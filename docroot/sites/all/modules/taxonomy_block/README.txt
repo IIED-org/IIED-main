@@ -1,0 +1,1 @@
+Drupal 7 version of the taxonomy_block module (http://drupal.org/project/taxonomy_block).

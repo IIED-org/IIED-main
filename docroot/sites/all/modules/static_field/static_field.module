@@ -1,0 +1,122 @@
+<?php
+
+/**
+ * @file
+ *   Static field main module file.
+ */
+
+/**
+ * Implements hook_field_info().
+ */
+function static_field_field_info() {
+  return array(
+    'static_field' => array(
+      'label' => t('Static'),
+      'description' => t('Allows the display of static text as field as a field instance.'),
+      'instance_settings' => array(
+        'text' => array('value' => '', 'format' => NULL),
+        'form_display' => FALSE,
+      ),
+      'default_widget' => 'static_field',
+      'default_formatter' => 'static_field'
+    )
+  );
+}
+
+/**
+ * Implements hook_field_instance_settings_form().
+ */
+function static_field_field_instance_settings_form($field, $instance) {
+  $settings = $instance['settings'];
+  $form = array();
+
+  $form['text'] = array(
+    '#type' => 'text_format',
+    '#title' => t('Static field content'),
+    '#default_value' => $settings['text']['value'],
+    '#format' => $settings['text']['format'],
+    '#required' => TRUE,
+    '#description' => t('The static field text to display in this instance of field.')
+  );
+  $form['form_display'] = array(
+    '#type' => 'radios',
+    '#title' => t('Display also in form'),
+    '#description' => t("Select how the static content will be displayed in the edit form."),
+    '#default_value' => $settings['form_display'],
+    '#options' => array(
+      FALSE => t('No'),
+      'markup' => t('Yes. No label'),
+      'item' => t('Yes. Display also the label'),
+    ),
+  );
+  return $form;
+}
+
+/**
+ * Implements hook_field_widget_info(). A dummy widget.
+ */
+function static_field_field_widget_info() {
+  return array(
+    'static_field' => array(
+      'label' => t('Static'),
+      'description' => t("If 'Display also in form' was set, this widget will display the static content of the field as an 'item' or 'markup' form element."),
+      'field types' => array('static_field'),
+    )
+  );
+}
+
+/**
+ * Implements hook_field_widget_form().
+ */
+function static_field_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  if ($instance['settings']['form_display']) {
+    $element += array(
+      '#type' => $instance['settings']['form_display'],
+      '#markup' => check_markup($instance['settings']['text']['value'], $instance['settings']['text']['format']),
+    );
+    return $element;
+  }
+}
+
+/**
+ * Implements hook_field_is_empty().
+ */
+function static_field_field_is_empty($item, $field) {
+  return TRUE;
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function static_field_field_formatter_info() {
+  return array(
+    'static_field' => array(
+      'label' => t('Static as markup'),
+      'description' => t("Render only the static content (the field value) without the field label. It uses the '#markup' form element type."),
+      'field types' => array('static_field'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function static_field_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+
+  $item_static = array('#markup' => check_markup($instance['settings']['text']['value'], $instance['settings']['text']['format']));
+  foreach ($items as $delta => $item) {
+    $element[$delta] = $item_static;
+  }
+  $element[0] = $item_static;
+  return $element;
+}
+
+/**
+ * Implements hook_field_load().
+ */
+function static_field_field_load($entity_type, $entities, $field, $instances, $langcode, &$items, $age) {
+  foreach ($entities as $entity_id => $entity) {
+    $items[$entity_id][0]['safe_value'] = check_markup($instances[$entity_id]['settings']['text']['value'], $instances[$entity_id]['settings']['text']['format']);
+  }
+}

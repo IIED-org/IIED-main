@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ *   Install, uninstall and update tasks for Static Field module.
+ */
+
+/**
+ * Change 'form_display' setting from TRUE to 'item'.
+ */
+function static_field_update_7000() {
+  foreach (field_info_instances() as $bundles) {
+    foreach ($bundles as $fields) {
+      foreach ($fields as $field_name => $instance) {
+        $field = field_info_field($field_name);
+        if ($field['type'] == 'static_field') {
+          $form_display = (int) $instance['settings']['form_display'];
+          if ($form_display == 1) {
+            $instance['settings']['form_display'] = 'item';
+            field_update_instance($instance);
+          }
+        }
+      }
+    }
+  }
+}

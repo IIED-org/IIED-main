@@ -1,0 +1,11 @@
+name = Static field
+description = Add a static configuarable field to entities.
+core = 7.x
+dependencies[] = field
+
+; Information added by drupal.org packaging script on 2012-09-27
+version = "7.x-1.0"
+core = "7.x"
+project = "static_field"
+datestamp = "1348782666"
+

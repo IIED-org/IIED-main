@@ -1,0 +1,107 @@
+/*
+Theme Name: Oxygen Child Theme
+Author: Chris Brody
+Template: oxygen
+Version: 0.1.0
+*/
+
+@import url("../oxygen/style.css");
+
+#header {
+	padding: 20px 0 0 0;
+}
+.content-wrap {
+	width: 100%;
+}
+
+#content {
+	float: left;
+	width: 65%;
+	margin: 0;
+}
+
+body.page .type-page .entry-title, .not-found .entry-title,  
+.page-title {
+	color: #CCCCCC;
+	display: none;
+	font-size: 2em;
+	margin: -5px 0 .7em;
+}
+
+.breadcrumbs {
+	display: none;
+}
+
+.widgettitle {
+	color: #B46B29;
+	font-size: 1.25em;
+	font-weight: bold;
+	letter-spacing: 1px;
+	text-transform: lowercase;
+	word-spacing: 2px;
+}
+
+ul {
+	list-style: square outside none;
+	margin: 0 0 1.75em 2.8em;
+	padding: 0;
+	content: "•";
+	color: #B46B29;
+}
+
+#leftcol {
+	float: left;
+	width: 300px;
+	margin-right: 60px;
+	margin-top: 5px;
+}
+
+div.media {
+	float: right;
+	width: 300px;
+	margin: 5px 0 0 10px;
+}
+
+.featured {
+	width: 200px;
+	margin-right: 20px;
+	float: left;
+}
+
+.entry-header {
+	width: 385px;
+}
+
+.entry-summary {
+	width: 100%;
+	padding-left: 0;
+	float: left;
+}
+
+a.read-more {
+	top: 38px;
+}
+
+.byline-cat {
+	bottom: -1em;
+	top: auto;
+}
+
+.byline a, .byline a:visited {
+	color: #fff;
+}
+
+.hentry .archive-thumbnail {
+	margin: 0 15px 11px 0;
+}
+
+div.logo {
+	width: 285px;
+	clear: both;
+}
+
+div.description {
+	width: 390px;
+	float: left;
+	margin-bottom: 1em;
+}

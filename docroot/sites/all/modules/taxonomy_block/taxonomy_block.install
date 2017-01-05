@@ -1,0 +1,13 @@
+<?php
+/**
+ * @file
+ * Installation file for taxonomy_block.
+ */
+
+/**
+ * Implementation of hook_uninstall();
+ */
+function taxonomy_block_uninstall() {
+  variable_del('taxonomy_block_vid');
+  variable_del('taxonomy_block_node_count');
+}

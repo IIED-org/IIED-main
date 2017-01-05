@@ -1,0 +1,12 @@
+/* This file will hold styles for all layouts using the alpha grid (i.e. not the mobile layout). */
+
+.site-name-slogan {
+	float: right;
+	width: 290px;
+	margin-top: -145px;
+}
+
+.logo-img img {
+	width: auto;
+	height:auto;
+}

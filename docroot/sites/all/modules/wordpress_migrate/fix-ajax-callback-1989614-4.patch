@@ -1,0 +1,13 @@
+diff --git a/wordpress_migrate.pages.inc b/wordpress_migrate.pages.inc
+index 397b330..17ce73e 100644
+--- a/wordpress_migrate.pages.inc
++++ b/wordpress_migrate.pages.inc
+@@ -122,6 +122,8 @@ function wordpress_migrate_import_form($form, &$form_state) {
+     '#collapsible' => TRUE,
+     '#collapsed' => FALSE,
+     '#pre_render' => array('vertical_tabs_form_pre_render'),
++    '#prefix' => '<div id="edit-settings">',
++    '#suffix' => '</div>',
+     '#attached' => array(
+       'js' => array(
+         'vertical-tabs' => drupal_get_path('module', 'wordpress_migrate') . '/wordpress_migrate.js',

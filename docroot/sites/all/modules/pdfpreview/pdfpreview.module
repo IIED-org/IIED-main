@@ -1,0 +1,351 @@
+<?php
+/**
+ * @file
+ * This file contains hooks for the pdfpreview module
+ *
+ * @author Juanjo Garcia <juanjo.gcia@gmail.com>
+ * @author Florian Auer <floeschie@gmail.com>
+ *
+ */
+
+define('PDFPREVIEW_DEFAULT_QUALITY', 75);
+define('PDFPREVIEW_DEFAULT_SIZE', '1024x1024');
+define('PDFPREVIEW_DEFAULT_SHOW_DESCRIPTION', 0);
+define('PDFPREVIEW_DEFAULT_TAG', 'span');
+define('PDFPREVIEW_FILENAMES_MACHINE', 0);
+define('PDFPREVIEW_FILENAMES_HUMAN', 1);
+
+/**
+ * Implements hook_field_formatter_info()
+ *
+ */
+function pdfpreview_field_formatter_info() {
+  $formatters = array(
+    'pdfpreview' => array(
+      'label' => t('PDF Preview'),
+      'field types' => array('file'),
+      'description' => 'Displays an snapshot of the first page of the PDF',
+      'settings' => array('image_style' => '', 'image_link' => '', 'show_description' => PDFPREVIEW_DEFAULT_SHOW_DESCRIPTION, 'tag' => PDFPREVIEW_DEFAULT_TAG),
+    ),
+  );
+  return $formatters;
+}
+
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+
+function pdfpreview_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  //We want our user feel familiar with our settings, and reuse code.
+  $form = image_field_formatter_settings_form($field, $instance, $view_mode, $form, $form_state);
+  $form['show_description'] = array(
+          '#type' => 'checkbox',
+          '#title' => t('Description'),
+          '#description' => t('Show file description beside image'),
+          '#options' => array(0 => t('No'), 1 => t('Yes')),
+          '#default_value' => $instance['display'][$view_mode]['settings']['show_description'],
+      );
+  $form['tag'] = array(
+          '#type' => 'radios',
+          '#title' => t('HTML tag'),
+          '#description' => t('Select which kind of HTML element will be used to theme elements'),
+          '#options' => array('span' => 'span', 'div' => 'div'),
+          '#default_value' => $instance['display'][$view_mode]['settings']['tag'],
+      );
+  return $form;
+}
+
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function pdfpreview_field_formatter_settings_summary($field, $instance, $view_mode) {
+  //again, act like image module
+  $summary = image_field_formatter_settings_summary($field, $instance, $view_mode);
+  $summary .= '<br />' . t('Using %tag as separator', array('%tag' => $instance['display'][$view_mode]['settings']['tag']));
+  $summary .= '<br />' . t('Descriptions are %desc', array('%desc' => $instance['display'][$view_mode]['settings']['show_description'] ? t('visible') : t('hidden'))); 
+  return $summary;
+}
+
+
+/**
+ * Implements hook_field_formatter_view()
+ *
+ * @see _pdfpreview_create_preview()
+ */
+function pdfpreview_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+  $settings = $display['settings'];
+  $non_pdfs = array();
+  foreach ($items as $delta => $item) {
+    if (empty($item['display'])) continue; //don't show hidden files
+    if ($item['filemime'] == 'application/pdf') {
+      $item['preview'] = _pdfpreview_create_preview($item);
+      $element[$delta] = array(
+        '#preview' => $item['preview'],
+        '#markup' => theme($display['type'], array('item' => $item, 'instance' => $instance, 'settings' => $settings, 'entity_type' => $entity_type, 'entity' => $entity)),
+      );
+    }
+    else {
+      //For non pdf files, we defer processing
+      $non_pdfs[$delta] = $item;
+    }
+  }
+  if (!empty($non_pdfs)) {
+    //process non pdf files using default file formatter
+    module_load_include('inc', 'file', 'file.field');
+    $display['type'] = 'file_default';
+    $element = array_merge($element, file_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, array($item), $display));
+  }
+  return $element;
+}
+
+
+/**
+ * Implements hook_menu()
+ */
+function pdfpreview_menu() {
+  $items = array(
+    'admin/config/media/pdfpreview' => array(
+      'title' => 'PDF Preview',
+      'description' => 'Configure PDF Preview settings',
+      'access arguments' => array('administer content'),
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('pdfpreview_admin'),
+      'type' => MENU_NORMAL_ITEM,
+    ),
+  );
+
+  return $items;
+}
+
+
+/**
+ * Implements hook_theme().
+ *
+ */
+function pdfpreview_theme() {
+  $theme = array(
+    'pdfpreview' => array(
+      'function' => 'theme_pdfpreview_formatter',
+      'variables' => array('element' => NULL),
+    ),
+  );
+  return $theme;
+}
+
+/**
+ * Implements hook_file_delete()
+ */
+function pdfpreview_file_delete($file){
+  file_unmanaged_delete(_pdfpreview_output_filename($file));
+}
+
+// ----- custom module functions ----- //
+
+
+/**
+ * Creates the module settings render array
+ *
+ * If you want to extend the module's settings form, append the elements you
+ * need to the $form array. Don't forget to update the pdfpreview_uninstall()
+ * routine in the pdfpreview.install file as well.
+ *
+ */
+function pdfpreview_admin() {
+  $form = array(
+      'pdfpreview_pathtoimages' => array(
+          '#type' => 'textfield',
+          '#title' => t('Images folder'),
+          '#description' => t('Path, inside files directory, where snapshots are stored. For example <em>pdfpreview</em>'),
+          '#default_value' => variable_get('pdfpreview_pathtoimages', 'pdfpreview'),
+      ),
+      'pdfpreview_previewsize' => array(
+          '#type' => 'textfield',
+          '#title' => t('Preview size'),
+          '#description' => t('Size of the preview in pixels. For example <em>100x100</em>. You must set this to a value big enought to apply your image styles.'),
+          '#default_value' => variable_get('pdfpreview_previewsize', PDFPREVIEW_DEFAULT_SIZE),
+      ),
+      'pdfpreview_quality' => array(
+          '#type' => 'textfield',
+          '#size' => 3,
+          '#maxlenght' => 3,
+          '#title' => t('Image quality'),
+          '#field_suffix' => '%',
+          '#description' => t('Image extraction quality in percentage.'),
+          '#default_value' => variable_get('pdfpreview_quality', PDFPREVIEW_DEFAULT_QUALITY),
+      ),
+      'pdfpreview_filenames' => array(
+        '#type' => 'radios',
+        '#options' => array(PDFPREVIEW_FILENAMES_MACHINE => t('Filename hash'), PDFPREVIEW_FILENAMES_HUMAN => t('From pdf filename')),
+        '#default_value' => variable_get('pdfpreview_filenames', PDFPREVIEW_FILENAMES_MACHINE),
+        '#title' => t('Generated filenames'),
+        '#description' => t('This changes how filenames will be used on genereated previews. If you change this after some files were generated, you must delete them manually.'),
+      ),
+  );
+
+  // Callback function which checks for existing preview directory on save
+  $form['#submit'][] = '_pdfpreview_prepare_filesystem';
+
+  return system_settings_form($form);
+}
+
+
+/**
+ * Convert the first page of a PDF document
+ *
+ * This function converts the first page of a PDF document using ImageMagick's
+ * convert executable and returns TRUE on success, FALSE else. You can provide
+ * optional parameters for the convert executable by simply passing them with
+ * in an array to the $args parameter. For details about convert arguments see
+ * the <a href="http://www.imagemagick.org/Usage/basics/#cmdline">ImageMagick
+ * documentation</a>.
+ *
+ * @param $source URI to the PDF file
+ * @param $dest URI where the preview file will be saved
+ * @param $args Optional arguments for the convert executable
+ * @see _imagemagick_convert()
+ * @see _pdfpreview_create_preview()
+ */
+function _pdfpreview_convert_first_page($source, $dest, $args = array()) {
+  $source = drupal_realpath($source) . '[0]';
+  $dest = drupal_realpath($dest);
+
+  $args['quality'] = '-quality ' . escapeshellarg(variable_get('imagemagick_quality', PDFPREVIEW_DEFAULT_QUALITY));
+  $args['previewsize'] = '-resize ' . escapeshellarg(variable_get('pdfpreview_previewsize', PDFPREVIEW_DEFAULT_SIZE));
+
+  $context = array(
+    'source' => $source,
+    'destination' => $dest,
+  );
+
+  drupal_alter('imagemagick_arguments', $args, $context);
+  // To make use of ImageMagick 6's parenthetical command grouping we need to make
+  // the $source image the first parameter and $dest the last.
+  // See http://www.imagemagick.org/Usage/basics/#cmdline
+  $command = escapeshellarg($source) . ' ' . implode(' ', $args) . ' ' . escapeshellarg($dest);
+
+  if (_imagemagick_convert_exec($command, $output, $error) !== TRUE) {
+    return FALSE;
+  }
+  return file_exists($dest);
+}
+
+
+/**
+ * Creates the PDF preview file and returns its URI
+ *
+ * @param File $file
+ * @return string URI of the newly created preview image
+ * @see _pdfpreview_convert_first_page()
+ * @see pdfpreview_field_formatter_view()
+ */
+function _pdfpreview_create_preview($file) {
+  if (!is_array($file)) $file = (array) $file;
+  $output_filename = _pdfpreview_output_filename($file);
+  // Create preview image using ImageMagick
+  if (!file_exists($output_filename) && function_exists('_imagemagick_convert')) {
+    _pdfpreview_convert_first_page($file['uri'], $output_filename);
+  }
+  return $output_filename;
+}
+
+/**
+ * Generates the filename for the preview
+ * @paream File $file
+ * @return Filename for the generated preview
+ */
+function _pdfpreview_output_filename($file) {
+  if (!is_object($file)) $file = (object) $file;
+  $output_dir = file_default_scheme() . '://' . variable_get('pdfpreview_pathtoimages', 'pdfpreview');
+  if (variable_get('pdfpreview_filenames', PDFPREVIEW_FILENAMES_MACHINE) == PDFPREVIEW_FILENAMES_HUMAN) {
+    $filename = basename($file->filename, '.pdf');
+    if (module_exists('transliteration')) {
+      $filename = transliteration_clean_filename($filename);
+    }
+    return $output_dir . '/' . $file->fid . '-' .  $filename . '.jpg';
+  }
+  else {
+    return $output_dir . '/' . md5('pdfpreview' . $file->fid) . '.jpg';  
+  }
+}
+
+/**
+ * Prepare the file system for PDF preview image creation
+ *
+ * This function is called after the module's setting form is submitted. It
+ * checks whether the target directory for preview images exists. If this is not
+ * the case, the directory will be created.
+ *
+ * @see _pdfpreview_admin_settings()
+ * @see system_settings_form_submit()
+ */
+function _pdfpreview_prepare_filesystem($form, &$form_state) {
+  $output_uri = file_default_scheme() . '://' . $form['pdfpreview_pathtoimages']['#value'];
+  $output_dir = drupal_realpath($output_uri);
+
+  if (!file_exists($output_dir)) {
+    if (!mkdir($output_dir)) {
+      drupal_set_message(t('Error creating directory %dir', array('%dir' => $output_dir)), 'error');
+      watchdog('pdfpreview', 'Error creating directory %dir', array('%dir' => $output_dir), WATCHDOG_ERROR);
+    }
+    $message = t('The directory %dir has been created', array('%dir' => $output_dir));
+    watchdog('pdfpreview', 'The directory %dir has been created', array('%dir' => $output_dir));
+    drupal_set_message($message, 'status');
+  }
+  elseif (!is_dir($output_dir)) {
+    $message = t('The path %dir is not a directory', array('%dir' => $output_dir));
+    watchdog('pdfpreview', 'The path %dir is not a directory', array('%dir' => $output_dir), WATCHDOG_ERROR);
+    drupal_set_message($message, 'error');
+  }
+}
+
+
+/**
+ * Theming functions for our formatters
+ *
+ * @todo Clearify the image cache thing...
+ * @todo Let user choose what preview image to show on non-PDF files
+ */
+function theme_pdfpreview_formatter($variables) {
+  $img_tag = '';
+  $item = $variables['item'];
+  
+  $image = array(
+    'title' => $item['description'],
+    'uri' => $item['preview'],
+  'alt' => $item['description'],
+  );
+
+  $element =array();
+  $element['item'] = $image;
+  $element['image_style'] = $variables['settings']['image_style'];
+  switch ($variables['settings']['image_link']) {
+    case 'file':
+      $element['path'] = array(
+        'path' => file_create_url($item['uri']),
+        'options' => array(),
+      );
+      break;
+      case 'content':
+      $element['path'] = array(
+        'path' => $variables['entity_type'] . '/' . $variables['entity']->nid,
+        'options' => array(),
+      );
+      break;
+  }
+  $img_tag = theme('image_formatter', $element);
+  $wrapper_tag = $variables['settings']['tag'];
+  $description = $variables['settings']['show_description'] ? '<' . $wrapper_tag . ' class="pdfpreview-description">' . $item['description'] . '</' . $wrapper_tag . '>' : '' ;
+  return sprintf(
+          '<div class="pdfpreview pdfpreview-%s" id="pdfpreview-%s">'
+          . ' <%s class="pdfpreview-image-wrapper">%s</%s>'
+          . ' %s'
+          . '</div>',
+          $variables['instance']['field_name'],
+          $item['fid'],
+          $wrapper_tag, $img_tag, $wrapper_tag,
+          $description
+  );
+}
