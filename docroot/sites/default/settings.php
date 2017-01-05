@@ -279,7 +279,7 @@ $drupal_hash_salt = 'J9RatOKHNL76AySacBkdG1qa56z8n50P-JQJqzMb02Y';
  * for you.
  */
 
-$base_url = 'https://www.irforum.org';  // NO trailing slash!
+# $base_url = 'https://www.irforum.org';  // NO trailing slash!
 
 /**
  * PHP settings:
