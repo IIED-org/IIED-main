@@ -55,3 +55,19 @@ function hook_addthis_markup_alter(&$markup) {
     $markup['google_plusone']['#attributes']['g:plusone:size'] = 'small';
   }
 }
+
+/**
+ * Implements hook_TYPE_alter().
+ *
+ * @param array $configuration.
+ */
+function hook_addthis_configuration($configuration) {
+
+  if (isset($configuration['templates'])) {
+    $configuration['templates']['twitter'] = 'Hello on twitter.';
+  }
+
+  if (isset($configuration['addthis_share'])) {
+    // Alter the share variable used for the javascript.
+  }
+}

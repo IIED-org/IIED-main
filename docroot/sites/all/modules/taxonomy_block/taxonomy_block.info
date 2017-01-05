@@ -1,15 +1,16 @@
 name = Taxonomy Block
-description = Displays taxonomy hierarchy in a block.
-core = 7.x
-files[] = taxonomy_block.module
+description = "This module used to display taxonomy in block which support i18n (multi-languages)."
+; Information added by drupal.org packaging script on 2009-03-27
+package = "Taxonomy"
+version = "6.x-1.0-BETA6"
+core = "6.x"
 dependencies[] = taxonomy
-version = "7.x-1.0"
+project = "taxonomy_block"
+datestamp = "1238152822"
+
+; Information added by drupal.org packaging script on 2013-04-03
+version = "7.x-1.4"
 core = "7.x"
 project = "taxonomy_block"
-package = Taxonomy
-; Information added by drupal.org packaging script on 2012-12-20
-version = "7.x-1.0+0-dev"
-core = "7.x"
-project = "taxonomy_block"
-datestamp = "1355968969"
+datestamp = "1365006318"
 

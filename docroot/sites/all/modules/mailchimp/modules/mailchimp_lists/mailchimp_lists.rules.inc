@@ -1,101 +1,51 @@
 <?php
 /**
  * @file
- * Rules integration for the mailchimp module.
+ * Rules integration for the mailchimp lists module.
  */
-
-/**
- * Implements hook_rules_action_info().
- */
-function mailchimp_lists_rules_condition_info() {
-
-  $items['mailchimp_lists_mail_is_subscribed'] = array(
-    'label' => t('E-Mail is subscribed to a mailchimp list'),
-    'parameter' => array(
-      'mail' => array(
-        'type' => '*',
-        'label' => t('E-Mail address'),
-        'description' => t('The e-mail address for which to check whether it is subscribed to a list.'),
-        'default mode' => 'selector',
-      ),
-      'list' => array(
-        'type' => 'mailchimp_list',
-        'label' => t('Mailchimp list'),
-        'default mode' => 'input',
-      ),
-    ),
-    'group' => t('Mailchimp'),
-    'access callback' => 'mailchimp_lists_rules_access_callback',
-    'base' => 'mailchimp_lists_rules_condition_mail_is_subscribed',
-  );
-  return $items;
-}
-
-/**
- * Condition callback: User is subscribed to a list.
- */
-function mailchimp_lists_rules_condition_mail_is_subscribed($mail, $list) {
-  return mailchimp_is_subscribed($list->mc_list_id, $mail);
-}
 
 /**
  * Implements hook_rules_action_info().
  */
 function mailchimp_lists_rules_action_info() {
-
-  $items['mailchimp_lists_user_subscribe_list'] = array(
-    'label' => t('Subscribe user to a mailchimp list'),
+  $items = array();
+  $items['mailchimp_lists_user_subscribe'] = array(
+    'label' => t('Subscribe or unsubscribe entity from a MailChimp list'),
     'parameter' => array(
-      'account' => array(
-        'type' => 'user',
-        'label' => t('User'),
-        'description' => t('The user to subscribe to a list.'),
+      'entity' => array(
+        'type' => 'entity',
+        'label' => t('Entity'),
+        'description' => t('The entity to subscribe/unsubscribe'),
       ),
-      'list' => array(
-        'type' => 'mailchimp_list',
-        'label' => t('Mailchimp list'),
-        'default mode' => 'input',
+      'field' => array(
+        'type' => '*',
+        'label' => t('MailChimp List Subscription Field'),
+        'description' => t('Subscription Field connected to the desired Mailchimp List.'),
+        'restriction' => 'selector',
+        'wrapped' => TRUE,
+        'allow null' => FALSE,
+      ),
+      'subscribe' => array(
+        'type' => 'boolean',
+        'label' => t('Subscribe'),
+        'description' => t('True to subscribe, False to unsubscribe'),
       ),
     ),
-    'group' => t('Mailchimp'),
+    'group' => t('MailChimp'),
     'access callback' => 'mailchimp_lists_rules_access_callback',
-    'base' => 'mailchimp_lists_rules_action_user_subscribe_list',
-  );
-  $items['mailchimp_lists_unsubscribe_list'] = array(
-    'label' => t('Unsubscribe mail address from a mailchimp list'),
-    'parameter' => array(
-      'mail' => array(
-        'type' => 'text',
-        'label' => t('E-Mail address'),
-        'description' => t('The mail address to unsubscribe from the given list.'),
-        'default mode' => 'selector',
-      ),
-      'list' => array(
-        'type' => 'mailchimp_list',
-        'label' => t('Mailchimp list'),
-        'default mode' => 'input',
-      ),
-    ),
-    'group' => t('Mailchimp'),
-    'access callback' => 'mailchimp_lists_rules_access_callback',
-    'base' => 'mailchimp_lists_rules_action_unsubscribe_list',
+    'base' => 'mailchimp_lists_rules_action_entity_subscribe',
   );
   return $items;
 }
 
 /**
- * Action callback: Subscribe a user to a list.
+ * Action callback: Subscribe an entity to a list.
  */
-function mailchimp_lists_rules_action_user_subscribe_list($account, $list) {
-  $merge_variables = mailchimp_lists_load_user_mergevars($account, $list);
-  mailchimp_subscribe_user($list, $account->mail, $merge_variables, FALSE);
-}
-
-/**
- * Action callback: Unsubscribe a user to a list.
- */
-function mailchimp_lists_rules_action_unsubscribe_list($mail, $list) {
-  mailchimp_unsubscribe_user($list, $mail, FALSE);
+function mailchimp_lists_rules_action_entity_subscribe($entity, $field, $subscribe) {
+  $field_info = $field->info();
+  $choices = reset($field_info['instance']['default_value']);
+  $choices['subscribe'] = $subscribe;
+  mailchimp_lists_process_subscribe_form_choices($choices, $field_info['instance'], $field_info['field'], $entity->value());
 }
 
 /**

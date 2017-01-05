@@ -4,12 +4,12 @@ package = Picture
 core = 7.x
 
 dependencies[] = picture
-dependencies[] = flexslider
-dependencies[] = flexslider_fields
+dependencies[] = flexslider (2.x)
+dependencies[] = flexslider_fields (2.x)
 
-; Information added by drupal.org packaging script on 2012-12-13
-version = "7.x-1.1"
+; Information added by Drupal.org packaging script on 2015-10-13
+version = "7.x-2.13"
 core = "7.x"
 project = "picture"
-datestamp = "1355413446"
+datestamp = "1444740240"
 

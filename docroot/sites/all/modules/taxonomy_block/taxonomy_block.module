@@ -1,216 +1,175 @@
 <?php
+
 /**
  * @file
- * The taxonomy_block module.
+ * The taxonomy_block module used for displaying Site Counter.
  */
 
-/************************************************************************************
- *                  CONFIG
- ***********************************************************************************/ 
- 
-define('TAXONOMY_BLOCK_PERM_ACCESS',  'access taxonomy_block');
-define('TAXONOMY_BLOCK_PERM_ADMIN',   'administer taxonomy_block');
-
-/************************************************************************************
- *                  DRUPAL HOOKS 
- ***********************************************************************************/
- 
 /**
- * Implementation of hook_help();
+ * Implementation of hook_help().
  */
 function taxonomy_block_help($section) {
   switch ($section) {
     case 'admin/help#taxonomy_block':
-      return '<p>'.t('Displays taxonomy hierarchy in a block.') . '</p>';
-    
+      $output = "The taxonomy_block module used for displaying taxonomy in a block with i18n/multi-languages support";
+  return $output;
     case 'admin/modules#description':
-      return 'Displays taxonomy hierarchy in a block.';
+      return 'The taxonomy_block module used for displaying taxonomy in a block with i18n/multi-languages support';
   }
 }
 
 /**
- * Implementation of hook_permission();
+ * Implementation of hook_perm
  */
-function taxonomy_block_permission() {
-  return array(
-    TAXONOMY_BLOCK_PERM_ACCESS => array(
-      'title' => t('Access taxonomy block'), 
-      'description' => t('Read access for taxonomy block.'),
-    ),
-    TAXONOMY_BLOCK_PERM_ADMIN => array(
-      'title' => t('Administer taxonomy block'), 
-      'description' => t('Administration access for taxonomy block.'),
-    ),
-  );
+function taxonomy_block_perm() {
+  return array('access taxonomy_block', 'administer taxonomy_block');
 }
  
 /**
- * Implementation of hook_menu();
+ * Menu callback. Prints a listing of active nodes on the site.
  */
+
 function taxonomy_block_menu() {
   $items = array();
 
-  $items['admin/config/taxonomy_block'] = array(
-    'title'             => 'Taxonomy Block',
-    'description'       => 'Displays taxonomy hierarchy',
-    'access arguments'  => array(TAXONOMY_BLOCK_PERM_ADMIN),
-    'page callback'     => 'drupal_get_form',
-    'page arguments'    => array('taxonomy_block_admin_settings'),
-    'type'              => MENU_NORMAL_ITEM,
-    'file'              => 'taxonomy_block.settings.inc',
+  $items['admin/settings/taxonomy_block'] = array(
+    'title' => 'Taxonomy Block',
+    'description' => 'Show taxonomy in a block with i18n support',
+    'access arguments' => array('administer taxonomy_block'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('taxonomy_block_admin_settings'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'taxonomy_block.settings.inc',
   );
   
   return $items;
 }
 
 /**
- * Implementation of hook_block_info();
+ * Implementation of hook_block().
+ *
  */
-function taxonomy_block_block_info() {
-  $blocks['taxonomy_block'] = array(
-    'info'  => t('Taxonomy Block'), 
-    'cache' => DRUPAL_NO_CACHE,
-  );
-
+function taxonomy_block_block($op = 'list', $delta = 0) {
+  if ($op == 'list') 
+  {
+    $blocks[0]['info'] = 'Taxonomy Block';
   return $blocks;
-}
+  }
+  
+  if ($op == 'view') 
+  {
+    $vid        = variable_get('taxonomy_block_settings_vid',1);
+    $node_count = variable_get('taxonomy_block_settings_node_count',1);
+    $num_term   = variable_get('taxonomy_block_settings_max_term',0);
+    
+    $order_by   = variable_get('taxonomy_block_settings_order_by', 0)==0 ? 'name' : 'weight';
+    $order_type = variable_get('taxonomy_block_settings_order_type', 0)==0 ? 'ASC' : 'DESC';
+    
+    switch($delta) {
+      case 0:
+        $block['subject'] = t('Taxonomy Block');    
+        
+        $output  = '';
+        
+    
+      //Check database
 
-/**
- * Implementation of hook_block_view();
- */
-function taxonomy_block_block_view($delta = '') {
-  $block = array();
-
-  switch ($delta) {
-    case 'taxonomy_block':
-      if ($vid = variable_get('taxonomy_block_vid', 0)) {
-        $block['subject'] = taxonomy_vocabulary_load($vid)->name;
-        $block['content'] = taxonomy_block_generate_list(taxonomy_block_build_taxonomy_tree($vid, 0), (bool) variable_get('taxonomy_block_node_count', 0));
+      if ($num_term == 0) {
+        $sql = " SELECT td.tid, td.name, th.parent  from {term_data} td "
+            ." INNER JOIN {term_hierarchy} th ON th.tid=td.tid "
+            ." WHERE vid='%d' AND th.parent=0 ORDER BY %s %s";    
+      } else {
+        $sql = " SELECT td.tid, td.name, th.parent  from {term_data} td "
+            ." INNER JOIN {term_hierarchy} th ON th.tid=td.tid "
+            ." WHERE vid='%d' AND th.parent=0 ORDER BY %s %s LIMIT %d";  
       }
       
-      break;
-  }
-  
-  return $block;
-}
+      $term_parents = db_query($sql, $vid, $order_by, $order_type, $num_term );
 
-/************************************************************************************
- *                  API
- ***********************************************************************************/
+      $output .= '<ul class="menu">';
+      while ($term_parent = db_fetch_object($term_parents)) {
+        $tid_parent = $term_parent->tid;
+        $name_parent= $term_parent->name;
+      
+        $output .= '<li>';
+        $term_parent = taxonomy_get_term($tid_parent);
+        
+        if (module_exists("i18n")) {
+          $output .= l(tt("taxonomy:term:$tid_parent:name", $name_parent), taxonomy_term_path($term_parent));
+        } else {
+          //$output .= l(t($name_parent), "taxonomy/term/$tid_parent");  
+          $output .= l(t($name_parent), taxonomy_term_path($term_parent));  
+        }
+        if ($node_count) {
+          $sql_count_parents = " SELECT COUNT(tn.nid) FROM {term_node} tn "
+                              ." INNER JOIN {node} n ON n.nid = tn.nid "
+                              ." WHERE tid = %d AND n.status = 1";
+                              
+          $total_parent = db_result(db_query($sql_count_parents, $tid_parent));
+          $output .= " ($total_parent)"; 
+        }
+        
+        
+        $sql_count_childs = " SELECT count(td.tid) from {term_data} td "
+                           ." INNER JOIN {term_hierarchy} th ON th.tid=td.tid "
+                           ." INNER JOIN {term_node} tn ON tn.tid= td.tid"
+                           ." INNER JOIN {node} n ON n.nid = tn.nid"
+                           ." WHERE td.vid='%d' AND th.parent='%d' AND n.status=1";
+        $count_child = db_result(db_query($sql_count_childs, $vid, $tid_parent));
+        
+        if ($count_child) {
+          if ($num_term == 0) {
+            $sql_term_childs = " SELECT td.tid, td.name from {term_data} td "
+                              ." INNER JOIN {term_hierarchy} th ON th.tid=td.tid "
+                              ." WHERE vid='%d' AND th.parent='%d' ORDER BY %s %s";
+          } else {
+            $sql_term_childs = " SELECT td.tid, td.name from {term_data} td "
+                              ." INNER JOIN {term_hierarchy} th ON th.tid=td.tid "
+                              ." WHERE vid='%d' AND th.parent='%d' ORDER BY %s %s LIMIT %d";  
+          }                  
+          
+          $term_childs = db_query($sql_term_childs, $vid, $tid_parent, $order_by, $order_type, $num_term );
+          $output .= '<ul>';
+          while ($term_child = db_fetch_object($term_childs)) {
+            $tid_child = $term_child->tid;
+            $name_child = $term_child->name;
+            
+            $output .= '<li>';
+            $term_child = taxonomy_get_term($tid_child);
 
-/**
- * Generates & returns a nested array of taxonomy terms for the specified vocabulary id;
- * @return 
- * @param object $vid
- * @param object $parent[optional]
- * @param object $max_depth[optional]
- */
-function taxonomy_block_build_taxonomy_tree($vid, $parent = 0, $max_depth = NULL) {
-  static $results;
-  
-  $args = func_get_args();
-  $hash = md5(implode('-', $args));
-
-  if (!isset($results[$hash])) {
-    $terms = array();
-    
-    $data = taxonomy_get_tree($vid, $parent, $max_depth);
-
-    foreach ($data as $term) {
-      $terms[$term->tid] = $term;
-    }
-
-    $terms = taxonomy_block_nest_taxonomy_terms($terms, $parent);
-    
-    $results[$hash] = $terms;
-  }
-  
-  return $results[$hash];
-}
-
-/**
- * Looks for each term's parent term in the given tree and assigns 
- * the child to the parent.
- * @return 
- * @param object $terms
- * @param object $parent
- */
-function taxonomy_block_nest_taxonomy_terms($terms, $parent) {
-  foreach ($terms as $term) {
-    $parent_tid = isset($term->parents[0]) ? $term->parents[0] : 0;
-
-    if ($parent_tid) {
-      if (isset($terms[$parent_tid])) {
-        $terms[$parent_tid]->children[$term->tid] = $term;
-        unset($terms[$term->tid]);
+            if (module_exists("i18n")) {
+              $output .= l(tt("taxonomy:term:$tid_child:name", $name_child), taxonomy_term_path($term_child));
+            } else {
+              $output .= l(t($name_child), taxonomy_term_path($term_child));  
+            }
+            if ($node_count) {
+              $sql_total_child = " SELECT COUNT(tn.nid) FROM {term_node} tn"
+                                ." INNER JOIN {node} n ON n.nid=tn.nid"
+                                ." WHERE n.status=1 AND tid = %d";
+              $total_child = db_result(db_query($sql_total_child, $tid_child));
+              $output .= " ($total_child)"; 
+            }
+            $output .= "</li>"; 
+          }
+          $output .= "</ul>"; //child
+					$output .= "</li>"; //parent
+        }
       }
-      elseif ($parent_tid != $parent) {
-        taxonomy_block_nest_taxonomy_terms_child($terms, $parent_tid, $term);
-        unset($terms[$term->tid]);
-      }
+    
+      $output .= "</ul>";
+      
+      //if(count($items)) {
+      //  return theme('item_list',$items);
+      //}
+            
+      $block['content'] = $output;
+        
+      break;  
     }
+    
+    return $block;  
   }
-  
-  return $terms;
+    
 }
 
-/**
- * Recursive function which nests the child element within the appropriate
- * parent element in the given terms tree.
- * @return 
- * @param object $terms
- * @param object $parent_tid
- * @param object $child
- */
-function taxonomy_block_nest_taxonomy_terms_child(&$terms, $parent_tid, $child) {
-  foreach ($terms as &$term) {
-    if ($term->tid == $parent_tid) {
-      $term->children[$child->tid] = $child;
-      break;
-    }
-    elseif (!empty($term->children)) {
-      taxonomy_block_nest_taxonomy_terms_child($term->children, $parent_tid, $child);
-    }
-  }
-}
-
-/**
- * Generates a nested HTML list from hierarchy items.
- * @return string $output
- * @param array $hierarchy
- * @param bool $show_counts[optional]
- */
-function taxonomy_block_generate_list($hierarchy, $show_counts = FALSE) {
-  $items = array();
-  
-  foreach ($hierarchy as $term) {
-    $title = $term->name;
-    
-    if ($show_counts) {
-      $title .= t(' (@count)', array('@count' => taxonomy_block_count_nodes_term($term->tid)));
-    }
-    
-    $item = l($title, 'taxonomy/term/' . $term->tid);
-    
-    if (!empty($term->children)) {
-      $item .= taxonomy_block_generate_list($term->children, $show_counts);
-    }
-    
-    $items[] = $item;
-  }
-  
-  return theme('item_list', array('items' => $items));
-}
-
-/**
- * Counts the number of nodes assigned to a term.
- * @return integer $count - number of nodes
- * @param integer $tid - term id
- */
-function taxonomy_block_count_nodes_term($tid) {
-  return db_select('taxonomy_index', 'ti')
-            ->condition('tid', (int) $tid)
-            ->countQuery()
-            ->execute()
-            ->fetchField();
-}
+?>

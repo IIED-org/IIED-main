@@ -221,7 +221,9 @@ Drupal.wysiwyg.plugins.media = {
 
     // The following 5 ifs are dedicated to IE7
     // If the style is null, it is because IE7 can't read values from itself
-    if (jQuery.browser.msie && jQuery.browser.version == '7.0') {
+    if ((jQuery.browser && jQuery.browser.msie && jQuery.browser.version == '7.0')
+       ||
+       (navigator.userAgent.match(/msie [7]/i) && !window.XMLHttpRequest)) {
       if (mediaAttributes.style === "null") {
         var imgHeight = imgNode.css('height');
         var imgWidth = imgNode.css('width');
@@ -259,6 +261,10 @@ Drupal.wysiwyg.plugins.media = {
     // Remove elements from attribs using the blacklist
     for (var blackList in Drupal.settings.media.blacklist) {
       delete mediaAttributes[Drupal.settings.media.blacklist[blackList]];
+    }
+    if (attributes['view_mode'] == undefined || attributes['fid'] == undefined || mediaAttributes == undefined) {
+      // Getting out of here, user has changed media style.
+      return imgNode[0].outerHTML;
     }
     tagContent = {
       "type": 'media',

@@ -1,1 +1,3 @@
-Drupal 7 version of the taxonomy_block module (http://drupal.org/project/taxonomy_block).
+TAXONOMY BLOCK
+--------------
+Show taxonomy in a block. Supports node count and multi languages.

@@ -17,14 +17,15 @@ class AddThis {
   const STYLE_KEY = 'addthis_style';
   const WIDGET_TYPE = 'addthis_button_widget';
 
-  // AddThis attribute and parameter names (as defined in AddThis APIs)
+  // AddThis attribute and parameter names (as defined in AddThis APIs).
   const PROFILE_ID_QUERY_PARAMETER = 'pubid';
   const TITLE_ATTRIBUTE = 'addthis:title';
   const URL_ATTRIBUTE = 'addthis:url';
 
-  // Persistent variable keys
+  // Persistent variable keys.
   const ADDRESSBOOK_ENABLED_KEY = 'addthis_addressbook_enabled';
   const BLOCK_WIDGET_TYPE_KEY = 'addthis_block_widget_type';
+  const BLOCK_WIDGET_SETTINGS_KEY = 'addthis_block_widget_settings';
   const BOOKMARK_URL_KEY = 'addthis_bookmark_url';
   const CLICKBACK_TRACKING_ENABLED_KEY = 'addthis_clickback_tracking_enabled';
   const CLICK_TO_OPEN_COMPACT_MENU_ENABLED_KEY = 'addthis_click_to_open_compact_menu_enabled';
@@ -33,6 +34,7 @@ class AddThis {
   const CUSTOM_CONFIGURATION_CODE_ENABLED_KEY = 'addthis_custom_configuration_code_enabled';
   const CUSTOM_CONFIGURATION_CODE_KEY = 'addthis_custom_configuration_code';
   const ENABLED_SERVICES_KEY = 'addthis_enabled_services';
+  const EXCLUDED_SERVICES_KEY = 'addthis_excluded_services';
   const GOOGLE_ANALYTICS_TRACKING_ENABLED_KEY = 'addthis_google_analytics_tracking_enabled';
   const GOOGLE_ANALYTICS_SOCIAL_TRACKING_ENABLED_KEY = 'addthis_google_analytics_social_tracking_enabled';
   const FACEBOOK_LIKE_COUNT_SUPPORT_ENABLED = 'addthis_facebook_like_count_support_enabled';
@@ -45,29 +47,40 @@ class AddThis {
   const UI_HEADER_BACKGROUND_COLOR_KEY = 'addthis_ui_header_background_color';
   const UI_HEADER_COLOR_KEY = 'addthis_ui_header_color';
   const WIDGET_JS_URL_KEY = 'addthis_widget_js_url';
-  const WIDGET_JS_ASYNC = 'addthis_widget_async';
+  const WIDGET_JS_LOAD_DOMREADY = 'addthis_widget_load_domready';
+  const WIDGET_JS_LOAD_ASYNC = 'addthis_widget_load_async';
+  const WIDGET_JS_INCLUDE = 'addthis_widget_include';
 
-  // Twitter
+  // Twitter.
   const TWITTER_VIA_KEY = 'addthis_twitter_via';
   const TWITTER_VIA_DEFAULT = 'AddThis';
   const TWITTER_TEMPLATE_KEY = 'addthis_twitter_template';
   const TWITTER_TEMPLATE_DEFAULT = '{{title}} {{url}} via @AddThis';
 
-  // External resources
-  const DEFAULT_BOOKMARK_URL = 'http://www.addthis.com/bookmark.php?v=250';
+  // External resources.
+  const DEFAULT_BOOKMARK_URL = 'http://www.addthis.com/bookmark.php?v=300';
   const DEFAULT_SERVICES_CSS_URL = 'http://cache.addthiscdn.com/icons/v1/sprites/services.css';
   const DEFAULT_SERVICES_JSON_URL = 'http://cache.addthiscdn.com/services/v1/sharing.en.json';
-  const DEFAULT_WIDGET_JS_URL = 'http://s7.addthis.com/js/250/addthis_widget.js';
-  const DEFAULT_WIDGET_JS_ASYNC = TRUE;
+  const DEFAULT_WIDGET_JS_URL = 'http://s7.addthis.com/js/300/addthis_widget.js';
+  const DEFAULT_WIDGET_JS_LOAD_DOMREADY = TRUE;
+  const DEFAULT_WIDGET_JS_LOAD_ASYNC = FALSE;
 
-  // Internal resources
+  // Type of inclusion.
+  // 0 = don't include, 1 = pages no admin, 2 = on usages only.
+  const DEFAULT_WIDGET_JS_INCLUDE = 2;
+  const WIDGET_JS_INCLUDE_NONE = 0;
+  const WIDGET_JS_INCLUDE_PAGE = 1;
+  const WIDGET_JS_INCLUDE_USAGE = 2;
+
+
+  // Internal resources.
   const ADMIN_CSS_FILE = 'addthis.admin.css';
   const ADMIN_INCLUDE_FILE = 'includes/addthis.admin.inc';
 
-  // Widget types
+  // Widget types.
   const WIDGET_TYPE_DISABLED = 'addthis_disabled';
 
-  // Styles
+  // Styles.
   const CSS_32x32 = 'addthis_32x32_style';
   const CSS_16x16 = 'addthis_16x16_style';
 
@@ -77,18 +90,25 @@ class AddThis {
   private $json;
 
   /**
+   * Get the singleton instance of the AddThis class.
+   *
    * @return AddThis
+   *   Instance of AddThis.
    */
   public static function getInstance() {
-    module_load_include('php', 'addthis', 'classes/AddThisJson');
+
     if (!isset(self::$instance)) {
-      $addThis = new AddThis();
-      $addThis->setJson(new AddThisJson());
-      self::$instance = $addThis;
+      $add_this = new AddThis();
+      $add_this->setJson(new AddThisJson());
+      self::$instance = $add_this;
     }
+
     return self::$instance;
   }
 
+  /**
+   * Set the json object.
+   */
   public function setJson(AddThisJson $json) {
     $this->json = $json;
   }
@@ -192,91 +212,6 @@ class AddThis {
     return $rows;
   }
 
-  public function addWidgetJs() {
-    $async_parameter = self::isWidgetJsAsync() ? '?async=1' : '';
-    $url = self::getWidgetUrl() . $async_parameter;
-    if (self::isWidgetJsAsync()) {
-      drupal_add_js(
-        array(
-        'addthis' => array(
-          'widget_url' => $url,
-        ),
-      ),
-        'setting'
-      );
-    }
-    else {
-      // Add AddThis.com resources
-      drupal_add_js(
-        $url,
-        array(
-        'type' => 'external',
-        'group' => JS_LIBRARY,
-        'every_page' => TRUE,
-        'weight' => 9,
-      )
-      );
-    }
-    // Add local internal behaviours
-    if (self::isWidgetJsAsync()) {
-      drupal_add_js(
-        drupal_get_path('module', 'addthis') . '/addthis.js',
-        array(
-        'group' => JS_DEFAULT,
-        'weight' => 10,
-        'every_page' => TRUE,
-        'preprocess' => TRUE,
-      )
-      );
-    }
-  }
-
-  public function addConfigurationOptionsJs() {
-    if ($this->isCustomConfigurationCodeEnabled()) {
-      $configurationOptionsJavascript = $this->getCustomConfigurationCode();
-    }
-    else {
-      $enabledServices = $this->getServiceNamesAsCommaSeparatedString() . 'more';
-
-      global $language;
-      $configuration = array(
-        'services_compact' => $enabledServices,
-        'data_track_clickback' => $this->isClickbackTrackingEnabled(),
-        'ui_508_compliant' => $this->get508Compliant(),
-        'ui_click' => $this->isClickToOpenCompactMenuEnabled(),
-        'ui_cobrand' => $this->getCoBrand(),
-        'ui_delay' => $this->getUiDelay(),
-        'ui_header_background' => $this->getUiHeaderBackgroundColor(),
-        'ui_header_color' => $this->getUiHeaderColor(),
-        'ui_open_windows' => $this->isOpenWindowsEnabled(),
-        'ui_use_css' => $this->isStandardCssEnabled(),
-        'ui_use_addressbook' => $this->isAddressbookEnabled(),
-        'ui_language' => $language->language,
-      );
-      if (module_exists('googleanalytics')) {
-        if ($this->isGoogleAnalyticsTrackingEnabled()) {
-          $configuration['data_ga_property'] = variable_get('googleanalytics_account', '');
-          $configuration['data_ga_social'] = $this->isGoogleAnalyticsSocialTrackingEnabled();
-        }
-      }
-      $configuration['templates']['twitter'] = $this->getTwitterTemplate();
-      drupal_alter('addthis_configuration', $configuration);
-
-      $templates = array('templates' => $configuration['templates']);
-      unset($configuration['templates']);
-      $configurationOptionsJavascript = 'var addthis_config = ' . drupal_json_encode($configuration) . "\n";
-      $configurationOptionsJavascript .= 'var addthis_share = ' . drupal_json_encode($templates);
-    }
-    drupal_add_js(
-      $configurationOptionsJavascript,
-      array(
-      'type' => 'inline',
-      'scope' => 'footer',
-      'every_page' => TRUE,
-    )
-    );
-  }
-
   public function getAddThisAttributesMarkup($options) {
     if (isset($options)) {
       $attributes = array();
@@ -291,8 +226,24 @@ class AddThis {
     return array();
   }
 
+  /**
+   * Get the type used for the block.
+   */
   public function getBlockDisplayType() {
     return variable_get(self::BLOCK_WIDGET_TYPE_KEY, self::WIDGET_TYPE_DISABLED);
+  }
+
+  /**
+   * Get the settings used by the block display.
+   */
+  public function getBlockDisplaySettings() {
+    $settings = variable_get(self::BLOCK_WIDGET_SETTINGS_KEY, NULL);
+
+    if ($settings == NULL && $this->getBlockDisplayType() != self::WIDGET_TYPE_DISABLED) {
+      $settings = field_info_formatter_settings($this->getBlockDisplayType());
+    }
+
+    return $settings;
   }
 
   public function getProfileId() {
@@ -311,8 +262,38 @@ class AddThis {
     return variable_get(self::ENABLED_SERVICES_KEY, array());
   }
 
-  public function isWidgetJsAsync() {
-    return variable_get(self::WIDGET_JS_ASYNC, self::DEFAULT_WIDGET_JS_ASYNC);
+  public function getExcludedServices() {
+    return variable_get(self::EXCLUDED_SERVICES_KEY, array());
+  }
+
+  /**
+   * Return the type of inclusion.
+   *
+   * @return string
+   *   Retuns domready or async.
+   */
+  public function getWidgetJsInclude() {
+    return variable_get(self::WIDGET_JS_INCLUDE, self::DEFAULT_WIDGET_JS_INCLUDE);
+  }
+
+  /**
+   * Return if domready loading should be active.
+   *
+   * @return bool
+   *   Returns TRUE if domready is enabled.
+   */
+  public function getWidgetJsDomReady() {
+    return variable_get(self::WIDGET_JS_LOAD_DOMREADY, self::DEFAULT_WIDGET_JS_LOAD_DOMREADY);
+  }
+
+  /**
+   * Return if async initialization should be active.
+   *
+   * @return bool
+   *   Returns TRUE if async is enabled.
+   */
+  public function getWidgetJsAsync() {
+    return variable_get(self::WIDGET_JS_LOAD_ASYNC, self::DEFAULT_WIDGET_JS_LOAD_ASYNC);
   }
 
   public function isClickToOpenCompactMenuEnabled() {
@@ -400,10 +381,17 @@ class AddThis {
     return $this->getBaseBookmarkUrl() . $this->getProfileIdQueryParameterPrefixedWithAmp();
   }
 
+  /**
+   * Transform the entity title to a attribute.
+   *
+   * @remarks
+   *   The title of the entity and site can not contain double-qoutes. These are
+   *   encoded into html chars.
+   */
   private function getAttributeTitle($entity) {
     if (isset($entity->title)) {
       return array(
-        self::TITLE_ATTRIBUTE => (check_plain($entity->title) . ' - ' . variable_get('site_name')),
+        self::TITLE_ATTRIBUTE => htmlentities($entity->title . ' - ' . variable_get('site_name'), ENT_COMPAT),
       );
     }
     return array();
@@ -418,15 +406,15 @@ class AddThis {
     return array();
   }
 
-  private function getServiceNamesAsCommaSeparatedString() {
-    $enabledServiceNames = array_values($this->getEnabledServices());
-    $enabledServicesAsCommaSeparatedString = '';
-    foreach ($enabledServiceNames as $enabledServiceName) {
-      if ($enabledServiceName != '0') {
-        $enabledServicesAsCommaSeparatedString .= $enabledServiceName . ',';
+  public function getServiceNamesAsCommaSeparatedString($services) {
+    $serviceNames = array_values($services);
+    $servicesAsCommaSeparatedString = '';
+    foreach ($serviceNames as $serviceName) {
+      if ($serviceName != '0') {
+        $servicesAsCommaSeparatedString .= $serviceName . ',';
       }
     }
-    return $enabledServicesAsCommaSeparatedString;
+    return $servicesAsCommaSeparatedString;
   }
 
   private function getAdminCssFilePath() {
@@ -446,13 +434,32 @@ class AddThis {
     return $this->getProfileIdQueryParameter('#');
   }
 
+  /**
+   * Get the url for the AddThis Widget.
+   */
   private function getWidgetUrl() {
-    return check_url($this->validateSecureUrl($this->getBaseWidgetJsUrl()) . $this->getProfileIdQueryParameterPrefixedWithHash());
+    $url = ($this->currentlyOnHttps() ?
+      $this->getBaseWidgetJsUrl() : // Not https url.
+      $this->transformToSecureUrl($this->getBaseWidgetJsUrl()) // Transformed to https url.
+    );
+    return check_url($url);
   }
 
-  private function validateSecureUrl($url) {
+  /**
+   * Request if we are currently on a https connection.
+   *
+   * @return True if we are currently on a https connection.
+   */
+  public function currentlyOnHttps() {
     global $base_root;
-    if (strpos($base_root, 'https://') !== FALSE) {
+    return (strpos($base_root, 'https://') !== FALSE) ? TRUE : FALSE;
+  }
+
+  /**
+   * Transform a url to secure url with https prefix.
+   */
+  public function transformToSecureUrl($url) {
+    if ($this->currentlyOnHttps()) {
       $url = (strpos($url, 'http://') === 0 ? 'https://' . substr($url, 7) : $url);
     }
     return $url;

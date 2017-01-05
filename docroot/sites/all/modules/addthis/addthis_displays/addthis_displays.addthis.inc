@@ -32,6 +32,10 @@ function addthis_displays_addthis_display_markup__addthis_basic_toolbox($options
   );
   $element['#attributes'] += $addthis->getAddThisAttributesMarkup($options);
 
+  // Add the widget script.
+  $script_manager = AddThisScriptManager::getInstance();
+  $script_manager->attachJsToElement($element);
+
   $services = trim($options['#display']['settings']['share_services']);
   $services = str_replace(' ', '', $services);
   $services = explode(',', $services);
@@ -52,18 +56,30 @@ function addthis_displays_addthis_display_markup__addthis_basic_toolbox($options
       '#addthis_service' => $service,
     );
 
+    // Add individual counters.
+    if (strpos($service, 'counter_') === 0) {
+      $items[$service]['#attributes']['class'] = array("addthis_$service");
+    }
+
     // Basic implementations of bubble counter orientation.
     // @todo Figure all the bubbles out and add them.
-    //   Still missing: tweetme, hyves and stubleupon.
+    //   Still missing: tweetme, hyves and stubleupon, google_plusone_badge.
     //
-    // @todo Fix a way to use addthis_bubble_style.
-    //   There is a conflict now with using the class addthis_button_[service].
-    //   You can't add this bubble style now.
     $orientation = ($options['#display']['settings']['counter_orientation'] == 'horizontal' ? TRUE : FALSE);
     switch ($service) {
+      case 'linkedin_counter':
+          $items[$service]['#attributes'] += array(
+            'li:counter' => ($orientation ? '' : 'top'),
+          );
+        break;
       case 'facebook_like':
         $items[$service]['#attributes'] += array(
           'fb:like:layout' => ($orientation ? 'button_count' : 'box_count')
+        );
+        break;
+      case 'facebook_share':
+        $items[$service]['#attributes'] += array(
+          'fb:share:layout' => ($orientation ? 'button_count' : 'box_count')
         );
         break;
       case 'google_plusone':
@@ -75,6 +91,16 @@ function addthis_displays_addthis_display_markup__addthis_basic_toolbox($options
         $items[$service]['#attributes'] += array(
           'tw:count' => ($orientation ? 'horizontal' : 'vertical'),
           'tw:via' => AddThis::getInstance()->getTwitterVia(),
+        );
+        break;
+      case 'bubble_style':
+        $items[$service]['#attributes']['class'] = array(
+          'addthis_counter', 'addthis_bubble_style'
+        );
+        break;
+      case 'pill_style':
+        $items[$service]['#attributes']['class'] = array(
+          'addthis_counter', 'addthis_pill_style'
         );
         break;
     }
@@ -89,24 +115,33 @@ function addthis_displays_addthis_display_markup__addthis_basic_toolbox($options
  */
 function addthis_displays_addthis_display_markup__addthis_basic_button($options = array()) {
 
+  $addthis = AddThis::getInstance();
+  $settings = $options['#display']['settings'];
+
   $button_img = 'http://s7.addthis.com/static/btn/sm-share-en.gif';
-  if ($options['#display']['settings']['button_size'] == 'big') {
+  if (isset($settings['buttons_size']) && $settings['buttons_size'] == 'big') {
     $button_img = 'http://s7.addthis.com/static/btn/v2/lg-share-en.gif';
   }
+  $button_img = $addthis->transformToSecureUrl($button_img);
 
+  $extra_css = isset($settings['extra_css']) ? $settings['extra_css'] : '';
   $element = array(
     '#theme' => 'addthis_wrapper',
     '#tag' => 'a',
     '#attributes' => array(
       'class' => array(
         'addthis_button',
-        $options['#display']['settings']['extra_css'],
+        $extra_css,
       ),
     ),
   );
-  $element['#attributes'] += AddThis::getInstance()->getAddThisAttributesMarkup($options);
+  $element['#attributes'] += $addthis->getAddThisAttributesMarkup($options);
 
-  // Create img button
+  // Add the widget script.
+  $script_manager = AddThisScriptManager::getInstance();
+  $script_manager->attachJsToElement($element);
+
+  // Create img button.
   $image = array(
     '#theme' => 'addthis_element',
     '#tag' => 'img',

@@ -232,6 +232,10 @@ function webform_submission_send_mail($node, $submission, $emails = NULL) {
   // Create a themed message for mailing.
   $send_count = 0;
   foreach ($emails as $eid => $email) {
+    // Continue with next email recipients array if disabled for current.
+    if (!$email['status'])
+      continue;
+
     // Set the HTML property based on availablity of MIME Mail.
     $email['html'] = ($email['html'] && webform_variable_get('webform_email_html_capable'));
 
@@ -517,11 +521,11 @@ function webform_submission_resend($form, $form_state, $node, $submission) {
     $addresses = webform_format_email_address($email['email'], NULL, $node, $submission, FALSE, FALSE, NULL, $mapping);
     $addresses_valid = array_map('webform_valid_email_address', $addresses);
     $valid_email = count($addresses) == array_sum($addresses_valid);
-    
+
     $form['resend'][$eid] = array(
       '#type' => 'checkbox',
-      '#default_value' => $valid_email ? TRUE : FALSE,
-      '#disabled' => $valid_email ? FALSE : TRUE,
+      '#default_value' => $valid_email && $email['status'],
+      '#disabled' => !$valid_email,
     );
     $form['emails'][$eid]['email'] = array(
       '#markup' => nl2br(check_plain(implode("\n", $addresses))),
@@ -592,7 +596,7 @@ function webform_submission_resend_submit($form, &$form_state) {
 function theme_webform_submission_resend($variables) {
   $form = $variables['form'];
 
-  $header = array('', t('E-mail to'), t('Subject'));
+  $header = array(t('Send'), t('E-mail to'), t('Subject'));
   $rows = array();
   if (!empty($form['emails'])) {
     foreach (element_children($form['emails']) as $eid) {
@@ -632,15 +636,16 @@ function webform_submission_render($node, $submission, $email, $format, $exclude
   $renderable['#theme'] = array('webform_submission_' . $node->nid, 'webform_submission');
 
   $components = $node->webform['components'];
-  
+
   // Remove excluded components.
   if (is_array($excluded_components)) {
     foreach ($excluded_components as $cid) {
       unset($components[$cid]);
     }
-    if ($email && $email['exclude_empty']) {
+    if (!empty($email['exclude_empty'])) {
       foreach ($submission->data as $cid => $data) {
-        if (!isset($data[0]) || $data[0] == '') {
+        // Caution. Grids store their data in an array index by question key.
+        if (implode($data) == '') {
           unset($components[$cid]);
         }
       }

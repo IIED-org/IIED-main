@@ -49,7 +49,11 @@ function addthis_displays_field_formatter_settings_form($field, $instance, $view
         '#default_value' => $settings['share_services'],
         '#required' => TRUE,
         '#element_validate' => array('_addthis_display_element_validate_services'),
-        '#description' => t('Specify the names of the sharing services and seperate them with a , (comma). <a href="http://www.addthis.com/services/list">The names on this list are valid.</a>'),
+        '#description' =>
+          t('Specify the names of the sharing services and seperate them with a , (comma). <a href="http://www.addthis.com/services/list" target="_blank">The names on this list are valid.</a>') . 
+          t('Elements that are available but not ont the services list are (!services).',
+            array('!services' => 'bubble_style, pill_style, tweet, facebook_send, twitter_follow_native, google_plusone, stumbleupon_badge, counter_* (several supported services), linkedin_counter')
+        ),
       );
       $element['buttons_size'] = array(
         '#title' => t('Buttons size'),
@@ -110,7 +114,7 @@ function _addthis_display_element_validate_services($element, &$form_state, $for
   $services = trim($element['#value']);
   $services = str_replace(' ', '', $services);
 
-  if (!preg_match('/^[a-z\_\,]+$/', $services)) {
+  if (!preg_match('/^[a-z\_\,0-9]+$/', $services)) {
     $bad = TRUE;
   }
   // @todo Validate the service names against AddThis.com. Give a notice when there are bad names.

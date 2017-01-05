@@ -563,7 +563,7 @@
       // is larger than the allowed percent.
       // Otherwise check to see if the amount of px shown is larger than the
       // allotted amount.
-      if (amountVisible.indexOf('%')) {
+      if (typeof amountVisible === 'string' && amountVisible.indexOf('%')) {
         return (((verticalShowing/elemHeight)*100) >= parseInt(amountVisible));
       }
       else {
@@ -577,7 +577,7 @@
       // is larger than the allowed percent.
       // Otherwise check to see if the amount of px shown is larger than the
       // allotted amount.
-      if (amountVisible.indexOf('%')) {
+      if (typeof amountVisible === 'string' && amountVisible.indexOf('%')) {
         return (((horizontalShowing/elemWidth)*100) >= parseInt(amountVisible));
       }
       else {
@@ -591,7 +591,7 @@
       // is larger than the allowed percent.
       // Otherwise check to see if the amount of px shown is larger than the
       // allotted amount.
-      if (amountVisible.indexOf('%')) {
+      if (typeof amountVisible === 'string' && amountVisible.indexOf('%')) {
         return (((areaShowing/elemArea)*100) >= parseInt(amountVisible));
       }
       else {

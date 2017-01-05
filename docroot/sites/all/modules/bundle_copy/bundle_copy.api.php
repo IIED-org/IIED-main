@@ -22,6 +22,7 @@ function hook_bundle_copy_info() {
       'bundle_export_callback' => 'node_type_get_type',
       'bundle_save_callback' => 'node_type_save',
       'bundle_clone_name_validate' => 'node_type_load',
+      'bundle_name_validate' => 'node_type_load',
       'export_menu' => array(
         'path' => 'admin/structure/types/export',
         'access arguments' => 'administer content types',

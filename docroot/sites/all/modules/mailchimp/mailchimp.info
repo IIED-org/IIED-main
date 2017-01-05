@@ -2,17 +2,15 @@ name = MailChimp
 description = MailChimp email service integration.
 package = MailChimp
 core = 7.x
+php = 5.5
 
-files[] = includes/mailchimp.inc
-files[] = tests/mailchimp_tests.inc
-
-dependencies[] = libraries (>=2)
+files[] = includes/mailchimp_exception.inc
 
 configure = admin/config/services/mailchimp
 
-; Information added by drupal.org packaging script on 2013-07-25
-version = "7.x-2.12"
+; Information added by Drupal.org packaging script on 2016-11-08
+version = "7.x-4.7"
 core = "7.x"
 project = "mailchimp"
-datestamp = "1374771079"
+datestamp = "1478578147"
 
