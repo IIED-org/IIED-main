@@ -91,7 +91,7 @@ img {
 	min-height: 30px;
 	padding-left: 1em;
 	padding-right: 0;
-	background: url(../images/menu-separator.png) no-repeat left .2em;
+	background: url(../images/menu-separator.png) no-repeat left .1em;
 }
 
 #main-menu li:first-child, #superfish-1 li:first-child, #superfish-1 li li {
@@ -106,7 +106,7 @@ img {
 	line-height: 1em;
 	margin: 0;
 	display: block;
-	text-transform: uppercase;
+	text-transform: none;
 	text-decoration: none;
 	color: #dd9933; 
 	border-bottom: solid 0 #E6E6E6;
