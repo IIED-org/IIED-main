@@ -214,10 +214,6 @@ img {
   color: black;
 }
 
-.not-front #region-content {
-	margin-top: -3em;
-}
-
 div.column {
 	float: right;
 	width: 300px;
