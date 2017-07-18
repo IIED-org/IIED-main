@@ -15,7 +15,7 @@ body {
 	padding: 0;
 }
 h1, h2, h3, h4, h5, h6, .timeline-header h1.summary {
-	font-family: 'Abel', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	font-style: normal;
 	font-weight: bold;
 	margin: 0 0 15px 0;
@@ -176,31 +176,43 @@ img {
 
 /* Box background colour */
 
-.orange {
+.orange, .orange h2, #block-views-news-block-1, #block-views-news-block-1 h2, #block-views-news-block-1 a {
   background-color: #d76229;
   color: white;
-  padding: 10px;
+}
+.front .text, .front .block-views {
+  padding: 10px 20px;
   line-height: 1.5em;
 }
 
-.orange h3 {
-  color: white;
+.front .text, .front .map, .front .block-views {
+  margin-bottom: 1em;
 }
 
 .map {
   text-align: center;
 }
 .map iframe {
-  width: 90%;
+  width: 95%;
   height: 480px;
 }
 
-/*
-.front .content h2 {
-	font-size: 3em;
-	margin-bottom: 0.5em;
+.front .views-field-field-media-image {
+  float: none;
+  margin-bottom: 1em;
 }
-*/
+
+.front .views-field-field-media-image img {
+  border: solid 1px #d76229;
+}
+
+.front h5 {
+  margin-top: 1em;
+}
+
+.front h5 a {
+  color: black;
+}
 
 .not-front #region-content {
 	margin-top: -3em;
