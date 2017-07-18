@@ -362,13 +362,12 @@ div.description {
 	line-height: 1.33em;
 }
 
-/*
-.view-blog .views-field-field-image, .view-news .views-field-field-image {
+
+.not-front .view-blog .views-field-field-image, .not-front .view-news .views-field-field-image {
 	clear:left;
 	float:left;
 	margin: 0 10px 10px 0;
 }
-*/
 
 .view-blog .views-row, .view-news .views-row {
 	clear:left;
