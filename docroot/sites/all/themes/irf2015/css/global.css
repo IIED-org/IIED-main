@@ -181,12 +181,12 @@ img {
   background-color: #d76229;
   color: white;
 }
-.front .text, .front .block-views {
+.text, .front .block-views {
   padding: 10px 20px;
   line-height: 1.5em;
 }
 
-.front .text, .front .map, .front .block-views {
+.text, .front .map, .front .block-views {
   margin-bottom: 1em;
 }
 
@@ -196,6 +196,11 @@ img {
 .map iframe {
   width: 95%;
   height: 480px;
+}
+
+.region-sidebar-second .map iframe {
+  width: 100%;
+  height: 300px;
 }
 
 .front .views-field-field-media-image {
