@@ -295,13 +295,6 @@ h2.block-title {
 	width: 25%;
 }
 
-/* Messages */
-
-.not-front .messages {
-	margin-top: -3em;
-	margin-bottom: 3em;
-}
-
 /* mailchimp signup */
 
 .form-item-mailchimp-lists-mailchimp-newsletters-mergevars-EMAIL {
