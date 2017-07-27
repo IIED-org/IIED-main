@@ -9,32 +9,33 @@ html {
 }
 body {
 	margin: 0;
-	font: 0.75em/1.75em 'Helvetica Neue', Helvetica, Arial, sans-serif;	/* 12 / 16 = 0.75;  21 / 12 = 1.75 */
+	font: 0.8em/1.75em Arial, Helvetica, sans-serif;
 	color: #444;
 	background: #fff;
 	padding: 0;
 }
 h1, h2, h3, h4, h5, h6, .timeline-header h1.summary {
-	font-family: 'Abel', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-family: Arial, Helvetica, sans-serif;
 	font-style: normal;
 	font-weight: bold;
 	margin: 0 0 15px 0;
 	color: #333;
-	line-height: 1.3em;
+	line-height: 1.333em;
+  letter-spacing: normal;
 }
 
 h3, h4, h5, h6 {
-	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-family: Arial, Helvetica, sans-serif;
 	font-weight: normal;
 }
 
-h1 { font-size: 3em; }	/* 36 / 12 = 3 */
-h2, h2.block-title { font-size: 2em; }	/* 24 / 12 = 2 */
-h3 { font-size: 1.666666666666667em; }	/* 20 / 12 = 1.666666666666667 */
-h4 { font-size: 1.5em; }	/* 18 / 12 = 1.5 */
-h5 { font-size: 1.333333333333333em;	/* 16 / 12 = 1.333333333333333 */ }
+h1 { font-size: 2em; }
+h2, h2.block-title { font-size: 1.67em; }	
+h3 { font-size: 1.5em; }	
+h4 { font-size: 1.33em; }
+h5 { font-size: 1.167em;	}
 h6 {
-	font-size: 1.166666666666667em;	/* 14 / 12 = 1.166666666666667 */
+	font-size: 1em;	
 	text-transform: uppercase;
 	font-weight: normal;
 }
@@ -57,7 +58,7 @@ a:hover, a:focus {
 }
  
 h6.site-slogan {
-	font-family: 'Abel', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-family: Arial, Helvetica, sans-serif;
 	line-height: 1.8em;
     margin-top: 1.33em;
     text-transform: none;
@@ -108,13 +109,13 @@ img {
 	display: block;
 	text-transform: none;
 	text-decoration: none;
-	color: #dd9933; 
+	color: #3d3d3b; 
 	border-bottom: solid 0 #E6E6E6;
 	text-align:center;
 }
 
 #main-menu li a:hover, #main-menu li a:active, #main-menu li a.active-trail, #superfish-1 li a:hover, #superfish-1 li a:active, #superfish-1 li a.active-trail {
-	border-color: #FCB316;
+	border-color: #d76229;
 	border-bottom-width: 4px;
 	-webkit-transition: all 0.2s ease-in-out;
 	-moz-transition: all 0.2s ease-in-out;
@@ -127,7 +128,7 @@ img {
 }
 
 #main-menu li.current-menu-item a, #superfish-1 li.active-trail a { 
-	color: #aaa; 
+	color: #d76229; 
 }
 
 #main-menu li li, #main-menu li li.current-menu-item li, #superfish-1 li li, #superfish-1 li li.current-menu-item li {
@@ -174,15 +175,49 @@ img {
 
 /*** Home page styles ***/
 
-/*
-.front .content h2 {
-	font-size: 3em;
-	margin-bottom: 0.5em;
-}
-*/
+/* Box background colour */
 
-.not-front #region-content {
-	margin-top: -3em;
+.orange, .orange h2, #block-views-news-block-1, #block-views-news-block-1 h2, #block-views-news-block-1 a {
+  background-color: #d76229;
+  color: white;
+}
+.text, .front .block-views {
+  padding: 10px;
+  line-height: 1.5em;
+}
+
+.text, .front .map, .front .block-views {
+  margin-bottom: 1em;
+}
+
+.map {
+  text-align: center;
+}
+.map iframe {
+  width: 95%;
+  height: 480px;
+}
+
+.region-sidebar-second .map iframe {
+  width: 100%;
+  height: 300px;
+}
+
+.front .views-field-field-media-image {
+  float: none;
+  margin-bottom: 1em;
+}
+
+.front .views-field-field-media-image img {
+  border: solid 1px #d76229;
+}
+
+.front h5 {
+  margin-top: 1em;
+}
+
+.front h5 a {
+  color: black;
 }
 
 div.column {
@@ -260,13 +295,6 @@ h2.block-title {
 	width: 25%;
 }
 
-/* Messages */
-
-.not-front .messages {
-	margin-top: -3em;
-	margin-bottom: 3em;
-}
-
 /* mailchimp signup */
 
 .form-item-mailchimp-lists-mailchimp-newsletters-mergevars-EMAIL {
@@ -332,7 +360,8 @@ div.description {
 	line-height: 1.33em;
 }
 
-.view-blog .views-field-field-image, .view-news .views-field-field-image {
+
+.not-front .view-blog .views-field-field-image, .not-front .view-news .views-field-field-image {
 	clear:left;
 	float:left;
 	margin: 0 10px 10px 0;
