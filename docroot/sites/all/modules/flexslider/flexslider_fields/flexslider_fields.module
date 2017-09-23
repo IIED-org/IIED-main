@@ -228,7 +228,7 @@ function flexslider_fields_field_formatter_view($entity_type, $entity, $field, $
       }
 
       // Check caption settings.
-      if ($display['settings']['caption'] === 1) {
+      if ($display['settings']['caption'] === '1') {
         $item['caption'] = filter_xss($item['item']['title']);
       }
       elseif ($display['settings']['caption'] === 'alt') {

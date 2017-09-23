@@ -96,7 +96,7 @@ class FlexsliderTestCase extends DrupalWebTestCase {
     $optionset = flexslider_optionset_load($testsets[0]);
 
     // Change the settings
-    $optionset->options += $test_options['set2'];
+    $optionset->options = $test_options['set2'] + $optionset->options;
 
     // Save the updated values
     $optionset = flexslider_optionset_save($optionset);

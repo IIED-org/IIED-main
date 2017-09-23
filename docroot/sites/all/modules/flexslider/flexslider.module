@@ -163,13 +163,13 @@ function flexslider_theme() {
       'template' => 'theme/flexslider',
       'file' => 'theme/flexslider.theme.inc',
     ),
-    
+
     // Slide container
     'flexslider_list' => array(
       'variables' => array('items' => array(), 'settings' => array()),
       'file' => 'theme/flexslider.theme.inc',
     ),
-    
+
     // Slide item
     'flexslider_list_item' => array(
       'variables' => array('item' => array(), 'settings' => array(), 'caption' => ''),
@@ -253,7 +253,7 @@ function flexslider_optionset_create($values = array()) {
 
   // Merge default settings with any given settings
   $optionset_defaults = _flexslider_optionset_defaults();
-  $optionset->options = $optionset_defaults += $optionset->options;
+  $optionset->options = $optionset->options + $optionset_defaults;
 
   return $optionset;
 }
@@ -317,13 +317,14 @@ function flexslider_optionset_save($optionset, $new = FALSE) {
 
   // Merge default settings with any given settings
   $optionset_defaults = _flexslider_optionset_defaults();
-  $optionset->options = $optionset_defaults += $optionset->options;
+  $optionset->options = $optionset->options + $optionset_defaults;
+  _flexslider_typecast_optionset($optionset->options);
 
   // Prepare the database values.
   $db_values = array(
     'name' => $optionset->name,
     'title' => $optionset->title,
-    'options' => _flexslider_typecast_optionset($optionset->options),
+    'options' => $optionset->options,
   );
 
   if ($new) {
@@ -349,13 +350,14 @@ function flexslider_optionset_save($optionset, $new = FALSE) {
  *  Optionset object or machine name
  */
 function flexslider_optionset_delete($optionset) {
-  if (isset($optionset->name)) {
-    $name = $optionset->name;
+  if (!$optionset) {
+    return;
+  } elseif (!isset($optionset->name)) {
+    $optionset = flexslider_optionset_load($optionset);
   }
-  else {
-    $name = $optionset;
-  }
-  db_delete('flexslider_optionset')->condition('name', $name)->execute();
+  ctools_include('export');
+  ctools_export_crud_delete('flexslider_optionset', $optionset);
+  ctools_export_load_object_reset('flexslider_optionset');
 }
 
 /*
@@ -394,7 +396,7 @@ function flexslider_add($id = NULL, $optionset = NULL) {
     );
     drupal_add_js(array('flexslider' => $js_setting), 'setting');
   }
-  
+
   if (!empty($id)) {
     // JavaScript settings
     $js_settings = array(

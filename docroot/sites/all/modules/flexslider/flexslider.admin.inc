@@ -81,7 +81,7 @@ function flexslider_option_elements($options = array()) {
   $easing_options = array('swing' => t('Swing'), 'linear' => t('Linear'));
   if (module_exists('jqeasing')) {
     $easing_options = array_merge($easing_options, _flexslider_jqeasing_options());
-    
+
   }
 
   $form['animation_slideshow']['easing'] = array(
@@ -467,8 +467,7 @@ function flexslider_optionset_form_delete_submit($form, &$form_state) {
   $optionset = &$form_state['optionset'];
   $op = ($optionset->export_type & EXPORT_IN_CODE) ? 'reverted' : 'deleted';
 
-  ctools_include('export');
-  ctools_export_crud_delete('flexslider_optionset', $optionset);
+  flexslider_optionset_delete($optionset);
 
   drupal_set_message(t('Option set %name was ' . $op . '.', array('%name' => $optionset->name)));
   $form_state['redirect'] = 'admin/config/media/flexslider';

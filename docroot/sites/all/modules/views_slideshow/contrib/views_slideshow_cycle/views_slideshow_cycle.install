@@ -13,7 +13,7 @@ function views_slideshow_cycle_requirements($phase) {
 
   // If installing via Drush skip requirement checking here.
   if (php_sapi_name() == 'cli') {
-    return;
+    return $requirements;
   }
 
   // Ensure translations do not break at install time.
@@ -45,7 +45,7 @@ function views_slideshow_cycle_requirements($phase) {
           'severity' => REQUIREMENT_ERROR,
           'value' => t('Library required for Views Slideshow Cycle'),
           'description' => t('You need to install the jQuery cycle plugin. Create a directory in sites/all/libraries called jquery.cycle, and then copy jquery.cycle.all.js into it. You can find the plugin at !url.', array(
-            '!url' => l(t('GitHub)', 'https://raw.githubusercontent.com/malsup/cycle/3.0.3/jquery.cycle.all.js', array('attributes' => array('target' => '_blank')))),
+            '!url' => l(t('GitHub'), 'https://raw.githubusercontent.com/malsup/cycle/3.0.3/jquery.cycle.all.js', array('attributes' => array('target' => '_blank'))),
           )),
         );
       }

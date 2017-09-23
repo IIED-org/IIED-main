@@ -31,9 +31,9 @@ features[node][] = flexslider_example
 features[variable][] = field_bundle_settings_node__flexslider_example
 features[views_view][] = flexslider_views_example
 
-; Information added by Drupal.org packaging script on 2016-08-05
-version = "7.x-2.0-rc1+21-dev"
+; Information added by Drupal.org packaging script on 2017-02-13
+version = "7.x-2.0-rc2"
 core = "7.x"
 project = "flexslider"
-datestamp = "1470420482"
+datestamp = "1487028488"
 
