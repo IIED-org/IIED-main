@@ -429,3 +429,27 @@ p.copyright {
 	font-size:90%;
 	line-height:1.667em;
 }
+
+/* Cookie compliance buttons */
+
+#sliding-popup .popup-content #popup-text {
+  font-size: 15px;
+  font-weight: normal;
+}
+
+#sliding-popup .popup-content #popup-buttons button {
+   background: #585858;
+   color: white;
+   border: none;
+   border-radius: 0;
+   text-shadow: none;
+   box-shadow: none;
+   padding:5px 7px;
+   font-size: 15px;
+   font-weight: normal;
+}
+
+#sliding-popup .popup-content #popup-buttons button:hover {
+  background: #dfdfdf;
+  color: #777777;
+}
