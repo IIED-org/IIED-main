@@ -7,3 +7,20 @@
 	width: 290px;
 	margin-top: -145px;
 }
+
+/* Cookie compliance banner */
+
+#sliding-popup .popup-content {
+  max-width: 90%;
+}
+#sliding-popup .popup-content #popup-text {
+  max-width: 75%;
+  line-height: 2em;
+}
+#sliding-popup .popup-content #popup-buttons {
+  margin-bottom: 0;
+  max-width: 25%;
+}
+#sliding-popup .popup-content #popup-buttons button {
+  margin-top: .5em;
+}
