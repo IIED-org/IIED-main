@@ -17,6 +17,19 @@ consent is given another banner appears with a thank you message.
 The module provides a settings page where the banner can be customised. There
 are also template files for the banners that can be overridden by your theme.
 
+Upgrade info.
+=============
+7.24 introduces a dependency on ctools. Please (install and) enable ctools when
+you upgrade from a version below 7.24.
+
+https://www.drupal.org/project/ctools
+
+For translations, 7.15 introduced a soft dependency on i18n_variable. If you
+need to translate the banners, download i18n and install the i18n_variable and
+its dependencies.
+
+https://www.drupal.org/project/i18n
+
 Installation.
 =============
 1. Unzip the files to the "sites/all/modules" directory and enable the module.
@@ -48,13 +61,22 @@ Installation.
    available for sites that use Varnish (or other caching strategies). The
    JavaScript based variant also works for visitors that bypass Varnish.
 
-8. To translate the message displayed, enable the i18n_variable module in the
-   i18n package. After enabling "EU Cookie Compliance" at
-   admin/config/regional/i18n/variable, you will be able to set your
-   translations on the settings page for this module.
+Translations.
+=============
 
-NOTICE: The module does not audit your cookies nor does it prevent cookies
-from being set.
+To translate the message in the banners, enable the "i18n_variable" submodule in
+the i18n project.
+
+https://www.drupal.org/project/i18n
+
+After enabling "EU Cookie Compliance" at admin/config/regional/i18n/variable,
+you will be able to set your translations on the settings page for this module.
+
+Using Domain Access? Instead of using the "domain_settings" module, you need to
+use the "domain_variable_i18n" sub-module from the domain_variable project,
+or you won't be able to translate the module settings.
+
+https://www.drupal.org/project/domain_variable
 
 For developers.
 ===============

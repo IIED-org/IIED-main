@@ -6,12 +6,73 @@
  */
 
 /**
+ * Implements hook_schema().
+ */
+function eu_cookie_compliance_schema() {
+  $schema['eu_cookie_compliance_basic_consent'] = array(
+    'description' => 'Basic consent storage for EU Cookie Compliance / GDPR.',
+    'fields' => array(
+      'cid' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique consent storage ID.',
+      ),
+      'uid' => array(
+        'description' => '{users}.uid for user.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'timestamp' => array(
+        'description' => 'Time of consent.',
+        'type' => 'int',
+        'unsigned' => FALSE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'ip_address' => array(
+        'description' => 'The IP address.',
+        'type' => 'varchar',
+        // Maximum length of an ipv6 IP address.
+        'length' => 45,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'consent_type' => array(
+        'description' => 'The type of consent, such as "banner" for the banner and form_id for forms.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'revision_id' => array(
+        'description' => 'Revision of the privacy policy at the time of consent.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('cid'),
+    'indexes' => array(
+      'uid' => array('uid'),
+    ),
+    'foreign keys' => array(
+      'uid' => array('users' => 'uid'),
+    ),
+  );
+
+  return $schema;
+}
+
+/**
  * Implements hook_install().
  */
 function eu_cookie_compliance_install() {
 
   $default_filter_format = filter_default_format();
-  if ($default_filter_format == 'filtered_html') {
+  if ($default_filter_format == 'filtered_html' && filter_format_load('full_html')) {
     $default_filter_format = 'full_html';
   }
 
@@ -39,6 +100,17 @@ function eu_cookie_compliance_install() {
     'popup_delay' => 1000,
     'popup_link' => $cookie_policy,
     'fixed_top_position' => TRUE,
+    'consent_storage_method' => 'do_not_store',
+    'disabled_javascripts' => '',
+    'cookie_session' => 0,
+    'disable_google_analytics' => 0,
+    'withdraw_message' => array(
+      'value' => '<h2>We use cookies on this site to enhance your user experience</h2><p>You have given your consent for us to set cookies.</p>',
+      'format' => $default_filter_format,
+    ),
+    'withdraw_action_button_label' => 'Withdraw consent',
+    'withdraw_tab_button_label' => 'Privacy settings',
+    'withdraw_enabled' => 0,
   );
   variable_set('eu_cookie_compliance', $popup_settings);
 
@@ -63,16 +135,16 @@ function eu_cookie_compliance_uninstall() {
  */
 function eu_cookie_compliance_requirements($phase) {
   $requirements = array();
-  $settings = variable_get('eu_cookie_compliance');
 
-  if ($settings['popup_link'] == '<front>' && $settings['show_disagree_button']) {
-    $requirements['eu_cookie_compliance'] = array(
-      'title' => t('EU Cookie Compliance'),
-      'severity' => REQUIREMENT_ERROR,
-      'description' => t('Your privacy policy link is pointing at the front page. This is the default value after installation, and unless your privacy policy is actually posted at the front page, you will need to create a separate page for the privacy policy and link to that page.'),
-    );
-    if ($phase == 'runtime') {
-      $requirements['eu_cookie_compliance'] += array(
+  if ($phase == 'runtime') {
+    module_load_include('module', 'eu_cookie_compliance', 'eu_cookie_compliance');
+    $settings = eu_cookie_compliance_get_settings();
+
+    if (!empty($settings['popup_link']) && $settings['popup_link'] == '<front>' && !empty($settings['show_disagree_button']) && $settings['show_disagree_button']) {
+      $requirements['eu_cookie_compliance'] = array(
+        'title' => t('EU Cookie Compliance'),
+        'severity' => REQUIREMENT_ERROR,
+        'description' => t('Your privacy policy link is pointing at the front page. This is the default value after installation, and unless your privacy policy is actually posted at the front page, you will need to create a separate page for the privacy policy and link to that page.'),
         'value' => t('Privacy Policy link not provided'),
       );
     }
@@ -155,20 +227,154 @@ function eu_cookie_compliance_update_7001(&$sandbox) {
 /**
  * Delete the menu item that was added due to a missing menu item type in 1.15.
  */
-function eu_cookie_compliance_update_7002(&$sandbox) {
+function eu_cookie_compliance_update_7002() {
   db_query('delete from {menu_links} where link_path = \'eu-cookie-compliance-check\'');
 }
 
 /**
  * Clear cache for only the settings of this module, to initialize new module settings.
  */
-function eu_cookie_compliance_update_7003(&$sandbox) {
+function eu_cookie_compliance_update_7003() {
+  module_load_include('module', 'eu_cookie_compliance', 'eu_cookie_compliance');
   eu_cookie_compliance_clear_caches();
 }
 
 /**
  * Version 1.21. Clear cache for only the settings of this module.
  */
-function eu_cookie_compliance_update_7004(&$sandbox) {
+function eu_cookie_compliance_update_7004() {
+  module_load_include('module', 'eu_cookie_compliance', 'eu_cookie_compliance');
   eu_cookie_compliance_clear_caches();
+}
+
+/**
+ * Version 1.24. Add new settings.
+ */
+function eu_cookie_compliance_update_7005() {
+  $eu_cookie_settings = variable_get('eu_cookie_compliance', array());
+  $eu_cookie_settings['method'] = 'default';
+  $eu_cookie_settings['disagree_button_label'] = 'No, thanks';
+  $eu_cookie_settings['disabled_javascripts'] = '';
+  $eu_cookie_settings['whitelisted_cookies'] = '';
+  variable_set('eu_cookie_compliance', $eu_cookie_settings);
+}
+
+/**
+ * Version 1.24. Create table for storing consent, and update settings.
+ */
+function eu_cookie_compliance_update_7006() {
+  // NEVER load the schema with hook schema as the schema may has changed!
+  $schema['eu_cookie_compliance_basic_consent'] = array(
+    'description' => 'Basic consent storage for EU Cookie Compliance / GDPR.',
+    'fields' => array(
+      'cid' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique consent storage ID.',
+      ),
+      'uid' => array(
+        'description' => '{users}.uid for user.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'timestamp' => array(
+        'description' => 'Time of consent.',
+        'type' => 'int',
+        'unsigned' => FALSE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'ip_address' => array(
+        'description' => 'The IP address.',
+        'type' => 'varchar',
+        // Maximum length of an ipv6 IP address.
+        'length' => 45,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'consent_type' => array(
+        'description' => 'The type of consent, such as "banner" for the banner and form_id for forms.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'revision_id' => array(
+        'description' => 'Revision of the privacy policy at the time of consent.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('cid'),
+    'indexes' => array(
+      'uid' => array('uid'),
+    ),
+    'foreign keys' => array(
+      'uid' => array('users' => 'uid'),
+    ),
+  );
+
+  db_create_table('eu_cookie_compliance_basic_consent', $schema['eu_cookie_compliance_basic_consent']);
+  $eu_cookie_settings = variable_get('eu_cookie_compliance', array());
+  $eu_cookie_settings['consent_storage_method'] = 'do_not_store';
+  variable_set('eu_cookie_compliance', $eu_cookie_settings);
+
+  module_load_include('module', 'eu_cookie_compliance', 'eu_cookie_compliance');
+  eu_cookie_compliance_clear_caches();
+}
+
+/**
+ * Version 1.24. Be sure weight of the module is higher than jQuery Update.
+ */
+function eu_cookie_compliance_update_7007() {
+  if (module_exists('jquery_update')) {
+    // @TODO: Document why this weight change is needed. Add a test.
+    // Get the weight of the jquery update module.
+    $result = db_select('system', 's')
+      ->fields('s', array('weight'))
+      ->condition('name', 'jquery_update', '=')
+      ->execute();
+    $weight = !empty($result) ? $result->fetchField() : 0;
+
+    // Set the weight of this module to 1 heavier.
+    db_update('system')
+      ->fields(array('weight' => $weight + 1))
+      ->condition('name', 'eu_cookie_compliance', '=')
+      ->execute();
+  }
+}
+
+/**
+ * Add config variables for the withdraw banner.
+ */
+function eu_cookie_compliance_update_7008() {
+  $default_filter_format = filter_default_format();
+  if ($default_filter_format == 'filtered_html' && filter_format_load('full_html')) {
+    $default_filter_format = 'full_html';
+  }
+  $eu_cookie_settings = variable_get('eu_cookie_compliance', array());
+  $eu_cookie_settings['withdraw_message'] = array(
+    'value' => '<h2>We use cookies on this site to enhance your user experience</h2><p>You have given your consent for us to set cookies.</p>',
+    'format' => $default_filter_format,
+  );
+  $eu_cookie_settings['withdraw_action_button_label'] = 'Withdraw consent';
+  $eu_cookie_settings['withdraw_tab_button_label'] = 'Privacy settings';
+  $eu_cookie_settings['withdraw_enabled'] = 1;
+  variable_set('eu_cookie_compliance', $eu_cookie_settings);
+}
+
+/**
+ * Disable withdraw tab and banner in the consent method "Consent by default".
+ */
+function eu_cookie_compliance_update_7009() {
+  $eu_cookie_settings = variable_get('eu_cookie_compliance', array());
+
+  if (!empty($eu_cookie_settings['method']) && $eu_cookie_settings['method'] == 'default' && !empty($eu_cookie_settings['withdraw_enabled']) && $eu_cookie_settings['withdraw_enabled'] == 1) {
+    $eu_cookie_settings['withdraw_enabled'] = 0;
+  }
+  variable_set('eu_cookie_compliance', $eu_cookie_settings);
 }
