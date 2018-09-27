@@ -15,6 +15,7 @@ function eu_cookie_compliance_variable_info($options) {
     'type' => 'array',
     'access' => 'administer EU Cookie Compliance popup',
     'localize' => TRUE,
+    'multidomain' => TRUE,
   );
 
   return $variable;

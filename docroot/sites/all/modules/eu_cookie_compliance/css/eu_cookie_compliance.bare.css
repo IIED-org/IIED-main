@@ -24,13 +24,33 @@
   max-width: 40%;
 }
 
-#sliding-popup .popup-content #popup-buttons button {
+#sliding-popup button {
   cursor: pointer;
 }
 
 #sliding-popup .popup-content #popup-text {
   float: left;
   max-width: 60%;
+}
+
+.eu-cookie-withdraw-tab {
+  cursor: pointer;
+}
+
+.eu-cookie-withdraw-wrapper.sliding-popup-top,
+.eu-cookie-withdraw-wrapper.sliding-popup-top .eu-cookie-withdraw-banner {
+  transform: scaleY(-1);
+}
+
+.eu-cookie-withdraw-tab {
+  position: absolute;
+  top: 0;
+  transform: translate(-50%, -100%);
+  left: 50%;
+}
+
+.eu-cookie-withdraw-wrapper.sliding-popup-top .eu-cookie-withdraw-tab {
+  transform: translate(-50%, -100%) scaleY(-1);
 }
 
 @media screen and (max-width: 600px) {
