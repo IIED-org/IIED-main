@@ -181,3 +181,10 @@ function acquia_spi_update_7002() {
   variable_del('acquia_spi_machine_multisite_identifier');
 }
 
+/**
+ * Delete the module diff data variable.
+ */
+function acquia_spi_update_7003() {
+    variable_del('acquia_spi_module_diff_data');
+}
+

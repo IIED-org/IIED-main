@@ -155,14 +155,14 @@ function acquia_agent_page_alter(&$page) {
 function acquia_agent_toolbar_add_links($toolbar) {
   $link = array();
   if (acquia_agent_subscription_is_active()) {
-    $subscription = acquia_agent_settings('acquia_subscription_data');
-    if (is_array($subscription['expiration_date']) && isset($subscription['active']) && $subscription['active'] !== FALSE) {
+      $subscription = acquia_agent_settings('acquia_subscription_data');
+      if (is_array($subscription['expiration_date']) && isset($subscription['active']) && $subscription['active'] !== FALSE) {
       // Yes, this uses inline CSS, which sounds bad, but including a CSS file
       // just for this sounds equally bad.
       $icon = '<img src="' . base_path() . 'misc/message-16-ok.png" alt="ok" style="vertical-align: middle;" />';
       $link['title'] = t("!icon Subscription active (expires @date)", array('!icon' => $icon, '@date' => format_date(strtotime($subscription['expiration_date']['value']), 'custom', 'Y/n/j')));
       $link['attributes']['class'][] = "acquia-active-subscription";
-      $link['href'] = $subscription['href'];
+      $link['href'] = 'https://cloud.acquia.com/app/develop/applications/'.$subscription['uuid'];
     }
   }
   if (empty($link)) {
@@ -171,7 +171,7 @@ function acquia_agent_toolbar_add_links($toolbar) {
     $icon = '<img src="' . base_path() . 'misc/message-16-error.png" alt="error" style="vertical-align: middle;" />';
     $link['title'] = t("!icon Subscription not active", array('!icon' => $icon));
     $link['attributes']['class'][] = "acquia-inactive-subscription";
-    $link['href'] = 'http://acquia.com/network';
+    $link['href'] = 'https://cloud.acquia.com';
   }
   $link['html'] = TRUE;
   $toolbar['toolbar_user']['#links'] = array_merge(array('acquia_agent' => $link), $toolbar['toolbar_user']['#links']);
@@ -442,6 +442,10 @@ function acquia_agent_menu_alter(&$items) {
  * Menu callback for 'admin/config/system/acquia-agent/refresh-status'.
  */
 function acquia_agent_refresh_status() {
+  if (!isset($_GET['token']) || !drupal_valid_token($_GET['token'], 'admin/config/system/acquia-agent/refresh-status')) {
+    return MENU_ACCESS_DENIED;
+  }
+
   // Refresh subscription information, so we are sure about our update status.
   // We send a heartbeat here so that all of our status information gets
   // updated locally via the return data.
@@ -516,7 +520,7 @@ function acquia_agent_help($path, $arg) {
     case 'admin/help#acquia_agent':
       $output = '<h2>' . t('Acquia Connector modules') . '</h2>';
       $output .= '<p>' . t("The Acquia Connector suite of modules allow you to connect your site to Acquia Insight and other valuable services.") . '<p>';
-      $output .= '<p>' . t("<a href='!url'>Read more about the installation and use of the Acquia Connector module on the Acquia Library</a>.", array('!url' => url('https://docs.acquia.com/network/install/connector', array('external' => TRUE)))) . '</p>';
+      $output .= '<p>' . t("<a href='!url'>Read more about the installation and use of the Acquia Connector module on the Acquia Library</a>.", array('!url' => url('https://docs.acquia.com/acquia-cloud/insight/install/', array('external' => TRUE)))) . '</p>';
       $output .= '<dl>';
       $output .= '<dt>Acquia Agent</dt>';
       $output .= '<dd>' . t('Enables secure communication between your Drupal sites and Acquia Insight.') . '</dt>';
@@ -532,11 +536,11 @@ function acquia_agent_help($path, $arg) {
       $output .= '<dt>' . t('Data collection and examination') . '</dt>';
       $output .= '<dd>' . t('Upon cron (or if configured to run manually) information about your site will be sent and analyzed as part of the Acquia Insight service. You can optionally exclude information about admin privileges, content and user count, and watchdog logs.');
       $output .= '<dt>' . t('Source code analysis') . '</dt>';
-      $output .= '<dd>' . t('If your site supports external SSL connections, Acquia Insight will examine the source code of your site to detect alterations and provide code diffs and update recommentations.');
+      $output .= '<dd>' . t('If your site supports external SSL connections, Acquia Insight will examine the source code of your site to detect alterations and provide code diffs and update recommendations.');
       $output .= '<dt>' . t('Receive updates from Acquia Insight') . '</dt>';
       $output .= '<dd>' . t('Receive dynamic updates on the Network Settings page from Acquia.com about your subscription and new features.') . '</dd>';
       $output .= '<dt>' . t('Allow Insight to update list of approved variables.') . '</dt>';
-      $output .= '<dd>' . t('As part of the Acquia Insight service, some variables can be corrected to their recommended settings from within the Insight system. The list of variables that can be corrected can also be updated at your discretion. <a href="!url">Learn more</a>', array('!url' => url('https://docs.acquia.com/network/enhance/fix', array('external' => TRUE, 'fragment' => 'scope')))) . '</dd>';
+      $output .= '<dd>' . t('As part of the Acquia Insight service, some variables can be corrected to their recommended settings from within the Insight system. The list of variables that can be corrected can also be updated at your discretion. <a href="!url">Learn more</a>', array('!url' => url('https://docs.acquia.com/acquia-cloud/insight/config/', array('external' => TRUE)))) . '</dd>';
       $output .= '</dl>';
       return $output;
   }

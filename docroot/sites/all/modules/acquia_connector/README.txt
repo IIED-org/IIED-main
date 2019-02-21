@@ -34,7 +34,7 @@ hosted search service. Requires Apache Solr Search Integration module.
 Installation
 --------------------------------------------------------------------------------
 
-Consult the online documentation at https://docs.acquia.com/network/install for
+Consult the online documentation at https://docs.acquia.com/acquia-cloud/insight/install/ for
 installation instructions.
 
 Notes on Acquia Search data protection and index auto-switching

@@ -85,6 +85,8 @@ function acquia_agent_requirements($phase) {
 
   switch ($phase) {
     case 'runtime':
+      $token = ['token' => drupal_get_token('admin/config/system/acquia-agent/refresh-status')];
+
       // Inform users on subscription status. Either we know they are active,
       // or we know they have credentials but not active (not set up yet) or
       // we have credentials but an inactive subscription (either bad
@@ -94,7 +96,7 @@ function acquia_agent_requirements($phase) {
           'title' => t('Acquia subscription status'),
           'severity' => REQUIREMENT_OK,
           'value' => t('Active'),
-          'description' => t('You can <a href="@refresh-status">manually refresh the subscription status</a>.', array('@refresh-status' => url('admin/config/system/acquia-agent/refresh-status', array('query' => drupal_get_destination())))),
+          'description' => t('You can <a href="@refresh-status">manually refresh the subscription status</a>.', array('@refresh-status' => url('admin/config/system/acquia-agent/refresh-status', array('query' => array_merge(drupal_get_destination(), $token))))),
         );
       }
       elseif (!$has_credentials) {
@@ -102,12 +104,12 @@ function acquia_agent_requirements($phase) {
           'title' => t('Acquia subscription status'),
           'severity' => REQUIREMENT_WARNING,
           'value' => t('Unknown'),
-          'description' => t('You did not complete your Acquia subscription signup. You can provide the subscription identifier and the subscription key at the <a href="@settings">Acquia settings</a> page or try to <a href="@refresh-status">manually refresh the subscription status</a>.', array('@settings' => url('admin/config/system/acquia-agent'), '@refresh-status' => url('admin/config/system/acquia-agent/refresh-status', array('query' => drupal_get_destination()))))
+          'description' => t('You did not complete your Acquia subscription signup. You can provide the subscription identifier and the subscription key at the <a href="@settings">Acquia settings</a> page or try to <a href="@refresh-status">manually refresh the subscription status</a>.', array('@settings' => url('admin/config/system/acquia-agent'), '@refresh-status' => url('admin/config/system/acquia-agent/refresh-status', array('query' => array_merge(drupal_get_destination(), $token)))))
         );
       }
       else {
         $subscription = variable_get('acquia_subscription_data', array('active' => FALSE));
-        $href = isset($subscription['href']) ? $subscription['href'] . '/health' : 'http://acquia.com/network';
+        $href = isset($subscription['uuid']) ? 'https://cloud.acquia.com/app/develop/applications/' . $subscription['uuid'] : 'https://cloud.acquia.com';
         $requirements['acquia_subscription_status'] = array(
           'title' => t('Acquia subscription status'),
           'severity' => REQUIREMENT_WARNING,

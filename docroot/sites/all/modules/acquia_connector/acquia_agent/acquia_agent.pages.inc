@@ -249,7 +249,8 @@ function acquia_agent_settings_credentials($form, &$form_state) {
   $identifier = acquia_agent_settings('acquia_identifier');
   $key = acquia_agent_settings('acquia_key');
 
-  $form['#prefix'] = t('Enter your <a href="!net">identifier and key</a> from your subscriptions overview or <a href="!url">log in</a> to connect your site to Acquia Insight.', array('!net' => url('https://insight.acquia.com/subscriptions'), '!url' => url('admin/config/system/acquia-agent/setup')));
+  $form['#prefix'] = t('Enter your product keys from your <a href="!net">application overview</a> or <a href="!url">log in</a> to connect your site to Acquia Insight.', array('!net' => url('https://cloud.acquia.com'), '!url' => url('admin/config/system/acquia-agent/setup')));
+
   $form['acquia_identifier'] = array(
     '#type' => 'textfield',
     '#title' => t('Identifier'),
@@ -381,7 +382,7 @@ function acquia_agent_settings_form($form, &$form_state, $banner) {
     $help_url = url('admin/help/acquia_agent');
   }
   else {
-    $help_url = url('https://docs.acquia.com/network/install');
+    $help_url = url('https://docs.acquia.com/acquia-cloud/insight/install/');
   }
 
   if (empty($_POST)) {

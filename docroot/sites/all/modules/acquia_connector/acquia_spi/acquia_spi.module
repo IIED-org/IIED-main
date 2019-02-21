@@ -178,67 +178,6 @@ function _acquia_spi_send() {
 }
 
 /**
- * Implementation of hook_xmlrpc().
- */
-function acquia_spi_xmlrpc() {
-  return array(
-    array(
-      'acquia.nspi.send.module.data',
-      'acquia_spi_send_module_data',
-      array('string', 'array'),
-      t('Send file data for the provided path.')),
-  );
-}
-
-function acquia_spi_valid_request($data, $message) {
-  $key = acquia_agent_settings('acquia_key');
-  if (!isset($data['authenticator']) || !isset($data['authenticator']['time']) || !isset($data['authenticator']['nonce'])) {
-    return FALSE;
-  }
-  $string = $data['authenticator']['time'] . ':' . $data['authenticator']['nonce'] . ':' . $message;
-  $hash = sha1((str_pad($key, 64, chr(0x00)) ^ (str_repeat(chr(0x5c), 64))) . pack("H*", sha1((str_pad($key, 64, chr(0x00)) ^ (str_repeat(chr(0x36), 64))) . $string)));
-  if ($hash == $data['authenticator']['hash']) {
-    return TRUE;
-  }
-  else {
-    return FALSE;
-  }
-}
-
-/**
- * Send a file's contents to the requestor.
- *
- * @param array $data
- *
- * @return bool|string
- */
-function acquia_spi_send_module_data($data = array()) {
-  // We only do this if we are on SSL
-  $via_ssl = isset($_SERVER['HTTPS']) ? TRUE : FALSE;
-  if (variable_get('acquia_spi_module_diff_data', 1) && $via_ssl
-      && acquia_agent_has_credentials() && isset($data['body']['file'])
-      && acquia_spi_valid_request($data, $data['body']['file'])) {
-    // If our checks pass muster, then we'll provide this data.
-    // If the file variable is set and if the user has allowed file diffing.
-    $file = $data['body']['file'];
-    $document_root = getcwd();
-    $file_path = realpath($document_root . '/' . $file);
-    // Be sure the file being requested is within the webroot and is not any
-    // settings.php file.
-    if (is_file($file_path) && strpos($file_path, $document_root) === 0 && strpos($file_path, 'settings.php') === FALSE) {
-      $file_contents = file_get_contents($file_path);
-      header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-      header("Content-Type:text");
-      header("Cache-Control: no-cache");
-      header("Pragma: no-cache");
-      return $file_contents;
-    }
-  }
-
-  return FALSE;
-}
-
-/**
  * Implementation of hook_form_[form_id]_alter().
  */
 function acquia_spi_form_acquia_agent_settings_form_alter(&$form) {
@@ -253,7 +192,7 @@ function acquia_spi_form_acquia_agent_settings_form_alter(&$form) {
     $help_url = url('admin/help/acquia_agent');
   }
   else {
-    $help_url = url('https://docs.acquia.com/network/install');
+    $help_url = url('https://docs.acquia.com/acquia-cloud/insight/install/');
   }
 
   $ssl_available = (in_array('ssl', stream_get_transports(), TRUE) && !defined('ACQUIA_DEVELOPMENT_NOSSL'));
@@ -325,13 +264,6 @@ function acquia_spi_form_acquia_agent_settings_form_alter(&$form) {
     '#title' => t('Watchdog logs'),
     '#default_value' => variable_get('acquia_spi_send_watchdog', 1),
   );
-  $form['connection']['spi']['module_diff_data'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Source code'),
-    '#default_value' => (int) variable_get('acquia_spi_module_diff_data', 1) && $ssl_available,
-    '#description' => t('Source code analysis requires a SSL connection and for your site to be publicly accessible. <a href="!url">Learn more</a>.', array('!url' => $help_url)),
-    '#disabled' => !$ssl_available,
-  );
   $form['connection']['alter_variables'] = array(
     '#type' => 'checkbox',
     '#title' => t('Allow Insight to update list of approved variables.'),
@@ -382,7 +314,6 @@ function acquia_spi_agent_settings_submit($form, &$form_state) {
  */
 function acquia_agent_spi_set_submit($form, &$form_state) {
   variable_set('acquia_spi_site_name', $form_state['values']['name']);
-  variable_set('acquia_spi_module_diff_data', $form_state['values']['module_diff_data']);
   variable_set('acquia_spi_admin_priv', $form_state['values']['admin_priv']);
   variable_set('acquia_spi_send_node_user', $form_state['values']['send_node_user']);
   variable_set('acquia_spi_send_watchdog', $form_state['values']['send_watchdog']);
@@ -1350,7 +1281,7 @@ function acquai_spi_get_404s() {
 function acquia_spi_get_variables_data() {
   global $conf;
   $data = array();
-  $variables = array('acquia_spi_send_node_user', 'acquia_spi_admin_priv', 'acquia_spi_module_diff_data', 'acquia_spi_send_watchdog', 'acquia_spi_use_cron', 'cache_backends', 'cache_default_class', 'cache_inc', 'cron_safe_threshold', 'googleanalytics_cache', 'error_level', 'preprocess_js', 'page_cache_maximum_age', 'block_cache', 'preprocess_css', 'page_compression', 'cache', 'cache_lifetime', 'cron_last', 'clean_url', 'redirect_global_clean', 'theme_zen_settings', 'site_offline', 'site_name', 'user_register', 'user_signatures', 'user_admin_role', 'user_email_verification', 'user_cancel_method', 'filter_fallback_format', 'dblog_row_limit', 'date_default_timezone', 'file_default_scheme', 'install_profile', 'maintenance_mode', 'update_last_check', 'site_default_country', 'acquia_spi_saved_variables', 'acquia_spi_set_variables_automatic', 'acquia_spi_ignored_set_variables', 'acquia_spi_set_variables_override');
+  $variables = array('acquia_spi_send_node_user', 'acquia_spi_admin_priv', 'acquia_spi_send_watchdog', 'acquia_spi_use_cron', 'cache_backends', 'cache_default_class', 'cache_inc', 'cron_safe_threshold', 'googleanalytics_cache', 'error_level', 'preprocess_js', 'page_cache_maximum_age', 'block_cache', 'preprocess_css', 'page_compression', 'cache', 'cache_lifetime', 'cron_last', 'clean_url', 'redirect_global_clean', 'theme_zen_settings', 'site_offline', 'site_name', 'user_register', 'user_signatures', 'user_admin_role', 'user_email_verification', 'user_cancel_method', 'filter_fallback_format', 'dblog_row_limit', 'date_default_timezone', 'file_default_scheme', 'install_profile', 'maintenance_mode', 'update_last_check', 'site_default_country', 'acquia_spi_saved_variables', 'acquia_spi_set_variables_automatic', 'acquia_spi_ignored_set_variables', 'acquia_spi_set_variables_override');
   $spi_def_vars = variable_get('acquia_spi_def_vars', array());
   $waived_spi_def_vars = variable_get('acquia_spi_def_waived_vars', array());
   // Merge hard coded $variables with vars from SPI definition.
@@ -1439,7 +1370,7 @@ function acquia_spi_get_failed_logins() {
  * @return boolean
  */
 function acquia_spi_get_super_name() {
-  $result = db_query("SELECT name FROM {users} WHERE uid = 1 AND (name LIKE '%admin%' OR name LIKE '%root%')")->fetch();
+  $result = db_query("SELECT name FROM {users} WHERE uid = 1 AND (name LIKE '%admin%' OR name LIKE '%root%') AND CHAR_LENGTH(name) < 15")->fetch();
   if ($result) {
     return TRUE;
   }
@@ -1773,7 +1704,7 @@ function acquia_spi_set_variables($set_variables) {
 function acquia_spi_approved_set_variables() {
   // acquia_spi_set_variables_automatic is in here so that if
   // acquia_spi_set_variables_override is TRUE then it can be automatically set.
-  return variable_get('acquia_spi_set_variables_automatic', array('acquia_spi_set_variables_automatic', 'error_level', 'preprocess_js', 'page_cache_maximum_age', 'block_cache', 'preprocess_css', 'page_compression', 'cache', 'cache_lifetime', 'image_allow_insecure_derivatives', 'googleanalytics_cache', 'acquia_spi_send_node_user', 'acquia_spi_admin_priv', 'acquia_spi_module_diff_data', 'acquia_spi_send_watchdog', 'acquia_spi_use_cron'));
+  return variable_get('acquia_spi_set_variables_automatic', array('acquia_spi_set_variables_automatic', 'error_level', 'preprocess_js', 'page_cache_maximum_age', 'block_cache', 'preprocess_css', 'page_compression', 'cache', 'cache_lifetime', 'image_allow_insecure_derivatives', 'googleanalytics_cache', 'acquia_spi_send_node_user', 'acquia_spi_admin_priv', 'acquia_spi_send_watchdog', 'acquia_spi_use_cron'));
 }
 
 /**
@@ -1783,6 +1714,9 @@ function acquia_spi_approved_set_variables() {
  *   The suggested Acquia Hosted name.
  */
 function acquia_spi_get_acquia_hosted_name() {
+  if (!acquia_spi_check_acquia_hosted()) {
+    return '';
+  }
   $server = acquia_agent_get_server_superglobal();
   return acquia_agent_settings('acquia_subscription_name') . ': ' . $server['AH_SITE_ENVIRONMENT'];
 }
