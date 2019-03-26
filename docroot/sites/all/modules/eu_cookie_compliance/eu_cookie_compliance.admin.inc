@@ -16,7 +16,7 @@
  * @return array
  *   Admin form render array.
  */
-function eu_cookie_compliance_admin_form($form, $form_state) {
+function eu_cookie_compliance_admin_form(array $form, array $form_state) {
   ctools_include('plugins');
 
   $form = array();
@@ -112,6 +112,25 @@ function eu_cookie_compliance_admin_form($form, $form_state) {
     '#default_value' => isset($popup_settings['method']) ? $popup_settings['method'] : 'opt_in',
   );
 
+  // The info_template element is initialized in function
+  // eu_cookie_compliance_update_7009().
+  $default_value = (!empty($popup_settings['info_template'])) ? $popup_settings['info_template'] : 'new';
+  $form['consent_option']['eu_cookie_compliance']['info_template'] = array(
+    '#type' => 'radios',
+    '#title' => t('Info banner template'),
+    '#options' => array(
+      'legacy' => t('Cookie policy button in popup-buttons section and styled similarly to the Agree button, 
+        as in earlier versions of this module'),
+      'new' => t('Cookie policy button in popup-text section, styled differently than the Agree button.'),
+    ),
+    '#default_value' => $default_value,
+    '#states' => array(
+      'visible' => array(
+        "input[name='eu_cookie_compliance[method]']" => array('value' => 'default'),
+      ),
+    ),
+  );
+
   $form['javascripts'] = array(
     '#type' => 'fieldset',
     '#title' => t("Disable the following JavaScripts when consent isn't given"),
@@ -133,7 +152,7 @@ function eu_cookie_compliance_admin_form($form, $form_state) {
     '#type' => 'textarea',
     '#title' => t('Disable JavaScripts'),
     '#default_value' => isset($popup_settings['disabled_javascripts']) ? $popup_settings['disabled_javascripts'] : '',
-    '#description' => t("Include the full path of JavaScripts, each on a separate line. When using the opt-in or opt-out consent options, you can block certain JavaScript files from being loaded when consent isn't given. The on-site JavaScripts should be written as root relative paths <strong>without the leading slash</strong>, and off-site JavaScripts should be written as complete URLs <strong>with the leading http(s)://</strong>. Note that after the user gives consent, the scripts will be executed in the order you enter here."),
+    '#description' => t("Include the full path of JavaScripts, each on a separate line. When using the opt-in or opt-out consent options, you can block certain JavaScript files from being loaded when consent isn't given. The on-site JavaScripts should be written as root relative paths <strong>without the leading slash</strong>, you can use public://path/to/file.js and private://path/to/file.js, and off-site JavaScripts should be written as complete URLs <strong>with the leading http(s)://</strong>. Note that after the user gives consent, the scripts will be executed in the order you enter here.<br /><br />Scripts that attach to Drupal.behaviors are supported. To indicate a behavior that needs to be loaded on consent, append the behavior name after the script with a | (vertical bar). <strong>Example: modules/custom/custom_module/js/custom.js|customModule</strong>. <strong>Note that the Drupal behavior name is optional</strong>, but may be required to achieve your objective."),
   );
 
   $form['cookies'] = array(
@@ -180,7 +199,7 @@ function eu_cookie_compliance_admin_form($form, $form_state) {
   $form['consent_storage']['eu_cookie_compliance']['consent_storage_method'] = array(
     '#type' => 'radios',
     '#title' => t('Consent storage method'),
-    '#default_value' => $popup_settings['consent_storage_method'],
+    '#default_value' => isset($popup_settings['consent_storage_method']) ? $popup_settings['consent_storage_method'] : 'do_not_store',
     '#options' => $consent_storage_options,
   );
 
@@ -685,7 +704,11 @@ function eu_cookie_compliance_admin_form($form, $form_state) {
     '#type' => 'textarea',
     '#title' => t('Exclude paths'),
     '#default_value' => isset($popup_settings['exclude_paths']) ? $popup_settings['exclude_paths'] : '',
-    '#description' => t("Specify pages by using their paths. Enter one path per line. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
+    '#description' => t("Specify pages by using their paths. Enter one path per line. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array(
+      '%blog' => 'blog',
+      '%blog-wildcard' => 'blog/*',
+      '%front' => '<front>',
+    )),
   );
 
   $form['advanced']['eu_cookie_compliance']['exclude_admin_pages'] = array(
@@ -705,7 +728,7 @@ function eu_cookie_compliance_admin_form($form, $form_state) {
     '#title' => t('Script scope'),
     '#options' => array(
       'header' => t('Header (Scripts variable)'),
-      'footer' => t('Footer (Page bottom variable)')
+      'footer' => t('Footer (Page bottom variable)'),
     ),
     '#default_value' => isset($popup_settings['script_scope']) ? $popup_settings['script_scope'] : 'footer',
     '#description' => t('If you want to use the hasAgreed() function from other scripts, you may want to change this to header.'),
@@ -739,7 +762,7 @@ function eu_cookie_compliance_admin_form($form, $form_state) {
  * @param array $form_state
  *   Form state array.
  */
-function eu_cookie_compliance_admin_form_validate($form, &$form_state) {
+function eu_cookie_compliance_admin_form_validate(array $form, array &$form_state) {
   if ((!preg_match('/^[1-9][0-9]{0,4}$/', $form_state['values']['eu_cookie_compliance']['popup_delay'])) && ($form_state['values']['eu_cookie_compliance']['popup_delay'] != '0')) {
     form_set_error('eu_cookie_compliance][popup_delay', t('Delay must be an integer value.'));
   }
@@ -784,6 +807,7 @@ function eu_cookie_compliance_admin_form_validate($form, &$form_state) {
     $form_state['values']['eu_cookie_compliance']['show_disagree_button'] = TRUE;
     $form_state['values']['eu_cookie_compliance']['popup_clicking_confirmation'] = FALSE;
     $form_state['values']['eu_cookie_compliance']['popup_scrolling_confirmation'] = FALSE;
+    $form_state['values']['eu_cookie_compliance']['info_template'] = 'new';
   }
   else {
     $form_state['values']['eu_cookie_compliance']['whitelisted_cookies'] = '';
@@ -806,7 +830,7 @@ function eu_cookie_compliance_admin_form_validate($form, &$form_state) {
  * @param array $form_state
  *   Form state array.
  */
-function eu_cookie_compliance_admin_form_submit($form, &$form_state) {
+function eu_cookie_compliance_admin_form_submit(array $form, array &$form_state) {
   $permission = 'display EU Cookie Compliance popup';
   $roles = $form_state['values']['see_the_banner'];
   foreach ($roles as $rid => $value) {
@@ -827,7 +851,7 @@ function eu_cookie_compliance_admin_form_submit($form, &$form_state) {
  * @param array $form_state
  *   Form state array.
  */
-function eu_cookie_compliance_validate_hex($element, &$form_state) {
+function eu_cookie_compliance_validate_hex(array $element, array &$form_state) {
   if (!empty($element['#value']) && !preg_match('/^[0-9a-fA-F]{3,6}$/', $element['#value'])) {
     form_error($element, t('%name must be a HEX value (without leading #) or empty.', array('%name' => $element['#title'])));
   }
