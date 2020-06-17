@@ -1,0 +1,21 @@
+{
+    "name": "drupal/mysql56",
+    "_comment": [
+        "The type is not drupal-module, because drivers in a module namespace wasn't supported until after this project was released, and changing the namespace now would break BC.",
+        "The type is not drupal-database-driver, because drivers that override (have the same name as) a core one don't need to be in the drivers directory so long as they're in the autoloader."
+    ],
+    "type": "library",
+    "description": "MySQL 5.6 Driver for Drupal 9.0.",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "drupal/core": "~9.0.0-beta3"
+    },
+    "extra": {
+        "installer-name": "mysql"
+    },
+    "autoload": {
+        "psr-4": {
+            "Drupal\\Driver\\Database\\mysql\\": ""
+        }
+    }
+}

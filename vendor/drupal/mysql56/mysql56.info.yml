@@ -1,0 +1,6 @@
+name: MySQL 5.6 Driver for Drupal 9.0
+
+# Information added by Drupal.org packaging script on 2020-06-02
+version: '8.x-1.0'
+project: 'mysql56'
+datestamp: 1591127009
