@@ -1,0 +1,14 @@
+uuid: 01f3bd2c-a110-4790-96dc-b05c9dcddd9d
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: vymHlgJy26BuI5GGj9-IXjwR3dRC5C0tij4BpWJnoqw
+id: feedback
+label: 'Website feedback'
+recipients:
+  - newbooks@iied.org
+reply: ''
+weight: 0
+message: 'Your message has been sent.'
+redirect: ''

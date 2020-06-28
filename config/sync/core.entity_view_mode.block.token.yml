@@ -1,0 +1,10 @@
+uuid: 412425ed-caba-4c93-b3b3-ee2fdc5f17c8
+langcode: en
+status: true
+dependencies:
+  module:
+    - block
+id: block.token
+label: Token
+targetEntityType: block
+cache: true
