@@ -1109,44 +1109,6 @@
         ]
     },
     {
-        "name": "drupal/core-project-message",
-        "version": "8.9.1",
-        "version_normalized": "8.9.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/drupal/core-project-message.git",
-            "reference": "e0e237d3da026a87784f70c1069345855340ec23"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/drupal/core-project-message/zipball/e0e237d3da026a87784f70c1069345855340ec23",
-            "reference": "e0e237d3da026a87784f70c1069345855340ec23",
-            "shasum": ""
-        },
-        "require": {
-            "composer-plugin-api": "^1.1 || ^2",
-            "php": ">=7.0.8"
-        },
-        "type": "composer-plugin",
-        "extra": {
-            "class": "Drupal\\Composer\\Plugin\\ProjectMessage\\MessagePlugin"
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Drupal\\Composer\\Plugin\\ProjectMessage\\": "."
-            }
-        },
-        "license": [
-            "GPL-2.0-or-later"
-        ],
-        "description": "Adds a message after Composer installation.",
-        "homepage": "https://www.drupal.org/project/drupal",
-        "keywords": [
-            "drupal"
-        ]
-    },
-    {
         "name": "drupal/core-recommended",
         "version": "8.9.1",
         "version_normalized": "8.9.1.0",
