@@ -35,7 +35,7 @@ class FormStateDecoratorBaseTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     parent::setUp();
 
     $this->decoratedFormState = $this->prophesize(FormStateInterface::class);

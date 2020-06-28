@@ -28,7 +28,7 @@ class OverrideSectionsTest extends LayoutRestTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     parent::setUp();
     // @todo Figure why field definitions have to cleared in
     //   https://www.drupal.org/project/drupal/issues/2985882.
@@ -53,6 +53,7 @@ class OverrideSectionsTest extends LayoutRestTestBase {
       [
         'config:filter.format.plain_text',
         'config:rest.resource.entity.node',
+        'config:rest.settings',
         'http_response',
         'node:1',
       ],

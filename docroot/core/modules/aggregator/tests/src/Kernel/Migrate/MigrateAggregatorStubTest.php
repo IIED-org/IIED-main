@@ -17,12 +17,12 @@ class MigrateAggregatorStubTest extends MigrateDrupalTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['aggregator'];
+  public static $modules = ['aggregator'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('aggregator_feed');
     $this->installEntitySchema('aggregator_item');

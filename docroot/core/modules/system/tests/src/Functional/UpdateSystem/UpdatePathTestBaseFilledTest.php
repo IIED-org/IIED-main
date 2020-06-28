@@ -409,6 +409,7 @@ class UpdatePathTestBaseFilledTest extends UpdatePathTestBaseTest {
     // Make sure our themes are still enabled.
     $expected_enabled_themes = [
       'bartik',
+      'classy',
       'seven',
       'stark',
     ];

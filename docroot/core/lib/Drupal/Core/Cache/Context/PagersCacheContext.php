@@ -3,6 +3,7 @@
 namespace Drupal\Core\Cache\Context;
 
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\DependencyInjection\DeprecatedServicePropertyTrait;
 use Drupal\Core\Pager\PagerParametersInterface;
 
 /**
@@ -13,6 +14,13 @@ use Drupal\Core\Pager\PagerParametersInterface;
  * 'url.query_args.pagers:1' (to vary by the pager with ID 1).
  */
 class PagersCacheContext implements CalculatedCacheContextInterface {
+
+  use DeprecatedServicePropertyTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $deprecatedProperties = ['requestStack' => 'request_stack'];
 
   /**
    * The pager parameters.
@@ -27,7 +35,11 @@ class PagersCacheContext implements CalculatedCacheContextInterface {
    * @param \Drupal\Core\Pager\PagerParametersInterface $pager_params
    *   The pager parameters.
    */
-  public function __construct(PagerParametersInterface $pager_params) {
+  public function __construct($pager_params) {
+    if (!($pager_params instanceof PagerParametersInterface)) {
+      @trigger_error('Calling ' . __METHOD__ . ' with a $pager_params argument that does not implement \Drupal\Core\Pager\PagerParametersInterface is deprecated in drupal:8.8.0 and is required in drupal:9.0.0. See https://www.drupal.org/node/2779457', E_USER_DEPRECATED);
+      $pager_params = \Drupal::service('pager.parameters');
+    }
     $this->pagerParams = $pager_params;
   }
 

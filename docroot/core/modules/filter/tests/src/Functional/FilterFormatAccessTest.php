@@ -19,7 +19,7 @@ class FilterFormatAccessTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['block', 'filter', 'node'];
+  public static $modules = ['block', 'filter', 'node'];
 
   /**
    * {@inheritdoc}
@@ -68,7 +68,7 @@ class FilterFormatAccessTest extends BrowserTestBase {
    */
   protected $disallowedFormat;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalPlaceBlock('page_title_block');

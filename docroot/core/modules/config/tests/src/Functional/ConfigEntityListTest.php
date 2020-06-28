@@ -21,7 +21,7 @@ class ConfigEntityListTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['block', 'config_test'];
+  public static $modules = ['block', 'config_test'];
 
   /**
    * {@inheritdoc}
@@ -31,7 +31,7 @@ class ConfigEntityListTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     // Delete the override config_test entity since it is not required by this
     // test.

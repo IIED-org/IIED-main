@@ -28,7 +28,7 @@ abstract class MigrateUpgradeExecuteTestBase extends MigrateUpgradeTestBase {
     $this->createContent();
 
     // Get the current major version.
-    [$this->destinationSiteVersion] = explode('.', \Drupal::VERSION, 2);
+    list($this->destinationSiteVersion) = explode('.', \Drupal::VERSION, 2);
   }
 
   /**

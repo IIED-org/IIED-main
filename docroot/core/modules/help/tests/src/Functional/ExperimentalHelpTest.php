@@ -19,7 +19,7 @@ class ExperimentalHelpTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'help',
     'experimental_module_test',
     'help_page_test',
@@ -40,7 +40,7 @@ class ExperimentalHelpTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->adminUser = $this->drupalCreateUser(['access administration pages']);
   }

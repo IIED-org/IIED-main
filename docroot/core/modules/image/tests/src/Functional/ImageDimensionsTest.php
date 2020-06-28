@@ -24,7 +24,7 @@ class ImageDimensionsTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['image', 'image_module_test'];
+  public static $modules = ['image', 'image_module_test'];
 
   /**
    * {@inheritdoc}

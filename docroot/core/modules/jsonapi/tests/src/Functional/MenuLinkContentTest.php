@@ -26,7 +26,7 @@ class MenuLinkContentTest extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['menu_link_content'];
+  public static $modules = ['menu_link_content'];
 
   /**
    * {@inheritdoc}

@@ -31,7 +31,7 @@ class DisplayBlockTest extends ViewTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'block_test_views',
     'test_page_test',
@@ -54,7 +54,7 @@ class DisplayBlockTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     ViewTestData::createTestViews(get_class($this), ['block_test_views']);

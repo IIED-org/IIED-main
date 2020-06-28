@@ -80,7 +80,7 @@ class UpdateReady extends FormBase {
       $container->get('update.root'),
       $container->get('module_handler'),
       $container->get('state'),
-      $container->getParameter('site.path')
+      $container->get('site.path')
     );
   }
 

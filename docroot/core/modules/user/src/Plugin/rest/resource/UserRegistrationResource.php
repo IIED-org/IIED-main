@@ -23,7 +23,7 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
  *   label = @Translation("User registration"),
  *   serialization_class = "Drupal\user\Entity\User",
  *   uri_paths = {
- *     "create" = "/user/register",
+ *     "https://www.drupal.org/link-relations/create" = "/user/register",
  *   },
  * )
  */

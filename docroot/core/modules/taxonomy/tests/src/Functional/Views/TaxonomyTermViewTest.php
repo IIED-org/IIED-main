@@ -21,7 +21,7 @@ class TaxonomyTermViewTest extends TaxonomyTestBase {
    *
    * @var array
    */
-  protected static $modules = ['taxonomy', 'views'];
+  public static $modules = ['taxonomy', 'views'];
 
   /**
    * {@inheritdoc}
@@ -45,7 +45,7 @@ class TaxonomyTermViewTest extends TaxonomyTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     // Create an administrative user.

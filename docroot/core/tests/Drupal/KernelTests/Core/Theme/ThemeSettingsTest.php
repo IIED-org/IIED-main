@@ -18,7 +18,7 @@ class ThemeSettingsTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system'];
+  public static $modules = ['system'];
 
   /**
    * List of discovered themes.
@@ -27,7 +27,7 @@ class ThemeSettingsTest extends KernelTestBase {
    */
   protected $availableThemes;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     // Theme settings rely on System module's system.theme.global configuration.
     $this->installConfig(['system']);

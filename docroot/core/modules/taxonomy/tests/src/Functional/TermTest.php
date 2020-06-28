@@ -34,7 +34,7 @@ class TermTest extends TaxonomyTestBase {
    *
    * @var string[]
    */
-  protected static $modules = ['block'];
+  public static $modules = ['block'];
 
   /**
    * {@inheritdoc}
@@ -44,7 +44,7 @@ class TermTest extends TaxonomyTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalPlaceBlock('local_actions_block');

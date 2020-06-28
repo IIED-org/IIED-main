@@ -19,9 +19,9 @@ class BundleConstraintValidatorTest extends KernelTestBase {
    */
   protected $typedData;
 
-  protected static $modules = ['node', 'field', 'text', 'user'];
+  public static $modules = ['node', 'field', 'text', 'user'];
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('user');
     $this->typedData = $this->container->get('typed_data_manager');

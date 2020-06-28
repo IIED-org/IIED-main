@@ -18,7 +18,7 @@ class EditorManagerTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'user', 'filter', 'editor'];
+  public static $modules = ['system', 'user', 'filter', 'editor'];
 
   /**
    * The manager for text editor plugins.
@@ -27,7 +27,7 @@ class EditorManagerTest extends KernelTestBase {
    */
   protected $editorManager;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Install the Filter module.

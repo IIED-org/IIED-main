@@ -41,7 +41,7 @@ class TimestampTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['node', 'entity_test', 'field_ui'];
+  public static $modules = ['node', 'entity_test', 'field_ui'];
 
   /**
    * {@inheritdoc}
@@ -51,7 +51,7 @@ class TimestampTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $web_user = $this->drupalCreateUser([

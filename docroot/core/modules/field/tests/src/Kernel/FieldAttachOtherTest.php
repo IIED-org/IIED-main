@@ -13,7 +13,7 @@ use Drupal\entity_test\Entity\EntityTest;
  */
 class FieldAttachOtherTest extends FieldKernelTestBase {
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->container->get('router.builder')->rebuild();
     $this->installEntitySchema('entity_test_rev');

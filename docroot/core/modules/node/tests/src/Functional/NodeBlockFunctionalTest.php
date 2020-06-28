@@ -41,9 +41,9 @@ class NodeBlockFunctionalTest extends NodeTestBase {
    *
    * @var array
    */
-  protected static $modules = ['block', 'views'];
+  public static $modules = ['block', 'views'];
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create users and test node.

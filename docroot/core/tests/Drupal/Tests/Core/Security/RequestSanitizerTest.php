@@ -26,7 +26,7 @@ class RequestSanitizerTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->errors = [];
     set_error_handler([$this, "errorHandler"]);

@@ -28,7 +28,7 @@ class AliasTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // The alias whitelist expects that the menu path roots are set by a

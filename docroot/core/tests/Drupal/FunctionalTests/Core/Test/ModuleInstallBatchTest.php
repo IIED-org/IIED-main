@@ -23,7 +23,7 @@ class ModuleInstallBatchTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['test_batch_test', 'entity_test'];
+  public static $modules = ['test_batch_test', 'entity_test'];
 
   /**
    * {@inheritdoc}

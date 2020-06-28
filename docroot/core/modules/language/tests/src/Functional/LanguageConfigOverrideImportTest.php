@@ -17,7 +17,7 @@ class LanguageConfigOverrideImportTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'language',
     'config',
     'locale',

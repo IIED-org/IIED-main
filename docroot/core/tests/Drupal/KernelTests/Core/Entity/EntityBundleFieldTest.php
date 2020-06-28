@@ -14,7 +14,7 @@ class EntityBundleFieldTest extends EntityKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['entity_schema_test', 'entity_test_update'];
+  public static $modules = ['entity_schema_test', 'entity_test_update'];
 
   /**
    * The module handler.
@@ -33,7 +33,7 @@ class EntityBundleFieldTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installSchema('user', ['users_data']);
     $this->installEntitySchema('entity_test_update');

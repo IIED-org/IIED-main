@@ -17,7 +17,7 @@ class FollowUpMigrationsTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'content_translation',
     'comment',
     'datetime',
@@ -36,7 +36,7 @@ class FollowUpMigrationsTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->fileMigrationSetup();

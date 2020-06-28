@@ -17,7 +17,7 @@ class NodeAccessFieldTest extends NodeTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node_access_test', 'field_ui'];
+  public static $modules = ['node_access_test', 'field_ui'];
 
   /**
    * {@inheritdoc}
@@ -45,7 +45,7 @@ class NodeAccessFieldTest extends NodeTestBase {
    */
   protected $fieldName;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     node_access_rebuild();

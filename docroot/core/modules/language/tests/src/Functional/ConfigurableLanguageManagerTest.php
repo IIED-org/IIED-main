@@ -24,7 +24,7 @@ class ConfigurableLanguageManagerTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'language',
     'content_translation',
     'node',
@@ -42,7 +42,7 @@ class ConfigurableLanguageManagerTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     /** @var \Drupal\user\UserInterface $user */

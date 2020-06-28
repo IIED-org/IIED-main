@@ -19,12 +19,12 @@ class FormDefaultHandlersTest extends KernelTestBase implements FormInterface {
    *
    * @var array
    */
-  protected static $modules = ['system'];
+  public static $modules = ['system'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installSchema('system', ['key_value_expire']);
   }

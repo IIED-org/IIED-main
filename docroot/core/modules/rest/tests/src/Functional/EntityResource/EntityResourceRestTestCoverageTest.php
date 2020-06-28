@@ -31,7 +31,7 @@ class EntityResourceRestTestCoverageTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $all_modules = $this->container->get('extension.list.module')->getList();

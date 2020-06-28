@@ -28,7 +28,7 @@ class FieldUninstallValidatorTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->fieldUninstallValidator = $this->getMockBuilder('Drupal\field\FieldUninstallValidator')
       ->disableOriginalConstructor()

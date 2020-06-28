@@ -15,12 +15,12 @@ class MigrateUploadInstanceTest extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['menu_ui'];
+  public static $modules = ['menu_ui'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->migrateFields();
   }
@@ -34,7 +34,7 @@ class MigrateUploadInstanceTest extends MigrateDrupal6TestBase {
     $this->assertIdentical('node.page.upload', $field->id());
     $this->assertIdentical('jpg jpeg gif png txt doc xls pdf ppt pps odt ods odp', $settings['file_extensions']);
     $this->assertIdentical('1MB', $settings['max_filesize']);
-    $this->assertTrue($settings['description_field']);
+    $this->assertIdentical(TRUE, $settings['description_field']);
 
     $field = FieldConfig::load('node.story.upload');
     $this->assertIdentical('node.story.upload', $field->id());

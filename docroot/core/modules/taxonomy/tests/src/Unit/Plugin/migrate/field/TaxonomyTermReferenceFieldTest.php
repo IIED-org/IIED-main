@@ -26,7 +26,7 @@ class TaxonomyTermReferenceFieldTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     $this->plugin = new TaxonomyTermReference([], 'taxonomy', []);
 
     $migration = $this->prophesize(MigrationInterface::class);

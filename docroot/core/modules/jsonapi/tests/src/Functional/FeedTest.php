@@ -18,7 +18,7 @@ class FeedTest extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['aggregator'];
+  public static $modules = ['aggregator'];
 
   /**
    * {@inheritdoc}

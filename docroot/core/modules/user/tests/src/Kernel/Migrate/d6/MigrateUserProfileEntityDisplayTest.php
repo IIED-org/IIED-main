@@ -15,7 +15,7 @@ class MigrateUserProfileEntityDisplayTest extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->executeMigrations([
       'user_profile_field',

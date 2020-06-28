@@ -15,7 +15,7 @@ class TourTest extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['tour'];
+  public static $modules = ['tour'];
 
   /**
    * {@inheritdoc}

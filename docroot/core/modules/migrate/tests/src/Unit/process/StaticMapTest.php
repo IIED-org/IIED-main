@@ -17,7 +17,7 @@ class StaticMapTest extends MigrateProcessTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     $configuration['map']['foo']['bar'] = 'baz';
     $this->plugin = new StaticMap($configuration, 'map', []);
     parent::setUp();

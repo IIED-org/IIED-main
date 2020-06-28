@@ -21,7 +21,7 @@ class StatisticsLoggingTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'statistics', 'block', 'locale'];
+  public static $modules = ['node', 'statistics', 'block', 'locale'];
 
   /**
    * {@inheritdoc}
@@ -49,7 +49,7 @@ class StatisticsLoggingTest extends BrowserTestBase {
    */
   protected $client;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create Basic page node type.
@@ -142,7 +142,7 @@ class StatisticsLoggingTest extends BrowserTestBase {
     // This is a test specifically for the deprecated statistics_get() function
     // and so should remain unconverted until that function is removed.
     $result = \Drupal::service('statistics.storage.node')->fetchView($node_id);
-    $this->assertFalse($result);
+    $this->assertIdentical($result, FALSE);
   }
 
 }

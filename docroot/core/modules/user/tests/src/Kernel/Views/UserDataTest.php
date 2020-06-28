@@ -24,7 +24,7 @@ class UserDataTest extends ViewsKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['user_test_views'];
+  public static $modules = ['user_test_views'];
 
   /**
    * Tests field handler.

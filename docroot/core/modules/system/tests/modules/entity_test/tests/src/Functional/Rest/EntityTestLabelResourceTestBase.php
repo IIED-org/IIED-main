@@ -3,15 +3,18 @@
 namespace Drupal\Tests\entity_test\Functional\Rest;
 
 use Drupal\entity_test\Entity\EntityTestLabel;
+use Drupal\Tests\rest\Functional\BcTimestampNormalizerUnixTestTrait;
 use Drupal\Tests\rest\Functional\EntityResource\EntityResourceTestBase;
 use Drupal\user\Entity\User;
 
 abstract class EntityTestLabelResourceTestBase extends EntityResourceTestBase {
 
+  use BcTimestampNormalizerUnixTestTrait;
+
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['entity_test'];
+  public static $modules = ['entity_test'];
 
   /**
    * {@inheritdoc}
@@ -96,10 +99,7 @@ abstract class EntityTestLabelResourceTestBase extends EntityResourceTestBase {
         ],
       ],
       'created' => [
-        [
-          'value' => (new \DateTime())->setTimestamp((int) $this->entity->get('created')->value)->setTimezone(new \DateTimeZone('UTC'))->format(\DateTime::RFC3339),
-          'format' => \DateTime::RFC3339,
-        ],
+        $this->formatExpectedTimestampItemValues((int) $this->entity->get('created')->value),
       ],
       'user_id' => [
         [
@@ -143,6 +143,10 @@ abstract class EntityTestLabelResourceTestBase extends EntityResourceTestBase {
    * {@inheritdoc}
    */
   protected function getExpectedUnauthorizedAccessMessage($method) {
+    if ($this->config('rest.settings')->get('bc_entity_resource_permissions')) {
+      return parent::getExpectedUnauthorizedAccessMessage($method);
+    }
+
     switch ($method) {
       case 'GET':
         return "The 'view test entity' permission is required.";

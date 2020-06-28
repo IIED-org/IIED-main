@@ -38,7 +38,7 @@ class FileFieldWidgetTest extends FileFieldTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->drupalPlaceBlock('system_breadcrumb_block');
   }

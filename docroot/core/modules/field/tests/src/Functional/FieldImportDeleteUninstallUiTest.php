@@ -22,7 +22,7 @@ class FieldImportDeleteUninstallUiTest extends FieldTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'entity_test',
     'telephone',
     'config',
@@ -35,7 +35,7 @@ class FieldImportDeleteUninstallUiTest extends FieldTestBase {
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalLogin($this->drupalCreateUser(['synchronize configuration']));

@@ -16,7 +16,7 @@ class FieldHelpTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['field', 'help'];
+  public static $modules = ['field', 'help'];
 
   /**
    * {@inheritdoc}
@@ -31,7 +31,7 @@ class FieldHelpTest extends BrowserTestBase {
    */
   protected $adminUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create the admin user.

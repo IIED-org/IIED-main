@@ -14,7 +14,7 @@ class ThemeTest extends TaxonomyTestBase {
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Make sure we are using distinct default and administrative themes for

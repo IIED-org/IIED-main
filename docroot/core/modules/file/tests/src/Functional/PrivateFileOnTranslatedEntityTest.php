@@ -15,7 +15,7 @@ class PrivateFileOnTranslatedEntityTest extends FileFieldTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['language', 'content_translation'];
+  public static $modules = ['language', 'content_translation'];
 
   /**
    * {@inheritdoc}
@@ -32,7 +32,7 @@ class PrivateFileOnTranslatedEntityTest extends FileFieldTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create the "Basic page" node type.

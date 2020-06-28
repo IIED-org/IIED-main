@@ -31,7 +31,7 @@ class MachineNameControllerTest extends UnitTestCase {
    */
   protected $tokenGenerator;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     // Create the machine name controller.
     $this->tokenGenerator = $this->prophesize(CsrfTokenGenerator::class);

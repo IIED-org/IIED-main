@@ -15,7 +15,7 @@ class EntityViewDisplayAccessControlHandlerTest extends EntityFormDisplayAccessC
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->member = $this->createMock(AccountInterface::class);

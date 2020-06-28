@@ -15,12 +15,12 @@ class ItemWithoutFeedTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['aggregator', 'options'];
+  public static $modules = ['aggregator', 'options'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('aggregator_feed');
     $this->installEntitySchema('aggregator_item');

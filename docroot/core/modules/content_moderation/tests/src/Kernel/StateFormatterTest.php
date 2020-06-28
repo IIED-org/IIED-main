@@ -21,7 +21,7 @@ class StateFormatterTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'workflows',
     'content_moderation',
     'entity_test',
@@ -31,7 +31,7 @@ class StateFormatterTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installEntitySchema('entity_test_rev');

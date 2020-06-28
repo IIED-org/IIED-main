@@ -20,7 +20,7 @@ class EditorAdminTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['filter', 'editor'];
+  public static $modules = ['filter', 'editor'];
 
   /**
    * {@inheritdoc}
@@ -34,7 +34,7 @@ class EditorAdminTest extends BrowserTestBase {
    */
   protected $adminUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Add text format.

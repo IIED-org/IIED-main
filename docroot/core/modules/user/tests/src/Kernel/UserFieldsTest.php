@@ -17,12 +17,12 @@ class UserFieldsTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['user', 'system'];
+  public static $modules = ['user', 'system'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('user');
 

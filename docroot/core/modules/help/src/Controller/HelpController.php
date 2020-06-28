@@ -44,11 +44,16 @@ class HelpController extends ControllerBase {
    * @param \Drupal\help\HelpSectionManager $help_manager
    *   The help section manager.
    * @param \Drupal\Core\Extension\ModuleExtensionList|null $module_extension_list
-   *   The module extension list.
+   *   The module extension list. This is left optional for BC reasons, but the
+   *   optional usage is deprecated and will become required in Drupal 9.0.0.
    */
-  public function __construct(RouteMatchInterface $route_match, HelpSectionManager $help_manager, ModuleExtensionList $module_extension_list) {
+  public function __construct(RouteMatchInterface $route_match, HelpSectionManager $help_manager, ModuleExtensionList $module_extension_list = NULL) {
     $this->routeMatch = $route_match;
     $this->helpManager = $help_manager;
+    if ($module_extension_list === NULL) {
+      @trigger_error('Calling HelpController::__construct() with the $module_extension_list argument is supported in drupal:8.8.0 and will be required before drupal:9.0.0. See https://www.drupal.org/node/2709919.', E_USER_DEPRECATED);
+      $module_extension_list = \Drupal::service('extension.list.module');
+    }
     $this->moduleExtensionList = $module_extension_list;
   }
 

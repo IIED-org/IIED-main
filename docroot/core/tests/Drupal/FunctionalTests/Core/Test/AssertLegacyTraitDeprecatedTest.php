@@ -17,12 +17,7 @@ class AssertLegacyTraitDeprecatedTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['form_test'];
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $defaultTheme = 'stark';
+  public static $modules = ['form_test'];
 
   /**
    * Tests getAllOptions().

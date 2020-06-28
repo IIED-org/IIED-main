@@ -19,7 +19,7 @@ class ImageViewsDataTest extends ViewsKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'image',
     'file',
     'views',
@@ -31,7 +31,7 @@ class ImageViewsDataTest extends ViewsKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
     $this->installEntitySchema('entity_test');
     $this->installEntitySchema('entity_test_mul');

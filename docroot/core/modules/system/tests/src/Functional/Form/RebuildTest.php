@@ -16,7 +16,7 @@ class RebuildTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'form_test'];
+  public static $modules = ['node', 'form_test'];
 
   /**
    * {@inheritdoc}
@@ -30,7 +30,7 @@ class RebuildTest extends BrowserTestBase {
    */
   protected $webUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalCreateContentType(['type' => 'page', 'name' => 'Basic page']);

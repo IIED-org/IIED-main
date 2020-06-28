@@ -25,7 +25,7 @@ class SessionAuthenticationTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['basic_auth', 'session_test'];
+  public static $modules = ['basic_auth', 'session_test'];
 
   /**
    * {@inheritdoc}
@@ -35,7 +35,7 @@ class SessionAuthenticationTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create a test administrator user.

@@ -28,7 +28,7 @@ class EntityAccessControlHandlerTest extends EntityLanguageTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     parent::setUp();
 
     $this->installEntitySchema('entity_test_no_uuid');

@@ -27,12 +27,12 @@ class NodeFieldOverridesTest extends EntityKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['user', 'system', 'field', 'node'];
+  public static $modules = ['user', 'system', 'field', 'node'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installConfig(['user']);
     $this->user = $this->createUser();

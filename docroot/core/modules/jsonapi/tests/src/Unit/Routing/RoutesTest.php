@@ -29,7 +29,7 @@ class RoutesTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $relationship_fields = [
       'external' => new ResourceTypeRelationship('external'),

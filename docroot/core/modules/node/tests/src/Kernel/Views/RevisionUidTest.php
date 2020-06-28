@@ -23,7 +23,7 @@ class RevisionUidTest extends ViewsKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'node_test_views',
     'system',
@@ -53,7 +53,7 @@ class RevisionUidTest extends ViewsKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     $this->installSchema('node', 'node_access');

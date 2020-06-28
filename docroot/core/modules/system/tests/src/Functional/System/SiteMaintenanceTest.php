@@ -22,7 +22,7 @@ class SiteMaintenanceTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node'];
+  public static $modules = ['node'];
 
   /**
    * {@inheritdoc}
@@ -31,7 +31,7 @@ class SiteMaintenanceTest extends BrowserTestBase {
 
   protected $adminUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Configure 'node' as front page.

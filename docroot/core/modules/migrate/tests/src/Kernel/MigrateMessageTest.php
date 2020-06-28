@@ -22,7 +22,7 @@ class MigrateMessageTest extends KernelTestBase implements MigrateMessageInterfa
    *
    * @var array
    */
-  protected static $modules = ['migrate', 'system'];
+  public static $modules = ['migrate', 'system'];
 
   /**
    * Migration to run.
@@ -41,7 +41,7 @@ class MigrateMessageTest extends KernelTestBase implements MigrateMessageInterfa
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installConfig(['system']);

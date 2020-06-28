@@ -16,7 +16,7 @@ class DownloadTest extends FileManagedTestBase {
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     // Clear out any hook calls.
     file_test_reset();

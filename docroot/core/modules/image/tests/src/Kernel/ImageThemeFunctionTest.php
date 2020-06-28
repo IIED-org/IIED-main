@@ -30,7 +30,7 @@ class ImageThemeFunctionTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'entity_test',
     'field',
     'file',
@@ -51,7 +51,7 @@ class ImageThemeFunctionTest extends KernelTestBase {
    */
   protected $imageFactory;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installEntitySchema('entity_test');

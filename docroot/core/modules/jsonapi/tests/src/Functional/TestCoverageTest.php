@@ -27,7 +27,7 @@ class TestCoverageTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $all_modules = \Drupal::service('extension.list.module')->getList();

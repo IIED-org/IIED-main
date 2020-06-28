@@ -21,7 +21,7 @@ class FileFieldAnonymousSubmissionTest extends FileFieldTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     // Set up permissions for anonymous attacker user.
     user_role_change_permissions(RoleInterface::ANONYMOUS_ID, [

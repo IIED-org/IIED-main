@@ -33,7 +33,7 @@ class VocabularyListBuilder extends DraggableListBuilder {
   protected $currentUser;
 
   /**
-   * The entity type manager.
+   * The entity manager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
@@ -61,7 +61,7 @@ class VocabularyListBuilder extends DraggableListBuilder {
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current user.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
+   *   The entity manager service.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer service.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger

@@ -17,7 +17,7 @@ class AnonymousPrivateTempStoreTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system'];
+  public static $modules = ['system'];
 
   /**
    * The private temp store.
@@ -29,7 +29,7 @@ class AnonymousPrivateTempStoreTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Install system tables to test the key/value storage without installing a

@@ -20,7 +20,7 @@ class CommentFieldsTest extends CommentTestBase {
    *
    * @var array
    */
-  protected static $modules = ['field_ui'];
+  public static $modules = ['field_ui'];
 
   /**
    * {@inheritdoc}

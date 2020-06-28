@@ -26,12 +26,12 @@ class CommentDefaultFormatterCacheTagsTest extends EntityKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['entity_test', 'comment'];
+  public static $modules = ['entity_test', 'comment'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $session = new Session();

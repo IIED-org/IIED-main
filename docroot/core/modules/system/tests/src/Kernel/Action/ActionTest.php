@@ -17,7 +17,7 @@ class ActionTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['system', 'field', 'user', 'action_test'];
+  public static $modules = ['system', 'field', 'user', 'action_test'];
 
   /**
    * The action manager.
@@ -29,7 +29,7 @@ class ActionTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->actionManager = $this->container->get('plugin.manager.action');

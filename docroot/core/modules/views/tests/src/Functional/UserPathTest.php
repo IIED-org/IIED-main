@@ -12,7 +12,7 @@ class UserPathTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['views', 'user'];
+  public static $modules = ['views', 'user'];
 
   /**
    * {@inheritdoc}

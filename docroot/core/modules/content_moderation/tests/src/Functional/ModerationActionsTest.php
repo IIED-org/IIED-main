@@ -22,7 +22,7 @@ class ModerationActionsTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'content_moderation',
     'node',
     'views',
@@ -36,7 +36,7 @@ class ModerationActionsTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     parent::setUp();
 
     $moderated_bundle = $this->createContentType(['type' => 'moderated_bundle']);

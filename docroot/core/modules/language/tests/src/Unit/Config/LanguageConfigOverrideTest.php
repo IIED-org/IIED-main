@@ -51,7 +51,7 @@ class LanguageConfigOverrideTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     $this->storage = $this->createMock('Drupal\Core\Config\StorageInterface');
     $this->eventDispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
     $this->typedConfig = $this->createMock('\Drupal\Core\Config\TypedConfigManagerInterface');

@@ -13,7 +13,7 @@ class HighWaterNotJoinableTest extends MigrateSqlSourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'migrate',
     'migrate_drupal',
     'migrate_high_water_test',

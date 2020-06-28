@@ -4,6 +4,7 @@ namespace Drupal\Tests\jsonapi\Functional;
 
 use Drupal\aggregator\Entity\Feed;
 use Drupal\aggregator\Entity\Item;
+use Drupal\Tests\rest\Functional\BcTimestampNormalizerUnixTestTrait;
 
 /**
  * JSON:API integration test for the "Item" content entity type.
@@ -12,10 +13,12 @@ use Drupal\aggregator\Entity\Item;
  */
 class ItemTest extends ResourceTestBase {
 
+  use BcTimestampNormalizerUnixTestTrait;
+
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['aggregator'];
+  public static $modules = ['aggregator'];
 
   /**
    * {@inheritdoc}

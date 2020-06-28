@@ -10,7 +10,7 @@ abstract class TourResourceTestBase extends EntityResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['tour'];
+  public static $modules = ['tour'];
 
   /**
    * {@inheritdoc}
@@ -113,6 +113,10 @@ abstract class TourResourceTestBase extends EntityResourceTestBase {
    * {@inheritdoc}
    */
   protected function getExpectedUnauthorizedAccessMessage($method) {
+    if ($this->config('rest.settings')->get('bc_entity_resource_permissions')) {
+      return parent::getExpectedUnauthorizedAccessMessage($method);
+    }
+
     return "The following permissions are required: 'access tour' OR 'administer site configuration'.";
   }
 

@@ -16,7 +16,7 @@ class LayoutBuilderEntityViewDisplayHalJsonAnonTest extends LayoutBuilderEntityV
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['hal'];
+  public static $modules = ['hal'];
 
   /**
    * {@inheritdoc}

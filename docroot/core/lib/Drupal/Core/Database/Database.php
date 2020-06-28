@@ -214,7 +214,6 @@ abstract class Database {
     if (empty($info['driver'])) {
       $info = $info[mt_rand(0, count($info) - 1)];
     }
-
     // Parse the prefix information.
     if (!isset($info['prefix'])) {
       // Default to an empty prefix.
@@ -228,12 +227,6 @@ abstract class Database {
         'default' => $info['prefix'],
       ];
     }
-
-    // Fallback for Drupal 7 settings.php if namespace is not provided.
-    if (empty($info['namespace'])) {
-      $info['namespace'] = 'Drupal\\Core\\Database\\Driver\\' . $info['driver'];
-    }
-
     return $info;
   }
 
@@ -375,7 +368,8 @@ abstract class Database {
       throw new DriverNotSpecifiedException('Driver not specified for this database connection: ' . $key);
     }
 
-    $driver_class = self::$databaseInfo[$key][$target]['namespace'] . '\\Connection';
+    $namespace = static::getDatabaseDriverNamespace(self::$databaseInfo[$key][$target]);
+    $driver_class = $namespace . '\\Connection';
 
     $pdo_connection = $driver_class::open(self::$databaseInfo[$key][$target]);
     $new_connection = new $driver_class($pdo_connection, self::$databaseInfo[$key][$target]);
@@ -574,7 +568,7 @@ abstract class Database {
     }
 
     // Extract the module information from the namespace.
-    [, $module, $module_relative_namespace] = explode('\\', $namespace, 3);
+    list(, $module, $module_relative_namespace) = explode('\\', $namespace, 3);
 
     // The namespace is within a Drupal module. Find the directory where the
     // module is located.
@@ -611,7 +605,7 @@ abstract class Database {
     if (empty($db_info) || empty($db_info['default'])) {
       throw new \RuntimeException("Database connection $key not defined or missing the 'default' settings");
     }
-    $namespace = $db_info['default']['namespace'];
+    $namespace = static::getDatabaseDriverNamespace($db_info['default']);
 
     // If the driver namespace is within a Drupal module, add the module name
     // to the connection options to make it easy for the connection class's
@@ -661,7 +655,7 @@ abstract class Database {
    *   \Drupal\Core\Database\Database::getConnectionInfoAsUrl() is removed.
    */
   private static function isWithinModuleNamespace(string $namespace) {
-    [$first, $second] = explode('\\', $namespace, 3);
+    list($first, $second) = explode('\\', $namespace, 3);
 
     // The namespace for Drupal modules is Drupal\MODULE_NAME, and the module
     // name must be all lowercase. Second-level namespaces containing uppercase

@@ -17,7 +17,7 @@ class SubstrTest extends MigrateProcessTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
   }
 

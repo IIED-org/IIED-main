@@ -18,7 +18,7 @@ class WorkspaceContentModerationIntegrationTest extends ModerationStateTestBase 
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['node', 'workspaces'];
+  public static $modules = ['node', 'workspaces'];
 
   /**
    * {@inheritdoc}
@@ -28,7 +28,7 @@ class WorkspaceContentModerationIntegrationTest extends ModerationStateTestBase 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalLogin($this->rootUser);

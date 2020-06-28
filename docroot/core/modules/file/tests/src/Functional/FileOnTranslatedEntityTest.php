@@ -14,7 +14,7 @@ class FileOnTranslatedEntityTest extends FileFieldTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['language', 'content_translation'];
+  public static $modules = ['language', 'content_translation'];
 
   /**
    * {@inheritdoc}
@@ -31,7 +31,7 @@ class FileOnTranslatedEntityTest extends FileFieldTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // This test expects unused managed files to be marked as temporary a file.

@@ -17,7 +17,7 @@ class ColorSafePreviewTest extends BrowserTestBase {
    *
    * @var string[]
    */
-  protected static $modules = ['color', 'color_test'];
+  public static $modules = ['color', 'color_test'];
 
   /**
    * {@inheritdoc}
@@ -34,7 +34,7 @@ class ColorSafePreviewTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create user.

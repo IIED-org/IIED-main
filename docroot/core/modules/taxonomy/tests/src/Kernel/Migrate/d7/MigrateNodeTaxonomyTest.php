@@ -11,7 +11,7 @@ use Drupal\node\NodeInterface;
  */
 class MigrateNodeTaxonomyTest extends MigrateDrupal7TestBase {
 
-  protected static $modules = [
+  public static $modules = [
     'comment',
     'datetime',
     'image',
@@ -26,7 +26,7 @@ class MigrateNodeTaxonomyTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installEntitySchema('file');

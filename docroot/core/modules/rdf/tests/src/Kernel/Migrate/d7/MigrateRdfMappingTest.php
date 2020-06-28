@@ -15,7 +15,7 @@ class MigrateRdfMappingTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'menu_ui',
     'node',
     'rdf',
@@ -26,7 +26,7 @@ class MigrateRdfMappingTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installConfig(static::$modules);

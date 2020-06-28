@@ -21,7 +21,7 @@ class ModuleRouteSubscriberTest extends UnitTestCase {
    */
   protected $moduleHandler;
 
-  protected function setUp(): void {
+  protected function setUp() {
     $this->moduleHandler = $this->createMock('Drupal\Core\Extension\ModuleHandlerInterface');
 
     $value_map = [

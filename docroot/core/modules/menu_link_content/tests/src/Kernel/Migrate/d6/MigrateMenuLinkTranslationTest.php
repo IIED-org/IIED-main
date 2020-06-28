@@ -18,7 +18,7 @@ class MigrateMenuLinkTranslationTest extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'menu_ui',
     'menu_link_content',
     'language',
@@ -28,7 +28,7 @@ class MigrateMenuLinkTranslationTest extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->migrateContent();
     $this->setUpCurrentUser();

@@ -29,12 +29,12 @@ class CacheTest extends ViewsKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['taxonomy', 'text', 'user', 'node'];
+  public static $modules = ['taxonomy', 'text', 'user', 'node'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     $this->installEntitySchema('node');

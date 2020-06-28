@@ -17,7 +17,7 @@ class ContentTranslationLinkTagTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'entity_test',
     'content_translation',
     'content_translation_test',
@@ -39,7 +39,7 @@ class ContentTranslationLinkTagTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Set up user.

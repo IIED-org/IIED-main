@@ -19,7 +19,7 @@ class BasicTest extends WizardTestBase {
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     $this->drupalPlaceBlock('page_title_block');

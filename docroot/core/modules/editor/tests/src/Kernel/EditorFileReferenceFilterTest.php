@@ -19,7 +19,7 @@ class EditorFileReferenceFilterTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'system',
     'filter',
     'editor',
@@ -36,7 +36,7 @@ class EditorFileReferenceFilterTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installConfig(['system']);
     $this->installEntitySchema('file');

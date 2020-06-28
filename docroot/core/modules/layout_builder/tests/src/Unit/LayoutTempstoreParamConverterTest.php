@@ -56,6 +56,7 @@ class LayoutTempstoreParamConverterTest extends UnitTestCase {
     $defaults = ['section_storage_type' => NULL];
 
     $section_storage_manager->hasDefinition()->shouldNotBeCalled();
+    $section_storage_manager->loadFromRoute()->shouldNotBeCalled();
     $section_storage_manager->load()->shouldNotBeCalled();
     $layout_tempstore_repository->get()->shouldNotBeCalled();
 
@@ -77,6 +78,7 @@ class LayoutTempstoreParamConverterTest extends UnitTestCase {
     $defaults = ['section_storage_type' => 'invalid'];
 
     $section_storage_manager->hasDefinition('invalid')->willReturn(FALSE);
+    $section_storage_manager->loadFromRoute()->shouldNotBeCalled();
     $section_storage_manager->load()->shouldNotBeCalled();
     $layout_tempstore_repository->get()->shouldNotBeCalled();
 

@@ -30,14 +30,14 @@ class HandlerTest extends ViewTestBase {
    *
    * @var array
    */
-  protected static $modules = ['views_ui', 'comment', 'node'];
+  public static $modules = ['views_ui', 'comment', 'node'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
     $this->drupalCreateContentType(['type' => 'page']);
     $this->addDefaultCommentField('node', 'page');

@@ -18,13 +18,7 @@ class CKEditorPluginManagerTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
-    'system',
-    'user',
-    'filter',
-    'editor',
-    'ckeditor',
-  ];
+  public static $modules = ['system', 'user', 'filter', 'editor', 'ckeditor'];
 
   /**
    * The manager for "CKEditor plugin" plugins.
@@ -33,7 +27,7 @@ class CKEditorPluginManagerTest extends KernelTestBase {
    */
   protected $manager;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Install the Filter module.

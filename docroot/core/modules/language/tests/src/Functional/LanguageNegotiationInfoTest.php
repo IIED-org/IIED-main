@@ -19,7 +19,7 @@ class LanguageNegotiationInfoTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['language', 'content_translation'];
+  public static $modules = ['language', 'content_translation'];
 
   /**
    * {@inheritdoc}
@@ -29,7 +29,7 @@ class LanguageNegotiationInfoTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $admin_user = $this->drupalCreateUser(['administer languages', 'access administration pages', 'view the administration theme', 'administer modules']);
     $this->drupalLogin($admin_user);

@@ -19,12 +19,7 @@ class FormErrorHandlerFileUploadTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
-    'node',
-    'file',
-    'field_ui',
-    'inline_form_errors',
-  ];
+  public static $modules = ['node', 'file', 'field_ui', 'inline_form_errors'];
 
   /**
    * {@inheritdoc}
@@ -34,7 +29,7 @@ class FormErrorHandlerFileUploadTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create a node type for testing.

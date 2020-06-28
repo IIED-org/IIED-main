@@ -31,7 +31,7 @@ class SearchLanguageTest extends BrowserTestBase {
    */
   protected $searchableNodes;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalCreateContentType(['type' => 'page', 'name' => 'Basic page']);

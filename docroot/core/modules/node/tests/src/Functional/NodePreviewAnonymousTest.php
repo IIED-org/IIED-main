@@ -18,7 +18,7 @@ class NodePreviewAnonymousTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node'];
+  public static $modules = ['node'];
 
   /**
    * {@inheritdoc}
@@ -28,7 +28,7 @@ class NodePreviewAnonymousTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     // Create Basic page node type.
     $this->drupalCreateContentType([

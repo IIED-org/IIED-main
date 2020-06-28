@@ -44,7 +44,9 @@ class PluginInstanceTest extends ViewsKernelTestBase {
    *
    * @var string[]
    */
-  protected $deprecatedPlugins = [];
+  protected $deprecatedPlugins = [
+    'Drupal\system\Plugin\views\field\BulkForm',
+  ];
 
   /**
    * An array of plugin definitions, keyed by plugin type.
@@ -53,7 +55,7 @@ class PluginInstanceTest extends ViewsKernelTestBase {
    */
   protected $definitions;
 
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp();
 
     $this->definitions = Views::getPluginDefinitions();
@@ -76,6 +78,20 @@ class PluginInstanceTest extends ViewsKernelTestBase {
     // Tests that the plugin list has not missed any types.
     $diff = array_diff(array_keys($this->definitions), $this->pluginTypes);
     $this->assertTrue(empty($diff), 'All plugins were found and matched.');
+  }
+
+  /**
+   * Tests creating instances of deprecated views plugin.
+   *
+   * This will iterate through all plugins from _views_fetch_plugin_data() and
+   * test only deprecated plugins.
+   *
+   * @group legacy
+   *
+   * @expectedDeprecation Drupal\system\Plugin\views\field\BulkForm is deprecated in drupal:8.5.0, will be removed before drupal:9.0.0. Use \Drupal\views\Plugin\views\field\BulkForm instead. See https://www.drupal.org/node/2916716.
+   */
+  public function testDeprecatedPluginInstances() {
+    $this->assertPluginInstances(TRUE);
   }
 
   /**

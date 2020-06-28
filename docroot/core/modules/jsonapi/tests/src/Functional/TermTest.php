@@ -24,7 +24,7 @@ class TermTest extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['taxonomy', 'path'];
+  public static $modules = ['taxonomy', 'path'];
 
   /**
    * {@inheritdoc}

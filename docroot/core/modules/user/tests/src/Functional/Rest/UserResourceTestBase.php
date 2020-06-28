@@ -3,16 +3,19 @@
 namespace Drupal\Tests\user\Functional\Rest;
 
 use Drupal\Core\Url;
+use Drupal\Tests\rest\Functional\BcTimestampNormalizerUnixTestTrait;
 use Drupal\Tests\rest\Functional\EntityResource\EntityResourceTestBase;
 use Drupal\user\Entity\User;
 use GuzzleHttp\RequestOptions;
 
 abstract class UserResourceTestBase extends EntityResourceTestBase {
 
+  use BcTimestampNormalizerUnixTestTrait;
+
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['user'];
+  public static $modules = ['user'];
 
   /**
    * {@inheritdoc}
@@ -110,16 +113,10 @@ abstract class UserResourceTestBase extends EntityResourceTestBase {
         ],
       ],
       'created' => [
-        [
-          'value' => (new \DateTime())->setTimestamp(123456789)->setTimezone(new \DateTimeZone('UTC'))->format(\DateTime::RFC3339),
-          'format' => \DateTime::RFC3339,
-        ],
+        $this->formatExpectedTimestampItemValues(123456789),
       ],
       'changed' => [
-        [
-          'value' => (new \DateTime())->setTimestamp($this->entity->getChangedTime())->setTimezone(new \DateTimeZone('UTC'))->format(\DateTime::RFC3339),
-          'format' => \DateTime::RFC3339,
-        ],
+        $this->formatExpectedTimestampItemValues($this->entity->getChangedTime()),
       ],
       'default_langcode' => [
         [
@@ -288,12 +285,12 @@ abstract class UserResourceTestBase extends EntityResourceTestBase {
 
     // Try changing user 1's email.
     $user1 = [
-        'mail' => [['value' => 'another_email_address@example.com']],
-        'uid' => [['value' => 1]],
-        'name' => [['value' => 'another_user_name']],
-        'pass' => [['existing' => $this->account->passRaw]],
-        'uuid' => [['value' => '2e9403a4-d8af-4096-a116-624710140be0']],
-      ] + $original_normalization;
+      'mail' => [['value' => 'another_email_address@example.com']],
+      'uid' => [['value' => 1]],
+      'name' => [['value' => 'another_user_name']],
+      'pass' => [['existing' => $this->account->passRaw]],
+      'uuid' => [['value' => '2e9403a4-d8af-4096-a116-624710140be0']],
+    ] + $original_normalization;
     $request_options[RequestOptions::BODY] = $this->serializer->encode($user1, static::$format);
     $response = $this->request('PATCH', $url, $request_options);
     // Ensure the email address has not changed.
@@ -305,6 +302,10 @@ abstract class UserResourceTestBase extends EntityResourceTestBase {
    * {@inheritdoc}
    */
   protected function getExpectedUnauthorizedAccessMessage($method) {
+    if ($this->config('rest.settings')->get('bc_entity_resource_permissions')) {
+      return parent::getExpectedUnauthorizedAccessMessage($method);
+    }
+
     switch ($method) {
       case 'GET':
         return "The 'access user profiles' permission is required and the user must be active.";

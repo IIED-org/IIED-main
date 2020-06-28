@@ -18,7 +18,7 @@ class TermIndexTest extends TaxonomyTestBase {
    *
    * @var array
    */
-  protected static $modules = ['views'];
+  public static $modules = ['views'];
 
   /**
    * {@inheritdoc}
@@ -46,7 +46,7 @@ class TermIndexTest extends TaxonomyTestBase {
    */
   protected $fieldName2;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create an administrative user.

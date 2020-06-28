@@ -20,7 +20,7 @@ class InvalidUpdateHookTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'update_test_invalid_hook',
     'update_script_test',
     'dblog',
@@ -45,7 +45,7 @@ class InvalidUpdateHookTest extends BrowserTestBase {
    */
   private $updateUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     require_once $this->root . '/core/includes/update.inc';
 

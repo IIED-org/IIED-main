@@ -22,7 +22,7 @@ class BrokenCacheUpdateTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->ensureUpdatesToRun();
   }
@@ -32,6 +32,12 @@ class BrokenCacheUpdateTest extends BrowserTestBase {
    */
   public function testUpdate() {
     $connection = Database::getConnection();
+    // Ensure \Drupal\Core\Update\UpdateKernel::fixSerializedExtensionObjects()
+    // does not clear the cache.
+    $connection->delete('key_value')
+      ->condition('collection', 'state')
+      ->condition('name', 'system.theme.data')
+      ->execute();
 
     // Create broken element info caches entries.
     $insert = $connection->upsert('cache_discovery');

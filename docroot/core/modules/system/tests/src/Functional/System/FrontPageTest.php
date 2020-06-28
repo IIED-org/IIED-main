@@ -17,7 +17,7 @@ class FrontPageTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'system_test', 'views'];
+  public static $modules = ['node', 'system_test', 'views'];
 
   /**
    * {@inheritdoc}
@@ -31,7 +31,7 @@ class FrontPageTest extends BrowserTestBase {
    */
   protected $nodePath;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create admin user, log in admin user, and create one node.

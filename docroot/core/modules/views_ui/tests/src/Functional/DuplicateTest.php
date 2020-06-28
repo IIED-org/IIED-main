@@ -14,7 +14,7 @@ class DuplicateTest extends UITestBase {
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     $this->placeBlock('page_title_block');

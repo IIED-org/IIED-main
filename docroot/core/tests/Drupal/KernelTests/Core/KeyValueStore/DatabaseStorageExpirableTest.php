@@ -17,9 +17,9 @@ class DatabaseStorageExpirableTest extends StorageTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system'];
+  public static $modules = ['system'];
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->factory = 'keyvalue.expirable';
     $this->installSchema('system', ['key_value_expire']);

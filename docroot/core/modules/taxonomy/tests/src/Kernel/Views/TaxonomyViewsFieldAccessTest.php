@@ -16,12 +16,12 @@ class TaxonomyViewsFieldAccessTest extends FieldFieldAccessTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['taxonomy', 'text', 'entity_test'];
+  public static $modules = ['taxonomy', 'text', 'entity_test'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     $this->installEntitySchema('taxonomy_term');

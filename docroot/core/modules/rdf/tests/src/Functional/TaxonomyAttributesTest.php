@@ -20,7 +20,7 @@ class TaxonomyAttributesTest extends TaxonomyTestBase {
    *
    * @var array
    */
-  protected static $modules = ['rdf', 'views'];
+  public static $modules = ['rdf', 'views'];
 
   /**
    * {@inheritdoc}
@@ -41,7 +41,7 @@ class TaxonomyAttributesTest extends TaxonomyTestBase {
    */
   protected $vocabulary;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->vocabulary = $this->createVocabulary();

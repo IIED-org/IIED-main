@@ -27,7 +27,7 @@ abstract class AggregatorTestBase extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'block',
     'node',
     'aggregator',

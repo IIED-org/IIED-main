@@ -16,7 +16,7 @@ class MimeTypeTest extends FileTestBase {
    *
    * @var array
    */
-  protected static $modules = ['file_test'];
+  public static $modules = ['file_test'];
 
   /**
    * Test mapping of mimetypes from filenames.

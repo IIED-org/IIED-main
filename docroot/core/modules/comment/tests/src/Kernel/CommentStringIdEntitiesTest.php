@@ -18,7 +18,7 @@ class CommentStringIdEntitiesTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'comment',
     'user',
     'field',
@@ -27,7 +27,7 @@ class CommentStringIdEntitiesTest extends KernelTestBase {
     'text',
   ];
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('comment');
     $this->installEntitySchema('entity_test_string_id');

@@ -19,7 +19,7 @@ class EntityDuplicateTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('entity_test_rev');
     $this->entityTestRevStorage = $this->container->get('entity_type.manager')->getStorage('entity_test_rev');

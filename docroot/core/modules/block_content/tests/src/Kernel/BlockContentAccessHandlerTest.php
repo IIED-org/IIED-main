@@ -23,7 +23,7 @@ class BlockContentAccessHandlerTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'block',
     'block_content',
     'system',
@@ -54,7 +54,7 @@ class BlockContentAccessHandlerTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installSchema('system', ['sequences']);
     $this->installSchema('user', ['users_data']);

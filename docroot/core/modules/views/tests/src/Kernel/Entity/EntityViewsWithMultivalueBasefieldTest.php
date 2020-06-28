@@ -16,7 +16,7 @@ class EntityViewsWithMultivalueBasefieldTest extends ViewsKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['entity_test'];
+  public static $modules = ['entity_test'];
 
   /**
    * {@inheritdoc}
@@ -26,7 +26,7 @@ class EntityViewsWithMultivalueBasefieldTest extends ViewsKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     $this->installEntitySchema('entity_test_multivalue_basefield');

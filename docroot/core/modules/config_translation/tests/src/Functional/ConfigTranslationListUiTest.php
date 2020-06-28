@@ -25,7 +25,7 @@ class ConfigTranslationListUiTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'block',
     'config_translation',
     'contact',
@@ -53,7 +53,7 @@ class ConfigTranslationListUiTest extends BrowserTestBase {
    */
   protected $adminUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $permissions = [

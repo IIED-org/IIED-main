@@ -23,7 +23,7 @@ class ParamConverterManagerTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->manager = new ParamConverterManager();

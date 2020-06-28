@@ -14,7 +14,7 @@ class FormStoragePageCacheTest extends BrowserTestBase {
   /**
    * @var array
    */
-  protected static $modules = ['form_test'];
+  public static $modules = ['form_test'];
 
   /**
    * {@inheritdoc}
@@ -24,7 +24,7 @@ class FormStoragePageCacheTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $config = $this->config('system.performance');

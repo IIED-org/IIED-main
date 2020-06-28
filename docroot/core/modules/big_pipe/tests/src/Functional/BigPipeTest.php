@@ -31,7 +31,7 @@ class BigPipeTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['big_pipe', 'big_pipe_test', 'dblog'];
+  public static $modules = ['big_pipe', 'big_pipe_test', 'dblog'];
 
   /**
    * {@inheritdoc}
@@ -46,7 +46,7 @@ class BigPipeTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Ignore the <meta> refresh that big_pipe.module sets. It causes a redirect

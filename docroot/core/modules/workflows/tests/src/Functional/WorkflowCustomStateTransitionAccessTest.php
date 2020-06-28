@@ -15,7 +15,7 @@ class WorkflowCustomStateTransitionAccessTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'workflows',
     'workflow_type_test',
   ];
@@ -42,7 +42,7 @@ class WorkflowCustomStateTransitionAccessTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->adminUser = $this->createUser(['administer workflows']);
     $this->testWorkflow = Workflow::create([

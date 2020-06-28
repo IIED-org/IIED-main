@@ -15,12 +15,7 @@ class LegacyStyleSheetsRemoveTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'stark';
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     \Drupal::service('theme_installer')->install(['test_legacy_stylesheets_remove']);
   }

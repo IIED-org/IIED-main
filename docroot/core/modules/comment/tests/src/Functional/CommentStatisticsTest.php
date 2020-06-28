@@ -25,7 +25,7 @@ class CommentStatisticsTest extends CommentTestBase {
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create a second user to post comments.

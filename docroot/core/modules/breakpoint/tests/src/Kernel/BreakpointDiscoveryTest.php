@@ -16,13 +16,9 @@ class BreakpointDiscoveryTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
-    'system',
-    'breakpoint',
-    'breakpoint_module_test',
-  ];
+  public static $modules = ['system', 'breakpoint', 'breakpoint_module_test'];
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     \Drupal::service('theme_installer')->install(['breakpoint_theme_test']);
   }

@@ -35,7 +35,7 @@ class JsonApiDocumentTopLevelNormalizerTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     $resource_type_repository = $this->prophesize(ResourceTypeRepository::class);
     $field_resolver = $this->prophesize(FieldResolver::class);
 

@@ -18,12 +18,12 @@ class NodeValidationTest extends EntityKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node'];
+  public static $modules = ['node'];
 
   /**
    * Set the default field storage backend for fields created during tests.
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create a node type for testing.

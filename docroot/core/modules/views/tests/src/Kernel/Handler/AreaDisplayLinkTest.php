@@ -27,7 +27,7 @@ class AreaDisplayLinkTest extends ViewsKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['system', 'user', 'filter'];
+  public static $modules = ['system', 'user', 'filter'];
 
   /**
    * {@inheritdoc}
@@ -37,7 +37,7 @@ class AreaDisplayLinkTest extends ViewsKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     $this->installConfig(['system', 'filter']);

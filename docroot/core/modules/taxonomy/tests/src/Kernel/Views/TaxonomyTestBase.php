@@ -34,7 +34,7 @@ abstract class TaxonomyTestBase extends ViewsKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'taxonomy',
     'taxonomy_test_views',
     'text',

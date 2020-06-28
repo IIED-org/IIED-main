@@ -23,7 +23,7 @@ class JsonApiFunctionalMultilingualTest extends JsonApiFunctionalTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'language',
     'content_translation',
   ];
@@ -36,7 +36,7 @@ class JsonApiFunctionalMultilingualTest extends JsonApiFunctionalTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $language = ConfigurableLanguage::createFromLangcode('ca');
     $language->save();

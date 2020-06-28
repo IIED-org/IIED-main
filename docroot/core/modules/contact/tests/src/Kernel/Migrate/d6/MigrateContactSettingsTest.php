@@ -17,12 +17,12 @@ class MigrateContactSettingsTest extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['contact'];
+  public static $modules = ['contact'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->executeMigrations(['contact_category', 'd6_contact_settings']);
   }
@@ -32,7 +32,7 @@ class MigrateContactSettingsTest extends MigrateDrupal6TestBase {
    */
   public function testContactSettings() {
     $config = $this->config('contact.settings');
-    $this->assertTrue($config->get('user_default_enabled'));
+    $this->assertIdentical(TRUE, $config->get('user_default_enabled'));
     $this->assertIdentical(3, $config->get('flood.limit'));
     $this->assertIdentical('some_other_category', $config->get('default_form'));
     $this->assertConfigSchema(\Drupal::service('config.typed'), 'contact.settings', $config->get());

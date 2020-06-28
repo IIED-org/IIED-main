@@ -11,7 +11,7 @@ use Drupal\Tests\BrowserTestBase;
  */
 class ContentTranslationEntityBundleUITest extends BrowserTestBase {
 
-  protected static $modules = [
+  public static $modules = [
     'language',
     'content_translation',
     'node',
@@ -24,7 +24,7 @@ class ContentTranslationEntityBundleUITest extends BrowserTestBase {
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $user = $this->drupalCreateUser(['access administration pages', 'administer languages', 'administer content translation', 'administer content types']);
     $this->drupalLogin($user);

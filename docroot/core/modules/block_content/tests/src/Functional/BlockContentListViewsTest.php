@@ -18,7 +18,7 @@ class BlockContentListViewsTest extends BlockContentTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'block',
     'block_content',
     'config_translation',

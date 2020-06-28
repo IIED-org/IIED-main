@@ -21,7 +21,7 @@ class ReEnableModuleFieldTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'field',
     'node',
     // We use telephone module instead of test_field because test_field is
@@ -34,7 +34,7 @@ class ReEnableModuleFieldTest extends BrowserTestBase {
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalCreateContentType(['type' => 'article']);

@@ -19,12 +19,7 @@ class FieldTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
-    'node',
-    'views',
-    'views_ui',
-    'views_test_config',
-  ];
+  public static $modules = ['node', 'views', 'views_ui', 'views_test_config'];
 
   /**
    * {@inheritdoc}
@@ -48,7 +43,7 @@ class FieldTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     ViewTestData::createTestViews(get_class($this), ['views_test_config']);

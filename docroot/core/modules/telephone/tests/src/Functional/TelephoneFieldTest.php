@@ -18,7 +18,7 @@ class TelephoneFieldTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'field',
     'node',
     'telephone',
@@ -39,7 +39,7 @@ class TelephoneFieldTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalCreateContentType(['type' => 'article']);

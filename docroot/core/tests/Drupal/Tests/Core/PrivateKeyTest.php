@@ -37,7 +37,7 @@ class PrivateKeyTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->key = Crypt::randomBytesBase64(55);
 

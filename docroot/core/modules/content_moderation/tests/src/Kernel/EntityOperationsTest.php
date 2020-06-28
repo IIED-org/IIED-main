@@ -19,7 +19,7 @@ class EntityOperationsTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'content_moderation',
     'node',
     'user',
@@ -30,7 +30,7 @@ class EntityOperationsTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('node');
     $this->installSchema('node', 'node_access');

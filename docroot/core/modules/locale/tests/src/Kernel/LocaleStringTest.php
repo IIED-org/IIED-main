@@ -31,7 +31,7 @@ class LocaleStringTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Add a default locale storage for all these tests.

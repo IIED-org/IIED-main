@@ -41,7 +41,7 @@ class EntityReferenceSelectionReferenceableTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'system',
     'user',
     'field',
@@ -53,7 +53,7 @@ class EntityReferenceSelectionReferenceableTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installEntitySchema('entity_test_no_label');

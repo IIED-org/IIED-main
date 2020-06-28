@@ -19,7 +19,7 @@ class CommentAccessTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'comment',
   ];
@@ -39,7 +39,7 @@ class CommentAccessTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $node_type = NodeType::create([

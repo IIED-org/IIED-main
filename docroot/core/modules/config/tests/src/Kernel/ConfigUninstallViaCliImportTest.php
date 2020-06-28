@@ -24,9 +24,9 @@ class ConfigUninstallViaCliImportTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'config'];
+  public static $modules = ['system', 'config'];
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     if (PHP_SAPI !== 'cli') {
       $this->markTestSkipped('This test has to be run from the CLI');

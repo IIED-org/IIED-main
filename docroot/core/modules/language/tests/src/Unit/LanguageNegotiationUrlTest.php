@@ -22,7 +22,7 @@ class LanguageNegotiationUrlTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
 
     // Set up some languages to be used by the language-based path processor.
     $language_de = $this->createMock('\Drupal\Core\Language\LanguageInterface');

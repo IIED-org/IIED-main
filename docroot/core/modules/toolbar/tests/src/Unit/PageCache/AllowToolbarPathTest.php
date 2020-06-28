@@ -20,7 +20,7 @@ class AllowToolbarPathTest extends UnitTestCase {
    */
   protected $policy;
 
-  protected function setUp(): void {
+  protected function setUp() {
     $this->policy = new AllowToolbarPath();
   }
 

@@ -24,12 +24,12 @@ class MigrateUserAdminPassTest extends MigrateTestBase {
    *
    * @var string[]
    */
-  protected static $modules = ['user'];
+  public static $modules = ['user'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Make sure the admin user and a regular user are created.

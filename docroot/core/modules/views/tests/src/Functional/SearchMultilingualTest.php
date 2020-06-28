@@ -20,7 +20,7 @@ class SearchMultilingualTest extends ViewTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'search',
     'language',

@@ -130,7 +130,7 @@ class FieldPluginBaseTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->executable = $this->getMockBuilder('Drupal\views\ViewExecutable')

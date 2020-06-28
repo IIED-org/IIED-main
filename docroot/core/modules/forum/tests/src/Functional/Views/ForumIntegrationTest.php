@@ -19,7 +19,7 @@ class ForumIntegrationTest extends ViewTestBase {
    *
    * @var array
    */
-  protected static $modules = ['forum_test_views'];
+  public static $modules = ['forum_test_views'];
 
   /**
    * {@inheritdoc}
@@ -33,7 +33,7 @@ class ForumIntegrationTest extends ViewTestBase {
    */
   public static $testViews = ['test_forum_index'];
 
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     ViewTestData::createTestViews(get_class($this), ['forum_test_views']);

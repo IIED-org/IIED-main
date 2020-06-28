@@ -30,7 +30,7 @@ class HandlerFilterCurrentUserTest extends UserKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp();
     $this->currentUser = $this->container->get('current_user');
     $this->setupPermissionTestData();

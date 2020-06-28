@@ -14,7 +14,7 @@ class ViewsNoResultsBehaviorTest extends ViewTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'user'];
+  public static $modules = ['node', 'user'];
 
   /**
    * {@inheritdoc}
@@ -24,7 +24,7 @@ class ViewsNoResultsBehaviorTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp();
     $this->enableViewsTestModule();
     $user = $this->createUser([], NULL, TRUE);

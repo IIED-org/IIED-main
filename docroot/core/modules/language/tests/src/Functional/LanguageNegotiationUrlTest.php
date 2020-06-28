@@ -16,7 +16,7 @@ class LanguageNegotiationUrlTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'language',
     'node',
     'path',
@@ -35,7 +35,7 @@ class LanguageNegotiationUrlTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create an Article node type.

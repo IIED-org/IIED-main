@@ -16,14 +16,14 @@ class LanguagePathMonolingualTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['block', 'language', 'path'];
+  public static $modules = ['block', 'language', 'path'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create and log in user.

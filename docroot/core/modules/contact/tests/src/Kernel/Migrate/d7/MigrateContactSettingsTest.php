@@ -14,12 +14,12 @@ class MigrateContactSettingsTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['contact'];
+  public static $modules = ['contact'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->executeMigration('contact_category');
     $this->executeMigration('d7_contact_settings');

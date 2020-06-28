@@ -19,7 +19,7 @@ class DateTimeTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'block',
     'node',
     'language',
@@ -34,7 +34,7 @@ class DateTimeTest extends BrowserTestBase {
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create admin user and log in admin user.

@@ -15,7 +15,7 @@ class MigrateCustomBlockContentTranslationTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'block_content',
     'content_translation',
     'filter',
@@ -26,7 +26,7 @@ class MigrateCustomBlockContentTranslationTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('block_content');
     $this->installConfig(['block_content']);

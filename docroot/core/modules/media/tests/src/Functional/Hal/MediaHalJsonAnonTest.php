@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\media\Functional\Hal;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\file\Entity\File;
 use Drupal\Tests\hal\Functional\EntityResource\HalEntityNormalizationTrait;
 use Drupal\Tests\media\Functional\Rest\MediaResourceTestBase;
@@ -19,7 +20,7 @@ class MediaHalJsonAnonTest extends MediaResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['hal'];
+  public static $modules = ['hal'];
 
   /**
    * {@inheritdoc}
@@ -220,6 +221,13 @@ class MediaHalJsonAnonTest extends MediaResourceTestBase {
         ],
       ],
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getExpectedCacheTags() {
+    return Cache::mergeTags(parent::getExpectedCacheTags(), ['config:hal.settings']);
   }
 
 }

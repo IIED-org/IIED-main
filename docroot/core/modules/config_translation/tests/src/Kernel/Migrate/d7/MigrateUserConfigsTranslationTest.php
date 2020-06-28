@@ -17,7 +17,7 @@ class MigrateUserConfigsTranslationTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'language',
     'locale',
     'config_translation',
@@ -26,7 +26,7 @@ class MigrateUserConfigsTranslationTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installSchema('locale', [
       'locales_source',

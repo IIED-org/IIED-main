@@ -76,7 +76,7 @@ class SqlContentEntityStorageSchemaTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     $this->entityTypeManager = $this->createMock(EntityTypeManager::class);
     $this->entityFieldManager = $this->createMock(EntityFieldManager::class);
     $this->entityLastInstalledSchemaRepository = $this->createMock(EntityLastInstalledSchemaRepositoryInterface::class);
@@ -111,6 +111,7 @@ class SqlContentEntityStorageSchemaTest extends UnitTestCase {
    * @covers ::getFieldUniqueKeys
    * @covers ::getFieldForeignKeys
    * @covers ::getFieldSchemaData
+   * @covers ::processBaseTable
    * @covers ::processIdentifierSchema
    */
   public function testGetSchemaBase() {
@@ -404,6 +405,7 @@ class SqlContentEntityStorageSchemaTest extends UnitTestCase {
    * @covers ::initializeRevisionTable
    * @covers ::addTableDefaults
    * @covers ::getEntityIndexName
+   * @covers ::processRevisionTable
    * @covers ::processIdentifierSchema
    */
   public function testGetSchemaRevisionable() {

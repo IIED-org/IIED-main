@@ -20,7 +20,7 @@ class RouteCachingLanguageTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'path',
     'node',
     'content_translation',
@@ -40,7 +40,7 @@ class RouteCachingLanguageTest extends BrowserTestBase {
    */
   protected $webUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->createContentType(['type' => 'page']);

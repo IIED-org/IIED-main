@@ -12,7 +12,7 @@ class MigrateUrlAliasTest extends MigrateUrlAliasTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'path_alias',
     'content_translation',
     'migrate_drupal_multilingual',
@@ -21,7 +21,7 @@ class MigrateUrlAliasTest extends MigrateUrlAliasTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->executeMigrations([
       'd7_node_translation',

@@ -3,6 +3,7 @@
 namespace Drupal\content_translation\Access;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\DependencyInjection\DeprecatedServicePropertyTrait;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageInterface;
@@ -16,6 +17,12 @@ use Symfony\Component\Routing\Route;
  * Access check for entity translation CRUD operation.
  */
 class ContentTranslationManageAccessCheck implements AccessInterface {
+  use DeprecatedServicePropertyTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $deprecatedProperties = ['entityManager' => 'entity.manager'];
 
   /**
    * The entity type manager.

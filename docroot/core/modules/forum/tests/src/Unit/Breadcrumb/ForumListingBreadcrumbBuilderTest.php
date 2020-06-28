@@ -3,7 +3,6 @@
 namespace Drupal\Tests\forum\Unit\Breadcrumb;
 
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Link;
 use Drupal\forum\Breadcrumb\ForumListingBreadcrumbBuilder;
 use Drupal\taxonomy\TermStorageInterface;
@@ -19,7 +18,7 @@ class ForumListingBreadcrumbBuilderTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $cache_contexts_manager = $this->getMockBuilder('Drupal\Core\Cache\Context\CacheContextsManager')
@@ -46,7 +45,7 @@ class ForumListingBreadcrumbBuilderTest extends UnitTestCase {
    */
   public function testApplies($expected, $route_name = NULL, $parameter_map = []) {
     // Make some test doubles.
-    $entity_type_manager = $this->createMock(EntityTypeManagerInterface::class);
+    $entity_manager = $this->createMock('Drupal\Core\Entity\EntityManagerInterface');
     $config_factory = $this->getConfigFactoryStub([]);
     $forum_manager = $this->createMock('Drupal\forum\ForumManagerInterface');
     $translation_manager = $this->createMock('Drupal\Core\StringTranslation\TranslationInterface');
@@ -54,7 +53,7 @@ class ForumListingBreadcrumbBuilderTest extends UnitTestCase {
     // Make an object to test.
     $builder = $this->getMockBuilder('Drupal\forum\Breadcrumb\ForumListingBreadcrumbBuilder')
       ->setConstructorArgs([
-        $entity_type_manager,
+        $entity_manager,
         $config_factory,
         $forum_manager,
         $translation_manager,
@@ -163,10 +162,10 @@ class ForumListingBreadcrumbBuilderTest extends UnitTestCase {
         ['forums', $prophecy->reveal()],
       ]));
 
-    $entity_type_manager = $this->getMockBuilder(EntityTypeManagerInterface::class)
+    $entity_manager = $this->getMockBuilder('Drupal\Core\Entity\EntityManagerInterface')
       ->disableOriginalConstructor()
       ->getMock();
-    $entity_type_manager->expects($this->any())
+    $entity_manager->expects($this->any())
       ->method('getStorage')
       ->will($this->returnValueMap([
         ['taxonomy_vocabulary', $vocab_storage],
@@ -184,7 +183,7 @@ class ForumListingBreadcrumbBuilderTest extends UnitTestCase {
     $forum_manager = $this->createMock('Drupal\forum\ForumManagerInterface');
 
     // Build a breadcrumb builder to test.
-    $breadcrumb_builder = new ForumListingBreadcrumbBuilder($entity_type_manager, $config_factory, $forum_manager, $translation_manager);
+    $breadcrumb_builder = new ForumListingBreadcrumbBuilder($entity_manager, $config_factory, $forum_manager, $translation_manager);
 
     // Add a translation manager for t().
     $translation_manager = $this->getStringTranslationStub();

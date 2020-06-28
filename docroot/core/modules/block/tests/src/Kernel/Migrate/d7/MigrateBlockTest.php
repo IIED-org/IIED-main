@@ -16,7 +16,7 @@ class MigrateBlockTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'block',
     'views',
     'comment',
@@ -32,7 +32,7 @@ class MigrateBlockTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Install the themes used for this test.

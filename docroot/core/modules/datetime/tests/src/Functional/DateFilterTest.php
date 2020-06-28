@@ -34,7 +34,7 @@ class DateFilterTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'datetime_test',
     'node',
     'datetime',
@@ -50,7 +50,7 @@ class DateFilterTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
     ViewTestData::createTestViews(get_class($this), ['datetime_test']);
 

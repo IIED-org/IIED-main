@@ -14,7 +14,7 @@ class ExtractTest extends MigrateProcessTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     $configuration['index'] = ['foo'];
     $this->plugin = new Extract($configuration, 'map', []);
     parent::setUp();

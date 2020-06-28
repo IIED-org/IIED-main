@@ -70,6 +70,38 @@ class ContextDefinition implements ContextDefinitionInterface {
   protected $constraints = [];
 
   /**
+   * An EntityContextDefinition instance, for backwards compatibility.
+   *
+   * If this context is created with a data type that starts with 'entity:',
+   * this property will be an instance of EntityContextDefinition, and certain
+   * methods of this object will delegate to their overridden counterparts in
+   * $this->entityContextDefinition.
+   *
+   * This property should be kept private so that it is only accessible to this
+   * class for backwards compatibility reasons. It will be removed in Drupal 9.
+   *
+   * @deprecated
+   *   Constructing a context definition for an entity type (i.e., the data type
+   *   begins with 'entity:') is deprecated in Drupal 8.6.0. Instead, use
+   *   the static factory methods of EntityContextDefinition to create context
+   *   definitions for entity types, or the static ::create() method of this
+   *   class for any other data type. See https://www.drupal.org/node/2976400
+   *   for more information.
+   *
+   * @see ::__construct()
+   * @see ::__sleep()
+   * @see ::__wakeup()
+   * @see ::getConstraintObjects()
+   * @see ::getSampleValues()
+   * @see ::initializeEntityContextDefinition()
+   * @see https://www.drupal.org/node/2932462
+   * @see https://www.drupal.org/node/2976400
+   *
+   * @var \Drupal\Core\Plugin\Context\EntityContextDefinition
+   */
+  private $entityContextDefinition;
+
+  /**
    * Creates a new context definition.
    *
    * @param string $data_type
@@ -109,7 +141,10 @@ class ContextDefinition implements ContextDefinitionInterface {
     $this->description = $description;
     $this->defaultValue = $default_value;
 
-    assert(strpos($data_type, 'entity:') !== 0 || $this instanceof EntityContextDefinition);
+    if (strpos($data_type, 'entity:') === 0 && !($this instanceof EntityContextDefinition)) {
+      @trigger_error('Constructing a ContextDefinition object for an entity type is deprecated in Drupal 8.6.0. Use ' . __NAMESPACE__ . '\EntityContextDefinition instead. See https://www.drupal.org/node/2976400 for more information.', E_USER_DEPRECATED);
+      $this->initializeEntityContextDefinition();
+    }
   }
 
   /**
@@ -206,6 +241,12 @@ class ContextDefinition implements ContextDefinitionInterface {
    * {@inheritdoc}
    */
   public function getConstraints() {
+    // If the backwards compatibility layer is present, delegate to that.
+    $this->initializeEntityContextDefinition();
+    if ($this->entityContextDefinition) {
+      return $this->entityContextDefinition->getConstraints();
+    }
+
     // @todo Apply defaults.
     return $this->constraints;
   }
@@ -214,6 +255,12 @@ class ContextDefinition implements ContextDefinitionInterface {
    * {@inheritdoc}
    */
   public function getConstraint($constraint_name) {
+    // If the backwards compatibility layer is present, delegate to that.
+    $this->initializeEntityContextDefinition();
+    if ($this->entityContextDefinition) {
+      return $this->entityContextDefinition->getConstraint($constraint_name);
+    }
+
     $constraints = $this->getConstraints();
     return isset($constraints[$constraint_name]) ? $constraints[$constraint_name] : NULL;
   }
@@ -222,6 +269,12 @@ class ContextDefinition implements ContextDefinitionInterface {
    * {@inheritdoc}
    */
   public function setConstraints(array $constraints) {
+    // If the backwards compatibility layer is present, delegate to that.
+    $this->initializeEntityContextDefinition();
+    if ($this->entityContextDefinition) {
+      $this->entityContextDefinition->setConstraints($constraints);
+    }
+
     $this->constraints = $constraints;
     return $this;
   }
@@ -230,6 +283,12 @@ class ContextDefinition implements ContextDefinitionInterface {
    * {@inheritdoc}
    */
   public function addConstraint($constraint_name, $options = NULL) {
+    // If the backwards compatibility layer is present, delegate to that.
+    $this->initializeEntityContextDefinition();
+    if ($this->entityContextDefinition) {
+      $this->entityContextDefinition->addConstraint($constraint_name, $options);
+    }
+
     $this->constraints[$constraint_name] = $options;
     return $this;
   }
@@ -295,7 +354,13 @@ class ContextDefinition implements ContextDefinitionInterface {
       $values = [$context->getContextData()];
     }
     elseif ($definition instanceof self) {
-      $values = $definition->getSampleValues();
+      $this->initializeEntityContextDefinition();
+      if ($this->entityContextDefinition) {
+        $values = $this->entityContextDefinition->getSampleValues();
+      }
+      else {
+        $values = $definition->getSampleValues();
+      }
     }
     else {
       $values = [];
@@ -340,6 +405,12 @@ class ContextDefinition implements ContextDefinitionInterface {
    *   A list of applied constraints for the context definition.
    */
   protected function getConstraintObjects() {
+    // If the backwards compatibility layer is present, delegate to that.
+    $this->initializeEntityContextDefinition();
+    if ($this->entityContextDefinition) {
+      return $this->entityContextDefinition->getConstraintObjects();
+    }
+
     $constraint_definitions = $this->getConstraints();
 
     $validation_constraint_manager = $this->getTypedDataManager()->getValidationConstraintManager();
@@ -349,6 +420,34 @@ class ContextDefinition implements ContextDefinitionInterface {
     }
 
     return $constraints;
+  }
+
+  /**
+   * Implements magic __sleep() method.
+   */
+  public function __sleep() {
+    return array_diff($this->traitSleep(), ['entityContextDefinition']);
+  }
+
+  /**
+   * Initializes $this->entityContextDefinition for backwards compatibility.
+   *
+   * This method should be kept private so that it is only accessible to this
+   * class for backwards compatibility reasons. It will be removed in Drupal 9.
+   *
+   * @deprecated
+   */
+  private function initializeEntityContextDefinition() {
+    if (!$this instanceof EntityContextDefinition && strpos($this->getDataType(), 'entity:') === 0 && !$this->entityContextDefinition) {
+      $this->entityContextDefinition = EntityContextDefinition::create()
+        ->setDataType($this->getDataType())
+        ->setLabel($this->getLabel())
+        ->setRequired($this->isRequired())
+        ->setMultiple($this->isMultiple())
+        ->setDescription($this->getDescription())
+        ->setConstraints($this->constraints)
+        ->setDefaultValue($this->getDefaultValue());
+    }
   }
 
 }

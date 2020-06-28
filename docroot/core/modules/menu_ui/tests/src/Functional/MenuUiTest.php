@@ -80,7 +80,7 @@ class MenuUiTest extends BrowserTestBase {
    */
   protected $items;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalPlaceBlock('page_title_block');

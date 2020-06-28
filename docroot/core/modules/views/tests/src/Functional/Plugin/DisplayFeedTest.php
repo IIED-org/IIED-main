@@ -29,14 +29,14 @@ class DisplayFeedTest extends ViewTestBase {
    *
    * @var array
    */
-  protected static $modules = ['block', 'node', 'views', 'views_test_rss'];
+  public static $modules = ['block', 'node', 'views', 'views_test_rss'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'classy';
 
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     $this->enableViewsTestModule();

@@ -18,12 +18,12 @@ class MigrateContactCategoryTest extends MigrateDrupal6TestBase {
    *
    * @var array
    */
-  protected static $modules = ['contact'];
+  public static $modules = ['contact'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->executeMigration('contact_category');
   }

@@ -3,6 +3,7 @@
 namespace Drupal\field_ui;
 
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
+use Drupal\Core\DependencyInjection\DeprecatedServicePropertyTrait;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -18,6 +19,14 @@ use Drupal\Core\Link;
  * @see field_ui_entity_type_build()
  */
 class FieldStorageConfigListBuilder extends ConfigEntityListBuilder {
+  use DeprecatedServicePropertyTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $deprecatedProperties = [
+    'entityManager' => 'entity.manager',
+  ];
 
   /**
    * An array of information about field types.
@@ -53,7 +62,7 @@ class FieldStorageConfigListBuilder extends ConfigEntityListBuilder {
    * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
    *   The entity type definition.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
+   *   The entity manager.
    * @param \Drupal\Core\Field\FieldTypePluginManagerInterface $field_type_manager
    *   The 'field type' plugin manager.
    */

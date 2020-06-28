@@ -21,7 +21,7 @@ class UpdateCoreTest extends UpdateTestBase {
    *
    * @var array
    */
-  protected static $modules = ['update_test', 'update', 'language', 'block'];
+  public static $modules = ['update_test', 'update', 'language', 'block'];
 
   /**
    * {@inheritdoc}
@@ -38,7 +38,7 @@ class UpdateCoreTest extends UpdateTestBase {
    */
   protected $updateProject = 'drupal';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $admin_user = $this->drupalCreateUser(['administer site configuration', 'administer modules', 'administer themes']);
     $this->drupalLogin($admin_user);

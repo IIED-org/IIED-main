@@ -17,7 +17,7 @@ class FieldUiIntegrationTest extends MediaLibraryTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create a user who can add media fields.

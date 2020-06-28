@@ -21,7 +21,7 @@ class TermAutocompleteTest extends TaxonomyTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node'];
+  public static $modules = ['node'];
 
   /**
    * {@inheritdoc}
@@ -66,7 +66,7 @@ class TermAutocompleteTest extends TaxonomyTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create a vocabulary.

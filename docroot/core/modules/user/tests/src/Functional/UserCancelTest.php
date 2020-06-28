@@ -23,14 +23,14 @@ class UserCancelTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'comment'];
+  public static $modules = ['node', 'comment'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalCreateContentType(['type' => 'page', 'name' => 'Basic page']);

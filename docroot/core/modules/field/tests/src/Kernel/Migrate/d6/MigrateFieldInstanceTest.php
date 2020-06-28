@@ -17,7 +17,7 @@ class MigrateFieldInstanceTest extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['menu_ui', 'node'];
+  public static $modules = ['menu_ui', 'node'];
 
   /**
    * Tests migration of file variables to file.settings.yml.

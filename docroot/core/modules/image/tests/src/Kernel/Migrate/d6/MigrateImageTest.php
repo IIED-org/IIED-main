@@ -21,12 +21,12 @@ class MigrateImageTest extends MigrateNodeTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['menu_ui'];
+  public static $modules = ['menu_ui'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->setUpMigratedFiles();
     $this->installSchema('file', ['file_usage']);

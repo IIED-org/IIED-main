@@ -28,7 +28,7 @@ class EntityTest extends UnitTestCase {
   protected $display;
 
   /**
-   * The entity type manager.
+   * The entity manager.
    *
    * @var \PHPUnit\Framework\MockObject\MockObject|\Drupal\Core\Entity\EntityTypeManagerInterface
    */
@@ -51,7 +51,7 @@ class EntityTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->entityTypeManager = $this->createMock(EntityTypeManagerInterface::class);
@@ -188,7 +188,7 @@ class EntityTest extends UnitTestCase {
    * @covers ::calculateDependencies
    */
   public function testCalculateDependencies() {
-    // Create an entity type manager, storage, entity type, and entity to mock the
+    // Create an entity manager, storage, entity type, and entity to mock the
     // loading of entities providing bundles.
     $entity_type_manager = $this->createMock(EntityTypeManagerInterface::class);
     $storage = $this->createMock('Drupal\Core\Entity\EntityStorageInterface');

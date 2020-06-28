@@ -26,7 +26,7 @@ class ActionFormAjaxTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $user = $this->drupalCreateUser(['administer actions']);
     $this->drupalLogin($user);

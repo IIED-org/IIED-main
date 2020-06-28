@@ -66,7 +66,7 @@ class ConfigExportImportUITest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['config', 'node', 'field'];
+  public static $modules = ['config', 'node', 'field'];
 
   /**
    * {@inheritdoc}
@@ -76,7 +76,7 @@ class ConfigExportImportUITest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     // The initial import must be done with uid 1 because if separately named
     // roles are created then the role is lost after import. If the roles

@@ -11,7 +11,7 @@ use Drupal\Tests\BrowserTestBase;
  */
 class UserRolesAssignmentTest extends BrowserTestBase {
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $admin_user = $this->drupalCreateUser(['administer permissions', 'administer users']);
     $this->drupalLogin($admin_user);

@@ -13,9 +13,9 @@ use Drupal\user\RoleInterface;
  */
 class FilterDefaultConfigTest extends KernelTestBase {
 
-  protected static $modules = ['system', 'user', 'filter', 'filter_test'];
+  public static $modules = ['system', 'user', 'filter', 'filter_test'];
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Drupal\filter\FilterPermissions::permissions() builds a URL to output

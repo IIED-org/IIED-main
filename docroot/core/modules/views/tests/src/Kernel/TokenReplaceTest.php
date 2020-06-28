@@ -13,7 +13,7 @@ use Drupal\views\Views;
  */
 class TokenReplaceTest extends ViewsKernelTestBase {
 
-  protected static $modules = ['system'];
+  public static $modules = ['system'];
 
   /**
    * Views used by this test.
@@ -22,7 +22,7 @@ class TokenReplaceTest extends ViewsKernelTestBase {
    */
   public static $testViews = ['test_tokens', 'test_invalid_tokens'];
 
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp();
     $this->container->get('router.builder')->rebuild();
   }
@@ -83,7 +83,7 @@ class TokenReplaceTest extends ViewsKernelTestBase {
     $view->setDisplay('page_3');
     $this->executeView($view);
 
-    $this->assertTrue($view->get_total_rows, 'The query was set to calculate the total number of rows.');
+    $this->assertSame(TRUE, $view->get_total_rows, 'The query was set to calculate the total number of rows.');
 
     $expected = [
       '[view:label]' => 'Test tokens',

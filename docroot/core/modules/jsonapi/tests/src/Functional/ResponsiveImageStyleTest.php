@@ -15,7 +15,7 @@ class ResponsiveImageStyleTest extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['responsive_image'];
+  public static $modules = ['responsive_image'];
 
   /**
    * {@inheritdoc}

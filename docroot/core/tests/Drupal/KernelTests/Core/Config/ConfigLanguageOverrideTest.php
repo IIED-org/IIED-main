@@ -17,7 +17,7 @@ class ConfigLanguageOverrideTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'user',
     'language',
     'config_test',
@@ -28,7 +28,7 @@ class ConfigLanguageOverrideTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installConfig(['config_test']);
   }

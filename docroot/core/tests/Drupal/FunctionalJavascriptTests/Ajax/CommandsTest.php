@@ -14,7 +14,7 @@ class CommandsTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['node', 'ajax_test', 'ajax_forms_test'];
+  public static $modules = ['node', 'ajax_test', 'ajax_forms_test'];
 
   /**
    * {@inheritdoc}

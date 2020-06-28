@@ -21,7 +21,7 @@ class RouteProcessorCurrentIntegrationTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['system'];
+  public static $modules = ['system'];
 
   /**
    * The URL generator.
@@ -33,7 +33,7 @@ class RouteProcessorCurrentIntegrationTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->urlGenerator = \Drupal::urlGenerator();

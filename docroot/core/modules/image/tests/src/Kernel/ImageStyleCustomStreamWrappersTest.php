@@ -24,7 +24,7 @@ class ImageStyleCustomStreamWrappersTest extends KernelTestBase {
    *
    * @var string[]
    */
-  protected static $modules = ['system', 'image'];
+  public static $modules = ['system', 'image'];
 
   /**
    * A testing image style entity.
@@ -43,7 +43,7 @@ class ImageStyleCustomStreamWrappersTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->fileSystem = $this->container->get('file_system');
     $this->config('system.file')->set('default_scheme', 'public')->save();

@@ -16,7 +16,7 @@ class NodeAccessTest extends ModerationStateTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'content_moderation',
     'block',
     'block_content',
@@ -50,7 +50,7 @@ class NodeAccessTest extends ModerationStateTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->drupalLogin($this->adminUser);
     $this->createContentTypeFromUi('Moderated content', 'moderated_content', FALSE);

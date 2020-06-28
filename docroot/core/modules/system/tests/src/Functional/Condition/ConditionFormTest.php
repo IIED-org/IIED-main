@@ -16,7 +16,7 @@ use Drupal\Tests\BrowserTestBase;
  */
 class ConditionFormTest extends BrowserTestBase {
 
-  protected static $modules = ['node', 'condition_test'];
+  public static $modules = ['node', 'condition_test'];
 
   /**
    * {@inheritdoc}

@@ -20,7 +20,7 @@ class EditorLoadingTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['filter', 'editor', 'editor_test', 'node'];
+  public static $modules = ['filter', 'editor', 'editor_test', 'node'];
 
   /**
    * {@inheritdoc}
@@ -48,7 +48,7 @@ class EditorLoadingTest extends BrowserTestBase {
    */
   protected $privilegedUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Let there be T-rex.

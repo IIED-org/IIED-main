@@ -17,7 +17,7 @@ class EntityValidationTest extends EntityKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['filter', 'text', 'language'];
+  public static $modules = ['filter', 'text', 'language'];
 
   /**
    * @var string
@@ -37,7 +37,7 @@ class EntityValidationTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Enable an additional language.

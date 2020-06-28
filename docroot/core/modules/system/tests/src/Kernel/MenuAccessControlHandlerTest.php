@@ -24,7 +24,7 @@ class MenuAccessControlHandlerTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'system',
     'user',
   ];
@@ -39,7 +39,7 @@ class MenuAccessControlHandlerTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('menu');
     $this->installEntitySchema('user');

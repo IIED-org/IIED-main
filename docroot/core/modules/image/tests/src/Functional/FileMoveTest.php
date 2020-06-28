@@ -25,7 +25,7 @@ class FileMoveTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['image'];
+  public static $modules = ['image'];
 
   /**
    * {@inheritdoc}

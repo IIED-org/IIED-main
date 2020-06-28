@@ -45,7 +45,7 @@ class EntityReferenceIntegrationTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['config_test', 'entity_test', 'field_ui'];
+  public static $modules = ['config_test', 'entity_test', 'field_ui'];
 
   /**
    * {@inheritdoc}
@@ -55,7 +55,7 @@ class EntityReferenceIntegrationTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create a test user.

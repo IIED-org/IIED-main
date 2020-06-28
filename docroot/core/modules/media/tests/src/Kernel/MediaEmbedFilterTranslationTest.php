@@ -22,7 +22,7 @@ class MediaEmbedFilterTranslationTest extends MediaEmbedFilterTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     ConfigurableLanguage::createFromLangcode('pt-br')->save();

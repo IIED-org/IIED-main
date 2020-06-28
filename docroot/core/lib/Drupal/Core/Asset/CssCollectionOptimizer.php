@@ -59,11 +59,15 @@ class CssCollectionOptimizer implements AssetCollectionOptimizerInterface {
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The file system service.
    */
-  public function __construct(AssetCollectionGrouperInterface $grouper, AssetOptimizerInterface $optimizer, AssetDumperInterface $dumper, StateInterface $state, FileSystemInterface $file_system) {
+  public function __construct(AssetCollectionGrouperInterface $grouper, AssetOptimizerInterface $optimizer, AssetDumperInterface $dumper, StateInterface $state, FileSystemInterface $file_system = NULL) {
     $this->grouper = $grouper;
     $this->optimizer = $optimizer;
     $this->dumper = $dumper;
     $this->state = $state;
+    if (!$file_system) {
+      @trigger_error('The file_system service must be passed to CssCollectionOptimizer::__construct(), it is required before Drupal 9.0.0. See https://www.drupal.org/node/3006851.', E_USER_DEPRECATED);
+      $file_system = \Drupal::service('file_system');
+    }
     $this->fileSystem = $file_system;
   }
 

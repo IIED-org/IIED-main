@@ -19,9 +19,9 @@ class GarbageCollectionTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system'];
+  public static $modules = ['system'];
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // These additional tables are necessary due to the call to system_cron().

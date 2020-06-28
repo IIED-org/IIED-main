@@ -23,7 +23,7 @@ class ResourceTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['hal', 'rest', 'entity_test', 'rest_test'];
+  public static $modules = ['hal', 'rest', 'entity_test', 'rest_test'];
 
   /**
    * {@inheritdoc}
@@ -40,7 +40,7 @@ class ResourceTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     // Create an entity programmatic.
     $this->entity = EntityTest::create([

@@ -48,7 +48,7 @@ class MigrateExecutableTest extends MigrateTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->migration = $this->getMigration();
     $this->message = $this->createMock('Drupal\migrate\MigrateMessageInterface');

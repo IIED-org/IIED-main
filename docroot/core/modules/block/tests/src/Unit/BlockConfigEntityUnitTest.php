@@ -60,7 +60,7 @@ class BlockConfigEntityUnitTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     $this->entityTypeId = $this->randomMachineName();
 
     $this->entityType = $this->createMock('\Drupal\Core\Entity\EntityTypeInterface');

@@ -33,7 +33,7 @@ class MatcherDumperTest extends KernelTestBase {
    */
   protected $state;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->fixtures = new RoutingFixtures();

@@ -14,7 +14,7 @@ class MigrateThemeSettingsTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Install bartik and seven themes.

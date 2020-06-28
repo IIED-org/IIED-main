@@ -16,7 +16,7 @@ class MigrateAccessTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['migrate_drupal_ui'];
+  public static $modules = ['migrate_drupal_ui'];
 
   /**
    * {@inheritdoc}

@@ -17,7 +17,7 @@ class NodeBulkFormTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function tearDown(): void {
+  protected function tearDown() {
     parent::tearDown();
     $container = new ContainerBuilder();
     \Drupal::setContainer($container);
@@ -93,9 +93,7 @@ class NodeBulkFormTest extends UnitTestCase {
     $node_bulk_form = new NodeBulkForm([], 'node_bulk_form', $definition, $entity_type_manager, $language_manager, $messenger, $entity_repository);
     $node_bulk_form->init($executable, $display, $options);
 
-    $reflected_actions = (new \ReflectionObject($node_bulk_form))->getProperty('actions');
-    $reflected_actions->setAccessible(TRUE);
-    $this->assertEquals(array_slice($actions, 0, -1, TRUE), $reflected_actions->getValue($node_bulk_form));
+    $this->assertAttributeEquals(array_slice($actions, 0, -1, TRUE), 'actions', $node_bulk_form);
   }
 
 }

@@ -13,7 +13,7 @@ use Drupal\views\Views;
  */
 class AreaTextTest extends ViewsKernelTestBase {
 
-  protected static $modules = ['system', 'user', 'filter'];
+  public static $modules = ['system', 'user', 'filter'];
 
   /**
    * Views used by this test.
@@ -22,7 +22,7 @@ class AreaTextTest extends ViewsKernelTestBase {
    */
   public static $testViews = ['test_view'];
 
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp();
 
     $this->installConfig(['system', 'filter']);

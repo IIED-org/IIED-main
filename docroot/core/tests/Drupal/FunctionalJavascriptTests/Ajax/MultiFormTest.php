@@ -19,7 +19,7 @@ class MultiFormTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['node', 'form_test'];
+  public static $modules = ['node', 'form_test'];
 
   /**
    * {@inheritdoc}
@@ -29,7 +29,7 @@ class MultiFormTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalCreateContentType(['type' => 'page', 'name' => 'Page']);

@@ -11,12 +11,12 @@ use Drupal\Tests\migrate_drupal\Kernel\d7\MigrateDrupal7TestBase;
  */
 class MigrateTrackerSettingsTest extends MigrateDrupal7TestBase {
 
-  protected static $modules = ['tracker'];
+  public static $modules = ['tracker'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installConfig(['tracker']);
     $this->executeMigration('d7_tracker_settings');

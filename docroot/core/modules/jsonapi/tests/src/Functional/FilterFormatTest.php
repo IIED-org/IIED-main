@@ -15,7 +15,7 @@ class FilterFormatTest extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['filter'];
+  public static $modules = ['filter'];
 
   /**
    * {@inheritdoc}

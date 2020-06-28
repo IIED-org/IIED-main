@@ -8,10 +8,11 @@ use Drupal\Tests\migrate_drupal\Kernel\d6\MigrateDrupal6TestBase;
  * Upgrade i18n_strings site variables to system.*.yml.
  *
  * @group migrate_drupal_6
+ * @group legacy
  */
 class MigrateSystemSiteTranslationTest extends MigrateDrupal6TestBase {
 
-  protected static $modules = [
+  public static $modules = [
     'language',
     'config_translation',
   ];
@@ -19,7 +20,7 @@ class MigrateSystemSiteTranslationTest extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->executeMigration('d6_system_site_translation');
   }

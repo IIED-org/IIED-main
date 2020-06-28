@@ -18,7 +18,7 @@ class MenuLinkContentDeleteFormTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['menu_link_content'];
+  public static $modules = ['menu_link_content'];
 
   /**
    * {@inheritdoc}
@@ -28,7 +28,7 @@ class MenuLinkContentDeleteFormTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $web_user = $this->drupalCreateUser(['administer menu']);
     $this->drupalLogin($web_user);

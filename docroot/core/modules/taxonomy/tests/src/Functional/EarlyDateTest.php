@@ -18,14 +18,14 @@ class EarlyDateTest extends TaxonomyTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'datetime'];
+  public static $modules = ['node', 'datetime'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create a tags vocabulary for the 'article' content type.

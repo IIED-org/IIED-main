@@ -6,17 +6,16 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\PhpStorage\PhpStorageFactory;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\State\StateInterface;
-use Twig\Environment;
-use Twig\Extension\SandboxExtension;
-use Twig\Loader\LoaderInterface;
 
 /**
  * A class that defines a Twig environment for Drupal.
  *
  * Instances of this class are used to store the configuration and extensions,
  * and are used to load templates from the file system or other locations.
+ *
+ * @see core\vendor\twig\twig\lib\Twig\Environment.php
  */
-class TwigEnvironment extends Environment {
+class TwigEnvironment extends \Twig_Environment {
 
   /**
    * Key name of the Twig cache prefix metadata key-value pair in State.
@@ -56,13 +55,18 @@ class TwigEnvironment extends Environment {
    *   The Twig extension hash.
    * @param \Drupal\Core\State\StateInterface $state
    *   The state service.
-   * @param \Twig\Loader\LoaderInterface $loader
+   * @param \Twig_LoaderInterface $loader
    *   The Twig loader or loader chain.
    * @param array $options
    *   The options for the Twig environment.
    */
-  public function __construct($root, CacheBackendInterface $cache, $twig_extension_hash, StateInterface $state, LoaderInterface $loader = NULL, array $options = []) {
+  public function __construct($root, CacheBackendInterface $cache, $twig_extension_hash, StateInterface $state, \Twig_LoaderInterface $loader = NULL, array $options = []) {
     $this->state = $state;
+
+    // Ensure that twig.engine is loaded, given that it is needed to render a
+    // template because functions like TwigExtension::escapeFilter() are called.
+    // @todo remove in Drupal 9.0.0 https://www.drupal.org/node/3011393.
+    require_once $root . '/core/themes/engines/twig/twig.engine';
 
     $this->templateClasses = [];
 
@@ -93,7 +97,7 @@ class TwigEnvironment extends Environment {
     $this->setLoader($loader);
     parent::__construct($this->getLoader(), $options);
     $policy = new TwigSandboxPolicy();
-    $sandbox = new SandboxExtension($policy, TRUE);
+    $sandbox = new \Twig_Extension_Sandbox($policy, TRUE);
     $this->addExtension($sandbox);
   }
 

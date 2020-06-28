@@ -17,7 +17,7 @@ class WorkspacePermissionsTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['workspaces'];
+  public static $modules = ['workspaces'];
 
   /**
    * {@inheritdoc}

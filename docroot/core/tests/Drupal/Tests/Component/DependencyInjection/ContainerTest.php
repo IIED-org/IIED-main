@@ -55,7 +55,7 @@ class ContainerTest extends TestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     $this->machineFormat = TRUE;
     $this->containerClass = '\Drupal\Component\DependencyInjection\Container';
     $this->containerDefinition = $this->getMockContainerDefinition();

@@ -19,7 +19,7 @@ class FeedLanguageTest extends AggregatorTestBase {
    *
    * @var array
    */
-  protected static $modules = ['language'];
+  public static $modules = ['language'];
 
   /**
    * {@inheritdoc}
@@ -36,7 +36,7 @@ class FeedLanguageTest extends AggregatorTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create test languages.

@@ -3,6 +3,7 @@
 namespace Drupal\Tests\menu_link_content\Functional\Rest;
 
 use Drupal\menu_link_content\Entity\MenuLinkContent;
+use Drupal\Tests\rest\Functional\BcTimestampNormalizerUnixTestTrait;
 use Drupal\Tests\rest\Functional\EntityResource\EntityResourceTestBase;
 
 /**
@@ -10,10 +11,12 @@ use Drupal\Tests\rest\Functional\EntityResource\EntityResourceTestBase;
  */
 abstract class MenuLinkContentResourceTestBase extends EntityResourceTestBase {
 
+  use BcTimestampNormalizerUnixTestTrait;
+
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['menu_link_content'];
+  public static $modules = ['menu_link_content'];
 
   /**
    * {@inheritdoc}
@@ -185,12 +188,7 @@ abstract class MenuLinkContentResourceTestBase extends EntityResourceTestBase {
         ],
       ],
       'changed' => [
-        [
-          'value' => (new \DateTime())->setTimestamp($this->entity->getChangedTime())
-            ->setTimezone(new \DateTimeZone('UTC'))
-            ->format(\DateTime::RFC3339),
-          'format' => \DateTime::RFC3339,
-        ],
+        $this->formatExpectedTimestampItemValues($this->entity->getChangedTime()),
       ],
       'default_langcode' => [
         [
@@ -199,12 +197,7 @@ abstract class MenuLinkContentResourceTestBase extends EntityResourceTestBase {
       ],
       'parent' => [],
       'revision_created' => [
-        [
-          'value' => (new \DateTime())->setTimestamp((int) $this->entity->getRevisionCreationTime())
-            ->setTimezone(new \DateTimeZone('UTC'))
-            ->format(\DateTime::RFC3339),
-          'format' => \DateTime::RFC3339,
-        ],
+        $this->formatExpectedTimestampItemValues((int) $this->entity->getRevisionCreationTime()),
       ],
       'revision_user' => [],
       'revision_log_message' => [],
@@ -220,6 +213,10 @@ abstract class MenuLinkContentResourceTestBase extends EntityResourceTestBase {
    * {@inheritdoc}
    */
   protected function getExpectedUnauthorizedAccessMessage($method) {
+    if ($this->config('rest.settings')->get('bc_entity_resource_permissions')) {
+      return parent::getExpectedUnauthorizedAccessMessage($method);
+    }
+
     switch ($method) {
       case 'DELETE':
         return "The 'administer menu' permission is required.";

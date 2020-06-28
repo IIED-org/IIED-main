@@ -17,7 +17,7 @@ class StatisticsAttachedTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'statistics'];
+  public static $modules = ['node', 'statistics'];
 
   /**
    * {@inheritdoc}
@@ -27,7 +27,7 @@ class StatisticsAttachedTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalCreateContentType(['type' => 'page']);

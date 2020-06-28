@@ -12,7 +12,7 @@ class TrackChangesTest extends MigrateTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'system',
     'user',
     'taxonomy',
@@ -24,7 +24,7 @@ class TrackChangesTest extends MigrateTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     // Create source test table.
     $this->sourceDatabase->schema()->createTable('track_changes_term', [

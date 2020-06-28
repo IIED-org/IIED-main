@@ -18,7 +18,7 @@ class UserBlocksTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['block', 'views'];
+  public static $modules = ['block', 'views'];
 
   /**
    * {@inheritdoc}
@@ -32,7 +32,7 @@ class UserBlocksTest extends BrowserTestBase {
    */
   protected $adminUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser(['administer blocks']);

@@ -7,7 +7,6 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 use Drupal\Core\Serialization\Yaml;
 use Twig\Error\LoaderError;
-use Twig\Loader\FilesystemLoader;
 use Twig\Source;
 
 /**
@@ -25,7 +24,7 @@ use Twig\Source;
  *   experimental modules and development releases of contributed modules.
  *   See https://www.drupal.org/core/experimental for more information.
  */
-class HelpTopicTwigLoader extends FilesystemLoader {
+class HelpTopicTwigLoader extends \Twig_Loader_Filesystem {
 
   /**
    * {@inheritdoc}

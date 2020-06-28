@@ -12,7 +12,7 @@ use Drupal\views\Views;
  */
 class HandlerAliasTest extends ViewsKernelTestBase {
 
-  protected static $modules = ['user'];
+  public static $modules = ['user'];
 
   /**
    * Views used by this test.
@@ -21,7 +21,7 @@ class HandlerAliasTest extends ViewsKernelTestBase {
    */
   public static $testViews = ['test_filter', 'test_alias'];
 
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp();
 
     $this->installEntitySchema('user');

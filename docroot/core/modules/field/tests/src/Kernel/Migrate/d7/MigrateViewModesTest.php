@@ -13,12 +13,12 @@ use Drupal\Tests\migrate_drupal\Kernel\d7\MigrateDrupal7TestBase;
  */
 class MigrateViewModesTest extends MigrateDrupal7TestBase {
 
-  protected static $modules = ['comment', 'node', 'taxonomy', 'text'];
+  public static $modules = ['comment', 'node', 'taxonomy', 'text'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('comment');
     $this->installEntitySchema('node');

@@ -14,14 +14,14 @@ class PathAdminTest extends PathTestBase {
    *
    * @var array
    */
-  protected static $modules = ['path'];
+  public static $modules = ['path'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create test user and log in.

@@ -17,7 +17,7 @@ class SerializationTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['serialization', 'serialization_test'];
+  public static $modules = ['serialization', 'serialization_test'];
 
   /**
    * The serializer service to test.
@@ -26,7 +26,7 @@ class SerializationTest extends KernelTestBase {
    */
   protected $serializer;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->serializer = $this->container->get('serializer');
   }

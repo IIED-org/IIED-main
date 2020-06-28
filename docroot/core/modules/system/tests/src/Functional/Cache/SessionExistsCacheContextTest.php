@@ -17,7 +17,7 @@ class SessionExistsCacheContextTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['session_exists_cache_context_test'];
+  public static $modules = ['session_exists_cache_context_test'];
 
   /**
    * {@inheritdoc}

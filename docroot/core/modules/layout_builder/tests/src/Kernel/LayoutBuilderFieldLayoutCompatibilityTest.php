@@ -15,14 +15,14 @@ class LayoutBuilderFieldLayoutCompatibilityTest extends LayoutBuilderCompatibili
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'field_layout',
   ];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->display

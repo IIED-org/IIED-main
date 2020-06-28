@@ -14,7 +14,7 @@ class MemoryStorageTest extends ConfigStorageTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->storage = new MemoryStorage();
     // ::listAll() verifications require other configuration data to exist.

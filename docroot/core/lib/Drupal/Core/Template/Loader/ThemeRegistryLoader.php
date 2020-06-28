@@ -3,15 +3,13 @@
 namespace Drupal\Core\Template\Loader;
 
 use Drupal\Core\Theme\Registry;
-use Twig\Error\LoaderError;
-use Twig\Loader\FilesystemLoader;
 
 /**
  * Loads templates based on information from the Drupal theme registry.
  *
  * Allows for template inheritance based on the currently active template.
  */
-class ThemeRegistryLoader extends FilesystemLoader {
+class ThemeRegistryLoader extends \Twig_Loader_Filesystem {
 
   /**
    * The theme registry used to determine which template to use.
@@ -41,7 +39,7 @@ class ThemeRegistryLoader extends FilesystemLoader {
    * @return string|false
    *   The path to the template, or false if the template is not found.
    *
-   * @throws \Twig\Error\LoaderError
+   * @throws \Twig_Error_Loader
    *   Thrown if a template matching $name cannot be found.
    */
   protected function findTemplate($name, $throw = TRUE) {
@@ -63,7 +61,7 @@ class ThemeRegistryLoader extends FilesystemLoader {
     }
 
     if ($throw) {
-      throw new LoaderError(sprintf('Unable to find template "%s" in the Drupal theme registry.', $name));
+      throw new \Twig_Error_Loader(sprintf('Unable to find template "%s" in the Drupal theme registry.', $name));
     }
 
     return FALSE;

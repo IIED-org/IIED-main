@@ -16,7 +16,7 @@ class MigrateEmbeddedDataTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['migrate'];
+  public static $modules = ['migrate'];
 
   /**
    * Tests the embedded_data source plugin.
@@ -45,7 +45,10 @@ class MigrateEmbeddedDataTest extends KernelTestBase {
     $results = [];
     /** @var \Drupal\migrate\Row $row */
     foreach ($source as $row) {
-      $this->assertFalse($row->isStub());
+      // The plugin should not mark any rows as stubs. We need to use
+      // assertSame() here because assertFalse() will pass falsy values (e.g.,
+      // empty arrays).
+      $this->assertSame(FALSE, $row->isStub());
 
       $data_row = $row->getSource();
       // The "data" row returned by getSource() also includes all source

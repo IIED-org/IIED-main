@@ -15,7 +15,7 @@ class RemoteFileScanDirectoryTest extends ScanDirectoryTest {
    *
    * @var array
    */
-  protected static $modules = ['file_test'];
+  public static $modules = ['file_test'];
 
   /**
    * A stream wrapper scheme to register for the test.
@@ -31,7 +31,7 @@ class RemoteFileScanDirectoryTest extends ScanDirectoryTest {
    */
   protected $classname = 'Drupal\file_test\StreamWrapper\DummyRemoteStreamWrapper';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->config('system.file')->set('default_scheme', 'dummy-remote')->save();
   }

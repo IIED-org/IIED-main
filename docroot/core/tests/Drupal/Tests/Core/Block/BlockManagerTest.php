@@ -34,7 +34,7 @@ class BlockManagerTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $cache_backend = $this->prophesize(CacheBackendInterface::class);

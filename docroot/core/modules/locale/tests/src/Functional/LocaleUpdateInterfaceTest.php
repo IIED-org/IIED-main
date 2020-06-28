@@ -17,7 +17,7 @@ class LocaleUpdateInterfaceTest extends LocaleUpdateBase {
    *
    * @var array
    */
-  protected static $modules = ['locale_test_translate'];
+  public static $modules = ['locale_test_translate'];
 
   /**
    * {@inheritdoc}
@@ -27,7 +27,7 @@ class LocaleUpdateInterfaceTest extends LocaleUpdateBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $admin_user = $this->drupalCreateUser(['administer modules', 'administer site configuration', 'administer languages', 'access administration pages', 'translate interface']);
     $this->drupalLogin($admin_user);

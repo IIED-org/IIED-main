@@ -17,12 +17,12 @@ class MigrateImageStylesTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['image'];
+  public static $modules = ['image'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installConfig(static::$modules);
     $this->executeMigration('d7_image_styles');

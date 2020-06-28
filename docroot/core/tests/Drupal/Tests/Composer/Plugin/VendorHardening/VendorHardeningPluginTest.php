@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
  */
 class VendorHardeningPluginTest extends TestCase {
 
-  public function setUp(): void {
+  public function setUp() {
     parent::setUp();
     vfsStream::setup('vendor', NULL, [
       'drupal' => [

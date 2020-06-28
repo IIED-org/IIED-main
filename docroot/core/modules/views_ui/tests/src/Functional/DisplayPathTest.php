@@ -16,7 +16,7 @@ class DisplayPathTest extends UITestBase {
 
   use AssertPageCacheContextsAndTagsTrait;
 
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     $this->placeBlock('page_title_block');
@@ -25,7 +25,7 @@ class DisplayPathTest extends UITestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['menu_ui'];
+  public static $modules = ['menu_ui'];
 
   /**
    * {@inheritdoc}

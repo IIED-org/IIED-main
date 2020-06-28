@@ -17,7 +17,7 @@ class ErrorHandlerTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['error_test'];
+  public static $modules = ['error_test'];
 
   /**
    * {@inheritdoc}

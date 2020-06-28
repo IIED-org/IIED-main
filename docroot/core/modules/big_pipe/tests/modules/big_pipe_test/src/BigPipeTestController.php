@@ -162,7 +162,7 @@ class BigPipeTestController implements TrustedCallbackInterface {
    * {@inheritdoc}
    */
   public static function trustedCallbacks() {
-    return ['currentTime', 'helloOrYarhar', 'exception', 'responseException', 'counter'];
+    return ['currentTime', 'counter'];
   }
 
 }

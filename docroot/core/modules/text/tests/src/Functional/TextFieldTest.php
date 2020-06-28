@@ -33,7 +33,7 @@ class TextFieldTest extends StringFieldTest {
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser(['administer filters']);

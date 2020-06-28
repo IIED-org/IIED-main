@@ -16,7 +16,7 @@ abstract class FileTestBase extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system'];
+  public static $modules = ['system'];
 
   /**
    * A stream wrapper scheme to register for the test.
@@ -153,7 +153,6 @@ abstract class FileTestBase extends KernelTestBase {
    * @param $path
    *   Optional string with a directory path. If none is provided, a random
    *   name in the site's files directory will be used.
-   *
    * @return
    *   The path to the directory.
    */
@@ -179,7 +178,6 @@ abstract class FileTestBase extends KernelTestBase {
    * @param $scheme
    *   Optional string indicating the stream scheme to use. Drupal core includes
    *   public, private, and temporary. The public wrapper is the default.
-   *
    * @return
    *   File URI.
    */

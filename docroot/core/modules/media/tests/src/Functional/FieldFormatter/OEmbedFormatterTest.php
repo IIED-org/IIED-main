@@ -21,7 +21,7 @@ class OEmbedFormatterTest extends MediaFunctionalTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'field_ui',
     'link',
     'media_test_oembed',
@@ -35,7 +35,7 @@ class OEmbedFormatterTest extends MediaFunctionalTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->lockHttpClientToFixtures();
 

@@ -17,12 +17,12 @@ class MigrateLocaleConfigsTest extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['locale', 'language'];
+  public static $modules = ['locale', 'language'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->executeMigration('locale_settings');
   }
@@ -32,7 +32,7 @@ class MigrateLocaleConfigsTest extends MigrateDrupal6TestBase {
    */
   public function testLocaleSettings() {
     $config = $this->config('locale.settings');
-    $this->assertTrue($config->get('cache_strings'));
+    $this->assertIdentical(TRUE, $config->get('cache_strings'));
     $this->assertIdentical('languages', $config->get('javascript.directory'));
     $this->assertConfigSchema(\Drupal::service('config.typed'), 'locale.settings', $config->get());
   }

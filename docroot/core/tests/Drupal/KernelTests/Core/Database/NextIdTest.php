@@ -14,12 +14,12 @@ class NextIdTest extends DatabaseTestBase {
    *
    * @var array
    */
-  protected static $modules = ['database_test', 'system'];
+  public static $modules = ['database_test', 'system'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installSchema('system', 'sequences');
   }

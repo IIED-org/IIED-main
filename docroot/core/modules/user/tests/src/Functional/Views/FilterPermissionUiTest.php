@@ -25,14 +25,14 @@ class FilterPermissionUiTest extends ViewTestBase {
    *
    * @var array
    */
-  protected static $modules = ['user', 'user_test_views', 'views_ui'];
+  public static $modules = ['user', 'user_test_views', 'views_ui'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     ViewTestData::createTestViews(get_class($this), ['user_test_views']);

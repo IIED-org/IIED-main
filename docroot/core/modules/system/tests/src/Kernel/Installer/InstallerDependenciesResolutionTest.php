@@ -14,7 +14,7 @@ class InstallerDependenciesResolutionTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['system'];
+  public static $modules = ['system'];
 
   /**
    * Verifies that the exception message in the profile step is correct.

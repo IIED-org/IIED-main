@@ -20,7 +20,7 @@ class ContentTranslationRevisionTranslationDeletionTest extends ContentTranslati
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->enableContentModeration();
   }

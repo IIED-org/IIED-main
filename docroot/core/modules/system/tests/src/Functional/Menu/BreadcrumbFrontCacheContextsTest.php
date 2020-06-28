@@ -18,7 +18,7 @@ class BreadcrumbFrontCacheContextsTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'block',
     'node',
     'path',
@@ -40,7 +40,7 @@ class BreadcrumbFrontCacheContextsTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalPlaceBlock('system_breadcrumb_block');

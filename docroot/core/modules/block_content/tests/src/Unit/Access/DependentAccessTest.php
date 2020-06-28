@@ -34,7 +34,7 @@ class DependentAccessTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->account = $this->prophesize(AccountInterface::class)->reveal();
     $this->forbidden = $this->createAccessibleDouble(AccessResult::forbidden('Because I said so'));

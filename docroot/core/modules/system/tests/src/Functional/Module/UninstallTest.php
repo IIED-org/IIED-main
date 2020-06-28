@@ -21,7 +21,7 @@ class UninstallTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['module_test', 'user', 'views', 'node'];
+  public static $modules = ['module_test', 'user', 'views', 'node'];
 
   /**
    * {@inheritdoc}

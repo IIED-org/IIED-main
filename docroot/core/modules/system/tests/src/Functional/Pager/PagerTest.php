@@ -20,7 +20,7 @@ class PagerTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['dblog', 'image', 'pager_test'];
+  public static $modules = ['dblog', 'image', 'pager_test'];
 
   /**
    * {@inheritdoc}
@@ -36,7 +36,7 @@ class PagerTest extends BrowserTestBase {
 
   protected $profile = 'testing';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Insert 300 log messages.

@@ -16,14 +16,14 @@ class ForumIndexTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['taxonomy', 'comment', 'forum'];
+  public static $modules = ['taxonomy', 'comment', 'forum'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create a test user.

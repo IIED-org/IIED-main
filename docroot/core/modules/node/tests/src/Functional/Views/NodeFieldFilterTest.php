@@ -14,7 +14,7 @@ class NodeFieldFilterTest extends NodeTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['language'];
+  public static $modules = ['language'];
 
   /**
    * {@inheritdoc}
@@ -38,7 +38,7 @@ class NodeFieldFilterTest extends NodeTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     // Create Page content type.

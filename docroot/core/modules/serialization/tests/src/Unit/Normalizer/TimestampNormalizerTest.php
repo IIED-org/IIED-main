@@ -37,7 +37,7 @@ class TimestampNormalizerTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->normalizer = new TimestampNormalizer($this->prophesize(ConfigFactoryInterface::class)->reveal());

@@ -15,7 +15,7 @@ class StableTemplateOverrideTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['system', 'user'];
+  public static $modules = ['system', 'user'];
 
   /**
    * An array of template names to skip, without the extension.
@@ -43,7 +43,7 @@ class StableTemplateOverrideTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->themeHandler = $this->container->get('theme_handler');
 

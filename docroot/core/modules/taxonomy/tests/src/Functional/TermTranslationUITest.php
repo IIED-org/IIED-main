@@ -26,14 +26,14 @@ class TermTranslationUITest extends ContentTranslationUITestBase {
    *
    * @var array
    */
-  protected static $modules = ['language', 'content_translation', 'taxonomy'];
+  public static $modules = ['language', 'content_translation', 'taxonomy'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'classy';
 
-  protected function setUp(): void {
+  protected function setUp() {
     $this->entityTypeId = 'taxonomy_term';
     $this->bundle = 'tags';
     parent::setUp();

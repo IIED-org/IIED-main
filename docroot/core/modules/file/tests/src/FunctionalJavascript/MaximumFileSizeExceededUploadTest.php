@@ -20,7 +20,7 @@ class MaximumFileSizeExceededUploadTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['node', 'file'];
+  public static $modules = ['node', 'file'];
 
   /**
    * {@inheritdoc}
@@ -54,7 +54,7 @@ class MaximumFileSizeExceededUploadTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->fileSystem = $this->container->get('file_system');
@@ -83,7 +83,7 @@ class MaximumFileSizeExceededUploadTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function tearDown(): void {
+  protected function tearDown() {
     // Restore the displaying of errors to the original value.
     // @todo Remove this when issue #2905597 is fixed.
     // @see https://www.drupal.org/node/2905597

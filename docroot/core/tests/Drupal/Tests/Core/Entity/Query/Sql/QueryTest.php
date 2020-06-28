@@ -23,7 +23,7 @@ class QueryTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $entity_type = new EntityType(['id' => 'example_entity_query']);
     $conjunction = 'AND';

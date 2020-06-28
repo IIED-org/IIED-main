@@ -14,7 +14,7 @@ class MediaTypeCreationTest extends MediaFunctionalTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'media_test_source',
   ];
 

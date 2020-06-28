@@ -21,7 +21,7 @@ class LanguageUrlRewritingTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['language', 'language_test'];
+  public static $modules = ['language', 'language_test'];
 
   /**
    * {@inheritdoc}
@@ -35,7 +35,7 @@ class LanguageUrlRewritingTest extends BrowserTestBase {
    */
   protected $webUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create and log in user.

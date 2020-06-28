@@ -27,7 +27,7 @@ class ItemLayoutFieldBlockTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalLogin($this->drupalCreateUser([

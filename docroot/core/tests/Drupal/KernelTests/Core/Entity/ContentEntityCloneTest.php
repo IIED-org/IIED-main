@@ -17,12 +17,12 @@ class ContentEntityCloneTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['language', 'entity_test'];
+  public static $modules = ['language', 'entity_test'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Enable an additional language.

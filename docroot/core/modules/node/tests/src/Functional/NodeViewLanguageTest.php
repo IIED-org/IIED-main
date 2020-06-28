@@ -16,7 +16,7 @@ class NodeViewLanguageTest extends NodeTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'datetime', 'language'];
+  public static $modules = ['node', 'datetime', 'language'];
 
   /**
    * {@inheritdoc}

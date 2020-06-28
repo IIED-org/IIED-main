@@ -20,7 +20,7 @@ class WizardPluginBaseKernelTest extends ViewsKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['language', 'system', 'user', 'views_ui'];
+  public static $modules = ['language', 'system', 'user', 'views_ui'];
 
   /**
    * Contains thw wizard plugin manager.
@@ -29,7 +29,7 @@ class WizardPluginBaseKernelTest extends ViewsKernelTestBase {
    */
   protected $wizard;
 
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp();
 
     $this->installConfig(['language']);

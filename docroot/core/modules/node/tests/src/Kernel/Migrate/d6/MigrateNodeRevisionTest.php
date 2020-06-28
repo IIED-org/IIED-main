@@ -21,12 +21,12 @@ class MigrateNodeRevisionTest extends MigrateNodeTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['language', 'content_translation', 'menu_ui'];
+  public static $modules = ['language', 'content_translation', 'menu_ui'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->executeMigrations(['d6_node', 'd6_node_revision']);
     $this->nodeStorage = $this->container->get('entity_type.manager')

@@ -31,7 +31,7 @@ class BlockFilterTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $user = $this->drupalCreateUser([
       'configure any layout',

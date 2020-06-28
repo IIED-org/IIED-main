@@ -27,7 +27,7 @@ class FileFieldTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     $this->plugin = new FileField([], 'file', []);
 
     $migration = $this->prophesize(MigrationInterface::class);

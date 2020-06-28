@@ -16,12 +16,12 @@ class MigrateCommentTypeTest extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['comment'];
+  public static $modules = ['comment'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installConfig(['comment']);
     $this->executeMigration('d6_comment_type');

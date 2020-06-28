@@ -4,7 +4,6 @@ namespace Drupal\Core\Template\Loader;
 
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ThemeHandlerInterface;
-use Twig\Loader\FilesystemLoader as TwigFilesystemLoader;
 
 /**
  * Loads templates from the filesystem.
@@ -13,7 +12,7 @@ use Twig\Loader\FilesystemLoader as TwigFilesystemLoader;
  * filesystem loader so that templates can be referenced by namespace, like
  * @block/block.html.twig or @mytheme/page.html.twig.
  */
-class FilesystemLoader extends TwigFilesystemLoader {
+class FilesystemLoader extends \Twig_Loader_Filesystem {
 
   /**
    * Constructs a new FilesystemLoader object.

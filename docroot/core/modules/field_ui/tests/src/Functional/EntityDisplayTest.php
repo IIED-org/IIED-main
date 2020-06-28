@@ -14,7 +14,7 @@ class EntityDisplayTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['field_ui', 'entity_test'];
+  public static $modules = ['field_ui', 'entity_test'];
 
   /**
    * {@inheritdoc}
@@ -24,7 +24,7 @@ class EntityDisplayTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalLogin($this->drupalCreateUser([

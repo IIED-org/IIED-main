@@ -85,12 +85,16 @@ class CKEditor extends EditorBase implements ContainerFactoryPluginInterface {
    * @param \Drupal\Core\State\StateInterface $state
    *   The state key/value store.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, CKEditorPluginManager $ckeditor_plugin_manager, ModuleHandlerInterface $module_handler, LanguageManagerInterface $language_manager, RendererInterface $renderer, StateInterface $state) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, CKEditorPluginManager $ckeditor_plugin_manager, ModuleHandlerInterface $module_handler, LanguageManagerInterface $language_manager, RendererInterface $renderer, StateInterface $state = NULL) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->ckeditorPluginManager = $ckeditor_plugin_manager;
     $this->moduleHandler = $module_handler;
     $this->languageManager = $language_manager;
     $this->renderer = $renderer;
+    if ($state === NULL) {
+      @trigger_error('Calling CKEditor::__construct() without the $state argument is deprecated in drupal:8.8.0. The $state argument is required in drupal:9.0.0. See https://www.drupal.org/node/3075102.', E_USER_DEPRECATED);
+      $state = \Drupal::service('state');
+    }
     $this->state = $state;
   }
 
@@ -399,7 +403,6 @@ class CKEditor extends EditorBase implements ContainerFactoryPluginInterface {
    *
    * @param \Drupal\editor\Entity\Editor $editor
    *   A configured text editor object.
-   *
    * @return array
    *   An array containing the "toolbar" configuration.
    */
@@ -423,7 +426,6 @@ class CKEditor extends EditorBase implements ContainerFactoryPluginInterface {
    *
    * @param \Drupal\editor\Entity\Editor $editor
    *   A configured text editor object.
-   *
    * @return array
    *   An array containing the "contentsCss" configuration.
    */

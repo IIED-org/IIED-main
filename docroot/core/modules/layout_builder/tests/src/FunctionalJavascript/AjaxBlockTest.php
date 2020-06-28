@@ -14,7 +14,7 @@ class AjaxBlockTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'block',
     'node',
     'datetime',
@@ -31,7 +31,7 @@ class AjaxBlockTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $user = $this->drupalCreateUser([
       'configure any layout',

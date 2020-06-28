@@ -15,7 +15,7 @@ class NodePreviewLinkTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['node', 'filter'];
+  public static $modules = ['node', 'filter'];
 
   /**
    * {@inheritdoc}
@@ -25,7 +25,7 @@ class NodePreviewLinkTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     parent::setUp();
 
     $filtered_html_format = FilterFormat::create([

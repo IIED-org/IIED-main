@@ -18,12 +18,12 @@ class ExceptionHandlingTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['system', 'router_test'];
+  public static $modules = ['system', 'router_test'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installEntitySchema('date_format');
@@ -128,7 +128,6 @@ class ExceptionHandlingTest extends KernelTestBase {
    * Sets the given path to use as the 404 page and triggers a 404.
    *
    * @param string $path
-   *
    * @return \Drupal\Core\Render\HtmlResponse
    *
    * @see \Drupal\system\Tests\Routing\ExceptionHandlingTest::testExceptionResponseGeneratedForOriginalRequest()

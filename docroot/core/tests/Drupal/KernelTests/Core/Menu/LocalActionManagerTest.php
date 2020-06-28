@@ -15,7 +15,7 @@ class LocalActionManagerTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['menu_test', 'user', 'system'];
+  public static $modules = ['menu_test', 'user', 'system'];
 
   /**
    * Tests the cacheability of local actions.

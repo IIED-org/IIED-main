@@ -15,7 +15,7 @@ class ProfileFieldOptionTranslationTest extends ProfileFieldTest {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['user', 'migrate_drupal'];
+  public static $modules = ['user', 'migrate_drupal'];
 
   /**
    * {@inheritdoc}

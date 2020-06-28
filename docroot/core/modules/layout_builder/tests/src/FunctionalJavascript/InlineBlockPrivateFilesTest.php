@@ -22,7 +22,7 @@ class InlineBlockPrivateFilesTest extends InlineBlockTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'file',
   ];
 
@@ -41,7 +41,7 @@ class InlineBlockPrivateFilesTest extends InlineBlockTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Update the test node type to not create new revisions by default. This

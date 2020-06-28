@@ -23,7 +23,7 @@ class UrlAlterFunctionalTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['path', 'forum', 'url_alter_test'];
+  public static $modules = ['path', 'forum', 'url_alter_test'];
 
   /**
    * {@inheritdoc}

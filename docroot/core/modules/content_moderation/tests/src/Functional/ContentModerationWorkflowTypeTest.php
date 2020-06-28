@@ -16,7 +16,7 @@ class ContentModerationWorkflowTypeTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'content_moderation',
     'node',
     'entity_test',
@@ -30,7 +30,7 @@ class ContentModerationWorkflowTypeTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $admin = $this->drupalCreateUser([
       'administer workflows',

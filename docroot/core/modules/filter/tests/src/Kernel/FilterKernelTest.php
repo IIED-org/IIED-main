@@ -23,14 +23,14 @@ class FilterKernelTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'filter'];
+  public static $modules = ['system', 'filter'];
 
   /**
    * @var \Drupal\filter\Plugin\FilterInterface[]
    */
   protected $filters;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installConfig(['system']);
 

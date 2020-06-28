@@ -36,7 +36,7 @@ class SummaryLengthTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'datetime',
     'user',
@@ -49,7 +49,7 @@ class SummaryLengthTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installSchema('system', 'sequences');
     $this->installSchema('node', 'node_access');

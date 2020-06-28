@@ -17,7 +17,7 @@ class UserSearchTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['search'];
+  public static $modules = ['search'];
 
   /**
    * {@inheritdoc}

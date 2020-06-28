@@ -16,7 +16,7 @@ class WorkspaceTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['workspaces', 'toolbar', 'field_ui'];
+  public static $modules = ['workspaces', 'toolbar', 'field_ui'];
 
   /**
    * {@inheritdoc}
@@ -40,7 +40,7 @@ class WorkspaceTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     parent::setUp();
     $permissions = [
       'access administration pages',

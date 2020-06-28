@@ -18,12 +18,12 @@ class TermKernelTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['filter', 'taxonomy', 'text', 'user'];
+  public static $modules = ['filter', 'taxonomy', 'text', 'user'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installConfig(['filter']);
     $this->installEntitySchema('taxonomy_term');

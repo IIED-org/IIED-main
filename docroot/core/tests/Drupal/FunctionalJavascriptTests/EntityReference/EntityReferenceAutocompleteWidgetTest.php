@@ -21,7 +21,7 @@ class EntityReferenceAutocompleteWidgetTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['node', 'field_ui'];
+  public static $modules = ['node', 'field_ui'];
 
   /**
    * {@inheritdoc}
@@ -31,7 +31,7 @@ class EntityReferenceAutocompleteWidgetTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create a Content type and two test nodes.

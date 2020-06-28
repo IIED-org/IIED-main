@@ -47,7 +47,7 @@ class TermParentsTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     /* @var \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager */

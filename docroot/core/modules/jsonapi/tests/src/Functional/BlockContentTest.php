@@ -20,7 +20,7 @@ class BlockContentTest extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['block_content'];
+  public static $modules = ['block_content'];
 
   /**
    * {@inheritdoc}

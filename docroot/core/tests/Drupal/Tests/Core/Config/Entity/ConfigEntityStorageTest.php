@@ -103,7 +103,7 @@ class ConfigEntityStorageTest extends UnitTestCase {
    *
    * @covers ::__construct
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->entityTypeId = 'test_entity_type';

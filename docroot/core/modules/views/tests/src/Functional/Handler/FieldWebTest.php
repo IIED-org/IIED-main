@@ -31,7 +31,7 @@ class FieldWebTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['node'];
+  public static $modules = ['node'];
 
   /**
    * {@inheritdoc}
@@ -47,7 +47,7 @@ class FieldWebTest extends ViewTestBase {
     'views_test_data_name' => 'name',
   ];
 
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     $this->enableViewsTestModule();
@@ -125,7 +125,6 @@ class FieldWebTest extends ViewTestBase {
    *   The message to display along with the assertion.
    * @param string $group
    *   The type of assertion - examples are "Browser", "PHP".
-   *
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
@@ -144,7 +143,6 @@ class FieldWebTest extends ViewTestBase {
    *   The message to display along with the assertion.
    * @param string $group
    *   The type of assertion - examples are "Browser", "PHP".
-   *
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */

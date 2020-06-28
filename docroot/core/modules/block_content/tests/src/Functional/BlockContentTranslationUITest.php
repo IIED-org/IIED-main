@@ -2,7 +2,9 @@
 
 namespace Drupal\Tests\block_content\Functional;
 
+use Drupal\block_content\Entity\BlockContent;
 use Drupal\block_content\Entity\BlockContentType;
+use Drupal\Core\Database\Database;
 use Drupal\Tests\content_translation\Functional\ContentTranslationUITestBase;
 
 /**
@@ -17,7 +19,7 @@ class BlockContentTranslationUITest extends ContentTranslationUITestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'language',
     'content_translation',
     'block',
@@ -46,7 +48,7 @@ class BlockContentTranslationUITest extends ContentTranslationUITestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     $this->entityTypeId = 'block_content';
     $this->bundle = 'basic';
     $this->testLanguageSelector = FALSE;
@@ -78,6 +80,31 @@ class BlockContentTranslationUITest extends ContentTranslationUITestBase {
       'administer blocks',
       'administer block_content fields',
     ]);
+  }
+
+  /**
+   * Creates a custom block.
+   *
+   * @param bool|string $title
+   *   (optional) Title of block. When no value is given uses a random name.
+   *   Defaults to FALSE.
+   * @param bool|string $bundle
+   *   (optional) Bundle name. When no value is given, defaults to
+   *   $this->bundle. Defaults to FALSE.
+   *
+   * @return \Drupal\block_content\Entity\BlockContent
+   *   Created custom block.
+   */
+  protected function createBlockContent($title = FALSE, $bundle = FALSE) {
+    $title = $title ?: $this->randomMachineName();
+    $bundle = $bundle ?: $this->bundle;
+    $block_content = BlockContent::create([
+      'info' => $title,
+      'type' => $bundle,
+      'langcode' => 'en',
+    ]);
+    $block_content->save();
+    return $block_content;
   }
 
   /**
@@ -129,6 +156,28 @@ class BlockContentTranslationUITest extends ContentTranslationUITestBase {
     // Check that the translate operation link is shown.
     $this->drupalGet('admin/structure/block/block-content');
     $this->assertLinkByHref('block/' . $entity->id() . '/translations');
+  }
+
+  /**
+   * Test that no metadata is stored for a disabled bundle.
+   */
+  public function testDisabledBundle() {
+    // Create a bundle that does not have translation enabled.
+    $disabled_bundle = $this->randomMachineName();
+    $bundle = BlockContentType::create([
+      'id' => $disabled_bundle,
+      'label' => $disabled_bundle,
+      'revision' => FALSE,
+    ]);
+    $bundle->save();
+
+    // Create a block content for each bundle.
+    $enabled_block_content = $this->createBlockContent();
+    $disabled_block_content = $this->createBlockContent(FALSE, $bundle->id());
+
+    // Make sure that only a single row was inserted into the block table.
+    $rows = Database::getConnection()->query('SELECT * FROM {block_content_field_data} WHERE id = :id', [':id' => $enabled_block_content->id()])->fetchAll();
+    $this->assertCount(1, $rows);
   }
 
   /**

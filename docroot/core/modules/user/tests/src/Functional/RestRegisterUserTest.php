@@ -50,7 +50,7 @@ class RestRegisterUserTest extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['hal', 'user'];
+  public static $modules = ['hal', 'user'];
 
   const USER_EMAIL_DOMAIN = '@example.com';
 
@@ -59,7 +59,7 @@ class RestRegisterUserTest extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     parent::setUp();
 
     $auth = isset(static::$auth) ? [static::$auth] : [];

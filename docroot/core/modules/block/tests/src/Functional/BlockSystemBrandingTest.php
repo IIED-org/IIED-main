@@ -14,7 +14,7 @@ class BlockSystemBrandingTest extends BlockTestBase {
    *
    * @var array
    */
-  protected static $modules = ['block', 'system'];
+  public static $modules = ['block', 'system'];
 
   /**
    * {@inheritdoc}
@@ -24,7 +24,7 @@ class BlockSystemBrandingTest extends BlockTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     // Set a site slogan.
     $this->config('system.site')

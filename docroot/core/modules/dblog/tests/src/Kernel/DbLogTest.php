@@ -24,7 +24,7 @@ class DbLogTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installSchema('dblog', ['watchdog']);

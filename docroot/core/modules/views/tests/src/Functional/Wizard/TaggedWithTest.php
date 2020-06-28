@@ -21,7 +21,7 @@ class TaggedWithTest extends WizardTestBase {
    *
    * @var array
    */
-  protected static $modules = ['taxonomy'];
+  public static $modules = ['taxonomy'];
 
   /**
    * {@inheritdoc}
@@ -70,7 +70,7 @@ class TaggedWithTest extends WizardTestBase {
    */
   protected $tagField;
 
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     // Create two content types. One will have an autocomplete tagging field,

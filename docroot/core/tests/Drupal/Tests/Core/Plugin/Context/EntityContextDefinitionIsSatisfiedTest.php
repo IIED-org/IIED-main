@@ -45,7 +45,7 @@ class EntityContextDefinitionIsSatisfiedTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $namespaces = new \ArrayObject([

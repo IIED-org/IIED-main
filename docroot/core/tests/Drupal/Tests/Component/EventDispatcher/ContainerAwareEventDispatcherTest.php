@@ -35,12 +35,12 @@ class ContainerAwareEventDispatcherTest extends TestCase {
   private $dispatcher;
   private $listener;
 
-  protected function setUp(): void {
+  protected function setUp() {
     $this->dispatcher = $this->createEventDispatcher();
     $this->listener = new TestEventListener();
   }
 
-  protected function tearDown(): void {
+  protected function tearDown() {
     $this->dispatcher = NULL;
     $this->listener = NULL;
   }

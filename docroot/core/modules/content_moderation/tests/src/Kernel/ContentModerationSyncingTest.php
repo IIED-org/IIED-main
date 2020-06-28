@@ -18,7 +18,7 @@ class ContentModerationSyncingTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'user',
     'workflows',
     'content_moderation',
@@ -28,7 +28,7 @@ class ContentModerationSyncingTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('workflow');
     $this->installEntitySchema('content_moderation_state');

@@ -11,12 +11,12 @@ use Drupal\Tests\migrate_drupal\Kernel\d7\MigrateDrupal7TestBase;
  */
 class MigrateImageSettingsTest extends MigrateDrupal7TestBase {
 
-  protected static $modules = ['image'];
+  public static $modules = ['image'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->executeMigration('d7_image_settings');
   }

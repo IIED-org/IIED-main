@@ -18,7 +18,7 @@ class TourTest extends TourTestBasic {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'block',
     'tour',
     'locale',
@@ -52,7 +52,7 @@ class TourTest extends TourTestBasic {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalPlaceBlock('local_actions_block', [

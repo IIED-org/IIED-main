@@ -12,6 +12,18 @@ use Drupal\Tests\UnitTestCase;
 class StaticMenuLinkOverridesTest extends UnitTestCase {
 
   /**
+   * Tests the constructor.
+   *
+   * @covers ::__construct
+   */
+  public function testConstruct() {
+    $config_factory = $this->getConfigFactoryStub(['core.menu.static_menu_link_overrides' => []]);
+    $static_override = new StaticMenuLinkOverrides($config_factory);
+
+    $this->assertAttributeEquals($config_factory, 'configFactory', $static_override);
+  }
+
+  /**
    * Tests the reload method.
    *
    * @covers ::reload

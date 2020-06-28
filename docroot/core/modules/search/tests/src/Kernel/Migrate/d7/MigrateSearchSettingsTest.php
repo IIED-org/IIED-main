@@ -11,12 +11,12 @@ use Drupal\Tests\migrate_drupal\Kernel\d7\MigrateDrupal7TestBase;
  */
 class MigrateSearchSettingsTest extends MigrateDrupal7TestBase {
 
-  protected static $modules = ['search'];
+  public static $modules = ['search'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->executeMigration('d7_search_settings');
   }

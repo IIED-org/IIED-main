@@ -15,12 +15,12 @@ class EntityHasFieldConstraintValidatorTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['entity_test_constraints'];
+  public static $modules = ['entity_test_constraints'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('entity_test_constraints');
     $this->createUser();

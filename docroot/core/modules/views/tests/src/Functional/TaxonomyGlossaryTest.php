@@ -18,7 +18,7 @@ class TaxonomyGlossaryTest extends ViewTestBase {
    *
    * @var array
    */
-  protected static $modules = ['taxonomy'];
+  public static $modules = ['taxonomy'];
 
   /**
    * {@inheritdoc}
@@ -39,7 +39,7 @@ class TaxonomyGlossaryTest extends ViewTestBase {
    */
   protected $taxonomyTerms;
 
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     $this->enableViewsTestModule();

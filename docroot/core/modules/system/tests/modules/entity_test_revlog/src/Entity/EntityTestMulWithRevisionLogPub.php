@@ -9,6 +9,9 @@ use Drupal\Core\Entity\EntityTypeInterface;
 /**
  * Defines the test entity class.
  *
+ * This entity type does not define revision_metadata_keys on purpose to test
+ * the BC layer.
+ *
  * @ContentEntityType(
  *   id = "entity_test_mul_revlog_pub",
  *   label = @Translation("Test entity - data table, revisions log, publishing status"),
@@ -25,11 +28,6 @@ use Drupal\Core\Entity\EntityTypeInterface;
  *     "label" = "name",
  *     "langcode" = "langcode",
  *     "published" = "status",
- *   },
- *   revision_metadata_keys = {
- *     "revision_user" = "revision_user",
- *     "revision_created" = "revision_created",
- *     "revision_log_message" = "revision_log_message"
  *   },
  * )
  */

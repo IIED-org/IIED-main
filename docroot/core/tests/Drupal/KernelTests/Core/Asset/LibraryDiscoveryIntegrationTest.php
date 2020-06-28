@@ -23,7 +23,7 @@ class LibraryDiscoveryIntegrationTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->container->get('theme_installer')->install(['test_theme', 'classy']);

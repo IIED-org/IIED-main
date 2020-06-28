@@ -21,7 +21,7 @@ class FileFieldAttributesTest extends FileFieldTestBase {
    *
    * @var array
    */
-  protected static $modules = ['rdf', 'file'];
+  public static $modules = ['rdf', 'file'];
 
   /**
    * {@inheritdoc}
@@ -56,7 +56,7 @@ class FileFieldAttributesTest extends FileFieldTestBase {
    */
   protected $node;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $node_storage = $this->container->get('entity_type.manager')->getStorage('node');
     $this->fieldName = strtolower($this->randomMachineName());

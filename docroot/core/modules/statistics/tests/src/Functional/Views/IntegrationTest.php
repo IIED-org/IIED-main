@@ -19,7 +19,7 @@ class IntegrationTest extends ViewTestBase {
    *
    * @var array
    */
-  protected static $modules = ['statistics', 'statistics_test_views', 'node'];
+  public static $modules = ['statistics', 'statistics_test_views', 'node'];
 
   /**
    * {@inheritdoc}
@@ -47,7 +47,7 @@ class IntegrationTest extends ViewTestBase {
    */
   public static $testViews = ['test_statistics_integration'];
 
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     ViewTestData::createTestViews(get_class($this), ['statistics_test_views']);

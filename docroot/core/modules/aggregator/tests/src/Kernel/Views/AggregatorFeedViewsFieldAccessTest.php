@@ -15,12 +15,12 @@ class AggregatorFeedViewsFieldAccessTest extends FieldFieldAccessTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['aggregator', 'entity_test', 'options'];
+  public static $modules = ['aggregator', 'entity_test', 'options'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     $this->installEntitySchema('aggregator_feed');

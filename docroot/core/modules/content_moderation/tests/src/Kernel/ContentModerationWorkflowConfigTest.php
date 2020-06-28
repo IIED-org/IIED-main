@@ -20,7 +20,7 @@ class ContentModerationWorkflowConfigTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'content_moderation',
     'user',
@@ -52,7 +52,7 @@ class ContentModerationWorkflowConfigTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installSchema('node', 'node_access');

@@ -19,7 +19,7 @@ class EntityDisplayModeTest extends BrowserTestBase {
    *
    * @var string[]
    */
-  protected static $modules = ['block', 'entity_test', 'field_ui', 'node'];
+  public static $modules = ['block', 'entity_test', 'field_ui', 'node'];
 
   /**
    * {@inheritdoc}
@@ -29,7 +29,7 @@ class EntityDisplayModeTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create a node type.

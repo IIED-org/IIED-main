@@ -26,9 +26,9 @@ class ConfigImportRecreateTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'field', 'text', 'user', 'node'];
+  public static $modules = ['system', 'field', 'text', 'user', 'node'];
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installEntitySchema('node');

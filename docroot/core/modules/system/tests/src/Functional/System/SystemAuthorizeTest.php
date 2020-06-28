@@ -16,14 +16,14 @@ class SystemAuthorizeTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system_test'];
+  public static $modules = ['system_test'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create an administrator user.

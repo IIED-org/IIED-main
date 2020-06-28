@@ -19,7 +19,7 @@ class MenuUiContentModerationTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'block',
     'content_moderation',
     'node',
@@ -35,7 +35,7 @@ class MenuUiContentModerationTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalPlaceBlock('system_menu_block:main');

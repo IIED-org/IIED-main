@@ -19,7 +19,7 @@ class PageTitleTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'test_page_test', 'form_test', 'block'];
+  public static $modules = ['node', 'test_page_test', 'form_test', 'block'];
 
   /**
    * {@inheritdoc}
@@ -32,7 +32,7 @@ class PageTitleTest extends BrowserTestBase {
   /**
    * Implement setUp().
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalCreateContentType(['type' => 'page', 'name' => 'Basic page']);

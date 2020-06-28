@@ -18,7 +18,7 @@ class LocaleLocaleLookupTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['locale', 'locale_test'];
+  public static $modules = ['locale', 'locale_test'];
 
   /**
    * {@inheritdoc}
@@ -28,7 +28,7 @@ class LocaleLocaleLookupTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Change the language default object to different values.

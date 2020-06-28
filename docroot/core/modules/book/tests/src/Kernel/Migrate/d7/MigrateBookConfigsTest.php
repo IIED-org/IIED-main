@@ -17,12 +17,12 @@ class MigrateBookConfigsTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['book', 'node'];
+  public static $modules = ['book', 'node'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->executeMigration('book_settings');
   }

@@ -15,7 +15,7 @@ class ContactFormTest extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['contact'];
+  public static $modules = ['contact'];
 
   /**
    * {@inheritdoc}

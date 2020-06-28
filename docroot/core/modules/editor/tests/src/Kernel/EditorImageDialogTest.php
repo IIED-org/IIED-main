@@ -28,7 +28,7 @@ class EditorImageDialogTest extends EntityKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'file',
     'editor',
@@ -40,7 +40,7 @@ class EditorImageDialogTest extends EntityKernelTestBase {
   /**
    * Sets up the test.
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('file');
     $this->installSchema('system', ['key_value_expire']);

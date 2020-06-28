@@ -15,7 +15,7 @@ class CommentEntityTranslationTest extends MigrateSqlSourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['comment', 'migrate_drupal'];
+  public static $modules = ['comment', 'migrate_drupal'];
 
   /**
    * {@inheritdoc}

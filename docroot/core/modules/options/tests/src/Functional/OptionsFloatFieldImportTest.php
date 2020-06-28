@@ -18,7 +18,7 @@ class OptionsFloatFieldImportTest extends FieldTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'options',
     'field_ui',
@@ -31,7 +31,7 @@ class OptionsFloatFieldImportTest extends FieldTestBase {
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create test user.

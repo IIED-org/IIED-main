@@ -19,7 +19,7 @@ class LocaleJavascriptTranslationTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['locale', 'locale_test'];
+  public static $modules = ['locale', 'locale_test'];
 
   /**
    * {@inheritdoc}

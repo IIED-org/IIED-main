@@ -19,7 +19,7 @@ class MigrateNodeCompleteTest extends MigrateNodeTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'language',
     'content_translation',
     'menu_ui',
@@ -37,7 +37,7 @@ class MigrateNodeCompleteTest extends MigrateNodeTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->setUpMigratedFiles();
 

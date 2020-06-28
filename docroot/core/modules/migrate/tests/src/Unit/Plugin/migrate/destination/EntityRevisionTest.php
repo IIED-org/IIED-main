@@ -21,7 +21,7 @@ class EntityRevisionTest extends EntityTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->migration = $this->prophesize(MigrationInterface::class);

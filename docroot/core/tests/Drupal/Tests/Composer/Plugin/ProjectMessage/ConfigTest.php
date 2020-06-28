@@ -13,7 +13,7 @@ use org\bovigo\vfs\vfsStream;
  */
 class ConfigTest extends TestCase {
 
-  public static function setUpBeforeClass(): void {
+  public static function setUpBeforeClass() {
     parent::setUpBeforeClass();
     vfsStream::setup('config_test', NULL, [
       'bespoke' => [

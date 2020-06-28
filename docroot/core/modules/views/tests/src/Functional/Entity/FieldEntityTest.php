@@ -31,7 +31,7 @@ class FieldEntityTest extends ViewTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'comment'];
+  public static $modules = ['node', 'comment'];
 
   /**
    * {@inheritdoc}
@@ -41,7 +41,7 @@ class FieldEntityTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp(FALSE);
 
     $this->drupalCreateContentType(['type' => 'page']);

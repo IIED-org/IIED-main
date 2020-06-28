@@ -21,7 +21,7 @@ class FormCacheTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'user'];
+  public static $modules = ['system', 'user'];
 
   /**
    * @var string
@@ -38,7 +38,7 @@ class FormCacheTest extends KernelTestBase {
    */
   protected $formState;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installSchema('system', ['key_value_expire']);
 

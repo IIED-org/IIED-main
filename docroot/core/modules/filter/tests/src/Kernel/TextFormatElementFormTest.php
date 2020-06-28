@@ -28,7 +28,7 @@ class TextFormatElementFormTest extends KernelTestBase implements FormInterface 
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'system',
     'user',
     'filter',
@@ -39,7 +39,7 @@ class TextFormatElementFormTest extends KernelTestBase implements FormInterface 
   /**
    * Sets up the test.
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('user');
     $this->installSchema('system', ['sequences']);

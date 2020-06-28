@@ -20,7 +20,7 @@ class ImageStyleIntegrationTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'image',
     'file',
     'field',
@@ -32,7 +32,7 @@ class ImageStyleIntegrationTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('node');
   }

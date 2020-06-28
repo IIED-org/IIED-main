@@ -88,7 +88,7 @@ class BulkDeleteTest extends FieldKernelTestBase {
     }
   }
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->fieldStorages = [];

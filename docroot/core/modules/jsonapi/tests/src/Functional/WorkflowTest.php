@@ -15,7 +15,7 @@ class WorkflowTest extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['workflows', 'workflow_type_test'];
+  public static $modules = ['workflows', 'workflow_type_test'];
 
   /**
    * {@inheritdoc}

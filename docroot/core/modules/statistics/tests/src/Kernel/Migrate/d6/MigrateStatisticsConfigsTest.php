@@ -17,12 +17,12 @@ class MigrateStatisticsConfigsTest extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['statistics'];
+  public static $modules = ['statistics'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->executeMigration('statistics_settings');
   }

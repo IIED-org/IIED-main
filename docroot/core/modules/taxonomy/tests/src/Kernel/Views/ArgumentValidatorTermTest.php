@@ -42,7 +42,7 @@ class ArgumentValidatorTermTest extends TaxonomyTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     // Add three terms to the 'tags' vocabulary.

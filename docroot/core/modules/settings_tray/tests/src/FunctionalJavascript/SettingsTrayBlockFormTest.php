@@ -17,7 +17,7 @@ class SettingsTrayBlockFormTest extends SettingsTrayTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'search',
     'settings_tray_test',
@@ -31,7 +31,7 @@ class SettingsTrayBlockFormTest extends SettingsTrayTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $user = $this->createUser([

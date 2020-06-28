@@ -18,7 +18,7 @@ class RevisionCreateTimestampTest extends ViewsKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['node_test_views', 'node', 'views', 'user'];
+  public static $modules = ['node_test_views', 'node', 'views', 'user'];
 
   /**
    * {@inheritdoc}
@@ -28,7 +28,7 @@ class RevisionCreateTimestampTest extends ViewsKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     $this->installSchema('node', 'node_access');

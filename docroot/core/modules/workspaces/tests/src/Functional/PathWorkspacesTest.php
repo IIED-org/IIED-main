@@ -35,7 +35,7 @@ class PathWorkspacesTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     ConfigurableLanguage::createFromLangcode('ro')->save();

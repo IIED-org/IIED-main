@@ -17,7 +17,7 @@ class ImageTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system'];
+  public static $modules = ['system'];
 
   /*
    * The images to test with.
@@ -26,7 +26,7 @@ class ImageTest extends KernelTestBase {
    */
   protected $testImages;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // The code under test uses file_url_transform_relative(), which relies on

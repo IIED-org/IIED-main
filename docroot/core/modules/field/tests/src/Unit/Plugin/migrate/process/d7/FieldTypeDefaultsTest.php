@@ -16,7 +16,7 @@ class FieldTypeDefaultsTest extends MigrateProcessTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->plugin = new FieldTypeDefaults([], 'd7_field_type_defaults', []);
   }

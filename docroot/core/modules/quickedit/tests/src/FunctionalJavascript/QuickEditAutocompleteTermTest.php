@@ -23,7 +23,7 @@ class QuickEditAutocompleteTermTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'taxonomy',
     'quickedit',
@@ -81,7 +81,7 @@ class QuickEditAutocompleteTermTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalCreateContentType([

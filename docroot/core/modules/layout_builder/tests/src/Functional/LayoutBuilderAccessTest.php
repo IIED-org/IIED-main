@@ -30,7 +30,7 @@ class LayoutBuilderAccessTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Enable Layout Builder for one content type.

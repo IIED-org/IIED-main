@@ -23,7 +23,7 @@ class BreadcrumbTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['menu_test', 'block'];
+  public static $modules = ['menu_test', 'block'];
 
   /**
    * An administrative user.
@@ -46,7 +46,7 @@ class BreadcrumbTest extends BrowserTestBase {
    */
   protected $profile = 'standard';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $perms = array_keys(\Drupal::service('user.permissions')->getPermissions());

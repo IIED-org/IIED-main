@@ -25,7 +25,7 @@ class ContentTranslationSettingsTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'language',
     'content_translation',
     'node',
@@ -39,7 +39,7 @@ class ContentTranslationSettingsTest extends BrowserTestBase {
    */
   protected $defaultTheme = 'classy';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Set up two content types to test fields shared between different

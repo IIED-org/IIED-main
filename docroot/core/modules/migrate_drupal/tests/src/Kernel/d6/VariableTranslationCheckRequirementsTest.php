@@ -14,12 +14,12 @@ class VariableTranslationCheckRequirementsTest extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['config_translation'];
+  public static $modules = ['config_translation'];
 
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setup() {
     parent::setUp();
     $this->sourceDatabase->schema()->dropTable('i18n_variable');
   }

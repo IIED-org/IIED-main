@@ -17,7 +17,7 @@ class NormalizeTest extends NormalizerTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     FilterFormat::create([

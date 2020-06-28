@@ -3,7 +3,7 @@
 namespace Drupal\FunctionalJavascriptTests;
 
 /**
- * Tests Drupal settings retrieval in WebDriverTestBase tests.
+ * Tests Drupal settings retrieval in JavascriptTestBase tests.
  *
  * @group javascript
  */

@@ -12,6 +12,7 @@ use Drupal\layout_builder\Entity\LayoutBuilderEntityViewDisplay;
 use Drupal\layout_builder\Plugin\SectionStorage\DefaultsSectionStorage;
 use Drupal\layout_builder\Section;
 use Drupal\layout_builder\SectionComponent;
+use Drupal\layout_builder\SectionListInterface;
 use Drupal\layout_builder\SectionStorage\SectionStorageDefinition;
 
 /**
@@ -44,7 +45,7 @@ class DefaultsSectionStorageTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     entity_test_create_bundle('bundle_with_extra_fields');
@@ -182,6 +183,19 @@ class DefaultsSectionStorageTest extends KernelTestBase {
     $this->assertInstanceOf(Context::class, $result['view_mode']);
     $result_value = $result['view_mode']->getContextValue();
     $this->assertSame('default', $result_value);
+  }
+
+  /**
+   * @covers ::setSectionList
+   *
+   * @expectedDeprecation \Drupal\layout_builder\SectionStorageInterface::setSectionList() is deprecated in Drupal 8.7.0 and will be removed before Drupal 9.0.0. This method should no longer be used. The section list should be derived from context. See https://www.drupal.org/node/3016262.
+   * @group legacy
+   */
+  public function testSetSectionList() {
+    $section_list = $this->prophesize(SectionListInterface::class);
+    $this->expectException(\Exception::class);
+    $this->expectExceptionMessage('\Drupal\layout_builder\SectionStorageInterface::setSectionList() must no longer be called. The section list should be derived from context. See https://www.drupal.org/node/3016262.');
+    $this->plugin->setSectionList($section_list->reveal());
   }
 
   /**

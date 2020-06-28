@@ -17,7 +17,7 @@ class ConfigEntityListMultilingualTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['config_test', 'language', 'block'];
+  public static $modules = ['config_test', 'language', 'block'];
 
   /**
    * {@inheritdoc}
@@ -27,7 +27,7 @@ class ConfigEntityListMultilingualTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     // Delete the override config_test entity. It is not required by this test.
     \Drupal::entityTypeManager()->getStorage('config_test')->load('override')->delete();

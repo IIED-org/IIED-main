@@ -19,6 +19,8 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
  */
 abstract class WidgetBase extends PluginSettingsBase implements WidgetInterface, ContainerFactoryPluginInterface {
 
+  use AllowedTagsXssTrait;
+
   /**
    * The field definition.
    *

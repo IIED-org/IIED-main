@@ -22,7 +22,7 @@ class EntityReferenceFieldDefaultValueTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['field_ui', 'node'];
+  public static $modules = ['field_ui', 'node'];
 
   /**
    * {@inheritdoc}
@@ -36,7 +36,7 @@ class EntityReferenceFieldDefaultValueTest extends BrowserTestBase {
    */
   protected $adminUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create default content type.

@@ -33,7 +33,7 @@ class UserEntityReferenceTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->role1 = Role::create([

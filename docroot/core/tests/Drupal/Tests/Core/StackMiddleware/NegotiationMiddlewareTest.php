@@ -32,7 +32,7 @@ class NegotiationMiddlewareTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->app = $this->prophesize(HttpKernelInterface::class);

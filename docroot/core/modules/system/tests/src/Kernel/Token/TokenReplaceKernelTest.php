@@ -19,7 +19,7 @@ class TokenReplaceKernelTest extends TokenReplaceKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     // Set the site name to something other than an empty string.
     $this->config('system.site')->set('name', 'Drupal')->save();

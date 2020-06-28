@@ -12,7 +12,7 @@ use Drupal\language\Entity\ConfigurableLanguage;
  */
 class TermLanguageTest extends TaxonomyTestBase {
 
-  protected static $modules = ['language'];
+  public static $modules = ['language'];
 
   /**
    * {@inheritdoc}
@@ -26,7 +26,7 @@ class TermLanguageTest extends TaxonomyTestBase {
    */
   protected $vocabulary;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create an administrative user.

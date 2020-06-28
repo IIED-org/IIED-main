@@ -19,7 +19,7 @@ class MachineNameTest extends WebDriverTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'form_test'];
+  public static $modules = ['node', 'form_test'];
 
   /**
    * {@inheritdoc}
@@ -29,7 +29,7 @@ class MachineNameTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $account = $this->drupalCreateUser([

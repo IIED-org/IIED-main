@@ -29,18 +29,14 @@ class ContentTranslationWorkflowsTest extends ContentTranslationTestBase {
    *
    * @var array
    */
-  protected static $modules = [
-    'language',
-    'content_translation',
-    'entity_test',
-  ];
+  public static $modules = ['language', 'content_translation', 'entity_test'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->setupEntity();
   }

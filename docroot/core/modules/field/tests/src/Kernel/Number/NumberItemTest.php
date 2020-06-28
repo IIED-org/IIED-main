@@ -21,9 +21,9 @@ class NumberItemTest extends FieldKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [];
+  public static $modules = [];
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create number field storages and fields for validation.

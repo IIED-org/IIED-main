@@ -17,7 +17,7 @@ class BlockLanguageCacheTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['block', 'language', 'menu_ui'];
+  public static $modules = ['block', 'language', 'menu_ui'];
 
   /**
    * {@inheritdoc}
@@ -31,7 +31,7 @@ class BlockLanguageCacheTest extends BrowserTestBase {
    */
   protected $langcodes = [];
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create test languages.

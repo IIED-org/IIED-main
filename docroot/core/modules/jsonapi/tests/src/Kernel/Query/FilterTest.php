@@ -27,7 +27,7 @@ class FilterTest extends JsonapiKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'field',
     'file',
     'image',
@@ -56,7 +56,7 @@ class FilterTest extends JsonapiKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     parent::setUp();
 
     $this->setUpSchemas();

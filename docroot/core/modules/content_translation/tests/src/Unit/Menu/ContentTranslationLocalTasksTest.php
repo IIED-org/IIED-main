@@ -11,7 +11,7 @@ use Drupal\Tests\Core\Menu\LocalTaskIntegrationTestBase;
  */
 class ContentTranslationLocalTasksTest extends LocalTaskIntegrationTestBase {
 
-  protected function setUp(): void {
+  protected function setUp() {
     $this->directoryList = [
       'content_translation' => 'core/modules/content_translation',
       'node' => 'core/modules/node',

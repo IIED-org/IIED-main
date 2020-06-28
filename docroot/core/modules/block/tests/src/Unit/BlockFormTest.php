@@ -67,7 +67,7 @@ class BlockFormTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->conditionManager = $this->createMock('Drupal\Core\Executable\ExecutableManagerInterface');

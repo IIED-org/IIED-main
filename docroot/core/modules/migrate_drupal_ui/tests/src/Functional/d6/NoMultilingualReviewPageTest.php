@@ -12,13 +12,15 @@ use Drupal\Tests\migrate_drupal_ui\Functional\NoMultilingualReviewPageTestBase;
  *
  * @group migrate_drupal_6
  * @group migrate_drupal_ui
+ *
+ * @group legacy
  */
 class NoMultilingualReviewPageTest extends NoMultilingualReviewPageTestBase {
 
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'language',
     'telephone',
     'aggregator',
@@ -31,12 +33,14 @@ class NoMultilingualReviewPageTest extends NoMultilingualReviewPageTestBase {
     // Test migrations states.
     'migrate_state_finished_test',
     'migrate_state_not_finished_test',
+    // Test missing migrate_drupal.yml.
+    'migrate_state_no_file_test',
   ];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->loadFixture(drupal_get_path('module', 'migrate_drupal') . '/tests/fixtures/drupal6.php');
   }

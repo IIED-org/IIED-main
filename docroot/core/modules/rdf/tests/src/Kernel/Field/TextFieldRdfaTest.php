@@ -33,9 +33,9 @@ class TextFieldRdfaTest extends FieldRdfaTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['text', 'filter'];
+  public static $modules = ['text', 'filter'];
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installConfig(['filter']);

@@ -15,7 +15,7 @@ class SearchPageTest extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['node', 'search'];
+  public static $modules = ['node', 'search'];
 
   /**
    * {@inheritdoc}

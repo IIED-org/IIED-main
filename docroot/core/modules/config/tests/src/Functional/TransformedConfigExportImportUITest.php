@@ -15,7 +15,7 @@ class TransformedConfigExportImportUITest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'config',
     'config_transformer_test',
   ];
@@ -28,7 +28,7 @@ class TransformedConfigExportImportUITest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $permissions = [

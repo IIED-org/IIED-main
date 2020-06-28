@@ -25,7 +25,7 @@ class ConfigFieldDefinitionTest extends FieldKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create a field and a storage of type 'test_field', on the 'entity_test'

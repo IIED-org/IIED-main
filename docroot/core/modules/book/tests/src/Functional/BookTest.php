@@ -21,12 +21,7 @@ class BookTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
-    'book',
-    'block',
-    'node_access_test',
-    'book_test',
-  ];
+  public static $modules = ['book', 'block', 'node_access_test', 'book_test'];
 
   /**
    * {@inheritdoc}
@@ -57,7 +52,7 @@ class BookTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->drupalPlaceBlock('system_breadcrumb_block');
     $this->drupalPlaceBlock('page_title_block');

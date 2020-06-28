@@ -22,7 +22,7 @@ class TranslationTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     $this->translationManager = $this->getStringTranslationStub();
   }
 

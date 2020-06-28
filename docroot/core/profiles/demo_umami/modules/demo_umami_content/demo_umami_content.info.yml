@@ -1,16 +1,22 @@
 name: 'Umami demo: Content'
 description: Imports the content for the Umami demo.
 type: module
-version: VERSION
+# version: VERSION
+core: 8.x
 package: 'Core (Experimental)'
 hidden: true
 dependencies:
-  - drupal:field
-  - drupal:file
-  - drupal:image
-  - drupal:node
-  - drupal:options
-  - drupal:path
-  - drupal:taxonomy
-  - drupal:text
-  - drupal:user
+  - field
+  - file
+  - image
+  - node
+  - options
+  - path
+  - taxonomy
+  - text
+  - user
+
+# Information added by Drupal.org packaging script on 2020-06-17
+version: '8.9.1'
+project: 'drupal'
+datestamp: 1592418285

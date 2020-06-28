@@ -3,6 +3,7 @@
 namespace Drupal\menu_link_content\Plugin\Deriver;
 
 use Drupal\Component\Plugin\Derivative\DeriverBase;
+use Drupal\Core\DependencyInjection\DeprecatedServicePropertyTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Menu\MenuLinkManagerInterface;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
@@ -15,6 +16,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * compared to entity referenced ones.
  */
 class MenuLinkContentDeriver extends DeriverBase implements ContainerDeriverInterface {
+  use DeprecatedServicePropertyTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $deprecatedProperties = ['entityManager' => 'entity.manager'];
 
   /**
    * The entity type manager.

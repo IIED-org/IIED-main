@@ -38,7 +38,7 @@ class SearchKeywordsConditionsTest extends BrowserTestBase {
    */
   protected $searchingUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create searching user.

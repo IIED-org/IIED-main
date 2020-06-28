@@ -42,7 +42,7 @@ class RequestPathTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'user', 'field', 'path'];
+  public static $modules = ['system', 'user', 'field', 'path'];
 
   /**
    * The current path.
@@ -54,7 +54,7 @@ class RequestPathTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installSchema('system', ['sequences']);

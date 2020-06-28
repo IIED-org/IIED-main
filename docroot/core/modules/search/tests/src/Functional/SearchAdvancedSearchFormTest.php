@@ -28,7 +28,7 @@ class SearchAdvancedSearchFormTest extends BrowserTestBase {
    */
   protected $node;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalCreateContentType(['type' => 'page', 'name' => 'Basic page']);

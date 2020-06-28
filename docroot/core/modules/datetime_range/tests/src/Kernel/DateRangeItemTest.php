@@ -33,7 +33,7 @@ class DateRangeItemTest extends FieldKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'datetime',
     'datetime_range',
   ];
@@ -41,7 +41,7 @@ class DateRangeItemTest extends FieldKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Add a datetime range field.

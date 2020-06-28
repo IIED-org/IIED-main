@@ -20,7 +20,7 @@ class StatisticsAdminTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'statistics'];
+  public static $modules = ['node', 'statistics'];
 
   /**
    * {@inheritdoc}
@@ -48,7 +48,7 @@ class StatisticsAdminTest extends BrowserTestBase {
    */
   protected $client;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Set the max age to 0 to simplify testing.

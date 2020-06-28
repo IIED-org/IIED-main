@@ -42,12 +42,12 @@ class CKEditorIntegrationTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['node', 'ckeditor', 'filter', 'ckeditor_test'];
+  public static $modules = ['node', 'ckeditor', 'filter', 'ckeditor_test'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create a text format and associate CKEditor.

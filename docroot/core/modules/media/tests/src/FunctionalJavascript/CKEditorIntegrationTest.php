@@ -83,7 +83,7 @@ class CKEditorIntegrationTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     FilterFormat::create([

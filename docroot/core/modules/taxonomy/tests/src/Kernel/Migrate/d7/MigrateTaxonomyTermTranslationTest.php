@@ -16,7 +16,7 @@ class MigrateTaxonomyTermTranslationTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'comment',
     'content_translation',
     'datetime',
@@ -40,7 +40,7 @@ class MigrateTaxonomyTermTranslationTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('comment');
     $this->installEntitySchema('file');

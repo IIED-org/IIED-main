@@ -22,7 +22,7 @@ class EntityDecoupledTranslationRevisionsTest extends EntityKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'system',
     'entity_test',
     'language',
@@ -80,7 +80,7 @@ class EntityDecoupledTranslationRevisionsTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $entity_type_id = 'entity_test_mulrev';

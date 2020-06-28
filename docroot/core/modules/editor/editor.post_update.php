@@ -6,10 +6,7 @@
  */
 
 /**
- * Implements hook_removed_post_updates().
+ * Clear the render cache to fix file references added by Editor.
  */
-function editor_removed_post_updates() {
-  return [
-    'editor_post_update_clear_cache_for_file_reference_filter' => '9.0.0',
-  ];
+function editor_post_update_clear_cache_for_file_reference_filter() {
 }

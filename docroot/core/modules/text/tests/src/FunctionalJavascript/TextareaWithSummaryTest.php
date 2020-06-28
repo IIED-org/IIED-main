@@ -15,7 +15,7 @@ class TextareaWithSummaryTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['text', 'node'];
+  public static $modules = ['text', 'node'];
 
   /**
    * {@inheritdoc}
@@ -25,7 +25,7 @@ class TextareaWithSummaryTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalCreateContentType(['type' => 'page']);

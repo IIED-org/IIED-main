@@ -25,7 +25,7 @@ class XssTest extends TestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $allowed_protocols = [
@@ -594,7 +594,7 @@ class XssTest extends TestCase {
    *   (optional) The group this message belongs to. Defaults to 'Other'.
    */
   protected function assertNormalized($haystack, $needle, $message = '', $group = 'Other') {
-    $this->assertStringContainsString($needle, strtolower(Html::decodeEntities($haystack)), $message);
+    $this->assertTrue(strpos(strtolower(Html::decodeEntities($haystack)), $needle) !== FALSE, $message, $group);
   }
 
   /**
@@ -616,7 +616,7 @@ class XssTest extends TestCase {
    *   (optional) The group this message belongs to. Defaults to 'Other'.
    */
   protected function assertNotNormalized($haystack, $needle, $message = '', $group = 'Other') {
-    $this->assertStringNotContainsString($needle, strtolower(Html::decodeEntities($haystack)), $message);
+    $this->assertTrue(strpos(strtolower(Html::decodeEntities($haystack)), $needle) === FALSE, $message, $group);
   }
 
 }

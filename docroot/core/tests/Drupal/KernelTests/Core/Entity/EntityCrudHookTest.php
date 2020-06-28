@@ -41,7 +41,7 @@ class EntityCrudHookTest extends EntityKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'block',
     'block_test',
     'entity_crud_hook_test',
@@ -53,7 +53,7 @@ class EntityCrudHookTest extends EntityKernelTestBase {
 
   protected $ids = [];
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installSchema('user', ['users_data']);

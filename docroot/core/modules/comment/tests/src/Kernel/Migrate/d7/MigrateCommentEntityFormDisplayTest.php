@@ -16,12 +16,12 @@ class MigrateCommentEntityFormDisplayTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['node', 'comment', 'text', 'menu_ui'];
+  public static $modules = ['node', 'comment', 'text', 'menu_ui'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->migrateContentTypes();
     $this->migrateCommentTypes();

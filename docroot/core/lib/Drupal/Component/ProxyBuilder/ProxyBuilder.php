@@ -236,9 +236,6 @@ EOS;
 
     $signature_line .= implode(', ', $parameters);
     $signature_line .= ')';
-    if ($reflection_method->hasReturnType()) {
-      $signature_line .= ': ' . $reflection_method->getReturnType()->getName();
-    }
 
     $output = $signature_line . "\n{\n";
 
@@ -267,9 +264,6 @@ EOS;
     }
     elseif ($class = $parameter->getClass()) {
       $parameter_string .= '\\' . $class->getName() . ' ';
-    }
-    elseif ($parameter->hasType()) {
-      $parameter_string .= $parameter->getType()->getName() . ' ';
     }
 
     if ($parameter->isPassedByReference()) {

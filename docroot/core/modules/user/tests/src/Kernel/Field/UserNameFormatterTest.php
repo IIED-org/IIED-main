@@ -19,7 +19,7 @@ class UserNameFormatterTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['field', 'user', 'system'];
+  public static $modules = ['field', 'user', 'system'];
 
   /**
    * @var string
@@ -39,7 +39,7 @@ class UserNameFormatterTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installConfig(['field']);

@@ -16,7 +16,7 @@ class MigrateFieldInstanceTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'comment',
     'datetime',
     'image',
@@ -31,7 +31,7 @@ class MigrateFieldInstanceTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->migrateFields();
   }

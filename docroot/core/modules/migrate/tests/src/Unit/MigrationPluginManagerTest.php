@@ -22,7 +22,7 @@ class MigrationPluginManagerTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     parent::setUp();
 
     // Get a plugin manager for testing.

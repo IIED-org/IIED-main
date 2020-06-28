@@ -2,14 +2,13 @@
 
 namespace Drupal\twig_extension_test\TwigExtension;
 
-use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 /**
  * A test Twig extension that adds a custom function and a custom filter.
  */
-class TestExtension extends AbstractExtension {
+class TestExtension extends \Twig_Extension {
 
   /**
    * Generates a list of all Twig functions that this extension defines.

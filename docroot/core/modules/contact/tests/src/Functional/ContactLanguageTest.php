@@ -20,7 +20,7 @@ class ContactLanguageTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'contact',
     'language',
     'contact_test',
@@ -34,7 +34,7 @@ class ContactLanguageTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create and log in administrative user.

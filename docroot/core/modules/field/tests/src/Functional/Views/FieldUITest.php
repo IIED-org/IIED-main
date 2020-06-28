@@ -26,7 +26,7 @@ class FieldUITest extends FieldTestBase {
    *
    * @var array
    */
-  protected static $modules = ['views_ui'];
+  public static $modules = ['views_ui'];
 
   /**
    * {@inheritdoc}
@@ -43,7 +43,7 @@ class FieldUITest extends FieldTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     $this->account = $this->drupalCreateUser(['administer views']);

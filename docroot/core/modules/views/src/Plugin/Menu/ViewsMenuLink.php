@@ -2,6 +2,7 @@
 
 namespace Drupal\views\Plugin\Menu;
 
+use Drupal\Core\DependencyInjection\DeprecatedServicePropertyTrait;
 use Drupal\Core\Menu\MenuLinkBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -14,6 +15,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @see \Drupal\views\Plugin\Derivative\ViewsMenuLink
  */
 class ViewsMenuLink extends MenuLinkBase implements ContainerFactoryPluginInterface {
+  use DeprecatedServicePropertyTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $deprecatedProperties = ['entityManager' => 'entity.manager'];
 
   /**
    * {@inheritdoc}

@@ -18,7 +18,7 @@ class MigrateSearchPageTest extends MigrateDrupal7TestBase {
    *
    * {@inheritdoc}
    */
-  protected static $modules = ['search'];
+  public static $modules = ['search'];
 
   /**
    * Asserts various aspects of an SearchPage entity.

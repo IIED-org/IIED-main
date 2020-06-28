@@ -20,12 +20,12 @@ class StyleSerializerKernelTest extends ViewsKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['rest_test_views', 'serialization', 'rest'];
+  public static $modules = ['rest_test_views', 'serialization', 'rest'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     ViewTestData::createTestViews(get_class($this), ['rest_test_views']);

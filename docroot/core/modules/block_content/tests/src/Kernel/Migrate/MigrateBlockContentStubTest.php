@@ -19,12 +19,12 @@ class MigrateBlockContentStubTest extends MigrateDrupalTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['block_content'];
+  public static $modules = ['block_content'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('block_content');
   }

@@ -18,12 +18,12 @@ class UuidFormatterTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['field', 'entity_test', 'system', 'user'];
+  public static $modules = ['field', 'entity_test', 'system', 'user'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installConfig(['system', 'field']);

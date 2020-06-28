@@ -22,7 +22,7 @@ class LocalePathTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'locale', 'path', 'views'];
+  public static $modules = ['node', 'locale', 'path', 'views'];
 
   /**
    * {@inheritdoc}
@@ -32,7 +32,7 @@ class LocalePathTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalCreateContentType(['type' => 'page', 'name' => 'Basic page']);

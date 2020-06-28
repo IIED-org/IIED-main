@@ -21,7 +21,7 @@ class BookUninstallValidatorTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->bookUninstallValidator = $this->getMockBuilder('Drupal\book\BookUninstallValidator')
       ->disableOriginalConstructor()

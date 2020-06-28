@@ -11,7 +11,7 @@ use Drupal\Tests\Core\Menu\LocalTaskIntegrationTestBase;
  */
 class BookLocalTasksTest extends LocalTaskIntegrationTestBase {
 
-  protected function setUp(): void {
+  protected function setUp() {
     $this->directoryList = [
       'book' => 'core/modules/book',
       'node' => 'core/modules/node',

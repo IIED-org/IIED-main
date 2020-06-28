@@ -24,7 +24,7 @@ class FileItemTest extends FieldKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['file'];
+  public static $modules = ['file'];
 
   /**
    * Created file entity.
@@ -40,7 +40,7 @@ class FileItemTest extends FieldKernelTestBase {
    */
   protected $directory;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installEntitySchema('user');

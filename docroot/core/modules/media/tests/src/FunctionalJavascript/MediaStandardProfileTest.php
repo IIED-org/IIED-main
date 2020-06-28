@@ -26,7 +26,7 @@ class MediaStandardProfileTest extends MediaJavascriptTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['media_test_oembed'];
+  public static $modules = ['media_test_oembed'];
 
   /**
    * {@inheritdoc}
@@ -36,7 +36,7 @@ class MediaStandardProfileTest extends MediaJavascriptTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->lockHttpClientToFixtures();
     $this->hijackProviderEndpoints();

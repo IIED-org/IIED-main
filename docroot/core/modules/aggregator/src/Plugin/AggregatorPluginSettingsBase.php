@@ -3,6 +3,7 @@
 namespace Drupal\aggregator\Plugin;
 
 use Drupal\Component\Plugin\ConfigurableInterface;
+use Drupal\Component\Plugin\ConfigurablePluginInterface;
 use Drupal\Component\Plugin\DependentPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginBase;
@@ -20,7 +21,7 @@ use Drupal\Core\Plugin\PluginFormInterface;
  * @see \Drupal\aggregator\Plugin\ParserInterface
  * @see plugin_api
  */
-abstract class AggregatorPluginSettingsBase extends PluginBase implements PluginFormInterface, ConfigurableInterface, DependentPluginInterface {
+abstract class AggregatorPluginSettingsBase extends PluginBase implements PluginFormInterface, ConfigurableInterface, DependentPluginInterface, ConfigurablePluginInterface {
 
   /**
    * {@inheritdoc}

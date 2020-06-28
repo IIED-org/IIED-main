@@ -39,7 +39,7 @@ class JsonApiRegressionTest extends JsonApiFunctionalTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'basic_auth',
   ];
 

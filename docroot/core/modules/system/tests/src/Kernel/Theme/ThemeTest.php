@@ -16,12 +16,12 @@ class ThemeTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['theme_test', 'node', 'system'];
+  public static $modules = ['theme_test', 'node', 'system'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     \Drupal::service('theme_installer')->install(['test_theme']);
   }
@@ -70,7 +70,7 @@ class ThemeTest extends KernelTestBase {
     // suggestionnotimplemented is not an implemented theme hook so \Drupal::theme() service
     // should return FALSE instead of a string.
     $output = \Drupal::theme()->render(['suggestionnotimplemented'], []);
-    $this->assertFalse($output, '\Drupal::theme() returns FALSE when a hook suggestion is not implemented.');
+    $this->assertIdentical($output, FALSE, '\Drupal::theme() returns FALSE when a hook suggestion is not implemented.');
   }
 
   /**

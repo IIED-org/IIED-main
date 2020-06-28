@@ -23,7 +23,7 @@ class ClaroMenuUiJavascriptTest extends MenuUiJavascriptTest {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->container->get('theme_installer')->install(['claro']);
     $this->config('system.theme')->set('default', 'claro')->save();

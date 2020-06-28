@@ -15,7 +15,7 @@ class MigrateBookTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'book',
     'menu_ui',
     'node',
@@ -25,7 +25,7 @@ class MigrateBookTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installSchema('book', ['book']);
     $this->installSchema('node', ['node_access']);

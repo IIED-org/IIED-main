@@ -19,7 +19,7 @@ class FieldEntityTranslationTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'language',
     'locale',
     'content_translation',
@@ -39,7 +39,7 @@ class FieldEntityTranslationTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     $node_type = NodeType::create([

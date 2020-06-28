@@ -19,7 +19,7 @@ class EmailFieldTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'entity_test', 'field_ui'];
+  public static $modules = ['node', 'entity_test', 'field_ui'];
 
   /**
    * {@inheritdoc}
@@ -40,7 +40,7 @@ class EmailFieldTest extends BrowserTestBase {
    */
   protected $field;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalLogin($this->drupalCreateUser([

@@ -19,7 +19,7 @@ class MediaSourceOEmbedVideoTest extends MediaSourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['media_test_oembed'];
+  public static $modules = ['media_test_oembed'];
 
   /**
    * {@inheritdoc}
@@ -31,7 +31,7 @@ class MediaSourceOEmbedVideoTest extends MediaSourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->lockHttpClientToFixtures();
   }

@@ -24,7 +24,7 @@ abstract class EntityCacheTagsTestBase extends PageCacheTagsTestBase {
    *
    * @var array
    */
-  protected static $modules = ['entity_test', 'field_test'];
+  public static $modules = ['entity_test', 'field_test'];
 
   /**
    * The main entity used for testing.
@@ -164,7 +164,6 @@ abstract class EntityCacheTagsTestBase extends PageCacheTagsTestBase {
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The entity to be tested, as created by createEntity().
-   *
    * @return array
    *   An array of the additional cache tags.
    *

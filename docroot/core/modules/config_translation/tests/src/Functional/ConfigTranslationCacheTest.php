@@ -20,7 +20,7 @@ class ConfigTranslationCacheTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'block',
     'config_translation',
     'config_translation_test',
@@ -70,7 +70,7 @@ class ConfigTranslationCacheTest extends BrowserTestBase {
    */
   protected $localeStorage;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $translator_permissions = [
       'translate configuration',

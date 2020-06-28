@@ -13,12 +13,12 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class SyslogTest extends KernelTestBase {
 
-  protected static $modules = ['syslog', 'syslog_test'];
+  public static $modules = ['syslog', 'syslog_test'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installConfig(['syslog']);
   }

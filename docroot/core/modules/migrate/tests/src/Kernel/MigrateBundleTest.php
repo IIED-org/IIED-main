@@ -18,12 +18,12 @@ class MigrateBundleTest extends MigrateTestBase {
    *
    * @var array
    */
-  protected static $modules = ['taxonomy', 'text', 'user', 'system'];
+  public static $modules = ['taxonomy', 'text', 'user', 'system'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('user');
     $this->installEntitySchema('taxonomy_vocabulary');

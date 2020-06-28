@@ -24,7 +24,7 @@ class OffCanvasDialogTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['ajax_test'];
+  public static $modules = ['ajax_test'];
 
   /**
    * Test sending AJAX requests to open and manipulate off-canvas dialog.

@@ -138,7 +138,7 @@ abstract class StorageTestBase extends KernelTestBase {
 
     // Verify that a FALSE value can be stored.
     $stores[0]->set('foo', FALSE);
-    $this->assertFalse($stores[0]->get('foo'));
+    $this->assertIdentical($stores[0]->get('foo'), FALSE);
 
     // Verify that a deleted key returns NULL as value.
     $stores[0]->delete('foo');

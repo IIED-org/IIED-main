@@ -28,7 +28,7 @@ class FileCacheTest extends TestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->fileCache = new FileCache('prefix', 'test', '\Drupal\Tests\Component\FileCache\StaticFileCacheBackend', ['bin' => 'llama']);

@@ -10,7 +10,6 @@ use Drupal\Core\Template\AttributeString;
 use Drupal\Core\Template\Loader\StringLoader;
 use Drupal\Tests\UnitTestCase;
 use Drupal\Component\Render\MarkupInterface;
-use Twig\Environment;
 
 /**
  * @coversDefaultClass \Drupal\Core\Template\Attribute
@@ -266,7 +265,7 @@ class AttributeTest extends UnitTestCase {
    */
   public function testTwigAddRemoveClasses($template, $expected, $seed_attributes = []) {
     $loader = new StringLoader();
-    $twig = new Environment($loader);
+    $twig = new \Twig_Environment($loader);
     $data = ['attributes' => new Attribute($seed_attributes)];
     $result = $twig->createTemplate($template)->render($data);
     $this->assertEquals($expected, $result);

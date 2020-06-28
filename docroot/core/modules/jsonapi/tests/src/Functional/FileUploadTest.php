@@ -25,7 +25,7 @@ class FileUploadTest extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['entity_test', 'file'];
+  public static $modules = ['entity_test', 'file'];
 
   /**
    * {@inheritdoc}
@@ -105,7 +105,7 @@ class FileUploadTest extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     parent::setUp();
 
     $this->fileStorage = $this->container->get('entity_type.manager')

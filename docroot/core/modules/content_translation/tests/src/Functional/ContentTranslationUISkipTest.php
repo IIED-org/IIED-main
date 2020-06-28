@@ -16,7 +16,7 @@ class ContentTranslationUISkipTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['content_translation_test', 'user', 'node'];
+  public static $modules = ['content_translation_test', 'user', 'node'];
 
   /**
    * {@inheritdoc}

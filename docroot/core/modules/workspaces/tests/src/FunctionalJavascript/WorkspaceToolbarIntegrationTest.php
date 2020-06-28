@@ -14,7 +14,7 @@ class WorkspaceToolbarIntegrationTest extends OffCanvasTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['toolbar', 'workspaces'];
+  public static $modules = ['toolbar', 'workspaces'];
 
   /**
    * {@inheritdoc}
@@ -24,7 +24,7 @@ class WorkspaceToolbarIntegrationTest extends OffCanvasTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $admin_user = $this->drupalCreateUser([
       'administer workspaces',

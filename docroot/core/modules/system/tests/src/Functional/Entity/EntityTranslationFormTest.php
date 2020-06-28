@@ -20,7 +20,7 @@ class EntityTranslationFormTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['entity_test', 'language', 'node'];
+  public static $modules = ['entity_test', 'language', 'node'];
 
   /**
    * {@inheritdoc}
@@ -29,7 +29,7 @@ class EntityTranslationFormTest extends BrowserTestBase {
 
   protected $langcodes;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     // Enable translations for the test entity type.
     \Drupal::state()->set('entity_test.translation', TRUE);

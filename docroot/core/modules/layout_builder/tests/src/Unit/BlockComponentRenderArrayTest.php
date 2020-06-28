@@ -55,7 +55,7 @@ class BlockComponentRenderArrayTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->blockManager = $this->prophesize(BlockManagerInterface::class);

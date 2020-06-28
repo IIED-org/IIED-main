@@ -23,7 +23,7 @@ class WidgetOEmbedTest extends MediaLibraryTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->lockHttpClientToFixtures();
     $this->hijackProviderEndpoints();

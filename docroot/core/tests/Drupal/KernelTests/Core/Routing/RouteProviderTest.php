@@ -38,7 +38,7 @@ class RouteProviderTest extends KernelTestBase {
   /**
    * Modules to enable.
    */
-  protected static $modules = [
+  public static $modules = [
     'url_alter_test',
     'system',
     'language',
@@ -87,7 +87,7 @@ class RouteProviderTest extends KernelTestBase {
    */
   protected $cacheTagsInvalidator;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->fixtures = new RoutingFixtures();
     $this->state = new State(new KeyValueMemoryFactory());
@@ -111,7 +111,7 @@ class RouteProviderTest extends KernelTestBase {
     }
   }
 
-  protected function tearDown(): void {
+  protected function tearDown() {
     $this->fixtures->dropTables(Database::getConnection());
 
     parent::tearDown();

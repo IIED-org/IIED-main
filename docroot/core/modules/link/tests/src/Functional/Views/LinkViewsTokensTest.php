@@ -19,7 +19,7 @@ class LinkViewsTokensTest extends ViewTestBase {
    *
    * @var array
    */
-  protected static $modules = ['link_test_views'];
+  public static $modules = ['link_test_views'];
 
   /**
    * {@inheritdoc}
@@ -43,7 +43,7 @@ class LinkViewsTokensTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
     ViewTestData::createTestViews(get_class($this), ['link_test_views']);
 

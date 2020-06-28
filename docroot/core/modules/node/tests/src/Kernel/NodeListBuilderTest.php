@@ -15,9 +15,9 @@ class NodeListBuilderTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['node', 'user'];
+  public static $modules = ['node', 'user'];
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installEntitySchema('node');

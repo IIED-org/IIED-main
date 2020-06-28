@@ -28,7 +28,7 @@ class KernelTestBaseShutdownTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     // Initialize static variable prior to testing.
     self::$shutdownCalled = [];
     parent::setUp();
@@ -67,7 +67,7 @@ class KernelTestBaseShutdownTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function assertPostConditions(): void {
+  protected function assertPostConditions() {
     parent::assertPostConditions();
     $this->assertSame($this->expectedShutdownCalled, self::$shutdownCalled);
   }

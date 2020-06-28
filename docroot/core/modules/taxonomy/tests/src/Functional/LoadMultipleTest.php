@@ -17,7 +17,7 @@ class LoadMultipleTest extends TaxonomyTestBase {
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->drupalLogin($this->drupalCreateUser(['administer taxonomy']));
   }

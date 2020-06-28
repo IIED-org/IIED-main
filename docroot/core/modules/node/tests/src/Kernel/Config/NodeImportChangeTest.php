@@ -17,7 +17,7 @@ class NodeImportChangeTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'field',
     'text',
@@ -29,7 +29,7 @@ class NodeImportChangeTest extends KernelTestBase {
   /**
    * Set the default field storage backend for fields created during tests.
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Set default storage backend.

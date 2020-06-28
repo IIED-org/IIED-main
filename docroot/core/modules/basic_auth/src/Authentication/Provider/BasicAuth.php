@@ -7,6 +7,7 @@ use Drupal\Core\Authentication\AuthenticationProviderInterface;
 use Drupal\Core\Authentication\AuthenticationProviderChallengeInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\DependencyInjection\DeprecatedServicePropertyTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Flood\FloodInterface;
 use Drupal\Core\Http\Exception\CacheableUnauthorizedHttpException;
@@ -18,6 +19,12 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
  * HTTP Basic authentication provider.
  */
 class BasicAuth implements AuthenticationProviderInterface, AuthenticationProviderChallengeInterface {
+  use DeprecatedServicePropertyTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $deprecatedProperties = ['entityManager' => 'entity.manager'];
 
   /**
    * The config factory.

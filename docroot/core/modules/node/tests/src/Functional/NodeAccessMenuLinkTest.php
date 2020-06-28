@@ -16,7 +16,7 @@ class NodeAccessMenuLinkTest extends NodeTestBase {
    *
    * @var array
    */
-  protected static $modules = ['menu_ui', 'block'];
+  public static $modules = ['menu_ui', 'block'];
 
   /**
    * {@inheritdoc}
@@ -30,7 +30,7 @@ class NodeAccessMenuLinkTest extends NodeTestBase {
    */
   protected $contentAdminUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalPlaceBlock('system_menu_block:main');

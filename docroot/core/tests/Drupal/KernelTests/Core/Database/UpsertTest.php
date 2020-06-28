@@ -54,37 +54,39 @@ class UpsertTest extends DatabaseTestBase {
   }
 
   /**
-   * Confirms that we can upsert records with keywords successfully.
+   * Tests that we can upsert records with a special named column.
    */
-  public function testUpsertWithKeywords() {
-    $num_records_before = $this->connection->query('SELECT COUNT(*) FROM {select}')->fetchField();
-
-    $upsert = $this->connection->upsert('select')
+  public function testSpecialColumnUpsert() {
+    $num_records_before = $this->connection->query('SELECT COUNT(*) FROM {test_special_columns}')->fetchField();
+    $upsert = $this->connection->upsert('test_special_columns')
       ->key('id')
-      ->fields(['id', 'update']);
+      ->fields(['id', 'offset', 'function']);
 
     // Add a new row.
     $upsert->values([
       'id' => 2,
-      'update' => 'Update value 2',
+      'offset' => 'Offset 2',
+      'function' => 'Function 2',
     ]);
 
     // Update an existing row.
     $upsert->values([
       'id' => 1,
-      'update' => 'Update value 1 updated',
+      'offset' => 'Offset 1 updated',
+      'function' => 'Function 1 updated',
     ]);
 
     $upsert->execute();
-
-    $num_records_after = $this->connection->query('SELECT COUNT(*) FROM {select}')->fetchField();
+    $num_records_after = $this->connection->query('SELECT COUNT(*) FROM {test_special_columns}')->fetchField();
     $this->assertEquals($num_records_before + 1, $num_records_after, 'Rows were inserted and updated properly.');
 
-    $record = $this->connection->query('SELECT * FROM {select} WHERE id = :id', [':id' => 1])->fetch();
-    $this->assertEquals('Update value 1 updated', $record->update);
+    $record = $this->connection->query('SELECT * FROM {test_special_columns} WHERE id = :id', [':id' => 1])->fetch();
+    $this->assertEquals($record->offset, 'Offset 1 updated');
+    $this->assertEquals($record->function, 'Function 1 updated');
 
-    $record = $this->connection->query('SELECT * FROM {select} WHERE id = :id', [':id' => 2])->fetch();
-    $this->assertEquals('Update value 2', $record->update);
+    $record = $this->connection->query('SELECT * FROM {test_special_columns} WHERE id = :id', [':id' => 2])->fetch();
+    $this->assertEquals($record->offset, 'Offset 2');
+    $this->assertEquals($record->function, 'Function 2');
   }
 
 }

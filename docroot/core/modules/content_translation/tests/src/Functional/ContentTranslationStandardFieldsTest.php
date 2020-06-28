@@ -16,7 +16,7 @@ class ContentTranslationStandardFieldsTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'language',
     'content_translation',
     'node',
@@ -33,7 +33,7 @@ class ContentTranslationStandardFieldsTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $admin_user = $this->drupalCreateUser([

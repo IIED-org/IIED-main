@@ -19,7 +19,7 @@ class OptionsFieldUITest extends FieldTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'options',
     'field_test',
@@ -60,7 +60,7 @@ class OptionsFieldUITest extends FieldTestBase {
    */
   protected $adminPath;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create test user.

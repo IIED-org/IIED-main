@@ -22,14 +22,14 @@ class BlockHiddenRegionTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['block', 'block_test', 'search'];
+  public static $modules = ['block', 'block_test', 'search'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'classy';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create administrative user.

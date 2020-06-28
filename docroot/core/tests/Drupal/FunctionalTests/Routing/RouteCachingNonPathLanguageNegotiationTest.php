@@ -21,7 +21,7 @@ class RouteCachingNonPathLanguageNegotiationTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['language', 'block'];
+  public static $modules = ['language', 'block'];
 
   /**
    * {@inheritdoc}
@@ -35,7 +35,7 @@ class RouteCachingNonPathLanguageNegotiationTest extends BrowserTestBase {
    */
   protected $adminUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create and log in user.

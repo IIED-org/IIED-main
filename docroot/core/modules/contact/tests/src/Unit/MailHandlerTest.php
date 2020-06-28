@@ -68,7 +68,7 @@ class MailHandlerTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->mailManager = $this->createMock('\Drupal\Core\Mail\MailManagerInterface');
     $this->languageManager = $this->createMock('\Drupal\Core\Language\LanguageManagerInterface');

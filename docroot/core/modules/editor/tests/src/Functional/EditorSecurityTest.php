@@ -46,7 +46,7 @@ class EditorSecurityTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['filter', 'editor', 'editor_test', 'node'];
+  public static $modules = ['filter', 'editor', 'editor_test', 'node'];
 
   /**
    * User with access to Restricted HTML text format without text editor.
@@ -77,7 +77,7 @@ class EditorSecurityTest extends BrowserTestBase {
    */
   protected $privilegedUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create 5 text formats, to cover all potential use cases:

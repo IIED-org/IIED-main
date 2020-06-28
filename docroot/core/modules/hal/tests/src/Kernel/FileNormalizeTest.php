@@ -16,12 +16,12 @@ class FileNormalizeTest extends NormalizerTestBase {
    *
    * @var array
    */
-  protected static $modules = ['file'];
+  public static $modules = ['file'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('file');
   }

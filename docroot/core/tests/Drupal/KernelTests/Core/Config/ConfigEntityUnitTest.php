@@ -25,7 +25,7 @@ class ConfigEntityUnitTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['config_test'];
+  public static $modules = ['config_test'];
 
   /**
    * The config_test entity storage.
@@ -37,7 +37,7 @@ class ConfigEntityUnitTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->storage = $this->container->get('entity_type.manager')->getStorage('config_test');
   }

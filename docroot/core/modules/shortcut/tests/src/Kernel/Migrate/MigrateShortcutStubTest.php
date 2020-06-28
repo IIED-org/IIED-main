@@ -17,12 +17,12 @@ class MigrateShortcutStubTest extends MigrateDrupalTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['shortcut', 'link'];
+  public static $modules = ['shortcut', 'link'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('shortcut');
     // Make sure the 'default' shortcut_set is installed.

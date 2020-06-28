@@ -30,12 +30,12 @@ class MigrateEventsTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['migrate', 'migrate_events_test'];
+  public static $modules = ['migrate', 'migrate_events_test'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->state = \Drupal::state();
     \Drupal::service('event_dispatcher')->addListener(MigrateEvents::MAP_SAVE,

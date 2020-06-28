@@ -19,14 +19,14 @@ class ThemeLegacyTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['theme_test', 'theme_legacy_test'];
+  public static $modules = ['theme_test', 'theme_legacy_test'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     \Drupal::service('theme_installer')->install(['test_legacy_theme']);
   }

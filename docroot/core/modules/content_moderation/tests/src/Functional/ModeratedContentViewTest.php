@@ -26,7 +26,7 @@ class ModeratedContentViewTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'content_moderation',
     'node',
     'views',
@@ -42,7 +42,7 @@ class ModeratedContentViewTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     parent::setUp();
 
     $this->drupalCreateContentType(['type' => 'page', 'name' => 'Basic page'])->save();

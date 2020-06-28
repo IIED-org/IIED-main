@@ -15,7 +15,7 @@ class CommentFieldFilterTest extends CommentTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['language'];
+  public static $modules = ['language'];
 
   /**
    * {@inheritdoc}
@@ -36,7 +36,7 @@ class CommentFieldFilterTest extends CommentTestBase {
    */
   public $commentTitles = [];
 
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
     $this->drupalLogin($this->drupalCreateUser(['access comments']));
 

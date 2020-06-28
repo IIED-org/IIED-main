@@ -18,7 +18,7 @@ class MigrateShortcutSetTest extends MigrateDrupal7TestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'link',
     'field',
     'shortcut',
@@ -28,7 +28,7 @@ class MigrateShortcutSetTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('shortcut');
     $this->installEntitySchema('menu_link_content');

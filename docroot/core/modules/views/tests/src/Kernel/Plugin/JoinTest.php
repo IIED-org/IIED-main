@@ -30,7 +30,7 @@ class JoinTest extends RelationshipJoinTestBase {
    */
   protected $manager;
 
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp();
 
     // Add a join plugin manager which can be used in all of the tests.

@@ -54,7 +54,7 @@ class CounterTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Setup basic stuff like the view and the display.

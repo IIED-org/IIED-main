@@ -19,12 +19,12 @@ class LinkFieldRdfaTest extends FieldRdfaTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['link', 'text'];
+  public static $modules = ['link', 'text'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->createTestField();

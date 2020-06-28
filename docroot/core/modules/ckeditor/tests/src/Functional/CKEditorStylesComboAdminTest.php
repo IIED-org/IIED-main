@@ -18,7 +18,7 @@ class CKEditorStylesComboAdminTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['filter', 'editor', 'ckeditor'];
+  public static $modules = ['filter', 'editor', 'ckeditor'];
 
   /**
    * {@inheritdoc}
@@ -42,7 +42,7 @@ class CKEditorStylesComboAdminTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->format = strtolower($this->randomMachineName());

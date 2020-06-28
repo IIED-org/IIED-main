@@ -3,6 +3,7 @@
 namespace Drupal\editor\Plugin\Filter;
 
 use Drupal\Component\Utility\Html;
+use Drupal\Core\DependencyInjection\DeprecatedServicePropertyTrait;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\file\FileInterface;
@@ -23,6 +24,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class EditorFileReference extends FilterBase implements ContainerFactoryPluginInterface {
+  use DeprecatedServicePropertyTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $deprecatedProperties = ['entityManager' => 'entity.manager'];
 
   /**
    * The entity repository.

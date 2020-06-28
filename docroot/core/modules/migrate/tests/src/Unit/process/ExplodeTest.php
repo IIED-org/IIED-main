@@ -16,7 +16,7 @@ class ExplodeTest extends MigrateProcessTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     $configuration = [
       'delimiter' => ',',
     ];

@@ -14,7 +14,7 @@ class MigrateFieldOptionTranslationTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'comment',
     'config_translation',
     'datetime',
@@ -34,7 +34,7 @@ class MigrateFieldOptionTranslationTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->executeMigrations([
       'language',

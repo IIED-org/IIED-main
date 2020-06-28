@@ -16,7 +16,7 @@ class DrupalDateTimeTest extends BrowserTestBase {
   /**
    * Set up required modules.
    */
-  protected static $modules = [];
+  public static $modules = [];
 
   /**
    * {@inheritdoc}
@@ -26,7 +26,7 @@ class DrupalDateTimeTest extends BrowserTestBase {
   /**
    * Test setup.
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
   }

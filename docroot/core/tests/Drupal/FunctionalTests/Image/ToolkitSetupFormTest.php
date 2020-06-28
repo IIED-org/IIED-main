@@ -23,7 +23,7 @@ class ToolkitSetupFormTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'image_test'];
+  public static $modules = ['system', 'image_test'];
 
   /**
    * {@inheritdoc}
@@ -33,7 +33,7 @@ class ToolkitSetupFormTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->adminUser = $this->drupalCreateUser([
       'administer site configuration',

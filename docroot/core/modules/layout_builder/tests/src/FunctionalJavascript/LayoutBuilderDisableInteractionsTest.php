@@ -40,7 +40,7 @@ class LayoutBuilderDisableInteractionsTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->createContentType(['type' => 'bundle_with_section_field']);

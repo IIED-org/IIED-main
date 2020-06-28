@@ -18,7 +18,7 @@ class FormJSAddMoreTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['field_test', 'entity_test'];
+  public static $modules = ['field_test', 'entity_test'];
 
   /**
    * {@inheritdoc}
@@ -28,7 +28,7 @@ class FormJSAddMoreTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $account = $this->drupalCreateUser([

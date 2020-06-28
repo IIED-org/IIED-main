@@ -14,7 +14,7 @@ class DeleteFeedTest extends AggregatorTestBase {
    *
    * @var array
    */
-  protected static $modules = ['block'];
+  public static $modules = ['block'];
 
   /**
    * {@inheritdoc}

@@ -25,7 +25,7 @@ class ContentModerationAccessTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'content_moderation',
     'filter',
     'node',
@@ -37,7 +37,7 @@ class ContentModerationAccessTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installEntitySchema('content_moderation_state');

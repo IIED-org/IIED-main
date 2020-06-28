@@ -18,7 +18,7 @@ class ConfigLanguageOverrideWebTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'block',
     'language',
     'system',
@@ -32,7 +32,7 @@ class ConfigLanguageOverrideWebTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
   }
 

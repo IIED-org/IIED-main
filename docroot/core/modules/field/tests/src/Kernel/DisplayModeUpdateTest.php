@@ -47,7 +47,7 @@ class DisplayModeUpdateTest extends FieldKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create 'default' view-display.

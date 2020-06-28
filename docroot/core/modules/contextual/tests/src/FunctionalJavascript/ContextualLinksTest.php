@@ -17,7 +17,7 @@ class ContextualLinksTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['block', 'contextual'];
+  public static $modules = ['block', 'contextual'];
 
   /**
    * {@inheritdoc}
@@ -27,7 +27,7 @@ class ContextualLinksTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalLogin($this->createUser(['access contextual links']));

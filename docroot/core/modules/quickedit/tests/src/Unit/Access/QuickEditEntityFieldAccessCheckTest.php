@@ -26,7 +26,7 @@ class QuickEditEntityFieldAccessCheckTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     $this->editAccessCheck = new QuickEditEntityFieldAccessCheck();
 
     $cache_contexts_manager = $this->prophesize(CacheContextsManager::class);

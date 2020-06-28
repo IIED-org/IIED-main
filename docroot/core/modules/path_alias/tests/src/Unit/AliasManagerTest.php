@@ -22,6 +22,13 @@ class AliasManagerTest extends UnitTestCase {
   protected $aliasManager;
 
   /**
+   * Alias storage.
+   *
+   * @var \Drupal\Core\Path\AliasStorageInterface|\PHPUnit\Framework\MockObject\MockObject
+   */
+  protected $aliasStorage;
+
+  /**
    * Alias repository.
    *
    * @var \Drupal\path_alias\AliasRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
@@ -66,7 +73,7 @@ class AliasManagerTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->aliasRepository = $this->createMock(AliasRepositoryInterface::class);

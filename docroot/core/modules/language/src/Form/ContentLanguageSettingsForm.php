@@ -2,6 +2,7 @@
 
 namespace Drupal\language\Form;
 
+use Drupal\Core\DependencyInjection\DeprecatedServicePropertyTrait;
 use Drupal\Core\Entity\ContentEntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -16,6 +17,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @internal
  */
 class ContentLanguageSettingsForm extends FormBase {
+  use DeprecatedServicePropertyTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $deprecatedProperties = ['entityManager' => 'entity.manager'];
 
   /**
    * The entity type manager.
@@ -46,8 +53,12 @@ class ContentLanguageSettingsForm extends FormBase {
    * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info
    *   The entity type bundle info.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, EntityTypeBundleInfoInterface $entity_type_bundle_info) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL) {
     $this->entityTypeManager = $entity_type_manager;
+    if (!$entity_type_bundle_info) {
+      @trigger_error('Calling ContentLanguageSettingsForm::__construct() with the $entity_type_bundle_info argument is supported in drupal:8.7.0 and will be required before drupal:9.0.0. See https://www.drupal.org/node/2549139.', E_USER_DEPRECATED);
+      $entity_type_bundle_info = \Drupal::service('entity_type.bundle.info');
+    }
     $this->entityTypeBundleInfo = $entity_type_bundle_info;
   }
 

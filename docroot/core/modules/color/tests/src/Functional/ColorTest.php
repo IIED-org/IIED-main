@@ -17,7 +17,7 @@ class ColorTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['color', 'color_test', 'block', 'file'];
+  public static $modules = ['color', 'color_test', 'block', 'file'];
 
   /**
    * {@inheritdoc}
@@ -51,7 +51,7 @@ class ColorTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create user.

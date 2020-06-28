@@ -22,7 +22,7 @@ class RendererBubblingTest extends RendererTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     // Disable the required cache contexts, so that this test can test just the
     // bubbling behavior.
     $this->rendererConfig['required_cache_contexts'] = [];

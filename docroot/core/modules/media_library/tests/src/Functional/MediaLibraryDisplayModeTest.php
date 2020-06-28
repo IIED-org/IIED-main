@@ -37,7 +37,7 @@ class MediaLibraryDisplayModeTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->drupalLogin($this->drupalCreateUser([
       'access media overview',

@@ -15,12 +15,12 @@ class MigrateUserPictureEntityDisplayTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['file', 'image'];
+  public static $modules = ['file', 'image'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('file');
     $this->executeMigrations([

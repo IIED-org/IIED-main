@@ -24,7 +24,7 @@ class ClaroViewsUiTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Disable automatic live preview to make the sequence of calls clearer.

@@ -16,7 +16,7 @@ class UnitTestSuite extends TestSuiteBase {
    *   The test suite.
    */
   public static function suite() {
-    $root = dirname(__DIR__, 3);
+    $root = dirname(dirname(dirname(__DIR__)));
 
     $suite = new static('unit');
     $suite->addTestsBySuiteNamespace($root, 'Unit');

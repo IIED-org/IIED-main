@@ -21,7 +21,7 @@ class HelpTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['help_test', 'help_page_test'];
+  public static $modules = ['help_test', 'help_page_test'];
 
   /**
    * {@inheritdoc}
@@ -45,7 +45,7 @@ class HelpTest extends BrowserTestBase {
    */
   protected $anyUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create users.

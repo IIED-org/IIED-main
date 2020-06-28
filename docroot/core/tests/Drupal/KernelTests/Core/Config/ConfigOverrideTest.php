@@ -16,9 +16,9 @@ class ConfigOverrideTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'config_test'];
+  public static $modules = ['system', 'config_test'];
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installConfig(['system']);
     $this->copyConfig($this->container->get('config.storage'), $this->container->get('config.storage.sync'));

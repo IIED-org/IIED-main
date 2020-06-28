@@ -19,7 +19,7 @@ class CKEditorToolbarButtonTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['filter', 'editor', 'ckeditor', 'locale'];
+  public static $modules = ['filter', 'editor', 'ckeditor', 'locale'];
 
   /**
    * {@inheritdoc}
@@ -29,7 +29,7 @@ class CKEditorToolbarButtonTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create a text format and associate this with CKEditor.

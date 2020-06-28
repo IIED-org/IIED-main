@@ -25,7 +25,7 @@ class ManageDisplayTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'field_ui',
     'taxonomy',
@@ -43,7 +43,7 @@ class ManageDisplayTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->drupalPlaceBlock('system_breadcrumb_block');
     $this->drupalPlaceBlock('local_tasks_block');
@@ -225,7 +225,6 @@ class ManageDisplayTest extends BrowserTestBase {
    *   Plain text to look for.
    * @param $message
    *   Message to display.
-   *
    * @return
    *   TRUE on pass, FALSE on fail.
    */

@@ -21,7 +21,7 @@ class AccessDeniedTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['block', 'node', 'system_test'];
+  public static $modules = ['block', 'node', 'system_test'];
 
   /**
    * {@inheritdoc}
@@ -30,7 +30,7 @@ class AccessDeniedTest extends BrowserTestBase {
 
   protected $adminUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalPlaceBlock('page_title_block');

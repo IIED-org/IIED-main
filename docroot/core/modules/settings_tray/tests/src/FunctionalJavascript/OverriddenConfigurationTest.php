@@ -16,7 +16,7 @@ class OverriddenConfigurationTest extends SettingsTrayTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'settings_tray_override_test',
     'menu_ui',
     'menu_link_content',
@@ -30,7 +30,7 @@ class OverriddenConfigurationTest extends SettingsTrayTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $user = $this->createUser([

@@ -19,12 +19,12 @@ class MigrateNodeSettingsTest extends MigrateDrupal7TestBase {
    *
    * @var array
    */
-  protected static $modules = ['node'];
+  public static $modules = ['node'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->executeMigration('d7_node_settings');
   }

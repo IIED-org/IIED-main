@@ -21,7 +21,7 @@ class WorkflowTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     // Create a container so that the plugin manager and workflow type can be
     // mocked.

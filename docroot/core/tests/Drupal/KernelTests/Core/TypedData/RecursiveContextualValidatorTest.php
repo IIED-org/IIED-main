@@ -16,7 +16,7 @@ class RecursiveContextualValidatorTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'entity_test',
     'user',
   ];
@@ -24,7 +24,7 @@ class RecursiveContextualValidatorTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     parent::setUp();
     $this->installEntitySchema('user');
     $this->installEntitySchema('entity_test');

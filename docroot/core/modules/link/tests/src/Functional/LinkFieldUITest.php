@@ -25,7 +25,7 @@ class LinkFieldUITest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'link', 'field_ui', 'block'];
+  public static $modules = ['node', 'link', 'field_ui', 'block'];
 
   /**
    * {@inheritdoc}
@@ -63,7 +63,7 @@ class LinkFieldUITest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->firstContentType = $this->drupalCreateContentType();

@@ -21,7 +21,7 @@ class MachineNameTest extends MigrateProcessTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     $this->transliteration = $this->getMockBuilder('Drupal\Component\Transliteration\TransliterationInterface')
       ->disableOriginalConstructor()
       ->getMock();

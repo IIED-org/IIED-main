@@ -17,7 +17,7 @@ class FieldConfigAccessControlHandlerTest extends FieldStorageConfigAccessContro
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->entity = new FieldConfig([

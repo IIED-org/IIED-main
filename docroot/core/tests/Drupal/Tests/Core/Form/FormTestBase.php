@@ -173,7 +173,7 @@ abstract class FormTestBase extends UnitTestCase {
       ->getMock();
     $this->account = $this->createMock('Drupal\Core\Session\AccountInterface');
     $this->themeManager = $this->createMock('Drupal\Core\Theme\ThemeManagerInterface');
-    $this->request = new Request();
+    $this->request = Request::createFromGlobals();
     $this->eventDispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
     $this->requestStack = new RequestStack();
     $this->requestStack->push($this->request);
@@ -187,7 +187,7 @@ abstract class FormTestBase extends UnitTestCase {
       ->setConstructorArgs([$this->requestStack, $this->urlGenerator])
       ->setMethods(['batchGet', 'drupalInstallationAttempted'])
       ->getMock();
-    $this->root = dirname(substr(__DIR__, 0, -strlen(__NAMESPACE__)), 2);
+    $this->root = dirname(dirname(substr(__DIR__, 0, -strlen(__NAMESPACE__))));
 
     $this->formBuilder = new FormBuilder($this->formValidator, $this->formSubmitter, $this->formCache, $this->moduleHandler, $this->eventDispatcher, $this->requestStack, $this->classResolver, $this->elementInfo, $this->themeManager, $this->csrfToken);
   }

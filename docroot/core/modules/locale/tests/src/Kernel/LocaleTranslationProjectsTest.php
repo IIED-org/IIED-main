@@ -14,7 +14,7 @@ class LocaleTranslationProjectsTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['locale', 'locale_test', 'system'];
+  public static $modules = ['locale', 'locale_test', 'system'];
 
   /**
    * The module handler used in this test.
@@ -33,7 +33,7 @@ class LocaleTranslationProjectsTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->moduleHandler = $this->container->get('module_handler');

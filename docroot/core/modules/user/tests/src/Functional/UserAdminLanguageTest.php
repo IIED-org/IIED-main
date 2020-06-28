@@ -31,14 +31,14 @@ class UserAdminLanguageTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['user', 'language', 'language_test'];
+  public static $modules = ['user', 'language', 'language_test'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     // User to add and remove language.
     $this->adminUser = $this->drupalCreateUser(['administer languages', 'access administration pages']);

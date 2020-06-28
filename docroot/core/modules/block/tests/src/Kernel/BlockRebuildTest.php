@@ -19,12 +19,12 @@ class BlockRebuildTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['block', 'system'];
+  public static $modules = ['block', 'system'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->container->get('theme_installer')->install(['stable', 'classy']);
@@ -34,7 +34,7 @@ class BlockRebuildTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static function setUpBeforeClass(): void {
+  public static function setUpBeforeClass() {
     parent::setUpBeforeClass();
 
     // @todo Once block_rebuild() is refactored to auto-loadable code, remove

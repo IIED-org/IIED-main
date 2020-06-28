@@ -23,9 +23,9 @@ class MenuLinkTreeElementTest extends UnitTestCase {
     $link = MenuLinkMock::create(['id' => 'test']);
     $item = new MenuLinkTreeElement($link, FALSE, 3, FALSE, []);
     $this->assertSame($link, $item->link);
-    $this->assertFalse($item->hasChildren);
+    $this->assertSame(FALSE, $item->hasChildren);
     $this->assertSame(3, $item->depth);
-    $this->assertFalse($item->inActiveTrail);
+    $this->assertSame(FALSE, $item->inActiveTrail);
     $this->assertSame([], $item->subtree);
   }
 

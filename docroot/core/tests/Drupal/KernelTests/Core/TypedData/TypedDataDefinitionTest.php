@@ -26,7 +26,7 @@ class TypedDataDefinitionTest extends KernelTestBase {
    */
   protected $typedDataManager;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setup();
     $this->typedDataManager = $this->container->get('typed_data_manager');
   }

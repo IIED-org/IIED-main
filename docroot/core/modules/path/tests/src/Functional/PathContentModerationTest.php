@@ -21,7 +21,7 @@ class PathContentModerationTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'path',
     'content_moderation',
@@ -36,7 +36,7 @@ class PathContentModerationTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     ConfigurableLanguage::createFromLangcode('fr')->save();
     $this->rebuildContainer();

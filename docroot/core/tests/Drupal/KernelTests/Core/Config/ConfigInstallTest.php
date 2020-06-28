@@ -19,12 +19,12 @@ class ConfigInstallTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['system'];
+  public static $modules = ['system'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Ensure the global variable being asserted by this test does not exist;
@@ -41,9 +41,9 @@ class ConfigInstallTest extends KernelTestBase {
 
     // Verify that default module config does not exist before installation yet.
     $config = $this->config($default_config);
-    $this->assertTrue($config->isNew());
+    $this->assertIdentical($config->isNew(), TRUE);
     $config = $this->config($default_configuration_entity);
-    $this->assertTrue($config->isNew());
+    $this->assertIdentical($config->isNew(), TRUE);
 
     // Ensure that schema provided by modules that are not installed is not
     // available.
@@ -56,9 +56,9 @@ class ConfigInstallTest extends KernelTestBase {
     \Drupal::configFactory()->reset($default_config);
     \Drupal::configFactory()->reset($default_configuration_entity);
     $config = $this->config($default_config);
-    $this->assertFalse($config->isNew());
+    $this->assertIdentical($config->isNew(), FALSE);
     $config = $this->config($default_configuration_entity);
-    $this->assertFalse($config->isNew());
+    $this->assertIdentical($config->isNew(), FALSE);
 
     // Verify that config_test API hooks were invoked for the dynamic default
     // configuration entity.

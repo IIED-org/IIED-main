@@ -18,6 +18,7 @@ use org\bovigo\vfs\vfsStreamWrapper;
  * Defines a class for testing \Drupal\migrate_drupal\MigrationState.
  *
  * @group migrate_drupal
+ * @group legacy
  *
  * @coversDefaultClass \Drupal\migrate_drupal\MigrationState
  */
@@ -257,12 +258,11 @@ PROFILE
           'search' => '',
           // Declared finished by one module but not finished by another.
           'user' => 'user',
-          // Enabled and not declared.
-          'rdf' => 'rdf',
-          'link' => 'link',
         ],
         MigrationState::FINISHED => [
+          'link' => 'link',
           'node' => 'node',
+          'rdf' => 'rdf',
         ],
       ],
       'expected_6' => [
@@ -279,11 +279,12 @@ PROFILE
           // No discovered or declared state.
           'search' => '',
           'color' => '',
-          'link' => 'link',
         ],
         MigrationState::FINISHED => [
           'node' => 'node',
           'content' => 'node',
+          // Update path not needed.
+          'link' => 'link',
         ],
       ],
     ];

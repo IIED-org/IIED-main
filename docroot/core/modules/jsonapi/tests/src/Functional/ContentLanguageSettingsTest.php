@@ -18,7 +18,7 @@ class ContentLanguageSettingsTest extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['language', 'node'];
+  public static $modules = ['language', 'node'];
 
   /**
    * {@inheritdoc}

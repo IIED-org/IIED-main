@@ -20,9 +20,9 @@ class DirectoryTest extends FileTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system'];
+  public static $modules = ['system'];
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // These additional tables are necessary due to the call to system_cron().
@@ -33,7 +33,7 @@ class DirectoryTest extends FileTestBase {
    * Test local directory handling functions.
    */
   public function testFileCheckLocalDirectoryHandling() {
-    $site_path = $this->container->getParameter('site.path');
+    $site_path = $this->container->get('site.path');
     $directory = $site_path . '/files';
 
     // Check a new recursively created local directory for correct file system

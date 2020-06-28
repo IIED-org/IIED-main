@@ -25,7 +25,7 @@ class LanguageNegotiationContentEntityTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'language',
     'language_test',
     'entity_test',
@@ -47,7 +47,7 @@ class LanguageNegotiationContentEntityTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     ConfigurableLanguage::create(['id' => 'es'])->save();

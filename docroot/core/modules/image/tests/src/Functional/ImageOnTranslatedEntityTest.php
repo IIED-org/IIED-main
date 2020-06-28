@@ -20,7 +20,7 @@ class ImageOnTranslatedEntityTest extends ImageFieldTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['language', 'content_translation', 'field_ui'];
+  public static $modules = ['language', 'content_translation', 'field_ui'];
 
   /**
    * {@inheritdoc}
@@ -37,7 +37,7 @@ class ImageOnTranslatedEntityTest extends ImageFieldTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // This test expects unused managed files to be marked as a temporary file.

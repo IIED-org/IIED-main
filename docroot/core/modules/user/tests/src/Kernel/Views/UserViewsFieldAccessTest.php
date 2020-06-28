@@ -16,12 +16,12 @@ class UserViewsFieldAccessTest extends FieldFieldAccessTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['user', 'entity_test', 'language'];
+  public static $modules = ['user', 'entity_test', 'language'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     $this->installEntitySchema('user');

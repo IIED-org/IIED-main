@@ -12,7 +12,7 @@ use Drupal\Tests\migrate_drupal\Kernel\d7\MigrateDrupal7TestBase;
 class MigrateForumSettingsTest extends MigrateDrupal7TestBase {
 
   // Don't alphabetize these. They're in dependency order.
-  protected static $modules = [
+  public static $modules = [
     'comment',
     'field',
     'filter',
@@ -25,7 +25,7 @@ class MigrateForumSettingsTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->executeMigration('d7_taxonomy_vocabulary');
     $this->executeMigration('d7_forum_settings');

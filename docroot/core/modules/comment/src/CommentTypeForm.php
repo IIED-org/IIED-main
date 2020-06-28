@@ -2,6 +2,7 @@
 
 namespace Drupal\comment;
 
+use Drupal\Core\DependencyInjection\DeprecatedServicePropertyTrait;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -16,6 +17,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @internal
  */
 class CommentTypeForm extends EntityForm {
+  use DeprecatedServicePropertyTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $deprecatedProperties = [
+    'entityManager' => 'entity.manager',
+  ];
 
   /**
    * Entity type manager service.
@@ -52,15 +61,15 @@ class CommentTypeForm extends EntityForm {
   /**
    * Constructs a CommentTypeFormController
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
    *   The entity type manager service.
    * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
    * @param \Drupal\comment\CommentManagerInterface $comment_manager
    *   The comment manager.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, LoggerInterface $logger, CommentManagerInterface $comment_manager) {
-    $this->entityTypeManager = $entity_type_manager;
+  public function __construct(EntityTypeManagerInterface $entity_manager, LoggerInterface $logger, CommentManagerInterface $comment_manager) {
+    $this->entityTypeManager = $entity_manager;
     $this->logger = $logger;
     $this->commentManager = $comment_manager;
   }

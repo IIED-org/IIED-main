@@ -54,9 +54,9 @@ class ContentTranslationSyncUnitTest extends KernelTestBase {
    */
   protected $unchangedFieldValues;
 
-  protected static $modules = ['language', 'content_translation'];
+  public static $modules = ['language', 'content_translation'];
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->synchronizer = new FieldTranslationSynchronizer($this->container->get('entity_type.manager'), $this->container->get('plugin.manager.field.field_type'));

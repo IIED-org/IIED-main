@@ -26,7 +26,7 @@ class EntityViewBuilderTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installConfig(['user', 'entity_test']);
 

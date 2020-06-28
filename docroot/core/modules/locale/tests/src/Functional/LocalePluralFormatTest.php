@@ -26,7 +26,7 @@ class LocalePluralFormatTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['locale'];
+  public static $modules = ['locale'];
 
   /**
    * {@inheritdoc}
@@ -36,7 +36,7 @@ class LocalePluralFormatTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser(['administer languages', 'translate interface', 'access administration pages']);

@@ -14,7 +14,7 @@ class ManageFieldsTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'field_ui',
     'field_ui_test',
     'node',
@@ -29,7 +29,7 @@ class ManageFieldsTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $account = $this->drupalCreateUser(['administer node fields']);
     $this->drupalLogin($account);

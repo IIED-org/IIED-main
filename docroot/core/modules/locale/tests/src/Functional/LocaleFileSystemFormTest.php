@@ -16,7 +16,7 @@ class LocaleFileSystemFormTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system'];
+  public static $modules = ['system'];
 
   /**
    * {@inheritdoc}
@@ -26,7 +26,7 @@ class LocaleFileSystemFormTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $account = $this->drupalCreateUser(['administer site configuration']);
     $this->drupalLogin($account);

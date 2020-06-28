@@ -19,7 +19,7 @@ class FieldDiscoveryTest extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'menu_ui',
     'comment',
     'datetime',
@@ -63,7 +63,7 @@ class FieldDiscoveryTest extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     parent::setUp();
     $this->installConfig(['node']);
     $this->executeMigration('d6_node_type');

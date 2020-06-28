@@ -17,12 +17,12 @@ class EntityExistsTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['migrate', 'system', 'user'];
+  public static $modules = ['migrate', 'system', 'user'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installSchema('system', ['sequences']);
     $this->installEntitySchema('user');

@@ -14,7 +14,8 @@ class MigrateFieldInstanceOptionTranslationTest extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules =
+    [
       'config_translation',
       'language',
       'locale',
@@ -24,7 +25,7 @@ class MigrateFieldInstanceOptionTranslationTest extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installConfig(['node']);
     $this->executeMigrations([

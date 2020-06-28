@@ -1,26 +1,15 @@
 <?php
 
-namespace Drupal\Tests\Listeners;
-
-use PHPUnit\Framework\TestResult;
-use PHPUnit\TextUI\ResultPrinter;
-
 /**
+ * @file
  * Defines a class for providing html output results for functional tests.
  *
- * @internal
+ * In order to manage different method signatures between PHPUnit versions, we
+ * dynamically load a class dependent on the PHPUnit runner version.
  */
-class HtmlOutputPrinter extends ResultPrinter {
 
-  use HtmlOutputPrinterTrait;
+namespace Drupal\Tests\Listeners;
 
-  /**
-   * {@inheritdoc}
-   */
-  public function printResult(TestResult $result): void {
-    parent::printResult($result);
+use Drupal\TestTools\PhpUnitCompatibility\RunnerVersion;
 
-    $this->printHtmlOutput();
-  }
-
-}
+class_alias("Drupal\TestTools\PhpUnitCompatibility\PhpUnit" . RunnerVersion::getMajor() . "\HtmlOutputPrinter", HtmlOutputPrinter::class);

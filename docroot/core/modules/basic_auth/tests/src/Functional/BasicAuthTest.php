@@ -23,7 +23,7 @@ class BasicAuthTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'basic_auth',
     'router_test',
     'locale',

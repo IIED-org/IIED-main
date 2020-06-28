@@ -23,7 +23,7 @@ class FieldUIDeleteTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'field_ui',
     'field_test',
@@ -46,7 +46,7 @@ class FieldUIDeleteTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalPlaceBlock('system_breadcrumb_block');

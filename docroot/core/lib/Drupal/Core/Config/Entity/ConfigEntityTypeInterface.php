@@ -65,12 +65,16 @@ interface ConfigEntityTypeInterface extends EntityTypeInterface {
   /**
    * Gets the config entity properties to export if declared on the annotation.
    *
+   * Falls back to determining the properties using configuration schema, if the
+   * config entity properties are not declared.
+   *
    * @param string $id
-   *   The ID of the configuration entity.
+   *   The ID of the configuration entity. Used when checking schema instead of
+   *   the annotation.
    *
    * @return array|null
    *   The properties to export or NULL if they can not be determine from the
-   *   config entity type annotation.
+   *   config entity type annotation or the schema.
    */
   public function getPropertiesToExport($id = NULL);
 

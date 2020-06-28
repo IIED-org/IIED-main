@@ -21,7 +21,7 @@ class TempStoreDatabaseTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system'];
+  public static $modules = ['system'];
 
   /**
    * A key/value store factory.
@@ -44,7 +44,7 @@ class TempStoreDatabaseTest extends KernelTestBase {
    */
   protected $objects = [];
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Install system tables to test the key/value storage without installing a

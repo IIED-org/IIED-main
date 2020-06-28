@@ -24,7 +24,7 @@ class SerializerTest extends JsonapiKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'serialization',
     'system',
     'node',
@@ -59,7 +59,7 @@ class SerializerTest extends JsonapiKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     // Add the entity schemas.
     $this->installEntitySchema('node');

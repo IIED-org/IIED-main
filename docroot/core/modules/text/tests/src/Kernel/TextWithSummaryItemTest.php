@@ -21,7 +21,7 @@ class TextWithSummaryItemTest extends FieldKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['filter'];
+  public static $modules = ['filter'];
 
   /**
    * Field storage entity.
@@ -37,7 +37,7 @@ class TextWithSummaryItemTest extends FieldKernelTestBase {
    */
   protected $field;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installEntitySchema('entity_test_rev');

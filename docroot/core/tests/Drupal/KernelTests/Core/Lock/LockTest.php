@@ -19,7 +19,7 @@ class LockTest extends KernelTestBase {
    */
   protected $lock;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->lock = new DatabaseLockBackend($this->container->get('database'));
   }

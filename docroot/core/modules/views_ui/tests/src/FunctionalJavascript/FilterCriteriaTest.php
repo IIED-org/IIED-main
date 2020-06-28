@@ -14,7 +14,7 @@ class FilterCriteriaTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['node', 'views', 'views_ui'];
+  public static $modules = ['node', 'views', 'views_ui'];
 
   /**
    * {@inheritdoc}
@@ -24,7 +24,7 @@ class FilterCriteriaTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     parent::setUp();
 
     $admin_user = $this->drupalCreateUser([

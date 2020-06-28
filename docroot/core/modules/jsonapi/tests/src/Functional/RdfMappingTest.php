@@ -16,7 +16,7 @@ class RdfMappingTest extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['node', 'rdf'];
+  public static $modules = ['node', 'rdf'];
 
   /**
    * {@inheritdoc}

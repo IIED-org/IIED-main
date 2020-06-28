@@ -71,7 +71,7 @@ class RegistryTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->cache = $this->createMock('Drupal\Core\Cache\CacheBackendInterface');
@@ -87,7 +87,7 @@ class RegistryTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function tearDown(): void {
+  protected function tearDown() {
     parent::tearDown();
     static::$functions = [];
   }

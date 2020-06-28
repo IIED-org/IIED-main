@@ -3,6 +3,7 @@
 namespace Drupal\Core\Entity\Plugin\Derivative;
 
 use Drupal\Component\Plugin\Derivative\DeriverBase;
+use Drupal\Core\DependencyInjection\DeprecatedServicePropertyTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -17,6 +18,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @see plugin_api
  */
 class DefaultSelectionDeriver extends DeriverBase implements ContainerDeriverInterface {
+  use DeprecatedServicePropertyTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $deprecatedProperties = ['entityManager' => 'entity.manager'];
 
   /**
    * The entity type manager.

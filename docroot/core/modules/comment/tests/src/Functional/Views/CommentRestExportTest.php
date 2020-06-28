@@ -27,7 +27,7 @@ class CommentRestExportTest extends CommentTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'comment',
     'comment_test_views',
@@ -35,7 +35,7 @@ class CommentRestExportTest extends CommentTestBase {
     'hal',
   ];
 
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
     // Add another anonymous comment.
     $comment = [

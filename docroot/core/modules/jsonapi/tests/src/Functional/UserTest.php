@@ -22,7 +22,7 @@ class UserTest extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['user', 'jsonapi_test_user'];
+  public static $modules = ['user', 'jsonapi_test_user'];
 
   /**
    * {@inheritdoc}

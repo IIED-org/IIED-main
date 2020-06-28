@@ -285,7 +285,7 @@ class KernelTestBaseTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function tearDown(): void {
+  protected function tearDown() {
     parent::tearDown();
 
     // Check that all tables of the test instance have been deleted. At this

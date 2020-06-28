@@ -22,7 +22,7 @@ use Drupal\Tests\BrowserTestBase;
  */
 class UrlTest extends BrowserTestBase {
 
-  protected static $modules = ['common_test', 'url_alter_test'];
+  public static $modules = ['common_test', 'url_alter_test'];
 
   /**
    * {@inheritdoc}

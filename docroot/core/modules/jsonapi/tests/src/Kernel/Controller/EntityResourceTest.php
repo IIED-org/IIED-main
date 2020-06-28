@@ -38,7 +38,7 @@ class EntityResourceTest extends JsonapiKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'field',
     'jsonapi',
@@ -92,7 +92,7 @@ class EntityResourceTest extends JsonapiKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     // Add the entity schemas.
     $this->installEntitySchema('node');

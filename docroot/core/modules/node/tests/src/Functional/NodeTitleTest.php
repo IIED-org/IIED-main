@@ -19,7 +19,7 @@ class NodeTitleTest extends NodeTestBase {
    *
    * @var array
    */
-  protected static $modules = ['comment', 'views', 'block'];
+  public static $modules = ['comment', 'views', 'block'];
 
   /**
    * {@inheritdoc}
@@ -36,7 +36,7 @@ class NodeTitleTest extends NodeTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->drupalPlaceBlock('system_breadcrumb_block');
     $this->drupalPlaceBlock('page_title_block');

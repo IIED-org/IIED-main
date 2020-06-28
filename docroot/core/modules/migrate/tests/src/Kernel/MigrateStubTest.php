@@ -16,7 +16,7 @@ class MigrateStubTest extends MigrateTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'system',
     'node',
     'field',
@@ -49,7 +49,7 @@ class MigrateStubTest extends MigrateTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->setTestLogger();
     $this->migrateStub = $this->container->get('migrate.stub');

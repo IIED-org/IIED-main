@@ -19,7 +19,7 @@ class EntityTypeWithoutLanguageFormTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'language',
     'language_test',
   ];
@@ -32,7 +32,7 @@ class EntityTypeWithoutLanguageFormTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create and log in administrative user.

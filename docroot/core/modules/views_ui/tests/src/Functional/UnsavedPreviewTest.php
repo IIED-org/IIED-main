@@ -31,12 +31,12 @@ class UnsavedPreviewTest extends UITestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['node', 'views_ui'];
+  public static $modules = ['node', 'views_ui'];
 
   /**
    * Sets up a Drupal site for running functional and integration tests.
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp(FALSE);
 
     $this->adminUser = $this->drupalCreateUser(['administer views']);

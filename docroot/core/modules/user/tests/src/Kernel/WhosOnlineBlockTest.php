@@ -16,7 +16,7 @@ class WhosOnlineBlockTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['system', 'user', 'block', 'views'];
+  public static $modules = ['system', 'user', 'block', 'views'];
 
   /**
    * The block being tested.
@@ -42,7 +42,7 @@ class WhosOnlineBlockTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installConfig(['system', 'block', 'views', 'user']);
     $this->installSchema('system', ['sequences']);

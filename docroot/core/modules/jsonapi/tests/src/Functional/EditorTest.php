@@ -18,7 +18,7 @@ class EditorTest extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['filter', 'editor', 'ckeditor'];
+  public static $modules = ['filter', 'editor', 'ckeditor'];
 
   /**
    * {@inheritdoc}

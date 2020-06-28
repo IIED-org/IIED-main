@@ -24,7 +24,7 @@ class ProxyServicesPassTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->proxyServicesPass = new ProxyServicesPass();

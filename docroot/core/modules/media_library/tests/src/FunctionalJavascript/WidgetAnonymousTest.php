@@ -15,7 +15,7 @@ class WidgetAnonymousTest extends MediaLibraryTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create a few example media items for use in selection.

@@ -17,7 +17,7 @@ class CsrfRequestHeaderTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'csrf_test'];
+  public static $modules = ['system', 'csrf_test'];
 
   /**
    * {@inheritdoc}

@@ -30,7 +30,7 @@ class MigrateEntityContentValidationTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installConfig(['system', 'user']);

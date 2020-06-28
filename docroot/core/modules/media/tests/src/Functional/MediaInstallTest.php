@@ -14,7 +14,7 @@ class MediaInstallTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['media'];
+  public static $modules = ['media'];
 
   /**
    * {@inheritdoc}
@@ -24,7 +24,7 @@ class MediaInstallTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->drupalLogin($this->drupalCreateUser(['administer modules']));
   }

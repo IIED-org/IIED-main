@@ -28,7 +28,7 @@ class SearchNodePunctuationTest extends BrowserTestBase {
    */
   public $testUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalCreateContentType(['type' => 'page', 'name' => 'Basic page']);

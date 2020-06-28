@@ -14,12 +14,12 @@ class MigrateDblogConfigsTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['dblog'];
+  public static $modules = ['dblog'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installConfig(static::$modules);
     $this->executeMigration('d7_dblog_settings');

@@ -20,7 +20,7 @@ class PhpStorageFactoryTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Empty the PHP storage settings, as KernelTestBase sets it by default.

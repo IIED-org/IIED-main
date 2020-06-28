@@ -26,12 +26,12 @@ class DatetimeElementFormTest extends KernelTestBase implements FormInterface {
    *
    * @var array
    */
-  protected static $modules = ['datetime', 'system'];
+  public static $modules = ['datetime', 'system'];
 
   /**
    * Sets up the test.
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
   }
 

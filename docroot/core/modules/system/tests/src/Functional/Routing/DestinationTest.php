@@ -20,7 +20,7 @@ class DestinationTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['system_test'];
+  public static $modules = ['system_test'];
 
   /**
    * {@inheritdoc}

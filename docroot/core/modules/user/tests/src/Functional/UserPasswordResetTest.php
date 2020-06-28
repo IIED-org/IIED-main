@@ -32,7 +32,7 @@ class UserPasswordResetTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['block'];
+  public static $modules = ['block'];
 
   /**
    * {@inheritdoc}
@@ -42,7 +42,7 @@ class UserPasswordResetTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Enable page caching.

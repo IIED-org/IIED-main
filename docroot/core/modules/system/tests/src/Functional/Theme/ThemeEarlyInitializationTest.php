@@ -17,7 +17,7 @@ class ThemeEarlyInitializationTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['theme_test'];
+  public static $modules = ['theme_test'];
 
   /**
    * {@inheritdoc}

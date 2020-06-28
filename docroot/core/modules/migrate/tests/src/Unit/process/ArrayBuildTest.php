@@ -14,7 +14,7 @@ class ArrayBuildTest extends MigrateProcessTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     $configuration = [
       'key' => 'foo',
       'value' => 'bar',

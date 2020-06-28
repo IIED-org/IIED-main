@@ -16,14 +16,14 @@ class BlockHtmlTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['block', 'block_test'];
+  public static $modules = ['block', 'block_test'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'classy';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalLogin($this->rootUser);

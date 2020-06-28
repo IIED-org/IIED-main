@@ -16,7 +16,7 @@ class NodeHelpTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['block', 'node', 'help'];
+  public static $modules = ['block', 'node', 'help'];
 
   /**
    * {@inheritdoc}
@@ -40,7 +40,7 @@ class NodeHelpTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create user.

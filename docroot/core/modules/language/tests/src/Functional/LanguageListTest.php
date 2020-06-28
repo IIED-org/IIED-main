@@ -20,7 +20,7 @@ class LanguageListTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['language'];
+  public static $modules = ['language'];
 
   /**
    * {@inheritdoc}

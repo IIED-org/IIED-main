@@ -21,7 +21,7 @@ class FilterSecurityTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'filter_test'];
+  public static $modules = ['node', 'filter_test'];
 
   /**
    * {@inheritdoc}
@@ -35,7 +35,7 @@ class FilterSecurityTest extends BrowserTestBase {
    */
   protected $adminUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create Basic page node type.

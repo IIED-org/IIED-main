@@ -25,7 +25,7 @@ class MysqlDateSqlTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     parent::setUp();
     $this->database = $this->prophesize(Connection::class)->reveal();
   }

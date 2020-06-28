@@ -296,13 +296,40 @@
          * @param {object} data
          *   Data object containing popper and target data.
          */
-        function refinePopper({ state }) {
+        function refinePopper(data) {
           // Determine if the pointer should be on the top or bottom.
-          const isBelow = state.placement.split('-')[0] === 'bottom';
+          const isBelow = data.offsets.popper.top > data.offsets.reference.top;
           const classListMethod = isBelow ? 'add' : 'remove';
-          state.elements.popper.classList[classListMethod](
+          data.instance.popper.classList[classListMethod](
             'quickedit-toolbar-pointer-top',
           );
+          // Don't position the toolbar past the first or last editable field if
+          // the entity is the target.
+          if (that.$entity[0] === data.instance.reference) {
+            // Get the first or last field according to whether the toolbar is
+            // above or below the entity.
+            const $field = that.$entity
+              .find('.quickedit-editable')
+              .eq(isBelow ? -1 : 0);
+            if ($field.length > 0) {
+              data.offsets.popper.top = isBelow
+                ? $field.offset().top + $field.outerHeight(true)
+                : $field.offset().top -
+                  $(data.instance.reference).outerHeight(true);
+            }
+          }
+          // Don't let the toolbar go outside the fence.
+          const fenceTop = that.$fence.offset().top;
+          const fenceHeight = that.$fence.height();
+          const toolbarHeight = $(data.instance.popper).outerHeight(true);
+          if (data.offsets.popper.top < fenceTop) {
+            data.offsets.popper.top = fenceTop;
+          } else if (
+            data.offsets.popper.top + toolbarHeight >
+            fenceTop + fenceHeight
+          ) {
+            data.offsets.popper.top = fenceTop + fenceHeight - toolbarHeight;
+          }
         }
         /**
          * Calls the Popper() method on the $el of this view.
@@ -314,48 +341,29 @@
           const popperedge = edge === 'left' ? 'start' : 'end';
           if (referenceElement !== undefined) {
             if (!popperElement.classList.contains('js-popper-processed')) {
-              that.popper = Popper.createPopper(
-                referenceElement,
-                popperElement,
-                {
-                  placement: `top-${popperedge}`,
-                  modifiers: [
-                    {
-                      name: 'flip',
-                      options: {
-                        boundary: boundariesElement,
-                      },
-                    },
-                    {
-                      name: 'preventOverflow',
-                      options: {
-                        boundary: boundariesElement,
-                        tether: false,
-                        altAxis: true,
-                        padding: { top: 5, bottom: 5 },
-                      },
-                    },
-                    {
-                      name: 'computeStyles',
-                      options: {
-                        adaptive: false,
-                      },
-                    },
-                    {
-                      name: 'refinePopper',
-                      phase: 'write',
-                      enabled: true,
-                      fn: refinePopper,
-                    },
-                  ],
+              that.popper = new Popper(referenceElement, popperElement, {
+                placement: `top-${popperedge}`,
+                modifiers: {
+                  flip: {
+                    behavior: ['top', 'bottom'],
+                  },
+                  computeStyle: {
+                    gpuAcceleration: false,
+                  },
+                  preventOverflow: {
+                    boundariesElement,
+                  },
                 },
-              );
+                onCreate: refinePopper,
+                onUpdate: refinePopper,
+              });
               popperElement.classList.add('js-popper-processed');
             } else {
-              that.popper.state.elements.reference = referenceElement[0]
+              that.popper.options.placement = `top-${popperedge}`;
+              that.popper.reference = referenceElement[0]
                 ? referenceElement[0]
                 : referenceElement;
-              that.popper.forceUpdate();
+              that.popper.update();
             }
           }
 

@@ -24,7 +24,7 @@ class FilterHtmlImageSecureTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['filter', 'node', 'comment'];
+  public static $modules = ['filter', 'node', 'comment'];
 
   /**
    * {@inheritdoc}
@@ -38,7 +38,7 @@ class FilterHtmlImageSecureTest extends BrowserTestBase {
    */
   protected $webUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Setup Filtered HTML text format.

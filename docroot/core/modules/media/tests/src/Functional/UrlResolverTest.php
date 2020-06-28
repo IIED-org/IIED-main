@@ -23,7 +23,7 @@ class UrlResolverTest extends MediaFunctionalTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->lockHttpClientToFixtures();
     $this->useFixtureProviders();

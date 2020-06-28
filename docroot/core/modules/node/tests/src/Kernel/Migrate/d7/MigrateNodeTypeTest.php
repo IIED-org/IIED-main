@@ -20,12 +20,12 @@ class MigrateNodeTypeTest extends MigrateDrupal7TestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'text', 'menu_ui'];
+  public static $modules = ['node', 'text', 'menu_ui'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->migrateContentTypes();
   }

@@ -19,12 +19,12 @@ class TestSettingSummariesContentType extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['node'];
+  public static $modules = ['node'];
 
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     parent::setUp();
 
     $admin_user = $this->drupalCreateUser(['administer content types']);

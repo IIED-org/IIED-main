@@ -29,7 +29,7 @@ class CommentTest extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['comment', 'entity_test'];
+  public static $modules = ['comment', 'entity_test'];
 
   /**
    * {@inheritdoc}

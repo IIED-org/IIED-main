@@ -16,14 +16,14 @@ class PathLanguageUiTest extends PathTestBase {
    *
    * @var array
    */
-  protected static $modules = ['path', 'locale', 'locale_test'];
+  public static $modules = ['path', 'locale', 'locale_test'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create and log in user.

@@ -14,7 +14,7 @@ class LayoutBuilderThemeSuggestionsTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'layout_builder',
     'node',
     'layout_builder_theme_suggestions_test',
@@ -28,7 +28,7 @@ class LayoutBuilderThemeSuggestionsTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->createContentType([

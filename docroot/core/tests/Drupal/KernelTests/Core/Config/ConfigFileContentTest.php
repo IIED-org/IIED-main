@@ -63,7 +63,7 @@ class ConfigFileContentTest extends KernelTestBase {
 
     // Verify nothing was saved.
     $data = $storage->read($name);
-    $this->assertFalse($data);
+    $this->assertIdentical($data, FALSE);
 
     // Add a top level value.
     $config = $this->config($name);
@@ -126,7 +126,7 @@ class ConfigFileContentTest extends KernelTestBase {
     $this->assertIdentical($config->get('null'), NULL);
 
     // Read false that had been nested in an array value.
-    $this->assertFalse($config->get($casting_array_false_value_key), "Nested boolean FALSE value returned FALSE.");
+    $this->assertSame(FALSE, $config->get($casting_array_false_value_key), "Nested boolean FALSE value returned FALSE.");
 
     // Unset a top level value.
     $config->clear($key);
@@ -182,7 +182,7 @@ class ConfigFileContentTest extends KernelTestBase {
 
     // Verify the database entry no longer exists.
     $data = $storage->read($name);
-    $this->assertFalse($data);
+    $this->assertIdentical($data, FALSE);
   }
 
   /**

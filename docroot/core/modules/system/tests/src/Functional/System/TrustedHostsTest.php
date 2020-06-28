@@ -19,7 +19,7 @@ class TrustedHostsTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $admin_user = $this->drupalCreateUser([

@@ -21,7 +21,7 @@ class QuickEditIntegrationTest extends QuickEditJavascriptTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'editor',
     'ckeditor',
@@ -46,7 +46,7 @@ class QuickEditIntegrationTest extends QuickEditJavascriptTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     // Create text format, associate CKEditor.
     FilterFormat::create([

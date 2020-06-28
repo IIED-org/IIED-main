@@ -29,7 +29,7 @@ class NodeAccessTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'content_moderation',
     'filter',
     'node',
@@ -42,7 +42,7 @@ class NodeAccessTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installEntitySchema('content_moderation_state');
@@ -82,6 +82,26 @@ class NodeAccessTest extends KernelTestBase {
     $user = $this->createUser();
     \Drupal::currentUser()->setAccount($user);
     $this->assertEquals($node->getRevisionId(), $this->moderationInformation->getDefaultRevisionId('node', $node->id()));
+  }
+
+  /**
+   * @covers \Drupal\content_moderation\ModerationInformation::getLatestRevisionId
+   * @group legacy
+   * @expectedDeprecation Drupal\content_moderation\ModerationInformation::getLatestRevisionId is deprecated in drupal:8.8.0 and is removed from drupal:9.0.0. Use RevisionableStorageInterface::getLatestRevisionId() instead. See https://www.drupal.org/node/3087295
+   */
+  public function testGetLatestRevisionId() {
+    // Create an admin user.
+    $user = $this->createUser([], NULL, TRUE);
+    \Drupal::currentUser()->setAccount($user);
+
+    // Create a node.
+    $node = $this->createNode(['type' => 'page']);
+    $this->assertEquals($node->getRevisionId(), $this->moderationInformation->getLatestRevisionId('node', $node->id()));
+
+    // Create a non-admin user.
+    $user = $this->createUser();
+    \Drupal::currentUser()->setAccount($user);
+    $this->assertEquals($node->getRevisionId(), $this->moderationInformation->getLatestRevisionId('node', $node->id()));
   }
 
 }

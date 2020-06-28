@@ -15,7 +15,7 @@ class StyleSummaryTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['entity_test', 'views_ui'];
+  public static $modules = ['entity_test', 'views_ui'];
 
   /**
    * {@inheritdoc}
@@ -35,7 +35,7 @@ class StyleSummaryTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     // Create 5 entities per bundle, to allow a summary overview per bundle.

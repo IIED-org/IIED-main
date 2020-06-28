@@ -17,9 +17,9 @@ class UserRoleDeleteTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'user', 'field'];
+  public static $modules = ['system', 'user', 'field'];
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('user');
   }

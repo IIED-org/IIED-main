@@ -58,7 +58,7 @@ class ViewExecutableFactoryTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->user = $this->createMock('Drupal\Core\Session\AccountInterface');

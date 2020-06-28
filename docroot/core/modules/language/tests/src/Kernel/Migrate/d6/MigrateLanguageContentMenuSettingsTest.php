@@ -17,7 +17,7 @@ class MigrateLanguageContentMenuSettingsTest extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'language',
     'content_translation',
     'menu_link_content',
@@ -26,7 +26,7 @@ class MigrateLanguageContentMenuSettingsTest extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     // Create some languages.
     ConfigurableLanguage::createFromLangcode('en')->save();

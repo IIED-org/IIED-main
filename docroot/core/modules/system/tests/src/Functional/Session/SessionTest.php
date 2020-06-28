@@ -18,7 +18,7 @@ class SessionTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['session_test'];
+  public static $modules = ['session_test'];
 
   /**
    * {@inheritdoc}

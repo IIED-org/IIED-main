@@ -21,12 +21,12 @@ class TypedConfigTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['config_test'];
+  public static $modules = ['config_test'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installConfig('config_test');

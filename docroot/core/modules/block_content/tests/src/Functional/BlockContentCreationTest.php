@@ -21,7 +21,7 @@ class BlockContentCreationTest extends BlockContentTestBase {
    *
    * @var array
    */
-  protected static $modules = ['block_content_test', 'dblog', 'field_ui'];
+  public static $modules = ['block_content_test', 'dblog', 'field_ui'];
 
   /**
    * {@inheritdoc}
@@ -41,7 +41,7 @@ class BlockContentCreationTest extends BlockContentTestBase {
   /**
    * Sets the test up.
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->drupalLogin($this->adminUser);
   }

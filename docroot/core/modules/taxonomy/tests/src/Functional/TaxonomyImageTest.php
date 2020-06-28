@@ -32,14 +32,14 @@ class TaxonomyImageTest extends TaxonomyTestBase {
    *
    * @var array
    */
-  protected static $modules = ['image'];
+  public static $modules = ['image'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Remove access content permission from registered users.

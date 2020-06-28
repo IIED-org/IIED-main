@@ -31,14 +31,14 @@ class AdminTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['locale'];
+  public static $modules = ['locale'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     // testAdminPages() requires Locale module.
     parent::setUp();
 

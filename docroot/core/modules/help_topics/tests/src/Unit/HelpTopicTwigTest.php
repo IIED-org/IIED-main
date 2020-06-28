@@ -42,7 +42,7 @@ class HelpTopicTwigTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     $this->helpTopic = new HelpTopicTwig([],
       self::PLUGIN_INFORMATION['id'],
       self::PLUGIN_INFORMATION,
@@ -104,7 +104,7 @@ class HelpTopicTwigTest extends UnitTestCase {
 }
 
 /**
- * Defines a fake template class to mock \Twig\TemplateWrapper.
+ * Defines a fake template class to mock \Twig_TemplateWrapper.
  *
  * We cannot use getMockBuilder() for this, because the Twig TemplateWrapper
  * class is declared "final" and cannot be mocked.
@@ -129,7 +129,7 @@ class FakeTemplateWrapper {
   }
 
   /**
-   * Mocks the \Twig\TemplateWrapper render() method.
+   * Mocks the \Twig_TemplateWrapper render() method.
    *
    * @param array $context
    *   (optional) Render context.

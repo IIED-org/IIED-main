@@ -26,7 +26,7 @@ class BookRelationshipTest extends ViewTestBase {
    *
    * @var array
    */
-  protected static $modules = ['book_test_views', 'book', 'views'];
+  public static $modules = ['book_test_views', 'book', 'views'];
 
   /**
    * {@inheritdoc}
@@ -50,7 +50,7 @@ class BookRelationshipTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     // Create users.

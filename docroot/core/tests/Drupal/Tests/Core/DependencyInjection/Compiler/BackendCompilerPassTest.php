@@ -29,7 +29,7 @@ class BackendCompilerPassTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     $this->backendPass = new BackendCompilerPass();
   }
 
@@ -97,7 +97,6 @@ class BackendCompilerPassTest extends UnitTestCase {
    * bag so the setParameter() call effects the parent container as well.
    *
    * @param $service
-   *
    * @return \Symfony\Component\DependencyInjection\ContainerBuilder
    */
   protected function getSqliteContainer($service) {
@@ -116,7 +115,6 @@ class BackendCompilerPassTest extends UnitTestCase {
    * bag so the setParameter() call effects the parent container as well.
    *
    * @param $service
-   *
    * @return \Symfony\Component\DependencyInjection\ContainerBuilder
    */
   protected function getMysqlContainer($service) {

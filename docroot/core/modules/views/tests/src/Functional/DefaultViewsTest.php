@@ -30,7 +30,7 @@ class DefaultViewsTest extends ViewTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'views',
     'node',
     'search',
@@ -56,7 +56,7 @@ class DefaultViewsTest extends ViewTestBase {
     'glossary' => ['all'],
   ];
 
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     $this->drupalPlaceBlock('page_title_block');

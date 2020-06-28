@@ -2,6 +2,7 @@
 
 namespace Drupal\views\Plugin\views\row;
 
+use Drupal\Core\DependencyInjection\DeprecatedServicePropertyTrait;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -12,8 +13,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 abstract class RssPluginBase extends RowPluginBase {
 
+  use DeprecatedServicePropertyTrait;
+
   /**
-   * The entity type manager.
+   * {@inheritdoc}
+   */
+  protected $deprecatedProperties = ['entityManager' => 'entity.manager'];
+
+  /**
+   * The entity manager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
@@ -40,10 +48,14 @@ abstract class RssPluginBase extends RowPluginBase {
    * @param \Drupal\Core\Entity\EntityDisplayRepositoryInterface $entity_display_repository
    *   The entity display repository.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, EntityDisplayRepositoryInterface $entity_display_repository) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, EntityDisplayRepositoryInterface $entity_display_repository = NULL) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->entityTypeManager = $entity_type_manager;
+    if (!$entity_display_repository) {
+      @trigger_error('Calling RssPluginBase::__construct() with the $entity_repository argument is supported in drupal:8.7.0 and will be required before drupal:9.0.0. See https://www.drupal.org/node/2549139.', E_USER_DEPRECATED);
+      $entity_display_repository = \Drupal::service('entity_display.repository');
+    }
     $this->entityDisplayRepository = $entity_display_repository;
   }
 

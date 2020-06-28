@@ -36,7 +36,7 @@ class EntityFieldTest extends EntityKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['filter', 'text', 'node', 'user', 'field_test'];
+  public static $modules = ['filter', 'text', 'node', 'user', 'field_test'];
 
   /**
    * @var string
@@ -53,7 +53,7 @@ class EntityFieldTest extends EntityKernelTestBase {
    */
   protected $entityFieldText;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     foreach (entity_test_entity_types() as $entity_type_id) {

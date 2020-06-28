@@ -68,7 +68,7 @@ class LinkGeneratorTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->urlGenerator = $this->getMockBuilder('\Drupal\Core\Routing\UrlGenerator')

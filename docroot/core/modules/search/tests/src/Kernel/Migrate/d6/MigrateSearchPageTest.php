@@ -16,12 +16,12 @@ class MigrateSearchPageTest extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['search'];
+  public static $modules = ['search'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->executeMigration('search_page');
   }

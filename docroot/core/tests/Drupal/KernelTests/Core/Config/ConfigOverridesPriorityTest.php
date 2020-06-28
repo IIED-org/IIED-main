@@ -18,7 +18,7 @@ class ConfigOverridesPriorityTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'system',
     'config',
     'config_override_test',

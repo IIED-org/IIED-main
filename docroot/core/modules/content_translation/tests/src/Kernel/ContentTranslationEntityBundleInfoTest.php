@@ -18,7 +18,7 @@ class ContentTranslationEntityBundleInfoTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'system',
     'node',
     'user',
@@ -45,7 +45,7 @@ class ContentTranslationEntityBundleInfoTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->contentTranslationManager = $this->container->get('content_translation.manager');

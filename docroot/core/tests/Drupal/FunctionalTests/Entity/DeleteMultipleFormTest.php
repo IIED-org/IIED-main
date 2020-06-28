@@ -29,7 +29,7 @@ class DeleteMultipleFormTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['entity_test', 'user', 'language'];
+  public static $modules = ['entity_test', 'user', 'language'];
 
   /**
    * {@inheritdoc}
@@ -39,7 +39,7 @@ class DeleteMultipleFormTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     EntityTestBundle::create([

@@ -22,7 +22,7 @@ class RestExportJsonApiUnsupported extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['jsonapi', 'rest_test_views', 'views_ui'];
+  public static $modules = ['jsonapi', 'rest_test_views', 'views_ui'];
 
   /**
    * {@inheritdoc}
@@ -32,7 +32,7 @@ class RestExportJsonApiUnsupported extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
     ViewTestData::createTestViews(get_class($this), ['rest_test_views']);
 

@@ -16,12 +16,12 @@ class RedirectOnExceptionTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['system', 'test_page_test'];
+  public static $modules = ['system', 'test_page_test'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     \Drupal::service('router.builder')->rebuild();

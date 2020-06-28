@@ -24,7 +24,7 @@ class FieldDropButtonTest extends ViewTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node'];
+  public static $modules = ['node'];
 
   /**
    * {@inheritdoc}
@@ -34,7 +34,7 @@ class FieldDropButtonTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     $admin_user = $this->drupalCreateUser(['access content overview', 'administer nodes', 'bypass node access']);

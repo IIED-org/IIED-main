@@ -12,7 +12,7 @@ class TaxonomyTermArgumentDepthTest extends TaxonomyTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'taxonomy',
     'taxonomy_test_views',
     'views',
@@ -42,7 +42,7 @@ class TaxonomyTermArgumentDepthTest extends TaxonomyTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     // Create a term with markup in the label.

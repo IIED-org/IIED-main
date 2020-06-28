@@ -40,7 +40,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @code
  * source:
- *   plugin: d6_profile_field_translation
+ *   plugin: d6_i18n_profile_field
  *   constants:
  *     entity_type: user
  *     bundle: user

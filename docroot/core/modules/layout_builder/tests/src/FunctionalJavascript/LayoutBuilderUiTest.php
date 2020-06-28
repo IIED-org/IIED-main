@@ -22,7 +22,7 @@ class LayoutBuilderUiTest extends WebDriverTestBase {
    */
   const FIELD_UI_PREFIX = 'admin/structure/types/manage/bundle_with_section_field';
 
-  protected static $modules = [
+  public static $modules = [
     'layout_builder',
     'block',
     'node',
@@ -39,7 +39,7 @@ class LayoutBuilderUiTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->createContentType(['type' => 'bundle_with_section_field']);

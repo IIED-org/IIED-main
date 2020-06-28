@@ -70,7 +70,7 @@ class UrlTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $map = [];
@@ -233,7 +233,7 @@ class UrlTest extends UnitTestCase {
       ->with('invalid-path')
       ->willReturn(FALSE);
     $url = Url::fromUri('internal:/invalid-path');
-    $this->assertFalse($url->isRouted());
+    $this->assertSame(FALSE, $url->isRouted());
     $this->assertSame('base:invalid-path', $url->getUri());
   }
 

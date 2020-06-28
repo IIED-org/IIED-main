@@ -25,7 +25,7 @@ class UserRoleAdminTest extends BrowserTestBase {
    *
    * @var string[]
    */
-  protected static $modules = ['block'];
+  public static $modules = ['block'];
 
   /**
    * {@inheritdoc}
@@ -35,7 +35,7 @@ class UserRoleAdminTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->adminUser = $this->drupalCreateUser(['administer permissions', 'administer users']);
     $this->drupalPlaceBlock('local_tasks_block');

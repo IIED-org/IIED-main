@@ -22,7 +22,7 @@ class EditorUploadImageScaleTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['editor', 'editor_test'];
+  public static $modules = ['editor', 'editor_test'];
 
   /**
    * {@inheritdoc}
@@ -39,7 +39,7 @@ class EditorUploadImageScaleTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Add text format.

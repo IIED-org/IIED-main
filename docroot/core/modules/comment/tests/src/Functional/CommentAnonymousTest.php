@@ -17,7 +17,7 @@ class CommentAnonymousTest extends CommentTestBase {
    */
   protected $defaultTheme = 'classy';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Enable anonymous and authenticated user comments.

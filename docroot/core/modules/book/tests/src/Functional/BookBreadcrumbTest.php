@@ -16,7 +16,7 @@ class BookBreadcrumbTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['book', 'block', 'book_breadcrumb_test'];
+  public static $modules = ['book', 'block', 'book_breadcrumb_test'];
 
   /**
    * {@inheritdoc}
@@ -47,7 +47,7 @@ class BookBreadcrumbTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->drupalPlaceBlock('system_breadcrumb_block');
     $this->drupalPlaceBlock('page_title_block');

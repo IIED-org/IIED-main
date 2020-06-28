@@ -8,12 +8,10 @@
 use Drupal\demo_umami_content\InstallHelper;
 
 /**
- * Implements hook_module_preinstall().
+ * Implements hook_install().
  */
-function demo_umami_content_module_preinstall($module) {
-  if ($module === 'demo_umami_content' && !\Drupal::service('config.installer')->isSyncing()) {
-    // Run before importing config so blocks are created with the correct
-    // dependencies.
+function demo_umami_content_install($is_syncing) {
+  if (!$is_syncing) {
     \Drupal::classResolver(InstallHelper::class)->importContent();
   }
 }

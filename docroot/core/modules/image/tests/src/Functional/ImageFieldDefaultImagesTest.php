@@ -31,7 +31,7 @@ class ImageFieldDefaultImagesTest extends ImageFieldTestBase {
    *
    * @var array
    */
-  protected static $modules = ['field_ui'];
+  public static $modules = ['field_ui'];
 
   /**
    * {@inheritdoc}

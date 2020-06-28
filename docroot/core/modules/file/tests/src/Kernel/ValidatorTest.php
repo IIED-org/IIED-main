@@ -25,7 +25,7 @@ class ValidatorTest extends FileManagedUnitTestBase {
    */
   protected $nonImage;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->image = File::create();

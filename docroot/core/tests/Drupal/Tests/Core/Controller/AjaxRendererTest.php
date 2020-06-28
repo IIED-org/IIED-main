@@ -2,9 +2,11 @@
 
 namespace Drupal\Tests\Core\Controller;
 
+use Drupal\Core\Render\ElementInfoManagerInterface;
 use Drupal\Core\Render\MainContent\AjaxRenderer;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Tests\UnitTestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -30,7 +32,7 @@ class AjaxRendererTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     $element_info_manager = $this->createMock('Drupal\Core\Render\ElementInfoManagerInterface');
     $element_info_manager->expects($this->any())
       ->method('getInfo')
@@ -79,6 +81,21 @@ class AjaxRendererTest extends UnitTestCase {
 
     $this->assertEquals('insert', $commands[1]['command']);
     $this->assertEquals('status_messages', $commands[1]['data']);
+  }
+
+  /**
+   * @group legacy
+   * @expectedDeprecation The renderer service must be passed to Drupal\Core\Render\MainContent\AjaxRenderer::__construct and will be required before Drupal 9.0.0. See https://www.drupal.org/node/3009400
+   */
+  public function testConstructorRendererArgument() {
+    $element_info_manager = $this->createMock(ElementInfoManagerInterface::class);
+    $container = $this->createMock(ContainerInterface::class);
+    $container->expects($this->once())
+      ->method('get')
+      ->with('renderer')
+      ->willReturn(NULL);
+    \Drupal::setContainer($container);
+    new AjaxRenderer($element_info_manager);
   }
 
 }

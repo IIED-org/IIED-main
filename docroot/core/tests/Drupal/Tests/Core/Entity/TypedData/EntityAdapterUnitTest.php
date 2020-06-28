@@ -120,7 +120,7 @@ class EntityAdapterUnitTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     $this->id = 1;
     $values = [
       'id' => $this->id,

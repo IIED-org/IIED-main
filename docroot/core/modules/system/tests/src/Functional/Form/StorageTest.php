@@ -25,7 +25,7 @@ class StorageTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['form_test', 'dblog'];
+  public static $modules = ['form_test', 'dblog'];
 
   /**
    * {@inheritdoc}
@@ -35,7 +35,7 @@ class StorageTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalLogin($this->drupalCreateUser());

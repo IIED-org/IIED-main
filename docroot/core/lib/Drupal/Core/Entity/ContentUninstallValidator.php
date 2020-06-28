@@ -2,6 +2,7 @@
 
 namespace Drupal\Core\Entity;
 
+use Drupal\Core\DependencyInjection\DeprecatedServicePropertyTrait;
 use Drupal\Core\Extension\ModuleUninstallValidatorInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
@@ -12,6 +13,12 @@ use Drupal\Core\Url;
  */
 class ContentUninstallValidator implements ModuleUninstallValidatorInterface {
   use StringTranslationTrait;
+  use DeprecatedServicePropertyTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $deprecatedProperties = ['entityManager' => 'entity.manager'];
 
   /**
    * The entity type manager service.
@@ -29,7 +36,13 @@ class ContentUninstallValidator implements ModuleUninstallValidatorInterface {
    *   The string translation service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, TranslationInterface $string_translation) {
-    $this->entityTypeManager = $entity_type_manager;
+    if ($entity_type_manager instanceof EntityManagerInterface) {
+      @trigger_error('Passing the entity.manager service to ContentUninstallValidator::__construct() is deprecated in Drupal 8.7.0 and will be removed before Drupal 9.0.0. Pass the new dependencies instead. See https://www.drupal.org/node/2549139.', E_USER_DEPRECATED);
+      $this->entityTypeManager = \Drupal::entityTypeManager();
+    }
+    else {
+      $this->entityTypeManager = $entity_type_manager;
+    }
     $this->stringTranslation = $string_translation;
   }
 

@@ -46,7 +46,7 @@ class NodeTranslationUITest extends ContentTranslationUITestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'block',
     'language',
     'content_translation',
@@ -63,7 +63,7 @@ class NodeTranslationUITest extends ContentTranslationUITestBase {
    */
   protected $profile = 'standard';
 
-  protected function setUp(): void {
+  protected function setUp() {
     $this->entityTypeId = 'node';
     $this->bundle = 'article';
     parent::setUp();

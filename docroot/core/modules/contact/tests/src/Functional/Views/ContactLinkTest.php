@@ -27,7 +27,7 @@ class ContactLinkTest extends ViewTestBase {
    *
    * @var array
    */
-  protected static $modules = ['contact_test_views'];
+  public static $modules = ['contact_test_views'];
 
   /**
    * {@inheritdoc}
@@ -44,7 +44,7 @@ class ContactLinkTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     ViewTestData::createTestViews(get_class($this), ['contact_test_views']);

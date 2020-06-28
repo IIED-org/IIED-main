@@ -19,7 +19,7 @@ class ClaroLayoutBuilderTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'views',
     'layout_builder',
     'layout_builder_views_test',
@@ -33,7 +33,7 @@ class ClaroLayoutBuilderTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalPlaceBlock('local_tasks_block', ['region' => 'header']);

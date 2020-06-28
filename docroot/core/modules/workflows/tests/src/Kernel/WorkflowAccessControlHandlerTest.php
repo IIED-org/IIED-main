@@ -20,7 +20,7 @@ class WorkflowAccessControlHandlerTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'workflows',
     'workflow_type_test',
     'system',
@@ -51,7 +51,7 @@ class WorkflowAccessControlHandlerTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installEntitySchema('workflow');

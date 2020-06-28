@@ -16,7 +16,7 @@ class BlockAdminThemeTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['block', 'contextual'];
+  public static $modules = ['block', 'contextual'];
 
   /**
    * {@inheritdoc}

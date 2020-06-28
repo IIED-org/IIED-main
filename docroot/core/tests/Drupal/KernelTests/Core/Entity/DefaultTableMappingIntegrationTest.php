@@ -29,12 +29,12 @@ class DefaultTableMappingIntegrationTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['entity_test_extra'];
+  public static $modules = ['entity_test_extra'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Setup some fields for entity_test_extra to create.

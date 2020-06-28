@@ -71,7 +71,7 @@ class ContentModerationTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create an image media type and article node type.

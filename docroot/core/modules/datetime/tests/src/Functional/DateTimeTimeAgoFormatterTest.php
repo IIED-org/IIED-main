@@ -39,7 +39,7 @@ class DateTimeTimeAgoFormatterTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['datetime', 'entity_test', 'field_ui'];
+  public static $modules = ['datetime', 'entity_test', 'field_ui'];
 
   /**
    * {@inheritdoc}
@@ -49,7 +49,7 @@ class DateTimeTimeAgoFormatterTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $web_user = $this->drupalCreateUser([

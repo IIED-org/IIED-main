@@ -16,14 +16,14 @@ class NodeLoadMultipleTest extends NodeTestBase {
    *
    * @var array
    */
-  protected static $modules = ['views'];
+  public static $modules = ['views'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $web_user = $this->drupalCreateUser(['create article content', 'create page content']);
     $this->drupalLogin($web_user);

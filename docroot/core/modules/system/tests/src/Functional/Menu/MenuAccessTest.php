@@ -17,7 +17,7 @@ class MenuAccessTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['block', 'menu_test'];
+  public static $modules = ['block', 'menu_test'];
 
   /**
    * {@inheritdoc}
@@ -27,7 +27,7 @@ class MenuAccessTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalPlaceBlock('local_tasks_block');

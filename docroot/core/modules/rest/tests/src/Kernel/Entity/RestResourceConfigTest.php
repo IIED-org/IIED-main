@@ -16,7 +16,7 @@ class RestResourceConfigTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'rest',
     'entity_test',
     'serialization',

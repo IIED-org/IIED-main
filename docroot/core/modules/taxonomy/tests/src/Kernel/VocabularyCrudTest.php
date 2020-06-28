@@ -33,7 +33,7 @@ class VocabularyCrudTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installSchema('user', ['users_data']);
     $this->installEntitySchema('taxonomy_term');

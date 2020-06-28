@@ -15,7 +15,7 @@ class LanguageNegotiationTest extends MigrateProcessTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     $this->plugin = new LanguageNegotiation([], 'map', []);
     parent::setUp();
   }

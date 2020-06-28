@@ -19,7 +19,7 @@ class BooleanItemTest extends FieldKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create a boolean field and storage for validation.

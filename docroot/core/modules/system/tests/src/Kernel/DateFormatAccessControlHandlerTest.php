@@ -24,7 +24,7 @@ class DateFormatAccessControlHandlerTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'system',
     'user',
   ];
@@ -39,7 +39,7 @@ class DateFormatAccessControlHandlerTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('date_format');
     $this->installEntitySchema('user');

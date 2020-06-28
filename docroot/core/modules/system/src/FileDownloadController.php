@@ -28,7 +28,11 @@ class FileDownloadController extends ControllerBase {
    * @param \Drupal\Core\StreamWrapper\StreamWrapperManagerInterface $streamWrapperManager
    *   The stream wrapper manager.
    */
-  public function __construct(StreamWrapperManagerInterface $streamWrapperManager) {
+  public function __construct(StreamWrapperManagerInterface $streamWrapperManager = NULL) {
+    if (!$streamWrapperManager) {
+      @trigger_error('Calling FileDownloadController::__construct() without the $streamWrapperManager argument is deprecated in drupal:8.8.0. The $streamWrapperManager argument will be required in drupal:9.0.0. See https://www.drupal.org/node/3035273', E_USER_DEPRECATED);
+      $streamWrapperManager = \Drupal::service('stream_wrapper_manager');
+    }
     $this->streamWrapperManager = $streamWrapperManager;
   }
 

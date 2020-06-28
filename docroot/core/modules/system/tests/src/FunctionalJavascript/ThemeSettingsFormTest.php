@@ -18,7 +18,7 @@ class ThemeSettingsFormTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['file'];
+  public static $modules = ['file'];
 
   /**
    * {@inheritdoc}
@@ -28,7 +28,7 @@ class ThemeSettingsFormTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $admin = $this->drupalCreateUser(['administer themes']);

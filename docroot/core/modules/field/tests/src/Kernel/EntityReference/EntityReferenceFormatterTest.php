@@ -61,7 +61,7 @@ class EntityReferenceFormatterTest extends EntityKernelTestBase {
    */
   protected $unsavedReferencedEntity;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Use Classy theme for testing markup output.

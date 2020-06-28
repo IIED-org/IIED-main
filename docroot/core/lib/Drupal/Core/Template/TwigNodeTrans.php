@@ -2,18 +2,7 @@
 
 namespace Drupal\Core\Template;
 
-use Twig\Compiler;
-use Twig\Error\SyntaxError;
 use Twig\Node\CheckToStringNode;
-use Twig\Node\Expression\AbstractExpression;
-use Twig\Node\Expression\ConstantExpression;
-use Twig\Node\Expression\FilterExpression;
-use Twig\Node\Expression\FunctionExpression;
-use Twig\Node\Expression\GetAttrExpression;
-use Twig\Node\Expression\NameExpression;
-use Twig\Node\Expression\TempNameExpression;
-use Twig\Node\Node;
-use Twig\Node\PrintNode;
 
 /**
  * A class that defines the Twig 'trans' tag for Drupal.
@@ -25,12 +14,12 @@ use Twig\Node\PrintNode;
  * @see https://twig-extensions.readthedocs.io/en/latest/i18n.html
  * @see https://github.com/fabpot/Twig-extensions
  */
-class TwigNodeTrans extends Node {
+class TwigNodeTrans extends \Twig_Node {
 
   /**
    * {@inheritdoc}
    */
-  public function __construct(Node $body, Node $plural = NULL, AbstractExpression $count = NULL, AbstractExpression $options = NULL, $lineno, $tag = NULL) {
+  public function __construct(\Twig_Node $body, \Twig_Node $plural = NULL, \Twig_Node_Expression $count = NULL, \Twig_Node_Expression $options = NULL, $lineno, $tag = NULL) {
     $nodes['body'] = $body;
     if ($count !== NULL) {
       $nodes['count'] = $count;
@@ -47,7 +36,7 @@ class TwigNodeTrans extends Node {
   /**
    * {@inheritdoc}
    */
-  public function compile(Compiler $compiler) {
+  public function compile(\Twig_Compiler $compiler) {
     $compiler->addDebugInfo($this);
 
     list($singular, $tokens) = $this->compileString($this->getNode('body'));
@@ -99,7 +88,7 @@ class TwigNodeTrans extends Node {
   /**
    * Extracts the text and tokens for the "trans" tag.
    *
-   * @param \Twig\Node\Node $body
+   * @param \Twig_Node $body
    *   The node to compile.
    *
    * @return array
@@ -107,11 +96,10 @@ class TwigNodeTrans extends Node {
    *   - string $text
    *       The extracted text.
    *   - array $tokens
-   *       The extracted tokens as new \Twig\Node\Expression\TempNameExpression
-   *       instances.
+   *       The extracted tokens as new \Twig_Node_Expression_Name instances.
    */
-  protected function compileString(Node $body) {
-    if ($body instanceof NameExpression || $body instanceof ConstantExpression || $body instanceof TempNameExpression) {
+  protected function compileString(\Twig_Node $body) {
+    if ($body instanceof \Twig_Node_Expression_Name || $body instanceof \Twig_Node_Expression_Constant || $body instanceof \Twig_Node_Expression_TempName) {
       return [$body, []];
     }
 
@@ -120,9 +108,13 @@ class TwigNodeTrans extends Node {
       $text = '';
 
       foreach ($body as $node) {
-        if ($node instanceof PrintNode) {
+        if (get_class($node) === 'Twig_Node' && $node->getNode(0) instanceof \Twig_Node_SetTemp) {
+          $node = $node->getNode(1);
+        }
+
+        if ($node instanceof \Twig_Node_Print) {
           $n = $node->getNode('expr');
-          while ($n instanceof FilterExpression) {
+          while ($n instanceof \Twig_Node_Expression_Filter) {
             $n = $n->getNode('node');
           }
 
@@ -132,7 +124,7 @@ class TwigNodeTrans extends Node {
           $args = $n;
 
           // Support TwigExtension->renderVar() function in chain.
-          if ($args instanceof FunctionExpression) {
+          if ($args instanceof \Twig_Node_Expression_Function) {
             $args = $n->getNode('arguments')->getNode(0);
           }
 
@@ -142,7 +134,7 @@ class TwigNodeTrans extends Node {
           // safe for templates.
           // @see TwigExtension::getFilters()
           $argPrefix = '@';
-          while ($args instanceof FilterExpression) {
+          while ($args instanceof \Twig_Node_Expression_Filter) {
             switch ($args->getNode('filter')->getAttribute('value')) {
               case 'placeholder':
                 $argPrefix = '%';
@@ -153,7 +145,7 @@ class TwigNodeTrans extends Node {
           if ($args instanceof CheckToStringNode) {
             $args = $args->getNode('expr');
           }
-          if ($args instanceof GetAttrExpression) {
+          if ($args instanceof \Twig_Node_Expression_GetAttr) {
             $argName = [];
             // Reuse the incoming expression.
             $expr = $args;
@@ -161,7 +153,7 @@ class TwigNodeTrans extends Node {
             $argName[] = $args->getNode('attribute')->getAttribute('value');
             while ($args->hasNode('node')) {
               $args = $args->getNode('node');
-              if ($args instanceof NameExpression) {
+              if ($args instanceof \Twig_Node_Expression_Name) {
                 $argName[] = $args->getAttribute('name');
               }
               else {
@@ -176,7 +168,7 @@ class TwigNodeTrans extends Node {
             if (!is_null($args)) {
               $argName = $args->getAttribute('name');
             }
-            $expr = new NameExpression($argName, $n->getTemplateLine());
+            $expr = new \Twig_Node_Expression_Name($argName, $n->getTemplateLine());
           }
           $placeholder = sprintf('%s%s', $argPrefix, $argName);
           $text .= $placeholder;
@@ -189,14 +181,14 @@ class TwigNodeTrans extends Node {
       }
     }
     elseif (!$body->hasAttribute('data')) {
-      throw new SyntaxError('{% trans %} tag cannot be empty');
+      throw new \Twig_Error_Syntax('{% trans %} tag cannot be empty');
     }
     else {
       $text = $body->getAttribute('data');
     }
 
     return [
-      new Node([new ConstantExpression(trim($text), $body->getTemplateLine())]),
+      new \Twig_Node([new \Twig_Node_Expression_Constant(trim($text), $body->getTemplateLine())]),
       $tokens,
     ];
   }

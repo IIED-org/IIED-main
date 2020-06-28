@@ -14,7 +14,7 @@ class NewViewConfigSchemaTest extends UITestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'views_ui',
     'node',
     'comment',

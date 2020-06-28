@@ -21,7 +21,7 @@ class PageNotFoundTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system_test'];
+  public static $modules = ['system_test'];
 
   /**
    * {@inheritdoc}
@@ -30,7 +30,7 @@ class PageNotFoundTest extends BrowserTestBase {
 
   protected $adminUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create an administrative user.

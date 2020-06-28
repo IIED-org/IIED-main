@@ -14,7 +14,7 @@ class LayoutBuilderToolbarTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'block',
     'node',
     'layout_builder',
@@ -30,7 +30,7 @@ class LayoutBuilderToolbarTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalPlaceBlock('local_tasks_block');

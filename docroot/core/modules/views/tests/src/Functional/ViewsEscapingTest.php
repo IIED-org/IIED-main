@@ -30,12 +30,12 @@ class ViewsEscapingTest extends ViewTestBase {
    *
    * @see \Drupal\simpletest\WebTestBase::setup()
    */
-  protected static $modules = ['views', 'theme_test'];
+  public static $modules = ['views', 'theme_test'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp(TRUE);
 
     $this->enableViewsTestModule();

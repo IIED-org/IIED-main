@@ -42,7 +42,7 @@ class FieldDiscoveryTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     parent::setUp();
     $this->fieldPluginManager = $this->prophesize(MigrateFieldPluginManagerInterface::class);
     $this->migrationPluginManager = $this->prophesize(MigrationPluginManagerInterface::class);

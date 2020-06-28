@@ -22,7 +22,7 @@ class CommentCSSTest extends CommentTestBase {
    */
   protected $defaultTheme = 'classy';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Allow anonymous users to see comments.

@@ -31,7 +31,7 @@ class CommentFieldAccessTest extends EntityKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['comment', 'entity_test', 'user'];
+  public static $modules = ['comment', 'entity_test', 'user'];
 
   /**
    * Fields that only users with administer comments permissions can change.
@@ -84,7 +84,7 @@ class CommentFieldAccessTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installConfig(['user', 'comment']);
     $this->installSchema('comment', ['comment_entity_statistics']);

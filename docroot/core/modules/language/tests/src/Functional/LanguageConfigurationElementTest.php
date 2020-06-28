@@ -20,7 +20,7 @@ class LanguageConfigurationElementTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'taxonomy',
     'node',
     'language',
@@ -33,7 +33,7 @@ class LanguageConfigurationElementTest extends BrowserTestBase {
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $user = $this->drupalCreateUser(['access administration pages', 'administer languages', 'administer content types']);
     $this->drupalLogin($user);

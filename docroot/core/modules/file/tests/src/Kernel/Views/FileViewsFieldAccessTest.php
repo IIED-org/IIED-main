@@ -17,12 +17,12 @@ class FileViewsFieldAccessTest extends FieldFieldAccessTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['file', 'entity_test', 'language', 'user'];
+  public static $modules = ['file', 'entity_test', 'language', 'user'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     $this->installEntitySchema('file');

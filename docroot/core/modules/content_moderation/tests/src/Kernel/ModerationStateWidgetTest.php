@@ -23,7 +23,7 @@ class ModerationStateWidgetTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'system',
     'user',
     'workflows',
@@ -34,7 +34,7 @@ class ModerationStateWidgetTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installEntitySchema('content_moderation_state');

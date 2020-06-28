@@ -18,7 +18,7 @@ class NoHelpTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['help', 'menu_test'];
+  public static $modules = ['help', 'menu_test'];
 
   /**
    * {@inheritdoc}
@@ -30,7 +30,7 @@ class NoHelpTest extends BrowserTestBase {
    */
   protected $adminUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->adminUser = $this->drupalCreateUser(['access administration pages']);
   }

@@ -30,7 +30,7 @@ class QueueSerializationTest extends KernelTestBase implements FormInterface {
    *
    * @var array
    */
-  protected static $modules = ['system', 'user', 'aggregator'];
+  public static $modules = ['system', 'user', 'aggregator'];
 
   /**
    * {@inheritdoc}
@@ -75,7 +75,7 @@ class QueueSerializationTest extends KernelTestBase implements FormInterface {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installSchema('system', ['key_value_expire', 'sequences']);
     $this->installEntitySchema('user');

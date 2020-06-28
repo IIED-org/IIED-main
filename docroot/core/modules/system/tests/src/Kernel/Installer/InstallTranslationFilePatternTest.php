@@ -30,7 +30,7 @@ class InstallTranslationFilePatternTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setup() {
     parent::setUp();
     $this->fileTranslation = new FileTranslation('filename', $this->container->get('file_system'));
     $method = new \ReflectionMethod('\Drupal\Core\StringTranslation\Translator\FileTranslation', 'getTranslationFilesPattern');

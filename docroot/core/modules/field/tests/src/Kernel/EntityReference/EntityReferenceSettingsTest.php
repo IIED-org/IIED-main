@@ -9,7 +9,7 @@ use Drupal\node\Entity\NodeType;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\field\Traits\EntityReferenceTestTrait;
-use Symfony\Component\ErrorHandler\BufferingLogger;
+use Symfony\Component\Debug\BufferingLogger;
 
 /**
  * Tests entity reference field settings.
@@ -23,7 +23,7 @@ class EntityReferenceSettingsTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'taxonomy',
     'field',
@@ -65,7 +65,7 @@ class EntityReferenceSettingsTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setup();
 
     $this->installEntitySchema('node');

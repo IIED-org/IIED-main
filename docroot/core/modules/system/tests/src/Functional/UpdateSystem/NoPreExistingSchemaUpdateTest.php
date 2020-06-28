@@ -11,16 +11,12 @@ use Drupal\Tests\RequirementsPageTrait;
  * Tries to update a module which has no pre-existing schema.
  *
  * @group Update
+ * @group legacy
  */
 class NoPreExistingSchemaUpdateTest extends BrowserTestBase {
   use RequirementsPageTrait;
 
-  /**
-   * {@inheritdoc}
-   */
-  protected $defaultTheme = 'stark';
-
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $connection = Database::getConnection();
 

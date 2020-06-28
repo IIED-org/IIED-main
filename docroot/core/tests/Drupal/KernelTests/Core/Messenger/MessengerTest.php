@@ -23,7 +23,7 @@ class MessengerTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->messenger = \Drupal::service('messenger');
   }

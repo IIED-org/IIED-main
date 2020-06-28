@@ -12,7 +12,7 @@ abstract class FieldConfigResourceTestBase extends EntityResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['field', 'node'];
+  public static $modules = ['field', 'node'];
 
   /**
    * {@inheritdoc}
@@ -109,6 +109,10 @@ abstract class FieldConfigResourceTestBase extends EntityResourceTestBase {
    * {@inheritdoc}
    */
   protected function getExpectedUnauthorizedAccessMessage($method) {
+    if ($this->config('rest.settings')->get('bc_entity_resource_permissions')) {
+      return parent::getExpectedUnauthorizedAccessMessage($method);
+    }
+
     return "The 'administer node fields' permission is required.";
   }
 

@@ -22,7 +22,7 @@ class MigrationPluginListTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'migrate',
     // Test with all modules containing Drupal migrations.
     'action',
@@ -62,7 +62,7 @@ class MigrationPluginListTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installEntitySchema('user');

@@ -35,7 +35,7 @@ class SearchEmbedFormTest extends BrowserTestBase {
    */
   protected $submitCount = 0;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalCreateContentType(['type' => 'page', 'name' => 'Basic page']);

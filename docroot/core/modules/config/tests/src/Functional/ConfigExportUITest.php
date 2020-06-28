@@ -19,7 +19,7 @@ class ConfigExportUITest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['config', 'config_test'];
+  public static $modules = ['config', 'config_test'];
 
   /**
    * {@inheritdoc}
@@ -29,7 +29,7 @@ class ConfigExportUITest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Set up an override.

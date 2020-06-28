@@ -13,12 +13,12 @@ use Drupal\Tests\migrate_drupal\Kernel\d7\MigrateDrupal7TestBase;
  */
 class MigrateUserPictureFieldTest extends MigrateDrupal7TestBase {
 
-  protected static $modules = ['image', 'file'];
+  public static $modules = ['image', 'file'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->executeMigration('user_picture_field');
   }

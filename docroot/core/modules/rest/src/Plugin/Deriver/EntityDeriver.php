@@ -2,6 +2,7 @@
 
 namespace Drupal\rest\Plugin\Deriver;
 
+use Drupal\Core\DependencyInjection\DeprecatedServicePropertyTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -12,6 +13,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @see \Drupal\rest\Plugin\rest\resource\EntityResource
  */
 class EntityDeriver implements ContainerDeriverInterface {
+  use DeprecatedServicePropertyTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $deprecatedProperties = ['entityManager' => 'entity.manager'];
 
   /**
    * List of derivative definitions.

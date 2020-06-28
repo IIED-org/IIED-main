@@ -12,7 +12,7 @@ use Drupal\Tests\UnitTestCase;
 class EntityFormBuilderTest extends UnitTestCase {
 
   /**
-   * The entity type manager.
+   * The entity manager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface|\PHPUnit\Framework\MockObject\MockObject
    */
@@ -35,7 +35,7 @@ class EntityFormBuilderTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->formBuilder = $this->createMock('Drupal\Core\Form\FormBuilderInterface');

@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class BlockLocalTasksTest extends LocalTaskIntegrationTestBase {
 
-  protected function setUp(): void {
+  protected function setUp() {
     $this->directoryList = ['block' => 'core/modules/block'];
     parent::setUp();
 
@@ -55,7 +55,7 @@ class BlockLocalTasksTest extends LocalTaskIntegrationTestBase {
     $container = new ContainerBuilder();
     $container->set('config.factory', $config_factory);
     $container->set('theme_handler', $theme_handler);
-    $container->setParameter('app.root', $this->root);
+    $container->set('app.root', $this->root);
     \Drupal::setContainer($container);
   }
 

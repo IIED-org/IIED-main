@@ -20,12 +20,12 @@ class CacheContextOptimizationTest extends KernelTestBase {
    *
    * @var string[]
    */
-  protected static $modules = ['user', 'system'];
+  public static $modules = ['user', 'system'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('user');
     $this->installConfig(['user']);

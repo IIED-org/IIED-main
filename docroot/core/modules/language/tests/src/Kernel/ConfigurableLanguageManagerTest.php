@@ -16,7 +16,7 @@ class ConfigurableLanguageManagerTest extends LanguageTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['user'];
+  public static $modules = ['user'];
 
   /**
    * The language negotiator.
@@ -35,7 +35,7 @@ class ConfigurableLanguageManagerTest extends LanguageTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installEntitySchema('user');

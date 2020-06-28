@@ -5,7 +5,6 @@ namespace Drupal\Tests\Core\Database;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Database\Query\Condition;
 use Drupal\Core\Database\Query\PlaceholderInterface;
-use Drupal\Tests\Core\Database\Stub\StubConnection;
 use Drupal\Tests\Core\Database\Stub\StubPDO;
 use Drupal\Tests\UnitTestCase;
 use Prophecy\Argument;
@@ -196,7 +195,10 @@ class ConditionTest extends UnitTestCase {
 
     $mockPdo = $this->createMock(StubPDO::class);
 
-    $connection = new StubConnection($mockPdo, $options);
+    $connection = $this->getMockBuilder(Connection::class)
+      ->setConstructorArgs([$mockPdo, $options])
+      ->getMockForAbstractClass();
+
     $condition = $connection->condition('AND');
     $this->assertSame('MockCondition', get_class($condition));
   }

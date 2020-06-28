@@ -36,7 +36,7 @@ class LayoutBuilderRoutesTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->sectionStorageManager = $this->prophesize(SectionStorageManagerInterface::class);

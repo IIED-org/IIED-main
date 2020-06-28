@@ -4,7 +4,6 @@ namespace Drupal\Tests\views\Kernel\Plugin;
 
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\views\Views;
-use Drupal\views\ViewExecutable;
 
 /**
  * Tests mapping style functionality.
@@ -13,7 +12,7 @@ use Drupal\views\ViewExecutable;
  */
 class StyleMappingTest extends StyleTestBase {
 
-  protected static $modules = ['system'];
+  public static $modules = ['system'];
 
   /**
    * Views used by this test.
@@ -46,7 +45,7 @@ class StyleMappingTest extends StyleTestBase {
    * @return string
    *   The view rendered as HTML.
    */
-  protected function mappedOutputHelper(ViewExecutable $view) {
+  protected function mappedOutputHelper($view) {
     $output = $view->preview();
     $rendered_output = \Drupal::service('renderer')->renderRoot($output);
     $this->storeViewPreview($rendered_output);

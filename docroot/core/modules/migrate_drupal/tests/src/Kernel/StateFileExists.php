@@ -5,6 +5,7 @@ namespace Drupal\Tests\migrate_drupal\Kernel;
 use Drupal\Component\Discovery\YamlDiscovery;
 use Drupal\KernelTests\FileSystemModuleDiscoveryDataProviderTrait;
 use Drupal\migrate_drupal\MigrationConfigurationTrait;
+use Drupal\Tests\DeprecatedModulesTestTrait;
 
 /**
  * Tests that core modules have a migrate_drupal.yml file as needed.
@@ -18,16 +19,19 @@ use Drupal\migrate_drupal\MigrationConfigurationTrait;
  */
 class StateFileExists extends MigrateDrupalTestBase {
 
+  use DeprecatedModulesTestTrait;
   use FileSystemModuleDiscoveryDataProviderTrait;
   use MigrationConfigurationTrait;
 
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     // Test migrations states.
     'migrate_state_finished_test',
     'migrate_state_not_finished_test',
+    // Test missing migrate_drupal.yml.
+    'migrate_state_no_file_test',
   ];
 
   /**
@@ -68,6 +72,7 @@ class StateFileExists extends MigrateDrupalTestBase {
     'rdf',
     'search',
     'shortcut',
+    'simpletest',
     'statistics',
     'syslog',
     'system',

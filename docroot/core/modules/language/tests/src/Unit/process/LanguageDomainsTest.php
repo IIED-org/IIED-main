@@ -19,7 +19,7 @@ class LanguageDomainsTest extends MigrateProcessTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     $configuration = [
       'key' => 'language',
       'value' => 'domain',

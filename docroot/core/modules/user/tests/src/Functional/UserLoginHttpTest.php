@@ -30,7 +30,7 @@ class UserLoginHttpTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['hal'];
+  public static $modules = ['hal'];
 
   /**
    * {@inheritdoc}
@@ -54,7 +54,7 @@ class UserLoginHttpTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->cookies = new CookieJar();
     $encoders = [new JsonEncoder(), new XmlEncoder(), new HALJsonEncoder()];

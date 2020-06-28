@@ -2,6 +2,7 @@
 
 namespace Drupal\options\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Field\AllowedTagsXssTrait;
 use Drupal\Core\Field\FieldFilteredMarkup;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -21,6 +22,8 @@ use Drupal\Core\Form\OptGroup;
  * )
  */
 class OptionsDefaultFormatter extends FormatterBase {
+
+  use AllowedTagsXssTrait;
 
   /**
    * {@inheritdoc}

@@ -33,7 +33,7 @@ class EmbeddedFormWidgetTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $display_repository = $this->container->get('entity_display.repository');

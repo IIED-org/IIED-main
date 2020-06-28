@@ -19,7 +19,7 @@ abstract class LayoutRestTestBase extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'layout_builder',
     'serialization',

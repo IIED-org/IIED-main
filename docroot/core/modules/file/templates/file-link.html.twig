@@ -15,5 +15,6 @@
 #}
 <span{{ attributes }}>{{ link }}</span>
 {% if file_size %}
-  <span>({{ file_size }})</span>
+  {# @todo remove class before Drupal 9.0.0 #}
+  <span class="file-size">({{ file_size }})</span>
 {% endif %}

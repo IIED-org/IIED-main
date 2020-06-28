@@ -20,7 +20,7 @@ class BlockContentTypeTest extends BlockContentTestBase {
    *
    * @var array
    */
-  protected static $modules = ['field_ui'];
+  public static $modules = ['field_ui'];
 
   /**
    * {@inheritdoc}
@@ -44,7 +44,7 @@ class BlockContentTypeTest extends BlockContentTestBase {
    */
   protected $autoCreateBasicBlockType = FALSE;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalPlaceBlock('page_title_block');
@@ -187,8 +187,8 @@ class BlockContentTypeTest extends BlockContentTestBase {
 
     $this->drupalLogin($this->adminUser);
     // Create two block types programmatically.
-    $this->createBlockContentType('foo');
-    $this->createBlockContentType('bar');
+    $type = $this->createBlockContentType('foo');
+    $type = $this->createBlockContentType('bar');
 
     // Get the custom block storage.
     $storage = $this->container

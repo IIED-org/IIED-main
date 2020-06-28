@@ -15,7 +15,7 @@ class BlockContentFieldFilterTest extends BlockContentTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['language'];
+  public static $modules = ['language'];
 
   /**
    * {@inheritdoc}
@@ -39,7 +39,7 @@ class BlockContentFieldFilterTest extends BlockContentTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp($import_test_views = TRUE): void {
+  public function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     // Add two new languages.

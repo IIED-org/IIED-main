@@ -54,7 +54,7 @@ class ToolbarAdminMenuTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'block',
     'menu_ui',
@@ -71,7 +71,7 @@ class ToolbarAdminMenuTest extends BrowserTestBase {
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $perms = [

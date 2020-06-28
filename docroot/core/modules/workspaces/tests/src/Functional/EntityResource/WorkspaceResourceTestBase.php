@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\workspaces\Functional\EntityResource;
 
+use Drupal\Tests\rest\Functional\BcTimestampNormalizerUnixTestTrait;
 use Drupal\Tests\rest\Functional\EntityResource\EntityResourceTestBase;
 use Drupal\user\Entity\User;
 use Drupal\workspaces\Entity\Workspace;
@@ -11,10 +12,12 @@ use Drupal\workspaces\Entity\Workspace;
  */
 abstract class WorkspaceResourceTestBase extends EntityResourceTestBase {
 
+  use BcTimestampNormalizerUnixTestTrait;
+
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['workspaces'];
+  public static $modules = ['workspaces'];
 
   /**
    * {@inheritdoc}
@@ -26,13 +29,6 @@ abstract class WorkspaceResourceTestBase extends EntityResourceTestBase {
    */
   protected static $patchProtectedFieldNames = [
     'changed' => NULL,
-  ];
-
-  /**
-   * {@inheritdoc}
-   */
-  protected static $uniqueFieldNames = [
-    'id',
   ];
 
   /**
@@ -98,16 +94,10 @@ abstract class WorkspaceResourceTestBase extends EntityResourceTestBase {
     $author = User::load($this->entity->getOwnerId());
     return [
       'created' => [
-        [
-          'value' => (new \DateTime())->setTimestamp((int) $this->entity->getCreatedTime())->setTimezone(new \DateTimeZone('UTC'))->format(\DateTime::RFC3339),
-          'format' => \DateTime::RFC3339,
-        ],
+        $this->formatExpectedTimestampItemValues((int) $this->entity->getCreatedTime()),
       ],
       'changed' => [
-        [
-          'value' => (new \DateTime())->setTimestamp($this->entity->getChangedTime())->setTimezone(new \DateTimeZone('UTC'))->format(\DateTime::RFC3339),
-          'format' => \DateTime::RFC3339,
-        ],
+        $this->formatExpectedTimestampItemValues($this->entity->getChangedTime()),
       ],
       'id' => [
         [
@@ -186,6 +176,10 @@ abstract class WorkspaceResourceTestBase extends EntityResourceTestBase {
    * {@inheritdoc}
    */
   protected function getExpectedUnauthorizedAccessMessage($method) {
+    if ($this->config('rest.settings')->get('bc_entity_resource_permissions')) {
+      return parent::getExpectedUnauthorizedAccessMessage($method);
+    }
+
     switch ($method) {
       case 'GET':
         return "The 'view any workspace' permission is required.";

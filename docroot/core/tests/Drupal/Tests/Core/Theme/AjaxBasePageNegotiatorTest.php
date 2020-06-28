@@ -40,7 +40,7 @@ class AjaxBasePageNegotiatorTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     parent::setUp();
 
     $this->tokenGenerator = $this->prophesize(CsrfTokenGenerator::class);

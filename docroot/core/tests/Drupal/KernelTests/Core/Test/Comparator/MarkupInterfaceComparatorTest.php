@@ -35,7 +35,7 @@ class MarkupInterfaceComparatorTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->factory = new Factory();
     $this->comparator = new MarkupInterfaceComparator();

@@ -18,7 +18,7 @@ class ThemeTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['theme_test', 'node'];
+  public static $modules = ['theme_test', 'node'];
 
   /**
    * {@inheritdoc}
@@ -28,7 +28,7 @@ class ThemeTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     \Drupal::service('theme_installer')->install(['test_theme']);
   }

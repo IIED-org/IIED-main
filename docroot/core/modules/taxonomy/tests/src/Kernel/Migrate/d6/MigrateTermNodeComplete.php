@@ -16,7 +16,7 @@ class MigrateTermNodeComplete extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'content_translation',
     'language',
     'menu_ui',
@@ -28,7 +28,7 @@ class MigrateTermNodeComplete extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Remove the classic node table made in setup.

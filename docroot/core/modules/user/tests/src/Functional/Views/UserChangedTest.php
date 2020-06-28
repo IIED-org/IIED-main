@@ -17,7 +17,7 @@ class UserChangedTest extends ViewTestBase {
    *
    * @var array
    */
-  protected static $modules = ['views_ui', 'user_test_views'];
+  public static $modules = ['views_ui', 'user_test_views'];
 
   /**
    * {@inheritdoc}
@@ -31,7 +31,7 @@ class UserChangedTest extends ViewTestBase {
    */
   public static $testViews = ['test_user_changed'];
 
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     ViewTestData::createTestViews(get_class($this), ['user_test_views']);

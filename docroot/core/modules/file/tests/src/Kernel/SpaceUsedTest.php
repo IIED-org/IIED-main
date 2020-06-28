@@ -11,7 +11,7 @@ use Drupal\file\Entity\File;
  */
 class SpaceUsedTest extends FileManagedUnitTestBase {
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create records for a couple of users with different sizes.

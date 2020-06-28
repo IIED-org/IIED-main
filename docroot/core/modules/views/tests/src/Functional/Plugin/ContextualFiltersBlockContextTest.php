@@ -21,12 +21,7 @@ class ContextualFiltersBlockContextTest extends ViewTestBase {
    *
    * @var array
    */
-  protected static $modules = [
-    'block',
-    'block_test_views',
-    'views_ui',
-    'node',
-  ];
+  public static $modules = ['block', 'block_test_views', 'views_ui', 'node'];
 
   /**
    * {@inheritdoc}
@@ -57,7 +52,7 @@ class ContextualFiltersBlockContextTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     ViewTestData::createTestViews(get_class($this), ['block_test_views']);

@@ -15,12 +15,12 @@ class MigrateBlockContentEntityDisplayTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['block', 'block_content', 'filter', 'text'];
+  public static $modules = ['block', 'block_content', 'filter', 'text'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('block_content');
     $this->installConfig(static::$modules);

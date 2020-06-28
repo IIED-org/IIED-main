@@ -28,7 +28,7 @@ class NullNormalizerTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     $this->normalizer = new NullNormalizer($this->interface);
   }
 

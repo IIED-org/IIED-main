@@ -72,7 +72,7 @@ class PermissionsHashGeneratorTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     new Settings(['hash_salt' => 'test']);

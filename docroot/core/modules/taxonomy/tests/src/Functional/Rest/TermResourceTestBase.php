@@ -5,15 +5,18 @@ namespace Drupal\Tests\taxonomy\Functional\Rest;
 use Drupal\Core\Cache\Cache;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
+use Drupal\Tests\rest\Functional\BcTimestampNormalizerUnixTestTrait;
 use Drupal\Tests\rest\Functional\EntityResource\EntityResourceTestBase;
 use GuzzleHttp\RequestOptions;
 
 abstract class TermResourceTestBase extends EntityResourceTestBase {
 
+  use BcTimestampNormalizerUnixTestTrait;
+
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['taxonomy', 'path'];
+  public static $modules = ['taxonomy', 'path'];
 
   /**
    * {@inheritdoc}
@@ -189,10 +192,7 @@ abstract class TermResourceTestBase extends EntityResourceTestBase {
         ],
       ],
       'changed' => [
-        [
-          'value' => (new \DateTime())->setTimestamp($this->entity->getChangedTime())->setTimezone(new \DateTimeZone('UTC'))->format(\DateTime::RFC3339),
-          'format' => \DateTime::RFC3339,
-        ],
+        $this->formatExpectedTimestampItemValues($this->entity->getChangedTime()),
       ],
       'default_langcode' => [
         [
@@ -212,12 +212,7 @@ abstract class TermResourceTestBase extends EntityResourceTestBase {
         ],
       ],
       'revision_created' => [
-        [
-          'value' => (new \DateTime())->setTimestamp((int) $this->entity->getRevisionCreationTime())
-            ->setTimezone(new \DateTimeZone('UTC'))
-            ->format(\DateTime::RFC3339),
-          'format' => \DateTime::RFC3339,
-        ],
+        $this->formatExpectedTimestampItemValues((int) $this->entity->getRevisionCreationTime()),
       ],
       'revision_user' => [],
       'revision_log_message' => [],
@@ -257,6 +252,10 @@ abstract class TermResourceTestBase extends EntityResourceTestBase {
    * {@inheritdoc}
    */
   protected function getExpectedUnauthorizedAccessMessage($method) {
+    if ($this->config('rest.settings')->get('bc_entity_resource_permissions')) {
+      return parent::getExpectedUnauthorizedAccessMessage($method);
+    }
+
     switch ($method) {
       case 'GET':
         return "The 'access content' permission is required and the taxonomy term must be published.";

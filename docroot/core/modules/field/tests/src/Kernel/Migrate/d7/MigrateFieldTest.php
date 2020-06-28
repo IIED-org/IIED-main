@@ -18,7 +18,7 @@ class MigrateFieldTest extends MigrateDrupal7TestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'comment',
     'datetime',
     'file',
@@ -34,7 +34,7 @@ class MigrateFieldTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installConfig(static::$modules);
     $this->executeMigration('d7_field');

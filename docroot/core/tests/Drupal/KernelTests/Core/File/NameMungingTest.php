@@ -26,7 +26,7 @@ class NameMungingTest extends FileTestBase {
    */
   protected $nameWithUcExt;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->badExtension = 'php';
     $this->name = $this->randomMachineName() . '.' . $this->badExtension . '.txt';

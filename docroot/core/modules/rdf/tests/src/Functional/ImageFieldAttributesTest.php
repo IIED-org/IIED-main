@@ -28,7 +28,7 @@ class ImageFieldAttributesTest extends ImageFieldTestBase {
    *
    * @var array
    */
-  protected static $modules = ['rdf', 'image'];
+  public static $modules = ['rdf', 'image'];
 
   /**
    * {@inheritdoc}
@@ -63,7 +63,7 @@ class ImageFieldAttributesTest extends ImageFieldTestBase {
    */
   protected $node;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->fieldName = 'field_image';

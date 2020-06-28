@@ -7,6 +7,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Render\RenderContext;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\CssSelector\CssSelectorConverter;
 
 /**
@@ -434,7 +435,12 @@ trait AssertContentTrait {
     if (!$message) {
       $message = 'Raw "' . Html::escape($raw) . '" found';
     }
-    $this->assertStringContainsString((string) $raw, $this->getRawContent(), $message);
+    if ($this instanceof TestCase) {
+      $this->assertStringContainsString((string) $raw, $this->getRawContent(), $message);
+    }
+    else {
+      return $this->assert(strpos($this->getRawContent(), (string) $raw) !== FALSE, $message, $group);
+    }
   }
 
   /**
@@ -462,7 +468,12 @@ trait AssertContentTrait {
     if (!$message) {
       $message = 'Raw "' . Html::escape($raw) . '" not found';
     }
-    $this->assertStringNotContainsString((string) $raw, $this->getRawContent(), $message);
+    if ($this instanceof TestCase) {
+      $this->assertStringNotContainsString((string) $raw, $this->getRawContent(), $message);
+    }
+    else {
+      return $this->assert(strpos($this->getRawContent(), (string) $raw) === FALSE, $message, $group);
+    }
   }
 
   /**
@@ -490,7 +501,12 @@ trait AssertContentTrait {
     if (!$message) {
       $message = 'Escaped "' . Html::escape($raw) . '" found';
     }
-    $this->assertStringContainsString(Html::escape($raw), $this->getRawContent(), $message);
+    if ($this instanceof TestCase) {
+      $this->assertStringContainsString(Html::escape($raw), $this->getRawContent(), $message);
+    }
+    else {
+      return $this->assert(strpos($this->getRawContent(), Html::escape($raw)) !== FALSE, $message, $group);
+    }
   }
 
   /**
@@ -519,7 +535,12 @@ trait AssertContentTrait {
     if (!$message) {
       $message = 'Escaped "' . Html::escape($raw) . '" not found';
     }
-    $this->assertStringNotContainsString(Html::escape($raw), $this->getRawContent(), $message);
+    if ($this instanceof TestCase) {
+      $this->assertStringNotContainsString(Html::escape($raw), $this->getRawContent(), $message);
+    }
+    else {
+      return $this->assert(strpos($this->getRawContent(), Html::escape($raw)) === FALSE, $message, $group);
+    }
   }
 
   /**
@@ -607,10 +628,20 @@ trait AssertContentTrait {
       $message = !$not_exists ? new FormattableMarkup('"@text" found', ['@text' => $text]) : new FormattableMarkup('"@text" not found', ['@text' => $text]);
     }
     if ($not_exists) {
-      $this->assertStringNotContainsString((string) $text, $this->getTextContent(), $message);
+      if ($this instanceof TestCase) {
+        $this->assertStringNotContainsString((string) $text, $this->getTextContent(), $message);
+      }
+      else {
+        return $this->assert(strpos($this->getTextContent(), (string) $text) === FALSE, $message, $group);
+      }
     }
     else {
-      $this->assertStringContainsString((string) $text, $this->getTextContent(), $message);
+      if ($this instanceof TestCase) {
+        $this->assertStringContainsString((string) $text, $this->getTextContent(), $message);
+      }
+      else {
+        return $this->assert(strpos($this->getTextContent(), (string) $text) !== FALSE, $message, $group);
+      }
     }
   }
 

@@ -60,7 +60,7 @@ class UserRegistrationResourceTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->logger = $this->prophesize(LoggerInterface::class)->reveal();

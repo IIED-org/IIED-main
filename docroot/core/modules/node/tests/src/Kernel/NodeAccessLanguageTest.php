@@ -24,7 +24,7 @@ class NodeAccessLanguageTest extends NodeAccessTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     node_access_test_add_field(NodeType::load('page'));

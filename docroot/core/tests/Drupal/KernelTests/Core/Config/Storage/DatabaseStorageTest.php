@@ -15,7 +15,7 @@ class DatabaseStorageTest extends ConfigStorageTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->storage = new DatabaseStorage($this->container->get('database'), 'config');

@@ -42,7 +42,7 @@ class UserPictureTest extends BrowserTestBase {
    */
   protected $webUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // This test expects unused managed files to be marked temporary and then

@@ -22,7 +22,7 @@ class HistoryTimestampTest extends ViewsKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['history', 'node'];
+  public static $modules = ['history', 'node'];
 
   /**
    * Views used by this test.
@@ -34,7 +34,7 @@ class HistoryTimestampTest extends ViewsKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     $this->installEntitySchema('node');

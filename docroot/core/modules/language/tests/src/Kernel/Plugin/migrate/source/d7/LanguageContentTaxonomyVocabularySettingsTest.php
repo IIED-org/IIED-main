@@ -16,7 +16,7 @@ class LanguageContentTaxonomyVocabularySettingsTest extends VocabularyTest {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['taxonomy', 'language', 'migrate_drupal'];
+  public static $modules = ['taxonomy', 'language', 'migrate_drupal'];
 
   /**
    * {@inheritdoc}

@@ -17,7 +17,7 @@ class EntityViewControllerTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['entity_test'];
+  public static $modules = ['entity_test'];
 
   /**
    * {@inheritdoc}
@@ -31,7 +31,7 @@ class EntityViewControllerTest extends BrowserTestBase {
    */
   protected $entities = [];
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     // Create some dummy entity_test entities.
     for ($i = 0; $i < 2; $i++) {

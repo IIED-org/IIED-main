@@ -22,7 +22,7 @@ class RestJsonApiUnsupported extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['jsonapi', 'node'];
+  public static $modules = ['jsonapi', 'node'];
 
   /**
    * {@inheritdoc}
@@ -61,7 +61,7 @@ class RestJsonApiUnsupported extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     parent::setUp();
 
     // Set up a HTTP client that accepts relative URLs.

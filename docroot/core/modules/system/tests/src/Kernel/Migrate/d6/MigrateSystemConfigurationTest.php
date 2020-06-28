@@ -14,7 +14,7 @@ class MigrateSystemConfigurationTest extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['action', 'file', 'system'];
+  public static $modules = ['action', 'file', 'system'];
 
   protected $expectedConfig = [
     'system.cron' => [
@@ -124,7 +124,7 @@ class MigrateSystemConfigurationTest extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $migrations = [

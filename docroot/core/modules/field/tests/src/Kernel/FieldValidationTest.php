@@ -24,7 +24,7 @@ class FieldValidationTest extends FieldKernelTestBase {
    */
   private $entity;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create a field and storage of type 'test_field', on the 'entity_test'

@@ -24,7 +24,7 @@ class EntityRepositoryTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'entity_test',
     'user',
     'language',
@@ -48,7 +48,7 @@ class EntityRepositoryTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     parent::setUp();
 
     $this->entityTypeManager = $this->container->get('entity_type.manager');

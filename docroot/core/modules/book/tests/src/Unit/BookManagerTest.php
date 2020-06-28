@@ -57,7 +57,7 @@ class BookManagerTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     $this->entityTypeManager = $this->createMock(EntityTypeManagerInterface::class);
     $this->translation = $this->getStringTranslationStub();
     $this->configFactory = $this->getConfigFactoryStub([]);

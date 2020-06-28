@@ -18,7 +18,7 @@ class HelpTopicTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'help_topics_test',
     'help',
     'help_topics',
@@ -47,7 +47,7 @@ class HelpTopicTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // These tests rely on some markup from the 'Seven' theme and we test theme

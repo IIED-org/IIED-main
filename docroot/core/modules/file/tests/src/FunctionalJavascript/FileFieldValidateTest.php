@@ -20,7 +20,7 @@ class FileFieldValidateTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['node', 'file'];
+  public static $modules = ['node', 'file'];
 
   /**
    * {@inheritdoc}

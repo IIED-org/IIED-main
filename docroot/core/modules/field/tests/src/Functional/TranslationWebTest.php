@@ -19,7 +19,7 @@ class TranslationWebTest extends FieldTestBase {
    *
    * @var array
    */
-  protected static $modules = ['language', 'field_test', 'entity_test'];
+  public static $modules = ['language', 'field_test', 'entity_test'];
 
   /**
    * {@inheritdoc}
@@ -54,7 +54,7 @@ class TranslationWebTest extends FieldTestBase {
    */
   protected $field;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->fieldName = mb_strtolower($this->randomMachineName() . '_field_name');

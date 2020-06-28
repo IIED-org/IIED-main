@@ -19,7 +19,7 @@ class EntityRevisionsTest extends EntityKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'system',
     'entity_test',
     'language',
@@ -29,7 +29,7 @@ class EntityRevisionsTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installEntitySchema('entity_test_mulrev');

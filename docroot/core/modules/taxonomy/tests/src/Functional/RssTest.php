@@ -18,7 +18,7 @@ class RssTest extends TaxonomyTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'field_ui', 'views'];
+  public static $modules = ['node', 'field_ui', 'views'];
 
   /**
    * {@inheritdoc}
@@ -39,7 +39,7 @@ class RssTest extends TaxonomyTestBase {
    */
   protected $fieldName;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalLogin($this->drupalCreateUser(['administer taxonomy', 'bypass node access', 'administer content types', 'administer node display']));

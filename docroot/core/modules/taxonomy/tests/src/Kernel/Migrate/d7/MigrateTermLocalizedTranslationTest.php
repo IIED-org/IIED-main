@@ -16,7 +16,7 @@ class MigrateTermLocalizedTranslationTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'content_translation',
     'language',
     'taxonomy',
@@ -33,7 +33,7 @@ class MigrateTermLocalizedTranslationTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('taxonomy_term');
     $this->installConfig(static::$modules);

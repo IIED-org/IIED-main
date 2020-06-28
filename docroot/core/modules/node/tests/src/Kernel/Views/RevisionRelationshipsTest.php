@@ -21,7 +21,7 @@ class RevisionRelationshipsTest extends ViewsKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'node_test_views',
     'language',
@@ -31,7 +31,7 @@ class RevisionRelationshipsTest extends ViewsKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
+  protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
     $this->installSchema('node', 'node_access');

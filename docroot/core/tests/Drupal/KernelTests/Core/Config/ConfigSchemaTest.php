@@ -25,7 +25,7 @@ class ConfigSchemaTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'system',
     'language',
     'field',
@@ -37,7 +37,7 @@ class ConfigSchemaTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installConfig(['system', 'image', 'config_schema_test']);
   }
@@ -47,7 +47,7 @@ class ConfigSchemaTest extends KernelTestBase {
    */
   public function testSchemaMapping() {
     // Nonexistent configuration key will have Undefined as metadata.
-    $this->assertFalse(\Drupal::service('config.typed')->hasConfigSchema('config_schema_test.no_such_key'));
+    $this->assertSame(FALSE, \Drupal::service('config.typed')->hasConfigSchema('config_schema_test.no_such_key'));
     $definition = \Drupal::service('config.typed')->getDefinition('config_schema_test.no_such_key');
     $expected = [];
     $expected['label'] = 'Undefined';
@@ -58,12 +58,12 @@ class ConfigSchemaTest extends KernelTestBase {
     $this->assertEqual($definition, $expected, 'Retrieved the right metadata for nonexistent configuration.');
 
     // Configuration file without schema will return Undefined as well.
-    $this->assertFalse(\Drupal::service('config.typed')->hasConfigSchema('config_schema_test.noschema'));
+    $this->assertSame(FALSE, \Drupal::service('config.typed')->hasConfigSchema('config_schema_test.noschema'));
     $definition = \Drupal::service('config.typed')->getDefinition('config_schema_test.noschema');
     $this->assertEqual($definition, $expected, 'Retrieved the right metadata for configuration with no schema.');
 
     // Configuration file with only some schema.
-    $this->assertTrue(\Drupal::service('config.typed')->hasConfigSchema('config_schema_test.someschema'));
+    $this->assertSame(TRUE, \Drupal::service('config.typed')->hasConfigSchema('config_schema_test.someschema'));
     $definition = \Drupal::service('config.typed')->getDefinition('config_schema_test.someschema');
     $expected = [];
     $expected['label'] = 'Schema test data';

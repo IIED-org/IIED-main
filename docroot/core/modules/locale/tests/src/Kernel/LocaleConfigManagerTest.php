@@ -18,7 +18,7 @@ class LocaleConfigManagerTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'system',
     'language',
     'locale',

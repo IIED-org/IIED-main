@@ -19,7 +19,7 @@ class ConfigurableLanguageTest extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['language'];
+  public static $modules = ['language'];
 
   /**
    * {@inheritdoc}

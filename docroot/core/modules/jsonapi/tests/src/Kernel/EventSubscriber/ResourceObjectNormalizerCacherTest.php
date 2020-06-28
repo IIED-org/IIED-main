@@ -9,7 +9,7 @@ use Drupal\jsonapi\JsonApiResource\ResourceObject;
 use Drupal\jsonapi\Normalizer\Value\CacheableNormalization;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\user\Entity\User;
-use Symfony\Component\HttpKernel\Event\TerminateEvent;
+use Symfony\Component\HttpKernel\Event\PostResponseEvent;
 
 /**
  * @coversDefaultClass \Drupal\jsonapi\EventSubscriber\ResourceObjectNormalizationCacher
@@ -52,7 +52,7 @@ class ResourceObjectNormalizerCacherTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->resourceTypeRepository = $this->container->get('jsonapi.resource_type.repository');
     $this->serializer = $this->container->get('jsonapi.serializer');
@@ -85,7 +85,7 @@ class ResourceObjectNormalizerCacherTest extends KernelTestBase {
       ResourceObjectNormalizationCacher::RESOURCE_CACHE_SUBSET_FIELDS => [],
     ];
     $this->cacher->saveOnTerminate($resource_object, $normalization_parts);
-    $event = $this->prophesize(TerminateEvent::class);
+    $event = $this->prophesize(PostResponseEvent::class);
     $this->cacher->onTerminate($event->reveal());
     $this->assertNotFalse((bool) $this->cacher->get($resource_object));
     Cache::invalidateTags([$cache_tag_to_invalidate]);

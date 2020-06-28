@@ -23,14 +23,14 @@ class NodeSaveTest extends NodeTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node_test'];
+  public static $modules = ['node_test'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create a user that is allowed to post; we'll use this to test the submission.

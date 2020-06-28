@@ -27,7 +27,7 @@ class TranslationManagerTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     $this->translationManager = new TestTranslationManager();
   }
 

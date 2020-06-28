@@ -18,7 +18,7 @@ class MigrateFieldInstanceWidgetSettingsTest extends MigrateDrupal7TestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'comment',
     'datetime',
     'image',
@@ -33,7 +33,7 @@ class MigrateFieldInstanceWidgetSettingsTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->migrateFields();
     $this->executeMigration('d7_field_instance_widget_settings');

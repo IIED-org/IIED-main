@@ -20,7 +20,7 @@ class CKEditorAdminTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['filter', 'editor', 'ckeditor'];
+  public static $modules = ['filter', 'editor', 'ckeditor'];
 
   /**
    * {@inheritdoc}
@@ -34,7 +34,7 @@ class CKEditorAdminTest extends BrowserTestBase {
    */
   protected $adminUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create text format.

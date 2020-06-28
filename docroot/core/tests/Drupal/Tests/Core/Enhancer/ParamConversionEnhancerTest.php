@@ -28,7 +28,7 @@ class ParamConversionEnhancerTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->paramConverterManager = $this->createMock('Drupal\Core\ParamConverter\ParamConverterManagerInterface');

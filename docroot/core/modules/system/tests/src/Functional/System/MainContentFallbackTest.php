@@ -16,7 +16,7 @@ class MainContentFallbackTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['block', 'system_test'];
+  public static $modules = ['block', 'system_test'];
 
   /**
    * {@inheritdoc}
@@ -26,7 +26,7 @@ class MainContentFallbackTest extends BrowserTestBase {
   protected $adminUser;
   protected $webUser;
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Create and log in admin user.

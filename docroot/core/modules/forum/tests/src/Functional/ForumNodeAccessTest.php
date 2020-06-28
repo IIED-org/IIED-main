@@ -17,7 +17,7 @@ class ForumNodeAccessTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'comment',
     'forum',
@@ -32,7 +32,7 @@ class ForumNodeAccessTest extends BrowserTestBase {
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     node_access_rebuild();
     node_access_test_add_field(NodeType::load('forum'));
