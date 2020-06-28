@@ -1,0 +1,51 @@
+# Migration configuration for beer content.
+id: pubs_node
+label: IIED Publications
+migration_group: pubs
+migration_tags:
+  - example
+source:
+  plugin: pubs_node
+process:
+  # Hardcode the destination node type (bundle) as 'publication'.
+  type:
+    plugin: default_value
+    default_value: publication
+  title: Title
+  #uid:
+  #  plugin: migration_lookup
+  #  migration: pubs_user
+  #  source: aid
+  field_pubid: ProductCode
+  field_authors:
+    plugin: entity_lookup
+    allow_multiple: true
+    source: AuthorList
+    entity_type: node
+    bundle: author
+    value_key: title
+  # Some Drupal fields may have multiple components we may want to set
+  # separately. For example, text fields may have summaries (teasers) in
+  # addition to the full text value. We use / to separate the field name from
+  # the internal field value being set, and put it in quotes because / is a
+  # YAML special character.
+  'body/value': Abstract
+  # 'body/summary': excerpt
+  field_tags:
+    plugin: entity_generate_multiple
+    source: Keywords
+    entity_type: taxonomy_term
+    bundle: tags
+    bundle_key: vid
+    value_key: name
+    ignore_case: true
+destination:
+  plugin: entity:node
+
+# The general rule of thumb is that any migrations referenced by migration
+# process plugins should be required here.
+migration_dependencies:
+  optional:
+    - pubs_tags
+    - pubs_authors
+

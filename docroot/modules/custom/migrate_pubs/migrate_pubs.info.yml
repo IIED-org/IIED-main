@@ -1,0 +1,21 @@
+type: module
+name: Migrate Publications Library
+description: 'Examples of how Drupal 8 migration compares to previous versions.'
+package: Examples
+# core: 8.x
+dependencies:
+  - drupal:migrate
+  - drupal:menu_ui
+  - drupal:path
+  - migrate_plus:migrate_plus
+config_devel:
+  install:
+    - migrate_plus.migration.pubs_authors
+    - migrate_plus.migration.pubs_tags
+    - migrate_plus.migration.pubs_node
+    - migrate_plus.migration_group.pubs
+# Information added by Drupal.org packaging script on 2019-04-19
+version: '8.x-1.0'
+core: '8.x'
+project: 'migrate_pubs'
+datestamp: 1555683500
