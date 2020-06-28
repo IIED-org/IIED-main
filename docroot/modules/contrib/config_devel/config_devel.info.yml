@@ -1,0 +1,14 @@
+name: Configuration development
+type: module
+description: 'Helps developers work with configuration.'
+package: Configuration
+# version: VERSION
+core: 8.x
+configure: config_devel.settings
+dependencies:
+  - drupal:config
+
+# Information added by Drupal.org packaging script on 2020-05-21
+version: '8.x-1.7'
+project: 'config_devel'
+datestamp: 1590070767

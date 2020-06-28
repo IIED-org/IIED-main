@@ -82,5 +82,12 @@
                 "      composer remove drupal/core-project-message"
             ]
         }
+    },
+    "require-dev": {
+        "drupal/config_devel": "^1.7",
+        "drupal/devel": "^4.0",
+        "drupal/migrate_devel": "^2",
+        "drupal/migrate_plus": "^5.1",
+        "drupal/migrate_tools": "^5.0"
     }
 }

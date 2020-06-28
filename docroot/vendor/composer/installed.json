@@ -673,6 +673,76 @@
         ]
     },
     {
+        "name": "drupal/config_devel",
+        "version": "1.7.0",
+        "version_normalized": "1.7.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupalcode.org/project/config_devel.git",
+            "reference": "8.x-1.7"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/config_devel-8.x-1.7.zip",
+            "reference": "8.x-1.7",
+            "shasum": "4ebcf4fb2a2842232b9bf9b0855e3728df918fc7"
+        },
+        "require": {
+            "drupal/core": "^8"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "drupal": {
+                "version": "8.x-1.7",
+                "datestamp": "1590070764",
+                "security-coverage": {
+                    "status": "covered",
+                    "message": "Covered by Drupal's security advisory policy"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0+"
+        ],
+        "authors": [
+            {
+                "name": "alexpott",
+                "homepage": "https://www.drupal.org/user/157725"
+            },
+            {
+                "name": "benjy",
+                "homepage": "https://www.drupal.org/user/1852732"
+            },
+            {
+                "name": "chx",
+                "homepage": "https://www.drupal.org/user/9446"
+            },
+            {
+                "name": "joachim",
+                "homepage": "https://www.drupal.org/user/107701"
+            },
+            {
+                "name": "nedjo",
+                "homepage": "https://www.drupal.org/user/4481"
+            },
+            {
+                "name": "tim.plunkett",
+                "homepage": "https://www.drupal.org/user/241634"
+            },
+            {
+                "name": "vijaycs85",
+                "homepage": "https://www.drupal.org/user/93488"
+            }
+        ],
+        "description": "Helps developers work with configuration.",
+        "homepage": "https://www.drupal.org/project/config_devel",
+        "support": {
+            "source": "https://git.drupalcode.org/project/config_devel"
+        }
+    },
+    {
         "name": "drupal/core",
         "version": "8.9.1",
         "version_normalized": "8.9.1.0",
@@ -1114,6 +1184,341 @@
         "keywords": [
             "drupal"
         ]
+    },
+    {
+        "name": "drupal/devel",
+        "version": "4.0.0",
+        "version_normalized": "4.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupalcode.org/project/devel.git",
+            "reference": "4.0.0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/devel-4.0.0.zip",
+            "reference": "4.0.0",
+            "shasum": "6c01ef8dd4e926e63b08fe28dea5357c7caa49c9"
+        },
+        "require": {
+            "doctrine/common": "^2.7",
+            "drupal/core": "^8.8 || ^9",
+            "symfony/var-dumper": "^4 || ^5"
+        },
+        "conflict": {
+            "kint-php/kint": "<3"
+        },
+        "require-dev": {
+            "composer/installers": "^1",
+            "cweagans/composer-patches": "~1.0",
+            "drupal/core-composer-scaffold": "^8.0",
+            "drupal/core-dev": "^8.0",
+            "drupal/core-recommended": "^8.0",
+            "drush/drush": "^10",
+            "mglaman/phpstan-drupal": "^0.12",
+            "php-parallel-lint/php-parallel-lint": "^1.2",
+            "phpstan/phpstan-deprecation-rules": "^0.12",
+            "zaporylie/composer-drupal-optimizations": "^1.0"
+        },
+        "suggest": {
+            "kint-php/kint": "Kint provides an informative display of arrays/objects. Useful for debugging and developing."
+        },
+        "type": "drupal-module",
+        "extra": {
+            "drupal": {
+                "version": "4.0.0",
+                "datestamp": "1592918495",
+                "security-coverage": {
+                    "status": "covered",
+                    "message": "Covered by Drupal's security advisory policy"
+                }
+            },
+            "installer-paths": {
+                "web/core": [
+                    "type:drupal-core"
+                ],
+                "web/libraries/{$name}": [
+                    "type:drupal-library"
+                ],
+                "web/modules/contrib/{$name}": [
+                    "type:drupal-module"
+                ],
+                "web/profiles/{$name}": [
+                    "type:drupal-profile"
+                ],
+                "web/themes/{$name}": [
+                    "type:drupal-theme"
+                ],
+                "drush/{$name}": [
+                    "type:drupal-drush"
+                ]
+            },
+            "drupal-scaffold": {
+                "locations": {
+                    "web-root": "web/"
+                }
+            },
+            "drush": {
+                "services": {
+                    "drush.services.yml": "^9 || ^10"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                ".spoons/ScriptHandler.php"
+            ]
+        },
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "scripts": {
+            "si": [
+                "drush si -v --db-url=${SIMPLETEST_DB:-mysql://root:password@mariadb/db}"
+            ],
+            "phpcs": [
+                "phpcs --runtime-set ignore_warnings_on_exit 1 --runtime-set ignore_errors_on_exit 1 web/modules/custom"
+            ],
+            "lint": [
+                "parallel-lint --exclude web --exclude vendor ."
+            ],
+            "webserver": [
+                "cd web && php -S 0.0.0.0:8888 .ht.router.php"
+            ],
+            "chromedriver": [
+                "chromedriver --port=9515 --verbose --whitelisted-ips --log-path=/tmp/chromedriver.log --no-sandbox"
+            ],
+            "unit": [
+                "phpunit --verbose web/modules/custom"
+            ],
+            "phpstan": [
+                "phpstan analyse web/modules/custom"
+            ],
+            "stylelint": [
+                "yarn --silent --cwd web/core stylelint --formatter verbose --config ./.stylelintrc.json ../modules/custom/**/*.css"
+            ],
+            "eslint": [
+                "yarn --silent --cwd web/core eslint -c ./.eslintrc.json ../modules/custom"
+            ],
+            "post-update-cmd": [
+                "Spoons\\ScriptHandler::createSymlinks"
+            ]
+        },
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "drupalspoons",
+                "homepage": "https://www.drupal.org/user/3647684"
+            },
+            {
+                "name": "moshe weitzman",
+                "homepage": "https://www.drupal.org/user/23"
+            }
+        ],
+        "description": "Various blocks, pages, and functions for developers.",
+        "homepage": "https://www.drupal.org/project/devel",
+        "support": {
+            "source": "https://gitlab.com/drupalspoons/devel",
+            "issues": "https://gitlab.com/drupalspoons/devel/-/issues",
+            "slack": "https://drupal.slack.com/archives/C012WAW1MH6"
+        }
+    },
+    {
+        "name": "drupal/migrate_devel",
+        "version": "2.0.0-alpha1",
+        "version_normalized": "2.0.0.0-alpha1",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupalcode.org/project/migrate_devel.git",
+            "reference": "8.x-2.0-alpha1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/migrate_devel-8.x-2.0-alpha1.zip",
+            "reference": "8.x-2.0-alpha1",
+            "shasum": "250cff9ab58cbd2f74b4d40497e04360f5c14ab8"
+        },
+        "require": {
+            "drupal/core": "^8 || ^9",
+            "drupal/devel": "*"
+        },
+        "conflict": {
+            "drush/drush": "<9"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "drupal": {
+                "version": "8.x-2.0-alpha1",
+                "datestamp": "1591995867",
+                "security-coverage": {
+                    "status": "not-covered",
+                    "message": "Alpha releases are not covered by Drupal security advisories."
+                }
+            },
+            "drush": {
+                "services": {
+                    "drush.services.yml": "^9"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "Derimagia",
+                "homepage": "https://www.drupal.org/user/819640"
+            },
+            {
+                "name": "aczietlow",
+                "homepage": "https://www.drupal.org/user/1616656"
+            },
+            {
+                "name": "andrewmacpherson",
+                "homepage": "https://www.drupal.org/user/265648"
+            }
+        ],
+        "description": "Migrate Development Tools",
+        "homepage": "https://www.drupal.org/project/migrate_devel",
+        "support": {
+            "source": "https://git.drupalcode.org/project/migrate_devel",
+            "issues": "https://www.drupal.org/project/issues/migrate_devel"
+        }
+    },
+    {
+        "name": "drupal/migrate_plus",
+        "version": "5.1.0",
+        "version_normalized": "5.1.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupalcode.org/project/migrate_plus.git",
+            "reference": "8.x-5.1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/migrate_plus-8.x-5.1.zip",
+            "reference": "8.x-5.1",
+            "shasum": "1257427ab0c64459c3c1e42bb2a98d3114b77163"
+        },
+        "require": {
+            "drupal/core": "^8.8 || ^9",
+            "php": ">=7.1"
+        },
+        "require-dev": {
+            "drupal/migrate_example_advanced_setup": "*",
+            "drupal/migrate_example_setup": "*"
+        },
+        "suggest": {
+            "ext-soap": "*",
+            "sainsburys/guzzle-oauth2-plugin": "3.0 required for the OAuth2 authentication plugin"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "drupal": {
+                "version": "8.x-5.1",
+                "datestamp": "1588261060",
+                "security-coverage": {
+                    "status": "covered",
+                    "message": "Covered by Drupal's security advisory policy"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "Mike Ryan",
+                "homepage": "https://www.drupal.org/u/mikeryan",
+                "role": "Maintainer"
+            },
+            {
+                "name": "Lucas Hedding",
+                "homepage": "https://www.drupal.org/u/heddn",
+                "role": "Maintainer"
+            }
+        ],
+        "description": "Enhancements to core migration support.",
+        "homepage": "https://www.drupal.org/project/migrate_plus",
+        "support": {
+            "source": "https://git.drupalcode.org/project/migrate_plus",
+            "issues": "https://www.drupal.org/project/issues/migrate_plus",
+            "slack": "#migrate"
+        }
+    },
+    {
+        "name": "drupal/migrate_tools",
+        "version": "5.0.0",
+        "version_normalized": "5.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupalcode.org/project/migrate_tools.git",
+            "reference": "8.x-5.0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/migrate_tools-8.x-5.0.zip",
+            "reference": "8.x-5.0",
+            "shasum": "b7c91aa6f7de9d6d548f65f83c8736e47e5926a1"
+        },
+        "require": {
+            "drupal/core": "^8.8 | ^9",
+            "drupal/migrate_plus": "^5",
+            "php": ">=7.1"
+        },
+        "require-dev": {
+            "drupal/migrate_plus": "^5",
+            "drupal/migrate_source_csv": "^3",
+            "drush/drush": "^10"
+        },
+        "suggest": {
+            "drush/drush": "^9 || ^10"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "drupal": {
+                "version": "8.x-5.0",
+                "datestamp": "1588260531",
+                "security-coverage": {
+                    "status": "covered",
+                    "message": "Covered by Drupal's security advisory policy"
+                }
+            },
+            "drush": {
+                "services": {
+                    "drush.services.yml": "^9 || ^10"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "Mike Ryan",
+                "homepage": "https://www.drupal.org/u/mikeryan",
+                "role": "Maintainer"
+            },
+            {
+                "name": "Lucas Hedding",
+                "homepage": "https://www.drupal.org/u/heddn",
+                "role": "Maintainer"
+            }
+        ],
+        "description": "Tools to assist in developing and running migrations.",
+        "homepage": "http://drupal.org/project/migrate_tools",
+        "support": {
+            "source": "https://git.drupalcode.org/project/migrate_tools",
+            "issues": "https://www.drupal.org/project/issues/migrate_tools",
+            "slack": "#migrate"
+        }
     },
     {
         "name": "easyrdf/easyrdf",
@@ -3478,6 +3883,88 @@
         ]
     },
     {
+        "name": "symfony/polyfill-php80",
+        "version": "v1.17.1",
+        "version_normalized": "1.17.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/polyfill-php80.git",
+            "reference": "4a5b6bba3259902e386eb80dd1956181ee90b5b2"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/4a5b6bba3259902e386eb80dd1956181ee90b5b2",
+            "reference": "4a5b6bba3259902e386eb80dd1956181ee90b5b2",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=7.0.8"
+        },
+        "time": "2020-06-06T08:46:27+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.17-dev"
+            },
+            "thanks": {
+                "name": "symfony/polyfill",
+                "url": "https://github.com/symfony/polyfill"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Symfony\\Polyfill\\Php80\\": ""
+            },
+            "files": [
+                "bootstrap.php"
+            ],
+            "classmap": [
+                "Resources/stubs"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Ion Bazan",
+                "email": "ion.bazan@gmail.com"
+            },
+            {
+                "name": "Nicolas Grekas",
+                "email": "p@tchwork.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony polyfill backporting some PHP 8.0+ features to lower PHP versions",
+        "homepage": "https://symfony.com",
+        "keywords": [
+            "compatibility",
+            "polyfill",
+            "portable",
+            "shim"
+        ],
+        "funding": [
+            {
+                "url": "https://symfony.com/sponsor",
+                "type": "custom"
+            },
+            {
+                "url": "https://github.com/fabpot",
+                "type": "github"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                "type": "tidelift"
+            }
+        ]
+    },
+    {
         "name": "symfony/polyfill-util",
         "version": "v1.17.0",
         "version_normalized": "1.17.0.0",
@@ -4035,6 +4522,99 @@
         ],
         "description": "Symfony Validator Component",
         "homepage": "https://symfony.com",
+        "funding": [
+            {
+                "url": "https://symfony.com/sponsor",
+                "type": "custom"
+            },
+            {
+                "url": "https://github.com/fabpot",
+                "type": "github"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                "type": "tidelift"
+            }
+        ]
+    },
+    {
+        "name": "symfony/var-dumper",
+        "version": "v4.4.10",
+        "version_normalized": "4.4.10.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/var-dumper.git",
+            "reference": "56b3aa5eab0ac6720dcd559fd1d590ce301594ac"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/var-dumper/zipball/56b3aa5eab0ac6720dcd559fd1d590ce301594ac",
+            "reference": "56b3aa5eab0ac6720dcd559fd1d590ce301594ac",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=7.1.3",
+            "symfony/polyfill-mbstring": "~1.0",
+            "symfony/polyfill-php72": "~1.5",
+            "symfony/polyfill-php80": "^1.15"
+        },
+        "conflict": {
+            "phpunit/phpunit": "<4.8.35|<5.4.3,>=5.0",
+            "symfony/console": "<3.4"
+        },
+        "require-dev": {
+            "ext-iconv": "*",
+            "symfony/console": "^3.4|^4.0|^5.0",
+            "symfony/process": "^4.4|^5.0",
+            "twig/twig": "^1.34|^2.4|^3.0"
+        },
+        "suggest": {
+            "ext-iconv": "To convert non-UTF-8 strings to UTF-8 (or symfony/polyfill-iconv in case ext-iconv cannot be used).",
+            "ext-intl": "To show region name in time zone dump",
+            "symfony/console": "To use the ServerDumpCommand and/or the bin/var-dump-server script"
+        },
+        "time": "2020-05-30T20:06:45+00:00",
+        "bin": [
+            "Resources/bin/var-dump-server"
+        ],
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "4.4-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "Resources/functions/dump.php"
+            ],
+            "psr-4": {
+                "Symfony\\Component\\VarDumper\\": ""
+            },
+            "exclude-from-classmap": [
+                "/Tests/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Nicolas Grekas",
+                "email": "p@tchwork.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony mechanism for exploring and dumping PHP variables",
+        "homepage": "https://symfony.com",
+        "keywords": [
+            "debug",
+            "dump"
+        ],
         "funding": [
             {
                 "url": "https://symfony.com/sponsor",
