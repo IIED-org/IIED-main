@@ -262,7 +262,7 @@ $databases = [];
  * its location.
  */
 
-$settings['config_sync_directory'] = $app_root . '/../config/sync';
+$settings['config_sync_directory'] = $app_root . '/../config/default/';
 
 /**
  * Settings:
