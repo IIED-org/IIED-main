@@ -1,0 +1,22 @@
+uuid: bcbc8bf2-821b-4d42-ac2b-4dd2c165ad8d
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - iied_pubs
+_core:
+  default_config_hash: KHQIJ7Vfl25lTjzIc7qIvnuistt-Mw2O0kG4jCofmkI
+id: iied_pubs_messages
+theme: iied_pubs
+region: navbar_branding
+weight: 0
+provider: null
+plugin: system_messages_block
+settings:
+  id: system_messages_block
+  label: 'Status messages'
+  provider: system
+  label_display: '0'
+visibility: {  }
