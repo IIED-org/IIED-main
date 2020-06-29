@@ -20,6 +20,7 @@
         "drupal/core-composer-scaffold": "^8.8",
         "drupal/core-recommended": "^8.8",
         "drupal/core-vendor-hardening": "^8.8",
+        "drupal/paragraphs": "^1.12",
         "drupal/pathauto": "^1.8"
     },
     "require-dev": {
