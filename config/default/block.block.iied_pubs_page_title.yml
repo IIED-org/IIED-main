@@ -1,0 +1,20 @@
+uuid: c0cf74a0-221f-4268-bcc2-df018040a9c9
+langcode: en
+status: true
+dependencies:
+  theme:
+    - iied_pubs
+_core:
+  default_config_hash: 7rR9chwXvdM2H8OYMAYx9Zj3GGlPMrZp_M3ZA4thYTk
+id: iied_pubs_page_title
+theme: iied_pubs
+region: content
+weight: -50
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  provider: core
+  label_display: '0'
+visibility: {  }

@@ -1,4 +1,4 @@
-uuid: 2c358faf-d42b-45da-a74e-a57f816fac93
+uuid: c1d3ce26-9a17-4e8e-b8d7-b90d24c46d0f
 langcode: en
 status: true
 dependencies:
@@ -7,11 +7,11 @@ dependencies:
   module:
     - system
   theme:
-    - radix
+    - iied_pubs
 _core:
   default_config_hash: rH6PpAn7-RScha1rGkohGAYSSh_1OVeZzioJPzPw6O4
-id: radix_tools
-theme: radix
+id: iied_pubs_tools
+theme: iied_pubs
 region: navbar_branding
 weight: 0
 provider: null
