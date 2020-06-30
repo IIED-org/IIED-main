@@ -301,7 +301,7 @@ class CustomSQLQuery extends SourcePluginBase implements ContainerFactoryPluginI
     // plugin for the next possible row.
     while (!isset($this->currentRow) && $this->getIterator()->valid()) {
 
-      $row_data = $this->getIterator()->current();
+      $row_data = (array)$this->getIterator()->current() + $this->configuration;
       $this->fetchNextRow();
       $row = new Row((array)$row_data, $this->getIds());
 
