@@ -1,0 +1,8 @@
+uuid: 69b700f7-9547-4786-b612-cd07f9cd126a
+langcode: en
+status: true
+dependencies: {  }
+name: List
+vid: list
+description: 'Set of publications'
+weight: 0

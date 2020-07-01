@@ -1,0 +1,8 @@
+uuid: 89037d71-037d-4505-ace2-53f0df349795
+langcode: en
+status: true
+dependencies: {  }
+name: Series
+vid: series
+description: 'Publication series'
+weight: -9

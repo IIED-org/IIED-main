@@ -1,0 +1,8 @@
+uuid: 41e96b44-654c-4283-80fa-a8fc3680cf68
+langcode: en
+status: true
+dependencies: {  }
+name: Theme
+vid: theme
+description: 'Interest or category'
+weight: -10
