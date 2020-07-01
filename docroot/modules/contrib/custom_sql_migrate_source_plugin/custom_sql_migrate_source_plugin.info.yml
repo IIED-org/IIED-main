@@ -8,7 +8,7 @@ dependencies:
   - migrate_plus
   - migrate_tools
 
-# Information added by Drupal.org packaging script on 2019-10-03
-version: '8.x-1.0'
+# Information added by Drupal.org packaging script on 2020-04-10
+version: '8.x-1.1'
 project: 'custom_sql_migrate_source_plugin'
-datestamp: 1570121293
+datestamp: 1586559209

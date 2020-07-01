@@ -25,6 +25,7 @@
     },
     "require-dev": {
         "drupal/config_devel": "^1.7",
+        "drupal/custom_sql_migrate_source_plugin": "^1.1",
         "drupal/devel": "^4.0",
         "drupal/migrate_devel": "^2",
         "drupal/migrate_plus": "^5.1",

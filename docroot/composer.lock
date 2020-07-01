@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "307a00b3fd51b9f7dd81b9f907ab2873",
+    "content-hash": "9693632ed1b9d202b2c4f7437d9195e4",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4608,6 +4608,52 @@
             "homepage": "https://www.drupal.org/project/config_devel",
             "support": {
                 "source": "https://git.drupalcode.org/project/config_devel"
+            }
+        },
+        {
+            "name": "drupal/custom_sql_migrate_source_plugin",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/custom_sql_migrate_source_plugin.git",
+                "reference": "8.x-1.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/custom_sql_migrate_source_plugin-8.x-1.1.zip",
+                "reference": "8.x-1.1",
+                "shasum": "19eb2ef1cfa9f6aa4ac6d795fce7d697add57263"
+            },
+            "require": {
+                "drupal/core": "^8",
+                "drupal/migrate_plus": "*",
+                "drupal/migrate_tools": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.1",
+                    "datestamp": "1586559207",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "ccx105",
+                    "homepage": "https://www.drupal.org/user/3157639"
+                }
+            ],
+            "description": "Migrations of content via custom SQL string.",
+            "homepage": "https://www.drupal.org/project/custom_sql_migrate_source_plugin",
+            "support": {
+                "source": "https://git.drupalcode.org/project/custom_sql_migrate_source_plugin"
             }
         },
         {
