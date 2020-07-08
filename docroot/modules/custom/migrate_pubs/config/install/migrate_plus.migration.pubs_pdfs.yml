@@ -1,0 +1,43 @@
+# Migration configuration for pdf file content.
+id: pubs_pdfs
+label: 'Pubs pdfs'
+source:
+  plugin: directory
+  path: /Users/chris/Sites/devdesktop/pubspdfs
+  constants:
+    dest_prefix: 'public://migrate/onlinepdf/'
+process:
+  _source_file_path:
+    -
+      plugin: urlencode
+      source: path
+  _dest_file_path:
+    -
+      plugin: concat
+      source:
+        - constants/dest_prefix
+        - relative_path
+    -
+      plugin: urlencode
+  uri:
+    plugin: file_copy
+    source:
+      - '@_source_file_path'
+      - '@_dest_file_path'
+  status:
+    -
+      plugin: default_value
+      default_value: 1
+  _timestamp:
+    -
+      plugin: callback
+      callable: time
+  created: '@_timestamp'
+  changed: '@_timestamp'
+  uid:
+    -
+      plugin: default_value
+      default_value: 0
+destination:
+  plugin: 'entity:file'
+migration_dependencies: {  }

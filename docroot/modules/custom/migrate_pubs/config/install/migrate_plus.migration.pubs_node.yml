@@ -32,7 +32,8 @@ process:
   'body/value': Abstract
   # 'body/summary': excerpt
   field_tags:
-    plugin: entity_generate_multiple
+    plugin: entity_lookup
+    allow_multiple: true
     source: Keywords
     entity_type: taxonomy_term
     bundle: tags
@@ -48,4 +49,4 @@ migration_dependencies:
   optional:
     - pubs_tags
     - pubs_authors
-
+    - pubs_pdfs

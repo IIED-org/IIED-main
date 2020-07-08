@@ -1,0 +1,6 @@
+.dropwhale
+.idea/
+docker-compose.yml
+dropwhale.settings
+*.patch
+interdiff*.txt
