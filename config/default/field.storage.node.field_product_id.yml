@@ -1,0 +1,21 @@
+uuid: 6646d186-8718-46d4-941e-6879fac2f325
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - serial
+id: node.field_product_id
+field_name: field_product_id
+entity_type: node
+type: serial
+settings:
+  start_value: 20001
+  init_existing_entities: 0
+module: serial
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

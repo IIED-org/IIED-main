@@ -5,6 +5,16 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.publication.body
+    - field.field.node.publication.field_author_s_
+    - field.field.node.publication.field_lit_code
+    - field.field.node.publication.field_pdf
+    - field.field.node.publication.field_product_code
+    - field.field.node.publication.field_product_id
+    - field.field.node.publication.field_project
+    - field.field.node.publication.field_publisher
+    - field.field.node.publication.field_short_title
+    - field.field.node.publication.field_tags
+    - field.field.node.publication.field_theme_s_
     - node.type.publication
   module:
     - text
@@ -27,4 +37,14 @@ content:
     settings: {  }
     third_party_settings: {  }
     region: content
-hidden: {  }
+hidden:
+  field_author_s_: true
+  field_lit_code: true
+  field_pdf: true
+  field_product_code: true
+  field_product_id: true
+  field_project: true
+  field_publisher: true
+  field_short_title: true
+  field_tags: true
+  field_theme_s_: true

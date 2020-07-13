@@ -11,6 +11,7 @@ module:
   color: 0
   comment: 0
   components: 0
+  computed_field: 0
   config: 0
   contact: 0
   contextual: 0
@@ -33,7 +34,10 @@ module:
   menu_ui: 0
   migrate: 0
   migrate_devel: 0
+  migrate_directory: 0
   migrate_plus: 0
+  migrate_pubs: 0
+  migrate_source_csv: 0
   migrate_tools: 0
   node: 0
   options: 0
@@ -43,6 +47,7 @@ module:
   quickedit: 0
   rdf: 0
   search: 0
+  serial: 0
   shortcut: 0
   system: 0
   taxonomy: 0
