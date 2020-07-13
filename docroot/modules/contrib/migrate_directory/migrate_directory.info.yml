@@ -1,0 +1,13 @@
+name: 'Migrate Directory'
+type: module
+description: 'Migrate Directory'
+# core: 8.x
+package: 'Migrate'
+dependencies:
+  - drupal:migrate
+
+# Information added by Drupal.org packaging script on 2019-05-03
+version: '8.x-1.0'
+core: '8.x'
+project: 'migrate_directory'
+datestamp: 1556906897

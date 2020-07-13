@@ -1,0 +1,22 @@
+uuid: dcb93125-f7cb-40a5-b915-686fc623a87f
+langcode: en
+status: true
+dependencies:
+  module:
+    - computed_field
+    - node
+id: node.field_product_code
+field_name: field_product_code
+entity_type: node
+type: computed_string
+settings:
+  max_length: '128'
+  is_ascii: false
+  case_sensitive: false
+module: computed_field
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

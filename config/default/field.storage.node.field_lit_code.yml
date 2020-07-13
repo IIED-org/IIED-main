@@ -1,0 +1,30 @@
+uuid: 7375b6da-ab54-4449-a726-ed10af4dc0be
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_lit_code
+field_name: field_lit_code
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: P
+      label: IIED
+    -
+      value: S
+      label: General
+    -
+      value: X
+      label: External
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

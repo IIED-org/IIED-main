@@ -1,0 +1,24 @@
+uuid: c543c34a-9f4c-4d2d-934d-6c637c015ffa
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_product_code
+    - node.type.publication
+  module:
+    - computed_field
+id: node.publication.field_product_code
+field_name: field_product_code
+entity_type: node
+bundle: publication
+label: 'Product code'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: ''
+default_value_callback: ''
+settings:
+  code: "switch ($entity->field_lit_code->value) {\r\n  case 'P':\r\n     $value = $entity->field_product_id->value . 'IIED';\r\n  break;\r\n  case 'X':\r\n    $value = 'X' . $entity->field_product_id->value;\r\n  break;\r\n case 'S':\r\n    $value = 'G' . $entity->field_product_id->value;\r\n  break;\r\n}\r\n"
+field_type: computed_string

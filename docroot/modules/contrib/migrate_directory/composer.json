@@ -1,0 +1,14 @@
+{
+  "name": "drupal/migrate_directory",
+  "type": "drupal-module",
+  "description": "Migrate Directory",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/migrate_directory",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/migrate_directory",
+    "source": "http://cgit.drupalcode.org/migrate_directory"
+  },
+  "require": { }
+}

@@ -17,11 +17,15 @@
     "require": {
         "composer/installers": "^1.2",
         "drupal/admin_toolbar": "^2.3",
+        "drupal/computed_field": "^2.0",
         "drupal/core-composer-scaffold": "^8.8",
         "drupal/core-recommended": "^8.8",
         "drupal/core-vendor-hardening": "^8.8",
+        "drupal/migrate_directory": "^1.0",
+        "drupal/migrate_source_csv": "^3.4",
         "drupal/paragraphs": "^1.12",
-        "drupal/pathauto": "^1.8"
+        "drupal/pathauto": "^1.8",
+        "drupal/serial": "^1.0@alpha"
     },
     "require-dev": {
         "drupal/config_devel": "^1.7",

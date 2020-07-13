@@ -1,0 +1,23 @@
+uuid: 44d8262e-8773-4413-be87-d362f7506616
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_product_id
+    - node.type.publication
+  module:
+    - serial
+id: node.publication.field_product_id
+field_name: field_product_id
+entity_type: node
+bundle: publication
+label: 'Product ID'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings: {  }
+field_type: serial
