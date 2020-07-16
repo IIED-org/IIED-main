@@ -10,6 +10,7 @@ dependencies:
   - migrate_plus:migrate_plus
 config_devel:
   install:
+    - migrate_plus.migration.pubs_themes
     - migrate_plus.migration.pubs_pdfs
     - migrate_plus.migration.pubs_authors
     - migrate_plus.migration.pubs_tags

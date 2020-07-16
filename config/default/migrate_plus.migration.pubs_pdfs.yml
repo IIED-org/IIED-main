@@ -1,9 +1,10 @@
-uuid: 7f33e702-f874-4958-9809-85470e2e2892
+uuid: dfdb06c8-113d-412a-b9d0-50eb332e1ed9
 langcode: en
 status: true
-dependencies: {  }
-_core:
-  default_config_hash: dJrQdsqyQveM0knakMN9n83EXZvY2L51HWgGAIQ5VZA
+dependencies:
+  enforced:
+    module:
+      - migrate_pubs
 id: pubs_pdfs
 class: null
 field_plugin_method: null
@@ -15,7 +16,7 @@ source:
   plugin: directory
   path: /Users/chris/Sites/devdesktop/pubspdfs
   constants:
-    dest_prefix: 'public://migrate/pdfs/'
+    dest_prefix: 'public://migrate/onlinepdf/'
 process:
   _source_file_path:
     -
@@ -47,7 +48,7 @@ process:
   uid:
     -
       plugin: default_value
-      default_value: 0
+      default_value: 1
 destination:
   plugin: 'entity:file'
 migration_dependencies: {  }

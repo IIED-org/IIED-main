@@ -1,12 +1,10 @@
-uuid: 114dc96c-d353-441d-9fff-6a9402036a03
+uuid: 684c0f0d-9f3a-4959-aa85-1f6d02de73d8
 langcode: en
 status: true
 dependencies:
   enforced:
     module:
       - migrate_pubs
-_core:
-  default_config_hash: wrNMzVRQ-zBfTH40nLTYSsJcrt-lcIp2FZnzazpHxQI
 id: pubs_authors
 class: null
 field_plugin_method: null
@@ -22,6 +20,9 @@ process:
     default_value: author
   title: Author
   field_surname: Surname
+  uid:
+    plugin: default_value
+    default_value: 1
 destination:
   plugin: 'entity:node'
 migration_dependencies: null

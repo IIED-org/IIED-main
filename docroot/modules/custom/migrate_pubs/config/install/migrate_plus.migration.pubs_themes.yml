@@ -1,23 +1,22 @@
 # Migration configuration for author content.
-id: pubs_authors
-label: Authors of IIED Publications
+id: pubs_themes
+label: IIED Themes
 migration_group: pubs
 source:
-  plugin: pubs_author
+  plugin: pubs_theme
 process:
-  # Hardcode the destination node type (bundle) as 'author'.
-  type:
+  # Hardcode the destination node type (bundle) as 'Theme'.
+  vid:
     plugin: default_value
-    default_value: author
-  title: Author
-  field_surname: Surname
-  uid:
-    plugin: default_value
-    default_value: 1
+    default_value: theme
+  name: ShortName
+  description: LongName
+  field_legacy_code: Code
 destination:
-  plugin: entity:node
+  plugin: entity:taxonomy_term
 # The general rule of thumb is that any migrations referenced by migration
 # process plugins should be required here.
+migration_dependencies: {}
 dependencies:
   enforced:
     module:

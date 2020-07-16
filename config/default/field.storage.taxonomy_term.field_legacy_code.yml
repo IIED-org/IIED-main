@@ -1,15 +1,15 @@
-uuid: 988adfbc-2b9b-4bc5-a80a-d17baee24ddc
+uuid: d3404b24-4c86-45ed-8542-933c54e53be1
 langcode: en
 status: true
 dependencies:
   module:
-    - node
-id: node.field_product_code
-field_name: field_product_code
-entity_type: node
+    - taxonomy
+id: taxonomy_term.field_legacy_code
+field_name: field_legacy_code
+entity_type: taxonomy_term
 type: string
 settings:
-  max_length: 127
+  max_length: 128
   is_ascii: false
   case_sensitive: false
 module: core

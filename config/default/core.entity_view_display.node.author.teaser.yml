@@ -5,7 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.author.body
-    - field.field.node.author.field_organisation
+    - field.field.node.author.field_surname
     - node.type.author
   module:
     - text
@@ -29,4 +29,4 @@ content:
     third_party_settings: {  }
     region: content
 hidden:
-  field_organisation: true
+  field_surname: true

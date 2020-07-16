@@ -1,23 +1,39 @@
 # Migration configuration for beer content.
 id: pubs_node
-label: IIED Publications
+label: IIED Publications nodes
 migration_group: pubs
 migration_tags:
-  - example
+  - pubs
 source:
   plugin: pubs_node
+  constants:
+    SOURCE_DOMAIN: 'https://pubscopy.iied.org/pdfs/'
+    DRUPAL_FILE_DIRECTORY: 'public://pdfs/migrate/'
+    PDF_SUFFIX: '.pdf'
 process:
   # Hardcode the destination node type (bundle) as 'publication'.
+  uid:
+    plugin: default_value
+    default_value: 1
   type:
     plugin: default_value
     default_value: publication
+# Skip row unless Status = A or N
+  field_status:
+    plugin: skip_on_value
+    method: row
+    not_equals: true
+    source: Status
+    value:
+      - A
+      - N
   title: Title
-  #uid:
-  #  plugin: migration_lookup
-  #  migration: pubs_user
-  #  source: aid
-  field_pubid: ProductCode
-  field_authors:
+  field_short_title: ShortTitle
+  _product_code: ProductCode
+  _lit_code: LitCode
+  field_product_code: '@_product_code'
+  field_lit_code: '@_lit_code'
+  field_author_s_:
     plugin: entity_lookup
     allow_multiple: true
     source: AuthorList
@@ -31,6 +47,21 @@ process:
   # YAML special character.
   'body/value': Abstract
   # 'body/summary': excerpt
+  # Theme code goes here
+  field_theme_s_:
+    -
+      plugin: get
+      source:
+        - Theme
+        - Theme2
+    -
+      plugin: entity_lookup
+      allow_multiple: true
+      entity_type: taxonomy_term
+      bundle: theme
+      bundle_key: vid
+      value_key: field_legacy_code
+
   field_tags:
     plugin: entity_lookup
     allow_multiple: true
@@ -40,6 +71,26 @@ process:
     bundle_key: vid
     value_key: name
     ignore_case: true
+
+  _field_pdf_path:
+    plugin: concat
+    source:
+      - constants/SOURCE_DOMAIN
+      - '@_product_code'
+      - constants/PDF_SUFFIX
+
+  field_pdf:
+    plugin: file_import
+    source: '@_field_pdf_path'
+    destination: constants/DRUPAL_FILE_DIRECTORY
+    skip_on_missing_source: true
+    skip_on_error: true
+    reuse: true
+    uid: 1
+  field_pdf/display:
+    plugin: default_value
+    default_value: 1
+
 destination:
   plugin: entity:node
 
@@ -47,6 +98,6 @@ destination:
 # process plugins should be required here.
 migration_dependencies:
   optional:
+    - pubs_themes
     - pubs_tags
     - pubs_authors
-    - pubs_pdfs

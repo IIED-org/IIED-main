@@ -6,13 +6,13 @@ use Drupal\migrate\Plugin\migrate\source\SqlBase;
 use Drupal\migrate\Row;
 
 /**
- * Source plugin for pubs content.
+ * Source plugin for themes content.
  *
  * @MigrateSource(
- *   id = "pubs_node"
+ *   id = "pubs_theme"
  * )
  */
-class PubsNode extends SqlBase {
+class PubsTheme extends SqlBase {
 
   /**
    * {@inheritdoc}
@@ -28,20 +28,12 @@ class PubsNode extends SqlBase {
     // the base node data here, and pull in the relationships in prepareRow()
     // below.
     $fields = [
-      // @TODO: Add rest of pubs fields
-      'ProductCode',
-      'LitCode',
-      'Status',
-      'Title',
-      'ShortTitle',
-      'AuthorList',
-      'Abstract',
-      'Theme',
-      'Theme2',
-      'Keywords',
+      'Code',
+      'ShortName',
+      'LongName'
     ];
-    $query = $this->select('Publications', 'p')
-      ->fields('p', $fields);
+    $query = $this->select('Themes', 't')
+      ->fields('t', $fields);
     return $query;
   }
 
@@ -50,16 +42,9 @@ class PubsNode extends SqlBase {
    */
   public function fields() {
     $fields = [
-      'ProductCode' => $this->t('Publication ID'),
-      'LitCode' => $this->t('P, S or X'),
-      'Status' => $this->t('Status A or N only'),
-      'Title' => $this->t('Title of publication'),
-      'ShortTitle' => $this->t('Short title'),
-      'AuthorList' => $this->t('Authors: multiple values, delimited by pipe'),
-      'Abstract' => $this->t('Abstract for this publication'),
-      'Theme' => $this->t('Primary theme'),
-      'Theme2' => $this->t('Secondary theme'),
-      'Keywords' => $this->t('Tags, delimited by pipe'),
+      'Code' => $this->t('Key'),
+      'ShortName' => $this->t('Theme name'),
+      'LongName' => $this->t('Description'),
     ];
 
     return $fields;
@@ -70,9 +55,9 @@ class PubsNode extends SqlBase {
    */
   public function getIds() {
     return [
-      'ProductCode' => [
+      'Code' => [
         'type' => 'string',
-        'alias' => 'p',
+        'alias' => 'a',
       ],
     ];
   }
@@ -93,12 +78,7 @@ class PubsNode extends SqlBase {
     */
     // As we did for favorite beers in the user migration, we need to explode
     // the multi-value country names.
-    if ($value = $row->getSourceProperty('AuthorList')) {
-      $row->setSourceProperty('AuthorList', explode('|', substr($value,1,strlen($value)-2)));
-    }
-    if ($value = $row->getSourceProperty('Keywords')) {
-     $row->setSourceProperty('Keywords', explode('|', substr($value,1,strlen($value)-2)));
-    }
+
     return parent::prepareRow($row);
   }
 

@@ -12,11 +12,11 @@ dependencies:
     - field.field.node.publication.field_project
     - field.field.node.publication.field_publisher
     - field.field.node.publication.field_short_title
+    - field.field.node.publication.field_status
     - field.field.node.publication.field_tags
     - field.field.node.publication.field_theme_s_
     - node.type.publication
   module:
-    - computed_field
     - file
     - options
     - serial
@@ -30,12 +30,12 @@ content:
   body:
     label: hidden
     type: text_default
-    weight: 101
+    weight: 1
     settings: {  }
     third_party_settings: {  }
     region: content
   field_author_s_:
-    weight: 107
+    weight: 6
     label: above
     settings:
       link: true
@@ -43,14 +43,14 @@ content:
     type: entity_reference_label
     region: content
   field_lit_code:
-    weight: 103
+    weight: 3
     label: above
     settings: {  }
     third_party_settings: {  }
     type: list_default
     region: content
   field_pdf:
-    weight: 105
+    weight: 5
     label: above
     settings:
       use_description_as_link_text: true
@@ -58,24 +58,22 @@ content:
     type: file_default
     region: content
   field_product_code:
-    weight: 104
+    weight: 11
     label: above
     settings:
-      sanitized: true
-      cache_unit: -1
-      cache_duration: 1
+      link_to_entity: false
     third_party_settings: {  }
-    type: computed_string
+    type: string
     region: content
   field_product_id:
-    weight: 102
+    weight: 2
     label: above
     settings: {  }
     third_party_settings: {  }
     type: serial_default_formatter
     region: content
   field_project:
-    weight: 110
+    weight: 9
     label: above
     settings:
       link: true
@@ -83,7 +81,7 @@ content:
     type: entity_reference_label
     region: content
   field_publisher:
-    weight: 108
+    weight: 7
     label: above
     settings:
       link: true
@@ -91,15 +89,22 @@ content:
     type: entity_reference_label
     region: content
   field_short_title:
-    weight: 106
+    weight: 4
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
     type: string
     region: content
+  field_status:
+    weight: 13
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+    region: content
   field_tags:
-    weight: 111
+    weight: 10
     label: above
     settings:
       link: true
@@ -107,7 +112,7 @@ content:
     type: entity_reference_label
     region: content
   field_theme_s_:
-    weight: 109
+    weight: 8
     label: above
     settings:
       link: true
@@ -115,8 +120,8 @@ content:
     type: entity_reference_label
     region: content
   links:
-    weight: 100
+    weight: 0
+    region: content
     settings: {  }
     third_party_settings: {  }
-    region: content
 hidden: {  }

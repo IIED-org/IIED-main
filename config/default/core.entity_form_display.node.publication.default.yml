@@ -12,11 +12,11 @@ dependencies:
     - field.field.node.publication.field_project
     - field.field.node.publication.field_publisher
     - field.field.node.publication.field_short_title
+    - field.field.node.publication.field_status
     - field.field.node.publication.field_tags
     - field.field.node.publication.field_theme_s_
     - node.type.publication
   module:
-    - computed_field
     - file
     - path
     - serial
@@ -28,7 +28,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 10
+    weight: 11
     settings:
       rows: 9
       summary_rows: 3
@@ -38,12 +38,12 @@ content:
     region: content
   created:
     type: datetime_timestamp
-    weight: 5
+    weight: 6
     region: content
     settings: {  }
     third_party_settings: {  }
   field_author_s_:
-    weight: 28
+    weight: 14
     settings:
       match_operator: CONTAINS
       match_limit: 10
@@ -59,7 +59,7 @@ content:
     type: options_select
     region: content
   field_pdf:
-    weight: 26
+    weight: 12
     settings:
       progress_indicator: throbber
     third_party_settings: {  }
@@ -67,9 +67,11 @@ content:
     region: content
   field_product_code:
     weight: 2
-    settings: {  }
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
-    type: computed_string_widget
+    type: string_textfield
     region: content
   field_product_id:
     weight: 1
@@ -78,7 +80,7 @@ content:
     type: serial_default_widget
     region: content
   field_project:
-    weight: 31
+    weight: 17
     settings:
       match_operator: CONTAINS
       match_limit: 10
@@ -88,7 +90,7 @@ content:
     type: entity_reference_autocomplete
     region: content
   field_publisher:
-    weight: 29
+    weight: 15
     settings:
       match_operator: CONTAINS
       match_limit: 10
@@ -98,15 +100,21 @@ content:
     type: entity_reference_autocomplete
     region: content
   field_short_title:
-    weight: 27
+    weight: 13
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
     type: string_textfield
     region: content
+  field_status:
+    weight: 4
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
   field_tags:
-    weight: 32
+    weight: 18
     settings:
       match_operator: CONTAINS
       match_limit: 10
@@ -116,18 +124,14 @@ content:
     type: entity_reference_autocomplete
     region: content
   field_theme_s_:
-    weight: 30
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    weight: 16
+    settings: {  }
     third_party_settings: {  }
-    type: entity_reference_autocomplete
+    type: options_buttons
     region: content
   path:
     type: path
-    weight: 8
+    weight: 9
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -135,21 +139,21 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 6
+    weight: 7
     region: content
     third_party_settings: {  }
   status:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 9
+    weight: 10
     region: content
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 7
+    weight: 8
     region: content
     third_party_settings: {  }
   title:
@@ -162,7 +166,7 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 4
+    weight: 5
     settings:
       match_operator: CONTAINS
       size: 60

@@ -21,8 +21,6 @@
         "drupal/core-composer-scaffold": "^8.8",
         "drupal/core-recommended": "^8.8",
         "drupal/core-vendor-hardening": "^8.8",
-        "drupal/migrate_directory": "^1.0",
-        "drupal/migrate_source_csv": "^3.4",
         "drupal/paragraphs": "^1.12",
         "drupal/pathauto": "^1.8",
         "drupal/serial": "^1.0@alpha"
@@ -33,7 +31,10 @@
         "drupal/devel": "^4.0",
         "drupal/migrate_devel": "^2",
         "drupal/migrate_plus": "^5.1",
-        "drupal/migrate_tools": "^5.0"
+        "drupal/migrate_tools": "^5.0",
+        "drupal/migrate_directory": "^1.0",
+        "drupal/migrate_file": "^1.1",
+        "drupal/migrate_source_csv": "^3.4"
     },
     "conflict": {
         "drupal/drupal": "*"

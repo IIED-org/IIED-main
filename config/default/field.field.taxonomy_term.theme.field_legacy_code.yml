@@ -1,0 +1,19 @@
+uuid: ec58a389-f165-4231-bb82-4fd44fc4c154
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_legacy_code
+    - taxonomy.vocabulary.theme
+id: taxonomy_term.theme.field_legacy_code
+field_name: field_legacy_code
+entity_type: taxonomy_term
+bundle: theme
+label: 'Legacy code'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
