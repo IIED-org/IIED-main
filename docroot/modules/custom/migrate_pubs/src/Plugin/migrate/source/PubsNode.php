@@ -35,10 +35,12 @@ class PubsNode extends SqlBase {
       'Title',
       'ShortTitle',
       'AuthorList',
+      'Publisher',
       'Abstract',
       'Theme',
       'Theme2',
       'Keywords',
+      'DocType'
     ];
     $query = $this->select('Publications', 'p')
       ->fields('p', $fields);
@@ -56,10 +58,12 @@ class PubsNode extends SqlBase {
       'Title' => $this->t('Title of publication'),
       'ShortTitle' => $this->t('Short title'),
       'AuthorList' => $this->t('Authors: multiple values, delimited by pipe'),
+      'Publisher' => $this->t('Sometimes delimited by commas'),
       'Abstract' => $this->t('Abstract for this publication'),
       'Theme' => $this->t('Primary theme'),
       'Theme2' => $this->t('Secondary theme'),
       'Keywords' => $this->t('Tags, delimited by pipe'),
+      'DocType' => $this->t('Doctype lookup')
     ];
 
     return $fields;

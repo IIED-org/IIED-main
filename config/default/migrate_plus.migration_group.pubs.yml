@@ -1,10 +1,12 @@
-uuid: 01cb6a97-14ba-43d6-84e9-ec2b86cb1d61
+uuid: 563f14ec-f72d-4653-b79f-c575b79fc734
 langcode: en
 status: true
 dependencies:
   enforced:
     module:
       - migrate_pubs
+_core:
+  default_config_hash: OGqK_7caDPLgv3luzcRx-EpFqv_ExeEyxFOnNgE0UI4
 id: pubs
 label: 'Publications Library Imports'
 description: 'Migration from pubscopy.iied.org'

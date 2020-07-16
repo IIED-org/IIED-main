@@ -1,0 +1,30 @@
+# Migration configuration for author content.
+id: pubs_doctypes
+label: IIED document types
+migration_group: pubs
+source:
+  plugin: pubs_doctype
+process:
+  # Hardcode the destination node type (bundle) as 'document_type'.
+  vid:
+    plugin: default_value
+    default_value: document_type
+  name: Desc
+  _code: Code
+  _parent: Parent
+  field_legacy_doctype: '@_code'
+  tid: '@_code'
+  weight: '@_code'
+  parent:
+    plugin: migration_lookup
+    migration: pubs_doctypes
+    source: '@_parent'
+destination:
+  plugin: entity:taxonomy_term
+# The general rule of thumb is that any migrations referenced by migration
+# process plugins should be required here.
+migration_dependencies: {}
+dependencies:
+  enforced:
+    module:
+      - migrate_pubs

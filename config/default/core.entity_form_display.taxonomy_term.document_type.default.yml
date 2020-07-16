@@ -1,0 +1,60 @@
+uuid: 016b7a94-383d-4d10-8561-55e10ee38690
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.document_type.field_legacy_doctype
+    - field.field.taxonomy_term.document_type.field_parent_id
+    - taxonomy.vocabulary.document_type
+  module:
+    - path
+    - text
+id: taxonomy_term.document_type.default
+targetEntityType: taxonomy_term
+bundle: document_type
+mode: default
+content:
+  description:
+    type: text_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_legacy_doctype:
+    weight: 101
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  field_parent_id:
+    weight: 102
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  name:
+    type: string_textfield
+    weight: -5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 30
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 100
+    region: content
+    third_party_settings: {  }
+hidden: {  }

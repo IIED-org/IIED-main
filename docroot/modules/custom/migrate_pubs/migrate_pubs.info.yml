@@ -11,13 +11,13 @@ dependencies:
 config_devel:
   install:
     - migrate_plus.migration.pubs_themes
-    - migrate_plus.migration.pubs_pdfs
+    - migrate_plus.migration.pubs_doctypes
     - migrate_plus.migration.pubs_authors
     - migrate_plus.migration.pubs_tags
     - migrate_plus.migration.pubs_node
     - migrate_plus.migration_group.pubs
 # Information added by Drupal.org packaging script on 2019-04-19
-version: '8.x-1.1'
+version: '8.x-1.2'
 core: '8.x'
 project: 'migrate_pubs'
 datestamp: 1555683500

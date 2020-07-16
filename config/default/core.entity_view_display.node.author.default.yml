@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.node.author.body
+    - field.field.node.author.field_legacy_iscanonical
     - field.field.node.author.field_surname
     - node.type.author
   module:
@@ -20,6 +21,16 @@ content:
     weight: 101
     settings: {  }
     third_party_settings: {  }
+    region: content
+  field_legacy_iscanonical:
+    weight: 103
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
     region: content
   field_surname:
     weight: 102

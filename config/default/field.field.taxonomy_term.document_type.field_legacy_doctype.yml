@@ -1,0 +1,23 @@
+uuid: 45a5df1b-c476-4b48-b95c-579d54ea7365
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_legacy_doctype
+    - taxonomy.vocabulary.document_type
+id: taxonomy_term.document_type.field_legacy_doctype
+field_name: field_legacy_doctype
+entity_type: taxonomy_term
+bundle: document_type
+label: 'Legacy Doctype'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

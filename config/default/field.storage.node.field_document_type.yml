@@ -1,18 +1,17 @@
-uuid: 6646d186-8718-46d4-941e-6879fac2f325
+uuid: aa938bf3-805a-49a5-9556-5070b0eb7000
 langcode: en
 status: true
 dependencies:
   module:
     - node
-    - serial
-id: node.field_product_id
-field_name: field_product_id
+    - taxonomy
+id: node.field_document_type
+field_name: field_document_type
 entity_type: node
-type: serial
+type: entity_reference
 settings:
-  start_value: 20001
-  init_existing_entities: 1
-module: serial
+  target_type: taxonomy_term
+module: core
 locked: false
 cardinality: 1
 translatable: true

@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.node.publication.body
     - field.field.node.publication.field_author_s_
+    - field.field.node.publication.field_document_type
     - field.field.node.publication.field_lit_code
     - field.field.node.publication.field_pdf
     - field.field.node.publication.field_product_code
@@ -35,7 +36,15 @@ content:
     third_party_settings: {  }
     region: content
   field_author_s_:
-    weight: 6
+    weight: 7
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_document_type:
+    weight: 4
     label: above
     settings:
       link: true
@@ -50,7 +59,7 @@ content:
     type: list_default
     region: content
   field_pdf:
-    weight: 5
+    weight: 6
     label: above
     settings:
       use_description_as_link_text: true
@@ -58,7 +67,7 @@ content:
     type: file_default
     region: content
   field_product_code:
-    weight: 11
+    weight: 12
     label: above
     settings:
       link_to_entity: false
@@ -73,7 +82,7 @@ content:
     type: serial_default_formatter
     region: content
   field_project:
-    weight: 9
+    weight: 10
     label: above
     settings:
       link: true
@@ -81,7 +90,7 @@ content:
     type: entity_reference_label
     region: content
   field_publisher:
-    weight: 7
+    weight: 8
     label: above
     settings:
       link: true
@@ -89,7 +98,7 @@ content:
     type: entity_reference_label
     region: content
   field_short_title:
-    weight: 4
+    weight: 5
     label: above
     settings:
       link_to_entity: false
@@ -104,7 +113,7 @@ content:
     type: list_default
     region: content
   field_tags:
-    weight: 10
+    weight: 11
     label: above
     settings:
       link: true
@@ -112,7 +121,7 @@ content:
     type: entity_reference_label
     region: content
   field_theme_s_:
-    weight: 8
+    weight: 9
     label: above
     settings:
       link: true

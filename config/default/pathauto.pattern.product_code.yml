@@ -1,0 +1,22 @@
+uuid: 00de0199-0cdc-453a-8efd-4493fd313276
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: product_code
+label: 'Product code'
+type: 'canonical_entities:node'
+pattern: '[node:field_product_code]'
+selection_criteria:
+  4142f365-1ed9-4de3-a02a-407336f219a7:
+    id: node_type
+    bundles:
+      publication: publication
+    negate: false
+    context_mapping:
+      node: node
+    uuid: 4142f365-1ed9-4de3-a02a-407336f219a7
+selection_logic: and
+weight: -5
+relationships: {  }

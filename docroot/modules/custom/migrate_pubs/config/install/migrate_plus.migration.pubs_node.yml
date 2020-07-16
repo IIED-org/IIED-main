@@ -40,14 +40,9 @@ process:
     entity_type: node
     bundle: author
     value_key: title
-  # Some Drupal fields may have multiple components we may want to set
-  # separately. For example, text fields may have summaries (teasers) in
-  # addition to the full text value. We use / to separate the field name from
-  # the internal field value being set, and put it in quotes because / is a
-  # YAML special character.
+
   'body/value': Abstract
-  # 'body/summary': excerpt
-  # Theme code goes here
+
   field_theme_s_:
     -
       plugin: get
@@ -72,6 +67,27 @@ process:
     value_key: name
     ignore_case: true
 
+  field_document_type:
+    plugin: entity_lookup
+    source: DocType
+    entity_type: taxonomy_term
+    bundle: document_type
+    bundle_key: vid
+    value_key: field_legacy_doctype
+
+  field_publisher:
+    -
+      plugin: explode
+      delimiter: ', '
+      source: Publisher
+    -
+      plugin: entity_generate_multiple
+      entity_type: node
+      bundle: organisation
+      value_key: title
+      uid: 1
+
+# PDF file import via https from source directory
   _field_pdf_path:
     plugin: concat
     source:
@@ -101,3 +117,4 @@ migration_dependencies:
     - pubs_themes
     - pubs_tags
     - pubs_authors
+    - pubs_doctypes

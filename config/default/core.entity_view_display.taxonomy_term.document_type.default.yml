@@ -1,0 +1,41 @@
+uuid: 8e3517bc-b5e6-451e-ba21-3fcc645af9b2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.document_type.field_legacy_doctype
+    - field.field.taxonomy_term.document_type.field_parent_id
+    - taxonomy.vocabulary.document_type
+  module:
+    - text
+id: taxonomy_term.document_type.default
+targetEntityType: taxonomy_term
+bundle: document_type
+mode: default
+content:
+  description:
+    label: hidden
+    type: text_default
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_legacy_doctype:
+    weight: 1
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
+    region: content
+  field_parent_id:
+    weight: 2
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
+    region: content
+hidden: {  }

@@ -9,10 +9,10 @@ use Drupal\migrate\Row;
  * Source plugin for pubs content.
  *
  * @MigrateSource(
- *   id = "pubs_author"
+ *   id = "pubs_doctype"
  * )
  */
-class PubsAuthor extends SqlBase {
+class PubsDocType extends SqlBase {
 
   /**
    * {@inheritdoc}
@@ -29,11 +29,12 @@ class PubsAuthor extends SqlBase {
     // below.
     $fields = [
       // @TODO: Add rest of pubs fields
-      'Author',
-      'IsCanonical',
+      'Code',
+      'Desc',
+      'Heading'
     ];
-    $query = $this->select('AuthorMap', 'a')
-      ->fields('a', $fields);
+    $query = $this->select('NewDocTypes', 'd')
+      ->fields('d', $fields);
     return $query;
   }
 
@@ -42,9 +43,10 @@ class PubsAuthor extends SqlBase {
    */
   public function fields() {
     $fields = [
-      'Author' => $this->t('Author full name'),
-      'Surname' => $this->t('Last name of author for sorting'),
-      'IsCanonical' => $this->t('Canonical version of name')
+      'Code' => $this->t('Type code'),
+      'Desc' => $this->t('Content type description'),
+      'Heading' => $this->t('Content type heading'),
+      'Parent' => $this->t('Content type parent')
     ];
 
     return $fields;
@@ -55,9 +57,9 @@ class PubsAuthor extends SqlBase {
    */
   public function getIds() {
     return [
-      'Author' => [
-        'type' => 'string',
-        'alias' => 'a',
+      'Code' => [
+        'type' => 'integer',
+        'alias' => 'c',
       ],
     ];
   }
@@ -78,14 +80,12 @@ class PubsAuthor extends SqlBase {
     */
     // As we did for favorite beers in the user migration, we need to explode
     // the multi-value country names.
-    if ($value = $row->getSourceProperty('Author')) {
-      $output = preg_replace_callback("/(&#[0-9]+;)/", function($m) {
-        return mb_convert_encoding($m[1], "UTF-8", "HTML-ENTITIES");
-        }, $value);
-      $pieces = explode(' ', $output);
-      $last_word = array_pop($pieces);
-      $row->setSourceProperty('Surname', $last_word);
-      $row->setSourceProperty('Author', $output);
+    if ($row->getSourceProperty('Desc') != '') {
+      $parentID = (intval($row->getSourceProperty('Code') / 10)) * 10;
+      $row->setSourceProperty('Parent', $parentID);
+    }
+    elseif ($row->getSourceProperty('Desc') == '') {
+      $row->setSourceProperty('Desc', $row->getSourceProperty('Heading'));
     }
     return parent::prepareRow($row);
   }

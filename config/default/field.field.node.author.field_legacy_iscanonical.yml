@@ -1,0 +1,23 @@
+uuid: 1208c7bd-00cc-4978-8841-fb27dd7ac8db
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_legacy_iscanonical
+    - node.type.author
+id: node.author.field_legacy_iscanonical
+field_name: field_legacy_iscanonical
+entity_type: node
+bundle: author
+label: 'Legacy IsCanonical'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'True'
+  off_label: 'False'
+field_type: boolean

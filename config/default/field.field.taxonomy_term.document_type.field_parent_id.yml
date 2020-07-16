@@ -1,0 +1,23 @@
+uuid: f61abbd4-125f-4a85-a1a2-e7343c3a881a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_parent_id
+    - taxonomy.vocabulary.document_type
+id: taxonomy_term.document_type.field_parent_id
+field_name: field_parent_id
+entity_type: taxonomy_term
+bundle: document_type
+label: 'Parent ID'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer
