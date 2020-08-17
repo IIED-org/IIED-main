@@ -2,8 +2,6 @@ uuid: 31fe0a2a-69b2-4f40-b1af-60b688b0b0d5
 langcode: en
 status: true
 dependencies: {  }
-_core:
-  default_config_hash: _N4jiAHL1_5l6BO6YcEhg_cl9VtMaDZQH4RhmwDXqq4
 id: pubs_node
 class: null
 field_plugin_method: null
@@ -39,13 +37,6 @@ process:
   _lit_code: LitCode
   field_product_code: '@_product_code'
   field_lit_code: '@_lit_code'
-  field_author_s_:
-    plugin: entity_lookup
-    allow_multiple: true
-    source: AuthorList
-    entity_type: node
-    bundle: author
-    value_key: title
   body/value: Abstract
   field_theme_s_:
     -
@@ -83,15 +74,37 @@ process:
       source: Publisher
     -
       plugin: entity_generate_multiple
-      entity_type: node
+      entity_type: taxonomy_term
       bundle: organisation
-      value_key: title
+      bundle_key: vid
+      value_key: name
+  field_author_s_:
+    plugin: entity_generate_multiple
+    allow_multiple: true
+    source: AuthorList
+    entity_type: taxonomy_term
+    bundle: person
+    bundle_key: vid
+    value_key: name
   _field_pdf_path:
     plugin: concat
     source:
       - constants/SOURCE_DOMAIN
       - '@_product_code'
       - constants/PDF_SUFFIX
+  field_project:
+    -
+      source: ProjectNumber
+      plugin: skip_on_value
+      method: process
+      value: 0
+    -
+      plugin: entity_lookup
+      bundle_key: type
+      bundle: project
+      value_key: field_projectnumber
+      entity_type: node
+      access_check: 0
   field_pdf:
     plugin: file_import
     source: '@_field_pdf_path'
@@ -111,3 +124,4 @@ migration_dependencies:
     - pubs_tags
     - pubs_authors
     - pubs_doctypes
+    - pubs_projects

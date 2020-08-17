@@ -7,7 +7,73 @@ dependencies:
     - field.field.taxonomy_term.document_type.field_parent_id
     - taxonomy.vocabulary.document_type
   module:
+    - field_layout
+    - layout_builder
+    - layout_discovery
     - text
+third_party_settings:
+  field_layout:
+    id: layout_onecol
+    settings:
+      label: ''
+  layout_builder:
+    enabled: true
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+        components:
+          52810b44-b6a4-4683-9357-b74fa2b5d3fe:
+            uuid: 52810b44-b6a4-4683-9357-b74fa2b5d3fe
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:taxonomy_term:document_type:description'
+              formatter:
+                label: hidden
+                type: text_default
+                settings: {  }
+                third_party_settings: {  }
+            additional: {  }
+            weight: 0
+          cb427f25-c035-43c1-812c-d5fde2976530:
+            uuid: cb427f25-c035-43c1-812c-d5fde2976530
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:taxonomy_term:document_type:field_legacy_doctype'
+              formatter:
+                label: above
+                settings:
+                  thousand_separator: ''
+                  prefix_suffix: true
+                third_party_settings: {  }
+                type: number_integer
+            additional: {  }
+            weight: 1
+          758d2f54-8cb0-4eea-9b6e-f51c97fb7c54:
+            uuid: 758d2f54-8cb0-4eea-9b6e-f51c97fb7c54
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:taxonomy_term:document_type:field_parent_id'
+              formatter:
+                label: above
+                settings:
+                  thousand_separator: ''
+                  prefix_suffix: true
+                third_party_settings: {  }
+                type: number_integer
+            additional: {  }
+            weight: 2
+        third_party_settings: {  }
 id: taxonomy_term.document_type.default
 targetEntityType: taxonomy_term
 bundle: document_type

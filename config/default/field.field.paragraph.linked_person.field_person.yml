@@ -1,0 +1,31 @@
+uuid: 162fc10d-d214-4e5c-a20e-c0c258c4d241
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_person
+    - paragraphs.paragraphs_type.linked_person
+    - taxonomy.vocabulary.organisation
+    - taxonomy.vocabulary.person
+id: paragraph.linked_person.field_person
+field_name: field_person
+entity_type: paragraph
+bundle: linked_person
+label: Person
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      organisation: organisation
+      person: person
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: organisation
+field_type: entity_reference

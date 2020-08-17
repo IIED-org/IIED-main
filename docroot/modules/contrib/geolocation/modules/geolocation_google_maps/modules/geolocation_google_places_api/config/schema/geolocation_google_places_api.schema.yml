@@ -1,0 +1,26 @@
+geolocation.geocoder.google_places_api:
+  type: geolocation_geocoder
+  label: 'Google Places API'
+  mapping:
+    autocomplete_min_length:
+      type: integer
+      label: 'Autocomplete MinLength'
+    components:
+      type: mapping
+      label: 'Components'
+      mapping:
+        route:
+          type: string
+          label: 'Route'
+        country:
+          type: string
+          label: 'Country'
+        administrative_area:
+          type: string
+          label: 'Administrative Area'
+        locality:
+          type: string1
+          label: 'Locality'
+        postal_code:
+          type: string
+          label: 'Postal Code'

@@ -4,10 +4,21 @@ status: true
 dependencies:
   config:
     - field.field.node.project.body
+    - field.field.node.project.field_link
+    - field.field.node.project.field_projectnumber
+    - field.field.node.project.field_year
     - node.type.project
   module:
+    - field_layout
+    - layout_discovery
+    - link
     - path
     - text
+third_party_settings:
+  field_layout:
+    id: layout_onecol
+    settings:
+      label: ''
 id: node.project.default
 targetEntityType: node
 bundle: project
@@ -29,6 +40,28 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_link:
+    weight: 122
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
+    region: content
+  field_projectnumber:
+    weight: 123
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  field_year:
+    weight: 124
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
   path:
     type: path
     weight: 30

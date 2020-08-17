@@ -22,17 +22,9 @@ migrations.
    https://drupal.org/project/issues/migrate_devel
 
 
-REQUIREMENTS
-------------
-
-This module requires the modules outside of Drupal core:
-
- * [devel](https://www.drupal.org/project/devel)
-
-
 RECOMMENDED MODULES
 -------------------
- 
+
  * [migrate_tools](https://www.drupal.org/project/migrate_tools)
  * [migrate_run](https://www.drupal.org/project/migrate_run)
  * [config_update](https://www.drupal.org/project/config_update)
@@ -65,7 +57,10 @@ MAINTAINERS
 -----------
 
 Current maintainers:
+ * [Andrew Macpherson)](https://www.drupal.org/u/andrewmacpherson)
+
+Former maintainers:
  * [Dave Wikoff (Derimagia)](https://www.drupal.org/u/derimagia)
-  
+
 This project is sponsored by:
- * [Mindgrub Technologies](https://www.drupal.org/mindgrub-technologies)
+ * [Mindgrub Technologies](https://www.drupal.org/mindgrub-technologies) - Derimagia's work on the 8.x-1.x branch.

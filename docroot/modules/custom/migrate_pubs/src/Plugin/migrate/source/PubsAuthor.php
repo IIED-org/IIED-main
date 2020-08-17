@@ -28,7 +28,6 @@ class PubsAuthor extends SqlBase {
     // the base node data here, and pull in the relationships in prepareRow()
     // below.
     $fields = [
-      // @TODO: Add rest of pubs fields
       'Author',
       'IsCanonical',
     ];
@@ -44,6 +43,8 @@ class PubsAuthor extends SqlBase {
     $fields = [
       'Author' => $this->t('Author full name'),
       'Surname' => $this->t('Last name of author for sorting'),
+      'Given' => $this->t('Given name of author'),
+      'Middle' =>  $this->t('Middle name(s) of author'),
       'IsCanonical' => $this->t('Canonical version of name')
     ];
 
@@ -78,14 +79,24 @@ class PubsAuthor extends SqlBase {
     */
     // As we did for favorite beers in the user migration, we need to explode
     // the multi-value country names.
-    if ($value = $row->getSourceProperty('Author')) {
+    if ($row->getSourceProperty('IsCanonical') != 1 ) {
+       return FALSE;
+    }
+
+    elseif ($value = $row->getSourceProperty('Author')) {
       $output = preg_replace_callback("/(&#[0-9]+;)/", function($m) {
         return mb_convert_encoding($m[1], "UTF-8", "HTML-ENTITIES");
         }, $value);
       $pieces = explode(' ', $output);
       $last_word = array_pop($pieces);
-      $row->setSourceProperty('Surname', $last_word);
+      $first_word = array_shift($pieces);
+      $middle = implode(' ',$pieces);
       $row->setSourceProperty('Author', $output);
+      $row->setSourceProperty('Surname', $last_word);
+      $row->setSourceProperty('Given', $first_word);
+      if (null != $middle) {
+        $row->setSourceProperty('Middle', $middle);
+      }
     }
     return parent::prepareRow($row);
   }

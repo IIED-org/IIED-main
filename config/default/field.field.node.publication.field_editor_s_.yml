@@ -1,0 +1,29 @@
+uuid: b15d4140-cf35-4c37-8a10-cc2c3ded758a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_editor_s_
+    - node.type.publication
+    - taxonomy.vocabulary.person
+id: node.publication.field_editor_s_
+field_name: field_editor_s_
+entity_type: node
+bundle: publication
+label: Editor(s)
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      person: person
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

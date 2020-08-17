@@ -5,10 +5,56 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.project.body
+    - field.field.node.project.field_link
+    - field.field.node.project.field_projectnumber
+    - field.field.node.project.field_year
     - node.type.project
   module:
+    - field_layout
+    - layout_builder
+    - layout_discovery
     - text
     - user
+third_party_settings:
+  field_layout:
+    id: layout_onecol
+    settings:
+      label: ''
+  layout_builder:
+    enabled: true
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+        components:
+          d869278b-5881-4dbf-8c08-33f13038f76a:
+            uuid: d869278b-5881-4dbf-8c08-33f13038f76a
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'extra_field_block:node:project:links'
+            additional: {  }
+            weight: 0
+          9d1c9c27-dec6-4656-852f-24de2da8f599:
+            uuid: 9d1c9c27-dec6-4656-852f-24de2da8f599
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:project:body'
+              formatter:
+                label: hidden
+                type: text_summary_or_trimmed
+                settings:
+                  trim_length: 600
+                third_party_settings: {  }
+            additional: {  }
+            weight: 1
+        third_party_settings: {  }
 id: node.project.teaser
 targetEntityType: node
 bundle: project
@@ -27,4 +73,7 @@ content:
     settings: {  }
     third_party_settings: {  }
     region: content
-hidden: {  }
+hidden:
+  field_link: true
+  field_projectnumber: true
+  field_year: true

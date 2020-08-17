@@ -7,6 +7,7 @@ dependencies:
     - field.field.node.publication.body
     - field.field.node.publication.field_author_s_
     - field.field.node.publication.field_document_type
+    - field.field.node.publication.field_editor_s_
     - field.field.node.publication.field_lit_code
     - field.field.node.publication.field_pdf
     - field.field.node.publication.field_product_code
@@ -19,40 +20,88 @@ dependencies:
     - field.field.node.publication.field_theme_s_
     - node.type.publication
   module:
-    - file
-    - text
+    - field_layout
+    - layout_builder
+    - layout_discovery
     - user
+third_party_settings:
+  field_layout:
+    id: layout_onecol
+    settings:
+      label: ''
+  layout_builder:
+    enabled: true
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+        components:
+          87046230-925d-4a70-b6a4-eebd7e8828ad:
+            uuid: 87046230-925d-4a70-b6a4-eebd7e8828ad
+            region: content
+            configuration:
+              id: 'field_block:node:publication:field_product_code'
+              label: 'Product code'
+              provider: layout_builder
+              label_display: '0'
+              formatter:
+                label: hidden
+                type: string
+                settings:
+                  link_to_entity: true
+                third_party_settings: {  }
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+            additional: {  }
+            weight: 0
+          d2865cbc-5e8c-4d02-9f83-73f361304f9b:
+            uuid: d2865cbc-5e8c-4d02-9f83-73f361304f9b
+            region: content
+            configuration:
+              id: 'field_block:node:publication:body'
+              label: Body
+              provider: layout_builder
+              label_display: '0'
+              formatter:
+                label: hidden
+                type: text_summary_or_trimmed
+                settings:
+                  trim_length: 300
+                third_party_settings: {  }
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+            additional: {  }
+            weight: 1
+        third_party_settings: {  }
+    allow_custom: false
 id: node.publication.teaser
 targetEntityType: node
 bundle: publication
 mode: teaser
 content:
-  body:
-    label: hidden
-    type: text_summary_or_trimmed
-    weight: 1
-    settings:
-      trim_length: 600
-    third_party_settings: {  }
-    region: content
-  field_pdf:
-    type: file_default
-    weight: 2
+  field_product_code:
+    type: string
+    weight: 0
     region: content
     label: above
     settings:
-      use_description_as_link_text: true
+      link_to_entity: false
     third_party_settings: {  }
   links:
-    weight: 0
+    weight: 1
     region: content
     settings: {  }
     third_party_settings: {  }
 hidden:
+  body: true
   field_author_s_: true
   field_document_type: true
+  field_editor_s_: true
   field_lit_code: true
-  field_product_code: true
+  field_pdf: true
   field_product_id: true
   field_project: true
   field_publisher: true

@@ -4,10 +4,110 @@ status: true
 dependencies:
   config:
     - field.field.node.project.body
+    - field.field.node.project.field_link
+    - field.field.node.project.field_projectnumber
+    - field.field.node.project.field_year
     - node.type.project
   module:
+    - field_layout
+    - layout_builder
+    - layout_discovery
+    - link
     - text
     - user
+third_party_settings:
+  field_layout:
+    id: layout_onecol
+    settings:
+      label: ''
+  layout_builder:
+    enabled: true
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+        components:
+          c4f708aa-ce31-4186-aad4-2ad45fdab7e5:
+            uuid: c4f708aa-ce31-4186-aad4-2ad45fdab7e5
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'extra_field_block:node:project:links'
+            additional: {  }
+            weight: 0
+          816a0148-d147-48c8-9a4b-bb6c70310fc2:
+            uuid: 816a0148-d147-48c8-9a4b-bb6c70310fc2
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:project:body'
+              formatter:
+                label: hidden
+                type: text_default
+                settings: {  }
+                third_party_settings: {  }
+            additional: {  }
+            weight: 1
+          571fd336-e54b-47af-b7d1-cafa25e698cb:
+            uuid: 571fd336-e54b-47af-b7d1-cafa25e698cb
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:project:field_link'
+              formatter:
+                label: above
+                settings:
+                  trim_length: 80
+                  url_only: false
+                  url_plain: false
+                  rel: ''
+                  target: ''
+                third_party_settings: {  }
+                type: link
+            additional: {  }
+            weight: 2
+          e79b315b-2a70-44b2-a5ab-20c3ceccba57:
+            uuid: e79b315b-2a70-44b2-a5ab-20c3ceccba57
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:project:field_projectnumber'
+              formatter:
+                label: above
+                settings:
+                  thousand_separator: ''
+                  prefix_suffix: true
+                third_party_settings: {  }
+                type: number_integer
+            additional: {  }
+            weight: 3
+          0c6309b3-03cd-4f0d-b17b-90d0a4407c93:
+            uuid: 0c6309b3-03cd-4f0d-b17b-90d0a4407c93
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:project:field_year'
+              formatter:
+                label: above
+                settings:
+                  thousand_separator: ''
+                  prefix_suffix: true
+                third_party_settings: {  }
+                type: number_integer
+            additional: {  }
+            weight: 4
+        third_party_settings: {  }
 id: node.project.default
 targetEntityType: node
 bundle: project
@@ -19,6 +119,36 @@ content:
     weight: 101
     settings: {  }
     third_party_settings: {  }
+    region: content
+  field_link:
+    weight: 102
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+    region: content
+  field_projectnumber:
+    weight: 103
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
+    region: content
+  field_year:
+    weight: 104
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
     region: content
   links:
     weight: 100

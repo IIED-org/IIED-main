@@ -43,7 +43,7 @@ class MigrationEventSubscriber implements EventSubscriberInterface {
         '---------------------------------------------------------------------',
         '|                           $Destination                            |',
         '---------------------------------------------------------------------',
-        $Destination,
+        $Destination
       );
     }
   }
@@ -83,7 +83,7 @@ class MigrationEventSubscriber implements EventSubscriberInterface {
         '---------------------------------------------------------------------',
         '|                       $DestinationIdValues                        |',
         '---------------------------------------------------------------------',
-        $DestinationIDValues,
+        $DestinationIDValues
       );
     }
   }

@@ -1,0 +1,13 @@
+name: Geolocation - Yandex Maps
+type: module
+description: 'Yandex Maps provider.'
+core_version_requirement: ^8.7.7 || ^9
+package: Geolocation
+configure: geolocation_yandex.settings
+dependencies:
+  - geolocation:geolocation
+
+# Information added by Drupal.org packaging script on 2020-05-24
+version: '8.x-3.2'
+project: 'geolocation'
+datestamp: 1590319157

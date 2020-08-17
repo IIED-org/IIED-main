@@ -1,21 +1,21 @@
 # Migration configuration for author content.
 id: pubs_authors
-label: Authors of IIED Publications
+label: Authors of IIED Publications (from AuthorMap table)
 migration_group: pubs
 source:
   plugin: pubs_author
 process:
-  type:
+  vid:
     plugin: default_value
-    default_value: author
-  title: Author
-  field_surname: Surname
+    default_value: person
+  name: Author
+  'field_name/family': Surname
+  'field_name/given': Given
+  'field_name/middle': Middle
   field_legacy_iscanonical: IsCanonical
-  uid:
-    plugin: default_value
-    default_value: 1
 destination:
-  plugin: entity:node
+  plugin: entity:taxonomy_term
+migration_dependencies: {}
 dependencies:
   enforced:
     module:

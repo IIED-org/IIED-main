@@ -1,0 +1,10 @@
+uuid: 9cadf2a8-0cb9-457d-9166-42651a06d147
+langcode: en
+status: true
+dependencies: {  }
+id: linked_person
+label: 'Linked person'
+icon_uuid: null
+icon_default: null
+description: 'Author / editor'
+behavior_plugins: {  }

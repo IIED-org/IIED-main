@@ -1,0 +1,79 @@
+uuid: 4cae9ad6-d991-473f-a384-a6f2996b992d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.linked_person.field_author_editor
+    - field.field.paragraph.linked_person.field_person
+    - paragraphs.paragraphs_type.linked_person
+  module:
+    - field_layout
+    - layout_builder
+    - layout_discovery
+    - options
+third_party_settings:
+  field_layout:
+    id: layout_onecol
+    settings:
+      label: ''
+  layout_builder:
+    enabled: true
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+        components:
+          a61407dd-d02a-4761-b5da-df61bee60557:
+            uuid: a61407dd-d02a-4761-b5da-df61bee60557
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:paragraph:linked_person:field_person'
+              formatter:
+                label: above
+                settings:
+                  link: true
+                third_party_settings: {  }
+                type: entity_reference_label
+            additional: {  }
+            weight: 0
+          8c19e260-2ecd-4b46-8ea3-faf135b990b7:
+            uuid: 8c19e260-2ecd-4b46-8ea3-faf135b990b7
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:paragraph:linked_person:field_author_editor'
+              formatter:
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+                type: list_default
+            additional: {  }
+            weight: 1
+        third_party_settings: {  }
+id: paragraph.linked_person.default
+targetEntityType: paragraph
+bundle: linked_person
+mode: default
+content:
+  field_author_editor:
+    weight: 1
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+    region: content
+  field_person:
+    weight: 0
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+hidden: {  }

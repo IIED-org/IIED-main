@@ -1,11 +1,6 @@
 name: Test Theme Depending on Nonexisting Module
 type: theme
 base theme: stark
-# version: VERSION
+version: VERSION
 dependencies:
   - test_module_non_existing
-
-# Information added by Drupal.org packaging script on 2020-06-17
-version: '8.9.1'
-project: 'drupal'
-datestamp: 1592418285

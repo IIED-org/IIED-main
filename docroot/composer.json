@@ -16,14 +16,20 @@
     ],
     "require": {
         "composer/installers": "^1.2",
+        "cweagans/composer-patches": "^1.6",
+        "drupal/address": "^1.8",
         "drupal/admin_toolbar": "^2.3",
         "drupal/computed_field": "^2.0",
         "drupal/core-composer-scaffold": "^8.8",
         "drupal/core-recommended": "^8.8",
         "drupal/core-vendor-hardening": "^8.8",
+        "drupal/field_group": "^3.1",
+        "drupal/geolocation": "^3.2",
+        "drupal/name": "^1.0@RC",
         "drupal/paragraphs": "^1.12",
         "drupal/pathauto": "^1.8",
-        "drupal/serial": "^1.0@alpha"
+        "drupal/serial": "^1.0@alpha",
+        "drush/drush": "^10.3"
     },
     "require-dev": {
         "drupal/config_devel": "^1.7",
@@ -96,6 +102,11 @@
                 "  * Remove the plugin that prints this message:",
                 "      composer remove drupal/core-project-message"
             ]
+        },
+        "patches": {
+          "drupal/address": {
+            "Migrate using country names": "https://www.drupal.org/files/issues/2020-02-21/country_lookup_migrate_process_plugin-3114991-2.patch"
+          }
         }
     }
 }

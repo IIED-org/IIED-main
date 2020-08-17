@@ -1,0 +1,23 @@
+uuid: 0c9c9b1e-5868-40a2-a5bc-0c326371ba82
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_author_editor
+    - paragraphs.paragraphs_type.linked_person
+  module:
+    - options
+id: paragraph.linked_person.field_author_editor
+field_name: field_author_editor
+entity_type: paragraph
+bundle: linked_person
+label: 'Relationship (Author/Editor)'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: au
+default_value_callback: ''
+settings: {  }
+field_type: list_string

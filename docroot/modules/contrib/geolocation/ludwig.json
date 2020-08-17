@@ -1,0 +1,12 @@
+{
+  "require": {
+    "gasparesganga/php-shapefile": {
+      "version" : "3.2.0+",
+      "url": "https://github.com/gasparesganga/php-shapefile/archive/master.zip"
+    },
+    "sibyx/phpgpx": {
+      "version" : "1.0-RC5+",
+      "url": "https://github.com/Sibyx/phpGPX/archive/master.zip"
+    }
+  }
+}

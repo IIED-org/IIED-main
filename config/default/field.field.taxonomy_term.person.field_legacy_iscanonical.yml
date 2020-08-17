@@ -1,0 +1,23 @@
+uuid: ebcf9ab7-f620-4fe2-9555-f3aec3eab752
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_legacy_iscanonical
+    - taxonomy.vocabulary.person
+id: taxonomy_term.person.field_legacy_iscanonical
+field_name: field_legacy_iscanonical
+entity_type: taxonomy_term
+bundle: person
+label: 'Legacy IsCanonical'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'True'
+  off_label: 'False'
+field_type: boolean

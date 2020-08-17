@@ -11,7 +11,7 @@ id: node.publication.field_status
 field_name: field_status
 entity_type: node
 bundle: publication
-label: Status
+label: 'Status (legacy)'
 description: ''
 required: false
 translatable: false

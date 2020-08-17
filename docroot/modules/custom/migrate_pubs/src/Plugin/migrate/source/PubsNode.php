@@ -40,7 +40,9 @@ class PubsNode extends SqlBase {
       'Theme',
       'Theme2',
       'Keywords',
-      'DocType'
+      'DocType',
+      'ProjectNumber',
+      'AreaList'
     ];
     $query = $this->select('Publications', 'p')
       ->fields('p', $fields);
@@ -63,7 +65,9 @@ class PubsNode extends SqlBase {
       'Theme' => $this->t('Primary theme'),
       'Theme2' => $this->t('Secondary theme'),
       'Keywords' => $this->t('Tags, delimited by pipe'),
-      'DocType' => $this->t('Doctype lookup')
+      'DocType' => $this->t('Doctype lookup'),
+      'ProjectNumber' => $this->t('Legacy project ID'),
+      'AreaList' => $this->t('List of countries')
     ];
 
     return $fields;
@@ -102,6 +106,12 @@ class PubsNode extends SqlBase {
     }
     if ($value = $row->getSourceProperty('Keywords')) {
      $row->setSourceProperty('Keywords', explode('|', substr($value,1,strlen($value)-2)));
+    }
+    if ($value = $row->getSourceProperty('Abstract')) {
+     $row->setSourceProperty('Abstract', str_replace('~~', PHP_EOL . PHP_EOL, $value));
+    }
+    if ($value = $row->getSourceProperty('AreaList')) {
+     $row->setSourceProperty('AreaList', explode('|', substr($value,1,strlen($value)-2)));
     }
     return parent::prepareRow($row);
   }

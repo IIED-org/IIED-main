@@ -1,0 +1,17 @@
+name: Name Field
+type: module
+description: 'Defines a persons name field type.'
+# core: 8.x
+dependencies:
+  - 'drupal:field'
+  - 'drupal:system (>= 8.4)'
+test_dependencies:
+  - 'token:token'
+package: Field types
+configure: name.settings
+
+# Information added by Drupal.org packaging script on 2019-07-04
+version: '8.x-1.0-rc2'
+core: '8.x'
+project: 'name'
+datestamp: 1562233093

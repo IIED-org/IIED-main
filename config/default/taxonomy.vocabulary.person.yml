@@ -1,0 +1,8 @@
+uuid: 22e0b368-3e59-4afb-a637-f8b36e8c2b18
+langcode: en
+status: true
+dependencies: {  }
+name: Person
+vid: person
+description: 'Author, editor, contributor etc.'
+weight: 0

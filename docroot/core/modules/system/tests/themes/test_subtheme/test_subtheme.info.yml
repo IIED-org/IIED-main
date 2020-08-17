@@ -1,7 +1,7 @@
 name: 'Theme test subtheme'
 type: theme
 description: 'Test theme which uses test_basetheme as the base theme.'
-# version: VERSION
+version: VERSION
 core: 8.x
 base theme: test_basetheme
 libraries:
@@ -18,8 +18,3 @@ libraries-override:
 libraries-extend:
   classy/base:
     - test_subtheme/global-styling
-
-# Information added by Drupal.org packaging script on 2020-06-17
-version: '8.9.1'
-project: 'drupal'
-datestamp: 1592418285

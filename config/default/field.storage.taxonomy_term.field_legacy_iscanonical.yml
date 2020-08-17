@@ -1,0 +1,18 @@
+uuid: ec71c06d-f53f-4842-ad97-72b9a111f0a7
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.field_legacy_iscanonical
+field_name: field_legacy_iscanonical
+entity_type: taxonomy_term
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

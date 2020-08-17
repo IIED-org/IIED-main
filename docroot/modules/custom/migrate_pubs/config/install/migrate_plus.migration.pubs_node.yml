@@ -33,13 +33,6 @@ process:
   _lit_code: LitCode
   field_product_code: '@_product_code'
   field_lit_code: '@_lit_code'
-  field_author_s_:
-    plugin: entity_lookup
-    allow_multiple: true
-    source: AuthorList
-    entity_type: node
-    bundle: author
-    value_key: title
 
   'body/value': Abstract
 
@@ -82,10 +75,38 @@ process:
       source: Publisher
     -
       plugin: entity_generate_multiple
-      entity_type: node
+      entity_type: taxonomy_term
       bundle: organisation
-      value_key: title
-      uid: 1
+      bundle_key: vid
+      value_key: name
+
+  field_author_s_:
+    plugin: entity_generate_multiple
+    allow_multiple: true
+    source: AuthorList
+    entity_type: taxonomy_term
+    bundle: person
+    bundle_key: vid
+    value_key: name
+
+  field_project:
+    -
+      source: ProjectNumber
+      plugin: skip_on_value
+      method: process
+      value: 0
+    -
+      plugin: entity_lookup
+      bundle_key: type
+      bundle: project
+      value_key: field_projectnumber
+      entity_type: node
+      access_check: 0
+
+#field AreaList
+  field_area_list:
+    plugin: lookup_country
+    source: AreaList
 
 # PDF file import via https from source directory
   _field_pdf_path:
@@ -118,3 +139,4 @@ migration_dependencies:
     - pubs_tags
     - pubs_authors
     - pubs_doctypes
+    - pubs_projects

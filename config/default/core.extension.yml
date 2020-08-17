@@ -24,12 +24,17 @@ module:
   editor: 0
   entity_reference_revisions: 0
   field: 0
+  field_group: 0
+  field_layout: 0
   field_ui: 0
   file: 0
   filter: 0
+  geolocation: 0
   help: 0
   history: 0
   image: 0
+  layout_builder: 0
+  layout_discovery: 0
   link: 0
   menu_link_content: 0
   menu_ui: 0
@@ -41,6 +46,7 @@ module:
   migrate_pubs: 0
   migrate_source_csv: 0
   migrate_tools: 0
+  name: 0
   node: 0
   options: 0
   page_cache: 0

@@ -1,0 +1,40 @@
+uuid: 0bbc800e-64f4-4f99-9bce-7645ce058533
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.linked_person.field_author_editor
+    - field.field.paragraph.linked_person.field_person
+    - paragraphs.paragraphs_type.linked_person
+  module:
+    - field_layout
+    - layout_discovery
+third_party_settings:
+  field_layout:
+    id: layout_onecol
+    settings:
+      label: ''
+id: paragraph.linked_person.default
+targetEntityType: paragraph
+bundle: linked_person
+mode: default
+content:
+  field_author_editor:
+    weight: 1
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_person:
+    weight: 0
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
+hidden:
+  created: true
+  status: true

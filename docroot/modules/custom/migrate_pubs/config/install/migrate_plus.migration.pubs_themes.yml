@@ -5,7 +5,7 @@ migration_group: pubs
 source:
   plugin: pubs_theme
 process:
-  # Hardcode the destination node type (bundle) as 'Theme'.
+  # Hardcode the destination term type as 'Theme'.
   vid:
     plugin: default_value
     default_value: theme

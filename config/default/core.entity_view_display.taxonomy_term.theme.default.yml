@@ -6,7 +6,55 @@ dependencies:
     - field.field.taxonomy_term.theme.field_legacy_code
     - taxonomy.vocabulary.theme
   module:
+    - field_layout
+    - layout_builder
+    - layout_discovery
     - text
+third_party_settings:
+  field_layout:
+    id: layout_onecol
+    settings:
+      label: ''
+  layout_builder:
+    enabled: true
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+        components:
+          30efb88e-a881-4ddb-82f5-3bc95a1c13ef:
+            uuid: 30efb88e-a881-4ddb-82f5-3bc95a1c13ef
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:taxonomy_term:theme:description'
+              formatter:
+                label: hidden
+                type: text_default
+                settings: {  }
+                third_party_settings: {  }
+            additional: {  }
+            weight: 0
+          b6c57b91-a331-457f-83d6-04360930b077:
+            uuid: b6c57b91-a331-457f-83d6-04360930b077
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:taxonomy_term:theme:field_legacy_code'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 1
+        third_party_settings: {  }
 id: taxonomy_term.theme.default
 targetEntityType: taxonomy_term
 bundle: theme

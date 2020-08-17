@@ -1,11 +1,12 @@
-uuid: 4f9f2920-b5b5-4bf8-91b3-2ab4c1627324
+uuid: 08052b42-f6f2-49c6-be2c-6c21805ce909
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.field_author_s_
-    - node.type.author
     - node.type.publication
+    - taxonomy.vocabulary.organisation
+    - taxonomy.vocabulary.person
 id: node.publication.field_author_s_
 field_name: field_author_s_
 entity_type: node
@@ -17,12 +18,14 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:node'
+  handler: 'default:taxonomy_term'
   handler_settings:
     target_bundles:
-      author: author
+      organisation: organisation
+      person: person
     sort:
-      field: _none
-    auto_create: true
-    auto_create_bundle: ''
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: organisation
 field_type: entity_reference
