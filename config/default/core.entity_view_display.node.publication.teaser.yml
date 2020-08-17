@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.publication.body
+    - field.field.node.publication.field_area_list
     - field.field.node.publication.field_author_s_
     - field.field.node.publication.field_document_type
     - field.field.node.publication.field_editor_s_
@@ -97,6 +98,7 @@ content:
     third_party_settings: {  }
 hidden:
   body: true
+  field_area_list: true
   field_author_s_: true
   field_document_type: true
   field_editor_s_: true

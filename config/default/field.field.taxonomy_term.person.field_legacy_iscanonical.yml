@@ -9,7 +9,7 @@ id: taxonomy_term.person.field_legacy_iscanonical
 field_name: field_legacy_iscanonical
 entity_type: taxonomy_term
 bundle: person
-label: 'Legacy IsCanonical'
+label: 'IsCanonical (legacy)'
 description: ''
 required: false
 translatable: false

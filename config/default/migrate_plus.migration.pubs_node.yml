@@ -86,12 +86,6 @@ process:
     bundle: person
     bundle_key: vid
     value_key: name
-  _field_pdf_path:
-    plugin: concat
-    source:
-      - constants/SOURCE_DOMAIN
-      - '@_product_code'
-      - constants/PDF_SUFFIX
   field_project:
     -
       source: ProjectNumber
@@ -105,6 +99,16 @@ process:
       value_key: field_projectnumber
       entity_type: node
       access_check: 0
+  field_area_list:
+    plugin: lookup_country
+    source: AreaList
+    default_value: GB
+  _field_pdf_path:
+    plugin: concat
+    source:
+      - constants/SOURCE_DOMAIN
+      - '@_product_code'
+      - constants/PDF_SUFFIX
   field_pdf:
     plugin: file_import
     source: '@_field_pdf_path'

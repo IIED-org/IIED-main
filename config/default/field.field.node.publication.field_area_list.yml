@@ -1,0 +1,22 @@
+uuid: fe5d99a0-9f55-4f88-a60c-8f42008cf797
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_area_list
+    - node.type.publication
+  module:
+    - address
+id: node.publication.field_area_list
+field_name: field_area_list
+entity_type: node
+bundle: publication
+label: 'Area list'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  available_countries: {  }
+field_type: address_country
