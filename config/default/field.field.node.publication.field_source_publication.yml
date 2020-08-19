@@ -1,0 +1,19 @@
+uuid: 1f55bae4-cda3-4980-87b6-80f4863a50a6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_source_publication
+    - node.type.publication
+id: node.publication.field_source_publication
+field_name: field_source_publication
+entity_type: node
+bundle: publication
+label: 'Source publication'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

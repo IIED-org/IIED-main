@@ -77,3 +77,4 @@ hidden:
   field_link: true
   field_projectnumber: true
   field_year: true
+  langcode: true

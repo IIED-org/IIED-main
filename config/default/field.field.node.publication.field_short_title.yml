@@ -12,7 +12,7 @@ bundle: publication
 label: 'Short title'
 description: 'Promotional ''short title'', only used for home-page over-long titles'
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings: {  }

@@ -1,0 +1,9 @@
+uuid: 253d4bcb-81cb-413a-a351-11ab0ddd5c00
+langcode: en
+status: true
+dependencies: {  }
+id: bm
+label: Bambara
+direction: ltr
+weight: -9
+locked: false

@@ -1,0 +1,18 @@
+uuid: 3bb09d99-2649-423b-b2b0-830e973842c5
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.person
+id: taxonomy_term.person.changed
+field_name: changed
+entity_type: taxonomy_term
+bundle: person
+label: Changed
+description: 'The time that the term was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

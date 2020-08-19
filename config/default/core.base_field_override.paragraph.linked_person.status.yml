@@ -1,0 +1,22 @@
+uuid: 580a52ce-485a-4042-acb0-cf20f13d3ca8
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.linked_person
+id: paragraph.linked_person.status
+field_name: status
+entity_type: paragraph
+bundle: linked_person
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

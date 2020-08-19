@@ -1,0 +1,23 @@
+uuid: be7cf70a-9ed0-4f7c-8542-59beb0a4b263
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_pdf_pages
+    - node.type.publication
+id: node.publication.field_pdf_pages
+field_name: field_pdf_pages
+entity_type: node
+bundle: publication
+label: 'PDF pages'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

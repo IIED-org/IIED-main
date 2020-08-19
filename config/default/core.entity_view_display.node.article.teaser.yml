@@ -129,3 +129,4 @@ content:
     third_party_settings: {  }
 hidden:
   comment: true
+  langcode: true

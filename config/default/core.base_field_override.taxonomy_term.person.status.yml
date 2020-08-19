@@ -1,0 +1,22 @@
+uuid: 36a80f07-f038-4377-880d-88890fb6bcb8
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.person
+id: taxonomy_term.person.status
+field_name: status
+entity_type: taxonomy_term
+bundle: person
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

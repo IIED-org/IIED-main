@@ -1,0 +1,9 @@
+uuid: 7933ffe3-8c61-4a6d-aa77-df0e4b014249
+langcode: en
+status: true
+dependencies: {  }
+id: si
+label: Sinhala
+direction: ltr
+weight: 2
+locked: false

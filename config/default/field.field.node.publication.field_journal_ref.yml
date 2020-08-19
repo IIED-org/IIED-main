@@ -1,0 +1,19 @@
+uuid: 571ddb1c-c5a7-4131-8600-d240be537119
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_journal_ref
+    - node.type.publication
+id: node.publication.field_journal_ref
+field_name: field_journal_ref
+entity_type: node
+bundle: publication
+label: 'Journal reference'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

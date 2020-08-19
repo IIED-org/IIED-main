@@ -1,0 +1,20 @@
+uuid: bab0530a-fdc1-43a4-be2f-c75215cffe20
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.theme
+  module:
+    - path
+id: taxonomy_term.theme.path
+field_name: path
+entity_type: taxonomy_term
+bundle: theme
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

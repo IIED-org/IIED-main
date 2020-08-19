@@ -1,0 +1,20 @@
+uuid: a7e77d9c-0032-400f-bb0e-6745a0071d85
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_pdf_pages
+field_name: field_pdf_pages
+entity_type: node
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -6,25 +6,37 @@ dependencies:
     - field.field.node.publication.body
     - field.field.node.publication.field_area_list
     - field.field.node.publication.field_author_s_
+    - field.field.node.publication.field_date_published
     - field.field.node.publication.field_document_type
+    - field.field.node.publication.field_doi
     - field.field.node.publication.field_editor_s_
+    - field.field.node.publication.field_external_url
+    - field.field.node.publication.field_iied_url
+    - field.field.node.publication.field_isbn
+    - field.field.node.publication.field_issn
+    - field.field.node.publication.field_journal_ref
     - field.field.node.publication.field_lit_code
     - field.field.node.publication.field_pdf
+    - field.field.node.publication.field_pdf_pages
     - field.field.node.publication.field_product_code
     - field.field.node.publication.field_product_id
     - field.field.node.publication.field_project
     - field.field.node.publication.field_publisher
     - field.field.node.publication.field_short_title
+    - field.field.node.publication.field_source_publication
     - field.field.node.publication.field_status
     - field.field.node.publication.field_tags
     - field.field.node.publication.field_theme_s_
     - node.type.publication
   module:
     - address
+    - datetime
     - field_layout
     - file
+    - isbn
     - layout_builder
     - layout_discovery
+    - link
     - options
     - serial
     - text
@@ -287,6 +299,166 @@ third_party_settings:
                 type: address_country_default
             additional: {  }
             weight: 16
+          8f926131-bb49-4bb8-9a1c-d62193303ab4:
+            uuid: 8f926131-bb49-4bb8-9a1c-d62193303ab4
+            region: content
+            configuration:
+              id: 'field_block:node:publication:field_date_published'
+              label: 'Published date'
+              provider: layout_builder
+              label_display: '0'
+              formatter:
+                label: above
+                type: datetime_default
+                settings:
+                  timezone_override: ''
+                  format_type: html_month
+                third_party_settings: {  }
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+            additional: {  }
+            weight: 17
+          4af98e1e-a917-48f5-9bb4-3105398dbae8:
+            uuid: 4af98e1e-a917-48f5-9bb4-3105398dbae8
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:publication:field_isbn'
+              formatter:
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+                type: isbn_default
+            additional: {  }
+            weight: 18
+          042aab35-0fc4-4d8c-a999-97ad68ab4513:
+            uuid: 042aab35-0fc4-4d8c-a999-97ad68ab4513
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:publication:field_issn'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 19
+          ede76031-00fd-469e-932d-40083847643d:
+            uuid: ede76031-00fd-469e-932d-40083847643d
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:publication:field_doi'
+              formatter:
+                label: above
+                settings:
+                  trim_length: 80
+                  url_only: false
+                  url_plain: false
+                  rel: ''
+                  target: ''
+                third_party_settings: {  }
+                type: link
+            additional: {  }
+            weight: 20
+          0838ac75-3f6e-4f1c-b046-eb24e86cf033:
+            uuid: 0838ac75-3f6e-4f1c-b046-eb24e86cf033
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:publication:field_source_publication'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 21
+          8639f0b1-e952-4e23-8198-ed714fe72cf0:
+            uuid: 8639f0b1-e952-4e23-8198-ed714fe72cf0
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:publication:field_journal_ref'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 22
+          b8ba1bec-3ead-4a8e-b351-83184010e25f:
+            uuid: b8ba1bec-3ead-4a8e-b351-83184010e25f
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:publication:field_pdf_pages'
+              formatter:
+                label: above
+                settings:
+                  thousand_separator: ''
+                  prefix_suffix: true
+                third_party_settings: {  }
+                type: number_integer
+            additional: {  }
+            weight: 23
+          6ead054e-b4e0-4485-902e-3e77852b4ab3:
+            uuid: 6ead054e-b4e0-4485-902e-3e77852b4ab3
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:publication:field_iied_url'
+              formatter:
+                label: above
+                settings:
+                  trim_length: 80
+                  url_only: false
+                  url_plain: false
+                  rel: ''
+                  target: ''
+                third_party_settings: {  }
+                type: link
+            additional: {  }
+            weight: 24
+          9c4f11f7-0cea-45a6-815d-83c643387a6b:
+            uuid: 9c4f11f7-0cea-45a6-815d-83c643387a6b
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:publication:field_external_url'
+              formatter:
+                label: above
+                settings:
+                  trim_length: 80
+                  url_only: false
+                  url_plain: false
+                  rel: ''
+                  target: ''
+                third_party_settings: {  }
+                type: link
+            additional: {  }
+            weight: 25
         third_party_settings: {  }
 id: node.publication.default
 targetEntityType: node
@@ -315,6 +487,15 @@ content:
     third_party_settings: {  }
     type: entity_reference_label
     region: content
+  field_date_published:
+    weight: 18
+    label: above
+    settings:
+      format_type: medium
+      timezone_override: ''
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
   field_document_type:
     weight: 4
     label: above
@@ -323,6 +504,18 @@ content:
     third_party_settings: {  }
     type: entity_reference_label
     region: content
+  field_doi:
+    weight: 21
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+    region: content
   field_editor_s_:
     weight: 16
     label: above
@@ -330,6 +523,53 @@ content:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
+    region: content
+  field_external_url:
+    weight: 26
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+    region: content
+  field_iied_url:
+    weight: 25
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+    region: content
+  field_isbn:
+    weight: 19
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: isbn_default
+    region: content
+  field_issn:
+    weight: 20
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_journal_ref:
+    weight: 23
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
     region: content
   field_lit_code:
     weight: 3
@@ -345,6 +585,15 @@ content:
       use_description_as_link_text: true
     third_party_settings: {  }
     type: file_default
+    region: content
+  field_pdf_pages:
+    weight: 24
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
     region: content
   field_product_code:
     weight: 12
@@ -385,6 +634,14 @@ content:
     third_party_settings: {  }
     type: string
     region: content
+  field_source_publication:
+    weight: 22
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
   field_status:
     weight: 13
     label: above
@@ -413,4 +670,5 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  langcode: true

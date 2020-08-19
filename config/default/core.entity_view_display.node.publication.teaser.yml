@@ -7,15 +7,24 @@ dependencies:
     - field.field.node.publication.body
     - field.field.node.publication.field_area_list
     - field.field.node.publication.field_author_s_
+    - field.field.node.publication.field_date_published
     - field.field.node.publication.field_document_type
+    - field.field.node.publication.field_doi
     - field.field.node.publication.field_editor_s_
+    - field.field.node.publication.field_external_url
+    - field.field.node.publication.field_iied_url
+    - field.field.node.publication.field_isbn
+    - field.field.node.publication.field_issn
+    - field.field.node.publication.field_journal_ref
     - field.field.node.publication.field_lit_code
     - field.field.node.publication.field_pdf
+    - field.field.node.publication.field_pdf_pages
     - field.field.node.publication.field_product_code
     - field.field.node.publication.field_product_id
     - field.field.node.publication.field_project
     - field.field.node.publication.field_publisher
     - field.field.node.publication.field_short_title
+    - field.field.node.publication.field_source_publication
     - field.field.node.publication.field_status
     - field.field.node.publication.field_tags
     - field.field.node.publication.field_theme_s_
@@ -100,14 +109,24 @@ hidden:
   body: true
   field_area_list: true
   field_author_s_: true
+  field_date_published: true
   field_document_type: true
+  field_doi: true
   field_editor_s_: true
+  field_external_url: true
+  field_iied_url: true
+  field_isbn: true
+  field_issn: true
+  field_journal_ref: true
   field_lit_code: true
   field_pdf: true
+  field_pdf_pages: true
   field_product_id: true
   field_project: true
   field_publisher: true
   field_short_title: true
+  field_source_publication: true
   field_status: true
   field_tags: true
   field_theme_s_: true
+  langcode: true
