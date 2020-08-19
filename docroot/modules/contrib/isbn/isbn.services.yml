@@ -1,0 +1,3 @@
+services:
+  isbn.isbn_service:
+    class: Drupal\isbn\IsbnToolsService

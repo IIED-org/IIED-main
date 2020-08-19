@@ -1,0 +1,20 @@
+<?php
+
+/**
+ *
+ *  Implements hook_requirements().
+ *
+ */
+function isbn_requirements($phase) {
+  $requirements = [];
+  if ($phase == 'install') {
+    if (!class_exists('\Nicebooks\Isbn\IsbnTools')) {
+      $requirements['isbn_library'] = [
+        'description' => t('ISBN module requires the nicebooks/isbn library.'),
+        'severity' => REQUIREMENT_ERROR,
+      ];
+    }
+  }
+
+  return $requirements;
+}

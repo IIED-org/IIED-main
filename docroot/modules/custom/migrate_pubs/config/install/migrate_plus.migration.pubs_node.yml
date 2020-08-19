@@ -10,6 +10,7 @@ source:
     SOURCE_DOMAIN: 'https://pubscopy.iied.org/pdfs/'
     DRUPAL_FILE_DIRECTORY: 'public://pdfs/migrate/'
     PDF_SUFFIX: '.pdf'
+    DAY_OF_MONTH: '01'
 process:
   # Hardcode the destination node type (bundle) as 'publication'.
   uid:
@@ -35,6 +36,9 @@ process:
   field_lit_code: '@_lit_code'
 
   'body/value': Abstract
+  'body/format':
+    plugin: default_value
+    default_value: "plain_text"
 
   field_theme_s_:
     -
@@ -103,30 +107,100 @@ process:
       entity_type: node
       access_check: 0
 
-#field AreaList
   field_area_list:
     plugin: lookup_country
     source: AreaList
 
-# PDF file import via https from source directory
-  _field_pdf_path:
+  _field_month_published:
+    -
+      plugin: substr
+      source: MonthPublished
+      start: 4
+      length: 2
+    -
+      plugin: str_replace
+      search: '00'
+      replace: '01'
+
+  _field_year_published:
+    plugin: substr
+    source: MonthPublished
+    start: 0
+    length: 4
+
+  _field_date_published:
     plugin: concat
     source:
-      - constants/SOURCE_DOMAIN
-      - '@_product_code'
-      - constants/PDF_SUFFIX
+      - '@_field_year_published'
+      - '@_field_month_published'
+      - constants/DAY_OF_MONTH
 
-  field_pdf:
-    plugin: file_import
-    source: '@_field_pdf_path'
-    destination: constants/DRUPAL_FILE_DIRECTORY
-    skip_on_missing_source: true
-    skip_on_error: true
-    reuse: true
-    uid: 1
-  field_pdf/display:
-    plugin: default_value
-    default_value: 1
+  field_date_published:
+    plugin: format_date
+    source: '@_field_date_published'
+    from_format: 'Ymd'
+    to_format: 'Y-m-d'
+
+  field_isbn: ISBN13
+
+  field_issn: ISSN
+
+  field_source_publication: SourcePublication
+
+  field_journal_ref: JournalRef
+
+  langcode:
+    -
+      plugin: substr
+      source: Language
+      start: 1
+      length: 3
+    -
+      plugin: static_map
+      map:
+        ara: ar
+        bam: bm
+        bur: my
+        cro: hr
+        eng: en
+        fra: fr
+        ind: id
+        pol: pl
+        por: 'pt-pt'
+        rus: ru
+        sin: si
+        som: so
+        spa: es
+        swa: sw
+        tel: te
+        vie: vi
+        zho: 'zh-hant'
+
+  field_pdf_pages: PubPages
+
+  'field_iied_url/uri': LinkIIEDURL
+
+  'field_external_url/uri': LinkMoreURL
+
+# PDF file import via https from source directory
+  # _field_pdf_path:
+  #   plugin: concat
+  #   source:
+  #     - constants/SOURCE_DOMAIN
+  #     - '@_product_code'
+  #     - constants/PDF_SUFFIX
+  #
+  # field_pdf:
+  #   plugin: file_import
+  #   source: '@_field_pdf_path'
+  #   destination: constants/DRUPAL_FILE_DIRECTORY
+  #   skip_on_missing_source: true
+  #   skip_on_error: true
+  #   reuse: true
+  #   uid: 1
+  # field_pdf/display:
+  #   plugin: default_value
+  #   default_value: 1
 
 destination:
   plugin: entity:node

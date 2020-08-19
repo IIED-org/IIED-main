@@ -109,6 +109,10 @@ class ComposerStaticInit7376e166806aa5d664ccbd35d60d770b
             'Psr\\Container\\' => 14,
             'PhpParser\\' => 10,
         ),
+        'N' => 
+        array (
+            'Nicebooks\\Isbn\\' => 15,
+        ),
         'M' => 
         array (
             'Masterminds\\' => 12,
@@ -342,6 +346,10 @@ class ComposerStaticInit7376e166806aa5d664ccbd35d60d770b
         'PhpParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
+        ),
+        'Nicebooks\\Isbn\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/nicebooks/isbn/src',
         ),
         'Masterminds\\' => 
         array (

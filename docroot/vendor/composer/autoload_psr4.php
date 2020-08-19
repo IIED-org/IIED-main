@@ -48,6 +48,7 @@ return array(
     'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src'),
     'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'PhpParser\\' => array($vendorDir . '/nikic/php-parser/lib/PhpParser'),
+    'Nicebooks\\Isbn\\' => array($vendorDir . '/nicebooks/isbn/src'),
     'Masterminds\\' => array($vendorDir . '/masterminds/html5/src'),
     'League\\Csv\\' => array($vendorDir . '/league/csv/src'),
     'League\\Container\\' => array($vendorDir . '/league/container/src'),

@@ -25,6 +25,8 @@
         "drupal/core-vendor-hardening": "^8.8",
         "drupal/field_group": "^3.1",
         "drupal/geolocation": "^3.2",
+        "drupal/isbn": "^1.2",
+        "drupal/merge_translations": "^1.1",
         "drupal/name": "^1.0@RC",
         "drupal/paragraphs": "^1.12",
         "drupal/pathauto": "^1.8",

@@ -42,7 +42,16 @@ class PubsNode extends SqlBase {
       'Keywords',
       'DocType',
       'ProjectNumber',
-      'AreaList'
+      'AreaList',
+      'Language',
+      'MonthPublished',
+      'ISBN13',
+      'ISSN',
+      'SourcePublication',
+      'JournalRef',
+      'PubPages',
+      'LinkIIEDURL',
+      'LinkMoreURL'
     ];
     $query = $this->select('Publications', 'p')
       ->fields('p', $fields);
@@ -67,7 +76,16 @@ class PubsNode extends SqlBase {
       'Keywords' => $this->t('Tags, delimited by pipe'),
       'DocType' => $this->t('Doctype lookup'),
       'ProjectNumber' => $this->t('Legacy project ID'),
-      'AreaList' => $this->t('List of countries')
+      'AreaList' => $this->t('List of countries'),
+      'Language' => $this->t('Publication language'),
+      'MonthPublished' => $this->t('Year and month published'),
+      'ISBN13' => $this->t('ISBN number'),
+      'ISSN' => $this->t('ISSN number'),
+      'SourcePublication' => $this->t('Source publication'),
+      'JournalRef' => $this->t('Source publication reference'),
+      'PubPages' => $this->t('Number of pages'),
+      'LinkIIEDURL' => $this->t('IIED link'),
+      'LinkMoreURL' => $this->t('External link'),
     ];
 
     return $fields;

@@ -1,0 +1,33 @@
+{
+    "name": "drupal/isbn",
+    "description": "Add an ISBN field option.",
+    "type": "drupal-module",
+    "license": "GPL-2.0+",
+    "keywords": ["php", "field", "drupal"],
+    "homepage": "https://www.drupal.org/project/isbn",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Jon Pugh",
+            "role": "Co-Maintainer",
+            "homepage": "https://github.com/jonpugh"
+        },
+        {
+            "name": "Rafael Silva",
+            "homepage": "https://rafaelsilva.net/",
+            "role": "Co-Maintainer"
+        },
+        {
+            "name": "Andy Austin",
+            "role": "Creator"
+        }
+    ],
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/isbn",
+        "irc": "irc://irc.freenode.org/drupal-contribute",
+        "source": "http://git.drupal.org/project/isbn.git"
+    },
+    "require": {
+        "nicebooks/isbn": "~0.0"
+    }
+}
