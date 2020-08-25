@@ -22,6 +22,8 @@ dependencies:
     - field.field.node.publication.field_product_id
     - field.field.node.publication.field_project
     - field.field.node.publication.field_publisher
+    - field.field.node.publication.field_series
+    - field.field.node.publication.field_series_item_code
     - field.field.node.publication.field_short_title
     - field.field.node.publication.field_source_publication
     - field.field.node.publication.field_status
@@ -459,6 +461,38 @@ third_party_settings:
                 type: link
             additional: {  }
             weight: 25
+          e61c34f8-9f05-4543-90f2-a075919f8afb:
+            uuid: e61c34f8-9f05-4543-90f2-a075919f8afb
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:publication:field_series'
+              formatter:
+                label: above
+                settings:
+                  link: true
+                third_party_settings: {  }
+                type: entity_reference_label
+            additional: {  }
+            weight: 26
+          d6e47897-95dd-44cd-a29f-a756709d895a:
+            uuid: d6e47897-95dd-44cd-a29f-a756709d895a
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:publication:field_series_item_code'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 27
         third_party_settings: {  }
 id: node.publication.default
 targetEntityType: node
@@ -625,6 +659,22 @@ content:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
+    region: content
+  field_series:
+    weight: 27
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_series_item_code:
+    weight: 28
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
     region: content
   field_short_title:
     weight: 5

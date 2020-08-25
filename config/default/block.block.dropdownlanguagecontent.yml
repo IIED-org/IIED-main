@@ -1,0 +1,29 @@
+uuid: 4e5369e5-4c2f-4b55-91a0-70b573d4dae8
+langcode: fr
+status: true
+dependencies:
+  module:
+    - ctools
+    - dropdown_language
+  theme:
+    - iied_pubs
+id: dropdownlanguagecontent
+theme: iied_pubs
+region: content
+weight: -6
+provider: null
+plugin: 'dropdown_language:language_content'
+settings:
+  id: 'dropdown_language:language_content'
+  label: 'Dropdown Language (Content)'
+  provider: dropdown_language
+  label_display: '0'
+  labels: null
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      publication: publication
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'

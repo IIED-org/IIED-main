@@ -140,6 +140,14 @@ process:
     to_format: Y-m-d
   field_isbn: ISBN13
   field_issn: ISSN
+  field_series:
+    plugin: entity_lookup
+    source: SeriesCode
+    entity_type: taxonomy_term
+    bundle: series
+    bundle_key: vid
+    value_key: field_code
+  field_series_item_code: SeriesItemCode
   field_source_publication: SourcePublication
   field_journal_ref: JournalRef
   langcode:
@@ -180,3 +188,4 @@ migration_dependencies:
     - pubs_authors
     - pubs_doctypes
     - pubs_projects
+    - pubs_series

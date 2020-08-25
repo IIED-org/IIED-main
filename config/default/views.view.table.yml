@@ -12,6 +12,7 @@ dependencies:
     - field.storage.node.field_lit_code
     - field.storage.node.field_pdf_pages
     - field.storage.node.field_product_code
+    - field.storage.node.field_series
     - field.storage.node.field_source_publication
     - node.type.publication
   module:
@@ -81,12 +82,13 @@ display:
             field_document_type: field_document_type
             field_isbn: field_isbn
             field_issn: field_issn
+            field_series: field_series
+            field_iied_url: field_iied_url
+            field_external_url: field_external_url
             field_source_publication: field_source_publication
             field_journal_ref: field_journal_ref
             langcode: langcode
-            field_iied_url: field_iied_url
             field_pdf_pages: field_pdf_pages
-            nothing: nothing
           info:
             field_product_code:
               sortable: true
@@ -130,6 +132,23 @@ display:
               separator: ''
               empty_column: false
               responsive: ''
+            field_series:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_iied_url:
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_external_url:
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
             field_source_publication:
               sortable: true
               default_sort_order: asc
@@ -151,20 +170,8 @@ display:
               separator: ''
               empty_column: false
               responsive: ''
-            field_iied_url:
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
             field_pdf_pages:
               sortable: true
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            nothing:
-              sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
@@ -535,6 +542,69 @@ display:
           separator: ', '
           field_api_classes: false
           plugin_id: field
+        field_series:
+          id: field_series
+          table: node__field_series
+          field: field_series
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: Series
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: target_id
+          type: entity_reference_label
+          settings:
+            link: true
+          group_column: target_id
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          plugin_id: field
         field_iied_url:
           id: field_iied_url
           table: node__field_iied_url
@@ -586,7 +656,7 @@ display:
           click_sort_column: uri
           type: link
           settings:
-            trim_length: 80
+            trim_length: 25
             url_only: false
             url_plain: false
             rel: '0'
@@ -653,7 +723,7 @@ display:
           click_sort_column: uri
           type: link
           settings:
-            trim_length: 80
+            trim_length: 25
             url_only: false
             url_plain: false
             rel: '0'
@@ -991,6 +1061,7 @@ display:
         - 'config:field.storage.node.field_lit_code'
         - 'config:field.storage.node.field_pdf_pages'
         - 'config:field.storage.node.field_product_code'
+        - 'config:field.storage.node.field_series'
         - 'config:field.storage.node.field_source_publication'
   page_1:
     display_plugin: page
@@ -1018,4 +1089,5 @@ display:
         - 'config:field.storage.node.field_lit_code'
         - 'config:field.storage.node.field_pdf_pages'
         - 'config:field.storage.node.field_product_code'
+        - 'config:field.storage.node.field_series'
         - 'config:field.storage.node.field_source_publication'

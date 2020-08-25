@@ -23,6 +23,8 @@ dependencies:
     - field.field.node.publication.field_product_id
     - field.field.node.publication.field_project
     - field.field.node.publication.field_publisher
+    - field.field.node.publication.field_series
+    - field.field.node.publication.field_series_item_code
     - field.field.node.publication.field_short_title
     - field.field.node.publication.field_source_publication
     - field.field.node.publication.field_status
@@ -124,6 +126,8 @@ hidden:
   field_product_id: true
   field_project: true
   field_publisher: true
+  field_series: true
+  field_series_item_code: true
   field_short_title: true
   field_source_publication: true
   field_status: true

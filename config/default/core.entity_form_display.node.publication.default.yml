@@ -22,6 +22,8 @@ dependencies:
     - field.field.node.publication.field_product_id
     - field.field.node.publication.field_project
     - field.field.node.publication.field_publisher
+    - field.field.node.publication.field_series
+    - field.field.node.publication.field_series_item_code
     - field.field.node.publication.field_short_title
     - field.field.node.publication.field_source_publication
     - field.field.node.publication.field_status
@@ -112,7 +114,7 @@ content:
     type: entity_reference_autocomplete
     region: content
   field_external_url:
-    weight: 29
+    weight: 31
     settings:
       placeholder_url: ''
       placeholder_title: ''
@@ -120,7 +122,7 @@ content:
     type: link_default
     region: content
   field_iied_url:
-    weight: 28
+    weight: 30
     settings:
       placeholder_url: ''
       placeholder_title: ''
@@ -142,7 +144,7 @@ content:
     type: string_textfield
     region: content
   field_journal_ref:
-    weight: 31
+    weight: 33
     settings:
       size: 60
       placeholder: ''
@@ -163,7 +165,7 @@ content:
     type: file_generic
     region: content
   field_pdf_pages:
-    weight: 32
+    weight: 34
     settings:
       placeholder: ''
     third_party_settings: {  }
@@ -203,6 +205,20 @@ content:
     third_party_settings: {  }
     type: entity_reference_autocomplete
     region: content
+  field_series:
+    weight: 28
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_series_item_code:
+    weight: 29
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
   field_short_title:
     weight: 6
     settings:
@@ -212,7 +228,7 @@ content:
     type: string_textfield
     region: content
   field_source_publication:
-    weight: 30
+    weight: 32
     settings:
       size: 60
       placeholder: ''
@@ -297,5 +313,10 @@ content:
       placeholder: ''
       match_limit: 10
     region: content
+    third_party_settings: {  }
+  url_redirects:
+    weight: 35
+    region: content
+    settings: {  }
     third_party_settings: {  }
 hidden: {  }

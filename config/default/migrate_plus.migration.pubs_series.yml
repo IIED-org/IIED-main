@@ -1,0 +1,29 @@
+uuid: 236bf535-4f02-4c1b-af39-176cabd3a540
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - migrate_pubs
+id: pubs_series
+class: null
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags: null
+migration_group: pubs
+label: 'IIED Pubs Series'
+source:
+  plugin: pubs_series
+process:
+  vid:
+    plugin: default_value
+    default_value: series
+  name: LongName
+  description: ShortName
+  field_code: Code
+  field_public:
+    plugin: default_value
+    default_value: true
+destination:
+  plugin: 'entity:taxonomy_term'
+migration_dependencies: {  }

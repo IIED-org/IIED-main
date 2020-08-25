@@ -9,7 +9,7 @@ id: taxonomy_term.series.field_code
 field_name: field_code
 entity_type: taxonomy_term
 bundle: series
-label: Code
+label: 'Code (legacy)'
 description: ''
 required: false
 translatable: false
