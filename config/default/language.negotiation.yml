@@ -3,11 +3,13 @@ session:
 url:
   source: path_prefix
   prefixes:
-    en: ''
-    fr: fr
+    ar: ar
     bm: bm
     my: my
+    zh-hant: zh-hant
     hr: hr
+    en: ''
+    fr: fr
     id: id
     pl: pl
     pt-br: pt-br
@@ -19,14 +21,14 @@ url:
     sw: sw
     te: te
     vi: vi
-    zh-hant: zh-hant
-    ar: ar
   domains:
-    en: ''
-    fr: ''
+    ar: ''
     bm: ''
     my: ''
+    zh-hant: ''
     hr: ''
+    en: ''
+    fr: ''
     id: ''
     pl: ''
     pt-br: ''
@@ -38,8 +40,6 @@ url:
     sw: ''
     te: ''
     vi: ''
-    zh-hant: ''
-    ar: ''
 selected_langcode: site_default
 _core:
   default_config_hash: uEePITI9tV6WqzmsTb7MfPCi5yPWXSxAN1xeLcYFQbM

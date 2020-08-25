@@ -65,12 +65,18 @@ process:
     ignore_case: true
 
   field_document_type:
-    plugin: entity_lookup
-    source: DocType
-    entity_type: taxonomy_term
-    bundle: document_type
-    bundle_key: vid
-    value_key: field_legacy_doctype
+    -
+      plugin: skip_on_value
+      method: row
+      source: DocType
+      value: 99
+    -
+      plugin: entity_lookup
+      source: DocType
+      entity_type: taxonomy_term
+      bundle: document_type
+      bundle_key: vid
+      value_key: field_legacy_doctype
 
   field_publisher:
     -

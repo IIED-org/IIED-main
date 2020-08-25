@@ -30,6 +30,7 @@
         "drupal/name": "^1.0@RC",
         "drupal/paragraphs": "^1.12",
         "drupal/pathauto": "^1.8",
+        "drupal/redirect": "^1.6",
         "drupal/serial": "^1.0@alpha",
         "drush/drush": "^10.3"
     },

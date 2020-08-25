@@ -9,7 +9,7 @@ _core:
 id: iied_pubs_page_title
 theme: iied_pubs
 region: content
-weight: -50
+weight: -7
 provider: null
 plugin: page_title_block
 settings:

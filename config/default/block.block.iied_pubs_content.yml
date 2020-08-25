@@ -11,7 +11,7 @@ _core:
 id: iied_pubs_content
 theme: iied_pubs
 region: content
-weight: 0
+weight: -2
 provider: null
 plugin: system_main_block
 settings:

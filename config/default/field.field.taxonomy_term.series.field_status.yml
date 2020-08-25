@@ -1,0 +1,21 @@
+uuid: 9d8c9f70-d6dd-439d-bec6-73d3d87e7535
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_status
+    - taxonomy.vocabulary.series
+  module:
+    - options
+id: taxonomy_term.series.field_status
+field_name: field_status
+entity_type: taxonomy_term
+bundle: series
+label: Status
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,0 +1,51 @@
+uuid: c3eeed3e-0f82-4399-826b-e4bde687e20c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.series.field_code
+    - field.field.taxonomy_term.series.field_public
+    - field.field.taxonomy_term.series.field_status
+    - taxonomy.vocabulary.series
+  module:
+    - options
+    - text
+id: taxonomy_term.series.default
+targetEntityType: taxonomy_term
+bundle: series
+mode: default
+content:
+  description:
+    label: hidden
+    type: text_default
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_code:
+    weight: 1
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_public:
+    weight: 2
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_status:
+    weight: 3
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+    region: content
+hidden:
+  langcode: true

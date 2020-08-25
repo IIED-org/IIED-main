@@ -1,0 +1,27 @@
+uuid: 5c527920-1a40-46ea-959b-9873d7a378b1
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - taxonomy
+id: taxonomy_term.field_status
+field_name: field_status
+entity_type: taxonomy_term
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: cur
+      label: Current
+    -
+      value: arc
+      label: Archive
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
