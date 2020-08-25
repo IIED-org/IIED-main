@@ -1,0 +1,84 @@
+<?php
+
+/**
+ * @file
+ * Main module file.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_help().
+ */
+function dropdown_language_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the allowed_languages module.
+    case 'help.page.dropdown_language':
+      $admin_ctrl = Url::fromRoute('entity.configurable_language.collection');
+      $dropdown_ctrl = Url::fromRoute('dropdown_language.setting');
+      $block_ctrl = Url::fromRoute('block.admin_display');
+      $switch = t('Switch Language');
+
+      $listconf = [];
+      $listconf[] = t('Navigate to administor <a title="Administration → Configuration → Regional and Language → Languages" href="@admin_ctrl">Languages</a> and add desired languages. <strong>Save configuration</strong>.', [
+        '@admin_ctrl' => $admin_ctrl->toString(),
+      ]);
+      $listconf[] = t('Navigate to configure <a title="Administration → Configuration → Regional and Language → Dropdown Language Switcher" href="@dropdown_ctrl">Dropdown Language Switcher</a>.', [
+        '@dropdown_ctrl' => $dropdown_ctrl->toString(),
+      ]);
+      $listconf[] = t('Select how to display the language labelling from the dropdown: Language Name, Language ID, Native Name or use Custom Labels.');
+      $listconf[] = t('There is also the option to <q>@switch</q> Decor which provides the  block with fieldset wrapping.', [
+        '@switch' => $switch,
+      ]);
+      $listconf[] = t('Navigate to <a title="Administration → Structure → Block" href="@block_ctrl">Block layout</a> and place the <q>@drop</q> block as your site requires.', [
+        '@block_ctrl' => $block_ctrl->toString(),
+        '@drop' => t('Dropdown Language'),
+      ]);
+
+      $listtrouble = [];
+      $listtrouble[] = t('Placed Blocks will be visible when two, or more languages are active.  See Configuration step 1.');
+      if (\Drupal::moduleHandler()->moduleExists('locale')) {
+        $translate_ctrl = Url::fromRoute('locale.translate_page');
+        $language_manager = \Drupal::getContainer()->get('language_manager');
+        $default_language = $language_manager->getDefaultLanguage()->getId();
+        $native_names = $language_manager->getStandardLanguageList();
+        $edit = Url::fromRoute('entity.configurable_language.edit_form', ['configurable_language' => $default_language]);
+        $install_lang = $native_names[$default_language][0];
+        $listtrouble[] = t('To be able to translate strings (ie: <q>@switch</q> decor option) Navigate to administer <a title="Administration → Configuration → Regional and Language → Languages" href="@admin_ctrl">Languages</a>, then click <a href="@edit"><strong>Edit</strong></a> Operation of your default language install (@lang), check the <q>Enable interface translation to @lang</q> box, and click <strong>Save language</strong>.  Then translatible strings can be searched and translated via administer <a title="Administration → Configuration → Regional and Language → User interface translation" href="@translate_ctrl">User interface translation</a>', [
+          '@lang' => $install_lang,
+          '@switch' => $switch,
+          '@admin_ctrl' => $admin_ctrl->toString(),
+          '@translate_ctrl' => $translate_ctrl->toString(),
+          '@edit' => $edit->toString(),
+        ]);
+      }
+      else {
+        $modules_list = Url::fromRoute('system.modules_list');
+        $listtrouble[] = t('The <q>Locale</q> module is not enabled. You will need to enable should you need to translate strings via the UI.  <a title="Administration → Extend" href="@modules_list">Enable Modules</a>',
+          [
+            '@modules_list' => $modules_list->toString(),
+          ]);
+      }
+
+      return [
+        '#type' => 'inline_template',
+        '#template' => '<h3>{{ configuration }}</h3>{{ listconf }}<h3>{{ troubleshooting }}</h3>{{ listtrouble }}',
+        '#context' => [
+          'configuration' => t('Configuration'),
+          'troubleshooting' => t('Troubleshooting'),
+          'listconf' => [
+            '#theme' => 'item_list',
+            '#items' => $listconf,
+            '#list_type' => 'ol',
+          ],
+          'listtrouble' => [
+            '#theme' => 'item_list',
+            '#items' => $listtrouble,
+            '#list_type' => 'ul',
+          ],
+        ],
+      ];
+
+  }
+}

@@ -1,0 +1,14 @@
+{
+    "name": "drupal/dropdown_language",
+    "description": "Dropdown Language Switcher. https://www.drupal.org/project/dropdown_language",
+    "authors": [
+        {
+            "name": "Scott Carpenter",
+            "email": "dropdown-language@goodscott.com"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "drupal/core": "^8 || ^9"
+    }
+}

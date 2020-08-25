@@ -1,0 +1,26 @@
+# Migration configuration for author content.
+id: pubs_series
+label: IIED Pubs Series
+migration_group: pubs
+source:
+  plugin: pubs_series
+process:
+  # Hardcode the destination term type as 'Series'.
+  vid:
+    plugin: default_value
+    default_value: series
+  name: LongName
+  description: ShortName
+  field_code: Code
+  field_public:
+    plugin: default_value
+    default_value: true
+destination:
+  plugin: entity:taxonomy_term
+# The general rule of thumb is that any migrations referenced by migration
+# process plugins should be required here.
+migration_dependencies: {}
+dependencies:
+  enforced:
+    module:
+      - migrate_pubs

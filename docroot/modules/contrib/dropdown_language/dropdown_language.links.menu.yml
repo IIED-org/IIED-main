@@ -1,0 +1,5 @@
+dropdown_language.setting:
+  title: Dropdown Language Switcher
+  parent: system.admin_config_regional
+  description: 'Dropdown Language Switcher general configurations.'
+  route_name: dropdown_language.setting
