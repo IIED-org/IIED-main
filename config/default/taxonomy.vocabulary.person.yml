@@ -2,7 +2,7 @@ uuid: 22e0b368-3e59-4afb-a637-f8b36e8c2b18
 langcode: en
 status: true
 dependencies: {  }
-name: Person
+name: Author
 vid: person
-description: 'Author, editor, contributor etc.'
+description: 'Author, editor, contributor etc. (can be a group)'
 weight: 0

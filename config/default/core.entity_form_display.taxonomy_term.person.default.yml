@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.taxonomy_term.person.field_legacy_iscanonical
     - field.field.taxonomy_term.person.field_name
+    - field.field.taxonomy_term.person.field_organisation
     - taxonomy.vocabulary.person
   module:
     - field_layout
@@ -58,6 +59,16 @@ content:
       override_field_settings: false
     third_party_settings: {  }
     type: name_default
+    region: content
+  field_organisation:
+    weight: 5
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
     region: content
   langcode:
     type: language_select

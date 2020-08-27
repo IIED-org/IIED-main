@@ -9,7 +9,7 @@ id: node.project.field_projectnumber
 field_name: field_projectnumber
 entity_type: node
 bundle: project
-label: ProjectNumber
+label: 'ProjectNumber (legacy)'
 description: ''
 required: false
 translatable: false

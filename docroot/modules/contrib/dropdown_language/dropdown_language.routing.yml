@@ -1,0 +1,7 @@
+dropdown_language.setting:
+  path: '/admin/config/regional/dropdown-language-switcher'
+  defaults:
+    _title: 'Dropdown Language Settings'
+    _form: \Drupal\dropdown_language\Form\DropdownLanguageSettings
+  requirements:
+    _permission: 'administer site configuration'

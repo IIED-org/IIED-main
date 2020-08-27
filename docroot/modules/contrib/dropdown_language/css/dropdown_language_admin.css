@@ -1,0 +1,24 @@
+/**
+ * @file
+ * Dropdown language selector admin.
+ */
+
+.dropdown-language-help dl {
+  margin: 0 0 2em 0;
+  padding: 0 0 0 0;
+}
+
+.dropdown-language-help dt,
+.dropdown-language-help dd {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  font-size: .8em;
+}
+
+.dropdown-language-help dt {
+  font-weight: 700;
+}
+
+.dropdown-general-settings {
+  font-size: 10px;  /* px for setting tray inheritance */
+}

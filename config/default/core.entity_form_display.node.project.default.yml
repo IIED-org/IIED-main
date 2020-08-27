@@ -4,12 +4,18 @@ status: true
 dependencies:
   config:
     - field.field.node.project.body
+    - field.field.node.project.field_collection
+    - field.field.node.project.field_image
     - field.field.node.project.field_link
+    - field.field.node.project.field_nid
     - field.field.node.project.field_projectnumber
+    - field.field.node.project.field_theme
     - field.field.node.project.field_year
+    - image.style.thumbnail
     - node.type.project
   module:
     - field_layout
+    - image
     - layout_discovery
     - link
     - path
@@ -40,6 +46,22 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_collection:
+    weight: 129
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textfield
+    region: content
+  field_image:
+    weight: 128
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+    type: image_image
+    region: content
   field_link:
     weight: 122
     settings:
@@ -48,12 +70,29 @@ content:
     third_party_settings: {  }
     type: link_default
     region: content
+  field_nid:
+    weight: 125
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
   field_projectnumber:
     weight: 123
     settings:
       placeholder: ''
     third_party_settings: {  }
     type: number
+    region: content
+  field_theme:
+    weight: 127
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
     region: content
   field_year:
     weight: 124
@@ -114,4 +153,9 @@ content:
       match_limit: 10
     region: content
     third_party_settings: {  }
+  url_redirects:
+    weight: 50
+    settings: {  }
+    third_party_settings: {  }
+    region: content
 hidden: {  }

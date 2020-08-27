@@ -21,6 +21,7 @@ module:
   dblog: 0
   devel: 0
   devel_generate: 0
+  dropdown_language: 0
   dynamic_page_cache: 0
   editor: 0
   entity_reference_revisions: 0

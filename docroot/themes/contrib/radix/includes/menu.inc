@@ -37,6 +37,23 @@ function radix_preprocess_menu_local_action(&$variables) {
 }
 
 /**
+ * Implements hook_preprocess_links_ID().
+ */
+function radix_preprocess_links__language_block(&$variables) {
+  $links = &$variables['links'];
+
+  // Do nothing if we have no links.
+  if (!count($links)) {
+    return;
+  }
+
+  // Add the nav-link class.
+  foreach ($variables['links'] as $key => $link) {
+    $links[$key]['link']['#options']['attributes']['class'][] = 'nav-link';
+  }
+}
+
+/**
  * Implements template_preprocess_links__dropbutton().
  */
 function radix_preprocess_links__dropbutton(&$variables) {

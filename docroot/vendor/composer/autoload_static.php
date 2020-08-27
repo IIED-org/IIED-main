@@ -146,6 +146,7 @@ class ComposerStaticInit7376e166806aa5d664ccbd35d60d770b
         'D' => 
         array (
             'Drush\\Internal\\' => 15,
+            'Drush\\Commands\\radix\\' => 21,
             'Drush\\' => 6,
             'Drupal\\Driver\\' => 14,
             'Drupal\\Core\\' => 12,
@@ -414,6 +415,10 @@ class ComposerStaticInit7376e166806aa5d664ccbd35d60d770b
         'Drush\\Internal\\' => 
         array (
             0 => __DIR__ . '/..' . '/drush/drush/src/internal-forks',
+        ),
+        'Drush\\Commands\\radix\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/themes/contrib/radix/Commands/radix',
         ),
         'Drush\\' => 
         array (

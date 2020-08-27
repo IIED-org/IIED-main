@@ -1,0 +1,110 @@
+uuid: f720a1d7-10dd-43bf-b8c6-a03ef1bda1cc
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - migrate_pubs
+id: iied_projects
+class: null
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags: null
+migration_group: pubs
+label: 'Projects from IIED site (RSS)'
+source:
+  constants:
+    BASE_PATH: 'https://www.iied.org'
+    DRUPAL_IMAGE_DIRECTORY: 'public://images/projects/'
+  plugin: url
+  data_fetcher_plugin: http
+  urls: 'https://www.iied.org/projects/rss.xml'
+  data_parser_plugin: simple_xml
+  item_selector: /rss/channel/item
+  fields:
+    -
+      name: guid
+      label: NID
+      selector: guid
+    -
+      name: title
+      label: Title
+      selector: title
+    -
+      name: description
+      label: Description
+      selector: description
+    -
+      name: link
+      label: Link
+      selector: link
+    -
+      name: year
+      label: Year
+      selector: pubDate
+    -
+      name: collection
+      label: Collection
+      selector: 'dc:relation'
+    -
+      name: category
+      label: Category
+      selector: category
+    -
+      name: image_path
+      label: Image
+      selector: enclosure/@url
+    -
+      name: image_title
+      label: 'Image title'
+      selector: 'dc:title'
+    -
+      name: image_alt
+      label: 'Image alt text'
+      selector: 'dc:description'
+  ids:
+    guid:
+      type: integer
+process:
+  uid:
+    plugin: default_value
+    default_value: 1
+  title: title
+  body: description
+  field_link/uri:
+    plugin: concat
+    source:
+      - constants/BASE_PATH
+      - link
+  field_collection/format:
+    plugin: default_value
+    default_value: full_html
+  field_collection/value: collection
+  field_nid: guid
+  field_year: year
+  field_theme:
+    -
+      plugin: explode
+      delimiter: ', '
+      source: category
+    -
+      plugin: entity_lookup
+      allow_multiple: true
+      entity_type: taxonomy_term
+      bundle: theme
+      bundle_key: vid
+  field_image:
+    plugin: image_import
+    source: image_path
+    destination: constants/DRUPAL_IMAGE_DIRECTORY
+    alt: image_alt
+    title: image_title
+    skip_on_missing_source: true
+    skip_on_error: true
+    reuse: true
+  type:
+    plugin: default_value
+    default_value: project
+destination:
+  plugin: 'entity:node'
+migration_dependencies: {  }

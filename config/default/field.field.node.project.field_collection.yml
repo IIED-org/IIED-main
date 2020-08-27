@@ -1,0 +1,21 @@
+uuid: b2bac165-9a07-4152-867b-e51fa790ee81
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_collection
+    - node.type.project
+  module:
+    - text
+id: node.project.field_collection
+field_name: field_collection
+entity_type: node
+bundle: project
+label: Collection
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text

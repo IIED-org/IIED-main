@@ -1,0 +1,8 @@
+name: Utilities
+type: module
+description: "IIED pubs utilities"
+package: Custom
+core: 8.x
+
+dependencies:
+  - language

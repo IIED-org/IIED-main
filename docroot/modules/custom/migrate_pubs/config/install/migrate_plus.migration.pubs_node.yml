@@ -78,17 +78,7 @@ process:
       bundle_key: vid
       value_key: field_legacy_doctype
 
-  field_publisher:
-    -
-      plugin: explode
-      delimiter: ', '
-      source: Publisher
-    -
-      plugin: entity_generate_multiple
-      entity_type: taxonomy_term
-      bundle: organisation
-      bundle_key: vid
-      value_key: name
+  field_publisher_legacy: Publisher
 
   field_author_s_:
     plugin: entity_generate_multiple
@@ -150,6 +140,16 @@ process:
   field_isbn: ISBN13
 
   field_issn: ISSN
+
+  field_series:
+    plugin: entity_lookup
+    source: SeriesCode
+    entity_type: taxonomy_term
+    bundle: series
+    bundle_key: vid
+    value_key: field_code
+
+  field_series_item_code: SeriesItemCode
 
   field_source_publication: SourcePublication
 
@@ -215,8 +215,10 @@ destination:
 # process plugins should be required here.
 migration_dependencies:
   optional:
+    - iied_projects
     - pubs_themes
     - pubs_tags
     - pubs_authors
     - pubs_doctypes
     - pubs_projects
+    - pubs_series
