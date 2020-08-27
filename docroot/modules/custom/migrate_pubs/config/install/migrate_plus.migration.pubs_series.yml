@@ -12,9 +12,6 @@ process:
   name: LongName
   description: ShortName
   field_code: Code
-  field_public:
-    plugin: default_value
-    default_value: true
 destination:
   plugin: entity:taxonomy_term
 # The general rule of thumb is that any migrations referenced by migration

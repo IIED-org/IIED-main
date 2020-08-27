@@ -4,12 +4,17 @@ status: true
 dependencies:
   config:
     - field.field.node.project.body
+    - field.field.node.project.field_collection
+    - field.field.node.project.field_image
     - field.field.node.project.field_link
+    - field.field.node.project.field_nid
     - field.field.node.project.field_projectnumber
+    - field.field.node.project.field_theme
     - field.field.node.project.field_year
     - node.type.project
   module:
     - field_layout
+    - image
     - layout_builder
     - layout_discovery
     - link
@@ -107,6 +112,71 @@ third_party_settings:
                 type: number_integer
             additional: {  }
             weight: 4
+          c521bf15-90e2-4e05-850a-147639e72503:
+            uuid: c521bf15-90e2-4e05-850a-147639e72503
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:project:field_nid'
+              formatter:
+                label: above
+                settings:
+                  thousand_separator: ''
+                  prefix_suffix: true
+                third_party_settings: {  }
+                type: number_integer
+            additional: {  }
+            weight: 5
+          3871b66f-6bce-4499-a680-c38487ec2514:
+            uuid: 3871b66f-6bce-4499-a680-c38487ec2514
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:project:field_theme'
+              formatter:
+                label: above
+                settings:
+                  link: true
+                third_party_settings: {  }
+                type: entity_reference_label
+            additional: {  }
+            weight: 7
+          533cfb2a-6f5d-44f3-883a-b3fd1f38ada4:
+            uuid: 533cfb2a-6f5d-44f3-883a-b3fd1f38ada4
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:project:field_image'
+              formatter:
+                label: above
+                settings:
+                  image_style: ''
+                  image_link: ''
+                third_party_settings: {  }
+                type: image
+            additional: {  }
+            weight: 8
+          66503377-8da6-40c2-8cc3-e9cafed3d819:
+            uuid: 66503377-8da6-40c2-8cc3-e9cafed3d819
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:project:field_collection'
+              formatter:
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+                type: text_default
+            additional: {  }
+            weight: 9
         third_party_settings: {  }
 id: node.project.default
 targetEntityType: node
@@ -120,6 +190,22 @@ content:
     settings: {  }
     third_party_settings: {  }
     region: content
+  field_collection:
+    weight: 109
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_image:
+    weight: 108
+    label: above
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+    region: content
   field_link:
     weight: 102
     label: above
@@ -132,6 +218,15 @@ content:
     third_party_settings: {  }
     type: link
     region: content
+  field_nid:
+    weight: 105
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
+    region: content
   field_projectnumber:
     weight: 103
     label: above
@@ -140,6 +235,14 @@ content:
       prefix_suffix: true
     third_party_settings: {  }
     type: number_integer
+    region: content
+  field_theme:
+    weight: 107
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
     region: content
   field_year:
     weight: 104

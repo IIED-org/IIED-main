@@ -14,25 +14,21 @@ migration_group: pubs
 label: 'Projects relating to IIED Publications (from ProjectInfo table)'
 source:
   plugin: pubs_project
-  constants:
-    DOMAIN: 'https://www.iied.org'
 process:
-  uid:
-    plugin: default_value
-    default_value: 1
   type:
     plugin: default_value
     default_value: project
-  title: Title
-  body: Summary
+  nid:
+    plugin: migration_lookup
+    migration: iied_projects
+    source: MatchNode
   field_projectnumber: ProjectNumber
-  field_link/uri:
-    plugin: concat
-    source:
-      - constants/DOMAIN
-      - Link
-  field_link/title: Title
-  field_year: Year
+  title: Title
+  uid:
+    plugin: default_value
+    default_value: 1
 destination:
   plugin: 'entity:node'
-migration_dependencies: {  }
+migration_dependencies:
+  required:
+    - iied_projects

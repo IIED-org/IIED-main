@@ -22,6 +22,7 @@ dependencies:
     - field.field.node.publication.field_product_id
     - field.field.node.publication.field_project
     - field.field.node.publication.field_publisher
+    - field.field.node.publication.field_publisher_legacy
     - field.field.node.publication.field_series
     - field.field.node.publication.field_series_item_code
     - field.field.node.publication.field_short_title
@@ -204,6 +205,14 @@ content:
       placeholder: ''
     third_party_settings: {  }
     type: entity_reference_autocomplete
+    region: content
+  field_publisher_legacy:
+    weight: 36
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
     region: content
   field_series:
     weight: 28

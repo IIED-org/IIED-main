@@ -20,6 +20,7 @@ class PubsProject extends SqlBase {
   public function query() {
     $fields = [
       'ProjectNumber',
+      'MatchNode',
       'Year',
       'Title',
       'Summary',
@@ -36,6 +37,7 @@ class PubsProject extends SqlBase {
   public function fields() {
     $fields = [
       'ProjectNumber' => $this->t('ID'),
+      'MatchNode' => $this->t('IIED NID'),
       'Year' => $this->t('Year of project'),
       'Title' => $this->t('Title'),
       'Summary' => $this->t('Description'),
@@ -50,9 +52,9 @@ class PubsProject extends SqlBase {
    */
   public function getIds() {
     return [
-      'ProjectNumber' => [
+      'MatchNode' => [
         'type' => 'integer',
-        'alias' => 'a',
+        'alias' => 'm',
       ],
     ];
   }

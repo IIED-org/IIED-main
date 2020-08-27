@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - field.field.taxonomy_term.series.field_code
-    - field.field.taxonomy_term.series.field_public
     - field.field.taxonomy_term.series.field_status
     - taxonomy.vocabulary.series
   module:
@@ -37,13 +36,6 @@ content:
       placeholder: ''
     third_party_settings: {  }
     type: string_textfield
-    region: content
-  field_public:
-    weight: 3
-    settings:
-      display_label: true
-    third_party_settings: {  }
-    type: boolean_checkbox
     region: content
   field_status:
     weight: 2

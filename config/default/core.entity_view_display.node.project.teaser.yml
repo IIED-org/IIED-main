@@ -5,8 +5,12 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.project.body
+    - field.field.node.project.field_collection
+    - field.field.node.project.field_image
     - field.field.node.project.field_link
+    - field.field.node.project.field_nid
     - field.field.node.project.field_projectnumber
+    - field.field.node.project.field_theme
     - field.field.node.project.field_year
     - node.type.project
   module:
@@ -74,7 +78,11 @@ content:
     third_party_settings: {  }
     region: content
 hidden:
+  field_collection: true
+  field_image: true
   field_link: true
+  field_nid: true
   field_projectnumber: true
+  field_theme: true
   field_year: true
   langcode: true

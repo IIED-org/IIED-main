@@ -22,6 +22,7 @@ dependencies:
     - field.field.node.publication.field_product_id
     - field.field.node.publication.field_project
     - field.field.node.publication.field_publisher
+    - field.field.node.publication.field_publisher_legacy
     - field.field.node.publication.field_series
     - field.field.node.publication.field_series_item_code
     - field.field.node.publication.field_short_title
@@ -493,6 +494,22 @@ third_party_settings:
                 type: string
             additional: {  }
             weight: 27
+          926454af-b055-49fd-a6a9-b27c050b5d98:
+            uuid: 926454af-b055-49fd-a6a9-b27c050b5d98
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:publication:field_publisher_legacy'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 28
         third_party_settings: {  }
 id: node.publication.default
 targetEntityType: node
@@ -659,6 +676,14 @@ content:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
+    region: content
+  field_publisher_legacy:
+    weight: 29
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
     region: content
   field_series:
     weight: 27
