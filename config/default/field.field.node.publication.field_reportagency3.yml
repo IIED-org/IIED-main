@@ -1,0 +1,19 @@
+uuid: e1ae79b4-88c6-42bf-99e1-97da87445522
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_reportagency3
+    - node.type.publication
+id: node.publication.field_reportagency3
+field_name: field_reportagency3
+entity_type: node
+bundle: publication
+label: ReportAgency3
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

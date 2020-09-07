@@ -1,0 +1,19 @@
+uuid: 7c8dcd1c-5a94-488d-b13a-364211d5b28e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_team
+    - node.type.publication
+id: node.publication.field_team
+field_name: field_team
+entity_type: node
+bundle: publication
+label: Team
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

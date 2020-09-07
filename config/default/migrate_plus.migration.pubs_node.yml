@@ -32,6 +32,13 @@ process:
     value:
       - A
       - 'N'
+  field_reportingcode1: ReportingCode1
+  field_reportingcode2: ReportingCode2
+  field_reportfin1: ReportFin1
+  field_reportagency1: ReportAgency1
+  field_reportfin2: ReportFin2
+  field_reportagency2: ReportAgency2
+  field_reportfin3: ReportFin3
   title: Title
   field_short_title: ShortTitle
   _product_code: ProductCode
@@ -78,6 +85,8 @@ process:
       bundle_key: vid
       value_key: field_legacy_doctype
   field_publisher_legacy: Publisher
+  field_deptlist: DeptList
+  field_team: Team
   field_author_s_:
     plugin: entity_generate_multiple
     allow_multiple: true
