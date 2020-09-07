@@ -7,6 +7,7 @@ dependencies:
     - field.field.node.publication.field_area_list
     - field.field.node.publication.field_author_s_
     - field.field.node.publication.field_date_published
+    - field.field.node.publication.field_deptlist
     - field.field.node.publication.field_document_type
     - field.field.node.publication.field_doi
     - field.field.node.publication.field_editor_s_
@@ -23,12 +24,21 @@ dependencies:
     - field.field.node.publication.field_project
     - field.field.node.publication.field_publisher
     - field.field.node.publication.field_publisher_legacy
+    - field.field.node.publication.field_reportagency1
+    - field.field.node.publication.field_reportagency2
+    - field.field.node.publication.field_reportagency3
+    - field.field.node.publication.field_reportfin1
+    - field.field.node.publication.field_reportfin2
+    - field.field.node.publication.field_reportfin3
+    - field.field.node.publication.field_reportingcode1
+    - field.field.node.publication.field_reportingcode2
     - field.field.node.publication.field_series
     - field.field.node.publication.field_series_item_code
     - field.field.node.publication.field_short_title
     - field.field.node.publication.field_source_publication
     - field.field.node.publication.field_status
     - field.field.node.publication.field_tags
+    - field.field.node.publication.field_team
     - field.field.node.publication.field_theme_s_
     - node.type.publication
   module:
@@ -89,6 +99,14 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: datetime_default
+    region: content
+  field_deptlist:
+    weight: 45
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
     region: content
   field_document_type:
     weight: 4
@@ -214,6 +232,70 @@ content:
     third_party_settings: {  }
     type: string_textfield
     region: content
+  field_reportagency1:
+    weight: 42
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_reportagency2:
+    weight: 43
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_reportagency3:
+    weight: 44
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_reportfin1:
+    weight: 39
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_reportfin2:
+    weight: 40
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_reportfin3:
+    weight: 41
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_reportingcode1:
+    weight: 37
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_reportingcode2:
+    weight: 38
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
   field_series:
     weight: 28
     settings: {  }
@@ -259,6 +341,14 @@ content:
       placeholder: ''
     third_party_settings: {  }
     type: entity_reference_autocomplete_tags
+    region: content
+  field_team:
+    weight: 46
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
     region: content
   field_theme_s_:
     weight: 21

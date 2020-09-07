@@ -32,13 +32,23 @@ class PubsNode extends SqlBase {
       'ProductCode',
       'LitCode',
       'Status',
+      'ReportingCode1',
+      'ReportingCode2',
+      'ReportFin1',
+      'ReportAgency1',
+      'ReportFin2',
+      'ReportAgency2',
+      'ReportFin3',
+      'ReportAgency3',
       'Title',
       'ShortTitle',
       'AuthorList',
       'Publisher',
+      'DeptList',
       'Abstract',
       'Theme',
       'Theme2',
+      'Team',
       'Keywords',
       'DocType',
       'ProjectNumber',
@@ -68,13 +78,23 @@ class PubsNode extends SqlBase {
       'ProductCode' => $this->t('Publication ID'),
       'LitCode' => $this->t('P, S or X'),
       'Status' => $this->t('Status A or N only'),
+      'ReportingCode1' => $this->t('ReportingCode1'),
+      'ReportingCode2' => $this->t('ReportingCode2'),
+      'ReportFin1' => $this->t('ReportFin1'),
+      'ReportAgency1' => $this->t('ReportAgency1'),
+      'ReportFin2' => $this->t('ReportFin2'),
+      'ReportAgency2' => $this->t('ReportAgency2'),
+      'ReportFin3' => $this->t('ReportFin3'),
+      'ReportAgency3' => $this->t('ReportAgency3'),
       'Title' => $this->t('Title of publication'),
       'ShortTitle' => $this->t('Short title'),
       'AuthorList' => $this->t('Authors: multiple values, delimited by pipe'),
       'Publisher' => $this->t('Sometimes delimited by commas'),
+      'DeptList' => $this->t('DepList: multiple values, delimited by pipe'),
       'Abstract' => $this->t('Abstract for this publication'),
       'Theme' => $this->t('Primary theme'),
       'Theme2' => $this->t('Secondary theme'),
+      'Team'  => $this->t('Team code'),
       'Keywords' => $this->t('Tags, delimited by pipe'),
       'DocType' => $this->t('Doctype lookup'),
       'ProjectNumber' => $this->t('Legacy project ID'),
@@ -128,6 +148,9 @@ class PubsNode extends SqlBase {
     }
     if ($value = $row->getSourceProperty('Keywords')) {
      $row->setSourceProperty('Keywords', explode('|', substr($value,1,strlen($value)-2)));
+    }
+    if ($value = $row->getSourceProperty('DeptList')) {
+     $row->setSourceProperty('DeptList', explode('|', substr($value,1,strlen($value)-2)));
     }
     if ($value = $row->getSourceProperty('Abstract')) {
      $row->setSourceProperty('Abstract', str_replace('~~', PHP_EOL . PHP_EOL, $value));
