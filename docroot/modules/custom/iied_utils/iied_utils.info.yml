@@ -2,8 +2,7 @@ name: Utilities
 type: module
 description: "IIED pubs utilities"
 package: Custom
-core: "8.x"
 core_version_requirement: ^8.8 || ^9
-version: "8.x-1.0"
+version: "1.0"
 dependencies:
   - language
