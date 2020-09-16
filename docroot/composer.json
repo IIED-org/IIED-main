@@ -28,12 +28,14 @@
         "drupal/geolocation": "^3.2",
         "drupal/isbn": "^1.2",
         "drupal/merge_translations": "^1.1",
+        "drupal/migrate_file": "1.x-dev",
         "drupal/name": "^1.0@RC",
         "drupal/paragraphs": "^1.12",
         "drupal/pathauto": "^1.8",
-        "drupal/radix": "^4.8",
+        "drupal/radix": "4.x-dev",
         "drupal/redirect": "^1.6",
         "drupal/serial": "^1.0@alpha",
+        "drupal/upgrade_status": "^2.0",
         "drush/drush": "^10.3"
     },
     "require-dev": {
@@ -44,7 +46,6 @@
         "drupal/migrate_plus": "^5.1",
         "drupal/migrate_tools": "^5.0",
         "drupal/migrate_directory": "^1.0",
-        "drupal/migrate_file": "^1.1",
         "drupal/migrate_source_csv": "^3.4"
     },
     "conflict": {
@@ -114,6 +115,12 @@
           },
           "drupal/radix": {
             "Language switcher patch": "https://www.drupal.org/files/issues/2020-01-05/3060563-7.patch"
+          },
+          "drupal/migrate_file": {
+            "D9 compatibility": "https://www.drupal.org/files/issues/2020-06-23/migrate_file-3148126-3.patch"
+          },
+          "drupal/config_devel": {
+            "D9 readiness": "https://www.drupal.org/files/issues/2020-08-20/deprecated-3094340-18.patch"
           }
         }
     }

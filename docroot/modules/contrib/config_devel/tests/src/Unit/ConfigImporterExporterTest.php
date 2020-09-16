@@ -48,7 +48,8 @@ class ConfigImporterExporterTest extends ConfigDevelTestBase {
       $this->prophesize(\Drupal\Core\Extension\ModuleHandlerInterface::class)->reveal(),
       $this->prophesize(\Drupal\Core\ProxyClass\Extension\ModuleInstaller::class)->reveal(),
       $this->prophesize(\Drupal\Core\Extension\ThemeHandlerInterface::class)->reveal(),
-      $this->prophesize(\Drupal\Core\StringTranslation\TranslationManager::class)->reveal()
+      $this->prophesize(\Drupal\Core\StringTranslation\TranslationManager::class)->reveal(),
+      $this->prophesize(\Drupal\Core\Extension\ModuleExtensionList::class)->reveal()
     );
 
     $configDevelSubscriber->writeBackConfig($config, $file_names);
@@ -62,4 +63,8 @@ class ConfigImporterExporterTest extends ConfigDevelTestBase {
     }
   }
 
+}
+
+if (!defined('DRUPAL_MINIMUM_PHP')) {
+  define('DRUPAL_MINIMUM_PHP', '7.3.0');
 }

@@ -250,7 +250,7 @@ function drush_config_devel_get_type($extension) {
   elseif (\Drupal::service('theme_handler')->themeExists($extension)) {
     $type = 'theme';
   }
-  elseif (drupal_get_profile() === $extension) {
+  elseif (\Drupal::installProfile() === $extension) {
     $type = 'profile';
   }
 

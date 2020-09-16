@@ -1,8 +1,9 @@
 name: Radix
 type: theme
+base theme: false
 description: Responsive base theme for Drupal.
 screenshot: screenshot.png
-core: 8.x
+core_version_requirement: ^8.7.7 || ^9.0
 
 stylesheets-remove:
   - system.theme.css
@@ -29,8 +30,3 @@ component-libraries:
   radix:
     paths:
       - ./src/components
-
-# Information added by Drupal.org packaging script on 2020-03-17
-version: '8.x-4.8'
-project: 'radix'
-datestamp: 1584430760

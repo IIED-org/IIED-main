@@ -4,6 +4,7 @@ description: 'Helps developers work with configuration.'
 package: Configuration
 # version: VERSION
 core: 8.x
+core_version_requirement: ^8 || ^9
 configure: config_devel.settings
 dependencies:
   - drupal:config

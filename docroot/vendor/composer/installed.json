@@ -1862,30 +1862,30 @@
     },
     {
         "name": "drupal/components",
-        "version": "1.1.0",
-        "version_normalized": "1.1.0.0",
+        "version": "2.0.0-beta3",
+        "version_normalized": "2.0.0.0-beta3",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/components.git",
-            "reference": "8.x-1.1"
+            "reference": "8.x-2.0-beta3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/components-8.x-1.1.zip",
-            "reference": "8.x-1.1",
-            "shasum": "72af8ff1ca842556ee4b95335595c24703acdb75"
+            "url": "https://ftp.drupal.org/files/projects/components-8.x-2.0-beta3.zip",
+            "reference": "8.x-2.0-beta3",
+            "shasum": "5883c8b6dd358d29127a3c49d1459814c061b566"
         },
         "require": {
-            "drupal/core": "~8.0"
+            "drupal/core": "^8.7.7 || ^9"
         },
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "8.x-1.1",
-                "datestamp": "1556870881",
+                "version": "8.x-2.0-beta3",
+                "datestamp": "1594633703",
                 "security-coverage": {
-                    "status": "covered",
-                    "message": "Covered by Drupal's security advisory policy"
+                    "status": "not-covered",
+                    "message": "Beta releases are not covered by Drupal security advisories."
                 }
             }
         },
@@ -1897,15 +1897,16 @@
         "authors": [
             {
                 "name": "JohnAlbin",
-                "homepage": "https://www.drupal.org/user/32095"
+                "homepage": "https://www.drupal.org/user/32095",
+                "email": "virtually.johnalbin@gmail.com"
             },
             {
                 "name": "RobLoach",
                 "homepage": "https://www.drupal.org/user/61114"
             }
         ],
-        "description": "Registers “component libraries” defined in modules and themes with the Twig system",
-        "homepage": "https://www.drupal.org/project/components",
+        "description": "Sets up folders of components defined by your theme or module",
+        "homepage": "https://drupal.org/project/components",
         "support": {
             "source": "https://git.drupalcode.org/project/components"
         }
@@ -2011,6 +2012,9 @@
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
                 }
+            },
+            "patches_applied": {
+                "D9 readiness": "https://www.drupal.org/files/issues/2020-08-20/deprecated-3094340-18.patch"
             }
         },
         "installation-source": "dist",
@@ -2056,17 +2060,17 @@
     },
     {
         "name": "drupal/core",
-        "version": "8.9.3",
-        "version_normalized": "8.9.3.0",
+        "version": "8.9.4",
+        "version_normalized": "8.9.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/drupal/core.git",
-            "reference": "ee02fd4cbe4ac148b4d7e297ec63b3459983862e"
+            "reference": "1de88703485c755d0db7420156432306a0acad8f"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/drupal/core/zipball/ee02fd4cbe4ac148b4d7e297ec63b3459983862e",
-            "reference": "ee02fd4cbe4ac148b4d7e297ec63b3459983862e",
+            "url": "https://api.github.com/repos/drupal/core/zipball/1de88703485c755d0db7420156432306a0acad8f",
+            "reference": "1de88703485c755d0db7420156432306a0acad8f",
             "shasum": ""
         },
         "require": {
@@ -2233,7 +2237,7 @@
             "drupal/workflows": "self.version",
             "drupal/workspaces": "self.version"
         },
-        "time": "2020-08-05T21:49:40+00:00",
+        "time": "2020-09-02T11:37:12+00:00",
         "type": "drupal-core",
         "extra": {
             "drupal-scaffold": {
@@ -2289,17 +2293,17 @@
     },
     {
         "name": "drupal/core-composer-scaffold",
-        "version": "8.9.3",
-        "version_normalized": "8.9.3.0",
+        "version": "8.9.5",
+        "version_normalized": "8.9.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/drupal/core-composer-scaffold.git",
-            "reference": "07cdfe2799789fc0c2d0e3e1ba64cb5e2a973ece"
+            "reference": "c902d07cb49ef73777e2b33a39e54c2861a8c81d"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/drupal/core-composer-scaffold/zipball/07cdfe2799789fc0c2d0e3e1ba64cb5e2a973ece",
-            "reference": "07cdfe2799789fc0c2d0e3e1ba64cb5e2a973ece",
+            "url": "https://api.github.com/repos/drupal/core-composer-scaffold/zipball/c902d07cb49ef73777e2b33a39e54c2861a8c81d",
+            "reference": "c902d07cb49ef73777e2b33a39e54c2861a8c81d",
             "shasum": ""
         },
         "require": {
@@ -2312,7 +2316,7 @@
         "require-dev": {
             "composer/composer": "^1.8@stable"
         },
-        "time": "2020-05-29T11:36:27+00:00",
+        "time": "2020-08-07T22:30:30+00:00",
         "type": "composer-plugin",
         "extra": {
             "class": "Drupal\\Composer\\Plugin\\Scaffold\\Plugin",
@@ -2338,17 +2342,17 @@
     },
     {
         "name": "drupal/core-recommended",
-        "version": "8.9.3",
-        "version_normalized": "8.9.3.0",
+        "version": "8.9.4",
+        "version_normalized": "8.9.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/drupal/core-recommended.git",
-            "reference": "db5c2fdd4bf3e72aee8c862eca72dd445e704d71"
+            "reference": "baf3da750b7ea0d89c9ab4b1b20e8048030e348d"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/drupal/core-recommended/zipball/db5c2fdd4bf3e72aee8c862eca72dd445e704d71",
-            "reference": "db5c2fdd4bf3e72aee8c862eca72dd445e704d71",
+            "url": "https://api.github.com/repos/drupal/core-recommended/zipball/baf3da750b7ea0d89c9ab4b1b20e8048030e348d",
+            "reference": "baf3da750b7ea0d89c9ab4b1b20e8048030e348d",
             "shasum": ""
         },
         "require": {
@@ -2360,7 +2364,7 @@
             "doctrine/common": "v2.7.3",
             "doctrine/inflector": "v1.2.0",
             "doctrine/lexer": "1.0.2",
-            "drupal/core": "8.9.3",
+            "drupal/core": "8.9.4",
             "easyrdf/easyrdf": "0.9.1",
             "egulias/email-validator": "2.1.17",
             "guzzlehttp/guzzle": "6.5.4",
@@ -2411,7 +2415,7 @@
         "conflict": {
             "webflo/drupal-core-strict": "*"
         },
-        "time": "2020-08-05T21:49:40+00:00",
+        "time": "2020-09-02T11:37:12+00:00",
         "type": "metapackage",
         "notification-url": "https://packagist.org/downloads/",
         "license": [
@@ -2421,8 +2425,8 @@
     },
     {
         "name": "drupal/core-vendor-hardening",
-        "version": "8.9.3",
-        "version_normalized": "8.9.3.0",
+        "version": "8.9.5",
+        "version_normalized": "8.9.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/drupal/core-vendor-hardening.git",
@@ -3213,34 +3217,34 @@
     },
     {
         "name": "drupal/migrate_file",
-        "version": "1.1.0",
-        "version_normalized": "1.1.0.0",
+        "version": "dev-1.x",
+        "version_normalized": "dev-1.x",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/migrate_file.git",
-            "reference": "8.x-1.1"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/migrate_file-8.x-1.1.zip",
-            "reference": "8.x-1.1",
-            "shasum": "4a24edc577541b5aa67682a4f89c8dfd7c0788d5"
+            "reference": "2d3b4e25ab619ac12cdab346479f49b71c3f4eab"
         },
         "require": {
             "drupal/core": "^8"
         },
         "type": "drupal-module",
         "extra": {
+            "branch-alias": {
+                "dev-1.x": "1.x-dev"
+            },
             "drupal": {
-                "version": "8.x-1.1",
-                "datestamp": "1539064380",
+                "version": "8.x-1.1+0-dev",
+                "datestamp": "1539064080",
                 "security-coverage": {
-                    "status": "covered",
-                    "message": "Covered by Drupal's security advisory policy"
+                    "status": "not-covered",
+                    "message": "Dev releases are not covered by Drupal security advisories."
                 }
+            },
+            "patches_applied": {
+                "D9 compatibility": "https://www.drupal.org/files/issues/2020-06-23/migrate_file-3148126-3.patch"
             }
         },
-        "installation-source": "dist",
+        "installation-source": "source",
         "notification-url": "https://packages.drupal.org/8/downloads",
         "license": [
             "GPL-2.0+"
@@ -3671,31 +3675,28 @@
     },
     {
         "name": "drupal/radix",
-        "version": "4.8.0",
-        "version_normalized": "4.8.0.0",
+        "version": "dev-4.x",
+        "version_normalized": "dev-4.x",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/radix.git",
-            "reference": "8.x-4.8"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/radix-8.x-4.8.zip",
-            "reference": "8.x-4.8",
-            "shasum": "1f909ca5e5d90ef80d06fb99403e8deba7efdcd1"
+            "reference": "bd5106c707edf18a355f4b952fa7acae6cff01fa"
         },
         "require": {
-            "drupal/components": "^1.0",
-            "drupal/core": "~8.0"
+            "drupal/components": "~2.0@beta",
+            "drupal/core": "^8.7.7 || ^9.0"
         },
         "type": "drupal-theme",
         "extra": {
+            "branch-alias": {
+                "dev-4.x": "4.x-dev"
+            },
             "drupal": {
-                "version": "8.x-4.8",
-                "datestamp": "1584430785",
+                "version": "8.x-4.8+5-dev",
+                "datestamp": "1588146548",
                 "security-coverage": {
-                    "status": "covered",
-                    "message": "Covered by Drupal's security advisory policy"
+                    "status": "not-covered",
+                    "message": "Dev releases are not covered by Drupal security advisories."
                 }
             },
             "drush": {
@@ -3707,7 +3708,7 @@
                 "Language switcher patch": "https://www.drupal.org/files/issues/2020-01-05/3060563-7.patch"
             }
         },
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "psr-4": {
                 "Drush\\Commands\\radix\\": "Commands/radix/"
@@ -3921,6 +3922,82 @@
         "homepage": "https://www.drupal.org/project/token",
         "support": {
             "source": "https://git.drupalcode.org/project/token"
+        }
+    },
+    {
+        "name": "drupal/upgrade_status",
+        "version": "2.9.0",
+        "version_normalized": "2.9.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupalcode.org/project/upgrade_status.git",
+            "reference": "8.x-2.9"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/upgrade_status-8.x-2.9.zip",
+            "reference": "8.x-2.9",
+            "shasum": "3751062ba6192cbed94c3c970fa3adbe308fb450"
+        },
+        "require": {
+            "drupal/core": "^8.7.7 || ^9",
+            "mathieuviossat/arraytotexttable": "~1.0.0",
+            "mglaman/phpstan-drupal": "^0.12.0",
+            "nikic/php-parser": "^4.0.0",
+            "phpstan/phpstan-deprecation-rules": "^0.12.0",
+            "webflo/drupal-finder": "^1.2"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "drupal": {
+                "version": "8.x-2.9",
+                "datestamp": "1592678651",
+                "security-coverage": {
+                    "status": "covered",
+                    "message": "Covered by Drupal's security advisory policy"
+                }
+            },
+            "drush": {
+                "services": {
+                    "drush.services.yml": "^9 || ^10"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "Gábor Hojtsy",
+                "homepage": "https://www.drupal.org/user/4166"
+            },
+            {
+                "name": "colan",
+                "homepage": "https://www.drupal.org/user/58704"
+            },
+            {
+                "name": "herczogzoltan",
+                "homepage": "https://www.drupal.org/user/3528391"
+            },
+            {
+                "name": "sun",
+                "homepage": "https://www.drupal.org/user/54136"
+            },
+            {
+                "name": "webchick",
+                "homepage": "https://www.drupal.org/user/24967"
+            },
+            {
+                "name": "xjm",
+                "homepage": "https://www.drupal.org/user/65776"
+            }
+        ],
+        "description": "Review current status of known Drupal 9 incompatibilities on the site.",
+        "homepage": "http://drupal.org/project/upgrade_status",
+        "support": {
+            "source": "https://git.drupalcode.org/project/upgrade_status"
         }
     },
     {
@@ -4727,6 +4804,86 @@
         ]
     },
     {
+        "name": "laminas/laminas-servicemanager",
+        "version": "3.4.1",
+        "version_normalized": "3.4.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/laminas/laminas-servicemanager.git",
+            "reference": "0d4c8628a71fae9f7bd0b1b74b76382e5e9a04b1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/laminas/laminas-servicemanager/zipball/0d4c8628a71fae9f7bd0b1b74b76382e5e9a04b1",
+            "reference": "0d4c8628a71fae9f7bd0b1b74b76382e5e9a04b1",
+            "shasum": ""
+        },
+        "require": {
+            "container-interop/container-interop": "^1.2",
+            "laminas/laminas-stdlib": "^3.2.1",
+            "laminas/laminas-zendframework-bridge": "^1.0",
+            "php": "^5.6 || ^7.0",
+            "psr/container": "^1.0"
+        },
+        "provide": {
+            "container-interop/container-interop-implementation": "^1.2",
+            "psr/container-implementation": "^1.0"
+        },
+        "replace": {
+            "zendframework/zend-servicemanager": "^3.4.0"
+        },
+        "require-dev": {
+            "laminas/laminas-coding-standard": "~1.0.0",
+            "mikey179/vfsstream": "^1.6.5",
+            "ocramius/proxy-manager": "^1.0 || ^2.0",
+            "phpbench/phpbench": "^0.13.0",
+            "phpunit/phpunit": "^5.7.25 || ^6.4.4"
+        },
+        "suggest": {
+            "laminas/laminas-stdlib": "laminas-stdlib ^2.5 if you wish to use the MergeReplaceKey or MergeRemoveKey features in Config instances",
+            "ocramius/proxy-manager": "ProxyManager 1.* to handle lazy initialization of services"
+        },
+        "time": "2020-05-11T14:43:22+00:00",
+        "bin": [
+            "bin/generate-deps-for-config-factory",
+            "bin/generate-factory-for-class"
+        ],
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.3-dev",
+                "dev-develop": "4.0-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Laminas\\ServiceManager\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "description": "Factory-Driven Dependency Injection Container",
+        "homepage": "https://laminas.dev",
+        "keywords": [
+            "PSR-11",
+            "dependency-injection",
+            "di",
+            "dic",
+            "laminas",
+            "service-manager",
+            "servicemanager"
+        ],
+        "funding": [
+            {
+                "url": "https://funding.communitybridge.org/projects/laminas-project",
+                "type": "community_bridge"
+            }
+        ]
+    },
+    {
         "name": "laminas/laminas-stdlib",
         "version": "3.2.1",
         "version_normalized": "3.2.1.0",
@@ -4776,6 +4933,60 @@
         "keywords": [
             "laminas",
             "stdlib"
+        ]
+    },
+    {
+        "name": "laminas/laminas-text",
+        "version": "2.7.1",
+        "version_normalized": "2.7.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/laminas/laminas-text.git",
+            "reference": "3601b5eacb06ed0a12f658df860cc0f9613cf4db"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/laminas/laminas-text/zipball/3601b5eacb06ed0a12f658df860cc0f9613cf4db",
+            "reference": "3601b5eacb06ed0a12f658df860cc0f9613cf4db",
+            "shasum": ""
+        },
+        "require": {
+            "laminas/laminas-servicemanager": "^2.7.5 || ^3.0.3",
+            "laminas/laminas-stdlib": "^2.7 || ^3.0",
+            "laminas/laminas-zendframework-bridge": "^1.0",
+            "php": "^5.6 || ^7.0"
+        },
+        "replace": {
+            "zendframework/zend-text": "self.version"
+        },
+        "require-dev": {
+            "laminas/laminas-coding-standard": "~1.0.0",
+            "laminas/laminas-config": "^2.6",
+            "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.4"
+        },
+        "time": "2019-12-31T17:54:52+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.7.x-dev",
+                "dev-develop": "2.8.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Laminas\\Text\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "description": "Create FIGlets and text-based tables",
+        "homepage": "https://laminas.dev",
+        "keywords": [
+            "laminas",
+            "text"
         ]
     },
     {
@@ -5049,6 +5260,295 @@
             "querypath",
             "serializer",
             "xml"
+        ]
+    },
+    {
+        "name": "mathieuviossat/arraytotexttable",
+        "version": "v1.0.8",
+        "version_normalized": "1.0.8.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/viossat/arraytotexttable.git",
+            "reference": "6b1af924478cb9c3a903269e304fff006fe0dbf4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/viossat/arraytotexttable/zipball/6b1af924478cb9c3a903269e304fff006fe0dbf4",
+            "reference": "6b1af924478cb9c3a903269e304fff006fe0dbf4",
+            "shasum": ""
+        },
+        "require": {
+            "laminas/laminas-text": "^2.7",
+            "php": ">=5.3.0"
+        },
+        "time": "2020-06-23T17:14:22+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "MathieuViossat\\Util\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Mathieu Viossat",
+                "email": "mathieu@viossat.fr",
+                "homepage": "https://viossat.fr"
+            }
+        ],
+        "description": "Display arrays in terminal",
+        "homepage": "https://github.com/viossat/arraytotexttable",
+        "keywords": [
+            "array",
+            "ascii",
+            "table",
+            "terminal",
+            "text",
+            "unicode"
+        ]
+    },
+    {
+        "name": "mglaman/phpstan-drupal",
+        "version": "0.12.5",
+        "version_normalized": "0.12.5.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/mglaman/phpstan-drupal.git",
+            "reference": "f7676482b39184270eaba25cbd5e491144814a93"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/f7676482b39184270eaba25cbd5e491144814a93",
+            "reference": "f7676482b39184270eaba25cbd5e491144814a93",
+            "shasum": ""
+        },
+        "require": {
+            "nette/finder": "^2.5",
+            "php": "^7.1",
+            "phpstan/phpstan": "^0.12.26",
+            "symfony/yaml": "~3.4.5|^4.2",
+            "webflo/drupal-finder": "^1.2"
+        },
+        "require-dev": {
+            "composer/installers": "^1.6",
+            "drupal/core-recommended": "^8.8@alpha",
+            "drush/drush": "^9.6",
+            "phpstan/phpstan-deprecation-rules": "~0.12.0",
+            "phpstan/phpstan-strict-rules": "^0.12.0",
+            "phpunit/phpunit": "^7.5",
+            "squizlabs/php_codesniffer": "^3.3"
+        },
+        "suggest": {
+            "phpstan/phpstan-deprecation-rules": "For catching deprecations, especially in Drupal core."
+        },
+        "time": "2020-07-26T17:10:56+00:00",
+        "type": "phpstan-extension",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "0.12-dev"
+            },
+            "installer-paths": {
+                "tests/fixtures/drupal/core": [
+                    "type:drupal-core"
+                ],
+                "tests/fixtures/drupal/libraries/{$name}": [
+                    "type:drupal-library"
+                ],
+                "tests/fixtures/drupal/modules/contrib/{$name}": [
+                    "type:drupal-module"
+                ],
+                "tests/fixtures/drupal/profiles/contrib/{$name}": [
+                    "type:drupal-profile"
+                ],
+                "tests/fixtures/drupal/themes/contrib/{$name}": [
+                    "type:drupal-theme"
+                ]
+            },
+            "phpstan": {
+                "includes": [
+                    "extension.neon"
+                ]
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "PHPStan\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Matt Glaman",
+                "email": "nmd.matt@gmail.com"
+            }
+        ],
+        "description": "Drupal extension and rules for PHPStan",
+        "funding": [
+            {
+                "url": "https://github.com/mglaman",
+                "type": "github"
+            },
+            {
+                "url": "https://ko-fi.com/mglaman",
+                "type": "ko_fi"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/mglaman/phpstan-drupal",
+                "type": "tidelift"
+            }
+        ]
+    },
+    {
+        "name": "nette/finder",
+        "version": "v2.5.2",
+        "version_normalized": "2.5.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/nette/finder.git",
+            "reference": "4ad2c298eb8c687dd0e74ae84206a4186eeaed50"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/nette/finder/zipball/4ad2c298eb8c687dd0e74ae84206a4186eeaed50",
+            "reference": "4ad2c298eb8c687dd0e74ae84206a4186eeaed50",
+            "shasum": ""
+        },
+        "require": {
+            "nette/utils": "^2.4 || ^3.0",
+            "php": ">=7.1"
+        },
+        "conflict": {
+            "nette/nette": "<2.2"
+        },
+        "require-dev": {
+            "nette/tester": "^2.0",
+            "phpstan/phpstan": "^0.12",
+            "tracy/tracy": "^2.3"
+        },
+        "time": "2020-01-03T20:35:40+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.5-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause",
+            "GPL-2.0",
+            "GPL-3.0"
+        ],
+        "authors": [
+            {
+                "name": "David Grudl",
+                "homepage": "https://davidgrudl.com"
+            },
+            {
+                "name": "Nette Community",
+                "homepage": "https://nette.org/contributors"
+            }
+        ],
+        "description": "🔍 Nette Finder: find files and directories with an intuitive API.",
+        "homepage": "https://nette.org",
+        "keywords": [
+            "filesystem",
+            "glob",
+            "iterator",
+            "nette"
+        ]
+    },
+    {
+        "name": "nette/utils",
+        "version": "v3.1.3",
+        "version_normalized": "3.1.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/nette/utils.git",
+            "reference": "c09937fbb24987b2a41c6022ebe84f4f1b8eec0f"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/nette/utils/zipball/c09937fbb24987b2a41c6022ebe84f4f1b8eec0f",
+            "reference": "c09937fbb24987b2a41c6022ebe84f4f1b8eec0f",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=7.1"
+        },
+        "require-dev": {
+            "nette/tester": "~2.0",
+            "phpstan/phpstan": "^0.12",
+            "tracy/tracy": "^2.3"
+        },
+        "suggest": {
+            "ext-gd": "to use Image",
+            "ext-iconv": "to use Strings::webalize(), toAscii(), chr() and reverse()",
+            "ext-intl": "to use Strings::webalize(), toAscii(), normalize() and compare()",
+            "ext-json": "to use Nette\\Utils\\Json",
+            "ext-mbstring": "to use Strings::lower() etc...",
+            "ext-tokenizer": "to use Nette\\Utils\\Reflection::getUseStatements()",
+            "ext-xml": "to use Strings::length() etc. when mbstring is not available"
+        },
+        "time": "2020-08-07T10:34:21+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.1-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause",
+            "GPL-2.0-only",
+            "GPL-3.0-only"
+        ],
+        "authors": [
+            {
+                "name": "David Grudl",
+                "homepage": "https://davidgrudl.com"
+            },
+            {
+                "name": "Nette Community",
+                "homepage": "https://nette.org/contributors"
+            }
+        ],
+        "description": "🛠 Nette Utils: lightweight utilities for string & array manipulation, image handling, safe JSON encoding/decoding, validation, slug or strong password generating etc.",
+        "homepage": "https://nette.org",
+        "keywords": [
+            "array",
+            "core",
+            "datetime",
+            "images",
+            "json",
+            "nette",
+            "paginator",
+            "password",
+            "slugify",
+            "string",
+            "unicode",
+            "utf-8",
+            "utility",
+            "validation"
         ]
     },
     {
@@ -5417,6 +5917,117 @@
         "keywords": [
             "exception"
         ]
+    },
+    {
+        "name": "phpstan/phpstan",
+        "version": "0.12.42",
+        "version_normalized": "0.12.42.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/phpstan/phpstan.git",
+            "reference": "7c43b7c2d5ca6554f6231e82e342a710163ac5f4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/phpstan/phpstan/zipball/7c43b7c2d5ca6554f6231e82e342a710163ac5f4",
+            "reference": "7c43b7c2d5ca6554f6231e82e342a710163ac5f4",
+            "shasum": ""
+        },
+        "require": {
+            "php": "^7.1|^8.0"
+        },
+        "conflict": {
+            "phpstan/phpstan-shim": "*"
+        },
+        "time": "2020-09-02T13:14:53+00:00",
+        "bin": [
+            "phpstan",
+            "phpstan.phar"
+        ],
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "0.12-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "bootstrap.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "PHPStan - PHP Static Analysis Tool",
+        "funding": [
+            {
+                "url": "https://github.com/ondrejmirtes",
+                "type": "github"
+            },
+            {
+                "url": "https://www.patreon.com/phpstan",
+                "type": "patreon"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
+                "type": "tidelift"
+            }
+        ]
+    },
+    {
+        "name": "phpstan/phpstan-deprecation-rules",
+        "version": "0.12.5",
+        "version_normalized": "0.12.5.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/phpstan/phpstan-deprecation-rules.git",
+            "reference": "bfabc6a1b4617fbcbff43f03a4c04eae9bafae21"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/phpstan/phpstan-deprecation-rules/zipball/bfabc6a1b4617fbcbff43f03a4c04eae9bafae21",
+            "reference": "bfabc6a1b4617fbcbff43f03a4c04eae9bafae21",
+            "shasum": ""
+        },
+        "require": {
+            "php": "^7.1 || ^8.0",
+            "phpstan/phpstan": "^0.12.26"
+        },
+        "require-dev": {
+            "consistence/coding-standard": "^3.0.1",
+            "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
+            "ergebnis/composer-normalize": "^2.0.2",
+            "jakub-onderka/php-parallel-lint": "^1.0",
+            "phing/phing": "^2.16.0",
+            "phpstan/phpstan-phpunit": "^0.12",
+            "phpunit/phpunit": "^7.0",
+            "slevomat/coding-standard": "^4.5.2"
+        },
+        "time": "2020-07-21T14:52:30+00:00",
+        "type": "phpstan-extension",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "0.12-dev"
+            },
+            "phpstan": {
+                "includes": [
+                    "rules.neon"
+                ]
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "PHPStan\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "PHPStan rules for detecting usage of deprecated classes, methods, properties, constants and traits."
     },
     {
         "name": "psr/container",

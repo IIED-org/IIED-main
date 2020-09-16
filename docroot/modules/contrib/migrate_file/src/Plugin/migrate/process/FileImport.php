@@ -15,6 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\ServerException;
+use Drupal\Core\StreamWrapper\StreamWrapperManager;
 
 /**
  * Imports a file from an local or external source.
@@ -189,15 +190,15 @@ class FileImport extends FileCopy {
 
     // Build the destination file uri (in case only a directory was provided).
     $destination = $this->getDestinationFilePath($source, $destination);
-    if (!$this->fileSystem->uriScheme($destination)) {
+    if (!StreamWrapperManager::getScheme($destination)) {
       if (empty($destination)) {
-        $destination = file_default_scheme() . '://' . preg_replace('/^\//' ,'', $destination);
+        $destination = \Drupal::config('system.file')->get('default_scheme') . '://' . preg_replace('/^\//' ,'', $destination);
       }
     }
     $final_destination = '';
 
     // If we're in re-use mode, reuse the file if it exists.
-    if ($this->getOverwriteMode() == FILE_EXISTS_ERROR && $this->isLocalUri($destination) && is_file($destination)) {
+    if ($this->getOverwriteMode() == FileSystemInterface::EXISTS_ERROR && $this->isLocalUri($destination) && is_file($destination)) {
       // Look for a file entity with the destination uri.
       if ($files = \Drupal::entityTypeManager()->getStorage('file')->loadByProperties(['uri' => $destination])) {
         // Grab the first file entity with a matching uri.
@@ -288,13 +289,13 @@ class FileImport extends FileCopy {
    */
   protected function getOverwriteMode() {
     if (!empty($this->configuration['rename'])) {
-      return FILE_EXISTS_RENAME;
+      return FileSystemInterface::EXISTS_RENAME;
     }
     if (!empty($this->configuration['reuse'])) {
-      return FILE_EXISTS_ERROR;
+      return FileSystemInterface::EXISTS_ERROR;
     }
 
-    return FILE_EXISTS_REPLACE;
+    return FileSystemInterface::EXISTS_REPLACE;
   }
 
   /**
@@ -325,7 +326,7 @@ class FileImport extends FileCopy {
   protected function getDestinationFilePath($source, $destination) {
     if ($this->isDirectory($destination)) {
       $parsed_url = parse_url($source);
-      $filepath = $destination . drupal_basename($parsed_url['path']);
+      $filepath = $destination . \Drupal::service('file_system')->basename($parsed_url['path']);
     }
     else {
       $filepath = $destination;
