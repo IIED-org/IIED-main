@@ -12,6 +12,7 @@ use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Config\StorageComparer;
 use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Config\TypedConfigManagerInterface;
+use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drupal\Core\Extension\ThemeHandlerInterface;
@@ -99,6 +100,13 @@ class ConfigImporterExporter {
   protected $stringTranslation;
 
   /**
+   * The module extension list service.
+   *
+   * @var \Drupal\Core\Extension\ModuleExtensionList
+   */
+  protected $moduleExtensionList;
+
+  /**
    * Creates a ConfigImporterExporter instance.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -121,6 +129,8 @@ class ConfigImporterExporter {
    *   The theme handler.
    * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
    *   The string translation service.
+   * @param \Drupal\Core\Extension\ModuleExtensionList $module_extension_list
+   *   The module extension list service.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
@@ -132,7 +142,8 @@ class ConfigImporterExporter {
     ModuleHandlerInterface $module_handler,
     ModuleInstallerInterface $module_installer,
     ThemeHandlerInterface $theme_handler,
-    TranslationInterface $string_translation
+    TranslationInterface $string_translation,
+    ModuleExtensionList $module_extension_list
   ) {
     $this->configFactory = $config_factory;
     $this->configStorage = $config_storage;
@@ -144,6 +155,7 @@ class ConfigImporterExporter {
     $this->moduleInstaller = $module_installer;
     $this->themeHandler = $theme_handler;
     $this->stringTranslation = $string_translation;
+    $this->moduleExtensionList = $module_extension_list;
   }
 
   /**
@@ -193,7 +205,8 @@ class ConfigImporterExporter {
         $this->moduleHandler,
         $this->moduleInstaller,
         $this->themeHandler,
-        $this->stringTranslation
+        $this->stringTranslation,
+        $this->moduleExtensionList
       );
 
       $config_importer->import();
@@ -253,7 +266,7 @@ class ConfigImporterExporter {
    * @return \Drupal\Core\Config\Entity\ConfigEntityStorageInterface
    */
   protected function getStorage($entity_type_id) {
-    return $this->configManager->getEntityManager()->getStorage($entity_type_id);
+    return $this->configManager->getEntityTypeManager()->getStorage($entity_type_id);
   }
 
   /**

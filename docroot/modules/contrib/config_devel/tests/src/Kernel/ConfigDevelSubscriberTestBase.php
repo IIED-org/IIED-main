@@ -29,7 +29,7 @@ abstract class ConfigDevelSubscriberTestBase extends KernelTestBase {
     // Without this the config exporter breaks.
     \Drupal::service('config.installer')->installDefaultConfig('module', 'config_devel');
     $filename = 'public://'. static::CONFIGNAME . '.yml';
-    drupal_mkdir('public://exported');
+    \Drupal::service('file_system')->mkdir('public://exported');
     $exported_filename = 'public://exported/' . static::CONFIGNAME . '.yml';
     \Drupal::configFactory()->getEditable('config_devel.settings')
       ->set('auto_import', array(array(

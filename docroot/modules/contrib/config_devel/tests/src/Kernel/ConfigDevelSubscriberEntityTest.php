@@ -23,7 +23,7 @@ class ConfigDevelSubscriberEntityTest extends ConfigDevelSubscriberTestBase {
    * {@inheritdoc}
    */
   protected function doAssert(array $data, array $exported_data) {
-    $entity = entity_load('config_test', 'test', TRUE);
+    $entity = \Drupal::entityTypeManager()->getStorage('config_test')->load('test');
     $this->assertIdentical($data['label'], $entity->get('label'));
     $this->assertIdentical($exported_data['label'], $data['label']);
     $this->assertIdentical($exported_data['id'], 'test');
