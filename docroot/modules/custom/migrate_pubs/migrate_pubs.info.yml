@@ -20,8 +20,7 @@ config_devel:
     - migrate_plus.migration.pubs_node
     - migrate_plus.migration_group.pubs
 # Information added by Drupal.org packaging script on 2019-04-19
-version: '8.x-1.2'
-core: '8.x'
+version: '8.x-1.2.1'
 core_version_requirement: ^8.8 || ^9
 project: 'migrate_pubs'
 datestamp: 1555683500
