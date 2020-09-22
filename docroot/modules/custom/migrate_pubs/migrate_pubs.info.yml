@@ -10,6 +10,7 @@ dependencies:
   - migrate_plus:migrate_plus
 config_devel:
   install:
+    - migrate_plus.migration.iied.tags
     - migrate_plus.migration.iied_projects
     - migrate_plus.migration.pubs_projects
     - migrate_plus.migration.pubs_themes

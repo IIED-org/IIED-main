@@ -1,0 +1,49 @@
+# Migration configuration for tags (keywords).
+id: iied_tags
+label: 'Tags from IIED site (RSS)'
+migration_group: pubs
+source:
+  constants:
+    BASE_PATH: 'https://www.iied.org'
+  plugin: url
+  data_fetcher_plugin: http
+  urls: 'https://www.iied.org/alltags.xml'
+  data_parser_plugin: simple_xml
+  item_selector: /rss/channel/item
+  fields:
+    -
+      name: guid
+      label: TID
+      selector: guid
+    -
+      name: name
+      label: Title
+      selector: title
+    -
+      name: importance
+      label: Importance
+      selector: description
+    -
+      name: tag_type
+      label: 'Tag type'
+      selector: category
+  ids:
+    guid:
+      type: integer
+
+process:
+  name: name
+  field_importance: importance
+  field_tid: guid
+  field_tag_type: tag_type
+  vid:
+    plugin: default_value
+    default_value: tags
+
+destination:
+  plugin: entity:term
+migration_dependencies: {}
+dependencies:
+  enforced:
+    module:
+      - migrate_pubs
