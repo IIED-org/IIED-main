@@ -2,6 +2,7 @@
 
 namespace Drupal\webprofiler\Command;
 
+use Drupal\Console\Annotations\DrupalCommand;
 use Drupal\Console\Core\Command\Shared\ContainerAwareCommandTrait;
 use Drupal\Core\Archiver\ArchiveTar;
 use Drupal\webprofiler\Profiler\Profiler;

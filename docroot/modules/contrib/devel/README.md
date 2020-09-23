@@ -42,7 +42,7 @@ for more info.
 
 #### Testing
 - [CI docs](https://gitlab.com/drupalspoons/webmasters/-/blob/master/docs/ci.md) give info on running tests.
-- See [develCommandsTest.php](tests/src/Functional/DevelCommandsTest.php) for an example of Drush command testing. This uses Drush's own test framework, based on PHPUnit.
+- See [develCommandsTest.php](tests/src/Functional/DevelCommandsTest.php) for an example of Drush command testing. This uses [Drush Test Traits](https://www.drush.org/contribute/#drush-test-traits).
 
 #### Version Compatibility
 | Devel version | Drupal core | PHP | Drush |

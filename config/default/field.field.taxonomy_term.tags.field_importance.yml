@@ -1,0 +1,21 @@
+uuid: 98fc65c6-6312-41e1-b90b-b743a7736934
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_importance
+    - taxonomy.vocabulary.tags
+  module:
+    - options
+id: taxonomy_term.tags.field_importance
+field_name: field_importance
+entity_type: taxonomy_term
+bundle: tags
+label: Importance
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

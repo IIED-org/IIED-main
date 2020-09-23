@@ -15,6 +15,7 @@ services:
       PHP_XDEBUG_DEFAULT_ENABLE:
       PHP_IDE_CONFIG:
       PHP_XDEBUG_REMOTE_HOST:
+      PHP_XDEBUG_REMOTE_CONNECT_BACK:
       # Specify 'drupal' instead of 127.0.0.1 so that chrome service can reach it.
       SIMPLETEST_BASE_URL: http://drupal:8888
       SIMPLETEST_DB:

@@ -1,0 +1,36 @@
+uuid: 0edf5062-ff9c-4c57-98ab-c8bae6250c83
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - taxonomy
+id: taxonomy_term.field_tag_type
+field_name: field_tag_type
+entity_type: taxonomy_term
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: '1'
+      label: Event
+    -
+      value: '2'
+      label: Internal
+    -
+      value: '3'
+      label: Location
+    -
+      value: '4'
+      label: Organisation
+    -
+      value: '6'
+      label: Project
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

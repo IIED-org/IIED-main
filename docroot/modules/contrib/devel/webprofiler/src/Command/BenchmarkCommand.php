@@ -2,6 +2,7 @@
 
 namespace Drupal\webprofiler\Command;
 
+use Drupal\Console\Annotations\DrupalCommand;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Cookie\CookieJar;
 use Symfony\Component\Console\Helper\ProgressBar;

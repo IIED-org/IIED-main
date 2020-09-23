@@ -42,35 +42,27 @@ class Debug extends \Twig_Extension {
    * {@inheritdoc}
    */
   public function getFunctions() {
-    $functions = [];
+    $options = [
+      'is_safe' => ['html'],
+      'needs_environment' => TRUE,
+      'needs_context' => TRUE,
+      'is_variadic' => TRUE,
+    ];
 
-    foreach (['devel_dump', 'kpr'] as $function) {
-      $functions[] = new \Twig_SimpleFunction($function, [$this, 'dump'], [
-        'is_safe' => ['html'],
+    return [
+      new \Twig_SimpleFunction('devel_dump', [$this, 'dump'], $options),
+      new \Twig_SimpleFunction('kpr', [$this, 'dump'], $options),
+      //  Preserve familiar kint() function for dumping
+      new \Twig_SimpleFunction('kint', [$this, 'dump'], $options),
+      new \Twig_SimpleFunction('devel_message', [$this, 'message'], $options),
+      new \Twig_SimpleFunction('dpm', [$this, 'message'], $options),
+      new \Twig_SimpleFunction('dsm', [$this, 'message'], $options),
+      new \Twig_SimpleFunction('devel_breakpoint', [$this, 'breakpoint'], [
         'needs_environment' => TRUE,
         'needs_context' => TRUE,
         'is_variadic' => TRUE,
-      ]);
-    }
-
-    foreach (['devel_message', 'dpm', 'dsm'] as $function) {
-      $functions[] = new \Twig_SimpleFunction($function, [$this, 'message'], [
-        'is_safe' => ['html'],
-        'needs_environment' => TRUE,
-        'needs_context' => TRUE,
-        'is_variadic' => TRUE,
-      ]);
-    }
-
-    foreach (['devel_breakpoint'] as $function) {
-      $functions[] = new \Twig_SimpleFunction($function, [$this, 'breakpoint'], [
-        'needs_environment' => TRUE,
-        'needs_context' => TRUE,
-        'is_variadic' => TRUE,
-      ]);
-    }
-
-    return $functions;
+      ]),
+    ];
   }
 
   /**

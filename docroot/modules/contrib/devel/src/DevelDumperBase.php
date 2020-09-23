@@ -62,6 +62,7 @@ abstract class DevelDumperBase extends PluginBase implements DevelDumperInterfac
       [$manager_class_name, 'export'],
       [$manager_class_name, 'exportAsRenderable'],
       [$manager_class_name, 'message'],
+      [\Drupal\devel\Twig\Extension\Debug::class, 'dump'],
       'dpm',
       'dvm',
       'dsm',

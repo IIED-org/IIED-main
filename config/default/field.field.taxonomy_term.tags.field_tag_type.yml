@@ -1,0 +1,21 @@
+uuid: 1d4827f5-016d-40df-9de4-b0c855d46b3a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_tag_type
+    - taxonomy.vocabulary.tags
+  module:
+    - options
+id: taxonomy_term.tags.field_tag_type
+field_name: field_tag_type
+entity_type: taxonomy_term
+bundle: tags
+label: 'Tag type'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

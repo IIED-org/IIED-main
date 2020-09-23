@@ -1,0 +1,23 @@
+uuid: 6d38cbe4-0b25-4eac-b84a-6dbb2a581522
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_valid
+    - taxonomy.vocabulary.organisation
+id: taxonomy_term.organisation.field_valid
+field_name: field_valid
+entity_type: taxonomy_term
+bundle: organisation
+label: Valid
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'True'
+  off_label: 'False'
+field_type: boolean

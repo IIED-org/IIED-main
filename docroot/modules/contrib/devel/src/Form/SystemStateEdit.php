@@ -72,6 +72,7 @@ class SystemStateEdit extends FormBase {
     $form['value'] = [
       '#type' => 'item',
       '#title' => $this->t('Current value for %name', ['%name' => $state_name]),
+      // phpcs:ignore Drupal.Functions.DiscouragedFunctions
       '#markup' => kpr($old_value, TRUE),
     ];
 

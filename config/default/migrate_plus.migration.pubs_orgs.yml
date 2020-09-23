@@ -1,0 +1,37 @@
+uuid: a463b6dd-4175-4587-a1a0-dd64171b9b59
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - migrate_pubs
+id: pubs_orgs
+class: null
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - orgs
+migration_group: pubs
+label: 'Import publishers from CSV file to taxonomy terms'
+source:
+  plugin: csv
+  path: '/Users/chris/Downloads/Publishers and organisations - Valid publishers list to import.csv'
+  ids:
+    - id
+  delimiter: ','
+  enclosure: '"'
+  header_row_count: 1
+process:
+  name: Name
+  field_full_name: 'Full name'
+  field_location_legacy: Location
+  field_url/uri: URL
+  field_valid:
+    plugin: default_value
+    default_value: true
+  vid:
+    plugin: default_value
+    default_value: organisation
+destination:
+  plugin: 'entity:taxonomy_term'
+migration_dependencies: {  }

@@ -11,13 +11,13 @@ dependencies:
 config_devel:
   install:
     - migrate_plus.migration.iied.tags
+    - migrate_plus.migration.pubs_orgs
     - migrate_plus.migration.iied_projects
     - migrate_plus.migration.pubs_projects
     - migrate_plus.migration.pubs_themes
     - migrate_plus.migration.pubs_doctypes
     - migrate_plus.migration.pubs_authors
     - migrate_plus.migration.pubs_series
-    - migrate_plus.migration.pubs_tags
     - migrate_plus.migration.pubs_node
     - migrate_plus.migration_group.pubs
 # Information added by Drupal.org packaging script on 2019-04-19

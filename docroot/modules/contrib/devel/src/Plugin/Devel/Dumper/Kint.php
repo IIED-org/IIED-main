@@ -60,7 +60,7 @@ class Kint extends DevelDumperBase {
       // is just treated as the next variable to dump, it is not used as the
       // label. So we give a dummy value that we can remove below.
       // @see https://gitlab.com/drupalspoons/devel/-/issues/252
-      \Kint::dump($input, '---remove-this---');
+      \Kint::dump($input, '---temporary-fix-see-issue-252---');
     }
     else {
       \Kint::dump($input);
@@ -68,18 +68,26 @@ class Kint extends DevelDumperBase {
     $dump = ob_get_clean();
     if ($name) {
       // Kint no longer treats an additional parameter as a custom title, but we
-      // can add in the required $name to the dump output. Providing that a
-      // variable starting with $ was passed to the original call, we can find
-      // the place where this starts and add in our custom $name.
-      $dump = str_replace('<dfn>$', '<dfn>' . $name . ': $', $dump);
+      // can add the required $name as a label at the top of the output.
+      $dump = str_replace('<div class="kint-rich">', '<div class="kint-rich">' . $name . ': ', $dump);
 
-      // Remove the output for the second dummy parameter. $1 will be the greedy
-      // match of everything before <dl><dt> related to the section to remove.
-      $pattern = '/(.*)(<dl><dt>)(.*)("---remove-this---"<\/dt><\/dl>)/';
-      $dump = preg_replace($pattern, '$1', $dump, 1);
+      // Remove the output from the second dummy parameter. The pattern in [ ]
+      // matches the minimum to ensure we get just the string to be removed.
+      $pattern = '/(<dl><dt>[\w\d\s<>\/()]*"---temporary-fix-see-issue-252---"<\/dt><\/dl>)/';
+      preg_match($pattern, $dump, $matches);
+      if (!preg_last_error() && isset($matches[1])) {
+        $dump = str_replace($matches[1], '', $dump);
+      }
     }
 
     return $this->setSafeMarkup($dump);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getInternalFunctions() {
+    return array_merge(parent::getInternalFunctions(), \Kint\Kint::$aliases);
   }
 
   /**

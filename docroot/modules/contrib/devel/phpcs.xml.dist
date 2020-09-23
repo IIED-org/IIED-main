@@ -21,18 +21,21 @@
   <exclude-pattern>\.patch</exclude-pattern>
   <exclude-pattern>interdif</exclude-pattern>
 
+  <!-- Examples for how you disable rules you do not like. -->
+  <!-- Exclude a sniff from running on specific files. -->
   <rule ref="Drupal.Files.TxtFileLineLength.TooLong">
     <!-- Exclude .md files from the line limit rule. -->
     <exclude-pattern>\.md</exclude-pattern>
   </rule>
-
-  <!-- Example how you disable rules you do not like -->
   <rule ref="Drupal.Commenting.DocComment.ParamNotFirst">
     <!-- Drush commands are most readable with @command at top. -->
     <exclude-pattern>Commands\.php</exclude-pattern>
   </rule>
+
+  <!-- Use a rule, but exclude one of its sniffs from all files. -->
   <rule ref="Drupal.Arrays.Array.LongLineDeclaration">
     <!-- Method declarations should be exempt. -->
     <severity>0</severity>
   </rule>
+
 </ruleset>

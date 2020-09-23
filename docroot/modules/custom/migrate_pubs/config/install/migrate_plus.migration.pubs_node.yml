@@ -91,7 +91,7 @@ process:
 
   field_deptlist: DeptList
   field_team: Team
-  
+
   field_author_s_:
     plugin: entity_generate_multiple
     allow_multiple: true
@@ -228,8 +228,9 @@ destination:
 migration_dependencies:
   optional:
     - iied_projects
+    - iied_tags
     - pubs_themes
-    - pubs_tags
+    - pubs_orgs
     - pubs_authors
     - pubs_doctypes
     - pubs_projects
