@@ -183,8 +183,9 @@ destination:
 migration_dependencies:
   optional:
     - iied_projects
+    - iied_tags
     - pubs_themes
-    - pubs_tags
+    - pubs_orgs
     - pubs_authors
     - pubs_doctypes
     - pubs_projects

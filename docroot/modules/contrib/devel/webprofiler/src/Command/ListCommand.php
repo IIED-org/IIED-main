@@ -2,6 +2,7 @@
 
 namespace Drupal\webprofiler\Command;
 
+use Drupal\Console\Annotations\DrupalCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;

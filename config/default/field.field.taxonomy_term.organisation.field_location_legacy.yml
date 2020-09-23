@@ -1,0 +1,19 @@
+uuid: 241e6b2b-4336-45db-a577-f763c032da04
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_location_legacy
+    - taxonomy.vocabulary.organisation
+id: taxonomy_term.organisation.field_location_legacy
+field_name: field_location_legacy
+entity_type: taxonomy_term
+bundle: organisation
+label: 'Location (legacy)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

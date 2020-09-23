@@ -10,10 +10,11 @@ include:
 # The code below is specific to devel project. You dont need to copy it to your new project.
 #
 
-# Run tests on Drupal 9 by default.
+# Run tests on Drupal 9.0 by default. Avoids compat breaks in 9.1+
 composer_node:
   variables:
-    DRUPAL_CORE_CONSTRAINT: ^9
+    # https://getcomposer.org/doc/articles/versions.md#next-significant-release-operators
+    DRUPAL_CORE_CONSTRAINT: ~9.0.0
 
 # Add /webprofiler to ignored paths.
 phpcs:

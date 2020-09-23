@@ -29,19 +29,19 @@ source:
       selector: category
   ids:
     guid:
-      type: integer
+      type: text
 
 process:
   name: name
   field_importance: importance
-  field_tid: guid
   field_tag_type: tag_type
+  field_iied_tid/uri: guid
   vid:
     plugin: default_value
     default_value: tags
 
 destination:
-  plugin: entity:term
+  plugin: entity:taxonomy_term
 migration_dependencies: {}
 dependencies:
   enforced:

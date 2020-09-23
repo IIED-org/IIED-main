@@ -1,0 +1,23 @@
+uuid: 89686378-8c29-4cdb-9d7c-ea5a516a353a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_iied_tid
+    - taxonomy.vocabulary.tags
+  module:
+    - link
+id: taxonomy_term.tags.field_iied_tid
+field_name: field_iied_tid
+entity_type: taxonomy_term
+bundle: tags
+label: 'IIED TID'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 16
+  title: 0
+field_type: link

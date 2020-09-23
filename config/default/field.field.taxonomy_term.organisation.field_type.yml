@@ -1,0 +1,23 @@
+uuid: df04d206-7785-4dc5-8f1f-f241f5338898
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_type
+    - taxonomy.vocabulary.organisation
+id: taxonomy_term.organisation.field_type
+field_name: field_type
+entity_type: taxonomy_term
+bundle: organisation
+label: Group
+description: 'Groups are not displayed in citations'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'True'
+  off_label: 'False'
+field_type: boolean

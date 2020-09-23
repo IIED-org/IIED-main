@@ -1,0 +1,139 @@
+uuid: 0e07e61d-9684-4eb1-802f-61c5e2cbc714
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.organisation.field_alias
+    - field.field.taxonomy_term.organisation.field_email
+    - field.field.taxonomy_term.organisation.field_full_name
+    - field.field.taxonomy_term.organisation.field_location
+    - field.field.taxonomy_term.organisation.field_location_legacy
+    - field.field.taxonomy_term.organisation.field_logo
+    - field.field.taxonomy_term.organisation.field_type
+    - field.field.taxonomy_term.organisation.field_url
+    - field.field.taxonomy_term.organisation.field_valid
+    - image.style.thumbnail
+    - taxonomy.vocabulary.organisation
+  module:
+    - address
+    - field_layout
+    - image
+    - layout_discovery
+    - link
+    - path
+    - text
+third_party_settings:
+  field_layout:
+    id: layout_onecol
+    settings:
+      label: ''
+id: taxonomy_term.organisation.default
+targetEntityType: taxonomy_term
+bundle: organisation
+mode: default
+content:
+  description:
+    type: text_textarea
+    weight: 1
+    region: content
+    settings:
+      placeholder: ''
+      rows: 5
+    third_party_settings: {  }
+  field_alias:
+    weight: 11
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_email:
+    weight: 9
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: email_default
+    region: content
+  field_full_name:
+    weight: 5
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_location:
+    weight: 7
+    settings: {  }
+    third_party_settings: {  }
+    type: address_default
+    region: content
+  field_location_legacy:
+    weight: 6
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_logo:
+    weight: 10
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+    type: image_image
+    region: content
+  field_type:
+    weight: 13
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_url:
+    weight: 8
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
+    region: content
+  field_valid:
+    weight: 12
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 4
+    region: content
+    third_party_settings: {  }
+hidden: {  }

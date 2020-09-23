@@ -5,6 +5,10 @@
  * This module holds functions useful for Drupal development.
  *
  * Please contribute!
+ *
+ * Devel is allowed to use its own functions kpr(), dpm() and dpq() so disable
+ * the coding standard which gives warnings for using these.
+ * phpcs:disable Drupal.Functions.DiscouragedFunctions
  */
 
 define('DEVEL_ERROR_HANDLER_NONE', 0);
@@ -464,7 +468,7 @@ if (!function_exists('ksm')) {
       $name = '__ARGS__';
     }
 
-    return \Drupal::service('devel.dumper')->message($args, $name, 'kint');
+    return \Drupal::service('devel.dumper')->message($args, $name, MessengerInterface::TYPE_STATUS, 'kint');
   }
 
 }

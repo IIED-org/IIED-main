@@ -54,6 +54,7 @@ class ConfigEditor extends FormBase {
     ];
     $form['current']['value'] = [
       '#type' => 'item',
+      // phpcs:ignore Drupal.Functions.DiscouragedFunctions
       '#markup' => dpr($output, TRUE),
     ];
 

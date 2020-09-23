@@ -1,0 +1,19 @@
+uuid: 52423a37-3362-4dfc-a0fd-72632fececfa
+langcode: en
+status: true
+dependencies:
+  module:
+    - link
+    - taxonomy
+id: taxonomy_term.field_iied_tid
+field_name: field_iied_tid
+entity_type: taxonomy_term
+type: link
+settings: {  }
+module: link
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

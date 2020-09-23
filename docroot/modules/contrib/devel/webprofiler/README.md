@@ -45,7 +45,7 @@ If you use Composer to manage dependencies, edit [composer.json](composer.json) 
         }
     }
     ```
-1. Run `composer require d3/d3 hihglightjs/highlightjs` - you should find that new directories have been created
+1. Run `composer require d3/d3 highlightjs/highlightjs` - you should find that new directories have been created
 under `libraries`
 
 #### Install manually

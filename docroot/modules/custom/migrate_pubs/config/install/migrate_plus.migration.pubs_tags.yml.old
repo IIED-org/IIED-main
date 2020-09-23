@@ -1,3 +1,5 @@
+# Not used (see iied_tags migration)
+
 # A "migration" is, in technical terms, a plugin whose configuration describes
 # how to read source data, process it (generally by mapping source fields to
 # destination fields), and write it to Drupal.
