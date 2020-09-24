@@ -1,4 +1,4 @@
-# Migration configuration for beer content.
+# Migration configuration for publication nodes.
 id: pubs_node
 label: IIED Publications nodes
 migration_group: pubs
@@ -7,7 +7,7 @@ migration_tags:
 source:
   plugin: pubs_node
   constants:
-    SOURCE_DOMAIN: 'https://pubscopy.iied.org/pdfs/'
+    SOURCE_DOMAIN: 'https://pubs.iied.org/pdfs/'
     DRUPAL_FILE_DIRECTORY: 'public://pdfs/migrate/'
     PDF_SUFFIX: '.pdf'
     DAY_OF_MONTH: '01'
@@ -201,30 +201,29 @@ process:
   'field_external_url/uri': LinkMoreURL
 
 # PDF file import via https from source directory
-  # _field_pdf_path:
-  #   plugin: concat
-  #   source:
-  #     - constants/SOURCE_DOMAIN
-  #     - '@_product_code'
-  #     - constants/PDF_SUFFIX
-  #
-  # field_pdf:
-  #   plugin: file_import
-  #   source: '@_field_pdf_path'
-  #   destination: constants/DRUPAL_FILE_DIRECTORY
-  #   skip_on_missing_source: true
-  #   skip_on_error: true
-  #   reuse: true
-  #   uid: 1
-  # field_pdf/display:
-  #   plugin: default_value
-  #   default_value: 1
+  _field_pdf_path:
+    plugin: concat
+    source:
+      - constants/SOURCE_DOMAIN
+      - '@_product_code'
+      - constants/PDF_SUFFIX
+
+  field_pdf:
+    plugin: file_import
+    source: '@_field_pdf_path'
+    destination: constants/DRUPAL_FILE_DIRECTORY
+    skip_on_missing_source: true
+    skip_on_error: true
+    reuse: true
+    uid: 1
+  field_pdf/display:
+    plugin: default_value
+    default_value: 1
 
 destination:
   plugin: entity:node
 
-# The general rule of thumb is that any migrations referenced by migration
-# process plugins should be required here.
+# Migrations referenced by migration process plugins are required here.
 migration_dependencies:
   optional:
     - iied_projects
@@ -235,3 +234,8 @@ migration_dependencies:
     - pubs_doctypes
     - pubs_projects
     - pubs_series
+
+dependencies:
+  enforced:
+    module:
+      - migrate_pubs

@@ -1,7 +1,10 @@
-uuid: 31fe0a2a-69b2-4f40-b1af-60b688b0b0d5
+uuid: b11a0bcc-9a62-4730-8e8e-85b264200672
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  enforced:
+    module:
+      - migrate_pubs
 id: pubs_node
 class: null
 field_plugin_method: null
@@ -13,7 +16,7 @@ label: 'IIED Publications nodes'
 source:
   plugin: pubs_node
   constants:
-    SOURCE_DOMAIN: 'https://pubscopy.iied.org/pdfs/'
+    SOURCE_DOMAIN: 'https://pubs.iied.org/pdfs/'
     DRUPAL_FILE_DIRECTORY: 'public://pdfs/migrate/'
     PDF_SUFFIX: .pdf
     DAY_OF_MONTH: '01'
@@ -178,6 +181,23 @@ process:
   field_pdf_pages: PubPages
   field_iied_url/uri: LinkIIEDURL
   field_external_url/uri: LinkMoreURL
+  _field_pdf_path:
+    plugin: concat
+    source:
+      - constants/SOURCE_DOMAIN
+      - '@_product_code'
+      - constants/PDF_SUFFIX
+  field_pdf:
+    plugin: file_import
+    source: '@_field_pdf_path'
+    destination: constants/DRUPAL_FILE_DIRECTORY
+    skip_on_missing_source: true
+    skip_on_error: true
+    reuse: true
+    uid: 1
+  field_pdf/display:
+    plugin: default_value
+    default_value: 1
 destination:
   plugin: 'entity:node'
 migration_dependencies:
