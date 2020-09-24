@@ -812,13 +812,13 @@ if (file_exists('/var/www/site-php')) {
 $settings['config_sync_directory'] = $app_root . '/../config/default/';
 $settings['config_vcs_directory'] = $settings['config_sync_directory'];
 
-$databases['pubscopy']['default'] = array (
+$databases['pubs']['default'] = array (
   'database'  => 'Publications',
   'username'  => 'iiedpubs2',
   'password' => 'pu0603_jk',
   'prefix' => '',
   'host' => '127.0.0.1',
-  'port' => '3307',
+  'port' => '3308',
   'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
   'driver' => 'mysql',
 );
