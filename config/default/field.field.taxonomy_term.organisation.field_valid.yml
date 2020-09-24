@@ -9,7 +9,7 @@ id: taxonomy_term.organisation.field_valid
 field_name: field_valid
 entity_type: taxonomy_term
 bundle: organisation
-label: Valid
+label: Verified
 description: ''
 required: false
 translatable: false

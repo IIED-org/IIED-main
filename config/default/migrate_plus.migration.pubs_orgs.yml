@@ -1,4 +1,4 @@
-uuid: a463b6dd-4175-4587-a1a0-dd64171b9b59
+uuid: 862de6bb-ef99-46cb-b954-402ce6d41ddb
 langcode: en
 status: true
 dependencies:
@@ -12,7 +12,7 @@ cck_plugin_method: null
 migration_tags:
   - orgs
 migration_group: pubs
-label: 'Import publishers from CSV file to taxonomy terms'
+label: 'Import publishers & organisations from CSV file to taxonomy terms'
 source:
   plugin: csv
   path: '/Users/chris/Downloads/Publishers and organisations - Valid publishers list to import.csv'
@@ -27,8 +27,12 @@ process:
   field_location_legacy: Location
   field_url/uri: URL
   field_valid:
-    plugin: default_value
-    default_value: true
+    plugin: static_map
+    source: Verified
+    map:
+      'Yes': true
+      'No': false
+  field_type: Group
   vid:
     plugin: default_value
     default_value: organisation
