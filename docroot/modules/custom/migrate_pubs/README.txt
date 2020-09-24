@@ -44,13 +44,14 @@ migrate_plus.migration_group.pubs.yml file describes the order in which the
 migrations are to be run.
 
 migrate_plus.migration.iied_projects.yml
+migrate_plus.migration.iied_tags.yml
+migrate_plus.migration.pubs_orgs.yml
 migrate_plus.migration.pubs_authors.yml
 migrate_plus.migration.pubs_doctypes.yml
 migrate_plus.migration.pubs_node.yml
 migrate_plus.migration.pubs_pdfs.yml
 migrate_plus.migration.pubs_projects.yml
 migrate_plus.migration.pubs_series.yml
-migrate_plus.migration.pubs_tags.yml
 migrate_plus.migration.pubs_themes.yml
 
 RUNNING THE MIGRATIONS
@@ -69,11 +70,26 @@ drush en -y migrate_tools,migrate_example
 
 drush ms                    # Abbreviation for migrate-status
 
+# as at 2020-09-24T15:35:00+01:00, pubs live connection
+----------------------------- --------------- -------- ------- ---------- ------------- ---------------
+ Group                         Migration ID    Status   Total   Imported   Unprocessed   Last Imported
+----------------------------- --------------- -------- ------- ---------- ------------- ---------------
+ Pubs library imports (pubs)   iied_projects   Idle     261     0          261
+ Pubs library imports (pubs)   iied_tags       Idle     907     0          907
+ Pubs library imports (pubs)   pubs_authors    Idle     6332    0          6332
+ Pubs library imports (pubs)   pubs_doctypes   Idle     40      0          40
+ Pubs library imports (pubs)   pubs_themes     Idle     23      0          23
+ Pubs library imports (pubs)   pubs_orgs       Idle     236     0          236
+ Pubs library imports (pubs)   pubs_projects   Idle     276     0          276
+ Pubs library imports (pubs)   pubs_series     Idle     57      0          57
+ Pubs library imports (pubs)   pubs_node       Idle     7629    0          7629
+----------------------------- --------------- -------- ------- ---------- ------------- ---------------
+
 # Run the import operation for all the pubs migrations.
 
 drush mim --group=pubs      # Abbreviation for migrate-import
 
-# Look at what you've done! ALso, visit the site and see the imported content
+# Look at what you've done! Also, visit the site and see the imported content
 
 drush ms
 
@@ -84,6 +100,9 @@ http://pubs.dd:8083/table   # Your local URL may vary
 # they were imported.
 
 drush mr --group=pubs       # Abbreviation for migrate-rollback
+
+
+
 
 TESTING
 -------

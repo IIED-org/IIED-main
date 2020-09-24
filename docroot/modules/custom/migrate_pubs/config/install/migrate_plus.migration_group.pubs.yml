@@ -8,10 +8,10 @@
 id: pubs
 
 # A human-friendly label for the group.
-label: Publications Library Imports
+label: Pubs library imports
 
 # More information about the group.
-description: Migration from pubscopy.iied.org
+description: Migration from pubs.iied.org
 
 # Short description of the type of source, e.g. "Drupal 6" or "WordPress".
 source_type: Custom tables
@@ -26,7 +26,7 @@ shared_configuration:
   source:
     # add a database connection to your external database in settings.php and
     # reference its key here.
-    key: pubscopy
+    key: pubs
 
 # As with the migration configuration (see beer_term), we add an enforced
 # dependency so the migration_group configuration will be removed on module

@@ -19,7 +19,7 @@ source:
   # Full path to the file.
 
   # Run twice, do publishers first
-  # path: '/Users/chris/Downloads/Publishers and organisations - Valid publishers list to import.csv'
+  path: '/Users/chris/Downloads/Publishers and organisations - Valid publishers list to import.csv'
   # path: '/Users/chris/Downloads/Publishers and organisations - Organisations to import (complete).csv'
 
   # Column delimiter. Comma (,) by default.
