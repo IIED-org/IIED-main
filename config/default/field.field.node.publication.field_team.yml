@@ -1,10 +1,12 @@
-uuid: 7c8dcd1c-5a94-488d-b13a-364211d5b28e
+uuid: e77c1feb-419a-4ab3-9553-73c467c5e0fa
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.field_team
     - node.type.publication
+  module:
+    - options
 id: node.publication.field_team
 field_name: field_team
 entity_type: node
@@ -16,4 +18,4 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings: {  }
-field_type: string
+field_type: list_string

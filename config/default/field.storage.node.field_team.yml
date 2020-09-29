@@ -1,18 +1,69 @@
-uuid: 2a320c4f-b3f4-4532-8ffd-ea57242c43ff
+uuid: a097ee57-b12c-4096-9298-9d028e7d6a61
 langcode: en
 status: true
 dependencies:
   module:
     - node
+    - options
 id: node.field_team
 field_name: field_team
 entity_type: node
-type: string
+type: list_string
 settings:
-  max_length: 127
-  is_ascii: false
-  case_sensitive: false
-module: core
+  allowed_values:
+    -
+      value: '1.1'
+      label: 'Legal Tools'
+    -
+      value: '1.2'
+      label: Agroecology
+    -
+      value: '1.3'
+      label: 'People, Forests and Biodiversity'
+    -
+      value: '1.4'
+      label: 'Water Infrastructure'
+    -
+      value: '1.5'
+      label: 'China Strategy'
+    -
+      value: '2.1'
+      label: 'Global climate law, policy and governance'
+    -
+      value: '2.2'
+      label: 'Public Policy Responses for Climate Resilient Development'
+    -
+      value: '2.3'
+      label: 'Climate resilience, productivity and equity in the drylands'
+    -
+      value: '2.4'
+      label: 'Community Based Adaptation and ICCCAD'
+    -
+      value: '3.1'
+      label: 'Environmental Economics'
+    -
+      value: '3.2'
+      label: 'Small-scale and informal enterprise'
+    -
+      value: '3.3'
+      label: 'Energy and extractive industries'
+    -
+      value: '3.4'
+      label: 'Green Economy Coalition'
+    -
+      value: '4.1'
+      label: 'Cities and climate change'
+    -
+      value: '4.2'
+      label: 'Urbanisation and rural-urban linkages'
+    -
+      value: '4.3'
+      label: 'Urban poverty'
+    -
+      value: '5.1'
+      label: 'Post 2015 (SLG)'
+  allowed_values_function: ''
+module: options
 locked: false
 cardinality: 1
 translatable: true

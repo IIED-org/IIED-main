@@ -344,11 +344,9 @@ content:
     region: content
   field_team:
     weight: 46
-    settings:
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
-    type: string_textfield
+    type: options_select
     region: content
   field_theme_s_:
     weight: 21
