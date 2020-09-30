@@ -1,0 +1,17 @@
+name: Acquia Search Solr
+type: module
+description: Provides integration between your Drupal site and Acquia's hosted search service.
+package: Acquia
+core: 8.x
+core_version_requirement: ^8 || ^9
+configure: acquia_search_solr.settings
+dependencies:
+ - search_api_solr:search_api_solr
+ - drupal:views
+ - drupal:node
+php: 7.1
+
+# Information added by Drupal.org packaging script on 2020-09-11
+version: '8.x-1.0-beta8'
+project: 'acquia_search_solr'
+datestamp: 1599833496

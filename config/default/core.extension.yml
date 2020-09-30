@@ -1,4 +1,6 @@
 module:
+  acquia_connector: 0
+  acquia_search_solr: 0
   address: 0
   admin_toolbar: 0
   admin_toolbar_links_access_filter: 0
@@ -61,6 +63,9 @@ module:
   rdf: 0
   redirect: 0
   search: 0
+  search_api: 0
+  search_api_solr: 0
+  search_api_solr_admin: 0
   serial: 0
   shortcut: 0
   system: 0

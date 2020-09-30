@@ -1,0 +1,14 @@
+type: module
+name: 'Database search test'
+description: 'Provides a setup for testing Database Search.'
+package: Testing
+dependencies:
+  - search_api:search_api_db
+  - search_api:search_api_test_example_content
+core_version_requirement: ^8.8 || ^9
+hidden: true
+
+# Information added by Drupal.org packaging script on 2020-06-02
+version: '8.x-1.17'
+project: 'search_api'
+datestamp: 1591128372

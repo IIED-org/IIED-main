@@ -1,0 +1,5 @@
+acquia_search_solr.settings:
+  title: Acquia Search Solr
+  description: 'Configure Acquia Search Solr.'
+  route_name: acquia_search_solr.settings
+  parent: system.admin_config_search

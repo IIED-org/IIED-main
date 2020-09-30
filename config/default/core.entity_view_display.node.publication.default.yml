@@ -664,8 +664,8 @@ third_party_settings:
                 type: string
             additional: {  }
             weight: 37
-          6a5fd192-a606-4b3d-a4f7-26b676e881d4:
-            uuid: 6a5fd192-a606-4b3d-a4f7-26b676e881d4
+          34f45886-4a4f-4ee3-8ba8-84b95d6a3554:
+            uuid: 34f45886-4a4f-4ee3-8ba8-84b95d6a3554
             region: content
             configuration:
               label_display: '0'
@@ -674,10 +674,9 @@ third_party_settings:
               id: 'field_block:node:publication:field_team'
               formatter:
                 label: above
-                settings:
-                  link_to_entity: false
+                settings: {  }
                 third_party_settings: {  }
-                type: string
+                type: list_default
             additional: {  }
             weight: 38
         third_party_settings: {  }
@@ -977,10 +976,9 @@ content:
   field_team:
     weight: 39
     label: above
-    settings:
-      link_to_entity: false
+    settings: {  }
     third_party_settings: {  }
-    type: string
+    type: list_default
     region: content
   field_theme_s_:
     weight: 9
@@ -997,3 +995,4 @@ content:
     third_party_settings: {  }
 hidden:
   langcode: true
+  search_api_excerpt: true

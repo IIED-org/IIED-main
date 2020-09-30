@@ -1,0 +1,15 @@
+entity.acquia_search_solr_search_api_solr_server.delete_form:
+  path: '/admin/config/search/search-api/server/acquia_search_solr_search_api_solr_server/delete'
+  requirements:
+    _access: 'FALSE'
+entity.acquia_search_solr_search_api_solr_index.delete_form:
+  path: '/admin/config/search/search-api/index/acquia_search_solr_search_api_solr_index/delete'
+  requirements:
+    _access: 'FALSE'
+acquia_search_solr.settings:
+  path: '/admin/config/search/acquia-search-solr'
+  defaults:
+    _form: '\Drupal\acquia_search_solr\Form\SettingsForm'
+    _title: 'Acquia Search Solr settings'
+  requirements:
+    _permission: 'administer site configuration'

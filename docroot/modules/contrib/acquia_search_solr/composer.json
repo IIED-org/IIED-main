@@ -1,0 +1,28 @@
+{
+    "name": "drupal/acquia_search_solr",
+    "type": "drupal-module",
+    "description": "Provides integration between your Drupal site and Acquia's hosted search service.",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": "^7.1",
+        "drupal/search_api_solr": "^4.1",
+        "http-interop/http-factory-guzzle": "^1.0",
+        "php-http/guzzle6-adapter": "^2.0"
+    },
+    "conflict": {
+        "drupal/acquia_search": "*"
+    },
+    "require-dev": {
+        "drush/drush": "~9.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-8.x-1.x": "1.x-dev"
+        },
+        "drush": {
+            "services": {
+                "drush.services.yml": "^9"
+            }
+        }
+    }
+}
