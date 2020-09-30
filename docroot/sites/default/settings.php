@@ -822,3 +822,5 @@ $databases['pubs']['default'] = array (
   'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
   'driver' => 'mysql',
 );
+
+$config['acquia_search_solr.settings']['override_search_core'] = 'AGHX-142716.prod.irforum';
