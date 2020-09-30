@@ -40,7 +40,7 @@ process:
   field_reportfin1: ReportFin1
   field_reportagency1: ReportAgency1
   field_reportfin2: ReportFin2
-  field_reportagency2: ReportAgency2
+  field_reportagency2: ReportAgency3
   field_reportfin3: ReportFin3
   title: Title
   field_short_title: ShortTitle
