@@ -1,0 +1,9 @@
+media_pdf_thumbnail.settings:
+  title: Media Bundles
+  route_name: media_pdf_thumbnail.settings
+  base_route: media_pdf_thumbnail.settings
+
+media_pdf_thumbnail.settings_regeneration:
+  title: Thumbnail Regeneration
+  route_name: media_pdf_thumbnail.settings_regeneration
+  base_route: media_pdf_thumbnail.settings

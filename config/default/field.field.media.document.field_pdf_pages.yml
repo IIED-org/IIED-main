@@ -1,0 +1,23 @@
+uuid: 427dbc0a-df3f-4635-895e-b1ea82b90ec9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_pdf_pages
+    - media.type.document
+id: media.document.field_pdf_pages
+field_name: field_pdf_pages
+entity_type: media
+bundle: document
+label: 'PDF pages'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

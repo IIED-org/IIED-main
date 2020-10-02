@@ -1,0 +1,20 @@
+uuid: 45207cb9-09e9-46f2-bcfc-3c85cf05cf42
+langcode: en
+status: true
+dependencies:
+  module:
+    - media
+id: media.field_pdf_pages
+field_name: field_pdf_pages
+entity_type: media
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

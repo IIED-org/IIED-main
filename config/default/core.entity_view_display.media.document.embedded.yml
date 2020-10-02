@@ -1,0 +1,62 @@
+uuid: 098ccef8-5c3c-47e1-9148-c1364aa60527
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.embedded
+    - field.field.media.document.field_media_document
+    - field.field.media.document.field_pdf_pages
+    - field.field.media.document.field_size
+    - image.style.thumbnail
+    - media.type.document
+  module:
+    - layout_builder
+    - pdfpreview
+third_party_settings:
+  layout_builder:
+    allow_custom: false
+    enabled: false
+_core:
+  default_config_hash: DXitcriWmE5QHvGvk2OzWouaSnXD5uipkRdAG6_pnkg
+id: media.document.embedded
+targetEntityType: media
+bundle: document
+mode: embedded
+content:
+  field_media_document:
+    label: hidden
+    settings:
+      image_style: thumbnail
+      image_link: file
+      tag: div
+      fallback_formatter: file_default
+      show_description: 0
+    third_party_settings: {  }
+    type: pdfpreview
+    weight: 1
+    region: content
+  field_pdf_pages:
+    weight: 2
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
+    region: content
+  field_size:
+    weight: 3
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
+    region: content
+hidden:
+  created: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true

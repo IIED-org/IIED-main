@@ -17,6 +17,7 @@ dependencies:
     - field.field.node.publication.field_issn
     - field.field.node.publication.field_journal_ref
     - field.field.node.publication.field_lit_code
+    - field.field.node.publication.field_media
     - field.field.node.publication.field_pdf
     - field.field.node.publication.field_pdf_pages
     - field.field.node.publication.field_product_code
@@ -679,7 +680,27 @@ third_party_settings:
                 type: list_default
             additional: {  }
             weight: 38
+          3692bab2-0b0a-4342-a8f1-4852351226e2:
+            uuid: 3692bab2-0b0a-4342-a8f1-4852351226e2
+            region: content
+            configuration:
+              id: 'field_block:node:publication:field_media'
+              label: Media
+              provider: layout_builder
+              label_display: '0'
+              formatter:
+                label: above
+                type: entity_reference_entity_view
+                settings:
+                  view_mode: media_library
+                third_party_settings: {  }
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+            additional: {  }
+            weight: 39
         third_party_settings: {  }
+    allow_custom: false
 id: node.publication.default
 targetEntityType: node
 bundle: publication
@@ -805,6 +826,15 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: list_default
+    region: content
+  field_media:
+    type: entity_reference_entity_view
+    weight: 40
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
     region: content
   field_pdf:
     weight: 6

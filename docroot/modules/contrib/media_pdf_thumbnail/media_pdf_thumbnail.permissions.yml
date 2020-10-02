@@ -1,0 +1,3 @@
+administer_media_pdf_thumbnail:
+  title: 'Administer Media PDF Thumbnail'
+  restrict access: true

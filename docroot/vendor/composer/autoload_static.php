@@ -49,6 +49,10 @@ class ComposerStaticInit7376e166806aa5d664ccbd35d60d770b
         array (
             'phpGPX\\' => 7,
         ),
+        'l' => 
+        array (
+            'lsolesen\\pel\\' => 13,
+        ),
         'c' => 
         array (
             'cweagans\\Composer\\' => 18,
@@ -101,6 +105,7 @@ class ComposerStaticInit7376e166806aa5d664ccbd35d60d770b
             'Symfony\\Component\\ClassLoader\\' => 30,
             'Symfony\\Cmf\\Component\\Routing\\' => 30,
             'Symfony\\Bridge\\PsrHttpMessage\\' => 30,
+            'Spatie\\PdfToImage\\' => 18,
             'Solarium\\' => 9,
             'Shapefile\\' => 10,
             'SelfUpdate\\' => 11,
@@ -162,6 +167,11 @@ class ComposerStaticInit7376e166806aa5d664ccbd35d60d770b
             'Grasmash\\YamlExpander\\' => 22,
             'Grasmash\\Expander\\' => 18,
         ),
+        'F' => 
+        array (
+            'FontLib\\' => 8,
+            'FileEye\\MimeMap\\' => 16,
+        ),
         'E' => 
         array (
             'Egulias\\EmailValidator\\' => 23,
@@ -171,6 +181,7 @@ class ComposerStaticInit7376e166806aa5d664ccbd35d60d770b
             'Drush\\Internal\\' => 15,
             'Drush\\Commands\\radix\\' => 21,
             'Drush\\' => 6,
+            'Drupal\\sophron\\' => 15,
             'Drupal\\Driver\\' => 14,
             'Drupal\\Core\\' => 12,
             'Drupal\\Composer\\Plugin\\VendorHardening\\' => 39,
@@ -206,6 +217,10 @@ class ComposerStaticInit7376e166806aa5d664ccbd35d60d770b
         'phpGPX\\' => 
         array (
             0 => __DIR__ . '/..' . '/sibyx/phpgpx/src/phpGPX',
+        ),
+        'lsolesen\\pel\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/lsolesen/pel/src',
         ),
         'cweagans\\Composer\\' => 
         array (
@@ -346,6 +361,10 @@ class ComposerStaticInit7376e166806aa5d664ccbd35d60d770b
         'Symfony\\Bridge\\PsrHttpMessage\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/psr-http-message-bridge',
+        ),
+        'Spatie\\PdfToImage\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/spatie/pdf-to-image/src',
         ),
         'Solarium\\' => 
         array (
@@ -493,6 +512,14 @@ class ComposerStaticInit7376e166806aa5d664ccbd35d60d770b
         array (
             0 => __DIR__ . '/..' . '/grasmash/expander/src',
         ),
+        'FontLib\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phenx/php-font-lib/src/FontLib',
+        ),
+        'FileEye\\MimeMap\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/fileeye/mimemap/src',
+        ),
         'Egulias\\EmailValidator\\' => 
         array (
             0 => __DIR__ . '/..' . '/egulias/email-validator/EmailValidator',
@@ -508,6 +535,10 @@ class ComposerStaticInit7376e166806aa5d664ccbd35d60d770b
         'Drush\\' => 
         array (
             0 => __DIR__ . '/..' . '/drush/drush/src',
+        ),
+        'Drupal\\sophron\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/modules/contrib/sophron/src',
         ),
         'Drupal\\Driver\\' => 
         array (

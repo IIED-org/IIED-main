@@ -200,25 +200,30 @@ process:
 
   'field_external_url/uri': LinkMoreURL
 
-# PDF file import via https from source directory
-  _field_pdf_path:
-    plugin: concat
-    source:
-      - constants/SOURCE_DOMAIN
-      - '@_product_code'
-      - constants/PDF_SUFFIX
+  field_media:
+    plugin: migration_lookup
+    migration: pubs_pdfs
+    source: '@_product_code'
 
-  field_pdf:
-    plugin: file_import
-    source: '@_field_pdf_path'
-    destination: constants/DRUPAL_FILE_DIRECTORY
-    skip_on_missing_source: true
-    skip_on_error: true
-    reuse: true
-    uid: 1
-  field_pdf/display:
-    plugin: default_value
-    default_value: 1
+# # PDF file import via https from source directory
+#   _field_pdf_path:
+#     plugin: concat
+#     source:
+#       - constants/SOURCE_DOMAIN
+#       - '@_product_code'
+#       - constants/PDF_SUFFIX
+#
+#   field_pdf:
+#     plugin: file_import
+#     source: '@_field_pdf_path'
+#     destination: constants/DRUPAL_FILE_DIRECTORY
+#     skip_on_missing_source: true
+#     skip_on_error: true
+#     reuse: true
+#     uid: 1
+#   field_pdf/display:
+#     plugin: default_value
+#     default_value: 1
 
 destination:
   plugin: entity:node
@@ -228,6 +233,7 @@ migration_dependencies:
   optional:
     - iied_projects
     - iied_tags
+    - pubs_pdfs
     - pubs_themes
     - pubs_orgs
     - pubs_authors

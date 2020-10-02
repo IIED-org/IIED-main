@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @file
+ * Generates image previews of PDF files.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_theme().
+ */
+function pdfpreview_theme($existing, $type, $theme, $path) {
+  return [
+    'pdfpreview_formatter' => [
+      'render element' => 'element',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function pdfpreview_file_update(EntityInterface $file) {
+  \Drupal::service('pdfpreview.generator')->updatePDFPreview($file);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function pdfpreview_file_delete(EntityInterface $file) {
+  \Drupal::service('pdfpreview.generator')->deletePDFPreview($file);
+}
+
+/**
+ * Prepares variables for pdfpreview_formatter element templates.
+ *
+ * Default template: pdfpreview-formatter.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array containing the properties of the element.
+ */
+function template_preprocess_pdfpreview_formatter(array &$variables) {
+  $settings = $variables['element']['#settings'];
+  $variables['tag'] = $settings['tag'];
+  $variables['fid'] = $variables['element']['#fid'];
+  $variables['description'] = $settings['show_description'] ? $variables['element']['#description'] : '';
+}

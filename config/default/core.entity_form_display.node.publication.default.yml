@@ -17,6 +17,7 @@ dependencies:
     - field.field.node.publication.field_issn
     - field.field.node.publication.field_journal_ref
     - field.field.node.publication.field_lit_code
+    - field.field.node.publication.field_media
     - field.field.node.publication.field_pdf
     - field.field.node.publication.field_pdf_pages
     - field.field.node.publication.field_product_code
@@ -49,6 +50,7 @@ dependencies:
     - isbn
     - layout_discovery
     - link
+    - media_library
     - path
     - serial
     - text
@@ -175,6 +177,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: options_select
+    region: content
+  field_media:
+    type: media_library_widget
+    weight: 47
+    settings:
+      media_types: {  }
+    third_party_settings: {  }
     region: content
   field_pdf:
     weight: 17
