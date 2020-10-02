@@ -15,7 +15,7 @@ migration_group: pubs
 label: 'Import publishers & organisations from CSV file to taxonomy terms'
 source:
   plugin: csv
-  path: '/mnt/gfs/irforum.dev/import/Publishers and organisations - All Orgs.csv'
+  path: '../import/Publishers and organisations - All Orgs.csv'
   ids:
     - id
   delimiter: ','

@@ -1,0 +1,57 @@
+uuid: 7441cc2b-4fb3-4678-9f3f-d50b2ed60764
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - migrate_pubs
+id: pubs_pdfs_files
+class: null
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - pubs
+migration_group: pubs
+label: 'Pubs PDFs to files'
+source:
+  plugin: pubs_node
+  constants:
+    SOURCE_DOMAIN: 'https://pubs.iied.org/pdfs/'
+    DRUPAL_FILE_DIRECTORY: 'public://pdfs/migrate/'
+    PDF_SUFFIX: .pdf
+    DAY_OF_MONTH: '01'
+  ids:
+    ProductCode:
+      type: string
+process:
+  uid:
+    plugin: default_value
+    default_value: 1
+  field_status:
+    plugin: skip_on_value
+    method: row
+    not_equals: true
+    source: Status
+    value:
+      - A
+      - 'N'
+  _product_code: ProductCode
+  _field_pdf_path:
+    plugin: concat
+    source:
+      - constants/SOURCE_DOMAIN
+      - '@_product_code'
+      - constants/PDF_SUFFIX
+  field_media_document:
+    plugin: file_import
+    source: '@_field_pdf_path'
+    destination: constants/DRUPAL_FILE_DIRECTORY
+    skip_on_missing_source: true
+    skip_on_error: true
+    reuse: true
+    uid: '@uid'
+  field_pdf_pages: PubPages
+destination:
+  plugin: 'entity:media'
+  default_bundle: document
+migration_dependencies: {  }

@@ -18,6 +18,7 @@ dependencies:
     - field.field.node.publication.field_issn
     - field.field.node.publication.field_journal_ref
     - field.field.node.publication.field_lit_code
+    - field.field.node.publication.field_media
     - field.field.node.publication.field_pdf
     - field.field.node.publication.field_pdf_pages
     - field.field.node.publication.field_product_code
@@ -133,6 +134,7 @@ hidden:
   field_issn: true
   field_journal_ref: true
   field_lit_code: true
+  field_media: true
   field_pdf: true
   field_pdf_pages: true
   field_product_id: true
@@ -156,3 +158,4 @@ hidden:
   field_team: true
   field_theme_s_: true
   langcode: true
+  search_api_excerpt: true

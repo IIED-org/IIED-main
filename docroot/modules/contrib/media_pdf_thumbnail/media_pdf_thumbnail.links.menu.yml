@@ -1,0 +1,7 @@
+media_pdf_thumbnail.settings:
+  title: 'Media PDF thumbnail'
+  parent: system.admin_config_media
+  route_name: media_pdf_thumbnail.settings
+  description: 'Media PDF thumbnail settings.'
+
+

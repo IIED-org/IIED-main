@@ -1,0 +1,23 @@
+uuid: 59f16de4-6e79-430e-afe5-c4b591e08f3b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_size
+    - media.type.document
+id: media.document.field_size
+field_name: field_size
+entity_type: media
+bundle: document
+label: Size
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ' bytes'
+field_type: integer

@@ -1,0 +1,40 @@
+uuid: d93daa18-086b-473a-a838-2f57173b0318
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.media_library
+    - field.field.media.document.field_media_document
+    - field.field.media.document.field_pdf_pages
+    - field.field.media.document.field_size
+    - media.type.document
+  module:
+    - pdfpreview
+_core:
+  default_config_hash: WA5PBCSll9OeXbS16GbGz8jNgz7vkUAmC_72nn0yyBo
+id: media.document.media_library
+targetEntityType: media
+bundle: document
+mode: media_library
+content:
+  field_media_document:
+    type: pdfpreview
+    weight: 0
+    region: content
+    label: hidden
+    settings:
+      image_style: ''
+      image_link: ''
+      tag: div
+      show_description: 0
+      fallback_formatter: 0
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_pdf_pages: true
+  field_size: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true

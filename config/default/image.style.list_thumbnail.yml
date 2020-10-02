@@ -1,0 +1,15 @@
+uuid: bc9d36bb-79aa-4b8b-ae13-4bf4869f4062
+langcode: en
+status: true
+dependencies: {  }
+name: list_thumbnail
+label: 'List thumbnail'
+effects:
+  f48f4015-45f3-48f8-a32f-09ff516ec91d:
+    uuid: f48f4015-45f3-48f8-a32f-09ff516ec91d
+    id: image_scale
+    weight: 1
+    data:
+      width: null
+      height: 50
+      upscale: false
