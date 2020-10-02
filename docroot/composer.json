@@ -36,6 +36,7 @@
         "drupal/paragraphs": "^1.12",
         "drupal/pathauto": "^1.8",
         "drupal/pdfpreview": "^1.0",
+        "drupal/publishcontent": "^1.2",
         "drupal/radix": "4.x-dev",
         "drupal/redirect": "^1.6",
         "drupal/serial": "^1.0@alpha",

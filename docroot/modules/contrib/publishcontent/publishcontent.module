@@ -1,0 +1,26 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\publishcontent\Access\PublishContentAccess;
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function publishcontent_form_node_form_alter(&$form, FormStateInterface $form_state) {
+
+  $config = \Drupal::config('publishcontent.settings');
+  if (empty($config) || empty($config->get('ui_checkbox'))) {
+    return;
+  }
+
+  if (!empty($form['status']) && !$form['status']['#access']) {
+    $user = Drupal::currentUser();
+    $node = $form_state->getFormObject()->getEntity();
+    $publishContentAccess = new PublishContentAccess();
+    $form['status']['#access'] = TRUE;
+    if (!$publishContentAccess->access($user, $node)->isAllowed()) {
+      $form['status']['#disabled'] = TRUE;
+      $form['status']['widget']['value']['#description'] = t('You can not change the published status.');
+    }
+  }
+}

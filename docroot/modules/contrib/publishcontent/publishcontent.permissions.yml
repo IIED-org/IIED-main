@@ -1,0 +1,18 @@
+publish any content:
+  title: 'Publish any content'
+  description: 'Allows to publish any content.'
+
+publish editable content:
+  title: 'Publish editable content'
+  description: 'Allows to publish content which user has access to edit for.'
+
+unpublish any content:
+  title: 'Unpublish any content'
+  description: 'Allows to unpublish any content.'
+
+unpublish editable content:
+  title: 'Unpublish editable content'
+  description: 'Allows to unpublish content which user has access to edit for.'
+
+permission_callbacks:
+  - \Drupal\publishcontent\PublishContentPermissions::permissions
