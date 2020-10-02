@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * Import default UI configuration for the module.
+ */
+function publishcontent_update_8001() {
+
+  // Ensure existing sites have the same configuration as that provided in
+  // config/install/publishcontent.settings.yml
+  $config = \Drupal::configFactory()->getEditable('publishcontent.settings');
+  $config->set('ui_localtask', 1);
+  $config->set('ui_checkbox', 0);
+  $config->save(TRUE);
+}

@@ -1,0 +1,5 @@
+publishcontent.settings:
+  title: 'Publish content'
+  route_name: publishcontent.settings
+  description: 'Administer PublishContent module settings.'
+  parent: system.admin_config_workflow

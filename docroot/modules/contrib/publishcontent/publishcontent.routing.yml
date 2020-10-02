@@ -1,0 +1,27 @@
+entity.node.publish:
+  path: '/node/{node}/toggleStatus'
+  defaults:
+    _controller: 'Drupal\publishcontent\Controller\PublishContentPublishEntity::toggleEntityStatus'
+  requirements:
+    _csrf_token: 'TRUE'
+    _publish_access_check: 'TRUE'
+    _custom_access: 'Drupal\publishcontent\Controller\PublishContentPublishEntity::hasUILocalTask'
+
+entity.node.publish_translation:
+  path: '/node/{node}/toggleStatus/{langcode}'
+  defaults:
+    _controller: 'Drupal\publishcontent\Controller\PublishContentPublishEntity::toggleEntityStatus'
+  requirements:
+    _csrf_token: 'TRUE'
+    _publish_access_check: 'TRUE'
+    _custom_access: 'Drupal\publishcontent\Controller\PublishContentPublishEntity::hasUILocalTask'
+
+publishcontent.settings:
+  path: '/admin/config/workflow/publishcontent'
+  defaults:
+    _form: '\Drupal\publishcontent\Form\PublishContentSettings'
+    _title: 'PublishContentSettings'
+  requirements:
+    _permission: 'access administration pages'
+  options:
+    _admin_route: TRUE

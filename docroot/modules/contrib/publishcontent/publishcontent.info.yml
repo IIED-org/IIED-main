@@ -1,0 +1,12 @@
+name: Publish Content
+description: 'Adds a ''Publish'' or ''Unpublish'' link on the node edit/view pages, and a ''Publish Link'' field if the Views module is enabled.'
+core_version_requirement: ^8.8 || ^9
+type: module
+package: Permissions
+dependencies:
+  - drupal:node
+
+# Information added by Drupal.org packaging script on 2020-06-08
+version: '8.x-1.2'
+project: 'publishcontent'
+datestamp: 1591625878

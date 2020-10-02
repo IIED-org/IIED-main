@@ -1,0 +1,5 @@
+entity.node.publish:
+  title: Publish/Unpublish
+  route_name: entity.node.publish
+  base_route: entity.node.canonical
+  class: '\Drupal\publishcontent\Plugin\Menu\LocalTask\PublishContentLocalTask'
