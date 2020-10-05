@@ -1,10 +1,12 @@
-uuid: 2b5fa2d5-000a-4313-abe7-9c38f877b09d
+uuid: 2719c6ff-fc59-4519-971f-b14df9eb097c
 langcode: en
 status: true
 dependencies:
   enforced:
     module:
       - migrate_pubs
+_core:
+  default_config_hash: ZJeGn8ISzc9AT_sRC1-0FAoM3zRViTKdOfyOiY30bgM
 id: pubs
 label: 'Pubs library imports'
 description: 'Migration from pubs.iied.org'

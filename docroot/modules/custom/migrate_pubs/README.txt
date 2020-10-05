@@ -48,11 +48,11 @@ migrate_plus.migration.iied_tags.yml
 migrate_plus.migration.pubs_orgs.yml
 migrate_plus.migration.pubs_authors.yml
 migrate_plus.migration.pubs_doctypes.yml
-migrate_plus.migration.pubs_node.yml
 migrate_plus.migration.pubs_pdfs.yml
 migrate_plus.migration.pubs_projects.yml
 migrate_plus.migration.pubs_series.yml
 migrate_plus.migration.pubs_themes.yml
+migrate_plus.migration.pubs_node.yml
 
 RUNNING THE MIGRATIONS
 ----------------------

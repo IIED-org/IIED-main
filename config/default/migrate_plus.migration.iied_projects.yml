@@ -1,10 +1,12 @@
-uuid: c6934a15-736a-46aa-ab6c-a4571c23939d
+uuid: 1065a185-ddc7-456e-be9d-2e1f78698ea0
 langcode: en
 status: true
 dependencies:
   enforced:
     module:
       - migrate_pubs
+_core:
+  default_config_hash: 88Ip21Bi4T89Egx2SPkA23VXxWq_tMIbs-TvLQcWE4Y
 id: iied_projects
 class: null
 field_plugin_method: null
