@@ -1,10 +1,12 @@
-uuid: b6d42a98-4876-4abf-a9e2-df979bfe854f
+uuid: 2fb7d75c-5351-482c-92f8-287947d59046
 langcode: en
 status: true
 dependencies:
   enforced:
     module:
       - migrate_pubs
+_core:
+  default_config_hash: kna7t2AaXnQowpB08NnSRdwU2HkNYnOOHZx59Te2EVo
 id: pubs_series
 class: null
 field_plugin_method: null
