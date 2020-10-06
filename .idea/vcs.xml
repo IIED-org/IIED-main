@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/docroot/modules/contrib/migrate_file" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/docroot/themes/contrib/radix" vcs="Git" />
+  </component>
+</project>

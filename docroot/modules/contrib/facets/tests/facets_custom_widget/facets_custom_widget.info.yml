@@ -1,0 +1,10 @@
+name: 'Facets custom widget'
+type: module
+description: 'Facets custom widget'
+package: 'Testing'
+hidden: true
+
+# Information added by Drupal.org packaging script on 2020-07-17
+version: '8.x-1.5'
+project: 'facets'
+datestamp: 1595015394

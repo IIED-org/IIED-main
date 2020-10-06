@@ -5,8 +5,6 @@ dependencies:
   enforced:
     module:
       - migrate_pubs
-_core:
-  default_config_hash: ZJeGn8ISzc9AT_sRC1-0FAoM3zRViTKdOfyOiY30bgM
 id: pubs
 label: 'Pubs library imports'
 description: 'Migration from pubs.iied.org'

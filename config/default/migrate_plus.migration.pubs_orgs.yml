@@ -5,8 +5,6 @@ dependencies:
   enforced:
     module:
       - migrate_pubs
-_core:
-  default_config_hash: CLqKQxse6KFSX_EYy1ZQvYSv0y-TCC9nmw-CP8g3Xmg
 id: pubs_orgs
 class: null
 field_plugin_method: null

@@ -10,8 +10,8 @@ _core:
   default_config_hash: KHQIJ7Vfl25lTjzIc7qIvnuistt-Mw2O0kG4jCofmkI
 id: iied_pubs_messages
 theme: iied_pubs
-region: navbar_branding
-weight: 0
+region: footer
+weight: -7
 provider: null
 plugin: system_messages_block
 settings:

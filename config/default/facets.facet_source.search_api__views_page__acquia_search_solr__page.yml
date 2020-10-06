@@ -1,0 +1,9 @@
+uuid: e8244376-36da-403e-8d2a-a7993f7469ba
+langcode: en
+status: true
+dependencies: {  }
+id: search_api__views_page__acquia_search_solr__page
+name: 'search_api:views_page__acquia_search_solr__page'
+filter_key: null
+url_processor: query_string
+breadcrumb: {  }

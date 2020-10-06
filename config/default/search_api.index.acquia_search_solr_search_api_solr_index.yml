@@ -89,7 +89,7 @@ field_settings:
     label: Theme(s)
     datasource_id: 'entity:node'
     property_path: field_theme_s_
-    type: text
+    type: string
     dependencies:
       config:
         - field.storage.node.field_theme_s_
@@ -207,6 +207,6 @@ tracker_settings:
   default:
     indexing_order: fifo
 options:
-  index_directly: false
+  index_directly: true
   cron_limit: 50
 server: acquia_search_solr_search_api_solr_server
