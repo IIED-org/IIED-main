@@ -19,6 +19,7 @@ dependencies:
     - field.field.node.publication.field_journal_ref
     - field.field.node.publication.field_lit_code
     - field.field.node.publication.field_media
+    - field.field.node.publication.field_parent
     - field.field.node.publication.field_pdf
     - field.field.node.publication.field_pdf_pages
     - field.field.node.publication.field_product_code
@@ -135,6 +136,7 @@ hidden:
   field_journal_ref: true
   field_lit_code: true
   field_media: true
+  field_parent: true
   field_pdf: true
   field_pdf_pages: true
   field_product_id: true

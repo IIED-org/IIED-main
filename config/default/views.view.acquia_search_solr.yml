@@ -1,6 +1,6 @@
 uuid: 09691717-b2ab-4b26-9399-09663d5023fd
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - field.storage.node.body
@@ -434,6 +434,7 @@ display:
         operator: AND
         groups:
           1: AND
+      use_ajax: true
     cache_metadata:
       max-age: -1
       contexts:
@@ -441,9 +442,11 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - 'user.node_grants:view'
         - user.permissions
       tags:
         - 'config:field.storage.node.body'
+        - 'config:search_api.index.acquia_search_solr_search_api_solr_index'
   page:
     display_plugin: page
     id: page
@@ -463,6 +466,10 @@ display:
         context: '0'
         menu_name: main
       display_description: ''
+      cache:
+        type: none
+      defaults:
+        cache: false
     cache_metadata:
       max-age: -1
       contexts:
@@ -470,6 +477,8 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - 'user.node_grants:view'
         - user.permissions
       tags:
         - 'config:field.storage.node.body'
+        - 'config:search_api.index.acquia_search_solr_search_api_solr_index'

@@ -26,6 +26,7 @@
         "drupal/core-recommended": "^8.8",
         "drupal/core-vendor-hardening": "^8.8",
         "drupal/dropdown_language": "^2.6",
+        "drupal/facets": "^1.5",
         "drupal/field_group": "^3.1",
         "drupal/geolocation": "^3.2",
         "drupal/isbn": "^1.2",

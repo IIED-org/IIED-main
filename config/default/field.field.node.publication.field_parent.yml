@@ -1,0 +1,28 @@
+uuid: 5e6e668c-cc11-4cc5-b671-b494e5d3ea3b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_parent
+    - node.type.publication
+id: node.publication.field_parent
+field_name: field_parent
+entity_type: node
+bundle: publication
+label: Parent
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      publication: publication
+    sort:
+      field: field_product_code
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
