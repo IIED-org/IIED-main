@@ -1,0 +1,86 @@
+<?php
+
+/**
+ * @file
+ * Hooks and callbacks for the Sidr module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_theme().
+ */
+function sidr_theme($existing, $type, $theme, $path) {
+  $output = [];
+  $output['sidr_trigger'] = [
+    'variables' => [
+      'configuration' => [],
+      'options' => [],
+      'trigger_icon' => NULL,
+      'trigger_text' => NULL,
+    ],
+  ];
+  return $output;
+}
+
+/**
+ * Implements hook_help().
+ */
+function sidr_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.sidr':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('The Sidr module for Drupal allows you to create "trigger" blocks. These triggers use the Sidr libraries to slide in / slide out a specified target element. This is very useful for implementing responsive menus and much more.') . '</p>';
+      $output .= '<h3>' . t('Uses') . '</h3>';
+      $output .= '<dl>';
+      $output .= '<dt>' . t('Configuring') . '</dt>';
+      $output .= '<dd>' . t('From the <a href=":block-layout">Block layout</a> page, click on the <em>Place block</em> button for the region in which you want to place the trigger for your Sidr and place a <em>Sidr trigger button</em> block. This trigger will toggle your Sidr panel. Configure the block by reading the instructions on the configuration form and save it. The Sidr trigger should be visible on your site. If you click on the trigger, you should see a Sidr menu sliding out as per your configuration.', [':block-layout' => Url::fromRoute('block.admin_display')->toString()]) . '</dd>';
+      $output .= '</dl>';
+      return $output;
+  }
+}
+
+/**
+ * Implements template_preprocess_HOOK().
+ */
+function template_preprocess_sidr_trigger(&$variables) {
+  $sidr_settings = \Drupal::config('sidr.settings');
+  $block_config = $variables['configuration'];
+  $attributes =& $variables['attributes'];
+
+  // Prepare trigger attributes.
+  $attributes['data-sidr-options'] = json_encode($variables['options']);
+  $attributes['class'] = ['sidr-trigger', 'js-sidr-trigger'];
+
+  // Prepare trigger icon.
+  if ($block_config['trigger_icon']) {
+    $attributes['class'][] = 'has-icon';
+    $variables['trigger_icon'] = [
+      '#markup' => $block_config['trigger_icon'],
+    ];
+  }
+
+  // Prepare trigger text.
+  if ($block_config['trigger_text']) {
+    $attributes['class'][] = 'has-text';
+    $variables['trigger_text'] = [
+      '#markup' => $block_config['trigger_text'],
+    ];
+  }
+
+  // Attach libraries.
+  $variables['#attached'] = [
+    'library' => [
+      'sidr/behaviors',
+      'sidr/sidr.' . $sidr_settings->get('sidr_theme'),
+    ],
+    'drupalSettings' => [
+      'sidr' => [
+        'closeOnBlur' => $sidr_settings->get('close_on_blur'),
+        'closeOnEscape' => $sidr_settings->get('close_on_escape'),
+      ],
+    ],
+  ];
+}

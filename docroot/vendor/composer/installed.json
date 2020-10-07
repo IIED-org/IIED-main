@@ -2090,6 +2090,60 @@
         }
     },
     {
+        "name": "drupal/bootstrap_layouts",
+        "version": "5.2.0",
+        "version_normalized": "5.2.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupalcode.org/project/bootstrap_layouts.git",
+            "reference": "8.x-5.2"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/bootstrap_layouts-8.x-5.2.zip",
+            "reference": "8.x-5.2",
+            "shasum": "7abc903415adc5f459b362f9cfd619786a144afe"
+        },
+        "require": {
+            "drupal/core": "^8 || ^9"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "drupal": {
+                "version": "8.x-5.2",
+                "datestamp": "1591360017",
+                "security-coverage": {
+                    "status": "covered",
+                    "message": "Covered by Drupal's security advisory policy"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "darol100",
+                "homepage": "https://www.drupal.org/user/2667123"
+            },
+            {
+                "name": "hctom",
+                "homepage": "https://www.drupal.org/user/112790"
+            },
+            {
+                "name": "markcarver",
+                "homepage": "https://www.drupal.org/user/501638"
+            }
+        ],
+        "description": "This module is going to generate layouts with Bootstrap grid system.",
+        "homepage": "https://www.drupal.org/project/bootstrap_layouts",
+        "support": {
+            "source": "https://git.drupalcode.org/project/bootstrap_layouts"
+        }
+    },
+    {
         "name": "drupal/components",
         "version": "2.0.0-beta3",
         "version_normalized": "2.0.0.0-beta3",
@@ -4285,6 +4339,77 @@
         }
     },
     {
+        "name": "drupal/rabbit_hole",
+        "version": "1.0.0-beta7",
+        "version_normalized": "1.0.0.0-beta7",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupalcode.org/project/rabbit_hole.git",
+            "reference": "8.x-1.0-beta7"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/rabbit_hole-8.x-1.0-beta7.zip",
+            "reference": "8.x-1.0-beta7",
+            "shasum": "392fc458e124847fee2f726dd5bc4ed925fba5e5"
+        },
+        "require": {
+            "drupal/core": "^8 || ^9"
+        },
+        "require-dev": {
+            "drupal/file_entity": "*",
+            "drupal/group": "*"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "drupal": {
+                "version": "8.x-1.0-beta7",
+                "datestamp": "1591667436",
+                "security-coverage": {
+                    "status": "not-covered",
+                    "message": "Beta releases are not covered by Drupal security advisories."
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0+"
+        ],
+        "authors": [
+            {
+                "name": "Dylan Donkersgoed",
+                "homepage": "https://www.drupal.org/user/2803351"
+            },
+            {
+                "name": "Matroskeen",
+                "homepage": "https://www.drupal.org/user/3426249"
+            },
+            {
+                "name": "Odd Hill",
+                "homepage": "https://www.drupal.org/user/789934"
+            },
+            {
+                "name": "mparker17",
+                "homepage": "https://www.drupal.org/user/536298"
+            },
+            {
+                "name": "olofbokedal",
+                "homepage": "https://www.drupal.org/user/1198438"
+            },
+            {
+                "name": "shumushin",
+                "homepage": "https://www.drupal.org/user/22093"
+            }
+        ],
+        "description": "Change what happens when viewing entities, e.g. redirect node types that users shouldn't see",
+        "homepage": "https://www.drupal.org/project/rabbit_hole",
+        "support": {
+            "source": "https://cgit.drupalcode.org/rabbit_hole",
+            "issues": "https://www.drupal.org/project/issues/rabbit_hole"
+        }
+    },
+    {
         "name": "drupal/radix",
         "version": "dev-4.x",
         "version_normalized": "dev-4.x",
@@ -4641,6 +4766,61 @@
         }
     },
     {
+        "name": "drupal/sidr",
+        "version": "3.1.0",
+        "version_normalized": "3.1.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupalcode.org/project/sidr.git",
+            "reference": "8.x-3.1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/sidr-8.x-3.1.zip",
+            "reference": "8.x-3.1",
+            "shasum": "b0388a14a1e12bc5e886368ddc3a44714af5235c"
+        },
+        "require": {
+            "drupal/core": "^8.8 || ^9",
+            "npm-asset/sidr": "2.2.1"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "drupal": {
+                "version": "8.x-3.1",
+                "datestamp": "1593614001",
+                "security-coverage": {
+                    "status": "covered",
+                    "message": "Covered by Drupal's security advisory policy"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0+"
+        ],
+        "authors": [
+            {
+                "name": "Jigar Mehta (jigarius)",
+                "homepage": "https://jigarius.com/",
+                "role": "Maintainer"
+            }
+        ],
+        "description": "Sidr integration for Drupal for responsive menus and more.",
+        "homepage": "https://www.drupal.org/project/sidr",
+        "keywords": [
+            "Drupal",
+            "Menus",
+            "Responsive",
+            "Sidr"
+        ],
+        "support": {
+            "source": "http://cgit.drupalcode.org/sidr",
+            "issues": "https://www.drupal.org/project/issues/sidr"
+        }
+    },
+    {
         "name": "drupal/sophron",
         "version": "1.0.0",
         "version_normalized": "1.0.0.0",
@@ -4837,6 +5017,68 @@
         "homepage": "http://drupal.org/project/upgrade_status",
         "support": {
             "source": "https://git.drupalcode.org/project/upgrade_status"
+        }
+    },
+    {
+        "name": "drupal/views_bootstrap",
+        "version": "4.3.0",
+        "version_normalized": "4.3.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupalcode.org/project/views_bootstrap.git",
+            "reference": "8.x-4.3"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/views_bootstrap-8.x-4.3.zip",
+            "reference": "8.x-4.3",
+            "shasum": "8eebf7b7e95e9a56cce96c4ae11944c5d5852b46"
+        },
+        "require": {
+            "drupal/core": "^8 || ^9"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "drupal": {
+                "version": "8.x-4.3",
+                "datestamp": "1590086605",
+                "security-coverage": {
+                    "status": "covered",
+                    "message": "Covered by Drupal's security advisory policy"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "aburrows",
+                "homepage": "https://www.drupal.org/user/577844"
+            },
+            {
+                "name": "ericpugh",
+                "homepage": "https://www.drupal.org/user/130084"
+            },
+            {
+                "name": "ikeigenwijs",
+                "homepage": "https://www.drupal.org/user/583238"
+            },
+            {
+                "name": "mrded",
+                "homepage": "https://www.drupal.org/user/556088"
+            },
+            {
+                "name": "shelane",
+                "homepage": "https://www.drupal.org/user/2674989"
+            }
+        ],
+        "description": "Allows for different styles to be used in views to work with Bootstrap 4 components.",
+        "homepage": "https://www.drupal.org/project/views_bootstrap",
+        "support": {
+            "source": "https://git.drupalcode.org/project/views_bootstrap"
         }
     },
     {
@@ -6771,6 +7013,37 @@
         "keywords": [
             "parser",
             "php"
+        ]
+    },
+    {
+        "name": "npm-asset/jquery",
+        "version": "3.5.1",
+        "version_normalized": "3.5.1.0",
+        "dist": {
+            "type": "tar",
+            "url": "https://registry.npmjs.org/jquery/-/jquery-3.5.1.tgz"
+        },
+        "type": "npm-asset",
+        "installation-source": "dist",
+        "license": [
+            "MIT"
+        ]
+    },
+    {
+        "name": "npm-asset/sidr",
+        "version": "2.2.1",
+        "version_normalized": "2.2.1.0",
+        "dist": {
+            "type": "tar",
+            "url": "https://registry.npmjs.org/sidr/-/sidr-2.2.1.tgz"
+        },
+        "require": {
+            "npm-asset/jquery": ">=1.4.3"
+        },
+        "type": "npm-asset",
+        "installation-source": "dist",
+        "license": [
+            "MIT"
         ]
     },
     {

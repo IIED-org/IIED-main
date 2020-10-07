@@ -1,0 +1,7 @@
+sidr.settings:
+  path: '/admin/config/user-interface/sidr'
+  defaults:
+    _form: '\Drupal\sidr\Form\SettingsForm'
+    _title: 'Sidr settings'
+  requirements:
+    _permission: 'administer site configuration'

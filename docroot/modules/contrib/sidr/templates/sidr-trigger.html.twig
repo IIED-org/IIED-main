@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a Sidr Trigger.
+ *
+ * Available variables:
+ * - configuration: Block configuration.
+ * - options: Sidr options (derived from configuration).
+ * - attributes: Attributes for the Sidr trigger.
+ * - trigger_icon: Markup for the trigger's icon (if any).
+ * - trigger_text: Markup for the trigger's text (if any).
+ *
+ * @see template_preprocess_sidr_trigger()
+ *
+ * @ingroup themeable
+ */
+#}
+<button {{ attributes }}>
+    {% if trigger_icon %}<span class="sidr-trigger__icon">{{ trigger_icon }}</span>{% endif %}
+    {% if trigger_text %}<span class="sidr-trigger__text">{{ trigger_text }}</span>{% endif %}
+</button>

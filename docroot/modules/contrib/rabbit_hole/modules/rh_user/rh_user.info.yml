@@ -1,0 +1,13 @@
+name: Rabbit Hole users
+type: module
+description: Adds Rabbit Hole functionality for users.
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - rabbit_hole:rabbit_hole
+  - drupal:user
+
+# Information added by Drupal.org packaging script on 2020-06-09
+version: '8.x-1.0-beta7'
+project: 'rabbit_hole'
+datestamp: 1591667438

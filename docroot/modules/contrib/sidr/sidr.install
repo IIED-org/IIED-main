@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * @file
+ * Install and uninstall hooks for the sidr module.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function sidr_requirements($phase) {
+  if ($phase != 'runtime') {
+    return [];
+  }
+
+  // Sidr libraries must be installed.
+  $library = \Drupal::service('library.discovery')->getLibraryByName('sidr', 'sidr');
+  $library_exists = file_exists(DRUPAL_ROOT . '/' . $library['js'][0]['data']);
+
+  return [
+    'sidr_library_downloaded' => [
+      'title' => t('Sidr library'),
+      'value' => $library_exists ? t('Installed') : t('Not installed'),
+      'description' => $library_exists ? '' : t('The <a href=":download-url">Sidr library</a> needs to be installed at %destination. See the module\'s <a href=":readme-url">README</a> for more instructions.', [
+        ':download-url' => 'https://github.com/artberri/sidr/archive/v2.2.1.zip',
+        '%destination' => DRUPAL_ROOT . '/libraries/sidr',
+        ':readme-url' => 'https://git.drupalcode.org/project/sidr#installation',
+      ]),
+      'severity' => $library_exists ? REQUIREMENT_OK : REQUIREMENT_ERROR,
+    ],
+  ];
+}
+
+/**
+ * Install default configuration for auto-close settings.
+ */
+function sidr_update_8001() {
+  \Drupal::configFactory()
+    ->getEditable('sidr.settings')
+    ->set('close_on_blur', TRUE)
+    ->set('close_on_escape', TRUE)
+    ->save();
+}
