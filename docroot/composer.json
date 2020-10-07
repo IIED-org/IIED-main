@@ -8,12 +8,16 @@
         "docs": "https://www.drupal.org/docs/user_guide/en/index.html",
         "chat": "https://www.drupal.org/node/314178"
     },
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8"
-        }
-    ],
+    "repositories": {
+      "drupal": {
+      "type": "composer",
+      "url": "https://packages.drupal.org/8"
+      },
+      "asset-packagist": {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+      }
+    },
     "require": {
         "composer/installers": "^1.2",
         "cweagans/composer-patches": "^1.6",
@@ -21,6 +25,7 @@
         "drupal/acquia_search_solr": "^1.0",
         "drupal/address": "^1.8",
         "drupal/admin_toolbar": "^2.3",
+        "drupal/bootstrap_layouts": "^5.2",
         "drupal/computed_field": "^2.0",
         "drupal/core-composer-scaffold": "^8.8",
         "drupal/core-recommended": "^8.8",
@@ -38,10 +43,13 @@
         "drupal/pathauto": "^1.8",
         "drupal/pdfpreview": "^1.0",
         "drupal/publishcontent": "^1.2",
+        "drupal/rabbit_hole": "^1.0@beta",
         "drupal/radix": "4.x-dev",
         "drupal/redirect": "^1.6",
         "drupal/serial": "^1.0@alpha",
+        "drupal/sidr": "^3.1",
         "drupal/upgrade_status": "^2.0",
+        "drupal/views_bootstrap": "^4.3",
         "drush/drush": "^10.3"
     },
     "require-dev": {

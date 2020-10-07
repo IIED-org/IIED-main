@@ -1,0 +1,54 @@
+sidr.settings:
+  type: config_object
+  label: 'Sidr settings'
+  mapping:
+    sidr_theme:
+      type: string
+      label: 'Sidr theme'
+    close_on_escape:
+      type: boolean
+      label: 'Close on Escape'
+    close_on_blur:
+      type: boolean
+      label: 'Close on blur'
+
+sidr_trigger_block:
+  type: block_settings
+  label: 'Sidr trigger block'
+  mapping:
+    trigger_text:
+      type: label
+      label: 'Trigger text'
+    trigger_icon:
+      type: string
+      label: 'Trigger icon'
+    sidr_name:
+      type: string
+      label: 'Unique ID'
+    sidr_source:
+      type: string
+      label: 'Source'
+    sidr_side:
+      type: string
+      label: 'Location'
+    sidr_renaming:
+      type: boolean
+      label: 'Rename elements'
+    sidr_speed:
+      type: string
+      label: 'Animation speed'
+    sidr_timing:
+      type: string
+      label: 'Animation timing function'
+    sidr_method:
+      type: string
+      label: 'Trigger action'
+    sidr_displace:
+      type: boolean
+      label: 'Displace content'
+    sidr_body:
+      type: string
+      label: 'Element to displace'
+
+block.settings.sidr_trigger:
+  type: sidr_trigger_block

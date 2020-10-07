@@ -1,0 +1,43 @@
+behaviors:
+  css:
+    base:
+      sidr.css: {}
+  js:
+    sidr.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/jquery.once
+    - sidr/sidr
+
+sidr:
+  remote: https://www.berriart.com/sidr/
+  version: 2.2.x
+  license:
+    url: https://github.com/artberri/sidr/blob/master/LICENSE
+    gpl-compatible: true
+  js:
+    /libraries/sidr/dist/jquery.sidr.min.js: { minified: true }
+  dependencies:
+    - core/jquery
+
+sidr.bare:
+  css:
+    base:
+      /libraries/sidr/dist/stylesheets/jquery.sidr.bare.css: {}
+  dependencies:
+    - sidr/sidr
+
+sidr.dark:
+  css:
+    base:
+      /libraries/sidr/dist/stylesheets/jquery.sidr.dark.min.css: { minified: true }
+  dependencies:
+    - sidr/sidr
+
+sidr.light:
+  css:
+    base:
+      /libraries/sidr/dist/stylesheets/jquery.sidr.light.min.css: { minified: true }
+  dependencies:
+    - sidr/sidr

@@ -1,0 +1,18 @@
+/* Don't put Sidr too high in the z-index */
+.sidr {
+  z-index: 999 !important;
+}
+
+/* Basic styles for the Sidr trigger */
+.sidr-trigger {
+  cursor: pointer;
+  display: inline-block;
+}
+.sidr-trigger.has-icon.has-text .sidr-trigger__icon {
+  margin-right: .25em;
+}
+
+/* Hide contextual menus within the Sidr */
+.sidr div.contextual {
+  display: none;
+}
