@@ -37,6 +37,40 @@ process:
       - constants/SOURCE_DOMAIN
       - '@_product_code'
       - constants/PDF_SUFFIX
+  field_document_type:
+    plugin: skip_on_value
+    method: row
+    source: DocType
+    value:
+      - 35
+      - 99
+
+  langcode:
+    -
+      plugin: substr
+      source: Language
+      start: 1
+      length: 3
+    -
+      plugin: static_map
+      map:
+        ara: ar
+        bam: bm
+        bur: my
+        cro: hr
+        eng: en
+        fra: fr
+        ind: id
+        pol: pl
+        por: 'pt-pt'
+        rus: ru
+        sin: si
+        som: so
+        spa: es
+        swa: sw
+        tel: te
+        vie: vi
+        zho: 'zh-hant'
 
   field_media_document:
     plugin: file_import

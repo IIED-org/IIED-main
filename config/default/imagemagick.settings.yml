@@ -1,6 +1,6 @@
 quality: 85
 binaries: imagemagick
-path_to_binaries: /usr/local/bin/
+path_to_binaries: /usr/bin/
 prepend: ''
 log_warnings: true
 debug: false
@@ -36,7 +36,7 @@ image_formats:
     enabled: false
   PDF:
     mime_type: application/pdf
-    enabled: true
+    enabled: false
   BMP:
     mime_type: image/x-ms-bmp
     enabled: false

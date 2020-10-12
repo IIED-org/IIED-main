@@ -6,11 +6,9 @@ dependencies:
     - field.field.media.document.field_media_document
     - field.field.media.document.field_pdf_pages
     - field.field.media.document.field_size
-    - image.style.media_library
     - media.type.document
   module:
     - file
-    - image
 _core:
   default_config_hash: DXitcriWmE5QHvGvk2OzWouaSnXD5uipkRdAG6_pnkg
 id: media.document.default
@@ -19,11 +17,12 @@ bundle: document
 mode: default
 content:
   field_media_document:
-    label: visually_hidden
-    settings: {  }
+    weight: 4
+    label: above
+    settings:
+      use_description_as_link_text: true
     third_party_settings: {  }
-    type: file_url_plain
-    weight: 0
+    type: file_default
     region: content
   field_pdf_pages:
     weight: 2
@@ -43,18 +42,10 @@ content:
     third_party_settings: {  }
     type: number_integer
     region: content
-  thumbnail:
-    type: image
-    weight: 1
-    region: content
-    label: hidden
-    settings:
-      image_style: media_library
-      image_link: content
-    third_party_settings: {  }
 hidden:
   created: true
   langcode: true
   name: true
   search_api_excerpt: true
+  thumbnail: true
   uid: true
