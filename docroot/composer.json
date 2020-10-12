@@ -30,6 +30,7 @@
         "drupal/core-composer-scaffold": "^8.8",
         "drupal/core-recommended": "^8.8",
         "drupal/core-vendor-hardening": "^8.8",
+        "drupal/delete_all": "^2.0",
         "drupal/dropdown_language": "^2.6",
         "drupal/facets": "^1.5",
         "drupal/field_group": "^3.1",

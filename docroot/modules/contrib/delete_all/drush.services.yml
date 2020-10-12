@@ -1,0 +1,6 @@
+services:
+  delete_all.commands:
+    class: \Drupal\delete_all\Commands\DeleteAllCommands
+    tags:
+      - { name: drush.command }
+    arguments: ['@entity_type.manager', '@entity_type.bundle.info']

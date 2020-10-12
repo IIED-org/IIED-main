@@ -1,0 +1,11 @@
+type: module
+name: Delete content and users
+description: 'Allows deletion of all nodes, comments and users on a site. Useful for development or prior to launching a site.'
+package: Development
+core_version_requirement: ^8 || ^9
+core: 8.x
+
+# Information added by Drupal.org packaging script on 2020-06-28
+version: '2.0.0'
+project: 'delete_all'
+datestamp: 1593336397

@@ -1,0 +1,15 @@
+delete_all.delete_content:
+  path: '/admin/content/delete_content'
+  defaults:
+    _form: '\Drupal\delete_all\Form\ContentDelete'
+    _title: 'Delete all content'
+  requirements:
+    _permission: 'administer nodes'
+
+delete_all.delete_people:
+  path: '/admin/people/delete_people'
+  defaults:
+    _form: '\Drupal\delete_all\Form\PeopleDelete'
+    _title: 'Delete All People'
+  requirements:
+    _permission: 'administer users'

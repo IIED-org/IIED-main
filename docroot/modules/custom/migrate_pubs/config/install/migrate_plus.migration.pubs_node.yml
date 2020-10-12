@@ -146,10 +146,15 @@ process:
       - constants/DAY_OF_MONTH
 
   field_date_published:
-    plugin: format_date
-    source: '@_field_date_published'
-    from_format: 'Ymd'
-    to_format: 'Y-m-d'
+    -
+      plugin: skip_on_value
+      source: '@_field_date_published'
+      method: process
+      value: '001'
+    -
+      plugin: format_date
+      from_format: 'Ymd'
+      to_format: 'Y-m-d'
 
   field_isbn: ISBN13
 

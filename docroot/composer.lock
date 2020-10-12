@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "30ef81335a069e3f09b34432e6d87107",
+    "content-hash": "a0dd035cfdbbff3453a0461b279ac46c",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2719,6 +2719,85 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/ctools",
                 "issues": "https://www.drupal.org/project/issues/ctools"
+            }
+        },
+        {
+            "name": "drupal/delete_all",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/delete_all.git",
+                "reference": "2.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/delete_all-2.0.0.zip",
+                "reference": "2.0.0",
+                "shasum": "dda46b576a45158906243668e3b386a788f9bf73"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9",
+                "php": ">=5.6.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.0",
+                    "datestamp": "1593336394",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^9"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Author name",
+                    "homepage": "https://www.drupal.org/user/3196009",
+                    "email": "author@example.com"
+                },
+                {
+                    "name": "coderintherye",
+                    "homepage": "https://www.drupal.org/user/297478"
+                },
+                {
+                    "name": "danylevskyi",
+                    "homepage": "https://www.drupal.org/user/322039"
+                },
+                {
+                    "name": "dipakmdhrm",
+                    "homepage": "https://www.drupal.org/user/1687410"
+                },
+                {
+                    "name": "douggreen",
+                    "homepage": "https://www.drupal.org/user/29191"
+                },
+                {
+                    "name": "kbahey",
+                    "homepage": "https://www.drupal.org/user/4063"
+                },
+                {
+                    "name": "realityloop",
+                    "homepage": "https://www.drupal.org/user/139189"
+                },
+                {
+                    "name": "wafaa",
+                    "homepage": "https://www.drupal.org/user/50133"
+                }
+            ],
+            "description": "This extension provides new commands for Drush.",
+            "homepage": "https://www.drupal.org/project/delete_all",
+            "support": {
+                "source": "https://git.drupalcode.org/project/delete_all"
             }
         },
         {

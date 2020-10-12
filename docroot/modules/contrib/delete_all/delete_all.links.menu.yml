@@ -1,0 +1,12 @@
+delete_all.content:
+  title: 'Batch Delete Content'
+  description: 'Batch delete of Content with option to select content type.'
+  parent: system.admin_config_development
+  route_name: delete_all.delete_content
+  weight:   100
+delete_all.people:
+  title: 'Batch Delete Account'
+  description: 'Batch delete of account.'
+  parent: system.admin_config_development
+  route_name: delete_all.delete_people
+  weight:   101
