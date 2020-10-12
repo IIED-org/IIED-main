@@ -1,0 +1,13 @@
+name: Media Thumbnails PDF
+type: module
+description: Generate custom thumbnails for pdf media entities
+core: 8.x
+core_version_requirement: ^8 || ^9
+package: Media
+dependencies:
+  - media_thumbnails:media_thumbnails
+
+# Information added by Drupal.org packaging script on 2020-06-11
+version: '8.x-1.0-alpha3'
+project: 'media_thumbnails_pdf'
+datestamp: 1591871377

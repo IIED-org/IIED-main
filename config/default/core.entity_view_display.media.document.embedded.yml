@@ -7,11 +7,12 @@ dependencies:
     - field.field.media.document.field_media_document
     - field.field.media.document.field_pdf_pages
     - field.field.media.document.field_size
-    - image.style.thumbnail
+    - image.style.media_library
     - media.type.document
   module:
+    - file
+    - image
     - layout_builder
-    - pdfpreview
 third_party_settings:
   layout_builder:
     allow_custom: false
@@ -24,19 +25,15 @@ bundle: document
 mode: embedded
 content:
   field_media_document:
-    label: hidden
+    weight: 3
+    label: above
     settings:
-      image_style: thumbnail
-      image_link: file
-      tag: div
-      fallback_formatter: file_default
-      show_description: 0
+      use_description_as_link_text: true
     third_party_settings: {  }
-    type: pdfpreview
-    weight: 1
+    type: file_default
     region: content
   field_pdf_pages:
-    weight: 2
+    weight: 0
     label: above
     settings:
       thousand_separator: ''
@@ -45,7 +42,7 @@ content:
     type: number_integer
     region: content
   field_size:
-    weight: 3
+    weight: 1
     label: above
     settings:
       thousand_separator: ''
@@ -53,10 +50,18 @@ content:
     third_party_settings: {  }
     type: number_integer
     region: content
+  thumbnail:
+    type: image
+    weight: 2
+    region: content
+    label: above
+    settings:
+      image_style: media_library
+      image_link: file
+    third_party_settings: {  }
 hidden:
   created: true
   langcode: true
   name: true
   search_api_excerpt: true
-  thumbnail: true
   uid: true

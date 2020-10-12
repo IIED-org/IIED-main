@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * @file
+ * Plugin manager for media entity thumbnail generation.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\media\MediaInterface;
+
+/**
+ * Implements hook_help().
+ */
+function media_thumbnails_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.media_thumbnails':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('The Media Thumbnails module provides a plugin manager for thumbnail generation.') . '</p>';
+      $output .= '<p>' . t('You need to install and enable at least one media thumbnail plugin.') . '</p>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function media_thumbnails_media_presave(MediaInterface $entity) {
+  /** @var \Drupal\media_thumbnails\Plugin\MediaThumbnailManager $manager */
+  $manager = \Drupal::service('plugin.manager.media_thumbnail');
+  if ($manager->hasPlugin($entity)) {
+    if ($entity->isNew()) {
+      $manager->createThumbnail($entity);
+    }
+    elseif(\Drupal::config('media_thumbnails.settings')->get('update_thumbnail')) {
+      $manager->updateThumbnail($entity);
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function media_thumbnails_media_delete(MediaInterface $entity) {
+  /** @var \Drupal\media_thumbnails\Plugin\MediaThumbnailManager $manager */
+  $manager = \Drupal::service('plugin.manager.media_thumbnail');
+  if ($manager->hasPlugin($entity)) {
+    $manager->deleteThumbnail($entity);
+  }
+}

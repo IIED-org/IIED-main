@@ -187,9 +187,9 @@ process:
       migration: pubs_pdfs
       source: '@_product_code'
     -
-      plugin: default_value
-      source: '@lookup'
-      default_value: 0
+      plugin: skip_on_empty
+      method: process
+      message: 'No media entity found'
 destination:
   plugin: 'entity:node'
 migration_dependencies:

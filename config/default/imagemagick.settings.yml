@@ -36,7 +36,7 @@ image_formats:
     enabled: false
   PDF:
     mime_type: application/pdf
-    enabled: false
+    enabled: true
   BMP:
     mime_type: image/x-ms-bmp
     enabled: false

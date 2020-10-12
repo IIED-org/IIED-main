@@ -1,6 +1,6 @@
 uuid: d81e73e7-7b46-4fb5-99cf-1852b37b2ab5
 langcode: en
-status: true
+status: false
 dependencies:
   module:
     - acquia_search_solr
@@ -9,8 +9,8 @@ dependencies:
     - search_api
     - taxonomy
   config:
-    - field.storage.node.field_author_s_
     - field.storage.node.body
+    - field.storage.node.field_author_s_
     - field.storage.node.field_document_type
     - field.storage.node.field_theme_s_
     - search_api.server.acquia_search_solr_search_api_solr_server
