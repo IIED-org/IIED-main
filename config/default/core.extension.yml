@@ -21,6 +21,7 @@ module:
   ctools: 0
   datetime: 0
   dblog: 0
+  delete_all: 0
   devel: 0
   devel_generate: 0
   dropdown_language: 0

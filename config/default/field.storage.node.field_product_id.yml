@@ -1,4 +1,4 @@
-uuid: 6646d186-8718-46d4-941e-6879fac2f325
+uuid: 6a640876-36a8-4291-a8b3-32e76e4d0040
 langcode: en
 status: true
 dependencies:
@@ -11,7 +11,7 @@ entity_type: node
 type: serial
 settings:
   start_value: 20001
-  init_existing_entities: 1
+  init_existing_entities: 0
 module: serial
 locked: false
 cardinality: 1

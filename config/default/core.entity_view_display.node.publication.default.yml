@@ -94,21 +94,6 @@ third_party_settings:
                 third_party_settings: {  }
             additional: {  }
             weight: 1
-          46ee8de8-c30f-4e6a-a6fd-2ab7a73a7fc2:
-            uuid: 46ee8de8-c30f-4e6a-a6fd-2ab7a73a7fc2
-            region: content
-            configuration:
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              id: 'field_block:node:publication:field_product_id'
-              formatter:
-                label: above
-                settings: {  }
-                third_party_settings: {  }
-                type: serial_default_formatter
-            additional: {  }
-            weight: 2
           4cf8a500-a575-41f9-8629-85ed933891d2:
             uuid: 4cf8a500-a575-41f9-8629-85ed933891d2
             region: content
@@ -716,6 +701,21 @@ third_party_settings:
                 type: entity_reference_label
             additional: {  }
             weight: 40
+          80189545-fe97-4a19-a3d8-b2d0e08de3f8:
+            uuid: 80189545-fe97-4a19-a3d8-b2d0e08de3f8
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:publication:field_product_id'
+              formatter:
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+                type: serial_default_formatter
+            additional: {  }
+            weight: 41
         third_party_settings: {  }
     allow_custom: false
 id: node.publication.default
@@ -887,7 +887,7 @@ content:
     type: string
     region: content
   field_product_id:
-    weight: 2
+    weight: 42
     label: above
     settings: {  }
     third_party_settings: {  }

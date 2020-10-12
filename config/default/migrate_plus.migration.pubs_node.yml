@@ -40,7 +40,7 @@ process:
   field_reportfin1: ReportFin1
   field_reportagency1: ReportAgency1
   field_reportfin2: ReportFin2
-  field_reportagency2: ReportAgency2
+  field_reportagency2: ReportAgency3
   field_reportfin3: ReportFin3
   title: Title
   field_short_title: ShortTitle
@@ -79,7 +79,9 @@ process:
       plugin: skip_on_value
       method: row
       source: DocType
-      value: 99
+      value:
+        - 35
+        - 99
     -
       plugin: entity_lookup
       source: DocType
@@ -136,10 +138,15 @@ process:
       - '@_field_month_published'
       - constants/DAY_OF_MONTH
   field_date_published:
-    plugin: format_date
-    source: '@_field_date_published'
-    from_format: Ymd
-    to_format: Y-m-d
+    -
+      plugin: skip_on_value
+      source: '@_field_date_published'
+      method: process
+      value: '001'
+    -
+      plugin: format_date
+      from_format: Ymd
+      to_format: Y-m-d
   field_isbn: ISBN13
   field_issn: ISSN
   field_series:
@@ -182,14 +189,9 @@ process:
   field_iied_url/uri: LinkIIEDURL
   field_external_url/uri: LinkMoreURL
   field_media:
-    -
-      plugin: migration_lookup
-      migration: pubs_pdfs
-      source: '@_product_code'
-    -
-      plugin: default_value
-      source: '@lookup'
-      default_value: 0
+    plugin: migration_lookup
+    migration: pubs_pdfs
+    source: '@_product_code'
 destination:
   plugin: 'entity:node'
 migration_dependencies:

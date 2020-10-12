@@ -1,4 +1,4 @@
-uuid: 44d8262e-8773-4413-be87-d362f7506616
+uuid: b21a2131-0878-402c-a42b-79875be7d691
 langcode: en
 status: true
 dependencies:
@@ -14,7 +14,7 @@ bundle: publication
 label: 'Product ID'
 description: ''
 required: false
-translatable: true
+translatable: false
 default_value:
   -
     value: 1

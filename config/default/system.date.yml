@@ -1,6 +1,6 @@
 country:
   default: GB
-first_day: 0
+first_day: 1
 timezone:
   default: UTC
   user:

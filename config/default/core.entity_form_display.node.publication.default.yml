@@ -219,7 +219,7 @@ content:
     type: string_textfield
     region: content
   field_product_id:
-    weight: 1
+    weight: 49
     settings: {  }
     third_party_settings: {  }
     type: serial_default_widget
