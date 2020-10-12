@@ -78,7 +78,9 @@ process:
       plugin: skip_on_value
       method: row
       source: DocType
-      value: 99
+      value:
+        - 35
+        - 99
     -
       plugin: entity_lookup
       source: DocType

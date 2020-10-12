@@ -47,7 +47,8 @@ module:
   link: 0
   media: 0
   media_library: 0
-  media_pdf_thumbnail: 0
+  media_thumbnails: 0
+  media_thumbnails_pdf: 0
   menu_link_content: 0
   menu_ui: 0
   merge_translations: 0
@@ -65,7 +66,6 @@ module:
   page_cache: 0
   path: 0
   path_alias: 0
-  pdfpreview: 0
   quickedit: 0
   rdf: 0
   redirect: 0

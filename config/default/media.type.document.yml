@@ -8,7 +8,7 @@ id: document
 label: Document
 description: 'An uploaded file or document (PDF).'
 source: file
-queue_thumbnail_downloads: false
+queue_thumbnail_downloads: true
 new_revision: true
 source_configuration:
   source_field: field_media_document
