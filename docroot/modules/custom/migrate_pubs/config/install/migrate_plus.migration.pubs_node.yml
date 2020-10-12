@@ -203,14 +203,9 @@ process:
   'field_external_url/uri': LinkMoreURL
 
   field_media:
-    -
-      plugin: migration_lookup
-      migration: pubs_pdfs
-      source: '@_product_code'
-    -
-      plugin: default_value
-      source: '@lookup'
-      default_value: 0
+    plugin: migration_lookup
+    migration: pubs_pdfs
+    source: '@_product_code'
 
 # # PDF file import via https from source directory
 #   _field_pdf_path:
