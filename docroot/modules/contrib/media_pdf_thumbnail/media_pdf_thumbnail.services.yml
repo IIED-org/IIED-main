@@ -1,0 +1,7 @@
+services:
+  media_pdf_thumbnail.image.manager:
+    class: Drupal\media_pdf_thumbnail\Manager\MediaPdfThumbnailImageManager
+    arguments: ['@media_pdf_thumbnail.imagick.manager', '@entity_type.manager', '@file_system', '@config.factory', '@state']
+  media_pdf_thumbnail.imagick.manager:
+    class: Drupal\media_pdf_thumbnail\Manager\MediaPdfThumbnailImagickManager
+    arguments: ['@logger.factory']

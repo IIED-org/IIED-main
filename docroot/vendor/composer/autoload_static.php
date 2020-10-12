@@ -105,6 +105,7 @@ class ComposerStaticInit7376e166806aa5d664ccbd35d60d770b
             'Symfony\\Component\\ClassLoader\\' => 30,
             'Symfony\\Cmf\\Component\\Routing\\' => 30,
             'Symfony\\Bridge\\PsrHttpMessage\\' => 30,
+            'Spatie\\PdfToImage\\' => 18,
             'Solarium\\' => 9,
             'Shapefile\\' => 10,
             'SelfUpdate\\' => 11,
@@ -360,6 +361,10 @@ class ComposerStaticInit7376e166806aa5d664ccbd35d60d770b
         'Symfony\\Bridge\\PsrHttpMessage\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/psr-http-message-bridge',
+        ),
+        'Spatie\\PdfToImage\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/spatie/pdf-to-image/src',
         ),
         'Solarium\\' => 
         array (

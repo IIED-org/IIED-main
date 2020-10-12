@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @file
+ * Contains media_pdf_thumbnail.module.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ *
+ * @inheritdoc
+ */
+function media_pdf_thumbnail_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the adimeo_pdf_thumbnail module.
+    case 'help.page.media_pdf_thumbnail':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Generate a thumbnail image from a pdf file in media entity') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function media_pdf_thumbnail_media_presave(EntityInterface $entity) {
+  Drupal::service('media_pdf_thumbnail.image.manager')->createThumbnail($entity);
+}
+
+/**
+ * Implements hook_file_download().
+ */
+function media_pdf_thumbnail_file_download($uri) {
+  $files = Drupal::entityTypeManager()->getStorage('file')->loadByProperties(['uri' => $uri]);
+  if (!empty($files)) {
+    if (Drupal::service('media_pdf_thumbnail.image.manager')->isUsedAsPdfThumbnail($files) && Drupal::currentUser()->isAuthenticated()) {
+      return file_get_content_headers(reset($files));
+    }
+  }
+}

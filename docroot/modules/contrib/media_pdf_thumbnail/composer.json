@@ -1,0 +1,17 @@
+{
+  "name": "drupal/media_pdf_thumbnail",
+  "type": "drupal-module",
+  "description": "Media PDF Thumbnail",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/media_pdf_thumbnail",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "http://drupal.org/project/issues/media_pdf_thumbnail",
+    "source": "http://cgit.drupalcode.org/media_pdf_thumbnail"
+  },
+  "require": {
+    "ext-imagick": "*",
+    "spatie/pdf-to-image": "*"
+  }
+}

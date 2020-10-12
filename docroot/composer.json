@@ -35,6 +35,7 @@
         "drupal/field_group": "^3.1",
         "drupal/geolocation": "^3.2",
         "drupal/isbn": "^1.2",
+        "drupal/media_pdf_thumbnail": "^3.6",
         "drupal/media_thumbnails_pdf": "^1.0",
         "drupal/merge_translations": "^1.1",
         "drupal/migrate_file": "1.x-dev",
