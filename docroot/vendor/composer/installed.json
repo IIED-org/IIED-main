@@ -2569,6 +2569,9 @@
                     "[web-root]/profiles/README.txt": "assets/scaffold/files/profiles.README.txt",
                     "[web-root]/themes/README.txt": "assets/scaffold/files/themes.README.txt"
                 }
+            },
+            "patches_applied": {
+                "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2020-09-03/3007424-108.patch"
             }
         },
         "installation-source": "dist",
@@ -2765,6 +2768,58 @@
         "keywords": [
             "drupal"
         ]
+    },
+    {
+        "name": "drupal/csv_serialization",
+        "version": "2.0.0-beta3",
+        "version_normalized": "2.0.0.0-beta3",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupalcode.org/project/csv_serialization.git",
+            "reference": "8.x-2.0-beta3"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/csv_serialization-8.x-2.0-beta3.zip",
+            "reference": "8.x-2.0-beta3",
+            "shasum": "b22f8a11c87cbaa16dab61da5c1cf0a6af48a024"
+        },
+        "require": {
+            "drupal/core": "^8 || ^9",
+            "league/csv": "^9.1"
+        },
+        "require-dev": {
+            "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
+            "drupal/coder": "^8.3"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "drupal": {
+                "version": "8.x-2.0-beta3",
+                "datestamp": "1595876761",
+                "security-coverage": {
+                    "status": "not-covered",
+                    "message": "Beta releases are not covered by Drupal security advisories."
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "Matthew Grasmick",
+                "homepage": "https://www.drupal.org/user/455714"
+            }
+        ],
+        "description": "Provides CSV as a serialization format.",
+        "homepage": "https://www.drupal.org/project/csv_serialization",
+        "support": {
+            "source": "http://cgit.drupalcode.org/csv_serialization",
+            "issues": "https://www.drupal.org/project/issues/csv_serialization"
+        }
     },
     {
         "name": "drupal/ctools",
@@ -3691,6 +3746,56 @@
         "support": {
             "source": "http://cgit.drupalcode.org/media_pdf_thumbnail",
             "issues": "http://drupal.org/project/issues/media_pdf_thumbnail"
+        }
+    },
+    {
+        "name": "drupal/media_revisions_ui",
+        "version": "2.0.0",
+        "version_normalized": "2.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupalcode.org/project/media_revisions_ui.git",
+            "reference": "2.0.0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/media_revisions_ui-2.0.0.zip",
+            "reference": "2.0.0",
+            "shasum": "3705d7291486ada1c8384c2eefa2219c7d2fdc49"
+        },
+        "require": {
+            "drupal/core": "^8 || ^9"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "drupal": {
+                "version": "2.0.0",
+                "datestamp": "1594109933",
+                "security-coverage": {
+                    "status": "covered",
+                    "message": "Covered by Drupal's security advisory policy"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0+"
+        ],
+        "authors": [
+            {
+                "name": "benjamincizej",
+                "homepage": "https://www.drupal.org/user/3612191"
+            }
+        ],
+        "description": "Adds admin interface to handle media revisions.",
+        "homepage": "https://www.drupal.org/project/media_revisions_ui",
+        "keywords": [
+            "Drupal"
+        ],
+        "support": {
+            "source": "https://git.drupalcode.org/project/media_revisions_ui",
+            "issues": "https://www.drupal.org/project/issues/media_revisions_ui"
         }
     },
     {
@@ -5279,6 +5384,152 @@
         "homepage": "https://www.drupal.org/project/views_bootstrap",
         "support": {
             "source": "https://git.drupalcode.org/project/views_bootstrap"
+        }
+    },
+    {
+        "name": "drupal/views_bulk_operations",
+        "version": "3.9.0",
+        "version_normalized": "3.9.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupalcode.org/project/views_bulk_operations.git",
+            "reference": "8.x-3.9"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/views_bulk_operations-8.x-3.9.zip",
+            "reference": "8.x-3.9",
+            "shasum": "d7f6e50c31d21ff32f21e8f4aaedb52f6dee2da8"
+        },
+        "require": {
+            "drupal/core": "^8.8 || ^9"
+        },
+        "require-dev": {
+            "drush/drush": "^10"
+        },
+        "suggest": {
+            "drush/drush": "^9 || ^10"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "drupal": {
+                "version": "8.x-3.9",
+                "datestamp": "1597319021",
+                "security-coverage": {
+                    "status": "covered",
+                    "message": "Covered by Drupal's security advisory policy"
+                }
+            },
+            "drush": {
+                "services": {
+                    "drush.services.yml": "^9 || ^10"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "Marcin Grabias",
+                "homepage": "https://www.drupal.org/u/graber"
+            },
+            {
+                "name": "Jon Pugh",
+                "homepage": "https://www.drupal.org/user/17028"
+            },
+            {
+                "name": "bojanz",
+                "homepage": "https://www.drupal.org/user/86106"
+            },
+            {
+                "name": "infojunkie",
+                "homepage": "https://www.drupal.org/user/48424"
+            },
+            {
+                "name": "joelpittet",
+                "homepage": "https://www.drupal.org/user/160302"
+            }
+        ],
+        "description": "Adds an ability to perform bulk operations on selected entities from view results. Provides an API to create such operations.",
+        "homepage": "https://www.drupal.org/project/views_bulk_operations",
+        "support": {
+            "source": "https://git.drupalcode.org/project/views_bulk_operations/-/tree/8.x-3.x",
+            "issues": "https://www.drupal.org/project/issues/views_bulk_operations?version=8.x",
+            "docs": "https://www.drupal.org/docs/8/modules/views-bulk-operations-vbo"
+        }
+    },
+    {
+        "name": "drupal/views_data_export",
+        "version": "1.0.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupalcode.org/project/views_data_export.git",
+            "reference": "8.x-1.0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/views_data_export-8.x-1.0.zip",
+            "reference": "8.x-1.0",
+            "shasum": "f1d16fd06ee7574f680e30f6bf5d6a152e3e9f42"
+        },
+        "require": {
+            "drupal/core": "^8.8 || ^9",
+            "drupal/csv_serialization": "~1.4 || ~2.0"
+        },
+        "require-dev": {
+            "drupal/search_api": "~1.12",
+            "drupal/xls_serialization": "~1.0"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "drupal": {
+                "version": "8.x-1.0",
+                "datestamp": "1592589996",
+                "security-coverage": {
+                    "status": "covered",
+                    "message": "Covered by Drupal's security advisory policy"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0+"
+        ],
+        "authors": [
+            {
+                "name": "Steven Jones",
+                "homepage": "https://www.drupal.org/user/99644"
+            },
+            {
+                "name": "amoebanath",
+                "homepage": "https://www.drupal.org/user/2810799"
+            },
+            {
+                "name": "james.williams",
+                "homepage": "https://www.drupal.org/user/592268"
+            },
+            {
+                "name": "jamsilver",
+                "homepage": "https://www.drupal.org/user/476732"
+            },
+            {
+                "name": "jhedstrom",
+                "homepage": "https://www.drupal.org/user/208732"
+            },
+            {
+                "name": "nerdstein",
+                "homepage": "https://www.drupal.org/user/1557710"
+            }
+        ],
+        "description": "Plugin to export views data into various file formats.",
+        "homepage": "https://www.drupal.org/project/views_data_export",
+        "support": {
+            "source": "https://git.drupalcode.org/project/views_data_export"
         }
     },
     {

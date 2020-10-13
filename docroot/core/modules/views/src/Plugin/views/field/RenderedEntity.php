@@ -146,17 +146,19 @@ class RenderedEntity extends FieldPluginBase implements CacheableDependencyInter
    * {@inheritdoc}
    */
   public function render(ResultRow $values) {
-    $entity = $this->getEntityTranslation($this->getEntity($values), $values);
-    $build = [];
-    if (isset($entity)) {
+    $entity = $this->getEntity($values);
+    if ($entity) {
+      $build = [];
+      $entity = $this->getEntityTranslation($entity, $values);
       $access = $entity->access('view', NULL, TRUE);
       $build['#access'] = $access;
       if ($access->isAllowed()) {
         $view_builder = $this->entityTypeManager->getViewBuilder($this->getEntityTypeId());
         $build += $view_builder->view($entity, $this->options['view_mode'], $entity->language()->getId());
       }
+      return $build;
     }
-    return $build;
+    return '';
   }
 
   /**
