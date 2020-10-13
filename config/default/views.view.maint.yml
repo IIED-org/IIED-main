@@ -5406,7 +5406,7 @@ display:
           group_type: group
           admin_label: ''
           label: Title
-          exclude: false
+          exclude: true
           alter:
             alter_text: true
             text: '{{ title }} [{{ edit_node }}]'
