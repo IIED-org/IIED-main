@@ -67,7 +67,7 @@ display:
         type: views_query
         options:
           disable_sql_rewrite: false
-          distinct: false
+          distinct: true
           replica: false
           query_comment: ''
           query_tags: {  }
@@ -107,7 +107,7 @@ display:
         options:
           grouping:
             -
-              field: field_product_code
+              field: title
               rendered: true
               rendered_strip: false
           row_class: ''
@@ -118,32 +118,15 @@ display:
           summary: ''
           description: ''
           columns:
-            field_product_code: field_product_code
-            field_date_published: field_date_published
-            edit_node: edit_node
+            edit_node_1: edit_node_1
             title: title
-            field_lit_code: field_lit_code
-            field_document_type: field_document_type
-            delete_taxonomy_term: delete_taxonomy_term
-            edit_taxonomy_term: edit_taxonomy_term
-            field_author_s_: field_author_s_
-            field_legacy_iscanonical: field_legacy_iscanonical
+            field_link: field_link
+            field_nid: field_nid
+            field_projectnumber: field_projectnumber
+            field_product_code: field_product_code
+            title_1: title_1
           info:
-            field_product_code:
-              sortable: true
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            field_date_published:
-              sortable: false
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            edit_node:
+            edit_node_1:
               sortable: false
               default_sort_order: asc
               align: ''
@@ -157,42 +140,33 @@ display:
               separator: ' | '
               empty_column: false
               responsive: ''
-            field_lit_code:
+            field_link:
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_nid:
               sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
-            field_document_type:
+            field_projectnumber:
               sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
-            delete_taxonomy_term:
-              sortable: false
+            field_product_code:
+              sortable: true
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
-            edit_taxonomy_term:
-              sortable: false
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            field_author_s_:
-              sortable: false
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            field_legacy_iscanonical:
+            title_1:
               sortable: false
               default_sort_order: asc
               align: ''
@@ -1045,7 +1019,20 @@ display:
             operator_list: {  }
       sorts: {  }
       title: Maint
-      header: {  }
+      header:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: true
+          tokenize: false
+          content:
+            value: "<h2>[view:title]</h2>\r\n<p>Page [view:current-page] of [view:page-count] ([view:total-rows] total rows)<p> "
+            format: full_html
+          plugin_id: text
       footer: {  }
       empty: {  }
       relationships:
@@ -2187,6 +2174,10 @@ display:
       defaults:
         fields: false
         pager: false
+        title: false
+        style: false
+        row: false
+        relationships: false
       pager:
         type: full
         options:
@@ -2223,6 +2214,128 @@ display:
         title: Maint
         description: ''
         weight: 0
+      title: Table
+      style:
+        type: table
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: true
+          override: true
+          sticky: false
+          caption: ''
+          summary: ''
+          description: ''
+          columns:
+            field_product_code: field_product_code
+            field_date_published: field_date_published
+            title: title
+            field_lit_code: field_lit_code
+            field_document_type: field_document_type
+            field_publisher_legacy: field_publisher_legacy
+            field_publisher: field_publisher
+            field_journal_ref: field_journal_ref
+            field_series: field_series
+            field_project: field_project
+            field_source_publication: field_source_publication
+            langcode: langcode
+            field_pdf_pages: field_pdf_pages
+          info:
+            field_product_code:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_date_published:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            title:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ' | '
+              empty_column: false
+              responsive: ''
+            field_lit_code:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_document_type:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_publisher_legacy:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_publisher:
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_journal_ref:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_series:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_project:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_source_publication:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            langcode:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_pdf_pages:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+          default: '-1'
+          empty_table: false
+      row:
+        type: fields
+        options: {  }
+      relationships: {  }
     cache_metadata:
       max-age: -1
       contexts:
@@ -2699,6 +2812,9 @@ display:
         filter_groups: false
         relationships: false
         sorts: false
+        style: false
+        row: false
+        title: false
       filters:
         status:
           value: '1'
@@ -2818,7 +2934,7 @@ display:
         description: ''
         expanded: false
         parent: admin_toolbar_tools.help
-        weight: 0
+        weight: 1
         context: '0'
         menu_name: admin
       relationships:
@@ -2833,6 +2949,83 @@ display:
           entity_type: node
           plugin_id: entity_reverse
       sorts: {  }
+      style:
+        type: table
+        options:
+          grouping:
+            -
+              field: title
+              rendered: true
+              rendered_strip: false
+          row_class: ''
+          default_row_class: true
+          override: true
+          sticky: false
+          caption: ''
+          summary: ''
+          description: ''
+          columns:
+            edit_node_1: edit_node_1
+            title: title
+            field_link: field_link
+            field_nid: field_nid
+            field_projectnumber: field_projectnumber
+            field_product_code: field_product_code
+            title_1: title_1
+          info:
+            edit_node_1:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            title:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ' | '
+              empty_column: false
+              responsive: ''
+            field_link:
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_nid:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_projectnumber:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_product_code:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            title_1:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+          default: '-1'
+          empty_table: false
+      row:
+        type: fields
+        options: {  }
+      title: Projects
     cache_metadata:
       max-age: -1
       contexts:
@@ -2929,6 +3122,7 @@ display:
         title: false
         filters: false
         filter_groups: false
+        relationships: false
       sorts: {  }
       style:
         type: default
@@ -2962,7 +3156,7 @@ display:
           quantity: 9
       menu:
         type: tab
-        title: Products
+        title: 'Product codes'
         description: ''
         expanded: false
         parent: admin_toolbar_tools.help
@@ -3089,6 +3283,7 @@ display:
         operator: AND
         groups:
           1: AND
+      relationships: {  }
     cache_metadata:
       max-age: -1
       contexts:
@@ -3548,6 +3743,11 @@ display:
         filters: false
         filter_groups: false
         sorts: false
+        title: false
+        style: false
+        row: false
+        relationships: false
+        query: false
       path: admin/maint/noproject
       filters:
         status:
@@ -3645,9 +3845,93 @@ display:
         description: ''
         expanded: false
         parent: admin_toolbar_tools.help
-        weight: 0
+        weight: 2
         context: '0'
         menu_name: admin
+      title: 'Pubs with no project link'
+      style:
+        type: table
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: true
+          override: true
+          sticky: false
+          caption: ''
+          summary: ''
+          description: ''
+          columns:
+            field_product_code: field_product_code
+            field_date_published: field_date_published
+            edit_node: edit_node
+            title: title
+            field_lit_code: field_lit_code
+            field_document_type: field_document_type
+            field_project: field_project
+          info:
+            field_product_code:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_date_published:
+              sortable: true
+              default_sort_order: desc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            edit_node:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            title:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ' | '
+              empty_column: false
+              responsive: ''
+            field_lit_code:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_document_type:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_project:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+          default: field_date_published
+          empty_table: false
+      row:
+        type: fields
+        options: {  }
+      relationships: {  }
+      query:
+        type: views_query
+        options:
+          disable_sql_rewrite: false
+          distinct: false
+          replica: false
+          query_comment: ''
+          query_tags: null
     cache_metadata:
       max-age: -1
       contexts:
@@ -4498,6 +4782,8 @@ display:
         relationships: false
         title: false
         sorts: false
+        style: false
+        row: false
       filters:
         status:
           value: '1'
@@ -4735,10 +5021,10 @@ display:
         description: ''
         expanded: false
         parent: admin_toolbar_tools.help
-        weight: 0
+        weight: 5
         context: '0'
         menu_name: admin
-      title: 'Pubs & PDFs'
+      title: 'Pubs media'
       sorts:
         field_date_published_value:
           id: field_date_published_value
@@ -4753,6 +5039,132 @@ display:
             label: ''
           granularity: day
           plugin_id: datetime
+      style:
+        type: table
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: true
+          override: true
+          sticky: false
+          caption: ''
+          summary: ''
+          description: ''
+          columns:
+            field_product_code: field_product_code
+            field_date_published: field_date_published
+            field_lit_code: field_lit_code
+            title: title
+            field_document_type: field_document_type
+            langcode: langcode
+            field_pdf_pages: field_pdf_pages
+            field_media_document: field_media_document
+            view_media: view_media
+            edit_media: edit_media
+            delete_media: delete_media
+            media_bulk_form: media_bulk_form
+            nothing: nothing
+            field_external_url: field_external_url
+          info:
+            field_product_code:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_date_published:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_lit_code:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            title:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ' | '
+              empty_column: false
+              responsive: ''
+            field_document_type:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            langcode:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_pdf_pages:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_media_document:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            view_media:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            edit_media:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            delete_media:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            media_bulk_form:
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            nothing:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_external_url:
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+          default: '-1'
+          empty_table: false
+      row:
+        type: fields
+        options: {  }
     cache_metadata:
       max-age: 0
       contexts:
@@ -4785,7 +5197,7 @@ display:
         description: ''
         expanded: false
         parent: admin_toolbar_tools.help
-        weight: 0
+        weight: 6
         context: '0'
         menu_name: admin
       relationships:
@@ -4804,6 +5216,7 @@ display:
         filters: false
         filter_groups: false
         sorts: false
+        title: false
       fields:
         field_product_code:
           id: field_product_code
@@ -5540,6 +5953,7 @@ display:
             label: ''
           granularity: second
           plugin_id: datetime
+      title: 'Pubs and authors'
     cache_metadata:
       max-age: -1
       contexts:
@@ -5572,7 +5986,7 @@ display:
         description: ''
         expanded: false
         parent: ''
-        weight: 0
+        weight: 7
         context: '0'
         menu_name: main
       filters:
@@ -5649,6 +6063,9 @@ display:
         filter_groups: false
         fields: false
         relationships: false
+        title: false
+        style: false
+        row: false
       filter_groups:
         operator: AND
         groups:
@@ -6217,6 +6634,95 @@ display:
           field_api_classes: false
           plugin_id: field
       relationships: {  }
+      title: Translations
+      style:
+        type: table
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: true
+          override: true
+          sticky: false
+          caption: ''
+          summary: ''
+          description: ''
+          columns:
+            field_product_code: field_product_code
+            edit_node: edit_node
+            title: title
+            field_lit_code: field_lit_code
+            field_document_type: field_document_type
+            field_publisher_legacy: field_publisher_legacy
+            field_publisher: field_publisher
+            langcode: langcode
+            field_pdf_pages: field_pdf_pages
+          info:
+            field_product_code:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            edit_node:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            title:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ' | '
+              empty_column: false
+              responsive: ''
+            field_lit_code:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_document_type:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_publisher_legacy:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_publisher:
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            langcode:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_pdf_pages:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+          default: '-1'
+          empty_table: false
+      row:
+        type: fields
+        options: {  }
     cache_metadata:
       max-age: -1
       contexts:
