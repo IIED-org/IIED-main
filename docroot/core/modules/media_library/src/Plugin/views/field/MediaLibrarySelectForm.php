@@ -56,14 +56,14 @@ class MediaLibrarySelectForm extends FieldPluginBase {
     $form[$this->options['id']]['#tree'] = TRUE;
     foreach ($this->view->result as $row_index => $row) {
       $entity = $this->getEntity($row);
-      $form[$this->options['id']][$row_index] = [
+      $form[$this->options['id']][$row_index] = $entity ? [
         '#type' => 'checkbox',
         '#title' => $this->t('Select @label', [
           '@label' => $entity->label(),
         ]),
         '#title_display' => 'invisible',
         '#return_value' => $entity->id(),
-      ];
+      ] : [];
     }
 
     // The selection is persistent across different pages in the media library

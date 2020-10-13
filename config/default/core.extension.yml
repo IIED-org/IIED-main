@@ -18,6 +18,7 @@ module:
   config: 0
   contact: 0
   contextual: 0
+  csv_serialization: 0
   ctools: 0
   datetime: 0
   dblog: 0
@@ -48,6 +49,7 @@ module:
   link: 0
   media: 0
   media_library: 0
+  media_revisions_ui: 0
   menu_link_content: 0
   menu_ui: 0
   merge_translations: 0
@@ -68,10 +70,12 @@ module:
   quickedit: 0
   rdf: 0
   redirect: 0
+  rest: 0
   search_api: 0
   search_api_solr: 0
   search_api_solr_admin: 0
   serial: 0
+  serialization: 0
   shortcut: 0
   sophron: 0
   system: 0
@@ -83,6 +87,8 @@ module:
   update: 0
   upgrade_status: 0
   user: 0
+  views_bulk_operations: 0
+  views_data_export: 0
   views_ui: 0
   pathauto: 1
   content_translation: 10

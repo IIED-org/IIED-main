@@ -37,6 +37,7 @@
         "drupal/geolocation": "^3.2",
         "drupal/isbn": "^1.2",
         "drupal/media_pdf_thumbnail": "^3.6",
+        "drupal/media_revisions_ui": "^2.0",
         "drupal/media_thumbnails_pdf": "^1.0",
         "drupal/merge_translations": "^1.1",
         "drupal/migrate_file": "1.x-dev",
@@ -52,6 +53,8 @@
         "drupal/sidr": "^3.1",
         "drupal/upgrade_status": "^2.0",
         "drupal/views_bootstrap": "^4.3",
+        "drupal/views_bulk_operations": "^3.9",
+        "drupal/views_data_export": "^1.0",
         "drush/drush": "^10.3"
     },
     "require-dev": {
@@ -140,7 +143,10 @@
           },
           "drupal/media_thumbnails": {
             "Make thumbnails editable": "https://www.drupal.org/files/issues/2020-08-06/media_thumbnails-3149842-4.patch"
-          } 
+          },
+          "drupal/core": {
+            "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2020-09-03/3007424-108.patch"
+          }
         }
     }
 }
