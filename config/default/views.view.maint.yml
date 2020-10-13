@@ -118,15 +118,32 @@ display:
           summary: ''
           description: ''
           columns:
-            edit_node_1: edit_node_1
-            title: title
-            field_link: field_link
-            field_nid: field_nid
-            field_projectnumber: field_projectnumber
             field_product_code: field_product_code
-            title_1: title_1
+            field_date_published: field_date_published
+            edit_node: edit_node
+            title: field_product_code
+            field_lit_code: field_lit_code
+            field_document_type: field_document_type
+            delete_taxonomy_term: delete_taxonomy_term
+            edit_taxonomy_term: edit_taxonomy_term
+            field_author_s_: field_author_s_
+            field_legacy_iscanonical: field_legacy_iscanonical
           info:
-            edit_node_1:
+            field_product_code:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ' | '
+              empty_column: false
+              responsive: ''
+            field_date_published:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            edit_node:
               sortable: false
               default_sort_order: asc
               align: ''
@@ -140,33 +157,42 @@ display:
               separator: ' | '
               empty_column: false
               responsive: ''
-            field_link:
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            field_nid:
+            field_lit_code:
               sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
-            field_projectnumber:
+            field_document_type:
               sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
-            field_product_code:
-              sortable: true
+            delete_taxonomy_term:
+              sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
-            title_1:
+            edit_taxonomy_term:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_author_s_:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_legacy_iscanonical:
               sortable: false
               default_sort_order: asc
               align: ''
@@ -5217,6 +5243,8 @@ display:
         filter_groups: false
         sorts: false
         title: false
+        style: false
+        row: false
       fields:
         field_product_code:
           id: field_product_code
@@ -5270,70 +5298,6 @@ display:
           type: string
           settings:
             link_to_entity: false
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          plugin_id: field
-        field_date_published:
-          id: field_date_published
-          table: node__field_date_published
-          field: field_date_published
-          relationship: none
-          group_type: group
-          admin_label: ''
-          label: Published
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: datetime_default
-          settings:
-            timezone_override: ''
-            format_type: html_month
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -5406,7 +5370,7 @@ display:
           group_type: group
           admin_label: ''
           label: Title
-          exclude: true
+          exclude: false
           alter:
             alter_text: true
             text: '{{ title }} [{{ edit_node }}]'
@@ -5462,6 +5426,70 @@ display:
           field_api_classes: false
           entity_type: node
           entity_field: title
+          plugin_id: field
+        field_date_published:
+          id: field_date_published
+          table: node__field_date_published
+          field: field_date_published
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: Published
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: datetime_default
+          settings:
+            timezone_override: ''
+            format_type: html_month
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
           plugin_id: field
         field_lit_code:
           id: field_lit_code
@@ -5705,7 +5733,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: '{{ field_author_s_ }} [{{ edit_taxonomy_term }}|{{ delete_taxonomy_term }}]'
+            text: '{{ field_author_s_ }} [{{ edit_taxonomy_term }}|{{ delete_taxonomy_term }}|<a href="/admin/structure/taxonomy/manage/person/merge">merge</a>]'
             make_link: false
             path: ''
             absolute: false
@@ -5954,6 +5982,108 @@ display:
           granularity: second
           plugin_id: datetime
       title: 'Pubs and authors'
+      style:
+        type: table
+        options:
+          grouping:
+            -
+              field: field_product_code
+              rendered: false
+              rendered_strip: false
+          row_class: ''
+          default_row_class: true
+          override: true
+          sticky: false
+          caption: ''
+          summary: ''
+          description: ''
+          columns:
+            field_product_code: title
+            edit_node: edit_node
+            title: title
+            field_date_published: field_date_published
+            field_lit_code: field_lit_code
+            field_document_type: field_document_type
+            delete_taxonomy_term: delete_taxonomy_term
+            edit_taxonomy_term: edit_taxonomy_term
+            field_author_s_: field_author_s_
+            field_legacy_iscanonical: field_legacy_iscanonical
+          info:
+            field_product_code:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ' | '
+              empty_column: false
+              responsive: ''
+            edit_node:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            title:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ' | '
+              empty_column: false
+              responsive: ''
+            field_date_published:
+              sortable: true
+              default_sort_order: desc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_lit_code:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_document_type:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            delete_taxonomy_term:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            edit_taxonomy_term:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_author_s_:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_legacy_iscanonical:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+          default: '-1'
+          empty_table: false
+      row:
+        type: fields
+        options: {  }
     cache_metadata:
       max-age: -1
       contexts:
