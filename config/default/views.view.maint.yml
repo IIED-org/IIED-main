@@ -25,6 +25,7 @@ dependencies:
     - node.type.project
     - node.type.publication
     - taxonomy.vocabulary.document_type
+    - taxonomy.vocabulary.person
     - user.role.administrator
   module:
     - csv_serialization
@@ -104,7 +105,11 @@ display:
       style:
         type: table
         options:
-          grouping: {  }
+          grouping:
+            -
+              field: field_product_code
+              rendered: true
+              rendered_strip: false
           row_class: ''
           default_row_class: true
           override: true
@@ -114,17 +119,25 @@ display:
           description: ''
           columns:
             field_product_code: field_product_code
+            field_date_published: field_date_published
             edit_node: edit_node
             title: title
             field_lit_code: field_lit_code
             field_document_type: field_document_type
-            field_publisher_legacy: field_publisher_legacy
-            field_publisher: field_publisher
-            langcode: langcode
-            field_pdf_pages: field_pdf_pages
+            delete_taxonomy_term: delete_taxonomy_term
+            edit_taxonomy_term: edit_taxonomy_term
+            field_author_s_: field_author_s_
+            field_legacy_iscanonical: field_legacy_iscanonical
           info:
             field_product_code:
               sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_date_published:
+              sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
@@ -141,43 +154,45 @@ display:
               sortable: true
               default_sort_order: asc
               align: ''
-              separator: ''
+              separator: ' | '
               empty_column: false
               responsive: ''
             field_lit_code:
-              sortable: true
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            field_document_type:
-              sortable: true
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            field_publisher_legacy:
               sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
-            field_publisher:
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            langcode:
-              sortable: true
+            field_document_type:
+              sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
-            field_pdf_pages:
+            delete_taxonomy_term:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            edit_taxonomy_term:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_author_s_:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_legacy_iscanonical:
               sortable: false
               default_sort_order: asc
               align: ''
@@ -1064,7 +1079,7 @@ display:
     display_plugin: data_export
     id: data_export_1
     display_title: 'Data export'
-    position: 4
+    position: 5
     display_options:
       display_extenders: {  }
       style:
@@ -1331,6 +1346,7 @@ display:
           plugin_id: field
       defaults:
         fields: false
+        relationships: false
       export_method: batch
       export_batch_size: 1000
       export_limit: 0
@@ -1339,6 +1355,7 @@ display:
         options:
           items_per_page: 0
           offset: 0
+      relationships: {  }
     cache_metadata:
       max-age: -1
       contexts:
@@ -2230,11 +2247,64 @@ display:
     display_plugin: page
     id: page_2
     display_title: Projects
-    position: 2
+    position: 3
     display_options:
       display_extenders: {  }
       path: admin/maint/projects
       fields:
+        edit_node_1:
+          id: edit_node_1
+          table: node
+          field: edit_node
+          relationship: reverse__node__field_project
+          group_type: group
+          admin_label: ''
+          label: 'Link to edit Publication'
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          text: edit
+          output_url_as_text: false
+          absolute: false
+          entity_type: node
+          plugin_id: entity_link_edit
         title:
           id: title
           table: node_field_data
@@ -2243,10 +2313,10 @@ display:
           group_type: group
           admin_label: ''
           label: Title
-          exclude: false
+          exclude: true
           alter:
             alter_text: false
-            text: ''
+            text: '{{ title }} [{{ edit_node }}]'
             make_link: false
             path: ''
             absolute: false
@@ -2374,15 +2444,15 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: NID
+          label: 'IIED NID'
           exclude: false
           alter:
             alter_text: false
             text: ''
-            make_link: false
-            path: ''
+            make_link: true
+            path: 'https://www.iied.org/node/{{ field_nid }}/edit'
             absolute: false
-            external: false
+            external: true
             replace_spaces: false
             path_case: none
             trim_whitespace: false
@@ -2495,10 +2565,140 @@ display:
           separator: ', '
           field_api_classes: false
           plugin_id: field
+        field_product_code:
+          id: field_product_code
+          table: node__field_product_code
+          field: field_product_code
+          relationship: reverse__node__field_project
+          group_type: group
+          admin_label: ''
+          label: 'Product code'
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: true
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          plugin_id: field
+        title_1:
+          id: title_1
+          table: node_field_data
+          field: title
+          relationship: reverse__node__field_project
+          group_type: group
+          admin_label: ''
+          label: Title
+          exclude: false
+          alter:
+            alter_text: true
+            text: '{{ title_1 }} [{{ edit_node_1 }}]'
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: true
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          entity_type: node
+          entity_field: title
+          plugin_id: field
       defaults:
         fields: false
         filters: false
         filter_groups: false
+        relationships: false
+        sorts: false
       filters:
         status:
           value: '1'
@@ -2555,6 +2755,58 @@ display:
           entity_type: node
           entity_field: type
           plugin_id: bundle
+        field_product_code_value:
+          id: field_product_code_value
+          table: node__field_product_code
+          field: field_product_code_value
+          relationship: reverse__node__field_project
+          group_type: group
+          admin_label: ''
+          operator: 'not empty'
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_product_code_value_op
+            label: 'Product code'
+            description: ''
+            use_operator: true
+            operator: field_product_code_value_op
+            operator_limit_selection: true
+            operator_list:
+              '=': '='
+              empty: empty
+              'not empty': 'not empty'
+            identifier: field_product_code_value
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+            placeholder: ''
+          is_grouped: true
+          group_info:
+            label: 'Product code (field_product_code)'
+            description: ''
+            identifier: field_product_code_value
+            optional: true
+            widget: radios
+            multiple: false
+            remember: false
+            default_group: '1'
+            default_group_multiple: {  }
+            group_items:
+              1:
+                title: 'Projects with pubs'
+                operator: 'not empty'
+                value: ''
+              2:
+                title: 'Projects with no pubs'
+                operator: empty
+                value: ''
+          plugin_id: string
       filter_groups:
         operator: AND
         groups:
@@ -2569,23 +2821,37 @@ display:
         weight: 0
         context: '0'
         menu_name: admin
+      relationships:
+        reverse__node__field_project:
+          id: reverse__node__field_project
+          table: node_field_data
+          field: reverse__node__field_project
+          relationship: none
+          group_type: group
+          admin_label: field_project
+          required: false
+          entity_type: node
+          plugin_id: entity_reverse
+      sorts: {  }
     cache_metadata:
       max-age: -1
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - url
         - url.query_args
         - 'user.node_grants:view'
         - user.roles
       tags:
         - 'config:field.storage.node.field_link'
         - 'config:field.storage.node.field_nid'
+        - 'config:field.storage.node.field_product_code'
         - 'config:field.storage.node.field_projectnumber'
   page_3:
     display_plugin: page
     id: page_3
     display_title: 'Product codes'
-    position: 3
+    position: 2
     display_options:
       display_extenders: {  }
       display_description: ''
@@ -2839,7 +3105,7 @@ display:
     display_plugin: page
     id: page_4
     display_title: 'Pubs w/o project'
-    position: 5
+    position: 4
     display_options:
       display_extenders: {  }
       display_description: ''
@@ -3359,7 +3625,20 @@ display:
         operator: AND
         groups:
           1: AND
-      sorts: {  }
+      sorts:
+        field_date_published_value:
+          id: field_date_published_value
+          table: node__field_date_published
+          field: field_date_published_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
+          granularity: day
+          plugin_id: datetime
       menu:
         type: tab
         title: NoProject
@@ -4218,6 +4497,7 @@ display:
         filter_groups: false
         relationships: false
         title: false
+        sorts: false
       filters:
         status:
           value: '1'
@@ -4459,6 +4739,20 @@ display:
         context: '0'
         menu_name: admin
       title: 'Pubs & PDFs'
+      sorts:
+        field_date_published_value:
+          id: field_date_published_value
+          table: node__field_date_published
+          field: field_date_published_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
+          granularity: day
+          plugin_id: datetime
     cache_metadata:
       max-age: 0
       contexts:
@@ -5181,6 +5475,53 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           plugin_id: boolean
+        field_author_s__target_id:
+          id: field_author_s__target_id
+          table: node__field_author_s_
+          field: field_author_s__target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: 'not empty'
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_author_s__target_id_op
+            label: Author(s)
+            description: ''
+            use_operator: true
+            operator: field_author_s__target_id_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_author_s__target_id
+            required: false
+            remember: false
+            multiple: true
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          type: textfield
+          limit: true
+          vid: person
+          hierarchy: false
+          error_message: true
+          plugin_id: taxonomy_index_tid
       filter_groups:
         operator: AND
         groups:
@@ -5206,6 +5547,7 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - user
         - 'user.node_grants:view'
         - user.roles
       tags:
