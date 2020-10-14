@@ -126,6 +126,10 @@ class ComposerStaticInit7376e166806aa5d664ccbd35d60d770b
             'PhpParser\\' => 10,
             'PHPStan\\' => 8,
         ),
+        'O' => 
+        array (
+            'OomphInc\\ComposerInstallersExtender\\' => 36,
+        ),
         'N' => 
         array (
             'Nicebooks\\Isbn\\' => 15,
@@ -419,6 +423,10 @@ class ComposerStaticInit7376e166806aa5d664ccbd35d60d770b
         array (
             0 => __DIR__ . '/..' . '/mglaman/phpstan-drupal/src',
             1 => __DIR__ . '/..' . '/phpstan/phpstan-deprecation-rules/src',
+        ),
+        'OomphInc\\ComposerInstallersExtender\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/oomphinc/composer-installers-extender/src',
         ),
         'Nicebooks\\Isbn\\' => 
         array (
