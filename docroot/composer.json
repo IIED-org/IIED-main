@@ -57,7 +57,8 @@
         "drupal/views_bootstrap": "^4.3",
         "drupal/views_bulk_operations": "^3.9",
         "drupal/views_data_export": "^1.0",
-        "drush/drush": "^10.3"
+        "drush/drush": "^10.3",
+        "oomphinc/composer-installers-extender": "^2.0"
     },
     "require-dev": {
         "drupal/config_devel": "^1.7",
@@ -83,12 +84,16 @@
                 "web-root": "./"
             }
         },
+        "installer-types": [
+          "npm-asset"
+        ],
         "installer-paths": {
             "core": [
                 "type:drupal-core"
             ],
             "libraries/{$name}": [
-                "type:drupal-library"
+                "type:drupal-library",
+                "type:npm-asset"
             ],
             "modules/contrib/{$name}": [
                 "type:drupal-module"
