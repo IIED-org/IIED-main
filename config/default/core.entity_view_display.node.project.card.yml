@@ -1,0 +1,103 @@
+uuid: 8b09e621-67ac-4d8f-8ed6-c87bfd76c718
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.card
+    - field.field.node.project.body
+    - field.field.node.project.field_collection
+    - field.field.node.project.field_image
+    - field.field.node.project.field_link
+    - field.field.node.project.field_nid
+    - field.field.node.project.field_projectnumber
+    - field.field.node.project.field_theme
+    - field.field.node.project.field_year
+    - node.type.project
+  module:
+    - ds
+    - field_layout
+    - image
+    - layout_builder
+    - link
+    - text
+    - user
+third_party_settings:
+  field_layout:
+    id: layout_onecol
+    settings:
+      label: ''
+  layout_builder:
+    enabled: false
+    allow_custom: false
+  ds:
+    layout:
+      id: ds_1col
+      library: null
+      disable_css: false
+      entity_classes: all_classes
+      settings:
+        label: ''
+        wrappers:
+          ds_content: div
+        outer_wrapper: div
+        attributes: ''
+        link_attribute: ''
+        link_custom: ''
+        classes:
+          layout_class:
+            card: card
+          ds_content: {  }
+    regions:
+      ds_content:
+        - field_image
+        - node_title
+        - body
+        - field_link
+    fields:
+      node_title:
+        plugin_id: node_title
+        weight: 1
+        label: hidden
+        formatter: default
+id: node.project.card
+targetEntityType: node
+bundle: project
+mode: card
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 2
+    settings: {  }
+    third_party_settings: {  }
+    region: ds_content
+  field_image:
+    weight: 0
+    label: hidden
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+    region: ds_content
+  field_link:
+    weight: 3
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+    region: ds_content
+hidden:
+  field_collection: true
+  field_nid: true
+  field_projectnumber: true
+  field_theme: true
+  field_year: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

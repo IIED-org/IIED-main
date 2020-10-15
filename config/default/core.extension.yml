@@ -79,6 +79,7 @@ module:
   serial: 0
   serialization: 0
   shortcut: 0
+  sidr: 0
   sophron: 0
   system: 0
   taxonomy: 0
@@ -94,6 +95,7 @@ module:
   views_bulk_operations: 0
   views_data_export: 0
   views_ui: 0
+  ds: 1
   pathauto: 1
   content_translation: 10
   views: 10

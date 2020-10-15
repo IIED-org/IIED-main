@@ -1,0 +1,20 @@
+disabled: false
+field_template: true
+ft-default: default
+ft-show-colon: false
+ft-layout-builder: true
+classes:
+  region:
+    - card|card
+    - card-deck-|card-deck
+    - row|row
+    - col|col
+    - col-md-4|col-md-4
+    - col-md-6|col-md-6
+    - col-md-8|col-md-8
+    - h-100|h-100
+    - mx-auto|mx-auto
+  field: {  }
+use_field_names: true
+_core:
+  default_config_hash: PVw1CqINc8mdBO0v-gKzrhG9fd1pyKwx4wIXdks-k3w

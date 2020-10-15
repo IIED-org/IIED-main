@@ -1,8 +1,9 @@
-uuid: 6f06315d-ddcc-4f62-903c-32e98e177377
+uuid: f2c654ab-66ce-4b5a-af6f-d82f24b7f97d
 langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.full
     - field.field.node.page.body
     - node.type.page
   module:
@@ -33,10 +34,11 @@ third_party_settings:
           classes:
             layout_class:
               col-md-8: col-md-8
+              mx-auto: mx-auto
             ds_content: {  }
         components:
-          62c155ba-3449-4e6e-b81c-4f8978471c47:
-            uuid: 62c155ba-3449-4e6e-b81c-4f8978471c47
+          150db0ab-d317-434f-9a5a-b0962e291ee2:
+            uuid: 150db0ab-d317-434f-9a5a-b0962e291ee2
             region: ds_content
             configuration:
               id: 'field_block:node:page:body'
@@ -56,10 +58,10 @@ third_party_settings:
         third_party_settings: {  }
 _core:
   default_config_hash: g1S3_GLaxq4l3I9RIca5Mlz02MxI2KmOquZpHw59akM
-id: node.page.default
+id: node.page.full
 targetEntityType: node
 bundle: page
-mode: default
+mode: full
 content:
   body:
     label: hidden

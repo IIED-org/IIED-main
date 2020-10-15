@@ -44,9 +44,12 @@ dependencies:
     - field.field.node.publication.field_team
     - field.field.node.publication.field_theme_s_
     - node.type.publication
+    - views.view.related_project
+    - views.view.related_publications
   module:
     - address
     - datetime
+    - ds
     - field_layout
     - file
     - isbn
@@ -56,14 +59,247 @@ dependencies:
     - serial
     - text
     - user
+    - views
 third_party_settings:
   field_layout:
     id: layout_onecol
     settings:
       label: ''
   layout_builder:
-    enabled: false
+    enabled: true
     allow_custom: false
+    sections:
+      -
+        layout_id: ds_2col
+        layout_settings:
+          label: ''
+          wrappers:
+            left: div
+            right: div
+          outer_wrapper: div
+          attributes: ''
+          link_attribute: ''
+          link_custom: ''
+          classes:
+            layout_class:
+              row: row
+            left:
+              col-md-4: col-md-4
+            right:
+              col-md-8: col-md-8
+        components:
+          eb76d8fe-3ec8-4380-9273-72acb22e3d18:
+            uuid: eb76d8fe-3ec8-4380-9273-72acb22e3d18
+            region: right
+            configuration:
+              id: 'field_block:node:publication:title'
+              label: Title
+              provider: layout_builder
+              label_display: '0'
+              formatter:
+                label: hidden
+                type: string
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+            additional: {  }
+            weight: -10
+          14a100b9-dc83-411b-ba95-7cdd228d1b98:
+            uuid: 14a100b9-dc83-411b-ba95-7cdd228d1b98
+            region: right
+            configuration:
+              id: 'field_block:node:publication:field_document_type'
+              label: 'Document type'
+              provider: layout_builder
+              label_display: '0'
+              formatter:
+                label: hidden
+                type: entity_reference_label
+                settings:
+                  link: true
+                third_party_settings: {  }
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+            additional: {  }
+            weight: -9
+          2a5ac960-6b5a-49eb-8f77-7a8e85a715e7:
+            uuid: 2a5ac960-6b5a-49eb-8f77-7a8e85a715e7
+            region: right
+            configuration:
+              id: 'field_block:node:publication:field_pdf_pages'
+              label: 'PDF pages'
+              provider: layout_builder
+              label_display: '0'
+              formatter:
+                label: hidden
+                type: number_integer
+                settings:
+                  thousand_separator: ''
+                  prefix_suffix: true
+                third_party_settings: {  }
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+            additional: {  }
+            weight: -8
+          e85bad1c-189f-4224-bf8b-8189fbe39c90:
+            uuid: e85bad1c-189f-4224-bf8b-8189fbe39c90
+            region: right
+            configuration:
+              id: 'field_block:node:publication:field_author_s_'
+              label: Author(s)
+              provider: layout_builder
+              label_display: '0'
+              formatter:
+                label: hidden
+                type: entity_reference_label
+                settings:
+                  link: true
+                third_party_settings: {  }
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+            additional: {  }
+            weight: -7
+          e5e638a1-5d52-4a82-8ad7-d80ba0a482d9:
+            uuid: e5e638a1-5d52-4a82-8ad7-d80ba0a482d9
+            region: right
+            configuration:
+              id: 'field_block:node:publication:body'
+              label: Body
+              provider: layout_builder
+              label_display: '0'
+              formatter:
+                label: hidden
+                type: text_default
+                settings: {  }
+                third_party_settings: {  }
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+            additional: {  }
+            weight: -5
+          612e1fdf-3902-431d-b475-1c1d7f18d139:
+            uuid: 612e1fdf-3902-431d-b475-1c1d7f18d139
+            region: left
+            configuration:
+              id: 'field_block:node:publication:field_product_code'
+              label: 'Product code'
+              provider: layout_builder
+              label_display: '0'
+              formatter:
+                label: above
+                type: string
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+            additional: {  }
+            weight: 1
+          02cc4c49-69f3-47e0-9c54-dbe226776acd:
+            uuid: 02cc4c49-69f3-47e0-9c54-dbe226776acd
+            region: left
+            configuration:
+              id: 'field_block:node:publication:field_isbn'
+              label: ISBN
+              provider: layout_builder
+              label_display: '0'
+              formatter:
+                label: above
+                type: isbn_default
+                settings: {  }
+                third_party_settings: {  }
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+            additional: {  }
+            weight: 2
+          bb5c4c0f-4f6f-492b-8719-719d95425b60:
+            uuid: bb5c4c0f-4f6f-492b-8719-719d95425b60
+            region: left
+            configuration:
+              id: 'field_block:node:publication:field_series'
+              label: Series
+              provider: layout_builder
+              label_display: '0'
+              formatter:
+                label: above
+                type: entity_reference_label
+                settings:
+                  link: true
+                third_party_settings: {  }
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+            additional: {  }
+            weight: 3
+          0cef48c9-f8af-4667-943f-7db5292aa7e2:
+            uuid: 0cef48c9-f8af-4667-943f-7db5292aa7e2
+            region: right
+            configuration:
+              id: 'field_block:node:publication:field_pdf'
+              label: PDF
+              provider: layout_builder
+              label_display: '0'
+              formatter:
+                label: above
+                type: file_default
+                settings:
+                  use_description_as_link_text: true
+                third_party_settings: {  }
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+            additional: {  }
+            weight: -6
+        third_party_settings: {  }
+      -
+        layout_id: ds_1col
+        layout_settings:
+          label: ''
+          wrappers:
+            ds_content: div
+          outer_wrapper: div
+          attributes: ''
+          link_attribute: ''
+          link_custom: ''
+          classes:
+            layout_class: {  }
+            ds_content: {  }
+        components:
+          c70de6f6-f155-4447-98ac-cd8dec1aad9f:
+            uuid: c70de6f6-f155-4447-98ac-cd8dec1aad9f
+            region: ds_content
+            configuration:
+              id: 'views_block:related_project-block_1'
+              label: ''
+              provider: views
+              label_display: visible
+              views_label: ''
+              items_per_page: none
+              context_mapping: {  }
+            additional: {  }
+            weight: 0
+          0a302f00-3e57-4dd4-9621-39179b0294ee:
+            uuid: 0a302f00-3e57-4dd4-9621-39179b0294ee
+            region: ds_content
+            configuration:
+              id: 'views_block:related_publications-block_1'
+              label: ''
+              provider: views
+              label_display: visible
+              views_label: ''
+              items_per_page: none
+              context_mapping: {  }
+            additional: {  }
+            weight: 1
+        third_party_settings: {  }
 id: node.publication.full
 targetEntityType: node
 bundle: publication
