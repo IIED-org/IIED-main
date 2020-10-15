@@ -12,8 +12,8 @@ _core:
   default_config_hash: 8zRjTNbfNAJ94lQpZDu6MkyD87GYJ2zpH9VQPVmRbcM
 id: iied_pubs_footer
 theme: iied_pubs
-region: navbar_branding
-weight: -7
+region: footer
+weight: -5
 provider: null
 plugin: 'system_menu_block:footer'
 settings:

@@ -178,6 +178,7 @@ third_party_settings:
             additional: {  }
             weight: 9
         third_party_settings: {  }
+    allow_custom: false
 id: node.project.default
 targetEntityType: node
 bundle: project
@@ -260,3 +261,4 @@ content:
     region: content
 hidden:
   langcode: true
+  search_api_excerpt: true

@@ -1,0 +1,6 @@
+uuid: 3d5b7f66-a675-45fc-b6f8-31ee811a0df8
+langcode: en
+status: true
+dependencies: {  }
+id: nt-shortcuts
+label: 'nt shortcuts'
