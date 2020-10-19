@@ -16,17 +16,10 @@ dependencies:
     - taxonomy.vocabulary.organisation
   module:
     - address
-    - field_layout
     - image
-    - layout_discovery
     - link
     - path
     - text
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
 id: taxonomy_term.organisation.default
 targetEntityType: taxonomy_term
 bundle: organisation

@@ -8,15 +8,8 @@ dependencies:
     - field.field.taxonomy_term.person.field_organisation
     - taxonomy.vocabulary.person
   module:
-    - field_layout
-    - layout_discovery
     - name
     - path
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
 id: taxonomy_term.person.default
 targetEntityType: taxonomy_term
 bundle: person

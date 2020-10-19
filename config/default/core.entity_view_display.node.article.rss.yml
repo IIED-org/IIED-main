@@ -10,15 +10,9 @@ dependencies:
     - field.field.node.article.field_tags
     - node.type.article
   module:
-    - field_layout
     - layout_builder
-    - layout_discovery
     - user
 third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
   layout_builder:
     enabled: true
     sections:
@@ -56,3 +50,4 @@ hidden:
   field_image: true
   field_tags: true
   langcode: true
+  search_api_excerpt: true

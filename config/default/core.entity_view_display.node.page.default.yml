@@ -6,16 +6,10 @@ dependencies:
     - field.field.node.page.body
     - node.type.page
   module:
-    - ds
-    - field_layout
     - layout_builder
     - text
     - user
 third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
   layout_builder:
     enabled: true
     allow_custom: false

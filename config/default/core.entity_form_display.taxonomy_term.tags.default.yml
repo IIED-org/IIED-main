@@ -8,16 +8,9 @@ dependencies:
     - field.field.taxonomy_term.tags.field_tag_type
     - taxonomy.vocabulary.tags
   module:
-    - field_layout
-    - layout_discovery
     - link
     - path
     - text
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
 id: taxonomy_term.tags.default
 targetEntityType: taxonomy_term
 bundle: tags

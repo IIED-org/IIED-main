@@ -14,16 +14,10 @@ dependencies:
     - field.field.node.project.field_year
     - node.type.project
   module:
-    - field_layout
     - layout_builder
-    - layout_discovery
     - text
     - user
 third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
   layout_builder:
     enabled: true
     sections:
@@ -86,3 +80,4 @@ hidden:
   field_theme: true
   field_year: true
   langcode: true
+  search_api_excerpt: true

@@ -45,15 +45,9 @@ dependencies:
     - field.field.node.publication.field_theme_s_
     - node.type.publication
   module:
-    - field_layout
     - layout_builder
-    - layout_discovery
     - user
 third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
   layout_builder:
     enabled: true
     sections:

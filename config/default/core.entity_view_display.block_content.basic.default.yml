@@ -6,15 +6,9 @@ dependencies:
     - block_content.type.basic
     - field.field.block_content.basic.body
   module:
-    - field_layout
     - layout_builder
-    - layout_discovery
     - text
 third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
   layout_builder:
     enabled: true
     sections:
@@ -55,3 +49,4 @@ content:
     third_party_settings: {  }
 hidden:
   langcode: true
+  search_api_excerpt: true

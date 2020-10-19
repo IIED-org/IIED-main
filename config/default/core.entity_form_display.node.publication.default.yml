@@ -46,20 +46,13 @@ dependencies:
   module:
     - address
     - datetime
-    - field_layout
     - file
     - isbn
-    - layout_discovery
     - link
     - media_library
     - path
     - serial
     - text
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
 id: node.publication.default
 targetEntityType: node
 bundle: publication

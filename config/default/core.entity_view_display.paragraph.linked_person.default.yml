@@ -7,15 +7,9 @@ dependencies:
     - field.field.paragraph.linked_person.field_person
     - paragraphs.paragraphs_type.linked_person
   module:
-    - field_layout
     - layout_builder
-    - layout_discovery
     - options
 third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
   layout_builder:
     enabled: true
     sections:
@@ -76,4 +70,5 @@ content:
     third_party_settings: {  }
     type: entity_reference_label
     region: content
-hidden: {  }
+hidden:
+  search_api_excerpt: true

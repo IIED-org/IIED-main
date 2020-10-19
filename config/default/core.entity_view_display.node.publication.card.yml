@@ -46,14 +46,9 @@ dependencies:
     - node.type.publication
   module:
     - ds
-    - field_layout
     - layout_builder
     - user
 third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
   layout_builder:
     enabled: false
     allow_custom: false

@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.base_field_override.taxonomy_term.organisation.description
     - field.field.taxonomy_term.organisation.field_alias
     - field.field.taxonomy_term.organisation.field_email
     - field.field.taxonomy_term.organisation.field_full_name
@@ -16,8 +17,187 @@ dependencies:
   module:
     - address
     - image
+    - layout_builder
+    - layout_discovery
     - link
     - text
+third_party_settings:
+  layout_builder:
+    allow_custom: false
+    enabled: true
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+        components:
+          d8d60654-df73-4029-b623-c89bb87e9d1a:
+            uuid: d8d60654-df73-4029-b623-c89bb87e9d1a
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:taxonomy_term:organisation:description'
+              formatter:
+                label: hidden
+                type: text_default
+                settings: {  }
+                third_party_settings: {  }
+            additional: {  }
+            weight: 0
+          b4e8fac4-c6c6-4d09-acce-e11f8e2920ff:
+            uuid: b4e8fac4-c6c6-4d09-acce-e11f8e2920ff
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:taxonomy_term:organisation:field_full_name'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 1
+          a9d3a0bd-5e0a-49a6-834a-9d4958d79daf:
+            uuid: a9d3a0bd-5e0a-49a6-834a-9d4958d79daf
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:taxonomy_term:organisation:field_location'
+              formatter:
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+                type: address_default
+            additional: {  }
+            weight: 2
+          e2f8c999-2507-464d-b118-693a2043d5dd:
+            uuid: e2f8c999-2507-464d-b118-693a2043d5dd
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:taxonomy_term:organisation:field_url'
+              formatter:
+                label: above
+                settings:
+                  trim_length: 80
+                  url_only: false
+                  url_plain: false
+                  rel: ''
+                  target: ''
+                third_party_settings: {  }
+                type: link
+            additional: {  }
+            weight: 3
+          28f38856-da70-45c7-8617-d77b86e6e8c7:
+            uuid: 28f38856-da70-45c7-8617-d77b86e6e8c7
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:taxonomy_term:organisation:field_email'
+              formatter:
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+                type: basic_string
+            additional: {  }
+            weight: 4
+          e41c9368-6020-44b2-a502-4c2fa036e532:
+            uuid: e41c9368-6020-44b2-a502-4c2fa036e532
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:taxonomy_term:organisation:field_logo'
+              formatter:
+                label: above
+                settings:
+                  image_style: ''
+                  image_link: ''
+                third_party_settings: {  }
+                type: image
+            additional: {  }
+            weight: 5
+          85458248-fa05-45f6-bc7b-6446c8556726:
+            uuid: 85458248-fa05-45f6-bc7b-6446c8556726
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:taxonomy_term:organisation:field_alias'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 6
+          8d202e4d-a9fc-4b17-9672-c99bf54d372c:
+            uuid: 8d202e4d-a9fc-4b17-9672-c99bf54d372c
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:taxonomy_term:organisation:field_valid'
+              formatter:
+                label: above
+                settings:
+                  format: default
+                  format_custom_false: ''
+                  format_custom_true: ''
+                third_party_settings: {  }
+                type: boolean
+            additional: {  }
+            weight: 7
+          c7f14446-9f98-47ad-90f2-9c04caa8b329:
+            uuid: c7f14446-9f98-47ad-90f2-9c04caa8b329
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:taxonomy_term:organisation:field_type'
+              formatter:
+                label: above
+                settings:
+                  format: default
+                  format_custom_false: ''
+                  format_custom_true: ''
+                third_party_settings: {  }
+                type: boolean
+            additional: {  }
+            weight: 8
+          e918b946-3d86-4a48-a03c-9ba7d9391d3f:
+            uuid: e918b946-3d86-4a48-a03c-9ba7d9391d3f
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:taxonomy_term:organisation:field_location_legacy'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 9
+        third_party_settings: {  }
 id: taxonomy_term.organisation.default
 targetEntityType: taxonomy_term
 bundle: organisation
@@ -111,3 +291,4 @@ content:
     region: content
 hidden:
   langcode: true
+  search_api_excerpt: true

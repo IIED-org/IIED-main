@@ -8,14 +8,6 @@ dependencies:
     - field.field.media.document.field_pdf_pages
     - field.field.media.document.field_size
     - media.type.document
-  module:
-    - field_layout
-    - layout_discovery
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
 _core:
   default_config_hash: dcpfpqyLXOSGpulacMAJW3H-G34_LeNsjdfxd1_oCfY
 id: media.document.media_library

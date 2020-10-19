@@ -13,18 +13,12 @@ dependencies:
     - field.field.node.project.field_year
     - node.type.project
   module:
-    - field_layout
     - image
     - layout_builder
-    - layout_discovery
     - link
     - text
     - user
 third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
   layout_builder:
     enabled: true
     sections:
