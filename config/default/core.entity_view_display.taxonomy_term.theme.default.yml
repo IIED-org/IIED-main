@@ -6,15 +6,9 @@ dependencies:
     - field.field.taxonomy_term.theme.field_legacy_code
     - taxonomy.vocabulary.theme
   module:
-    - field_layout
     - layout_builder
-    - layout_discovery
     - text
 third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
   layout_builder:
     enabled: true
     sections:
@@ -77,3 +71,4 @@ content:
     region: content
 hidden:
   langcode: true
+  search_api_excerpt: true

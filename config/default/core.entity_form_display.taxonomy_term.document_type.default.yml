@@ -7,15 +7,8 @@ dependencies:
     - field.field.taxonomy_term.document_type.field_parent_id
     - taxonomy.vocabulary.document_type
   module:
-    - field_layout
-    - layout_discovery
     - path
     - text
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
 id: taxonomy_term.document_type.default
 targetEntityType: taxonomy_term
 bundle: document_type

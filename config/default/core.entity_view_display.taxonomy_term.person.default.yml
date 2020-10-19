@@ -8,15 +8,9 @@ dependencies:
     - field.field.taxonomy_term.person.field_organisation
     - taxonomy.vocabulary.person
   module:
-    - field_layout
     - layout_builder
-    - layout_discovery
     - name
 third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
   layout_builder:
     enabled: true
     sections:
@@ -124,3 +118,4 @@ content:
 hidden:
   description: true
   langcode: true
+  search_api_excerpt: true

@@ -1,0 +1,20 @@
+{
+  "name": "drupal/views_bulk_edit",
+  "type": "drupal-module",
+  "description": "Allows bulk edition of entity field values.",
+  "homepage": "https://www.drupal.org/project/views_bulk_edit",
+  "authors": [
+    {
+      "name": "Marcin Grabias",
+      "homepage": "https://www.drupal.org/u/graber"
+    }
+  ],
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/views_bulk_edit?version=8.x"
+  },
+  "license": "GPL-2.0+",
+  "require": {
+    "drupal/views_bulk_operations": "~1.0 | ~2.0 | ~3.0"
+  },
+  "minimum-stability": "dev"
+}

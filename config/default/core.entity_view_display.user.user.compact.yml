@@ -7,16 +7,10 @@ dependencies:
     - field.field.user.user.user_picture
     - image.style.thumbnail
   module:
-    - field_layout
     - image
     - layout_builder
-    - layout_discovery
     - user
 third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
   layout_builder:
     enabled: true
     sections:
@@ -62,3 +56,4 @@ content:
 hidden:
   langcode: true
   member_for: true
+  search_api_excerpt: true

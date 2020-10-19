@@ -21,6 +21,7 @@ url:
     sw: sw
     te: te
     vi: vi
+    '': null
   domains:
     ar: ''
     bm: ''

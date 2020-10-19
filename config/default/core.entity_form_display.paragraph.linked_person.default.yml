@@ -6,14 +6,6 @@ dependencies:
     - field.field.paragraph.linked_person.field_author_editor
     - field.field.paragraph.linked_person.field_person
     - paragraphs.paragraphs_type.linked_person
-  module:
-    - field_layout
-    - layout_discovery
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
 id: paragraph.linked_person.default
 targetEntityType: paragraph
 bundle: linked_person

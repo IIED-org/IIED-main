@@ -7,15 +7,9 @@ dependencies:
     - field.field.taxonomy_term.document_type.field_parent_id
     - taxonomy.vocabulary.document_type
   module:
-    - field_layout
     - layout_builder
-    - layout_discovery
     - text
 third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
   layout_builder:
     enabled: true
     sections:
@@ -106,3 +100,4 @@ content:
     region: content
 hidden:
   langcode: true
+  search_api_excerpt: true

@@ -11,17 +11,11 @@ dependencies:
     - image.style.medium
     - node.type.article
   module:
-    - field_layout
     - image
     - layout_builder
-    - layout_discovery
     - text
     - user
 third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
   layout_builder:
     enabled: true
     sections:
@@ -130,3 +124,4 @@ content:
 hidden:
   comment: true
   langcode: true
+  search_api_excerpt: true
