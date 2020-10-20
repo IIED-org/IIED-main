@@ -48,6 +48,7 @@
         "drupal/name": "^1.0@RC",
         "drupal/paragraphs": "^1.12",
         "drupal/pathauto": "^1.8",
+        "drupal/pdf_preview_image": "^1.0",
         "drupal/pdfpreview": "^1.0",
         "drupal/publishcontent": "^1.2",
         "drupal/rabbit_hole": "^1.0@beta",
@@ -62,7 +63,8 @@
         "drupal/views_bulk_operations": "^3.9",
         "drupal/views_data_export": "^1.0",
         "drush/drush": "^10.3",
-        "oomphinc/composer-installers-extender": "^2.0"
+        "oomphinc/composer-installers-extender": "^2.0",
+        "spatie/pdf-to-image": "^2.0"
     },
     "require-dev": {
         "drupal/config_devel": "^1.7",

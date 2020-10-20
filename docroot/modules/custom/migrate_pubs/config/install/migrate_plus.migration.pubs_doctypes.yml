@@ -13,7 +13,6 @@ process:
   _code: Code
   _parent: Parent
   field_legacy_doctype: '@_code'
-  tid: '@_code'
   weight: '@_code'
   parent:
     plugin: migration_lookup

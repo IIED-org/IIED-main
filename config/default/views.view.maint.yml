@@ -71,7 +71,7 @@ display:
         type: views_query
         options:
           disable_sql_rewrite: false
-          distinct: true
+          distinct: false
           replica: false
           query_comment: ''
           query_tags: {  }
@@ -79,7 +79,7 @@ display:
         type: basic
         options:
           submit_button: Apply
-          reset_button: false
+          reset_button: true
           reset_button_label: Reset
           exposed_sorts_label: 'Sort by'
           expose_sort_order: true
@@ -137,8 +137,9 @@ display:
             langcode: langcode
             vid: vid
             name: name
-            vid_1: vid_1
             name_1: name_1
+            field_author_s_: field_author_s_
+            field_editor_s_: field_editor_s_
           info:
             views_bulk_operations_bulk_form:
               align: ''
@@ -213,16 +214,19 @@ display:
               separator: ''
               empty_column: false
               responsive: ''
-            vid_1:
+            name_1:
               sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
-            name_1:
-              sortable: false
-              default_sort_order: asc
+            field_author_s_:
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_editor_s_:
               align: ''
               separator: ''
               empty_column: false
@@ -1412,7 +1416,7 @@ display:
   page_1:
     display_plugin: page
     id: page_1
-    display_title: Table
+    display_title: 'All pubs'
     position: 1
     display_options:
       display_extenders: {  }
@@ -2256,7 +2260,7 @@ display:
       display_description: ''
       menu:
         type: 'default tab'
-        title: Table
+        title: 'All pubs'
         description: ''
         expanded: false
         parent: ''
@@ -2268,7 +2272,7 @@ display:
         title: Maint
         description: ''
         weight: 0
-      title: Table
+      title: 'All publications'
       style:
         type: table
         options:
@@ -2303,8 +2307,8 @@ display:
               empty_column: false
               responsive: ''
             field_date_published:
-              sortable: false
-              default_sort_order: asc
+              sortable: true
+              default_sort_order: desc
               align: ''
               separator: ''
               empty_column: false
@@ -2317,21 +2321,21 @@ display:
               empty_column: false
               responsive: ''
             field_lit_code:
-              sortable: false
+              sortable: true
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
             field_document_type:
-              sortable: false
+              sortable: true
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
             field_publisher_legacy:
-              sortable: false
+              sortable: true
               default_sort_order: asc
               align: ''
               separator: ''
@@ -6352,7 +6356,7 @@ display:
         description: ''
         expanded: false
         parent: ''
-        weight: 7
+        weight: 10
         context: '0'
         menu_name: main
       filters:
@@ -7806,71 +7810,6 @@ display:
           entity_type: taxonomy_term
           entity_field: name
           plugin_id: term_name
-        vid_1:
-          id: vid_1
-          table: taxonomy_term_field_data
-          field: vid
-          relationship: field_editor_s_
-          group_type: group
-          admin_label: ''
-          label: 'Eds voc'
-          exclude: true
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: target_id
-          type: entity_reference_label
-          settings:
-            link: true
-          group_column: target_id
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          entity_type: taxonomy_term
-          entity_field: vid
-          plugin_id: field
         name_1:
           id: name_1
           table: taxonomy_term_field_data
@@ -7882,7 +7821,7 @@ display:
           exclude: true
           alter:
             alter_text: true
-            text: '{{ name_1 }} [{{ vid_1 }}]'
+            text: '{{ name_1 }}'
             make_link: false
             path: ''
             absolute: false
@@ -8011,7 +7950,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: '{{ field_editor_s_ }} [{{ vid_1 }}]'
+            text: '{{ field_editor_s_ }}'
             make_link: false
             path: ''
             absolute: false
@@ -8138,6 +8077,47 @@ display:
           expose:
             operator_limit_selection: false
             operator_list: {  }
+          group: 1
+        field_legacy_iscanonical_value:
+          id: field_legacy_iscanonical_value
+          table: taxonomy_term__field_legacy_iscanonical
+          field: field_legacy_iscanonical_value
+          relationship: field_author_s_
+          group_type: group
+          admin_label: ''
+          operator: '='
+          value: All
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: IsCanonical
+            description: ''
+            use_operator: false
+            operator: field_legacy_iscanonical_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_legacy_iscanonical_value
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          plugin_id: boolean
         name:
           id: name
           table: taxonomy_term_field_data
@@ -8269,51 +8249,6 @@ display:
           entity_type: taxonomy_term
           entity_field: name
           plugin_id: string
-        vid_1:
-          id: vid_1
-          table: taxonomy_term_field_data
-          field: vid
-          relationship: field_editor_s_
-          group_type: group
-          admin_label: ''
-          operator: in
-          value:
-            person: person
-            organisation: organisation
-          group: 1
-          exposed: true
-          expose:
-            operator_id: vid_1_op
-            label: 'Editor vocab'
-            description: ''
-            use_operator: false
-            operator: vid_1_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: vid_1
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-            reduce: true
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          entity_type: taxonomy_term
-          entity_field: vid
-          plugin_id: bundle
       filter_groups:
         operator: AND
         groups:

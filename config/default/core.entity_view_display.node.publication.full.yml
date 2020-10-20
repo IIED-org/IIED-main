@@ -159,7 +159,7 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
             additional: {  }
-            weight: -7
+            weight: -6
           e5e638a1-5d52-4a82-8ad7-d80ba0a482d9:
             uuid: e5e638a1-5d52-4a82-8ad7-d80ba0a482d9
             region: right
@@ -177,7 +177,7 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
             additional: {  }
-            weight: -5
+            weight: -4
           612e1fdf-3902-431d-b475-1c1d7f18d139:
             uuid: 612e1fdf-3902-431d-b475-1c1d7f18d139
             region: left
@@ -252,7 +252,7 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
             additional: {  }
-            weight: -6
+            weight: -5
           ae61b2a5-6a0e-4d43-ae35-35bdbec04d8d:
             uuid: ae61b2a5-6a0e-4d43-ae35-35bdbec04d8d
             region: content
@@ -895,16 +895,33 @@ third_party_settings:
                 third_party_settings: {  }
             additional: {  }
             weight: 39
-          d5d75f87-c22e-4a09-8c28-dcd5f9d51779:
-            uuid: d5d75f87-c22e-4a09-8c28-dcd5f9d51779
-            region: left
+          b10d469c-1c65-462f-bc22-dc1d0737ea18:
+            uuid: b10d469c-1c65-462f-bc22-dc1d0737ea18
+            region: right
             configuration:
+              id: 'field_block:node:publication:field_editor_s_'
+              label: Editor(s)
+              provider: layout_builder
               label_display: '0'
+              formatter:
+                label: inline
+                type: entity_reference_label
+                settings:
+                  link: true
+                third_party_settings:
+                  ds:
+                    ds_limit: ''
+                    ft:
+                      id: default
+                      settings:
+                        lb: 'Edited by'
+                        lb-col: true
+                        classes: {  }
               context_mapping:
                 entity: layout_builder.entity
-              id: 'extra_field_block:node:publication:sharing_buttons'
+                view_mode: view_mode
             additional: {  }
-            weight: 5
+            weight: -7
         third_party_settings: {  }
       -
         layout_id: ds_1col
