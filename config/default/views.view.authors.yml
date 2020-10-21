@@ -855,6 +855,56 @@ display:
           entity_type: taxonomy_term
           entity_field: name
           plugin_id: string
+        field_legacy_iscanonical_value:
+          id: field_legacy_iscanonical_value
+          table: taxonomy_term__field_legacy_iscanonical
+          field: field_legacy_iscanonical_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: '='
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: 'IsCanonical (legacy) (field_legacy_iscanonical)'
+            description: null
+            use_operator: false
+            operator: field_legacy_iscanonical_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_legacy_iscanonical_value
+            required: true
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: true
+          group_info:
+            label: IsCanonical
+            description: ''
+            identifier: field_legacy_iscanonical_value
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items:
+              1:
+                title: 'True'
+                operator: '='
+                value: '1'
+              2:
+                title: 'False'
+                operator: '='
+                value: '0'
+              3:
+                title: ''
+                operator: '='
+                value: ''
+          plugin_id: boolean
       defaults:
         filters: false
         filter_groups: false

@@ -43,6 +43,7 @@ dependencies:
     - field.field.node.publication.field_tags
     - field.field.node.publication.field_team
     - field.field.node.publication.field_theme_s_
+    - field.field.node.publication.field_translator
     - node.type.publication
   module:
     - address
@@ -383,5 +384,6 @@ content:
     third_party_settings: {  }
 hidden:
   field_product_id: true
+  field_translator: true
   langcode: true
   search_api_excerpt: true

@@ -56,6 +56,7 @@
         "drupal/redirect": "^1.6",
         "drupal/serial": "^1.0@alpha",
         "drupal/sidr": "^3.1",
+        "drupal/taxonomy_manager": "^2.0",
         "drupal/term_merge": "^1.0@alpha",
         "drupal/upgrade_status": "^2.0",
         "drupal/views_bootstrap": "^4.3",
