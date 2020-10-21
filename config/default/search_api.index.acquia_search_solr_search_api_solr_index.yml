@@ -1,6 +1,6 @@
 uuid: d81e73e7-7b46-4fb5-99cf-1852b37b2ab5
 langcode: en
-status: false
+status: true
 dependencies:
   module:
     - acquia_search_solr

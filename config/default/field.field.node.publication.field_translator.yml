@@ -1,0 +1,25 @@
+uuid: 827eca90-dcbf-45ec-8994-bbe90b5fae68
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_translator
+    - node.type.publication
+id: node.publication.field_translator
+field_name: field_translator
+entity_type: node
+bundle: publication
+label: Translator
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: authors
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference

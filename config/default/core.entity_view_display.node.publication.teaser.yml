@@ -43,9 +43,11 @@ dependencies:
     - field.field.node.publication.field_tags
     - field.field.node.publication.field_team
     - field.field.node.publication.field_theme_s_
+    - field.field.node.publication.field_translator
     - node.type.publication
   module:
     - layout_builder
+    - layout_discovery
     - user
 third_party_settings:
   layout_builder:
@@ -153,5 +155,6 @@ hidden:
   field_tags: true
   field_team: true
   field_theme_s_: true
+  field_translator: true
   langcode: true
   search_api_excerpt: true
