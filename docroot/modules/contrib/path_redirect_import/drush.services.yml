@@ -1,0 +1,5 @@
+services:
+  path_redirect_import.commands:
+    class: \Drupal\path_redirect_import\Commands\PathRedirectImport
+    tags:
+    - { name: drush.command }

@@ -1,0 +1,4 @@
+services:
+  path_redirect_import.importer:
+    class: Drupal\path_redirect_import\ImporterService
+    arguments: []

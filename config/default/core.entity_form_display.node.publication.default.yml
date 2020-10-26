@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.node.publication.body
+    - field.field.node.publication.field_admin
     - field.field.node.publication.field_area_list
     - field.field.node.publication.field_author_s_
     - field.field.node.publication.field_date_published
@@ -75,6 +76,14 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_admin:
+    weight: 50
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
+    region: content
   field_area_list:
     weight: 25
     settings: {  }
