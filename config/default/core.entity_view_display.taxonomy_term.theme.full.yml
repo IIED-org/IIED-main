@@ -1,9 +1,10 @@
-uuid: 7acbfd8e-9245-4762-a69e-104422f43f00
+uuid: b6df817e-03b3-4852-93d7-da27efc5c6c7
 langcode: en
 status: true
 dependencies:
   config:
     - core.base_field_override.taxonomy_term.theme.description
+    - core.entity_view_mode.taxonomy_term.full
     - field.field.taxonomy_term.theme.field_legacy_code
     - taxonomy.vocabulary.theme
   module:
@@ -13,14 +14,15 @@ dependencies:
 third_party_settings:
   layout_builder:
     enabled: true
+    allow_custom: false
     sections:
       -
         layout_id: layout_onecol
         layout_settings:
           label: ''
         components:
-          30efb88e-a881-4ddb-82f5-3bc95a1c13ef:
-            uuid: 30efb88e-a881-4ddb-82f5-3bc95a1c13ef
+          3e622f73-77e7-4642-bf6e-1b39225cfbdf:
+            uuid: 3e622f73-77e7-4642-bf6e-1b39225cfbdf
             region: content
             configuration:
               label_display: '0'
@@ -34,8 +36,8 @@ third_party_settings:
                 third_party_settings: {  }
             additional: {  }
             weight: 0
-          b6c57b91-a331-457f-83d6-04360930b077:
-            uuid: b6c57b91-a331-457f-83d6-04360930b077
+          25332b4e-ec73-4430-8470-bfde413077e5:
+            uuid: 25332b4e-ec73-4430-8470-bfde413077e5
             region: content
             configuration:
               label_display: '0'
@@ -51,11 +53,10 @@ third_party_settings:
             additional: {  }
             weight: 1
         third_party_settings: {  }
-    allow_custom: false
-id: taxonomy_term.theme.default
+id: taxonomy_term.theme.full
 targetEntityType: taxonomy_term
 bundle: theme
-mode: default
+mode: full
 content:
   description:
     label: hidden

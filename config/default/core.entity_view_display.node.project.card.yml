@@ -15,9 +15,9 @@ dependencies:
     - node.type.project
   module:
     - ds
+    - field_group
     - image
     - layout_builder
-    - link
     - text
     - user
 third_party_settings:
@@ -40,20 +40,130 @@ third_party_settings:
         link_custom: ''
         classes:
           layout_class:
+            col-md-12: col-md-12
+          ds_content:
             card: card
-          ds_content: {  }
     regions:
       ds_content:
+        - group_project_card
+        - group_row_nogutters
         - field_image
+        - group_col_md_8
+        - group_card_body
         - node_title
         - body
-        - field_link
     fields:
       node_title:
         plugin_id: node_title
-        weight: 1
+        weight: 37
         label: hidden
         formatter: default
+        settings:
+          wrapper: h4
+          class: card-title
+          link: false
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            prefix: ''
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow-el: ''
+            ow-cl: ''
+            ow-at: ''
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
+            fi: true
+            fi-el: a
+            fi-cl: stretched-link
+            fi-at: 'href="[node:URL]"'
+            suffix: ''
+            lbw: false
+            lb-col: false
+            ow: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
+            fis-def-at: false
+            fi-def-at: false
+  field_group:
+    group_project_card:
+      children:
+        - group_row_nogutters
+      parent_name: ''
+      weight: 0
+      format_type: html_element
+      region: ds_content
+      format_settings:
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        id: ''
+        classes: card
+      label: Project-card
+    group_row_nogutters:
+      children:
+        - field_image
+        - group_col_md_8
+      parent_name: group_project_card
+      weight: 1
+      format_type: html_element
+      region: ds_content
+      format_settings:
+        id: ''
+        classes: 'row no-gutters'
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+      label: Row-nogutters
+    group_card_body:
+      children:
+        - node_title
+        - body
+      parent_name: group_col_md_8
+      weight: 36
+      format_type: html_element
+      region: ds_content
+      format_settings:
+        id: ''
+        classes: card-body
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+      label: 'card body'
+    group_col_md_8:
+      children:
+        - group_card_body
+      parent_name: group_row_nogutters
+      weight: 35
+      format_type: html_element
+      region: ds_content
+      format_settings:
+        id: ''
+        classes: col-md-8
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+      label: col-md-8
 id: node.project.card
 targetEntityType: node
 bundle: project
@@ -62,33 +172,78 @@ content:
   body:
     label: hidden
     type: text_default
-    weight: 2
+    weight: 38
     settings: {  }
-    third_party_settings: {  }
+    third_party_settings:
+      ds:
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            prefix: ''
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow-el: ''
+            ow-cl: ''
+            ow-at: ''
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            lbw: false
+            lb-col: false
+            ow: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
     region: ds_content
   field_image:
-    weight: 0
+    weight: 34
     label: hidden
     settings:
       image_style: ''
       image_link: ''
-    third_party_settings: {  }
+    third_party_settings:
+      ds:
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            prefix: ''
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow: true
+            ow-el: div
+            ow-cl: col-md-4
+            ow-at: ''
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            lbw: false
+            lb-col: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
     type: image
-    region: ds_content
-  field_link:
-    weight: 3
-    label: hidden
-    settings:
-      trim_length: 80
-      url_only: false
-      url_plain: false
-      rel: ''
-      target: ''
-    third_party_settings: {  }
-    type: link
     region: ds_content
 hidden:
   field_collection: true
+  field_link: true
   field_nid: true
   field_projectnumber: true
   field_theme: true

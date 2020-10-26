@@ -1,0 +1,8 @@
+uuid: b73166c7-cd47-40a6-87a6-8e2c25b0dee5
+langcode: en
+status: true
+dependencies: {  }
+id: published_date
+label: 'Published date'
+locked: false
+pattern: 'F Y'
