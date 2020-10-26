@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains path_redirect_import.module..
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function path_redirect_import_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the path_redirect_import module.
+    case 'help.page.path_redirect_import':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Provides the ability to import redirects for the Redirect module') . '</p>';
+      return $output;
+
+    default:
+  }
+}

@@ -1,0 +1,21 @@
+uuid: cd8af185-3c07-40a1-a206-8de022b599ec
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_admin
+    - node.type.publication
+  module:
+    - text
+id: node.publication.field_admin
+field_name: field_admin
+entity_type: node
+bundle: publication
+label: 'Admin notes'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

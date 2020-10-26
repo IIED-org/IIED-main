@@ -1,0 +1,6 @@
+redirect.import:
+  title: 'Import'
+  parent: redirect.list
+  route_name: redirect.import
+  description: 'Import redirects from file.'
+  menu_name: admin

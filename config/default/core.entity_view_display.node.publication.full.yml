@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.full
     - field.field.node.publication.body
+    - field.field.node.publication.field_admin
     - field.field.node.publication.field_area_list
     - field.field.node.publication.field_author_s_
     - field.field.node.publication.field_date_published
@@ -739,6 +740,7 @@ content:
     third_party_settings: {  }
     region: left
 hidden:
+  field_admin: true
   field_deptlist: true
   field_parent: true
   field_pdf: true

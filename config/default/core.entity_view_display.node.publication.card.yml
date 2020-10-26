@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.card
     - field.field.node.publication.body
+    - field.field.node.publication.field_admin
     - field.field.node.publication.field_area_list
     - field.field.node.publication.field_author_s_
     - field.field.node.publication.field_date_published
@@ -118,6 +119,7 @@ mode: card
 content: {  }
 hidden:
   body: true
+  field_admin: true
   field_area_list: true
   field_author_s_: true
   field_date_published: true

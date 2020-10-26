@@ -9,7 +9,6 @@ module:
   big_pipe: 0
   block: 0
   block_content: 0
-  bootstrap_layouts: 0
   breakpoint: 0
   chosen: 0
   chosen_lib: 0
@@ -69,6 +68,7 @@ module:
   page_cache: 0
   path: 0
   path_alias: 0
+  path_redirect_import: 0
   quickedit: 0
   rdf: 0
   redirect: 0

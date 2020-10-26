@@ -1,0 +1,5 @@
+redirect.import:
+  route_name: redirect.import
+  base_route: redirect.list
+  title: Import
+  weight: 50
