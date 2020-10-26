@@ -2,6 +2,8 @@ uuid: c0cf74a0-221f-4268-bcc2-df018040a9c9
 langcode: en
 status: true
 dependencies:
+  module:
+    - ctools
   theme:
     - iied_pubs
 _core:
@@ -17,4 +19,12 @@ settings:
   label: 'Page title'
   provider: core
   label_display: '0'
-visibility: {  }
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      article: article
+      page: page
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'

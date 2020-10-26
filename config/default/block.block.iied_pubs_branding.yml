@@ -10,8 +10,8 @@ _core:
   default_config_hash: NDwadleLD3YVSbDUaakxyYZyINYtkFtOVGShfq4kWy8
 id: iied_pubs_branding
 theme: iied_pubs
-region: header
-weight: 0
+region: navbar_branding
+weight: -5
 provider: null
 plugin: system_branding_block
 settings:

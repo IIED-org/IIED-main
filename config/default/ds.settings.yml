@@ -12,6 +12,7 @@ classes:
     - col-md-4|col-md-4
     - col-md-6|col-md-6
     - col-md-8|col-md-8
+    - col-md-12|col-md-12
     - h-100|h-100
     - mx-auto|mx-auto
   field: {  }

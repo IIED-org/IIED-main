@@ -81,9 +81,9 @@ third_party_settings:
         label: hidden
         formatter: default
         settings:
+          link: true
           wrapper: ''
           class: ''
-          link: false
         ft:
           id: expert
           settings:
