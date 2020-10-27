@@ -4,8 +4,8 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.card
-    - node.type.publication
   module:
+    - datetime
     - node
     - user
     - views_bootstrap
@@ -28,7 +28,7 @@ display:
         options:
           perm: 'access content'
       cache:
-        type: tag
+        type: none
         options: {  }
       query:
         type: views_query
@@ -144,64 +144,20 @@ display:
             operator_limit_selection: false
             operator_list: {  }
           group: 1
-        type:
-          id: type
-          table: node_field_data
-          field: type
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: in
-          value:
-            publication: publication
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          entity_type: node
-          entity_field: type
-          plugin_id: bundle
       sorts:
-        created:
-          id: created
-          table: node_field_data
-          field: created
-          order: DESC
-          entity_type: node
-          entity_field: created
-          plugin_id: date
+        field_date_published_value:
+          id: field_date_published_value
+          table: node__field_date_published
+          field: field_date_published_value
           relationship: none
           group_type: group
           admin_label: ''
+          order: DESC
           exposed: false
           expose:
             label: ''
-          granularity: second
+          granularity: month
+          plugin_id: datetime
       title: 'Publications related to this project'
       header: {  }
       footer: {  }
@@ -216,12 +172,22 @@ display:
           admin_label: 'field_project: Content'
           required: true
           plugin_id: standard
+        reverse__node__field_project:
+          id: reverse__node__field_project
+          table: node_field_data
+          field: reverse__node__field_project
+          relationship: field_project_1
+          group_type: group
+          admin_label: field_project
+          required: true
+          entity_type: node
+          plugin_id: entity_reverse
       arguments:
         nid:
           id: nid
           table: node_field_data
           field: nid
-          relationship: field_project_1
+          relationship: reverse__node__field_project
           group_type: group
           admin_label: ''
           default_action: default
@@ -245,16 +211,11 @@ display:
             format: default_summary
           specify_validation: true
           validate:
-            type: 'entity:node'
+            type: none
             fail: 'not found'
-          validate_options:
-            bundles:
-              publication: publication
-            operation: view
-            multiple: 0
-            access: false
+          validate_options: {  }
           break_phrase: false
-          not: true
+          not: false
           entity_type: node
           entity_field: nid
           plugin_id: node_nid
@@ -284,10 +245,10 @@ display:
             sort_order: asc
             number_of_records: 0
             format: default_summary
-          specify_validation: false
+          specify_validation: true
           validate:
             type: none
-            fail: 'not found'
+            fail: ignore
           validate_options: {  }
           break_phrase: false
           not: true
@@ -295,6 +256,10 @@ display:
           entity_field: nid
           plugin_id: node_nid
       display_extenders: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
     cache_metadata:
       max-age: -1
       contexts:
@@ -311,6 +276,7 @@ display:
     position: 1
     display_options:
       display_extenders: {  }
+      block_hide_empty: true
     cache_metadata:
       max-age: -1
       contexts:
