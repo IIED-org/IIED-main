@@ -5,5 +5,5 @@ dependencies: {  }
 id: id
 label: Indonesian
 direction: ltr
-weight: -3
+weight: -2
 locked: false

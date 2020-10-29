@@ -41,8 +41,7 @@ third_party_settings:
         classes:
           layout_class:
             col-md-12: col-md-12
-          ds_content:
-            card: card
+          ds_content: {  }
     regions:
       ds_content:
         - group_project_card

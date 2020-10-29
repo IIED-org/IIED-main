@@ -1,0 +1,33 @@
+uuid: 7178356d-2460-4213-8496-036597108285
+langcode: en
+status: false
+dependencies:
+  module:
+    - sidr
+  theme:
+    - iied_pubs
+id: sidrtriggerbuttonblock
+theme: iied_pubs
+region: navbar_branding
+weight: -6
+provider: null
+plugin: sidr_trigger
+settings:
+  id: sidr_trigger
+  label: 'Sidr trigger button block'
+  provider: sidr
+  label_display: '0'
+  trigger_text: Menu
+  trigger_icon: '<i class="fa fa-bars"></i>'
+  sidr_name: ''
+  sidr_source: .region-navbar-left
+  sidr_side: left
+  sidr_renaming: false
+  sidr_nocopy: true
+  sidr_speed: ''
+  sidr_timing: ''
+  sidr_method: toggle
+  sidr_displace: false
+  sidr_body: ''
+  sidr_close_on_blur: null
+visibility: {  }

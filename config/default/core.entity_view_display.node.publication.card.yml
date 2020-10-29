@@ -48,6 +48,7 @@ dependencies:
     - node.type.publication
   module:
     - ds
+    - field_group
     - layout_builder
     - user
 third_party_settings:
@@ -71,14 +72,16 @@ third_party_settings:
         classes:
           layout_class:
             card: card
+            h-100: h-100
           ds_content: {  }
     regions:
       ds_content:
+        - group_card_body
         - node_title
     fields:
       node_title:
         plugin_id: node_title
-        weight: 0
+        weight: 1
         label: hidden
         formatter: default
         settings:
@@ -100,7 +103,7 @@ third_party_settings:
             fis-cl: ''
             fis-at: ''
             fi: true
-            fi-el: h4
+            fi-el: h5
             fi-cl: card-title
             fi-at: ''
             suffix: ''
@@ -112,6 +115,25 @@ third_party_settings:
             fis: false
             fis-def-at: false
             fi-def-at: false
+  field_group:
+    group_card_body:
+      children:
+        - node_title
+      parent_name: ''
+      weight: 0
+      format_type: html_element
+      region: ds_content
+      format_settings:
+        id: ''
+        classes: card-body
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+      label: card-body
 id: node.publication.card
 targetEntityType: node
 bundle: publication

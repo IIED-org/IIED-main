@@ -3,56 +3,54 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.base_field_override.taxonomy_term.theme.description
     - core.entity_view_mode.taxonomy_term.full
     - field.field.taxonomy_term.theme.field_legacy_code
     - taxonomy.vocabulary.theme
   module:
+    - ds
     - layout_builder
-    - layout_discovery
     - text
 third_party_settings:
   layout_builder:
-    enabled: true
+    enabled: false
     allow_custom: false
-    sections:
-      -
-        layout_id: layout_onecol
-        layout_settings:
-          label: ''
-        components:
-          3e622f73-77e7-4642-bf6e-1b39225cfbdf:
-            uuid: 3e622f73-77e7-4642-bf6e-1b39225cfbdf
-            region: content
-            configuration:
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:theme:description'
-              formatter:
-                label: hidden
-                type: text_default
-                settings: {  }
-                third_party_settings: {  }
-            additional: {  }
-            weight: 0
-          25332b4e-ec73-4430-8470-bfde413077e5:
-            uuid: 25332b4e-ec73-4430-8470-bfde413077e5
-            region: content
-            configuration:
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:theme:field_legacy_code'
-              formatter:
-                label: above
-                settings:
-                  link_to_entity: false
-                third_party_settings: {  }
-                type: string
-            additional: {  }
-            weight: 1
-        third_party_settings: {  }
+  ds:
+    layout:
+      id: ds_1col
+      library: null
+      disable_css: false
+      entity_classes: all_classes
+      settings:
+        label: ''
+        wrappers:
+          ds_content: div
+        outer_wrapper: div
+        attributes: ''
+        link_attribute: ''
+        link_custom: ''
+        classes:
+          layout_class: {  }
+          ds_content: {  }
+    regions:
+      ds_content:
+        - taxonomy_term_title
+        - description
+    fields:
+      taxonomy_term_title:
+        plugin_id: taxonomy_term_title
+        weight: 0
+        label: hidden
+        formatter: default
+        settings:
+          wrapper: h1
+          class: page-title
+          link: false
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
 id: taxonomy_term.theme.full
 targetEntityType: taxonomy_term
 bundle: theme
@@ -61,18 +59,11 @@ content:
   description:
     label: hidden
     type: text_default
-    weight: 0
-    region: content
+    weight: 1
+    region: ds_content
     settings: {  }
     third_party_settings: {  }
-  field_legacy_code:
-    weight: 1
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    type: string
-    region: content
 hidden:
+  field_legacy_code: true
   langcode: true
   search_api_excerpt: true
