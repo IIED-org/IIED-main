@@ -5,5 +5,5 @@ dependencies: {  }
 id: sw
 label: Swahili
 direction: ltr
-weight: 5
+weight: 6
 locked: false

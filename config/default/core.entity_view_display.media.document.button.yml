@@ -1,0 +1,49 @@
+uuid: 0d38768a-b779-4d05-911e-5fd19a9c1eba
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.button
+    - field.field.media.document.field_media_document
+    - field.field.media.document.field_pdf_pages
+    - field.field.media.document.field_size
+    - media.type.document
+  module:
+    - ds
+    - file
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    allow_custom: false
+    enabled: false
+_core:
+  default_config_hash: DXitcriWmE5QHvGvk2OzWouaSnXD5uipkRdAG6_pnkg
+id: media.document.button
+targetEntityType: media
+bundle: document
+mode: button
+content:
+  field_media_document:
+    weight: 0
+    label: hidden
+    settings:
+      use_description_as_link_text: true
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: Download
+            lb-col: false
+            classes: {  }
+    type: file_default
+    region: content
+hidden:
+  created: true
+  field_pdf_pages: true
+  field_size: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true

@@ -1,0 +1,10 @@
+uuid: 829cfe3f-993e-4eba-b765-a2be1170ec52
+langcode: en
+status: true
+dependencies:
+  module:
+    - media
+id: media.button
+label: Button
+targetEntityType: media
+cache: true

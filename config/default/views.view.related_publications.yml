@@ -56,27 +56,14 @@ display:
       style:
         type: views_bootstrap_grid
         options:
-          grouping: {  }
           row_class: ''
-          default_row_class: true
+          default_row_class: false
           uses_fields: false
-          col_xs: none
-          col_sm: none
-          col_md: none
-          col_lg: none
-          col_xl: none
-          col_class_custom: ''
-          col_class_default: true
-          row_class_custom: ''
-          row_class_default: true
-          default: ''
-          info: {  }
-          override: true
-          sticky: false
-          order: asc
-          caption: ''
-          summary: ''
-          description: ''
+          col_xs: col-auto
+          col_sm: col-sm-12
+          col_md: col-md-6
+          col_lg: col-lg-4
+          col_xl: col-xl-3
       row:
         type: 'entity:node'
         options:
