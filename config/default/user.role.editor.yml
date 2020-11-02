@@ -1,0 +1,45 @@
+uuid: 0c5c536b-ef92-46e9-9ce2-2c082ff45df8
+langcode: en
+status: true
+dependencies: {  }
+id: editor
+label: Editor
+weight: -7
+is_admin: null
+permissions:
+  - 'access content'
+  - 'access content overview'
+  - 'access files overview'
+  - 'access in-place editing'
+  - 'create content translations'
+  - 'create document media'
+  - 'create image media'
+  - 'create publication content'
+  - 'create terms in list'
+  - 'create terms in person'
+  - 'delete own publication content'
+  - 'delete terms in list'
+  - 'delete terms in person'
+  - 'edit any document media'
+  - 'edit any image media'
+  - 'edit any publication content'
+  - 'edit own document media'
+  - 'edit own image media'
+  - 'edit own publication content'
+  - 'edit terms in list'
+  - 'edit terms in person'
+  - 'notify of path changes'
+  - 'revert publication revisions'
+  - 'translate document media'
+  - 'translate publication node'
+  - 'update content translations'
+  - 'use text format basic_html'
+  - 'use text format full_html'
+  - 'use text format restricted_html'
+  - 'view all media revisions'
+  - 'view document media revisions'
+  - 'view image media revisions'
+  - 'view media'
+  - 'view own unpublished content'
+  - 'view own unpublished media'
+  - 'view publication revisions'

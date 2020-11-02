@@ -48,8 +48,10 @@ module:
   layout_builder: 0
   layout_discovery: 0
   link: 0
+  masquerade: 0
   media: 0
   media_library: 0
+  media_pdf_thumbnail: 0
   media_revisions_ui: 0
   menu_link_content: 0
   menu_ui: 0
