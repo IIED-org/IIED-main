@@ -67,8 +67,28 @@ display:
           quantity: 9
       style:
         type: default
+        options:
+          row_class: 'row border-bottom mb-2'
+          default_row_class: false
+          uses_fields: false
       row:
-        type: fields
+        type: search_api
+        options:
+          view_modes:
+            'entity:node':
+              article: default
+              page: default
+              project: default
+              publication: search_result
+            'entity:taxonomy_term':
+              document_type: default
+              list: default
+              organisation: default
+              person: default
+              series: default
+              tags: default
+              test: default
+              theme: default
       fields:
         title:
           id: title
@@ -295,17 +315,18 @@ display:
           empty: true
           tokenize: false
           content:
-            value: 'No results'
+            value: 'No results found'
             format: basic_html
           plugin_id: text
       relationships: {  }
       arguments: {  }
       display_extenders: {  }
-      use_ajax: true
+      use_ajax: false
       filter_groups:
         operator: AND
         groups:
           1: AND
+      css_class: 'col-md-8 order-md-1 mr-5'
     cache_metadata:
       max-age: -1
       contexts:
@@ -427,7 +448,10 @@ display:
       exposed_block: true
       style:
         type: default
-        options: {  }
+        options:
+          row_class: 'row border-bottom mb-2'
+          default_row_class: false
+          uses_fields: false
       row:
         type: search_api
         options:
@@ -436,7 +460,7 @@ display:
               article: default
               page: default
               project: default
-              publication: teaser
+              publication: search_result
             'entity:taxonomy_term':
               document_type: default
               list: default
