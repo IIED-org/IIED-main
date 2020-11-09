@@ -21,7 +21,7 @@ bundle: document
 mode: media_library
 content:
   field_media_document:
-    weight: 1
+    weight: 2
     label: hidden
     settings:
       use_description_as_link_text: true

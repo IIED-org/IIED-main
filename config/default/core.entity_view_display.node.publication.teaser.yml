@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.publication.field_admin
     - field.field.node.publication.field_area_list
     - field.field.node.publication.field_author_s_
+    - field.field.node.publication.field_cover_image
     - field.field.node.publication.field_date_published
     - field.field.node.publication.field_deptlist
     - field.field.node.publication.field_document_type
@@ -122,6 +123,7 @@ hidden:
   field_admin: true
   field_area_list: true
   field_author_s_: true
+  field_cover_image: true
   field_date_published: true
   field_deptlist: true
   field_document_type: true

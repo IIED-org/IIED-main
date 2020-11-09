@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.publication.field_admin
     - field.field.node.publication.field_area_list
     - field.field.node.publication.field_author_s_
+    - field.field.node.publication.field_cover_image
     - field.field.node.publication.field_date_published
     - field.field.node.publication.field_deptlist
     - field.field.node.publication.field_document_type
@@ -64,6 +65,7 @@ third_party_settings:
   field_group:
     group_cover_image:
       children:
+        - 'dynamic_block_field:node-cover_image'
         - field_lit_code
         - field_product_code
       parent_name: ''
@@ -137,7 +139,7 @@ third_party_settings:
         - field_issn
         - field_doi
       parent_name: ''
-      weight: 4
+      weight: 3
       format_type: html_element
       region: ds_content
       format_settings:
@@ -155,7 +157,7 @@ third_party_settings:
       children:
         - field_project
       parent_name: ''
-      weight: 5
+      weight: 4
       format_type: html_element
       region: ds_content
       format_settings:
@@ -173,7 +175,7 @@ third_party_settings:
       children:
         - 'dynamic_block_field:node-related_publications'
       parent_name: ''
-      weight: 6
+      weight: 5
       format_type: html_element
       region: ds_content
       format_settings:
@@ -227,19 +229,20 @@ third_party_settings:
     regions:
       ds_content:
         - group_pub_header
-        - field_lit_code
+        - 'dynamic_block_field:node-cover_image'
         - group_cover_image
         - node_title
-        - field_product_code
+        - field_lit_code
         - field_author_s_
+        - field_product_code
         - group_pub_body
-        - field_editor_s_
         - group_pub_detail
-        - field_translator
+        - field_editor_s_
         - group_related_project
+        - field_translator
         - field_document_type
-        - field_pdf_pages
         - group_related_publications
+        - field_pdf_pages
         - 'dynamic_block_field:node-related_publications'
         - field_date_published
         - field_iied_url
@@ -258,6 +261,11 @@ third_party_settings:
         - field_doi
         - field_project
     fields:
+      'dynamic_block_field:node-cover_image':
+        plugin_id: 'dynamic_block_field:node-cover_image'
+        weight: 0
+        label: hidden
+        formatter: default
       'dynamic_block_field:node-related_publications':
         plugin_id: 'dynamic_block_field:node-related_publications'
         weight: 6
@@ -532,7 +540,7 @@ content:
     region: ds_content
   field_lit_code:
     type: list_key
-    weight: 0
+    weight: 1
     region: ds_content
     label: hidden
     settings: {  }
@@ -640,7 +648,7 @@ content:
     type: number_integer
     region: ds_content
   field_product_code:
-    weight: 1
+    weight: 2
     label: inline
     settings:
       link_to_entity: false
@@ -761,6 +769,7 @@ content:
     region: left
 hidden:
   field_admin: true
+  field_cover_image: true
   field_deptlist: true
   field_parent: true
   field_pdf: true
