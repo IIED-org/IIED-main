@@ -56,6 +56,7 @@
         "drupal/rabbit_hole": "^1.0@beta",
         "drupal/radix": "^4.10",
         "drupal/redirect": "^1.6",
+        "drupal/search_api_autocomplete": "^1.4",
         "drupal/serial": "^1.0@alpha",
         "drupal/sidr": "^3.1",
         "drupal/taxonomy_manager": "^2.0",

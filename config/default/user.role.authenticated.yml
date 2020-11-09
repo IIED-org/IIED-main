@@ -16,5 +16,7 @@ permissions:
   - 'post comments'
   - 'search content'
   - 'skip comment approval'
+  - 'use search_api_autocomplete for acquia_search_solr'
+  - 'use search_api_autocomplete for search'
   - 'use text format basic_html'
   - 'view media'
