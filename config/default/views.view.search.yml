@@ -383,6 +383,9 @@ display:
             remember_roles:
               authenticated: authenticated
               anonymous: '0'
+              viewer: '0'
+              editor: '0'
+              manager: '0'
               administrator: '0'
             placeholder: ''
           is_grouped: false
@@ -397,54 +400,14 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          parse_mode: terms
+          parse_mode: sloppy_phrase
           min_length: 3
           fields: {  }
           plugin_id: search_api_fulltext
-        type:
-          id: type
-          table: search_api_index_acquia_search_solr_search_api_solr_index
-          field: type
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: or
-          value:
-            publication: publication
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          reduce_duplicates: false
-          plugin_id: search_api_options
       filter_groups:
-        operator: AND
-        groups: {  }
+        operator: OR
+        groups:
+          1: AND
       exposed_block: true
       style:
         type: default

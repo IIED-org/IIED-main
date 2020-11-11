@@ -5,9 +5,9 @@ dependencies:
   module:
     - acquia_search_solr
     - search_api_solr
+    - taxonomy
     - node
     - search_api
-    - taxonomy
   config:
     - field.storage.node.body
     - field.storage.node.field_author_s_
@@ -102,6 +102,15 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_theme_s_
+  name:
+    label: Name
+    datasource_id: 'entity:taxonomy_term'
+    property_path: name
+    type: text
+    boost: !!float 8
+    dependencies:
+      module:
+        - taxonomy
   node_grants:
     label: 'Node access information'
     property_path: search_api_node_grants
@@ -146,6 +155,14 @@ field_settings:
     dependencies:
       module:
         - node
+  vid:
+    label: Vocabulary
+    datasource_id: 'entity:taxonomy_term'
+    property_path: vid
+    type: integer
+    dependencies:
+      module:
+        - taxonomy
 datasource_settings:
   'entity:node':
     bundles:
@@ -156,8 +173,11 @@ datasource_settings:
       selected: {  }
   'entity:taxonomy_term':
     bundles:
-      default: true
-      selected: {  }
+      default: false
+      selected:
+        - organisation
+        - person
+        - theme
     languages:
       default: true
       selected: {  }
@@ -192,6 +212,7 @@ processor_settings:
       - field_document_type
       - field_product_code
       - field_theme_s_
+      - name
       - title
       - type
     title: true
@@ -207,6 +228,7 @@ processor_settings:
       preprocess_query: -15
   language_with_fallback: {  }
   rendered_item: {  }
+  reverse_entity_references: {  }
   solr_date_range:
     weights:
       preprocess_index: 0
@@ -216,6 +238,9 @@ processor_settings:
         datasource_boost: !!float 1
       'entity:taxonomy_term':
         datasource_boost: !!float 1
+        bundle_boosts:
+          person: !!float 21
+          theme: !!float 21
     weights:
       preprocess_index: 0
 tracker_settings:

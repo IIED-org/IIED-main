@@ -9,6 +9,7 @@ dependencies:
     - taxonomy.vocabulary.person
   module:
     - layout_builder
+    - layout_discovery
     - name
 third_party_settings:
   layout_builder:
@@ -77,6 +78,7 @@ third_party_settings:
             additional: {  }
             weight: 2
         third_party_settings: {  }
+    allow_custom: false
 id: taxonomy_term.person.default
 targetEntityType: taxonomy_term
 bundle: person
