@@ -1,0 +1,73 @@
+uuid: a4294f24-c2bb-4c38-9252-15dd98f241b7
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.taxonomy_term.search_autocomplete
+    - field.field.taxonomy_term.theme.field_legacy_code
+    - taxonomy.vocabulary.theme
+  module:
+    - ds
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+  ds:
+    layout:
+      id: layout_onecol
+      library: layout_discovery/onecol
+      disable_css: false
+      entity_classes: all_classes
+      settings:
+        label: ''
+    regions:
+      content:
+        - taxonomy_term_title
+    fields:
+      taxonomy_term_title:
+        plugin_id: taxonomy_term_title
+        weight: 0
+        label: hidden
+        formatter: default
+        settings:
+          wrapper: ''
+          class: ''
+          link: false
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            prefix: '<div class="search-api-autocomplete-suggestion">'
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow-el: ''
+            ow-cl: ''
+            ow-at: ''
+            fis: true
+            fis-el: span
+            fis-cl: autocomplete-suggestion-label
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: '&nbsp;[Theme]</div>'
+            lbw: false
+            lb-col: false
+            ow: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
+id: taxonomy_term.theme.search_autocomplete
+targetEntityType: taxonomy_term
+bundle: theme
+mode: search_autocomplete
+content: {  }
+hidden:
+  description: true
+  field_legacy_code: true
+  langcode: true
+  search_api_excerpt: true

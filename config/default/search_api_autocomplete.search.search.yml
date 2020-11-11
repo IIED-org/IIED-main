@@ -5,6 +5,7 @@ dependencies:
   config:
     - search_api.index.acquia_search_solr_search_api_solr_index
     - views.view.search
+    - core.entity_view_mode.taxonomy_term.search_autocomplete
   module:
     - views
     - search_api_autocomplete
@@ -24,16 +25,16 @@ suggester_settings:
         document_type: ''
         list: ''
         organisation: ''
-        person: ''
+        person: search_autocomplete
         series: ''
         tags: ''
         test: ''
-        theme: ''
+        theme: search_autocomplete
   server:
     fields: {  }
 suggester_weights:
-  live_results: 0
-  server: 0
+  live_results: -50
+  server: -49
 suggester_limits: {  }
 search_settings:
   'views:search':
@@ -46,4 +47,4 @@ options:
   show_count: true
   autosubmit: true
   submit_button_selector: ':submit'
-  delay: null
+  delay: 100
