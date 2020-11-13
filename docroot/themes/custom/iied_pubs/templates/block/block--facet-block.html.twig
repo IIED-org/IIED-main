@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * Template for a collapsible facet block component.
+ *
+ * Available config:
+ * - utility_classes: An array of utility classes.
+ */
+#}
+{% set classes = [
+  'block',
+  bundle ? 'block--' ~ bundle|clean_class,
+  id ? 'block--' ~ id|replace({"_": "-"})|clean_class,
+]|merge(utility_classes ? utility_classes : []) %}
+
+  <div {{ attributes|without('id').addClass(classes) }}>
+
+  {{ title_prefix }}
+  {% if label %}
+    {% block label %}
+      <button aria-controls='collapse_{{ id }}' type='button' data-toggle='collapse' data-target='#collapse_{{ id }}' {{ title_attributes }}>{{ label }}</button>
+    {% endblock %}
+  {% endif %}
+  {{ title_suffix }}
+
+  {% block content %}
+    <div class='collapse show' id='collapse_{{ id }}'>
+    {{ content }}
+    </div>
+  {% endblock %}
+
+  </div>

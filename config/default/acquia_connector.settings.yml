@@ -36,7 +36,7 @@ spi:
   site_machine_name: a70da4cc_a976_4f36_999d_94e46d72df37__irforumdqqmr2dfs9__5fa9569dddd0d
   env_detection_enabled: true
   site_uuid: 53a9e309-734c-4742-b2c5-c8ccdb11652d
-  site_environment: test
+  site_environment: null
 mapping:
   acquia_spi_send_node_user:
     - acquia_connector.settings

@@ -1,4 +1,4 @@
-uuid: f6f0b4bc-1f9f-4545-99b8-bd6240b05669
+uuid: d3e6ce17-129f-4258-b966-44529ea8c509
 langcode: en
 status: true
 dependencies:
@@ -7,19 +7,19 @@ dependencies:
     - views.view.search
   module:
     - search_api
-id: type
-name: Type
-url_alias: type
-weight: -1
+id: country
+name: Country
+url_alias: country
+weight: 0
 min_count: 1
 show_only_one_result: false
-field_identifier: field_document_type
+field_identifier: field_area_list
 facet_source_id: 'search_api:views_page__search__page_2'
 widget:
   type: checkbox
   config:
     show_numbers: true
-    soft_limit: 0
+    soft_limit: 10
     soft_limit_settings:
       show_less_label: 'Show less'
       show_more_label: 'Show more'
@@ -27,10 +27,10 @@ widget:
     reset_text: 'Show all'
     hide_reset_when_no_selection: false
 query_operator: and
-use_hierarchy: true
+use_hierarchy: false
 expand_hierarchy: false
-enable_parent_when_child_gets_disabled: false
-hard_limit: 10
+enable_parent_when_child_gets_disabled: true
+hard_limit: 0
 exclude: false
 only_visible_when_facet_source_is_visible: true
 processor_configs:
@@ -39,7 +39,7 @@ processor_configs:
     weights:
       sort: 20
     settings:
-      sort: DESC
+      sort: ASC
   count_widget_order:
     processor_id: count_widget_order
     weights:
@@ -52,13 +52,8 @@ processor_configs:
       sort: 40
     settings:
       sort: ASC
-  list_item:
-    processor_id: list_item
-    weights:
-      build: 5
-    settings: {  }
-  translate_entity:
-    processor_id: translate_entity
+  translate_country:
+    processor_id: translate_country
     weights:
       build: 5
     settings: {  }

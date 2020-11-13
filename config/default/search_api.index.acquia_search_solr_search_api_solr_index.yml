@@ -10,7 +10,9 @@ dependencies:
     - search_api
   config:
     - field.storage.node.body
+    - field.storage.node.field_area_list
     - field.storage.node.field_author_s_
+    - field.storage.node.field_date_published
     - field.storage.node.field_document_type
     - field.storage.node.field_product_code
     - field.storage.node.field_theme_s_
@@ -70,6 +72,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
+  field_area_list:
+    label: 'Area list'
+    datasource_id: 'entity:node'
+    property_path: field_area_list
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_area_list
   field_author_s_:
     label: Author(s)
     datasource_id: 'entity:node'
@@ -78,6 +88,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_author_s_
+  field_date_published:
+    label: 'Published date'
+    datasource_id: 'entity:node'
+    property_path: field_date_published
+    type: date
+    dependencies:
+      config:
+        - field.storage.node.field_date_published
   field_document_type:
     label: 'Document type'
     datasource_id: 'entity:node'
@@ -197,9 +215,8 @@ processor_settings:
     highlight: server
     highlight_partial: false
     excerpt: true
-    excerpt_length: 400
-    exclude_fields:
-      - title
+    excerpt_length: 250
+    exclude_fields: {  }
     prefix: '<strong>'
     suffix: '</strong>'
     weights:
@@ -208,6 +225,7 @@ processor_settings:
     all_fields: true
     fields:
       - body
+      - field_area_list
       - field_author_s_
       - field_document_type
       - field_product_code
