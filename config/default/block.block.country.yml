@@ -1,9 +1,9 @@
-uuid: ec8f355d-dfe2-4d09-bd45-730ba0adcc39
+uuid: b2784dd2-93f5-4134-8b92-05357d8af25f
 langcode: en
 status: true
 dependencies:
   config:
-    - facets.facet.theme
+    - facets.facet.country
   module:
     - block_class
     - facets
@@ -11,17 +11,17 @@ dependencies:
     - iied_pubs
 third_party_settings:
   block_class:
-    classes: 'col-md-4 order-md-2'
-id: theme
+    classes: 'col-md-4 order-md-4'
+id: country
 theme: iied_pubs
 region: content
-weight: 0
+weight: 2
 provider: null
-plugin: 'facet_block:theme'
+plugin: 'facet_block:country'
 settings:
-  id: 'facet_block:theme'
-  label: Theme
+  id: 'facet_block:country'
+  label: Country
   provider: facets
   label_display: visible
-  block_id: theme
+  block_id: country
 visibility: {  }

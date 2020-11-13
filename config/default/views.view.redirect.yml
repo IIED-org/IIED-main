@@ -80,6 +80,7 @@ display:
           summary: ''
           description: ''
           columns:
+            redirect_bulk_form: redirect_bulk_form
             redirect_source__path: redirect_source__path
             redirect_redirect__uri: redirect_redirect__uri
             status_code: status_code
@@ -87,6 +88,11 @@ display:
             created: created
             operations: operations
           info:
+            redirect_bulk_form:
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
             redirect_source__path:
               sortable: true
               default_sort_order: asc
@@ -117,14 +123,12 @@ display:
               responsive: ''
             created:
               sortable: true
-              default_sort_order: asc
+              default_sort_order: desc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
             operations:
-              sortable: false
-              default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
@@ -595,6 +599,24 @@ display:
     display_options:
       display_extenders: {  }
       path: admin/config/search/redirect
+      sorts:
+        created:
+          id: created
+          table: redirect
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
+          granularity: second
+          entity_type: redirect
+          entity_field: created
+          plugin_id: date
+      defaults:
+        sorts: false
     cache_metadata:
       contexts:
         - 'languages:language_content'

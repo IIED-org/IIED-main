@@ -5,9 +5,13 @@ dependencies:
   config:
     - facets.facet.type
   module:
+    - block_class
     - facets
   theme:
     - iied_pubs
+third_party_settings:
+  block_class:
+    classes: 'col-md-4 order-md-3'
 id: type
 theme: iied_pubs
 region: content

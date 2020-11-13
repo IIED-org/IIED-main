@@ -10,7 +10,7 @@ dependencies:
 id: theme
 name: Theme
 url_alias: theme
-weight: 0
+weight: -2
 min_count: 1
 show_only_one_result: false
 field_identifier: field_theme_s_
@@ -25,7 +25,7 @@ widget:
       show_more_label: 'Show more'
     show_reset_link: true
     reset_text: 'Show all'
-    hide_reset_when_no_selection: true
+    hide_reset_when_no_selection: false
 query_operator: and
 use_hierarchy: false
 expand_hierarchy: false
@@ -37,19 +37,19 @@ processor_configs:
   active_widget_order:
     processor_id: active_widget_order
     weights:
-      sort: -9
+      sort: -8
     settings:
       sort: DESC
   count_widget_order:
     processor_id: count_widget_order
     weights:
-      sort: -10
+      sort: -9
     settings:
       sort: DESC
   display_value_widget_order:
     processor_id: display_value_widget_order
     weights:
-      sort: -8
+      sort: -10
     settings:
       sort: ASC
   translate_entity:

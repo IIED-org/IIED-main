@@ -8,6 +8,7 @@ module:
   automated_cron: 0
   big_pipe: 0
   block: 0
+  block_class: 0
   block_content: 0
   breakpoint: 0
   chosen: 0
@@ -32,6 +33,7 @@ module:
   editor: 0
   entity_reference_revisions: 0
   facets: 0
+  facets_country: 0
   field: 0
   field_group: 0
   field_ui: 0

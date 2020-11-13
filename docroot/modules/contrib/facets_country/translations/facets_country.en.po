@@ -1,0 +1,17 @@
+msgid ""
+msgstr ""
+
+"Project-Id-Version: Facets Country\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "facets_country.label.facets_country"
+msgstr "Transform country code to label"
+
+msgid "facets_country.description.facets_country"
+msgstr "Display the country label instead of its code."
+
+msgid "facets_country.message.invalid_processor"
+msgstr "Field doesn't have a country definition, so this processor doesn't work."
