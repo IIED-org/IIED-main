@@ -12,7 +12,7 @@ _core:
   default_config_hash: ChCx7DYNUrPTt5uiRdQAPDKJQMc-_SyAQTrZh8H0o-c
 id: iied_pubs_main_menu
 theme: iied_pubs
-region: navbar_branding
+region: navbar_left
 weight: -5
 provider: null
 plugin: 'system_menu_block:main'

@@ -1,0 +1,11 @@
+id: download_button
+label: 'Download button'
+ui_limit: ''
+properties:
+  block: 'views_block:pdf_download-block_1'
+  use_block_title: false
+  add_block_wrappers: false
+type: block
+type_label: 'Block field'
+entities:
+  node: node

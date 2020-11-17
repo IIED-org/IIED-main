@@ -1,0 +1,21 @@
+uuid: cec96a16-13bf-490f-ac07-c4573a85e9b0
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.jumbotron
+    - field.storage.block_content.field_text
+  module:
+    - text
+id: block_content.jumbotron.field_text
+field_name: field_text
+entity_type: block_content
+bundle: jumbotron
+label: Text
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long
