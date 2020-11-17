@@ -33,7 +33,7 @@ punctuation:
   greater_than: 0
   slash: 0
   back_slash: 0
-verbose: false
+verbose: true
 separator: '-'
 max_length: 100
 max_component_length: 100

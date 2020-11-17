@@ -1,0 +1,29 @@
+uuid: bb858ca2-15d4-479b-a856-c548c2167e10
+langcode: en
+status: true
+dependencies:
+  module:
+    - ctools
+    - taxonomy
+id: taxonomy
+label: Taxonomy
+type: 'canonical_entities:taxonomy_term'
+pattern: '[term:vocabulary]/[term:name]'
+selection_criteria:
+  848aee86-7c6d-4d61-9ec7-6d588c0e40e5:
+    id: 'entity_bundle:taxonomy_term'
+    bundles:
+      document_type: document_type
+      list: list
+      organisation: organisation
+      person: person
+      series: series
+      tags: tags
+      theme: theme
+    negate: false
+    context_mapping:
+      taxonomy_term: taxonomy_term
+    uuid: 848aee86-7c6d-4d61-9ec7-6d588c0e40e5
+selection_logic: and
+weight: -5
+relationships: {  }
