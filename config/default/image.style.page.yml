@@ -1,0 +1,15 @@
+uuid: 018c8fb3-6da5-40b2-b31e-1f481e1af2dc
+langcode: en
+status: true
+dependencies: {  }
+name: page
+label: 'Page (280)'
+effects:
+  8ae8311a-d60d-4f0b-b983-5c56cb940670:
+    uuid: 8ae8311a-d60d-4f0b-b983-5c56cb940670
+    id: image_scale
+    weight: 1
+    data:
+      width: 280
+      height: null
+      upscale: false

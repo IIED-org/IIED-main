@@ -5,9 +5,11 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.page.body
+    - field.field.node.page.layout_builder__layout
     - node.type.page
   module:
     - layout_builder
+    - layout_discovery
     - text
     - user
 third_party_settings:
@@ -68,4 +70,5 @@ content:
     third_party_settings: {  }
 hidden:
   langcode: true
+  layout_builder__layout: true
   search_api_excerpt: true

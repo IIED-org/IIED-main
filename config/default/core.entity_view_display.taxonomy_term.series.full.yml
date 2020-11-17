@@ -1,0 +1,107 @@
+uuid: 9655cddd-a0ff-4b56-9878-f3fec7f32b05
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.taxonomy_term.full
+    - field.field.taxonomy_term.series.field_code
+    - field.field.taxonomy_term.series.field_status
+    - taxonomy.vocabulary.series
+  module:
+    - ds
+    - layout_builder
+    - options
+    - text
+third_party_settings:
+  layout_builder:
+    allow_custom: false
+    enabled: false
+  ds:
+    layout:
+      id: ds_1col
+      library: null
+      disable_css: false
+      entity_classes: all_classes
+      settings:
+        label: ''
+        wrappers:
+          ds_content: div
+        outer_wrapper: div
+        attributes: ''
+        link_attribute: ''
+        link_custom: ''
+        classes:
+          layout_class: {  }
+          ds_content: {  }
+    regions:
+      ds_content:
+        - taxonomy_term_title
+        - description
+        - field_status
+    fields:
+      taxonomy_term_title:
+        plugin_id: taxonomy_term_title
+        weight: 0
+        label: hidden
+        formatter: default
+        settings:
+          wrapper: h1
+          class: page-title
+          link: false
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+id: taxonomy_term.series.full
+targetEntityType: taxonomy_term
+bundle: series
+mode: full
+content:
+  description:
+    label: hidden
+    type: text_default
+    weight: 1
+    region: ds_content
+    settings: {  }
+    third_party_settings:
+      ds:
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            prefix: ''
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow: true
+            ow-el: div
+            ow-cl: row
+            ow-at: ''
+            fis: true
+            fis-el: div
+            fis-cl: 'col-lg-8 mb-4'
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            lbw: false
+            lb-col: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
+  field_status:
+    type: list_key
+    weight: 2
+    region: ds_content
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_code: true
+  langcode: true
+  search_api_excerpt: true

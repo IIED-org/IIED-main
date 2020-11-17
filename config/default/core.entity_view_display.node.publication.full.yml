@@ -55,7 +55,6 @@ dependencies:
     - isbn
     - layout_builder
     - link
-    - options
     - text
     - user
 third_party_settings:
@@ -66,7 +65,6 @@ third_party_settings:
     group_cover_image:
       children:
         - 'dynamic_block_field:node-cover_image'
-        - field_lit_code
         - field_product_code
       parent_name: ''
       weight: 1
@@ -91,6 +89,7 @@ third_party_settings:
         - field_translator
         - field_document_type
         - field_pdf_pages
+        - 'dynamic_block_field:node-page_count'
       parent_name: ''
       weight: 0
       format_type: html_element
@@ -108,6 +107,7 @@ third_party_settings:
       label: pub-header
     group_pub_body:
       children:
+        - 'dynamic_block_field:node-download_button'
         - field_media
         - body
         - group_related_links
@@ -194,7 +194,7 @@ third_party_settings:
         - field_iied_url
         - field_external_url
       parent_name: group_pub_body
-      weight: 18
+      weight: 3
       format_type: html_element
       region: ds_content
       format_settings:
@@ -229,31 +229,32 @@ third_party_settings:
     regions:
       ds_content:
         - group_pub_header
+        - 'dynamic_block_field:node-download_button'
         - 'dynamic_block_field:node-cover_image'
-        - group_cover_image
         - node_title
-        - field_lit_code
-        - field_author_s_
+        - group_cover_image
+        - field_media
         - field_product_code
         - group_pub_body
-        - group_pub_detail
+        - field_author_s_
+        - body
         - field_editor_s_
-        - group_related_project
+        - group_pub_detail
+        - group_related_links
         - field_translator
+        - group_related_project
         - field_document_type
         - group_related_publications
-        - field_pdf_pages
         - 'dynamic_block_field:node-related_publications'
+        - field_pdf_pages
+        - 'dynamic_block_field:node-page_count'
         - field_date_published
         - field_iied_url
         - langcode
         - field_external_url
         - field_publisher
-        - field_media
         - field_area_list
-        - body
         - field_series
-        - group_related_links
         - field_source_publication
         - field_journal_ref
         - field_isbn
@@ -266,6 +267,70 @@ third_party_settings:
         weight: 0
         label: hidden
         formatter: default
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            prefix: ''
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow-el: ''
+            ow-cl: ''
+            ow-at: ''
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            lbw: false
+            lb-col: false
+            ow: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
+      'dynamic_block_field:node-download_button':
+        plugin_id: 'dynamic_block_field:node-download_button'
+        weight: 0
+        label: hidden
+        formatter: default
+      'dynamic_block_field:node-page_count':
+        plugin_id: 'dynamic_block_field:node-page_count'
+        weight: 7
+        label: hidden
+        formatter: default
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            prefix: ''
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow-el: ''
+            ow-cl: ''
+            ow-at: ''
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            lbw: false
+            lb-col: false
+            ow: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
       'dynamic_block_field:node-related_publications':
         plugin_id: 'dynamic_block_field:node-related_publications'
         weight: 6
@@ -321,7 +386,7 @@ content:
   body:
     label: hidden
     type: text_default
-    weight: 17
+    weight: 2
     settings: {  }
     third_party_settings: {  }
     region: ds_content
@@ -538,44 +603,9 @@ content:
     third_party_settings: {  }
     type: string
     region: ds_content
-  field_lit_code:
-    type: list_key
-    weight: 1
-    region: ds_content
-    label: hidden
-    settings: {  }
-    third_party_settings:
-      ds:
-        ft:
-          id: expert
-          settings:
-            lb: ''
-            prefix: ''
-            lbw-el: ''
-            lbw-cl: ''
-            lbw-at: ''
-            ow-el: ''
-            ow-cl: ''
-            ow-at: ''
-            fis-el: ''
-            fis-cl: ''
-            fis-at: ''
-            fi-el: ''
-            fi-cl: ''
-            fi-at: ''
-            suffix: 'cover image '
-            lbw: false
-            lb-col: false
-            ow: false
-            ow-def-at: false
-            ow-def-cl: false
-            fis: false
-            fis-def-at: false
-            fi: false
-            fi-def-at: false
   field_media:
     type: entity_reference_entity_view
-    weight: 16
+    weight: 1
     label: hidden
     settings:
       view_mode: button
@@ -771,6 +801,7 @@ hidden:
   field_admin: true
   field_cover_image: true
   field_deptlist: true
+  field_lit_code: true
   field_parent: true
   field_pdf: true
   field_product_id: true

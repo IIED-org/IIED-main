@@ -7,13 +7,14 @@ dependencies:
     - field.field.node.page.body
     - node.type.page
   module:
+    - ds
     - layout_builder
     - text
     - user
 third_party_settings:
   layout_builder:
     enabled: true
-    allow_custom: false
+    allow_custom: true
     sections:
       -
         layout_id: ds_1col

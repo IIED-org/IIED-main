@@ -1,0 +1,53 @@
+uuid: 5c15af06-8329-4e7d-9e29-40b4999fbccf
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.jumbotron
+    - field.field.block_content.jumbotron.field_text
+  module:
+    - ds
+    - text
+id: block_content.jumbotron.default
+targetEntityType: block_content
+bundle: jumbotron
+mode: default
+content:
+  field_text:
+    weight: 1
+    label: hidden
+    settings: {  }
+    third_party_settings:
+      ds:
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            prefix: ''
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow: true
+            ow-el: div
+            ow-cl: jumbotron
+            ow-at: ''
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            lbw: false
+            lb-col: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
+    type: text_default
+    region: content
+hidden:
+  langcode: true
+  search_api_excerpt: true
