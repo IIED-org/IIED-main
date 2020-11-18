@@ -93,7 +93,7 @@ class DefaultValueTestForm extends FormBase {
     $payment_method = $values['payment_method'];
     $address = $values[$payment_method]['address'];
 
-    $this->messenger()->addMessage(t('The street is "@street" and the country code is @country_code.', [
+    $this->messenger()->addMessage($this->t('The street is "@street" and the country code is @country_code.', [
       '@street' => $address['address_line1'],
       '@country_code' => $address['country_code'],
     ]));

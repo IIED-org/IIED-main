@@ -65,8 +65,10 @@ function acquia_connector_help($route_name, RouteMatchInterface $route_match) {
 function acquia_connector_cron() {
 
   $config = \Drupal::config('acquia_connector.settings');
+  $state_site_name = \Drupal::state()->get('spi.site_name');
+  $state_site_machine_name = \Drupal::state()->get('spi.site_machine_name');
   // Don't send data if site is blocked or missing components.
-  if ($config->get('spi.blocked') || (is_null($config->get('spi.site_name')) && is_null($config->get('spi.site_machine_name')))) {
+  if ($config->get('spi.blocked') || (is_null($state_site_name) && is_null($state_site_machine_name))) {
     return;
   }
 

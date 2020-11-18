@@ -4,6 +4,7 @@
  * @file
  * Standard installation functions for name.
  */
+
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -17,7 +18,9 @@ function name_update_last_removed() {
  * Upgrade from Drupal 7 to Drupal 8.
  */
 function name_update_8001() {
-  $result = db_query("SELECT * FROM {name_custom_format} ORDER BY name ASC");
+  $database = \Drupal::database();
+  $query = $database->query("SELECT * FROM {name_custom_format} ORDER BY name ASC");
+  $result = $query->fetchAll();
 
   foreach ($result as $row) {
     \Drupal::config('name_format.' . $row->machine_name)
@@ -56,8 +59,7 @@ function name_update_8001() {
   variable_del('name_inline_styles_rtl');
   variable_del('name_element_wrapper');
   variable_del('name_component_required_marker');
-
-  db_drop_table('name_custom_format');
+  $database->schema()->dropTable('name_custom_format');
 }
 
 /**

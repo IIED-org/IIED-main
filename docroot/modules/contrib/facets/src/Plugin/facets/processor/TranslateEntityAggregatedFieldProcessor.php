@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\facets\FacetInterface;
+use Drupal\facets\FacetSource\SearchApiFacetSourceInterface;
 use Drupal\facets\Plugin\facets\facet_source\SearchApiDisplay;
 use Drupal\facets\Processor\BuildProcessorInterface;
 use Drupal\facets\Processor\ProcessorPluginBase;
@@ -216,16 +217,17 @@ class TranslateEntityAggregatedFieldProcessor extends ProcessorPluginBase implem
    * {@inheritdoc}
    */
   public function supportsFacet(FacetInterface $facet) {
-    $field_identifier = $facet->getFieldIdentifier();
-    /** @var \Drupal\search_api\Entity\Index $index */
-    $index = $facet->getFacetSource()->getIndex();
-    /** @var \Drupal\search_api\Item\Field $field */
-    $field = $index->getField($field_identifier);
+    $facet_source = $facet->getFacetSource();
 
-    if ($field->getPropertyPath() === 'aggregated_field') {
-      return TRUE;
+    if ($facet_source instanceof SearchApiFacetSourceInterface) {
+      /** @var \Drupal\search_api\Item\Field $field */
+      $field_identifier = $facet->getFieldIdentifier();
+      $field = $facet_source->getIndex()->getField($field_identifier);
+
+      if ($field->getPropertyPath() === 'aggregated_field') {
+        return TRUE;
+      }
     }
-
     return FALSE;
   }
 

@@ -2,10 +2,10 @@
 
 namespace Drupal\media_pdf_thumbnail\Manager;
 
-use Drupal\Core\Config\ConfigFactory;
-use Drupal\Core\Entity\EntityTypeManager;
-use Drupal\Core\File\FileSystem;
-use Drupal\Core\State\State;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\State\StateInterface;
 
 /**
  * Class MediaPdfThumbnailImageManager.
@@ -24,24 +24,24 @@ class MediaPdfThumbnailImageManager {
   /**
    * EntityTypeManager.
    *
-   * @var \Drupal\Core\Entity\EntityTypeManager
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
 
   /**
    * FileSystem.
    *
-   * @var \Drupal\Core\File\FileSystem
+   * @var \Drupal\Core\File\FileSystemInterface
    */
   protected $fileSystem;
 
   /**
-   * @var \Drupal\Core\Config\ConfigFactory
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected $configFactory;
 
   /**
-   * @var \Drupal\Core\State\State
+   * @var \Drupal\Core\State\StateInterface
    */
   protected $state;
 
@@ -50,14 +50,14 @@ class MediaPdfThumbnailImageManager {
    *
    * @param \Drupal\media_pdf_thumbnail\Manager\MediaPdfThumbnailImagickManager $mediaPdfThumbnailImagickManager
    *   $mediaPdfThumbnailImagickManager.
-   * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   EntityTypeManager.
-   * @param \Drupal\Core\File\FileSystem $fileSystem
+   * @param \Drupal\Core\File\FileSystemInterface $fileSystem
    *   FileSystem.
-   * @param \Drupal\Core\Config\ConfigFactory $configFactory
-   * @param \Drupal\Core\State\State $state
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   * @param \Drupal\Core\State\StateInterface $state
    */
-  public function __construct(MediaPdfThumbnailImagickManager $mediaPdfThumbnailImagickManager, EntityTypeManager $entityTypeManager, FileSystem $fileSystem, ConfigFactory $configFactory, State $state) {
+  public function __construct(MediaPdfThumbnailImagickManager $mediaPdfThumbnailImagickManager, EntityTypeManagerInterface $entityTypeManager, FileSystemInterface $fileSystem, ConfigFactoryInterface $configFactory, StateInterface $state) {
     $this->mediaPdfThumbnailImagickManager = $mediaPdfThumbnailImagickManager;
     $this->entityTypeManager = $entityTypeManager;
     $this->fileSystem = $fileSystem;
@@ -86,8 +86,10 @@ class MediaPdfThumbnailImageManager {
       }
 
       $fieldName = $config->get($bundle . '_field');
-      if ($fieldName && $entity->hasField($fieldName) && !empty($entity->get($fieldName)->getValue())) {
-        $fileEntity = $this->getFileEntity($entity->get($fieldName)->getValue()[0]['target_id']);
+      if ($fieldName && $entity->hasField($fieldName) && !empty($entity->get($fieldName)
+          ->getValue())) {
+        $fileEntity = $this->getFileEntity($entity->get($fieldName)
+          ->getValue()[0]['target_id']);
         if ($fileEntity && $fileEntity->getMimeType() == 'application/pdf') {
           $fileEntityInfo = !$this->generatePdfImage($fileEntity) ?: $this->createThumbnailFileEntity($fileEntity->getFileUri());
           if (!empty($fileEntityInfo)) {
@@ -95,9 +97,7 @@ class MediaPdfThumbnailImageManager {
           }
         }
       }
-      return;
     }
-    return;
   }
 
   /**
@@ -119,7 +119,8 @@ class MediaPdfThumbnailImageManager {
   protected function generatePdfImage($fileEntity) {
     $fileInfos = $this->getFileInfos($fileEntity);
     if (!empty($fileInfos['source']) && !empty($fileInfos['destination'])) {
-      return $this->mediaPdfThumbnailImagickManager->generateImageFromPDF($fileInfos['source'], $fileInfos['destination']);
+      return $this->mediaPdfThumbnailImagickManager->generateImageFromPDF($fileInfos['source'],
+        $fileInfos['destination']);
     }
     return NULL;
   }

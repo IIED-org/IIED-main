@@ -7,8 +7,10 @@ use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
-use Drupal\Core\Config\ConfigException;
 
+/**
+ * Handles name generation.
+ */
 class NameGenerator implements NameGeneratorInterface {
 
   use StringTranslationTrait;
@@ -35,7 +37,7 @@ class NameGenerator implements NameGeneratorInterface {
   protected $configFactory;
 
   /**
-   * Language manager for retrieving the default langcode when none is specified.
+   * Language manager for retrieving the default language code if needed.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
@@ -79,7 +81,11 @@ class NameGenerator implements NameGeneratorInterface {
         'preferred' => 'preferred',
         'alternative' => 'alternative',
       ];
-      $this->components = ['female' => array_fill_keys ($keys, []), 'male' => array_fill_keys ($keys, [])];
+      $this->components = [
+        'female' => array_fill_keys($keys, []),
+        'male' => array_fill_keys($keys, []),
+      ];
+
       // Parse genderless configuration.
       $components = $this->loadConfiguration('name.generate.components', 'components', $field_definition);
       foreach ($keys as $key) {
@@ -121,7 +127,8 @@ class NameGenerator implements NameGeneratorInterface {
       }
       if (rand(0, 1)) {
         $creds = [];
-        $cred_limit = min([rand(1, 3), count($this->components[$gender]['credentials'])]);
+        $credential_count = count($this->components[$gender]['credentials']);
+        $cred_limit = min([rand(1, 3), $credential_count]);
         for ($j = 0; $j <= $cred_limit; $j++) {
           $creds[] = $this->components[$gender]['credentials'][array_rand($this->components[$gender]['credentials'])];
         }
@@ -172,7 +179,7 @@ class NameGenerator implements NameGeneratorInterface {
    *   The configuration to load.
    * @param string $key
    *   The configuration key to retrieve.
-   * @param \Drupal\Core\Field\FieldDefinitionInterface|NULL $field_definition
+   * @param \Drupal\Core\Field\FieldDefinitionInterface|null $field_definition
    *   The field definition to find field specific configuration.
    *
    * @return array
@@ -188,10 +195,6 @@ class NameGenerator implements NameGeneratorInterface {
     }
     if (!$components) {
       $components = $this->configFactory->get($config)->get($key);
-    }
-
-    if (!$components) {
-     // throw new ConfigException($this->t('Missing or empty name configuration detected %key.', ['%key' => "{$config}.{$key}"]));
     }
 
     return $components;

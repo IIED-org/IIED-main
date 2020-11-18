@@ -87,8 +87,8 @@ class NameListFormat extends ConfigEntityBase implements NameListFormatInterface
    * The final delimitor type of this name list format.
    *
    * Valid options include:
-   * - text: textual (i.e. 'and')
-   * - symbol: ampersand
+   * - text: textual (i.e. 'and').
+   * - symbol: ampersand.
    *
    * @var string
    */
@@ -110,10 +110,10 @@ class NameListFormat extends ConfigEntityBase implements NameListFormatInterface
    * Reduce list limit of this name list format.
    *
    * This specifies a limit on the number of names to display. After this
-   * limit, names are removed and the abbrivation et al is appended. This
-   * Latin abbrivation of et alii means "and others".
+   * limit, names are removed and the abbreviation et al is appended. This
+   * Latin abbreviation of et alii means "and others".
    *
-   * @var integer
+   * @var int
    */
   public $el_al_min = 3;
 
@@ -121,10 +121,10 @@ class NameListFormat extends ConfigEntityBase implements NameListFormatInterface
    * Number of names to show when list is reduced of this name list format.
    *
    * This specifies a limit on the number of names to display. After this
-   * limit, names are removed and the abbrivation et al is appended. This
-   * Latin abbrivation of et alii means "and others".
+   * limit, names are removed and the abbreviation et al is appended. This
+   * Latin abbreviation of et alii means "and others".
    *
-   * @var integer
+   * @var int
    */
   public $el_al_first = 1;
 

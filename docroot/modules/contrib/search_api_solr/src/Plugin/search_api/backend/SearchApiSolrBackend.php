@@ -5,6 +5,7 @@ namespace Drupal\search_api_solr\Plugin\search_api\backend;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Config\Config;
+use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\TypedData\EntityDataDefinitionInterface;
@@ -89,6 +90,8 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
   }
 
   use PluginDependencyTrait;
+
+  use DependencySerializationTrait;
 
   use SolrCommitTrait;
 
@@ -1131,32 +1134,38 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
         // Enable sorts in some special cases.
         if ($first_value && !array_key_exists($name, $special_fields)) {
           if (
-            (strpos($field_names[$name], 't') === 0 && strpos($field_names[$name], 'twm_suggest') !== 0) ||
-            (strpos($field_names[$name], 's') === 0 && strpos($field_names[$name], 'spellcheck') !== 0)
+            strpos($field_names[$name], 't') === 0 ||
+            strpos($field_names[$name], 's') === 0
           ) {
-            // Truncate the string to avoid Solr string field limitation.
-            // @see https://www.drupal.org/node/2809429
-            // @see https://www.drupal.org/node/2852606
-            // 128 characters should be enough for sorting and it makes no
-            // sense to heavily increase the index size. The DB backend limits
-            // the sort strings to 32 characters. But for example a
-            // search_api_id quickly exceeds 32 characters and the interesting
-            // ID is at the end of the string:
-            // 'entity:entity_test_mulrev_changed/2:en'.
-            if (mb_strlen($first_value) > 128) {
-              $first_value = Unicode::truncate($first_value, 128);
-            }
+            if (
+              strpos($field_names[$name], 'twm_suggest') !== 0 &&
+              strpos($field_names[$name], 'spellcheck') !== 0
+            ) {
+              // Truncate the string to avoid Solr string field limitation.
+              // @see https://www.drupal.org/node/2809429
+              // @see https://www.drupal.org/node/2852606
+              // 128 characters should be enough for sorting and it makes no
+              // sense to heavily increase the index size. The DB backend limits
+              // the sort strings to 32 characters. But for example a
+              // search_api_id quickly exceeds 32 characters and the interesting
+              // ID is at the end of the string:
+              // 'entity:entity_test_mulrev_changed/2:en'.
+              if (mb_strlen($first_value) > 128) {
+                $first_value = Unicode::truncate($first_value, 128);
+              }
 
-            // Always copy fulltext and string fields to a dedicated sort fields
-            // for faster sorts and language specific collations. To allow
-            // sorted multilingual searches we need to fill *all*
-            // language-specific sort fields!
-            $sort_languages = array_keys(\Drupal::languageManager()->getLanguages());
-            $sort_languages[] = LanguageInterface::LANGCODE_NOT_SPECIFIED;
-            foreach ($sort_languages as $sort_language_id) {
-              $key = Utility::encodeSolrName('sort' . SolrBackendInterface::SEARCH_API_SOLR_LANGUAGE_SEPARATOR . $sort_language_id . '_' . $name);
-              if (!$doc->{$key}) {
-                $doc->addField($key, $first_value);
+              // Always copy fulltext and string fields to a dedicated sort
+              // fields for faster sorts and language specific collations. To
+              // allow sorted multilingual searches we need to fill *all*
+              // language-specific sort fields!
+              $sort_languages = array_keys(\Drupal::languageManager()
+                ->getLanguages());
+              $sort_languages[] = LanguageInterface::LANGCODE_NOT_SPECIFIED;
+              foreach ($sort_languages as $sort_language_id) {
+                $key = Utility::encodeSolrName('sort' . SolrBackendInterface::SEARCH_API_SOLR_LANGUAGE_SEPARATOR . $sort_language_id . '_' . $name);
+                if (!$doc->{$key}) {
+                  $doc->addField($key, $first_value);
+                }
               }
             }
           }
@@ -1694,10 +1703,11 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
 
     if ($settings['multilingual']['include_language_independent']) {
       $language_ids[] = LanguageInterface::LANGCODE_NOT_SPECIFIED;
-      $language_ids[] = LanguageInterface::LANGCODE_NOT_APPLICABLE;
+      // LanguageInterface::LANGCODE_NOT_APPLICABLE never appears in Search API
+      // at the moment.
     }
 
-    $query->setLanguages($language_ids);
+    $query->setLanguages(array_unique($language_ids));
     return $language_ids;
   }
 
@@ -1798,7 +1808,7 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
     $highlight_fields = ['*'];
 
     if (!empty($this->configuration['retrieve_data'])) {
-      $field_names = $this->getSolrFieldNamesKeyedByLanguage($query->getLanguages(), $query->getIndex());
+      $field_names = $this->getSolrFieldNamesKeyedByLanguage($this->ensureLanguageCondition($query), $query->getIndex());
 
       // If Search API provides information about the fields to retrieve, limit
       // the fields accordingly. ...
@@ -2874,7 +2884,7 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
     // If there's no language condition on the first level, take the one from
     // the query.
     if (!$language_ids) {
-      $language_ids = $query->getLanguages();
+      $language_ids = $this->ensureLanguageCondition($query);
     }
 
     if (!$language_ids) {
@@ -3445,8 +3455,7 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
    */
   protected function getAutocompleteFields(QueryInterface $query) {
     $fl = [];
-    $language_ids = $query->getLanguages();
-    $field_names = $this->getSolrFieldNamesKeyedByLanguage($language_ids, $query->getIndex());
+    $field_names = $this->getSolrFieldNamesKeyedByLanguage($this->ensureLanguageCondition($query), $query->getIndex());
     // We explicit allow to get terms from twm_suggest. Therefore we call
     // parent::getQueryFulltextFields() to not filter twm_suggest.
     foreach (parent::getQueryFulltextFields($query) as $fulltext_field) {
@@ -3597,16 +3606,37 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
    *   e.g: 'dictionary' as string, 'context_filter_tags' as array of strings.
    */
   protected function setAutocompleteSuggesterQuery(QueryInterface $query, AutocompleteQuery $solarium_query, $user_input, array $options = []) {
-    if (isset($options['context_filter_tags']) && in_array('drupal/langcode:multilingual', $options['context_filter_tags'])) {
-      $langcodes = $query->getLanguages();
-      if ($langcodes && count($langcodes) == 1) {
-        $langcode = reset($langcodes);
-        $options['context_filter_tags'] = str_replace('drupal/langcode:multilingual', 'drupal/langcode:' . $langcode, $options['context_filter_tags']);
-        $options['dictionary'] = $langcode;
+    $langcodes = $this->ensureLanguageCondition($query);
+
+    if (isset($options['context_filter_tags'])) {
+      if (in_array('drupal/langcode:multilingual', $options['context_filter_tags'])) {
+        if ($langcodes && count($langcodes) === 1) {
+          $langcode = reset($langcodes);
+          $options['context_filter_tags'] = str_replace('drupal/langcode:multilingual', 'drupal/langcode:' . $langcode, $options['context_filter_tags']);
+          $options['dictionary'] = $langcode;
+        }
+        else {
+          // Use multiple dictionaries and langcodes.
+          $tag_name = Utility::encodeSolrName('drupal/langcode:');
+          $options['context_filter_tags'] = str_replace('drupal/langcode:multilingual', '(' . $tag_name . implode(' ' . $tag_name, $langcodes) . ')', $options['context_filter_tags']);
+          $options['dictionary'] = $langcodes;
+        }
       }
       else {
         foreach ($options['context_filter_tags'] as $key => $tag) {
-          if ('drupal/langcode:multilingual' === $tag) {
+          if (strpos($tag, 'drupal/langcode:') === 0) {
+            $langcode_array = explode(':', $tag);
+            if (isset($langcode_array[1]) && 'any' !== $langcode_array[1]) {
+              $options['dictionary'] = $langcode_array[1] ?: LanguageInterface::LANGCODE_NOT_SPECIFIED;
+              break;
+            }
+          }
+        }
+      }
+
+      if (empty($options['dictionary'])) {
+        foreach ($options['context_filter_tags'] as $key => $tag) {
+          if (strpos($tag, 'drupal/langcode:') === 0) {
             unset($options['context_filter_tags'][$key]);
             break;
           }
@@ -3691,9 +3721,7 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
       $autocomplete_terms = [];
       foreach ($terms_results as $fields) {
         foreach ($fields as $term => $count) {
-          if ($term != $incomplete_key) {
-            $autocomplete_terms[$term] = $count;
-          }
+          $autocomplete_terms[$term] = $count;
         }
       }
 
@@ -3945,7 +3973,7 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
     $connector = $this->getSolrConnector();
     $solarium_query = $connector->getMoreLikeThisQuery();
     $mlt_options = $query->getOption('search_api_mlt');
-    $language_ids = $query->getLanguages();
+    $language_ids = $this->ensureLanguageCondition($query);
     $field_names = $this->getSolrFieldNamesKeyedByLanguage($language_ids, $query->getIndex());
 
     $ids = [];
@@ -4190,7 +4218,7 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
    * @throws \Drupal\search_api\SearchApiException
    */
   protected function setSorts(Query $solarium_query, QueryInterface $query) {
-    $field_names = $this->getSolrFieldNamesKeyedByLanguage($query->getLanguages(), $query->getIndex());
+    $field_names = $this->getSolrFieldNamesKeyedByLanguage($this->ensureLanguageCondition($query), $query->getIndex());
     foreach ($query->getSorts() as $field => $order) {
       $solarium_query->addSort(Utility::getSortableSolrField($field, $field_names, $query), strtolower($order));
     }
@@ -4274,7 +4302,7 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
     $schema_languages = $this->getSchemaLanguageStatistics();
     $dictionaries = [];
 
-    foreach ($query->getLanguages() as $language_id) {
+    foreach ($this->ensureLanguageCondition($query) as $language_id) {
       if (isset($schema_languages[$language_id]) && $schema_languages[$language_id]) {
         $dictionaries[] = $schema_languages[$language_id];
       }
@@ -4307,6 +4335,13 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
    */
   public function extractContentFromFile($filepath) {
     $connector = $this->getSolrConnector();
+
+    $solr_version = $connector->getSolrVersion();
+    if (version_compare($solr_version, '8.6', '>=') && version_compare($solr_version, '8.6.3', '<')) {
+      $this->getLogger()
+        ->error('Solr 8.6.0, 8.6.1 and 8.6.2 contain a bug that breaks content extraction form files. Upgrade to 8.6.3 at least.');
+      return '';
+    }
 
     $query = $connector->getExtractQuery();
     $query->setExtractOnly(TRUE);
@@ -4507,6 +4542,11 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
    */
   protected function doDocumentCounts(Endpoint $endpoint): array {
     $connector = $this->getSolrConnector();
+
+    if (version_compare($connector->getSolrVersion(), '5.0.0', '<')) {
+      // The code below doesn't work in Solr below 5.x anyway.
+      return ['#total' => 0];
+    }
 
     $facet_key = Client::checkMinimal('5.2') ? 'local_key' : 'key';
 
@@ -4768,6 +4808,19 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
    */
   public function isNonDrupalOrOutdatedConfigSetAllowed(): bool {
     return (bool) $this->configuration['skip_schema_check'];
+  }
+
+  /**
+   * Implements the magic __sleep() method.
+   *
+   * Prevents the Solr connector from being serialized. There's no need for a
+   * corresponding __wakeup() because of getSolrConnector().
+   * @see getSolrConnector()
+   */
+  public function __sleep() {
+    $properties = array_flip(parent::__sleep());
+    unset($properties['solrConnector']);
+    return array_keys($properties);
   }
 
 }

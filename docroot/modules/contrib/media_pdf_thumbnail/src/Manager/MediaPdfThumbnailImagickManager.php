@@ -2,7 +2,7 @@
 
 namespace Drupal\media_pdf_thumbnail\Manager;
 
-use Drupal\Core\Logger\LoggerChannelFactory;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Spatie\PdfToImage\Pdf;
 
 /**
@@ -17,9 +17,9 @@ class MediaPdfThumbnailImagickManager {
   /**
    * MediaPdfThumbnailImagickManager constructor.
    *
-   * @param \Drupal\Core\Logger\LoggerChannelFactory $loggerChannelFactory
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerChannelFactory
    */
-  public function __construct(LoggerChannelFactory $loggerChannelFactory) {
+  public function __construct(LoggerChannelFactoryInterface $loggerChannelFactory) {
     $this->loggerFactory = $loggerChannelFactory->get('Media PDF Thumbnail');
   }
 

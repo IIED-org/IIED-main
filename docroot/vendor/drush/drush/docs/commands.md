@@ -9,7 +9,7 @@ Creating a new Drush command or porting a legacy command is easy. Follow the ste
 1. Drush will then report that it created a commandfile, a drush.services.yml file and a composer.json file. Edit those files as needed.
 1. Use the classes for the core Drush commands at [/src/Drupal/Commands](https://github.com/drush-ops/drush/tree/10.x/src/Drupal/Commands) as inspiration and documentation.
 1. See the [dependency injection docs](dependency-injection.md) for interfaces you can implement to gain access to Drush config, Drupal site aliases, etc.
-1. Write PHPUnit tests based on [Drush Test Traits](https://github.com/drush-ops/drush/tree/10.x/tests#drush-test-traits).
+1. Write PHPUnit tests based on [Drush Test Traits](https://github.com/drush-ops/drush/blob/10.x/docs/contribute/unish.md#drush-test-traits).
 1. Once your two files are ready, run `drush cr` to get your command recognized by the Drupal container.
 
 ## Specifying the Services File
@@ -52,6 +52,9 @@ In order to alter an existing command info, follow the steps below:
 1. Along with the alter code, it's strongly recommended to log a debug message explaining what exactly was altered. This makes things easier on others who may need to debug the interaction of the alter code with other modules. Also it's a good practice to inject the the logger in the class constructor.
 
 For an example, see the alterer class provided by the testing 'woot' module: `tests/functional/resources/modules/d8/woot/src/WootCommandInfoAlterer.php`.
+
+## Symfony Console Commands
+Drush lists and runs Symfony Console commands, in addition to more typical annotated commands. See [this test](https://github.com/drush-ops/drush/blob/eed106ae4510d5a2df89f8e7fd54b41ffb0aa5fa/tests/integration/AnnotatedCommandCase.php#L178-L180) and this [commandfile](https://github.com/drush-ops/drush/blob/049d2a4b36338178c0c7cf89b8e7caf9769524c9/tests/functional/resources/modules/d8/woot/src/Commands/GreetCommand.php). 
 
 ## Site-Wide Drush Commands
 Commandfiles that are installed in a Drupal site and are not bundled inside a Drupal module are called 'site-wide' commandfiles. Site-wide commands may either be added directly to the Drupal site's repository (e.g. for site-specific policy files), or via `composer require`. See the [examples/Commands](https://github.com/drush-ops/drush/tree/10.x/examples/Commands) folder for examples. In general, it's better to use modules to carry your Drush commands, as module-based commands may [participate in Drupal's dependency injection via the drush.services.yml](#specifying-the-services-file).

@@ -5,16 +5,7 @@ namespace Drupal\chosen;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\Core\Language\LanguageInterface;
-
-// @codingStandardsIgnoreStart
-// @todo remove this BC layer once support for Drupal 8.7 is sunsetted
-if (interface_exists('\Drupal\Core\Security\TrustedCallbackInterface')) {
-  interface TrustedCallbackInterface extends \Drupal\Core\Security\TrustedCallbackInterface {}
-}
-else {
-  interface TrustedCallbackInterface {}
-}
-// @codingStandardsIgnoreStop
+use Drupal\Core\Security\TrustedCallbackInterface;
 
 class ChosenFormRender implements TrustedCallbackInterface {
 

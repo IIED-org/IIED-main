@@ -14,15 +14,15 @@ interface NameFormatterInterface {
    *   An array of name components to format.
    *
    *   The expected components are:
-   *   - title (string): The persons title
-   *   - given (string):
-   *   - middle (string):
-   *   - family (string):
-   *   - generational (string):
-   *   - credentials (string):
+   *   - title (string)
+   *   - given (string)
+   *   - middle (string)
+   *   - family (string)
+   *   - generational (string)
+   *   - credentials (string)
    *   The following tokens are also supported:
-   *   - preferred (string):
-   *   - alternative (string):
+   *   - preferred (string)
+   *   - alternative (string)
    * @param string $type
    *   (optional) The name format type to load. If the format does not exist,
    *   the 'default' format is used.

@@ -4,13 +4,22 @@ namespace Drupal\name\Element;
 
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Security\TrustedCallbackInterface;
+use Drupal\Core\Template\Attribute;
 
 /**
  * Provides a name render element.
  *
  * @RenderElement("name")
  */
-class Name extends FormElement {
+class Name extends FormElement implements TrustedCallbackInterface {
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function trustedCallbacks() {
+    return ['preRender'];
+  }
 
   /**
    * Returns the element properties for this element.
@@ -29,7 +38,7 @@ class Name extends FormElement {
     return [
       '#input' => TRUE,
       '#process' => ['name_element_expand'],
-      '#pre_render' => ['name_element_pre_render'],
+      '#pre_render' => [[__CLASS__, 'preRender']],
       '#element_validate' => ['name_element_validate'],
       '#theme_wrappers' => ['form_element'],
       '#show_component_required_marker' => 0,
@@ -124,6 +133,42 @@ class Name extends FormElement {
       }
     }
     return $value;
+  }
+
+  /**
+   * This function themes the element and controls the title display.
+   */
+  public static function preRender($element) {
+    $layouts = name_widget_layouts();
+    $layout = $layouts['stacked'];
+    if (!empty($element['#widget_layout']) && isset($layouts[$element['#widget_layout']])) {
+      $layout = $layouts[$element['#widget_layout']];
+    }
+
+    if (!empty($layout['library'])) {
+      if (!isset($element['#attached']['library'])) {
+        $element['#attached']['library'] = [];
+      }
+      $element['#attached']['library'] += $layout['library'];
+    }
+    $attributes = new Attribute($layout['wrapper_attributes']);
+    $element['_name'] = [
+      '#prefix' => '<div' . $attributes . '>',
+      '#suffix' => '</div>',
+    ];
+
+    foreach (_name_translations() as $key => $title) {
+      if (isset($element[$key])) {
+        $element['_name'][$key] = $element[$key];
+        unset($element[$key]);
+      }
+    }
+
+    if (!empty($element['#component_layout'])) {
+      _name_component_layout($element['_name'], $element['#component_layout']);
+    }
+
+    return $element;
   }
 
 }

@@ -2,15 +2,21 @@
 
 namespace Drupal\upgrade_status;
 
+use Composer\Semver\Semver;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ProfileExtensionList;
 use Drupal\Core\Extension\ThemeExtensionList;
-use http\Exception\InvalidArgumentException;
+use Drupal\Core\Extension\Exception\UnknownExtensionException;
+use Drupal\Core\KeyValueStore\KeyValueExpirableFactory;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
- * Collects projects collated for the purposes of upgrade status.
+ * Collects projects and their associated metadata collated for Upgrade Status.
  */
 class ProjectCollector {
+
+  use StringTranslationTrait;
 
   /**
    * The list of available modules.
@@ -34,15 +40,98 @@ class ProjectCollector {
   protected $profileExtensionList;
 
   /**
-   * A list of allowed extension types.
+   * Available updates store.
    *
-   * @var array
+   * @var \Drupal\Core\KeyValueStore\KeyValueStoreInterface|mixed
    */
-  protected $allowedTypes = [
-    'module',
-    'theme',
-    'profile',
-  ];
+  protected $availableUpdates;
+
+  /**
+   * Configuration factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * Update not checked for a project.
+   */
+  const UPDATE_NOT_CHECKED = 0;
+
+  /**
+   * Update not available for a project.
+   */
+  const UPDATE_NOT_AVAILABLE = 1;
+
+  /**
+   * Update available for a project.
+   */
+  const UPDATE_AVAILABLE = 2;
+
+  /**
+   * The latest version is already being used.
+   */
+  const UPDATE_ALREADY_INSTALLED = 3;
+
+  /**
+   * Custom project.
+   */
+  const TYPE_CUSTOM = 'custom';
+
+  /**
+   * Contributed project.
+   */
+  const TYPE_CONTRIB = 'contrib';
+
+  /**
+   * Suggest to relax.
+   */
+  const NEXT_RELAX = 'relax';
+
+  /**
+   * Suggest to remove.
+   */
+  const NEXT_REMOVE = 'remove';
+
+  /**
+   * Suggest to update.
+   */
+  const NEXT_UPDATE = 'update';
+
+  /**
+   * Suggest to collaborate with maintainer.
+   */
+  const NEXT_COLLABORATE = 'collaborate';
+
+  /**
+   * Suggest to scan for errors.
+   */
+  const NEXT_SCAN = 'scan';
+
+  /**
+   * Suggest to fix with rector.
+   */
+  const NEXT_RECTOR = 'rector';
+
+  /**
+   * Suggest to fix with manually.
+   */
+  const NEXT_MANUAL = 'manual';
+
+  /**
+   * Summary category for things to analyze.
+   */
+  const SUMMARY_ANALYZE = 'analyze';
+
+  /**
+   * Summary category for things to act on.
+   */
+  const SUMMARY_ACT = 'act';
+
+  /**
+   * Summary category for things to act on.
+   */
+  const SUMMARY_RELAX = 'relax';
 
   /**
    * Constructs a \Drupal\upgrade_status\ProjectCollector.
@@ -53,34 +142,50 @@ class ProjectCollector {
    *   The theme extension handler service.
    * @param \Drupal\Core\Extension\ProfileExtensionList $profile_extension_list
    *   The profile extension handler service.
+   * @param \Drupal\Core\KeyValueStore\KeyValueExpirableFactory $key_value_expirable
+   *   The expirable key/value storage.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The configuration factory.
    */
   public function __construct(
     ModuleExtensionList $module_extension_list,
     ThemeExtensionList $theme_extension_list,
-    ProfileExtensionList $profile_extension_list
+    ProfileExtensionList $profile_extension_list,
+    KeyValueExpirableFactory $key_value_expirable,
+    ConfigFactoryInterface $config_factory
   ) {
     $this->moduleExtensionList = $module_extension_list;
     $this->themeExtensionList = $theme_extension_list;
     $this->profileExtensionList = $profile_extension_list;
+    $this->availableUpdates = $key_value_expirable->get('update_available_releases');
+    $this->configFactory = $config_factory;
+  }
+
+  /**
+   * Reset all extension lists so their data is regenerated.
+   */
+  public function resetLists() {
+    $this->moduleExtensionList->reset();
+    $this->themeExtensionList->reset();
+    $this->profileExtensionList->reset();
   }
 
   /**
    * Collect projects of installed modules grouped by custom and contrib.
    *
-   * @return array
-   *   An array keyed by 'custom' and 'contrib' where each array is a list
-   *   of projects grouped into that project group. Custom modules get a
-   *   project name based on their topmost parent custom module and only
-   *   that topmost custom module gets included in the list. Each item is
-   *   a \Drupal\Core\Extension\Extension object in both arrays.
+   * @return \Drupal\Core\Extension\Extension[]
+   *   An array keyed by project names. Extensions selected as projects
+   *   without a defined project name get one based on their topmost parent
+   *   extension and only that topmost extension gets included in the list.
    */
   public function collectProjects() {
-    $projects = ['custom' => [], 'contrib' => []];
+    $projects = [];
     $modules = $this->moduleExtensionList->getList();
     $themes = $this->themeExtensionList->getList();
     $profiles = $this->profileExtensionList->getList();
     $extensions = array_merge($modules, $themes, $profiles);
     unset($modules, $themes, $profiles);
+    $update_check_for_uninstalled = $this->configFactory->get('update.settings')->get('check.disabled_extensions');
 
     /** @var \Drupal\Core\Extension\Extension $extension */
     foreach ($extensions as $key => $extension) {
@@ -92,12 +197,21 @@ class ProjectCollector {
 
       // If the project is already specified in this extension, use that.
       $project = isset($extension->info['project']) ? $extension->info['project'] : '';
-      if (array_key_exists($project, $projects['custom'])
-        || array_key_exists($project, $projects['contrib'])
-      ) {
+      if (isset($projects[$project])) {
         // If we already have a representative of this project in the list,
         // don't add this extension.
         // @todo Make sure to use the extension with the shortest file path.
+
+        // If the existing project was already Drupal 9 compatible, consider
+        // this subcomponent as well. If this component was enabled, it would
+        // affect how we consider the Drupal 9 compatibility.
+        if (!empty($projects[$project]->info['upgrade_status_9_compatible']) && !empty($extension->status)) {
+          // Overwrite compatibility. If this is still compatible, it will
+          // keep being TRUE, otherwise FALSE.
+          $projects[$project]->info['upgrade_status_9_compatible'] =
+            isset($extension->info['core_version_requirement']) &&
+            Semver::satisfies('9.0.0', $extension->info['core_version_requirement']);
+        }
         continue;
       }
 
@@ -109,45 +223,114 @@ class ProjectCollector {
         continue;
       }
 
-      // Attempt to identfy if the project was contrib based on the directory
+      // Attempt to identify if the project was contrib based on the directory
       // structure it is in. Extension placement is not a mandatory requirement
       // and theoretically this could lead to false positives, but if
       // composer_deploy or git_deploy is not available (and/or did not
       // identify the project for us), this is all we can do. Ignore our test
       // modules for this scenario.
       if (empty($project)) {
-        $type = 'custom';
+        $type = self::TYPE_CUSTOM;
         if (strpos($extension->getPath(), '/contrib/') && (strpos($key, 'upgrade_status_test_') !== 0)) {
-          $type = 'contrib';
+          $type = self::TYPE_CONTRIB;
         }
       }
       // Extensions that have the 'drupal' project but did not have the 'core'
       // origin assigned are custom extensions that are running in a Drupal
       // core git checkout, so also categorize them as custom.
       elseif ($project === 'drupal') {
-        $type = 'custom';
+        $type = self::TYPE_CUSTOM;
       }
       else {
-        $type = 'contrib';
+        $type = self::TYPE_CONTRIB;
       }
-      $projects[$type][$key] = $extension;
+
+      // Add additional information to the extension info for our tracking.
+      // Keep this on a cloned extension object so we are not polluting runtime
+      // extension information elsewhere.
+      $extdata = clone $extension;
+      $extdata->info['upgrade_status_type'] = $type;
+      $extdata->info['upgrade_status_9_compatible'] =
+        isset($extdata->info['core_version_requirement']) &&
+        Semver::satisfies('9.0.0', $extdata->info['core_version_requirement']);
+
+      // Save this as a possible project to consider.
+      $projects[$key] = $extdata;
     }
 
-    // Collate custom extensions to projects, removing sub-extensions.
-    $projects['custom'] = $this->collateExtensionsIntoProjects($projects['custom']);
+    // Collate extensions to projects, removing sub-extensions.
+    $projects = $this->collateExtensionsIntoProjects($projects);
 
-    // Also collate contrib extensions. This is only needed if there were
-    // contrib extensions with projects not identified, and they had
-    // sub-extensions. After the collation is done, assign project names
-    // based on the topmost extension. While this is not always right for
-    // drupal.org projects, this is the best guess we have.
-    $projects['contrib'] = $this->collateExtensionsIntoProjects($projects['contrib']);
-    foreach ($projects['contrib'] as $name => $extension) {
+    // After the collation is done, assign project names based on the topmost
+    // extension. While this is not always right for drupal.org projects, this
+    // is the best guess we have.
+    foreach ($projects as $name => $extension) {
       if (!isset($extension->info['project'])) {
-        $projects['contrib'][$name]->info['project'] = $name;
+        $projects[$name]->info['project'] = $name;
+      }
+
+      // Add available update information to contrib projects found.
+      if ($extension->info['upgrade_status_type'] == self::TYPE_CONTRIB) {
+        // Look up by drupal.org project info not $name because the two may be different.
+        $project_update = $this->availableUpdates->get($extension->info['project']);
+        if (!isset($project_update['releases']) || is_null($project_update['releases'])) {
+          // Releases were either not checked or not available.
+          $projects[$name]->info['upgrade_status_update'] = $update_check_for_uninstalled ? self::UPDATE_NOT_AVAILABLE : self::UPDATE_NOT_CHECKED;
+        }
+        else {
+          // Add Drupal 9 compatibility info from the update's data.
+          $latest_release = reset($project_update['releases']);
+          $projects[$name]->info['upgrade_status_update_compatible'] = FALSE;
+          if (!empty($latest_release['core_compatibility']) && Semver::satisfies('9.0.0', $latest_release['core_compatibility'])) {
+            $projects[$name]->info['upgrade_status_update_compatible'] = TRUE;
+          }
+          // Denormalize update info into the extension info for our own use.
+          if ($extension->info['version'] !== $latest_release['version']) {
+            $projects[$name]->info['upgrade_status_update'] = self::UPDATE_AVAILABLE;
+            $link = $project_update['link'] . '/releases/' . $latest_release['version'];
+            $projects[$name]->info['upgrade_status_update_link'] = $link;
+            $projects[$name]->info['upgrade_status_update_version'] = $latest_release['version'];
+          }
+          else {
+            // If the current version is already the latest, store that.
+            $projects[$name]->info['upgrade_status_update'] = self::UPDATE_ALREADY_INSTALLED;
+          }
+        }
+      }
+
+      // Get scan results if there was any.
+      $scan_result = $this->getResults($name);
+
+      // Pick a suggested next step for this project.
+      if ($extension->info['upgrade_status_9_compatible'] && $extension->info['upgrade_status_type'] == self::TYPE_CONTRIB) {
+        // If the project was contrib and already Drupal 9 compatible, relax.
+        $extension->info['upgrade_status_next'] = self::NEXT_RELAX;
+      }
+      elseif (empty($extension->status)) {
+        // Uninstalled modules should be removed.
+        $extension->info['upgrade_status_next'] = self::NEXT_REMOVE;
+      }
+      elseif (isset($extension->info['upgrade_status_update']) && $extension->info['upgrade_status_update'] == self::UPDATE_AVAILABLE) {
+        // If there was a Drupal 9 compatible update or even a yet incompatible
+        // update to this project, the best course of action is to update to
+        // that, since that should move closer to Drupal 9 compatibility.
+        $extension->info['upgrade_status_next'] = self::NEXT_UPDATE;
+      }
+      elseif ($extension->info['upgrade_status_type'] == self::TYPE_CONTRIB) {
+        // For installed contributed modules that do not have compatile updates, collaborate.
+        $extension->info['upgrade_status_next'] = self::NEXT_COLLABORATE;
+      }
+      else {
+        // If there was no scanning result yet, next step is to scan this project.
+        if (empty($scan_result) || empty($scan_result['data']['totals']['upgrade_status_next'])) {
+          $extension->info['upgrade_status_next'] = self::NEXT_SCAN;
+        }
+        // If there were scanning results, carry over the next step suggestion from there.
+        else {
+          $extension->info['upgrade_status_next'] = $scan_result['data']['totals']['upgrade_status_next'];
+        }
       }
     }
-
     return $projects;
   }
 
@@ -155,7 +338,7 @@ class ProjectCollector {
    * Finds topmost extension for each extension and keeps only that.
    *
    * @param \Drupal\Core\Extension\Extension[] $extensions
-   *   List of all enabled extensions in a category.
+   *   List of all enabled extensions.
    *
    * @return \Drupal\Core\Extension\Extension[]
    *   List of extensions, with only the topmost extension left for each
@@ -168,7 +351,7 @@ class ProjectCollector {
 
       foreach ($extensions as $name_b => $extension_b) {
         // Skip collation for test modules except where we test that.
-        if ((strpos($name_b, 'upgrade_status_test_') === 0) && (strpos($name_b, 'upgrade_status_test_submodules_') !== 0)) {
+        if ((strpos($name_b, 'upgrade_status_test_') === 0) && ($name_b != 'upgrade_status_test_submodules_a') && ($name_b != 'upgrade_status_test_submodules_with_errors_a')) {
           continue;
         }
 
@@ -176,6 +359,19 @@ class ProjectCollector {
         // If the extension is not the same but the beginning of paths match,
         // remove this extension from the list as it is part of another one.
         if ($name_b != $name_a && substr($path_b, 0, $path_a_length) === $path_a) {
+
+          // If the existing project was already Drupal 9 compatible, consider
+          // this subcomponent as well. If this component was enabled, it would
+          // affect how we consider the Drupal 9 compatibility.
+          if (!empty($extensions[$name_a]->info['upgrade_status_9_compatible']) && !empty($extension_b->status)) {
+            // Overwrite compatibility. If this is still compatible, it will
+            // keep being TRUE, otherwise FALSE.
+            $extensions[$name_a]->info['upgrade_status_9_compatible'] =
+              isset($extension_b->info['core_version_requirement']) &&
+              Semver::satisfies('9.0.0', $extension_b->info['core_version_requirement']);
+          }
+
+          // Remove the subextension.
           unset($extensions[$name_b]);
         }
       }
@@ -186,34 +382,114 @@ class ProjectCollector {
   /**
    * Returns a single extension based on type and machine name.
    *
-   * @param string $type
-   *   One of 'module' or 'theme' or 'profile' to signify the type of the
-   *   extension.
    * @param string $project_machine_name
    *   Machine name for the extension.
    *
    * @return \Drupal\Core\Extension\Extension
    *   A project if exists.
    *
-   * @throws \InvalidArgumentException
-   *   If the type was not one of the allowed ones.
    * @throws \Drupal\Core\Extension\Exception\UnknownExtensionException
-   *   If there was no extension with the given name.
+   *   If there was no identified project with the given name.
    */
-  public function loadProject(string $type, string $project_machine_name) {
-    if (!in_array($type, $this->allowedTypes)) {
-      throw new InvalidArgumentException(sprintf('"%s" is not a valid type. Valid types are module, profile and theme.', $type));
+  public function loadProject(string $project_machine_name) {
+    $projects = $this->collectProjects();
+    if (!empty($projects[$project_machine_name])) {
+      return $projects[$project_machine_name];
+    }
+    throw new UnknownExtensionException("The {$project_machine_name} project does not exist.");
+  }
+
+  /**
+   * Get local scanning results for a project.
+   *
+   * @param string $project_machine_name
+   *   Machine name for project.
+   *
+   * @return mixed
+   *   - NULL if there was no result
+   *   - Associative array of results otherwise
+   */
+  public function getResults(string $project_machine_name) {
+    // Always use a fresh service. An injected service could get stale results
+    // because scan result saving happens in different HTTP requests for most
+    // cases (when analysis was successful).
+    return \Drupal::service('keyvalue')->get('upgrade_status_scan_results')->get($project_machine_name) ?: NULL;
+  }
+
+  /**
+   * Get the Drupal 9 plan for a project, either explicitly fetched or cached.
+   *
+   * @param string $project_machine_name
+   *   Machine name for project.
+   *
+   * @return NULL|string
+   *   Either NULL or the Drupal 9 plan for the project.
+   */
+  public function getPlan(string $project_machine_name) {
+    // Return explicitly fetched Drupal 9 plan if available.
+    $result = $this->getResults($project_machine_name);
+    if (!empty($result) && !empty($result['plans'])) {
+      return $result['plans'];
     }
 
-    if ($type === 'module') {
-      return $this->moduleExtensionList->get($project_machine_name);
+    // Read our shipped snapshot of Drupal 9 plans to find this one.
+    $file = fopen(drupal_get_path('module', 'upgrade_status') . '/project_plans.csv', 'r');
+    while ($line = fgetcsv($file, 0, ";")) {
+      if ($line[0] == $project_machine_name) {
+        fclose($file);
+        // Replace drupal.org link formatting with actual links.
+        return preg_replace('!\[#(\d+)\]!', '<a href="https://drupal.org/node/\1">[#\1]</a>', $line[1]);
+      }
     }
+    fclose($file);
+    return NULL;
+  }
 
-    if ($type === 'profile') {
-      return $this->profileExtensionList->get($project_machine_name);
-    }
-
-    return $this->themeExtensionList->get($project_machine_name);
+  /**
+   * Return list of possible next steps and their labels and descriptions.
+   *
+   * @return array
+   *   Associative array keys by next step identifier. Values are arrays
+   *   where the first item is a label an the second is a description.
+   */
+  public function getNextStepInfo() {
+    return [
+      ProjectCollector::NEXT_REMOVE => [
+        $this->t('Remove'),
+        $this->t('The likely best action is to remove projects that are uninstalled. Why invest in updating them to be compatible if you are not using them?'),
+        ProjectCollector::SUMMARY_ACT,
+      ],
+      ProjectCollector::NEXT_UPDATE => [
+        $this->t('Update'),
+        $this->t('There is an update available. Even if that is not fully Drupal 9 compatible, it may be more compatible than what you have, so best to start with updating first.'),
+        ProjectCollector::SUMMARY_ACT,
+      ],
+      ProjectCollector::NEXT_SCAN => [
+        $this->t('Scan'),
+        $this->t('Status of this project cannot be determined without scanning the source code here. Use this form to run a scan on these.'),
+        ProjectCollector::SUMMARY_ANALYZE,
+      ],
+      ProjectCollector::NEXT_COLLABORATE => [
+        $this->t('Collaborate with maintainers'),
+        $this->t('There are likely Drupal.org issues by contributors or even <a href=":drupal-bot">the Project Update Bot</a>. Work with the maintainer to get them committed, provide feedback if they worked.', [':drupal-bot' => 'https://www.drupal.org/u/project-update-bot']),
+        ProjectCollector::SUMMARY_ACT,
+      ],
+      ProjectCollector::NEXT_RECTOR => [
+        $this->t('Fix with rector'),
+        $this->t('Some or all problems found can be fixed automatically with <a href=":drupal-rector">drupal-rector</a>. Make the machine do the work.', [':drupal-rector' => 'https://www.drupal.org/project/rector']),
+        ProjectCollector::SUMMARY_ACT,
+      ],
+      ProjectCollector::NEXT_MANUAL => [
+        $this->t('Fix manually'),
+        $this->t('It looks like there is no automated fixes for either problems found. Check the report for pointers on how to fix.'),
+        ProjectCollector::SUMMARY_ACT,
+      ],
+      ProjectCollector::NEXT_RELAX => [
+        $this->t('Drupal 9 compatible'),
+        $this->t('Well done. Congrats! Let\'s get everything else here!'),
+        ProjectCollector::SUMMARY_RELAX,
+      ],
+    ];
   }
 
 }

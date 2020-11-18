@@ -91,11 +91,7 @@ class ScanResultFormatter {
    *   Scan results array or null if no scan results are saved.
    */
   public function getRawResult(Extension $extension) {
-    $scan_results = $this->scanResultStorage->get($extension->getName());
-    if (!empty($scan_results)) {
-      $scan_results = json_decode($scan_results, TRUE);
-    }
-    return $scan_results;
+    return $this->scanResultStorage->get($extension->getName()) ?: NULL;
   }
 
   /**

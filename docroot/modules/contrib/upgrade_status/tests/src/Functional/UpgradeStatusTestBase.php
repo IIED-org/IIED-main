@@ -47,18 +47,18 @@ abstract class UpgradeStatusTestBase extends BrowserTestBase {
    */
   protected function runFullScan() {
     $edit = [
-      'contrib[data][installed][upgrade_status]' => TRUE,
-      'custom[data][installed][upgrade_status_test_error]' => TRUE,
-      'custom[data][installed][upgrade_status_test_no_error]' => TRUE,
-      'custom[data][installed][upgrade_status_test_submodules]' => TRUE,
-      'custom[data][installed][upgrade_status_test_submodules_with_error]' => TRUE,
-      'custom[data][installed][upgrade_status_test_twig]' => TRUE,
-      'custom[data][installed][upgrade_status_test_theme]' => TRUE,
-      'custom[data][installed][upgrade_status_test_theme_functions]' => TRUE,
-      'custom[data][installed][upgrade_status_test_library]' => TRUE,
-      'custom[data][installed][upgrade_status_test_library_exception]' => TRUE,
-      'contrib[data][installed][upgrade_status_test_contrib_error]' => TRUE,
-      'contrib[data][installed][upgrade_status_test_contrib_no_error]' => TRUE,
+      'scan[data][list][upgrade_status_test_error]' => TRUE,
+      'scan[data][list][upgrade_status_test_no_error]' => TRUE,
+      'scan[data][list][upgrade_status_test_submodules]' => TRUE,
+      'scan[data][list][upgrade_status_test_submodules_with_error]' => TRUE,
+      'scan[data][list][upgrade_status_test_twig]' => TRUE,
+      'scan[data][list][upgrade_status_test_theme]' => TRUE,
+      'scan[data][list][upgrade_status_test_theme_functions]' => TRUE,
+      'scan[data][list][upgrade_status_test_library]' => TRUE,
+      'scan[data][list][upgrade_status_test_library_exception]' => TRUE,
+      'collaborate[data][list][upgrade_status]' => TRUE,
+      'collaborate[data][list][upgrade_status_test_contrib_error]' => TRUE,
+      'relax[data][list][upgrade_status_test_contrib_no_error]' => TRUE,
     ];
     $this->drupalPostForm('admin/reports/upgrade-status', $edit, 'Scan selected');
   }

@@ -1,0 +1,7 @@
+host: search.acquia.com
+path: ''
+derived_key_salt: ''
+version: 8.x
+default_search_core: null
+disable_auto_read_only: false
+disable_auto_switch: false

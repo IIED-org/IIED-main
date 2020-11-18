@@ -94,7 +94,7 @@ class FacetBlock extends BlockBase implements ContainerFactoryPluginInterface {
         'route_parameters' => ['facets_facet' => $facet->id()],
       ];
 
-      if (in_array('facet-active', $build[0]['#attributes']['class'], TRUE)) {
+      if (!empty($build[0]['#attributes']['class']) && in_array('facet-active', $build[0]['#attributes']['class'], TRUE)) {
         $build['#attributes']['class'][] = 'facet-active';
       }
       else {

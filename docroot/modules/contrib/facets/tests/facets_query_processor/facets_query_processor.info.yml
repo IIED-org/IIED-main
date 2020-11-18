@@ -4,7 +4,7 @@ description: 'Facets query processor'
 package: 'Testing'
 hidden: true
 
-# Information added by Drupal.org packaging script on 2020-07-17
-version: '8.x-1.5'
+# Information added by Drupal.org packaging script on 2020-11-03
+version: '8.x-1.6'
 project: 'facets'
-datestamp: 1595015394
+datestamp: 1604397982

@@ -30,8 +30,8 @@ class ResetFacetsProcessor extends ProcessorPluginBase implements BuildProcessor
     $configuration = $facets_summary->getProcessorConfigs()[$this->getPluginId()];
     $hasReset = FALSE;
 
-    // Do nothing if there are no selected facets or reset text is empty.
-    if (empty($build['#items']) || empty($configuration['settings']['link_text'])) {
+    // Do nothing if there are no selected facets.
+    if (empty($build['#items'])) {
       return $build;
     }
 
@@ -67,8 +67,15 @@ class ResetFacetsProcessor extends ProcessorPluginBase implements BuildProcessor
 
     $url = Url::fromUserInput($facets_summary->getFacetSource()->getPath());
     $url->setOptions(['query' => $query_params]);
-
-    $item = (new Link($configuration['settings']['link_text'], $url))->toRenderable();
+    // Check if reset link text is not set or it contains only whitespaces.
+    // Set text from settings or set default text.
+    if (empty($configuration['settings']['link_text']) || strlen(trim($configuration['settings']['link_text'])) === 0) {
+      $itemText = t('Reset');
+    }
+    else {
+      $itemText = $configuration['settings']['link_text'];
+    }
+    $item = (new Link($itemText, $url))->toRenderable();
     $item['#wrapper_attributes'] = [
       'class' => [
         'facet-summary-item--clear',

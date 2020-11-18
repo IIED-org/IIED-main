@@ -5,10 +5,6 @@
  * https://github.com/googlei18n/libaddressinput/issues
  * Since Google has been slow to resolve them, the library maintains its own
  * list of customizations, in PHP format for easier contribution.
- *
- * @todo
- * PE subdivisions (https://github.com/googlei18n/libaddressinput/issues/50)
- * Other points raised in https://github.com/googlei18n/libaddressinput/issues/49
  */
 
 /**
@@ -250,6 +246,17 @@ function get_subdivision_customizations($group) {
             'iso_code' => 'CO-VID',
             'postal_code_pattern' => '99\d{4}',
         ],
+    ];
+    // Replace Iporá with Iporã.
+    // https://github.com/google/libaddressinput/issues/186
+    $subdivisionCustomizations['BR-e8f1a539a5489b18c33be768b1c3c799'] = [
+        '_remove' => [
+            'Iporá',
+        ],
+        '_add_after' => [
+            'Iporã' => 'Iracema do Oeste',
+        ],
+        'Iporã' => [],
     ];
 
     return isset($subdivisionCustomizations[$group]) ? $subdivisionCustomizations[$group] : [];

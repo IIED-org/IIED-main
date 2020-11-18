@@ -2,7 +2,6 @@
 
 namespace Drupal\name;
 
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -43,7 +42,7 @@ class NameFormatListBuilder extends ConfigEntityListBuilder {
   public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type) {
     return new static(
       $entity_type,
-      $container->get('entity.manager')->getStorage($entity_type->id()),
+      $container->get('entity_type.manager')->getStorage($entity_type->id()),
       $container->get('name.format_parser'),
       $container->get('name.generator')
     );
@@ -58,6 +57,8 @@ class NameFormatListBuilder extends ConfigEntityListBuilder {
    *   The entity storage class.
    * @param \Drupal\name\NameFormatParser $parser
    *   The name format parser.
+   * @param \Drupal\name\NameGeneratorInterface $generator
+   *   The name generator.
    */
   public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, NameFormatParser $parser, NameGeneratorInterface $generator) {
     parent::__construct($entity_type, $storage);
@@ -95,7 +96,7 @@ class NameFormatListBuilder extends ConfigEntityListBuilder {
   /**
    * Provides some example based on names with various components set.
    *
-   * @param \Drupal\name\Entity\NameFormat $entity;
+   * @param \Drupal\name\Entity\NameFormat $entity
    *   The name format entity.
    *
    * @return \Drupal\Component\Render\FormattableMarkup

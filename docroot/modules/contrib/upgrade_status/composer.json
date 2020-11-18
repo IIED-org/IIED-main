@@ -11,6 +11,9 @@
         "nikic/php-parser": "^4.0.0",
         "webflo/drupal-finder": "^1.2"
     },
+    "conflict": {
+        "phpstan/phpstan": ">=0.12.43"
+    },
     "minimum-stability": "dev",
     "extra": {
         "drush": {

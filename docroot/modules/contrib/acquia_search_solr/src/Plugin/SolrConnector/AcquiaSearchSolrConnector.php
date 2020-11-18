@@ -9,10 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\search_api_solr\SolrConnector\SolrConnectorPluginBase;
-use Http\Adapter\Guzzle6\Client as Guzzle6Client;
-use Http\Factory\Guzzle\RequestFactory;
-use Http\Factory\Guzzle\StreamFactory;
-use Solarium\Core\Client\Adapter\Psr18Adapter;
+use Solarium\Core\Client\Adapter\Http;
 use Solarium\Core\Client\Client;
 use Solarium\Core\Client\Endpoint;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -48,23 +45,11 @@ class AcquiaSearchSolrConnector extends SolrConnectorPluginBase {
   const ENDPOINT_KEY = 'search_api_solr';
 
   /**
-   * {@inheritdoc}
-   */
-  protected $eventDispatcher = FALSE;
-
-  /**
    * Event subscriber.
    *
    * @var \Drupal\acquia_search_solr\EventSubscriber\AcquiaSearchSolrSubscriber
    */
   protected $searchSubscriber;
-
-  /**
-   * The HTTP client.
-   *
-   * @var \GuzzleHttp\Client
-   */
-  protected $client;
 
   /**
    * {@inheritdoc}
@@ -73,7 +58,6 @@ class AcquiaSearchSolrConnector extends SolrConnectorPluginBase {
 
     $plugin = parent::create($container, $configuration, $plugin_id, $plugin_definition);
     $plugin->searchSubscriber = $container->get('acquia_search_solr.search_subscriber');
-    $plugin->client = $container->get('http_client');
     return $plugin;
 
   }
@@ -85,8 +69,8 @@ class AcquiaSearchSolrConnector extends SolrConnectorPluginBase {
 
     $configuration = parent::defaultConfiguration();
 
-    $configuration['port'] = 443;
     $configuration['scheme'] = 'https';
+    $configuration['port'] = $this->getSolrPort($configuration['scheme']);
     unset($configuration['overridden_by_acquia_search_solr']);
 
     // The Acquia Search Solr isn't configured.
@@ -186,6 +170,17 @@ class AcquiaSearchSolrConnector extends SolrConnectorPluginBase {
   /**
    * {@inheritdoc}
    */
+  public function setConfiguration(array $configuration) {
+
+    $configuration['port'] = $this->getSolrPort();
+
+    parent::setConfiguration($configuration);
+
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
     // Override parent class: turn off connection check.
   }
@@ -199,24 +194,14 @@ class AcquiaSearchSolrConnector extends SolrConnectorPluginBase {
       return;
     }
 
-    // This is the Solarium adapter that needs to be used among various options.
-    // Using classes from php-http/guzzle6-adapter and
-    // http-interop/http-factory-guzzle as they seem to be the current consensus
-    // for this use case in core:
-    // https://www.drupal.org/project/drupal/issues/3039047.
-    $adapter = new Psr18Adapter(
-      new Guzzle6Client($this->client),
-      new RequestFactory(),
-      new StreamFactory()
-    );
-
-    $this->solr = new Client($adapter, $this->eventDispatcher);
+    $this->solr = new Client(new Http(), $this->eventDispatcher);
     // Ensure that people don't specify the wrong port since the Search API Solr
     // class SolrConnectorPluginBase which we're extending does offer everything
     // up for configuration.
-    $this->configuration['port'] = ($this->configuration['scheme'] == 'https') ? 443 : 80;
+    $this->configuration['port'] = $this->getSolrPort($this->configuration['scheme']);
     $this->configuration['key'] = self::ENDPOINT_KEY;
     $this->configuration['path'] = '/';
+    $this->configuration[self::QUERY_TIMEOUT] = $this->configuration['timeout'];
 
     $this->solr->createEndpoint($this->configuration, TRUE);
     $this->solr->registerPlugin('acquia_solr_search_subscriber', $this->searchSubscriber);
@@ -330,6 +315,19 @@ class AcquiaSearchSolrConnector extends SolrConnectorPluginBase {
    */
   public function reloadCore() {
     return FALSE;
+  }
+
+  /**
+   * Get port number of the Solr server.
+   *
+   * @param string $scheme
+   *   The server scheme.
+   *
+   * @return int
+   *   443 if using HTTPS, otherwise 80.
+   */
+  protected function getSolrPort($scheme = 'https') {
+    return $scheme === 'https' ? 443 : 80;
   }
 
 }

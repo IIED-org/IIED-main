@@ -3,7 +3,7 @@
 namespace Drupal\name;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Entity\EntityTypeManager;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
@@ -45,7 +45,7 @@ class NameFormatter implements NameFormatterInterface {
   protected $listFormatStorage;
 
   /**
-   * Language manager for retrieving the default langcode when none is specified.
+   * Language manager for retrieving the default language code if needed.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
@@ -79,7 +79,7 @@ class NameFormatter implements NameFormatterInterface {
   /**
    * Constructs a name formatter object.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity manager.
    * @param \Drupal\name\NameFormatParser $parser
    *   The name format parser.
@@ -90,7 +90,7 @@ class NameFormatter implements NameFormatterInterface {
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
    */
-  public function __construct(EntityTypeManager $entityTypeManager, NameFormatParser $parser, LanguageManagerInterface $language_manager, TranslationInterface $translation, ConfigFactoryInterface $config_factory) {
+  public function __construct(EntityTypeManagerInterface $entityTypeManager, NameFormatParser $parser, LanguageManagerInterface $language_manager, TranslationInterface $translation, ConfigFactoryInterface $config_factory) {
     $this->nameFormatStorage = $entityTypeManager->getStorage('name_format');
     $this->listFormatStorage = $entityTypeManager->getStorage('name_list_format');
     $this->parser = $parser;
@@ -181,25 +181,29 @@ class NameFormatter implements NameFormatterInterface {
       }
     }
     else {
+      if ($settings['and'] == 'inherit') {
+        return new NameListFormattableMarkup($names, $settings['delimiter']);
+      }
       $t_args = [
         '@lastname' => array_pop($names),
         '@names' => new NameListFormattableMarkup($names, $settings['delimiter']),
         '@delimiter' => trim($settings['delimiter']),
       ];
       if ($settings['and'] == 'text') {
-        $t_args['@and'] = t('and', [], ['context' => 'name']);
+        $t_args['@and'] = $this->t('and', [], ['context' => 'name']);
       }
       else {
-        $t_args['@and'] = t('&', [], ['context' => 'name']);
+        $t_args['@and'] = $this->t('&', [], ['context' => 'name']);
       }
 
-      // Strange rule from http://citationstyles.org/downloads/specification.html.
+      // Strange rule from citationstyles.org.
+      // @see http://citationstyles.org/downloads/specification.html
       if (($settings['delimiter_precedes_last'] == 'contextual' && $name_count > 2)
           || $settings['delimiter_precedes_last'] == 'always') {
-        return t('@names@delimiter @and @lastname', $t_args);
+        return $this->t('@names@delimiter @and @lastname', $t_args);
       }
       else {
-        return t('@names @and @lastname', $t_args);
+        return $this->t('@names @and @lastname', $t_args);
       }
     }
   }
@@ -249,12 +253,14 @@ class NameFormatter implements NameFormatterInterface {
       return [
         'text' => $this->t('Textual (and)'),
         'symbol' => $this->t('Ampersand (&amp;)'),
+        'inherit' => $this->t('Inherit delimiter'),
       ];
     }
     else {
       return [
         'text' => $this->t('Textual'),
         'symbol' => $this->t('Ampersand'),
+        'inherit' => $this->t('Inherit delimiter'),
       ];
     }
   }

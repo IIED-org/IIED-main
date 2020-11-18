@@ -633,6 +633,8 @@ class AcquiaConnectorModuleTest extends BrowserTestBase {
     $storage->setIdentifier('');
 
     \Drupal::state()->set('acquia_connector_test_request_count', 0);
+    \Drupal::state()->delete('spi.site_name');
+    \Drupal::state()->delete('spi.site_machine_name');
     \Drupal::state()->resetCache();
   }
 

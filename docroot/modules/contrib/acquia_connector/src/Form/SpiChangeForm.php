@@ -2,8 +2,11 @@
 
 namespace Drupal\acquia_connector\Form;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\State\State;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class SpiChangeForm.
@@ -11,6 +14,37 @@ use Drupal\Core\Form\FormStateInterface;
  * @package Drupal\acquia_connector\Form
  */
 class SpiChangeForm extends ConfigFormBase {
+
+  /**
+   * The state service.
+   *
+   * @var \Drupal\Core\State\State
+   */
+  protected $state;
+
+  /**
+   * Constructs a \Drupal\acquia_connector\Form object.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
+   * @param \Drupal\Core\State\State $state
+   *   The State handler.
+   */
+  public function __construct(ConfigFactoryInterface $config_factory, State $state) {
+    parent::__construct($config_factory);
+
+    $this->state = $state;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('config.factory'),
+      $container->get('state')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -96,7 +130,7 @@ class SpiChangeForm extends ConfigFormBase {
         '#title' => $this->t('Name'),
         '#maxlength' => 255,
         '#required' => TRUE,
-        '#default_value' => $config->get('spi.site_name'),
+        '#default_value' => $this->state->get('spi.site_name'),
       ];
 
       $form['identification']['site']['machine_name'] = [
@@ -108,10 +142,11 @@ class SpiChangeForm extends ConfigFormBase {
           'exists' => [$this, 'exists'],
           'source' => ['identification', 'site', 'name'],
         ],
-        '#default_value' => $config->get('spi.site_machine_name'),
+        '#default_value' => $this->state->get('spi.site_machine_name'),
       ];
 
       if ($acquia_hosted) {
+        $form['identification']['site']['name']['#disabled'] = TRUE;
         $form['identification']['site']['machine_name']['#disabled'] = TRUE;
         $form['identification']['site']['machine_name']['#default_value'] = \Drupal::service('acquia_connector.spi')->getAcquiaHostedMachineName();
       }
@@ -156,9 +191,8 @@ class SpiChangeForm extends ConfigFormBase {
     }
 
     if ($values['env_change_action'] == 'create') {
-      $config->set('spi.site_name', $values['name'])
-        ->set('spi.site_machine_name', $values['machine_name'])
-        ->save();
+      $this->state->set('spi.site_name', $values['name']);
+      $this->state->set('spi.site_machine_name', $values['machine_name']);
     }
     parent::submitForm($form, $form_state);
 

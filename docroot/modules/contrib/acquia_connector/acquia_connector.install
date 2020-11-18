@@ -32,6 +32,8 @@ function acquia_connector_requirements($phase) {
       $last_sent = \Drupal::state()->get('acquia_connector.cron_last', 0);
       $subscription = new Subscription();
       $has_credentials = $subscription->hasCredentials();
+      $state_site_name = \Drupal::state()->get('spi.site_name');
+      $state_site_machine_name = \Drupal::state()->get('spi.site_machine_name');
 
       if ($has_credentials) {
         $key = sha1(Drupal::service('private_key')->get());
@@ -41,7 +43,7 @@ function acquia_connector_requirements($phase) {
         $blocked = $config->get('spi.blocked');
         $environment_change = \Drupal::service('acquia_connector.spi')->checkEnvironmentChange();
         $is_acquia_hosted = \Drupal::service('acquia_connector.spi')->checkAcquiaHosted();
-        $name_required = is_null($config->get('spi.site_name')) && is_null($config->get('spi.site_machine_name')) && !$is_acquia_hosted;
+        $name_required = is_null($state_site_name) && is_null($state_site_machine_name) && !$is_acquia_hosted;
         $interval = $config->get('cron_interval');
         if ($config->get('cron_interval_override')) {
           $interval = $config->get('cron_interval_override');
@@ -184,33 +186,4 @@ function acquia_connector_requirements($phase) {
   }
 
   return $requirements;
-}
-
-/**
- * Move subscription data to state.
- */
-function acquia_connector_update_8200() {
-  $config = \Drupal::configFactory()->getEditable('acquia_connector.settings');
-
-  // Handle subscription data first.
-  $subscription_data = $config->get('subscription_data');
-  if ($subscription_data) {
-    \Drupal::state()->set('acquia_subscription_data', $subscription_data);
-    $config->clear('subscription_data')->save();
-  }
-
-  // Now handle SPI vars.
-  $spi_moved_keys = [
-    'def_vars',
-    'def_waived_vars',
-    'def_timestamp',
-    'new_optional_data',
-  ];
-  foreach ($spi_moved_keys as $key) {
-    $data = $config->get("spi.$key");
-    if ($data) {
-      \Drupal::state()->set("acquia_spi_data.$key", $data);
-      $config->clear("spi.$key")->save();
-    }
-  }
 }

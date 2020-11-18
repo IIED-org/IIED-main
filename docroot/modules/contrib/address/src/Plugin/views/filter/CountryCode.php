@@ -9,6 +9,9 @@ namespace Drupal\address\Plugin\views\filter;
  *
  * @ViewsFilter("country_code")
  *
- * @deprecated in 1.5, to be removed before 2.x. Use the Country plugin instead.
+ * @deprecated in address:8.x-1.5 and is removed from address:8.x-2.0. Use the
+ *   Country plugin instead.
+ *
+ * @see https://www.drupal.org/project/address/issues/3034122
  */
 class CountryCode extends Country {}

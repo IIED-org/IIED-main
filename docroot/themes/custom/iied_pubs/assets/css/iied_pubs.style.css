@@ -9620,6 +9620,10 @@ a.text-dark:hover, a.text-dark:focus {
   visibility: hidden !important;
 }
 
+.file-size a {
+  display: none;
+}
+
 .navbar img {
   display: block;
   max-width: 60px;
@@ -9649,6 +9653,11 @@ a.text-dark:hover, a.text-dark:focus {
 }
 .block-facet--checkbox .facets-widget-checkbox .facets-checkbox {
   margin-right: 0.5rem;
+}
+
+.block--dropdownlanguagecontent h2 {
+  font-size: 1rem;
+  float: left;
 }
 
 .comma-list {

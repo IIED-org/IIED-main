@@ -69,6 +69,8 @@ trait NameFormDisplaySettingsTrait {
    *   The form where the settings form is being included in.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state of the (entire) configuration form.
+   * @param bool $has_data
+   *   A flag to indicate if the field has data.
    *
    * @return array
    *   The form definition for the field settings.

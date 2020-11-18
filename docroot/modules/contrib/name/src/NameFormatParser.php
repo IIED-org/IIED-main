@@ -68,7 +68,7 @@ class NameFormatParser {
    * @return \Drupal\Component\Render\MarkupInterface
    *   A renderable object representing the name.
    */
-  public function parse($name_components, $format = '', array $settings = []) {
+  public function parse(array $name_components, $format = '', array $settings = []) {
     foreach (['sep1', 'sep2', 'sep3'] as $sep_key) {
       if (isset($settings[$sep_key])) {
         $this->{$sep_key} = (string) $settings[$sep_key];
@@ -86,6 +86,10 @@ class NameFormatParser {
       case 'rdfa':
       case 'microdata':
         return new FormattableMarkup($name_string, []);
+
+      // Unescaped text.
+      case 'raw':
+        return $name_string;
 
       // Raw component values.
       case 'none':
@@ -108,7 +112,7 @@ class NameFormatParser {
    * @return string
    *   The formatted string.
    */
-  protected function format($name_components, $format = '', $tokens = NULL) {
+  protected function format(array $name_components, $format = '', array $tokens = NULL) {
     if (empty($format)) {
       return '';
     }
@@ -124,8 +128,8 @@ class NameFormatParser {
     $modifiers = '';
     $conditions = '';
     for ($i = 0; $i < strlen($format); $i++) {
-      $char = $format{$i};
-      $last_char = ($i > 0) ? $format{$i - 1} : FALSE;
+      $char = $format[$i];
+      $last_char = ($i > 0) ? $format[$i - 1] : FALSE;
 
       // Handle escaped letters.
       if ($char == '\\') {
@@ -286,13 +290,13 @@ class NameFormatParser {
         }
 
         for ($j = 0; $j < strlen($modifiers); $j++) {
-          switch ($modifiers{$j}) {
+          switch ($modifiers[$j]) {
             case 'L':
-              $string = Unicode::strtolower($string);
+              $string = mb_strtolower($string);
               break;
 
             case 'U':
-              $string = Unicode::strtoupper($string);
+              $string = mb_strtoupper($string);
               break;
 
             case 'F':
@@ -304,7 +308,7 @@ class NameFormatParser {
               break;
 
             case 'T':
-              $string = trim($string);
+              $string = trim(preg_replace('/\s+/', ' ', $string));
               break;
 
             case 'S':
@@ -334,7 +338,8 @@ class NameFormatParser {
    *
    * @param string $string
    *   Accepts strings in the format, ^ marks the matched bracket.
-   *   '(xxx^)xxx(xxxx)xxxx' or '(xxx(xxx(xxxx))xxx^)'
+   *
+   *   i.e. '(xxx^)xxx(xxxx)xxxx' or '(xxx(xxx(xxxx))xxx^)'.
    *
    * @return mixed
    *   The closing bracket position or FALSE if not found.
@@ -344,7 +349,7 @@ class NameFormatParser {
     $depth = 0;
     $string = str_replace(['\(', '\)'], ['__', '__'], $string);
     for ($i = 0; $i < strlen($string); $i++) {
-      $char = $string{$i};
+      $char = $string[$i];
       if ($char == '(') {
         $depth++;
       }
@@ -367,7 +372,7 @@ class NameFormatParser {
    * @return array
    *   The keyed tokens generated for the given name.
    */
-  protected function generateTokens($name_components) {
+  protected function generateTokens(array $name_components) {
     $name_components = (array) $name_components;
     $name_components += [
       'title' => '',
@@ -431,8 +436,8 @@ class NameFormatParser {
    * Finds and renders the first renderable name component value.
    *
    * This function does not by default sanitize the output unless the markup
-   * flag is set. If this is set, it runs the component through check_plain() and
-   * wraps the component in a span with the component name set as the class.
+   * flag is set. If this is set, it runs the component through check_plain()
+   * and wraps the component in a span with the component name set as the class.
    *
    * @param array $values
    *   An array of walues to find the first to render.
@@ -473,13 +478,13 @@ class NameFormatParser {
    *   The rendered componenet.
    */
   protected function renderComponent($value, $component_key, $modifier = NULL) {
-    if (empty($value) || !Unicode::strlen($value)) {
+    if (empty($value) || !mb_strlen($value)) {
       return NULL;
     }
     switch ($modifier) {
       // First letter first word.
       case 'initial':
-        $value = Unicode::substr($value, 0, 1);
+        $value = mb_substr($value, 0, 1);
         break;
 
       // First letter all words.
@@ -531,6 +536,8 @@ class NameFormatParser {
     return [
       // Raw component values.
       'none' => $this->t('No markup'),
+      // Unescaped text.
+      'raw' => $this->t('Raw, unescaped text'),
       // Escaped component values.
       'simple' => $this->t('Component classes'),
       // Escaped component values.
@@ -601,13 +608,13 @@ class NameFormatParser {
         if (preg_match('/^[a-z]+$/', $letter)) {
           $tokens[$letter] = $this->t('@description<br><small>(lowercase @letter)</small>', [
             '@description' => $description,
-            '@letter' => Unicode::strtoupper($letter),
+            '@letter' => mb_strtoupper($letter),
           ]);
         }
         elseif (preg_match('/^[A-Z]+$/', $letter)) {
           $tokens[$letter] = $this->t('@description<br><small>(uppercase @letter)</small>', [
             '@description' => $description,
-            '@letter' => Unicode::strtoupper($letter),
+            '@letter' => mb_strtoupper($letter),
           ]);
         }
       }
@@ -625,7 +632,7 @@ class NameFormatParser {
   public function renderableTokenHelp() {
     return [
       '#type' => 'details',
-      '#title' => t('Format string help'),
+      '#title' => $this->t('Format string help'),
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
       '#parents' => [],

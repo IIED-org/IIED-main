@@ -5,17 +5,7 @@
  *
  * @package Shapefile
  * @author  Gaspare Sganga
- * @version 3.3.1
- * @license MIT
- * @link    https://gasparesganga.com/labs/php-shapefile/
- */<?php
-
-/**
- * PHP Shapefile - PHP library to read and write ESRI Shapefiles, compatible with WKT and GeoJSON
- *
- * @package Shapefile
- * @author  Gaspare Sganga
- * @version 3.3.0
+ * @version 3.3.3
  * @license MIT
  * @link    https://gasparesganga.com/labs/php-shapefile/
  */
@@ -661,12 +651,12 @@ class ShapefileWriter extends Shapefile
         
         if ($is_z) {
             // Z Coordinate
-            $ret .= $this->packZ($coordinates);
+            $ret .= $this->packZ($array);
         }
         
         if ($is_m) {
             // M Coordinate
-            $ret .= $this->packM($coordinates);
+            $ret .= $this->packM($array);
         }
         
         return $ret;

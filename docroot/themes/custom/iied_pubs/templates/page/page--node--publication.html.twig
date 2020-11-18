@@ -45,10 +45,58 @@
     {% if page.content %}
       <div class="page__content">
         <div class="container">
+          {% if page.featured_top %}
+            {% block featured %}
+              <div class="featured-top col-md-8 float-md-right">
+                <aside class="featured-top__inner section {{ container }} clearfix" role="complementary">
+                  {{ page.featured_top }}
+                </aside>
+              </div>
+            {% endblock %}
+          {% endif %}
+
+          {% if page.sidebar_first_top %}
+              <div class="sidebar_first_top col-md-4 float-md-left">
+                <aside class="section" role="complementary">
+                  {{ page.sidebar_first_top }}
+                </aside>
+              </div>
+          {% endif %}
+
+          <div class="col-md-8 float-md-right clearfix">
           {{ page.content }}
+          </div>
+
+          {% if page.sidebar_first_bottom %}
+            <div class="sidebar_first_bottom col-md-4 clearfix">
+              <aside class="section" role="complementary">
+                {{ page.sidebar_first_bottom }}
+              </aside>
+            </div>
+          {% endif %}
+
+          {% if page.sidebar_second %}
+            <div class="sidebar_second">
+              <aside class="section" role="complementary">
+                {{ page.sidebar_second }}
+              </aside>
+            </div>
+          {% endif %}
+
+        {% if page.featured_bottom %}
+          {% block featured_bottom %}
+            <div class="featured-bottom">
+              <aside class="featured-bottom__inner section {{ container }} clearfix" role="complementary">
+                {{ page.featured_bottom }}
+              </aside>
+            </div>
+          {% endblock %}
+        {% endif %}
+
         </div>
       </div>
     {% endif %}
+
   </main>
 
   {% if page.footer %}

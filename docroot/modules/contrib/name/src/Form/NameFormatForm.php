@@ -108,10 +108,10 @@ class NameFormatForm extends EntityForm {
   public function save(array $form, FormStateInterface $form_state) {
     $form_state->setRedirect('name.name_format_list');
     if ($this->entity->isNew()) {
-      drupal_set_message($this->t('Name format %label added.', ['%label' => $this->entity->label()]));
+      $this->messenger()->addMessage($this->t('Name format %label added.', ['%label' => $this->entity->label()]));
     }
     else {
-      drupal_set_message($this->t('Name format %label has been updated.', ['%label' => $this->entity->label()]));
+      $this->messenger()->addMessage($this->t('Name format %label has been updated.', ['%label' => $this->entity->label()]));
     }
     $this->entity->save();
   }

@@ -81,6 +81,7 @@ class LinksWidget extends WidgetPluginBase {
         $url = Url::createFromRequest($request);
         $params = $request->query->all();
         unset($params[$url_processor->getFilterKey()]);
+        $url->setRouteParameter('facets_query', '');
         $url->setOption('query', $params);
       }
 

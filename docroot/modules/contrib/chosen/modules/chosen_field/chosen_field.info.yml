@@ -8,7 +8,7 @@ type: module
 dependencies:
   - chosen:chosen
 
-# Information added by Drupal.org packaging script on 2020-08-13
-version: '3.0.0'
+# Information added by Drupal.org packaging script on 2020-10-23
+version: '3.0.1'
 project: 'chosen'
-datestamp: 1597305851
+datestamp: 1603473894

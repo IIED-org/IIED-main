@@ -7,7 +7,7 @@ dependencies:
   - address:address
   - drupal:views
 
-# Information added by Drupal.org packaging script on 2020-02-28
-version: '8.x-1.8'
+# Information added by Drupal.org packaging script on 2020-11-03
+version: '8.x-1.9'
 project: 'address'
-datestamp: 1582913043
+datestamp: 1604422823

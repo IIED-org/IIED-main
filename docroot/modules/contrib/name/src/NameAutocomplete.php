@@ -2,7 +2,6 @@
 
 namespace Drupal\name;
 
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Field\FieldDefinitionInterface;
 
 /**
@@ -113,12 +112,12 @@ class NameAutocomplete {
       }
       else {
         $sep = (string) $settings['autocomplete_separator'][$component];
-        if (empty($sep)) {
+        if (strlen($sep) === 0) {
           $sep = ' ';
         }
-        for ($i = 0; $i < count($sep); $i++) {
-          if (strpos($action['separater'], $sep{$i}) === FALSE) {
-            $action['separater'] .= $sep{$i};
+        for ($i = 0; $i < strlen($sep); $i++) {
+          if (strpos($action['separater'], $sep[$i]) === FALSE) {
+            $action['separater'] .= $sep[$i];
           }
         }
         $found_source = FALSE;
@@ -147,13 +146,13 @@ class NameAutocomplete {
 
     // We should have nice clean parameters to query.
     if (!empty($pieces) && !empty($action['components'])) {
-      $test_string = Unicode::strtolower(array_pop($pieces));
-      $base_string = Unicode::substr($string, 0, Unicode::strlen($string) - Unicode::strlen($test_string));
+      $test_string = mb_strtolower(array_pop($pieces));
+      $base_string = mb_substr($string, 0, mb_strlen($string) - mb_strlen($test_string));
 
       if ($limit > 0 && count($action['source']['title'])) {
         $options = $this->optionsProvider->getOptions($field, 'title');
         foreach ($options as $key => $option) {
-          if (strpos(Unicode::strtolower($key), $test_string) === 0 || strpos(Unicode::strtolower($option), $test_string) === 0) {
+          if (strpos(mb_strtolower($key), $test_string) === 0 || strpos(mb_strtolower($option), $test_string) === 0) {
             $matches[$base_string . $key] = $key;
             $limit--;
           }
@@ -163,7 +162,7 @@ class NameAutocomplete {
       if ($limit > 0 && count($action['source']['generational'])) {
         $options = $this->optionsProvider->getOptions($field, 'generational');
         foreach ($options as $key => $option) {
-          if (strpos(Unicode::strtolower($key), $test_string) === 0 || strpos(Unicode::strtolower($option), $test_string) === 0) {
+          if (strpos(mb_strtolower($key), $test_string) === 0 || strpos(mb_strtolower($option), $test_string) === 0) {
             $matches[$base_string . $key] = $key;
             $limit--;
           }

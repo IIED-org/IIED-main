@@ -42,7 +42,7 @@ class ZoneTerritoryTestForm extends FormBase {
     $values = $form_state->getValues();
     $territory = new ZoneTerritory($values['territory']);
 
-    $this->messenger()->addMessage(t('Submitted: @country_code / @administrative_area / @included_postal_codes / @excluded_postal_codes.', [
+    $this->messenger()->addMessage($this->t('Submitted: @country_code / @administrative_area / @included_postal_codes / @excluded_postal_codes.', [
       '@country_code' => $territory->getCountryCode(),
       '@administrative_area' => $territory->getAdministrativeArea(),
       '@included_postal_codes' => $territory->getIncludedPostalCodes(),

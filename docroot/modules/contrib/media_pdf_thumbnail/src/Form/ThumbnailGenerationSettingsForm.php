@@ -2,12 +2,13 @@
 
 namespace Drupal\media_pdf_thumbnail\Form;
 
+use Drupal;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Messenger\Messenger;
+use Drupal\Core\Messenger\MessengerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Config\ConfigFactory;
 
 /**
  * Class ThumbnailGenerationSettingsForm
@@ -27,7 +28,7 @@ class ThumbnailGenerationSettingsForm extends FormBase {
   protected $messenger;
 
   /**
-   * @var \Drupal\Core\Config\ConfigFactory
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected $configFactory;
 
@@ -35,10 +36,10 @@ class ThumbnailGenerationSettingsForm extends FormBase {
    * SettingsForm constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   * @param \Drupal\Core\Messenger\Messenger $messenger
-   * @param \Drupal\Core\Config\ConfigFactory $configFactory
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, Messenger $messenger, ConfigFactory $configFactory) {
+  public function __construct(EntityTypeManagerInterface $entityTypeManager, MessengerInterface $messenger, ConfigFactoryInterface $configFactory) {
     $this->entityTypeManager = $entityTypeManager;
     $this->messenger = $messenger;
     $this->configFactory = $configFactory;
@@ -48,11 +49,9 @@ class ThumbnailGenerationSettingsForm extends FormBase {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('entity_type.manager'),
+    return new static($container->get('entity_type.manager'),
       $container->get('messenger'),
-      $container->get('config.factory')
-    );
+      $container->get('config.factory'));
   }
 
   /**
@@ -67,7 +66,7 @@ class ThumbnailGenerationSettingsForm extends FormBase {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public static function regenerateThumbnail($mid, &$context) {
-    $media = \Drupal::entityTypeManager()->getStorage('media')->load($mid);
+    $media = Drupal::entityTypeManager()->getStorage('media')->load($mid);
     $media->save();
     $context['message'] = 'Processing - ' . $media->label();
     $context['results'][] = $media->label();
@@ -85,13 +84,13 @@ class ThumbnailGenerationSettingsForm extends FormBase {
    */
   public static function finishedCallback($success, $results, $operations) {
     if ($success) {
-      $message = \Drupal::translation()->formatPlural(count($results),
+      $message = Drupal::translation()->formatPlural(count($results),
         'One task processed.',
         '@count tasks processed.');
-      \Drupal::messenger()->addMessage($message);
+      Drupal::messenger()->addMessage($message);
     }
     else {
-      \Drupal::messenger()->addError(t('Finished with an error.'));
+      Drupal::messenger()->addError(t('Finished with an error.'));
     }
   }
 
@@ -126,12 +125,13 @@ class ThumbnailGenerationSettingsForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $data = $this->configFactory->get('media_pdf_thumbnail.bundles.settings')->getRawData();
+    $data = $this->configFactory->get('media_pdf_thumbnail.bundles.settings')
+      ->getRawData();
     $bundles = [];
 
-    foreach($data as $name => $item) {
-      $bundle = substr($name, 0, strpos($name,'_field'));
-      if(!empty($data[$bundle . '_enable'])) {
+    foreach ($data as $name => $item) {
+      $bundle = substr($name, 0, strpos($name, '_field'));
+      if (!empty($data[$bundle . '_enable'])) {
         $bundles[] = $bundle;
       }
     }

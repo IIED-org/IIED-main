@@ -216,14 +216,11 @@ class NameWidget extends WidgetBase implements ContainerFactoryPluginInterface {
   public function settingsSummary() {
     $summary = parent::settingsSummary();
     $widget_settings = $this->getSettings();
-    $field_settings = $this->getFieldSettings();
     if (empty($widget_settings['override_field_settings'])) {
-      array_unshift($summary, t('Using shared settings'));
-      $settings = $field_settings;
+      array_unshift($summary, $this->t('Using shared settings'));
     }
     else {
-      array_unshift($summary, t('Overridden settings'));
-      $settings = $widget_settings + $field_settings;
+      array_unshift($summary, $this->t('Overridden settings'));
     }
 
     return $summary;

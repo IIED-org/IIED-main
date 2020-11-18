@@ -42,13 +42,50 @@
       </header>
     {% endif %}
 
+    {% if page.featured_top %}
+      {% block featured %}
+        <div class="featured-top">
+          <aside class="featured-top__inner section {{ container }} clearfix" role="complementary">
+            {{ page.featured_top }}
+          </aside>
+        </div>
+      {% endblock %}
+    {% endif %}
+
     {% if page.content %}
       <div class="page__content">
         <div class="container">
           {{ page.content }}
+
+          {% if page.sidebar_first_top %}
+              <div class="sidebar_first_top col-md-4">
+                <aside class="section" role="complementary">
+                  {{ page.sidebar_first_top }}
+                </aside>
+              </div>
+          {% endif %}
+
+          {% if page.sidebar_first_bottom %}
+            <div class="sidebar_first_bottom col-md-4">
+              <aside class="section" role="complementary">
+                {{ page.sidebar_first_bottom }}
+              </aside>
+            </div>
+          {% endif %}
+
+          {% if page.sidebar_second %}
+            <div class="sidebar_second">
+              <aside class="section" role="complementary">
+                {{ page.sidebar_second }}
+              </aside>
+            </div>
+          {% endif %}
+
         </div>
       </div>
     {% endif %}
+
+
   </main>
 
   {% if page.footer %}

@@ -44,13 +44,6 @@ class UpgradeStatusCommands extends DrushCommands {
   protected $dateFormatter;
 
   /**
-   * Output mode (format).
-   *
-   * @var string
-   */
-  protected $mode = 'ascii';
-
-  /**
    * Constructs a new UpgradeStatusCommands object.
    *
    * @param \Drupal\upgrade_status\ScanResultFormatter $result_formatter
@@ -93,8 +86,40 @@ class UpgradeStatusCommands extends DrushCommands {
    *   Thrown when one of the passed arguments is invalid or no arguments were provided.
    */
   public function checkstyle(array $projects, array $options = ['all' => FALSE, 'skip-existing' => FALSE, 'ignore-uninstalled' => FALSE, 'ignore-contrib' => FALSE, 'ignore-custom' => FALSE]) {
-    $this->mode = 'checkstyle';
-    $this->analyze($projects, $options);
+    $extensions = $this->doAnalyze($projects, $options);
+    $xml = new \SimpleXMLElement("<?xml version='1.0'?><checkstyle/>");
+
+    foreach ($extensions as $type => $list) {
+      foreach ($list as $name => $extension) {
+        $result = $this->resultFormatter->getRawResult($extension);
+
+        if (is_null($result)) {
+          $this->logger()->error('Project scan @name failed.', ['@name' => $name]);
+          continue;
+        }
+
+        foreach ($result['data']['files'] as $filepath => $errors) {
+          $short_path = str_replace(DRUPAL_ROOT . '/', '', $filepath);
+          $file_xml = $xml->addChild('file');
+          $file_xml->addAttribute('name', $short_path);
+          foreach ($errors['messages'] as $error) {
+            $severity = 'error';
+            if ($error['upgrade_status_category'] == 'ignore') {
+              $severity = 'info';
+            }
+            elseif ($error['upgrade_status_category'] == 'later') {
+              $severity = 'warning';
+            }
+            $error_xml = $file_xml->addChild('error');
+            $error_xml->addAttribute('line', $error['line']);
+            $error_xml->addAttribute('message', $error['message']);
+            $error_xml->addAttribute('severity', $severity);
+          }
+        }
+      }
+    }
+
+    $this->output()->writeln($xml->asXML());
   }
 
   /**
@@ -117,6 +142,46 @@ class UpgradeStatusCommands extends DrushCommands {
    *   Thrown when one of the passed arguments is invalid or no arguments were provided.
    */
   public function analyze(array $projects, array $options = ['all' => FALSE, 'skip-existing' => FALSE, 'ignore-uninstalled' => FALSE, 'ignore-contrib' => FALSE, 'ignore-custom' => FALSE]) {
+    $extensions = $this->doAnalyze($projects, $options);
+
+    foreach ($extensions as $type => $list) {
+      $this->output()->writeln('');
+      $this->output()->writeln(str_pad('', 80, '='));
+
+      foreach ($list as $name => $extension) {
+        $result = $this->resultFormatter->getRawResult($extension);
+
+        if (is_null($result)) {
+          $this->logger()->error('Project scan @name failed.', ['@name' => $name]);
+          continue;
+        }
+
+        $output = $this->formatDrushStdoutResult($extension);
+        foreach ($output as $line) {
+          $this->output()->writeln($line);
+        }
+      }
+    }
+  }
+
+  /**
+   * Analyze projects and return all processed extensions.
+   *
+   * @param array $projects
+   *   List of projects to analyze.
+   * @param array $options
+   *   Additional options for the command.
+   *
+   * @option all Analyze all projects.
+   * @option skip-existing Return results from a previous scan of a project if available, otherwise start a new one.
+   * @option ignore-uninstalled Ignore uninstalled projects.
+   * @option ignore-contrib Ignore contributed projects.
+   * @option ignore-custom Ignore custom projects.
+   *
+   * @throws \InvalidArgumentException
+   *   Thrown when one of the passed arguments is invalid or no arguments were provided.
+   */
+  public function doAnalyze(array $projects, array $options = ['all' => FALSE, 'skip-existing' => FALSE, 'ignore-uninstalled' => FALSE, 'ignore-contrib' => FALSE, 'ignore-custom' => FALSE]) {
     // Group by type here so we can tell loader what is type of each one of
     // these.
     $extensions = [];
@@ -131,39 +196,38 @@ class UpgradeStatusCommands extends DrushCommands {
     $available_projects = $this->projectCollector->collectProjects();
 
     if ($options['all']) {
-      foreach ($available_projects as $type => $projects) {
-        if (!$options['ignore-' . $type]) {
-          foreach ($projects as $name => $project) {
-            if (!$options['ignore-uninstalled'] || $project->status !== 0) {
-              $extensions[$project->getType()][$name] = $project;
-            }
-          }
+      foreach ($available_projects as $name => $project) {
+        if ($options['ignore-uninstalled'] && $project->status === 0) {
+          continue;
         }
+        if ($options['ignore-contrib'] && $project->info['upgrade_status_type'] == ProjectCollector::TYPE_CONTRIB) {
+          continue;
+        }
+        if ($options['ignore-custom'] && $project->info['upgrade_status_type'] == ProjectCollector::TYPE_CUSTOM) {
+          continue;
+        }
+        $extensions[$project->getType()][$name] = $project;
       }
     }
     else {
       foreach ($projects as $name) {
-        if (!$options['ignore-custom'] && array_key_exists($name, $available_projects['custom'])) {
-          $type = $available_projects['custom'][$name]->getType();
-          if (!$options['ignore-uninstalled'] || $available_projects['custom'][$name]->status !== 0) {
-            $extensions[$type][$name] = $available_projects['custom'][$name];
-          }
-          else {
-            $invalid_names[] = $name;
-          }
-        }
-        elseif (!$options['ignore-contrib'] && array_key_exists($name, $available_projects['contrib'])) {
-          $type = $available_projects['contrib'][$name]->getType();
-          if (!$options['ignore-uninstalled'] || $available_projects['contrib'][$name]->status !== 0) {
-            $extensions[$type][$name] = $available_projects['contrib'][$name];
-          }
-          else {
-            $invalid_names[] = $name;
-          }
-        }
-        else {
+        if (!isset($available_projects[$name])) {
           $invalid_names[] = $name;
+          continue;
         }
+        if ($options['ignore-uninstalled'] && $available_projects[$name]->status === 0) {
+          $invalid_names[] = $name;
+          continue;
+        }
+        if ($options['ignore-contrib'] && $available_projects[$name]->info['upgrade_status_type'] == ProjectCollector::TYPE_CONTRIB) {
+          $invalid_names[] = $name;
+          continue;
+        }
+        if ($options['ignore-custom'] && $available_projects[$name]->info['upgrade_status_type'] == ProjectCollector::TYPE_CUSTOM) {
+          $invalid_names[] = $name;
+          continue;
+        }
+        $extensions[$available_projects[$name]->getType()][$name] = $available_projects[$name];
       }
     }
 
@@ -198,59 +262,7 @@ class UpgradeStatusCommands extends DrushCommands {
       }
     }
 
-    if ($this->mode !== 'ascii') {
-      $xml = new \SimpleXMLElement("<?xml version='1.0'?><checkstyle/>");
-    }
-
-    foreach ($extensions as $type => $list) {
-      if ($this->mode === 'ascii') {
-        $this->output()->writeln('');
-        $this->output()->writeln(str_pad('', 80, '='));
-      }
-
-      $track = 0;
-      foreach ($list as $name => $extension) {
-
-        $result = $this->resultFormatter->getRawResult($extension);
-
-        if (is_null($result)) {
-          $this->logger()
-            ->error('Project scan @name failed.', ['@name' => $name]);
-          continue;
-        }
-
-        if ($this->mode === 'ascii') {
-          $output = $this->formatDrushStdoutResult($extension);
-          foreach ($output as $line) {
-            $this->output()->writeln($line);
-          }
-          if (++$track < count($list)) {
-            $this->output()->writeln(str_pad('', 80, '='));
-          }
-        }
-        else {
-          foreach ($result['data']['files'] as $filepath => $errors) {
-            $short_path = str_replace(DRUPAL_ROOT . '/', '', $filepath);
-            $file_xml = $xml->addChild('file');
-            $file_xml->addAttribute('name', $short_path);
-            foreach ($errors['messages'] as $error) {
-              $severity = 'error';
-              if ($error['upgrade_status_category'] == 'ignore') {
-                $severity = 'info';
-              }
-              elseif ($error['upgrade_status_category'] == 'later') {
-                $severity = 'warning';
-              }
-              $error_xml = $file_xml->addChild('error');
-              $error_xml->addAttribute('line', $error['line']);
-              $error_xml->addAttribute('message', $error['message']);
-              $error_xml->addAttribute('severity', $severity);
-            }
-          }
-          $this->output()->writeln($xml->asXML());
-        }
-      }
-    }
+    return $extensions;
   }
 
   /**

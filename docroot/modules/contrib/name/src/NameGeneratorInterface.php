@@ -14,7 +14,7 @@ interface NameGeneratorInterface {
    *
    * @param int $limit
    *   The number to generate.
-   * @param FieldDefinitionInterface $field_definition
+   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
    *   The field definition if in context.
    *
    * @return array

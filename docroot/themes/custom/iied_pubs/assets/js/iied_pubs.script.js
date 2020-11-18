@@ -17847,8 +17847,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/apple/Sites/devdesktop/irforum-dev/docroot/themes/custom/iied_pubs/src/js/iied_pubs.script.js */"./src/js/iied_pubs.script.js");
-module.exports = __webpack_require__(/*! /Users/apple/Sites/devdesktop/irforum-dev/docroot/themes/custom/iied_pubs/src/sass/iied_pubs.style.scss */"./src/sass/iied_pubs.style.scss");
+__webpack_require__(/*! /Users/chris/Sites/devdesktop/irforum-dev/docroot/themes/custom/iied_pubs/src/js/iied_pubs.script.js */"./src/js/iied_pubs.script.js");
+module.exports = __webpack_require__(/*! /Users/chris/Sites/devdesktop/irforum-dev/docroot/themes/custom/iied_pubs/src/sass/iied_pubs.style.scss */"./src/sass/iied_pubs.style.scss");
 
 
 /***/ })
