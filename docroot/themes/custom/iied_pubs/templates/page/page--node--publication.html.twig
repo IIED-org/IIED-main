@@ -1,0 +1,59 @@
+{#
+/**
+ * @file
+ * Template for the publication page.
+ */
+#}
+<div class="page">
+  {% embed '@radix/navbar/navbar.twig' with {
+    placement: 'sticky-top',
+    container: 'fixed',
+    color: 'light',
+    utility_classes: ['bg-light'],
+  } %}
+
+    {% block branding %}
+      {% if page.navbar_branding %}
+        {{ page.navbar_branding }}
+      {% endif %}
+    {% endblock %}
+
+    {% block left %}
+      {% if page.navbar_left %}
+        <div class="mr-auto">
+          {{ page.navbar_left }}
+        </div>
+      {% endif %}
+    {% endblock %}
+
+    {% block right %}
+      {% if page.navbar_right %}
+        {{ page.navbar_right }}
+      {% endif %}
+    {% endblock %}
+  {% endembed %}
+
+  <main class="pb-5">
+    {% if page.header %}
+      <header class="page__header mb-3 bg-light">
+        <div class="container">
+          {{ page.header }}
+        </div>
+      </header>
+    {% endif %}
+
+    {% if page.content %}
+      <div class="page__content">
+        <div class="container">
+          {{ page.content }}
+        </div>
+      </div>
+    {% endif %}
+  </main>
+
+  {% if page.footer %}
+    <footer class="page__footer">
+          {{ page.footer }}
+    </footer>
+  {% endif %}
+</div>

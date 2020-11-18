@@ -4432,7 +4432,7 @@ input[type=button].btn-block {
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;
   list-style: none;
-  background-color: #e9ecef;
+  background-color: #f8f9fa;
   border-radius: 0.25rem;
 }
 
@@ -7331,7 +7331,7 @@ button.bg-dark:focus {
   margin-right: 1.5rem !important;
 }
 
-.mb-4,
+.mb-4, .grid .col-auto,
 .my-4 {
   margin-bottom: 1.5rem !important;
 }
@@ -9620,6 +9620,13 @@ a.text-dark:hover, a.text-dark:focus {
   visibility: hidden !important;
 }
 
+.navbar img {
+  display: block;
+  max-width: 60px;
+  width: 100%;
+  height: auto;
+}
+
 .page__footer {
   clear: both;
 }
@@ -9642,4 +9649,26 @@ a.text-dark:hover, a.text-dark:focus {
 }
 .block-facet--checkbox .facets-widget-checkbox .facets-checkbox {
   margin-right: 0.5rem;
+}
+
+.comma-list {
+  display: inline;
+  list-style: none;
+  padding: 0px;
+}
+
+.comma-list li {
+  display: inline;
+}
+
+.comma-list li::after {
+  content: ", ";
+}
+
+.comma-list li:last-child::after {
+  content: "";
+}
+
+.grid .col-auto {
+  /* add margin below cards */
 }
