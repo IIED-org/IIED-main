@@ -1,19 +1,18 @@
-uuid: 27656da2-b401-43db-ac09-d4eca0e0f3cd
+uuid: f6615f37-2b03-40e1-8d63-f3055e21e7fb
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_media
+    - field.storage.node.field_theme_s_
     - node.type.publication
   module:
-    - media
     - node
     - user
-id: pdf_download
-label: 'PDF download'
+id: breadcrumb
+label: Breadcrumb
 module: views
-description: 'Provides a download button for display suite'
-tag: 'Display suite field'
+description: 'Breadcrumb block for publications'
+tag: ''
 base_table: node_field_data
 base_field: nid
 display:
@@ -55,21 +54,25 @@ display:
           offset: 0
       style:
         type: default
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: false
       row:
         type: fields
       fields:
-        field_media:
-          id: field_media
-          table: node__field_media
-          field: field_media
+        field_theme_s_:
+          id: field_theme_s_
+          table: node__field_theme_s_
+          field: field_theme_s_
           relationship: none
           group_type: group
           admin_label: ''
           label: ''
-          exclude: false
+          exclude: true
           alter:
             alter_text: true
-            text: "<a href=\"/pdfs/{{ field_media }}\" class=\"btn btn-primary btn-lg\" role=\"button\" title=\"download PDF\">Download <svg width=\"1em\" height=\"1em\" viewBox=\"0 0 16 16\" class=\"bi bi-download\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\">\r\n  <path fill-rule=\"evenodd\" d=\"M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z\"/>\r\n  <path fill-rule=\"evenodd\" d=\"M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z\"/>\r\n</svg></a>"
+            text: '<li class="breadcrumb-item">{{ field_theme_s_ }}</li>'
             make_link: false
             path: ''
             absolute: false
@@ -109,18 +112,67 @@ display:
           click_sort_column: target_id
           type: entity_reference_label
           settings:
-            link: false
+            link: true
           group_column: target_id
           group_columns: {  }
           group_rows: true
-          delta_limit: 0
+          delta_limit: 3
           delta_offset: 0
           delta_reversed: false
           delta_first_last: false
           multi_type: separator
-          separator: ', '
+          separator: ''
           field_api_classes: false
           plugin_id: field
+        nothing:
+          id: nothing
+          table: views
+          field: nothing
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: ''
+          exclude: false
+          alter:
+            alter_text: true
+            text: "<nav aria-label=\"breadcrumb\">\r\n    <ol class=\"breadcrumb\">\r\n        <li class=\"breadcrumb-item\"><a href=\"https://www.iied.org\">IIED home</a></li>\r\n        <li class=\"breadcrumb-item\"><a href=\"/\">Publications Library</a></li>\r\n   {{ field_theme_s_ }} \r\n      </ol>\r\n    </nav>"
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: false
+          plugin_id: custom
       filters:
         status:
           value: '1'
@@ -163,20 +215,11 @@ display:
           expose:
             label: ''
           granularity: second
-      title: 'PDF download'
+      title: Breadcrumb
       header: {  }
       footer: {  }
       empty: {  }
-      relationships:
-        field_media:
-          id: field_media
-          table: node__field_media
-          field: field_media
-          relationship: none
-          group_type: group
-          admin_label: 'field_media: Media'
-          required: false
-          plugin_id: standard
+      relationships: {  }
       arguments:
         nid:
           id: nid
@@ -224,7 +267,7 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:field.storage.node.field_media'
+        - 'config:field.storage.node.field_theme_s_'
   block_1:
     display_plugin: block
     id: block_1
@@ -232,7 +275,7 @@ display:
     position: 1
     display_options:
       display_extenders: {  }
-      block_description: 'download button'
+      block_description: 'IIED breadcrumb'
     cache_metadata:
       max-age: -1
       contexts:
@@ -242,4 +285,4 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:field.storage.node.field_media'
+        - 'config:field.storage.node.field_theme_s_'

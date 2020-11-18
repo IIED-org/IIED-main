@@ -3,11 +3,14 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.base_field_override.taxonomy_term.document_type.description
+    - field.field.taxonomy_term.document_type.field_display_name
     - field.field.taxonomy_term.document_type.field_legacy_doctype
     - field.field.taxonomy_term.document_type.field_parent_id
     - taxonomy.vocabulary.document_type
   module:
     - layout_builder
+    - layout_discovery
     - text
 third_party_settings:
   layout_builder:
@@ -67,6 +70,22 @@ third_party_settings:
                 type: number_integer
             additional: {  }
             weight: 2
+          e8f91cd7-4e9c-4a7e-8149-87a50f76dfee:
+            uuid: e8f91cd7-4e9c-4a7e-8149-87a50f76dfee
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:taxonomy_term:document_type:field_display_name'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 3
         third_party_settings: {  }
 id: taxonomy_term.document_type.default
 targetEntityType: taxonomy_term
@@ -80,6 +99,14 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_display_name:
+    weight: 3
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
   field_legacy_doctype:
     weight: 1
     label: above

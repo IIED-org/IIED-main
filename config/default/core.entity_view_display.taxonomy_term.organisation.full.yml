@@ -1,0 +1,107 @@
+uuid: 356f9679-8d0a-443a-b7ab-e466113612a3
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.taxonomy_term.full
+    - field.field.taxonomy_term.organisation.field_alias
+    - field.field.taxonomy_term.organisation.field_email
+    - field.field.taxonomy_term.organisation.field_full_name
+    - field.field.taxonomy_term.organisation.field_location
+    - field.field.taxonomy_term.organisation.field_location_legacy
+    - field.field.taxonomy_term.organisation.field_logo
+    - field.field.taxonomy_term.organisation.field_type
+    - field.field.taxonomy_term.organisation.field_url
+    - field.field.taxonomy_term.organisation.field_valid
+    - taxonomy.vocabulary.organisation
+  module:
+    - address
+    - ds
+    - image
+    - layout_builder
+    - link
+    - text
+third_party_settings:
+  layout_builder:
+    allow_custom: false
+    enabled: false
+  ds:
+    layout:
+      id: ds_1col
+      library: null
+      disable_css: false
+      entity_classes: all_classes
+      settings:
+        label: ''
+        wrappers:
+          ds_content: div
+        outer_wrapper: div
+        attributes: ''
+        link_attribute: ''
+        link_custom: ''
+        classes:
+          layout_class: {  }
+          ds_content: {  }
+    regions:
+      ds_content:
+        - field_logo
+        - field_full_name
+        - description
+        - field_location
+        - field_url
+id: taxonomy_term.organisation.full
+targetEntityType: taxonomy_term
+bundle: organisation
+mode: full
+content:
+  description:
+    label: hidden
+    type: text_default
+    weight: 2
+    region: ds_content
+    settings: {  }
+    third_party_settings: {  }
+  field_full_name:
+    weight: 1
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: ds_content
+  field_location:
+    weight: 3
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: address_default
+    region: ds_content
+  field_logo:
+    weight: 0
+    label: above
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+    region: ds_content
+  field_url:
+    weight: 4
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+    region: ds_content
+hidden:
+  field_alias: true
+  field_email: true
+  field_location_legacy: true
+  field_type: true
+  field_valid: true
+  langcode: true
+  search_api_excerpt: true

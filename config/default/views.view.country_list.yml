@@ -1,18 +1,18 @@
-uuid: 27656da2-b401-43db-ac09-d4eca0e0f3cd
+uuid: 8ecea79e-097c-430a-99b7-056e5c66bf5b
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_media
+    - field.storage.node.field_area_list
     - node.type.publication
   module:
-    - media
+    - address
     - node
     - user
-id: pdf_download
-label: 'PDF download'
+id: country_list
+label: 'Country list'
 module: views
-description: 'Provides a download button for display suite'
+description: 'Provides list of countries with links to search pages'
 tag: 'Display suite field'
 base_table: node_field_data
 base_field: nid
@@ -58,20 +58,20 @@ display:
       row:
         type: fields
       fields:
-        field_media:
-          id: field_media
-          table: node__field_media
-          field: field_media
+        field_area_list:
+          id: field_area_list
+          table: node__field_area_list
+          field: field_area_list
           relationship: none
           group_type: group
           admin_label: ''
           label: ''
           exclude: false
           alter:
-            alter_text: true
-            text: "<a href=\"/pdfs/{{ field_media }}\" class=\"btn btn-primary btn-lg\" role=\"button\" title=\"download PDF\">Download <svg width=\"1em\" height=\"1em\" viewBox=\"0 0 16 16\" class=\"bi bi-download\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\">\r\n  <path fill-rule=\"evenodd\" d=\"M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z\"/>\r\n  <path fill-rule=\"evenodd\" d=\"M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z\"/>\r\n</svg></a>"
-            make_link: false
-            path: ''
+            alter_text: false
+            text: ''
+            make_link: true
+            path: '/search?f%5B0%5D=%3A&f%5B1%5D=country%3A{{ field_area_list__value }}'
             absolute: false
             external: false
             replace_spaces: false
@@ -101,16 +101,15 @@ display:
           element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
-          element_default_classes: false
+          element_default_classes: true
           empty: ''
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          click_sort_column: target_id
-          type: entity_reference_label
-          settings:
-            link: false
-          group_column: target_id
+          click_sort_column: value
+          type: address_country_default
+          settings: {  }
+          group_column: value
           group_columns: {  }
           group_rows: true
           delta_limit: 0
@@ -139,14 +138,44 @@ display:
           id: type
           table: node_field_data
           field: type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: in
           value:
             publication: publication
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
           entity_type: node
           entity_field: type
           plugin_id: bundle
-          expose:
-            operator_limit_selection: false
-            operator_list: {  }
       sorts:
         created:
           id: created
@@ -163,20 +192,11 @@ display:
           expose:
             label: ''
           granularity: second
-      title: 'PDF download'
+      title: 'Country list'
       header: {  }
       footer: {  }
       empty: {  }
-      relationships:
-        field_media:
-          id: field_media
-          table: node__field_media
-          field: field_media
-          relationship: none
-          group_type: group
-          admin_label: 'field_media: Media'
-          required: false
-          plugin_id: standard
+      relationships: {  }
       arguments:
         nid:
           id: nid
@@ -224,7 +244,7 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:field.storage.node.field_media'
+        - 'config:field.storage.node.field_area_list'
   block_1:
     display_plugin: block
     id: block_1
@@ -232,7 +252,7 @@ display:
     position: 1
     display_options:
       display_extenders: {  }
-      block_description: 'download button'
+      block_description: 'country list'
     cache_metadata:
       max-age: -1
       contexts:
@@ -242,4 +262,4 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:field.storage.node.field_media'
+        - 'config:field.storage.node.field_area_list'

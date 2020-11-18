@@ -48,7 +48,6 @@ dependencies:
     - field.field.node.publication.field_translator
     - node.type.publication
   module:
-    - address
     - datetime
     - ds
     - field_group
@@ -65,7 +64,6 @@ third_party_settings:
     group_cover_image:
       children:
         - 'dynamic_block_field:node-cover_image'
-        - field_product_code
       parent_name: ''
       weight: 1
       format_type: html_element
@@ -131,13 +129,14 @@ third_party_settings:
         - field_date_published
         - langcode
         - field_publisher
-        - field_area_list
+        - 'dynamic_block_field:node-country_list'
         - field_series
         - field_source_publication
         - field_journal_ref
         - field_isbn
         - field_issn
         - field_doi
+        - field_product_code
       parent_name: ''
       weight: 3
       format_type: html_element
@@ -169,7 +168,7 @@ third_party_settings:
         effect: none
         speed: fast
         id: ''
-        classes: 'border-gradient py-5 mb-5 order-5'
+        classes: 'border-gradient mb-5 order-5'
       label: Related-project
     group_related_publications:
       children:
@@ -187,7 +186,7 @@ third_party_settings:
         effect: none
         speed: fast
         id: ''
-        classes: 'py-5 mb-5 order-6'
+        classes: 'mb-5 order-6 container'
       label: 'Related publications'
     group_related_links:
       children:
@@ -229,22 +228,21 @@ third_party_settings:
     regions:
       ds_content:
         - group_pub_header
-        - 'dynamic_block_field:node-download_button'
         - 'dynamic_block_field:node-cover_image'
-        - node_title
-        - group_cover_image
+        - 'dynamic_block_field:node-download_button'
         - field_media
-        - field_product_code
-        - group_pub_body
+        - group_cover_image
+        - node_title
         - field_author_s_
         - body
-        - field_editor_s_
+        - group_pub_body
         - group_pub_detail
+        - field_editor_s_
         - group_related_links
-        - field_translator
         - group_related_project
-        - field_document_type
+        - field_translator
         - group_related_publications
+        - field_document_type
         - 'dynamic_block_field:node-related_publications'
         - field_pdf_pages
         - 'dynamic_block_field:node-page_count'
@@ -253,15 +251,27 @@ third_party_settings:
         - langcode
         - field_external_url
         - field_publisher
-        - field_area_list
+        - 'dynamic_block_field:node-country_list'
         - field_series
         - field_source_publication
         - field_journal_ref
         - field_isbn
         - field_issn
         - field_doi
+        - field_product_code
         - field_project
     fields:
+      'dynamic_block_field:node-country_list':
+        plugin_id: 'dynamic_block_field:node-country_list'
+        weight: 17
+        label: inline
+        formatter: default
+        ft:
+          id: default
+          settings:
+            lb: Area
+            lb-col: true
+            classes: {  }
       'dynamic_block_field:node-cover_image':
         plugin_id: 'dynamic_block_field:node-cover_image'
         weight: 0
@@ -390,13 +400,6 @@ content:
     settings: {  }
     third_party_settings: {  }
     region: ds_content
-  field_area_list:
-    weight: 16
-    label: inline
-    settings: {  }
-    third_party_settings: {  }
-    type: address_country_default
-    region: ds_content
   field_author_s_:
     weight: 2
     label: hidden
@@ -417,10 +420,11 @@ content:
             ow-cl: ''
             ow-at: ''
             fis: true
-            fis-el: p
-            fis-cl: ''
+            fis-el: ul
+            fis-cl: comma-list
             fis-at: ''
-            fi-el: ''
+            fi: true
+            fi-el: li
             fi-cl: ''
             fi-at: ''
             suffix: ''
@@ -430,7 +434,6 @@ content:
             ow-def-at: false
             ow-def-cl: false
             fis-def-at: false
-            fi: false
             fi-def-at: false
     type: entity_reference_label
     region: ds_content
@@ -447,9 +450,11 @@ content:
           settings:
             lb: Published
             prefix: ''
-            lbw-el: ''
-            lbw-cl: ''
+            lbw: true
+            lbw-el: span
+            lbw-cl: 'field__label font-weight-bold'
             lbw-at: ''
+            lb-col: true
             ow-el: ''
             ow-cl: ''
             ow-at: ''
@@ -460,8 +465,6 @@ content:
             fi-cl: ''
             fi-at: ''
             suffix: ''
-            lbw: false
-            lb-col: false
             ow: false
             ow-def-at: false
             ow-def-cl: false
@@ -486,7 +489,8 @@ content:
             lbw-el: ''
             lbw-cl: ''
             lbw-at: ''
-            ow-el: ''
+            ow: true
+            ow-el: p
             ow-cl: ''
             ow-at: ''
             fis-el: ''
@@ -498,7 +502,6 @@ content:
             suffix: ''
             lbw: false
             lb-col: false
-            ow: false
             ow-def-at: false
             ow-def-cl: false
             fis: false
@@ -508,7 +511,7 @@ content:
     type: entity_reference_label
     region: ds_content
   field_doi:
-    weight: 22
+    weight: 23
     label: inline
     settings:
       trim_length: 80
@@ -581,14 +584,14 @@ content:
     type: link
     region: ds_content
   field_isbn:
-    weight: 20
+    weight: 21
     label: inline
     settings: {  }
     third_party_settings: {  }
     type: isbn_default
     region: ds_content
   field_issn:
-    weight: 21
+    weight: 22
     label: inline
     settings:
       link_to_entity: false
@@ -596,7 +599,7 @@ content:
     type: string
     region: ds_content
   field_journal_ref:
-    weight: 19
+    weight: 20
     label: inline
     settings:
       link_to_entity: false
@@ -678,7 +681,7 @@ content:
     type: number_integer
     region: ds_content
   field_product_code:
-    weight: 2
+    weight: 24
     label: inline
     settings:
       link_to_entity: false
@@ -700,22 +703,22 @@ content:
           settings:
             lb: ''
             prefix: ''
-            lbw-el: ''
+            lbw: true
+            lbw-el: h2
             lbw-cl: ''
             lbw-at: ''
             ow: true
-            ow-el: container
-            ow-cl: ''
+            ow-el: div
+            ow-cl: container
             ow-at: ''
             fis: true
-            fis-el: row
-            fis-cl: ''
+            fis-el: div
+            fis-cl: row
             fis-at: ''
             fi-el: ''
             fi-cl: ''
             fi-at: ''
             suffix: ''
-            lbw: false
             lb-col: false
             ow-def-at: false
             ow-def-cl: false
@@ -731,7 +734,7 @@ content:
     type: entity_reference_label
     region: ds_content
   field_series:
-    weight: 17
+    weight: 18
     label: inline
     settings:
       link: true
@@ -739,7 +742,7 @@ content:
     type: entity_reference_label
     region: ds_content
   field_source_publication:
-    weight: 18
+    weight: 19
     label: inline
     settings:
       link_to_entity: false
@@ -791,7 +794,35 @@ content:
     settings:
       link_to_entity: false
       native_language: false
-    third_party_settings: {  }
+    third_party_settings:
+      ds:
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            prefix: ''
+            lbw: true
+            lbw-el: span
+            lbw-cl: 'field__label font-weight-bold'
+            lbw-at: ''
+            lb-col: true
+            ow-el: ''
+            ow-cl: ''
+            ow-at: ''
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            ow: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
   sharing_buttons:
     weight: 100
     settings: {  }
@@ -799,6 +830,7 @@ content:
     region: left
 hidden:
   field_admin: true
+  field_area_list: true
   field_cover_image: true
   field_deptlist: true
   field_lit_code: true

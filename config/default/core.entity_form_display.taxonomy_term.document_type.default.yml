@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.taxonomy_term.document_type.field_display_name
     - field.field.taxonomy_term.document_type.field_legacy_doctype
     - field.field.taxonomy_term.document_type.field_parent_id
     - taxonomy.vocabulary.document_type
@@ -22,6 +23,14 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_display_name:
+    weight: 103
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
   field_legacy_doctype:
     weight: 101
     settings:
