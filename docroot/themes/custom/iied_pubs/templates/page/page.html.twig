@@ -81,6 +81,16 @@
             </div>
           {% endif %}
 
+          {% if page.featured_bottom %}
+            {% block featured_bottom %}
+              <div class="featured-bottom">
+                <aside class="featured-bottom__inner section {{ container }} clearfix" role="complementary">
+                  {{ page.featured_bottom }}
+                </aside>
+              </div>
+            {% endblock %}
+          {% endif %}
+
         </div>
       </div>
     {% endif %}

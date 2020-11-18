@@ -9624,6 +9624,10 @@ a.text-dark:hover, a.text-dark:focus {
   display: none;
 }
 
+.node--type-project .node--view-mode-card {
+  cursor: pointer;
+}
+
 .navbar img {
   display: block;
   max-width: 60px;
