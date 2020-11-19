@@ -1,0 +1,19 @@
+uuid: 935f91a5-31ae-4c5e-a8d0-410ccb693db7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_display_name
+    - taxonomy.vocabulary.document_type
+id: taxonomy_term.document_type.field_display_name
+field_name: field_display_name
+entity_type: taxonomy_term
+bundle: document_type
+label: 'Display name'
+description: 'The name of the document type as it will appear.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

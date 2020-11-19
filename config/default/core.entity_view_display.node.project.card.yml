@@ -35,9 +35,9 @@ third_party_settings:
         wrappers:
           ds_content: div
         outer_wrapper: div
-        attributes: ''
-        link_attribute: ''
-        link_custom: ''
+        attributes: cursor|pointer
+        link_attribute: tokens
+        link_custom: '[node:url]'
         classes:
           layout_class:
             col-md-12: col-md-12
@@ -76,9 +76,9 @@ third_party_settings:
             fis-cl: ''
             fis-at: ''
             fi: true
-            fi-el: a
+            fi-el: span
             fi-cl: stretched-link
-            fi-at: 'href="[node:URL]"'
+            fi-at: ''
             suffix: ''
             lbw: false
             lb-col: false

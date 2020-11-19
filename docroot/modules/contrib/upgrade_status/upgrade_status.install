@@ -20,14 +20,6 @@ function upgrade_status_requirements($phase) {
         ]
       ];
     }
-    if (version_compare('9.0.0', \Drupal::VERSION) <= 0) {
-      return [
-        'upgrade_status' => [
-          'description' => t('Upgrade Status should be used on a Drupal 8 site to detect deprecated APIs present. It does not in itself know about deprecated APIs and Drupal 9 does not have Drupal 8\'s deprecated APIs anymore.'),
-          'severity' => REQUIREMENT_ERROR,
-        ]
-      ];
-    }
   }
   return [];
 }
@@ -63,4 +55,11 @@ function upgrade_status_update_8101() {
       return t("Most legacy Upgrade Status data was cleaned up, however the 'queue_inspectable' table remains because it had values in it. This will not cause issues with the module, but will linger around as old unused data in the database. It may become a problem in the future if another module chooses to use the same queue type name. Please remove manually.");
     }
   }
+}
+
+/**
+ * Delete old state information so the changed storage format can be used.
+ */
+function upgrade_status_update_8301() {
+  \Drupal::keyValue('upgrade_status_scan_results')->deleteAll();
 }

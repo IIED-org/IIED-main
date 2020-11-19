@@ -11,7 +11,7 @@ dependencies:
  - drupal:node
 php: 7.1
 
-# Information added by Drupal.org packaging script on 2020-09-11
-version: '8.x-1.0-beta8'
+# Information added by Drupal.org packaging script on 2020-11-13
+version: '8.x-1.0-beta10'
 project: 'acquia_search_solr'
-datestamp: 1599833496
+datestamp: 1605298387

@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_connector\EventSubscriber;
 
+use Drupal\acquia_connector\Controller\SpiController;
 use Drupal\acquia_connector\Subscription;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -44,6 +45,13 @@ class InitSubscriber implements EventSubscriberInterface {
   protected $cache;
 
   /**
+   * The spi backend.
+   *
+   * @var \Drupal\acquia_connector\Controller\SpiController
+   */
+  protected $spiController;
+
+  /**
    * InitSubscriber constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -52,11 +60,14 @@ class InitSubscriber implements EventSubscriberInterface {
    *   State.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache backend.
+   * @param \Drupal\acquia_connector\Controller\SpiController $spi_controller
+   *   SPI backend.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, StateInterface $state, CacheBackendInterface $cache) {
+  public function __construct(ConfigFactoryInterface $config_factory, StateInterface $state, CacheBackendInterface $cache, SpiController $spi_controller) {
     $this->configFactory = $config_factory;
     $this->state = $state;
     $this->cache = $cache;
+    $this->spiController = $spi_controller;
   }
 
   /**
@@ -71,6 +82,22 @@ class InitSubscriber implements EventSubscriberInterface {
 
     acquia_connector_show_free_tier_promo();
 
+    // Move site data to State API.
+    $site_name = $this->state->get('spi.site_name');
+    $current_site_name = $this->spiController->checkAcquiaHosted() ? getenv('AH_SITE_ENVIRONMENT') . '_' . getenv('AH_SITE_NAME') : '';
+    if (empty($site_name) || $site_name != $current_site_name) {
+      $config = $this->configFactory->getEditable('acquia_connector.settings');
+
+      // Handle site name.
+      $site_name = $this->spiController->checkAcquiaHosted() ? getenv('AH_SITE_ENVIRONMENT') . '_' . getenv('AH_SITE_NAME') : $config->get('spi.site_name');;
+      $site_machine_name = $this->spiController->getAcquiaHostedMachineName() ?? $config->get('spi.site_machine_name');
+      if ($site_name) {
+        $this->state->set('spi.site_name', $site_name);
+        $config->clear('spi.site_name')->save();
+        $this->state->set('spi.site_machine_name', $site_machine_name);
+        $config->clear('spi.site_machine_name')->save();
+      }
+    }
   }
 
   /**

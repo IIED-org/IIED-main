@@ -3,8 +3,8 @@
 namespace Drupal\media_pdf_thumbnail\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Entity\EntityFieldManager;
-use Drupal\Core\Entity\EntityTypeBundleInfo;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -22,12 +22,12 @@ class BundlesSettingsForm extends ConfigFormBase {
   const SETTINGS = 'media_pdf_thumbnail.bundles.settings';
 
   /**
-   * @var \Drupal\Core\Entity\EntityTypeBundleInfo
+   * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
    */
   protected $entityTypeBundleInfo;
 
   /**
-   * @var \Drupal\Core\Entity\EntityFieldManager
+   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
    */
   protected $entityFieldManager;
 
@@ -35,10 +35,10 @@ class BundlesSettingsForm extends ConfigFormBase {
    * BundlesSettingsForm constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfo $entityTypeBundleInfo
-   * @param \Drupal\Core\Entity\EntityFieldManager $entityFieldManager
+   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entityTypeBundleInfo
+   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager
    */
-  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeBundleInfo $entityTypeBundleInfo, EntityFieldManager $entityFieldManager) {
+  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeBundleInfoInterface $entityTypeBundleInfo, EntityFieldManagerInterface $entityFieldManager) {
     parent::__construct($config_factory);
     $this->entityTypeBundleInfo = $entityTypeBundleInfo;
     $this->entityFieldManager = $entityFieldManager;
@@ -101,7 +101,8 @@ class BundlesSettingsForm extends ConfigFormBase {
     $output = [];
     foreach ($bundles as $id => $bundle) {
       $output[$id]['label'] = $bundle['label'];
-      foreach ($this->entityFieldManager->getFieldDefinitions('media', $id) as $fieldDefinition) {
+      foreach ($this->entityFieldManager->getFieldDefinitions('media',
+        $id) as $fieldDefinition) {
         if ($fieldDefinition->getType() == 'file') {
           $output[$id]['fields'][$fieldDefinition->getName()] = $fieldDefinition->getName();
         }
@@ -116,8 +117,10 @@ class BundlesSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $editableConfig = $this->configFactory->getEditable(static::SETTINGS);
     foreach ($this->getFieldsList() as $bundleId => $infos) {
-      $editableConfig->set($bundleId . '_field', $form_state->getValue($bundleId . '_field'));
-      $editableConfig->set($bundleId . '_enable', $form_state->getValue($bundleId . '_enable'));
+      $editableConfig->set($bundleId . '_field',
+        $form_state->getValue($bundleId . '_field'));
+      $editableConfig->set($bundleId . '_enable',
+        $form_state->getValue($bundleId . '_enable'));
     }
     $editableConfig->save();
     parent::submitForm($form, $form_state);

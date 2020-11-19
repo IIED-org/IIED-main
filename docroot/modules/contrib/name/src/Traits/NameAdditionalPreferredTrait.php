@@ -27,8 +27,6 @@ trait NameAdditionalPreferredTrait {
   /**
    * Returns a form for the default settings defined above.
    *
-   * @param array $settings
-   *   The settings.
    * @param array $form
    *   The form where the settings form is being included in.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
@@ -127,6 +125,7 @@ trait NameAdditionalPreferredTrait {
    * To refactor once https://www.drupal.org/node/2053415 gets in.
    *
    * @return array
+   *   The discovered additional sources.
    */
   protected function getAdditionalSources() {
     if (!isset($this->entityTypeManager)) {
@@ -173,4 +172,5 @@ trait NameAdditionalPreferredTrait {
   protected function getTraitUsageIsField() {
     return is_subclass_of($this, 'Drupal\Core\Field\FieldItemBase');
   }
+
 }

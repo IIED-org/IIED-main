@@ -273,8 +273,17 @@ final class DeprecationAnalyzer {
     exec($this->binPath . '/phpstan analyse --error-format=json -c ' . $this->phpstanNeonPath . ' ' . $project_dir, $output);
     $json = json_decode(implode('', $output), TRUE);
     if (!isset($json['files']) || !is_array($json['files'])) {
-       $this->logger->error('PHPStan failed: %results', ['%results' => print_r($result, TRUE)]);
-       $json = ['files' => [], 'totals' => ['file_errors' => 0]];
+       $this->logger->error('PHPStan failed: %results', ['%results' => print_r($output, TRUE)]);
+       $json = [
+         'files' => [
+           'PHPStan failed' => 'PHP API deprecations cannot be checked. Reason: ' . print_r($output, TRUE),
+           'line' => 0,
+          ],
+          'totals' => [
+            'errors' => 1,
+            'file_errors' => 1,
+          ],
+       ];
     }
     $result = [
       'date' => $this->time->getRequestTime(),
@@ -385,6 +394,9 @@ final class DeprecationAnalyzer {
       }
     }
 
+    // Assume next step is to relax (there were no errors found).
+    $result['data']['totals']['upgrade_status_next'] = ProjectCollector::NEXT_RELAX;
+
     foreach ($result['data']['files'] as $path => &$errors) {
       if (!empty($errors['messages'])) {
         foreach ($errors['messages'] as &$error) {
@@ -393,6 +405,18 @@ final class DeprecationAnalyzer {
           [$message, $category] = $this->categorizeMessage($error['message'], $extension);
           $error['message'] = $message;
           $error['upgrade_status_category'] = $category;
+
+          // If the category was 'rector' that means at least one error was
+          // identified as covered by rector, so next step should be to run
+          // rector on this project.
+          if ($category == 'rector') {
+            $result['data']['totals']['upgrade_status_next'] = ProjectCollector::NEXT_RECTOR;
+          }
+          // If the category was not rector, if the next step is still to
+          // relax, modify that to fix manually.
+          elseif ($result['data']['totals']['upgrade_status_next'] == ProjectCollector::NEXT_RELAX) {
+            $result['data']['totals']['upgrade_status_next'] = ProjectCollector::NEXT_MANUAL;
+          }
 
           // Sum up the error based on the category it ended up in. Split the
           // categories into two high level buckets needing attention now or
@@ -430,7 +454,7 @@ final class DeprecationAnalyzer {
     }
 
     // Store the analysis results in our storage bin.
-    $this->scanResultStorage->set($extension->getName(), json_encode($result));
+    $this->scanResultStorage->set($extension->getName(), $result);
   }
 
   /**
@@ -483,9 +507,12 @@ final class DeprecationAnalyzer {
         "\tdrupal:\n\t\tdrupal_root: '" . DRUPAL_ROOT . "'",
       $config
     );
-    $config .= "\nincludes:\n\t- '" .
-      $this->vendorPath . "/mglaman/phpstan-drupal/extension.neon'\n\t- '" .
-      $this->vendorPath . "/phpstan/phpstan-deprecation-rules/rules.neon'\n";
+
+    if (!class_exists('PHPStan\ExtensionInstaller\GeneratedConfig')) {
+      $config .= "\nincludes:\n\t- '" .
+        $this->vendorPath . "/mglaman/phpstan-drupal/extension.neon'\n\t- '" .
+        $this->vendorPath . "/phpstan/phpstan-deprecation-rules/rules.neon'\n";
+    }
     $success = file_put_contents($this->phpstanNeonPath, $config);
     if (!$success) {
       throw new \Exception('Unable to write configuration for PHPStan to ' . $this->phpstanNeonPath);

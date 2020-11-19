@@ -19,7 +19,7 @@ trait TestHelperTrait {
     $links = $this->findFacetLink($label);
 
     $message = ($message ? $message : strtr('Link with label %label found.', ['%label' => $label]));
-    return $this->assert(isset($links[$index]), $message, $group);
+    return $this->assertArrayHasKey($index, $links, $message, $group);
   }
 
   /**
@@ -36,7 +36,7 @@ trait TestHelperTrait {
    */
   protected function checkFacetIsActive($label) {
     $links = $this->findFacetLink($label);
-    return $this->assert(isset($links[0]));
+    return $this->assertArrayHasKey(0, $links);
   }
 
   /**
@@ -55,7 +55,7 @@ trait TestHelperTrait {
     $label = (string) $label;
     $label = strip_tags($label);
     $links = $this->xpath('//a/span[1][normalize-space(text())=:label]', [':label' => $label]);
-    return $this->assert(isset($links[0]));
+    return $this->assertArrayHasKey(0, $links);
   }
 
   /**

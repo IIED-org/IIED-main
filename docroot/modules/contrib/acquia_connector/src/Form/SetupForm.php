@@ -199,7 +199,7 @@ class SetupForm extends ConfigFormBase {
     }
 
     // Don't set message or redirect if multistep.
-    if (!$form_state->getErrors() && empty($form_data['rebuild'])) {
+    if (!$form_state->getErrors() && $form_state->isRebuilding() === FALSE) {
       // Check subscription and send a heartbeat to Acquia via XML-RPC.
       // Our status gets updated locally via the return data.
       $subscription = new Subscription();

@@ -10,19 +10,19 @@
  * t('@name_given', ['@name_given' => t('Given')])
  */
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\field\FieldConfigInterface;
 use Drupal\user\UserInterface;
 use Drupal\user\Entity\User;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\Component\Utility\Html;
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Template\Attribute;
-use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\name\Element\Name;
 
 /**
  * Helper function to get any defined name widget layout options.
@@ -86,7 +86,6 @@ function name_theme() {
     'name_item_list' => [
       'variables' => ['items' => [], 'settings' => []],
       'file' => 'name.theme.inc',
-      'function' => 'theme_name_item_list',
     ],
     // Themes the FAPI element.
     'name' => [
@@ -120,14 +119,14 @@ function name_user_format_name_alter(&$name, AccountInterface $account) {
 
   // Since $account may not be the real User entity object, check the name
   // lookup cache for results too.
-  if (!isset($account->realname) || !Unicode::strlen($account->realname)) {
+  if (!isset($account->realname) || !mb_strlen($account->realname)) {
     $names = &drupal_static('name_user_realname_cache', []);
     if (isset($names[$account->id()])) {
       $account->realname = $names[$account->id()];
     }
   }
 
-  if (isset($account->realname) && Unicode::strlen($account->realname)) {
+  if (isset($account->realname) && mb_strlen($account->realname)) {
     $name = $account->realname;
   }
 }
@@ -194,15 +193,21 @@ function name_user_load(array $users) {
 /**
  * Helper function to an additional component for an item.
  *
- * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
+ * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+ *   The entity type manager to generate the view.
  * @param \Drupal\Core\Render\RendererInterface $renderer
+ *   The renderer to render the value.
  * @param \Drupal\Core\Field\FieldItemListInterface $items
- * @param $key_value
- * @param $sep_value
+ *   The items to render.
+ * @param string $key_value
+ *   The key value.
+ * @param string $sep_value
+ *   The separator value to use when handling multiple values.
  *
  * @return string
+ *   The value of the additional component.
  */
-function name_get_additional_component(EntityTypeManager $entityTypeManager, RendererInterface $renderer, FieldItemListInterface $items, $key_value, $sep_value) {
+function name_get_additional_component(EntityTypeManagerInterface $entityTypeManager, RendererInterface $renderer, FieldItemListInterface $items, $key_value, $sep_value) {
   if ($key_value) {
     $parent = $items->getEntity();
     if ($key_value == '_self') {
@@ -219,7 +224,8 @@ function name_get_additional_component(EntityTypeManager $entityTypeManager, Ren
           }
         }
       }
-      catch (\InvalidArgumentException $e) {}
+      catch (\InvalidArgumentException $e) {
+      }
     }
     elseif ($parent->hasField($key_value)) {
       $target_items = $parent->get($key_value);
@@ -249,7 +255,8 @@ function name_get_additional_component(EntityTypeManager $entityTypeManager, Ren
                   }
                 }
               }
-              catch (\Exception $e) {}
+              catch (\Exception $e) {
+              }
             }
             break;
 
@@ -314,7 +321,7 @@ function name_get_format_by_machine_name($machine_name) {
  *
  * These have double encoding to allow easy and targeted string overrides.
  *
- * @param string[]
+ * @param string[] $intersect
  *   An array of field component keys of the translations required.
  *
  * @return string[]
@@ -371,8 +378,6 @@ function _name_formatter_output_types() {
  * The #process callback to create the element.
  */
 function name_element_expand($element, &$form_state, $complete_form) {
-  $language = Drupal::languageManager()->getCurrentLanguage();
-
   $element['#tree'] = TRUE;
   if (empty($element['#value'])) {
     $element['#value'] = [];
@@ -463,19 +468,26 @@ function name_element_render_component(array $components, $component_key, array 
     $element += $component['autocomplete'];
   }
 
-  if ($core && !empty($base_element['#show_component_required_marker']) && !in_array('default_value_input', $base_element['#field_parents'])) {
-    $element['#required'] = TRUE;
-  }
+  $show_component_required_marker = $core
+    && !empty($base_element['#show_component_required_marker'])
+    && !in_array('default_value_input', $base_element['#field_parents']);
 
   // Enable the title options.
   $title_display = isset($component['title_display']) ? $component['title_display'] : 'description';
   switch ($title_display) {
     case 'title':
+      $label = [
+        '#theme' => 'form_element_label',
+        '#title' => $element['#title'],
+        '#required' => $show_component_required_marker,
+        '#title_display' => 'before',
+      ];
+      $element['#title'] = render($label);
       break;
 
     case 'placeholder':
       $element['#attributes']['placeholder'] = $element['#title'];
-      if (!empty($element['#required'])) {
+      if ($show_component_required_marker) {
         $element['#attributes']['placeholder'] .= ' (' . t('Required') . ')';
       }
       $element['#title_display'] = 'invisible';
@@ -488,7 +500,7 @@ function name_element_render_component(array $components, $component_key, array 
     case 'attribute':
       $element['#title_display'] = 'attribute';
       $element['#attributes']['title'] = $element['#title'];
-      if (!empty($element['#required'])) {
+      if ($show_component_required_marker) {
         $element['#attributes']['title'] .= ' (' . t('Required') . ')';
       }
       break;
@@ -498,7 +510,7 @@ function name_element_render_component(array $components, $component_key, array 
       $label = [
         '#theme' => 'form_element_label',
         '#title' => $element['#title'],
-        '#required' => !empty($element['#required']),
+        '#required' => $show_component_required_marker,
         '#title_display' => 'before',
       ];
       $element['#title_display'] = 'invisible';
@@ -513,7 +525,7 @@ function name_element_render_component(array $components, $component_key, array 
 /**
  * Afterbuild for setting the correct ID on the description labels.
  *
- * @param $form_element
+ * @param array $element
  *   The form element that needs the for attribute set.
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   The current state of the form.
@@ -521,7 +533,7 @@ function name_element_render_component(array $components, $component_key, array 
  * @return array
  *   The form element.
  */
-function name_component_description_after_build_label_alter($element, FormStateInterface $form_state) {
+function name_component_description_after_build_label_alter(array $element, FormStateInterface $form_state) {
   if (!empty($element['#description']) && !empty($element['#id']) && is_array($element['#description'])) {
     $element['#description']['#for'] = $element['#id'];
   }
@@ -588,38 +600,12 @@ function name_element_validate($element, &$form_state) {
 
 /**
  * This function themes the element and controls the title display.
+ *
+ * @deprecated in name:8.x-1.0 and is removed from name:2.0.0.
+ *   Use Drupal\name\Element\Name::preRender() instead.
  */
 function name_element_pre_render($element) {
-  $layouts = name_widget_layouts();
-  $layout = $layouts['stacked'];
-  if (!empty($element['#widget_layout']) && isset($layouts[$element['#widget_layout']])) {
-    $layout = $layouts[$element['#widget_layout']];
-  }
-
-  if (!empty($layout['library'])) {
-    if (!isset($element['#attached']['library'])) {
-      $element['#attached']['library'] = [];
-    }
-    $element['#attached']['library'] += $layout['library'];
-  }
-  $attributes = new Attribute($layout['wrapper_attributes']);
-  $element['_name'] = [
-    '#prefix' => '<div' . $attributes . '>',
-    '#suffix' => '</div>',
-  ];
-
-  foreach (_name_translations() as $key => $title) {
-    if (isset($element[$key])) {
-      $element['_name'][$key] = $element[$key];
-      unset($element[$key]);
-    }
-  }
-
-  if (!empty($element['#component_layout'])) {
-    _name_component_layout($element['_name'], $element['#component_layout']);
-  }
-
-  return $element;
+  return Name::preRender($element);
 }
 
 /**
@@ -632,7 +618,7 @@ function _name_component_layout(&$element, $layout = 'default') {
       'middle' => 2,
       'given' => 3,
       'title' => 4,
-      // 'generational' is removed from the display.
+      // The 'generational' value is removed from the display.
       'generational' => 5,
       'credentials' => 6,
     ],
@@ -650,7 +636,7 @@ function _name_component_layout(&$element, $layout = 'default') {
       'given' => 3,
       'middle' => 4,
       'family' => 5,
-      // 'generational' is removed from the display
+      // The 'generational' value is removed from the display.
       'generational' => 7,
     ],
   ];
@@ -692,20 +678,6 @@ function name_element_validate_is_empty(array $item) {
     }
   }
   return TRUE;
-}
-
-/**
- * Validates if an unused component is selected as a minimal component.
- */
-function _name_field_minimal_component_requirements($element, &$form_state) {
-  $required_field_set = array_flip(['given', 'family']);
-  $value = array_intersect_key($required_field_set, array_filter((array) $element['#value']));
-  if (empty($value)) {
-    $required_fields = array_intersect_key(_name_translations(), $required_field_set);
-    form_set_error(implode('][', $element['#parents']) . '][given]',
-        t('@label must have one of the following components: %components',
-        ['@label' => $element['#title'], '%components' => implode(', ', $required_fields)]));
-  }
 }
 
 /**

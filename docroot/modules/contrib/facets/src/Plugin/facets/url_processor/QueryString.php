@@ -86,7 +86,6 @@ class QueryString extends UrlProcessorPluginBase {
     $facet_source_path = $facet->getFacetSource()->getPath();
     $request = $this->getRequestByFacetSourcePath($facet_source_path);
     $requestUrl = $this->getUrlForRequest($facet_source_path, $request);
-    $routeParameters = $this->getUrlRouteParameters();
 
     $original_filter_params = [];
     foreach ($this->getActiveFilters() as $facet_id => $values) {
@@ -242,32 +241,6 @@ class QueryString extends UrlProcessorPluginBase {
     $request->attributes->set('_format', $this->request->get('_format'));
     $requestsByPath[$facet_source_path] = $request;
     return $request;
-  }
-
-  /**
-   * Gets the route parameters from the original request.
-   *
-   * This method statically caches the route parameters for the request, so that
-   * subsequent calls to this processor do not re-run Url::createFromRequest for
-   * the same request.
-   *
-   * @return array
-   *   The route parameters.
-   */
-  protected function getUrlRouteParameters() {
-    $routeParameters = &drupal_static(__CLASS__ . __FUNCTION__, []);
-    if ($routeParameters) {
-      return $routeParameters;
-    }
-
-    // Grab any route params from the original request.
-    try {
-      $routeParameters = Url::createFromRequest($this->request)->getRouteParameters();
-    }
-    catch (ResourceNotFoundException $e) {
-      $routeParameters = [];
-    }
-    return $routeParameters;
   }
 
   /**

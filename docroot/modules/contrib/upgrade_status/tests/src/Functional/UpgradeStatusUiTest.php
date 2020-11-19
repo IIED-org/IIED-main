@@ -29,14 +29,11 @@ class UpgradeStatusUiTest extends UpgradeStatusTestBase {
     $assert_session->buttonExists('Scan selected');
     $assert_session->buttonExists('Export selected as HTML');
 
-    // Status for every project should be 'Not scanned'.
-    $status = $this->getSession()->getPage()->findAll('css', '.upgrade-status-summary-custom td.status-info');
+    // Scan result for every project should be 'N/A'.
+    $status = $this->getSession()->getPage()->findAll('css', 'td.scan-result');
+    $this->assertNotEmpty($status);
     foreach ($status as $project_status) {
-      $this->assertSame('Not scanned', $project_status->getHtml());
-    }
-    $status = $this->getSession()->getPage()->findAll('css', '.upgrade-status-summary-contrib td.status-info');
-    foreach ($status as $project_status) {
-      $this->assertSame('Not scanned', $project_status->getHtml());
+      $this->assertSame('N/A', $project_status->getHtml());
     }
   }
 
@@ -52,31 +49,22 @@ class UpgradeStatusUiTest extends UpgradeStatusTestBase {
     $assert_session->buttonExists('Scan selected');
     $assert_session->buttonExists('Export selected as HTML');
 
-    // Custom projects have 3 columns of information.
-    $upgrade_status_test_error = $page->find('css', '.upgrade-status-summary-custom .project-upgrade_status_test_error');
-    $this->assertCount(3, $upgrade_status_test_error->findAll('css', 'td'));
-    $this->assertSame('2 errors, 2 warnings', strip_tags($upgrade_status_test_error->find('css', 'td.status-info')->getHtml()));
+    // Error and no-error test module results should show.
+    $this->assertSame('4 problems', strip_tags($page->find('css', 'tr.project-upgrade_status_test_error td.scan-result')->getHtml()));
+    $this->assertSame('No problems found', strip_tags($page->find('css', 'tr.project-upgrade_status_test_no_error td.scan-result')->getHtml()));
 
-    $upgrade_status_test_no_error = $page->find('css', '.upgrade-status-summary-custom .project-upgrade_status_test_no_error');
-    $this->assertCount(3, $upgrade_status_test_no_error->findAll('css', 'td'));
-    $this->assertSame('No known errors', $upgrade_status_test_no_error->find('css', 'td.status-info')->getHtml());
+    // Parent module should show up without errors and submodule should not appear.
+    $this->assertSame('No problems found', strip_tags($page->find('css', 'tr.project-upgrade_status_test_submodules td.scan-result')->getHtml()));
+    $this->assertEmpty($page->find('css', 'tr.upgrade_status_test_submodules_a'));
 
-    $upgrade_status_test_submodules = $page->find('css', '.upgrade-status-summary-custom .project-upgrade_status_test_submodules');
-    $this->assertCount(3, $upgrade_status_test_submodules->findAll('css', 'td'));
-    $this->assertSame('No known errors', $upgrade_status_test_submodules->find('css', 'td.status-info')->getHtml());
+    // Contrib test modules should show with results.
+    $this->assertSame('2 problems', strip_tags($page->find('css', 'tr.project-upgrade_status_test_contrib_error td.scan-result')->getHtml()));
+    $this->assertSame('No problems found', strip_tags($page->find('css', 'tr.project-upgrade_status_test_contrib_no_error td.scan-result')->getHtml()));
+    // This contrib module has a different project name. Ensure the drupal.org link used that.
+    $this->assertSession()->linkByHrefExists('https://drupal.org/project/issues/upgrade_status_test_contributed_no_error?text=Drupal+9&status=All');
 
-    // Contributed modules should have one extra column because of possible
-    // available update information.
-    $upgrade_status_test_contrib_error = $page->find('css', '.upgrade-status-summary-contrib .project-upgrade_status_test_contrib_error');
-    $this->assertCount(4, $upgrade_status_test_contrib_error->findAll('css', 'td'));
-    $this->assertSame('1 error, 1 warning', strip_tags($upgrade_status_test_contrib_error->find('css', 'td.status-info')->getHtml()));
-
-    $upgrade_status_test_contrib_no_error = $page->find('css', '.upgrade-status-summary-contrib .project-upgrade_status_test_contrib_no_error');
-    $this->assertCount(4, $upgrade_status_test_contrib_no_error->findAll('css', 'td'));
-    $this->assertSame('No known errors', $upgrade_status_test_contrib_no_error->find('css', 'td.status-info')->getHtml());
-
-    // Click the '2 errors, 2 warnings' link. Should be the contrib project.
-    $this->clickLink('2 errors, 2 warnings');
+    // Click the first '4 problems' link. Should be the contrib project.
+    $this->clickLink('4 problems');
     $this->assertText('Upgrade status test error ' . \Drupal::VERSION);
     $this->assertText('2 errors found. 2 warnings found.');
     $this->assertText('Syntax error, unexpected T_STRING on line 3');
@@ -93,7 +81,7 @@ class UpgradeStatusUiTest extends UpgradeStatusTestBase {
 
     // Go back to the listing page and click over to exporting in single ASCII.
     $this->drupalGet(Url::fromRoute('upgrade_status.report'));
-    $this->clickLink('2 errors, 2 warnings');
+    $this->clickLink('4 problems');
     $this->clickLink('Export as text');
     $this->assertText('Upgrade status test error ' . \Drupal::VERSION);
     $this->assertText('CUSTOM PROJECTS');
@@ -103,9 +91,9 @@ class UpgradeStatusUiTest extends UpgradeStatusTestBase {
 
     // Run partial export of multiple projects.
     $edit = [
-      'custom[data][installed][upgrade_status_test_error]' => TRUE,
-      'custom[data][installed][upgrade_status_test_no_error]' => TRUE,
-      'contrib[data][installed][upgrade_status_test_contrib_error]' => TRUE,
+      'manual[data][list][upgrade_status_test_error]' => TRUE,
+      'relax[data][list][upgrade_status_test_no_error]' => TRUE,
+      'collaborate[data][list][upgrade_status_test_contrib_error]' => TRUE,
     ];
     $expected = [
       'Export selected as HTML' => ['Contributed projects', 'Custom projects'],
@@ -124,16 +112,4 @@ class UpgradeStatusUiTest extends UpgradeStatusTestBase {
       $this->assertText('Syntax error, unexpected T_STRING on line 3');
     }
   }
-
-  /**
-   * Test project collection's result by checking the amount of projects.
-   */
-  public function testProjectCollector() {
-    $this->drupalGet(Url::fromRoute('upgrade_status.report'));
-    $page = $this->getSession()->getPage();
-
-    $this->assertCount(9, $page->findAll('css', '.upgrade-status-summary-custom tr[class*=\'project-\']'));
-    $this->assertCount(3, $page->findAll('css', '.upgrade-status-summary-contrib tr[class*=\'project-\']'));
-  }
-
 }

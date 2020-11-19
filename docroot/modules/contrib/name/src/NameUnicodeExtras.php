@@ -41,13 +41,13 @@ class NameUnicodeExtras extends Unicode {
    *   The input $text with first letters of each word capitalized.
    */
   public static function initials($text, $delimitor = '') {
-    $text = self::strtolower($text);
+    $text = mb_strtolower($text);
     $results = [];
     foreach (array_filter(self::explode($text)) as $word) {
-      $results[] = Unicode::substr($word, 0, 1);
+      $results[] = mb_substr($word, 0, 1);
     }
     $text = implode($delimitor, $results);
-    $text = self::strtoupper($text);
+    $text = mb_strtoupper($text);
     return $text ? $text . $delimitor : '';
   }
 

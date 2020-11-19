@@ -1,7 +1,7 @@
 ---
 language: php
 
-php: "7.2"
+php: "7.3"
 
 addons:
   chrome: stable
@@ -40,6 +40,7 @@ matrix:
     - env: ORCA_JOB=CORE_NEXT
 
 before_install:
+  - composer self-update --1
   - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"
   - ../orca/bin/travis/before_install.sh
 

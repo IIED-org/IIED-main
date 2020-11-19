@@ -80,7 +80,6 @@ class FacetFacetSourceTest extends EntityKernelTestBase {
     $displays = $this->container
       ->get('plugin.manager.search_api.display')
       ->getDefinitions();
-    $this->assertTrue(isset($displays['views_page:search_api_test_view__page_1']));
     $this->assertArrayHasKey('views_page:search_api_test_view__page_1', $displays);
 
     // Check that has transformed into a facet source as expected.

@@ -8,7 +8,7 @@ use Drupal\Component\Utility\Html;
 /**
  * Formats a string for HTML display by replacing variable placeholders.
  *
- * Adds special handling of @names, @last
+ * Adds special handling of @names, @last.
  */
 class NameListFormattableMarkup implements MarkupInterface {
 
@@ -27,15 +27,24 @@ class NameListFormattableMarkup implements MarkupInterface {
    */
   protected $separator = ', ';
 
+  /**
+   * Constructor for NameListFormattableMarkup.
+   */
   public function __construct(array $names = [], $separator = ', ') {
     $this->names = $names;
     $this->separator = $this->escapeValues($separator);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function __toString() {
     return $this->escapeValues($this->names);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function jsonSerialize() {
     return $this->__toString();
   }

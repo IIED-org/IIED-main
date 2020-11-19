@@ -1,0 +1,363 @@
+uuid: efd70852-42a5-4efd-ba3f-2dfe5b59ad52
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.document_meta
+    - field.field.node.publication.body
+    - field.field.node.publication.field_admin
+    - field.field.node.publication.field_area_list
+    - field.field.node.publication.field_author_s_
+    - field.field.node.publication.field_cover_image
+    - field.field.node.publication.field_date_published
+    - field.field.node.publication.field_deptlist
+    - field.field.node.publication.field_document_type
+    - field.field.node.publication.field_doi
+    - field.field.node.publication.field_editor_s_
+    - field.field.node.publication.field_external_url
+    - field.field.node.publication.field_iied_url
+    - field.field.node.publication.field_isbn
+    - field.field.node.publication.field_issn
+    - field.field.node.publication.field_journal_ref
+    - field.field.node.publication.field_lit_code
+    - field.field.node.publication.field_media
+    - field.field.node.publication.field_parent
+    - field.field.node.publication.field_pdf
+    - field.field.node.publication.field_pdf_pages
+    - field.field.node.publication.field_product_code
+    - field.field.node.publication.field_product_id
+    - field.field.node.publication.field_project
+    - field.field.node.publication.field_publisher
+    - field.field.node.publication.field_publisher_legacy
+    - field.field.node.publication.field_reportagency1
+    - field.field.node.publication.field_reportagency2
+    - field.field.node.publication.field_reportagency3
+    - field.field.node.publication.field_reportfin1
+    - field.field.node.publication.field_reportfin2
+    - field.field.node.publication.field_reportfin3
+    - field.field.node.publication.field_reportingcode1
+    - field.field.node.publication.field_reportingcode2
+    - field.field.node.publication.field_series
+    - field.field.node.publication.field_series_item_code
+    - field.field.node.publication.field_short_title
+    - field.field.node.publication.field_source_publication
+    - field.field.node.publication.field_status
+    - field.field.node.publication.field_tags
+    - field.field.node.publication.field_team
+    - field.field.node.publication.field_theme_s_
+    - field.field.node.publication.field_translator
+    - node.type.publication
+  module:
+    - datetime
+    - ds
+    - field_group
+    - isbn
+    - layout_builder
+    - link
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+  field_group:
+    group_cover_image:
+      children:
+        - 'dynamic_block_field:node-cover_image'
+        - group_pub_body
+      parent_name: ''
+      weight: 42
+      format_type: html_element
+      region: hidden
+      format_settings:
+        id: ''
+        classes: 'col-md-4 float-md-left order-md-1'
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+      label: cover-image
+    group_pub_header:
+      children:
+        - 'dynamic_block_field:node-page_count'
+        - node_title
+      parent_name: ''
+      weight: 41
+      format_type: html_element
+      region: hidden
+      format_settings:
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        id: ''
+        classes: 'col-md-8 order-md-2 float-md-right mb-3'
+      label: pub-header
+    group_pub_body:
+      children:
+        - 'dynamic_block_field:node-download_button'
+        - group_related_links
+      parent_name: group_cover_image
+      weight: 43
+      format_type: html_element
+      region: hidden
+      format_settings:
+        id: ''
+        classes: 'col-md-8 float-md-right order-md-3'
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+      label: pub-body
+    group_related_project:
+      children: {  }
+      parent_name: ''
+      weight: 1
+      format_type: html_element
+      region: hidden
+      format_settings:
+        element: section
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: project-info
+        effect: none
+        speed: fast
+        id: ''
+        classes: 'border-gradient mb-5 order-5'
+      label: Related-project
+    group_related_publications:
+      children: {  }
+      parent_name: ''
+      weight: 2
+      format_type: html_element
+      region: hidden
+      format_settings:
+        element: section
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        id: ''
+        classes: 'mb-5 order-6 container'
+      label: 'Related publications'
+    group_related_links:
+      children: {  }
+      parent_name: group_pub_body
+      weight: 3
+      format_type: html_element
+      region: hidden
+      format_settings:
+        id: ''
+        classes: ''
+        element: div
+        show_label: true
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+      label: 'Related links'
+  ds:
+    layout:
+      id: ds_1col
+      library: null
+      disable_css: false
+      entity_classes: all_classes
+      settings:
+        label: ''
+        wrappers:
+          ds_content: div
+        outer_wrapper: article
+        attributes: ''
+        link_attribute: ''
+        link_custom: ''
+        classes:
+          layout_class:
+            row: row
+          ds_content: {  }
+    regions:
+      ds_content:
+        - field_date_published
+        - field_publisher
+        - 'dynamic_block_field:node-country_list'
+        - field_series
+        - field_source_publication
+        - field_journal_ref
+        - field_isbn
+        - field_issn
+        - field_doi
+        - field_product_code
+    fields:
+      'dynamic_block_field:node-country_list':
+        plugin_id: 'dynamic_block_field:node-country_list'
+        weight: 17
+        label: inline
+        formatter: default
+        ft:
+          id: default
+          settings:
+            lb: Area
+            lb-col: true
+            classes: {  }
+id: node.publication.document_meta
+targetEntityType: node
+bundle: publication
+mode: document_meta
+content:
+  field_date_published:
+    weight: 13
+    label: inline
+    settings:
+      timezone_override: ''
+      format_type: published_date
+    third_party_settings:
+      ds:
+        ft:
+          id: expert
+          settings:
+            lb: Published
+            prefix: ''
+            lbw: true
+            lbw-el: span
+            lbw-cl: 'field__label font-weight-bold'
+            lbw-at: ''
+            lb-col: true
+            ow-el: ''
+            ow-cl: ''
+            ow-at: ''
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            ow: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
+    type: datetime_default
+    region: ds_content
+  field_doi:
+    weight: 23
+    label: inline
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+    region: ds_content
+  field_isbn:
+    weight: 21
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    type: isbn_default
+    region: ds_content
+  field_issn:
+    weight: 22
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: ds_content
+  field_journal_ref:
+    weight: 20
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: ds_content
+  field_product_code:
+    weight: 24
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: ds_content
+  field_publisher:
+    weight: 15
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: ds_content
+  field_series:
+    weight: 18
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: ds_content
+  field_source_publication:
+    weight: 19
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: ds_content
+  sharing_buttons:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: left
+hidden:
+  body: true
+  field_admin: true
+  field_area_list: true
+  field_author_s_: true
+  field_cover_image: true
+  field_deptlist: true
+  field_document_type: true
+  field_editor_s_: true
+  field_external_url: true
+  field_iied_url: true
+  field_lit_code: true
+  field_media: true
+  field_parent: true
+  field_pdf: true
+  field_pdf_pages: true
+  field_product_id: true
+  field_project: true
+  field_publisher_legacy: true
+  field_reportagency1: true
+  field_reportagency2: true
+  field_reportagency3: true
+  field_reportfin1: true
+  field_reportfin2: true
+  field_reportfin3: true
+  field_reportingcode1: true
+  field_reportingcode2: true
+  field_series_item_code: true
+  field_short_title: true
+  field_status: true
+  field_tags: true
+  field_team: true
+  field_theme_s_: true
+  field_translator: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

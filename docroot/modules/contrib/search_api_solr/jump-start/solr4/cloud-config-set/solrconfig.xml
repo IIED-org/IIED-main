@@ -9,7 +9,7 @@
      For more details about configurations options that may appear in
      this file, see http://wiki.apache.org/solr/SolrConfigXml.
 -->
-<config name="drupal-4.1.0-solr-4.x-1" >
+<config name="drupal-4.1.1-solr-4.x-1" >
   <!-- In all configuration below, a prefix of "solr." for class names
        is an alias that causes solr to search appropriate packages,
        including org.apache.solr.(search|update|request|core|analysis)
@@ -944,7 +944,7 @@
   <!-- ping/healthcheck -->
   <requestHandler name="/admin/ping" class="solr.PingRequestHandler">
     <lst name="invariants">
-      <str name="qt">pinkPony</str>
+      <str name="qt">standard</str>
       <str name="q">solrpingquery</str>
     </lst>
     <lst name="defaults">

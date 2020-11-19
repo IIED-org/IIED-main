@@ -214,7 +214,7 @@ class ExcludeSpecifiedItemsProcessorTest extends UnitTestCase {
     $this->assertCount(count($expected_results), $filtered_results);
 
     foreach ($filtered_results as $res) {
-      $this->assertTrue(in_array($res->getDisplayValue(), $expected_results));
+      $this->assertContains($res->getDisplayValue(), $expected_results);
     }
   }
 

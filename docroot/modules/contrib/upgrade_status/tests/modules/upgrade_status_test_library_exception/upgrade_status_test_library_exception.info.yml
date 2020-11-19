@@ -1,4 +1,4 @@
-name: 'Upgrade status test library'
+name: 'Upgrade status test library exception'
 type: module
 description: 'Support module for upgrade status module testing.'
 package: Testing
@@ -7,7 +7,7 @@ core_version_requirement: ^8 || ^9
 dependencies:
   - upgrade_status_test_twig
 
-# Information added by Drupal.org packaging script on 2020-06-20
-version: '8.x-2.9'
+# Information added by Drupal.org packaging script on 2020-11-04
+version: '8.x-3.0'
 project: 'upgrade_status'
-datestamp: 1592678579
+datestamp: 1604508429

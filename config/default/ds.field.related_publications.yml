@@ -1,6 +1,6 @@
 id: related_publications
 label: 'Related publications'
-ui_limit: publication|full
+ui_limit: 'publication|*'
 properties:
   block: 'views_block:related_publications-block_1'
   use_block_title: false

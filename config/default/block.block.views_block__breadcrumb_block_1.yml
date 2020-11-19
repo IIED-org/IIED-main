@@ -1,0 +1,33 @@
+uuid: a1e21828-d766-40e4-95cd-70e92398d418
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.breadcrumb
+  module:
+    - ctools
+    - views
+  theme:
+    - iied_pubs
+id: views_block__breadcrumb_block_1
+theme: iied_pubs
+region: header
+weight: 0
+provider: null
+plugin: 'views_block:breadcrumb-block_1'
+settings:
+  id: 'views_block:breadcrumb-block_1'
+  label: ''
+  provider: views
+  label_display: '0'
+  views_label: ''
+  items_per_page: none
+  context_mapping: {  }
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      publication: publication
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'

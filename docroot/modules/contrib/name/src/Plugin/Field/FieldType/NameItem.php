@@ -9,6 +9,7 @@ use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemBase;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Security\TrustedCallbackInterface;
 use Drupal\Core\TypedData\DataDefinition;
 use Drupal\name\Traits\NameFieldSettingsTrait;
 use Drupal\name\Traits\NameFormDisplaySettingsTrait;
@@ -29,7 +30,7 @@ use Drupal\name\Traits\NameAdditionalPreferredTrait;
  *   default_formatter = "name_default"
  * )
  */
-class NameItem extends FieldItemBase {
+class NameItem extends FieldItemBase implements TrustedCallbackInterface {
 
   use NameFieldSettingsTrait;
   use NameFormDisplaySettingsTrait;
@@ -51,7 +52,14 @@ class NameItem extends FieldItemBase {
   ];
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
+   */
+  public static function trustedCallbacks() {
+    return ['fieldSettingsFormPreRender'];
+  }
+
+  /**
+   * {@inheritdoc}
    */
   public static function schema(FieldStorageDefinitionInterface $field_definition) {
     $columns = [];
@@ -83,7 +91,7 @@ class NameItem extends FieldItemBase {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public static function propertyDefinitions(FieldStorageDefinitionInterface $field_definition) {
     $properties = [];
@@ -109,7 +117,15 @@ class NameItem extends FieldItemBase {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
+   */
+  public static function mainPropertyName() {
+    // There is no main property for this field item.
+    return NULL;
+  }
+
+  /**
+   * {@inheritdoc}
    */
   public function isEmpty() {
     foreach ($this->properties as $property) {
@@ -144,7 +160,7 @@ class NameItem extends FieldItemBase {
     $settings = $field->getSettings();
     $active_components = array_filter($settings['components']);
     foreach ($this->getProperties() as $name => $property) {
-      if ($active_components[$name]) {
+      if (isset($active_components[$name]) && $active_components[$name]) {
         $values[$name] = $property->getValue();
       }
     }
@@ -170,7 +186,7 @@ class NameItem extends FieldItemBase {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function fieldSettingsForm(array $form, FormStateInterface $form_state) {
     $settings = $this->getSettings();
@@ -183,38 +199,6 @@ class NameItem extends FieldItemBase {
     }
 
     $element['#pre_render'][] = [$this, 'fieldSettingsFormPreRender'];
-
-    // @todo: Port this feature to Drupal 8.
-    //    $extra_max_info = '<div>' . t('This can not be less than the longest value in the database. The minimum values are:') . '</div>';
-    //    $extra_max_items = [];
-    //    foreach (_name_translations() as $key => $title) {
-    //      $extra_max_items[] = t('@title is @size', [
-    //        '@title' => $title,
-    //        '@size' => $form['max_length'][$key]['#min'],
-    //      ]);
-    //    }
-    //    $item_list = [
-    //      '#theme' => 'item_list',
-    //      '#items' => $extra_max_items,
-    //    ];
-    //    $extra_max_info .= drupal_render($item_list);
-    //  if ($has_data) {
-    //  $min_length = $settings['max_length'][$key];
-    //    if ($field['storage']['type'] == 'field_sql_storage') {
-    //      try {
-    //        $table = 'field_data_' . $field['field_name'];
-    //        $column = $field['storage']['details']['sql'][FIELD_LOAD_CURRENT]
-    //        [$table][$key];
-    //        $min_length = db_query("SELECT MAX(CHAR_LENGTH({$column})) AS len FROM {$table}")->fetchField();
-    //        if ($min_length < 1) {
-    //          $min_length = 1;
-    //        }
-    //      }
-    //      catch (Exception $e) {
-    //      }
-    //    }
-    //}
-
 
     // Add the overwrite user name option.
     if ($this->getFieldDefinition()->getTargetEntityTypeId() == 'user') {
@@ -251,7 +235,6 @@ class NameItem extends FieldItemBase {
       ];
 
       $element['#element_validate'] = [[get_class($this), 'validateUserPreferred']];
-
     }
     else {
       // We may extend this feature to Profile2 latter.

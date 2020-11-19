@@ -1,21 +1,17 @@
 uuid: ec8f355d-dfe2-4d09-bd45-730ba0adcc39
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - facets.facet.theme
   module:
-    - block_class
     - facets
   theme:
     - iied_pubs
-third_party_settings:
-  block_class:
-    classes: 'col-md-4 order-md-2'
 id: theme
 theme: iied_pubs
-region: content
-weight: 0
+region: navbar_branding
+weight: -7
 provider: null
 plugin: 'facet_block:theme'
 settings:

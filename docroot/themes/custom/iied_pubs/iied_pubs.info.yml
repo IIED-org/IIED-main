@@ -1,8 +1,8 @@
 name: IIED Pubs
 description: A theme based on Radix.
 screenshot: screenshot.png
-core: 8.x
-# version: VERSION
+core_version_requirement: ^8.7.7 || ^9.0
+version: VERSION
 engine: twig
 type: theme
 base theme: radix
@@ -12,7 +12,11 @@ regions:
   navbar_left:  Navbar left
   navbar_right: Navbar right
   header: Header
+  featured_top: Featured top
   content: Content
+  featured_bottom: Featured bottom
+  sidebar_first: Sidebar first
+  sidebar_second: Sidebar second
   page_bottom: Page bottom
   footer: Footer
 

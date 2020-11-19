@@ -27,7 +27,7 @@ class ViewsTest extends SearchApiViewsTest {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     // Skip parent::setUp().
     SearchApiBrowserTestBase::setUp();
 
@@ -43,6 +43,8 @@ class ViewsTest extends SearchApiViewsTest {
       ->set('id', 'database_search_index')
       ->save();
 
+    $this->adjustBackendConfig();
+
     // Now do the same as parent::setUp().
     \Drupal::getContainer()
       ->get('search_api.index_task_manager')
@@ -52,9 +54,14 @@ class ViewsTest extends SearchApiViewsTest {
   }
 
   /**
+   * Allow 3rd party SOlr connectors to manipulate the config.
+   */
+  protected function adjustBackendConfig() {}
+
+  /**
    * {@inheritdoc}
    */
-  protected function tearDown() {
+  protected function tearDown(): void {
     $index = Index::load($this->indexId);
     $index->clear();
     $this->ensureCommit($index);

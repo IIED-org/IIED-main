@@ -9,11 +9,6 @@ use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
-// @todo Remove this when 8.7.x is EOL.
-// @see https://www.drupal.org/project/address/issues/3093193
-if (!trait_exists('\Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait')) {
-  class_alias('\Drupal\Tests\taxonomy\Functional\TaxonomyTestTrait', '\Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait');
-}
 use Drupal\Tests\token\Kernel\KernelTestBase;
 
 /**
@@ -193,7 +188,7 @@ class CountryNameTokenTest extends KernelTestBase {
    * Tests [entity:country_name] tokens.
    */
   public function testEntityCountryNameTokens() {
-    // Create a node with a value in its fields and test its country_name tokens.
+    // Create a node with address fields and test its country_name tokens.
     $entity = Node::create([
       'title' => 'Test node title',
       'type' => 'article',

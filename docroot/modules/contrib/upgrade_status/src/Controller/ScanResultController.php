@@ -67,24 +67,20 @@ class ScanResultController extends ControllerBase {
   /**
    * Builds content for the error list page/popup.
    *
-   * @param string $type
-   *   Type of the extension, it can be either 'module' or 'theme' or 'profile'.
    * @param string $project_machine_name
    *   The machine name of the project.
    *
    * @return array
    *   Build array.
    */
-  public function resultPage(string $type, string $project_machine_name) {
-    $extension = $this->projectCollector->loadProject($type, $project_machine_name);
+  public function resultPage(string $project_machine_name) {
+    $extension = $this->projectCollector->loadProject($project_machine_name);
     return $this->resultFormatter->formatResult($extension);
   }
 
   /**
    * Generates single project export.
    *
-   * @param string $type
-   *   Type of the extension, it can be either 'module' or 'theme' or 'profile'.
    * @param string $project_machine_name
    *   The machine name of the project.
    * @param string $format
@@ -93,8 +89,8 @@ class ScanResultController extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\Response
    *   Response object.
    */
-  public function resultExport(string $type, string $project_machine_name, string $format) {
-    $extension = $this->projectCollector->loadProject($type, $project_machine_name);
+  public function resultExport(string $project_machine_name, string $format) {
+    $extension = $this->projectCollector->loadProject($project_machine_name);
     $result = $this->resultFormatter->getRawResult($extension);
 
     // Sanitize user input.
@@ -103,7 +99,7 @@ class ScanResultController extends ControllerBase {
     }
 
     $build = ['#theme' =>  'upgrade_status_' . $format . '_export' ];
-    $build['#projects'][empty($extension->info['project']) ? 'custom' : 'contrib'] = [
+    $build['#projects'][$extension->info['upgrade_status_type'] == ProjectCollector::TYPE_CUSTOM ? 'custom' : 'contrib'] = [
       $project_machine_name =>
         $format == 'html' ?
           $this->resultFormatter->formatResult($extension) :
@@ -122,16 +118,14 @@ class ScanResultController extends ControllerBase {
   /**
    * Analyze a specific project in its own HTTP request.
    *
-   * @param string $type
-   *   Type of the extension, it can be either 'module' or 'theme' or 'profile'.
    * @param string $project_machine_name
    *   The machine name of the project.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Response object.
    */
-  public function analyze(string $type, string $project_machine_name) {
-    if ($type == 'upgrade_status_request_test' && $project_machine_name == 'upgrade_status_request_test') {
+  public function analyze(string $project_machine_name) {
+    if ($project_machine_name == 'upgrade_status_request_test') {
       // Handle the special case of a request test which is testing the
       // HTTP sandboxing capability.
       return new JsonResponse(
@@ -140,7 +134,7 @@ class ScanResultController extends ControllerBase {
     }
     else {
       // Dealing with a real project.
-      $extension = $this->projectCollector->loadProject($type, $project_machine_name);
+      $extension = $this->projectCollector->loadProject($project_machine_name);
       \Drupal::service('upgrade_status.deprecation_analyzer')->analyze($extension);
       return new JsonResponse(
         ['message' => $this->t('Scanned @project', ['@project' => $extension->getName()])]

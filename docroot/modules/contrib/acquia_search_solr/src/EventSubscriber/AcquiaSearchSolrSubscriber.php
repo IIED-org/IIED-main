@@ -8,6 +8,7 @@ use Drupal\acquia_search_solr\Helper\Storage;
 use Drupal\Component\Utility\Crypt;
 use Drupal\search_api_solr\Solarium\EventDispatcher\EventProxy;
 use Solarium\Core\Client\Adapter\AdapterHelper;
+use Solarium\Core\Client\Client;
 use Solarium\Core\Client\Response;
 use Solarium\Core\Event\Events;
 use Solarium\Core\Plugin\AbstractPlugin;
@@ -71,6 +72,11 @@ class AcquiaSearchSolrSubscriber extends AbstractPlugin implements EventSubscrib
 
     /** @var \Solarium\Core\Client\Request $request */
     $request = $event->getRequest();
+
+    if (!($this->client instanceof Client)) {
+      return;
+    }
+
     $request->addParam('request_id', uniqid(), TRUE);
     if ($request->getFileUpload()) {
       $helper = new AdapterHelper();

@@ -1,0 +1,23 @@
+uuid: b4d6532b-750b-4a59-8ab0-c7b6a5fb7c84
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.country
+  module:
+    - facets
+  theme:
+    - iied_pubs
+id: country_2
+theme: iied_pubs
+region: sidebar_first
+weight: 2
+provider: null
+plugin: 'facet_block:country'
+settings:
+  id: 'facet_block:country'
+  label: Area
+  provider: facets
+  label_display: visible
+  block_id: country_2
+visibility: {  }

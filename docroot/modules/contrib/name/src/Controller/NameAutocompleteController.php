@@ -3,7 +3,7 @@
 namespace Drupal\name\Controller;
 
 use Drupal\Core\Entity\EntityFieldManager;
-use Drupal\Core\Entity\EntityTypeManager;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -33,7 +33,7 @@ class NameAutocompleteController implements ContainerInjectionInterface {
   /**
    * Entity type manager.
    *
-   * @var \Drupal\Core\Entity\EntityTypeManager
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
 
@@ -44,10 +44,10 @@ class NameAutocompleteController implements ContainerInjectionInterface {
    *   The name autocomplete helper class to find matching name values.
    * @param \Drupal\Core\Entity\EntityFieldManager $entityFieldManager
    *   The entity field manager.
-   * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity field manager.
    */
-  public function __construct(NameAutocomplete $name_autocomplete, EntityFieldManager $entityFieldManager, EntityTypeManager $entityTypeManager) {
+  public function __construct(NameAutocomplete $name_autocomplete, EntityFieldManager $entityFieldManager, EntityTypeManagerInterface $entityTypeManager) {
     $this->nameAutocomplete = $name_autocomplete;
     $this->entityFieldManager = $entityFieldManager;
     $this->entityTypeManager = $entityTypeManager;

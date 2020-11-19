@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Acquia Connector module.
+ */
+
+use Drupal\acquia_connector\Subscription;
+use Drupal\search_api\Entity\Server;
+
+/**
+ * @throws \Exception
+ */
+function acquia_search_install() {
+  /** @var \Drupal\Core\Extension\ModuleInstallerInterface $module_installer */
+  $module_installer = \Drupal::service('module_installer');
+  $module_installer->uninstall(['acquia_search']);
+
+  $messenger = \Drupal::messenger();
+  $messenger->addWarning(t('Acquia Search Legacy must not be installed again! Please use Acquia Search Solr instead.'));
+}
+
+/**
+ * @return mixed
+ */
+function acquia_search_update_dependencies() {
+  // Ensure that before Acquia Search Solr is installed, that Search API Solr
+  // Is updated to the most recent version.
+  $dependencies['acquia_search'][8201] = [
+    'search_api_solr' => 8402,
+  ];
+  return $dependencies;
+}
+
+function acquia_search_update_8201() {
+  /** @var \Drupal\Core\Extension\ModuleInstallerInterface $module_installer */
+  $module_installer = \Drupal::service('module_installer');
+  $module_installer->install(['acquia_search_solr'], TRUE);
+}

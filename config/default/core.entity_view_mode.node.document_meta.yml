@@ -1,0 +1,10 @@
+uuid: 75e86db0-fa58-4eb3-92a4-2a830ba21fe0
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.document_meta
+label: 'Document meta'
+targetEntityType: node
+cache: true

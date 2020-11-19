@@ -6,6 +6,8 @@ use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate_drupal\Plugin\migrate\field\FieldPluginBase;
 
 /**
+ * Field migration plugin from D7 to D8.
+ *
  * @MigrateField(
  *   id = "addressfield",
  *   core = {7},

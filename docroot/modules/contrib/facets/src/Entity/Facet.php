@@ -997,4 +997,13 @@ class Facet extends ConfigEntityBase implements FacetInterface {
     $container->get('plugin.manager.block')->clearCachedDefinitions();
   }
 
+  /**
+   * Remove the facet lazy built data when the facet is serialized.
+   */
+  public function __sleep() {
+    unset($this->facet_source_instance);
+    unset($this->processors);
+    return parent::__sleep();
+  }
+
 }

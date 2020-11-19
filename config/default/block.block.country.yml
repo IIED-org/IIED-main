@@ -1,21 +1,17 @@
 uuid: b2784dd2-93f5-4134-8b92-05357d8af25f
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - facets.facet.country
   module:
-    - block_class
     - facets
   theme:
     - iied_pubs
-third_party_settings:
-  block_class:
-    classes: 'col-md-4 order-md-4'
 id: country
 theme: iied_pubs
-region: content
-weight: 2
+region: navbar_branding
+weight: -5
 provider: null
 plugin: 'facet_block:country'
 settings:

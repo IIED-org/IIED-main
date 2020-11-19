@@ -264,6 +264,7 @@ class Address extends FormElement {
           '#attributes' => [
             'class' => [$class],
             'autocomplete' => FieldHelper::getAutocompleteAttribute($field),
+            'autocapitalize' => 'words',
           ],
         ];
         if (count($line_fields) > 1) {

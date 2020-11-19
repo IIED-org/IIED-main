@@ -125,13 +125,13 @@ class FacetBlockAjaxController extends ControllerBase {
       throw new NotFoundHttpException('No facet link or facet blocks found.');
     }
 
-    $this->currentRouteMatch->resetRouteMatch();
     $new_request = Request::create($path);
     $request_stack = new RequestStack();
     $processed = $this->pathProcessor->processInbound($path, $new_request);
 
     $this->currentPath->setPath($processed);
     $request->attributes->add($this->router->matchRequest($new_request));
+    $this->currentRouteMatch->resetRouteMatch();
     $request_stack->push($new_request);
 
     $container = \Drupal::getContainer();

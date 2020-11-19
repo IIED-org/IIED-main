@@ -2,8 +2,7 @@
 
 namespace Drupal\name;
 
-use Drupal\Component\Utility\Unicode;
-use Drupal\Core\Entity\EntityTypeManager;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 
@@ -22,7 +21,7 @@ class NameOptionsProvider {
   /**
    * The entity type manager.
    *
-   * @var \Drupal\Core\Entity\EntityTypeManager
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
 
@@ -48,15 +47,15 @@ class NameOptionsProvider {
   protected $vocabularyStorage;
 
   /**
-   * Contructs the service.
+   * Constructs a new NameOptionsProvider object.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
-   *   The entity manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
    */
-  public function __construct(EntityTypeManager $entityTypeManager, ModuleHandlerInterface $module_handler) {
-    $this->entityTypeManager = $entityTypeManager;
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler) {
+    $this->entityTypeManager = $entity_type_manager;
     $this->moduleHandler = $module_handler;
 
     if ($this->entityTypeManager && $this->moduleHandler->moduleExists('taxonomy')) {
@@ -79,7 +78,7 @@ class NameOptionsProvider {
           if ($vocabulary) {
             $max_length = isset($fs['max_length'][$component]) ? $fs['max_length'][$component] : 255;
             foreach ($this->termStorage->loadTree($vocabulary->id()) as $term) {
-              if (Unicode::strlen($term->name) <= $max_length) {
+              if (mb_strlen($term->name) <= $max_length) {
                 $options[] = $term->name;
               }
             }
@@ -98,7 +97,7 @@ class NameOptionsProvider {
     foreach ($options as $index => $opt) {
       if (strpos($opt, '--') === 0) {
         unset($options[$index]);
-        $default = trim(Unicode::substr($opt, 2));
+        $default = trim(mb_substr($opt, 2));
       }
     }
     $options = array_map('trim', $options);

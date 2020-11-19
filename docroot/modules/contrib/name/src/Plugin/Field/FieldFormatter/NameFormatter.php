@@ -3,7 +3,7 @@
 namespace Drupal\name\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Entity\EntityFieldManager;
-use Drupal\Core\Entity\EntityTypeManager;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\Exception\UndefinedLinkTemplateException;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -16,6 +16,7 @@ use Drupal\name\NameFormatParser;
 use Drupal\name\NameGeneratorInterface;
 use Drupal\name\Traits\NameAdditionalPreferredTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\name\NameFormatter as NameFormatterService;
 
 /**
  * Plugin implementation of the 'name' formatter.
@@ -47,7 +48,7 @@ class NameFormatter extends FormatterBase implements ContainerFactoryPluginInter
   /**
    * The entity type manager.
    *
-   * @var \Drupal\Core\Entity\EntityTypeManager
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
 
@@ -100,7 +101,7 @@ class NameFormatter extends FormatterBase implements ContainerFactoryPluginInter
    *   Any third party settings settings.
    * @param \Drupal\Core\Entity\EntityFieldManager $entityFieldManager
    *   The entity field manager.
-   * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The rendering service.
@@ -111,7 +112,7 @@ class NameFormatter extends FormatterBase implements ContainerFactoryPluginInter
    * @param \Drupal\name\NameGeneratorInterface $generator
    *   The name format parser.
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, EntityFieldManager $entityFieldManager, EntityTypeManager $entityTypeManager, RendererInterface $renderer, \Drupal\name\NameFormatter $formatter, NameFormatParser $parser, NameGeneratorInterface $generator) {
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, EntityFieldManager $entityFieldManager, EntityTypeManagerInterface $entityTypeManager, RendererInterface $renderer, NameFormatterService $formatter, NameFormatParser $parser, NameGeneratorInterface $generator) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
 
     $this->entityFieldManager = $entityFieldManager;
@@ -187,17 +188,17 @@ class NameFormatter extends FormatterBase implements ContainerFactoryPluginInter
       '#description' => $this->t('This option wraps the individual components of the name in SPAN elements with corresponding classes to the component.'),
       '#required' => TRUE,
     ];
+    if (!empty($this->fieldDefinition->getTargetBundle())) {
+      $elements['link_target'] = [
+        '#type' => 'select',
+        '#title' => $this->t('Link Target'),
+        '#default_value' => $this->getSetting('link_target'),
+        '#empty_option' => $this->t('-- no link --'),
+        '#options' => $this->getLinkableTargets(),
+      ];
 
-    $elements['link_target'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Link Target'),
-      '#default_value' => $this->getSetting('link_target'),
-      '#empty_option' => $this->t('-- no link --'),
-      '#options' => $this->getLinkableTargets(),
-    ];
-
-    $elements += $this->getNameAdditionalPreferredSettingsForm($form, $form_state);
-
+      $elements += $this->getNameAdditionalPreferredSettingsForm($form, $form_state);
+    }
     return $elements;
   }
 
@@ -208,6 +209,7 @@ class NameFormatter extends FormatterBase implements ContainerFactoryPluginInter
     $settings = $this->getSettings();
     $summary = [];
 
+    // Name format.
     $machine_name = isset($settings['format']) ? $settings['format'] : 'default';
     $name_format = $this->entityTypeManager->getStorage('name_format')->load($machine_name);
     if ($name_format) {
@@ -220,6 +222,25 @@ class NameFormatter extends FormatterBase implements ContainerFactoryPluginInter
       $summary[] = $this->t('Format: <strong>Missing format.</strong><br/>This field will be displayed using the Default format.');
     }
 
+    // List format.
+    if (!isset($settings['list_format']) || $settings['list_format'] == '') {
+      $summary[] = $this->t('List format: Individually');
+    }
+    else {
+      $machine_name = isset($settings['list_format']) ? $settings['list_format'] : 'default';
+      $name_format = $this->entityTypeManager->getStorage('name_list_format')->load($machine_name);
+      if ($name_format) {
+        $summary[] = $this->t('List format: @format (@machine_name)', [
+          '@format' => $name_format->label(),
+          '@machine_name' => $name_format->id(),
+        ]);
+      }
+      else {
+        $summary[] = $this->t('List format: <strong>Missing list format.</strong><br/>This field will be displayed using the Default list format.');
+      }
+    }
+
+    // Additional options.
     $markup_options = $this->parser->getMarkupOptions();
     $summary[] = $this->t('Markup: @type', [
       '@type' => $markup_options[$this->getSetting('markup')],
@@ -228,7 +249,7 @@ class NameFormatter extends FormatterBase implements ContainerFactoryPluginInter
     if (!empty($settings['link_target'])) {
       $targets = $this->getLinkableTargets();
       $summary[] = $this->t('Link: @target', [
-        '@target' => empty($targets[$settings['link_target']]) ? t('-- invalid --') : $targets[$settings['link_target']],
+        '@target' => empty($targets[$settings['link_target']]) ? $this->t('-- invalid --') : $targets[$settings['link_target']],
       ]);
     }
 
@@ -328,7 +349,7 @@ class NameFormatter extends FormatterBase implements ContainerFactoryPluginInter
   /**
    * Gets the URL object.
    *
-   * @param FieldItemListInterface $items
+   * @param \Drupal\Core\Field\FieldItemListInterface $items
    *   The name formatters FieldItemList.
    *
    * @return \Drupal\Core\Url
@@ -367,7 +388,8 @@ class NameFormatter extends FormatterBase implements ContainerFactoryPluginInter
         }
       }
     }
-    catch (UndefinedLinkTemplateException $e) {}
+    catch (UndefinedLinkTemplateException $e) {
+    }
 
     return Url::fromRoute('<none>');
   }
@@ -375,7 +397,7 @@ class NameFormatter extends FormatterBase implements ContainerFactoryPluginInter
   /**
    * Gets any additional linked components.
    *
-   * @param FieldItemListInterface $items
+   * @param \Drupal\Core\Field\FieldItemListInterface $items
    *   The name formatters FieldItemList.
    *
    * @return array
@@ -383,15 +405,15 @@ class NameFormatter extends FormatterBase implements ContainerFactoryPluginInter
    */
   protected function parseAdditionalComponents(FieldItemListInterface $items) {
     $extra = [];
-    foreach (['preferred', 'alternative'] as $component => $key) {
+    foreach (['preferred', 'alternative'] as $key) {
       $key_value = $this->getSetting($key . '_field_reference');
       $sep_value = $this->getSetting($key . '_field_reference_separator');
       if (!$key_value) {
-        $key_value = $this->fieldDefinition->getSetting($key);
-        $sep_value = $this->fieldDefinition->getSetting($key . '_separator');
+        $key_value = $this->fieldDefinition->getSetting($key . '_field_reference');
+        $sep_value = $this->fieldDefinition->getSetting($key . '_field_reference_separator');
       }
       if ($value = name_get_additional_component($this->entityTypeManager, $this->renderer, $items, $key_value, $sep_value)) {
-        $extra[$component] = $value;
+        $extra[$key] = $value;
       }
     }
 

@@ -107,7 +107,7 @@ class SpiController extends ControllerBase {
         $config->set('spi.site_environment', $_SERVER['AH_SITE_ENVIRONMENT']);
         $environment = $_SERVER['AH_SITE_ENVIRONMENT'];
         if ($env_detection_enabled) {
-          $config->set('spi.site_machine_name', $this->getAcquiaHostedMachineName());
+          $this->state()->set('spi.site_machine_name', $this->getAcquiaHostedMachineName());
         }
       }
     }
@@ -133,8 +133,8 @@ class SpiController extends ControllerBase {
       'site_uuid'          => $this->config('acquia_connector.settings')->get('spi.site_uuid'),
       'env_changed_action' => $this->config('acquia_connector.settings')->get('spi.environment_changed_action'),
       'acquia_hosted'      => $acquia_hosted,
-      'name'               => $this->config('acquia_connector.settings')->get('spi.site_name'),
-      'machine_name'       => $this->config('acquia_connector.settings')->get('spi.site_machine_name'),
+      'name'               => $this->state()->get('spi.site_name'),
+      'machine_name'       => $this->state()->get('spi.site_machine_name'),
       'environment'        => $environment,
       'modules'            => $this->getModules(),
       'platform'           => $platform,

@@ -52,6 +52,8 @@ class Subscription {
       // If there is not an identifier or key, delete any old subscription data.
       \Drupal::state()->delete('acquia_subscription_data');
       \Drupal::state()->set('acquia_subscription_data', ['active' => FALSE]);
+      \Drupal::state()->delete('spi.site_name');
+      \Drupal::state()->delete('spi.site_machine_name');
     }
     else {
       // Get our subscription data.

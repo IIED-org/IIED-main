@@ -1,0 +1,37 @@
+# Schema for the configuration files of the acquia_search module.
+acquia_search.settings:
+  type: config_object
+  label: 'Acquia search settings'
+  mapping:
+    host:
+      type: string
+      label: Acquia search host
+    path:
+      type: string
+      label: 'Acquia search path'
+    derived_key_salt:
+      type: string
+      label: 'Acquia derived key salt'
+    version:
+      type: string
+      label: 'Acquia Search version'
+    default_search_core:
+      type: string
+      label: 'String containing desired search core id. The search core should be available via Acquia Search API for the Acquia Subscription'
+    disable_auto_read_only:
+      type: boolean
+      label: 'If TRUE (only when disable_auto_switch is FALSE or not set) then there is no enforcing of read-only mode'
+    disable_auto_switch:
+      type: boolean
+      label: 'If TRUE, completely disables the auto-switching behavior'
+
+plugin.plugin_configuration.search_api_solr_connector.solr_acquia_connector:
+  type: plugin.plugin_configuration.search_api_solr_connector.standard
+  label: Acquia Search Solr connector settings
+  mapping:
+    acquia_search_possible_cores:
+      type: string
+      label: 'Possible cores'
+    overridden_by_acquia_search:
+      type: int
+      label: 'Overridden by Acquia Search'

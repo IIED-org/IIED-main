@@ -221,7 +221,7 @@ class Client {
       $extension_list = \Drupal::service('extension.list.module');
       $info = $extension_list->getExtensionInfo($name);
       // Send the version, or at least the core compatibility as a fallback.
-      $result[$name] = isset($info['version']) ? (string) $info['version'] : (string) $info['core'];
+      $result[$name] = isset($info['version']) ? (string) $info['version'] : (string) $info['core_version_requirement'];
     }
 
     return $result;

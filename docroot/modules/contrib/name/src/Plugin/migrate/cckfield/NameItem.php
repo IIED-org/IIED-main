@@ -3,7 +3,7 @@
 namespace Drupal\name\Plugin\migrate\cckfield;
 
 use Drupal\migrate\Plugin\MigrationInterface;
-use Drupal\migrate_drupal\Plugin\migrate\cckfield\CckFieldPluginBase;
+use Drupal\migrate_drupal\Plugin\migrate\field\FieldPluginBase;
 
 /**
  * Name migrate plugin.
@@ -15,7 +15,7 @@ use Drupal\migrate_drupal\Plugin\migrate\cckfield\CckFieldPluginBase;
  *   destination_module = "name",
  * )
  */
-class NameItem extends CckFieldPluginBase {
+class NameItem extends FieldPluginBase {
 
   /**
    * {@inheritdoc}

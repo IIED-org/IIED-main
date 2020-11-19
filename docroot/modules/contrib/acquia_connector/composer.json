@@ -4,9 +4,8 @@
     "description": "Allows Drupal websites to connect with Acquia.",
     "license": "GPL-2.0-or-later",
     "require": {
-        "php": "^7.1",
         "ext-json": "*",
-        "drupal/core": "^8.7 || ^9.0.0-alpha1"
+        "drupal/core": "^8.8 || ^9.0.0-alpha1"
     },
     "require-dev": {
         "acquia/coding-standards": "^0.4.1",
