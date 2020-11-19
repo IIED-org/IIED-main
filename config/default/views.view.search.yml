@@ -277,6 +277,18 @@ display:
           fields: {  }
           plugin_id: search_api_fulltext
       sorts:
+        field_date_published:
+          id: field_date_published
+          table: search_api_index_acquia_search_solr_search_api_solr_index
+          field: field_date_published
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: true
+          expose:
+            label: 'Published date'
+          plugin_id: search_api
         search_api_relevance:
           id: search_api_relevance
           table: search_api_index_acquia_search_solr_search_api_solr_index
@@ -300,18 +312,6 @@ display:
           exposed: true
           expose:
             label: Title
-          plugin_id: search_api
-        field_date_published:
-          id: field_date_published
-          table: search_api_index_acquia_search_solr_search_api_solr_index
-          field: field_date_published
-          relationship: none
-          group_type: group
-          admin_label: ''
-          order: DESC
-          exposed: true
-          expose:
-            label: 'Published date'
           plugin_id: search_api
       title: Search
       header: {  }

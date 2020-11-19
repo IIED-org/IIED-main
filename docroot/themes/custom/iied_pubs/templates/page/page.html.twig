@@ -57,20 +57,12 @@
         <div class="container">
           {{ page.content }}
 
-          {% if page.sidebar_first_top %}
-              <div class="sidebar_first_top col-md-4">
+          {% if page.sidebar_first %}
+              <div class="sidebar_first col-md-4">
                 <aside class="section" role="complementary">
-                  {{ page.sidebar_first_top }}
+                  {{ page.sidebar_first }}
                 </aside>
               </div>
-          {% endif %}
-
-          {% if page.sidebar_first_bottom %}
-            <div class="sidebar_first_bottom col-md-4">
-              <aside class="section" role="complementary">
-                {{ page.sidebar_first_bottom }}
-              </aside>
-            </div>
           {% endif %}
 
           {% if page.sidebar_second %}

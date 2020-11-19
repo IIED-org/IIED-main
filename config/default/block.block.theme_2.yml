@@ -1,6 +1,6 @@
-uuid: ec8f355d-dfe2-4d09-bd45-730ba0adcc39
+uuid: b637f291-bea6-46b5-993e-03375cb6a890
 langcode: en
-status: false
+status: true
 dependencies:
   config:
     - facets.facet.theme
@@ -8,10 +8,10 @@ dependencies:
     - facets
   theme:
     - iied_pubs
-id: theme
+id: theme_2
 theme: iied_pubs
-region: navbar_branding
-weight: -7
+region: sidebar_first
+weight: 0
 provider: null
 plugin: 'facet_block:theme'
 settings:
@@ -19,5 +19,5 @@ settings:
   label: Theme
   provider: facets
   label_display: visible
-  block_id: theme
+  block_id: theme_2
 visibility: {  }

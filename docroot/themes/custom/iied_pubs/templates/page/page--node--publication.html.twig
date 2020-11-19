@@ -47,7 +47,7 @@
         <div class="container">
           {% if page.featured_top %}
             {% block featured %}
-              <div class="featured-top col-md-8 float-md-right">
+              <div class="featured-top">
                 <aside class="featured-top__inner section {{ container }} clearfix" role="complementary">
                   {{ page.featured_top }}
                 </aside>
@@ -55,25 +55,17 @@
             {% endblock %}
           {% endif %}
 
-          {% if page.sidebar_first_top %}
-              <div class="sidebar_first_top col-md-4 float-md-left">
+          {% if page.sidebar_first %}
+              <div class="sidebar_first col-md-4">
                 <aside class="section" role="complementary">
-                  {{ page.sidebar_first_top }}
+                  {{ page.sidebar_first }}
                 </aside>
               </div>
           {% endif %}
 
-          <div class="col-md-8 float-md-right clearfix">
+          <div>
           {{ page.content }}
           </div>
-
-          {% if page.sidebar_first_bottom %}
-            <div class="sidebar_first_bottom col-md-4 clearfix">
-              <aside class="section" role="complementary">
-                {{ page.sidebar_first_bottom }}
-              </aside>
-            </div>
-          {% endif %}
 
           {% if page.sidebar_second %}
             <div class="sidebar_second">

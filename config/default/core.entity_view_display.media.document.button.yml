@@ -16,6 +16,26 @@ third_party_settings:
   layout_builder:
     allow_custom: false
     enabled: false
+  ds:
+    layout:
+      id: ds_1col
+      library: null
+      disable_css: false
+      entity_classes: all_classes
+      settings:
+        label: ''
+        wrappers:
+          ds_content: div
+        outer_wrapper: div
+        attributes: ''
+        link_attribute: ''
+        link_custom: ''
+        classes:
+          layout_class: {  }
+          ds_content: {  }
+    regions:
+      ds_content:
+        - field_media_document
 _core:
   default_config_hash: DXitcriWmE5QHvGvk2OzWouaSnXD5uipkRdAG6_pnkg
 id: media.document.button
@@ -27,17 +47,38 @@ content:
     weight: 0
     label: hidden
     settings:
-      use_description_as_link_text: true
+      use_description_as_link_text: false
     third_party_settings:
       ds:
         ft:
-          id: default
+          id: expert
           settings:
-            lb: Download
+            lb: ''
+            prefix: 'PDF&nbsp;'
+            lbw-el: button
+            lbw-cl: 'btn btn-primary'
+            lbw-at: ''
+            ow-el: button
+            ow-cl: 'btn btn-primary'
+            ow-at: ''
+            fis-el: a
+            fis-cl: ''
+            fis-at: ''
+            fi: true
+            fi-el: span
+            fi-cl: file-size
+            fi-at: ''
+            fi-def-at: true
+            suffix: ''
+            lbw: false
             lb-col: false
-            classes: {  }
+            ow: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
+            fis-def-at: false
     type: file_default
-    region: content
+    region: ds_content
 hidden:
   created: true
   field_pdf_pages: true

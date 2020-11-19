@@ -15,8 +15,7 @@ regions:
   featured_top: Featured top
   content: Content
   featured_bottom: Featured bottom
-  sidebar_first_top: Sidebar first top
-  sidebar_first_bottom: Sidebar first bottom
+  sidebar_first: Sidebar first
   sidebar_second: Sidebar second
   page_bottom: Page bottom
   footer: Footer
