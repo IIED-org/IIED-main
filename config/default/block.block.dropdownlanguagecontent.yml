@@ -1,0 +1,21 @@
+uuid: fc6f91f8-1a8b-45a5-b164-3ddb08d5390a
+langcode: en
+status: true
+dependencies:
+  module:
+    - dropdown_language
+  theme:
+    - iied_pubs
+id: dropdownlanguagecontent
+theme: iied_pubs
+region: featured_top
+weight: 0
+provider: null
+plugin: 'dropdown_language:language_content'
+settings:
+  id: 'dropdown_language:language_content'
+  label: 'Dropdown Language (Content)'
+  provider: dropdown_language
+  label_display: '0'
+  labels: null
+visibility: {  }
