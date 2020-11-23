@@ -43,7 +43,7 @@
     {% endif %}
 
     {% if page.content %}
-      <div class="page__content">
+      <div class="page__content mb-5">
         <div class="container">
           {% if page.featured_top %}
             {% block featured %}
@@ -75,18 +75,20 @@
             </div>
           {% endif %}
 
-        {% if page.featured_bottom %}
-          {% block featured_bottom %}
-            <div class="featured-bottom">
-              <aside class="featured-bottom__inner section {{ container }} clearfix" role="complementary">
-                {{ page.featured_bottom }}
-              </aside>
-            </div>
-          {% endblock %}
-        {% endif %}
-
         </div>
       </div>
+    {% endif %}
+
+    {% if page.featured_bottom %}
+      {% block featured_bottom %}
+        <div class="featured-bottom bg-light py-4">
+          <aside class="featured-bottom__inner section {{ container }} clearfix" role="complementary">
+          <div class="container">
+            {{ page.featured_bottom }}
+            </div>
+          </aside>
+        </div>
+      {% endblock %}
     {% endif %}
 
   </main>
