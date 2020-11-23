@@ -5,6 +5,7 @@
  * Hide language switcher links for untranslated languages on an entity.
  */
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Implements hook_language_switch_links_alter().
@@ -16,19 +17,24 @@ function iied_utils_language_switch_links_alter(array &$links, $type, $path) {
       try {
         if ($entity->getTranslation($lang_code)->access('view')) {
           $new_links[$lang_code] = $link;
+          $native_language = \Drupal::languageManager()->getNativeLanguages()[$lang_code];
+          $native_language_translated = t($native_language->getName(), [], ['langcode' => $lang_code]);
+          $new_links[$lang_code]['attributes']['title'] = $native_language_translated;
         }
       }
       catch (InvalidArgumentException $e) {
         // This language is untranslated so do not add it to the links.
       }
     }
+
     $links = $new_links;
 
     // If we're left with less than 2 links, then there's nothing to switch.
     // Hide the language switcher.
-    if (count($links) < 2) {
-      $links = array();
+    /* if (count($links) < 2) {
+       $links = array();
     }
+    */
   }
 }
 

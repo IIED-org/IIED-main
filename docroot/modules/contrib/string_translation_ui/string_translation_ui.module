@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Default file for String Translation UI.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function string_translation_ui_help($route_name, RouteMatchInterface $route_match) {
+
+  switch ($route_name) {
+
+    case 'help.page.string_translation_ui':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Provides a admin area to insert new strings to be translatable.') . '</p>';
+
+      return $output;
+
+    default:
+  }
+}

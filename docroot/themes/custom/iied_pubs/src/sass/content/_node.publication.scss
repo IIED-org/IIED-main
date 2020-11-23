@@ -21,3 +21,11 @@
 .cleared {
   clear: both;
 }
+
+ul.language-switcher-language-url.nav {
+  @extend .comma-list;
+  .nav-link {
+    display: inline;
+    padding: 0;
+  }
+}

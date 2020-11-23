@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the String Translation UI.
+ */
+
+ /**
+  * Function hook_uninstall().
+  */
+  function string_translation_ui_uninstall() {
+    \Drupal::configFactory()->getEditable('string_translation_ui.settings')->delete();
+  }

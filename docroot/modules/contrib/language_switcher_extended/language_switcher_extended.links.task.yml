@@ -1,0 +1,4 @@
+language_switcher_extended.settings:
+  title: 'Language Switcher Extended'
+  route_name: language_switcher_extended.settings
+  base_route: entity.configurable_language.collection

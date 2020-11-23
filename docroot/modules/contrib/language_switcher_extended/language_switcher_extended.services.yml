@@ -1,0 +1,4 @@
+services:
+  language_switcher_extended.link_processor:
+    class: Drupal\language_switcher_extended\LanguageSwitcherLinkProcessor
+    arguments: ['@config.factory', '@current_route_match', '@language_manager']

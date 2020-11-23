@@ -1,0 +1,14 @@
+name: 'String Translation UI'
+type: module
+description: 'Provides a admin area to insert new strings to be translatable.'
+core: 8.x
+core_version_requirement: ^8 || ^9
+package: 'multilingual'
+configure: string_translation_ui.add_strings
+dependencies:
+  - drupal:locale (>= 8.8)
+
+# Information added by Drupal.org packaging script on 2020-10-14
+version: '8.x-1.2'
+project: 'string_translation_ui'
+datestamp: 1602689263

@@ -9689,24 +9689,29 @@ a.text-dark:hover, a.text-dark:focus {
   float: left;
 }
 
-.comma-list {
+.comma-list, ul.language-switcher-language-url.nav {
   display: inline;
   list-style: none;
   padding: 0px;
 }
 
-.comma-list li {
+.comma-list li, ul.language-switcher-language-url.nav li {
   display: inline;
 }
 
-.comma-list li::after {
+.comma-list li::after, ul.language-switcher-language-url.nav li::after {
   content: ", ";
 }
 
-.comma-list li:last-child::after {
+.comma-list li:last-child::after, ul.language-switcher-language-url.nav li:last-child::after {
   content: "";
 }
 
 .cleared {
   clear: both;
+}
+
+ul.language-switcher-language-url.nav .nav-link {
+  display: inline;
+  padding: 0;
 }

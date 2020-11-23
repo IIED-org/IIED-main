@@ -1,0 +1,16 @@
+name: Language Switcher Extended
+description: Provides additional processors for the Language Switcher block links.
+package: Multilingual
+type: module
+core: 8.x
+core_version_requirement: ^8 || ^9
+configure: language_switcher_extended.settings
+
+dependencies:
+  - drupal:block
+  - drupal:language
+
+# Information added by Drupal.org packaging script on 2020-09-25
+version: '8.x-1.0-beta4'
+project: 'language_switcher_extended'
+datestamp: 1601051632
