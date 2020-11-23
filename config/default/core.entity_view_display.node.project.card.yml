@@ -12,6 +12,7 @@ dependencies:
     - field.field.node.project.field_projectnumber
     - field.field.node.project.field_theme
     - field.field.node.project.field_year
+    - image.style.card_370
     - node.type.project
   module:
     - ds
@@ -35,12 +36,11 @@ third_party_settings:
         wrappers:
           ds_content: div
         outer_wrapper: div
-        attributes: cursor|pointer
-        link_attribute: tokens
-        link_custom: '[node:url]'
+        attributes: 'role|link, tabindex|0'
+        link_attribute: content
+        link_custom: '[node:field_link]'
         classes:
-          layout_class:
-            col-md-12: col-md-12
+          layout_class: {  }
           ds_content: {  }
     regions:
       ds_content:
@@ -58,9 +58,9 @@ third_party_settings:
         label: hidden
         formatter: default
         settings:
+          link: true
           wrapper: h4
           class: card-title
-          link: false
         ft:
           id: expert
           settings:
@@ -75,7 +75,6 @@ third_party_settings:
             fis-el: ''
             fis-cl: ''
             fis-at: ''
-            fi: true
             fi-el: span
             fi-cl: stretched-link
             fi-at: ''
@@ -87,6 +86,7 @@ third_party_settings:
             ow-def-cl: false
             fis: false
             fis-def-at: false
+            fi: false
             fi-def-at: false
   field_group:
     group_project_card:
@@ -105,7 +105,7 @@ third_party_settings:
         effect: none
         speed: fast
         id: ''
-        classes: card
+        classes: 'card pointer'
       label: Project-card
     group_row_nogutters:
       children:
@@ -207,7 +207,7 @@ content:
     weight: 34
     label: hidden
     settings:
-      image_style: ''
+      image_style: card_370
       image_link: ''
     third_party_settings:
       ds:

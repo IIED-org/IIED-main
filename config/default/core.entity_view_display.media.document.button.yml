@@ -58,8 +58,8 @@ content:
             lbw-el: button
             lbw-cl: 'btn btn-primary'
             lbw-at: ''
-            ow-el: button
-            ow-cl: 'btn btn-primary'
+            ow-el: div
+            ow-cl: text-muted
             ow-at: ''
             fis-el: a
             fis-cl: ''

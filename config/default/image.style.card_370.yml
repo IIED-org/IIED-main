@@ -1,0 +1,15 @@
+uuid: c755a16f-9171-4120-b66b-5d35a212f0d6
+langcode: en
+status: true
+dependencies: {  }
+name: card_370
+label: 'Card (370)'
+effects:
+  576c86f8-a5ed-4b88-aec4-f702ce62a89e:
+    uuid: 576c86f8-a5ed-4b88-aec4-f702ce62a89e
+    id: image_scale
+    weight: 1
+    data:
+      width: 370
+      height: null
+      upscale: false

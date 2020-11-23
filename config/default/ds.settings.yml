@@ -15,6 +15,9 @@ classes:
     - col-md-12|col-md-12
     - h-100|h-100
     - mx-auto|mx-auto
+    - d-md-block
+    - pointer
+    - no-gutters
   field: {  }
 use_field_names: true
 _core:

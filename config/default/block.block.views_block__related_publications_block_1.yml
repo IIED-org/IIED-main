@@ -1,0 +1,37 @@
+uuid: 11ef7414-dfec-4e29-9268-f1ff2efe5aea
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.related_publications
+  module:
+    - block_class
+    - ctools
+    - views
+  theme:
+    - iied_pubs
+third_party_settings:
+  block_class:
+    classes: mb-5
+id: views_block__related_publications_block_1
+theme: iied_pubs
+region: featured_bottom
+weight: -9
+provider: null
+plugin: 'views_block:related_publications-block_1'
+settings:
+  id: 'views_block:related_publications-block_1'
+  label: ''
+  provider: views
+  label_display: visible
+  views_label: ''
+  items_per_page: none
+  context_mapping: {  }
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      publication: publication
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
