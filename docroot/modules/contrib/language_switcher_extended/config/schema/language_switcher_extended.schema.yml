@@ -1,0 +1,19 @@
+language_switcher_extended.settings:
+  type: config_object
+  label: 'Language Switcher Extended Settings'
+  mapping:
+    mode:
+      type: string
+      label: 'Language Switcher Mode'
+    current_language_mode:
+      type: string
+      label: 'Current language mode'
+    untranslated_handler:
+      type: string
+      label: 'Untranslated Handler'
+    hide_single_link:
+      type: boolean
+      label: 'Hide single link'
+    show_langcode:
+      type: boolean
+      label: 'Show language code'

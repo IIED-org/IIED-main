@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Handles language switcher links for untranslated languages on an entity.
+ */
+
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_language_switch_links_alter().
+ */
+function language_switcher_extended_language_switch_links_alter(array &$links, $type, Url $url) {
+  $processor = Drupal::service('language_switcher_extended.link_processor');
+  /* @var \Drupal\language_switcher_extended\LanguageSwitcherLinkProcessor $processor */
+  $processor->process($links);
+}

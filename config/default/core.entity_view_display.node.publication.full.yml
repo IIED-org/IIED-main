@@ -64,6 +64,7 @@ third_party_settings:
     group_cover_image:
       children:
         - 'dynamic_block_field:node-cover_image'
+        - 'dynamic_block_field:node-language_links'
       parent_name: group_row_one
       weight: 2
       format_type: html_element
@@ -125,7 +126,6 @@ third_party_settings:
     group_pub_detail:
       children:
         - field_date_published
-        - langcode
         - field_publisher
         - 'dynamic_block_field:node-country_list'
         - field_series
@@ -230,7 +230,7 @@ third_party_settings:
         - group_related_project
         - group_related_publications
       parent_name: ''
-      weight: 37
+      weight: 39
       format_type: html_element
       region: hidden
       format_settings:
@@ -266,25 +266,25 @@ third_party_settings:
         - group_row_one
         - 'dynamic_block_field:node-cover_image'
         - 'dynamic_block_field:node-download_button'
-        - node_title
         - group_pub_header
+        - node_title
+        - 'dynamic_block_field:node-language_links'
         - body
         - field_author_s_
         - group_cover_image
+        - group_related_links
         - field_editor_s_
         - group_pub_body
-        - group_related_links
         - group_pub_detail
         - field_translator
         - field_document_type
         - 'dynamic_block_field:node-page_count'
         - field_date_published
-        - field_iied_url
-        - langcode
-        - field_external_url
         - field_publisher
+        - field_iied_url
         - 'dynamic_block_field:node-country_list'
         - field_series
+        - field_external_url
         - field_source_publication
         - field_journal_ref
         - field_isbn
@@ -294,7 +294,7 @@ third_party_settings:
     fields:
       'dynamic_block_field:node-country_list':
         plugin_id: 'dynamic_block_field:node-country_list'
-        weight: 17
+        weight: 13
         label: inline
         formatter: default
         ft:
@@ -346,6 +346,38 @@ third_party_settings:
             lb: ''
             lb-col: false
             classes: {  }
+      'dynamic_block_field:node-language_links':
+        plugin_id: 'dynamic_block_field:node-language_links'
+        weight: 1
+        label: inline
+        formatter: default
+        ft:
+          id: expert
+          settings:
+            lb: Language
+            prefix: ''
+            lbw: true
+            lbw-el: span
+            lbw-cl: 'field__label font-weight-bold field-label-inline'
+            lbw-at: ''
+            lb-col: true
+            ow-el: div
+            ow-cl: language-links
+            ow-at: ''
+            fis-el: ''
+            fis-cl: comma-list
+            fis-at: ''
+            fi-el: li
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            ow: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
       'dynamic_block_field:node-page_count':
         plugin_id: 'dynamic_block_field:node-page_count'
         weight: 7
@@ -443,7 +475,7 @@ content:
     type: entity_reference_label
     region: ds_content
   field_date_published:
-    weight: 13
+    weight: 11
     label: inline
     settings:
       timezone_override: ''
@@ -516,7 +548,7 @@ content:
     type: entity_reference_label
     region: ds_content
   field_doi:
-    weight: 23
+    weight: 19
     label: inline
     settings:
       trim_length: 80
@@ -589,14 +621,14 @@ content:
     type: link
     region: ds_content
   field_isbn:
-    weight: 21
+    weight: 17
     label: inline
     settings: {  }
     third_party_settings: {  }
     type: isbn_default
     region: ds_content
   field_issn:
-    weight: 22
+    weight: 18
     label: inline
     settings:
       link_to_entity: false
@@ -604,7 +636,7 @@ content:
     type: string
     region: ds_content
   field_journal_ref:
-    weight: 20
+    weight: 16
     label: inline
     settings:
       link_to_entity: false
@@ -612,7 +644,7 @@ content:
     type: string
     region: ds_content
   field_product_code:
-    weight: 24
+    weight: 20
     label: inline
     settings:
       link_to_entity: false
@@ -620,7 +652,7 @@ content:
     type: string
     region: ds_content
   field_publisher:
-    weight: 15
+    weight: 12
     label: inline
     settings:
       link: true
@@ -628,7 +660,7 @@ content:
     type: entity_reference_label
     region: ds_content
   field_series:
-    weight: 18
+    weight: 14
     label: inline
     settings:
       link: true
@@ -636,7 +668,7 @@ content:
     type: entity_reference_label
     region: ds_content
   field_source_publication:
-    weight: 19
+    weight: 15
     label: inline
     settings:
       link_to_entity: false
@@ -680,43 +712,6 @@ content:
             fis-def-at: false
             fi: false
             fi-def-at: false
-  langcode:
-    type: language
-    weight: 14
-    region: ds_content
-    label: inline
-    settings:
-      link_to_entity: false
-      native_language: false
-    third_party_settings:
-      ds:
-        ft:
-          id: expert
-          settings:
-            lb: ''
-            prefix: ''
-            lbw: true
-            lbw-el: span
-            lbw-cl: 'field__label font-weight-bold'
-            lbw-at: ''
-            lb-col: true
-            ow-el: ''
-            ow-cl: ''
-            ow-at: ''
-            fis-el: ''
-            fis-cl: ''
-            fis-at: ''
-            fi-el: ''
-            fi-cl: ''
-            fi-at: ''
-            suffix: ''
-            ow: false
-            ow-def-at: false
-            ow-def-cl: false
-            fis: false
-            fis-def-at: false
-            fi: false
-            fi-def-at: false
   sharing_buttons:
     weight: 100
     settings: {  }
@@ -749,5 +744,6 @@ hidden:
   field_tags: true
   field_team: true
   field_theme_s_: true
+  langcode: true
   links: true
   search_api_excerpt: true

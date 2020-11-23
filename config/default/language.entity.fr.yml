@@ -1,9 +1,9 @@
 uuid: fa9c2658-492c-4daf-aed7-28b0f3bbe323
-langcode: en
+langcode: fr
 status: true
 dependencies: {  }
 id: fr
-label: French
+label: Français
 direction: ltr
-weight: -3
+weight: -2
 locked: false

@@ -29,7 +29,6 @@ module:
   delete_all: 0
   devel: 0
   devel_generate: 0
-  dropdown_language: 0
   dynamic_page_cache: 0
   editor: 0
   entity_reference_revisions: 0
@@ -48,9 +47,11 @@ module:
   imagemagick: 0
   isbn: 0
   language: 0
+  language_switcher_extended: 0
   layout_builder: 0
   layout_discovery: 0
   link: 0
+  locale: 0
   masquerade: 0
   media: 0
   media_library: 0

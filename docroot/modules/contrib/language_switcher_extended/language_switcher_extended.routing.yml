@@ -1,0 +1,7 @@
+language_switcher_extended.settings:
+  path: '/admin/config/regional/language/language-switcher-extended'
+  defaults:
+    _form: '\Drupal\language_switcher_extended\Form\LanguageSwitcherExtendedSettingsForm'
+    _title: 'Language Switcher Extended'
+  requirements:
+    _permission: 'administer language_switcher_extended'

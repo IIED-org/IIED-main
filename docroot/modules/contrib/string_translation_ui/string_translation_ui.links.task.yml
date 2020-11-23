@@ -1,0 +1,5 @@
+string_translation_ui.add_strings:
+  route_name: string_translation_ui.add_strings
+  base_route: locale.translate_page
+  title: Add Strings
+  weight: 101

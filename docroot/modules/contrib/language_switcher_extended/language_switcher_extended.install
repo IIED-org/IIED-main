@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Install functions for the language_switcher_extended module.
+ */
+
+/**
+ * Transform hide current language flag to a select field.
+ */
+function language_switcher_extended_update_8001() {
+  $config = \Drupal::configFactory()->getEditable('language_switcher_extended.settings');
+  $current_language_mode = $config->get('hide_current_language') ? 'hide_link' : 'default';
+  $config->set('current_language_mode', $current_language_mode);
+  $config->clear('hide_current_language');
+  $config->save();
+}
