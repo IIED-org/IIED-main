@@ -18,6 +18,6 @@
     content: "";
 }
 
-.grid .col-auto { /* add margin below cards */
-  @extend .mb-4;
+.cleared {
+  clear: both;
 }

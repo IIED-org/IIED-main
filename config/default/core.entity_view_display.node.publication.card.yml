@@ -69,20 +69,21 @@ third_party_settings:
         wrappers:
           ds_content: div
         outer_wrapper: div
-        attributes: ''
-        link_attribute: ''
+        attributes: 'role|link, tabindex|0'
+        link_attribute: content
         link_custom: ''
         classes:
           layout_class:
             card: card
             h-100: h-100
+            pointer: pointer
           ds_content: {  }
     regions:
       ds_content:
-        - group_card_body
-        - field_cover_image
+        - group_row
         - field_media
         - node_title
+        - group_card_body
     fields:
       node_title:
         plugin_id: node_title
@@ -101,8 +102,9 @@ third_party_settings:
             lbw-el: ''
             lbw-cl: ''
             lbw-at: ''
-            ow-el: ''
-            ow-cl: ''
+            ow: true
+            ow-el: div
+            ow-cl: card-body
             ow-at: ''
             fis-el: ''
             fis-cl: ''
@@ -114,7 +116,6 @@ third_party_settings:
             suffix: ''
             lbw: false
             lb-col: false
-            ow: false
             ow-def-at: false
             ow-def-cl: false
             fis: false
@@ -123,16 +124,12 @@ third_party_settings:
   field_group:
     group_card_body:
       children:
-        - field_cover_image
-        - field_media
         - node_title
-      parent_name: ''
-      weight: 0
+      parent_name: group_row
+      weight: 2
       format_type: html_element
       region: ds_content
       format_settings:
-        id: ''
-        classes: card-body
         element: div
         show_label: false
         label_element: h3
@@ -140,28 +137,33 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
+        id: ''
+        classes: 'col-8 col-xl-12'
       label: card-body
+    group_row:
+      children:
+        - field_media
+        - group_card_body
+      parent_name: ''
+      weight: 0
+      format_type: html_element
+      region: ds_content
+      format_settings:
+        id: ''
+        classes: 'row no-gutters'
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+      label: Row
 id: node.publication.card
 targetEntityType: node
 bundle: publication
 mode: card
 content:
-  field_cover_image:
-    type: entity_reference_entity_view
-    weight: 0
-    region: ds_content
-    label: hidden
-    settings:
-      view_mode: embedded
-      link: false
-    third_party_settings:
-      ds:
-        ft:
-          id: default
-          settings:
-            lb: ''
-            lb-col: false
-            classes: {  }
   field_media:
     type: media_thumbnail
     weight: 1
@@ -173,16 +175,38 @@ content:
     third_party_settings:
       ds:
         ft:
-          id: default
+          id: expert
           settings:
             lb: ''
+            prefix: ''
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow: true
+            ow-el: div
+            ow-cl: 'col-4 col-xl-12 p-3'
+            ow-at: ''
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            lbw: false
             lb-col: false
-            classes: {  }
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
 hidden:
   body: true
   field_admin: true
   field_area_list: true
   field_author_s_: true
+  field_cover_image: true
   field_date_published: true
   field_deptlist: true
   field_document_type: true

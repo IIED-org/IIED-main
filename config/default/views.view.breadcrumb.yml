@@ -72,7 +72,7 @@ display:
           exclude: true
           alter:
             alter_text: true
-            text: '<li class="breadcrumb-item">{{ field_theme_s_ }}</li>'
+            text: '<li class="breadcrumb-item-theme">{{ field_theme_s_ }}</li>'
             make_link: false
             path: ''
             absolute: false

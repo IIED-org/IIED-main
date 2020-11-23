@@ -1,8 +1,9 @@
-uuid: f9f01049-b669-4029-b82c-e7cdbc8e2ed3
+uuid: 3cbcf2c9-90b0-4b5c-8f7c-1cadbb41e58c
 langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.full
     - field.field.node.project.body
     - field.field.node.project.field_collection
     - field.field.node.project.field_image
@@ -23,10 +24,10 @@ third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-id: node.project.default
+id: node.project.full
 targetEntityType: node
 bundle: project
-mode: default
+mode: full
 content:
   body:
     label: hidden

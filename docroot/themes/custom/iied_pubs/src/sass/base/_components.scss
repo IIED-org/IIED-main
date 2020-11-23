@@ -4,6 +4,42 @@
   display: none;
 }
 
-.node--type-project .node--view-mode-card {
-  cursor: pointer;
+.pointer {
+    cursor: pointer;
+}
+
+// Components: breadcrumb
+.breadcrumb-item-theme {
+    @extend .breadcrumb-item;
+}
+
+.breadcrumb-item-theme + .breadcrumb-item-theme::before {
+    display: inline-block;
+    padding-right: 0.5rem;
+    color: #6c757d;
+    content: "|";
+}
+
+// Components: cards
+.grid .col-auto { /* add margin below cards */
+  @extend .mb-4;
+}
+
+@media (min-width: 1200px) {
+  .col-xl-3 {
+
+  img {
+  transform: rotate(-3deg);
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+}
+  .col-4.col-xl-12 {
+    max-height: 180px;
+    overflow: hidden;
+    background: $gray-200;
+  }
+
+}
 }

@@ -1,0 +1,11 @@
+uuid: 771e01a0-ac0a-4a85-82a4-2519c698ac23
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.project
+id: node_type_project
+action: page_redirect
+allow_override: 1
+redirect: '[node:field_link]'
+redirect_code: 301
