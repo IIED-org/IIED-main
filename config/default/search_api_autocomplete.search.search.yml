@@ -22,29 +22,26 @@ suggester_settings:
         project: ''
         publication: ''
       'entity:taxonomy_term':
-        document_type: ''
-        list: ''
         organisation: ''
         person: search_autocomplete
-        series: ''
-        tags: ''
-        test: ''
         theme: search_autocomplete
   server:
     fields: {  }
 suggester_weights:
   live_results: -50
   server: -49
-suggester_limits: {  }
+suggester_limits:
+  live_results: 10
+  server: 10
 search_settings:
   'views:search':
     displays:
       default: true
       selected: {  }
 options:
-  limit: 10
+  limit: 20
   min_length: 2
   show_count: true
   autosubmit: true
   submit_button_selector: ':submit'
-  delay: 100
+  delay: 150

@@ -2,6 +2,7 @@
 
 namespace Drupal\facets\Plugin\Block;
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -107,9 +108,11 @@ class FacetBlock extends BlockBase implements ContainerFactoryPluginInterface {
         // The configuration block id isn't always set in the configuration.
         if (isset($this->configuration['block_id'])) {
           $build['#attributes']['class'][] = 'js-facet-block-id-' . $this->configuration['block_id'];
+          $build['#attributes']['id'] = Html::getUniqueId($this->configuration['block_id']);
         }
         else {
           $build['#attributes']['class'][] = 'js-facet-block-id-' . $this->pluginId;
+          $build['#attributes']['id'] = Html::getUniqueId($this->pluginId);
         }
       }
     }

@@ -39,10 +39,11 @@
 
         // Update view on summary block click.
         if (updateFacetsSummaryBlock() && (facetId === 'facets_summary_ajax')) {
-          $('[data-drupal-facets-summary-id=' + facetSettings.facets_summary_id + ']').children('ul').children('li').once().click(function (e) {
+          $('[data-drupal-facets-summary-id=' + facetSettings.facets_summary_id + ']').find('a').once('facets_summary_ajax_link').click(function (e) {
             e.preventDefault();
-            var facetLink = $(this).find('a');
-            updateFacetsView(facetLink.attr('href'), current_dom_id, view_path);
+            updateFacetsView($(this).attr('href'), current_dom_id, view_path);
+            // Remove clicked element, ajax callback will update the content.
+            $(this).parents('li').remove();
           });
         }
         // Update view on facet item click.
@@ -121,16 +122,8 @@
 
     // Update facets summary block.
     if (updateFacetsSummaryBlock()) {
-      var facet_summary_wrapper_id = $('[data-drupal-facets-summary-id=' + settings.facets_views_ajax.facets_summary_ajax.facets_summary_id + ']').attr('id');
-      var facet_summary_block_id = '';
-      if (facet_summary_wrapper_id.indexOf('--') !== -1) {
-        facet_summary_block_id = facet_summary_wrapper_id.substring(0, facet_summary_wrapper_id.indexOf('--')).replace('block-', '');
-      }
-      else {
-        facet_summary_block_id = facet_summary_wrapper_id.replace('block-', '');
-      }
       facet_settings.submit.update_summary_block = true;
-      facet_settings.submit.facet_summary_block_id = facet_summary_block_id;
+      facet_settings.submit.facet_summary_plugin_id = $('[data-drupal-facets-summary-id=' + settings.facets_views_ajax.facets_summary_ajax.facets_summary_id + ']').data('drupal-facets-summary-plugin-id');
       facet_settings.submit.facet_summary_wrapper_id = settings.facets_views_ajax.facets_summary_ajax.facets_summary_id;
     }
 
@@ -170,7 +163,8 @@
   };
 
   /**
-   * Overrides beforeSend to trigger facetblocks update on exposed filter change.
+   * Overrides beforeSend to trigger facetblocks update on exposed filter
+   * change.
    *
    * @param {XMLHttpRequest} xmlhttprequest
    *   Native Ajax object.
@@ -204,12 +198,12 @@
   }
 
   // Helper function to add exposed form data to facets url
-  var addExposedFiltersToFacetsUrl = function(href, view_name, view_display_id) {
+  var addExposedFiltersToFacetsUrl = function (href, view_name, view_display_id) {
     var $exposed_form = $('form#views-exposed-form-' + view_name.replace(/_/g, '-') + '-' + view_display_id.replace(/_/g, '-'));
 
     var params = Drupal.Views.parseQueryString(href);
 
-    $.each($exposed_form.serializeArray(), function() {
+    $.each($exposed_form.serializeArray(), function () {
       params[this.name] = this.value;
     });
 

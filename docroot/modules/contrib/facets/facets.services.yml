@@ -38,3 +38,8 @@ services:
     arguments: ['@plugin.manager.block']
     tags:
       - { name: event_subscriber }
+  facets.section_component_render:
+     class: Drupal\facets\EventSubscriber\SectionComponentRender
+     arguments: []
+     tags:
+       - { name: event_subscriber }

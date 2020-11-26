@@ -1,0 +1,81 @@
+uuid: 6f024ceb-fd05-4063-b6c5-089fb51779de
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.taxonomy_term.search_result
+    - field.field.taxonomy_term.person.field_legacy_iscanonical
+    - field.field.taxonomy_term.person.field_name
+    - field.field.taxonomy_term.person.field_organisation
+    - taxonomy.vocabulary.person
+  module:
+    - ds
+    - layout_builder
+    - text
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+  ds:
+    layout:
+      id: ds_1col_wrapper
+      library: null
+      disable_css: false
+      entity_classes: all_classes
+      settings:
+        label: ''
+        wrappers:
+          ds_content: div
+        outer_wrapper: div
+        attributes: ''
+        link_attribute: content
+        link_custom: ''
+        classes:
+          layout_class: {  }
+          ds_content: {  }
+    regions:
+      ds_content:
+        - taxonomy_term_title
+        - description
+    fields:
+      taxonomy_term_title:
+        plugin_id: taxonomy_term_title
+        weight: 0
+        label: hidden
+        formatter: default
+        settings:
+          wrapper: h5
+          class: ''
+          link: false
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+id: taxonomy_term.person.search_result
+targetEntityType: taxonomy_term
+bundle: person
+mode: search_result
+content:
+  description:
+    type: text_trimmed
+    weight: 1
+    region: ds_content
+    label: hidden
+    settings:
+      trim_length: 300
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+hidden:
+  field_legacy_iscanonical: true
+  field_name: true
+  field_organisation: true
+  langcode: true
+  search_api_excerpt: true

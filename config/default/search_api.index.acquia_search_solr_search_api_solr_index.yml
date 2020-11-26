@@ -53,6 +53,9 @@ third_party_settings:
       maxntp: 2000
       boost: false
       interestingTerms: none
+    term_modifiers:
+      slop: 10000000
+      fuzzy: 2
     advanced:
       index_prefix: ''
       collection: ''
@@ -84,7 +87,8 @@ field_settings:
     label: Author(s)
     datasource_id: 'entity:node'
     property_path: field_author_s_
-    type: text
+    type: integer
+    boost: !!float 2
     dependencies:
       config:
         - field.storage.node.field_author_s_
@@ -100,7 +104,7 @@ field_settings:
     label: 'Document type'
     datasource_id: 'entity:node'
     property_path: field_document_type
-    type: string
+    type: integer
     dependencies:
       config:
         - field.storage.node.field_document_type
@@ -116,7 +120,7 @@ field_settings:
     label: Theme(s)
     datasource_id: 'entity:node'
     property_path: field_theme_s_
-    type: string
+    type: integer
     dependencies:
       config:
         - field.storage.node.field_theme_s_
@@ -125,8 +129,30 @@ field_settings:
     datasource_id: 'entity:taxonomy_term'
     property_path: name
     type: text
-    boost: !!float 8
+    boost: !!float 13
     dependencies:
+      module:
+        - taxonomy
+  name_1:
+    label: 'Author(s) » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_author_s_:entity:name'
+    type: text
+    boost: !!float 2
+    dependencies:
+      config:
+        - field.storage.node.field_author_s_
+      module:
+        - taxonomy
+  name_2:
+    label: 'Theme(s) » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_theme_s_:entity:name'
+    type: text
+    boost: !!float 2
+    dependencies:
+      config:
+        - field.storage.node.field_theme_s_
       module:
         - taxonomy
   node_grants:
@@ -210,12 +236,12 @@ processor_settings:
     fields:
       field_document_type: taxonomy_term-parent
     weights:
-      preprocess_index: -45
+      preprocess_index: -50
   highlight:
-    highlight: server
+    highlight: always
     highlight_partial: false
     excerpt: true
-    excerpt_length: 250
+    excerpt_length: 300
     exclude_fields: {  }
     prefix: '<strong>'
     suffix: '</strong>'
@@ -226,11 +252,10 @@ processor_settings:
     fields:
       - body
       - field_area_list
-      - field_author_s_
-      - field_document_type
       - field_product_code
-      - field_theme_s_
       - name
+      - name_1
+      - name_2
       - title
       - type
     title: true
@@ -242,7 +267,7 @@ processor_settings:
       h3: 2
       strong: 2
     weights:
-      preprocess_index: -15
+      preprocess_index: -49
       preprocess_query: -15
   language_with_fallback: {  }
   rendered_item: {  }
@@ -255,16 +280,16 @@ processor_settings:
       'entity:node':
         datasource_boost: !!float 1
       'entity:taxonomy_term':
-        datasource_boost: !!float 1
+        datasource_boost: !!float 2
         bundle_boosts:
           person: !!float 21
           theme: !!float 21
     weights:
-      preprocess_index: 0
+      preprocess_index: -48
 tracker_settings:
   default:
     indexing_order: fifo
 options:
   index_directly: true
-  cron_limit: 50
+  cron_limit: 500
 server: acquia_search_solr_search_api_solr_server
