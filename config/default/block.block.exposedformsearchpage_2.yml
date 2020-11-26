@@ -5,6 +5,7 @@ dependencies:
   config:
     - views.view.search
   module:
+    - system
     - views
   theme:
     - iied_pubs
@@ -20,4 +21,9 @@ settings:
   provider: views
   label_display: '0'
   views_label: ''
-visibility: {  }
+visibility:
+  request_path:
+    id: request_path
+    pages: '/search*'
+    negate: false
+    context_mapping: {  }

@@ -36,10 +36,16 @@ third_party_settings:
           ds_content: {  }
     regions:
       ds_content:
+        - taxonomy_term_title
         - field_name
         - description
         - field_organisation
-        - field_legacy_iscanonical
+    fields:
+      taxonomy_term_title:
+        plugin_id: taxonomy_term_title
+        weight: 0
+        label: hidden
+        formatter: default
 id: taxonomy_term.person.full
 targetEntityType: taxonomy_term
 bundle: person
@@ -47,24 +53,14 @@ mode: full
 content:
   description:
     type: text_default
-    weight: 1
+    weight: 2
     region: ds_content
     label: above
     settings: {  }
     third_party_settings: {  }
-  field_legacy_iscanonical:
-    weight: 3
-    label: above
-    settings:
-      format: default
-      format_custom_false: ''
-      format_custom_true: ''
-    third_party_settings: {  }
-    type: boolean
-    region: ds_content
   field_name:
-    weight: 0
-    label: above
+    weight: 1
+    label: inline
     settings:
       format: default
       list_format: ''
@@ -74,11 +70,18 @@ content:
       preferred_field_reference_separator: ', '
       alternative_field_reference: ''
       alternative_field_reference_separator: ', '
-    third_party_settings: {  }
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: true
+            classes: {  }
     type: name_default
     region: ds_content
   field_organisation:
-    weight: 2
+    weight: 3
     label: above
     settings:
       link: true
@@ -86,5 +89,6 @@ content:
     type: entity_reference_label
     region: ds_content
 hidden:
+  field_legacy_iscanonical: true
   langcode: true
   search_api_excerpt: true

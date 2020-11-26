@@ -1,13 +1,11 @@
-uuid: 6f024ceb-fd05-4063-b6c5-089fb51779de
+uuid: 67d493a7-c2c7-4d24-a65e-e759fcad3657
 langcode: en
 status: true
 dependencies:
   config:
     - core.entity_view_mode.taxonomy_term.search_result
-    - field.field.taxonomy_term.person.field_legacy_iscanonical
-    - field.field.taxonomy_term.person.field_name
-    - field.field.taxonomy_term.person.field_organisation
-    - taxonomy.vocabulary.person
+    - field.field.taxonomy_term.theme.field_legacy_code
+    - taxonomy.vocabulary.theme
   module:
     - ds
     - layout_builder
@@ -28,7 +26,7 @@ third_party_settings:
           ds_content: div
         outer_wrapper: div
         attributes: ''
-        link_attribute: content
+        link_attribute: ''
         link_custom: ''
         classes:
           layout_class: {  }
@@ -53,16 +51,16 @@ third_party_settings:
             lb: ''
             lb-col: false
             classes: {  }
-id: taxonomy_term.person.search_result
+id: taxonomy_term.theme.search_result
 targetEntityType: taxonomy_term
-bundle: person
+bundle: theme
 mode: search_result
 content:
   description:
+    label: hidden
     type: text_trimmed
     weight: 1
     region: ds_content
-    label: hidden
     settings:
       trim_length: 300
     third_party_settings:
@@ -74,8 +72,6 @@ content:
             lb-col: false
             classes: {  }
 hidden:
-  field_legacy_iscanonical: true
-  field_name: true
-  field_organisation: true
+  field_legacy_code: true
   langcode: true
   search_api_excerpt: true
