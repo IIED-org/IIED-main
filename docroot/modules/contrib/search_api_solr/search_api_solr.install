@@ -1962,6 +1962,51 @@ function search_api_solr_update_8402() {
  * Solve German umlaut edge cases for plural forms.
  */
 function search_api_solr_update_8403() {
+  // Covered search_api_solr_update_8407().
+}
+
+/**
+ * Migrate skip_schema_check configuration from server to connector plugin.
+ */
+function search_api_solr_update_8404() {
+  foreach (search_api_solr_update_helper_get_backend_configs() as $server_name => $backend_config) {
+    $backend_config['connector_config']['skip_schema_check'] = $backend_config['skip_schema_check'];
+    unset($backend_config['skip_schema_check']);
+    search_api_solr_update_helper_save_backend_config($server_name, $backend_config);
+  }
+}
+
+/**
+ * Make fallback field type cardinality configurable.
+ */
+function search_api_solr_update_8405() {
+  foreach (search_api_solr_update_helper_get_backend_configs() as $server_name => $backend_config) {
+    // BC: the hardcoded fallback was 'multiple'.
+    $backend_config['fallback_multiple'] = TRUE;
+    search_api_solr_update_helper_save_backend_config($server_name, $backend_config);
+  }
+}
+
+/**
+ * Make term modifiers configurable.
+ */
+function search_api_solr_update_8406() {
+  foreach (search_api_solr_update_helper_get_index_third_party_settings() as $index_id => $third_party_settings) {
+    if (!isset($third_party_settings['term_modifiers'])) {
+      $third_party_settings['term_modifiers'] = [
+        // BC.
+        'slop' => 10000000,
+        'fuzzy' => 2,
+      ];
+      search_api_solr_update_helper_save_index_third_party_settings($index_id, $third_party_settings);
+    }
+  }
+}
+
+/**
+ * Solve German synonyms.
+ */
+function search_api_solr_update_8407() {
   foreach (['6_0_0', '7_0_0', 'scientific_6_0_0', 'scientific_7_0_0'] as $version) {
     $filename = __DIR__ . '/config/optional/search_api_solr.solr_field_type.text_de_' . $version . '.yml';
     $config = Yaml::decode(file_get_contents($filename));

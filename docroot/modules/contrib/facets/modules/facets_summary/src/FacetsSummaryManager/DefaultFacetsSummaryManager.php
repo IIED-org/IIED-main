@@ -116,7 +116,7 @@ class DefaultFacetsSummaryManager {
     $build = [
       '#theme' => 'facets_summary_item_list',
       '#facet_summary_id' => $facets_summary->id(),
-      '#attributes' => [
+      '#wrapper_attributes' => [
         'data-drupal-facets-summary-id' => $facets_summary->id(),
       ],
     ];

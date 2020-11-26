@@ -3,6 +3,7 @@
 namespace Drupal\facets_summary\Plugin\facets_summary\processor;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Template\Attribute;
 use Drupal\facets_summary\FacetsSummaryInterface;
 use Drupal\facets_summary\Processor\BuildProcessorInterface;
 use Drupal\facets_summary\Processor\ProcessorPluginBase;
@@ -34,7 +35,7 @@ class ShowTextWhenEmptyProcessor extends ProcessorPluginBase implements BuildPro
     }, $facets));
 
     // No items are found, so we should return the empty summary.
-    if (!isset($build['#items']) || $results_count === 0) {
+    if (empty($build['#items']) || $results_count === 0) {
       return [
         '#theme' => 'facets_summary_empty',
         '#message' => [
@@ -42,6 +43,7 @@ class ShowTextWhenEmptyProcessor extends ProcessorPluginBase implements BuildPro
           '#text' => $config['text']['value'],
           '#format' => $config['text']['format'],
         ],
+        '#wrapper_attributes' => new Attribute($build['#wrapper_attributes']),
       ];
     }
 

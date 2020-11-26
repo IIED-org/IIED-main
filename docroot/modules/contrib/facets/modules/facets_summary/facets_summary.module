@@ -38,6 +38,7 @@ function facets_summary_theme($existing, $type, $theme, $path) {
     'facets_summary_empty' => [
       'variables' => [
         'message' => '',
+        'wrapper_attributes' => [],
       ],
     ],
     'facets_summary_item_list' => [

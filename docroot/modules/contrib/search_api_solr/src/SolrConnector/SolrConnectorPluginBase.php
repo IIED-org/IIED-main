@@ -108,6 +108,7 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
       'commit_within' => 1000,
       'jmx' => FALSE,
       'solr_install_dir' => '',
+      'skip_schema_check' => FALSE,
     ];
   }
 
@@ -122,6 +123,7 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
     $configuration[self::FINALIZE_TIMEOUT] = (int) $configuration[self::FINALIZE_TIMEOUT];
     $configuration['commit_within'] = (int) $configuration['commit_within'];
     $configuration['jmx'] = (bool) $configuration['jmx'];
+    $configuration['skip_schema_check'] = (bool) $configuration['skip_schema_check'];
 
     parent::setConfiguration($configuration);
   }
@@ -236,19 +238,26 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
         '7' => '7.x',
         '8' => '8.x',
       ],
-      '#default_value' => isset($this->configuration['solr_version']) ? $this->configuration['solr_version'] : '',
+      '#default_value' => $this->configuration['solr_version'] ?? '',
     ];
 
     $form['workarounds']['http_method'] = [
       '#type' => 'select',
       '#title' => $this->t('HTTP method'),
       '#description' => $this->t('The HTTP method to use for sending queries. GET will often fail with larger queries, while POST should not be cached. AUTO will use GET when possible, and POST for queries that are too large.'),
-      '#default_value' => isset($this->configuration['http_method']) ? $this->configuration['http_method'] : 'AUTO',
+      '#default_value' => $this->configuration['http_method'] ?? 'AUTO',
       '#options' => [
         'AUTO' => $this->t('AUTO'),
         'POST' => 'POST',
         'GET' => 'GET',
       ],
+    ];
+
+    $form['workarounds']['skip_schema_check'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Skip schema verification'),
+      '#description' => $this->t('Skip the automatic check for schema-compatibillity. Use this override if you are seeing an error-message about an incompatible schema.xml configuration file, and you are sure the configuration is compatible.'),
+      '#default_value' => $this->configuration['skip_schema_check'] ?? FALSE,
     ];
 
     $form['advanced'] = [
@@ -407,8 +416,13 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
       $min_version = ['0', '0', '0'];
       $version = implode('.', explode('.', $this->configuration['solr_version']) + $min_version);
       switch ($version) {
+        case '3.0.0':
+          // 3.6.0 is the minimum supported Solr 3 version by the
+          // search_api_solr_legacy module.
+          $version = '3.6.0';
+          break;
         case '4.0.0':
-          // 4.5.0 is the minimum supported Solr version by the
+          // 4.5.0 is the minimum supported Solr 4 version by the
           // search_api_solr_legacy module.
           $version = '4.5.0';
           break;
@@ -436,7 +450,11 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
 
     // Get our solr version number.
     if (isset($info['lucene']['solr-spec-version'])) {
-      return $info['lucene']['solr-spec-version'];
+      // Some Solr distributions or docker images append additional info to the
+      // version number, for example the build date: 3.6.2.2012.12.18.19.52.27.
+      if (preg_match('/^(\d+\.\d+\.\d+)/', $info['lucene']['solr-spec-version'], $matches)) {
+        return $matches[1];
+      }
     }
 
     return '0.0.0';
