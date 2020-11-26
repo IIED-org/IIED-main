@@ -29,6 +29,7 @@ dependencies:
     - search_api_solr.solr_field_type.text_pt-pt_7_0_0
     - search_api_solr.solr_field_type.text_ru_7_0_0
     - search_api_solr.solr_field_type.text_und_7_0_0
+    - search_api_solr.solr_field_type.text_zh-hans_7_0_0
     - search_api_solr.solr_field_type.text_zh-hant_7_0_0
     - search_api_solr.solr_request_dispatcher.request_dispatcher_httpcachingnever_default_7_0_0
     - search_api_solr.solr_request_handler.request_handler_autocomplete_default_7_0_0
@@ -58,9 +59,10 @@ backend_config:
     commit_within: 1000
     solr_version: ''
     http_method: AUTO
+    skip_schema_check: true
     jmx: false
     solr_install_dir: ''
-    port: 0
+    port: 443
     host: s7004-eu-west-1.sr-prod02.acquia.com
     path: /solr/AGHX-142716.prod.irforum
     core: AGHX-142716.prod.irforum
@@ -78,9 +80,9 @@ backend_config:
   index_single_documents_fallback_count: 10
   retrieve_data: true
   highlight_data: true
-  skip_schema_check: true
+  fallback_multiple: false
   server_prefix: ''
   domain: generic
   environment: default
   optimize: false
-  site_hash: true
+  site_hash: false
