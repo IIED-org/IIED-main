@@ -1,0 +1,21 @@
+uuid: 817431cb-6062-4dcc-865f-dff58ebb76ce
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_purpose
+    - taxonomy.vocabulary.series
+  module:
+    - text
+id: taxonomy_term.series.field_purpose
+field_name: field_purpose
+entity_type: taxonomy_term
+bundle: series
+label: Purpose
+description: 'Admin only. Add details about why this series has been created'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

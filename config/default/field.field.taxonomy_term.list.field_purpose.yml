@@ -1,0 +1,21 @@
+uuid: a5d0b150-208e-4671-be97-e9d660700bc5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_purpose
+    - taxonomy.vocabulary.list
+  module:
+    - text
+id: taxonomy_term.list.field_purpose
+field_name: field_purpose
+entity_type: taxonomy_term
+bundle: list
+label: Purpose
+description: 'Admin use only. Describe why this list has been created. '
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

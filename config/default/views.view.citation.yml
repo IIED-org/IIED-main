@@ -13,7 +13,7 @@ dependencies:
     - node
     - user
 id: citation
-label: CItation
+label: Citation
 module: views
 description: 'Combines field to create a citation reference'
 tag: ''
@@ -550,7 +550,7 @@ display:
           expose:
             label: ''
           granularity: second
-      title: CItation
+      title: Citation
       header: {  }
       footer: {  }
       empty: {  }
@@ -577,6 +577,7 @@ display:
     position: 1
     display_options:
       display_extenders: {  }
+      block_description: 'citation block'
     cache_metadata:
       max-age: -1
       contexts:

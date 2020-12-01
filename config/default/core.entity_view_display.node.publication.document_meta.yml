@@ -19,6 +19,7 @@ dependencies:
     - field.field.node.publication.field_isbn
     - field.field.node.publication.field_issn
     - field.field.node.publication.field_journal_ref
+    - field.field.node.publication.field_lists
     - field.field.node.publication.field_lit_code
     - field.field.node.publication.field_media
     - field.field.node.publication.field_parent
@@ -335,6 +336,7 @@ hidden:
   field_editor_s_: true
   field_external_url: true
   field_iied_url: true
+  field_lists: true
   field_lit_code: true
   field_media: true
   field_parent: true

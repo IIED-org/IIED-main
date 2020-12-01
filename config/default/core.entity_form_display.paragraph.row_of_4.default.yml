@@ -1,0 +1,25 @@
+uuid: ef3c0f08-f52a-4ae5-a520-c3d26acebda2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.row_of_4.field_term_filter
+    - paragraphs.paragraphs_type.row_of_4
+id: paragraph.row_of_4.default
+targetEntityType: paragraph
+bundle: row_of_4
+mode: default
+content:
+  field_term_filter:
+    weight: 0
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
+hidden:
+  created: true
+  status: true

@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.taxonomy_term.series.field_code
+    - field.field.taxonomy_term.series.field_purpose
     - field.field.taxonomy_term.series.field_status
     - taxonomy.vocabulary.series
   module:
@@ -28,6 +29,13 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     type: string
+    region: content
+  field_purpose:
+    weight: 4
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
     region: content
   field_status:
     weight: 3

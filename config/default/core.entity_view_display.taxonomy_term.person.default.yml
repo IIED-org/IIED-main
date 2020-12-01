@@ -4,12 +4,14 @@ status: true
 dependencies:
   config:
     - field.field.taxonomy_term.person.field_legacy_iscanonical
+    - field.field.taxonomy_term.person.field_link
     - field.field.taxonomy_term.person.field_name
     - field.field.taxonomy_term.person.field_organisation
     - taxonomy.vocabulary.person
   module:
     - layout_builder
     - layout_discovery
+    - link
     - name
 third_party_settings:
   layout_builder:
@@ -77,6 +79,26 @@ third_party_settings:
                 type: entity_reference_label
             additional: {  }
             weight: 2
+          54228028-4761-4df8-8ea6-b478b6f2f97e:
+            uuid: 54228028-4761-4df8-8ea6-b478b6f2f97e
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:taxonomy_term:person:field_link'
+              formatter:
+                label: above
+                settings:
+                  trim_length: 80
+                  url_only: false
+                  url_plain: false
+                  rel: ''
+                  target: ''
+                third_party_settings: {  }
+                type: link
+            additional: {  }
+            weight: 3
         third_party_settings: {  }
     allow_custom: false
 id: taxonomy_term.person.default
@@ -93,6 +115,18 @@ content:
       format_custom_true: ''
     third_party_settings: {  }
     type: boolean
+    region: content
+  field_link:
+    weight: 3
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
     region: content
   field_name:
     weight: 0

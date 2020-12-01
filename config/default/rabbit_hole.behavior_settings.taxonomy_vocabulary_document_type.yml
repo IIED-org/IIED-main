@@ -1,0 +1,11 @@
+uuid: 14414a69-2dc8-45ab-8f52-b1b4e8f9e3ba
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.document_type
+id: taxonomy_vocabulary_document_type
+action: page_not_found
+allow_override: 1
+redirect: ''
+redirect_code: 301

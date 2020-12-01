@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.taxonomy_term.series.field_code
+    - field.field.taxonomy_term.series.field_purpose
     - field.field.taxonomy_term.series.field_status
     - taxonomy.vocabulary.series
   module:
@@ -16,7 +17,7 @@ mode: default
 content:
   description:
     type: text_textarea
-    weight: 4
+    weight: 3
     region: content
     settings:
       placeholder: ''
@@ -29,6 +30,14 @@ content:
       placeholder: ''
     third_party_settings: {  }
     type: string_textfield
+    region: content
+  field_purpose:
+    weight: 4
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
     region: content
   field_status:
     weight: 2

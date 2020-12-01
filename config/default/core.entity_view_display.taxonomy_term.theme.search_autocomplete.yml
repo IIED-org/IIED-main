@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.taxonomy_term.search_autocomplete
     - field.field.taxonomy_term.theme.field_legacy_code
+    - field.field.taxonomy_term.theme.field_link
     - taxonomy.vocabulary.theme
   module:
     - ds
@@ -69,5 +70,6 @@ content: {  }
 hidden:
   description: true
   field_legacy_code: true
+  field_link: true
   langcode: true
   search_api_excerpt: true

@@ -1,0 +1,23 @@
+uuid: b01f6b32-937b-4565-873a-1f0f4aa170f6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_link
+    - taxonomy.vocabulary.person
+  module:
+    - link
+id: taxonomy_term.person.field_link
+field_name: field_link
+entity_type: taxonomy_term
+bundle: person
+label: Link
+description: 'Add link to biog where available. Links to IIED website only.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 1
+field_type: link

@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.taxonomy_term.full
     - field.field.taxonomy_term.series.field_code
+    - field.field.taxonomy_term.series.field_purpose
     - field.field.taxonomy_term.series.field_status
     - taxonomy.vocabulary.series
   module:
@@ -31,13 +32,14 @@ third_party_settings:
         link_attribute: ''
         link_custom: ''
         classes:
-          layout_class: {  }
+          layout_class:
+            mb-3: mb-3
           ds_content: {  }
     regions:
       ds_content:
         - taxonomy_term_title
-        - description
         - field_status
+        - description
     fields:
       taxonomy_term_title:
         plugin_id: taxonomy_term_title
@@ -62,8 +64,43 @@ content:
   description:
     label: hidden
     type: text_default
+    weight: 2
+    region: ds_content
+    settings: {  }
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            prefix: ''
+            lbw: 0
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            lb-col: false
+            ow: 0
+            ow-el: ''
+            ow-cl: ''
+            ow-at: ''
+            ow-def-at: 0
+            ow-def-cl: 0
+            fis: 0
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
+            fis-def-at: 0
+            fi: 0
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            fi-def-at: 0
+            suffix: ''
+  field_status:
+    type: list_default
     weight: 1
     region: ds_content
+    label: hidden
     settings: {  }
     third_party_settings:
       ds:
@@ -71,37 +108,31 @@ content:
           id: expert
           settings:
             lb: ''
-            prefix: ''
+            prefix: '<p class="text-muted">'
             lbw-el: ''
             lbw-cl: ''
             lbw-at: ''
-            ow: true
             ow-el: div
-            ow-cl: row
+            ow-cl: mb-3
             ow-at: ''
-            fis: true
-            fis-el: div
-            fis-cl: 'col-lg-8 mb-4'
+            fis-el: ''
+            fis-cl: ''
             fis-at: ''
             fi-el: ''
             fi-cl: ''
             fi-at: ''
-            suffix: ''
+            suffix: series</p>
             lbw: false
             lb-col: false
+            ow: false
             ow-def-at: false
             ow-def-cl: false
+            fis: false
             fis-def-at: false
             fi: false
             fi-def-at: false
-  field_status:
-    type: list_key
-    weight: 2
-    region: ds_content
-    label: inline
-    settings: {  }
-    third_party_settings: {  }
 hidden:
   field_code: true
+  field_purpose: true
   langcode: true
   search_api_excerpt: true

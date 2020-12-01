@@ -1,0 +1,11 @@
+id: row_of_4
+label: 'row of 4'
+ui_limit: ''
+properties:
+  block: 'views_block:list_rows-block_1'
+  use_block_title: false
+  add_block_wrappers: false
+type: block
+type_label: 'Block field'
+entities:
+  paragraph: paragraph

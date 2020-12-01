@@ -13,6 +13,7 @@ dependencies:
     - field.field.taxonomy_term.organisation.field_type
     - field.field.taxonomy_term.organisation.field_url
     - field.field.taxonomy_term.organisation.field_valid
+    - image.style.page
     - taxonomy.vocabulary.organisation
   module:
     - address
@@ -44,11 +45,27 @@ third_party_settings:
           ds_content: {  }
     regions:
       ds_content:
+        - taxonomy_term_title
         - field_logo
-        - field_full_name
         - description
         - field_location
         - field_url
+    fields:
+      taxonomy_term_title:
+        plugin_id: taxonomy_term_title
+        weight: 0
+        label: hidden
+        formatter: default
+        settings:
+          wrapper: h1
+          class: page-title
+          link: false
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
 id: taxonomy_term.organisation.full
 targetEntityType: taxonomy_term
 bundle: organisation
@@ -61,33 +78,81 @@ content:
     region: ds_content
     settings: {  }
     third_party_settings: {  }
-  field_full_name:
-    weight: 1
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    type: string
-    region: ds_content
   field_location:
     weight: 3
-    label: above
+    label: hidden
     settings: {  }
-    third_party_settings: {  }
+    third_party_settings:
+      ds:
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            prefix: ''
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow-el: ''
+            ow-cl: ''
+            ow-at: ''
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
+            fi: true
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            lbw: false
+            lb-col: false
+            ow: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
+            fis-def-at: false
+            fi-def-at: false
     type: address_default
     region: ds_content
   field_logo:
-    weight: 0
-    label: above
+    weight: 1
+    label: hidden
     settings:
-      image_style: ''
+      image_style: page
       image_link: ''
-    third_party_settings: {  }
+    third_party_settings:
+      ds:
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            prefix: ''
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow: true
+            ow-el: a
+            ow-cl: ''
+            ow-at: 'href="[term:field_url]"'
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            lbw: false
+            lb-col: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
     type: image
     region: ds_content
   field_url:
     weight: 4
-    label: above
+    label: hidden
     settings:
       trim_length: 80
       url_only: false
@@ -100,6 +165,7 @@ content:
 hidden:
   field_alias: true
   field_email: true
+  field_full_name: true
   field_location_legacy: true
   field_type: true
   field_valid: true

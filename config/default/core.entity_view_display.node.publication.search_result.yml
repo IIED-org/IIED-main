@@ -19,6 +19,7 @@ dependencies:
     - field.field.node.publication.field_isbn
     - field.field.node.publication.field_issn
     - field.field.node.publication.field_journal_ref
+    - field.field.node.publication.field_lists
     - field.field.node.publication.field_lit_code
     - field.field.node.publication.field_media
     - field.field.node.publication.field_parent
@@ -53,7 +54,6 @@ dependencies:
     - ds
     - layout_builder
     - media
-    - text
     - user
 third_party_settings:
   layout_builder:
@@ -80,10 +80,9 @@ third_party_settings:
       ds_content:
         - field_media
         - node_title
+        - search_api_excerpt
         - field_author_s_
         - field_editor_s_
-        - search_api_excerpt
-        - body
         - field_date_published
         - field_document_type
         - field_publisher
@@ -94,7 +93,7 @@ third_party_settings:
         label: hidden
         formatter: default
         settings:
-          wrapper: h4
+          wrapper: h5
           class: ''
           link: false
         ft:
@@ -108,69 +107,7 @@ targetEntityType: node
 bundle: publication
 mode: search_result
 content:
-  body:
-    label: hidden
-    type: text_summary_or_trimmed
-    weight: 5
-    settings:
-      trim_length: 250
-    third_party_settings:
-      ds:
-        ft:
-          id: default
-          settings:
-            lb: ''
-            lb-col: false
-            classes: {  }
-    region: ds_content
   field_author_s_:
-    weight: 2
-    label: hidden
-    settings:
-      link: false
-    third_party_settings:
-      ds:
-        ds_limit: ''
-        ft:
-          id: default
-          settings:
-            lb: ''
-            lb-col: false
-            classes: {  }
-    type: entity_reference_label
-    region: ds_content
-  field_date_published:
-    weight: 6
-    label: hidden
-    settings:
-      timezone_override: ''
-      format_type: published_date
-    third_party_settings:
-      ds:
-        ft:
-          id: default
-          settings:
-            lb: ''
-            lb-col: false
-            classes: {  }
-    type: datetime_default
-    region: ds_content
-  field_document_type:
-    weight: 7
-    label: hidden
-    settings:
-      link: false
-    third_party_settings:
-      ds:
-        ft:
-          id: default
-          settings:
-            lb: ''
-            lb-col: false
-            classes: {  }
-    type: entity_reference_label
-    region: ds_content
-  field_editor_s_:
     weight: 3
     label: hidden
     settings:
@@ -179,11 +116,142 @@ content:
       ds:
         ds_limit: ''
         ft:
-          id: default
+          id: expert
           settings:
             lb: ''
+            prefix: '<br />'
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow-el: ''
+            ow-cl: ''
+            ow-at: ''
+            fis: true
+            fis-el: ul
+            fis-cl: 'meta field-authors comma-list'
+            fis-at: ''
+            fis-def-at: true
+            fi: true
+            fi-el: li
+            fi-cl: field-author
+            fi-at: ''
+            fi-def-at: true
+            suffix: ' | '
+            lbw: false
             lb-col: false
-            classes: {  }
+            ow: false
+            ow-def-at: false
+            ow-def-cl: false
+    type: entity_reference_label
+    region: ds_content
+  field_date_published:
+    weight: 5
+    label: hidden
+    settings:
+      timezone_override: ''
+      format_type: published_date
+    third_party_settings:
+      ds:
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            prefix: ''
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow-el: ''
+            ow-cl: ''
+            ow-at: ''
+            fis: true
+            fis-el: span
+            fis-cl: 'meta field-date'
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ' | '
+            lbw: false
+            lb-col: false
+            ow: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
+    type: datetime_default
+    region: ds_content
+  field_document_type:
+    weight: 6
+    label: hidden
+    settings:
+      link: false
+    third_party_settings:
+      ds:
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            prefix: ''
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow-el: ''
+            ow-cl: ''
+            ow-at: ''
+            fis: true
+            fis-el: span
+            fis-cl: 'meta field-doctype'
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            lbw: false
+            lb-col: false
+            ow: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
+    type: entity_reference_label
+    region: ds_content
+  field_editor_s_:
+    weight: 4
+    label: hidden
+    settings:
+      link: false
+    third_party_settings:
+      ds:
+        ds_limit: ''
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            prefix: ''
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow-el: ''
+            ow-cl: ''
+            ow-at: ''
+            fis: true
+            fis-el: span
+            fis-cl: 'meta field-editors'
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ' (eds.) | '
+            lbw: false
+            lb-col: false
+            ow: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
     type: entity_reference_label
     region: ds_content
   field_media:
@@ -196,15 +264,36 @@ content:
     third_party_settings:
       ds:
         ft:
-          id: default
+          id: expert
           settings:
             lb: ''
+            prefix: ''
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow-el: ''
+            ow-cl: ''
+            ow-at: ''
+            fis: true
+            fis-el: div
+            fis-cl: 'float-left mr-3 mb-3'
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            lbw: false
             lb-col: false
-            classes: {  }
+            ow: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
     region: ds_content
   field_publisher:
     type: entity_reference_label
-    weight: 8
+    weight: 7
     region: ds_content
     label: hidden
     settings:
@@ -213,17 +302,39 @@ content:
       ds:
         ds_limit: ''
         ft:
-          id: default
+          id: expert
           settings:
             lb: ''
+            prefix: ' | '
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow-el: ''
+            ow-cl: ''
+            ow-at: ''
+            fis: true
+            fis-el: span
+            fis-cl: 'meta field-publishers'
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            lbw: false
             lb-col: false
-            classes: {  }
+            ow: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
   search_api_excerpt:
-    weight: 4
+    weight: 2
     region: ds_content
     settings: {  }
     third_party_settings: {  }
 hidden:
+  body: true
   field_admin: true
   field_area_list: true
   field_cover_image: true
@@ -234,6 +345,7 @@ hidden:
   field_isbn: true
   field_issn: true
   field_journal_ref: true
+  field_lists: true
   field_lit_code: true
   field_parent: true
   field_pdf: true
