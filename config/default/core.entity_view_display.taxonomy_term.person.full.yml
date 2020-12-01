@@ -5,13 +5,14 @@ dependencies:
   config:
     - core.entity_view_mode.taxonomy_term.full
     - field.field.taxonomy_term.person.field_legacy_iscanonical
+    - field.field.taxonomy_term.person.field_link
     - field.field.taxonomy_term.person.field_name
     - field.field.taxonomy_term.person.field_organisation
     - taxonomy.vocabulary.person
   module:
     - ds
     - layout_builder
-    - name
+    - link
     - text
 third_party_settings:
   layout_builder:
@@ -46,6 +47,16 @@ third_party_settings:
         weight: 0
         label: hidden
         formatter: default
+        settings:
+          wrapper: h1
+          class: page-title
+          link: false
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
 id: taxonomy_term.person.full
 targetEntityType: taxonomy_term
 bundle: person
@@ -55,34 +66,24 @@ content:
     type: text_default
     weight: 2
     region: ds_content
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
-  field_name:
+  field_link:
+    type: link
+    weight: 3
+    region: ds_content
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+  field_organisation:
     weight: 1
     label: inline
-    settings:
-      format: default
-      list_format: ''
-      markup: none
-      link_target: ''
-      preferred_field_reference: ''
-      preferred_field_reference_separator: ', '
-      alternative_field_reference: ''
-      alternative_field_reference_separator: ', '
-    third_party_settings:
-      ds:
-        ft:
-          id: default
-          settings:
-            lb: ''
-            lb-col: true
-            classes: {  }
-    type: name_default
-    region: ds_content
-  field_organisation:
-    weight: 3
-    label: above
     settings:
       link: true
     third_party_settings: {  }
@@ -90,5 +91,6 @@ content:
     region: ds_content
 hidden:
   field_legacy_iscanonical: true
+  field_name: true
   langcode: true
   search_api_excerpt: true

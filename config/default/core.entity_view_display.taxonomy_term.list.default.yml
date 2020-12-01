@@ -1,0 +1,64 @@
+uuid: 09f2d06f-5ca6-49f5-9e05-d89da73f654d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.list.field_purpose
+    - taxonomy.vocabulary.list
+  module:
+    - ds
+    - text
+third_party_settings:
+  ds:
+    layout:
+      id: ds_1col
+      library: null
+      disable_css: false
+      entity_classes: all_classes
+      settings:
+        label: ''
+        wrappers:
+          ds_content: div
+        outer_wrapper: div
+        attributes: ''
+        link_attribute: ''
+        link_custom: ''
+        classes:
+          layout_class: {  }
+          ds_content: {  }
+    regions:
+      ds_content:
+        - taxonomy_term_title
+        - description
+    fields:
+      taxonomy_term_title:
+        plugin_id: taxonomy_term_title
+        weight: 0
+        label: hidden
+        formatter: default
+        settings:
+          wrapper: h1
+          class: page-title
+          link: false
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+id: taxonomy_term.list.default
+targetEntityType: taxonomy_term
+bundle: list
+mode: default
+content:
+  description:
+    label: hidden
+    type: text_default
+    weight: 1
+    region: ds_content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_purpose: true
+  langcode: true
+  search_api_excerpt: true

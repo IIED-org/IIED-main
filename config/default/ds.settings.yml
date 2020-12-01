@@ -18,6 +18,8 @@ classes:
     - d-md-block
     - pointer
     - no-gutters
+    - mb-3
+    - mb-4
   field: {  }
 use_field_names: true
 _core:

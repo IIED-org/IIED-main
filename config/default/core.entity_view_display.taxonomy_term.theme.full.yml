@@ -5,10 +5,12 @@ dependencies:
   config:
     - core.entity_view_mode.taxonomy_term.full
     - field.field.taxonomy_term.theme.field_legacy_code
+    - field.field.taxonomy_term.theme.field_link
     - taxonomy.vocabulary.theme
   module:
     - ds
     - layout_builder
+    - link
     - text
 third_party_settings:
   layout_builder:
@@ -35,6 +37,7 @@ third_party_settings:
       ds_content:
         - taxonomy_term_title
         - description
+        - field_link
     fields:
       taxonomy_term_title:
         plugin_id: taxonomy_term_title
@@ -63,6 +66,46 @@ content:
     region: ds_content
     settings: {  }
     third_party_settings: {  }
+  field_link:
+    type: link
+    weight: 2
+    region: ds_content
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: '0'
+      target: '0'
+    third_party_settings:
+      ds:
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            prefix: ''
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow: true
+            ow-el: div
+            ow-cl: mb-3
+            ow-at: ''
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            lbw: false
+            lb-col: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
 hidden:
   field_legacy_code: true
   langcode: true

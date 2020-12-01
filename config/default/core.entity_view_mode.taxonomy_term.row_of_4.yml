@@ -1,0 +1,10 @@
+uuid: 7eb8ddc1-6ef7-4e4a-913f-ddd05d71cad5
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.row_of_4
+label: 'row of 4'
+targetEntityType: taxonomy_term
+cache: true

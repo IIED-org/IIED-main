@@ -1,0 +1,29 @@
+uuid: c8d6287c-7e5f-40c2-aa91-1657f068de66
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_lists
+    - node.type.publication
+    - taxonomy.vocabulary.list
+id: node.publication.field_lists
+field_name: field_lists
+entity_type: node
+bundle: publication
+label: Lists
+description: 'Add publication to a list'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      list: list
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

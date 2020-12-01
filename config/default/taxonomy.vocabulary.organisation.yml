@@ -4,5 +4,5 @@ status: true
 dependencies: {  }
 name: Organisation
 vid: organisation
-description: ''
+description: 'Organisation such as publisher or partner. Can be a project or programme name'
 weight: 0

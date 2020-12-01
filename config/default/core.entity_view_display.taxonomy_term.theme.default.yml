@@ -5,10 +5,12 @@ dependencies:
   config:
     - core.base_field_override.taxonomy_term.theme.description
     - field.field.taxonomy_term.theme.field_legacy_code
+    - field.field.taxonomy_term.theme.field_link
     - taxonomy.vocabulary.theme
   module:
     - layout_builder
     - layout_discovery
+    - link
     - text
 third_party_settings:
   layout_builder:
@@ -50,6 +52,26 @@ third_party_settings:
                 type: string
             additional: {  }
             weight: 1
+          0296ad75-f9ac-4d9e-9733-1e59bf964f54:
+            uuid: 0296ad75-f9ac-4d9e-9733-1e59bf964f54
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:taxonomy_term:theme:field_link'
+              formatter:
+                label: above
+                settings:
+                  trim_length: 80
+                  url_only: false
+                  url_plain: false
+                  rel: ''
+                  target: ''
+                third_party_settings: {  }
+                type: link
+            additional: {  }
+            weight: 2
         third_party_settings: {  }
     allow_custom: false
 id: taxonomy_term.theme.default
@@ -71,6 +93,18 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     type: string
+    region: content
+  field_link:
+    weight: 2
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
     region: content
 hidden:
   langcode: true

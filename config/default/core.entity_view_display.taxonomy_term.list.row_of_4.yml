@@ -1,0 +1,78 @@
+uuid: a6f73305-648a-418b-a837-c2cc575e0673
+langcode: en
+status: false
+dependencies:
+  config:
+    - core.entity_view_mode.taxonomy_term.row_of_4
+    - field.field.taxonomy_term.list.field_purpose
+    - taxonomy.vocabulary.list
+  module:
+    - ds
+    - layout_builder
+third_party_settings:
+  ds:
+    layout:
+      id: ds_1col
+      library: null
+      disable_css: false
+      entity_classes: all_classes
+      settings:
+        label: ''
+        wrappers:
+          ds_content: div
+        outer_wrapper: div
+        attributes: ''
+        link_attribute: ''
+        link_custom: ''
+        classes:
+          layout_class: {  }
+          ds_content: {  }
+    regions:
+      ds_content:
+        - 'dynamic_block_field:taxonomy_term-row_of_4'
+    fields:
+      'dynamic_block_field:taxonomy_term-row_of_4':
+        plugin_id: 'dynamic_block_field:taxonomy_term-row_of_4'
+        weight: 0
+        label: hidden
+        formatter: default
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            prefix: hi
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow-el: ''
+            ow-cl: ''
+            ow-at: ''
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            lbw: false
+            lb-col: false
+            ow: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
+  layout_builder:
+    allow_custom: false
+    enabled: false
+id: taxonomy_term.list.row_of_4
+targetEntityType: taxonomy_term
+bundle: list
+mode: row_of_4
+content: {  }
+hidden:
+  description: true
+  field_purpose: true
+  langcode: true
+  search_api_excerpt: true

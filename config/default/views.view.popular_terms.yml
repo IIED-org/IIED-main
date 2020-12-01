@@ -1,0 +1,268 @@
+uuid: 8ed4fdc9-0b75-40fc-bd8e-fc55a3d285cc
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.theme
+  module:
+    - node
+    - taxonomy
+    - user
+id: popular_terms
+label: 'Popular terms'
+module: views
+description: 'List of most common themes'
+tag: ''
+base_table: taxonomy_term_field_data
+base_field: tid
+display:
+  default:
+    display_plugin: default
+    id: default
+    display_title: Master
+    position: 0
+    display_options:
+      access:
+        type: perm
+        options:
+          perm: 'access content'
+      cache:
+        type: tag
+        options: {  }
+      query:
+        type: views_query
+        options:
+          disable_sql_rewrite: false
+          distinct: false
+          replica: false
+          query_comment: ''
+          query_tags: {  }
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Apply
+          reset_button: false
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      pager:
+        type: some
+        options:
+          items_per_page: 7
+          offset: 0
+      style:
+        type: default
+        options:
+          grouping: {  }
+          row_class: btn-group
+          default_row_class: false
+      row:
+        type: fields
+        options:
+          default_field_elements: false
+          inline: {  }
+          separator: ''
+          hide_empty: false
+      fields:
+        name:
+          id: name
+          table: taxonomy_term_field_data
+          field: name
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: false
+            ellipsis: false
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: div
+          element_class: 'btn btn-light'
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: true
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          convert_spaces: false
+          entity_type: taxonomy_term
+          entity_field: name
+          plugin_id: term_name
+      filters:
+        status:
+          value: '1'
+          table: taxonomy_term_field_data
+          field: status
+          plugin_id: boolean
+          entity_type: taxonomy_term
+          entity_field: status
+          id: status
+          expose:
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+          group: 1
+        vid:
+          id: vid
+          table: taxonomy_term_field_data
+          field: vid
+          value:
+            theme: theme
+          entity_type: taxonomy_term
+          entity_field: vid
+          plugin_id: bundle
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
+      sorts:
+        field_theme_target_id:
+          id: field_theme_target_id
+          table: node__field_theme
+          field: field_theme_target_id
+          relationship: reverse__node__field_theme
+          group_type: count
+          admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: standard
+      title: 'Popular themes'
+      header:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: false
+          tokenize: false
+          content:
+            value: "<div class=\"row\">\r\n  <div class=\"col col-md-8\">\r\n  <h2>Popular themes</h2>\r\n</div>\r\n<div class=\"col col-md-4\">\r\n<div class=\"dropdown text-right\">\r\n  <button class=\"btn btn-outline-dark dropdown-toggle\" type=\"button\" id=\"dropdownMenuButton\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\r\n    All themes\r\n  </button>\r\n  <div class=\"dropdown-menu\" aria-labelledby=\"dropdownMenuButton\">\r\n      <a class=\"dropdown-item\" href=\"/theme/biodiversity\">Biodiversity</a>\r\n      <a class=\"dropdown-item\" href=\"/theme/communication\">Communication</a>\r\n      <a class=\"dropdown-item\" href=\"/theme/climate-change\">Climate change</a>\r\n      <a class=\"dropdown-item\" href=\"/theme/drylands-pastoralism\">Drylands and pastoralism</a>\r\n      <a class=\"dropdown-item\" href=\"/theme/economics\">Economics</a>\r\n      <a class=\"dropdown-item\" href=\"/theme/energy\">Energy</a>\r\n      <a class=\"dropdown-item\" href=\"/theme/fisheries\">Fisheries</a>\r\n      <a class=\"dropdown-item\" href=\"/theme/food-agriculture\">Food and agriculture</a>\r\n      <a class=\"dropdown-item\" href=\"/theme/forests\">Forests</a>\r\n      <a class=\"dropdown-item\" href=\"/theme/gender\">Gender</a>\r\n      <a class=\"dropdown-item\" href=\"/theme/governance\">Governance</a>\r\n      <a class=\"dropdown-item\" href=\"/theme/green-economy\">Green economy</a>\r\n      <a class=\"dropdown-item\" href=\"/theme/land-acquisitions-rights\">Land acquisitions and rights</a>\r\n      <a class=\"dropdown-item\" href=\"/theme/law\">Law</a>\r\n      <a class=\"dropdown-item\" href=\"/theme/monitoring-evaluation-learning\">Monitoring, evaluation and learning</a>\r\n      <a class=\"dropdown-item\" href=\"/theme/natural-resource-management\">Natural resource management</a>\r\n      <a class=\"dropdown-item\" href=\"/theme/policy-planning\">Policy and planning</a>\r\n      <a class=\"dropdown-item\" href=\"/theme/poverty\">Poverty</a>\r\n      <a class=\"dropdown-item\" href=\"/theme/sustainable-markets\">Sustainable markets</a>\r\n      <a class=\"dropdown-item\" href=\"/theme/urban\">Urban</a>\r\n      <a class=\"dropdown-item\" href=\"/theme/water\">Water</a>\r\n  </div>\r\n</div>\r\n</div>\r\n\r\n</div>"
+            format: full_html
+          plugin_id: text
+      footer: {  }
+      empty: {  }
+      relationships:
+        reverse__node__field_theme:
+          id: reverse__node__field_theme
+          table: taxonomy_term_field_data
+          field: reverse__node__field_theme
+          relationship: none
+          group_type: group
+          admin_label: field_theme
+          required: false
+          entity_type: taxonomy_term
+          plugin_id: entity_reverse
+      arguments:
+        field_theme_target_id:
+          id: field_theme_target_id
+          table: node__field_theme
+          field: field_theme_target_id
+          relationship: reverse__node__field_theme
+          group_type: count_distinct
+          admin_label: ''
+          default_action: ignore
+          exception:
+            value: all
+            title_enable: false
+            title: All
+          title_enable: false
+          title: ''
+          default_argument_type: fixed
+          default_argument_options:
+            argument: ''
+          default_argument_skip_url: false
+          summary_options:
+            base_path: ''
+            count: true
+            items_per_page: 25
+            override: false
+          summary:
+            sort_order: asc
+            number_of_records: 0
+            format: default_summary
+          specify_validation: true
+          validate:
+            type: taxonomy_term_name
+            fail: 'not found'
+          validate_options:
+            bundles:
+              theme: theme
+            operation: view
+            access: false
+            transform: false
+          break_phrase: false
+          not: false
+          plugin_id: numeric
+      display_extenders: {  }
+      group_by: true
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - user.permissions
+      tags: {  }
+  block_1:
+    display_plugin: block
+    id: block_1
+    display_title: Block
+    position: 1
+    display_options:
+      display_extenders: {  }
+      block_description: 'popular themes'
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - user.permissions
+      tags: {  }

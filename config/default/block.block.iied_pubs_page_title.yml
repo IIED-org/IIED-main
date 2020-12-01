@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - ctools
+    - system
   theme:
     - iied_pubs
 _core:
@@ -28,3 +29,8 @@ visibility:
     negate: false
     context_mapping:
       node: '@node.node_route_context:node'
+  request_path:
+    id: request_path
+    pages: '<front>'
+    negate: true
+    context_mapping: {  }
