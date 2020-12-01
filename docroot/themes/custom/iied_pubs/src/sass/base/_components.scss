@@ -4,6 +4,77 @@
   display: none;
 }
 
+// Search page elements
+.main-search-form {
+  input, button, select {
+    border-radius: $border-radius-lg;
+    line-height: 1.5 !important;
+    min-width: 8rem;
+  }
+  #views-exposed-form-search-page-2 {
+    @extend .container;
+    @extend .row;
+    &:hover {
+      background-color: transparent !important;
+    }
+    .js-form-type-search-api-autocomplete {
+      @extend .col-lg-6;
+    }
+    .js-form-item-sort-by {
+      @extend .col-lg-3;
+      select {
+        max-width: fit-content;
+      }
+    }
+  }
+  #edit-submit-search--3::after {
+    content: ' Search';
+    color: white;
+    font-family: $font-family-base;
+  }
+}
+
+.block-facet--checkbox button {
+  border-radius: $border-radius-lg;
+}
+
+// Header search form
+.header-search-block {
+  .form-group {
+    margin-bottom: 0;
+  }
+  div {
+    display: inline-flex;
+  }
+  input {
+    border-radius: 1rem 0 0 1rem;
+    margin-right: 0;
+  }
+  #edit-actions,
+  #edit-actions--2 {
+    input {
+      border-radius: 0 1rem 1rem 0;
+      float: right;
+      margin-left: -4px;
+      width: auto;
+      line-height: 1.5 !important;
+      font-weight: 400;
+    }
+  }
+  .form-item-sort-by,
+  #edit-reset,
+  #edit-reset--2 {
+    display: none !important;
+  }
+  .row:hover {
+    background-color: transparent;
+  }
+}
+
+.search-api-autocomplete-search {
+  z-index: 2000;
+}
+
 .pointer {
     cursor: pointer;
 }

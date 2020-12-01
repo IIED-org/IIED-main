@@ -3,7 +3,7 @@
  * @file
  * Theme functions
  */
- 
+
  use Drupal\Core\Template\Attribute;
  use Drupal\Core\Link;
  use Drupal\Component\Utility\Html;
@@ -73,4 +73,12 @@ function iied_pubs_preprocess_html(&$variables) {
     if ($view_id) {
       $variables['attributes']['class'][] = 'page-view-' . Html::cleanCssIdentifier($view_id);
     }
+}
+
+function iied_pubs_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  if (in_array($form_id, ['search_block_form', 'search_form', 'views_exposed_form' ])) {
+    $form['keys']['#attributes']['placeholder'][] = t('Search');
+    $form['actions']['submit']['#value'] = html_entity_decode("&#xf002;", ENT_COMPAT, 'UTF-8');
+    $form['actions']['submit']['#attributes']['class'][] = 'search-button fas';
+  }
 }

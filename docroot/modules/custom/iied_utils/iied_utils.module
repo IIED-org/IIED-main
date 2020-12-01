@@ -52,3 +52,15 @@ function iied_utils_get_page_entity() {
   }
   return FALSE;
 }
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter() for the search_block_form form.
+ */
+function iied_utils_form_header_search_alter(&$form, FormStateInterface $form_state) {
+  // NB so that these are not added to the get query params
+  $form['form_build_id']['#access'] = FALSE;
+  $form['form_token']['#access'] = FALSE;
+  $form['form_id']['#access'] = FALSE;
+}

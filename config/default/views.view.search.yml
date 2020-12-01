@@ -431,7 +431,7 @@ display:
             operator: search_api_fulltext_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: search_api_fulltext
+            identifier: k
             required: false
             remember: false
             multiple: false
@@ -460,7 +460,7 @@ display:
           fields: {  }
           plugin_id: search_api_fulltext
       filter_groups:
-        operator: OR
+        operator: AND
         groups:
           1: AND
       exposed_block: true

@@ -82,7 +82,7 @@ display:
             alter_text: true
             text: '{{ ''Download''|trans }}'
             make_link: true
-            path: '{{ field_media_document }} '
+            path: '{{ field_media_document }}'
             absolute: false
             external: false
             replace_spaces: false
