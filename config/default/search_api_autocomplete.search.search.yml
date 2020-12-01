@@ -17,12 +17,8 @@ suggester_settings:
     fields: {  }
     view_modes:
       'entity:node':
-        article: ''
-        page: ''
-        project: ''
         publication: ''
       'entity:taxonomy_term':
-        organisation: ''
         person: search_autocomplete
         theme: search_autocomplete
   server:
@@ -44,4 +40,4 @@ options:
   show_count: true
   autosubmit: true
   submit_button_selector: ':submit'
-  delay: 150
+  delay: 200

@@ -90,7 +90,7 @@ display:
             trim_whitespace: false
             alt: 'Download PDF'
             rel: ''
-            link_class: 'btn btn-primary btn-lg'
+            link_class: 'btn btn-secondary btn-lg'
             prefix: ''
             suffix: ''
             target: ''

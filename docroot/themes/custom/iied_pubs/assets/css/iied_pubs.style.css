@@ -2589,53 +2589,53 @@ fieldset:disabled a.btn {
   box-shadow: 0 0 0 0.2rem rgba(82, 88, 93, 0.5);
 }
 
-.btn-outline-primary {
+.btn-outline-primary, .block-facet--checkbox button {
   color: #00b3df;
   border-color: #00b3df;
 }
-.btn-outline-primary:hover {
+.btn-outline-primary:hover, .block-facet--checkbox button:hover {
   color: #fff;
   background-color: #00b3df;
   border-color: #00b3df;
 }
-.btn-outline-primary:focus, .btn-outline-primary.focus {
+.btn-outline-primary:focus, .block-facet--checkbox button:focus, .btn-outline-primary.focus, .block-facet--checkbox button.focus {
   box-shadow: 0 0 0 0.2rem rgba(0, 179, 223, 0.5);
 }
-.btn-outline-primary.disabled, .btn-outline-primary:disabled {
+.btn-outline-primary.disabled, .block-facet--checkbox button.disabled, .btn-outline-primary:disabled, .block-facet--checkbox button:disabled {
   color: #00b3df;
   background-color: transparent;
 }
-.btn-outline-primary:not(:disabled):not(.disabled):active, .btn-outline-primary:not(:disabled):not(.disabled).active, .show > .btn-outline-primary.dropdown-toggle, .block-facet--checkbox .show > button.btn-outline-primary {
+.btn-outline-primary:not(:disabled):not(.disabled):active, .block-facet--checkbox button:not(:disabled):not(.disabled):active, .btn-outline-primary:not(:disabled):not(.disabled).active, .block-facet--checkbox button:not(:disabled):not(.disabled).active, .show > .btn-outline-primary.dropdown-toggle, .block-facet--checkbox .show > button {
   color: #fff;
   background-color: #00b3df;
   border-color: #00b3df;
 }
-.btn-outline-primary:not(:disabled):not(.disabled):active:focus, .btn-outline-primary:not(:disabled):not(.disabled).active:focus, .show > .btn-outline-primary.dropdown-toggle:focus, .block-facet--checkbox .show > button.btn-outline-primary:focus {
+.btn-outline-primary:not(:disabled):not(.disabled):active:focus, .block-facet--checkbox button:not(:disabled):not(.disabled):active:focus, .btn-outline-primary:not(:disabled):not(.disabled).active:focus, .block-facet--checkbox button:not(:disabled):not(.disabled).active:focus, .show > .btn-outline-primary.dropdown-toggle:focus, .block-facet--checkbox .show > button:focus {
   box-shadow: 0 0 0 0.2rem rgba(0, 179, 223, 0.5);
 }
 
-.btn-outline-secondary, .block-facet--checkbox button {
+.btn-outline-secondary {
   color: #fcb316;
   border-color: #fcb316;
 }
-.btn-outline-secondary:hover, .block-facet--checkbox button:hover {
+.btn-outline-secondary:hover {
   color: #212529;
   background-color: #fcb316;
   border-color: #fcb316;
 }
-.btn-outline-secondary:focus, .block-facet--checkbox button:focus, .btn-outline-secondary.focus, .block-facet--checkbox button.focus {
+.btn-outline-secondary:focus, .btn-outline-secondary.focus {
   box-shadow: 0 0 0 0.2rem rgba(252, 179, 22, 0.5);
 }
-.btn-outline-secondary.disabled, .block-facet--checkbox button.disabled, .btn-outline-secondary:disabled, .block-facet--checkbox button:disabled {
+.btn-outline-secondary.disabled, .btn-outline-secondary:disabled {
   color: #fcb316;
   background-color: transparent;
 }
-.btn-outline-secondary:not(:disabled):not(.disabled):active, .block-facet--checkbox button:not(:disabled):not(.disabled):active, .btn-outline-secondary:not(:disabled):not(.disabled).active, .block-facet--checkbox button:not(:disabled):not(.disabled).active, .show > .btn-outline-secondary.dropdown-toggle, .block-facet--checkbox .show > button {
+.btn-outline-secondary:not(:disabled):not(.disabled):active, .btn-outline-secondary:not(:disabled):not(.disabled).active, .show > .btn-outline-secondary.dropdown-toggle, .block-facet--checkbox .show > button.btn-outline-secondary {
   color: #212529;
   background-color: #fcb316;
   border-color: #fcb316;
 }
-.btn-outline-secondary:not(:disabled):not(.disabled):active:focus, .block-facet--checkbox button:not(:disabled):not(.disabled):active:focus, .btn-outline-secondary:not(:disabled):not(.disabled).active:focus, .block-facet--checkbox button:not(:disabled):not(.disabled).active:focus, .show > .btn-outline-secondary.dropdown-toggle:focus, .block-facet--checkbox .show > button:focus {
+.btn-outline-secondary:not(:disabled):not(.disabled):active:focus, .btn-outline-secondary:not(:disabled):not(.disabled).active:focus, .show > .btn-outline-secondary.dropdown-toggle:focus, .block-facet--checkbox .show > button.btn-outline-secondary:focus {
   box-shadow: 0 0 0 0.2rem rgba(252, 179, 22, 0.5);
 }
 
@@ -14683,6 +14683,9 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 1rem;
   line-height: 1.5 !important;
   min-width: 8rem;
+}
+.main-search-form #views-exposed-form-search-page-2 {
+  margin-left: -15px !important;
 }
 .main-search-form #views-exposed-form-search-page-2:hover {
   background-color: transparent !important;
