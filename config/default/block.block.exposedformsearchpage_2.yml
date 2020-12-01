@@ -5,10 +5,14 @@ dependencies:
   config:
     - views.view.search
   module:
+    - block_class
     - system
     - views
   theme:
     - iied_pubs
+third_party_settings:
+  block_class:
+    classes: main-search-form
 id: exposedformsearchpage_2
 theme: iied_pubs
 region: content

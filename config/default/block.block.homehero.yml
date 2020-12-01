@@ -2,11 +2,8 @@ uuid: cc2e680e-c412-4ded-9f65-3e909e84d478
 langcode: en
 status: true
 dependencies:
-  content:
-    - 'block_content:jumbotron:78263b3c-5904-4e9c-a102-17b89ca2abb8'
   module:
     - block_class
-    - block_content
     - system
   theme:
     - iied_pubs

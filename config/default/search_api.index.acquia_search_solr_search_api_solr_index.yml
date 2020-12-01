@@ -9,17 +9,17 @@ dependencies:
     - node
     - search_api
   config:
-    - field.storage.node.body
     - field.storage.node.field_area_list
     - field.storage.node.field_author_s_
-    - field.storage.node.field_date_published
+    - field.storage.node.body
     - field.storage.node.field_document_type
     - field.storage.node.field_product_code
+    - field.storage.node.field_date_published
     - field.storage.node.field_theme_s_
     - search_api.server.acquia_search_solr_search_api_solr_server
 third_party_settings:
   acquia_search_solr:
-    use_edismax: 1
+    use_edismax: 0
   search_api_solr:
     finalize: false
     commit_before_finalize: false
@@ -129,7 +129,7 @@ field_settings:
     datasource_id: 'entity:taxonomy_term'
     property_path: name
     type: text
-    boost: !!float 13
+    boost: !!float 5
     dependencies:
       module:
         - taxonomy
@@ -210,8 +210,9 @@ field_settings:
 datasource_settings:
   'entity:node':
     bundles:
-      default: true
-      selected: {  }
+      default: false
+      selected:
+        - publication
     languages:
       default: true
       selected: {  }
@@ -219,7 +220,6 @@ datasource_settings:
     bundles:
       default: false
       selected:
-        - organisation
         - person
         - theme
     languages:
@@ -280,10 +280,10 @@ processor_settings:
       'entity:node':
         datasource_boost: !!float 1
       'entity:taxonomy_term':
-        datasource_boost: !!float 2
+        datasource_boost: !!float 1
         bundle_boosts:
           person: !!float 21
-          theme: !!float 21
+          theme: !!float 0
     weights:
       preprocess_index: -48
 tracker_settings:
