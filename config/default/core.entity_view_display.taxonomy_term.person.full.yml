@@ -38,9 +38,9 @@ third_party_settings:
     regions:
       ds_content:
         - taxonomy_term_title
-        - field_organisation
+        - field_name
         - description
-        - field_link
+        - field_organisation
     fields:
       taxonomy_term_title:
         plugin_id: taxonomy_term_title

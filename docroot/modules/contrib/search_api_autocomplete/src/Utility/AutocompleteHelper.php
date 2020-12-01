@@ -4,6 +4,7 @@ namespace Drupal\search_api_autocomplete\Utility;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultReasonInterface;
+use Drupal\Core\Render\ElementInfoManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\search_api_autocomplete\SearchInterface;
 
@@ -11,6 +12,22 @@ use Drupal\search_api_autocomplete\SearchInterface;
  * Provides helper methods for creating autocomplete suggestions.
  */
 class AutocompleteHelper implements AutocompleteHelperInterface {
+
+  /**
+   * The element info manager.
+   *
+   * @var \Drupal\Core\Render\ElementInfoManagerInterface
+   */
+  protected $elementInfo;
+
+  /**
+   * Constructs a new class instance.
+   *
+   * @param \Drupal\Core\Render\ElementInfoManagerInterface $element_info
+   */
+  public function __construct(ElementInfoManagerInterface $element_info) {
+    $this->elementInfo = $element_info;
+  }
 
   /**
    * {@inheritdoc}
@@ -35,6 +52,15 @@ class AutocompleteHelper implements AutocompleteHelperInterface {
     $element['#type'] = 'search_api_autocomplete';
     $element['#search_id'] = $search->id();
     $element['#additional_data'] = $data;
+
+    // In case another module (for instance, Better Exposed Filters) adds a
+    // "#process" key for our element type, make sure it is present on this
+    // element now, too.
+    $info = $this->elementInfo->getInfo('search_api_autocomplete');
+    if (!empty($info['#process'])) {
+      $old_process = $element['#process'] ?? [];
+      $element['#process'] = array_merge($old_process, $info['#process']);
+    }
   }
 
   /**

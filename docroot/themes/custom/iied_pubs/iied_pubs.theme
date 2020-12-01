@@ -3,6 +3,14 @@
  * @file
  * Theme functions
  */
+ 
+ use Drupal\Core\Template\Attribute;
+ use Drupal\Core\Link;
+ use Drupal\Component\Utility\Html;
+ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\Component\Utility\Xss;
+ use Drupal\node\Entity\Node;
+ use Drupal\Component\Render\MarkupInterface;
 
  /**
   * Implements hook_preprocess_HOOK() for HTML document templates.
@@ -40,4 +48,29 @@ function iied_pubs_preprocess_html(&$variables) {
   if (!empty($variables['page']['featured_top'])) {
     $variables['attributes']['class'][] = 'has-featured-top';
   }
+
+  // Page specific info.
+    $variables['path_info']['args'] = FALSE;
+    $path = \Drupal::service('path.current')->getPath();
+    $path = ltrim($path, '/');
+    $path_args = explode('/', $path);
+    if (isset($path_args[0]) && isset($path_args[1]) && ($path_args[0] == 'node') && (is_numeric($path_args[1]))) {
+      $variables['attributes']['class'][] = 'page-node-' . $path_args[1];
+    }
+    if (isset($path_args[0]) && isset($path_args[1]) && ($path_args[0] == 'user')) {
+      $variables['attributes']['class'][] = 'page-user-' . $path_args[1];
+    }
+    if (isset($path_args[0]) && isset($path_args[1]) && isset($path_args[2]) &&
+      $path_args[0] == 'taxonomy' && $path_args[1] == 'term') {
+      $variables['attributes']['class'][] = 'page-taxonomy-term-' . $path_args[2];
+      $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($path_args[2]);
+      if (!empty($term)) {
+        $vocabulary_id = $term->bundle();
+        $variables['attributes']['class'][] = 'page-vocabulary-' . Html::cleanCssIdentifier($vocabulary_id);
+      }
+    }
+    $view_id = \Drupal::routeMatch()->getParameter('view_id');
+    if ($view_id) {
+      $variables['attributes']['class'][] = 'page-view-' . Html::cleanCssIdentifier($view_id);
+    }
 }

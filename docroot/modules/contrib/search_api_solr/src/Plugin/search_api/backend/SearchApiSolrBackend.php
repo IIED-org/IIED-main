@@ -200,7 +200,6 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
     return [
       'retrieve_data' => FALSE,
       'highlight_data' => FALSE,
-      'skip_schema_check' => FALSE,
       'site_hash' => FALSE,
       'server_prefix' => '',
       'domain' => 'generic',
@@ -210,6 +209,7 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
       'connector' => NULL,
       'connector_config' => [],
       'optimize' => FALSE,
+      'fallback_multiple' => FALSE,
       // 10 is Solr's default limit if rows is not set.
       'rows' => 10,
       'index_single_documents_fallback_count' => 10,
@@ -254,9 +254,9 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
   public function setConfiguration(array $configuration) {
     $configuration['retrieve_data'] = (bool) $configuration['retrieve_data'];
     $configuration['highlight_data'] = (bool) $configuration['highlight_data'];
-    $configuration['skip_schema_check'] = (bool) $configuration['skip_schema_check'];
     $configuration['site_hash'] = (bool) $configuration['site_hash'];
     $configuration['optimize'] = (bool) $configuration['optimize'];
+    $configuration['fallback_multiple'] = (bool) $configuration['fallback_multiple'];
     $configuration['rows'] = (int) ($configuration['rows'] ?? 10);
     $configuration['index_single_documents_fallback_count'] = (int) ($configuration['index_single_documents_fallback_count'] ?? 10);
 
@@ -332,11 +332,11 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
       '#default_value' => $this->configuration['highlight_data'],
     ];
 
-    $form['advanced']['skip_schema_check'] = [
+    $form['advanced']['fallback_multiple'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Skip schema verification'),
-      '#description' => $this->t('Skip the automatic check for schema-compatibillity. Use this override if you are seeing an error-message about an incompatible schema.xml configuration file, and you are sure the configuration is compatible.'),
-      '#default_value' => $this->configuration['skip_schema_check'],
+      '#title' => $this->t('Fallback to multiValued field types'),
+      '#description' => $this->t('If the cardinality of a field or a property could not be detected (due to incomplete custom module implementations), a single value field type will be used within the Solr index for better performance. If this leads to "multiple values encountered for non multiValued field" exceptions you can set this option to change the fallback to multiValued.'),
+      '#default_value' => $this->configuration['fallback_multiple'],
     ];
 
     $form['advanced']['server_prefix'] = [
@@ -1578,7 +1578,13 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
             $flatten_keys = 'direct' === $parse_mode_id ? $keys : Utility::flattenKeys($keys, [], 'keys');
           }
           else {
-            $flatten_keys = Utility::flattenKeys($keys, ($query_fields_boosted ? explode(' ', $query_fields_boosted) : []), $parse_mode_id);
+            $settings = Utility::getIndexSolrSettings($index);
+            $flatten_keys = Utility::flattenKeys(
+              $keys,
+              ($query_fields_boosted ? explode(' ', $query_fields_boosted) : []),
+              $parse_mode_id,
+              $settings['term_modifiers']
+            );
           }
 
           if ('direct' !== $parse_mode_id && strpos($flatten_keys, '-(') === 0) {
@@ -2135,16 +2141,20 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
                 }
                 else {
                   try {
-                    $datasource = $field->getDatasource();
-                    if (!$datasource) {
-                      throw new SearchApiException();
-                    }
-                    $pref .= $this->getPropertyPathCardinality($field->getPropertyPath(), $datasource->getPropertyDefinitions()) != 1 ? 'm' : 's';
+                    // Returns the correct list of field definitions including
+                    // processor-added properties.
+                    $index_properties = $index->getPropertyDefinitions($field->getDatasourceId());
+                    $pref .= $this->getPropertyPathCardinality($field->getPropertyPath(), $index_properties) != 1 ? 'm' : 's';
                   }
                   catch (SearchApiException $e) {
-                    // Thrown by $field->getDatasource(). Assume multi value to
-                    // be safe.
-                    $pref .= 'm';
+                    // Thrown by $field->getDatasource(). As all conditions for
+                    // multiple values are not met, it seems to be a single
+                    // value field. Note: If the assumption is wrong, Solr will
+                    // throw exceptions when indexing this field. In this case
+                    // you should add an explicit 'isList' => TRUE to your
+                    // property or data definition! Or activate
+                    // fallback_multiple in the advanced server settings.
+                    $pref .= empty($this->configuration['fallback_multiple']) ? 's' : 'm';
                   }
                 }
               }
@@ -2254,11 +2264,10 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
           $cardinality *= $storage->getCardinality();
         }
       }
-      elseif ($property instanceof ListDataDefinitionInterface) {
-        // Lists have unpecified cardinality.
-        return FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED;
-      }
-      elseif ($property->isList()) {
+      elseif ($property->isList() || $property instanceof ListDataDefinitionInterface) {
+        // Lists have unspecified cardinality. Unfortunately BaseFieldDefinition
+        // implements ListDataDefinitionInterface. So the safety net check for
+        // this interface needs to be the last one!
         return FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED;
       }
 
@@ -2269,6 +2278,7 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
         }
       }
     }
+
     return $cardinality;
   }
 
@@ -2924,6 +2934,8 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
               case 'terms':
               case 'phrase':
               case 'sloppy_phrase':
+              case 'sloppy_terms':
+              case 'fuzzy_terms':
               case 'edismax':
                 if (is_array($value)) {
                   $keys += $value;
@@ -2940,7 +2952,13 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
               default:
                 throw new SearchApiSolrException('Incompatible parse mode.');
             }
-            $filter_query = Utility::flattenKeys($keys, $solr_fields[$field], $parse_mode_id);
+            $settings = Utility::getIndexSolrSettings($index);
+            $filter_query = Utility::flattenKeys(
+              $keys,
+              $solr_fields[$field],
+              $parse_mode_id,
+              $settings['term_modifiers']
+            );
           }
           else {
             // Fulltext fields checked against NULL.
@@ -3747,10 +3765,16 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
   protected function getAutocompleteSuggesterSuggestions(ResultInterface $result, SuggestionFactory $suggestion_factory) {
     $suggestions = [];
     if ($phrases_result = $result->getComponent(ComponentAwareQueryInterface::COMPONENT_SUGGESTER)) {
-      foreach ($phrases_result->getAll() as $phrases) {
+      /** @var \Solarium\Component\Result\Suggester\Result $phrases_result */
+      $dictionaries = array_keys($phrases_result->getResults());
+      foreach ($phrases_result->getAll() as $dictionary_index => $phrases) {
         /** @var \Solarium\QueryType\Suggester\Result\Term $phrases */
         foreach ($phrases->getSuggestions() as $phrase) {
-          $suggestions[] = $suggestion_factory->createFromSuggestedKeys($phrase['term']);
+          $suggestion = $suggestion_factory->createFromSuggestedKeys($phrase['term']);
+          if (method_exists($suggestion, 'setDictionary')) {
+            $suggestion->setDictionary($dictionaries[$dictionary_index]);
+          }
+          $suggestions[] = $suggestion;
         }
       }
     }
@@ -4807,7 +4831,9 @@ class SearchApiSolrBackend extends BackendPluginBase implements SolrBackendInter
    * {@inheritdoc}
    */
   public function isNonDrupalOrOutdatedConfigSetAllowed(): bool {
-    return (bool) $this->configuration['skip_schema_check'];
+    $connector = $this->getSolrConnector();
+    $configuration = $connector->getConfiguration();
+    return (bool) ($configuration['skip_schema_check'] ?? FALSE);
   }
 
   /**

@@ -27,7 +27,7 @@ class ShowTextWhenEmptyProcessorTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
     $string_translation = $this->prophesize(TranslationInterface::class);
 
@@ -65,7 +65,15 @@ class ShowTextWhenEmptyProcessorTest extends UnitTestCase {
     $summary = new FacetsSummary([], 'facets_summary');
     $summary->setFacetSourceId('foo');
 
-    $result = $this->processor->build($summary, ['foo'], []);
+    $build = [
+      'foo' => 'bar',
+      '#wrapper_attributes' => [
+        'class' => [
+          $this->randomMachineName(),
+        ]
+      ]
+    ];
+    $result = $this->processor->build($summary, $build, []);
     $this->assertSame('array', gettype($result));
     $this->assertArrayHasKey('#theme', $result);
     $this->assertEquals('facets_summary_empty', $result['#theme']);
@@ -78,7 +86,7 @@ class ShowTextWhenEmptyProcessorTest extends UnitTestCase {
       ],
     ];
     $this->processor->setConfiguration($configuration);
-    $result = $this->processor->build($summary, ['foo'], []);
+    $result = $this->processor->build($summary, $build, []);
     $this->assertEquals('llama', $result['#message']['#text']);
   }
 
@@ -91,7 +99,14 @@ class ShowTextWhenEmptyProcessorTest extends UnitTestCase {
     $summary = new FacetsSummary([], 'facets_summary');
     $summary->setFacetSourceId('foo');
 
-    $build = ['#items' => []];
+    $build = [
+      '#items' => [],
+      '#wrapper_attributes' => [
+        'class' => [
+          $this->randomMachineName(),
+        ]
+      ]
+    ];
     $result = $this->processor->build($summary, $build, []);
     $this->assertSame('array', gettype($result));
     $this->assertArrayHasKey('#theme', $result);
@@ -111,7 +126,14 @@ class ShowTextWhenEmptyProcessorTest extends UnitTestCase {
     $summary = new FacetsSummary([], 'facets_summary');
     $summary->setFacetSourceId('foo');
 
-    $build = ['#items' => []];
+    $build = [
+      '#items' => [],
+      '#wrapper_attributes' => [
+        'class' => [
+          $this->randomMachineName(),
+        ]
+      ]
+    ];
     $this->processor->setConfiguration(['text' => ['value' => 'Owl', 'format' => 'llama']]);
     $result = $this->processor->build($summary, $build, []);
     $this->assertSame('array', gettype($result));
