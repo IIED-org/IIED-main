@@ -6,10 +6,9 @@
 #}
 <div class="page">
   {% embed '@radix/navbar/navbar.twig' with {
-    placement: 'sticky-top',
     container: 'fixed',
     color: 'light',
-    utility_classes: ['bg-light'],
+    utility_classes: ['bg-white border-bottom'],
   } %}
 
     {% block branding %}
@@ -35,7 +34,7 @@
 
   <main class="pb-5">
     {% if page.header %}
-      <header class="page__header mb-3 bg-light">
+      <header class="page__header bg-light">
         <div class="container">
           {{ page.header }}
         </div>
@@ -81,7 +80,7 @@
 
     {% if page.featured_bottom %}
       {% block featured_bottom %}
-        <div class="featured-bottom bg-light py-4">
+        <div class="featured-bottom bg-light">
           <aside class="featured-bottom__inner section {{ container }} clearfix" role="complementary">
           <div class="container">
             {{ page.featured_bottom }}

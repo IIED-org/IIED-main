@@ -103,7 +103,7 @@ display:
             preserve_tags: ''
             html: false
           element_type: div
-          element_class: 'btn btn-light'
+          element_class: 'btn btn-light mb-3'
           element_label_type: ''
           element_label_class: ''
           element_label_colon: false
@@ -242,6 +242,7 @@ display:
           plugin_id: numeric
       display_extenders: {  }
       group_by: true
+      css_class: container
     cache_metadata:
       max-age: -1
       contexts:

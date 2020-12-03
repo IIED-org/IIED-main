@@ -1,0 +1,22 @@
+{#
+/**
+ * @file
+ * Template for the branding block.
+ */
+#}
+{% embed '@radix/block/block.twig' with {
+  html_tag: 'div',
+} %}
+
+{% block content %}
+  {% include '@iied_pubs/navbar/navbar-brand.twig' with {
+    text: site_name,
+    image: site_logo,
+    width: 64,
+    height: 'auto',
+    path: path('<front>'),
+    alt: 'IIED logo' ,
+  } %}
+{% endblock %}
+
+{% endembed %}
