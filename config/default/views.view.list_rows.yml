@@ -5,8 +5,12 @@ dependencies:
   config:
     - core.entity_view_mode.node.card
     - node.type.publication
+    - taxonomy.vocabulary.list
+  content:
+    - 'taxonomy_term:list:85f1ee52-f4d3-4bc8-a993-df456ddcfa08'
   module:
     - node
+    - taxonomy
     - user
     - views_bootstrap
 id: list_rows
@@ -51,7 +55,7 @@ display:
       pager:
         type: some
         options:
-          items_per_page: 4
+          items_per_page: 12
           offset: 0
       style:
         type: views_bootstrap_grid
@@ -159,6 +163,52 @@ display:
           expose:
             operator_limit_selection: false
             operator_list: {  }
+        field_lists_target_id:
+          id: field_lists_target_id
+          table: node__field_lists
+          field: field_lists_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: or
+          value:
+            38496: 38496
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          type: select
+          limit: true
+          vid: list
+          hierarchy: false
+          error_message: true
+          plugin_id: taxonomy_index_tid
       sorts:
         created:
           id: created
@@ -187,6 +237,7 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - user
         - 'user.node_grants:view'
         - user.permissions
       tags: {  }
@@ -204,6 +255,7 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - user
         - 'user.node_grants:view'
         - user.permissions
       tags: {  }

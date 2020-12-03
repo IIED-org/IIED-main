@@ -5,14 +5,10 @@ dependencies:
   config:
     - views.view.related_publications
   module:
-    - block_class
     - ctools
     - views
   theme:
     - iied_pubs
-third_party_settings:
-  block_class:
-    classes: mb-5
 id: views_block__related_publications_block_1
 theme: iied_pubs
 region: featured_bottom

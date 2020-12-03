@@ -54,6 +54,10 @@ display:
           offset: 0
       style:
         type: default
+        options:
+          row_class: pb-5
+          default_row_class: false
+          uses_fields: false
       row:
         type: 'entity:node'
         options:
@@ -161,8 +165,8 @@ display:
           empty: false
           tokenize: false
           content:
-            value: '<h2>Project</h2>'
-            format: basic_html
+            value: '<h2 class="pt-4">Project</h2>'
+            format: full_html
           plugin_id: text
       footer: {  }
       empty: {  }
@@ -215,7 +219,7 @@ display:
           entity_field: nid
           plugin_id: node_nid
       display_extenders: {  }
-      css_class: mb-5
+      css_class: ''
     cache_metadata:
       max-age: -1
       contexts:

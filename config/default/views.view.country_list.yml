@@ -224,7 +224,7 @@ display:
             sort_order: asc
             number_of_records: 0
             format: default_summary
-          specify_validation: false
+          specify_validation: true
           validate:
             type: none
             fail: 'not found'
