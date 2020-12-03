@@ -148,7 +148,10 @@ class ViewsExposedForm extends FormBase {
 
     $form['#action'] = $form_action;
     $form['#theme'] = $view->buildThemeFunctions('views_exposed_form');
-    $form['#id'] = Html::cleanCssIdentifier('views_exposed_form-' . $view->storage->id() . '-' . $display['id']);
+    $clean_form_id = Html::cleanCssIdentifier('views_exposed_form-' . $view->storage->id() . '-' . $display['id']);
+    $form['#attributes']['class'][] = $clean_form_id;
+    // The form can be possibly rendered twice on a page, make the id unique.
+    $form['#id'] = Html::getUniqueId($clean_form_id);
 
     /** @var \Drupal\views\Plugin\views\exposed_form\ExposedFormPluginInterface $exposed_form_plugin */
     $exposed_form_plugin = $view->display_handler->getPlugin('exposed_form');
