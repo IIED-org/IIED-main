@@ -40,8 +40,9 @@ abstract class ExtensionParser
 					}
 					break;
 				default:
-					foreach ($nodes->children() as $key => $value) {
-						$extensions->unsupported[$key] = (string) $value;
+					foreach ($nodes->children($namespace) as $child_key => $value) {
+
+						$extensions->unsupported[$key ? "$key:$child_key" : "$child_key"] = (string) $value;
 					}
 			}
 		}

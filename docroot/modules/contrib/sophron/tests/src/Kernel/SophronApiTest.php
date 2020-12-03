@@ -26,7 +26,7 @@ class SophronApiTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
     $this->installConfig(['sophron']);
   }
@@ -37,7 +37,7 @@ class SophronApiTest extends KernelTestBase {
    * @covers ::listExtensions
    * @covers ::getExtension
    */
-  public function testGetExtension() {
+  public function testGetExtension(): void {
     $manager = \Drupal::service('sophron.mime_map.manager');
     $this->assertEquals(DrupalMap::class, $manager->getMapClass());
     $this->assertContains('atomsrv', $manager->listExtensions());
@@ -53,7 +53,7 @@ class SophronApiTest extends KernelTestBase {
    * @covers ::listTypes
    * @covers ::getType
    */
-  public function testGetType() {
+  public function testGetType(): void {
     $manager = \Drupal::service('sophron.mime_map.manager');
     $this->assertContains('application/atomserv+xml', $manager->listTypes());
     $this->assertEquals(['atomsrv'], $manager->getType('application/atomserv+xml')->getExtensions());
@@ -69,10 +69,7 @@ class SophronApiTest extends KernelTestBase {
    * @covers ::getMapClass
    * @covers ::getMappingErrors
    */
-  public function testGetMappingErrors() {
-    if (PHP_VERSION_ID < 70000) {
-      $this->markTestSkipped('Not supported before PHP 7.0');
-    }
+  public function testGetMappingErrors(): void {
     $config = \Drupal::configFactory()->getEditable('sophron.settings');
     $config
       ->set('map_option', MimeMapManagerInterface::DEFAULT_MAP)

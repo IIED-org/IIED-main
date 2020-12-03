@@ -13,9 +13,11 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 class RabbitHoleEntityPluginManager extends DefaultPluginManager {
 
   /**
-   * Drupal\Core\Entity\EntityTypeManagerInterface.
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  private $etm;
+  protected $entityTypeManager;
 
   /**
    * Constructor for RabbitHoleEntityPluginManager objects.
@@ -27,19 +29,21 @@ class RabbitHoleEntityPluginManager extends DefaultPluginManager {
    *   Cache backend instance to use.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler to invoke the alter hook with.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
    */
   public function __construct(
     \Traversable $namespaces,
     CacheBackendInterface $cache_backend,
     ModuleHandlerInterface $module_handler,
-    EntityTypeManagerInterface $etm
+    EntityTypeManagerInterface $entity_type_manager
   ) {
     parent::__construct('Plugin/RabbitHoleEntityPlugin', $namespaces, $module_handler, 'Drupal\rabbit_hole\Plugin\RabbitHoleEntityPluginInterface', 'Drupal\rabbit_hole\Annotation\RabbitHoleEntityPlugin');
 
     $this->alterInfo('rabbit_hole_rabbit_hole_entity_plugin_info');
     $this->setCacheBackend($cache_backend, 'rabbit_hole_rabbit_hole_entity_plugin_plugins');
 
-    $this->etm = $etm;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -51,7 +55,7 @@ class RabbitHoleEntityPluginManager extends DefaultPluginManager {
    * @param string $entity_type
    *   The string ID of the entity type.
    *
-   * @return Drupal\rabbit_hole\Plugin\RabbitHoleEntityPluginInterface
+   * @return \Drupal\rabbit_hole\Plugin\RabbitHoleEntityPluginInterface
    *   The plugin.
    */
   public function createInstanceByEntityType($entity_type) {
@@ -94,7 +98,7 @@ class RabbitHoleEntityPluginManager extends DefaultPluginManager {
    */
   public function loadSupportedBundleEntityTypes() {
     return array_values(array_map(function ($var) {
-      return $this->etm->getStorage($var['entityType'])
+      return $this->entityTypeManager->getStorage($var['entityType'])
         ->getEntityType()->getBundleEntityType();
     }, $this->getDefinitions()));
   }

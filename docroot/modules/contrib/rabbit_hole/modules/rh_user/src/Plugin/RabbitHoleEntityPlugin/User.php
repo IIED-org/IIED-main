@@ -2,6 +2,7 @@
 
 namespace Drupal\rh_user\Plugin\RabbitHoleEntityPlugin;
 
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\rabbit_hole\Plugin\RabbitHoleEntityPluginBase;
 
 /**
@@ -18,15 +19,6 @@ class User extends RabbitHoleEntityPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getFormSubmitHandlerAttachLocations() {
-    return [
-      ['actions', 'submit', '#submit'],
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getGlobalConfigFormId() {
     return "user_admin_settings";
   }
@@ -34,7 +26,7 @@ class User extends RabbitHoleEntityPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getGlobalFormSubmitHandlerAttachLocations() {
+  public function getGlobalFormSubmitHandlerAttachLocations(array $form, FormStateInterface $form_state) {
     return ['#submit'];
   }
 

@@ -6,7 +6,6 @@
 
 namespace phpGPX\Models;
 
-use phpGPX\Helpers\DateTimeHelper;
 use phpGPX\Helpers\GeoHelper;
 use phpGPX\Helpers\SerializationHelper;
 use phpGPX\phpGPX;
@@ -48,7 +47,7 @@ class Track extends Collection
 		}
 
 		if (phpGPX::$SORT_BY_TIMESTAMP && !empty($points)) {
-			usort($points, array(DateTimeHelper::class, 'comparePointsByTimestamp'));
+			usort($points, array('phpGPX\Helpers\DateTimeHelper', 'comparePointsByTimestamp'));
 		}
 
 		return $points;
@@ -86,44 +85,46 @@ class Track extends Collection
 
 		$this->stats->reset();
 
-		if (empty($this->segments) || empty($this->segments[0]->points)) {
+		if (empty($this->segments)) {
 			return;
 		}
 
-		$firstSegment = &$this->segments[0];
-		$firstPoint = &$this->segments[0]->points[0];
+		$segmentsCount = count($this->segments);
+
+		$firstSegment = null;
+		$firstPoint = null;
+
+		// Identify first Segment/Point
+		for ($s = 0; $s < $segmentsCount; $s++) {
+			$pointCount = count($this->segments[$s]->points);
+			for ($p = 0; $p < $pointCount; $p++) {
+				if (is_null($firstPoint)) {
+					$firstPoint = &$this->segments[$s]->points[$p];
+					$firstSegment = &$this->segments[$s];
+					break;
+				}
+			}
+		}
+
+		if (empty($firstPoint)) {
+			return;
+		}
+
 		$lastSegment = end($this->segments);
 		$lastPoint = end(end($this->segments)->points);
-
-		$segmentsCount = count($this->segments);
 
 		$this->stats->startedAt = $firstPoint->time;
 		$this->stats->finishedAt = $lastPoint->time;
 		$this->stats->minAltitude = $firstPoint->elevation;
 
-		$lastElevation = null;
-
 		for ($s = 0; $s < $segmentsCount; $s++) {
 			$this->segments[$s]->recalculateStats();
-			$pointCount = count($this->segments[$s]->points);
-			for ($p = 0; $p < $pointCount; $p++) {
-				if (($p == 0) && ($s > 0)) {
-					$this->segments[$s]->points[$p]->difference = GeoHelper::getDistance(end($this->segments[$s-1]->points), $this->segments[$s]->points[$p]);
-				} elseif ($p > 0) {
-					$this->segments[$s]->points[$p]->difference = GeoHelper::getDistance($this->segments[$s]->points[$p-1], $this->segments[$s]->points[$p]);
-				}
-				$this->stats->distance += $this->segments[$s]->points[$p]->difference;
-				$this->segments[$s]->points[$p]->distance = $this->stats->distance;
 
-				if ($this->stats->cumulativeElevationGain === null) {
-					$lastElevation = $firstPoint->elevation;
-					$this->stats->cumulativeElevationGain = 0;
-				} else {
-					$elevationDelta = $this->segments[$s]->points[$p]->elevation - $lastElevation;
-					$this->stats->cumulativeElevationGain += ($elevationDelta > 0) ? $elevationDelta : 0;
-					$lastElevation = $this->segments[$s]->points[$p]->elevation;
-				}
-			}
+			$this->stats->cumulativeElevationGain += $this->segments[$s]->stats->cumulativeElevationGain;
+			$this->stats->cumulativeElevationLoss += $this->segments[$s]->stats->cumulativeElevationLoss;
+
+			$this->stats->distance += $this->segments[$s]->stats->distance;
+
 			if ($this->stats->minAltitude === null) {
 				$this->stats->minAltitude = $this->segments[$s]->stats->minAltitude;
 			}

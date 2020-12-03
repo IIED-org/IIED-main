@@ -19,7 +19,7 @@ settings:
   provider: sidr
   label_display: '0'
   trigger_text: 'Filter and sort'
-  trigger_icon: '<span class="icon-hamburger"></span>'
+  trigger_icon: ''
   sidr_name: ''
   sidr_source: .sidebar_first
   sidr_side: left
@@ -28,7 +28,7 @@ settings:
   sidr_speed: '400'
   sidr_timing: ''
   sidr_method: toggle
-  sidr_displace: false
+  sidr_displace: true
   sidr_body: ''
   sidr_close_on_blur: null
 visibility:

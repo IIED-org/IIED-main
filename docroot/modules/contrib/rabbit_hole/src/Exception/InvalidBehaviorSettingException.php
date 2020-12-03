@@ -3,16 +3,22 @@
 namespace Drupal\rabbit_hole\Exception;
 
 /**
- * Class InvalidBehaviorSettingException.
- *
- * @package Drupal\rabbit_hole
+ * Exception for the case of invalid behavior settings.
  */
 class InvalidBehaviorSettingException extends \Exception {
 
+  /**
+   * Rabbit Hole setting name.
+   *
+   * @var string
+   */
   private $setting;
 
   /**
-   * Constructor.
+   * InvalidBehaviorSettingException constructor.
+   *
+   * @param string $setting
+   *   Rabbit Hole setting name.
    */
   public function __construct($setting) {
     parent::__construct();
@@ -20,7 +26,7 @@ class InvalidBehaviorSettingException extends \Exception {
   }
 
   /**
-   * Get the invalid setting.
+   * Returns invalid setting name.
    */
   public function getSetting() {
     return $this->setting();

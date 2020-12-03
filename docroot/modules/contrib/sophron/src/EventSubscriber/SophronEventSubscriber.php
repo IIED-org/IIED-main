@@ -58,12 +58,6 @@ class SophronEventSubscriber implements EventSubscriberInterface {
    *   Sophron's map event.
    */
   public function initializeMap(MapEvent $event) {
-    // Run additional commands mapping only for PHP 7+. This is because running
-    // the mapping routine for lower version expose the module to fatal error
-    // risks that cannot be caught before PHP 7.
-    if (PHP_VERSION_ID < 70000) {
-      return;
-    }
     $map_commands = $this->sophronSettings->get('map_commands');
     $map = MapHandler::map($event->getMapClass());
     foreach ($map_commands as $command) {

@@ -22,16 +22,36 @@ class RabbitHoleBehaviorSettingsTest extends BrowserTestBase {
   const DEFAULT_BUNDLE_REDIRECT_CODE = BehaviorSettings::REDIRECT_NOT_APPLICABLE;
 
   /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
+
+  /**
    * Modules to enable.
    *
    * @var array
    */
   public static $modules = ['rabbit_hole', self::DEFAULT_TEST_ENTITY];
 
+  /**
+   * Behavior settings manager.
+   *
+   * @var \Drupal\rabbit_hole\BehaviorSettingsManager
+   */
   private $behaviorSettingsManager;
 
+  /**
+   * Config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
   private $configFactory;
 
+  /**
+   * Test content type.
+   *
+   * @var \Drupal\Core\Entity\EntityInterface
+   */
   private $testNodeType;
 
   /**
@@ -61,13 +81,15 @@ class RabbitHoleBehaviorSettingsTest extends BrowserTestBase {
    */
   public function testBundleSettingsDefault() {
     $settings = \Drupal::config('rabbit_hole.behavior_settings.default');
-    $this->assertEqual($settings->get('action'),
-      self::DEFAULT_BUNDLE_ACTION,
+    $this->assertEquals(self::DEFAULT_BUNDLE_ACTION,
+        $settings->get('action'),
       'Unexpected default action');
-    $this->assertEqual($settings->get('allow_override'),
-      self::DEFAULT_BUNDLE_OVERRIDE, 'Unexpected default override');
-    $this->assertEqual($settings->get('redirect_code'),
-      self::DEFAULT_BUNDLE_REDIRECT_CODE, 'Unexpected default redirect');
+    $this->assertEquals(self::DEFAULT_BUNDLE_OVERRIDE,
+        $settings->get('allow_override'),
+       'Unexpected default override');
+    $this->assertEquals(self::DEFAULT_BUNDLE_REDIRECT_CODE,
+        $settings->get('redirect_code'),
+        'Unexpected default redirect');
   }
 
   /**
@@ -91,7 +113,7 @@ class RabbitHoleBehaviorSettingsTest extends BrowserTestBase {
     $action = $this->behaviorSettingsManager->loadBehaviorSettingsAsConfig(
       self::DEFAULT_TEST_ENTITY,
       'f4515736-cfa0-4e38-b3ed-1306f56bd2a1')->get('action');
-    $this->assertEqual(self::DEFAULT_BUNDLE_ACTION, $action,
+    $this->assertEquals($action, self::DEFAULT_BUNDLE_ACTION,
       'Unexpected default action');
   }
 
@@ -102,7 +124,7 @@ class RabbitHoleBehaviorSettingsTest extends BrowserTestBase {
     $editable = $this->behaviorSettingsManager
       ->loadBehaviorSettingsAsEditableConfig(self::DEFAULT_TEST_ENTITY,
         '6b92ed36-f17f-4799-97d0-ae1801ed37ff');
-    $this->assertEqual($editable, NULL);
+    $this->assertNull($editable);
   }
 
   /**
@@ -125,7 +147,7 @@ class RabbitHoleBehaviorSettingsTest extends BrowserTestBase {
     ], $entity_type_label, $entity_id);
     $action = $this->behaviorSettingsManager->loadBehaviorSettingsAsConfig(
       $entity_type_label, $entity_id)->get('action');
-    $this->assertEqual($action, $expected_action, 'Unexpected action '
+    $this->assertEquals($expected_action, $action, 'Unexpected action '
       . ' (called from ' . $calling_method . ')');
 
     // Clean up the entity afterwards.

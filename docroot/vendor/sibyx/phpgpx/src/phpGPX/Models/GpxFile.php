@@ -55,7 +55,7 @@ class GpxFile implements Summarizable
 	 * Creator of GPX file.
 	 * @var string|null
 	 */
-	public $creator;
+		public $creator;
 
 	/**
 	 * GpxFile constructor.
@@ -77,14 +77,14 @@ class GpxFile implements Summarizable
 	 */
 	public function toArray()
 	{
-		return [
+		return SerializationHelper::filterNotNull([
 			'creator' => SerializationHelper::stringOrNull($this->creator),
 			'metadata' => SerializationHelper::serialize($this->metadata),
 			'waypoints' => SerializationHelper::serialize($this->waypoints),
 			'routes' => SerializationHelper::serialize($this->routes),
 			'tracks' => SerializationHelper::serialize($this->tracks),
 			'extensions' => SerializationHelper::serialize($this->extensions)
-		];
+		]);
 	}
 
 	/**
@@ -106,7 +106,7 @@ class GpxFile implements Summarizable
 
 		$gpx = $document->createElementNS("http://www.topografix.com/GPX/1/1", "gpx");
 		$gpx->setAttribute("version", "1.1");
-		$gpx->setAttribute("creator", phpGPX::getSignature());
+		$gpx->setAttribute("creator", $this->creator ? $this->creator : phpGPX::getSignature());
 
 		ExtensionParser::$usedNamespaces = [];
 

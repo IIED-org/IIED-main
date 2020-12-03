@@ -5,6 +5,7 @@ namespace Drupal\rabbit_hole\Plugin;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Base class for Rabbit hole behavior plugin plugins.
@@ -22,8 +23,8 @@ abstract class RabbitHoleBehaviorPluginBase extends PluginBase implements Rabbit
    * {@inheritdoc}
    */
   public function settingsForm(
-    &$form,
-    &$form_state,
+    array &$form,
+    FormStateInterface $form_state,
     $form_id,
     EntityInterface $entity = NULL,
     $entity_is_bundle = FALSE,
@@ -51,6 +52,36 @@ abstract class RabbitHoleBehaviorPluginBase extends PluginBase implements Rabbit
    */
   public function usesResponse() {
     return RabbitHoleBehaviorPluginInterface::USES_RESPONSE_NEVER;
+  }
+
+  /**
+   * Returns configuration object with "Rabbit Hole" bundle settings.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity the action is being performed on.
+   *
+   * @return \Drupal\Core\Config\ImmutableConfig
+   *   Configuration object with bundle settings.
+   */
+  protected function getBundleSettings(EntityInterface $entity) {
+    $bundle_entity_type = $entity->getEntityType()->getBundleEntityType();
+    return \Drupal::service('rabbit_hole.behavior_settings_manager')
+      ->loadBehaviorSettingsAsConfig(
+        $bundle_entity_type ?: $entity->getEntityType()->id(),
+        $bundle_entity_type ? $entity->bundle() : NULL);
+  }
+
+  /**
+   * Returns the fallback action in case if action cannot be performed.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity the action is being performed on.
+   *
+   * @return string
+   *   Fallback action name.
+   */
+  protected function getFallbackAction(EntityInterface $entity) {
+    return 'access_denied';
   }
 
 }

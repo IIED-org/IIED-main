@@ -10,15 +10,25 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 
 /**
- * Class RabbitHolePermissionGenerator.
- *
- * @package Drupal\rabbit_hole
+ * Generates permission for each supported entity type.
  */
 class RabbitHolePermissionGenerator implements ContainerInjectionInterface {
+
   use StringTranslationTrait;
 
-  private $entityTypeManager = NULL;
-  private $rhEntityPluginManager = NULL;
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * Entity plugin manager.
+   *
+   * @var \Drupal\rabbit_hole\Plugin\RabbitHoleEntityPluginManager
+   */
+  protected $rhEntityPluginManager;
 
   /**
    * Constructor.
@@ -48,25 +58,28 @@ class RabbitHolePermissionGenerator implements ContainerInjectionInterface {
    * Return an array of per-entity rabbit hole permissions.
    *
    * @return array
-   *   An array of permissions
+   *   An array of permissions.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function permissions() {
     $permissions = [];
 
     foreach ($this->rhEntityPluginManager->getDefinitions() as $def) {
       $entity_type = $this->entityTypeManager
-              ->getStorage($def['entityType'])
-              ->getEntityType();
+        ->getStorage($def['entityType'])
+        ->getEntityType();
       $permissions += [
         'rabbit hole administer ' . $def['entityType'] => [
-          'title' => $this->t(
-                      'Administer Rabbit Hole settings for %entity_type',
-                      ['%entity_type' => $entity_type->getLabel()]),
+          'title' => $this->t('Administer Rabbit Hole settings for %entity_type', [
+            '%entity_type' => $entity_type->getLabel(),
+          ]),
         ],
         'rabbit hole bypass ' . $def['entityType'] => [
-          'title' => $this->t(
-                      'Bypass Rabbit Hole action for %entity_type',
-                      ['%entity_type' => $entity_type->getLabel()]),
+          'title' => $this->t('Bypass Rabbit Hole action for %entity_type', [
+            '%entity_type' => $entity_type->getLabel(),
+          ]),
         ],
       ];
     }

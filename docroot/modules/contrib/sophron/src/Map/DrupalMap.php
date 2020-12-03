@@ -4908,6 +4908,17 @@ class DrupalMap extends AbstractMap {
         0 => 'dmg',
       ),
     ),
+    'application/x-apple-systemprofiler+xml' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'Apple System Profiler',
+      ),
+      'e' =>
+      array (
+        0 => 'spx',
+      ),
+    ),
     'application/x-appleworks-document' =>
     array (
       'desc' =>
@@ -5086,6 +5097,18 @@ class DrupalMap extends AbstractMap {
       array (
         0 => 'blb',
         1 => 'blorb',
+      ),
+    ),
+    'application/x-bps-patch' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'BPS patch',
+        1 => 'BPS: Binary Patching System',
+      ),
+      'e' =>
+      array (
+        0 => 'bps',
       ),
     ),
     'application/x-bsdiff' =>
@@ -6118,6 +6141,18 @@ class DrupalMap extends AbstractMap {
       'e' =>
       array (
         0 => 'iii',
+      ),
+    ),
+    'application/x-ips-patch' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'IPS patch',
+        1 => 'IPS: International Patching System',
+      ),
+      'e' =>
+      array (
+        0 => 'ips',
       ),
     ),
     'application/x-ipynb+json' =>
@@ -7194,6 +7229,28 @@ class DrupalMap extends AbstractMap {
       'e' =>
       array (
         0 => 'pw',
+      ),
+    ),
+    'application/x-pyspread-bz-spreadsheet' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'Pyspread spreadsheet (bzip-compressed)',
+      ),
+      'e' =>
+      array (
+        0 => 'pys',
+      ),
+    ),
+    'application/x-pyspread-spreadsheet' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'Pyspread spreadsheet',
+      ),
+      'e' =>
+      array (
+        0 => 'pysu',
       ),
     ),
     'application/x-python-bytecode' =>
@@ -8598,6 +8655,17 @@ class DrupalMap extends AbstractMap {
         1 => 'xhe',
       ),
     ),
+    'audio/vnd.audible.aax' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'Audible Enhanced audio',
+      ),
+      'e' =>
+      array (
+        0 => 'aax',
+      ),
+    ),
     'audio/vnd.dece.audio' =>
     array (
       'e' =>
@@ -8996,7 +9064,6 @@ class DrupalMap extends AbstractMap {
       'a' =>
       array (
         0 => 'audio/vnd.audible',
-        1 => 'audio/vnd.audible.aax',
       ),
       'desc' =>
       array (
@@ -9005,7 +9072,6 @@ class DrupalMap extends AbstractMap {
       'e' =>
       array (
         0 => 'aa',
-        1 => 'aax',
       ),
     ),
     'audio/x-pn-realaudio-plugin' =>
@@ -9094,6 +9160,7 @@ class DrupalMap extends AbstractMap {
       array (
         0 => 'oga',
         1 => 'ogg',
+        2 => 'spx',
       ),
     ),
     'audio/x-stm' =>
@@ -9694,6 +9761,28 @@ class DrupalMap extends AbstractMap {
       'e' =>
       array (
         0 => 'woff2',
+      ),
+    ),
+    'image/avif' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'AV1 Image File Format (AVIF)',
+      ),
+      'e' =>
+      array (
+        0 => 'avif',
+      ),
+    ),
+    'image/avif-sequence' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'AVIF image sequence',
+      ),
+      'e' =>
+      array (
+        0 => 'avifs',
       ),
     ),
     'image/bmp' =>
@@ -11304,6 +11393,22 @@ class DrupalMap extends AbstractMap {
         0 => 'tsv',
       ),
     ),
+    'text/tcl' =>
+    array (
+      'a' =>
+      array (
+        0 => 'text/x-tcl',
+      ),
+      'desc' =>
+      array (
+        0 => 'Tcl script',
+      ),
+      'e' =>
+      array (
+        0 => 'tcl',
+        1 => 'tk',
+      ),
+    ),
     'text/texmacs' =>
     array (
       'e' =>
@@ -11353,6 +11458,21 @@ class DrupalMap extends AbstractMap {
         0 => 'uri',
         1 => 'uris',
         2 => 'urls',
+      ),
+    ),
+    'text/vbscript' =>
+    array (
+      'a' =>
+      array (
+        0 => 'text/vbs',
+      ),
+      'desc' =>
+      array (
+        0 => 'VBScript program',
+      ),
+      'e' =>
+      array (
+        0 => 'vbs',
       ),
     ),
     'text/vcard' =>
@@ -11635,6 +11755,20 @@ class DrupalMap extends AbstractMap {
       array (
         0 => 'cbl',
         1 => 'cob',
+      ),
+    ),
+    'text/x-common-lisp' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'Common Lisp source code',
+      ),
+      'e' =>
+      array (
+        0 => 'asd',
+        1 => 'fasl',
+        2 => 'lisp',
+        3 => 'ros',
       ),
     ),
     'text/x-component' =>
@@ -11938,6 +12072,17 @@ class DrupalMap extends AbstractMap {
       'e' =>
       array (
         0 => 'java',
+      ),
+    ),
+    'text/x-kotlin' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'Kotlin source code',
+      ),
+      'e' =>
+      array (
+        0 => 'kt',
       ),
     ),
     'text/x-ldif' =>
@@ -12445,18 +12590,6 @@ class DrupalMap extends AbstractMap {
         8 => 'swap',
         9 => 'target',
         10 => 'timer',
-      ),
-    ),
-    'text/x-tcl' =>
-    array (
-      'desc' =>
-      array (
-        0 => 'Tcl script',
-      ),
-      'e' =>
-      array (
-        0 => 'tcl',
-        1 => 'tk',
       ),
     ),
     'text/x-tex' =>
@@ -13394,7 +13527,7 @@ class DrupalMap extends AbstractMap {
     array (
       't' =>
       array (
-        0 => 'audio/x-pn-audibleaudio',
+        0 => 'audio/vnd.audible.aax',
       ),
     ),
     'abw' =>
@@ -13811,6 +13944,13 @@ class DrupalMap extends AbstractMap {
         3 => 'application/pgp-keys',
       ),
     ),
+    'asd' =>
+    array (
+      't' =>
+      array (
+        0 => 'text/x-common-lisp',
+      ),
+    ),
     'asf' =>
     array (
       't' =>
@@ -13934,6 +14074,20 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'video/x-msvideo',
+      ),
+    ),
+    'avif' =>
+    array (
+      't' =>
+      array (
+        0 => 'image/avif',
+      ),
+    ),
+    'avifs' =>
+    array (
+      't' =>
+      array (
+        0 => 'image/avif-sequence',
       ),
     ),
     'aw' =>
@@ -14156,6 +14310,13 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'application/octet-stream',
+      ),
+    ),
+    'bps' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/x-bps-patch',
       ),
     ),
     'bsd' =>
@@ -15938,6 +16099,13 @@ class DrupalMap extends AbstractMap {
         0 => 'text/x-fortran',
       ),
     ),
+    'fasl' =>
+    array (
+      't' =>
+      array (
+        0 => 'text/x-common-lisp',
+      ),
+    ),
     'fb' =>
     array (
       't' =>
@@ -17404,6 +17572,13 @@ class DrupalMap extends AbstractMap {
         0 => 'application/vnd.shana.informed.package',
       ),
     ),
+    'ips' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/x-ips-patch',
+      ),
+    ),
     'iptables' =>
     array (
       't' =>
@@ -17954,6 +18129,13 @@ class DrupalMap extends AbstractMap {
         1 => 'application/vnd.kde.kspread',
       ),
     ),
+    'kt' =>
+    array (
+      't' =>
+      array (
+        0 => 'text/x-kotlin',
+      ),
+    ),
     'ktr' =>
     array (
       't' =>
@@ -18081,6 +18263,13 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'application/vnd.route66.link66+xml',
+      ),
+    ),
+    'lisp' =>
+    array (
+      't' =>
+      array (
+        0 => 'text/x-common-lisp',
       ),
     ),
     'list' =>
@@ -20914,6 +21103,20 @@ class DrupalMap extends AbstractMap {
         1 => 'application/x-python-bytecode',
       ),
     ),
+    'pys' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/x-pyspread-bz-spreadsheet',
+      ),
+    ),
+    'pysu' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/x-pyspread-spreadsheet',
+      ),
+    ),
     'pyv' =>
     array (
       't' =>
@@ -21398,6 +21601,7 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'chemical/x-rosdal',
+        1 => 'text/x-common-lisp',
       ),
     ),
     'rp' =>
@@ -22283,7 +22487,9 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'audio/ogg',
-        1 => 'audio/x-speex',
+        1 => 'application/x-apple-systemprofiler+xml',
+        2 => 'audio/x-speex+ogg',
+        3 => 'audio/x-speex',
       ),
     ),
     'sql' =>
@@ -22844,6 +23050,7 @@ class DrupalMap extends AbstractMap {
       array (
         0 => 'text/x-tcl',
         1 => 'application/x-tcl',
+        2 => 'text/tcl',
       ),
     ),
     'teacher' =>
@@ -22981,6 +23188,7 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'text/x-tcl',
+        1 => 'text/tcl',
       ),
     ),
     'tlrz' =>
@@ -23623,6 +23831,13 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'application/x-virtual-boy-rom',
+      ),
+    ),
+    'vbs' =>
+    array (
+      't' =>
+      array (
+        0 => 'text/vbscript',
       ),
     ),
     'vcard' =>
@@ -26402,13 +26617,6 @@ class DrupalMap extends AbstractMap {
         0 => 'audio/x-pn-audibleaudio',
       ),
     ),
-    'audio/vnd.audible.aax' =>
-    array (
-      't' =>
-      array (
-        0 => 'audio/x-pn-audibleaudio',
-      ),
-    ),
     'audio/vnd.m-realaudio' =>
     array (
       't' =>
@@ -26991,6 +27199,13 @@ class DrupalMap extends AbstractMap {
         0 => 'application/rtf',
       ),
     ),
+    'text/vbs' =>
+    array (
+      't' =>
+      array (
+        0 => 'text/vbscript',
+      ),
+    ),
     'text/vnd.trolltech.linguist' =>
     array (
       't' =>
@@ -27119,6 +27334,18 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'application/sql',
+      ),
+    ),
+    'text/x-tcl' =>
+    array (
+      'e' =>
+      array (
+        0 => 'tcl',
+        1 => 'tk',
+      ),
+      't' =>
+      array (
+        0 => 'text/tcl',
       ),
     ),
     'text/x-troff' =>

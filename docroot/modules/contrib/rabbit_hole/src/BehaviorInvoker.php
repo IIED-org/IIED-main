@@ -2,106 +2,138 @@
 
 namespace Drupal\rabbit_hole;
 
-use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Session\AccountProxy;
+use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginManager;
 use Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginInterface;
 use Drupal\rabbit_hole\Plugin\RabbitHoleEntityPluginManager;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\KernelEvent;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
- * Class BehaviorInvoker.
- *
- * @package Drupal\rabbit_hole
+ * Default implementation of Rabbit Hole behaviors invoker.
  */
 class BehaviorInvoker implements BehaviorInvokerInterface {
 
   /**
-   * Drupal\rabbit_hole\BehaviorSettingsManager definition.
+   * Behavior settings manager.
    *
-   * @var Drupal\rabbit_hole\BehaviorSettingsManager
+   * @var \Drupal\rabbit_hole\BehaviorSettingsManager
    */
   protected $rhBehaviorSettingsManager;
 
   /**
-   * Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginManager definition.
+   * Behavior plugin manager.
    *
-   * @var Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginManager
+   * @var \Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginManager
    */
   protected $rhBehaviorPluginManager;
 
   /**
-   * Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginManager definition.
+   * Entity plugin manager.
    *
-   * @var Drupal\rabbit_hole\Plugin\RabbitHoleEntityPluginManager
+   * @var \Drupal\rabbit_hole\Plugin\RabbitHoleEntityPluginManager
    */
   protected $rhEntityPluginManager;
 
   /**
-   * Drupal\rabbit_hole\EntityExtender definition.
+   * Entity extender service.
+   *
+   * @var \Drupal\rabbit_hole\EntityExtender
    */
   protected $rhEntityExtender;
 
   /**
    * The current user.
    *
-   * @var Drupal\Core\Session\AccountProxy
+   * @var \Drupal\Core\Session\AccountProxyInterface
    */
   protected $currentUser;
 
   /**
-   * Constructor.
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * BehaviorInvoker constructor.
+   *
+   * @param \Drupal\rabbit_hole\BehaviorSettingsManager $rabbit_hole_behavior_settings_manager
+   *   Behavior settings manager.
+   * @param \Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginManager $plugin_manager_rabbit_hole_behavior_plugin
+   *   Behavior plugin manager.
+   * @param \Drupal\rabbit_hole\Plugin\RabbitHoleEntityPluginManager $plugin_manager_rabbit_hole_entity_plugin
+   *   Entity plugin manager.
+   * @param \Drupal\rabbit_hole\EntityExtender $entity_extender
+   *   Entity extender service.
+   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
+   *   The current user.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    */
   public function __construct(
     BehaviorSettingsManager $rabbit_hole_behavior_settings_manager,
     RabbitHoleBehaviorPluginManager $plugin_manager_rabbit_hole_behavior_plugin,
     RabbitHoleEntityPluginManager $plugin_manager_rabbit_hole_entity_plugin,
     EntityExtender $entity_extender,
-    AccountProxy $current_user
+    AccountProxyInterface $current_user,
+    ModuleHandlerInterface $module_handler
   ) {
     $this->rhBehaviorSettingsManager = $rabbit_hole_behavior_settings_manager;
     $this->rhBehaviorPluginManager = $plugin_manager_rabbit_hole_behavior_plugin;
     $this->rhEntityPluginManager = $plugin_manager_rabbit_hole_entity_plugin;
     $this->rhEntityExtender = $entity_extender;
     $this->currentUser = $current_user;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
-   * Invoke a rabbit hole behavior based on an entity's configuration.
-   *
-   * This assumes the entity is configured for use with Rabbit Hole - if you
-   * pass an entity to this method and it does not have a rabbit hole plugin it
-   * will use the defaults!
-   *
-   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
-   *    The entity to apply rabbit hole behavior on.
-   * @param Symfony\Component\HttpFoundation\Response $current_response
-   *    The current response, to be passed along to and potentially altered by
-   *    any called rabbit hole plugin.
-   *
-   * @return Symfony\Component\HttpFoundation\Response|null
-   *    A response or null if the response is unchanged.
-   *
-   * @throws Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-   *   The PageNotFound plugin may throw a NotFoundHttpException which is not
-   *   handled by this method. This usually shouldn't be caught as it is
-   *   intended behavior.
-   * @throws Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
-   *   The PageNotFound plugin may throw a NotFoundHttpException which is not
-   *   handled by this method. This usually shouldn't be caught as it is
-   *   intended behavior.
+   * {@inheritdoc}
    */
-  public function processEntity(ContentEntityInterface $entity, Response $current_response = NULL) {
-    $permission = 'rabbit hole bypass ' . $entity->getEntityTypeId();
-    if ($this->currentUser->hasPermission($permission)) {
-      return NULL;
+  public function getEntity(KernelEvent $event) {
+    $request = $event->getRequest();
+    // Don't process events with HTTP exceptions - those have either been thrown
+    // by us or have nothing to do with rabbit hole.
+    if ($request->get('exception') != NULL) {
+      return FALSE;
     }
 
-    $values = $this->getRabbitHoleValuesForEntity($entity);
+    // Get the route from the request.
+    if ($route = $request->get('_route')) {
+      // Only continue if the request route is the an entity canonical.
+      if (preg_match('/^entity\.(.+)\.canonical$/', $route)) {
+        // We check for all of our known entity keys that work with rabbit hole
+        // and invoke rabbit hole behavior on the first one we find (which
+        // should also be the only one).
+        $entity_keys = $this->getPossibleEntityTypeKeys();
+        foreach ($entity_keys as $ekey) {
+          $entity = $request->get($ekey);
+          if (isset($entity) && $entity instanceof ContentEntityInterface) {
+            return $entity;
+          }
+        }
+      }
+    }
 
-    if (empty($values['rh_action'])) {
-      // No action set; do nothing.
+    return FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function processEntity(ContentEntityInterface $entity, Response $current_response = NULL) {
+    $values = $this->getRabbitHoleValuesForEntity($entity);
+    $permission = 'rabbit hole bypass ' . $entity->getEntityTypeId();
+    $values['bypass_access'] = $this->currentUser->hasPermission($permission);
+
+    // Allow altering Rabbit Hole values.
+    $this->moduleHandler->alter('rabbit_hole_values', $values, $entity);
+
+    // Do nothing if action is missing or access is bypassed.
+    if (empty($values['rh_action']) || $values['bypass_access']) {
       return NULL;
     }
 
@@ -123,7 +155,20 @@ class BehaviorInvoker implements BehaviorInvokerInterface {
       // require a response so that case is handled.
       || $response_required && $current_response != NULL) {
 
-      return $plugin->performAction($entity, $current_response);
+      $response = $plugin->performAction($entity, $current_response);
+
+      // Execute a fallback action until we have correct response object.
+      // It allows us to have a chain of fallback actions until we execute the
+      // final one.
+      while (!$response instanceof Response && is_string($response) && $this->rhBehaviorPluginManager->getDefinition($response, FALSE) !== NULL) {
+        $fallback_plugin = $this->rhBehaviorPluginManager->createInstance($response, []);
+        $response = $fallback_plugin->performAction($entity, $current_response);
+      }
+
+      // Alter the response before it is returned.
+      $this->moduleHandler->alter('rabbit_hole_response', $response, $entity);
+
+      return $response;
     }
     // All other cases return NULL, meaning the response is unchanged.
     else {
@@ -132,10 +177,7 @@ class BehaviorInvoker implements BehaviorInvokerInterface {
   }
 
   /**
-   * Load a list of entity IDs supported by rabbit hole given available plugins.
-   *
-   * @return array
-   *   An array of string entity ids.
+   * {@inheritdoc}
    */
   public function getPossibleEntityTypeKeys() {
     $entity_type_keys = [];
@@ -146,17 +188,9 @@ class BehaviorInvoker implements BehaviorInvokerInterface {
   }
 
   /**
-   * An entity's rabbit hole configuration, or the default if it does not exist.
-   *
-   * Return an entity's rabbit hole configuration or, failing that, the default
-   * configuration for the bundle (which itself will call the base default
-   * configuration if necessary).
-   *
-   * @return array
-   *   An array of values from the entity's fields matching the base properties
-   *   added by rabbit hole.
+   * {@inheritdoc}
    */
-  public function getRabbitHoleValuesForEntity(ContentEntityBase $entity) {
+  public function getRabbitHoleValuesForEntity(ContentEntityInterface $entity) {
     $field_keys = array_keys($this->rhEntityExtender->getGeneralExtraFields());
     $values = [];
 
@@ -196,14 +230,7 @@ class BehaviorInvoker implements BehaviorInvokerInterface {
   }
 
   /**
-   * An entity type's rabbit hole configuration, or the default if it does not exist.
-   *
-   * Return an entity types's rabbit hole configuration or, failing that, the base default
-   * configuration.
-   *
-   * @return array|false
-   *   An array of values from the entity's fields matching the base properties
-   *   added by rabbit hole. Explicit false if no matching configuration was found.
+   * {@inheritdoc}
    */
   public function getRabbitHoleValuesForEntityType($entity_type_id, $bundle_id = NULL) {
     $field_keys = array_keys($this->rhEntityExtender->getGeneralExtraFields());

@@ -3,9 +3,7 @@
 namespace Drupal\rabbit_hole;
 
 /**
- * Interface EntityExtenderInterface.
- *
- * @package Drupal\rabbit_hole
+ * Defines an interface for entity extender service.
  */
 interface EntityExtenderInterface {
 
