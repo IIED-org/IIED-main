@@ -172,7 +172,8 @@
             "Make thumbnails editable": "https://www.drupal.org/files/issues/2020-08-06/media_thumbnails-3149842-4.patch"
           },
           "drupal/core": {
-            "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2020-09-03/3007424-108.patch"
+            "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2020-09-03/3007424-108.patch",
+            "Duplicate exposed filter form IDs": "https://www.drupal.org/files/issues/2020-09-08/randomize_exposed_filter_block_form_ID-2894747-53-d8.patch"
           },
           "drupal/search_api_autocomplete": {
             "BEF breaks autocomplete": "https://www.drupal.org/files/issues/2020-09-26/3159000-14--fix_autocomplete_with_bef.patch"

@@ -143,6 +143,7 @@ class ViewAjaxController implements ContainerInjectionInterface {
           'view_dom_id',
           'pager_element',
           'view_base_path',
+          'view_html_id',
           AjaxResponseSubscriber::AJAX_REQUEST_PARAMETER,
           FormBuilderInterface::AJAX_FORM_REQUEST,
           MainContentViewSubscriber::WRAPPER_FORMAT,

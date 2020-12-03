@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\views\Functional\Plugin;
 
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\Html;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\Tests\system\Functional\Cache\AssertPageCacheContextsAndTagsTrait;
@@ -254,6 +255,21 @@ class ExposedFormTest extends ViewTestBase {
   }
 
   /**
+   * Test placing the same form twice on the same page.
+   */
+  public function testNoDoubleIdsForSameExposedForm() {
+    $this->drupalCreateContentType(['type' => 'page']);
+    $view = Views::getView('test_exposed_block');
+    $view->setDisplay('page_1');
+    $this->drupalPlaceBlock('views_exposed_filter_block:test_exposed_block-page_1');
+    $this->drupalPlaceBlock('views_exposed_filter_block:test_exposed_block-page_1');
+
+    $this->drupalGet('test_exposed_block');
+
+    $this->assertNoDuplicateIds();
+  }
+
+  /**
    * Test the input required exposed form type.
    */
   public function testInputRequired() {
@@ -433,6 +449,31 @@ class ExposedFormTest extends ViewTestBase {
     $this->assertFieldByName('type[]', 'post');
     $this->assertFieldByName('created[min]', '-1 month');
     $this->assertFieldByName('created[max]', '+1 month');
+  }
+
+  /**
+   * Asserts that each HTML ID is used for just a single element on the page.
+   */
+  protected function assertNoDuplicateIds() {
+    $args = ['@url' => $this->getUrl()];
+
+    if (!$elements = $this->xpath('//*[@id]')) {
+      $this->fail(new FormattableMarkup('The page @url contains no HTML IDs.', $args));
+      return;
+    }
+
+    $message = new FormattableMarkup('The page @url contains duplicate HTML IDs', $args);
+
+    $seen_ids = [];
+    foreach ($elements as $element) {
+      $id = $element->getAttribute('id');
+      if (isset($seen_ids[$id])) {
+        $this->fail($message);
+        return;
+      }
+      $seen_ids[$id] = TRUE;
+    }
+    $this->assertTrue(TRUE, $message);
   }
 
 }

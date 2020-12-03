@@ -427,7 +427,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     var _this = this;
 
     if (this.progress.element) {
-      $(this.progress.element).remove();
+      $('.' + $(this.progress.element).attr('class').replace(/\s/g, '.')).remove();
     }
     if (this.progress.object) {
       this.progress.object.stopMonitoring();

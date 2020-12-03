@@ -1,17 +1,29 @@
-// Components: Download button
+// Components: Buttons
 
+// Download button
 .file-size a {
   display: none;
 }
 
+// Sidr facet button
+.block--sidrtriggerbuttonblock-2 button {
+  @extend .btn;
+  @extend .btn-secondary;
+  @include media-breakpoint-up(md) {
+    display: none;
+  }
+}
+
 // Search page elements
 .main-search-form {
-  input, button, select {
+  #edit-k--3 {
     border-radius: $border-radius-lg;
-    line-height: 1.5 !important;
-    min-width: 8rem;
   }
-  #views-exposed-form-search-page-2 {
+  input, select {
+    line-height: 1.5 !important;
+  //  min-width: 8rem;
+  }
+  #views-exposed-form-search-page-2--3 {
     @extend .container;
     @extend .row;
     margin-left: -15px !important;
@@ -22,21 +34,24 @@
       @extend .col-lg-6;
     }
     .js-form-item-sort-by {
-      @extend .col-lg-3;
-      select {
-        max-width: fit-content;
-      }
+        display: none;
     }
-  }
-  #edit-submit-search--3::after {
-    content: ' Search';
-    color: white;
-    font-family: $font-family-base;
   }
 }
 
-.block-facet--checkbox button {
-  border-radius: $border-radius-lg;
+//Exposed sorts
+
+.sidebar-form {
+  .js-form-type-search-api-autocomplete,
+  input {
+    display: none;
+  }
+  .js-form-item-sort-by {
+    label {
+      display: none;
+    }
+    max-width: fit-content;
+  }
 }
 
 // Header search form
@@ -45,17 +60,19 @@
     margin-bottom: 0;
   }
   div {
-    display: inline-flex;
+    display: inline;
   }
   input {
     border-radius: 1rem 0 0 1rem;
     margin-right: 0;
+    display: inline-block;
+    max-width: 87%;
   }
   #edit-actions,
   #edit-actions--2 {
     input {
-      border-radius: 0 1rem 1rem 0;
       float: right;
+      border-radius: 0 1rem 1rem 0;
       margin-left: -4px;
       width: auto;
       line-height: 1.5 !important;
