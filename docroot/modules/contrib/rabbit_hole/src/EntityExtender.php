@@ -8,9 +8,7 @@ use Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginManager;
 use Drupal\rabbit_hole\Plugin\RabbitHoleEntityPluginManager;
 
 /**
- * Class EntityExtender.
- *
- * @package Drupal\rabbit_hole
+ * Adds Rabbit Hole fields to supported entity types.
  */
 class EntityExtender implements EntityExtenderInterface {
   use StringTranslationTrait;
@@ -18,14 +16,14 @@ class EntityExtender implements EntityExtenderInterface {
   /**
    * Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginManager definition.
    *
-   * @var Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginManager
+   * @var \Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginManager
    */
   protected $rhBehaviorPluginManager;
 
   /**
    * Drupal\rabbit_hole\Plugin\RabbitHoleEntityPluginManager definition.
    *
-   * @var Drupal\rabbit_hole\Plugin\RabbitHoleEntityPluginManager
+   * @var \Drupal\rabbit_hole\Plugin\RabbitHoleEntityPluginManager
    */
   protected $rhEntityPluginManager;
 

@@ -2,10 +2,12 @@
 
 namespace Drupal\rabbit_hole\EventSubscriber;
 
+use Drupal\Component\Plugin\Exception\PluginException;
+use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\EventDispatcher\Event;
-use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\rabbit_hole\BehaviorInvoker;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\KernelEvent;
 
 /**
  * Class EventSubscriber.
@@ -43,11 +45,11 @@ class RabbitHoleSubscriber implements EventSubscriberInterface {
    * It invokes a rabbit hole behavior on an entity in the request if
    * applicable.
    *
-   * @param \Symfony\Component\EventDispatcher\Event $event
+   * @param \Symfony\Component\HttpKernel\Event\KernelEvent $event
    *   The event triggered by the request.
    */
-  public function onRequest(Event $event) {
-    return $this->processEvent($event);
+  public function onRequest(KernelEvent $event) {
+    $this->processEvent($event);
   }
 
   /**
@@ -57,45 +59,31 @@ class RabbitHoleSubscriber implements EventSubscriberInterface {
    * the request if possible. Unlike the onRequest event, it also passes in a
    * response.
    *
-   * @param \Symfony\Component\EventDispatcher\Event $event
+   * @param \Symfony\Component\HttpKernel\Event\KernelEvent $event
    *   The event triggered by the response.
    */
-  public function onResponse(Event $event) {
-    return $this->processEvent($event);
+  public function onResponse(KernelEvent $event) {
+    $this->processEvent($event);
   }
 
   /**
    * Process events generically invoking rabbit hole behaviors if necessary.
    *
-   * @param \Symfony\Component\EventDispatcher\Event $event
+   * @param \Symfony\Component\HttpKernel\Event\KernelEvent $event
    *   The event to process.
    */
-  private function processEvent(Event $event) {
-    // Don't process events with HTTP exceptions - those have either been thrown
-    // by us or have nothing to do with rabbit hole.
-    if ($event->getRequest()->get('exception') != NULL) {
-      return;
-    }
+  private function processEvent(KernelEvent $event) {
+    if ($entity = $this->rabbitHoleBehaviorInvoker->getEntity($event)) {
+      try {
+        $new_response = $this->rabbitHoleBehaviorInvoker->processEntity($entity, $event->getResponse());
 
-    // Get the route from the request.
-    if ($route = $event->getRequest()->get('_route')) {
-      // Only continue if the request route is the an entity canonical.
-      if (preg_match('/^entity\.(.+)\.canonical$/', $route)) {
-        // We check for all of our known entity keys that work with rabbit hole
-        // and invoke rabbit hole behavior on the first one we find (which
-        // should also be the only one).
-        $entity_keys = $this->rabbitHoleBehaviorInvoker->getPossibleEntityTypeKeys();
-        foreach ($entity_keys as $ekey) {
-          $entity = $event->getRequest()->get($ekey);
-          if (isset($entity) && $entity instanceof ContentEntityInterface) {
-            $new_response = $this->rabbitHoleBehaviorInvoker
-              ->processEntity($entity, $event->getResponse());
-            if (isset($new_response)) {
-              $event->setResponse($new_response);
-            }
-            break;
-          }
+        if ($new_response instanceof Response) {
+          $event->setResponse($new_response);
         }
+      }
+      catch (PluginNotFoundException | PluginException $e) {
+        // Do nothing if we got plugin-related exception.
+        // Other exceptions (i.e. AccessDeniedHttpException) should be accepted.
       }
     }
   }

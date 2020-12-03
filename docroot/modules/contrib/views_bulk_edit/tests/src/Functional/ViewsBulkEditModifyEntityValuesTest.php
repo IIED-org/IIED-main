@@ -58,7 +58,7 @@ class ViewsBulkEditModifyEntityValuesTest extends BrowserTestBase {
     ])->save();
 
     $this->testNodes = [];
-    $time = REQUEST_TIME;
+    $time = \Drupal::time()->getRequestTime();
     for ($i = 0; $i < 4; $i++) {
       // Ensure nodes are sorted in the same order they are inserted in the
       // array.
@@ -94,8 +94,13 @@ class ViewsBulkEditModifyEntityValuesTest extends BrowserTestBase {
     // set items per page to 10 and offset to 0.
     $testViewConfig = $this->container->get('config.factory')->getEditable('views.view.views_bulk_operations_test_advanced');
     $configData = $testViewConfig->getRawData();
-    $configData['display']['default']['display_options']['fields']['views_bulk_operations_bulk_form']['selected_actions']['views_bulk_edit'] = 'views_bulk_edit';
-    $configData['display']['default']['display_options']['fields']['views_bulk_operations_bulk_form']['preconfiguration']['views_bulk_edit'] = ['label_override' => ''];
+    $action = count($configData['display']['default']['display_options']['fields']['views_bulk_operations_bulk_form']['selected_actions']);
+    $configData['display']['default']['display_options']['fields']['views_bulk_operations_bulk_form']['selected_actions'][$action] = [
+      'action_id' => 'views_bulk_edit',
+      'preconfiguration' => [
+        'label_override' => '',
+      ]
+    ];
     $configData['display']['default']['display_options']['pager']['options']['items_per_page'] = 10;
     $configData['display']['default']['display_options']['pager']['options']['offset'] = 0;
     $testViewConfig->setData($configData);
@@ -103,7 +108,7 @@ class ViewsBulkEditModifyEntityValuesTest extends BrowserTestBase {
 
     // Post the VBO form with one page and one article selected.
     $edit = [
-      'action' => 'views_bulk_edit',
+      'action' => $action,
       'views_bulk_operations_bulk_form[1]' => TRUE,
       'views_bulk_operations_bulk_form[2]' => TRUE,
     ];

@@ -15,19 +15,33 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Component\Utility\UrlHelper;
 
 /**
- * Class FormManglerService.
- *
- * @package Drupal\rabbit_hole
+ * Provides necessary form alterations.
  */
 class FormManglerService {
   use StringTranslationTrait;
 
   const RABBIT_HOLE_USE_DEFAULT = 'bundle_default';
 
-  private $entityTypeManager = NULL;
-  private $bundleInfo = NULL;
-  private $rhBehaviorPluginManager = NULL;
-  private $rhEntityPluginManager = NULL;
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface|null
+   */
+  private $entityTypeManager;
+
+  /**
+   * Behavior plugin manager.
+   *
+   * @var \Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginManager|null
+   */
+  private $rhBehaviorPluginManager;
+
+  /**
+   * Entity plugin manager.
+   *
+   * @var \Drupal\rabbit_hole\Plugin\RabbitHoleEntityPluginManager|null
+   */
+  private $rhEntityPluginManager;
 
   /**
    * Constructor.
@@ -57,6 +71,10 @@ class FormManglerService {
    *   The form that the Rabbit Hole form should be attached to.
    * @param string $entity_type
    *   The name of the entity for which this form provides global options.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   Form state object.
+   * @param string $form_id
+   *   Form ID.
    */
   public function addRabbitHoleOptionsToGlobalForm(array &$attach, $entity_type, FormStateInterface $form_state, $form_id) {
     $entity_type = $this->entityTypeManager->getStorage($entity_type)
@@ -78,6 +96,13 @@ class FormManglerService {
    *   The entity that we're adding the form to, e.g. a node.  This should be
    *    defined even in the case of bundles since it is used to determine bundle
    *    and entity type.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   Form state object.
+   * @param string $form_id
+   *   Form ID.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function addRabbitHoleOptionsToEntityForm(array &$attach, EntityInterface $entity, FormStateInterface $form_state, $form_id) {
     $this->addRabbitHoleOptionsToForm($attach, $entity->getEntityType()->id(),
@@ -95,6 +120,13 @@ class FormManglerService {
    *   The entity that we're adding the form to, e.g. a node.  This should be
    *    defined even in the case of bundles since it is used to determine bundle
    *    and entity type.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   Form state object.
+   * @param string $form_id
+   *   Form ID.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   private function addRabbitHoleOptionsToForm(
     array &$attach,
@@ -173,6 +205,8 @@ class FormManglerService {
       '#title' => $this->t('Rabbit Hole settings'),
       '#collapsed' => FALSE,
       '#collapsible' => TRUE,
+      '#tree' => FALSE,
+      '#weight' => 10,
 
       // TODO: Should probably handle group in a plugin - not sure if, e.g.,
       // files will work in the same way and even if they do later entities
@@ -197,9 +231,11 @@ class FormManglerService {
     if ($is_bundle_or_entity_type) {
       $form['rabbit_hole']['rh_override'] = [
         '#type' => 'checkbox',
-        '#title' => t('Allow these settings to be overridden for individual entities'),
+        '#title' => $this->t('Allow these settings to be overridden for individual entities'),
         '#default_value' => $bundle_settings->get('allow_override'),
-        '#description' => t('If this is checked, users with the %permission permission will be able to override these settings for individual entities.', ['%permission' => t('Administer Rabbit Hole settings for @entity_type', ['@entity_type' => $entity_label])]),
+        '#description' => $this->t('If this is checked, users with the %permission permission will be able to override these settings for individual entities.', [
+          '%permission' => $this->t('Administer Rabbit Hole settings for @entity_type', ['@entity_type' => $entity_label]),
+        ]),
       ];
     }
 
@@ -211,7 +247,10 @@ class FormManglerService {
       // the configuration for the bundle.
       $action_bundle = $bundle_settings->get('action');
       $action_options = [
-        self::RABBIT_HOLE_USE_DEFAULT => t('Global @bundle behavior (@setting)', ['@bundle' => strtolower($bundle_label), '@setting' => $action_options[$action_bundle]]),
+        self::RABBIT_HOLE_USE_DEFAULT => $this->t('Global @bundle behavior (@setting)', [
+          '@bundle' => strtolower($bundle_label),
+          '@setting' => $action_options[$action_bundle],
+        ]),
       ] + $action_options;
     }
 
@@ -242,9 +281,16 @@ class FormManglerService {
     // type.
     $is_global_form = isset($attach['#form_id'])
       && $attach['#form_id'] === $entity_plugin->getGlobalConfigFormId();
-    $submit_handler_locations = $is_global_form
-      ? $entity_plugin->getGlobalFormSubmitHandlerAttachLocations()
-      : $entity_plugin->getFormSubmitHandlerAttachLocations();
+
+    if ($is_global_form) {
+      $submit_handler_locations = $entity_plugin->getGlobalFormSubmitHandlerAttachLocations($attach, $form_state);
+    }
+    elseif ($is_bundle) {
+      $submit_handler_locations = $entity_plugin->getBundleFormSubmitHandlerAttachLocations($attach, $form_state);
+    }
+    else {
+      $submit_handler_locations = $entity_plugin->getFormSubmitHandlerAttachLocations($attach, $form_state);
+    }
 
     foreach ($submit_handler_locations as $location) {
       $array_ref = &$attach;
@@ -264,7 +310,7 @@ class FormManglerService {
     // Add ability to validate user input before saving the data.
     $attach['rabbit_hole']['rabbit_hole']['redirect']['rh_redirect']['#element_validate'][] = [
       'Drupal\rabbit_hole\FormManglerService',
-      'validateFormRedirect'
+      'validateFormRedirect',
     ];
   }
 
@@ -284,19 +330,18 @@ class FormManglerService {
       $redirect = $form_state->getValue('rh_redirect');
 
       if (!UrlHelper::isExternal($redirect)) {
+        $scheme = parse_url($redirect, PHP_URL_SCHEME);
+
         // Check if internal URL matches requirements of
         // \Drupal\Core\Url::fromUserInput.
         $accepted_internal_characters = [
           '/',
           '?',
           '#',
+          '[',
         ];
 
-        if (\Drupal::service('module_handler')->moduleExists('token')) {
-          $accepted_internal_characters[] = '[';
-        }
-
-        if (!in_array(substr($redirect, 0, 1), $accepted_internal_characters)) {
+        if ($scheme === NULL && !in_array(substr($redirect, 0, 1), $accepted_internal_characters)) {
           $form_state->setErrorByName('rh_redirect', t("Internal path '@string' must begin with a '/', '?', '#', or be a token.", ['@string' => $redirect]));
         }
       }
@@ -313,7 +358,7 @@ class FormManglerService {
    * @param string|int|object $form_state
    *   The form state.
    */
-  public function handleFormSubmit($form, $form_state) {
+  public function handleFormSubmit(array $form, $form_state) {
     if ($form_state->getValue('rh_is_bundle')) {
       $entity = NULL;
       if (method_exists($form_state->getFormObject(), 'getEntity')) {
@@ -327,10 +372,9 @@ class FormManglerService {
         [
           'action' => $form_state->getValue('rh_action'),
           'allow_override' => $allow_override,
-          'redirect' => $form_state->getValue('rh_redirect')
-          ?: '',
-          'redirect_code' => $form_state->getValue('rh_redirect_response')
-          ?: BehaviorSettings::REDIRECT_NOT_APPLICABLE,
+          'redirect' => $form_state->getValue('rh_redirect') ?: '',
+          'redirect_code' => $form_state->getValue('rh_redirect_response') ?: BehaviorSettings::REDIRECT_NOT_APPLICABLE,
+          'redirect_fallback_action' => $form_state->getvalue('rh_redirect_fallback_action') ?: 'access_denied',
         ],
         $form_state->getValue('rh_entity_type'),
         isset($entity) ? $entity->id() : NULL
@@ -360,7 +404,7 @@ class FormManglerService {
    *
    * @param array $form
    *   The form array.
-   * @param array $form_state
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    * @param string $form_id
    *   The form ID.
@@ -372,8 +416,8 @@ class FormManglerService {
    *   The settings for this bundle.
    */
   protected function populateExtraBehaviorSections(
-    &$form,
-    $form_state,
+    array &$form,
+    FormStateInterface $form_state,
     $form_id,
     EntityInterface $entity = NULL,
     $entity_is_bundle = FALSE,

@@ -25,7 +25,7 @@ class SophronTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
     $this->drupalLogin($this->drupalCreateUser([
       'administer site configuration',
@@ -35,7 +35,7 @@ class SophronTest extends BrowserTestBase {
   /**
    * Test settings form.
    */
-  public function testFormAndSettings() {
+  public function testFormAndSettings(): void {
     // The default map has been set by install.
     $this->assertSame(MimeMapManagerInterface::DRUPAL_MAP, \Drupal::configFactory()->get('sophron.settings')->get('map_option'));
     $this->assertSame('', \Drupal::configFactory()->get('sophron.settings')->get('map_class'));
@@ -64,11 +64,6 @@ class SophronTest extends BrowserTestBase {
     ];
     $this->drupalPostForm(NULL, $edit, 'Save configuration');
 
-    // Test mapping commands, only for PHP 7+.
-    if (PHP_VERSION_ID < 70000) {
-      $this->assertSession()->fieldNotExists('map_commands');
-      return;
-    }
     $this->assertEquals('application/octet-stream', \Drupal::service('sophron.mime_map.manager')->getExtension('quxqux')->getDefaultType(FALSE));
     $this->assertSession()->fieldExists('map_commands');
     $edit = [

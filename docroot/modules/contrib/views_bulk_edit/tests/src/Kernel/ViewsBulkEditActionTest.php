@@ -44,8 +44,13 @@ class ViewsBulkEditActionTest extends ViewsBulkOperationsKernelTestBase {
       'configuration' => [
         'node' => [
           'page' => [
-            'status' => [
-              ['value' => 0],
+            'values' => [
+              'status' => [
+                ['value' => 0],
+              ],
+            ],
+            'change_method' => [
+              'status' => 'replace',
             ],
           ],
         ],

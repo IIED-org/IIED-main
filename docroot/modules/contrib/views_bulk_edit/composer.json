@@ -14,7 +14,13 @@
   },
   "license": "GPL-2.0+",
   "require": {
-    "drupal/views_bulk_operations": "~1.0 | ~2.0 | ~3.0"
+    "drupal/core": "^8 || ^9"
+  },
+  "require-dev": {
+    "drupal/views_bulk_operations": "~3.0"
+  },
+  "suggest": {
+    "drupal/views_bulk_operations": "Get VBO for all the views benefits like batching, ability to select all view results or persistent selection across pages"
   },
   "minimum-stability": "dev"
 }

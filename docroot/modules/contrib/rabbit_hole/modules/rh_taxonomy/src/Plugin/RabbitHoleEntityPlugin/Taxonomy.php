@@ -18,15 +18,6 @@ class Taxonomy extends RabbitHoleEntityPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getFormSubmitHandlerAttachLocations() {
-    return [
-      ['actions', 'submit', '#submit'],
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getEntityTokenMap() {
     return [
       'taxonomy_term' => 'term',

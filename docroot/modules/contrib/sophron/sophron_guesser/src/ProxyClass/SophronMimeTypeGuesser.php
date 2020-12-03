@@ -70,6 +70,14 @@ namespace Drupal\sophron_guesser\ProxyClass {
         /**
          * {@inheritdoc}
          */
+        public function guessMimeType(string $path): ?string
+        {
+            return $this->lazyLoadItself()->guessMimeType($path);
+        }
+
+        /**
+         * {@inheritdoc}
+         */
         public function guess($path)
         {
             return $this->lazyLoadItself()->guess($path);
@@ -78,7 +86,15 @@ namespace Drupal\sophron_guesser\ProxyClass {
         /**
          * {@inheritdoc}
          */
-        public function setMapping(array $mapping = NULL)
+        public function isGuesserSupported(): bool
+        {
+            return $this->lazyLoadItself()->isGuesserSupported();
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+        public function setMapping(?array $mapping = NULL)
         {
             return $this->lazyLoadItself()->setMapping($mapping);
         }

@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Rabbit Hole module.
+ */
+
+/**
+ * Update redirect_fallback_action field.
+ */
+function rabbit_hole_update_8100() {
+
+  /** @var \Drupal\rabbit_hole\Annotation\RabbitHoleEntityPlugin $rabbitHolePlugin */
+  $rabbitHolePlugin = \Drupal::service('plugin.manager.rabbit_hole_entity_plugin');
+
+  $entityTypes = $rabbitHolePlugin->loadSupportedEntityTypes();
+
+  /** @var \Drupal\Core\Entity\EntityFieldManager $fieldManager */
+  $fieldManager = \Drupal::service('entity_field.manager');
+
+  $updateManager = \Drupal::entityDefinitionUpdateManager();
+
+  foreach ($entityTypes as $entityType) {
+    $fieldDefinitions = $fieldManager->getBaseFieldDefinitions($entityType);
+    $fieldStorageDefinition = $updateManager->getFieldStorageDefinition('rh_redirect_fallback_action', $entityType);
+    if (!$fieldStorageDefinition) {
+      $fallbackActionField = $fieldDefinitions['rh_redirect_fallback_action'];
+      $updateManager->installFieldStorageDefinition('rh_redirect_fallback_action', $entityType, $entityType, $fallbackActionField);
+    }
+  }
+}
+
+/**
+ * Update redirect_fallback_action field default values.
+ */
+function rabbit_hole_update_8101() {
+  /** @var \Drupal\Core\Config\ConfigFactoryInterface $configFactory */
+  $configFactory = \Drupal::configFactory();
+  /** @var \Drupal\Core\Config\StorageInterface $configStorage */
+  $configStorage = \Drupal::service('config.storage');
+
+  foreach ($configStorage->listAll('rabbit_hole.behavior_settings') as $configName) {
+    $config = $configFactory->getEditable($configName);
+    if (!$config->get('redirect_fallback_action')) {
+      $config->set('redirect_fallback_action', 'access_denied')->save();
+    }
+  }
+}

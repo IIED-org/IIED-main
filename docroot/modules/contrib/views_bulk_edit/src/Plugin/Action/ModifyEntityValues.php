@@ -2,6 +2,10 @@
 
 namespace Drupal\views_bulk_edit\Plugin\Action;
 
+use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\views_bulk_edit\Form\BulkEditFormTrait;
 use Drupal\views_bulk_operations\Action\ViewsBulkOperationsActionBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\views_bulk_operations\Action\ViewsBulkOperationsPreconfigurationInterface;
@@ -11,9 +15,7 @@ use Drupal\views_bulk_operations\Service\ViewsbulkOperationsViewData;
 use Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionProcessor;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Database\Connection;
 
@@ -28,8 +30,31 @@ use Drupal\Core\Database\Connection;
  */
 class ModifyEntityValues extends ViewsBulkOperationsActionBase implements ContainerFactoryPluginInterface, ViewsBulkOperationsPreconfigurationInterface {
 
+  use BulkEditFormTrait;
+
   /**
-   * Database conection.
+   * VBO views data service.
+   *
+   * @var \Drupal\views_bulk_operations\Service\ViewsbulkOperationsViewData
+   */
+  protected $viewDataService;
+
+  /**
+   * VBO action processor.
+   *
+   * @var \Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionProcessor
+   */
+  protected $actionProcessor;
+
+  /**
+   * The bundle info service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
+   */
+  protected $bundleInfo;
+
+  /**
+   * Database connection.
    *
    * @var \Drupal\Core\Database\Connection
    */
@@ -53,15 +78,40 @@ class ModifyEntityValues extends ViewsBulkOperationsActionBase implements Contai
    * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundleInfo
    *   Bundle info object.
    * @param \Drupal\Core\Database\Connection $database
-   *   Database conection.
+   *   Database connection.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   The time service.
+   * @param \Drupal\Core\Session\AccountInterface $currentUser
+   *   The current user.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
+   *   The entity repository service.
+   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager
+   *   The entity field manager service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ViewsbulkOperationsViewData $viewDataService, ViewsBulkOperationsActionProcessor $actionProcessor, EntityTypeManagerInterface $entityTypeManager, EntityTypeBundleInfoInterface $bundleInfo, Connection $database) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    ViewsbulkOperationsViewData $viewDataService,
+    ViewsBulkOperationsActionProcessor $actionProcessor,
+    EntityTypeManagerInterface $entityTypeManager,
+    EntityTypeBundleInfoInterface $bundleInfo,
+    Connection $database,
+    TimeInterface $time,
+    AccountInterface $currentUser,
+    EntityRepositoryInterface $entityRepository,
+    EntityFieldManagerInterface $entityFieldManager
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->viewDataService = $viewDataService;
     $this->actionProcessor = $actionProcessor;
     $this->entityTypeManager = $entityTypeManager;
     $this->bundleInfo = $bundleInfo;
     $this->database = $database;
+    $this->time = $time;
+    $this->currentUser = $currentUser;
+    $this->entityRepository = $entityRepository;
+    $this->entityFieldManager = $entityFieldManager;
   }
 
   /**
@@ -76,7 +126,11 @@ class ModifyEntityValues extends ViewsBulkOperationsActionBase implements Contai
       $container->get('views_bulk_operations.processor'),
       $container->get('entity_type.manager'),
       $container->get('entity_type.bundle.info'),
-      $container->get('database')
+      $container->get('database'),
+      $container->get('datetime.time'),
+      $container->get('current_user'),
+      $container->get('entity.repository'),
+      $container->get('entity_field.manager')
     );
   }
 
@@ -97,45 +151,9 @@ class ModifyEntityValues extends ViewsBulkOperationsActionBase implements Contai
    * {@inheritdoc}
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
-
-    // Disable cache to avoid errors with storing files in tempstore
-    $form_state->disableCache();
-
     // Get view bundles.
     $bundle_data = $this->getViewBundles();
-
-    // Store entity data.
-    $storage = $form_state->getStorage();
-    $storage['vbe_entity_bundles_data'] = $bundle_data;
-    $form_state->setStorage($storage);
-
-    $form['#attributes']['class'] = ['views-bulk-edit-form'];
-    $form['#attached']['library'][] = 'views_bulk_edit/views_bulk_edit.edit_form';
-
-    $form['options'] = [
-      '#type' => 'fieldset',
-      '#title' => $this->t('Options'),
-    ];
-    $form['options']['_add_values'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Add values to multi-value fields'),
-      '#description' => $this->t('New values of multi-value fields will be added to the existing ones instead of overwriting them.'),
-    ];
-
-    $bundle_count = 0;
-    foreach ($bundle_data as $entity_type_id => $bundles) {
-      foreach ($bundles as $bundle => $label) {
-        $bundle_count++;
-      }
-    }
-
-    foreach ($bundle_data as $entity_type_id => $bundles) {
-      foreach ($bundles as $bundle => $label) {
-        $form = $this->getBundleForm($entity_type_id, $bundle, $label, $form, $form_state, $bundle_count);
-      }
-    }
-
-    return $form;
+    return $this->buildBundleForms($form, $form_state, $bundle_data);
   }
 
   /**
@@ -256,249 +274,6 @@ class ModifyEntityValues extends ViewsBulkOperationsActionBase implements Contai
       }
     }
     return $bundle_data;
-  }
-
-  /**
-   * Gets the form for this entity display.
-   *
-   * @param string $entity_type_id
-   *   The entity type ID.
-   * @param string $bundle
-   *   The bundle ID.
-   * @param mixed $bundle_label
-   *   Bundle label.
-   * @param array $form
-   *   Form array.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The form_state object.
-   * @param int $bundle_count
-   *   Number of bundles that may be affected.
-   *
-   * @return array
-   *   Edit form for the current entity bundle.
-   */
-  protected function getBundleForm($entity_type_id, $bundle, $bundle_label, array $form, FormStateInterface $form_state, $bundle_count) {
-    $entityType = $this->entityTypeManager->getDefinition($entity_type_id);
-    $entity = $this->entityTypeManager->getStorage($entity_type_id)->create([
-      $entityType->getKey('bundle') => $bundle,
-    ]);
-
-    if (!isset($form[$entity_type_id])) {
-      $form[$entity_type_id] = [
-        '#type' => 'container',
-        '#tree' => TRUE,
-      ];
-    }
-
-    // If there is no bundle label, the entity has no bundles.
-    if (empty($bundle_label)) {
-      $bundle_label = $entityType->getLabel();
-    }
-    $form[$entity_type_id][$bundle] = [
-      '#type' => 'details',
-      '#open' => ($bundle_count === 1),
-      '#title' => $entityType->getLabel() . ' - ' . $bundle_label,
-      '#parents' => [$entity_type_id, $bundle],
-    ];
-
-    $form_display = EntityFormDisplay::collectRenderDisplay($entity, 'bulk_edit');
-    $form_display->buildForm($entity, $form[$entity_type_id][$bundle], $form_state);
-
-    $form[$entity_type_id][$bundle] += $this->getSelectorForm($entity_type_id, $bundle, $form[$entity_type_id][$bundle]);
-
-    return $form;
-  }
-
-  /**
-   * Builds the selector form.
-   *
-   * Given an entity form, create a selector form to provide options to update
-   * values.
-   *
-   * @param string $entity_type_id
-   *   Entity type ID.
-   * @param string $bundle
-   *   The bundle machine name.
-   * @param array $form
-   *   The form we're building the selection options for.
-   *
-   * @return array
-   *   The new selector form.
-   */
-  protected function getSelectorForm($entity_type_id, $bundle, array &$form) {
-    $selector['_field_selector'] = [
-      '#type' => 'fieldset',
-      '#title' => $this->t('Select fields to change'),
-      '#weight' => -50,
-      '#tree' => TRUE,
-      '#attributes' => ['class' => ['vbe-selector-fieldset']],
-    ];
-
-    foreach (Element::children($form) as $key) {
-      if (isset($form[$key]['#access']) && !$form[$key]['#access']) {
-        continue;
-      }
-      if ($key == '_field_selector' || !$element = &$this->findFormElement($form[$key])) {
-        continue;
-      }
-
-      // Modify the referenced element a bit so it doesn't
-      // cause errors and returns correct data structure.
-      $element['#required'] = FALSE;
-      $element['#tree'] = TRUE;
-
-      // Add the toggle field to the form.
-      $selector['_field_selector'][$key] = [
-        '#type' => 'checkbox',
-        '#title' => $element['#title'],
-        '#weight' => isset($form[$key]['#weight']) ? $form[$key]['#weight'] : 0,
-        '#tree' => TRUE,
-      ];
-
-      // Force the original value to be hidden unless the checkbox is enabled.
-
-      $form[$key]['#states'] = [
-        'visible' => [
-          sprintf('[name="%s[%s][_field_selector][%s]"]', $entity_type_id, $bundle, $key) => ['checked' => TRUE],
-        ],
-      ];
-    }
-
-    if (empty(Element::children($selector['_field_selector']))) {
-      $selector['_field_selector']['#title'] = $this->t('There are no fields available to modify');
-    }
-
-    return $selector;
-  }
-
-  /**
-   * Finds the deepest most form element and returns it.
-   *
-   * @param array $form
-   *   The form element we're searching.
-   * @param string $title
-   *   The most recent non-empty title from previous form elements
-   *
-   * @return array|null
-   *   The deepest most element if we can find it.
-   */
-  protected function &findFormElement(array &$form, $title = NULL) {
-    $element = NULL;
-    foreach (Element::children($form) as $key) {
-      // Not all levels have both #title and #type.
-      // Attempt to inherit #title from previous iterations.
-      // Some #titles are empty strings.  Ignore them.
-      if (!empty($form[$key]['#title'])) {
-        $title = $form[$key]['#title'];
-      }
-      elseif (!empty($form[$key]['title']['#value']) && !empty($form[$key]['title']['#type']) && $form[$key]['title']['#type'] === 'html_tag') {
-        $title = $form[$key]['title']['#value'];
-      }
-      if (isset($form[$key]['#type']) && !empty($title)) {
-        // Fix empty or missing #title in $form
-        if (empty($form[$key]['#title'])) {
-          $form[$key]['#title'] = $title;
-        }
-        $element = &$form[$key];
-        break;
-      }
-      elseif (is_array($form[$key])) {
-        $element = &$this->findFormElement($form[$key], $title);
-      }
-    }
-    return $element;
-  }
-
-  /**
-   * Provides same functionality as ARRAY_FILTER_USE_KEY for PHP 5.5.
-   *
-   * @param array $array
-   *   The array of data to filter.
-   * @param callable $callback
-   *   The function we're going to use to determine the filtering.
-   *
-   * @return array
-   *   The filtered data.
-   */
-  protected function filterOnKey(array $array, callable $callback) {
-    $filtered_values = [];
-    foreach ($array as $key => $value) {
-      if ($callback($key)) {
-        $filtered_values[$key] = $value;
-      }
-    }
-    return $filtered_values;
-  }
-
-  /**
-   * Save modified entity field values to action configuration.
-   *
-   * @param array $form
-   *   Form array.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The form_state object.
-   */
-  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
-    $storage = $form_state->getStorage();
-    $bundle_data = $storage['vbe_entity_bundles_data'];
-
-    foreach ($bundle_data as $entity_type_id => $bundles) {
-      $entity_type = $this->entityTypeManager->getDefinition($entity_type_id);
-      foreach ($bundles as $bundle => $label) {
-        $field_data = $form_state->getValue([$entity_type_id, $bundle]);
-        $modify = array_filter($field_data['_field_selector']);
-        if (!empty($modify)) {
-          $form_clone = $form;
-          $form_clone['#parents'] = [$entity_type_id, $bundle];
-          $entity = $this->entityTypeManager->getStorage($entity_type_id)->create([
-            $entity_type->getKey('bundle') => $bundle,
-          ]);
-          $form_display = EntityFormDisplay::collectRenderDisplay($entity, 'bulk_edit');
-          $form_display->extractFormValues($entity, $form_clone, $form_state);
-
-          foreach (array_keys($modify) as $field) {
-            $this->configuration[$entity_type_id][$bundle][$field] = $entity->{$field}->getValue();
-          }
-        }
-      }
-    }
-
-    $this->configuration['_add_values'] = $form_state->getValue('_add_values');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function execute($entity = NULL) {
-    $type_id = $entity->getEntityTypeId();
-    $bundle = $entity->bundle();
-
-    $result = $this->t('Skip (field is not present on this bundle)');
-    if (isset($this->configuration[$type_id][$bundle])) {
-      foreach ($this->configuration[$type_id][$bundle] as $field => $value) {
-        if (!empty($this->configuration['_add_values'])) {
-          /** @var \Drupal\Core\Field\FieldStorageDefinitionInterface $storageDefinition */
-          $storageDefinition = $entity->{$field}->getFieldDefinition()->getFieldStorageDefinition();
-          $cardinality = $storageDefinition->getCardinality();
-          if ($cardinality === $storageDefinition::CARDINALITY_UNLIMITED || $cardinality > 1) {
-            $current_value = $entity->{$field}->getValue();
-            $value_count = count($current_value);
-            foreach ($value as $item) {
-              if ($cardinality != $storageDefinition::CARDINALITY_UNLIMITED && $value_count >= $cardinality) {
-                break;
-              }
-              $current_value[] = $item;
-            }
-            $value = $current_value;
-          }
-        }
-
-        $entity->{$field}->setValue($value);
-      }
-      $entity->save();
-      $result = $this->t('Modify field values');
-    }
-    return $result;
   }
 
   /**

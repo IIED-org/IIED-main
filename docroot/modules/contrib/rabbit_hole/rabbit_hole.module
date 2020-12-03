@@ -26,15 +26,6 @@ function rabbit_hole_help($route_name, RouteMatchInterface $route_match) {
 }
 
 /**
- * Implements hook_theme().
- */
-function rabbit_hole_theme() {
-  $theme = [];
-
-  return $theme;
-}
-
-/**
  * Handle general aspects of rabbit hole form submission.
  *
  * @param array $form
@@ -60,25 +51,15 @@ function rabbit_hole_form_alter(&$form, FormStateInterface $form_state, $form_id
   if ($form_state->getFormObject() instanceof EntityFormInterface) {
     $current_type = $form_state->getFormObject()->getEntity()->getEntityTypeId();
     $current_operation = $form_state->getFormObject()->getOperation();
-    $disallowed_operations = ['delete', 'cancel', 'layout_builder'];
+    $disallowed_operations = ['delete', 'cancel', 'reset', 'layout_builder', 'replicate'];
     $administer_permitted = \Drupal::currentUser()
             ->hasPermission('rabbit hole administer ' . $current_type);
-    if (in_array($current_type, $affected_types) && $administer_permitted && !in_array($current_operation, $disallowed_operations)) {
-      \Drupal::service('rabbit_hole.form_mangler')->addRabbitHoleOptionsToEntityForm(
-        $form, $form_state->getFormObject()->getEntity(), $form_state, $form_id);
 
-      $form_state->setSubmitHandlers(
-        array_merge($form_state->getSubmitHandlers(),
-          ['_rabbit_hole_general_form_submit'])
-      );
-    }
-    elseif (in_array($current_type, $affected_bundle_types) && !in_array($current_operation, $disallowed_operations)) {
+    $is_entity_form = in_array($current_type, $affected_types) && $administer_permitted && !in_array($current_operation, $disallowed_operations);
+    $is_bundle_form = in_array($current_type, $affected_bundle_types) && !in_array($current_operation, $disallowed_operations);
+    if ($is_entity_form || $is_bundle_form) {
       \Drupal::service('rabbit_hole.form_mangler')->addRabbitHoleOptionsToEntityForm(
         $form, $form_state->getFormObject()->getEntity(), $form_state, $form_id);
-      $form_state->setSubmitHandlers(
-        array_merge($form_state->getSubmitHandlers(),
-          ['_rabbit_hole_general_form_submit'])
-      );
     }
   }
   elseif (array_key_exists($form_id, $affected_global_forms)) {

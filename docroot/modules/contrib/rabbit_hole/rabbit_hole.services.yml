@@ -27,6 +27,7 @@ services:
       - "@plugin.manager.rabbit_hole_entity_plugin"
       - "@rabbit_hole.entity_extender"
       - "@current_user"
+      - "@module_handler"
   rabbit_hole.rabbit_hole_subscriber:
     class: Drupal\rabbit_hole\EventSubscriber\RabbitHoleSubscriber
     arguments: ["@rabbit_hole.behavior_invoker"]

@@ -5,6 +5,12 @@ rabbit_hole.behavior_settings.*:
     id:
       type: string
       label: 'ID'
+    entity_type_id:
+      type: string
+      label: 'Entity Type ID'
+    entity_id:
+      type:  string
+      label: 'Bundle'
     action:
       type: string
       label: 'Action'
@@ -17,3 +23,6 @@ rabbit_hole.behavior_settings.*:
     redirect_code:
       type: integer
       label: 'Redirect code'
+    redirect_fallback_action:
+      type: string
+      label: 'Fallback action'

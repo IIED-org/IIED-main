@@ -41,7 +41,7 @@ class SophronMimeTypeGuesser implements MimeTypeGuesserInterface {
   /**
    * {@inheritdoc}
    */
-  public function guess($path) {
+  public function guessMimeType(string $path) : ?string {
     $extension = '';
     $file_parts = explode('.', $this->fileSystem->basename($path));
 
@@ -59,6 +59,21 @@ class SophronMimeTypeGuesser implements MimeTypeGuesserInterface {
     }
 
     return 'application/octet-stream';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function guess($path) {
+    @trigger_error(__METHOD__ . '() is deprecated in drupal:9.1.0 and is removed from drupal:10.0.0. Use ::guessMimeType() instead. See https://www.drupal.org/node/3133341', E_USER_DEPRECATED);
+    return $this->guessMimeType($path);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isGuesserSupported(): bool {
+    return TRUE;
   }
 
   /**
