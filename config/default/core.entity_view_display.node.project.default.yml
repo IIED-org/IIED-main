@@ -68,7 +68,7 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    type: link
+    type: link_separate
     region: content
   field_nid:
     weight: 105

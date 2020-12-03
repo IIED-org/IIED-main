@@ -1,23 +1,26 @@
-uuid: cc2e680e-c412-4ded-9f65-3e909e84d478
+uuid: 9a5ed496-75e8-45cc-86d1-cd56ffc41a8a
 langcode: en
 status: true
 dependencies:
+  content:
+    - 'block_content:jumbotron:82c13e7a-241f-4e88-ab3f-433c0202d562'
   module:
     - block_class
+    - block_content
     - system
   theme:
     - iied_pubs
 third_party_settings:
   block_class:
-    classes: 'jumbotron bg-primary'
+    classes: 'jumbotron bg-secondary'
 id: homehero
 theme: iied_pubs
 region: header
-weight: -10
+weight: -11
 provider: null
-plugin: 'block_content:78263b3c-5904-4e9c-a102-17b89ca2abb8'
+plugin: 'block_content:82c13e7a-241f-4e88-ab3f-433c0202d562'
 settings:
-  id: 'block_content:78263b3c-5904-4e9c-a102-17b89ca2abb8'
+  id: 'block_content:82c13e7a-241f-4e88-ab3f-433c0202d562'
   label: 'Home hero'
   provider: block_content
   label_display: '0'

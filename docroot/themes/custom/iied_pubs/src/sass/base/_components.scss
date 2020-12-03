@@ -115,7 +115,7 @@
   @extend .mb-4;
 }
 
-@media (min-width: 1200px) {
+@include media-breakpoint-up(xl) {
   .col-xl-3 {
 
   img {

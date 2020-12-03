@@ -1,32 +1,27 @@
-uuid: eb84f53c-15d6-4c3a-90ab-b192e863d016
+uuid: 4a682d6d-75b7-4c4c-b1e2-6bff1cbecabc
 langcode: en
 status: true
 dependencies:
   config:
-    - views.view.popular_terms
+    - views.view.list_rows
   module:
-    - block_class
     - system
     - views
   theme:
     - iied_pubs
-third_party_settings:
-  block_class:
-    classes: mb-4
-id: views_block__popular_terms_block_1
+id: views_block__list_rows_block_1
 theme: iied_pubs
-region: featured_top
-weight: -10
+region: content
+weight: 0
 provider: null
-plugin: 'views_block:popular_terms-block_1'
+plugin: 'views_block:list_rows-block_1'
 settings:
-  id: 'views_block:popular_terms-block_1'
+  id: 'views_block:list_rows-block_1'
   label: ''
   provider: views
   label_display: '0'
   views_label: ''
   items_per_page: none
-  context_mapping: {  }
 visibility:
   request_path:
     id: request_path
