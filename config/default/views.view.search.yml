@@ -455,7 +455,7 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          parse_mode: terms
+          parse_mode: edismax
           min_length: 3
           fields: {  }
           plugin_id: search_api_fulltext
