@@ -72,8 +72,8 @@ third_party_settings:
           ds_content: div
         outer_wrapper: div
         attributes: ''
-        link_attribute: content
-        link_custom: ''
+        link_attribute: tokens
+        link_custom: '[node:url]'
         classes:
           layout_class: {  }
           ds_content: {  }
