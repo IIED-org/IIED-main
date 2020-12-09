@@ -2354,7 +2354,7 @@ textarea.form-control {
   }
 }
 
-.btn, .block-facet--checkbox button, .block--sidrtriggerbuttonblock-2 button {
+.btn, .block-facet--checkbox button, .main-search-form #edit-reset--3, .block--sidrtriggerbuttonblock-2 button {
   display: inline-block;
   font-weight: 400;
   color: #212529;
@@ -2373,23 +2373,25 @@ textarea.form-control {
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 @media (prefers-reduced-motion: reduce) {
-  .btn, .block-facet--checkbox button, .block--sidrtriggerbuttonblock-2 button {
+  .btn, .block-facet--checkbox button, .main-search-form #edit-reset--3, .block--sidrtriggerbuttonblock-2 button {
     transition: none;
   }
 }
-.btn:hover, .block-facet--checkbox button:hover, .block--sidrtriggerbuttonblock-2 button:hover {
+.btn:hover, .block-facet--checkbox button:hover, .main-search-form #edit-reset--3:hover, .block--sidrtriggerbuttonblock-2 button:hover {
   color: #212529;
   text-decoration: none;
 }
-.btn:focus, .block-facet--checkbox button:focus, .block--sidrtriggerbuttonblock-2 button:focus, .btn.focus, .block-facet--checkbox button.focus, .block--sidrtriggerbuttonblock-2 button.focus {
+.btn:focus, .block-facet--checkbox button:focus, .main-search-form #edit-reset--3:focus, .block--sidrtriggerbuttonblock-2 button:focus, .btn.focus, .block-facet--checkbox button.focus, .main-search-form .focus#edit-reset--3, .block--sidrtriggerbuttonblock-2 button.focus {
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(252, 179, 22, 0.25);
 }
-.btn.disabled, .block-facet--checkbox button.disabled, .block--sidrtriggerbuttonblock-2 button.disabled, .btn:disabled, .block-facet--checkbox button:disabled, .block--sidrtriggerbuttonblock-2 button:disabled {
+.btn.disabled, .block-facet--checkbox button.disabled, .main-search-form .disabled#edit-reset--3, .block--sidrtriggerbuttonblock-2 button.disabled, .btn:disabled, .block-facet--checkbox button:disabled, .main-search-form #edit-reset--3:disabled, .block--sidrtriggerbuttonblock-2 button:disabled {
   opacity: 0.65;
 }
-a.btn.disabled,
-fieldset:disabled a.btn {
+a.btn.disabled, .main-search-form a.disabled#edit-reset--3,
+fieldset:disabled a.btn,
+fieldset:disabled .main-search-form a#edit-reset--3,
+.main-search-form fieldset:disabled a#edit-reset--3 {
   pointer-events: none;
 }
 
@@ -2636,53 +2638,53 @@ fieldset:disabled a.btn {
   box-shadow: 0 0 0 0.2rem rgba(43, 146, 181, 0.5);
 }
 
-.btn-outline-primary, .block-facet--checkbox button {
+.btn-outline-primary {
   color: #fcb316;
   border-color: #fcb316;
 }
-.btn-outline-primary:hover, .block-facet--checkbox button:hover {
+.btn-outline-primary:hover {
   color: #212529;
   background-color: #fcb316;
   border-color: #fcb316;
 }
-.btn-outline-primary:focus, .block-facet--checkbox button:focus, .btn-outline-primary.focus, .block-facet--checkbox button.focus {
+.btn-outline-primary:focus, .btn-outline-primary.focus {
   box-shadow: 0 0 0 0.2rem rgba(252, 179, 22, 0.5);
 }
-.btn-outline-primary.disabled, .block-facet--checkbox button.disabled, .btn-outline-primary:disabled, .block-facet--checkbox button:disabled {
+.btn-outline-primary.disabled, .btn-outline-primary:disabled {
   color: #fcb316;
   background-color: transparent;
 }
-.btn-outline-primary:not(:disabled):not(.disabled):active, .block-facet--checkbox button:not(:disabled):not(.disabled):active, .btn-outline-primary:not(:disabled):not(.disabled).active, .block-facet--checkbox button:not(:disabled):not(.disabled).active, .show > .btn-outline-primary.dropdown-toggle, .block-facet--checkbox .show > button {
+.btn-outline-primary:not(:disabled):not(.disabled):active, .btn-outline-primary:not(:disabled):not(.disabled).active, .show > .btn-outline-primary.dropdown-toggle, .block-facet--checkbox .show > button.btn-outline-primary {
   color: #212529;
   background-color: #fcb316;
   border-color: #fcb316;
 }
-.btn-outline-primary:not(:disabled):not(.disabled):active:focus, .block-facet--checkbox button:not(:disabled):not(.disabled):active:focus, .btn-outline-primary:not(:disabled):not(.disabled).active:focus, .block-facet--checkbox button:not(:disabled):not(.disabled).active:focus, .show > .btn-outline-primary.dropdown-toggle:focus, .block-facet--checkbox .show > button:focus {
+.btn-outline-primary:not(:disabled):not(.disabled):active:focus, .btn-outline-primary:not(:disabled):not(.disabled).active:focus, .show > .btn-outline-primary.dropdown-toggle:focus, .block-facet--checkbox .show > button.btn-outline-primary:focus {
   box-shadow: 0 0 0 0.2rem rgba(252, 179, 22, 0.5);
 }
 
-.btn-outline-secondary {
+.btn-outline-secondary, .block-facet--checkbox button, .main-search-form #edit-reset--3 {
   color: #00b3df;
   border-color: #00b3df;
 }
-.btn-outline-secondary:hover {
+.btn-outline-secondary:hover, .block-facet--checkbox button:hover, .main-search-form #edit-reset--3:hover {
   color: #fff;
   background-color: #00b3df;
   border-color: #00b3df;
 }
-.btn-outline-secondary:focus, .btn-outline-secondary.focus {
+.btn-outline-secondary:focus, .block-facet--checkbox button:focus, .main-search-form #edit-reset--3:focus, .btn-outline-secondary.focus, .block-facet--checkbox button.focus, .main-search-form .focus#edit-reset--3 {
   box-shadow: 0 0 0 0.2rem rgba(0, 179, 223, 0.5);
 }
-.btn-outline-secondary.disabled, .btn-outline-secondary:disabled {
+.btn-outline-secondary.disabled, .block-facet--checkbox button.disabled, .main-search-form .disabled#edit-reset--3, .btn-outline-secondary:disabled, .block-facet--checkbox button:disabled, .main-search-form #edit-reset--3:disabled {
   color: #00b3df;
   background-color: transparent;
 }
-.btn-outline-secondary:not(:disabled):not(.disabled):active, .btn-outline-secondary:not(:disabled):not(.disabled).active, .show > .btn-outline-secondary.dropdown-toggle, .block-facet--checkbox .show > button.btn-outline-secondary {
+.btn-outline-secondary:not(:disabled):not(.disabled):active, .block-facet--checkbox button:not(:disabled):not(.disabled):active, .main-search-form #edit-reset--3:not(:disabled):not(.disabled):active, .btn-outline-secondary:not(:disabled):not(.disabled).active, .block-facet--checkbox button:not(:disabled):not(.disabled).active, .main-search-form #edit-reset--3:not(:disabled):not(.disabled).active, .show > .btn-outline-secondary.dropdown-toggle, .block-facet--checkbox .show > button, .main-search-form .show > .dropdown-toggle#edit-reset--3, .main-search-form .block-facet--checkbox .show > button#edit-reset--3, .block-facet--checkbox .main-search-form .show > button#edit-reset--3 {
   color: #fff;
   background-color: #00b3df;
   border-color: #00b3df;
 }
-.btn-outline-secondary:not(:disabled):not(.disabled):active:focus, .btn-outline-secondary:not(:disabled):not(.disabled).active:focus, .show > .btn-outline-secondary.dropdown-toggle:focus, .block-facet--checkbox .show > button.btn-outline-secondary:focus {
+.btn-outline-secondary:not(:disabled):not(.disabled):active:focus, .block-facet--checkbox button:not(:disabled):not(.disabled):active:focus, .main-search-form #edit-reset--3:not(:disabled):not(.disabled):active:focus, .btn-outline-secondary:not(:disabled):not(.disabled).active:focus, .block-facet--checkbox button:not(:disabled):not(.disabled).active:focus, .main-search-form #edit-reset--3:not(:disabled):not(.disabled).active:focus, .show > .btn-outline-secondary.dropdown-toggle:focus, .block-facet--checkbox .show > button:focus, .main-search-form .show > .dropdown-toggle#edit-reset--3:focus, .main-search-form .block-facet--checkbox .show > button#edit-reset--3:focus, .block-facet--checkbox .main-search-form .show > button#edit-reset--3:focus {
   box-shadow: 0 0 0 0.2rem rgba(0, 179, 223, 0.5);
 }
 
@@ -2879,14 +2881,14 @@ fieldset:disabled a.btn {
   pointer-events: none;
 }
 
-.btn-lg, .btn-group-lg > .btn, .block-facet--checkbox .btn-group-lg > button, .block--sidrtriggerbuttonblock-2 .btn-group-lg > button {
+.btn-lg, .btn-group-lg > .btn, .block-facet--checkbox .btn-group-lg > button, .main-search-form .btn-group-lg > #edit-reset--3, .block--sidrtriggerbuttonblock-2 .btn-group-lg > button {
   padding: 0.5rem 1rem;
   font-size: 1.25rem;
   line-height: 1.5;
   border-radius: 0.5rem;
 }
 
-.btn-sm, .btn-group-sm > .btn, .block-facet--checkbox .btn-group-sm > button, .block--sidrtriggerbuttonblock-2 .btn-group-sm > button {
+.btn-sm, .btn-group-sm > .btn, .block-facet--checkbox .btn-group-sm > button, .main-search-form .btn-group-sm > #edit-reset--3, .block--sidrtriggerbuttonblock-2 .btn-group-sm > button {
   padding: 0.25rem 0.5rem;
   font-size: 0.875rem;
   line-height: 1.5;
@@ -3174,28 +3176,33 @@ input[type=button].btn-block {
   display: inline-flex;
   vertical-align: middle;
 }
-.btn-group > .btn, .block-facet--checkbox .btn-group > button, .block--sidrtriggerbuttonblock-2 .btn-group > button,
+.btn-group > .btn, .block-facet--checkbox .btn-group > button, .main-search-form .btn-group > #edit-reset--3, .block--sidrtriggerbuttonblock-2 .btn-group > button,
 .btn-group-vertical > .btn,
 .block-facet--checkbox .btn-group-vertical > button,
+.main-search-form .btn-group-vertical > #edit-reset--3,
 .block--sidrtriggerbuttonblock-2 .btn-group-vertical > button {
   position: relative;
   flex: 1 1 auto;
 }
-.btn-group > .btn:hover, .block-facet--checkbox .btn-group > button:hover, .block--sidrtriggerbuttonblock-2 .btn-group > button:hover,
+.btn-group > .btn:hover, .block-facet--checkbox .btn-group > button:hover, .main-search-form .btn-group > #edit-reset--3:hover, .block--sidrtriggerbuttonblock-2 .btn-group > button:hover,
 .btn-group-vertical > .btn:hover,
 .block-facet--checkbox .btn-group-vertical > button:hover,
+.main-search-form .btn-group-vertical > #edit-reset--3:hover,
 .block--sidrtriggerbuttonblock-2 .btn-group-vertical > button:hover {
   z-index: 1;
 }
-.btn-group > .btn:focus, .block-facet--checkbox .btn-group > button:focus, .block--sidrtriggerbuttonblock-2 .btn-group > button:focus, .btn-group > .btn:active, .block-facet--checkbox .btn-group > button:active, .block--sidrtriggerbuttonblock-2 .btn-group > button:active, .btn-group > .btn.active, .block-facet--checkbox .btn-group > button.active, .block--sidrtriggerbuttonblock-2 .btn-group > button.active,
+.btn-group > .btn:focus, .block-facet--checkbox .btn-group > button:focus, .main-search-form .btn-group > #edit-reset--3:focus, .block--sidrtriggerbuttonblock-2 .btn-group > button:focus, .btn-group > .btn:active, .block-facet--checkbox .btn-group > button:active, .main-search-form .btn-group > #edit-reset--3:active, .block--sidrtriggerbuttonblock-2 .btn-group > button:active, .btn-group > .btn.active, .block-facet--checkbox .btn-group > button.active, .main-search-form .btn-group > .active#edit-reset--3, .block--sidrtriggerbuttonblock-2 .btn-group > button.active,
 .btn-group-vertical > .btn:focus,
 .block-facet--checkbox .btn-group-vertical > button:focus,
+.main-search-form .btn-group-vertical > #edit-reset--3:focus,
 .block--sidrtriggerbuttonblock-2 .btn-group-vertical > button:focus,
 .btn-group-vertical > .btn:active,
 .block-facet--checkbox .btn-group-vertical > button:active,
+.main-search-form .btn-group-vertical > #edit-reset--3:active,
 .block--sidrtriggerbuttonblock-2 .btn-group-vertical > button:active,
 .btn-group-vertical > .btn.active,
 .block-facet--checkbox .btn-group-vertical > button.active,
+.main-search-form .btn-group-vertical > .active#edit-reset--3,
 .block--sidrtriggerbuttonblock-2 .btn-group-vertical > button.active {
   z-index: 1;
 }
@@ -3209,20 +3216,22 @@ input[type=button].btn-block {
   width: auto;
 }
 
-.btn-group > .btn:not(:first-child), .block-facet--checkbox .btn-group > button:not(:first-child), .block--sidrtriggerbuttonblock-2 .btn-group > button:not(:first-child),
+.btn-group > .btn:not(:first-child), .block-facet--checkbox .btn-group > button:not(:first-child), .main-search-form .btn-group > #edit-reset--3:not(:first-child), .block--sidrtriggerbuttonblock-2 .btn-group > button:not(:first-child),
 .btn-group > .btn-group:not(:first-child) {
   margin-left: -1px;
 }
-.btn-group > .btn:not(:last-child):not(.dropdown-toggle), .block-facet--checkbox .btn-group > button:not(:last-child):not(.dropdown-toggle), .block--sidrtriggerbuttonblock-2 .btn-group > button:not(:last-child):not(.dropdown-toggle),
+.btn-group > .btn:not(:last-child):not(.dropdown-toggle), .block-facet--checkbox .btn-group > button:not(:last-child):not(.dropdown-toggle), .main-search-form .btn-group > #edit-reset--3:not(:last-child):not(.dropdown-toggle), .block--sidrtriggerbuttonblock-2 .btn-group > button:not(:last-child):not(.dropdown-toggle),
 .btn-group > .btn-group:not(:last-child) > .btn,
 .block-facet--checkbox .btn-group > .btn-group:not(:last-child) > button,
+.main-search-form .btn-group > .btn-group:not(:last-child) > #edit-reset--3,
 .block--sidrtriggerbuttonblock-2 .btn-group > .btn-group:not(:last-child) > button {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
-.btn-group > .btn:not(:first-child), .block-facet--checkbox .btn-group > button:not(:first-child), .block--sidrtriggerbuttonblock-2 .btn-group > button:not(:first-child),
+.btn-group > .btn:not(:first-child), .block-facet--checkbox .btn-group > button:not(:first-child), .main-search-form .btn-group > #edit-reset--3:not(:first-child), .block--sidrtriggerbuttonblock-2 .btn-group > button:not(:first-child),
 .btn-group > .btn-group:not(:first-child) > .btn,
 .block-facet--checkbox .btn-group > .btn-group:not(:first-child) > button,
+.main-search-form .btn-group > .btn-group:not(:first-child) > #edit-reset--3,
 .block--sidrtriggerbuttonblock-2 .btn-group > .btn-group:not(:first-child) > button {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
@@ -3239,12 +3248,12 @@ input[type=button].btn-block {
   margin-right: 0;
 }
 
-.btn-sm + .dropdown-toggle-split, .btn-group-sm > .btn + .dropdown-toggle-split, .block-facet--checkbox .btn-group-sm > button + .dropdown-toggle-split, .block--sidrtriggerbuttonblock-2 .btn-group-sm > button + .dropdown-toggle-split {
+.btn-sm + .dropdown-toggle-split, .btn-group-sm > .btn + .dropdown-toggle-split, .block-facet--checkbox .btn-group-sm > button + .dropdown-toggle-split, .main-search-form .btn-group-sm > #edit-reset--3 + .dropdown-toggle-split, .block--sidrtriggerbuttonblock-2 .btn-group-sm > button + .dropdown-toggle-split {
   padding-right: 0.375rem;
   padding-left: 0.375rem;
 }
 
-.btn-lg + .dropdown-toggle-split, .btn-group-lg > .btn + .dropdown-toggle-split, .block-facet--checkbox .btn-group-lg > button + .dropdown-toggle-split, .block--sidrtriggerbuttonblock-2 .btn-group-lg > button + .dropdown-toggle-split {
+.btn-lg + .dropdown-toggle-split, .btn-group-lg > .btn + .dropdown-toggle-split, .block-facet--checkbox .btn-group-lg > button + .dropdown-toggle-split, .main-search-form .btn-group-lg > #edit-reset--3 + .dropdown-toggle-split, .block--sidrtriggerbuttonblock-2 .btn-group-lg > button + .dropdown-toggle-split {
   padding-right: 0.75rem;
   padding-left: 0.75rem;
 }
@@ -3254,38 +3263,42 @@ input[type=button].btn-block {
   align-items: flex-start;
   justify-content: center;
 }
-.btn-group-vertical > .btn, .block-facet--checkbox .btn-group-vertical > button, .block--sidrtriggerbuttonblock-2 .btn-group-vertical > button,
+.btn-group-vertical > .btn, .block-facet--checkbox .btn-group-vertical > button, .main-search-form .btn-group-vertical > #edit-reset--3, .block--sidrtriggerbuttonblock-2 .btn-group-vertical > button,
 .btn-group-vertical > .btn-group {
   width: 100%;
 }
-.btn-group-vertical > .btn:not(:first-child), .block-facet--checkbox .btn-group-vertical > button:not(:first-child), .block--sidrtriggerbuttonblock-2 .btn-group-vertical > button:not(:first-child),
+.btn-group-vertical > .btn:not(:first-child), .block-facet--checkbox .btn-group-vertical > button:not(:first-child), .main-search-form .btn-group-vertical > #edit-reset--3:not(:first-child), .block--sidrtriggerbuttonblock-2 .btn-group-vertical > button:not(:first-child),
 .btn-group-vertical > .btn-group:not(:first-child) {
   margin-top: -1px;
 }
-.btn-group-vertical > .btn:not(:last-child):not(.dropdown-toggle), .block-facet--checkbox .btn-group-vertical > button:not(:last-child):not(.dropdown-toggle), .block--sidrtriggerbuttonblock-2 .btn-group-vertical > button:not(:last-child):not(.dropdown-toggle),
+.btn-group-vertical > .btn:not(:last-child):not(.dropdown-toggle), .block-facet--checkbox .btn-group-vertical > button:not(:last-child):not(.dropdown-toggle), .main-search-form .btn-group-vertical > #edit-reset--3:not(:last-child):not(.dropdown-toggle), .block--sidrtriggerbuttonblock-2 .btn-group-vertical > button:not(:last-child):not(.dropdown-toggle),
 .btn-group-vertical > .btn-group:not(:last-child) > .btn,
 .block-facet--checkbox .btn-group-vertical > .btn-group:not(:last-child) > button,
+.main-search-form .btn-group-vertical > .btn-group:not(:last-child) > #edit-reset--3,
 .block--sidrtriggerbuttonblock-2 .btn-group-vertical > .btn-group:not(:last-child) > button {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
-.btn-group-vertical > .btn:not(:first-child), .block-facet--checkbox .btn-group-vertical > button:not(:first-child), .block--sidrtriggerbuttonblock-2 .btn-group-vertical > button:not(:first-child),
+.btn-group-vertical > .btn:not(:first-child), .block-facet--checkbox .btn-group-vertical > button:not(:first-child), .main-search-form .btn-group-vertical > #edit-reset--3:not(:first-child), .block--sidrtriggerbuttonblock-2 .btn-group-vertical > button:not(:first-child),
 .btn-group-vertical > .btn-group:not(:first-child) > .btn,
 .block-facet--checkbox .btn-group-vertical > .btn-group:not(:first-child) > button,
+.main-search-form .btn-group-vertical > .btn-group:not(:first-child) > #edit-reset--3,
 .block--sidrtriggerbuttonblock-2 .btn-group-vertical > .btn-group:not(:first-child) > button {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
 
-.btn-group-toggle > .btn, .block-facet--checkbox .btn-group-toggle > button, .block--sidrtriggerbuttonblock-2 .btn-group-toggle > button,
+.btn-group-toggle > .btn, .block-facet--checkbox .btn-group-toggle > button, .main-search-form .btn-group-toggle > #edit-reset--3, .block--sidrtriggerbuttonblock-2 .btn-group-toggle > button,
 .btn-group-toggle > .btn-group > .btn,
 .block-facet--checkbox .btn-group-toggle > .btn-group > button,
+.main-search-form .btn-group-toggle > .btn-group > #edit-reset--3,
 .block--sidrtriggerbuttonblock-2 .btn-group-toggle > .btn-group > button {
   margin-bottom: 0;
 }
-.btn-group-toggle > .btn input[type=radio], .block-facet--checkbox .btn-group-toggle > button input[type=radio], .block--sidrtriggerbuttonblock-2 .btn-group-toggle > button input[type=radio],
+.btn-group-toggle > .btn input[type=radio], .block-facet--checkbox .btn-group-toggle > button input[type=radio], .main-search-form .btn-group-toggle > #edit-reset--3 input[type=radio], .block--sidrtriggerbuttonblock-2 .btn-group-toggle > button input[type=radio],
 .btn-group-toggle > .btn input[type=checkbox],
 .block-facet--checkbox .btn-group-toggle > button input[type=checkbox],
+.main-search-form .btn-group-toggle > #edit-reset--3 input[type=checkbox],
 .block--sidrtriggerbuttonblock-2 .btn-group-toggle > button input[type=checkbox],
 .btn-group-toggle > .btn-group > .btn input[type=radio],
 .btn-group-toggle > .btn-group > .btn input[type=checkbox] {
@@ -3359,33 +3372,41 @@ input[type=button].btn-block {
 .input-group-append {
   display: flex;
 }
-.input-group-prepend .btn, .input-group-prepend .block-facet--checkbox button, .block-facet--checkbox .input-group-prepend button, .input-group-prepend .block--sidrtriggerbuttonblock-2 button, .block--sidrtriggerbuttonblock-2 .input-group-prepend button,
+.input-group-prepend .btn, .input-group-prepend .block-facet--checkbox button, .block-facet--checkbox .input-group-prepend button, .input-group-prepend .main-search-form #edit-reset--3, .main-search-form .input-group-prepend #edit-reset--3, .input-group-prepend .block--sidrtriggerbuttonblock-2 button, .block--sidrtriggerbuttonblock-2 .input-group-prepend button,
 .input-group-append .btn,
 .input-group-append .block-facet--checkbox button,
 .block-facet--checkbox .input-group-append button,
+.input-group-append .main-search-form #edit-reset--3,
+.main-search-form .input-group-append #edit-reset--3,
 .input-group-append .block--sidrtriggerbuttonblock-2 button,
 .block--sidrtriggerbuttonblock-2 .input-group-append button {
   position: relative;
   z-index: 2;
 }
-.input-group-prepend .btn:focus, .input-group-prepend .block-facet--checkbox button:focus, .block-facet--checkbox .input-group-prepend button:focus, .input-group-prepend .block--sidrtriggerbuttonblock-2 button:focus, .block--sidrtriggerbuttonblock-2 .input-group-prepend button:focus,
+.input-group-prepend .btn:focus, .input-group-prepend .block-facet--checkbox button:focus, .block-facet--checkbox .input-group-prepend button:focus, .input-group-prepend .main-search-form #edit-reset--3:focus, .main-search-form .input-group-prepend #edit-reset--3:focus, .input-group-prepend .block--sidrtriggerbuttonblock-2 button:focus, .block--sidrtriggerbuttonblock-2 .input-group-prepend button:focus,
 .input-group-append .btn:focus,
 .input-group-append .block-facet--checkbox button:focus,
 .block-facet--checkbox .input-group-append button:focus,
+.input-group-append .main-search-form #edit-reset--3:focus,
+.main-search-form .input-group-append #edit-reset--3:focus,
 .input-group-append .block--sidrtriggerbuttonblock-2 button:focus,
 .block--sidrtriggerbuttonblock-2 .input-group-append button:focus {
   z-index: 3;
 }
-.input-group-prepend .btn + .btn, .input-group-prepend .block-facet--checkbox button + .btn, .block-facet--checkbox .input-group-prepend button + .btn, .input-group-prepend .block-facet--checkbox .btn + button, .block-facet--checkbox .input-group-prepend .btn + button, .input-group-prepend .block-facet--checkbox button + button, .block-facet--checkbox .input-group-prepend button + button, .input-group-prepend .block--sidrtriggerbuttonblock-2 button + .btn, .block--sidrtriggerbuttonblock-2 .input-group-prepend button + .btn, .input-group-prepend .block--sidrtriggerbuttonblock-2 .btn + button, .block--sidrtriggerbuttonblock-2 .input-group-prepend .btn + button, .input-group-prepend .block--sidrtriggerbuttonblock-2 button + button, .block--sidrtriggerbuttonblock-2 .input-group-prepend button + button,
+.input-group-prepend .btn + .btn, .input-group-prepend .block-facet--checkbox button + .btn, .block-facet--checkbox .input-group-prepend button + .btn, .input-group-prepend .block-facet--checkbox .btn + button, .block-facet--checkbox .input-group-prepend .btn + button, .input-group-prepend .block-facet--checkbox button + button, .block-facet--checkbox .input-group-prepend button + button, .input-group-prepend .main-search-form #edit-reset--3 + .btn, .input-group-prepend .main-search-form .block-facet--checkbox #edit-reset--3 + button, .block-facet--checkbox .input-group-prepend .main-search-form #edit-reset--3 + button, .main-search-form .input-group-prepend #edit-reset--3 + .btn, .main-search-form .input-group-prepend .block-facet--checkbox #edit-reset--3 + button, .block-facet--checkbox .main-search-form .input-group-prepend #edit-reset--3 + button, .input-group-prepend .main-search-form .btn + #edit-reset--3, .input-group-prepend .main-search-form .block-facet--checkbox button + #edit-reset--3, .block-facet--checkbox .input-group-prepend .main-search-form button + #edit-reset--3, .main-search-form .input-group-prepend .btn + #edit-reset--3, .main-search-form .input-group-prepend .block-facet--checkbox button + #edit-reset--3, .block-facet--checkbox .main-search-form .input-group-prepend button + #edit-reset--3, .input-group-prepend .main-search-form #edit-reset--3 + #edit-reset--3, .main-search-form .input-group-prepend #edit-reset--3 + #edit-reset--3, .input-group-prepend .block--sidrtriggerbuttonblock-2 button + .btn, .input-group-prepend .block--sidrtriggerbuttonblock-2 .block-facet--checkbox button + button, .block-facet--checkbox .input-group-prepend .block--sidrtriggerbuttonblock-2 button + button, .input-group-prepend .block--sidrtriggerbuttonblock-2 .main-search-form button + #edit-reset--3, .main-search-form .input-group-prepend .block--sidrtriggerbuttonblock-2 button + #edit-reset--3, .block--sidrtriggerbuttonblock-2 .input-group-prepend button + .btn, .block--sidrtriggerbuttonblock-2 .input-group-prepend .block-facet--checkbox button + button, .block-facet--checkbox .block--sidrtriggerbuttonblock-2 .input-group-prepend button + button, .block--sidrtriggerbuttonblock-2 .input-group-prepend .main-search-form button + #edit-reset--3, .main-search-form .block--sidrtriggerbuttonblock-2 .input-group-prepend button + #edit-reset--3, .input-group-prepend .block--sidrtriggerbuttonblock-2 .btn + button, .input-group-prepend .block--sidrtriggerbuttonblock-2 .block-facet--checkbox button + button, .block-facet--checkbox .input-group-prepend .block--sidrtriggerbuttonblock-2 button + button, .input-group-prepend .block--sidrtriggerbuttonblock-2 .main-search-form #edit-reset--3 + button, .main-search-form .input-group-prepend .block--sidrtriggerbuttonblock-2 #edit-reset--3 + button, .block--sidrtriggerbuttonblock-2 .input-group-prepend .btn + button, .block--sidrtriggerbuttonblock-2 .input-group-prepend .block-facet--checkbox button + button, .block-facet--checkbox .block--sidrtriggerbuttonblock-2 .input-group-prepend button + button, .block--sidrtriggerbuttonblock-2 .input-group-prepend .main-search-form #edit-reset--3 + button, .main-search-form .block--sidrtriggerbuttonblock-2 .input-group-prepend #edit-reset--3 + button, .input-group-prepend .block--sidrtriggerbuttonblock-2 button + button, .block--sidrtriggerbuttonblock-2 .input-group-prepend button + button,
 .input-group-prepend .btn + .input-group-text,
 .input-group-prepend .block-facet--checkbox button + .input-group-text,
 .block-facet--checkbox .input-group-prepend button + .input-group-text,
+.input-group-prepend .main-search-form #edit-reset--3 + .input-group-text,
+.main-search-form .input-group-prepend #edit-reset--3 + .input-group-text,
 .input-group-prepend .block--sidrtriggerbuttonblock-2 button + .input-group-text,
 .block--sidrtriggerbuttonblock-2 .input-group-prepend button + .input-group-text,
 .input-group-prepend .input-group-text + .input-group-text,
 .input-group-prepend .input-group-text + .btn,
 .input-group-prepend .block-facet--checkbox .input-group-text + button,
 .block-facet--checkbox .input-group-prepend .input-group-text + button,
+.input-group-prepend .main-search-form .input-group-text + #edit-reset--3,
+.main-search-form .input-group-prepend .input-group-text + #edit-reset--3,
 .input-group-prepend .block--sidrtriggerbuttonblock-2 .input-group-text + button,
 .block--sidrtriggerbuttonblock-2 .input-group-prepend .input-group-text + button,
 .input-group-append .btn + .btn,
@@ -3395,21 +3416,55 @@ input[type=button].btn-block {
 .block-facet--checkbox .input-group-append .btn + button,
 .input-group-append .block-facet--checkbox button + button,
 .block-facet--checkbox .input-group-append button + button,
+.input-group-append .main-search-form #edit-reset--3 + .btn,
+.input-group-append .main-search-form .block-facet--checkbox #edit-reset--3 + button,
+.block-facet--checkbox .input-group-append .main-search-form #edit-reset--3 + button,
+.main-search-form .input-group-append #edit-reset--3 + .btn,
+.main-search-form .input-group-append .block-facet--checkbox #edit-reset--3 + button,
+.block-facet--checkbox .main-search-form .input-group-append #edit-reset--3 + button,
+.input-group-append .main-search-form .btn + #edit-reset--3,
+.input-group-append .main-search-form .block-facet--checkbox button + #edit-reset--3,
+.block-facet--checkbox .input-group-append .main-search-form button + #edit-reset--3,
+.main-search-form .input-group-append .btn + #edit-reset--3,
+.main-search-form .input-group-append .block-facet--checkbox button + #edit-reset--3,
+.block-facet--checkbox .main-search-form .input-group-append button + #edit-reset--3,
+.input-group-append .main-search-form #edit-reset--3 + #edit-reset--3,
+.main-search-form .input-group-append #edit-reset--3 + #edit-reset--3,
 .input-group-append .block--sidrtriggerbuttonblock-2 button + .btn,
+.input-group-append .block--sidrtriggerbuttonblock-2 .block-facet--checkbox button + button,
+.block-facet--checkbox .input-group-append .block--sidrtriggerbuttonblock-2 button + button,
+.input-group-append .block--sidrtriggerbuttonblock-2 .main-search-form button + #edit-reset--3,
+.main-search-form .input-group-append .block--sidrtriggerbuttonblock-2 button + #edit-reset--3,
 .block--sidrtriggerbuttonblock-2 .input-group-append button + .btn,
+.block--sidrtriggerbuttonblock-2 .input-group-append .block-facet--checkbox button + button,
+.block-facet--checkbox .block--sidrtriggerbuttonblock-2 .input-group-append button + button,
+.block--sidrtriggerbuttonblock-2 .input-group-append .main-search-form button + #edit-reset--3,
+.main-search-form .block--sidrtriggerbuttonblock-2 .input-group-append button + #edit-reset--3,
 .input-group-append .block--sidrtriggerbuttonblock-2 .btn + button,
+.input-group-append .block--sidrtriggerbuttonblock-2 .block-facet--checkbox button + button,
+.block-facet--checkbox .input-group-append .block--sidrtriggerbuttonblock-2 button + button,
+.input-group-append .block--sidrtriggerbuttonblock-2 .main-search-form #edit-reset--3 + button,
+.main-search-form .input-group-append .block--sidrtriggerbuttonblock-2 #edit-reset--3 + button,
 .block--sidrtriggerbuttonblock-2 .input-group-append .btn + button,
+.block--sidrtriggerbuttonblock-2 .input-group-append .block-facet--checkbox button + button,
+.block-facet--checkbox .block--sidrtriggerbuttonblock-2 .input-group-append button + button,
+.block--sidrtriggerbuttonblock-2 .input-group-append .main-search-form #edit-reset--3 + button,
+.main-search-form .block--sidrtriggerbuttonblock-2 .input-group-append #edit-reset--3 + button,
 .input-group-append .block--sidrtriggerbuttonblock-2 button + button,
 .block--sidrtriggerbuttonblock-2 .input-group-append button + button,
 .input-group-append .btn + .input-group-text,
 .input-group-append .block-facet--checkbox button + .input-group-text,
 .block-facet--checkbox .input-group-append button + .input-group-text,
+.input-group-append .main-search-form #edit-reset--3 + .input-group-text,
+.main-search-form .input-group-append #edit-reset--3 + .input-group-text,
 .input-group-append .block--sidrtriggerbuttonblock-2 button + .input-group-text,
 .block--sidrtriggerbuttonblock-2 .input-group-append button + .input-group-text,
 .input-group-append .input-group-text + .input-group-text,
 .input-group-append .input-group-text + .btn,
 .input-group-append .block-facet--checkbox .input-group-text + button,
 .block-facet--checkbox .input-group-append .input-group-text + button,
+.input-group-append .main-search-form .input-group-text + #edit-reset--3,
+.main-search-form .input-group-append .input-group-text + #edit-reset--3,
 .input-group-append .block--sidrtriggerbuttonblock-2 .input-group-text + button,
 .block--sidrtriggerbuttonblock-2 .input-group-append .input-group-text + button {
   margin-left: -1px;
@@ -3454,9 +3509,11 @@ input[type=button].btn-block {
 .input-group-lg > .input-group-append > .input-group-text,
 .input-group-lg > .input-group-prepend > .btn,
 .block-facet--checkbox .input-group-lg > .input-group-prepend > button,
+.main-search-form .input-group-lg > .input-group-prepend > #edit-reset--3,
 .block--sidrtriggerbuttonblock-2 .input-group-lg > .input-group-prepend > button,
 .input-group-lg > .input-group-append > .btn,
 .block-facet--checkbox .input-group-lg > .input-group-append > button,
+.main-search-form .input-group-lg > .input-group-append > #edit-reset--3,
 .block--sidrtriggerbuttonblock-2 .input-group-lg > .input-group-append > button {
   padding: 0.5rem 1rem;
   font-size: 1.25rem;
@@ -3475,9 +3532,11 @@ input[type=button].btn-block {
 .input-group-sm > .input-group-append > .input-group-text,
 .input-group-sm > .input-group-prepend > .btn,
 .block-facet--checkbox .input-group-sm > .input-group-prepend > button,
+.main-search-form .input-group-sm > .input-group-prepend > #edit-reset--3,
 .block--sidrtriggerbuttonblock-2 .input-group-sm > .input-group-prepend > button,
 .input-group-sm > .input-group-append > .btn,
 .block-facet--checkbox .input-group-sm > .input-group-append > button,
+.main-search-form .input-group-sm > .input-group-append > #edit-reset--3,
 .block--sidrtriggerbuttonblock-2 .input-group-sm > .input-group-append > button {
   padding: 0.25rem 0.5rem;
   font-size: 0.875rem;
@@ -3490,28 +3549,32 @@ input[type=button].btn-block {
   padding-right: 1.75rem;
 }
 
-.input-group > .input-group-prepend > .btn, .block-facet--checkbox .input-group > .input-group-prepend > button, .block--sidrtriggerbuttonblock-2 .input-group > .input-group-prepend > button,
+.input-group > .input-group-prepend > .btn, .block-facet--checkbox .input-group > .input-group-prepend > button, .main-search-form .input-group > .input-group-prepend > #edit-reset--3, .block--sidrtriggerbuttonblock-2 .input-group > .input-group-prepend > button,
 .input-group > .input-group-prepend > .input-group-text,
 .input-group > .input-group-append:not(:last-child) > .btn,
 .block-facet--checkbox .input-group > .input-group-append:not(:last-child) > button,
+.main-search-form .input-group > .input-group-append:not(:last-child) > #edit-reset--3,
 .block--sidrtriggerbuttonblock-2 .input-group > .input-group-append:not(:last-child) > button,
 .input-group > .input-group-append:not(:last-child) > .input-group-text,
 .input-group > .input-group-append:last-child > .btn:not(:last-child):not(.dropdown-toggle),
 .block-facet--checkbox .input-group > .input-group-append:last-child > button:not(:last-child):not(.dropdown-toggle),
+.main-search-form .input-group > .input-group-append:last-child > #edit-reset--3:not(:last-child):not(.dropdown-toggle),
 .block--sidrtriggerbuttonblock-2 .input-group > .input-group-append:last-child > button:not(:last-child):not(.dropdown-toggle),
 .input-group > .input-group-append:last-child > .input-group-text:not(:last-child) {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
 
-.input-group > .input-group-append > .btn, .block-facet--checkbox .input-group > .input-group-append > button, .block--sidrtriggerbuttonblock-2 .input-group > .input-group-append > button,
+.input-group > .input-group-append > .btn, .block-facet--checkbox .input-group > .input-group-append > button, .main-search-form .input-group > .input-group-append > #edit-reset--3, .block--sidrtriggerbuttonblock-2 .input-group > .input-group-append > button,
 .input-group > .input-group-append > .input-group-text,
 .input-group > .input-group-prepend:not(:first-child) > .btn,
 .block-facet--checkbox .input-group > .input-group-prepend:not(:first-child) > button,
+.main-search-form .input-group > .input-group-prepend:not(:first-child) > #edit-reset--3,
 .block--sidrtriggerbuttonblock-2 .input-group > .input-group-prepend:not(:first-child) > button,
 .input-group > .input-group-prepend:not(:first-child) > .input-group-text,
 .input-group > .input-group-prepend:first-child > .btn:not(:first-child),
 .block-facet--checkbox .input-group > .input-group-prepend:first-child > button:not(:first-child),
+.main-search-form .input-group > .input-group-prepend:first-child > #edit-reset--3:not(:first-child),
 .block--sidrtriggerbuttonblock-2 .input-group > .input-group-prepend:first-child > button:not(:first-child),
 .input-group > .input-group-prepend:first-child > .input-group-text:not(:first-child) {
   border-top-left-radius: 0;
@@ -4671,7 +4734,7 @@ a.badge:hover, a.badge:focus {
   display: none;
 }
 
-.btn .badge, .block-facet--checkbox button .badge, .block--sidrtriggerbuttonblock-2 button .badge {
+.btn .badge, .block-facet--checkbox button .badge, .main-search-form #edit-reset--3 .badge, .block--sidrtriggerbuttonblock-2 button .badge {
   position: relative;
   top: -1px;
 }
@@ -9750,7 +9813,7 @@ a.text-link:hover, a.text-link:focus {
   color: #212529 !important;
 }
 
-.text-muted {
+.text-muted, .meta {
   color: #767676 !important;
 }
 
@@ -14861,13 +14924,16 @@ h1, h2, h3, h4, h5, h6, .display-4 {
 .main-search-form input, .main-search-form select {
   line-height: 1.5 !important;
 }
+.main-search-form #edit-reset--3 {
+  background-color: transparent !important;
+}
 .main-search-form #views-exposed-form-search-page-2--3 {
   margin-left: -15px !important;
 }
 .main-search-form #views-exposed-form-search-page-2--3:hover {
   background-color: transparent !important;
 }
-.main-search-form #views-exposed-form-search-page-2--3 .js-form-item-sort-by {
+.main-search-form #views-exposed-form-search-page-2--3 .js-form-item-sort-by, .main-search-form #views-exposed-form-search-page-2--3 #edit-submit-search--3 {
   display: none;
 }
 
@@ -15030,13 +15096,22 @@ h1, h2, h3, h4, h5, h6, .display-4 {
   border-image-slice: 1;
 }
 
-.page-view-search .row, .page-view-search .main-search-form #views-exposed-form-search-page-2--3, .main-search-form .page-view-search #views-exposed-form-search-page-2--3 {
+.page-view-search .view-result .row, .page-view-search .view-result .main-search-form #views-exposed-form-search-page-2--3, .main-search-form .page-view-search .view-result #views-exposed-form-search-page-2--3 {
+  border: solid 1px #dfe1e5;
+  border-bottom-width: 0;
   padding: 0.5rem;
   margin: 0;
   cursor: pointer;
 }
-.page-view-search .row:hover, .page-view-search .main-search-form #views-exposed-form-search-page-2--3:hover, .main-search-form .page-view-search #views-exposed-form-search-page-2--3:hover {
+.page-view-search .view-result .row:hover, .page-view-search .view-result .main-search-form #views-exposed-form-search-page-2--3:hover, .main-search-form .page-view-search .view-result #views-exposed-form-search-page-2--3:hover {
   background-color: #dfe1e5;
+}
+.page-view-search .view-result .row:last-of-type, .page-view-search .view-result .main-search-form #views-exposed-form-search-page-2--3:last-of-type, .main-search-form .page-view-search .view-result #views-exposed-form-search-page-2--3:last-of-type {
+  margin-bottom: 2rem;
+  border-bottom-width: 1px;
+}
+.page-view-search .view-result .row .media div.field-image, .page-view-search .view-result .main-search-form #views-exposed-form-search-page-2--3 .media div.field-image, .main-search-form .page-view-search .view-result #views-exposed-form-search-page-2--3 .media div.field-image {
+  width: 100px;
 }
 
 .page__footer {
@@ -15131,7 +15206,6 @@ h1, h2, h3, h4, h5, h6, .display-4 {
 
 .block-facet--checkbox button {
   font-size: 1rem;
-  width: 100%;
   text-align: left;
   margin-top: 1rem;
 }

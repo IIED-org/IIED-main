@@ -1,10 +1,10 @@
 .block-facet--checkbox {
   button {
     font-size: $font-size-base;
-    width: 100%;
+    //width: 100%;
     text-align: left;
     @extend .btn;
-    @extend .btn-outline-primary;
+    @extend .btn-outline-secondary;
     @extend .dropdown-toggle;
     margin-top: 1rem;
   }

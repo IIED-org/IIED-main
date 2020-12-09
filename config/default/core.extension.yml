@@ -44,6 +44,7 @@ module:
   geolocation: 0
   help: 0
   history: 0
+  iied_utils: 0
   image: 0
   imagemagick: 0
   isbn: 0

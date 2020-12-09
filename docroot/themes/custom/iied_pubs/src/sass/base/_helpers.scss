@@ -29,3 +29,7 @@ ul.language-switcher-language-url.nav {
     padding: 0;
   }
 }
+
+.meta {
+  @extend .text-muted;
+}
