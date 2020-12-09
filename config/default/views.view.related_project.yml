@@ -165,7 +165,7 @@ display:
           empty: false
           tokenize: false
           content:
-            value: '<h2 class="pt-4">Project</h2>'
+            value: '<h2 class="pt-4">Related IIED project</h2>'
             format: full_html
           plugin_id: text
       footer: {  }

@@ -146,7 +146,20 @@ display:
           granularity: month
           plugin_id: datetime
       title: 'Publications related to this project'
-      header: {  }
+      header:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: false
+          tokenize: false
+          content:
+            value: '<h3>Further publications related to this project</h3>'
+            format: basic_html
+          plugin_id: text
       footer: {  }
       empty: {  }
       relationships:

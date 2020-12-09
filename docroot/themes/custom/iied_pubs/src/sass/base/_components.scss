@@ -117,19 +117,57 @@
 
 @include media-breakpoint-up(xl) {
   .col-xl-3 {
-
-  img {
-  transform: rotate(-3deg);
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
-}
-  .col-4.col-xl-12 {
-    max-height: 180px;
-    overflow: hidden;
-    background: $gray-200;
+      img {
+      transform: rotate(-3deg);
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+    }
+      .col-4.col-xl-12 {
+        max-height: 180px;
+        overflow: hidden;
+        background: $gray-200;
+        border-radius: calc(0.5rem - 1px) calc(0.5rem - 1px) 0 0;
+      }
   }
-
+  .card-body {
+      border-top: 2px solid $gray-100;
+  }
+  .grid .row {
+    .col-xl-3:nth-child(8n+1) .card-body {border-top-color: $pink;}
+    .col-xl-3:nth-child(8n+2) .card-body {border-top-color: $orange;}
+    .col-xl-3:nth-child(8n+3) .card-body {border-top-color: $blue;}
+    .col-xl-3:nth-child(8n+4) .card-body {border-top-color: $green;}
+    .col-xl-3:nth-child(8n+5) .card-body {border-top-color: $green;}
+    .col-xl-3:nth-child(8n+6) .card-body {border-top-color: $blue;}
+    .col-xl-3:nth-child(8n+7) .card-body {border-top-color: $orange;}
+    .col-xl-3:nth-child(8n+8) .card-body {border-top-color: $pink;}
+  }
 }
+
+.card-body {
+  padding: 1rem;
+}
+.card-title {
+  font-size: 1.2rem;
+}
+.card-title a {
+  color: $gray-900;
+}
+.card-meta {
+  padding: 0 1rem 1rem 1rem;
+}
+.card:hover {
+  box-shadow: 0px 0px 5px -1px rgba(0,0,0,0.3);
+  transition: all .3s ease;
+}
+.card:hover img {
+  transform: scale(1.1) rotate(-2deg);
+  transition: all .3s ease;
+}
+
+.page-item.active .page-link {
+  background-color: $secondary;
+  border-color: $secondary;
 }
