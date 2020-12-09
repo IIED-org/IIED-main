@@ -355,7 +355,17 @@ display:
             label: Title
           plugin_id: search_api
       title: Search
-      header: {  }
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: false
+          content: 'Displaying @start - @end of @total results'
+          plugin_id: result
       footer: {  }
       empty:
         area:
