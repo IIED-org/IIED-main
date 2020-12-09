@@ -17,3 +17,9 @@
 .block--iied-pubs-branding .navbar-brand {
     color: rgba(0, 0, 0, 0.7);
 }
+
+.navbar {
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(to right, $pink , $orange);
+  border-image-slice: 1;
+}

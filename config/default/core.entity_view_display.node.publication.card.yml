@@ -83,12 +83,12 @@ third_party_settings:
       ds_content:
         - group_row
         - field_media
-        - node_title
         - group_card_body
+        - node_title
     fields:
       node_title:
         plugin_id: node_title
-        weight: 2
+        weight: 7
         label: hidden
         formatter: default
         settings:
@@ -127,7 +127,7 @@ third_party_settings:
       children:
         - node_title
       parent_name: group_row
-      weight: 2
+      weight: 3
       format_type: html_element
       region: ds_content
       format_settings:
@@ -160,6 +160,23 @@ third_party_settings:
         effect: none
         speed: fast
       label: Row
+    group_card_footer:
+      children: {  }
+      parent_name: ''
+      weight: 1
+      format_type: html_element
+      region: hidden
+      format_settings:
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        id: ''
+        classes: 'card-meta text-muted col-8 col-xl-12'
+      label: 'card footer'
 id: node.publication.card
 targetEntityType: node
 bundle: publication
@@ -167,7 +184,7 @@ mode: card
 content:
   field_media:
     type: media_thumbnail
-    weight: 1
+    weight: 2
     region: ds_content
     label: hidden
     settings:

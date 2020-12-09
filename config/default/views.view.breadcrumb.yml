@@ -140,7 +140,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: "<nav aria-label=\"breadcrumb\">\r\n    <ol class=\"breadcrumb\">\r\n        <li class=\"breadcrumb-item\"><a href=\"https://www.iied.org\">IIED home</a></li>\r\n        <li class=\"breadcrumb-item\"><a href=\"/\">Publications Library</a></li>\r\n   {{ field_theme_s_ }} \r\n      </ol>\r\n    </nav>"
+            text: "<nav aria-label=\"breadcrumb\">\r\n    <ol class=\"breadcrumb\">\r\n        <li class=\"breadcrumb-item\"><a href=\"/\">Publications Library</a></li>\r\n   {{ field_theme_s_ }} \r\n      </ol>\r\n    </nav>"
             make_link: false
             path: ''
             absolute: false

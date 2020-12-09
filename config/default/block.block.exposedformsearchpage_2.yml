@@ -16,7 +16,7 @@ third_party_settings:
 id: exposedformsearchpage_2
 theme: iied_pubs
 region: content
-weight: -8
+weight: -9
 provider: null
 plugin: 'views_exposed_filter_block:search-page_2'
 settings:

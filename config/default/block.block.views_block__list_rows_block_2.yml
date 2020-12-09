@@ -1,4 +1,4 @@
-uuid: 4a682d6d-75b7-4c4c-b1e2-6bff1cbecabc
+uuid: aafa92df-e72b-46fd-872a-6a7360cce9a7
 langcode: en
 status: true
 dependencies:
@@ -9,18 +9,18 @@ dependencies:
     - views
   theme:
     - iied_pubs
-id: views_block__list_rows_block_1
+id: views_block__list_rows_block_2
 theme: iied_pubs
 region: content
-weight: -6
+weight: -5
 provider: null
-plugin: 'views_block:list_rows-block_1'
+plugin: 'views_block:list_rows-block_2'
 settings:
-  id: 'views_block:list_rows-block_1'
-  label: ''
+  id: 'views_block:list_rows-block_2'
+  label: Briefings
   provider: views
-  label_display: '0'
-  views_label: ''
+  label_display: visible
+  views_label: Briefings
   items_per_page: none
 visibility:
   request_path:

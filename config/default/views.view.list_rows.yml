@@ -5,10 +5,16 @@ dependencies:
   config:
     - core.entity_view_mode.node.card
     - node.type.publication
+    - taxonomy.vocabulary.document_type
     - taxonomy.vocabulary.list
   content:
+    - 'taxonomy_term:document_type:2fc385a6-964d-4b92-881d-9c8b48755746'
+    - 'taxonomy_term:document_type:9b686be7-6c6b-42b4-81d6-655cc0650a17'
+    - 'taxonomy_term:document_type:a9161f6f-f33c-4b44-af78-0ccc81ab09ea'
+    - 'taxonomy_term:document_type:f4e90378-926b-430d-a5a1-d3bb14db7a72'
     - 'taxonomy_term:list:85f1ee52-f4d3-4bc8-a993-df456ddcfa08'
   module:
+    - datetime
     - node
     - taxonomy
     - user
@@ -210,21 +216,48 @@ display:
           error_message: true
           plugin_id: taxonomy_index_tid
       sorts:
-        created:
-          id: created
+        status:
+          id: status
           table: node_field_data
-          field: created
-          order: DESC
-          entity_type: node
-          entity_field: created
-          plugin_id: date
+          field: status
           relationship: none
           group_type: group
           admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
+          entity_type: node
+          entity_field: status
+          plugin_id: standard
+        field_date_published_value:
+          id: field_date_published_value
+          table: node__field_date_published
+          field: field_date_published_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
           exposed: false
           expose:
             label: ''
           granularity: second
+          plugin_id: datetime
+        created:
+          id: created
+          table: node_field_data
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
+          granularity: day
+          entity_type: node
+          entity_field: created
+          plugin_id: date
       title: 'list rows'
       header: {  }
       footer: {  }
@@ -254,6 +287,106 @@ display:
       max-age: -1
       contexts:
         - 'languages:language_content'
+        - 'languages:language_interface'
+        - user
+        - 'user.node_grants:view'
+        - user.permissions
+      tags: {  }
+  block_2:
+    display_plugin: block
+    id: block_2
+    display_title: '4 col block briefings'
+    position: 1
+    display_options:
+      display_extenders: {  }
+      block_description: 'briefings row-cols-4'
+      display_description: ''
+      filters:
+        status:
+          value: '1'
+          table: node_field_data
+          field: status
+          plugin_id: boolean
+          entity_type: node
+          entity_field: status
+          id: status
+          expose:
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+          group: 1
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          value:
+            publication: publication
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
+        field_document_type_target_id:
+          id: field_document_type_target_id
+          table: node__field_document_type
+          field: field_document_type_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: or
+          value:
+            80: 80
+            81: 81
+            83: 83
+            85: 85
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          type: select
+          limit: true
+          vid: document_type
+          hierarchy: true
+          error_message: true
+          plugin_id: taxonomy_index_tid
+      defaults:
+        filters: false
+        filter_groups: false
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      rendering_language: en
+    cache_metadata:
+      max-age: -1
+      contexts:
         - 'languages:language_interface'
         - user
         - 'user.node_grants:view'
