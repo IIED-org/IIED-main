@@ -24,9 +24,7 @@
   //  min-width: 8rem;
   }
   #edit-reset--3 {
-    @extend .btn-outline-secondary;
-    @extend .btn;
-    background-color: transparent !important;
+    @extend .btn-secondary ;
   }
   #views-exposed-form-search-page-2--3 {
     @extend .container;
