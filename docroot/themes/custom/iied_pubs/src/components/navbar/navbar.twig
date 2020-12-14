@@ -21,7 +21,7 @@
 {% set placement = placement ?? '' %}
 {% set color = color ?? 'light' %}
 
-<nav class="navbar navbar-expand-lg justify-content-between navbar-{{ color }} {{ placement }} {{ utility_classes|join(' ') }}">
+<nav class="navbar justify-content-between navbar-{{ color }} {{ placement }} {{ utility_classes|join(' ') }}">
   {% if container %}
     <div class="{{ container }}">
   {% endif %}

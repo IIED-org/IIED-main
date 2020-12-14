@@ -11,6 +11,9 @@ facets_summary.facets_summary.*:
     facet_source_id:
       type: string
       label: 'Facet source id'
+    search_filter_identifier:
+      type: string
+      label: 'Search filter identifier'
     processor_configs:
       type: sequence
       label: 'Processor settings'

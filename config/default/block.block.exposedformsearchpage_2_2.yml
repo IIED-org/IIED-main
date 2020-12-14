@@ -11,11 +11,11 @@ dependencies:
     - iied_pubs
 third_party_settings:
   block_class:
-    classes: header-search-block
+    classes: hero-search-block
 id: exposedformsearchpage_2_2
 theme: iied_pubs
-region: navbar_right
-weight: 0
+region: header
+weight: -11
 provider: null
 plugin: 'views_exposed_filter_block:search-page_2'
 settings:

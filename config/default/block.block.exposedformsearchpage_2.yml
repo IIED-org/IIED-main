@@ -1,4 +1,4 @@
-uuid: 176f292e-ab6f-4bc1-b5c0-190ebeadfe03
+uuid: 8f761c8c-46bd-4207-bd93-19e7ec0f6b7f
 langcode: en
 status: true
 dependencies:
@@ -6,17 +6,16 @@ dependencies:
     - views.view.search
   module:
     - block_class
-    - system
     - views
   theme:
     - iied_pubs
 third_party_settings:
   block_class:
-    classes: main-search-form
+    classes: header-search-block
 id: exposedformsearchpage_2
 theme: iied_pubs
-region: content
-weight: -9
+region: navbar_branding
+weight: 0
 provider: null
 plugin: 'views_exposed_filter_block:search-page_2'
 settings:
@@ -25,9 +24,4 @@ settings:
   provider: views
   label_display: '0'
   views_label: ''
-visibility:
-  request_path:
-    id: request_path
-    pages: '/search*'
-    negate: false
-    context_mapping: {  }
+visibility: {  }

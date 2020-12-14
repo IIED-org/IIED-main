@@ -179,7 +179,8 @@
             "BEF breaks autocomplete": "https://www.drupal.org/files/issues/2020-09-26/3159000-14--fix_autocomplete_with_bef.patch"
           },
           "drupal/facets": {
-            "AJAX facets broken": "https://www.drupal.org/files/issues/2020-10-02/facets-ajax-3052574-89.patch"
+            "AJAX facets broken": "https://www.drupal.org/files/issues/2020-10-02/facets-ajax-3052574-89.patch",
+            "Show search term in summary": "https://www.drupal.org/files/issues/2020-12-02/2979223--39.patch"
           }
         }
     }

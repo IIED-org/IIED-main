@@ -34,6 +34,7 @@ use Drupal\facets_summary\FacetsSummaryInterface;
  *     "name",
  *     "facets",
  *     "facet_source_id",
+ *     "search_filter_identifier",
  *     "processor_configs",
  *   },
  *   links = {
@@ -66,6 +67,13 @@ class FacetsSummary extends ConfigEntityBase implements FacetsSummaryInterface {
    * @var string
    */
   protected $facet_source_id;
+
+  /**
+   * The search filter identifier.
+   *
+   * @var string
+   */
+  protected $search_filter_identifier;
 
   /**
    * The facet source belonging to this facet summary.
@@ -129,6 +137,24 @@ class FacetsSummary extends ConfigEntityBase implements FacetsSummaryInterface {
    */
   public function setFacetSourceId($facet_source_id) {
     $this->facet_source_id = $facet_source_id;
+    return $this;
+  }
+
+  /**
+   * Returns the search filter identifier.
+   *
+   * @return string
+   *   The search filter identifier.
+   */
+  public function getSearchFilterIdentifier() {
+    return $this->search_filter_identifier;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setSearchFilterIdentifier($search_filter_identifier) {
+    $this->search_filter_identifier = $search_filter_identifier;
     return $this;
   }
 

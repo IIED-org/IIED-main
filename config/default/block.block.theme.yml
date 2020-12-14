@@ -11,7 +11,7 @@ dependencies:
 id: theme
 theme: iied_pubs
 region: navbar_branding
-weight: -7
+weight: -12
 provider: null
 plugin: 'facet_block:theme'
 settings:

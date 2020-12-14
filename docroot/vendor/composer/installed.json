@@ -3798,7 +3798,8 @@
                 "dev-8.x-1.x": "1.x-dev"
             },
             "patches_applied": {
-                "AJAX facets broken": "https://www.drupal.org/files/issues/2020-10-02/facets-ajax-3052574-89.patch"
+                "AJAX facets broken": "https://www.drupal.org/files/issues/2020-10-02/facets-ajax-3052574-89.patch",
+                "Show search term in summary": "https://www.drupal.org/files/issues/2020-12-02/2979223--39.patch"
             }
         },
         "installation-source": "dist",

@@ -39,6 +39,25 @@ interface FacetsSummaryInterface extends ConfigEntityInterface {
   public function setFacetSourceId($facet_source_id);
 
   /**
+   * Returns the search filter identifier.
+   *
+   * @return string
+   *   The search filter identifier.
+   */
+  public function getSearchFilterIdentifier();
+
+  /**
+   * Sets a string representation of the search filter identifier.
+   *
+   * @param string $search_filter_identifier
+   *   The search filter identifier.
+   *
+   * @return $this
+   *   Returns self.
+   */
+  public function setSearchFilterIdentifier($search_filter_identifier);
+
+  /**
    * Returns the plugin instance of a facet source.
    *
    * @return \Drupal\facets\FacetSource\FacetSourcePluginInterface

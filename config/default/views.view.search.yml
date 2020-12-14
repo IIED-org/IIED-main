@@ -355,17 +355,7 @@ display:
             label: Title
           plugin_id: search_api
       title: Search
-      header:
-        result:
-          id: result
-          table: views
-          field: result
-          relationship: none
-          group_type: group
-          admin_label: ''
-          empty: false
-          content: 'Displaying @start - @end of @total results'
-          plugin_id: result
+      header: {  }
       footer: {  }
       empty:
         area:
@@ -493,7 +483,7 @@ display:
               organisation: search_result
               person: search_result
               theme: search_result
-      css_class: 'col-md-8 float-md-right order-md-1 view-result'
+      css_class: 'col-12 col-lg-8 float-lg-right order-lg-1 view-result'
     cache_metadata:
       max-age: -1
       contexts:

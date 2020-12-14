@@ -4,18 +4,17 @@ namespace Drupal\Tests\facets_summary\Unit\Plugin\Processor;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\StringTranslation\TranslationInterface;
-use Drupal\facets_summary\Entity\FacetsSummary;
-use Drupal\facets_summary\Plugin\facets_summary\processor\ResetFacetsProcessor;
+use Drupal\facets_summary\Plugin\facets_summary\processor\ResetStringProcessor;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Tests\UnitTestCase;
 
 /**
- * Class ResetFacetsProcessorTest.
+ * Class ResetStringProcessorTest.
  *
  * @group facets
- * @coversDefaultClass \Drupal\facets_summary\Plugin\facets_summary\processor\ResetFacetsProcessor
+ * @coversDefaultClass \Drupal\facets_summary\Plugin\facets_summary\processor\ResetStringProcessor
  */
-class ResetFacetsProcessorTest extends UnitTestCase {
+class ResetStringProcessorTest extends UnitTestCase {
 
   /**
    * The processor we're testing.
@@ -38,8 +37,7 @@ class ResetFacetsProcessorTest extends UnitTestCase {
       ->getMock();
     $container->set('request_stack', $requestStack);
     \Drupal::setContainer($container);
-
-    $this->processor = new ResetFacetsProcessor(['settings' => ['link_text' => 'Text', 'clear_string' => FALSE]], 'reset_facets', [], $requestStack);
+    $this->processor = new ResetStringProcessor([], 'reset_string', [], $requestStack);
   }
 
   /**
@@ -66,17 +64,7 @@ class ResetFacetsProcessorTest extends UnitTestCase {
    * @covers ::build
    */
   public function testBuildWithEmptyItems() {
-    $summary = new FacetsSummary([], 'facets_summary');
-    $summary->setFacetSourceId('foo');
-    $config = [
-      'processor_id' => 'reset_facets',
-      'weights' => [],
-      'settings' => ['link_text' => 'Text'],
-    ];
-    $summary->addProcessor($config);
-
-    $result = $this->processor->build($summary, ['foo'], []);
-    $this->assertSame('array', gettype($result));
+    // @todo implement
   }
 
 }

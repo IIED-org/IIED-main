@@ -5,15 +5,6 @@
   display: none;
 }
 
-// Sidr facet button
-.block--sidrtriggerbuttonblock-2 button {
-  @extend .btn;
-  @extend .btn-secondary;
-  @include media-breakpoint-up(md) {
-    display: none;
-  }
-}
-
 // Search page elements
 .main-search-form {
   #edit-k--3 {
@@ -42,6 +33,39 @@
   }
 }
 
+// Results summary
+.block--searchsummary {
+  margin-bottom: 1rem;
+  ul {
+    margin: 0;
+    padding: 0;
+    li {
+      display: inline;
+      padding: .5rem 0;
+      a {
+        display: inline-block;
+        padding-left: 1rem;
+      }
+    }
+  }
+}
+
+// Sidr filters and trigger button
+
+.sidr.left {
+  margin-top: 5rem;
+  background-color: $gray-100;
+}
+
+.block--sidrtriggerbuttonblock-2 button {
+  @extend .btn;
+  @extend .btn-outline-secondary;
+  @include media-breakpoint-up(lg) {
+    display: none;
+  }
+  margin-bottom: 1rem;
+}
+
 //Exposed sorts
 
 .sidebar-form {
@@ -59,6 +83,12 @@
 
 // Header search form
 .header-search-block {
+  display: none;
+  @include media-breakpoint-up(md) {
+    display: block;
+  }
+  width: 50%;
+  margin: 1rem auto 0;
   .form-group {
     margin-bottom: 0;
   }
@@ -66,14 +96,15 @@
     display: inline;
   }
   input {
-    border-radius: 1rem 0 0 1rem;
-    margin-right: 0;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
     display: inline-block;
-    max-width: 87%;
   }
   #edit-actions,
-  #edit-actions--2 {
+  #edit-actions--2,
+  #edit-actions--3 {
     input {
+      display: none; //Don't show button
       float: right;
       border-radius: 0 1rem 1rem 0;
       margin-left: -4px;
@@ -92,14 +123,47 @@
   }
 }
 
+.js input.form-autocomplete {
+  background-image: url('../images/search_icon.png');
+  background-position: 97% center !important;
+}
+
 .search-api-autocomplete-search {
   z-index: 2000;
-  max-width: 100%;
+  max-width: 98%;
+}
+
+.hero-search-block {
+  @extend .header-search-block;
+  @include media-breakpoint-down(md) {
+    display: block;
+    width: 100%;
+  }
+  @include media-breakpoint-up(md) {
+    display: none;
+  }
+}
+.page-node-72916 .hero-search-block {
+    @extend .header-search-block;
+    display: block !important;
+    width: 50%;
+    margin: 0 auto 1rem;
+    @include media-breakpoint-down(md) {
+      display: block;
+      width: 100%;
+    }
 }
 
 .pointer {
     cursor: pointer;
 }
+
+// Jumbotron
+
+.jumbotron {
+  padding-bottom: 2rem;
+}
+
 
 // Components: breadcrumb
 .breadcrumb-item-theme {

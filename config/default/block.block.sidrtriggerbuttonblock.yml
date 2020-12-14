@@ -9,7 +9,7 @@ dependencies:
 id: sidrtriggerbuttonblock
 theme: iied_pubs
 region: navbar_branding
-weight: -6
+weight: -11
 provider: null
 plugin: sidr_trigger
 settings:

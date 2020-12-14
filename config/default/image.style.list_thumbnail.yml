@@ -5,11 +5,11 @@ dependencies: {  }
 name: list_thumbnail
 label: 'List thumbnail'
 effects:
-  f48f4015-45f3-48f8-a32f-09ff516ec91d:
-    uuid: f48f4015-45f3-48f8-a32f-09ff516ec91d
+  a211c1ca-34d6-4062-92a4-3a21ffdef0a1:
+    uuid: a211c1ca-34d6-4062-92a4-3a21ffdef0a1
     id: image_scale
-    weight: 1
+    weight: 2
     data:
-      width: null
-      height: 100
+      width: 80
+      height: null
       upscale: true
