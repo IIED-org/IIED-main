@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8d1022dc7e9447f8118ef5f65efa6113",
+    "content-hash": "ae6ae8941f703546740d3a54cdd3c6f0",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3454,7 +3454,8 @@
                     "dev-8.x-1.x": "1.x-dev"
                 },
                 "patches_applied": {
-                    "AJAX facets broken": "https://www.drupal.org/files/issues/2020-10-02/facets-ajax-3052574-89.patch"
+                    "AJAX facets broken": "https://www.drupal.org/files/issues/2020-10-02/facets-ajax-3052574-89.patch",
+                    "Show search term in summary": "https://www.drupal.org/files/issues/2020-12-02/2979223--39.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5751,6 +5752,50 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/taxonomy_manager",
                 "issues": "https://www.drupal.org/project/issues/taxonomy_manager"
+            }
+        },
+        {
+            "name": "drupal/taxonomy_menu_ui",
+            "version": "1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/taxonomy_menu_ui.git",
+                "reference": "8.x-1.4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/taxonomy_menu_ui-8.x-1.4.zip",
+                "reference": "8.x-1.4",
+                "shasum": "1b23469325377fadf661979eeaf3b0d4cf5146f8"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.4",
+                    "datestamp": "1594974825",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "lobodacyril",
+                    "homepage": "https://www.drupal.org/user/769176"
+                }
+            ],
+            "description": "Add ability to create menu links for taxonomy terms.",
+            "homepage": "https://www.drupal.org/project/taxonomy_menu_ui",
+            "support": {
+                "source": "https://git.drupalcode.org/project/taxonomy_menu_ui"
             }
         },
         {

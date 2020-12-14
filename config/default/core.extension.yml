@@ -101,6 +101,7 @@ module:
   sophron: 0
   system: 0
   taxonomy: 0
+  taxonomy_menu_ui: 0
   term_merge: 0
   term_reference_change: 0
   text: 0

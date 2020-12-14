@@ -66,6 +66,7 @@
         "drupal/sidr": "^3.1",
         "drupal/string_translation_ui": "^1.2",
         "drupal/taxonomy_manager": "^2.0",
+        "drupal/taxonomy_menu_ui": "^1.4",
         "drupal/term_merge": "^1.0@alpha",
         "drupal/upgrade_status": "^3.0",
         "drupal/views_bootstrap": "^4.3",

@@ -1,0 +1,15 @@
+# Schema for configuration files of the Taxonomy Menu UI module.
+
+taxonomy.vocabulary.*.third_party.menu_ui:
+  type: mapping
+  label: 'Per-content type menu settings'
+  mapping:
+    available_menus:
+      type: sequence
+      label: 'Available menus'
+      sequence:
+       type: string
+       label: 'Menu machine name'
+    parent:
+      type: string
+      label: 'Parent'

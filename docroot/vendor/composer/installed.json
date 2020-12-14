@@ -6476,6 +6476,52 @@
         }
     },
     {
+        "name": "drupal/taxonomy_menu_ui",
+        "version": "1.4.0",
+        "version_normalized": "1.4.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupalcode.org/project/taxonomy_menu_ui.git",
+            "reference": "8.x-1.4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/taxonomy_menu_ui-8.x-1.4.zip",
+            "reference": "8.x-1.4",
+            "shasum": "1b23469325377fadf661979eeaf3b0d4cf5146f8"
+        },
+        "require": {
+            "drupal/core": "^8 || ^9"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "drupal": {
+                "version": "8.x-1.4",
+                "datestamp": "1594974825",
+                "security-coverage": {
+                    "status": "covered",
+                    "message": "Covered by Drupal's security advisory policy"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "lobodacyril",
+                "homepage": "https://www.drupal.org/user/769176"
+            }
+        ],
+        "description": "Add ability to create menu links for taxonomy terms.",
+        "homepage": "https://www.drupal.org/project/taxonomy_menu_ui",
+        "support": {
+            "source": "https://git.drupalcode.org/project/taxonomy_menu_ui"
+        }
+    },
+    {
         "name": "drupal/term_merge",
         "version": "1.0.0-alpha2",
         "version_normalized": "1.0.0.0-alpha2",

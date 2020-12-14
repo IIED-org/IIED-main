@@ -6,6 +6,7 @@ dependencies:
     - views.view.search
   module:
     - block_class
+    - system
     - views
   theme:
     - iied_pubs
@@ -24,4 +25,9 @@ settings:
   provider: views
   label_display: '0'
   views_label: ''
-visibility: {  }
+visibility:
+  request_path:
+    id: request_path
+    pages: '<front>'
+    negate: true
+    context_mapping: {  }
