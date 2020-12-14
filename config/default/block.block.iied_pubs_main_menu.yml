@@ -5,9 +5,13 @@ dependencies:
   config:
     - system.menu.main
   module:
+    - block_class
     - system
   theme:
     - iied_pubs
+third_party_settings:
+  block_class:
+    classes: 'col-12 col-md-4 col-lg-3 align-right'
 _core:
   default_config_hash: ChCx7DYNUrPTt5uiRdQAPDKJQMc-_SyAQTrZh8H0o-c
 id: iied_pubs_main_menu

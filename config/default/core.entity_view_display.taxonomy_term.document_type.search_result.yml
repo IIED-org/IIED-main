@@ -1,0 +1,84 @@
+uuid: 148ed29f-7514-4b7c-811f-294a9d645e88
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.taxonomy_term.search_result
+    - field.field.taxonomy_term.document_type.field_display_name
+    - field.field.taxonomy_term.document_type.field_legacy_doctype
+    - field.field.taxonomy_term.document_type.field_parent_id
+    - taxonomy.vocabulary.document_type
+  module:
+    - ds
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+  ds:
+    layout:
+      id: ds_1col
+      library: null
+      disable_css: false
+      entity_classes: all_classes
+      settings:
+        label: ''
+        wrappers:
+          ds_content: div
+        outer_wrapper: div
+        attributes: ''
+        link_attribute: ''
+        link_custom: ''
+        classes:
+          layout_class: {  }
+          ds_content: {  }
+    regions:
+      ds_content:
+        - field_display_name
+id: taxonomy_term.document_type.search_result
+targetEntityType: taxonomy_term
+bundle: document_type
+mode: search_result
+content:
+  field_display_name:
+    weight: 0
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings:
+      ds:
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            prefix: ''
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow-el: ''
+            ow-cl: ''
+            ow-at: ''
+            fis: true
+            fis-el: span
+            fis-cl: 'meta field-doctype'
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            lbw: false
+            lb-col: false
+            ow: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
+    type: string
+    region: ds_content
+hidden:
+  description: true
+  field_legacy_doctype: true
+  field_parent_id: true
+  langcode: true
+  search_api_excerpt: true

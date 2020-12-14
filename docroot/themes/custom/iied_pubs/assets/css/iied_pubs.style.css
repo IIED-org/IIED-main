@@ -9781,6 +9781,14 @@ ul.language-switcher-language-url.nav .nav-link {
   padding: 0;
 }
 
+.field-doctype div {
+  display: inline;
+}
+.field-doctype div.clearfix::after {
+  display: inline;
+  clear: none !important;
+}
+
 /*!
  * Font Awesome Free 5.3.1 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)

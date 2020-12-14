@@ -87,6 +87,7 @@ third_party_settings:
             additional: {  }
             weight: 3
         third_party_settings: {  }
+    allow_custom: false
 id: taxonomy_term.document_type.default
 targetEntityType: taxonomy_term
 bundle: document_type

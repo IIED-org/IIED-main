@@ -8,7 +8,7 @@ third_party_settings:
   menu_ui:
     available_menus:
       - main
-    parent: 'main:menu_link_content:3a10144e-4f4d-4c92-80db-c979515654c5'
+    parent: 'main:menu_link_content:88bf2242-fe2b-46a7-82fc-0edbd6b00d9e'
 name: Theme
 vid: theme
 description: 'Interest or category'

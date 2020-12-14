@@ -368,7 +368,7 @@ display:
           empty: true
           tokenize: false
           content:
-            value: 'No results found'
+            value: '<a href="/search">Start a new search</a>'
             format: basic_html
           plugin_id: text
       relationships: {  }
