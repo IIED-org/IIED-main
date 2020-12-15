@@ -1,5 +1,5 @@
 .navbar {
-
+  padding: 0;
   .form-inline {
 
     .form-actions {
@@ -20,4 +20,8 @@
       float: left;
     }
   }
+}
+
+.navbar-brand {
+  margin-right: 0;
 }
