@@ -1,0 +1,20 @@
+uuid: c5c95db4-b33d-435d-aa1b-810e203b9b22
+langcode: en
+status: true
+dependencies:
+  module:
+    - responsive_menu
+  theme:
+    - iied_pubs
+id: responsivemenumobileicon
+theme: iied_pubs
+region: navbar_branding
+weight: -13
+provider: null
+plugin: responsive_menu_toggle
+settings:
+  id: responsive_menu_toggle
+  label: 'Responsive menu mobile icon'
+  provider: responsive_menu
+  label_display: '0'
+visibility: {  }

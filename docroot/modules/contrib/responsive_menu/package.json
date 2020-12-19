@@ -1,0 +1,14 @@
+{
+  "name": "responsive_menu",
+  "author": "tanc <tanc@agile.coop> (http://agile.coop)",
+  "homepage": "https://www.drupal.org/project/responsive_menu",
+  "description": "Installs required and optional libraries",
+  "license": "MIT",
+  "scripts": {
+    "install": "mv node_modules/mmenu-js node_modules/mmenu; rm -rf node_modules/jquery; mv node_modules libraries; echo 'Important! You must now move the libraries directory to your webroot.'"
+  },
+  "dependencies": {
+    "superfish": "^1.7.7",
+    "mmenu-js": "^8.5.6"
+  }
+}

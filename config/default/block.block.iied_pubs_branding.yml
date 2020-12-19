@@ -11,7 +11,7 @@ _core:
 id: iied_pubs_branding
 theme: iied_pubs
 region: navbar_branding
-weight: -13
+weight: -12
 provider: null
 plugin: system_branding_block
 settings:

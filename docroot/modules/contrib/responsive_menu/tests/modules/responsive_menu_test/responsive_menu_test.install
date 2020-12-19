@@ -1,0 +1,130 @@
+<?php
+
+/**
+ * @file
+ * Install file for responsive_menu_test module.
+ *
+ * Installs content and menu items to make testing easier.
+ */
+
+use Drupal\block\Entity\Block;
+use Drupal\menu_link_content\Entity\MenuLinkContent;
+use Drupal\node\Entity\Node;
+
+/**
+ * Implements hook_install().
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ * @noinspection PhpFullyQualifiedNameUsageInspection
+ */
+function responsive_menu_test_install() {
+  $items = [
+    'level1item1' => [
+      'title' => 'Test page title for top level nav',
+      'link' => 'internal:/node/1',
+      'body' => 'This is a page.',
+    ],
+    'level2item1' => [
+      'title' => 'A second level item',
+      'link' => 'internal:/node/2',
+      'parent' => 'level1item1',
+      'body' => 'A page linked to a second level item.',
+    ],
+    'level2item2' => [
+      'title' => 'A sibling on the second level',
+      'link' => 'internal:/node/3',
+      'parent' => 'level1item1',
+      'body' => 'Another second level item.',
+    ],
+    'level1item2' => [
+      'title' => 'Menu item without children',
+      'link' => 'internal:/node/4',
+      'body' => 'A page that is in the menu tree without any children.',
+    ],
+    'level1item3' => [
+      'title' => 'Third top level item',
+      'link' => 'internal:/node/5',
+      'body' => 'Just another test page.',
+    ],
+    'level2item3' => [
+      'title' => 'Child of third item',
+      'link' => 'internal:/node/6',
+      'parent' => 'level1item3',
+      'body' => 'A second level item test page.',
+    ],
+    'level3item1' => [
+      'title' => 'Third level item',
+      'link' => 'internal:/node/7',
+      'parent' => 'level2item3',
+      'body' => 'Used to test third level items.',
+    ],
+  ];
+
+  $created = [];
+
+  foreach ($items as $id => $item) {
+    $menu_link_data = [
+      'title' => $item['title'],
+      'link' => ['uri' => $item['link']],
+      'menu_name' => 'main',
+      'expanded' => TRUE,
+    ];
+    if (isset($item['parent']) && isset($created[$item['parent']])) {
+      $parent = $created[$item['parent']];
+      $menu_link_data['parent'] = $parent->getPluginId();
+    }
+    $menu_link = MenuLinkContent::create($menu_link_data);
+    $menu_link->save();
+    $created[$id] = $menu_link;
+    _create_node($item);
+  }
+
+  $blocks = [
+    'responsive_menu_horizontal_menu',
+    'responsive_menu_toggle',
+  ];
+
+  foreach ($blocks as $block_id) {
+    $values = [
+      'id' => $block_id,
+      'plugin' => $block_id,
+      'region' => 'primary_menu',
+      'settings' => [
+        'label' => '',
+      ],
+      'theme' => 'stark',
+      'visibility' => [],
+      'weight' => 0,
+    ];
+    $block = Block::create($values);
+    $block->save();
+  }
+
+  $node = Node::load(2);
+  $node_ar = $node->addTranslation('ar');
+  $node_ar->title = 'هذا اختبار';
+  $node_ar->body->value = 'ترجمة جوجل مفيدة';
+  $node_ar->body->format = 'basic_html';
+  $node_ar->save();
+}
+
+/**
+ * Helper function to create test nodes.
+ *
+ * @param array $node_data
+ *   An array of data for the new node.
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ * @noinspection PhpFullyQualifiedNameUsageInspection
+ */
+function _create_node(array $node_data) {
+  $node = Node::create([
+    'type' => 'page',
+    'title' => $node_data['title'],
+    'body' => [
+      'value' => $node_data['body'],
+      'format' => 'basic_html',
+    ],
+  ]);
+  $node->save();
+}

@@ -54,6 +54,12 @@ function iied_pubs_preprocess_html(&$variables) {
     $path = \Drupal::service('path.current')->getPath();
     $path = ltrim($path, '/');
     $path_args = explode('/', $path);
+
+    $path_class = !$variables['root_path'] ? 'path-front' : 'path-' . Html::getClass($variables['root_path']);
+    if (isset($path_class)) {
+      $variables['attributes']['class'][] = $path_class;
+    }
+
     if (isset($path_args[0]) && isset($path_args[1]) && ($path_args[0] == 'node') && (is_numeric($path_args[1]))) {
       $variables['attributes']['class'][] = 'page-node-' . $path_args[1];
     }

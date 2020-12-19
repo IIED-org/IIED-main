@@ -1,0 +1,5 @@
+tips:
+  search-api-index-fields-label:
+    label: Nhãn
+  search-api-index-fields-machine-name:
+    label: 'Tên nội bộ'

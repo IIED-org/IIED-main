@@ -1,0 +1,17 @@
+name: 'Responsive Menu Test'
+type: module
+description: 'Support module for Responsive Menu tests.'
+package: Testing
+dependencies:
+  - drupal:node
+  - drupal:filter
+  - drupal:field
+  - drupal:block
+  - drupal:menu_link_content
+  - responsive_menu:responsive_menu
+  - drupal:language
+
+# Information added by Drupal.org packaging script on 2020-10-15
+version: '4.4.1'
+project: 'responsive_menu'
+datestamp: 1602747456

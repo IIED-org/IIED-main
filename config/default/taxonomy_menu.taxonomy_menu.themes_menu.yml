@@ -1,0 +1,16 @@
+uuid: 0cecd153-4b9f-4638-a46a-b65d886b3591
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.main
+    - taxonomy.vocabulary.theme
+id: themes_menu
+label: 'Themes menu'
+vocabulary: theme
+menu: main
+expanded: true
+depth: 0
+menu_parent: 'main:menu_link_content:4727348e-c6bd-4876-a3b9-a7a06d69d700'
+description_field_name: description
+use_term_weight_order: true

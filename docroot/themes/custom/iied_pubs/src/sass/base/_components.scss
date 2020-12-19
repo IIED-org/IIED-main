@@ -50,11 +50,61 @@
   }
 }
 
+// Header blocks
+
+.block--wwwiiedorg {
+  @include media-breakpoint-down(xs) {
+      display: none;
+  }
+  padding-top: 1rem;
+}
+
 // Sidr filters and trigger button
 
+// Main menu
+
+#toggle-icon {
+  span.icon {
+    color: $gray-700;
+    font-size: 1.5rem;
+  }
+  span.label {
+    display: none;
+    color: $gray-700;
+    text-transform: uppercase;
+    margin: 0 1rem 0 .5rem;
+    vertical-align: text-bottom;
+    @include media-breakpoint-up(sm) {
+      display: inline-block;
+    }
+  }
+}
+
+.block--sidrtriggerbuttonblock {
+  line-height: 1.5rem;
+  button {
+    border: none;
+    outline: none;
+    background-color: transparent;
+  }
+  .sidr-trigger__icon {
+    font-size: 1.5rem;
+    display: inline-block;
+  }
+  .sidr-trigger__text {
+    vertical-align: top;
+    display: none;
+    margin-right: 1rem;
+    @include media-breakpoint-up(sm) {
+      display: inline-block;
+    }
+  }
+}
+
 .sidr.left {
-  margin-top: 5rem;
-  background-color: $gray-100;
+  padding: 1rem;
+  margin-top: 3.75rem;
+  background-color: $body-bg;
 }
 
 .block--sidrtriggerbuttonblock-2 button {
@@ -83,11 +133,6 @@
 
 // Header search form
 .header-search-block {
-  display: none;
-  @include media-breakpoint-up(md) {
-    display: block;
-  }
-  width: 50%;
   margin: 1rem auto 0;
   .form-group {
     margin-bottom: 0;
@@ -134,24 +179,8 @@
 }
 
 .hero-search-block {
-  @extend .header-search-block;
-  @include media-breakpoint-down(md) {
-    display: block;
-    width: 100%;
-  }
-  @include media-breakpoint-up(md) {
-    display: none;
-  }
-}
-.page-node-72916 .hero-search-block {
     @extend .header-search-block;
-    display: block !important;
-    width: 50%;
     margin: 0 auto 1rem;
-    @include media-breakpoint-down(md) {
-      display: block;
-      width: 100%;
-    }
 }
 
 .pointer {

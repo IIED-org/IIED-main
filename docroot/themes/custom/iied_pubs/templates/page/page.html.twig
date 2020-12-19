@@ -5,6 +5,10 @@
  */
 #}
 <div class="page">
+  <section id="menu-main" class="menu-main" role="contentinfo">
+    {{ page.menu_main }}
+  </section>
+  
   {% embed '@iied_pubs/navbar/navbar.twig' with {
     container: 'fixed',
     color: 'light',

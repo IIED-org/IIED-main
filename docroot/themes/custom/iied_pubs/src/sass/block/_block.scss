@@ -53,6 +53,9 @@
   &:last-of-type {
     border-bottom: solid 1px $gray-200;
   }
+  .facets-soft-limit-link:nth-of-type(2) {
+    display: none;
+  }
 }
 
 .block--dropdownlanguagecontent {

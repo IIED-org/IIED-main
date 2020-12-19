@@ -1,0 +1,248 @@
+<?php
+
+/**
+ * @file
+ * Contains install and update functions.
+ */
+
+/**
+ * Add new config for the breakpoint css file path.
+ */
+function responsive_menu_update_8001() {
+  \Drupal::configFactory()
+    ->getEditable('responsive_menu.settings')
+    ->set('breakpoint_css_filepath', 'public://css')
+    ->save(TRUE);
+}
+
+/**
+ * Add new config to determine whether to use the breakpoint.
+ */
+function responsive_menu_update_8002() {
+  \Drupal::configFactory()
+    ->getEditable('responsive_menu.settings')
+    ->set('use_breakpoint', TRUE)
+    ->save(TRUE);
+}
+
+/**
+ * Add new config to determine whether to use the breakpoint.
+ */
+function responsive_menu_update_8003() {
+  \Drupal::configFactory()
+    ->getEditable('responsive_menu.settings')
+    ->set('allow_admin', FALSE)
+    ->save(TRUE);
+}
+
+/**
+ * Add new config for page wrappers.
+ */
+function responsive_menu_update_8004() {
+  \Drupal::configFactory()
+    ->getEditable('responsive_menu.settings')
+    ->set('wrapper_admin', TRUE)
+    ->save(TRUE);
+  \Drupal::configFactory()
+    ->getEditable('responsive_menu.settings')
+    ->set('wrapper_theme', FALSE)
+    ->save(TRUE);
+}
+
+/**
+ * Add new config for keyboard extension.
+ */
+function responsive_menu_update_8005() {
+  \Drupal::configFactory()
+    ->getEditable('responsive_menu.settings')
+    ->set('extension_keyboard', TRUE)
+    ->save(TRUE);
+}
+
+/**
+ * Add new config for pagedim setting.
+ */
+function responsive_menu_update_8006() {
+  \Drupal::configFactory()
+    ->getEditable('responsive_menu.settings')
+    ->set('pagedim', 'pagedim')
+    ->save(TRUE);
+}
+
+/**
+ * Delete keyboard extension config.
+ */
+function responsive_menu_update_8007() {
+  \Drupal::configFactory()
+    ->getEditable('responsive_menu.settings')
+    ->clear('extension_keyboard')
+    ->save();
+}
+
+/**
+ * Delete hammerjs config.
+ */
+function responsive_menu_update_84000() {
+  \Drupal::configFactory()
+    ->getEditable('responsive_menu.settings')
+    ->clear('hammerjs')
+    ->save();
+}
+
+/**
+ * Add new config for the drag setting.
+ */
+function responsive_menu_update_84001() {
+  \Drupal::configFactory()
+    ->getEditable('responsive_menu.settings')
+    ->set('drag', FALSE)
+    ->save(TRUE);
+}
+
+/**
+ * Add new config for the IE11 polyfills.
+ */
+function responsive_menu_update_84002() {
+  \Drupal::configFactory()
+    ->getEditable('responsive_menu.settings')
+    ->set('use_polyfills', FALSE)
+    ->save(TRUE);
+}
+
+/**
+ * Add new config to dynamically modify the viewport to fix Chrome bug.
+ */
+function responsive_menu_update_84300() {
+  \Drupal::configFactory()
+    ->getEditable('responsive_menu.settings')
+    ->set('modify_viewport', TRUE)
+    ->save(TRUE);
+}
+
+/**
+ * Add new config to dynamically modify the viewport to fix Chrome bug.
+ */
+function responsive_menu_update_84301() {
+  \Drupal::configFactory()
+    ->getEditable('responsive_menu.settings')
+    ->set('use_bootstrap', FALSE)
+    ->save(TRUE);
+}
+
+/**
+ * Implements hook_requirements().
+ */
+function responsive_menu_requirements($phase) {
+  $requirements = [];
+
+  if ($phase !== 'runtime') {
+    return $requirements;
+  }
+
+  // Check whether the libraries are installed.
+  $libraries = [
+    'mmenu' => [
+      'title' => 'mmenu library',
+      'version' => '8.4.0',
+      'path' => '/libraries/mmenu',
+      'version_path' => '/libraries/mmenu/composer.json',
+      'severity' => REQUIREMENT_ERROR,
+      'download_url' => 'https://github.com/FrDH/mmenu-js/releases/latest',
+      'homepage_url' => 'http://mmenu.frebsite.nl',
+    ],
+    'superfish' => [
+      'title' => 'superfish library',
+      'version' => '1.7.0',
+      'path' => '/libraries/superfish',
+      'version_path' => '/libraries/superfish/package.json',
+      'severity' => REQUIREMENT_WARNING,
+      'download_url' => 'https://api.github.com/repos/joeldbirch/superfish/zipball',
+      'homepage_url' => 'https://superfish.joelbirch.co',
+    ],
+  ];
+
+  foreach ($libraries as $key => $library) {
+    if (isset($library['version'])) {
+      $version = responsive_menu_get_library_version($library['version_path']);
+    }
+    else {
+      $version = $library['title'];
+    }
+    $t_args = [
+      '@title' => $library['title'],
+      '@version' => $version,
+      '@required' => isset($library['version']) ? $library['version'] : '',
+      '@path' => $library['path'],
+      ':download_href' => $library['download_url'],
+      ':homepage_href' => $library['homepage_url'],
+    ];
+    // Does this library exist?
+    $library_exists = file_exists(DRUPAL_ROOT . $library['path']);
+    // Does the library meet the version requirements?
+    if (isset($library['version'])) {
+      $library_installed = $library_exists && responsive_menu_check_library_version($version, $library['version']);
+    }
+    else {
+      $library_installed = $library_exists;
+    }
+
+    // The requirements array for rendering.
+    $requirements['responsive_menu' . $key] = [
+      'title' => 'Responsive menu: ' . $library['title'],
+      'value' => $library_installed ? t('@version (Installed)', $t_args) : t('@version (Not installed)', $t_args),
+      'severity' => $library_installed ? REQUIREMENT_OK : $library['severity'],
+    ];
+    if (!$library_installed) {
+      if ($library_exists && $version > 0) {
+        $requirements['responsive_menu' . $key]['value'] = t('Version @version is installed but @required is required', $t_args);
+      }
+      else {
+        $requirements['responsive_menu' . $key]['value'] = t('Library not installed');
+      }
+      $requirements['responsive_menu' . $key]['description'] = t('The @title must be installed at @path and must be version @required or greater. The download url is :download_href', $t_args);
+    }
+  }
+  return $requirements;
+}
+
+/**
+ * Returns a version string.
+ *
+ * @param string $version_path
+ *   The path to the file containing the version.
+ *
+ * @return string
+ *   A version string or '0' if not found.
+ */
+function responsive_menu_get_library_version($version_path) {
+  if (!file_exists(DRUPAL_ROOT . $version_path)) {
+    return '0';
+  }
+  $json = file_get_contents(DRUPAL_ROOT . $version_path);
+  if (!$json) {
+    return '0';
+  }
+  $json_array = json_decode($json, TRUE);
+  if (isset($json_array['version'])) {
+    return $json_array['version'];
+  }
+  return '0';
+}
+
+/**
+ * Checks a version string against a requirement string.
+ *
+ * @param string $version
+ *   The discovered version to check.
+ * @param string $requirement
+ *   The required version to check against.
+ *
+ * @return bool
+ *   Success or failure boolean.
+ */
+function responsive_menu_check_library_version($version, $requirement) {
+  if ($version >= $requirement) {
+    return TRUE;
+  }
+  return FALSE;
+}
