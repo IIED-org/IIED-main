@@ -1,0 +1,11 @@
+<?php
+
+/**
+ * Implements hook_responsive_menu_off_canvas_output().
+ */
+function responsive_menu_test_responsive_menu_off_canvas_output_alter(&$output) {
+  $theme = \Drupal::service('theme.manager')->getActiveTheme()->getName();
+  if ($theme === 'bartik') {
+    $output = FALSE;
+  }
+}

@@ -6,16 +6,17 @@ dependencies:
     - views.view.search
   module:
     - block_class
+    - system
     - views
   theme:
     - iied_pubs
 third_party_settings:
   block_class:
-    classes: header-search-block
+    classes: 'col-12 col-lg-6 hero-search-block'
 id: exposedformsearchpage_2_2
 theme: iied_pubs
-region: navbar_right
-weight: 0
+region: header
+weight: -11
 provider: null
 plugin: 'views_exposed_filter_block:search-page_2'
 settings:
@@ -24,4 +25,9 @@ settings:
   provider: views
   label_display: '0'
   views_label: ''
-visibility: {  }
+visibility:
+  request_path:
+    id: request_path
+    pages: '<front>'
+    negate: false
+    context_mapping: {  }

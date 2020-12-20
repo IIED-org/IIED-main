@@ -105,7 +105,7 @@ display:
       style:
         type: default
         options:
-          row_class: 'row border-bottom mb-2'
+          row_class: 'row border mb-2'
           default_row_class: false
           uses_fields: false
       row:
@@ -328,7 +328,7 @@ display:
           order: DESC
           exposed: true
           expose:
-            label: Relevance
+            label: 'Sort by relevance'
           plugin_id: search_api
         field_date_published:
           id: field_date_published
@@ -368,7 +368,7 @@ display:
           empty: true
           tokenize: false
           content:
-            value: 'No results found'
+            value: '<a href="/search">Start a new search</a>'
             format: basic_html
           plugin_id: text
       relationships: {  }
@@ -455,7 +455,7 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          parse_mode: terms
+          parse_mode: edismax
           min_length: 3
           fields: {  }
           plugin_id: search_api_fulltext
@@ -467,7 +467,7 @@ display:
       style:
         type: default
         options:
-          row_class: 'row border-bottom mb-2'
+          row_class: row
           default_row_class: false
           uses_fields: false
       row:
@@ -483,7 +483,7 @@ display:
               organisation: search_result
               person: search_result
               theme: search_result
-      css_class: 'col-md-8 float-md-right order-md-1'
+      css_class: 'col-12 col-lg-8 float-lg-right order-lg-1 view-result'
     cache_metadata:
       max-age: -1
       contexts:

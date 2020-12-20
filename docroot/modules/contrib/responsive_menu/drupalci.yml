@@ -1,0 +1,66 @@
+# This is the DrupalCI testbot build file for Drupal core and modified for
+# the responsive_menu module.
+build:
+  assessment:
+    validate_codebase:
+      phplint:
+      csslint:
+        halt-on-fail: false
+      eslint:
+        # A test must pass eslinting standards check in order to continue processing.
+        halt-on-fail: false
+      phpcs:
+        # phpcs will use core's specified version of Coder.
+        sniff-all-files: false
+        halt-on-fail: false
+    testing:
+      # updated for 4.4.x branch. See #3157997
+      container_command:
+        commands:
+          - cd ${SOURCE_DIR}
+          - sudo -u www-data mkdir libraries
+          - sudo -u www-data curl -L $(curl -s https://api.github.com/repos/FrDH/mmenu-js/releases/latest | grep tarball_url | cut -d '"' -f4) --output mmenu.tar.gz --silent
+          - sudo -u www-data tar xzf mmenu.tar.gz
+          - sudo -u www-data mv FrDH-mmenu* libraries/mmenu
+          - sudo -u www-data curl -L https://github.com/joeldbirch/superfish/archive/v1.7.10.tar.gz --output superfish.tar.gz --silent
+          - sudo -u www-data tar xzf superfish.tar.gz
+          - sudo -u www-data mv superfish-1.7.10 libraries/superfish
+        halt-on-fail: true
+      # run_tests task is executed several times in order of performance speeds.
+      # halt-on-fail can be set on the run_tests tasks in order to fail fast.
+      # suppress-deprecations is false in order to be alerted to usages of
+      # deprecated code.
+      run_tests.phpunit:
+        types: 'PHPUnit-Unit'
+        testgroups: 'responsive_menu'
+        suppress-deprecations: false
+        halt-on-fail: false
+      run_tests.kernel:
+        types: 'PHPUnit-Kernel'
+        testgroups: 'responsive_menu'
+        suppress-deprecations: false
+        halt-on-fail: false
+      run_tests.simpletest:
+        types: 'Simpletest'
+        testgroups: 'responsive_menu'
+        suppress-deprecations: false
+        halt-on-fail: false
+      run_tests.build:
+        types: 'PHPUnit-Build'
+        testgroups: 'responsive_menu'
+        suppress-deprecations: false
+        halt-on-fail: false
+      run_tests.functional:
+        types: 'PHPUnit-Functional'
+        testgroups: 'responsive_menu'
+        suppress-deprecations: false
+        halt-on-fail: false
+      run_tests.javascript:
+        concurrency: 15
+        types: 'PHPUnit-FunctionalJavascript'
+        testgroups: 'responsive_menu'
+        suppress-deprecations: false
+        halt-on-fail: false
+      # Run nightwatch testing.
+      # @see https://www.drupal.org/project/drupal/issues/2869825
+      nightwatchjs:

@@ -5,3 +5,7 @@ AJAX facets broken
 Source: https://www.drupal.org/files/issues/2020-10-02/facets-ajax-3052574-89.patch
 
 
+Show search term in summary
+Source: https://www.drupal.org/files/issues/2020-12-02/2979223--39.patch
+
+

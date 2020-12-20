@@ -35,6 +35,7 @@ module:
   entity_reference_revisions: 0
   facets: 0
   facets_country: 0
+  facets_summary: 0
   field: 0
   field_group: 0
   field_ui: 0
@@ -44,6 +45,7 @@ module:
   geolocation: 0
   help: 0
   history: 0
+  iied_utils: 0
   image: 0
   imagemagick: 0
   isbn: 0
@@ -84,6 +86,7 @@ module:
   rabbit_hole: 0
   rdf: 0
   redirect: 0
+  responsive_menu: 0
   rest: 0
   rh_media: 0
   rh_node: 0
@@ -99,6 +102,7 @@ module:
   sophron: 0
   system: 0
   taxonomy: 0
+  taxonomy_menu: 0
   term_merge: 0
   term_reference_change: 0
   text: 0

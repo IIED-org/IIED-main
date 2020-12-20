@@ -16,7 +16,7 @@ provider: null
 plugin: 'facet_block:theme'
 settings:
   id: 'facet_block:theme'
-  label: Theme
+  label: 'Filter by theme'
   provider: facets
   label_display: visible
   block_id: theme_2

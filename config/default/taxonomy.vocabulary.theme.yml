@@ -1,7 +1,14 @@
 uuid: 41e96b44-654c-4283-80fa-a8fc3680cf68
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:menu_link_content:88bf2242-fe2b-46a7-82fc-0edbd6b00d9e'
 name: Theme
 vid: theme
 description: 'Interest or category'

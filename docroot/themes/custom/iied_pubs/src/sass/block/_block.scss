@@ -1,12 +1,33 @@
 .block-facet--checkbox {
+  border-top: solid 1px $gray-200;
+  border-right: solid 1px $gray-200;
+  border-left: solid 1px $gray-200;
+  padding: 0 .5rem .5rem .5rem;
+  width: 100%;
   button {
     font-size: $font-size-base;
     width: 100%;
+    display: inline-block;
     text-align: left;
-    @extend .btn;
-    @extend .btn-outline-primary;
+    border: none;
+    background: none;
     @extend .dropdown-toggle;
-    margin-top: 1rem;
+    margin-top: .5rem;
+    &:hover, &:active, &:focus {
+      border: none;
+      background: none;
+      color: inherit;
+      box-shadow: none;
+      outline: none;
+    }
+    &:after {
+      float: right;
+      margin-top: .5rem;
+    }
+    &[aria-expanded="true"]::after {
+      border-top: 0;
+      border-bottom: 0.3em solid;
+    }
   }
   .facets-widget-checkbox {
     ul {
@@ -23,6 +44,17 @@
     .facets-checkbox {
       margin-right: .5rem;
     }
+  }
+  a.facets-soft-limit-link {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+  }
+  &:last-of-type {
+    border-bottom: solid 1px $gray-200;
+  }
+  .facets-soft-limit-link:nth-of-type(2) {
+    display: none;
   }
 }
 

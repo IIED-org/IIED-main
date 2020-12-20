@@ -29,3 +29,15 @@ ul.language-switcher-language-url.nav {
     padding: 0;
   }
 }
+
+.meta {
+  @extend .text-muted;
+}
+
+.field-doctype div {
+  display: inline;
+  &.clearfix::after {
+    display: inline;
+    clear: none !important;
+  }
+}

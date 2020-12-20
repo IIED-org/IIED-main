@@ -1,0 +1,59 @@
+responsive_menu.styling:
+  version: VERSION
+  css:
+    theme:
+      css/responsive_menu.css: {}
+
+responsive_menu.mmenu:
+  version: VERSION
+  js:
+    /libraries/mmenu/dist/mmenu.js: {}
+  css:
+    theme:
+      /libraries/mmenu/dist/mmenu.css: {}
+
+responsive_menu.config:
+  version: VERSION
+  js:
+    js/responsive_menu.config.js: {}
+  dependencies:
+    - responsive_menu/responsive_menu.mmenu
+    - core/drupal
+    - core/drupalSettings
+
+responsive_menu.superfish:
+  version: VERSION
+  js:
+    /libraries/superfish/dist/js/superfish.min.js: {}
+    js/responsive_menu.superfish.js: {}
+  dependencies:
+    - responsive_menu/responsive_menu.config
+    - core/jquery
+    - core/jquery.once
+
+responsive_menu.superfish_hoverintent:
+  version: VERSION
+  js:
+    /libraries/superfish/dist/js/hoverIntent.js: {}
+  dependencies:
+    - responsive_menu/responsive_menu.superfish
+
+responsive_menu.bootstrap:
+  version: VERSION
+  js:
+    js/responsive_menu.bootstrap.js: {}
+  css:
+    theme:
+      /libraries/mmenu/dist/wrappers/bootstrap/mmenu.bootstrap.css: {}
+  dependencies:
+    - responsive_menu/responsive_menu.config
+
+responsive_menu.polyfills:
+  version: VERSION
+  js:
+    /libraries/mmenu/dist/mmenu.polyfills.js: {}
+
+responsive_menu.toolbar:
+  version: VERSION
+  js:
+    js/views/ToolbarVisualView.js: {}

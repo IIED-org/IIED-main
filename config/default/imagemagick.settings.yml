@@ -1,4 +1,4 @@
-quality: 85
+quality: 90
 binaries: imagemagick
 path_to_binaries: /usr/bin/
 prepend: ''

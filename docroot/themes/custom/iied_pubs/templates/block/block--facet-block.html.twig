@@ -24,9 +24,13 @@
   {{ title_suffix }}
 
   {% block content %}
-    <div class='collapse show' id='collapse_{{ id }}'>
-    {{ content }}
-    </div>
+    {% if id == 'theme-2' %}
+      <div class='collapse show' id='collapse_{{ id }}'>
+    {% else %}
+      <div class='collapse' id='collapse_{{ id }}'>
+    {% endif %}
+      {{ content }}
+      </div>
   {% endblock %}
 
   </div>

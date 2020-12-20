@@ -21,14 +21,10 @@ suggester_settings:
       'entity:taxonomy_term':
         person: search_autocomplete
         theme: search_autocomplete
-  server:
-    fields: {  }
 suggester_weights:
   live_results: -50
-  server: -49
 suggester_limits:
-  live_results: 10
-  server: 10
+  live_results: 15
 search_settings:
   'views:search':
     displays:

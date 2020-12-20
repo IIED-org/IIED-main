@@ -21,7 +21,7 @@
 {% set placement = placement ?? '' %}
 {% set color = color ?? 'light' %}
 
-<nav class="navbar navbar-expand-lg justify-content-between navbar-{{ color }} {{ placement }} {{ utility_classes|join(' ') }}">
+<nav class="navbar justify-content-md-between navbar-{{ color }} {{ placement }} {{ utility_classes|join(' ') }}">
   {% if container %}
     <div class="{{ container }}">
   {% endif %}
@@ -30,11 +30,7 @@
     {{ branding }}
   {% endblock %}
 
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse">
+    <div class="collapse navbar-collapse">
     {% block left %}
       {{ left }}
     {% endblock %}

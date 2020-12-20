@@ -61,11 +61,13 @@
         "drupal/rabbit_hole": "^1.0@beta",
         "drupal/radix": "^4.10",
         "drupal/redirect": "^1.6",
+        "drupal/responsive_menu": "^4.4",
         "drupal/search_api_autocomplete": "^1.4",
         "drupal/serial": "^1.0@alpha",
         "drupal/sidr": "^3.1",
         "drupal/string_translation_ui": "^1.2",
         "drupal/taxonomy_manager": "^2.0",
+        "drupal/taxonomy_menu": "^3.4",
         "drupal/term_merge": "^1.0@alpha",
         "drupal/upgrade_status": "^3.0",
         "drupal/views_bootstrap": "^4.3",
@@ -179,7 +181,8 @@
             "BEF breaks autocomplete": "https://www.drupal.org/files/issues/2020-09-26/3159000-14--fix_autocomplete_with_bef.patch"
           },
           "drupal/facets": {
-            "AJAX facets broken": "https://www.drupal.org/files/issues/2020-10-02/facets-ajax-3052574-89.patch"
+            "AJAX facets broken": "https://www.drupal.org/files/issues/2020-10-02/facets-ajax-3052574-89.patch",
+            "Show search term in summary": "https://www.drupal.org/files/issues/2020-12-02/2979223--39.patch"
           }
         }
     }

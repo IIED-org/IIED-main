@@ -1,0 +1,5 @@
+tips:
+  search-api-index-fields-label:
+    label: Etykieta
+  search-api-index-fields-machine-name:
+    label: 'Identyfikator systemowy'

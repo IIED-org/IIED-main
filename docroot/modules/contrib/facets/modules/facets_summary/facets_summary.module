@@ -27,6 +27,13 @@ function facets_summary_theme($existing, $type, $theme, $path) {
         'facet_admin_label' => NULL,
       ],
     ],
+    'facets_summary_string' => [
+      'render element' => 'elements',
+      'variables' => [
+        'label' => NULL,
+        'search_string' => NULL,
+      ],
+    ],
     'facets_summary_facet_result' => [
       'variables' => [
         'label' => NULL,

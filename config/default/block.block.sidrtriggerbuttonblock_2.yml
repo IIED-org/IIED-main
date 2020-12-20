@@ -28,7 +28,7 @@ settings:
   sidr_speed: '400'
   sidr_timing: ''
   sidr_method: toggle
-  sidr_displace: true
+  sidr_displace: false
   sidr_body: ''
   sidr_close_on_blur: null
 visibility:

@@ -15,12 +15,17 @@ const mix = require('laravel-mix');
  | Configuration
  |--------------------------------------------------------------------------
  */
+
 mix
   .setPublicPath('assets')
   .disableNotifications()
   .options({
     processCssUrls: false
-  });
+  })
+  .webpackConfig({
+    devtool: "inline-source-map"
+  })
+  .sourceMaps();
 
 /*
  |--------------------------------------------------------------------------
