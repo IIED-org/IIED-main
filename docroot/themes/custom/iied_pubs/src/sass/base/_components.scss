@@ -80,6 +80,16 @@
   }
 }
 
+.mm-menu_offcanvas {
+  height: 100%;
+  @include media-breakpoint-up(xs) {
+    left: 50%;
+  }
+  @include media-breakpoint-up(md) {
+    left: 220px;
+  }
+}
+
 .block--sidrtriggerbuttonblock {
   line-height: 1.5rem;
   button {

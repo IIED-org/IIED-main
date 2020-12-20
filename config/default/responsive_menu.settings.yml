@@ -7,7 +7,7 @@ horizontal_media_query: '(min-width: 960px)'
 include_css: false
 off_canvas_position: left
 off_canvas_theme: theme-white
-pagedim: pagedim
+pagedim: none
 horizontal_superfish: true
 horizontal_superfish_delay: 300
 horizontal_superfish_speed: 100
