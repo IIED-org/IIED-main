@@ -1,0 +1,44 @@
+readonlymode.settings:
+  type: config_object
+  label: 'Read Only Mode settings'
+  mapping:
+    enabled:
+      type: integer
+      label: 'Enabled'
+    url:
+      type: string
+      label: 'URL'
+    messages:
+      type: mapping
+      mapping:
+        default:
+          type: string
+          label: 'Default'
+        not_saved:
+          type: string
+          label: 'Not Saved'
+    forms:
+      type: mapping
+      mapping:
+        default:
+          type: mapping
+          mapping:
+            edit:
+              type: sequence
+              sequence:
+                type: string
+            view:
+              type: sequence
+              sequence:
+                type: string
+        additional:
+          type: mapping
+          mapping:
+            edit:
+              type: sequence
+              sequence:
+                type: string
+            view:
+              type: sequence
+              sequence:
+                type: string

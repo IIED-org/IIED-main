@@ -47,14 +47,12 @@ dependencies:
     - field.field.node.publication.field_team
     - field.field.node.publication.field_theme_s_
     - field.field.node.publication.field_translator
-    - image.style.list_thumbnail
     - node.type.publication
   module:
     - datetime
     - ds
     - field_group
     - layout_builder
-    - media
     - user
 third_party_settings:
   layout_builder:
@@ -80,16 +78,48 @@ third_party_settings:
     regions:
       ds_content:
         - group_media
-        - field_media
+        - 'dynamic_block_field:node-cover_image'
         - search_api_excerpt
-        - node_title
         - group_result
+        - node_title
         - group_meta
         - field_date_published
         - field_document_type
         - field_author_s_
         - field_editor_s_
     fields:
+      'dynamic_block_field:node-cover_image':
+        plugin_id: 'dynamic_block_field:node-cover_image'
+        weight: 2
+        label: hidden
+        formatter: default
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            prefix: ''
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow-el: ''
+            ow-cl: ''
+            ow-at: ''
+            fis: true
+            fis-el: div
+            fis-cl: 'mr-2 field-image'
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            lbw: false
+            lb-col: false
+            ow: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
       node_title:
         plugin_id: node_title
         weight: 5
@@ -115,7 +145,7 @@ third_party_settings:
         - field_author_s_
         - field_editor_s_
       parent_name: group_media
-      weight: 5
+      weight: 4
       format_type: html_element
       region: ds_content
       format_settings:
@@ -131,7 +161,7 @@ third_party_settings:
       label: Result
     group_media:
       children:
-        - field_media
+        - 'dynamic_block_field:node-cover_image'
         - group_result
       parent_name: ''
       weight: 0
@@ -319,45 +349,8 @@ content:
             fi-def-at: false
     type: entity_reference_label
     region: ds_content
-  field_media:
-    type: media_thumbnail
-    weight: 3
-    label: hidden
-    settings:
-      image_style: list_thumbnail
-      image_link: ''
-    third_party_settings:
-      ds:
-        ft:
-          id: expert
-          settings:
-            lb: ''
-            prefix: ''
-            lbw-el: ''
-            lbw-cl: ''
-            lbw-at: ''
-            ow-el: div
-            ow-cl: col-sm-2
-            ow-at: ''
-            fis: true
-            fis-el: div
-            fis-cl: 'mr-2 field-image'
-            fis-at: ''
-            fi-el: ''
-            fi-cl: ''
-            fi-at: ''
-            suffix: ''
-            lbw: false
-            lb-col: false
-            ow: false
-            ow-def-at: false
-            ow-def-cl: false
-            fis-def-at: false
-            fi: false
-            fi-def-at: false
-    region: ds_content
   search_api_excerpt:
-    weight: 4
+    weight: 3
     region: ds_content
     settings: {  }
     third_party_settings: {  }
@@ -375,6 +368,7 @@ hidden:
   field_journal_ref: true
   field_lists: true
   field_lit_code: true
+  field_media: true
   field_parent: true
   field_pdf: true
   field_pdf_pages: true

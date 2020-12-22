@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * @file
+ * Install and update hooks for the Read Only Mode module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function readonlymode_install() {
+  // Set the module weight to run as last.
+  module_set_weight('readonlymode', 9999);
+}
+
+/**
+ * Move the Read Only Mode settings from variable to config.
+ *
+ * @ingroup config_upgrade
+ */
+function readonlymode_update_8001() {
+  update_variables_to_config('readonlymode.settings', [
+    'site_readonly' => 'enabled',
+    'site_readonly_url' => 'url',
+    'site_readonly_message' => 'messages.default',
+    'site_readonly_forms_allowed' => 'forms.additional.edit',
+    'site_readonly_forms_viewonly' => 'forms.additional.view',
+  ]);
+}
