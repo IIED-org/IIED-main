@@ -9,7 +9,3 @@ Duplicate exposed filter form IDs
 Source: https://www.drupal.org/files/issues/2020-09-08/randomize_exposed_filter_block_form_ID-2894747-53-d8.patch
 
 
-Media entity translation
-Source: https://www.drupal.org/files/issues/2019-05-29/2877994-140.patch
-
-
