@@ -1,8 +1,0 @@
-popup_agreed:
-  value: '<h2>Obrigado por aceitar os cookies.</h2><p>Pode esconder esta mensagem ou saber mais sobre a nossa política de cookies.</p>'
-popup_agree_button_message: Aceitar
-popup_more_info_button_message: 'Mais informação'
-popup_find_more_button_message: 'Mais informação'
-popup_hide_button_message: Ocultar
-disagree_button_label: 'Não, obrigado'
-withdraw_action_button_label: 'Retirar consentimento'

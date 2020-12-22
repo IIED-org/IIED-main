@@ -1,0 +1,261 @@
+<?php
+
+/**
+ * @file
+ * Read Only Mode provides an alternative to the built in 'Maintenance Mode' in
+ * Drupal. Instead of displaying a static text file to users while the site is
+ * in maintenance mode, Read Only Mode will allow access (reading) of existing
+ * content while preventing changing or adding content (posting / submitting.
+ * forms / etc).
+ *
+ * This allows the site to remain functional while maintenance is performed.
+ * This module also provides messaging to users and administrators to indicate
+ * that the site is in maintenance mode.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function readonlymode_form_system_site_maintenance_mode_alter(&$form, FormStateInterface $form_state) {
+  $settings = \Drupal::config('readonlymode.settings');
+  $form['read_only'] = [
+    '#title' => t('Read Only Mode'),
+    '#type' => 'details',
+    '#weight' => 1,
+    '#open' => TRUE,
+  ];
+  $form['read_only']['enable_readonly'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Enable "Read Only" mode'),
+    '#description' => t('When set to "Read Only", all content moderation (add/edit) will be impossible.'),
+    '#weight' => 0,
+    '#default_value' => $settings->get('enabled'),
+  ];
+
+  // Message configuration is in a collapsed fieldset
+  // so that it doesn't clutter the display.
+  $form['read_only']['settings'] = [
+    '#title' => t('Messages and redirects'),
+    '#type' => 'details',
+    '#description' => t('Configure the redirect URL and messages to display to users while the site is in Read Only Mode.'),
+  ];
+  $form['read_only']['settings']['default_message'] = [
+    '#type' => 'textarea',
+    '#title' => t('Read Only Mode warning'),
+    '#description' => t('This warning will be displayed when viewing a page that has a blocked form while in Read Only Mode.'),
+    '#default_value' => $settings->get('messages.default'),
+    '#rows' => 3,
+    '#required' => TRUE,
+  ];
+
+  $form['read_only']['settings']['not_saved_message'] = [
+    '#type' => 'textarea',
+    '#title' => t('Form submission error'),
+    '#description' => t('This error will be displayed when a blocked form is submitted while in Read Only Mode. This scenario occurs when a user starts filling out a form during normal site operation and then attempts to submit the form after Read Only Mode has been enabled.'),
+    '#default_value' => $settings->get('messages.not_saved'),
+    '#rows' => 3,
+    '#required' => TRUE,
+  ];
+  $form['read_only']['settings']['url'] = [
+    '#type' => 'textfield',
+    '#title' => t('Redirect path'),
+    '#description' => t('When given, Drupal will redirect the user to this URL when a user tries to add/edit content instead of displaying the message above.'),
+    '#default_value' => $settings->get('url'),
+  ];
+
+  // Allowed forms configuration is in a collapsed fieldset
+  // so that it doesn't clutter the display.
+  $form['read_only']['forms'] = [
+    '#title' => t('Allowed forms'),
+    '#type' => 'details',
+    '#description' => t('Configure which forms will be excluded from restriction when in read-only mode.'),
+  ];
+  $form['read_only']['forms']['additional_edit'] = [
+    '#type' => 'textarea',
+    '#title' => t('Forms that can be submitted'),
+    '#description' => t("These forms are not restricted when in read only mode. Enter one form id per line. You may use the wildcard character '*' to use loose matches. For example: webform* will match all webforms. Note that the following forms will always be allowed: %allowed_forms.", [
+      '%allowed_forms' => empty($settings->get('forms.default.edit')) ? '' : implode(', ', $settings->get('forms.default.edit')),
+    ]),
+    '#default_value' => $settings->get('forms.additional.edit'),
+  ];
+  $form['read_only']['forms']['additional_view'] = [
+    '#type' => 'textarea',
+    '#title' => t('Forms that can be viewed'),
+    '#description' => t("These forms are allowed to be viewed but will not accept form submissions. Enter one form id per line. You may use the wildcard character '*' to use loose matches. For example: webform* will match all webforms. Note that the following forms will always be allowed: %allowed_forms.", [
+      '%allowed_forms' => empty($settings->get('forms.default.view')) ? '' : implode(', ', $settings->get('forms.default.view')),
+    ]),
+    '#default_value' => $settings->get('forms.additional.view'),
+  ];
+  $form['#validate'][] = 'readonlymode_settings_form_validate';
+  $form['#submit'][] = 'readonlymode_settings_form_submit';
+}
+
+/**
+ * Settings form validate handler.
+ *
+ * See readonlymode_form_system_site_maintenance_mode_alter().
+ */
+function readonlymode_settings_form_validate(array &$form, FormStateInterface $form_state) {
+  $values = $form_state->getValues();
+  if ($path = $values['url']) {
+    $path_validator = \Drupal::pathValidator();
+    if (!$path_validator->isValid($form_state->getValue('url'))) {
+      $form_state->setErrorByName('url', t('The path %link_path is either invalid or you do not have access to it.', ['%link_path' => $path]));
+    }
+  }
+}
+
+/**
+ * Settings form submission handler.
+ *
+ * See readonlymode_form_system_site_maintenance_mode_alter().
+ */
+function readonlymode_settings_form_submit(array &$form, FormStateInterface $form_state) {
+  $values = $form_state->getUserInput();
+
+  \Drupal::configFactory()->getEditable('readonlymode.settings')
+    ->set('enabled', $values['enable_readonly'])
+    ->set('url', $values['url'])
+    ->set('messages.default', $values['default_message'])
+    ->set('messages.not_saved', $values['not_saved_message'])
+    ->set('forms.additional.edit', $values['additional_edit'])
+    ->set('forms.additional.view', $values['additional_view'])
+    ->save();
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Permit posting of content.
+ */
+function readonlymode_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $settings = \Drupal::config('readonlymode.settings');
+  if (!_readonlymode_form_check($form, $form_id, FALSE)) {
+    // If a redirect URL is set, then we redirect to it.
+    if ($url = $settings->get('url')) {
+      return new RedirectResponse($url);
+    }
+    else {
+      // Remove FAPI #after_build handlers.
+      $form['#after_build'] = [];
+      // Remove all elements of the form.
+      foreach (Element::children($form) as $key) {
+        if (!in_array($key, [
+          'form_id',
+          'form_token',
+          'form_build_id',
+        ])
+        ) {
+          unset($form[$key]);
+        }
+      }
+      $form['readonly_notice'] = [
+        '#markup' => \Drupal::token()
+          ->replace($settings->get('messages.default')),
+        '#prefix' => '<div class="messages warning">',
+        '#suffix' => '</div>',
+      ];
+    }
+  }
+
+  if (\Drupal::currentUser()
+    ->hasPermission('readonlymode access forms') && $settings->get('enabled')
+  ) {
+    \Drupal::messenger()->addMessage(t('The site is currently set to Read Only, content moderation is disabled for all users without the "Access all forms while in Read Only Mode" permission.'), 'warning', FALSE);
+  }
+
+  $form['#validate'][] = 'readonlymode_check_form_validate';
+}
+
+/**
+ * Validation handler for all form submissions.
+ *
+ * Checks whether the form submission is
+ * occurring while Read Only Mode is enabled.
+ */
+function readonlymode_check_form_validate(array &$form, FormStateInterface $form_state) {
+  // Check for Read Only Mode, whether we are allowed this form,.
+  if (!_readonlymode_form_check($form, $form['form_id']['#value'], TRUE)) {
+    $form_state->setErrorByName('submit', \Drupal::token()
+      ->replace(\Drupal::config('readonlymode.settings')
+        ->get('messages.not_saved')));
+  }
+}
+
+/**
+ * Helper function to check form submissions.
+ *
+ * Internal handler to check whether this form is to be restricted.
+ *
+ * @param array $form
+ *   The full form.
+ * @param string $form_id
+ *   The form ID.
+ * @param bool $submitted
+ *   Defaults to TRUE.
+ *
+ * @return bool
+ *   TRUE when matched, FALSE otherwise.
+ */
+function _readonlymode_form_check(array &$form, $form_id, $submitted = TRUE) {
+  $settings = \Drupal::config('readonlymode.settings');
+  // If not in Read Only Mode, allow the form.
+  if (!$settings->get('enabled')) {
+    return TRUE;
+  }
+
+  // Admins can access all forms.
+  if (\Drupal::currentUser()->hasPermission('readonlymode access forms')) {
+    return TRUE;
+  }
+
+  // Is the form in the list of default forms? Then allow access.
+  if (in_array($form_id, $settings->get('forms.default.edit'))) {
+    return TRUE;
+  }
+
+  // Is the form in the list of read-only forms? Then allow access.
+  if (!$submitted && in_array($form_id, $settings->get('forms.default.view'))) {
+    return TRUE;
+  }
+
+  // Check if the form is in the custom list of allowed forms. If so, allow.
+  if (_readonlymode_form_list_check($form_id, $settings->get('forms.additional.edit'))) {
+    return TRUE;
+  }
+
+  // Check if the form is in the custom list of allowed read-only forms.
+  if (!$submitted && _readonlymode_form_list_check($form_id, $settings->get('forms.additional.view'))) {
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+/**
+ * Check for form_id in a given list.
+ *
+ * @param array $list
+ *   A string of form id's separated by newlines.
+ *
+ * @return bool
+ *   TRUE when matched, FALSE otherwise.
+ */
+function _readonlymode_form_list_check($form_id, array $list) {
+  $l = preg_split('/(\r\n|\n|\r)/', $list);
+  foreach ($l as $word) {
+    // Skip empty words.
+    if (empty($word)) {
+      continue;
+    }
+    $word = str_replace('*', '.*', $word);
+    if (preg_match('/^' . $word . '$/', $form_id) === 1) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}

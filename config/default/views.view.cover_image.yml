@@ -243,11 +243,16 @@ display:
             sort_order: asc
             number_of_records: 0
             format: default_summary
-          specify_validation: false
+          specify_validation: true
           validate:
-            type: none
+            type: 'entity:node'
             fail: 'not found'
-          validate_options: {  }
+          validate_options:
+            bundles:
+              publication: publication
+            operation: view
+            multiple: 0
+            access: false
           break_phrase: false
           not: false
           entity_type: node
