@@ -1,0 +1,8 @@
+display:
+  page:
+    display_options:
+      fields:
+        edit_media:
+          text: تحرير
+        delete_media:
+          text: حذف

@@ -1,0 +1,7 @@
+popup_agreed:
+  value: '<h2>Dziękujemy za akceptację ciasteczek</h2><p>Możesz teraz ukryć tą wiadomość lub dowiedzieć się więcej na temat ciasteczek.</p>'
+popup_agree_button_message: Akceptuj
+popup_more_info_button_message: 'Więcej informacji'
+popup_find_more_button_message: 'Więcej informacji'
+popup_hide_button_message: Ukryj
+save_preferences_button_label: 'Zapisz preferencje'

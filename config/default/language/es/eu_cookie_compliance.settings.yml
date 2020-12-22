@@ -1,0 +1,8 @@
+popup_agreed:
+  value: '<h2>Gracias por aceptar el uso de cookies</h2><p>Ya puede ocultar este mensaje o saber más sobre el uso de cookies.</p>'
+popup_agree_button_message: Aceptar
+popup_more_info_button_message: 'Más info'
+popup_find_more_button_message: 'Más info'
+popup_hide_button_message: Ocultar
+withdraw_tab_button_label: 'Opciones de privacidad'
+save_preferences_button_label: 'Guardar preferencias'

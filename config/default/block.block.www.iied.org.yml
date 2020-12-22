@@ -1,9 +1,9 @@
-uuid: d1dcf9ba-828d-47b5-8688-6909aa5ef9de
+uuid: 491cdfc6-9635-480b-bc7e-56b8710c3228
 langcode: en
 status: true
 dependencies:
   content:
-    - 'block_content:basic:135c02f1-fec9-4b08-8586-b3a104009066'
+    - 'block_content:basic:8f77f3ca-de59-4e54-a7b1-14041a4aabb3'
   module:
     - block_content
     - system
@@ -12,11 +12,11 @@ dependencies:
 id: www.iied.org
 theme: iied_pubs
 region: navbar_branding
-weight: -10
+weight: 0
 provider: null
-plugin: 'block_content:135c02f1-fec9-4b08-8586-b3a104009066'
+plugin: 'block_content:8f77f3ca-de59-4e54-a7b1-14041a4aabb3'
 settings:
-  id: 'block_content:135c02f1-fec9-4b08-8586-b3a104009066'
+  id: 'block_content:8f77f3ca-de59-4e54-a7b1-14041a4aabb3'
   label: www.iied.org
   provider: block_content
   label_display: '0'
