@@ -1,0 +1,8 @@
+display:
+  page:
+    display_options:
+      fields:
+        edit_media:
+          text: Редактировать
+        delete_media:
+          text: Удалить

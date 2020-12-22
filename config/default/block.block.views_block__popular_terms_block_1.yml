@@ -15,8 +15,8 @@ third_party_settings:
     classes: mb-4
 id: views_block__popular_terms_block_1
 theme: iied_pubs
-region: featured_top
-weight: -10
+region: featured_bottom
+weight: -13
 provider: null
 plugin: 'views_block:popular_terms-block_1'
 settings:

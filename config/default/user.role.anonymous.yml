@@ -12,6 +12,7 @@ permissions:
   - 'access comments'
   - 'access content'
   - 'access site-wide contact form'
+  - 'display eu cookie compliance popup'
   - 'search content'
   - 'use search_api_autocomplete for acquia_search_solr'
   - 'use search_api_autocomplete for search'

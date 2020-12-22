@@ -1,0 +1,11 @@
+popup_agreed:
+  value: '<h2>Merci d''avoir accepté les cookies</h2><p>Vous pouvez désormais masquer ce message ou en apprendre plus à propos des cookies.</p>'
+popup_agree_button_message: Accepter
+popup_more_info_button_message: 'En savoir plus'
+popup_find_more_button_message: 'En savoir plus'
+popup_hide_button_message: Masquer
+disagree_button_label: 'Non, merci.'
+withdraw_message:
+  value: '<h2>Nous utilisons des cookies sur ce site pour améliorer votre expérience d''utilisateur.</h2><p>Vous avez consenti à l''ajout de cookies.</p>'
+withdraw_action_button_label: 'Retirer le consentement'
+withdraw_tab_button_label: 'Paramètres de confidentialité'
