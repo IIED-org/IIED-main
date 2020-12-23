@@ -1,0 +1,79 @@
+uuid: 4dcd0367-ad1d-4091-8ed1-56d933e50303
+langcode: en
+status: false
+dependencies:
+  config:
+    - core.entity_view_mode.node.rss
+    - field.field.node.project.body
+    - field.field.node.project.field_collection
+    - field.field.node.project.field_image
+    - field.field.node.project.field_link
+    - field.field.node.project.field_nid
+    - field.field.node.project.field_projectnumber
+    - field.field.node.project.field_theme
+    - field.field.node.project.field_year
+    - node.type.project
+  module:
+    - ds
+    - layout_builder
+    - link
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+  ds:
+    layout:
+      id: ds_reset
+      library: null
+      disable_css: false
+      entity_classes: all_classes
+      settings:
+        label: ''
+        wrappers:
+          ds_content: div
+        outer_wrapper: div
+        attributes: ''
+        link_attribute: ''
+        link_custom: ''
+        classes:
+          layout_class: {  }
+          ds_content: {  }
+    regions:
+      ds_content:
+        - field_link
+id: node.project.rss
+targetEntityType: node
+bundle: project
+mode: rss
+content:
+  field_link:
+    weight: 0
+    label: hidden
+    settings:
+      trim_length: null
+      url_only: false
+      url_plain: false
+      rel: '0'
+      target: '0'
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    type: link_separate
+    region: ds_content
+hidden:
+  body: true
+  field_collection: true
+  field_image: true
+  field_nid: true
+  field_projectnumber: true
+  field_theme: true
+  field_year: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

@@ -1,0 +1,12 @@
+popup_agreed:
+  value: "<h2>Thank you for accepting cookies</h2>\r\n\r\n<p>You can now hide this message or find out more about cookies.</p>\r\n"
+popup_agree_button_message: 'Chấp nhận'
+popup_more_info_button_message: 'More info'
+popup_find_more_button_message: 'More info'
+popup_hide_button_message: Ẩn
+popup_info:
+  value: "<div>We use cookies to help improve this website. Clicking any link on this site will be taken as your consent to this.</div>\r\n"
+popup_link: 'https://www.iied.org/privacy-policy'
+disagree_button_label: Disagree
+withdraw_message:
+  value: "<h2>We use cookies on this site to enhance your user experience</h2>\r\n\r\n<p>You have given your consent for us to set cookies.</p>\r\n"
