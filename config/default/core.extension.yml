@@ -44,6 +44,7 @@ module:
   file_mdm: 0
   filter: 0
   geolocation: 0
+  google_analytics: 0
   help: 0
   history: 0
   iied_utils: 0
@@ -124,6 +125,7 @@ module:
   views: 10
   paragraphs: 11
   standard: 1000
+  eu_cookie_compliance: 1001
 theme:
   stable: 0
   classy: 0

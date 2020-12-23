@@ -77,6 +77,51 @@ AddEncoding gzip svgz
   # Redirect legacy pdf paths
   RewriteRule ^pdfs/(.*)$ /sites/default/files/pdfs/migrate/$1 [R=301,NC,L]
 
+  # Rewrite theme search
+
+  RewriteCond %{QUERY_STRING} c=biodiv
+  RewriteRule (.*) /theme/biodiversity [R=301,L,QSD]
+  RewriteCond %{QUERY_STRING} c=climate
+  RewriteRule (.*) /theme/climate-change [R=301,L,QSD]
+  RewriteCond %{QUERY_STRING} c=comm
+  RewriteRule (.*) /theme/communication [R=301,L,QSD]
+  RewriteCond %{QUERY_STRING} c=dry
+  RewriteRule (.*) /theme/drylands-and-pastoralism [R=301,L,QSD]
+  RewriteCond %{QUERY_STRING} c=econ
+  RewriteRule (.*) /theme/economics [R=301,L,QSD]
+  RewriteCond %{QUERY_STRING} c=energy
+  RewriteRule (.*) /theme/energy [R=301,L,QSD]
+  RewriteCond %{QUERY_STRING} c=fish
+  RewriteRule (.*) /theme/fisheries [R=301,L,QSD]
+  RewriteCond %{QUERY_STRING} c=foodag
+  RewriteRule (.*) /theme/food-and-agriculture [R=301,L,QSD]
+  RewriteCond %{QUERY_STRING} c=forest
+  RewriteRule (.*) /theme/forests [R=301,L,QSD]
+  RewriteCond %{QUERY_STRING} c=gender
+  RewriteRule (.*) /theme/gender [R=301,L,QSD]
+  RewriteCond %{QUERY_STRING} c=govern
+  RewriteRule (.*) /theme/governance [R=301,L,QSD]
+  RewriteCond %{QUERY_STRING} c=greenec
+  RewriteRule (.*) /theme/green-economy [R=301,L,QSD]
+  RewriteCond %{QUERY_STRING} c=land
+  RewriteRule (.*) /theme/land-acquisitions-and-rights [R=301,L,QSD]
+  RewriteCond %{QUERY_STRING} c=law
+  RewriteRule (.*) /theme/law [R=301,L,QSD]
+  RewriteCond %{QUERY_STRING} c=nrm
+  RewriteRule (.*) /theme/natural-resource-management [R=301,L,QSD]
+  RewriteCond %{QUERY_STRING} c=part
+  RewriteRule (.*) /theme/participation [R=301,L,QSD]
+  RewriteCond %{QUERY_STRING} c=policy
+  RewriteRule (.*) /theme/policy-planning [R=301,L,QSD]
+  RewriteCond %{QUERY_STRING} c=pov
+  RewriteRule (.*) /theme/poverty [R=301,L,QSD]
+  RewriteCond %{QUERY_STRING} c=susmkt
+  RewriteRule (.*) /theme/sustainable-markets [R=301,L,QSD]
+  RewriteCond %{QUERY_STRING} c=urban
+  RewriteRule (.*) /theme/urban [R=301,L,QSD]
+  RewriteCond %{QUERY_STRING} c=water
+  RewriteRule (.*) /theme/water [R=301,L,QSD]
+
   # Make sure Authorization HTTP header is available to PHP
   # even when running as CGI or FastCGI.
   RewriteRule ^ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]

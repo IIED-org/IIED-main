@@ -42,6 +42,7 @@ permissions:
   - 'delete own image media'
   - 'delete own publication content'
   - 'delete publication revisions'
+  - 'display eu cookie compliance popup'
   - 'edit any article content'
   - 'edit any document media'
   - 'edit any image media'

@@ -1,0 +1,164 @@
+uuid: 90cb013a-7572-4f7a-b695-3cd71899b196
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.rss
+    - field.field.node.publication.body
+    - field.field.node.publication.field_admin
+    - field.field.node.publication.field_area_list
+    - field.field.node.publication.field_author_s_
+    - field.field.node.publication.field_cover_image
+    - field.field.node.publication.field_date_published
+    - field.field.node.publication.field_deptlist
+    - field.field.node.publication.field_document_type
+    - field.field.node.publication.field_doi
+    - field.field.node.publication.field_editor_s_
+    - field.field.node.publication.field_external_url
+    - field.field.node.publication.field_iied_url
+    - field.field.node.publication.field_isbn
+    - field.field.node.publication.field_issn
+    - field.field.node.publication.field_journal_ref
+    - field.field.node.publication.field_lists
+    - field.field.node.publication.field_lit_code
+    - field.field.node.publication.field_media
+    - field.field.node.publication.field_parent
+    - field.field.node.publication.field_pdf
+    - field.field.node.publication.field_pdf_pages
+    - field.field.node.publication.field_product_code
+    - field.field.node.publication.field_product_id
+    - field.field.node.publication.field_project
+    - field.field.node.publication.field_publisher
+    - field.field.node.publication.field_publisher_legacy
+    - field.field.node.publication.field_reportagency1
+    - field.field.node.publication.field_reportagency2
+    - field.field.node.publication.field_reportagency3
+    - field.field.node.publication.field_reportfin1
+    - field.field.node.publication.field_reportfin2
+    - field.field.node.publication.field_reportfin3
+    - field.field.node.publication.field_reportingcode1
+    - field.field.node.publication.field_reportingcode2
+    - field.field.node.publication.field_series
+    - field.field.node.publication.field_series_item_code
+    - field.field.node.publication.field_short_title
+    - field.field.node.publication.field_source_publication
+    - field.field.node.publication.field_status
+    - field.field.node.publication.field_tags
+    - field.field.node.publication.field_team
+    - field.field.node.publication.field_theme_s_
+    - field.field.node.publication.field_translator
+    - image.style.media_library
+    - node.type.publication
+  module:
+    - datetime
+    - ds
+    - layout_builder
+    - media
+    - text
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.publication.rss
+targetEntityType: node
+bundle: publication
+mode: rss
+content:
+  body:
+    label: inline
+    type: text_default
+    weight: 1
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_author_s_:
+    weight: 15
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_date_published:
+    weight: 18
+    label: inline
+    settings:
+      timezone_override: ''
+      format_type: html_month
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    type: datetime_default
+    region: content
+  field_media:
+    type: media_thumbnail
+    weight: 40
+    label: inline
+    settings:
+      image_style: media_library
+      image_link: ''
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    region: content
+  field_product_code:
+    weight: 12
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+hidden:
+  field_admin: true
+  field_area_list: true
+  field_cover_image: true
+  field_deptlist: true
+  field_document_type: true
+  field_doi: true
+  field_editor_s_: true
+  field_external_url: true
+  field_iied_url: true
+  field_isbn: true
+  field_issn: true
+  field_journal_ref: true
+  field_lists: true
+  field_lit_code: true
+  field_parent: true
+  field_pdf: true
+  field_pdf_pages: true
+  field_product_id: true
+  field_project: true
+  field_publisher: true
+  field_publisher_legacy: true
+  field_reportagency1: true
+  field_reportagency2: true
+  field_reportagency3: true
+  field_reportfin1: true
+  field_reportfin2: true
+  field_reportfin3: true
+  field_reportingcode1: true
+  field_reportingcode2: true
+  field_series: true
+  field_series_item_code: true
+  field_short_title: true
+  field_source_publication: true
+  field_status: true
+  field_tags: true
+  field_team: true
+  field_theme_s_: true
+  field_translator: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

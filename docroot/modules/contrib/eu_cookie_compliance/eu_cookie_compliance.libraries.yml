@@ -1,0 +1,31 @@
+eu_cookie_compliance:
+  version: 1.9
+  js:
+    js/eu_cookie_compliance.js: { attributes: { defer: true } }
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+    - core/jquery.once
+    - core/jquery.cookie
+eu_cookie_compliance_default:
+  version: 1.0
+  css:
+    state:
+      css/eu_cookie_compliance.css: {}
+  dependencies:
+    - eu_cookie_compliance/eu_cookie_compliance
+eu_cookie_compliance_bare:
+  version: 1.9
+  css:
+    state:
+      css/eu_cookie_compliance.bare.css: {}
+  dependencies:
+    - eu_cookie_compliance/eu_cookie_compliance
+admin:
+  version: 1.9
+  css:
+    state:
+      css/eu_cookie_compliance_admin.css: {}
+  js:
+    js/eu_cookie_compliance_admin.js: {}

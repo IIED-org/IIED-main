@@ -38,10 +38,12 @@
         "drupal/delete_all": "^2.0",
         "drupal/dropdown_language": "^2.6",
         "drupal/ds": "^3.9",
+        "drupal/eu_cookie_compliance": "^1.14",
         "drupal/facets": "^1.5",
         "drupal/facets_country": "^1.0",
         "drupal/field_group": "^3.1",
         "drupal/geolocation": "^3.2",
+        "drupal/google_analytics": "^3.1",
         "drupal/inline_entity_form": "^1.0@RC",
         "drupal/isbn": "^1.2",
         "drupal/language_switcher_extended": "^1.0",
@@ -50,6 +52,7 @@
         "drupal/media_revisions_ui": "^2.0",
         "drupal/media_thumbnails_pdf": "^1.0",
         "drupal/merge_translations": "^1.1",
+        "drupal/metatag": "^1.15",
         "drupal/migrate_file": "1.x-dev",
         "drupal/name": "^1.0@RC",
         "drupal/paragraphs": "^1.12",
@@ -60,6 +63,7 @@
         "drupal/publishcontent": "^1.2",
         "drupal/rabbit_hole": "^1.0@beta",
         "drupal/radix": "^4.10",
+        "drupal/readonlymode": "^1.1",
         "drupal/redirect": "^1.6",
         "drupal/responsive_menu": "^4.4",
         "drupal/search_api_autocomplete": "^1.4",
@@ -183,6 +187,9 @@
           "drupal/facets": {
             "AJAX facets broken": "https://www.drupal.org/files/issues/2020-10-02/facets-ajax-3052574-89.patch",
             "Show search term in summary": "https://www.drupal.org/files/issues/2020-12-02/2979223--39.patch"
+          },
+          "drupal/ds": {
+            "Provide entity context to DS block fields":"https://www.drupal.org/files/issues/2020-10-12/ds-content_entity-2939322-14.patch"
           }
         }
     }

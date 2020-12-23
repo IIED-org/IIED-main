@@ -6,4 +6,5 @@ id: viewer
 label: Viewer
 weight: -8
 is_admin: null
-permissions: {  }
+permissions:
+  - 'display eu cookie compliance popup'

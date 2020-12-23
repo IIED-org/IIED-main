@@ -20,6 +20,7 @@ permissions:
   - 'delete own publication content'
   - 'delete terms in list'
   - 'delete terms in person'
+  - 'display eu cookie compliance popup'
   - 'edit any document media'
   - 'edit any image media'
   - 'edit any publication content'
