@@ -81,9 +81,9 @@ third_party_settings:
     regions:
       ds_content:
         - group_row
-        - group_card_footer
+        - 'dynamic_block_field:node-cover_image'
         - node_title
-        - field_media
+        - group_card_footer
         - field_date_published
         - group_card_body
     fields:
@@ -121,7 +121,7 @@ third_party_settings:
             fi-def-at: false
       node_title:
         plugin_id: node_title
-        weight: 2
+        weight: 1
         label: hidden
         formatter: default
         settings:
@@ -158,6 +158,7 @@ third_party_settings:
   field_group:
     group_card_body:
       children:
+        - 'dynamic_block_field:node-cover_image'
         - group_card_footer
       parent_name: group_row
       weight: 2
@@ -176,7 +177,6 @@ third_party_settings:
       label: card-body
     group_row:
       children:
-        - 'dynamic_block_field:node-cover_image'
         - group_card_body
       parent_name: ''
       weight: 0
@@ -210,7 +210,7 @@ third_party_settings:
         effect: none
         speed: fast
         id: ''
-        classes: 'card-body d-flex flex-column h-100'
+        classes: 'card-body d-flex flex-column'
       label: 'card inner'
 id: node.publication.card
 targetEntityType: node
@@ -219,7 +219,7 @@ mode: card
 content:
   field_date_published:
     type: datetime_custom
-    weight: 3
+    weight: 2
     region: ds_content
     label: hidden
     settings:
@@ -235,12 +235,12 @@ content:
             lbw-el: ''
             lbw-cl: ''
             lbw-at: ''
-            ow: true
-            ow-el: div
-            ow-cl: 'text-muted mt-auto'
+            ow-el: ''
+            ow-cl: ''
             ow-at: ''
-            fis-el: ''
-            fis-cl: ''
+            fis: true
+            fis-el: div
+            fis-cl: 'text-muted mt-auto'
             fis-at: ''
             fi-el: ''
             fi-cl: ''
@@ -248,46 +248,9 @@ content:
             suffix: ''
             lbw: false
             lb-col: false
+            ow: false
             ow-def-at: false
             ow-def-cl: false
-            fis: false
-            fis-def-at: false
-            fi: false
-            fi-def-at: false
-  field_media:
-    type: media_thumbnail
-    weight: 2
-    region: ds_content
-    label: hidden
-    settings:
-      image_style: media_library
-      image_link: ''
-    third_party_settings:
-      ds:
-        ft:
-          id: expert
-          settings:
-            lb: ''
-            prefix: ''
-            lbw-el: ''
-            lbw-cl: ''
-            lbw-at: ''
-            ow: true
-            ow-el: div
-            ow-cl: 'col-4 col-xl-12 p-3'
-            ow-at: ''
-            fis-el: ''
-            fis-cl: ''
-            fis-at: ''
-            fi-el: ''
-            fi-cl: ''
-            fi-at: ''
-            suffix: ''
-            lbw: false
-            lb-col: false
-            ow-def-at: false
-            ow-def-cl: false
-            fis: false
             fis-def-at: false
             fi: false
             fi-def-at: false
