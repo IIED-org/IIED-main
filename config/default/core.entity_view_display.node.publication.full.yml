@@ -136,6 +136,7 @@ third_party_settings:
         - field_issn
         - field_doi
         - field_product_code
+        - sharing_buttons
       parent_name: group_row_one
       weight: 5
       format_type: html_element
@@ -267,8 +268,8 @@ third_party_settings:
         - group_row_one
         - 'dynamic_block_field:node-cover_image'
         - 'dynamic_block_field:node-download_button'
-        - group_pub_header
         - node_title
+        - group_pub_header
         - 'dynamic_block_field:node-language_links'
         - body
         - field_author_s_
@@ -284,14 +285,15 @@ third_party_settings:
         - field_publisher
         - 'dynamic_block_field:node-country_list'
         - field_iied_url
-        - field_external_url
         - field_series
+        - field_external_url
         - field_source_publication
         - field_journal_ref
         - field_isbn
         - field_issn
         - field_doi
         - field_product_code
+        - sharing_buttons
     fields:
       'dynamic_block_field:node-citation':
         plugin_id: 'dynamic_block_field:node-citation'
@@ -301,14 +303,35 @@ third_party_settings:
       'dynamic_block_field:node-country_list':
         plugin_id: 'dynamic_block_field:node-country_list'
         weight: 13
-        label: inline
+        label: hidden
         formatter: default
         ft:
-          id: default
+          id: expert
           settings:
             lb: Area
+            prefix: ''
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
             lb-col: true
-            classes: {  }
+            ow-el: ''
+            ow-cl: ''
+            ow-at: ''
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            lbw: false
+            ow: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
       'dynamic_block_field:node-cover_image':
         plugin_id: 'dynamic_block_field:node-cover_image'
         weight: 0
@@ -518,7 +541,7 @@ content:
     type: datetime_default
     region: ds_content
   field_doi:
-    weight: 20
+    weight: 19
     label: inline
     settings:
       trim_length: 80
@@ -568,7 +591,7 @@ content:
     region: ds_content
   field_external_url:
     weight: 14
-    label: inline
+    label: visually_hidden
     settings:
       trim_length: 80
       url_only: false
@@ -580,7 +603,7 @@ content:
     region: ds_content
   field_iied_url:
     weight: 13
-    label: inline
+    label: visually_hidden
     settings:
       trim_length: 80
       url_only: false
@@ -591,14 +614,14 @@ content:
     type: link
     region: ds_content
   field_isbn:
-    weight: 18
+    weight: 17
     label: inline
     settings: {  }
     third_party_settings: {  }
     type: isbn_default
     region: ds_content
   field_issn:
-    weight: 19
+    weight: 18
     label: inline
     settings:
       link_to_entity: false
@@ -606,7 +629,7 @@ content:
     type: string
     region: ds_content
   field_journal_ref:
-    weight: 17
+    weight: 16
     label: inline
     settings:
       link_to_entity: false
@@ -614,7 +637,7 @@ content:
     type: string
     region: ds_content
   field_product_code:
-    weight: 21
+    weight: 20
     label: inline
     settings:
       link_to_entity: false
@@ -630,7 +653,7 @@ content:
     type: entity_reference_label
     region: ds_content
   field_series:
-    weight: 15
+    weight: 14
     label: inline
     settings:
       link: true
@@ -638,7 +661,7 @@ content:
     type: entity_reference_label
     region: ds_content
   field_source_publication:
-    weight: 16
+    weight: 15
     label: inline
     settings:
       link_to_entity: false
@@ -683,10 +706,10 @@ content:
             fi: false
             fi-def-at: false
   sharing_buttons:
-    weight: 100
+    weight: 21
+    region: ds_content
     settings: {  }
     third_party_settings: {  }
-    region: left
 hidden:
   field_admin: true
   field_area_list: true

@@ -12,7 +12,7 @@ dependencies:
     - iied_pubs
 third_party_settings:
   block_class:
-    classes: 'col-12 col-lg-6 hero-search-block'
+    classes: 'col-12 col-lg-6 hero-search-block pb-4'
 id: exposedformsearchpage_2_2
 theme: iied_pubs
 region: header
