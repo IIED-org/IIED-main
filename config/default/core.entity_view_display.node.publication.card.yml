@@ -49,6 +49,7 @@ dependencies:
     - field.field.node.publication.field_translator
     - node.type.publication
   module:
+    - datetime
     - ds
     - field_group
     - layout_builder
@@ -80,9 +81,11 @@ third_party_settings:
     regions:
       ds_content:
         - group_row
-        - 'dynamic_block_field:node-cover_image'
-        - group_card_body
+        - group_card_footer
         - node_title
+        - field_media
+        - field_date_published
+        - group_card_body
     fields:
       'dynamic_block_field:node-cover_image':
         plugin_id: 'dynamic_block_field:node-cover_image'
@@ -118,7 +121,7 @@ third_party_settings:
             fi-def-at: false
       node_title:
         plugin_id: node_title
-        weight: 7
+        weight: 2
         label: hidden
         formatter: default
         settings:
@@ -133,7 +136,6 @@ third_party_settings:
             lbw-el: ''
             lbw-cl: ''
             lbw-at: ''
-            ow: true
             ow-el: div
             ow-cl: card-body
             ow-at: ''
@@ -147,6 +149,7 @@ third_party_settings:
             suffix: ''
             lbw: false
             lb-col: false
+            ow: false
             ow-def-at: false
             ow-def-cl: false
             fis: false
@@ -155,7 +158,7 @@ third_party_settings:
   field_group:
     group_card_body:
       children:
-        - node_title
+        - group_card_footer
       parent_name: group_row
       weight: 2
       format_type: html_element
@@ -180,8 +183,6 @@ third_party_settings:
       format_type: html_element
       region: ds_content
       format_settings:
-        id: ''
-        classes: 'row no-gutters'
         element: div
         show_label: false
         label_element: h3
@@ -189,13 +190,17 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
+        id: ''
+        classes: 'row no-gutters h-100'
       label: Row
     group_card_footer:
-      children: {  }
-      parent_name: ''
-      weight: 61
+      children:
+        - node_title
+        - field_date_published
+      parent_name: group_card_body
+      weight: 1
       format_type: html_element
-      region: hidden
+      region: ds_content
       format_settings:
         element: div
         show_label: false
@@ -205,20 +210,93 @@ third_party_settings:
         effect: none
         speed: fast
         id: ''
-        classes: 'card-meta text-muted col-8 col-xl-12'
-      label: 'card footer'
+        classes: 'card-body d-flex flex-column h-100'
+      label: 'card inner'
 id: node.publication.card
 targetEntityType: node
 bundle: publication
 mode: card
-content: {  }
+content:
+  field_date_published:
+    type: datetime_custom
+    weight: 3
+    region: ds_content
+    label: hidden
+    settings:
+      timezone_override: ''
+      date_format: 'F Y'
+    third_party_settings:
+      ds:
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            prefix: ''
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow: true
+            ow-el: div
+            ow-cl: 'text-muted mt-auto'
+            ow-at: ''
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            lbw: false
+            lb-col: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
+  field_media:
+    type: media_thumbnail
+    weight: 2
+    region: ds_content
+    label: hidden
+    settings:
+      image_style: media_library
+      image_link: ''
+    third_party_settings:
+      ds:
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            prefix: ''
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow: true
+            ow-el: div
+            ow-cl: 'col-4 col-xl-12 p-3'
+            ow-at: ''
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            lbw: false
+            lb-col: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
 hidden:
   body: true
   field_admin: true
   field_area_list: true
   field_author_s_: true
   field_cover_image: true
-  field_date_published: true
   field_deptlist: true
   field_document_type: true
   field_doi: true

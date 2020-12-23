@@ -1,0 +1,24 @@
+iconset: social-icons--no-color
+services:
+  facebook: facebook
+  twitter: twitter
+  email: email
+  linkedin: linkedin
+  whatsapp: 0
+  facebook_messenger: 0
+  pinterest: 0
+  digg: 0
+  stumbleupon: 0
+  slashdot: 0
+  tumblr: 0
+  reddit: 0
+  evernote: 0
+  print: 0
+  copy: 0
+width: 30px
+radius: 100%
+print_css: ''
+facebook_app_id: ''
+node_field: 1
+_core:
+  default_config_hash: DlFPozYNOFuBqQVms526YfSXmbsKH-9c1-f4ZYJXDc0
