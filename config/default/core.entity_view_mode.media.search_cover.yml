@@ -1,0 +1,10 @@
+uuid: 7f7f37d4-8d71-4047-b961-67c091f2dc71
+langcode: en
+status: true
+dependencies:
+  module:
+    - media
+id: media.search_cover
+label: 'Search cover'
+targetEntityType: media
+cache: true

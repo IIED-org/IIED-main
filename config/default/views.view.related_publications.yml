@@ -260,6 +260,7 @@ display:
         operator: AND
         groups:
           1: AND
+      css_class: pb-5
     cache_metadata:
       max-age: -1
       contexts:

@@ -78,9 +78,9 @@ third_party_settings:
     regions:
       ds_content:
         - group_media
-        - 'dynamic_block_field:node-cover_image'
-        - search_api_excerpt
+        - 'dynamic_block_field:node-cover_image_search'
         - group_result
+        - search_api_excerpt
         - node_title
         - group_meta
         - field_date_published
@@ -88,9 +88,9 @@ third_party_settings:
         - field_author_s_
         - field_editor_s_
     fields:
-      'dynamic_block_field:node-cover_image':
-        plugin_id: 'dynamic_block_field:node-cover_image'
-        weight: 2
+      'dynamic_block_field:node-cover_image_search':
+        plugin_id: 'dynamic_block_field:node-cover_image_search'
+        weight: 0
         label: hidden
         formatter: default
         ft:
@@ -126,7 +126,7 @@ third_party_settings:
         label: hidden
         formatter: default
         settings:
-          wrapper: h5
+          wrapper: h4
           class: ''
           link: false
         ft:
@@ -145,7 +145,7 @@ third_party_settings:
         - field_author_s_
         - field_editor_s_
       parent_name: group_media
-      weight: 4
+      weight: 2
       format_type: html_element
       region: ds_content
       format_settings:
@@ -161,7 +161,7 @@ third_party_settings:
       label: Result
     group_media:
       children:
-        - 'dynamic_block_field:node-cover_image'
+        - 'dynamic_block_field:node-cover_image_search'
         - group_result
       parent_name: ''
       weight: 0
@@ -396,3 +396,4 @@ hidden:
   field_translator: true
   langcode: true
   links: true
+  sharing_buttons: true

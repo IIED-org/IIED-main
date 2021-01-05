@@ -327,7 +327,7 @@ display:
           group_type: group
           admin_label: ''
           empty: false
-          content: '<p>Displaying @start - @end of @total publications</p>'
+          content: '<p class="mt-2">Displaying @start - @end of @total publications</p>'
           plugin_id: result
       footer: {  }
       empty: {  }

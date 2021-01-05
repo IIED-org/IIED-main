@@ -12,3 +12,10 @@ h1, h2, h3, h4, h5, h6, .display-4 {
   font-family: $headings-font-family;
   font-weight: $headings-font-weight;
 }
+
+/* card adjustments */
+
+h5.card-title {
+  font-size: 1rem;
+  line-height: 1.45;
+}

@@ -1,0 +1,15 @@
+uuid: 6ff87f55-22fa-4aff-897e-2f6ffeefefdf
+langcode: en
+status: true
+dependencies: {  }
+name: search_cover
+label: 'Search cover'
+effects:
+  4deec8a5-328a-4cd9-a9cf-a0e24f2bd12c:
+    uuid: 4deec8a5-328a-4cd9-a9cf-a0e24f2bd12c
+    id: image_scale
+    weight: 1
+    data:
+      width: 100
+      height: null
+      upscale: false

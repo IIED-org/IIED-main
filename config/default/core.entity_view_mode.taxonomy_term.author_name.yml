@@ -1,0 +1,10 @@
+uuid: b5ef7edc-a0d7-4bc1-88b7-810eff63e6bf
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.author_name
+label: 'Author name'
+targetEntityType: taxonomy_term
+cache: true

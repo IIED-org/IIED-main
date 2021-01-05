@@ -1,0 +1,71 @@
+uuid: 4e1ef72d-edad-44c4-9c2a-89107c450300
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.taxonomy_term.author_name
+    - field.field.taxonomy_term.person.field_legacy_iscanonical
+    - field.field.taxonomy_term.person.field_link
+    - field.field.taxonomy_term.person.field_name
+    - field.field.taxonomy_term.person.field_organisation
+    - taxonomy.vocabulary.person
+  module:
+    - ds
+    - layout_builder
+    - name
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+  ds:
+    layout:
+      id: ds_reset
+      library: null
+      disable_css: false
+      entity_classes: no_classes
+      settings:
+        label: ''
+        wrappers:
+          ds_content: div
+        outer_wrapper: div
+        attributes: ''
+        link_attribute: ''
+        link_custom: ''
+        classes:
+          layout_class: {  }
+          ds_content: {  }
+    regions:
+      ds_content:
+        - field_name
+id: taxonomy_term.person.author_name
+targetEntityType: taxonomy_term
+bundle: person
+mode: author_name
+content:
+  field_name:
+    weight: 0
+    label: hidden
+    settings:
+      format: cite_name
+      list_format: ''
+      markup: none
+      link_target: ''
+      preferred_field_reference: ''
+      preferred_field_reference_separator: ', '
+      alternative_field_reference: ''
+      alternative_field_reference_separator: ', '
+    third_party_settings:
+      ds:
+        ft:
+          id: reset
+          settings:
+            lb: ''
+    type: name_default
+    region: ds_content
+hidden:
+  description: true
+  field_legacy_iscanonical: true
+  field_link: true
+  field_organisation: true
+  langcode: true
+  search_api_excerpt: true

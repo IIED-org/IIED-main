@@ -1,0 +1,51 @@
+uuid: 5664a8c6-a4ac-4cef-b559-36662effc3b2
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.search_cover
+    - field.field.media.document.field_media_document
+    - field.field.media.document.field_pdf_pages
+    - field.field.media.document.field_size
+    - image.style.search_cover
+    - media.type.document
+  module:
+    - ds
+    - image
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    allow_custom: false
+    enabled: false
+_core:
+  default_config_hash: DXitcriWmE5QHvGvk2OzWouaSnXD5uipkRdAG6_pnkg
+id: media.document.search_cover
+targetEntityType: media
+bundle: document
+mode: search_cover
+content:
+  thumbnail:
+    type: image
+    weight: 0
+    region: content
+    label: hidden
+    settings:
+      image_style: search_cover
+      image_link: ''
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+hidden:
+  created: true
+  field_media_document: true
+  field_pdf_pages: true
+  field_size: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  uid: true

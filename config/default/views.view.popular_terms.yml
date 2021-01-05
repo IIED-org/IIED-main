@@ -56,7 +56,7 @@ display:
         type: default
         options:
           grouping: {  }
-          row_class: btn-group
+          row_class: 'btn-group mr-1'
           default_row_class: false
       row:
         type: fields
