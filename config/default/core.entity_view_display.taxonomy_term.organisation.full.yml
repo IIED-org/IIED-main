@@ -46,10 +46,11 @@ third_party_settings:
     regions:
       ds_content:
         - taxonomy_term_title
-        - field_logo
-        - description
+        - field_full_name
         - field_location
         - field_url
+        - field_logo
+        - description
     fields:
       taxonomy_term_title:
         plugin_id: taxonomy_term_title
@@ -74,12 +75,20 @@ content:
   description:
     label: hidden
     type: text_default
-    weight: 2
+    weight: 5
     region: ds_content
     settings: {  }
     third_party_settings: {  }
+  field_full_name:
+    type: string
+    weight: 1
+    region: ds_content
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
   field_location:
-    weight: 3
+    weight: 2
     label: hidden
     settings: {  }
     third_party_settings:
@@ -95,12 +104,12 @@ content:
             ow-el: ''
             ow-cl: ''
             ow-at: ''
-            fis-el: ''
-            fis-cl: ''
+            fis: true
+            fis-el: span
+            fis-cl: text-muted
             fis-at: ''
-            fi: true
-            fi-el: ''
-            fi-cl: ''
+            fi-el: span
+            fi-cl: 'float-left comma-list'
             fi-at: ''
             suffix: ''
             lbw: false
@@ -108,13 +117,13 @@ content:
             ow: false
             ow-def-at: false
             ow-def-cl: false
-            fis: false
             fis-def-at: false
+            fi: false
             fi-def-at: false
     type: address_default
     region: ds_content
   field_logo:
-    weight: 1
+    weight: 4
     label: hidden
     settings:
       image_style: page
@@ -131,7 +140,7 @@ content:
             lbw-at: ''
             ow: true
             ow-el: a
-            ow-cl: ''
+            ow-cl: float-right
             ow-at: 'href="[term:field_url]"'
             fis-el: ''
             fis-cl: ''
@@ -151,7 +160,7 @@ content:
     type: image
     region: ds_content
   field_url:
-    weight: 4
+    weight: 3
     label: hidden
     settings:
       trim_length: 80
@@ -165,7 +174,6 @@ content:
 hidden:
   field_alias: true
   field_email: true
-  field_full_name: true
   field_location_legacy: true
   field_type: true
   field_valid: true

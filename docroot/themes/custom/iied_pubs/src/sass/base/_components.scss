@@ -142,6 +142,8 @@
       display: none;
     }
     max-width: fit-content;
+    margin-bottom: 2rem;
+    padding-top: 2px;
   }
 }
 
@@ -198,6 +200,7 @@
 
     .form-control {
     height: calc(2em + 0.75rem + 2px);
+    border-color: #fff;
   }
 }
 

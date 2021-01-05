@@ -81,15 +81,15 @@ third_party_settings:
     regions:
       ds_content:
         - group_row
-        - 'dynamic_block_field:node-cover_image'
-        - node_title
+        - 'dynamic_block_field:node-cover_image_card'
         - group_card_footer
+        - node_title
         - field_date_published
         - group_card_body
     fields:
-      'dynamic_block_field:node-cover_image':
-        plugin_id: 'dynamic_block_field:node-cover_image'
-        weight: 0
+      'dynamic_block_field:node-cover_image_card':
+        plugin_id: 'dynamic_block_field:node-cover_image_card'
+        weight: 1
         label: hidden
         formatter: default
         ft:
@@ -158,10 +158,9 @@ third_party_settings:
   field_group:
     group_card_body:
       children:
-        - 'dynamic_block_field:node-cover_image'
         - group_card_footer
       parent_name: group_row
-      weight: 2
+      weight: 3
       format_type: html_element
       region: ds_content
       format_settings:
@@ -177,6 +176,7 @@ third_party_settings:
       label: card-body
     group_row:
       children:
+        - 'dynamic_block_field:node-cover_image_card'
         - group_card_body
       parent_name: ''
       weight: 0
@@ -191,7 +191,7 @@ third_party_settings:
         effect: none
         speed: fast
         id: ''
-        classes: 'row no-gutters h-100'
+        classes: 'row no-gutters'
       label: Row
     group_card_footer:
       children:
@@ -210,7 +210,7 @@ third_party_settings:
         effect: none
         speed: fast
         id: ''
-        classes: 'card-body d-flex flex-column'
+        classes: card-body
       label: 'card inner'
 id: node.publication.card
 targetEntityType: node
@@ -240,7 +240,7 @@ content:
             ow-at: ''
             fis: true
             fis-el: div
-            fis-cl: 'text-muted mt-auto'
+            fis-cl: text-muted
             fis-at: ''
             fi-el: ''
             fi-cl: ''
@@ -300,3 +300,4 @@ hidden:
   langcode: true
   links: true
   search_api_excerpt: true
+  sharing_buttons: true

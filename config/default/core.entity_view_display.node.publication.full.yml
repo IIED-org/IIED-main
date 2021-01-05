@@ -106,6 +106,7 @@ third_party_settings:
     group_pub_body:
       children:
         - 'dynamic_block_field:node-download_button'
+        - 'dynamic_block_field:node-source'
         - body
         - group_related_links
         - 'dynamic_block_field:node-citation'
@@ -192,7 +193,7 @@ third_party_settings:
         - field_iied_url
         - field_external_url
       parent_name: group_pub_body
-      weight: 2
+      weight: 3
       format_type: html_element
       region: ds_content
       format_settings:
@@ -232,7 +233,7 @@ third_party_settings:
         - group_related_project
         - group_related_publications
       parent_name: ''
-      weight: 41
+      weight: 43
       format_type: html_element
       region: hidden
       format_settings:
@@ -271,22 +272,23 @@ third_party_settings:
         - node_title
         - group_pub_header
         - 'dynamic_block_field:node-language_links'
+        - 'dynamic_block_field:node-source'
         - body
         - field_author_s_
         - group_cover_image
-        - group_related_links
-        - 'dynamic_block_field:node-citation'
         - group_pub_body
+        - group_related_links
         - field_editor_s_
+        - 'dynamic_block_field:node-citation'
         - field_translator
         - group_pub_detail
         - 'dynamic_block_field:node-page_count'
         - field_date_published
         - field_publisher
-        - 'dynamic_block_field:node-country_list'
         - field_iied_url
-        - field_series
+        - 'dynamic_block_field:node-country_list'
         - field_external_url
+        - field_series
         - field_source_publication
         - field_journal_ref
         - field_isbn
@@ -297,7 +299,7 @@ third_party_settings:
     fields:
       'dynamic_block_field:node-citation':
         plugin_id: 'dynamic_block_field:node-citation'
-        weight: 3
+        weight: 4
         label: hidden
         formatter: default
       'dynamic_block_field:node-country_list':
@@ -439,6 +441,38 @@ third_party_settings:
             fis-def-at: false
             fi: false
             fi-def-at: false
+      'dynamic_block_field:node-source':
+        plugin_id: 'dynamic_block_field:node-source'
+        weight: 1
+        label: hidden
+        formatter: default
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            prefix: ''
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            ow: true
+            ow-el: div
+            ow-cl: mb-3
+            ow-at: ''
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            lbw: false
+            lb-col: false
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
+            fis-def-at: false
+            fi: false
+            fi-def-at: false
       node_title:
         plugin_id: node_title
         weight: 1
@@ -462,7 +496,7 @@ content:
   body:
     label: hidden
     type: text_default
-    weight: 1
+    weight: 2
     settings: {  }
     third_party_settings: {  }
     region: ds_content

@@ -1,0 +1,8 @@
+uuid: 6dbaed98-eab3-4cfa-93bc-b75828bb7bd3
+langcode: en
+status: true
+dependencies: {  }
+id: cite_name
+label: 'Cite name'
+locked: false
+pattern: 'f, +w.'

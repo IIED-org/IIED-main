@@ -1,0 +1,15 @@
+uuid: 3b668a4d-384e-4610-b79d-3fa63b28b26c
+langcode: en
+status: true
+dependencies: {  }
+name: card_cover
+label: 'Card cover'
+effects:
+  8bb80c5d-9e71-4eb6-b1cc-522d226cde27:
+    uuid: 8bb80c5d-9e71-4eb6-b1cc-522d226cde27
+    id: image_scale
+    weight: 1
+    data:
+      width: 190
+      height: null
+      upscale: false

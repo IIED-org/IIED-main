@@ -36,7 +36,7 @@
     {% endblock %}
   {% endembed %}
 
-  <main class="pb-5">
+  <main>
     {% if page.header %}
       <header class="page__header mb-4 bg-secondary">
         <div class="container">
@@ -56,7 +56,7 @@
     {% endif %}
 
     {% if page.content %}
-      <div class="page__content">
+      <div class="page__content pb-4">
         <div class="container">
           {{ page.content }}
 
@@ -76,20 +76,19 @@
             </div>
           {% endif %}
 
-          {% if page.featured_bottom %}
-            {% block featured_bottom %}
-              <div class="featured-bottom">
-                <aside class="featured-bottom__inner section {{ container }} clearfix" role="complementary">
-                  {{ page.featured_bottom }}
-                </aside>
-              </div>
-            {% endblock %}
-          {% endif %}
-
         </div>
       </div>
     {% endif %}
 
+    {% if page.featured_bottom %}
+      {% block featured_bottom %}
+        <div class="featured-bottom border-top py-4">
+          <aside class="featured-bottom__inner section {{ container }} clearfix" role="complementary">
+            {{ page.featured_bottom }}
+          </aside>
+        </div>
+      {% endblock %}
+    {% endif %}
 
   </main>
 

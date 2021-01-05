@@ -1,0 +1,20 @@
+id: cover_image_search
+label: 'Cover image search'
+ui_limit: ''
+properties:
+  block: 'views_block:cover_image-block_3'
+  use_block_title: false
+  add_block_wrappers: false
+  config:
+    id: 'views_block:cover_image-block_3'
+    label: ''
+    provider: views
+    label_display: visible
+    views_label: ''
+    items_per_page: none
+    context_mapping:
+      nid: '@ds.ds_block_field_entity_context:node'
+type: block
+type_label: 'Block field'
+entities:
+  node: node

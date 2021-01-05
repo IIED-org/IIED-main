@@ -64,3 +64,17 @@
     float: left;
   }
 }
+
+.block--searchsummary {
+   .source-summary-count, .source-summary-item {
+    font-weight: bold;
+  }
+}
+
+/* search page */
+.block--theme-2, .page-view-search .view-result .row:first-of-type  {
+    @extend .rounded-top;
+}
+.block--country-2, .page-view-search .view-result .row:last-of-type {
+    @extend .rounded-bottom;
+ }

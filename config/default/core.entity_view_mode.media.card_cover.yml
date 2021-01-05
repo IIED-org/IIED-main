@@ -1,0 +1,10 @@
+uuid: 421d8cb3-1293-4306-b074-0cf648bad753
+langcode: en
+status: true
+dependencies:
+  module:
+    - media
+id: media.card_cover
+label: 'Card cover'
+targetEntityType: media
+cache: true
