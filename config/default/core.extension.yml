@@ -21,6 +21,8 @@ module:
   components: 0
   computed_field: 0
   config: 0
+  config_filter: 0
+  config_split: 0
   contact: 0
   contextual: 0
   csv_serialization: 0
