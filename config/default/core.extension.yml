@@ -30,9 +30,6 @@ module:
   ctools_block: 0
   datetime: 0
   dblog: 0
-  delete_all: 0
-  devel: 0
-  devel_generate: 0
   dynamic_page_cache: 0
   editor: 0
   entity_reference_revisions: 0
@@ -73,7 +70,6 @@ module:
   menu_ui: 0
   merge_translations: 0
   migrate: 0
-  migrate_devel: 0
   migrate_directory: 0
   migrate_file: 0
   migrate_plus: 0
@@ -121,7 +117,6 @@ module:
   views_bulk_edit: 0
   views_bulk_operations: 0
   views_data_export: 0
-  views_ui: 0
   ds: 1
   pathauto: 1
   content_translation: 10
