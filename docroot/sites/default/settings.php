@@ -810,6 +810,10 @@ $databases['pubs']['default'] = array (
 
 $config['acquia_search_solr.settings']['override_search_core'] = 'AGHX-142716.prod.irforum';
 
+$_env_is_prod = isset($_ENV['AH_SITE_ENVIRONMENT']) && $_ENV['AH_SITE_ENVIRONMENT'] == 'prod';
+$config['config_split.config_split.dev']['status'] = !$_env_is_prod;
+$config['config_split.config_split.live']['status'] = $_env_is_prod;
+
 /**
  * Load local development override configuration, if available.
  *
