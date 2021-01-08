@@ -1,0 +1,41 @@
+uuid: f35b184d-3129-43ba-856e-b829a1d4e9b3
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - migrate_pubs
+id: pubs_orgs
+class: null
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - orgs
+migration_group: pubs
+label: 'Import publishers & organisations from CSV file to taxonomy terms'
+source:
+  plugin: csv
+  path: '../import/Publishers and organisations - All Orgs.csv'
+  ids:
+    - id
+  delimiter: ','
+  enclosure: '"'
+  header_row_count: 1
+process:
+  name: Name
+  field_full_name: 'Full name'
+  field_location_legacy: Location
+  field_url/uri: URL
+  field_valid:
+    plugin: static_map
+    source: Verified
+    map:
+      'Yes': true
+      'No': false
+  field_type: Group
+  vid:
+    plugin: default_value
+    default_value: organisation
+destination:
+  plugin: 'entity:taxonomy_term'
+migration_dependencies: {  }

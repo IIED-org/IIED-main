@@ -1,0 +1,15 @@
+uuid: 2719c6ff-fc59-4519-971f-b14df9eb097c
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - migrate_pubs
+id: pubs
+label: 'Pubs library imports'
+description: 'Migration from pubs.iied.org'
+source_type: 'Custom tables'
+module: null
+shared_configuration:
+  source:
+    key: pubs
