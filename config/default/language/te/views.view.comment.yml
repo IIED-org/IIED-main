@@ -1,0 +1,33 @@
+display:
+  default:
+    display_options:
+      fields:
+        subject:
+          label: విషయం
+        name:
+          label: రచయిత
+        operations:
+          label: కార్యాలు
+      filters:
+        subject:
+          expose:
+            label: విషయం
+        langcode:
+          expose:
+            label: భాష
+  page_unapproved:
+    display_options:
+      filters:
+        subject:
+          expose:
+            label: విషయం
+        langcode:
+          expose:
+            label: భాష
+      fields:
+        subject:
+          label: విషయం
+        name:
+          label: రచయిత
+        operations:
+          label: కార్యాలు

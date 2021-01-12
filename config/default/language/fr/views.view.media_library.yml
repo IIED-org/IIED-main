@@ -1,4 +1,14 @@
 display:
+  default:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: Nom
+        langcode:
+          expose:
+            label: Langue
+      title: Média
   page:
     display_options:
       fields:
@@ -6,3 +16,22 @@ display:
           text: Modifier
         delete_media:
           text: Supprimer
+  widget:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: Nom
+  widget_table:
+    display_options:
+      fields:
+        thumbnail__target_id:
+          label: Vignette
+        name:
+          label: Nom
+        uid:
+          label: Auteur
+      filters:
+        name:
+          expose:
+            label: Nom

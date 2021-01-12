@@ -1,0 +1,30 @@
+label: సారము
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: శీర్షిక
+        name:
+          label: రచయిత
+        status:
+          label: స్థితి
+        operations:
+          label: కార్యాలు
+      filters:
+        title:
+          expose:
+            label: శీర్షిక
+        status:
+          expose:
+            label: స్థితి
+        langcode:
+          expose:
+            label: భాష
+      title: సారము
+  page_1:
+    display_options:
+      menu:
+        title: సారము
+      tab_options:
+        title: సారము

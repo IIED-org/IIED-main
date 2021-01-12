@@ -1,0 +1,19 @@
+display:
+  default:
+    display_options:
+      fields:
+        name:
+          label: 'Nazwa użytkownika'
+        status:
+          label: Status
+          settings:
+            format_custom_true: Aktywne
+        operations:
+          label: Operacje
+      filters:
+        status:
+          group_info:
+            label: Status
+            group_items:
+              1:
+                title: Aktywne

@@ -1,0 +1,33 @@
+display:
+  default:
+    display_options:
+      fields:
+        subject:
+          label: Naziv
+        name:
+          label: Autor
+        operations:
+          label: Operacije
+      filters:
+        subject:
+          expose:
+            label: Naziv
+        langcode:
+          expose:
+            label: Jezik
+  page_unapproved:
+    display_options:
+      filters:
+        subject:
+          expose:
+            label: Naziv
+        langcode:
+          expose:
+            label: Jezik
+      fields:
+        subject:
+          label: Naziv
+        name:
+          label: Autor
+        operations:
+          label: Operacije

@@ -1,0 +1,33 @@
+display:
+  default:
+    display_options:
+      fields:
+        subject:
+          label: 主题
+        name:
+          label: 作者
+        operations:
+          label: 操作
+      filters:
+        subject:
+          expose:
+            label: 主题
+        langcode:
+          expose:
+            label: 语言
+  page_unapproved:
+    display_options:
+      filters:
+        subject:
+          expose:
+            label: 主题
+        langcode:
+          expose:
+            label: 语言
+      fields:
+        subject:
+          label: 主题
+        name:
+          label: 作者
+        operations:
+          label: 操作

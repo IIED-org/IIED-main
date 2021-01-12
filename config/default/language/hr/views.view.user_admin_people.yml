@@ -1,0 +1,19 @@
+display:
+  default:
+    display_options:
+      fields:
+        name:
+          label: 'Korisničko ime'
+        status:
+          label: Status
+          settings:
+            format_custom_true: Aktivno
+        operations:
+          label: Operacije
+      filters:
+        status:
+          group_info:
+            label: Status
+            group_items:
+              1:
+                title: Aktivno

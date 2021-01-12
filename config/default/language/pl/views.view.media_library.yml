@@ -1,4 +1,14 @@
 display:
+  default:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: Nazwa
+        langcode:
+          expose:
+            label: Język
+      title: Media
   page:
     display_options:
       fields:
@@ -6,3 +16,22 @@ display:
           text: Edytuj
         delete_media:
           text: Usuń
+  widget:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: Nazwa
+  widget_table:
+    display_options:
+      fields:
+        thumbnail__target_id:
+          label: Miniaturka
+        name:
+          label: Nazwa
+        uid:
+          label: Autor
+      filters:
+        name:
+          expose:
+            label: Nazwa

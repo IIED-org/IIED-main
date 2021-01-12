@@ -1,0 +1,33 @@
+display:
+  default:
+    display_options:
+      fields:
+        subject:
+          label: အကြောင်း
+        name:
+          label: စာရေးသူ
+        operations:
+          label: လုပ်ဆောင်ချက်များ
+      filters:
+        subject:
+          expose:
+            label: အကြောင်း
+        langcode:
+          expose:
+            label: ဘာသာစကား
+  page_unapproved:
+    display_options:
+      filters:
+        subject:
+          expose:
+            label: အကြောင်း
+        langcode:
+          expose:
+            label: ဘာသာစကား
+      fields:
+        subject:
+          label: အကြောင်း
+        name:
+          label: စာရေးသူ
+        operations:
+          label: လုပ်ဆောင်ချက်များ

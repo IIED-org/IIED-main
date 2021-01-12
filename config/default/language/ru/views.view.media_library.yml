@@ -1,4 +1,14 @@
 display:
+  default:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: Название
+        langcode:
+          expose:
+            label: Язык
+      title: Мультимедиа
   page:
     display_options:
       fields:
@@ -6,3 +16,22 @@ display:
           text: Редактировать
         delete_media:
           text: Удалить
+  widget:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: Название
+  widget_table:
+    display_options:
+      fields:
+        thumbnail__target_id:
+          label: Миниатюра
+        name:
+          label: Название
+        uid:
+          label: Автор
+      filters:
+        name:
+          expose:
+            label: Название

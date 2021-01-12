@@ -1,4 +1,14 @@
 display:
+  default:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: 名称
+        langcode:
+          expose:
+            label: 语言
+      title: 媒体
   page:
     display_options:
       fields:
@@ -6,3 +16,22 @@ display:
           text: 编辑
         delete_media:
           text: 删除
+  widget:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: 名称
+  widget_table:
+    display_options:
+      fields:
+        thumbnail__target_id:
+          label: 缩略图
+        name:
+          label: 名称
+        uid:
+          label: 作者
+      filters:
+        name:
+          expose:
+            label: 名称

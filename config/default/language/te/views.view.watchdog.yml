@@ -1,0 +1,16 @@
+display:
+  default:
+    display_options:
+      fields:
+        type:
+          label: రకం
+        timestamp:
+          label: తేదీ
+        name:
+          label: వాడుకరి
+        link:
+          label: కార్యాలు
+      filters:
+        type:
+          expose:
+            label: రకం

@@ -1,4 +1,13 @@
 display:
+  default:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: పేరు
+        langcode:
+          expose:
+            label: భాష
   page:
     display_options:
       fields:
@@ -6,3 +15,20 @@ display:
           text: మార్చు
         delete_media:
           text: తొలగించు
+  widget:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: పేరు
+  widget_table:
+    display_options:
+      fields:
+        name:
+          label: పేరు
+        uid:
+          label: రచయిత
+      filters:
+        name:
+          expose:
+            label: పేరు

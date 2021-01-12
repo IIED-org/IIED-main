@@ -1,0 +1,8 @@
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: 'Tiêu đề'
+        name:
+          label: 'Tác giả'

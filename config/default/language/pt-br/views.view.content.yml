@@ -1,0 +1,35 @@
+label: Conteúdo
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: Título
+        type:
+          label: 'Tipo de conteúdo'
+        name:
+          label: Autor
+        status:
+          label: Status
+        operations:
+          label: Operações
+      filters:
+        title:
+          expose:
+            label: Título
+        type:
+          expose:
+            label: 'Tipo de conteúdo'
+        status:
+          expose:
+            label: Status
+        langcode:
+          expose:
+            label: Idioma
+      title: Conteúdo
+  page_1:
+    display_options:
+      menu:
+        title: Conteúdo
+      tab_options:
+        title: Conteúdo

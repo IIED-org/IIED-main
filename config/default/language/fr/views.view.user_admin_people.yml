@@ -1,0 +1,19 @@
+display:
+  default:
+    display_options:
+      fields:
+        name:
+          label: 'Nom d''utilisateur'
+        status:
+          label: État
+          settings:
+            format_custom_true: Actif
+        operations:
+          label: Actions
+      filters:
+        status:
+          group_info:
+            label: État
+            group_items:
+              1:
+                title: Actif

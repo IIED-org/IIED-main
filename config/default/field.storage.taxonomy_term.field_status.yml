@@ -16,7 +16,7 @@ settings:
       label: Current
     -
       value: arc
-      label: Archive
+      label: Archived
   allowed_values_function: ''
 module: options
 locked: false

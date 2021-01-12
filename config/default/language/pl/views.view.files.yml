@@ -1,0 +1,17 @@
+display:
+  default:
+    display_options:
+      fields:
+        filename:
+          label: Nazwa
+        status:
+          label: Status
+      filters:
+        status:
+          expose:
+            label: Status
+  page_2:
+    display_options:
+      fields:
+        type:
+          label: 'Typ encji'

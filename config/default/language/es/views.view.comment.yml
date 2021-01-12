@@ -1,0 +1,33 @@
+display:
+  default:
+    display_options:
+      fields:
+        subject:
+          label: Asunto
+        name:
+          label: Autor
+        operations:
+          label: Operaciones
+      filters:
+        subject:
+          expose:
+            label: Asunto
+        langcode:
+          expose:
+            label: Idioma
+  page_unapproved:
+    display_options:
+      filters:
+        subject:
+          expose:
+            label: Asunto
+        langcode:
+          expose:
+            label: Idioma
+      fields:
+        subject:
+          label: Asunto
+        name:
+          label: Autor
+        operations:
+          label: Operaciones

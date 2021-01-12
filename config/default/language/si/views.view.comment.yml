@@ -1,0 +1,29 @@
+display:
+  default:
+    display_options:
+      fields:
+        subject:
+          label: කාරණය
+        operations:
+          label: මෙහෙයුම්
+      filters:
+        subject:
+          expose:
+            label: කාරණය
+        langcode:
+          expose:
+            label: භාෂාව
+  page_unapproved:
+    display_options:
+      filters:
+        subject:
+          expose:
+            label: කාරණය
+        langcode:
+          expose:
+            label: භාෂාව
+      fields:
+        subject:
+          label: කාරණය
+        operations:
+          label: මෙහෙයුම්

@@ -1,0 +1,16 @@
+display:
+  default:
+    display_options:
+      fields:
+        type:
+          label: Jenis
+        timestamp:
+          label: Tanggal
+        name:
+          label: Pengguna
+        link:
+          label: Operasi-operasi
+      filters:
+        type:
+          expose:
+            label: Jenis

@@ -1,4 +1,14 @@
 display:
+  default:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: Nama
+        langcode:
+          expose:
+            label: Bahasa
+      title: Media
   page:
     display_options:
       fields:
@@ -6,3 +16,22 @@ display:
           text: Sunting
         delete_media:
           text: Hapus
+  widget:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: Nama
+  widget_table:
+    display_options:
+      fields:
+        thumbnail__target_id:
+          label: Miniatur
+        name:
+          label: Nama
+        uid:
+          label: Penulis
+      filters:
+        name:
+          expose:
+            label: Nama

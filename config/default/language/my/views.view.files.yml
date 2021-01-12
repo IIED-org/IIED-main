@@ -1,0 +1,12 @@
+display:
+  default:
+    display_options:
+      fields:
+        filename:
+          label: အမည်
+        status:
+          label: အခြေအနေ
+      filters:
+        status:
+          expose:
+            label: အခြေအနေ

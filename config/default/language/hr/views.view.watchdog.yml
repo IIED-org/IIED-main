@@ -1,0 +1,16 @@
+display:
+  default:
+    display_options:
+      fields:
+        type:
+          label: Vrsta
+        timestamp:
+          label: Datum
+        name:
+          label: Korisnik
+        link:
+          label: Operacije
+      filters:
+        type:
+          expose:
+            label: Vrsta

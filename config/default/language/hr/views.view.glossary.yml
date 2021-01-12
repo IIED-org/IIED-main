@@ -1,0 +1,8 @@
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: Naziv
+        name:
+          label: Autor

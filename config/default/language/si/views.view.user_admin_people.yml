@@ -1,0 +1,14 @@
+display:
+  default:
+    display_options:
+      fields:
+        name:
+          label: 'පරිශීලක නාමය'
+        status:
+          label: තත්වය
+        operations:
+          label: මෙහෙයුම්
+      filters:
+        status:
+          group_info:
+            label: තත්වය

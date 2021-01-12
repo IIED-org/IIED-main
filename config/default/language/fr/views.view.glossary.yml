@@ -1,0 +1,8 @@
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: Titre
+        name:
+          label: Auteur

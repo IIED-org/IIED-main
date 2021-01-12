@@ -1,0 +1,16 @@
+display:
+  default:
+    display_options:
+      fields:
+        type:
+          label: အမျိုးအစား
+        timestamp:
+          label: ရက်စွဲ
+        name:
+          label: အသုံးပြုသူ
+        link:
+          label: လုပ်ဆောင်ချက်များ
+      filters:
+        type:
+          expose:
+            label: အမျိုးအစား

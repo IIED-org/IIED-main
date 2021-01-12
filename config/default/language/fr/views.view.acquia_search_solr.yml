@@ -1,0 +1,6 @@
+display:
+  default:
+    display_options:
+      fields:
+        type:
+          label: Type

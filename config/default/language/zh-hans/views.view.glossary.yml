@@ -1,0 +1,8 @@
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: 标题
+        name:
+          label: 作者

@@ -34,6 +34,10 @@ ul.language-switcher-language-url.nav {
   @extend .text-muted;
 }
 
+.bg-medium {
+  background-color: $gray-200 !important;
+}
+
 .field-doctype div {
   display: inline;
   &.clearfix::after {

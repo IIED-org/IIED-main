@@ -1,0 +1,19 @@
+display:
+  default:
+    display_options:
+      fields:
+        name:
+          label: 'Nama pengguna'
+        status:
+          label: Status
+          settings:
+            format_custom_true: Aktif
+        operations:
+          label: Operasi-operasi
+      filters:
+        status:
+          group_info:
+            label: Status
+            group_items:
+              1:
+                title: Aktif

@@ -7,4 +7,6 @@ logo:
   use_default: false
   path: themes/custom/iied_pubs/iied-blue.svg
 favicon:
-  use_default: true
+  use_default: false
+  path: favicon.ico
+  mimetype: image/vnd.microsoft.icon

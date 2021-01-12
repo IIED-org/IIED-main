@@ -1,0 +1,35 @@
+label: Contenu
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: Titre
+        type:
+          label: 'Type de contenu'
+        name:
+          label: Auteur
+        status:
+          label: État
+        operations:
+          label: Actions
+      filters:
+        title:
+          expose:
+            label: Titre
+        type:
+          expose:
+            label: 'Type de contenu'
+        status:
+          expose:
+            label: État
+        langcode:
+          expose:
+            label: Langue
+      title: Contenu
+  page_1:
+    display_options:
+      menu:
+        title: Contenu
+      tab_options:
+        title: Contenu

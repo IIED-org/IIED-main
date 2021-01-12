@@ -22,6 +22,7 @@ dependencies:
     - field.field.node.publication.field_lists
     - field.field.node.publication.field_lit_code
     - field.field.node.publication.field_media
+    - field.field.node.publication.field_meta_tags
     - field.field.node.publication.field_parent
     - field.field.node.publication.field_pdf
     - field.field.node.publication.field_pdf_pages
@@ -273,22 +274,22 @@ third_party_settings:
         - group_pub_header
         - 'dynamic_block_field:node-language_links'
         - 'dynamic_block_field:node-source'
-        - body
         - field_author_s_
         - group_cover_image
+        - body
+        - field_editor_s_
         - group_pub_body
         - group_related_links
-        - field_editor_s_
         - 'dynamic_block_field:node-citation'
         - field_translator
         - group_pub_detail
         - 'dynamic_block_field:node-page_count'
         - field_date_published
         - field_publisher
-        - field_iied_url
         - 'dynamic_block_field:node-country_list'
-        - field_external_url
+        - field_iied_url
         - field_series
+        - field_external_url
         - field_source_publication
         - field_journal_ref
         - field_isbn
@@ -349,7 +350,7 @@ third_party_settings:
             lbw-at: ''
             ow: true
             ow-el: div
-            ow-cl: mb-3
+            ow-cl: 'mb-3 full-cover'
             ow-at: ''
             fis-el: ''
             fis-cl: ''
@@ -555,7 +556,8 @@ content:
             lbw-cl: 'field__label font-weight-bold'
             lbw-at: ''
             lb-col: true
-            ow-el: ''
+            ow: true
+            ow-el: div
             ow-cl: ''
             ow-at: ''
             fis-el: ''
@@ -565,7 +567,6 @@ content:
             fi-cl: ''
             fi-at: ''
             suffix: ''
-            ow: false
             ow-def-at: false
             ow-def-cl: false
             fis: false
@@ -683,7 +684,36 @@ content:
     label: inline
     settings:
       link: true
-    third_party_settings: {  }
+    third_party_settings:
+      ds:
+        ds_limit: ''
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            prefix: ''
+            lbw: true
+            lbw-el: span
+            lbw-cl: font-weight-bold
+            lbw-at: ''
+            lb-col: true
+            ow: true
+            ow-el: div
+            ow-cl: ''
+            ow-at: ''
+            fis: true
+            fis-el: ul
+            fis-cl: comma-list
+            fis-at: ''
+            fi: true
+            fi-el: li
+            fi-cl: ''
+            fi-at: ''
+            suffix: ''
+            ow-def-at: false
+            ow-def-cl: false
+            fis-def-at: false
+            fi-def-at: false
     type: entity_reference_label
     region: ds_content
   field_series:
@@ -753,6 +783,7 @@ hidden:
   field_lists: true
   field_lit_code: true
   field_media: true
+  field_meta_tags: true
   field_parent: true
   field_pdf: true
   field_pdf_pages: true

@@ -1,0 +1,17 @@
+display:
+  default:
+    display_options:
+      fields:
+        filename:
+          label: Nom
+        status:
+          label: État
+      filters:
+        status:
+          expose:
+            label: État
+  page_2:
+    display_options:
+      fields:
+        type:
+          label: 'Type d''entité'

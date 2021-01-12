@@ -105,7 +105,7 @@ third_party_settings:
         effect: none
         speed: fast
         id: ''
-        classes: 'card pointer'
+        classes: 'card pointer overflow-hidden'
       label: Project-card
     group_row_nogutters:
       children:
@@ -250,3 +250,4 @@ hidden:
   langcode: true
   links: true
   search_api_excerpt: true
+  sharing_buttons: true
