@@ -1081,8 +1081,7 @@ display:
       style:
         type: serializer
         options:
-          formats:
-            xml: xml
+          formats: {  }
       row:
         type: data_field
         options:
