@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.taxonomy_term.person.field_iied_user_id
     - field.field.taxonomy_term.person.field_legacy_iscanonical
     - field.field.taxonomy_term.person.field_link
     - field.field.taxonomy_term.person.field_name
@@ -99,6 +100,23 @@ third_party_settings:
                 type: link
             additional: {  }
             weight: 3
+          0aec4775-946a-45e7-9c1a-1e11f3dc593b:
+            uuid: 0aec4775-946a-45e7-9c1a-1e11f3dc593b
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:taxonomy_term:person:field_iied_user_id'
+              formatter:
+                label: above
+                settings:
+                  thousand_separator: ''
+                  prefix_suffix: true
+                third_party_settings: {  }
+                type: number_integer
+            additional: {  }
+            weight: 4
         third_party_settings: {  }
     allow_custom: false
 id: taxonomy_term.person.default
@@ -106,6 +124,15 @@ targetEntityType: taxonomy_term
 bundle: person
 mode: default
 content:
+  field_iied_user_id:
+    weight: 4
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
+    region: content
   field_legacy_iscanonical:
     weight: 1
     label: above

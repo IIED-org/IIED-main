@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.taxonomy_term.search_autocomplete
+    - field.field.taxonomy_term.person.field_iied_user_id
     - field.field.taxonomy_term.person.field_legacy_iscanonical
     - field.field.taxonomy_term.person.field_link
     - field.field.taxonomy_term.person.field_name
@@ -71,6 +72,7 @@ mode: search_autocomplete
 content: {  }
 hidden:
   description: true
+  field_iied_user_id: true
   field_legacy_iscanonical: true
   field_link: true
   field_name: true

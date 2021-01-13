@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.taxonomy_term.person.field_iied_user_id
     - field.field.taxonomy_term.person.field_legacy_iscanonical
     - field.field.taxonomy_term.person.field_link
     - field.field.taxonomy_term.person.field_name
@@ -26,6 +27,13 @@ content:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
+  field_iied_user_id:
+    weight: 9
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
   field_legacy_iscanonical:
     weight: 7
     settings:

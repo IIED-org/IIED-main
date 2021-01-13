@@ -1,0 +1,23 @@
+uuid: ba647373-90ba-46e0-8ff9-5a5a7ff2dc2b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_iied_user_id
+    - taxonomy.vocabulary.person
+id: taxonomy_term.person.field_iied_user_id
+field_name: field_iied_user_id
+entity_type: taxonomy_term
+bundle: person
+label: 'IIED user ID'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

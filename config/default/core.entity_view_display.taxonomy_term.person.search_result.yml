@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.taxonomy_term.search_result
+    - field.field.taxonomy_term.person.field_iied_user_id
     - field.field.taxonomy_term.person.field_legacy_iscanonical
     - field.field.taxonomy_term.person.field_link
     - field.field.taxonomy_term.person.field_name
@@ -80,6 +81,7 @@ mode: search_result
 content: {  }
 hidden:
   description: true
+  field_iied_user_id: true
   field_legacy_iscanonical: true
   field_link: true
   field_name: true
