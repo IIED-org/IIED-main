@@ -1,0 +1,14 @@
+display:
+  default:
+    display_options:
+      fields:
+        name:
+          label: အမည်
+        status:
+          label: အခြေအနေ
+        operations:
+          label: လုပ်ဆောင်ချက်များ
+      filters:
+        status:
+          group_info:
+            label: အခြေအနေ

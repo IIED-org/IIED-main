@@ -22,6 +22,7 @@ dependencies:
     - field.field.node.publication.field_lists
     - field.field.node.publication.field_lit_code
     - field.field.node.publication.field_media
+    - field.field.node.publication.field_meta_tags
     - field.field.node.publication.field_parent
     - field.field.node.publication.field_pdf
     - field.field.node.publication.field_pdf_pages
@@ -120,6 +121,11 @@ content:
     third_party_settings: {  }
     type: string
     region: content
+  sharing_buttons:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
 hidden:
   field_admin: true
   field_area_list: true
@@ -135,6 +141,7 @@ hidden:
   field_journal_ref: true
   field_lists: true
   field_lit_code: true
+  field_meta_tags: true
   field_parent: true
   field_pdf: true
   field_pdf_pages: true

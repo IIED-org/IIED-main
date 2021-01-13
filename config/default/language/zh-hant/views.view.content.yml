@@ -1,0 +1,35 @@
+label: 內容
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: 標題
+        type:
+          label: 內容類型
+        name:
+          label: 作者
+        status:
+          label: 狀態
+        operations:
+          label: 操作
+      filters:
+        title:
+          expose:
+            label: 標題
+        type:
+          expose:
+            label: 內容類型
+        status:
+          expose:
+            label: 狀態
+        langcode:
+          expose:
+            label: 語言
+      title: 內容
+  page_1:
+    display_options:
+      menu:
+        title: 內容
+      tab_options:
+        title: 內容

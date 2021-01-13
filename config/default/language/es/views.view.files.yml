@@ -1,0 +1,17 @@
+display:
+  default:
+    display_options:
+      fields:
+        filename:
+          label: Nombre
+        status:
+          label: Estado
+      filters:
+        status:
+          expose:
+            label: Estado
+  page_2:
+    display_options:
+      fields:
+        type:
+          label: 'Tipo de entidad'

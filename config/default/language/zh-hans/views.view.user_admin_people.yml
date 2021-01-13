@@ -1,0 +1,19 @@
+display:
+  default:
+    display_options:
+      fields:
+        name:
+          label: 用户名
+        status:
+          label: 状态
+          settings:
+            format_custom_true: 有效
+        operations:
+          label: 操作
+      filters:
+        status:
+          group_info:
+            label: 状态
+            group_items:
+              1:
+                title: 有效

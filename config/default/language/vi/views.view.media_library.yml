@@ -1,4 +1,14 @@
 display:
+  default:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: Tên
+        langcode:
+          expose:
+            label: 'Ngôn ngữ'
+      title: 'Phương tiện'
   page:
     display_options:
       fields:
@@ -6,3 +16,22 @@ display:
           text: Sửa
         delete_media:
           text: Xóa
+  widget:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: Tên
+  widget_table:
+    display_options:
+      fields:
+        thumbnail__target_id:
+          label: 'Ảnh thu nhỏ'
+        name:
+          label: Tên
+        uid:
+          label: 'Tác giả'
+      filters:
+        name:
+          expose:
+            label: Tên

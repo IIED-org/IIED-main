@@ -1,4 +1,13 @@
 display:
+  default:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: නම
+        langcode:
+          expose:
+            label: භාෂාව
   page:
     display_options:
       fields:
@@ -6,3 +15,18 @@ display:
           text: සංස්කරණය
         delete_media:
           text: මකාදමන්න
+  widget:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: නම
+  widget_table:
+    display_options:
+      fields:
+        name:
+          label: නම
+      filters:
+        name:
+          expose:
+            label: නම

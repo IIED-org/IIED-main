@@ -1,0 +1,16 @@
+display:
+  default:
+    display_options:
+      fields:
+        type:
+          label: Tipo
+        timestamp:
+          label: Data
+        name:
+          label: Utilizador
+        link:
+          label: Operações
+      filters:
+        type:
+          expose:
+            label: Tipo

@@ -1,0 +1,33 @@
+display:
+  default:
+    display_options:
+      fields:
+        subject:
+          label: الموضوع
+        name:
+          label: المؤلف
+        operations:
+          label: عمليات
+      filters:
+        subject:
+          expose:
+            label: الموضوع
+        langcode:
+          expose:
+            label: اللغة
+  page_unapproved:
+    display_options:
+      filters:
+        subject:
+          expose:
+            label: الموضوع
+        langcode:
+          expose:
+            label: اللغة
+      fields:
+        subject:
+          label: الموضوع
+        name:
+          label: المؤلف
+        operations:
+          label: عمليات

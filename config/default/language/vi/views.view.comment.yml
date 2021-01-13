@@ -1,0 +1,33 @@
+display:
+  default:
+    display_options:
+      fields:
+        subject:
+          label: 'Tiêu đề'
+        name:
+          label: 'Tác giả'
+        operations:
+          label: 'Thao tác'
+      filters:
+        subject:
+          expose:
+            label: 'Tiêu đề'
+        langcode:
+          expose:
+            label: 'Ngôn ngữ'
+  page_unapproved:
+    display_options:
+      filters:
+        subject:
+          expose:
+            label: 'Tiêu đề'
+        langcode:
+          expose:
+            label: 'Ngôn ngữ'
+      fields:
+        subject:
+          label: 'Tiêu đề'
+        name:
+          label: 'Tác giả'
+        operations:
+          label: 'Thao tác'

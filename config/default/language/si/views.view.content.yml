@@ -1,0 +1,28 @@
+label: අන්තර්ගතය
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: මාතෘකාව
+        status:
+          label: තත්වය
+        operations:
+          label: මෙහෙයුම්
+      filters:
+        title:
+          expose:
+            label: මාතෘකාව
+        status:
+          expose:
+            label: තත්වය
+        langcode:
+          expose:
+            label: භාෂාව
+      title: අන්තර්ගතය
+  page_1:
+    display_options:
+      menu:
+        title: අන්තර්ගතය
+      tab_options:
+        title: අන්තර්ගතය

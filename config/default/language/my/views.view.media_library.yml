@@ -1,4 +1,14 @@
 display:
+  default:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: အမည်
+        langcode:
+          expose:
+            label: ဘာသာစကား
+      title: မီဒီယာ
   page:
     display_options:
       fields:
@@ -6,3 +16,20 @@ display:
           text: ပြင်ရန်
         delete_media:
           text: ပယ်ဖျက်
+  widget:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: အမည်
+  widget_table:
+    display_options:
+      fields:
+        name:
+          label: အမည်
+        uid:
+          label: စာရေးသူ
+      filters:
+        name:
+          expose:
+            label: အမည်

@@ -1,0 +1,33 @@
+display:
+  default:
+    display_options:
+      fields:
+        subject:
+          label: Tytuł
+        name:
+          label: Autor
+        operations:
+          label: Operacje
+      filters:
+        subject:
+          expose:
+            label: Tytuł
+        langcode:
+          expose:
+            label: Język
+  page_unapproved:
+    display_options:
+      filters:
+        subject:
+          expose:
+            label: Tytuł
+        langcode:
+          expose:
+            label: Język
+      fields:
+        subject:
+          label: Tytuł
+        name:
+          label: Autor
+        operations:
+          label: Operacje

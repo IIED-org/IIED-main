@@ -1,0 +1,33 @@
+display:
+  default:
+    display_options:
+      fields:
+        subject:
+          label: Objet
+        name:
+          label: Auteur
+        operations:
+          label: Actions
+      filters:
+        subject:
+          expose:
+            label: Objet
+        langcode:
+          expose:
+            label: Langue
+  page_unapproved:
+    display_options:
+      filters:
+        subject:
+          expose:
+            label: Objet
+        langcode:
+          expose:
+            label: Langue
+      fields:
+        subject:
+          label: Objet
+        name:
+          label: Auteur
+        operations:
+          label: Actions

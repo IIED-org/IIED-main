@@ -1,0 +1,33 @@
+display:
+  default:
+    display_options:
+      fields:
+        subject:
+          label: Тема
+        name:
+          label: Автор
+        operations:
+          label: Операции
+      filters:
+        subject:
+          expose:
+            label: Тема
+        langcode:
+          expose:
+            label: Язык
+  page_unapproved:
+    display_options:
+      filters:
+        subject:
+          expose:
+            label: Тема
+        langcode:
+          expose:
+            label: Язык
+      fields:
+        subject:
+          label: Тема
+        name:
+          label: Автор
+        operations:
+          label: Операции

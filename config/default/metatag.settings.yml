@@ -1,0 +1,10 @@
+entity_type_groups:
+  node:
+    publication:
+      basic: basic
+      advanced: advanced
+      open_graph: open_graph
+      dublin_core: dublin_core
+      facebook: facebook
+      pinterest: pinterest
+      twitter_cards: twitter_cards

@@ -1,0 +1,16 @@
+display:
+  default:
+    display_options:
+      fields:
+        type:
+          label: Тип
+        timestamp:
+          label: Дата
+        name:
+          label: Пользователь
+        link:
+          label: Операции
+      filters:
+        type:
+          expose:
+            label: Тип

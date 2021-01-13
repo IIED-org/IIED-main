@@ -1,0 +1,33 @@
+display:
+  default:
+    display_options:
+      fields:
+        subject:
+          label: Judul
+        name:
+          label: Penulis
+        operations:
+          label: Operasi-operasi
+      filters:
+        subject:
+          expose:
+            label: Judul
+        langcode:
+          expose:
+            label: Bahasa
+  page_unapproved:
+    display_options:
+      filters:
+        subject:
+          expose:
+            label: Judul
+        langcode:
+          expose:
+            label: Bahasa
+      fields:
+        subject:
+          label: Judul
+        name:
+          label: Penulis
+        operations:
+          label: Operasi-operasi

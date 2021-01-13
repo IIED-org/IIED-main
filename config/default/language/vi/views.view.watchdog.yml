@@ -1,0 +1,16 @@
+display:
+  default:
+    display_options:
+      fields:
+        type:
+          label: Kiểu
+        timestamp:
+          label: 'Ngày tháng'
+        name:
+          label: 'Người dùng'
+        link:
+          label: 'Thao tác'
+      filters:
+        type:
+          expose:
+            label: Kiểu

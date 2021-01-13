@@ -1,0 +1,7 @@
+uuid: 2479c16d-41d5-4e40-bb7a-515a02e0cc27
+langcode: en
+status: true
+dependencies: {  }
+id: node__publication
+label: 'Content: Publication'
+tags: {  }

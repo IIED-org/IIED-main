@@ -1,0 +1,14 @@
+display:
+  default:
+    display_options:
+      fields:
+        name:
+          label: 'వాడుకరి పేరు'
+        status:
+          label: స్థితి
+        operations:
+          label: కార్యాలు
+      filters:
+        status:
+          group_info:
+            label: స్థితి

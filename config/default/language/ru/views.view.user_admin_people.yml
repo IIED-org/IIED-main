@@ -1,0 +1,19 @@
+display:
+  default:
+    display_options:
+      fields:
+        name:
+          label: 'Имя пользователя'
+        status:
+          label: Статус
+          settings:
+            format_custom_true: Активно
+        operations:
+          label: Операции
+      filters:
+        status:
+          group_info:
+            label: Статус
+            group_items:
+              1:
+                title: Активно

@@ -1,0 +1,12 @@
+display:
+  default:
+    display_options:
+      fields:
+        filename:
+          label: Tên
+        status:
+          label: 'Trạng thái'
+      filters:
+        status:
+          expose:
+            label: 'Trạng thái'

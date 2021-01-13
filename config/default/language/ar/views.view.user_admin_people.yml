@@ -1,0 +1,19 @@
+display:
+  default:
+    display_options:
+      fields:
+        name:
+          label: 'اسم المستخدم'
+        status:
+          label: الحالة
+          settings:
+            format_custom_true: نشط
+        operations:
+          label: عمليات
+      filters:
+        status:
+          group_info:
+            label: الحالة
+            group_items:
+              1:
+                title: نشط

@@ -1,0 +1,12 @@
+display:
+  default:
+    display_options:
+      fields:
+        filename:
+          label: නම
+        status:
+          label: තත්වය
+      filters:
+        status:
+          expose:
+            label: තත්වය

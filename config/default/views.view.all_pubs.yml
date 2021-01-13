@@ -5,11 +5,13 @@ dependencies:
   config:
     - field.storage.node.body
     - field.storage.node.field_author_s_
+    - field.storage.node.field_cover_image
     - field.storage.node.field_date_published
     - field.storage.node.field_document_type
     - field.storage.node.field_link
     - field.storage.node.field_lists
     - field.storage.node.field_lit_code
+    - field.storage.node.field_media
     - field.storage.node.field_product_code
     - field.storage.node.field_short_title
     - field.storage.node.field_tags
@@ -17,7 +19,6 @@ dependencies:
     - node.type.publication
   module:
     - datetime
-    - image
     - link
     - media
     - node
@@ -337,22 +338,22 @@ display:
           separator: ', '
           field_api_classes: false
           plugin_id: field
-        thumbnail__target_id:
-          id: thumbnail__target_id
-          table: media_field_data
-          field: thumbnail__target_id
-          relationship: field_media
+        field_media:
+          id: field_media
+          table: node__field_media
+          field: field_media
+          relationship: none
           group_type: group
           admin_label: ''
           label: ''
           exclude: true
           alter:
-            alter_text: true
-            text: 'https://pubs-live.ac.iied.org{{ thumbnail__target_id }}'
+            alter_text: false
+            text: ''
             make_link: false
-            path: '{{ thumbnail__target_id }}'
-            absolute: true
-            external: true
+            path: ''
+            absolute: false
+            external: false
             replace_spaces: false
             path_case: none
             trim_whitespace: false
@@ -380,15 +381,15 @@ display:
           element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
-          element_default_classes: false
+          element_default_classes: true
           empty: ''
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: target_id
-          type: image_url
+          type: media_thumbnail
           settings:
-            image_style: ''
+          image_style: ''
           group_column: ''
           group_columns: {  }
           group_rows: true
@@ -399,25 +400,23 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          entity_type: media
-          entity_field: thumbnail
           plugin_id: field
-        thumbnail__target_id_1:
-          id: thumbnail__target_id_1
-          table: media_field_data
-          field: thumbnail__target_id
-          relationship: field_cover_image
+        field_cover_image:
+          id: field_cover_image
+          table: node__field_cover_image
+          field: field_cover_image
+          relationship: none
           group_type: group
-          admin_label: cover_image
-          label: field_cover_image
+          admin_label: ''
+          label: ''
           exclude: false
           alter:
-            alter_text: true
-            text: 'https://pubs-live.ac.iied.org{{ thumbnail__target_id_1 }}'
+            alter_text: false
+            text: ''
             make_link: false
             path: ''
             absolute: false
-            external: true
+            external: false
             replace_spaces: false
             path_case: none
             trim_whitespace: false
@@ -445,15 +444,15 @@ display:
           element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
-          element_default_classes: false
-          empty: '{{ thumbnail__target_id }}'
+          element_default_classes: true
+          empty: '{{ field_media }}'
           hide_empty: false
           empty_zero: false
           hide_alter_empty: false
           click_sort_column: target_id
-          type: image_url
+          type: media_thumbnail
           settings:
-            image_style: ''
+          image_style: ''
           group_column: ''
           group_columns: {  }
           group_rows: true
@@ -464,8 +463,6 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          entity_type: media
-          entity_field: thumbnail
           plugin_id: field
         field_author_s_:
           id: field_author_s_
@@ -1216,24 +1213,6 @@ display:
       footer: {  }
       empty: {  }
       relationships:
-        field_cover_image:
-          id: field_cover_image
-          table: node__field_cover_image
-          field: field_cover_image
-          relationship: none
-          group_type: group
-          admin_label: 'field_cover_image: Media'
-          required: false
-          plugin_id: standard
-        field_media:
-          id: field_media
-          table: node__field_media
-          field: field_media
-          relationship: none
-          group_type: group
-          admin_label: 'field_media: Media'
-          required: false
-          plugin_id: standard
         field_project:
           id: field_project
           table: node__field_project
@@ -1257,11 +1236,13 @@ display:
       tags:
         - 'config:field.storage.node.body'
         - 'config:field.storage.node.field_author_s_'
+        - 'config:field.storage.node.field_cover_image'
         - 'config:field.storage.node.field_date_published'
         - 'config:field.storage.node.field_document_type'
         - 'config:field.storage.node.field_link'
         - 'config:field.storage.node.field_lists'
         - 'config:field.storage.node.field_lit_code'
+        - 'config:field.storage.node.field_media'
         - 'config:field.storage.node.field_product_code'
         - 'config:field.storage.node.field_short_title'
         - 'config:field.storage.node.field_tags'
@@ -1275,26 +1256,10 @@ display:
       display_extenders: {  }
       path: feed
       pager:
-        type: full
+        type: some
         options:
           items_per_page: 1000
           offset: 0
-          id: 0
-          total_pages: null
-          tags:
-            previous: '‹ Previous'
-            next: 'Next ›'
-            first: '« First'
-            last: 'Last »'
-          expose:
-            items_per_page: false
-            items_per_page_label: 'Items per page'
-            items_per_page_options: '5, 10, 25, 50'
-            items_per_page_options_all: false
-            items_per_page_options_all_label: '- All -'
-            offset: false
-            offset_label: Offset
-          quantity: 9
       style:
         type: serializer
         options:
@@ -1352,17 +1317,18 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - request_format
-        - url.query_args
         - 'user.node_grants:view'
         - user.permissions
       tags:
         - 'config:field.storage.node.body'
         - 'config:field.storage.node.field_author_s_'
+        - 'config:field.storage.node.field_cover_image'
         - 'config:field.storage.node.field_date_published'
         - 'config:field.storage.node.field_document_type'
         - 'config:field.storage.node.field_link'
         - 'config:field.storage.node.field_lists'
         - 'config:field.storage.node.field_lit_code'
+        - 'config:field.storage.node.field_media'
         - 'config:field.storage.node.field_product_code'
         - 'config:field.storage.node.field_short_title'
         - 'config:field.storage.node.field_tags'

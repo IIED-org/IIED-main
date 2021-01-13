@@ -1,4 +1,14 @@
 display:
+  default:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: Nombre
+        langcode:
+          expose:
+            label: Idioma
+      title: Multimedia
   page:
     display_options:
       fields:
@@ -6,3 +16,22 @@ display:
           text: Editar
         delete_media:
           text: Eliminar
+  widget:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: Nombre
+  widget_table:
+    display_options:
+      fields:
+        thumbnail__target_id:
+          label: Miniatura
+        name:
+          label: Nombre
+        uid:
+          label: Autor
+      filters:
+        name:
+          expose:
+            label: Nombre

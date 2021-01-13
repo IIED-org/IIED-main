@@ -1,0 +1,35 @@
+label: အကြောင်းအရာ
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: ခေါင်းစဉ်
+        type:
+          label: အကြောင်းအရာအမျိုးအစား
+        name:
+          label: စာရေးသူ
+        status:
+          label: အခြေအနေ
+        operations:
+          label: လုပ်ဆောင်ချက်များ
+      filters:
+        title:
+          expose:
+            label: ခေါင်းစဉ်
+        type:
+          expose:
+            label: အကြောင်းအရာအမျိုးအစား
+        status:
+          expose:
+            label: အခြေအနေ
+        langcode:
+          expose:
+            label: ဘာသာစကား
+      title: အကြောင်းအရာ
+  page_1:
+    display_options:
+      menu:
+        title: အကြောင်းအရာ
+      tab_options:
+        title: အကြောင်းအရာ

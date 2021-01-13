@@ -1,0 +1,17 @@
+display:
+  default:
+    display_options:
+      fields:
+        filename:
+          label: الاسم
+        status:
+          label: الحالة
+      filters:
+        status:
+          expose:
+            label: الحالة
+  page_2:
+    display_options:
+      fields:
+        type:
+          label: 'نوع الكيان'

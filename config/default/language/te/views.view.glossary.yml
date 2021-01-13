@@ -1,0 +1,8 @@
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: శీర్షిక
+        name:
+          label: రచయిత

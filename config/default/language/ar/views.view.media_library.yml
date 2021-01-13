@@ -1,4 +1,14 @@
 display:
+  default:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: الاسم
+        langcode:
+          expose:
+            label: اللغة
+      title: ميديا
   page:
     display_options:
       fields:
@@ -6,3 +16,22 @@ display:
           text: تحرير
         delete_media:
           text: حذف
+  widget:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: الاسم
+  widget_table:
+    display_options:
+      fields:
+        thumbnail__target_id:
+          label: 'النسخة المصغرة'
+        name:
+          label: الاسم
+        uid:
+          label: المؤلف
+      filters:
+        name:
+          expose:
+            label: الاسم

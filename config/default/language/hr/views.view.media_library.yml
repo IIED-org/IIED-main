@@ -1,4 +1,14 @@
 display:
+  default:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: Naziv
+        langcode:
+          expose:
+            label: Jezik
+      title: Mediji
   page:
     display_options:
       fields:
@@ -6,3 +16,22 @@ display:
           text: Uredi
         delete_media:
           text: Ukloni
+  widget:
+    display_options:
+      filters:
+        name:
+          expose:
+            label: Naziv
+  widget_table:
+    display_options:
+      fields:
+        thumbnail__target_id:
+          label: Thumbnail
+        name:
+          label: Naziv
+        uid:
+          label: Autor
+      filters:
+        name:
+          expose:
+            label: Naziv

@@ -1,0 +1,12 @@
+display:
+  default:
+    display_options:
+      fields:
+        filename:
+          label: పేరు
+        status:
+          label: స్థితి
+      filters:
+        status:
+          expose:
+            label: స్థితి

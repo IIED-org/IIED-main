@@ -1,0 +1,19 @@
+display:
+  default:
+    display_options:
+      fields:
+        name:
+          label: 'Tên người dùng'
+        status:
+          label: 'Trạng thái'
+          settings:
+            format_custom_true: 'Hoạt động'
+        operations:
+          label: 'Thao tác'
+      filters:
+        status:
+          group_info:
+            label: 'Trạng thái'
+            group_items:
+              1:
+                title: 'Hoạt động'

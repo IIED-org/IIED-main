@@ -1,0 +1,17 @@
+display:
+  default:
+    display_options:
+      fields:
+        filename:
+          label: Название
+        status:
+          label: Статус
+      filters:
+        status:
+          expose:
+            label: Статус
+  page_2:
+    display_options:
+      fields:
+        type:
+          label: 'Тип сущности'

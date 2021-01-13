@@ -1,0 +1,27 @@
+uuid: 5d145e0e-b3bf-4bc8-99e4-990395a1857f
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: sL588ui1E_8-2c_UupwyYxcqX2OVyMFp3HTLbbFqvPc
+id: global
+label: Global
+tags:
+  shortlink: '[current-page:url:unaliased]'
+  title: '[current-page:title] | [site:name]'
+  canonical_url: '[current-page:url]'
+  dcterms_title: '[current-page:title]'
+  dcterms_publisher: '[node:field_publisher]'
+  dcterms_language: '[node:langcode]'
+  dcterms_creator: '[node:field_author_s_]'
+  dcterms_subject: '[node:field_theme_s_]'
+  og_image: '[node:field_image]'
+  og_url: '[current-page:url:absolute]'
+  og_site_name: '[site:name]'
+  og_title: '[current-page:title]'
+  twitter_cards_site: '@IIED'
+  twitter_cards_page_url: '[current-page:url:absolute]'
+  twitter_cards_description: '[site:slogan]'
+  twitter_cards_type: summary_large_image
+  twitter_cards_site_id: '39719681'
+  twitter_cards_title: '[site:name]'

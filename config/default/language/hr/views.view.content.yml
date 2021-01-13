@@ -1,0 +1,35 @@
+label: Sadržaj
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: Naziv
+        type:
+          label: 'Vrsta sadržaja'
+        name:
+          label: Autor
+        status:
+          label: Status
+        operations:
+          label: Operacije
+      filters:
+        title:
+          expose:
+            label: Naziv
+        type:
+          expose:
+            label: 'Vrsta sadržaja'
+        status:
+          expose:
+            label: Status
+        langcode:
+          expose:
+            label: Jezik
+      title: Sadržaj
+  page_1:
+    display_options:
+      menu:
+        title: Sadržaj
+      tab_options:
+        title: Sadržaj

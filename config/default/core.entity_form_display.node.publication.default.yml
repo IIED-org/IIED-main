@@ -21,6 +21,7 @@ dependencies:
     - field.field.node.publication.field_lists
     - field.field.node.publication.field_lit_code
     - field.field.node.publication.field_media
+    - field.field.node.publication.field_meta_tags
     - field.field.node.publication.field_parent
     - field.field.node.publication.field_pdf
     - field.field.node.publication.field_pdf_pages
@@ -53,6 +54,7 @@ dependencies:
     - isbn
     - link
     - media_library
+    - metatag
     - path
     - serial
     - text
@@ -206,6 +208,13 @@ content:
     settings:
       media_types: {  }
     third_party_settings: {  }
+    region: content
+  field_meta_tags:
+    weight: 52
+    settings:
+      sidebar: true
+    third_party_settings: {  }
+    type: metatag_firehose
     region: content
   field_parent:
     weight: 49

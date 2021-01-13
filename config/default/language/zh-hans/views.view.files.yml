@@ -1,0 +1,17 @@
+display:
+  default:
+    display_options:
+      fields:
+        filename:
+          label: 名称
+        status:
+          label: 状态
+      filters:
+        status:
+          expose:
+            label: 状态
+  page_2:
+    display_options:
+      fields:
+        type:
+          label: 实体类型

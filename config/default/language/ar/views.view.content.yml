@@ -1,0 +1,35 @@
+label: المحتوى
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: العنوان
+        type:
+          label: 'نوع المحتوى'
+        name:
+          label: المؤلف
+        status:
+          label: الحالة
+        operations:
+          label: عمليات
+      filters:
+        title:
+          expose:
+            label: العنوان
+        type:
+          expose:
+            label: 'نوع المحتوى'
+        status:
+          expose:
+            label: الحالة
+        langcode:
+          expose:
+            label: اللغة
+      title: المحتوى
+  page_1:
+    display_options:
+      menu:
+        title: المحتوى
+      tab_options:
+        title: المحتوى

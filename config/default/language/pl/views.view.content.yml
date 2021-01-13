@@ -1,0 +1,35 @@
+label: Zawartość
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: Tytuł
+        type:
+          label: 'Rodzaj zawartości'
+        name:
+          label: Autor
+        status:
+          label: Status
+        operations:
+          label: Operacje
+      filters:
+        title:
+          expose:
+            label: Tytuł
+        type:
+          expose:
+            label: 'Rodzaj zawartości'
+        status:
+          expose:
+            label: Status
+        langcode:
+          expose:
+            label: Język
+      title: Zawartość
+  page_1:
+    display_options:
+      menu:
+        title: Zawartość
+      tab_options:
+        title: Zawartość
