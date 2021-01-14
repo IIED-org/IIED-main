@@ -1,6 +1,9 @@
 display:
   default:
     display_options:
+      exposed_form:
+        options:
+          submit_button: Filter
       fields:
         name:
           label: 'Nome de utilizador'
@@ -8,6 +11,8 @@ display:
           label: Estado
           settings:
             format_custom_true: Ativo
+        roles_target_id:
+          label: Roles
         operations:
           label: Operações
       filters:

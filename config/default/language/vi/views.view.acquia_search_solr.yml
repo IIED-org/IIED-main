@@ -1,6 +1,18 @@
 display:
   default:
     display_options:
+      exposed_form:
+        options:
+          submit_button: Search
       fields:
         type:
           label: Kiểu
+      filters:
+        search_api_fulltext:
+          expose:
+            label: Search
+      title: Search
+  page:
+    display_options:
+      menu:
+        title: Search

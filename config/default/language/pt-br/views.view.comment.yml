@@ -1,7 +1,10 @@
+label: Comments
 display:
   default:
     display_options:
       fields:
+        comment_bulk_form:
+          action_title: Action
         subject:
           label: Assunto
         name:
@@ -15,6 +18,11 @@ display:
         langcode:
           expose:
             label: Idioma
+      title: Comments
+  page_published:
+    display_options:
+      menu:
+        title: Comments
   page_unapproved:
     display_options:
       filters:
@@ -25,6 +33,8 @@ display:
           expose:
             label: Idioma
       fields:
+        comment_bulk_form:
+          action_title: Action
         subject:
           label: Assunto
         name:

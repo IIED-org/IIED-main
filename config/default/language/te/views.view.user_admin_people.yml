@@ -1,11 +1,16 @@
 display:
   default:
     display_options:
+      exposed_form:
+        options:
+          submit_button: Filter
       fields:
         name:
           label: 'వాడుకరి పేరు'
         status:
           label: స్థితి
+        roles_target_id:
+          label: Roles
         operations:
           label: కార్యాలు
       filters:

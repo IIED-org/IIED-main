@@ -1,6 +1,9 @@
 display:
   default:
     display_options:
+      exposed_form:
+        options:
+          submit_button: Filter
       fields:
         name:
           label: 'Имя пользователя'
@@ -8,6 +11,8 @@ display:
           label: Статус
           settings:
             format_custom_true: Активно
+        roles_target_id:
+          label: Roles
         operations:
           label: Операции
       filters:

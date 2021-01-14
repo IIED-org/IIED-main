@@ -1,10 +1,18 @@
 display:
   default:
     display_options:
+      fields:
+        media_bulk_form:
+          action_title: Action
       filters:
         name:
           expose:
             label: 名称
+        bundle:
+          expose:
+            label: 'Media type'
+          group_info:
+            label: 'Media type'
         langcode:
           expose:
             label: 语言
@@ -12,6 +20,8 @@ display:
   page:
     display_options:
       fields:
+        media_bulk_form:
+          action_title: Action
         edit_media:
           text: 编辑
         delete_media:

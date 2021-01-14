@@ -6,6 +6,8 @@ display:
           label: အမည်
         status:
           label: အခြေအနေ
+        roles_target_id:
+          label: Roles
         operations:
           label: လုပ်ဆောင်ချက်များ
       filters:
