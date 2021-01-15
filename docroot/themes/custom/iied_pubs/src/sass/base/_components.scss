@@ -249,6 +249,10 @@
   @extend .mb-4;
 }
 
+.col-xl-3 img {
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px;
+}
+
 @include media-breakpoint-up(xl) {
   .col-xl-3 {
       img {

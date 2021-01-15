@@ -1,9 +1,6 @@
 display:
   default:
     display_options:
-      fields:
-        media_bulk_form:
-          action_title: Action
       filters:
         name:
           expose:
@@ -15,8 +12,6 @@ display:
   page:
     display_options:
       fields:
-        media_bulk_form:
-          action_title: Action
         edit_media:
           text: تحرير
         delete_media:

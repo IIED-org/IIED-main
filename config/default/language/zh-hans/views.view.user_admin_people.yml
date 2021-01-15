@@ -1,9 +1,6 @@
 display:
   default:
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         name:
           label: 用户名
@@ -11,8 +8,6 @@ display:
           label: 状态
           settings:
             format_custom_true: 有效
-        roles_target_id:
-          label: Roles
         operations:
           label: 操作
       filters:
