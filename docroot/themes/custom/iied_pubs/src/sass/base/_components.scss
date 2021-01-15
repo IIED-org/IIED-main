@@ -119,6 +119,24 @@
   padding: 1rem;
   margin-top: 3.75rem;
   background-color: $body-bg;
+  width: 285px;
+  left: -285px;
+  font-size: 90%;
+  line-height: 1rem;
+  input[type="checkbox"] {
+    float: left;
+    vertical-align: middle;
+  }
+  label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    vertical-align: middle;
+    word-wrap: break-word;
+    span {
+      padding-right: .25rem;
+    }
+  }
 }
 
 .block--sidrtriggerbuttonblock-2 button {

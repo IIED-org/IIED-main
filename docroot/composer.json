@@ -25,6 +25,7 @@
         "drupal/acquia_search_solr": "^1.0",
         "drupal/address": "^1.8",
         "drupal/admin_toolbar": "^2.3",
+        "drupal/asset_injector": "^2.7",
         "drupal/better_exposed_filters": "^5.0",
         "drupal/better_social_sharing_buttons": "^3.1",
         "drupal/block_class": "^1.3",
