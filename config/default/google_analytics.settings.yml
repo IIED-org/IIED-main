@@ -1,4 +1,4 @@
-account: UA-334389-9
+account: UA-334389-1
 premium: false
 domain_mode: 0
 cross_domains: ''
@@ -6,7 +6,9 @@ visibility:
   request_path_mode: 0
   request_path_pages: "/admin\r\n/admin/*\r\n/batch\r\n/node/add*\r\n/node/*/*\r\n/user/*/*"
   user_role_mode: 0
-  user_role_roles: {  }
+  user_role_roles:
+    anonymous: anonymous
+    authenticated: authenticated
   user_account_mode: 1
 track:
   outbound: true
@@ -20,11 +22,59 @@ track:
   messages: {  }
   site_search: false
   adsense: false
-  displayfeatures: true
+  displayfeatures: false
 privacy:
   anonymizeip: true
 custom:
-  dimension: {  }
+  dimension:
+    1:
+      name: Team
+      value: '[node:field_team]'
+      index: 1
+    10:
+      name: 'Product code'
+      value: '[node:field_product_code]'
+      index: 10
+    11:
+      name: Project
+      value: '[node:field_project]'
+      index: 11
+    12:
+      name: 'Department list'
+      value: '[node:field_deptlist]'
+      index: 12
+    13:
+      name: Series
+      value: '[node:field_series]'
+      index: 13
+    14:
+      name: 'Publication lists'
+      value: '[node:field_lists]'
+      index: 14
+    15:
+      name: WP/GET
+      value: '[node:field_reportagency1]'
+      index: 15
+    16:
+      name: 'Document type'
+      value: '[node:field_document_type]'
+      index: 16
+    17:
+      name: 'Country focus'
+      value: '[node:field_area_list]'
+      index: 17
+    18:
+      name: 'Publication authors'
+      value: '[node:field_author_s_]'
+      index: 18
+    19:
+      name: 'Publication published date'
+      value: '[node:field_date_published]'
+      index: 19
+    20:
+      name: 'Publication themes'
+      value: '[node:field_theme_s_]'
+      index: 20
   metric: {  }
 codesnippet:
   create: {  }

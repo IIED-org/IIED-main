@@ -1,0 +1,87 @@
+uuid: b92fe825-cd9f-4d19-b734-e92a681700fa
+langcode: en
+status: true
+dependencies:
+  module:
+    - ctools
+id: iied_publications_container
+label: 'IIED publications container'
+weight: 0
+container_id: GTM-5QNCJ5
+data_layer: dataLayer
+include_classes: false
+whitelist_classes: "google\nnonGooglePixels\nnonGoogleScripts\nnonGoogleIframes"
+blacklist_classes: "customScripts\ncustomPixels"
+include_environment: false
+environment_id: ''
+environment_token: ''
+path_toggle: 'exclude listed'
+path_list: "/admin*\n/batch*\n/node/add*\n/node/*/edit\n/node/*/delete\n/user/*/edit*\n/user/*/cancel*"
+role_toggle: 'include listed'
+role_list:
+  anonymous: anonymous
+  authenticated: authenticated
+status_toggle: 'exclude listed'
+status_list: "403\n404"
+conditions:
+  'entity_bundle:block_content':
+    id: 'entity_bundle:block_content'
+    bundles: {  }
+    negate: false
+    context_mapping:
+      block_content: '@ds.ds_block_field_entity_context:block_content'
+  'entity_bundle:comment':
+    id: 'entity_bundle:comment'
+    bundles: {  }
+    negate: false
+    context_mapping:
+      comment: '@ds.ds_block_field_entity_context:comment'
+  'entity_bundle:contact_message':
+    id: 'entity_bundle:contact_message'
+    bundles: {  }
+    negate: false
+    context_mapping:
+      contact_message: '@ds.ds_block_field_entity_context:contact_message'
+  'entity_bundle:media':
+    id: 'entity_bundle:media'
+    bundles: {  }
+    negate: false
+    context_mapping:
+      media: '@ds.ds_block_field_entity_context:media'
+  'entity_bundle:menu_link_content':
+    id: 'entity_bundle:menu_link_content'
+    bundles: {  }
+    negate: false
+    context_mapping:
+      menu_link_content: '@ds.ds_block_field_entity_context:menu_link_content'
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      publication: publication
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+  'entity_bundle:paragraph':
+    id: 'entity_bundle:paragraph'
+    bundles: {  }
+    negate: false
+    context_mapping:
+      paragraph: '@ds.ds_block_field_entity_context:paragraph'
+  'entity_bundle:redirect':
+    id: 'entity_bundle:redirect'
+    bundles: {  }
+    negate: false
+    context_mapping:
+      redirect: '@ds.ds_block_field_entity_context:redirect'
+  'entity_bundle:shortcut':
+    id: 'entity_bundle:shortcut'
+    bundles: {  }
+    negate: false
+    context_mapping:
+      shortcut: '@ds.ds_block_field_entity_context:shortcut'
+  'entity_bundle:taxonomy_term':
+    id: 'entity_bundle:taxonomy_term'
+    bundles: {  }
+    negate: false
+    context_mapping:
+      taxonomy_term: '@ds.ds_block_field_entity_context:taxonomy_term'

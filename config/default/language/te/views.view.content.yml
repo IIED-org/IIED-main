@@ -2,9 +2,6 @@ label: సారము
 display:
   default:
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         title:
           label: శీర్షిక

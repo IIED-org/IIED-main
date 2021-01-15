@@ -1,12 +1,7 @@
 display:
   default:
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
-        nothing:
-          admin_label: Icon
         type:
           label: Jenis
         timestamp:
