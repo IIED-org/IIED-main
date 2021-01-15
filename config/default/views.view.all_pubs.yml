@@ -352,7 +352,7 @@ display:
           exclude: true
           alter:
             alter_text: true
-            text: 'https://pubs-live.ac.iied.org{{ thumbnail__target_id }}'
+            text: 'https://pubs.iied.org{{ thumbnail__target_id }}'
             make_link: false
             path: '{{ thumbnail__target_id }}'
             absolute: true
@@ -417,7 +417,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: 'https://pubs-live.ac.iied.org{{ thumbnail__target_id_1 }}'
+            text: 'https://pubs.iied.org{{ thumbnail__target_id_1 }}'
             make_link: false
             path: ''
             absolute: false
