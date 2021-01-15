@@ -1,18 +1,10 @@
 display:
   default:
     display_options:
-      fields:
-        media_bulk_form:
-          action_title: Action
       filters:
         name:
           expose:
             label: Nazwa
-        bundle:
-          expose:
-            label: 'Media type'
-          group_info:
-            label: 'Media type'
         langcode:
           expose:
             label: Język
@@ -20,8 +12,6 @@ display:
   page:
     display_options:
       fields:
-        media_bulk_form:
-          action_title: Action
         edit_media:
           text: Edytuj
         delete_media:

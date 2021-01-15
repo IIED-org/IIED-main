@@ -78,3 +78,13 @@
     width: 0;
     z-index: 1;
 }
+
+.socials {
+    svg {
+      width: 40px;
+      fill: $secondary;
+    }
+    svg:hover {
+    fill: $dark-blue;
+}
+}
