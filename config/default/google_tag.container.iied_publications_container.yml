@@ -24,36 +24,6 @@ role_list:
 status_toggle: 'exclude listed'
 status_list: "403\n404"
 conditions:
-  'entity_bundle:block_content':
-    id: 'entity_bundle:block_content'
-    bundles: {  }
-    negate: false
-    context_mapping:
-      block_content: '@ds.ds_block_field_entity_context:block_content'
-  'entity_bundle:comment':
-    id: 'entity_bundle:comment'
-    bundles: {  }
-    negate: false
-    context_mapping:
-      comment: '@ds.ds_block_field_entity_context:comment'
-  'entity_bundle:contact_message':
-    id: 'entity_bundle:contact_message'
-    bundles: {  }
-    negate: false
-    context_mapping:
-      contact_message: '@ds.ds_block_field_entity_context:contact_message'
-  'entity_bundle:media':
-    id: 'entity_bundle:media'
-    bundles: {  }
-    negate: false
-    context_mapping:
-      media: '@ds.ds_block_field_entity_context:media'
-  'entity_bundle:menu_link_content':
-    id: 'entity_bundle:menu_link_content'
-    bundles: {  }
-    negate: false
-    context_mapping:
-      menu_link_content: '@ds.ds_block_field_entity_context:menu_link_content'
   'entity_bundle:node':
     id: 'entity_bundle:node'
     bundles:
@@ -61,27 +31,3 @@ conditions:
     negate: false
     context_mapping:
       node: '@node.node_route_context:node'
-  'entity_bundle:paragraph':
-    id: 'entity_bundle:paragraph'
-    bundles: {  }
-    negate: false
-    context_mapping:
-      paragraph: '@ds.ds_block_field_entity_context:paragraph'
-  'entity_bundle:redirect':
-    id: 'entity_bundle:redirect'
-    bundles: {  }
-    negate: false
-    context_mapping:
-      redirect: '@ds.ds_block_field_entity_context:redirect'
-  'entity_bundle:shortcut':
-    id: 'entity_bundle:shortcut'
-    bundles: {  }
-    negate: false
-    context_mapping:
-      shortcut: '@ds.ds_block_field_entity_context:shortcut'
-  'entity_bundle:taxonomy_term':
-    id: 'entity_bundle:taxonomy_term'
-    bundles: {  }
-    negate: false
-    context_mapping:
-      taxonomy_term: '@ds.ds_block_field_entity_context:taxonomy_term'

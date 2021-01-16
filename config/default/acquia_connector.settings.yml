@@ -34,7 +34,7 @@ spi:
   cron_interval: 28800
   env_detection_enabled: true
   site_uuid: 53a9e309-734c-4742-b2c5-c8ccdb11652d
-  site_environment: null
+  site_environment: prod
 mapping:
   acquia_spi_send_node_user:
     - acquia_connector.settings

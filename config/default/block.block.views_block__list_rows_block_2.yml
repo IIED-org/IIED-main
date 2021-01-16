@@ -5,10 +5,14 @@ dependencies:
   config:
     - views.view.list_rows
   module:
+    - block_class
     - system
     - views
   theme:
     - iied_pubs
+third_party_settings:
+  block_class:
+    classes: mt-4
 id: views_block__list_rows_block_2
 theme: iied_pubs
 region: content
