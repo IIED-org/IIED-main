@@ -74,6 +74,10 @@ AddEncoding gzip svgz
   RewriteCond %{HTTPS} on
   RewriteRule ^ - [E=protossl:s]
 
+  # Strip off html suffix if exists
+  RewriteCond %{THE_REQUEST} /([^.]+)\.html [NC]
+  RewriteRule ^ /%1 [NC,L,R=301]
+  
   # Redirect legacy pdf paths
   RewriteRule ^pdfs/(.*)$ /sites/default/files/pdfs/migrate/$1 [R=301,NC,L]
 
