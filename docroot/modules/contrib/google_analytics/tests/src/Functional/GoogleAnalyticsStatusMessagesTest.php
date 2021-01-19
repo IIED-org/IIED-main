@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\google_analytics\Functional;
 
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -12,8 +11,6 @@ use Drupal\Tests\BrowserTestBase;
  */
 class GoogleAnalyticsStatusMessagesTest extends BrowserTestBase {
 
-  use StringTranslationTrait;
-
   /**
    * Modules to enable.
    *
@@ -22,18 +19,9 @@ class GoogleAnalyticsStatusMessagesTest extends BrowserTestBase {
   public static $modules = ['google_analytics', 'google_analytics_test'];
 
   /**
-   * Default theme.
-   *
-   * @var string
+   * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
-
-  /**
-   * Admin user.
-   *
-   * @var \Drupal\user\Entity\User|bool
-   */
-  protected $adminUser;
 
   /**
    * {@inheritdoc}
@@ -47,7 +35,7 @@ class GoogleAnalyticsStatusMessagesTest extends BrowserTestBase {
     ];
 
     // User to set up google_analytics.
-    $this->adminUser = $this->drupalCreateUser($permissions);
+    $this->admin_user = $this->drupalCreateUser($permissions);
   }
 
   /**
@@ -60,16 +48,16 @@ class GoogleAnalyticsStatusMessagesTest extends BrowserTestBase {
     // Enable logging of errors only.
     $this->config('google_analytics.settings')->set('track.messages', ['error' => 'error'])->save();
 
-    $this->drupalPostForm('user/login', [], $this->t('Log in'));
-    $this->assertRaw('gtag("event", "Error message", {"event_category":"Messages","event_label":"Username field is required."});');
-    $this->assertRaw('gtag("event", "Error message", {"event_category":"Messages","event_label":"Password field is required."});');
+    $this->drupalPostForm('user/login', [], t('Log in'));
+    $this->assertSession()->responseContains('ga("send", "event", "Messages", "Error message", "Username field is required.");');
+    $this->assertSession()->responseContains('ga("send", "event", "Messages", "Error message", "Password field is required.");');
 
     // Testing this drupal_set_message() requires an extra test module.
     $this->drupalGet('google-analytics-test/drupal-messenger-add-message');
-    $this->assertNoRaw('gtag("event", "Status message", {"event_category":"Messages","event_label":"Example status message."});');
-    $this->assertNoRaw('gtag("event", "Warning message", {"event_category":"Messages","event_label":"Example warning message."});');
-    $this->assertRaw('gtag("event", "Error message", {"event_category":"Messages","event_label":"Example error message."});');
-    $this->assertRaw('gtag("event", "Error message", {"event_category":"Messages","event_label":"Example error message with html tags and link."});');
+    $this->assertSession()->responseNotContains('ga("send", "event", "Messages", "Status message", "Example status message.");');
+    $this->assertSession()->responseNotContains('ga("send", "event", "Messages", "Warning message", "Example warning message.");');
+    $this->assertSession()->responseContains('ga("send", "event", "Messages", "Error message", "Example error message.");');
+    $this->assertSession()->responseContains('ga("send", "event", "Messages", "Error message", "Example error message with html tags and link.");');
 
     // Enable logging of status, warnings and errors.
     $this->config('google_analytics.settings')->set('track.messages', [
@@ -79,10 +67,10 @@ class GoogleAnalyticsStatusMessagesTest extends BrowserTestBase {
     ])->save();
 
     $this->drupalGet('google-analytics-test/drupal-messenger-add-message');
-    $this->assertRaw('gtag("event", "Status message", {"event_category":"Messages","event_label":"Example status message."});');
-    $this->assertRaw('gtag("event", "Warning message", {"event_category":"Messages","event_label":"Example warning message."});');
-    $this->assertRaw('gtag("event", "Error message", {"event_category":"Messages","event_label":"Example error message."});');
-    $this->assertRaw('gtag("event", "Error message", {"event_category":"Messages","event_label":"Example error message with html tags and link."});');
+    $this->assertSession()->responseContains('ga("send", "event", "Messages", "Status message", "Example status message.");');
+    $this->assertSession()->responseContains('ga("send", "event", "Messages", "Warning message", "Example warning message.");');
+    $this->assertSession()->responseContains('ga("send", "event", "Messages", "Error message", "Example error message.");');
+    $this->assertSession()->responseContains('ga("send", "event", "Messages", "Error message", "Example error message with html tags and link.");');
   }
 
 }

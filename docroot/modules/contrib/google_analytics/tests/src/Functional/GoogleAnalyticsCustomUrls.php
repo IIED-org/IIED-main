@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\google_analytics\Functional;
 
-use Drupal\Component\Serialization\Json;
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -20,18 +19,9 @@ class GoogleAnalyticsCustomUrls extends BrowserTestBase {
   public static $modules = ['google_analytics'];
 
   /**
-   * Default theme.
-   *
-   * @var string
+   * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
-
-  /**
-   * Admin user.
-   *
-   * @var \Drupal\user\Entity\User|bool
-   */
-  protected $adminUser;
 
   /**
    * {@inheritdoc}
@@ -47,39 +37,25 @@ class GoogleAnalyticsCustomUrls extends BrowserTestBase {
     ];
 
     // User to set up google_analytics.
-    $this->adminUser = $this->drupalCreateUser($permissions);
+    $this->admin_user = $this->drupalCreateUser($permissions);
   }
 
   /**
    * Tests if user password page urls are overridden.
    */
-  public function testGoogleAnalyticsCustomUrls() {
+  public function testGoogleAnalyticsUserPasswordPage() {
     $base_path = base_path();
     $ua_code = 'UA-123456-1';
-    $this->config('google_analytics.settings')
-      ->set('account', $ua_code)
-      ->set('privacy.anonymizeip', 0)
-      ->set('track.displayfeatures', 1)
-      ->save();
+    $this->config('google_analytics.settings')->set('account', $ua_code)->save();
 
     $this->drupalGet('user/password', ['query' => ['name' => 'foo']]);
-    $this->assertRaw('gtag("config", ' . Json::encode($ua_code) . ', {"groups":"default","page_path":"' . $base_path . 'user/password"});');
+    $this->assertSession()->responseContains('ga("set", "page", "' . $base_path . 'user/password"');
 
     $this->drupalGet('user/password', ['query' => ['name' => 'foo@example.com']]);
-    $this->assertRaw('gtag("config", ' . Json::encode($ua_code) . ', {"groups":"default","page_path":"' . $base_path . 'user/password"});');
+    $this->assertSession()->responseContains('ga("set", "page", "' . $base_path . 'user/password"');
 
     $this->drupalGet('user/password');
-    $this->assertNoRaw('"page_path":"' . $base_path . 'user/password"});');
-
-    // Test whether 403 forbidden tracking code is shown if user has no access.
-    $this->drupalGet('admin');
-    $this->assertResponse(403);
-    $this->assertRaw($base_path . '403.html');
-
-    // Test whether 404 not found tracking code is shown on non-existent pages.
-    $this->drupalGet($this->randomMachineName(64));
-    $this->assertResponse(404);
-    $this->assertRaw($base_path . '404.html');
+    $this->assertSession()->responseNotContains('ga("set", "page",');
   }
 
 }
