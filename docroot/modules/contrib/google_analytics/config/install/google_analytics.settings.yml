@@ -20,7 +20,7 @@ track:
   messages: {  }
   site_search: false
   adsense: false
-  displayfeatures: true
+  displayfeatures: false
 privacy:
   anonymizeip: true
 custom:
