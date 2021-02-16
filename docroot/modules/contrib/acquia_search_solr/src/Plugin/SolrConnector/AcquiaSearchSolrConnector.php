@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_search_solr\Plugin\SolrConnector;
 
+use Drupal\acquia_search_solr\Helper\Messages;
 use Drupal\acquia_search_solr\Helper\Runtime;
 use Drupal\acquia_search_solr\Helper\Storage;
 use Drupal\acquia_search_solr\PreferredSearchCore;
@@ -12,6 +13,7 @@ use Drupal\search_api_solr\SolrConnector\SolrConnectorPluginBase;
 use Solarium\Core\Client\Adapter\Http;
 use Solarium\Core\Client\Client;
 use Solarium\Core\Client\Endpoint;
+use Solarium\Exception\UnexpectedValueException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -45,6 +47,13 @@ class AcquiaSearchSolrConnector extends SolrConnectorPluginBase {
   const ENDPOINT_KEY = 'search_api_solr';
 
   /**
+   * Centralized place for accessing and updating Acquia Search Solr settings.
+   *
+   * @var \Drupal\acquia_search_solr\Helper\Storage
+   */
+  protected $storage;
+
+  /**
    * Event subscriber.
    *
    * @var \Drupal\acquia_search_solr\EventSubscriber\AcquiaSearchSolrSubscriber
@@ -52,12 +61,32 @@ class AcquiaSearchSolrConnector extends SolrConnectorPluginBase {
   protected $searchSubscriber;
 
   /**
+   * A cache backend interface.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(array $configuration, $plugin_id, array $plugin_definition) {
+    $this->storage = new Storage();
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+  }
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    // Our schema (8.1.7) is newer than Solr's version, 4.1.1.
+    $configuration['skip_schema_check'] = TRUE;
 
     $plugin = parent::create($container, $configuration, $plugin_id, $plugin_definition);
     $plugin->searchSubscriber = $container->get('acquia_search_solr.search_subscriber');
+    $plugin->logger = $container->get('logger.factory')->get('acquia_search_solr');
+    $plugin->cache = $container->get('cache.default');
+
     return $plugin;
 
   }
@@ -69,8 +98,6 @@ class AcquiaSearchSolrConnector extends SolrConnectorPluginBase {
 
     $configuration = parent::defaultConfiguration();
 
-    $configuration['scheme'] = 'https';
-    $configuration['port'] = $this->getSolrPort($configuration['scheme']);
     unset($configuration['overridden_by_acquia_search_solr']);
 
     // The Acquia Search Solr isn't configured.
@@ -112,6 +139,23 @@ class AcquiaSearchSolrConnector extends SolrConnectorPluginBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getCoreLink() {
+    return $this->getServerLink();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCoreInfo($reset = FALSE) {
+    if (isset($this->configuration['core'])) {
+      return parent::getCoreInfo($reset);
+    }
+    return NULL;
+  }
+
+  /**
    * Sets read-only mode to the given Solr config.
    *
    * We enforce read-only mode in 2 ways:
@@ -150,17 +194,71 @@ class AcquiaSearchSolrConnector extends SolrConnectorPluginBase {
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
 
-    $form = parent::buildConfigurationForm($form, $form_state);
+    if ($this->storage->isReadOnly()) {
+      $form['readonly']['#markup'] = Messages::getReadOnlyModeWarning();
+    }
 
-    unset($form['host']);
-    unset($form['port']);
-    unset($form['path']);
-    unset($form['core']);
+    // If acquia connector is enabled, use the settings from there instead.
+    $connector = \Drupal::moduleHandler()->moduleExists('acquia_connector');
+    if ($connector) {
+      $form['connector']['#markup'] = $this->t('Search settings are being automatically set by your <a href=":connector">Acquia Connector</a> subscription.', [
+        ':connector' => base_path() . Url::fromRoute('acquia_connector.settings')->getInternalPath(),
+      ]);
 
-    // Scheme should always be https.
-    $form['scheme'] = [
-      '#type' => 'value',
-      '#value' => 'https',
+      $subscription = \Drupal::state()->get('acquia_subscription_data');
+      $form['identifier'] = [
+        '#type' => 'value',
+        '#value' => \Drupal::state()->get('acquia_connector.identifier') ?? '',
+      ];
+      $form['api_key'] = [
+        '#type' => 'value',
+        '#value' => \Drupal::state()->get('acquia_connector.key') ?? '',
+      ];
+      $form['uuid'] = [
+        '#type' => 'value',
+        '#value' => $subscription['uuid'] ?? '',
+      ];
+    }
+    else {
+      $form['manual']['#markup'] = $this->t('Enter your product keys from the "Product Keys" section of the <a href=":cloud">Acquia Cloud UI</a> to connect your site to Acquia Search. You can also automatically set these details by enabling the Acquia Connector.', [
+        ':cloud' => Url::fromUri('https://cloud.acquia.com')->getUri(),
+      ]);
+
+      $form['identifier'] = [
+        '#title' => $this->t('Acquia Subscription identifier'),
+        '#type' => 'textfield',
+        '#default_value' => $this->storage->getIdentifier(),
+        '#required' => TRUE,
+        '#description' => $this->t('Obtain this from the "Product Keys" section of the Acquia Cloud UI. Example: ABCD-12345'),
+      ];
+      $form['api_key'] = [
+        '#title' => $this->t('Acquia Connector key'),
+        '#type' => 'password',
+        '#description' => !empty($this->storage->getApiKey()) ? $this->t('Value already provided.') : $this->t('Obtain this from the "Product Keys" section of the Acquia Cloud UI.'),
+        '#required' => empty($this->storage->getApiKey()),
+      ];
+      $form['uuid'] = [
+        '#title' => $this->t('Acquia Application UUID'),
+        '#type' => 'textfield',
+        '#default_value' => $this->storage->getUuid(),
+        '#required' => TRUE,
+        '#description' => $this->t('Obtain this from the "Product Keys" section of the Acquia Cloud UI.'),
+      ];
+    }
+
+    $form['api_host'] = [
+      '#title' => $this->t('Acquia Search API hostname'),
+      '#type' => 'textfield',
+      '#description' => $this->t('API endpoint domain or URL. Default value is "https://api.sr-prod02.acquia.com".'),
+      '#default_value' => $this->storage->getApiHost(),
+      '#required' => TRUE,
+    ];
+
+    $form['acquia_search_cores'] = [
+      '#title' => $this->t('Solr core(s) currently available for your application'),
+      '#type' => 'fieldset',
+      '#tree' => FALSE,
+      'cores' => $this->getAcquiaSearchCores(),
     ];
 
     return $form;
@@ -170,19 +268,47 @@ class AcquiaSearchSolrConnector extends SolrConnectorPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function setConfiguration(array $configuration) {
+  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
+    // Remove whitespaces.
+    foreach (['identifier', 'uuid', 'api_key', 'api_host'] as $key) {
+      $form_state->setValue($key, trim($form_state->getValue($key)));
+    }
+    // No trailing slash allowed for a API host.
+    $form_state->setValue('api_host', rtrim($form_state->getValue('api_host'), '/'));
 
-    $configuration['port'] = $this->getSolrPort();
+    $values = $form_state->getValues();
 
-    parent::setConfiguration($configuration);
+    if (!preg_match('@^[A-Z]{4,5}-[0-9]{5,6}$@', $values['identifier'])) {
+      $form_state->setErrorByName('identifier', $this->t('Enter a valid identifier.'));
+    }
 
+    if (!preg_match('@^(https?://|)[a-z0-9\.-]*$@', $values['api_host'])) {
+      $form_state->setErrorByName('api_host', $this->t('Enter a valid domain.'));
+    }
+
+    if (!preg_match('@^[0-9a-f-]*$@', $values['uuid'])) {
+      $form_state->setErrorByName('uuid', $this->t('Enter a valid UUID.'));
+    }
   }
 
   /**
    * {@inheritdoc}
    */
-  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
-    // Override parent class: turn off connection check.
+  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
+    $values = $form_state->getValues();
+
+    // Clear Acquia Search Solr indexes cache.
+    if (!empty(Storage::getIdentifier())) {
+      $cid = 'acquia_search_solr.indexes.' . Storage::getIdentifier();
+      $this->cache->delete($cid);
+    }
+    $this->storage->setApiHost($values['api_host']);
+    if (!empty($values['api_key'])) {
+      $this->storage->setApiKey($values['api_key']);
+    }
+
+    $this->storage->setIdentifier($values['identifier']);
+    $this->storage->setUuid($values['uuid']);
   }
 
   /**
@@ -195,10 +321,10 @@ class AcquiaSearchSolrConnector extends SolrConnectorPluginBase {
     }
 
     $this->solr = new Client(new Http(), $this->eventDispatcher);
-    // Ensure that people don't specify the wrong port since the Search API Solr
-    // class SolrConnectorPluginBase which we're extending does offer everything
-    // up for configuration.
-    $this->configuration['port'] = $this->getSolrPort($this->configuration['scheme']);
+
+    // Scheme should always be https and port 443.
+    $this->configuration['scheme'] = 'https';
+    $this->configuration['port'] = 443;
     $this->configuration['key'] = self::ENDPOINT_KEY;
     $this->configuration['path'] = '/';
     $this->configuration[self::QUERY_TIMEOUT] = $this->configuration['timeout'];
@@ -208,13 +334,47 @@ class AcquiaSearchSolrConnector extends SolrConnectorPluginBase {
   }
 
   /**
+   * Outputs list of Acquia Search cores.
+   *
+   * @return array
+   *   Renderable array.
+   */
+  protected function getAcquiaSearchCores(): array {
+
+    if (!$this->storage->getApiKey() || !$this->storage->getIdentifier() || !$this->storage->getUuid() || !$this->storage->getApiHost()) {
+      return [
+        '#markup' => $this->t('Please provide API credentials for Acquia Search.'),
+      ];
+    }
+
+    if (!$cores = Runtime::getAcquiaSearchApiClient()->getSearchIndexes($this->storage->getIdentifier())) {
+      return [
+        '#markup' => $this->t('Unable to connect to Acquia Search API.'),
+      ];
+    }
+
+    // We use core id as a key.
+    $cores = array_keys($cores);
+
+    if (empty($cores)) {
+      $cores[] = $this->t('Your subscription contains no cores.');
+    }
+
+    return [
+      '#theme' => 'item_list',
+      '#items' => $cores,
+    ];
+
+  }
+
+  /**
    * {@inheritdoc}
    */
   protected function getServerUri() {
 
     $this->connect();
 
-    return $this->solr->getEndpoint(self::ENDPOINT_KEY)->getCoreBaseUri();
+    return $this->getEndpointUri($this->solr->getEndpoint(self::ENDPOINT_KEY));
 
   }
 
@@ -272,13 +432,6 @@ class AcquiaSearchSolrConnector extends SolrConnectorPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getCoreLink() {
-    return $this->getServerLink();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getSolrVersion($force_auto_detect = FALSE) {
     try {
       return parent::getSolrVersion($force_auto_detect);
@@ -307,7 +460,14 @@ class AcquiaSearchSolrConnector extends SolrConnectorPluginBase {
    * {@inheritdoc}
    */
   protected function getEndpointUri(Endpoint $endpoint): string {
-    return $endpoint->getCoreBaseUri();
+    try {
+      return $endpoint->getCoreBaseUri();
+    }
+    catch (UnexpectedValueException $exception) {
+      $this->logger->error($this->t('Unavailable: @message', ['@message' => $exception->getMessage()]));
+      return $endpoint->getServerUri();
+    }
+
   }
 
   /**
@@ -315,19 +475,6 @@ class AcquiaSearchSolrConnector extends SolrConnectorPluginBase {
    */
   public function reloadCore() {
     return FALSE;
-  }
-
-  /**
-   * Get port number of the Solr server.
-   *
-   * @param string $scheme
-   *   The server scheme.
-   *
-   * @return int
-   *   443 if using HTTPS, otherwise 80.
-   */
-  protected function getSolrPort($scheme = 'https') {
-    return $scheme === 'https' ? 443 : 80;
   }
 
 }

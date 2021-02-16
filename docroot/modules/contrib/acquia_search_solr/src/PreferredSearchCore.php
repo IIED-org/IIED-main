@@ -5,7 +5,7 @@ namespace Drupal\acquia_search_solr;
 use Drupal\acquia_search_solr\Helper\Storage;
 
 /**
- * Class PreferredSearchCore.
+ * Return the Preferred search core for Solr.
  *
  * @package Drupal\acquia_search_solr
  */

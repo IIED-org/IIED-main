@@ -55,7 +55,7 @@ class StorageTest extends UnitTestCase {
       ->willReturn($config->reveal());
 
     $entension_list_module = $this->prophesize(ModuleExtensionList::class);
-    $entension_list_module->getExtensionInfo('acquia_search_solr')->willReturn(['version' => 'testing-8.x-1.x']);
+    $entension_list_module->getExtensionInfo('acquia_search_solr')->willReturn(['version' => 'testing-3.x']);
 
     $container = new ContainerBuilder();
     $container->set('state', $state->reveal());
@@ -97,7 +97,7 @@ class StorageTest extends UnitTestCase {
     $storage->setUuid($uuid);
     $this->assertEquals($uuid, Storage::getUuid());
 
-    $this->assertEquals(Storage::getVersion(), 'testing-8.x-1.x');
+    $this->assertEquals(Storage::getVersion(), 'testing-3.x');
 
     $storage->deleteAllData();
 

@@ -87,3 +87,19 @@ function acquia_search_solr_uninstall() {
   \Drupal::configFactory()->getEditable('acquia_search_solr.settings')->delete();
 
 }
+
+/**
+ * Implements hook_install().
+ */
+function acquia_search_solr_install() {
+  // Import settings from the connector if it is installed and configured.
+  $connector = \Drupal::moduleHandler()->moduleExists('acquia_connector');
+  $subscription = \Drupal::state()->get('acquia_subscription_data');
+  $storage = new Storage();
+  if ($connector && isset($subscription)) {
+    $storage->setApiHost(\Drupal::config('acquia_search_solr.settings')->get('api_host') ?? 'https://api.sr-prod02.acquia.com');
+    $storage->setApiKey(\Drupal::state()->get('acquia_connector.key'));
+    $storage->setIdentifier(\Drupal::state()->get('acquia_connector.identifier'));
+    $storage->setUuid($subscription['uuid']);
+  }
+}

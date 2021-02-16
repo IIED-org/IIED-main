@@ -9,7 +9,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
 /**
- * Class AcquiaSearchApiClient.
+ * Acquia implementation of the Search API Client.
  *
  * @package Drupal\acquia_search_solr
  */

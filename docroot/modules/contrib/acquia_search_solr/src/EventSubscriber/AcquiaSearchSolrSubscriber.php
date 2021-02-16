@@ -3,6 +3,7 @@
 namespace Drupal\acquia_search_solr\EventSubscriber;
 
 use Drupal\acquia_search_solr\AcquiaCryptConnector;
+use Drupal\acquia_search_solr\Helper\Flood;
 use Drupal\acquia_search_solr\Helper\Runtime;
 use Drupal\acquia_search_solr\Helper\Storage;
 use Drupal\Component\Utility\Crypt;
@@ -77,6 +78,18 @@ class AcquiaSearchSolrSubscriber extends AbstractPlugin implements EventSubscrib
       return;
     }
 
+    // Run Flood control checks.
+    if (!Flood::isAllowed($request->getHandler())) {
+      // If request should be blocked, show an error message.
+      $message = 'The Acquia Search flood control mechanism has blocked a Solr query due to API usage limits. You should retry in a few seconds. Contact the site administrator if this message persists.';
+      \Drupal::messenger()->addError($message);
+
+      // Build a static response which avoids a network request to Solr.
+      $response = new Response($message, ['HTTP/1.1 429 Too Many Requests']);
+      $event->setResponse($response);
+      $event->stopPropagation();
+      return;
+    }
     $request->addParam('request_id', uniqid(), TRUE);
     if ($request->getFileUpload()) {
       $helper = new AdapterHelper();
@@ -123,7 +136,11 @@ class AcquiaSearchSolrSubscriber extends AbstractPlugin implements EventSubscrib
     $response = $event->getResponse();
 
     if ($response->getStatusCode() != 200) {
-      throw new HttpException($response->getStatusMessage());
+      throw new HttpException(
+        $response->getStatusMessage(),
+        $response->getStatusCode(),
+        $response->getBody()
+      );
     }
 
     if ($event->getRequest()->getHandler() == 'admin/ping') {
@@ -267,7 +284,7 @@ class AcquiaSearchSolrSubscriber extends AbstractPlugin implements EventSubscrib
       return '';
     }
 
-    $time = \Drupal::time()->getRequestTime();
+    $time = time();
 
     $hmac = hash_hmac('sha1', $time . $nonce . $string, $derived_key);
 
