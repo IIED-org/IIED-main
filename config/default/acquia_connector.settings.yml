@@ -12,7 +12,7 @@ spi:
   send_watchdog: 1
   use_cron: 1
   dynamic_banner: 1
-  set_variables_override: 0
+  set_variables_override: 1
   set_variables_automatic:
     - acquia_spi_set_variables_automatic
     - error_level

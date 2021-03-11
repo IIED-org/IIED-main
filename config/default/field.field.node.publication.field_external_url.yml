@@ -11,8 +11,8 @@ id: node.publication.field_external_url
 field_name: field_external_url
 entity_type: node
 bundle: publication
-label: 'External URL'
-description: ''
+label: 'External hosted publication URL'
+description: '<i><big><strong>Hint:</strong> Use only with ''X'' type product codes</big></i>'
 required: false
 translatable: false
 default_value: {  }

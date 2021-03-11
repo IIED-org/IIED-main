@@ -1,0 +1,81 @@
+uuid: d5e5dddd-b2b9-46d0-92a4-3c70a4e8232d
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_work_programme_global_enga
+field_name: field_work_programme_global_enga
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: 'GET_01: Biodiversity and development'
+      label: 'GET_01: Biodiversity and development'
+    -
+      value: 'GET_02: China in the world'
+      label: 'GET_02: China in the world'
+    -
+      value: 'GET_03: Connecting humanitarian and environmental worlds'
+      label: 'GET_03: Connecting humanitarian and environmental worlds'
+    -
+      value: 'GET_04: Digital and sustainable development'
+      label: 'GET_04: Digital and sustainable development'
+    -
+      value: 'GET_05: The Sustainable Development Goals'
+      label: 'GET_05: The Sustainable Development Goals'
+    -
+      value: 'WP_01: Conservation, communities and equity'
+      label: 'WP_01: Conservation, communities and equity'
+    -
+      value: 'WP_02: Equitable and transformative energy systems'
+      label: 'WP_02: Equitable and transformative energy systems'
+    -
+      value: 'WP_03: Forests and prosperity'
+      label: 'WP_03: Forests and prosperity'
+    -
+      value: 'WP_04: Food systems'
+      label: 'WP_04: Food systems'
+    -
+      value: 'WP_05: Gender equality, voice and power'
+      label: 'WP_05: Gender equality, voice and power'
+    -
+      value: 'WP_06: The governance of risk: agile, resilient and mobile societies'
+      label: 'WP_06: The governance of risk: agile, resilient and mobile societies'
+    -
+      value: 'WP_07: Inclusive blue economy (ocean and fisheries economics)'
+      label: 'WP_07: Inclusive blue economy (ocean and fisheries economics)'
+    -
+      value: 'WP_08: Money where it matters'
+      label: 'WP_08: Money where it matters'
+    -
+      value: 'WP_09: Monitoring, evaluation and learning for sustainable development'
+      label: 'WP_09: Monitoring, evaluation and learning for sustainable development'
+    -
+      value: 'WP_10: Incentives for an inclusive green economy'
+      label: 'WP_10: Incentives for an inclusive green economy'
+    -
+      value: 'WP_11: Shaping urban transitions'
+      label: 'WP_11: Shaping urban transitions'
+    -
+      value: 'WP_12: Strengthening rights in natural resource investments'
+      label: 'WP_12: Strengthening rights in natural resource investments'
+    -
+      value: 'WP_13: Urban poverty and informality'
+      label: 'WP_13: Urban poverty and informality'
+    -
+      value: 'WP_14: Working with the LDCs for climate ambition'
+      label: 'WP_14: Working with the LDCs for climate ambition'
+    -
+      value: 'WP_15: LIFE-AR'
+      label: 'WP_15: LIFE-AR'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

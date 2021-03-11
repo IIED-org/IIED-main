@@ -9,7 +9,7 @@ id: node.publication.field_parent
 field_name: field_parent
 entity_type: node
 bundle: publication
-label: Parent
+label: 'Parent - Coming soon, do not use yet!'
 description: ''
 required: false
 translatable: true

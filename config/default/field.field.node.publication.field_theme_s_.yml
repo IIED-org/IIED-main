@@ -11,7 +11,7 @@ field_name: field_theme_s_
 entity_type: node
 bundle: publication
 label: Theme(s)
-description: ''
+description: '<p><i><big><strong>Hint:</strong> select no more than 2</big></i></p>'
 required: false
 translatable: false
 default_value: {  }

@@ -9,7 +9,7 @@ id: node.publication.field_pdf_pages
 field_name: field_pdf_pages
 entity_type: node
 bundle: publication
-label: 'PDF pages'
+label: 'PDF no. of pages'
 description: ''
 required: false
 translatable: true

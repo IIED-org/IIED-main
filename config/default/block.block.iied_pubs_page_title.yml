@@ -3,10 +3,14 @@ langcode: en
 status: true
 dependencies:
   module:
+    - block_class
     - ctools
     - system
   theme:
     - iied_pubs
+third_party_settings:
+  block_class:
+    classes: 'text-center m-3'
 _core:
   default_config_hash: 7rR9chwXvdM2H8OYMAYx9Zj3GGlPMrZp_M3ZA4thYTk
 id: iied_pubs_page_title

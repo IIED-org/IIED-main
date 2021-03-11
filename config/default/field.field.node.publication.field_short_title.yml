@@ -10,7 +10,7 @@ field_name: field_short_title
 entity_type: node
 bundle: publication
 label: 'Short title'
-description: 'Promotional ''short title'', only used for home-page over-long titles'
+description: '<i><big><strong>Hint:</strong> If title is over 120 characters add a shorter title for use on Home page and in lists</big></i>'
 required: false
 translatable: true
 default_value: {  }

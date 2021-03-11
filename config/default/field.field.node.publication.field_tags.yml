@@ -11,7 +11,7 @@ field_name: field_tags
 entity_type: node
 bundle: publication
 label: Tags
-description: ''
+description: '<p><i><big><strong>Hint:</strong> Start typing and select from the suggestions that appear. Contact the Comms team to suggest/request new tags.</big></i></p>'
 required: false
 translatable: true
 default_value: {  }

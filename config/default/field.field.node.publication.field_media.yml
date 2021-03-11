@@ -10,7 +10,7 @@ id: node.publication.field_media
 field_name: field_media
 entity_type: node
 bundle: publication
-label: Media
+label: 'Upload PDF file'
 description: ''
 required: false
 translatable: true

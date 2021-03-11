@@ -47,6 +47,7 @@ dependencies:
     - field.field.node.publication.field_team
     - field.field.node.publication.field_theme_s_
     - field.field.node.publication.field_translator
+    - field.field.node.publication.field_work_programme_global_enga
     - node.type.publication
   module:
     - address
@@ -427,6 +428,13 @@ content:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
+    region: content
+  field_work_programme_global_enga:
+    weight: 102
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
     region: content
   links:
     weight: 0

@@ -48,6 +48,7 @@ dependencies:
     - field.field.node.publication.field_team
     - field.field.node.publication.field_theme_s_
     - field.field.node.publication.field_translator
+    - field.field.node.publication.field_work_programme_global_enga
     - node.type.publication
   module:
     - layout_builder
@@ -179,5 +180,6 @@ hidden:
   field_team: true
   field_theme_s_: true
   field_translator: true
+  field_work_programme_global_enga: true
   langcode: true
   search_api_excerpt: true

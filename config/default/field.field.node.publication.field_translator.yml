@@ -9,8 +9,8 @@ id: node.publication.field_translator
 field_name: field_translator
 entity_type: node
 bundle: publication
-label: Translator
-description: ''
+label: Translator(s)
+description: '<p><i><big><strong>Hint:</strong> Complete as per ''Author(s)'' field.</big></i></p>'
 required: false
 translatable: true
 default_value: {  }

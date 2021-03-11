@@ -11,7 +11,7 @@ field_name: field_project
 entity_type: node
 bundle: publication
 label: Project
-description: ''
+description: '<p><i><big><strong>Hint:</strong> Start typing and select from the suggestions that appear. Contact the Comms team to request a new project page.</big></i></p>'
 required: false
 translatable: false
 default_value: {  }

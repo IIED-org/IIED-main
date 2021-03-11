@@ -10,9 +10,9 @@ id: node.publication.field_document_type
 field_name: field_document_type
 entity_type: node
 bundle: publication
-label: 'Document type'
+label: 'Publication type'
 description: ''
-required: false
+required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''

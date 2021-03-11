@@ -1,0 +1,21 @@
+uuid: 26e6be5d-25a0-465c-8153-fa24dad00ca4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_work_programme_global_enga
+    - node.type.publication
+  module:
+    - options
+id: node.publication.field_work_programme_global_enga
+field_name: field_work_programme_global_enga
+entity_type: node
+bundle: publication
+label: 'Work programme/Global engagement theme'
+description: '<p><i><big><strong>Hint:</strong> Select one from the drop-down list</big></i></p>'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -9,7 +9,7 @@ id: node.publication.field_reportagency1
 field_name: field_reportagency1
 entity_type: node
 bundle: publication
-label: ReportAgency1
+label: 'ReportAgency1 (legacy)'
 description: ''
 required: false
 translatable: false

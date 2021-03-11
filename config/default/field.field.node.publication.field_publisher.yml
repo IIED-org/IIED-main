@@ -11,8 +11,8 @@ field_name: field_publisher
 entity_type: node
 bundle: publication
 label: Publisher(s)
-description: ''
-required: false
+description: "<p><i><big><strong>Hint:</strong> Publishers must be organisations NOT individuals.</big></i></p>\r\n<p><i><big>Start typing and select from the suggestions that appear.</big></i></p>\r\n<p><i><big>To create a new Publisher entry, return to your dashboard and select 'Check/create Organisation'.</big></i></p>\r\n<p><i><big>For multiple Publishers click 'Add another item'.</big></i></p>"
+required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''

@@ -11,7 +11,7 @@ id: node.publication.field_doi
 field_name: field_doi
 entity_type: node
 bundle: publication
-label: DOI
+label: 'Digital Object Identifier (DOI)'
 description: ''
 required: false
 translatable: true

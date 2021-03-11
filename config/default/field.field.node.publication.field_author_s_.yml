@@ -10,8 +10,8 @@ field_name: field_author_s_
 entity_type: node
 bundle: publication
 label: Author(s)
-description: ''
-required: false
+description: "<p><i><big><strong>Hint:</strong> Authors may be individuals or organisations.</big></i></p>\r\n<p><i><big>Start typing and select from the suggestions that appear.</big></i></p>\r\n<p><i><big>To create a new Author entry, return to your dashboard and select 'Check/create Author'.</big></i></p>\r\n<p><i><big>For multiple Authors click 'Add another item'.</big></i></p>"
+required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''

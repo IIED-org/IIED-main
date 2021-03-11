@@ -9,8 +9,8 @@ id: node.publication.field_deptlist
 field_name: field_deptlist
 entity_type: node
 bundle: publication
-label: DeptList
-description: ''
+label: 'Department List (legacy)'
+description: '<p><i><big><strong>Hint:</strong> BSD, CCP, COMMS, EEP, EXEC, FAA, FOR, GLOBALGOV, HS, MMSD, NATRES, SABL, SLG or SMG</big></i><p>'
 required: false
 translatable: false
 default_value: {  }
