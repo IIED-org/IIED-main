@@ -1,0 +1,61 @@
+{
+    "name": "drupal/masonry",
+    "description": "Masonry integrates with Masonry library",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "minimum-stability": "dev",
+    "homepage": "https://www.drupal.org/project/masonry",
+    "authors": [
+        {
+            "name": "Dominique Clause (Dom.)",
+            "homepage": "https://www.drupal.org/u/dom",
+            "role": "Maintainer"
+        }
+    ],
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/masonry?version=8.x",
+        "source": "https://git.drupalcode.org/project/masonry"
+    },
+    "repositories": {
+        "masonry": {
+            "type": "package",
+            "package": {
+                "name": "masonry/masonry",
+                "version": "v4.2.2",
+                "type": "drupal-library",
+                "extra": {
+                    "installer-name": "masonry"
+                },
+                "dist": {
+                    "url": "https://github.com/desandro/masonry/archive/v4.2.2.zip",
+                    "type": "zip"
+                },
+                "require": {
+                    "composer/installers": "~1.0"
+                }
+            }
+        },
+        "imagesloaded": {
+            "type": "package",
+            "package": {
+                "name": "imagesloaded/imagesloaded",
+                "version": "v4.1.4",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/desandro/imagesloaded/archive/v4.1.4.zip",
+                    "type": "zip"
+                },
+                "extra": {
+                    "installer-name": "imagesloaded"
+                },
+                "require": {
+                    "composer/installers": "~1.0"
+                }
+            }
+        }
+    },
+    "require": {
+        "masonry/masonry": "*",
+        "imagesloaded/imagesloaded": "*"
+    }
+}

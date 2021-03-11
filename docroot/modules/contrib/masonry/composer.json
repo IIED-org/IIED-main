@@ -1,0 +1,19 @@
+{
+    "name": "drupal/masonry",
+    "description": "Masonry integrates with Masonry library",
+    "homepage": "https://www.drupal.org/project/masonry",
+    "license": "GPL-2.0-or-later",
+    "minimum-stability": "dev",
+    "type": "drupal-module",
+    "authors": [
+        {
+            "name": "Dominique Clause (Dom.)",
+            "homepage": "https://www.drupal.org/u/dom",
+            "role": "Maintainer"
+        }
+    ],
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/masonry?version=8.x",
+        "source": "https://git.drupalcode.org/project/masonry"
+    }
+}

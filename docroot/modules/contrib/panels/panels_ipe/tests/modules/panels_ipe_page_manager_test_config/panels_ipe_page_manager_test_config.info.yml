@@ -1,0 +1,13 @@
+name: 'Page Manager test configuration for Panels IPE'
+type: module
+description: 'Provides default configuration to test Page Manager.'
+core_version_requirement: '^8.8 || ^9'
+package: Testing
+dependencies:
+  - page_manager
+  - panels_ipe
+
+# Information added by Drupal.org packaging script on 2020-04-02
+version: '8.x-4.6'
+project: 'panels'
+datestamp: 1585870869

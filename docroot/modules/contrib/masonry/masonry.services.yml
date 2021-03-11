@@ -1,0 +1,4 @@
+services:
+  masonry.service:
+    class: Drupal\masonry\Services\MasonryService
+    arguments: ['@module_handler', '@theme.manager', '@language_manager', '@config.factory']

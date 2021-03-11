@@ -1,0 +1,40 @@
+ckeditor.plugin.wordcount:
+  type: mapping
+  label: 'Word Count & Character Count'
+  mapping:
+    enable:
+      type: boolean
+      label: 'Enable the counter.'
+    show_remaining:
+      type: boolean
+      label: 'Show remaining count.'
+    show_paragraphs:
+      type: boolean
+      label: 'Show the paragraphs count.'
+    show_word_count:
+      type: boolean
+      label: 'Show the word count.'
+    show_char_count:
+      type: boolean
+      label: 'Show the character count.'
+    count_bytes:
+      type: boolean
+      label: 'Count bytes as characters.'
+    count_spaces:
+      type: boolean
+      label: 'Count spaces as characters.'
+    count_html:
+      type: integer
+      label: 'Count HTML as characters.'
+    count_line_breaks:
+      type: boolean
+      label: 'Count line breaks as characters.'
+    max_words:
+      type: integer
+      label: 'Maximum word limit.'
+    max_chars:
+      type: integer
+      label: 'Maximum character limit.'
+    hardLimit:
+      type: boolean
+      label: 'Lock editor when limit is reached.'

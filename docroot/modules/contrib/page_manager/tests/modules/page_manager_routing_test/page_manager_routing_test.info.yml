@@ -1,0 +1,10 @@
+type: module
+name: Page Manager Routing Test
+description: 'Required for Page Manager tests.'
+package: Testing
+core_version_requirement: '^8.8 || ^9'
+
+# Information added by Drupal.org packaging script on 2020-06-02
+version: '8.x-4.0-beta6'
+project: 'page_manager'
+datestamp: 1591125566

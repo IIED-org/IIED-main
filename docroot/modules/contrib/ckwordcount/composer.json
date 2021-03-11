@@ -1,0 +1,25 @@
+{
+  "name": "drupal/ckwordcount",
+  "type": "drupal-module",
+  "description": "Adds the ability to count words and/or characters to CKEditor.",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0-or-later",
+  "homepage": "http://drupal.org/project/ckwordcount",
+  "minimum-stability": "dev",
+  "authors": [
+    {
+      "name": "Kevin Quillen (kevinquillen)",
+      "homepage": "https://www.drupal.org/u/kevinquillen",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "http://drupal.org/project/issues/ckwordcount",
+    "source": "http://cgit.drupalcode.org/ckwordcount"
+  },
+  "require": {
+    "composer/installers": "^1.2",
+    "drupal/notification": "^1.0",
+    "w8tcha/ckeditor-wordcount-plugin": "^1.17"
+  }
+}

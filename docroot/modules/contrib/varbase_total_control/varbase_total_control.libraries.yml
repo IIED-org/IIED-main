@@ -1,0 +1,7 @@
+vtc:
+  css:
+    theme:
+      css/theme/varbase-total-control.theme.css: {}
+vtc-masonry:
+  js:
+    js/varbase-total-control-masonry.js: {}

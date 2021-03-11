@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Holds install hooks for the Textfield Counter module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function textfield_counter_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.textfield_counter':
+      return t(
+        '<p>This module adds new widgets for the form display of each of the field types that ship with core, both text fields and text areas. The widgets this module provides extend the default core widgets, adding a text counter that displays the remaining number of characters allowed in the field. This counter updates as the user types. There is also a setting for the counter to be above or below the text field. If any field has more characters entered than the field allows, form submission is prevented until the number of characters is adjusted to the correct amount.</p><p>See the <a href=":project_page">project page on Drupal.org</a> for more details.</p>',
+        [
+          ':project_page' => 'https://www.drupal.org/project/textfield_counter',
+        ]
+      );
+  }
+}

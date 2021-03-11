@@ -1,0 +1,67 @@
+{
+  "name": "drupal/varbase_total_control",
+  "description": "Varbase Total Control Dashboard: A dashboard is what is missing for better Drupal administration experience. This dashboard is built on top of Total Control Admin Dashboard module, utilizing Panels, Google Analytics Reports, and several enhanced blocks and widgets for an intuitive and flexible administration experience.",
+  "type": "drupal-module",
+  "homepage": "https://github.com/Vardot/varbase_total_control",
+  "notification-url": "https://packages.drupal.org/8/downloads",
+  "license": "GPL-2.0-or-later",
+  "minimum-stability": "dev",
+  "authors": [
+    {
+      "name": "Vardot",
+      "homepage": "https://www.drupal.org/vardot",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/varbase_total_control",
+    "source": "http://cgit.drupalcode.org/varbase_total_control"
+  },
+  "repositories": {
+    "drupal": {
+      "type": "composer",
+      "url": "https://packages.drupal.org/8"
+    },
+    "assets": {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  },
+  "require": {
+    "composer/installers": "~1.0 || ~2.0",
+    "oomphinc/composer-installers-extender": "~1.0 || ~2.0",
+    "cweagans/composer-patches": "~1.0",
+    "drupal/core": "^8.8.0 || ~9.0.0",
+    "drupal/masonry": "~1.0",
+    "drupal/charts": "~3.0",
+    "drupal/google_analytics_reports": "~3.0",
+    "drupal/total_control": "~2.0"
+  },
+  "suggest": {
+    "bower-asset/chartjs": "2.7.*: Provides JavaScript library necessary for Chart JS",
+    "bower-asset/c3": "0.7.*: Provides JavaScript library necessary for C3",
+    "bower-asset/d3": "~5.0: Provides JavaScript library necessary for D3",
+    "npm-asset/masonry-layout": "~4.0: Provides JavaScript library necessary for Masonry Layout",
+    "npm-asset/imagesloaded": "~4.0: Provides JavaScript library necessary for Image Loaded"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-8.x-6.x": "8.6.x-dev"
+    },
+    "installer-types": [
+      "bower-asset",
+      "npm-asset"
+    ],
+    "drupal-libraries": {
+      "libraries": [
+        {"name": "chartjs", "package": "bower-asset/chartjs"},
+        {"name": "c3","package": "bower-asset/c3"},
+        {"name": "d3", "package": "bower-asset/d3"},
+        {"name": "masonry", "package": "npm-asset/masonry-layout"},
+        {"name": "imagesloaded", "package": "npm-asset/imagesloaded"}
+      ]
+    },
+    "enable-patching": true,
+    "composer-exit-on-patch-failure": true
+  }
+}

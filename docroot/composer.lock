@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "84e7c2d798a4d70cbeee062c257d6531",
+    "content-hash": "2e66f410bb93394654945884b1a97535",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -57,6 +57,63 @@
                 "stack"
             ],
             "time": "2019-12-24T22:41:47+00:00"
+        },
+        {
+            "name": "bower-asset/c3",
+            "version": "v0.7.20",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/c3js/c3.git",
+                "reference": "2f3cddb818065f1d0c45f562745d4249e12980ff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/c3js/c3/zipball/2f3cddb818065f1d0c45f562745d4249e12980ff",
+                "reference": "2f3cddb818065f1d0c45f562745d4249e12980ff"
+            },
+            "require": {
+                "bower-asset/d3": ">=5.0.0,<6.0.0"
+            },
+            "type": "bower-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "bower-asset/chartjs",
+            "version": "v2.9.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/chartjs/Chart.js.git",
+                "reference": "9bd4cf82fda9f50a5fb50b72843e06ab88124278"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/chartjs/Chart.js/zipball/9bd4cf82fda9f50a5fb50b72843e06ab88124278",
+                "reference": "9bd4cf82fda9f50a5fb50b72843e06ab88124278"
+            },
+            "type": "bower-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "bower-asset/d3",
+            "version": "v5.16.0",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:mbostock-bower/d3-bower.git",
+                "reference": "c15b85ce115be200bd4ca473f97fcd0bb43bba07"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mbostock-bower/d3-bower/zipball/c15b85ce115be200bd4ca473f97fcd0bb43bba07",
+                "reference": "c15b85ce115be200bd4ca473f97fcd0bb43bba07"
+            },
+            "type": "bower-asset",
+            "license": [
+                "BSD-3-Clause"
+            ]
         },
         {
             "name": "chi-teck/drupal-code-generator",
@@ -1700,6 +1757,36 @@
             "time": "2019-06-08T11:03:04+00:00"
         },
         {
+            "name": "drupal-ckeditor-libraries-group/notification",
+            "version": "4.16.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/drupal-ckeditor-libraries-group/notification.git",
+                "reference": "b0338a9d2f3ab7600c4902ab3d887e45f020f8e5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/drupal-ckeditor-libraries-group/notification/zipball/b0338a9d2f3ab7600c4902ab3d887e45f020f8e5",
+                "reference": "b0338a9d2f3ab7600c4902ab3d887e45f020f8e5",
+                "shasum": ""
+            },
+            "type": "drupal-library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later",
+                "LGPL-2.1-or-later",
+                "MPL-1.1"
+            ],
+            "description": "CKEditor 4 notification plugin",
+            "homepage": "https://ckeditor.com/cke4/addon/notification",
+            "keywords": [
+                "CKEditor",
+                "notification",
+                "plugin"
+            ],
+            "time": "2021-01-25T12:06:23+00:00"
+        },
+        {
             "name": "drupal/acquia_connector",
             "version": "2.0.0-rc3",
             "source": {
@@ -2398,6 +2485,70 @@
             }
         },
         {
+            "name": "drupal/charts",
+            "version": "3.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/charts.git",
+                "reference": "8.x-3.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/charts-8.x-3.2.zip",
+                "reference": "8.x-3.2",
+                "shasum": "7caf427ce981962036f8335e94f41fc88f36db72"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-3.2",
+                    "datestamp": "1588134278",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Pierre.Vriens",
+                    "homepage": "https://www.drupal.org/user/1689304"
+                },
+                {
+                    "name": "andileco",
+                    "homepage": "https://www.drupal.org/user/2054544"
+                },
+                {
+                    "name": "brmassa",
+                    "homepage": "https://www.drupal.org/user/67164"
+                },
+                {
+                    "name": "kenorb",
+                    "homepage": "https://www.drupal.org/user/191974"
+                },
+                {
+                    "name": "quicksketch",
+                    "homepage": "https://www.drupal.org/user/35821"
+                },
+                {
+                    "name": "rashad612",
+                    "homepage": "https://www.drupal.org/user/319686"
+                }
+            ],
+            "description": "A charting API for Drupal that provides chart elements and integration with Views.",
+            "homepage": "https://www.drupal.org/project/charts",
+            "support": {
+                "source": "https://git.drupalcode.org/project/charts"
+            }
+        },
+        {
             "name": "drupal/chosen",
             "version": "3.0.1",
             "source": {
@@ -2550,6 +2701,66 @@
             "homepage": "https://www.drupal.org/project/chosen",
             "support": {
                 "source": "https://git.drupalcode.org/project/chosen"
+            }
+        },
+        {
+            "name": "drupal/ckwordcount",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/ckwordcount.git",
+                "reference": "8.x-1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/ckwordcount-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "202d202479171f006be7a875c27167348f35687d"
+            },
+            "require": {
+                "composer/installers": "^1.2",
+                "drupal/core": "^8 || ^9",
+                "drupal/notification": "^1.0",
+                "w8tcha/ckeditor-wordcount-plugin": "^1.17"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.2",
+                    "datestamp": "1614528662",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Kevin Quillen (kevinquillen)",
+                    "homepage": "https://www.drupal.org/u/kevinquillen",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "kevinquillen",
+                    "homepage": "https://www.drupal.org/user/317279"
+                },
+                {
+                    "name": "szloredan",
+                    "homepage": "https://www.drupal.org/user/3531611"
+                }
+            ],
+            "description": "Adds the ability to count words and/or characters to CKEditor.",
+            "homepage": "http://drupal.org/project/ckwordcount",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/ckwordcount",
+                "issues": "http://drupal.org/project/issues/ckwordcount"
             }
         },
         {
@@ -4044,6 +4255,141 @@
             }
         },
         {
+            "name": "drupal/google_analytics_reports",
+            "version": "3.0.0-rc3",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/google_analytics_reports.git",
+                "reference": "8.x-3.0-rc3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/google_analytics_reports-8.x-3.0-rc3.zip",
+                "reference": "8.x-3.0-rc3",
+                "shasum": "051c1e8aa031a0d16f0087943a9b73456de7b15e"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9",
+                "drupal/google_analytics_reports_api": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-3.0-rc3",
+                    "datestamp": "1594893535",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Mohammed J. Razem",
+                    "homepage": "https://www.drupal.org/user/255384"
+                },
+                {
+                    "name": "Plazik",
+                    "homepage": "https://www.drupal.org/user/982724"
+                },
+                {
+                    "name": "RajabNatshah",
+                    "homepage": "https://www.drupal.org/user/1414312"
+                },
+                {
+                    "name": "grendzy",
+                    "homepage": "https://www.drupal.org/user/96647"
+                },
+                {
+                    "name": "jantoine",
+                    "homepage": "https://www.drupal.org/user/192192"
+                },
+                {
+                    "name": "jkitching",
+                    "homepage": "https://www.drupal.org/user/159067"
+                },
+                {
+                    "name": "jojonaloha",
+                    "homepage": "https://www.drupal.org/user/1579186"
+                },
+                {
+                    "name": "raspberryman",
+                    "homepage": "https://www.drupal.org/user/71464"
+                }
+            ],
+            "description": "Display statistics from Google Analytics using Views.",
+            "homepage": "https://www.drupal.org/project/google_analytics_reports",
+            "support": {
+                "source": "https://git.drupalcode.org/project/google_analytics_reports"
+            }
+        },
+        {
+            "name": "drupal/google_analytics_reports_api",
+            "version": "3.0.0-rc3",
+            "require": {
+                "drupal/core": "^8 || ^9",
+                "drupal/google_analytics_reports": "self.version"
+            },
+            "type": "metapackage",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-3.0-rc3",
+                    "datestamp": "1594893535",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Mohammed J. Razem",
+                    "homepage": "https://www.drupal.org/user/255384"
+                },
+                {
+                    "name": "Plazik",
+                    "homepage": "https://www.drupal.org/user/982724"
+                },
+                {
+                    "name": "RajabNatshah",
+                    "homepage": "https://www.drupal.org/user/1414312"
+                },
+                {
+                    "name": "grendzy",
+                    "homepage": "https://www.drupal.org/user/96647"
+                },
+                {
+                    "name": "jantoine",
+                    "homepage": "https://www.drupal.org/user/192192"
+                },
+                {
+                    "name": "jkitching",
+                    "homepage": "https://www.drupal.org/user/159067"
+                },
+                {
+                    "name": "jojonaloha",
+                    "homepage": "https://www.drupal.org/user/1579186"
+                },
+                {
+                    "name": "raspberryman",
+                    "homepage": "https://www.drupal.org/user/71464"
+                }
+            ],
+            "description": "API to access statistics from the <a href=\"https://developers.google.com/analytics/devguides/reporting/core/v3/\">Google Analytics Core Reporting API</a>.",
+            "homepage": "https://www.drupal.org/project/google_analytics_reports",
+            "support": {
+                "source": "https://git.drupalcode.org/project/google_analytics_reports"
+            }
+        },
+        {
             "name": "drupal/google_tag",
             "version": "1.4.0",
             "source": {
@@ -4454,6 +4800,113 @@
             }
         },
         {
+            "name": "drupal/jquery_ui_draggable",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/jquery_ui_draggable.git",
+                "reference": "8.x-1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/jquery_ui_draggable-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "09e17046e38aebf84ed573822b0d5be6de3f0c94"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9",
+                "drupal/jquery_ui": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.2",
+                    "datestamp": "1582150027",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "bnjmnm",
+                    "homepage": "https://www.drupal.org/user/2369194"
+                },
+                {
+                    "name": "lauriii",
+                    "homepage": "https://www.drupal.org/user/1078742"
+                },
+                {
+                    "name": "zrpnr",
+                    "homepage": "https://www.drupal.org/user/1448368"
+                }
+            ],
+            "description": "Provides jQuery UI Draggable library.",
+            "homepage": "https://www.drupal.org/project/jquery_ui_draggable",
+            "support": {
+                "source": "https://git.drupalcode.org/project/jquery_ui_draggable"
+            }
+        },
+        {
+            "name": "drupal/jquery_ui_droppable",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/jquery_ui_droppable.git",
+                "reference": "8.x-1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/jquery_ui_droppable-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "6e53043f2d3215f211721eea4d4c6ab5d1672b14"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9",
+                "drupal/jquery_ui": "*",
+                "drupal/jquery_ui_draggable": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.2",
+                    "datestamp": "1582150071",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "bnjmnm",
+                    "homepage": "https://www.drupal.org/user/2369194"
+                },
+                {
+                    "name": "lauriii",
+                    "homepage": "https://www.drupal.org/user/1078742"
+                },
+                {
+                    "name": "zrpnr",
+                    "homepage": "https://www.drupal.org/user/1448368"
+                }
+            ],
+            "description": "Provides jQuery UI Droppable library.",
+            "homepage": "https://www.drupal.org/project/jquery_ui_droppable",
+            "support": {
+                "source": "https://git.drupalcode.org/project/jquery_ui_droppable"
+            }
+        },
+        {
             "name": "drupal/jquery_ui_slider",
             "version": "1.1.0",
             "source": {
@@ -4603,6 +5056,56 @@
             "homepage": "https://www.drupal.org/project/language_switcher_extended",
             "support": {
                 "source": "https://git.drupalcode.org/project/language_switcher_extended"
+            }
+        },
+        {
+            "name": "drupal/masonry",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/masonry.git",
+                "reference": "8.x-1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/masonry-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "28b780a93c1692f4b746093c9e52b734cf179ff8"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.2",
+                    "datestamp": "1602247057",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Dominique Clause (Dom.)",
+                    "homepage": "https://www.drupal.org/u/dom",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Dom.",
+                    "homepage": "https://www.drupal.org/user/801982"
+                }
+            ],
+            "description": "Masonry integrates with Masonry library",
+            "homepage": "https://www.drupal.org/project/masonry",
+            "support": {
+                "source": "https://git.drupalcode.org/project/masonry",
+                "issues": "https://www.drupal.org/project/issues/masonry?version=8.x"
             }
         },
         {
@@ -5088,6 +5591,222 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/name",
                 "issues": "https://www.drupal.org/project/issues/name"
+            }
+        },
+        {
+            "name": "drupal/notification",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/notification.git",
+                "reference": "8.x-1.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/notification-8.x-1.1.zip",
+                "reference": "8.x-1.1",
+                "shasum": "b245432ad8d29f1992ed8f887b8b2042941bb18e"
+            },
+            "require": {
+                "drupal-ckeditor-libraries-group/notification": "^4.5.11",
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.1",
+                    "datestamp": "1593799207",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Kevin Quillen (kevinquillen)",
+                    "homepage": "https://www.drupal.org/u/kevinquillen",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "kevinquillen",
+                    "homepage": "https://www.drupal.org/user/317279"
+                },
+                {
+                    "name": "szloredan",
+                    "homepage": "https://www.drupal.org/user/3531611"
+                }
+            ],
+            "description": "Adds the Notification plugin to CKEditor.",
+            "homepage": "http://drupal.org/project/notification",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/notification",
+                "issues": "http://drupal.org/project/issues/notification"
+            }
+        },
+        {
+            "name": "drupal/page_manager",
+            "version": "4.0.0-beta6",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/page_manager.git",
+                "reference": "8.x-4.0-beta6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/page_manager-8.x-4.0-beta6.zip",
+                "reference": "8.x-4.0-beta6",
+                "shasum": "bf0ac07177b1cd6c1a3da80f727f1448221ee98a"
+            },
+            "require": {
+                "drupal/core": "^8.8 || ^9",
+                "drupal/ctools": "^3.1"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-4.0-beta6",
+                    "datestamp": "1591125562",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                },
+                "branch-alias": {
+                    "dev-8.x-4.x": "4.x-dev"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Tim Plunkett",
+                    "homepage": "https://www.drupal.org/u/tim.plunkett",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "dsnopek",
+                    "homepage": "https://www.drupal.org/user/266527"
+                },
+                {
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
+                },
+                {
+                    "name": "manuel.adan",
+                    "homepage": "https://www.drupal.org/user/516420"
+                },
+                {
+                    "name": "phenaproxima",
+                    "homepage": "https://www.drupal.org/user/205645"
+                }
+            ],
+            "description": "Provides a way to place blocks on a custom page.",
+            "homepage": "https://www.drupal.org/project/page_manager",
+            "support": {
+                "source": "https://git.drupal.org/project/page_manager.git",
+                "issues": "https://www.drupal.org/project/issues/page_manager",
+                "irc": "irc://irc.freenode.org/drupal-contribute"
+            }
+        },
+        {
+            "name": "drupal/panels",
+            "version": "4.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/panels.git",
+                "reference": "8.x-4.6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/panels-8.x-4.6.zip",
+                "reference": "8.x-4.6",
+                "shasum": "6430436a4d8fb64f8c113729dd92505a1e46b794"
+            },
+            "require": {
+                "drupal/core": "^8.8 || ^9",
+                "drupal/ctools": ">=3.0.0",
+                "drupal/jquery_ui_droppable": "^1.2"
+            },
+            "require-dev": {
+                "drupal/jquery_ui_droppable": "*",
+                "drupal/page_manager": "^4"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-4.6",
+                    "datestamp": "1585870866",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "branch-alias": {
+                    "dev-8.x-4.x": "4.x-dev"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Jakob Perry",
+                    "homepage": "https://www.drupal.org/u/japerry"
+                },
+                {
+                    "name": "Samuel Mortenson",
+                    "homepage": "https://www.drupal.org/u/samuel.mortenson"
+                },
+                {
+                    "name": "See other contributors",
+                    "homepage": "https://www.drupal.org/node/74958/committers"
+                },
+                {
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
+                },
+                {
+                    "name": "joelpittet",
+                    "homepage": "https://www.drupal.org/user/160302"
+                },
+                {
+                    "name": "merlinofchaos",
+                    "homepage": "https://www.drupal.org/user/26979"
+                },
+                {
+                    "name": "neclimdul",
+                    "homepage": "https://www.drupal.org/user/48673"
+                },
+                {
+                    "name": "phenaproxima",
+                    "homepage": "https://www.drupal.org/user/205645"
+                },
+                {
+                    "name": "samuel.mortenson",
+                    "homepage": "https://www.drupal.org/user/2582268"
+                },
+                {
+                    "name": "tim.plunkett",
+                    "homepage": "https://www.drupal.org/user/241634"
+                }
+            ],
+            "description": "Core Panels display functions; provides no external UI, at least one other Panels module should be enabled.",
+            "homepage": "https://www.drupal.org/project/panels",
+            "support": {
+                "source": "http://git.drupal.org/project/panels.git",
+                "issues": "https://www.drupal.org/project/issues/panels",
+                "irc": "irc://irc.freenode.org/drupal-scotch"
             }
         },
         {
@@ -6475,6 +7194,50 @@
             }
         },
         {
+            "name": "drupal/textfield_counter",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/textfield_counter.git",
+                "reference": "2.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/textfield_counter-2.0.0.zip",
+                "reference": "2.0.0",
+                "shasum": "64e5dca6654520d2cfbf7e03af84ed19202637a2"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.0",
+                    "datestamp": "1607025041",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Jaypan",
+                    "homepage": "https://www.drupal.org/user/324696"
+                }
+            ],
+            "description": "Creates field formatters with character counts for text fields and text areas.",
+            "homepage": "https://www.drupal.org/project/textfield_counter",
+            "support": {
+                "source": "https://git.drupalcode.org/project/textfield_counter"
+            }
+        },
+        {
             "name": "drupal/token",
             "version": "1.7.0",
             "source": {
@@ -6541,6 +7304,81 @@
             "homepage": "https://www.drupal.org/project/token",
             "support": {
                 "source": "https://git.drupalcode.org/project/token"
+            }
+        },
+        {
+            "name": "drupal/total_control",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/total_control.git",
+                "reference": "8.x-2.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/total_control-8.x-2.0.zip",
+                "reference": "8.x-2.0",
+                "shasum": "67e4bcf348fbc4647402de7903b48fc6414beece"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9",
+                "drupal/ctools": "~3.0",
+                "drupal/page_manager": "~4.0",
+                "drupal/panels": "~4.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-2.0",
+                    "datestamp": "1583399169",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "branch-alias": {
+                    "dev-8.x-2.x": "8.2.x-dev"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Jen Lampton",
+                    "homepage": "https://www.drupal.org/u/jenlampton",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Mohammed J. Razem",
+                    "homepage": "https://www.drupal.org/u/mohammed-j-razem",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Abdulla Abu-Zakham",
+                    "homepage": "https://www.drupal.org/u/abu-zakham",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Rajab Natshah",
+                    "homepage": "https://www.drupal.org/u/rajabnatshah",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "populist",
+                    "homepage": "https://www.drupal.org/user/58600"
+                },
+                {
+                    "name": "squiggy",
+                    "homepage": "https://www.drupal.org/user/44299"
+                }
+            ],
+            "description": "Total Control Administration Dashboard",
+            "homepage": "https://www.drupal.org/project/total_control",
+            "support": {
+                "source": "https://git.drupalcode.org/project/total_control/tree/8.x-2.x",
+                "issues": "https://www.drupal.org/project/issues/total_control"
             }
         },
         {
@@ -6618,6 +7456,107 @@
             "homepage": "http://drupal.org/project/upgrade_status",
             "support": {
                 "source": "https://git.drupalcode.org/project/upgrade_status"
+            }
+        },
+        {
+            "name": "drupal/varbase_total_control",
+            "version": "6.14.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/varbase_total_control.git",
+                "reference": "8.x-6.14"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/varbase_total_control-8.x-6.14.zip",
+                "reference": "8.x-6.14",
+                "shasum": "e60739aea140ca8a923792c47586f3028d761ca5"
+            },
+            "require": {
+                "composer/installers": "~1.0 || ~2.0",
+                "cweagans/composer-patches": "~1.0",
+                "drupal/charts": "~3.0",
+                "drupal/core": "^8.8.0 || ~9.0.0",
+                "drupal/google_analytics_reports": "~3.0",
+                "drupal/masonry": "~1.0",
+                "drupal/total_control": "~2.0",
+                "oomphinc/composer-installers-extender": "~1.0 || ~2.0"
+            },
+            "suggest": {
+                "bower-asset/c3": "0.7.*: Provides JavaScript library necessary for C3",
+                "bower-asset/chartjs": "2.7.*: Provides JavaScript library necessary for Chart JS",
+                "bower-asset/d3": "~5.0: Provides JavaScript library necessary for D3",
+                "npm-asset/imagesloaded": "~4.0: Provides JavaScript library necessary for Image Loaded",
+                "npm-asset/masonry-layout": "~4.0: Provides JavaScript library necessary for Masonry Layout"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-6.14",
+                    "datestamp": "1612352262",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "branch-alias": {
+                    "dev-8.x-6.x": "8.6.x-dev"
+                },
+                "installer-types": [
+                    "bower-asset",
+                    "npm-asset"
+                ],
+                "drupal-libraries": {
+                    "libraries": [
+                        {
+                            "name": "chartjs",
+                            "package": "bower-asset/chartjs"
+                        },
+                        {
+                            "name": "c3",
+                            "package": "bower-asset/c3"
+                        },
+                        {
+                            "name": "d3",
+                            "package": "bower-asset/d3"
+                        },
+                        {
+                            "name": "masonry",
+                            "package": "npm-asset/masonry-layout"
+                        },
+                        {
+                            "name": "imagesloaded",
+                            "package": "npm-asset/imagesloaded"
+                        }
+                    ]
+                },
+                "enable-patching": true,
+                "composer-exit-on-patch-failure": true
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Vardot",
+                    "homepage": "https://www.drupal.org/vardot",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "RajabNatshah",
+                    "homepage": "https://www.drupal.org/user/1414312"
+                },
+                {
+                    "name": "abu-zakham",
+                    "homepage": "https://www.drupal.org/user/2836067"
+                }
+            ],
+            "description": "Varbase Total Control Dashboard: A dashboard is what is missing for better Drupal administration experience. This dashboard is built on top of Total Control Admin Dashboard module, utilizing Panels, Google Analytics Reports, and several enhanced blocks and widgets for an intuitive and flexible administration experience.",
+            "homepage": "https://github.com/Vardot/varbase_total_control",
+            "support": {
+                "source": "http://cgit.drupalcode.org/varbase_total_control",
+                "issues": "https://www.drupal.org/project/issues/varbase_total_control"
             }
         },
         {
@@ -8815,11 +9754,110 @@
             "time": "2020-09-26T10:30:38+00:00"
         },
         {
+            "name": "npm-asset/desandro-matches-selector",
+            "version": "2.0.2",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/desandro-matches-selector/-/desandro-matches-selector-2.0.2.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/ev-emitter",
+            "version": "1.1.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/ev-emitter/-/ev-emitter-1.1.1.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/fizzy-ui-utils",
+            "version": "2.0.7",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/fizzy-ui-utils/-/fizzy-ui-utils-2.0.7.tgz"
+            },
+            "require": {
+                "npm-asset/desandro-matches-selector": ">=2.0.0,<3.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/get-size",
+            "version": "2.0.3",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/get-size/-/get-size-2.0.3.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/imagesloaded",
+            "version": "4.1.4",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/imagesloaded/-/imagesloaded-4.1.4.tgz"
+            },
+            "require": {
+                "npm-asset/ev-emitter": ">=1.0.0,<2.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
             "name": "npm-asset/jquery",
             "version": "3.5.1",
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/jquery/-/jquery-3.5.1.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/masonry-layout",
+            "version": "4.2.2",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/masonry-layout/-/masonry-layout-4.2.2.tgz"
+            },
+            "require": {
+                "npm-asset/get-size": ">=2.0.2,<3.0.0",
+                "npm-asset/outlayer": ">=2.1.0,<3.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/outlayer",
+            "version": "2.1.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/outlayer/-/outlayer-2.1.1.tgz"
+            },
+            "require": {
+                "npm-asset/ev-emitter": ">=1.0.0,<2.0.0",
+                "npm-asset/fizzy-ui-utils": ">=2.0.0,<3.0.0",
+                "npm-asset/get-size": ">=2.0.2,<3.0.0"
             },
             "type": "npm-asset",
             "license": [
@@ -12323,6 +13361,44 @@
             "time": "2019-12-10T11:53:27+00:00"
         },
         {
+            "name": "w8tcha/ckeditor-wordcount-plugin",
+            "version": "v1.17.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/w8tcha/CKEditor-WordCount-Plugin.git",
+                "reference": "c999df7c361d27d581fca460a6ac6c1082f3e0e2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/w8tcha/CKEditor-WordCount-Plugin/zipball/c999df7c361d27d581fca460a6ac6c1082f3e0e2",
+                "reference": "c999df7c361d27d581fca460a6ac6c1082f3e0e2",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "w8tcha",
+                    "homepage": "https://github.com/w8tcha"
+                }
+            ],
+            "description": "WordCount Plugin for CKEditor Editor",
+            "homepage": "http://w8tcha.github.com/CKEditor-WordCount-Plugin/",
+            "keywords": [
+                "CKEditor",
+                "editor",
+                "html",
+                "javascript",
+                "richtext",
+                "text",
+                "wysiwyg"
+            ],
+            "time": "2020-10-10T22:06:12+00:00"
+        },
+        {
             "name": "webflo/drupal-finder",
             "version": "1.2.2",
             "source": {
@@ -13023,5 +14099,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "1.1.0"
 }
