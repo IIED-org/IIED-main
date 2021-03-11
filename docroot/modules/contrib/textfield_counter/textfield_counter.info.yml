@@ -1,0 +1,13 @@
+name: Textfield Counter
+description: Creates field formatters with character counts for text fields and text areas.
+core: 8.x
+core_version_requirement: ^8 || ^9
+type: module
+
+dependencies:
+  - drupal:text
+
+# Information added by Drupal.org packaging script on 2020-12-03
+version: '2.0.0'
+project: 'textfield_counter'
+datestamp: 1607025042

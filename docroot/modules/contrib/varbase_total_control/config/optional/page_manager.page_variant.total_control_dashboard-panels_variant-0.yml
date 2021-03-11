@@ -1,0 +1,122 @@
+uuid: 5ad04407-ebcd-4ab1-a7a1-2eadba0d781c
+langcode: en
+status: true
+dependencies:
+  config:
+    - page_manager.page.total_control_dashboard
+    - views.view.control_content_panes
+    - views.view.varbase_google_analytics_summary
+  module:
+    - panels
+    - varbase_total_control
+    - views
+id: total_control_dashboard-panels_variant-0
+label: ' Varbase Dashboard'
+variant: panels_variant
+variant_settings:
+  blocks:
+    7b116893-6d4c-4d71-b715-ffc55e1607d0:
+      id: varbase_dashboard_user
+      label: 'Varbase Dashboard User'
+      provider: varbase_total_control
+      label_display: '0'
+      region: first
+      weight: -3
+      uuid: 7b116893-6d4c-4d71-b715-ffc55e1607d0
+      context_mapping: {  }
+    e0e305d6-e1bf-4e30-9aec-d07abcce7cce:
+      id: varbase_create_content
+      label: 'Create New Content'
+      provider: varbase_total_control
+      label_display: visible
+      region: first
+      weight: -2
+      uuid: e0e305d6-e1bf-4e30-9aec-d07abcce7cce
+      total_control_admin_types_links:
+        landing_page: landing_page
+        page: page
+      context_mapping: {  }
+    a145445d-bf17-4de3-beb2-828007ac3d54:
+      id: 'views_block:control_content_panes-pane_tc_new'
+      label: ''
+      provider: views
+      label_display: visible
+      views_label: ''
+      items_per_page: none
+      region: first
+      weight: 0
+      uuid: a145445d-bf17-4de3-beb2-828007ac3d54
+      context_mapping: {  }
+    4cabdfda-ff0c-4f33-b2ad-d0556d5d2f97:
+      id: 'views_block:varbase_google_analytics_summary-top_pages_block'
+      label: ''
+      provider: views
+      label_display: visible
+      views_label: ''
+      items_per_page: none
+      region: second
+      weight: -2
+      uuid: 4cabdfda-ff0c-4f33-b2ad-d0556d5d2f97
+      context_mapping: {  }
+    32886dcf-fa13-4674-9435-06c14cb42f25:
+      id: 'views_block:varbase_google_analytics_summary-top_sources_block'
+      label: ''
+      provider: views
+      label_display: visible
+      views_label: ''
+      items_per_page: none
+      region: second
+      weight: -1
+      uuid: 32886dcf-fa13-4674-9435-06c14cb42f25
+      context_mapping: {  }
+    47341d50-9e62-45f6-9bd6-4ac02171043c:
+      id: 'views_block:varbase_google_analytics_summary-sessions_and_pageviews'
+      label: ''
+      provider: views
+      label_display: visible
+      views_label: ''
+      items_per_page: none
+      region: second
+      weight: -3
+      uuid: 47341d50-9e62-45f6-9bd6-4ac02171043c
+      context_mapping: {  }
+    01630e32-baf4-4e6d-8b93-926ec5eef7ad:
+      id: varbase_quick_links
+      label: 'Quick Links'
+      provider: varbase_total_control
+      label_display: visible
+      region: first
+      weight: 1
+      uuid: 01630e32-baf4-4e6d-8b93-926ec5eef7ad
+      context_mapping: {  }
+    21ab7b51-0554-494b-a17e-fdb5570f8d39:
+      id: varbase_content_overview
+      label: 'My Site Overview'
+      provider: varbase_total_control
+      label_display: visible
+      region: first
+      weight: -1
+      uuid: 21ab7b51-0554-494b-a17e-fdb5570f8d39
+      varbase_total_control_types_overview:
+        landing_page: landing_page
+        page: page=
+      varbase_total_control_comments_overview:
+        landing_page: landing_page
+        page: page
+      varbase_total_control_spam_overview: '0'
+      context_mapping: {  }
+  id: panels_variant
+  uuid: 9293a78d-f3d7-4526-a81a-c8318609219a
+  label: null
+  weight: 0
+  layout: layout_twocol
+  layout_settings: {  }
+  page_title: Dashboard
+  storage_type: page_manager
+  storage_id: total_control_dashboard-panels_variant-0
+  builder: standard
+page: total_control_dashboard
+weight: -9
+selection_criteria: {  }
+selection_logic: and
+static_context: {  }

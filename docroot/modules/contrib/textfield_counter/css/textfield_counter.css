@@ -1,0 +1,25 @@
+.form-textarea-wrapper.textcount_warning .textfield-counter-element,
+.form-item.textcount_warning .textfield-counter-element {
+  border-color: #e09600;
+  border-width: 2px;
+}
+.form-textarea-wrapper.textcount_warning .textfield_counter_counter .current_count,
+.form-textarea-wrapper.textcount_warning .textfield_counter_counter .remaining_count,
+.form-item.textcount_warning .textfield_counter_counter .current_count,
+.form-item.textcount_warning .textfield_counter_counter .remaining_count {
+  color: #e09600;
+}
+
+.form-textarea-wrapper.textcount_over .textfield-counter-element,
+.form-item.textcount_over .textfield-counter-element {
+  border-color: #ff0000;
+  border-width: 2px;
+}
+.form-textarea-wrapper.textcount_over .textfield_counter_counter .current_count,
+.form-textarea-wrapper.textcount_over .textfield_counter_counter .remaining_count,
+.form-item.textcount_over .textfield_counter_counter .current_count,
+.form-item.textcount_over .textfield_counter_counter .remaining_count {
+  color: #ff0000;
+}
+
+/*# sourceMappingURL=textfield_counter.css.map */

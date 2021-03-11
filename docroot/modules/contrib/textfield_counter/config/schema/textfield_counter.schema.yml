@@ -1,0 +1,147 @@
+field.widget.settings.text_textarea_with_counter:
+  type: mapping
+  label: 'Text area (multiple rows) with counter widget settings'
+  mapping:
+    rows:
+      type: integer
+      label: 'The number of rows in size that the textarea should be'
+    placeholder:
+      type: string
+      label: 'The form element placeholder text'
+    maxlength:
+      type: integer
+      label: 'The maximum number of characters allowed in the textarea'
+    counter_position:
+      type: string
+      label: 'The position of the counter in relation to the text field: before or after'
+    js_prevent_submit:
+      type: boolean
+      label: 'Whether or not form submission should be prevented using JavaScript when the character limit has been crossed'
+    count_html_characters:
+      type: boolean
+      label: 'Whether or not HTML characters should be included in the character count.'
+    textcount_status_message:
+      type: string
+      label: 'The message shown indicating the status of the character count. The variables @maxlength, @current_length, @remaining_count'
+
+field.widget.settings.text_textarea_with_summary_and_counter:
+  type: mapping
+  label: 'Text area (multiple rows) with summary and counter widget settings'
+  mapping:
+    rows:
+      type: integer
+      label: 'The height of the textarea in horizontal rows'
+    enable_summary:
+      type: boolean
+      label: 'Whether or not the summary field is enabled'
+    summary_rows:
+      type: integer
+      label: 'The height of the summary in horizontal rows'
+    show_summary:
+      type: boolean
+      label: 'Always show summary'
+    summary_maxlength:
+      type: integer
+      label: 'Maximum length of the summary'
+    placeholder:
+      type: string
+      label: 'The form element placeholder text'
+    maxlength:
+      type: integer
+      label: 'The maximum number of characters allowed in the textarea'
+    counter_position:
+      type: string
+      label: 'The position of the counter in relation to the text field: before or after'
+    js_prevent_submit:
+      type: boolean
+      label: 'Whether or not form submission should be prevented using JavaScript when the character limit has been crossed'
+    count_html_characters:
+      type: boolean
+      label: 'Whether or not HTML characters should be included in the character count.'
+    textcount_status_message:
+      type: string
+      label: 'The message shown indicating the status of the character count. The variables @maxlength, @current_length, @remaining_count'
+
+field.widget.settings.string_textarea_with_counter:
+  type: mapping
+  label: 'Text area (multiple rows) with counter widget settings'
+  mapping:
+    rows:
+      type: integer
+      label: 'The number of rows in size that the textarea should be'
+    placeholder:
+      type: string
+      label: 'The form element placeholder text'
+    maxlength:
+      type: integer
+      label: 'The maximum number of characters allowed in the textarea'
+    counter_position:
+      type: string
+      label: 'The position of the counter in relation to the text field: before or after'
+    js_prevent_submit:
+      type: boolean
+      label: 'Whether or not form submission should be prevented using JavaScript when the character limit has been crossed'
+    count_html_characters:
+      type: boolean
+      label: 'Whether or not HTML characters should be included in the character count.'
+    textcount_status_message:
+      type: string
+      label: 'The message shown indicating the status of the character count. The variables @maxlength, @current_length, @remaining_count'
+
+field.widget.settings.string_textfield_with_counter:
+  type: mapping
+  label: 'Textfield with counter widget settings'
+  mapping:
+    size:
+      type: integer
+      label: 'The HTML size attribute to be applied to the textarea'
+    placeholder:
+      type: string
+      label: 'The form element placeholder text'
+    use_field_maxlength:
+      type: boolean
+      label: 'Indicates whether the field settings should be used for the maximum length'
+    maxlength:
+      type: integer
+      label: 'The maximum number of characters allowed in the textarea'
+    counter_position:
+      type: string
+      label: 'The position of the counter in relation to the text field: before or after'
+    js_prevent_submit:
+      type: boolean
+      label: 'Whether or not form submission should be prevented using JavaScript when the character limit has been crossed'
+    count_html_characters:
+      type: boolean
+      label: 'Whether or not HTML characters should be included in the character count.'
+    textcount_status_message:
+      type: string
+      label: 'The message shown indicating the status of the character count. The variables @maxlength, @current_length, @remaining_count'
+
+field.widget.settings.text_textfield_with_counter:
+  type: mapping
+  label: 'Text field with counter widget settings'
+  mapping:
+    size:
+      type: integer
+      label: 'The HTML size attribute to be applied to the textarea'
+    placeholder:
+      type: string
+      label: 'The form element placeholder text'
+    use_field_maxlength:
+      type: boolean
+      label: 'Indicates whether the field settings should be used for the maximum length'
+    maxlength:
+      type: integer
+      label: 'The maximum number of characters allowed in the textarea'
+    counter_position:
+      type: string
+      label: 'The position of the counter in relation to the text field: before or after'
+    js_prevent_submit:
+      type: boolean
+      label: 'Whether or not form submission should be prevented using JavaScript when the character limit has been crossed'
+    count_html_characters:
+      type: boolean
+      label: 'Whether or not HTML characters should be included in the character count.'
+    textcount_status_message:
+      type: string
+      label: 'The message shown indicating the status of the character count. The variables @maxlength, @current_length, @remaining_count'

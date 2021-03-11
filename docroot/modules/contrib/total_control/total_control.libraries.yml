@@ -1,0 +1,6 @@
+tc:
+  css:
+    theme:
+      css/theme/total-control.theme.css: { }
+  dependencies:
+    - 'toolbar/toolbar'

@@ -1,0 +1,65 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Masonry API module.
+ *
+ * Sponsored by: www.freelance-drupal.com
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function masonry_requirements($phase) {
+  $requirements = [];
+  $masonry = NULL;
+  $imagesLoaded = NULL;
+
+  if ($phase == 'runtime') {
+    /** @var \Drupal\masonry\Services\MasonryService $masonryService */
+    $masonryService = \Drupal::service('masonry.service');
+
+    // Check for Masonry Library.
+    $requirements['masonry'] = [
+      'title' => t('Masonry library'),
+    ];
+
+    $masonry = $masonryService->isMasonryInstalled();
+    if ($masonry) {
+      $requirements['masonry']['value'] = t('The library is properly installed.');
+      $requirements['masonry']['description'] = t('File found at %file', ['%file' => $masonry]);
+      $requirements['masonry']['severity'] = REQUIREMENT_OK;
+    }
+    else {
+      $requirements['masonry']['value'] = t('Masonry not found');
+      $requirements['masonry']['description'] = $masonry ? $masonry['error message'] : t('The library is missing. Please check that %file exists', ['%file' => '/libraries/masonry/dist/masonry.pkgd.min.js']);
+      $requirements['masonry']['severity'] = REQUIREMENT_ERROR;
+    }
+
+    // Check for ImagesLoaded Library.
+    $requirements['imagesloaded'] = [
+      'title' => t('ImagesLoaded library'),
+    ];
+
+    $imagesloaded = $masonryService->isImagesloadedInstalled();
+    if ($imagesloaded) {
+      $requirements['imagesloaded']['value'] = t('The library is properly installed.');
+      $requirements['imagesloaded']['description'] = t('File found at %file', ['%file' => $imagesloaded]);
+      $requirements['imagesloaded']['severity'] = REQUIREMENT_OK;
+    }
+    else {
+      $requirements['imagesloaded']['value'] = t('ImagesLoaded not found');
+      $requirements['imagesloaded']['description'] = t('The library is missing. Please check that %file exists', ['%file' => '/libraries/imagesloaded/imagesloaded.pkgd.min.js']);
+      $requirements['imagesloaded']['severity'] = REQUIREMENT_ERROR;
+    }
+  }
+
+  return $requirements;
+}
+
+/**
+ * Cache rebuild for new masonry service new injected dependencies.
+ */
+function masonry_update_8001(&$sandbox) {
+  // Empty update to cause a cache rebuild.
+}

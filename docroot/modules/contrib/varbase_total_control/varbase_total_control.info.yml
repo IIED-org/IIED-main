@@ -1,0 +1,17 @@
+name: 'Varbase Total Control Dashboard'
+type: module
+description: 'A dashboard is what is missing for better Drupal administration experience. This dashboard is built on top of Total Control Admin Dashboard module, utilizing Panels, Google Analytics Reports, and several enhanced blocks and widgets for an intuitive and flexible administration experience.'
+package: Varbase
+core_version_requirement: ^8 || ^9
+dependencies:
+  - total_control:total_control
+install:
+  - google_analytics_reports_api
+  - google_analytics_reports
+  - charts
+  - charts_c3
+
+# Information added by Drupal.org packaging script on 2021-02-03
+version: '8.x-6.14'
+project: 'varbase_total_control'
+datestamp: 1612352265

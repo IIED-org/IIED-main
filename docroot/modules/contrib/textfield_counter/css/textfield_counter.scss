@@ -1,0 +1,31 @@
+$warning-color:#E09600;
+$over-color:#FF0000;
+$border-width:2px;
+
+.form-textarea-wrapper.textcount_warning,
+.form-item.textcount_warning {
+  .textfield-counter-element {
+    border-color:$warning-color;
+    border-width:$border-width;
+  }
+  .textfield_counter_counter {
+    .current_count,
+    .remaining_count {
+      color:$warning-color;
+    }
+  }
+}
+
+.form-textarea-wrapper.textcount_over,
+.form-item.textcount_over {
+  .textfield-counter-element {
+    border-color:$over-color;
+    border-width:$border-width;
+  }
+  .textfield_counter_counter {
+    .current_count,
+    .remaining_count {
+      color:$over-color
+    }
+  }
+}

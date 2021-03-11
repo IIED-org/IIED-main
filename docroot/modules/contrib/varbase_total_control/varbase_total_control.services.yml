@@ -1,0 +1,5 @@
+services:
+  varbase_total_control.route_subscriber:
+    class: Drupal\varbase_total_control\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }

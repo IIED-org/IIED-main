@@ -1,0 +1,31 @@
+masonry:
+  title: 'Masonry'
+  website: http://masonry.desandro.com
+  version: 4.2.2
+  js:
+    /libraries/masonry/dist/masonry.pkgd.min.js: { minified: true }
+
+imagesloaded:
+  remote: https://github.com/desandro/imagesloaded
+  version: 4.1.4
+  license:
+    name: MIT
+    url: https://github.com/desandro/imagesloaded/
+    gpl-compatible: true
+  js:
+    /libraries/imagesloaded/imagesloaded.pkgd.min.js: { minified: true }
+  dependencies:
+    - core/jquery
+
+masonry.layout:
+  js:
+    js/masonry.js: {}
+  drupalSettings:
+    # These placeholder values will be set by system_js_settings_alter().
+    masonry: []
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.once
+    - masonry/imagesloaded
+    - masonry/masonry

@@ -1,0 +1,58 @@
+Requirements
+============
+
+To work with the 4.x version of masonry,
+This project requires two third party libraries to be placed in your
+/libraries directory.
+Both are provided by David DeSandro desandro.com
+
+The items on the Status report page ( /admin/reports/status )
+will indicate if they are available and installed on your system correctly.
+
+Composer dependencies installation
+===================================
+
+1- Install the module itself
+  composer require drupal/masonry
+
+2- Install wikimedia/composer-merge-plugin :
+  composer require wikimedia/composer-merge-plugin
+
+3- Edit your "merge-plugin" section under "extra" in your *root* composer.json so it looks like :
+  "extra": {
+    "merge-plugin": {
+      "include": [
+        "modules/contrib/masonry/composer.libraries.json"
+      ],
+
+Beware to change the path to your contrib module folder if under web or docroot for instance
+
+3- Run a locked update:
+  composer update --lock
+
+
+Manual dependencies installation
+===================================
+
+Module
+-------
+
+Download and unzip masonry module from https://www.drupal.org/project/masonry
+and place it into /modules/contrib folder.
+
+Masonry
+-------
+
+Download and unzip masonry from http://masonry.desandro.com/
+and place it into /libraries folder so the following path exists:
+
+    /libraries/masonry/dist/masonry.pkgd.min.js
+
+ImagesLoaded
+------------
+
+Download and unzip imagesloaded from http://imagesloaded.desandro.com/
+and place it into /libraries folder so the following path exists:
+
+    /libraries/imagesloaded/imagesloaded.pkgd.min.js
+

@@ -1,0 +1,91 @@
+<?php
+
+/**
+ * @file
+ * Provides the hooks implementation to interface with Libraries API.
+ *
+ * Sponsored by: www.freelance-drupal.com
+ */
+
+/**
+ * Implements hook_libraries_info().
+ */
+function masonry_libraries_info() {
+  $libraries['masonry'] = [
+    'name' => 'Masonry',
+    'vendor url' => 'http://masonry.desandro.com/',
+    'download url' => 'http://masonry.desandro.com/',
+    'version arguments' => [
+      'file' => 'dist/masonry.pkgd.min.js',
+      'pattern' => '/Masonry\s+PACKAGED\s+v?([0-9\.]+)/',
+      'lines' => 2,
+      'cols' => 30,
+    ],
+    'files' => [
+      'js' => [
+        'dist/masonry.pkgd.min.js',
+      ],
+    ],
+  ];
+  $libraries['imagesloaded'] = [
+    'name' => 'Images Loaded',
+    'vendor url' => 'http://desandro.github.io/imagesloaded',
+    'download url' => 'http://desandro.github.io/imagesloaded/imagesloaded.pkgd.min.js',
+    'version arguments' => [
+      'file' => 'imagesloaded.pkgd.min.js',
+      // imagesLoaded 3.x
+      'pattern' => '/imagesLoaded\s+PACKAGED\s+v?([0-9\.]+)/',
+      'lines' => 2,
+      'cols' => 35,
+    ],
+    'files' => [
+      'js' => [
+        'imagesloaded.pkgd.min.js',
+      ],
+    ],
+  ];
+
+  return $libraries;
+}
+
+/**
+ * Check if the Masonry and imagesLoaded libraries have been loaded.
+ *
+ * @return
+ *   A boolean indicating the loaded status.
+ *
+ * @deprecated
+ * Use \Drupal::service('masonry.service')->isMasonryInstalled() and
+ * \Drupal::service('masonry.service')->isImagesloadedInstalled() instead.
+ */
+function masonry_loaded() {
+  return (\Drupal::service('masonry.service')->isMasonryInstalled() && \Drupal::service('masonry.service')->isImagesloadedInstalled());
+}
+
+/**
+ * Implements hook_library_info_alter().
+ *
+ * Masonry and Imagesloaded libraries may not be in the /libraries folder.
+ * MasonryService is capable of detecting that is a certain extend so we can
+ * correct the file path in both librarie declarations if needed.
+ */
+function masonry_library_info_alter(&$libraries, $extension) {
+  if ($extension == 'masonry') {
+
+    /** @var \Drupal\masonry\Services\MasonryService $masonryService */
+    $masonryService = \Drupal::service('masonry.service');
+
+    if ($masonryPath = $masonryService->isMasonryInstalled()) {
+      $libraries['masonry']['js'] = [
+        "/$masonryPath" => ['minified' => true]
+      ];
+    }
+
+    if ($imagesLoaded = $masonryService->isImagesloadedInstalled()) {
+      $libraries['imagesloaded']['js'] =  [
+        "/$imagesLoaded" => ['minified' => true]
+      ];
+    }
+  }
+}
+

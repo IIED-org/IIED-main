@@ -1,0 +1,24 @@
+{
+  "name": "drupal/notification",
+  "type": "drupal-module",
+  "description": "Adds the Notification plugin to CKEditor.",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "http://drupal.org/project/notification",
+  "minimum-stability": "dev",
+  "authors": [
+    {
+      "name": "Kevin Quillen (kevinquillen)",
+      "homepage": "https://www.drupal.org/u/kevinquillen",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "http://drupal.org/project/issues/notification",
+    "source": "http://cgit.drupalcode.org/notification"
+  },
+  "require": {
+    "drupal-ckeditor-libraries-group/notification": "^4.5.11"
+  },
+  "prefer-stable": true
+}

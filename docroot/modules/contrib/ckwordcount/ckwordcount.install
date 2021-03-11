@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Ckeditor Word Count Module.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function ckwordcount_requirements($phase) {
+  $requirements = [];
+
+  if ($phase == 'install' || $phase == 'runtime') {
+    $plugin_detected = file_exists(DRUPAL_ROOT . '/libraries/wordcount/plugin.js') || file_exists(DRUPAL_ROOT . '/libraries/ckeditor-wordcount-plugin/wordcount/plugin.js');
+
+    if ($plugin_detected) {
+      $requirements['wordcount'] = [
+        'title' => t('CKEditor Wordcount'),
+        'value' => t('Plugin detected'),
+        'severity' => REQUIREMENT_OK,
+      ];
+    }
+    else {
+      $requirements['wordcount'] = [
+        'title' => t('CKEditor Wordcount'),
+        'value' => t('Plugin not detected'),
+        'severity' => REQUIREMENT_ERROR,
+        'description' => t('You will need the CKEditor plugin for counting words and characters before enabling this module. <a href=":plugin_url">Get the plugin here</a>.', [':plugin_url' => 'http://ckeditor.com/addon/wordcount']),
+      ];
+    }
+  }
+
+  return $requirements;
+}
