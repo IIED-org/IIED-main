@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2e66f410bb93394654945884b1a97535",
+    "content-hash": "c84d16ea769cff3dc945095f00162da9",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -13362,41 +13362,15 @@
         },
         {
             "name": "w8tcha/ckeditor-wordcount-plugin",
-            "version": "v1.17.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/w8tcha/CKEditor-WordCount-Plugin.git",
-                "reference": "c999df7c361d27d581fca460a6ac6c1082f3e0e2"
-            },
+            "version": "1.17.8",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/w8tcha/CKEditor-WordCount-Plugin/zipball/c999df7c361d27d581fca460a6ac6c1082f3e0e2",
-                "reference": "c999df7c361d27d581fca460a6ac6c1082f3e0e2",
-                "shasum": ""
+                "url": "https://github.com/w8tcha/CKEditor-WordCount-Plugin/releases/download/v1.17.8/CKEditor-WordCount-Plugin.zip"
             },
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "w8tcha",
-                    "homepage": "https://github.com/w8tcha"
-                }
-            ],
-            "description": "WordCount Plugin for CKEditor Editor",
-            "homepage": "http://w8tcha.github.com/CKEditor-WordCount-Plugin/",
-            "keywords": [
-                "CKEditor",
-                "editor",
-                "html",
-                "javascript",
-                "richtext",
-                "text",
-                "wysiwyg"
-            ],
-            "time": "2020-10-10T22:06:12+00:00"
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "drupal-library"
         },
         {
             "name": "webflo/drupal-finder",

@@ -14340,43 +14340,17 @@
     },
     {
         "name": "w8tcha/ckeditor-wordcount-plugin",
-        "version": "v1.17.8",
+        "version": "1.17.8",
         "version_normalized": "1.17.8.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/w8tcha/CKEditor-WordCount-Plugin.git",
-            "reference": "c999df7c361d27d581fca460a6ac6c1082f3e0e2"
-        },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/w8tcha/CKEditor-WordCount-Plugin/zipball/c999df7c361d27d581fca460a6ac6c1082f3e0e2",
-            "reference": "c999df7c361d27d581fca460a6ac6c1082f3e0e2",
-            "shasum": ""
+            "url": "https://github.com/w8tcha/CKEditor-WordCount-Plugin/releases/download/v1.17.8/CKEditor-WordCount-Plugin.zip"
         },
-        "time": "2020-10-10T22:06:12+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "w8tcha",
-                "homepage": "https://github.com/w8tcha"
-            }
-        ],
-        "description": "WordCount Plugin for CKEditor Editor",
-        "homepage": "http://w8tcha.github.com/CKEditor-WordCount-Plugin/",
-        "keywords": [
-            "CKEditor",
-            "editor",
-            "html",
-            "javascript",
-            "richtext",
-            "text",
-            "wysiwyg"
-        ]
+        "require": {
+            "composer/installers": "~1.0"
+        },
+        "type": "drupal-library",
+        "installation-source": "dist"
     },
     {
         "name": "webflo/drupal-finder",
