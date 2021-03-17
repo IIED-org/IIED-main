@@ -1,0 +1,14 @@
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: 'Tiêu đề'
+        uid:
+          label: 'Tác giả'
+        edit_node:
+          label: Sửa
+      filters:
+        type:
+          expose:
+            label: Kiểu

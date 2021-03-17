@@ -1,0 +1,14 @@
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: Judul
+        uid:
+          label: Penulis
+        edit_node:
+          label: Sunting
+      filters:
+        type:
+          expose:
+            label: Jenis

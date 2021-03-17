@@ -86,9 +86,11 @@ module:
   node: 0
   options: 0
   page_cache: 0
+  panels: 0
   path: 0
   path_alias: 0
   path_redirect_import: 0
+  publishcontent: 0
   quickedit: 0
   rabbit_hole: 0
   rdf: 0

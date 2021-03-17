@@ -1,0 +1,14 @@
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: Naziv
+        uid:
+          label: Autor
+        edit_node:
+          label: Uredi
+      filters:
+        type:
+          expose:
+            label: Vrsta

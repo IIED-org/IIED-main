@@ -1,0 +1,14 @@
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: ခေါင်းစဉ်
+        uid:
+          label: စာရေးသူ
+        edit_node:
+          label: ပြင်ရန်
+      filters:
+        type:
+          expose:
+            label: အမျိုးအစား

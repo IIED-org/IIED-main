@@ -77,7 +77,7 @@ third_party_settings:
         id: ''
         classes: ''
         open: false
-      label: 'Add/Edit Author(s), Editor(s)and Translator(s)'
+      label: 'Add/Edit Author(s), Editor(s)and Translator(s) *'
     group_publication_metadata:
       children:
         - field_document_type
@@ -98,7 +98,7 @@ third_party_settings:
         id: ''
         classes: ''
         open: false
-      label: 'Add/Edit Publication metadata'
+      label: 'Add/Edit Publication metadata *'
     group_iied_marketing_and_reporti:
       children:
         - field_theme_s_
@@ -115,7 +115,7 @@ third_party_settings:
         id: ''
         classes: ''
         open: false
-      label: 'Add/Edit IIED Marketing and Reporting info'
+      label: 'Add/Edit IIED Marketing and Reporting info *'
     group_series_article_and_journal:
       children:
         - field_series
@@ -148,7 +148,7 @@ third_party_settings:
         id: ''
         classes: ''
         open: false
-      label: 'Add/Edit IIED links and tags'
+      label: 'Add/Edit IIED links and tags *'
     group_upload_file_or_link_to_ext:
       children:
         - field_media

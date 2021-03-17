@@ -1,0 +1,12 @@
+display:
+  default:
+    display_options:
+      fields:
+        name:
+          label: အမည်
+        edit_user:
+          label: ပြင်ရန်
+      filters:
+        uid:
+          expose:
+            label: အမည်

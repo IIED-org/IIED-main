@@ -1,0 +1,14 @@
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: Заголовок
+        uid:
+          label: Автор
+        edit_node:
+          label: Редактировать
+      filters:
+        type:
+          expose:
+            label: Тип

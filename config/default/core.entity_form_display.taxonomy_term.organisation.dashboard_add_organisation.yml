@@ -1,8 +1,9 @@
-uuid: 0e07e61d-9684-4eb1-802f-61c5e2cbc714
+uuid: d8e5679d-b26c-4184-8e77-888185f6a7a7
 langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_form_mode.taxonomy_term.dashboard_add_organisation
     - field.field.taxonomy_term.organisation.field_alias
     - field.field.taxonomy_term.organisation.field_email
     - field.field.taxonomy_term.organisation.field_full_name
@@ -18,11 +19,12 @@ dependencies:
     - address
     - image
     - link
+    - path
     - text
-id: taxonomy_term.organisation.default
+id: taxonomy_term.organisation.dashboard_add_organisation
 targetEntityType: taxonomy_term
 bundle: organisation
-mode: default
+mode: dashboard_add_organisation
 content:
   description:
     type: text_textarea
@@ -33,7 +35,7 @@ content:
       rows: 5
     third_party_settings: {  }
   field_alias:
-    weight: 10
+    weight: 12
     settings:
       size: 60
       placeholder: ''
@@ -62,6 +64,14 @@ content:
     third_party_settings: {  }
     type: address_default
     region: content
+  field_location_legacy:
+    weight: 8
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
   field_logo:
     weight: 1
     settings:
@@ -71,7 +81,7 @@ content:
     type: image_image
     region: content
   field_type:
-    weight: 8
+    weight: 10
     settings:
       display_label: true
     third_party_settings: {  }
@@ -86,7 +96,7 @@ content:
     type: link_default
     region: content
   field_valid:
-    weight: 7
+    weight: 9
     settings:
       display_label: true
     third_party_settings: {  }
@@ -94,7 +104,7 @@ content:
     region: content
   langcode:
     type: language_select
-    weight: 9
+    weight: 11
     region: content
     settings:
       include_locked: true
@@ -107,13 +117,17 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  path:
+    type: path
+    weight: 7
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   status:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 11
+    weight: 13
     region: content
     third_party_settings: {  }
-hidden:
-  field_location_legacy: true
-  path: true
+hidden: {  }

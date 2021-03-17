@@ -1,0 +1,12 @@
+display:
+  default:
+    display_options:
+      fields:
+        name:
+          label: Nome
+        edit_user:
+          label: Editar
+      filters:
+        uid:
+          expose:
+            label: Nome
