@@ -1,0 +1,4 @@
+form_mode_control.configuration:
+  title: Configure
+  route_name: form_mode_control.configuration
+  parent: entity.entity_form_mode.collection

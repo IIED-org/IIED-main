@@ -1,0 +1,6 @@
+field_ui.entity_form_mode_addd:
+  route_name: field_ui.entity_form_mode_add
+  title: 'Add new form mode'
+  weight: 1
+  appears_on:
+    - form_mode_control.configuration

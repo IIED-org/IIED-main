@@ -1,0 +1,2 @@
+permission_callbacks:
+  - \Drupal\form_mode_control\FormModePermission::roleToFormMode
