@@ -15,11 +15,6 @@ settings:
     rows:
       -
         -
-          name: Formatting
-          items:
-            - Bold
-            - Italic
-        -
           name: Lists
           items:
             - BulletedList

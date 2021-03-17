@@ -1,0 +1,14 @@
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: 标题
+        uid:
+          label: 作者
+        edit_node:
+          label: 编辑
+      filters:
+        type:
+          expose:
+            label: 类型

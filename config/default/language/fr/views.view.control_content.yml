@@ -1,0 +1,14 @@
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: Titre
+        uid:
+          label: Auteur
+        edit_node:
+          label: Modifier
+      filters:
+        type:
+          expose:
+            label: Type

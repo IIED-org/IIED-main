@@ -1,12 +1,9 @@
-uuid: 52d16175-1b80-4b3c-a945-9eb64c5a3fae
 langcode: en
 status: true
 dependencies:
   module:
     - comment
     - node
-_core:
-  default_config_hash: ktCna9xmWvYZIUfOCUyDQvedn5RtnS4CRmEIwNmvYjc
 id: node.comment
 field_name: comment
 entity_type: node

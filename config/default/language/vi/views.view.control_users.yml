@@ -1,0 +1,12 @@
+display:
+  default:
+    display_options:
+      fields:
+        name:
+          label: Tên
+        edit_user:
+          label: Sửa
+      filters:
+        uid:
+          expose:
+            label: Tên

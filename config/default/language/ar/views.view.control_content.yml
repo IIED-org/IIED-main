@@ -1,0 +1,14 @@
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: العنوان
+        uid:
+          label: المؤلف
+        edit_node:
+          label: تحرير
+      filters:
+        type:
+          expose:
+            label: النوع

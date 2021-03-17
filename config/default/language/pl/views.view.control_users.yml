@@ -1,0 +1,12 @@
+display:
+  default:
+    display_options:
+      fields:
+        name:
+          label: Nazwa
+        edit_user:
+          label: Edytuj
+      filters:
+        uid:
+          expose:
+            label: Nazwa

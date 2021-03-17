@@ -1,0 +1,10 @@
+uuid: 05615591-5927-4ed6-bea8-0a8a6495c766
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.dashboard_add_author
+label: 'Dashboard add author'
+targetEntityType: taxonomy_term
+cache: true

@@ -1,0 +1,14 @@
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: శీర్షిక
+        uid:
+          label: రచయిత
+        edit_node:
+          label: మార్చు
+      filters:
+        type:
+          expose:
+            label: రకం

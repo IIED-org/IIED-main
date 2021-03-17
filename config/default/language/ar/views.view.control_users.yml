@@ -1,0 +1,12 @@
+display:
+  default:
+    display_options:
+      fields:
+        name:
+          label: الاسم
+        edit_user:
+          label: تحرير
+      filters:
+        uid:
+          expose:
+            label: الاسم

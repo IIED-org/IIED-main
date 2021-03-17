@@ -11,7 +11,7 @@ id: taxonomy_term.organisation.field_url
 field_name: field_url
 entity_type: taxonomy_term
 bundle: organisation
-label: URL
+label: 'Website address'
 description: ''
 required: false
 translatable: false

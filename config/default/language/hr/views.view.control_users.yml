@@ -1,0 +1,12 @@
+display:
+  default:
+    display_options:
+      fields:
+        name:
+          label: Naziv
+        edit_user:
+          label: Uredi
+      filters:
+        uid:
+          expose:
+            label: Naziv

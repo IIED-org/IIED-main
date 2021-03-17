@@ -1,0 +1,12 @@
+display:
+  default:
+    display_options:
+      fields:
+        name:
+          label: పేరు
+        edit_user:
+          label: మార్చు
+      filters:
+        uid:
+          expose:
+            label: పేరు

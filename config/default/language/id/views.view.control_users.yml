@@ -1,0 +1,12 @@
+display:
+  default:
+    display_options:
+      fields:
+        name:
+          label: Nama
+        edit_user:
+          label: Sunting
+      filters:
+        uid:
+          expose:
+            label: Nama

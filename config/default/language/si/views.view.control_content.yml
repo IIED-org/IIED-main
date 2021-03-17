@@ -1,0 +1,12 @@
+display:
+  default:
+    display_options:
+      fields:
+        title:
+          label: මාතෘකාව
+        edit_node:
+          label: සංස්කරණය
+      filters:
+        type:
+          expose:
+            label: වර්ගය

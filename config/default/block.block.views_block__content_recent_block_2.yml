@@ -1,0 +1,43 @@
+uuid: 2994ad53-7648-4036-aee7-913ae8c67e82
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.content_recent
+  module:
+    - ctools
+    - user
+    - views
+  theme:
+    - claro
+id: views_block__content_recent_block_2
+theme: claro
+region: content
+weight: 0
+provider: null
+plugin: 'views_block:content_recent-block_2'
+settings:
+  id: 'views_block:content_recent-block_2'
+  label: ''
+  provider: views
+  label_display: visible
+  views_label: ''
+  items_per_page: none
+  context_mapping: {  }
+visibility:
+  'entity_bundle:block_content':
+    id: 'entity_bundle:block_content'
+    bundles:
+      basic: basic
+    negate: false
+    context_mapping:
+      block_content: '@ds.ds_block_field_entity_context:block_content'
+  user_role:
+    id: user_role
+    roles:
+      editor: editor
+      manager: manager
+      administrator: administrator
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'

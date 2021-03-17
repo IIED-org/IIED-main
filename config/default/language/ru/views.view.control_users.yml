@@ -1,0 +1,12 @@
+display:
+  default:
+    display_options:
+      fields:
+        name:
+          label: Название
+        edit_user:
+          label: Редактировать
+      filters:
+        uid:
+          expose:
+            label: Название

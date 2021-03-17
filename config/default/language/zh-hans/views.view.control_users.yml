@@ -1,0 +1,12 @@
+display:
+  default:
+    display_options:
+      fields:
+        name:
+          label: 名称
+        edit_user:
+          label: 编辑
+      filters:
+        uid:
+          expose:
+            label: 名称
