@@ -10,7 +10,7 @@ field_name: field_author_s_
 entity_type: node
 bundle: publication
 label: Author(s)
-description: "<p><i><big><strong>Hint:</strong> Authors may be individuals or organisations.</big></i></p>\r\n<p><i><big>Start typing and select from the suggestions that appear.</big></i></p>\r\n<p><i><big>To create a new Author entry, return to your dashboard and select 'Check/create Author'.</big></i></p>\r\n<p><i><big>For multiple Authors click 'Add another item'.</big></i></p>"
+description: "<p><i><big><strong>Hint:</strong> Authors may be individuals or organisations.</big></i></p>\r\n<p><i><big>Start typing and select from the suggestions that appear.</big></i></p>\r\n<p><i><big>If your Author is not listed, <a href=\"https://pubs.dev.dd:8443/admin/structure/taxonomy/manage/person/add\" target=\"_blank\">follow this link to create a new Author</a> (opens in new tab) then return to this screen and continue.</big></i></p>\r\n<p><i><big>For multiple Authors click the 'Add another item' button below.</big></i></p>"
 required: true
 translatable: false
 default_value: {  }

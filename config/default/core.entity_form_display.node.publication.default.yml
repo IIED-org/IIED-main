@@ -98,7 +98,7 @@ third_party_settings:
         id: ''
         classes: ''
         open: false
-      label: 'Add/Edit Publication metadata *'
+      label: 'Add/Edit Publication details *'
     group_iied_marketing_and_reporti:
       children:
         - field_theme_s_

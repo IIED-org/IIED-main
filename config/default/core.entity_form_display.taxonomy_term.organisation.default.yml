@@ -16,9 +16,37 @@ dependencies:
     - taxonomy.vocabulary.organisation
   module:
     - address
+    - field_group
     - image
     - link
     - text
+third_party_settings:
+  field_group:
+    group_add_new_organisation:
+      children:
+        - name
+        - field_logo
+        - field_full_name
+        - description
+        - field_url
+        - field_email
+        - field_location
+        - field_valid
+        - field_type
+        - langcode
+        - field_alias
+        - status
+      parent_name: ''
+      weight: 0
+      format_type: details
+      region: content
+      format_settings:
+        id: ''
+        classes: ''
+        description: '<big><i><b>Hint: </b>When you save this form, the page will automatically refresh with a new, blank form so you can add another Organisation. If you do not want/need to do this, simply close this tab or navigate away from the page.</i></big>'
+        open: true
+        required_fields: true
+      label: 'Add new Organisation'
 id: taxonomy_term.organisation.default
 targetEntityType: taxonomy_term
 bundle: organisation
@@ -26,14 +54,14 @@ mode: default
 content:
   description:
     type: text_textarea
-    weight: 3
+    weight: 4
     region: content
     settings:
       placeholder: ''
       rows: 5
     third_party_settings: {  }
   field_alias:
-    weight: 10
+    weight: 11
     settings:
       size: 60
       placeholder: ''
@@ -41,7 +69,7 @@ content:
     type: string_textfield
     region: content
   field_email:
-    weight: 5
+    weight: 6
     settings:
       size: 60
       placeholder: ''
@@ -49,7 +77,7 @@ content:
     type: email_default
     region: content
   field_full_name:
-    weight: 2
+    weight: 3
     settings:
       size: 60
       placeholder: ''
@@ -57,13 +85,13 @@ content:
     type: string_textfield
     region: content
   field_location:
-    weight: 6
+    weight: 7
     settings: {  }
     third_party_settings: {  }
     type: address_default
     region: content
   field_logo:
-    weight: 1
+    weight: 2
     settings:
       progress_indicator: throbber
       preview_image_style: thumbnail
@@ -71,14 +99,14 @@ content:
     type: image_image
     region: content
   field_type:
-    weight: 8
+    weight: 9
     settings:
       display_label: true
     third_party_settings: {  }
     type: boolean_checkbox
     region: content
   field_url:
-    weight: 4
+    weight: 5
     settings:
       placeholder_url: ''
       placeholder_title: ''
@@ -86,7 +114,7 @@ content:
     type: link_default
     region: content
   field_valid:
-    weight: 7
+    weight: 8
     settings:
       display_label: true
     third_party_settings: {  }
@@ -94,14 +122,14 @@ content:
     region: content
   langcode:
     type: language_select
-    weight: 9
+    weight: 10
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   name:
     type: string_textfield
-    weight: 0
+    weight: 1
     region: content
     settings:
       size: 60
@@ -111,7 +139,7 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 11
+    weight: 12
     region: content
     third_party_settings: {  }
 hidden:

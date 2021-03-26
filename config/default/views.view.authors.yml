@@ -7,9 +7,11 @@ dependencies:
     - taxonomy.vocabulary.organisation
     - taxonomy.vocabulary.person
   module:
+    - better_exposed_filters
     - node
     - taxonomy
     - user
+    - views_autocomplete_filters
 id: authors
 label: 'Authors & Editors'
 module: views
@@ -369,7 +371,7 @@ display:
   block_2:
     display_plugin: block
     id: block_2
-    display_title: 'Dashboard check author/org'
+    display_title: 'Dashboard check author'
     position: 2
     display_options:
       display_extenders: {  }
@@ -397,9 +399,8 @@ display:
           operator: in
           value:
             person: person
-            organisation: organisation
           group: 1
-          exposed: true
+          exposed: false
           expose:
             operator_id: vid_op
             label: Vocabulary
@@ -439,7 +440,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          operator: '='
+          operator: contains
           value: ''
           group: 1
           exposed: true
@@ -447,7 +448,7 @@ display:
             operator_id: name_op
             label: Name
             description: ''
-            use_operator: true
+            use_operator: false
             operator: name_op
             operator_limit_selection: false
             operator_list: {  }
@@ -458,8 +459,18 @@ display:
             remember_roles:
               authenticated: authenticated
               anonymous: '0'
+              viewer: '0'
+              editor: '0'
+              manager: '0'
               administrator: '0'
             placeholder: ''
+            autocomplete_filter: 1
+            autocomplete_min_chars: '1'
+            autocomplete_items: '10'
+            autocomplete_field: name
+            autocomplete_raw_suggestion: 1
+            autocomplete_raw_dropdown: 1
+            autocomplete_dependent: 0
           is_grouped: false
           group_info:
             label: ''
@@ -489,6 +500,8 @@ display:
         sorts: false
         pager: false
         footer: false
+        show_admin_links: false
+        exposed_form: false
       filter_groups:
         operator: AND
         groups:
@@ -614,14 +627,313 @@ display:
           entity_type: taxonomy_term
           entity_field: name
           plugin_id: term_name
-        nid:
-          id: nid
-          table: node_field_data
-          field: nid
-          relationship: reverse__node__field_author_s_
-          group_type: count
+      relationships:
+        reverse__node__field_author_s_:
+          id: reverse__node__field_author_s_
+          table: taxonomy_term_field_data
+          field: reverse__node__field_author_s_
+          relationship: none
+          group_type: group
+          admin_label: field_author_s_
+          required: false
+          entity_type: taxonomy_term
+          plugin_id: entity_reverse
+      display_description: ''
+      title: 'Dashboard user check author V2'
+      header: {  }
+      enabled: true
+      group_by: true
+      use_ajax: true
+      block_description: 'Dashboard user check Author V2'
+      sorts:
+        name:
+          id: name
+          table: taxonomy_term_field_data
+          field: name
+          relationship: none
+          group_type: group
           admin_label: ''
-          label: 'Use count'
+          order: ASC
+          exposed: false
+          expose:
+            label: ''
+          entity_type: taxonomy_term
+          entity_field: name
+          plugin_id: standard
+      pager:
+        type: full
+        options:
+          items_per_page: 3
+          offset: 0
+          id: 0
+          total_pages: null
+          tags:
+            previous: ‹‹
+            next: ››
+            first: '« First'
+            last: 'Last »'
+          expose:
+            items_per_page: false
+            items_per_page_label: 'Items per page'
+            items_per_page_options: '5, 10, 25, 50'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- All -'
+            offset: false
+            offset_label: Offset
+          quantity: 9
+      footer:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: false
+          tokenize: false
+          content:
+            value: '<br>'
+            format: full_html
+          plugin_id: text
+      show_admin_links: true
+      exposed_form:
+        type: bef
+        options:
+          submit_button: Apply
+          reset_button: false
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+          text_input_required: 'Select any filter and click on Apply to see results'
+          text_input_required_format: basic_html
+          bef:
+            general:
+              autosubmit: true
+              autosubmit_exclude_textfield: false
+              autosubmit_textfield_delay: 2500
+              autosubmit_hide: true
+              input_required: false
+              allow_secondary: false
+              secondary_label: 'Advanced options'
+              secondary_open: false
+            filter:
+              name:
+                plugin_id: default
+                advanced:
+                  collapsible: false
+                  is_secondary: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - user.permissions
+      tags: {  }
+  block_3:
+    display_plugin: block
+    id: block_3
+    display_title: 'Dashboard check organisation'
+    position: 2
+    display_options:
+      display_extenders: {  }
+      filters:
+        status:
+          value: '1'
+          table: taxonomy_term_field_data
+          field: status
+          plugin_id: boolean
+          entity_type: taxonomy_term
+          entity_field: status
+          id: status
+          expose:
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+          group: 1
+        vid:
+          id: vid
+          table: taxonomy_term_field_data
+          field: vid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: in
+          value:
+            organisation: organisation
+          group: 1
+          exposed: false
+          expose:
+            operator_id: vid_op
+            label: Vocabulary
+            description: ''
+            use_operator: false
+            operator: vid_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: vid
+            required: true
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+            reduce: true
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          entity_type: taxonomy_term
+          entity_field: vid
+          plugin_id: bundle
+        name:
+          id: name
+          table: taxonomy_term_field_data
+          field: name
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: name_op
+            label: Name
+            description: ''
+            use_operator: false
+            operator: name_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: name
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              viewer: '0'
+              editor: '0'
+              manager: '0'
+              administrator: '0'
+            placeholder: ''
+            autocomplete_filter: 1
+            autocomplete_min_chars: '0'
+            autocomplete_items: '10'
+            autocomplete_field: name
+            autocomplete_raw_suggestion: 1
+            autocomplete_raw_dropdown: 1
+            autocomplete_dependent: 0
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          entity_type: taxonomy_term
+          entity_field: name
+          plugin_id: views_autocomplete_filters_string
+      defaults:
+        filters: false
+        filter_groups: false
+        style: false
+        row: false
+        fields: false
+        relationships: false
+        title: false
+        header: false
+        group_by: false
+        use_ajax: false
+        sorts: false
+        pager: false
+        footer: false
+        show_admin_links: false
+        exposed_form: false
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      style:
+        type: table
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: true
+          override: true
+          sticky: false
+          caption: ''
+          summary: ''
+          description: ''
+          columns:
+            vid: vid
+            name: name
+            field_legacy_iscanonical: field_legacy_iscanonical
+            nid: nid
+          info:
+            vid:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            name:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_legacy_iscanonical:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            nid:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+          default: '-1'
+          empty_table: false
+      row:
+        type: fields
+        options:
+          inline: {  }
+          separator: ''
+          hide_empty: false
+          default_field_elements: true
+      fields:
+        name:
+          id: name
+          table: taxonomy_term_field_data
+          field: name
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: Organisation
           exclude: false
           alter:
             alter_text: false
@@ -654,7 +966,7 @@ display:
           element_class: ''
           element_label_type: ''
           element_label_class: ''
-          element_label_colon: true
+          element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
           element_default_classes: true
@@ -662,19 +974,10 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          set_precision: false
-          precision: 0
-          decimal: .
-          separator: ', '
-          format_plural: 0
-          format_plural_string: !!binary MQNAY291bnQ=
-          prefix: ''
-          suffix: ''
           click_sort_column: value
-          type: number_integer
+          type: string
           settings:
-            thousand_separator: ''
-            prefix_suffix: true
+            link_to_entity: true
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -683,28 +986,30 @@ display:
           delta_reversed: false
           delta_first_last: false
           multi_type: separator
+          separator: ', '
           field_api_classes: false
-          entity_type: node
-          entity_field: nid
-          plugin_id: field
+          convert_spaces: false
+          entity_type: taxonomy_term
+          entity_field: name
+          plugin_id: term_name
       relationships:
-        reverse__node__field_author_s_:
-          id: reverse__node__field_author_s_
+        reverse__taxonomy_term__field_organisation:
+          id: reverse__taxonomy_term__field_organisation
           table: taxonomy_term_field_data
-          field: reverse__node__field_author_s_
+          field: reverse__taxonomy_term__field_organisation
           relationship: none
           group_type: group
-          admin_label: field_author_s_
+          admin_label: field_organisation
           required: false
           entity_type: taxonomy_term
           plugin_id: entity_reverse
       display_description: ''
-      title: 'Dashboard user check author/org'
+      title: 'Dashboard user check Org V2'
       header: {  }
       enabled: true
       group_by: true
       use_ajax: true
-      block_description: 'Dashboard user check Author/Org'
+      block_description: 'Dashboard user check Org V2'
       sorts:
         name:
           id: name
@@ -723,7 +1028,7 @@ display:
       pager:
         type: full
         options:
-          items_per_page: 5
+          items_per_page: 3
           offset: 0
           id: 0
           total_pages: null
@@ -755,6 +1060,35 @@ display:
             value: '<br>'
             format: full_html
           plugin_id: text
+      show_admin_links: true
+      exposed_form:
+        type: bef
+        options:
+          submit_button: Apply
+          reset_button: false
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+          text_input_required: 'Select any filter and click on Apply to see results'
+          text_input_required_format: basic_html
+          bef:
+            general:
+              autosubmit: true
+              autosubmit_exclude_textfield: false
+              autosubmit_textfield_delay: 2500
+              autosubmit_hide: true
+              input_required: false
+              allow_secondary: false
+              secondary_label: 'Advanced options'
+              secondary_open: false
+            filter:
+              name:
+                plugin_id: default
+                advanced:
+                  collapsible: false
+                  is_secondary: false
     cache_metadata:
       max-age: -1
       contexts:

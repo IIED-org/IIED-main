@@ -10,7 +10,7 @@ dependencies:
 id: sidrtriggerbuttonblock_2
 theme: iied_pubs
 region: content
-weight: -8
+weight: -9
 provider: null
 plugin: sidr_trigger
 settings:

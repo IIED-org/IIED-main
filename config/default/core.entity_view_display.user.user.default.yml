@@ -5,13 +5,12 @@ dependencies:
   config:
     - field.field.user.user.user_picture
     - image.style.thumbnail
-    - views.view.authors
     - views.view.content_recent
   content:
     - 'block_content:basic:3c84acb2-ece0-4d50-9c47-7b9976479293'
-    - 'block_content:basic:d2caf884-0527-45a3-88c9-6b4e8d17ef5c'
   module:
     - block_content
+    - field_group
     - image
     - layout_builder
     - layout_discovery
@@ -26,81 +25,71 @@ third_party_settings:
         layout_settings:
           label: ''
         components:
-          d5b74c52-97ec-4acd-aad6-9b31276aec53:
-            uuid: d5b74c52-97ec-4acd-aad6-9b31276aec53
-            region: content
-            configuration:
-              id: 'field_block:user:user:user_picture'
-              label: Picture
-              provider: layout_builder
-              label_display: '0'
-              formatter:
-                label: hidden
-                type: image
-                settings:
-                  image_style: thumbnail
-                  image_link: content
-                third_party_settings:
-                  ds:
-                    ft:
-                      id: default
-                      settings:
-                        lb: ''
-                        lb-col: false
-                        classes: {  }
-              context_mapping:
-                entity: '@user.current_user_context:current_user'
-                view_mode: view_mode
-            additional: {  }
-            weight: 0
-          4e27d3e7-b0f7-4bb2-998f-c54d104b9f66:
-            uuid: 4e27d3e7-b0f7-4bb2-998f-c54d104b9f66
-            region: content
-            configuration:
-              id: 'extra_field_block:user:user:member_for'
-              label: 'Member for'
-              provider: layout_builder
-              label_display: '0'
-              context_mapping:
-                entity: '@user.current_user_context:current_user'
-            additional: {  }
-            weight: 1
           bd76007a-a943-4805-8ba2-fda33ee036c2:
             uuid: bd76007a-a943-4805-8ba2-fda33ee036c2
             region: content
             configuration:
+              id: 'extra_field_block:user:user:masquerade'
+              label: Masquerade
+              provider: layout_builder
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'extra_field_block:user:user:masquerade'
             additional: {  }
-            weight: 2
-          be75a506-0e24-4ce8-b1f3-256311da3a03:
-            uuid: be75a506-0e24-4ce8-b1f3-256311da3a03
+            weight: 0
+          1ade6956-714f-441f-bcc9-589e5b237753:
+            uuid: 1ade6956-714f-441f-bcc9-589e5b237753
             region: content
             configuration:
-              id: 'views_block:content_recent-block_2'
-              label: 'My publications'
-              provider: views
-              label_display: visible
-              views_label: 'My publications'
-              items_per_page: none
-              context_mapping: {  }
+              id: 'field_block:user:user:name'
+              label: 'Welcome back'
+              provider: layout_builder
+              label_display: '0'
+              formatter:
+                label: above
+                type: user_name
+                settings:
+                  link_to_entity: false
+                third_party_settings:
+                  ds:
+                    ft:
+                      id: expert
+                      settings:
+                        lb: 'Welcome back'
+                        prefix: ''
+                        lbw: true
+                        lbw-el: h3
+                        lbw-cl: ''
+                        lbw-at: ''
+                        lb-col: false
+                        ow: false
+                        ow-el: ''
+                        ow-cl: ''
+                        ow-at: ''
+                        ow-def-at: false
+                        ow-def-cl: false
+                        fis: false
+                        fis-el: ''
+                        fis-cl: ''
+                        fis-at: ''
+                        fis-def-at: false
+                        fi: false
+                        fi-el: ''
+                        fi-cl: ''
+                        fi-at: ''
+                        fi-def-at: false
+                        suffix: '<p></p><hr>'
+              context_mapping:
+                entity: '@user.current_user_context:current_user'
+                view_mode: view_mode
             additional: {  }
-            weight: 4
-          226d65a4-3836-475b-a32a-74d8b96bb721:
-            uuid: 226d65a4-3836-475b-a32a-74d8b96bb721
-            region: content
-            configuration:
-              id: 'views_block:content_recent-block_3'
-              label: 'All publications'
-              provider: views
-              label_display: visible
-              views_label: 'All publications'
-              items_per_page: none
-              context_mapping: {  }
-            additional: {  }
-            weight: 5
+            weight: 1
+        third_party_settings: {  }
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+        components:
           29e5079f-51a2-4c99-8203-dbedaeb5f42c:
             uuid: 29e5079f-51a2-4c99-8203-dbedaeb5f42c
             region: content
@@ -114,35 +103,54 @@ third_party_settings:
               view_mode: full
               context_mapping: {  }
             additional: {  }
-            weight: 3
-          603cefa7-ba5d-4478-99c9-1ad2f7dbe614:
-            uuid: 603cefa7-ba5d-4478-99c9-1ad2f7dbe614
+            weight: 0
+        third_party_settings: {  }
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+        components:
+          be75a506-0e24-4ce8-b1f3-256311da3a03:
+            uuid: be75a506-0e24-4ce8-b1f3-256311da3a03
             region: content
             configuration:
-              id: 'block_content:d2caf884-0527-45a3-88c9-6b4e8d17ef5c'
-              label: 'Create new Author or Organisation'
-              provider: block_content
-              label_display: visible
-              status: true
-              info: ''
-              view_mode: full
-              context_mapping: {  }
-            additional: {  }
-            weight: 8
-          071631a9-9f89-44d7-9112-60aaf8821f00:
-            uuid: 071631a9-9f89-44d7-9112-60aaf8821f00
-            region: content
-            configuration:
-              id: 'views_block:authors-block_2'
-              label: 'Check Author or Organisation exists on system'
+              id: 'views_block:content_recent-block_2'
+              label: 'My publications'
               provider: views
               label_display: visible
-              views_label: 'Check Author or Organisation exists on system'
+              views_label: 'My publications'
               items_per_page: none
               context_mapping: {  }
             additional: {  }
-            weight: 7
+            weight: 1
+          226d65a4-3836-475b-a32a-74d8b96bb721:
+            uuid: 226d65a4-3836-475b-a32a-74d8b96bb721
+            region: content
+            configuration:
+              id: 'views_block:content_recent-block_3'
+              label: 'All publications'
+              provider: views
+              label_display: visible
+              views_label: 'All publications'
+              items_per_page: none
+              context_mapping: {  }
+            additional: {  }
+            weight: 2
         third_party_settings: {  }
+  field_group:
+    group_wha_:
+      children: {  }
+      parent_name: ''
+      weight: 20
+      format_type: details
+      region: hidden
+      format_settings:
+        id: ''
+        classes: ''
+        description: ''
+        open: false
+        required_fields: false
+      label: 'Wha?'
 _core:
   default_config_hash: V51QPCKkgNREKtSmB9Iu2wmAMEpktVpnzklWaZV8UYo
 id: user.user.default

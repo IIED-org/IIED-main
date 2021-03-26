@@ -29,6 +29,19 @@ settings:
       language_list: un
     stylescombo:
       styles: ''
+    wordcount:
+      enable: true
+      show_remaining: true
+      show_paragraphs: false
+      show_word_count: true
+      show_char_count: false
+      count_bytes: false
+      count_spaces: false
+      count_html: 0
+      count_line_breaks: false
+      max_words: 300
+      max_chars: -1
+      hard_limit: 1
 image_upload:
   status: true
   scheme: public

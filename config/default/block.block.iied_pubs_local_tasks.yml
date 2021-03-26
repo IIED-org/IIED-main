@@ -9,7 +9,7 @@ _core:
 id: iied_pubs_local_tasks
 theme: iied_pubs
 region: content
-weight: -12
+weight: -13
 provider: null
 plugin: local_tasks_block
 settings:
