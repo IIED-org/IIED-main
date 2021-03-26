@@ -1,9 +1,9 @@
-uuid: 0e356d5c-ed0d-489f-a258-95e37cc2e742
+uuid: bed6853f-c6c9-4037-a14b-1f7b9920ffd2
 langcode: en
 status: true
 dependencies:
   content:
-    - 'block_content:basic:2161b00e-e1f5-4804-b82f-b521639189f1'
+    - 'block_content:basic:997e941d-85a8-4bfc-9ab7-efa990ac000a'
   module:
     - block_content
     - user
@@ -14,9 +14,9 @@ theme: iied_pubs
 region: menu_main
 weight: 0
 provider: null
-plugin: 'block_content:2161b00e-e1f5-4804-b82f-b521639189f1'
+plugin: 'block_content:997e941d-85a8-4bfc-9ab7-efa990ac000a'
 settings:
-  id: 'block_content:2161b00e-e1f5-4804-b82f-b521639189f1'
+  id: 'block_content:997e941d-85a8-4bfc-9ab7-efa990ac000a'
   label: 'Editor options menu'
   provider: block_content
   label_display: '0'

@@ -4,13 +4,14 @@ status: true
 dependencies:
   config:
     - field.storage.node.field_date_published
-    - field.storage.node.field_product_code
+    - field.storage.node.field_product_code_new
     - node.type.publication
     - user.role.administrator
     - user.role.editor
     - user.role.manager
   module:
     - better_exposed_filters
+    - computed_field
     - datetime
     - node
     - user
@@ -284,28 +285,36 @@ display:
           description: ''
           columns:
             title: title
+            field_product_code_new: field_product_code_new
             field_date_published: field_date_published
-            changed_1: changed_1
+            changed: changed
             status: status
             edit_node: edit_node
           info:
             title:
-              sortable: false
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_product_code_new:
+              sortable: true
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
             field_date_published:
-              sortable: false
-              default_sort_order: asc
+              sortable: true
+              default_sort_order: desc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
-            changed_1:
-              sortable: false
-              default_sort_order: asc
+            changed:
+              sortable: true
+              default_sort_order: desc
               align: ''
               separator: ''
               empty_column: false
@@ -395,10 +404,10 @@ display:
           entity_type: node
           entity_field: title
           plugin_id: field
-        field_product_code:
-          id: field_product_code
-          table: node__field_product_code
-          field: field_product_code
+        field_product_code_new:
+          id: field_product_code_new
+          table: node__field_product_code_new
+          field: field_product_code_new
           relationship: none
           group_type: group
           admin_label: ''
@@ -435,7 +444,7 @@ display:
           element_class: ''
           element_label_type: ''
           element_label_class: ''
-          element_label_colon: false
+          element_label_colon: true
           element_wrapper_type: ''
           element_wrapper_class: ''
           element_default_classes: true
@@ -444,9 +453,11 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: value
-          type: string
+          type: computed_string
           settings:
-            link_to_entity: false
+            sanitized: 1
+            cache_unit: '-1'
+            cache_duration: '1'
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -522,11 +533,11 @@ display:
           separator: ', '
           field_api_classes: false
           plugin_id: field
-        changed_1:
-          id: changed_1
-          table: users_field_data
+        changed:
+          id: changed
+          table: node_field_data
           field: changed
-          relationship: uid
+          relationship: none
           group_type: group
           admin_label: ''
           label: 'Updated date'
@@ -562,7 +573,7 @@ display:
           element_class: ''
           element_label_type: ''
           element_label_class: ''
-          element_label_colon: false
+          element_label_colon: true
           element_wrapper_type: ''
           element_wrapper_class: ''
           element_default_classes: true
@@ -586,7 +597,7 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          entity_type: user
+          entity_type: node
           entity_field: changed
           plugin_id: field
         status:
@@ -818,7 +829,20 @@ display:
           entity_field: uid
           plugin_id: user_uid
       header: {  }
-      footer: {  }
+      footer:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: false
+          tokenize: false
+          content:
+            value: '<p></p>'
+            format: full_html
+          plugin_id: text
       filters:
         type:
           id: type
@@ -906,7 +930,7 @@ display:
         - user.permissions
       tags:
         - 'config:field.storage.node.field_date_published'
-        - 'config:field.storage.node.field_product_code'
+        - 'config:field.storage.node.field_product_code_new'
   block_3:
     display_plugin: block
     id: block_3
@@ -944,35 +968,43 @@ display:
           description: ''
           columns:
             title: title
+            field_product_code_new: field_product_code_new
             field_date_published: field_date_published
-            changed_1: changed_1
+            changed: changed
             name: name
             status: status
             edit_node: edit_node
           info:
             title:
-              sortable: false
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_product_code_new:
+              sortable: true
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
             field_date_published:
-              sortable: false
+              sortable: true
               default_sort_order: desc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
-            changed_1:
-              sortable: false
+            changed:
+              sortable: true
               default_sort_order: desc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
             name:
-              sortable: false
+              sortable: true
               default_sort_order: asc
               align: ''
               separator: ''
@@ -992,7 +1024,7 @@ display:
               separator: ''
               empty_column: false
               responsive: ''
-          default: '-1'
+          default: field_date_published
           empty_table: false
       row:
         type: fields
@@ -1063,10 +1095,10 @@ display:
           entity_type: node
           entity_field: title
           plugin_id: field
-        field_product_code:
-          id: field_product_code
-          table: node__field_product_code
-          field: field_product_code
+        field_product_code_new:
+          id: field_product_code_new
+          table: node__field_product_code_new
+          field: field_product_code_new
           relationship: none
           group_type: group
           admin_label: ''
@@ -1103,7 +1135,7 @@ display:
           element_class: ''
           element_label_type: ''
           element_label_class: ''
-          element_label_colon: false
+          element_label_colon: true
           element_wrapper_type: ''
           element_wrapper_class: ''
           element_default_classes: true
@@ -1112,9 +1144,11 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: value
-          type: string
+          type: computed_string
           settings:
-            link_to_entity: false
+            sanitized: 1
+            cache_unit: '-1'
+            cache_duration: '1'
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -1190,14 +1224,14 @@ display:
           separator: ', '
           field_api_classes: false
           plugin_id: field
-        changed_1:
-          id: changed_1
-          table: users_field_data
+        changed:
+          id: changed
+          table: node_field_data
           field: changed
-          relationship: uid
+          relationship: none
           group_type: group
           admin_label: ''
-          label: 'Updated date'
+          label: Changed
           exclude: false
           alter:
             alter_text: false
@@ -1230,7 +1264,7 @@ display:
           element_class: ''
           element_label_type: ''
           element_label_class: ''
-          element_label_colon: false
+          element_label_colon: true
           element_wrapper_type: ''
           element_wrapper_class: ''
           element_default_classes: true
@@ -1254,7 +1288,7 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          entity_type: user
+          entity_type: node
           entity_field: changed
           plugin_id: field
         name:
@@ -1443,6 +1477,19 @@ display:
           entity_type: node
           plugin_id: entity_link_edit
       sorts:
+        field_date_published_value:
+          id: field_date_published_value
+          table: node__field_date_published
+          field: field_date_published_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
+          granularity: day
+          plugin_id: datetime
         created:
           id: created
           table: node_field_data
@@ -1601,4 +1648,4 @@ display:
         - user.roles
       tags:
         - 'config:field.storage.node.field_date_published'
-        - 'config:field.storage.node.field_product_code'
+        - 'config:field.storage.node.field_product_code_new'

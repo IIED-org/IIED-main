@@ -1,0 +1,24 @@
+uuid: b7ac6c30-4b94-47bd-8335-b4a8aba5d75c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_product_code_new
+    - node.type.publication
+  module:
+    - computed_field
+id: node.publication.field_product_code_new
+field_name: field_product_code_new
+entity_type: node
+bundle: publication
+label: 'Product code'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: ''
+default_value_callback: ''
+settings:
+  code: '$value = '''';'
+field_type: computed_string

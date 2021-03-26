@@ -16,6 +16,7 @@ dependencies:
     - field.storage.node.field_nid
     - field.storage.node.field_pdf_pages
     - field.storage.node.field_product_code
+    - field.storage.node.field_product_code_new
     - field.storage.node.field_project
     - field.storage.node.field_projectnumber
     - field.storage.node.field_publisher
@@ -31,6 +32,7 @@ dependencies:
     - taxonomy.vocabulary.series
     - user.role.administrator
   module:
+    - computed_field
     - csv_serialization
     - datetime
     - file
@@ -43,6 +45,7 @@ dependencies:
     - serialization
     - taxonomy
     - user
+    - views_autocomplete_filters
     - views_bulk_operations
     - views_data_export
 id: maint
@@ -1418,6 +1421,133 @@ display:
       display_extenders: {  }
       path: admin/maint/table
       fields:
+        views_bulk_operations_bulk_form:
+          id: views_bulk_operations_bulk_form
+          table: views
+          field: views_bulk_operations_bulk_form
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: 'Views bulk operations'
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          batch: true
+          batch_size: 100
+          form_step: true
+          buttons: true
+          clear_on_exposed: true
+          action_title: Action
+          selected_actions:
+            9:
+              action_id: views_bulk_edit
+              preconfiguration:
+                add_confirmation: 0
+                get_bundles_from_results: 1
+          force_selection_info: 0
+          plugin_id: views_bulk_operations_bulk_form
+        field_product_code_new:
+          id: field_product_code_new
+          table: node__field_product_code_new
+          field: field_product_code_new
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: 'Product code'
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: computed_string
+          settings:
+            sanitized: 1
+            cache_unit: '-1'
+            cache_duration: ''
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          plugin_id: field
         field_product_code:
           id: field_product_code
           table: node__field_product_code
@@ -1425,7 +1555,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: 'Product code'
+          label: 'Product code (leg.)'
           exclude: false
           alter:
             alter_text: false
@@ -2232,6 +2362,8 @@ display:
         style: false
         row: false
         relationships: false
+        filters: false
+        filter_groups: false
       pager:
         type: full
         options:
@@ -2390,11 +2522,87 @@ display:
         type: fields
         options: {  }
       relationships: {  }
+      filters:
+        status:
+          value: '1'
+          table: node_field_data
+          field: status
+          plugin_id: boolean
+          entity_type: node
+          entity_field: status
+          id: status
+          expose:
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+          group: 1
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          value:
+            publication: publication
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
+        field_lit_code_value:
+          id: field_lit_code_value
+          table: node__field_lit_code
+          field: field_lit_code_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_lit_code_value_op
+            label: 'Product code type'
+            description: ''
+            use_operator: false
+            operator: field_lit_code_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_lit_code_value
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              viewer: '0'
+              editor: '0'
+              manager: '0'
+              administrator: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          plugin_id: list_field
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - url
         - url.query_args
         - 'user.node_grants:view'
         - user.roles
@@ -2405,6 +2613,7 @@ display:
         - 'config:field.storage.node.field_lit_code'
         - 'config:field.storage.node.field_pdf_pages'
         - 'config:field.storage.node.field_product_code'
+        - 'config:field.storage.node.field_product_code_new'
         - 'config:field.storage.node.field_project'
         - 'config:field.storage.node.field_publisher'
         - 'config:field.storage.node.field_publisher_legacy'

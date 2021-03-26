@@ -1,12 +1,12 @@
-uuid: 6a640876-36a8-4291-a8b3-32e76e4d0040
+uuid: 6fb7a036-9512-4ee9-bb29-c129a6c03340
 langcode: en
 status: true
 dependencies:
   module:
     - node
     - serial
-id: node.field_product_id
-field_name: field_product_id
+id: node.field_a_serial
+field_name: field_a_serial
 entity_type: node
 type: serial
 settings:

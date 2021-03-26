@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.token
     - field.field.node.publication.body
+    - field.field.node.publication.field_a_serial
     - field.field.node.publication.field_admin
     - field.field.node.publication.field_area_list
     - field.field.node.publication.field_author_s_
@@ -27,7 +28,7 @@ dependencies:
     - field.field.node.publication.field_pdf
     - field.field.node.publication.field_pdf_pages
     - field.field.node.publication.field_product_code
-    - field.field.node.publication.field_product_id
+    - field.field.node.publication.field_product_code_new
     - field.field.node.publication.field_project
     - field.field.node.publication.field_publisher
     - field.field.node.publication.field_publisher_legacy
@@ -60,7 +61,6 @@ dependencies:
     - link
     - metatag
     - options
-    - serial
     - text
     - user
 third_party_settings:
@@ -331,13 +331,6 @@ content:
     third_party_settings: {  }
     type: string
     region: content
-  field_product_id:
-    weight: 39
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    type: serial_default_formatter
-    region: content
   field_project:
     weight: 8
     label: above
@@ -569,5 +562,7 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
+  field_a_serial: true
+  field_product_code_new: true
   field_work_programme_global_enga: true
   search_api_excerpt: true

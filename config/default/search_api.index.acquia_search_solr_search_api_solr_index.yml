@@ -9,12 +9,13 @@ dependencies:
     - node
     - search_api
   config:
-    - field.storage.node.body
     - field.storage.node.field_area_list
     - field.storage.node.field_author_s_
-    - field.storage.node.field_date_published
+    - field.storage.node.body
     - field.storage.node.field_document_type
     - field.storage.node.field_product_code
+    - field.storage.node.field_product_code_new
+    - field.storage.node.field_date_published
     - field.storage.node.field_theme_s_
     - search_api.server.acquia_search_solr_search_api_solr_server
 third_party_settings:
@@ -116,6 +117,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_product_code
+  field_product_code_new:
+    label: 'Product code'
+    datasource_id: 'entity:node'
+    property_path: field_product_code_new
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.field_product_code_new
   field_theme_s_:
     label: Theme(s)
     datasource_id: 'entity:node'
@@ -252,6 +261,7 @@ processor_settings:
       - body
       - field_area_list
       - field_product_code
+      - field_product_code_new
       - name
       - name_1
       - name_2

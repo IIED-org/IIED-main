@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.node.publication.body
+    - field.field.node.publication.field_a_serial
     - field.field.node.publication.field_admin
     - field.field.node.publication.field_area_list
     - field.field.node.publication.field_author_s_
@@ -26,7 +27,7 @@ dependencies:
     - field.field.node.publication.field_pdf
     - field.field.node.publication.field_pdf_pages
     - field.field.node.publication.field_product_code
-    - field.field.node.publication.field_product_id
+    - field.field.node.publication.field_product_code_new
     - field.field.node.publication.field_project
     - field.field.node.publication.field_publisher
     - field.field.node.publication.field_publisher_legacy
@@ -51,6 +52,7 @@ dependencies:
     - node.type.publication
   module:
     - address
+    - computed_field
     - datetime
     - file
     - isbn
@@ -76,6 +78,13 @@ content:
     weight: 1
     settings: {  }
     third_party_settings: {  }
+    region: content
+  field_a_serial:
+    weight: 103
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: serial_default_formatter
     region: content
   field_admin:
     weight: 44
@@ -264,12 +273,15 @@ content:
     third_party_settings: {  }
     type: string
     region: content
-  field_product_id:
-    weight: 42
+  field_product_code_new:
+    weight: 104
     label: above
-    settings: {  }
+    settings:
+      sanitized: true
+      cache_unit: -1
+      cache_duration: 1
     third_party_settings: {  }
-    type: serial_default_formatter
+    type: computed_string
     region: content
   field_project:
     weight: 10

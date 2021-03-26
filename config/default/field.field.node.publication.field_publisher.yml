@@ -11,7 +11,7 @@ field_name: field_publisher
 entity_type: node
 bundle: publication
 label: Publisher(s)
-description: "<p><i><big><strong>Hint:</strong> Publishers must be organisations NOT individuals.</big></i></p>\r\n<p><i><big>Start typing and select from the suggestions that appear.</big></i></p>\r\n<p><i><big>If your Publisher is not listed, <a href=\"https://pubs.dev.dd:8443/admin/structure/taxonomy/manage/organisation/add\" target=\"_blank\">follow this link to create a new Organisation</a> (opens in new tab) then return to this screen and continue.</big></i></p>\r\n<p><i><big>For multiple Publishers click the 'Add another item' button below.</big></i></p>"
+description: "<p><i><big><strong>Hint:</strong> Publishers must be organisations NOT individuals.</big></i></p>\r\n<p><i><big>Start typing and select from the suggestions that appear.</big></i></p>\r\n<p><i><big>If your Publisher is not listed, <a href=\"/admin/structure/taxonomy/manage/organisation/add\" target=\"_blank\"><strong>follow this link to create a new Organisation</strong></a> (opens in new tab) then return to this screen and continue.</big></i></p>\r\n<p><i><big>For multiple Publishers click the 'Add another item' button below.</big></i></p>"
 required: true
 translatable: false
 default_value: {  }

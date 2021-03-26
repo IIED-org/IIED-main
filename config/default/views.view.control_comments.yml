@@ -1,3 +1,4 @@
+uuid: 3a88a670-f460-4954-991b-467cc9d7c87f
 langcode: en
 status: true
 dependencies:
@@ -16,7 +17,6 @@ description: ''
 tag: ''
 base_table: comment_field_data
 base_field: cid
-core: 8.x
 display:
   default:
     display_plugin: default
@@ -678,6 +678,8 @@ display:
               authenticated: authenticated
               anonymous: '0'
               administrator: '0'
+            operator_limit_selection: false
+            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -719,6 +721,8 @@ display:
               anonymous: '0'
               administrator: '0'
             reduce: false
+            operator_limit_selection: false
+            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -759,6 +763,8 @@ display:
               authenticated: authenticated
               anonymous: '0'
               administrator: '0'
+            operator_limit_selection: false
+            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''

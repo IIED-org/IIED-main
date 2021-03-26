@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.search_result
     - field.field.node.publication.body
+    - field.field.node.publication.field_a_serial
     - field.field.node.publication.field_admin
     - field.field.node.publication.field_area_list
     - field.field.node.publication.field_author_s_
@@ -27,7 +28,7 @@ dependencies:
     - field.field.node.publication.field_pdf
     - field.field.node.publication.field_pdf_pages
     - field.field.node.publication.field_product_code
-    - field.field.node.publication.field_product_id
+    - field.field.node.publication.field_product_code_new
     - field.field.node.publication.field_project
     - field.field.node.publication.field_publisher
     - field.field.node.publication.field_publisher_legacy
@@ -358,6 +359,7 @@ content:
     third_party_settings: {  }
 hidden:
   body: true
+  field_a_serial: true
   field_admin: true
   field_area_list: true
   field_cover_image: true
@@ -376,7 +378,7 @@ hidden:
   field_pdf: true
   field_pdf_pages: true
   field_product_code: true
-  field_product_id: true
+  field_product_code_new: true
   field_project: true
   field_publisher: true
   field_publisher_legacy: true
