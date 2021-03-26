@@ -13,13 +13,14 @@ dependencies:
     - field.storage.node.field_lists
     - field.storage.node.field_lit_code
     - field.storage.node.field_nid
-    - field.storage.node.field_product_code
+    - field.storage.node.field_product_code_new
     - field.storage.node.field_short_title
     - field.storage.node.field_tags
     - field.storage.node.field_theme_s_
     - node.type.publication
   module:
     - address
+    - computed_field
     - datetime
     - image
     - link
@@ -152,10 +153,10 @@ display:
           absolute: true
           entity_type: node
           plugin_id: entity_link
-        field_product_code:
-          id: field_product_code
-          table: node__field_product_code
-          field: field_product_code
+        field_product_code_new:
+          id: field_product_code_new
+          table: node__field_product_code_new
+          field: field_product_code_new
           relationship: none
           group_type: group
           admin_label: ''
@@ -165,7 +166,7 @@ display:
             alter_text: false
             text: ''
             make_link: false
-            path: '{{ field_product_code }} '
+            path: ''
             absolute: false
             external: false
             replace_spaces: false
@@ -192,18 +193,20 @@ display:
           element_class: ''
           element_label_type: ''
           element_label_class: ''
-          element_label_colon: false
+          element_label_colon: true
           element_wrapper_type: ''
           element_wrapper_class: ''
-          element_default_classes: false
+          element_default_classes: true
           empty: ''
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: value
-          type: string
+          type: computed_string
           settings:
-            link_to_entity: false
+            sanitized: 1
+            cache_unit: '-1'
+            cache_duration: '1'
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -1539,7 +1542,7 @@ display:
         - 'config:field.storage.node.field_lists'
         - 'config:field.storage.node.field_lit_code'
         - 'config:field.storage.node.field_nid'
-        - 'config:field.storage.node.field_product_code'
+        - 'config:field.storage.node.field_product_code_new'
         - 'config:field.storage.node.field_short_title'
         - 'config:field.storage.node.field_tags'
         - 'config:field.storage.node.field_theme_s_'
@@ -1582,6 +1585,9 @@ display:
           field_options:
             view_node:
               alias: link
+              raw_output: false
+            field_product_code_new:
+              alias: field_product_code
               raw_output: false
             field_product_code:
               alias: ''
@@ -1632,6 +1638,9 @@ display:
               alias: project_nid
               raw_output: false
             field_collection:
+              alias: ''
+              raw_output: false
+            field_area_list:
               alias: ''
               raw_output: false
             changed:
@@ -1707,7 +1716,7 @@ display:
         - 'config:field.storage.node.field_lists'
         - 'config:field.storage.node.field_lit_code'
         - 'config:field.storage.node.field_nid'
-        - 'config:field.storage.node.field_product_code'
+        - 'config:field.storage.node.field_product_code_new'
         - 'config:field.storage.node.field_short_title'
         - 'config:field.storage.node.field_tags'
         - 'config:field.storage.node.field_theme_s_'
@@ -1734,8 +1743,8 @@ display:
             view_node:
               alias: link
               raw_output: false
-            field_product_code:
-              alias: ''
+            field_product_code_new:
+              alias: field_product_code
               raw_output: false
             title:
               alias: ''
@@ -1783,6 +1792,9 @@ display:
               alias: project_nid
               raw_output: false
             field_collection:
+              alias: ''
+              raw_output: false
+            field_area_list:
               alias: ''
               raw_output: false
             changed:
@@ -1937,7 +1949,7 @@ display:
         - 'config:field.storage.node.field_lists'
         - 'config:field.storage.node.field_lit_code'
         - 'config:field.storage.node.field_nid'
-        - 'config:field.storage.node.field_product_code'
+        - 'config:field.storage.node.field_product_code_new'
         - 'config:field.storage.node.field_short_title'
         - 'config:field.storage.node.field_tags'
         - 'config:field.storage.node.field_theme_s_'
