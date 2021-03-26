@@ -7,16 +7,16 @@ dependencies:
 id: product_code
 label: 'Product code'
 type: 'canonical_entities:node'
-pattern: '[node:field_product_code]'
+pattern: '[node:field_product_code_new:value]'
 selection_criteria:
-  4142f365-1ed9-4de3-a02a-407336f219a7:
+  4b99ff98-8359-4fdd-ae17-8e936a164434:
     id: node_type
     bundles:
       publication: publication
     negate: false
     context_mapping:
       node: node
-    uuid: 4142f365-1ed9-4de3-a02a-407336f219a7
+    uuid: 4b99ff98-8359-4fdd-ae17-8e936a164434
 selection_logic: and
 weight: -5
 relationships: {  }

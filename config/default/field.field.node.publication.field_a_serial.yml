@@ -1,14 +1,14 @@
-uuid: b21a2131-0878-402c-a42b-79875be7d691
+uuid: 0d29a12a-aa92-4deb-9c1a-ca65bea5f456
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_product_id
+    - field.storage.node.field_a_serial
     - node.type.publication
   module:
     - serial
-id: node.publication.field_product_id
-field_name: field_product_id
+id: node.publication.field_a_serial
+field_name: field_a_serial
 entity_type: node
 bundle: publication
 label: 'Product ID'

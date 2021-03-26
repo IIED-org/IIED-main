@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.document_meta
     - field.field.node.publication.body
+    - field.field.node.publication.field_a_serial
     - field.field.node.publication.field_admin
     - field.field.node.publication.field_area_list
     - field.field.node.publication.field_author_s_
@@ -27,7 +28,7 @@ dependencies:
     - field.field.node.publication.field_pdf
     - field.field.node.publication.field_pdf_pages
     - field.field.node.publication.field_product_code
-    - field.field.node.publication.field_product_id
+    - field.field.node.publication.field_product_code_new
     - field.field.node.publication.field_project
     - field.field.node.publication.field_publisher
     - field.field.node.publication.field_publisher_legacy
@@ -51,6 +52,7 @@ dependencies:
     - field.field.node.publication.field_work_programme_global_enga
     - node.type.publication
   module:
+    - computed_field
     - datetime
     - ds
     - field_group
@@ -68,7 +70,7 @@ third_party_settings:
         - 'dynamic_block_field:node-cover_image'
         - group_pub_body
       parent_name: ''
-      weight: 42
+      weight: 68
       format_type: html_element
       region: hidden
       format_settings:
@@ -87,7 +89,7 @@ third_party_settings:
         - 'dynamic_block_field:node-page_count'
         - node_title
       parent_name: ''
-      weight: 41
+      weight: 67
       format_type: html_element
       region: hidden
       format_settings:
@@ -123,7 +125,7 @@ third_party_settings:
     group_related_project:
       children: {  }
       parent_name: ''
-      weight: 1
+      weight: 65
       format_type: html_element
       region: hidden
       format_settings:
@@ -140,7 +142,7 @@ third_party_settings:
     group_related_publications:
       children: {  }
       parent_name: ''
-      weight: 2
+      weight: 66
       format_type: html_element
       region: hidden
       format_settings:
@@ -200,11 +202,12 @@ third_party_settings:
         - field_isbn
         - field_issn
         - field_doi
+        - field_product_code_new
         - field_product_code
     fields:
       'dynamic_block_field:node-country_list':
         plugin_id: 'dynamic_block_field:node-country_list'
-        weight: 17
+        weight: 2
         label: inline
         formatter: default
         ft:
@@ -219,7 +222,7 @@ bundle: publication
 mode: document_meta
 content:
   field_date_published:
-    weight: 13
+    weight: 0
     label: inline
     settings:
       timezone_override: ''
@@ -256,7 +259,7 @@ content:
     type: datetime_default
     region: ds_content
   field_doi:
-    weight: 23
+    weight: 8
     label: inline
     settings:
       trim_length: 80
@@ -268,14 +271,14 @@ content:
     type: link
     region: ds_content
   field_isbn:
-    weight: 21
+    weight: 6
     label: inline
     settings: {  }
     third_party_settings: {  }
     type: isbn_default
     region: ds_content
   field_issn:
-    weight: 22
+    weight: 7
     label: inline
     settings:
       link_to_entity: false
@@ -283,7 +286,7 @@ content:
     type: string
     region: ds_content
   field_journal_ref:
-    weight: 20
+    weight: 5
     label: inline
     settings:
       link_to_entity: false
@@ -291,15 +294,32 @@ content:
     type: string
     region: ds_content
   field_product_code:
-    weight: 24
+    weight: 10
     label: inline
     settings:
       link_to_entity: false
     third_party_settings: {  }
     type: string
     region: ds_content
+  field_product_code_new:
+    type: computed_string
+    weight: 9
+    region: ds_content
+    label: inline
+    settings:
+      cache_unit: '-1'
+      cache_duration: ''
+      sanitized: 0
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
   field_publisher:
-    weight: 15
+    weight: 1
     label: inline
     settings:
       link: true
@@ -307,7 +327,7 @@ content:
     type: entity_reference_label
     region: ds_content
   field_series:
-    weight: 18
+    weight: 3
     label: inline
     settings:
       link: true
@@ -315,20 +335,16 @@ content:
     type: entity_reference_label
     region: ds_content
   field_source_publication:
-    weight: 19
+    weight: 4
     label: inline
     settings:
       link_to_entity: false
     third_party_settings: {  }
     type: string
     region: ds_content
-  sharing_buttons:
-    weight: 100
-    settings: {  }
-    third_party_settings: {  }
-    region: left
 hidden:
   body: true
+  field_a_serial: true
   field_admin: true
   field_area_list: true
   field_author_s_: true
@@ -345,7 +361,6 @@ hidden:
   field_parent: true
   field_pdf: true
   field_pdf_pages: true
-  field_product_id: true
   field_project: true
   field_publisher_legacy: true
   field_reportagency1: true
@@ -367,3 +382,4 @@ hidden:
   langcode: true
   links: true
   search_api_excerpt: true
+  sharing_buttons: true

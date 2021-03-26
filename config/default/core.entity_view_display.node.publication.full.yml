@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.full
     - field.field.node.publication.body
+    - field.field.node.publication.field_a_serial
     - field.field.node.publication.field_admin
     - field.field.node.publication.field_area_list
     - field.field.node.publication.field_author_s_
@@ -27,7 +28,7 @@ dependencies:
     - field.field.node.publication.field_pdf
     - field.field.node.publication.field_pdf_pages
     - field.field.node.publication.field_product_code
-    - field.field.node.publication.field_product_id
+    - field.field.node.publication.field_product_code_new
     - field.field.node.publication.field_project
     - field.field.node.publication.field_publisher
     - field.field.node.publication.field_publisher_legacy
@@ -51,6 +52,7 @@ dependencies:
     - field.field.node.publication.field_work_programme_global_enga
     - node.type.publication
   module:
+    - computed_field
     - datetime
     - ds
     - field_group
@@ -138,6 +140,7 @@ third_party_settings:
         - field_isbn
         - field_issn
         - field_doi
+        - field_product_code_new
         - field_product_code
         - sharing_buttons
       parent_name: group_row_one
@@ -272,30 +275,31 @@ third_party_settings:
         - 'dynamic_block_field:node-cover_image'
         - 'dynamic_block_field:node-download_button'
         - node_title
-        - group_pub_header
         - 'dynamic_block_field:node-language_links'
         - 'dynamic_block_field:node-source'
+        - group_pub_header
         - field_author_s_
         - group_cover_image
         - body
         - field_editor_s_
-        - group_pub_body
         - group_related_links
-        - 'dynamic_block_field:node-citation'
+        - group_pub_body
         - field_translator
+        - 'dynamic_block_field:node-citation'
         - group_pub_detail
         - 'dynamic_block_field:node-page_count'
         - field_date_published
         - field_publisher
         - 'dynamic_block_field:node-country_list'
         - field_iied_url
-        - field_series
         - field_external_url
+        - field_series
         - field_source_publication
         - field_journal_ref
         - field_isbn
         - field_issn
         - field_doi
+        - field_product_code_new
         - field_product_code
         - sharing_buttons
     fields:
@@ -673,13 +677,30 @@ content:
     type: string
     region: ds_content
   field_product_code:
-    weight: 20
+    weight: 21
     label: inline
     settings:
       link_to_entity: false
     third_party_settings: {  }
     type: string
     region: ds_content
+  field_product_code_new:
+    type: computed_string
+    weight: 20
+    region: ds_content
+    label: inline
+    settings:
+      cache_unit: '-1'
+      cache_duration: ''
+      sanitized: 0
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
   field_publisher:
     weight: 12
     label: inline
@@ -771,11 +792,12 @@ content:
             fi: false
             fi-def-at: false
   sharing_buttons:
-    weight: 21
+    weight: 22
     region: ds_content
     settings: {  }
     third_party_settings: {  }
 hidden:
+  field_a_serial: true
   field_admin: true
   field_area_list: true
   field_cover_image: true
@@ -788,7 +810,6 @@ hidden:
   field_parent: true
   field_pdf: true
   field_pdf_pages: true
-  field_product_id: true
   field_project: true
   field_publisher_legacy: true
   field_reportagency1: true

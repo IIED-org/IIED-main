@@ -7,7 +7,7 @@ dependencies:
     - image.style.thumbnail
     - views.view.content_recent
   content:
-    - 'block_content:basic:3c84acb2-ece0-4d50-9c47-7b9976479293'
+    - 'block_content:basic:2e269474-0c90-4a0b-8c47-d12d521ca8b5'
   module:
     - block_content
     - field_group
@@ -90,11 +90,11 @@ third_party_settings:
         layout_settings:
           label: ''
         components:
-          29e5079f-51a2-4c99-8203-dbedaeb5f42c:
-            uuid: 29e5079f-51a2-4c99-8203-dbedaeb5f42c
+          723bca1b-ec4b-4499-8327-e5bbdc631795:
+            uuid: 723bca1b-ec4b-4499-8327-e5bbdc631795
             region: content
             configuration:
-              id: 'block_content:3c84acb2-ece0-4d50-9c47-7b9976479293'
+              id: 'block_content:2e269474-0c90-4a0b-8c47-d12d521ca8b5'
               label: 'Create content'
               provider: block_content
               label_display: visible
@@ -103,7 +103,7 @@ third_party_settings:
               view_mode: full
               context_mapping: {  }
             additional: {  }
-            weight: 0
+            weight: 1
         third_party_settings: {  }
       -
         layout_id: layout_onecol

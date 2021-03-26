@@ -12,11 +12,17 @@ type: list_string
 settings:
   allowed_values:
     -
-      value: P
+      value: IIED
       label: IIED
     -
-      value: S
+      value: G
       label: General
+    -
+      value: P
+      label: 'IIED (legacy)'
+    -
+      value: S
+      label: 'General (legacy)'
     -
       value: X
       label: External

@@ -9,9 +9,9 @@ id: node.publication.field_product_code
 field_name: field_product_code
 entity_type: node
 bundle: publication
-label: 'Product code'
+label: 'Product code (legacy)'
 description: ''
-required: true
+required: false
 translatable: true
 default_value: {  }
 default_value_callback: ''
