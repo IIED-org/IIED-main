@@ -22,7 +22,7 @@ function views_bulk_operations_drush_command() {
       ],
       'options' => [
         'display-id' => 'ID of the display to use (default: default)',
-        'args' => 'View arguments (slash is a delimeter, default: none)',
+        'args' => 'View arguments (slash is a delimiter, default: none)',
         'exposed' => 'Exposed filters (query string format)',
         'batch-size' => 'Processing batch size (default: 100)',
         'config' => 'Action configuration (query string format)',
@@ -77,7 +77,7 @@ function _views_bulk_operations_timer($debug = TRUE, $id = NULL) {
 }
 
 /**
- * The vbo-exec command executtion function.
+ * The vbo-exec command execution function.
  *
  * @param string $view_id
  *   The ID of the view to use.

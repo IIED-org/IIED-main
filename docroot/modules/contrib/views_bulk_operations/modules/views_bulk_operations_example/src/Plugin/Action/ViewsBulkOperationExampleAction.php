@@ -83,7 +83,7 @@ class ViewsBulkOperationExampleAction extends ViewsBulkOperationsActionBase impl
    * Submit handler for the action configuration form.
    *
    * If not implemented, the cleaned form values will be
-   * passed direclty to the action $configuration parameter.
+   * passed directly to the action $configuration parameter.
    *
    * @param array $form
    *   Form array.

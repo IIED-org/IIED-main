@@ -262,7 +262,7 @@ abstract class ViewsBulkOperationsKernelTestBase extends KernelTestBase {
       $vbo_data['action_label'] = (string) $action_definition['label'];
     }
 
-    // Account for eclude mode.
+    // Account for exclude mode.
     if ($vbo_data['exclude_mode']) {
       $vbo_data['exclude_list'] = $vbo_data['list'];
       $vbo_data['list'] = [];

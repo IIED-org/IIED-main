@@ -3,99 +3,12 @@
 namespace Drupal\Tests\views_bulk_operations\Functional;
 
 use Drupal\Component\Render\FormattableMarkup;
-use Drupal\Tests\BrowserTestBase;
 
 /**
  * @coversDefaultClass \Drupal\views_bulk_operations\Plugin\views\field\ViewsBulkOperationsBulkForm
  * @group views_bulk_operations
  */
-class ViewsBulkOperationsBulkFormTest extends BrowserTestBase {
-
-  const TEST_NODE_COUNT = 15;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $defaultTheme = 'stable';
-
-  /**
-   * Modules to install.
-   *
-   * @var array
-   */
-  public static $modules = [
-    'node',
-    'views',
-    'views_bulk_operations',
-    'views_bulk_operations_test',
-  ];
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp() {
-    parent::setUp();
-
-    // Create some nodes for testing.
-    $this->drupalCreateContentType(['type' => 'page']);
-
-    $this->testNodes = [];
-    $time = $this->container->get('datetime.time')->getRequestTime();
-    for ($i = 0; $i < self::TEST_NODE_COUNT; $i++) {
-      // Ensure nodes are sorted in the same order they are inserted in the
-      // array.
-      $time -= $i;
-      $this->testNodes[] = $this->drupalCreateNode([
-        'type' => 'page',
-        'title' => 'Title ' . $i,
-        'sticky' => FALSE,
-        'created' => $time,
-        'changed' => $time,
-      ]);
-    }
-
-  }
-
-  /**
-   * Helper function to test a batch process.
-   *
-   * After checking if we're on a Batch API page,
-   * the iterations are executed, the finished page is opened
-   * and browser redirects to the final destination.
-   *
-   * NOTE: As of Drupal 8.4, functional test
-   * automatically redirects user through all Batch API pages,
-   * so this function is not longer needed.
-   */
-  protected function assertBatchProcess() {
-    // Get the current batch ID.
-    $current_url = $this->getUrl();
-    $q = substr($current_url, strrpos($current_url, '/') + 1);
-    $this->assertEquals('batch?', substr($q, 0, 6), 'We are on a Batch API page.');
-
-    preg_match('#id=([0-9]+)#', $q, $matches);
-    $batch_id = $matches[1];
-
-    // Proceed with the operations.
-    // Assumption: all operations will be completed within a single request.
-    // TODO: modify code to include an option when the assumption is false.
-    do {
-      $this->drupalGet('batch', [
-        'query' => [
-          'id' => $batch_id,
-          'op' => 'do_nojs',
-        ],
-      ]);
-    } while (FALSE);
-
-    // Get the finished page.
-    $this->drupalGet('batch', [
-      'query' => [
-        'id' => $batch_id,
-        'op' => 'finished',
-      ],
-    ]);
-  }
+class ViewsBulkOperationsBulkFormTest extends ViewsBulkOperationsFunctionalTestBase {
 
   /**
    * Tests the VBO bulk form with simple test action.
@@ -110,10 +23,12 @@ class ViewsBulkOperationsBulkFormTest extends BrowserTestBase {
     $first_form_element = $this->xpath('//form/div[1][@id = :id]', [':id' => 'edit-header']);
     $this->assertNotEmpty($first_form_element, 'The views form edit header appears first.');
 
-    // Make sure a checkbox appears on all rows.
-    $edit = [];
+    // Make sure a checkbox appears on all rows and every checkbox has
+    // the correct label.
     for ($i = 0; $i < 4; $i++) {
-      $assertSession->fieldExists('edit-views-bulk-operations-bulk-form-' . $i, NULL, new FormattableMarkup('The checkbox on row @row appears.', ['@row' => $i]));
+      $checkbox_selector = 'edit-views-bulk-operations-bulk-form-' . $i;
+      $assertSession->fieldExists($checkbox_selector, NULL, new FormattableMarkup('The checkbox on row @row appears.', ['@row' => $i]));
+      $assertSession->elementTextContains('css', "label[for=$checkbox_selector]", $this->testNodes[$i]->label());
     }
 
     // The advanced action should not be shown on the form - no permission.
@@ -125,14 +40,8 @@ class ViewsBulkOperationsBulkFormTest extends BrowserTestBase {
     $this->drupalLogin($admin_user);
 
     // Execute the simple test action.
-    $edit = [];
     $selected = [0, 2, 3];
-    foreach ($selected as $index) {
-      $edit["views_bulk_operations_bulk_form[$index]"] = TRUE;
-    }
-
-    // Tests: actions as buttons, label override.
-    $this->drupalPostForm('views-bulk-operations-test', $edit, t('Simple test action'));
+    $this->executeAction('views-bulk-operations-test', t('Simple test action'), $selected);
 
     $testViewConfig = \Drupal::service('config.factory')->get('views.view.views_bulk_operations_test');
     $configData = $testViewConfig->getRawData();
@@ -151,17 +60,12 @@ class ViewsBulkOperationsBulkFormTest extends BrowserTestBase {
     }
 
     // Test the select all functionality.
-    $edit = [
-      'select_all' => 1,
-    ];
     // With the exclude mode, we also have to select all rows of the
     // view, otherwise those will be treated as excluded. In the UI
     // this is handled by JS.
-    foreach ([0, 1, 2, 3] as $index) {
-      $edit["views_bulk_operations_bulk_form[$index]"] = TRUE;
-    }
-
-    $this->drupalPostForm(NULL, $edit, t('Simple test action'));
+    $selected = [0, 1, 2, 3];
+    $data = ['select_all' => 1];
+    $this->executeAction(NULL, t('Simple test action'), $selected, $data);
 
     $assertSession->pageTextContains(
       sprintf('Action processing results: Test (%d).', self::TEST_NODE_COUNT),
@@ -186,14 +90,9 @@ class ViewsBulkOperationsBulkFormTest extends BrowserTestBase {
 
     // First execute the simple action to test
     // the ViewsBulkOperationsController class.
-    $edit = [
-      'action' => 0,
-    ];
     $selected = [0, 2];
-    foreach ($selected as $index) {
-      $edit["views_bulk_operations_bulk_form[$index]"] = TRUE;
-    }
-    $this->drupalPostForm('views-bulk-operations-test-advanced', $edit, t('Apply to selected items'));
+    $data = ['action' => 0];
+    $this->executeAction('views-bulk-operations-test-advanced', t('Apply to selected items'), $selected, $data);
 
     $assertSession->pageTextContains(
       sprintf('Action processing results: Test (%d).', count($selected)),
@@ -201,14 +100,9 @@ class ViewsBulkOperationsBulkFormTest extends BrowserTestBase {
     );
 
     // Execute the advanced test action.
-    $edit = [
-      'action' => 1,
-    ];
     $selected = [0, 1, 3];
-    foreach ($selected as $index) {
-      $edit["views_bulk_operations_bulk_form[$index]"] = TRUE;
-    }
-    $this->drupalPostForm('views-bulk-operations-test-advanced', $edit, t('Apply to selected items'));
+    $data = ['action' => 1];
+    $this->executeAction('views-bulk-operations-test-advanced', t('Apply to selected items'), $selected, $data);
 
     // Check if the configuration form is open and contains the
     // test_config field.
@@ -279,7 +173,7 @@ class ViewsBulkOperationsBulkFormTest extends BrowserTestBase {
 
     $assertSession = $this->assertSession();
 
-    // Log in as a user with 'administer content' permission
+    // Log in as a user with 'bypass node access' permission
     // to have access to perform the test operation.
     $admin_user = $this->drupalCreateUser(['bypass node access']);
     $this->drupalLogin($admin_user);
@@ -365,6 +259,34 @@ class ViewsBulkOperationsBulkFormTest extends BrowserTestBase {
       $assertSession->pageTextContains('Passed view results match the entity queue.');
     }
 
+  }
+
+  /**
+   * Test core action - specific configuration.
+   */
+  public function testActionCorePreconfig() {
+    $assertSession = $this->assertSession();
+
+    $testViewConfig = \Drupal::service('config.factory')->getEditable('views.view.views_bulk_operations_test');
+    $configData = $testViewConfig->getRawData();
+    $preconfig = &$configData['display']['default']['display_options']['fields']['views_bulk_operations_bulk_form']['selected_actions'][0]['preconfiguration'];
+    $preconfig['add_confirmation'] = TRUE;
+    $testViewConfig->setData($configData);
+    $testViewConfig->save();
+
+    $this->drupalGet('views-bulk-operations-test');
+
+    // Log in as a user with 'edit any page content' permission
+    // to have access to perform the test operation.
+    $admin_user = $this->drupalCreateUser(['edit any page content']);
+    $this->drupalLogin($admin_user);
+
+    // Check if we're on the confirmation form and if the overridden label
+    // is displayed.
+    $selection = [0, 2, 3];
+    $label = $preconfig['label_override'];
+    $this->executeAction('views-bulk-operations-test', t('Simple test action'), $selection);
+    $assertSession->pageTextContains(sprintf('Are you sure you wish to perform "%s" action on %d entities?', $label, count($selection)));
   }
 
 }

@@ -76,7 +76,7 @@ class ViewsBulkOperationsCommands extends DrushCommands {
    * @option display-id
    *   ID of the display to use.
    * @option args
-   *   View arguments (slash is a delimeter).
+   *   View arguments (slash is a delimiter).
    * @option exposed
    *   Exposed filters (query string format).
    * @option batch-size
@@ -103,7 +103,7 @@ class ViewsBulkOperationsCommands extends DrushCommands {
       'display-id' => 'default',
       'args' => '',
       'exposed' => '',
-      'batch-size' => 100,
+      'batch-size' => 10,
       'configuration' => '',
       'user-id' => 1,
     ]
@@ -144,6 +144,9 @@ class ViewsBulkOperationsCommands extends DrushCommands {
       'exposed_input' => $options['exposed'],
       'batch_size' => $options['batch-size'],
       'relationship_id' => 'none',
+      // We set the clear_on_exposed parameter to true, otherwise with empty
+      // selection exposed filters are not taken into account.
+      'clear_on_exposed' => TRUE,
     ];
 
     // Login as superuser, as drush 9 doesn't support the
@@ -179,7 +182,7 @@ class ViewsBulkOperationsCommands extends DrushCommands {
 
     // Get total rows count.
     $this->viewData->init($view, $view->getDisplay(), $vbo_data['relationship_id']);
-    $vbo_data['total_results'] = $this->viewData->getTotalResults();
+    $vbo_data['total_results'] = $this->viewData->getTotalResults($vbo_data['clear_on_exposed']);
 
     // Get action definition and check if action ID is correct.
     $action_definition = $this->actionManager->getDefinition($action_id);
