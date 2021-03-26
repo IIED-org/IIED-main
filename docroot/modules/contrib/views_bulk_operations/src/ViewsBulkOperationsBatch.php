@@ -77,7 +77,7 @@ class ViewsBulkOperationsBatch {
    * Save generated list to user tempstore.
    *
    * @param bool $success
-   *   Was the process successfull?
+   *   Was the process successful?
    * @param array $results
    *   Batch process results array.
    * @param array $operations
@@ -145,7 +145,7 @@ class ViewsBulkOperationsBatch {
    * Batch finished callback.
    *
    * @param bool $success
-   *   Was the process successfull?
+   *   Was the process successful?
    * @param array $results
    *   Batch process results array.
    * @param array $operations

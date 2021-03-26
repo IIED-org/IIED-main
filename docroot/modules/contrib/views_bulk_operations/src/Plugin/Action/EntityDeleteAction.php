@@ -3,6 +3,7 @@
 namespace Drupal\views_bulk_operations\Plugin\Action;
 
 use Drupal\views_bulk_operations\Action\ViewsBulkOperationsActionBase;
+use Drupal\Core\Entity\TranslatableInterface;
 use Drupal\Core\Session\AccountInterface;
 
 /**
@@ -10,7 +11,7 @@ use Drupal\Core\Session\AccountInterface;
  *
  * @Action(
  *   id = "views_bulk_operations_delete_entity",
- *   label = @Translation("Delete selected entities"),
+ *   label = @Translation("Delete selected entities / translations"),
  *   type = "",
  *   confirm = TRUE,
  * )
@@ -21,8 +22,16 @@ class EntityDeleteAction extends ViewsBulkOperationsActionBase {
    * {@inheritdoc}
    */
   public function execute($entity = NULL) {
-    $entity->delete();
-    return $this->t('Delete entities');
+    if ($entity instanceof TranslatableInterface && !$entity->isDefaultTranslation()) {
+      $untranslated_entity = $entity->getUntranslated();
+      $untranslated_entity->removeTranslation($entity->language()->getId());
+      $untranslated_entity->save();
+      return $this->t('Delete translations');
+    }
+    else {
+      $entity->delete();
+      return $this->t('Delete entities');
+    }
   }
 
   /**

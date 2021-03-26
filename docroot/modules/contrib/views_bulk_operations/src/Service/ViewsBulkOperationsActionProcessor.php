@@ -127,7 +127,7 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
       $this->queue = [];
     }
 
-    $this->excludeMode = $view_data['exclude_mode'];
+    $this->excludeMode = !empty($view_data['exclude_mode']);
 
     if (isset($view_data['action_id'])) {
       if (!isset($view_data['configuration'])) {
@@ -210,7 +210,7 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
       $this->view->setExposedInput(['_views_bulk_operations_override' => TRUE]);
     }
 
-    // In some cases we may encounter nondeterministic bahaviour in
+    // In some cases we may encounter nondeterministic behaviour in
     // db queries with sorts allowing different order of results.
     // To fix this we're removing all sorts and setting one sorting
     // rule by the view base id field.
@@ -303,7 +303,7 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
       $batch_list = $list;
     }
 
-    $this->view->setItemsPerPage(0);
+    $this->view->setItemsPerPage($batch_size);
     $this->view->setCurrentPage(0);
     $this->view->setOffset(0);
     $this->view->initHandlers();

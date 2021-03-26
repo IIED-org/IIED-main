@@ -38,14 +38,14 @@
           if (event.which === 13) {
             event.preventDefault();
             event.stopPropagation();
-            selectionObject.update(this.checked, index, $(this).val());
+            selectionObject.update(!this.checked, index, $(this).val());
             $(this).trigger('click');
           }
           if (event.which === 32) {
-            selectionObject.update(this.checked, index, $(this).val());
+            selectionObject.update(!this.checked, index, $(this).val());
           }
         });
-        $element.on('mousedown', function (event) {
+        $element.on('click', function (event) {
           // Act only on left button click.
           if (event.which === 1) {
             selectionObject.update(this.checked, index, $(this).val());
@@ -70,8 +70,8 @@
 
         var list = {}, op = '';
         if (index === 'selection_method_change') {
-          var op = state ? 'method_include' : 'method_exclude';
-          if (!state) {
+          var op = state ? 'method_exclude' : 'method_include';
+          if (state) {
             list = this.list[index];
           }
         }
@@ -82,11 +82,13 @@
           else {
             list = this.list[index];
           }
-          op = state ? 'remove' : 'add';
+          op = state ? 'add' : 'remove';
         }
 
         var $placeholder = this.$placeholder;
+        var $selectionInfo = this.$selectionInfo;
         var target_uri = drupalSettings.path.baseUrl + drupalSettings.path.pathPrefix + 'views-bulk-operations/ajax/' + this.view_id + '/' + this.display_id;
+
         $.ajax(target_uri, {
           method: 'POST',
           data: {
@@ -94,6 +96,7 @@
             op: op
           },
           success: function (data) {
+            $selectionInfo.html($(data.selection_info).html());
             $placeholder.text(data.count);
           }
         });
@@ -122,6 +125,7 @@
     var $multiSelectElement = $vboForm.find('.vbo-multipage-selector').first();
     if ($multiSelectElement.length) {
 
+      Drupal.viewsBulkOperationsSelection.$selectionInfo = $multiSelectElement.find('.vbo-info-list-wrapper').first();
       Drupal.viewsBulkOperationsSelection.$placeholder = $multiSelectElement.find('.placeholder').first();
       Drupal.viewsBulkOperationsSelection.view_id = $multiSelectElement.attr('data-view-id');
       Drupal.viewsBulkOperationsSelection.display_id = $multiSelectElement.attr('data-display-id');
@@ -162,11 +166,28 @@
     if ($primarySelectAll.length) {
       $primarySelectAll.on('change', function (event) {
         var value = this.checked;
+
         // Select / deselect all checkboxes in the view.
+        // If there are table select all elements, use that.
+        if (tableSelectAll.length) {
+          tableSelectAll.forEach(function (element) {
+            if (element.get(0).checked != value) {
+              element.click();
+            }
+          });
+        }
+
+        // Also handle checkboxes that may still have different values.
         $vboForm.find('.views-field-views-bulk-operations-bulk-form input[type="checkbox"]').each(function () {
-          this.checked = value;
+          if (this.checked != value) {
+            $(this).click();
+          }
         });
 
+        // Clear the selection information if exists.
+        $vboForm.find('.vbo-info-list-wrapper').each(function () {
+          $(this).html('');
+        });
       });
 
       if ($multiSelectElement.length) {

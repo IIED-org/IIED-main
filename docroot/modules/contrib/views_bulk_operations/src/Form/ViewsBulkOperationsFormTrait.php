@@ -71,6 +71,37 @@ trait ViewsBulkOperationsFormTrait {
   }
 
   /**
+   * Get the selection info title.
+   *
+   * @param array $tempstore_data
+   *   VBO tempstore data array.
+   *
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
+   *   The selection info title.
+   */
+  protected function getSelectionInfoTitle(array $tempstore_data) {
+    if (!empty($tempstore_data['list'])) {
+      return empty($tempstore_data['exclude_mode']) ? $this->t('Items selected:') : $this->t('Selected all items except:');
+    }
+    return $this->t('');
+  }
+
+  /**
+   * Build the selection info element.
+   *
+   * @param array $tempstore_data
+   *   VBO tempstore data array.
+   *
+   * @return array
+   *   Renderable array of the item list.
+   */
+  protected function getMultipageList(array $tempstore_data) {
+    $this->addListData($tempstore_data);
+    $list = $this->getListRenderable($tempstore_data);
+    return $list;
+  }
+
+  /**
    * Build selected entities list renderable.
    *
    * @param array $form_data
@@ -80,11 +111,12 @@ trait ViewsBulkOperationsFormTrait {
    *   Renderable list array.
    */
   protected function getListRenderable(array $form_data) {
+    $renderable = [
+      '#theme' => 'item_list',
+      '#items' => $form_data['entity_labels'],
+      '#empty' => $this->t(''),
+    ];
     if (!empty($form_data['entity_labels'])) {
-      $renderable = [
-        '#theme' => 'item_list',
-        '#items' => $form_data['entity_labels'],
-      ];
       $more = count($form_data['list']) - count($form_data['entity_labels']);
       if ($more > 0) {
         $renderable['#items'][] = [
@@ -95,18 +127,12 @@ trait ViewsBulkOperationsFormTrait {
         ];
       }
     }
-    else {
-      $renderable = [
-        '#type' => 'item',
-        '#markup' => $this->t('All view results'),
-      ];
+    elseif (!empty($form_data['exclude_mode'])) {
+      $renderable['#empty'] = $this->t('All items');
     }
-    if (!empty($form_data['exclude_mode'])) {
-      $renderable['#title'] = $this->t('Selected @count entities - all in the view except:', ['@count' => $form_data['selected_count']]);
-    }
-    else {
-      $renderable['#title'] = $this->t('Selected @count entities:', ['@count' => $form_data['selected_count']]);
-    }
+
+    $renderable['#title'] = $this->getSelectionInfoTitle($form_data);
+    $renderable['#wrapper_attributes'] = ['class' => ['vbo-info-list-wrapper']];
 
     return $renderable;
   }
@@ -147,7 +173,7 @@ trait ViewsBulkOperationsFormTrait {
   }
 
   /**
-   * Get an entity list item from a bulk form key and label.
+   * Get an entity list item from a bulk form key.
    *
    * @param string $bulkFormKey
    *   A bulk form key.

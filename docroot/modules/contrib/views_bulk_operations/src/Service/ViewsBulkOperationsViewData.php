@@ -38,7 +38,7 @@ class ViewsBulkOperationsViewData implements ViewsBulkOperationsViewDataInterfac
   protected $view;
 
   /**
-   * The realtionship ID.
+   * The relationship ID.
    *
    * @var string
    */
@@ -241,6 +241,10 @@ class ViewsBulkOperationsViewData implements ViewsBulkOperationsViewDataInterfac
     }
     else {
       throw new \Exception('Unexpected view result row structure.');
+    }
+
+    if (empty($entity)) {
+      return;
     }
 
     if ($entity instanceof TranslatableInterface && $entity->isTranslatable()) {

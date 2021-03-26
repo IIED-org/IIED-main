@@ -51,3 +51,11 @@ function iied_utils_search_api_solr_query_alter(\Solarium\Core\Query\QueryInterf
     $solarium_query->addParam('defType', 'edismax');
 //  }
 }
+
+function computed_field_field_product_code_new_compute($entity_type_manager, $entity, $fields, $delta) {
+  $value = $entity->field_product_code->value;
+  if (!$value) {
+    $value = strval($entity->field_a_serial->value) . $entity->field_lit_code->value;
+  }
+  return $value;
+}

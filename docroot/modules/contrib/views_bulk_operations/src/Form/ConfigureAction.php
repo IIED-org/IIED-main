@@ -92,7 +92,7 @@ class ConfigureAction extends FormBase {
     $form['list'] = $this->getListRenderable($form_data);
 
     // :D Make sure the submit button is at the bottom of the form
-    // and is editale from the action buildConfigurationForm method.
+    // and is editable from the action buildConfigurationForm method.
     $form['actions']['#weight'] = 666;
     $form['actions']['submit'] = [
       '#type' => 'submit',
@@ -143,12 +143,11 @@ class ConfigureAction extends FormBase {
       $form_data['configuration'] = $form_state->getValues();
     }
 
-    $definition = $this->actionManager->getDefinition($form_data['action_id']);
-    if (!empty($definition['confirm_form_route_name'])) {
+    if (!empty($form_data['confirm_route'])) {
       // Update tempStore data.
       $this->setTempstoreData($form_data, $form_data['view_id'], $form_data['display_id']);
       // Go to the confirm route.
-      $form_state->setRedirect($definition['confirm_form_route_name'], [
+      $form_state->setRedirect($form_data['confirm_route'], [
         'view_id' => $form_data['view_id'],
         'display_id' => $form_data['display_id'],
       ]);
