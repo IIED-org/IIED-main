@@ -10,10 +10,36 @@ dependencies:
     - field.field.taxonomy_term.person.field_organisation
     - taxonomy.vocabulary.person
   module:
+    - field_group
     - link
     - name
     - path
     - text
+third_party_settings:
+  field_group:
+    group_add_new_author:
+      children:
+        - name
+        - field_name
+        - field_organisation
+        - description
+        - field_link
+        - langcode
+        - path
+        - field_legacy_iscanonical
+        - status
+        - field_iied_user_id
+      parent_name: ''
+      weight: 0
+      format_type: details
+      region: content
+      format_settings:
+        description: '<big><i><b>Hint: </b>When you save this form, the page will automatically refresh with a new, blank form so you can add another Author. If you do not want/need to do this, simply close this tab or navigate away from the page.</i></big>'
+        open: true
+        id: ''
+        classes: ''
+        required_fields: false
+      label: 'Add new Author'
 id: taxonomy_term.person.default
 targetEntityType: taxonomy_term
 bundle: person
@@ -21,28 +47,28 @@ mode: default
 content:
   description:
     type: text_textarea
-    weight: 3
+    weight: 4
     region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
   field_iied_user_id:
-    weight: 9
+    weight: 10
     settings:
       placeholder: ''
     third_party_settings: {  }
     type: number
     region: content
   field_legacy_iscanonical:
-    weight: 7
+    weight: 8
     settings:
       display_label: true
     third_party_settings: {  }
     type: boolean_checkbox
     region: content
   field_link:
-    weight: 4
+    weight: 5
     settings:
       placeholder_url: ''
       placeholder_title: ''
@@ -50,7 +76,7 @@ content:
     type: link_default
     region: content
   field_name:
-    weight: 1
+    weight: 2
     settings:
       labels:
         title: Title
@@ -81,7 +107,7 @@ content:
     type: name_default
     region: content
   field_organisation:
-    weight: 2
+    weight: 3
     settings:
       match_operator: CONTAINS
       match_limit: 10
@@ -92,14 +118,14 @@ content:
     region: content
   langcode:
     type: language_select
-    weight: 5
+    weight: 6
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   name:
     type: string_textfield
-    weight: 0
+    weight: 1
     region: content
     settings:
       size: 60
@@ -107,7 +133,7 @@ content:
     third_party_settings: {  }
   path:
     type: path
-    weight: 6
+    weight: 7
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -115,7 +141,7 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 8
+    weight: 9
     region: content
     third_party_settings: {  }
 hidden: {  }

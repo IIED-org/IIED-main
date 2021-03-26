@@ -16,6 +16,7 @@ module:
   chosen: 0
   chosen_lib: 0
   ckeditor: 0
+  ckwordcount: 0
   color: 0
   comment: 0
   components: 0
@@ -84,6 +85,7 @@ module:
   migrate_tools: 0
   name: 0
   node: 0
+  notification: 0
   options: 0
   page_cache: 0
   panels: 0
@@ -122,6 +124,7 @@ module:
   update: 0
   upgrade_status: 0
   user: 0
+  views_autocomplete_filters: 0
   views_bootstrap: 0
   views_bulk_edit: 0
   views_bulk_operations: 0

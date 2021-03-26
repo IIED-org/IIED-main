@@ -9,7 +9,7 @@ _core:
 id: iied_pubs_local_actions
 theme: iied_pubs
 region: content
-weight: -10
+weight: -11
 provider: null
 plugin: local_actions_block
 settings:

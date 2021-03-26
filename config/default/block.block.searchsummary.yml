@@ -16,7 +16,7 @@ third_party_settings:
 id: searchsummary
 theme: iied_pubs
 region: content
-weight: -9
+weight: -10
 provider: null
 plugin: 'facets_summary_block:search_summary'
 settings:
