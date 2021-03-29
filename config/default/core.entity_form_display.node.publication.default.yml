@@ -52,7 +52,6 @@ dependencies:
     - node.type.publication
   module:
     - address
-    - computed_field
     - datetime
     - field_group
     - isbn
@@ -70,7 +69,7 @@ third_party_settings:
         - field_editor_s_
         - field_translator
       parent_name: ''
-      weight: 6
+      weight: 5
       format_type: details
       region: content
       format_settings:
@@ -91,7 +90,7 @@ third_party_settings:
         - field_publisher
         - field_area_list
       parent_name: ''
-      weight: 7
+      weight: 6
       format_type: details
       region: content
       format_settings:
@@ -108,7 +107,7 @@ third_party_settings:
         - field_work_programme_global_enga
         - field_deptlist
       parent_name: ''
-      weight: 8
+      weight: 7
       format_type: details
       region: content
       format_settings:
@@ -125,7 +124,7 @@ third_party_settings:
         - field_source_publication
         - field_journal_ref
       parent_name: ''
-      weight: 9
+      weight: 8
       format_type: details
       region: content
       format_settings:
@@ -141,7 +140,7 @@ third_party_settings:
         - field_iied_url
         - field_tags
       parent_name: ''
-      weight: 10
+      weight: 9
       format_type: details
       region: content
       format_settings:
@@ -157,7 +156,7 @@ third_party_settings:
         - field_cover_image
         - field_external_url
       parent_name: ''
-      weight: 11
+      weight: 10
       format_type: details
       region: content
       format_settings:
@@ -172,8 +171,9 @@ third_party_settings:
         - field_reportagency1
         - field_publisher_legacy
         - field_status
+        - field_product_code
       parent_name: ''
-      weight: 13
+      weight: 12
       format_type: details
       region: content
       format_settings:
@@ -205,7 +205,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 5
+    weight: 4
     settings:
       rows: 9
       summary_rows: 3
@@ -215,18 +215,18 @@ content:
     region: content
   created:
     type: datetime_timestamp
-    weight: 19
+    weight: 17
     region: content
     settings: {  }
     third_party_settings: {  }
   field_a_serial:
-    weight: 27
+    weight: 24
     settings: {  }
     third_party_settings: {  }
     type: serial_default_widget
     region: content
   field_admin:
-    weight: 12
+    weight: 11
     settings:
       rows: 5
       placeholder: ''
@@ -356,7 +356,7 @@ content:
     third_party_settings: {  }
     region: content
   field_meta_tags:
-    weight: 26
+    weight: 23
     settings:
       sidebar: true
     third_party_settings: {  }
@@ -380,18 +380,12 @@ content:
     type: number
     region: content
   field_product_code:
-    weight: 1
+    weight: 20
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
     type: string_textfield
-    region: content
-  field_product_code_new:
-    weight: 28
-    settings: {  }
-    third_party_settings: {  }
-    type: computed_string_widget
     region: content
   field_project:
     weight: 13
@@ -444,7 +438,7 @@ content:
     type: string_textfield
     region: content
   field_short_title:
-    weight: 4
+    weight: 3
     settings:
       size: 60
       placeholder: ''
@@ -505,14 +499,14 @@ content:
     region: content
   langcode:
     type: language_select
-    weight: 2
+    weight: 1
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   path:
     type: path
-    weight: 23
+    weight: 21
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -520,39 +514,39 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 21
+    weight: 19
     region: content
     third_party_settings: {  }
   status:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 24
+    weight: 22
     region: content
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 22
+    weight: 20
     region: content
     third_party_settings: {  }
   title:
     type: string_textfield
-    weight: 3
+    weight: 2
     region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
   translation:
-    weight: 20
+    weight: 18
     region: content
     settings: {  }
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 18
+    weight: 16
     settings:
       match_operator: CONTAINS
       size: 60
@@ -561,12 +555,13 @@ content:
     region: content
     third_party_settings: {  }
   url_redirects:
-    weight: 17
+    weight: 15
     region: content
     settings: {  }
     third_party_settings: {  }
 hidden:
   field_pdf: true
+  field_product_code_new: true
   field_reportagency2: true
   field_reportagency3: true
   field_reportfin1: true

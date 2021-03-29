@@ -88,7 +88,6 @@ module:
   notification: 0
   options: 0
   page_cache: 0
-  panels: 0
   path: 0
   path_alias: 0
   path_redirect_import: 0

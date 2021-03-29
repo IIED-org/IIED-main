@@ -1,7 +1,0 @@
-varbase_total_control_masonry:
-  label: 'Varbase total control Masonry'
-  category: 'Dashboard'
-  template: templates/varbase-total-control-masonry
-  regions:
-    content:
-      label: 'Content'

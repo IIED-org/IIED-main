@@ -1,5 +1,0 @@
-services:
-  google_analytics_reports.route_subscriber:
-    class: Drupal\google_analytics_reports\Routing\RouteSubscriber
-    tags:
-      - { name: event_subscriber }

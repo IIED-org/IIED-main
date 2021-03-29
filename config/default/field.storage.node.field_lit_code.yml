@@ -18,12 +18,6 @@ settings:
       value: G
       label: General
     -
-      value: P
-      label: 'IIED (legacy)'
-    -
-      value: S
-      label: 'General (legacy)'
-    -
       value: X
       label: External
   allowed_values_function: ''
