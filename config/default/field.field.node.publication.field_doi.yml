@@ -12,7 +12,7 @@ field_name: field_doi
 entity_type: node
 bundle: publication
 label: 'Digital Object Identifier (DOI)'
-description: ''
+description: '<big><strong><i>Hint: </strong></i><i>Example format: https://dx.doi.org/10.1093/ajae/aaq063</i></big>'
 required: false
 translatable: true
 default_value: {  }

@@ -10,8 +10,8 @@ id: node.publication.field_cover_image
 field_name: field_cover_image
 entity_type: node
 bundle: publication
-label: 'Alternative cover image'
-description: ''
+label: 'Replacement cover image'
+description: '<i><big><strong>Hint:</strong>If your cover image is a non-standard shape/size or does not display correctly, contact web or marketing staff in the Comms team for help with creating an alternative in the correct format.</big></i>'
 required: false
 translatable: true
 default_value: {  }

@@ -9,7 +9,7 @@ id: node.publication.field_series_item_code
 field_name: field_series_item_code
 entity_type: node
 bundle: publication
-label: 'Series number'
+label: 'Series issue number'
 description: ''
 required: false
 translatable: false

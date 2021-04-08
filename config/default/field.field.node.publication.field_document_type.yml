@@ -11,7 +11,7 @@ field_name: field_document_type
 entity_type: node
 bundle: publication
 label: 'Publication type'
-description: ''
+description: '<i><big><strong>Hint: </strong>If unsure, refer the <a href = "https://iied.sharepoint.com/group/comms/Comms%20Documents/Forms/AllItems.aspx?viewpath=%2Fgroup%2Fcomms%2FComms%20Documents%2FForms%2FAllItems%2Easpx&id=%2Fgroup%2Fcomms%2FComms%20Documents%2FIIED%20publications%20library%20%2D%20a%20guide%20to%20which%20types%20of%20document%20can%20be%20uploaded%2C%20their%20codes%20and%20ISBNs%2Epdf&parent=%2Fgroup%2Fcomms%2FComms%20Documents" target="_blank"><strong>guidance document on the Intranet</strong></a>.</big></i>'
 required: true
 translatable: false
 default_value: {  }
