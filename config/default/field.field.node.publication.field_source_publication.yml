@@ -10,7 +10,7 @@ field_name: field_source_publication
 entity_type: node
 bundle: publication
 label: 'Source publication'
-description: ''
+description: '<i><big><strong>Hint: </strong>E.g. Journal name or Book title</big></i>'
 required: false
 translatable: false
 default_value: {  }

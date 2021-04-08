@@ -10,7 +10,7 @@ field_name: field_journal_ref
 entity_type: node
 bundle: publication
 label: 'Journal reference'
-description: ''
+description: '<i><big><strong>Hint: </strong>E.g. Volume 32, Issue 2</big></i>'
 required: false
 translatable: true
 default_value: {  }

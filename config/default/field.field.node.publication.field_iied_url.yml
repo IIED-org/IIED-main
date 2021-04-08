@@ -11,8 +11,8 @@ id: node.publication.field_iied_url
 field_name: field_iied_url
 entity_type: node
 bundle: publication
-label: 'IIED URL'
-description: '<p><i><big><strong>Hint:</strong> If there is no related project page on the IIED site, enter the URL of another related page, e.g. Blog, Long-read etc. Do NOT link to IIED Home, Group or Theme pages.</big></i></p>'
+label: 'Other IIED main site URL'
+description: '<p><i><big><strong>Hint:</strong> If there is no related project page on the IIED site, enter the URL of another related page, e.g. Blog, Long-read etc. Do NOT link to IIED Home, Group or Theme pages.</big></p><p><i><big>Note: Link text will be displayed as a link in place of the URL, e.g. ''Read more...''.</big></i></p>'
 required: false
 translatable: false
 default_value: {  }
