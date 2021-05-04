@@ -12,7 +12,7 @@ field_name: body
 entity_type: node
 bundle: publication
 label: Abstract
-description: '<p><i><big><strong>Hint:</strong> Maximum of 300 words.</big></i></p>'
+description: '<p><i><big><strong>Hint:</strong> Maximum of 300 words. Word count will appear at the bottom of the field when you start typing. If you are making an entry just to generate a product code/URL, enter ''to follow...'' and complete the entry later (before going live)</big></i>.</p>'
 required: true
 translatable: true
 default_value: {  }

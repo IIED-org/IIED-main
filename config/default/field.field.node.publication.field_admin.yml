@@ -11,7 +11,7 @@ id: node.publication.field_admin
 field_name: field_admin
 entity_type: node
 bundle: publication
-label: 'Admin notes'
+label: 'Notes for web team'
 description: ''
 required: false
 translatable: true

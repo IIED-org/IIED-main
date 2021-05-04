@@ -65,11 +65,10 @@ third_party_settings:
   field_group:
     group_author_s_editor_s_and_tran:
       children:
-        - field_author_s_
         - field_editor_s_
         - field_translator
       parent_name: ''
-      weight: 5
+      weight: 10
       format_type: details
       region: content
       format_settings:
@@ -78,19 +77,16 @@ third_party_settings:
         id: ''
         classes: ''
         open: false
-      label: 'Author(s), Editor(s)and Translator(s) *'
+      label: 'Editor(s)and Translator(s)'
     group_publication_metadata:
       children:
-        - field_document_type
-        - field_date_published
-        - field_publisher
-        - field_pdf_pages
         - field_area_list
+        - field_pdf_pages
         - field_isbn
         - field_issn
         - field_doi
       parent_name: ''
-      weight: 6
+      weight: 11
       format_type: details
       region: content
       format_settings:
@@ -99,14 +95,13 @@ third_party_settings:
         id: ''
         classes: ''
         open: false
-      label: 'Add/Edit Publication details *'
+      label: 'Country list, PDF pages, ISBN etc.'
     group_iied_marketing_and_reporti:
       children:
-        - field_work_programme_global_enga
         - field_team
         - field_theme_s_
       parent_name: ''
-      weight: 7
+      weight: 12
       format_type: details
       region: content
       format_settings:
@@ -115,7 +110,7 @@ third_party_settings:
         id: ''
         classes: ''
         open: false
-      label: 'IIED Dept., Reporting and Marketing info *'
+      label: 'IIED Team/Theme'
     group_series_article_and_journal:
       children:
         - field_series
@@ -123,7 +118,7 @@ third_party_settings:
         - field_source_publication
         - field_journal_ref
       parent_name: ''
-      weight: 8
+      weight: 13
       format_type: details
       region: content
       format_settings:
@@ -139,11 +134,11 @@ third_party_settings:
         - field_iied_url
         - field_tags
       parent_name: ''
-      weight: 9
+      weight: 14
       format_type: details
       region: content
       format_settings:
-        description: ''
+        description: '<p><i><big><strong>Hint:</strong> It is possible to save your entry without completing this section (i.e. if you are making an entry just to generate a product code/URL), however it <strong>MUST</strong> be completed before the entry is made live</big></i></p>'
         required_fields: true
         id: ''
         classes: ''
@@ -152,21 +147,21 @@ third_party_settings:
     group_upload_file_or_link_to_ext:
       children:
         - field_media
-        - field_cover_image
         - field_external_url
       parent_name: ''
-      weight: 10
+      weight: 15
       format_type: details
       region: content
       format_settings:
-        description: ''
+        description: '<i><big><strong>Hint: </strong>Save this entry BEFORE uploading your file in order to generate the correct product code (visible in the saved page URL e.g. <strong>''pubs.iied.org/20036iied''</strong>). Please remember your PDF file MUST be renamed to match the product code before uploading, e.g. ''<strong>20036iied.pdf''</strong>.<p>If your file is not in english, add an <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"><strong>ISO 639-1 two-letter language code</strong></a> to the filename, e.g. <strong>''20036iiedsw.pdf''</strong> for Kiswahili.</p></big></i>'
         required_fields: true
         id: ''
         classes: ''
         open: false
-      label: 'Upload file, or link to external publication'
+      label: 'Upload file, or link to external publication *'
     group_legacy_fields_do_not_use:
       children:
+        - field_cover_image
         - field_deptlist
         - field_publisher_legacy
         - field_reportagency1
@@ -174,7 +169,7 @@ third_party_settings:
         - field_product_code
         - field_meta_tags
       parent_name: ''
-      weight: 12
+      weight: 17
       format_type: details
       region: content
       format_settings:
@@ -189,7 +184,7 @@ third_party_settings:
         - field_parent
         - field_lists
       parent_name: ''
-      weight: 14
+      weight: 18
       format_type: details
       region: content
       format_settings:
@@ -216,18 +211,18 @@ content:
     region: content
   created:
     type: datetime_timestamp
-    weight: 17
+    weight: 21
     region: content
     settings: {  }
     third_party_settings: {  }
   field_a_serial:
-    weight: 24
+    weight: 27
     settings: {  }
     third_party_settings: {  }
     type: serial_default_widget
     region: content
   field_admin:
-    weight: 11
+    weight: 16
     settings:
       rows: 5
       placeholder: ''
@@ -241,7 +236,7 @@ content:
     type: address_country_default
     region: content
   field_author_s_:
-    weight: 6
+    weight: 5
     settings:
       match_operator: CONTAINS
       match_limit: 10
@@ -258,7 +253,7 @@ content:
     third_party_settings: {  }
     region: content
   field_date_published:
-    weight: 8
+    weight: 9
     settings: {  }
     third_party_settings: {  }
     type: datetime_default
@@ -272,13 +267,13 @@ content:
     type: string_textfield
     region: content
   field_document_type:
-    weight: 7
+    weight: 8
     settings: {  }
     third_party_settings: {  }
     type: options_select
     region: content
   field_doi:
-    weight: 14
+    weight: 15
     settings:
       placeholder_url: ''
       placeholder_title: ''
@@ -312,13 +307,13 @@ content:
     type: link_default
     region: content
   field_isbn:
-    weight: 12
+    weight: 13
     settings: {  }
     third_party_settings: {  }
     type: isbn_widget
     region: content
   field_issn:
-    weight: 13
+    weight: 14
     settings:
       size: 60
       placeholder: ''
@@ -374,7 +369,7 @@ content:
     type: entity_reference_autocomplete
     region: content
   field_pdf_pages:
-    weight: 10
+    weight: 12
     settings:
       placeholder: ''
     third_party_settings: {  }
@@ -399,7 +394,7 @@ content:
     type: entity_reference_autocomplete
     region: content
   field_publisher:
-    weight: 9
+    weight: 6
     settings:
       match_operator: CONTAINS
       match_limit: 10
@@ -493,7 +488,7 @@ content:
     type: entity_reference_autocomplete
     region: content
   field_work_programme_global_enga:
-    weight: 12
+    weight: 7
     settings: {  }
     third_party_settings: {  }
     type: options_select
@@ -507,7 +502,7 @@ content:
     third_party_settings: {  }
   path:
     type: path
-    weight: 21
+    weight: 25
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -515,21 +510,21 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 19
+    weight: 23
     region: content
     third_party_settings: {  }
   status:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 22
+    weight: 26
     region: content
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 20
+    weight: 24
     region: content
     third_party_settings: {  }
   title:
@@ -541,13 +536,13 @@ content:
       placeholder: ''
     third_party_settings: {  }
   translation:
-    weight: 18
+    weight: 22
     region: content
     settings: {  }
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 16
+    weight: 20
     settings:
       match_operator: CONTAINS
       size: 60
@@ -556,7 +551,7 @@ content:
     region: content
     third_party_settings: {  }
   url_redirects:
-    weight: 15
+    weight: 19
     region: content
     settings: {  }
     third_party_settings: {  }
