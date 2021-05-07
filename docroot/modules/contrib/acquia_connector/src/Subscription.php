@@ -5,7 +5,7 @@ namespace Drupal\acquia_connector;
 use Drupal\acquia_connector\Helper\Storage;
 
 /**
- * Class Subscription.
+ * Storage class for Acquia Subscriptions.
  *
  * @package Drupal\acquia_connector.
  */

@@ -13,7 +13,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use GuzzleHttp\Exception\RequestException;
 
 /**
- * Class Client.
+ * Acquia connector client.
  *
  * @package Drupal\acquia_connector
  */

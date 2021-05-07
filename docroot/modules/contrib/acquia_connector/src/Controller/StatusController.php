@@ -10,7 +10,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * Class StatusController.
+ * Checks the current status of the Acquia Service.
  */
 class StatusController extends ControllerBase {
 

@@ -66,8 +66,7 @@ class AcquiaConnectorMiddleware {
         break;
 
       default:
-        // Todo: handle this more cleanly, maybe with some sort of native route
-        // matching and parsing.
+        // @todo fix problem with adding native route matching and parsing.
         if (strstr($path, '/spi_def/get')) {
           $parts = explode('/', $path);
           $response = $nspiController->spiDefinition($request, $parts[3]);

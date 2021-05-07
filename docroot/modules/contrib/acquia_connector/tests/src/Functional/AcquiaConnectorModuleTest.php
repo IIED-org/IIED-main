@@ -431,7 +431,7 @@ class AcquiaConnectorModuleTest extends BrowserTestBase {
     $this->assertTrue($is_active, 'Subscription is active after successful connection.');
     $check_subscription = $subscription->update();
     \Drupal::state()->resetCache();
-    $this->assertTrue(is_array($check_subscription), 'Subscription is array after successful connection.');
+    $this->assertIsArray($check_subscription, 'Subscription is array after successful connection.');
     // Now stored subscription data should match.
     $stored = \Drupal::config('acquia_connector.settings');
     $this->assertIdentical(\Drupal::state()->get('acquia_connector_test_request_count', 0), 4, '1 additional HTTP request made via acquia_agent_check_subscription().');
@@ -477,7 +477,7 @@ class AcquiaConnectorModuleTest extends BrowserTestBase {
     // Hold onto subcription data for comparison.
     $stored = \Drupal::config('acquia_connector.settings');
     $this->assertNotIdentical($check_subscription, '503', 'Subscription is not storing 503.');
-    $this->assertTrue(is_array($check_subscription), 'Storing subscription array data.');
+    $this->assertIsArray($check_subscription, 'Storing subscription array data.');
     $this->assertIdentical(\Drupal::state()->get('acquia_connector_test_request_count', 0), 4, 'Have made 4 HTTP requests so far.');
   }
 

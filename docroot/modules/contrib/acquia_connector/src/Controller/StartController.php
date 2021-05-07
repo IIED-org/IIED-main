@@ -6,7 +6,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 
 /**
- * Class StartController.
+ * Acquia Start Wizard Page.
  */
 class StartController extends ControllerBase {
 

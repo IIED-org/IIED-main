@@ -26,6 +26,23 @@ function acquia_connector_requirements($phase) {
 
   switch ($phase) {
     case 'runtime':
+      // Unsupported Warning to upgrade to 3.x
+      if (strtotime('1 May 2021') < time()) {
+        $ret['acquia_connector_2_eol'] = [
+          'title' => t('Acquia Connector 8.x-2.x'),
+          'value' => t('The 2.x version reached EOL at 2021-05-01!'),
+          'description' => t('This version of connector is unsupported. Upgrade to 3.x! This version is fully backwards compatible and works with all versions of Acquia Search'),
+          'severity' => REQUIREMENT_ERROR,
+        ];
+      }
+      elseif (strtotime('1 May 2021') > time()) {
+        $ret['acquia_connector_2_eol'] = [
+          'title' => t('Acquia Connector 8.x-2.x'),
+          'value' => t('This version will be EOL on 2021-05-01!'),
+          'description' => t('This version of connector will soon be unsupported. Upgrade to 3.x. It is fully backwards compatible and works with all versions of Acquia Search'),
+          'severity' => REQUIREMENT_WARNING,
+        ];
+      }
       acquia_connector_load_versions();
       $config = \Drupal::config('acquia_connector.settings');
       $use_cron = $config->get('spi.use_cron');

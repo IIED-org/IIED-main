@@ -5,7 +5,7 @@ namespace Drupal\acquia_connector;
 use Drupal\acquia_connector\Helper\Storage;
 
 /**
- * Class AutoConnector.
+ * Subscription Auto connector storage.
  *
  * @package Drupal\acquia_connector.
  */

@@ -419,7 +419,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          operator: and
+          operator: or
           value: ''
           group: 1
           exposed: true
@@ -443,6 +443,8 @@ display:
               manager: '0'
               administrator: '0'
             placeholder: 'Search publications'
+            expose_fields: false
+            searched_fields_id: ''
           is_grouped: false
           group_info:
             label: ''

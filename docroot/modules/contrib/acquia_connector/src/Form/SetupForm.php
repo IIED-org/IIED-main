@@ -13,7 +13,7 @@ use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class SetupForm.
+ * Acquia Connector setup form.
  *
  * @package Drupal\acquia_connector\Form
  */
