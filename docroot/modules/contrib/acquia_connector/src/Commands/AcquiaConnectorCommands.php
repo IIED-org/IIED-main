@@ -146,6 +146,30 @@ class AcquiaConnectorCommands extends DrushCommands {
   }
 
   /**
+   * A command to send Acquia SPI data.
+   *
+   * @command acquia:connector:spi-send
+   *
+   * @usage drush -l <host_uri> acquia:connector:spi-send
+   *   Sends Acquia SPI data.
+   */
+  public function spiSend() {
+    $config = \Drupal::config('acquia_connector.settings');
+    $state_site_name = \Drupal::state()->get('spi.site_name');
+    $state_site_machine_name = \Drupal::state()->get('spi.site_machine_name');
+    // Don't send data if site is blocked or missing components.
+    if ($config->get('spi.blocked') || (is_null($state_site_name) && is_null($state_site_machine_name))) {
+      $this->logger->error('Site is blocked or missing components.');
+      return;
+    }
+
+    $response = \Drupal::service('acquia_connector.spi')->sendFullSpi(ACQUIA_CONNECTOR_ACQUIA_SPI_METHOD_DRUSH);
+    if ($response && isset($response['is_error']) && $response['is_error']) {
+      $this->logger->error('Failed to send SPI data.');
+    }
+  }
+
+  /**
    * Helper method to include acquia_connector.module file.
    */
   protected function drushSpiGet() {
@@ -154,7 +178,8 @@ class AcquiaConnectorCommands extends DrushCommands {
     $conf['acquia_connector.settings']['spi']['ssl_override'] = TRUE;
 
     $client = \Drupal::service('acquia_connector.client');
-    $spi = new SpiController($client);
+    $config = \Drupal::service('config.factory');
+    $spi = new SpiController($client, $config);
 
     return $spi->get();
   }

@@ -424,7 +424,7 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
     $this->drupalPostForm($this->settingsPath, $edit_fields, $submit_button);
 
     // Test spiControllerTest::get.
-    $spi = new SpiController(\Drupal::service('acquia_connector.client'), \Drupal::service('config.factory'));
+    $spi = new SpiController(\Drupal::service('acquia_connector.client'), \Drupal::service('config.factory'), \Drupal::service('path_alias.manager'));
     $spi_data = $spi->get();
     $valid = is_array($spi_data);
     $this->assertTrue($valid, 'spiController::get returns an array');
@@ -438,11 +438,11 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
       $this->assertTrue($valid, 'Array has expected keys');
       $private_key = \Drupal::service('private_key')->get();
       $this->assertEqual(sha1($private_key), $spi_data['site_key'], 'Site key is sha1 of Drupal private key');
-      $this->assertTrue(!empty($spi_data['spi_data_version']), 'SPI data version is set');
+      $this->assertNotEmpty($spi_data['spi_data_version'], 'SPI data version is set');
       $vars = Json::decode($spi_data['system_vars']);
-      $this->assertTrue(is_array($vars), 'SPI data system_vars is a JSON-encoded array');
-      $this->assertTrue(isset($vars['test_variable_3']), 'test_variable_3 included in SPI data');
-      $this->assertTrue(!empty($spi_data['modules']), 'Modules is not empty');
+      $this->assertIsArray($vars, 'SPI data system_vars is a JSON-encoded array');
+      $this->assertArrayHasKey('test_variable_3', $vars, 'test_variable_3 included in SPI data');
+      $this->assertNotEmpty($spi_data['modules'], 'Modules is not empty');
       $modules = [
         'status',
         'name',
@@ -454,12 +454,12 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
         'module_data',
       ];
       $diff = array_diff(array_keys($spi_data['modules'][0]), $modules);
-      $this->assertTrue(empty($diff), 'Module elements have expected keys');
+      $this->assertEmpty($diff, 'Module elements have expected keys');
       $diff = array_diff(array_keys($spi_data['platform']), $this->platformKeys);
-      $this->assertTrue(empty($diff), 'Platform contains expected keys');
+      $this->assertEmpty($diff, 'Platform contains expected keys');
       $roles = Json::decode($spi_data['roles']);
-      $this->assertTrue(is_array($roles), 'Roles is an array');
-      $this->assertTrue(isset($roles) && array_key_exists('anonymous', $roles), 'Roles array contains anonymous user');
+      $this->assertIsArray($roles, 'Roles is an array');
+      $this->assertArrayHasKey('anonymous', $roles, 'Roles array contains anonymous user');
     }
   }
 
@@ -477,7 +477,7 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
     $submit_button = 'Save configuration';
     $this->drupalPostForm($this->settingsPath, $edit_fields, $submit_button);
 
-    $spi = new SpiController(\Drupal::service('acquia_connector.client'), \Drupal::service('config.factory'));
+    $spi = new SpiController(\Drupal::service('acquia_connector.client'), \Drupal::service('config.factory'), \Drupal::service('path_alias.manager'));
     $spi_data = $spi->get();
 
     $this->assertFalse($this->isContainObjects($spi_data), 'SPI data does not contain PHP objects.');
@@ -501,11 +501,11 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
     $this->connectSite();
 
     // Check that result is an array.
-    $spi = new SpiController(\Drupal::service('acquia_connector.client'), \Drupal::service('config.factory'));
+    $spi = new SpiController(\Drupal::service('acquia_connector.client'), \Drupal::service('config.factory'), \Drupal::service('path_alias.manager'));
     $spi_data = $spi->get();
     unset($spi_data['spi_def_update']);
     $result = $client->sendNspi($this->acqtestId, $this->acqtestKey, $spi_data);
-    $this->assertTrue(is_array($result), 'SPI update result is an array');
+    $this->assertIsArray($result, 'SPI update result is an array');
 
     // Trigger a validation error on response.
     $spi_data['test_validation_error'] = TRUE;
@@ -517,7 +517,7 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
     // Trigger a SPI definition update response.
     $spi_data['spi_def_update'] = TRUE;
     $result = $client->sendNspi($this->acqtestId, $this->acqtestKey, $spi_data);
-    $this->assertTrue(!empty($result['body']['update_spi_definition']), 'SPI result array has expected "update_spi_definition" key.');
+    $this->assertNotEmpty($result['body']['update_spi_definition'], 'SPI result array has expected "update_spi_definition" key.');
   }
 
   /**
@@ -536,14 +536,14 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
     $def_timestamp = \Drupal::state()->get('acquia_spi_data.def_timestamp', 0);
     $this->assertNotEqual($def_timestamp, 0, 'SPI definition timestamp set');
     $def_vars = \Drupal::state()->get('acquia_spi_data.def_vars', []);
-    $this->assertTrue(!empty($def_vars), 'SPI definition variable set');
+    $this->assertNotEmpty($def_vars, 'SPI definition variable set');
     \Drupal::state()->set('acquia_spi_data.def_waived_vars', ['test_variable_3']);
     // Test that new variables are in SPI data.
-    $spi = new SpiController(\Drupal::service('acquia_connector.client'), \Drupal::service('config.factory'));
+    $spi = new SpiController(\Drupal::service('acquia_connector.client'), \Drupal::service('config.factory'), \Drupal::service('path_alias.manager'));
     $spi_data = $spi->get();
     $vars = Json::decode($spi_data['system_vars']);
-    $this->assertTrue(!empty($vars['test_variable_1']), 'New variables included in SPI data');
-    $this->assertTrue(!isset($vars['test_variable_3']), 'test_variable_3 not included in SPI data');
+    $this->assertNotEmpty($vars['test_variable_1'], 'New variables included in SPI data');
+    $this->assertArrayNotHasKey('test_variable_3', $vars, 'test_variable_3 not included in SPI data');
   }
 
   /**
@@ -560,10 +560,10 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
     $submit_button = 'Save configuration';
     $this->drupalPostForm($this->settingsPath, $edit_fields, $submit_button);
 
-    $spi = new SpiController(\Drupal::service('acquia_connector.client'), \Drupal::service('config.factory'));
+    $spi = new SpiController(\Drupal::service('acquia_connector.client'), \Drupal::service('config.factory'), \Drupal::service('path_alias.manager'));
     $spi_data = $spi->get();
     $vars = Json::decode($spi_data['system_vars']);
-    $this->assertTrue(empty($vars['acquia_spi_saved_variables']['variables']), 'Have not saved any variables');
+    $this->assertEmpty($vars['acquia_spi_saved_variables']['variables'], 'Have not saved any variables');
     // Set error reporting so variable is saved.
     $edit = [
       'error_level' => 'verbose',
@@ -578,8 +578,8 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
     $new = \Drupal::config('system.logging')->get('error_level');
     $this->assertTrue($new === 'hide', 'Set error reporting to log only');
     $vars = Json::decode($variables->getVariablesData());
-    $this->assertTrue(in_array('error_level', $vars['acquia_spi_saved_variables']['variables']), 'SPI data reports error level was saved');
-    $this->assertTrue(isset($vars['acquia_spi_saved_variables']['time']), 'Set time for saved variables');
+    $this->assertContains('error_level', $vars['acquia_spi_saved_variables']['variables'], 'SPI data reports error level was saved');
+    $this->assertArrayHasKey('time', $vars['acquia_spi_saved_variables'], 'Set time for saved variables');
 
     // Attemp to set variable that is not whitelisted.
     $current = \Drupal::config('system.site')->get('name');
@@ -588,7 +588,7 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
     $after = \Drupal::config('system.site')->get('name');
     $this->assertIdentical($current, $after, 'Non-whitelisted variable cannot be automatically set');
     $vars = Json::decode($variables->getVariablesData());
-    $this->assertFalse(in_array('site_name', $vars['acquia_spi_saved_variables']['variables']), 'SPI data does not include anything about trying to save clean url');
+    $this->assertNotContains('site_name', $vars['acquia_spi_saved_variables']['variables'], 'SPI data does not include anything about trying to save clean url');
 
     // Test override of approved variable list.
     \Drupal::configFactory()->getEditable('acquia_connector.settings')->set('spi.set_variables_override', FALSE)->save();
@@ -597,7 +597,7 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
     $set_variables = ['acquia_spi_set_variables_automatic' => 'test_variable'];
     $variables->setVariables($set_variables);
     $vars = Json::decode($variables->getVariablesData());
-    $this->assertFalse(isset($vars['test_variable']), 'Using default list of approved list of variables');
+    $this->assertArrayNotHasKey('test_variable', $vars, 'Using default list of approved list of variables');
     \Drupal::configFactory()->getEditable('acquia_connector.settings')->set('spi.set_variables_override', TRUE)->save();
     // Variables controller stores old config.
     $variables = new VariablesController();

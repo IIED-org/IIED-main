@@ -19,13 +19,14 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Drupal\path_alias\AliasManagerInterface;
 use Drupal\user\Entity\Role;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class SpiController.
+ * SPI Controller class.
  */
 class SpiController extends ControllerBase {
 
@@ -50,19 +51,13 @@ class SpiController extends ControllerBase {
    *   Acquia Client.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config factory service.
+   * @param \Drupal\path_alias\AliasManagerInterface $path_alias
+   *   Path alias service.
    */
-  public function __construct(Client $client, ConfigFactoryInterface $config_factory) {
+  public function __construct(Client $client, ConfigFactoryInterface $config_factory, AliasManagerInterface $path_alias) {
     $this->client = $client;
     $this->configFactory = $config_factory;
-    if (\Drupal::hasService('path.alias_manager')) {
-      // Legacy compatibility with Drupal 8.7-. Remove after D8.7 is EOL. Also
-      // replace this with service injection.
-      $this->pathAliasManager = \Drupal::service('path.alias_manager');
-    }
-    else {
-      // Compatibility with Drupal 8.8+.
-      $this->pathAliasManager = \Drupal::service('path_alias.manager');
-    }
+    $this->pathAliasManager = $path_alias;
   }
 
   /**
@@ -71,7 +66,8 @@ class SpiController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('acquia_connector.client'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('path_alias.manager')
     );
   }
 
@@ -125,9 +121,9 @@ class SpiController extends ControllerBase {
     $config->save();
 
     $spi = [
-    // Used in HMAC validation.
+      // Used in HMAC validation.
       'rpc_version'        => ACQUIA_CONNECTOR_ACQUIA_SPI_DATA_VERSION,
-    // Used in Fix it now feature.
+      // Used in Fix it now feature.
       'spi_data_version'   => ACQUIA_CONNECTOR_ACQUIA_SPI_DATA_VERSION,
       'site_key'           => sha1(\Drupal::service('private_key')->get()),
       'site_uuid'          => $this->config('acquia_connector.settings')->get('spi.site_uuid'),
@@ -449,11 +445,13 @@ class SpiController extends ControllerBase {
   private function getWatchdogData() {
     $wd = [];
     if ($this->moduleHandler()->moduleExists('dblog')) {
+      // phpcs:disable
       $result = Database::getConnection()->select('watchdog', 'w')
         ->fields('w', ['wid', 'severity', 'type', 'message', 'timestamp'])
         ->condition('w.severity', [RfcLogLevel::EMERGENCY, RfcLogLevel::CRITICAL], 'IN')
         ->condition('w.timestamp', \Drupal::time()->getRequestTime() - 3600, '>')
         ->execute();
+      // phpcs:enable
 
       while ($record = $result->fetchAssoc()) {
         $wd[$record['severity']] = $record;
@@ -789,7 +787,7 @@ class SpiController extends ControllerBase {
     $ver = [];
 
     $ver['base_version'] = \Drupal::VERSION;
-    $install_root = $server['DOCUMENT_ROOT'] . base_path();
+    $install_root = DRUPAL_ROOT;
     $ver['distribution'] = '';
 
     // Determine if this puppy is Acquia Drupal.

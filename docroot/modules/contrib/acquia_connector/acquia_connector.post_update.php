@@ -5,6 +5,8 @@
  * Connector updates once other modules have made their own updates.
  */
 
+use Drupal\acquia_search_solr\Helper\Storage;
+
 /**
  * Move subscription data to state.
  */
@@ -56,6 +58,19 @@ function acquia_connector_post_update_move_search_modules() {
     $module_installer->uninstall(['acquia_search']);
     if (\Drupal::moduleHandler()->moduleExists('search_api_solr_multilingual')) {
       $module_installer->uninstall(['search_api_solr_multilingual']);
+    }
+
+    // Import settings from the connector if it is installed and configured.
+    $module_installer->install(['acquia_search_solr']);
+    $subscription = \Drupal::state()->get('acquia_subscription_data');
+    $storage = new Storage();
+    if (isset($subscription)) {
+      $storage->setApiHost(\Drupal::config('acquia_search_solr.settings')
+          ->get('api_host') ?? 'https://api.sr-prod02.acquia.com');
+      $storage->setApiKey(\Drupal::state()->get('acquia_connector.key'));
+      $storage->setIdentifier(\Drupal::state()
+        ->get('acquia_connector.identifier'));
+      $storage->setUuid($subscription['uuid']);
     }
   }
 }

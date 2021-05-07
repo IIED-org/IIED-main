@@ -1,10 +1,10 @@
 name: Acquia Connector test
 type: module
 description: Support module for the Acquia Connector module tests.
-package: Testing
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^8.9 || ^9
+hidden: true
 
-# Information added by Drupal.org packaging script on 2020-11-18
-version: '8.x-2.0-rc3'
+# Information added by Drupal.org packaging script on 2021-02-26
+version: '8.x-2.0'
 project: 'acquia_connector'
-datestamp: 1605728163
+datestamp: 1614301295

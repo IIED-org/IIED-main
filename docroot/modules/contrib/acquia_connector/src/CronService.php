@@ -6,7 +6,7 @@ use Drupal\Core\Logger\RfcLoggerTrait;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class CronService.
+ * Runs Connector related tasks during Cron.
  *
  * @package Drupal\acquia_connector
  */

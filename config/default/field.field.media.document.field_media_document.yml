@@ -25,7 +25,7 @@ default_value_callback: ''
 settings:
   file_directory: 'pdfs/[date:custom:Y]-[date:custom:m]'
   file_extensions: pdf
-  max_filesize: ''
+  max_filesize: '12 MB'
   description_field: false
   handler: 'default:file'
   handler_settings: {  }

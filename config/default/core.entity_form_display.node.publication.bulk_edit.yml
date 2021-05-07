@@ -54,6 +54,7 @@ dependencies:
   module:
     - computed_field
     - field_group
+    - link
     - text
 third_party_settings:
   field_group:
@@ -63,7 +64,7 @@ third_party_settings:
         - field_editor_s_
         - field_translator
       parent_name: ''
-      weight: 6
+      weight: 27
       format_type: details
       region: hidden
       format_settings:
@@ -75,16 +76,16 @@ third_party_settings:
       label: 'Add/Edit Author(s), Editor(s)and Translator(s) *'
     group_publication_metadata:
       children:
-        - field_document_type
+        - field_area_list
         - field_date_published
+        - field_document_type
+        - field_doi
         - field_isbn
         - field_issn
-        - field_doi
         - field_pdf_pages
         - field_publisher
-        - field_area_list
       parent_name: ''
-      weight: 7
+      weight: 28
       format_type: details
       region: hidden
       format_settings:
@@ -96,12 +97,12 @@ third_party_settings:
       label: 'Add/Edit Publication details *'
     group_iied_marketing_and_reporti:
       children:
-        - field_theme_s_
-        - field_team
-        - field_work_programme_global_enga
         - field_deptlist
+        - field_team
+        - field_theme_s_
+        - field_work_programme_global_enga
       parent_name: ''
-      weight: 8
+      weight: 29
       format_type: details
       region: hidden
       format_settings:
@@ -113,12 +114,12 @@ third_party_settings:
       label: 'Add/Edit IIED Marketing and Reporting info *'
     group_series_article_and_journal:
       children:
+        - field_journal_ref
         - field_series
         - field_series_item_code
         - field_source_publication
-        - field_journal_ref
       parent_name: ''
-      weight: 9
+      weight: 30
       format_type: details
       region: hidden
       format_settings:
@@ -130,11 +131,11 @@ third_party_settings:
       label: 'Add/Edit Series, Article and Journal info'
     group_tags_and_links:
       children:
-        - field_project
         - field_iied_url
+        - field_project
         - field_tags
       parent_name: ''
-      weight: 10
+      weight: 31
       format_type: details
       region: hidden
       format_settings:
@@ -146,11 +147,10 @@ third_party_settings:
       label: 'Add/Edit IIED links and tags *'
     group_upload_file_or_link_to_ext:
       children:
-        - field_media
         - field_cover_image
-        - field_external_url
+        - field_media
       parent_name: ''
-      weight: 11
+      weight: 32
       format_type: details
       region: hidden
       format_settings:
@@ -162,11 +162,11 @@ third_party_settings:
       label: 'Upload file or link to external publication'
     group_legacy_fields_do_not_use:
       children:
-        - field_reportagency1
         - field_publisher_legacy
+        - field_reportagency1
         - field_status
       parent_name: ''
-      weight: 13
+      weight: 33
       format_type: details
       region: hidden
       format_settings:
@@ -178,10 +178,10 @@ third_party_settings:
       label: 'Legacy fields - do not use'
     group_coming_soon_:
       children:
-        - field_parent
         - field_lists
+        - field_parent
       parent_name: ''
-      weight: 14
+      weight: 34
       format_type: details
       region: hidden
       format_settings:
@@ -197,13 +197,21 @@ bundle: publication
 mode: bulk_edit
 content:
   field_admin:
-    weight: 12
+    weight: 2
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
     type: text_textarea
     region: content
+  field_external_url:
+    type: link_default
+    weight: 4
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
   field_lit_code:
     weight: 0
     settings: {  }
@@ -219,7 +227,7 @@ content:
     type: string_textfield
     region: content
   field_product_code_new:
-    weight: 28
+    weight: 3
     settings: {  }
     third_party_settings: {  }
     type: computed_string_widget
@@ -236,7 +244,6 @@ hidden:
   field_document_type: true
   field_doi: true
   field_editor_s_: true
-  field_external_url: true
   field_iied_url: true
   field_isbn: true
   field_issn: true

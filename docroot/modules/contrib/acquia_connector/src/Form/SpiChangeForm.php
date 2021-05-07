@@ -9,7 +9,7 @@ use Drupal\Core\State\State;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class SpiChangeForm.
+ * Change SPI Data form.
  *
  * @package Drupal\acquia_connector\Form
  */

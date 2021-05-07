@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * Class SettingsForm.
+ * Acquia Connector Settings.
  *
  * @package Drupal\acquia_connector\Form
  */
@@ -268,6 +268,7 @@ class SettingsForm extends ConfigFormBase {
 
       $form['#attached']['library'][] = 'acquia_connector/acquia_connector.form';
       $key = sha1($this->privateKey->get());
+      // phpcs:ignore
       $url = Url::fromRoute('acquia_connector.send', [], ['query' => ['key' => $key], 'absolute' => TRUE])->toString();
 
       $form['connection']['use_cron_url'] = [

@@ -32,4 +32,4 @@ Contact Acquia Support if you have support questions regarding your site.
 
 If you have issues with the submodules included in the Acquia 
 Connector package, you are also welcome to submit issues at
-http://drupal.org/project/acquia_connector (all submitted issues are public).
+https://drupal.org/project/acquia_connector (all submitted issues are public).

@@ -3,7 +3,7 @@
 namespace Drupal\acquia_connector;
 
 /**
- * Class ConnectorException.
+ * Produce an exception for certain cases in the connector.
  *
  * @package Drupal\acquia_connector
  */

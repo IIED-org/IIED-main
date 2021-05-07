@@ -40,7 +40,7 @@
         "composer/installers": "^1.2",
         "cweagans/composer-patches": "^1.6",
         "drupal/acquia_connector": "^2.0",
-        "drupal/acquia_search_solr": "^3.0@RC",
+        "drupal/acquia_search_solr": "^3.0",
         "drupal/address": "^1.8",
         "drupal/admin_toolbar": "^2.3",
         "drupal/asset_injector": "^2.7",

@@ -11,7 +11,7 @@ use Drupal\user\UserInterface;
 use Drupal\views\Views;
 
 /**
- * Class SecurityReviewController.
+ * Acquia Security Review page.
  *
  * @package Drupal\acquia_connector\Controller
  */
@@ -335,7 +335,7 @@ class SecurityReviewController extends ControllerBase {
 
     }
     catch (\Exception $e) {
-      $response = $e->getResponse();
+      // Do nothing.
     }
 
     if (file_exists('./' . $directory . $file)) {
@@ -350,13 +350,6 @@ class SecurityReviewController extends ControllerBase {
       $contents = file_get_contents($directory . '/.htaccess');
       // Text from includes/file.inc.
       $expected = '';
-      // Todo: remove conditional when Drupal 8.7 is EOL.
-      foreach (['\Drupal\Component\FileSecurity\FileSecurity', '\Drupal\Component\PhpStorage\FileStorage'] as $class) {
-        if (method_exists($class, 'htaccessLines')) {
-          $expected = $class::htaccessLines(FALSE);
-          break;
-        }
-      }
       if ($contents !== $expected) {
         $result = FALSE;
         $check_result_value[] = 'incorrect_htaccess';
@@ -405,7 +398,7 @@ class SecurityReviewController extends ControllerBase {
   }
 
   /**
-   * Check input formats fo unsafe tags.
+   * Check input formats of unsafe tags.
    *
    * Check for formats that either do not have HTML filter that can be used by
    * untrusted users, or if they do check if unsafe tags are allowed.

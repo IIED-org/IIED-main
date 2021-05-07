@@ -419,7 +419,7 @@ class NspiController extends ControllerBase {
 
     if (!empty($data['body']['email'])) {
       $account = user_load_by_mail($data['body']['email']);
-      \Drupal::logger('getCredentials password')->debug($account->getPassword());
+      $this->getLogger('getCredentials password')->debug($account->getPassword());
       if (empty($account) || $account->isAnonymous()) {
         return new Response(self::ACQTEST_SUBSCRIPTION_SERVICE_UNAVAILABLE, [], json_encode($this->errorResponse(self::ACQTEST_SUBSCRIPTION_VALIDATION_ERROR, $this->t('Account not found'))));
       }

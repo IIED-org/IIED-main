@@ -217,7 +217,7 @@ display:
     display_options:
       display_extenders: {  }
       path: search
-      exposed_block: true
+      exposed_block: false
       menu:
         type: normal
         title: Search

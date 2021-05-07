@@ -89,7 +89,7 @@ class InitSubscriber implements EventSubscriberInterface {
       $config = $this->configFactory->getEditable('acquia_connector.settings');
 
       // Handle site name.
-      $site_name = $this->spiController->checkAcquiaHosted() ? getenv('AH_SITE_ENVIRONMENT') . '_' . getenv('AH_SITE_NAME') : $config->get('spi.site_name');;
+      $site_name = $this->spiController->checkAcquiaHosted() ? getenv('AH_SITE_ENVIRONMENT') . '_' . getenv('AH_SITE_NAME') : $config->get('spi.site_name');
       $site_machine_name = $this->spiController->getAcquiaHostedMachineName() ?? $config->get('spi.site_machine_name');
       if ($site_name) {
         $this->state->set('spi.site_name', $site_name);
