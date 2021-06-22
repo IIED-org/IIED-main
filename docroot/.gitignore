@@ -43,3 +43,5 @@ sites/simpletest
 
 # Ignore changelog.txt
 CHANGELOG.txt
+
+.DS_Store

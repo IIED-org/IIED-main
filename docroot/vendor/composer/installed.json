@@ -82,12 +82,12 @@
         "version_normalized": "2.9.4.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/chartjs/Chart.js.git",
+            "url": "git@github.com:nnnick/Chart.js.git",
             "reference": "9bd4cf82fda9f50a5fb50b72843e06ab88124278"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/chartjs/Chart.js/zipball/9bd4cf82fda9f50a5fb50b72843e06ab88124278",
+            "url": "https://api.github.com/repos/nnnick/Chart.js/zipball/9bd4cf82fda9f50a5fb50b72843e06ab88124278",
             "reference": "9bd4cf82fda9f50a5fb50b72843e06ab88124278"
         },
         "type": "bower-asset",
@@ -5281,6 +5281,52 @@
             "source": "https://git.drupal.org/project/masquerade.git",
             "issues": "https://www.drupal.org/project/issues/masquerade",
             "irc": "irc://irc.freenode.org/drupal-contribute"
+        }
+    },
+    {
+        "name": "drupal/media_entity_file_replace",
+        "version": "1.0.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupalcode.org/project/media_entity_file_replace.git",
+            "reference": "8.x-1.0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/media_entity_file_replace-8.x-1.0.zip",
+            "reference": "8.x-1.0",
+            "shasum": "a22fb6b946dade434301b85c249d8621d0fc6654"
+        },
+        "require": {
+            "drupal/core": "^8.7.7 || ^9"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "drupal": {
+                "version": "8.x-1.0",
+                "datestamp": "1618180544",
+                "security-coverage": {
+                    "status": "covered",
+                    "message": "Covered by Drupal's security advisory policy"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "bkosborne",
+                "homepage": "https://www.drupal.org/user/788032"
+            }
+        ],
+        "description": "Allows content editors to easily replace source files associated with any file-based media entity, preserving the original filename.",
+        "homepage": "https://www.drupal.org/project/media_entity_file_replace",
+        "support": {
+            "source": "https://git.drupalcode.org/project/media_entity_file_replace"
         }
     },
     {
