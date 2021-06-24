@@ -143,7 +143,7 @@ third_party_settings:
         id: ''
         classes: ''
         open: false
-      label: 'Links to IIED main site and tags *'
+      label: 'Links to IIED main site and tags (required before going live)'
     group_upload_file_or_link_to_ext:
       children:
         - field_media
@@ -158,7 +158,7 @@ third_party_settings:
         id: ''
         classes: ''
         open: false
-      label: 'Upload file, or link to external publication *'
+      label: 'Upload file, or link to external publication (required before going live)'
     group_legacy_fields_do_not_use:
       children:
         - field_cover_image
@@ -201,7 +201,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 4
+    weight: 9
     settings:
       rows: 9
       summary_rows: 3
@@ -236,7 +236,7 @@ content:
     type: address_country_default
     region: content
   field_author_s_:
-    weight: 5
+    weight: 4
     settings:
       match_operator: CONTAINS
       match_limit: 10
@@ -253,7 +253,7 @@ content:
     third_party_settings: {  }
     region: content
   field_date_published:
-    weight: 9
+    weight: 8
     settings: {  }
     third_party_settings: {  }
     type: datetime_default
@@ -267,7 +267,7 @@ content:
     type: string_textfield
     region: content
   field_document_type:
-    weight: 8
+    weight: 7
     settings: {  }
     third_party_settings: {  }
     type: options_select
@@ -352,7 +352,7 @@ content:
     third_party_settings: {  }
     region: content
   field_meta_tags:
-    weight: 20
+    weight: 21
     settings:
       sidebar: false
     third_party_settings: {  }
@@ -394,7 +394,7 @@ content:
     type: entity_reference_autocomplete
     region: content
   field_publisher:
-    weight: 6
+    weight: 5
     settings:
       match_operator: CONTAINS
       match_limit: 10
@@ -488,7 +488,7 @@ content:
     type: entity_reference_autocomplete
     region: content
   field_work_programme_global_enga:
-    weight: 7
+    weight: 6
     settings: {  }
     third_party_settings: {  }
     type: options_select

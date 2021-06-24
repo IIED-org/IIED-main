@@ -18,8 +18,6 @@ permissions:
   - 'create terms in list'
   - 'create terms in organisation'
   - 'create terms in person'
-  - 'delete own document media'
-  - 'delete own image media'
   - 'display eu cookie compliance popup'
   - 'edit any document media'
   - 'edit any image media'
