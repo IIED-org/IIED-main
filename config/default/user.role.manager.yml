@@ -22,6 +22,7 @@ permissions:
   - 'administer comment types'
   - 'administer comments'
   - 'administer content translation'
+  - 'administer media'
   - 'administer nodes'
   - 'administer redirects'
   - 'administer taxonomy'
