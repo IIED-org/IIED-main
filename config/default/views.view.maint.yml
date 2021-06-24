@@ -2892,7 +2892,6 @@ display:
         fields: false
         filters: false
         filter_groups: false
-        exposed_form: false
         sorts: false
       path: admin/maint/Pubs_with_date_export
       fields:
@@ -5679,7 +5678,6 @@ display:
         fields: false
         filters: false
         filter_groups: false
-        exposed_form: false
         sorts: false
         use_ajax: false
         query: false

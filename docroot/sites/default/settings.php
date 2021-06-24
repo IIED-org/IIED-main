@@ -828,3 +828,11 @@ $config['config_split.config_split.live']['status'] = $_env_is_prod;
 if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
    include $app_root . '/' . $site_path . '/settings.local.php';
 }
+
+/**
+ * Error reporting
+  */
+# error_reporting(E_ALL);
+# ini_set('display_errors', TRUE);
+# ini_set('display_startup_errors', TRUE);
+# $config['system.logging']['error_level'] = 'verbose';
