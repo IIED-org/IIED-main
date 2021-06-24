@@ -34,7 +34,7 @@ custom:
       value: '[node:field_theme_s_]'
       index: 3
     10:
-      value: '[node:field_product_code]'
+      value: '[node:field_product_code_new]'
       index: 10
     11:
       value: '[node:field_project]'
