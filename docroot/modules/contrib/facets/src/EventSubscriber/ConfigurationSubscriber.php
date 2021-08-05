@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\facets;
+namespace Drupal\facets\EventSubscriber;
 
 use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\Core\Config\ConfigCrudEvent;
@@ -10,7 +10,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Config subscriber for facet delete.
  */
-class EventSubscriber implements EventSubscriberInterface {
+class ConfigurationSubscriber implements EventSubscriberInterface {
 
   /**
    * Drupal core's block manager.

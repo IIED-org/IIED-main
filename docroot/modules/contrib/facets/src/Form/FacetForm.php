@@ -467,6 +467,18 @@ class FacetForm extends EntityForm {
       $form['facet_settings']['use_hierarchy']['#description'] .= '<strong>At this moment only hierarchical taxonomy terms are supported.</strong>';
     }
 
+    $form['facet_settings']['keep_hierarchy_parents_active'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Keep hierarchy parents active'),
+      '#description' => $this->t('Keep the parents active when selecting a child.'),
+      '#default_value' => $facet->getKeepHierarchyParentsActive(),
+      '#states' => [
+        'visible' => [
+          ':input[name="facet_settings[use_hierarchy]"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
     $form['facet_settings']['expand_hierarchy'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Always expand hierarchy'),
@@ -716,6 +728,7 @@ class FacetForm extends EntityForm {
 
     $facet->setExclude($form_state->getValue(['facet_settings', 'exclude']));
     $facet->setUseHierarchy($form_state->getValue(['facet_settings', 'use_hierarchy']));
+    $facet->setKeepHierarchyParentsActive($form_state->getValue(['facet_settings', 'keep_hierarchy_parents_active']));
     $facet->setExpandHierarchy($form_state->getValue(['facet_settings', 'expand_hierarchy']));
     $facet->setEnableParentWhenChildGetsDisabled($form_state->getValue(['facet_settings', 'enable_parent_when_child_gets_disabled']));
     $facet->set('show_title', $form_state->getValue(['facet_settings', 'show_title'], FALSE));

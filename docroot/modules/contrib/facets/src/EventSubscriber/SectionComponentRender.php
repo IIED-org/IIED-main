@@ -1,8 +1,13 @@
 <?php
+/**
+ * @file
+ * Hooks into layout builder rendering to add our required attributes.
+ */
 
 namespace Drupal\facets\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Drupal\layout_builder\LayoutBuilderEvents;
 use Drupal\layout_builder\Event\SectionComponentBuildRenderArrayEvent;
 
 /**
@@ -14,7 +19,7 @@ class SectionComponentRender implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events['section_component.build.render_array'] = ['onBuildRender'];
+    $events[LayoutBuilderEvents::SECTION_COMPONENT_BUILD_RENDER_ARRAY] = ['onBuildRender'];
 
     return $events;
   }
