@@ -5,8 +5,6 @@
  * Hook implementations for the facets summary module.
  */
 
-use Drupal\search_api\Query\QueryInterface;
-
 /**
  * Implements hook_theme().
  */
@@ -61,25 +59,6 @@ function facets_summary_theme($existing, $type, $theme, $path) {
       ],
     ],
   ];
-}
-
-/**
- * Implements hook_search_api_query_alter().
- */
-function facets_summary_search_api_query_alter(QueryInterface &$query) {
-  $facet_source_id = 'search_api:' . str_replace(':', '__', $query->getSearchId());
-  $storage = \Drupal::entityTypeManager()->getStorage('facets_summary');
-  // Get all the facet summaries for the facet source.
-  $facet_summaries = $storage->loadByProperties(['facet_source_id' => $facet_source_id]);
-  /** @var \Drupal\facets_summary\FacetsSummaryInterface $facet_summary */
-  foreach ($facet_summaries as $facet_summary) {
-    $processors = $facet_summary->getProcessors();
-    // If the count processor is enabled, results count must not be skipped.
-    if (in_array('show_count', array_keys($processors))) {
-      $query->setOption('skip result count', FALSE);
-      break;
-    }
-  }
 }
 
 /**

@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'a44b7a078e6bb03a966163aaae325ef9008f454f',
+        'reference' => '8baeffa2dd88fd4ff74897d81208a5c4abeeb1b7',
         'name' => 'drupal/legacy-project',
         'dev' => true,
     ),
@@ -863,12 +863,12 @@
             'dev_requirement' => false,
         ),
         'drupal/facets' => array(
-            'pretty_version' => '1.6.0',
-            'version' => '1.6.0.0',
+            'pretty_version' => '1.8.0',
+            'version' => '1.8.0.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../modules/contrib/facets',
             'aliases' => array(),
-            'reference' => '8.x-1.6',
+            'reference' => '8.x-1.8',
             'dev_requirement' => false,
         ),
         'drupal/facets_country' => array(
@@ -1108,7 +1108,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'a44b7a078e6bb03a966163aaae325ef9008f454f',
+            'reference' => '8baeffa2dd88fd4ff74897d81208a5c4abeeb1b7',
             'dev_requirement' => false,
         ),
         'drupal/link' => array(
