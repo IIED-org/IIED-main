@@ -59,3 +59,25 @@ function computed_field_field_product_code_new_compute($entity_type_manager, $en
   }
   return $value;
 }
+
+// Hide work programmes field if field_date_published before 1 April 2019
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Datetime\DrupalDateTime;
+/**
+ * Implements hook_form_FORM_ID_alter().
+ * @param $form
+ * @param $form_state
+ * @param $form_id
+ */
+function iied_utils_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
+  if(($form_id == 'node_publication_edit_form') || ($form_id == 'node_publication_form')) {
+      $legacy = '2019-04-01';
+      $entity = $form_state->getFormObject()->getEntity();
+      $date_value = $entity->get('field_date_published')->value;
+     //  \Drupal::messenger()->addWarning('$val: ' . $date_value);
+      if($date_value < $legacy) {
+        $form['field_work_programme_global_enga']['#access'] = FALSE;
+        $form['field_work_programme_global_enga']['#type'] = 'hidden';
+      }
+    }
+}
