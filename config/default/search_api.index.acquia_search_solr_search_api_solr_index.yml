@@ -9,13 +9,13 @@ dependencies:
     - node
     - search_api
   config:
+    - field.storage.node.body
     - field.storage.node.field_area_list
     - field.storage.node.field_author_s_
-    - field.storage.node.body
+    - field.storage.node.field_date_published
     - field.storage.node.field_document_type
     - field.storage.node.field_product_code
     - field.storage.node.field_product_code_new
-    - field.storage.node.field_date_published
     - field.storage.node.field_theme_s_
     - search_api.server.acquia_search_solr_search_api_solr_server
 third_party_settings:

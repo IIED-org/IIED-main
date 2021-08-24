@@ -12,7 +12,7 @@ field_name: field_isbn
 entity_type: node
 bundle: publication
 label: ISBN
-description: ''
+description: '<i><big><strong>Hint:</strong> If needed, an ISBN number can be requested from the Publications and Marketing manager. If unsure, refer the <a href = "https://iied.sharepoint.com/:b:/g/group/comms/EdFmDzl805FPhNzF8MvpC4sBGQMsdNATkwVv97Wv3FsTwg?e=dtlDoF" target="_blank"><strong>guidance document on the Intranet</strong></a></big>.</i>'
 required: false
 translatable: true
 default_value: {  }

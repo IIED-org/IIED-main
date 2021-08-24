@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.user.user.user_picture
     - image.style.thumbnail
+    - views.view.authors
     - views.view.content_recent
   content:
     - 'block_content:basic:2e269474-0c90-4a0b-8c47-d12d521ca8b5'
@@ -119,7 +120,7 @@ third_party_settings:
               provider: views
               label_display: visible
               views_label: 'My publications'
-              items_per_page: none
+              items_per_page: '5'
               context_mapping: {  }
             additional: {  }
             weight: 1
@@ -132,10 +133,48 @@ third_party_settings:
               provider: views
               label_display: visible
               views_label: 'All publications'
-              items_per_page: none
+              items_per_page: '5'
               context_mapping: {  }
             additional: {  }
             weight: 2
+        third_party_settings: {  }
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: 'Search/Edit Authors'
+        components:
+          2ff96f1e-a006-4be9-8c06-dbed96d8d494:
+            uuid: 2ff96f1e-a006-4be9-8c06-dbed96d8d494
+            region: content
+            configuration:
+              id: 'views_block:authors-block_2'
+              label: 'Search/Edit Authors'
+              provider: views
+              label_display: visible
+              views_label: 'Search/Edit Authors'
+              items_per_page: none
+              context_mapping: {  }
+            additional: {  }
+            weight: 0
+        third_party_settings: {  }
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: 'Search/Edit Organisations'
+        components:
+          ed911345-352f-4165-a096-5a14df8b0506:
+            uuid: ed911345-352f-4165-a096-5a14df8b0506
+            region: content
+            configuration:
+              id: 'views_block:authors-block_3'
+              label: 'Search/Edit Organisations'
+              provider: views
+              label_display: visible
+              views_label: 'Search/Edit Organisations'
+              items_per_page: none
+              context_mapping: {  }
+            additional: {  }
+            weight: 0
         third_party_settings: {  }
   field_group:
     group_wha_:

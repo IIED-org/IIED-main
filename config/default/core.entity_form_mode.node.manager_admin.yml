@@ -1,0 +1,10 @@
+uuid: 6a5ab07f-baaf-471c-a111-641796ffe98d
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.manager_admin
+label: Manager/Admin
+targetEntityType: node
+cache: true

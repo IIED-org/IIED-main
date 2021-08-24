@@ -1,8 +1,9 @@
-uuid: fba47fb8-b7d5-4e99-a545-55cb7a81d4ad
+uuid: f1866900-149d-4ea4-b889-a3cd702a8df4
 langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_form_mode.node.manager_admin
     - field.field.node.publication.body
     - field.field.node.publication.field_a_serial
     - field.field.node.publication.field_admin
@@ -57,6 +58,7 @@ dependencies:
     - isbn
     - link
     - media_library
+    - metatag
     - path
     - serial
     - text
@@ -160,33 +162,32 @@ third_party_settings:
       label: 'Upload file, or link to external publication (required before going live)'
     group_legacy_fields_do_not_use:
       children:
-        - field_cover_image
         - field_deptlist
-        - field_meta_tags
-        - field_product_code
         - field_publisher_legacy
         - field_reportagency1
         - field_status
+        - field_product_code
+        - field_meta_tags
         - group_coming_soon_
       parent_name: ''
-      weight: 26
+      weight: 19
       format_type: details
-      region: hidden
+      region: content
       format_settings:
         description: ''
         required_fields: true
         id: ''
         classes: ''
         open: false
-      label: 'Admin only fields'
+      label: 'Admin only fields - do not use'
     group_coming_soon_:
       children:
-        - field_lists
         - field_parent
+        - field_lists
       parent_name: group_legacy_fields_do_not_use
-      weight: 21
+      weight: 22
       format_type: details
-      region: hidden
+      region: content
       format_settings:
         id: ''
         classes: ''
@@ -194,10 +195,24 @@ third_party_settings:
         open: false
         required_fields: true
       label: 'Coming soon...'
-id: node.publication.default
+    group_replacement_cover_image:
+      children:
+        - field_cover_image
+      parent_name: ''
+      weight: 17
+      format_type: details
+      region: content
+      format_settings:
+        id: ''
+        classes: ''
+        effect: none
+        open: false
+        required_fields: true
+      label: 'Replacement cover image'
+id: node.publication.manager_admin
 targetEntityType: node
 bundle: publication
-mode: default
+mode: manager_admin
 content:
   body:
     type: text_textarea_with_summary
@@ -211,12 +226,12 @@ content:
     region: content
   created:
     type: datetime_timestamp
-    weight: 19
+    weight: 22
     region: content
     settings: {  }
     third_party_settings: {  }
   field_a_serial:
-    weight: 25
+    weight: 28
     settings: {  }
     third_party_settings: {  }
     type: serial_default_widget
@@ -245,11 +260,26 @@ content:
     third_party_settings: {  }
     type: entity_reference_autocomplete
     region: content
+  field_cover_image:
+    type: media_library_widget
+    weight: 18
+    settings:
+      media_types: {  }
+    third_party_settings: {  }
+    region: content
   field_date_published:
     weight: 8
     settings: {  }
     third_party_settings: {  }
     type: datetime_default
+    region: content
+  field_deptlist:
+    weight: 15
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
     region: content
   field_document_type:
     weight: 7
@@ -306,12 +336,22 @@ content:
     type: string_textfield
     region: content
   field_journal_ref:
-    weight: 14
+    weight: 15
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
     type: string_textfield
+    region: content
+  field_lists:
+    weight: 17
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete_tags
     region: content
   field_lit_code:
     weight: 0
@@ -326,12 +366,37 @@ content:
       media_types: {  }
     third_party_settings: {  }
     region: content
+  field_meta_tags:
+    weight: 21
+    settings:
+      sidebar: false
+    third_party_settings: {  }
+    type: metatag_firehose
+    region: content
+  field_parent:
+    weight: 15
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
   field_pdf_pages:
     weight: 12
     settings:
       placeholder: ''
     third_party_settings: {  }
     type: number
+    region: content
+  field_product_code:
+    weight: 20
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
     region: content
   field_project:
     weight: 13
@@ -353,6 +418,22 @@ content:
     third_party_settings: {  }
     type: entity_reference_autocomplete
     region: content
+  field_publisher_legacy:
+    weight: 16
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_reportagency1:
+    weight: 18
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
   field_series:
     weight: 11
     settings: {  }
@@ -360,7 +441,7 @@ content:
     type: options_select
     region: content
   field_series_item_code:
-    weight: 12
+    weight: 13
     settings:
       size: 60
       placeholder: ''
@@ -376,15 +457,21 @@ content:
     type: string_textfield
     region: content
   field_source_publication:
-    weight: 13
+    weight: 14
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
     type: string_textfield
     region: content
+  field_status:
+    weight: 19
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
   field_tags:
-    weight: 15
+    weight: 16
     settings:
       match_operator: CONTAINS
       match_limit: 10
@@ -430,7 +517,7 @@ content:
     third_party_settings: {  }
   path:
     type: path
-    weight: 23
+    weight: 26
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -438,21 +525,21 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 21
+    weight: 24
     region: content
     third_party_settings: {  }
   status:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 24
+    weight: 27
     region: content
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 22
+    weight: 25
     region: content
     third_party_settings: {  }
   title:
@@ -464,13 +551,13 @@ content:
       placeholder: ''
     third_party_settings: {  }
   translation:
-    weight: 20
+    weight: 23
     region: content
     settings: {  }
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 18
+    weight: 21
     settings:
       match_operator: CONTAINS
       size: 60
@@ -479,21 +566,13 @@ content:
     region: content
     third_party_settings: {  }
   url_redirects:
-    weight: 17
+    weight: 20
     region: content
     settings: {  }
     third_party_settings: {  }
 hidden:
-  field_cover_image: true
-  field_deptlist: true
-  field_lists: true
-  field_meta_tags: true
-  field_parent: true
   field_pdf: true
-  field_product_code: true
   field_product_code_new: true
-  field_publisher_legacy: true
-  field_reportagency1: true
   field_reportagency2: true
   field_reportagency3: true
   field_reportfin1: true
@@ -501,4 +580,3 @@ hidden:
   field_reportfin3: true
   field_reportingcode1: true
   field_reportingcode2: true
-  field_status: true

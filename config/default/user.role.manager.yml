@@ -91,6 +91,7 @@ permissions:
   - 'unpublish editable node type publication'
   - 'unpublish own node type publication'
   - 'update content translations'
+  - 'use  The form mode manager_admin linked to  node entity( publication )'
   - 'use text format basic_html'
   - 'view all media revisions'
   - 'view all revisions'
