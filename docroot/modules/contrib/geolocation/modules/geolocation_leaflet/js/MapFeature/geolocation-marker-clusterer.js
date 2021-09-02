@@ -25,6 +25,7 @@
          * @param {String} featureSettings.zoomToBoundsOnClick - Settings for current feature.
          * @param {String} featureSettings.showCoverageOnHover - Settings for current feature.
          * @param {int} featureSettings.disableClusteringAtZoom - Settings for current feature.
+         * @param {Object} featureSettings.customMarkerSettings - Settings for current feature.
          *
          * @see https://github.com/Leaflet/Leaflet.markercluster
          */
@@ -43,6 +44,28 @@
           }
           if (featureSettings.disableClusteringAtZoom) {
             options.disableClusteringAtZoom = featureSettings.disableClusteringAtZoom;
+          }
+          if (featureSettings.customMarkerSettings) {
+            options.iconCreateFunction = function (cluster) {
+              var childCount = cluster.getChildCount();
+              var customMarkers = featureSettings.customMarkerSettings;
+              var className = ' marker-cluster-';
+              var radius = 40;
+
+              for (var size in customMarkers) {
+                if (childCount < customMarkers[size].limit) {
+                  className += size;
+                  radius = customMarkers[size].radius;
+                  break;
+                }
+              }
+
+              return new L.DivIcon({
+                html: '<div><span>' + childCount + '</span></div>',
+                className: 'marker-cluster' + className,
+                iconSize: new L.Point(radius, radius)
+              });
+            };
           }
 
           var cluster = L.markerClusterGroup(options);

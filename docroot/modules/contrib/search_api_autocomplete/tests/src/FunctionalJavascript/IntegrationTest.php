@@ -275,7 +275,9 @@ class IntegrationTest extends IntegrationTestBase {
     $suggestion_elements[$keys]->click();
     $this->logPageChange();
     $keys = urlencode($keys);
-    $assert_session->addressMatches("#^/search-api-autocomplete-test\\?(?:.*&)?keys=$keys#");
+    // @todo Replace with $assert_session->addressMatches() (and prepend "^")
+    //   once we depend on Drupal 9.1+.
+    $this->assertRegExp("#/search-api-autocomplete-test\\?(?:.*&)?keys=$keys#", $this->getUrl());
 
     // Check that autocomplete in the "Name" filter works, too, and that it sets
     // the correct fields on the query.
@@ -302,7 +304,7 @@ class IntegrationTest extends IntegrationTestBase {
       'suggesters[settings][live_results][fields][name]' => FALSE,
       'suggesters[settings][live_results][fields][body]' => TRUE,
     ];
-    $this->drupalPostForm(NULL, $edit, 'Save');
+    $this->submitForm($edit, 'Save');
     $assert_session->pageTextContains('The autocompletion settings for the search have been saved.');
 
     // Then, set an appropriate search method for the test backend.

@@ -17,6 +17,7 @@
 .btnCopy {
   position: relative;
   padding: 0;
+  cursor: pointer;
 }
 
 .social-sharing-buttons__popup {

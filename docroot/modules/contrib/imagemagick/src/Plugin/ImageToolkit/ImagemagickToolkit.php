@@ -305,20 +305,14 @@ class ImagemagickToolkit extends ImageToolkitBase {
     ];
     // Prepend arguments.
     $form['exec']['prepend'] = [
-      '#type' => 'details',
-      '#collapsible' => FALSE,
-      '#open' => TRUE,
+      '#type' => 'textfield',
       '#title' => $this->t('Prepend arguments'),
+      '#default_value' => $config->get('prepend'),
+      '#required' => FALSE,
       '#description' => $this->t("Use this to add e.g. <kbd><a href=':limit-url'>-limit</a></kbd> or <kbd><a href=':debug-url'>-debug</a></kbd> arguments in front of the others when executing the <kbd>identify</kbd> and <kbd>convert</kbd> commands. The arguments specified will be added before the source image file name.", [
         ':limit-url' => 'https://www.imagemagick.org/script/command-line-options.php#limit',
         ':debug-url' => 'https://www.imagemagick.org/script/command-line-options.php#debug',
       ]),
-    ];
-    $form['exec']['prepend']['prepend'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Arguments'),
-      '#default_value' => $config->get('prepend'),
-      '#required' => FALSE,
     ];
 
     // Locale.
@@ -476,7 +470,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
         'imagemagick', 'formats', 'mapping', 'image_formats',
       ])))
       ->set('prepend', (string) $form_state->getValue([
-        'imagemagick', 'exec', 'prepend', 'prepend',
+        'imagemagick', 'exec', 'prepend',
       ]))
       ->set('locale', (string) $form_state->getValue([
         'imagemagick', 'exec', 'locale',

@@ -12,9 +12,12 @@ use Drupal\node\NodeInterface;
 class ViewsBulkEditModifyEntityValuesTest extends BrowserTestBase {
 
   /**
-   * Modules to install.
-   *
-   * @var array
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stable';
+
+  /**
+   * {@inheritdoc}
    */
   public static $modules = [
     'node',
@@ -99,7 +102,7 @@ class ViewsBulkEditModifyEntityValuesTest extends BrowserTestBase {
       'action_id' => 'views_bulk_edit',
       'preconfiguration' => [
         'label_override' => '',
-      ]
+      ],
     ];
     $configData['display']['default']['display_options']['pager']['options']['items_per_page'] = 10;
     $configData['display']['default']['display_options']['pager']['options']['offset'] = 0;

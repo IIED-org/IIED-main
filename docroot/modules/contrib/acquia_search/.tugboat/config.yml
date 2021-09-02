@@ -1,0 +1,47 @@
+services:
+  php:
+    # Here's where you specify your custom Docker image and preferred tag.
+    image: q0rban/tugboat-drupal:8.9
+    default: true
+    depends:
+      - mysql
+    commands:
+      update: |
+        set -eux
+        # Check out a branch using the unique Tugboat ID for this repository, to ensure
+        # we don't clobber an existing branch.
+        git checkout -b $TUGBOAT_REPO_ID
+        # Composer is hungry. You need a Tugboat project with a pretty sizeable chunk of
+        # memory for this to work.
+        export COMPOSER_MEMORY_LIMIT=-1
+        # This is an environment variable we added in the Dockerfile that provides the
+        # path to Drupal composer root (not the web root).
+        cd $DRUPAL_COMPOSER_ROOT
+        # We configure the Drupal project to use the checkout of the module as a
+        # Composer package repository.
+        composer config repositories.tugboat vcs $TUGBOAT_ROOT
+        # Now we can require this module, specifing the branch name we created above
+        # that uses the $TUGBOAT_REPO_ID environment variable.
+        composer require drupal/acquia_search:dev-$TUGBOAT_REPO_ID
+        # Install Drupal!
+        vendor/bin/drush --yes --db-url=mysql://tugboat:tugboat@mysql:3306/tugboat site:install standard
+        # Enable our module!
+        vendor/bin/drush --yes en acquia_search
+        # Setup secret sauce
+        # TODO: Add some test credentials here
+      build: |
+        set -eux
+        export COMPOSER_MEMORY_LIMIT=-1
+        cd $DRUPAL_COMPOSER_ROOT
+        composer install --optimize-autoloader
+        # Update this module, including all dependencies.
+        composer update drupal/acquia_search --with-all-dependencies
+        # Run Drupal update scripts.
+        vendor/bin/drush --yes updb
+        vendor/bin/drush cache:rebuild
+  mysql:
+    image: tugboatqa/percona:5.6
+    commands:
+      init:
+        - printf '[mysqld]\ninnodb_log_file_size = 50331648\nmax_allowed_packet = 128M\n' > /etc/my.cnf.d/zzz.cnf
+        - sv restart percona

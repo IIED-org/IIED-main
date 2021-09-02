@@ -61,6 +61,14 @@
  */
 
 /**
+ * Callback when map bounds changed.
+ *
+ * @callback GeolocationBoundsChangedCallback
+ *
+ * @param object bounds - New bounds.
+ */
+
+/**
  * Callback when map fully loaded.
  *
  * @callback GeolocationMapPopulatedCallback
@@ -173,6 +181,9 @@
  *
  * @property {function({GeolocationMapMarker})} markerRemoveCallback - Executes {GeolocationMarkerCallback} for this map.
  * @property {function({GeolocationMarkerCallback})} addMarkerRemoveCallback - Adds a callback that will be called before marker is removed.
+ *
+ * @property {function()} boundsChangedCallback - Executes {GeolocationBoundsChangedCallback} for this map.
+ * @property {function({GeolocationBoundsChangedCallback})} addBoundsChangedCallback - Adds a callback that will be called when map bounds changed.
  */
 
 /**
@@ -433,6 +444,16 @@
     addUpdatedCallback: function (callback) {
       this.updatedCallbacks = this.updatedCallbacks || [];
       this.updatedCallbacks.push(callback);
+    },
+    boundsChangedCallback: function (bounds) {
+      this.boundsChangedCallbacks = this.boundsChangedCallbacks || [];
+      $.each(this.boundsChangedCallbacks, function (index, callback) {
+        callback(bounds);
+      });
+    },
+    addBoundsChangedCallback: function (callback) {
+      this.boundsChangedCallbacks = this.boundsChangedCallbacks || [];
+      this.boundsChangedCallbacks.push(callback);
     },
     centerUpdatedCallback: function (coordinates, accuracy, identifier) {
       this.centerUpdatedCallbacks = this.centerUpdatedCallbacks || [];

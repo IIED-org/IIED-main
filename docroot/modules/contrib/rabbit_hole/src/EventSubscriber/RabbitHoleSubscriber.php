@@ -3,7 +3,6 @@
 namespace Drupal\rabbit_hole\EventSubscriber;
 
 use Drupal\Component\Plugin\Exception\PluginException;
-use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\rabbit_hole\BehaviorInvoker;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +18,7 @@ class RabbitHoleSubscriber implements EventSubscriberInterface {
   /**
    * Drupal\rabbit_hole\BehaviorInvoker definition.
    *
-   * @var Drupal\rabbit_hole\BehaviorInvoker
+   * @var \Drupal\rabbit_hole\BehaviorInvoker
    */
   protected $rabbitHoleBehaviorInvoker;
 
@@ -81,7 +80,7 @@ class RabbitHoleSubscriber implements EventSubscriberInterface {
           $event->setResponse($new_response);
         }
       }
-      catch (PluginNotFoundException | PluginException $e) {
+      catch (PluginException $e) {
         // Do nothing if we got plugin-related exception.
         // Other exceptions (i.e. AccessDeniedHttpException) should be accepted.
       }

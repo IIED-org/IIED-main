@@ -172,6 +172,24 @@ class LanguageSwitcherExtendedTest extends BrowserTestBase {
     // Verify, that there is no language switcher item anymore.
     $this->assertSession()
       ->elementsCount('css', '#block-test-language-block li', 0);
+
+    $this->drupalGet('admin/config/regional/language/language-switcher-extended');
+    $edit = [
+      'mode' => 'process_untranslated',
+      'untranslated_handler' => 'hide_link',
+      'hide_single_link' => 1,
+      'hide_single_link_block' => 1,
+      'show_langcode' => 0,
+    ];
+    $this->submitForm($edit, 'Save configuration');
+
+    // Open the node without a translation.
+    $this->drupalGet('node/1');
+
+    // Verify, that there is no language switcher block anymore.
+    $this->assertSession()
+      ->elementsCount('css', '#block-test-language-block', 0);
+
   }
 
   /**

@@ -6,6 +6,7 @@ use Drupal\geolocation_google_maps\Plugin\geolocation\MapProvider\GoogleMaps;
 use GuzzleHttp\Exception\RequestException;
 use Drupal\Component\Serialization\Json;
 use Drupal\geolocation_google_maps\GoogleGeocoderBase;
+use Drupal\geolocation\KeyProvider;
 use Drupal\Core\Render\BubbleableMetadata;
 
 /**
@@ -22,6 +23,38 @@ use Drupal\Core\Render\BubbleableMetadata;
  * )
  */
 class GoogleGeocodingAPI extends GoogleGeocoderBase {
+
+  const API_PATH = '/maps/api/geocode/json';
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getDefaultSettings() {
+    $default_settings = parent::getDefaultSettings();
+    $default_settings['region'] = '';
+
+    return $default_settings;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getOptionsForm() {
+    $settings = $this->getSettings();
+    $form = parent::getOptionsForm();
+
+    $form += [
+      'region' => [
+        '#type' => 'textfield',
+        '#title' => $this->t('Region'),
+        '#description' => $this->t('Make a region biasing by providing a ccTLD country code. See <a href="https://developers.google.com/maps/documentation/geocoding/intro#RegionCodes">Region Biasing</a>'),
+        '#default_value' => $settings['region'],
+        '#size' => 5,
+      ],
+    ];
+
+    return $form;
+  }
 
   /**
    * {@inheritdoc}
@@ -50,9 +83,9 @@ class GoogleGeocodingAPI extends GoogleGeocoderBase {
    */
   public function geocode($address) {
     $config = \Drupal::config('geolocation_google_maps.settings');
-    if (empty($address)) {
-      return FALSE;
-    }
+    $query_params = [
+      'address' => $address,
+    ];
 
     if (!empty($config->get('google_maps_base_url'))) {
       $request_url = $config->get('google_maps_base_url');
@@ -63,22 +96,27 @@ class GoogleGeocodingAPI extends GoogleGeocoderBase {
     else {
       $request_url = GoogleMaps::$googleMapsApiUrlBase;
     }
-    $request_url .= '/maps/api/geocode/json?address=' . urlencode($address);
+    $request_url .= self::API_PATH;
 
     if (!empty($config->get('google_map_api_server_key'))) {
-      $request_url .= '&key=' . $config->get('google_map_api_server_key');
+      $query_params['key'] = KeyProvider::getKeyValue($config->get('google_map_api_server_key'));
     }
     elseif (!empty($config->get('google_map_api_key'))) {
-      $request_url .= '&key=' . $config->get('google_map_api_key');
+      $query_params['key'] = KeyProvider::getKeyValue($config->get('google_map_api_key'));
     }
+
     if (!empty($this->configuration['component_restrictions'])) {
-      $request_url .= '&components=';
+      $components = [];
       foreach ($this->configuration['component_restrictions'] as $component_id => $component_value) {
-        $request_url .= $component_id . ':' . $component_value . '|';
+        $components[] = $component_id . ':' . $component_value;
       }
+      $query_params['components'] = implode('|', $components);
     }
     if (!empty($config->get('google_map_custom_url_parameters')['language'])) {
-      $request_url .= '&language=' . $config->get('google_map_custom_url_parameters')['language'];
+      $query_params['language'] = $config->get('google_map_custom_url_parameters')['language'];
+    }
+    if (!empty($this->configuration['region'])) {
+      $query_params['region'] = $this->configuration['region'];
     }
     if (
       !empty($this->configuration['boundary_restriction'])
@@ -91,11 +129,13 @@ class GoogleGeocodingAPI extends GoogleGeocoderBase {
       $bounds .= $this->configuration['boundary_restriction']['west'] . '|';
       $bounds .= $this->configuration['boundary_restriction']['north'] . ',';
       $bounds .= $this->configuration['boundary_restriction']['east'];
-      $request_url .= '&bounds=' . $bounds;
+      $query_params['bounds'] = $bounds;
     }
 
     try {
-      $result = Json::decode(\Drupal::httpClient()->request('GET', $request_url)->getBody());
+      $result = Json::decode(\Drupal::httpClient()
+        ->get($request_url, ['query' => $query_params])
+        ->getBody());
     }
     catch (RequestException $e) {
       watchdog_exception('geolocation', $e);
@@ -121,7 +161,7 @@ class GoogleGeocodingAPI extends GoogleGeocoderBase {
         'lat' => $result['results'][0]['geometry']['location']['lat'],
         'lng' => $result['results'][0]['geometry']['location']['lng'],
       ],
-      // TODO: Add viewport or build it if missing.
+      // @todo Add viewport or build it if missing.
       'boundary' => [
         'lat_north_east' => empty($result['results'][0]['geometry']['viewport']) ? $result['results'][0]['geometry']['location']['lat'] + 0.005 : $result['results'][0]['geometry']['viewport']['northeast']['lat'],
         'lng_north_east' => empty($result['results'][0]['geometry']['viewport']) ? $result['results'][0]['geometry']['location']['lng'] + 0.005 : $result['results'][0]['geometry']['viewport']['northeast']['lng'],
@@ -129,6 +169,7 @@ class GoogleGeocodingAPI extends GoogleGeocoderBase {
         'lng_south_west' => empty($result['results'][0]['geometry']['viewport']) ? $result['results'][0]['geometry']['location']['lng'] - 0.005 : $result['results'][0]['geometry']['viewport']['southwest']['lng'],
       ],
       'address' => empty($result['results'][0]['formatted_address']) ? '' : $result['results'][0]['formatted_address'],
+      'atomics' => $this->getAddressAtomics($result),
     ];
   }
 
@@ -145,10 +186,10 @@ class GoogleGeocodingAPI extends GoogleGeocoderBase {
     $request_url .= '/maps/api/geocode/json?latlng=' . (float) $latitude . ',' . (float) $longitude;
 
     if (!empty($config->get('google_map_api_server_key'))) {
-      $request_url .= '&key=' . $config->get('google_map_api_server_key');
+      $request_url .= '&key=' . KeyProvider::getKeyValue($config->get('google_map_api_server_key'));
     }
     elseif (!empty($config->get('google_map_api_key'))) {
-      $request_url .= '&key=' . $config->get('google_map_api_key');
+      $request_url .= '&key=' . KeyProvider::getKeyValue($config->get('google_map_api_key'));
     }
 
     if (!empty($config->get('google_map_custom_url_parameters')['language'])) {
@@ -182,6 +223,26 @@ class GoogleGeocodingAPI extends GoogleGeocoderBase {
       return NULL;
     }
 
+    $address_atomics = $this->getAddressAtomics($result);
+
+    return [
+      'atomics' => $address_atomics,
+      'elements' => $this->addressElements($address_atomics),
+      'string' => empty($result['results'][0]['formatted_address']) ? '' : $result['results'][0]['formatted_address'],
+    ];
+  }
+
+  /**
+   * Gets array of geo data by Google Api result.
+   *
+   * @param array $result
+   *   Google API result array.
+   *
+   * @return array
+   *   Sorted array of geo data.
+   */
+  protected function getAddressAtomics(array $result): array {
+
     $addressAtomicsMapping = [
       'streetNumber' => [
         'type' => 'street_number',
@@ -195,12 +256,19 @@ class GoogleGeocodingAPI extends GoogleGeocoderBase {
       'county' => [
         'type' => 'administrative_area_level_2',
       ],
+      'countyCode' => [
+        'type' => 'administrative_area_level_2',
+        'short' => TRUE,
+      ],
       'postalCode' => [
         'type' => 'postal_code',
       ],
       'administrativeArea' => [
         'type' => 'administrative_area_level_1',
         'short' => TRUE,
+      ],
+      'administrativeAreaLong' => [
+        'type' => 'administrative_area_level_1',
       ],
       'country' => [
         'type' => 'country',
@@ -237,11 +305,7 @@ class GoogleGeocodingAPI extends GoogleGeocoderBase {
       }
     }
 
-    return [
-      'atomics' => $address_atomics,
-      'elements' => $this->addressElements($address_atomics),
-      'string' => empty($result['results'][0]['formatted_address']) ? '' : $result['results'][0]['formatted_address'],
-    ];
+    return $address_atomics;
   }
 
 }

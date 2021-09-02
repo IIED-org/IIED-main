@@ -1,7 +1,7 @@
 parameters:
 	bootstrapFiles:
 		- drupal-autoloader.php
-	excludes_analyse:
+	excludePaths:
 		- '*.api.php'
 		- '*/tests/fixtures/*.php'
 	fileExtensions:
@@ -48,3 +48,20 @@ services:
 		tags: [phpstan.rules.rule]
 		arguments:
 			- %drupal.drupal_root%
+	-
+		class: PHPStan\Rules\Drupal\ModuleLoadInclude
+		tags: [phpstan.rules.rule]
+		arguments:
+			- %drupal.drupal_root%
+
+	-
+		class: PHPStan\Rules\Deprecations\PluginAnnotationContextDefinitionsRule
+		tags: [phpstan.rules.rule]
+
+	-
+		class: PHPStan\Rules\Deprecations\ConfigEntityConfigExportRule
+		tags: [phpstan.rules.rule]
+
+	-
+		class: PHPStan\Rules\Drupal\Tests\BrowserTestBaseDefaultThemeRule
+		tags: [phpstan.rules.rule]

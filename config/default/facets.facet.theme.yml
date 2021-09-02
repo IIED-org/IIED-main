@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - search_api.index.acquia_search_solr_search_api_solr_index
+    - search_api.index.acquia_search_index
     - views.view.search
   module:
     - search_api

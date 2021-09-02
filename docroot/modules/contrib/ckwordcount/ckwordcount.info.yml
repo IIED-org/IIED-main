@@ -9,7 +9,7 @@ dependencies:
   - drupal:ckeditor
   - notification:notification
 
-# Information added by Drupal.org packaging script on 2021-02-28
-version: '8.x-1.2'
+# Information added by Drupal.org packaging script on 2021-04-29
+version: '8.x-1.5'
 project: 'ckwordcount'
-datestamp: 1614528624
+datestamp: 1619689021

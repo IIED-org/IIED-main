@@ -5,7 +5,10 @@ package: Acquia
 core_version_requirement: ^8.9 || ^9
 configure: acquia_connector.settings
 
-# Information added by Drupal.org packaging script on 2021-02-26
-version: '8.x-2.0'
+dependencies:
+  - drupal:path_alias
+
+# Information added by Drupal.org packaging script on 2021-04-14
+version: '3.0.3'
 project: 'acquia_connector'
-datestamp: 1614301295
+datestamp: 1618428135

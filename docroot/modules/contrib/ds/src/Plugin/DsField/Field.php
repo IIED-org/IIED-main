@@ -3,6 +3,7 @@
 namespace Drupal\ds\Plugin\DsField;
 
 use Drupal\Core\Template\Attribute;
+use Drupal\Core\Url;
 
 /**
  * The base plugin to create DS fields.
@@ -42,7 +43,7 @@ abstract class Field extends DsFieldBase {
 <{{ wrapper }}{{ attributes }}>
 {% endif %}
 {% if is_link %}
-  {{ link(output, entity_url) }}
+  {{ link(output, entity_url, link_attributes) }}
 {% else %}
   {{ output }}
 {% endif %}
@@ -57,8 +58,14 @@ TWIG;
     $is_link = FALSE;
     $entity_url = NULL;
     if (!empty($this->entity()->id())) {
-      $is_link = !empty($config['link']);
-      $entity_url = $this->entity()->toUrl();
+      $is_link = !empty($config['link']) || !empty($config['mail_link']);
+
+      if (!empty($config['mail_link'])) {
+        $entity_url = Url::fromUri('mailto:' . $output);
+      }
+      else {
+        $entity_url = $this->entity()->toUrl();
+      }
       if (!empty($config['link class'])) {
         $entity_url->setOption('attributes', ['class' => explode(' ', $config['link class'])]);
       }
@@ -70,6 +77,12 @@ TWIG;
       $attributes->addClass($config['class']);
     }
 
+    // Build the link attributes.
+    $link_attributes = new Attribute();
+    if (!empty($config['link']) && !empty($config['link class'])) {
+      $link_attributes->addClass($config['link class']);
+    }
+
     return [
       '#type' => 'inline_template',
       '#template' => $template,
@@ -77,6 +90,7 @@ TWIG;
         'is_link' => $is_link,
         'wrapper' => !empty($config['wrapper']) ? $config['wrapper'] : '',
         'attributes' => $attributes,
+        'link_attributes' => $link_attributes,
         'entity_url' => $entity_url,
         'output' => $output,
       ],

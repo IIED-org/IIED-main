@@ -42,9 +42,9 @@ class ControlGoogleMapType extends ControlGoogleElementBase {
       '#type' => 'select',
       '#title' => $this->t('Style'),
       '#options' => [
-        'DEFAULT' => t('Default (Map size dependent)'),
-        'HORIZONTAL_BAR' => t('Horizontal Bar'),
-        'DROPDOWN_MENU' => t('Dropdown Menu'),
+        'DEFAULT' => $this->t('Default (Map size dependent)'),
+        'HORIZONTAL_BAR' => $this->t('Horizontal Bar'),
+        'DROPDOWN_MENU' => $this->t('Dropdown Menu'),
       ],
       '#default_value' => $settings['style'],
     ];

@@ -220,7 +220,7 @@ class ViewsBulkOperationsViewData implements ViewsBulkOperationsViewDataInterfac
       $total_results = $view->total_rows;
     }
 
-    if (!empty($pager_options)) {
+    if (!empty($pager_options) && !empty($pager_options['id'])) {
       $this->pagerManager->createPager($pager_options['total_items'], $pager_options['items_per_page'], $pager_options['id']);
     }
 

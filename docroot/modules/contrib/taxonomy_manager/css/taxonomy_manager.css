@@ -14,3 +14,15 @@
 .taxonomy-manager-vocabulary-terms-form #edit-move {
   display: none;
 }
+
+.taxonomy-manager-vocabulary-terms-form .js-form-type-textfield.form-type--textfield.js-form-item-load-term-data.form-item--load-term-data {
+  display: none;
+}
+
+form.taxonomy-manager-vocabulary-terms-form {
+  display: inline-block;
+}
+
+.taxonomy-manager-hidden-button {
+  display: none !important;
+}

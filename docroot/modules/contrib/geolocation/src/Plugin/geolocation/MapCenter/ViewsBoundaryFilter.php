@@ -2,6 +2,7 @@
 
 namespace Drupal\geolocation\Plugin\geolocation\MapCenter;
 
+use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\geolocation\MapCenterInterface;
 use Drupal\geolocation\MapCenterBase;
 use Drupal\geolocation\ViewsContextTrait;
@@ -18,6 +19,33 @@ use Drupal\geolocation\ViewsContextTrait;
 class ViewsBoundaryFilter extends MapCenterBase implements MapCenterInterface {
 
   use ViewsContextTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getDefaultSettings() {
+    return array_replace_recursive(
+      parent::getDefaultSettings(),
+      [
+        'clear_address_input' => TRUE,
+      ]
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSettingsForm($center_option_id = NULL, array $settings = [], $context = NULL) {
+    $form = parent::getSettingsForm($center_option_id, $settings, $context);
+
+    $form['clear_address_input'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Clear address input on map bound change.'),
+      '#default_value' => $settings['clear_address_input'],
+    ];
+
+    return $form;
+  }
 
   /**
    * {@inheritdoc}
@@ -48,8 +76,29 @@ class ViewsBoundaryFilter extends MapCenterBase implements MapCenterInterface {
       return $map;
     }
 
-    /** @var \Drupal\geolocation\Plugin\views\filter\ProximityFilter $handler */
+    /** @var \Drupal\geolocation\Plugin\views\filter\BoundaryFilter $handler */
     $handler = $displayHandler->getHandler('filter', substr($center_option_id, 16));
+
+    $map['#attached'] = BubbleableMetadata::mergeAttachments($map['#attached'], [
+      'library' => [
+        'geolocation/map_center.viewsBoundaryFilter',
+      ],
+      'drupalSettings' => [
+        'geolocation' => [
+          'maps' => [
+            $map['#id'] => [
+              'map_center' => [
+                'views_boundary_filter' => [
+                  'clearAddressInput' => (bool) $center_option_settings['clear_address_input'],
+                  'identifier' => $handler->options['expose']['identifier'],
+                ],
+              ],
+            ],
+          ],
+        ],
+      ],
+    ]);
+
     if (
       isset($handler->value['lat_north_east'])
       && $handler->value['lat_north_east'] !== ""
@@ -60,10 +109,7 @@ class ViewsBoundaryFilter extends MapCenterBase implements MapCenterInterface {
       && isset($handler->value['lng_south_west'])
       && $handler->value['lng_south_west'] !== ""
     ) {
-      $map['#attached'] = array_merge_recursive($map['#attached'], [
-        'library' => [
-          'geolocation/map_center.viewsBoundaryFilter',
-        ],
+      $map['#attached'] = BubbleableMetadata::mergeAttachments($map['#attached'], [
         'drupalSettings' => [
           'geolocation' => [
             'maps' => [

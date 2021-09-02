@@ -6,11 +6,14 @@ use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Component\Utility\SortArray;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Search plugin manager.
  */
 class LocationManager extends DefaultPluginManager {
+
+  use StringTranslationTrait;
 
   /**
    * Constructs an LocationManager object.
@@ -71,12 +74,12 @@ class LocationManager extends DefaultPluginManager {
   public function getLocationOptionsForm(array $settings, $context = NULL) {
     $form = [
       '#type' => 'table',
-      '#prefix' => t('<h3>Centre options</h3>Please note: Each option will, if it can be applied, supersede any following option.'),
+      '#prefix' => $this->t('<h3>Centre options</h3>Please note: Each option will, if it can be applied, supersede any following option.'),
       '#header' => [
-        t('Enable'),
-        t('Option'),
-        t('Settings'),
-        t('Settings'),
+        $this->t('Enable'),
+        $this->t('Option'),
+        $this->t('Settings'),
+        $this->t('Settings'),
       ],
       '#attributes' => ['id' => 'geolocation-centre-options'],
       '#tabledrag' => [
@@ -113,7 +116,7 @@ class LocationManager extends DefaultPluginManager {
           ],
           'weight' => [
             '#type' => 'weight',
-            '#title' => t('Weight for @option', ['@option' => $label]),
+            '#title' => $this->t('Weight for @option', ['@option' => $label]),
             '#title_display' => 'invisible',
             '#size' => 4,
             '#default_value' => $weight,

@@ -10,7 +10,7 @@ dependencies:
   - drupal:block
   - drupal:language
 
-# Information added by Drupal.org packaging script on 2020-09-25
-version: '8.x-1.0-beta4'
+# Information added by Drupal.org packaging script on 2021-07-16
+version: '8.x-1.0'
 project: 'language_switcher_extended'
-datestamp: 1601051632
+datestamp: 1626451795

@@ -3,9 +3,12 @@
 namespace Drupal\rabbit_hole;
 
 use Drupal\Core\Config\ImmutableConfig;
+use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfo;
+use Drupal\Core\Url;
+use Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPlugin\DisplayPage;
 use Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginManager;
 use Drupal\rabbit_hole\Plugin\RabbitHoleEntityPluginManager;
 use Drupal\rabbit_hole\Entity\BehaviorSettings;
@@ -18,6 +21,8 @@ use Drupal\Component\Utility\UrlHelper;
  * Provides necessary form alterations.
  */
 class FormManglerService {
+
+  use DependencySerializationTrait;
   use StringTranslationTrait;
 
   const RABBIT_HOLE_USE_DEFAULT = 'bundle_default';
@@ -44,6 +49,27 @@ class FormManglerService {
   private $rhEntityPluginManager;
 
   /**
+   * Rabbit hole behavior invoker.
+   *
+   * @var \Drupal\rabbit_hole\BehaviorInvokerInterface
+   */
+  protected $behaviorInvoker;
+
+  /**
+   * Bundles information.
+   *
+   * @var array
+   */
+  protected $allBundleInfo;
+
+  /**
+   * The behavior settings manager.
+   *
+   * @var \Drupal\rabbit_hole\BehaviorSettingsManager
+   */
+  private $rhBehaviorSettingsManager;
+
+  /**
    * Constructor.
    */
   public function __construct(
@@ -52,7 +78,8 @@ class FormManglerService {
     RabbitHoleBehaviorPluginManager $behavior_plugin_manager,
     RabbitHoleEntityPluginManager $entity_plugin_manager,
     BehaviorSettingsManager $behavior_settings_manager,
-    TranslationInterface $translation) {
+    TranslationInterface $translation,
+    BehaviorInvokerInterface $behavior_invoker) {
 
     $this->entityTypeManager = $etm;
     $this->allBundleInfo = $etbi->getAllBundleInfo();
@@ -60,6 +87,7 @@ class FormManglerService {
     $this->rhEntityPluginManager = $entity_plugin_manager;
     $this->rhBehaviorSettingsManager = $behavior_settings_manager;
     $this->stringTranslation = $translation;
+    $this->behaviorInvoker = $behavior_invoker;
   }
 
   /**
@@ -150,6 +178,10 @@ class FormManglerService {
     $bundle = isset($entity) ? $entity->bundle() : $entity_type_id;
     $action = NULL;
 
+    $entity_plugin = $this->rhEntityPluginManager->createInstanceByEntityType(
+      $is_bundle_or_entity_type && !empty($entity_type->getBundleOf())
+        ? $entity_type->getBundleOf() : $entity_type->id());
+
     if ($is_bundle_or_entity_type) {
       if ($entity === NULL) {
         $bundle_settings = $this->rhBehaviorSettingsManager
@@ -163,6 +195,12 @@ class FormManglerService {
       $action = $bundle_settings->get('action');
     }
     else {
+      // Attach extra submit for redirect in case of entity form.
+      $submit_location = $entity_plugin->getFormSubmitHandlerAttachLocations($attach, $form_state);
+      $this->attachFormSubmit($attach, $submit_location, [
+        $this, 'redirectToEntityEditForm',
+      ]);
+
       $bundle_entity_type = $entity_type->getBundleEntityType()
         ?: $entity_type->id();
       $bundle_settings = $this->rhBehaviorSettingsManager
@@ -181,12 +219,6 @@ class FormManglerService {
         : 'bundle_default';
     }
 
-    $is_bundle = $this->isEntityBundle($entity);
-    $entity_plugin = $this->rhEntityPluginManager->createInstanceByEntityType(
-      $is_bundle_or_entity_type && !empty($entity_type->getBundleOf())
-        ? $entity_type->getBundleOf() : $entity_type->id());
-
-    // If the user doesn't have access, exit.
     // Get information about the entity.
     // TODO: Should be possible to get this as plural? Look into this.
     $entity_label = $entity_type->getLabel();
@@ -283,27 +315,15 @@ class FormManglerService {
       && $attach['#form_id'] === $entity_plugin->getGlobalConfigFormId();
 
     if ($is_global_form) {
-      $submit_handler_locations = $entity_plugin->getGlobalFormSubmitHandlerAttachLocations($attach, $form_state);
+      $submit_location = $entity_plugin->getGlobalFormSubmitHandlerAttachLocations($attach, $form_state);
     }
-    elseif ($is_bundle) {
-      $submit_handler_locations = $entity_plugin->getBundleFormSubmitHandlerAttachLocations($attach, $form_state);
+    elseif ($is_bundle_or_entity_type) {
+      $submit_location = $entity_plugin->getBundleFormSubmitHandlerAttachLocations($attach, $form_state);
     }
     else {
-      $submit_handler_locations = $entity_plugin->getFormSubmitHandlerAttachLocations($attach, $form_state);
+      $submit_location = $entity_plugin->getFormSubmitHandlerAttachLocations($attach, $form_state);
     }
-
-    foreach ($submit_handler_locations as $location) {
-      $array_ref = &$attach;
-      if (is_array($location)) {
-        foreach ($location as $subkey) {
-          $array_ref = &$array_ref[$subkey];
-        }
-      }
-      else {
-        $array_ref = &$array_ref[$location];
-      }
-      $array_ref[] = '_rabbit_hole_general_form_submit';
-    }
+    $this->attachFormSubmit($attach, $submit_location, '_rabbit_hole_general_form_submit');
 
     // TODO: Optionally provide additional form submission handler (can we do
     // this via plugin?).
@@ -319,7 +339,7 @@ class FormManglerService {
    *
    * @param array $form
    *   The form.
-   * @param string|int|object $form_state
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    */
   public static function validateFormRedirect(array $form, FormStateInterface &$form_state) {
@@ -355,10 +375,10 @@ class FormManglerService {
    *
    * @param array $form
    *   The form.
-   * @param string|int|object $form_state
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    */
-  public function handleFormSubmit(array $form, $form_state) {
+  public function handleFormSubmit(array $form, FormStateInterface $form_state) {
     if ($form_state->getValue('rh_is_bundle')) {
       $entity = NULL;
       if (method_exists($form_state->getFormObject(), 'getEntity')) {
@@ -379,6 +399,30 @@ class FormManglerService {
         $form_state->getValue('rh_entity_type'),
         isset($entity) ? $entity->id() : NULL
       );
+    }
+  }
+
+  /**
+   * Redirects back to entity edit form to prevent hitting error page.
+   *
+   * @param array $form
+   *   The form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   */
+  public function redirectToEntityEditForm(array $form, FormStateInterface $form_state) {
+    $entity = $form_state->getFormObject()->getEntity();
+    $plugin = $this->behaviorInvoker->getBehaviorPlugin($entity);
+
+    // Set form redirect to entity edit page to prevent 403/404 errors if
+    // Rabbit Hole is enabled and the user doesn't have the bypass access.
+    if ($plugin !== NULL && !$plugin instanceof DisplayPage) {
+      $redirect = $form_state->getRedirect();
+
+      // Change redirect URL only if current one is set to canonical page.
+      if ($redirect instanceof Url && $redirect->toString() === $entity->toUrl()->toString()) {
+        $form_state->setRedirectUrl($entity->toUrl('edit-form'));
+      }
     }
   }
 
@@ -429,6 +473,24 @@ class FormManglerService {
         ->createInstance($id)
         ->settingsForm($form['rabbit_hole'], $form_state, $form_id, $entity,
           $entity_is_bundle, $bundle_settings);
+    }
+  }
+
+  /**
+   * Adds extra form submit based on the provided submit locations.
+   */
+  protected function attachFormSubmit(&$form, $submit_location, $submit_handler) {
+    foreach ($submit_location as $location) {
+      $array_ref = &$form;
+      if (is_array($location)) {
+        foreach ($location as $subkey) {
+          $array_ref = &$array_ref[$subkey];
+        }
+      }
+      else {
+        $array_ref = &$array_ref[$location];
+      }
+      $array_ref[] = $submit_handler;
     }
   }
 

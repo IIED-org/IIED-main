@@ -17,20 +17,30 @@ abstract class GoogleCountryFormattingBase extends GeocoderCountryFormattingBase
     $address_elements = parent::format($atomics);
 
     if (
-      $atomics['streetNumber']
+      isset($atomics['streetNumber'])
+      && isset($atomics['route'])
+      && $atomics['streetNumber']
       && $atomics['route']
     ) {
       $address_elements['addressLine1'] = $atomics['streetNumber'] . ' ' . $atomics['route'];
     }
-    elseif ($atomics['route']) {
+    elseif (
+      isset($atomics['route'])
+      && $atomics['route']
+    ) {
       $address_elements['addressLine1'] = $atomics['route'];
     }
-    elseif ($atomics['premise']) {
+    elseif (
+      isset($atomics['premise'])
+      && $atomics['premise']
+    ) {
       $address_elements['addressLine1'] = $atomics['premise'];
     }
 
     if (
-      $atomics['locality']
+      isset($atomics['locality'])
+      && isset($atomics['postalTown'])
+      && $atomics['locality']
       && $atomics['postalTown']
       && $atomics['locality'] !== $atomics['postalTown']
     ) {
@@ -38,37 +48,57 @@ abstract class GoogleCountryFormattingBase extends GeocoderCountryFormattingBase
     }
     elseif (
       empty($atomics['locality'])
+      && isset($atomics['neighborhood'])
       && $atomics['neighborhood']
     ) {
       $address_elements['addressLine2'] = $atomics['neighborhood'];
     }
 
-    if ($atomics['locality']) {
+    if (
+      isset($atomics['locality'])
+      && $atomics['locality']
+    ) {
       $address_elements['locality'] = $atomics['locality'];
     }
-    elseif ($atomics['postalTown']) {
+    elseif (
+      isset($atomics['postalTown'])
+      && $atomics['postalTown']
+    ) {
       $address_elements['locality'] = $atomics['postalTown'];
     }
     elseif (
       empty($atomics['locality'])
+      && isset($atomics['political'])
       && $atomics['political']
     ) {
       $address_elements['locality'] = $atomics['political'];
     }
 
-    if ($atomics['postalCode']) {
+    if (
+      isset($atomics['postalCode'])
+      && $atomics['postalCode']
+    ) {
       $address_elements['postalCode'] = $atomics['postalCode'];
     }
 
-    if ($atomics['postalCode']) {
+    if (
+      isset($atomics['postalCode'])
+      && $atomics['postalCode']
+    ) {
       $address_elements['postalCode'] = $atomics['postalCode'];
     }
 
-    if ($atomics['administrativeArea']) {
+    if (
+      isset($atomics['administrativeArea'])
+      && $atomics['administrativeArea']
+    ) {
       $address_elements['administrativeArea'] = $atomics['administrativeArea'];
     }
 
-    if ($atomics['countryCode']) {
+    if (
+      isset($atomics['countryCode'])
+      && $atomics['countryCode']
+    ) {
       $address_elements['countryCode'] = $atomics['countryCode'];
     }
 

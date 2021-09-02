@@ -10,7 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 
 /**
- * Trait BulkEditFormTrait.
+ * Common methods for Views Bulk Edit forms.
  */
 trait BulkEditFormTrait {
 
@@ -150,7 +150,12 @@ trait BulkEditFormTrait {
    */
   protected function getRevisionForm(EntityInterface $entity) {
     $revision_form = [];
-    if ($entity->get($entity->getEntityType()->getKey('revision'))->access('update') && $entity instanceof RevisionLogInterface) {
+
+    if (
+      $entity instanceof RevisionLogInterface &&
+      !empty($revision_key = $entity->getEntityType()->getKey('revision')) &&
+      $entity->get($revision_key)->access('update')
+    ) {
       $new_revision_default = $this->getNewRevisionDefault($entity);
 
       $revision_form['revision_information'] = [
@@ -289,7 +294,7 @@ trait BulkEditFormTrait {
 
       $option_keys = array_keys($options);
       $form["{$key}_change_method"] = [
-        '#title' => 'Change method',
+        '#title' => $this->t('Change method'),
         '#type' => count($options) > 1 ? 'radios' : 'hidden',
         '#options' => $options,
         '#default_value' => reset($option_keys),
@@ -394,7 +399,7 @@ trait BulkEditFormTrait {
             $this->configuration[$entity_type_id][$bundle]['values'][$field] = $entity->{$field}->getValue();
             $this->configuration[$entity_type_id][$bundle]['change_method'][$field] = $field_data["{$field}_change_method"];
           }
-          $this->configuration[$entity_type_id][$bundle]['revision_information'] = $field_data['revision_information'];
+          $this->configuration[$entity_type_id][$bundle]['revision_information'] = $field_data['revision_information'] ?? [];
         }
       }
     }
@@ -404,7 +409,7 @@ trait BulkEditFormTrait {
    * {@inheritdoc}
    */
   public function execute($entity = NULL) {
-    /* @var \Drupal\Core\Entity\ContentEntityInterface $entity */
+    /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
     $type_id = $entity->getEntityTypeId();
     $bundle = $entity->bundle();
     $result = $this->t('No values changed');
@@ -420,7 +425,7 @@ trait BulkEditFormTrait {
           switch ($change_method[$field]) {
             case 'new':
               $current_value = $entity->{$field}->getValue();
-              $value = array_merge($current_value, $value);
+              $value = array_unique(array_merge($current_value, $value), SORT_REGULAR);
               break;
 
             case 'append':
@@ -442,7 +447,9 @@ trait BulkEditFormTrait {
         $entity->setRevisionUserId($this->currentUser->id());
 
         if (empty($this->configuration[$type_id][$bundle]['revision_information']['revision_log'])) {
-          $entity->setRevisionLogMessage($this->formatPlural(count($values), 'Edited as a part of bulk operation. Field changed: @fields', 'Edited as a part of bulk operation. Fields changed: @fields', ['@fields' => implode(', ', array_keys($values))]));
+          $entity->setRevisionLogMessage($this->formatPlural(count($values), 'Edited as a part of bulk operation. Field changed: @fields', 'Edited as a part of bulk operation. Fields changed: @fields', [
+            '@fields' => implode(', ', array_keys($values)),
+          ]));
         }
         else {
           $entity->setRevisionLogMessage($this->configuration[$type_id][$bundle]['revision_information']['revision_log']);

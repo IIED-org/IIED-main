@@ -43,8 +43,6 @@ class LeafletControlLayer extends ControlCustomElementBase {
       $parents_string = NULL;
     }
 
-    $settings = $this->getSettings($settings);
-
     $form['default_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default layer label'),
@@ -98,8 +96,6 @@ class LeafletControlLayer extends ControlCustomElementBase {
    */
   public function alterMap(array $render_array, array $feature_settings, array $context = []) {
     $render_array = parent::alterMap($render_array, $feature_settings, $context);
-
-    $feature_settings = $this->getSettings($feature_settings);
 
     $providers = [];
     foreach ($feature_settings['tile_layer_providers'] as $list) {

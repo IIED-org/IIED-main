@@ -41,8 +41,8 @@ class ControlGoogleZoom extends ControlGoogleElementBase {
       '#type' => 'select',
       '#title' => $this->t('Style'),
       '#options' => [
-        'SMALL' => t('Small'),
-        'LARGE' => t('Large'),
+        'SMALL' => $this->t('Small'),
+        'LARGE' => $this->t('Large'),
       ],
       '#default_value' => $settings['style'],
     ];

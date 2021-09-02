@@ -40,6 +40,13 @@ class CsvEncoder implements EncoderInterface, DecoderInterface {
   protected $escapeChar;
 
   /**
+   * Indicates the character used for new line. Defaults to "\n".
+   *
+   * @var string
+   */
+  protected $newline;
+
+  /**
    * Whether to strip tags from values or not. Defaults to TRUE.
    *
    * @var bool
@@ -145,6 +152,10 @@ class CsvEncoder implements EncoderInterface, DecoderInterface {
       $csv->setEnclosure($this->enclosure);
       $csv->setEscape($this->escapeChar);
 
+      if ($this->newline) {
+        $csv->setNewline(stripcslashes($this->newline));
+      }
+
       // Set data.
       if ($this->useUtf8Bom) {
         $csv->setOutputBOM(ByteSequence::BOM_UTF8);
@@ -155,10 +166,12 @@ class CsvEncoder implements EncoderInterface, DecoderInterface {
         $csv->insertOne($headers);
       }
       $csv->addFormatter([$this, 'formatRow']);
-      foreach ($data as $row) {
-        $csv->insertOne($row);
+      if (isset($data[0])) {
+        foreach ($data as $row) {
+          $csv->insertOne($row);
+        }
       }
-      $output = (string) $csv;
+      $output = $csv->getContent();
 
       return trim($output);
     }
@@ -244,7 +257,7 @@ class CsvEncoder implements EncoderInterface, DecoderInterface {
   protected function flattenCell(array $data) {
     $depth = $this->arrayDepth($data);
 
-    if ($depth === 1) {
+    if ($depth == 1) {
       // @todo Allow customization of this in-cell separator.
       return implode('|', $data);
     }
@@ -377,6 +390,7 @@ class CsvEncoder implements EncoderInterface, DecoderInterface {
     $this->enclosure = $settings['enclosure'];
     $this->escapeChar = $settings['escape_char'];
     $this->useUtf8Bom = ($settings['encoding'] === 'utf8' && !empty($settings['utf8_bom']));
+    $this->newline = isset($settings['new_line']) ? $settings['new_line'] : NULL;
     $this->stripTags = $settings['strip_tags'];
     $this->trimValues = $settings['trim'];
     if (array_key_exists('output_header', $settings)) {

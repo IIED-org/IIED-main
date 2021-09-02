@@ -56,10 +56,10 @@ geolocation_geocoder:
   type: mapping
   mapping:
     label:
-      type: string
+      type: label
       label: 'Label'
     description:
-      type: string
+      type: label
       label: 'Description'
 
 geolocation.geocoder.*:

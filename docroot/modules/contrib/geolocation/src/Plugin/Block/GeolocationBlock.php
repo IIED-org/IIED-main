@@ -125,7 +125,7 @@ class GeolocationBlock extends BlockBase implements ContainerFactoryPluginInterf
         ],
         'marker_coordinates' => [
           '#type' => 'geolocation_input',
-          '#title' => t('Marker Coordinates'),
+          '#title' => $this->t('Marker Coordinates'),
           '#default_value' => empty($locations[$i]['marker_coordinates']) ? [] : $locations[$i]['marker_coordinates'],
         ],
       ];
@@ -140,7 +140,7 @@ class GeolocationBlock extends BlockBase implements ContainerFactoryPluginInterf
 
       $form['locations'][$i]['remove_item'] = [
         '#type' => 'submit',
-        '#value' => t('Remove one'),
+        '#value' => $this->t('Remove one'),
         '#submit' => [[$this, 'removeCallback']],
         '#ajax' => [
           'callback' => [$this, 'addLocation'],
@@ -152,7 +152,7 @@ class GeolocationBlock extends BlockBase implements ContainerFactoryPluginInterf
 
     $form['locations']['add_item'] = [
       '#type' => 'submit',
-      '#value' => t('Add one more'),
+      '#value' => $this->t('Add one more'),
       '#submit' => [[$this, 'addCallback']],
       '#ajax' => [
         'callback' => [$this, 'addLocation'],
@@ -167,7 +167,7 @@ class GeolocationBlock extends BlockBase implements ContainerFactoryPluginInterf
       return [
         '#type' => 'html_tag',
         '#tag' => 'span',
-        '#value' => t("No map provider found."),
+        '#value' => $this->t("No map provider found."),
       ];
     }
 
@@ -188,7 +188,7 @@ class GeolocationBlock extends BlockBase implements ContainerFactoryPluginInterf
     $form['map_provider_settings'] = [
       '#type' => 'html_tag',
       '#tag' => 'span',
-      '#value' => t("No settings available."),
+      '#value' => $this->t("No settings available."),
     ];
 
     $parents = [

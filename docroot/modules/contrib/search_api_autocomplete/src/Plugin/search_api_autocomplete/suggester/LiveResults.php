@@ -2,14 +2,18 @@
 
 namespace Drupal\search_api_autocomplete\Plugin\search_api_autocomplete\suggester;
 
+use Drupal\Component\Plugin\Exception\PluginException;
+use Drupal\Component\Utility\Xss;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\search_api\LoggerTrait;
 use Drupal\search_api\Plugin\PluginFormTrait;
+use Drupal\search_api\Processor\ProcessorPluginManager;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\SearchApiException;
+use Drupal\search_api_autocomplete\SearchApiAutocompleteException;
 use Drupal\search_api_autocomplete\Suggester\SuggesterPluginBase;
 use Drupal\search_api_autocomplete\Suggestion\SuggestionFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -36,6 +40,13 @@ class LiveResults extends SuggesterPluginBase implements PluginFormInterface {
   protected $entityTypeManager;
 
   /**
+   * The Search API processor plugin manager.
+   *
+   * @var \Drupal\search_api\Processor\ProcessorPluginManager
+   */
+  protected $processorPluginManager;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
@@ -44,6 +55,7 @@ class LiveResults extends SuggesterPluginBase implements PluginFormInterface {
 
     $plugin->setEntityTypeManager($container->get('entity_type.manager'));
     $plugin->setLogger($container->get('logger.channel.search_api_autocomplete'));
+    $plugin->setProcessorPluginManager($container->get('plugin.manager.search_api.processor'));
 
     return $plugin;
   }
@@ -72,6 +84,29 @@ class LiveResults extends SuggesterPluginBase implements PluginFormInterface {
   }
 
   /**
+   * Retrieves the Search API processor plugin manager.
+   *
+   * @return \Drupal\search_api\Processor\ProcessorPluginManager
+   *   The Search API processor plugin manager.
+   */
+  public function getProcessorPluginManager(): ProcessorPluginManager {
+    return $this->processorPluginManager ?: \Drupal::service('plugin.manager.search_api.processor');
+  }
+
+  /**
+   * Sets the Search API processor plugin manager.
+   *
+   * @param \Drupal\search_api\Processor\ProcessorPluginManager $processor_plugin_manager
+   *   The Search API processor plugin manager.
+   *
+   * @return $this
+   */
+  public function setProcessorPluginManager(ProcessorPluginManager $processor_plugin_manager): self {
+    $this->processorPluginManager = $processor_plugin_manager;
+    return $this;
+  }
+
+  /**
    * Retrieves the logger.
    *
    * @return \Psr\Log\LoggerInterface
@@ -88,6 +123,10 @@ class LiveResults extends SuggesterPluginBase implements PluginFormInterface {
     return [
       'fields' => [],
       'view_modes' => [],
+      'highlight' => [
+        'enabled' => FALSE,
+        'field' => '',
+      ],
     ];
   }
 
@@ -150,7 +189,82 @@ class LiveResults extends SuggesterPluginBase implements PluginFormInterface {
       }
     }
 
+    $args = [
+      '%highlight' => $this->t('Highlight'),
+    ];
+    try {
+      $args['%highlight'] = $this->getProcessorPluginManager()
+        ->createInstance('highlight')
+        ->label();
+    }
+    catch (PluginException $e) {
+      // Ignore – really not that important.
+    }
+    $form['highlight'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Highlight live results'),
+      '#description' => $this->t('Replace the live result with the output of a highlighted field, if available. Requires the %highlight processor to be enabled.', $args),
+      '#description_display' => 'before',
+      '#disabled' => !$this->isHighlightingAvailable(),
+      '#tree' => TRUE,
+    ];
+    $form['highlight']['enabled'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable highlighting of live results'),
+      '#default_value' => $this->configuration['highlight']['enabled'],
+    ];
+    $form['highlight']['field'] = [
+      '#type' => 'select',
+      '#empty_value' => '',
+      '#title' => $this->t('Select the field to replace live result'),
+      '#options' => $options,
+      '#default_value' => $this->configuration['highlight']['field'],
+      '#states' => [
+        'visible' => [
+          ':input[name="suggesters[settings][live_results][highlight][enabled]"]' => [
+            'checked' => TRUE,
+          ],
+        ],
+        'required' => [
+          ':input[name="suggesters[settings][live_results][highlight][enabled]"]' => [
+            'checked' => TRUE,
+          ],
+        ],
+      ],
+    ];
+
     return $form;
+  }
+
+  /**
+   * Checks whether the "highlight" processor is enabled for this index.
+   *
+   * @return bool
+   *   TRUE if the "highlight" processor is enabled for this index, FALSE
+   *   otherwise.
+   */
+  protected function isHighlightingAvailable(): bool {
+    try {
+      $this->getSearch()->getIndex()->getProcessor('highlight');
+      return TRUE;
+    }
+    catch (SearchApiException $e) {
+    }
+    catch (SearchApiAutocompleteException $e) {
+    }
+    return FALSE;
+  }
+
+  /**
+   * Checks whether highlighting is configured and available.
+   *
+   * @return bool
+   *   TRUE if highlighting is configured and available, FALSE otherwise.
+   */
+  protected function isHighlightingEnabled(): bool {
+    return $this->configuration['highlight']['enabled']
+        && $this->configuration['highlight']['field']
+        && $this->isHighlightingAvailable();
   }
 
   /**
@@ -160,6 +274,8 @@ class LiveResults extends SuggesterPluginBase implements PluginFormInterface {
     $values = $form_state->getValues();
     // Change the "fields" option to an array of just the selected fields.
     $values['fields'] = array_keys(array_filter($values['fields']));
+    // Cast to bool to prevent schema mismatches.
+    $values['highlight']['enabled'] = (bool) $values['highlight']['enabled'];
     $this->setConfiguration($values);
   }
 
@@ -202,6 +318,10 @@ class LiveResults extends SuggesterPluginBase implements PluginFormInterface {
 
     $suggestions = [];
     $view_modes = $this->configuration['view_modes'];
+    $highlight_field = NULL;
+    if ($this->isHighlightingEnabled()) {
+      $highlight_field = $this->configuration['highlight']['field'];
+    }
     foreach ($results->getResultItems() as $item_id => $item) {
       // If the result object could not be loaded, there's little we can do
       // here.
@@ -233,6 +353,18 @@ class LiveResults extends SuggesterPluginBase implements PluginFormInterface {
 
       $datasource_id = $item->getDatasourceId();
       $bundle = $datasource->getItemBundle($object);
+      // Use highlighted field, if configured.
+      if ($highlight_field) {
+        $highlighted_fields = $item->getExtraData('highlighted_fields');
+        if (isset($highlighted_fields[$highlight_field][0])) {
+          $highlighted_field = [
+            '#type' => 'markup',
+            '#markup' => Xss::filterAdmin($highlighted_fields[$highlight_field][0]),
+          ];
+          $suggestions[] = $factory->createUrlSuggestion($url, NULL, $highlighted_field);
+          continue;
+        }
+      }
       // If no view mode was selected for this bundle, just use the label.
       if (empty($view_modes[$datasource_id][$bundle])) {
         $label = $datasource->getItemLabel($object);

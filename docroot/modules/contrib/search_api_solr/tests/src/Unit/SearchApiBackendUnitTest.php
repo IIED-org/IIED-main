@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\search_api_solr\Unit;
 
+use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Drupal\Core\Config\Config;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -75,7 +76,8 @@ class SearchApiBackendUnitTest extends UnitTestCase {
       $this->prophesize(FieldsHelperInterface::class)->reveal(),
       $this->prophesize(DataTypeHelperInterface::class)->reveal(),
       $this->queryHelper,
-      $this->entityTypeManager->reveal());
+      $this->entityTypeManager->reveal(),
+      $this->prophesize(ContainerAwareEventDispatcher::class)->reveal());
   }
 
   /**
@@ -114,11 +116,13 @@ class SearchApiBackendUnitTest extends UnitTestCase {
         ->shouldNotBeCalled();
     }
 
+    $boost_terms = [];
     $args = [
       $document->reveal(),
       $field,
       [$input],
       $type,
+      &$boost_terms,
     ];
 
     // addIndexField() should convert the $input according to $type and call

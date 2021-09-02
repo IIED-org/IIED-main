@@ -3,43 +3,69 @@
 namespace Drupal\publishcontent\Plugin\Menu\LocalTask;
 
 use Drupal\Core\Menu\LocalTaskDefault;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\node\Entity\Node;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Defines a local task plugin with a dynamic title.
  */
-class PublishContentLocalTask extends LocalTaskDefault {
+class PublishContentLocalTask extends LocalTaskDefault implements ContainerFactoryPluginInterface {
   use StringTranslationTrait;
 
   /**
-   * Current node.
+   * The node storage.
    *
-   * @var \Drupal\node\NodeInterface
+   * @var \Drupal\node\NodeStorageInterface
    */
-  protected $node;
+  protected $nodeStorage;
+
+  /**
+   * The current route match.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $routeMatch;
+
+  /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
+   * The module configuration for reading.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $config;
 
   /**
    * {@inheritdoc}
    */
-  public function getRouteParameters(RouteMatchInterface $route_match) {
-    $this->node = Node::load($route_match->getRawParameter('node'));
-
-    return parent::getRouteParameters($route_match);
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    $instance = new static($configuration, $plugin_id, $plugin_definition);
+    $instance->nodeStorage = $container->get('entity_type.manager')->getStorage('node');
+    $instance->routeMatch = $container->get('current_route_match');
+    $instance->languageManager = $container->get('language_manager');
+    $instance->config = $container->get('config.factory')->get('publishcontent.settings');
+    return $instance;
   }
 
   /**
    * {@inheritdoc}
    */
   public function getTitle(Request $request = NULL) {
-    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-    if ($this->node->isTranslatable() && $this->node->hasTranslation($langcode) && $translatedNode = $this->node->getTranslation($langcode)) {
-      $translatedNode->setPublished($translatedNode->isPublished());
-      return $translatedNode->isPublished() ? $this->t('Unpublish (this translation)') : $this->t('Publish (this translation)');
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    /** @var \Drupal\node\NodeInterface $node */
+    $node = $this->nodeStorage->load($this->routeMatch->getRawParameter('node'));
+    if ($node->isTranslatable() && $node->hasTranslation($langcode)) {
+      $translatedNode = $node->getTranslation($langcode);
+      return $translatedNode->isPublished() ? $this->config->get('unpublish_text_value') : $this->config->get('publish_text_value');
     }
-    return $this->node->isPublished() ? $this->t('Unpublish') : $this->t('Publish');
+    return $node->isPublished() ? $this->config->get('unpublish_text_value') : $this->config->get('publish_text_value');
   }
 
 }

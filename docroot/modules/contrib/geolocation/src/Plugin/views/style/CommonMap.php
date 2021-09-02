@@ -100,7 +100,7 @@ class CommonMap extends GeolocationStyleBase {
    * {@inheritdoc}
    */
   public function evenEmpty() {
-    return $this->options['even_empty'] ? TRUE : FALSE;
+    return (bool) $this->options['even_empty'];
   }
 
   /**
@@ -114,7 +114,7 @@ class CommonMap extends GeolocationStyleBase {
     }
 
     if (!empty($this->options['dynamic_map']['enabled'])) {
-      // TODO: Not unique enough, but uniqueid() changes on every AJAX request.
+      // @todo Not unique enough, but uniqueid() changes on every AJAX request.
       // For the geolocationCommonMapBehavior to work, this has to stay
       // identical.
       $this->mapId = $this->view->id() . '-' . $this->view->current_display;
@@ -181,7 +181,7 @@ class CommonMap extends GeolocationStyleBase {
     /*
      * Add locations to output.
      */
-    foreach ($this->view->result as $row_number => $row) {
+    foreach ($this->view->result as $row) {
       foreach ($this->getLocationsFromRow($row) as $location) {
         $build['locations'][] = $location;
       }
@@ -204,7 +204,10 @@ class CommonMap extends GeolocationStyleBase {
         ->alterCommonMap($build, $this->options['map_provider_settings'], ['view' => $this]);
     }
 
-    if (!empty($this->view->geolocationLayers[$this->view->current_display])) {
+    if (
+      !empty($this->view->geolocationLayers)
+      && !empty($this->view->geolocationLayers[$this->view->current_display])
+    ) {
       if (empty($build['#layers'])) {
         $build['#layers'] = [];
       }
@@ -249,7 +252,7 @@ class CommonMap extends GeolocationStyleBase {
       $form = [
         '#type' => 'html_tag',
         '#tag' => 'span',
-        '#value' => t("No map provider found."),
+        '#value' => $this->t("No map provider found."),
       ];
       return;
     }
@@ -363,7 +366,10 @@ class CommonMap extends GeolocationStyleBase {
       '#title' => $this->t('Map Provider'),
       '#default_value' => $this->options['map_provider_id'],
       '#ajax' => [
-        'callback' => [get_class($this->mapProviderManager), 'addSettingsFormAjax'],
+        'callback' => [
+          get_class($this->mapProviderManager),
+          'addSettingsFormAjax',
+        ],
         'wrapper' => 'map-provider-settings',
         'effect' => 'fade',
       ],
@@ -372,10 +378,13 @@ class CommonMap extends GeolocationStyleBase {
     $form['map_provider_settings'] = [
       '#type' => 'html_tag',
       '#tag' => 'span',
-      '#value' => t("No settings available."),
+      '#value' => $this->t("No settings available."),
     ];
 
-    $map_provider_id = NestedArray::getValue($form_state->getUserInput(), ['style_options', 'map_provider_id']);
+    $map_provider_id = NestedArray::getValue(
+      $form_state->getUserInput(),
+      ['style_options', 'map_provider_id']
+    );
     if (empty($map_provider_id)) {
       $map_provider_id = $this->options['map_provider_id'];
     }
@@ -383,9 +392,19 @@ class CommonMap extends GeolocationStyleBase {
       $map_provider_id = key($map_provider_options);
     }
 
-    $map_provider_settings = NestedArray::getValue($form_state->getUserInput(), ['style_options', 'map_provider_settings']);
-    if (empty($map_provider_settings)) {
-      $map_provider_settings = $this->options['map_provider_settings'];
+    $map_provider_settings = $this->options['map_provider_settings'] ?? [];
+    if (
+      !empty($this->options['map_provider_id'])
+      && $map_provider_id != $this->options['map_provider_id']
+    ) {
+      $map_provider_settings = [];
+      if (!empty($form_state->getValue([
+        'style_options',
+        'map_provider_settings',
+      ]))) {
+        $form_state->setValue(['style_options', 'map_provider_settings'], []);
+        $form_state->setUserInput($form_state->getValues());
+      }
     }
 
     if (!empty($map_provider_id)) {
@@ -407,6 +426,20 @@ class CommonMap extends GeolocationStyleBase {
         '#suffix' => '</div>',
       ]
     );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function calculateDependencies() {
+    $dependencies = parent::calculateDependencies();
+    if (empty($this->options['map_provider_id'])) {
+      return $dependencies;
+    }
+
+    $definition = $this->mapProviderManager->getDefinition($this->options['map_provider_id']);
+
+    return array_merge_recursive($dependencies, ['module' => [$definition['provider']]]);
   }
 
 }

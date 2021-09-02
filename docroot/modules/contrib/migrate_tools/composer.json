@@ -21,20 +21,19 @@
         "source": "https://git.drupalcode.org/project/migrate_tools"
     },
     "license": "GPL-2.0-or-later",
+    "prefer-stable": true,
     "require": {
         "php": ">=7.1",
-        "drupal/migrate_plus": "^5",
-        "drupal/core": "^8.8 | ^9"
+        "drupal/core": "^8.8 | ^9",
+        "drupal/migrate_plus": "^5"
     },
     "require-dev": {
-        "drupal/migrate_plus": "^5",
-        "drupal/migrate_source_csv": "^3",
+        "drupal/migrate_source_csv": "^3.0",
         "drush/drush": "^10"
     },
     "suggest": {
         "drush/drush": "^9 || ^10"
     },
-    "minimum-stability": "dev",
     "extra": {
         "drush": {
             "services": {

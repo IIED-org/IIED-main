@@ -141,6 +141,8 @@ class GeolocationMap extends RenderElement {
       $map_settings = $render_array['#settings'];
     }
 
+    $map_settings = $map_provider->getSettings($map_settings);
+
     $render_array = BubbleableMetadata::mergeAttachments(
       [
         '#attached' => [
@@ -193,9 +195,7 @@ class GeolocationMap extends RenderElement {
       $context = $render_array['#context'];
     }
 
-    $render_array = $map_provider->alterRenderArray($render_array, $map_settings, $context);
-
-    return $render_array;
+    return $map_provider->alterRenderArray($render_array, $map_settings, $context);
   }
 
   /**

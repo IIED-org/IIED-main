@@ -132,6 +132,9 @@ class AcquiaSearchSolrSubscriber extends AbstractPlugin implements EventSubscrib
    * @throws \Solarium\Exception\HttpException
    */
   public function postExecuteRequest(EventProxy $event) {
+    if (!($this->client instanceof Client)) {
+      return;
+    }
 
     $response = $event->getResponse();
 

@@ -19,7 +19,7 @@ interface BehaviorSettingsManagerInterface {
    * @param string $entity_id
    *   The entity ID as a string.
    */
-  public function saveBehaviorSettings(array $settings, $entity_type_id, $entity_id);
+  public function saveBehaviorSettings(array $settings, $entity_type_id, $entity_id = NULL);
 
   /**
    * Load behaviour settings for an entity or bundle, or load the defaults.

@@ -157,8 +157,6 @@ class SolrConfigSetController extends ControllerBase {
    *
    * @return string
    *   XML snippet containing all index settings.
-   *
-   * @throws \Drupal\search_api\SearchApiException
    */
   public function getSolrconfigIndexXml(?ServerInterface $search_api_server = NULL): string {
     // Reserved for future internal use.
@@ -323,8 +321,8 @@ class SolrConfigSetController extends ControllerBase {
         $file_path = $search_api_solr_conf_path . '/' . $file;
         if (file_exists($file_path) && is_readable($file_path)) {
           $files[$file] = str_replace(
-            ['SEARCH_API_SOLR_MIN_SCHEMA_VERSION', 'SEARCH_API_SOLR_BRANCH', 'SEARCH_API_SOLR_JUMP_START_CONFIG_SET'],
-            [SolrBackendInterface::SEARCH_API_SOLR_MIN_SCHEMA_VERSION, $real_solr_branch, SEARCH_API_SOLR_JUMP_START_CONFIG_SET],
+            ['SEARCH_API_SOLR_SCHEMA_VERSION', 'SEARCH_API_SOLR_BRANCH', 'SEARCH_API_SOLR_JUMP_START_CONFIG_SET'],
+            [SolrBackendInterface::SEARCH_API_SOLR_SCHEMA_VERSION, $real_solr_branch, SEARCH_API_SOLR_JUMP_START_CONFIG_SET],
             file_get_contents($search_api_solr_conf_path . '/' . $file)
           );
         }
@@ -416,7 +414,60 @@ class SolrConfigSetController extends ControllerBase {
     }
     catch (\Exception $e) {
       watchdog_exception('search_api', $e);
-      $this->messenger()->addError($this->t('An error occured during the creation of the config.zip. Look at the logs for details.'));
+      $this->messenger()->addError($this->t('An error occurred during the creation of the config.zip. Look at the logs for details.'));
+    }
+
+    return new RedirectResponse($search_api_server->toUrl('canonical')->toString());
+  }
+
+  /**
+   * Streams a zip archive containing a complete Solr configuration currently in use.
+   *
+   * @param \Drupal\search_api\ServerInterface $search_api_server
+   *   The Search API server entity.
+   *
+   * @return \Symfony\Component\HttpFoundation\Response
+   *   The HTTP response object.
+   */
+  public function streamCurrentConfigZip(ServerInterface $search_api_server): Response {
+    try {
+      /** @var \Drupal\search_api_solr\SolrBackendInterface $backend */
+      $backend = $search_api_server->getBackend();
+
+      $archive_options = new Archive();
+      $archive_options->setSendHttpHeaders(TRUE);
+
+      @ob_clean();
+      // If you are using nginx as a webserver, it will try to buffer the
+      // response. We have to disable this with a custom header.
+      // @see https://github.com/maennchen/ZipStream-PHP/wiki/nginx
+      header('X-Accel-Buffering: no');
+
+      $zip = new ZipStream('solr_current_config.zip', $archive_options);
+
+      /** @var \Drupal\search_api_solr\SolrBackendInterface $backend */
+      $backend = $search_api_server->getBackend();
+
+      $files_list = Utility::getServerFiles($search_api_server);
+
+      foreach ($files_list as $file_name => $file_info) {
+        $content = '';
+        if ($file_info['size'] > 0) {
+          $file_data = $backend->getSolrConnector()->getFile($file_name);
+          $content = $file_data->getBody();
+        }
+
+        $zip->addFile($file_name, $content);
+      }
+
+      $zip->finish();
+      @ob_end_flush();
+
+      exit();
+    }
+    catch (\Exception $e) {
+      watchdog_exception('search_api', $e);
+      $this->messenger()->addError($this->t('An error occurred during the creation of the config.zip. Look at the logs for details.'));
     }
 
     return new RedirectResponse($search_api_server->toUrl('canonical')->toString());

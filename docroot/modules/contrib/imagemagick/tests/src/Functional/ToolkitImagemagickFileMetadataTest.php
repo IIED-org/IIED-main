@@ -25,7 +25,12 @@ class ToolkitImagemagickFileMetadataTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'imagemagick', 'file_mdm', 'file_test'];
+  protected static $modules = [
+    'system',
+    'imagemagick',
+    'file_mdm',
+    'file_test',
+  ];
 
   /**
    * {@inheritdoc}
@@ -44,7 +49,7 @@ class ToolkitImagemagickFileMetadataTest extends BrowserTestBase {
    *
    * @dataProvider providerToolkitConfiguration
    */
-  public function testFileMetadata($toolkit_id, $toolkit_config, array $toolkit_settings) {
+  public function testFileMetadata(string $toolkit_id, string $toolkit_config, array $toolkit_settings): void {
     $this->setUpToolkit($toolkit_id, $toolkit_config, $toolkit_settings);
     $this->prepareImageFileHandling();
 
@@ -305,7 +310,7 @@ class ToolkitImagemagickFileMetadataTest extends BrowserTestBase {
       $this->fileSystem->delete($file->uri);
     }
     $directory_scan = $this->fileSystem->scanDirectory('temporary://', '/ima.*/');
-    $this->assertEquals(0, count($directory_scan));
+    $this->assertCount(0, $directory_scan);
     foreach ($files as $source_uri => $source_image_data) {
       $this->fileSystem->deleteRecursive($this->testDirectory);
       $this->fileSystem->prepareDirectory($this->testDirectory, FileSystemInterface::CREATE_DIRECTORY);
@@ -473,7 +478,7 @@ class ToolkitImagemagickFileMetadataTest extends BrowserTestBase {
    *
    * @dataProvider providerToolkitConfiguration
    */
-  public function testSourceLocalPath($toolkit_id, $toolkit_config, array $toolkit_settings) {
+  public function testSourceLocalPath(string $toolkit_id, string $toolkit_config, array $toolkit_settings): void {
     $this->setUpToolkit($toolkit_id, $toolkit_config, $toolkit_settings);
     $this->prepareImageFileHandling();
 

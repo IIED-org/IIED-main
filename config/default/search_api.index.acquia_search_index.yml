@@ -1,0 +1,302 @@
+uuid: 1dab1286-23f3-4311-8583-2aedaa01ba2d
+langcode: en
+status: true
+dependencies:
+  module:
+    - search_api_solr
+    - node
+    - search_api
+  config:
+    - field.storage.node.body
+    - field.storage.node.field_area_list
+    - field.storage.node.field_author_s_
+    - field.storage.node.field_date_published
+    - field.storage.node.field_document_type
+    - field.storage.node.field_product_code
+    - field.storage.node.field_product_code_new
+    - field.storage.node.field_theme_s_
+    - search_api.server.acquia_search_server
+third_party_settings:
+  acquia_search_solr:
+    use_edismax: 1
+  search_api_solr:
+    finalize: false
+    commit_before_finalize: false
+    commit_after_finalize: false
+    multilingual:
+      limit_to_content_language: false
+      include_language_independent: true
+    highlighter:
+      maxAnalyzedChars: 51200
+      fragmenter: gap
+      regex:
+        slop: 0.5
+        pattern: blank
+        maxAnalyzedChars: 10000
+      usePhraseHighlighter: true
+      highlightMultiTerm: true
+      preserveMulti: false
+      highlight:
+        mergeContiguous: false
+        requireFieldMatch: false
+        snippets: 2
+        fragsize: 0
+    mlt:
+      mintf: 1
+      mindf: 1
+      maxdf: 0
+      maxdfpct: 0
+      minwl: 0
+      maxwl: 0
+      maxqt: 100
+      maxntp: 2000
+      boost: false
+      interestingTerms: none
+    term_modifiers:
+      slop: 10000000
+      fuzzy: 2
+    advanced:
+      index_prefix: ''
+      collection: ''
+      timezone: ''
+_core:
+  default_config_hash: m3BA7ry9oerhED2EXWWHra57A4vZj7Eobsr5-29dq4M
+id: acquia_search_index
+name: 'Acquia Search Solr Index'
+description: ''
+read_only: false
+field_settings:
+  body:
+    label: Body
+    datasource_id: 'entity:node'
+    property_path: body
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.body
+  field_area_list:
+    label: 'Area list'
+    datasource_id: 'entity:node'
+    property_path: field_area_list
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_area_list
+  field_author_s_:
+    label: Author(s)
+    datasource_id: 'entity:node'
+    property_path: field_author_s_
+    type: integer
+    boost: !!float 2
+    dependencies:
+      config:
+        - field.storage.node.field_author_s_
+  field_date_published:
+    label: 'Published date'
+    datasource_id: 'entity:node'
+    property_path: field_date_published
+    type: date
+    dependencies:
+      config:
+        - field.storage.node.field_date_published
+  field_document_type:
+    label: 'Document type'
+    datasource_id: 'entity:node'
+    property_path: field_document_type
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_document_type
+  field_product_code:
+    label: 'Product code'
+    datasource_id: 'entity:node'
+    property_path: field_product_code
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.field_product_code
+  field_product_code_new:
+    label: 'Product code'
+    datasource_id: 'entity:node'
+    property_path: field_product_code_new
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.field_product_code_new
+  field_theme_s_:
+    label: Theme(s)
+    datasource_id: 'entity:node'
+    property_path: field_theme_s_
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_theme_s_
+  name:
+    label: Name
+    datasource_id: 'entity:taxonomy_term'
+    property_path: name
+    type: text
+    boost: !!float 5
+    dependencies:
+      module:
+        - taxonomy
+  name_1:
+    label: 'Author(s) » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_author_s_:entity:name'
+    type: text
+    boost: !!float 2
+    dependencies:
+      config:
+        - field.storage.node.field_author_s_
+      module:
+        - taxonomy
+  name_2:
+    label: 'Theme(s) » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_theme_s_:entity:name'
+    type: text
+    boost: !!float 2
+    dependencies:
+      config:
+        - field.storage.node.field_theme_s_
+      module:
+        - taxonomy
+  node_grants:
+    label: 'Node access information'
+    property_path: search_api_node_grants
+    type: string
+    indexed_locked: true
+    type_locked: true
+    hidden: true
+  status:
+    label: status
+    datasource_id: 'entity:node'
+    property_path: status
+    type: boolean
+    indexed_locked: true
+    type_locked: true
+    dependencies:
+      module:
+        - node
+  title:
+    label: Title
+    datasource_id: 'entity:node'
+    property_path: title
+    type: text
+    boost: !!float 3
+    dependencies:
+      module:
+        - node
+  type:
+    label: 'Content type'
+    datasource_id: 'entity:node'
+    property_path: type
+    type: string
+    dependencies:
+      module:
+        - node
+  uid:
+    label: uid
+    datasource_id: 'entity:node'
+    property_path: uid
+    type: integer
+    indexed_locked: true
+    type_locked: true
+    dependencies:
+      module:
+        - node
+  vid:
+    label: Vocabulary
+    datasource_id: 'entity:taxonomy_term'
+    property_path: vid
+    type: integer
+    dependencies:
+      module:
+        - taxonomy
+datasource_settings:
+  'entity:node':
+    bundles:
+      default: false
+      selected:
+        - publication
+    languages:
+      default: true
+      selected: {  }
+  'entity:taxonomy_term':
+    bundles:
+      default: false
+      selected:
+        - person
+    languages:
+      default: true
+      selected: {  }
+processor_settings:
+  add_url: {  }
+  aggregated_field: {  }
+  content_access:
+    weights:
+      preprocess_query: -30
+  entity_status: {  }
+  hierarchy:
+    fields:
+      field_document_type: taxonomy_term-parent
+    weights:
+      preprocess_index: -50
+  highlight:
+    highlight: always
+    highlight_partial: false
+    excerpt: true
+    excerpt_length: 300
+    exclude_fields: {  }
+    prefix: '<strong>'
+    suffix: '</strong>'
+    weights:
+      postprocess_query: 0
+  html_filter:
+    all_fields: true
+    fields:
+      - body
+      - field_area_list
+      - field_product_code
+      - field_product_code_new
+      - name
+      - name_1
+      - name_2
+      - title
+      - type
+    title: true
+    alt: true
+    tags:
+      b: 2
+      h1: 5
+      h2: 3
+      h3: 2
+      strong: 2
+    weights:
+      preprocess_index: -49
+      preprocess_query: -15
+  language_with_fallback: {  }
+  rendered_item: {  }
+  reverse_entity_references: {  }
+  solr_date_range:
+    weights:
+      preprocess_index: 0
+  type_boost:
+    boosts:
+      'entity:node':
+        datasource_boost: !!float 1
+      'entity:taxonomy_term':
+        datasource_boost: !!float 1
+        bundle_boosts:
+          person: !!float 21
+          theme: !!float 0
+    weights:
+      preprocess_index: -48
+tracker_settings:
+  default:
+    indexing_order: fifo
+options:
+  index_directly: true
+  cron_limit: 500
+server: acquia_search_server

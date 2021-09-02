@@ -111,8 +111,6 @@ class Here extends MapProviderBase {
   public function alterRenderArray(array $render_array, array $map_settings, array $context = []) {
     $config = \Drupal::config('here_maps.settings');
 
-    $map_settings = $this->getSettings($map_settings);
-
     $render_array['#attached'] = BubbleableMetadata::mergeAttachments(
       empty($render_array['#attached']) ? [] : $render_array['#attached'],
       [
@@ -135,9 +133,7 @@ class Here extends MapProviderBase {
       ]
     );
 
-    $render_array = parent::alterRenderArray($render_array, $map_settings, $context);
-
-    return $render_array;
+    return parent::alterRenderArray($render_array, $map_settings, $context);
   }
 
   /**

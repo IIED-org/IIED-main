@@ -86,6 +86,7 @@ class ProximityField extends NumericField implements ContainerFactoryPluginInter
       '#options' => [
         'km' => $this->t('Kilometer'),
         'mi' => $this->t('Miles'),
+        'nm' => $this->t('Nautical Miles'),
         'm' => $this->t('Meter'),
         'ly' => $this->t('Light-years'),
       ],

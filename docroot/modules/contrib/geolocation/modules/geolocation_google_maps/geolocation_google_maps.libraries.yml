@@ -103,7 +103,7 @@ spiderfier:
   version: 1.x
   license:
     name: MIT licence
-    url: http://www.opensource.org/licenses/mit-license.php
+    url: https://www.opensource.org/licenses/mit-license.php
     gpl-compatible: true
   js:
     https://cdnjs.cloudflare.com/ajax/libs/OverlappingMarkerSpiderfier/1.0.3/oms.min.js: { type: external }
@@ -118,14 +118,14 @@ mapfeature.marker_clusterer:
 
 # External marker clusterer.
 markerclusterer:
-  remote: https://github.com/googlemaps/js-marker-clusterer
+  remote: https://github.com/googlemaps/js-markerclustererplus
   version: 1.x
   license:
     name: Apache License, Version 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
     gpl-compatible: true
   js:
-    https://cdn.jsdelivr.net/gh/googlemaps/js-marker-clusterer@gh-pages/src/markerclusterer.js: { type: external }
+    https://unpkg.com/@googlemaps/markerclustererplus/dist/index.min.js: { type: external }
 
 # InfoWindow support.
 mapfeature.marker_infowindow:
@@ -147,7 +147,7 @@ infobubble:
   version: 1.x
   license:
     name: Apache License, Version 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
     gpl-compatible: true
   js:
     https://cdn.jsdelivr.net/gh/googlemaps/js-info-bubble@gh-pages/src/infobubble-compiled.js: { type: external }
@@ -282,3 +282,14 @@ mapfeature.control_geocoder:
     js/MapFeature/geolocation-control-geocoder.js: {}
   dependencies:
     - geolocation_google_maps/googlemapsapi
+
+# Directions support.
+mapfeature.geolocation_google_maps_control_directions:
+  css:
+    theme:
+      css/MapFeature/directions.css: { }
+  js:
+    js/MapFeature/geolocation-control-directions.js: {}
+  dependencies:
+    - geolocation_google_maps/googlemapsapi
+

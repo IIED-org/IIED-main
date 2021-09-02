@@ -2,7 +2,7 @@ upgrade_status.report:
   path: '/admin/reports/upgrade-status'
   defaults:
     _form: '\Drupal\upgrade_status\Form\UpgradeStatusForm'
-    _title: 'Upgrade status'
+    _title_callback: '\Drupal\upgrade_status\Form\UpgradeStatusForm::getTitle'
   requirements:
     _permission: 'administer software updates'
 

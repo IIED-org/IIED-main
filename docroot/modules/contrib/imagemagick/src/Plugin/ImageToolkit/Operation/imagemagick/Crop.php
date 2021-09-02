@@ -81,7 +81,7 @@ class Crop extends ImagemagickImageToolkitOperationBase {
     // Even though the crop effect in Drupal core does not allow for negative
     // offsets, ImageMagick supports them. Also note: if $x and $y are set to
     // NULL then crop will create tiled images so we convert these to ints.
-    $this->addArgument(sprintf('-crop %dx%d%+d%+d!', $arguments['width'], $arguments['height'], $arguments['x'], $arguments['y']));
+    $this->addArgument(sprintf('-crop %dx%d%+d%+d +repage', $arguments['width'], $arguments['height'], $arguments['x'], $arguments['y']));
     $this->getToolkit()->setWidth($arguments['width'])->setHeight($arguments['height']);
     return TRUE;
   }

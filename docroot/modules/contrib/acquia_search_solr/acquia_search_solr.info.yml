@@ -7,7 +7,7 @@ dependencies:
  - search_api_solr:search_api_solr
  - drupal:views
 
-# Information added by Drupal.org packaging script on 2021-02-10
-version: '3.0.0-rc1'
+# Information added by Drupal.org packaging script on 2021-02-26
+version: '3.0.0'
 project: 'acquia_search_solr'
-datestamp: 1612942852
+datestamp: 1614299471

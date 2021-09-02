@@ -3,8 +3,8 @@
     "type": "drupal-module",
     "description": "Provides an image toolkit to integrate ImageMagick with the Image API.",
     "require": {
-        "php": ">=7",
-        "drupal/core": "^8.8 || ^9",
+        "php": ">=7.1",
+        "drupal/core": "^8.9 || ^9.1",
         "drupal/file_mdm": "^2",
         "drupal/sophron": "^1"
     }

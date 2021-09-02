@@ -1,0 +1,13 @@
+name: Acquia Search
+type: module
+description: Provides integration between your Drupal site and Acquia's hosted search service.
+package: Acquia
+core_version_requirement: ^8.9 || ^9
+dependencies:
+ - search_api_solr:search_api_solr
+ - drupal:views
+
+# Information added by Drupal.org packaging script on 2021-06-17
+version: '3.0.4'
+project: 'acquia_search'
+datestamp: 1623949116

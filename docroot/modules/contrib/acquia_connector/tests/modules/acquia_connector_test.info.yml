@@ -4,7 +4,7 @@ description: Support module for the Acquia Connector module tests.
 core_version_requirement: ^8.9 || ^9
 hidden: true
 
-# Information added by Drupal.org packaging script on 2021-02-26
-version: '8.x-2.0'
+# Information added by Drupal.org packaging script on 2021-04-14
+version: '3.0.3'
 project: 'acquia_connector'
-datestamp: 1614301295
+datestamp: 1618428135

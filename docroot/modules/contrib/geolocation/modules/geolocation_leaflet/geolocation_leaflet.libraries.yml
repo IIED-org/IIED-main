@@ -1,16 +1,16 @@
 leaflet:
   header: true
-  remote: http://leafletjs.com/
-  version: '1.0.3'
+  remote: https://leafletjs.com/
+  version: '1.7.1'
   license:
     name: BSD 2-clause "Simplified" License
     url: https://github.com/Leaflet/Leaflet/blob/master/LICENSE
     gpl-compatible: true
   css:
     component:
-      'https://unpkg.com/leaflet@1.3.3/dist/leaflet.css': { type: external, minified: true }
+      'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css': { type: external, minified: true }
   js:
-    'https://unpkg.com/leaflet@1.3.3/dist/leaflet.js': { type: external, minified: true, attributes: { defer: true, async: true } }
+    'https://unpkg.com/leaflet@1.7.1/dist/leaflet.js': { type: external, minified: true }
 
 # Leaflet integration library.
 geolocation.leaflet:
@@ -74,16 +74,18 @@ mapfeature.leaflet_marker_popup:
 leaflet.markerclusterer:
   header: true
   remote: https://github.com/Leaflet/Leaflet.markercluster
-  version: '1.2.0'
+  version: '1.4.1'
   license:
     name: MIT-LICENSE
     gpl-compatible: true
   css:
     component:
-      'https://unpkg.com/leaflet.markercluster@1.2.0/dist/MarkerCluster.css': { type: external, minified: true }
-      'https://unpkg.com/leaflet.markercluster@1.2.0/dist/MarkerCluster.Default.css': { type: external, minified: true }
+      'https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css': { type: external, minified: true }
+      'https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css': { type: external, minified: true }
   js:
-    'https://unpkg.com/leaflet.markercluster@1.2.0/dist/leaflet.markercluster.js': { type: external, minified: true }
+    'https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js': { type: external, minified: true }
+  dependencies:
+    - geolocation_leaflet/leaflet
 
 mapfeature.leaflet_marker_clusterer:
   js:
@@ -110,16 +112,18 @@ mapfeature.leaflet_marker_icon:
 leaflet.gesture-handling:
   header: true
   remote: https://github.com/elmarquis/Leaflet.GestureHandling/
-  version: '1.1.7'
+  version: '1.2.1'
   license:
     name: MIT
     url: https://github.com/elmarquis/Leaflet.GestureHandling/blob/master/LICENSE
     gpl-compatible: true
   css:
     component:
-      '//unpkg.com/leaflet-gesture-handling@1.1.7/dist/leaflet-gesture-handling.min.css': { type: external, minified: true }
+      '//unpkg.com/leaflet-gesture-handling@1.2.1/dist/leaflet-gesture-handling.min.css': { type: external, minified: true }
   js:
-    '//unpkg.com/leaflet-gesture-handling@1.1.7/dist/leaflet-gesture-handling.min.js': { type: external, minified: true }
+    '//unpkg.com/leaflet-gesture-handling@1.2.1/dist/leaflet-gesture-handling.min.js': { type: external, minified: true }
+  dependencies:
+    - geolocation_leaflet/leaflet
 
 mapfeature.leaflet_gesture_handling:
   js:
@@ -132,13 +136,15 @@ mapfeature.leaflet_gesture_handling:
 leaflet-providers:
   header: true
   remote: https://github.com/leaflet-extras/leaflet-providers
-  version: '1.3.1'
+  version: '1.12.0'
   license:
     name: BSD 2-clause "Simplified" License
     url: https://github.com/leaflet-extras/leaflet-providers/blob/master/license.md
     gpl-compatible: true
   js:
-    'https://cdnjs.cloudflare.com/ajax/libs/leaflet-providers/1.3.1/leaflet-providers.min.js': { type: external, minified: true }
+    'https://cdnjs.cloudflare.com/ajax/libs/leaflet-providers/1.12.0/leaflet-providers.min.js': { type: external, minified: true }
+  dependencies:
+    - geolocation_leaflet/leaflet
 
 mapfeature.leaflet_tile_layer:
   js:
@@ -172,7 +178,9 @@ leaflet.wms:
     url: https://github.com/heigeo/leaflet.wms/blob/gh-pages/LICENSE
     gpl-compatible: true
   js:
-    'https//cdn.jsdelivr.net/gh/heigeo/leaflet.wms@0.2.0/dist/leaflet.wms.min.js': { type: external, minified: true }
+    'https://cdn.jsdelivr.net/gh/heigeo/leaflet.wms@0.2.0/dist/leaflet.wms.min.js': { type: external, minified: true }
+  dependencies:
+    - geolocation_leaflet/leaflet
 
 mapfeature.leaflet_wms:
   js:
@@ -187,7 +195,6 @@ mapfeature.leaflet_disable_user_interaction:
     js/MapFeature/geolocation-disable-user-interaction.js: {}
   dependencies:
     - geolocation_leaflet/geolocation.leaflet
-
 
 # MaxBounds
 mapfeature.leaflet_max_bounds:
@@ -207,6 +214,8 @@ leaflet.bouncemarker:
     gpl-compatible: true
   js:
     'https://cdn.jsdelivr.net/gh/maximeh/leaflet.bouncemarker@1.2/bouncemarker.js': { type: external, minified: true }
+  dependencies:
+    - geolocation_leaflet/leaflet
 
 mapfeature.leaflet_marker_zoom_and_animate:
   js:
@@ -218,6 +227,13 @@ mapfeature.leaflet_marker_zoom_and_animate:
 #
 # Map Features - Controls
 #
+
+# Control Attribution
+mapfeature.leaflet_control_attribution:
+  js:
+    js/MapFeature/geolocation-control-attribution.js: {}
+  dependencies:
+    - geolocation_leaflet/geolocation.leaflet
 
 # Control Zoom
 mapfeature.leaflet_control_zoom:
@@ -275,6 +291,8 @@ leaflet.fullscreen:
       'https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css': { type: external}
   js:
     'https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js': { type: external, minified: true }
+  dependencies:
+    - geolocation_leaflet/leaflet
 
 mapfeature.leaflet_control_fullscreen:
   js:

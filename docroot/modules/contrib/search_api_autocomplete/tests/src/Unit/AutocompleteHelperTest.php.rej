@@ -1,0 +1,34 @@
+***************
+*** 2,7 ****
+  
+  namespace Drupal\Tests\search_api_autocomplete\Unit;
+  
+  use Drupal\search_api_autocomplete\Utility\AutocompleteHelper;
+  use Drupal\Tests\UnitTestCase;
+  
+--- 2,8 ----
+  
+  namespace Drupal\Tests\search_api_autocomplete\Unit;
+  
++ use Drupal\Core\Render\ElementInfoManagerInterface;
+  use Drupal\search_api_autocomplete\Utility\AutocompleteHelper;
+  use Drupal\Tests\UnitTestCase;
+  
+***************
+*** 27,33 ****
+     * @dataProvider providerTestSplitKeys
+     */
+    public function testSplitKeys($keys, array $expected) {
+-     $service = new AutocompleteHelper();
+      $this->assertEquals($expected, $service->splitKeys($keys));
+    }
+  
+--- 28,35 ----
+     * @dataProvider providerTestSplitKeys
+     */
+    public function testSplitKeys($keys, array $expected) {
++     $element_info = $this->createMock(ElementInfoManagerInterface::class);
++     $service = new AutocompleteHelper($element_info);
+      $this->assertEquals($expected, $service->splitKeys($keys));
+    }
+  

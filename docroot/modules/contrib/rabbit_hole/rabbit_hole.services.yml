@@ -19,6 +19,7 @@ services:
       - "@plugin.manager.rabbit_hole_entity_plugin"
       - '@rabbit_hole.behavior_settings_manager'
       - "@string_translation"
+      - '@rabbit_hole.behavior_invoker'
   rabbit_hole.behavior_invoker:
     class: Drupal\rabbit_hole\BehaviorInvoker
     arguments:

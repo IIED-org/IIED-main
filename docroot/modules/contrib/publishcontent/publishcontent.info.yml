@@ -3,10 +3,12 @@ description: 'Adds a ''Publish'' or ''Unpublish'' link on the node edit/view pag
 core_version_requirement: ^8.8 || ^9
 type: module
 package: Permissions
+configure: publishcontent.settings
+
 dependencies:
   - drupal:node
 
-# Information added by Drupal.org packaging script on 2020-06-08
-version: '8.x-1.2'
+# Information added by Drupal.org packaging script on 2021-07-09
+version: '8.x-1.4'
 project: 'publishcontent'
-datestamp: 1591625878
+datestamp: 1625848112

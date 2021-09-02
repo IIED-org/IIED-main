@@ -21,7 +21,7 @@ class EventSubscriberTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['system', 'imagemagick', 'file_mdm'];
+  protected static $modules = ['system', 'imagemagick', 'file_mdm'];
 
   /**
    * {@inheritdoc}
@@ -40,7 +40,7 @@ class EventSubscriberTest extends BrowserTestBase {
    *
    * @dataProvider providerToolkitConfiguration
    */
-  public function testEventSubscriber($toolkit_id, $toolkit_config, array $toolkit_settings) {
+  public function testEventSubscriber(string $toolkit_id, string $toolkit_config, array $toolkit_settings): void {
     $this->setUpToolkit($toolkit_id, $toolkit_config, $toolkit_settings);
     $this->prepareImageFileHandling();
 
@@ -129,7 +129,7 @@ class EventSubscriberTest extends BrowserTestBase {
    *
    * @dataProvider providerToolkitConfiguration
    */
-  public function testGifCoalesce($toolkit_id, $toolkit_config, array $toolkit_settings) {
+  public function testGifCoalesce(string $toolkit_id, string $toolkit_config, array $toolkit_settings): void {
     $this->setUpToolkit($toolkit_id, $toolkit_config, $toolkit_settings);
     $this->prepareImageFileHandling();
 

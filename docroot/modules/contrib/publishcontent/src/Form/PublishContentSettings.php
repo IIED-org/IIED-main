@@ -2,13 +2,42 @@
 
 namespace Drupal\publishcontent\Form;
 
+use Drupal\Core\Cache\CacheTagsInvalidator;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class PublishContentSettings.
  */
 class PublishContentSettings extends ConfigFormBase {
+
+  /**
+   * Cache invalidator service.
+   *
+   * @var \Drupal\Core\Cache\CacheTagsInvalidator
+   */
+  protected $cacheInvalidator;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('config.factory'),
+      $container->get('cache_tags.invalidator')
+    );
+
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(ConfigFactoryInterface $config_factory, CacheTagsInvalidator $cache_invalidator) {
+    parent::__construct($config_factory);
+    $this->cacheInvalidator = $cache_invalidator;
+  }
 
   /**
    * {@inheritdoc}
@@ -57,6 +86,42 @@ class PublishContentSettings extends ConfigFormBase {
       '#description' => $this->t('A checkbox will appear near the bottom of node edit forms for users who have permission to publish/unpublish. Users who do not have permission will see the checkbox but will not be able to change its value.'),
     ];
 
+    $form['accountability'] = [
+      '#type' => 'details',
+      '#open' => TRUE,
+      '#title' => $this->t('Accountability preferences'),
+      '#description' => $this->t('Configure what kind of trace the publish and unpublish toggle will leave in the system.'),
+    ];
+
+    $form['create_revision'] = [
+      '#type' => 'checkbox',
+      '#group' => 'accountability',
+      '#title' => $this->t('Create new revision when publising/unpublishing a node'),
+      '#default_value' => $config->get('create_revision'),
+      '#description' => $this->t('Unpublishing or publishing a node will create a new revision automatically.'),
+    ];
+
+    $form['create_log_entry'] = [
+      '#type' => 'checkbox',
+      '#group' => 'accountability',
+      '#title' => $this->t('Create a log entry when publishing or unpublishing a node'),
+      '#default_value' => $config->get('create_log_entry'),
+      '#description' => $this->t('Make Drupal log all publishing and unpublishing actions, to be able to see when and by whom the action was executed.'),
+    ];
+    $form['publish_text_value'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Publish button value'),
+      '#default_value' => $config->get('publish_text_value'),
+      '#description' => $this->t('Set the text value for publishing content types. Default is set to Publish'),
+      '#required' => TRUE,
+    ];
+    $form['unpublish_text_value'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Un-publish button value'),
+      '#default_value' => $config->get('unpublish_text_value'),
+      '#description' => $this->t('Set the text value for un-publishing content types. Default is set to Unpublish'),
+      '#required' => TRUE,
+    ];
     return $form;
   }
 
@@ -74,7 +139,12 @@ class PublishContentSettings extends ConfigFormBase {
     $config = $this->config('publishcontent.settings');
     $config->set('ui_localtask', $form_state->getValue('ui_localtask'));
     $config->set('ui_checkbox', $form_state->getValue('ui_checkbox'));
+    $config->set('create_revision', $form_state->getValue('create_revision'));
+    $config->set('create_log_entry', $form_state->getValue('create_log_entry'));
+    $config->set('publish_text_value', $form_state->getValue('publish_text_value'));
+    $config->set('unpublish_text_value', $form_state->getValue('unpublish_text_value'));
     $config->save();
+    $this->cacheInvalidator->invalidateTags(['local_task']);
     return parent::submitForm($form, $form_state);
   }
 

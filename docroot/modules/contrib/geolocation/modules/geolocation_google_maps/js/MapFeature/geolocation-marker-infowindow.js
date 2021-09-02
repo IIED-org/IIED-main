@@ -82,9 +82,16 @@
             });
 
             if (featureSettings.infoAutoDisplay) {
-              google.maps.event.addListenerOnce(map.googleMap, 'tilesloaded', function () {
-                google.maps.event.trigger(currentMarker, 'click');
-              });
+              if (map.googleMap.get('tilesloading')) {
+                google.maps.event.addListenerOnce(map.googleMap, 'tilesloaded', function () {
+                  google.maps.event.trigger(currentMarker, 'click');
+                });
+              }
+              else {
+                jQuery.each(map.mapMarkers, function (index, currentMarker) {
+                  google.maps.event.trigger(currentMarker, 'click');
+                })
+              }
             }
           });
 

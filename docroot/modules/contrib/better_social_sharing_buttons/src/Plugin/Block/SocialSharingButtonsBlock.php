@@ -6,6 +6,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Url;
+use Drupal\Component\Utility\Html;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -181,7 +182,7 @@ class SocialSharingButtonsBlock extends BlockBase implements ContainerFactoryPlu
 
     $items['page_url'] = Url::fromRoute('<current>', [], ['absolute' => TRUE]);
     $items['description'] = '';
-    $items['title'] = $title;
+    $items['title'] = Html::escape($title);
     $items['width'] = $this->configuration['width'] ?? $config->get('width');
     $items['radius'] = $this->configuration['radius'] ?? $config->get('radius');
     $items['facebook_app_id'] = $this->configuration['facebook_app_id'] ?? $config->get('facebook_app_id');

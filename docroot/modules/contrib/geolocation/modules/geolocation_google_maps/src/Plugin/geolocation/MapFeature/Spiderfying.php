@@ -41,8 +41,6 @@ class Spiderfying extends MapFeatureBase {
    * {@inheritdoc}
    */
   public function getSettingsForm(array $settings, array $parents) {
-    $settings = $this->getSettings($settings);
-
     $form['spiderfiable_marker_path'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Marker Path'),

@@ -8,7 +8,7 @@
   'use strict';
 
   /**
-   * Google MarkerIcon.
+   * Marker zoom by anchor.
    *
    * @type {Drupal~behavior}
    *
@@ -30,7 +30,7 @@
            */
           function (map, featureSettings) {
             $.each(map.mapMarkers, function (index, marker) {
-              if (marker.locationWrapper.data('marker-zoom-anchor-id') === markerAnchor) {
+              if (marker.locationWrapper.data('marker-zoom-anchor-id').replace(/\s/g, "") === markerAnchor) {
                 $('html, body').animate({
                   scrollTop: map.wrapper.offset().top
                 }, 'slow');

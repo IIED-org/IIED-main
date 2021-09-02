@@ -3,6 +3,7 @@
 namespace Drupal\migrate_tools\Commands;
 
 use Consolidation\OutputFormatters\StructuredData\RowsOfFields;
+use Drupal\Component\Graph\Graph;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Datetime\DateFormatter;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -75,6 +76,104 @@ class MigrateToolsCommands extends DrushCommands {
     $this->dateFormatter = $dateFormatter;
     $this->entityTypeManager = $entityTypeManager;
     $this->keyValue = $keyValue;
+  }
+
+  /**
+   * Shows a tree of migration dependencies.
+   *
+   * @param string $migration_names
+   *   Restrict to a comma-separated list of migrations (Optional).
+   * @param array $options
+   *   Additional options for the command.
+   *
+   * @command migrate:tree
+   */
+  public function dependencyTree($migration_names = '', array $options = [
+    'all' => FALSE,
+    'group' => self::REQ,
+    'tag' => self::REQ,
+  ]) {
+    $manager = $this->migrationPluginManager;
+    $migrations = $this->migrationsList($migration_names, $options);
+
+    // Turn this into a flat array.
+    $migrations_to_process = [];
+    foreach ($migrations as $group => $group_migrations) {
+      foreach ($group_migrations as $migration) {
+        $migrations_to_process[$migration->id()] = $migration;
+      }
+    }
+
+    // Create a dependency graph. The migrations in the given list may have
+    // dependencies not in the list, so we need to add those to the list as we
+    // go.
+    $dependency_graph = [];
+    while (!empty($migrations_to_process)) {
+      // Get the next migration in the list.
+      $migration = reset($migrations_to_process);
+      unset($migrations_to_process[$migration->id()]);
+
+      // Add its dependencies to the graph and to the list.
+      $migration_dependencies = $migration->getMigrationDependencies();
+
+      $dependency_graph[$migration->id()]['edges'] = [];
+      if (isset($migration_dependencies['required'])) {
+        foreach ($migration_dependencies['required'] as $dependency) {
+          $dependency_graph[$migration->id()]['edges'][$dependency] = $dependency;
+
+          $migrations_to_process[$dependency] = $manager->createInstance($dependency);
+        }
+      }
+    }
+
+    $dependency_graph = (new Graph($dependency_graph))->searchAndSort();
+
+    // Get the list of top-level migrations, that is, those that nothing depends
+    // on.
+    $top_level_migrations = [];
+    foreach ($dependency_graph as $migration_name => $vertex) {
+      if (empty($vertex['reverse_paths'])) {
+        $top_level_migrations[] = $migration_name;
+      }
+    }
+
+    foreach ($top_level_migrations as $migration_name) {
+      $this->output()->writeln($migration_name);
+      $this->printDependencies(0, '', $dependency_graph, $migration_name);
+    }
+  }
+
+  /**
+   * Prints the dependencies of a single migration in the dependency tree.
+   *
+   * Helper for dependencyTree().
+   *
+   * @param int $level
+   *   The current level in the tree.
+   * @param string $prefix
+   *   The prefix for the current level's lines.
+   * @param array $dependency_graph
+   *   The complete dependency graph.
+   * @param string $migration_name
+   *   The name of the migration to print dependencies for.
+   */
+  protected function printDependencies($level, $prefix, $dependency_graph, $migration_name) {
+    $last_edge = end($dependency_graph[$migration_name]['edges']);
+
+    foreach ($dependency_graph[$migration_name]['edges'] as $edge) {
+      if ($edge === $last_edge) {
+        $tree_string = '└──';
+        $subtree_prefix = $prefix . '   ';
+      }
+      else {
+        $tree_string = '├──';
+        $subtree_prefix = $prefix . '│  ';
+      }
+      $this->output()->writeln($prefix . $tree_string . $edge);
+
+
+      $this->printDependencies($level + 1, $subtree_prefix, $dependency_graph, $edge);
+    }
   }
 
   /**
@@ -694,20 +793,34 @@ class MigrateToolsCommands extends DrushCommands {
     $filter['migration_tags'] = explode(',', $options['tag']);
 
     $manager = $this->migrationPluginManager;
-    $plugins = $manager->createInstances([]);
+
     $matched_migrations = [];
 
-    // Get the set of migrations that may be filtered.
     if (empty($migration_ids)) {
+      // Get all migrations.
+      $plugins = $manager->createInstances([]);
       $matched_migrations = $plugins;
     }
     else {
       // Get the requested migrations.
       $migration_ids = explode(',', mb_strtolower($migration_ids));
-      foreach ($plugins as $id => $migration) {
-        if (in_array(mb_strtolower($id), $migration_ids)) {
-          $matched_migrations[$id] = $migration;
+
+      $definitions = $manager->getDefinitions();
+
+      foreach ($migration_ids as $given_migration_id) {
+        if (isset($definitions[$given_migration_id])) {
+          $matched_migrations[$given_migration_id] = $manager->createInstance($given_migration_id);
         }
+        else {
+          $error_message = dt('Migration @id does not exist', ['@id' => $given_migration_id]);
+          if ($options['continue-on-failure']) {
+            $this->loggProcessPluginBaseer()->error($error_message);
+          }
+          else {
+            throw new \Exception($error_message);
+          }
+        }
+
       }
     }
 
@@ -796,8 +909,7 @@ class MigrateToolsCommands extends DrushCommands {
     static $executed_migrations = [];
 
     if ($options['execute-dependencies']) {
-      $definition = $migration->getPluginDefinition();
-      $required_migrations = $definition['requirements'] ?? [];
+      $required_migrations = $this->getMigrationRequirements($migration);
       $required_migrations = array_filter($required_migrations, function ($value) use ($executed_migrations) {
         return !isset($executed_migrations[$value]);
       });
@@ -879,6 +991,34 @@ class MigrateToolsCommands extends DrushCommands {
       $this->migrateMessage = new Drush9LogMigrateMessage($this->logger());
     }
     return $this->migrateMessage;
+  }
+
+  /**
+   * Returns the migration requirements for the provided migration.
+   *
+   * @param \Drupal\migrate\Plugin\MigrationInterface $migration
+   *   The migration instance.
+   *
+   * @return array
+   *   Array of migration requirements.
+   *
+   * @throws \ReflectionException
+   */
+  protected function getMigrationRequirements(MigrationInterface $migration) {
+    if (method_exists($migration, 'getRequirements')) {
+      // Use the getRequirements method on Drupal 9.1.x and newer.
+      return $migration->getRequirements();
+    }
+
+    // FIXME: Don't use reflection.
+    // @see https://www.drupal.org/project/migrate_tools/issues/3117485
+    // Maintain Drupal 8.x and 9.0.x compatibility using Reflection until an appropriate
+    // interface method or reimplementation is available.
+    $reflection = new \ReflectionClass($migration);
+    $property = $reflection->getProperty('requirements');
+    $property->setAccessible(TRUE);
+
+    return $property->getValue($migration);
   }
 
 }

@@ -70,9 +70,9 @@ class GeolocationGeometry extends RelationshipPluginBase {
     $form['geometry_join_type'] = [
       '#type' => 'select',
       '#options' => [
-        'geolocation_geometry_within' => t('This field ST_WITHIN that geometry'),
-        'geolocation_geometry_contains' => t('This field ST_CONTAINS that geometry'),
-        'geolocation_geometry_intersects' => t('This field ST_INTERSECT that geometry'),
+        'geolocation_geometry_within' => $this->t('This field ST_WITHIN that geometry'),
+        'geolocation_geometry_contains' => $this->t('This field ST_CONTAINS that geometry'),
+        'geolocation_geometry_intersects' => $this->t('This field ST_INTERSECT that geometry'),
       ],
       '#title' => $this->t('Relationship type'),
       '#description' => $this->t('Spatial join type on DB level'),

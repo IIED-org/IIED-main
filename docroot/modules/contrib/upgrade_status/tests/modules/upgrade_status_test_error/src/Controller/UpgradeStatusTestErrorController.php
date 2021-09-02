@@ -4,15 +4,13 @@ namespace Drupal\upgrade_status_test_error\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 
+/**
+ * Test class which contains deprecation error.
+ */
 class UpgradeStatusTestErrorController extends ControllerBase {
 
   public function content() {
-    menu_cache_clear_all();
-
-    return [
-      '#type' => 'markup',
-      '#markup' => $this->t('I am deprecated.'),
-    ];
+    upgrade_status_test_contrib_error_function_8_to_9();
   }
 
 }

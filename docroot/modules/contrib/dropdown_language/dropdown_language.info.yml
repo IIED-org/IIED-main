@@ -9,7 +9,7 @@ core_version_requirement: ^8 || ^9
 type: module
 configure: dropdown_language.setting
 
-# Information added by Drupal.org packaging script on 2020-03-21
-version: '8.x-2.6'
+# Information added by Drupal.org packaging script on 2021-02-09
+version: '8.x-2.7'
 project: 'dropdown_language'
-datestamp: 1584793089
+datestamp: 1612902508

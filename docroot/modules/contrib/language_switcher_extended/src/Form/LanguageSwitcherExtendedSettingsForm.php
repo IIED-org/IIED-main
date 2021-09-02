@@ -81,6 +81,17 @@ class LanguageSwitcherExtendedSettingsForm extends ConfigFormBase {
         ],
       ],
     ];
+    $form['hide_single_link_block'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Hide single link block'),
+      '#description' => $this->t('Hide the block when the single link is hidden.'),
+      '#default_value' => $config->get('hide_single_link_block'),
+      '#states' => [
+        'visible' => [
+          ':input[name="hide_single_link"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
     $form['current_language_mode'] = [
       '#type' => 'select',
       '#title' => $this->t('Current language mode'),
@@ -116,6 +127,7 @@ class LanguageSwitcherExtendedSettingsForm extends ConfigFormBase {
     $config->set('untranslated_handler', $form_state->getValue('untranslated_handler'));
     $config->set('current_language_mode', $form_state->getValue('current_language_mode'));
     $config->set('hide_single_link', $form_state->getValue('hide_single_link'));
+    $config->set('hide_single_link_block', $form_state->getValue('hide_single_link_block'));
     $config->set('show_langcode', $form_state->getValue('show_langcode'));
     $config->save();
 

@@ -19,8 +19,17 @@ function geolocation_geometry_requirements($phase) {
 
   // Must be MySQL >= 5.7.6 or MariaDB >= 10.1.2.
   $connection = \Drupal::database();
+
   if ($connection->driver() === 'mysql') {
-    if ((float) substr($connection->version(), 0, 5) >= 5.7) {
+    $version = $connection->version();
+    if ((float) substr($version, 0, 5) >= 5.7) {
+      return $requirements;
+    }
+    elseif (
+      strpos($version, 'MariaDB') !== FALSE
+      && strpos($version, '10.') !== FALSE
+      && strpos($version, '10.0') === FALSE
+    ) {
       return $requirements;
     }
   }

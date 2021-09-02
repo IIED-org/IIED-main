@@ -10,6 +10,7 @@ use Drupal\Core\Field\WidgetInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\geolocation\Plugin\Field\FieldWidget\GeolocationMapWidgetBase;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\geolocation_address\Plugin\migrate\field\Location;
 
 /**
  * {@inheritdoc}
@@ -372,4 +373,16 @@ function geolocation_address_get_widget_settings(WidgetInterface $widget) {
     'button_position' => NULL,
     'ignore' => [],
   ];
+}
+
+/**
+ * Implements hook_migrate_field_info_alter().
+ */
+function geolocation_address_migrate_field_info_alter(&$definitions) {
+  // When geolocation and also address modules are present, we can migrate both
+  // the geological locations and also the addresses into their own field.
+  if (!empty($definitions['location'])) {
+    $definitions['location']['class'] = Location::class;
+    $definitions['location']['provider'] = 'geolocation_address';
+  }
 }

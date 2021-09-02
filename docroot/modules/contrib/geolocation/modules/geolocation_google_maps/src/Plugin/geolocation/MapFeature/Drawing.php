@@ -10,7 +10,7 @@ use Drupal\Core\Render\BubbleableMetadata;
  *
  * @MapFeature(
  *   id = "drawing",
- *   name = @Translation("Drawing"),
+ *   name = @Translation("DEPRECATED - Drawing"),
  *   description = @Translation("Draw lines and areas over markers."),
  *   type = "google_maps",
  * )
@@ -48,8 +48,6 @@ class Drawing extends MapFeatureBase {
    * {@inheritdoc}
    */
   public function getSettingsForm(array $settings, array $parents) {
-    $settings = $this->getSettings($settings);
-
     $states_prefix = array_shift($parents) . '[' . implode('][', $parents) . ']';
 
     $form['polyline'] = [
@@ -149,8 +147,6 @@ class Drawing extends MapFeatureBase {
    */
   public function alterMap(array $render_array, array $feature_settings, array $context = []) {
     $render_array = parent::alterMap($render_array, $feature_settings, $context);
-
-    $feature_settings = $this->getSettings($feature_settings);
 
     $render_array['#attached'] = BubbleableMetadata::mergeAttachments(
       empty($render_array['#attached']) ? [] : $render_array['#attached'],

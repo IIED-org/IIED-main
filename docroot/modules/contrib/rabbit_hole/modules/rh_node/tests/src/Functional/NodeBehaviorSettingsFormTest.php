@@ -80,6 +80,7 @@ class NodeBehaviorSettingsFormTest extends RabbitHoleBehaviorSettingsFormTestBas
     $this->assertRabbitHoleSettings();
     $button_label = \Drupal::moduleHandler()->moduleExists('field_ui') ? 'Save and manage fields' : 'Save content type';
     $this->submitForm($edit, $button_label);
+    $this->bundle = $this->loadBundle($edit['type']);
     return $edit['type'];
   }
 

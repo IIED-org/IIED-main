@@ -96,12 +96,17 @@ map_center.viewsBoundaryArgument:
 location_input.client_location:
   js:
     js/LocationInput/client-location.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
 
 location_input.geocoder:
   js:
     js/LocationInput/geocoder.js: {}
   dependencies:
     - geolocation/geolocation.geocoder.api
+    - core/jquery
+    - core/jquery.once
 
 #
 #

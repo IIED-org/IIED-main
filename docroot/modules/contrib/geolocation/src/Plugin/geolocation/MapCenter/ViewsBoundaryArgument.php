@@ -2,6 +2,7 @@
 
 namespace Drupal\geolocation\Plugin\geolocation\MapCenter;
 
+use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\geolocation\MapCenterInterface;
 use Drupal\geolocation\MapCenterBase;
 use Drupal\geolocation\ViewsContextTrait;
@@ -62,7 +63,7 @@ class ViewsBoundaryArgument extends MapCenterBase implements MapCenterInterface 
         && isset($values['lng_south_west'])
         && $values['lng_south_west'] !== ""
       ) {
-        $map['#attached'] = array_merge_recursive($map['#attached'], [
+        $map['#attached'] = BubbleableMetadata::mergeAttachments($map['#attached'], [
           'library' => [
             'geolocation/map_center.viewsBoundaryArgument',
           ],

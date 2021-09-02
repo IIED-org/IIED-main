@@ -51,7 +51,7 @@ class UnescoWorldHeritage extends GeolocationGeometryDataBase {
           'format' => filter_default_format(),
         ],
         'field_geometry_data_point' => [
-          'wkt' => 'POINT(' . $site->longitude . ' ' . $site->latitude . ')',
+          'geojson' => '{"type": "Point", "coordinates": [' . $site->longitude . ', ' . $site->latitude . ']}',
         ],
       ]);
       $node->save();

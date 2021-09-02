@@ -31,19 +31,26 @@ class Geolocation extends FieldTargetBase {
    * {@inheritdoc}
    */
   protected function prepareValue($delta, array &$values) {
-    if (isset($values)) {
-      if (isset($values['lat']) && isset($values['lng'])) {
-        $values['lat'] = floatval($values['lat']);
-        $values['lng'] = floatval($values['lng']);
-        $values['lat_sin'] = sin(deg2rad($values['lat']));
-        $values['lat_cos'] = cos(deg2rad($values['lat']));
-        $values['lng_rad'] = deg2rad($values['lng']);
+    // Both latitude and longitude must be set in order to prepare the values.
+    // Check if both contain values.
+    foreach (['lat', 'lng'] as $key) {
+      if (!isset($values[$key])) {
+        // Value is not set. Abort.
+        throw new EmptyFeedException();
       }
-      return $values;
+      if (empty($values[$key]) && $values[$key] !== '0' && $values[$key] !== 0) {
+        // Value is empty and is not zero. Abort.
+        throw new EmptyFeedException();
+      }
     }
-    else {
-      throw new EmptyFeedException();
-    }
+
+    $values['lat'] = floatval($values['lat']);
+    $values['lng'] = floatval($values['lng']);
+    $values['lat_sin'] = sin(deg2rad($values['lat']));
+    $values['lat_cos'] = cos(deg2rad($values['lat']));
+    $values['lng_rad'] = deg2rad($values['lng']);
+
+    return $values;
   }
 
   /**

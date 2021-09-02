@@ -103,6 +103,9 @@ class MigrateExecutable extends MigrateExecutableBase {
     if (isset($options['feedback'])) {
       $this->feedback = $options['feedback'];
     }
+    if (isset($options['sync'])) {
+      $this->migration->set('syncSource', $options['sync']);
+    }
     $this->idlist = MigrateTools::buildIdList($options);
 
     $this->listeners[MigrateEvents::MAP_SAVE] = [$this, 'onMapSave'];
@@ -244,7 +247,11 @@ class MigrateExecutable extends MigrateExecutableBase {
    */
   protected function removeListeners() {
     foreach ($this->listeners as $event => $listener) {
-      $this->getEventDispatcher()->removeListener($event, $listener);
+      // Don't remove the listener for the events that are currently being
+      // dispatched.
+      if ($event !== MigrateEvents::POST_IMPORT && $event !== MigrateEvents::POST_ROLLBACK) {
+        $this->getEventDispatcher()->removeListener($event, $listener);
+      }
     }
   }
 

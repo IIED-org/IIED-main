@@ -33,7 +33,7 @@ function rabbit_hole_help($route_name, RouteMatchInterface $route_match) {
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   The state of the form.
  */
-function _rabbit_hole_general_form_submit($form, FormStateInterface $form_state) {
+function _rabbit_hole_general_form_submit(array $form, FormStateInterface $form_state) {
   \Drupal::service('rabbit_hole.form_mangler')
     ->handleFormSubmit($form, $form_state);
 }
@@ -51,9 +51,10 @@ function rabbit_hole_form_alter(&$form, FormStateInterface $form_state, $form_id
   if ($form_state->getFormObject() instanceof EntityFormInterface) {
     $current_type = $form_state->getFormObject()->getEntity()->getEntityTypeId();
     $current_operation = $form_state->getFormObject()->getOperation();
-    $disallowed_operations = ['delete', 'cancel', 'reset', 'layout_builder', 'replicate'];
-    $administer_permitted = \Drupal::currentUser()
-            ->hasPermission('rabbit hole administer ' . $current_type);
+    $disallowed_operations = [
+      'delete', 'cancel', 'reset', 'layout_builder', 'replicate',
+    ];
+    $administer_permitted = \Drupal::currentUser()->hasPermission('rabbit hole administer ' . $current_type);
 
     $is_entity_form = in_array($current_type, $affected_types) && $administer_permitted && !in_array($current_operation, $disallowed_operations);
     $is_bundle_form = in_array($current_type, $affected_bundle_types) && !in_array($current_operation, $disallowed_operations);

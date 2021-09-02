@@ -63,3 +63,10 @@ function upgrade_status_update_8101() {
 function upgrade_status_update_8301() {
   \Drupal::keyValue('upgrade_status_scan_results')->deleteAll();
 }
+
+/**
+ * Delete state, because PHPStan fail state was incorrectly formatted.
+ */
+function upgrade_status_update_8302() {
+  \Drupal::keyValue('upgrade_status_scan_results')->deleteAll();
+}

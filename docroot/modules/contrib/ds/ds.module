@@ -309,16 +309,26 @@ function ds_entity_view_alter(&$build, EntityInterface $entity, EntityDisplayInt
     if (isset($component['third_party_settings']['ds']) && !empty($component['third_party_settings']['ds']['ds_limit'])) {
       $limit = $component['third_party_settings']['ds']['ds_limit'];
       if (isset($build[$field]) && isset($build[$field]['#items'])) {
-        if ($limit === 'delta' && isset($entity->ds_delta) && isset($entity->ds_delta[$field])) {
-          $delta = $entity->ds_delta[$field];
-          $filtered_elements = Element::children($build['field']);
+        if ($limit === 'delta' && isset($build['#ds_delta']) && isset($build['#ds_delta'][$field])) {
+
+          // Get delta.
+          $delta = $build['#ds_delta'][$field];
+
+          // Remove caching for this entity as it otherwise won't work.
+          unset($build['#cache']);
+
+          $filtered_elements = Element::children($build[$field]);
           foreach ($filtered_elements as $filtered_element) {
             if ($filtered_element != $delta) {
               unset($build[$field][$filtered_element]);
             }
           }
         }
-        else {
+        elseif (is_numeric($limit)) {
+
+          // Remove caching for this entity as it otherwise won't work.
+          unset($build['#cache']);
+
           $filtered_elements = Element::children($build[$field]);
           $filtered_elements = array_slice($filtered_elements, $limit);
           foreach ($filtered_elements as $filtered_element) {
@@ -350,7 +360,6 @@ function ds_entity_view_alter(&$build, EntityInterface $entity, EntityDisplayInt
         $field['settings'] = $field_values[$key]['settings'];
       }
 
-      /* @var $field_instance \Drupal\ds\Plugin\DsField\DsFieldInterface */
       $field_instance = Ds::getFieldInstance($key, $field, $entity, $view_mode, $display, $build);
       $field_value = $field_instance->build();
       $field_title = $field_instance->getTitle();
@@ -408,11 +417,6 @@ function template_preprocess_ds_entity_view(&$variables) {
 
   $configuration = $build['#ds_configuration'];
 
-  // Process the render array so we can reuse it.
-  // Don't add/override the cache key if there aren't any.
-  if (!empty($build['#cache']['keys'])) {
-    $build['#cache']['keys'][0] = 'ds_entity_view';
-  }
   unset($build['#theme']);
   unset($build['#pre_render']);
   unset($build['#sorted']);
@@ -497,17 +501,19 @@ function ds_preprocess_ds_layout(&$variables) {
   }
 
   // Create region variables based on the layout settings.
-  foreach ($layout_settings['wrappers'] as $region_name => $wrapper) {
-    // @todo remove from D9, This is deprecated
-    $variables[$region_name . '_classes'] = !empty($layout_settings['classes'][$region_name]) ? ' ' . implode(' ', $layout_settings['classes'][$region_name]) : '';
-    // The new way of doing stuff is creating an attributes object.
-    if (!empty($layout_settings['classes'][$region_name])) {
-      $variables[$region_name . '_attributes'] = new Attribute(['class' => $layout_settings['classes'][$region_name]]);
+  if (!empty($layout_settings['wrappers']) && is_array($layout_settings['wrappers'])) {
+    foreach ($layout_settings['wrappers'] as $region_name => $wrapper) {
+      // @todo remove from D9, This is deprecated
+      $variables[$region_name . '_classes'] = !empty($layout_settings['classes'][$region_name]) ? ' ' . implode(' ', $layout_settings['classes'][$region_name]) : '';
+      // The new way of doing stuff is creating an attributes object.
+      if (!empty($layout_settings['classes'][$region_name])) {
+        $variables[$region_name . '_attributes'] = new Attribute(['class' => $layout_settings['classes'][$region_name]]);
+      }
+      else {
+        $variables[$region_name . '_attributes'] = new Attribute();
+      }
+      $variables[$region_name . '_wrapper'] = !empty($layout_settings['wrappers'][$region_name]) ? $layout_settings['wrappers'][$region_name] : 'div';
     }
-    else {
-      $variables[$region_name . '_attributes'] = new Attribute();
-    }
-    $variables[$region_name . '_wrapper'] = !empty($layout_settings['wrappers'][$region_name]) ? $layout_settings['wrappers'][$region_name] : 'div';
   }
 
   // Add a layout wrapper.
@@ -1020,7 +1026,7 @@ function ds_field_formatter_third_party_settings_form(FormatterInterface $plugin
       '#type' => 'textfield',
       '#title' => t('UI limit'),
       '#size' => 2,
-      '#description' => t("Enter a number to limit the number of items or 'delta' to print a specific delta (usually configured in views or found in entity->ds_delta). Leave empty to display them all. Note that depending on the formatter settings, this option might not always work."),
+      '#description' => t("Enter a number to limit the number of items or 'delta' to print a specific delta (usually configured in views or found in entity->ds_delta).<br />Leave empty to display them all. Note that depending on the formatter settings, this option might not always work."),
       '#default_value' => !empty($settings[$name]['ds_limit']) ? $settings[$name]['ds_limit'] : '',
     ];
   }

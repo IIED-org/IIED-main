@@ -14,8 +14,11 @@ class CurrentLanguageRenderer extends RendererBase {
    *
    * @param \Drupal\views\ResultRow $row
    *   The result row.
+   *
+   * @return string
    */
   public function getLangcode(ResultRow $row) {
+    return $this->languageManager->getCurrentLanguage()->getId();
   }
 
 }

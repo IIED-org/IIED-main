@@ -66,6 +66,7 @@
             return;
           }
           var $element = uiAutocomplete.menu.element;
+          $element.data('search-api-autocomplete-input-id', this.id);
           $element.addClass('search-api-autocomplete-search');
           var elementSettings = autocomplete.getSettings(this, settings);
           if (elementSettings['delay']) {

@@ -51,8 +51,6 @@ class LeafletMarkerIcon extends MapFeatureBase {
    * {@inheritdoc}
    */
   public function getSettingsForm(array $settings, array $parents) {
-    $settings = $this->getSettings($settings);
-
     $form['marker_icon_path'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Icon path'),
@@ -154,8 +152,6 @@ class LeafletMarkerIcon extends MapFeatureBase {
    */
   public function alterMap(array $render_array, array $feature_settings, array $context = []) {
     $render_array = parent::alterMap($render_array, $feature_settings, $context);
-
-    $feature_settings = $this->getSettings($feature_settings);
 
     $render_array['#attached'] = BubbleableMetadata::mergeAttachments(
       empty($render_array['#attached']) ? [] : $render_array['#attached'],

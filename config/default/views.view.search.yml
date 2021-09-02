@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - field.storage.node.body
-    - search_api.index.acquia_search_solr_search_api_solr_index
+    - search_api.index.acquia_search_index
     - user.role.anonymous
     - user.role.authenticated
   module:
@@ -17,7 +17,7 @@ label: Search
 module: views
 description: ''
 tag: ''
-base_table: search_api_index_acquia_search_solr_search_api_solr_index
+base_table: search_api_index_acquia_search_index
 base_field: search_api_id
 display:
   default:
@@ -124,7 +124,7 @@ display:
       fields:
         title:
           id: title
-          table: search_api_index_acquia_search_solr_search_api_solr_index
+          table: search_api_index_acquia_search_index
           field: title
           relationship: none
           group_type: group
@@ -193,7 +193,7 @@ display:
             multi_separator: ', '
           plugin_id: search_api_field
         body:
-          table: search_api_index_acquia_search_solr_search_api_solr_index
+          table: search_api_index_acquia_search_index
           field: body
           id: body
           entity_type: null
@@ -266,7 +266,7 @@ display:
       filters:
         search_api_fulltext:
           id: search_api_fulltext
-          table: search_api_index_acquia_search_solr_search_api_solr_index
+          table: search_api_index_acquia_search_index
           field: search_api_fulltext
           relationship: none
           group_type: group
@@ -320,7 +320,7 @@ display:
       sorts:
         search_api_relevance:
           id: search_api_relevance
-          table: search_api_index_acquia_search_solr_search_api_solr_index
+          table: search_api_index_acquia_search_index
           field: search_api_relevance
           relationship: none
           group_type: group
@@ -332,7 +332,7 @@ display:
           plugin_id: search_api
         field_date_published:
           id: field_date_published
-          table: search_api_index_acquia_search_solr_search_api_solr_index
+          table: search_api_index_acquia_search_index
           field: field_date_published
           relationship: none
           group_type: group
@@ -344,7 +344,7 @@ display:
           plugin_id: search_api
         title:
           id: title
-          table: search_api_index_acquia_search_solr_search_api_solr_index
+          table: search_api_index_acquia_search_index
           field: title
           relationship: none
           group_type: group
@@ -392,7 +392,7 @@ display:
         - user.roles
       tags:
         - 'config:field.storage.node.body'
-        - 'config:search_api.index.acquia_search_solr_search_api_solr_index'
+        - 'config:search_api.index.acquia_search_index'
   page_2:
     display_plugin: page
     id: page_2
@@ -414,7 +414,7 @@ display:
       filters:
         search_api_fulltext:
           id: search_api_fulltext
-          table: search_api_index_acquia_search_solr_search_api_solr_index
+          table: search_api_index_acquia_search_index
           field: search_api_fulltext
           relationship: none
           group_type: group
@@ -498,4 +498,4 @@ display:
         - user.roles
       tags:
         - 'config:field.storage.node.body'
-        - 'config:search_api.index.acquia_search_solr_search_api_solr_index'
+        - 'config:search_api.index.acquia_search_index'
