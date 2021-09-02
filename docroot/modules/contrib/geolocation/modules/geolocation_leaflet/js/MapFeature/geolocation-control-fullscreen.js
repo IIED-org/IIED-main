@@ -25,9 +25,13 @@
          * @param {GeolocationMapFeatureSettings} featureSettings - Settings for current feature.
          */
         function (map, featureSettings) {
-          L.control.fullscreen({
-            position: featureSettings.position
-          }).addTo(map.leafletMap);
+          map.leafletMap.addControl(new L.Control.Fullscreen({
+            position: featureSettings.position,
+            title: {
+              "false": Drupal.t("View Fullscreen"),
+              "true": Drupal.t("Exit Fullscreen")
+            }
+          }));
 
           return true;
         },

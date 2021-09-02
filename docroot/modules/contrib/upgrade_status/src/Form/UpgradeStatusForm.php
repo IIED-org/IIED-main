@@ -4,8 +4,10 @@ namespace Drupal\upgrade_status\Form;
 
 use Composer\Semver\Semver;
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\DrupalKernelInterface;
 use Drupal\Core\Extension\Extension;
 use Drupal\Core\Extension\ModuleHandler;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DateFormatter;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -17,6 +19,8 @@ use Drupal\Core\Url;
 use Drupal\upgrade_status\DeprecationAnalyzer;
 use Drupal\upgrade_status\ProjectCollector;
 use Drupal\upgrade_status\ScanResultFormatter;
+use Drupal\upgrade_status\Util\CorrectDbServerVersion;
+use Drupal\user\Entity\Role;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Cookie\SetCookie;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -96,6 +100,27 @@ class UpgradeStatusForm extends FormBase {
   protected $destination;
 
   /**
+   * The next Drupal core major version.
+   *
+   * @var int
+   */
+  protected $nextMajor;
+
+  /**
+   * Database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
+  /**
+   * Drupal kernel.
+   *
+   * @var \Drupal\Core\DrupalKernelInterface
+   */
+  protected $kernel;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -109,7 +134,9 @@ class UpgradeStatusForm extends FormBase {
       $container->get('upgrade_status.deprecation_analyzer'),
       $container->get('state'),
       $container->get('date.formatter'),
-      $container->get('redirect.destination')
+      $container->get('redirect.destination'),
+      $container->get('database'),
+      $container->get('kernel')
     );
   }
 
@@ -136,6 +163,10 @@ class UpgradeStatusForm extends FormBase {
    *   The date formatter.
    * @param \Drupal\Core\Routing\RedirectDestination $destination
    *   The destination service.
+   * @param \Drupal\Core\Database\Connection $connection
+   *   The database connection.
+   * @param \Drupal\Core\DrupalKernelInterface $kernel
+   *   The Drupal kernel.
    */
   public function __construct(
     ProjectCollector $project_collector,
@@ -147,7 +178,9 @@ class UpgradeStatusForm extends FormBase {
     DeprecationAnalyzer $deprecation_analyzer,
     StateInterface $state,
     DateFormatter $date_formatter,
-    RedirectDestination $destination
+    RedirectDestination $destination,
+    Connection $database,
+    DrupalKernelInterface $kernel
   ) {
     $this->projectCollector = $project_collector;
     $this->releaseStore = $key_value_expirable->get('update_available_releases');
@@ -159,6 +192,9 @@ class UpgradeStatusForm extends FormBase {
     $this->state = $state;
     $this->dateFormatter = $date_formatter;
     $this->destination = $destination;
+    $this->nextMajor = ProjectCollector::getDrupalCoreMajorVersion() + 1;
+    $this->database = $database;
+    $this->kernel = $kernel;
   }
 
   /**
@@ -193,12 +229,14 @@ class UpgradeStatusForm extends FormBase {
 
     $environment = $this->buildEnvironmentChecks();
     $form['summary'] = $this->buildResultSummary($environment['status']);
+    $environment_description = $environment['description'];
     unset($environment['status']);
+    unset($environment['description']);
 
     $form['environment'] = [
       '#type' => 'details',
       '#title' => $this->t('Drupal core and hosting environment'),
-      '#description' => $this->t('<a href=":upgrade">Upgrades to Drupal 9 are supported from Drupal 8.8.x and Drupal 8.9.x</a>. It is suggested to update to the latest Drupal 8 version available. <a href=":platform">Several hosting platform requirements have been raised for Drupal 9</a>.', [':upgrade' => 'https://www.drupal.org/docs/9/how-to-prepare-your-drupal-7-or-8-site-for-drupal-9/upgrading-a-drupal-8-site-to-drupal-9', ':platform' => 'https://www.drupal.org/docs/9/how-drupal-9-is-made-and-what-is-included/environment-requirements-of-drupal-9']),
+      '#description' => $environment_description,
       '#open' => TRUE,
       '#attributes' => ['class' => ['upgrade-status-summary-environment']],
       'data' => $environment,
@@ -270,10 +308,10 @@ class UpgradeStatusForm extends FormBase {
       'type'     => ['data' => $this->t('Type'), 'class' => 'type-label'],
       'status'   => ['data' => $this->t('Status'), 'class' => 'status-label'],
       'version'  => ['data' => $this->t('Local version'), 'class' => 'version-label'],
-      'ready'    => ['data' => $this->t('Local 9-ready'), 'class' => 'ready-label'],
+      'ready'    => ['data' => $this->t('Local ' . $this->nextMajor . '-ready'), 'class' => 'ready-label'],
       'result'   => ['data' => $this->t('Local scan result'), 'class' => 'scan-info'],
       'updatev'  => ['data' => $this->t('Drupal.org version'), 'class' => 'updatev-info'],
-      'update9'  => ['data' => $this->t('Drupal.org 9-ready'), 'class' => 'update9-info'],
+      'update9'  => ['data' => $this->t('Drupal.org ' . $this->nextMajor . '-ready'), 'class' => 'update9-info'],
       'issues'   => ['data' => $this->t('Drupal.org issues'), 'class' => 'issue-info'],
       'plan'     => ['data' => $this->t('Plan'), 'class' => 'plan-info'],
     ];
@@ -327,11 +365,11 @@ class UpgradeStatusForm extends FormBase {
         ]
       ];
       $option['ready'] = [
-        'class' => 'status-info ' . (!empty($extension->info['upgrade_status_9_compatible']) ? 'status-info-compatible' : 'status-info-incompatible'),
+        'class' => 'status-info ' . (!empty($extension->info['upgrade_status_next_major_compatible']) ? 'status-info-compatible' : 'status-info-incompatible'),
         'data' => [
           'label' => [
             '#type' => 'markup',
-            '#markup' => !empty($extension->info['upgrade_status_9_compatible']) ? $this->t('Compatible') : $this->t('Incompatible'),
+            '#markup' => !empty($extension->info['upgrade_status_next_major_compatible']) ? $this->t('Compatible') : $this->t('Incompatible'),
           ],
         ]
       ];
@@ -458,7 +496,7 @@ class UpgradeStatusForm extends FormBase {
               '#type' => 'markup',
               // Use the project name from the info array instead of $key.
               // $key is the local name, not necessarily the project name.
-              '#markup' => '<a href="https://drupal.org/project/issues/' . $extension->info['project'] . '?text=Drupal+9&status=All">' . $this->t('Issues') . '</a>',
+              '#markup' => '<a href="https://drupal.org/project/issues/' . $extension->info['project'] . '?text=Drupal+' . $this->nextMajor . '&status=All">' . $this->t('Issues', [], ['context' => 'Drupal.org issues']) . '</a>',
             ],
           ]
         ];
@@ -481,8 +519,9 @@ class UpgradeStatusForm extends FormBase {
   /**
    * Build a result summary table for quick overview display to users.
    *
-   * @param bool $environment_status
-   *   The status of the environment. Whether to put it into the Fix or Relax columns.
+   * @param bool|null $environment_status
+   *   The status of the environment. Whether to put it into the Fix or Relax
+   *   columns or omit it.
    *
    * @return array
    *   Render array.
@@ -552,7 +591,7 @@ class UpgradeStatusForm extends FormBase {
         // Add available update info.
         $cell_items[] = $update_time;
       }
-      if (($key == ProjectCollector::SUMMARY_ACT) && !$environment_status) {
+      if (($key == ProjectCollector::SUMMARY_ACT) && !is_null($environment_status) && !$environment_status) {
         $cell_items[] = [
           '#markup' => '<a href="#edit-environment" class="upgrade-status-summary-label">' . $this->t('Environment is incompatible') . '</a>',
         ];
@@ -598,14 +637,11 @@ class UpgradeStatusForm extends FormBase {
       </div>
 MARKUP
         ];
-        if ($environment_status) {
+        if (!empty($environment_status)) {
           $cell_items[] = [
             '#markup' => '<a href="#edit-environment" class="upgrade-status-summary-label">' . $this->t('Environment checks passed') . '</a>',
           ];
         }
-        $cell_items[] = [
-          '#markup' => 'Once entirely compatible, make sure to remove Upgrade Status from the site before updating to Drupal 9',
-        ];
       }
       if (count($cell_items)) {
         $build['#rows'][0]['data'][$key]['data'][] = [
@@ -627,8 +663,9 @@ MARKUP
    * Builds a list of environment checks.
    *
    * @return array
-   *   Build array. The overall environment status (TRUE or FALSE) is indicated
-   *   in the 'status' key.
+   *   Build array. The overall environment status (TRUE, FALSE or NULL) is
+   *   indicated in the 'status' key, while a 'description' key explains the
+   *   environment requirements on a high level.
    */
   protected function buildEnvironmentChecks() {
     $status = TRUE;
@@ -641,6 +678,119 @@ MARKUP
       '#header' => $header,
       '#rows' => [],
     ];
+
+    if ($this->nextMajor == 10) {
+      // @todo update this as the situation develops.
+      $build['description'] = $this->t('<a href=":environment">Drupal 10 environment requirements are still evolving</a>. Upgrades to Drupal 10 are planned to be supported from Drupal 9.3.x and Drupal 9.4.x.', [':environment' => 'https://www.drupal.org/project/drupal/issues/3118147']);
+
+      // Check PHP version.
+      $version = PHP_VERSION;
+      if (version_compare($version, '8.0.0') >= 0) {
+        $class = 'no-known-error';
+      }
+      else {
+        $class = 'known-error';
+        $status = FALSE;
+      }
+      $build['data']['#rows'][] = [
+        'class' => [$class],
+        'data' => [
+          'requirement' => [
+            'class' => 'requirement-label',
+            'data' => $this->t('PHP version should be at least 8.0.0. Before updating to PHP 8, use <code>$ composer why-not php:8</code> to check if any projects need updating for compatibility. Also check custom projects manually.'),
+          ],
+          'status' => [
+            'data' => $this->t('Version @version', ['@version' => $version]),
+            'class' => 'status-info',
+          ],
+        ]
+      ];
+
+      // Check JSON support in database.
+      $class = 'no-known-error';
+      $requirement = $this->t('Supported.');
+      try {
+        $this->database->query('SELECT JSON_TYPE(\'1\')');
+      }
+      catch (\Exception $e) {
+        $class = 'known-error';
+        $status = FALSE;
+        $requirement = $this->t('Not supported.');
+      }
+      $build['data']['#rows'][] = [
+        'class' => [$class],
+        'data' => [
+          'requirement' => [
+            'class' => 'requirement-label',
+            'data' => $this->t('Database JSON support required'),
+          ],
+          'status' => [
+            'data' => $requirement,
+            'class' => 'status-info',
+          ],
+        ]
+      ];
+
+      // Check user roles on the site for invalid permissions.
+      $class = 'no-known-error';
+      $requirement = [$this->t('None found.')];
+      $user_roles = Role::loadMultiple();
+      $all_permissions = array_keys(\Drupal::service('user.permissions')->getPermissions());
+      foreach ($user_roles as $role) {
+        $role_permissions = $role->getPermissions();
+        $valid_role_permissions = array_intersect($role_permissions, $all_permissions);
+        $invalid_role_permissions = array_diff($role_permissions, $valid_role_permissions);
+        if (!empty($invalid_role_permissions)) {
+          $class = 'known-error';
+          $status = FALSE;
+          $requirement = [$this->t('"@permissions" of user role: "@role".', ['@permissions' => implode('", "', $invalid_role_permissions), '@role' => $role->label()])];
+        }
+      }
+      $build['data']['#rows'][] = [
+        'class' => [$class],
+        'data' => [
+          'requirement' => [
+            'class' => 'requirement-label',
+            'data' => $this->t('Invalid permissions will trigger runtime exceptions in Drupal 10. Permissions should be defined in a permissions.yml file or a permission callback. See https://www.drupal.org/node/3193348'),
+          ],
+          'status' => [
+            'data' => join(' ', $requirement),
+            'class' => 'status-info',
+          ],
+        ]
+      ];
+
+      // Check for deprecated or obsolete core extensions.
+      $class = 'no-known-error';
+      $requirement = $this->t('None installed.');
+      $deprecated_or_obsolete = $this->projectCollector->collectCoreDeprecatedAndObsoleteExtensions();
+      if (!empty($deprecated_or_obsolete)) {
+        $class = 'known-error';
+        $status = FALSE;
+        $requirement = join(', ', $deprecated_or_obsolete);
+      }
+      $build['data']['#rows'][] = [
+        'class' => [$class],
+        'data' => [
+          'requirement' => [
+            'class' => 'requirement-label',
+            'data' => $this->t('Deprecated or obsolete core extensions installed. These will be removed in the next major version.'),
+          ],
+          'status' => [
+            'data' => $requirement,
+            'class' => 'status-info',
+          ],
+        ]
+      ];
+
+      // Save the overall status indicator in the build array. It will be
+      // popped off later to be used in the summary table.
+      $build['status'] = $status;
+
+      return $build;
+    }
+
+    $build['description'] = $this->t('<a href=":upgrade">Upgrades to Drupal 9 are supported from Drupal 8.8.x and Drupal 8.9.x</a>. It is suggested to update to the latest Drupal 8 version available. <a href=":platform">Several hosting platform requirements have been raised for Drupal 9</a>.', [':upgrade' => 'https://www.drupal.org/docs/9/how-to-prepare-your-drupal-7-or-8-site-for-drupal-9/upgrading-a-drupal-8-site-to-drupal-9', ':platform' => 'https://www.drupal.org/docs/9/how-drupal-9-is-made-and-what-is-included/environment-requirements-of-drupal-9']);
 
     // Check Drupal version. Link to update if available.
     $core_version_info = [
@@ -715,9 +865,15 @@ MARKUP
     ];
 
     // Check database version.
-    $database = \Drupal::database();
-    $type = $database->databaseType();
-    $version = $database->version();
+    $type = $this->database->databaseType();
+    $version = $this->database->version();
+
+    // If running on Drupal 8, the mysql driver might
+    // mis-report the database version.
+    if ($this->nextMajor == 9) {
+      $versionFixer = new CorrectDbServerVersion($this->database);
+      $version = $versionFixer->getCorrectedDbServerVersion($version);
+    }
 
     // MariaDB databases report as MySQL. Detect MariaDB separately based on code from
     // https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Database%21Driver%21mysql%21Connection.php/function/Connection%3A%3AgetMariaDbVersionMatch/9.0.x
@@ -863,6 +1019,45 @@ MARKUP
         ],
       ]
     ];
+
+    // Check deprecated $config_directories if after Drupal 8.8.0. On older
+    // Drupal versions, the replacement is not supported and the setting may
+    // be generated by platforms like ddev, leading to false positives that
+    // the user should not even resolve yet before updating core.
+    if (version_compare(\Drupal::VERSION, '8.8.0') >= 0) {
+      $class = 'no-known-error';
+      $requirement = $this->t('Use of $config_directories in settings.php is deprecated.');
+      $label = $this->t('Not used');
+      $is_deprecated = $this->isDeprecatedConfigDirectorySettingUsed();
+      if ($is_deprecated !== FALSE) {
+        $status = FALSE;
+        $class = 'known-error';
+        if ($is_deprecated === TRUE) {
+          $label = $this->t('Deprecated configuration used');
+          $requirement .= ' ' . $this->t('<a href=":settings">Use $settings[\'config_sync_directory\'] instead.</a>', [':settings' => 'https://www.drupal.org/node/3018145']);
+        }
+        else {
+          $label = $this->t('Deprecated and new configuration used');
+          $requirement .= ' ' . $this->t('<a href=":settings">Use $settings[\'config_sync_directory\'] only.</a>', [':settings' => 'https://www.drupal.org/node/3018145']);
+        }
+      }
+      $build['data']['#rows'][] = [
+        'class' => $class,
+        'data' => [
+          'requirement' => [
+            'class' => 'requirement-label',
+            'data' => [
+              '#type' => 'markup',
+              '#markup' => $requirement
+            ],
+          ],
+          'status' => [
+            'data' => $label,
+            'class' => 'status-info',
+          ],
+        ]
+      ];
+    }
 
     // Save the overall status indicator in the build array. It will be
     // popped off later to be used in the summary table.
@@ -1145,6 +1340,53 @@ MARKUP
     }
 
     return [$error, $message, $data];
+  }
+
+  /**
+   * Checks config directory settings for use of deprecated values.
+   *
+   * The $config_directories variable is deprecated in Drupal 8. However,
+   * the Settings object obscures the fact in Settings:initialise(), where
+   * it throws an error but levels the values in the deprecated location
+   * and $settings. So after that, it is not possible to tell if either
+   * were set in settings.php or not.
+   *
+   * Therefore we reproduce loading of settings and check the raw values.
+   *
+   * @return bool|NULL
+   *   TRUE if the deprecated setting is used. FALSE if not used.
+   *   NULL if both values are used.
+   */
+  protected function isDeprecatedConfigDirectorySettingUsed() {
+    $app_root = $this->kernel->getAppRoot();
+    $site_path = $this->kernel->getSitePath();
+    if (is_readable($app_root . '/' . $site_path . '/settings.php')) {
+      // Reset the "global" variables expected to exist for settings.
+      $settings = [];
+      $config = [];
+      $databases = [];
+      $class_loader = require $app_root . '/autoload.php';
+      require $app_root . '/' . $site_path . '/settings.php';
+    }
+
+    if (!empty($config_directories)) {
+      if (!empty($settings['config_sync_directory'])) {
+        // Both are set. The $settings copy will prevail in Settings::initialise().
+        return NULL;
+      }
+      // Only the deprecated variable is set.
+      return TRUE;
+    }
+
+    // The deprecated variable is not set.
+    return FALSE;
+  }
+
+  /**
+   * Dynamic page title for the form to make the status target clear.
+   */
+  public function getTitle() {
+    return $this->t('Drupal @version upgrade status', ['@version' => $this->nextMajor]);
   }
 
 }

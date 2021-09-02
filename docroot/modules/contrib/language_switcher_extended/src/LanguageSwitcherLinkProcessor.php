@@ -150,8 +150,9 @@ class LanguageSwitcherLinkProcessor {
 
       // Hides the links, if we have only a single language switcher item left.
       if ($config->get('hide_single_link') && count($links) < 2) {
-        $links = [];
+        $links = $config->get('hide_single_link_block') ? NULL : [];
       }
+
     }
   }
 
@@ -182,7 +183,7 @@ class LanguageSwitcherLinkProcessor {
       ->getId();
 
     // Display the current language without link.
-    //unset($links[$currentLanguage]['url']);
+    unset($links[$currentLanguage]['url']);
     $links[$currentLanguage]['attributes']['class'][] = 'is-active';
   }
 

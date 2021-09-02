@@ -7,6 +7,7 @@
 
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
+use Drupal\geolocation\Plugin\migrate\field\Location;
 
 /**
  * Implements hook_help().
@@ -53,7 +54,7 @@ function geolocation_theme() {
         'attributes' => NULL,
         'children' => NULL,
         'title' => NULL,
-        'position' => NULL,
+        'coordinates' => NULL,
         'id' => NULL,
         'hidden' => NULL,
         'icon' => NULL,
@@ -98,5 +99,31 @@ function geolocation_theme() {
       ],
       'template' => 'geolocation-sexagesimal-formatter',
     ],
+  ];
+}
+
+/**
+ * Implements hook_migrate_field_info_alter().
+ */
+function geolocation_migrate_field_info_alter(&$definitions) {
+  // Defines the location-to-geolocation migrate field plugin.
+  // This code also wants to replace the location-to-address migrate field
+  // plugin of Address module: a geolocation with latitude and longitude is way
+  // more accurate than a (partial) postal address.
+  if (\Drupal::moduleHandler()->moduleExists('geolocation_address')) {
+    return;
+  }
+
+  $definitions['location'] = [
+    'type_map' => [
+      'location' => 'geolocation',
+    ],
+    'weight' => 0,
+    'id' => 'location',
+    'core' => [7],
+    'source_module' => 'location_cck',
+    'destination_module' => 'geolocation',
+    'class' => Location::class,
+    'provider' => 'geolocation',
   ];
 }

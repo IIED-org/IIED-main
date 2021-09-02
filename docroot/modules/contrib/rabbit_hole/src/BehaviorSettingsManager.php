@@ -71,9 +71,7 @@ class BehaviorSettingsManager implements BehaviorSettingsManagerInterface {
 
     $actual = $this->configFactory->getEditable(
       'rabbit_hole.behavior_settings.'
-        . $this->generateBehaviorSettingsFullId($entity_type_id, $entity_id,
-            $is_bundle
-      )
+        . $this->generateBehaviorSettingsFullId($entity_type_id, $entity_id)
     );
     return !$actual->isNew() ? $actual : NULL;
   }

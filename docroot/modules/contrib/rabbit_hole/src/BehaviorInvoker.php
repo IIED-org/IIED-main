@@ -3,13 +3,13 @@
 namespace Drupal\rabbit_hole;
 
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
-use Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginManager;
 use Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginInterface;
+use Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginManager;
 use Drupal\rabbit_hole\Plugin\RabbitHoleEntityPluginManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Default implementation of Rabbit Hole behaviors invoker.
@@ -80,13 +80,17 @@ class BehaviorInvoker implements BehaviorInvokerInterface {
     RabbitHoleEntityPluginManager $plugin_manager_rabbit_hole_entity_plugin,
     EntityExtender $entity_extender,
     AccountProxyInterface $current_user,
-    ModuleHandlerInterface $module_handler
+    ModuleHandlerInterface $module_handler = NULL
   ) {
     $this->rhBehaviorSettingsManager = $rabbit_hole_behavior_settings_manager;
     $this->rhBehaviorPluginManager = $plugin_manager_rabbit_hole_behavior_plugin;
     $this->rhEntityPluginManager = $plugin_manager_rabbit_hole_entity_plugin;
     $this->rhEntityExtender = $entity_extender;
     $this->currentUser = $current_user;
+    if (!$module_handler) {
+      @trigger_error('The module_handler service must be passed to ' . __NAMESPACE__ . '\BehaviorInvoker::__construct(). It was added in 8.x-1.0-beta8 and will be required in 2.0 version.', E_USER_DEPRECATED);
+      $module_handler = \Drupal::moduleHandler();
+    }
     $this->moduleHandler = $module_handler;
   }
 
@@ -125,20 +129,11 @@ class BehaviorInvoker implements BehaviorInvokerInterface {
    * {@inheritdoc}
    */
   public function processEntity(ContentEntityInterface $entity, Response $current_response = NULL) {
-    $values = $this->getRabbitHoleValuesForEntity($entity);
-    $permission = 'rabbit hole bypass ' . $entity->getEntityTypeId();
-    $values['bypass_access'] = $this->currentUser->hasPermission($permission);
+    $plugin = $this->getBehaviorPlugin($entity);
 
-    // Allow altering Rabbit Hole values.
-    $this->moduleHandler->alter('rabbit_hole_values', $values, $entity);
-
-    // Do nothing if action is missing or access is bypassed.
-    if (empty($values['rh_action']) || $values['bypass_access']) {
+    if ($plugin === NULL) {
       return NULL;
     }
-
-    $plugin = $this->rhBehaviorPluginManager
-      ->createInstance($values['rh_action'], $values);
 
     $resp_use = $plugin->usesResponse();
     $response_required = $resp_use == RabbitHoleBehaviorPluginInterface::USES_RESPONSE_ALWAYS;
@@ -242,6 +237,25 @@ class BehaviorInvoker implements BehaviorInvokerInterface {
       $values[$field_key] = $config->get($config_field_key);
     }
     return $values;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getBehaviorPlugin(ContentEntityInterface $entity) {
+    $values = $this->getRabbitHoleValuesForEntity($entity);
+    $permission = 'rabbit hole bypass ' . $entity->getEntityTypeId();
+    $values['bypass_access'] = $this->currentUser->hasPermission($permission);
+
+    // Allow altering Rabbit Hole values.
+    $this->moduleHandler->alter('rabbit_hole_values', $values, $entity);
+
+    // Do nothing if action is missing or access is bypassed.
+    if (empty($values['rh_action']) || $values['bypass_access']) {
+      return NULL;
+    }
+
+    return $this->rhBehaviorPluginManager->createInstance($values['rh_action'], $values);
   }
 
 }

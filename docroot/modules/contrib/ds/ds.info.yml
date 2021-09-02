@@ -10,7 +10,7 @@ dependencies:
 test_dependencies:
   - field_group:field_group
 
-# Information added by Drupal.org packaging script on 2020-08-31
-version: '8.x-3.9'
+# Information added by Drupal.org packaging script on 2021-06-23
+version: '8.x-3.13'
 project: 'ds'
-datestamp: 1598898823
+datestamp: 1624456616

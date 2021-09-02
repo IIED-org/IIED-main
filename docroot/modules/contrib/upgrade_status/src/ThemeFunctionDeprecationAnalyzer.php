@@ -20,6 +20,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * A theme function deprecation analyzer.
+ *
+ * @todo Remove once Drupal 8 to 9 deprecations are not a focus anymore.
+ *   This is not dependent on Drupal 8 core itself though, so we can keep
+ *   it in Drupal 9 to 10 for the sake of exposing extremely outdated code.
  */
 final class ThemeFunctionDeprecationAnalyzer {
 
@@ -144,7 +148,7 @@ final class ThemeFunctionDeprecationAnalyzer {
       $deprecation_messages[] = new DeprecationMessage(sprintf('The %s is defining %s theme function. Theme functions are deprecated. For more info, see https://www.drupal.org/node/2575445.', $extension->getType(), $theme_function), $function_reflection->getFileName(), $node->getStartLine());
     }
 
-    // Find theme functions that are being added to an existing array using 
+    // Find theme functions that are being added to an existing array using
     // the array square bracket syntax.
     // @code
     // function hook_theme_registry_alter(&$theme_registry) {

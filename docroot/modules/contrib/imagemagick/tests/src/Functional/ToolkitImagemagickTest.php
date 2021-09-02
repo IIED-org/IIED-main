@@ -42,7 +42,12 @@ class ToolkitImagemagickTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'imagemagick', 'file_mdm', 'file_test'];
+  protected static $modules = [
+    'system',
+    'imagemagick',
+    'file_mdm',
+    'file_test',
+  ];
 
   /**
    * {@inheritdoc}
@@ -52,7 +57,7 @@ class ToolkitImagemagickTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     // Create an admin user.
@@ -74,7 +79,7 @@ class ToolkitImagemagickTest extends BrowserTestBase {
    *
    * @dataProvider providerToolkitConfiguration
    */
-  public function testTemporaryRemoteCopiesDeletion($toolkit_id, $toolkit_config, array $toolkit_settings) {
+  public function testTemporaryRemoteCopiesDeletion(string $toolkit_id, string $toolkit_config, array $toolkit_settings): void {
     $this->setUpToolkit($toolkit_id, $toolkit_config, $toolkit_settings);
     $this->prepareImageFileHandling();
 
@@ -86,13 +91,52 @@ class ToolkitImagemagickTest extends BrowserTestBase {
     // Simulate Drupal shutdown.
     $callbacks = drupal_register_shutdown_function();
     foreach ($callbacks as $callback) {
-      if ($callback['callback'] === [ImagemagickEventSubscriber::class, 'removeTemporaryRemoteCopy']) {
+      if ($callback['callback'] === [
+        ImagemagickEventSubscriber::class,
+        'removeTemporaryRemoteCopy',
+      ]) {
         call_user_func_array($callback['callback'], $callback['arguments']);
       }
     }
 
     // Ensure we have no leftovers in the temporary directory.
     $this->assertCount(0, $this->fileSystem->scanDirectory('temporary://', '/ima.*/'), 'No files left in the temporary directory after the Drupal shutdown.');
+  }
+
+  /**
+   * Tests that double cropping returns an image of expected dimensions.
+   *
+   * @param string $toolkit_id
+   *   The id of the toolkit to set up.
+   * @param string $toolkit_config
+   *   The config object of the toolkit to set up.
+   * @param array $toolkit_settings
+   *   The settings of the toolkit to set up.
+   *
+   * @dataProvider providerToolkitConfiguration
+   */
+  public function testDoubleCropping(string $toolkit_id, string $toolkit_config, array $toolkit_settings): void {
+    $this->setUpToolkit($toolkit_id, $toolkit_config, $toolkit_settings);
+    $this->prepareImageFileHandling();
+
+    // Prepare a test image.
+    $image = $this->imageFactory->get('public://image-test.png');
+    $image->resize(5833, 3889);
+    $image->save('public://3204498-test.png');
+
+    // Process the image.
+    $test_image = $this->imageFactory->get('public://3204498-test.png');
+    $this->assertSame(5833, $test_image->getWidth());
+    $this->assertSame(3889, $test_image->getHeight());
+    $test_image->crop(0, 1601, 5826, 1456);
+    $test_image->resize(1601, 400);
+    $test_image->crop(100, 0, 1400, 400);
+    $test_image->save('public://3204498-test-derived.png');
+
+    // Check the resulting image.
+    $derived_test_image = $this->imageFactory->get('public://3204498-test-derived.png');
+    $this->assertSame(1400, $derived_test_image->getWidth());
+    $this->assertSame(400, $derived_test_image->getHeight());
   }
 
   /**
@@ -111,7 +155,7 @@ class ToolkitImagemagickTest extends BrowserTestBase {
    *
    * @dataProvider providerToolkitConfiguration
    */
-  public function testManipulations($toolkit_id, $toolkit_config, array $toolkit_settings) {
+  public function testManipulations(string $toolkit_id, string $toolkit_config, array $toolkit_settings): void {
     $this->setUpToolkit($toolkit_id, $toolkit_config, $toolkit_settings);
     $this->prepareImageFileHandling();
 
@@ -130,6 +174,7 @@ class ToolkitImagemagickTest extends BrowserTestBase {
       'image-test.gif',
       'image-test-no-transparency.gif',
       'image-test.jpg',
+      'img-test.webp',
     ];
 
     // Setup a list of tests to perform on each type.
@@ -217,6 +262,15 @@ class ToolkitImagemagickTest extends BrowserTestBase {
         'corners' => $default_corners,
         'tolerance' => 5,
       ],
+      'convert_webp' => [
+        'function' => 'convert',
+        'width' => 40,
+        'height' => 20,
+        'arguments' => ['extension' => 'webp'],
+        'mimetype' => 'image/webp',
+        'corners' => $default_corners,
+        'tolerance' => 27,
+      ],
       'rotate_5' => [
         'function' => 'rotate',
         'arguments' => [
@@ -290,8 +344,11 @@ class ToolkitImagemagickTest extends BrowserTestBase {
         // Load up a fresh image.
         $image = $this->imageFactory->get($image_uri);
         if (!$image->isValid()) {
+          // WEBP may be not supported by the binaries.
+          if ($file === 'img-test.webp') {
+            continue 2;
+          }
           $this->fail("Could not load image $file.");
-          continue 2;
         }
 
         // Check that no multi-frame information is set.
@@ -302,7 +359,12 @@ class ToolkitImagemagickTest extends BrowserTestBase {
 
         // Save and reload image.
         $file_path = $this->testDirectory . '/' . $op . substr($file, -4);
-        $this->assertTrue($image->save($file_path));
+        $save_result = $image->save($file_path);
+        // WEBP may be not supported by the binaries.
+        if (!$save_result && $op === 'convert_webp') {
+          continue 2;
+        }
+        $this->assertTrue($save_result);
         $image = $this->imageFactory->get($file_path);
         $this->assertTrue($image->isValid());
 
@@ -362,6 +424,11 @@ class ToolkitImagemagickTest extends BrowserTestBase {
         $this->assertTrue($correct_dimensions_real, "Image '$file' after '$op' action has proper dimensions. Expected {$values['width']}x{$values['height']}, actual {$actual_toolkit_width}x{$actual_toolkit_height}.");
         $this->assertTrue($correct_dimensions_object, "Image '$file' object after '$op' action is reporting the proper height and width values.  Expected {$values['width']}x{$values['height']}, actual {$actual_image_width}x{$actual_image_height}.");
 
+        // GraphicsMagick on WEBP requires higher tolerance.
+        if ($file === 'img-test.webp' && $package === 'graphicsmagick') {
+          $values['tolerance'] += 4800;
+        }
+
         // JPEG colors will always be messed up due to compression.
         if ($image->getToolkit()->getType() != IMAGETYPE_JPEG) {
           // Now check each of the corners to ensure color correctness.
@@ -373,7 +440,11 @@ class ToolkitImagemagickTest extends BrowserTestBase {
             }
             // The test jpg when converted to other formats has yellow where the
             // others have transparent.
-            if ($file === 'image-test.jpg' && $corner === $this->transparent && in_array($op, ['convert_gif', 'convert_png'])) {
+            if ($file === 'image-test.jpg' && $corner === $this->transparent && in_array($op, [
+              'convert_gif',
+              'convert_png',
+              'convert_webp',
+            ])) {
               $corner = $this->yellow;
             }
             // Get the location of the corner.
@@ -399,8 +470,7 @@ class ToolkitImagemagickTest extends BrowserTestBase {
                 break;
 
             }
-            $color = $this->getPixelColor($image, $x, $y);
-            $this->colorsAreClose($color, $corner, $values['tolerance'], $file, $op);
+            $this->assertColorsAreClose($corner, $this->getPixelColor($image, $x, $y), $values['tolerance'], $file, $op);
           }
         }
       }
@@ -570,7 +640,7 @@ class ToolkitImagemagickTest extends BrowserTestBase {
   /**
    * Function for finding a pixel's RGBa values.
    */
-  protected function getPixelColor(ImageInterface $image, $x, $y) {
+  protected function getPixelColor(ImageInterface $image, int $x, int $y): array {
     $toolkit = $image->getToolkit();
     $color_index = imagecolorat($toolkit->getResource(), $x, $y);
 
@@ -583,33 +653,29 @@ class ToolkitImagemagickTest extends BrowserTestBase {
   }
 
   /**
-   * Function to compare two colors by RGBa, within a tolerance.
+   * Asserts equality of two colors by RGBa, within a tolerance.
    *
    * Very basic, just compares the sum of the squared differences for each of
    * the R, G, B, A components of two colors against a 'tolerance' value.
    *
-   * @param int[] $actual
-   *   The actual RGBA array.
    * @param int[] $expected
    *   The expected RGBA array.
+   * @param int[] $actual
+   *   The actual RGBA array.
    * @param int $tolerance
    *   The acceptable difference between the colors.
    * @param string $file
    *   The image file being tested.
    * @param string $op
    *   The image operation being tested.
-   *
-   * @return bool
-   *   TRUE if the colors differences are within tolerance, FALSE otherwise.
    */
-  protected function colorsAreClose(array $actual, array $expected, $tolerance, $file, $op) {
+  protected function assertColorsAreClose(array $expected, array $actual, int $tolerance, string $file, string $op): void {
     // Fully transparent colors are equal, regardless of RGB.
     if ($actual[3] == 127 && $expected[3] == 127) {
-      return TRUE;
+      return;
     }
     $distance = pow(($actual[0] - $expected[0]), 2) + pow(($actual[1] - $expected[1]), 2) + pow(($actual[2] - $expected[2]), 2) + pow(($actual[3] - $expected[3]), 2);
     $this->assertLessThanOrEqual($tolerance, $distance, "Actual: {" . implode(',', $actual) . "}, Expected: {" . implode(',', $expected) . "}, Distance: " . $distance . ", Tolerance: " . $tolerance . ", File: " . $file . ", Operation: " . $op);
-    return TRUE;
   }
 
 }

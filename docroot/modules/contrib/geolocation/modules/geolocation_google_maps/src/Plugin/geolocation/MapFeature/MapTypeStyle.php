@@ -31,9 +31,6 @@ class MapTypeStyle extends MapFeatureBase {
    * {@inheritdoc}
    */
   public function getSettingsForm(array $settings, array $parents) {
-
-    $settings = $this->getSettings($settings);
-
     $form['style'] = [
       '#title' => $this->t('JSON styles'),
       '#type' => 'textarea',
@@ -72,8 +69,6 @@ class MapTypeStyle extends MapFeatureBase {
    */
   public function alterMap(array $render_array, array $feature_settings, array $context = []) {
     $render_array = parent::alterMap($render_array, $feature_settings, $context);
-
-    $feature_settings = $this->getSettings($feature_settings);
 
     if (
       !empty($feature_settings['style'])

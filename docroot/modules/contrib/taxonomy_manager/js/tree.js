@@ -6,6 +6,11 @@
    */
   Drupal.behaviors.TaxonomyManagerTree = {
     attach: function (context, settings) {
+      // Handle click on autocomplete suggestion
+      $('.ui-widget-content.ui-autocomplete.ui-front').click(function() {
+        $('.taxonomy-manager-hidden-button').click();
+      });
+
       var treeSettings = settings.taxonomy_manager.tree || [];
       if (treeSettings instanceof Array) {
         for (var i = 0; i < treeSettings.length; i++) {

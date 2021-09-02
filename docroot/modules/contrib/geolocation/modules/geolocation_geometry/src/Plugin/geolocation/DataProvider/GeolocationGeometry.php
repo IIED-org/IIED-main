@@ -8,6 +8,7 @@ use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\geolocation\DataProviderInterface;
 use Drupal\Core\Field\FieldItemInterface;
 use Drupal\views\Plugin\views\field\EntityField;
+use Drupal\views\ResultRow;
 
 /**
  * Provides GPX.
@@ -125,6 +126,61 @@ class GeolocationGeometry extends DataProviderBase implements DataProviderInterf
     ];
 
     return $element;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getLocationsFromViewsRow(ResultRow $row, FieldPluginBase $viewsField = NULL) {
+    $locations = parent::getLocationsFromViewsRow($row, $viewsField);
+
+    $current_style = $viewsField->displayHandler->getPlugin('style');
+
+    if (
+      empty($current_style)
+      || !is_subclass_of($current_style, 'Drupal\geolocation\Plugin\views\style\GeolocationStyleBase')
+    ) {
+      return $locations;
+    }
+
+    foreach ($locations as &$location) {
+      if (!is_array($location)) {
+        continue;
+      }
+      $location['#title'] = $current_style->getTitleField($row);
+      $location['#label'] = $current_style->getLabelField($row);
+    }
+
+    return $locations;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getShapesFromViewsRow(ResultRow $row, FieldPluginBase $viewsField = NULL) {
+    $shapes = parent::getShapesFromViewsRow($row, $viewsField);
+
+    if (empty($shapes)) {
+      return $shapes;
+    }
+
+    $current_style = $viewsField->displayHandler->getPlugin('style');
+
+    if (
+      empty($current_style)
+      || !is_subclass_of($current_style, 'Drupal\geolocation\Plugin\views\style\GeolocationStyleBase')
+    ) {
+      return $shapes;
+    }
+
+    foreach ($shapes as &$shape) {
+      if (!is_array($shape)) {
+        continue;
+      }
+      $shape['#title'] = $current_style->getTitleField($row);
+    }
+
+    return $shapes;
   }
 
   /**
@@ -314,7 +370,7 @@ class GeolocationGeometry extends DataProviderBase implements DataProviderInterf
    * @param array $shapes
    *   Shapes to be filled.
    */
-  protected function parseGeoJson($geoJson, array &$locations, array &$shapes) {
+  protected function parseGeoJson(string $geoJson, array &$locations, array &$shapes) {
     $json = json_decode($geoJson);
 
     if (
@@ -324,7 +380,7 @@ class GeolocationGeometry extends DataProviderBase implements DataProviderInterf
       $json = [$json];
     }
 
-    foreach ($json as $key => $entry) {
+    foreach ($json as $entry) {
       if (empty($entry->type)) {
         continue;
       }

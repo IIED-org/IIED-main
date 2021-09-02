@@ -14,12 +14,12 @@ class ExecManagerTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['imagemagick', 'file_mdm', 'sophron'];
+  protected static $modules = ['imagemagick', 'file_mdm', 'sophron'];
 
   /**
    * Test missing command on ExecManager.
    */
-  public function testExecManagerCommandNotFound() {
+  public function testExecManagerCommandNotFound(): void {
     $exec_manager = \Drupal::service('imagemagick.exec_manager');
     $output = '';
     $error = '';
@@ -31,7 +31,7 @@ class ExecManagerTest extends KernelTestBase {
   /**
    * Test timeout on ExecManager.
    */
-  public function testExecManagerTimeout() {
+  public function testExecManagerTimeout(): void {
     $exec_manager = \Drupal::service('imagemagick.exec_manager');
     $output = '';
     $error = '';

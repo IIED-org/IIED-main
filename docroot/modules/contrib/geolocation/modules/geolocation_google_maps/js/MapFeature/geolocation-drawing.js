@@ -9,7 +9,7 @@
  * @property {String} enable
  * @property {Object} settings - Settings
  * @property {Boolean|String} settings.polyline - Draw polyline
- * @property {Boolean|String} settings.polygon - Draw polygone
+ * @property {Boolean|String} settings.polygon - Draw polygon
  */
 
 (function ($, Drupal) {

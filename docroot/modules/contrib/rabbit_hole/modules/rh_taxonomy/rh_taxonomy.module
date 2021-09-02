@@ -5,7 +5,7 @@
  * Contains rh_taxonomy.module.
  */
 
-use \Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
 
 /**
  * Implements hook_entity_base_field_info().

@@ -150,11 +150,12 @@ class GeolocationJavascriptTest extends GeolocationJavascriptTestBase {
 
     // Enable the checkbox to use current language.
     $edit = ['use_current_language' => TRUE];
-    $this->drupalPostForm(NULL, $edit, t('Save configuration'));
+    $this->submitForm($edit, t('Save configuration'));
 
     // Add and set French as the language. See from LanguageSwitchingTest.
     $edit = ['predefined_langcode' => 'fr'];
-    $this->drupalPostForm('admin/config/regional/language/add', $edit, t('Add language'));
+    $this->drupalGet('admin/config/regional/language/add');
+    $this->submitForm($edit, t('Add language'));
 
     \Drupal::service('language.config_factory_override')
       ->getOverride('fr', 'language.entity.fr')
@@ -163,7 +164,8 @@ class GeolocationJavascriptTest extends GeolocationJavascriptTestBase {
 
     // Enable URL language detection and selection.
     $edit = ['language_interface[enabled][language-url]' => '1'];
-    $this->drupalPostForm('admin/config/regional/language/detection', $edit, t('Save settings'));
+    $this->drupalGet('admin/config/regional/language/detection');
+    $this->submitForm($edit, t('Save settings'));
 
     $this->drupalGet('fr/node/4');
     $this->assertSession()->elementExists('css', 'html[lang="fr"]');
@@ -237,7 +239,7 @@ class GeolocationJavascriptTest extends GeolocationJavascriptTestBase {
       'field_geolocation[0][google_map_settings][height]' => '273px',
     ];
 
-    $this->drupalPostForm(NULL, $edit, t('Save'));
+    $this->submitForm($edit, t('Save'));
 
     $this->drupalGet('node/4');
 

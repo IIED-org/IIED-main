@@ -12,7 +12,6 @@ function rabbit_hole_post_update_entity_type_id_and_entity_id_for_existing_behav
   $excluded_behavior_settings = [
     'default',
     'default_bundle',
-    'user',
   ];
 
   $entity_type_manager = \Drupal::entityTypeManager();
@@ -29,7 +28,15 @@ function rabbit_hole_post_update_entity_type_id_and_entity_id_for_existing_behav
     $entity_id = NULL;
     $entity_type_id = NULL;
     $id_parts = explode('_', $behavior_setting->id());
-    while (!$entity_type_manager->hasHandler($entity_type_id, 'storage')) {
+
+    // Handle settings without entity bundle.
+    if (count($id_parts) === 1) {
+      $behavior_setting->set('entity_type_id', $behavior_setting->id());
+      $behavior_setting->save();
+      continue;
+    }
+
+    while (!$entity_type_manager->hasHandler($entity_type_id, 'storage') && !empty($id_parts)) {
       array_pop($id_parts);
       $entity_type_id = implode('_', $id_parts);
     }

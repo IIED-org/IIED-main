@@ -17,7 +17,7 @@ class ToolkitOperationsTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'imagemagick',
     'system',
     'file_mdm',
@@ -28,7 +28,7 @@ class ToolkitOperationsTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->installConfig(['system', 'imagemagick', 'sophron']);
   }
@@ -45,7 +45,7 @@ class ToolkitOperationsTest extends KernelTestBase {
    *
    * @dataProvider providerToolkitConfiguration
    */
-  public function testCreateNewImageArguments($toolkit_id, $toolkit_config, array $toolkit_settings) {
+  public function testCreateNewImageArguments(string $toolkit_id, string $toolkit_config, array $toolkit_settings): void {
     $this->setUpToolkit($toolkit_id, $toolkit_config, $toolkit_settings);
     $image = $this->imageFactory->get();
     $image->createNew(100, 200);
@@ -66,7 +66,7 @@ class ToolkitOperationsTest extends KernelTestBase {
    *
    * @dataProvider providerToolkitConfiguration
    */
-  public function testCreateNewImageFailures($toolkit_id, $toolkit_config, array $toolkit_settings) {
+  public function testCreateNewImageFailures(string $toolkit_id, string $toolkit_config, array $toolkit_settings): void {
     $this->setUpToolkit($toolkit_id, $toolkit_config, $toolkit_settings);
     $image = $this->imageFactory->get();
     $image->createNew(-50, 20);
@@ -91,7 +91,7 @@ class ToolkitOperationsTest extends KernelTestBase {
    *
    * @dataProvider providerToolkitConfiguration
    */
-  public function testOperationsOnImageWithNoDimensions($toolkit_id, $toolkit_config, array $toolkit_settings) {
+  public function testOperationsOnImageWithNoDimensions(string $toolkit_id, string $toolkit_config, array $toolkit_settings): void {
     $this->setUpToolkit($toolkit_id, $toolkit_config, $toolkit_settings);
     $image = $this->imageFactory->get();
     $image->createNew(100, 200);
@@ -139,7 +139,7 @@ class ToolkitOperationsTest extends KernelTestBase {
    *
    * @dataProvider providerToolkitConfiguration
    */
-  public function testScaleAndCropOperation($toolkit_id, $toolkit_config, array $toolkit_settings) {
+  public function testScaleAndCropOperation(string $toolkit_id, string $toolkit_config, array $toolkit_settings): void {
     $this->setUpToolkit($toolkit_id, $toolkit_config, $toolkit_settings);
     $image = $this->imageFactory->get();
     $image->createNew(100, 200);
@@ -149,7 +149,7 @@ class ToolkitOperationsTest extends KernelTestBase {
       'width' => 5,
       'height' => 10,
     ]);
-    $this->assertSame("-size 100x200 xc:transparent -resize 5x10! -crop 5x10+1+1!", $image->getToolkit()->arguments()->toString(ImagemagickExecArguments::POST_SOURCE));
+    $this->assertSame("-size 100x200 xc:transparent -resize 5x10! -crop 5x10+1+1 +repage", $image->getToolkit()->arguments()->toString(ImagemagickExecArguments::POST_SOURCE));
   }
 
   /**
@@ -164,12 +164,12 @@ class ToolkitOperationsTest extends KernelTestBase {
    *
    * @dataProvider providerToolkitConfiguration
    */
-  public function testScaleAndCropNoAnchorOperation($toolkit_id, $toolkit_config, array $toolkit_settings) {
+  public function testScaleAndCropNoAnchorOperation(string $toolkit_id, string $toolkit_config, array $toolkit_settings): void {
     $this->setUpToolkit($toolkit_id, $toolkit_config, $toolkit_settings);
     $image = $this->imageFactory->get();
     $image->createNew(100, 200);
     $image->apply('scale_and_crop', ['width' => 5, 'height' => 10]);
-    $this->assertSame("-size 100x200 xc:transparent -resize 5x10! -crop 5x10+0+0!", $image->getToolkit()->arguments()->toString(ImagemagickExecArguments::POST_SOURCE));
+    $this->assertSame("-size 100x200 xc:transparent -resize 5x10! -crop 5x10+0+0 +repage", $image->getToolkit()->arguments()->toString(ImagemagickExecArguments::POST_SOURCE));
   }
 
 }

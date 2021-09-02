@@ -21,7 +21,9 @@ class Austria extends GoogleCountryFormattingBase {
   public function format(array $atomics) {
     $address_elements = parent::format($atomics);
     if (
-      $atomics['streetNumber']
+      isset($atomics['streetNumber'])
+      && $atomics['streetNumber']
+      && isset($atomics['route'])
       && $atomics['route']
     ) {
       $address_elements['addressLine1'] = $atomics['route'] . ' ' . $atomics['streetNumber'];

@@ -3,7 +3,7 @@
 namespace Drupal\geolocation_geometry;
 
 /**
- * Trait GeometryBoundaryTrait.
+ * Trait Geometry Boundary.
  */
 trait GeometryBoundaryTrait {
 
@@ -14,19 +14,13 @@ trait GeometryBoundaryTrait {
    *   The proximity table name.
    * @param string $field_id
    *   The proximity field ID.
-   * @param string $filter_lat_north_east
-   *   The latitude to filter for.
-   * @param string $filter_lng_north_east
-   *   The longitude to filter for.
-   * @param string $filter_lat_south_west
-   *   The latitude to filter for.
-   * @param string $filter_lng_south_west
-   *   The longitude to filter for.
+   * @param string $placeholder
+   *   Placeholder SQL.
    *
    * @return string
    *   The fragment to enter to actual query.
    */
-  public static function getGeometryBoundaryQueryFragment($table_name, $field_id, $filter_lat_north_east, $filter_lng_north_east, $filter_lat_south_west, $filter_lng_south_west) {
+  public static function getGeometryBoundaryQueryFragment(string $table_name, string $field_id, string $placeholder): string {
     // Define the field name.
     $field_point = "{$table_name}.{$field_id}_geometry";
 
@@ -36,7 +30,39 @@ trait GeometryBoundaryTrait {
      * So latitude will always have north larger than south, but east not
      * necessarily larger than west.
      */
-    return 'ST_Contains(ST_GeomFromText(\'POLYGON((' . $filter_lat_south_west . ' ' . $filter_lng_south_west . ',' . $filter_lat_south_west . ' ' . $filter_lng_north_east . ',' . $filter_lat_north_east . ' ' . $filter_lng_north_east . ',' . $filter_lat_north_east . ' ' . $filter_lng_south_west . ',' . $filter_lat_south_west . ' ' . $filter_lng_south_west . '))\', 4326), ' . $field_point . ')';
+    return 'ST_Contains(
+      ST_GeomFromGeoJSON(' . $placeholder . '),
+      ' . $field_point . '
+    )';
+  }
+
+  /**
+   * Gets the value placeholder.
+   *
+   * @param string $placeholder
+   *   SQL placeholder.
+   * @param string|float $filter_lat_north_east
+   *   The latitude to filter for.
+   * @param string|float $filter_lng_north_east
+   *   The longitude to filter for.
+   * @param string|float $filter_lat_south_west
+   *   The latitude to filter for.
+   * @param string|float $filter_lng_south_west
+   *   The longitude to filter for.
+   *
+   * @return array
+   *   Placeholder array.
+   */
+  public static function getGeometryBoundaryQueryValue(string $placeholder, $filter_lat_north_east, $filter_lng_north_east, $filter_lat_south_west, $filter_lng_south_west): array {
+    return [
+      $placeholder  => '{"type": "Polygon","coordinates": [[
+        [' . $filter_lng_south_west . ', ' . $filter_lat_south_west . '],
+        [' . $filter_lng_north_east . ', ' . $filter_lat_south_west . '],
+        [' . $filter_lng_north_east . ', ' . $filter_lat_north_east . '],
+        [' . $filter_lng_south_west . ', ' . $filter_lat_north_east . '],
+        [' . $filter_lng_south_west . ', ' . $filter_lat_south_west . ']
+      ]]}',
+    ];
   }
 
 }

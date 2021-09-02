@@ -4,13 +4,8 @@ description: Example views and pages for some more common use cases
 core_version_requirement: ^8.7.7 || ^9
 package: Geolocation
 dependencies:
-  - geolocation:geolocation_demo
-  - geolocation:geolocation_leaflet
   - geolocation:geolocation_geometry
-  - geolocation:geolocation_geometry_data
-  - geolocation:geolocation_geometry_natural_earth_countries
-
-# Information added by Drupal.org packaging script on 2020-05-24
-version: '8.x-3.2'
+# Information added by Drupal.org packaging script on 2021-06-07
+version: '8.x-3.7'
 project: 'geolocation'
-datestamp: 1590319157
+datestamp: 1623052752

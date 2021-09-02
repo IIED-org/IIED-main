@@ -1,7 +1,7 @@
 <div {{ attributes }} typeof="Place">
   <span property="geo" typeof="GeoCoordinates">
-    <meta property="latitude" content="{{ position.lat }}" />
-    <meta property="longitude" content="{{ position.lng }}" />
+    <meta property="latitude" content="{{ coordinates.lat }}" />
+    <meta property="longitude" content="{{ coordinates.lng }}" />
   </span>
 
   {% if title is not empty %}

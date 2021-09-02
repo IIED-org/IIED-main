@@ -33,8 +33,6 @@ class ContextPopup extends MapFeatureBase {
    * {@inheritdoc}
    */
   public function getSettingsForm(array $settings, array $parents) {
-    $settings = $this->getSettings($settings);
-
     $form = parent::getSettingsForm($settings, $parents);
     $form['content'] = [
       '#type' => 'text_format',
@@ -57,8 +55,6 @@ class ContextPopup extends MapFeatureBase {
    */
   public function alterMap(array $render_array, array $feature_settings, array $context = []) {
     $render_array = parent::alterMap($render_array, $feature_settings, $context);
-
-    $feature_settings = $this->getSettings($feature_settings);
 
     if (
       !empty($settings['content']['value'])

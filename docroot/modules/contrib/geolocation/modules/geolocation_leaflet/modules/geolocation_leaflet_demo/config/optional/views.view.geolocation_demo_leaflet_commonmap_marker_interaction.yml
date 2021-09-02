@@ -81,6 +81,10 @@ display:
           marker_icon_path: ''
           marker_row_number: 0
           centre:
+            views_boundary_filter:
+              enable: true
+              weight: 0
+              map_center_id: views_boundary_filter
             fit_bounds:
               enable: true
               weight: 0
@@ -114,7 +118,7 @@ display:
                 weight: 0
                 settings:
                   position: topright
-                  default_label: false
+                  default_label: ''
                   tile_layer_providers:
                     OpenStreetMap:
                       'OpenStreetMap Mapnik':
@@ -514,23 +518,6 @@ display:
                 enabled: false
               leaflet_control_geocoder:
                 weight: 0
-                settings:
-                  position: topright
-                  geocoder: google_geocoding_api
-                  settings:
-                    label: Adresse
-                    description: 'Enter an address to be localized.'
-                    component_restrictions:
-                      route: ''
-                      locality: ''
-                      administrative_area: ''
-                      postal_code: ''
-                      country: ''
-                    boundary_restriction:
-                      south: ''
-                      west: ''
-                      north: ''
-                      east: ''
                 enabled: false
               leaflet_control_fullscreen:
                 weight: 0

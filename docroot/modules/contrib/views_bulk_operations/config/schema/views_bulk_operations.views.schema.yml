@@ -17,6 +17,12 @@ views.field.views_bulk_operations_bulk_form:
     action_title:
       type: string
       label: 'Title of the action selector form element'
+    clear_on_exposed:
+      type: boolean
+      label: 'Clear selection when exposed filters change'
+    force_selection_info:
+      type: boolean
+      label: 'Should the selection information always be displayed?'
     selected_actions:
       type: sequence
       label: 'Selected actions data array'
@@ -29,6 +35,3 @@ views.field.views_bulk_operations_bulk_form:
           preconfiguration:
             label: 'Preliminary configuration array for the plugin'
             type: ignore
-    clear_on_exposed:
-      type: boolean
-      label: 'Clear selection when exposed filters change'

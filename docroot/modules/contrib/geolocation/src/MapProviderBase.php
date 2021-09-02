@@ -11,7 +11,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Html;
 
 /**
- * Class MapProviderBase.
+ * Provide Map Provider Base class.
  *
  * @package Drupal\geolocation
  */
@@ -166,7 +166,9 @@ abstract class MapProviderBase extends PluginBase implements MapProviderInterfac
       }
 
       $feature_enable_id = Html::getUniqueId($feature_id . '_enabled');
-      $weight = isset($settings['map_features'][$feature_id]['weight']) ? $settings['map_features'][$feature_id]['weight'] : 0;
+      $weight = $settings['map_features'][$feature_id]['weight'] ?? 0;
+
+      $feature_settings = $settings['map_features'][$feature_id]['settings'] ?? [];
 
       $form['map_features'][$feature_id] = [
         '#weight' => $weight,
@@ -180,7 +182,7 @@ abstract class MapProviderBase extends PluginBase implements MapProviderInterfac
             'id' => $feature_enable_id,
           ],
           '#type' => 'checkbox',
-          '#default_value' => empty($settings['map_features'][$feature_id]['enabled']) ? FALSE : TRUE,
+          '#default_value' => !empty($settings['map_features'][$feature_id]['enabled']),
         ],
         'feature' => [
           '#type' => 'label',
@@ -198,7 +200,7 @@ abstract class MapProviderBase extends PluginBase implements MapProviderInterfac
       ];
 
       $feature_form = $feature->getSettingsForm(
-        empty($settings['map_features'][$feature_id]['settings']) ? [] : $settings['map_features'][$feature_id]['settings'],
+        $feature->getSettings($feature_settings),
         array_merge($parents, ['map_features', $feature_id, 'settings'])
       );
 
@@ -263,9 +265,9 @@ abstract class MapProviderBase extends PluginBase implements MapProviderInterfac
           $feature = $this->mapFeatureManager->getMapFeature($feature_id, []);
           if ($feature) {
             if (empty($feature_settings['settings'])) {
-              $feature_settings['settings'] = $feature->getSettings([]);
+              $feature_settings['settings'] = [];
             }
-            $render_array = $feature->alterMap($render_array, $feature_settings['settings'], $context);
+            $render_array = $feature->alterMap($render_array, $feature->getSettings($feature_settings['settings']), $context);
           }
         }
       }

@@ -11,6 +11,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
@@ -428,7 +429,7 @@ function ds_field_ui_layouts_save($form, FormStateInterface $form_state) {
     $record['layout']['settings']['attributes'] = '';
     $record['layout']['settings']['link_attribute'] = FALSE;
     $record['layout']['settings']['link_custom'] = '';
-    $fields = _ds_sort_fields($form_state->getValue('fields'), 'weight');
+    $fields = _ds_sort_fields((array) $form_state->getValue('fields'), 'weight');
     foreach ($fields as $field_key => $field) {
 
       // Ignore new fieldgroup, new field or existing field.
@@ -455,7 +456,7 @@ function ds_field_ui_layouts_save($form, FormStateInterface $form_state) {
   elseif (!empty($layout)) {
     $save_display = TRUE;
 
-    $fields = _ds_sort_fields($form_state->getValue('fields'), 'weight');
+    $fields = _ds_sort_fields((array) $form_state->getValue('fields'), 'weight');
 
     foreach ($fields as $key => $field) {
       // Make sure to hide hidden fields.
@@ -851,38 +852,56 @@ function _ds_field_ui_table_layouts($entity_type, $bundle, $view_mode, array &$f
     // See if we can clone from another view mode.
     $options = [];
     $entity_displays = \Drupal::configFactory()->listAll('core.entity_view_display.' . $entity_type . '.' . $bundle);
-    foreach ($entity_displays as $name) {
-      $row = \Drupal::config($name)->get();
-      if ($row['mode'] == $view_mode) {
-        continue;
-      }
-      if ($row['targetEntityType'] == $entity_type && $row['bundle'] == $bundle) {
-        $options[$row['id']] = Unicode::ucfirst(str_replace('_', ' ', $row['targetEntityType'])) . ' > ' . Unicode::ucfirst(str_replace('_', ' ', $row['bundle'])) . ' > ' . Unicode::ucfirst(str_replace('_', ' ', $row['mode']));
-      }
-    }
+    if (!empty($entity_displays)) {
+      $entity_type_info = \Drupal::entityTypeManager()->getDefinition($entity_type);
+      foreach ($entity_displays as $name) {
+        $row = \Drupal::config($name)->get();
+        if ($row['mode'] === $view_mode) {
+          continue;
+        }
 
-    if (!empty($options)) {
+        if ($row['mode'] != 'default') {
+          $view_mode_label = \Drupal::entityTypeManager()->getStorage('entity_view_mode')->load($entity_type . '.' . $row['mode'])->label();
+        }
+        else {
+          $view_mode_label = 'Default';
+        }
 
-      // Clone from another layout.
-      $form['ds_clone'] = [
-        '#type' => 'details',
-        '#group' => 'additional_settings',
-        '#title' => t('Clone layout'),
-        '#collapsible' => TRUE,
-        '#collapsed' => TRUE,
-      ];
-      $form['ds_clone']['clone'] = [
-        '#title' => t('Select an existing layout to clone.'),
-        '#type' => 'select',
-        '#options' => $options,
-        '#weight' => 20,
-      ];
-      $form['ds_clone']['clone_submit'] = [
-        '#type' => 'submit',
-        '#value' => t('Clone layout'),
-        '#submit' => ['ds_field_ui_layout_clone'],
-        '#weight' => 21,
-      ];
+        if ($row['targetEntityType'] === $entity_type && $row['bundle'] === $bundle) {
+          if ($entity_type_info->getBundleEntityType()) {
+            $bundle_info = \Drupal::entityTypeManager()->getStorage($entity_type_info->getBundleEntityType())->load($bundle);
+            $options[$row['id']] = $entity_type_info->getLabel() . ' > ' . $bundle_info->label() . ' > ' . $view_mode_label;
+          }
+          else {
+            $options[$row['id']] = $entity_type_info->getLabel() . ' > ' . $view_mode_label;
+          }
+        }
+      }
+
+      if (!empty($options)) {
+        natcasesort($options);
+
+        // Clone from another layout.
+        $form['ds_clone'] = [
+          '#type' => 'details',
+          '#group' => 'additional_settings',
+          '#title' => t('Clone layout'),
+          '#collapsible' => TRUE,
+          '#collapsed' => TRUE,
+        ];
+        $form['ds_clone']['clone'] = [
+          '#title' => t('Select an existing layout to clone.'),
+          '#type' => 'select',
+          '#options' => $options,
+          '#weight' => 20,
+        ];
+        $form['ds_clone']['clone_submit'] = [
+          '#type' => 'submit',
+          '#value' => t('Clone layout'),
+          '#submit' => ['ds_field_ui_layout_clone'],
+          '#weight' => 21,
+        ];
+      }
     }
   }
 
@@ -1134,6 +1153,80 @@ function _ds_field_ui_fields($entity_type, $bundle, $view_mode, array &$form, Fo
   $field_settings = $form['#ds_layout']['fields'];
   $form['#field_settings'] = $field_settings;
 
+  if (empty($form['fields'])) {
+    // EntityDisplayFormBase doesn't add the fields table and field_ui library
+    // when there are no fields.  Since DS needs those, we add them.
+    $form['#attached']['library'][] = 'field_ui/drupal.field_ui';
+    $form['fields'] = [
+      '#type' => 'field_ui_table',
+      '#weight' => -101,
+      '#header' => [
+        t('Field'),
+        t('Weight'),
+        t('Parent'),
+        t('Region'),
+        t('Label'),
+        ['data' => t('Format'), 'colspan' => 3],
+      ],
+      '#regions' => [],
+      '#attributes' => [
+        'class' => ['field-ui-overview'],
+        'id' => 'field-display-overview',
+      ],
+      '#tabledrag' => [
+        [
+          'action' => 'order',
+          'relationship' => 'sibling',
+          'group' => 'field-weight',
+        ],
+        [
+          'action' => 'match',
+          'relationship' => 'parent',
+          'group' => 'field-parent',
+          'subgroup' => 'field-parent',
+          'source' => 'field-name',
+        ],
+        [
+          'action' => 'match',
+          'relationship' => 'parent',
+          'group' => 'field-region',
+          'subgroup' => 'field-region',
+          'source' => 'field-name',
+        ],
+      ],
+    ];
+
+    // Check for the 'There are no fields yet added. You can add new fields on
+    // the Manage fields page.' warning message. We really don't need it.
+    $warnings = \Drupal::messenger()->messagesByType(MessengerInterface::TYPE_WARNING);
+    if (count($warnings) == 1) {
+      \Drupal::messenger()->deleteByType(MessengerInterface::TYPE_WARNING);
+    }
+
+    // In overviews involving nested rows from contributed modules (i.e
+    // field_group), the 'plugin type' selects can trigger a series of changes
+    // in child rows. The #ajax behavior is therefore not attached directly to
+    // the selects, but triggered by the client-side script through a hidden
+    // #ajax 'Refresh' button. A hidden 'refresh_rows' input tracks the name of
+    // affected rows.
+    $form['refresh_rows'] = ['#type' => 'hidden'];
+    $form['refresh'] = [
+      '#type' => 'submit',
+      '#value' => t('Refresh'),
+      '#op' => 'refresh_table',
+      '#submit' => ['::multistepSubmit'],
+      '#ajax' => [
+        'callback' => '::multistepAjax',
+        'wrapper' => 'field-display-overview-wrapper',
+        'effect' => 'fade',
+        // The button stays hidden, so we hide the Ajax spinner too. Ad-hoc
+        // spinners will be added manually by the client-side script.
+        'progress' => 'none',
+      ],
+      '#attributes' => ['class' => ['visually-hidden']],
+    ];
+
+  }
   $table = &$form['fields'];
   $form['#ds_fields'] = [];
 
@@ -1449,6 +1542,7 @@ function ds_field_row_form_format_summary_construct(&$table, $key, FormStateInte
  */
 function _ds_sort_fields(array $a, $subkey) {
   $c = [];
+  $b = [];
   foreach ($a as $k => $v) {
     if (isset($v[$subkey])) {
       $b[$k] = $v[$subkey];

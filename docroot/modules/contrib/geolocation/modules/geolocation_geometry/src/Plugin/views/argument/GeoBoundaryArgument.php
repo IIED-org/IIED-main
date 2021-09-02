@@ -48,9 +48,12 @@ class GeoBoundaryArgument extends BoundaryArgument {
       return;
     }
 
+    $placeholder = $this->placeholder() . '_boundary_geojson';
+
     $this->query->addWhereExpression(
       $group_by,
-      self::getGeometryBoundaryQueryFragment($this->ensureMyTable(), $this->realField, $lat_north_east, $lng_north_east, $lat_south_west, $lng_south_west)
+      self::getGeometryBoundaryQueryFragment($this->ensureMyTable(), $this->realField, $placeholder),
+      self::getGeometryBoundaryQueryValue($placeholder, $lat_north_east, $lng_north_east, $lat_south_west, $lng_south_west)
     );
   }
 

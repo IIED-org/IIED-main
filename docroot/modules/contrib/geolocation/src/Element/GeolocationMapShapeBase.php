@@ -28,6 +28,14 @@ abstract class GeolocationMapShapeBase extends RenderElement {
       $render_array['#id'] = $id;
     }
 
+    if (is_array($render_array['#coordinates'])) {
+      $coordinates = '';
+      foreach ($render_array['#coordinates'] as $coordinate) {
+        $coordinates .= $coordinate['lat'] . ',' . $coordinate['lng'] . ' ';
+      }
+      $render_array['#coordinates'] = $coordinates;
+    }
+
     foreach (Element::children($render_array) as $child) {
       $render_array['#children'][] = $render_array[$child];
     }

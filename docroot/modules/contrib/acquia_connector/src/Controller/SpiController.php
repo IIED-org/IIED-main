@@ -352,7 +352,7 @@ class SpiController extends ControllerBase {
   public function getAcquiaHostedMachineName() {
     $sub_data = $this->state()->get('acquia_subscription_data');
 
-    if ($this->checkAcquiaHosted() && $sub_data) {
+    if ($this->checkAcquiaHosted() && is_array($sub_data)) {
       $uuid = new StatusController();
       $sub_uuid = str_replace('-', '_', $uuid->getIdFromSub($sub_data));
 

@@ -1,0 +1,17 @@
+# Schema for the configuration files of the acquia_search module.
+acquia_search.settings:
+  type: config_object
+  label: 'Acquia Search Solr settings'
+  mapping:
+    api_host:
+      type: string
+      label: 'Acquia Search API endpoint domain or URL (no trailing slash). Default value is "https://api.sr-prod02.acquia.com"'
+    extract_query_handler_option:
+      type: string
+      label: 'Extract query handler option. Default value is "update/extract"'
+    read_only:
+      type: boolean
+      label: 'If TRUE, then read-only mode is enforced'
+    override_search_core:
+      type: string
+      label: 'String containing desired search core id. The search core should be available via Acquia Search API for the Acquia Subscription'

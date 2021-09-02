@@ -26,72 +26,76 @@
         return;
       }
 
-      $(context).find('[data-horizontal-tabs-panes]').once('horizontal-tabs').each(function () {
+      $(context).find('[data-horizontal-tabs]').once('horizontal-tabs').each(function() {
+        var horizontal_tabs_clearfix = this;
+        $(this).find('> [data-horizontal-tabs-panes]').each(function () {
+          var $this = $(this).addClass('horizontal-tabs-panes');
+          var focusID = $(':hidden.horizontal-tabs-active-tab', this).val();
+          var tab_focus;
 
-        var $this = $(this).addClass('horizontal-tabs-panes');
-        var focusID = $(':hidden.horizontal-tabs-active-tab', this).val();
-        var tab_focus;
-
-        // Check if there are some details that can be converted to horizontal-tabs
-        var $details = $this.find('> details');
-        if ($details.length === 0) {
-          return;
-        }
-
-        // If collapse.js did not do his work yet, call it directly.
-        if (!$($details[0]).hasClass('.collapse-processed')) {
-          Drupal.behaviors.collapse.attach(context);
-        }
-
-        // Create the tab column.
-        var tab_list = $('<ul class="horizontal-tabs-list"></ul>');
-        $(this).wrap('<div class="horizontal-tabs clearfix"></div>').before(tab_list);
-
-        // Transform each details into a tab.
-        $details.each(function (i) {
-          var $this = $(this);
-          var summaryElement = $this.find('> summary .details-title');
-
-          if (!summaryElement.length) {
-            summaryElement = $this.find('> summary');
+          // Check if there are some details that can be converted to horizontal-tabs
+          var $details = $this.find('> details');
+          if ($details.length === 0) {
+            return;
           }
 
-          var summaryText = summaryElement.clone().children().remove().end().text().trim() || summaryElement.find('> span:first-child').text().trim();
-          var horizontal_tab = new Drupal.horizontalTab({
-            title: summaryText,
-            details: $this
+          // If collapse.js did not do his work yet, call it directly.
+          if (!$($details[0]).hasClass('.collapse-processed')) {
+            Drupal.behaviors.collapse.attach(context);
+          }
+          // Find the tab column.
+          var tab_list = $(horizontal_tabs_clearfix).find('> [data-horizontal-tabs-list]');
+          tab_list.removeClass('visually-hidden')
+
+          // Transform each details into a tab.
+          $details.each(function (i) {
+            var $this = $(this);
+            var summaryElement = $this.find('> summary');
+            var detailsTitle = summaryElement.first().find('.details-title')
+            if (detailsTitle.length) {
+              var summaryText = detailsTitle.find('> span:last-child').text().trim();
+            }
+            else {
+              var summaryText = summaryElement.clone().children().remove().end().text().trim() || summaryElement.find('> span:first-child').text().trim();
+            }
+
+            var horizontal_tab = new Drupal.horizontalTab({
+              title: summaryText,
+              details: $this
+            });
+            horizontal_tab.item.addClass('horizontal-tab-button-' + i);
+            horizontal_tab.item.attr('data-horizontalTabButton', i);
+            tab_list.append(horizontal_tab.item);
+            $this
+              .removeClass('collapsed')
+              // prop() can't be used on browsers not supporting details element,
+              // the style won't apply to them if prop() is used.
+              .attr('open', true)
+              .addClass('horizontal-tabs-pane')
+              .data('horizontalTab', horizontal_tab);
+            if (this.id === focusID) {
+              tab_focus = $this;
+            }
           });
-          horizontal_tab.item.addClass('horizontal-tab-button-' + i);
-          tab_list.append(horizontal_tab.item);
-          $this
-            .removeClass('collapsed')
-            // prop() can't be used on browsers not supporting details element,
-            // the style won't apply to them if prop() is used.
-            .attr('open', true)
-            .addClass('horizontal-tabs-pane')
-            .data('horizontalTab', horizontal_tab);
-          if (this.id === focusID) {
-            tab_focus = $this;
+
+          $(tab_list).find('> li:first').addClass('first');
+          $(tab_list).find('> li:last').addClass('last');
+
+          if (!tab_focus) {
+            // If the current URL has a fragment and one of the tabs contains an
+            // element that matches the URL fragment, activate that tab.
+            var hash = window.location.hash.replace(/[=%;,\/]/g, '');
+            if (hash !== '#' && $(hash, this).length) {
+              tab_focus = $(hash, this).closest('.horizontal-tabs-pane');
+            }
+            else {
+              tab_focus = $this.find('> .horizontal-tabs-pane:first');
+            }
+          }
+          if (tab_focus.length) {
+            tab_focus.data('horizontalTab').focus();
           }
         });
-
-        $(tab_list).find('> li:first').addClass('first');
-        $(tab_list).find('> li:last').addClass('last');
-
-        if (!tab_focus) {
-          // If the current URL has a fragment and one of the tabs contains an
-          // element that matches the URL fragment, activate that tab.
-          var hash = window.location.hash.replace(/[=%;,\/]/g, '');
-          if (hash !== '#' && $(this).find(hash).length) {
-            tab_focus = $(this).find(hash).closest('.horizontal-tabs-pane');
-          }
-          else {
-            tab_focus = $this.find('> .horizontal-tabs-pane:first');
-          }
-        }
-        if (tab_focus.length) {
-          tab_focus.data('horizontalTab').focus();
-        }
       });
     }
   };

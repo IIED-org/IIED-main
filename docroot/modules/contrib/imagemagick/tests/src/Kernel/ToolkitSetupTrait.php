@@ -44,7 +44,7 @@ trait ToolkitSetupTrait {
    * @param array $toolkit_settings
    *   The settings of the toolkit to set up.
    */
-  protected function setUpToolkit($toolkit_id, $toolkit_config, array $toolkit_settings) {
+  protected function setUpToolkit(string $toolkit_id, string $toolkit_config, array $toolkit_settings): void {
     // Change the toolkit.
     \Drupal::configFactory()->getEditable('system.image')
       ->set('toolkit', $toolkit_id)
@@ -81,7 +81,7 @@ trait ToolkitSetupTrait {
    *   - 'toolkit_config': the config object of the toolkit.
    *   - 'toolkit_settings': an associative array of toolkit settings.
    */
-  public function providerToolkitConfiguration() {
+  public function providerToolkitConfiguration(): array {
     return [
       'ImageMagick-imagemagick' => [
         'toolkit_id' => 'imagemagick',
@@ -118,7 +118,7 @@ trait ToolkitSetupTrait {
    * ImageMagick executables that require a physical file passed in as a real
    * path.
    */
-  protected function prepareImageFileHandling() {
+  protected function prepareImageFileHandling(): void {
     if (!$this instanceof BrowserTestBase) {
       $this->fail(__CLASS__ . " is not a BrowserTestBase test class, and file system cannot be initialised properly for calling ImageMagick executables.");
     }
@@ -132,6 +132,14 @@ trait ToolkitSetupTrait {
 
     // Prepare a copy of test files.
     $this->getTestFiles('image');
+
+    /** @var \Drupal\Core\File\FileSystemInterface $file_system */
+    $file_system = \Drupal::service('file_system');
+    $original = \Drupal::root() . '/core/tests/fixtures/files';
+    $files = $file_system->scanDirectory($original, '/img-.*/');
+    foreach ($files as $file) {
+      $file_system->copy($file->uri, 'public://');
+    }
   }
 
 }

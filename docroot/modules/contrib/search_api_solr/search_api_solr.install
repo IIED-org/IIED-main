@@ -98,7 +98,7 @@ function search_api_solr_requirements($phase) {
                   'There are some files missing in the Solr server schema <a href=":url">@server</a>: @files. An updated config.zip should be downloaded and deployed to your Solr server.', [
                     ':url' => $server->toUrl('canonical')->toString(),
                     '@server' => $server->label(),
-                    '@files' => implode(', ', array_keys($extra_release_files)),
+                    '@files' => implode(', ', $extra_release_files),
                   ]
                 );
               }
@@ -202,7 +202,7 @@ function search_api_solr_requirements($phase) {
       }
     }
 
-    if (!Client::checkMinimal('6.0.0')) {
+    if (!Client::checkMinimal('6.1.3')) {
       $requirements['search_api_solr_solarium'] = [
         'title' => t('Solarium library'),
         'value' => t('Solarium library'),
@@ -2018,4 +2018,19 @@ function search_api_solr_update_8407() {
       }
     }
   }
+}
+
+/**
+ * Improved Japanese field type.
+ */
+function search_api_solr_update_8408() {
+  // Covered search_api_solr_update_8409().
+}
+
+
+/**
+ * Add Hungarian field type.
+ */
+function search_api_solr_update_8409() {
+  search_api_solr_update_helper_install_configs();
 }

@@ -105,7 +105,6 @@
             dataLayer.addListener('setgeometry', refreshGeoJsonFromData);
 
             map.data.addListener('click', function (event) {
-              console.log("Is this ever reached?");
               var newPolyPoints = [];
 
               event.feature.getGeometry().forEachLatLng(function (latlng) {

@@ -44,8 +44,6 @@ class MigrateFieldGroupTest extends MigrateDrupal7TestBase {
       'd7_taxonomy_vocabulary',
       'd7_view_modes',
       'd7_field',
-      'd7_field_instance',
-      'd7_field_formatter_settings',
       'd7_field_group',
     ]);
   }

@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\rabbit_hole\Functional;
 
+use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 use Drupal\rabbit_hole\Entity\BehaviorSettings;
 use Drupal\Tests\BrowserTestBase;
 
@@ -225,6 +226,9 @@ abstract class RabbitHoleBehaviorSettingsFormTestBase extends BrowserTestBase {
       'rh_action' => $action,
     ], 'Save');
 
+    // Make sure the editor didn't hit error page after the form save.
+    $this->assertSession()->statusCodeEquals(200);
+
     $entity = $this->loadEntity($entity_id);
     $this->assertEquals($action, $entity->get('rh_action')->value);
   }
@@ -251,6 +255,22 @@ abstract class RabbitHoleBehaviorSettingsFormTestBase extends BrowserTestBase {
     $this->loadEditEntityForm($entity_id);
 
     $this->assertSession()->checkboxChecked($this->getOptionId($action));
+  }
+
+  /**
+   * Test redirect after entity form save.
+   */
+  public function testEntityFormSaveRedirect() {
+    $override = BehaviorSettings::OVERRIDE_DISALLOW;
+    $action = 'access_denied';
+    $this->createEntityBundleFormSubmit($action, $override);
+    $this->loadCreateEntityForm();
+    $this->assertNoRabbitHoleSettings();
+    $this->submitForm([], $this->getEntityFormSubmit());
+
+    // Make sure the editor didn't hit error page after the form save in case
+    // there is no Rabbit Hole actions available.
+    $this->assertSession()->statusCodeEquals(200);
   }
 
   /**
@@ -318,6 +338,23 @@ abstract class RabbitHoleBehaviorSettingsFormTestBase extends BrowserTestBase {
   }
 
   /**
+   * Loads test bundle object.
+   *
+   * @param mixed $id
+   *   Bundle ID.
+   *
+   * @return \Drupal\Core\Config\Entity\ConfigEntityBundleBase
+   *   Loaded bundle.
+   */
+  protected function loadBundle($id) {
+    $storage = \Drupal::entityTypeManager()->getStorage($this->bundleEntityTypeName);
+    $storage->resetCache([$id]);
+    $bundle = $storage->load($id);
+    $this->assertInstanceOf(ConfigEntityBundleBase::class, $bundle);
+    return $bundle;
+  }
+
+  /**
    * Formats selector of the action input.
    *
    * @param string $action
@@ -328,6 +365,16 @@ abstract class RabbitHoleBehaviorSettingsFormTestBase extends BrowserTestBase {
    */
   protected function getOptionId($action) {
     return 'edit-rh-action-' . str_replace('_', '-', $action);
+  }
+
+  /**
+   * Returns form submit name/identifier for entity create/edit form.
+   *
+   * @return string
+   *   Value of the submit button whose click is to be emulated.
+   */
+  protected function getEntityFormSubmit() {
+    return 'edit-submit';
   }
 
   /**

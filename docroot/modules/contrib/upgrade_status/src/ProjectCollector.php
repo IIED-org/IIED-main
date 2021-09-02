@@ -2,7 +2,8 @@
 
 namespace Drupal\upgrade_status;
 
-use Composer\Semver\Semver;
+use Composer\Semver\VersionParser;
+use Composer\Semver\Constraint\Constraint;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ProfileExtensionList;
@@ -205,12 +206,12 @@ class ProjectCollector {
         // If the existing project was already Drupal 9 compatible, consider
         // this subcomponent as well. If this component was enabled, it would
         // affect how we consider the Drupal 9 compatibility.
-        if (!empty($projects[$project]->info['upgrade_status_9_compatible']) && !empty($extension->status)) {
+        if (!empty($projects[$project]->info['upgrade_status_next_major_compatible']) && !empty($extension->status)) {
           // Overwrite compatibility. If this is still compatible, it will
           // keep being TRUE, otherwise FALSE.
-          $projects[$project]->info['upgrade_status_9_compatible'] =
+          $projects[$project]->info['upgrade_status_next_major_compatible'] =
             isset($extension->info['core_version_requirement']) &&
-            Semver::satisfies('9.0.0', $extension->info['core_version_requirement']);
+            self::isCompatibleWithNextMajorDrupal($extension->info['core_version_requirement']);
         }
         continue;
       }
@@ -250,9 +251,9 @@ class ProjectCollector {
       // extension information elsewhere.
       $extdata = clone $extension;
       $extdata->info['upgrade_status_type'] = $type;
-      $extdata->info['upgrade_status_9_compatible'] =
+      $extdata->info['upgrade_status_next_major_compatible'] =
         isset($extdata->info['core_version_requirement']) &&
-        Semver::satisfies('9.0.0', $extdata->info['core_version_requirement']);
+        self::isCompatibleWithNextMajorDrupal($extdata->info['core_version_requirement']);
 
       // Save this as a possible project to consider.
       $projects[$key] = $extdata;
@@ -281,7 +282,7 @@ class ProjectCollector {
           // Add Drupal 9 compatibility info from the update's data.
           $latest_release = reset($project_update['releases']);
           $projects[$name]->info['upgrade_status_update_compatible'] = FALSE;
-          if (!empty($latest_release['core_compatibility']) && Semver::satisfies('9.0.0', $latest_release['core_compatibility'])) {
+          if (!empty($latest_release['core_compatibility']) && self::isCompatibleWithNextMajorDrupal($latest_release['core_compatibility'])) {
             $projects[$name]->info['upgrade_status_update_compatible'] = TRUE;
           }
           // Denormalize update info into the extension info for our own use.
@@ -302,7 +303,7 @@ class ProjectCollector {
       $scan_result = $this->getResults($name);
 
       // Pick a suggested next step for this project.
-      if ($extension->info['upgrade_status_9_compatible'] && $extension->info['upgrade_status_type'] == self::TYPE_CONTRIB) {
+      if ($extension->info['upgrade_status_next_major_compatible'] && $extension->info['upgrade_status_type'] == self::TYPE_CONTRIB) {
         // If the project was contrib and already Drupal 9 compatible, relax.
         $extension->info['upgrade_status_next'] = self::NEXT_RELAX;
       }
@@ -335,6 +336,29 @@ class ProjectCollector {
   }
 
   /**
+   * Collect core modules that are installed and obsolete or deprecated.
+   *
+   * @return array
+   *   An associated array of extension names keyed by extension machine names.
+   */
+  public function collectCoreDeprecatedAndObsoleteExtensions() {
+    $deprecated_or_obsolete = [];
+    $modules = $this->moduleExtensionList->getList();
+    $themes = $this->themeExtensionList->getList();
+    $profiles = $this->profileExtensionList->getList();
+    $extensions = array_merge($modules, $themes, $profiles);
+    unset($modules, $themes, $profiles);
+
+    /** @var \Drupal\Core\Extension\Extension $extension */
+    foreach ($extensions as $key => $extension) {
+      if ($extension->origin === 'core' && !empty($extension->info['lifecycle']) && in_array($extension->info['lifecycle'], ['deprecated', 'obsolete'])) {
+        $deprecated_or_obsolete[$key] = $extension->info['name'];
+      }
+    }
+    return $deprecated_or_obsolete;
+  }
+
+  /**
    * Finds topmost extension for each extension and keeps only that.
    *
    * @param \Drupal\Core\Extension\Extension[] $extensions
@@ -363,12 +387,12 @@ class ProjectCollector {
           // If the existing project was already Drupal 9 compatible, consider
           // this subcomponent as well. If this component was enabled, it would
           // affect how we consider the Drupal 9 compatibility.
-          if (!empty($extensions[$name_a]->info['upgrade_status_9_compatible']) && !empty($extension_b->status)) {
+          if (!empty($extensions[$name_a]->info['upgrade_status_next_major_compatible']) && !empty($extension_b->status)) {
             // Overwrite compatibility. If this is still compatible, it will
             // keep being TRUE, otherwise FALSE.
-            $extensions[$name_a]->info['upgrade_status_9_compatible'] =
+            $extensions[$name_a]->info['upgrade_status_next_major_compatible'] =
               isset($extension_b->info['core_version_requirement']) &&
-              Semver::satisfies('9.0.0', $extension_b->info['core_version_requirement']);
+              self::isCompatibleWithNextMajorDrupal($extension_b->info['core_version_requirement']);
           }
 
           // Remove the subextension.
@@ -461,7 +485,7 @@ class ProjectCollector {
       ],
       ProjectCollector::NEXT_UPDATE => [
         $this->t('Update'),
-        $this->t('There is an update available. Even if that is not fully Drupal 9 compatible, it may be more compatible than what you have, so best to start with updating first.'),
+        $this->t('There is an update available. Even if that is not fully compatible with the next major Drupal core, it may be more compatible than what you have, so best to start with updating first.'),
         ProjectCollector::SUMMARY_ACT,
       ],
       ProjectCollector::NEXT_SCAN => [
@@ -471,7 +495,7 @@ class ProjectCollector {
       ],
       ProjectCollector::NEXT_COLLABORATE => [
         $this->t('Collaborate with maintainers'),
-        $this->t('There are likely Drupal.org issues by contributors or even <a href=":drupal-bot">the Project Update Bot</a>. Work with the maintainer to get them committed, provide feedback if they worked.', [':drupal-bot' => 'https://www.drupal.org/u/project-update-bot']),
+        $this->t('There may be Drupal.org issues by contributors or even <a href=":drupal-bot">the Project Update Bot</a>. Work with the maintainer to get them committed, provide feedback if they worked.', [':drupal-bot' => 'https://www.drupal.org/u/project-update-bot']),
         ProjectCollector::SUMMARY_ACT,
       ],
       ProjectCollector::NEXT_RECTOR => [
@@ -485,11 +509,75 @@ class ProjectCollector {
         ProjectCollector::SUMMARY_ACT,
       ],
       ProjectCollector::NEXT_RELAX => [
-        $this->t('Drupal 9 compatible'),
+        $this->t('Compatible with next major Drupal core version'),
         $this->t('Well done. Congrats! Let\'s get everything else here!'),
         ProjectCollector::SUMMARY_RELAX,
       ],
     ];
+  }
+
+  /**
+   * Checks constraint compatibility with the next major Drupal core version.
+   *
+   * A customized version of Semver::satisfies(), since that only works for
+   * a == condition.
+   *
+   * @paran string $constraints
+   *   Composer compatible constraints from core_version_requirement or
+   *   drupal/core requirement.
+   *
+   * @return bool
+   */
+  public static function isCompatibleWithNextMajorDrupal(string $constraints) {
+    $version_parser = new VersionParser();
+    $provider = new Constraint('>=', $version_parser->normalize((self::getDrupalCoreMajorVersion() + 1) . '.0.0'));
+    $parsed_constraints = $version_parser->parseConstraints($constraints);
+    return $parsed_constraints->matches($provider);
+  }
+
+  /**
+   * Checks constraint compatibility with PHP 8.
+   *
+   * A customized version of Semver::satisfies(), since that only works for
+   * a == condition.
+   *
+   * @paran string $constraints
+   *   Composer compatible constraints from a PHP version requirement.
+   *
+   * @return bool
+   */
+  public static function isCompatibleWithPHP8(string $constraints) {
+    $version_parser = new VersionParser();
+    $provider = new Constraint('>=', $version_parser->normalize('8.0.0'));
+    $parsed_constraints = $version_parser->parseConstraints($constraints);
+    return $parsed_constraints->matches($provider);
+  }
+
+  /**
+   * Return the oldest supported minor version for the current core major.
+   *
+   * @return string
+   *   Oldest supported core version number.
+   */
+  public static function getOldestSupportedMinor(): string {
+    $major = (int) \Drupal::VERSION;
+    switch ($major) {
+      case 8:
+        return '8.9';
+      case 9:
+        return '9.1';
+    }
+    return '';
+  }
+
+  /**
+   * Returns current core's major version.
+   *
+   * @return int
+   *   Version converted to int.
+   */
+  public static function getDrupalCoreMajorVersion(): int {
+    return (int) \Drupal::VERSION;
   }
 
 }

@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @Action(
  *   id = "entity:edit_action",
- *   action_label = @Translation("Edit"),
+ *   action_label = @Translation("Modify field values"),
  *   confirm_form_route_name = "views_bulk_edit.edit_form",
  *   deriver = "Drupal\views_bulk_edit\Plugin\Action\Derivative\EntityEditActionDeriver"
  * )

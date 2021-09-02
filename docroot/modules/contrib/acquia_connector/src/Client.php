@@ -209,12 +209,12 @@ class Client {
 
     // This is the only search module compatible with this version of Acquia
     // Connector for now.
-    if (!\Drupal::moduleHandler()->moduleExists('acquia_search_solr')) {
+    if (!\Drupal::moduleHandler()->moduleExists('acquia_search')) {
       return NULL;
     }
 
     // Include Acquia Search Solr for Search API module version number.
-    $modules = ['acquia_search_solr', 'search_api_solr'];
+    $modules = ['acquia_search', 'search_api_solr'];
     $result = [];
 
     foreach ($modules as $name) {

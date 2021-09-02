@@ -22,6 +22,6 @@ publishcontent.settings:
     _form: '\Drupal\publishcontent\Form\PublishContentSettings'
     _title: 'PublishContentSettings'
   requirements:
-    _permission: 'access administration pages'
+    _permission: 'access publish content settings'
   options:
     _admin_route: TRUE

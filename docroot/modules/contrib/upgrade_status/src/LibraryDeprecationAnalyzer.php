@@ -243,11 +243,9 @@ final class LibraryDeprecationAnalyzer {
    * @return \Drupal\upgrade_status\DeprecationMessage[]
    */
   private function analyzeTwigLibraryDependencies(Extension $extension): array {
-    $iterator = new TemplateDirIterator(new \RegexIterator(
-      new \RecursiveIteratorIterator(
-        new \RecursiveDirectoryIterator($extension->getPath()), \RecursiveIteratorIterator::LEAVES_ONLY
-      ), '{'.preg_quote('.html.twig').'$}'
-    ));
+    $iterator = new TemplateDirIterator(
+      new TwigRecursiveIterator($extension->getPath())
+    );
 
     $deprecations = [];
     foreach ($iterator as $name => $contents) {

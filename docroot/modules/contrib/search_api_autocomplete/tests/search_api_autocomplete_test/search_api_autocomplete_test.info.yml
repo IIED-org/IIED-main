@@ -12,7 +12,7 @@ type: module
 package: Search
 hidden: true
 
-# Information added by Drupal.org packaging script on 2020-09-07
-version: '8.x-1.4'
+# Information added by Drupal.org packaging script on 2021-07-19
+version: '8.x-1.5'
 project: 'search_api_autocomplete'
-datestamp: 1599485734
+datestamp: 1626685061

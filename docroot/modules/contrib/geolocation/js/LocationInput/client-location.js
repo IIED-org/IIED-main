@@ -32,7 +32,7 @@
      */
     attach: function (context, drupalSettings) {
       $.each(drupalSettings.geolocation.locationInput.clientLocation, function (index, settings) {
-        var input = $('.location-input-client-location.' + settings.identifier, context).once('location-input-processed').first();
+        var input = $('.location-input-client-location.' + settings.identifier, context).once('location-input-client-location-processed').first();
         if (
           navigator.geolocation
           && input.length

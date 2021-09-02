@@ -25,7 +25,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @SolrConnector(
  *   id = "solr_acquia_search_solr",
- *   label = @Translation("Acquia"),
+ *   label = @Translation("Acquia Search Solr"),
  *   description = @Translation("Index items using an Acquia Apache Solr search server.")
  * )
  */

@@ -40,7 +40,7 @@ class Layer extends GeolocationStyleBase {
     /*
      * Add locations to output.
      */
-    foreach ($this->view->result as $row_number => $row) {
+    foreach ($this->view->result as $row) {
       foreach ($this->getLocationsFromRow($row) as $location) {
         $build['locations'][] = $location;
       }

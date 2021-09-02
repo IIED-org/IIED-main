@@ -51,7 +51,7 @@ function field_group_update_8302() {
     if (\Drupal::service('extension.list.module')
       ->getName('jquery_ui_accordion')) {
       \Drupal::service('module_installer')
-        ->install(['jquery_ui_accordion'], FALSE);
+        ->install(['jquery_ui_accordion'], TRUE);
       return t('The "jquery_ui_accordion" module has been installed.');
     }
   }

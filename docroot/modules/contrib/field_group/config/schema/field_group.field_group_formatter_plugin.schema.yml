@@ -14,7 +14,7 @@ field_group.field_group_formatter_plugin.accordion_item:
       type: string
       label: 'Formatting of the item'
     description:
-      type: label
+      type: text
       label: 'Description of the item'
     required_fields:
       type: boolean
@@ -47,7 +47,7 @@ field_group.field_group_formatter_plugin.fieldset:
   label: 'Mapping for the fieldset formatter settings'
   mapping:
     description:
-      type: label
+      type: text
       label: 'Description of the item'
     required_fields:
       type: boolean
@@ -90,7 +90,7 @@ field_group.field_group_formatter_plugin.tab:
       type: string
       label: 'default state for the tab'
     description:
-      type: label
+      type: text
       label: 'Description of the tab'
     required_fields:
       type: boolean
@@ -104,7 +104,7 @@ field_group.field_group_formatter_plugin.tabs:
       type: string
       label: 'default state for the tabs'
     description:
-      type: label
+      type: text
       label: 'description of the tabs'
     required_fields:
       type: boolean
@@ -112,6 +112,9 @@ field_group.field_group_formatter_plugin.tabs:
     direction:
       type: string
       label: 'Direction of the tabs'
+    width_breakpoint:
+      type: integer
+      label: 'Disable Tabs widget if the window width is equal or smaller'
 
 field_group.field_group_formatter_plugin.base:
   type: mapping
@@ -123,6 +126,9 @@ field_group.field_group_formatter_plugin.base:
     classes:
       type: string
       label:  'Classes of the fieldgroup'
+    show_empty_fields:
+      type: boolean
+      label: 'Show Empty Fields'
     id:
       type: string
       label: 'Html id of the fieldgroup'

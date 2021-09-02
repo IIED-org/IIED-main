@@ -296,7 +296,7 @@
               var addressInput = this.getAddressByDelta(delta);
               if (addressInput) {
                 widget.addressChangedEventPaused = true;
-                addressInput.find('select, input').val('');
+                addressInput.find('select, input:not([type="hidden"], [name$="[given_name]"], [name$="[family_name]"])').val('');
                 widget.addressChangedEventPaused = false;
               }
             }
@@ -318,7 +318,10 @@
             }
           }
 
-          if (addressIntegrationSettings.sync_mode === 'auto') {
+          if (
+              addressIntegrationSettings.sync_mode === 'auto'
+              && addressIntegrationSettings.direction !== 'one_way'
+          ) {
             widget.addLocationAlteredCallback(function (location, delta, identifier) {
               if (identifier === 'address-changed') {
                 return;

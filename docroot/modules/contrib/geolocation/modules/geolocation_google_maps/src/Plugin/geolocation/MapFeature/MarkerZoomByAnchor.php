@@ -30,8 +30,6 @@ class MarkerZoomByAnchor extends MapFeatureFrontendBase {
    * {@inheritdoc}
    */
   public function getSettingsForm(array $settings, array $parents) {
-    $settings = $this->getSettings($settings);
-
     $form['marker_zoom_anchor_id'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Anchor ID'),

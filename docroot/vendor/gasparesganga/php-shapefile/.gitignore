@@ -1,8 +1,0 @@
-*~
-.DS_store
-gulpfile.js
-header.txt
-package.json
-package-lock.json
-documentation/
-node_modules/

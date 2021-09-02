@@ -1,0 +1,105 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Acquia Search Solr module.
+ */
+
+use Drupal\acquia_search\Helper\Messages;
+use Drupal\acquia_search\Helper\Runtime;
+use Drupal\acquia_search\Helper\Storage;
+use Drupal\search_api\Entity\Server;
+
+/**
+ * Implements hook_requirements().
+ */
+function acquia_search_requirements($phase) {
+  $requirements = [];
+
+  if ($phase == 'runtime') {
+    $requirements['acquia_search_ssl'] = [
+      'title' => t('Acquia Search Solr'),
+      'value' => 'Security',
+    ];
+    // Check SSL support.
+    if (in_array('ssl', stream_get_transports(), TRUE)) {
+      $requirements['acquia_search_ssl']['severity'] = REQUIREMENT_OK;
+      $requirements['acquia_search_ssl']['description'] = t('The Acquia Search module is using SSL to protect the privacy of your content.');
+    }
+    else {
+      $requirements['acquia_search_ssl']['severity'] = REQUIREMENT_WARNING;
+      $requirements['acquia_search_ssl']['description'] = t('In order to protect the privacy of your content with the Acquia Search module you must have SSL support enabled in PHP on your host.');
+    }
+
+    /** @var \Drupal\search_api\Entity\Server[] $servers */
+    $servers = Server::loadMultiple();
+
+    $acquia_servers = array_filter($servers, function (Server $server) {
+      return Runtime::isAcquiaServer($server);
+    });
+
+    // Show available Acquia Search Solr indexes.
+    foreach ($acquia_servers as $server_id => $server) {
+      $requirements['acquia_search_status_' . $server_id] = [
+        'title' => t('Acquia Search connection status'),
+        'severity' => REQUIREMENT_OK,
+        'description' => ['#markup' => Messages::getSearchStatusMessage($server)],
+      ];
+    }
+
+    // Flag when read-only mode was forced because of not finding the right
+    // index.
+    if (Runtime::shouldEnforceReadOnlyMode()) {
+      $requirements['acquia_search_read_only'] = [
+        'title' => t('Acquia Search Solr'),
+        'value' => t('Read-only warning'),
+        'severity' => REQUIREMENT_WARNING,
+        'description' => ['#markup' => Messages::getReadOnlyModeWarning()],
+      ];
+    }
+
+    if (!Runtime::getPreferredSearchCoreService()->isPreferredCoreAvailable()) {
+      $requirements['acquia_search_read_only'] = [
+        'title' => t('Acquia Search Solr'),
+        'value' => t('No preferred search core'),
+        'severity' => REQUIREMENT_ERROR,
+        'description' => ['#markup' => Messages::getNoPreferredCoreError()],
+      ];
+    }
+
+  }
+
+  // Update the cached version whenever we may be updating the module.
+  if ($phase == 'runtime' || $phase == 'update') {
+    Storage::getVersion();
+  }
+
+  return $requirements;
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function acquia_search_uninstall() {
+
+  $storage = new Storage();
+  $storage->deleteAllData();
+  \Drupal::configFactory()->getEditable('acquia_search.settings')->delete();
+
+}
+
+/**
+ * Implements hook_install().
+ */
+function acquia_search_install() {
+  // Import settings from the connector if it is installed and configured.
+  $connector = \Drupal::moduleHandler()->moduleExists('acquia_connector');
+  $subscription = \Drupal::state()->get('acquia_subscription_data');
+  $storage = new Storage();
+  if ($connector && isset($subscription)) {
+    $storage->setApiHost(\Drupal::config('acquia_search.settings')->get('api_host') ?? 'https://api.sr-prod02.acquia.com');
+    $storage->setApiKey(\Drupal::state()->get('acquia_connector.key'));
+    $storage->setIdentifier(\Drupal::state()->get('acquia_connector.identifier'));
+    $storage->setUuid($subscription['uuid']);
+  }
+}

@@ -188,7 +188,7 @@ class AddressFieldProvider extends DataProviderBase implements DataProviderInter
 
     if (empty($geocoder_options)) {
       return [
-        '#markup' => t('No geocoder option found'),
+        '#markup' => $this->t('No geocoder option found'),
       ];
     }
 

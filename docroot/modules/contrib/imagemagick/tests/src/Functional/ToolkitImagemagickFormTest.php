@@ -16,7 +16,7 @@ class ToolkitImagemagickFormTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'imagemagick', 'file_mdm'];
+  protected static $modules = ['system', 'imagemagick', 'file_mdm'];
 
   /**
    * {@inheritdoc}
@@ -26,7 +26,7 @@ class ToolkitImagemagickFormTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     // Create an admin user.
@@ -39,7 +39,7 @@ class ToolkitImagemagickFormTest extends BrowserTestBase {
   /**
    * Test ImageMagick subform and settings.
    */
-  public function testFormAndSettings() {
+  public function testFormAndSettings(): void {
     $admin_path = 'admin/config/media/image-toolkit';
 
     // Change the toolkit.
@@ -54,7 +54,7 @@ class ToolkitImagemagickFormTest extends BrowserTestBase {
       'image_toolkit' => 'gd',
       'imagemagick[suite][path_to_binaries]' => '/foo/bar/',
     ];
-    $this->drupalPostForm(NULL, $edit, 'Save configuration');
+    $this->submitForm($edit, 'Save configuration');
     $this->assertSession()->fieldValueEquals('image_toolkit', 'gd');
 
     // Change the toolkit via form.
@@ -64,7 +64,7 @@ class ToolkitImagemagickFormTest extends BrowserTestBase {
       'image_toolkit' => 'imagemagick',
       'imagemagick[suite][path_to_binaries]' => '',
     ];
-    $this->drupalPostForm(NULL, $edit, 'Save configuration');
+    $this->submitForm($edit, 'Save configuration');
     $this->assertSession()->fieldValueEquals('image_toolkit', 'imagemagick');
 
     // Test default supported image extensions.
@@ -79,7 +79,7 @@ class ToolkitImagemagickFormTest extends BrowserTestBase {
     $image_formats['TIFF']['enabled'] = TRUE;
     $config->set('image_formats', $image_formats)->save();
     $this->drupalGet($admin_path);
-    $this->drupalPostForm(NULL, $edit, 'Save configuration');
+    $this->submitForm($edit, 'Save configuration');
     $this->assertSession()->responseNotContains('Image format errors');
     $this->assertSession()->responseContains('GIF, JPEG, PNG, TIFF');
     $this->assertSession()->responseContains('gif, jpe, jpeg, jpg, png, tif, tiff');
@@ -88,7 +88,7 @@ class ToolkitImagemagickFormTest extends BrowserTestBase {
     $image_formats['BMP']['enabled'] = TRUE;
     $config->set('image_formats', $image_formats)->save();
     $this->drupalGet($admin_path);
-    $this->drupalPostForm(NULL, $edit, 'Save configuration');
+    $this->submitForm($edit, 'Save configuration');
     $this->assertSession()->responseNotContains('Image format errors');
     $this->assertSession()->responseContains('BMP, GIF, JPEG, PNG, TIFF');
     $this->assertSession()->responseContains('bmp, dib, gif, jpe, jpeg, jpg, png, tif, tiff');
@@ -97,7 +97,7 @@ class ToolkitImagemagickFormTest extends BrowserTestBase {
     $image_formats['PNG']['enabled'] = FALSE;
     $config->set('image_formats', $image_formats)->save();
     $this->drupalGet($admin_path);
-    $this->drupalPostForm(NULL, $edit, 'Save configuration');
+    $this->submitForm($edit, 'Save configuration');
     $this->assertSession()->responseNotContains('Image format errors');
     $this->assertSession()->responseContains('BMP, GIF, JPEG, TIFF');
     $this->assertSession()->responseContains('bmp, dib, gif, jpe, jpeg, jpg, tif, tiff');
@@ -106,14 +106,14 @@ class ToolkitImagemagickFormTest extends BrowserTestBase {
     $image_formats['TIFF']['exclude_extensions'] = 'tif, gif';
     $config->set('image_formats', $image_formats)->save();
     $this->drupalGet($admin_path);
-    $this->drupalPostForm(NULL, $edit, 'Save configuration');
+    $this->submitForm($edit, 'Save configuration');
     $this->assertSession()->responseNotContains('Image format errors');
     $this->assertSession()->responseContains('BMP, GIF, JPEG, TIFF');
     $this->assertSession()->responseContains('bmp, dib, gif, jpe, jpeg, jpg, tiff');
     $image_formats['JPEG']['exclude_extensions'] = 'jpe, jpg';
     $config->set('image_formats', $image_formats)->save();
     $this->drupalGet($admin_path);
-    $this->drupalPostForm(NULL, $edit, 'Save configuration');
+    $this->submitForm($edit, 'Save configuration');
     $this->assertSession()->responseNotContains('Image format errors');
     $this->assertSession()->responseContains('BMP, GIF, JPEG, TIFF');
     $this->assertSession()->responseContains('bmp, dib, gif, jpeg, tiff');
@@ -122,7 +122,7 @@ class ToolkitImagemagickFormTest extends BrowserTestBase {
     $image_formats['BAX']['mime_type'] = 'foo/bar';
     $config->set('image_formats', $image_formats)->save();
     $this->drupalGet($admin_path);
-    $this->drupalPostForm(NULL, $edit, 'Save configuration');
+    $this->submitForm($edit, 'Save configuration');
     $this->assertSession()->responseContains('Image format errors');
   }
 

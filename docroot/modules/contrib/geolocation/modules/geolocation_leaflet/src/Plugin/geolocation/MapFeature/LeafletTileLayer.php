@@ -43,8 +43,6 @@ class LeafletTileLayer extends MapFeatureBase {
       $parents_string = NULL;
     }
 
-    $settings = $this->getSettings($settings);
-
     $providers = $this->getBaseMaps();
     $form['tile_layer_provider'] = [
       '#type' => 'select',
@@ -71,8 +69,6 @@ class LeafletTileLayer extends MapFeatureBase {
    */
   public function alterMap(array $render_array, array $feature_settings, array $context = []) {
     $render_array = parent::alterMap($render_array, $feature_settings, $context);
-
-    $feature_settings = $this->getSettings($feature_settings);
 
     $tileLayer = [
       'enable' => TRUE,

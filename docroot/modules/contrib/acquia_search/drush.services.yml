@@ -1,0 +1,7 @@
+services:
+  acquia_search.commands:
+    class: Drupal\acquia_search\Commands\AcquiaSearchCommands
+    arguments:
+      - '@cache.default'
+    tags:
+      - { name: drush.command }

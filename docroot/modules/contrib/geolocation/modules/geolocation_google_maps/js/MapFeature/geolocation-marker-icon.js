@@ -78,23 +78,23 @@
             var scaledSizeWidth = currentMarker.locationWrapper.data('marker-icon-scaled-size-width') || featureSettings.scaledSize.width;
             var scaledSizeHeight = currentMarker.locationWrapper.data('marker-icon-scaled-size-height') || featureSettings.scaledSize.height;
 
-            if (anchorX && anchorY) {
+            if (anchorX !== null && anchorY !== null) {
               newIcon.anchor = new google.maps.Point(anchorX, anchorY);
             }
 
-            if (labelOriginX && labelOriginY) {
+            if (labelOriginX !== null && labelOriginY !== null) {
               newIcon.labelOrigin = new google.maps.Point(labelOriginX, labelOriginY);
             }
 
-            if (originX && originY) {
+            if (originX !== null && originY !== null) {
               newIcon.origin = new google.maps.Point(originX, originY)
             }
 
-            if (sizeWidth && sizeHeight) {
+            if (sizeWidth !== null && sizeHeight !== null) {
               newIcon.size = new google.maps.Size(sizeWidth, sizeHeight);
             }
 
-            if (scaledSizeWidth && scaledSizeHeight) {
+            if (scaledSizeWidth !== null && scaledSizeHeight !== null) {
               newIcon.scaledSize = new google.maps.Size(scaledSizeWidth, scaledSizeHeight);
             }
 

@@ -20,7 +20,10 @@ class Spain extends GoogleCountryFormattingBase {
    */
   public function format(array $atomics) {
     $address_elements = parent::format($atomics);
-    if ($atomics['county']) {
+    if (
+      isset($atomics['county'])
+      && $atomics['county']
+    ) {
       $address_elements['administrativeArea'] = $atomics['county'];
     }
 

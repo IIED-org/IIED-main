@@ -13,7 +13,7 @@ ds.list:
   requirements:
     _permission: 'admin display suite'
 ds.admin_settings:
-  path: 'admin/structure/ds/settings'
+  path: '/admin/structure/ds/settings'
   defaults:
     _form: '\Drupal\ds\Form\SettingsForm'
     _title: 'Settings'

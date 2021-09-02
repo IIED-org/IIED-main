@@ -17,7 +17,7 @@ class UpgradeStatusAccessTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['upgrade_status'];
+  protected static $modules = ['upgrade_status'];
 
   /**
    * {@inheritdoc}

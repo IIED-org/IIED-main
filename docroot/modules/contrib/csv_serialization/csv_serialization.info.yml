@@ -7,7 +7,7 @@ package: Web services
 dependencies:
   - drupal:serialization (>=8.0.4)
 
-# Information added by Drupal.org packaging script on 2020-07-27
-version: '8.x-2.0-beta3'
+# Information added by Drupal.org packaging script on 2021-02-08
+version: '8.x-2.0'
 project: 'csv_serialization'
-datestamp: 1595876764
+datestamp: 1612801963

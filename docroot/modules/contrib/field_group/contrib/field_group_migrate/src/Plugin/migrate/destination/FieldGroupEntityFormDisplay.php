@@ -25,18 +25,16 @@ class FieldGroupEntityFormDisplay extends PerComponentEntityFormDisplay {
       $values[$id] = $row->getDestinationProperty($id);
     }
     $entity = $this->getEntity($values['entity_type'], $values['bundle'], $values[static::MODE_NAME]);
-    if (!$entity->isNew()) {
-      $settings = $row->getDestinationProperty('field_group');
-      $settings += [
-        'region' => 'content',
-        'parent_name' => '',
-      ];
-      $entity->setThirdPartySetting('field_group', $row->getDestinationProperty('id'), $settings);
-      if (isset($settings['format_type']) && ($settings['format_type'] == 'no_style' || $settings['format_type'] == 'hidden')) {
-        $entity->unsetThirdPartySetting('field_group', $row->getDestinationProperty('id'));
-      }
-      $entity->save();
+    $settings = $row->getDestinationProperty('field_group');
+    $settings += [
+      'region' => 'content',
+      'parent_name' => '',
+    ];
+    $entity->setThirdPartySetting('field_group', $row->getDestinationProperty('id'), $settings);
+    if (isset($settings['format_type']) && ($settings['format_type'] == 'no_style' || $settings['format_type'] == 'hidden')) {
+      $entity->unsetThirdPartySetting('field_group', $row->getDestinationProperty('id'));
     }
+    $entity->save();
     return array_values($values);
   }
 
