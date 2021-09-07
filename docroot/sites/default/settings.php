@@ -834,8 +834,8 @@ function acquia_search_override_example_20210427() {
   return $chosen_core;
 }
 
-//$config['acquia_search_solr.settings']['override_search_core'] = acquia_search_override_example_20210427();
-$config['acquia_search.settings']['override_search_core'] = 'AGHX-142716.dev.irforum';
+$config['acquia_search.settings']['override_search_core'] = acquia_search_override_example_20210427();
+//$config['acquia_search.solr.settings']['override_search_core'] = 'AGHX-142716.dev.irforum';
 
 $_env_is_prod = isset($_ENV['AH_SITE_ENVIRONMENT']) && $_ENV['AH_SITE_ENVIRONMENT'] == 'prod';
 $config['config_split.config_split.dev']['status'] = !$_env_is_prod;
