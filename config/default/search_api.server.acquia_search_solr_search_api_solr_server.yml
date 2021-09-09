@@ -63,7 +63,7 @@ backend_config:
     jmx: false
     solr_install_dir: ''
     port: 443
-    host: s7004-eu-west-1.sr-prod02.acquia.com
+    host: s7020-eu-west-1.sr-prod02.acquia.com
     path: /solr/AGHX-142716.prod.irforum
     core: AGHX-142716.prod.irforum
     key: search_api_solr
