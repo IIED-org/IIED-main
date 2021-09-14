@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'bb4bbeec6a432d05299b650c888c36ae34ac8568',
+        'reference' => '5ca8e3a48cc55a7127b979bd5223781c33ec5b81',
         'name' => 'drupal/legacy-project',
         'dev' => true,
     ),
@@ -1108,7 +1108,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'bb4bbeec6a432d05299b650c888c36ae34ac8568',
+            'reference' => '5ca8e3a48cc55a7127b979bd5223781c33ec5b81',
             'dev_requirement' => false,
         ),
         'drupal/link' => array(
@@ -1765,6 +1765,15 @@
             'install_path' => __DIR__ . '/../../modules/contrib/views_data_export',
             'aliases' => array(),
             'reference' => '8.x-1.0',
+            'dev_requirement' => false,
+        ),
+        'drupal/views_field_view' => array(
+            'pretty_version' => '1.0.0-beta3',
+            'version' => '1.0.0.0-beta3',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../modules/contrib/views_field_view',
+            'aliases' => array(),
+            'reference' => '8.x-1.0-beta3',
             'dev_requirement' => false,
         ),
         'drupal/views_ui' => array(

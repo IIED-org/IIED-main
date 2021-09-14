@@ -158,27 +158,6 @@ third_party_settings:
         classes: ''
         open: false
       label: 'Upload file, or link to external publication (required before going live)'
-    group_legacy_fields_do_not_use:
-      children:
-        - field_cover_image
-        - field_deptlist
-        - field_meta_tags
-        - field_product_code
-        - field_publisher_legacy
-        - field_reportagency1
-        - field_status
-        - group_coming_soon_
-      parent_name: ''
-      weight: 26
-      format_type: details
-      region: hidden
-      format_settings:
-        description: ''
-        required_fields: true
-        id: ''
-        classes: ''
-        open: false
-      label: 'Admin only fields'
     group_coming_soon_:
       children:
         - field_lists

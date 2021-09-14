@@ -12,7 +12,7 @@ field_name: field_lit_code
 entity_type: node
 bundle: publication
 label: 'Product code type'
-description: '<i><big><strong>Hint:</strong> ''IIED'', ''G'' or ''X''. If unsure, refer the <a href = "https://iied.sharepoint.com/:b:/g/group/comms/EdFmDzl805FPhNzF8MvpC4sBGQMsdNATkwVv97Wv3FsTwg?e=dtlDoF" target="_blank"><strong>guidance document on the Intranet</strong></a></big>.</i>'
+description: '<i><big><strong>Hint:</strong> ''IIED'', ''G'' or ''X''. If unsure, refer to the <a href = "https://iied.sharepoint.com/group/comms/Comms%20Documents/Publications%20library%20document%20codes-types-ISBN%20numbers.pdf" target="_blank"><strong>guidance document on the Intranet</strong></a></big>.</i>'
 required: true
 translatable: false
 default_value: {  }
