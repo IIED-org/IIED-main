@@ -59,6 +59,7 @@ backend_config:
     commit_within: '1000'
     solr_version: ''
     http_method: AUTO
+<<<<<<< HEAD:config/default/search_api.server.acquia_search_server.yml
     skip_schema_check: true
     jmx: false
     solr_install_dir: ''
@@ -78,6 +79,9 @@ backend_config:
     - request_dispatcher_httpcaching_default_7_0_0
   rows: 10
   index_single_documents_fallback_count: 10
+=======
+    jmx: 0
+>>>>>>> 8bb6fd310993df702ad0502d8e1e8adeb591f78a:config/default/search_api.server.acquia_search_solr_search_api_solr_server.yml
   retrieve_data: true
   highlight_data: true
   skip_schema_check: true
