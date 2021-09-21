@@ -37,9 +37,7 @@ abstract class MapFeatureBase extends PluginBase implements MapFeatureInterface,
    */
   public function getSettings(array $settings) {
     $default_settings = $this->getDefaultSettings();
-    $settings = array_replace_recursive($default_settings, $settings);
-
-    return $settings;
+    return array_replace_recursive($default_settings, $settings);
   }
 
   /**

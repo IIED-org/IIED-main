@@ -93,6 +93,15 @@ plugin.plugin_configuration.search_api_autocomplete_suggester.live_results:
       label: 'The fields to use for searching'
       sequence:
         type: string
+    highlight:
+      type: mapping
+      mapping:
+        enabled:
+          type: boolean
+          label: 'Whether to replace live results with a highlighted field'
+        field:
+          type: string
+          label: 'The field to replace the live result'
     view_modes:
       type: sequence
       label: 'The view modes to use for displaying results'

@@ -85,6 +85,9 @@ geolocation.geocoder.google_geocoding_api:
         east:
           type: string
           label: 'East'
+    region:
+      type: string
+      label: 'Region ccTLD'
 
 geolocation.map_provider.google_maps:
   type: geolocation_map_provider

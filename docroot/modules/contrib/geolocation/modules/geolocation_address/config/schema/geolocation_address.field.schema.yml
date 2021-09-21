@@ -60,6 +60,9 @@ field.widget.third_party.geolocation_address:
             east:
               type: string
               label: 'East'
+        region:
+          type: string
+          label: 'Region ccTLD'
     sync_mode:
       type: string
     button_position:

@@ -20,7 +20,19 @@ class FieldGroup extends DrupalSqlBase {
    * {@inheritdoc}
    */
   public function query() {
-    return $this->select('field_group', 'f')->fields('f');
+    $query = $this->select('field_group', 'f')->fields('f');
+    $entity_type = $this->configuration['entity_type'] ?? NULL;
+    $bundle = $this->configuration['bundle'] ?? NULL;
+
+    if ($entity_type) {
+      $query->condition('f.entity_type', $entity_type);
+
+      if ($bundle) {
+        $query->condition('f.bundle', $bundle);
+      }
+    }
+
+    return $query;
   }
 
   /**
@@ -67,6 +79,10 @@ class FieldGroup extends DrupalSqlBase {
       case 'multipage':
         // @todo Check if there is a better way to deal with this format type.
         $settings['format_type'] = 'tab';
+        break;
+
+      case 'html-element':
+        $settings['format_type'] = 'html_element';
         break;
 
     }

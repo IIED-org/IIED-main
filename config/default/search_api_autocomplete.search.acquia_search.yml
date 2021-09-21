@@ -1,0 +1,24 @@
+uuid: c1877b1d-5119-45e7-ac95-a62c39aaac78
+langcode: en
+status: false
+dependencies:
+  config:
+    - search_api.index.acquia_search_index
+    - views.view.acquia_search
+  module:
+    - views
+    - search_api_autocomplete
+id: acquia_search
+label: 'Acquia Search Solr'
+index_id: acquia_search_index
+suggester_settings:
+  server:
+    fields: {  }
+suggester_weights: {  }
+suggester_limits: {  }
+search_settings:
+  'views:acquia_search':
+    displays:
+      default: true
+      selected: {  }
+options: {  }

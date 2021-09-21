@@ -3,11 +3,12 @@
 namespace Drupal\publishcontent\Controller;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Drupal\core\Access\AccessResult;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Url;
 
 /**
@@ -39,11 +40,25 @@ class PublishContentPublishEntity implements ContainerInjectionInterface {
   protected $messenger;
 
   /**
-   * Configuration Factory.
+   * The current user service.
    *
-   * @var \Drupal\Core\Config\ConfigFactory
+   * @var \Drupal\Core\Session\AccountInterface
    */
-  protected $configFactory;
+  protected $currentUser;
+
+  /**
+   * The module configuration for reading.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $config;
+
+  /**
+   * The logging channel.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
 
   /**
    * {@inheritdoc}
@@ -54,7 +69,9 @@ class PublishContentPublishEntity implements ContainerInjectionInterface {
       ->getCurrentRequest()->server;
     $instance->languageManager = $container->get('language_manager');
     $instance->messenger = $container->get('messenger');
-    $instance->configFactory = $container->get('config.factory');
+    $instance->config = $container->get('config.factory')->get('publishcontent.settings');
+    $instance->currentUser = $container->get('current_user');
+    $instance->logger = $container->get('logger.factory')->get('publishcontent');
     return $instance;
   }
 
@@ -69,37 +86,72 @@ class PublishContentPublishEntity implements ContainerInjectionInterface {
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   Redirect to the previous page.
    */
-  public function toggleEntityStatus(NodeInterface $node, string $langcode = '') {
-    if ($referrer = $this->server->get('HTTP_REFERER')) {
-      $redirectUrl = Url::fromUri($referrer, ['absolute' => TRUE])->getUri();
+  public function toggleEntityStatus(NodeInterface $node, $langcode = '') {
+    try {
+      if ($referrer = $this->server->get('HTTP_REFERER')) {
+        $redirectUrl = Url::fromUri($referrer, ['absolute' => TRUE])->getUri();
+      }
+      else {
+        $redirectUrl = $node->toUrl()->toString();
+      }
     }
-    else {
-      $redirectUrl = $node->toUrl()->toString();
+    catch (\Exception $e) {
+      $redirectUrl = Url::fromRoute('<front>')->setAbsolute()->toString();
     }
 
-    // If node is not translatable, just publish or unpublish it.
-    if (!$node->isTranslatable()) {
-      $node->setPublished(!$node->isPublished());
+    if ($node->isTranslatable()) {
+      if ($langcode == '') {
+        $langcode = $this->languageManager->getCurrentLanguage()->getId();
+      }
+
+      if (!$node->hasTranslation($langcode)) {
+        $this->messenger->addError($this->t("You can't @publish/@unpublish a non-existing translation.", [
+          '@publish' => $this->config->get('publish_text_value'),
+          '@unpublish' => $this->config->get('unpublish_text_value'),
+        ]));
+        return new RedirectResponse($redirectUrl);
+      }
+
+      $node = $node->getTranslation($langcode);
+    }
+
+    $node->isPublished() ? $node->setUnpublished() : $node->setPublished();
+
+    $isPublished = $node->isPublished();
+    $status = $isPublished ? $this->config->get('publish_text_value') : $this->config->get('unpublish_text_value');
+
+    if (!empty($this->config)) {
+      if ($this->config->get('create_log_entry')) {
+        $this->logger->notice($this->t('@type: @action @title', [
+          '@type' => $node->bundle(),
+          '@action' => $isPublished ? 'unpublished' : 'published',
+          '@title' => $node->getTitle(),
+        ]));
+      }
+
+      if ($this->config->get('create_revision')) {
+        $node->setNewRevision(TRUE);
+        $node->revision_log = $this->t('Changed to @status by @user', [
+          '@status' => $status,
+          '@user' => $this->currentUser->getDisplayName(),
+        ]);
+        $node->setRevisionCreationTime(REQUEST_TIME);
+        $node->setRevisionUserId($this->currentUser->id());
+      }
+
+    }
+
+    try {
       $node->save();
-      return new RedirectResponse($redirectUrl);
+      $this->messenger->addMessage($this->t('@title has been set to @status',
+      [
+        '@title' => $node->getTitle(),
+        '@status' => $status,
+      ]
+      ));
     }
-
-    if ($langcode == '') {
-      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    catch (EntityStorageException $e) {
     }
-
-    if (!$node->hasTranslation($langcode)) {
-      $this->messenger->addError($this->t("You can't publish/unpublish a non-existing translation."));
-      return new RedirectResponse($redirectUrl);
-    }
-
-    /** @var \Drupal\node\NodeInterface $translatedNode */
-    if ($translatedNode = $node->getTranslation($langcode)) {
-      $node = $translatedNode;
-    }
-
-    $node->setPublished(!$node->isPublished());
-    $node->save();
 
     return new RedirectResponse($redirectUrl);
   }
@@ -111,9 +163,8 @@ class PublishContentPublishEntity implements ContainerInjectionInterface {
    *   The access result.
    */
   public function hasUILocalTask() {
-    $config = $this->configFactory->get('publishcontent.settings');
-    return AccessResult::allowedIf(!empty($config) &&
-      !empty($config->get('ui_localtask')));
+    return AccessResult::allowedIf(!empty($this->config) &&
+      !empty($this->config->get('ui_localtask')));
   }
 
 }

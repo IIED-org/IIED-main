@@ -26,7 +26,7 @@
    * @prop {Drupal~behaviorAttach} attach
    *   Attaches common map style functionality to relevant elements.
    */
-  Drupal.behaviors.geolocationMarkerIcon = {
+  Drupal.behaviors.geolocationMarkerLabel = {
     attach: function (context, drupalSettings) {
       Drupal.geolocation.executeFeatureOnAllMaps(
         'marker_label',
@@ -43,7 +43,11 @@
             var newLabel = {};
             var currentLabel = currentMarker.getLabel();
 
-            var text = '';
+            if (typeof currentLabel === 'undefined') {
+              return;
+            }
+
+            var text;
             if (typeof currentLabel === 'string') {
               text = currentLabel;
             }

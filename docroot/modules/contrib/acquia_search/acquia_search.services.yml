@@ -1,0 +1,5 @@
+services:
+  acquia_search.search_subscriber:
+    class: Drupal\acquia_search\EventSubscriber\SearchSubscriber
+    tags:
+    - { name: 'event_subscriber' }

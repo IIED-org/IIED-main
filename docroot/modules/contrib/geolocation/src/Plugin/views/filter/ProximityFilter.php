@@ -67,7 +67,7 @@ class ProximityFilter extends NumericFilter implements ContainerFactoryPluginInt
     $options['location_input'] = ['default' => []];
     $options['unit'] = ['default' => 'km'];
 
-    $options['value']['contains']['center'] = ['default' => ''];
+    $options['value']['contains']['center'] = ['default' => []];
 
     return $options;
   }
@@ -85,8 +85,9 @@ class ProximityFilter extends NumericFilter implements ContainerFactoryPluginInt
       '#default_value' => $this->options['unit'],
       '#weight' => 6,
       '#options' => [
-        'mi' => $this->t('Miles'),
         'km' => $this->t('Kilometers'),
+        'mi' => $this->t('Miles'),
+        'nm' => $this->t('Nautical Miles'),
       ],
     ];
 
@@ -111,6 +112,8 @@ class ProximityFilter extends NumericFilter implements ContainerFactoryPluginInt
   public function valueForm(&$form, FormStateInterface $form_state) {
     parent::valueForm($form, $form_state);
 
+    $form['#tree'] = TRUE;
+
     if (!isset($form['value']['value'])) {
       $form['value'] = array_replace($form['value'], [
         '#type' => 'number',
@@ -132,10 +135,7 @@ class ProximityFilter extends NumericFilter implements ContainerFactoryPluginInt
       ]);
     }
 
-    $center_form = $this->locationInputManager->getForm($this->options['location_input'], $this, empty($this->value['center']) ? NULL : $this->value['center']);
-    if (!empty($center_form)) {
-      $form['center'] = $center_form;
-    }
+    $form['center'] = $this->locationInputManager->getForm($this->options['location_input'], $this, empty($this->value['center']) ? NULL : $this->value['center']);
   }
 
   /**
@@ -145,6 +145,10 @@ class ProximityFilter extends NumericFilter implements ContainerFactoryPluginInt
     $value = $form_state->getValue(['options', 'value', 'value']);
     $distance = (float) $value;
     $form_state->setValue(['options', 'value', 'value'], $distance);
+    $form_state->setValue(
+      ['options', 'value', 'center'],
+      $form_state->getValue(['options', 'value', 'center'], [])
+    );
 
     parent::valueSubmit($form, $form_state);
   }

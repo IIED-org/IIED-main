@@ -85,28 +85,6 @@ using the block id:
 
 ```{{ drupal_block("social_sharing_buttons_block") }}```
 
-
-*NOTE: This module was initially meant to be used on node detail pages because
-it gets the title and url for sharing from the current node.*
-
-*It is possible to add sharing buttons on teasers. A separate twig file was
-created for this so you can include this and pass the necessary parameters to
-it (title, url, description). On your teaser twig file, you can use this as
-follows:*
-```
-{# -- Social sharing buttons -- #}
-{% set services = ['facebook', 'twitter', 'email', 'linkedin'] %}
-{% include '/modules/contrib/better_social_sharing_buttons/theme/better-social-sharing-buttons.html.twig' with {
-  'title': item.title,
-  'url': item.url,
-  'description': item.description|raw,
-  'services': services
-} %}
-```
-
-*As you can see, this way you can set which fields of your node contain the
-necessary info and you can set the services you want displayed.*
-
 Add social sharing buttons via twig (Twig Tweak module v1.9 or lower)
 ---
 If you use a version of Twig Tweak below 2.0 (like 1.9) then you cannot print a

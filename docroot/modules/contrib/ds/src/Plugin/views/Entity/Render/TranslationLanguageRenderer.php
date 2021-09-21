@@ -6,7 +6,7 @@ use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\ResultRow;
 
 /**
- * Renders entities in the current language.
+ * Renders entity translations in their row language.
  */
 class TranslationLanguageRenderer extends DefaultLanguageRenderer {
 
@@ -52,7 +52,13 @@ class TranslationLanguageRenderer extends DefaultLanguageRenderer {
   public function render(ResultRow $row) {
     $entity_id = $row->_entity->id();
     $langcode = $this->getLangcode($row);
-    return $this->build[$entity_id][$langcode];
+    if (isset($this->build[$entity_id][$langcode])) {
+      $build = $this->build[$entity_id][$langcode];
+      $this->alterBuild($build, $row);
+      return $build;
+    }
+
+    return [];
   }
 
   /**

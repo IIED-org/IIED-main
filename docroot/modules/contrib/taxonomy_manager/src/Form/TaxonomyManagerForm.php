@@ -220,6 +220,39 @@ class TaxonomyManagerForm extends FormBase {
         'callback' => '::exportListFormCallback',
       ],
     ];
+    /* Vocabulary switcher */
+    $vocabularies = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->loadMultiple();
+    foreach ($vocabularies as $voc) {
+      $voc_list[$voc->id()] = $voc->label();
+    }
+
+    $current_path = \Drupal::service('path.current')->getPath();
+    $url_parts = explode('/',$current_path);
+    $voc_id = end($url_parts);
+    $form['toolbar']['vocabulary_switcher'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Vocabulary switcher'),
+      '#options' => $voc_list,
+      '#attributes' => ['onchange' => "form.submit('taxonomy-manager-vocabulary-terms-form')"],
+      '#default_value' => $voc_id,
+    ];
+
+    /* Autocomplete function redirecting to taxonomy term details page */
+    $form['toolbar']['search_terms'] = [
+      '#title' => $this->t('Search all terms in this vocabulary'),
+      '#type' => 'entity_autocomplete',
+      '#target_type' => 'taxonomy_term',
+      '#selection_settings' => [
+        'target_bundles' => [$voc_id],
+      ],
+    ];
+
+    $form['toolbar']['actions']['submit'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Submit'),
+      '#submit' => ['::taxonomy_term_submit_handler'],
+      '#attributes' => ['class' => ['taxonomy-manager-hidden-button']],
+    ];
 
     /* Taxonomy manager. */
     $form['taxonomy']['#tree'] = TRUE;
@@ -265,8 +298,18 @@ class TaxonomyManagerForm extends FormBase {
   /**
    * {@inheritdoc}
    */
+  public function taxonomy_term_submit_handler(array &$form, FormStateInterface $form_state) {
+    $tid = $form_state->getValue(['search_terms']);
+    $url = Url::fromRoute('entity.taxonomy_term.edit_form', array('taxonomy_term' => $tid));
+    $form_state->setRedirectUrl($url);
+  }
+  /**
+   * {@inheritdoc}
+   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $form_state->getValue(['taxonomy', 'manager', 'tree']);
+    $url = Url::fromRoute('taxonomy_manager.admin_vocabulary', array('taxonomy_vocabulary' => $form_state->getValue(['vocabulary_switcher'])));
+    $form_state->setRedirectUrl($url);
   }
 
   /**

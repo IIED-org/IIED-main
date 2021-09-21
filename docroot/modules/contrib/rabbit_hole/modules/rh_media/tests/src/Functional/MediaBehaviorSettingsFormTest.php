@@ -68,6 +68,7 @@ class MediaBehaviorSettingsFormTest extends RabbitHoleBehaviorSettingsFormTestBa
     $this->assertSession()->buttonExists('Save')->press();
     // To actually save the bundle we need to hit save again.
     $this->assertSession()->buttonExists('Save')->press();
+    $this->bundle = $this->loadBundle($machine_name);
     return $machine_name;
   }
 

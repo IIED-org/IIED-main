@@ -2,6 +2,7 @@
 
 namespace Drupal\geolocation_geometry\Plugin\Field\FieldType;
 
+use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 
 /**
@@ -28,6 +29,38 @@ class GeolocationGeometryPolygon extends GeolocationGeometryBase {
     $schema['columns']['geometry']['mysql_type'] = 'polygon';
 
     return $schema;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function generateSampleValue(FieldDefinitionInterface $field_definition) {
+    $reference_point = self::getRandomCoordinates();
+    $coordinates = [];
+    for ($i = 1; $i <= 16; $i++) {
+      $coordinates[] = self::getRandomCoordinates($reference_point);
+    }
+    $center_point = self::getCenterFromCoordinates($coordinates);
+    usort(
+      $coordinates,
+      function ($a, $b) use ($center_point) {
+        return self::sortCoordinatesByAngle($a, $b, $center_point);
+      }
+    );
+    // POLYGONS need to be closed.
+    $coordinates[] = $coordinates[0];
+
+    $values['geojson'] = '{
+      "type": "Polygon",
+      "coordinates": [
+        [';
+    foreach ($coordinates as $coordinate) {
+      $values['geojson'] .= '[' . $coordinate['longitude'] . ', ' . $coordinate['latitude'] . '],';
+    }
+    $values['geojson'] = rtrim($values['geojson'], ',');
+    $values['geojson'] .= ']]}';
+
+    return $values;
   }
 
 }

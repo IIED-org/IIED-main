@@ -30,12 +30,17 @@ image_formats:
     enabled: false
   WEBP:
     mime_type: image/webp
+  AVIF:
+    mime_type: image/avif
     enabled: false
   TIFF:
     mime_type: image/tiff
     enabled: false
   PDF:
     mime_type: application/pdf
+    enabled: false
+  HEIC:
+    mime_type: image/heif
     enabled: false
   BMP:
     mime_type: image/x-ms-bmp

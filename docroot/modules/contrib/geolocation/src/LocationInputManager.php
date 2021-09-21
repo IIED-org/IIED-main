@@ -2,16 +2,20 @@
 
 namespace Drupal\geolocation;
 
+use Drupal\Component\Utility\SortArray;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Component\Utility\SortArray;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Search plugin manager.
  */
 class LocationInputManager extends DefaultPluginManager {
+
+  use StringTranslationTrait;
 
   /**
    * Constructs an LocationInputManager object.
@@ -72,15 +76,15 @@ class LocationInputManager extends DefaultPluginManager {
   public function getOptionsForm(array $settings, $context = NULL) {
     $form = [
       '#type' => 'table',
-      '#prefix' => t('<h3>Location input</h3>Each option will, if it can be applied, supersede any following option.'),
+      '#prefix' => $this->t('<h3>Location input</h3>Each option will, if it can be applied, supersede any following option.'),
       '#header' => [
         [
-          'data' => t('Enable'),
+          'data' => $this->t('Enable'),
           'colspan' => 2,
         ],
-        t('Option'),
-        t('Settings'),
-        t('Weight'),
+        $this->t('Option'),
+        $this->t('Settings'),
+        $this->t('Weight'),
       ],
       '#tabledrag' => [
         [
@@ -124,7 +128,7 @@ class LocationInputManager extends DefaultPluginManager {
           ],
           'weight' => [
             '#type' => 'weight',
-            '#title' => t('Weight for @option', ['@option' => $label]),
+            '#title' => $this->t('Weight for @option', ['@option' => $label]),
             '#title_display' => 'invisible',
             '#size' => 4,
             '#default_value' => $weight,
@@ -234,8 +238,8 @@ class LocationInputManager extends DefaultPluginManager {
       /** @var \Drupal\geolocation\LocationInputInterface $location_input_plugin */
       $location_input_plugin = $this->createInstance($option['location_input_id']);
       $plugin_form = $location_input_plugin->getForm($option_id, empty($option['settings']) ? [] : $option['settings'], $context, $default_value);
-      if ($plugin_form !== FALSE) {
-        return $plugin_form;
+      if ($plugin_form) {
+        $form = NestedArray::mergeDeep($plugin_form, $form);
       }
     }
 

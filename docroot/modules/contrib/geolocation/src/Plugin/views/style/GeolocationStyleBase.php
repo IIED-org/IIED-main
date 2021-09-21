@@ -11,7 +11,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Render\PlainTextOutput;
 
 /**
- * Class GeolocationStyleBase.
+ * Geolocation Style Base.
  *
  * @package Drupal\geolocation\Plugin\views\style
  */
@@ -36,27 +36,6 @@ abstract class GeolocationStyleBase extends StylePluginBase {
    * {@inheritdoc}
    */
   protected $usesGrouping = FALSE;
-
-  /**
-   * Title field.
-   *
-   * @var bool|string
-   */
-  protected $titleField = FALSE;
-
-  /**
-   * Label field.
-   *
-   * @var bool|string
-   */
-  protected $labelField = FALSE;
-
-  /**
-   * Icon field.
-   *
-   * @var bool|string
-   */
-  protected $iconField = FALSE;
 
   /**
    * Data provider base.
@@ -100,27 +79,6 @@ abstract class GeolocationStyleBase extends StylePluginBase {
       return FALSE;
     }
 
-    if (
-      !empty($this->options['title_field'])
-      && $this->options['title_field'] != 'none'
-    ) {
-      $this->titleField = $this->options['title_field'];
-    }
-
-    if (
-      !empty($this->options['label_field'])
-      && $this->options['label_field'] != 'none'
-    ) {
-      $this->labelField = $this->options['label_field'];
-    }
-
-    if (
-      !empty($this->options['icon_field'])
-      && $this->options['icon_field'] != 'none'
-    ) {
-      $this->iconField = $this->options['icon_field'];
-    }
-
     return parent::render();
   }
 
@@ -136,32 +94,13 @@ abstract class GeolocationStyleBase extends StylePluginBase {
   protected function getLocationsFromRow(ResultRow $row) {
     $locations = [];
 
-    if (!empty($this->titleField)) {
-      if (!empty($this->rendered_fields[$row->index][$this->titleField])) {
-        $title_build = $this->rendered_fields[$row->index][$this->titleField];
-      }
-      elseif (!empty($this->view->field[$this->titleField])) {
-        $title_build = $this->view->field[$this->titleField]->render($row);
-      }
-    }
-
-    if (!empty($this->labelField)) {
-      if (!empty($this->rendered_fields[$row->index][$this->labelField])) {
-        $label_build = $this->rendered_fields[$row->index][$this->labelField];
-      }
-      elseif (!empty($this->view->field[$this->labelField])) {
-        $label_build = $this->view->field[$this->labelField]->render($row);
-      }
-      else {
-        $label_build = '';
-      }
-      $label_build = PlainTextOutput::renderFromHtml($label_build);
-    }
-
     $icon_url = NULL;
-    if (!empty($this->iconField)) {
+    if (
+      !empty($this->options['icon_field'])
+      && $this->options['icon_field'] != 'none'
+    ) {
       /** @var \Drupal\views\Plugin\views\field\Field $icon_field_handler */
-      $icon_field_handler = $this->view->field[$this->iconField];
+      $icon_field_handler = $this->view->field[$this->options['icon_field']];
       if (!empty($icon_field_handler)) {
         $image_items = $icon_field_handler->getItems($row);
         if (!empty($image_items[0]['rendered']['#item']->entity)) {
@@ -200,8 +139,8 @@ abstract class GeolocationStyleBase extends StylePluginBase {
       $location = [
         '#type' => 'geolocation_map_location',
         'content' => $this->view->rowPlugin->render($row),
-        '#title' => empty($title_build) ? '' : $title_build,
-        '#label' => empty($label_build) ? '' : $label_build,
+        '#title' => $this->getTitleField($row) ?? '',
+        '#label' => $this->getLabelField($row) ?? '',
         '#coordinates' => $position,
         '#weight' => $row->index,
         '#attributes' => ['data-views-row-index' => $row->index],
@@ -302,7 +241,10 @@ abstract class GeolocationStyleBase extends StylePluginBase {
       '#options' => $geo_options,
       '#required' => TRUE,
       '#ajax' => [
-        'callback' => [get_class($this->dataProviderManager), 'addDataProviderSettingsFormAjax'],
+        'callback' => [
+          get_class($this->dataProviderManager),
+          'addDataProviderSettingsFormAjax',
+        ],
         'wrapper' => 'data-provider-settings',
         'effect' => 'fade',
       ],
@@ -310,7 +252,10 @@ abstract class GeolocationStyleBase extends StylePluginBase {
 
     $data_provider = NULL;
 
-    $form_state_data_provider_id = NestedArray::getValue($form_state->getUserInput(), ['style_options', 'geolocation_field']);
+    $form_state_data_provider_id = NestedArray::getValue(
+      $form_state->getUserInput(),
+      ['style_options', 'geolocation_field']
+    );
     if (
       !empty($form_state_data_provider_id)
       && !empty($data_providers[$form_state_data_provider_id])
@@ -332,19 +277,13 @@ abstract class GeolocationStyleBase extends StylePluginBase {
       '#value' => $data_provider->getPluginId(),
     ];
 
-    $form['data_provider_settings'] = [
-      '#type' => 'container',
-    ];
-
-    if ($data_provider) {
-      $form['data_provider_settings'] = $data_provider->getSettingsForm(
-        $this->options['data_provider_settings'],
-        [
-          'style_options',
-          'map_provider_settings',
-        ]
-      );
-    }
+    $form['data_provider_settings'] = $data_provider->getSettingsForm(
+      $this->options['data_provider_settings'],
+      [
+        'style_options',
+        'map_provider_settings',
+      ]
+    );
 
     $form['data_provider_settings'] = array_replace($form['data_provider_settings'], [
       '#prefix' => '<div id="data-provider-settings">',
@@ -410,6 +349,58 @@ abstract class GeolocationStyleBase extends StylePluginBase {
       '#type' => 'checkbox',
       '#default_value' => $this->options['marker_row_number'],
     ];
+  }
+
+  /**
+   * Get title value if present.
+   *
+   * @param \Drupal\views\ResultRow $row
+   *   Result Row.
+   *
+   * @return string|null
+   *   Title.
+   */
+  public function getTitleField(ResultRow $row): ?string {
+    if (
+      !empty($this->options['title_field'])
+      && $this->options['title_field'] != 'none'
+    ) {
+      $title_field = $this->options['title_field'];
+      if (!empty($this->rendered_fields[$row->index][$title_field])) {
+        return PlainTextOutput::renderFromHtml($this->rendered_fields[$row->index][$title_field]);
+      }
+      elseif (!empty($this->view->field[$title_field])) {
+        return PlainTextOutput::renderFromHtml($this->view->field[$title_field]->render($row));
+      }
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Get label value if present.
+   *
+   * @param \Drupal\views\ResultRow $row
+   *   Result Row.
+   *
+   * @return string|null
+   *   Label.
+   */
+  public function getLabelField(ResultRow $row): ?string {
+    if (
+      !empty($this->options['label_field'])
+      && $this->options['label_field'] != 'none'
+    ) {
+      $label_field = $this->options['label_field'];
+      if (!empty($this->rendered_fields[$row->index][$label_field])) {
+        return PlainTextOutput::renderFromHtml($this->rendered_fields[$row->index][$label_field]);
+      }
+      elseif (!empty($this->view->field[$label_field])) {
+        return PlainTextOutput::renderFromHtml($this->view->field[$label_field]->render($row));
+      }
+    }
+
+    return NULL;
   }
 
 }

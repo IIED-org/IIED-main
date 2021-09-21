@@ -2,3 +2,5 @@ ui_localtask: true
 ui_checkbox: false
 _core:
   default_config_hash: CSLsGbxp3SlqyxyFdo_ySU0CldlmJux5IKpG9zYn4V0
+publish_text_value: Publish
+unpublish_text_value: Unpublish

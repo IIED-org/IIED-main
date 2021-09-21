@@ -7,7 +7,7 @@ dependencies:
   - drupal:views_bulk_operations
   - drupal:node
 
-# Information added by Drupal.org packaging script on 2021-03-19
-version: '8.x-3.12'
+# Information added by Drupal.org packaging script on 2021-04-29
+version: '8.x-3.13'
 project: 'views_bulk_operations'
-datestamp: 1616148485
+datestamp: 1619697069

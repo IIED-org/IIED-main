@@ -26,6 +26,14 @@
          */
         function (map, featureSettings) {
           map.addInitializedCallback(function (map) {
+            jQuery.each(map.leafletMap.controls, function (index, control) {
+              var currentControlContainer = control.getContainer();
+              if (!currentControlContainer.classList.contains('leaflet_control_recenter')) {
+                return;
+              }
+              map.leafletMap.removeControl(control);
+              map.leafletMap.addControl(control);
+            });
             var recenterButton = $('.geolocation-map-control .recenter', map.wrapper);
             recenterButton.click(function (e) {
               map.setCenter();

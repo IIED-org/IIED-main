@@ -12,6 +12,11 @@
  */
 function get_address_format_customizations($countryCode) {
     $formatCustomizations = [];
+    // Replace the postal code pattern.
+    // https://github.com/google/libaddressinput/issues/207
+    $formatCustomizations['BH'] = [
+        'postal_code_pattern' => '(?:^|\b)(?:1[0-2]|[1-9])\d{2}(?:$|\b)',
+    ];
     // Make the locality required.
     $formatCustomizations['CO'] = [
         'required_fields' => [
@@ -246,17 +251,6 @@ function get_subdivision_customizations($group) {
             'iso_code' => 'CO-VID',
             'postal_code_pattern' => '99\d{4}',
         ],
-    ];
-    // Replace Iporá with Iporã.
-    // https://github.com/google/libaddressinput/issues/186
-    $subdivisionCustomizations['BR-e8f1a539a5489b18c33be768b1c3c799'] = [
-        '_remove' => [
-            'Iporá',
-        ],
-        '_add_after' => [
-            'Iporã' => 'Iracema do Oeste',
-        ],
-        'Iporã' => [],
     ];
 
     return isset($subdivisionCustomizations[$group]) ? $subdivisionCustomizations[$group] : [];

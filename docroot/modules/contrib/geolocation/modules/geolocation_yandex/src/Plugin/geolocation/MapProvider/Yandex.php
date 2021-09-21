@@ -116,8 +116,6 @@ class Yandex extends MapProviderBase {
    * {@inheritdoc}
    */
   public function alterRenderArray(array $render_array, array $map_settings, array $context = []) {
-    $map_settings = $this->getSettings($map_settings);
-
     $yandex_url_parts = parse_url(self::$apiBaseUrl);
 
     $render_array['#attached'] = BubbleableMetadata::mergeAttachments(
@@ -153,9 +151,7 @@ class Yandex extends MapProviderBase {
       ]
     );
 
-    $render_array = parent::alterRenderArray($render_array, $map_settings, $context);
-
-    return $render_array;
+    return parent::alterRenderArray($render_array, $map_settings, $context);
   }
 
   /**

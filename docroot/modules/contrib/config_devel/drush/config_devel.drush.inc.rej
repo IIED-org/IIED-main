@@ -1,0 +1,17 @@
+***************
+*** 250,256 ****
+    elseif (\Drupal::service('theme_handler')->themeExists($extension)) {
+      $type = 'theme';
+    }
+-   elseif (drupal_get_profile() === $extension) {
+      $type = 'profile';
+    }
+  
+--- 250,256 ----
+    elseif (\Drupal::service('theme_handler')->themeExists($extension)) {
+      $type = 'theme';
+    }
++   elseif (\Drupal::installProfile() === $extension) {
+      $type = 'profile';
+    }
+  

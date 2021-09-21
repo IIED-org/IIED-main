@@ -24,6 +24,7 @@ class AutocompleteHelper implements AutocompleteHelperInterface {
    * Constructs a new class instance.
    *
    * @param \Drupal\Core\Render\ElementInfoManagerInterface $element_info
+   *   The element info manager.
    */
   public function __construct(ElementInfoManagerInterface $element_info) {
     $this->elementInfo = $element_info;

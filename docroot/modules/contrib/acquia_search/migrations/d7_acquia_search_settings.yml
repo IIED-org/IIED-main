@@ -1,0 +1,18 @@
+id: d7_acquia_search_settings
+label: 'Acquia Search Configurations Settings'
+migration_tags:
+  - Drupal 7
+  - Configuration
+source:
+  plugin: variable
+  variables:
+    - acquia_search_api_host
+    - acquia_search_solr_forced_read_only
+  source_module:
+    - acquia_search
+process:
+  api_host: acquia_search_api_host
+  read_only: acquia_search_solr_forced_read_only
+destination:
+  plugin: config
+  config_name: acquia_search.settings

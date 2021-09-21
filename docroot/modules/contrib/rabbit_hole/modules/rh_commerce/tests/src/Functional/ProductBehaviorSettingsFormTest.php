@@ -82,6 +82,7 @@ class ProductBehaviorSettingsFormTest extends RabbitHoleBehaviorSettingsFormTest
       'rh_override' => $override,
     ];
     $this->submitForm($edit, 'Save');
+    $this->bundle = $this->loadBundle($edit['id']);
     return $edit['id'];
   }
 
@@ -134,6 +135,13 @@ class ProductBehaviorSettingsFormTest extends RabbitHoleBehaviorSettingsFormTest
       'administer commerce_product',
       'administer commerce_product_type',
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getEntityFormSubmit() {
+    return 'Save';
   }
 
 }

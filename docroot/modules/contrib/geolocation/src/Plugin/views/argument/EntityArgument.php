@@ -81,6 +81,8 @@ class EntityArgument extends ProximityArgument implements ContainerFactoryPlugin
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
 
+    $bundle_info = \Drupal::service("entity_type.bundle.info")->getAllBundleInfo();
+
     unset($form['description']);
 
     $options = [];
@@ -89,8 +91,9 @@ class EntityArgument extends ProximityArgument implements ContainerFactoryPlugin
       $entity_type_definition = $this->entityTypeManager->getDefinition($entity_type);
       foreach ($fields as $field_name => $field) {
         foreach ($field['bundles'] as $bundle) {
+          $bundle_label = empty($bundle_info[$entity_type][$bundle]['label']) ? $entity_type_definition->getBundleLabel() : $bundle_info[$entity_type][$bundle]['label'];
           $field_definitions = $this->entityFieldManager->getFieldDefinitions($entity_type, $bundle);
-          $options[$entity_type . ':' . $bundle . ':' . $field_name] = $entity_type_definition->getLabel() . ' - ' . $entity_type_definition->getBundleLabel() . ' - ' . $field_definitions[$field_name]->getLabel();
+          $options[$entity_type . ':' . $bundle . ':' . $field_name] = $entity_type_definition->getLabel() . ' - ' . $bundle_label . ' - ' . $field_definitions[$field_name]->getLabel();
         }
       }
     }
@@ -123,11 +126,9 @@ class EntityArgument extends ProximityArgument implements ContainerFactoryPlugin
 
     $source_parts = explode(':', $this->options['geolocation_entity_argument_source']);
     $entity_type = $source_parts[0];
-    $bundle_type = $source_parts[1];
     $field_name = $source_parts[2];
     if (
       empty($entity_type)
-      || empty($bundle_type)
       || empty($field_name)
     ) {
       return FALSE;

@@ -11,3 +11,10 @@ datepicker:
       jquery.ui/themes/base/datepicker.css: {}
   dependencies:
     - jquery_ui/core
+
+locale:
+  js:
+    js/locale.js: { }
+  dependencies:
+    - core/drupal
+    - core/drupalSettings

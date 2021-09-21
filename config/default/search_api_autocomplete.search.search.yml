@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - search_api.index.acquia_search_solr_search_api_solr_index
+    - search_api.index.acquia_search_index
     - views.view.search
     - core.entity_view_mode.taxonomy_term.search_autocomplete
   module:
@@ -11,7 +11,7 @@ dependencies:
     - search_api_autocomplete
 id: search
 label: Search
-index_id: acquia_search_solr_search_api_solr_index
+index_id: acquia_search_index
 suggester_settings:
   live_results:
     fields: {  }
@@ -20,7 +20,9 @@ suggester_settings:
         publication: ''
       'entity:taxonomy_term':
         person: search_autocomplete
-        theme: search_autocomplete
+    highlight:
+      enabled: false
+      field: ''
 suggester_weights:
   live_results: -50
 suggester_limits:

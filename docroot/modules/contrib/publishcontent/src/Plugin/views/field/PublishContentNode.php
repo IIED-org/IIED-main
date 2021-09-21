@@ -2,9 +2,9 @@
 
 namespace Drupal\publishcontent\Plugin\views\field;
 
-use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
+use Drupal\node\NodeInterface;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -33,12 +33,20 @@ class PublishContentNode extends FieldPluginBase {
   protected $currentUser;
 
   /**
+   * The module configuration for reading.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $config;
+
+  /**
    * {@inheritDoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
     $instance->publishContentAccess = $container->get('publishcontent.access');
     $instance->currentUser = $container->get('current_user');
+    $instance->config = $container->get('config.factory')->get('publishcontent.settings');
     return $instance;
   }
 
@@ -53,27 +61,30 @@ class PublishContentNode extends FieldPluginBase {
    * {@inheritdoc}
    */
   public function render(ResultRow $values) {
-    /* @var \Drupal\Core\Entity\EntityPublishedInterface */
-    $entity = $values->_entity;
+    /* @var \Drupal\node\NodeInterface $node */
+    $node = $values->_entity;
+
+    // Sanity check.
+    if (!$node instanceof NodeInterface) {
+      return '';
+    }
+
     // Don't bother adding the link if the access is forbidden.
-    if ($this->publishContentAccess->access($this->currentUser, $entity)->isForbidden()) {
-      return [];
+    if ($this->publishContentAccess->access($this->currentUser, $node)->isForbidden()) {
+      return '';
     }
 
-    if (!$entity instanceof EntityPublishedInterface) {
-      return [];
-    }
+    $langcode = $values->{'node_field_data_langcode'} ?? '';
+    $id = $node->id();
 
-    $langcode = $values->{'node_field_data_langcode'};
-    $id = $entity->id();
-
-    if ($entity->isTranslatable() && isset($langcode) && $entity->hasTranslation($langcode)) {
-      $url = Url::fromRoute('entity.node.publish_translation', ['node' => $id, 'langcode' => $langcode]);
-      $text = $entity->getTranslation($langcode)->isPublished() ? $this->t('Unpublish (this translation)') : $this->t('Publish (this translation)');
+    if ($node->isTranslatable() && !empty($langcode) && $node->hasTranslation($langcode)) {
+      $url = Url::fromRoute('entity.node.publish_translation',
+        ['node' => $id, 'langcode' => $langcode]);
+      $text = $node->getTranslation($langcode)->isPublished() ? $this->config->get('unpublish_text_value') : $this->config->get('publish_text_value');
     }
     else {
       $url = Url::fromRoute('entity.node.publish', ['node' => $id]);
-      $text = $entity->isPublished() ? $this->t('Unpublish') : $this->t('Publish');
+      $text = $node->isPublished() ? $this->config->get('unpublish_text_value') : $this->config->get('publish_text_value');
     }
 
     $link = Link::fromTextAndUrl($text, $url);

@@ -91,7 +91,7 @@ class GeolocationFieldTest extends BrowserTestBase {
     ];
 
     // Test if the raw lat, lng values are found on the page.
-    $this->drupalPostForm(NULL, $edit, t('Save'));
+    $this->submitForm($edit, t('Save'));
     $this->assertSession()->responseContains($lat);
     $this->assertSession()->responseContains($lng);
 
@@ -107,7 +107,7 @@ class GeolocationFieldTest extends BrowserTestBase {
     ];
 
     // Test if the raw lat, lng values are found on the page.
-    $this->drupalPostForm(NULL, $edit, t('Save'));
+    $this->submitForm($edit, t('Save'));
     $this->assertSession()->responseContains($lat);
     $this->assertSession()->responseContains($lng);
   }

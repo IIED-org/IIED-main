@@ -5,10 +5,10 @@
         {
             "name": "Scott Carpenter",
             "email": "dropdown-language@goodscott.com"
-        }
+        } 
     ],
     "require": {
-        "php": "^7.1",
+        "php": "^7.1 || ^8.0",
         "drupal/core": "^8 || ^9"
     }
 }

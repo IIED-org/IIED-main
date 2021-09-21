@@ -21,7 +21,6 @@ function better_social_sharing_buttons_theme($existing, $type, $theme, $path) {
     'better_social_sharing_buttons' => [
       'variables' => ['items' => ''],
       'template' => 'better-social-sharing-buttons',
-      'path' => $path . '/theme',
     ],
   ];
 }

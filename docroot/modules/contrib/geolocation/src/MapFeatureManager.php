@@ -63,7 +63,7 @@ class MapFeatureManager extends DefaultPluginManager {
    * @param string $type
    *   Map type.
    *
-   * @return string[]
+   * @return array[]
    *   Map feature list.
    */
   public function getMapFeaturesByMapType($type) {

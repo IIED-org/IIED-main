@@ -115,8 +115,6 @@ class LeafletTileLayerOverlay extends MapFeatureBase {
   public function alterMap(array $render_array, array $feature_settings, array $context = []) {
     $render_array = parent::alterMap($render_array, $feature_settings, $context);
 
-    $feature_settings = $this->getSettings($feature_settings);
-
     $tileLayer = [
       'enable' => TRUE,
       'tileLayerOverlay' => $feature_settings['tile_layer_overlay'],

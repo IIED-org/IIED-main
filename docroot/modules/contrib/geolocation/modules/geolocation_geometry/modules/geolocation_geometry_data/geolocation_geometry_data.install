@@ -30,7 +30,7 @@ function geolocation_geometry_data_requirements($phase) {
     'severity' => REQUIREMENT_OK,
   ];
 
-  if (!class_exists('Shapefile\ShapefileReader')) {
+  if (!class_exists('Shapefile\\ShapefileReader')) {
     $requirements['geolocation_geometry_data_composer']['value'] = t('Libraries not installed');
     $requirements['geolocation_geometry_data_composer']['severity'] = REQUIREMENT_ERROR;
   }

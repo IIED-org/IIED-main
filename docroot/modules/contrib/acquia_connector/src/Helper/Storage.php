@@ -61,6 +61,7 @@ class Storage {
       'acquia_connector.identifier',
       'spi.site_name',
       'spi.site_machine_name',
+      'acquia_subscription_data',
     ]);
   }
 

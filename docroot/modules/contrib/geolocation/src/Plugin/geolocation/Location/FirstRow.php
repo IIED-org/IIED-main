@@ -27,7 +27,7 @@ class FirstRow extends LocationBase implements LocationInterface {
 
     if ($displayHandler = self::getViewsDisplayHandler($context)) {
       if ($displayHandler->getPlugin('style')->getPluginId() == 'maps_common') {
-        $options['first_row'] = t('First row');
+        $options['first_row'] = $this->t('First row');
       }
     }
 

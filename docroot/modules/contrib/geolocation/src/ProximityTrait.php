@@ -20,6 +20,7 @@ trait ProximityTrait {
     $conversions = [
       'km' => 1,
       'mi' => 1.609344,
+      'nm' => 1.852,
       'm' => 0.001,
       'ly' => 9460753090819,
     ];

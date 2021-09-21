@@ -12,13 +12,8 @@
       "homepage": "https://www.drupal.org/u/cadamski"
     }
   ],
-  "minimum-stability": "dev",
-  "require": {
-    "gasparesganga/php-shapefile": ">=3.2",
-    "sibyx/phpgpx": "^1.0"
-  },
   "support": {
     "issues": "https://www.drupal.org/project/issues/geolocation",
-    "source": "http://git.drupal.org/project/geolocation.git"
+    "source": "https://git.drupal.org/project/geolocation.git"
   }
 }

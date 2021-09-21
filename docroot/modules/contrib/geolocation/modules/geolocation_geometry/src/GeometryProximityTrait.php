@@ -31,7 +31,7 @@ trait GeometryProximityTrait {
     $filter_lat = empty($filter_lat) ? '0' : $filter_lat;
     $filter_lng = empty($filter_lng) ? '0' : $filter_lng;
 
-    return 'ST_Distance_Sphere(ST_GeomFromText(\'POINT(' . $filter_lat . ' ' . $filter_lng . ')\', 4326), ' . $field_point . ')/1000';
+    return 'ST_Distance_Sphere(ST_GeomFromText(\'POINT(' . $filter_lng . ' ' . $filter_lat . ')\'), ST_GeomFromText(CONCAT(\'POINT(\', ST_Y(' . $field_point . '), \' \', ST_X(' . $field_point . '), \')\')))/1000';
   }
 
 }

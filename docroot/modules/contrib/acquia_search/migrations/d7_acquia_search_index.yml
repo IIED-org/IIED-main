@@ -1,0 +1,11 @@
+id: d7_acquia_search_index
+label: 'Acquia Search Index'
+migration_tags:
+  - Drupal 7
+  - Configuration
+source:
+  plugin: d7_acquia_search_index
+process:
+  datasource_settings/entity:node/bundles/selected: bundle
+destination:
+  plugin: d7_acquia_search_index

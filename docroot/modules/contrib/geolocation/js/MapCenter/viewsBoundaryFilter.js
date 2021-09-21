@@ -13,6 +13,8 @@
   /**
    * @param {Object} map
    * @param {Object} centerOption
+   * @param {bool} centerOption.clearAddressInput
+   * @param {string} centerOption.identifier
    * @param {float} centerOption.latNorthEast
    * @param {float} centerOption.lngNorthEast
    * @param {float} centerOption.latSouthWest
@@ -27,6 +29,12 @@
     };
 
     map.fitBoundaries(centerBounds, 'views_boundary_filter');
+
+    if (centerOption.clearAddressInput) {
+      map.addBoundsChangedCallback(function () {
+        jQuery('input.geolocation-geocoder-address[data-source-identifier="' + centerOption.identifier + '"]').val('');
+      });
+    }
 
     return true;
   }

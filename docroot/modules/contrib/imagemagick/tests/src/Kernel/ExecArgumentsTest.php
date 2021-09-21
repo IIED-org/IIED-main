@@ -15,12 +15,12 @@ class ExecArgumentsTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['imagemagick', 'file_mdm', 'sophron'];
+  protected static $modules = ['imagemagick', 'file_mdm', 'sophron'];
 
   /**
    * Test arguments handling.
    */
-  public function testArguments() {
+  public function testArguments(): void {
     // Get an empty Image object.
     $arguments = new ImagemagickExecArguments(\Drupal::service('imagemagick.exec_manager'));
 

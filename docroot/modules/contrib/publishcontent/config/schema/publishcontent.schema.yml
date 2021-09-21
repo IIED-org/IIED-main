@@ -1,8 +1,16 @@
 publishcontent.settings:
-  type: mapping
+  type: config_object
   label: 'Settings'
   mapping:
     ui_localtask:
       type: boolean
     ui_checkbox:
       type: boolean
+    create_revision:
+      type: boolean
+    create_log_entry:
+      type: boolean
+    publish_text_value:
+      type: label
+    unpublish_text_value:
+      type: label

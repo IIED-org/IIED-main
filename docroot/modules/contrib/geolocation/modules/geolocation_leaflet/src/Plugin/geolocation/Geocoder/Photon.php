@@ -15,7 +15,7 @@ use Drupal\Core\Render\BubbleableMetadata;
  * @Geocoder(
  *   id = "photon",
  *   name = @Translation("Photon"),
- *   description = @Translation("See https://photon.komoot.de for details."),
+ *   description = @Translation("See https://photon.komoot.io for details."),
  *   locationCapable = true,
  *   boundaryCapable = true,
  *   frontendCapable = true,
@@ -30,7 +30,7 @@ class Photon extends GeocoderBase implements GeocoderInterface {
    * @var string
    *   Photon URL.
    */
-  public $requestBaseUrl = 'https://photon.komoot.de';
+  public $requestBaseUrl = 'https://photon.komoot.io';
 
   /**
    * {@inheritdoc}

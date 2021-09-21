@@ -80,8 +80,9 @@ abstract class GeolocationMapFormatterBase extends FormatterBase {
     $settings = parent::defaultSettings();
     $settings['title'] = '';
     $settings['set_marker'] = TRUE;
-    $settings['common_map'] = TRUE;
+    $settings['show_label'] = FALSE;
     $settings['show_delta_label'] = FALSE;
+    $settings['common_map'] = TRUE;
     $settings['data_provider_settings'] = [];
     $settings['map_provider_id'] = '';
     if (\Drupal::moduleHandler()->moduleExists('geolocation_google_maps')) {
@@ -119,7 +120,7 @@ abstract class GeolocationMapFormatterBase extends FormatterBase {
       return [
         '#type' => 'html_tag',
         '#tag' => 'span',
-        '#value' => t("No map provider found."),
+        '#value' => $this->t("No map provider found."),
       ];
     }
 
@@ -136,6 +137,12 @@ abstract class GeolocationMapFormatterBase extends FormatterBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Set map marker'),
       '#default_value' => $settings['set_marker'],
+    ];
+
+    $element['show_label'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show   label'),
+      '#default_value' => $settings['show_label'],
     ];
 
     $element['title'] = [
@@ -217,7 +224,7 @@ abstract class GeolocationMapFormatterBase extends FormatterBase {
     $element['map_provider_settings'] = [
       '#type' => 'html_tag',
       '#tag' => 'span',
-      '#value' => t("No settings available."),
+      '#value' => $this->t("No settings available."),
     ];
 
     $parents = [
@@ -277,6 +284,9 @@ abstract class GeolocationMapFormatterBase extends FormatterBase {
     $summary[] = $this->t('Marker set: @marker', ['@marker' => $settings['set_marker'] ? $this->t('Yes') : $this->t('No')]);
     if ($settings['set_marker']) {
       $summary[] = $this->t('Marker Title: @type', ['@type' => $settings['title']]);
+      if ($settings['show_label']) {
+        $summary[] = $this->t('Showing Marker Label');
+      }
       if (
         !empty($settings['info_text']['value'])
         && !empty($settings['info_text']['format'])
@@ -416,6 +426,10 @@ abstract class GeolocationMapFormatterBase extends FormatterBase {
           '#weight' => $delta,
         ];
 
+        if ($settings['show_label']) {
+          $location['#label'] = $title;
+        }
+
         if (
           !empty($settings['info_text']['value'])
           && !empty($settings['info_text']['format'])
@@ -444,7 +458,7 @@ abstract class GeolocationMapFormatterBase extends FormatterBase {
     $dependencies = parent::calculateDependencies();
     $settings = $this->getSettings();
 
-    if (!empty($settings['info_text'])) {
+    if (!empty($settings['info_text']['format'])) {
       $filter_format = FilterFormat::load($settings['info_text']['format']);
     }
 

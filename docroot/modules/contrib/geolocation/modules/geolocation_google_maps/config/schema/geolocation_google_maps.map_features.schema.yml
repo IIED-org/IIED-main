@@ -293,6 +293,9 @@ geolocation_google_maps.map_control_feature_settings:
         position:
           type: string
           label: 'Position'
+        behavior:
+          type: string
+          label: 'Behavior'
 
 plugin.plugin_configuration.geolocation.map_feature.control_recenter:
   type: geolocation_google_maps.map_control_feature_settings
@@ -336,9 +339,6 @@ plugin.plugin_configuration.geolocation.map_feature.control_zoom:
       type: mapping
       label: 'Settings'
       mapping:
-        behavior:
-          type: string
-          label: 'Behavior'
         style:
           type: string
           label: 'Style'
@@ -346,38 +346,14 @@ plugin.plugin_configuration.geolocation.map_feature.control_zoom:
 plugin.plugin_configuration.geolocation.map_feature.control_rotate:
   type: geolocation_google_maps.map_control_feature_settings
   label: 'Control Rotate'
-  mapping:
-    settings:
-      type: mapping
-      label: 'Settings'
-      mapping:
-        behavior:
-          type: string
-          label: 'Behavior'
 
 plugin.plugin_configuration.geolocation.map_feature.control_streetview:
   type: geolocation_google_maps.map_control_feature_settings
   label: 'Control Streetview'
-  mapping:
-    settings:
-      type: mapping
-      label: 'Settings'
-      mapping:
-        behavior:
-          type: string
-          label: 'Behavior'
 
 plugin.plugin_configuration.geolocation.map_feature.control_fullscreen:
   type: geolocation_google_maps.map_control_feature_settings
   label: 'Control Fullscreen'
-  mapping:
-    settings:
-      type: mapping
-      label: 'Settings'
-      mapping:
-        behavior:
-          type: string
-          label: 'Behavior'
 
 plugin.plugin_configuration.geolocation.map_feature.control_maptype:
   type: geolocation_google_maps.map_control_feature_settings
@@ -387,9 +363,6 @@ plugin.plugin_configuration.geolocation.map_feature.control_maptype:
       type: mapping
       label: 'Settings'
       mapping:
-        behavior:
-          type: string
-          label: 'Behavior'
         style:
           type: string
           label: 'Style'
@@ -405,6 +378,36 @@ plugin.plugin_configuration.geolocation.map_feature.marker_zoom_to_animate:
         marker_zoom_anchor_id:
           type: string
           label: 'Anchor'
+
+plugin.plugin_configuration.geolocation.map_feature.geolocation_google_maps_control_directions:
+  type: geolocation_google_maps.map_control_feature_settings
+  label: 'Directions Control'
+  mapping:
+    settings:
+      type: mapping
+      label: 'Settings'
+      mapping:
+        origin_source:
+          type: string
+          label: 'Origin Source'
+        origin_static_value:
+          type: string
+          label: 'Origin Static Value'
+        destination_source:
+          type: string
+          label: 'Destination Source'
+        destination_static_value:
+          type: string
+          label: 'Destination Static Value'
+        travel_mode:
+          type: string
+          label: 'Travel Mode'
+        directions_container:
+          type: string
+          label: 'Directions container'
+        directions_container_custom_id:
+          type: string
+          label: 'Directions Container Custom ID'
 
 plugin.plugin_configuration.geolocation.map_feature.spiderfying:
   type: geolocation.map_feature_settings
@@ -450,4 +453,3 @@ plugin.plugin_configuration.geolocation.map_feature.spiderfying:
         legWeight:
           type: float
           label: 'Setting'
-

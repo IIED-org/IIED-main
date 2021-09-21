@@ -1,6 +1,6 @@
 name: 'Upgrade status test theme'
 type: theme
-description: 'Theme for testing the deprecations in themes'
+description: 'Theme for testing deprecations in themes'
 # version: VERSION
 base theme: false
 core_version_requirement: ^8 || ^9
@@ -13,7 +13,7 @@ libraries-extend:
   upgrade_status_test_twig/deprecated_library:
     - upgrade_status_test_theme/library
 
-# Information added by Drupal.org packaging script on 2020-11-04
-version: '8.x-3.0'
+# Information added by Drupal.org packaging script on 2021-08-25
+version: '8.x-3.10'
 project: 'upgrade_status'
-datestamp: 1604508429
+datestamp: 1629923997

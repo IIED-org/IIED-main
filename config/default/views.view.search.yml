@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - field.storage.node.body
-    - search_api.index.acquia_search_solr_search_api_solr_index
+    - search_api.index.acquia_search_index
     - user.role.anonymous
     - user.role.authenticated
   module:
@@ -12,12 +12,13 @@ dependencies:
     - search_api
     - text
     - user
+    - views_autocomplete_filters
 id: search
 label: Search
 module: views
 description: ''
 tag: ''
-base_table: search_api_index_acquia_search_solr_search_api_solr_index
+base_table: search_api_index_acquia_search_index
 base_field: search_api_id
 display:
   default:
@@ -74,9 +75,10 @@ display:
                 collapsible_label: 'Sort options'
                 is_secondary: false
             filter:
-              search_api_fulltext:
+              search_api_fulltext_1:
                 plugin_id: default
                 advanced:
+                  placeholder_text: ''
                   rewrite:
                     filter_rewrite_values: ''
                   collapsible: false
@@ -124,7 +126,7 @@ display:
       fields:
         title:
           id: title
-          table: search_api_index_acquia_search_solr_search_api_solr_index
+          table: search_api_index_acquia_search_index
           field: title
           relationship: none
           group_type: group
@@ -193,7 +195,7 @@ display:
             multi_separator: ', '
           plugin_id: search_api_field
         body:
-          table: search_api_index_acquia_search_solr_search_api_solr_index
+          table: search_api_index_acquia_search_index
           field: body
           id: body
           entity_type: null
@@ -263,64 +265,11 @@ display:
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
-      filters:
-        search_api_fulltext:
-          id: search_api_fulltext
-          table: search_api_index_acquia_search_solr_search_api_solr_index
-          field: search_api_fulltext
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: and
-          value: ''
-          group: 1
-          exposed: true
-          expose:
-            operator_id: search_api_fulltext_op
-            label: Search
-            description: ''
-            use_operator: false
-            operator: search_api_fulltext_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: search_api_fulltext
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
-            placeholder: 'Search publications'
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          parse_mode: terms
-          min_length: null
-          fields:
-            - body
-            - field_author_s_
-            - field_product_code
-            - name
-            - name_2
-            - title
-          plugin_id: search_api_fulltext
+      filters: {  }
       sorts:
         search_api_relevance:
           id: search_api_relevance
-          table: search_api_index_acquia_search_solr_search_api_solr_index
+          table: search_api_index_acquia_search_index
           field: search_api_relevance
           relationship: none
           group_type: group
@@ -332,7 +281,7 @@ display:
           plugin_id: search_api
         field_date_published:
           id: field_date_published
-          table: search_api_index_acquia_search_solr_search_api_solr_index
+          table: search_api_index_acquia_search_index
           field: field_date_published
           relationship: none
           group_type: group
@@ -344,7 +293,7 @@ display:
           plugin_id: search_api
         title:
           id: title
-          table: search_api_index_acquia_search_solr_search_api_solr_index
+          table: search_api_index_acquia_search_index
           field: title
           relationship: none
           group_type: group
@@ -377,22 +326,20 @@ display:
       use_ajax: false
       filter_groups:
         operator: AND
-        groups:
-          1: AND
+        groups: {  }
       css_class: 'col-md-8 order-md-1 mr-5'
     cache_metadata:
       max-age: -1
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
-        - url
         - url.query_args
         - 'url.query_args:sort_by'
         - 'user.node_grants:view'
         - user.roles
       tags:
         - 'config:field.storage.node.body'
-        - 'config:search_api.index.acquia_search_solr_search_api_solr_index'
+        - 'config:search_api.index.acquia_search_index'
   page_2:
     display_plugin: page
     id: page_2
@@ -414,7 +361,7 @@ display:
       filters:
         search_api_fulltext:
           id: search_api_fulltext
-          table: search_api_index_acquia_search_solr_search_api_solr_index
+          table: search_api_index_acquia_search_index
           field: search_api_fulltext
           relationship: none
           group_type: group
@@ -436,15 +383,21 @@ display:
             remember: false
             multiple: false
             remember_roles:
-              anonymous: anonymous
               authenticated: authenticated
+              anonymous: '0'
               viewer: '0'
               editor: '0'
               manager: '0'
               administrator: '0'
-            placeholder: 'Search publications'
+            placeholder: ''
             expose_fields: false
-            searched_fields_id: ''
+            searched_fields_id: search_api_fulltext_searched_fields
+            autocomplete_filter: 1
+            autocomplete_min_chars: '2'
+            autocomplete_items: '10'
+            autocomplete_raw_suggestion: 1
+            autocomplete_raw_dropdown: 1
+            autocomplete_dependent: 0
           is_grouped: false
           group_info:
             label: ''
@@ -458,13 +411,12 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           parse_mode: edismax
-          min_length: 3
+          min_length: 2
           fields: {  }
-          plugin_id: search_api_fulltext
+          plugin_id: views_autocomplete_filters_search_api_fulltext
       filter_groups:
         operator: AND
-        groups:
-          1: AND
+        groups: {  }
       exposed_block: true
       style:
         type: default
@@ -498,4 +450,4 @@ display:
         - user.roles
       tags:
         - 'config:field.storage.node.body'
-        - 'config:search_api.index.acquia_search_solr_search_api_solr_index'
+        - 'config:search_api.index.acquia_search_index'

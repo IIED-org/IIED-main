@@ -48,12 +48,22 @@
       width: this.settings.baidu_settings.width
     });
 
+    var that = this;
+
     // Instantiate (and display) a map object:
     this.baiduMap = new BMap.Map(this.container.get(0));
     this.baiduMap.centerAndZoom(new BMap.Point(0, 0), 10);
 
     // TODO: Centrering & Zooming.
     this.baiduMap.enableScrollWheelZoom();
+
+    this.baiduMap.addEventListener('click', function (e) {
+      that.clickCallback({lat: e.point.lat, lng: e.point.lng});
+    });
+
+    this.baiduMap.addEventListener('moveend', function () {
+      that.boundsChangedCallback(that.baiduMap.getBounds());
+    });
 
     this.initializedCallback();
     this.populatedCallback();

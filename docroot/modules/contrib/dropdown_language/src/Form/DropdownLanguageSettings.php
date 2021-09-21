@@ -49,7 +49,7 @@ class DropdownLanguageSettings extends ConfigFormBase {
       '#title_display' => 'invisible',
       '#default_value' => $config->get('display_language_id'),
     ];
-    $form['labels']['display_language_id'][2]['#description'] = $this->t('Langauge Name used as title attribute');
+    $form['labels']['display_language_id'][2]['#description'] = $this->t('Language Name used as title attribute');
     $form['labels']['display_language_id'][3]['#description'] = $this->t('Each block instance will provide fields for label names.');
 
     $form['decor'] = [

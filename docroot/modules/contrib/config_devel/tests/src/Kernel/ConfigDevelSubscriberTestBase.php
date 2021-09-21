@@ -27,11 +27,11 @@ abstract class ConfigDevelSubscriberTestBase extends KernelTestBase {
    */
   public function testSubscribers() {
     // Without this the config exporter breaks.
-    \Drupal::service('config.installer')->installDefaultConfig('module', 'config_devel');
+    $this->container->get('config.installer')->installDefaultConfig('module', 'config_devel');
     $filename = 'public://'. static::CONFIGNAME . '.yml';
-    \Drupal::service('file_system')->mkdir('public://exported');
+    $this->container->get('file_system')->mkdir('public://exported');
     $exported_filename = 'public://exported/' . static::CONFIGNAME . '.yml';
-    \Drupal::configFactory()->getEditable('config_devel.settings')
+    $this->container->get('config.factory')->getEditable('config_devel.settings')
       ->set('auto_import', array(array(
         'filename' => $filename,
         'hash' => '',
@@ -42,7 +42,7 @@ abstract class ConfigDevelSubscriberTestBase extends KernelTestBase {
       ->save();
     $this->storage = \Drupal::service('config.storage');
     $this->assertFalse($this->storage->exists(static::CONFIGNAME));
-    $subscriber = \Drupal::service('config_devel.auto_import_subscriber');
+    $subscriber = $this->container->get('config_devel.auto_import_subscriber');
     for ($i = 2; $i; $i--) {
       $data['label'] = $this->randomString();
       file_put_contents($filename, Yaml::encode($data));

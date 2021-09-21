@@ -87,6 +87,9 @@ class AddTermsToVocabularyForm extends FormBase {
     $form['add'] = [
       '#type' => 'submit',
       '#value' => $this->t('Add'),
+      '#attributes' => array(
+        'onclick' => 'javascript:var s=this;setTimeout(function(){s.value="Saving...";s.disabled=true;},1);',
+      ),
     ];
     return $form;
   }

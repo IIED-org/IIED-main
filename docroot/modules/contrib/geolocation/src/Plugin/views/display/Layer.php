@@ -20,6 +20,7 @@ use Drupal\views\Plugin\views\display\Attachment;
  *   title = @Translation("Geolocation Layer"),
  *   help = @Translation("Blah blah."),
  *   theme = "views_view",
+ *   register_theme = FALSE,
  *   contextual_links_locations = {""}
  * )
  */

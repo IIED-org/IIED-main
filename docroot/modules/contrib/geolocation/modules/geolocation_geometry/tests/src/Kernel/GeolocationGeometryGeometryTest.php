@@ -81,6 +81,7 @@ class GeolocationGeometryGeometryTest extends FieldKernelTestBase {
     ]);
     $geometry->save();
 
+    /** @var \Drupal\entity_test\Entity\EntityTest $geometry */
     $geometry = $entityTestStorage->load($geometry->id());
 
     $this->assertEquals($geometry->get('field_geometry')->wkt, $kenya['wkt'], "WKT are identical.");
@@ -94,6 +95,7 @@ class GeolocationGeometryGeometryTest extends FieldKernelTestBase {
     ]);
     $geometry->save();
 
+    /** @var \Drupal\entity_test\Entity\EntityTest $geometry */
     $geometry = $entityTestStorage->load($geometry->id());
 
     $this->assertEquals($geometry->get('field_geometry')->geojson, $kenya['geojson'], "GeoJSON are identical.");
@@ -111,7 +113,7 @@ class GeolocationGeometryGeometryTest extends FieldKernelTestBase {
     }
     catch (\Exception $e) {
       $exception_thrown = TRUE;
-      $this->assertContains("Cannot get geometry object from data you send to the GEOMETRY field", $e->getMessage(), "Mismatching geometry type, exception should be thrown.");
+      $this->assertStringContainsString("Cannot get geometry object from data you send to the GEOMETRY field", $e->getMessage(), "Mismatching geometry type, exception should be thrown.");
     }
 
     $this->assertTrue($exception_thrown, "Exception for mismatching geometry was thrown.");

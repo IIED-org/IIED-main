@@ -191,9 +191,6 @@ class GoogleMaps extends GoogleMapsProviderBase {
    * {@inheritdoc}
    */
   public function alterRenderArray(array $render_array, array $map_settings, array $context = []) {
-
-    $map_settings = $this->getSettings($map_settings);
-
     $render_array['#attached'] = BubbleableMetadata::mergeAttachments(
       empty($render_array['#attached']) ? [] : $render_array['#attached'],
       [
@@ -214,9 +211,7 @@ class GoogleMaps extends GoogleMapsProviderBase {
       ]
     );
 
-    $render_array = parent::alterRenderArray($render_array, $map_settings, $context);
-
-    return $render_array;
+    return parent::alterRenderArray($render_array, $map_settings, $context);
   }
 
   /**

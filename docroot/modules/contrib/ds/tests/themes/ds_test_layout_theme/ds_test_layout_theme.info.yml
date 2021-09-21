@@ -4,7 +4,7 @@ description: 'Theme for testing a theme-provided layout'
 base theme: classy
 core_version_requirement: ^8.8 || ^9
 
-# Information added by Drupal.org packaging script on 2020-08-31
-version: '8.x-3.9'
+# Information added by Drupal.org packaging script on 2021-06-23
+version: '8.x-3.13'
 project: 'ds'
-datestamp: 1598898823
+datestamp: 1624456616

@@ -7,11 +7,14 @@ use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Component\Utility\SortArray;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Search plugin manager.
  */
 class MapCenterManager extends DefaultPluginManager {
+
+  use StringTranslationTrait;
 
   /**
    * Constructs an MapCenterManager object.
@@ -72,15 +75,15 @@ class MapCenterManager extends DefaultPluginManager {
   public function getCenterOptionsForm(array $settings, $context = NULL) {
     $form = [
       '#type' => 'table',
-      '#prefix' => t('<h3>Centre override</h3>These options allow to override the default map centre. Each option will, if it can be applied, supersede any following option.'),
+      '#prefix' => $this->t('<h3>Centre override</h3>These options allow to override the default map centre. Each option will, if it can be applied, supersede any following option.'),
       '#header' => [
         [
-          'data' => t('Enable'),
+          'data' => $this->t('Enable'),
           'colspan' => 2,
         ],
-        t('Option'),
-        t('Settings'),
-        t('Weight'),
+        $this->t('Option'),
+        $this->t('Settings'),
+        $this->t('Weight'),
       ],
       '#tabledrag' => [
         [
@@ -124,7 +127,7 @@ class MapCenterManager extends DefaultPluginManager {
           ],
           'weight' => [
             '#type' => 'weight',
-            '#title' => t('Weight for @option', ['@option' => $label]),
+            '#title' => $this->t('Weight for @option', ['@option' => $label]),
             '#title_display' => 'invisible',
             '#size' => 4,
             '#default_value' => $weight,
@@ -216,13 +219,15 @@ class MapCenterManager extends DefaultPluginManager {
 
       /** @var \Drupal\geolocation\MapCenterInterface $map_center_plugin */
       $map_center_plugin = $this->createInstance($option['map_center_id']);
+      $map_center_plugin_settings = $option['settings'] ?? [];
+      $map_center_plugin_settings = $map_center_plugin->getSettings($map_center_plugin_settings);
       $map['#attached']['drupalSettings']['geolocation']['maps'][$map['#id']]['map_center'][$option['map_center_id']] = [
         'map_center_id' => $option['map_center_id'],
         'option_id' => $option_id,
-        'settings' => isset($option['settings']) ? $option['settings'] : [],
+        'settings' => $map_center_plugin_settings,
         'weight' => $option['weight'],
       ];
-      $map = $map_center_plugin->alterMap($map, $option_id, empty($option['settings']) ? [] : $option['settings'], $context);
+      $map = $map_center_plugin->alterMap($map, $option_id, $map_center_plugin_settings, $context);
     }
 
     if (empty($map['#centre'])) {

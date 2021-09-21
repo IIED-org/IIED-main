@@ -5,6 +5,7 @@ namespace Drupal\search_api_solr_legacy\Plugin\SolrConnector;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\search_api_solr\SolrConnector\SolrConnectorPluginBase;
 use Solarium\Core\Client\Endpoint;
+use Solarium\QueryType\Select\Query\Query;
 
 /**
  * Class Solr36Connector.
@@ -58,7 +59,24 @@ class Solr36Connector extends SolrConnectorPluginBase {
       '#value' => TRUE,
     ];
 
+    $form['advanced']['jts'] = [
+      '#type' => 'value',
+      '#value' => FALSE,
+    ];
+
     return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function search(Query $query, ?Endpoint $endpoint = NULL) {
+    $params = $query->getParams();
+    if (!isset($params['q.op'])) {
+      $query->addParam('q.op', 'OR');
+    }
+
+    return parent::search($query, $endpoint);
   }
 
   /**

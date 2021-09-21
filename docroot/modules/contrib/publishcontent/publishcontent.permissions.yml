@@ -14,5 +14,9 @@ unpublish editable content:
   title: 'Unpublish editable content'
   description: 'Allows to unpublish content which user has access to edit for.'
 
+access publish content settings:
+  title: 'Access publish content settings'
+  description: 'Allows to admin publish content settings.'
+
 permission_callbacks:
   - \Drupal\publishcontent\PublishContentPermissions::permissions

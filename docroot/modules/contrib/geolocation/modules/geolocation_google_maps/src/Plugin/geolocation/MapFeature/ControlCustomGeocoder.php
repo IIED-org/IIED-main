@@ -141,8 +141,6 @@ class ControlCustomGeocoder extends ControlCustomElementBase {
   public function alterMap(array $render_array, array $feature_settings, array $context = []) {
     $render_array = parent::alterMap($render_array, $feature_settings, $context);
 
-    $feature_settings = $this->getSettings($feature_settings);
-
     /** @var \Drupal\geolocation\GeocoderInterface $geocoder_plugin */
     $geocoder_plugin = $this->geocoderManager->getGeocoder(
       $feature_settings['geocoder'],

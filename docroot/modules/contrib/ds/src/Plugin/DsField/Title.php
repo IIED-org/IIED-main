@@ -20,6 +20,19 @@ abstract class Title extends Field {
       '#title' => 'Link',
       '#default_value' => $config['link'],
     ];
+    $settings['link class'] = [
+      '#type' => 'textfield',
+      '#title' => 'Link class',
+      '#default_value' => $config['link class'],
+      '#description' => $this->t('Put a class on the link. Eg: btn btn-default'),
+      '#states' => [
+        'visible' => [
+          ':input[name="fields[node_title][settings_edit_form][settings][link]"]' => [
+            'checked' => TRUE
+          ]
+        ]
+      ]
+    ];
     $settings['wrapper'] = [
       '#type' => 'textfield',
       '#title' => 'Wrapper',
@@ -50,6 +63,10 @@ abstract class Title extends Field {
       $summary[] = 'Link: no';
     }
 
+    if (!empty($config['link']) && !empty($config['link class'])) {
+      $summary[] = 'Link class: ' . $config['link class'];
+    }
+
     $summary[] = 'Wrapper: ' . $config['wrapper'];
 
     if (!empty($config['class'])) {
@@ -66,6 +83,7 @@ abstract class Title extends Field {
 
     $configuration = [
       'link' => 0,
+      'link class' => '',
       'wrapper' => 'h2',
       'class' => '',
     ];

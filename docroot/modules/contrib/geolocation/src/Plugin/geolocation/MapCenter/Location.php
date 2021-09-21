@@ -2,6 +2,7 @@
 
 namespace Drupal\geolocation\Plugin\geolocation\MapCenter;
 
+use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\geolocation\LocationManager;
 use Drupal\geolocation\MapCenterInterface;
 use Drupal\geolocation\MapCenterBase;
@@ -150,7 +151,7 @@ class Location extends MapCenterBase implements MapCenterInterface {
     if (!empty($map_center)) {
       $map['#centre'] = $map_center;
     }
-    $map['#attached'] = array_merge_recursive($map['#attached'], [
+    $map['#attached'] = BubbleableMetadata::mergeAttachments($map['#attached'], [
       'library' => [
         'geolocation/map_center.static_location',
       ],

@@ -5,6 +5,7 @@ namespace Drupal\geolocation_google_places_api\Plugin\geolocation\Geocoder;
 use GuzzleHttp\Exception\RequestException;
 use Drupal\Component\Serialization\Json;
 use Drupal\geolocation_google_maps\GoogleGeocoderBase;
+use Drupal\geolocation\KeyProvider;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\geolocation_google_maps\Plugin\geolocation\MapProvider\GoogleMaps;
 
@@ -59,10 +60,10 @@ class GooglePlacesAPI extends GoogleGeocoderBase {
     $google_key = '';
 
     if (!empty($config->get('google_map_api_server_key'))) {
-      $google_key = $config->get('google_map_api_server_key');
+      $google_key = KeyProvider::getKeyValue($config->get('google_map_api_server_key'));
     }
     elseif (!empty($config->get('google_map_api_key'))) {
-      $google_key = $config->get('google_map_api_key');
+      $google_key = KeyProvider::getKeyValue($config->get('google_map_api_key'));
     }
 
     if (!empty($google_key)) {

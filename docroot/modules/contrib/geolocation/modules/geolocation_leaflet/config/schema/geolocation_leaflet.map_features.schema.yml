@@ -9,6 +9,34 @@ plugin.plugin_configuration.geolocation.map_feature.leaflet_marker_popup:
         info_auto_display:
           type: boolean
           label: 'Show info window on map start'
+        max_width:
+          type: integer
+          label: 'Popup max width'
+        min_width:
+          type: integer
+          label: 'Popup min width'
+        max_height:
+          type: integer
+          label: 'Popup max height'
+        auto_pan:
+          type: boolean
+          label: 'Popup auto pan'
+        keep_in_view:
+          type: boolean
+          label: 'Popup keep in view'
+        close_button:
+          type: boolean
+          label: 'Popup close button'
+        auto_close:
+          type: boolean
+          label: 'Popup auto close'
+        close_on_escape_key:
+          type: boolean
+          label: 'Popup close with escape'
+        class_name:
+          type: string
+          label: 'Popup class name'
+
 
 plugin.plugin_configuration.geolocation.map_feature.leaflet_marker_clusterer:
   type: geolocation.map_feature_settings
@@ -31,6 +59,9 @@ plugin.plugin_configuration.geolocation.map_feature.leaflet_marker_clusterer:
         disable_clustering_at_zoom:
           type: integer
           label: 'Max Zoom for clustering'
+        custom_marker_settings:
+          type: string
+          label: 'Custom Marker Settings'
 
 geolocation.map_feature_settings.leaflet.control:
   type: geolocation.map_feature_settings
@@ -73,6 +104,18 @@ plugin.plugin_configuration.geolocation.map_feature.leaflet_control_locate:
 plugin.plugin_configuration.geolocation.map_feature.leaflet_control_recenter:
   type: geolocation.map_feature_settings.leaflet.control
   label: 'Control Recenter'
+
+plugin.plugin_configuration.geolocation.map_feature.leaflet_control_attribution:
+  type: geolocation.map_feature_settings.leaflet.control
+  label: 'Control Attribution'
+  mapping:
+    settings:
+      type: mapping
+      label: 'Settings'
+      mapping:
+        prefix:
+          type: string
+          label: 'Prefix'
 
 plugin.plugin_configuration.geolocation.map_feature.leaflet_control_scale:
   type: geolocation.map_feature_settings.leaflet.control

@@ -5,8 +5,6 @@
  * Connector updates once other modules have made their own updates.
  */
 
-use Drupal\acquia_search_solr\Helper\Storage;
-
 /**
  * Move subscription data to state.
  */
@@ -37,40 +35,8 @@ function acquia_connector_post_update_move_subscription_data_state() {
 }
 
 /**
- * Uninstall Acquia Search and use Acquia Search Solr.
+ * Whether you use Search or not, you need to clear container cache.
  */
-function acquia_connector_post_update_move_search_modules() {
-  if (\Drupal::moduleHandler()->moduleExists('acquia_search')) {
-    $config_factory = \Drupal::configFactory();
-    $config_to_delete = [
-      'block.block.exposedformacquia_searchpage',
-      'search_api.index.acquia_search_index',
-      'search_api.server.acquia_search_server',
-      'views.view.acquia_search',
-    ];
-    foreach ($config_to_delete as $config_name) {
-      if ($config = $config_factory->getEditable($config_name)) {
-        $config->delete();
-      }
-    }
-    /** @var \Drupal\Core\Extension\ModuleInstallerInterface $module_installer */
-    $module_installer = \Drupal::service('module_installer');
-    $module_installer->uninstall(['acquia_search']);
-    if (\Drupal::moduleHandler()->moduleExists('search_api_solr_multilingual')) {
-      $module_installer->uninstall(['search_api_solr_multilingual']);
-    }
-
-    // Import settings from the connector if it is installed and configured.
-    $module_installer->install(['acquia_search_solr']);
-    $subscription = \Drupal::state()->get('acquia_subscription_data');
-    $storage = new Storage();
-    if (isset($subscription)) {
-      $storage->setApiHost(\Drupal::config('acquia_search_solr.settings')
-          ->get('api_host') ?? 'https://api.sr-prod02.acquia.com');
-      $storage->setApiKey(\Drupal::state()->get('acquia_connector.key'));
-      $storage->setIdentifier(\Drupal::state()
-        ->get('acquia_connector.identifier'));
-      $storage->setUuid($subscription['uuid']);
-    }
-  }
+function acquia_connector_post_update_move_acquia_search_modules() {
+  drupal_flush_all_caches();
 }

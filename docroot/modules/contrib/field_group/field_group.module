@@ -40,11 +40,11 @@ function field_group_library_info_alter(&$libraries, $extension) {
   // Swap jQuery.ui library if available.
   // See https://www.drupal.org/project/field_group/issues/3109552 for more
   // background on the logic.
-  if (version_compare(\Drupal::VERSION, 9) > 0 && $extension == 'field_group') {
+  if ($extension == 'field_group') {
     if (\Drupal::moduleHandler()->moduleExists('jquery_ui_accordion')) {
       $libraries['formatter.accordion']['dependencies'] = ['jquery_ui_accordion/accordion'];
     }
-    else {
+    elseif (version_compare(\Drupal::VERSION, 9) > 0 ) {
       $libraries['formatter.accordion']['js'] = [];
       $libraries['formatter.accordion']['dependencies'] = [];
     }
@@ -76,6 +76,10 @@ function field_group_theme_registry_alter(&$theme_registry) {
     $theme_registry['eck_entity']['preprocess functions'][] = 'field_group_build_entity_groups';
   }
 
+  // External entities use the external_entity as theme function.
+  if (isset($theme_registry['external_entity'])) {
+    $theme_registry['external_entity']['preprocess functions'][] = 'field_group_build_entity_groups';
+  }
 }
 
 /**
@@ -279,6 +283,31 @@ function field_group_inline_entity_form_entity_form_alter(&$entity_form, FormSta
 }
 
 /**
+ * Implements hook_form_media_library_add_form_upload_alter().
+ */
+function field_group_form_media_library_add_form_upload_alter(&$form, FormStateInterface $form_state) {
+
+  // Attach the fieldgroups to the media entity form in Media Library widget.
+  $storage = $form_state->getStorage();
+  if (!empty($storage['media'])) {
+    foreach ($storage['media'] as $delta => $media) {
+      $context = [
+        'entity_type' => $storage['media'][$delta]->getEntityTypeId(),
+        'bundle' => $storage['media'][$delta]->bundle(),
+        'entity' => $storage['media'][$delta],
+        'context' => 'form',
+        'display_context' => 'form',
+        'mode' => 'media_library',
+      ];
+
+      field_group_attach_groups($form['media'][$delta]['fields'], $context);
+      $form['media'][$delta]['fields']['#process'][] = [FormatterHelper::class, 'formProcess'];
+    }
+  }
+
+}
+
+/**
  * Implements hook_form_layout_builder_update_block_alter().
  */
 function field_group_form_layout_builder_update_block_alter(&$form, FormStateInterface $form_state) {
@@ -339,6 +368,30 @@ function field_group_entity_view_alter(&$build, EntityInterface $entity, EntityD
       $build['#pre_render'][] = [FormatterHelper::class, 'entityViewPrender'];
     }
   }
+}
+
+/**
+ * Implements hook_conditional_fields().
+ */
+function field_group_conditional_fields($entity_type, $bundle_name) {
+  $fields = [];
+  $groups = field_group_info_groups($entity_type, $bundle_name, 'form', 'default');
+  foreach ($groups as $name => $group) {
+    $fields[$name] = $group->label;
+  }
+  return $fields;
+}
+
+/**
+ * Implements hook_conditional_fields_children().
+ */
+function field_group_conditional_fields_children($entity_type, $bundle_name) {
+  $groups = [];
+  $group_info = field_group_info_groups($entity_type, $bundle_name, 'form', 'default');
+  foreach ($group_info as $name => $info) {
+    $groups[$name] = $info->children;
+  }
+  return $groups;
 }
 
 /**
@@ -498,8 +551,10 @@ function field_group_attach_groups(&$element, $context) {
   // Create a lookup array.
   $group_children = [];
   foreach ($element['#fieldgroups'] as $group_name => $group) {
-    foreach ($group->children as $child) {
-      $group_children[$child] = $group_name;
+    if (!empty($group->children)) {
+      foreach ($group->children as $child) {
+        $group_children[$child] = $group_name;
+      }
     }
   }
   $element['#group_children'] = $group_children;
@@ -528,7 +583,7 @@ function field_group_build_entity_groups(array &$vars, $context = 'view') {
     $element = &$vars['content'];
   }
   else {
-    if ($context === 'eck_entity') {
+    if ($context === 'eck_entity' || $context === 'external_entity') {
       $element = &$vars['entity'];
     }
     else {
@@ -628,7 +683,7 @@ function field_group_fields_nest(&$element, &$vars = NULL, $context = NULL) {
       $key = field_group_get_content_element_key($context);
       if (!isset($element['#fieldgroups'][$child_name]) && isset($vars[$key][$child_name])) {
 
-        // ECK marks his defaut properties as printed, while it is not printed yet.
+        // ECK marks his default properties as printed, while it is not printed yet.
         if ($context === 'eck_entity' && !empty($vars[$key][$child_name]['#printed'])) {
           $vars[$key][$child_name]['#printed'] = FALSE;
         }
@@ -720,7 +775,7 @@ function field_group_field_layout_fields_nest(array &$element, &$vars = NULL, $c
     $key = field_group_get_content_element_key($context);
     if (!isset($element['#fieldgroups'][$child_name]) && isset($vars[$key]['_field_layout'][$region][$child_name])) {
 
-      // ECK marks his defaut properties as printed, while it is not printed yet.
+      // ECK marks his default properties as printed, while it is not printed yet.
       if ($context === 'eck_entity' && !empty($vars[$key]['_field_layout'][$region][$child_name]['#printed'])) {
         $vars[$key]['_field_layout'][$region][$child_name]['#printed'] = FALSE;
       }
@@ -759,7 +814,7 @@ function field_group_pre_render(& $element, $group, & $rendering_object) {
 
   // Only run the pre_render function if the group has elements.
   // $group->group_name.
-  if ($element == []) {
+  if ($element == [] && empty($group->format_settings['show_empty_fields'])) {
     return;
   }
 
@@ -1003,6 +1058,11 @@ function field_group_remove_empty_form_groups(&$element, $groups, $entity_type) 
         $group_name = str_replace($name_prefix, '', $element[$childname]['#group']);
         $empty_groups_indication[$group_name] = FALSE;
       }
+
+      $show_empty_fields = isset($element[$childname]['#show_empty_fields']) && $element[$childname]['#show_empty_fields'];
+      if ($show_empty_fields) {
+        $empty_groups_indication[$childname] = FALSE;
+      }
     }
   }
 
@@ -1033,9 +1093,14 @@ function field_group_remove_empty_display_groups(& $element, $groups) {
 
     // Descend if the child is a group.
     if (in_array($name, $groups)) {
-      $empty_child = field_group_remove_empty_display_groups($element[$name], $groups);
-      if (!$empty_child) {
+      if (isset($element[$name]['#show_empty_fields']) && $element[$name]['#show_empty_fields']) {
         $empty_group = FALSE;
+      }
+      else {
+        $empty_child = field_group_remove_empty_display_groups($element[$name], $groups);
+        if (!$empty_child) {
+          $empty_group = FALSE;
+        }
       }
     }
     // Child is a field or a renderable array and the element is not empty.

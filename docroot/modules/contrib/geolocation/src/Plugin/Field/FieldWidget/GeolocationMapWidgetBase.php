@@ -243,6 +243,9 @@ abstract class GeolocationMapWidgetBase extends WidgetBase implements ContainerF
 
     $element = [
       '#type' => 'geolocation_input',
+      '#title' => $element['#title'] ?? '',
+      '#title_display' => $element['#title_display'] ?? '',
+      '#description' => $element['#description'] ?? '',
       '#attributes' => [
         'class' => [
           'geolocation-widget-input',

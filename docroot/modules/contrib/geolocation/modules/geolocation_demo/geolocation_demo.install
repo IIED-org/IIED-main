@@ -94,6 +94,7 @@ function geolocation_demo_install() {
       ]);
       /** @var \Drupal\node\NodeInterface $node */
       $node->get('field_geolocation_demo_single')->generateSampleItems();
+      $node->get('field_geolocation_demo_multiple')->generateSampleItems(3);
       $node->get('field_geolocation_demo_taxonomy')->appendItem([
         'target_id' => $term_ids[mt_rand(0, count($term_ids) - 1)],
       ]);

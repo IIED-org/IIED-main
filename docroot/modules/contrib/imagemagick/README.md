@@ -10,9 +10,9 @@ To submit bug reports and feature suggestions, or to track changes: https://drup
 * The module **must** be downloaded or updated using Composer, see [Download contributed modules and themes using Composer](https://www.drupal.org/node/2718229#adding-modules).
 This ensures the all dependency modules get downloaded as well.
 
-* PHP 7 or higher
+* PHP 7.1 or higher
 
-* Drupal 8.8.0 or higher
+* Drupal 8.9.x or 9.1.x and higher
 
 * File Metadata Manager module 8.x-2.0 or higher
 

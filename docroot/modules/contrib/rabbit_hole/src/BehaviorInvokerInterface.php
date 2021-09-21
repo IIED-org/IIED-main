@@ -17,10 +17,21 @@ interface BehaviorInvokerInterface {
    * @param \Symfony\Component\HttpKernel\Event\KernelEvent $event
    *   The kernel request event.
    *
-   * @return ContentEntityInterface|false
+   * @return \Drupal\Core\Entity\ContentEntityInterface|false
    *   Entity object if the Rabbit Hole action is applicable or FALSE otherwise.
    */
   public function getEntity(KernelEvent $event);
+
+  /**
+   * Get the behavior plugin for the given entity.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   *   The entity to apply rabbit hole behavior on.
+   *
+   * @return \Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginBase|null
+   *   Rabbit Hole action plugin or NULL.
+   */
+  public function getBehaviorPlugin(ContentEntityInterface $entity);
 
   /**
    * Invoke a rabbit hole behavior based on an entity's configuration.

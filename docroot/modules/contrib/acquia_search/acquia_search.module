@@ -1,0 +1,334 @@
+<?php
+
+/**
+ * @file
+ * Integration between Drupal and Acquia's hosted Solr search service.
+ */
+
+use Drupal\acquia_search\Helper\Messages;
+use Drupal\acquia_search\Helper\Runtime;
+use Drupal\acquia_search\Plugin\SolrConnector\SearchApiSolrAcquiaConnector;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormState;
+use Drupal\search_api\Entity\Server;
+use Drupal\search_api\Query\QueryInterface;
+use Drupal\search_api\SearchApiException;
+use Laminas\Stdlib\ArrayUtils;
+use Solarium\Core\Query\QueryInterface as SolariumQueryInterface;
+
+/**
+ * Implements hook_entity_operation_alter().
+ *
+ * Don't allow delete default server and index.
+ */
+function acquia_search_entity_operation_alter(array &$operations, EntityInterface $entity) {
+
+  if (empty($operations['delete'])) {
+    return;
+  }
+
+  $do_not_delete = [
+    'acquia_search_search_api_solr_server',
+    'acquia_search_search_api_solr_index',
+  ];
+
+  if (array_search($entity->id(), $do_not_delete) !== FALSE) {
+    unset($operations['delete']);
+  }
+
+}
+
+/**
+ * Implements hook_search_api_server_load().
+ *
+ * Flag when a certain server should be enforcing read-only mode.
+ */
+function acquia_search_search_api_server_load(array $entities) {
+  /** @var \Drupal\search_api\Entity\Server[] $entities */
+  $acquia_servers = array_filter($entities, function ($server) {
+    return Runtime::isAcquiaServer($server);
+  });
+
+  foreach ($acquia_servers as $server) {
+    /** @var \Drupal\search_api\Entity\Server $server */
+    $backend_config = $server->getBackendConfig();
+
+    unset($backend_config['overridden_by_acquia_search']);
+
+    if (Runtime::shouldEnforceReadOnlyMode()) {
+      $backend_config['overridden_by_acquia_search'] = SearchApiSolrAcquiaConnector::READ_ONLY;
+    }
+
+    $server->setBackendConfig($backend_config);
+  }
+}
+
+/**
+ * Implements hook_search_api_index_load().
+ *
+ * This takes care of marking indexes as read-only mode under the right
+ * conditions (@see acquia_search_search_api_server_load()).
+ */
+function acquia_search_search_api_index_load($entities) {
+  // Loop through the Index entities.
+  /** @var \Drupal\search_api\Entity\Index $index */
+  foreach ($entities as &$index) {
+
+    // Check for server-less indexes.
+    // @see https://www.drupal.org/project/acquia_connector/issues/2956737
+    $serverId = $index->getServerId();
+    if (!isset($serverId) || $serverId == '') {
+      continue;
+    }
+
+    $server = Server::load($serverId);
+
+    if (!$server) {
+      continue;
+    }
+
+    if (!Runtime::isAcquiaServer($server)) {
+      continue;
+    }
+
+    // Reset the overridden_by_acquia_search option.
+    $options = $index->getOptions();
+    if (!empty($options['overridden_by_acquia_search'])) {
+      unset($options['overridden_by_acquia_search']);
+      $index->setOptions($options);
+    }
+
+    if (Runtime::shouldEnforceReadOnlyMode()) {
+      // Set this index to read-only mode.
+      $index->set('read_only', TRUE);
+      // Flag this index as having been altered by this module.
+      $index->setOption('overridden_by_acquia_search', SearchApiSolrAcquiaConnector::READ_ONLY);
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Alters the Search API server's status form and displays a warning.
+ */
+function acquia_search_form_search_api_server_status_alter(&$form) {
+
+  if (empty($form['#server'])) {
+    return;
+  }
+  $server = $form['#server'];
+
+  if (!is_object($server) || get_class($server) !== Server::class) {
+    return;
+  }
+
+  /** @var \Drupal\search_api\Entity\Server $server */
+  if (!Runtime::isAcquiaServer($server)) {
+    return;
+  }
+
+  if (Runtime::shouldEnforceReadOnlyMode()) {
+    // Show read-only warning and disable the "Delete all indexed data on this
+    // server" action.
+    Messages::showReadOnlyModeWarning();
+
+    $form['actions']['clear']['#disabled'] = TRUE;
+  }
+
+  if (!Runtime::getPreferredSearchCoreService()->isPreferredCoreAvailable()) {
+    // Show "could not find preferred core" message.
+    Messages::showNoPreferredCoreError();
+  }
+
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Display the read-only warning.
+ */
+function acquia_search_form_search_api_server_edit_form_alter(&$form) {
+
+  $server = Server::load($form['id']['#default_value']);
+
+  if (!$server) {
+    return;
+  }
+
+  if (!Runtime::isAcquiaServer($server)) {
+    return;
+  }
+
+  if (Runtime::shouldEnforceReadOnlyMode()) {
+    Messages::showReadOnlyModeWarning();
+  }
+
+  if (!Runtime::getPreferredSearchCoreService()->isPreferredCoreAvailable()) {
+    // Show "could not find preferred core" message.
+    Messages::showNoPreferredCoreError();
+  }
+
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Shows message if we are editing a Search API server's configuration.
+ */
+function acquia_search_form_search_api_index_edit_form_alter(&$form, FormState $form_state) {
+
+  /** @var \Drupal\search_api\Entity\Server $server */
+  $server = Server::load($form['server']['#default_value']);
+
+  if (!$server) {
+    return;
+  }
+
+  if (!Runtime::isAcquiaServer($server)) {
+    return;
+  }
+
+  if (Runtime::shouldEnforceReadOnlyMode()) {
+    Messages::showReadOnlyModeWarning();
+    $form['options']['read_only']['#disabled'] = TRUE;
+  }
+
+  if (!Runtime::getPreferredSearchCoreService()->isPreferredCoreAvailable()) {
+    // Show "could not find preferred core" message.
+    Messages::showNoPreferredCoreError();
+  }
+
+  $settings = [];
+  $default_settings = ['use_edismax' => TRUE];
+  /** @var \Drupal\search_api\IndexInterface $search_index */
+  $search_index = $form_state->getFormObject()->getEntity();
+  if (!$search_index->isNew()) {
+    $settings = $search_index->getThirdPartySettings('acquia_search');
+  }
+  $settings = ArrayUtils::merge($default_settings, $settings, TRUE);
+
+  $form['third_party_settings']['acquia_search'] = [
+    '#tree' => TRUE,
+    '#type' => 'details',
+    '#title' => t('Acquia Search Solr'),
+    '#open' => TRUE,
+  ];
+  $form['third_party_settings']['acquia_search']['use_edismax'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Enable eDisMax'),
+    '#description' => t('Use Extended DisMax Query Parser.'),
+    '#default_value' => $settings['use_edismax'],
+  ];
+}
+
+/**
+ * Implements hook_search_api_solr_query_alter().
+ */
+function acquia_search_search_api_solr_query_alter(SolariumQueryInterface $solarium_query, QueryInterface $query) {
+  $handler = $solarium_query->getHandler();
+  $search_index = $query->getIndex();
+  try {
+    $server = $search_index->getServerInstance();
+  }
+  catch (SearchApiException $exception) {
+    return;
+  }
+
+  if (empty($server)) {
+    return;
+  }
+
+  if (!Runtime::isAcquiaServer($server)) {
+    return;
+  }
+
+  if ('select' === $handler) {
+    $use_edismax = $search_index->getThirdPartySetting(
+      'acquia_search',
+      'use_edismax',
+      TRUE
+    );
+    if ($use_edismax) {
+      $solarium_query->addParam('defType', 'edismax');
+    }
+  }
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ *
+ * Helps us alter some Search API status pages.
+ */
+function acquia_search_theme_registry_alter(&$theme_registry) {
+  $module_handler = \Drupal::moduleHandler();
+  $module_path = $module_handler->getModule('acquia_search')->getPath();
+
+  $theme_registry['search_api_index']['variables']['acquia_search_info_box'] = NULL;
+  $theme_registry['search_api_index']['path'] = $module_path . '/templates';
+
+  $theme_registry['search_api_server']['variables']['acquia_search_info_box'] = NULL;
+  $theme_registry['search_api_server']['path'] = $module_path . '/templates';
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ *
+ * Theme override for Search API index status page.
+ *
+ * @throws \Drupal\Component\Plugin\Exception\PluginException
+ * @throws \Drupal\search_api\SearchApiException
+ */
+function acquia_search_preprocess_search_api_index(array &$variables) {
+  /** @var \Drupal\search_api\Entity\Index $index */
+  $index = $variables['index'];
+  /** @var \Drupal\search_api\Entity\Server $server */
+  $server = Server::load($index->get('server'));
+
+  if (!$server || !Runtime::isAcquiaServer($server)) {
+    return;
+  }
+
+  if (Runtime::shouldEnforceReadOnlyMode()) {
+    Messages::showReadOnlyModeWarning();
+  }
+
+  if (!Runtime::getPreferredSearchCoreService()->isPreferredCoreAvailable()) {
+    // Show "could not find preferred core" message.
+    Messages::showNoPreferredCoreError();
+  }
+
+  $variables['acquia_search_info_box'] = [
+    '#type' => 'fieldset',
+    '#title' => t('Acquia Search status for this connection'),
+    '#markup' => Messages::getSearchStatusMessage($server),
+  ];
+}
+
+/**
+ * Theme override function for Search API server status page.
+ *
+ * @param array $variables
+ *   Variables.
+ *
+ * @throws \Drupal\Component\Plugin\Exception\PluginException
+ * @throws \Drupal\search_api\SearchApiException
+ */
+function acquia_search_preprocess_search_api_server(array &$variables) {
+  /** @var \Drupal\search_api\Entity\Server $server */
+  $server = $variables['server'];
+
+  if (!Runtime::isAcquiaServer($server)) {
+    return;
+  }
+
+  if (Runtime::shouldEnforceReadOnlyMode()) {
+    Messages::showReadOnlyModeWarning();
+  }
+
+  $variables['acquia_search_info_box'] = [
+    '#type' => 'fieldset',
+    '#title' => t('Acquia Search status for this connection'),
+    '#markup' => Messages::getSearchStatusMessage($server),
+  ];
+}
