@@ -10,7 +10,7 @@ field_name: field_full_name
 entity_type: taxonomy_term
 bundle: organisation
 label: 'Full name'
-description: ''
+description: '<big><i><b>Hint: </b>If organisation is commonly known by an acronym e.g. ''IIED'', enter full name e.g., ''International Institute for Environment and Development</i></big>'
 required: false
 translatable: false
 default_value: {  }

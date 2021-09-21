@@ -1,4 +1,4 @@
-uuid: 09691717-b2ab-4b26-9399-09663d5023fd
+uuid: 1aa6a925-95b1-41e6-893c-99fc313a248f
 langcode: en
 status: false
 dependencies:
@@ -10,9 +10,10 @@ dependencies:
     - search_api
     - text
     - user
+    - views_autocomplete_filters
 _core:
-  default_config_hash: Vgj4zcsD-37QxitCZr3_PPOUrQoY7_ZDTqcDF25k-ro
-id: acquia_search_solr
+  default_config_hash: 9Hnjt6A6DLNyxWjvL-uYrUwtdIYldvL79C5QsJYrato
+id: acquia_search
 label: 'Acquia Search Solr'
 module: views
 description: ''
@@ -416,7 +417,7 @@ display:
       empty:
         area:
           id: area
-          table: views
+          table: search_api_index_acquia_search_index
           field: area
           relationship: none
           group_type: group
@@ -434,7 +435,6 @@ display:
         operator: AND
         groups:
           1: AND
-      use_ajax: true
     cache_metadata:
       max-age: -1
       contexts:
@@ -455,7 +455,7 @@ display:
     display_options:
       display_extenders: {  }
       path: search
-      exposed_block: true
+      exposed_block: false
       menu:
         type: normal
         title: Search
@@ -466,10 +466,6 @@ display:
         context: '0'
         menu_name: main
       display_description: ''
-      cache:
-        type: none
-      defaults:
-        cache: false
     cache_metadata:
       max-age: -1
       contexts:

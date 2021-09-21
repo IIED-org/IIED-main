@@ -1,5 +1,0 @@
-services:
-  acquia_search_solr.search_subscriber:
-    class: Drupal\acquia_search_solr\EventSubscriber\AcquiaSearchSolrSubscriber
-    tags:
-    - { name: 'event_subscriber' }

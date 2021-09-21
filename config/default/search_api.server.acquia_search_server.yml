@@ -1,4 +1,4 @@
-uuid: 79f167de-d5c8-4953-b61c-fb9b75a7ec52
+uuid: 64aa7045-a187-4b36-91ce-045b0b21a892
 langcode: en
 status: true
 dependencies:
@@ -59,29 +59,7 @@ backend_config:
     commit_within: '1000'
     solr_version: ''
     http_method: AUTO
-<<<<<<< HEAD:config/default/search_api.server.acquia_search_server.yml
-    skip_schema_check: true
-    jmx: false
-    solr_install_dir: ''
-    port: 443
-    host: s7020-eu-west-1.sr-prod02.acquia.com
-    path: /solr/AGHX-142716.prod.irforum
-    core: AGHX-142716.prod.irforum
-    key: search_api_solr
-    overridden_by_acquia_search_solr: 1
-  disabled_field_types: {  }
-  disabled_caches: {  }
-  disabled_request_handlers:
-    - request_handler_elevate_default_7_0_0
-    - request_handler_replicationmaster_default_7_0_0
-    - request_handler_replicationslave_default_7_0_0
-  disabled_request_dispatchers:
-    - request_dispatcher_httpcaching_default_7_0_0
-  rows: 10
-  index_single_documents_fallback_count: 10
-=======
     jmx: 0
->>>>>>> 8bb6fd310993df702ad0502d8e1e8adeb591f78a:config/default/search_api.server.acquia_search_solr_search_api_solr_server.yml
   retrieve_data: true
   highlight_data: true
   skip_schema_check: true

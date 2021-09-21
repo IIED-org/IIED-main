@@ -1,6 +1,6 @@
-uuid: 221f36c0-744a-4005-b291-7ae78ef95223
+uuid: c1877b1d-5119-45e7-ac95-a62c39aaac78
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - search_api.index.acquia_search_index
@@ -9,7 +9,7 @@ dependencies:
     - views
     - search_api_autocomplete
 id: acquia_search
-label: 'Acquia Search'
+label: 'Acquia Search Solr'
 index_id: acquia_search_index
 suggester_settings:
   server:

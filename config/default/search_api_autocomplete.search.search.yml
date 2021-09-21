@@ -1,0 +1,41 @@
+uuid: cdb6c158-2976-4d8d-a1fd-578c08067a99
+langcode: en
+status: true
+dependencies:
+  config:
+    - search_api.index.acquia_search_index
+    - views.view.search
+    - core.entity_view_mode.taxonomy_term.search_autocomplete
+  module:
+    - views
+    - search_api_autocomplete
+id: search
+label: Search
+index_id: acquia_search_index
+suggester_settings:
+  live_results:
+    fields: {  }
+    view_modes:
+      'entity:node':
+        publication: ''
+      'entity:taxonomy_term':
+        person: search_autocomplete
+    highlight:
+      enabled: false
+      field: ''
+suggester_weights:
+  live_results: -50
+suggester_limits:
+  live_results: 15
+search_settings:
+  'views:search':
+    displays:
+      default: true
+      selected: {  }
+options:
+  limit: 20
+  min_length: 2
+  show_count: true
+  autosubmit: true
+  submit_button_selector: ':submit'
+  delay: 200

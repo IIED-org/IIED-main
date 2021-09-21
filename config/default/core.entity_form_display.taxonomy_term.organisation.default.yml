@@ -41,11 +41,11 @@ third_party_settings:
       format_type: details
       region: content
       format_settings:
-        id: ''
-        classes: ''
-        description: '<big><i><b>Hint: </b>When you save this form, the page will automatically refresh with a new, blank form so you can add another Organisation. If you do not want/need to do this, simply close this tab or navigate away from the page.</i></big>'
+        description: "<big><i><b>Hint: </b>When you save this form, the page will automatically refresh with a new, blank form so you can add another Organisation. If you do not want/need to do this, simply close this tab or navigate away from the page.</i></big>\r\n<br><p><big><i><b>Name: </b>This should be the name the organisation is commonly known by - acronyms are acceptable here e.g., 'IIED' or 'WWF'.</i></big>"
         open: true
         required_fields: true
+        id: ''
+        classes: ''
       label: 'Add new Organisation'
 id: taxonomy_term.organisation.default
 targetEntityType: taxonomy_term

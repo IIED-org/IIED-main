@@ -1,6 +1,0 @@
----
-drupal/acquia_search_solr: []
-
-drupal/acquia_connector:
-  version: ~2.0
-  version_dev: 2.x-dev

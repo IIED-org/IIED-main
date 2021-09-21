@@ -1,9 +1,11 @@
-uuid: 1dab1286-23f3-4311-8583-2aedaa01ba2d
+uuid: df966701-5076-4a4a-882b-a534318c8e5f
 langcode: en
 status: true
 dependencies:
   module:
+    - acquia_search
     - search_api_solr
+    - taxonomy
     - node
     - search_api
   config:
@@ -17,7 +19,7 @@ dependencies:
     - field.storage.node.field_theme_s_
     - search_api.server.acquia_search_server
 third_party_settings:
-  acquia_search_solr:
+  acquia_search:
     use_edismax: 1
   search_api_solr:
     finalize: false
