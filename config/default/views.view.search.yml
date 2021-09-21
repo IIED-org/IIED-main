@@ -389,7 +389,7 @@ display:
               editor: '0'
               manager: '0'
               administrator: '0'
-            placeholder: ''
+            placeholder: 'Search publications'
             expose_fields: false
             searched_fields_id: search_api_fulltext_searched_fields
             autocomplete_filter: 1
