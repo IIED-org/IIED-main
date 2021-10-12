@@ -17,7 +17,7 @@ class ContextualLinks extends RenderElement {
    * {@inheritdoc}
    */
   public function getInfo() {
-    $class = get_class($this);
+    $class = static::class;
     return [
       '#pre_render' => [
         [$class, 'preRenderLinks'],
@@ -86,7 +86,8 @@ class ContextualLinks extends RenderElement {
     // Allow modules to alter the renderable contextual links element.
     static::moduleHandler()->alter('contextual_links_view', $element, $items);
 
-    // If there are no links, tell drupal_render() to abort rendering.
+    // If there are no links, tell \Drupal::service('renderer')->render() to
+    // abort rendering.
     if (empty($element['#links'])) {
       $element['#printed'] = TRUE;
     }

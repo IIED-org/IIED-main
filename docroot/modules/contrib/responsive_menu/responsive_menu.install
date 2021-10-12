@@ -145,7 +145,7 @@ function responsive_menu_requirements($phase) {
       'title' => 'mmenu library',
       'version' => '8.4.0',
       'path' => '/libraries/mmenu',
-      'version_path' => '/libraries/mmenu/composer.json',
+      'version_path' => '/libraries/mmenu/package.json',
       'severity' => REQUIREMENT_ERROR,
       'download_url' => 'https://github.com/FrDH/mmenu-js/releases/latest',
       'homepage_url' => 'http://mmenu.frebsite.nl',

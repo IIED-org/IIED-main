@@ -31,6 +31,7 @@ third_party_settings:
             layout_class:
               col-md-8: col-md-8
             ds_content: {  }
+          context_mapping: {  }
         components:
           62c155ba-3449-4e6e-b81c-4f8978471c47:
             uuid: 62c155ba-3449-4e6e-b81c-4f8978471c47
@@ -67,6 +68,16 @@ third_party_settings:
                 third_party_settings: {  }
             additional: {  }
             weight: 2
+          571d8f39-b989-4e3d-aa98-bb56ed14bfa6:
+            uuid: 571d8f39-b989-4e3d-aa98-bb56ed14bfa6
+            region: ds_content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'extra_field_block:node:page:sharing_buttons'
+            additional: {  }
+            weight: 3
         third_party_settings: {  }
 _core:
   default_config_hash: g1S3_GLaxq4l3I9RIca5Mlz02MxI2KmOquZpHw59akM
@@ -96,6 +107,11 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  sharing_buttons:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: ds_content
 hidden:
   langcode: true
   search_api_excerpt: true

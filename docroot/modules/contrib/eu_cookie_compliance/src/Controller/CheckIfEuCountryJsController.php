@@ -3,6 +3,8 @@
 namespace Drupal\eu_cookie_compliance\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Extension\ModuleHandler;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -11,16 +13,42 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class CheckIfEuCountryJsController extends ControllerBase {
 
   /**
+   * The MIME type guesser.
+   *
+   * @var \Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * Creates a new VendorFileDownloadController instance.
+   *
+   * @param \Drupal\Core\Extension\ModuleHandler $module_handler
+   *   The Module handler.
+   */
+  public function __construct(ModuleHandler $module_handler) {
+    $this->moduleHandler = $module_handler;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('module_handler')
+    );
+  }
+
+  /**
    * Check if visitor is in the EU.
    *
-   * @return JsonResponse
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Whether the user is in EU.
    */
   public function content() {
     $data = eu_cookie_compliance_user_in_eu();
 
     // Allow other modules to alter the geo IP matching logic.
-    \Drupal::moduleHandler()->alter('eu_cookie_compliance_geoip_match', $data);
+    $this->moduleHandler->alter('eu_cookie_compliance_geoip_match', $data);
 
     return new JsonResponse($data, 200, ['Cache-Control' => 'private']);
   }

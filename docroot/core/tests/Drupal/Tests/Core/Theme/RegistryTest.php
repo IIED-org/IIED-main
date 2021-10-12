@@ -71,7 +71,7 @@ class RegistryTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->cache = $this->createMock('Drupal\Core\Cache\CacheBackendInterface');
@@ -87,7 +87,7 @@ class RegistryTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function tearDown() {
+  protected function tearDown(): void {
     parent::tearDown();
     static::$functions = [];
   }
@@ -190,7 +190,7 @@ class RegistryTest extends UnitTestCase {
     $reflection_method->setAccessible(TRUE);
     $reflection_method->invokeArgs($this->registry, [&$hooks, $theme->reveal()]);
 
-    $this->assertArrayEquals($expected, $hooks);
+    $this->assertEquals($expected, $hooks);
   }
 
   /**
@@ -472,7 +472,7 @@ class RegistryTest extends UnitTestCase {
 
   protected function setupTheme() {
     $this->registry = $this->getMockBuilder(Registry::class)
-      ->setMethods(['getPath'])
+      ->onlyMethods(['getPath'])
       ->setConstructorArgs([$this->root, $this->cache, $this->lock, $this->moduleHandler, $this->themeHandler, $this->themeInitialization])
       ->getMock();
     $this->registry->expects($this->any())

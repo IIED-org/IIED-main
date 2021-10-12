@@ -2,7 +2,6 @@
 
 namespace Drupal\computed_field\Plugin\Field\FieldType;
 
-use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -19,6 +18,7 @@ use Drupal\Core\Form\FormStateInterface;
  * )
  */
 class ComputedStringItem extends ComputedStringItemBase {
+  use ComputedFieldStronglyTypedItemTrait;
 
   /**
    * {@inheritdoc}
@@ -50,30 +50,6 @@ class ComputedStringItem extends ComputedStringItemBase {
 
   /**
    * {@inheritdoc}
-   *
-   * @todo Add useful code.
-   */
-  public static function generateSampleValue(FieldDefinitionInterface $field_definition) {
-    $values['value'] = '';
-    return $values;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function fieldSettingsForm(array $form, FormStateInterface $form_state) {
-    $element = parent::fieldSettingsForm($form, $form_state);
-    $settings = $this->getSettings();
-
-    $element['code']['#description'] .= '<p>'
-      . t('The value will be truncated to @max_length characters.', ['@max_length' => $settings['max_length']])
-      . '</p>';
-
-    return $element;
-  }
-
-  /**
-   * {@inheritdoc}
    */
   public function storageSettingsForm(array &$form, FormStateInterface $form_state, $has_data) {
     $settings = $this->getSettings();
@@ -93,7 +69,7 @@ class ComputedStringItem extends ComputedStringItemBase {
   }
 
   /**
-   * This function does the computation of the field value.
+   * {@inheritdoc}
    *
    * @return string
    *   The string.

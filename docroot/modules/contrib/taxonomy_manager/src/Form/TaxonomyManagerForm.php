@@ -231,27 +231,28 @@ class TaxonomyManagerForm extends FormBase {
     $voc_id = end($url_parts);
     $form['toolbar']['vocabulary_switcher'] = [
       '#type' => 'select',
-      '#title' => $this->t('Vocabulary switcher'),
       '#options' => $voc_list,
       '#attributes' => ['onchange' => "form.submit('taxonomy-manager-vocabulary-terms-form')"],
       '#default_value' => $voc_id,
+      '#weight' => -1,
+    ];
+
+    $form['toolbar']['search_button'] =[
+      '#type' => 'button',
+      '#value' => $this->t('Search'),
+      '#attributes' => ['class' => ['taxonomy-manager-search-button']],
     ];
 
     /* Autocomplete function redirecting to taxonomy term details page */
     $form['toolbar']['search_terms'] = [
-      '#title' => $this->t('Search all terms in this vocabulary'),
       '#type' => 'entity_autocomplete',
+      '#title' => $this->t('Search terms'),
       '#target_type' => 'taxonomy_term',
       '#selection_settings' => [
         'target_bundles' => [$voc_id],
       ],
-    ];
-
-    $form['toolbar']['actions']['submit'] = [
-      '#type' => 'submit',
-      '#value' => $this->t('Submit'),
-      '#submit' => ['::taxonomy_term_submit_handler'],
-      '#attributes' => ['class' => ['taxonomy-manager-hidden-button']],
+      '#prefix' => '<div class="taxonomy-manager-autocomplete-input">',
+      '#suffix' => '</div>',
     ];
 
     /* Taxonomy manager. */

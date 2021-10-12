@@ -52,5 +52,18 @@ function hook_eu_cookie_compliance_show_popup_alter(&$show_popup) {
 }
 
 /**
+ * Alter hook to modify the cache id of the banner data.
+ *
+ * @param bool $cid
+ *   The cache id to store the banner data.
+ */
+function hook_eu_cookie_compliance_cid_alter(&$cid) {
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if ($node && $node->type === 'my_type') {
+    $cid .= ':' . $node->type;
+  }
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

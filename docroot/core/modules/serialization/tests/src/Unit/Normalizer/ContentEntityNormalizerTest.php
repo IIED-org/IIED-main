@@ -34,7 +34,7 @@ class ContentEntityNormalizerTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     $entity_field_manager = $this->createMock(EntityFieldManagerInterface::class);
     $entity_type_manager = $this->createMock(EntityTypeManagerInterface::class);
     $entity_type_repository = $this->createMock(EntityTypeRepositoryInterface::class);
@@ -43,7 +43,7 @@ class ContentEntityNormalizerTest extends UnitTestCase {
 
     $this->serializer = $this->getMockBuilder('Symfony\Component\Serializer\Serializer')
       ->disableOriginalConstructor()
-      ->setMethods(['normalize'])
+      ->onlyMethods(['normalize'])
       ->getMock();
     $this->contentEntityNormalizer->setSerializer($this->serializer);
   }
@@ -128,7 +128,7 @@ class ContentEntityNormalizerTest extends UnitTestCase {
   public function createMockForContentEntity($definitions) {
     $content_entity_mock = $this->getMockBuilder('Drupal\Core\Entity\ContentEntityBase')
       ->disableOriginalConstructor()
-      ->setMethods(['getTypedData'])
+      ->onlyMethods(['getTypedData'])
       ->getMockForAbstractClass();
     $typed_data = $this->prophesize(ComplexDataInterface::class);
     $typed_data->getProperties(TRUE)

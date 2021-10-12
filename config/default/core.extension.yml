@@ -30,9 +30,6 @@ module:
   ctools: 0
   ctools_block: 0
   datetime: 0
-  delete_all: 0
-  devel: 0
-  devel_generate: 0
   dynamic_page_cache: 0
   editor: 0
   entity_reference_revisions: 0
@@ -82,9 +79,6 @@ module:
   metatag_pinterest: 0
   metatag_twitter_cards: 0
   migrate: 0
-  migrate_devel: 0
-  migrate_directory: 0
-  migrate_file: 0
   migrate_plus: 0
   migrate_pubs: 0
   migrate_source_csv: 0
@@ -120,14 +114,11 @@ module:
   system: 0
   taxonomy: 0
   taxonomy_menu: 0
-  term_merge: 0
-  term_reference_change: 0
   text: 0
   token: 0
   toolbar: 0
   tour: 0
   update: 0
-  upgrade_status: 0
   user: 0
   views_autocomplete_filters: 0
   views_bootstrap: 0
@@ -135,7 +126,6 @@ module:
   views_bulk_operations: 0
   views_data_export: 0
   views_field_view: 0
-  views_ui: 0
   ds: 1
   pathauto: 1
   content_translation: 10
@@ -144,8 +134,6 @@ module:
   standard: 1000
   eu_cookie_compliance: 1001
 theme:
-  stable: 0
-  classy: 0
   bartik: 0
   seven: 0
   radix: 0

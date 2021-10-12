@@ -5,7 +5,7 @@ namespace Drupal\acquia_connector\Form;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\State\State;
+use Drupal\Core\State\StateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -16,9 +16,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class SpiChangeForm extends ConfigFormBase {
 
   /**
-   * The state service.
+   * The state interface.
    *
-   * @var \Drupal\Core\State\State
+   * @var \Drupal\Core\State\StateInterface
    */
   protected $state;
 
@@ -27,10 +27,10 @@ class SpiChangeForm extends ConfigFormBase {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
-   * @param \Drupal\Core\State\State $state
+   * @param \Drupal\Core\State\StateInterface $state
    *   The State handler.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, State $state) {
+  public function __construct(ConfigFactoryInterface $config_factory, StateInterface $state) {
     parent::__construct($config_factory);
 
     $this->state = $state;

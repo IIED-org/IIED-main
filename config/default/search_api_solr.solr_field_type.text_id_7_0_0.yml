@@ -242,7 +242,530 @@ solr_configs:
               name: buildOnStartup
               VALUE: 'false'
 text_files:
-  stopwords: "ada\nadanya\nadalah\nadapun\nagak\nagaknya\nagar\nakan\nakankah\nakhirnya\naku\nakulah\namat\namatlah\nanda\nandalah\nantar\ndiantaranya\nantara\nantaranya\ndiantara\napa\napaan\nmengapa\napabila\napakah\napalagi\napatah\natau\nataukah\nataupun\nbagai\nbagaikan\nsebagai\nsebagainya\nbagaimana\nbagaimanapun\nsebagaimana\nbagaimanakah\nbagi\nbahkan\nbahwa\nbahwasanya\nsebaliknya\nbanyak\nsebanyak\nbeberapa\nseberapa\nbegini\nbeginian\nbeginikah\nbeginilah\nsebegini\nbegitu\nbegitukah\nbegitulah\nbegitupun\nsebegitu\nbelum\nbelumlah\nsebelum\nsebelumnya\nsebenarnya\nberapa\nberapakah\nberapalah\nberapapun\nbetulkah\nsebetulnya\nbiasa\nbiasanya\nbila\nbilakah\nbisa\nbisakah\nsebisanya\nboleh\nbolehkah\nbolehlah\nbuat\nbukan\nbukankah\nbukanlah\nbukannya\ncuma\npercuma\ndahulu\ndalam\ndan\ndapat\ndari\ndaripada\ndekat\ndemi\ndemikian\ndemikianlah\nsedemikian\ndengan\ndepan\ndi\ndia\ndialah\ndini\ndiri\ndirinya\nterdiri\ndong\ndulu\nenggak\nenggaknya\nentah\nentahlah\nterhadap\nterhadapnya\nhal\nhampir\nhanya\nhanyalah\nharus\nharuslah\nharusnya\nseharusnya\nhendak\nhendaklah\nhendaknya\nhingga\nsehingga\nia\nialah\nibarat\ningin\ninginkah\ninginkan\nini\ninikah\ninilah\nitu\nitukah\nitulah\njangan\njangankan\njanganlah\njika\njikalau\njuga\njustru\nkala\nkalau\nkalaulah\nkalaupun\nkalian\nkami\nkamilah\nkamu\nkamulah\nkan\nkapan\nkapankah\nkapanpun\ndikarenakan\nkarena\nkarenanya\nke\nkecil\nkemudian\nkenapa\nkepada\nkepadanya\nketika\nseketika\nkhususnya\nkini\nkinilah\nkiranya\nsekiranya\nkita\nkitalah\nkok\nlagi\nlagian\nselagi\nlah\nlain\nlainnya\nmelainkan\nselaku\nlalu\nmelalui\nterlalu\nlama\nlamanya\nselama\nselama\nselamanya\nlebih\nterlebih\nbermacam\nmacam\nsemacam\nmaka\nmakanya\nmakin\nmalah\nmalahan\nmampu\nmampukah\nmana\nmanakala\nmanalagi\nmasih\nmasihkah\nsemasih\nmasing\nmau\nmaupun\nsemaunya\nmemang\nmereka\nmerekalah\nmeski\nmeskipun\nsemula\nmungkin\nmungkinkah\nnah\nnamun\nnanti\nnantinya\nnyaris\noleh\nolehnya\nseorang\nseseorang\npada\npadanya\npadahal\npaling\nsepanjang\npantas\nsepantasnya\nsepantasnyalah\npara\npasti\npastilah\nper\npernah\npula\npun\nmerupakan\nrupanya\nserupa\nsaat\nsaatnya\nsesaat\nsaja\nsajalah\nsaling\nbersama\nsama\nsesama\nsambil\nsampai\nsana\nsangat\nsangatlah\nsaya\nsayalah\nse\nsebab\nsebabnya\nsebuah\ntersebut\ntersebutlah\nsedang\nsedangkan\nsedikit\nsedikitnya\nsegala\nsegalanya\nsegera\nsesegera\nsejak\nsejenak\nsekali\nsekalian\nsekalipun\nsesekali\nsekaligus\nsekarang\nsekarang\nsekitar\nsekitarnya\nsela\nselain\nselalu\nseluruh\nseluruhnya\nsemakin\nsementara\nsempat\nsemua\nsemuanya\nsendiri\nsendirinya\nseolah\nseperti\nsepertinya\nsering\nseringnya\nserta\nsiapa\nsiapakah\nsiapapun\ndisini\ndisinilah\nsini\nsinilah\nsesuatu\nsesuatunya\nsuatu\nsesudah\nsesudahnya\nsudah\nsudahkah\nsudahlah\nsupaya\ntadi\ntadinya\ntak\ntanpa\nsetelah\ntelah\ntentang\ntentu\ntentulah\ntentunya\ntertentu\nseterusnya\ntapi\ntetapi\nsetiap\ntiap\nsetidaknya\ntidak\ntidakkah\ntidaklah\ntoh\nwaduh\nwah\nwahai\nsewaktu\nwalau\nwalaupun\nwong\nyaitu\nyakni\nyang\n"
-  synonyms: "drupal, durpal\n"
-  protwords: "\n"
-  accents: "# À => A\n\"\\u00C0\" => \"A\"\n# Á => A\n#\"\\u00C1\" => \"A\"\n# Â => A\n\"\\u00C2\" => \"A\"\n# Ã => A\n\"\\u00C3\" => \"A\"\n# Ä => A\n\"\\u00C4\" => \"A\"\n# Å => A\n#\"\\u00C5\" => \"A\"\n# Ą => A\n\"\\u0104\" => \"A\"\n# Æ => AE\n\"\\u00C6\" => \"AE\"\n# Ç => C\n\"\\u00C7\" => \"C\"\n# Ć => C\n\"\\U0106\" => \"C\"\n# È => E\n\"\\u00C8\" => \"E\"\n# É => E\n\"\\u00C9\" => \"E\"\n# Ê => E\n\"\\u00CA\" => \"E\"\n# Ë => E\n\"\\u00CB\" => \"E\"\n# Ę => E\n\"\\u0118\" => \"E\"\n# Ì => I\n\"\\u00CC\" => \"I\"\n# Í => I\n\"\\u00CD\" => \"I\"\n# Î => I\n\"\\u00CE\" => \"I\"\n# Ï => I\n\"\\u00CF\" => \"I\"\n# Ĳ => IJ\n\"\\u0132\" => \"IJ\"\n# Ð => D\n\"\\u00D0\" => \"D\"\n# Ł => L\n\"\\u0141\" => \"L\"\n# Ñ => N\n\"\\u00D1\" => \"N\"\n# Ń => N\n\"\\u0143\" => \"N\"\n# Ò => O\n\"\\u00D2\" => \"O\"\n# Ó => O\n#\"\\u00D3\" => \"O\"\n# Ô => O\n\"\\u00D4\" => \"O\"\n# Õ => O\n#\"\\u00D5\" => \"O\"\n# Ö => O\n\"\\u00D6\" => \"O\"\n# Ø => O\n\"\\u00D8\" => \"O\"\n# Œ => OE\n\"\\u0152\" => \"OE\"\n# Þ\n\"\\u00DE\" => \"TH\"\n# Ù => U\n\"\\u00D9\" => \"U\"\n# Ú => U\n\"\\u00DA\" => \"U\"\n# Û => U\n\"\\u00DB\" => \"U\"\n# Ü => U\n\"\\u00DC\" => \"U\"\n# Ý => Y\n\"\\u00DD\" => \"Y\"\n# Ÿ => Y\n\"\\u0178\" => \"Y\"\n# à => a\n\"\\u00E0\" => \"a\"\n# á => a\n#\"\\u00E1\" => \"a\"\n# â => a\n\"\\u00E2\" => \"a\"\n# ã => a\n\"\\u00E3\" => \"a\"\n# ä => a\n\"\\u00E4\" => \"a\"\n# å => a\n\"\\u00E5\" => \"a\"\n# æ => ae\n\"\\u00E6\" => \"ae\"\n# ç => c\n\"\\u00E7\" => \"c\"\n# è => e\n\"\\u00E8\" => \"e\"\n# é => e\n#\"\\u00E9\" => \"e\"\n# ê => e\n\"\\u00EA\" => \"e\"\n# ë => e\n\"\\u00EB\" => \"e\"\n# ì => i\n\"\\u00EC\" => \"i\"\n# í => i\n\"\\u00ED\" => \"i\"\n# î => i\n\"\\u00EE\" => \"i\"\n# ï => i\n\"\\u00EF\" => \"i\"\n# ĳ => ij\n\"\\u0133\" => \"ij\"\n# ð => d\n\"\\u00F0\" => \"d\"\n# ñ => n\n\"\\u00F1\" => \"n\"\n# ò => o\n\"\\u00F2\" => \"o\"\n# ó => o\n#\"\\u00F3\" => \"o\"\n# ô => o\n\"\\u00F4\" => \"o\"\n# õ => o\n\"\\u00F5\" => \"o\"\n# ö => o\n\"\\u00F6\" => \"o\"\n# ø => o\n\"\\u00F8\" => \"o\"\n# œ => oe\n\"\\u0153\" => \"oe\"\n# ß => ss\n\"\\u00DF\" => \"ss\"\n# Ś => S\n\"\\u015a\" => \"S\"\n# þ => th\n\"\\u00FE\" => \"th\"\n# ù => u\n\"\\u00F9\" => \"u\"\n# ú => u\n\"\\u00FA\" => \"u\"\n# û => u\n\"\\u00FB\" => \"u\"\n# ü => u\n\"\\u00FC\" => \"u\"\n# ý => y\n\"\\u00FD\" => \"y\"\n# ÿ => y\n\"\\u00FF\" => \"y\"\n# Ź => Z\n\"\\u0179\" => \"Z\"\n# Ż => Z\n\"\\u017b\" => \"Z\"\n# ﬀ => ff\n\"\\uFB00\" => \"ff\"\n# ﬁ => fi\n\"\\uFB01\" => \"fi\"\n# ﬂ => fl\n\"\\uFB02\" => \"fl\"\n# ﬃ => ffi\n\"\\uFB03\" => \"ffi\"\n# ﬄ => ffl\n\"\\uFB04\" => \"ffl\"\n# ﬅ => st\n\"\\uFB05\" => \"st\"\n# ﬆ => st\n\"\\uFB06\" => \"st\"\n"
+  stopwords: |
+    ada
+    adanya
+    adalah
+    adapun
+    agak
+    agaknya
+    agar
+    akan
+    akankah
+    akhirnya
+    aku
+    akulah
+    amat
+    amatlah
+    anda
+    andalah
+    antar
+    diantaranya
+    antara
+    antaranya
+    diantara
+    apa
+    apaan
+    mengapa
+    apabila
+    apakah
+    apalagi
+    apatah
+    atau
+    ataukah
+    ataupun
+    bagai
+    bagaikan
+    sebagai
+    sebagainya
+    bagaimana
+    bagaimanapun
+    sebagaimana
+    bagaimanakah
+    bagi
+    bahkan
+    bahwa
+    bahwasanya
+    sebaliknya
+    banyak
+    sebanyak
+    beberapa
+    seberapa
+    begini
+    beginian
+    beginikah
+    beginilah
+    sebegini
+    begitu
+    begitukah
+    begitulah
+    begitupun
+    sebegitu
+    belum
+    belumlah
+    sebelum
+    sebelumnya
+    sebenarnya
+    berapa
+    berapakah
+    berapalah
+    berapapun
+    betulkah
+    sebetulnya
+    biasa
+    biasanya
+    bila
+    bilakah
+    bisa
+    bisakah
+    sebisanya
+    boleh
+    bolehkah
+    bolehlah
+    buat
+    bukan
+    bukankah
+    bukanlah
+    bukannya
+    cuma
+    percuma
+    dahulu
+    dalam
+    dan
+    dapat
+    dari
+    daripada
+    dekat
+    demi
+    demikian
+    demikianlah
+    sedemikian
+    dengan
+    depan
+    di
+    dia
+    dialah
+    dini
+    diri
+    dirinya
+    terdiri
+    dong
+    dulu
+    enggak
+    enggaknya
+    entah
+    entahlah
+    terhadap
+    terhadapnya
+    hal
+    hampir
+    hanya
+    hanyalah
+    harus
+    haruslah
+    harusnya
+    seharusnya
+    hendak
+    hendaklah
+    hendaknya
+    hingga
+    sehingga
+    ia
+    ialah
+    ibarat
+    ingin
+    inginkah
+    inginkan
+    ini
+    inikah
+    inilah
+    itu
+    itukah
+    itulah
+    jangan
+    jangankan
+    janganlah
+    jika
+    jikalau
+    juga
+    justru
+    kala
+    kalau
+    kalaulah
+    kalaupun
+    kalian
+    kami
+    kamilah
+    kamu
+    kamulah
+    kan
+    kapan
+    kapankah
+    kapanpun
+    dikarenakan
+    karena
+    karenanya
+    ke
+    kecil
+    kemudian
+    kenapa
+    kepada
+    kepadanya
+    ketika
+    seketika
+    khususnya
+    kini
+    kinilah
+    kiranya
+    sekiranya
+    kita
+    kitalah
+    kok
+    lagi
+    lagian
+    selagi
+    lah
+    lain
+    lainnya
+    melainkan
+    selaku
+    lalu
+    melalui
+    terlalu
+    lama
+    lamanya
+    selama
+    selama
+    selamanya
+    lebih
+    terlebih
+    bermacam
+    macam
+    semacam
+    maka
+    makanya
+    makin
+    malah
+    malahan
+    mampu
+    mampukah
+    mana
+    manakala
+    manalagi
+    masih
+    masihkah
+    semasih
+    masing
+    mau
+    maupun
+    semaunya
+    memang
+    mereka
+    merekalah
+    meski
+    meskipun
+    semula
+    mungkin
+    mungkinkah
+    nah
+    namun
+    nanti
+    nantinya
+    nyaris
+    oleh
+    olehnya
+    seorang
+    seseorang
+    pada
+    padanya
+    padahal
+    paling
+    sepanjang
+    pantas
+    sepantasnya
+    sepantasnyalah
+    para
+    pasti
+    pastilah
+    per
+    pernah
+    pula
+    pun
+    merupakan
+    rupanya
+    serupa
+    saat
+    saatnya
+    sesaat
+    saja
+    sajalah
+    saling
+    bersama
+    sama
+    sesama
+    sambil
+    sampai
+    sana
+    sangat
+    sangatlah
+    saya
+    sayalah
+    se
+    sebab
+    sebabnya
+    sebuah
+    tersebut
+    tersebutlah
+    sedang
+    sedangkan
+    sedikit
+    sedikitnya
+    segala
+    segalanya
+    segera
+    sesegera
+    sejak
+    sejenak
+    sekali
+    sekalian
+    sekalipun
+    sesekali
+    sekaligus
+    sekarang
+    sekarang
+    sekitar
+    sekitarnya
+    sela
+    selain
+    selalu
+    seluruh
+    seluruhnya
+    semakin
+    sementara
+    sempat
+    semua
+    semuanya
+    sendiri
+    sendirinya
+    seolah
+    seperti
+    sepertinya
+    sering
+    seringnya
+    serta
+    siapa
+    siapakah
+    siapapun
+    disini
+    disinilah
+    sini
+    sinilah
+    sesuatu
+    sesuatunya
+    suatu
+    sesudah
+    sesudahnya
+    sudah
+    sudahkah
+    sudahlah
+    supaya
+    tadi
+    tadinya
+    tak
+    tanpa
+    setelah
+    telah
+    tentang
+    tentu
+    tentulah
+    tentunya
+    tertentu
+    seterusnya
+    tapi
+    tetapi
+    setiap
+    tiap
+    setidaknya
+    tidak
+    tidakkah
+    tidaklah
+    toh
+    waduh
+    wah
+    wahai
+    sewaktu
+    walau
+    walaupun
+    wong
+    yaitu
+    yakni
+    yang
+  synonyms: |
+    drupal, durpal
+  protwords: |
+
+  accents: |
+    # À => A
+    "\u00C0" => "A"
+    # Á => A
+    #"\u00C1" => "A"
+    # Â => A
+    "\u00C2" => "A"
+    # Ã => A
+    "\u00C3" => "A"
+    # Ä => A
+    "\u00C4" => "A"
+    # Å => A
+    #"\u00C5" => "A"
+    # Ą => A
+    "\u0104" => "A"
+    # Æ => AE
+    "\u00C6" => "AE"
+    # Ç => C
+    "\u00C7" => "C"
+    # Ć => C
+    "\U0106" => "C"
+    # È => E
+    "\u00C8" => "E"
+    # É => E
+    "\u00C9" => "E"
+    # Ê => E
+    "\u00CA" => "E"
+    # Ë => E
+    "\u00CB" => "E"
+    # Ę => E
+    "\u0118" => "E"
+    # Ì => I
+    "\u00CC" => "I"
+    # Í => I
+    "\u00CD" => "I"
+    # Î => I
+    "\u00CE" => "I"
+    # Ï => I
+    "\u00CF" => "I"
+    # Ĳ => IJ
+    "\u0132" => "IJ"
+    # Ð => D
+    "\u00D0" => "D"
+    # Ł => L
+    "\u0141" => "L"
+    # Ñ => N
+    "\u00D1" => "N"
+    # Ń => N
+    "\u0143" => "N"
+    # Ò => O
+    "\u00D2" => "O"
+    # Ó => O
+    #"\u00D3" => "O"
+    # Ô => O
+    "\u00D4" => "O"
+    # Õ => O
+    #"\u00D5" => "O"
+    # Ö => O
+    "\u00D6" => "O"
+    # Ø => O
+    "\u00D8" => "O"
+    # Œ => OE
+    "\u0152" => "OE"
+    # Þ
+    "\u00DE" => "TH"
+    # Ù => U
+    "\u00D9" => "U"
+    # Ú => U
+    "\u00DA" => "U"
+    # Û => U
+    "\u00DB" => "U"
+    # Ü => U
+    "\u00DC" => "U"
+    # Ý => Y
+    "\u00DD" => "Y"
+    # Ÿ => Y
+    "\u0178" => "Y"
+    # à => a
+    "\u00E0" => "a"
+    # á => a
+    #"\u00E1" => "a"
+    # â => a
+    "\u00E2" => "a"
+    # ã => a
+    "\u00E3" => "a"
+    # ä => a
+    "\u00E4" => "a"
+    # å => a
+    "\u00E5" => "a"
+    # æ => ae
+    "\u00E6" => "ae"
+    # ç => c
+    "\u00E7" => "c"
+    # è => e
+    "\u00E8" => "e"
+    # é => e
+    #"\u00E9" => "e"
+    # ê => e
+    "\u00EA" => "e"
+    # ë => e
+    "\u00EB" => "e"
+    # ì => i
+    "\u00EC" => "i"
+    # í => i
+    "\u00ED" => "i"
+    # î => i
+    "\u00EE" => "i"
+    # ï => i
+    "\u00EF" => "i"
+    # ĳ => ij
+    "\u0133" => "ij"
+    # ð => d
+    "\u00F0" => "d"
+    # ñ => n
+    "\u00F1" => "n"
+    # ò => o
+    "\u00F2" => "o"
+    # ó => o
+    #"\u00F3" => "o"
+    # ô => o
+    "\u00F4" => "o"
+    # õ => o
+    "\u00F5" => "o"
+    # ö => o
+    "\u00F6" => "o"
+    # ø => o
+    "\u00F8" => "o"
+    # œ => oe
+    "\u0153" => "oe"
+    # ß => ss
+    "\u00DF" => "ss"
+    # Ś => S
+    "\u015a" => "S"
+    # þ => th
+    "\u00FE" => "th"
+    # ù => u
+    "\u00F9" => "u"
+    # ú => u
+    "\u00FA" => "u"
+    # û => u
+    "\u00FB" => "u"
+    # ü => u
+    "\u00FC" => "u"
+    # ý => y
+    "\u00FD" => "y"
+    # ÿ => y
+    "\u00FF" => "y"
+    # Ź => Z
+    "\u0179" => "Z"
+    # Ż => Z
+    "\u017b" => "Z"
+    # ﬀ => ff
+    "\uFB00" => "ff"
+    # ﬁ => fi
+    "\uFB01" => "fi"
+    # ﬂ => fl
+    "\uFB02" => "fl"
+    # ﬃ => ffi
+    "\uFB03" => "ffi"
+    # ﬄ => ffl
+    "\uFB04" => "ffl"
+    # ﬅ => st
+    "\uFB05" => "st"
+    # ﬆ => st
+    "\uFB06" => "st"

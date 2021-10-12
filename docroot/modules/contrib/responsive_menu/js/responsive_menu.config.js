@@ -26,7 +26,7 @@
         const options = {
           extensions: [
             theme,
-            'popup',
+            'fx-menu-slide',
             position === 'left' ? 'position-left' : 'position-right'
           ],
           keyboardNavigation: {

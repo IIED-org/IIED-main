@@ -58,8 +58,16 @@ class CookieCategoryListBuilder extends DraggableListBuilder {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
 
-    $form['actions']['submit']['#value'] = t('Save configuration');
+    $form['actions']['submit']['#value'] = $this->t('Save configuration');
     return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    \Drupal::service('eu_cookie_compliance.clear_cache')->clearCache();
+    parent::submitForm($form, $form_state);
   }
 
 }

@@ -2,9 +2,7 @@
 
 namespace Drupal\computed_field\Plugin\Field\FieldType;
 
-use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
-use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Plugin implementation of the 'computed_string' field type.
@@ -35,25 +33,6 @@ class ComputedStringLongItem extends ComputedStringItemBase {
     ];
 
     return $schema;
-  }
-
-  /**
-   * {@inheritdoc}
-   *
-   * @todo Add useful code.
-   */
-  public static function generateSampleValue(FieldDefinitionInterface $field_definition) {
-    $values['value'] = '';
-    return $values;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function fieldSettingsForm(array $form, FormStateInterface $form_state) {
-    $element = parent::fieldSettingsForm($form, $form_state);
-    $element['code']['#title'] = $this->t('Code (PHP) to compute the <em>long text</em> value');
-    return $element;
   }
 
 }

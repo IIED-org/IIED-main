@@ -1,0 +1,65 @@
+services:
+  php:
+    image: q0rban/tugboat-drupal:9.0
+    default: true
+    http: false
+    depends: mysql
+    commands:
+      update: |
+        set -eux
+        # Check out a branch using the unique Tugboat ID for this repository, to
+        # ensure we don't clobber an existing branch.
+        git checkout -b $TUGBOAT_REPO_ID
+        # Composer is hungry. You need a Tugboat project with a pretty sizeable
+        # chunk of memory.
+        export COMPOSER_MEMORY_LIMIT=-1
+        # This is an environment variable we added in the Dockerfile that
+        # provides the path to Drupal composer root (not the web root).
+        cd $DRUPAL_COMPOSER_ROOT
+        # We configure the Drupal project to use the checkout of the module as a
+        # Composer package repository.
+        composer config repositories.tugboat vcs $TUGBOAT_ROOT
+        # Now we can require this module, specifing the branch name we created
+        # above that uses the $TUGBOAT_REPO_ID environment variable.
+        composer require drupal/responsive_menu:dev-$TUGBOAT_REPO_ID
+        # Add bootstrap bario theme which is useful for testing bootstrap issues.
+        composer require drupal/bootstrap_barrio
+        # Install Drupal on the site.
+        vendor/bin/drush \
+          --yes \
+          --db-url=mysql://tugboat:tugboat@mysql:3306/tugboat \
+          --site-name="Live preview for ${TUGBOAT_PREVIEW_NAME}" \
+          --account-pass=admin \
+          site:install standard
+        # Set up the files directory permissions.
+        mkdir -p $DRUPAL_DOCROOT/sites/default/files
+        chgrp -R www-data $DRUPAL_DOCROOT/sites/default/files
+        chmod 2775 $DRUPAL_DOCROOT/sites/default/files
+        chmod -R g+w $DRUPAL_DOCROOT/sites/default/files
+        mkdir -p $DRUPAL_DOCROOT/libraries
+        # Download mmenu into libraries.
+        export MMENU=$(curl -s "https://github.com/FrDH/mmenu-js/releases/latest/download" 2>&1 | sed "s/^.*download\/\([^\"]*\).*/\1/")
+        curl -sLo $DRUPAL_DOCROOT/libraries/mmenu.zip https://github.com/FrDH/mmenu-js/archive/refs/tags/$MMENU.zip
+        unzip -qq $DRUPAL_DOCROOT/libraries/mmenu.zip -d $DRUPAL_DOCROOT/libraries/
+        rm $DRUPAL_DOCROOT/libraries/mmenu.zip
+        mv $DRUPAL_DOCROOT/libraries/mmenu* $DRUPAL_DOCROOT/libraries/mmenu
+        # Download superfish into libraries.
+        curl -sLo $DRUPAL_DOCROOT/libraries/superfish.zip https://github.com/joeldbirch/superfish/archive/master.zip
+        unzip -qq $DRUPAL_DOCROOT/libraries/superfish.zip -d $DRUPAL_DOCROOT/libraries/
+        rm $DRUPAL_DOCROOT/libraries/superfish.zip
+        mv $DRUPAL_DOCROOT/libraries/superfish* $DRUPAL_DOCROOT/libraries/superfish
+        # Enable the module.
+        vendor/bin/drush --yes pm:enable responsive_menu
+      build: |
+        set -eux
+        # Delete and re-check out this branch in case this is built from a Base Preview.
+        git branch -D $TUGBOAT_REPO_ID && git checkout -b $TUGBOAT_REPO_ID || true
+        export COMPOSER_MEMORY_LIMIT=-1
+        cd $DRUPAL_COMPOSER_ROOT
+        composer install --optimize-autoloader
+        # Update this module, including all dependencies.
+        composer update drupal/responsive_menu --with-all-dependencies
+        vendor/bin/drush --yes updb
+        vendor/bin/drush cache:rebuild
+  mysql:
+    image: tugboatqa/mariadb

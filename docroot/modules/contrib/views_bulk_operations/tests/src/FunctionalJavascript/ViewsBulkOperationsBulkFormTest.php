@@ -80,7 +80,7 @@ class ViewsBulkOperationsBulkFormTest extends WebDriverTestBase {
     // Create some nodes for testing.
     $this->drupalCreateContentType(['type' => 'page']);
     for ($i = 0; $i <= self::TEST_NODE_COUNT; $i++) {
-      $node = $this->drupalCreateNode([
+      $this->drupalCreateNode([
         'type' => 'page',
         'title' => 'Title ' . $i,
       ]);
@@ -96,12 +96,19 @@ class ViewsBulkOperationsBulkFormTest extends WebDriverTestBase {
     $this->assertSession = $this->assertSession();
     $this->page = $this->getSession()->getPage();
 
+    $testViewConfig = \Drupal::service('config.factory')->getEditable('views.view.' . self::TEST_VIEW_ID);
+
     // Get useful config data from the test view.
-    $config_data = \Drupal::service('config.factory')->get('views.view.' . self::TEST_VIEW_ID)->getRawData();
+    $config_data = $testViewConfig->getRawData();
     $this->testViewParams = [
       'items_per_page' => $config_data['display']['default']['display_options']['pager']['options']['items_per_page'],
       'path' => $config_data['display']['page_1']['display_options']['path'],
     ];
+
+    // Enable AJAX on the view.
+    $config_data['display']['default']['display_options']['use_ajax'] = TRUE;
+    $testViewConfig->setData($config_data);
+    $testViewConfig->save();
 
     $this->drupalGet('/' . $this->testViewParams['path']);
   }
@@ -119,16 +126,17 @@ class ViewsBulkOperationsBulkFormTest extends WebDriverTestBase {
     // Select some items on the first page.
     foreach ([0, 1, 3] as $selected_index) {
       $this->selectedIndexes[] = $selected_index;
-      $this->page->checkField('edit-views-bulk-operations-bulk-form-' . $selected_index);
+      $this->page->checkField('views_bulk_operations_bulk_form[' . $selected_index . ']');
     }
 
     // Go to the next page and select some more.
     $this->page->clickLink('Go to next page');
+    $this->assertSession->assertWaitOnAjaxRequest();
     foreach ([1, 2] as $selected_index) {
       // This is page one so indexes are incremented by page count and
       // checkbox selectors start from 0 again.
       $this->selectedIndexes[] = $selected_index + $this->testViewParams['items_per_page'];
-      $this->page->checkField('edit-views-bulk-operations-bulk-form-' . $selected_index);
+      $this->page->checkField('views_bulk_operations_bulk_form[' . $selected_index . ']');
     }
 
     // Execute test operation.
@@ -157,7 +165,7 @@ class ViewsBulkOperationsBulkFormTest extends WebDriverTestBase {
     $this->selectedIndexes = [0, 1, 3];
 
     foreach ($this->selectedIndexes as $selected_index) {
-      $this->page->checkField('edit-views-bulk-operations-bulk-form-' . $selected_index);
+      $this->page->checkField('views_bulk_operations_bulk_form[' . $selected_index . ']');
     }
 
     // Insert nodes.

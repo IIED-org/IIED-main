@@ -4,12 +4,13 @@ namespace Drupal\eu_cookie_compliance\Form;
 
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityTypeManager;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\eu_cookie_compliance\Plugin\EuCcClearCache;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class CookieCategoryForm.
+ * Category form for the module.
  */
 class CookieCategoryForm extends EntityForm {
 
@@ -21,24 +22,37 @@ class CookieCategoryForm extends EntityForm {
   protected $categoryStorageManager;
 
   /**
+   * EUCC Clear Cache Service.
+   *
+   * @var \Drupal\eu_cookie_compliance\Plugin\EuCcClearCache
+   */
+  protected $euccClearCache;
+
+  /**
    * Constructs a CookieCategoryForm object.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entityTypeManager.
+   * @param \Drupal\eu_cookie_compliance\Plugin\EuCcClearCache $eucc_clear_cache
+   *   The EU CC Clear Cache service.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function __construct(EntityTypeManager $entityTypeManager) {
+  public function __construct(EntityTypeManagerInterface $entityTypeManager, EuCcClearCache $eucc_clear_cache) {
     $this->entityTypeManager = $entityTypeManager;
     $this->categoryStorageManager = $entityTypeManager->getStorage('cookie_category');
+    $this->euccClearCache = $eucc_clear_cache;
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static($container->get('entity_type.manager'));
+    return new static(
+      $container->get('entity_type.manager'),
+      $container->get('eu_cookie_compliance.clear_cache')
+    );
   }
 
   /**
@@ -89,6 +103,7 @@ class CookieCategoryForm extends EntityForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
+    $this->euccClearCache->clearCache();
     $cookie_category = $this->entity;
     $status = $cookie_category->save();
 

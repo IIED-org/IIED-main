@@ -2,12 +2,14 @@
 
 namespace Drupal\views_bulk_operations\Action;
 
+use Drupal\Core\Action\ActionInterface;
 use Drupal\views\ViewExecutable;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Defines Views Bulk Operations action interface.
  */
-interface ViewsBulkOperationsActionInterface {
+interface ViewsBulkOperationsActionInterface extends ActionInterface {
 
   /**
    * Set action context.
@@ -43,5 +45,22 @@ interface ViewsBulkOperationsActionInterface {
    *   An array of translatable markup objects or strings (optional)
    */
   public function executeMultiple(array $objects);
+
+  /**
+   * Action batch execution finished callback.
+   *
+   * Used to set finished message, redirect or execute some final logic.
+   *
+   * @param bool $success
+   *   Was the process successful?
+   * @param array $results
+   *   Batch process results array.
+   * @param array $operations
+   *   Performed operations array.
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse|null
+   *   Bach redirect response or NULL.
+   */
+  public static function finished($success, array $results, array $operations): ?RedirectResponse;
 
 }

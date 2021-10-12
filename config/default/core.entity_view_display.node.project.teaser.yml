@@ -15,6 +15,7 @@ dependencies:
     - node.type.project
   module:
     - layout_builder
+    - layout_discovery
     - text
     - user
 third_party_settings:
@@ -25,6 +26,7 @@ third_party_settings:
         layout_id: layout_onecol
         layout_settings:
           label: ''
+          context_mapping: {  }
         components:
           d869278b-5881-4dbf-8c08-33f13038f76a:
             uuid: d869278b-5881-4dbf-8c08-33f13038f76a
@@ -52,6 +54,16 @@ third_party_settings:
                 third_party_settings: {  }
             additional: {  }
             weight: 1
+          9a6b4501-8ae7-477b-ae88-423a18f5506b:
+            uuid: 9a6b4501-8ae7-477b-ae88-423a18f5506b
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'extra_field_block:node:project:sharing_buttons'
+            additional: {  }
+            weight: 2
         third_party_settings: {  }
 id: node.project.teaser
 targetEntityType: node
@@ -67,6 +79,11 @@ content:
     third_party_settings: {  }
     region: content
   links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  sharing_buttons:
     weight: 100
     settings: {  }
     third_party_settings: {  }

@@ -94,6 +94,24 @@
   }
 }
 
+.mm-menu.mm-menu_opened {
+  opacity: 1;
+  z-index: 2;
+  left: 0;
+}
+
+.mm-wrapper_opening .mm-menu_offcanvas.mm-menu_opened~.mm-slideout {
+  @include media-breakpoint-up(md) {
+    transform: none;
+  }
+}
+
+.mm-wrapper__blocker {
+  @include media-breakpoint-up(md) {
+    left: 440px;
+  }
+}
+
 .block--sidrtriggerbuttonblock {
   line-height: 1.5rem;
   button {

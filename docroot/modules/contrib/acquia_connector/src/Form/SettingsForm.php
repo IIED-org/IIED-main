@@ -11,7 +11,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\PrivateKey;
-use Drupal\Core\State\State;
+use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -54,7 +54,7 @@ class SettingsForm extends ConfigFormBase {
   /**
    * The state service.
    *
-   * @var \Drupal\Core\State\State
+   * @var \Drupal\Core\State\StateInterface
    */
   protected $state;
 
@@ -76,12 +76,12 @@ class SettingsForm extends ConfigFormBase {
    *   The private key.
    * @param \Drupal\acquia_connector\Client $client
    *   The Acquia client.
-   * @param \Drupal\Core\State\State $state
+   * @param \Drupal\Core\State\StateInterface $state
    *   The State handler.
    * @param \Drupal\acquia_connector\Controller\SpiController $spi_controller
    *   SPI backend.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, PrivateKey $private_key, Client $client, State $state, SpiController $spi_controller) {
+  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, PrivateKey $private_key, Client $client, StateInterface $state, SpiController $spi_controller) {
     parent::__construct($config_factory);
 
     $this->moduleHandler = $module_handler;

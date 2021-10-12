@@ -20,7 +20,11 @@ $connection->insert('variable')
   ])
   ->values([
     'name' => 'acquia_search_solr_forced_read_only',
-    'value' => 'b:0;',
+    'value' => 'b:1;',
+  ])
+  ->values([
+    'name' => 'apachesolr_default_environment',
+    'value' => 's:22:"acquia_search_server_3";',
   ])
   ->execute();
 
@@ -52,7 +56,7 @@ $connection->insert('apachesolr_index_bundles')
     'bundle',
   ])
   ->values([
-    'env_id' => 'acquia_search_server',
+    'env_id' => 'acquia_search_server_3',
     'entity_type' => 'node',
     'bundle' => 'article',
   ])

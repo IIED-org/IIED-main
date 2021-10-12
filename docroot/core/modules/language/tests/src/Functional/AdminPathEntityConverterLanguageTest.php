@@ -12,14 +12,14 @@ use Drupal\Tests\BrowserTestBase;
  */
 class AdminPathEntityConverterLanguageTest extends BrowserTestBase {
 
-  public static $modules = ['language', 'language_test'];
+  protected static $modules = ['language', 'language_test'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $permissions = [
       'access administration pages',
@@ -39,12 +39,12 @@ class AdminPathEntityConverterLanguageTest extends BrowserTestBase {
       ->save();
 
     $this->drupalGet('es/admin/language_test/entity_using_current_language/es');
-    $this->assertNoRaw(t('Loaded %label.', ['%label' => 'Spanish']));
-    $this->assertRaw(t('Loaded %label.', ['%label' => 'Español']));
+    $this->assertSession()->responseNotContains(t('Loaded %label.', ['%label' => 'Spanish']));
+    $this->assertSession()->responseContains(t('Loaded %label.', ['%label' => 'Español']));
 
     $this->drupalGet('es/admin/language_test/entity_using_original_language/es');
-    $this->assertRaw(t('Loaded %label.', ['%label' => 'Spanish']));
-    $this->assertNoRaw(t('Loaded %label.', ['%label' => 'Español']));
+    $this->assertSession()->responseContains(t('Loaded %label.', ['%label' => 'Spanish']));
+    $this->assertSession()->responseNotContains(t('Loaded %label.', ['%label' => 'Español']));
   }
 
 }

@@ -4,7 +4,6 @@ namespace Drupal\computed_field\Plugin\Field\FieldType;
 
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\TypedData\DataDefinition;
 
@@ -55,17 +54,6 @@ class ComputedFloatItem extends ComputedFieldItemBase {
   public static function generateSampleValue(FieldDefinitionInterface $field_definition) {
     $values['value'] = 0;
     return $values;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function fieldSettingsForm(array $form, FormStateInterface $form_state) {
-    $element = parent::fieldSettingsForm($form, $form_state);
-
-    $element['code']['#title'] = $this->t('Code (PHP) to compute the <em>float</em> value');
-
-    return $element;
   }
 
 }

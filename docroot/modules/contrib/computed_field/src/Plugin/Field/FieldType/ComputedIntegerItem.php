@@ -21,6 +21,7 @@ use Drupal\Core\TypedData\DataDefinition;
  * )
  */
 class ComputedIntegerItem extends ComputedFieldItemBase {
+  use ComputedFieldStronglyTypedItemTrait;
 
   /**
    * {@inheritdoc}
@@ -71,20 +72,6 @@ class ComputedIntegerItem extends ComputedFieldItemBase {
   public static function generateSampleValue(FieldDefinitionInterface $field_definition) {
     $values['value'] = rand(PHP_INT_MIN, PHP_INT_MAX);
     return $values;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function fieldSettingsForm(array $form, FormStateInterface $form_state) {
-    $element = parent::fieldSettingsForm($form, $form_state);
-
-    $element['code']['#title'] = $this->t('Code (PHP) to compute the <em>integer</em> value');
-    $element['code']['#description'] .= '<p>'
-        . t('The value will be rounded to an integer value.')
-        . '</p>';
-
-    return $element;
   }
 
   /**

@@ -12,7 +12,7 @@ class TestViewsBulkOperationsBatch extends ViewsBulkOperationsBatch {
   /**
    * Override t method.
    */
-  public static function t($string, array $args = [], array $options = []) {
+  public static function translate($string, array $args = [], array $options = []) {
     return strtr($string, $args);
   }
 
