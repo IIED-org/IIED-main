@@ -2,7 +2,7 @@ name: RADIX_SUBTHEME_NAME
 description: RADIX_SUBTHEME_DESCRIPTION
 screenshot: screenshot.png
 core_version_requirement: ^8.7.7 || ^9.0
-version: VERSION
+# version: VERSION
 engine: twig
 type: theme
 base theme: radix
@@ -31,3 +31,8 @@ component-libraries:
   RADIX_SUBTHEME_MACHINE_NAME:
     paths:
       - ./src/components
+
+# Information added by Drupal.org packaging script on 2020-09-30
+version: '8.x-4.10'
+project: 'radix'
+datestamp: 1601449011

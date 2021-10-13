@@ -9,6 +9,7 @@ dependencies:
   module:
     - image
     - layout_builder
+    - layout_discovery
     - user
 third_party_settings:
   layout_builder:
@@ -18,6 +19,7 @@ third_party_settings:
         layout_id: layout_onecol
         layout_settings:
           label: ''
+          context_mapping: {  }
         components:
           21dbb2a9-0091-4e8d-93b7-79b731dc83f9:
             uuid: 21dbb2a9-0091-4e8d-93b7-79b731dc83f9
@@ -36,6 +38,16 @@ third_party_settings:
                 label: hidden
             additional: {  }
             weight: 0
+          f8570b38-5e5d-4971-80c6-e2cbac597f72:
+            uuid: f8570b38-5e5d-4971-80c6-e2cbac597f72
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'extra_field_block:user:user:masquerade'
+            additional: {  }
+            weight: 1
         third_party_settings: {  }
 _core:
   default_config_hash: '-cLsS3M3JycipXQt9rEb81_HxKneReoGuRh8ijcOPXs'
@@ -44,6 +56,11 @@ targetEntityType: user
 bundle: user
 mode: compact
 content:
+  masquerade:
+    weight: 50
+    settings: {  }
+    third_party_settings: {  }
+    region: content
   user_picture:
     type: image
     weight: 0

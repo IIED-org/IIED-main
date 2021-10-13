@@ -6,19 +6,45 @@
    */
   Drupal.behaviors.TaxonomyManagerTree = {
     attach: function (context, settings) {
-      // Handle click on autocomplete suggestion
-      $('.ui-widget-content.ui-autocomplete.ui-front').click(function() {
-        $('.taxonomy-manager-hidden-button').click();
-      });
-
       var treeSettings = settings.taxonomy_manager.tree || [];
       if (treeSettings instanceof Array) {
         for (var i = 0; i < treeSettings.length; i++) {
           $('#' + treeSettings[i].id).once('taxonomy-manager-tree').each(function () {
-            new Drupal.TaxonomyManagerFancyTree(treeSettings[i].id, treeSettings[i].name, treeSettings[i].source);
+            var tree = new Drupal.TaxonomyManagerFancyTree(treeSettings[i].id, treeSettings[i].name, treeSettings[i].source);
           });
         }
       }
+      // Handle click on search terms
+      $('.taxonomy-manager-search-button').click(function (e) {
+        e.preventDefault();
+        $('.taxonomy-manager-autocomplete-input').show();
+        return true;
+      });
+      // Handle click on autocomplete suggestion
+      $('.ui-autocomplete', context).once('input').on('click', function (e) {
+        e.stopPropagation();
+        var tidMatch = $('input[name="search_terms"]').val().match(/\([0-9]*\)/g)
+        if (tidMatch.length) {
+          var tid = parseInt(tidMatch[0].replace(/^[^0-9]+/, ''), 10);
+          // Request tree keys to activate via ajax.
+          $.ajax({
+            url: Drupal.url('taxonomy_manager/subtree/child-parents'),
+            dataType: 'json',
+            data: {
+              'tid': tid
+            },
+            success: function (termData) {
+              var $tree = $("#edit-taxonomy-manager-tree").fancytree("getTree");
+              var path = termData.path;
+              $tree.loadKeyPath(path).progress(function (keyData) {
+                if (keyData.status === 'ok') {
+                  $tree.activateKey(keyData.node.key);
+                }
+              });
+            }
+          });
+        }
+      });
     }
   };
 

@@ -25,6 +25,7 @@ third_party_settings:
         layout_id: layout_onecol
         layout_settings:
           label: ''
+          context_mapping: {  }
         components:
           bd76007a-a943-4805-8ba2-fda33ee036c2:
             uuid: bd76007a-a943-4805-8ba2-fda33ee036c2
@@ -90,6 +91,7 @@ third_party_settings:
         layout_id: layout_onecol
         layout_settings:
           label: ''
+          context_mapping: {  }
         components:
           723bca1b-ec4b-4499-8327-e5bbdc631795:
             uuid: 723bca1b-ec4b-4499-8327-e5bbdc631795
@@ -110,6 +112,7 @@ third_party_settings:
         layout_id: layout_onecol
         layout_settings:
           label: ''
+          context_mapping: {  }
         components:
           be75a506-0e24-4ce8-b1f3-256311da3a03:
             uuid: be75a506-0e24-4ce8-b1f3-256311da3a03
@@ -142,6 +145,7 @@ third_party_settings:
         layout_id: layout_onecol
         layout_settings:
           label: 'Search/Edit Authors'
+          context_mapping: {  }
         components:
           2ff96f1e-a006-4be9-8c06-dbed96d8d494:
             uuid: 2ff96f1e-a006-4be9-8c06-dbed96d8d494
@@ -161,6 +165,7 @@ third_party_settings:
         layout_id: layout_onecol
         layout_settings:
           label: 'Search/Edit Organisations'
+          context_mapping: {  }
         components:
           ed911345-352f-4165-a096-5a14df8b0506:
             uuid: ed911345-352f-4165-a096-5a14df8b0506

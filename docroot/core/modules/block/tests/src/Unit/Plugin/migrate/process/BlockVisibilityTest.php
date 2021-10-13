@@ -26,7 +26,7 @@ class BlockVisibilityTest extends MigrateProcessTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->moduleHandler = $this->prophesize(ModuleHandlerInterface::class);
     $migrate_lookup = $this->prophesize(MigrateLookupInterface::class);
@@ -89,7 +89,7 @@ class BlockVisibilityTest extends MigrateProcessTestCase {
     $migrate_lookup = $this->prophesize(MigrateLookupInterface::class);
     $this->row = $this->getMockBuilder('Drupal\migrate\Row')
       ->disableOriginalConstructor()
-      ->setMethods(['getSourceProperty'])
+      ->onlyMethods(['getSourceProperty'])
       ->getMock();
     $this->row->expects($this->exactly(2))
       ->method('getSourceProperty')

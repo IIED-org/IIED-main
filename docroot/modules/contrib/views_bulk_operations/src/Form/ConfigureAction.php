@@ -82,9 +82,10 @@ class ConfigureAction extends FormBase {
 
     $form_data = $this->getFormData($view_id, $display_id);
 
-    // TODO: display an error msg, redirect back.
     if (!isset($form_data['action_id'])) {
-      return;
+      return [
+        '#markup' => $this->t('No items selected. Go back and try again.'),
+      ];
     }
 
     $form['#title'] = $this->t('Configure "%action" action applied to the selection', ['%action' => $form_data['action_label']]);

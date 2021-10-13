@@ -23,6 +23,11 @@ form.taxonomy-manager-vocabulary-terms-form {
   display: inline-block;
 }
 
-.taxonomy-manager-hidden-button {
-  display: none !important;
+.taxonomy-manager-vocabulary-terms-form .form-item--vocabulary-switcher {
+  float:right;
+  margin-top: 0px;
+}
+
+.taxonomy-manager-autocomplete-input {
+  display: none;
 }

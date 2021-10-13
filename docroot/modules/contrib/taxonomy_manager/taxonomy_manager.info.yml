@@ -8,7 +8,7 @@ package: Taxonomy
 type: module
 configure: taxonomy_manager.settings
 
-# Information added by Drupal.org packaging script on 2021-02-11
-version: '2.0.4'
+# Information added by Drupal.org packaging script on 2021-09-22
+version: '2.0.6'
 project: 'taxonomy_manager'
-datestamp: 1613054278
+datestamp: 1632303424

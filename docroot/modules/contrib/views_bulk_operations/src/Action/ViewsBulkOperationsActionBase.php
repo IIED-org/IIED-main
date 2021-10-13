@@ -16,6 +16,8 @@ use Drupal\Core\Session\AccountInterface;
  */
 abstract class ViewsBulkOperationsActionBase extends ActionBase implements ViewsBulkOperationsActionInterface, ConfigurableInterface {
 
+  use ViewsBulkOperationsActionCompletedTrait;
+
   /**
    * Action context.
    *

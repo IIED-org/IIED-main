@@ -23,7 +23,7 @@ class MigrateAcquiaSearchConfigurationTest extends MigrateDrupal7TestBase {
   protected $expectedConfig = [
     'acquia_search.settings' => [
       'api_host' => 'https://api.sr-prod02.acquia.com',
-      'read_only' => FALSE,
+      'read_only' => TRUE,
     ],
   ];
   protected $expectedIndexBundles = [

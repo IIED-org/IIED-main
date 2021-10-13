@@ -649,7 +649,7 @@ class ViewsBulkOperationsBulkForm extends FieldPluginBase implements CacheableDe
       // displayed, but not when the form is being built before submission
       // (data is subject to change - new entities added or deleted after
       // the form display). TODO: consider using $form_state->set() instead.
-      if (empty($form_state->getUserInput())) {
+      if (empty($form_state->getUserInput()['op'])) {
         $this->updateTempstoreData($bulk_form_keys);
       }
       else {
@@ -780,9 +780,10 @@ class ViewsBulkOperationsBulkForm extends FieldPluginBase implements CacheableDe
         $form['header'][$this->options['id']]['multipage'] = [
           '#type' => 'details',
           '#open' => FALSE,
-          '#title' => $this->t('Selected %count items in this view', [
-            '%count' => $count,
-          ]),
+          '#title' => $this->formatPlural($count,
+            'Selected 1 item in this view',
+            'Selected @count items in this view'
+          ),
           '#attributes' => [
             // Add view_id and display_id to be available for
             // js multipage selector functionality.
@@ -935,17 +936,12 @@ class ViewsBulkOperationsBulkForm extends FieldPluginBase implements CacheableDe
       }
 
       // Update exclude mode setting.
-      if ($form_state->getValue('select_all') && !empty($this->tempStoreData['list'])) {
-        $this->tempStoreData['exclude_mode'] = TRUE;
-      }
-      else {
-        $this->tempStoreData['exclude_mode'] = FALSE;
-      }
+      $this->tempStoreData['exclude_mode'] = !empty($select_all);
 
       // Routing - determine redirect route.
       //
       // Set default redirection due to issue #2952498.
-      // TODO: remove the next line when core cause is eliminated.
+      // @todo remove the next line when core cause is eliminated.
       $redirect_route = 'views_bulk_operations.execute_batch';
 
       if ($this->options['form_step'] && $configurable) {

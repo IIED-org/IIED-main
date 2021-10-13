@@ -25,6 +25,7 @@ tree:
   dependencies:
     - taxonomy_manager/jquery.fancytree
     - core/drupalSettings
+    - core/jquery.once
 
 termData:
   js:

@@ -4,6 +4,8 @@ migration_tags:
   - Drupal 7
   - Configuration
 source:
+  constants:
+    api_host: 'https://api.sr-prod02.acquia.com'
   plugin: variable
   variables:
     - acquia_search_api_host
@@ -11,8 +13,14 @@ source:
   source_module:
     - acquia_search
 process:
-  api_host: acquia_search_api_host
-  read_only: acquia_search_solr_forced_read_only
+  api_host:
+    plugin: default_value
+    default_value: constants/api_host
+    source: acquia_search_api_host
+  read_only:
+    plugin: default_value
+    default_value: true
+    source: acquia_search_solr_forced_read_only
 destination:
   plugin: config
   config_name: acquia_search.settings

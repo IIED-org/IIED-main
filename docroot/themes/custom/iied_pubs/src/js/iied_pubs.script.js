@@ -1,4 +1,4 @@
-import 'popper.js';
+//import 'popper.js';
 import 'bootstrap';
 
 (function () {

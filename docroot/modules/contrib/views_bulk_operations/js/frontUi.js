@@ -23,7 +23,7 @@
     view_id: '',
     display_id: '',
     list: {},
-    $placeholder: null,
+    $summary: null,
 
     /**
      * Bind event handlers to an element.
@@ -85,7 +85,7 @@
           op = state ? 'add' : 'remove';
         }
 
-        var $placeholder = this.$placeholder;
+        var $summary = this.$summary;
         var $selectionInfo = this.$selectionInfo;
         var target_uri = drupalSettings.path.baseUrl + drupalSettings.path.pathPrefix + 'views-bulk-operations/ajax/' + this.view_id + '/' + this.display_id;
 
@@ -96,8 +96,8 @@
             op: op
           },
           success: function (data) {
-            $selectionInfo.html($(data.selection_info).html());
-            $placeholder.text(data.count);
+            $selectionInfo.html(data.selection_info);
+            $summary.text(Drupal.formatPlural(data.count, 'Selected 1 item in this view', 'Selected @count items in this view'));
           }
         });
       }
@@ -126,7 +126,7 @@
     if ($multiSelectElement.length) {
 
       Drupal.viewsBulkOperationsSelection.$selectionInfo = $multiSelectElement.find('.vbo-info-list-wrapper').first();
-      Drupal.viewsBulkOperationsSelection.$placeholder = $multiSelectElement.find('.placeholder').first();
+      Drupal.viewsBulkOperationsSelection.$summary = $multiSelectElement.find('summary').first();
       Drupal.viewsBulkOperationsSelection.view_id = $multiSelectElement.attr('data-view-id');
       Drupal.viewsBulkOperationsSelection.display_id = $multiSelectElement.attr('data-display-id');
       Drupal.viewsBulkOperationsSelection.vbo_form = $vboForm;

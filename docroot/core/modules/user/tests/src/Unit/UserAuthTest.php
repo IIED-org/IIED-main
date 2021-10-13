@@ -57,7 +57,7 @@ class UserAuthTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     $this->userStorage = $this->createMock('Drupal\Core\Entity\EntityStorageInterface');
 
     /** @var \Drupal\Core\Entity\EntityTypeManagerInterface|\PHPUnit\Framework\MockObject\MockObject $entity_type_manager */
@@ -71,7 +71,7 @@ class UserAuthTest extends UnitTestCase {
 
     $this->testUser = $this->getMockBuilder('Drupal\user\Entity\User')
       ->disableOriginalConstructor()
-      ->setMethods(['id', 'setPassword', 'save', 'getPassword'])
+      ->onlyMethods(['id', 'setPassword', 'save', 'getPassword'])
       ->getMock();
 
     $this->userAuth = new UserAuth($entity_type_manager, $this->passwordService);
@@ -158,7 +158,7 @@ class UserAuthTest extends UnitTestCase {
       ->with($this->password, $this->testUser->getPassword())
       ->will($this->returnValue(TRUE));
 
-    $this->assertsame(1, $this->userAuth->authenticate($this->username, $this->password));
+    $this->assertSame(1, $this->userAuth->authenticate($this->username, $this->password));
   }
 
   /**
@@ -185,11 +185,11 @@ class UserAuthTest extends UnitTestCase {
       ->with(0, 0)
       ->will($this->returnValue(TRUE));
 
-    $this->assertsame(2, $this->userAuth->authenticate($this->username, 0));
+    $this->assertSame(2, $this->userAuth->authenticate($this->username, 0));
   }
 
   /**
-   * Tests the authenticate method with a correct password and new password hash.
+   * Tests the authenticate method with a correct password & new password hash.
    *
    * @covers ::authenticate
    */
@@ -217,7 +217,7 @@ class UserAuthTest extends UnitTestCase {
       ->with($this->testUser->getPassword())
       ->will($this->returnValue(TRUE));
 
-    $this->assertsame(1, $this->userAuth->authenticate($this->username, $this->password));
+    $this->assertSame(1, $this->userAuth->authenticate($this->username, $this->password));
   }
 
 }

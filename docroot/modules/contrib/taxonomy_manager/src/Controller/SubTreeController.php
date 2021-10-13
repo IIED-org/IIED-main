@@ -59,8 +59,36 @@ class SubTreeController extends ControllerBase {
         $list = TaxonomyManagerTree::getNestedListJsonArray($terms);
       }
     }
-
     return new JsonResponse($list);
+  }
+
+  /**
+   * Gets term tids key strings including child itself.
+   *
+   * Used by fancytree.loadKeyPath.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   JSON object with list of terms.
+   *
+   * @see js/tree.js
+   * @see $tree.loadKeyPath
+   */
+  public function jsonChildParentsString() {
+    $data = [];
+    $childTid = $this->request->get('tid');
+    /** @var \Drupal\taxonomy\TermStorageInterface $storage */
+    $storage = $this->entityTypeManager()->getStorage("taxonomy_term");
+    $childTerm = $storage->load($childTid);
+    if ($childTerm) {
+      $terms = $storage->loadAllParents($childTid);
+      $terms[$childTid] = $childTerm;
+      $tids = array_keys($terms);
+      $tids = array_reverse($tids);
+      $data = [
+        'path' => implode('/', $tids),
+      ];
+    }
+    return new JsonResponse($data);
   }
 
 }

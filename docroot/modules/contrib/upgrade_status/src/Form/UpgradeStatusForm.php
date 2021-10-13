@@ -224,7 +224,9 @@ class UpgradeStatusForm extends FormBase {
     }
     catch (\Exception $e) {
       $analyzer_ready = FALSE;
-      $this->messenger()->addError($e->getMessage());
+      // Message and impact description is not translated as the message
+      // is sourced from an exception thrown.
+      $this->messenger()->addError($e->getMessage() . ' Scanning is not possible until this is resolved.');
     }
 
     $environment = $this->buildEnvironmentChecks();

@@ -1,0 +1,7 @@
+services:
+  computed_field.helpers:
+    class: Drupal\computed_field\ComputedFieldHelpers
+    arguments: ['@entity_type.manager', '@module_handler']
+  computed_field.multiple_values_generator:
+    class: Drupal\computed_field\MultipleValuesGenerator
+    arguments: ['@entity_field.manager', '@plugin.manager.field.field_type']

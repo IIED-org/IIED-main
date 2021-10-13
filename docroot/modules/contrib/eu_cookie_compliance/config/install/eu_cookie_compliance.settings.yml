@@ -67,3 +67,7 @@ settings_tab_enabled: false
 reload_options: 0
 reload_routes_list: ''
 cookie_policy_version: '1.0.0'
+cookie_value_disagreed: '0'
+cookie_value_agreed_show_thank_you: '1'
+cookie_value_agreed: '2'
+accessibility_focus: false

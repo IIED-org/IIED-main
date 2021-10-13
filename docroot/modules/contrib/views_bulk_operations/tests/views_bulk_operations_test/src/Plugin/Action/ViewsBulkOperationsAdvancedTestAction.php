@@ -9,6 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\views\ViewExecutable;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Action for test purposes only.
@@ -83,7 +84,7 @@ class ViewsBulkOperationsAdvancedTestAction extends ViewsBulkOperationsActionBas
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form['test_config'] = [
-      '#title' => t('Config'),
+      '#title' => $this->t('Config'),
       '#type' => 'textfield',
       '#default_value' => $form_state->getValue('config'),
     ];
@@ -95,6 +96,24 @@ class ViewsBulkOperationsAdvancedTestAction extends ViewsBulkOperationsActionBas
    */
   public function access($object, AccountInterface $account = NULL, $return_as_object = FALSE) {
     return $object->access('update', $account, $return_as_object);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function finished($success, array $results, array $operations): ?RedirectResponse {
+    // Let's return a bit different message. We don't except faliures
+    // in tests as well so no need to check for a success.
+    $operations = array_count_values($results['operations']);
+    $details = [];
+    foreach ($operations as $op => $count) {
+      $details[] = $op . ' (' . $count . ')';
+    }
+    $message = static::translate('Custom processing message: @operations.', [
+      '@operations' => implode(', ', $details),
+    ]);
+    static::message($message);
+    return NULL;
   }
 
 }
