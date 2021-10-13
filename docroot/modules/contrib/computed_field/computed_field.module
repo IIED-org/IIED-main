@@ -5,6 +5,7 @@
  * Contains computed_field.module.
  */
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
@@ -30,4 +31,11 @@ function computed_field_theme() {
   $theme = [];
 
   return $theme;
+}
+
+/**
+ * Implements hook_entity_presave().
+ */
+function computed_field_entity_presave(EntityInterface $entity) {
+  \Drupal::service('computed_field.multiple_values_generator')->setEntity($entity)->generateMissingValues();
 }

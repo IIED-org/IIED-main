@@ -32,6 +32,13 @@ class Subscription {
   const MESSAGE_LIFETIME = 900;
 
   /**
+   * Cache.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
    * Get subscription status from Acquia, and store the result.
    *
    * This check also sends a heartbeat to Acquia unless
@@ -96,12 +103,28 @@ class Subscription {
   }
 
   /**
+   * Function to check if an $cache is initialised.
+   */
+  protected function initialiseCacheBin() {
+    if (empty($this->cache)) {
+      $cache = \Drupal::cache();
+      $this->cache = $cache;
+    }
+  }
+
+  /**
    * Helper function to check if the site has an active subscription.
    */
   public function isActive() {
+    $this->initialiseCacheBin();
     $active = FALSE;
     // Subscription cannot be active if we have no credentials.
     if (self::hasCredentials()) {
+      if ($cache = $this->cache->get('acquia_connector.subscription_data')) {
+        if (is_array($cache->data) && $cache->expire > time()) {
+          return !empty($cache->data['active']);
+        }
+      }
       $config = \Drupal::config('acquia_connector.settings');
       $subscription = \Drupal::state()->get('acquia_subscription_data');
 
@@ -113,6 +136,7 @@ class Subscription {
           $key = $storage->getKey();
           $identifier = $storage->getIdentifier();
           $subscription = \Drupal::service('acquia_connector.client')->getSubscription($identifier, $key, ['no_heartbeat' => 1]);
+          $this->cache->set('acquia_connector.subscription_data', $subscription, time() + (60 * 60));
         }
         catch (ConnectorException $e) {
         }

@@ -3,6 +3,7 @@ services:
     class: \Drupal\views_bulk_operations\Commands\ViewsBulkOperationsCommands
     arguments:
       - '@current_user'
+      - '@entity_type.manager'
       - '@views_bulk_operations.data'
       - '@plugin.manager.views_bulk_operations_action'
     tags:

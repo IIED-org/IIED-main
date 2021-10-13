@@ -17,11 +17,12 @@
  * hierarchical arrays that include the data to be rendered into HTML (or XML or
  * another output format), and options that affect the markup. Render arrays
  * are ultimately rendered into HTML or other output formats by recursive calls
- * to drupal_render(), traversing the depth of the render array hierarchy. At
- * each level, the theme system is invoked to do the actual rendering. See the
- * documentation of drupal_render() and the
- * @link theme_render Theme system and Render API topic @endlink for more
- * information about render arrays and rendering.
+ * to \Drupal\Core\Render\RendererInterface::render(), traversing the depth of
+ * the render array hierarchy. At each level, the theme system is invoked to do
+ * the actual rendering. See the documentation of
+ * \Drupal\Core\Render\RendererInterface::render() and the @link theme_render
+ * Theme system and Render API topic @endlink for more information about render
+ * arrays and rendering.
  *
  * @section sec_twig_theme Twig Templating Engine
  * Drupal 8 uses the templating engine Twig. Twig offers developers a fast,
@@ -186,7 +187,7 @@
  *   @code
  *   function THEME_page_attachments_alter(array &$page) {
  *     if ($some_condition) {
- *       $page['#attached']['library'][] = 'mytheme/something';
+ *       $page['#attached']['library'][] = 'my_theme/something';
  *     }
  *   }
  *   @endcode
@@ -199,6 +200,15 @@
  *     $variables['#attached']['library'][] = 'core/modernizr';
  *   }
  *   @endcode
+ *
+ * @section front_matter Front Matter
+ * Twig has been extended in Drupal to provide an easy way to parse front
+ * matter from template files. See \Drupal\Component\FrontMatter\FrontMatter
+ * for more information:
+ * @code
+ * $metadata = \Drupal::service('twig')->getTemplateMetadata('/path/to/template.html.twig');
+ * @endcode
+ * Note: all front matter is stripped from templates prior to rendering.
  *
  * @see hooks
  * @see callbacks
@@ -232,13 +242,16 @@
  * hierarchical associative array containing data to be rendered and properties
  * describing how the data should be rendered. A render array that is returned
  * by a function to specify markup to be sent to the web browser or other
- * services will eventually be rendered by a call to drupal_render(), which will
- * recurse through the render array hierarchy if appropriate, making calls into
- * the theme system to do the actual rendering. If a function or method actually
- * needs to return rendered output rather than a render array, the best practice
- * would be to create a render array, render it by calling drupal_render(), and
- * return that result, rather than writing the markup directly. See the
- * documentation of drupal_render() for more details of the rendering process.
+ * services will eventually be rendered by a call to
+ * \Drupal\Core\Render\RendererInterface::render(), which will recurse through
+ * the render array hierarchy if appropriate, making calls into the theme system
+ * to do the actual rendering. If a function or method actually needs to return
+ * rendered output rather than a render array, the best practice would be to
+ * create a render array, render it by calling
+ * \Drupal\Core\Render\RendererInterface::render(), and return that result,
+ * rather than writing the markup directly. See the documentation of
+ * \Drupal\Core\Render\RendererInterface::render() for more details of the
+ * rendering process.
  *
  * Each level in the hierarchy of a render array (including the outermost array)
  * has one or more array elements. Array elements whose names start with '#' are

@@ -8,6 +8,7 @@ dependencies:
     - paragraphs.paragraphs_type.linked_person
   module:
     - layout_builder
+    - layout_discovery
     - options
 third_party_settings:
   layout_builder:
@@ -17,6 +18,7 @@ third_party_settings:
         layout_id: layout_onecol
         layout_settings:
           label: ''
+          context_mapping: {  }
         components:
           a61407dd-d02a-4761-b5da-df61bee60557:
             uuid: a61407dd-d02a-4761-b5da-df61bee60557

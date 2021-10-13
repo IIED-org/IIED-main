@@ -6,7 +6,9 @@
  */
 
 use Drupal\Core\Config\Entity\ConfigEntityType;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\eu_cookie_compliance\Entity\CookieCategoryInterface;
 use Drupal\user\Entity\Role;
 use Drupal\Core\Database\Database;
 use Drupal\filter\Entity\FilterFormat;
@@ -84,43 +86,36 @@ function eu_cookie_compliance_install() {
     user_role_grant_permissions($rid, [$permission]);
   }
 
-  \Drupal::configFactory()
-    ->getEditable('eu_cookie_compliance.settings')
-    ->set('uuid', \Drupal::service('uuid')->generate())
-    ->save();
+  if (Settings::get('eu_cookie_compliance_validate_filter_format', TRUE)) {
+    // Allow individual installations to opt out of the filter format validation
+    // behaviour.
+    $all_filter_formats = filter_formats(\Drupal::currentUser());
 
-  $all_filter_formats = filter_formats(\Drupal::currentUser());
-
-  if (count($all_filter_formats)) {
-    // Determine the best default text format to use.
-    $default_filter_format = filter_default_format();
-    $full_html_format = FilterFormat::load('full_html');
-    if (($default_filter_format === 'restricted_html' || $default_filter_format === 'plain_text') && $full_html_format !== NULL && $full_html_format->get('status')) {
-      $default_filter_format = 'full_html';
+    $default_filter_format = filter_fallback_format();
+    if (count($all_filter_formats)) {
+      // Determine the best default text format to use.
+      $default_filter_format = filter_default_format();
+      $full_html_format = FilterFormat::load('full_html');
+      if (($default_filter_format === 'restricted_html' || $default_filter_format === 'plain_text') && $full_html_format !== NULL && $full_html_format->get('status')) {
+        $default_filter_format = 'full_html';
+      }
     }
   }
 
   // We can't be sure "Restricted HTML" exists.
   // Initialize rich text editors with a text format that actually exists.
   // https://www.drupal.org/project/eu_cookie_compliance/issues/2979440 .
-  \Drupal::configFactory()
-    ->getEditable('eu_cookie_compliance.settings')
-    ->set('popup_agreed', [
-      'value' => '<h2>Thank you for accepting cookies</h2><p>You can now hide this message or find out more about cookies.</p>',
-      'format' => $default_filter_format,
-    ])
-    ->set('popup_info', [
-      'value' => '<h2>We use cookies on this site to enhance your user experience</h2><p>By clicking the Accept button, you agree to us doing so.</p>',
-      'format' => $default_filter_format,
-    ])
-    ->set('mobile_popup_info', [
-      'value' => '<h2>We use cookies on this site to enhance your user experience</h2><p>By tapping the Accept button, you agree to us doing so.</p>',
-      'format' => $default_filter_format,
-    ])
-    ->set('withdraw_message', [
-      'value' => '<h2>We use cookies on this site to enhance your user experience</h2><p>You have given your consent for us to set cookies.</p>',
-      'format' => $default_filter_format,
-    ])
+  $config = \Drupal::configFactory()
+    ->getEditable('eu_cookie_compliance.settings');
+
+  if (!$config->get('uuid')) {
+    $config->set('uuid', \Drupal::service('uuid')->generate());
+  }
+
+  $config->set('popup_agreed.format', $default_filter_format)
+    ->set('popup_info.format', $default_filter_format)
+    ->set('mobile_popup_info.format', $default_filter_format)
+    ->set('withdraw_message.format', $default_filter_format)
     ->save();
 
   eu_cookie_compliance_module_set_weight();
@@ -132,19 +127,37 @@ function eu_cookie_compliance_install() {
 function eu_cookie_compliance_requirements($phase) {
   $requirements = [];
 
-  if ($phase === 'runtime') {
-    $popup_link = Drupal::config('eu_cookie_compliance.settings')->get('popup_link');
-    $show_policy = Drupal::config('eu_cookie_compliance.settings')->get('show_disagree_button');
+  $language_manager = \Drupal::languageManager();
 
-    if ($popup_link === '<front>' && $show_policy) {
-      $requirements['eu_cookie_compliance'] = [
-        'title' => t('EU Cookie Compliance'),
-        'severity' => REQUIREMENT_WARNING,
-        'description' => t('Your privacy policy link is pointing at the front page. This is the default value after installation, and unless your privacy policy is actually posted at the front page, you will need to create a separate page for the privacy policy and link to that page.'),
-        'value' => t('Privacy policy link not provided'),
-      ];
+  // Get all configured languages.
+  $languages = $language_manager->getLanguages();
+  // Store a reference to the current language.
+  $current_language = $language_manager->getCurrentLanguage();
+
+  if ($phase === 'runtime') {
+    foreach ($languages as $key => $language) {
+      // Set the language override.
+      $language_manager->setConfigOverrideLanguage($language);
+
+      // Get the config variables. This will use the overridden language.
+      $popup_link = Drupal::config('eu_cookie_compliance.settings')
+        ->get('popup_link');
+      $show_policy = Drupal::config('eu_cookie_compliance.settings')->get('show_more_info');
+
+      // Check the current language for wrongly configured policy link.
+      if ($popup_link === '<front>' && $show_policy) {
+        $requirements['eu_cookie_compliance_' . $key] = [
+          'title' => t('EU Cookie Compliance'),
+          'severity' => REQUIREMENT_WARNING,
+          'description' => t('Language @language_id: Your privacy policy link is pointing at the front page. This is the default value after installation, and unless your privacy policy is actually posted at the front page, you will need to create a separate page for the privacy policy and link to that page.', ['@language_id' => $language->getName()]),
+          'value' => t('Privacy policy link not provided'),
+        ];
+      }
     }
   }
+
+  // Reset the language manager.
+  $language_manager->setConfigOverrideLanguage($current_language);
 
   return $requirements;
 }
@@ -302,6 +315,8 @@ function eu_cookie_compliance_update_8108() {
  * Add config variables for the withdraw banner.
  */
 function eu_cookie_compliance_update_8109() {
+  $config = \Drupal::config('eu_cookie_compliance.settings');
+
   $default_filter_format = filter_default_format();
   $full_html_format = FilterFormat::load('full_html');
   if (($default_filter_format === 'restricted_html' || $default_filter_format === 'plain_text') && !empty($full_html_format) && $full_html_format->get('status')) {
@@ -311,8 +326,8 @@ function eu_cookie_compliance_update_8109() {
   \Drupal::configFactory()
     ->getEditable('eu_cookie_compliance.settings')
     ->set('withdraw_message', [
-      'value' => '<h2>We use cookies on this site to enhance your user experience</h2><p>You have given your consent for us to set cookies.</p>',
-      'format' => $default_filter_format,
+      'value' => $config->get('withdraw_message')['value'] ?? '<h2>We use cookies on this site to enhance your user experience</h2><p>You have given your consent for us to set cookies.</p>',
+      'format' => $config->get('withdraw_message')['format'] ?? $default_filter_format,
     ])
     ->set('withdraw_action_button_label', 'Withdraw consent')
     ->set('withdraw_tab_button_label', 'Privacy settings')
@@ -512,7 +527,7 @@ function eu_cookie_compliance_update_8122(&$sandbox) {
         'delete' => 'Drupal\eu_cookie_compliance\Form\CookieCategoryDeleteForm',
       ],
       'route_provider' => [
-        'html' => 'Drupal\eu_cookie_compliance\CookieCategoryHtmlRouteProvider',
+        'html' => 'Drupal\Core\Entity\Routing\AdminHtmlRouteProvider',
       ],
     ],
     'config_prefix' => 'cookie_category',
@@ -569,14 +584,16 @@ function eu_cookie_compliance_update_8123(&$sandbox) {
     if ($i === 0 && $fix_first_cookie_category) {
       $checkbox_default_state = 'required';
     }
-    $data = [
-      'id' => $machine_name,
-      'label' => $category['label'],
-      'description' => isset($category['description']) ? $category['description'] : '',
-      'checkbox_default_state' => $checkbox_default_state,
-      'weight' => $i++,
-    ];
-    $storage->create($data)->save();
+    if (!$storage->load($machine_name) instanceof CookieCategoryInterface) {
+      $data = [
+        'id' => $machine_name,
+        'label' => $category['label'],
+        'description' => isset($category['description']) ? $category['description'] : '',
+        'checkbox_default_state' => $checkbox_default_state,
+        'weight' => $i++,
+      ];
+      $storage->create($data)->save();
+    }
   }
 
   // Migrate translations as well.
@@ -608,5 +625,27 @@ function eu_cookie_compliance_update_8123(&$sandbox) {
     ->clear('cookie_categories')
     ->clear('fix_first_cookie_category')
     ->clear('select_all_categories_by_default')
+    ->save();
+}
+
+/**
+ * Add config variables for cookie values.
+ */
+function eu_cookie_compliance_update_8124() {
+  \Drupal::configFactory()
+    ->getEditable('eu_cookie_compliance.settings')
+    ->set('cookie_value_disagreed', '0')
+    ->set('cookie_value_agreed_show_thank_you', '1')
+    ->set('cookie_value_agreed', '2')
+    ->save();
+}
+
+/**
+ * Add config variables for button accessibility.
+ */
+function eu_cookie_compliance_update_8125() {
+  \Drupal::configFactory()
+    ->getEditable('eu_cookie_compliance.settings')
+    ->set('accessibility_focus', FALSE)
     ->save();
 }

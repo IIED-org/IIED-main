@@ -179,7 +179,8 @@ class AcquiaConnectorCommands extends DrushCommands {
 
     $client = \Drupal::service('acquia_connector.client');
     $config = \Drupal::service('config.factory');
-    $spi = new SpiController($client, $config);
+    $path_alias = \Drupal::service('path_alias.manager');
+    $spi = new SpiController($client, $config, $path_alias);
 
     return $spi->get();
   }

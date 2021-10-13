@@ -218,3 +218,33 @@ eu_cookie_compliance.settings:
     cookie_policy_version:
       type: string
       label: 'Cookie Policy Version'
+    cookie_value_disagreed:
+      type: string
+      label: 'Cookie value (disagreed)'
+    cookie_value_agreed_show_thank_you:
+      type: string
+      label: 'Cookie value (agreed, show thank you banner)'
+    cookie_value_agreed:
+      type: string
+      label: 'Cookie value (agreed)'
+    show_disagree_button:
+      type: boolean
+      label: 'Show disagree button (DEPRECATED)'
+    popup_disagree_button_message:
+      type: label
+      label: 'Disagree button message (DEPRECATED)'
+    whitelisted_cookies:
+      type: string
+      label: 'Whitelisted cookies (DEPRECATED)'
+    cookie_categories:
+      type: sting
+      label: 'Cookie categories (DEPRECATED)'
+    fix_first_cookie_category:
+      type: boolean
+      label: 'Boolean value to indicate that the first consent category cannot be unchecked (DEPRECATED)'
+    select_all_categories_by_default:
+      type: boolean
+      label: 'Select all categories by default (DEPRECATED)'
+    accessibility_focus:
+      type: boolean
+      label: 'Buttons have red focus outline (for accessibility)'

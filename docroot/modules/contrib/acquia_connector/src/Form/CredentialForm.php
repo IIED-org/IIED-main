@@ -158,7 +158,7 @@ class CredentialForm extends ConfigFormBase {
 
     drupal_flush_all_caches();
 
-    if ($subscription_data['active']) {
+    if ($subscription->isActive()) {
       $this->messenger()->addStatus($this->t('<h3>Connection successful!</h3>You are now connected to Acquia Cloud. Please enter a name for your site to begin sending profile data.'));
     }
   }

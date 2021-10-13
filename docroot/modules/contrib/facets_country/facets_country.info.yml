@@ -2,6 +2,7 @@ name: 'Facets Country'
 type: module
 description: 'Provides a Facets processor for translating country ISO-codes to their corresponding label'
 core: 8.x
+core_version_requirement: ^8 || ^9
 package: 'Search'
 
 dependencies:
@@ -9,8 +10,3 @@ dependencies:
 
 'interface translation project': facets_country
 'interface translation server pattern': modules/custom/%project/translations/%project.%language.po
-
-# Information added by Drupal.org packaging script on 2020-03-09
-version: '8.x-1.0'
-project: 'facets_country'
-datestamp: 1583744426

@@ -37,6 +37,7 @@ dependencies:
     - taxonomy.vocabulary.series
     - taxonomy.vocabulary.theme
     - user.role.administrator
+    - user.role.manager
   module:
     - computed_field
     - csv_serialization
@@ -72,6 +73,7 @@ display:
         type: role
         options:
           role:
+            manager: manager
             administrator: administrator
       cache:
         type: none
@@ -95,34 +97,13 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       pager:
-        type: full
+        type: none
         options:
-          items_per_page: 50
           offset: 0
-          id: 0
-          total_pages: null
-          tags:
-            previous: '‹ Previous'
-            next: 'Next ›'
-            first: '« First'
-            last: 'Last »'
-          expose:
-            items_per_page: false
-            items_per_page_label: 'Items per page'
-            items_per_page_options: '5, 10, 25, 50'
-            items_per_page_options_all: false
-            items_per_page_options_all_label: '- All -'
-            offset: false
-            offset_label: Offset
-          quantity: 9
       style:
         type: table
         options:
-          grouping:
-            -
-              field: field_publisher_legacy
-              rendered: true
-              rendered_strip: true
+          grouping: {  }
           row_class: ''
           default_row_class: true
           override: true
@@ -131,23 +112,22 @@ display:
           summary: ''
           description: ''
           columns:
-            views_bulk_operations_bulk_form: views_bulk_operations_bulk_form
+            nid: nid
             field_product_code_new: field_product_code_new
             field_product_code: field_product_code
-            edit_node: edit_node
-            title: field_product_code
-            field_lit_code: field_lit_code
-            field_document_type: field_document_type
-            field_publisher_legacy: field_publisher_legacy
-            field_publisher: field_publisher
-            langcode: langcode
-            vid: vid
-            name: name
-            name_1: name_1
-            field_author_s_: field_author_s_
-            field_editor_s_: field_editor_s_
+            langcode_1: langcode_1
+            title: title
+            field_series: field_series
+            field_deptlist: field_deptlist
+            field_theme_s_: field_theme_s_
+            field_team: field_team
+            field_work_programme_global_enga: field_work_programme_global_enga
+            field_reportagency1: field_reportagency1
+            field_date_published: field_date_published
           info:
-            views_bulk_operations_bulk_form:
+            nid:
+              sortable: false
+              default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
@@ -163,10 +143,10 @@ display:
               sortable: true
               default_sort_order: asc
               align: ''
-              separator: ' | '
+              separator: ''
               empty_column: false
               responsive: ''
-            edit_node:
+            langcode_1:
               sortable: false
               default_sort_order: asc
               align: ''
@@ -180,66 +160,47 @@ display:
               separator: ' | '
               empty_column: false
               responsive: ''
-            field_lit_code:
+            field_series:
               sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
-            field_document_type:
+            field_deptlist:
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_theme_s_:
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_team:
               sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
-            field_publisher_legacy:
-              sortable: true
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            field_publisher:
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            langcode:
+            field_work_programme_global_enga:
               sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
-            vid:
+            field_reportagency1:
               sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
-            name:
+            field_date_published:
               sortable: false
               default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            name_1:
-              sortable: false
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            field_author_s_:
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            field_editor_s_:
               align: ''
               separator: ''
               empty_column: false
@@ -3690,6 +3651,7 @@ display:
       redirect_to_display: none
       custom_redirect_path: false
       include_query_params: false
+      enabled: false
     cache_metadata:
       max-age: -1
       contexts:
@@ -3777,7 +3739,7 @@ display:
               preconfiguration:
                 add_confirmation: 0
                 get_bundles_from_results: 1
-          force_selection_info: 0
+          force_selection_info: false
           plugin_id: views_bulk_operations_bulk_form
         field_product_code_new:
           id: field_product_code_new
@@ -5030,7 +4992,7 @@ display:
               preconfiguration:
                 add_confirmation: 0
                 get_bundles_from_results: 1
-          force_selection_info: 0
+          force_selection_info: false
           plugin_id: views_bulk_operations_bulk_form
         field_product_code_new:
           id: field_product_code_new
@@ -5685,6 +5647,72 @@ display:
         relationships: false
       path: admin/maint/Pubs_with_date_filter_csv_export
       fields:
+        nid:
+          id: nid
+          table: node_field_data
+          field: nid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: ID
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: number_integer
+          settings:
+            thousand_separator: ''
+            prefix_suffix: true
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          entity_type: node
+          entity_field: nid
+          plugin_id: field
         field_product_code_new:
           id: field_product_code_new
           table: node__field_product_code_new
@@ -5739,6 +5767,69 @@ display:
             sanitized: 1
             cache_unit: '-1'
             cache_duration: '1'
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          plugin_id: field
+        field_product_code:
+          id: field_product_code
+          table: node__field_product_code
+          field: field_product_code
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: 'Product code (legacy)'
+          exclude: false
+          alter:
+            alter_text: false
+            text: xxx777
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: false
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -6516,6 +6607,7 @@ display:
       tags:
         - 'config:field.storage.node.field_date_published'
         - 'config:field.storage.node.field_deptlist'
+        - 'config:field.storage.node.field_product_code'
         - 'config:field.storage.node.field_product_code_new'
         - 'config:field.storage.node.field_reportagency1'
         - 'config:field.storage.node.field_series'

@@ -2,17 +2,20 @@
 
 namespace Drupal\eu_cookie_compliance\Form;
 
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Path\PathValidatorInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Routing\RequestContext;
+use Drupal\eu_cookie_compliance\Plugin\ConsentStorageManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\user\RoleStorageInterface;
-use Drupal\filter\Entity\FilterFormat;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
@@ -51,6 +54,34 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
   protected $moduleHandler;
 
   /**
+   * The filter format storage.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $filterFormatStorage;
+
+  /**
+   * The consent storage.
+   *
+   * @var \Drupal\eu_cookie_compliance\Plugin\ConsentStorageManagerInterface
+   */
+  protected $consentStorage;
+
+  /**
+   * The page cache.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cachePage;
+
+  /**
+   * The bootstraph cache.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cacheBootstrap;
+
+  /**
    * Constructs an EuCookieComplianceConfigForm object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -63,26 +94,50 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
    *   The role storage.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The filter format storage.
+   * @param \Drupal\eu_cookie_compliance\Plugin\ConsentStorageManager $consent_storage
+   *   The Consent storage.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache_bootstrap
+   *   The bootstrap cache.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache_page
+   *   The page cache.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, PathValidatorInterface $path_validator, RequestContext $request_context, RoleStorageInterface $role_storage, ModuleHandlerInterface $module_handler) {
+  public function __construct(ConfigFactoryInterface $config_factory, PathValidatorInterface $path_validator, RequestContext $request_context, RoleStorageInterface $role_storage, ModuleHandlerInterface $module_handler, EntityTypeManagerInterface $entity_type_manager, ConsentStorageManager $consent_storage, CacheBackendInterface $cache_bootstrap, CacheBackendInterface $cache_page) {
     parent::__construct($config_factory);
 
     $this->pathValidator = $path_validator;
     $this->requestContext = $request_context;
     $this->roleStorage = $role_storage;
     $this->moduleHandler = $module_handler;
+    $this->filterFormatStorage = $entity_type_manager;
+    $this->consentStorage = $consent_storage;
+    $this->cacheBootstrap = $cache_bootstrap;
+    if ($cache_page->get('bin') === 'cache_page') {
+      $this->cachePage = $cache_page;
+    }
+    else {
+      $this->cachePage = NULL;
+    }
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
+    $module_handler = $container->get('module_handler');
     return new static(
       $container->get('config.factory'),
       $container->get('path.validator'),
       $container->get('router.request_context'),
       $container->get('entity_type.manager')->getStorage('user_role'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('entity_type.manager'),
+      $container->get('plugin.manager.eu_cookie_compliance.consent_storage'),
+      $container->get('cache.bootstrap'),
+      // Use a cache that's available to the user if the page cache isn't
+      // available.
+      $module_handler->moduleExists('cache.page') ? $container->get('cache.page') : $container->get('cache.render')
     );
   }
 
@@ -120,23 +175,22 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
     $config = $this->config('eu_cookie_compliance.settings');
 
     $default_filter_format = filter_default_format();
-    $full_html_format = FilterFormat::load('full_html');
+    $full_html_format = $this->filterFormatStorage->getStorage('filter_format')->load('full_html');
     if (($default_filter_format === 'restricted_html' || $default_filter_format === 'plain_text') && !empty($full_html_format) && $full_html_format->get('status')) {
       $default_filter_format = 'full_html';
     }
 
-    $consent_storages = \Drupal::service('plugin.manager.eu_cookie_compliance.consent_storage');
-    $plugin_definitions = $consent_storages->getDefinitions();
+    $plugin_definitions = $this->consentStorage->getDefinitions();
 
     $consent_storage_options = [];
     $consent_storage_options['do_not_store'] = $this->t('Do not store');
     foreach ($plugin_definitions as $plugin_name => $plugin_definition) {
-      /* @var \Drupal\Core\StringTranslation\TranslatableMarkup $plugin_definition_name */
+      /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $plugin_definition_name */
       $plugin_definition_name = $plugin_definition['name'];
       $consent_storage_options[$plugin_name] = $plugin_definition_name->render();
     }
 
-    $token_support = \Drupal::service('module_handler')->moduleExists('token');
+    $token_support = $this->moduleHandler->moduleExists('token');
 
     $form['popup_enabled'] = [
       '#type' => 'checkbox',
@@ -155,7 +209,7 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
 
     foreach ($this->getRoles() as $role_name => $role) {
       // Exclude Admin roles.
-      /* @var \Drupal\user\Entity\Role $role */
+      /** @var \Drupal\user\Entity\Role $role */
       if (!$role->isAdmin()) {
         $role_names[$role_name] = $role->label();
         // Fetch permissions for the roles.
@@ -364,7 +418,7 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
 
     $config_format = $config->get('popup_info.format');
     if (!empty($config_format)) {
-      $filter_format = FilterFormat::load($config_format);
+      $filter_format = $this->filterFormatStorage->getStorage('filter_format')->load($config_format);
       if (empty($filter_format) || !$filter_format->get('status')) {
         $config_format = $default_filter_format;
       }
@@ -397,7 +451,7 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
 
     $config_format = $config->get('mobile_popup_info.format');
     if (!empty($config_format)) {
-      $filter_format = FilterFormat::load($config_format);
+      $filter_format = $this->filterFormatStorage->getStorage('filter_format')->load($config_format);
       if (empty($filter_format) || !$filter_format->get('status')) {
         $config_format = $default_filter_format;
       }
@@ -521,7 +575,7 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
 
     $form['withdraw_consent']['settings_tab_enabled'] = [
       '#type' => 'checkbox',
-      '#title' => t('Enable floating privacy settings tab after withdrawing consent'),
+      '#title' => $this->t('Enable floating privacy settings tab after withdrawing consent'),
       '#default_value' => $config->get('settings_tab_enabled'),
     ];
 
@@ -536,7 +590,7 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
 
     $config_format = $config->get('popup_info.format');
     if (!empty($config_format)) {
-      $filter_format = FilterFormat::load($config_format);
+      $filter_format = $this->filterFormatStorage->getStorage('filter_format')->load($config_format);
       if (empty($filter_format) || !$filter_format->get('status')) {
         $config_format = $default_filter_format;
       }
@@ -596,7 +650,7 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
 
     $config_format = $config->get('popup_info.format');
     if (!empty($config_format)) {
-      $filter_format = FilterFormat::load($config_format);
+      $filter_format = $this->filterFormatStorage->getStorage('filter_format')->load($config_format);
       if (empty($filter_format) || !$filter_format->get('status')) {
         $config_format = $default_filter_format;
       }
@@ -821,6 +875,12 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
       '#description' => $this->t('Use position:fixed for the banner when displayed at the top.'),
     ];
 
+    $form['advanced']['accessibility_focus'] = [
+      '#type' => 'checkbox',
+      '#title' => 'Buttons have red focus outline (for accessibility)',
+      '#default_value' => $config->get('accessibility_focus'),
+    ];
+
     $form['advanced']['popup_delay'] = [
       '#type' => 'number',
       '#title' => $this->t('Banner sliding animation time'),
@@ -897,6 +957,27 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
       '#description' => $this->t('Sets the cookie name that is used to check whether the user has agreed or not. This option is useful when policies change and the user needs to agree again.'),
     ];
 
+    $form['advanced']['cookie_value_disagreed'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Cookie value (disagreed)'),
+      '#default_value' => !empty($config->get('cookie_value_disagreed')) ? $config->get('cookie_value_disagreed') : '0',
+      '#description' => $this->t('The cookie value which will be set where the user has disagreed.'),
+    ];
+
+    $form['advanced']['cookie_value_agreed_show_thank_you'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Cookie value (agreed, show thank you banner)'),
+      '#default_value' => !empty($config->get('cookie_value_agreed_show_thank_you')) ? $config->get('cookie_value_agreed_show_thank_you') : '1',
+      '#description' => $this->t('The cookie value which will be set where the user has agreed and we will show a thank-you banner.'),
+    ];
+
+    $form['advanced']['cookie_value_agreed'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Cookie value (agreed)'),
+      '#default_value' => !empty($config->get('cookie_value_agreed')) ? $config->get('cookie_value_agreed') : '2',
+      '#description' => $this->t('The cookie value which will be set where the user has agreed.'),
+    ];
+
     // Adding option to add/remove banner on specified domains.
     $exclude_domains_option_active = [
       0 => $this->t('Add'),
@@ -933,12 +1014,14 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Exclude admin pages.'),
       '#default_value' => $config->get('exclude_admin_theme'),
+      '#description' => $this->t('Note: if you enable the Withdraw feature, the Privacy settings tab will be displayed also on admin pages, but the banner will not open until you click the tab.'),
     ];
 
     $form['advanced']['exclude_uid_1'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t("Don't show the banner for UID 1."),
+      '#title' => $this->t("Don't show the banner for site administrators (including UID 1)."),
       '#default_value' => !empty($config->get('exclude_uid_1')) ? $config->get('exclude_uid_1') : 0,
+      '#description' => $this->t('Note: if you enable the Withdraw feature, the Privacy settings tab will be displayed also for site administrators, but the banner will not open until you click the tab.'),
     ];
 
     $form['advanced']['better_support_for_screen_readers'] = [
@@ -1040,6 +1123,15 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
       $form_state->setValue('popup_width', '');
     }
 
+    // Cache needs to be cleared when enabling the EU only Varnish feature.
+    // It's sufficient to clear bootstrap and page cache.
+    if ($form_state->getValue('eu_only_js')) {
+      $this->cacheBootstrap->invalidateAll();
+      if ($this->cachePage !== NULL) {
+        $this->cachePage->invalidateAll();
+      }
+    }
+
     // If there's no mobile message entered, disable the feature.
     if (trim($form_state->getValue('mobile_popup_info')['value']) == '') {
       $form_state->setValue('use_mobile_message', FALSE);
@@ -1052,14 +1144,23 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
     // Save permissions.
     $permission_name = 'display eu cookie compliance popup';
 
+    $readonly_enabled = $this->moduleHandler->moduleExists('config_readonly') && Settings::get('config_readonly');
+    $allowlist_patterns = Settings::get('config_readonly_whitelist_patterns');
+
     foreach ($this->getRoles() as $role_name => $role) {
-      /* @var \Drupal\user\Entity\Role $role */
+      /** @var \Drupal\user\Entity\Role $role */
       if (!$role->isAdmin()) {
-        if (array_key_exists($role_name, $form_state->getValue('see_the_banner')) && $form_state->getValue('see_the_banner')[$role_name]) {
-          user_role_grant_permissions($role_name, [$permission_name]);
+        $user_settings_allowlisted = !empty($allowlist_patterns) && in_array('user.role.' . $role_name, $allowlist_patterns);
+        if (!$readonly_enabled || ($readonly_enabled && $user_settings_allowlisted)) {
+          if (array_key_exists($role_name, $form_state->getValue('see_the_banner')) && $form_state->getValue('see_the_banner')[$role_name]) {
+            user_role_grant_permissions($role_name, [$permission_name]);
+          }
+          else {
+            user_role_revoke_permissions($role_name, [$permission_name]);
+          }
         }
         else {
-          user_role_revoke_permissions($role_name, [$permission_name]);
+          $this->messenger()->addWarning($this->t('The user role permission could not be set because the <code>config_readonly</code> module is enabled. To allow setting of user role permissions, please add <code>user.role.%name</code> to the <code>config_readonly</code> allowlist.', ['%name' => $role_name]));
         }
       }
     }
@@ -1089,7 +1190,13 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
     // Clear cached javascript.
     Cache::invalidateTags(['library_info']);
 
-    eu_cookie_compliance_module_set_weight();
+    $extension_settings_allowlisted = !empty($allowlist_patterns) && in_array('core.extension' . $role_name, $allowlist_patterns);
+    if (!$readonly_enabled || ($readonly_enabled && $extension_settings_allowlisted)) {
+      eu_cookie_compliance_module_set_weight();
+    }
+    else {
+      $this->messenger()->addWarning($this->t('The module weight could not be set because the <code>config_readonly</code> module is enabled. To allow setting of module weight, please add <code>core.extension</code> to the <code>config_readonly</code> allowlist.'));
+    }
 
     // Handle version 2 of jQuery colorpicker.
     $jquery_colorpicker_version = _eu_cookie_compliance_get_jquery_colorpicker_version();
@@ -1110,7 +1217,11 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
       ->set('popup_info', $form_state->getValue('popup_info'))
       ->set('popup_info_template', $form_state->getValue('popup_info_template'))
       ->set('use_mobile_message', $form_state->getValue('use_mobile_message'))
-      ->set('mobile_popup_info', $form_state->getValue('use_mobile_message') ? $form_state->getValue('mobile_popup_info') : ['value' => '', 'format' => filter_default_format()])
+      ->set('mobile_popup_info', $form_state->getValue('use_mobile_message') ?
+        $form_state->getValue('mobile_popup_info') : [
+          'value' => '',
+          'format' => filter_default_format(),
+        ])
       ->set('mobile_breakpoint', $form_state->getValue('mobile_breakpoint'))
       ->set('popup_agreed_enabled', $form_state->getValue('popup_agreed_enabled'))
       ->set('popup_hide_agreed', $form_state->getValue('popup_hide_agreed'))
@@ -1140,6 +1251,9 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
       ->set('reload_routes_list', $form_state->getValue('reload_routes_list'))
       ->set('domain_all_sites', $form_state->getValue('domain_all_sites'))
       ->set('cookie_name', $form_state->getValue('cookie_name'))
+      ->set('cookie_value_disagreed', $form_state->getValue('cookie_value_disagreed'))
+      ->set('cookie_value_agreed_show_thank_you', $form_state->getValue('cookie_value_agreed_show_thank_you'))
+      ->set('cookie_value_agreed', $form_state->getValue('cookie_value_agreed'))
       ->set('exclude_uid_1', $form_state->getValue('exclude_uid_1'))
       ->set('better_support_for_screen_readers', $form_state->getValue('better_support_for_screen_readers'))
       ->set('fixed_top_position', $form_state->getValue('fixed_top_position'))
@@ -1159,6 +1273,7 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
       ->set('accept_all_categories_button_label', $form_state->getValue('accept_all_categories_button_label'))
       ->set('containing_element', $form_state->getValue('containing_element'))
       ->set('settings_tab_enabled', $form_state->getValue('settings_tab_enabled'))
+      ->set('accessibility_focus', $form_state->getValue('accessibility_focus'))
       ->save();
 
     parent::submitForm($form, $form_state);
@@ -1191,7 +1306,10 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
           Url::fromUri($input);
         }
         catch (\Exception $exc) {
-          $form_state->setError($element, $this->t('Invalid %name (:message).', ['%name' => $element['#title'], ':message' => $exc->getMessage()]));
+          $form_state->setError($element, $this->t('Invalid %name (:message).', [
+            '%name' => $element['#title'],
+            ':message' => $exc->getMessage(),
+          ]));
         }
       }
     }
@@ -1204,7 +1322,10 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
         Url::fromUserInput($input);
       }
       catch (\Exception $exc) {
-        $form_state->setError($element, $this->t('Invalid URL in %name field (:message).', ['%name' => $element['#title'], ':message' => $exc->getMessage()]));
+        $form_state->setError($element, $this->t('Invalid URL in %name field (:message).', [
+          '%name' => $element['#title'],
+          ':message' => $exc->getMessage(),
+        ]));
       }
     }
   }

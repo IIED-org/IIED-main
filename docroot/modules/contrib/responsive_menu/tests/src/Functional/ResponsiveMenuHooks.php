@@ -18,7 +18,7 @@ class ResponsiveMenuHooks extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['responsive_menu_test'];
+  protected static $modules = ['responsive_menu_test'];
 
   /**
    * {@inheritdoc}
@@ -45,7 +45,7 @@ class ResponsiveMenuHooks extends BrowserTestBase {
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $account = $this->drupalCreateUser(static::$userPermissions);
     $this->drupalLogin($account);

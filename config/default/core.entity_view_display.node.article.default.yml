@@ -25,6 +25,7 @@ third_party_settings:
         layout_id: layout_onecol
         layout_settings:
           label: ''
+          context_mapping: {  }
         components:
           3e9b0cc0-c886-4e3d-ada4-046e9cfb760b:
             uuid: 3e9b0cc0-c886-4e3d-ada4-046e9cfb760b

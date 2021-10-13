@@ -236,7 +236,7 @@ function responsive_menu_responsive_menu_off_canvas_tree_alter(array &$menu) {
   // which adds a unique class to each item and it's children.
   if (!empty($menu['#items'])) {
     foreach ($menu['#items'] as &$item) {
-      responsive_menu_off_canvas_add_class($item);
+      responsive_menu_off_canvas_add_classes($item);
     }
   }
 }
@@ -247,7 +247,7 @@ function responsive_menu_responsive_menu_off_canvas_tree_alter(array &$menu) {
  * @param array $item
  *   The render array of a menu item.
  */
-function responsive_menu_off_canvas_add_class(array &$item) {
+function responsive_menu_off_canvas_add_classes(array &$item) {
   if (!empty($item['original_link'])) {
     $link = $item['original_link'];
     $id = $link->getPluginId();
@@ -261,10 +261,14 @@ function responsive_menu_off_canvas_add_class(array &$item) {
     }
     $uuid = Html::cleanCssIdentifier($parts[1]);
     $item['attributes']->addClass('menu-item--' . $uuid);
+    // Get the name of the menu and add it to the menu item's class list
+    $link__menu_name = $link->getMenuName();
+    $menu_name = Html::cleanCssIdentifier($link__menu_name);
+    $item['attributes']->addClass('menu-name--' . $menu_name);
   }
   if (!empty($item['below'])) {
     foreach ($item['below'] as &$below) {
-      responsive_menu_off_canvas_add_class($below);
+      responsive_menu_off_canvas_add_classes($below);
     }
   }
 }

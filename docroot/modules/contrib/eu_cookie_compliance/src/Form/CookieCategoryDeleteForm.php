@@ -36,6 +36,7 @@ class CookieCategoryDeleteForm extends EntityConfirmFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    \Drupal::service('eu_cookie_compliance.clear_cache')->clearCache();
     $this->entity->delete();
 
     $this->messenger()->addMessage(

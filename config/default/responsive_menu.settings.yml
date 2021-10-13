@@ -21,6 +21,6 @@ wrapper_admin: true
 wrapper_theme: false
 use_polyfills: false
 modify_viewport: true
-use_bootstrap: false
+use_bootstrap: true
 _core:
   default_config_hash: 7oNO5Ci1XbGo6pXiGAo8fY7GXlxy41RhL7lGyt2OXYw

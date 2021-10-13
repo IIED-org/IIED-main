@@ -13,6 +13,7 @@ dependencies:
   module:
     - image
     - layout_builder
+    - layout_discovery
     - text
     - user
 third_party_settings:
@@ -23,6 +24,7 @@ third_party_settings:
         layout_id: layout_onecol
         layout_settings:
           label: ''
+          context_mapping: {  }
         components:
           b8c5a12f-7b58-4877-ad20-bf8de81b32b5:
             uuid: b8c5a12f-7b58-4877-ad20-bf8de81b32b5
@@ -83,6 +85,16 @@ third_party_settings:
               id: 'extra_field_block:node:article:links'
             additional: {  }
             weight: 3
+          e0ee1c66-9238-45c7-9570-02fad5bdd7fa:
+            uuid: e0ee1c66-9238-45c7-9570-02fad5bdd7fa
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'extra_field_block:node:article:sharing_buttons'
+            additional: {  }
+            weight: 4
         third_party_settings: {  }
 _core:
   default_config_hash: 4NcL2hSQZBpJbYtNuh5jC6kyQTcAc1m5bQpTegEWEso
@@ -121,6 +133,11 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  sharing_buttons:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
 hidden:
   comment: true
   langcode: true

@@ -7,6 +7,8 @@ use Drupal\migrate\MigrateExecutableInterface;
 use Drupal\migrate\Row;
 use Drupal\migrate\MigrateException;
 
+// cspell:ignore skłodowska
+
 /**
  * Returns a substring of the input value.
  *
@@ -53,7 +55,6 @@ use Drupal\migrate\MigrateException;
  *      source: some_text_field
  *    -
  *      plugin: substr
- *      source: some_text_field
  *      start: 6
  *      length: 10
  * @endcode

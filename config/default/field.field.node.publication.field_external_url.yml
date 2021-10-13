@@ -14,7 +14,7 @@ bundle: publication
 label: 'Externally hosted publication URL (for ''X'' records only)'
 description: "<i><big><strong>Hint:</strong> The URL where the publication can be accessed</big></i>\r\n<p><i><big>Note: Link text will be displayed as a link in place of the URL, e.g. 'Download from publishers website'. If the publication is not available for free, add '(paywall)'.</big></i></p>"
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
