@@ -1,1 +1,4 @@
 label: 'Pojam taksonomije'
+display:
+  default:
+    display_title: Zadano

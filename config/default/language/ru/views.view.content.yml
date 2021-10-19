@@ -27,6 +27,7 @@ display:
           expose:
             label: Язык
       title: Содержимое
+    display_title: 'По умолчанию'
   page_1:
     display_options:
       menu:

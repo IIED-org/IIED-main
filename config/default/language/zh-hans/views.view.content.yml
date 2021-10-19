@@ -27,6 +27,7 @@ display:
           expose:
             label: 语言
       title: 内容
+    display_title: 默认
   page_1:
     display_options:
       menu:

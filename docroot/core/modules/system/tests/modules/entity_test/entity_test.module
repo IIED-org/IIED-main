@@ -706,6 +706,21 @@ function entity_test_entity_prepare_view($entity_type, array $entities, array $d
       }
     }
   }
+
+  // Add a visually hidden data attribute with the result from the ::toUrl
+  // method to check that the method falls back to the right language
+  // when the entity doesn't have an active language set.
+  //
+  // @see \Drupal\Tests\language\Functional\LanguageNegotiationContentEntityTest::testContentEntityLanguageFallback
+  if ($entity->getEntityTypeId() == 'entity_test' && $entity->bundle() == 'language_test') {
+    $build['to_url'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'div',
+      '#attributes' => [
+        'data-to-url' => $entity->toUrl()->toString(),
+      ],
+    ];
+  }
 }
 
 /**
@@ -716,6 +731,20 @@ function entity_test_entity_display_build_alter(&$build, $context) {
   $entity = $context['entity'];
   if ($entity->getEntityTypeId() == 'entity_test' && $entity->bundle() == 'display_build_alter_bundle') {
     $build['entity_display_build_alter']['#markup'] = 'Content added in hook_entity_display_build_alter for entity id ' . $entity->id();
+  }
+
+  // Add a visually hidden data attribute with the result from the ::toUrl
+  // method to check that the method falls back to the right language
+  // when the entity doesn't have an active language set.
+  // @see \Drupal\Tests\language\Functional\LanguageNegotiationContentEntityTest::testContentEntityLanguageFallback
+  if ($entity->getEntityTypeId() == 'entity_test' && $entity->bundle() == 'language_test') {
+    $build['to_url'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'div',
+      '#attributes' => [
+        'data-to-url' => $entity->toUrl()->toString(),
+      ],
+    ];
   }
 }
 

@@ -1,5 +1,6 @@
 display:
   default:
+    display_title: 'По умолчанию'
     display_options:
       fields:
         operations:

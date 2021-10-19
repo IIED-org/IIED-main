@@ -1,4 +1,6 @@
 display:
+  default:
+    display_title: Predefinido
   block_1:
     display_options:
       block_category: Utilizador

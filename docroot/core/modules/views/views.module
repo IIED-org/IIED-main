@@ -68,9 +68,6 @@ function views_views_pre_render($view) {
         ],
       ],
     ];
-    if ($view->exposed_widgets) {
-      $view->element['#attached']['drupalSettings']['views']['ajaxViews']['views_dom_id:' . $view->dom_id]['view_html_id'] = $view->exposed_widgets['#id'];
-    }
     $view->element['#attached']['library'][] = 'views/views.ajax';
   }
 

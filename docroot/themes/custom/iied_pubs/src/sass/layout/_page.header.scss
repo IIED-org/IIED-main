@@ -22,4 +22,7 @@
   border-bottom: 1px solid transparent;
   border-image: linear-gradient(to right, $pink , $orange);
   border-image-slice: 1;
+  border-right: 0;
+  border-left: 0;
+  border-top: 0;
 }

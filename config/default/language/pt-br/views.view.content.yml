@@ -27,6 +27,7 @@ display:
           expose:
             label: Idioma
       title: Conteúdo
+    display_title: Padrão
   page_1:
     display_options:
       menu:

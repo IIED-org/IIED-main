@@ -27,6 +27,7 @@ display:
           expose:
             label: اللغة
       title: المحتوى
+    display_title: الافتراضي
   page_1:
     display_options:
       menu:

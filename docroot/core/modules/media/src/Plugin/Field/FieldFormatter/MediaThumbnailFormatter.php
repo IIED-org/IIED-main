@@ -144,7 +144,7 @@ class MediaThumbnailFormatter extends ImageFormatter {
     foreach ($media_items as $delta => $media) {
       $elements[$delta] = [
         '#theme' => 'image_formatter',
-        '#item' => $media->get('thumbnail')->first(),
+        '#item' => $media->image ? $media->image : $media->thumbnail,
         '#item_attributes' => [],
         '#image_style' => $this->getSetting('image_style'),
         '#url' => $this->getMediaThumbnailUrl($media, $items->getEntity()),
