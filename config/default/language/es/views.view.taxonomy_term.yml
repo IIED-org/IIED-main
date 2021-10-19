@@ -1,1 +1,4 @@
 label: 'Término de taxonomía'
+display:
+  default:
+    display_title: 'Por defecto'

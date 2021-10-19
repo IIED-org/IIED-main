@@ -43,7 +43,7 @@ class ExposedFormRenderTest extends ViewsKernelTestBase {
     $output = $exposed_form->renderExposedForm();
     $this->setRawContent(\Drupal::service('renderer')->renderRoot($output));
 
-    $this->assertFieldByXpath('//form/@id', Html::cleanCssIdentifier('views-exposed-form-' . $view->storage->id() . '-' . $view->current_display . '--2'), 'Expected form ID found.');
+    $this->assertFieldByXpath('//form/@id', Html::cleanCssIdentifier('views-exposed-form-' . $view->storage->id() . '-' . $view->current_display), 'Expected form ID found.');
 
     $view->setDisplay('page_1');
     $expected_action = $view->display_handler->getUrlInfo()->toString();

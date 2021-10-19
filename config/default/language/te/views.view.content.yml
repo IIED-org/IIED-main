@@ -22,6 +22,7 @@ display:
           expose:
             label: భాష
       title: సారము
+    display_title: అప్రమేయం
   page_1:
     display_options:
       menu:

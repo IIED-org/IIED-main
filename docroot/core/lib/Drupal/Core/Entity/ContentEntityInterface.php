@@ -23,4 +23,25 @@ namespace Drupal\Core\Entity;
  */
 interface ContentEntityInterface extends \Traversable, FieldableEntityInterface, TranslatableRevisionableInterface, SynchronizableInterface {
 
+  /**
+   * Marks the content entity as language aware.
+   *
+   * @param bool $flag
+   *   TRUE if this entity is being consulted as language aware.
+   */
+  public function setLanguageAware($flag = TRUE);
+
+  /**
+   * Checks if the entity is language aware or unaware.
+   *
+   * Unaware means that the entity inherits the language from the current
+   * user language, even if that means that the current language is different
+   * from the entity's default language. Language aware entities will default
+   * to the default language of the entity.
+   *
+   * @return bool
+   *   TRUE if language aware-..
+   */
+  public function isLanguageAware();
+
 }

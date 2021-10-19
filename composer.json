@@ -186,7 +186,9 @@
           },
           "drupal/core": {
             "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2020-09-03/3007424-108.patch",
-            "Duplicate exposed filter form IDs": "https://www.drupal.org/files/issues/2020-09-08/randomize_exposed_filter_block_form_ID-2894747-53-d8.patch"
+            "Wrong language handling in MediaThumbnailFormatter when linking": "https://www.drupal.org/files/issues/2021-05-06/2961404-17.patch",
+            "Media Thumbnail Formatter doesn't translate the title attribute correctly":"https://www.drupal.org/files/issues/2019-11-12/media-thumbnail-formatter-title-not-translated-workaround-3089216-4.patch",
+            "The language of content entities incorrectly falls back to the default language...":"https://www.drupal.org/files/issues/2021-09-16/3061761-46.patch"
           },
           "drupal/facets": {
             "AJAX facets broken": "https://www.drupal.org/files/issues/2021-06-21/Facets-with-AJAX-not-working-in-most-of-situations.patch",

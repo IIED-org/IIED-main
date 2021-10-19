@@ -1,1 +1,4 @@
 label: 分类术语
+display:
+  default:
+    display_title: 默认

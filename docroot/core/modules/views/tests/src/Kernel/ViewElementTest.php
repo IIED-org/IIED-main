@@ -127,7 +127,7 @@ class ViewElementTest extends ViewsKernelTestBase {
     $this->setRawContent($renderer->renderRoot($render));
 
     // Ensure that the exposed form is rendered.
-    $this->assertCount(1, $this->xpath('//form[@class="views-exposed-form views-exposed-form-test-view-embed-embed-2"]'));
+    $this->assertCount(1, $this->xpath('//form[@class="views-exposed-form"]'));
   }
 
   /**

@@ -27,6 +27,7 @@ display:
           expose:
             label: 'Ngôn ngữ'
       title: 'Nội dung'
+    display_title: 'Mặc định'
   page_1:
     display_options:
       menu:

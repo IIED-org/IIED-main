@@ -1,4 +1,6 @@
 display:
+  default:
+    display_title: Zadano
   block_1:
     display_options:
       block_category: Korisnik

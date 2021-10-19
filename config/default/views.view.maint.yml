@@ -3737,8 +3737,8 @@ display:
             9:
               action_id: views_bulk_edit
               preconfiguration:
-                add_confirmation: 0
-                get_bundles_from_results: 1
+                add_confirmation: false
+                get_bundles_from_results: true
           force_selection_info: false
           plugin_id: views_bulk_operations_bulk_form
         field_product_code_new:
@@ -4168,14 +4168,14 @@ display:
           separator: ', '
           field_api_classes: false
           plugin_id: field
-        field_publisher:
-          id: field_publisher
-          table: node__field_publisher
-          field: field_publisher
+        field_author_s_:
+          id: field_author_s_
+          table: node__field_author_s_
+          field: field_author_s_
           relationship: none
           group_type: group
           admin_label: ''
-          label: Publisher(s)
+          label: Author(s)
           exclude: false
           alter:
             alter_text: false
@@ -4231,14 +4231,14 @@ display:
           separator: ', '
           field_api_classes: false
           plugin_id: field
-        field_journal_ref:
-          id: field_journal_ref
-          table: node__field_journal_ref
-          field: field_journal_ref
+        field_publisher:
+          id: field_publisher
+          table: node__field_publisher
+          field: field_publisher
           relationship: none
           group_type: group
           admin_label: ''
-          label: Journalref
+          label: Publisher(s)
           exclude: false
           alter:
             alter_text: false
@@ -4279,11 +4279,11 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          click_sort_column: value
-          type: string
+          click_sort_column: target_id
+          type: entity_reference_label
           settings:
-            link_to_entity: false
-          group_column: value
+            link: true
+          group_column: target_id
           group_columns: {  }
           group_rows: true
           delta_limit: 0
@@ -4413,6 +4413,69 @@ display:
           group_columns: {  }
           group_rows: true
           delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          plugin_id: field
+        field_theme_s_:
+          id: field_theme_s_
+          table: node__field_theme_s_
+          field: field_theme_s_
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: Theme(s)
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: target_id
+          type: entity_reference_label
+          settings:
+            link: true
+          group_column: target_id
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 3
           delta_offset: 0
           delta_reversed: false
           delta_first_last: false
@@ -4627,7 +4690,7 @@ display:
         options:
           items_per_page: 100
           offset: 0
-          id: 0
+          id: 1
           total_pages: null
           tags:
             previous: '‹ Previous'
@@ -4635,10 +4698,10 @@ display:
             first: '« First'
             last: 'Last »'
           expose:
-            items_per_page: false
+            items_per_page: true
             items_per_page_label: 'Items per page'
-            items_per_page_options: '5, 10, 25, 50'
-            items_per_page_options_all: false
+            items_per_page_options: '25,50,100'
+            items_per_page_options_all: true
             items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
@@ -4897,6 +4960,56 @@ display:
             group_items: {  }
           reduce_duplicates: false
           plugin_id: list_field
+        field_theme_s__target_id:
+          id: field_theme_s__target_id
+          table: node__field_theme_s_
+          field: field_theme_s__target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_theme_s__target_id_op
+            label: Theme(s)
+            description: ''
+            use_operator: false
+            operator: field_theme_s__target_id_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_themes
+            required: false
+            remember: false
+            multiple: true
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              viewer: '0'
+              editor: '0'
+              manager: '0'
+              administrator: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          type: select
+          limit: true
+          vid: theme
+          hierarchy: false
+          error_message: true
+          plugin_id: taxonomy_index_tid
       filter_groups:
         operator: AND
         groups:
@@ -4908,12 +5021,13 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - user
         - 'user.node_grants:view'
         - user.roles
       tags:
+        - 'config:field.storage.node.field_author_s_'
         - 'config:field.storage.node.field_date_published'
         - 'config:field.storage.node.field_document_type'
-        - 'config:field.storage.node.field_journal_ref'
         - 'config:field.storage.node.field_lit_code'
         - 'config:field.storage.node.field_pdf_pages'
         - 'config:field.storage.node.field_product_code'
@@ -4923,6 +5037,7 @@ display:
         - 'config:field.storage.node.field_publisher_legacy'
         - 'config:field.storage.node.field_series'
         - 'config:field.storage.node.field_source_publication'
+        - 'config:field.storage.node.field_theme_s_'
   page_10:
     display_plugin: page
     id: page_10
@@ -4990,8 +5105,8 @@ display:
             9:
               action_id: views_bulk_edit
               preconfiguration:
-                add_confirmation: 0
-                get_bundles_from_results: 1
+                add_confirmation: false
+                get_bundles_from_results: true
           force_selection_info: false
           plugin_id: views_bulk_operations_bulk_form
         field_product_code_new:
@@ -11912,7 +12027,7 @@ display:
             10:
               action_id: views_bulk_edit
               preconfiguration:
-                get_bundles_from_results: 1
+                get_bundles_from_results: true
             12:
               action_id: pathauto_update_alias
           plugin_id: views_bulk_operations_bulk_form
@@ -13139,7 +13254,7 @@ display:
             10:
               action_id: views_bulk_edit
               preconfiguration:
-                get_bundles_from_results: 1
+                get_bundles_from_results: true
             12:
               action_id: pathauto_update_alias
           plugin_id: views_bulk_operations_bulk_form

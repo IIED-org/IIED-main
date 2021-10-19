@@ -98,6 +98,9 @@ class EntityRepository implements EntityRepositoryInterface {
         $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
         $entity->addCacheContexts(['languages:' . LanguageInterface::TYPE_CONTENT]);
       }
+      elseif ($entity instanceof ContentEntityInterface) {
+        $translation->setLanguageAware();
+      }
 
       // Retrieve language fallback candidates to perform the entity language
       // negotiation, unless the current translation is already the desired one.

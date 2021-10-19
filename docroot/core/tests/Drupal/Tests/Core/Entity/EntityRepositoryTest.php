@@ -90,6 +90,7 @@ class EntityRepositoryTest extends UnitTestCase {
     $entity->getTranslation('custom_langcode')->willReturn($translated_entity->reveal());
     $entity->getTranslationLanguages()->willReturn([new Language(['id' => 'en']), new Language(['id' => 'custom_langcode'])]);
     $entity->addCacheContexts(['languages:language_content'])->shouldBeCalled();
+    $entity->setLanguageAware()->shouldBeCalled();
 
     $this->assertSame($entity->reveal(), $this->entityRepository->getTranslationFromContext($entity->reveal()));
     $this->assertSame($translated_entity->reveal(), $this->entityRepository->getTranslationFromContext($entity->reveal(), 'custom_langcode'));

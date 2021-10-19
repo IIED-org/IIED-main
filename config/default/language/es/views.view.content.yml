@@ -27,6 +27,7 @@ display:
           expose:
             label: Idioma
       title: Contenido
+    display_title: 'Por defecto'
   page_1:
     display_options:
       menu:

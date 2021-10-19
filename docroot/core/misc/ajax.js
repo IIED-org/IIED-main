@@ -431,7 +431,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     var _this = this;
 
     if (this.progress.element) {
-      $('.' + $(this.progress.element).attr('class').replace(/\s/g, '.')).remove();
+      $(this.progress.element).remove();
     }
 
     if (this.progress.object) {

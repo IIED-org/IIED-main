@@ -27,6 +27,7 @@ display:
           expose:
             label: Język
       title: Zawartość
+    display_title: Domyślny
   page_1:
     display_options:
       menu:
