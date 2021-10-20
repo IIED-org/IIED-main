@@ -77,6 +77,7 @@
         "drupal/media_thumbnails_pdf": "^1.0",
         "drupal/merge_translations": "^1.1",
         "drupal/metatag": "^1.15",
+        "drupal/migrate_file": "^2.0",
         "drupal/name": "^1.0@RC",
         "drupal/paragraphs": "^1.12",
         "drupal/path_redirect_import": "^1.0@beta",
@@ -177,9 +178,6 @@
           },
           "drupal/radix": {
             "Language switcher patch": "https://www.drupal.org/files/issues/2020-01-05/3060563-7.patch"
-          },
-          "drupal/migrate_file": {
-            "D9 compatibility": "https://www.drupal.org/files/issues/2020-06-23/migrate_file-3148126-3.patch"
           },
           "drupal/media_thumbnails": {
             "Make thumbnails editable": "https://www.drupal.org/files/issues/2020-08-06/media_thumbnails-3149842-4.patch"

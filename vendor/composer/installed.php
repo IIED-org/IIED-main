@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '0b6d8e249eeb081e30e4534faf53db4aa693e038',
+        'reference' => 'd66dc71d2397bbaceaaee69f0d4c9515da27a371',
         'name' => 'drupal/recommended-project',
         'dev' => true,
     ),
@@ -1362,6 +1362,15 @@
                 0 => '9.2.7',
             ),
         ),
+        'drupal/migrate_file' => array(
+            'pretty_version' => '2.0.0',
+            'version' => '2.0.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/migrate_file',
+            'aliases' => array(),
+            'reference' => '2.0.0',
+            'dev_requirement' => false,
+        ),
         'drupal/migrate_plus' => array(
             'pretty_version' => '5.1.0',
             'version' => '5.1.0.0',
@@ -1550,7 +1559,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '0b6d8e249eeb081e30e4534faf53db4aa693e038',
+            'reference' => 'd66dc71d2397bbaceaaee69f0d4c9515da27a371',
             'dev_requirement' => false,
         ),
         'drupal/redirect' => array(

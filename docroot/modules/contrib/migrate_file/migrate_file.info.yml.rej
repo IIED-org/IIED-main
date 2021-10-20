@@ -1,0 +1,16 @@
+***************
+*** 2,7 ****
+  type: module
+  description: Additional support for migrating files including importing files, downloading remote files, and using remote uris (without download).
+  core: 8.x
+  package: Migrate
+  dependencies:
+    - drupal:migrate
+--- 2,8 ----
+  type: module
+  description: Additional support for migrating files including importing files, downloading remote files, and using remote uris (without download).
+  core: 8.x
++ core_version_requirement: ^8 || ^9
+  package: Migrate
+  dependencies:
+    - drupal:migrate
