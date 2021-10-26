@@ -798,33 +798,33 @@ $settings['config_sync_directory'] = $app_root . '/../config/default/';
 
 // See https://docs.acquia.com/acquia-search/multiple-cores/override/
 
-// function acquia_search_override_example_20210427() {
-//   $solr_core_mapping = [
-//     // Acquia environments.
-//     'prod' => 'AGHX-142716.prod.irforum',
-//     'test' => 'AGHX-142716.test.irforum',
-//     'dev' =>  'AGHX-142716.dev.irforum',
-//     // Fallback Solr index to use for all other cases.
-//     // Including Local or other non-acquia-hosted Drupal environment
-//     'FALLBACK' => 'AGHX-142716.dev.irforum'
-//   ];
-//
-//   // END of editable part ==============
-//
-//   // Choose fallback core by default.
-//   $chosen_core = $solr_core_mapping['FALLBACK'];
-//
-//   // Try to pick a core from the list according to the current environment.
-//   $ah_env = @$GLOBALS['gardens_site_settings']['env'] ?: @$_ENV['AH_SITE_ENVIRONMENT'];
-//   if (!empty($ah_env) && isset($solr_core_mapping[$ah_env])) {
-//     $chosen_core = $solr_core_mapping[$ah_env];
-//   }
-//
-//   return $chosen_core;
-// }
+function acquia_search_override_example_20210427() {
+  $solr_core_mapping = [
+    // Acquia environments.
+    'prod' => 'ERTY-144088.prod.gwi',
+    'test' => 'ERTY-144088.test.gwi',
+    'dev' =>  'ERTY-144088.dev.gwi',
+    // Fallback Solr index to use for all other cases.
+    // Including Local or other non-acquia-hosted Drupal environment
+    'FALLBACK' => 'ERTY-144088.dev.gwi'
+  ];
 
-//$config['acquia_search.settings']['override_search_core'] = acquia_search_override_example_20210427();
-//$config['acquia_search.solr.settings']['override_search_core'] = 'AGHX-142716.dev.irforum';
+  // END of editable part ==============
+
+  // Choose fallback core by default.
+  $chosen_core = $solr_core_mapping['FALLBACK'];
+
+  // Try to pick a core from the list according to the current environment.
+  $ah_env = @$GLOBALS['gardens_site_settings']['env'] ?: @$_ENV['AH_SITE_ENVIRONMENT'];
+  if (!empty($ah_env) && isset($solr_core_mapping[$ah_env])) {
+    $chosen_core = $solr_core_mapping[$ah_env];
+  }
+
+  return $chosen_core;
+}
+
+$config['acquia_search.settings']['override_search_core'] = acquia_search_override_example_20210427();
+//$config['acquia_search.solr.settings']['override_search_core'] = 'ERTY-144088.dev.gwi';
 
 $_env_is_prod = isset($_ENV['AH_SITE_ENVIRONMENT']) && $_ENV['AH_SITE_ENVIRONMENT'] == 'prod';
 $config['config_split.config_split.dev']['status'] = !$_env_is_prod;
