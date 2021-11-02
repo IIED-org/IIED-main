@@ -4864,15 +4864,16 @@ display:
         page_8: '0'
         page_9: '0'
       filename: '[view:title]_[date:html_datetime].csv'
-      automatic_download: true
+      automatic_download: false
       store_in_public_file_directory: null
-      redirect_to_display: page_1
+      redirect_to_display: none
       custom_redirect_path: false
-      include_query_params: true
+      include_query_params: false
       export_method: batch
       export_batch_size: 1000
       auth:
         - cookie
+      redirect_path: ''
     cache_metadata:
       max-age: -1
       contexts:
