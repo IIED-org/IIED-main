@@ -239,13 +239,16 @@ function _readonlymode_form_check(array &$form, $form_id, $submitted = TRUE) {
 /**
  * Check for form_id in a given list.
  *
- * @param array $list
+ * @param string $list
  *   A string of form id's separated by newlines.
  *
  * @return bool
  *   TRUE when matched, FALSE otherwise.
  */
-function _readonlymode_form_list_check($form_id, array $list) {
+function _readonlymode_form_list_check($form_id, $list) {
+  if (!is_string($list)) {
+    return FALSE;
+  }
   $l = preg_split('/(\r\n|\n|\r)/', $list);
   foreach ($l as $word) {
     // Skip empty words.

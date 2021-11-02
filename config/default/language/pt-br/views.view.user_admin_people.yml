@@ -2,6 +2,9 @@ display:
   default:
     display_title: Padrão
     display_options:
+      exposed_form:
+        options:
+          submit_button: Filter
       fields:
         name:
           label: Usuário
