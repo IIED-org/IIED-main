@@ -1,3 +1,6 @@
+label: 'Dashboard recent content'
 display:
   default:
     display_title: Domyślny
+    display_options:
+      title: 'Dashboard recent content'

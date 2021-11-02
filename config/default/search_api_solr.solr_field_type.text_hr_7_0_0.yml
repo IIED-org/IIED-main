@@ -362,8 +362,7 @@ text_files:
     znati
   synonyms: |
     drupal, durpal
-  protwords: |
-
+  protwords: ''
   accents: |
     # À => A
     "\u00C0" => "A"
