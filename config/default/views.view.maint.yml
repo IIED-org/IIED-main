@@ -4866,9 +4866,9 @@ display:
       filename: '[view:title]_[date:html_datetime].csv'
       automatic_download: true
       store_in_public_file_directory: null
-      redirect_to_display: none
+      redirect_to_display: page_1
       custom_redirect_path: false
-      include_query_params: false
+      include_query_params: true
       export_method: batch
       export_batch_size: 1000
       auth:
