@@ -1,0 +1,7 @@
+name: gwi
+recipe: acquia
+config:
+  acli_version: latest
+  ah_application_uuid: eeab35dc-2307-455c-b232-5f436ecb0af8
+  ah_site_group: gwi
+  php: '7.4'
