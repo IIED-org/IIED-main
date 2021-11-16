@@ -1,0 +1,7 @@
+name: irforum
+recipe: acquia
+config:
+  acli_version: latest
+  ah_application_uuid: a70da4cc-a976-4f36-999d-94e46d72df37
+  ah_site_group: irforum
+  php: '7.4'
