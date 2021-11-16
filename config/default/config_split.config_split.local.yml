@@ -1,12 +1,13 @@
 uuid: 316e95b0-a2f4-4d57-863b-a18707deabaa
 langcode: en
-status: false
+status: true
 dependencies: {  }
 id: local
 label: Local
-description: 'Additional settings for local development (MacOS)'
+description: 'Additional settings for local development (e.g. lando)'
 folder: ../config/splits/local
-module: {  }
+module:
+  stage_file_proxy: 0
 theme: {  }
 blacklist: {  }
 graylist:
