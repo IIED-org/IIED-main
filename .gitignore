@@ -1,0 +1,21 @@
+
+# Ignore Drupal's file directory
+/web/sites/*/files/
+
+# Ignore IDE files
+.idea/
+.vscode/
+*.code-workspace
+
+# Ignore .env files as they are personal
+/.env
+
+# Ignore DB dumps
+*.sql
+*.sql.gz
+*.mysql
+*.mysql.gz
+
+# Ignore Lando overrides
+.lando.local.yml
+
