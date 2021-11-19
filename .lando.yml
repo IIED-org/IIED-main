@@ -6,6 +6,11 @@ config:
   ah_site_group: gwi
   php: '7.4'
 services:
+  appserver:
+    overrides:
+      environment:
+        DRUSH_OPTIONS_ROOT: '/app/docroot'
+        DRUSH_OPTIONS_URI: 'https://gwi.lndo.site'
   d7db:
     type: mysql
     creds:
