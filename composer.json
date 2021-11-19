@@ -93,6 +93,7 @@
         "drupal/search_api_autocomplete": "^1.4",
         "drupal/serial": "^1.0@alpha",
         "drupal/sidr": "^3.1",
+        "drupal/stage_file_proxy": "^1.2",
         "drupal/string_translation_ui": "^1.2",
         "drupal/tailwindcss": "^2.8",
         "drupal/taxonomy_manager": "^2.0",

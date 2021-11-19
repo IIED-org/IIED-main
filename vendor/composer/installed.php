@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '314b1f8f001f1fdfbd50ed8d3458a0050335d563',
+        'reference' => '2cda7d07c9598b92561f60a7d0b3f627a55fb95f',
         'name' => 'drupal/recommended-project',
         'dev' => true,
     ),
@@ -1559,11 +1559,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-<<<<<<< HEAD
-            'reference' => 'af77d8379c439647b487cab1d707870b24f2c2cf',
-=======
-            'reference' => '314b1f8f001f1fdfbd50ed8d3458a0050335d563',
->>>>>>> edceb2126dcf9c91ec1112dfce9c890f7790b1f1
+            'reference' => '2cda7d07c9598b92561f60a7d0b3f627a55fb95f',
             'dev_requirement' => false,
         ),
         'drupal/redirect' => array(
@@ -1678,6 +1674,15 @@
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/sophron',
             'aliases' => array(),
             'reference' => '8.x-1.1',
+            'dev_requirement' => false,
+        ),
+        'drupal/stage_file_proxy' => array(
+            'pretty_version' => '1.2.0',
+            'version' => '1.2.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/stage_file_proxy',
+            'aliases' => array(),
+            'reference' => '8.x-1.2',
             'dev_requirement' => false,
         ),
         'drupal/standard' => array(
