@@ -1,6 +1,9 @@
 
 # Ignore Drupal's file directory
-/web/sites/*/files/
+docroot/sites/*/files/
+
+# Ignore settings.local.php for local developer ocverrides. 
+docroot/sites/default/settings.local.php
 
 # Ignore IDE files
 .idea/
