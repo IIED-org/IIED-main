@@ -5,3 +5,19 @@ config:
   ah_application_uuid: eeab35dc-2307-455c-b232-5f436ecb0af8
   ah_site_group: gwi
   php: '7.4'
+services:
+  d7db:
+    type: mysql
+    creds:
+      user: database
+      password: database
+      database: database
+  adminer:
+    type: compose
+    services:
+      image: dehy/adminer
+      command: '/bin/s6-svscan /etc/services.d'
+    portforward: true
+proxy:
+  adminer:
+    - adminer.gwi.lndo.site
