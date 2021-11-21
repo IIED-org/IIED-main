@@ -14,6 +14,10 @@ using Lando, Docker and Acquia command line acli.
 
 ## Requirements
 
+To run locally, you will need Lando and Docker.
+Note that the macOS and Windows Lando installer will install Docker for you if
+needed. Please check the relevent documentation.
+
  - Lando https://docs.lando.dev/basics/installation.html
  - Docker https://docs.lando.dev/basics/installation.html#system-requirements
 
@@ -31,7 +35,7 @@ cd gitroot
 ```
 lando start
 ```
-
+3. U
 
 
 
