@@ -100,7 +100,7 @@ Clear the cache:
 
 ```
 lando drush cr
-'''
+```
 
 Follow the appserver logs:
 ```
@@ -112,7 +112,6 @@ Inspect the lando configuration:
 ```
 lando info
 ```
-
 
 
 
