@@ -200,6 +200,9 @@
           },
           "drupal/views_field_view": {
             "Contextual filter parameter is not working":"https://www.drupal.org/files/issues/2020-09-17/multible_Contextual_filter_parameter-2873359-25.patch"
+          },
+          "drupal/readonlymode": {
+            "Got fatal error when running this module":"https://www.drupal.org/files/issues/2020-12-23/readonlymode-string_not_array-3115119-9.patch"
           }
         }
     }

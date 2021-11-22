@@ -2,6 +2,9 @@ display:
   default:
     display_title: 'Par défaut'
     display_options:
+      exposed_form:
+        options:
+          submit_button: Filter
       fields:
         subject:
           label: Objet

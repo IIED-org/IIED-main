@@ -1,4 +1,4 @@
-name: gwi
+name: iied-main
 recipe: acquia
 config:
   acli_version: latest
@@ -7,10 +7,14 @@ config:
   php: '7.4'
 services:
   appserver:
+    webroot: docroot
+    xdebug: true
+    config:
+      php: .vscode/php.ini
     overrides:
       environment:
         DRUSH_OPTIONS_ROOT: '/app/docroot'
-        DRUSH_OPTIONS_URI: 'https://gwi.lndo.site'
+        DRUSH_OPTIONS_URI: 'https://iied-main.lndo.site'
   d7db:
     type: mysql
     creds:
@@ -25,4 +29,5 @@ services:
     portforward: true
 proxy:
   adminer:
-    - adminer.gwi.lndo.site
+    - adminer.iied-main.lndo.site
+

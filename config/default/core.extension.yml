@@ -79,6 +79,7 @@ module:
   metatag_pinterest: 0
   metatag_twitter_cards: 0
   migrate: 0
+  migrate_file: 0
   migrate_plus: 0
   migrate_pubs: 0
   migrate_source_csv: 0
@@ -134,6 +135,7 @@ module:
   paragraphs: 11
   standard: 1000
   eu_cookie_compliance: 1001
+  readonlymode: 9999
 theme:
   bartik: 0
   seven: 0

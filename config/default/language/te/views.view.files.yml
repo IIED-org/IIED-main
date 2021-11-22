@@ -2,6 +2,9 @@ display:
   default:
     display_title: అప్రమేయం
     display_options:
+      exposed_form:
+        options:
+          submit_button: Filter
       fields:
         filename:
           label: పేరు

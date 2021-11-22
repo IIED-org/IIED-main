@@ -29,6 +29,7 @@ permissions:
   - 'edit terms in organisation'
   - 'edit terms in person'
   - 'notify of path changes'
+  - 'publish any content'
   - 'publish any node type publication'
   - 'publish editable content'
   - 'publish editable node type publication'
