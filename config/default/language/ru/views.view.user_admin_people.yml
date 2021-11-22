@@ -2,6 +2,9 @@ display:
   default:
     display_title: 'По умолчанию'
     display_options:
+      exposed_form:
+        options:
+          submit_button: Filter
       fields:
         name:
           label: 'Имя пользователя'

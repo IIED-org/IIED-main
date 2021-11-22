@@ -2,6 +2,9 @@ display:
   default:
     display_title: Domyślny
     display_options:
+      exposed_form:
+        options:
+          submit_button: Filter
       fields:
         name:
           label: 'Nazwa użytkownika'

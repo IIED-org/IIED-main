@@ -61,6 +61,9 @@ AddEncoding gzip svgz
 # Various rewrite rules.
 <IfModule mod_rewrite.c>
   RewriteEngine on
+  # Determine whether environment is production and serve different robots.txt
+  RewriteCond %{ENV:AH_SITE_ENVIRONMENT} !prod
+  RewriteRule ^robots\.txt$ robots-noindex.txt [L]
 
   RewriteCond %{ENV:AH_SITE_ENVIRONMENT} prod [NC]
   RewriteCond %{HTTPS} off
@@ -77,7 +80,7 @@ AddEncoding gzip svgz
   # Strip off html suffix if exists
   RewriteCond %{THE_REQUEST} /([^.]+)\.html [NC]
   RewriteRule ^ /%1 [NC,L,R=301]
-  
+
   # Redirect legacy pdf paths
   RewriteRule ^pdfs/(.*)$ /sites/default/files/pdfs/migrate/$1 [R=301,NC,L]
 

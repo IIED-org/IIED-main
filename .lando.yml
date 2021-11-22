@@ -7,6 +7,10 @@ config:
   php: '7.4'
 services:
   appserver:
+    webroot: docroot
+    xdebug: true
+    config:
+      php: .vscode/php.ini
     overrides:
       environment:
         DRUSH_OPTIONS_ROOT: '/app/docroot'
@@ -26,3 +30,4 @@ services:
 proxy:
   adminer:
     - adminer.iied-main.lndo.site
+
