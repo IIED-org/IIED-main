@@ -1,0 +1,34 @@
+# Migration configuration for project nodes.
+id: iied_d7_projects
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - iied_migrate_d7
+class: Drupal\node\Plugin\migrate\D7NodeTranslation
+label: IIED project nodes
+migration_group: iied_migrate_d7
+migration_tags:
+  - nodes
+deriver: Drupal\node\Plugin\migrate\D7NodeDeriver
+source:
+  plugin: d7_node_complete
+  node_type: project
+  key: d7migrate
+process:
+  langcode:
+    -
+      plugin: default_value
+      source: language
+      default_value: und
+  title:
+    -
+      plugin: get
+      source: title
+
+destination:
+  plugin: 'entity_complete:node'
+  translations: true
+  default_bundle: project
+
