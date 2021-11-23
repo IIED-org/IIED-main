@@ -152,12 +152,31 @@ $settings['skip_permissions_hardening'] = TRUE;
  * to use this feature with modules that affect Drupal in a major way such as
  * the language or field module.
  */
-$settings['config_exclude_modules'] = ['devel', 'stage_file_proxy'];
+# $settings['config_exclude_modules'] = ['devel', 'stage_file_proxy'];
 
-/** 
+
+// Migration database source for Drupal 7 migrations.
+$databases['d7migrate']['default'] = [
+  'database' => 'database',
+  'username' => 'database',
+  'password' => 'database',
+  'host' => 'd7db',
+  'port' => '3306',
+  'driver' => 'mysql',
+  'prefix' => '',
+  'collation' => 'utf8mb4_general_ci',
+];
+
+// Defining the pubs key as legacy migrations require this.
+$databases['pubs'] = $databases['d7migrate'];
+
+
+/**
  * Use "local" config split
  */
 $config['config_split.config_split.local']['status'] = TRUE;
+$config['config_split.config_split.live']['status'] = FALSE;
+$config['config_split.config_split.dev']['status'] = FALSE;
 
 /*
  * PHP Error reporting
@@ -166,4 +185,5 @@ error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
 
+// Config for sstage file proxy remote files.
 $config['stage_file_proxy.settings']['origin']  = 'https://pubs.iied.org';

@@ -65,14 +65,77 @@ Using Cloud Application IIED Pubs
 4. Crete settings.local.php
 
 To override certain settings and configuration we can use settings.local.php.
-To do so, copy the example.settings.local.php file from the sites folder to
+To do so, copy the sites/default/iied.example.settings.local.php file to
 sites/default/settings.local.php. This will include some recommended defaults.
 
 ```
-cp docroot/sites/example.settings.local.php  docroot/sites/default/settings.local.php
+cp docroot/sites/default/iied.example.settings.local.php  docroot/sites/default/settings.local.php
 ```
 
-5. Enable and configure stage_file_proxy
+5. Config split
+
+We are using the Config Split module to separate configuration intended for
+specific environments. We have splits for local, dev and live.
+In the docroot/sites/default/iied.example.settings.local.php file we include the
+following:
+
+```
+/**
+ * Use "local" config split
+ */
+$config['config_split.config_split.live']['status'] = FALSE;
+$config['config_split.config_split.dev']['status'] = FALSE;
+$config['config_split.config_split.local']['status'] = TRUE;
+```
+
+This set the 'local' split to active and the 'live' and 'dev' to inactive. With
+this setup, running `drush cr` then `drush cim` will import the local split
+configuration as well as the default configuration. In our case, this will
+enable other modules useful for developers like devel and stage_file_proxy.
+
+To enable a module on the current (probabyl local) split and not have it enabled
+by default. As an example, we'll try this with the help_topics module.
+
+Enable the module
+
+```
+lando drush en help_topics
+```
+
+Then add it to the complete split at:
+
+https://iied-main.lndo.site/admin/config/development/configuration/config-split/local/edit
+
+Clear the cache and export the config.
+
+```
+lando drush cr
+lando drush cex
+```
+
+A git diff will show that the config/default/config_split.config_split.local.yml
+file has been updated to inclide the module, rather than the core.extensions.yml
+
+```
+$ git diff
+diff --git a/config/default/config_split.config_split.local.yml b/config/default/config_split.config_split.local.yml
+index acadb2a47..1ff8d48de 100644
+--- a/config/default/config_split.config_split.local.yml
++++ b/config/default/config_split.config_split.local.yml
+@@ -10,6 +10,7 @@ module:
+   config_devel: 0
+   devel: 0
+   devel_generate: 0
++  help_topics: 0
+   migrate_devel: 0
+   stage_file_proxy: 0
+   views_ui: 0
+```
+
+This should result in the modue being enabled only when the local split is
+active.
+
+6. Enable and configure stage_file_proxy
 
 We should now be able to use drush to run commands in the appserver container.
 To avoid having to copy all files locally, stage_file_proxy can be enabled and
@@ -88,7 +151,7 @@ Now add the the following line to the end of the settings.local.php file.
 $config['stage_file_proxy.settings']['origin']  = 'https://pubs.iied.org';
 ```
 
-6. Common drush commands.
+7. Common drush commands.
 
 Generate a one time login link:
 
