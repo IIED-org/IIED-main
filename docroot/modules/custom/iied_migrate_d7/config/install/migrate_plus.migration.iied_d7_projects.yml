@@ -26,7 +26,10 @@ process:
     -
       plugin: get
       source: title
-
+  body:
+    -
+      plugin: get
+      source: body
 destination:
   plugin: 'entity_complete:node'
   translations: true
