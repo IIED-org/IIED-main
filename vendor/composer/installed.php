@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '3238a1cd0486cac748cf017bdc8a251c0f0bd57f',
+        'reference' => '71667f18ac0563ff88a91c0daffcbbd7242758c3',
         'name' => 'drupal/recommended-project',
         'dev' => true,
     ),
@@ -1559,7 +1559,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '3238a1cd0486cac748cf017bdc8a251c0f0bd57f',
+            'reference' => '71667f18ac0563ff88a91c0daffcbbd7242758c3',
             'dev_requirement' => false,
         ),
         'drupal/redirect' => array(
@@ -1723,6 +1723,15 @@
             'replaced' => array(
                 0 => '9.2.7',
             ),
+        ),
+        'drupal/tailwindcss' => array(
+            'pretty_version' => '2.8.0',
+            'version' => '2.8.0.0',
+            'type' => 'drupal-theme',
+            'install_path' => __DIR__ . '/../../docroot/themes/contrib/tailwindcss',
+            'aliases' => array(),
+            'reference' => '8.x-2.8',
+            'dev_requirement' => false,
         ),
         'drupal/taxonomy' => array(
             'dev_requirement' => false,

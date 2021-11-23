@@ -152,4 +152,18 @@ $settings['skip_permissions_hardening'] = TRUE;
  * to use this feature with modules that affect Drupal in a major way such as
  * the language or field module.
  */
-# $settings['config_exclude_modules'] = ['devel', 'stage_file_proxy'];
+$settings['config_exclude_modules'] = ['devel', 'stage_file_proxy'];
+
+/** 
+ * Use "local" config split
+ */
+$config['config_split.config_split.local']['status'] = TRUE;
+
+/*
+ * PHP Error reporting
+ */
+error_reporting(E_ALL);
+ini_set('display_errors', TRUE);
+ini_set('display_startup_errors', TRUE);
+
+$config['stage_file_proxy.settings']['origin']  = 'https://pubs.iied.org';
