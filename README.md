@@ -9,7 +9,7 @@
 
 ## Local developer setup with Lando
 
-This repositrory comes with a .lano.yml file which will help to set up locally
+This repository comes with a .lando.yml file which will help to set up locally
 using Lando, Docker and Acquia command line acli.
 
 ## Requirements
@@ -26,8 +26,8 @@ needed. Please check the relevent documentation.
 1. Clone this repo and move into the directory that contains the codebase.
 
 ```
-git clone git@github.com:IIED-org/pubs.git gitroot
-cd gitroot
+git clone git@github.com:IIED-org/pubs.git IIED-main
+cd IIED-main
 ```
 
 2. Run lando start to build the docker contaiers.
@@ -62,7 +62,7 @@ Using Cloud Application IIED Pubs
 > 0
 ```
 
-4. Crete settings.local.php
+4. Create settings.local.php
 
 To override certain settings and configuration we can use settings.local.php.
 To do so, copy the sites/default/iied.example.settings.local.php file to
@@ -93,7 +93,11 @@ this setup, running `drush cr` then `drush cim` will import the local split
 configuration as well as the default configuration. In our case, this will
 enable other modules useful for developers like devel and stage_file_proxy.
 
+<<<<<<< HEAD
 To enable a module on the current (probabyl local) split and not have it enabled
+=======
+To enable a module on the current (probably local) split and not have it enabled
+>>>>>>> dev-master
 by default. As an example, we'll try this with the help_topics module.
 
 Enable the module
@@ -137,7 +141,6 @@ active.
 
 6. Enable and configure stage_file_proxy
 
-We should now be able to use drush to run commands in the appserver container.
 To avoid having to copy all files locally, stage_file_proxy can be enabled and
 configured.
 
