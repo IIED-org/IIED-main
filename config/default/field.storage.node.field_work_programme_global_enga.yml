@@ -73,7 +73,7 @@ settings:
       label: 'WP_15: LIFE-AR'
     -
       value: Internal
-      label: 'Do not use (Comms use only)'
+      label: 'Internal (Comms use only)'
   allowed_values_function: ''
 module: options
 locked: false
