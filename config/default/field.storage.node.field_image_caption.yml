@@ -1,0 +1,19 @@
+uuid: 2a601fd2-00f7-405b-9d89-2bc1073e9ad0
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - text
+id: node.field_image_caption
+field_name: field_image_caption
+entity_type: node
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

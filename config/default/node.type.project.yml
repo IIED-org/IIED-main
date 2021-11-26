@@ -6,13 +6,12 @@ dependencies:
     - menu_ui
 third_party_settings:
   menu_ui:
-    available_menus:
-      - main
-    parent: 'main:'
-name: 'Project link'
+    available_menus: {  }
+    parent: ''
+name: Project
 type: project
-description: 'Related IIED project'
+description: 'IIED project'
 help: ''
 new_revision: true
 preview_mode: 1
-display_submitted: true
+display_submitted: false

@@ -1,17 +1,18 @@
-# Migration configuration for project nodes.
-id: iied_d7_projects
+uuid: 94795d61-428d-49cd-9d4e-b1ada07a91fc
 langcode: en
 status: true
 dependencies:
   enforced:
     module:
       - iied_migrate_d7
+id: iied_d7_projects
 class: Drupal\node\Plugin\migrate\D7NodeTranslation
-label: IIED project nodes
-migration_group: iied_migrate_d7
+field_plugin_method: null
+cck_plugin_method: null
 migration_tags:
   - nodes
-deriver: Drupal\node\Plugin\migrate\D7NodeDeriver
+migration_group: iied_migrate_d7
+label: 'IIED project nodes'
 source:
   plugin: iied_d7_project
   node_type: project
@@ -37,7 +38,7 @@ process:
   body/format:
     -
       plugin: default_value
-      default_value: 'full_html'
+      default_value: full_html
   field_dates:
     -
       plugin: get
@@ -53,7 +54,7 @@ process:
   field_standfirst/format:
     -
       plugin: default_value
-      default_value: 'full_html'
+      default_value: full_html
   field_project_status:
     -
       plugin: get
@@ -65,7 +66,7 @@ process:
   field_additional_resources/format:
     -
       plugin: default_value
-      default_value: 'full_html'
+      default_value: full_html
   field_partners:
     -
       plugin: get
@@ -74,4 +75,4 @@ destination:
   plugin: 'entity_complete:node'
   translations: true
   default_bundle: project
-
+migration_dependencies: null

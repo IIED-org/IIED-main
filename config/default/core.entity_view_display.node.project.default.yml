@@ -4,11 +4,20 @@ status: true
 dependencies:
   config:
     - field.field.node.project.body
+    - field.field.node.project.field_additional_resources
     - field.field.node.project.field_collection
+    - field.field.node.project.field_dates
+    - field.field.node.project.field_display_image
     - field.field.node.project.field_image
+    - field.field.node.project.field_image_caption
     - field.field.node.project.field_link
+    - field.field.node.project.field_main_image
     - field.field.node.project.field_nid
+    - field.field.node.project.field_partners
+    - field.field.node.project.field_project_status
     - field.field.node.project.field_projectnumber
+    - field.field.node.project.field_standfirst
+    - field.field.node.project.field_tagline
     - field.field.node.project.field_theme
     - field.field.node.project.field_year
     - node.type.project
@@ -17,6 +26,7 @@ dependencies:
     - image
     - layout_builder
     - link
+    - options
     - text
     - user
 third_party_settings:
@@ -35,12 +45,37 @@ content:
     settings: {  }
     third_party_settings: {  }
     region: content
+  field_additional_resources:
+    weight: 16
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
   field_collection:
     weight: 8
     label: above
     settings: {  }
     third_party_settings: {  }
     type: text_default
+    region: content
+  field_dates:
+    weight: 10
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_display_image:
+    weight: 15
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
     region: content
   field_image:
     weight: 7
@@ -50,6 +85,13 @@ content:
       image_link: ''
     third_party_settings: {  }
     type: image
+    region: content
+  field_image_caption:
+    weight: 14
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
     region: content
   field_link:
     weight: 2
@@ -70,6 +112,15 @@ content:
             classes: {  }
     type: link_separate
     region: content
+  field_main_image:
+    type: entity_reference_entity_view
+    weight: 13
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    region: content
   field_nid:
     weight: 5
     label: above
@@ -79,6 +130,20 @@ content:
     third_party_settings: {  }
     type: number_integer
     region: content
+  field_partners:
+    weight: 17
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_project_status:
+    weight: 12
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+    region: content
   field_projectnumber:
     weight: 3
     label: above
@@ -87,6 +152,20 @@ content:
       prefix_suffix: true
     third_party_settings: {  }
     type: number_integer
+    region: content
+  field_standfirst:
+    weight: 9
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_tagline:
+    weight: 11
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
     region: content
   field_theme:
     weight: 6

@@ -1,0 +1,21 @@
+uuid: f96a2ee6-4ca3-40b9-b720-c4972cfd2f74
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_additional_resources
+    - node.type.project
+  module:
+    - text
+id: node.project.field_additional_resources
+field_name: field_additional_resources
+entity_type: node
+bundle: project
+label: 'Additional resources'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

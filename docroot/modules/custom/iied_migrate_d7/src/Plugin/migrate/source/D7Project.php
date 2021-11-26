@@ -4,6 +4,8 @@ namespace Drupal\iied_migrate_d7\Plugin\migrate\source;
 
 use Drupal\migrate\Plugin\migrate\source\SqlBase;
 use Drupal\node\Plugin\migrate\source\d7\NodeComplete;
+use Drupal\node\Plugin\migrate\source\d7\Node;
+
 use Drupal\migrate\Row;
 
 /**
@@ -17,7 +19,7 @@ use Drupal\migrate\Row;
  *   source_module = "node"
  * )
  */
-class D7Project extends NodeComplete {
+class D7Project extends Node {
 
   /**
    * {@inheritdoc}
@@ -27,7 +29,8 @@ class D7Project extends NodeComplete {
     // Add field_dates field.
     // $query->leftJoin('field_data_field_dates', 'fdfd', '[fdfd].[entity_id] = [nt].[nid]');
     // $query->addField('fdfd', 'field_dates_value', 'field_dates');
-
+    // $query->leftJoin('field_data_field_tagline', 'fdft', 'fdft.entity_id = nt.nid');
+    // $query->addField('fdft', 'field_tagline_value', 'field_tagline');
     // Add field_standfirst field.
     // $query->leftJoin('field_data_field_standfirst', 'fdfs', '[fdfs].[entity_id] = [nt].[nid]');
     // $query->addField('fdfs', 'field_standfirst_value', 'field_standfirst');

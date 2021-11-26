@@ -1,0 +1,21 @@
+uuid: 3ab7fc2d-1d7b-487e-bc5a-249592e87a52
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_image_caption
+    - node.type.project
+  module:
+    - text
+id: node.project.field_image_caption
+field_name: field_image_caption
+entity_type: node
+bundle: project
+label: 'Image caption'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long
