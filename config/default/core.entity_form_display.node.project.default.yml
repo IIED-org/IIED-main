@@ -18,6 +18,7 @@ dependencies:
     - field.field.node.project.field_projectnumber
     - field.field.node.project.field_standfirst
     - field.field.node.project.field_tagline
+    - field.field.node.project.field_tags
     - field.field.node.project.field_theme
     - field.field.node.project.field_year
     - image.style.thumbnail
@@ -190,6 +191,16 @@ content:
       placeholder: ''
     third_party_settings: {  }
     type: string_textarea
+    region: content
+  field_tags:
+    weight: 28
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
     region: content
   field_theme:
     weight: 17

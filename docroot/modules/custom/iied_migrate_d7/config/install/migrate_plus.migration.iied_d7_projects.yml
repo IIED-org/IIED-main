@@ -76,6 +76,12 @@ process:
       source: taxonomy_vocabulary_19
       process:
         target_id: tid
+  field_tags:
+    -
+      plugin: sub_process
+      source: taxonomy_vocabulary_15
+      process:
+        target_id: tid
 destination:
   plugin: 'entity_complete:node'
   translations: true

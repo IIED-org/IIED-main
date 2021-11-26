@@ -51,6 +51,22 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       $row->setSourceProperty('taxonomy_vocabulary_19', $new_terms);
     }
 
+    // Tags
+    $tags_terms = $row->getSourceProperty('taxonomy_vocabulary_15');
+    $new_tags = [];
+    if (is_array($tags_terms)) {
+      foreach ($tags_terms as $key => $term) {
+        // Look up the mapped id from the migrate_map_iied_tags table.
+        $db = \Drupal\Core\Database\Database::getConnection();
+        $query = $db->select('migrate_map_iied_tags', 'mm');
+        $query->fields('mm', array('destid1'));
+        $query->condition('sourceid1', "https://www.iied.org/taxonomy/term/" . $term['tid']);
+        $new_tags[$key]['tid'] = $query->execute()->fetchField();
+      }
+      // Set the new mapped values
+      $row->setSourceProperty('taxonomy_vocabulary_15', $new_tags);
+    }
+
   }
 
 }

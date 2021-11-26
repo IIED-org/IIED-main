@@ -19,6 +19,7 @@ dependencies:
     - field.field.node.project.field_projectnumber
     - field.field.node.project.field_standfirst
     - field.field.node.project.field_tagline
+    - field.field.node.project.field_tags
     - field.field.node.project.field_theme
     - field.field.node.project.field_year
     - node.type.project
@@ -95,6 +96,7 @@ hidden:
   field_projectnumber: true
   field_standfirst: true
   field_tagline: true
+  field_tags: true
   field_theme: true
   field_year: true
   langcode: true
