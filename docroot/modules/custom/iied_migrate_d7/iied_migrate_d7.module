@@ -15,6 +15,42 @@ use Drupal\migrate\Row;
  */
 function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $source, MigrationInterface $migration) {
 
-  // Useful for debugging $row data.
-  $x='';
+  if ($migration->id() == 'iied_d7_projects') {
+    // Themes are already in the pubs site, so quickest to simply map the term
+    // ids for now.
+    $themes_map = [
+      '648' => '4436', // Biodiversity
+      '642' => '4441', // Climate change
+      '1553' => '4446', // Communication
+      '1843' => '4451', // Drylands and pastoralism
+      '634' => '4456', // Economics
+      '653' => '4461', // Energy
+      '2137' => '4466', // Fisheries
+      '651' => '4471', // Food and agriculture
+      '643' => '4476', // Forests
+      '1269' => '4481', // Gender
+      '645' => '4486', // Governance
+      '647' => '4491', // Green economy
+      '649' => '4496', // Land acquisitions and rights
+      '652' => '4501', // Law
+      '2491' => '4546', // Monitoring, evaluation and learning
+      '646' => '4506', // Natural resource management
+      '1268' => '4516', // Policy and planning
+      '635' => '4521', // Poverty
+      '633' => '4531', // Sustainable markets
+      '641' => '4536', // Urban
+      '644' => '4541', // Water
+    ];
+    // Get the source terms array.
+    $theme_terms = $row->getSourceProperty('taxonomy_vocabulary_19');
+    if (is_array($theme_terms)) {
+      foreach ($theme_terms as $key => $term) {
+        $new_terms[$key]['tid'] = $themes_map[$term['tid']];
+      }
+      // Set the new mapped values
+      $row->setSourceProperty('taxonomy_vocabulary_19', $new_terms);
+    }
+
+  }
+
 }

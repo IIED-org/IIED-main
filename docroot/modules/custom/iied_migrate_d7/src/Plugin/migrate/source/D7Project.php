@@ -34,7 +34,6 @@ class D7Project extends Node {
     // Add field_standfirst field.
     // $query->leftJoin('field_data_field_standfirst', 'fdfs', '[fdfs].[entity_id] = [nt].[nid]');
     // $query->addField('fdfs', 'field_standfirst_value', 'field_standfirst');
-
     return $query;
   }
 
@@ -42,7 +41,7 @@ class D7Project extends Node {
    * {@inheritdoc}
    */
   public function prepareRow(Row $row) {
-    $c = '';
+    $x = '';
     return parent::prepareRow($row);
   }
 

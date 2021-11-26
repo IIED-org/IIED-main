@@ -70,6 +70,12 @@ process:
     -
       plugin: get
       source: field_partners
+  field_theme:
+    -
+      plugin: sub_process
+      source: taxonomy_vocabulary_19
+      process:
+        target_id: tid
 destination:
   plugin: 'entity_complete:node'
   translations: true
