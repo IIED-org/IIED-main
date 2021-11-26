@@ -7,8 +7,10 @@ dependencies:
     - field.field.node.project.body
     - field.field.node.project.field_additional_resources
     - field.field.node.project.field_collection
+    - field.field.node.project.field_contact
     - field.field.node.project.field_dates
     - field.field.node.project.field_display_image
+    - field.field.node.project.field_funded_by
     - field.field.node.project.field_image
     - field.field.node.project.field_image_caption
     - field.field.node.project.field_link
@@ -123,8 +125,10 @@ content:
     third_party_settings: {  }
 hidden:
   field_additional_resources: true
+  field_contact: true
   field_dates: true
   field_display_image: true
+  field_funded_by: true
   field_image_caption: true
   field_main_image: true
   field_partners: true

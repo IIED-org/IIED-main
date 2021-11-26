@@ -6,8 +6,10 @@ dependencies:
     - field.field.node.project.body
     - field.field.node.project.field_additional_resources
     - field.field.node.project.field_collection
+    - field.field.node.project.field_contact
     - field.field.node.project.field_dates
     - field.field.node.project.field_display_image
+    - field.field.node.project.field_funded_by
     - field.field.node.project.field_image
     - field.field.node.project.field_image_caption
     - field.field.node.project.field_link
@@ -65,6 +67,38 @@ third_party_settings:
         formatter: closed
         required_fields: true
       label: Images
+    group_contacts:
+      children:
+        - field_contact
+      parent_name: ''
+      weight: 4
+      format_type: tab
+      region: content
+      format_settings:
+        show_empty_fields: false
+        id: ''
+        classes: ''
+        description: ''
+        formatter: closed
+        required_fields: true
+      label: Contacts
+    group_taxonomy:
+      children:
+        - field_theme
+        - field_collection
+        - field_tags
+      parent_name: ''
+      weight: 24
+      format_type: tab
+      region: content
+      format_settings:
+        show_empty_fields: false
+        id: ''
+        classes: ''
+        description: ''
+        formatter: closed
+        required_fields: true
+      label: Taxonomy
 id: node.project.default
 targetEntityType: node
 bundle: project
@@ -82,12 +116,12 @@ content:
     region: content
   created:
     type: datetime_timestamp
-    weight: 5
+    weight: 6
     region: content
     settings: {  }
     third_party_settings: {  }
   field_additional_resources:
-    weight: 26
+    weight: 22
     settings:
       rows: 5
       placeholder: ''
@@ -95,12 +129,20 @@ content:
     type: text_textarea
     region: content
   field_collection:
-    weight: 19
+    weight: 21
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
     type: text_textfield
+    region: content
+  field_contact:
+    weight: 12
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
     region: content
   field_dates:
     weight: 6
@@ -116,6 +158,14 @@ content:
       display_label: true
     third_party_settings: {  }
     type: boolean_checkbox
+    region: content
+  field_funded_by:
+    weight: 26
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
     region: content
   field_image:
     weight: 18
@@ -156,7 +206,7 @@ content:
     type: number
     region: content
   field_partners:
-    weight: 27
+    weight: 23
     settings:
       rows: 5
       placeholder: ''
@@ -193,7 +243,7 @@ content:
     type: string_textarea
     region: content
   field_tags:
-    weight: 28
+    weight: 22
     settings:
       match_operator: CONTAINS
       match_limit: 10
@@ -203,7 +253,7 @@ content:
     type: entity_reference_autocomplete
     region: content
   field_theme:
-    weight: 17
+    weight: 20
     settings:
       match_operator: CONTAINS
       match_limit: 10
@@ -228,7 +278,7 @@ content:
     third_party_settings: {  }
   path:
     type: path
-    weight: 8
+    weight: 9
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -236,7 +286,7 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 6
+    weight: 7
     region: content
     third_party_settings: {  }
   status:
@@ -250,7 +300,7 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 7
+    weight: 8
     region: content
     third_party_settings: {  }
   title:
@@ -263,7 +313,7 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 4
+    weight: 5
     settings:
       match_operator: CONTAINS
       size: 60

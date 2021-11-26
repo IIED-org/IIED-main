@@ -82,6 +82,24 @@ process:
       source: taxonomy_vocabulary_15
       process:
         target_id: tid
+  field_funded_by:
+    -
+      plugin: get
+      source: field_funded_by
+  field_contact:
+    -
+      plugin: get
+      source: field_contact
+  field_main_image:
+    -
+      plugin: sub_process
+      source: field_main_image
+      process:
+        target_id:
+          plugin: migration_lookup
+          migration: iied_d7_media_images
+          source: fid
+          no_stub: true
 destination:
   plugin: 'entity_complete:node'
   translations: true

@@ -1,0 +1,21 @@
+uuid: 44558cee-84ad-45fb-8098-8eaf743a9669
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_funded_by
+    - node.type.project
+  module:
+    - text
+id: node.project.field_funded_by
+field_name: field_funded_by
+entity_type: node
+bundle: project
+label: Donors
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long
