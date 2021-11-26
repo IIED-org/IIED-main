@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Module for testing the migration source plugin prepareRow().
+ */
+
+use Drupal\migrate\Plugin\MigrationInterface;
+use Drupal\migrate\MigrateSkipRowException;
+use Drupal\migrate\Plugin\MigrateSourceInterface;
+use Drupal\migrate\Row;
+
+/**
+ * Implements hook_migrate_prepare_row().
+ */
+function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $source, MigrationInterface $migration) {
+
+  // Useful for debugging $row data.
+  $x='';
+}

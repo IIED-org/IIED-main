@@ -30,10 +30,20 @@ process:
     -
       plugin: get
       source: body
+  'body/format':
+    -
+      plugin: default_value
+      default_value: 'full_html'
+
   field_dates:
     -
       plugin: get
       source: field_dates
+  field_standfirst: field_standfirst
+  'field_standfirst/format':
+    -
+      plugin: default_value
+      default_value: 'full_html'
   field_project_status:
     -
       plugin: get
