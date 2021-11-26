@@ -17,6 +17,8 @@ services:
         DRUSH_OPTIONS_URI: 'https://iied-main.lndo.site'
         # Support debugging Drush with XDEBUG. Use lando drush to debug.
         PHP_IDE_CONFIG: "serverName=localhost"
+      volumes:
+        - ../iied-d7/docroot/:/app/d7-files
   d7db:
     type: mysql
     creds:
