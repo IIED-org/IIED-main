@@ -13,7 +13,7 @@ migration_tags:
   - nodes
 deriver: Drupal\node\Plugin\migrate\D7NodeDeriver
 source:
-  plugin: d7_node_complete
+  plugin: iied_d7_project
   node_type: project
   key: d7migrate
 process:
@@ -30,6 +30,14 @@ process:
     -
       plugin: get
       source: body
+  field_dates:
+    -
+      plugin: get
+      source: field_dates
+  field_project_status:
+    -
+      plugin: get
+      source: field_project_status
 destination:
   plugin: 'entity_complete:node'
   translations: true
