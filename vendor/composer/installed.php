@@ -1724,15 +1724,6 @@
                 0 => '9.2.10',
             ),
         ),
-        'drupal/tailwindcss' => array(
-            'pretty_version' => '2.8.0',
-            'version' => '2.8.0.0',
-            'type' => 'drupal-theme',
-            'install_path' => __DIR__ . '/../../docroot/themes/contrib/tailwindcss',
-            'aliases' => array(),
-            'reference' => '8.x-2.8',
-            'dev_requirement' => false,
-        ),
         'drupal/taxonomy' => array(
             'dev_requirement' => false,
             'replaced' => array(
