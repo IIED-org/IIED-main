@@ -1,0 +1,33 @@
+name: iied-main
+recipe: acquia
+config:
+  acli_version: latest
+  ah_application_uuid: a70da4cc-a976-4f36-999d-94e46d72df37
+  ah_site_group: irforum
+  php: '7.4'
+services:
+  appserver:
+    webroot: docroot
+    xdebug: true
+    config:
+      php: .vscode/php.ini
+    overrides:
+      environment:
+        DRUSH_OPTIONS_ROOT: '/app/docroot'
+        DRUSH_OPTIONS_URI: 'https://iied-main.lndo.site'
+  d7db:
+    type: mysql
+    creds:
+      user: database
+      password: database
+      database: database
+  adminer:
+    type: compose
+    services:
+      image: dehy/adminer
+      command: '/bin/s6-svscan /etc/services.d'
+    portforward: true
+proxy:
+  adminer:
+    - adminer.iied-main.lndo.site
+

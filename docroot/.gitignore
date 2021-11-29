@@ -18,7 +18,7 @@
 
 # Ignore configuration files that may contain sensitive information.
 sites/*/services*.yml
-sites/*/settings*.php
+# sites/*/settings*.php
 
 # Ignore paths that contain user-generated content.
 sites/*/files
@@ -31,7 +31,7 @@ sites/simpletest
 # or delete the previous settings and uncomment the following ones, instead.
 
 # Ignore configuration files that may contain sensitive information.
-*/settings*.php
+# */settings*.php
 
 # Ignore paths that contain user-generated content.
 */files

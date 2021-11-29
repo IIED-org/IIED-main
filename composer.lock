@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "676a22985fe21d4bb372db2db7aa1f40",
+    "content-hash": "850cd98f50f09517205c916c5c9d0ac8",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4157,6 +4157,10 @@
                     "homepage": "https://www.drupal.org/user/471638"
                 },
                 {
+                    "name": "ram4nd",
+                    "homepage": "https://www.drupal.org/user/601534"
+                },
+                {
                     "name": "rszrama",
                     "homepage": "https://www.drupal.org/user/49344"
                 },
@@ -4734,8 +4738,16 @@
             ],
             "authors": [
                 {
-                    "name": "benjamincizej",
+                    "name": "acbramley",
+                    "homepage": "https://www.drupal.org/user/1036766"
+                },
+                {
+                    "name": "bcizej",
                     "homepage": "https://www.drupal.org/user/3612191"
+                },
+                {
+                    "name": "mstrelan",
+                    "homepage": "https://www.drupal.org/user/314289"
                 }
             ],
             "description": "Adds admin interface to handle media revisions.",
@@ -5050,6 +5062,10 @@
                     "role": "contributor"
                 },
                 {
+                    "name": "rconstantine",
+                    "homepage": "https://www.drupal.org/user/94676"
+                },
+                {
                     "name": "webflo",
                     "homepage": "https://www.drupal.org/user/254778"
                 }
@@ -5239,20 +5255,12 @@
                     "homepage": "https://www.drupal.org/user/279352"
                 },
                 {
-                    "name": "kporras07",
-                    "homepage": "https://www.drupal.org/user/1349780"
-                },
-                {
-                    "name": "otrolopezmas",
-                    "homepage": "https://www.drupal.org/user/3516204"
+                    "name": "paulocs",
+                    "homepage": "https://www.drupal.org/user/3640109"
                 },
                 {
                     "name": "plopesc",
                     "homepage": "https://www.drupal.org/user/282415"
-                },
-                {
-                    "name": "tjwelde",
-                    "homepage": "https://www.drupal.org/user/3411453"
                 }
             ],
             "description": "Provides the ability to import redirects for the Redirect module",
@@ -6182,6 +6190,83 @@
             }
         },
         {
+            "name": "drupal/stage_file_proxy",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/stage_file_proxy.git",
+                "reference": "8.x-1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/stage_file_proxy-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "a0bea520c139a4b0b67738b0c54e7ee21af081da"
+            },
+            "require": {
+                "drupal/core": ">=8.7.7"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.2",
+                    "datestamp": "1637007759",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "drush": {
+                    "services": {
+                        "stage_file_proxy.drush.services.yml": "^9 || ^10"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "BarisW",
+                    "homepage": "https://www.drupal.org/user/107229"
+                },
+                {
+                    "name": "geek-merlin",
+                    "homepage": "https://www.drupal.org/user/229048"
+                },
+                {
+                    "name": "greggles",
+                    "homepage": "https://www.drupal.org/user/36762"
+                },
+                {
+                    "name": "markdorison",
+                    "homepage": "https://www.drupal.org/user/346106"
+                },
+                {
+                    "name": "moshe weitzman",
+                    "homepage": "https://www.drupal.org/user/23"
+                },
+                {
+                    "name": "msonnabaum",
+                    "homepage": "https://www.drupal.org/user/75278"
+                },
+                {
+                    "name": "netaustin",
+                    "homepage": "https://www.drupal.org/user/199298"
+                },
+                {
+                    "name": "robwilmshurst",
+                    "homepage": "https://www.drupal.org/user/144488"
+                }
+            ],
+            "description": "Provides stage_file_proxy module.",
+            "homepage": "https://www.drupal.org/project/stage_file_proxy",
+            "support": {
+                "source": "https://git.drupalcode.org/project/stage_file_proxy"
+            }
+        },
+        {
             "name": "drupal/string_translation_ui",
             "version": "1.2.0",
             "source": {
@@ -6558,7 +6643,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-3.11",
-                    "datestamp": "1632233523",
+                    "datestamp": "1632233579",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -13340,6 +13425,7 @@
                 "issues": "https://github.com/webmozart/path-util/issues",
                 "source": "https://github.com/webmozart/path-util/tree/2.3.0"
             },
+            "abandoned": "symfony/filesystem",
             "time": "2015-12-17T08:42:14+00:00"
         }
     ],
@@ -14868,6 +14954,10 @@
                     "name": "Lucas Hedding",
                     "homepage": "https://www.drupal.org/u/heddn",
                     "role": "Maintainer"
+                },
+                {
+                    "name": "mikeryan",
+                    "homepage": "https://www.drupal.org/user/4420"
                 }
             ],
             "description": "Enhancements to core migration support.",
@@ -14939,7 +15029,7 @@
                 "reference": "56d82b4fc111dd26f2c3a1e53c06015eb854df20"
             },
             "require": {
-                "drupal/core": "^8.8 | ^9",
+                "drupal/core": "^9.1",
                 "drupal/migrate_plus": "^5",
                 "php": ">=7.1"
             },
@@ -14956,8 +15046,8 @@
                     "dev-5.x": "5.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-5.0+13-dev",
-                    "datestamp": "1618603463",
+                    "version": "8.x-5.0+19-dev",
+                    "datestamp": "1637161832",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -17097,6 +17187,7 @@
                     "type": "github"
                 }
             ],
+            "abandoned": true,
             "time": "2020-09-28T06:45:17+00:00"
         },
         {
