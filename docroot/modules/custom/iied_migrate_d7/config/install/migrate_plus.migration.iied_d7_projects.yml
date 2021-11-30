@@ -66,10 +66,14 @@ process:
     -
       plugin: default_value
       default_value: 'full_html'
-  field_partners:
+  field_partners/value:
     -
       plugin: get
-      source: field_partners
+      source: field_partners/0/value
+  field_partners/format:
+    -
+      plugin: default_value
+      default_value: 'full_html'
   field_theme:
     -
       plugin: sub_process
@@ -82,14 +86,26 @@ process:
       source: taxonomy_vocabulary_15
       process:
         target_id: tid
-  field_funded_by:
+  field_funded_by/value:
     -
       plugin: get
-      source: field_funded_by
+      source: field_funded_by/0/value
+  field_funded_by/format:
+    -
+      plugin: default_value
+      default_value: 'full_html'
   field_contact:
     -
       plugin: get
       source: field_contact
+  field_project_contacts:
+    -
+      plugin: entity_generate
+      source: field_project_contact
+      entity_type: taxonomy_term
+      bundle: person
+      value_key: name
+
   field_main_image:
     -
       plugin: sub_process
