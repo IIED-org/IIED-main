@@ -23,12 +23,15 @@ needed. Please check the relevent documentation.
 
 ## Setup
 
-1. Clone this repo and move into the directory that contains the codebase.
+1. Clone this repo, move into the directory that contains the codebase and connect to Acquia git remote.
 
 ```
 git clone git@github.com:IIED-org/pubs.git IIED-main
 cd IIED-main
+git remote add ac <acquiaGitPath>
 ```
+
+To determine the <acquiaGitPath>, navigate to the application overview page via https://cloud.acquia.com/a/applications, select “View Git Information” from the Actions menu and copy the git URL, e.g. irforum@svn-6076.devcloud.hosting.acquia.com:irforum.git
 
 2. Run lando start to build the docker contaiers.
 
@@ -46,11 +49,12 @@ instance to connect to.
 To pull a copy of the database we can run the following command.
 
 ```
-lado acli pull:database
+lando acli pull:database
 ```
-This currently the .acquia-cli.yml to connect to the IIED Pubs cloud app. It
-will ask which environment to pull the database from.
-Select the dev database: [0].
+This references .acquia-cli.yml to connect to the IIED Pubs cloud app. It
+will ask which environment to pull the database from. Follow the prompts to set up credentials for accessing the Acquia server as necessary.
+
+Select the prod database: [1].
 
 ```
 Using Cloud Application IIED Pubs
@@ -69,7 +73,7 @@ To do so, copy the sites/default/iied.example.settings.local.php file to
 sites/default/settings.local.php. This will include some recommended defaults.
 
 ```
-cp docroot/sites/default/iied.example.settings.local.php  docroot/sites/default/settings.local.php
+cp docroot/sites/default/iied.settings.local.php  docroot/sites/default/settings.local.php
 ```
 
 5. Config split
@@ -93,11 +97,7 @@ this setup, running `drush cr` then `drush cim` will import the local split
 configuration as well as the default configuration. In our case, this will
 enable other modules useful for developers like devel and stage_file_proxy.
 
-<<<<<<< HEAD
-To enable a module on the current (probabyl local) split and not have it enabled
-=======
 To enable a module on the current (probably local) split and not have it enabled
->>>>>>> dev-master
 by default. As an example, we'll try this with the help_topics module.
 
 Enable the module
