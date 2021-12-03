@@ -26,14 +26,9 @@ class D7Project extends Node {
    */
   public function query() {
     $query = parent::query();
-    // Add field_dates field.
-    // $query->leftJoin('field_data_field_dates', 'fdfd', '[fdfd].[entity_id] = [nt].[nid]');
-    // $query->addField('fdfd', 'field_dates_value', 'field_dates');
-    // $query->leftJoin('field_data_field_tagline', 'fdft', 'fdft.entity_id = nt.nid');
-    // $query->addField('fdft', 'field_tagline_value', 'field_tagline');
-    // Add field_standfirst field.
-    // $query->leftJoin('field_data_field_standfirst', 'fdfs', '[fdfs].[entity_id] = [nt].[nid]');
-    // $query->addField('fdfs', 'field_standfirst_value', 'field_standfirst');
+    // Since we are mapping incoming projects to existing nodes, we only want to
+    // select the source project nodes that are published.
+    $query->condition('n.status', 1);
     return $query;
   }
 

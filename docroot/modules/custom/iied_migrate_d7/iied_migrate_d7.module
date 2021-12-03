@@ -61,14 +61,19 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
         $query = $db->select('migrate_map_iied_tags', 'mm');
         $query->fields('mm', array('destid1'));
         $query->condition('sourceid1', "https://www.iied.org/taxonomy/term/" . $term['tid']);
-        $new_tags[$key]['tid'] = $query->execute()->fetchField();
+        $new_tag = $query->execute()->fetchField();
+        // Not all tags have been migrated.
+        // @todo - check if we can re-run tags migration first.
+        if ($new_tag) {
+          $new_tags[$key]['tid'] = $new_tag;
+        }
       }
       // Set the new mapped values
       $row->setSourceProperty('taxonomy_vocabulary_15', $new_tags);
     }
 
     // Debugging.
-    if ($row->getSourceProperty('nid') == '4444') {
+    if ($row->getSourceProperty('nid') == '228') {
       $x = ''; // Useful for debugging.
     }
 
@@ -80,6 +85,9 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
             $author_name = $source->getDatabase()->query('SELECT name FROM {users} WHERE uid = :uid', array(':uid' => $user_id))->fetchField();
           $row->setSourceProperty('field_project_contact', $author_name);
       }
+    }
+    else {
+      $row->setSourceProperty('field_project_contact', 'NONE');
     }
   }
 
