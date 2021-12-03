@@ -16,6 +16,7 @@ dependencies:
     - field.field.node.project.field_main_image
     - field.field.node.project.field_nid
     - field.field.node.project.field_partners
+    - field.field.node.project.field_project_contacts
     - field.field.node.project.field_project_status
     - field.field.node.project.field_projectnumber
     - field.field.node.project.field_standfirst
@@ -38,8 +39,8 @@ third_party_settings:
       children:
         - field_dates
         - field_project_status
-      parent_name: ''
-      weight: 2
+      parent_name: group_tabs
+      weight: 5
       format_type: tab
       region: content
       format_settings:
@@ -55,8 +56,9 @@ third_party_settings:
         - field_main_image
         - field_image_caption
         - field_display_image
-      parent_name: ''
-      weight: 3
+        - field_image
+      parent_name: group_tabs
+      weight: 6
       format_type: tab
       region: content
       format_settings:
@@ -70,8 +72,9 @@ third_party_settings:
     group_contacts:
       children:
         - field_contact
-      parent_name: ''
-      weight: 4
+        - field_project_contacts
+      parent_name: group_tabs
+      weight: 7
       format_type: tab
       region: content
       format_settings:
@@ -87,8 +90,8 @@ third_party_settings:
         - field_theme
         - field_collection
         - field_tags
-      parent_name: ''
-      weight: 24
+      parent_name: group_tabs
+      weight: 8
       format_type: tab
       region: content
       format_settings:
@@ -99,6 +102,45 @@ third_party_settings:
         formatter: closed
         required_fields: true
       label: Taxonomy
+    group_tabs:
+      children:
+        - group_copy
+        - group_dates_and_status
+        - group_images
+        - group_contacts
+        - group_taxonomy
+        - field_additional_resources
+      parent_name: ''
+      weight: 1
+      format_type: tabs
+      region: content
+      format_settings:
+        direction: horizontal
+        width_breakpoint: 640
+        id: ''
+        classes: ''
+        show_empty_fields: false
+      label: Tabs
+    group_copy:
+      children:
+        - langcode
+        - field_standfirst
+        - body
+        - field_funded_by
+        - field_partners
+        - field_tagline
+      parent_name: group_tabs
+      weight: 4
+      format_type: tab
+      region: content
+      format_settings:
+        show_empty_fields: false
+        id: ''
+        classes: ''
+        description: ''
+        formatter: closed
+        required_fields: true
+      label: Copy
 id: node.project.default
 targetEntityType: node
 bundle: project
@@ -106,7 +148,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 12
+    weight: 14
     settings:
       rows: 9
       summary_rows: 3
@@ -116,12 +158,12 @@ content:
     region: content
   created:
     type: datetime_timestamp
-    weight: 6
+    weight: 4
     region: content
     settings: {  }
     third_party_settings: {  }
   field_additional_resources:
-    weight: 22
+    weight: 9
     settings:
       rows: 5
       placeholder: ''
@@ -129,7 +171,7 @@ content:
     type: text_textarea
     region: content
   field_collection:
-    weight: 21
+    weight: 22
     settings:
       size: 60
       placeholder: ''
@@ -145,7 +187,7 @@ content:
     type: text_textarea
     region: content
   field_dates:
-    weight: 6
+    weight: 4
     settings:
       size: 60
       placeholder: ''
@@ -153,14 +195,14 @@ content:
     type: string_textfield
     region: content
   field_display_image:
-    weight: 11
+    weight: 5
     settings:
       display_label: true
     third_party_settings: {  }
     type: boolean_checkbox
     region: content
   field_funded_by:
-    weight: 26
+    weight: 15
     settings:
       rows: 5
       placeholder: ''
@@ -168,7 +210,7 @@ content:
     type: text_textarea
     region: content
   field_image:
-    weight: 18
+    weight: 6
     settings:
       progress_indicator: throbber
       preview_image_style: thumbnail
@@ -176,7 +218,7 @@ content:
     type: image_image
     region: content
   field_image_caption:
-    weight: 10
+    weight: 3
     settings:
       rows: 5
       placeholder: ''
@@ -184,7 +226,7 @@ content:
     type: text_textarea
     region: content
   field_link:
-    weight: 13
+    weight: 10
     settings:
       placeholder_url: ''
       placeholder_title: ''
@@ -193,41 +235,51 @@ content:
     region: content
   field_main_image:
     type: media_library_widget
-    weight: 9
+    weight: 2
     settings:
       media_types: {  }
     third_party_settings: {  }
     region: content
   field_nid:
-    weight: 16
+    weight: 13
     settings:
       placeholder: ''
     third_party_settings: {  }
     type: number
     region: content
   field_partners:
-    weight: 23
+    weight: 16
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
     type: text_textarea
     region: content
+  field_project_contacts:
+    weight: 13
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
   field_project_status:
-    weight: 7
+    weight: 5
     settings: {  }
     third_party_settings: {  }
     type: options_select
     region: content
   field_projectnumber:
-    weight: 14
+    weight: 11
     settings:
       placeholder: ''
     third_party_settings: {  }
     type: number
     region: content
   field_standfirst:
-    weight: 20
+    weight: 13
     settings:
       rows: 5
       placeholder: ''
@@ -235,7 +287,7 @@ content:
     type: text_textarea
     region: content
   field_tagline:
-    weight: 21
+    weight: 17
     settings:
       rows: 5
       placeholder: ''
@@ -243,7 +295,7 @@ content:
     type: string_textarea
     region: content
   field_tags:
-    weight: 22
+    weight: 23
     settings:
       match_operator: CONTAINS
       match_limit: 10
@@ -253,7 +305,7 @@ content:
     type: entity_reference_autocomplete
     region: content
   field_theme:
-    weight: 20
+    weight: 21
     settings:
       match_operator: CONTAINS
       match_limit: 10
@@ -263,7 +315,7 @@ content:
     type: entity_reference_autocomplete
     region: content
   field_year:
-    weight: 15
+    weight: 12
     settings:
       placeholder: ''
     third_party_settings: {  }
@@ -271,14 +323,14 @@ content:
     region: content
   langcode:
     type: language_select
-    weight: 1
+    weight: 12
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   path:
     type: path
-    weight: 9
+    weight: 7
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -286,21 +338,21 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 7
+    weight: 5
     region: content
     third_party_settings: {  }
   status:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 11
+    weight: 9
     region: content
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 8
+    weight: 6
     region: content
     third_party_settings: {  }
   title:
@@ -313,7 +365,7 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 5
+    weight: 2
     settings:
       match_operator: CONTAINS
       size: 60
@@ -322,7 +374,7 @@ content:
     region: content
     third_party_settings: {  }
   url_redirects:
-    weight: 10
+    weight: 8
     region: content
     settings: {  }
     third_party_settings: {  }

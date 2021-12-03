@@ -17,6 +17,7 @@ dependencies:
     - field.field.node.project.field_main_image
     - field.field.node.project.field_nid
     - field.field.node.project.field_partners
+    - field.field.node.project.field_project_contacts
     - field.field.node.project.field_project_status
     - field.field.node.project.field_projectnumber
     - field.field.node.project.field_standfirst
@@ -113,6 +114,7 @@ hidden:
   field_main_image: true
   field_nid: true
   field_partners: true
+  field_project_contacts: true
   field_project_status: true
   field_projectnumber: true
   field_standfirst: true
