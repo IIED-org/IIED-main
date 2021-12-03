@@ -67,15 +67,18 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       $row->setSourceProperty('taxonomy_vocabulary_15', $new_tags);
     }
 
-    // Use the user reference to look up user name to map to the person taxonomy.
+    // Debugging.
     if ($row->getSourceProperty('nid') == '4444') {
-      $project_contacts = $row->getSourceProperty('field_project_contact');
-      if (count($project_contacts)) {
-        foreach ($project_contacts as $project_contact) {
-          $user_id = $project_contact['target_id'];
-             $author_name = $source->getDatabase()->query('SELECT name FROM {users} WHERE uid = :uid', array(':uid' => $user_id))->fetchField();
-            $row->setSourceProperty('field_project_contact', $author_name);
-        }
+      $x = ''; // Useful for debugging.
+    }
+
+    // Use the user reference to look up user name to map to the person taxonomy.
+    $project_contacts = $row->getSourceProperty('field_project_contact');
+    if (count($project_contacts)) {
+      foreach ($project_contacts as $project_contact) {
+        $user_id = $project_contact['target_id'];
+            $author_name = $source->getDatabase()->query('SELECT name FROM {users} WHERE uid = :uid', array(':uid' => $user_id))->fetchField();
+          $row->setSourceProperty('field_project_contact', $author_name);
       }
     }
   }

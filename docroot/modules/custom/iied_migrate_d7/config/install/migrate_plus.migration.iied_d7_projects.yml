@@ -17,11 +17,15 @@ source:
   node_type: project
   key: d7migrate
 process:
+  nid:
+    -
+      plugin: migration_lookup
+      migration: iied_projects
+      source: nid
   langcode:
     -
       plugin: default_value
-      source: language
-      default_value: und
+      default_value: 'en'
   title:
     -
       plugin: get
@@ -116,6 +120,18 @@ process:
           migration: iied_d7_media_images
           source: fid
           no_stub: true
+  field_image_caption/value:
+    -
+      plugin: get
+      source: field_image_caption/0/value
+  field_image_caption/format:
+    -
+      plugin: default_value
+      default_value: 'full_html'
+  field_display_image:
+    -
+      plugin: get
+      source: field_display_image
 destination:
   plugin: 'entity_complete:node'
   translations: true
