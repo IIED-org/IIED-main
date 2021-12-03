@@ -73,7 +73,8 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
     }
 
     // Debugging.
-    if ($row->getSourceProperty('nid') == '228') {
+    if ($row->getSourceProperty('nid') == '19136') {
+      $field_full_width_media = $row->getSourceProperty('field_full_width_media');
       $x = ''; // Useful for debugging.
     }
 
@@ -89,6 +90,11 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
     else {
       $row->setSourceProperty('field_project_contact', 'NONE');
     }
+  }
+
+  if ($migration->id() == 'iied_d7_project_para_full_width_media') {
+    $x = ''; // Useful for debugging.
+
   }
 
 }
