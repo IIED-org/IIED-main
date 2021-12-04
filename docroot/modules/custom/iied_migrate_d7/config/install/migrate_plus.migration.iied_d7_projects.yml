@@ -108,8 +108,9 @@ process:
       source: field_project_contact
       entity_type: taxonomy_term
       bundle: person
+      bundle_key: vid
       value_key: name
-
+      ignore_case: true
   field_main_image:
     -
       plugin: sub_process
@@ -136,16 +137,28 @@ process:
     -
       plugin: skip_on_empty
       method: process
-      source: field_full_width_media/value
-    -
-      plugin: migration_lookup
-      migration: iied_d7_project_para_full_width_media
-      no_stub: true
+      source: field_full_width_media
     -
       plugin: sub_process
       process:
-        target_id: '0'
-        target_revision_id: '1'
+        target_id:
+          -
+            plugin: migration_lookup
+            migration: iied_d7_project_para_full_width_media
+            source: value
+          -
+            plugin: extract
+            index:
+              - 0
+        target_revision_id:
+          -
+            plugin: migration_lookup
+            migration: iied_d7_project_para_full_width_media
+            source: value
+          -
+            plugin: extract
+            index:
+              - 1
 destination:
   plugin: 'entity_complete:node'
   translations: true

@@ -74,8 +74,8 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
 
     // Debugging.
     if ($row->getSourceProperty('nid') == '19136') {
-      $field_full_width_media = $row->getSourceProperty('field_full_width_media');
-      $x = ''; // Useful for debugging.
+      //$field_full_width_media = $row->getSourceProperty('field_full_width_media');
+      //$x = ''; // Useful for debugging.
     }
 
     // Use the user reference to look up user name to map to the person taxonomy.
@@ -88,7 +88,8 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       }
     }
     else {
-      $row->setSourceProperty('field_project_contact', 'NONE');
+      //$x = ''; // Useful for debugging.
+      //$row->setSourceProperty('field_project_contact', '');
     }
   }
 
