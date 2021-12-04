@@ -95,7 +95,8 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
 
   if ($migration->id() == 'iied_d7_project_para_full_width_media') {
     $x = ''; // Useful for debugging.
-
   }
-
+  if ($migration->id() == 'iied_d7_project_para_additional_elements') {
+    $x = ''; // Useful for debugging.
+  }
 }
