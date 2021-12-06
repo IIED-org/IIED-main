@@ -45,6 +45,15 @@ class D7ParagraphAdditionalElements extends FieldableEntity {
       );
       $query->condition('pi.field_name', $this->configuration['field_name']);
 
+      // Join the field_data_field_basic_text.
+      $query->leftJoin('field_data_field_basic_text', 'fbt', 'fbt.entity_id = fd.' . $this->configuration['field_name'] . '_value');
+      $query->fields(
+        'fbt',
+        [
+          'field_basic_text_value',
+        ]
+      );
+
       $query->leftJoin('field_data_upload', 'fdu', 'fdu.entity_id = fd.' . $this->configuration['field_name'] . '_value');
       $query->fields(
         'fdu',

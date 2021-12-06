@@ -29,3 +29,6 @@
 'use  The form mode default linked to  taxonomy_term entity( tags )': taxonomy_term.tags.default
 'use  The form mode default linked to  taxonomy_term entity( theme )': taxonomy_term.theme.default
 'use  The form mode default linked to  user entity( user )': user.user.default
+'use  The form mode default linked to  paragraph entity( image_wide )': paragraph.image_wide.default
+'use  The form mode default linked to  paragraph entity( media_embed )': paragraph.media_embed.default
+'use  The form mode default linked to  paragraph entity( file_upload )': paragraph.file_upload.default

@@ -4,11 +4,13 @@ status: true
 dependencies:
   config:
     - field.field.node.project.body
+    - field.field.node.project.field_additional_elements
     - field.field.node.project.field_additional_resources
     - field.field.node.project.field_collection
     - field.field.node.project.field_contact
     - field.field.node.project.field_dates
     - field.field.node.project.field_display_image
+    - field.field.node.project.field_full_width_media
     - field.field.node.project.field_funded_by
     - field.field.node.project.field_image
     - field.field.node.project.field_image_caption
@@ -31,6 +33,7 @@ dependencies:
     - image
     - link
     - media_library
+    - paragraphs
     - path
     - text
 third_party_settings:
@@ -162,6 +165,18 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_additional_elements:
+    type: entity_reference_paragraphs
+    weight: 27
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+    third_party_settings: {  }
+    region: content
   field_additional_resources:
     weight: 9
     settings:
@@ -200,6 +215,18 @@ content:
       display_label: true
     third_party_settings: {  }
     type: boolean_checkbox
+    region: content
+  field_full_width_media:
+    type: entity_reference_paragraphs
+    weight: 26
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+    third_party_settings: {  }
     region: content
   field_funded_by:
     weight: 15

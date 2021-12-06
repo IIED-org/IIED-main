@@ -1,0 +1,10 @@
+uuid: 5a4c9dda-ae7d-45fd-80ad-002ff93b9d43
+langcode: en
+status: true
+dependencies: {  }
+id: image_wide
+label: 'Image wide'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

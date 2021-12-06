@@ -109,7 +109,9 @@ process:
       source: field_project_contact
       entity_type: taxonomy_term
       bundle: person
+      bundle_key: vid
       value_key: name
+      ignore_case: true
   field_main_image:
     -
       plugin: sub_process
@@ -132,8 +134,66 @@ process:
     -
       plugin: get
       source: field_display_image
+  field_full_width_media:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: field_full_width_media
+    -
+      plugin: sub_process
+      process:
+        target_id:
+          -
+            plugin: migration_lookup
+            migration: iied_d7_project_para_full_width_media
+            source: value
+          -
+            plugin: extract
+            index:
+              - 0
+        target_revision_id:
+          -
+            plugin: migration_lookup
+            migration: iied_d7_project_para_full_width_media
+            source: value
+          -
+            plugin: extract
+            index:
+              - 1
+  field_additional_elements:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: field_additional_elements
+    -
+      plugin: sub_process
+      process:
+        target_id:
+          -
+            plugin: migration_lookup
+            migration: iied_d7_project_para_additional_elements
+            source: value
+          -
+            plugin: extract
+            index:
+              - 0
+        target_revision_id:
+          -
+            plugin: migration_lookup
+            migration: iied_d7_project_para_additional_elements
+            source: value
+          -
+            plugin: extract
+            index:
+              - 1
 destination:
   plugin: 'entity_complete:node'
   translations: true
   default_bundle: project
-migration_dependencies: null
+migration_dependencies:
+  required:
+    - iied_d7_project_para_additional_elements
+    - iied_d7_project_para_full_width_media
+    - iied_d7_media_images
+    - iied_d7_media_documents
+  optional: {  }

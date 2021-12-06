@@ -159,8 +159,40 @@ process:
             plugin: extract
             index:
               - 1
+  field_additional_elements:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: field_additional_elements
+    -
+      plugin: sub_process
+      process:
+        target_id:
+          -
+            plugin: migration_lookup
+            migration: iied_d7_project_para_additional_elements
+            source: value
+          -
+            plugin: extract
+            index:
+              - 0
+        target_revision_id:
+          -
+            plugin: migration_lookup
+            migration: iied_d7_project_para_additional_elements
+            source: value
+          -
+            plugin: extract
+            index:
+              - 1
 destination:
   plugin: 'entity_complete:node'
   translations: true
   default_bundle: project
-
+migration_dependencies:
+  required:
+    - iied_d7_project_para_additional_elements
+    - iied_d7_project_para_full_width_media
+    - iied_d7_media_images
+    - iied_d7_media_documents
+  optional: {}

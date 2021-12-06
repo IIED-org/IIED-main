@@ -1,0 +1,24 @@
+uuid: f0ca3990-4cbb-48e7-b48d-bccb394df5de
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.file_upload.field_upload
+    - paragraphs.paragraphs_type.file_upload
+  module:
+    - file
+id: paragraph.file_upload.default
+targetEntityType: paragraph
+bundle: file_upload
+mode: default
+content:
+  field_upload:
+    weight: 0
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    type: file_default
+    region: content
+hidden:
+  search_api_excerpt: true

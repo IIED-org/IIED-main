@@ -1,0 +1,55 @@
+uuid: 43441690-e792-4db5-8b05-569cf41d5df6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_additional_elements
+    - node.type.project
+    - paragraphs.paragraphs_type.basic_text
+    - paragraphs.paragraphs_type.file_upload
+    - paragraphs.paragraphs_type.info_box
+    - paragraphs.paragraphs_type.media_embed
+  module:
+    - entity_reference_revisions
+id: node.project.field_additional_elements
+field_name: field_additional_elements
+entity_type: node
+bundle: project
+label: 'Additional elements'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    negate: 0
+    target_bundles:
+      basic_text: basic_text
+      file_upload: file_upload
+      info_box: info_box
+      media_embed: media_embed
+    target_bundles_drag_drop:
+      basic_text:
+        enabled: true
+        weight: -15
+      file_upload:
+        enabled: true
+        weight: -14
+      image_wide:
+        weight: -11
+        enabled: false
+      info_box:
+        enabled: true
+        weight: -13
+      linked_person:
+        weight: -10
+        enabled: false
+      media_embed:
+        enabled: true
+        weight: -12
+      row_of_4:
+        weight: -9
+        enabled: false
+field_type: entity_reference_revisions

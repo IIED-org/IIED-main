@@ -1,0 +1,24 @@
+uuid: 2a55139b-970f-4d29-9446-8a7f1df4bdab
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.file_upload.field_upload
+    - paragraphs.paragraphs_type.file_upload
+  module:
+    - file
+id: paragraph.file_upload.default
+targetEntityType: paragraph
+bundle: file_upload
+mode: default
+content:
+  field_upload:
+    weight: 0
+    settings:
+      progress_indicator: throbber
+    third_party_settings: {  }
+    type: file_generic
+    region: content
+hidden:
+  created: true
+  status: true
