@@ -191,8 +191,8 @@ destination:
   default_bundle: project
 migration_dependencies:
   required:
-    - iied_d7_project_para_additional_elements
-    - iied_d7_project_para_full_width_media
     - iied_d7_media_images
     - iied_d7_media_documents
-  optional: {}
+  optional:
+    - iied_d7_project_para_additional_elements
+    - iied_d7_project_para_full_width_media

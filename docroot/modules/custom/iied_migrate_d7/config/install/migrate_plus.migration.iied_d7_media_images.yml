@@ -41,4 +41,3 @@ destination:
 migration_dependencies:
   required:
     - iied_d7_files
-    - iied_d7_media_images
