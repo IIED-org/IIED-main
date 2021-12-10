@@ -104,8 +104,11 @@ process:
       source: field_contact
   field_project_contacts:
     -
-      plugin: entity_generate
+      plugin: skip_on_empty
+      method: process
       source: field_project_contact
+    -
+      plugin: entity_generate
       entity_type: taxonomy_term
       bundle: person
       bundle_key: vid
