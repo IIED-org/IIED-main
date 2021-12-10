@@ -7,7 +7,6 @@ dependencies:
     - field.field.node.project.body
     - field.field.node.project.field_additional_elements
     - field.field.node.project.field_additional_resources
-    - field.field.node.project.field_collection
     - field.field.node.project.field_contact
     - field.field.node.project.field_dates
     - field.field.node.project.field_display_image
@@ -50,13 +49,6 @@ content:
     weight: 1
     settings: {  }
     third_party_settings: {  }
-    region: content
-  field_collection:
-    weight: 8
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    type: text_default
     region: content
   field_image:
     weight: 7
