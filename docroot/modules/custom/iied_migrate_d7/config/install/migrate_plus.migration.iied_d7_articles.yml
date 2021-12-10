@@ -1,0 +1,199 @@
+# Migration configuration for article nodes.
+id: iied_d7_articles
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - iied_migrate_d7
+class: Drupal\node\Plugin\migrate\D7NodeTranslation
+label: IIED article nodes
+migration_group: iied_migrate_d7
+migration_tags:
+  - nodes
+deriver: Drupal\node\Plugin\migrate\D7NodeDeriver
+source:
+  plugin: iied_d7_article
+  node_type: article
+  key: d7migrate
+process:
+  created: created
+  changed: changed
+  status: status
+  langcode:
+    -
+      plugin: default_value
+      default_value: 'en'
+  title:
+    -
+      plugin: get
+      source: title
+  body/value:
+    -
+      plugin: get
+      source: body/0/value
+  body/summary:
+    -
+      plugin: get
+      source: body/0/summary
+  body/format:
+    -
+      plugin: default_value
+      default_value: 'full_html'
+  field_dates:
+    -
+      plugin: get
+      source: field_dates
+  field_tagline:
+    -
+      plugin: get
+      source: field_tagline
+  field_standfirst/value:
+    -
+      plugin: get
+      source: field_standfirst/0/value
+  field_standfirst/format:
+    -
+      plugin: default_value
+      default_value: 'full_html'
+  field_project_status:
+    -
+      plugin: get
+      source: field_project_status
+  field_additional_resources/value:
+    -
+      plugin: get
+      source: field_additional_resources/0/value
+  field_additional_resources/format:
+    -
+      plugin: default_value
+      default_value: 'full_html'
+  field_partners/value:
+    -
+      plugin: get
+      source: field_partners/0/value
+  field_partners/format:
+    -
+      plugin: default_value
+      default_value: 'full_html'
+  field_theme:
+    -
+      plugin: sub_process
+      source: taxonomy_vocabulary_19
+      process:
+        target_id: tid
+  field_tags:
+    -
+      plugin: sub_process
+      source: taxonomy_vocabulary_15
+      process:
+        target_id: tid
+  field_funded_by/value:
+    -
+      plugin: get
+      source: field_funded_by/0/value
+  field_funded_by/format:
+    -
+      plugin: default_value
+      default_value: 'full_html'
+  field_contact:
+    -
+      plugin: get
+      source: field_contact
+  field_project_contacts:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: field_project_contact
+    -
+      plugin: entity_generate
+      entity_type: taxonomy_term
+      bundle: person
+      bundle_key: vid
+      value_key: name
+      ignore_case: true
+  field_main_image:
+    -
+      plugin: sub_process
+      source: field_main_image
+      process:
+        target_id:
+          plugin: migration_lookup
+          migration: iied_d7_media_images
+          source: fid
+          no_stub: true
+  field_image_caption/value:
+    -
+      plugin: get
+      source: field_image_caption/0/value
+  field_image_caption/format:
+    -
+      plugin: default_value
+      default_value: 'full_html'
+  field_display_image:
+    -
+      plugin: get
+      source: field_display_image
+  field_full_width_media:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: field_full_width_media
+    -
+      plugin: sub_process
+      process:
+        target_id:
+          -
+            plugin: migration_lookup
+            migration: iied_d7_project_para_full_width_media
+            source: value
+          -
+            plugin: extract
+            index:
+              - 0
+        target_revision_id:
+          -
+            plugin: migration_lookup
+            migration: iied_d7_project_para_full_width_media
+            source: value
+          -
+            plugin: extract
+            index:
+              - 1
+  field_additional_elements:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: field_additional_elements
+    -
+      plugin: sub_process
+      process:
+        target_id:
+          -
+            plugin: migration_lookup
+            migration: iied_d7_project_para_additional_elements
+            source: value
+          -
+            plugin: extract
+            index:
+              - 0
+        target_revision_id:
+          -
+            plugin: migration_lookup
+            migration: iied_d7_project_para_additional_elements
+            source: value
+          -
+            plugin: extract
+            index:
+              - 1
+destination:
+  plugin: 'entity_complete:node'
+  translations: true
+  default_bundle: article
+migration_dependencies:
+  required:
+    - iied_d7_media_images
+    - iied_d7_media_documents
+  optional:
+    - iied_d7_project_para_additional_elements
+    - iied_d7_project_para_full_width_media
