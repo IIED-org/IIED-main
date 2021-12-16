@@ -86,7 +86,6 @@ module:
   migrate_pubs: 0
   migrate_source_csv: 0
   migrate_tools: 0
-  migrate_upgrade: 0
   name: 0
   node: 0
   notification: 0

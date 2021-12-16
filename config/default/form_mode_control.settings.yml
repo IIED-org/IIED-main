@@ -34,3 +34,4 @@
 'use  The form mode default linked to  paragraph entity( file_upload )': paragraph.file_upload.default
 'use  The form mode default linked to  paragraph entity( basic_text )': paragraph.basic_text.default
 'use  The form mode default linked to  paragraph entity( info_box )': paragraph.info_box.default
+'use  The form mode default linked to  taxonomy_term entity( collection )': taxonomy_term.collection.default

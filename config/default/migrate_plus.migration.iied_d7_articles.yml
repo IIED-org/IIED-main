@@ -1,28 +1,26 @@
-uuid: dc189661-0dfa-4b27-b1f5-dcb5a4107c67
+uuid: 5bbaa67c-fc9e-49f2-ae73-ff8b98f80511
 langcode: en
 status: true
 dependencies:
   enforced:
     module:
       - iied_migrate_d7
-id: iied_d7_projects
+id: iied_d7_articles
 class: Drupal\node\Plugin\migrate\D7NodeTranslation
 field_plugin_method: null
 cck_plugin_method: null
 migration_tags:
   - nodes
 migration_group: iied_migrate_d7
-label: 'IIED project nodes'
+label: 'IIED article nodes'
 source:
-  plugin: iied_d7_project
-  node_type: project
+  plugin: iied_d7_article
+  node_type: article
   key: d7migrate
 process:
-  nid:
-    -
-      plugin: migration_lookup
-      migration: iied_projects
-      source: nid
+  created: created
+  changed: changed
+  status: status
   langcode:
     -
       plugin: default_value
@@ -91,6 +89,11 @@ process:
       source: taxonomy_vocabulary_15
       process:
         target_id: tid
+  field_collection:
+    -
+      plugin: migration_lookup
+      migration: iied_d7_terms_collection
+      source: field_group
   field_funded_by/value:
     -
       plugin: get
@@ -192,7 +195,7 @@ process:
 destination:
   plugin: 'entity_complete:node'
   translations: true
-  default_bundle: project
+  default_bundle: article
 migration_dependencies:
   required:
     - iied_d7_media_images
