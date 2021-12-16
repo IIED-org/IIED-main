@@ -25,7 +25,7 @@ class D7Article extends Node {
     $query = parent::query();
     // Select only the source article nodes that are published.
     $query->condition('n.status', 1);
-    $query->condition('n.nid', '139726');
+    // $query->condition('n.nid', '139726');
     return $query;
   }
 
