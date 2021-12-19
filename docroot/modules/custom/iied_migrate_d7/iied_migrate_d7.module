@@ -100,4 +100,22 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
   if ($migration->id() == 'iied_d7_project_para_additional_elements') {
     $x = ''; // Useful for debugging.
   }
+  if ($migration->id() == 'iied_d7_field_paragraphs') {
+    $x = ''; // Useful for debugging.
+    $paragraphs_to_ignore = [
+      'colorbox_gallery',
+      'colorbox_gallery_thumbnails',
+    ];
+    if (in_array($row->getSourceProperty('bundle'), $paragraphs_to_ignore)) {
+      return FALSE;
+    }
+    if ($row->getSourceProperty('bundle') == 'video_embed_standard') {
+      $x = ''; // Useful for debugging.
+      // We are not meant to be using video_embed_standard, but there are a few
+      // paragraphs of this type use in articles. They can be migrated to the
+      // video_embed paragraph, which has the same fields.
+      $row->setSourceProperty('bundle', 'video_embed');
+    }
+
+  }
 }

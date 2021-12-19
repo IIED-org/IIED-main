@@ -165,18 +165,18 @@ process:
             plugin: extract
             index:
               - 1
-  field_additional_elements:
+  field_paragraphs:
     -
       plugin: skip_on_empty
       method: process
-      source: field_additional_elements
+      source: field_paragraphs
     -
       plugin: sub_process
       process:
         target_id:
           -
             plugin: migration_lookup
-            migration: iied_d7_project_para_additional_elements
+            migration: iied_d7_field_paragraphs
             source: value
           -
             plugin: extract
@@ -185,7 +185,7 @@ process:
         target_revision_id:
           -
             plugin: migration_lookup
-            migration: iied_d7_project_para_additional_elements
+            migration: iied_d7_field_paragraphs
             source: value
           -
             plugin: extract

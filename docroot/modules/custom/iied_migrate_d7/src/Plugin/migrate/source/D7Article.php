@@ -25,7 +25,10 @@ class D7Article extends Node {
     $query = parent::query();
     // Select only the source article nodes that are published.
     $query->condition('n.status', 1);
-    // $query->condition('n.nid', '139726');
+    // Node 27381 is useful for testing as it hase a video_embed_standard para
+    // that has been migrated into a video_embed paragraph on the
+    // field_paragraphs field.
+    // $query->condition('n.nid', '27381');
     return $query;
   }
 
