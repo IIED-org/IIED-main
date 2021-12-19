@@ -1,0 +1,36 @@
+uuid: 15233244-a864-40c5-9698-2999a39c8a64
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.image.field_image_caption
+    - field.field.paragraph.image.field_main_image
+    - paragraphs.paragraphs_type.image
+  module:
+    - text
+id: paragraph.image.default
+targetEntityType: paragraph
+bundle: image
+mode: default
+content:
+  field_image_caption:
+    weight: 1
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
+    region: content
+  field_main_image:
+    weight: 0
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
+hidden:
+  created: true
+  status: true

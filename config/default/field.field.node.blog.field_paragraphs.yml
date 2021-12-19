@@ -1,21 +1,20 @@
-uuid: a484b7ae-2d00-460e-a39f-177e92be78e7
+uuid: 09eae757-ea2e-4c5b-ae8f-3d8d56e5c5e4
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.field_paragraphs
-    - node.type.article
+    - node.type.blog
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.file_upload
     - paragraphs.paragraphs_type.info_box
     - paragraphs.paragraphs_type.media_embed
-    - paragraphs.paragraphs_type.video_embed
   module:
     - entity_reference_revisions
-id: node.article.field_paragraphs
+id: node.blog.field_paragraphs
 field_name: field_paragraphs
 entity_type: node
-bundle: article
+bundle: blog
 label: Paragraphs
 description: ''
 required: false
@@ -31,7 +30,6 @@ settings:
       file_upload: file_upload
       info_box: info_box
       media_embed: media_embed
-      video_embed: video_embed
     target_bundles_drag_drop:
       basic_text:
         enabled: true
@@ -39,9 +37,6 @@ settings:
       file_upload:
         enabled: true
         weight: 9
-      image:
-        weight: 12
-        enabled: false
       image_wide:
         weight: 10
         enabled: false
@@ -57,7 +52,4 @@ settings:
       row_of_4:
         weight: 14
         enabled: false
-      video_embed:
-        enabled: true
-        weight: 18
 field_type: entity_reference_revisions

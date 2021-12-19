@@ -1,0 +1,19 @@
+uuid: 9a4403f1-7d52-4977-b478-75692df97aa9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_tagline
+    - node.type.blog
+id: node.blog.field_tagline
+field_name: field_tagline
+entity_type: node
+bundle: blog
+label: 'Promo text'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long
