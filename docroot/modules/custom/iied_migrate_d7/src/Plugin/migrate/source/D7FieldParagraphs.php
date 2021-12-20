@@ -109,8 +109,7 @@ class D7FieldParagraphs extends FieldableEntity {
   /**
    * {@inheritdoc}
    */
-  public function fields()
-  {
+  public function fields() {
     $fields = [
       'item_id' => $this->t('Item ID'),
       'revision_id' => $this->t('Revision ID'),
@@ -122,8 +121,7 @@ class D7FieldParagraphs extends FieldableEntity {
   /**
    * {@inheritdoc}
    */
-  public function getIds()
-  {
+  public function getIds() {
     $ids['item_id']['type'] = 'integer';
     $ids['item_id']['alias'] = 'pi';
     return $ids;

@@ -15,7 +15,12 @@ use Drupal\migrate\Row;
  */
 function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $source, MigrationInterface $migration) {
 
-  if ($migration->id() == 'iied_d7_projects' || $migration->id() == 'iied_d7_articles') {
+  $themes_migrations = [
+    'iied_d7_projects',
+    'iied_d7_articles',
+    'iied_d7_blogs'
+  ];
+  if (in_array($migration->id(), $themes_migrations) ) {
     // Themes are already in the pubs site, so quickest to simply map the term
     // ids for now.
     $themes_map = [
@@ -116,6 +121,28 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       // video_embed paragraph, which has the same fields.
       $row->setSourceProperty('bundle', 'video_embed');
     }
+
+  }
+  if ($migration->id() == 'iied_d7_blogs') {
+
+    //$project_reference = $row->getSourceProperty('field_project_number_reference');
+    $x = ''; // Useful for debugging.
+    $blog_authors = [];
+    $author_names = [];
+    $author_uid = $row->getSourceProperty('node_uid');
+    if ($author_uid) {
+      $blog_authors[] = $author_uid;
+    }
+    $second_authors = $row->getSourceProperty('field_second_author');
+    if ($second_authors && count($second_authors)) {
+      foreach ($second_authors as $second_author) {
+        $blog_authors[] = $second_author['target_id'];
+      }
+    }
+    foreach ($blog_authors as $blog_author) {
+      $author_names[] = $source->getDatabase()->query('SELECT name FROM {users} WHERE uid = :uid', array(':uid' => $blog_author))->fetchField();
+    }
+    $row->setSourceProperty('field_authors', $author_names);
 
   }
 }
