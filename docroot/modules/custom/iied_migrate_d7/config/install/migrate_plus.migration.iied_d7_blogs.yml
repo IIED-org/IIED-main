@@ -146,7 +146,7 @@ process:
       bundle_key: vid
       value_key: name
       ignore_case: true
-field_about_the_author:
+  field_about_the_author:
     -
       plugin: skip_on_empty
       method: process

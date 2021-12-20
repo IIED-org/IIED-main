@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.taxonomy_term.person.field_author_picture
     - field.field.taxonomy_term.person.field_iied_user_id
     - field.field.taxonomy_term.person.field_legacy_iscanonical
     - field.field.taxonomy_term.person.field_link
@@ -118,6 +119,23 @@ third_party_settings:
                 type: number_integer
             additional: {  }
             weight: 4
+          f0928f70-4786-4728-acf0-49941e9f93b8:
+            uuid: f0928f70-4786-4728-acf0-49941e9f93b8
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:taxonomy_term:person:field_author_picture'
+              formatter:
+                type: entity_reference_entity_view
+                label: above
+                settings:
+                  view_mode: default
+                  link: false
+                third_party_settings: {  }
+            additional: {  }
+            weight: 6
         third_party_settings: {  }
     allow_custom: false
 id: taxonomy_term.person.default
@@ -125,6 +143,15 @@ targetEntityType: taxonomy_term
 bundle: person
 mode: default
 content:
+  field_author_picture:
+    type: entity_reference_entity_view
+    weight: 6
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    region: content
   field_iied_user_id:
     weight: 4
     label: above

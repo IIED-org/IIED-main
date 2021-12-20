@@ -2,11 +2,10 @@
 
 /**
  * @file
- * Module for testing the migration source plugin prepareRow().
+ * Module for altering the migration source properties in prepareRow().
  */
 
 use Drupal\migrate\Plugin\MigrationInterface;
-use Drupal\migrate\MigrateSkipRowException;
 use Drupal\migrate\Plugin\MigrateSourceInterface;
 use Drupal\migrate\Row;
 
@@ -77,13 +76,7 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       $row->setSourceProperty('taxonomy_vocabulary_15', $new_tags);
     }
 
-    // Debugging.
-    if ($row->getSourceProperty('nid') == '19136') {
-      //$field_full_width_media = $row->getSourceProperty('field_full_width_media');
-      //$x = ''; // Useful for debugging.
-    }
-
-    // Use the user reference to look up user name to map to the person taxonomy.
+    // Use user reference to look up user name to map to the person taxonomy.
     $project_contacts = [];
     $project_contacts = $row->getSourceProperty('field_project_contact');
     if ($project_contacts && count($project_contacts)) {
@@ -93,18 +86,9 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
           $row->setSourceProperty('field_project_contact', $author_name);
       }
     }
-    else {
-      //$x = ''; // Useful for debugging.
-      //$row->setSourceProperty('field_project_contact', '');
-    }
   }
 
-  if ($migration->id() == 'iied_d7_project_para_full_width_media') {
-    $x = ''; // Useful for debugging.
-  }
-  if ($migration->id() == 'iied_d7_project_para_additional_elements') {
-    $x = ''; // Useful for debugging.
-  }
+  // iied_d7_field_paragraphs, ignoring some paragraphs.
   if ($migration->id() == 'iied_d7_field_paragraphs') {
     $x = ''; // Useful for debugging.
     $paragraphs_to_ignore = [
@@ -115,18 +99,17 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       return FALSE;
     }
     if ($row->getSourceProperty('bundle') == 'video_embed_standard') {
-      $x = ''; // Useful for debugging.
       // We are not meant to be using video_embed_standard, but there are a few
       // paragraphs of this type use in articles. They can be migrated to the
       // video_embed paragraph, which has the same fields.
       $row->setSourceProperty('bundle', 'video_embed');
     }
-
   }
+
+  // iied_d7_blogs migration. We need to lookup person terms to reference as
+  // authors rather than the original user reference.
   if ($migration->id() == 'iied_d7_blogs') {
 
-    //$project_reference = $row->getSourceProperty('field_project_number_reference');
-    $x = ''; // Useful for debugging.
     $blog_authors = [];
     $author_names = [];
     $author_uid = $row->getSourceProperty('node_uid');
@@ -144,5 +127,15 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
     }
     $row->setSourceProperty('field_authors', $author_names);
 
+  }
+
+  // iied_d7_terms_person migration, users migrating to the person taxonomy.
+  if ($migration->id() == 'iied_d7_terms_person') {
+    $name = $row->getSourceProperty('name');
+    $term = taxonomy_term_load_multiple_by_name($name, $vocabulary = 'person');
+    if (count($term)) {
+      $tid = array_key_first($term);
+      $row->setSourceProperty('tid', $tid);
+    }
   }
 }

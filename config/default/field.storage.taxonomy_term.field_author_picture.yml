@@ -1,13 +1,13 @@
-uuid: 90410c69-350d-419c-8c1f-93a2361ea969
+uuid: d3addb8f-b3ec-4c53-9362-f5dcca5a1650
 langcode: en
 status: true
 dependencies:
   module:
     - media
-    - paragraphs
-id: paragraph.field_author_photo
-field_name: field_author_photo
-entity_type: paragraph
+    - taxonomy
+id: taxonomy_term.field_author_picture
+field_name: field_author_picture
+entity_type: taxonomy_term
 type: entity_reference
 settings:
   target_type: media

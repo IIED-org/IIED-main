@@ -32,13 +32,4 @@ class D7Article extends Node {
     return $query;
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function prepareRow(Row $row) {
-    // For debugging.
-    $x = '';
-    return parent::prepareRow($row);
-  }
-
 }

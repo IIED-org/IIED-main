@@ -23,17 +23,8 @@ class D7Blog extends Node {
     // Select only the source article nodes that are published.
     $query->condition('n.status', 1);
     // Node 26866 is useful for testing.
-    $query->condition('n.nid', '26866');
+    // $query->condition('n.nid', '26866');
     return $query;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function prepareRow(Row $row) {
-    // For debugging.
-    $x = '';
-    return parent::prepareRow($row);
   }
 
 }

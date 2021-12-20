@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.paragraph.about_the_author.field_author_biog
-    - field.field.paragraph.about_the_author.field_author_photo
+    - field.field.paragraph.about_the_author.field_author_reference
     - paragraphs.paragraphs_type.about_the_author
   module:
     - text
@@ -20,14 +20,13 @@ content:
     third_party_settings: {  }
     type: text_default
     region: content
-  field_author_photo:
-    type: entity_reference_entity_view
-    weight: 0
+  field_author_reference:
+    weight: 2
     label: above
     settings:
-      view_mode: default
-      link: false
+      link: true
     third_party_settings: {  }
+    type: entity_reference_label
     region: content
 hidden:
   search_api_excerpt: true

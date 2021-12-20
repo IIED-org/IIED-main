@@ -44,6 +44,7 @@ class D7FieldAboutTheAuthor extends FieldableEntity {
       $query->condition('pi.field_name', 'field_about_the_author');
       $types = ['article', 'blog', 'event', 'media_release'];
       $query->condition('fd.bundle', $types, 'IN');
+      //$query->condition('pi.item_id', '5416');
 
       // Join the field_data_field_author_biog.
       $query->leftJoin('field_data_field_author_biog', 'fab', 'fab.entity_id = fd.' . 'field_about_the_author_value');

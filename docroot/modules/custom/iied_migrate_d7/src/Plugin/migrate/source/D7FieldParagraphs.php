@@ -126,12 +126,5 @@ class D7FieldParagraphs extends FieldableEntity {
     $ids['item_id']['alias'] = 'pi';
     return $ids;
   }
-  /**
-   * {@inheritdoc}
-   */
-  public function prepareRow(Row $row) {
-    $x = '';
-    return parent::prepareRow($row);
-  }
 
 }

@@ -146,6 +146,32 @@ process:
       bundle_key: vid
       value_key: name
       ignore_case: true
+  field_about_the_author:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: field_about_the_author
+    -
+      plugin: sub_process
+      process:
+        target_id:
+          -
+            plugin: migration_lookup
+            migration: iied_d7_field_about_the_author
+            source: value
+          -
+            plugin: extract
+            index:
+              - 0
+        target_revision_id:
+          -
+            plugin: migration_lookup
+            migration: iied_d7_field_about_the_author
+            source: value
+          -
+            plugin: extract
+            index:
+              - 1
 destination:
   plugin: 'entity_complete:node'
   translations: true

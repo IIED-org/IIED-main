@@ -23,14 +23,11 @@ process:
     -
       plugin: default_value
       default_value: full_html
-  field_author_photo/target_id:
+  field_author_reference/target_id:
     -
       plugin: migration_lookup
-      migration: iied_d7_files
-      source: upload_fid
-    -
-      plugin: skip_on_empty
-      method: row
+      migration: iied_d7_terms_person
+      source: field_author_photo_target_id
 destination:
   plugin: 'entity_reference_revisions:paragraph'
 migration_dependencies:

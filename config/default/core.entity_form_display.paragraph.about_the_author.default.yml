@@ -4,10 +4,9 @@ status: true
 dependencies:
   config:
     - field.field.paragraph.about_the_author.field_author_biog
-    - field.field.paragraph.about_the_author.field_author_photo
+    - field.field.paragraph.about_the_author.field_author_reference
     - paragraphs.paragraphs_type.about_the_author
   module:
-    - media_library
     - text
 id: paragraph.about_the_author.default
 targetEntityType: paragraph
@@ -22,12 +21,15 @@ content:
     third_party_settings: {  }
     type: text_textarea
     region: content
-  field_author_photo:
-    type: media_library_widget
-    weight: 0
+  field_author_reference:
+    weight: 2
     settings:
-      media_types: {  }
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
+    type: entity_reference_autocomplete
     region: content
 hidden:
   created: true

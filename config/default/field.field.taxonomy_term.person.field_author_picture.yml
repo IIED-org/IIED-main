@@ -1,16 +1,16 @@
-uuid: 1ab02fbe-9ed6-46c6-8da3-90246c45d81f
+uuid: 3425036d-5f85-4858-acd1-071316be67f6
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.paragraph.field_author_photo
+    - field.storage.taxonomy_term.field_author_picture
     - media.type.image
-    - paragraphs.paragraphs_type.about_the_author
-id: paragraph.about_the_author.field_author_photo
-field_name: field_author_photo
-entity_type: paragraph
-bundle: about_the_author
-label: 'Author photo'
+    - taxonomy.vocabulary.person
+id: taxonomy_term.person.field_author_picture
+field_name: field_author_picture
+entity_type: taxonomy_term
+bundle: person
+label: 'Author picture'
 description: ''
 required: false
 translatable: false
