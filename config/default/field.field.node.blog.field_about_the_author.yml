@@ -1,0 +1,58 @@
+uuid: 51089f0a-d6f8-4405-8cd9-8b8e0c20257e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_about_the_author
+    - node.type.blog
+    - paragraphs.paragraphs_type.about_the_author
+  module:
+    - entity_reference_revisions
+id: node.blog.field_about_the_author
+field_name: field_about_the_author
+entity_type: node
+bundle: blog
+label: 'About the author'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    negate: 0
+    target_bundles:
+      about_the_author: about_the_author
+    target_bundles_drag_drop:
+      about_the_author:
+        enabled: true
+        weight: 11
+      basic_text:
+        weight: 12
+        enabled: false
+      file_upload:
+        weight: 13
+        enabled: false
+      image:
+        weight: 14
+        enabled: false
+      image_wide:
+        weight: 15
+        enabled: false
+      info_box:
+        weight: 16
+        enabled: false
+      linked_person:
+        weight: 17
+        enabled: false
+      media_embed:
+        weight: 18
+        enabled: false
+      row_of_4:
+        weight: 19
+        enabled: false
+      video_embed:
+        weight: 20
+        enabled: false
+field_type: entity_reference_revisions

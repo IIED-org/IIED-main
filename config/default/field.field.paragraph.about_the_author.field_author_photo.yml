@@ -1,0 +1,29 @@
+uuid: 1ab02fbe-9ed6-46c6-8da3-90246c45d81f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_author_photo
+    - media.type.image
+    - paragraphs.paragraphs_type.about_the_author
+id: paragraph.about_the_author.field_author_photo
+field_name: field_author_photo
+entity_type: paragraph
+bundle: about_the_author
+label: 'Author photo'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      image: image
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

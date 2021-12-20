@@ -1,0 +1,21 @@
+uuid: 101b96db-db3e-4994-938c-532808c2a8aa
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_blogger_info
+    - node.type.blog
+  module:
+    - text
+id: node.blog.field_blogger_info
+field_name: field_blogger_info
+entity_type: node
+bundle: blog
+label: 'Blogger info'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

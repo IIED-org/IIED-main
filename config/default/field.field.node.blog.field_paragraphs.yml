@@ -7,8 +7,10 @@ dependencies:
     - node.type.blog
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.file_upload
+    - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.info_box
     - paragraphs.paragraphs_type.media_embed
+    - paragraphs.paragraphs_type.video_embed
   module:
     - entity_reference_revisions
 id: node.blog.field_paragraphs
@@ -29,7 +31,9 @@ settings:
       basic_text: basic_text
       file_upload: file_upload
       info_box: info_box
+      image: image
       media_embed: media_embed
+      video_embed: video_embed
     target_bundles_drag_drop:
       basic_text:
         enabled: true
@@ -37,6 +41,9 @@ settings:
       file_upload:
         enabled: true
         weight: 9
+      image:
+        enabled: true
+        weight: 12
       image_wide:
         weight: 10
         enabled: false
@@ -52,4 +59,7 @@ settings:
       row_of_4:
         weight: 14
         enabled: false
+      video_embed:
+        enabled: true
+        weight: 18
 field_type: entity_reference_revisions
