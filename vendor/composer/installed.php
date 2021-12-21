@@ -1676,6 +1676,15 @@
             'reference' => '8.x-1.1',
             'dev_requirement' => false,
         ),
+        'drupal/stage_file_proxy' => array(
+            'pretty_version' => '1.2.0',
+            'version' => '1.2.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/stage_file_proxy',
+            'aliases' => array(),
+            'reference' => '8.x-1.2',
+            'dev_requirement' => false,
+        ),
         'drupal/standard' => array(
             'dev_requirement' => false,
             'replaced' => array(
