@@ -1,0 +1,48 @@
+uuid: 36c94014-52ca-47f4-b413-6f6a50d9aa88
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_event_type
+field_name: field_event_type
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: '1'
+      label: Workshop
+    -
+      value: '2'
+      label: 'Learning event'
+    -
+      value: '3'
+      label: Seminar
+    -
+      value: '4'
+      label: 'Critical theme'
+    -
+      value: '5'
+      label: Lecture
+    -
+      value: '6'
+      label: Presentation
+    -
+      value: '7'
+      label: Conference
+    -
+      value: '8'
+      label: 'Side event'
+    -
+      value: '9'
+      label: Webinar
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,19 @@
+uuid: 9510aa13-9548-489e-8f0f-93c8f6112792
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_tagline
+    - node.type.event
+id: node.event.field_tagline
+field_name: field_tagline
+entity_type: node
+bundle: event
+label: 'Promo text'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long
