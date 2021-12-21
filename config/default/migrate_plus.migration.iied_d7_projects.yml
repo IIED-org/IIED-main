@@ -18,6 +18,13 @@ source:
   node_type: project
   key: d7migrate
 process:
+  created: created
+  changed: changed
+  status: status
+  uid:
+    -
+      plugin: default_value
+      default_value: '1'
   nid:
     -
       plugin: migration_lookup
@@ -193,10 +200,41 @@ destination:
   plugin: 'entity_complete:node'
   translations: true
   default_bundle: project
+  overwrite_properties:
+    - created
+    - changed
+    - status
+    - uid
+    - title
+    - body/value
+    - body/summary
+    - body/format
+    - field_dates
+    - field_tagline
+    - field_standfirst/value
+    - field_standfirst/format
+    - field_project_status
+    - field_additional_resources/value
+    - field_additional_resources/format
+    - field_partners/value
+    - field_partners/format
+    - field_theme
+    - field_tags
+    - field_funded_by/value
+    - field_funded_by/format
+    - field_contact
+    - field_project_contacts
+    - field_main_image
+    - field_image_caption/value
+    - field_image_caption/format
+    - field_display_image
+    - field_full_width_media
+    - field_additional_elements
 migration_dependencies:
   required:
     - iied_d7_media_images
     - iied_d7_media_documents
+    - iied_d7_terms_collection
   optional:
     - iied_d7_project_para_additional_elements
     - iied_d7_project_para_full_width_media

@@ -20,6 +20,10 @@ process:
   created: created
   changed: changed
   status: status
+  uid:
+    -
+      plugin: default_value
+      default_value: '1'
   langcode:
     -
       plugin: default_value
