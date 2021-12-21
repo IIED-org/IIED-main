@@ -1,0 +1,33 @@
+uuid: d9e84328-580f-402a-bdb5-255399ba1c5c
+langcode: en
+status: true
+dependencies: {  }
+id: iied_d7_media_video_remote
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 7'
+  - Content
+migration_group: iied_migrate_d7
+label: 'IIED media remote video entities'
+source:
+  plugin: d7_video_remote
+process:
+  field_media_oembed_video:
+    -
+      plugin: get
+      source: field_video_video_url
+  status: status
+  created: timestamp
+  changed: timestamp
+  uid:
+    -
+      plugin: default_value
+      default_value: '1'
+destination:
+  plugin: 'entity:media'
+  default_bundle: remote_video
+migration_dependencies:
+  required:
+    - iied_d7_files

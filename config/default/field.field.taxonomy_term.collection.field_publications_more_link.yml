@@ -1,0 +1,21 @@
+uuid: ffdb6e9c-c187-4d77-b39b-1eea9ce13a52
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_publications_more_link
+    - taxonomy.vocabulary.collection
+  module:
+    - text
+id: taxonomy_term.collection.field_publications_more_link
+field_name: field_publications_more_link
+entity_type: taxonomy_term
+bundle: collection
+label: 'Publications more link'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

@@ -1,0 +1,49 @@
+uuid: 48d84a53-fc1e-496d-bfb9-9e03a234ab72
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_containers
+    - paragraphs.paragraphs_type.basic_text
+    - taxonomy.vocabulary.collection
+  module:
+    - entity_reference_revisions
+id: taxonomy_term.collection.field_containers
+field_name: field_containers
+entity_type: taxonomy_term
+bundle: collection
+label: Containers
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    negate: 0
+    target_bundles:
+      basic_text: basic_text
+    target_bundles_drag_drop:
+      basic_text:
+        enabled: true
+        weight: 8
+      file_upload:
+        weight: 9
+        enabled: false
+      image_wide:
+        weight: 10
+        enabled: false
+      info_box:
+        weight: 11
+        enabled: false
+      linked_person:
+        weight: 12
+        enabled: false
+      media_embed:
+        weight: 13
+        enabled: false
+      row_of_4:
+        weight: 14
+        enabled: false
+field_type: entity_reference_revisions

@@ -1,0 +1,21 @@
+uuid: 125251f1-9d7d-4a50-8771-15fd564e3408
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_downloads
+    - taxonomy.vocabulary.collection
+  module:
+    - text
+id: taxonomy_term.collection.field_downloads
+field_name: field_downloads
+entity_type: taxonomy_term
+bundle: collection
+label: Downloads
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

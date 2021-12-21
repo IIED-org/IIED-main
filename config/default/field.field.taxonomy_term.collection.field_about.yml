@@ -1,0 +1,21 @@
+uuid: 64433826-b527-438b-97cb-68a11d68bb8e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_about
+    - taxonomy.vocabulary.collection
+  module:
+    - text
+id: taxonomy_term.collection.field_about
+field_name: field_about
+entity_type: taxonomy_term
+bundle: collection
+label: Introduction
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

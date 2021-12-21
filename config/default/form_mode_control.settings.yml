@@ -34,3 +34,7 @@
 'use  The form mode default linked to  paragraph entity( file_upload )': paragraph.file_upload.default
 'use  The form mode default linked to  paragraph entity( basic_text )': paragraph.basic_text.default
 'use  The form mode default linked to  paragraph entity( info_box )': paragraph.info_box.default
+'use  The form mode default linked to  taxonomy_term entity( collection )': taxonomy_term.collection.default
+'use  The form mode default linked to  node entity( blog )': node.blog.default
+'use  The form mode default linked to  paragraph entity( image )': paragraph.image.default
+'use  The form mode default linked to  paragraph entity( video_embed )': paragraph.video_embed.default

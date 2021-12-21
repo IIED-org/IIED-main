@@ -1,4 +1,4 @@
-uuid: 94795d61-428d-49cd-9d4e-b1ada07a91fc
+uuid: dc189661-0dfa-4b27-b1f5-dcb5a4107c67
 langcode: en
 status: true
 dependencies:
@@ -105,8 +105,11 @@ process:
       source: field_contact
   field_project_contacts:
     -
-      plugin: entity_generate
+      plugin: skip_on_empty
+      method: process
       source: field_project_contact
+    -
+      plugin: entity_generate
       entity_type: taxonomy_term
       bundle: person
       bundle_key: vid

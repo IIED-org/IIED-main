@@ -1,0 +1,21 @@
+uuid: 473dc796-b0cd-464a-b166-144bdb7d53e8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_standfirst
+    - node.type.blog
+  module:
+    - text
+id: node.blog.field_standfirst
+field_name: field_standfirst
+entity_type: node
+bundle: blog
+label: Standfirst
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long
