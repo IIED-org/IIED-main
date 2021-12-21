@@ -4,7 +4,7 @@ path_to_binaries: /usr/bin/
 prepend: ''
 log_warnings: true
 debug: false
-locale: en_US.UTF-8
+locale: C.UTF-8
 advanced:
   density: 0
   colorspace: '0'

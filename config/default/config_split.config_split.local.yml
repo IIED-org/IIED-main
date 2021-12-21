@@ -16,8 +16,7 @@ module:
   views_ui: 0
 theme: {  }
 blacklist: {  }
-graylist:
-  - imagemagick.settings
+graylist: {  }
 graylist_dependents: true
 graylist_skip_equal: true
 weight: 0

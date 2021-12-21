@@ -1,0 +1,19 @@
+uuid: f36847cb-233c-4614-a98b-1d26f7b909ba
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - text
+id: node.field_where_and_how
+field_name: field_where_and_how
+entity_type: node
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

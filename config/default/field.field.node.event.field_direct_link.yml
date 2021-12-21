@@ -1,0 +1,23 @@
+uuid: 3012d45d-7387-4f4c-a42e-8d0cd8851086
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_direct_link
+    - node.type.event
+  module:
+    - link
+id: node.event.field_direct_link
+field_name: field_direct_link
+entity_type: node
+bundle: event
+label: 'Direct link'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 2
+field_type: link

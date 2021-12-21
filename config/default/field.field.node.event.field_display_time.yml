@@ -1,0 +1,21 @@
+uuid: 8fcd8533-5b8e-4af6-b26e-c13d0bf6b409
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_display_time
+    - node.type.event
+  module:
+    - text
+id: node.event.field_display_time
+field_name: field_display_time
+entity_type: node
+bundle: event
+label: 'Display time'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long
