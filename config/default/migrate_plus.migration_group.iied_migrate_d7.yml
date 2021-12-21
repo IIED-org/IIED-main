@@ -1,0 +1,15 @@
+uuid: b9e06baa-f8b2-431d-8adb-0c1bdbb6e327
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - iied_migrate_d7
+id: iied_migrate_d7
+label: 'IIED Drupal 7 Migrations'
+description: 'Migrations from www.iied.org'
+source_type: 'Drupal 7'
+module: null
+shared_configuration:
+  source:
+    key: d7migrate

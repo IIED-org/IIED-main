@@ -1,0 +1,21 @@
+uuid: c8db1fdc-e633-484f-af97-0c3c80542b71
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_partners
+    - node.type.project
+  module:
+    - text
+id: node.project.field_partners
+field_name: field_partners
+entity_type: node
+bundle: project
+label: Partners
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

@@ -1,0 +1,102 @@
+<?php
+
+/**
+ * @file
+ * Module for testing the migration source plugin prepareRow().
+ */
+
+use Drupal\migrate\Plugin\MigrationInterface;
+use Drupal\migrate\MigrateSkipRowException;
+use Drupal\migrate\Plugin\MigrateSourceInterface;
+use Drupal\migrate\Row;
+
+/**
+ * Implements hook_migrate_prepare_row().
+ */
+function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $source, MigrationInterface $migration) {
+
+  if ($migration->id() == 'iied_d7_projects') {
+    // Themes are already in the pubs site, so quickest to simply map the term
+    // ids for now.
+    $themes_map = [
+      '648' => '4436', // Biodiversity
+      '642' => '4441', // Climate change
+      '1553' => '4446', // Communication
+      '1843' => '4451', // Drylands and pastoralism
+      '634' => '4456', // Economics
+      '653' => '4461', // Energy
+      '2137' => '4466', // Fisheries
+      '651' => '4471', // Food and agriculture
+      '643' => '4476', // Forests
+      '1269' => '4481', // Gender
+      '645' => '4486', // Governance
+      '647' => '4491', // Green economy
+      '649' => '4496', // Land acquisitions and rights
+      '652' => '4501', // Law
+      '2491' => '4546', // Monitoring, evaluation and learning
+      '646' => '4506', // Natural resource management
+      '1268' => '4516', // Policy and planning
+      '635' => '4521', // Poverty
+      '633' => '4531', // Sustainable markets
+      '641' => '4536', // Urban
+      '644' => '4541', // Water
+    ];
+    // Get the source terms array.
+    $theme_terms = $row->getSourceProperty('taxonomy_vocabulary_19');
+    if (is_array($theme_terms)) {
+      foreach ($theme_terms as $key => $term) {
+        $new_terms[$key]['tid'] = $themes_map[$term['tid']];
+      }
+      // Set the new mapped values
+      $row->setSourceProperty('taxonomy_vocabulary_19', $new_terms);
+    }
+
+    // Tags
+    $tags_terms = $row->getSourceProperty('taxonomy_vocabulary_15');
+    $new_tags = [];
+    if (is_array($tags_terms)) {
+      foreach ($tags_terms as $key => $term) {
+        // Look up the mapped id from the migrate_map_iied_tags table.
+        $db = \Drupal\Core\Database\Database::getConnection();
+        $query = $db->select('migrate_map_iied_tags', 'mm');
+        $query->fields('mm', array('destid1'));
+        $query->condition('sourceid1', "https://www.iied.org/taxonomy/term/" . $term['tid']);
+        $new_tag = $query->execute()->fetchField();
+        // Not all tags have been migrated.
+        // @todo - check if we can re-run tags migration first.
+        if ($new_tag) {
+          $new_tags[$key]['tid'] = $new_tag;
+        }
+      }
+      // Set the new mapped values
+      $row->setSourceProperty('taxonomy_vocabulary_15', $new_tags);
+    }
+
+    // Debugging.
+    if ($row->getSourceProperty('nid') == '19136') {
+      //$field_full_width_media = $row->getSourceProperty('field_full_width_media');
+      //$x = ''; // Useful for debugging.
+    }
+
+    // Use the user reference to look up user name to map to the person taxonomy.
+    $project_contacts = $row->getSourceProperty('field_project_contact');
+    if (count($project_contacts)) {
+      foreach ($project_contacts as $project_contact) {
+        $user_id = $project_contact['target_id'];
+            $author_name = $source->getDatabase()->query('SELECT name FROM {users} WHERE uid = :uid', array(':uid' => $user_id))->fetchField();
+          $row->setSourceProperty('field_project_contact', $author_name);
+      }
+    }
+    else {
+      //$x = ''; // Useful for debugging.
+      //$row->setSourceProperty('field_project_contact', '');
+    }
+  }
+
+  if ($migration->id() == 'iied_d7_project_para_full_width_media') {
+    $x = ''; // Useful for debugging.
+  }
+  if ($migration->id() == 'iied_d7_project_para_additional_elements') {
+    $x = ''; // Useful for debugging.
+  }
+}

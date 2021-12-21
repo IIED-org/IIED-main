@@ -1,0 +1,23 @@
+uuid: 08e7abe7-9cc4-4583-b1cd-0d1637d6d762
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_display_image
+    - node.type.project
+id: node.project.field_display_image
+field_name: field_display_image
+entity_type: node
+bundle: project
+label: 'Display image'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

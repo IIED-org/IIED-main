@@ -48,6 +48,7 @@ module:
   google_tag: 0
   help: 0
   history: 0
+  iied_migrate_d7: 0
   iied_utils: 0
   image: 0
   imagemagick: 0
@@ -79,11 +80,13 @@ module:
   metatag_pinterest: 0
   metatag_twitter_cards: 0
   migrate: 0
+  migrate_drupal: 0
   migrate_file: 0
   migrate_plus: 0
   migrate_pubs: 0
   migrate_source_csv: 0
   migrate_tools: 0
+  migrate_upgrade: 0
   name: 0
   node: 0
   notification: 0

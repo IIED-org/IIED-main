@@ -1,0 +1,38 @@
+langcode: en
+status: true
+dependencies: {  }
+id: iied_d7_media_documents
+class: Drupal\migrate\Plugin\Migration
+migration_tags:
+  - 'Drupal 7'
+  - Content
+migration_group: iied_migrate_d7
+label: 'IIED media document entities'
+source:
+  plugin: d7_file_by_type
+  scheme: public
+  type: document
+  constants:
+    source_base_path: /app/d7-files
+process:
+  field_media_file/target_id:
+    -
+      plugin: migration_lookup
+      migration: iied_d7_files
+      source: fid
+    -
+      plugin: skip_on_empty
+      method: row
+  field_media_file/display:
+    plugin: default_value
+    default_value: 1
+  status: status
+  created: timestamp
+  changed: timestamp
+  uid: uid
+destination:
+  plugin: 'entity:media'
+  default_bundle: document
+migration_dependencies:
+  required:
+    - iied_d7_files

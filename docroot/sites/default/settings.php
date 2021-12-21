@@ -828,6 +828,7 @@ $config['acquia_search.settings']['override_search_core'] = acquia_search_overri
 $_env_is_prod = isset($_ENV['AH_SITE_ENVIRONMENT']) && $_ENV['AH_SITE_ENVIRONMENT'] == 'prod';
 $config['config_split.config_split.dev']['status'] = !$_env_is_prod;
 $config['config_split.config_split.live']['status'] = $_env_is_prod;
+$config['config_split.config_split.local']['status'] = FALSE;
 
 /**
  * Load local development override configuration, if available.

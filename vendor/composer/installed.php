@@ -1378,7 +1378,7 @@
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/migrate_plus',
             'aliases' => array(),
             'reference' => '8.x-5.1',
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'drupal/migrate_source_csv' => array(
             'pretty_version' => '3.4.0',
@@ -1399,6 +1399,15 @@
             ),
             'reference' => '56d82b4fc111dd26f2c3a1e53c06015eb854df20',
             'dev_requirement' => true,
+        ),
+        'drupal/migrate_upgrade' => array(
+            'pretty_version' => '3.2.0',
+            'version' => '3.2.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/migrate_upgrade',
+            'aliases' => array(),
+            'reference' => '8.x-3.2',
+            'dev_requirement' => false,
         ),
         'drupal/minimal' => array(
             'dev_requirement' => false,

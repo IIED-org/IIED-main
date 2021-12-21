@@ -22,3 +22,5 @@ docroot/sites/default/settings.local.php
 # Ignore Lando overrides
 .lando.local.yml
 
+# Ignore node
+*/node_modules

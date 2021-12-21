@@ -1,0 +1,19 @@
+uuid: 91cd10c8-a160-4a14-9800-bc869391286d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_tagline
+    - node.type.project
+id: node.project.field_tagline
+field_name: field_tagline
+entity_type: node
+bundle: project
+label: 'Carousel or highlight text'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long
