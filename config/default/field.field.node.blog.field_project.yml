@@ -1,19 +1,19 @@
-uuid: ee3e7e17-18ce-47e3-ae37-353a9bdfc5b0
+uuid: 4f5550fd-35e9-4b91-999d-b633b53939e9
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.field_project
+    - node.type.blog
     - node.type.project
-    - node.type.publication
-id: node.publication.field_project
+id: node.blog.field_project
 field_name: field_project
 entity_type: node
-bundle: publication
-label: Project
-description: '<p><i><big><strong>Hint:</strong> Start typing and select from the suggestions that appear. Contact the Comms team to request a new project page.</big></i></p>'
+bundle: blog
+label: 'Project reference'
+description: ''
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:

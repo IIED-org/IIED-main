@@ -5,9 +5,19 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.blog.body
+    - field.field.node.blog.field_about_the_author
+    - field.field.node.blog.field_author_s_
+    - field.field.node.blog.field_blogger_info
+    - field.field.node.blog.field_collection
+    - field.field.node.blog.field_display_image
+    - field.field.node.blog.field_image_caption
+    - field.field.node.blog.field_main_image
     - field.field.node.blog.field_paragraphs
+    - field.field.node.blog.field_project
     - field.field.node.blog.field_standfirst
     - field.field.node.blog.field_tagline
+    - field.field.node.blog.field_tags
+    - field.field.node.blog.field_theme_s_
     - node.type.blog
   module:
     - text
@@ -36,8 +46,18 @@ content:
     third_party_settings: {  }
     region: content
 hidden:
+  field_about_the_author: true
+  field_author_s_: true
+  field_blogger_info: true
+  field_collection: true
+  field_display_image: true
+  field_image_caption: true
+  field_main_image: true
   field_paragraphs: true
+  field_project: true
   field_standfirst: true
   field_tagline: true
+  field_tags: true
+  field_theme_s_: true
   langcode: true
   search_api_excerpt: true

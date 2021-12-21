@@ -1,0 +1,45 @@
+uuid: 0feeab20-f330-415e-971c-ab0d090a078b
+langcode: en
+status: true
+dependencies: {  }
+id: iied_d7_terms_person
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 7'
+  - Content
+migration_group: iied_migrate_d7
+label: 'Taxonomy terms (person / author)'
+source:
+  plugin: iied_d7_user
+process:
+  tid:
+    -
+      plugin: get
+      source: tid
+  field_author_picture/target_id:
+    -
+      plugin: migration_lookup
+      migration: iied_d7_media_images
+      source: picture
+  field_name/given: name
+  field_name/family: field_surname/0/value
+  name:
+    -
+      plugin: get
+      source: name
+  description/value:
+    -
+      plugin: get
+      source: description
+  description/format:
+    -
+      plugin: default_value
+      default_value: basic_html
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: person
+migration_dependencies:
+  required: {  }
+  optional: {  }

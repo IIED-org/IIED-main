@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.taxonomy_term.author_name
+    - field.field.taxonomy_term.person.field_author_picture
     - field.field.taxonomy_term.person.field_iied_user_id
     - field.field.taxonomy_term.person.field_legacy_iscanonical
     - field.field.taxonomy_term.person.field_link
@@ -65,6 +66,7 @@ content:
     region: ds_content
 hidden:
   description: true
+  field_author_picture: true
   field_iied_user_id: true
   field_legacy_iscanonical: true
   field_link: true

@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_form_mode.taxonomy_term.dashboard_add_author
+    - field.field.taxonomy_term.person.field_author_picture
     - field.field.taxonomy_term.person.field_iied_user_id
     - field.field.taxonomy_term.person.field_legacy_iscanonical
     - field.field.taxonomy_term.person.field_link
@@ -99,6 +100,7 @@ content:
     region: content
     third_party_settings: {  }
 hidden:
+  field_author_picture: true
   field_iied_user_id: true
   field_legacy_iscanonical: true
   path: true
