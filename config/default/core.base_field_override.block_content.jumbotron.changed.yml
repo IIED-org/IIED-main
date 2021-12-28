@@ -1,0 +1,18 @@
+uuid: 6a0b62b9-d0a6-4ddb-b4ec-53dee28a868e
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.jumbotron
+id: block_content.jumbotron.changed
+field_name: changed
+entity_type: block_content
+bundle: jumbotron
+label: Changed
+description: 'The time that the custom block was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed
