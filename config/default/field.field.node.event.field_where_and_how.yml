@@ -1,12 +1,10 @@
-uuid: 40bc7ec1-6c24-4e27-a9f4-271455e5eb2b
+uuid: 294c012c-9445-4c02-9f0d-7f9ce25e245d
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.field_where_and_how
     - node.type.event
-  module:
-    - text
 id: node.event.field_where_and_how
 field_name: field_where_and_how
 entity_type: node
@@ -18,4 +16,4 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings: {  }
-field_type: text_long
+field_type: string_long

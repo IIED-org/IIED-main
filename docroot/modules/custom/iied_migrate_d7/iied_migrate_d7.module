@@ -17,7 +17,8 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
   $themes_migrations = [
     'iied_d7_projects',
     'iied_d7_articles',
-    'iied_d7_blogs'
+    'iied_d7_blogs',
+    'iied_d7_events',
   ];
   if (in_array($migration->id(), $themes_migrations) ) {
     // Themes are already in the pubs site, so quickest to simply map the term
@@ -153,5 +154,8 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       $row->setSourceProperty('field_full_width_media', []);
     }
   }
-
+  // iied_d7_events migration.
+  if ($migration->id() == 'iied_d7_events') {
+    $x = 0;
+  }
 }
