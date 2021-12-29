@@ -223,6 +223,7 @@ migration_dependencies:
     - iied_d7_media_documents
     - iied_d7_terms_collection
     - iied_d7_terms_person
+    - iied_d7_projects
   optional:
     - iied_d7_project_para_additional_elements
     - iied_d7_project_para_full_width_media

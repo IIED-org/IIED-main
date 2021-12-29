@@ -138,4 +138,20 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       $row->setSourceProperty('tid', $tid);
     }
   }
+
+  // iied_d7_projects migration.
+  if ($migration->id() == 'iied_d7_projects') {
+    if ($row->getSourceProperty('nid') == "14066") {
+      // For node 14066 we were seeing the error on migration:
+      //   Array index missing, extraction failed for
+      //   'array( 'id' => '873', 'revision_id' => '874', )'.
+      //   Consider adding a `default` key to the configuration.
+      //
+      // I think this is due to an empty paragraph on the
+      // field_full_width_media field, so here we simply set that source
+      // property to an empty array, which seems to solve the issue.
+      $row->setSourceProperty('field_full_width_media', []);
+    }
+  }
+
 }
