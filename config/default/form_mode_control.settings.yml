@@ -40,3 +40,4 @@
 'use  The form mode default linked to  paragraph entity( video_embed )': paragraph.video_embed.default
 'use  The form mode default linked to  paragraph entity( about_the_author )': paragraph.about_the_author.default
 'use  The form mode default linked to  node entity( event )': node.event.default
+'use  The form mode default linked to  node entity( news )': node.news.default
