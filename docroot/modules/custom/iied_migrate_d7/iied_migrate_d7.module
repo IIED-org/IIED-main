@@ -161,6 +161,14 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
   }
   // iied_d7_news_media migration.
   if ($migration->id() == 'iied_d7_news_media') {
-    $x = 0;
+    // Source node 3979 is giving an error, which seems to be referencing a
+    // project id 4554 which does not seem to exist.
+    if ($row->getSourceProperty('nid') == '3979') {
+      $project = $row->getSourceProperty('field_project_number_reference');
+      if (is_array($project) && $project[0]['target_id'] == '4554') {
+        $row->setSourceProperty('field_project_number_reference', []);
+      }
+    }
+
   }
 }

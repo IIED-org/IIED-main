@@ -24,8 +24,7 @@ class D7NewsMedia extends Node {
     $query = parent::query();
     // Select only the source nodes that are published.
     $query->condition('n.status', 1);
-    $query->condition('n.nid', '3979');
-
+    // $query->condition('n.nid', '3979');
     return $query;
   }
 
