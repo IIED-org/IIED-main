@@ -31,7 +31,7 @@ process:
   title:
     -
       plugin: get
-      source: title
+      source: title_field
   field_main_image:
     -
       plugin: sub_process

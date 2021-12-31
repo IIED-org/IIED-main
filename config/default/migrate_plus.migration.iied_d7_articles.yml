@@ -32,7 +32,7 @@ process:
   title:
     -
       plugin: get
-      source: title
+      source: title_field
   body/value:
     -
       plugin: get
