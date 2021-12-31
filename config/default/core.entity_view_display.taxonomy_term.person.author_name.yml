@@ -4,12 +4,34 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.taxonomy_term.author_name
+    - field.field.taxonomy_term.person.field_appointed_role
     - field.field.taxonomy_term.person.field_author_picture
+    - field.field.taxonomy_term.person.field_before_iied
+    - field.field.taxonomy_term.person.field_biography
+    - field.field.taxonomy_term.person.field_current_work
+    - field.field.taxonomy_term.person.field_department
+    - field.field.taxonomy_term.person.field_email
+    - field.field.taxonomy_term.person.field_ex_staff
+    - field.field.taxonomy_term.person.field_expertise
+    - field.field.taxonomy_term.person.field_guest_contributor
     - field.field.taxonomy_term.person.field_iied_user_id
+    - field.field.taxonomy_term.person.field_languages
     - field.field.taxonomy_term.person.field_legacy_iscanonical
     - field.field.taxonomy_term.person.field_link
+    - field.field.taxonomy_term.person.field_list
     - field.field.taxonomy_term.person.field_name
     - field.field.taxonomy_term.person.field_organisation
+    - field.field.taxonomy_term.person.field_paragraphs
+    - field.field.taxonomy_term.person.field_position
+    - field.field.taxonomy_term.person.field_position_short
+    - field.field.taxonomy_term.person.field_quotes
+    - field.field.taxonomy_term.person.field_research_group
+    - field.field.taxonomy_term.person.field_researcher_profiles
+    - field.field.taxonomy_term.person.field_standfirst
+    - field.field.taxonomy_term.person.field_theme
+    - field.field.taxonomy_term.person.field_twitter_bio
+    - field.field.taxonomy_term.person.field_twitter_username
+    - field.field.taxonomy_term.person.field_video
     - taxonomy.vocabulary.person
   module:
     - ds
@@ -66,10 +88,32 @@ content:
     region: ds_content
 hidden:
   description: true
+  field_appointed_role: true
   field_author_picture: true
+  field_before_iied: true
+  field_biography: true
+  field_current_work: true
+  field_department: true
+  field_email: true
+  field_ex_staff: true
+  field_expertise: true
+  field_guest_contributor: true
   field_iied_user_id: true
+  field_languages: true
   field_legacy_iscanonical: true
   field_link: true
+  field_list: true
   field_organisation: true
+  field_paragraphs: true
+  field_position: true
+  field_position_short: true
+  field_quotes: true
+  field_research_group: true
+  field_researcher_profiles: true
+  field_standfirst: true
+  field_theme: true
+  field_twitter_bio: true
+  field_twitter_username: true
+  field_video: true
   langcode: true
   search_api_excerpt: true

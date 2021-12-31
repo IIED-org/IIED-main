@@ -20,7 +20,7 @@ class D7User extends User {
   public function query() {
     $query = parent::query();
     // UID 9296 for testing.
-    // $query->condition('u.uid', '9296');
+    $query->condition('u.uid', '97');
     return $query;
   }
 

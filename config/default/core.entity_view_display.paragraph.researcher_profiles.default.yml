@@ -1,0 +1,37 @@
+uuid: 0b7f025d-7a68-4d6d-b343-8a2dcb71914d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.researcher_profiles.field_link
+    - field.field.paragraph.researcher_profiles.field_profile_type
+    - paragraphs.paragraphs_type.researcher_profiles
+  module:
+    - link
+    - options
+id: paragraph.researcher_profiles.default
+targetEntityType: paragraph
+bundle: researcher_profiles
+mode: default
+content:
+  field_link:
+    weight: 1
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+    region: content
+  field_profile_type:
+    weight: 0
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+    region: content
+hidden:
+  search_api_excerpt: true

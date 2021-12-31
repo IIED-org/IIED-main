@@ -1,0 +1,23 @@
+uuid: fb1af8b8-df4f-4567-a19a-6e6fdf884f62
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_guest_contributor
+    - taxonomy.vocabulary.person
+id: taxonomy_term.person.field_guest_contributor
+field_name: field_guest_contributor
+entity_type: taxonomy_term
+bundle: person
+label: 'Guest contributor'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

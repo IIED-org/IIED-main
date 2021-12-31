@@ -1,0 +1,18 @@
+uuid: 349400b8-9b02-44ac-84d0-0a71eeaf2bd8
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.field_guest_contributor
+field_name: field_guest_contributor
+entity_type: taxonomy_term
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

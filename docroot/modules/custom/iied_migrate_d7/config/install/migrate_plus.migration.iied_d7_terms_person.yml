@@ -35,7 +35,79 @@ process:
   description/format:
     -
       plugin: default_value
-      default_value: 'basic_html'
+      default_value: 'full_html'
+  field_position/value:
+    -
+      plugin: get
+      source: field_position/0/value
+  field_position/format:
+    -
+      plugin: default_value
+      default_value: 'full_html'
+  field_position_short: field_position_short
+  field_email: mail
+  field_languages: field_languages
+  field_standfirst/value:
+    -
+      plugin: get
+      source: field_standfirst/0/value
+  field_standfirst/format:
+    -
+      plugin: default_value
+      default_value: 'full_html'
+  field_biography/value:
+    -
+      plugin: get
+      source: field_biography/0/value
+  field_biography/format:
+    -
+      plugin: default_value
+      default_value: 'full_html'
+  field_expertise/value:
+    -
+      plugin: get
+      source: field_expertise/0/value
+  field_expertise/format:
+    -
+      plugin: default_value
+      default_value: 'full_html'
+  field_before_iied/value:
+    -
+      plugin: get
+      source: field_before_iied/0/value
+  field_before_iied/format:
+    -
+      plugin: default_value
+      default_value: 'full_html'
+  field_current_work/value:
+    -
+      plugin: get
+      source: field_current_work/0/value
+  field_current_work/format:
+    -
+      plugin: default_value
+      default_value: 'full_html'
+  field_twitter_username: field_twitter_username
+  field_twitter_bio: field_twitter_bio
+  field_researcher_profiles: field_researcher_profiles # map to paragraph migration
+  field_video/target_id:
+    -
+      plugin: migration_lookup
+      migration: iied_d7_media_video_remote
+      source: uid
+    -
+      plugin: skip_on_empty
+      method: row
+  field_paragraphs: field_paragraphs # map to paragraph migration
+  field_list: field_list
+  field_guest_contributor: field_guest_contributor
+  field_ex_staff: field_ex_staff
+  field_department_group: field_department_group
+  field_group_working: field_group_working # Need to map entity reference to list item
+  field_theme: taxonomy_vocabulary_19
+  field_appointed_role: field_appointed_role
+  field_quotes: field_quotes
+
 destination:
   plugin: 'entity:taxonomy_term'
   default_bundle: person

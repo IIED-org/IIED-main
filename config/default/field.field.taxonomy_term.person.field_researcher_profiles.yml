@@ -1,0 +1,64 @@
+uuid: 607927f7-bfeb-4632-96e5-a15698f0eee4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_researcher_profiles
+    - paragraphs.paragraphs_type.researcher_profiles
+    - taxonomy.vocabulary.person
+  module:
+    - entity_reference_revisions
+id: taxonomy_term.person.field_researcher_profiles
+field_name: field_researcher_profiles
+entity_type: taxonomy_term
+bundle: person
+label: 'Researcher profiles'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    negate: 0
+    target_bundles:
+      researcher_profiles: researcher_profiles
+    target_bundles_drag_drop:
+      about_the_author:
+        weight: 13
+        enabled: false
+      basic_text:
+        weight: 14
+        enabled: false
+      file_upload:
+        weight: 15
+        enabled: false
+      image:
+        weight: 16
+        enabled: false
+      image_wide:
+        weight: 17
+        enabled: false
+      info_box:
+        weight: 18
+        enabled: false
+      linked_person:
+        weight: 19
+        enabled: false
+      media_embed:
+        weight: 20
+        enabled: false
+      related_link:
+        weight: 21
+        enabled: false
+      researcher_profiles:
+        enabled: true
+        weight: 22
+      row_of_4:
+        weight: 23
+        enabled: false
+      video_embed:
+        weight: 24
+        enabled: false
+field_type: entity_reference_revisions

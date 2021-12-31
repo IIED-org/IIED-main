@@ -1,0 +1,19 @@
+uuid: d728c6a3-3e15-4610-b34e-4de06de5e131
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_twitter_username
+    - taxonomy.vocabulary.person
+id: taxonomy_term.person.field_twitter_username
+field_name: field_twitter_username
+entity_type: taxonomy_term
+bundle: person
+label: 'Twitter username'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

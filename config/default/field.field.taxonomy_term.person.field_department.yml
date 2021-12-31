@@ -1,0 +1,21 @@
+uuid: 83ff71b7-07d1-44ba-9a01-b61a164159f9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_department
+    - taxonomy.vocabulary.person
+  module:
+    - options
+id: taxonomy_term.person.field_department
+field_name: field_department
+entity_type: taxonomy_term
+bundle: person
+label: Department
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

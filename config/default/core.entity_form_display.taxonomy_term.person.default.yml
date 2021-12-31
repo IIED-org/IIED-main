@@ -3,18 +3,41 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.taxonomy_term.person.field_appointed_role
     - field.field.taxonomy_term.person.field_author_picture
+    - field.field.taxonomy_term.person.field_before_iied
+    - field.field.taxonomy_term.person.field_biography
+    - field.field.taxonomy_term.person.field_current_work
+    - field.field.taxonomy_term.person.field_department
+    - field.field.taxonomy_term.person.field_email
+    - field.field.taxonomy_term.person.field_ex_staff
+    - field.field.taxonomy_term.person.field_expertise
+    - field.field.taxonomy_term.person.field_guest_contributor
     - field.field.taxonomy_term.person.field_iied_user_id
+    - field.field.taxonomy_term.person.field_languages
     - field.field.taxonomy_term.person.field_legacy_iscanonical
     - field.field.taxonomy_term.person.field_link
+    - field.field.taxonomy_term.person.field_list
     - field.field.taxonomy_term.person.field_name
     - field.field.taxonomy_term.person.field_organisation
+    - field.field.taxonomy_term.person.field_paragraphs
+    - field.field.taxonomy_term.person.field_position
+    - field.field.taxonomy_term.person.field_position_short
+    - field.field.taxonomy_term.person.field_quotes
+    - field.field.taxonomy_term.person.field_research_group
+    - field.field.taxonomy_term.person.field_researcher_profiles
+    - field.field.taxonomy_term.person.field_standfirst
+    - field.field.taxonomy_term.person.field_theme
+    - field.field.taxonomy_term.person.field_twitter_bio
+    - field.field.taxonomy_term.person.field_twitter_username
+    - field.field.taxonomy_term.person.field_video
     - taxonomy.vocabulary.person
   module:
     - field_group
     - link
     - media_library
     - name
+    - paragraphs
     - path
     - text
 third_party_settings:
@@ -55,6 +78,12 @@ content:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
+  field_appointed_role:
+    weight: 32
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
   field_author_picture:
     type: media_library_widget
     weight: 11
@@ -62,12 +91,80 @@ content:
       media_types: {  }
     third_party_settings: {  }
     region: content
+  field_before_iied:
+    weight: 19
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
+    region: content
+  field_biography:
+    weight: 17
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
+    region: content
+  field_current_work:
+    weight: 20
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
+    region: content
+  field_department:
+    weight: 29
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_email:
+    weight: 14
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: email_default
+    region: content
+  field_ex_staff:
+    weight: 28
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_expertise:
+    weight: 18
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
+    region: content
+  field_guest_contributor:
+    weight: 27
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
   field_iied_user_id:
     weight: 10
     settings:
       placeholder: ''
     third_party_settings: {  }
     type: number
+    region: content
+  field_languages:
+    weight: 15
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
     region: content
   field_legacy_iscanonical:
     weight: 8
@@ -83,6 +180,13 @@ content:
       placeholder_title: ''
     third_party_settings: {  }
     type: link_default
+    region: content
+  field_list:
+    weight: 26
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
     region: content
   field_name:
     weight: 2
@@ -124,6 +228,101 @@ content:
       placeholder: ''
     third_party_settings: {  }
     type: entity_reference_autocomplete
+    region: content
+  field_paragraphs:
+    type: entity_reference_paragraphs
+    weight: 24
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+    third_party_settings: {  }
+    region: content
+  field_position:
+    weight: 12
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
+    region: content
+  field_position_short:
+    weight: 13
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_quotes:
+    weight: 33
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textarea
+    region: content
+  field_research_group:
+    weight: 30
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_researcher_profiles:
+    type: entity_reference_paragraphs
+    weight: 25
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+    third_party_settings: {  }
+    region: content
+  field_standfirst:
+    weight: 16
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
+    region: content
+  field_theme:
+    weight: 31
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
+  field_twitter_bio:
+    weight: 22
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textarea
+    region: content
+  field_twitter_username:
+    weight: 21
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_video:
+    type: media_library_widget
+    weight: 23
+    settings:
+      media_types: {  }
+    third_party_settings: {  }
     region: content
   langcode:
     type: language_select
