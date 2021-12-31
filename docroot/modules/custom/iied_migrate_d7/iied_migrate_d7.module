@@ -106,6 +106,16 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       // video_embed paragraph, which has the same fields.
       $row->setSourceProperty('bundle', 'video_embed');
     }
+    if ($row->getSourceProperty('bundle') == 'related_link') {
+      $url = $row->getSourceProperty('field_related_link_url');
+      $title = $row->getSourceProperty('field_related_link_title');
+      $related_link_processed[0] = [
+        'url' => trim($url),
+        'title' => $title,
+        'attributes' => '',
+      ];
+      $row->setSourceProperty('related_link_processed', $related_link_processed);
+    }
   }
 
   // iied_d7_blogs migration. We need to lookup person terms to reference as
@@ -139,6 +149,8 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       $tid = array_key_first($term);
       $row->setSourceProperty('tid', $tid);
     }
+    $researcher_profiles = $row->getSourceProperty('field_researcher_profiles');
+    $x=0;
   }
 
   // iied_d7_projects migration.
@@ -169,6 +181,15 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
         $row->setSourceProperty('field_project_number_reference', []);
       }
     }
-
+  }
+  //iied_d7_person_para_researcher_profiles
+  if ($migration->id() == 'iied_d7_person_para_researcher_profiles') {
+    $url = $row->getSourceProperty('field_link_value');
+    $field_link_processed[0] = [
+      'url' => trim($url),
+      'title' => '',
+      'attributes' => '',
+    ];
+    $row->setSourceProperty('field_link_processed', $field_link_processed);
   }
 }

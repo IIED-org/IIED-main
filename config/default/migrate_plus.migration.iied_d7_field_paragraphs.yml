@@ -40,6 +40,18 @@ process:
       plugin: skip_on_empty
       method: row
   field_video_description/value: field_video_description_value
+  field_description/value:
+    -
+      plugin: get
+      source: field_description_value
+  field_description/format:
+    -
+      plugin: default_value
+      default_value: full_html
+  field_link:
+    plugin: field_link
+    uri_scheme: 'https://'
+    source: related_link_processed
 destination:
   plugin: 'entity_reference_revisions:paragraph'
 migration_dependencies:

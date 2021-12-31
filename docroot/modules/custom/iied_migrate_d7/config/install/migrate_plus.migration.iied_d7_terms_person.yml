@@ -89,7 +89,32 @@ process:
       default_value: 'full_html'
   field_twitter_username: field_twitter_username
   field_twitter_bio: field_twitter_bio
-  field_researcher_profiles: field_researcher_profiles # map to paragraph migration
+  field_researcher_profiles:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: field_researcher_profiles
+    -
+      plugin: sub_process
+      process:
+        target_id:
+          -
+            plugin: migration_lookup
+            migration: iied_d7_person_para_researcher_profiles
+            source: value
+          -
+            plugin: extract
+            index:
+              - 0
+        target_revision_id:
+          -
+            plugin: migration_lookup
+            migration: iied_d7_person_para_researcher_profiles
+            source: value
+          -
+            plugin: extract
+            index:
+              - 1
   field_video/target_id:
     -
       plugin: migration_lookup
@@ -98,7 +123,32 @@ process:
     -
       plugin: skip_on_empty
       method: row
-  field_paragraphs: field_paragraphs # map to paragraph migration
+  field_paragraphs:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: field_paragraphs
+    -
+      plugin: sub_process
+      process:
+        target_id:
+          -
+            plugin: migration_lookup
+            migration: iied_d7_field_paragraphs
+            source: value
+          -
+            plugin: extract
+            index:
+              - 0
+        target_revision_id:
+          -
+            plugin: migration_lookup
+            migration: iied_d7_field_paragraphs
+            source: value
+          -
+            plugin: extract
+            index:
+              - 1
   field_list: field_list
   field_guest_contributor: field_guest_contributor
   field_ex_staff: field_ex_staff
