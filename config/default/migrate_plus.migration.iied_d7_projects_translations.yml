@@ -107,6 +107,16 @@ process:
     -
       plugin: get
       source: field_contact
+  field_project_contacts:
+    -
+      plugin: sub_process
+      source: field_project_contact
+      process:
+        target_id:
+          plugin: migration_lookup
+          migration: iied_d7_terms_person
+          source: target_id
+          no_stub: true
   field_main_image:
     -
       plugin: sub_process

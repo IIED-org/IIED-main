@@ -79,15 +79,15 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
     }
 
     // Use user reference to look up user name to map to the person taxonomy.
-    $project_contacts = [];
-    $project_contacts = $row->getSourceProperty('field_project_contact');
-    if ($project_contacts && count($project_contacts)) {
-      foreach ($project_contacts as $project_contact) {
-        $user_id = $project_contact['target_id'];
-            $author_name = $source->getDatabase()->query('SELECT name FROM {users} WHERE uid = :uid', array(':uid' => $user_id))->fetchField();
-          $row->setSourceProperty('field_project_contact', $author_name);
-      }
-    }
+    // $project_contacts = [];
+    // $project_contacts = $row->getSourceProperty('field_project_contact');
+    // if ($project_contacts && count($project_contacts)) {
+    //   foreach ($project_contacts as $project_contact) {
+    //     $user_id = $project_contact['target_id'];
+    //         $author_name = $source->getDatabase()->query('SELECT name FROM {users} WHERE uid = :uid', array(':uid' => $user_id))->fetchField();
+    //       $row->setSourceProperty('field_project_contact', $author_name);
+    //   }
+    // }
   }
 
   // iied_d7_field_paragraphs, ignoring some paragraphs.

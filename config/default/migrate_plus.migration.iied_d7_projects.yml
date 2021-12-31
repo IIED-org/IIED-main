@@ -112,16 +112,14 @@ process:
       source: field_contact
   field_project_contacts:
     -
-      plugin: skip_on_empty
-      method: process
+      plugin: sub_process
       source: field_project_contact
-    -
-      plugin: entity_generate
-      entity_type: taxonomy_term
-      bundle: person
-      bundle_key: vid
-      value_key: name
-      ignore_case: true
+      process:
+        target_id:
+          plugin: migration_lookup
+          migration: iied_d7_terms_person
+          source: target_id
+          no_stub: true
   field_main_image:
     -
       plugin: sub_process
@@ -235,6 +233,7 @@ migration_dependencies:
     - iied_d7_media_images
     - iied_d7_media_documents
     - iied_d7_terms_collection
+    - iied_d7_terms_person
   optional:
     - iied_d7_project_para_additional_elements
     - iied_d7_project_para_full_width_media
