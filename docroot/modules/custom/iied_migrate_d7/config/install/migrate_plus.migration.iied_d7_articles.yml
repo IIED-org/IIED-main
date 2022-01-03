@@ -80,7 +80,7 @@ process:
     -
       plugin: default_value
       default_value: 'full_html'
-  field_theme:
+  field_theme_s_:
     -
       plugin: sub_process
       source: taxonomy_vocabulary_19

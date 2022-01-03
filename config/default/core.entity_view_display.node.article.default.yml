@@ -21,7 +21,7 @@ dependencies:
     - field.field.node.article.field_standfirst
     - field.field.node.article.field_tagline
     - field.field.node.article.field_tags
-    - field.field.node.article.field_theme
+    - field.field.node.article.field_theme_s_
     - image.style.large
     - node.type.article
   module:
@@ -274,22 +274,6 @@ third_party_settings:
                 type: text_default
             additional: {  }
             weight: 14
-          7ee59798-5ab7-404c-990f-92bfc59c62d8:
-            uuid: 7ee59798-5ab7-404c-990f-92bfc59c62d8
-            region: content
-            configuration:
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              id: 'field_block:node:article:field_theme'
-              formatter:
-                label: above
-                settings:
-                  link: true
-                third_party_settings: {  }
-                type: entity_reference_label
-            additional: {  }
-            weight: 15
           6ce5127a-83ae-49ce-a1ca-665de963fee4:
             uuid: 6ce5127a-83ae-49ce-a1ca-665de963fee4
             region: content
@@ -352,6 +336,22 @@ third_party_settings:
                 type: text_default
             additional: {  }
             weight: 19
+          6f9414d8-9617-43f1-ba24-921d766cadc9:
+            uuid: 6f9414d8-9617-43f1-ba24-921d766cadc9
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:article:field_theme_s_'
+              formatter:
+                label: above
+                settings:
+                  link: true
+                third_party_settings: {  }
+                type: entity_reference_label
+            additional: {  }
+            weight: 20
         third_party_settings: {  }
     allow_custom: false
 _core:
@@ -498,8 +498,8 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-  field_theme:
-    weight: 120
+  field_theme_s_:
+    weight: 125
     label: above
     settings:
       link: true

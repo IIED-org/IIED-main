@@ -21,7 +21,7 @@ dependencies:
     - field.field.node.article.field_standfirst
     - field.field.node.article.field_tagline
     - field.field.node.article.field_tags
-    - field.field.node.article.field_theme
+    - field.field.node.article.field_theme_s_
     - image.style.medium
     - node.type.article
   module:
@@ -167,6 +167,6 @@ hidden:
   field_set_info: true
   field_standfirst: true
   field_tagline: true
-  field_theme: true
+  field_theme_s_: true
   langcode: true
   search_api_excerpt: true

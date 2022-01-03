@@ -24,7 +24,7 @@ dependencies:
     - field.field.node.project.field_standfirst
     - field.field.node.project.field_tagline
     - field.field.node.project.field_tags
-    - field.field.node.project.field_theme
+    - field.field.node.project.field_theme_s_
     - field.field.node.project.field_year
     - node.type.project
   module:
@@ -105,7 +105,7 @@ hidden:
   field_standfirst: true
   field_tagline: true
   field_tags: true
-  field_theme: true
+  field_theme_s_: true
   field_year: true
   langcode: true
   links: true

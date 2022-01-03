@@ -20,7 +20,7 @@ dependencies:
     - field.field.node.article.field_standfirst
     - field.field.node.article.field_tagline
     - field.field.node.article.field_tags
-    - field.field.node.article.field_theme
+    - field.field.node.article.field_theme_s_
     - image.style.thumbnail
     - node.type.article
   module:
@@ -200,8 +200,8 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  field_theme:
-    weight: 12
+  field_theme_s_:
+    weight: 27
     settings:
       match_operator: CONTAINS
       match_limit: 10
