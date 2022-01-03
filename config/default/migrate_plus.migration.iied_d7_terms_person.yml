@@ -121,9 +121,6 @@ process:
       plugin: migration_lookup
       migration: iied_d7_media_video_remote
       source: uid
-    -
-      plugin: skip_on_empty
-      method: row
   field_paragraphs:
     -
       plugin: skip_on_empty
@@ -161,6 +158,41 @@ process:
 destination:
   plugin: 'entity:taxonomy_term'
   default_bundle: person
+  overwrite_properties:
+    - field_author_picture
+    - field_name/given
+    - field_name/family
+    - name
+    - description/value
+    - description/format
+    - field_position/value
+    - field_position/format
+    - field_position_short
+    - field_email
+    - field_languages
+    - field_standfirst/value
+    - field_standfirst/format
+    - field_biography/value
+    - field_biography/format
+    - field_expertise/value
+    - field_expertise/format
+    - field_before_iied/value
+    - field_before_iied/format
+    - field_current_work/value
+    - field_current_work/format
+    - field_twitter_username
+    - field_twitter_bio
+    - field_researcher_profiles
+    - field_video/target_id
+    - field_paragraphs
+    - field_list
+    - field_guest_contributor
+    - field_ex_staff
+    - field_department_group
+    - field_group_working
+    - field_theme
+    - field_appointed_role
+    - field_quotes
 migration_dependencies:
   required: {  }
   optional: {  }

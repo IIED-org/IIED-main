@@ -23,20 +23,20 @@ process:
       default_value: 'full_html'
   field_upload/target_id:
     -
+      plugin: skip_on_empty
+      method: process
+    -
       plugin: migration_lookup
       migration: iied_d7_files
       source: upload_fid
+  field_video/target_id:
     -
       plugin: skip_on_empty
-      method: row
-  field_video/target_id:
+      method: process
     -
       plugin: migration_lookup
       migration: iied_d7_media_video_remote
       source: fdfv_entity_id
-    -
-      plugin: skip_on_empty
-      method: row
   field_video_description/value: field_video_description_value
   field_description/value:
     -
