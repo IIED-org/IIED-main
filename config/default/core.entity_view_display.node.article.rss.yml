@@ -27,22 +27,22 @@ third_party_settings:
             uuid: aa3ec794-43b5-42a4-911b-4cdc4dd027ec
             region: content
             configuration:
+              id: 'extra_field_block:node:article:links'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'extra_field_block:node:article:links'
-            additional: {  }
             weight: 0
+            additional: {  }
           5d027611-d817-4151-8ade-73325ca902c9:
             uuid: 5d027611-d817-4151-8ade-73325ca902c9
             region: content
             configuration:
+              id: 'extra_field_block:node:article:sharing_buttons'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'extra_field_block:node:article:sharing_buttons'
-            additional: {  }
             weight: 1
+            additional: {  }
         third_party_settings: {  }
 _core:
   default_config_hash: 2rIr6K5Q0UQ9khg0zE_CK-PtJH76UL-BDDZcZnZzwCc
@@ -52,14 +52,14 @@ bundle: article
 mode: rss
 content:
   links:
+    settings: {  }
+    third_party_settings: {  }
     weight: 100
     region: content
-    settings: {  }
-    third_party_settings: {  }
   sharing_buttons:
-    weight: 100
     settings: {  }
     third_party_settings: {  }
+    weight: 100
     region: content
 hidden:
   body: true

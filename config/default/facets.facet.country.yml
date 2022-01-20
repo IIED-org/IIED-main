@@ -9,31 +9,34 @@ dependencies:
     - search_api
 id: country
 name: Country
-url_alias: country
 weight: 0
 min_count: 1
-show_only_one_result: false
-field_identifier: field_area_list
+url_alias: country
 facet_source_id: 'search_api:views_page__search__page_2'
+field_identifier: field_area_list
+query_operator: and
+hard_limit: 0
+exclude: false
+use_hierarchy: false
+keep_hierarchy_parents_active: false
+expand_hierarchy: false
+enable_parent_when_child_gets_disabled: true
 widget:
   type: checkbox
   config:
     show_numbers: true
     soft_limit: 10
-    soft_limit_settings:
-      show_less_label: 'Show fewer areas'
-      show_more_label: 'Show more areas'
     show_reset_link: true
     reset_text: 'Show all items'
     hide_reset_when_no_selection: false
-query_operator: and
-use_hierarchy: false
-keep_hierarchy_parents_active: false
-expand_hierarchy: false
-enable_parent_when_child_gets_disabled: true
-hard_limit: 0
-exclude: false
+    soft_limit_settings:
+      show_less_label: 'Show fewer areas'
+      show_more_label: 'Show more areas'
+empty_behavior:
+  behavior: none
 only_visible_when_facet_source_is_visible: true
+show_only_one_result: false
+show_title: false
 processor_configs:
   active_widget_order:
     processor_id: active_widget_order
@@ -64,6 +67,3 @@ processor_configs:
       pre_query: 50
       build: 15
     settings: {  }
-empty_behavior:
-  behavior: none
-show_title: false

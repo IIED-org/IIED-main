@@ -24,16 +24,16 @@ third_party_settings:
       disable_css: false
       entity_classes: all_classes
       settings:
-        label: ''
+        classes:
+          layout_class: {  }
+          ds_content: {  }
         wrappers:
           ds_content: div
         outer_wrapper: div
         attributes: ''
         link_attribute: content
         link_custom: ''
-        classes:
-          layout_class: {  }
-          ds_content: {  }
+        label: ''
     regions:
       ds_content:
         - taxonomy_term_title
@@ -44,36 +44,36 @@ third_party_settings:
         label: hidden
         formatter: default
         settings:
+          link: false
           wrapper: ''
           class: ''
-          link: false
         ft:
           id: expert
           settings:
             lb: ''
-            prefix: '<h5 class="mt-2">'
+            lbw: false
             lbw-el: ''
             lbw-cl: ''
             lbw-at: ''
+            lb-col: false
+            ow: false
             ow-el: h5
             ow-cl: ''
             ow-at: ''
+            ow-def-at: false
+            ow-def-cl: false
             fis: true
             fis-el: span
             fis-cl: field-name
             fis-at: ''
+            fis-def-at: false
+            fi: false
             fi-el: span
             fi-cl: field-author
             fi-at: ''
-            suffix: '&nbsp;[Author]</h5>'
-            lbw: false
-            lb-col: false
-            ow: false
-            ow-def-at: false
-            ow-def-cl: false
-            fis-def-at: false
-            fi: false
             fi-def-at: false
+            prefix: '<h5 class="mt-2">'
+            suffix: '&nbsp;[Author]</h5>'
 id: taxonomy_term.person.search_result
 targetEntityType: taxonomy_term
 bundle: person

@@ -45,9 +45,9 @@ field_type:
           class: solr.ArabicNormalizationFilterFactory
         -
           class: solr.SynonymFilterFactory
+          ignoreCase: true
           synonyms: synonyms_ar.txt
           expand: true
-          ignoreCase: true
         -
           class: solr.ArabicStemFilterFactory
 unstemmed_field_type:
@@ -83,9 +83,9 @@ unstemmed_field_type:
           class: solr.ArabicNormalizationFilterFactory
         -
           class: solr.SynonymFilterFactory
+          ignoreCase: true
           synonyms: synonyms_ar.txt
           expand: true
-          ignoreCase: true
 spellcheck_field_type: null
 collated_field_type:
   name: collated_ar
@@ -290,8 +290,8 @@ text_files:
     عندما
     لدى
     جميع
+  protwords: ''
+  accents: ''
   synonyms: |
     drupal, durpal
   nouns: ''
-  protwords: ''
-  accents: ''

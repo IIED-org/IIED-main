@@ -15,6 +15,7 @@ dependencies:
 third_party_settings:
   layout_builder:
     enabled: true
+    allow_custom: false
     sections:
       -
         layout_id: layout_onecol
@@ -26,106 +27,105 @@ third_party_settings:
             uuid: 52810b44-b6a4-4683-9357-b74fa2b5d3fe
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:document_type:description'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:document_type:description'
               formatter:
-                label: hidden
                 type: text_default
+                label: hidden
                 settings: {  }
                 third_party_settings: {  }
-            additional: {  }
             weight: 0
+            additional: {  }
           cb427f25-c035-43c1-812c-d5fde2976530:
             uuid: cb427f25-c035-43c1-812c-d5fde2976530
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:document_type:field_legacy_doctype'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:document_type:field_legacy_doctype'
               formatter:
+                type: number_integer
                 label: above
                 settings:
                   thousand_separator: ''
                   prefix_suffix: true
                 third_party_settings: {  }
-                type: number_integer
-            additional: {  }
             weight: 1
+            additional: {  }
           758d2f54-8cb0-4eea-9b6e-f51c97fb7c54:
             uuid: 758d2f54-8cb0-4eea-9b6e-f51c97fb7c54
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:document_type:field_parent_id'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:document_type:field_parent_id'
               formatter:
+                type: number_integer
                 label: above
                 settings:
                   thousand_separator: ''
                   prefix_suffix: true
                 third_party_settings: {  }
-                type: number_integer
-            additional: {  }
             weight: 2
+            additional: {  }
           e8f91cd7-4e9c-4a7e-8149-87a50f76dfee:
             uuid: e8f91cd7-4e9c-4a7e-8149-87a50f76dfee
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:document_type:field_display_name'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:document_type:field_display_name'
               formatter:
+                type: string
                 label: above
                 settings:
                   link_to_entity: false
                 third_party_settings: {  }
-                type: string
-            additional: {  }
             weight: 3
+            additional: {  }
         third_party_settings: {  }
-    allow_custom: false
 id: taxonomy_term.document_type.default
 targetEntityType: taxonomy_term
 bundle: document_type
 mode: default
 content:
   description:
-    label: hidden
     type: text_default
-    weight: 0
-    region: content
+    label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 0
+    region: content
   field_display_name:
-    weight: 3
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 3
     region: content
   field_legacy_doctype:
-    weight: 1
+    type: number_integer
     label: above
     settings:
       thousand_separator: ''
       prefix_suffix: true
     third_party_settings: {  }
-    type: number_integer
+    weight: 1
     region: content
   field_parent_id:
-    weight: 2
+    type: number_integer
     label: above
     settings:
       thousand_separator: ''
       prefix_suffix: true
     third_party_settings: {  }
-    type: number_integer
+    weight: 2
     region: content
 hidden:
   langcode: true

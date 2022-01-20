@@ -32,38 +32,38 @@ third_party_settings:
             uuid: d869278b-5881-4dbf-8c08-33f13038f76a
             region: content
             configuration:
+              id: 'extra_field_block:node:project:links'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'extra_field_block:node:project:links'
-            additional: {  }
             weight: 0
+            additional: {  }
           9d1c9c27-dec6-4656-852f-24de2da8f599:
             uuid: 9d1c9c27-dec6-4656-852f-24de2da8f599
             region: content
             configuration:
+              id: 'field_block:node:project:body'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:node:project:body'
               formatter:
-                label: hidden
                 type: text_summary_or_trimmed
+                label: hidden
                 settings:
                   trim_length: 600
                 third_party_settings: {  }
-            additional: {  }
             weight: 1
+            additional: {  }
           9a6b4501-8ae7-477b-ae88-423a18f5506b:
             uuid: 9a6b4501-8ae7-477b-ae88-423a18f5506b
             region: content
             configuration:
+              id: 'extra_field_block:node:project:sharing_buttons'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'extra_field_block:node:project:sharing_buttons'
-            additional: {  }
             weight: 2
+            additional: {  }
         third_party_settings: {  }
 id: node.project.teaser
 targetEntityType: node
@@ -71,22 +71,22 @@ bundle: project
 mode: teaser
 content:
   body:
-    label: hidden
     type: text_summary_or_trimmed
-    weight: 101
+    label: hidden
     settings:
       trim_length: 600
     third_party_settings: {  }
+    weight: 101
     region: content
   links:
-    weight: 100
     settings: {  }
     third_party_settings: {  }
+    weight: 100
     region: content
   sharing_buttons:
-    weight: 100
     settings: {  }
     third_party_settings: {  }
+    weight: 100
     region: content
 hidden:
   field_collection: true
