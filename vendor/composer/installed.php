@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '3eda14abd26e66786cc0657390df323e47d3b9ea',
+        'reference' => 'f49cba51af3839a2741bb5aecaaf6981565ab1c7',
         'name' => 'drupal/recommended-project',
         'dev' => true,
     ),
@@ -1168,12 +1168,12 @@
             'dev_requirement' => false,
         ),
         'drupal/jquery_ui_datepicker' => array(
-            'pretty_version' => '1.1.0',
-            'version' => '1.1.0.0',
+            'pretty_version' => '1.2.0',
+            'version' => '1.2.0.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/jquery_ui_datepicker',
             'aliases' => array(),
-            'reference' => '8.x-1.1',
+            'reference' => '8.x-1.2',
             'dev_requirement' => false,
         ),
         'drupal/jquery_ui_slider' => array(
@@ -1565,7 +1565,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '3eda14abd26e66786cc0657390df323e47d3b9ea',
+            'reference' => 'f49cba51af3839a2741bb5aecaaf6981565ab1c7',
             'dev_requirement' => false,
         ),
         'drupal/redirect' => array(
