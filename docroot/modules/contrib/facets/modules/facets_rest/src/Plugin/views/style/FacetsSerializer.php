@@ -120,7 +120,7 @@ class FacetsSerializer extends Serializer {
       );
     }
     uasort($facets_metadata, function($a, $b) {
-      return $a['weight'] > $b['weight'];
+      return (int) $a['weight'] - $b['weight'];
     });
 
     $rows['facets'] = array_values($processed_facets);

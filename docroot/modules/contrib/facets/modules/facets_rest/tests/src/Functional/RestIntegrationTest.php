@@ -136,6 +136,7 @@ class RestIntegrationTest extends FacetsTestBase {
           '_format=json',
           'f%5B0%5D=type%3Aarticle',
         ],
+        'raw_value' => 'article',
         'count' => 2,
       ],
       'item' => [
@@ -145,6 +146,7 @@ class RestIntegrationTest extends FacetsTestBase {
           '_format=json',
           'f%5B0%5D=type%3Aitem',
         ],
+        'raw_value' => 'item',
         'count' => 3,
       ],
     ];
@@ -152,6 +154,7 @@ class RestIntegrationTest extends FacetsTestBase {
     foreach ($json_decoded->facets[1][0]->type as $result) {
       $value = $result->values->value;
       $this->assertEquals($result->values->count, $results[$value]['count']);
+      $this->assertSame($results[$value]['raw_value'], $result->raw_value);
       foreach ($results[$value]['url'] as $url_part) {
         $this->assertNotFalse(strpos($result->url, $url_part));
       }
@@ -166,6 +169,7 @@ class RestIntegrationTest extends FacetsTestBase {
           '_format=json',
           'f%5B0%5D=keywords%3Abanana',
         ],
+        'raw_value' => 'banana',
         'count' => 1,
       ],
       'strawberry' => [
@@ -175,6 +179,7 @@ class RestIntegrationTest extends FacetsTestBase {
           '_format=json',
           'f%5B0%5D=keywords%3Astrawberry',
         ],
+        'raw_value' => 'strawberry',
         'count' => 2,
       ],
       'apple' => [
@@ -184,6 +189,7 @@ class RestIntegrationTest extends FacetsTestBase {
           '_format=json',
           'f%5B0%5D=keywords%3Aapple',
         ],
+        'raw_value' => 'apple',
         'count' => 2,
       ],
       'orange' => [
@@ -193,6 +199,7 @@ class RestIntegrationTest extends FacetsTestBase {
           '_format=json',
           'f%5B0%5D=keywords%3Aorange',
         ],
+        'raw_value' => 'orange',
         'count' => 3,
       ],
       'grape' => [
@@ -202,6 +209,7 @@ class RestIntegrationTest extends FacetsTestBase {
           '_format=json',
           'f%5B0%5D=keywords%3Agrape',
         ],
+        'raw_value' => 'grape',
         'count' => 3,
       ],
     ];
@@ -209,6 +217,7 @@ class RestIntegrationTest extends FacetsTestBase {
     foreach ($json_decoded->facets[0][0]->keywords as $result) {
       $value = $result->values->value;
       $this->assertEquals($result->values->count, $results[$value]['count']);
+      $this->assertSame($results[$value]['raw_value'], $result->raw_value);
       foreach ($results[$value]['url'] as $url_part) {
         $this->assertNotFalse(strpos($result->url, $url_part));
       }
@@ -230,10 +239,12 @@ class RestIntegrationTest extends FacetsTestBase {
           '_format=json',
           'f%5B0%5D=type%3Aarticle&f%5B1%5D=type%3Aitem',
         ],
+        'raw_value' => 'article',
         'count' => 2,
       ],
       'item' => [
         'url' => [$base_url, '/facets-rest', '_format=json'],
+        'raw_value' => 'item',
         'count' => 3,
       ],
       'banana' => [
@@ -243,6 +254,7 @@ class RestIntegrationTest extends FacetsTestBase {
           '_format=json',
           'f%5B0%5D=keywords%3Abanana&f%5B1%5D=type%3Aitem',
         ],
+        'raw_value' => 'banana',
         'count' => 0,
       ],
       'strawberry' => [
@@ -252,6 +264,7 @@ class RestIntegrationTest extends FacetsTestBase {
           '_format=json',
           'f%5B0%5D=keywords%3Astrawberry&f%5B1%5D=type%3Aitem',
         ],
+        'raw_value' => 'strawberry',
         'count' => 0,
       ],
       'apple' => [
@@ -261,6 +274,7 @@ class RestIntegrationTest extends FacetsTestBase {
           '_format=json',
           'f%5B0%5D=keywords%3Aapple&f%5B1%5D=type%3Aitem',
         ],
+        'raw_value' => 'apple',
         'count' => 1,
       ],
       'orange' => [
@@ -270,6 +284,7 @@ class RestIntegrationTest extends FacetsTestBase {
           '_format=json',
           'f%5B0%5D=keywords%3Aorange&f%5B1%5D=type%3Aitem',
         ],
+        'raw_value' => 'orange',
         'count' => 2,
       ],
       'grape' => [
@@ -279,6 +294,7 @@ class RestIntegrationTest extends FacetsTestBase {
           '_format=json',
           'f%5B0%5D=keywords%3Agrape&f%5B1%5D=type%3Aitem',
         ],
+        'raw_value' => 'grape',
         'count' => 1,
       ],
     ];
@@ -286,16 +302,18 @@ class RestIntegrationTest extends FacetsTestBase {
     foreach ($json_decoded->facets[1][0]->type as $result) {
       $value = $result->values->value;
       $this->assertEquals($results[$value]['count'], $result->values->count);
+      $this->assertSame($results[$value]['raw_value'], $result->raw_value);
       foreach ($results[$value]['url'] as $url_part) {
-        $this->assertContains($url_part, $result->url);
+        $this->assertStringContainsString($url_part, $result->url);
       }
     }
 
     foreach ($json_decoded->facets[0][0]->keywords as $result) {
       $value = $result->values->value;
       $this->assertEquals($results[$value]['count'], $result->values->count);
+      $this->assertSame($results[$value]['raw_value'], $result->raw_value);
       foreach ($results[$value]['url'] as $url_part) {
-        $this->assertContains($url_part, $result->url);
+        $this->assertStringContainsString($url_part, $result->url);
       }
     }
   }

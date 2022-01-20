@@ -136,14 +136,10 @@ class SearchApiDisplay extends FacetSourcePluginBase implements SearchApiFacetSo
    * {@inheritdoc}
    */
   public function getPath() {
-    // The implementation in search api tells us that this is a base path only
-    // if a path is defined, and false if that isn't done. This means that we
-    // have to check for this + create our own uri if that's needed.
-    if ($this->getDisplay()->getPath()) {
-      return $this->getDisplay()->getPath();
+    if ($this->isRenderedInCurrentRequest()) {
+      return \Drupal::service('path.current')->getPath();
     }
-
-    return \Drupal::service('path.current')->getPath();
+    return $this->getDisplay()->getPath();
   }
 
   /**
@@ -256,8 +252,13 @@ class SearchApiDisplay extends FacetSourcePluginBase implements SearchApiFacetSo
     // Get the Search API Backend.
     $backend = $server->getBackend();
 
-    $fields = $index->getFields();
-    foreach ($fields as $field) {
+    $fields = &drupal_static(__METHOD__, []);
+
+    if (!isset($fields[$index->id()])) {
+      $fields[$index->id()] = $index->getFields();
+    }
+
+    foreach ($fields[$index->id()] as $field) {
       if ($field->getFieldIdentifier() == $field_id) {
         return $this->getQueryTypesForDataType($backend, $field->getType());
       }

@@ -9,7 +9,6 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\facets\FacetSource\FacetSourcePluginManager;
 use Drupal\Tests\UnitTestCase;
-use Zend\Stdlib\ArrayObject;
 
 /**
  * Unit test for plugin manager.
@@ -67,7 +66,7 @@ class FacetSourcePluginManagerTest extends UnitTestCase {
 
     $this->cache = $this->createMock(CacheBackendInterface::class);
 
-    $namespaces = new ArrayObject();
+    $namespaces = new \ArrayObject();
 
     $this->sut = new FacetSourcePluginManager($namespaces, $this->cache, $this->moduleHandler);
     $discovery_property = new \ReflectionProperty($this->sut, 'discovery');
@@ -82,7 +81,7 @@ class FacetSourcePluginManagerTest extends UnitTestCase {
    * Tests plugin manager constructor.
    */
   public function testConstruct() {
-    $namespaces = new ArrayObject();
+    $namespaces = new \ArrayObject();
     $sut = new FacetSourcePluginManager($namespaces, $this->cache, $this->moduleHandler);
     $this->assertInstanceOf(FacetSourcePluginManager::class, $sut);
   }

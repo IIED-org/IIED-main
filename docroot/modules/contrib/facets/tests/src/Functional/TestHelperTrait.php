@@ -107,12 +107,9 @@ trait TestHelperTrait {
   }
 
   /**
-   * Checks that the url after clicking a facet is as expected.
-   *
-   * @param \Drupal\Core\Url $url
-   *   The expected url we end on.
+   * Clicks the test facet
    */
-  protected function checkClickedFacetUrl(Url $url) {
+  protected function clickFacet() {
     $this->drupalGet('search-api-test-fulltext');
     $this->assertSession()->statusCodeEquals(200);
     $this->assertFacetLabel('item');
@@ -123,7 +120,6 @@ trait TestHelperTrait {
     $this->assertSession()->statusCodeEquals(200);
     $this->checkFacetIsActive('item');
     $this->assertFacetLabel('article');
-    $this->assertSession()->addressEquals($url);
   }
 
   /**

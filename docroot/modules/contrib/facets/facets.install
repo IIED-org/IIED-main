@@ -186,3 +186,13 @@ function facets_update_8006() {
     $block->save();
   }
 }
+
+/**
+ * Resave facets for consistent configuration export.
+ */
+function facets_update_8007() {
+  $facets = Facet::loadMultiple();
+  foreach ($facets as $facet) {
+    $facet->save();
+  }
+}

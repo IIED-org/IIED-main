@@ -148,19 +148,19 @@ abstract class CommentTestBase extends BrowserTestBase {
     switch ($preview_mode) {
       case DRUPAL_REQUIRED:
         // Preview required so no save button should be found.
-        $this->assertSession()->buttonNotExists(t('Save'));
+        $this->assertSession()->buttonNotExists('Save');
         $this->submitForm($edit, 'Preview');
         // Don't break here so that we can test post-preview field presence and
         // function below.
       case DRUPAL_OPTIONAL:
-        $this->assertSession()->buttonExists(t('Preview'));
-        $this->assertSession()->buttonExists(t('Save'));
+        $this->assertSession()->buttonExists('Preview');
+        $this->assertSession()->buttonExists('Save');
         $this->submitForm($edit, 'Save');
         break;
 
       case DRUPAL_DISABLED:
-        $this->assertSession()->buttonNotExists(t('Preview'));
-        $this->assertSession()->buttonExists(t('Save'));
+        $this->assertSession()->buttonNotExists('Preview');
+        $this->assertSession()->buttonExists('Save');
         $this->submitForm($edit, 'Save');
         break;
     }
@@ -391,7 +391,7 @@ abstract class CommentTestBase extends BrowserTestBase {
   }
 
   /**
-   * Creates a comment comment type (bundle).
+   * Creates a comment type (bundle).
    *
    * @param string $label
    *   The comment type label.
