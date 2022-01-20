@@ -29,17 +29,17 @@ third_party_settings:
         - field_legacy_iscanonical
         - status
         - field_iied_user_id
+      label: 'Add new Author'
+      region: content
       parent_name: ''
       weight: 0
       format_type: details
-      region: content
       format_settings:
-        description: '<big><i><b>Hint: </b>When you save this form, the page will automatically refresh with a new, blank form so you can add another Author. If you do not want/need to do this, simply close this tab or navigate away from the page.</i></big>'
-        open: true
-        id: ''
         classes: ''
+        id: ''
+        open: true
+        description: '<big><i><b>Hint: </b>When you save this form, the page will automatically refresh with a new, blank form so you can add another Author. If you do not want/need to do this, simply close this tab or navigate away from the page.</i></big>'
         required_fields: false
-      label: 'Add new Author'
 id: taxonomy_term.person.default
 targetEntityType: taxonomy_term
 bundle: person
@@ -54,30 +54,33 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_iied_user_id:
+    type: number
     weight: 10
+    region: content
     settings:
       placeholder: ''
     third_party_settings: {  }
-    type: number
-    region: content
   field_legacy_iscanonical:
+    type: boolean_checkbox
     weight: 8
+    region: content
     settings:
       display_label: true
     third_party_settings: {  }
-    type: boolean_checkbox
-    region: content
   field_link:
+    type: link_default
     weight: 5
+    region: content
     settings:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
-    type: link_default
-    region: content
   field_name:
+    type: name_default
     weight: 2
+    region: content
     settings:
+      override_field_settings: false
       labels:
         title: Title
         given: Given
@@ -85,6 +88,9 @@ content:
         family: Family
         generational: Generational
         credentials: Credentials
+      widget_layout: stacked
+      show_component_required_marker: false
+      credentials_inline: false
       size:
         title: 6
         given: 20
@@ -99,23 +105,17 @@ content:
         family: description
         generational: description
         credentials: description
-      widget_layout: stacked
-      show_component_required_marker: false
-      credentials_inline: false
-      override_field_settings: false
     third_party_settings: {  }
-    type: name_default
-    region: content
   field_organisation:
+    type: entity_reference_autocomplete
     weight: 3
+    region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: entity_reference_autocomplete
-    region: content
   langcode:
     type: language_select
     weight: 6
@@ -139,9 +139,9 @@ content:
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    settings:
-      display_label: true
     weight: 9
     region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
 hidden: {  }

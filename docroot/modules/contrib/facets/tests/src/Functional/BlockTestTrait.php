@@ -83,15 +83,13 @@ trait BlockTestTrait {
    *   The id of the block.
    */
   protected function deleteBlock($id) {
-    // Delete a facet block trough the UI, the text for that link has changed
-    // in Drupal::VERSION 8.3.
-    $delete_link_title = \Drupal::VERSION >= 8.3 ? 'Remove block' : 'Delete';
-    $delete_confirm_form_button_title = \Drupal::VERSION >= 8.3 ? 'Remove' : 'Delete';
-    $orig_success_message = \Drupal::VERSION >= 8.3 ? 'The block ' . $this->blocks[$id]->label() . ' has been removed.' : 'The block ' . $this->blocks[$id]->label() . ' has been deleted.';
+    // Delete a facet block through the UI, the text for the success message has
+    // changed in Drupal::VERSION 9.3.
+    $orig_success_message = 'The block ' . $this->blocks[$id]->label() . ' has been removed' . (\Drupal::VERSION >= 9.3 ? ' from the Footer region' : '') . '.';
 
     $this->drupalGet('admin/structure/block/manage/' . $this->blocks[$id]->id(), ['query' => ['destination' => 'admin']]);
-    $this->clickLink($delete_link_title);
-    $this->drupalPostForm(NULL, [], $delete_confirm_form_button_title);
+    $this->clickLink('Remove block');
+    $this->drupalPostForm(NULL, [], 'Remove');
     $this->assertSession()->pageTextContains($orig_success_message);
   }
 

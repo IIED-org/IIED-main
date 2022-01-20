@@ -51,14 +51,16 @@ class LocalTasksTest extends BrowserTestBase {
    * @param int $level
    *   (optional) The local tasks level to assert; 0 for primary, 1 for
    *   secondary. Defaults to 0.
+   *
+   * @internal
    */
-  protected function assertLocalTasks(array $routes, $level = 0) {
+  protected function assertLocalTasks(array $routes, int $level = 0): void {
     $elements = $this->xpath('//*[contains(@class, :class)]//a', [
       ':class' => $level == 0 ? 'tabs primary' : 'tabs secondary',
     ]);
     $this->assertGreaterThan(0, count($elements), 'Local tasks found.');
     foreach ($routes as $index => $route_info) {
-      list($route_name, $route_parameters) = $route_info;
+      [$route_name, $route_parameters] = $route_info;
       $expected = Url::fromRoute($route_name, $route_parameters)->toString();
       $this->assertEquals($expected, $elements[$index]->getAttribute('href'), "Task " . ($index + 1) . "number href " . $elements[$index]->getAttribute('href') . " equals $expected.");
     }
@@ -70,15 +72,14 @@ class LocalTasksTest extends BrowserTestBase {
    * @param string $title
    *   The expected title.
    *
-   * @return bool
-   *   TRUE if the local task exists on the page.
+   * @internal
    */
-  protected function assertLocalTaskAppears($title) {
+  protected function assertLocalTaskAppears(string $title): void {
     // SimpleXML gives us the unescaped text, not the actual escaped markup,
     // so use a pattern instead to check the raw content.
     // This behavior is a bug in libxml, see
     // https://bugs.php.net/bug.php?id=49437.
-    return $this->assertSession()->responseMatches('@<a [^>]*>' . preg_quote($title, '@') . '</a>@');
+    $this->assertSession()->responseMatches('@<a [^>]*>' . preg_quote($title, '@') . '</a>@');
   }
 
   /**
@@ -87,8 +88,10 @@ class LocalTasksTest extends BrowserTestBase {
    * @param int $level
    *   (optional) The local tasks level to assert; 0 for primary, 1 for
    *   secondary. Defaults to 0.
+   *
+   * @internal
    */
-  protected function assertNoLocalTasks($level = 0) {
+  protected function assertNoLocalTasks(int $level = 0): void {
     $elements = $this->xpath('//*[contains(@class, :class)]//a', [
       ':class' => $level == 0 ? 'tabs primary' : 'tabs secondary',
     ]);
@@ -173,7 +176,7 @@ class LocalTasksTest extends BrowserTestBase {
     $this->assertEquals('menu_test', $definitions['menu_test.local_task_test_tasks_settings_sub2']['provider']);
     $this->assertEquals('menu_test', $definitions['menu_test.local_task_test_tasks_settings_sub3']['provider']);
 
-    // Test that we we correctly apply the active class to tabs where one of the
+    // Test that we correctly apply the active class to tabs where one of the
     // request attributes is upcast to an entity object.
     $entity = \Drupal::entityTypeManager()->getStorage('entity_test')->create(['bundle' => 'test']);
     $entity->save();

@@ -71,9 +71,9 @@ field_type:
           words: stopwords_pt_pt.txt
         -
           class: solr.SynonymGraphFilterFactory
+          ignoreCase: true
           synonyms: synonyms_pt_pt.txt
           expand: true
-          ignoreCase: true
         -
           class: solr.PortugueseStemFilterFactory
         -
@@ -133,9 +133,9 @@ unstemmed_field_type:
           class: solr.LowerCaseFilterFactory
         -
           class: solr.SynonymGraphFilterFactory
+          ignoreCase: true
           synonyms: synonyms_pt_pt.txt
           expand: true
-          ignoreCase: true
         -
           class: solr.StopFilterFactory
           ignoreCase: true
@@ -447,9 +447,6 @@ text_files:
     teria
     teríamos
     teriam
-  synonyms: |
-    drupal, durpal
-  nouns: ''
   protwords: ''
   accents: |
     # À => A
@@ -616,3 +613,6 @@ text_files:
     "\uFB05" => "st"
     # ﬆ => st
     "\uFB06" => "st"
+  synonyms: |
+    drupal, durpal
+  nouns: ''

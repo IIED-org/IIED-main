@@ -3,6 +3,7 @@
 namespace Drupal\Tests\facets\Functional;
 
 use Drupal\facets\Entity\Facet;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class FacetsUrlGeneratorTest.
@@ -64,6 +65,19 @@ class FacetsUrlGeneratorTest extends FacetsTestBase {
     $url = $this->urlGenerator->getUrl(['test_facet' => ['fuzzy']]);
 
     $this->assertEquals('route:view.search_api_test_view.page_1;arg_0&arg_1&arg_2?f%5B0%5D=owl%3Afuzzy', $url->toUriString());
+
+    // Setup search page URL with contextual parameters as current request and
+    // path.
+    $path = '/search-api-test-fulltext/entity:entity_test_mulrev_changed/entity_test_mulrev_changed';
+    $request = Request::create($path);
+    $result = \Drupal::service('router.no_access_checks')->matchRequest($request);
+    $request->attributes->add($result);
+    \Drupal::requestStack()->push($request);
+    \Drupal::service('path.current')->setPath($path);
+    $url = $this->urlGenerator->getUrl(['test_facet' => ['fuzzy']]);
+
+    $this->assertEquals('route:view.search_api_test_view.page_1;arg_0=entity%3Aentity_test_mulrev_changed&arg_1=entity_test_mulrev_changed&arg_2?f%5B0%5D=owl%3Afuzzy', $url->toUriString());
+    \Drupal::requestStack()->pop();
   }
 
   /**

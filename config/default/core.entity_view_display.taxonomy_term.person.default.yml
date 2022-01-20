@@ -17,6 +17,7 @@ dependencies:
 third_party_settings:
   layout_builder:
     enabled: true
+    allow_custom: false
     sections:
       -
         layout_id: layout_onecol
@@ -28,68 +29,69 @@ third_party_settings:
             uuid: 437ab223-c6da-4eb9-9119-0e332a644548
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:person:field_name'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:person:field_name'
               formatter:
+                type: name_default
                 label: above
                 settings:
                   format: default
-                  list_format: ''
                   markup: none
+                  list_format: ''
                   link_target: ''
                   preferred_field_reference: ''
                   preferred_field_reference_separator: ', '
                   alternative_field_reference: ''
                   alternative_field_reference_separator: ', '
                 third_party_settings: {  }
-                type: name_default
-            additional: {  }
             weight: 0
+            additional: {  }
           cddcce1a-16c5-4b2a-be5a-670e54884491:
             uuid: cddcce1a-16c5-4b2a-be5a-670e54884491
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:person:field_legacy_iscanonical'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:person:field_legacy_iscanonical'
               formatter:
+                type: boolean
                 label: above
                 settings:
                   format: default
                   format_custom_false: ''
                   format_custom_true: ''
                 third_party_settings: {  }
-                type: boolean
-            additional: {  }
             weight: 1
+            additional: {  }
           0c344382-6de5-467b-a0f0-1c1f556adacf:
             uuid: 0c344382-6de5-467b-a0f0-1c1f556adacf
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:person:field_organisation'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:person:field_organisation'
               formatter:
+                type: entity_reference_label
                 label: above
                 settings:
                   link: true
                 third_party_settings: {  }
-                type: entity_reference_label
-            additional: {  }
             weight: 2
+            additional: {  }
           54228028-4761-4df8-8ea6-b478b6f2f97e:
             uuid: 54228028-4761-4df8-8ea6-b478b6f2f97e
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:person:field_link'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:person:field_link'
               formatter:
+                type: link
                 label: above
                 settings:
                   trim_length: 80
@@ -98,54 +100,52 @@ third_party_settings:
                   rel: ''
                   target: ''
                 third_party_settings: {  }
-                type: link
-            additional: {  }
             weight: 3
+            additional: {  }
           0aec4775-946a-45e7-9c1a-1e11f3dc593b:
             uuid: 0aec4775-946a-45e7-9c1a-1e11f3dc593b
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:person:field_iied_user_id'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:person:field_iied_user_id'
               formatter:
+                type: number_integer
                 label: above
                 settings:
                   thousand_separator: ''
                   prefix_suffix: true
                 third_party_settings: {  }
-                type: number_integer
-            additional: {  }
             weight: 4
+            additional: {  }
         third_party_settings: {  }
-    allow_custom: false
 id: taxonomy_term.person.default
 targetEntityType: taxonomy_term
 bundle: person
 mode: default
 content:
   field_iied_user_id:
-    weight: 4
+    type: number_integer
     label: above
     settings:
       thousand_separator: ''
       prefix_suffix: true
     third_party_settings: {  }
-    type: number_integer
+    weight: 4
     region: content
   field_legacy_iscanonical:
-    weight: 1
+    type: boolean
     label: above
     settings:
       format: default
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    type: boolean
+    weight: 1
     region: content
   field_link:
-    weight: 3
+    type: link
     label: above
     settings:
       trim_length: 80
@@ -154,30 +154,30 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    type: link
+    weight: 3
     region: content
   field_name:
-    weight: 0
+    type: name_default
     label: above
     settings:
       format: default
-      list_format: ''
       markup: none
+      list_format: ''
       link_target: ''
       preferred_field_reference: ''
       preferred_field_reference_separator: ', '
       alternative_field_reference: ''
       alternative_field_reference_separator: ', '
     third_party_settings: {  }
-    type: name_default
+    weight: 0
     region: content
   field_organisation:
-    weight: 2
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 2
     region: content
 hidden:
   description: true

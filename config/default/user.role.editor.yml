@@ -1,7 +1,29 @@
 uuid: 0c5c536b-ef92-46e9-9ce2-2c082ff45df8
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - filter.format.basic_html
+    - media.type.document
+    - media.type.image
+    - node.type.publication
+    - taxonomy.vocabulary.list
+    - taxonomy.vocabulary.organisation
+    - taxonomy.vocabulary.person
+  module:
+    - content_translation
+    - eu_cookie_compliance
+    - file
+    - filter
+    - media
+    - media_revisions_ui
+    - node
+    - paragraphs
+    - pathauto
+    - publishcontent
+    - quickedit
+    - system
+    - taxonomy
 id: editor
 label: Editor
 weight: -7

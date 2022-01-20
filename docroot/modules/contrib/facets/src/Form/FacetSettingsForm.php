@@ -3,10 +3,10 @@
 namespace Drupal\facets\Form;
 
 use Drupal\Core\Entity\EntityForm;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\UrlGeneratorInterface;
+use Drupal\facets\Entity\Facet;
 use Drupal\facets\FacetInterface;
 use Drupal\facets\FacetSource\FacetSourcePluginManager;
 use Drupal\facets\FacetSource\SearchApiFacetSourceInterface;
@@ -18,13 +18,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides a form for creating and editing facets.
  */
 class FacetSettingsForm extends EntityForm {
-
-  /**
-   * The facet storage.
-   *
-   * @var \Drupal\Core\Entity\EntityStorageInterface
-   */
-  protected $facetStorage;
 
   /**
    * The plugin manager for facet sources.
@@ -43,8 +36,6 @@ class FacetSettingsForm extends EntityForm {
   /**
    * Constructs a FacetForm object.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity manager.
    * @param \Drupal\facets\FacetSource\FacetSourcePluginManager $facet_source_plugin_manager
    *   The plugin manager for facet sources.
    * @param \Drupal\facets\Processor\ProcessorPluginManager $processor_plugin_manager
@@ -54,8 +45,7 @@ class FacetSettingsForm extends EntityForm {
    * @param \Drupal\Core\Routing\UrlGeneratorInterface $url_generator
    *   The url generator.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, FacetSourcePluginManager $facet_source_plugin_manager, ProcessorPluginManager $processor_plugin_manager, ModuleHandlerInterface $module_handler, UrlGeneratorInterface $url_generator) {
-    $this->facetStorage = $entity_type_manager->getStorage('facets_facet');
+  public function __construct(FacetSourcePluginManager $facet_source_plugin_manager, ProcessorPluginManager $processor_plugin_manager, ModuleHandlerInterface $module_handler, UrlGeneratorInterface $url_generator) {
     $this->facetSourcePluginManager = $facet_source_plugin_manager;
     $this->processorPluginManager = $processor_plugin_manager;
     $this->moduleHandler = $module_handler;
@@ -67,7 +57,6 @@ class FacetSettingsForm extends EntityForm {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity_type.manager'),
       $container->get('plugin.manager.facets.facet_source'),
       $container->get('plugin.manager.facets.processor'),
       $container->get('module_handler'),
@@ -175,7 +164,7 @@ class FacetSettingsForm extends EntityForm {
       '#maxlength' => 50,
       '#required' => TRUE,
       '#machine_name' => [
-        'exists' => [$this->facetStorage, 'load'],
+        'exists' => [Facet::class, 'load'],
         'source' => ['name'],
       ],
       '#disabled' => !$facet->isNew(),

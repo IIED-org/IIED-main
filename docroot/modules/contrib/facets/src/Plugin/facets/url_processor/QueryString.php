@@ -55,7 +55,7 @@ class QueryString extends UrlProcessorPluginBase {
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('request_stack')->getMasterRequest(),
+      $container->get('request_stack')->getCurrentRequest(),
       $container->get('entity_type.manager'),
       $container->get('event_dispatcher')
     );

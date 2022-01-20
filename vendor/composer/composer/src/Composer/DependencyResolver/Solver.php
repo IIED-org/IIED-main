@@ -12,9 +12,11 @@
 
 namespace Composer\DependencyResolver;
 
+use Composer\Filter\PlatformRequirementFilter\IgnoreListPlatformRequirementFilter;
+use Composer\Filter\PlatformRequirementFilter\PlatformRequirementFilterFactory;
+use Composer\Filter\PlatformRequirementFilter\PlatformRequirementFilterInterface;
 use Composer\IO\IOInterface;
 use Composer\Package\BasePackage;
-use Composer\Repository\PlatformRepository;
 
 /**
  * @author Nils Adermann <naderman@naderman.de>
@@ -41,7 +43,7 @@ class Solver
 
     /** @var int */
     protected $propagateIndex;
-    /** @var array[] */
+    /** @var mixed[] */
     protected $branches = array();
     /** @var Problem[] */
     protected $problems = array();
@@ -166,14 +168,15 @@ class Solver
     }
 
     /**
-     * @param bool|string[] $ignorePlatformReqs
      * @return void
      */
-    protected function checkForRootRequireProblems(Request $request, $ignorePlatformReqs)
+    protected function checkForRootRequireProblems(Request $request, PlatformRequirementFilterInterface $platformRequirementFilter)
     {
         foreach ($request->getRequires() as $packageName => $constraint) {
-            if ((true === $ignorePlatformReqs || (is_array($ignorePlatformReqs) && in_array($packageName, $ignorePlatformReqs, true))) && PlatformRepository::isPlatformPackage($packageName)) {
+            if ($platformRequirementFilter->isIgnored($packageName)) {
                 continue;
+            } elseif ($platformRequirementFilter instanceof IgnoreListPlatformRequirementFilter) {
+                $constraint = $platformRequirementFilter->filterConstraint($packageName, $constraint);
             }
 
             if (!$this->pool->whatProvides($packageName, $constraint)) {
@@ -185,18 +188,19 @@ class Solver
     }
 
     /**
-     * @param  bool|string[]      $ignorePlatformReqs
      * @return LockTransaction
      */
-    public function solve(Request $request, $ignorePlatformReqs = false)
+    public function solve(Request $request, PlatformRequirementFilterInterface $platformRequirementFilter = null)
     {
+        $platformRequirementFilter = $platformRequirementFilter ?: PlatformRequirementFilterFactory::ignoreNothing();
+
         $this->setupFixedMap($request);
 
         $this->io->writeError('Generating rules', true, IOInterface::DEBUG);
         $ruleSetGenerator = new RuleSetGenerator($this->policy, $this->pool);
-        $this->rules = $ruleSetGenerator->getRulesFor($request, $ignorePlatformReqs);
+        $this->rules = $ruleSetGenerator->getRulesFor($request, $platformRequirementFilter);
         unset($ruleSetGenerator);
-        $this->checkForRootRequireProblems($request, $ignorePlatformReqs);
+        $this->checkForRootRequireProblems($request, $platformRequirementFilter);
         $this->decisions = new Decisions($this->pool);
         $this->watchGraph = new RuleWatchGraph;
 

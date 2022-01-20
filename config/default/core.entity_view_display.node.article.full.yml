@@ -25,16 +25,16 @@ third_party_settings:
       disable_css: false
       entity_classes: all_classes
       settings:
-        label: ''
+        classes:
+          layout_class: {  }
+          ds_content: {  }
         wrappers:
           ds_content: div
         outer_wrapper: div
         attributes: ''
         link_attribute: ''
         link_custom: ''
-        classes:
-          layout_class: {  }
-          ds_content: {  }
+        label: ''
     regions:
       ds_content:
         - body
@@ -47,8 +47,7 @@ mode: full
 content:
   body:
     type: text_default
-    weight: 0
-    region: ds_content
+    label: hidden
     settings: {  }
     third_party_settings:
       ds:
@@ -56,30 +55,31 @@ content:
           id: expert
           settings:
             lb: ''
-            prefix: ''
+            lbw: false
             lbw-el: ''
             lbw-cl: ''
             lbw-at: ''
+            lb-col: false
             ow: true
             ow-el: div
             ow-cl: container
             ow-at: ''
+            ow-def-at: false
+            ow-def-cl: false
             fis: true
             fis-el: div
             fis-cl: row
             fis-at: ''
+            fis-def-at: false
             fi: true
             fi-el: div
             fi-cl: 'col-md-8 m-auto'
             fi-at: ''
-            suffix: ''
-            lbw: false
-            lb-col: false
-            ow-def-at: false
-            ow-def-cl: false
-            fis-def-at: false
             fi-def-at: false
-    label: hidden
+            prefix: ''
+            suffix: ''
+    weight: 0
+    region: ds_content
 hidden:
   comment: true
   field_image: true

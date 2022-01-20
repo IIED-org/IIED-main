@@ -167,7 +167,10 @@ class BreadcrumbIntegrationTest extends FacetsTestBase {
 
     // Check that the current url still has the initial parameters.
     $curr_url = UrlHelper::parse($this->getUrl());
-    $this->assertArraySubset($initial_query, $curr_url['query']);
+    foreach ($initial_query as $key => $value) {
+      $this->assertArrayHasKey($key, $curr_url['query']);
+      $this->assertEquals($value, $curr_url['query'][$key]);
+    }
   }
 
 }

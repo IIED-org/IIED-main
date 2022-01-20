@@ -265,10 +265,7 @@ function facets_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInter
 
     // Sort facets by weight.
     uasort($facets, function (FacetInterface $a, FacetInterface $b) {
-      if ($a->getWeight() == $b->getWeight()) {
-        return 0;
-      }
-      return ($a->getWeight() < $b->getWeight()) ? -1 : 1;
+      return (int) $a->getWeight() - $b->getWeight();
     });
 
     /** @var \Drupal\facets\UrlProcessor\UrlProcessorPluginManager $url_processor_manager */
