@@ -206,4 +206,30 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
     ];
     $row->setSourceProperty('field_link_processed', $field_link_processed);
   }
+  // Redirects migration
+  if ($migration->id() == 'iied_d7_redirects') {
+    // Extract redirect target node id.
+    $redirect = $row->getSourceProperty('redirect');
+
+    if (substr($redirect, 0, 4) == 'node') {
+      $x=0;
+      $original_node_id = substr($redirect, 5, strlen($redirect));
+      // Get original node type.
+      $original_node_type = $source->getDatabase()->query('SELECT type FROM {node} WHERE nid = :nid', array(':nid' => $original_node_id))->fetchField();
+
+      if ($original_node_type == 'article') {
+        // Lookup node in article map.
+        $db = \Drupal\Core\Database\Database::getConnection();
+        $query = $db->select('migrate_map_iied_d7_articles', 'mm');
+        $query->fields('mm', array('destid1'));
+        $query->condition('sourceid1', $original_node_id);
+        $new_node_id = $query->execute()->fetchField();
+        $x = 0;
+        $row->setSourceProperty('redirect', 'node/' . $new_node_id);
+      }
+      $x = 0;
+
+    }
+
+  }
 }

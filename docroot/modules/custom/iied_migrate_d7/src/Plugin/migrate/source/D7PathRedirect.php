@@ -22,6 +22,7 @@ class D7PathRedirect extends DrupalSqlBase {
     // Select path redirects.
     $query = $this->select('redirect', 'p')->fields('p');
     //$query->condition('rid', '41');
+    $query->condition('rid', '10886');
     return $query;
   }
 
@@ -39,7 +40,7 @@ class D7PathRedirect extends DrupalSqlBase {
         ->fetchField());
     }
     $current_status_code = $row->getSourceProperty('status_code');
-    $status_code = $current_status_code != 0 ? $current_status_code : $default_status_code;
+    $status_code = $current_status_code != 0 ? $current_status_code : '301';
     $row->setSourceProperty('status_code', $status_code);
     return parent::prepareRow($row);
   }
