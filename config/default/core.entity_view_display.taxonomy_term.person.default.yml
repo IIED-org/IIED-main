@@ -10,17 +10,15 @@ dependencies:
     - field.field.taxonomy_term.person.field_current_work
     - field.field.taxonomy_term.person.field_department
     - field.field.taxonomy_term.person.field_email
-    - field.field.taxonomy_term.person.field_ex_staff
     - field.field.taxonomy_term.person.field_expertise
-    - field.field.taxonomy_term.person.field_guest_contributor
     - field.field.taxonomy_term.person.field_iied_user_id
     - field.field.taxonomy_term.person.field_languages
     - field.field.taxonomy_term.person.field_legacy_iscanonical
     - field.field.taxonomy_term.person.field_link
-    - field.field.taxonomy_term.person.field_list
     - field.field.taxonomy_term.person.field_name
     - field.field.taxonomy_term.person.field_organisation
     - field.field.taxonomy_term.person.field_paragraphs
+    - field.field.taxonomy_term.person.field_person_type
     - field.field.taxonomy_term.person.field_position
     - field.field.taxonomy_term.person.field_position_short
     - field.field.taxonomy_term.person.field_quotes
@@ -380,60 +378,6 @@ third_party_settings:
                 third_party_settings: {  }
             additional: {  }
             weight: 20
-          47b47496-2759-44df-bc77-a56329d1ccb2:
-            uuid: 47b47496-2759-44df-bc77-a56329d1ccb2
-            region: content
-            configuration:
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:person:field_list'
-              formatter:
-                label: above
-                settings:
-                  format: default
-                  format_custom_false: ''
-                  format_custom_true: ''
-                third_party_settings: {  }
-                type: boolean
-            additional: {  }
-            weight: 21
-          88b1a76f-33e3-4760-ac8d-4c8d847f2d63:
-            uuid: 88b1a76f-33e3-4760-ac8d-4c8d847f2d63
-            region: content
-            configuration:
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:person:field_guest_contributor'
-              formatter:
-                label: above
-                settings:
-                  format: default
-                  format_custom_false: ''
-                  format_custom_true: ''
-                third_party_settings: {  }
-                type: boolean
-            additional: {  }
-            weight: 22
-          926408cf-02b3-436e-8c70-b21017c9e7aa:
-            uuid: 926408cf-02b3-436e-8c70-b21017c9e7aa
-            region: content
-            configuration:
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:person:field_ex_staff'
-              formatter:
-                label: above
-                settings:
-                  format: default
-                  format_custom_false: ''
-                  format_custom_true: ''
-                third_party_settings: {  }
-                type: boolean
-            additional: {  }
-            weight: 23
           ba1e86ed-f66f-4212-b443-9340a9e8412b:
             uuid: ba1e86ed-f66f-4212-b443-9340a9e8412b
             region: content
@@ -510,6 +454,22 @@ third_party_settings:
                 type: basic_string
             additional: {  }
             weight: 28
+          c0489676-8f58-48a4-abd9-75d4168f7c7b:
+            uuid: c0489676-8f58-48a4-abd9-75d4168f7c7b
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:taxonomy_term:person:field_person_type'
+              formatter:
+                label: above
+                settings:
+                  link: true
+                third_party_settings: {  }
+                type: entity_reference_label
+            additional: {  }
+            weight: 29
         third_party_settings: {  }
     allow_custom: false
 id: taxonomy_term.person.default
@@ -568,32 +528,12 @@ content:
     third_party_settings: {  }
     type: basic_string
     region: content
-  field_ex_staff:
-    weight: 23
-    label: above
-    settings:
-      format: default
-      format_custom_false: ''
-      format_custom_true: ''
-    third_party_settings: {  }
-    type: boolean
-    region: content
   field_expertise:
     weight: 13
     label: above
     settings: {  }
     third_party_settings: {  }
     type: text_default
-    region: content
-  field_guest_contributor:
-    weight: 22
-    label: above
-    settings:
-      format: default
-      format_custom_false: ''
-      format_custom_true: ''
-    third_party_settings: {  }
-    type: boolean
     region: content
   field_iied_user_id:
     weight: 4
@@ -634,16 +574,6 @@ content:
     third_party_settings: {  }
     type: link
     region: content
-  field_list:
-    weight: 21
-    label: above
-    settings:
-      format: default
-      format_custom_false: ''
-      format_custom_true: ''
-    third_party_settings: {  }
-    type: boolean
-    region: content
   field_name:
     weight: 0
     label: above
@@ -675,6 +605,14 @@ content:
       view_mode: default
       link: ''
     third_party_settings: {  }
+    region: content
+  field_person_type:
+    weight: 29
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
     region: content
   field_position:
     weight: 7

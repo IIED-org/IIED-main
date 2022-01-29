@@ -146,9 +146,14 @@ process:
             plugin: extract
             index:
               - 1
-  field_list: field_list
-  field_guest_contributor: field_guest_contributor
-  field_ex_staff: field_ex_staff
+  field_person_type:
+    -
+      plugin: entity_generate
+      source: mapped_person_type
+      value_key: name
+      entity_type: taxonomy_term
+      bundle: person_type
+      bundle_key: vid
   field_department_group: field_department_group
   field_group_working: field_group_working # Need to map entity reference to list item
   field_theme: taxonomy_vocabulary_19
@@ -184,7 +189,7 @@ destination:
     - field_twitter_bio
     - field_researcher_profiles
     - field_video/target_id
-    - field_paragraphs
+    - field_paragrafield_person_typephs
     - field_list
     - field_guest_contributor
     - field_ex_staff
@@ -193,8 +198,7 @@ destination:
     - field_theme
     - field_appointed_role
     - field_quotes
-
-
+    - field_person_type
 
 migration_dependencies:
   required: {}

@@ -11,17 +11,15 @@ dependencies:
     - field.field.taxonomy_term.person.field_current_work
     - field.field.taxonomy_term.person.field_department
     - field.field.taxonomy_term.person.field_email
-    - field.field.taxonomy_term.person.field_ex_staff
     - field.field.taxonomy_term.person.field_expertise
-    - field.field.taxonomy_term.person.field_guest_contributor
     - field.field.taxonomy_term.person.field_iied_user_id
     - field.field.taxonomy_term.person.field_languages
     - field.field.taxonomy_term.person.field_legacy_iscanonical
     - field.field.taxonomy_term.person.field_link
-    - field.field.taxonomy_term.person.field_list
     - field.field.taxonomy_term.person.field_name
     - field.field.taxonomy_term.person.field_organisation
     - field.field.taxonomy_term.person.field_paragraphs
+    - field.field.taxonomy_term.person.field_person_type
     - field.field.taxonomy_term.person.field_position
     - field.field.taxonomy_term.person.field_position_short
     - field.field.taxonomy_term.person.field_quotes
@@ -111,17 +109,15 @@ hidden:
   field_current_work: true
   field_department: true
   field_email: true
-  field_ex_staff: true
   field_expertise: true
-  field_guest_contributor: true
   field_iied_user_id: true
   field_languages: true
   field_legacy_iscanonical: true
   field_link: true
-  field_list: true
   field_name: true
   field_organisation: true
   field_paragraphs: true
+  field_person_type: true
   field_position: true
   field_position_short: true
   field_quotes: true
