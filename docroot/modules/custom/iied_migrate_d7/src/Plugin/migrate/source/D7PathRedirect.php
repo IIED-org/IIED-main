@@ -42,7 +42,44 @@ class D7PathRedirect extends DrupalSqlBase {
     $current_status_code = $row->getSourceProperty('status_code');
     $status_code = $current_status_code != 0 ? $current_status_code : '301';
     $row->setSourceProperty('status_code', $status_code);
+
+    // Extract redirect target node id.
+    $redirect = $row->getSourceProperty('redirect');
+
+    if (substr($redirect, 0, 4) == 'node') {
+      $x = 0;
+      $original_node_id = substr($redirect, 5, strlen($redirect));
+      // Get original node type.
+      $original_node_type = $this->database->query('SELECT type FROM {node} WHERE nid = :nid', array(':nid' => $original_node_id))->fetchField();
+      $new_node_id = $this->getNewNodeId($original_node_id, $original_node_type);
+      $row->setSourceProperty('redirect', 'node/' . $new_node_id);
+      $x = 0;
+    }
+
+
+
+
     return parent::prepareRow($row);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getNewNodeId($original_node_id, $type) {
+    $type_maps = [
+      'article' => 'migrate_map_iied_d7_articles',
+      'project' => 'migrate_map_iied_d7_projects',
+      'press' => 'migrate_map_iied_d7_news_press',
+      'media_release' => 'migrate_map_iied_d7_news_media',
+    ];
+    // Lookup node in migrate_map table.
+    $db = \Drupal\Core\Database\Database::getConnection();
+    //$db = $this->database;
+    $query = $db->select($type_maps[$type], 'mm');
+    $query->fields('mm', array('destid1'));
+    $query->condition('sourceid1', $original_node_id);
+    $new_node_id = $query->execute()->fetchField();
+    return $new_node_id;
   }
 
   /**
