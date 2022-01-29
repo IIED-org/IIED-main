@@ -23,7 +23,7 @@ dependencies:
     - field.field.node.project.field_standfirst
     - field.field.node.project.field_tagline
     - field.field.node.project.field_tags
-    - field.field.node.project.field_theme
+    - field.field.node.project.field_theme_s_
     - field.field.node.project.field_year
     - node.type.project
   module:
@@ -214,8 +214,8 @@ content:
     third_party_settings: {  }
     type: entity_reference_label
     region: content
-  field_theme:
-    weight: 6
+  field_theme_s_:
+    weight: 24
     label: above
     settings:
       link: true

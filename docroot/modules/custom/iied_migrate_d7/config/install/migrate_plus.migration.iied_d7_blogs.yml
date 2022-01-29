@@ -20,6 +20,10 @@ process:
   created: created
   changed: changed
   status: status
+  uid:
+    -
+      plugin: default_value
+      default_value: '1'
   langcode:
     -
       plugin: default_value
@@ -27,7 +31,7 @@ process:
   title:
     -
       plugin: get
-      source: title
+      source: title_field
   field_main_image:
     -
       plugin: sub_process
@@ -136,16 +140,10 @@ process:
       default_value: 'full_html'
   field_author_s_:
     -
-      plugin: skip_on_empty
-      method: process
+      plugin: migration_lookup
+      migration: iied_d7_terms_person
       source: field_authors
-    -
-      plugin: entity_generate
-      entity_type: taxonomy_term
-      bundle: person
-      bundle_key: vid
-      value_key: name
-      ignore_case: true
+      no_stub: true
   field_about_the_author:
     -
       plugin: skip_on_empty

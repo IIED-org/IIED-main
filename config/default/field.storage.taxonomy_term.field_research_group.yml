@@ -1,0 +1,33 @@
+uuid: 9548b07b-b921-48d5-bf09-9e622de60e95
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - taxonomy
+id: taxonomy_term.field_research_group
+field_name: field_research_group
+entity_type: taxonomy_term
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: '1'
+      label: 'Climate Change research group'
+    -
+      value: '2'
+      label: 'Human Settlements research group'
+    -
+      value: '3'
+      label: 'Shaping Sustainable Markets research group'
+    -
+      value: '4'
+      label: 'Natural Resources research group'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

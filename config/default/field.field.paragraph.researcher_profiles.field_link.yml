@@ -1,0 +1,23 @@
+uuid: 3fea620b-8371-43f3-a791-9f9c6c5ca1ce
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_link
+    - paragraphs.paragraphs_type.researcher_profiles
+  module:
+    - link
+id: paragraph.researcher_profiles.field_link
+field_name: field_link
+entity_type: paragraph
+bundle: researcher_profiles
+label: Link
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 1
+field_type: link

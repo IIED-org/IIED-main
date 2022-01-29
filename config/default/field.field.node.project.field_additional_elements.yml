@@ -18,7 +18,7 @@ bundle: project
 label: 'Additional elements'
 description: ''
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
@@ -31,12 +31,18 @@ settings:
       info_box: info_box
       media_embed: media_embed
     target_bundles_drag_drop:
+      about_the_author:
+        weight: 11
+        enabled: false
       basic_text:
         enabled: true
         weight: -15
       file_upload:
         enabled: true
         weight: -14
+      image:
+        weight: 14
+        enabled: false
       image_wide:
         weight: -11
         enabled: false
@@ -51,5 +57,8 @@ settings:
         weight: -12
       row_of_4:
         weight: -9
+        enabled: false
+      video_embed:
+        weight: 20
         enabled: false
 field_type: entity_reference_revisions

@@ -24,6 +24,7 @@ class D7Blog extends Node {
     $query->condition('n.status', 1);
     // Node 26866 is useful for testing.
     // $query->condition('n.nid', '26866');
+    // $query->condition('n.nid', '2554'); // Good for second author.
     return $query;
   }
 

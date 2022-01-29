@@ -20,6 +20,10 @@ process:
   created: created
   changed: changed
   status: status
+  uid:
+    -
+      plugin: default_value
+      default_value: '1'
   langcode:
     -
       plugin: default_value
@@ -27,7 +31,7 @@ process:
   title:
     -
       plugin: get
-      source: title
+      source: title_field
   body/value:
     -
       plugin: get
@@ -76,7 +80,7 @@ process:
     -
       plugin: default_value
       default_value: 'full_html'
-  field_theme:
+  field_theme_s_:
     -
       plugin: sub_process
       source: taxonomy_vocabulary_19

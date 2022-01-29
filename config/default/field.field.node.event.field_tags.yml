@@ -1,16 +1,16 @@
-uuid: a910d236-6629-4d91-b59d-5cfd52525075
+uuid: 4e61ee0d-ab28-41f7-b0c8-6e293eb0d4a7
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_theme
-    - node.type.article
-    - taxonomy.vocabulary.theme
-id: node.article.field_theme
-field_name: field_theme
+    - field.storage.node.field_tags
+    - node.type.event
+    - taxonomy.vocabulary.tags
+id: node.event.field_tags
+field_name: field_tags
 entity_type: node
-bundle: article
-label: Theme
+bundle: event
+label: Tags
 description: ''
 required: false
 translatable: true
@@ -20,7 +20,7 @@ settings:
   handler: 'default:taxonomy_term'
   handler_settings:
     target_bundles:
-      theme: theme
+      tags: tags
     sort:
       field: name
       direction: asc

@@ -1,19 +1,19 @@
-uuid: 8bfe7a4c-d84e-4ac2-a0d6-21bd9d541d16
+uuid: 7b9efbea-4be5-4e7a-9c08-75d7c55cb055
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_theme
-    - node.type.project
+    - field.storage.taxonomy_term.field_theme
+    - taxonomy.vocabulary.person
     - taxonomy.vocabulary.theme
-id: node.project.field_theme
+id: taxonomy_term.person.field_theme
 field_name: field_theme
-entity_type: node
-bundle: project
-label: Theme
+entity_type: taxonomy_term
+bundle: person
+label: Themes
 description: ''
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:

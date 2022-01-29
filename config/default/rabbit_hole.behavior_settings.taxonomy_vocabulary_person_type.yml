@@ -1,0 +1,14 @@
+uuid: 7835baf6-4eba-439f-b346-81ba3b587560
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.person_type
+id: taxonomy_vocabulary_person_type
+entity_type_id: taxonomy_vocabulary
+entity_id: person_type
+action: display_page
+allow_override: 1
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

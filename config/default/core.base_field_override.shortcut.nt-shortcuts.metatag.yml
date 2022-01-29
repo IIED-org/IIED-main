@@ -1,0 +1,18 @@
+uuid: 25bb215d-cc2d-4ffa-b1e0-48109c33698d
+langcode: en
+status: true
+dependencies:
+  config:
+    - shortcut.set.nt-shortcuts
+id: shortcut.nt-shortcuts.metatag
+field_name: metatag
+entity_type: shortcut
+bundle: nt-shortcuts
+label: 'Metatags (Hidden field for JSON support)'
+description: 'The meta tags for the entity.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: map
