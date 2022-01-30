@@ -209,6 +209,27 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
   // Redirects migration
   if ($migration->id() == 'iied_d7_redirects') {
 
-
   }
+
+  // Look up path aliases for node migrations.
+  $node_migrations = [
+    'iied_d7_articles',
+    'iied_d7_blogs',
+    'iied_d7_events',
+    'iied_d7_news_media',
+    'iied_d7_news_press',
+    'iied_d7_projects',
+  ];
+  if (in_array($migration->id(), $node_migrations)) {
+    $nid = $row->getSourceProperty('nid');
+    $db = \Drupal\Core\Database\Database::getConnection();
+    $query = $source->getDatabase()->select('url_alias', 'ua')
+      ->fields('ua', ['alias']);
+    $query->condition('ua.source', 'node/' . $nid);
+    $alias = $query->execute()->fetchField();
+    if (!empty($alias)) {
+      $row->setSourceProperty('alias', '/' . $alias);
+    }
+  }
+
 }

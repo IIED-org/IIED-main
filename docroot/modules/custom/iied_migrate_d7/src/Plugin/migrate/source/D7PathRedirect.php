@@ -21,8 +21,8 @@ class D7PathRedirect extends DrupalSqlBase {
   public function query() {
     // Select path redirects.
     $query = $this->select('redirect', 'p')->fields('p');
-    //$query->condition('rid', '41');
-    $query->condition('rid', '10886');
+    // $query->condition('rid', '41');
+    // $query->condition('rid', '10886');
     return $query;
   }
 
@@ -47,17 +47,25 @@ class D7PathRedirect extends DrupalSqlBase {
     $redirect = $row->getSourceProperty('redirect');
 
     if (substr($redirect, 0, 4) == 'node') {
-      $x = 0;
       $original_node_id = substr($redirect, 5, strlen($redirect));
       // Get original node type.
-      $original_node_type = $this->database->query('SELECT type FROM {node} WHERE nid = :nid', array(':nid' => $original_node_id))->fetchField();
+      $original_node_type = $this->database->query('SELECT type FROM {node} WHERE nid = :nid', [':nid' => $original_node_id])->fetchField();
       $new_node_id = $this->getNewNodeId($original_node_id, $original_node_type);
-      $row->setSourceProperty('redirect', 'node/' . $new_node_id);
-      $x = 0;
+      if ($new_node_id) {
+        if ($new_node_id == '74449') {
+          // Avoid:
+          // Integrity constraint violation: 1062 Duplicate entry
+          // 'HzE2UgoAkGHwRY5twLUX-P5LRUNFERUhJ8wRfRrlo7c' for key 'hash':
+          // internal:/node/74449 .
+          // https://www.iied.org/2018-barbara-ward-lecture-gro-harlem-brundtland-calls-for-people-speak-out-against-simplistic
+          return FALSE;
+        }
+        $row->setSourceProperty('redirect', 'node/' . $new_node_id);
+      }
+      else {
+        return FALSE;
+      }
     }
-
-
-
 
     return parent::prepareRow($row);
   }
@@ -68,18 +76,26 @@ class D7PathRedirect extends DrupalSqlBase {
   public function getNewNodeId($original_node_id, $type) {
     $type_maps = [
       'article' => 'migrate_map_iied_d7_articles',
+      'blog' => 'migrate_map_iied_d7_blogs',
+      'event' => 'migrate_map_iied_d7_events',
       'project' => 'migrate_map_iied_d7_projects',
       'press' => 'migrate_map_iied_d7_news_press',
       'media_release' => 'migrate_map_iied_d7_news_media',
     ];
-    // Lookup node in migrate_map table.
-    $db = \Drupal\Core\Database\Database::getConnection();
-    //$db = $this->database;
-    $query = $db->select($type_maps[$type], 'mm');
-    $query->fields('mm', array('destid1'));
-    $query->condition('sourceid1', $original_node_id);
-    $new_node_id = $query->execute()->fetchField();
-    return $new_node_id;
+    if (in_array($type, array_keys($type_maps))) {
+      // Lookup node in migrate_map table.
+      $db = \Drupal\Core\Database\Database::getConnection();
+      //$db = $this->database;
+      $query = $db->select($type_maps[$type], 'mm');
+      $query->fields('mm', array('destid1'));
+      $query->condition('sourceid1', $original_node_id);
+      $new_node_id = $query->execute()->fetchField();
+      return $new_node_id;
+    }
+    else {
+      return FALSE;
+    }
+
   }
 
   /**
