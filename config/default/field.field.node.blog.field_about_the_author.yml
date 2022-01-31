@@ -21,13 +21,13 @@ default_value_callback: ''
 settings:
   handler: 'default:paragraph'
   handler_settings:
-    negate: 0
     target_bundles:
       about_the_author: about_the_author
+    negate: 0
     target_bundles_drag_drop:
       about_the_author:
-        enabled: true
         weight: 11
+        enabled: true
       basic_text:
         weight: 12
         enabled: false

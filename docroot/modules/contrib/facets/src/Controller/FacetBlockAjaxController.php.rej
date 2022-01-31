@@ -1,0 +1,43 @@
+--- src/Controller/FacetBlockAjaxController.php
++++ src/Controller/FacetBlockAjaxController.php
+@@ -5,14 +5,18 @@ namespace Drupal\facets\Controller;
+ use Drupal\Core\Ajax\AjaxResponse;
+ use Drupal\Core\Ajax\InvokeCommand;
+ use Drupal\Core\Ajax\ReplaceCommand;
++use Drupal\Core\Block\BlockManager;
++use Drupal\Core\Block\Plugin\Block\Broken;
+ use Drupal\Core\Controller\ControllerBase;
+ use Drupal\Core\Path\CurrentPathStack;
+ use Drupal\Core\PathProcessor\PathProcessorManager;
++use Drupal\Core\Http\RequestStack as DrupalRequestStack;
+ use Drupal\Core\Render\RendererInterface;
+ use Drupal\Core\Routing\CurrentRouteMatch;
++use Drupal\facets\Plugin\Block\FacetBlock;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+ use Symfony\Component\HttpFoundation\Request;
+-use Symfony\Component\HttpFoundation\RequestStack;
++use Symfony\Component\HttpFoundation\RequestStack as SymfonyRequestStack;
+ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+ use Symfony\Component\Routing\RouterInterface;
+ 
+@@ -133,11 +148,16 @@ class FacetBlockAjaxController extends ControllerBase {
+       throw new NotFoundHttpException('No facet link or facet blocks found.');
+     }
+ 
+-    // Make sure we are not updating blocks multiple times.
+-    $facets_blocks = array_unique($facets_blocks);
+-
+     $new_request = Request::create($path);
+-    $request_stack = new RequestStack();
++    // Support 9.3+
++    // @todo remove after 9.3 or greater is required.
++    if (class_exists(\Drupal\Core\Http\RequestStack::class)) {
++      $request_stack = new DrupalRequestStack();
++    }
++    // Legacy request stack.
++    else {
++      $request_stack = new SymfonyRequestStack();
++    }
+     $processed = $this->pathProcessor->processInbound($path, $new_request);
+ 
+     $this->currentPath->setPath($processed);

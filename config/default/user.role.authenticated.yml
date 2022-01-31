@@ -1,7 +1,19 @@
 uuid: 5136ae83-7b5f-4e5c-abb7-bceeec6c4db4
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - filter.format.basic_html
+  module:
+    - comment
+    - contact
+    - eu_cookie_compliance
+    - filter
+    - google_analytics
+    - media
+    - search_api_autocomplete
+    - shortcut
+    - system
 _core:
   default_config_hash: btW6TFHajhy7Eo6YUvdFiPh4TcPggo8GBXYctjV6zag
 id: authenticated
@@ -16,9 +28,7 @@ permissions:
   - 'display eu cookie compliance popup'
   - 'opt-in or out of google analytics tracking'
   - 'post comments'
-  - 'search content'
   - 'skip comment approval'
-  - 'use search_api_autocomplete for acquia_search_solr'
   - 'use search_api_autocomplete for search'
   - 'use text format basic_html'
   - 'view media'

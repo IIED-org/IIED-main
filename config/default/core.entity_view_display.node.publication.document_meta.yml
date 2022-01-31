@@ -69,13 +69,14 @@ third_party_settings:
       children:
         - 'dynamic_block_field:node-cover_image'
         - group_pub_body
+      label: cover-image
       parent_name: ''
+      region: hidden
       weight: 68
       format_type: html_element
-      region: hidden
       format_settings:
-        id: ''
         classes: 'col-md-4 float-md-left order-md-1'
+        id: ''
         element: div
         show_label: false
         label_element: h3
@@ -83,16 +84,18 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
-      label: cover-image
     group_pub_header:
       children:
         - 'dynamic_block_field:node-page_count'
         - node_title
+      label: pub-header
       parent_name: ''
+      region: hidden
       weight: 67
       format_type: html_element
-      region: hidden
       format_settings:
+        classes: 'col-md-8 order-md-2 float-md-right mb-3'
+        id: ''
         element: div
         show_label: false
         label_element: h3
@@ -100,20 +103,18 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
-        id: ''
-        classes: 'col-md-8 order-md-2 float-md-right mb-3'
-      label: pub-header
     group_pub_body:
       children:
         - 'dynamic_block_field:node-download_button'
         - group_related_links
+      label: pub-body
       parent_name: group_cover_image
+      region: hidden
       weight: 43
       format_type: html_element
-      region: hidden
       format_settings:
-        id: ''
         classes: 'col-md-8 float-md-right order-md-3'
+        id: ''
         element: div
         show_label: false
         label_element: h3
@@ -121,14 +122,16 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
-      label: pub-body
     group_related_project:
       children: {  }
+      label: Related-project
       parent_name: ''
+      region: hidden
       weight: 65
       format_type: html_element
-      region: hidden
       format_settings:
+        classes: 'border-gradient mb-5 order-5'
+        id: ''
         element: section
         show_label: false
         label_element: h3
@@ -136,16 +139,16 @@ third_party_settings:
         attributes: project-info
         effect: none
         speed: fast
-        id: ''
-        classes: 'border-gradient mb-5 order-5'
-      label: Related-project
     group_related_publications:
       children: {  }
+      label: 'Related publications'
       parent_name: ''
+      region: hidden
       weight: 66
       format_type: html_element
-      region: hidden
       format_settings:
+        classes: 'mb-5 order-6 container'
+        id: ''
         element: section
         show_label: false
         label_element: h3
@@ -153,18 +156,16 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
-        id: ''
-        classes: 'mb-5 order-6 container'
-      label: 'Related publications'
     group_related_links:
       children: {  }
+      label: 'Related links'
       parent_name: group_pub_body
+      region: hidden
       weight: 3
       format_type: html_element
-      region: hidden
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         element: div
         show_label: true
         label_element: h3
@@ -172,7 +173,6 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
-      label: 'Related links'
   ds:
     layout:
       id: ds_1col
@@ -180,17 +180,17 @@ third_party_settings:
       disable_css: false
       entity_classes: all_classes
       settings:
-        label: ''
+        classes:
+          layout_class:
+            row: row
+          ds_content: {  }
         wrappers:
           ds_content: div
         outer_wrapper: article
         attributes: ''
         link_attribute: ''
         link_custom: ''
-        classes:
-          layout_class:
-            row: row
-          ds_content: {  }
+        label: ''
     regions:
       ds_content:
         - field_date_published
@@ -222,7 +222,7 @@ bundle: publication
 mode: document_meta
 content:
   field_date_published:
-    weight: 0
+    type: datetime_default
     label: inline
     settings:
       timezone_override: ''
@@ -233,33 +233,33 @@ content:
           id: expert
           settings:
             lb: Published
-            prefix: ''
             lbw: true
             lbw-el: span
             lbw-cl: 'field__label font-weight-bold'
             lbw-at: ''
             lb-col: true
+            ow: false
             ow-el: ''
             ow-cl: ''
             ow-at: ''
-            fis-el: ''
-            fis-cl: ''
-            fis-at: ''
-            fi-el: ''
-            fi-cl: ''
-            fi-at: ''
-            suffix: ''
-            ow: false
             ow-def-at: false
             ow-def-cl: false
             fis: false
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
             fis-def-at: false
             fi: false
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
             fi-def-at: false
-    type: datetime_default
+            prefix: ''
+            suffix: ''
+    weight: 0
     region: ds_content
   field_doi:
-    weight: 8
+    type: link
     label: inline
     settings:
       trim_length: 80
@@ -268,43 +268,41 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    type: link
+    weight: 8
     region: ds_content
   field_isbn:
-    weight: 6
+    type: isbn_default
     label: inline
     settings: {  }
     third_party_settings: {  }
-    type: isbn_default
+    weight: 6
     region: ds_content
   field_issn:
-    weight: 7
+    type: string
     label: inline
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 7
     region: ds_content
   field_journal_ref:
-    weight: 5
+    type: string
     label: inline
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 5
     region: ds_content
   field_product_code:
-    weight: 10
+    type: string
     label: inline
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 10
     region: ds_content
   field_product_code_new:
     type: computed_string
-    weight: 9
-    region: ds_content
     label: inline
     settings:
       cache_unit: '-1'
@@ -318,29 +316,31 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
+    weight: 9
+    region: ds_content
   field_publisher:
-    weight: 1
+    type: entity_reference_label
     label: inline
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 1
     region: ds_content
   field_series:
-    weight: 3
+    type: entity_reference_label
     label: inline
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 3
     region: ds_content
   field_source_publication:
-    weight: 4
+    type: string
     label: inline
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 4
     region: ds_content
 hidden:
   body: true

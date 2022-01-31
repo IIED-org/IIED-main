@@ -1,3 +1,5 @@
+_core:
+  default_config_hash: HD-kJquDfx3JureBUmIIt_ADNReD_jLvKg4fwKISoJs
 account: UA-334389-1
 premium: false
 domain_mode: 0
@@ -28,41 +30,41 @@ privacy:
 custom:
   dimension:
     1:
-      value: '[node:field_team]'
       index: 1
+      value: '[node:field_team]'
     3:
-      value: '[node:field_theme_s_]'
       index: 3
+      value: '[node:field_theme_s_]'
     10:
-      value: '[node:field_product_code_new]'
       index: 10
+      value: '[node:field_product_code_new]'
     11:
-      value: '[node:field_project]'
       index: 11
+      value: '[node:field_project]'
     12:
-      value: '[node:field_deptlist]'
       index: 12
+      value: '[node:field_deptlist]'
     13:
-      value: '[node:field_series]'
       index: 13
+      value: '[node:field_series]'
     14:
-      value: '[node:field_lists]'
       index: 14
+      value: '[node:field_lists]'
     15:
-      value: '[node:field_reportagency1]'
       index: 15
+      value: '[node:field_reportagency1]'
     16:
-      value: '[node:field_document_type]'
       index: 16
+      value: '[node:field_document_type]'
     17:
-      value: '[node:field_area_list]'
       index: 17
+      value: '[node:field_area_list]'
     18:
-      value: '[node:field_author_s_]'
       index: 18
+      value: '[node:field_author_s_]'
     19:
-      value: '[node:field_date_published]'
       index: 19
+      value: '[node:field_date_published]'
   metric: {  }
 codesnippet:
   create: {  }
@@ -71,5 +73,3 @@ codesnippet:
 translation_set: false
 cache: false
 debug: false
-_core:
-  default_config_hash: HD-kJquDfx3JureBUmIIt_ADNReD_jLvKg4fwKISoJs

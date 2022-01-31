@@ -60,7 +60,7 @@
         "drupal/dropdown_language": "^2.6",
         "drupal/ds": "^3.9",
         "drupal/eu_cookie_compliance": "^1.14",
-        "drupal/facets": "^1.5",
+        "drupal/facets": "^2.0",
         "drupal/facets_country": "1.x-dev@dev",
         "drupal/field_group": "^3.1",
         "drupal/form_mode_control": "^2.0@RC",
@@ -200,8 +200,8 @@
             "The language of content entities incorrectly falls back to the default language...":"https://www.drupal.org/files/issues/2021-09-16/3061761-46.patch"
           },
           "drupal/facets": {
-            "AJAX facets broken": "https://www.drupal.org/files/issues/2021-06-21/Facets-with-AJAX-not-working-in-most-of-situations.patch",
-            "Show search term in summary": "https://www.drupal.org/files/issues/2020-12-02/2979223--39.patch"
+            "AJAX facets broken": "https://www.drupal.org/files/issues/2022-01-21/facets-ajax_not_working-3052574-136.patch",
+            "Show search term in summary": "https://www.drupal.org/files/issues/2022-01-21/facets-current_search_string-2979223-47.patch"
           },
           "drupal/ds": {
             "Provide entity context to DS block fields":"https://www.drupal.org/files/issues/2020-10-12/ds-content_entity-2939322-14.patch"

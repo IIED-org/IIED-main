@@ -22,14 +22,14 @@ plugin: 'block_content:82c13e7a-241f-4e88-ab3f-433c0202d562'
 settings:
   id: 'block_content:82c13e7a-241f-4e88-ab3f-433c0202d562'
   label: 'Home hero'
-  provider: block_content
   label_display: '0'
+  provider: block_content
   status: true
   info: ''
   view_mode: full
 visibility:
   request_path:
     id: request_path
-    pages: '<front>'
     negate: false
     context_mapping: {  }
+    pages: '<front>'

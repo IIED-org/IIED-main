@@ -37,18 +37,72 @@
           return;
         }
 
-        // Update view on summary block click.
-        if (updateFacetsSummaryBlock() && (facetId === 'facets_summary_ajax')) {
-          $('[data-drupal-facets-summary-id=' + facetSettings.facets_summary_id + ']').find('a').once('facets_summary_ajax_link').click(function (e) {
-            e.preventDefault();
-            updateFacetsView($(this).attr('href'), current_dom_id, view_path);
-            // Remove clicked element, ajax callback will update the content.
-            $(this).parents('li').remove();
-          });
+        // Update view on range slider stop event
+        if (typeof settings.facets !== "undefined" && settings.facets.sliders && settings.facets.sliders[facetId]) {
+          settings.facets.sliders[facetId].stop = function (e, ui) {
+            var href = settings.facets.sliders[facetId].url.replace('__range_slider_min__', ui.values[0]).replace('__range_slider_max__', ui.values[1]);
+
+            // Update facet query params on the request.
+            var currentHref = window.location.href;
+            var currentQueryParams = Drupal.Views.parseQueryString(currentHref);
+            var newQueryParams = Drupal.Views.parseQueryString(href);
+
+            var queryParams = {};
+            var facetPositions = [];
+            var fCount = 0;
+            var value = '';
+            var facetKey = '';
+            for (var paramName in currentQueryParams) {
+              if (paramName.substr(0, 1) === 'f') {
+                value = currentQueryParams[paramName];
+                // Store the facet position so we can override it later.
+                facetKey = value.substr(0, value.indexOf(':'));
+                facetPositions[facetKey] = fCount;
+                queryParams['f[' + fCount + ']'] = value;
+                fCount++;
+              }
+              else {
+                queryParams[paramName] = currentQueryParams[paramName];
+              }
+            }
+
+            var paramKey = '';
+            for (let paramName in newQueryParams) {
+              if (paramName.substr(0, 1) === 'f') {
+                value = newQueryParams[paramName];
+                // replace
+                facetKey = value.substr(0, value.indexOf(':'));
+                if (typeof facetPositions[facetKey] !== 'undefined') {
+                  paramKey = 'f[' + facetPositions[facetKey] + ']';
+                }
+                else {
+                  paramKey = 'f[' + fCount + ']';
+                  fCount++;
+                }
+                queryParams[paramKey] = newQueryParams[paramName];
+              }
+              else {
+                queryParams[paramName] = newQueryParams[paramName];
+              }
+            }
+
+            href = '/' + Drupal.Views.getPath(href) + '?' + $.param(queryParams);
+
+            updateFacetsView(href, current_dom_id, view_path);
+          };
+        }
+        else if (facetId == 'facets_summary_ajax_summary' || facetId == 'facets_summary_ajax_summary_count') {
+          if (updateFacetsSummaryBlock()) {
+            $('[data-drupal-facets-summary-id=' + facetSettings.facets_summary_id + ']').children('ul').children('li').once().click(function (e) {
+              e.preventDefault();
+              var facetLink = $(this).find('a');
+              updateFacetsView(facetLink.attr('href'), current_dom_id, view_path);
+            });
+          }
         }
         // Update view on facet item click.
         else {
-          $('[data-drupal-facet-id=' + facetId + ']').each(function (index, facet_item) {
+          $('[data-drupal-facet-id |= ' + facetId + ']').each(function (index, facet_item) {
             if ($(facet_item).hasClass('js-facets-widget')) {
               $(facet_item).unbind('facets_filter.facets');
               $(facet_item).on('facets_filter.facets', function (event, url) {
@@ -106,7 +160,7 @@
 
     // Remove All Range Input Form Facet Blocks from being updated.
     if(settings.facets && settings.facets.rangeInput) {
-      $.each(settings.facets.rangeInput, function (index, value){
+      $.each(settings.facets.rangeInput, function (index, value) {
         delete facets_blocks[value.facetId];
       });
     }
@@ -123,8 +177,16 @@
     // Update facets summary block.
     if (updateFacetsSummaryBlock()) {
       facet_settings.submit.update_summary_block = true;
-      facet_settings.submit.facet_summary_plugin_id = $('[data-drupal-facets-summary-id=' + settings.facets_views_ajax.facets_summary_ajax.facets_summary_id + ']').data('drupal-facets-summary-plugin-id');
-      facet_settings.submit.facet_summary_wrapper_id = settings.facets_views_ajax.facets_summary_ajax.facets_summary_id;
+      facet_settings.submit.facet_summary_plugin_ids = {};
+      let summary_selector = '[data-drupal-facets-summary-id=' + settings.facets_views_ajax.facets_summary_ajax_summary.facets_summary_id + ']';
+      if (settings.facets_views_ajax.facets_summary_ajax_summary_count !== undefined) {
+        summary_selector += ', [data-drupal-facets-summary-id=' + settings.facets_views_ajax.facets_summary_ajax_summary_count.facets_summary_id + ']';
+      }
+      $(summary_selector).each(function (index, summaryWrapper) {
+        let summaryPluginId = $(summaryWrapper).attr('data-drupal-facets-summary-plugin-id');
+        let summaryPluginIdWrapper = $(summaryWrapper).attr('id');
+        facet_settings.submit.facet_summary_plugin_ids[summaryPluginIdWrapper] = summaryPluginId;
+      });
     }
 
     Drupal.ajax(facet_settings).execute();
@@ -136,7 +198,7 @@
     var settings = drupalSettings;
     var update_summary = false;
 
-    if (settings.facets_views_ajax.facets_summary_ajax) {
+    if (settings.facets_views_ajax.facets_summary_ajax_summary || settings.facets_views_ajax.facets_summary_ajax_summary_count) {
       update_summary = true;
     }
 
@@ -155,16 +217,15 @@
           return v.slice(block_id_start.length, v.length);
         }
       }).join();
-      var block_selector = '#' + $(this).attr('id');
-      facets_blocks[block_id] = block_selector;
+      var block_selector = $(this).attr('id');
+      facets_blocks[block_selector] = block_id;
     });
 
     return facets_blocks;
   };
 
   /**
-   * Overrides beforeSend to trigger facetblocks update on exposed filter
-   * change.
+   * Overrides beforeSend to trigger facetblocks update on exposed filter change.
    *
    * @param {XMLHttpRequest} xmlhttprequest
    *   Native Ajax object.

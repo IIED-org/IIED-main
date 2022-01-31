@@ -2,8 +2,8 @@
 
 namespace Drupal\facets\Plugin\Block;
 
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -80,13 +80,18 @@ class FacetBlock extends BlockBase implements ContainerFactoryPluginInterface {
       return [];
     }
 
+    // Do not build the facet if the block is being previewed.
+    if ($this->getContextValue('in_preview')) {
+      return [];
+    }
+
     // Let the facet_manager build the facets.
     $build = $this->facetManager->build($facet);
 
     if (!empty($build)) {
       // Add extra elements from facet source, for example, ajax scripts.
       // @see Drupal\facets\Plugin\facets\facet_source\SearchApiDisplay
-      /* @var \Drupal\facets\FacetSource\FacetSourcePluginInterface $facet_source */
+      /** @var \Drupal\facets\FacetSource\FacetSourcePluginInterface $facet_source */
       $facet_source = $facet->getFacetSource();
       $build += $facet_source->buildFacet();
 
@@ -108,11 +113,9 @@ class FacetBlock extends BlockBase implements ContainerFactoryPluginInterface {
         // The configuration block id isn't always set in the configuration.
         if (isset($this->configuration['block_id'])) {
           $build['#attributes']['class'][] = 'js-facet-block-id-' . $this->configuration['block_id'];
-          $build['#attributes']['id'] = Html::getUniqueId($this->configuration['block_id']);
         }
         else {
           $build['#attributes']['class'][] = 'js-facet-block-id-' . $this->pluginId;
-          $build['#attributes']['id'] = Html::getUniqueId($this->pluginId);
         }
       }
     }
@@ -174,6 +177,13 @@ class FacetBlock extends BlockBase implements ContainerFactoryPluginInterface {
       $block_id = $form['id']['#value'];
       $this->configuration['block_id'] = $block_id;
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPreviewFallbackString() {
+    return $this->t('Placeholder for the "@facet" facet', ['@facet' => $this->getDerivativeId()]);
   }
 
 }

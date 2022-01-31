@@ -52,17 +52,17 @@ third_party_settings:
         - field_legacy_iscanonical
         - status
         - field_iied_user_id
+      label: 'Add new Author'
+      region: content
       parent_name: ''
       weight: 0
       format_type: details
-      region: content
       format_settings:
-        description: '<big><i><b>Hint: </b>When you save this form, the page will automatically refresh with a new, blank form so you can add another Author. If you do not want/need to do this, simply close this tab or navigate away from the page.</i></big>'
-        open: true
-        id: ''
         classes: ''
+        id: ''
+        open: true
+        description: '<big><i><b>Hint: </b>When you save this form, the page will automatically refresh with a new, blank form so you can add another Author. If you do not want/need to do this, simply close this tab or navigate away from the page.</i></big>'
         required_fields: false
-      label: 'Add new Author'
 id: taxonomy_term.person.default
 targetEntityType: taxonomy_term
 bundle: person
@@ -77,97 +77,100 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_appointed_role:
+    type: options_select
     weight: 20
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: options_select
-    region: content
   field_author_picture:
     type: media_library_widget
     weight: 1
+    region: content
     settings:
       media_types: {  }
     third_party_settings: {  }
-    region: content
   field_before_iied:
+    type: text_textarea
     weight: 10
+    region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-    type: text_textarea
-    region: content
   field_biography:
+    type: text_textarea
     weight: 8
+    region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-    type: text_textarea
-    region: content
   field_current_work:
+    type: text_textarea
     weight: 11
+    region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-    type: text_textarea
-    region: content
   field_department:
+    type: options_select
     weight: 17
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: options_select
-    region: content
   field_email:
-    weight: 5
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
     type: email_default
+    weight: 5
     region: content
+    settings:
+      placeholder: ''
+      size: 60
+    third_party_settings: {  }
   field_expertise:
+    type: text_textarea
     weight: 9
+    region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-    type: text_textarea
-    region: content
   field_iied_user_id:
+    type: number
     weight: 10
+    region: content
     settings:
       placeholder: ''
     third_party_settings: {  }
-    type: number
-    region: content
   field_languages:
+    type: string_textfield
     weight: 6
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_legacy_iscanonical:
+    type: boolean_checkbox
     weight: 8
+    region: content
     settings:
       display_label: true
     third_party_settings: {  }
-    type: boolean_checkbox
-    region: content
   field_link:
+    type: link_default
     weight: 5
+    region: content
     settings:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
-    type: link_default
-    region: content
   field_name:
+    type: name_default
     weight: 2
+    region: content
     settings:
+      override_field_settings: false
       labels:
         title: Title
         given: Given
@@ -175,6 +178,9 @@ content:
         family: Family
         generational: Generational
         credentials: Credentials
+      widget_layout: stacked
+      show_component_required_marker: false
+      credentials_inline: false
       size:
         title: 6
         given: 20
@@ -189,26 +195,21 @@ content:
         family: description
         generational: description
         credentials: description
-      widget_layout: stacked
-      show_component_required_marker: false
-      credentials_inline: false
-      override_field_settings: false
     third_party_settings: {  }
-    type: name_default
-    region: content
   field_organisation:
+    type: entity_reference_autocomplete
     weight: 3
+    region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: entity_reference_autocomplete
-    region: content
   field_paragraphs:
     type: entity_reference_paragraphs
     weight: 15
+    region: content
     settings:
       title: Paragraph
       title_plural: Paragraphs
@@ -217,46 +218,46 @@ content:
       form_display_mode: default
       default_paragraph_type: ''
     third_party_settings: {  }
-    region: content
   field_person_type:
+    type: options_select
     weight: 2
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: options_select
-    region: content
   field_position:
+    type: text_textarea
     weight: 3
+    region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-    type: text_textarea
-    region: content
   field_position_short:
+    type: string_textfield
     weight: 4
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_quotes:
+    type: string_textarea
     weight: 21
+    region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-    type: string_textarea
-    region: content
   field_research_group:
+    type: options_select
     weight: 18
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: options_select
-    region: content
   field_researcher_profiles:
     type: entity_reference_paragraphs
     weight: 16
+    region: content
     settings:
       title: Paragraph
       title_plural: Paragraphs
@@ -265,48 +266,47 @@ content:
       form_display_mode: default
       default_paragraph_type: ''
     third_party_settings: {  }
-    region: content
   field_standfirst:
+    type: text_textarea
     weight: 7
+    region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-    type: text_textarea
-    region: content
   field_theme:
+    type: entity_reference_autocomplete
     weight: 19
+    region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: entity_reference_autocomplete
-    region: content
   field_twitter_bio:
+    type: string_textarea
     weight: 13
+    region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-    type: string_textarea
-    region: content
   field_twitter_username:
+    type: string_textfield
     weight: 12
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_video:
     type: media_library_widget
     weight: 14
+    region: content
     settings:
       media_types: {  }
     third_party_settings: {  }
-    region: content
   langcode:
     type: language_select
     weight: 6
@@ -330,9 +330,9 @@ content:
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    settings:
-      display_label: true
     weight: 9
     region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
 hidden: {  }

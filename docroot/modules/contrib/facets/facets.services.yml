@@ -46,8 +46,3 @@ services:
   facets.language_switcher_links_alterer:
     class: Drupal\facets\LanguageSwitcherLinksAlterer
     arguments: ['@language_manager', '@cache.default', '@entity_type.manager', '@plugin.manager.facets.url_processor']
-  facets.section_component_render:
-    class: Drupal\facets\EventSubscriber\SectionComponentRender
-    arguments: []
-    tags:
-      - { name: event_subscriber }

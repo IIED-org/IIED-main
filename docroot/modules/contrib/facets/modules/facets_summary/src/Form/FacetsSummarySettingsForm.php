@@ -193,7 +193,13 @@ class FacetsSummarySettingsForm extends EntityForm {
 
     if ($is_new) {
       if ($this->moduleHandler->moduleExists('block')) {
-        $message = $this->t('Facet Summary %name has been created. Go to the <a href=":block_overview">Block overview page</a> to place the new block in the desired region.', ['%name' => $facets_summary->getName(), ':block_overview' => $this->urlGenerator->generateFromRoute('block.admin_display')]);
+        $message = $this->t(
+          'Facet Summary %name has been created. Go to the <a href=":block_overview">Block overview page</a> to place the new block in the desired region.',
+          [
+            '%name' => $facets_summary->getName(),
+            ':block_overview' => $this->urlGenerator->generateFromRoute('block.admin_display'),
+          ]
+        );
         $this->messenger()->addMessage($message);
         $form_state->setRedirect('entity.facets_summary.edit_form', ['facets_summary' => $facets_summary->id()]);
       }

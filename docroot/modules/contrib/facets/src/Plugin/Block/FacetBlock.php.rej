@@ -1,0 +1,85 @@
+--- src/Plugin/Block/FacetBlock.php
++++ src/Plugin/Block/FacetBlock.php
+@@ -80,39 +81,61 @@ class FacetBlock extends BlockBase implements ContainerFactoryPluginInterface {
+       return [];
+     }
+ 
++    $build = [];
++
+     // Let the facet_manager build the facets.
+-    $build = $this->facetManager->build($facet);
++    $facet_build = $this->facetManager->build($facet);
+ 
+-    if (!empty($build)) {
++    if ($facet_build) {
+       // Add extra elements from facet source, for example, ajax scripts.
+       // @see Drupal\facets\Plugin\facets\facet_source\SearchApiDisplay
+-      /* @var \Drupal\facets\FacetSource\FacetSourcePluginInterface $facet_source */
++      /** @var \Drupal\facets\FacetSource\FacetSourcePluginInterface $facet_source */
+       $facet_source = $facet->getFacetSource();
+-      $build += $facet_source->buildFacet();
+-
+-      // Add contextual links only when we have results.
+-      $build['#contextual_links']['facets_facet'] = [
+-        'route_parameters' => ['facets_facet' => $facet->id()],
++      $facet_build += $facet_source->buildFacet();
++
++      $build = [
++        '#type' => 'container',
++        '#contextual_links' => [
++          'facets_facet' => [
++            'route_parameters' => ['facets_facet' => $facet->id()],
++          ],
++        ],
++        '#attributes' => [
++          'class' => ['block-facet__wrapper'],
++        ],
+       ];
+ 
+-      if (!empty($build[0]['#attributes']['class']) && in_array('facet-active', $build[0]['#attributes']['class'], TRUE)) {
+-        $build['#attributes']['class'][] = 'facet-active';
+-      }
+-      else {
+-        $build['#attributes']['class'][] = 'facet-inactive';
+-      }
++      $build = array_merge($facet_build, $build);
+ 
+-      // Add classes needed for ajax.
+-      if (!empty($build['#use_ajax'])) {
+-        $build['#attributes']['class'][] = 'block-facets-ajax';
+-        // The configuration block id isn't always set in the configuration.
+-        if (isset($this->configuration['block_id'])) {
+-          $build['#attributes']['class'][] = 'js-facet-block-id-' . $this->configuration['block_id'];
++      // Add css classes.
++      if (!empty($facet_build[0]['#attributes']['class'])) {
++        $css_classes = $facet_build[0]['#attributes']['class'];
++        // Active/inactive css classes.
++        if (in_array('facet-active', $css_classes)) {
++          $build['#attributes']['class'][] = 'facet-active';
+         }
+         else {
+-          $build['#attributes']['class'][] = 'js-facet-block-id-' . $this->pluginId;
++          $build['#attributes']['class'][] = 'facet-inactive';
++        }
++        // Whether it is necessary to add hide css class.
++        if (in_array('facet-hidden', $css_classes)) {
++          $build['#attributes']['class'][] = 'hidden';
+         }
+       }
++
++      // Add classes needed for ajax.
++      if (!empty($facet_build['#use_ajax'])) {
++        $build['#attributes']['class'][] = 'block-facets-ajax';
++        $block_id = str_replace(':', '--', $this->pluginId);
++        $block_id = Html::cleanCssIdentifier($block_id);
++        $build['#attributes']['class'][] = 'js-facet-block-id-' . $block_id;
++        $build['#attributes']['id'] = Html::getUniqueId($block_id);
++      }
++
++      // To render correctly in different situations.
++      $build = [
++        'facet_block' => $build,
++      ];
+     }
+ 
+ 

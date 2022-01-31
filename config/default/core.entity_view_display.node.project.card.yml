@@ -46,16 +46,16 @@ third_party_settings:
       disable_css: false
       entity_classes: all_classes
       settings:
-        label: ''
+        classes:
+          layout_class: {  }
+          ds_content: {  }
         wrappers:
           ds_content: div
         outer_wrapper: div
         attributes: 'role|link, tabindex|0'
         link_attribute: content
         link_custom: '[node:field_link]'
-        classes:
-          layout_class: {  }
-          ds_content: {  }
+        label: ''
     regions:
       ds_content:
         - group_project_card
@@ -79,38 +79,41 @@ third_party_settings:
           id: expert
           settings:
             lb: ''
-            prefix: ''
+            lbw: false
             lbw-el: ''
             lbw-cl: ''
             lbw-at: ''
+            lb-col: false
+            ow: false
             ow-el: ''
             ow-cl: ''
             ow-at: ''
-            fis-el: ''
-            fis-cl: ''
-            fis-at: ''
-            fi-el: span
-            fi-cl: stretched-link
-            fi-at: ''
-            suffix: ''
-            lbw: false
-            lb-col: false
-            ow: false
             ow-def-at: false
             ow-def-cl: false
             fis: false
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
             fis-def-at: false
             fi: false
+            fi-el: span
+            fi-cl: stretched-link
+            fi-at: ''
             fi-def-at: false
+            prefix: ''
+            suffix: ''
   field_group:
     group_project_card:
       children:
         - group_row_nogutters
+      label: Project-card
       parent_name: ''
+      region: ds_content
       weight: 0
       format_type: html_element
-      region: ds_content
       format_settings:
+        classes: 'card pointer overflow-hidden'
+        id: ''
         element: div
         show_label: false
         label_element: h3
@@ -118,20 +121,18 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
-        id: ''
-        classes: 'card pointer overflow-hidden'
-      label: Project-card
     group_row_nogutters:
       children:
         - field_image
         - group_col_md_8
+      label: Row-nogutters
       parent_name: group_project_card
+      region: ds_content
       weight: 1
       format_type: html_element
-      region: ds_content
       format_settings:
-        id: ''
         classes: 'row no-gutters'
+        id: ''
         element: div
         show_label: false
         label_element: h3
@@ -139,18 +140,18 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
-      label: Row-nogutters
     group_card_body:
       children:
         - node_title
         - body
+      label: 'card body'
       parent_name: group_col_md_8
+      region: ds_content
       weight: 36
       format_type: html_element
-      region: ds_content
       format_settings:
-        id: ''
         classes: card-body
+        id: ''
         element: div
         show_label: false
         label_element: h3
@@ -158,17 +159,17 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
-      label: 'card body'
     group_col_md_8:
       children:
         - group_card_body
+      label: col-md-8
       parent_name: group_row_nogutters
+      region: ds_content
       weight: 35
       format_type: html_element
-      region: ds_content
       format_settings:
-        id: ''
         classes: col-md-8
+        id: ''
         element: div
         show_label: false
         label_element: h3
@@ -176,16 +177,14 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
-      label: col-md-8
 id: node.project.card
 targetEntityType: node
 bundle: project
 mode: card
 content:
   body:
-    label: hidden
     type: text_default
-    weight: 38
+    label: hidden
     settings: {  }
     third_party_settings:
       ds:
@@ -193,66 +192,67 @@ content:
           id: expert
           settings:
             lb: ''
-            prefix: ''
+            lbw: false
             lbw-el: ''
             lbw-cl: ''
             lbw-at: ''
+            lb-col: false
+            ow: false
             ow-el: ''
             ow-cl: ''
             ow-at: ''
-            fis-el: ''
-            fis-cl: ''
-            fis-at: ''
-            fi-el: ''
-            fi-cl: ''
-            fi-at: ''
-            suffix: ''
-            lbw: false
-            lb-col: false
-            ow: false
             ow-def-at: false
             ow-def-cl: false
             fis: false
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
             fis-def-at: false
             fi: false
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
             fi-def-at: false
+            prefix: ''
+            suffix: ''
+    weight: 38
     region: ds_content
   field_image:
-    weight: 34
+    type: image
     label: hidden
     settings:
-      image_style: card_370
       image_link: ''
+      image_style: card_370
     third_party_settings:
       ds:
         ft:
           id: expert
           settings:
             lb: ''
-            prefix: ''
+            lbw: false
             lbw-el: ''
             lbw-cl: ''
             lbw-at: ''
+            lb-col: false
             ow: true
             ow-el: div
             ow-cl: col-md-4
             ow-at: ''
-            fis-el: ''
-            fis-cl: ''
-            fis-at: ''
-            fi-el: ''
-            fi-cl: ''
-            fi-at: ''
-            suffix: ''
-            lbw: false
-            lb-col: false
             ow-def-at: false
             ow-def-cl: false
             fis: false
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
             fis-def-at: false
             fi: false
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
             fi-def-at: false
-    type: image
+            prefix: ''
+            suffix: ''
+    weight: 34
     region: ds_content
 hidden:
   field_additional_elements: true

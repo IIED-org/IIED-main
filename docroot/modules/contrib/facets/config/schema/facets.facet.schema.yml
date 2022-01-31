@@ -38,6 +38,16 @@ facets.facet.*:
     keep_hierarchy_parents_active:
       type: boolean
       label: 'Keep hierarchy parents active'
+    hierarchy:
+      type: mapping
+      label: 'Hierarchy type'
+      mapping:
+        type:
+          type: string
+          label: 'Plugin id'
+        config:
+          type: facets.facet.[%parent.type]
+          label: 'Configuration'
     expand_hierarchy:
       type: boolean
       label: 'Expand hierarchy'
