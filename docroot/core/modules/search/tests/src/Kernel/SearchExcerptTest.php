@@ -64,7 +64,7 @@ class SearchExcerptTest extends KernelTestBase {
     // 123456789 HTMLTest +123456789+&lsquo;  +&lsquo;  +&lsquo;  +&lsquo;  +12345678  &nbsp;&nbsp;  +&lsquo;  +&lsquo;  +&lsquo;   &lsquo;
     $text = "<div class=\"field field--name-body field--type-text-with-summary field--label-hidden\"><div class=\"field__items\"><div class=\"field__item even\" property=\"content:encoded\"><p>123456789 HTMLTest +123456789+‘  +‘  +‘  +‘  +12345678      +‘  +‘  +‘   ‘</p>\n</div></div></div> ";
     $result = $this->doSearchExcerpt('HTMLTest', $text);
-    $this->assertFalse(empty($result), 'Rendered Multi-byte HTML encodings are not corrupted in search excerpts');
+    $this->assertNotEmpty($result, 'Rendered Multi-byte HTML encodings are not corrupted in search excerpts');
   }
 
   /**
@@ -159,6 +159,7 @@ class SearchExcerptTest extends KernelTestBase {
     // Test with accents and caps in a longer piece of text with the target
     // near the end.
     $text = str_repeat($lorem2, 20) . ' ' . $lorem1;
+    // cspell:ignore Lìbêró
     $result = $this->doSearchExcerpt('Lìbêró', $text);
     $this->assertStringContainsString('<strong>libero</strong>', $result, 'Search excerpt works with caps and accents in longer text');
 

@@ -55,7 +55,9 @@ class FileFieldWidgetTest extends FileFieldTestBase {
    *   A file object, or FALSE on error.
    */
   protected function createTemporaryFile($data, UserInterface $user = NULL) {
-    $file = file_save_data($data, NULL, NULL);
+    /** @var \Drupal\file\FileRepositoryInterface $file_repository */
+    $file_repository = \Drupal::service('file.repository');
+    $file = $file_repository->writeData($data, "public://");
 
     if ($file) {
       if ($user) {
@@ -111,7 +113,7 @@ class FileFieldWidgetTest extends FileFieldTestBase {
     // Save the node and ensure it does not have the file.
     $this->submitForm([], 'Save');
     $node = $node_storage->loadUnchanged($nid);
-    $this->assertTrue(empty($node->{$field_name}->target_id), 'File was successfully removed from the node.');
+    $this->assertEmpty($node->{$field_name}->target_id, 'File was successfully removed from the node.');
   }
 
   /**
@@ -202,7 +204,7 @@ class FileFieldWidgetTest extends FileFieldTestBase {
     preg_match('/node\/([0-9])/', $this->getUrl(), $matches);
     $nid = $matches[1];
     $node = $node_storage->loadUnchanged($nid);
-    $this->assertTrue(empty($node->{$field_name}->target_id), 'Node was successfully saved without any files.');
+    $this->assertEmpty($node->{$field_name}->target_id, 'Node was successfully saved without any files.');
 
     // Try to upload more files than allowed on revision.
     $upload_files_node_revision = [$test_file, $test_file, $test_file, $test_file];
@@ -573,7 +575,7 @@ class FileFieldWidgetTest extends FileFieldTestBase {
     $victim_tmp_file = $this->createTemporaryFile('some text', $victim_user);
     $victim_tmp_file = File::load($victim_tmp_file->id());
     $this->assertTrue($victim_tmp_file->isTemporary(), 'New file saved to disk is temporary.');
-    $this->assertFalse(empty($victim_tmp_file->id()), 'New file has an fid.');
+    $this->assertNotEmpty($victim_tmp_file->id(), 'New file has an fid.');
     $this->assertEquals($victim_user->id(), $victim_tmp_file->getOwnerId(), 'New file belongs to the victim.');
 
     // Have attacker create a new node with a different uploaded file and

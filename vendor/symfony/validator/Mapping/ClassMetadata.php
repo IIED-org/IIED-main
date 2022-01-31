@@ -365,11 +365,7 @@ class ClassMetadata extends GenericMetadata implements ClassMetadataInterface
      */
     public function getPropertyMetadata($property)
     {
-        if (!isset($this->members[$property])) {
-            return [];
-        }
-
-        return $this->members[$property];
+        return $this->members[$property] ?? [];
     }
 
     /**
@@ -494,8 +490,8 @@ class ClassMetadata extends GenericMetadata implements ClassMetadataInterface
         }
 
         if ($constraint instanceof Composite) {
-            foreach ($constraint->getNestedContraints() as $nestedContraint) {
-                $this->checkConstraint($nestedContraint);
+            foreach ($constraint->getNestedConstraints() as $nestedConstraint) {
+                $this->checkConstraint($nestedConstraint);
             }
         }
     }

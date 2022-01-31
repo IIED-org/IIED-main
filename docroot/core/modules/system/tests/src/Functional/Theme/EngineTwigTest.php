@@ -69,7 +69,7 @@ class EngineTwigTest extends BrowserTestBase {
 
     // Make sure we got something.
     $content = $this->getSession()->getPage()->getContent();
-    $this->assertFalse(empty($content), 'Page content is not empty');
+    $this->assertNotEmpty($content, 'Page content is not empty');
     foreach ($expected as $string) {
       $this->assertSession()->responseContains('<div>' . $string . '</div>');
     }
@@ -103,7 +103,7 @@ class EngineTwigTest extends BrowserTestBase {
     $this->assertCacheContext('url.site');
 
     $content = $this->getSession()->getPage()->getContent();
-    $this->assertFalse(empty($content), 'Page content is not empty');
+    $this->assertNotEmpty($content, 'Page content is not empty');
     foreach ($expected as $string) {
       $this->assertSession()->responseContains('<div>' . $string . '</div>');
     }
@@ -122,7 +122,7 @@ class EngineTwigTest extends BrowserTestBase {
     ];
 
     $content = $this->getSession()->getPage()->getContent();
-    $this->assertFalse(empty($content), 'Page content is not empty');
+    $this->assertNotEmpty($content, 'Page content is not empty');
     foreach ($expected as $string) {
       $this->assertSession()->responseContains('<div>' . $string . '</div>');
     }
@@ -133,7 +133,9 @@ class EngineTwigTest extends BrowserTestBase {
    */
   public function testTwigFileUrls() {
     $this->drupalGet('/twig-theme-test/file-url');
-    $filepath = file_url_transform_relative(file_create_url('core/modules/system/tests/modules/twig_theme_test/twig_theme_test.js'));
+    /** @var \Drupal\Core\File\FileUrlGeneratorInterface $file_url_generator */
+    $file_url_generator = \Drupal::service('file_url_generator');
+    $filepath = $file_url_generator->generateString('core/modules/system/tests/modules/twig_theme_test/twig_theme_test.js');
     $this->assertSession()->responseContains('<div>file_url: ' . $filepath . '</div>');
   }
 

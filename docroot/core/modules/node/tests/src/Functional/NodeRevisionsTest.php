@@ -145,6 +145,11 @@ class NodeRevisionsTest extends NodeTestBase {
    * Checks node revision related operations.
    */
   public function testRevisions() {
+    // Access to the revision page for a node with 1 revision is allowed.
+    $node = $this->drupalCreateNode();
+    $this->drupalGet("node/" . $node->id() . "/revisions/" . $node->getRevisionId() . "/view");
+    $this->assertSession()->statusCodeEquals(200);
+
     $node_storage = $this->container->get('entity_type.manager')->getStorage('node');
     $nodes = $this->nodes;
     $logs = $this->revisionLogs;
@@ -353,7 +358,7 @@ class NodeRevisionsTest extends NodeTestBase {
     $this->assertSession()->pageTextContains($new_title);
     $node_storage->resetCache([$node->id()]);
     $node_revision = $node_storage->load($node->id());
-    $this->assertTrue(empty($node_revision->revision_log->value), 'After a new node revision is saved with an empty log message, the log message for the node is empty.');
+    $this->assertEmpty($node_revision->revision_log->value, 'After a new node revision is saved with an empty log message, the log message for the node is empty.');
   }
 
   /**
