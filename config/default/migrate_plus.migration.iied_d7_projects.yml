@@ -194,6 +194,7 @@ process:
             plugin: extract
             index:
               - 1
+  path/alias: alias
 destination:
   plugin: 'entity_complete:node'
   translations: true

@@ -208,6 +208,7 @@ process:
         plugin: migration_lookup
         migration: iied_projects
         source: target_id
+  path/alias: alias
 destination:
   plugin: 'entity_complete:node'
   translations: true
