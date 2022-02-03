@@ -6,7 +6,7 @@ dependencies:
     - field.field.node.article.body
     - field.field.node.article.comment
     - field.field.node.article.field_article_type
-    - field.field.node.article.field_collection
+    - field.field.node.article.field_collections
     - field.field.node.article.field_contact
     - field.field.node.article.field_display_image
     - field.field.node.article.field_full_width_media
@@ -65,8 +65,8 @@ content:
     third_party_settings: {  }
     type: options_select
     region: content
-  field_collection:
-    weight: 13
+  field_collections:
+    weight: 28
     settings:
       match_operator: CONTAINS
       match_limit: 10

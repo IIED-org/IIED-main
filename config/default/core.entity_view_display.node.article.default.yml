@@ -7,7 +7,7 @@ dependencies:
     - field.field.node.article.body
     - field.field.node.article.comment
     - field.field.node.article.field_article_type
-    - field.field.node.article.field_collection
+    - field.field.node.article.field_collections
     - field.field.node.article.field_contact
     - field.field.node.article.field_display_image
     - field.field.node.article.field_full_width_media
@@ -274,22 +274,6 @@ third_party_settings:
                 type: text_default
             additional: {  }
             weight: 14
-          6ce5127a-83ae-49ce-a1ca-665de963fee4:
-            uuid: 6ce5127a-83ae-49ce-a1ca-665de963fee4
-            region: content
-            configuration:
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              id: 'field_block:node:article:field_collection'
-              formatter:
-                label: above
-                settings:
-                  link: true
-                third_party_settings: {  }
-                type: entity_reference_label
-            additional: {  }
-            weight: 16
           e41cdeef-3a0c-484b-9afb-941e36a19e9c:
             uuid: e41cdeef-3a0c-484b-9afb-941e36a19e9c
             region: content
@@ -352,6 +336,22 @@ third_party_settings:
                 type: entity_reference_label
             additional: {  }
             weight: 20
+          725f95ad-9790-4b08-8d6a-da0ab95a0457:
+            uuid: 725f95ad-9790-4b08-8d6a-da0ab95a0457
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:article:field_collections'
+              formatter:
+                label: above
+                settings:
+                  link: true
+                third_party_settings: {  }
+                type: entity_reference_label
+            additional: {  }
+            weight: 21
         third_party_settings: {  }
     allow_custom: false
 _core:
@@ -384,8 +384,8 @@ content:
     third_party_settings: {  }
     type: list_default
     region: content
-  field_collection:
-    weight: 121
+  field_collections:
+    weight: 126
     label: above
     settings:
       link: true

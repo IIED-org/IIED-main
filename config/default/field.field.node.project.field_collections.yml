@@ -1,16 +1,16 @@
-uuid: 03cd448f-8b84-402d-a477-f3198c55a582
+uuid: 2eef63c4-145f-4f8b-ae4f-99fce98c47bb
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_collection
-    - node.type.event
+    - field.storage.node.field_collections
+    - node.type.project
     - taxonomy.vocabulary.collection
-id: node.event.field_collection
-field_name: field_collection
+id: node.project.field_collections
+field_name: field_collections
 entity_type: node
-bundle: event
-label: Collection
+bundle: project
+label: Collections
 description: ''
 required: false
 translatable: true
