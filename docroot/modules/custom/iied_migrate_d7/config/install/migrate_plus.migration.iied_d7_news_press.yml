@@ -86,6 +86,7 @@ process:
     -
       plugin: default_value
       default_value: 'full_html'
+  path/alias: alias
 destination:
   plugin: 'entity_complete:node'
   translations: true
