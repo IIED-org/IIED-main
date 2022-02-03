@@ -194,6 +194,11 @@ process:
             index:
               - 1
   path/alias: alias
+  field_collections:
+    -
+      plugin: migration_lookup
+      migration: iied_d7_terms_collection
+      source: field_group
 destination:
   plugin: 'entity_complete:node'
   translations: true

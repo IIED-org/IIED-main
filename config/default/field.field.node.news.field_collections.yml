@@ -1,16 +1,16 @@
-uuid: f03117f6-47fa-4299-99d3-bdfb4b2a3cbe
+uuid: 1aefced8-8b91-4ed0-b9d9-5b08b5efaaa4
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_collection
-    - node.type.article
+    - field.storage.node.field_collections
+    - node.type.news
     - taxonomy.vocabulary.collection
-id: node.article.field_collection
-field_name: field_collection
+id: node.news.field_collections
+field_name: field_collections
 entity_type: node
-bundle: article
-label: Collection
+bundle: news
+label: Collections
 description: ''
 required: false
 translatable: false
