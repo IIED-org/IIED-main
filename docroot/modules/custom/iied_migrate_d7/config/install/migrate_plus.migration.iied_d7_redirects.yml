@@ -32,5 +32,12 @@ process:
 destination:
   plugin: entity:redirect
 migration_dependencies:
-  required: {  }
+  required:
+    - iied_d7_articles
+    - iied_d7_blogs
+    - iied_d7_events
+    - iied_d7_news_media
+    - iied_d7_news_press
+    - iied_d7_projects
+    - iied_d7_projects_translations
   optional: {  }
