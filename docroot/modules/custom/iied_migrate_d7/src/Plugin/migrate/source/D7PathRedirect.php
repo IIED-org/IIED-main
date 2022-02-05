@@ -23,6 +23,8 @@ class D7PathRedirect extends DrupalSqlBase {
     $query = $this->select('redirect', 'p')->fields('p');
     // $query->condition('rid', '41');
     // $query->condition('rid', '10886');
+    // The source redirect for bw2018 has two entries, so causes an error.
+    $query->condition('p.source', 'bw2018', '<>');
     return $query;
   }
 
@@ -52,19 +54,35 @@ class D7PathRedirect extends DrupalSqlBase {
       $original_node_type = $this->database->query('SELECT type FROM {node} WHERE nid = :nid', [':nid' => $original_node_id])->fetchField();
       $new_node_id = $this->getNewNodeId($original_node_id, $original_node_type);
       if ($new_node_id) {
-        if ($new_node_id == '74449') {
-          // Avoid:
-          // Integrity constraint violation: 1062 Duplicate entry
-          // 'HzE2UgoAkGHwRY5twLUX-P5LRUNFERUhJ8wRfRrlo7c' for key 'hash':
-          // internal:/node/74449 .
-          // https://www.iied.org/2018-barbara-ward-lecture-gro-harlem-brundtland-calls-for-people-speak-out-against-simplistic
-          return FALSE;
-        }
         $row->setSourceProperty('redirect', 'node/' . $new_node_id);
       }
       else {
         return FALSE;
       }
+    }
+    elseif (substr($redirect, 0, 13) == 'taxonomy/term') {
+
+      $term_id = substr($redirect, 14, strlen($redirect));
+      $vid = $this->database->query('SELECT vid FROM {taxonomy_term_data} WHERE tid = :tid', [':tid' => $term_id])->fetchField();
+      // Either collection (21), tag (15)
+      if ($vid == '15') {
+        $db = \Drupal\Core\Database\Database::getConnection();
+        $query = $db->select('migrate_map_iied_tags', 'mm');
+        $query->fields('mm', array('destid1'));
+        $query->condition('sourceid1', 'https://www.iied.org/taxonomy/term/' . $term_id);
+        $target_term_id = $query->execute()->fetchField();
+        $row->setSourceProperty('redirect', 'taxonomy/term/' . $target_term_id);
+      }
+      elseif ($vid == '21') {
+        // vid 2, collection terms.
+        $db = \Drupal\Core\Database\Database::getConnection();
+        $query = $db->select('migrate_map_iied_d7_terms_collection', 'mm');
+        $query->fields('mm', array('destid1'));
+        $query->condition('sourceid1', $term_id);
+        $target_term_id = $query->execute()->fetchField();
+        $row->setSourceProperty('redirect', 'taxonomy/term/' . $target_term_id);
+      }
+
     }
 
     return parent::prepareRow($row);
@@ -85,7 +103,6 @@ class D7PathRedirect extends DrupalSqlBase {
     if (in_array($type, array_keys($type_maps))) {
       // Lookup node in migrate_map table.
       $db = \Drupal\Core\Database\Database::getConnection();
-      //$db = $this->database;
       $query = $db->select($type_maps[$type], 'mm');
       $query->fields('mm', array('destid1'));
       $query->condition('sourceid1', $original_node_id);
