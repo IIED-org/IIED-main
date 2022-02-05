@@ -171,6 +171,9 @@ process:
             index:
               - 1
   path/alias: alias
+  path/pathauto:
+    plugin: default_value
+    default_value: false
 destination:
   plugin: 'entity_complete:node'
   translations: true
