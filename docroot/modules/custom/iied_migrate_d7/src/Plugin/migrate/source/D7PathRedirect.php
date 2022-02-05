@@ -22,7 +22,7 @@ class D7PathRedirect extends DrupalSqlBase {
     // Select path redirects.
     $query = $this->select('redirect', 'p')->fields('p');
     // $query->condition('rid', '41');
-    // $query->condition('rid', '10886');
+    // $query->condition('rid', '1563');
     // The source redirect for bw2018 has two entries, so causes an error.
     $query->condition('p.source', 'bw2018', '<>');
     return $query;
@@ -83,6 +83,15 @@ class D7PathRedirect extends DrupalSqlBase {
         $row->setSourceProperty('redirect', 'taxonomy/term/' . $target_term_id);
       }
 
+    }
+    elseif (substr($redirect, 0, 5) == 'user/') {
+      $user_id = substr($redirect, 5, strlen($redirect));
+      $db = \Drupal\Core\Database\Database::getConnection();
+      $query = $db->select('migrate_map_iied_d7_terms_person', 'mm');
+      $query->fields('mm', array('destid1'));
+      $query->condition('sourceid1', $user_id);
+      $target_term_id = $query->execute()->fetchField();
+      $row->setSourceProperty('redirect', 'taxonomy/term/' . $target_term_id);
     }
 
     return parent::prepareRow($row);
