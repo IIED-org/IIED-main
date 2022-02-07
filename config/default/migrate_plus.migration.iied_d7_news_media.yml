@@ -132,7 +132,7 @@ process:
       source: taxonomy_vocabulary_15
       process:
         target_id: tid
-  field_collection:
+  field_collections:
     -
       plugin: migration_lookup
       migration: iied_d7_terms_collection

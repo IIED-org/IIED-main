@@ -157,7 +157,7 @@ display:
             10:
               action_id: views_bulk_edit
               preconfiguration:
-                get_bundles_from_results: 0
+                get_bundles_from_results: false
           plugin_id: views_bulk_operations_bulk_form
         title:
           id: title

@@ -1,12 +1,12 @@
-uuid: 322c99e1-7822-4301-8950-652dacb5f983
+uuid: b466f5ea-c1c3-496f-be61-99ed4929fe08
 langcode: en
 status: true
 dependencies:
   module:
     - node
     - taxonomy
-id: node.field_collection
-field_name: field_collection
+id: node.field_collections
+field_name: field_collections
 entity_type: node
 type: entity_reference
 settings:

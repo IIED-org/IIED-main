@@ -5,7 +5,7 @@ dependencies:
   config:
     - field.field.node.news.body
     - field.field.node.news.field_admin
-    - field.field.node.news.field_collection
+    - field.field.node.news.field_collections
     - field.field.node.news.field_contact
     - field.field.node.news.field_display_image
     - field.field.node.news.field_image_caption
@@ -142,8 +142,8 @@ content:
     third_party_settings: {  }
     type: text_textarea
     region: content
-  field_collection:
-    weight: 15
+  field_collections:
+    weight: 28
     settings:
       match_operator: CONTAINS
       match_limit: 10

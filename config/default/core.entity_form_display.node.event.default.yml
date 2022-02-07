@@ -6,7 +6,7 @@ dependencies:
     - field.field.node.event.body
     - field.field.node.event.field_alternative_label
     - field.field.node.event.field_alternative_title
-    - field.field.node.event.field_collection
+    - field.field.node.event.field_collections
     - field.field.node.event.field_contact
     - field.field.node.event.field_date
     - field.field.node.event.field_dates
@@ -172,8 +172,8 @@ content:
     third_party_settings: {  }
     type: string_textfield
     region: content
-  field_collection:
-    weight: 16
+  field_collections:
+    weight: 26
     settings:
       match_operator: CONTAINS
       match_limit: 10

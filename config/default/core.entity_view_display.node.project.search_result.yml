@@ -7,6 +7,7 @@ dependencies:
     - field.field.node.project.body
     - field.field.node.project.field_additional_elements
     - field.field.node.project.field_additional_resources
+    - field.field.node.project.field_collections
     - field.field.node.project.field_contact
     - field.field.node.project.field_dates
     - field.field.node.project.field_display_image
@@ -96,6 +97,7 @@ content:
 hidden:
   field_additional_elements: true
   field_additional_resources: true
+  field_collections: true
   field_contact: true
   field_dates: true
   field_display_image: true

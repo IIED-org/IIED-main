@@ -7,7 +7,7 @@ dependencies:
     - field.field.node.event.body
     - field.field.node.event.field_alternative_label
     - field.field.node.event.field_alternative_title
-    - field.field.node.event.field_collection
+    - field.field.node.event.field_collections
     - field.field.node.event.field_contact
     - field.field.node.event.field_date
     - field.field.node.event.field_dates
@@ -58,7 +58,7 @@ content:
 hidden:
   field_alternative_label: true
   field_alternative_title: true
-  field_collection: true
+  field_collections: true
   field_contact: true
   field_date: true
   field_dates: true
