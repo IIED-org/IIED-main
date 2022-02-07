@@ -211,15 +211,15 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
       $this->view->setExposedInput(['_views_bulk_operations_override' => TRUE]);
     }
 
+    $base_field = $this->view->storage->get('base_field');
+
     // In some cases we may encounter nondeterministic behaviour in
     // db queries with sorts allowing different order of results.
     // To fix this we're removing all sorts and setting one sorting
     // rule by the view base id field.
-    $sorts = $this->view->getHandlers('sort');
-    foreach ($sorts as $id => $sort) {
+    foreach (array_keys($this->view->getHandlers('sort')) as $id) {
       $this->view->setHandler($this->bulkFormData['display_id'], 'sort', $id, NULL);
     }
-    $base_field = $this->view->storage->get('base_field');
     $this->view->setHandler($this->bulkFormData['display_id'], 'sort', $base_field, [
       'id' => $base_field,
       'table' => $this->view->storage->get('base_table'),
@@ -246,7 +246,6 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
     $this->moduleHandler->invokeAll('views_pre_execute', [$this->view]);
     $this->view->query->execute($this->view);
 
-    $base_field = $this->view->storage->get('base_field');
     foreach ($this->view->result as $row) {
       $entity = $this->viewDataService->getEntity($row);
 

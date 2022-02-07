@@ -119,7 +119,11 @@ class ViewsBulkOperationsActionManager extends ActionManager {
       }
       // If this plugin was provided by a module that does not exist, remove the
       // plugin definition.
-      if (isset($plugin_definition['provider']) && !in_array($plugin_definition['provider'], ['core', 'component']) && !$this->providerExists($plugin_definition['provider'])) {
+      if (
+        isset($plugin_definition['provider']) &&
+        !in_array($plugin_definition['provider'], ['core', 'component']) &&
+        !$this->providerExists($plugin_definition['provider'])
+      ) {
         unset($definitions[$plugin_id]);
       }
     }
@@ -212,7 +216,14 @@ class ViewsBulkOperationsActionManager extends ActionManager {
     $event = new Event();
     $event->alterParameters = $this->alterParameters;
     $event->definitions = &$definitions;
-    $this->eventDispatcher->dispatch(static::ALTER_ACTIONS_EVENT, $event);
+
+    // @todo Remove the conditional when Drupal 8 is no longer supported.
+    if (floatval(\Drupal::VERSION) < 9) {
+      $this->eventDispatcher->dispatch(static::ALTER_ACTIONS_EVENT, $event);
+    }
+    else {
+      $this->eventDispatcher->dispatch($event, static::ALTER_ACTIONS_EVENT);
+    }
 
     // Include the expected behaviour (hook system) to avoid security issues.
     parent::alterDefinitions($definitions);

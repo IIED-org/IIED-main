@@ -17,12 +17,12 @@ class IntegrationTest extends FacetsTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['views_ui'];
+  protected static $modules = ['views_ui'];
 
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     $this->drupalLogin($this->adminUser);
@@ -183,7 +183,7 @@ class IntegrationTest extends FacetsTestBase {
     $this->drupalGet('admin/config/search/facets/' . $id . '/delete');
     $this->assertSession()->pageTextContains('The listed configuration will be deleted.');
     $this->assertSession()->pageTextContains($block->label());
-    $this->drupalPostForm(NULL, [], 'Delete');
+    $this->submitForm([], 'Delete');
 
     $this->drupalGet('admin/structure/block/library/stark');
     $this->assertSession()->pageTextNotContains($name);
@@ -206,7 +206,7 @@ class IntegrationTest extends FacetsTestBase {
     $this->assertSession()->addressEquals($url);
 
     $this->drupalGet($facet_edit_page);
-    $this->drupalPostForm(NULL, ['facet_settings[url_alias]' => 'llama'], 'Save');
+    $this->submitForm(['facet_settings[url_alias]' => 'llama'], 'Save');
 
     $this->drupalGet('search-api-test-fulltext');
     $this->assertFacetLabel('item');
@@ -251,7 +251,7 @@ class IntegrationTest extends FacetsTestBase {
       'facet_settings[dependent_processor][settings][' . $facet_id . '][condition]' => 'values',
       'facet_settings[dependent_processor][settings][' . $facet_id . '][values]' => 'item',
     ];
-    $this->drupalPostForm(NULL, $edit, 'Save');
+    $this->submitForm($edit, 'Save');
 
     // Go to the view and test that only the types are shown.
     $this->drupalGet('search-api-test-fulltext');
@@ -281,7 +281,7 @@ class IntegrationTest extends FacetsTestBase {
       'facet_settings[dependent_processor][settings][' . $facet_id . '][values]' => 'item',
       'facet_settings[dependent_processor][settings][' . $facet_id . '][negate]' => TRUE,
     ];
-    $this->drupalPostForm(NULL, $edit, 'Save');
+    $this->submitForm($edit, 'Save');
 
     // Go to the view and test only the type facet is shown.
     $this->drupalGet('search-api-test-fulltext');
@@ -314,7 +314,7 @@ class IntegrationTest extends FacetsTestBase {
     $this->createFacet($facet_name, $facet_id);
 
     $this->drupalGet($facet_edit_page);
-    $this->drupalPostForm(NULL, ['facet_settings[query_operator]' => 'and'], 'Save');
+    $this->submitForm(['facet_settings[query_operator]' => 'and'], 'Save');
 
     $this->drupalGet('search-api-test-fulltext');
     $this->assertFacetLabel('item');
@@ -325,7 +325,7 @@ class IntegrationTest extends FacetsTestBase {
     $this->assertSession()->linkNotExists('article');
 
     $this->drupalGet($facet_edit_page);
-    $this->drupalPostForm(NULL, ['facet_settings[query_operator]' => 'or'], 'Save');
+    $this->submitForm(['facet_settings[query_operator]' => 'or'], 'Save');
     $this->drupalGet('search-api-test-fulltext');
     $this->assertFacetLabel('item');
     $this->assertFacetLabel('article');
@@ -336,7 +336,13 @@ class IntegrationTest extends FacetsTestBase {
 
     // Verify the number of results for OR functionality.
     $this->drupalGet($facet_edit_page);
-    $this->drupalPostForm(NULL, ['widget' => 'links', 'widget_config[show_numbers]' => TRUE], 'Save');
+    $this->submitForm(
+      [
+        'widget' => 'links',
+        'widget_config[show_numbers]' => TRUE,
+      ],
+      'Save'
+    );
     $this->drupalGet('search-api-test-fulltext');
     $this->clickLink('item (3)');
     $this->assertFacetLabel('article (2)');
@@ -354,7 +360,7 @@ class IntegrationTest extends FacetsTestBase {
 
     // Configure the facet source by selecting one of the Search API views.
     $this->drupalGet($facet_add_page);
-    $this->drupalPostForm(NULL, ['facet_source_id' => 'search_api:views_page__search_api_test_view__page_1'], 'Configure facet source');
+    $this->submitForm(['facet_source_id' => 'search_api:views_page__search_api_test_view__page_1'], 'Configure facet source');
 
     // Fill in all fields and make sure the 'field is required' message is no
     // longer shown.
@@ -362,20 +368,20 @@ class IntegrationTest extends FacetsTestBase {
       'facet_source_id' => 'search_api:views_page__search_api_test_view__page_1',
       'facet_source_configs[search_api:views_page__search_api_test_view__page_1][field_identifier]' => 'type',
     ];
-    $this->drupalPostForm(NULL, $facet_source_form, 'Save');
+    $this->submitForm($facet_source_form, 'Save');
 
     $form_values = [
       'name' => 'name 1',
       'id' => 'name 1',
     ];
-    $this->drupalPostForm(NULL, $form_values, 'Save');
+    $this->submitForm($form_values, 'Save');
     $this->assertSession()->pageTextContains('The machine-readable name must contain only lowercase letters, numbers, and underscores.');
 
     $form_values = [
       'name' => 'name 1',
       'id' => 'name:&1',
     ];
-    $this->drupalPostForm(NULL, $form_values, 'Save');
+    $this->submitForm($form_values, 'Save');
     $this->assertSession()->pageTextContains('The machine-readable name must contain only lowercase letters, numbers, and underscores.');
 
     // Post the form with valid values, so we can test the next step.
@@ -383,7 +389,7 @@ class IntegrationTest extends FacetsTestBase {
       'name' => 'name 1',
       'id' => 'name_1',
     ];
-    $this->drupalPostForm(NULL, $form_values, 'Save');
+    $this->submitForm($form_values, 'Save');
 
     // Create an array of values that are not allowed in the url.
     $unwanted_values = [' ', '!', '@', '#', '$', '%', '^', '&'];
@@ -391,7 +397,7 @@ class IntegrationTest extends FacetsTestBase {
       $form_values = [
         'facet_settings[url_alias]' => 'alias' . $unwanted_value . '1',
       ];
-      $this->drupalPostForm(NULL, $form_values, 'Save');
+      $this->submitForm($form_values, 'Save');
       $this->assertSession()->pageTextContains('The URL alias contains characters that are not allowed.');
     }
 
@@ -399,7 +405,7 @@ class IntegrationTest extends FacetsTestBase {
     $form_values = [
       'facet_settings[url_alias]' => 'alias~-_.1',
     ];
-    $this->drupalPostForm(NULL, $form_values, 'Save');
+    $this->submitForm($form_values, 'Save');
     $this->assertSession()->pageTextContains('Facet name 1 has been updated.');
   }
 
@@ -414,7 +420,7 @@ class IntegrationTest extends FacetsTestBase {
 
     $this->drupalGet($facet_edit_page);
     $this->assertSession()->checkboxNotChecked('edit-facet-settings-exclude');
-    $this->drupalPostForm(NULL, ['facet_settings[exclude]' => TRUE], 'Save');
+    $this->submitForm(['facet_settings[exclude]' => TRUE], 'Save');
     $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()->checkboxChecked('edit-facet-settings-exclude');
 
@@ -430,7 +436,7 @@ class IntegrationTest extends FacetsTestBase {
     $this->assertSession()->pageTextNotContains('foo bar baz');
 
     $this->drupalGet($facet_edit_page);
-    $this->drupalPostForm(NULL, ['facet_settings[exclude]' => FALSE], 'Save');
+    $this->submitForm(['facet_settings[exclude]' => FALSE], 'Save');
     $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()->checkboxNotChecked('edit-facet-settings-exclude');
 
@@ -488,7 +494,7 @@ class IntegrationTest extends FacetsTestBase {
       'facet_settings[date_item][settings][granularity]' => SearchApiDate::FACETAPI_DATE_MONTH,
     ];
     $this->drupalGet($facet_edit_page);
-    $this->drupalPostForm(NULL, $form, 'Save');
+    $this->submitForm($form, 'Save');
 
     $this->drupalGet('search-api-test-fulltext');
     $this->assertSession()->pageTextContains('foo old');
@@ -500,7 +506,7 @@ class IntegrationTest extends FacetsTestBase {
 
     $this->drupalGet($facet_edit_page);
     $this->assertSession()->checkboxNotChecked('edit-facet-settings-exclude');
-    $this->drupalPostForm(NULL, ['facet_settings[exclude]' => 1], 'Save');
+    $this->submitForm(['facet_settings[exclude]' => 1], 'Save');
     $this->assertSession()->checkboxChecked('edit-facet-settings-exclude');
 
     $this->drupalGet('search-api-test-fulltext');
@@ -522,7 +528,7 @@ class IntegrationTest extends FacetsTestBase {
 
     $this->drupalGet($facet_edit_page . '/edit');
     $edit = ['facet_settings[show_only_one_result]' => TRUE];
-    $this->drupalPostForm(NULL, $edit, 'Save');
+    $this->submitForm($edit, 'Save');
 
     $this->drupalGet('search-api-test-fulltext');
     $this->assertSession()->pageTextContains('Displaying 5 search results');
@@ -554,8 +560,10 @@ class IntegrationTest extends FacetsTestBase {
       'widget_config[show_numbers]' => '1',
       'facet_settings[query_operator]' => 'and',
     ];
-    $this->drupalPostForm('admin/config/search/facets/keywords/edit', $edit, 'Save');
-    $this->drupalPostForm('admin/config/search/facets/type/edit', $edit, 'Save');
+    $this->drupalGet('admin/config/search/facets/keywords/edit');
+    $this->submitForm($edit, 'Save');
+    $this->drupalGet('admin/config/search/facets/type/edit');
+    $this->submitForm($edit, 'Save');
 
     $this->drupalGet('search-api-test-fulltext');
     $this->assertSession()->pageTextContains('Displaying 5 search results');
@@ -644,8 +652,8 @@ class IntegrationTest extends FacetsTestBase {
 
     // Delete the view display for the page.
     $this->drupalGet('admin/structure/views/view/search_api_test_view');
-    $this->drupalPostForm(NULL, [], 'Delete Page');
-    $this->drupalPostForm(NULL, [], 'Save');
+    $this->submitForm([], 'Delete Page');
+    $this->submitForm([], 'Save');
 
     // Go back to the overview, make sure that the page doesn't show any errors
     // and the facet/facet source are deleted.
@@ -668,7 +676,8 @@ class IntegrationTest extends FacetsTestBase {
       'facet_sorting[display_value_widget_order][status]' => TRUE,
       'facet_sorting[active_widget_order][status]' => FALSE,
     ];
-    $this->drupalPostForm('admin/config/search/facets/owl/edit', $edit, 'Save');
+    $this->drupalGet('admin/config/search/facets/owl/edit');
+    $this->submitForm($edit, 'Save');
 
     $this->drupalGet('search-api-test-fulltext');
     $this->assertSession()->pageTextContains('Displaying 5 search results');
@@ -679,7 +688,8 @@ class IntegrationTest extends FacetsTestBase {
     $this->assertFacetLabel('strawberry (2)');
 
     $edit['facet_settings[hard_limit]'] = 3;
-    $this->drupalPostForm('admin/config/search/facets/owl/edit', $edit, 'Save');
+    $this->drupalGet('admin/config/search/facets/owl/edit');
+    $this->submitForm($edit, 'Save');
 
     $this->drupalGet('search-api-test-fulltext');
     // We're still testing for 5 search results here, the hard limit only limits
@@ -706,7 +716,8 @@ class IntegrationTest extends FacetsTestBase {
       'widget_config[show_numbers]' => '1',
       'facet_settings[min_count]' => 1,
     ];
-    $this->drupalPostForm('admin/config/search/facets/elf_owl/edit', $edit, 'Save');
+    $this->drupalGet('admin/config/search/facets/elf_owl/edit');
+    $this->submitForm($edit, 'Save');
 
     // See that both article and item are showing.
     $this->drupalGet('search-api-test-fulltext');
@@ -720,7 +731,8 @@ class IntegrationTest extends FacetsTestBase {
       'widget_config[show_numbers]' => '1',
       'facet_settings[min_count]' => 3,
     ];
-    $this->drupalPostForm('admin/config/search/facets/elf_owl/edit', $edit, 'Save');
+    $this->drupalGet('admin/config/search/facets/elf_owl/edit');
+    $this->submitForm($edit, 'Save');
 
     // See that article is now hidden, item should still be showing.
     $this->drupalGet('search-api-test-fulltext');
@@ -737,7 +749,8 @@ class IntegrationTest extends FacetsTestBase {
     $edit = [
       'facet_settings[only_visible_when_facet_source_is_visible]' => FALSE,
     ];
-    $this->drupalPostForm('/admin/config/search/facets/vicuna/edit', $edit, 'Save');
+    $this->drupalGet('admin/config/search/facets/vicuna/edit');
+    $this->submitForm($edit, 'Save');
 
     // Test that the facet source is visible on the search page and user/2 page.
     $this->drupalGet('search-api-test-fulltext');
@@ -749,7 +762,8 @@ class IntegrationTest extends FacetsTestBase {
     $edit = [
       'facet_settings[only_visible_when_facet_source_is_visible]' => TRUE,
     ];
-    $this->drupalPostForm('/admin/config/search/facets/vicuna/edit', $edit, 'Save');
+    $this->drupalGet('admin/config/search/facets/vicuna/edit');
+    $this->submitForm($edit, 'Save');
 
     // Test that the facet still apears on the search page but is hidden on the
     // user page.
@@ -775,8 +789,10 @@ class IntegrationTest extends FacetsTestBase {
       'widget_config[show_numbers]' => 1,
       'facet_settings[min_count]' => 0,
     ];
-    $this->drupalPostForm('admin/config/search/facets/snow_owl/edit', $edit, 'Save');
-    $this->drupalPostForm('admin/config/search/facets/forest_owl/edit', $edit, 'Save');
+    $this->drupalGet('admin/config/search/facets/snow_owl/edit');
+    $this->submitForm($edit, 'Save');
+    $this->drupalGet('admin/config/search/facets/forest_owl/edit');
+    $this->submitForm($edit, 'Save');
 
     // Go to the view and check the default behavior.
     $this->drupalGet('search-api-test-fulltext');
@@ -847,7 +863,8 @@ class IntegrationTest extends FacetsTestBase {
     $id = "western_screech_owl";
     $name = "Western screech owl";
     $this->createFacet($name, $id);
-    $this->drupalPostForm('admin/config/search/facets/' . $id . '/settings', [], 'Save');
+    $this->drupalGet('admin/config/search/facets/' . $id . '/settings');
+    $this->submitForm([], 'Save');
     $this->assertSession()->pageTextContains('Caching of view Search API Test Fulltext search view has been disabled.');
 
     // Check the view's cache settings again to see if they've been updated.
@@ -865,7 +882,7 @@ class IntegrationTest extends FacetsTestBase {
     $this->drupalGet('search-api-test-fulltext');
     $this->assertSession()->pageTextNotContains('Llama');
     $this->drupalGet('admin/config/search/facets/llama/edit');
-    $this->drupalPostForm(NULL, ['facet_settings[show_title]' => TRUE], 'Save');
+    $this->submitForm(['facet_settings[show_title]' => TRUE], 'Save');
     $this->assertSession()->checkboxChecked('Show title of facet');
     $this->drupalGet('search-api-test-fulltext');
     $this->assertSession()->responseContains('<h3>Llama</h3>');
@@ -892,7 +909,7 @@ class IntegrationTest extends FacetsTestBase {
       'facet_settings[empty_behavior]' => 'text',
       'facet_settings[empty_behavior_container][empty_behavior_text][value]' => 'No results found for this block!',
     ];
-    $this->drupalPostForm(NULL, $edit, 'Save');
+    $this->submitForm($edit, 'Save');
 
   }
 
@@ -914,7 +931,7 @@ class IntegrationTest extends FacetsTestBase {
       'widget' => 'links',
       'widget_config[show_numbers]' => '0',
     ];
-    $this->drupalPostForm(NULL, $edit, 'Save');
+    $this->submitForm($edit, 'Save');
   }
 
   /**
@@ -959,21 +976,21 @@ class IntegrationTest extends FacetsTestBase {
 
     // Try filling out the form, but without having filled in a name for the
     // facet to test for form errors.
-    $this->drupalPostForm($facet_add_page, $form_values, 'Save');
+    $this->submitForm($form_values, 'Save');
     $this->assertSession()->pageTextContains('Name field is required.');
     $this->assertSession()->pageTextContains('Facet source field is required.');
 
     // Make sure that when filling out the name, the form error disappears.
     $form_values['name'] = $facet_name;
-    $this->drupalPostForm(NULL, $form_values, 'Save');
+    $this->submitForm($form_values, 'Save');
     $this->assertSession()->pageTextNotContains('Name field is required.');
 
     // Configure the facet source by selecting one of the Search API views.
     $this->drupalGet($facet_add_page);
-    $this->drupalPostForm(NULL, ['facet_source_id' => '' . $source_id . ''], 'Configure facet source');
+    $this->submitForm(['facet_source_id' => '' . $source_id . ''], 'Configure facet source');
 
     // The field is still required.
-    $this->drupalPostForm(NULL, $form_values, 'Save');
+    $this->submitForm($form_values, 'Save');
     $this->assertSession()->pageTextContains('Field field is required.');
 
     // Fill in all fields and make sure the 'field is required' message is no
@@ -982,7 +999,7 @@ class IntegrationTest extends FacetsTestBase {
       'facet_source_id' => $source_id,
       'facet_source_configs[' . $source_id . '][field_identifier]' => $facet_type,
     ];
-    $this->drupalPostForm(NULL, $form_values + $facet_source_form, 'Save');
+    $this->submitForm($form_values + $facet_source_form, 'Save');
     $this->assertSession()->pageTextNotContains('field is required.');
 
     // Make sure that the redirection to the display page is correct.
@@ -1016,8 +1033,8 @@ class IntegrationTest extends FacetsTestBase {
 
     // Try to submit a facet with a duplicate machine name after form rebuilding
     // via facet source submit.
-    $this->drupalPostForm(NULL, $form_values, 'Configure facet source');
-    $this->drupalPostForm(NULL, $form_values + $facet_source_configs, 'Save');
+    $this->submitForm($form_values, 'Configure facet source');
+    $this->submitForm($form_values + $facet_source_configs, 'Save');
     $this->assertSession()->pageTextContains('The machine-readable name is already in use. It must be unique.');
 
     // Try to submit a facet with a duplicate machine name after form rebuilding
@@ -1049,7 +1066,8 @@ class IntegrationTest extends FacetsTestBase {
 
     // Change the facet name to add in "-2" to test editing of a facet works.
     $form_values = ['name' => $facet_name . ' - 2'];
-    $this->drupalPostForm($facet_edit_page, $form_values, 'Save');
+    $this->drupalGet($facet_edit_page);
+    $this->submitForm($form_values, 'Save');
 
     // Make sure that the redirection back to the overview was successful and
     // the edited facet is shown on the overview page.
@@ -1061,7 +1079,8 @@ class IntegrationTest extends FacetsTestBase {
 
     // Edit the form and change the facet's name back to the initial name.
     $form_values = ['name' => $facet_name];
-    $this->drupalPostForm($facet_edit_page, $form_values, 'Save');
+    $this->drupalGet($facet_edit_page);
+    $this->submitForm($form_values, 'Save');
 
     // Make sure that the redirection back to the overview was successful and
     // the edited facet is shown on the overview page.
@@ -1118,7 +1137,7 @@ class IntegrationTest extends FacetsTestBase {
     $this->drupalGet($facet_delete_page);
 
     // Actually submit the confirmation form.
-    $this->drupalPostForm(NULL, [], 'Delete');
+    $this->submitForm([], 'Delete');
 
     // Check that the facet by testing for the message and the absence of the
     // facet name on the overview.
@@ -1145,7 +1164,8 @@ class IntegrationTest extends FacetsTestBase {
       'fields[entity:node/uid][type]' => 'search_api_test_data_type',
     ];
 
-    $this->drupalPostForm('admin/config/search/search-api/index/webtest_index/fields', $edit, 'Save changes');
+    $this->drupalGet('admin/config/search/search-api/index/webtest_index/fields');
+    $this->submitForm($edit, 'Save changes');
     $this->assertSession()->pageTextContains('The changes were successfully saved.');
   }
 

@@ -37,7 +37,7 @@ use Drupal\file\Entity\File;
  * @see \Drupal\migrate\Plugin\MigrateProcessInterface
  *
  * @MigrateProcessPlugin(
- *   id = "file_remote_url"
+ *   id = "file_remote_image"
  * )
  */
 class FileRemoteImage extends FileRemoteUrl {

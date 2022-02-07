@@ -4,6 +4,7 @@ namespace Drupal\facets_summary\Plugin\facets_summary\processor;
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Markup;
 use Drupal\facets_summary\FacetsSummaryInterface;
 use Drupal\facets_summary\Processor\BuildProcessorInterface;
 use Drupal\facets_summary\Processor\ProcessorPluginBase;
@@ -39,7 +40,7 @@ class ShowStringProcessor extends ProcessorPluginBase implements BuildProcessorI
     $build_string = [
       '#theme' => 'facets_summary_string',
       '#label' => $configuration['settings']['label'],
-      '#search_string' => Html::escape($currentString),
+      '#search_string' => Markup::create(Html::escape($currentString)),
       '#cache' => [
         'contexts' => [
           'url.query_args:' . $facets_summary->getSearchFilterIdentifier(),
@@ -69,7 +70,7 @@ class ShowStringProcessor extends ProcessorPluginBase implements BuildProcessorI
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return ['label' => $this->t('Current text search')];
+    return ['label' => 'Current text search'];
   }
 
 }

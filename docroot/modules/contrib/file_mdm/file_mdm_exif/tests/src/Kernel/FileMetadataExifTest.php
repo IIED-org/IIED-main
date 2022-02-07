@@ -13,7 +13,7 @@ use lsolesen\pel\PelEntrySRational;
 /**
  * Tests that File Metadata EXIF plugin works properly.
  *
- * @group File Metadata
+ * @group file_mdm
  */
 class FileMetadataExifTest extends FileMetadataManagerTestBase {
 
@@ -22,7 +22,7 @@ class FileMetadataExifTest extends FileMetadataManagerTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'system',
     'file_mdm',
     'file_mdm_exif',

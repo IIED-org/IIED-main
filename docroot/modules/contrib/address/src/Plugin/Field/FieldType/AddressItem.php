@@ -6,6 +6,7 @@ use CommerceGuys\Addressing\AddressFormat\AddressField;
 use CommerceGuys\Addressing\AddressFormat\FieldOverride;
 use CommerceGuys\Addressing\AddressFormat\FieldOverrides;
 use Drupal\address\AddressInterface;
+use Drupal\address\FieldHelper;
 use Drupal\address\LabelHelper;
 use Drupal\Core\Field\FieldItemBase;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
@@ -96,7 +97,7 @@ class AddressItem extends FieldItemBase implements AddressInterface {
    * {@inheritdoc}
    */
   public static function mainPropertyName() {
-    return NULL;
+    return 'country_code';
   }
 
   /**
@@ -137,9 +138,24 @@ class AddressItem extends FieldItemBase implements AddressInterface {
   /**
    * {@inheritdoc}
    */
+  public function getProperties($include_computed = FALSE) {
+    $properties = parent::getProperties($include_computed);
+    $parsed_overrides = new FieldOverrides($this->getFieldOverrides());
+    $hidden_properties = array_map(static function ($name) {
+      return FieldHelper::getPropertyName($name);
+    }, $parsed_overrides->getHiddenFields());
+    foreach ($hidden_properties as $hidden_property) {
+      unset($properties[$hidden_property]);
+    }
+    return $properties;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public static function defaultFieldSettings() {
     return self::defaultCountrySettings() + [
-      'langcode_override' => '',
+      'langcode_override' => NULL,
       'field_overrides' => [],
       // Replaced by field_overrides.
       'fields' => [],
@@ -265,7 +281,7 @@ class AddressItem extends FieldItemBase implements AddressInterface {
    *   in case the language is always known (e.g. a field storing the "english
    *   address" on a chinese article).
    *
-   * The langcode property is intepreted by getLocale(), and in case it's NULL,
+   * The langcode property is interpreted by getLocale(), and in case it's NULL,
    * the field langcode is returned instead (indicating a non-multilingual site
    * or a translatable parent entity).
    *
@@ -276,7 +292,7 @@ class AddressItem extends FieldItemBase implements AddressInterface {
     $this->langcode = NULL;
     $language_manager = \Drupal::languageManager();
     if (!$language_manager->isMultilingual()) {
-      return;
+      return NULL;
     }
 
     if ($override = $this->getSetting('langcode_override')) {
@@ -308,6 +324,17 @@ class AddressItem extends FieldItemBase implements AddressInterface {
     $constraints[] = $constraint_manager->create('AddressFormat', ['fieldOverrides' => $field_overrides]);
 
     return $constraints;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setValue($values, $notify = TRUE) {
+    if (isset($values['langcode']) && $values['langcode'] === '') {
+      $values['langcode'] = NULL;
+    }
+
+    parent::setValue($values, $notify);
   }
 
   /**

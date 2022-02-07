@@ -21,12 +21,23 @@
         "slack": "#migrate",
         "source": "https://git.drupalcode.org/project/migrate_plus"
     },
-    "minimum-stability": "dev",
     "suggest": {
         "sainsburys/guzzle-oauth2-plugin": "3.0 required for the OAuth2 authentication plugin",
         "ext-soap": "*"
     },
-    "require": {
-        "php": ">=7.1"
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "config": {
+        "preferred-install": "dist"
+    },
+    "require-dev": {
+        "drush/drush": "^10"
+    },
+    "extra": {
+        "drush": {
+            "services": {
+                "drush.services.yml": "^9 || ^10"
+            }
+        }
     }
 }

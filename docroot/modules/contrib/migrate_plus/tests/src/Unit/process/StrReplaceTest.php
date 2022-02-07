@@ -95,7 +95,7 @@ class StrReplaceTest extends MigrateProcessTestCase {
     $configuration['replace'] = 'that';
     $plugin = new StrReplace($configuration, 'str_replace', []);
     $actual = $plugin->transform($value, $this->migrateExecutable, $this->row, 'destinationproperty');
-    $this->assertArrayEquals($expected, $actual);
+    $this->assertSame($expected, $actual);
 
     $this->assertTrue($plugin->multiple());
   }

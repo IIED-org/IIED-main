@@ -25,7 +25,7 @@ interface FacetInterface extends ConfigEntityInterface {
    *
    * @return array
    *   An associative array with the following structure:
-   *   - id: The widget plugin id as a string.
+   *   - type: The widget plugin id as a string.
    *   - config: The widget configuration as an array.
    */
   public function getWidget();
@@ -54,10 +54,18 @@ interface FacetInterface extends ConfigEntityInterface {
    *
    * @return array
    *   An associative array with the following structure:
-   *   - id: The hierarchy plugin id as a string.
+   *   - type: The hierarchy plugin id as a string.
    *   - config: The widget configuration as an array.
    */
   public function getHierarchy();
+
+  /**
+   * Returns an array of hierarchies with their configuration.
+   *
+   * @return \Drupal\facets\Hierarchy\HierarchyInterface[]
+   *   An array of hierarchies.
+   */
+  public function getHierarchies();
 
   /**
    * Returns the facet hierarchy instance.

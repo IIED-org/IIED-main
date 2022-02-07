@@ -72,7 +72,7 @@ class CountLimitProcessor extends ProcessorPluginBase implements BuildProcessorI
   public function validateConfigurationForm(array $form, FormStateInterface $form_state, FacetInterface $facet) {
     $values = $form_state->getValues();
     if (!empty($values['maximum_items']) && !empty($values['minimum_items']) && $values['maximum_items'] <= $values['minimum_items']) {
-      $form_state->setErrorByName('maximum_items', t('If both minimum and maximum item count are specified, the maximum item count should be higher than the minimum item count.'));
+      $form_state->setErrorByName('maximum_items', $this->t('If both minimum and maximum item count are specified, the maximum item count should be higher than the minimum item count.'));
     }
     return parent::validateConfigurationForm($form, $form_state, $facet);
   }

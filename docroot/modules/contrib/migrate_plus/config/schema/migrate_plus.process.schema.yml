@@ -20,26 +20,6 @@ migrate_plus.process.concat:
       type: string
       label: 'Delimiter'
 
-migrate_plus.process.dedupe_entity:
-  type: migrate_process
-  label: 'Dedupe Entity process'
-  mapping:
-    entity_type:
-      type: string
-      label: 'Entity type'
-    field:
-      type: string
-      label: 'Field name'
-    postfix:
-      type: string
-      label: 'Postfix'
-    start:
-      type: integer
-      label: 'Start'
-    length:
-      type: integer
-      label: 'Length'
-
 migrate_plus.process.explode:
   type: migrate_process
   label: 'Explode process'
