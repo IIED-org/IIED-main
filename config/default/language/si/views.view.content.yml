@@ -2,6 +2,7 @@ label: අන්තර්ගතය
 display:
   default:
     display_options:
+      title: අන්තර්ගතය
       fields:
         title:
           label: මාතෘකාව
@@ -19,7 +20,6 @@ display:
         langcode:
           expose:
             label: භාෂාව
-      title: අන්තර්ගතය
   page_1:
     display_options:
       menu:

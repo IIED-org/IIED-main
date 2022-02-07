@@ -2,14 +2,14 @@ display:
   default:
     display_title: 'Por defecto'
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         filename:
           label: Nombre
         status:
           label: Estado
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         status:
           expose:

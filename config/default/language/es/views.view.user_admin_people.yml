@@ -2,9 +2,6 @@ display:
   default:
     display_title: 'Por defecto'
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         name:
           label: 'Nombre de usuario'
@@ -14,6 +11,9 @@ display:
             format_custom_true: Activo
         operations:
           label: Operaciones
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         status:
           group_info:

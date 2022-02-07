@@ -2,6 +2,7 @@ display:
   default:
     display_title: Predefinido
     display_options:
+      title: Media
       filters:
         name:
           expose:
@@ -9,7 +10,6 @@ display:
         langcode:
           expose:
             label: Idioma
-      title: Media
   page:
     display_options:
       fields:

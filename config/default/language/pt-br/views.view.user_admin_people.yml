@@ -2,9 +2,6 @@ display:
   default:
     display_title: Padrão
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         name:
           label: Usuário
@@ -14,6 +11,9 @@ display:
             format_custom_true: Ativo
         operations:
           label: Operações
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         status:
           group_info:
