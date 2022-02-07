@@ -198,6 +198,10 @@ process:
       plugin: migration_lookup
       migration: iied_d7_terms_collection
       source: field_group
+  path/alias: alias
+  path/pathauto:
+    plugin: default_value
+    default_value: false
 destination:
   plugin: 'entity_complete:node'
   translations: true
@@ -232,6 +236,8 @@ destination:
     - field_display_image
     - field_full_width_media
     - field_additional_elements
+    - path/alias
+    - path
 migration_dependencies:
   required:
     - iied_d7_media_images

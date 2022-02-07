@@ -153,6 +153,10 @@ process:
     -
       plugin: default_value
       default_value: 'full_html'
+  path/alias: alias
+  path/pathauto:
+    plugin: default_value
+    default_value: false
 destination:
   plugin: 'entity_complete:node'
   translations: true
