@@ -21,9 +21,9 @@ default_value_callback: ''
 settings:
   handler: 'default:paragraph'
   handler_settings:
-    negate: 0
     target_bundles:
       media_embed: media_embed
+    negate: 0
     target_bundles_drag_drop:
       about_the_author:
         weight: 11
@@ -47,8 +47,8 @@ settings:
         weight: 6
         enabled: false
       media_embed:
-        enabled: true
         weight: 7
+        enabled: true
       row_of_4:
         weight: 8
         enabled: false

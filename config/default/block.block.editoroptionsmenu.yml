@@ -18,18 +18,18 @@ plugin: 'block_content:997e941d-85a8-4bfc-9ab7-efa990ac000a'
 settings:
   id: 'block_content:997e941d-85a8-4bfc-9ab7-efa990ac000a'
   label: 'Editor options menu'
-  provider: block_content
   label_display: '0'
+  provider: block_content
   status: true
   info: ''
   view_mode: full
 visibility:
   user_role:
     id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
     roles:
       authenticated: authenticated
       viewer: viewer
       editor: editor
-    negate: false
-    context_mapping:
-      user: '@user.current_user_context:current_user'

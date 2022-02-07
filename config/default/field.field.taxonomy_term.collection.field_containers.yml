@@ -21,13 +21,13 @@ default_value_callback: ''
 settings:
   handler: 'default:paragraph'
   handler_settings:
-    negate: 0
     target_bundles:
       basic_text: basic_text
+    negate: 0
     target_bundles_drag_drop:
       basic_text:
-        enabled: true
         weight: 8
+        enabled: true
       file_upload:
         weight: 9
         enabled: false

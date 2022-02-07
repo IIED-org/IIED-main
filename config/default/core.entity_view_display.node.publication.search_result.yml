@@ -68,16 +68,16 @@ third_party_settings:
       disable_css: false
       entity_classes: all_classes
       settings:
-        label: ''
+        classes:
+          layout_class: {  }
+          ds_content: {  }
         wrappers:
           ds_content: div
         outer_wrapper: div
         attributes: ''
         link_attribute: tokens
         link_custom: '[node:url]'
-        classes:
-          layout_class: {  }
-          ds_content: {  }
+        label: ''
     regions:
       ds_content:
         - group_media
@@ -100,38 +100,38 @@ third_party_settings:
           id: expert
           settings:
             lb: ''
-            prefix: ''
+            lbw: false
             lbw-el: ''
             lbw-cl: ''
             lbw-at: ''
+            lb-col: false
+            ow: false
             ow-el: ''
             ow-cl: ''
             ow-at: ''
+            ow-def-at: false
+            ow-def-cl: false
             fis: true
             fis-el: div
             fis-cl: 'mr-2 field-image'
             fis-at: ''
+            fis-def-at: false
+            fi: false
             fi-el: ''
             fi-cl: ''
             fi-at: ''
-            suffix: ''
-            lbw: false
-            lb-col: false
-            ow: false
-            ow-def-at: false
-            ow-def-cl: false
-            fis-def-at: false
-            fi: false
             fi-def-at: false
+            prefix: ''
+            suffix: ''
       node_title:
         plugin_id: node_title
         weight: 5
         label: hidden
         formatter: default
         settings:
+          link: false
           wrapper: h4
           class: ''
-          link: false
         ft:
           id: default
           settings:
@@ -147,11 +147,14 @@ third_party_settings:
         - field_document_type
         - field_author_s_
         - field_editor_s_
+      label: Result
       parent_name: group_media
+      region: ds_content
       weight: 2
       format_type: html_element
-      region: ds_content
       format_settings:
+        classes: media-body
+        id: ''
         element: div
         show_label: false
         label_element: h3
@@ -159,20 +162,18 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
-        id: ''
-        classes: media-body
-      label: Result
     group_media:
       children:
         - 'dynamic_block_field:node-cover_image_search'
         - group_result
+      label: Media
       parent_name: ''
+      region: ds_content
       weight: 0
       format_type: html_element
-      region: ds_content
       format_settings:
-        id: ''
         classes: media
+        id: ''
         element: div
         show_label: false
         label_element: h3
@@ -180,17 +181,17 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
-      label: Media
     group_meta:
       children:
         - search_api_excerpt
+      label: Extract
       parent_name: group_result
+      region: ds_content
       weight: 6
       format_type: html_element
-      region: ds_content
       format_settings:
-        id: ''
         classes: clearfix
+        id: ''
         element: div
         show_label: false
         label_element: h3
@@ -198,14 +199,13 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
-      label: Extract
 id: node.publication.search_result
 targetEntityType: node
 bundle: publication
 mode: search_result
 content:
   field_author_s_:
-    weight: 9
+    type: entity_reference_label
     label: hidden
     settings:
       link: false
@@ -216,13 +216,17 @@ content:
           id: expert
           settings:
             lb: ''
-            prefix: ''
+            lbw: false
             lbw-el: ''
             lbw-cl: ''
             lbw-at: ''
+            lb-col: false
+            ow: false
             ow-el: ''
             ow-cl: ''
             ow-at: ''
+            ow-def-at: false
+            ow-def-cl: false
             fis: true
             fis-el: ul
             fis-cl: 'meta field-authors comma-list'
@@ -233,16 +237,12 @@ content:
             fi-cl: field-author
             fi-at: ''
             fi-def-at: true
+            prefix: ''
             suffix: '  '
-            lbw: false
-            lb-col: false
-            ow: false
-            ow-def-at: false
-            ow-def-cl: false
-    type: entity_reference_label
+    weight: 9
     region: ds_content
   field_date_published:
-    weight: 7
+    type: datetime_default
     label: hidden
     settings:
       timezone_override: ''
@@ -253,33 +253,33 @@ content:
           id: expert
           settings:
             lb: ''
-            prefix: ''
+            lbw: false
             lbw-el: ''
             lbw-cl: ''
             lbw-at: ''
+            lb-col: false
+            ow: false
             ow-el: ''
             ow-cl: ''
             ow-at: ''
+            ow-def-at: false
+            ow-def-cl: false
             fis: true
             fis-el: span
             fis-cl: 'meta field-date'
             fis-at: ''
+            fis-def-at: false
+            fi: false
             fi-el: ''
             fi-cl: ''
             fi-at: ''
-            suffix: '<span class="meta"> • </span>'
-            lbw: false
-            lb-col: false
-            ow: false
-            ow-def-at: false
-            ow-def-cl: false
-            fis-def-at: false
-            fi: false
             fi-def-at: false
-    type: datetime_default
+            prefix: ''
+            suffix: '<span class="meta"> • </span>'
+    weight: 7
     region: ds_content
   field_document_type:
-    weight: 8
+    type: entity_reference_entity_view
     label: hidden
     settings:
       view_mode: search_result
@@ -290,33 +290,33 @@ content:
           id: expert
           settings:
             lb: ''
-            prefix: ''
+            lbw: false
             lbw-el: ''
             lbw-cl: ''
             lbw-at: ''
+            lb-col: false
+            ow: false
             ow-el: ''
             ow-cl: ''
             ow-at: ''
+            ow-def-at: false
+            ow-def-cl: false
             fis: true
             fis-el: span
             fis-cl: 'meta field-doctype'
             fis-at: ''
+            fis-def-at: false
+            fi: false
             fi-el: ''
             fi-cl: ''
             fi-at: ''
-            suffix: '<span class="meta"> • </span>'
-            lbw: false
-            lb-col: false
-            ow: false
-            ow-def-at: false
-            ow-def-cl: false
-            fis-def-at: false
-            fi: false
             fi-def-at: false
-    type: entity_reference_entity_view
+            prefix: ''
+            suffix: '<span class="meta"> • </span>'
+    weight: 8
     region: ds_content
   field_editor_s_:
-    weight: 10
+    type: entity_reference_label
     label: hidden
     settings:
       link: false
@@ -327,36 +327,36 @@ content:
           id: expert
           settings:
             lb: ''
-            prefix: ''
+            lbw: false
             lbw-el: ''
             lbw-cl: ''
             lbw-at: ''
+            lb-col: false
+            ow: false
             ow-el: ''
             ow-cl: ''
             ow-at: ''
+            ow-def-at: false
+            ow-def-cl: false
             fis: true
             fis-el: ul
             fis-cl: 'meta field-editors comma-list'
             fis-at: ''
+            fis-def-at: false
             fi: true
             fi-el: li
             fi-cl: field-editor
             fi-at: ''
-            suffix: '<span class="meta"> (eds.)</span>'
-            lbw: false
-            lb-col: false
-            ow: false
-            ow-def-at: false
-            ow-def-cl: false
-            fis-def-at: false
             fi-def-at: false
-    type: entity_reference_label
+            prefix: ''
+            suffix: '<span class="meta"> (eds.)</span>'
+    weight: 10
     region: ds_content
   search_api_excerpt:
-    weight: 3
-    region: ds_content
     settings: {  }
     third_party_settings: {  }
+    weight: 3
+    region: ds_content
 hidden:
   body: true
   field_a_serial: true

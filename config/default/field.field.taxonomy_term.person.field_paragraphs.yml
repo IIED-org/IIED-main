@@ -21,9 +21,9 @@ default_value_callback: ''
 settings:
   handler: 'default:paragraph'
   handler_settings:
-    negate: 0
     target_bundles:
       related_link: related_link
+    negate: 0
     target_bundles_drag_drop:
       about_the_author:
         weight: 11
@@ -50,8 +50,8 @@ settings:
         weight: 18
         enabled: false
       related_link:
-        enabled: true
         weight: 19
+        enabled: true
       researcher_profiles:
         weight: 20
         enabled: false

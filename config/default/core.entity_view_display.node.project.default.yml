@@ -46,95 +46,95 @@ bundle: project
 mode: default
 content:
   body:
-    label: hidden
     type: text_default
-    weight: 1
+    label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 1
     region: content
   field_additional_elements:
     type: entity_reference_revisions_entity_view
-    weight: 23
     label: above
     settings:
       view_mode: default
       link: ''
     third_party_settings: {  }
+    weight: 23
     region: content
   field_additional_resources:
-    weight: 16
+    type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    weight: 16
     region: content
   field_collections:
-    weight: 25
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 25
     region: content
   field_contact:
-    weight: 20
+    type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    weight: 20
     region: content
   field_dates:
-    weight: 10
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 10
     region: content
   field_display_image:
-    weight: 15
+    type: boolean
     label: above
     settings:
       format: default
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    type: boolean
+    weight: 15
     region: content
   field_full_width_media:
     type: entity_reference_revisions_entity_view
-    weight: 22
     label: above
     settings:
       view_mode: default
       link: ''
     third_party_settings: {  }
+    weight: 22
     region: content
   field_funded_by:
-    weight: 19
+    type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    weight: 19
     region: content
   field_image:
-    weight: 7
+    type: image
     label: above
     settings:
-      image_style: ''
       image_link: ''
+      image_style: ''
     third_party_settings: {  }
-    type: image
+    weight: 7
     region: content
   field_image_caption:
-    weight: 14
+    type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    weight: 14
     region: content
   field_link:
-    weight: 2
+    type: link_separate
     label: above
     settings:
       trim_length: null
@@ -150,101 +150,101 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    type: link_separate
+    weight: 2
     region: content
   field_main_image:
     type: entity_reference_entity_view
-    weight: 13
     label: above
     settings:
       view_mode: default
       link: false
     third_party_settings: {  }
+    weight: 13
     region: content
   field_nid:
-    weight: 5
+    type: number_integer
     label: above
     settings:
       thousand_separator: ''
       prefix_suffix: true
     third_party_settings: {  }
-    type: number_integer
+    weight: 5
     region: content
   field_partners:
-    weight: 17
+    type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    weight: 17
     region: content
   field_project_contacts:
-    weight: 21
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 21
     region: content
   field_project_status:
-    weight: 12
+    type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: list_default
+    weight: 12
     region: content
   field_projectnumber:
-    weight: 3
+    type: number_integer
     label: above
     settings:
       thousand_separator: ''
       prefix_suffix: true
     third_party_settings: {  }
-    type: number_integer
+    weight: 3
     region: content
   field_standfirst:
-    weight: 9
+    type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    weight: 9
     region: content
   field_tagline:
-    weight: 11
+    type: basic_string
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: basic_string
+    weight: 11
     region: content
   field_tags:
-    weight: 18
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 18
     region: content
   field_theme_s_:
-    weight: 24
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 24
     region: content
   field_year:
-    weight: 4
+    type: number_integer
     label: above
     settings:
       thousand_separator: ''
       prefix_suffix: true
     third_party_settings: {  }
-    type: number_integer
+    weight: 4
     region: content
   links:
-    weight: 0
-    region: content
     settings: {  }
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   langcode: true
   search_api_excerpt: true
