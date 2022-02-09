@@ -1,0 +1,56 @@
+<?php
+
+/**
+ * @file
+ * Functions to support theming in the callisto_theme theme.
+ */
+
+/**
+ * {@inheritdoc}
+ */
+function callisto_theme_preprocess(&$variables, $hook, $info) {
+  $variables['base_path'] = base_path();
+  $theme_path = $variables['base_path'] . $variables['directory'];
+  $variables['assets_path'] = $theme_path . "/assets";
+}
+
+/**
+ * Implements template_preprocess_region().
+ */
+function callisto_theme_preprocess_region(&$variables) {
+  // The node templates need the flexibility to constrain elements
+  // but on all other pages we should constrain.
+  $node = \Drupal::routeMatch()->getParameter('node');
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  $excludedRoutes = ['view.site_search.site_search_page'];
+
+  if ($variables['region'] == 'content' &&
+    !$node &&
+    !in_array($route_name, $excludedRoutes)
+    ) {
+    $variables['attributes']['class'][] = 'container';
+    $variables['attributes']['class'][] = 'my-64';
+  }
+}
+
+
+/**
+ * Implements template_preprocess_paragraph().
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An array of elements to display in view mode.
+ *   - paragraph: The paragraph object.
+ *   - view_mode: View mode; e.g., 'full', 'teaser'...
+ */
+function callisto_theme_preprocess_paragraph(array &$variables) {
+  /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+  $paragraph = $variables['paragraph'];
+  switch ($paragraph->getType()) {
+    case 'embed':
+      // Let us render the HTML text as is so that embeds work
+      $variables['html_output'] = $variables['content']['field_embed'][0]['#context']['value'];
+      header("X-XSS-Protection: 0");
+      break;
+  }
+}

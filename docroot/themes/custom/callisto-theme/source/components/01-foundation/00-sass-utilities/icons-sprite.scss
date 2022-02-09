@@ -1,0 +1,34 @@
+%svg-common {
+	background: url("svg-sprite-css.svg") no-repeat;
+}
+
+.svg-ac_logo {
+	@extend %svg-common;
+	background-position: 0 0;
+}
+
+.svg-email {
+	@extend %svg-common;
+	background-position: 69.23076923076923% 40.42553191489362%;
+}
+
+.svg-facebook {
+	@extend %svg-common;
+	background-position: 0 48.717948717948715%;
+}
+
+.svg-keyboard {
+	@extend %svg-common;
+	background-position: 0 100%;
+}
+
+.svg-linkedin {
+	@extend %svg-common;
+	background-position: 24% 48.717948717948715%;
+}
+
+.svg-twitter {
+	@extend %svg-common;
+	background-position: 48% 48.717948717948715%;
+}
+

@@ -1,0 +1,8 @@
+/* purgecss start ignore */
+.user-login-form , .user-pass {
+  input {
+    @apply w-auto;
+  }
+}
+/* purgecss end ignore */
+/* stylelint-enable */
