@@ -22,107 +22,12 @@ base_table: search_api_index_acquia_search_index
 base_field: search_api_id
 display:
   default:
-    display_plugin: default
     id: default
     display_title: Master
+    display_plugin: default
     position: 0
     display_options:
-      access:
-        type: role
-        options:
-          role:
-            anonymous: anonymous
-            authenticated: authenticated
-      cache:
-        type: none
-        options: {  }
-      query:
-        type: views_query
-        options:
-          skip_access: 0
-          bypass_access: 0
-          preserve_facet_query_args: 1
-      exposed_form:
-        type: bef
-        options:
-          submit_button: Apply
-          reset_button: true
-          reset_button_label: 'Clear search'
-          exposed_sorts_label: 'Sort by'
-          expose_sort_order: false
-          sort_asc_label: Asc
-          sort_desc_label: Desc
-          text_input_required: 'Select any filter and click on Apply to see results'
-          text_input_required_format: basic_html
-          bef:
-            general:
-              autosubmit: true
-              autosubmit_exclude_textfield: true
-              autosubmit_textfield_delay: 500
-              autosubmit_hide: false
-              input_required: false
-              allow_secondary: false
-              secondary_label: 'Advanced options'
-              secondary_open: false
-            sort:
-              plugin_id: default
-              advanced:
-                combine: false
-                combine_rewrite: ''
-                reset: false
-                reset_label: ''
-                collapsible: false
-                collapsible_label: 'Sort options'
-                is_secondary: false
-            filter:
-              search_api_fulltext_1:
-                plugin_id: default
-                advanced:
-                  placeholder_text: ''
-                  rewrite:
-                    filter_rewrite_values: ''
-                  collapsible: false
-                  is_secondary: false
-      pager:
-        type: full
-        options:
-          items_per_page: 10
-          offset: 0
-          id: 0
-          total_pages: null
-          tags:
-            previous: ‹‹
-            next: ››
-            first: '« First'
-            last: 'Last »'
-          expose:
-            items_per_page: false
-            items_per_page_label: 'Items per page'
-            items_per_page_options: '5, 10, 25, 50'
-            items_per_page_options_all: false
-            items_per_page_options_all_label: '- All -'
-            offset: false
-            offset_label: Offset
-          quantity: 9
-      style:
-        type: default
-        options:
-          row_class: 'row border mb-2'
-          default_row_class: false
-          uses_fields: false
-      row:
-        type: search_api
-        options:
-          view_modes:
-            'entity:node':
-              article: search_result
-              page: search_result
-              project: search_result
-              publication: search_result
-            'entity:taxonomy_term':
-              organisation: search_result
-              person: search_result
-              theme: search_result
+      title: Search
       fields:
         title:
           id: title
@@ -131,6 +36,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_field
           label: ''
           exclude: false
           alter:
@@ -193,17 +99,16 @@ display:
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
-          plugin_id: search_api_field
         body:
+          id: body
           table: search_api_index_acquia_search_index
           field: body
-          id: body
-          entity_type: null
-          entity_field: null
-          plugin_id: search_api_field
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: null
+          entity_field: null
+          plugin_id: search_api_field
           label: ''
           exclude: false
           alter:
@@ -265,47 +170,77 @@ display:
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
-      filters: {  }
-      sorts:
-        search_api_relevance:
-          id: search_api_relevance
-          table: search_api_index_acquia_search_index
-          field: search_api_relevance
-          relationship: none
-          group_type: group
-          admin_label: ''
-          order: DESC
-          exposed: true
+      pager:
+        type: full
+        options:
+          offset: 0
+          items_per_page: 10
+          total_pages: null
+          id: 0
+          tags:
+            next: ››
+            previous: ‹‹
+            first: '« First'
+            last: 'Last »'
           expose:
-            label: 'Sort by relevance'
-          plugin_id: search_api
-        field_date_published:
-          id: field_date_published
-          table: search_api_index_acquia_search_index
-          field: field_date_published
-          relationship: none
-          group_type: group
-          admin_label: ''
-          order: DESC
-          exposed: true
-          expose:
-            label: 'Published date'
-          plugin_id: search_api
-        title:
-          id: title
-          table: search_api_index_acquia_search_index
-          field: title
-          relationship: none
-          group_type: group
-          admin_label: ''
-          order: ASC
-          exposed: true
-          expose:
-            label: Title
-          plugin_id: search_api
-      title: Search
-      header: {  }
-      footer: {  }
+            items_per_page: false
+            items_per_page_label: 'Items per page'
+            items_per_page_options: '5, 10, 25, 50'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- All -'
+            offset: false
+            offset_label: Offset
+          quantity: 9
+      exposed_form:
+        type: bef
+        options:
+          submit_button: Apply
+          reset_button: true
+          reset_button_label: 'Clear search'
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: false
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+          text_input_required: 'Select any filter and click on Apply to see results'
+          text_input_required_format: basic_html
+          bef:
+            general:
+              autosubmit: true
+              autosubmit_exclude_textfield: true
+              autosubmit_textfield_delay: 500
+              autosubmit_hide: false
+              input_required: false
+              allow_secondary: false
+              secondary_label: 'Advanced options'
+              secondary_open: false
+            sort:
+              plugin_id: default
+              advanced:
+                combine: false
+                combine_rewrite: ''
+                reset: false
+                reset_label: ''
+                collapsible: false
+                collapsible_label: 'Sort options'
+                is_secondary: false
+            filter:
+              search_api_fulltext_1:
+                plugin_id: default
+                advanced:
+                  placeholder_text: ''
+                  rewrite:
+                    filter_rewrite_values: ''
+                  collapsible: false
+                  is_secondary: false
+      access:
+        type: role
+        options:
+          role:
+            anonymous: anonymous
+            authenticated: authenticated
+      cache:
+        type: none
+        options: {  }
       empty:
         area:
           id: area
@@ -314,20 +249,88 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: text
           empty: true
-          tokenize: false
           content:
             value: '<a href="/search">Start a new search</a>'
             format: basic_html
-          plugin_id: text
-      relationships: {  }
+          tokenize: false
+      sorts:
+        search_api_relevance:
+          id: search_api_relevance
+          table: search_api_index_acquia_search_index
+          field: search_api_relevance
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: DESC
+          expose:
+            label: 'Sort by relevance'
+            field_identifier: search_api_relevance
+          exposed: true
+        field_date_published:
+          id: field_date_published
+          table: search_api_index_acquia_search_index
+          field: field_date_published
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: DESC
+          expose:
+            label: 'Published date'
+            field_identifier: field_date_published
+          exposed: true
+        title:
+          id: title
+          table: search_api_index_acquia_search_index
+          field: title
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: ASC
+          expose:
+            label: Title
+            field_identifier: title
+          exposed: true
       arguments: {  }
-      display_extenders: {  }
-      use_ajax: false
+      filters: {  }
       filter_groups:
         operator: AND
         groups: {  }
+      style:
+        type: default
+        options:
+          row_class: 'row border mb-2'
+          default_row_class: false
+          uses_fields: false
+      row:
+        type: search_api
+        options:
+          view_modes:
+            'entity:node':
+              article: search_result
+              page: search_result
+              project: search_result
+              publication: search_result
+            'entity:taxonomy_term':
+              organisation: search_result
+              person: search_result
+              theme: search_result
+      query:
+        type: views_query
+        options:
+          skip_access: 0
+          bypass_access: 0
+          preserve_facet_query_args: 1
+      relationships: {  }
       css_class: 'col-md-8 order-md-1 mr-5'
+      use_ajax: false
+      header: {  }
+      footer: {  }
+      display_extenders: {  }
     cache_metadata:
       max-age: -1
       contexts:
@@ -341,23 +344,13 @@ display:
         - 'config:field.storage.node.body'
         - 'config:search_api.index.acquia_search_index'
   page_2:
-    display_plugin: page
     id: page_2
     display_title: Page
+    display_plugin: page
     position: 2
     display_options:
-      display_extenders: {  }
-      display_description: ''
-      path: search
       cache:
         type: none
-      defaults:
-        cache: false
-        filters: false
-        filter_groups: false
-        style: false
-        row: false
-        css_class: false
       filters:
         search_api_fulltext:
           id: search_api_fulltext
@@ -366,6 +359,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: views_autocomplete_filters_search_api_fulltext
           operator: or
           value: ''
           group: 1
@@ -389,8 +383,8 @@ display:
               editor: '0'
               manager: '0'
               administrator: '0'
-            placeholder: 'Search publications'
             expose_fields: false
+            placeholder: 'Search publications'
             searched_fields_id: search_api_fulltext_searched_fields
             autocomplete_filter: 1
             autocomplete_min_chars: '2'
@@ -413,11 +407,9 @@ display:
           parse_mode: edismax
           min_length: 2
           fields: {  }
-          plugin_id: views_autocomplete_filters_search_api_fulltext
       filter_groups:
         operator: AND
         groups: {  }
-      exposed_block: true
       style:
         type: default
         options:
@@ -437,7 +429,18 @@ display:
               organisation: search_result
               person: search_result
               theme: search_result
+      defaults:
+        cache: false
+        css_class: false
+        style: false
+        row: false
+        filters: false
+        filter_groups: false
       css_class: 'col-12 col-lg-8 float-lg-right order-lg-1 view-result'
+      display_description: ''
+      exposed_block: true
+      display_extenders: {  }
+      path: search
     cache_metadata:
       max-age: -1
       contexts:

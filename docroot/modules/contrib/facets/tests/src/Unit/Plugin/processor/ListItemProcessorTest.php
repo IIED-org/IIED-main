@@ -40,7 +40,7 @@ class ListItemProcessorTest extends UnitTestCase {
   /**
    * Creates a new processor object for use in the tests.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $facet = new Facet([], 'facets_facet');
@@ -131,7 +131,7 @@ class ListItemProcessorTest extends UnitTestCase {
       'settings' => [],
     ]);
 
-    /* @var \Drupal\facets\Result\Result[] $module_field_facet- */
+    /** @var \Drupal\facets\Result\Result[] $module_field_facet- */
     $module_field_results = $processor->build($module_field_facet, $this->results);
 
     $this->assertCount(3, $module_field_results);
@@ -175,7 +175,7 @@ class ListItemProcessorTest extends UnitTestCase {
       'weights' => [],
       'settings' => [],
     ]);
-    /* @var \Drupal\facets\Result\Result[] $module_field_facet- */
+    /** @var \Drupal\facets\Result\Result[] $module_field_facet- */
     $module_field_results = $processor->build($module_field_facet, $this->results);
 
     $this->assertCount(3, $module_field_results);

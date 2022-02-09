@@ -68,19 +68,19 @@ third_party_settings:
       disable_css: false
       entity_classes: all_classes
       settings:
-        label: ''
-        wrappers:
-          ds_content: div
-        outer_wrapper: div
-        attributes: 'role|link, tabindex|0'
-        link_attribute: content
-        link_custom: ''
         classes:
           layout_class:
             card: card
             h-100: h-100
             pointer: pointer
           ds_content: {  }
+        wrappers:
+          ds_content: div
+        outer_wrapper: div
+        attributes: 'role|link, tabindex|0'
+        link_attribute: content
+        link_custom: ''
+        label: ''
     regions:
       ds_content:
         - group_row
@@ -99,29 +99,29 @@ third_party_settings:
           id: expert
           settings:
             lb: ''
-            prefix: ''
+            lbw: false
             lbw-el: ''
             lbw-cl: ''
             lbw-at: ''
+            lb-col: false
             ow: true
             ow-el: div
             ow-cl: 'col-4 col-xl-12 p-3'
             ow-at: ''
-            fis-el: ''
-            fis-cl: ''
-            fis-at: ''
-            fi-el: ''
-            fi-cl: ''
-            fi-at: ''
-            suffix: ''
-            lbw: false
-            lb-col: false
             ow-def-at: false
             ow-def-cl: false
             fis: false
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
             fis-def-at: false
             fi: false
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
             fi-def-at: false
+            prefix: ''
+            suffix: ''
       node_title:
         plugin_id: node_title
         weight: 1
@@ -135,38 +135,41 @@ third_party_settings:
           id: expert
           settings:
             lb: ''
-            prefix: ''
+            lbw: false
             lbw-el: ''
             lbw-cl: ''
             lbw-at: ''
+            lb-col: false
+            ow: false
             ow-el: div
             ow-cl: card-body
             ow-at: ''
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
             fis-el: ''
             fis-cl: ''
             fis-at: ''
+            fis-def-at: false
             fi: true
             fi-el: h5
             fi-cl: card-title
             fi-at: ''
-            suffix: ''
-            lbw: false
-            lb-col: false
-            ow: false
-            ow-def-at: false
-            ow-def-cl: false
-            fis: false
-            fis-def-at: false
             fi-def-at: false
+            prefix: ''
+            suffix: ''
   field_group:
     group_card_body:
       children:
         - group_card_footer
+      label: card-body
       parent_name: group_row
+      region: ds_content
       weight: 3
       format_type: html_element
-      region: ds_content
       format_settings:
+        classes: 'col-8 col-xl-12'
+        id: ''
         element: div
         show_label: false
         label_element: h3
@@ -174,18 +177,18 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
-        id: ''
-        classes: 'col-8 col-xl-12'
-      label: card-body
     group_row:
       children:
         - 'dynamic_block_field:node-cover_image_card'
         - group_card_body
+      label: Row
       parent_name: ''
+      region: ds_content
       weight: 0
       format_type: html_element
-      region: ds_content
       format_settings:
+        classes: 'row no-gutters'
+        id: ''
         element: div
         show_label: false
         label_element: h3
@@ -193,18 +196,18 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
-        id: ''
-        classes: 'row no-gutters'
-      label: Row
     group_card_footer:
       children:
         - node_title
         - field_date_published
+      label: 'card inner'
       parent_name: group_card_body
+      region: ds_content
       weight: 1
       format_type: html_element
-      region: ds_content
       format_settings:
+        classes: card-body
+        id: ''
         element: div
         show_label: false
         label_element: h3
@@ -212,9 +215,6 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
-        id: ''
-        classes: card-body
-      label: 'card inner'
 id: node.publication.card
 targetEntityType: node
 bundle: publication
@@ -222,8 +222,6 @@ mode: card
 content:
   field_date_published:
     type: datetime_custom
-    weight: 2
-    region: ds_content
     label: hidden
     settings:
       timezone_override: ''
@@ -234,29 +232,31 @@ content:
           id: expert
           settings:
             lb: ''
-            prefix: ''
+            lbw: false
             lbw-el: ''
             lbw-cl: ''
             lbw-at: ''
+            lb-col: false
+            ow: false
             ow-el: ''
             ow-cl: ''
             ow-at: ''
+            ow-def-at: false
+            ow-def-cl: false
             fis: true
             fis-el: div
             fis-cl: text-muted
             fis-at: ''
+            fis-def-at: false
+            fi: false
             fi-el: ''
             fi-cl: ''
             fi-at: ''
-            suffix: ''
-            lbw: false
-            lb-col: false
-            ow: false
-            ow-def-at: false
-            ow-def-cl: false
-            fis-def-at: false
-            fi: false
             fi-def-at: false
+            prefix: ''
+            suffix: ''
+    weight: 2
+    region: ds_content
 hidden:
   body: true
   field_a_serial: true

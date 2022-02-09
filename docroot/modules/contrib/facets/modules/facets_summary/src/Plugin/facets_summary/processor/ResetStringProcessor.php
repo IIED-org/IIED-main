@@ -72,7 +72,8 @@ class ResetStringProcessor extends ProcessorPluginBase implements BuildProcessor
 
     unset($query_params[$facets_summary->getSearchFilterIdentifier()]);
 
-    $url = Url::createFromRequest($request);
+    $url = Url::fromUserInput($facets_summary->getFacetSource()->getPath());
+    $url->setOptions(['query' => $query_params]);
 
     $item = [
       '#theme' => 'facets_result_item__summary',
@@ -88,6 +89,11 @@ class ResetStringProcessor extends ProcessorPluginBase implements BuildProcessor
     ];
     if (isset($build['#items'])) {
       array_unshift($build['#items'], $item);
+    }
+    else {
+      $build['#items'] = [
+        $item,
+      ];
     }
     return $build;
   }

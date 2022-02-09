@@ -12,6 +12,10 @@ pattern: '[term:vocabulary]/[term:name]'
 selection_criteria:
   848aee86-7c6d-4d61-9ec7-6d588c0e40e5:
     id: 'entity_bundle:taxonomy_term'
+    negate: false
+    uuid: 848aee86-7c6d-4d61-9ec7-6d588c0e40e5
+    context_mapping:
+      taxonomy_term: taxonomy_term
     bundles:
       document_type: document_type
       list: list
@@ -20,10 +24,6 @@ selection_criteria:
       series: series
       tags: tags
       theme: theme
-    negate: false
-    context_mapping:
-      taxonomy_term: taxonomy_term
-    uuid: 848aee86-7c6d-4d61-9ec7-6d588c0e40e5
 selection_logic: and
 weight: -5
 relationships: {  }

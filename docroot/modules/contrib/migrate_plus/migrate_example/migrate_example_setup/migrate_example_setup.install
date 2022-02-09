@@ -367,8 +367,10 @@ function migrate_example_beer_data_node() {
 /**
  * Populate account table.
  *
- * Note that alice has duplicate username. Exercises dedupe_entity plugin.
- * TODO duplicate email also.
+ * Note that alice has duplicate username. Exercises make_unique_entity_field
+ * plugin.
+ *
+ * @todo Duplicate email also.
  */
 function migrate_example_beer_data_account() {
   $fields = [

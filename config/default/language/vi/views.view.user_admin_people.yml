@@ -2,9 +2,6 @@ display:
   default:
     display_title: 'Mặc định'
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         name:
           label: 'Tên người dùng'
@@ -14,6 +11,9 @@ display:
             format_custom_true: 'Hoạt động'
         operations:
           label: 'Thao tác'
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         status:
           group_info:

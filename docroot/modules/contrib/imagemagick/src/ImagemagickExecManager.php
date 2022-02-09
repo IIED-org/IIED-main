@@ -329,7 +329,7 @@ class ImagemagickExecManager implements ImagemagickExecManagerInterface {
     $error = '';
 
     Timer::start('imagemagick:runOsShell');
-    $process = new Process($command_line, $this->appRoot);
+    $process = Process::fromShellCommandline($command_line, $this->appRoot);
     $process->setTimeout($this->timeout);
     try {
       $process->run();

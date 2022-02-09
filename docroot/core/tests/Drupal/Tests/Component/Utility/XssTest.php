@@ -86,7 +86,7 @@ class XssTest extends TestCase {
    *     - The value to filter.
    *     - The value to expect after filtering.
    *     - The assertion message.
-   *     - (optional) The allowed HTML HTML tags array that should be passed to
+   *     - (optional) The allowed HTML tags array that should be passed to
    *       \Drupal\Component\Utility\Xss::filter().
    */
   public function providerTestFilterXssNormalized() {
@@ -153,7 +153,7 @@ class XssTest extends TestCase {
    *     - The value to filter.
    *     - The value to expect that's missing after filtering.
    *     - The assertion message.
-   *     - (optional) The allowed HTML HTML tags array that should be passed to
+   *     - (optional) The allowed HTML tags array that should be passed to
    *       \Drupal\Component\Utility\Xss::filter().
    */
   public function providerTestFilterXssNotNormalized() {
@@ -594,10 +594,10 @@ class XssTest extends TestCase {
    *   Lowercase, plain text to look for.
    * @param string $message
    *   (optional) Message to display if failed. Defaults to an empty string.
-   * @param string $group
-   *   (optional) The group this message belongs to. Defaults to 'Other'.
+   *
+   * @internal
    */
-  protected function assertNormalized($haystack, $needle, $message = '', $group = 'Other') {
+  protected function assertNormalized(string $haystack, string $needle, string $message = ''): void {
     $this->assertStringContainsString($needle, strtolower(Html::decodeEntities($haystack)), $message);
   }
 
@@ -616,10 +616,10 @@ class XssTest extends TestCase {
    *   Lowercase, plain text to look for.
    * @param string $message
    *   (optional) Message to display if failed. Defaults to an empty string.
-   * @param string $group
-   *   (optional) The group this message belongs to. Defaults to 'Other'.
+   *
+   * @internal
    */
-  protected function assertNotNormalized($haystack, $needle, $message = '', $group = 'Other') {
+  protected function assertNotNormalized(string $haystack, string $needle, string $message = ''): void {
     $this->assertStringNotContainsString($needle, strtolower(Html::decodeEntities($haystack)), $message);
   }
 

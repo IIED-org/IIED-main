@@ -63,17 +63,17 @@ third_party_settings:
         - field_author_s_
         - field_editor_s_
         - field_translator
+      label: 'Add/Edit Author(s), Editor(s)and Translator(s) *'
+      region: hidden
       parent_name: ''
       weight: 27
       format_type: details
-      region: hidden
       format_settings:
+        classes: ''
+        id: ''
+        open: false
         description: ''
         required_fields: true
-        id: ''
-        classes: ''
-        open: false
-      label: 'Add/Edit Author(s), Editor(s)and Translator(s) *'
     group_publication_metadata:
       children:
         - field_area_list
@@ -84,126 +84,126 @@ third_party_settings:
         - field_issn
         - field_pdf_pages
         - field_publisher
+      label: 'Add/Edit Publication details *'
+      region: hidden
       parent_name: ''
       weight: 28
       format_type: details
-      region: hidden
       format_settings:
+        classes: ''
+        id: ''
+        open: false
         description: ''
         required_fields: true
-        id: ''
-        classes: ''
-        open: false
-      label: 'Add/Edit Publication details *'
     group_iied_marketing_and_reporti:
       children:
         - field_deptlist
         - field_team
         - field_theme_s_
         - field_work_programme_global_enga
+      label: 'Add/Edit IIED Marketing and Reporting info *'
+      region: hidden
       parent_name: ''
       weight: 29
       format_type: details
-      region: hidden
       format_settings:
+        classes: ''
+        id: ''
+        open: false
         description: ''
         required_fields: true
-        id: ''
-        classes: ''
-        open: false
-      label: 'Add/Edit IIED Marketing and Reporting info *'
     group_series_article_and_journal:
       children:
         - field_journal_ref
         - field_series
         - field_series_item_code
         - field_source_publication
+      label: 'Add/Edit Series, Article and Journal info'
+      region: hidden
       parent_name: ''
       weight: 30
       format_type: details
-      region: hidden
       format_settings:
+        classes: ''
+        id: ''
+        open: false
         description: ''
         required_fields: true
-        id: ''
-        classes: ''
-        open: false
-      label: 'Add/Edit Series, Article and Journal info'
     group_tags_and_links:
       children:
         - field_iied_url
         - field_project
         - field_tags
+      label: 'Add/Edit IIED links and tags *'
+      region: hidden
       parent_name: ''
       weight: 31
       format_type: details
-      region: hidden
       format_settings:
+        classes: ''
+        id: ''
+        open: false
         description: ''
         required_fields: true
-        id: ''
-        classes: ''
-        open: false
-      label: 'Add/Edit IIED links and tags *'
     group_upload_file_or_link_to_ext:
       children:
         - field_cover_image
         - field_media
+      label: 'Upload file or link to external publication'
+      region: hidden
       parent_name: ''
       weight: 32
       format_type: details
-      region: hidden
       format_settings:
-        id: ''
         classes: ''
-        description: ''
+        id: ''
         open: false
+        description: ''
         required_fields: true
-      label: 'Upload file or link to external publication'
     group_legacy_fields_do_not_use:
       children:
         - field_publisher_legacy
         - field_reportagency1
         - field_status
+      label: 'Legacy fields - do not use'
+      region: hidden
       parent_name: ''
       weight: 33
       format_type: details
-      region: hidden
       format_settings:
-        id: ''
         classes: ''
-        description: ''
+        id: ''
         open: false
+        description: ''
         required_fields: true
-      label: 'Legacy fields - do not use'
     group_coming_soon_:
       children:
         - field_lists
         - field_parent
+      label: 'Coming soon...'
+      region: hidden
       parent_name: ''
       weight: 34
       format_type: details
-      region: hidden
       format_settings:
-        id: ''
         classes: ''
-        description: ''
+        id: ''
         open: false
+        description: ''
         required_fields: true
-      label: 'Coming soon...'
 id: node.publication.bulk_edit
 targetEntityType: node
 bundle: publication
 mode: bulk_edit
 content:
   field_admin:
+    type: text_textarea
     weight: 2
+    region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-    type: text_textarea
-    region: content
   field_external_url:
     type: link_default
     weight: 4
@@ -213,25 +213,25 @@ content:
       placeholder_title: ''
     third_party_settings: {  }
   field_lit_code:
+    type: options_select
     weight: 0
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: options_select
-    region: content
   field_product_code:
+    type: string_textfield
     weight: 1
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_product_code_new:
+    type: computed_string_widget
     weight: 3
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: computed_string_widget
-    region: content
 hidden:
   body: true
   created: true

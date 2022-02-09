@@ -107,7 +107,7 @@ class Exif extends FileMetadataPluginBase {
       return $this->pelFile;
     }
     else {
-      switch ($this->mimeTypeGuesser->guess($this->getUri())) {
+      switch ($this->mimeTypeGuesser->guessMimeType($this->getUri())) {
         case 'image/jpeg':
           $this->pelFile = new PelJpeg($this->getLocalTempPath());
           return $this->pelFile !== NULL ? $this->pelFile : FALSE;

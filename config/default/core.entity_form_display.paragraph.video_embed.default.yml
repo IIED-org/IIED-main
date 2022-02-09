@@ -16,18 +16,18 @@ content:
   field_video:
     type: media_library_widget
     weight: 2
+    region: content
     settings:
       media_types: {  }
     third_party_settings: {  }
-    region: content
   field_video_description:
+    type: string_textarea
     weight: 1
+    region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-    type: string_textarea
-    region: content
 hidden:
   created: true
   status: true

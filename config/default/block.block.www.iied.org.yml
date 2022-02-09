@@ -18,14 +18,14 @@ plugin: 'block_content:8f77f3ca-de59-4e54-a7b1-14041a4aabb3'
 settings:
   id: 'block_content:8f77f3ca-de59-4e54-a7b1-14041a4aabb3'
   label: www.iied.org
-  provider: block_content
   label_display: '0'
+  provider: block_content
   status: true
   info: ''
   view_mode: full
 visibility:
   request_path:
     id: request_path
-    pages: '<front>'
     negate: false
     context_mapping: {  }
+    pages: '<front>'

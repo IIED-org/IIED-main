@@ -19,12 +19,12 @@ process:
     plugin: default_value
     default_value: 2
 
-  # Here's a new process plugin - dedupe_entity. Our source site allowed there
+  # Here's a new process plugin - make_unique_entity_field. Our source site allowed there
   # to be multiple user accounts with the same username, but Drupal wants
   # usernames to be unique. This plugin allows us to automatically generate
   # unique usernames when we detect collisions.
   name:
-    plugin: dedupe_entity
+    plugin: make_unique_entity_field
     # The name of the source field containing the username.
     source: username
     # These next two settings identify the destination-side field to check for

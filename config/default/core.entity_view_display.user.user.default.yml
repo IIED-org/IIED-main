@@ -33,23 +33,26 @@ third_party_settings:
             configuration:
               id: 'extra_field_block:user:user:masquerade'
               label: Masquerade
-              provider: layout_builder
               label_display: '0'
+              provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
-            additional: {  }
             weight: 0
+            additional: {  }
           1ade6956-714f-441f-bcc9-589e5b237753:
             uuid: 1ade6956-714f-441f-bcc9-589e5b237753
             region: content
             configuration:
               id: 'field_block:user:user:name'
               label: 'Welcome back'
-              provider: layout_builder
               label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: '@user.current_user_context:current_user'
+                view_mode: view_mode
               formatter:
-                label: above
                 type: user_name
+                label: above
                 settings:
                   link_to_entity: false
                 third_party_settings:
@@ -58,7 +61,6 @@ third_party_settings:
                       id: expert
                       settings:
                         lb: 'Welcome back'
-                        prefix: ''
                         lbw: true
                         lbw-el: h3
                         lbw-cl: ''
@@ -80,12 +82,10 @@ third_party_settings:
                         fi-cl: ''
                         fi-at: ''
                         fi-def-at: false
+                        prefix: ''
                         suffix: '<p></p><hr>'
-              context_mapping:
-                entity: '@user.current_user_context:current_user'
-                view_mode: view_mode
-            additional: {  }
             weight: 1
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
@@ -99,14 +99,14 @@ third_party_settings:
             configuration:
               id: 'block_content:2e269474-0c90-4a0b-8c47-d12d521ca8b5'
               label: 'Create content'
-              provider: block_content
               label_display: visible
+              provider: block_content
               status: true
               info: ''
               view_mode: full
               context_mapping: {  }
-            additional: {  }
             weight: 1
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
@@ -120,26 +120,26 @@ third_party_settings:
             configuration:
               id: 'views_block:content_recent-block_2'
               label: 'My publications'
-              provider: views
               label_display: visible
+              provider: views
+              context_mapping: {  }
               views_label: 'My publications'
               items_per_page: '5'
-              context_mapping: {  }
-            additional: {  }
             weight: 1
+            additional: {  }
           226d65a4-3836-475b-a32a-74d8b96bb721:
             uuid: 226d65a4-3836-475b-a32a-74d8b96bb721
             region: content
             configuration:
               id: 'views_block:content_recent-block_3'
               label: 'All publications'
-              provider: views
               label_display: visible
+              provider: views
+              context_mapping: {  }
               views_label: 'All publications'
               items_per_page: '5'
-              context_mapping: {  }
-            additional: {  }
             weight: 2
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
@@ -153,13 +153,13 @@ third_party_settings:
             configuration:
               id: 'views_block:authors-block_2'
               label: 'Search/Edit Authors'
-              provider: views
               label_display: visible
+              provider: views
+              context_mapping: {  }
               views_label: 'Search/Edit Authors'
               items_per_page: none
-              context_mapping: {  }
-            additional: {  }
             weight: 0
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
@@ -173,28 +173,28 @@ third_party_settings:
             configuration:
               id: 'views_block:authors-block_3'
               label: 'Search/Edit Organisations'
-              provider: views
               label_display: visible
+              provider: views
+              context_mapping: {  }
               views_label: 'Search/Edit Organisations'
               items_per_page: none
-              context_mapping: {  }
-            additional: {  }
             weight: 0
+            additional: {  }
         third_party_settings: {  }
   field_group:
     group_wha_:
       children: {  }
+      label: 'Wha?'
       parent_name: ''
+      region: hidden
       weight: 20
       format_type: details
-      region: hidden
       format_settings:
-        id: ''
         classes: ''
-        description: ''
+        id: ''
         open: false
+        description: ''
         required_fields: false
-      label: 'Wha?'
 _core:
   default_config_hash: V51QPCKkgNREKtSmB9Iu2wmAMEpktVpnzklWaZV8UYo
 id: user.user.default
@@ -203,24 +203,24 @@ bundle: user
 mode: default
 content:
   masquerade:
-    weight: 50
     settings: {  }
     third_party_settings: {  }
+    weight: 50
     region: content
   member_for:
-    weight: 5
-    region: content
     settings: {  }
     third_party_settings: {  }
+    weight: 5
+    region: content
   user_picture:
     type: image
+    label: hidden
+    settings:
+      image_link: content
+      image_style: thumbnail
+    third_party_settings: {  }
     weight: 0
     region: content
-    settings:
-      image_style: thumbnail
-      image_link: content
-    third_party_settings: {  }
-    label: hidden
 hidden:
   langcode: true
   search_api_excerpt: true

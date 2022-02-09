@@ -60,11 +60,11 @@ class DomStrReplaceTest extends MigrateProcessTestCase {
       ],
       'mode-invalid' => [
         ['mode' => 'invalid'],
-        'Configuration option "mode" only accepts the following values: attribute.',
+        'Configuration option "mode" only accepts the following values: attribute, element.',
       ],
       'attribute_options-null' => [
         ['attribute_options' => NULL],
-        "Configuration option 'attribute_options' is required.",
+        "Configuration option 'attribute_options' is required for mode 'attribute'.",
       ],
       'search-null' => [
         ['search' => NULL],

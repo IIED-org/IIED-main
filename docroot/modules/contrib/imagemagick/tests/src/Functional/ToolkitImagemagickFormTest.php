@@ -7,7 +7,7 @@ use Drupal\Tests\BrowserTestBase;
 /**
  * Tests ImageMagick subform and settings.
  *
- * @group Imagemagick
+ * @group imagemagick
  */
 class ToolkitImagemagickFormTest extends BrowserTestBase {
 

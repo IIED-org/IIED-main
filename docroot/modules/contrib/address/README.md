@@ -21,18 +21,10 @@ Use ```composer update drupal/address --with-dependencies``` to update to a new
 release.
 
 ### Ludwig
-Otherwise, download and install [Ludwig](https://www.drupal.org/project/ludwig)
-which will allow you to download the library separately:
-1) Download Address into your modules folder.
-2) Use one of Ludwig's methods to download the library:
+Composer is recommended whenever possible. However, if you are not familiar with
+Composer yet (or you want to avoid it for other reasons) you can install and use
+[Ludwig](https://www.drupal.org/project/ludwig) module to manage Address module
+library dependencies.
 
-    a) Run the ```ludwig:download``` Drupal Console command or the
-    ```ludwig-download``` Drush command.
-
-    b) Go to ```/admin/reports/packages``` and download the library manually,
-    then place it under address/lib as specified.
-
-3) Enable Address.
-
-Note that when using Ludwig, updating the module will require re-downloading the
-library. Composer is recommended whenever possible.
+Read more at Ludwig Installation and Usage guide:
+https://www.drupal.org/docs/contributed-modules/ludwig/installation-and-usage

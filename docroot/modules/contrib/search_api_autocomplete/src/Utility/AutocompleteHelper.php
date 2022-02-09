@@ -23,10 +23,14 @@ class AutocompleteHelper implements AutocompleteHelperInterface {
   /**
    * Constructs a new class instance.
    *
-   * @param \Drupal\Core\Render\ElementInfoManagerInterface $element_info
+   * @param \Drupal\Core\Render\ElementInfoManagerInterface|null $element_info
    *   The element info manager.
    */
-  public function __construct(ElementInfoManagerInterface $element_info) {
+  public function __construct(ElementInfoManagerInterface $element_info = NULL) {
+    if (!$element_info) {
+      @trigger_error('Constructing \Drupal\search_api_autocomplete\Utility\AutocompleteHelper without $element_info is deprecated in search_api_autocomplete:8.x-1.6 and will stop working in search_api_autocomplete:2.0.0. See https://www.drupal.org/node/3224354', E_USER_DEPRECATED);
+      $element_info = \Drupal::service('plugin.manager.element_info');
+    }
     $this->elementInfo = $element_info;
   }
 
