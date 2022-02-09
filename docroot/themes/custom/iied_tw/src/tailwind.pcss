@@ -1,0 +1,63 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:400,300,300italic,400italic,700,700italic,900,900italic");
+@import url("https://cloud.typography.com/7590498/6700612/css/fonts.css");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-4xl font-headline;
+  }
+  h2 {  
+    @apply text-3xl font-headline;
+  }
+  h3 {
+    @apply text-2xl font-headline;
+  }
+  h4 {
+    @apply text-xl font-headline;
+  }    
+  h5 {
+    @apply text-lg font-headline;  
+  }
+  h6 {
+    @apply font-headline;  
+  }
+  em {
+    @apply text-pink;
+  }
+}
+
+@layer components {
+  .site-name {
+    font-family: serif;
+  }
+  .block,
+  .node {
+    @apply mb-4;
+  }
+
+  .node__content p,
+  .node__content ul,
+  .node__content ol {
+    @apply mb-4 leading-normal;
+  }
+
+/* Elements -- twig partials */
+  /* Buttons */
+  .btn {
+    @apply px-3 py-2 transition rounded-full shadow-sm hover:shadow-none;
+  }
+
+/* Compounds -- twig templates */
+  /* Cards */
+  .card {
+    @apply border border-gray-100 p-3 hover:bg-gray-100;
+  }
+
+  [id$="-local-tasks"] ul {
+    @apply list-disc list-inside;
+  }
+
+}

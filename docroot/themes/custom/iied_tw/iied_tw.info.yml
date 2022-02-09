@@ -1,0 +1,13 @@
+name: IIED Tailwind Theme
+description: Theme for unified site
+core: 8.x
+core_version_requirement: ^8 || ^9
+type: theme
+base theme: stable9
+libraries:
+  - iied_tw/global-styling
+
+# Information added by Drupal.org packaging script on 2022-01-11
+version: '5.0.0-alpha2'
+project: 'tailwindcss'
+datestamp: 1641888129
