@@ -9,7 +9,7 @@
   h1 {
     @apply text-4xl font-headline;
   }
-  h2 {  
+  h2 {
     @apply text-3xl font-headline;
   }
   h3 {
@@ -17,15 +17,18 @@
   }
   h4 {
     @apply text-xl font-headline;
-  }    
+  }
   h5 {
-    @apply text-lg font-headline;  
+    @apply text-lg font-headline;
   }
   h6 {
-    @apply font-headline;  
+    @apply font-headline;
   }
-  em {
-    @apply text-pink;
+  a {
+    @apply transition duration-300 ease-in-out text-link-text hover:underline underline-offset-2 hover:text-link-hover visited:text-link-visited;
+  }
+  .rich-text p {
+    @apply mt-5 mb-5;
   }
 }
 
@@ -44,13 +47,13 @@
     @apply mb-4 leading-normal;
   }
 
-/* Elements -- twig partials */
+  /* Elements -- twig partials */
   /* Buttons */
   .btn {
     @apply px-3 py-2 transition rounded-full shadow-sm hover:shadow-none;
   }
 
-/* Compounds -- twig templates */
+  /* Compounds -- twig templates */
   /* Cards */
   .card {
     @apply border border-gray-100 p-3 hover:bg-gray-100;
@@ -59,5 +62,4 @@
   [id$="-local-tasks"] ul {
     @apply list-disc list-inside;
   }
-
 }
