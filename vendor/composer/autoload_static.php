@@ -260,6 +260,7 @@ class ComposerStaticInitc55356c53f91567181cb9bc578ac52ab
         'A' => 
         array (
             'Asm89\\Stack\\' => 12,
+            'Ajgl\\Twig\\Extension\\' => 20,
         ),
     );
 
@@ -819,6 +820,10 @@ class ComposerStaticInitc55356c53f91567181cb9bc578ac52ab
         'Asm89\\Stack\\' => 
         array (
             0 => __DIR__ . '/..' . '/asm89/stack-cors/src/Asm89/Stack',
+        ),
+        'Ajgl\\Twig\\Extension\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ajgl/breakpoint-twig-extension/src',
         ),
     );
 

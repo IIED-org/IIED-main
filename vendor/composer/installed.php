@@ -5,11 +5,20 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '0020ca050fffd16f597df416bc5efe7b71f08694',
+        'reference' => 'd70c6abe134df6940d49749775012934025cf7ff',
         'name' => 'drupal/recommended-project',
         'dev' => true,
     ),
     'versions' => array(
+        'ajgl/breakpoint-twig-extension' => array(
+            'pretty_version' => '0.3.5',
+            'version' => '0.3.5.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../ajgl/breakpoint-twig-extension',
+            'aliases' => array(),
+            'reference' => '9875feea0ac4bc3c9f308c62bae4727669d6052a',
+            'dev_requirement' => true,
+        ),
         'asm89/stack-cors' => array(
             'pretty_version' => '1.3.0',
             'version' => '1.3.0.0',
@@ -1583,7 +1592,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '0020ca050fffd16f597df416bc5efe7b71f08694',
+            'reference' => 'd70c6abe134df6940d49749775012934025cf7ff',
             'dev_requirement' => false,
         ),
         'drupal/redirect' => array(
@@ -1819,6 +1828,15 @@
             'replaced' => array(
                 0 => '9.3.5',
             ),
+        ),
+        'drupal/twig_xdebug' => array(
+            'pretty_version' => '1.2.0',
+            'version' => '1.2.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/twig_xdebug',
+            'aliases' => array(),
+            'reference' => '8.x-1.2',
+            'dev_requirement' => true,
         ),
         'drupal/update' => array(
             'dev_requirement' => false,
