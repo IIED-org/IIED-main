@@ -62,6 +62,7 @@
         "drupal/eu_cookie_compliance": "^1.14",
         "drupal/facets": "^2.0",
         "drupal/facets_country": "1.x-dev@dev",
+        "drupal/field_formatter": "^3.0",
         "drupal/field_group": "^3.1",
         "drupal/file_mdm": "^2.2",
         "drupal/form_mode_control": "^2.0@RC",

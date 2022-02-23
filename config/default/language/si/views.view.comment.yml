@@ -1,11 +1,15 @@
 display:
   default:
+    display_title: Master
     display_options:
       fields:
         subject:
           label: කාරණය
         operations:
           label: මෙහෙයුම්
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         subject:
           expose:

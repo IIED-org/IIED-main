@@ -1,0 +1,40 @@
+uuid: fda274ae-aa54-4ad9-9f08-c641a8ccaa9a
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_class
+    - node
+    - system
+  theme:
+    - iied_tw
+third_party_settings:
+  block_class:
+    classes: 'text-center m-3'
+_core:
+  default_config_hash: 7rR9chwXvdM2H8OYMAYx9Zj3GGlPMrZp_M3ZA4thYTk
+id: iied_tw_page_title
+theme: iied_tw
+region: content
+weight: -14
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  label_display: '0'
+  provider: core
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      article: article
+      page: page
+  request_path:
+    id: request_path
+    negate: true
+    context_mapping: {  }
+    pages: '<front>'

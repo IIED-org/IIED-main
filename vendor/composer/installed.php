@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'd70c6abe134df6940d49749775012934025cf7ff',
+        'reference' => '422b803db8f95ce8e16ed842894d97880c1b6ab4',
         'name' => 'drupal/recommended-project',
         'dev' => true,
     ),
@@ -1029,6 +1029,15 @@
                 0 => '9.3.5',
             ),
         ),
+        'drupal/field_formatter' => array(
+            'pretty_version' => '3.0.0-rc0',
+            'version' => '3.0.0.0-RC0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/field_formatter',
+            'aliases' => array(),
+            'reference' => '3.0.0-rc0',
+            'dev_requirement' => false,
+        ),
         'drupal/field_group' => array(
             'pretty_version' => '3.2.0',
             'version' => '3.2.0.0',
@@ -1592,7 +1601,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'd70c6abe134df6940d49749775012934025cf7ff',
+            'reference' => '422b803db8f95ce8e16ed842894d97880c1b6ab4',
             'dev_requirement' => false,
         ),
         'drupal/redirect' => array(

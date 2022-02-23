@@ -1,0 +1,37 @@
+uuid: c3d8ef73-2fa7-4688-85f9-e5ac92ecb7fa
+langcode: en
+status: false
+dependencies:
+  config:
+    - system.menu.account
+  module:
+    - system
+    - user
+  theme:
+    - iied_tw
+id: iied_tw_useraccountmenu
+theme: iied_tw
+region: sidebar_first
+weight: 0
+provider: null
+plugin: 'system_menu_block:account'
+settings:
+  id: 'system_menu_block:account'
+  label: 'User account menu'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      authenticated: authenticated
+      viewer: viewer
+      editor: editor
+      manager: manager
+      administrator: administrator

@@ -1,0 +1,20 @@
+uuid: e764912d-3dfe-47f1-b64b-2709996975af
+langcode: en
+status: true
+dependencies:
+  theme:
+    - iied_tw
+_core:
+  default_config_hash: 13GQpeITIJsp1kyPniXtWZfyFH87vb1xxJCHifL4UeE
+id: iied_tw_local_actions
+theme: iied_tw
+region: content
+weight: -11
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  label_display: '0'
+  provider: core
+visibility: {  }
