@@ -2,9 +2,6 @@ display:
   default:
     display_title: Bawaan
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         subject:
           label: Judul
@@ -12,6 +9,9 @@ display:
           label: Penulis
         operations:
           label: Operasi-operasi
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         subject:
           expose:
@@ -21,13 +21,6 @@ display:
             label: Bahasa
   page_unapproved:
     display_options:
-      filters:
-        subject:
-          expose:
-            label: Judul
-        langcode:
-          expose:
-            label: Bahasa
       fields:
         subject:
           label: Judul
@@ -35,3 +28,10 @@ display:
           label: Penulis
         operations:
           label: Operasi-operasi
+      filters:
+        subject:
+          expose:
+            label: Judul
+        langcode:
+          expose:
+            label: Bahasa

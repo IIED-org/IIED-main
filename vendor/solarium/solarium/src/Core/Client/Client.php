@@ -30,6 +30,9 @@ use Solarium\Exception\InvalidArgumentException;
 use Solarium\Exception\OutOfBoundsException;
 use Solarium\Exception\UnexpectedValueException;
 use Solarium\Plugin\BufferedAdd\BufferedAdd;
+use Solarium\Plugin\BufferedAdd\BufferedAddLite;
+use Solarium\Plugin\BufferedDelete\BufferedDelete;
+use Solarium\Plugin\BufferedDelete\BufferedDeleteLite;
 use Solarium\Plugin\CustomizeRequest\CustomizeRequest;
 use Solarium\Plugin\Loadbalancer\Loadbalancer;
 use Solarium\Plugin\MinimumScoreFilter\MinimumScoreFilter;
@@ -236,6 +239,9 @@ class Client extends Configurable implements ClientInterface
         'customizerequest' => CustomizeRequest::class,
         'parallelexecution' => ParallelExecution::class,
         'bufferedadd' => BufferedAdd::class,
+        'bufferedaddlite' => BufferedAddLite::class,
+        'buffereddelete' => BufferedDelete::class,
+        'buffereddeletelite' => BufferedDeleteLite::class,
         'prefetchiterator' => PrefetchIterator::class,
         'minimumscorefilter' => MinimumScoreFilter::class,
     ];
@@ -345,7 +351,7 @@ class Client extends Configurable implements ClientInterface
 
         $key = $endpoint->getKey();
 
-        if (0 === \strlen($key)) {
+        if (null === $key || 0 === \strlen($key)) {
             throw new InvalidArgumentException('An endpoint must have a key value');
         }
 
@@ -1298,7 +1304,7 @@ class Client extends Configurable implements ClientInterface
     }
 
     /**
-     * Create a managed resources query instance.
+     * Create a managed stopwords query instance.
      *
      * @param mixed $options
      *
@@ -1310,7 +1316,7 @@ class Client extends Configurable implements ClientInterface
     }
 
     /**
-     * Create a managed resources query instance.
+     * Create a managed synonyms query instance.
      *
      * @param mixed $options
      *

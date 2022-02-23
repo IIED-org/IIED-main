@@ -16,6 +16,7 @@ use Drupal\migrate\Row;
  * Available configuration keys:
  * - mode: What to modify. Possible values:
  *   - attribute: One element attribute.
+ *   - element: An element name.
  * - xpath: XPath query expression that will produce the \DOMNodeList to walk.
  * - attribute_options: A map of options related to the attribute mode. Required
  *   when mode is attribute. The keys can be:
@@ -52,6 +53,12 @@ use Drupal\migrate\Row;
  *       search: '/foo/'
  *       replace: 'bar'
  *     -
+ *       plugin: dom_str_replace
+ *       mode: element
+ *       xpath: '//b'
+ *       search: 'b'
+ *       replace: 'strong'
+ *     -
  *       plugin: dom
  *       method: export
  * @endcode
@@ -73,10 +80,12 @@ class DomStrReplace extends DomProcessBase {
     ];
     $options_validation = [
       'xpath' => NULL,
-      'mode' => ['attribute'],
-      // @todo Move out once another mode is supported.
-      // @see https://www.drupal.org/project/migrate_plus/issues/3042833
-      'attribute_options' => NULL,
+      'mode' => [
+        'attribute' => [
+          'attribute_options' => NULL,
+        ],
+        'element' => []
+      ],
       'search' => NULL,
       'replace' => NULL,
     ];
@@ -85,6 +94,64 @@ class DomStrReplace extends DomProcessBase {
         throw new InvalidPluginDefinitionException(
           $this->getPluginId(),
           "Configuration option '$option_name' is required."
+        );
+      }
+      if (!empty($possible_values) && !array_key_exists($this->configuration[$option_name], $possible_values)) {
+        throw new InvalidPluginDefinitionException(
+          $this->getPluginId(),
+          sprintf(
+            'Configuration option "%s" only accepts the following values: %s.',
+            $option_name,
+            implode(', ', array_keys($possible_values))
+          )
+        );
+      }
+    }
+    $mode = $this->configuration['mode'];
+    $mode_validation = $options_validation['mode'][$mode];
+    foreach ($mode_validation as $option_name => $possible_values) {
+      if (empty($this->configuration[$option_name])) {
+        throw new InvalidPluginDefinitionException(
+          $this->getPluginId(),
+          "Configuration option '$option_name' is required for mode '$mode'."
+        );
+      }
+      if (!is_null($possible_values) && !in_array($this->configuration[$option_name], $possible_values)) {
+        throw new InvalidPluginDefinitionException(
+          $this->getPluginId(),
+          sprintf(
+            'Configuration option "%s" only accepts the following values: %s.',
+            $option_name,
+            implode(', ', $possible_values)
+          )
+        );
+      }
+    }
+    $mode_validation = $options_validation['mode'][$this->configuration['mode']];
+    foreach ($mode_validation as $option_name => $possible_values) {
+      if (empty($this->configuration[$option_name])) {
+        throw new InvalidPluginDefinitionException(
+          $this->getPluginId(),
+          "Configuration option '$option_name' is required for mode '$mode'."
+        );
+      }
+      if (!is_null($possible_values) && !in_array($this->configuration[$option_name], $possible_values)) {
+        throw new InvalidPluginDefinitionException(
+          $this->getPluginId(),
+          sprintf(
+            'Configuration option "%s" only accepts the following values: %s.',
+            $option_name,
+            implode(', ', $possible_values)
+          )
+        );
+      }
+    }
+    $mode_validation = $options_validation['mode'][$this->configuration['mode']];
+    foreach ($mode_validation as $option_name => $possible_values) {
+      if (empty($this->configuration[$option_name])) {
+        throw new InvalidPluginDefinitionException(
+          $this->getPluginId(),
+          "Configuration option '$option_name' is required for mode '$mode'."
         );
       }
       if (!is_null($possible_values) && !in_array($this->configuration[$option_name], $possible_values)) {
@@ -133,6 +200,8 @@ class DomStrReplace extends DomProcessBase {
     switch ($this->configuration['mode']) {
       case 'attribute':
         return $node->getAttribute($this->configuration['attribute_options']['name']);
+      case 'element':
+        return $node->nodeName;
     }
   }
 
@@ -145,6 +214,7 @@ class DomStrReplace extends DomProcessBase {
   protected function getSearch() {
     switch ($this->configuration['mode']) {
       case 'attribute':
+      case 'element':
         return $this->configuration['search'];
     }
   }
@@ -158,6 +228,7 @@ class DomStrReplace extends DomProcessBase {
   protected function getReplace() {
     switch ($this->configuration['mode']) {
       case 'attribute':
+      case 'element':
         return $this->configuration['replace'];
     }
   }
@@ -200,6 +271,17 @@ class DomStrReplace extends DomProcessBase {
     switch ($this->configuration['mode']) {
       case 'attribute':
         $html_node->setAttribute($this->configuration['attribute_options']['name'], $new_subject);
+        break;
+      case 'element':
+        $new_node = $this->document->createElement($new_subject);
+        foreach ($html_node->childNodes as $child) {
+          $new_node->appendChild($child->cloneNode(TRUE));
+        }
+        foreach ($html_node->attributes as $attribute) {
+          $new_node->setAttribute($attribute->name, $attribute->value);
+        }
+        $html_node->parentNode->replaceChild($new_node, $html_node);
+        break;
     }
   }
 

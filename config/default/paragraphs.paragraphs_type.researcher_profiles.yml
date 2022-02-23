@@ -1,0 +1,10 @@
+uuid: 83340631-e54e-4f1e-bcee-6d5799a6289f
+langcode: en
+status: true
+dependencies: {  }
+id: researcher_profiles
+label: 'Researcher profiles'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

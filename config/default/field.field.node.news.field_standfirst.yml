@@ -1,0 +1,21 @@
+uuid: cfbf1788-2606-4cd5-8a8a-e85ca38cdb26
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_standfirst
+    - node.type.news
+  module:
+    - text
+id: node.news.field_standfirst
+field_name: field_standfirst
+entity_type: node
+bundle: news
+label: Standfirst
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

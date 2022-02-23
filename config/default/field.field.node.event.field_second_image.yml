@@ -1,0 +1,29 @@
+uuid: 5b62b60e-d136-46e2-b9aa-0b4467372e0a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_second_image
+    - media.type.image
+    - node.type.event
+id: node.event.field_second_image
+field_name: field_second_image
+entity_type: node
+bundle: event
+label: 'Second image'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      image: image
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

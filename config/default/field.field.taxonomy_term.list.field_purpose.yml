@@ -14,7 +14,7 @@ bundle: list
 label: Purpose
 description: 'Admin use only. Describe why this list has been created. '
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings: {  }

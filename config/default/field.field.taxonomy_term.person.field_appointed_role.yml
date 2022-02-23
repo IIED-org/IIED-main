@@ -1,0 +1,21 @@
+uuid: 3e5f46ff-0d6c-4bb6-b240-5231d1247656
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_appointed_role
+    - taxonomy.vocabulary.person
+  module:
+    - options
+id: taxonomy_term.person.field_appointed_role
+field_name: field_appointed_role
+entity_type: taxonomy_term
+bundle: person
+label: 'Appointed role'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,0 +1,18 @@
+uuid: 123c1436-fd9f-445e-9f7e-384a8da7ff51
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.image_wide
+id: paragraph.image_wide.created
+field_name: created
+entity_type: paragraph
+bundle: image_wide
+label: 'Authored on'
+description: 'The time that the Paragraph was created.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: created

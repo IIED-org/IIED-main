@@ -9,6 +9,9 @@ source:
   plugin: url
   data_fetcher_plugin: http
   data_parser_plugin: xml
+  # Guzzle request options can be added.
+  request_options:
+    allow_redirects: false
   # Normally, this is one or more fully-qualified URLs or file paths. Because
   # we can't hardcode your local URL, we provide a relative path here which
   # hook_install() will rewrite to a full URL for the current site.

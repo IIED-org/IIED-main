@@ -11,7 +11,7 @@ use Drupal\Tests\imagemagick\Kernel\ToolkitSetupTrait;
 /**
  * Tests that core image manipulations work properly through Imagemagick.
  *
- * @group Imagemagick
+ * @group imagemagick
  */
 class ToolkitImagemagickTest extends BrowserTestBase {
 
@@ -271,54 +271,6 @@ class ToolkitImagemagickTest extends BrowserTestBase {
         'corners' => $default_corners,
         'tolerance' => 27,
       ],
-      'rotate_5' => [
-        'function' => 'rotate',
-        'arguments' => [
-          'degrees' => 5,
-          'background' => '#FF00FF',
-          'resize_filter' => 'Box',
-        ],
-        'width' => 41,
-        'height' => 23,
-        'corners' => array_fill(0, 4, $this->fuchsia),
-        'tolerance' => 5,
-      ],
-      'rotate_minus_10' => [
-        'function' => 'rotate',
-        'arguments' => [
-          'degrees' => -10,
-          'background' => '#FF00FF',
-          'resize_filter' => 'Box',
-        ],
-        'width' => 41,
-        'height' => 26,
-        'corners' => array_fill(0, 4, $this->fuchsia),
-        'tolerance' => 15,
-      ],
-      'rotate_90' => [
-        'function' => 'rotate',
-        'arguments' => ['degrees' => 90, 'background' => '#FF00FF'],
-        'width' => 20,
-        'height' => 40,
-        'corners' => [$this->transparent, $this->red, $this->green, $this->blue],
-        'tolerance' => 0,
-      ],
-      'rotate_transparent_5' => [
-        'function' => 'rotate',
-        'arguments' => ['degrees' => 5, 'resize_filter' => 'Box'],
-        'width' => 41,
-        'height' => 23,
-        'corners' => array_fill(0, 4, $this->transparent),
-        'tolerance' => 0,
-      ],
-      'rotate_transparent_90' => [
-        'function' => 'rotate',
-        'arguments' => ['degrees' => 90],
-        'width' => 20,
-        'height' => 40,
-        'corners' => [$this->transparent, $this->red, $this->green, $this->blue],
-        'tolerance' => 0,
-      ],
       'desaturate' => [
         'function' => 'desaturate',
         'arguments' => [],
@@ -435,7 +387,7 @@ class ToolkitImagemagickTest extends BrowserTestBase {
           foreach ($values['corners'] as $key => $corner) {
             // The test gif that does not have transparency has yellow where the
             // others have transparent.
-            if ($file === 'image-test-no-transparency.gif' && $corner === $this->transparent && $op != 'rotate_transparent_5') {
+            if ($file === 'image-test-no-transparency.gif' && $corner === $this->transparent) {
               $corner = $this->yellow;
             }
             // The test jpg when converted to other formats has yellow where the
@@ -588,6 +540,240 @@ class ToolkitImagemagickTest extends BrowserTestBase {
     foreach ($image_files as $image_file) {
       $image = $this->imageFactory->get($image_file['path']);
       $this->assertSame($image_file['orientation'], $image->getToolkit()->getExifOrientation());
+    }
+
+    // Test multi-frame GIF image.
+    $image_files = [
+      [
+        'source' => drupal_get_path('module', 'imagemagick') . '/misc/test-multi-frame.gif',
+        'destination' => $this->testDirectory . '/test-multi-frame.gif',
+        'width' => 60,
+        'height' => 29,
+        'frames' => 13,
+        'scaled_width' => 30,
+        'scaled_height' => 15,
+      ],
+    ];
+    foreach ($image_files as $image_file) {
+      $image = $this->imageFactory->get($image_file['source']);
+      $this->assertSame($image_file['width'], $image->getWidth());
+      $this->assertSame($image_file['height'], $image->getHeight());
+      $this->assertSame($image_file['frames'], $image->getToolkit()->getFrames());
+
+      // Scaling should preserve frames.
+      $image->scale(30);
+      $this->assertTrue($image->save($image_file['destination']));
+      $image = $this->imageFactory->get($image_file['destination']);
+      $this->assertSame($image_file['scaled_width'], $image->getWidth());
+      $this->assertSame($image_file['scaled_height'], $image->getHeight());
+      $this->assertSame($image_file['frames'], $image->getToolkit()->getFrames());
+
+      // Converting to PNG should drop frames.
+      $image->convert('png');
+      $this->assertTrue($image->save($image_file['destination']));
+      $image = $this->imageFactory->get($image_file['destination']);
+      $this->assertSame(1, $image->getToolkit()->getFrames());
+      $this->assertSame($image_file['scaled_width'], $image->getWidth());
+      $this->assertSame($image_file['scaled_height'], $image->getHeight());
+      $this->assertSame(1, $image->getToolkit()->getFrames());
+    }
+  }
+
+  /**
+   * Tests legacy rotate operation.
+   *
+   * @param string $toolkit_id
+   *   The id of the toolkit to set up.
+   * @param string $toolkit_config
+   *   The config object of the toolkit to set up.
+   * @param array $toolkit_settings
+   *   The settings of the toolkit to set up.
+   *
+   * @group legacy
+   *
+   * @dataProvider providerToolkitConfiguration
+   */
+  public function testLegacyRotateOperation(string $toolkit_id, string $toolkit_config, array $toolkit_settings): void {
+    $this->expectDeprecation('\Drupal\imagemagick\Plugin\ImageToolkit\Operation\imagemagick\Rotate is deprecated in imagemagick:8.x-3.3 and is removed from imagemagick:4.0.0. Use the rotate operation provided by the Image Effects module instead. See https://www.drupal.org/project/imagemagick/issues/3251438');
+    $this->setUpToolkit($toolkit_id, $toolkit_config, $toolkit_settings);
+    $this->prepareImageFileHandling();
+
+    // Typically the corner colors will be unchanged. These colors are in the
+    // order of top-left, top-right, bottom-right, bottom-left.
+    $default_corners = [
+      $this->red,
+      $this->green,
+      $this->blue,
+      $this->transparent,
+    ];
+
+    // A list of files that will be tested.
+    $files = [
+      'image-test.png',
+      'image-test.gif',
+      'image-test-no-transparency.gif',
+      'image-test.jpg',
+      'img-test.webp',
+    ];
+
+    // Setup a list of tests to perform on each type.
+    $operations = [
+      'rotate_5' => [
+        'function' => 'rotate',
+        'arguments' => [
+          'degrees' => 5,
+          'background' => '#FF00FF',
+          'resize_filter' => 'Box',
+        ],
+        'width' => 41,
+        'height' => 23,
+        'corners' => array_fill(0, 4, $this->fuchsia),
+        'tolerance' => 5,
+      ],
+      'rotate_minus_10' => [
+        'function' => 'rotate',
+        'arguments' => [
+          'degrees' => -10,
+          'background' => '#FF00FF',
+          'resize_filter' => 'Box',
+        ],
+        'width' => 41,
+        'height' => 26,
+        'corners' => array_fill(0, 4, $this->fuchsia),
+        'tolerance' => 15,
+      ],
+      'rotate_90' => [
+        'function' => 'rotate',
+        'arguments' => ['degrees' => 90, 'background' => '#FF00FF'],
+        'width' => 20,
+        'height' => 40,
+        'corners' => [$this->transparent, $this->red, $this->green, $this->blue],
+        'tolerance' => 0,
+      ],
+      'rotate_transparent_5' => [
+        'function' => 'rotate',
+        'arguments' => ['degrees' => 5, 'resize_filter' => 'Box'],
+        'width' => 41,
+        'height' => 23,
+        'corners' => array_fill(0, 4, $this->transparent),
+        'tolerance' => 0,
+      ],
+      'rotate_transparent_90' => [
+        'function' => 'rotate',
+        'arguments' => ['degrees' => 90],
+        'width' => 20,
+        'height' => 40,
+        'corners' => [$this->transparent, $this->red, $this->green, $this->blue],
+        'tolerance' => 0,
+      ],
+    ];
+
+    foreach ($files as $file) {
+      $image_uri = 'public://' . $file;
+      foreach ($operations as $op => $values) {
+        // Load up a fresh image.
+        $image = $this->imageFactory->get($image_uri);
+        if (!$image->isValid()) {
+          // WEBP may be not supported by the binaries.
+          if ($file === 'img-test.webp') {
+            continue 2;
+          }
+          $this->fail("Could not load image $file.");
+        }
+
+        // Check that no multi-frame information is set.
+        $this->assertSame(1, $image->getToolkit()->getFrames());
+
+        // Perform our operation.
+        $image->apply($values['function'], $values['arguments']);
+
+        // Save and reload image.
+        $file_path = $this->testDirectory . '/' . $op . substr($file, -4);
+        $save_result = $image->save($file_path);
+        // WEBP may be not supported by the binaries.
+        if (!$save_result && $op === 'convert_webp') {
+          continue 2;
+        }
+        $this->assertTrue($save_result);
+        $image = $this->imageFactory->get($file_path);
+        $this->assertTrue($image->isValid());
+
+        $package = $image->getToolkit()->getExecManager()->getPackage();
+
+        // Reload with GD to be able to check results at pixel level.
+        $image = $this->imageFactory->get($file_path, 'gd');
+        $toolkit = $image->getToolkit();
+        $toolkit->getResource();
+        $this->assertTrue($image->isValid());
+
+        // Check MIME type if needed.
+        if (isset($values['mimetype'])) {
+          $this->assertEquals($values['mimetype'], $toolkit->getMimeType(), "Image '$file' after '$op' action has proper MIME type ({$values['mimetype']}).");
+        }
+
+        // To keep from flooding the test with assert values, make a general
+        // value for whether each group of values fail.
+        $correct_dimensions_real = TRUE;
+        $correct_dimensions_object = TRUE;
+
+        // Check the real dimensions of the image first.
+        $actual_toolkit_width = imagesx($toolkit->getResource());
+        $actual_toolkit_height = imagesy($toolkit->getResource());
+        if ($actual_toolkit_height != $values['height'] || $actual_toolkit_width != $values['width']) {
+          $correct_dimensions_real = FALSE;
+        }
+
+        // Check that the image object has an accurate record of the dimensions.
+        $actual_image_width = $image->getWidth();
+        $actual_image_height = $image->getHeight();
+        if ($actual_image_width != $values['width'] || $actual_image_height != $values['height']) {
+          $correct_dimensions_object = FALSE;
+        }
+
+        $this->assertTrue($correct_dimensions_real, "Image '$file' after '$op' action has proper dimensions. Expected {$values['width']}x{$values['height']}, actual {$actual_toolkit_width}x{$actual_toolkit_height}.");
+        $this->assertTrue($correct_dimensions_object, "Image '$file' object after '$op' action is reporting the proper height and width values.  Expected {$values['width']}x{$values['height']}, actual {$actual_image_width}x{$actual_image_height}.");
+
+        // GraphicsMagick on WEBP requires higher tolerance.
+        if ($file === 'img-test.webp' && $package === 'graphicsmagick') {
+          $values['tolerance'] += 4800;
+        }
+
+        // JPEG colors will always be messed up due to compression.
+        if ($image->getToolkit()->getType() != IMAGETYPE_JPEG) {
+          // Now check each of the corners to ensure color correctness.
+          foreach ($values['corners'] as $key => $corner) {
+            // The test gif that does not have transparency has yellow where the
+            // others have transparent.
+            if ($file === 'image-test-no-transparency.gif' && $corner === $this->transparent && $op != 'rotate_transparent_5') {
+              $corner = $this->yellow;
+            }
+            // Get the location of the corner.
+            switch ($key) {
+              case 0:
+                $x = 0;
+                $y = 0;
+                break;
+
+              case 1:
+                $x = $image->getWidth() - 1;
+                $y = 0;
+                break;
+
+              case 2:
+                $x = $image->getWidth() - 1;
+                $y = $image->getHeight() - 1;
+                break;
+
+              case 3:
+                $x = 0;
+                $y = $image->getHeight() - 1;
+                break;
+
+            }
+            $this->assertColorsAreClose($corner, $this->getPixelColor($image, $x, $y), $values['tolerance'], $file, $op);
+          }
+        }
+      }
     }
 
     // Test multi-frame GIF image.

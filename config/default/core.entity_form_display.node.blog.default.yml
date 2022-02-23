@@ -7,7 +7,7 @@ dependencies:
     - field.field.node.blog.field_about_the_author
     - field.field.node.blog.field_author_s_
     - field.field.node.blog.field_blogger_info
-    - field.field.node.blog.field_collection
+    - field.field.node.blog.field_collections
     - field.field.node.blog.field_display_image
     - field.field.node.blog.field_image_caption
     - field.field.node.blog.field_main_image
@@ -32,70 +32,70 @@ third_party_settings:
         - group_copy
         - group_taxonomy
         - group_authorship
+      label: Tabs
+      region: content
       parent_name: ''
       weight: 2
       format_type: tabs
-      region: content
       format_settings:
+        classes: ''
         show_empty_fields: false
         id: ''
-        classes: ''
         direction: horizontal
         width_breakpoint: 640
-      label: Tabs
     group_images:
       children:
         - field_main_image
         - field_image_caption
         - field_display_image
+      label: Images
+      region: content
       parent_name: group_tabs
       weight: 14
       format_type: tab
-      region: content
       format_settings:
+        classes: ''
         show_empty_fields: false
         id: ''
-        classes: ''
-        description: ''
         formatter: closed
+        description: ''
         required_fields: true
-      label: Images
     group_copy:
       children:
         - field_tagline
         - field_standfirst
         - body
         - field_paragraphs
+      label: Copy
+      region: content
       parent_name: group_tabs
       weight: 15
       format_type: tab
-      region: content
       format_settings:
+        classes: ''
         show_empty_fields: false
         id: ''
-        classes: ''
-        description: ''
         formatter: closed
+        description: ''
         required_fields: true
-      label: Copy
     group_taxonomy:
       children:
         - field_theme_s_
         - field_tags
         - field_collection
         - field_project
+      label: Taxonomy
+      region: content
       parent_name: group_tabs
       weight: 16
       format_type: tab
-      region: content
       format_settings:
+        classes: ''
         show_empty_fields: false
         id: ''
-        classes: ''
-        description: ''
         formatter: closed
+        description: ''
         required_fields: true
-      label: Taxonomy
     group_authorship:
       children:
         - field_blogger_info
@@ -103,18 +103,18 @@ third_party_settings:
         - field_author_s_
         - field_about_the_author
         - created
+      label: Authorship
+      region: content
       parent_name: group_tabs
       weight: 17
       format_type: tab
-      region: content
       format_settings:
+        classes: ''
         show_empty_fields: false
         id: ''
-        classes: ''
-        description: ''
         formatter: closed
+        description: ''
         required_fields: true
-      label: Authorship
 id: node.blog.default
 targetEntityType: node
 bundle: blog
@@ -123,13 +123,13 @@ content:
   body:
     type: text_textarea_with_summary
     weight: 16
+    region: content
     settings:
       rows: 9
       summary_rows: 3
       placeholder: ''
       show_summary: false
     third_party_settings: {  }
-    region: content
   created:
     type: datetime_timestamp
     weight: 16
@@ -139,6 +139,7 @@ content:
   field_about_the_author:
     type: entity_reference_paragraphs
     weight: 15
+    region: content
     settings:
       title: Paragraph
       title_plural: Paragraphs
@@ -147,59 +148,60 @@ content:
       form_display_mode: default
       default_paragraph_type: ''
     third_party_settings: {  }
-    region: content
   field_author_s_:
+    type: entity_reference_autocomplete
     weight: 14
+    region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: entity_reference_autocomplete
-    region: content
   field_blogger_info:
+    type: text_textarea
     weight: 12
+    region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-    type: text_textarea
+  field_collections:
+    type: entity_reference_autocomplete
+    weight: 26
     region: content
-  field_collection:
-    weight: 20
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: entity_reference_autocomplete
-    region: content
   field_display_image:
+    type: boolean_checkbox
     weight: 18
+    region: content
     settings:
       display_label: true
     third_party_settings: {  }
-    type: boolean_checkbox
-    region: content
   field_image_caption:
+    type: text_textarea
     weight: 17
+    region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-    type: text_textarea
-    region: content
   field_main_image:
+    type: media_library_widget
     weight: 16
+    region: content
     settings:
       media_types: {  }
     third_party_settings: {  }
-    type: media_library_widget
-    region: content
   field_paragraphs:
+    type: paragraphs
     weight: 17
+    region: content
     settings:
       title: Paragraph
       title_plural: Paragraphs
@@ -214,54 +216,52 @@ content:
         collapse_edit_all: collapse_edit_all
         duplicate: duplicate
     third_party_settings: {  }
-    type: paragraphs
-    region: content
   field_project:
+    type: entity_reference_autocomplete
     weight: 21
+    region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: entity_reference_autocomplete
-    region: content
   field_standfirst:
-    weight: 15
-    settings:
-      rows: 5
-      placeholder: ''
-    third_party_settings: {  }
     type: text_textarea
+    weight: 15
     region: content
-  field_tagline:
-    weight: 14
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
+  field_tagline:
     type: string_textarea
+    weight: 14
     region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
   field_tags:
+    type: entity_reference_autocomplete
     weight: 19
+    region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: entity_reference_autocomplete
-    region: content
   field_theme_s_:
+    type: entity_reference_autocomplete
     weight: 18
+    region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: entity_reference_autocomplete
-    region: content
   langcode:
     type: language_select
     weight: 1
@@ -277,24 +277,24 @@ content:
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
-    settings:
-      display_label: true
     weight: 4
     region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    settings:
-      display_label: true
     weight: 8
     region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
-    settings:
-      display_label: true
     weight: 5
     region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   title:
     type: string_textfield
@@ -312,12 +312,12 @@ content:
   uid:
     type: entity_reference_autocomplete
     weight: 13
+    region: content
     settings:
       match_operator: CONTAINS
+      match_limit: 10
       size: 60
       placeholder: ''
-      match_limit: 10
-    region: content
     third_party_settings: {  }
   url_redirects:
     weight: 7

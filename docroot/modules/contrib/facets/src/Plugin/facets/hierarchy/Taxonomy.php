@@ -2,12 +2,12 @@
 
 namespace Drupal\facets\Plugin\facets\hierarchy;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\facets\Hierarchy\HierarchyPluginBase;
-use Drupal\taxonomy\TermStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Taxonomy hierarchy.
+ * Provides the Taxonomy hierarchy class.
  *
  * @FacetsHierarchy(
  *   id = "taxonomy",
@@ -39,6 +39,13 @@ class Taxonomy extends HierarchyPluginBase {
   protected $termStorage;
 
   /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * Constructs a Drupal\Component\Plugin\PluginBase object.
    *
    * @param array $configuration
@@ -47,12 +54,12 @@ class Taxonomy extends HierarchyPluginBase {
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\taxonomy\TermStorageInterface $termStorage
-   *   The term storage.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, TermStorageInterface $termStorage) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->termStorage = $termStorage;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -63,8 +70,21 @@ class Taxonomy extends HierarchyPluginBase {
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('entity_type.manager')->getStorage('taxonomy_term')
+      $container->get('entity_type.manager')
     );
+  }
+
+  /**
+   * Returns the term storage.
+   *
+   * @return \Drupal\taxonomy\TermStorageInterface
+   *   The term storage.
+   */
+  public function getTermStorage() {
+    if (!isset($this->termStorage)) {
+      $this->termStorage = $this->entityTypeManager->getStorage('taxonomy_term');
+    }
+    return $this->termStorage;
   }
 
   /**
@@ -87,7 +107,7 @@ class Taxonomy extends HierarchyPluginBase {
       return $this->nestedChildren[$id];
     }
 
-    $children = $this->termStorage->loadChildren($id);
+    $children = $this->getTermStorage()->loadChildren($id);
     $children = array_filter(array_values(array_map(function ($it) {
       return $it->id();
     }, $children)));
@@ -105,7 +125,7 @@ class Taxonomy extends HierarchyPluginBase {
   public function getChildIds(array $ids) {
     $parents = [];
     foreach ($ids as $id) {
-      $terms = $this->termStorage->loadChildren($id);
+      $terms = $this->getTermStorage()->loadChildren($id);
       $parents[$id] = array_filter(array_values(array_map(function ($it) {
         return $it->id();
       }, $terms)));
@@ -131,10 +151,10 @@ class Taxonomy extends HierarchyPluginBase {
         if (!$currentParentIds) {
           if (!$topLevelTerms) {
             /** @var \Drupal\taxonomy\Entity\Term $term */
-            $term = $this->termStorage->load($id);
+            $term = $this->getTermStorage()->load($id);
             $topLevelTerms = array_map(function ($term) {
               return $term->tid;
-            }, $this->termStorage->loadTree($term->bundle(), 0, 1));
+            }, $this->getTermStorage()->loadTree($term->bundle(), 0, 1));
           }
         }
         else {
@@ -170,7 +190,7 @@ class Taxonomy extends HierarchyPluginBase {
       return $this->termParents[$tid];
     }
 
-    $parents = $this->termStorage->loadParents($tid);
+    $parents = $this->getTermStorage()->loadParents($tid);
     if (empty($parents)) {
       return FALSE;
     }

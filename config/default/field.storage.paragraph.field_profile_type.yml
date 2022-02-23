@@ -1,0 +1,30 @@
+uuid: 30233d47-e5ed-4736-950f-451eb306bbdc
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paragraphs
+id: paragraph.field_profile_type
+field_name: field_profile_type
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: '1'
+      label: ORCID
+    -
+      value: '2'
+      label: ResearchGate
+    -
+      value: '3'
+      label: 'Google Scholar'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

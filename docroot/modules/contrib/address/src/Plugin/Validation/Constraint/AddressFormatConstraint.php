@@ -16,6 +16,19 @@ use CommerceGuys\Addressing\Validator\Constraints\AddressFormatConstraint as Ext
 class AddressFormatConstraint extends ExternalAddressFormatConstraint {
 
   /**
+   * Whether extended postal code validation is enabled.
+   *
+   * Extended postal code validation uses subdivision-level patterns to
+   * in addition to the country-level pattern supplied by the address format.
+   *
+   * This feature is deprecated in the parent library, and undesired
+   * on the Drupal side.
+   *
+   * @var bool
+   */
+  public $extendedPostalCodeValidation = FALSE;
+
+  /**
    * Validation message if a field must be blank.
    *
    * @var string

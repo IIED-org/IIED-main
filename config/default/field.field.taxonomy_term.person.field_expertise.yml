@@ -1,0 +1,21 @@
+uuid: d833d0c3-6bb9-494e-acd4-0eefbdf7ec64
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_expertise
+    - taxonomy.vocabulary.person
+  module:
+    - text
+id: taxonomy_term.person.field_expertise
+field_name: field_expertise
+entity_type: taxonomy_term
+bundle: person
+label: Expertise
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

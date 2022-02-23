@@ -1,11 +1,11 @@
 type: module
-core_version_requirement: ^8.8 || ^9
+core_version_requirement: ^9.2
 name: 'File metadata manager'
 description: 'Provides a service to manage file metadata.'
 package: File metadata
 configure: file_mdm.settings
 
-# Information added by Drupal.org packaging script on 2020-04-13
-version: '8.x-2.1'
+# Information added by Drupal.org packaging script on 2021-12-17
+version: '8.x-2.2'
 project: 'file_mdm'
-datestamp: 1586801066
+datestamp: 1639755098

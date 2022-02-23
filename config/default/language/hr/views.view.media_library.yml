@@ -2,6 +2,7 @@ display:
   default:
     display_title: Zadano
     display_options:
+      title: Mediji
       filters:
         name:
           expose:
@@ -9,7 +10,6 @@ display:
         langcode:
           expose:
             label: Jezik
-      title: Mediji
   page:
     display_options:
       fields:

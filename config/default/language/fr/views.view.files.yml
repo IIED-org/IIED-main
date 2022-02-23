@@ -2,14 +2,14 @@ display:
   default:
     display_title: 'Par défaut'
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         filename:
           label: Nom
         status:
           label: État
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         status:
           expose:

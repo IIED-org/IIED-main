@@ -16,16 +16,16 @@ bundle: article
 label: 'Full width media'
 description: ''
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
   handler: 'default:paragraph'
   handler_settings:
-    negate: 0
     target_bundles:
       image_wide: image_wide
       media_embed: media_embed
+    negate: 0
     target_bundles_drag_drop:
       basic_text:
         weight: 8
@@ -34,8 +34,8 @@ settings:
         weight: 9
         enabled: false
       image_wide:
-        enabled: true
         weight: 10
+        enabled: true
       info_box:
         weight: 11
         enabled: false
@@ -43,8 +43,8 @@ settings:
         weight: 12
         enabled: false
       media_embed:
-        enabled: true
         weight: 13
+        enabled: true
       row_of_4:
         weight: 14
         enabled: false

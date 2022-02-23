@@ -1,10 +1,9 @@
 label: Contenu
 display:
   default:
+    display_title: 'Par défaut'
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
+      title: Contenu
       fields:
         title:
           label: Titre
@@ -16,6 +15,9 @@ display:
           label: État
         operations:
           label: Actions
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         title:
           expose:
@@ -29,8 +31,6 @@ display:
         langcode:
           expose:
             label: Langue
-      title: Contenu
-    display_title: 'Par défaut'
   page_1:
     display_options:
       menu:

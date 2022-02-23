@@ -112,7 +112,13 @@ class DefaultFacetManager {
     /** @var \Drupal\facets\FacetInterface[] $facets */
     foreach ($this->getFacetsByFacetSourceId($facetsource_id) as $facet) {
       /** @var \Drupal\facets\QueryType\QueryTypeInterface $query_type_plugin */
-      $query_type_plugin = $this->queryTypePluginManager->createInstance($facet->getQueryType(), ['query' => $query, 'facet' => $facet]);
+      $query_type_plugin = $this->queryTypePluginManager->createInstance(
+        $facet->getQueryType(),
+        [
+          'query' => $query,
+          'facet' => $facet,
+        ]
+      );
       $query_type_plugin->execute();
     }
   }
@@ -171,7 +177,6 @@ class DefaultFacetManager {
     }
 
     $unprocessedFacets = array_filter($this->facets, function ($item) use ($facetsource_id) {
-      /* @var \Drupal\facets\FacetInterface $item */
       return !isset($this->processedFacets[$facetsource_id][$item->id()]);
     });
 
@@ -328,7 +333,7 @@ class DefaultFacetManager {
       if ($empty_behavior && $empty_behavior['behavior'] === 'text') {
         return [
           [
-            $build,
+            0 => $build,
             '#type' => 'container',
             '#attributes' => [
               'data-drupal-facet-id' => $facet->id(),
@@ -349,7 +354,7 @@ class DefaultFacetManager {
         // content.
         return [
           [
-            $build,
+            0 => $build,
             '#type' => 'container',
             '#attributes' => [
               'data-drupal-facet-id' => $facet->id(),

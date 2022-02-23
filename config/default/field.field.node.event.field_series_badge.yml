@@ -1,0 +1,21 @@
+uuid: eb8747e0-7648-45ee-81ad-34af53a7f1df
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_series_badge
+    - node.type.event
+  module:
+    - text
+id: node.event.field_series_badge
+field_name: field_series_badge
+entity_type: node
+bundle: event
+label: 'Series badge'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

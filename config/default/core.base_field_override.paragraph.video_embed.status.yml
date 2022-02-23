@@ -1,0 +1,22 @@
+uuid: 2c546fea-f5ee-400c-9db2-4adbcd04aeb7
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.video_embed
+id: paragraph.video_embed.status
+field_name: status
+entity_type: paragraph
+bundle: video_embed
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

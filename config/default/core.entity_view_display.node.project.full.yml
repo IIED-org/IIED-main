@@ -7,6 +7,7 @@ dependencies:
     - field.field.node.project.body
     - field.field.node.project.field_additional_elements
     - field.field.node.project.field_additional_resources
+    - field.field.node.project.field_collections
     - field.field.node.project.field_contact
     - field.field.node.project.field_dates
     - field.field.node.project.field_display_image
@@ -24,7 +25,7 @@ dependencies:
     - field.field.node.project.field_standfirst
     - field.field.node.project.field_tagline
     - field.field.node.project.field_tags
-    - field.field.node.project.field_theme
+    - field.field.node.project.field_theme_s_
     - field.field.node.project.field_year
     - node.type.project
   module:
@@ -44,23 +45,23 @@ bundle: project
 mode: full
 content:
   body:
-    label: hidden
     type: text_default
-    weight: 1
+    label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 1
     region: content
   field_image:
-    weight: 7
+    type: image
     label: above
     settings:
-      image_style: ''
       image_link: ''
+      image_style: ''
     third_party_settings: {  }
-    type: image
+    weight: 7
     region: content
   field_link:
-    weight: 2
+    type: link
     label: above
     settings:
       trim_length: null
@@ -76,51 +77,44 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    type: link
+    weight: 2
     region: content
   field_nid:
-    weight: 5
+    type: number_integer
     label: above
     settings:
       thousand_separator: ''
       prefix_suffix: true
     third_party_settings: {  }
-    type: number_integer
+    weight: 5
     region: content
   field_projectnumber:
-    weight: 3
+    type: number_integer
     label: above
     settings:
       thousand_separator: ''
       prefix_suffix: true
     third_party_settings: {  }
-    type: number_integer
-    region: content
-  field_theme:
-    weight: 6
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    type: entity_reference_label
+    weight: 3
     region: content
   field_year:
-    weight: 4
+    type: number_integer
     label: above
     settings:
       thousand_separator: ''
       prefix_suffix: true
     third_party_settings: {  }
-    type: number_integer
+    weight: 4
     region: content
   links:
-    weight: 0
-    region: content
     settings: {  }
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   field_additional_elements: true
   field_additional_resources: true
+  field_collections: true
   field_contact: true
   field_dates: true
   field_display_image: true
@@ -134,6 +128,7 @@ hidden:
   field_standfirst: true
   field_tagline: true
   field_tags: true
+  field_theme_s_: true
   langcode: true
   search_api_excerpt: true
   sharing_buttons: true

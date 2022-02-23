@@ -1,0 +1,228 @@
+uuid: 5d7c844a-80ae-4ae2-b058-7e5067006641
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - iied_migrate_d7
+id: iied_d7_events
+class: Drupal\node\Plugin\migrate\D7NodeTranslation
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - nodes
+migration_group: iied_migrate_d7
+label: 'IIED event nodes'
+source:
+  plugin: iied_d7_event
+  node_type: event
+  key: d7migrate
+process:
+  created: created
+  changed: changed
+  status: status
+  uid:
+    -
+      plugin: default_value
+      default_value: '1'
+  langcode:
+    -
+      plugin: default_value
+      default_value: en
+  title:
+    -
+      plugin: get
+      source: title_field
+  field_date/value:
+    -
+      plugin: format_date
+      source: field_date/0/value
+      from_format: 'Y-m-d\TH:i:s'
+      to_format: Y-m-d
+  field_event_type:
+    -
+      plugin: get
+      source: field_event_type
+  field_contact/value:
+    -
+      plugin: get
+      source: field_contact/0/value
+  field_contact/format:
+    -
+      plugin: default_value
+      default_value: full_html
+  field_alternative_label/value:
+    -
+      plugin: get
+      source: 'field_alternative_label/0/value:'
+  field_alternative_label/format:
+    -
+      plugin: default_value
+      default_value: full_html
+  field_set_info:
+    -
+      plugin: get
+      source: field_set_info
+  field_main_image:
+    -
+      plugin: sub_process
+      source: field_main_image
+      process:
+        target_id:
+          plugin: migration_lookup
+          migration: iied_d7_media_images
+          source: fid
+          no_stub: true
+  field_image_caption/value:
+    -
+      plugin: get
+      source: field_image_caption/0/value
+  field_image_caption/format:
+    -
+      plugin: default_value
+      default_value: full_html
+  field_hero_media/value:
+    -
+      plugin: get
+      source: field_video_embed/0/value
+  field_hero_media/format:
+    -
+      plugin: default_value
+      default_value: full_html
+  field_second_image:
+    -
+      plugin: sub_process
+      source: field_second_image
+      process:
+        target_id:
+          plugin: migration_lookup
+          migration: iied_d7_media_images
+          source: fid
+          no_stub: true
+  field_second_image_caption/value:
+    -
+      plugin: get
+      source: field_small_image_caption/0/value
+  field_second_image_caption/format:
+    -
+      plugin: default_value
+      default_value: full_html
+  field_dates:
+    -
+      plugin: get
+      source: field_dates
+  field_display_time:
+    -
+      plugin: get
+      source: field_display_time
+  field_where_and_how:
+    -
+      plugin: get
+      source: field_display_location
+  field_registration_link:
+    -
+      plugin: field_link
+      uri_scheme: 'https://'
+      source: field_registration_link
+  field_direct_link:
+    -
+      plugin: field_link
+      uri_scheme: 'https://'
+      source: field_related_link
+  field_series_badge:
+    -
+      plugin: get
+      source: field_series_badge
+  field_tagline:
+    -
+      plugin: get
+      source: field_tagline
+  field_standfirst/value:
+    -
+      plugin: get
+      source: field_standfirst/0/value
+  field_standfirst/format:
+    -
+      plugin: default_value
+      default_value: full_html
+  body/value:
+    -
+      plugin: get
+      source: body/0/value
+  body/summary:
+    -
+      plugin: get
+      source: body/0/summary
+  body/format:
+    -
+      plugin: default_value
+      default_value: full_html
+  field_paragraphs:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: field_paragraphs
+    -
+      plugin: sub_process
+      process:
+        target_id:
+          -
+            plugin: migration_lookup
+            migration: iied_d7_field_paragraphs
+            source: value
+          -
+            plugin: extract
+            index:
+              - 0
+        target_revision_id:
+          -
+            plugin: migration_lookup
+            migration: iied_d7_field_paragraphs
+            source: value
+          -
+            plugin: extract
+            index:
+              - 1
+  field_theme_s_:
+    -
+      plugin: sub_process
+      source: taxonomy_vocabulary_19
+      process:
+        target_id: tid
+  field_tags:
+    -
+      plugin: sub_process
+      source: taxonomy_vocabulary_15
+      process:
+        target_id: tid
+  field_collections:
+    -
+      plugin: migration_lookup
+      migration: iied_d7_terms_collection
+      source: field_group
+  field_project:
+    plugin: sub_process
+    source: field_project_number_reference
+    process:
+      target_id:
+        plugin: migration_lookup
+        migration: iied_projects
+        source: target_id
+  path/alias: alias
+  path/pathauto:
+    plugin: default_value
+    default_value: false
+destination:
+  plugin: 'entity_complete:node'
+  translations: true
+  default_bundle: event
+migration_dependencies:
+  required:
+    - iied_d7_media_images
+    - iied_d7_media_documents
+    - iied_d7_terms_collection
+    - iied_tags
+  optional:
+    - iied_d7_field_about_the_author
+    - iied_d7_terms_person
+    - iied_d7_field_paragraphs

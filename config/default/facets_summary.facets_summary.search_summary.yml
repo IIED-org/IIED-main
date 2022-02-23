@@ -9,25 +9,6 @@ dependencies:
     - search_api
 id: search_summary
 name: 'Search summary'
-facets:
-  country:
-    checked: true
-    label: Country
-    separator: ', '
-    weight: 0
-    show_count: false
-  theme:
-    checked: true
-    label: Theme
-    separator: ', '
-    weight: 0
-    show_count: false
-  type:
-    checked: true
-    label: Type
-    separator: ', '
-    weight: 0
-    show_count: false
 facet_source_id: 'search_api:views_page__search__page_2'
 search_filter_identifier: k
 processor_configs:
@@ -55,3 +36,22 @@ processor_configs:
       text:
         value: 'No results found.'
         format: plain_text
+facets:
+  country:
+    checked: true
+    label: Country
+    separator: ', '
+    show_count: false
+    weight: 0
+  theme:
+    checked: true
+    label: Theme
+    separator: ', '
+    show_count: false
+    weight: 0
+  type:
+    checked: true
+    label: Type
+    separator: ', '
+    show_count: false
+    weight: 0

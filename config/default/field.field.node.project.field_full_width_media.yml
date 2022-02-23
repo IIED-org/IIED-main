@@ -15,26 +15,44 @@ bundle: project
 label: 'Full width media'
 description: ''
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
   handler: 'default:paragraph'
   handler_settings:
-    negate: 0
     target_bundles:
       media_embed: media_embed
+    negate: 0
     target_bundles_drag_drop:
+      about_the_author:
+        weight: 11
+        enabled: false
+      basic_text:
+        weight: 12
+        enabled: false
+      file_upload:
+        weight: 13
+        enabled: false
+      image:
+        weight: 14
+        enabled: false
       image_wide:
         weight: 5
+        enabled: false
+      info_box:
+        weight: 16
         enabled: false
       linked_person:
         weight: 6
         enabled: false
       media_embed:
-        enabled: true
         weight: 7
+        enabled: true
       row_of_4:
         weight: 8
+        enabled: false
+      video_embed:
+        weight: 20
         enabled: false
 field_type: entity_reference_revisions

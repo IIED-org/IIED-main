@@ -1,3 +1,5 @@
+_core:
+  default_config_hash: PVw1CqINc8mdBO0v-gKzrhG9fd1pyKwx4wIXdks-k3w
 disabled: false
 field_template: true
 ft-default: default
@@ -22,5 +24,3 @@ classes:
     - mb-4
   field: {  }
 use_field_names: true
-_core:
-  default_config_hash: PVw1CqINc8mdBO0v-gKzrhG9fd1pyKwx4wIXdks-k3w

@@ -23,7 +23,7 @@ class FacetFacetSourceTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'facets',
     'facets_custom_widget',
     'facets_search_api_dependency',
@@ -40,7 +40,7 @@ class FacetFacetSourceTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     $this->installEntitySchema('facets_facet');

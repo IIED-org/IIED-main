@@ -1,10 +1,9 @@
 label: Содержимое
 display:
   default:
+    display_title: 'По умолчанию'
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
+      title: Содержимое
       fields:
         title:
           label: Заголовок
@@ -16,6 +15,9 @@ display:
           label: Статус
         operations:
           label: Операции
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         title:
           expose:
@@ -29,8 +31,6 @@ display:
         langcode:
           expose:
             label: Язык
-      title: Содержимое
-    display_title: 'По умолчанию'
   page_1:
     display_options:
       menu:
