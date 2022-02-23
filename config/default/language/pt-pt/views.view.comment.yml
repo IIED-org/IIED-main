@@ -2,9 +2,6 @@ display:
   default:
     display_title: Predefinido
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         subject:
           label: Assunto
@@ -12,6 +9,9 @@ display:
           label: Autor
         operations:
           label: Operações
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         subject:
           expose:
@@ -21,13 +21,6 @@ display:
             label: Idioma
   page_unapproved:
     display_options:
-      filters:
-        subject:
-          expose:
-            label: Assunto
-        langcode:
-          expose:
-            label: Idioma
       fields:
         subject:
           label: Assunto
@@ -35,3 +28,10 @@ display:
           label: Autor
         operations:
           label: Operações
+      filters:
+        subject:
+          expose:
+            label: Assunto
+        langcode:
+          expose:
+            label: Idioma

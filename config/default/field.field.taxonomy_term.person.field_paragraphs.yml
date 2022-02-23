@@ -1,0 +1,64 @@
+uuid: c648e388-7b38-4d6b-ba5d-d7b0ce9f347e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_paragraphs
+    - paragraphs.paragraphs_type.related_link
+    - taxonomy.vocabulary.person
+  module:
+    - entity_reference_revisions
+id: taxonomy_term.person.field_paragraphs
+field_name: field_paragraphs
+entity_type: taxonomy_term
+bundle: person
+label: Paragraphs
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      related_link: related_link
+    negate: 0
+    target_bundles_drag_drop:
+      about_the_author:
+        weight: 11
+        enabled: false
+      basic_text:
+        weight: 12
+        enabled: false
+      file_upload:
+        weight: 13
+        enabled: false
+      image:
+        weight: 14
+        enabled: false
+      image_wide:
+        weight: 15
+        enabled: false
+      info_box:
+        weight: 16
+        enabled: false
+      linked_person:
+        weight: 17
+        enabled: false
+      media_embed:
+        weight: 18
+        enabled: false
+      related_link:
+        weight: 19
+        enabled: true
+      researcher_profiles:
+        weight: 20
+        enabled: false
+      row_of_4:
+        weight: 23
+        enabled: false
+      video_embed:
+        weight: 24
+        enabled: false
+field_type: entity_reference_revisions

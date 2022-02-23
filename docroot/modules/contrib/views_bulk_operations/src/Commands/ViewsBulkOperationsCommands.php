@@ -4,7 +4,7 @@ namespace Drupal\views_bulk_operations\Commands;
 
 use Drush\Commands\DrushCommands;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Entity\EntityTypeMAnagerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\views_bulk_operations\Service\ViewsbulkOperationsViewDataInterface;
 use Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionManager;
 use Drupal\views\Views;

@@ -4,11 +4,32 @@ status: true
 dependencies:
   config:
     - core.entity_form_mode.taxonomy_term.dashboard_add_author
+    - field.field.taxonomy_term.person.field_appointed_role
+    - field.field.taxonomy_term.person.field_author_picture
+    - field.field.taxonomy_term.person.field_before_iied
+    - field.field.taxonomy_term.person.field_biography
+    - field.field.taxonomy_term.person.field_current_work
+    - field.field.taxonomy_term.person.field_department
+    - field.field.taxonomy_term.person.field_email
+    - field.field.taxonomy_term.person.field_expertise
     - field.field.taxonomy_term.person.field_iied_user_id
+    - field.field.taxonomy_term.person.field_languages
     - field.field.taxonomy_term.person.field_legacy_iscanonical
     - field.field.taxonomy_term.person.field_link
     - field.field.taxonomy_term.person.field_name
     - field.field.taxonomy_term.person.field_organisation
+    - field.field.taxonomy_term.person.field_paragraphs
+    - field.field.taxonomy_term.person.field_person_type
+    - field.field.taxonomy_term.person.field_position
+    - field.field.taxonomy_term.person.field_position_short
+    - field.field.taxonomy_term.person.field_quotes
+    - field.field.taxonomy_term.person.field_research_group
+    - field.field.taxonomy_term.person.field_researcher_profiles
+    - field.field.taxonomy_term.person.field_standfirst
+    - field.field.taxonomy_term.person.field_theme
+    - field.field.taxonomy_term.person.field_twitter_bio
+    - field.field.taxonomy_term.person.field_twitter_username
+    - field.field.taxonomy_term.person.field_video
     - taxonomy.vocabulary.person
   module:
     - link
@@ -28,16 +49,19 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_link:
+    type: link_default
     weight: 4
+    region: content
     settings:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
-    type: link_default
-    region: content
   field_name:
+    type: name_default
     weight: 1
+    region: content
     settings:
+      override_field_settings: false
       labels:
         title: Title
         given: Given
@@ -45,6 +69,9 @@ content:
         family: Family
         generational: Generational
         credentials: Credentials
+      widget_layout: stacked
+      show_component_required_marker: false
+      credentials_inline: false
       size:
         title: 6
         given: 20
@@ -59,23 +86,17 @@ content:
         family: description
         generational: description
         credentials: description
-      widget_layout: stacked
-      show_component_required_marker: false
-      credentials_inline: false
-      override_field_settings: false
     third_party_settings: {  }
-    type: name_default
-    region: content
   field_organisation:
+    type: entity_reference_autocomplete
     weight: 2
+    region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: entity_reference_autocomplete
-    region: content
   langcode:
     type: language_select
     weight: 5
@@ -93,12 +114,33 @@ content:
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    settings:
-      display_label: true
     weight: 6
     region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
 hidden:
+  field_appointed_role: true
+  field_author_picture: true
+  field_before_iied: true
+  field_biography: true
+  field_current_work: true
+  field_department: true
+  field_email: true
+  field_expertise: true
   field_iied_user_id: true
+  field_languages: true
   field_legacy_iscanonical: true
+  field_paragraphs: true
+  field_person_type: true
+  field_position: true
+  field_position_short: true
+  field_quotes: true
+  field_research_group: true
+  field_researcher_profiles: true
+  field_standfirst: true
+  field_theme: true
+  field_twitter_bio: true
+  field_twitter_username: true
+  field_video: true
   path: true

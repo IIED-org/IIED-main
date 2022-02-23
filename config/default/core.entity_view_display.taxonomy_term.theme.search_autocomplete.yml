@@ -32,36 +32,36 @@ third_party_settings:
         label: hidden
         formatter: default
         settings:
+          link: false
           wrapper: ''
           class: ''
-          link: false
         ft:
           id: expert
           settings:
             lb: ''
-            prefix: '<div class="search-api-autocomplete-suggestion">'
+            lbw: false
             lbw-el: ''
             lbw-cl: ''
             lbw-at: ''
+            lb-col: false
+            ow: false
             ow-el: ''
             ow-cl: ''
             ow-at: ''
+            ow-def-at: false
+            ow-def-cl: false
             fis: true
             fis-el: span
             fis-cl: autocomplete-suggestion-label
             fis-at: ''
+            fis-def-at: false
+            fi: false
             fi-el: ''
             fi-cl: ''
             fi-at: ''
-            suffix: '&nbsp;[Theme]</div>'
-            lbw: false
-            lb-col: false
-            ow: false
-            ow-def-at: false
-            ow-def-cl: false
-            fis-def-at: false
-            fi: false
             fi-def-at: false
+            prefix: '<div class="search-api-autocomplete-suggestion">'
+            suffix: '&nbsp;[Theme]</div>'
 id: taxonomy_term.theme.search_autocomplete
 targetEntityType: taxonomy_term
 bundle: theme

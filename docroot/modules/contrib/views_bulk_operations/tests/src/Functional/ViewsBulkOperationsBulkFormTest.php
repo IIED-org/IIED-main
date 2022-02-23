@@ -85,7 +85,10 @@ class ViewsBulkOperationsBulkFormTest extends ViewsBulkOperationsFunctionalTestB
 
     // Log in as a user with 'edit any page content' permission
     // to have access to perform the test operation.
-    $admin_user = $this->drupalCreateUser(['edit any page content', 'execute advanced test action']);
+    $admin_user = $this->drupalCreateUser([
+      'edit any page content',
+      'execute advanced test action',
+    ]);
     $this->drupalLogin($admin_user);
 
     // First execute the simple action to test

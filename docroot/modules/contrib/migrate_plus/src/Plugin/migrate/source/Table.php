@@ -8,7 +8,66 @@ use Drupal\migrate\Plugin\migrate\source\SqlBase;
 use Drupal\migrate\Plugin\MigrationInterface;
 
 /**
- * Source plugin for retrieving data via URLs.
+ * SQL table source plugin.
+ *
+ * Available configuration keys:
+ * - table_name: The base table name.
+ * - id_fields: Fields used by migrate to identify table rows uniquely.
+ * At least one field is required.
+ * - fields: (optional) An indexed array of columns present in the specified table.
+ * Documents the field names of data provided by the source table.
+ *
+ * Examples:
+ *
+ * @code
+ *   source:
+ *     plugin: table
+ *     table_name: colors
+ *     id_fields:
+ *       color_name:
+ *         type: string
+ *       hex:
+ *         type: string
+ *     fields:
+ *       color_name: color_name
+ *       hex: hex
+ * @endcode
+ *
+ * In this example color data is retrieved from the source
+ * table.
+ *
+ * @code
+ *   source:
+ *     plugin: table
+ *     table_name: autoban
+ *     id_fields:
+ *       type:
+ *         type: string
+ *       message:
+ *         type: string
+ *       threshold:
+ *         type: integer
+ *       user_type:
+ *         type: integer
+ *       ip_type:
+ *         type: integer
+ *       referer:
+ *         type: string
+ *     fields:
+ *       type: type
+ *       message: message
+ *       threshold: threshold
+ *       user_type: user_type
+ *       ip_type: ip_type
+ *       referer: referer
+ * @endcode
+ *
+ * In this example shows how to retrieve data from autoban source
+ * table.
+ *
+ * For additional configuration keys, refer to the parent classes.
+ *
+ * @see \Drupal\migrate\Plugin\migrate\source\SqlBase
  *
  * @MigrateSource(
  *   id = "table"
@@ -16,6 +75,11 @@ use Drupal\migrate\Plugin\MigrationInterface;
  */
 class Table extends SqlBase {
 
+  /**
+   * Table alias.
+   *
+   * @var string
+   */
   const TABLE_ALIAS = 't';
 
   /**

@@ -235,7 +235,7 @@ class ImporterService {
       $query = isset($parsed_url['query']) ? $parsed_url['query'] : NULL;
 
       /** @var \Drupal\redirect\Entity\Redirect $redirect */
-      $redirectEntityManager = \Drupal::service('entity.manager')->getStorage('redirect');
+      $redirectEntityManager = \Drupal::entityTypeManager()->getStorage('redirect');
       $redirect = $redirectEntityManager->create();
       $redirect->setSource($path, $query);
     }
@@ -306,14 +306,14 @@ class ImporterService {
     if (!isset($parsed['scheme'])) {
       // Check for aliases *including* named anchors/query strings.
       $alias = self::addLeadingSlash($destination);
-      $normal_path = \Drupal::service('path.alias_manager')->getPathByAlias($alias);
+      $normal_path = \Drupal::service('path_alias.manager')->getPathByAlias($alias);
       if ($alias != $normal_path) {
         return FALSE;
       }
       // Check for aliases *excluding* named anchors/query strings.
       if (isset($parsed['path'])) {
         $alias = self::addLeadingSlash($parsed['path']);
-        $normal_path = \Drupal::service('path.alias_manager')->getPathByAlias($alias);
+        $normal_path = \Drupal::service('path_alias.manager')->getPathByAlias($alias);
         if ($alias != $normal_path) {
           return FALSE;
         }

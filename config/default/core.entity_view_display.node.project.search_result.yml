@@ -7,6 +7,7 @@ dependencies:
     - field.field.node.project.body
     - field.field.node.project.field_additional_elements
     - field.field.node.project.field_additional_resources
+    - field.field.node.project.field_collections
     - field.field.node.project.field_contact
     - field.field.node.project.field_dates
     - field.field.node.project.field_display_image
@@ -24,7 +25,7 @@ dependencies:
     - field.field.node.project.field_standfirst
     - field.field.node.project.field_tagline
     - field.field.node.project.field_tags
-    - field.field.node.project.field_theme
+    - field.field.node.project.field_theme_s_
     - field.field.node.project.field_year
     - node.type.project
   module:
@@ -43,16 +44,16 @@ third_party_settings:
       disable_css: false
       entity_classes: all_classes
       settings:
-        label: ''
+        classes:
+          layout_class: {  }
+          ds_content: {  }
         wrappers:
           ds_content: div
         outer_wrapper: div
         attributes: ''
         link_attribute: ''
         link_custom: ''
-        classes:
-          layout_class: {  }
-          ds_content: {  }
+        label: ''
     regions:
       ds_content:
         - node_title
@@ -64,9 +65,9 @@ third_party_settings:
         label: hidden
         formatter: default
         settings:
+          link: false
           wrapper: h5
           class: ''
-          link: false
         ft:
           id: default
           settings:
@@ -79,9 +80,8 @@ bundle: project
 mode: search_result
 content:
   body:
-    label: hidden
     type: text_summary_or_trimmed
-    weight: 1
+    label: hidden
     settings:
       trim_length: 300
     third_party_settings:
@@ -92,10 +92,12 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
+    weight: 1
     region: ds_content
 hidden:
   field_additional_elements: true
   field_additional_resources: true
+  field_collections: true
   field_contact: true
   field_dates: true
   field_display_image: true
@@ -113,7 +115,7 @@ hidden:
   field_standfirst: true
   field_tagline: true
   field_tags: true
-  field_theme: true
+  field_theme_s_: true
   field_year: true
   langcode: true
   links: true

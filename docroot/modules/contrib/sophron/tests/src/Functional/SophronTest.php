@@ -45,7 +45,7 @@ class SophronTest extends BrowserTestBase {
     $edit = [
       'map_option' => MimeMapManagerInterface::DEFAULT_MAP,
     ];
-    $this->drupalPostForm(NULL, $edit, 'Save configuration');
+    $this->submitForm($edit, 'Save configuration');
 
     // FileEye map has been set as default, and gaps exists.
     $this->assertSession()->responseContains('Mapping gaps');
@@ -57,39 +57,39 @@ class SophronTest extends BrowserTestBase {
       'map_option' => MimeMapManagerInterface::CUSTOM_MAP,
       'map_class' => BrowserTestBase::class,
     ];
-    $this->drupalPostForm(NULL, $edit, 'Save configuration');
+    $this->submitForm($edit, 'Save configuration');
     $this->assertSession()->responseContains('The map class is invalid.');
     $edit = [
       'map_option' => MimeMapManagerInterface::DEFAULT_MAP,
     ];
-    $this->drupalPostForm(NULL, $edit, 'Save configuration');
+    $this->submitForm($edit, 'Save configuration');
 
     $this->assertEquals('application/octet-stream', \Drupal::service('sophron.mime_map.manager')->getExtension('quxqux')->getDefaultType(FALSE));
     $this->assertSession()->fieldExists('map_commands');
     $edit = [
       'map_commands' => '- [addTypeExtensionMapping, [foo/bar, quxqux]]',
     ];
-    $this->drupalPostForm(NULL, $edit, 'Save configuration');
+    $this->submitForm($edit, 'Save configuration');
 
     // Mapping errors: wrongly typed commands.
     $edit = [
       'map_commands' => "- aaa\n- [addTypeExtensionMapping, [a/c, bbbb]]\n- [bbb, ccc]\n",
     ];
-    $this->drupalPostForm(NULL, $edit, 'Save configuration');
+    $this->submitForm($edit, 'Save configuration');
     $this->assertSession()->responseContains('The items at line(s) 1, 3 are wrongly typed.');
 
     // Mapping errors: YAML syntax.
     $edit = [
       'map_commands' => "- aaa\nbbb\n",
     ];
-    $this->drupalPostForm(NULL, $edit, 'Save configuration');
+    $this->submitForm($edit, 'Save configuration');
     $this->assertSession()->responseContains('YAML syntax error');
 
     // Mapping errors: invalid method.
     $edit = [
       'map_commands' => '- [aaa, [paramA, paramB]]',
     ];
-    $this->drupalPostForm(NULL, $edit, 'Save configuration');
+    $this->submitForm($edit, 'Save configuration');
     $this->assertSession()->responseContains('Mapping errors');
     $this->assertEquals([
       ['aaa', ['paramA', 'paramB']],

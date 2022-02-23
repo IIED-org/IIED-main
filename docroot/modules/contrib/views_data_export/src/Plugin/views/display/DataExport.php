@@ -542,6 +542,10 @@ class DataExport extends RestExport {
       return;
     }
 
+    if (!$this->access()) {
+      return;
+    }
+
     // Defer to the feed style; it may put in meta information, and/or
     // attach a feed icon.
     $clone->setArguments($this->view->args);

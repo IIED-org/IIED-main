@@ -5,6 +5,7 @@ dependencies: {  }
 id: local
 label: Local
 description: 'Additional settings for local development (e.g. lando)'
+weight: 0
 folder: ../config/splits/local
 module:
   config_devel: 0
@@ -16,8 +17,6 @@ module:
   views_ui: 0
 theme: {  }
 blacklist: {  }
-graylist:
-  - imagemagick.settings
+graylist: {  }
 graylist_dependents: true
 graylist_skip_equal: true
-weight: 0

@@ -2,6 +2,7 @@ label: အကြောင်းအရာ
 display:
   default:
     display_options:
+      title: အကြောင်းအရာ
       fields:
         title:
           label: ခေါင်းစဉ်
@@ -26,7 +27,6 @@ display:
         langcode:
           expose:
             label: ဘာသာစကား
-      title: အကြောင်းအရာ
   page_1:
     display_options:
       menu:

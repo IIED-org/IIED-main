@@ -1,0 +1,21 @@
+uuid: a2bb2e77-b574-4f88-a3ae-b42a53d2eb29
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_research_group
+    - taxonomy.vocabulary.person
+  module:
+    - options
+id: taxonomy_term.person.field_research_group
+field_name: field_research_group
+entity_type: taxonomy_term
+bundle: person
+label: 'Research group'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

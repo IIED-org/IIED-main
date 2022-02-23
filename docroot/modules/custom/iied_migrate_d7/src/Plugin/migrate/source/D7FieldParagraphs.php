@@ -49,7 +49,7 @@ class D7FieldParagraphs extends FieldableEntity {
         ]
       );
       $query->condition('pi.field_name', $this->configuration['field_name']);
-      $types = ['article', 'blog', 'event', 'media_release'];
+      $types = ['article', 'blog', 'event', 'media_release', 'user'];
       $query->condition('fd.bundle', $types, 'IN');
 
       // Join the field_data_field_basic_text.
@@ -101,6 +101,32 @@ class D7FieldParagraphs extends FieldableEntity {
         ]
       );
 
+
+      // Join the field_data_field_description.
+      $query->leftJoin('field_data_field_description  ', 'fdfd', 'fdfd.entity_id = fd.' . $this->configuration['field_name'] . '_value');
+      $query->fields(
+        'fdfd',
+        [
+          'entity_id',
+          'delta',
+          'field_description_value',
+        ]
+      );
+
+      // Join the field_data_field_related_link.
+      // $query->condition('fd.bundle', 'user');
+      // $query->condition('fd.entity_id', '53');
+      $query->leftJoin('field_data_field_related_link  ', 'fdfl', 'fdfl.entity_id = fd.' . $this->configuration['field_name'] . '_value');
+      $query->fields(
+        'fdfl',
+        [
+          'entity_id',
+          'delta',
+          'field_related_link_url',
+          'field_related_link_title',
+        ]
+      );
+
     }
 
     return $query;
@@ -109,8 +135,7 @@ class D7FieldParagraphs extends FieldableEntity {
   /**
    * {@inheritdoc}
    */
-  public function fields()
-  {
+  public function fields() {
     $fields = [
       'item_id' => $this->t('Item ID'),
       'revision_id' => $this->t('Revision ID'),
@@ -122,18 +147,10 @@ class D7FieldParagraphs extends FieldableEntity {
   /**
    * {@inheritdoc}
    */
-  public function getIds()
-  {
+  public function getIds() {
     $ids['item_id']['type'] = 'integer';
     $ids['item_id']['alias'] = 'pi';
     return $ids;
-  }
-  /**
-   * {@inheritdoc}
-   */
-  public function prepareRow(Row $row) {
-    $x = '';
-    return parent::prepareRow($row);
   }
 
 }

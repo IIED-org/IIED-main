@@ -82,7 +82,7 @@ class ConfirmAction extends FormBase {
 
     $form_data = $this->getFormData($view_id, $display_id);
 
-    // TODO: display an error msg, redirect back.
+    // @todo Display an error msg, redirect back.
     if (!isset($form_data['action_id'])) {
       return;
     }

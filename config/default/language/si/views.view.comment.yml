@@ -15,6 +15,11 @@ display:
             label: භාෂාව
   page_unapproved:
     display_options:
+      fields:
+        subject:
+          label: කාරණය
+        operations:
+          label: මෙහෙයුම්
       filters:
         subject:
           expose:
@@ -22,8 +27,3 @@ display:
         langcode:
           expose:
             label: භාෂාව
-      fields:
-        subject:
-          label: කාරණය
-        operations:
-          label: මෙහෙයුම්

@@ -25,29 +25,29 @@ third_party_settings:
             uuid: 21dbb2a9-0091-4e8d-93b7-79b731dc83f9
             region: content
             configuration:
+              id: 'field_block:user:user:user_picture'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:user:user:user_picture'
               formatter:
                 type: image
-                settings:
-                  image_style: thumbnail
-                  image_link: content
-                third_party_settings: {  }
                 label: hidden
-            additional: {  }
+                settings:
+                  image_link: content
+                  image_style: thumbnail
+                third_party_settings: {  }
             weight: 0
+            additional: {  }
           f8570b38-5e5d-4971-80c6-e2cbac597f72:
             uuid: f8570b38-5e5d-4971-80c6-e2cbac597f72
             region: content
             configuration:
+              id: 'extra_field_block:user:user:masquerade'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'extra_field_block:user:user:masquerade'
-            additional: {  }
             weight: 1
+            additional: {  }
         third_party_settings: {  }
 _core:
   default_config_hash: '-cLsS3M3JycipXQt9rEb81_HxKneReoGuRh8ijcOPXs'
@@ -57,19 +57,19 @@ bundle: user
 mode: compact
 content:
   masquerade:
-    weight: 50
     settings: {  }
     third_party_settings: {  }
+    weight: 50
     region: content
   user_picture:
     type: image
+    label: hidden
+    settings:
+      image_link: content
+      image_style: thumbnail
+    third_party_settings: {  }
     weight: 0
     region: content
-    settings:
-      image_style: thumbnail
-      image_link: content
-    third_party_settings: {  }
-    label: hidden
 hidden:
   langcode: true
   member_for: true

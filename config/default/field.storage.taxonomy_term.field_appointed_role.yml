@@ -1,0 +1,42 @@
+uuid: 16a90dd7-9d65-4ea7-9fa1-8990ed426479
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - taxonomy
+id: taxonomy_term.field_appointed_role
+field_name: field_appointed_role
+entity_type: taxonomy_term
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: '0'
+      label: 'Board of trustees'
+    -
+      value: '1'
+      label: 'International fellows'
+    -
+      value: '2'
+      label: Associates
+    -
+      value: '3'
+      label: 'Strategy and management team'
+    -
+      value: '4'
+      label: 'Operations management team'
+    -
+      value: '5'
+      label: 'Research strategy team'
+    -
+      value: '6'
+      label: None
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

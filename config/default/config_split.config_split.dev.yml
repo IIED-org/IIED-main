@@ -5,6 +5,7 @@ dependencies: {  }
 id: dev
 label: Dev
 description: 'Development and staging environment settings'
+weight: 0
 folder: ../config/splits/dev
 module:
   devel: 0
@@ -16,4 +17,3 @@ blacklist: {  }
 graylist: {  }
 graylist_dependents: true
 graylist_skip_equal: true
-weight: 0

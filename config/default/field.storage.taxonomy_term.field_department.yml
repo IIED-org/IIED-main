@@ -1,0 +1,54 @@
+uuid: fa46eae1-2dd1-499a-809f-5c27e0fa1e0f
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - taxonomy
+id: taxonomy_term.field_department
+field_name: field_department
+entity_type: taxonomy_term
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: '0'
+      label: 'Climate Change research group'
+    -
+      value: '1'
+      label: 'Human Settlements research group'
+    -
+      value: '2'
+      label: 'Natural Resources research group'
+    -
+      value: '3'
+      label: 'Shaping Sustainable Markets research group'
+    -
+      value: '4'
+      label: Communications
+    -
+      value: '5'
+      label: 'Director’s group'
+    -
+      value: '6'
+      label: Facilities
+    -
+      value: '7'
+      label: Finance
+    -
+      value: '8'
+      label: 'Human Resources group'
+    -
+      value: '9'
+      label: 'Strategy and Learning group'
+    -
+      value: '10'
+      label: None
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

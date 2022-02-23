@@ -1,0 +1,32 @@
+uuid: 76d1e568-b8aa-4760-8257-dc0dd088354a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.about_the_author.field_author_biog
+    - field.field.paragraph.about_the_author.field_author_reference
+    - paragraphs.paragraphs_type.about_the_author
+  module:
+    - text
+id: paragraph.about_the_author.default
+targetEntityType: paragraph
+bundle: about_the_author
+mode: default
+content:
+  field_author_biog:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_author_reference:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden:
+  search_api_excerpt: true

@@ -1,0 +1,18 @@
+uuid: 3af5a573-dd6e-44ad-89c3-ac2d0c18a378
+langcode: en
+status: true
+dependencies:
+  config:
+    - shortcut.set.nt-shortcuts
+id: shortcut.nt-shortcuts.title
+field_name: title
+entity_type: shortcut
+bundle: nt-shortcuts
+label: Name
+description: 'The name of the shortcut.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

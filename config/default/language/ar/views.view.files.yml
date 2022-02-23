@@ -2,14 +2,14 @@ display:
   default:
     display_title: الافتراضي
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         filename:
           label: الاسم
         status:
           label: الحالة
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         status:
           expose:

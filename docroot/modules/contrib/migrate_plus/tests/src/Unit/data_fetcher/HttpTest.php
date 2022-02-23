@@ -121,7 +121,7 @@ class HttpTest extends MigrateTestCase {
 
     // Compare what we got back from the parser to what we expected to get.
     $expected = json_decode($this->testData, TRUE);
-    $this->assertArrayEquals($expected, $body);
+    $this->assertSame($expected, $body);
   }
 
   /**
@@ -139,7 +139,7 @@ class HttpTest extends MigrateTestCase {
     $body = json_decode((string) $stream, TRUE);
 
     $expected = json_decode($this->testData, TRUE);
-    $this->assertArrayEquals($expected, $body);
+    $this->assertSame($expected, $body);
   }
 
   /**

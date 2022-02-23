@@ -1,0 +1,21 @@
+uuid: daafee90-ef09-4fe2-8488-2941cd326a15
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_hero_media
+    - node.type.event
+  module:
+    - text
+id: node.event.field_hero_media
+field_name: field_hero_media
+entity_type: node
+bundle: event
+label: 'Hero media'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

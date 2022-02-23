@@ -34,7 +34,10 @@ process:
   status: status
   created: timestamp
   changed: timestamp
-  uid: uid
+  uid:
+    -
+      plugin: default_value
+      default_value: '1'
 destination:
   plugin: 'entity:media'
   default_bundle: image

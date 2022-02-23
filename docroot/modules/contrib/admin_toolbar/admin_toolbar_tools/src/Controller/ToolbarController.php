@@ -18,7 +18,7 @@ use Drupal\Core\Template\TwigEnvironment;
 use Drupal\Core\Theme\Registry;
 
 /**
- * Class ToolbarController.
+ * Controller for AdminToolbar Tools.
  *
  * @package Drupal\admin_toolbar_tools\Controller
  */
@@ -193,7 +193,7 @@ class ToolbarController extends ControllerBase {
       return $request->server->get('HTTP_REFERER');
     }
     else {
-      return '/';
+      return base_path();
     }
   }
 

@@ -1,0 +1,18 @@
+uuid: ba23b60b-bd8a-4401-9b36-69a7d7f86d15
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.collection
+id: taxonomy_term.collection.name
+field_name: name
+entity_type: taxonomy_term
+bundle: collection
+label: Name
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

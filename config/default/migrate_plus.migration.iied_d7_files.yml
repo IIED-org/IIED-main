@@ -58,8 +58,8 @@ process:
       source: timestamp
   uid:
     -
-      plugin: get
-      source: uid
+      plugin: default_value
+      default_value: '1'
   field_metatag:
     -
       plugin: d7_metatag_entities

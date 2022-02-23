@@ -23,7 +23,7 @@ use Drupal\migrate\Row;
  *    plugin: d7_node
  *  process:
  *    temp_body:
- *      plugin: iterator
+ *      plugin: sub_process
  *      source: field_section
  *      process:
  *        target_id:
@@ -31,7 +31,7 @@ use Drupal\migrate\Row;
  *          migration: field_collection_field_section_to_paragraph
  *          source: value
  *    temp_images:
- *      plugin: iterator
+ *      plugin: sub_process
  *      source: field_image
  *      process:
  *        target_id:

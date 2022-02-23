@@ -1,0 +1,36 @@
+uuid: c0e0258b-6ed6-48cc-9e44-04f8aa32c407
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.about_the_author.field_author_biog
+    - field.field.paragraph.about_the_author.field_author_reference
+    - paragraphs.paragraphs_type.about_the_author
+  module:
+    - text
+id: paragraph.about_the_author.default
+targetEntityType: paragraph
+bundle: about_the_author
+mode: default
+content:
+  field_author_biog:
+    type: text_textarea
+    weight: 1
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_author_reference:
+    type: entity_reference_autocomplete
+    weight: 2
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true
