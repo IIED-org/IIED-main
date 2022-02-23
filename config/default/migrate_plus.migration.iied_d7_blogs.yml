@@ -133,7 +133,7 @@ process:
   field_blogger_info/value:
     -
       plugin: get
-      source: body/0/value
+      source: field_blogger_info/0/value
   field_blogger_info/format:
     -
       plugin: default_value
