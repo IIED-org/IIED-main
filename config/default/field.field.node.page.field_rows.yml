@@ -21,14 +21,14 @@ default_value_callback: ''
 settings:
   handler: 'default:paragraph'
   handler_settings:
-    negate: 0
     target_bundles:
       row_of_4: row_of_4
+    negate: 0
     target_bundles_drag_drop:
       linked_person:
         weight: 3
         enabled: false
       row_of_4:
-        enabled: true
         weight: 4
+        enabled: true
 field_type: entity_reference_revisions

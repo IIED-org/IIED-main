@@ -8,7 +8,7 @@ use Drupal\KernelTests\KernelTestBase;
 /**
  * Tests for ImageMagick toolkit operations.
  *
- * @group Imagemagick
+ * @group imagemagick
  */
 class ToolkitOperationsTest extends KernelTestBase {
 
@@ -101,11 +101,6 @@ class ToolkitOperationsTest extends KernelTestBase {
     $image->getToolkit()->setHeight(NULL);
     $this->assertNull($image->getWidth());
     $this->assertNull($image->getHeight());
-    // Rotate does not necessarily require previous dimensions, so it should
-    // not fail.
-    $this->assertTrue($image->rotate(5));
-    $this->assertNull($image->getWidth());
-    $this->assertNull($image->getHeight());
     $this->assertFalse($image->crop(10, 10, 20, 20));
     $this->assertNull($image->getWidth());
     $this->assertNull($image->getHeight());
@@ -120,10 +115,10 @@ class ToolkitOperationsTest extends KernelTestBase {
     $this->assertSame(50, $image->getWidth());
     $this->assertsame(100, $image->getHeight());
     if (substr(PHP_OS, 0, 3) === 'WIN') {
-      $this->assertSame("-size 100x200 xc:transparent -background \"transparent\" -rotate 5 +repage -resize 50x100!", $image->getToolkit()->arguments()->toString(ImagemagickExecArguments::POST_SOURCE));
+      $this->assertSame("-size 100x200 xc:transparent -resize 50x100!", $image->getToolkit()->arguments()->toString(ImagemagickExecArguments::POST_SOURCE));
     }
     else {
-      $this->assertSame("-size 100x200 xc:transparent -background 'transparent' -rotate 5 +repage -resize 50x100!", $image->getToolkit()->arguments()->toString(ImagemagickExecArguments::POST_SOURCE));
+      $this->assertSame("-size 100x200 xc:transparent -resize 50x100!", $image->getToolkit()->arguments()->toString(ImagemagickExecArguments::POST_SOURCE));
     }
   }
 

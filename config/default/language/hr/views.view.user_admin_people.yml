@@ -2,9 +2,6 @@ display:
   default:
     display_title: Zadano
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         name:
           label: 'Korisničko ime'
@@ -14,6 +11,9 @@ display:
             format_custom_true: Aktivno
         operations:
           label: Operacije
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         status:
           group_info:

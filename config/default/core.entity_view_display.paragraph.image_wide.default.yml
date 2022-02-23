@@ -14,20 +14,20 @@ bundle: image_wide
 mode: default
 content:
   field_image_caption:
-    weight: 1
+    type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    weight: 1
     region: content
   field_main_image:
     type: entity_reference_entity_view
-    weight: 0
     label: above
     settings:
       view_mode: default
       link: false
     third_party_settings: {  }
+    weight: 0
     region: content
 hidden:
   search_api_excerpt: true

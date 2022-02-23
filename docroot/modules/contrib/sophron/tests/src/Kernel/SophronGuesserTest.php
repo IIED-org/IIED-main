@@ -31,7 +31,7 @@ class SophronGuesserTest extends KernelTestBase {
    */
   public function testGuesserNotInstalled(): void {
     $guesser = \Drupal::service('file.mime_type.guesser.extension');
-    $this->assertEquals('application/octet-stream', $guesser->guess('fake.jp2'));
+    $this->assertEquals('application/octet-stream', $guesser->guessMimeType('fake.jp2'));
   }
 
   /**
@@ -40,7 +40,7 @@ class SophronGuesserTest extends KernelTestBase {
   public function testGuesserInstalled(): void {
     \Drupal::service('module_installer')->install(['sophron_guesser']);
     $guesser = \Drupal::service('file.mime_type.guesser.extension');
-    $this->assertEquals('image/jp2', $guesser->guess('fake.jp2'));
+    $this->assertEquals('image/jp2', $guesser->guessMimeType('fake.jp2'));
   }
 
   /**
@@ -48,13 +48,13 @@ class SophronGuesserTest extends KernelTestBase {
    */
   public function testGuesserInstallUninstall(): void {
     $guesser = \Drupal::service('file.mime_type.guesser.extension');
-    $this->assertEquals('application/octet-stream', $guesser->guess('fake.jp2'));
+    $this->assertEquals('application/octet-stream', $guesser->guessMimeType('fake.jp2'));
     \Drupal::service('module_installer')->install(['sophron_guesser']);
     $guesser = \Drupal::service('file.mime_type.guesser.extension');
-    $this->assertEquals('image/jp2', $guesser->guess('fake.jp2'));
+    $this->assertEquals('image/jp2', $guesser->guessMimeType('fake.jp2'));
     \Drupal::service('module_installer')->uninstall(['sophron_guesser']);
     $guesser = \Drupal::service('file.mime_type.guesser.extension');
-    $this->assertEquals('application/octet-stream', $guesser->guess('fake.jp2'));
+    $this->assertEquals('application/octet-stream', $guesser->guessMimeType('fake.jp2'));
   }
 
   /**
@@ -84,13 +84,13 @@ class SophronGuesserTest extends KernelTestBase {
     foreach ($test_case as $input => $expected) {
       // Test stream [URI].
       foreach ($prefixes as $prefix) {
-        $output = $guesser->guess($prefix . $input);
-        $this->assertIdentical($output, $expected, sprintf("Mimetype for '%s' is '%s' (expected: '%s').", $prefix . $input, $output, $expected));
+        $output = $guesser->guessMimeType($prefix . $input);
+        $this->assertSame($expected, $output, sprintf("Mimetype for '%s' is '%s' (expected: '%s').", $prefix . $input, $output, $expected));
       }
 
       // Test normal path equivalent.
-      $output = $guesser->guess($input);
-      $this->assertIdentical($output, $expected, sprintf("Mimetype (using default mappings) for '%s' is '%s' (expected: '%s').", $input, $output, $expected));
+      $output = $guesser->guessMimeType($input);
+      $this->assertSame($expected, $output, sprintf("Mimetype (using default mappings) for '%s' is '%s' (expected: '%s').", $input, $output, $expected));
     }
   }
 

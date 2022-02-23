@@ -7,13 +7,13 @@ use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Block\BlockManager;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Http\RequestStack as DrupalRequestStack;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\PathProcessor\PathProcessorManager;
-use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\RequestStack as SymfonyRequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -28,13 +28,6 @@ class FacetBlockAjaxController extends ControllerBase {
    * @var \Drupal\Core\Entity\EntityStorageInterface
    */
   protected $storage;
-
-  /**
-   * The renderer.
-   *
-   * @var \Drupal\Core\Render\RendererInterface
-   */
-  protected $renderer;
 
   /**
    * The current path.
@@ -74,8 +67,6 @@ class FacetBlockAjaxController extends ControllerBase {
   /**
    * Constructs a FacetBlockAjaxController object.
    *
-   * @param \Drupal\Core\Render\RendererInterface $renderer
-   *   The renderer service.
    * @param \Drupal\Core\Path\CurrentPathStack $currentPath
    *   The current path service.
    * @param \Symfony\Component\Routing\RouterInterface $router
@@ -86,13 +77,9 @@ class FacetBlockAjaxController extends ControllerBase {
    *   The current route match service.
    * @param \Drupal\Core\Block\BlockManager $blockManager
    *   The block manager service.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function __construct(RendererInterface $renderer, CurrentPathStack $currentPath, RouterInterface $router, PathProcessorManager $pathProcessor, CurrentRouteMatch $currentRouteMatch, BlockManager $blockManager) {
+  public function __construct(CurrentPathStack $currentPath, RouterInterface $router, PathProcessorManager $pathProcessor, CurrentRouteMatch $currentRouteMatch, BlockManager $blockManager) {
     $this->storage = $this->entityTypeManager()->getStorage('block');
-    $this->renderer = $renderer;
     $this->currentPath = $currentPath;
     $this->router = $router;
     $this->pathProcessor = $pathProcessor;
@@ -105,7 +92,6 @@ class FacetBlockAjaxController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('renderer'),
       $container->get('path.current'),
       $container->get('router'),
       $container->get('path_processor_manager'),
@@ -137,11 +123,16 @@ class FacetBlockAjaxController extends ControllerBase {
       throw new NotFoundHttpException('No facet link or facet blocks found.');
     }
 
-    // Make sure we are not updating blocks multiple times.
-    $facets_blocks = array_unique($facets_blocks);
-
     $new_request = Request::create($path);
-    $request_stack = new RequestStack();
+    // Support 9.3+.
+    // @todo remove after 9.3 or greater is required.
+    if (class_exists(DrupalRequestStack::class)) {
+      $request_stack = new DrupalRequestStack();
+    }
+    // Legacy request stack.
+    else {
+      $request_stack = new SymfonyRequestStack();
+    }
     $processed = $this->pathProcessor->processInbound($path, $new_request);
 
     $this->currentPath->setPath($processed);
@@ -151,53 +142,55 @@ class FacetBlockAjaxController extends ControllerBase {
 
     $container = \Drupal::getContainer();
     $container->set('request_stack', $request_stack);
-    $active_facet = $request->request->get('active_facet');
+    foreach ($facets_blocks as $block_selector => $block_id) {
+      // Facet block render array.
+      $block_view = NULL;
+      // Re prepare from css standarts.
+      $block_id = str_replace(['--', '-'], [':', '_'], $block_id);
 
-    // Build the facets blocks found for the current request and update.
-    foreach ($facets_blocks as $block_id => $block_selector) {
-      $block_view = '';
-      $block_entity = $this->storage->load($block_id);
-
-      if ($block_entity) {
-        // Render a block, then add it to the response as a replace command.
-        $block_view = $this->entityTypeManager
-          ->getViewBuilder('block')
-          ->view($block_entity);
-      }
-      else {
-        $instance = $this->blockManager->createInstance($block_id);
-        if ($instance) {
-          $block_view = $instance->build();
-          if (!empty($block_view[0]['#facet']) || !empty($block_view[0][0]['#facet'])) {
-            /** @var \Drupal\facets\Entity\Facet $facet */
-            $facet = !empty($block_view[0]['#facet']) ? $block_view[0]['#facet'] : $block_view[0][0]['#facet'];
-            $widget_type = $facet->get('widget')['type'];
-            $block_selector .= ' .facets-widget-' . $widget_type;
+      // @todo We should not create an instance if we have already created one.
+      $block_instance = $this->blockManager->createInstance($block_id);
+      if ($block_instance) {
+        $block_view = $block_instance->build();
+        if ($block_view) {
+          // Replace content current ID selector.
+          $response->addCommand(new ReplaceCommand('#' . $block_selector, $block_view));
+          // Hide or show block.
+          $facet_id = explode(':', $block_id)[1];
+          $hide_show_selector = '[data-drupal-block-facet-id = "' . $facet_id . '"]';
+          if (!empty($block_view['facet_block']['#attributes']['class']) && in_array('hidden', $block_view['facet_block']['#attributes']['class'])) {
+            $response->addCommand(new InvokeCommand($hide_show_selector, 'addClass', ['hidden']));
+          }
+          else {
+            $response->addCommand(new InvokeCommand($hide_show_selector, 'removeClass', ['hidden']));
           }
         }
       }
-      if ($block_view) {
-        $block_view = (string) $this->renderer->renderPlain($block_view);
-        $response->addCommand(new ReplaceCommand($block_selector, $block_view));
-      }
     }
-
-    $response->addCommand(new InvokeCommand('[data-block-plugin-id="' . $active_facet . '"]', 'addClass', ['facet-active']));
 
     // Update filter summary block.
     $update_summary_block = $request->request->get('update_summary_block');
     if ($update_summary_block) {
-      $block_view = NULL;
-      $facet_summary_plugin_id = $request->request->get('facet_summary_plugin_id');
-      $facet_summary_wrapper_id = $request->request->get('facet_summary_wrapper_id');
-      if (!empty($facet_summary_plugin_id)) {
-        $instance = $this->blockManager->createInstance($facet_summary_plugin_id);
-        if ($instance) {
-          $block_view = $instance->build();
-        }
-        if ($block_view) {
-          $block_view = (string) $this->renderer->renderPlain($block_view);
-          $response->addCommand(new ReplaceCommand('[data-drupal-facets-summary-id=' . $facet_summary_wrapper_id . ']', $block_view));
+      $facet_summary_plugin_ids = $request->request->get('facet_summary_plugin_ids');
+      foreach ($facet_summary_plugin_ids as $block_selector => $summary_plugin_id) {
+        // Facet summary block render array.
+        $block_view = NULL;
+        // @todo We should not create an instance if we have already created one.
+        $block_instance = $this->blockManager->createInstance($summary_plugin_id);
+        if ($block_instance) {
+          $block_view = $block_instance->build();
+          if ($block_view) {
+            // Replace content facets summary plugin ID selector.
+            $response->addCommand(new ReplaceCommand('[data-drupal-facets-summary-plugin-id = "' . $summary_plugin_id . '"]', $block_view));
+            // Hide or show block.
+            $hide_show_selector = '[data-drupal-block-facet-summary-id = "' . $summary_plugin_id . '"]';
+            if (!empty($block_view['facets_summary']['#attributes']['class']) && in_array('hidden', $block_view['facets_summary']['#attributes']['class'])) {
+              $response->addCommand(new InvokeCommand($hide_show_selector, 'addClass', ['hidden']));
+            }
+            else {
+              $response->addCommand(new InvokeCommand($hide_show_selector, 'removeClass', ['hidden']));
+            }
+          }
         }
       }
     }

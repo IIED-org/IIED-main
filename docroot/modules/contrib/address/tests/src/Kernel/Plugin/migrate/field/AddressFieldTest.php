@@ -18,7 +18,7 @@ class AddressFieldTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'address',
     'migrate',
     'migrate_drupal',

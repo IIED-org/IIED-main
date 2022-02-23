@@ -2,6 +2,7 @@ display:
   default:
     display_title: 默认
     display_options:
+      title: 媒体
       filters:
         name:
           expose:
@@ -9,7 +10,6 @@ display:
         langcode:
           expose:
             label: 语言
-      title: 媒体
   page:
     display_options:
       fields:

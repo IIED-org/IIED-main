@@ -2,6 +2,7 @@ display:
   default:
     display_title: 'Mặc định'
     display_options:
+      title: 'Phương tiện'
       filters:
         name:
           expose:
@@ -9,7 +10,6 @@ display:
         langcode:
           expose:
             label: 'Ngôn ngữ'
-      title: 'Phương tiện'
   page:
     display_options:
       fields:

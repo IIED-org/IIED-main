@@ -50,26 +50,6 @@ class DataExport extends Serializer {
       'use_serializer_encode_only' => ['default' => FALSE],
     ];
 
-    // XLS options.
-    $options['xls_settings']['contains'] = [
-      'xls_format' => ['default' => 'Excel2007'],
-    ];
-    $options['xls_settings']['metadata']['contains'] = [
-        // The 'created' and 'modified' elements are not exposed here, as they
-        // default to the current time (that the spreadsheet is created), and
-        // would probably just confuse the UI.
-      'creator' => ['default' => ''],
-      'last_modified_by' => ['default' => ''],
-      'title' => ['default' => ''],
-      'description' => ['default' => ''],
-      'subject' => ['default' => ''],
-      'keywords' => ['default' => ''],
-      'category' => ['default' => ''],
-      'manager' => ['default' => ''],
-      'company' => ['default' => ''],
-        // @todo Expose a UI for custom properties.
-    ];
-
     return $options;
   }
 
@@ -157,67 +137,6 @@ class DataExport extends Serializer {
             ],
           ];
         }
-
-        if (in_array('xls', $format_options)) {
-          // XLS options.
-          // @todo Can these be moved to a plugin?
-          $xls_options = $this->options['xls_settings'];
-          $form['xls_settings'] = [
-            '#type' => 'details',
-            '#open' => TRUE,
-            '#title' => $this->t('XLS settings'),
-            '#tree' => TRUE,
-            '#states' => [
-              'visible' => [
-                ':input[name="style_options[formats]"]' => [
-                  ['value' => 'xls'],
-                  ['value' => 'xlsx'],
-                ],
-              ],
-            ],
-            'xls_format' => [
-              '#type' => 'select',
-              '#title' => $this->t('Format'),
-              '#options' => [
-                  // @todo Add all PHPExcel supported formats.
-                'Excel2007' => $this->t('Excel 2007'),
-                'Excel5' => $this->t('Excel 5'),
-              ],
-              '#default_value' => $xls_options['xls_format'],
-            ],
-          ];
-
-          // XLS metadata.
-          $form['xls_settings']['metadata'] = [
-            '#type' => 'details',
-            '#title' => $this->t('Document metadata'),
-            '#open' => TRUE,
-          ];
-
-          $xls_fields = [
-            'creator' => $this->t('Author/creator name'),
-            'last_modified_by' => $this->t('Last modified by'),
-            'title' => $this->t('Title'),
-            'description' => $this->t('Description'),
-            'subject' => $this->t('Subject'),
-            'keywords' => $this->t('Keywords'),
-            'category' => $this->t('Category'),
-            'manager' => $this->t('Manager'),
-            'company' => $this->t('Company'),
-          ];
-
-          foreach ($xls_fields as $xls_field_key => $xls_field_title) {
-            $form['xls_settings']['metadata'][$xls_field_key] = [
-              '#type' => 'textfield',
-              '#title' => $xls_field_title,
-            ];
-
-            if (isset($xls_options['metadata'][$xls_field_key])) {
-              $form['xls_settings']['metadata']['#default_value'] = $xls_options['metadata'][$xls_field_key];
-            }
-          }
-        }
-
         break;
     }
   }
@@ -318,7 +237,9 @@ class DataExport extends Serializer {
     $rows = [];
     foreach ($this->view->result as $row_index => $row) {
       $this->view->row_index = $row_index;
-      $rows[] = $this->view->rowPlugin->render($row);
+      $output = $this->view->rowPlugin->render($row);
+      \Drupal::moduleHandler()->alter('views_data_export_row', $output, $row, $this->view);
+      $rows[] = $output;
     }
 
     unset($this->view->row_index);

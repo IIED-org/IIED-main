@@ -141,10 +141,10 @@ class FieldWebTest extends ViewTestBase {
    *   The value to search for.
    * @param string $message
    *   The message to display along with the assertion.
-   * @param string $group
-   *   The type of assertion - examples are "Browser", "PHP".
+   *
+   * @internal
    */
-  protected function assertSubString($haystack, $needle, $message = '', $group = 'Other') {
+  protected function assertSubString(string $haystack, string $needle, string $message = ''): void {
     $this->assertStringContainsString($needle, $haystack, $message);
   }
 
@@ -157,10 +157,10 @@ class FieldWebTest extends ViewTestBase {
    *   The value to search for.
    * @param string $message
    *   The message to display along with the assertion.
-   * @param string $group
-   *   The type of assertion - examples are "Browser", "PHP".
+   *
+   * @internal
    */
-  protected function assertNotSubString($haystack, $needle, $message = '', $group = 'Other') {
+  protected function assertNotSubString(string $haystack, string $needle, string $message = ''): void {
     $this->assertStringNotContainsString($needle, $haystack, $message);
   }
 
@@ -473,7 +473,7 @@ class FieldWebTest extends ViewTestBase {
 
     // Tests the element classes/element.
 
-    // Set some common element element types and see whether they appear with and without a custom class set.
+    // Set some common element types and see whether they appear with and without a custom class set.
     foreach (['h1', 'span', 'p', 'div'] as $element_type) {
       $id_field->options['element_type'] = $element_type;
 

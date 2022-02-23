@@ -113,11 +113,15 @@ abstract class UrlProcessorPluginBase extends ProcessorPluginBase implements Url
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    $request_stack = $container->get('request_stack');
+
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('request_stack')->getMasterRequest(),
+      // Support 9.3+.
+      // @todo remove switch after 9.3 or greater is required.
+      version_compare(\Drupal::VERSION, '9.3', '>=') ? $request_stack->getMainRequest() : $request_stack->getMasterRequest(),
       $container->get('entity_type.manager')
     );
   }

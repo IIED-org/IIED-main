@@ -23,8 +23,8 @@ dependencies:
     - text
 third_party_settings:
   layout_builder:
-    allow_custom: false
     enabled: true
+    allow_custom: false
     sections:
       -
         layout_id: layout_onecol
@@ -36,57 +36,58 @@ third_party_settings:
             uuid: d8d60654-df73-4029-b623-c89bb87e9d1a
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:organisation:description'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:organisation:description'
               formatter:
-                label: hidden
                 type: text_default
+                label: hidden
                 settings: {  }
                 third_party_settings: {  }
-            additional: {  }
             weight: 0
+            additional: {  }
           b4e8fac4-c6c6-4d09-acce-e11f8e2920ff:
             uuid: b4e8fac4-c6c6-4d09-acce-e11f8e2920ff
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:organisation:field_full_name'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:organisation:field_full_name'
               formatter:
+                type: string
                 label: above
                 settings:
                   link_to_entity: false
                 third_party_settings: {  }
-                type: string
-            additional: {  }
             weight: 1
+            additional: {  }
           a9d3a0bd-5e0a-49a6-834a-9d4958d79daf:
             uuid: a9d3a0bd-5e0a-49a6-834a-9d4958d79daf
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:organisation:field_location'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:organisation:field_location'
               formatter:
+                type: address_default
                 label: above
                 settings: {  }
                 third_party_settings: {  }
-                type: address_default
-            additional: {  }
             weight: 2
+            additional: {  }
           e2f8c999-2507-464d-b118-693a2043d5dd:
             uuid: e2f8c999-2507-464d-b118-693a2043d5dd
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:organisation:field_url'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:organisation:field_url'
               formatter:
+                type: link
                 label: above
                 settings:
                   trim_length: 80
@@ -95,164 +96,164 @@ third_party_settings:
                   rel: ''
                   target: ''
                 third_party_settings: {  }
-                type: link
-            additional: {  }
             weight: 3
+            additional: {  }
           28f38856-da70-45c7-8617-d77b86e6e8c7:
             uuid: 28f38856-da70-45c7-8617-d77b86e6e8c7
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:organisation:field_email'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:organisation:field_email'
               formatter:
+                type: basic_string
                 label: above
                 settings: {  }
                 third_party_settings: {  }
-                type: basic_string
-            additional: {  }
             weight: 4
+            additional: {  }
           e41c9368-6020-44b2-a502-4c2fa036e532:
             uuid: e41c9368-6020-44b2-a502-4c2fa036e532
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:organisation:field_logo'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:organisation:field_logo'
               formatter:
+                type: image
                 label: above
                 settings:
-                  image_style: ''
                   image_link: ''
+                  image_style: ''
                 third_party_settings: {  }
-                type: image
-            additional: {  }
             weight: 5
+            additional: {  }
           85458248-fa05-45f6-bc7b-6446c8556726:
             uuid: 85458248-fa05-45f6-bc7b-6446c8556726
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:organisation:field_alias'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:organisation:field_alias'
               formatter:
+                type: string
                 label: above
                 settings:
                   link_to_entity: false
                 third_party_settings: {  }
-                type: string
-            additional: {  }
             weight: 6
+            additional: {  }
           8d202e4d-a9fc-4b17-9672-c99bf54d372c:
             uuid: 8d202e4d-a9fc-4b17-9672-c99bf54d372c
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:organisation:field_valid'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:organisation:field_valid'
               formatter:
+                type: boolean
                 label: above
                 settings:
                   format: default
                   format_custom_false: ''
                   format_custom_true: ''
                 third_party_settings: {  }
-                type: boolean
-            additional: {  }
             weight: 7
+            additional: {  }
           c7f14446-9f98-47ad-90f2-9c04caa8b329:
             uuid: c7f14446-9f98-47ad-90f2-9c04caa8b329
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:organisation:field_type'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:organisation:field_type'
               formatter:
+                type: boolean
                 label: above
                 settings:
                   format: default
                   format_custom_false: ''
                   format_custom_true: ''
                 third_party_settings: {  }
-                type: boolean
-            additional: {  }
             weight: 8
+            additional: {  }
           e918b946-3d86-4a48-a03c-9ba7d9391d3f:
             uuid: e918b946-3d86-4a48-a03c-9ba7d9391d3f
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:organisation:field_location_legacy'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:organisation:field_location_legacy'
               formatter:
+                type: string
                 label: above
                 settings:
                   link_to_entity: false
                 third_party_settings: {  }
-                type: string
-            additional: {  }
             weight: 9
+            additional: {  }
           783f861a-53b5-4c28-bab3-8f7f8eb0adbd:
             uuid: 783f861a-53b5-4c28-bab3-8f7f8eb0adbd
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:organisation:description'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:organisation:description'
               formatter:
-                label: hidden
                 type: text_default
+                label: hidden
                 settings: {  }
                 third_party_settings: {  }
-            additional: {  }
             weight: 10
+            additional: {  }
           52873470-2c25-4617-9a1c-c22cfba2987e:
             uuid: 52873470-2c25-4617-9a1c-c22cfba2987e
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:organisation:field_full_name'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:organisation:field_full_name'
               formatter:
+                type: string
                 label: above
                 settings:
                   link_to_entity: false
                 third_party_settings: {  }
-                type: string
-            additional: {  }
             weight: 11
+            additional: {  }
           566b64ae-a9a2-4045-8364-ff04a256439b:
             uuid: 566b64ae-a9a2-4045-8364-ff04a256439b
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:organisation:field_location'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:organisation:field_location'
               formatter:
+                type: address_default
                 label: above
                 settings: {  }
                 third_party_settings: {  }
-                type: address_default
-            additional: {  }
             weight: 12
+            additional: {  }
           a2350865-1eb4-4be5-b677-92786f403982:
             uuid: a2350865-1eb4-4be5-b677-92786f403982
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:organisation:field_url'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:organisation:field_url'
               formatter:
+                type: link
                 label: above
                 settings:
                   trim_length: 80
@@ -261,109 +262,108 @@ third_party_settings:
                   rel: ''
                   target: ''
                 third_party_settings: {  }
-                type: link
-            additional: {  }
             weight: 13
+            additional: {  }
           2af160ce-ef8d-4430-931c-edf0ae41d11f:
             uuid: 2af160ce-ef8d-4430-931c-edf0ae41d11f
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:organisation:field_email'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:organisation:field_email'
               formatter:
+                type: basic_string
                 label: above
                 settings: {  }
                 third_party_settings: {  }
-                type: basic_string
-            additional: {  }
             weight: 14
+            additional: {  }
           c9b720ec-dc6a-40bd-b424-fe1d87242ff7:
             uuid: c9b720ec-dc6a-40bd-b424-fe1d87242ff7
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:organisation:field_logo'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:organisation:field_logo'
               formatter:
+                type: image
                 label: above
                 settings:
-                  image_style: ''
                   image_link: ''
+                  image_style: ''
                 third_party_settings: {  }
-                type: image
-            additional: {  }
             weight: 15
+            additional: {  }
           0ddf324a-ca40-44c0-b32b-bb2680577d4e:
             uuid: 0ddf324a-ca40-44c0-b32b-bb2680577d4e
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:organisation:field_alias'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:organisation:field_alias'
               formatter:
+                type: string
                 label: above
                 settings:
                   link_to_entity: false
                 third_party_settings: {  }
-                type: string
-            additional: {  }
             weight: 16
+            additional: {  }
           848214d6-4df2-4b66-a623-d623664405ff:
             uuid: 848214d6-4df2-4b66-a623-d623664405ff
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:organisation:field_valid'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:organisation:field_valid'
               formatter:
+                type: boolean
                 label: above
                 settings:
                   format: default
                   format_custom_false: ''
                   format_custom_true: ''
                 third_party_settings: {  }
-                type: boolean
-            additional: {  }
             weight: 17
+            additional: {  }
           7eb8d426-12a5-450d-a3a2-87521b2063e6:
             uuid: 7eb8d426-12a5-450d-a3a2-87521b2063e6
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:organisation:field_type'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:organisation:field_type'
               formatter:
+                type: boolean
                 label: above
                 settings:
                   format: default
                   format_custom_false: ''
                   format_custom_true: ''
                 third_party_settings: {  }
-                type: boolean
-            additional: {  }
             weight: 18
+            additional: {  }
           d4ddfa2a-62e7-4358-bc99-ac0236b650c7:
             uuid: d4ddfa2a-62e7-4358-bc99-ac0236b650c7
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:organisation:field_location_legacy'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:organisation:field_location_legacy'
               formatter:
+                type: string
                 label: above
                 settings:
                   link_to_entity: false
                 third_party_settings: {  }
-                type: string
-            additional: {  }
             weight: 19
+            additional: {  }
         third_party_settings: {  }
 id: taxonomy_term.organisation.default
 targetEntityType: taxonomy_term
@@ -371,71 +371,71 @@ bundle: organisation
 mode: default
 content:
   description:
-    label: hidden
     type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
     weight: 0
     region: content
-    settings: {  }
-    third_party_settings: {  }
   field_alias:
-    weight: 6
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 6
     region: content
   field_email:
-    weight: 4
+    type: basic_string
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: basic_string
+    weight: 4
     region: content
   field_full_name:
-    weight: 1
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 1
     region: content
   field_location:
-    weight: 2
+    type: address_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: address_default
+    weight: 2
     region: content
   field_location_legacy:
-    weight: 9
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 9
     region: content
   field_logo:
-    weight: 5
+    type: image
     label: above
     settings:
-      image_style: ''
       image_link: ''
+      image_style: ''
     third_party_settings: {  }
-    type: image
+    weight: 5
     region: content
   field_type:
-    weight: 8
+    type: boolean
     label: above
     settings:
       format: default
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    type: boolean
+    weight: 8
     region: content
   field_url:
-    weight: 3
+    type: link
     label: above
     settings:
       trim_length: 80
@@ -444,17 +444,17 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    type: link
+    weight: 3
     region: content
   field_valid:
-    weight: 7
+    type: boolean
     label: above
     settings:
       format: default
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    type: boolean
+    weight: 7
     region: content
 hidden:
   langcode: true

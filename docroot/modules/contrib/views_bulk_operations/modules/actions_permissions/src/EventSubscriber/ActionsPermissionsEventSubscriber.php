@@ -21,7 +21,10 @@ class ActionsPermissionsEventSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events[ViewsBulkOperationsActionManager::ALTER_ACTIONS_EVENT][] = ['alterActions', static::PRIORITY];
+    $events[ViewsBulkOperationsActionManager::ALTER_ACTIONS_EVENT][] = [
+      'alterActions',
+      static::PRIORITY,
+    ];
     return $events;
   }
 

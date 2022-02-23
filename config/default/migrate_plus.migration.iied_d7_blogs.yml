@@ -133,7 +133,7 @@ process:
   field_blogger_info/value:
     -
       plugin: get
-      source: body/0/value
+      source: field_blogger_info/0/value
   field_blogger_info/format:
     -
       plugin: default_value
@@ -170,6 +170,10 @@ process:
             plugin: extract
             index:
               - 1
+  path/alias: alias
+  path/pathauto:
+    plugin: default_value
+    default_value: false
 destination:
   plugin: 'entity_complete:node'
   translations: true

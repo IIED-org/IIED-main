@@ -19,25 +19,25 @@ plugin: 'views_block:content_recent-block_2'
 settings:
   id: 'views_block:content_recent-block_2'
   label: ''
-  provider: views
   label_display: visible
+  provider: views
+  context_mapping: {  }
   views_label: ''
   items_per_page: none
-  context_mapping: {  }
 visibility:
   'entity_bundle:block_content':
     id: 'entity_bundle:block_content'
-    bundles:
-      basic: basic
     negate: false
     context_mapping:
       block_content: '@ds.ds_block_field_entity_context:block_content'
+    bundles:
+      basic: basic
   user_role:
     id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
     roles:
       editor: editor
       manager: manager
       administrator: administrator
-    negate: false
-    context_mapping:
-      user: '@user.current_user_context:current_user'

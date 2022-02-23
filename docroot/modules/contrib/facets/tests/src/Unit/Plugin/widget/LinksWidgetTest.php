@@ -25,7 +25,7 @@ class LinksWidgetTest extends WidgetTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->widget = new LinksWidget([], 'links_widget', []);

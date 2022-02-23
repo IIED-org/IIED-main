@@ -15,6 +15,7 @@ dependencies:
 third_party_settings:
   layout_builder:
     enabled: true
+    allow_custom: false
     sections:
       -
         layout_id: layout_onecol
@@ -26,42 +27,43 @@ third_party_settings:
             uuid: 30efb88e-a881-4ddb-82f5-3bc95a1c13ef
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:theme:description'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:theme:description'
               formatter:
-                label: hidden
                 type: text_default
+                label: hidden
                 settings: {  }
                 third_party_settings: {  }
-            additional: {  }
             weight: 0
+            additional: {  }
           b6c57b91-a331-457f-83d6-04360930b077:
             uuid: b6c57b91-a331-457f-83d6-04360930b077
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:theme:field_legacy_code'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:theme:field_legacy_code'
               formatter:
+                type: string
                 label: above
                 settings:
                   link_to_entity: false
                 third_party_settings: {  }
-                type: string
-            additional: {  }
             weight: 1
+            additional: {  }
           0296ad75-f9ac-4d9e-9733-1e59bf964f54:
             uuid: 0296ad75-f9ac-4d9e-9733-1e59bf964f54
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:theme:field_link'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:theme:field_link'
               formatter:
+                type: link
                 label: above
                 settings:
                   trim_length: 80
@@ -70,33 +72,31 @@ third_party_settings:
                   rel: ''
                   target: ''
                 third_party_settings: {  }
-                type: link
-            additional: {  }
             weight: 2
+            additional: {  }
         third_party_settings: {  }
-    allow_custom: false
 id: taxonomy_term.theme.default
 targetEntityType: taxonomy_term
 bundle: theme
 mode: default
 content:
   description:
-    label: hidden
     type: text_default
-    weight: 0
-    region: content
+    label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 0
+    region: content
   field_legacy_code:
-    weight: 1
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 1
     region: content
   field_link:
-    weight: 2
+    type: link
     label: above
     settings:
       trim_length: 80
@@ -105,7 +105,7 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    type: link
+    weight: 2
     region: content
 hidden:
   langcode: true

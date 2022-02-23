@@ -15,7 +15,7 @@ use Solarium\QueryType\Update\Query\Query as UpdateQuery;
 /**
  * Update query raw XML command.
  *
- * @see https://lucene.apache.org/solr/guide/uploading-data-with-index-handlers.html#xml-formatted-index-updates
+ * @see https://solr.apache.org/guide/uploading-data-with-index-handlers.html#xml-formatted-index-updates
  */
 class RawXml extends AbstractCommand
 {
@@ -104,6 +104,18 @@ class RawXml extends AbstractCommand
     public function getCommands(): array
     {
         return $this->commands;
+    }
+
+    /**
+     * Clear all XML command strings.
+     *
+     * @return self Provides fluent interface
+     */
+    public function clear(): self
+    {
+        $this->commands = [];
+
+        return $this;
     }
 
     /**

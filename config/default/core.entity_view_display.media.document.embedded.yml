@@ -15,8 +15,8 @@ dependencies:
     - layout_builder
 third_party_settings:
   layout_builder:
-    allow_custom: false
     enabled: false
+    allow_custom: false
 _core:
   default_config_hash: DXitcriWmE5QHvGvk2OzWouaSnXD5uipkRdAG6_pnkg
 id: media.document.embedded
@@ -26,12 +26,10 @@ mode: embedded
 content:
   thumbnail:
     type: image
-    weight: 0
-    region: content
     label: hidden
     settings:
-      image_style: page
       image_link: ''
+      image_style: page
     third_party_settings:
       ds:
         ft:
@@ -40,6 +38,8 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
+    weight: 0
+    region: content
 hidden:
   created: true
   field_media_document: true

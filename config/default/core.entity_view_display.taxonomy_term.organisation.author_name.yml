@@ -19,8 +19,8 @@ dependencies:
     - layout_builder
 third_party_settings:
   layout_builder:
-    allow_custom: false
     enabled: false
+    allow_custom: false
   ds:
     layout:
       id: ds_reset
@@ -28,16 +28,16 @@ third_party_settings:
       disable_css: false
       entity_classes: all_classes
       settings:
-        label: ''
+        classes:
+          layout_class: {  }
+          ds_content: {  }
         wrappers:
           ds_content: div
         outer_wrapper: div
         attributes: ''
         link_attribute: ''
         link_custom: ''
-        classes:
-          layout_class: {  }
-          ds_content: {  }
+        label: ''
     regions:
       ds_content:
         - taxonomy_term_title
@@ -48,9 +48,9 @@ third_party_settings:
         label: hidden
         formatter: default
         settings:
+          link: false
           wrapper: ''
           class: ''
-          link: false
         ft:
           id: reset
           settings:

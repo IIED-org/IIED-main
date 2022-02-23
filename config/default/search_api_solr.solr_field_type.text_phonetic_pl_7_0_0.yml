@@ -22,16 +22,16 @@ field_type:
       filters:
         -
           class: solr.WordDelimiterGraphFilterFactory
-          protected: protwords_pl.txt
-          generateWordParts: 1
+          catenateNumbers: 1
           generateNumberParts: 1
+          protected: protwords_pl.txt
           splitOnCaseChange: 0
           splitOnNumerics: 1
-          catenateWords: 1
-          catenateNumbers: 1
-          catenateAll: 0
-          stemEnglishPossessive: 0
+          generateWordParts: 1
           preserveOriginal: 1
+          catenateAll: 0
+          catenateWords: 1
+          stemEnglishPossessive: 0
         -
           class: solr.LengthFilterFactory
           min: 2
