@@ -24,7 +24,8 @@ settings:
   label: ''
   label_display: '0'
   provider: views
-  context_mapping: {  }
+  context_mapping:
+    field_theme_target_id: '@ds.ds_block_field_entity_context:taxonomy_term'
   views_label: ''
   items_per_page: none
 visibility:

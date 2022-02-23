@@ -1,0 +1,64 @@
+{
+  "name": "callisto-theme",
+  "version": "1.4.0",
+  "description": "New Drupal 8 starter theme, Callisto.",
+  "homepage": "https://gitlab.agile.coop/agile-public/callisto-theme",
+  "bugs": {
+    "url": "https://gitlab.agile.coop/agile-public/callisto-theme/-/issues"
+  },
+  "scripts": {
+    "build": "NODE_ENV=production gulp dev",
+    "dev": "NODE_ENV=development gulp dev",
+    "ck": "NODE_ENV=production gulp ck",
+    "gen": "NODE_ENV=production gulp gen",
+    "icons": "NODE_ENV=production gulp generatesvg",
+    "health-check": "mocha --file test/health-check.js --grep='Health check'",
+    "test": "echo \"\nTry running yarn health-check or yarn postinstall to run automated tests.\n\" && exit 0",
+    "postinstall": "mocha --file=test/post-install.js --grep='Post installation'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.agile.coop:agile-public/callisto-theme.git"
+  },
+  "author": "Paul Popus",
+  "license": "GPL-2.0",
+  "dependencies": {
+    "@rbnlffl/rollup-plugin-eslint": "^1.0.0",
+    "@rollup/plugin-commonjs": "^13.0.0",
+    "@rollup/plugin-multi-entry": "^3.0.1",
+    "@rollup/plugin-node-resolve": "^8.1.0",
+    "@rollup/stream": "https://github.com/andremacola/stream.git",
+    "autoprefixer": "^9.6.1",
+    "browser-sync": "^2.26.7",
+    "chai": "^4.2.0",
+    "cssnano": "^4.1.10",
+    "eslint": "^6.5.1",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.19.0",
+    "glob": "^7.1.6",
+    "google-closure-compiler": "^20200224.0.0",
+    "gulp": "^4.0.2",
+    "gulp-postcss": "^8.0.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-sass-glob": "^1.1.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-svg-sprite": "^1.5.0",
+    "mocha": "^8.0.1",
+    "rollup": "^2.21.0",
+    "stylelint": "^11.0.0",
+    "stylelint-config-standard": "^19.0.0",
+    "svg4everybody": "^2.1.9",
+    "tailwindcss": "^1.8.10",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=10.0.0"
+  }
+}

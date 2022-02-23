@@ -146,4 +146,6 @@ theme:
   radix: 0
   iied_pubs: 0
   claro: 0
+  stable9: 0
+  iied_tw: 0
 profile: standard

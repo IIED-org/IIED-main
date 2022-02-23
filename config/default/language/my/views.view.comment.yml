@@ -1,5 +1,6 @@
 display:
   default:
+    display_title: Master
     display_options:
       fields:
         subject:
@@ -8,6 +9,9 @@ display:
           label: စာရေးသူ
         operations:
           label: လုပ်ဆောင်ချက်များ
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         subject:
           expose:

@@ -1,0 +1,9 @@
+name: 'Field formatter'
+description: 'Collection of general formatters that display a single field from the referenced entity.'
+type: module
+core_version_requirement: ^8 || ^9
+
+# Information added by Drupal.org packaging script on 2022-02-04
+version: '3.0.0-rc0'
+project: 'field_formatter'
+datestamp: 1643987531
