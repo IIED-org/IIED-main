@@ -28,7 +28,7 @@ class D7Article extends Node {
     // Node 27381 is useful for testing as it hase a video_embed_standard para
     // that has been migrated into a video_embed paragraph on the
     // field_paragraphs field.
-    // $query->condition('n.nid', '27381');
+    // $query->condition('n.nid', '138006');
     return $query;
   }
 
