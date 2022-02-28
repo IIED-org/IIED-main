@@ -206,7 +206,7 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
     ];
     $row->setSourceProperty('field_link_processed', $field_link_processed);
   }
-  // Colelctions
+  // Collections terms migration.
   if ($migration->id() == 'iied_d7_terms_collection') {
     $tagline_value = $row->getSourceProperty('field_tagline');
     $trimmed_short_description = substr($tagline_value[0]['value'], 0, 255);
