@@ -63,7 +63,26 @@ module.exports = {
           "hover": "#0E6196",
           "visited": "#51758B"
         }
-      }
+      },
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            a: {
+              borderBottomWidth: '1px',
+              borderBottomColor: theme('colors.iiedblue.200'),
+              color: theme('colors.link[text]'),
+              fontWeight: '400',
+              textDecoration: 'none',
+              '&:hover': {
+                color: theme('colors.link[hover]'),
+                borderBottomWidth: '2px',
+                borderBottomColor: theme('colors.iiedblue.500'),
+                textDecoration: 'underline',
+              },
+            },
+          },
+        },
+      })
     },
   },
   variants: {

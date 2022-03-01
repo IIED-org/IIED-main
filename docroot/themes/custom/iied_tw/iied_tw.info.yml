@@ -7,7 +7,22 @@ base theme: stable9
 libraries:
   - iied_tw/global-styling
 
+regions:
+  header: Header
+  navbar_branding: Navbar branding
+  navbar_left: Navbar left
+  navbar_right: Navbar right
+  primary_menu: Primary menu
+  secondary_menu: Secondary menu
+  breadcrumb: Breadcrumb
+  highlighted: Highlighted
+  help: Help
+  preface: Preface
+  content: Content
+  postscript: Postscript
+  footer: Footer
+
 # Information added by Drupal.org packaging script on 2022-01-11
-version: '5.0.0-alpha2'
-project: 'tailwindcss'
+version: "5.0.0-alpha2"
+project: "tailwindcss"
 datestamp: 1641888129

@@ -68,17 +68,19 @@
         {{ page.content }}
       </div>{# /.layout-content #}
 
-      {% if page.sidebar_first %}
+    {#{% if page.sidebar_first %}
         <aside class="p-4 md:w-1/4" role="complementary">
           {{ page.sidebar_first }}
         </aside>
       {% endif %}
 
-      {% if page.sidebar_second %}
+        {% if page.sidebar_second %}
         <aside class="md:w-1/4" role="complementary">
           {{ page.sidebar_second }}
         </aside>
       {% endif %}
+      #}
+      
     </div>
   </main>
 

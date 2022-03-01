@@ -27,8 +27,18 @@
   a {
     @apply transition duration-300 ease-in-out text-link-text hover:underline underline-offset-2 hover:text-link-hover visited:text-link-visited;
   }
-  .rich-text p {
-    @apply mt-5 mb-5;
+  .iied-gradient {
+    background: rgb(0, 179, 223);
+    background: linear-gradient(
+      90deg,
+      rgba(0, 179, 223, 1) 0%,
+      rgba(252, 179, 22, 1) 33.3%,
+      rgba(206, 83, 158, 1) 66.6%,
+      rgba(170, 192, 44, 1) 100%
+    );
+  }
+  hr {
+    @apply my-6;
   }
 }
 
@@ -53,10 +63,10 @@
     @apply px-3 py-2 transition rounded-full shadow-sm hover:shadow-none;
   }
 
-  /* Compounds -- twig templates */
+  /* Components -- twig templates */
   /* Cards */
   .card {
-    @apply border border-gray-100 p-3 hover:bg-gray-100;
+    @apply border border-gray-300 p-4;
   }
 
   [id$="-local-tasks"] ul {
