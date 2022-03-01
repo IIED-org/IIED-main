@@ -15,8 +15,8 @@ third_party_settings:
     classes: 'jumbotron bg-secondary pb-2'
 id: iied_tw_homehero
 theme: iied_tw
-region: header
-weight: -12
+region: preface
+weight: -14
 provider: null
 plugin: 'block_content:82c13e7a-241f-4e88-ab3f-433c0202d562'
 settings:

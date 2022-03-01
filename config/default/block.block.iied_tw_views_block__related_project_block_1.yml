@@ -11,8 +11,8 @@ dependencies:
     - iied_tw
 id: iied_tw_views_block__related_project_block_1
 theme: iied_tw
-region: sidebar_first
-weight: -12
+region: postscript
+weight: -14
 provider: null
 plugin: 'views_block:related_project-block_1'
 settings:

@@ -1,6 +1,6 @@
 uuid: de510fe9-68a3-4e34-a3fb-1d638ab58494
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - views.view.search
@@ -15,7 +15,7 @@ third_party_settings:
     classes: 'col-12 col-lg-6 header-search-block'
 id: iied_tw_exposedformsearchpage_2
 theme: iied_tw
-region: sidebar_first
+region: header
 weight: -11
 provider: null
 plugin: 'views_exposed_filter_block:search-page_2'

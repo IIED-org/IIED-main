@@ -1,12 +1,9 @@
 uuid: ba29a62c-a195-4cc0-83bc-d98f9a3c60ed
 langcode: en
-status: true
+status: false
 dependencies:
-  config:
-    - views.view.breadcrumb
   module:
     - node
-    - views
   theme:
     - iied_tw
 id: iied_tw_views_block__breadcrumb_block_1
