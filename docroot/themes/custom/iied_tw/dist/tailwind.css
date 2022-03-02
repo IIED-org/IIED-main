@@ -1342,6 +1342,14 @@ hr{
   height: 3rem;
 }
 
+.h-4{
+  height: 1rem;
+}
+
+.w-px{
+  width: 1px;
+}
+
 .max-w-xs{
   max-width: 20rem;
 }
@@ -1374,6 +1382,18 @@ hr{
   --tw-space-x-reverse: 0;
   margin-right: calc(0.75rem * var(--tw-space-x-reverse));
   margin-left: calc(0.75rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+.space-x-2 > :not([hidden]) ~ :not([hidden]){
+  --tw-space-x-reverse: 0;
+  margin-right: calc(0.5rem * var(--tw-space-x-reverse));
+  margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+.space-x-1 > :not([hidden]) ~ :not([hidden]){
+  --tw-space-x-reverse: 0;
+  margin-right: calc(0.25rem * var(--tw-space-x-reverse));
+  margin-left: calc(0.25rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
 .rounded-full{
@@ -1429,6 +1449,11 @@ hr{
 .bg-iiedblue-50{
   --tw-bg-opacity: 1;
   background-color: rgb(50 229 255 / var(--tw-bg-opacity));
+}
+
+.bg-gray-300{
+  --tw-bg-opacity: 1;
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
 
 .object-cover{

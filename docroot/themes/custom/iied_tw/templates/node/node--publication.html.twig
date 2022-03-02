@@ -106,7 +106,10 @@
           content.field_translator }}
         </div>
         <div class="mb-6">
-          {{ content.field_document_type }} {{ content.field_pdf_pages }}
+          {{ content.field_document_type }}
+              {% if content.field_pdf_pages %} 
+              {{ content.field_pdf_pages.0 }} pages
+                    {% endif %}  
         </div>
                   <div class="mb-6">
             <div class="md:flex">
@@ -129,12 +132,16 @@
 
 {#  order 1  #}  
       <div class="mb-4 md:order-1 md:row-span-2">
-          <img src="/" alt="/" class="object-cover object-center mb-4 border border-gray-200 rounded shadow-sm bg-iiedblue-50 md:w-48 xl:w-80 active:bg-gray-100"/>
-          {# details #} 
+
+{{ content.field_media }}
+        
+
+          {# details - add to separate twig #} 
           <div class="flex flex-col mb-6">
+          details
             {{ language }} 
-            {{ content.field_date_published }}
-            {{ content.field_publisher }} 
+            {{ content.field_date_published|date('Y') }}
+            {{ content.field_publisher.0 }} 
             {{ content.field_series }} 
             {{ content.field_journal_ref }} 
             {{ content.field_isbn }} 
