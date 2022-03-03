@@ -105,10 +105,10 @@ process:
     -
       plugin: get
       source: field_publications_more_link
-  field_tagline:
+  field_short_description:
     -
       plugin: get
-      source: field_tagline
+      source: trimmed_short_description
   field_metatag:
     -
       plugin: d7_metatag_entities
