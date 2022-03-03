@@ -242,7 +242,7 @@ class Url implements TrustedCallbackInterface {
    *   you may use entity:{entity_type}/{entity_id} URIs. The internal: scheme
    *   should be avoided except when processing actual user input that may or
    *   may not correspond to a Drupal route. Normally use Url::fromRoute() for
-   *   code linking to any any Drupal page.
+   *   code linking to any Drupal page.
    * @param array $options
    *   (optional) An associative array of additional URL options, with the
    *   following elements:
@@ -349,7 +349,7 @@ class Url implements TrustedCallbackInterface {
    *   Thrown if the entity URI is invalid.
    */
   protected static function fromEntityUri(array $uri_parts, array $options, $uri) {
-    list($entity_type_id, $entity_id) = explode('/', $uri_parts['path'], 2);
+    [$entity_type_id, $entity_id] = explode('/', $uri_parts['path'], 2);
     if ($uri_parts['scheme'] != 'entity' || $entity_id === '') {
       throw new \InvalidArgumentException("The entity URI '$uri' is invalid. You must specify the entity id in the URL. e.g., entity:node/1 for loading the canonical path to node entity with id 1.");
     }

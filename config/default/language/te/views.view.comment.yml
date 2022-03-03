@@ -2,9 +2,6 @@ display:
   default:
     display_title: అప్రమేయం
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         subject:
           label: విషయం
@@ -12,6 +9,9 @@ display:
           label: రచయిత
         operations:
           label: కార్యాలు
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         subject:
           expose:
@@ -21,13 +21,6 @@ display:
             label: భాష
   page_unapproved:
     display_options:
-      filters:
-        subject:
-          expose:
-            label: విషయం
-        langcode:
-          expose:
-            label: భాష
       fields:
         subject:
           label: విషయం
@@ -35,3 +28,10 @@ display:
           label: రచయిత
         operations:
           label: కార్యాలు
+      filters:
+        subject:
+          expose:
+            label: విషయం
+        langcode:
+          expose:
+            label: భాష

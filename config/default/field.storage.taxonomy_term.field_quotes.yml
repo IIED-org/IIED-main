@@ -1,0 +1,19 @@
+uuid: 8aa86989-0cf4-449a-b0a6-b8becfe58f4c
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.field_quotes
+field_name: field_quotes
+entity_type: taxonomy_term
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

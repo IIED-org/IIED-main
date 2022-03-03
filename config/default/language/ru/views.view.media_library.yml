@@ -2,6 +2,7 @@ display:
   default:
     display_title: 'По умолчанию'
     display_options:
+      title: Мультимедиа
       filters:
         name:
           expose:
@@ -9,7 +10,6 @@ display:
         langcode:
           expose:
             label: Язык
-      title: Мультимедиа
   page:
     display_options:
       fields:

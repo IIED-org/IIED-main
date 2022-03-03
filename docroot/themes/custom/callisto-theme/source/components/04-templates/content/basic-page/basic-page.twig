@@ -1,0 +1,37 @@
+{#
+/**
+ * @file
+ * base-node-template
+ */
+#}
+{% set classes = [
+  'basic-page',
+  'overflow-x-hidden',
+] | sort | join(' ') | trim %}
+
+{% block article %}
+  <article{{ attributes.addClass(classes) }} role="article">
+    {% include '@elements/skip-content/skip-content-anchor.twig' %}
+    <header class="container">
+      {% block page_title %}
+        {% include '@elements/page-title/page-title.twig' %}
+      {% endblock page_title %}
+    </header>
+
+{#
+  In this template we print the sidebar twice, this is because we want to show it in different layouts at mobile versus desktop widths
+  so the easiest thing to do is just print them twice and then hide one.
+ #}
+    <div class="container">
+      <section>
+          {# Should reserve this block only for paragraphs/content_sections #}
+          {% block main_content %}
+
+            {{ content_sections }}
+
+          {% endblock main_content %}
+      </section>
+
+    </div>
+  </article>
+{% endblock article %}

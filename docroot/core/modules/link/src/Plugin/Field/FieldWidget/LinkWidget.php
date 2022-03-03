@@ -71,7 +71,7 @@ class LinkWidget extends WidgetBase {
       $displayable_string = $uri_reference;
     }
     elseif ($scheme === 'entity') {
-      list($entity_type, $entity_id) = explode('/', substr($uri, 7), 2);
+      [$entity_type, $entity_id] = explode('/', substr($uri, 7), 2);
       // Show the 'entity:' URI as the entity autocomplete would.
       // @todo Support entity types other than 'node'. Will be fixed in
       //   https://www.drupal.org/node/2423093.
@@ -229,11 +229,25 @@ class LinkWidget extends WidgetBase {
       $element['uri']['#description'] = $this->t('This must be an external URL such as %url.', ['%url' => 'http://example.com']);
     }
 
+    // Make uri required on the front-end when title filled-in.
+    if (!$this->isDefaultValueWidget($form_state) && $this->getFieldSetting('title') !== DRUPAL_DISABLED && !$element['uri']['#required']) {
+      $parents = $element['#field_parents'];
+      $parents[] = $this->fieldDefinition->getName();
+      $selector = $root = array_shift($parents);
+      if ($parents) {
+        $selector = $root . '[' . implode('][', $parents) . ']';
+      }
+
+      $element['uri']['#states']['required'] = [
+        ':input[name="' . $selector . '[' . $delta . '][title]"]' => ['filled' => TRUE],
+      ];
+    }
+
     $element['title'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Link text'),
       '#placeholder' => $this->getSetting('placeholder_title'),
-      '#default_value' => isset($items[$delta]->title) ? $items[$delta]->title : NULL,
+      '#default_value' => $items[$delta]->title ?? NULL,
       '#maxlength' => 255,
       '#access' => $this->getFieldSetting('title') != DRUPAL_DISABLED,
       '#required' => $this->getFieldSetting('title') === DRUPAL_REQUIRED && $element['#required'],
@@ -250,10 +264,9 @@ class LinkWidget extends WidgetBase {
 
       if (!$element['title']['#required']) {
         // Make title required on the front-end when URI filled-in.
-        $field_name = $this->fieldDefinition->getName();
 
         $parents = $element['#field_parents'];
-        $parents[] = $field_name;
+        $parents[] = $this->fieldDefinition->getName();
         $selector = $root = array_shift($parents);
         if ($parents) {
           $selector = $root . '[' . implode('][', $parents) . ']';

@@ -1,16 +1,16 @@
-uuid: c2766456-567d-48c7-a315-3b61380c1832
+uuid: b2ee277b-ca5f-47db-b144-a78cd0e4786a
 langcode: en
 status: true
 dependencies:
   module:
     - node
-    - text
 id: node.field_display_time
 field_name: field_display_time
 entity_type: node
-type: text_long
-settings: {  }
-module: text
+type: string_long
+settings:
+  case_sensitive: false
+module: core
 locked: false
 cardinality: 1
 translatable: true

@@ -1,0 +1,13 @@
+{% extends '@templates/layout/page.twig' %}
+
+{% block main %}
+  <main role="main" class="bg-white error-page">
+    <div class="layout-content container py-128">
+      {% include '@elements/skip-content/skip-content-anchor.twig' %}
+      <h1 class="text-28"><span class="text-24 font-medium text-black-light mr-12">403</span>We're sorry, you need to be logged in to view this page.</h1>
+      <div class="">
+        Please <a class="underline" href="/user">log in</a> to see this page or return to <a class="underline" href="/">homepage</a>.
+      </div>
+    </div>
+  </main>
+{% endblock main %}

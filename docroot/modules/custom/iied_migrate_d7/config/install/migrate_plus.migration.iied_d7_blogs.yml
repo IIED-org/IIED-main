@@ -31,7 +31,7 @@ process:
   title:
     -
       plugin: get
-      source: title
+      source: title_field
   field_main_image:
     -
       plugin: sub_process
@@ -116,7 +116,7 @@ process:
       source: taxonomy_vocabulary_15
       process:
         target_id: tid
-  field_collection:
+  field_collections:
     -
       plugin: migration_lookup
       migration: iied_d7_terms_collection
@@ -133,23 +133,17 @@ process:
   field_blogger_info/value:
     -
       plugin: get
-      source: body/0/value
+      source: field_blogger_info/0/value
   field_blogger_info/format:
     -
       plugin: default_value
       default_value: 'full_html'
   field_author_s_:
     -
-      plugin: skip_on_empty
-      method: process
+      plugin: migration_lookup
+      migration: iied_d7_terms_person
       source: field_authors
-    -
-      plugin: entity_generate
-      entity_type: taxonomy_term
-      bundle: person
-      bundle_key: vid
-      value_key: name
-      ignore_case: true
+      no_stub: true
   field_about_the_author:
     -
       plugin: skip_on_empty
@@ -176,6 +170,10 @@ process:
             plugin: extract
             index:
               - 1
+  path/alias: alias
+  path/pathauto:
+    plugin: default_value
+    default_value: false
 destination:
   plugin: 'entity_complete:node'
   translations: true

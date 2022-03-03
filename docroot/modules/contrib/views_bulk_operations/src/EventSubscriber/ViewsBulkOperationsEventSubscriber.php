@@ -38,7 +38,10 @@ class ViewsBulkOperationsEventSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events[ViewsBulkOperationsEvent::NAME][] = ['provideViewData', self::PRIORITY];
+    $events[ViewsBulkOperationsEvent::NAME][] = [
+      'provideViewData',
+      self::PRIORITY,
+    ];
     return $events;
   }
 

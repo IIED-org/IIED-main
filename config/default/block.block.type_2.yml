@@ -17,7 +17,7 @@ plugin: 'facet_block:type'
 settings:
   id: 'facet_block:type'
   label: 'Filter by type'
-  provider: facets
   label_display: visible
+  provider: facets
   block_id: type_2
 visibility: {  }

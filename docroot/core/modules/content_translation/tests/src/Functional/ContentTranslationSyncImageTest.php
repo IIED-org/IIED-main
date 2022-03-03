@@ -97,7 +97,7 @@ class ContentTranslationSyncImageTest extends ContentTranslationTestBase {
   }
 
   /**
-   * Tests image field field synchronization.
+   * Tests image field synchronization.
    */
   public function testImageFieldSync() {
     // Check that the alt and title fields are enabled for the image field.
@@ -152,9 +152,9 @@ class ContentTranslationSyncImageTest extends ContentTranslationTestBase {
       $field_values = [
         'uri' => $this->files[$index]->uri,
         'uid' => \Drupal::currentUser()->id(),
-        'status' => FILE_STATUS_PERMANENT,
       ];
       $file = File::create($field_values);
+      $file->setPermanent();
       $file->save();
       $fid = $file->id();
       $this->files[$index]->fid = $fid;

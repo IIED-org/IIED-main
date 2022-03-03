@@ -186,3 +186,26 @@ function facets_update_8006() {
     $block->save();
   }
 }
+
+/**
+ * Resave facets for consistent configuration export.
+ */
+function facets_update_8007() {
+  $facets = Facet::loadMultiple();
+  foreach ($facets as $facet) {
+    $facet->save();
+  }
+}
+
+/**
+ * Support different hierarchy plugin types.
+ */
+function facets_update_8008() {
+  $config_factory = \Drupal::configFactory();
+
+  foreach ($config_factory->listAll('facets.facet.') as $facet_config_name) {
+    $facet = $config_factory->getEditable($facet_config_name);
+    $facet->set('hierarchy', ['type' => 'taxonomy', 'config' => []]);
+    $facet->save(TRUE);
+  }
+}

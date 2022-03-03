@@ -1,0 +1,30 @@
+uuid: 6a4a505c-23f8-40b0-bcea-95ac8a1503ff
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.list_rows
+  module:
+    - system
+    - views
+  theme:
+    - iied_tw
+id: iied_tw_views_block__list_rows_block_1
+theme: iied_tw
+region: content
+weight: -6
+provider: null
+plugin: 'views_block:list_rows-block_1'
+settings:
+  id: 'views_block:list_rows-block_1'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: '<front>'

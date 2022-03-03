@@ -26,7 +26,6 @@ default_value_callback: ''
 settings:
   handler: 'default:paragraph'
   handler_settings:
-    negate: 0
     target_bundles:
       basic_text: basic_text
       file_upload: file_upload
@@ -34,32 +33,33 @@ settings:
       image: image
       media_embed: media_embed
       video_embed: video_embed
+    negate: 0
     target_bundles_drag_drop:
       basic_text:
-        enabled: true
         weight: 8
+        enabled: true
       file_upload:
-        enabled: true
         weight: 9
-      image:
         enabled: true
+      image:
         weight: 12
+        enabled: true
       image_wide:
         weight: 10
         enabled: false
       info_box:
-        enabled: true
         weight: 11
+        enabled: true
       linked_person:
         weight: 12
         enabled: false
       media_embed:
-        enabled: true
         weight: 13
+        enabled: true
       row_of_4:
         weight: 14
         enabled: false
       video_embed:
-        enabled: true
         weight: 18
+        enabled: true
 field_type: entity_reference_revisions

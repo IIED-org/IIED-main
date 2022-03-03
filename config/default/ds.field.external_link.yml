@@ -1,6 +1,10 @@
 id: external_link
 label: 'External link'
 ui_limit: 'publication|*'
+type: block
+type_label: 'Block field'
+entities:
+  node: node
 properties:
   block: 'views_block:external_links-block_2'
   use_block_title: false
@@ -8,12 +12,8 @@ properties:
   config:
     id: 'views_block:external_links-block_2'
     label: ''
-    provider: views
     label_display: visible
+    provider: views
+    context_mapping: {  }
     views_label: ''
     items_per_page: none
-    context_mapping: {  }
-type: block
-type_label: 'Block field'
-entities:
-  node: node

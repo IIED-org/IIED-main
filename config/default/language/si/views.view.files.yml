@@ -1,11 +1,15 @@
 display:
   default:
+    display_title: Master
     display_options:
       fields:
         filename:
           label: නම
         status:
           label: තත්වය
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         status:
           expose:

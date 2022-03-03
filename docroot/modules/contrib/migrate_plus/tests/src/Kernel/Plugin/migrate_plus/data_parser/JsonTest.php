@@ -14,7 +14,7 @@ class JsonTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['migrate', 'migrate_plus'];
+  protected static $modules = ['migrate', 'migrate_plus'];
 
   /**
    * Tests missing properties in json file.

@@ -49,6 +49,11 @@ name: 'Acquia Search API Solr server'
 description: ''
 backend: search_api_solr
 backend_config:
+  retrieve_data: true
+  highlight_data: true
+  site_hash: true
+  server_prefix: ''
+  domain: generic
   connector: solr_acquia_connector
   connector_config:
     scheme: https
@@ -60,9 +65,4 @@ backend_config:
     solr_version: ''
     http_method: AUTO
     jmx: 0
-  retrieve_data: true
-  highlight_data: true
   skip_schema_check: true
-  server_prefix: ''
-  domain: generic
-  site_hash: true

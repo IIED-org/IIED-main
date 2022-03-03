@@ -1,0 +1,32 @@
+/* purgecss start ignore */
+.webform-submission-form fieldset {
+  @apply max-w-full;
+  @apply mb-48;
+  @apply bg-gray-light;
+  @apply p-32;
+  @apply rounded;
+  @apply pb-24;
+
+  input {
+    &[type='text'],
+    &[type='password'],
+    &[type='email'],
+    &[type='tel'],
+    &[type='number'] {
+      @apply bg-white;
+    }
+  }
+
+  input {
+    @apply bg-white;
+  }
+
+
+  .form-item {
+    &:last-of-type {
+      @apply mb-16;
+    }
+  }
+}
+
+/* purgecss end ignore */

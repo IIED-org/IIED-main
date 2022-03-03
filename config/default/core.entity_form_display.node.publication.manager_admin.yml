@@ -68,17 +68,17 @@ third_party_settings:
       children:
         - field_editor_s_
         - field_translator
+      label: 'Editor(s)and Translator(s)'
+      region: content
       parent_name: ''
       weight: 10
       format_type: details
-      region: content
       format_settings:
+        classes: ''
+        id: ''
+        open: false
         description: ''
         required_fields: true
-        id: ''
-        classes: ''
-        open: false
-      label: 'Editor(s)and Translator(s)'
     group_publication_metadata:
       children:
         - field_area_list
@@ -86,80 +86,80 @@ third_party_settings:
         - field_isbn
         - field_issn
         - field_doi
+      label: 'Country list, PDF pages, ISBN etc.'
+      region: content
       parent_name: ''
       weight: 11
       format_type: details
-      region: content
       format_settings:
+        classes: ''
+        id: ''
+        open: false
         description: ''
         required_fields: true
-        id: ''
-        classes: ''
-        open: false
-      label: 'Country list, PDF pages, ISBN etc.'
     group_iied_marketing_and_reporti:
       children:
         - field_team
         - field_theme_s_
+      label: 'IIED Team/Theme'
+      region: content
       parent_name: ''
       weight: 12
       format_type: details
-      region: content
       format_settings:
+        classes: ''
+        id: ''
+        open: false
         description: ''
         required_fields: true
-        id: ''
-        classes: ''
-        open: false
-      label: 'IIED Team/Theme'
     group_series_article_and_journal:
       children:
         - field_series
         - field_series_item_code
         - field_source_publication
         - field_journal_ref
+      label: 'Series, Journal or Book chapter info'
+      region: content
       parent_name: ''
       weight: 13
       format_type: details
-      region: content
       format_settings:
+        classes: ''
+        id: ''
+        open: false
         description: ''
         required_fields: true
-        id: ''
-        classes: ''
-        open: false
-      label: 'Series, Journal or Book chapter info'
     group_tags_and_links:
       children:
         - field_project
         - field_iied_url
         - field_tags
+      label: 'Links to IIED main site and tags (required before going live)'
+      region: content
       parent_name: ''
       weight: 14
       format_type: details
-      region: content
       format_settings:
+        classes: ''
+        id: ''
+        open: false
         description: '<p><i><big><strong>Hint:</strong> It is possible to save your entry without completing this section (i.e. if you are making an entry just to generate a product code/URL), however it <strong>MUST</strong> be completed before the entry is made live</big></i></p>'
         required_fields: true
-        id: ''
-        classes: ''
-        open: false
-      label: 'Links to IIED main site and tags (required before going live)'
     group_upload_file_or_link_to_ext:
       children:
         - field_media
         - field_external_url
+      label: 'Upload file, or link to external publication (required before going live)'
+      region: content
       parent_name: ''
       weight: 15
       format_type: details
-      region: content
       format_settings:
+        classes: ''
+        id: ''
+        open: false
         description: '<i><big><strong>Hint: </strong>Save this entry BEFORE uploading your file in order to generate the correct product code (visible in the saved page URL e.g. <strong>''pubs.iied.org/20036iied''</strong>). Please remember your PDF file MUST be renamed to match the product code before uploading, e.g. ''<strong>20036iied.pdf''</strong>.<p>If your file is not in english, add an <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"><strong>ISO 639-1 two-letter language code</strong></a> to the filename, e.g. <strong>''20036iiedsw.pdf''</strong> for Kiswahili.</p></big></i>'
         required_fields: true
-        id: ''
-        classes: ''
-        open: false
-      label: 'Upload file, or link to external publication (required before going live)'
     group_legacy_fields_do_not_use:
       children:
         - field_deptlist
@@ -169,46 +169,46 @@ third_party_settings:
         - field_product_code
         - field_meta_tags
         - group_coming_soon_
+      label: 'Admin only fields - do not use'
+      region: content
       parent_name: ''
       weight: 19
       format_type: details
-      region: content
       format_settings:
+        classes: ''
+        id: ''
+        open: false
         description: ''
         required_fields: true
-        id: ''
-        classes: ''
-        open: false
-      label: 'Admin only fields - do not use'
     group_coming_soon_:
       children:
         - field_parent
         - field_lists
+      label: 'Coming soon...'
+      region: content
       parent_name: group_legacy_fields_do_not_use
       weight: 22
       format_type: details
-      region: content
       format_settings:
-        id: ''
         classes: ''
-        description: ''
+        id: ''
         open: false
+        description: ''
         required_fields: true
-      label: 'Coming soon...'
     group_replacement_cover_image:
       children:
         - field_cover_image
+      label: 'Replacement cover image'
+      region: content
       parent_name: ''
       weight: 17
       format_type: details
-      region: content
       format_settings:
-        id: ''
         classes: ''
-        effect: none
+        id: ''
         open: false
         required_fields: true
-      label: 'Replacement cover image'
+        effect: none
 id: node.publication.manager_admin
 targetEntityType: node
 bundle: publication
@@ -217,13 +217,13 @@ content:
   body:
     type: text_textarea_with_summary
     weight: 9
+    region: content
     settings:
       rows: 9
       summary_rows: 3
       placeholder: ''
       show_summary: false
     third_party_settings: {  }
-    region: content
   created:
     type: datetime_timestamp
     weight: 22
@@ -231,283 +231,283 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_a_serial:
+    type: serial_default_widget
     weight: 28
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: serial_default_widget
-    region: content
   field_admin:
+    type: text_textarea
     weight: 16
+    region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-    type: text_textarea
-    region: content
   field_area_list:
+    type: address_country_default
     weight: 11
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: address_country_default
-    region: content
   field_author_s_:
+    type: entity_reference_autocomplete
     weight: 4
+    region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: entity_reference_autocomplete
-    region: content
   field_cover_image:
     type: media_library_widget
     weight: 18
+    region: content
     settings:
       media_types: {  }
     third_party_settings: {  }
-    region: content
   field_date_published:
-    weight: 8
-    settings: {  }
-    third_party_settings: {  }
     type: datetime_default
+    weight: 8
     region: content
+    settings: {  }
+    third_party_settings: {  }
   field_deptlist:
+    type: string_textfield
     weight: 15
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_document_type:
+    type: options_select
     weight: 7
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: options_select
-    region: content
   field_doi:
+    type: link_default
     weight: 15
+    region: content
     settings:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
-    type: link_default
-    region: content
   field_editor_s_:
-    weight: 7
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
     type: entity_reference_autocomplete
+    weight: 7
     region: content
-  field_external_url:
-    weight: 15
-    settings:
-      placeholder_url: ''
-      placeholder_title: ''
-    third_party_settings: {  }
-    type: link_default
-    region: content
-  field_iied_url:
-    weight: 14
-    settings:
-      placeholder_url: ''
-      placeholder_title: ''
-    third_party_settings: {  }
-    type: link_default
-    region: content
-  field_isbn:
-    weight: 13
-    settings: {  }
-    third_party_settings: {  }
-    type: isbn_widget
-    region: content
-  field_issn:
-    weight: 14
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-    type: string_textfield
-    region: content
-  field_journal_ref:
-    weight: 15
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-    type: string_textfield
-    region: content
-  field_lists:
-    weight: 17
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: entity_reference_autocomplete_tags
+  field_external_url:
+    type: link_default
+    weight: 15
     region: content
-  field_lit_code:
-    weight: 0
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  field_iied_url:
+    type: link_default
+    weight: 14
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  field_isbn:
+    type: isbn_widget
+    weight: 13
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: options_select
+  field_issn:
+    type: string_textfield
+    weight: 14
     region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_journal_ref:
+    type: string_textfield
+    weight: 15
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_lists:
+    type: entity_reference_autocomplete_tags
+    weight: 17
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_lit_code:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   field_media:
     type: media_library_widget
     weight: 13
+    region: content
     settings:
       media_types: {  }
     third_party_settings: {  }
-    region: content
   field_meta_tags:
+    type: metatag_firehose
     weight: 21
+    region: content
     settings:
       sidebar: false
     third_party_settings: {  }
-    type: metatag_firehose
-    region: content
   field_parent:
+    type: entity_reference_autocomplete
     weight: 15
+    region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: entity_reference_autocomplete
-    region: content
   field_pdf_pages:
-    weight: 12
-    settings:
-      placeholder: ''
-    third_party_settings: {  }
     type: number
+    weight: 12
     region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
   field_product_code:
+    type: string_textfield
     weight: 20
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_project:
+    type: entity_reference_autocomplete
     weight: 13
+    region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: entity_reference_autocomplete
-    region: content
   field_publisher:
+    type: entity_reference_autocomplete
     weight: 5
+    region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: entity_reference_autocomplete
-    region: content
   field_publisher_legacy:
+    type: string_textfield
     weight: 16
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_reportagency1:
+    type: string_textfield
     weight: 18
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_series:
+    type: options_select
     weight: 11
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: options_select
-    region: content
   field_series_item_code:
+    type: string_textfield
     weight: 13
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_short_title:
+    type: string_textfield
     weight: 3
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_source_publication:
+    type: string_textfield
     weight: 14
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_status:
+    type: options_select
     weight: 19
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: options_select
-    region: content
   field_tags:
+    type: entity_reference_autocomplete_tags
     weight: 16
+    region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 120
       placeholder: ''
     third_party_settings: {  }
-    type: entity_reference_autocomplete_tags
-    region: content
   field_team:
-    weight: 13
-    settings: {  }
-    third_party_settings: {  }
     type: options_select
+    weight: 13
     region: content
-  field_theme_s_:
-    weight: 14
     settings: {  }
     third_party_settings: {  }
+  field_theme_s_:
     type: options_buttons
+    weight: 14
     region: content
+    settings: {  }
+    third_party_settings: {  }
   field_translator:
+    type: entity_reference_autocomplete
     weight: 8
+    region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: entity_reference_autocomplete
-    region: content
   field_work_programme_global_enga:
+    type: options_select
     weight: 6
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: options_select
-    region: content
   langcode:
     type: language_select
     weight: 1
@@ -523,24 +523,24 @@ content:
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
-    settings:
-      display_label: true
     weight: 24
     region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    settings:
-      display_label: true
     weight: 27
     region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
-    settings:
-      display_label: true
     weight: 25
     region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   title:
     type: string_textfield
@@ -558,12 +558,12 @@ content:
   uid:
     type: entity_reference_autocomplete
     weight: 21
+    region: content
     settings:
       match_operator: CONTAINS
+      match_limit: 10
       size: 60
       placeholder: ''
-      match_limit: 10
-    region: content
     third_party_settings: {  }
   url_redirects:
     weight: 20

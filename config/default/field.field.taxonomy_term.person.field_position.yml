@@ -1,0 +1,21 @@
+uuid: 1c851acc-04f7-4de3-a4a7-5ba59e3da49a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_position
+    - taxonomy.vocabulary.person
+  module:
+    - text
+id: taxonomy_term.person.field_position
+field_name: field_position
+entity_type: taxonomy_term
+bundle: person
+label: Position
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

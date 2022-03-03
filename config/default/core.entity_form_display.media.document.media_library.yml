@@ -24,9 +24,9 @@ content:
     third_party_settings: {  }
   translation:
     weight: 10
+    region: content
     settings: {  }
     third_party_settings: {  }
-    region: content
 hidden:
   created: true
   field_media_document: true
@@ -34,5 +34,6 @@ hidden:
   field_size: true
   name: true
   path: true
+  replace_file: true
   status: true
   uid: true

@@ -49,7 +49,7 @@ class D7FieldParagraphs extends FieldableEntity {
         ]
       );
       $query->condition('pi.field_name', $this->configuration['field_name']);
-      $types = ['article', 'blog', 'event', 'media_release'];
+      $types = ['article', 'blog', 'event', 'media_release', 'user'];
       $query->condition('fd.bundle', $types, 'IN');
 
       // Join the field_data_field_basic_text.
@@ -98,6 +98,32 @@ class D7FieldParagraphs extends FieldableEntity {
           'entity_id',
           'delta',
           'field_video_description_value',
+        ]
+      );
+
+
+      // Join the field_data_field_description.
+      $query->leftJoin('field_data_field_description  ', 'fdfd', 'fdfd.entity_id = fd.' . $this->configuration['field_name'] . '_value');
+      $query->fields(
+        'fdfd',
+        [
+          'entity_id',
+          'delta',
+          'field_description_value',
+        ]
+      );
+
+      // Join the field_data_field_related_link.
+      // $query->condition('fd.bundle', 'user');
+      // $query->condition('fd.entity_id', '53');
+      $query->leftJoin('field_data_field_related_link  ', 'fdfl', 'fdfl.entity_id = fd.' . $this->configuration['field_name'] . '_value');
+      $query->fields(
+        'fdfl',
+        [
+          'entity_id',
+          'delta',
+          'field_related_link_url',
+          'field_related_link_title',
         ]
       );
 

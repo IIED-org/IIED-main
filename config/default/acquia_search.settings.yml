@@ -1,6 +1,6 @@
+_core:
+  default_config_hash: kVdYL0s7HSheIGw8N1eNw6Wv1WVI_c2ZznSKINU_QqU
 api_host: 'https://api.sr-prod02.acquia.com'
 extract_query_handler_option: update/extract
 read_only: false
 override_search_core: AGHX-142716.prod.irforum
-_core:
-  default_config_hash: kVdYL0s7HSheIGw8N1eNw6Wv1WVI_c2ZznSKINU_QqU

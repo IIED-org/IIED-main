@@ -23,12 +23,13 @@ process:
       default_value: 'full_html'
   field_upload/target_id:
     -
+      plugin: skip_on_empty
+      method: process
+    -
       plugin: migration_lookup
       migration: iied_d7_files
       source: upload_fid
-    -
-      plugin: skip_on_empty
-      method: row
+
 destination:
   plugin: 'entity_reference_revisions:paragraph'
 migration_dependencies:

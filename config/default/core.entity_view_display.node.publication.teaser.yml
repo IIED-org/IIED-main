@@ -58,6 +58,7 @@ dependencies:
 third_party_settings:
   layout_builder:
     enabled: true
+    allow_custom: false
     sections:
       -
         layout_id: layout_onecol
@@ -71,50 +72,49 @@ third_party_settings:
             configuration:
               id: 'field_block:node:publication:field_product_code'
               label: 'Product code'
-              provider: layout_builder
               label_display: '0'
-              formatter:
-                label: hidden
-                type: string
-                settings:
-                  link_to_entity: true
-                third_party_settings: {  }
+              provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
                 view_mode: view_mode
-            additional: {  }
+              formatter:
+                type: string
+                label: hidden
+                settings:
+                  link_to_entity: true
+                third_party_settings: {  }
             weight: 0
+            additional: {  }
           d2865cbc-5e8c-4d02-9f83-73f361304f9b:
             uuid: d2865cbc-5e8c-4d02-9f83-73f361304f9b
             region: content
             configuration:
               id: 'field_block:node:publication:body'
               label: Body
-              provider: layout_builder
               label_display: '0'
-              formatter:
-                label: hidden
-                type: text_summary_or_trimmed
-                settings:
-                  trim_length: 300
-                third_party_settings: {  }
+              provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
                 view_mode: view_mode
-            additional: {  }
+              formatter:
+                type: text_summary_or_trimmed
+                label: hidden
+                settings:
+                  trim_length: 300
+                third_party_settings: {  }
             weight: 1
+            additional: {  }
           d74ed986-0bc7-42fd-8698-73389d51ec33:
             uuid: d74ed986-0bc7-42fd-8698-73389d51ec33
             region: content
             configuration:
+              id: 'extra_field_block:node:publication:sharing_buttons'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'extra_field_block:node:publication:sharing_buttons'
-            additional: {  }
             weight: 2
+            additional: {  }
         third_party_settings: {  }
-    allow_custom: false
 id: node.publication.teaser
 targetEntityType: node
 bundle: publication
@@ -122,21 +122,21 @@ mode: teaser
 content:
   field_product_code:
     type: string
-    weight: 0
-    region: content
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 0
+    region: content
   links:
+    settings: {  }
+    third_party_settings: {  }
     weight: 1
     region: content
-    settings: {  }
-    third_party_settings: {  }
   sharing_buttons:
-    weight: 100
     settings: {  }
     third_party_settings: {  }
+    weight: 100
     region: content
 hidden:
   body: true

@@ -1,6 +1,10 @@
 id: cover_image_card
 label: 'Cover image card'
 ui_limit: ''
+type: block
+type_label: 'Block field'
+entities:
+  node: node
 properties:
   block: 'views_block:cover_image-block_2'
   use_block_title: false
@@ -8,13 +12,9 @@ properties:
   config:
     id: 'views_block:cover_image-block_2'
     label: ''
-    provider: views
     label_display: visible
-    views_label: ''
-    items_per_page: none
+    provider: views
     context_mapping:
       nid: '@ds.ds_block_field_entity_context:node'
-type: block
-type_label: 'Block field'
-entities:
-  node: node
+    views_label: ''
+    items_per_page: none

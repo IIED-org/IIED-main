@@ -1,16 +1,16 @@
-uuid: f36847cb-233c-4614-a98b-1d26f7b909ba
+uuid: 21e9a114-f465-4989-81d6-def52bfebfa1
 langcode: en
 status: true
 dependencies:
   module:
     - node
-    - text
 id: node.field_where_and_how
 field_name: field_where_and_how
 entity_type: node
-type: text_long
-settings: {  }
-module: text
+type: string_long
+settings:
+  case_sensitive: false
+module: core
 locked: false
 cardinality: 1
 translatable: true

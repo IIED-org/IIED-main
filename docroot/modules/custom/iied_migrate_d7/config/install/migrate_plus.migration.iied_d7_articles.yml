@@ -31,7 +31,7 @@ process:
   title:
     -
       plugin: get
-      source: title
+      source: title_field
   body/value:
     -
       plugin: get
@@ -44,6 +44,9 @@ process:
     -
       plugin: default_value
       default_value: 'full_html'
+  field_article_type:
+    - plugin: get
+      source: field_article_type/0/value
   field_dates:
     -
       plugin: get
@@ -80,7 +83,7 @@ process:
     -
       plugin: default_value
       default_value: 'full_html'
-  field_theme:
+  field_theme_s_:
     -
       plugin: sub_process
       source: taxonomy_vocabulary_19
@@ -92,7 +95,7 @@ process:
       source: taxonomy_vocabulary_15
       process:
         target_id: tid
-  field_collection:
+  field_collections:
     -
       plugin: migration_lookup
       migration: iied_d7_terms_collection
@@ -195,6 +198,18 @@ process:
             plugin: extract
             index:
               - 1
+  path/alias: alias
+  path/pathauto:
+    plugin: default_value
+    default_value: false
+  field_project:
+    plugin: sub_process
+    source: field_project_number_reference
+    process:
+      target_id:
+        plugin: migration_lookup
+        migration: iied_projects
+        source: target_id
 destination:
   plugin: 'entity_complete:node'
   translations: true

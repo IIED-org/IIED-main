@@ -1,0 +1,36 @@
+uuid: da688b3c-4992-43e7-9900-46a7adb3d5a7
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.popular_terms
+  module:
+    - block_class
+    - system
+    - views
+  theme:
+    - iied_tw
+third_party_settings:
+  block_class:
+    classes: mb-4
+id: iied_tw_views_block__popular_terms_block_1
+theme: iied_tw
+region: sidebar_first
+weight: -13
+provider: null
+plugin: 'views_block:popular_terms-block_1'
+settings:
+  id: 'views_block:popular_terms-block_1'
+  label: ''
+  label_display: '0'
+  provider: views
+  context_mapping:
+    field_theme_target_id: '@ds.ds_block_field_entity_context:taxonomy_term'
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: '<front>'

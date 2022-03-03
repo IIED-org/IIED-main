@@ -1,0 +1,21 @@
+uuid: 331fe0d5-cf96-4cf1-98aa-f47ff03b4c53
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_biography
+    - taxonomy.vocabulary.person
+  module:
+    - text
+id: taxonomy_term.person.field_biography
+field_name: field_biography
+entity_type: taxonomy_term
+bundle: person
+label: 'Biography (full)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

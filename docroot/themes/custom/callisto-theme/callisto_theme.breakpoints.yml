@@ -1,0 +1,49 @@
+callisto_theme.viewport:
+  label: viewport sizing
+  mediaQuery: 'screen'
+  weight: 0
+  multipliers:
+    - 1x
+callisto_theme.xsmall:
+  label: xsmall
+  mediaQuery: 'screen and (min-width: 380px)'
+  weight: 0
+  multipliers:
+    - 1x
+callisto_theme.small:
+  label: small
+  mediaQuery: 'screen and (min-width: 500px)'
+  weight: 1
+  multipliers:
+    - 1x
+callisto_theme.medium:
+  label: medium
+  mediaQuery: 'screen and (min-width: 768px)'
+  weight: 2
+  multipliers:
+    - 1x
+callisto_theme.large:
+  label: large
+  mediaQuery: 'screen and (min-width: 1024px)'
+  weight: 3
+  multipliers:
+    - 1x
+callisto_theme.xlarge:
+  label: xlarge
+  mediaQuery: 'screen and (min-width: 1250px)'
+  weight: 4
+  multipliers:
+    - 1x
+callisto_theme.xxlarge:
+  label: xxlarge
+  mediaQuery: 'screen and (min-width: 1600px)'
+  weight: 5
+  multipliers:
+    - 1x
+callisto_theme.xxxlarge:
+  label: xxxlarge
+  mediaQuery: 'screen and (min-width: 2560px)'
+  weight: 6
+  multipliers:
+    - 1x
+

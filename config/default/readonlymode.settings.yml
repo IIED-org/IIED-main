@@ -1,3 +1,5 @@
+_core:
+  default_config_hash: VxaCqdJsbhWNMsXd4T2aqdDqpAgIasry9-EIxPKlK-s
 enabled: null
 url: ''
 messages:
@@ -19,5 +21,3 @@ forms:
   additional:
     edit: "search*\r\nviews_exposed*"
     view: ''
-_core:
-  default_config_hash: VxaCqdJsbhWNMsXd4T2aqdDqpAgIasry9-EIxPKlK-s

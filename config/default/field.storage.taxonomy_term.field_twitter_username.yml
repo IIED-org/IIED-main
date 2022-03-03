@@ -1,0 +1,21 @@
+uuid: 99f7c9db-3b69-457e-9af5-c4b47ed6ef3b
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.field_twitter_username
+field_name: field_twitter_username
+entity_type: taxonomy_term
+type: string
+settings:
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

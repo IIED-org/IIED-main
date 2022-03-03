@@ -15,14 +15,14 @@ index_id: acquia_search_index
 suggester_settings:
   live_results:
     fields: {  }
+    highlight:
+      enabled: false
+      field: ''
     view_modes:
       'entity:node':
         publication: ''
       'entity:taxonomy_term':
         person: search_autocomplete
-    highlight:
-      enabled: false
-      field: ''
 suggester_weights:
   live_results: -50
 suggester_limits:
@@ -36,6 +36,6 @@ options:
   limit: 20
   min_length: 2
   show_count: true
-  autosubmit: true
-  submit_button_selector: ':submit'
   delay: 200
+  submit_button_selector: ':submit'
+  autosubmit: true

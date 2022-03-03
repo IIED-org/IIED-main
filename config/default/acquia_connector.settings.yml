@@ -1,3 +1,5 @@
+_core:
+  default_config_hash: 6phbBhcYjncqxncwDHAImFHb0MAKamGB_HQy53AfN9s
 subscription_name: 'IIED Pubs'
 debug: false
 cron_interval: 30
@@ -32,9 +34,9 @@ spi:
     variables: {  }
     time: 0
   cron_interval: 28800
-  env_detection_enabled: true
-  site_uuid: 53a9e309-734c-4742-b2c5-c8ccdb11652d
   site_environment: null
+  site_uuid: 53a9e309-734c-4742-b2c5-c8ccdb11652d
+  env_detection_enabled: true
 mapping:
   acquia_spi_send_node_user:
     - acquia_connector.settings
@@ -162,5 +164,3 @@ mapping:
   http_response_debug_cacheability_headers:
     - container_parameter
     - http.response.debug_cacheability_headers
-_core:
-  default_config_hash: 6phbBhcYjncqxncwDHAImFHb0MAKamGB_HQy53AfN9s

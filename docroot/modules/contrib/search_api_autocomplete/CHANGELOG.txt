@@ -1,3 +1,13 @@
+Search API Autocomplete 1.6 (2022-01-12):
+-----------------------------------------
+- #3238635 by drunken monkey, mkalkbrenner: Deprecated
+  AutocompleteBackendInterface in favor of the one in Search API.
+- #3224354 by drunken monkey: Fixed service container error after module
+  upgrade.
+- #3228452 by drunken monkey: Fixed test failures against Drupal 9.3.x.
+- #3226934 by drunken monkey: Fixed some exception handling problems.
+- #3226653 by drunken monkey: Added "lifecycle" key to .info.yml file.
+
 Search API Autocomplete 1.5 (2021-07-19):
 -----------------------------------------
 - #3060211 by FeyP, drunken monkey: Added optional highlighting for the "Live

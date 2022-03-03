@@ -5,7 +5,12 @@ plugin.plugin_configuration.facets_summary_processor.show_count:
   type: config_object
 
 plugin.plugin_configuration.facets_summary_processor.show_string:
-  type: config_object
+  type: mapping
+  label: 'Current text search'
+  mapping:
+    label:
+      type: label
+      label: 'Label'
 
 plugin.plugin_configuration.facets_summary_processor.hide_when_not_rendered:
   type: config_object

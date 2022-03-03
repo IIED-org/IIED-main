@@ -245,14 +245,11 @@ class LiveResults extends SuggesterPluginBase implements PluginFormInterface {
    */
   protected function isHighlightingAvailable(): bool {
     try {
-      $this->getSearch()->getIndex()->getProcessor('highlight');
-      return TRUE;
-    }
-    catch (SearchApiException $e) {
+      return $this->getSearch()->getIndex()->isValidProcessor('highlight');
     }
     catch (SearchApiAutocompleteException $e) {
+      return FALSE;
     }
-    return FALSE;
   }
 
   /**

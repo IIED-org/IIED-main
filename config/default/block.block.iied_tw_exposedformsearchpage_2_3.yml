@@ -1,0 +1,33 @@
+uuid: bec1453c-8ac5-4a35-b84f-09852687533b
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.search
+  module:
+    - block_class
+    - system
+    - views
+  theme:
+    - iied_tw
+third_party_settings:
+  block_class:
+    classes: sidebar-form
+id: iied_tw_exposedformsearchpage_2_3
+theme: iied_tw
+region: sidebar_first
+weight: -12
+provider: null
+plugin: 'views_exposed_filter_block:search-page_2'
+settings:
+  id: 'views_exposed_filter_block:search-page_2'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: 'Search sorts'
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: '/search*'

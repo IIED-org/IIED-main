@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Tests\UnitTestCase;
 
 /**
- * Class ResetFacetsProcessorTest.
+ * Provides the ResetFacetsProcessorTest class.
  *
  * @group facets
  * @coversDefaultClass \Drupal\facets_summary\Plugin\facets_summary\processor\ResetFacetsProcessor
@@ -27,7 +27,7 @@ class ResetFacetsProcessorTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
     $string_translation = $this->prophesize(TranslationInterface::class);
 

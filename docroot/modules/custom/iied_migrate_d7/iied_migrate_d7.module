@@ -17,7 +17,9 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
   $themes_migrations = [
     'iied_d7_projects',
     'iied_d7_articles',
-    'iied_d7_blogs'
+    'iied_d7_blogs',
+    'iied_d7_events',
+    'iied_d7_news_media',
   ];
   if (in_array($migration->id(), $themes_migrations) ) {
     // Themes are already in the pubs site, so quickest to simply map the term
@@ -77,15 +79,15 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
     }
 
     // Use user reference to look up user name to map to the person taxonomy.
-    $project_contacts = [];
-    $project_contacts = $row->getSourceProperty('field_project_contact');
-    if ($project_contacts && count($project_contacts)) {
-      foreach ($project_contacts as $project_contact) {
-        $user_id = $project_contact['target_id'];
-            $author_name = $source->getDatabase()->query('SELECT name FROM {users} WHERE uid = :uid', array(':uid' => $user_id))->fetchField();
-          $row->setSourceProperty('field_project_contact', $author_name);
-      }
-    }
+    // $project_contacts = [];
+    // $project_contacts = $row->getSourceProperty('field_project_contact');
+    // if ($project_contacts && count($project_contacts)) {
+    //   foreach ($project_contacts as $project_contact) {
+    //     $user_id = $project_contact['target_id'];
+    //         $author_name = $source->getDatabase()->query('SELECT name FROM {users} WHERE uid = :uid', array(':uid' => $user_id))->fetchField();
+    //       $row->setSourceProperty('field_project_contact', $author_name);
+    //   }
+    // }
   }
 
   // iied_d7_field_paragraphs, ignoring some paragraphs.
@@ -103,6 +105,16 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       // paragraphs of this type use in articles. They can be migrated to the
       // video_embed paragraph, which has the same fields.
       $row->setSourceProperty('bundle', 'video_embed');
+    }
+    if ($row->getSourceProperty('bundle') == 'related_link') {
+      $url = $row->getSourceProperty('field_related_link_url');
+      $title = $row->getSourceProperty('field_related_link_title');
+      $related_link_processed[0] = [
+        'url' => trim($url),
+        'title' => $title,
+        'attributes' => '',
+      ];
+      $row->setSourceProperty('related_link_processed', $related_link_processed);
     }
   }
 
@@ -125,7 +137,7 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
     foreach ($blog_authors as $blog_author) {
       $author_names[] = $source->getDatabase()->query('SELECT name FROM {users} WHERE uid = :uid', array(':uid' => $blog_author))->fetchField();
     }
-    $row->setSourceProperty('field_authors', $author_names);
+    $row->setSourceProperty('field_authors', $blog_authors);
 
   }
 
@@ -137,5 +149,89 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       $tid = array_key_first($term);
       $row->setSourceProperty('tid', $tid);
     }
+    $researcher_profiles = $row->getSourceProperty('field_researcher_profiles');
+    // Determine the value for the new person_type taxonomy term. This replaces
+    // the previous boolean fields for staff, guest and former staff.
+    $field_list = $row->getSourceProperty('field_list');
+    $field_guest_contributor = $row->getSourceProperty('field_guest_contributor');
+    $field_ex_staff = $row->getSourceProperty('field_ex_staff');
+    if ($field_list[0]['value']) {
+      $mapped_person_type = 'Staff';
+    }
+    elseif ($field_guest_contributor[0]['value']) {
+      $mapped_person_type = 'Guest';
+    }
+    elseif ($field_ex_staff[0]['value']) {
+      $mapped_person_type = 'Former staff';
+    }
+    $row->setSourceProperty('mapped_person_type', $mapped_person_type);
   }
+
+  // iied_d7_projects migration.
+  if ($migration->id() == 'iied_d7_projects') {
+    if ($row->getSourceProperty('nid') == "14066") {
+      // For node 14066 we were seeing the error on migration:
+      //   Array index missing, extraction failed for
+      //   'array( 'id' => '873', 'revision_id' => '874', )'.
+      //   Consider adding a `default` key to the configuration.
+      //
+      // I think this is due to an empty paragraph on the
+      // field_full_width_media field, so here we simply set that source
+      // property to an empty array, which seems to solve the issue.
+      $row->setSourceProperty('field_full_width_media', []);
+    }
+  }
+  // iied_d7_events migration.
+  if ($migration->id() == 'iied_d7_events') {
+    $x = 0;
+  }
+  // iied_d7_news_media migration.
+  if ($migration->id() == 'iied_d7_news_media') {
+    // Source node 3979 is giving an error, which seems to be referencing a
+    // project id 4554 which does not seem to exist.
+    if ($row->getSourceProperty('nid') == '3979') {
+      $project = $row->getSourceProperty('field_project_number_reference');
+      if (is_array($project) && $project[0]['target_id'] == '4554') {
+        $row->setSourceProperty('field_project_number_reference', []);
+      }
+    }
+  }
+  //iied_d7_person_para_researcher_profiles
+  if ($migration->id() == 'iied_d7_person_para_researcher_profiles') {
+    $url = $row->getSourceProperty('field_link_value');
+    $field_link_processed[0] = [
+      'url' => trim($url),
+      'title' => '',
+      'attributes' => '',
+    ];
+    $row->setSourceProperty('field_link_processed', $field_link_processed);
+  }
+  // Collections terms migration.
+  if ($migration->id() == 'iied_d7_terms_collection') {
+    $tagline_value = $row->getSourceProperty('field_tagline');
+    $trimmed_short_description = substr($tagline_value[0]['value'], 0, 255);
+    $row->setSourceProperty('trimmed_short_description', $trimmed_short_description);
+  }
+
+  // Look up path aliases for node migrations.
+  $node_migrations = [
+    'iied_d7_articles',
+    'iied_d7_blogs',
+    'iied_d7_events',
+    'iied_d7_news_media',
+    'iied_d7_news_press',
+    'iied_d7_projects',
+  ];
+  if (in_array($migration->id(), $node_migrations)) {
+    $nid = $row->getSourceProperty('nid');
+    $db = \Drupal\Core\Database\Database::getConnection();
+    $query = $source->getDatabase()->select('url_alias', 'ua')
+      ->fields('ua', ['alias']);
+    $query->condition('ua.source', 'node/' . $nid);
+    $alias = $query->execute()->fetchField();
+    if (!empty($alias)) {
+      $row->setSourceProperty('alias', '/' . $alias);
+    }
+  }
+
 }
