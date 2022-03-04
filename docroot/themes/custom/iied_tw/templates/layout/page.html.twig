@@ -51,6 +51,10 @@
     {{ page.header }}
   </header>
 
+  {{ page.navbar_branding }}
+  {{ page.navbar_left }}
+  {{ page.navbar_right }}
+
   {{ page.primary_menu }}
   {{ page.secondary_menu }}
 
@@ -59,6 +63,8 @@
   {{ page.highlighted }}
 
   {{ page.help }}
+
+  {{ page.preface }}
 
   <main role="main">
     <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
@@ -84,10 +90,16 @@
     </div>
   </main>
 
+  {% if page.postscript %}
+   <section class="bg-gray-100">
+      {{ page.postscript }}
+    </section>
+  {% endif %}
+
+</div>{# /.layout-container #}
+
   {% if page.footer %}
     <footer role="contentinfo">
       {{ page.footer }}
     </footer>
   {% endif %}
-
-</div>{# /.layout-container #}

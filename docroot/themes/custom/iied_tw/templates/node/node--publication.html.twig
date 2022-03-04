@@ -105,10 +105,10 @@
           {{ content.field_author_s_}} {{ content.field_editor_s_ }} {{
           content.field_translator }}
         </div>
-        <div class="mb-6">
+        <div class="flex mb-6">
           {{ content.field_document_type }}
               {% if content.field_pdf_pages %} 
-              {{ content.field_pdf_pages.0 }} pages
+              , {{ content.field_pdf_pages.0 }} pages
                     {% endif %}  
         </div>
                   <div class="mb-6">
@@ -125,6 +125,9 @@
                   >
                 </button>
                 <div class="">PDF <span class=""> (holding) </span></div>
+
+              {{ drupal_view('pdf_download', 'block_1') }}  
+                
               </div>
             </div>
           </div>
@@ -132,26 +135,20 @@
 
 {#  order 1  #}  
       <div class="mb-4 md:order-1 md:row-span-2">
+        {{ drupal_view('cover_image', 'default') }}
 
-{{ content.field_media }}
-        
+{#  instead of the view (if we can adjust this to work)
+        {% if content.field_cover_image %}
+          {{ field_cover_image }}
+           {% else %}
+            {{ content.field_media }}
+        {% endif %}
+#} 
 
-          {# details - add to separate twig #} 
-          <div class="flex flex-col mb-6">
-          details
-            {{ language }} 
-            {{ content.field_date_published|date('Y') }}
-            {{ content.field_publisher.0 }} 
-            {{ content.field_series }} 
-            {{ content.field_journal_ref }} 
-            {{ content.field_isbn }} 
-            {{ content.field_issn }} 
-            {{ content.field_doi }} 
-            {{ content.field_product_code_new }} 
-            {{ content.field_source_publication }}
+  {% include '@iied_tw/partials/_publication_details.html.twig' %}
+          <div>
+            {% include '@iied_tw/partials/_share_links.html.twig' %}
           </div>
-          
-          <div>Social Sharing Buttons</div>
       </div>
 
 {#  order 3  #}  
@@ -163,8 +160,13 @@
           {# cite #}
         <div class="pl-4 my-8 border-l-2 border-iiedblue-500">
           <span class="font-bold">How to cite:</span><br />
+          {{ drupal_view('citation', 'block_1') }} 
         </div>
       </div>
+
+{# {{ drupal_entity('node', node.field_media.0.target_id, 'card') }} this works to print a view mode #}
+{# {{ node.content.field_media.entity.name.value }} this prints the wholet thing #}
+
     </main>
   </div>
 
