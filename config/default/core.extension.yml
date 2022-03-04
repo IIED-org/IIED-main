@@ -32,6 +32,7 @@ module:
   ctools: 0
   ctools_block: 0
   datetime: 0
+  devel_kint_extras: 0
   dynamic_page_cache: 0
   editor: 0
   entity_reference_revisions: 0
@@ -124,6 +125,7 @@ module:
   token: 0
   toolbar: 0
   tour: 0
+  twig_tweak: 0
   update: 0
   user: 0
   views_autocomplete_filters: 0

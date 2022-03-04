@@ -2,11 +2,11 @@ _core:
   default_config_hash: o4bYR9ZupWb3AsOIizTUG4g-nu1mdJqA59UB7QT-ifQ
 definitions:
   contact__site_page:
-    weight: -50
-    parent: 'menu_link_content:ddad4e5a-1724-49dc-a576-a8e1fc954204'
     menu_name: footer
-    enabled: true
+    parent: 'menu_link_content:ddad4e5a-1724-49dc-a576-a8e1fc954204'
+    weight: -50
     expanded: false
+    enabled: true
   standard__front_page:
     menu_name: main
     parent: ''

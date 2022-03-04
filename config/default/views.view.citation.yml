@@ -868,12 +868,16 @@ display:
           1: AND
       style:
         type: default
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: false
       row:
         type: fields
         options:
           default_field_elements: true
           inline:
-            view: view
+            field_publisher_1: field_publisher_1
             nothing: nothing
           separator: ', '
           hide_empty: false
@@ -1352,7 +1356,7 @@ display:
           element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
-          element_default_classes: true
+          element_default_classes: false
           empty: ''
           hide_empty: false
           empty_zero: false
@@ -1480,7 +1484,7 @@ display:
           element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
-          element_default_classes: true
+          element_default_classes: false
           empty: ''
           hide_empty: false
           empty_zero: false
@@ -1562,7 +1566,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: "<div class=\"cite border-left border-secondary pl-2 my-4\">\r\n<span class=\"font-weight-bold\">How to cite:</span><br>\r\n{{ field_author_s_ }} {{ field_editor_s_ }} {{ field_translator }} {{ created }} <em>{{ title }}</em>{{ view }}<br>{{ field_product_code_new }}</div>"
+            text: '{{ field_author_s_ }} {{ field_editor_s_ }} {{ field_translator }} {{ created }} <em>{{ title }}</em>{{ view }} {{ field_product_code_new }}'
             make_link: false
             path: ''
             absolute: false
@@ -1594,7 +1598,7 @@ display:
           element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
-          element_default_classes: true
+          element_default_classes: false
           empty: ''
           hide_empty: false
           empty_zero: false
@@ -1734,7 +1738,7 @@ display:
           element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
-          element_default_classes: true
+          element_default_classes: false
           empty: ''
           hide_empty: false
           empty_zero: false
