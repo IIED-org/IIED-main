@@ -181,10 +181,6 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       $row->setSourceProperty('field_full_width_media', []);
     }
   }
-  // iied_d7_events migration.
-  if ($migration->id() == 'iied_d7_events') {
-    $x = 0;
-  }
   // iied_d7_news_media migration.
   if ($migration->id() == 'iied_d7_news_media') {
     // Source node 3979 is giving an error, which seems to be referencing a
