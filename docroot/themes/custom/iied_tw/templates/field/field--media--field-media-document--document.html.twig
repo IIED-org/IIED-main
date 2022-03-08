@@ -51,7 +51,7 @@
     </div>
   {% else %}
     {% for item in items %}
-      {{ include('@iied_tw/partials/button.html.twig', {'button_title': 'Download', 'url': item.content }) }}
+      {{ item.content }}
     {% endfor %}
   {% endif %}
 {% else %}
