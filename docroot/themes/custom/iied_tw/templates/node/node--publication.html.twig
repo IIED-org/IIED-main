@@ -91,6 +91,8 @@
   {% endif %}
   #}
 
+{{ breakpoint() }}
+
     <div{{ content_attributes.addClass('node-content') }}>
     <main class="container py-8 mx-auto md:grid md:grid-flow-row-dense md:grid-cols-3">
 {#  order 2  #}    
@@ -165,7 +167,7 @@
       </div>
 
 {# {{ drupal_entity('node', node.field_media.0.target_id, 'card') }} this works to print a view mode #}
-{# {{ node.content.field_media.entity.name.value }} this prints the wholet thing #}
+{# {{ node.content.field_media.entity.name.value }} this prints the whole thing #}
 
     </main>
   </div>
