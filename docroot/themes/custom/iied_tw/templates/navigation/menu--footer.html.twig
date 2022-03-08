@@ -18,30 +18,37 @@
  *   - in_active_trail: TRUE if the link is in the active trail.
  */
 #}
-{% import _self as menus %}
 
-{#
-  We call a macro which calls itself to render the full tree.
-  @see https://twig.symfony.com/doc/1.x/tags/macro.html
-#}
-{{ menus.menu_links(items, attributes, 0) }}
+<div class="container px-5 py-12 mx-auto">
+  
 
-{% macro menu_links(items, attributes, menu_level) %}
-  {% import _self as menus %}
-  {% if items %}
-    {% if menu_level == 0 %}
-      <ul{{ attributes.addClass('mb-10 list-none') }}>
-    {% else %}
-      <ul>
-    {% endif %}
-    {% for item in items %}
-      <li{{ item.attributes }}>
-        {{ link(item.title, item.url) }}
-        {% if item.below %}
-          {{ menus.menu_links(item.below, attributes, menu_level + 1) }}
+    {% import _self as menus %}
+
+    {#
+      We call a macro which calls itself to render the full tree.
+      @see https://twig.symfony.com/doc/1.x/tags/macro.html
+    #}
+    {{ menus.menu_links(items, attributes, 0) }}
+
+    {% macro menu_links(items, attributes, menu_level) %}
+      {% import _self as menus %}
+      {% if items %}
+        {% if menu_level == 0 %}
+          <ul{{ attributes.addClass('flex flex-wrap -mx-4 -mb-10 text-center md:text-left') }}>
+        {% else %}
+          <ul>
         {% endif %}
-      </li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endmacro %}
+        {% for item in items %}
+          <li{{ attributes.addClass('w-full px-4 mb-10 lg:w-1/4 md:w-1/2') }}>
+            {{ link(item.title, item.url) }}
+            {% if item.below %}
+              {{ menus.menu_links(item.below, menu_level + 1) }}
+            {% endif %}
+          </li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endmacro %}
+
+
+</div>
