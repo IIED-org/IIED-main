@@ -61,111 +61,13 @@ third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-  ds:
-    layout:
-      id: ds_1col
-      library: null
-      disable_css: false
-      entity_classes: all_classes
-      settings:
-        classes:
-          layout_class:
-            card: card
-            h-100: h-100
-            pointer: pointer
-          ds_content: {  }
-        wrappers:
-          ds_content: div
-        outer_wrapper: div
-        attributes: 'role|link, tabindex|0'
-        link_attribute: content
-        link_custom: ''
-        label: ''
-    regions:
-      ds_content:
-        - group_row
-        - 'dynamic_block_field:node-cover_image_card'
-        - group_card_footer
-        - node_title
-        - field_date_published
-        - group_card_body
-    fields:
-      'dynamic_block_field:node-cover_image_card':
-        plugin_id: 'dynamic_block_field:node-cover_image_card'
-        weight: 1
-        label: hidden
-        formatter: default
-        ft:
-          id: expert
-          settings:
-            lb: ''
-            lbw: false
-            lbw-el: ''
-            lbw-cl: ''
-            lbw-at: ''
-            lb-col: false
-            ow: true
-            ow-el: div
-            ow-cl: 'col-4 col-xl-12 p-3'
-            ow-at: ''
-            ow-def-at: false
-            ow-def-cl: false
-            fis: false
-            fis-el: ''
-            fis-cl: ''
-            fis-at: ''
-            fis-def-at: false
-            fi: false
-            fi-el: ''
-            fi-cl: ''
-            fi-at: ''
-            fi-def-at: false
-            prefix: ''
-            suffix: ''
-      node_title:
-        plugin_id: node_title
-        weight: 1
-        label: hidden
-        formatter: default
-        settings:
-          link: true
-          wrapper: ''
-          class: ''
-        ft:
-          id: expert
-          settings:
-            lb: ''
-            lbw: false
-            lbw-el: ''
-            lbw-cl: ''
-            lbw-at: ''
-            lb-col: false
-            ow: false
-            ow-el: div
-            ow-cl: card-body
-            ow-at: ''
-            ow-def-at: false
-            ow-def-cl: false
-            fis: false
-            fis-el: ''
-            fis-cl: ''
-            fis-at: ''
-            fis-def-at: false
-            fi: true
-            fi-el: h5
-            fi-cl: card-title
-            fi-at: ''
-            fi-def-at: false
-            prefix: ''
-            suffix: ''
   field_group:
     group_card_body:
-      children:
-        - group_card_footer
+      children: {  }
       label: card-body
-      parent_name: group_row
-      region: ds_content
-      weight: 3
+      parent_name: ''
+      region: hidden
+      weight: 72
       format_type: html_element
       format_settings:
         classes: 'col-8 col-xl-12'
@@ -178,13 +80,11 @@ third_party_settings:
         effect: none
         speed: fast
     group_row:
-      children:
-        - 'dynamic_block_field:node-cover_image_card'
-        - group_card_body
+      children: {  }
       label: Row
       parent_name: ''
-      region: ds_content
-      weight: 0
+      region: hidden
+      weight: 70
       format_type: html_element
       format_settings:
         classes: 'row no-gutters'
@@ -197,13 +97,11 @@ third_party_settings:
         effect: none
         speed: fast
     group_card_footer:
-      children:
-        - node_title
-        - field_date_published
+      children: {  }
       label: 'card inner'
-      parent_name: group_card_body
-      region: ds_content
-      weight: 1
+      parent_name: ''
+      region: hidden
+      weight: 71
       format_type: html_element
       format_settings:
         classes: card-body
@@ -215,55 +113,64 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
+  ds:
+    layout:
+      id: layout_onecol
+      library: layout_discovery/onecol
+      disable_css: false
+      entity_classes: all_classes
+      settings:
+        label: ''
+    regions:
+      content:
+        - field_short_title
+        - field_cover_image
+        - field_date_published
+        - field_media
 id: node.publication.card
 targetEntityType: node
 bundle: publication
 mode: card
 content:
+  field_cover_image:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
   field_date_published:
     type: datetime_custom
     label: hidden
     settings:
       timezone_override: ''
-      date_format: 'F Y'
-    third_party_settings:
-      ds:
-        ft:
-          id: expert
-          settings:
-            lb: ''
-            lbw: false
-            lbw-el: ''
-            lbw-cl: ''
-            lbw-at: ''
-            lb-col: false
-            ow: false
-            ow-el: ''
-            ow-cl: ''
-            ow-at: ''
-            ow-def-at: false
-            ow-def-cl: false
-            fis: true
-            fis-el: div
-            fis-cl: text-muted
-            fis-at: ''
-            fis-def-at: false
-            fi: false
-            fi-el: ''
-            fi-cl: ''
-            fi-at: ''
-            fi-def-at: false
-            prefix: ''
-            suffix: ''
-    weight: 2
-    region: ds_content
+      date_format: 'Y-m-d\TH:i:s'
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_media:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_short_title:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: -1
+    region: content
 hidden:
   body: true
   field_a_serial: true
   field_admin: true
   field_area_list: true
   field_author_s_: true
-  field_cover_image: true
   field_deptlist: true
   field_document_type: true
   field_doi: true
@@ -275,7 +182,6 @@ hidden:
   field_journal_ref: true
   field_lists: true
   field_lit_code: true
-  field_media: true
   field_meta_tags: true
   field_parent: true
   field_pdf: true
@@ -295,7 +201,6 @@ hidden:
   field_reportingcode2: true
   field_series: true
   field_series_item_code: true
-  field_short_title: true
   field_source_publication: true
   field_status: true
   field_tags: true

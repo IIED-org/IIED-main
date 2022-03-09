@@ -56,9 +56,7 @@ dependencies:
     - computed_field
     - datetime
     - ds
-    - field_formatter
     - field_group
-    - file
     - isbn
     - layout_builder
     - link
@@ -355,31 +353,20 @@ content:
     weight: 24
     region: content
   field_media:
-    type: field_formatter_with_inline_settings
+    type: entity_reference_entity_view
     label: hidden
     settings:
-      field_name: field_media_document
-      type: file_url_plain
-      settings: {  }
-      label: hidden
-      link_to_entity: false
+      view_mode: embedded
+      link: false
     third_party_settings:
       ds:
         ft:
-          id: minimal
+          id: default
           settings:
             lb: ''
             lb-col: false
             classes: {  }
     weight: 8
-    region: content
-  field_pdf:
-    type: file_default
-    label: above
-    settings:
-      use_description_as_link_text: true
-    third_party_settings: {  }
-    weight: 5
     region: content
   field_pdf_pages:
     type: number_integer
@@ -466,6 +453,7 @@ hidden:
   field_lists: true
   field_meta_tags: true
   field_parent: true
+  field_pdf: true
   field_product_code: true
   field_project: true
   field_publisher_legacy: true
