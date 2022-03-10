@@ -139,7 +139,7 @@ third_party_settings:
       label: pub-detail
       parent_name: ''
       region: content
-      weight: 9
+      weight: 8
       format_type: html_element
       format_settings:
         classes: ''
@@ -247,7 +247,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 7
+    weight: 6
     region: content
   field_a_serial:
     type: serial_default_formatter
@@ -313,7 +313,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 6
+    weight: 5
     region: content
   field_isbn:
     type: isbn_formatted_formatter
@@ -366,7 +366,7 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    weight: 8
+    weight: 7
     region: content
   field_pdf_pages:
     type: number_integer
@@ -386,6 +386,14 @@ content:
       cache_duration: 1
     third_party_settings: {  }
     weight: 16
+    region: content
+  field_project:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 10
     region: content
   field_publisher:
     type: entity_reference_label
@@ -444,6 +452,11 @@ content:
     third_party_settings: {  }
     weight: 12
     region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 9
+    region: content
 hidden:
   field_admin: true
   field_cover_image: true
@@ -455,7 +468,6 @@ hidden:
   field_parent: true
   field_pdf: true
   field_product_code: true
-  field_project: true
   field_publisher_legacy: true
   field_reportagency1: true
   field_reportagency2: true
@@ -471,6 +483,5 @@ hidden:
   field_tags: true
   field_team: true
   field_work_programme_global_enga: true
-  links: true
   search_api_excerpt: true
   sharing_buttons: true
