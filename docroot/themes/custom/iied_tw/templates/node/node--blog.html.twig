@@ -71,8 +71,10 @@
  */
 #}
 <article{{ attributes.addClass('node') }}>
+  <div class="my-6">
+    <main>
 
-  {#{{ title_prefix }}
+ {#} {{ title_prefix }}
   {% if not page %}
     <h2{{ title_attributes }}>
       <a href="{{ url }}" rel="bookmark">{{ label }}</a>
@@ -89,117 +91,66 @@
       </div>
     </footer>
   {% endif %}
-  #}
 
-    <div{{ content_attributes.addClass('node-content') }}>
-    <main class="container py-8 mx-auto md:grid md:grid-flow-row-dense md:grid-cols-3">
-{#  order 2  #}    
-      <div class="md:col-span-2 md:order-2">
-        <nav aria-label="themes">
-          <div class="flex flex-wrap mb-6 space-x-3">
-            {{ content.field_theme_s_}}
-          </div>
-        </nav>
-        <h1 class="mb-6 text-4xl">{{ node.label }}</h1>
-        <div class="flex mb-4">
-          {{ content.field_author_s_}} {{ content.field_editor_s_ }} {{
-          content.field_translator }}
+#}
+        <div class="container mx-auto md:max-w-3xl">
+          <nav aria-label="themes">
+            <div class="flex flex-wrap mb-6 space-x-3">
+              {{ content.field_theme_s_}}
+            </div>
+          </nav>
+          <h1 class="mb-6 text-4xl">{{ node.label }}</h1>
         </div>
-        <div class="flex mb-6">
-          {{ content.field_document_type }}
-              {% if content.field_pdf_pages %} 
-              , {{ content.field_pdf_pages.0 }} pages
-                    {% endif %}  
-        </div>
-                  <div class="mb-6">
-            <div class="md:flex">
-              <div class="flex flex-col items-center justify-center">
-                {# <button
-                  class="h-12 max-w-xs px-6 py-2 m-2 mb-1 text-lg transition-colors duration-150 rounded-full shadow-sm bg-iiedorange-500 hover:bg-iiedorange-600 focus:shadow-outline"
-                >
-                  <a
-                    class="font-semibold text-gray-800 hover:no-underline hover:text-gray-900"
-                    href="/sites/default/files/pdfs/2021-10/20546iied.pdf"
-                    title="Download PDF"
-                    >holding</a
-                  >
-                </button> #}
-                {# TODO: extract URL from media item cb 20220308 #}
-                {% include '@iied_tw/partials/_button.html.twig' with {'button_title':'Download', 'url': node.field_media.0.document.url} %}
-                <div class="">PDF <span class=""> (holding) </span></div>
 
-              {{ drupal_view('pdf_download', 'block_1') }}  
-                
+       
+        <div class="container mx-auto md:max-w-3xl xl:grid 2xl:grid-cols-4 xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-[1fr_48rem_1fr] xl:grid-flow-row-dense">
+
+          <div class="order-1 col-span-2 col-start-2 md:max-w-3xl md:order-2 xl:px-8 2xl:px-4">
+         
+            {#-- standfirst --#}
+            <div class="pb-6 mb-6 prose-lg border-b-2 lg:prose-xl border-iiedorange-500">
+              {{ content.field_standfirst }}
+            </div>
+
+            {# attribution #}
+            {#-- avatar group --#}
+            <div class="flex border-b border-gray-300">
+             {{ content.field_author_s_ }}
+            </div>
+            
+            {#-- date and share --#}
+            <div class="flex flex-col flex-wrap justify-between py-6 border-b border-gray-300 xl:border-none sm:flex-row">
+             {{ node.published_at.value|date('d F Y') }}
+              <div class="flex items-center">
+                {% include '@iied_tw/partials/_share_links.html.twig' %}
               </div>
             </div>
+
           </div>
-      </div>
 
-{#  order 1  #}  
-      <div class="mb-4 md:order-1 md:row-span-2">
-        {{ drupal_view('cover_image', 'default') }}
-
-            {{ content.field_media }}
-            
-{#  instead of the view (if we can adjust this to work)
-        {% if content.field_cover_image %}
-          {{ field_cover_image }}
-           {% else %}
-            {{ content.field_media }}
-        {% endif %}
-#}
-
-{# TODO: add classes to img from media item nt 20220309 
-{% 	set image_classes = [
-      'object-cover', 
-      'object-center', 
-      'mb-4 border', 
-      'border-gray-200', 
-      'rounded', 
-      'shadow-sm',
-      'bg-iiedblue-50',
-      'md:w-48',
-      'xl:w-80',
-      'active:bg-gray-100',
-	] 
-%}
-#}
-
-{#
-{% if content.field_media %}
-      {% for item in items %}
-            
-      {% endfor %}
-{% endif %} 
-#}
-
-  {% include '@iied_tw/partials/_publication_details.html.twig' %}
-          <div>
-            {% include '@iied_tw/partials/_share_links.html.twig' %}
+          {#-- collection --#}
+          <div class="pt-2 mb-6 2xl:col-span-1 2xl:order-1 2xl:pr-12">
+          {{ content.field_collections }}
           </div>
-      </div>
+          {# / attribution #}
 
-{#  order 3  #}  
-      <div class="md:col-span-2 md:order-3">
-        <div class="prose prose-base lg:prose-lg lg:max-w-max">
-          {{ content.body }}
         </div>
-    
-    {{ content.field_iied_url }}
-    
-          {# cite #}
-        <div class="pl-4 my-8 border-l-2 border-iiedblue-500">
-          <span class="font-bold">How to cite:</span><br />
-          {{ drupal_view('citation', 'block_1') }} 
-        </div>
-      </div>
+
+        {# main content #}
+        <div class="container w-full mx-auto md:max-w-3xl">
+
+          {#-- image --#} 
+          
+          {#-- body --#}
+           <div class="pb-12 prose border-b border-gray-300 lg:prose-lg">
+              <div{{ content_attributes.addClass('node-content') }}>
+              {{ content }}
+              </div>
+          </div>
+        
 
 
-{# {{ drupal_entity('node', node.field_media.0.target_id, 'card') }} this sort of works to print a view mode #}
-{# {{ node.content.field_media.entity.name.value }} this prints the whole thing #}
-
+        
     </main>
   </div>
-
 </article>
-

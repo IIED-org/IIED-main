@@ -80,6 +80,9 @@ module.exports = {
                 textDecoration: 'underline',
               },
             },
+            h3: {
+              fontWeight: '400',
+            },
           },
         },
       })
