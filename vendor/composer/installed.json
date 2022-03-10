@@ -5572,6 +5572,65 @@
             "install-path": "../../docroot/modules/contrib/field_formatter"
         },
         {
+            "name": "drupal/field_formatter_file_size",
+            "version": "2.0.0",
+            "version_normalized": "2.0.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/field_formatter_file_size.git",
+                "reference": "2.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/field_formatter_file_size-2.0.0.zip",
+                "reference": "2.0.0",
+                "shasum": "bda3a1415245e1bbdc230e9b922db25bf3edc264"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.0",
+                    "datestamp": "1633001285",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "ElieDev07",
+                    "homepage": "https://www.drupal.org/user/3643582"
+                },
+                {
+                    "name": "Guietc",
+                    "homepage": "https://www.drupal.org/user/3461503"
+                },
+                {
+                    "name": "jorisInsign",
+                    "homepage": "https://www.drupal.org/user/3473057"
+                },
+                {
+                    "name": "sebrose_insign",
+                    "homepage": "https://www.drupal.org/user/3514932"
+                }
+            ],
+            "description": "Field Formatter File Size is a field formatter to display the file size.",
+            "homepage": "https://www.drupal.org/project/field_formatter_file_size",
+            "support": {
+                "source": "https://git.drupalcode.org/project/field_formatter_file_size"
+            },
+            "install-path": "../../docroot/modules/contrib/field_formatter_file_size"
+        },
+        {
             "name": "drupal/field_group",
             "version": "3.2.0",
             "version_normalized": "3.2.0.0",
@@ -9015,6 +9074,53 @@
                 "source": "https://git.drupalcode.org/project/token"
             },
             "install-path": "../../docroot/modules/contrib/token"
+        },
+        {
+            "name": "drupal/twig_field_value",
+            "version": "2.0.0",
+            "version_normalized": "2.0.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/twig_field_value.git",
+                "reference": "2.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/twig_field_value-2.0.0.zip",
+                "reference": "2.0.0",
+                "shasum": "d2d0db6249493542bf9d568970f67d10ce143f90"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.0",
+                    "datestamp": "1587069998",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Sutharsan",
+                    "homepage": "https://www.drupal.org/user/73854"
+                }
+            ],
+            "description": "Twig filters for value(s) and label.",
+            "homepage": "https://www.drupal.org/project/twig_field_value",
+            "support": {
+                "source": "https://git.drupalcode.org/project/twig_field_value"
+            },
+            "install-path": "../../docroot/modules/contrib/twig_field_value"
         },
         {
             "name": "drupal/twig_tweak",

@@ -44,14 +44,15 @@
 
 {% if label_hidden %}
   {% if multiple %}
-    <div{{ attributes }}>
+    <div{{ attributes.addClass('flex flex-wrap space-x-1') }}>
       {% for item in items %}
         <div{{ item.attributes }}>{{ item.content }}</div>
+        {{ not loop.last ? ', ' }}
       {% endfor %}
     </div>
   {% else %}
     {% for item in items %}
-      {{ item.content }}
+      <div{{ attributes }}>{{ item.content }}</div>
     {% endfor %}
   {% endif %}
 {% else %}
