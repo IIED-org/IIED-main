@@ -8,7 +8,7 @@ dependencies:
     - iied_tw
 id: iied_tw_sidrtriggerbuttonblock
 theme: iied_tw
-region: sidebar_first
+region: header
 weight: -9
 provider: null
 plugin: sidr_trigger

@@ -45,11 +45,15 @@
  * @ingroup themeable
  */
 #}
-<div class="container p-4 mx-auto">
+
 
   <header role="banner">
     {{ page.header }}
   </header>
+
+  {{ page.navbar_branding }}
+  {{ page.navbar_left }}
+  {{ page.navbar_right }}
 
   {{ page.primary_menu }}
   {{ page.secondary_menu }}
@@ -60,6 +64,9 @@
 
   {{ page.help }}
 
+  {{ page.preface }}
+
+<div class="container p-4 mx-auto">
   <main role="main">
     <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
 
@@ -68,24 +75,34 @@
         {{ page.content }}
       </div>{# /.layout-content #}
 
-      {% if page.sidebar_first %}
+    {#{% if page.sidebar_first %}
         <aside class="p-4 md:w-1/4" role="complementary">
           {{ page.sidebar_first }}
         </aside>
       {% endif %}
 
-      {% if page.sidebar_second %}
+        {% if page.sidebar_second %}
         <aside class="md:w-1/4" role="complementary">
           {{ page.sidebar_second }}
         </aside>
       {% endif %}
+      #}
+      
     </div>
   </main>
+</div>{# /.layout-container #}
+
+  {% if page.postscript %}
+    <section class="bg-gray-100">
+      <div class="container p-4 mx-auto">
+        {{ page.postscript }}
+      </div>
+    </section>
+  {% endif %}
+  
 
   {% if page.footer %}
     <footer role="contentinfo">
       {{ page.footer }}
     </footer>
   {% endif %}
-
-</div>{# /.layout-container #}

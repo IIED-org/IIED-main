@@ -1,0 +1,8 @@
+{
+  "name": "drupal/field_formatter_file_size",
+  "description": "Field Formatter File Size is a field formatter to display the file size.",
+  "type": "drupal-module",
+  "license": "GPL-2.0+",
+  "minimum-stability": "dev",
+  "require": {}
+}

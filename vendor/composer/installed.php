@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '422b803db8f95ce8e16ed842894d97880c1b6ab4',
+        'reference' => '4077e972ba73d9da88b096479449fd0a03db511b',
         'name' => 'drupal/recommended-project',
         'dev' => true,
     ),
@@ -308,7 +308,7 @@
             'install_path' => __DIR__ . '/../doctrine/cache',
             'aliases' => array(),
             'reference' => '4cf401d14df219fa6f38b671f5493449151c9ad8',
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'doctrine/collections' => array(
             'pretty_version' => '1.6.8',
@@ -326,7 +326,7 @@
             'install_path' => __DIR__ . '/../doctrine/common',
             'aliases' => array(),
             'reference' => 'f3812c026e557892c34ef37f6ab808a6b567da7f',
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'doctrine/event-manager' => array(
             'pretty_version' => '1.1.1',
@@ -335,7 +335,7 @@
             'install_path' => __DIR__ . '/../doctrine/event-manager',
             'aliases' => array(),
             'reference' => '41370af6a30faa9dc0368c4a6814d596e81aba7f',
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'doctrine/inflector' => array(
             'pretty_version' => '1.4.4',
@@ -344,7 +344,7 @@
             'install_path' => __DIR__ . '/../doctrine/inflector',
             'aliases' => array(),
             'reference' => '4bd5c1cdfcd00e9e2d8c484f79150f67e5d355d9',
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'doctrine/instantiator' => array(
             'pretty_version' => '1.4.0',
@@ -371,7 +371,7 @@
             'install_path' => __DIR__ . '/../doctrine/persistence',
             'aliases' => array(),
             'reference' => '7a6eac9fb6f61bba91328f15aa7547f4806ca288',
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'doctrine/reflection' => array(
             'pretty_version' => '1.2.2',
@@ -947,7 +947,16 @@
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/devel',
             'aliases' => array(),
             'reference' => '4.1.3',
-            'dev_requirement' => true,
+            'dev_requirement' => false,
+        ),
+        'drupal/devel_kint_extras' => array(
+            'pretty_version' => '1.0.0',
+            'version' => '1.0.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/devel_kint_extras',
+            'aliases' => array(),
+            'reference' => '1.0.0',
+            'dev_requirement' => false,
         ),
         'drupal/dropdown_language' => array(
             'pretty_version' => '2.7.0',
@@ -1036,6 +1045,15 @@
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/field_formatter',
             'aliases' => array(),
             'reference' => '3.0.0-rc0',
+            'dev_requirement' => false,
+        ),
+        'drupal/field_formatter_file_size' => array(
+            'pretty_version' => '2.0.0',
+            'version' => '2.0.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/field_formatter_file_size',
+            'aliases' => array(),
+            'reference' => '2.0.0',
             'dev_requirement' => false,
         ),
         'drupal/field_group' => array(
@@ -1601,7 +1619,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '422b803db8f95ce8e16ed842894d97880c1b6ab4',
+            'reference' => '4077e972ba73d9da88b096479449fd0a03db511b',
             'dev_requirement' => false,
         ),
         'drupal/redirect' => array(
@@ -1837,6 +1855,24 @@
             'replaced' => array(
                 0 => '9.3.5',
             ),
+        ),
+        'drupal/twig_field_value' => array(
+            'pretty_version' => '2.0.0',
+            'version' => '2.0.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/twig_field_value',
+            'aliases' => array(),
+            'reference' => '2.0.0',
+            'dev_requirement' => false,
+        ),
+        'drupal/twig_tweak' => array(
+            'pretty_version' => '3.1.3',
+            'version' => '3.1.3.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/twig_tweak',
+            'aliases' => array(),
+            'reference' => '3.1.3',
+            'dev_requirement' => false,
         ),
         'drupal/twig_xdebug' => array(
             'pretty_version' => '1.2.0',
@@ -2080,6 +2116,15 @@
             'aliases' => array(),
             'reference' => '2ab6744b7296ded80f8cc4f9509abbff393399aa',
             'dev_requirement' => true,
+        ),
+        'kint-php/kint' => array(
+            'pretty_version' => '3.3',
+            'version' => '3.3.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../kint-php/kint',
+            'aliases' => array(),
+            'reference' => '335ac1bcaf04d87df70d8aa51e8887ba2c6d203b',
+            'dev_requirement' => false,
         ),
         'laminas/laminas-diactoros' => array(
             'pretty_version' => '2.8.0',

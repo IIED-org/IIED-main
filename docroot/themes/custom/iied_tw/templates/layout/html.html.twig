@@ -30,9 +30,9 @@
     <title>{{ head_title|safe_join(' | ') }}</title>
     <css-placeholder token="{{ placeholder_token }}">
     <js-placeholder token="{{ placeholder_token }}">
-    <script src="https://cdn.tailwindcss.com/"></script>{# For developing with tailwind #}
+    <!-- <script src="https://cdn.tailwindcss.com/"></script> --> {# For developing with tailwind #}
   </head>
-  <body{{ attributes.addClass('prose') }}{{ attributes }}>
+  <body{{ attributes }}>
     {#
       Keyboard navigation/accessibility link to main content section in
       page.html.twig.

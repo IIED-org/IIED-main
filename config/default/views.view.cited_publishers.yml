@@ -34,17 +34,17 @@ display:
           entity_field: name
           plugin_id: term_name
           label: ''
-          exclude: false
+          exclude: true
           alter:
-            alter_text: false
-            text: ''
+            alter_text: true
+            text: '{{- name -}}'
             make_link: false
             path: ''
             absolute: false
             external: false
             replace_spaces: false
             path_case: none
-            trim_whitespace: false
+            trim_whitespace: true
             alt: ''
             rel: ''
             link_class: ''
@@ -58,7 +58,7 @@ display:
             more_link: false
             more_link_text: ''
             more_link_path: ''
-            strip_tags: false
+            strip_tags: true
             trim: false
             preserve_tags: ''
             html: false
@@ -100,8 +100,8 @@ display:
           label: ''
           exclude: false
           alter:
-            alter_text: false
-            text: ''
+            alter_text: true
+            text: '{{- name -}}, {{ field_location_locality }}'
             make_link: false
             path: ''
             absolute: false
@@ -237,23 +237,20 @@ display:
             operator_limit_selection: false
             operator_list: {  }
       style:
-        type: html_list
+        type: default
         options:
           grouping: {  }
           row_class: ''
           default_row_class: false
-          type: ul
-          wrapper_class: ''
-          class: ''
       row:
         type: fields
         options:
-          default_field_elements: false
+          default_field_elements: true
           inline:
             name: name
             field_location_locality: field_location_locality
           separator: ', '
-          hide_empty: false
+          hide_empty: true
       query:
         type: views_query
         options:
@@ -263,7 +260,7 @@ display:
           replica: false
           query_tags: {  }
       relationships: {  }
-      css_class: comma-list
+      css_class: flex
       header: {  }
       footer: {  }
       display_extenders: {  }
@@ -281,6 +278,9 @@ display:
     display_plugin: block
     position: 1
     display_options:
+      defaults:
+        css_class: false
+      css_class: ''
       display_extenders: {  }
     cache_metadata:
       max-age: -1

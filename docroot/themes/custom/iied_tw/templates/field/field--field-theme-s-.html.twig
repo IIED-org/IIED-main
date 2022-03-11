@@ -44,14 +44,15 @@
 
 {% if label_hidden %}
   {% if multiple %}
-    <div{{ attributes }}>
+    <div{{ attributes.addClass('flex flex-wrap items-center space-x-3') }}>
       {% for item in items %}
         <div{{ item.attributes }}>{{ item.content }}</div>
+        {{ not loop.last ? '<div aria-hidden="true" class="w-px h-4 bg-gray-300"></div>' }}
       {% endfor %}
     </div>
   {% else %}
     {% for item in items %}
-      {{ include('@iied_tw/partials/button.html.twig', {'button_title': 'Download', 'url': item.content }) }}
+      <div{{ attributes }}>{{ item.content }}</div>
     {% endfor %}
   {% endif %}
 {% else %}

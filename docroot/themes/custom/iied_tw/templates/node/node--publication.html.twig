@@ -72,7 +72,7 @@
 #}
 <article{{ attributes.addClass('node') }}>
 
-  {{ title_prefix }}
+  {#{{ title_prefix }}
   {% if not page %}
     <h2{{ title_attributes }}>
       <a href="{{ url }}" rel="bookmark">{{ label }}</a>
@@ -89,9 +89,75 @@
       </div>
     </footer>
   {% endif %}
+  #}
 
-  <div{{ content_attributes.addClass('node-content') }}>
-    {{ content }}
+    <div{{ content_attributes.addClass('node-content') }}>
+    <main class="container py-8 mx-auto md:grid md:grid-flow-row-dense md:grid-cols-3">
+{#  order 2  #}    
+      <div class="md:col-span-2 md:order-2">
+        <nav aria-label="themes">
+          <div class="flex flex-wrap mb-6 space-x-3">
+            {{ content.field_theme_s_}}
+          </div>
+        </nav>
+        <h1 class="mb-6 text-4xl">{{ node.label }}</h1>
+        <div class="flex mb-4">
+          {{ content.field_author_s_}} {{ content.field_editor_s_ }} {{ content.field_translator }}
+        </div>
+        <div class="flex mb-6">
+          {{ content.field_document_type }}
+              {% if content.field_pdf_pages %} 
+              , {{ content.field_pdf_pages.0 }} pages
+                    {% endif %}  
+        </div>
+          <div class="mb-6">
+            <div class="md:flex">
+              <div class="flex flex-col items-center justify-center">
+                {% include '@iied_tw/partials/_button.html.twig' with {'button_title':'Download', 'url': node.field_media | file_url} %}
+                {% set size = content.field_media[0]["field_size"][0]["#markup"] %}
+                <div>PDF ({{ (size/1048576)|number_format(2) }} MB)
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+
+{#  order 1  #}  
+      <div class="mb-4 md:order-1 md:row-span-2">
+        {% if content.field_cover_image[0] %}
+          {{ node.field_cover_image | view }}
+        {% else %}
+          {{ node.field_media | view }}
+        {% endif %}
+
+        {% include '@iied_tw/partials/_publication_details.html.twig' %}
+          <div>
+            {% include '@iied_tw/partials/_share_links.html.twig' %}
+          </div>
+      </div>
+
+{#  order 3  #}  
+      <div class="md:col-span-2 md:order-3">
+        <div class="prose prose-base lg:prose-lg lg:max-w-max">
+          {{ content.body }}
+        </div>
+   
+    {{ content.field_iied_url }}
+    
+    {# cite #}
+    {# TODO: Rewrite in twig instead of using views! #}
+        <div class="pl-4 my-8 border-l-2 border-iiedblue-500">
+          <span class="font-bold">How to cite:</span><br />
+          {{ drupal_view('citation', 'block_1') }}
+        </div>
+      </div>
+
+
+{# {{ drupal_entity('node', node.field_media.0.target_id, 'card') }} this sort of works to print a view mode #}
+{# {{ node.content.field_media.entity.name.value }} this prints the whole thing #}
+
+    </main>
   </div>
 
 </article>
+

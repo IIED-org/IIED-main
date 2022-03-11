@@ -40,77 +40,13 @@ third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-  ds:
-    layout:
-      id: ds_1col
-      library: null
-      disable_css: false
-      entity_classes: all_classes
-      settings:
-        classes:
-          layout_class: {  }
-          ds_content: {  }
-        wrappers:
-          ds_content: div
-        outer_wrapper: div
-        attributes: 'role|link, tabindex|0'
-        link_attribute: content
-        link_custom: '[node:field_link]'
-        label: ''
-    regions:
-      ds_content:
-        - group_project_card
-        - group_row_nogutters
-        - field_image
-        - group_col_md_8
-        - group_card_body
-        - node_title
-        - body
-    fields:
-      node_title:
-        plugin_id: node_title
-        weight: 37
-        label: hidden
-        formatter: default
-        settings:
-          link: true
-          wrapper: h4
-          class: card-title
-        ft:
-          id: expert
-          settings:
-            lb: ''
-            lbw: false
-            lbw-el: ''
-            lbw-cl: ''
-            lbw-at: ''
-            lb-col: false
-            ow: false
-            ow-el: ''
-            ow-cl: ''
-            ow-at: ''
-            ow-def-at: false
-            ow-def-cl: false
-            fis: false
-            fis-el: ''
-            fis-cl: ''
-            fis-at: ''
-            fis-def-at: false
-            fi: false
-            fi-el: span
-            fi-cl: stretched-link
-            fi-at: ''
-            fi-def-at: false
-            prefix: ''
-            suffix: ''
   field_group:
     group_project_card:
-      children:
-        - group_row_nogutters
+      children: {  }
       label: Project-card
       parent_name: ''
-      region: ds_content
-      weight: 0
+      region: hidden
+      weight: 43
       format_type: html_element
       format_settings:
         classes: 'card pointer overflow-hidden'
@@ -123,13 +59,11 @@ third_party_settings:
         effect: none
         speed: fast
     group_row_nogutters:
-      children:
-        - field_image
-        - group_col_md_8
+      children: {  }
       label: Row-nogutters
-      parent_name: group_project_card
-      region: ds_content
-      weight: 1
+      parent_name: ''
+      region: hidden
+      weight: 45
       format_type: html_element
       format_settings:
         classes: 'row no-gutters'
@@ -142,13 +76,11 @@ third_party_settings:
         effect: none
         speed: fast
     group_card_body:
-      children:
-        - node_title
-        - body
+      children: {  }
       label: 'card body'
-      parent_name: group_col_md_8
-      region: ds_content
-      weight: 36
+      parent_name: ''
+      region: hidden
+      weight: 46
       format_type: html_element
       format_settings:
         classes: card-body
@@ -161,12 +93,11 @@ third_party_settings:
         effect: none
         speed: fast
     group_col_md_8:
-      children:
-        - group_card_body
+      children: {  }
       label: col-md-8
-      parent_name: group_row_nogutters
-      region: ds_content
-      weight: 35
+      parent_name: ''
+      region: hidden
+      weight: 4
       format_type: html_element
       format_settings:
         classes: col-md-8
@@ -184,9 +115,10 @@ bundle: project
 mode: card
 content:
   body:
-    type: text_default
+    type: text_summary_or_trimmed
     label: hidden
-    settings: {  }
+    settings:
+      trim_length: 600
     third_party_settings:
       ds:
         ft:
@@ -216,8 +148,8 @@ content:
             fi-def-at: false
             prefix: ''
             suffix: ''
-    weight: 38
-    region: ds_content
+    weight: 2
+    region: content
   field_image:
     type: image
     label: hidden
@@ -253,8 +185,8 @@ content:
             fi-def-at: false
             prefix: ''
             suffix: ''
-    weight: 34
-    region: ds_content
+    weight: 0
+    region: content
 hidden:
   field_additional_elements: true
   field_additional_resources: true

@@ -1,6 +1,6 @@
 uuid: c6ad75c7-1b7c-4639-9ce7-36485d54ccf0
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - facets.facet.type
@@ -10,7 +10,7 @@ dependencies:
     - iied_tw
 id: iied_tw_type_2
 theme: iied_tw
-region: sidebar_first
+region: header
 weight: -10
 provider: null
 plugin: 'facet_block:type'
