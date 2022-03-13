@@ -1,0 +1,10 @@
+uuid: b4bb187e-647f-4c9f-8c9b-80e9de51f7f0
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.avatar
+label: Avatar
+targetEntityType: taxonomy_term
+cache: true

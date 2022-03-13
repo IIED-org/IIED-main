@@ -4,10 +4,9 @@ status: true
 dependencies:
   config:
     - field.field.media.image.field_media_image
-    - image.style.page
+    - image.style.large
     - media.type.image
   module:
-    - ds
     - image
 _core:
   default_config_hash: B1a2aBHmUulUZN6HrxITEH1tSResuVjXMBEv1lUBtOo
@@ -21,15 +20,8 @@ content:
     label: visually_hidden
     settings:
       image_link: ''
-      image_style: page
-    third_party_settings:
-      ds:
-        ft:
-          id: default
-          settings:
-            lb: ''
-            lb-col: false
-            classes: {  }
+      image_style: large
+    third_party_settings: {  }
     weight: 1
     region: content
 hidden:
