@@ -1,0 +1,12 @@
+name: Media entity slideshow
+description: 'Media entity slideshow provider.'
+type: module
+package: Media
+core_version_requirement: ^8.8 || ^9
+dependencies:
+  - drupal:media
+
+# Information added by Drupal.org packaging script on 2021-02-03
+version: '8.x-2.4'
+project: 'media_entity_slideshow'
+datestamp: 1612355656

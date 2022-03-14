@@ -1,0 +1,23 @@
+name: Stories
+description: 'Provides default Paragraph Types to jumpstart site building.'
+package: Authoring
+type: module
+core_version_requirement: ^8 || ^9
+dependencies:
+  - block_field:block_field
+  - drupal:field
+  - drupal:link
+  - drupal:node
+  - drupal:system (>=8.4)
+  - drupal:text
+  - drupal:views
+  - entity_reference_revisions:entity_reference_revisions
+  - inline_entity_form:inline_entity_form
+  - paragraphs:paragraphs
+  - tablefield:tablefield
+  - viewsreference:viewsreference
+
+# Information added by Drupal.org packaging script on 2021-03-18
+version: '8.x-2.0-alpha7'
+project: 'stories'
+datestamp: 1616083628

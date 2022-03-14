@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.stories_views.field_stories_views
+    - paragraphs.paragraphs_type.stories_views
+  module:
+    - viewsreference
+id: paragraph.stories_views.default
+targetEntityType: paragraph
+bundle: stories_views
+mode: default
+content:
+  field_stories_views:
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+    type: viewsreference_select
+    region: content
+hidden:
+  created: true
+  status: true
+  uid: true

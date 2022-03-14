@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '4077e972ba73d9da88b096479449fd0a03db511b',
+        'reference' => 'cf0aafdf20ec2695f2e6c9ff21668b49120b08e4',
         'name' => 'drupal/recommended-project',
         'dev' => true,
     ),
@@ -517,6 +517,15 @@
                 0 => '9.3.5',
             ),
         ),
+        'drupal/block_field' => array(
+            'pretty_version' => '1.0.0-rc2',
+            'version' => '1.0.0.0-RC2',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/block_field',
+            'aliases' => array(),
+            'reference' => '8.x-1.0-rc2',
+            'dev_requirement' => false,
+        ),
         'drupal/book' => array(
             'dev_requirement' => false,
             'replaced' => array(
@@ -603,6 +612,15 @@
             'replaced' => array(
                 0 => '9.3.5',
             ),
+        ),
+        'drupal/color_field' => array(
+            'pretty_version' => '2.5.0',
+            'version' => '2.5.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/color_field',
+            'aliases' => array(),
+            'reference' => '8.x-2.5',
+            'dev_requirement' => false,
         ),
         'drupal/comment' => array(
             'dev_requirement' => false,
@@ -967,6 +985,15 @@
             'reference' => '8.x-2.7',
             'dev_requirement' => false,
         ),
+        'drupal/dropzonejs' => array(
+            'pretty_version' => '2.5.0',
+            'version' => '2.5.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/dropzonejs',
+            'aliases' => array(),
+            'reference' => '8.x-2.5',
+            'dev_requirement' => false,
+        ),
         'drupal/ds' => array(
             'pretty_version' => '3.13.0',
             'version' => '3.13.0.0',
@@ -987,6 +1014,15 @@
             'replaced' => array(
                 0 => '9.3.5',
             ),
+        ),
+        'drupal/entity_browser' => array(
+            'pretty_version' => '2.6.0',
+            'version' => '2.6.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/entity_browser',
+            'aliases' => array(),
+            'reference' => '8.x-2.6',
+            'dev_requirement' => false,
         ),
         'drupal/entity_reference' => array(
             'dev_requirement' => false,
@@ -1272,6 +1308,15 @@
                 0 => '9.3.5',
             ),
         ),
+        'drupal/layout_paragraphs' => array(
+            'pretty_version' => '1.0.0',
+            'version' => '1.0.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/layout_paragraphs',
+            'aliases' => array(),
+            'reference' => '1.0.0',
+            'dev_requirement' => false,
+        ),
         'drupal/link' => array(
             'dev_requirement' => false,
             'replaced' => array(
@@ -1306,6 +1351,15 @@
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/media_entity_file_replace',
             'aliases' => array(),
             'reference' => '8.x-1.0',
+            'dev_requirement' => false,
+        ),
+        'drupal/media_entity_slideshow' => array(
+            'pretty_version' => '2.4.0',
+            'version' => '2.4.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/media_entity_slideshow',
+            'aliases' => array(),
+            'reference' => '8.x-2.4',
             'dev_requirement' => false,
         ),
         'drupal/media_library' => array(
@@ -1619,7 +1673,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '4077e972ba73d9da88b096479449fd0a03db511b',
+            'reference' => 'cf0aafdf20ec2695f2e6c9ff21668b49120b08e4',
             'dev_requirement' => false,
         ),
         'drupal/redirect' => array(
@@ -1763,6 +1817,15 @@
                 0 => '9.3.5',
             ),
         ),
+        'drupal/stories' => array(
+            'pretty_version' => '2.0.0-alpha7',
+            'version' => '2.0.0.0-alpha7',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/stories',
+            'aliases' => array(),
+            'reference' => '8.x-2.0-alpha7',
+            'dev_requirement' => false,
+        ),
         'drupal/string_translation_ui' => array(
             'pretty_version' => '1.2.0',
             'version' => '1.2.0.0',
@@ -1783,6 +1846,15 @@
             'replaced' => array(
                 0 => '9.3.5',
             ),
+        ),
+        'drupal/tablefield' => array(
+            'pretty_version' => '2.2.0',
+            'version' => '2.2.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/tablefield',
+            'aliases' => array(),
+            'reference' => '8.x-2.2',
+            'dev_requirement' => false,
         ),
         'drupal/taxonomy' => array(
             'dev_requirement' => false,
@@ -1904,6 +1976,15 @@
                 0 => '9.3.5',
             ),
         ),
+        'drupal/video_embed_field' => array(
+            'pretty_version' => '2.4.0',
+            'version' => '2.4.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/video_embed_field',
+            'aliases' => array(),
+            'reference' => '8.x-2.4',
+            'dev_requirement' => false,
+        ),
         'drupal/views' => array(
             'dev_requirement' => false,
             'replaced' => array(
@@ -1969,6 +2050,15 @@
             'replaced' => array(
                 0 => '9.3.5',
             ),
+        ),
+        'drupal/viewsreference' => array(
+            'pretty_version' => '2.0.0-beta2',
+            'version' => '2.0.0.0-beta2',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/viewsreference',
+            'aliases' => array(),
+            'reference' => '8.x-2.0-beta2',
+            'dev_requirement' => false,
         ),
         'drupal/workflows' => array(
             'dev_requirement' => false,

@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_stories_link_list_links
+    - paragraphs.paragraphs_type.stories_link_list
+  module:
+    - link
+id: paragraph.stories_link_list.field_stories_link_list_links
+field_name: field_stories_link_list_links
+entity_type: paragraph
+bundle: stories_link_list
+label: Links
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 2
+field_type: link

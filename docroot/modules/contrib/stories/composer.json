@@ -1,0 +1,32 @@
+{
+  "name": "drupal/stories",
+  "description": "Provides default Paragraph Types to jumpstart site building.",
+  "type": "drupal-module",
+  "license": "GPL-2.0",
+  "authors": [
+    {
+      "name": "Joel Steidl",
+      "email": "joel@atendesigngroup.com",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "http://drupal.org/project/issues/stories"
+  },
+  "minimum-stability": "dev",
+  "require": {
+    "drupal/block_field": "~1.0",
+    "drupal/core": ">=8.4",
+    "drupal/dropzonejs": "~2.0",
+    "drupal/entity_browser": "~2.0",
+    "drupal/inline_entity_form": "~1.0",
+    "drupal/media_entity_slideshow": "~2.0",
+    "drupal/paragraphs": "~1.2",
+    "drupal/tablefield": "~2.0",
+    "drupal/viewsreference": "^2.0@beta",
+    "drupal/video_embed_field": "~2.0"
+  },
+  "require-dev": {
+    "drupal/features": "~3.0"
+  }
+}

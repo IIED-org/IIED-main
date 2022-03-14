@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.stories_media_selectors
+  module:
+    - views
+name: stories_slideshow
+label: Slideshow
+display: modal
+display_configuration:
+  width: ''
+  height: ''
+  link_text: 'Select Slideshows'
+  auto_open: false
+selection_display: no_display
+selection_display_configuration: {  }
+widget_selector: single
+widget_selector_configuration: {  }
+widgets:
+  38769132-7d3e-4790-8e3b-78f41010b368:
+    settings:
+      view: stories_media_selectors
+      view_display: slideshow
+      submit_text: 'Select Slideshows'
+      auto_select: false
+    uuid: 38769132-7d3e-4790-8e3b-78f41010b368
+    weight: 1
+    label: Slideshows
+    id: view
