@@ -14,12 +14,14 @@ module:
   block: 0
   block_class: 0
   block_content: 0
+  block_field: 0
   breakpoint: 0
   chosen: 0
   chosen_lib: 0
   ckeditor: 0
   ckwordcount: 0
   color: 0
+  color_field: 0
   comment: 0
   components: 0
   computed_field: 0
@@ -56,6 +58,7 @@ module:
   iied_utils: 0
   image: 0
   imagemagick: 0
+  inline_entity_form: 0
   isbn: 0
   jquery_ui: 0
   jquery_ui_datepicker: 0
@@ -66,6 +69,7 @@ module:
   language_switcher_extended: 0
   layout_builder: 0
   layout_discovery: 0
+  layout_paragraphs: 0
   link: 0
   locale: 0
   masquerade: 0
@@ -103,6 +107,7 @@ module:
   rabbit_hole: 0
   rdf: 0
   redirect: 0
+  responsive_image: 0
   responsive_menu: 0
   rest: 0
   rh_media: 0
@@ -118,8 +123,10 @@ module:
   shortcut: 0
   sidr: 0
   sophron: 0
+  stories: 0
   syslog: 0
   system: 0
+  tablefield: 0
   taxonomy: 0
   taxonomy_menu: 0
   text: 0
@@ -136,6 +143,7 @@ module:
   views_bulk_operations: 0
   views_data_export: 0
   views_field_view: 0
+  viewsreference: 0
   ds: 1
   pathauto: 1
   content_translation: 10

@@ -43,3 +43,12 @@
 'use  The form mode default linked to  node entity( news )': node.news.default
 'use  The form mode default linked to  paragraph entity( related_link )': paragraph.related_link.default
 'use  The form mode default linked to  paragraph entity( researcher_profiles )': paragraph.researcher_profiles.default
+'use  The form mode default linked to  node entity( long_read )': node.long_read.default
+'use  The form mode default linked to  paragraph entity( stories_block )': paragraph.stories_block.default
+'use  The form mode default linked to  paragraph entity( stories_cta )': paragraph.stories_cta.default
+'use  The form mode default linked to  paragraph entity( stories_curated_content )': paragraph.stories_curated_content.default
+'use  The form mode default linked to  paragraph entity( stories_link_list )': paragraph.stories_link_list.default
+'use  The form mode default linked to  paragraph entity( stories_quote )': paragraph.stories_quote.default
+'use  The form mode default linked to  paragraph entity( stories_table )': paragraph.stories_table.default
+'use  The form mode default linked to  paragraph entity( stories_text )': paragraph.stories_text.default
+'use  The form mode default linked to  paragraph entity( stories_views )': paragraph.stories_views.default

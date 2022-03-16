@@ -1,0 +1,17 @@
+uuid: 4fda7c88-a530-4192-b897-3a827fcc5171
+langcode: en
+status: true
+dependencies:
+  module:
+    - layout_paragraphs
+_core:
+  default_config_hash: 83Vm2gdh2yxrgWdivuOaR6XGxLpsB_HAeWPGm8mG4qw
+id: stories_link_list
+label: 'Link List'
+icon_uuid: null
+icon_default: null
+description: null
+behavior_plugins:
+  layout_paragraphs:
+    enabled: false
+    available_layouts: {  }

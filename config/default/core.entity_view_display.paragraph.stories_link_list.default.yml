@@ -1,0 +1,41 @@
+uuid: 184343ac-f49d-4bb9-82bc-bb178a01982e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.stories_link_list.field_stories_heading
+    - field.field.paragraph.stories_link_list.field_stories_link_list_links
+    - paragraphs.paragraphs_type.stories_link_list
+  module:
+    - link
+_core:
+  default_config_hash: 9MSerPGZpf09219rhjcJPa3AWHX9EvY2wEK7X2jYlbw
+id: paragraph.stories_link_list.default
+targetEntityType: paragraph
+bundle: stories_link_list
+mode: default
+content:
+  field_stories_heading:
+    weight: 0
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_stories_link_list_links:
+    weight: 1
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+    region: content
+hidden:
+  created: true
+  search_api_excerpt: true
+  uid: true

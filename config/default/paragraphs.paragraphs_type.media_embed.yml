@@ -1,10 +1,15 @@
 uuid: 6dcfb807-3c48-482c-99d5-42ddeef1c33d
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - layout_paragraphs
 id: media_embed
 label: 'Media embed'
 icon_uuid: null
 icon_default: null
 description: ''
-behavior_plugins: {  }
+behavior_plugins:
+  layout_paragraphs:
+    enabled: false
+    available_layouts: {  }

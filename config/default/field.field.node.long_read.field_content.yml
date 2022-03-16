@@ -1,0 +1,75 @@
+uuid: 8ac080f0-8291-4b5f-a715-38c12aa2b50c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_content
+    - node.type.long_read
+    - paragraphs.paragraphs_type.basic_text
+    - paragraphs.paragraphs_type.image
+    - paragraphs.paragraphs_type.media_embed
+    - paragraphs.paragraphs_type.section
+    - paragraphs.paragraphs_type.video_embed
+  module:
+    - entity_reference_revisions
+id: node.long_read.field_content
+field_name: field_content
+entity_type: node
+bundle: long_read
+label: Content
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      basic_text: basic_text
+      image: image
+      media_embed: media_embed
+      section: section
+      video_embed: video_embed
+    negate: 0
+    target_bundles_drag_drop:
+      about_the_author:
+        weight: 14
+        enabled: false
+      basic_text:
+        weight: 15
+        enabled: true
+      file_upload:
+        weight: 16
+        enabled: false
+      image:
+        weight: 17
+        enabled: true
+      image_wide:
+        weight: 18
+        enabled: false
+      info_box:
+        weight: 19
+        enabled: false
+      linked_person:
+        weight: 20
+        enabled: false
+      media_embed:
+        weight: 21
+        enabled: true
+      related_link:
+        weight: 22
+        enabled: false
+      researcher_profiles:
+        weight: 23
+        enabled: false
+      row_of_4:
+        weight: 24
+        enabled: false
+      section:
+        weight: 25
+        enabled: true
+      video_embed:
+        weight: 26
+        enabled: true
+field_type: entity_reference_revisions

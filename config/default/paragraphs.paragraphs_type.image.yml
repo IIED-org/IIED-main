@@ -1,10 +1,15 @@
 uuid: 6fa9d976-f668-4dc1-beba-6cb4e4d53734
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - layout_paragraphs
 id: image
 label: Image
 icon_uuid: null
 icon_default: null
 description: ''
-behavior_plugins: {  }
+behavior_plugins:
+  layout_paragraphs:
+    enabled: false
+    available_layouts: {  }

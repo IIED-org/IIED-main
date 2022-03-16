@@ -1,0 +1,36 @@
+uuid: 2de2170c-4a5a-4b49-b781-b2f6df100714
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.stories_curated_content.field_stories_curated_content
+    - field.field.paragraph.stories_curated_content.field_stories_heading
+    - paragraphs.paragraphs_type.stories_curated_content
+_core:
+  default_config_hash: qvDOe8VkoTEvXThC51hbYN478GgQ1CVw-G-ERdUHXuc
+id: paragraph.stories_curated_content.default
+targetEntityType: paragraph
+bundle: stories_curated_content
+mode: default
+content:
+  field_stories_curated_content:
+    weight: 1
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
+  field_stories_heading:
+    weight: 0
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+hidden:
+  created: true
+  status: true
+  uid: true

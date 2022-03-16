@@ -1,0 +1,17 @@
+uuid: ccc081c9-44b8-4381-8992-94c02e5d9a6b
+langcode: en
+status: true
+dependencies:
+  module:
+    - layout_paragraphs
+_core:
+  default_config_hash: vclwnELneqEQB_Gca0_hsAOwQLqq6uwkpATnvOcMzHc
+id: stories_quote
+label: Quote
+icon_uuid: null
+icon_default: null
+description: null
+behavior_plugins:
+  layout_paragraphs:
+    enabled: false
+    available_layouts: {  }

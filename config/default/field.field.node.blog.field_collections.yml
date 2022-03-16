@@ -10,7 +10,7 @@ id: node.blog.field_collections
 field_name: field_collections
 entity_type: node
 bundle: blog
-label: Collections
+label: Collection
 description: ''
 required: false
 translatable: true
