@@ -1,0 +1,11 @@
+tw-1-2-col:
+  label: "IIED two column"
+  category: "IIED layouts"
+  class: '\Drupal\ds\Plugin\DsLayout'
+  template: templates/sections/layout--tw-1-2-col-section
+  default_region: main
+  regions:
+    first:
+      label: Column one
+    second:
+      label: Column two

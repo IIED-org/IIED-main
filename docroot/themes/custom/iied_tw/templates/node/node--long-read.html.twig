@@ -1,0 +1,175 @@
+{#
+/**
+ * @file
+ * Theme override to display a node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - node.getCreatedTime() will return the node creation timestamp.
+ *   - node.hasField('field_example') returns TRUE if the node bundle includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   - node.isPublished() will return whether the node is published or not.
+ *   Calling other methods, such as node.delete(), will result in an exception.
+ *   See \Drupal\node\Entity\Node for a full list of public properties and
+ *   methods for the node object.
+ * - label: The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - author_picture: The node author user entity, rendered using the "compact"
+ *   view mode.
+ * - metadata: Metadata for this node.
+ * - date: Themed creation date field.
+ * - author_name: Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+ *   The following are controlled through the node publishing options.
+ *   - node--promoted: Appears on nodes promoted to the front page.
+ *   - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+ *     teaser listings.
+ *   - node--unpublished: Appears on unpublished nodes visible only to site
+ *     admins.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ * - readmore: Flag for more state. Will be true if the teaser content of the
+ *   node cannot hold the main body content.
+ * - logged_in: Flag for authenticated user status. Will be true when the
+ *   current user is a logged-in member.
+ * - is_admin: Flag for admin user status. Will be true when the current user
+ *   is an administrator.
+ *
+ * @see template_preprocess_node()
+ *
+ * @todo Remove the id attribute (or make it a class), because if that gets
+ *   rendered twice on a page this is invalid CSS for example: two lists
+ *   in different view modes.
+ */
+#}
+<article{{ attributes.addClass('node') }}>
+  <div class="my-6">
+    <main>
+        {#-- grid --#}
+      <div
+          class="container mx-auto xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12"
+        >
+            <!-- header -->
+            <div class="pt-6 xl:col-span-3 xl:row-span-2">
+              <header class="">
+              <nav aria-label="themes">
+                <div class="flex flex-wrap mb-6 space-x-3">
+                  {{ content.field_theme_s_}}
+                </div>
+              </nav>
+                <div class="py-4 border-b-2 border-iiedpink-500">
+                  <h1 class="mb-6">{{ node.label }}</h1>
+                  <h2 class="mb-6 text-lg text-iiedpink-700">
+                    {{ content.field_subheading }}
+                  </h2>
+                </div>
+                <div
+                  class="flex flex-wrap justify-between py-4 border-b border-gray-300 sm:flex-row xl:flex-col"
+                >
+                {% if content.field_author_s_ %} 
+              <p class="mb-2"><span class="mr-2">Blog by</span> {{ content.field_author_s_ }}</p>
+                {% endif %}
+                  <p class="mb-2">{{ node.getCreatedTime|date('d F Y') }}</p>
+                </div>
+    
+                <!-- share -->
+                <div class="flex flex-wrap justify-between py-4 sm:flex-row">
+                  <div class="flex items-center xl:mb-4">
+                    {% include '@iied_tw/partials/_share_links.html.twig' %}
+                  </div>
+                  <!-- end date and share -->
+                  <!-- utility buttons -->
+                  <div class="flex flex-wrap sm:flex-row">
+                    <button
+                      class="flex items-center px-3 py-2 mb-2 mr-2 transition bg-white border border-gray-300 rounded-full shadow-sm hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-5 h-5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                      Copy link
+                    </button>
+                    <button
+                      class="items-center hidden px-3 py-2 mb-2 mr-2 transition bg-white border border-gray-300 rounded-full shadow-sm md:flex hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-5 h-5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                      Print/PDF
+                    </button>
+                  </div>
+                </div>
+              </header>
+            </div>
+            <!-- image -->
+            <div class="relative xl:col-span-9 xl:col-start-4">
+              <figure class="mb-4 -mx-6 overflow-hidden xl:mb-2 rounded-bl-xl sm:mx-0">
+              {{ content.field_main_image }}
+              </figure>
+    
+              <figcaption class="right-0 text-sm text-gray-500 border-l border-gray-300 xl:-mt-2 xl:absolute xl:w-48 2xl:w-80 xl:pt-2 xl:pl-2">
+                {{ content.field_image_caption }}
+              </figcaption>
+            </div>
+    
+            <div class="xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4">
+              <div class="pb-12 prose md:prose-lg">
+              {{ content.body }}
+              </div>
+            </div>
+      </div>
+    
+      {#-- layout paragraphs --#}
+      {{ content.field_content }}
+
+      {#-- tags --#}
+      {{ content.field_tags }} 
+            
+    </main>
+  </div>
+</article>
