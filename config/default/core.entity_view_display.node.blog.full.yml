@@ -51,11 +51,20 @@ content:
     weight: 9
     region: content
   field_author_s_:
-    type: entity_reference_label
+    type: entity_reference_entity_view
     label: hidden
     settings:
-      link: true
-    third_party_settings: {  }
+      view_mode: avatar
+      link: false
+    third_party_settings:
+      ds:
+        ds_limit: ''
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
     weight: 2
     region: content
   field_blogger_info:

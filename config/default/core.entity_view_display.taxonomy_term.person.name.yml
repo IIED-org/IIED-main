@@ -1,9 +1,9 @@
-uuid: df7eb7e1-c978-4dd1-8f0b-fbae3ca23573
+uuid: 607a09d3-4675-40b4-8a59-fea8281c66d0
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.taxonomy_term.avatar
+    - core.entity_view_mode.taxonomy_term.name
     - field.field.taxonomy_term.person.field_appointed_role
     - field.field.taxonomy_term.person.field_author_picture
     - field.field.taxonomy_term.person.field_before_iied
@@ -32,59 +32,20 @@ dependencies:
     - field.field.taxonomy_term.person.field_video
     - taxonomy.vocabulary.person
   module:
-    - ds
     - layout_builder
-    - name
 third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-id: taxonomy_term.person.avatar
+id: taxonomy_term.person.name
 targetEntityType: taxonomy_term
 bundle: person
-mode: avatar
-content:
-  field_author_picture:
-    type: entity_reference_entity_view
-    label: hidden
-    settings:
-      view_mode: rounded
-      link: false
-    third_party_settings:
-      ds:
-        ft:
-          id: default
-          settings:
-            lb: ''
-            lb-col: false
-            classes: {  }
-    weight: 0
-    region: content
-  field_name:
-    type: name_default
-    label: hidden
-    settings:
-      format: short_full
-      markup: none
-      list_format: default
-      link_target: ''
-      preferred_field_reference: ''
-      preferred_field_reference_separator: ', '
-      alternative_field_reference: ''
-      alternative_field_reference_separator: ', '
-    third_party_settings:
-      ds:
-        ft:
-          id: default
-          settings:
-            lb: ''
-            lb-col: false
-            classes: {  }
-    weight: 1
-    region: content
+mode: name
+content: {  }
 hidden:
   description: true
   field_appointed_role: true
+  field_author_picture: true
   field_before_iied: true
   field_biography: true
   field_current_work: true
@@ -95,6 +56,7 @@ hidden:
   field_languages: true
   field_legacy_iscanonical: true
   field_link: true
+  field_name: true
   field_organisation: true
   field_paragraphs: true
   field_person_type: true

@@ -1,27 +1,41 @@
-uuid: 9f2f7b23-fd2e-498a-8c08-4a8c2db78bb5
+uuid: 65d413b6-2f4d-4cb4-9778-aef36cd5581c
 langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.media.rounded
     - field.field.media.image.field_media_image
-    - image.style.large
+    - image.style.thumbnail
     - media.type.image
   module:
+    - ds
     - image
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
 _core:
   default_config_hash: B1a2aBHmUulUZN6HrxITEH1tSResuVjXMBEv1lUBtOo
-id: media.image.default
+id: media.image.rounded
 targetEntityType: media
 bundle: image
-mode: default
+mode: rounded
 content:
   field_media_image:
     type: image
     label: hidden
     settings:
       image_link: ''
-      image_style: large
-    third_party_settings: {  }
+      image_style: thumbnail
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
     weight: 1
     region: content
 hidden:
