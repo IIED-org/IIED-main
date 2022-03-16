@@ -1,0 +1,14 @@
+layout_paragraphs.label_settings:
+  path: '/admin/config/content/layout_paragraphs/labels'
+  defaults:
+    _form: '\Drupal\layout_paragraphs\Form\LayoutParagraphsSettingsForm'
+    _title: 'Layout Paragraphs Labels'
+  requirements:
+    _permission: 'administer site configuration'
+layout_paragraphs.section_settings:
+  path: '/admin/config/content/layout_paragraphs/sections'
+  defaults:
+    _form: '\Drupal\layout_paragraphs\Form\LayoutParagraphsSectionsSettingsForm'
+    _title: 'Layout Paragraphs Sections'
+  requirements:
+    _permission: 'administer site configuration'

@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.stories_block.field_stories_block
+    - paragraphs.paragraphs_type.stories_block
+  module:
+    - block_field
+id: paragraph.stories_block.default
+targetEntityType: paragraph
+bundle: stories_block
+mode: default
+content:
+  field_stories_block:
+    weight: 0
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    type: block_field
+    region: content
+hidden:
+  created: true
+  uid: true

@@ -1,0 +1,98 @@
+<?php
+
+/**
+ * @file
+ * This module holds functions useful for advanced table layouts.
+ */
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function tablefield_cellspan_preprocess_table(&$variables) {
+
+  // Only fire on front-end.
+  if (!\Drupal::service('router.admin_context')->isAdminRoute()) {
+
+    $previous_row = FALSE;
+    $spancol = [];
+
+    foreach ($variables['rows'] as $row_key => $row) {
+      $colspan = 2;
+
+      foreach ($row['cells'] as $col_key => $cell) {
+
+        if (is_array($cell['content']) || is_object($cell['content'])) {
+          break;
+        }
+
+        if (!isset($spancol[$col_key])) {
+          $spancol[$col_key]['rowspan'] = 2;
+          $spancol[$col_key]['spancol'] = FALSE;
+        }
+
+        preg_match("/(?:#colspan#)/", $cell['content'], $match);
+        // Is #colspan# in the data.
+        if (!empty($match)) {
+
+          $keys = array_keys($variables['rows'][$row_key]['cells']);
+          $search = array_search($col_key, $keys);
+          $prev = $keys[intval($search) - 1];
+
+          $attributes = clone $variables['rows'][$row_key]['cells'][$prev]['attributes'];
+          $attributes['colspan'] = $colspan;
+
+          $variables['rows'][$row_key]['cells'][$prev]['attributes'] = $attributes;
+          unset($variables['rows'][$row_key]['cells'][$col_key]);
+
+          $colspan++;
+        }
+        else {
+          $colspan = 2;
+        }
+
+        preg_match("/(?:#rowspan#)/", $cell['content'], $match);
+        // Is #rowpsan# in the data.
+        if (!empty($match)) {
+
+          if ($previous_row !== FALSE) {
+
+            $keys = array_keys($variables['rows'][$row_key]['cells']);
+            $search = array_search($col_key, $keys);
+            $col = $keys[intval($search)];
+
+            $prev_row = $previous_row;
+
+            while (TRUE) {
+              if (isset($variables['rows'][$prev_row]['cells'][$col])) {
+
+                $attributes = clone $variables['rows'][$prev_row]['cells'][$col]['attributes'];
+                $attributes['rowspan'] = $spancol[$col_key]['rowspan'];
+
+                $variables['rows'][$prev_row]['cells'][$col]['attributes'] = $attributes;
+
+                $spancol[$col_key]['rowspan']++;
+                $spancol[$col_key]['spancol'] = $col;
+
+                break;
+              }
+              $prev_row--;
+            }
+            unset($variables['rows'][$row_key]['cells'][$col_key]);
+          }
+
+        }
+        elseif ($col_key == $spancol[$col_key]['spancol']) {
+          $spancol[$col_key]['rowspan'] = 2;
+          $spancol[$col_key]['spancol'] = FALSE;
+        }
+
+        // Remove lost cells #remove#.
+        preg_match("/(?:#remove#)/", $cell['content'], $match);
+        if (!empty($match)) {
+          unset($variables['rows'][$row_key]['cells'][$col_key]);
+        }
+      }
+      $previous_row = $row_key;
+    }
+  }
+}

@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_stories_curated_content
+    - paragraphs.paragraphs_type.stories_curated_content
+id: paragraph.stories_curated_content.field_stories_curated_content
+field_name: field_stories_curated_content
+entity_type: paragraph
+bundle: stories_curated_content
+label: Content
+description: "Select content (nodes) you wish to appear in a list.<br>\r\nBy default it will appear using the \"Teaser\" view mode."
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles: {  }
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: page
+field_type: entity_reference

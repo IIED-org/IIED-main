@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: stories_views
+label: 'Views Content List'
+icon_uuid: null
+description: null
+behavior_plugins: {  }

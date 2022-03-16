@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_stories_heading
+    - paragraphs.paragraphs_type.stories_cta
+id: paragraph.stories_cta.field_stories_heading
+field_name: field_stories_heading
+entity_type: paragraph
+bundle: stories_cta
+label: Heading
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

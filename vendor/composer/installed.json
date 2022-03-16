@@ -3582,6 +3582,73 @@
             "install-path": "../../docroot/modules/contrib/block_class"
         },
         {
+            "name": "drupal/block_field",
+            "version": "1.0.0-rc2",
+            "version_normalized": "1.0.0.0-RC2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/block_field.git",
+                "reference": "8.x-1.0-rc2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/block_field-8.x-1.0-rc2.zip",
+                "reference": "8.x-1.0-rc2",
+                "shasum": "44472f8e89c319af884b25ac0a66337329a9b309"
+            },
+            "require": {
+                "drupal/core": "^8.7.7 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.0-rc2",
+                    "datestamp": "1621950813",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Berdir",
+                    "homepage": "https://www.drupal.org/user/214652"
+                },
+                {
+                    "name": "acbramley",
+                    "homepage": "https://www.drupal.org/user/1036766"
+                },
+                {
+                    "name": "fenstrat",
+                    "homepage": "https://www.drupal.org/user/362649"
+                },
+                {
+                    "name": "jrockowitz",
+                    "homepage": "https://www.drupal.org/user/371407"
+                },
+                {
+                    "name": "michaellander",
+                    "homepage": "https://www.drupal.org/user/636494"
+                },
+                {
+                    "name": "paulocs",
+                    "homepage": "https://www.drupal.org/user/3640109"
+                }
+            ],
+            "description": "Provides a field that allows a content entity to create and configure custom block instances.",
+            "homepage": "https://www.drupal.org/project/block_field",
+            "support": {
+                "source": "https://git.drupalcode.org/project/block_field"
+            },
+            "install-path": "../../docroot/modules/contrib/block_field"
+        },
+        {
             "name": "drupal/bootstrap_layouts",
             "version": "5.2.0",
             "version_normalized": "5.2.0.0",
@@ -3905,6 +3972,68 @@
                 "source": "https://www.drupal.org/project/coder"
             },
             "install-path": "../drupal/coder"
+        },
+        {
+            "name": "drupal/color_field",
+            "version": "2.5.0",
+            "version_normalized": "2.5.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/color_field.git",
+                "reference": "8.x-2.5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/color_field-8.x-2.5.zip",
+                "reference": "8.x-2.5",
+                "shasum": "9b0d299cb24d3cb21c7fb6a6a08d32ae5aed8652"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "require-dev": {
+                "drupal/core-recommended": "*",
+                "drupal/token": "~1.3"
+            },
+            "suggest": {
+                "bower-asset/jquery-simple-color": "^v1.2.2: Provides JavaScript library necessary for the Color Grid widget",
+                "bower-asset/spectrum": "^1.8: Provides JavaScript library necessary for Spectrum widget."
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-2.5",
+                    "datestamp": "1632938098",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "targoo",
+                    "homepage": "https://www.drupal.org/user/431910",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Nick Wilde",
+                    "homepage": "https://www.drupal.org/user/nickwilde",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Provides a color field type to store the color value and opacity",
+            "homepage": "https://www.drupal.org/project/color_field",
+            "support": {
+                "source": "https://git.drupalcode.org/project/color_field",
+                "issues": "https://www.drupal.org/project/issues/color_field?version=8.x"
+            },
+            "install-path": "../../docroot/modules/contrib/color_field"
         },
         {
             "name": "drupal/components",
@@ -5171,6 +5300,98 @@
             "install-path": "../../docroot/modules/contrib/dropdown_language"
         },
         {
+            "name": "drupal/dropzonejs",
+            "version": "2.5.0",
+            "version_normalized": "2.5.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/dropzonejs.git",
+                "reference": "8.x-2.5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/dropzonejs-8.x-2.5.zip",
+                "reference": "8.x-2.5",
+                "shasum": "9918bd8c3c62599ec701be3bbac986741e735859"
+            },
+            "require": {
+                "drupal/core": "^8.8 || ^9"
+            },
+            "require-dev": {
+                "drupal/entity_browser": "*"
+            },
+            "suggest": {
+                "enyo/dropzone": "Required to use drupal/dropzonejs. DropzoneJS is an open source library that provides drag’n’drop file uploads with image previews."
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-2.5",
+                    "datestamp": "1614606376",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Janez Urevc",
+                    "homepage": "https://drupal.org/u/slashrsm",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Christian Fritsch",
+                    "homepage": "https://drupal.org/u/chrfritsch",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Primoz Hmeljak",
+                    "homepage": "https://drupal.org/u/Primsi",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Qiangjun Ran",
+                    "homepage": "https://drupal.org/u/jungle",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "See other contributors",
+                    "homepage": "https://www.drupal.org/node/1998478/committers",
+                    "role": "contributor"
+                },
+                {
+                    "name": "slashrsm",
+                    "homepage": "https://www.drupal.org/user/744628"
+                },
+                {
+                    "name": "wouters_f",
+                    "homepage": "https://www.drupal.org/user/721548"
+                },
+                {
+                    "name": "zkday",
+                    "homepage": "https://www.drupal.org/user/888644"
+                }
+            ],
+            "description": "Drupal integration for DropzoneJS - An open source library that provides drag’n’drop file uploads with image previews.",
+            "homepage": "https://www.drupal.org/project/dropzonejs",
+            "keywords": [
+                "DropzoneJS",
+                "Drupal"
+            ],
+            "support": {
+                "source": "https://www.drupal.org/project/dropzonejs",
+                "issues": "https://www.drupal.org/project/issues/dropzonejs",
+                "#media": "http://drupal.slack.com"
+            },
+            "install-path": "../../docroot/modules/contrib/dropzonejs"
+        },
+        {
             "name": "drupal/ds",
             "version": "3.13.0",
             "version_normalized": "3.13.0.0",
@@ -5245,6 +5466,99 @@
                 "irc": "irc://irc.freenode.org/drupal-contribute"
             },
             "install-path": "../../docroot/modules/contrib/ds"
+        },
+        {
+            "name": "drupal/entity_browser",
+            "version": "2.6.0",
+            "version_normalized": "2.6.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/entity_browser.git",
+                "reference": "8.x-2.6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/entity_browser-8.x-2.6.zip",
+                "reference": "8.x-2.6",
+                "shasum": "95cad4ce9620ccb4f02afa0e8b8bbf7c73fc5aac"
+            },
+            "require": {
+                "drupal/core": "^8.8 || ^9"
+            },
+            "require-dev": {
+                "drupal/embed": "~1.0",
+                "drupal/entity_embed": "1.x-dev",
+                "drupal/entity_reference_revisions": "1.x-dev",
+                "drupal/entityqueue": "1.x-dev",
+                "drupal/inline_entity_form": "1.x-dev",
+                "drupal/paragraphs": "1.x-dev",
+                "drupal/token": "~1.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-2.6",
+                    "datestamp": "1624401306",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Janez Urevc",
+                    "homepage": "https://github.com/slashrsm",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Primoz Hmeljak",
+                    "homepage": "https://github.com/primsi",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "See other contributors",
+                    "homepage": "https://www.drupal.org/node/1943336/committers",
+                    "role": "contributor"
+                },
+                {
+                    "name": "Drupal Media Team",
+                    "homepage": "https://www.drupal.org/user/3260690"
+                },
+                {
+                    "name": "Primsi",
+                    "homepage": "https://www.drupal.org/user/282629"
+                },
+                {
+                    "name": "marcingy",
+                    "homepage": "https://www.drupal.org/user/77320"
+                },
+                {
+                    "name": "oknate",
+                    "homepage": "https://www.drupal.org/user/471638"
+                },
+                {
+                    "name": "samuel.mortenson",
+                    "homepage": "https://www.drupal.org/user/2582268"
+                },
+                {
+                    "name": "slashrsm",
+                    "homepage": "https://www.drupal.org/user/744628"
+                }
+            ],
+            "description": "Entity browsing and selecting component.",
+            "homepage": "http://drupal.org/project/entity_browser",
+            "support": {
+                "source": "https://git.drupalcode.org/project/entity_browser",
+                "issues": "https://www.drupal.org/project/issues/entity_browser",
+                "irc": "irc://irc.freenode.org/drupal-contribute"
+            },
+            "install-path": "../../docroot/modules/contrib/entity_browser"
         },
         {
             "name": "drupal/entity_reference_revisions",
@@ -6569,6 +6883,62 @@
             "install-path": "../../docroot/modules/contrib/language_switcher_extended"
         },
         {
+            "name": "drupal/layout_paragraphs",
+            "version": "1.0.0",
+            "version_normalized": "1.0.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/layout_paragraphs.git",
+                "reference": "1.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/layout_paragraphs-1.0.0.zip",
+                "reference": "1.0.0",
+                "shasum": "6b4bbb8fc50f70092d1c1ed720076be9f8904218"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9",
+                "drupal/paragraphs": "^1.6"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0",
+                    "datestamp": "1621524309",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "itamair",
+                    "homepage": "https://www.drupal.org/user/1179076"
+                },
+                {
+                    "name": "justin2pin",
+                    "homepage": "https://www.drupal.org/user/278450"
+                }
+            ],
+            "description": "Layout Paragraphs",
+            "homepage": "https://www.drupal.org/project/layout_paragraphs",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/layout_paragraphs",
+                "issues": "https://www.drupal.org/project/issues/layout_paragraphs"
+            },
+            "install-path": "../../docroot/modules/contrib/layout_paragraphs"
+        },
+        {
             "name": "drupal/masquerade",
             "version": "2.0.0-beta4",
             "version_normalized": "2.0.0.0-beta4",
@@ -6688,6 +7058,69 @@
                 "source": "https://git.drupalcode.org/project/media_entity_file_replace"
             },
             "install-path": "../../docroot/modules/contrib/media_entity_file_replace"
+        },
+        {
+            "name": "drupal/media_entity_slideshow",
+            "version": "2.4.0",
+            "version_normalized": "2.4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/media_entity_slideshow.git",
+                "reference": "8.x-2.4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/media_entity_slideshow-8.x-2.4.zip",
+                "reference": "8.x-2.4",
+                "shasum": "7959016d541e594e998c78ccb7ca4e454251f07f"
+            },
+            "require": {
+                "drupal/core": "^8.8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-2.4",
+                    "datestamp": "1612355653",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Drupal Media Team",
+                    "homepage": "https://www.drupal.org/user/3260690"
+                },
+                {
+                    "name": "chr.fritsch",
+                    "homepage": "https://www.drupal.org/user/2103716"
+                },
+                {
+                    "name": "marcoscano",
+                    "homepage": "https://www.drupal.org/user/1288796"
+                },
+                {
+                    "name": "phenaproxima",
+                    "homepage": "https://www.drupal.org/user/205645"
+                },
+                {
+                    "name": "slashrsm",
+                    "homepage": "https://www.drupal.org/user/744628"
+                }
+            ],
+            "description": "Media entity slideshow provider.",
+            "homepage": "https://www.drupal.org/project/media_entity_slideshow",
+            "support": {
+                "source": "https://git.drupalcode.org/project/media_entity_slideshow"
+            },
+            "install-path": "../../docroot/modules/contrib/media_entity_slideshow"
         },
         {
             "name": "drupal/media_pdf_thumbnail",
@@ -8711,6 +9144,93 @@
             "install-path": "../../docroot/modules/contrib/stage_file_proxy"
         },
         {
+            "name": "drupal/stories",
+            "version": "2.0.0-alpha7",
+            "version_normalized": "2.0.0.0-alpha7",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/stories.git",
+                "reference": "8.x-2.0-alpha7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/stories-8.x-2.0-alpha7.zip",
+                "reference": "8.x-2.0-alpha7",
+                "shasum": "ab09970ded4e266db4b68dc50b77c617801a15b6"
+            },
+            "require": {
+                "drupal/block_field": "~1.0",
+                "drupal/core": ">=8.4",
+                "drupal/dropzonejs": "~2.0",
+                "drupal/entity_browser": "~2.0",
+                "drupal/entity_reference_revisions": "*",
+                "drupal/inline_entity_form": "~1.0",
+                "drupal/media_entity_slideshow": "~2.0",
+                "drupal/paragraphs": "~1.2",
+                "drupal/tablefield": "~2.0",
+                "drupal/video_embed_field": "~2.0",
+                "drupal/viewsreference": "^2.0@beta"
+            },
+            "require-dev": {
+                "drupal/dropzonejs_eb_widget": "^2",
+                "drupal/entity_browser": "^2",
+                "drupal/entity_browser_entity_form": "^2",
+                "drupal/features": "~3.0",
+                "drupal/inline_entity_form": "*",
+                "drupal/media_entity_slideshow": "^2",
+                "drupal/paragraphs": "*",
+                "drupal/video_embed_field": "*",
+                "drupal/video_embed_media": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-2.0-alpha7",
+                    "datestamp": "1616083625",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Joel Steidl",
+                    "homepage": "https://www.drupal.org/user/3598532",
+                    "email": "joel@atendesigngroup.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "jnettik",
+                    "homepage": "https://www.drupal.org/user/741478"
+                },
+                {
+                    "name": "joelsteidl",
+                    "homepage": "https://www.drupal.org/user/658038"
+                },
+                {
+                    "name": "kaythay",
+                    "homepage": "https://www.drupal.org/user/2182186"
+                },
+                {
+                    "name": "pixelwhip",
+                    "homepage": "https://www.drupal.org/user/275292"
+                }
+            ],
+            "description": "Provides default Paragraph Types to jumpstart site building.",
+            "homepage": "https://www.drupal.org/project/stories",
+            "support": {
+                "source": "https://git.drupalcode.org/project/stories",
+                "issues": "http://drupal.org/project/issues/stories"
+            },
+            "install-path": "../../docroot/modules/contrib/stories"
+        },
+        {
             "name": "drupal/string_translation_ui",
             "version": "1.2.0",
             "version_normalized": "1.2.0.0",
@@ -8792,6 +9312,85 @@
                 "source": "https://git.drupalcode.org/project/string_translation_ui"
             },
             "install-path": "../../docroot/modules/contrib/string_translation_ui"
+        },
+        {
+            "name": "drupal/tablefield",
+            "version": "2.2.0",
+            "version_normalized": "2.2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/tablefield.git",
+                "reference": "8.x-2.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/tablefield-8.x-2.2.zip",
+                "reference": "8.x-2.2",
+                "shasum": "ea458b0ba1ee6cdfac319c176451fe50027f6bcd"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-2.2",
+                    "datestamp": "1603881752",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "JeroenT",
+                    "homepage": "https://www.drupal.org/user/2228934"
+                },
+                {
+                    "name": "Kevin Hankens",
+                    "homepage": "https://www.drupal.org/user/78090"
+                },
+                {
+                    "name": "Liam Morland",
+                    "homepage": "https://www.drupal.org/user/493050"
+                },
+                {
+                    "name": "colan",
+                    "homepage": "https://www.drupal.org/user/58704"
+                },
+                {
+                    "name": "dsnopek",
+                    "homepage": "https://www.drupal.org/user/266527"
+                },
+                {
+                    "name": "jenlampton",
+                    "homepage": "https://www.drupal.org/user/85586"
+                },
+                {
+                    "name": "lolandese",
+                    "homepage": "https://www.drupal.org/user/210402"
+                },
+                {
+                    "name": "mayurjadhav",
+                    "homepage": "https://www.drupal.org/user/2266604"
+                },
+                {
+                    "name": "vitalie",
+                    "homepage": "https://www.drupal.org/user/175134"
+                }
+            ],
+            "description": "Defines a generic tabular data field.",
+            "homepage": "https://www.drupal.org/project/tablefield",
+            "support": {
+                "source": "https://git.drupalcode.org/project/tablefield"
+            },
+            "install-path": "../../docroot/modules/contrib/tablefield"
         },
         {
             "name": "drupal/taxonomy_manager",
@@ -9308,6 +9907,65 @@
             "install-path": "../../docroot/modules/contrib/upgrade_status"
         },
         {
+            "name": "drupal/video_embed_field",
+            "version": "2.4.0",
+            "version_normalized": "2.4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/video_embed_field.git",
+                "reference": "8.x-2.4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/video_embed_field-8.x-2.4.zip",
+                "reference": "8.x-2.4",
+                "shasum": "96b14bb93c1bb6a07b84315a4f87367870f8b574"
+            },
+            "require": {
+                "drupal/core": "^8.8 || ^9"
+            },
+            "require-dev": {
+                "drupal/colorbox": "^1.0",
+                "drupal/video_embed_media": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-2.4",
+                    "datestamp": "1587686337",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Sam152",
+                    "homepage": "https://www.drupal.org/user/1485048"
+                },
+                {
+                    "name": "jec006",
+                    "homepage": "https://www.drupal.org/user/855980"
+                },
+                {
+                    "name": "plopesc",
+                    "homepage": "https://www.drupal.org/user/282415"
+                }
+            ],
+            "description": "A pluggable field type for storing videos from external video hosts such as Vimeo and YouTube.",
+            "homepage": "https://www.drupal.org/project/video_embed_field",
+            "support": {
+                "source": "https://git.drupalcode.org/project/video_embed_field"
+            },
+            "install-path": "../../docroot/modules/contrib/video_embed_field"
+        },
+        {
             "name": "drupal/views_autocomplete_filters",
             "version": "1.3.0",
             "version_normalized": "1.3.0.0",
@@ -9701,6 +10359,72 @@
                 "source": "https://git.drupalcode.org/project/views_field_view"
             },
             "install-path": "../../docroot/modules/contrib/views_field_view"
+        },
+        {
+            "name": "drupal/viewsreference",
+            "version": "2.0.0-beta2",
+            "version_normalized": "2.0.0.0-beta2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/viewsreference.git",
+                "reference": "8.x-2.0-beta2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/viewsreference-8.x-2.0-beta2.zip",
+                "reference": "8.x-2.0-beta2",
+                "shasum": "146bf8c68e6cbb3805b4368b508d43931fe77c67"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "conflict": {
+                "drupal/viewsreferennce": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-2.0-beta2",
+                    "datestamp": "1597243219",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "New Zeal",
+                    "homepage": "https://www.drupal.org/user/93571"
+                },
+                {
+                    "name": "jasonawant",
+                    "homepage": "https://www.drupal.org/user/589890"
+                },
+                {
+                    "name": "joekers",
+                    "homepage": "https://www.drupal.org/user/2229066"
+                },
+                {
+                    "name": "seanB",
+                    "homepage": "https://www.drupal.org/user/545912"
+                }
+            ],
+            "description": "Views reference",
+            "homepage": "http://drupal.org/project/viewsreference",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/viewsreference",
+                "issues": "https://www.drupal.org/project/issues/viewsreference"
+            },
+            "install-path": "../../docroot/modules/contrib/viewsreference"
         },
         {
             "name": "drush/drush",

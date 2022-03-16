@@ -1,0 +1,5 @@
+layout_paragraphs.label_settings:
+  title: 'Layout Paragraphs settings'
+  description: 'Configure site-wide settings for Layout Paragraphs field widgets.'
+  parent: system.admin_config_content
+  route_name: layout_paragraphs.label_settings

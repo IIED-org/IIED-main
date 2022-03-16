@@ -4,7 +4,7 @@ definitions:
   contact__site_page:
     menu_name: footer
     parent: 'menu_link_content:dd4ca5f0-c02e-4647-b15b-413075605b89'
-    weight: -50
+    weight: -47
     expanded: false
     enabled: true
   standard__front_page:

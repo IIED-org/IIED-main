@@ -1,0 +1,40 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.stories_slideshow.field_stories_alignment
+    - field.field.paragraph.stories_slideshow.field_stories_slideshow
+    - paragraphs.paragraphs_type.stories_slideshow
+  module:
+    - entity_browser_entity_form
+    - inline_entity_form
+id: paragraph.stories_slideshow.default
+targetEntityType: paragraph
+bundle: stories_slideshow
+mode: default
+content:
+  field_stories_alignment:
+    weight: 1
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_stories_slideshow:
+    weight: 0
+    settings:
+      form_mode: default
+      override_labels: true
+      label_singular: Slideshow
+      label_plural: Slideshows
+      allow_new: true
+      allow_existing: true
+      match_operator: CONTAINS
+    third_party_settings:
+      entity_browser_entity_form:
+        entity_browser_id: stories_slideshow
+    type: inline_entity_form_complex
+    region: content
+hidden:
+  created: true
+  status: true
+  uid: true
