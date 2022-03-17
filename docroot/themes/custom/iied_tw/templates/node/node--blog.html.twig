@@ -94,20 +94,31 @@
           {{ content.field_standfirst }}
         </div>
 
-        {# attribution #} {#-- avatar group @todo add avatar and loop to add
-        'and' for second author--#}
-        <div class="flex border-b border-gray-300">
-          {% if content.field_author_s_ %} 
-          <span class="mr-2">Blog by</span> {{ content.field_author_s_ }} 
-          {% endif %}
-        {# uncomment once field is fixed {{ content.field_blogger_info }} #}
-        </div>
+        {# attribution #} 
+        {#-- avatar group @todo add avatar and loop to add 'and' for second author--#}
 
+        <div class="flex border-b border-gray-300">
+          <div class="flex mr-4 -space-x-3 shrink-0">
+              {{ node.field_author_s_[0].entity|view('avatar') }} {# images #}
+              {{ node.field_author_s_[1].entity|view('avatar') }}
+          </div>
+            <div class="flex mb-6">
+            {# {{ breakpoint(node.field_author_s_[0].entity.name ) }} #}
+            Blog by&nbsp;{{ node.field_author_s_[0].entity|view('name') }} 
+            {% if node.field_author_s_[1] %}
+             &nbsp;and&nbsp; {{ node.field_author_s_[1].entity|view('name') }} 
+            {% endif %}
+            </div>
+            
+          {# @TODO: uncommment after migration fix
+            {{ content.field_blogger_info }} 
+          #}
+        </div>
         {#-- date and share --#}
         <div
           class="flex flex-col flex-wrap justify-between py-6 border-b border-gray-300 xl:border-none sm:flex-row"
         >
-        {{ breakpoint() }}
+    
           {{ node.getCreatedTime|date('d F Y') }}
           <div class="flex items-center">
             {% include '@iied_tw/partials/_share_links.html.twig' %}
@@ -120,7 +131,7 @@
       </div>
     </div>
 
-        {# main content #}
+    {# main content #}
     <div
       class="container mx-auto xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12">
       <div
@@ -141,10 +152,9 @@
           </div>
         {#-- about the author --#} 
         {{ content.field_about_the_author }}  
-        {#-- tags --#}
-        {{ content.field_tags }} 
         </div>
-
+        {#-- tags --#}
+         {{ content.field_tags }} 
           {% include '@iied_tw/partials/_share_blog_links.html.twig' %}
           
       </div>

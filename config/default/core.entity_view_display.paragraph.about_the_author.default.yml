@@ -7,7 +7,6 @@ dependencies:
     - field.field.paragraph.about_the_author.field_author_reference
     - paragraphs.paragraphs_type.about_the_author
   module:
-    - ds
     - text
 id: paragraph.about_the_author.default
 targetEntityType: paragraph
@@ -21,22 +20,6 @@ content:
     third_party_settings: {  }
     weight: 1
     region: content
-  field_author_reference:
-    type: entity_reference_entity_view
-    label: above
-    settings:
-      view_mode: avatar
-      link: false
-    third_party_settings:
-      ds:
-        ds_limit: ''
-        ft:
-          id: default
-          settings:
-            lb: ''
-            lb-col: false
-            classes: {  }
-    weight: 2
-    region: content
 hidden:
+  field_author_reference: true
   search_api_excerpt: true
