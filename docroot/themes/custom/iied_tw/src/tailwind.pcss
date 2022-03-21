@@ -66,10 +66,19 @@
   /* Components -- twig templates */
   /* Cards */
   .card {
-    @apply border border-gray-300 p-4;
+    @apply border border-gray-300 p-4 rounded-xl;
   }
 
   [id$="-local-tasks"] ul {
     @apply list-disc list-inside;
+  }
+}
+
+@layer utilities {
+  .border {
+    @apply border border-gray-300 p-4 rounded-xl;
+  }
+  .bg-fill {
+    @apply p-4 bg-gray-100 rounded-xl;
   }
 }

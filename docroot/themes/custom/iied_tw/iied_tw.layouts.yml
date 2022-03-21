@@ -3,6 +3,7 @@ tw-1-col-md:
   category: "IIED layouts"
   class: '\Drupal\ds\Plugin\DsLayout'
   template: templates/layout/layout--tw-1-col-md
+  icon: templates/layout/icons/tw-1-col-md.svg
   default_region: main
   regions:
     first:
@@ -12,6 +13,7 @@ tw-1-col-lg:
   category: "IIED layouts"
   class: '\Drupal\ds\Plugin\DsLayout'
   template: templates/layout/layout--tw-1-col-lg
+  icon: templates/layout/icons/tw-1-col-lg.svg
   default_region: main
   regions:
     first:
@@ -21,6 +23,7 @@ tw-1-col-xl:
   category: "IIED layouts"
   class: '\Drupal\ds\Plugin\DsLayout'
   template: templates/layout/layout--tw-1-col-xl
+  icon: templates/layout/icons/tw-1-col-xl.svg
   default_region: main
   regions:
     first:
@@ -30,6 +33,7 @@ tw-1-2-col-sm-md:
   category: "IIED layouts"
   class: '\Drupal\ds\Plugin\DsLayout'
   template: templates/layout/layout--tw-1-2-col-sm-md
+  icon: templates/layout/icons/tw-1-2-col-sm-md.svg
   default_region: main
   regions:
     first:
@@ -41,6 +45,7 @@ tw-1-2-col:
   category: "IIED layouts"
   class: '\Drupal\ds\Plugin\DsLayout'
   template: templates/layout/layout--tw-1-2-col
+  icon: templates/layout/icons/tw-1-2-col.svg
   default_region: main
   regions:
     first:
@@ -51,7 +56,8 @@ tw-1-3-col:
   label: "IIED three column"
   category: "IIED layouts"
   class: '\Drupal\ds\Plugin\DsLayout'
-  template: templates/layout/layout--tw-1-2-col
+  template: templates/layout/layout--tw-1-3-col
+  icon: templates/layout/icons/tw-1-3-col.svg
   default_region: main
   regions:
     first:
@@ -64,7 +70,8 @@ tw-1-2-4-col:
   label: "IIED four column"
   category: "IIED layouts"
   class: '\Drupal\ds\Plugin\DsLayout'
-  template: templates/layout/layout--tw-1-2-col
+  template: templates/layout/layout--tw-1-2-4-col
+  icon: templates/layout/icons/tw-1-2-4-col.svg
   default_region: main
   regions:
     first:
