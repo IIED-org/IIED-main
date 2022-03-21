@@ -241,8 +241,8 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       'field_cover_image',
     ];
     $fid = $row->getSourceProperty('fid');
-    $row->setSourceProperty('alt_text', 'No alt text could be found for this image when migrated.');
-    $row->setSourceProperty('title_text', 'No title text could be found for this image when migrate.');
+    $row->setSourceProperty('alt_text', 'No description available.');
+    $row->setSourceProperty('title_text', 'No title available.');
 
     foreach ($image_fields as $image_field) {
       $query = $source->getDatabase()->select('field_data_' . $image_field, 'fdi')
