@@ -15,9 +15,10 @@ behavior_plugins:
   layout_paragraphs:
     enabled: true
     available_layouts:
-      layout_onecol: 'One column'
-      layout_twocol_section: 'Two column'
-      layout_threecol_section: 'Three column'
-      layout_fourcol_section: 'Four column'
-      ds_2col: 'Two column layout'
-      tw-1-2-col: 'Two column'
+      tw-1-2-4-col: 'IIED four column'
+      tw-1-2-col-sm-md: 'IIED main with aside'
+      tw-1-col-xl: 'IIED one column full'
+      tw-1-col-md: 'IIED one column standard'
+      tw-1-col-lg: 'IIED one column wide'
+      tw-1-3-col: 'IIED three column'
+      tw-1-2-col: 'IIED two column'

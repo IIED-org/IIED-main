@@ -52,3 +52,4 @@
 'use  The form mode default linked to  paragraph entity( stories_table )': paragraph.stories_table.default
 'use  The form mode default linked to  paragraph entity( stories_text )': paragraph.stories_text.default
 'use  The form mode default linked to  paragraph entity( stories_views )': paragraph.stories_views.default
+'use  The form mode default linked to  paragraph entity( quote )': paragraph.quote.default
