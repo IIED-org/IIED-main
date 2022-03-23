@@ -3,8 +3,8 @@
 <div class="flex items-center">
     {# Facebook #}
     <a
-        href="#"
-        class="flex items-center justify-center w-10 h-10 mr-2 text-gray-900 border border-gray-300 rounded-full hover:bg-gray-100 hover:border-iiedblue-500"
+        href="https://www.facebook.com/sharer/sharer.php?u={{ url('<current>') }}" target="_blank"
+        class="flex items-center justify-center w-10 h-10 mr-2 text-gray-900 border border-gray-300 rounded-full hover:bg-gray-100 hover:border-iiedblue-500" title="Share to Facebook" aria-label="Share to Facebook" rel="noopener" tabindex="-1"
     >
         <svg
         fill="currentColor"
@@ -21,8 +21,8 @@
     </a>
     {# Twitter #}
     <a
-        href="#"
-        class="flex items-center justify-center w-10 h-10 mr-2 text-gray-900 border border-gray-300 rounded-full hover:bg-gray-100 hover:border-iiedblue-500"
+        href="https://twitter.com/intent/tweet?text={{ node.title.value|url_encode }}%20{{ url('<current>') }}" target="_blank"
+        class="flex items-center justify-center w-10 h-10 mr-2 text-gray-900 border border-gray-300 rounded-full hover:bg-gray-100 hover:border-iiedblue-500" title="Share to Twitter" aria-label="Share to Twitter" rel="noopener" tabindex="-1"
     >
         <svg
         fill="currentColor"
@@ -39,8 +39,8 @@
     </a>
     {# linkedIn #}
     <a
-        href="#"
-        class="flex items-center justify-center w-10 h-10 mr-2 text-gray-900 border border-gray-300 rounded-full hover:bg-gray-100 hover:border-iiedblue-500"
+        href="https://www.linkedin.com/sharing/share-offsite/?url={{ url('<current>') }}" target="_blank"
+        class="flex items-center justify-center w-10 h-10 mr-2 text-gray-900 border border-gray-300 rounded-full hover:bg-gray-100 hover:border-iiedblue-500" title="Share to Linkedin" aria-label="Share to Linkedin" rel="noopener" tabindex="-1"
     >
         <svg
         fill="currentColor"
@@ -60,8 +60,7 @@
     </a>
     {# email #}
     <a
-        href="#"
-        class="flex items-center justify-center w-10 h-10 mr-2 text-gray-900 border border-gray-300 rounded-full hover:bg-gray-100 hover:border-iiedblue-500"
+        href="mailto:?subject={{ node.title.value|url_encode }} &amp;body={{ url('<current>') }}" title="Share to e-mail" aria-label="Share to e-mail" target="_blank" rel="noopener" tabindex="-1" class="flex items-center justify-center w-10 h-10 mr-2 text-gray-900 border border-gray-300 rounded-full hover:bg-gray-100 hover:border-iiedblue-500"
     >
         <svg
         xmlns="http://www.w3.org/2000/svg"

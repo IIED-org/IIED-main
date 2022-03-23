@@ -85,9 +85,9 @@
                   {{ content.field_theme_s_}}
                 </div>
               </nav>
-                <div class="py-4 border-b-2 border-iiedpink-500">
+                <div class="pb-4 border-b-2 border-iiedpink-500">
                   <h1 class="mb-6">{{ node.label }}</h1>
-                  <h2 class="mb-6 text-lg text-iiedpink-700">
+                  <h2 class="mb-6 text-xl text-iiedpink-700">
                     {{ content.field_subheading }}
                   </h2>
                 </div>
@@ -95,9 +95,9 @@
                   class="flex flex-wrap justify-between py-4 border-b border-gray-300 sm:flex-row xl:flex-col"
                 >
                 {% if content.field_author_s_ %} 
-              <p class="mb-2"><span class="mr-2">Blog by</span> {{ content.field_author_s_ }}</p>
+              <div class="flex mb-2"><span class="mr-1">Blog by</span> {{ content.field_author_s_|raw }}</div>
                 {% endif %}
-                  <p class="mb-2">{{ node.getCreatedTime|date('d F Y') }}</p>
+                  <div class="mb-2">{{ node.getCreatedTime|date('d F Y') }}</div>
                 </div>
     
                 <!-- share -->
@@ -148,17 +148,17 @@
             </div>
             <!-- image -->
             <div class="relative xl:col-span-9 xl:col-start-4">
-              <figure class="mb-4 -mx-6 overflow-hidden xl:mb-2 rounded-bl-xl sm:mx-0">
+              <figure class="-mx-6 overflow-hidden xl:mb-2 xl:rounded-bl-xl sm:mx-0">
               {{ content.field_main_image }}
               </figure>
     
-              <figcaption class="right-0 text-sm text-gray-500 border-l border-gray-300 xl:-mt-2 xl:absolute xl:w-48 2xl:w-80 xl:pt-2 xl:pl-2">
+              <figcaption class="right-0 text-sm text-gray-500 border-gray-300 xl:pl-2 xl:border-l xl:-mt-2 xl:absolute xl:w-48 2xl:w-80 xl:pt-2">
                 {{ content.field_image_caption }}
               </figcaption>
             </div>
     
-            <div class="xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4">
-              <div class="pb-12 prose md:prose-lg">
+            <div class="xl:-mt-8 xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4">
+              <div class="pb-12 prose md:prose-lg first-letter:text-8xl first-letter:float-left first-letter:font-serif first-letter:mr-2 first-letter:text-iiedpink-700">
               {{ content.body }}
               </div>
             </div>
