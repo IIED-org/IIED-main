@@ -7,8 +7,7 @@ ft-show-colon: false
 ft-layout-builder: true
 classes:
   region:
-    - border|Border
-    - 'bg-fill|Background fill'
+    - 'bg-fill|Background fill grey'
     - ''
     - ''
   field: {  }
