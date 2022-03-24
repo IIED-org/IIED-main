@@ -74,8 +74,8 @@ third_party_settings:
         required_fields: true
     group_contacts:
       children:
-        - field_contact
         - field_project_contacts
+        - field_contact
       label: Contacts
       region: content
       parent_name: group_tabs
@@ -90,8 +90,6 @@ third_party_settings:
         required_fields: true
     group_taxonomy:
       children:
-        - field_theme
-        - field_collection
         - field_tags
       label: Taxonomy
       region: content
@@ -197,7 +195,7 @@ content:
     third_party_settings: {  }
   field_contact:
     type: text_textarea
-    weight: 12
+    weight: 14
     region: content
     settings:
       rows: 5

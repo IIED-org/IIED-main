@@ -10,7 +10,7 @@ third_party_settings:
     parent: ''
 name: Blog
 type: blog
-description: 'Regularly updated journal pages, special interest opinion column or diary. Readers can post comments on the blog, and subscribe. Any member of staff can request to become a blogger. A blog must be on topic (relevant to IIED’s strategy) and maintained/promoted by its author.'
+description: 'Regularly updated special interest opinion page. Members of staff and guests can submit a blog on topic relevant to IIED’s strategy.'
 help: ''
 new_revision: true
 preview_mode: 1
