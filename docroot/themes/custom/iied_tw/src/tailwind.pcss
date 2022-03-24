@@ -62,6 +62,21 @@
   .btn {
     @apply px-3 py-2 transition rounded-full shadow-sm;
   }
+  .btn-outline {
+    @apply px-3 py-2 transition bg-white border border-gray-300 rounded-full shadow-sm;
+    &:hover {
+      @apply shadow-none bg-gray-100 border-iiedblue-500;
+    }
+  }
+  .btn-icon {
+    @apply flex items-center;
+  }
+  .btn-orange {
+    @apply bg-iiedorange-500;
+    &:hover {
+      @apply bg-iiedorange-600;
+    }
+  }
 
   /* Components -- twig templates */
   /* Cards */
@@ -73,10 +88,14 @@
     @apply list-disc list-inside;
   }
 
-  .box-outline {
+  .box-outline,
+  .boxbox {
     @apply border border-gray-300 p-4 rounded-xl;
   }
   .bg-fill {
     @apply p-4 bg-gray-100 rounded-xl;
+  }
+  .image-caption {
+    @apply mt-1 text-base leading-tight text-gray-500;
   }
 }

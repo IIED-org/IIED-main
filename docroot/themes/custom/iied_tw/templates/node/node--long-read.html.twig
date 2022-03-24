@@ -95,7 +95,7 @@
                   class="flex flex-wrap justify-between py-4 border-b border-gray-300 sm:flex-row xl:flex-col"
                 >
                 {% if content.field_author_s_ %} 
-              <div class="flex mb-2"><span class="mr-1">Blog by</span> {{ content.field_author_s_|raw }}</div>
+              <div class="flex mb-2"><span class="mr-1">Blog by</span> {{ content.field_author_s_ }}</div>
                 {% endif %}
                   <div class="mb-2">{{ node.getCreatedTime|date('d F Y') }}</div>
                 </div>

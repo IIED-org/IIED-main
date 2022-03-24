@@ -35,6 +35,8 @@
  *
  * @see template_preprocess_field()
  */
+
+ */ updated to add heading tags for labels
 #}
 {%
   set title_classes = [
@@ -42,33 +44,21 @@
   ]
 %}
 
-{%
-  set tags_classes = [
-    'flex', 'flex-wrap', 'gap-2', 'py-6', 'overflow-hidden', 'border-b', 'border-gray-300',
-  ]
-%}
-
-{%
-  set tag_classes = [
-    'h-10', 'transition-colors', 'duration-200', 'bg-gray-100', 'rounded-full', 'focus:shadow-outline', 'hover:bg-gray-200', 'text-base', 'text-gray-700',
-  ]
-%}
-
 {% if label_hidden %}
   {% if multiple %}
-    <div{{ attributes.addClass(tags_classes) }}>
+    <div{{ attributes }}>
       {% for item in items %}
-      <a class="px-4 py-2 h-10 transition-colors duration-200 bg-gray-100 rounded-full focus:shadow-outline hover:bg-gray-200 text-base text-gray-700" href="{{ item.content['#url'] }}">{{ item.content['#title']}}</a>
+        <div{{ item.attributes }}>{{ item.content }}</div>
       {% endfor %}
     </div>
   {% else %}
     {% for item in items %}
-      <a class="px-4 py-2 h-10 transition-colors duration-200 bg-gray-100 rounded-full focus:shadow-outline hover:bg-gray-200 text-base text-gray-700" href="{{ item.content['#url'] }}">{{ item.content['#title']}}</a>
+      <div{{ attributes }}>{{ item.content }}</div>
     {% endfor %}
   {% endif %}
 {% else %}
   <div{{ attributes }}>
-    <div{{ title_attributes.addClass(title_classes) }}>{{ label }}</div>
+    <h2{{ title_attributes.addClass(title_classes) }}>{{ label }}</h2>
     {% if multiple %}
       <div>
     {% endif %}
