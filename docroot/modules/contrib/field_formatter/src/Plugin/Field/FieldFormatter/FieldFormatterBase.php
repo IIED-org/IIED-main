@@ -175,7 +175,7 @@ abstract class FieldFormatterBase extends EntityReferenceFormatterBase {
         if ($this->getSetting('link_to_entity') && ($entity = $items->getEntity()) && $entity->hasLinkTemplate('canonical') && !$entity->isNew()) {
           $entityUrl = $entity->toUrl('canonical', ['language' => $this->languageManager->getLanguage($langcode)]);
           /*
-          TODO: This implementation overwrites the ['#url'] value of the
+          @todo This implementation overwrites the ['#url'] value of the
           selected field, which only works for fields what support
           ['#url'] and has the advantage that no extra wrapper is created
           AND links in links are prevented. Anyway this will not work for
@@ -187,7 +187,7 @@ abstract class FieldFormatterBase extends EntityReferenceFormatterBase {
           }
 
           /*
-          TODO: Alternative from field_link formatter, which should
+          @todo Alternative from field_link formatter, which should
           work for all field types but may lead to links in links
           and additional wrapper markup.
           $field_name = $this->fieldDefinition->getName();

@@ -54,7 +54,7 @@ class MediaEntitySlideshowTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
     $bundle_storage = $this->container->get('entity_type.manager')->getStorage('media_type');
     $this->slideshowMediaBundle = $bundle_storage->load('slideshow_bundle');
@@ -85,13 +85,14 @@ class MediaEntitySlideshowTest extends BrowserTestBase {
       'name[0][value]' => 'My first slideshow',
       'field_slides[0][target_id]' => $this->mediaImageCollection[0]->label() . ' (' . $this->mediaImageCollection[0]->id() . ')',
     ];
-    $this->drupalPostForm(NULL, $edit, t('Save'));
+    $this->submitForm($edit, t('Save'));
     $this->assertSession()->pageTextContains('Slideshow bundle My first slideshow has been created');
 
     $media_storage = $this->container->get('entity_type.manager')->getStorage('media');
     $slideshow_id = $media_storage->getQuery()
       ->condition('bundle', 'slideshow_bundle')
       ->sort('created', 'DESC')
+      ->accessCheck(FALSE)
       ->execute();
     $slideshow = $this->loadMedia(reset($slideshow_id));
 
@@ -101,10 +102,10 @@ class MediaEntitySlideshowTest extends BrowserTestBase {
       'field_slides[0][target_id]' => $this->mediaImageCollection[0]->label() . ' (' . $this->mediaImageCollection[0]->id() . ')',
       'field_slides[1][target_id]' => $this->mediaImageCollection[1]->label() . ' (' . $this->mediaImageCollection[1]->id() . ')',
     ];
-    $this->drupalPostForm(NULL, $edit, t('Save'));
+    $this->submitForm($edit, t('Save'));
     $this->assertSession()->statusCodeEquals(200);
     $slideshow = $this->loadMedia($slideshow->id());
-    $this->assertEqual($slideshow->field_slides->count(), 2, 'A new slide was correctly added to the slideshow.');
+    $this->assertEquals(2, $slideshow->field_slides->count(), 'A new slide was correctly added to the slideshow.');
 
     // Test removing one of the slides.
     $this->drupalGet('media/' . $slideshow->id() . '/edit');
@@ -112,14 +113,14 @@ class MediaEntitySlideshowTest extends BrowserTestBase {
       'field_slides[0][target_id]' => $this->mediaImageCollection[0]->label() . ' (' . $this->mediaImageCollection[0]->id() . ')',
       'field_slides[1][target_id]' => '',
     ];
-    $this->drupalPostForm(NULL, $edit, t('Save'));
+    $this->submitForm($edit, t('Save'));
     $this->assertSession()->statusCodeEquals(200);
     $slideshow = $this->loadMedia($slideshow->id());
-    $this->assertEqual($slideshow->field_slides->count(), 1, 'The deletion of one slide worked properly.');
+    $this->assertEquals(1, $slideshow->field_slides->count(), 'The deletion of one slide worked properly.');
 
     // Delete the slideshow entirely.
     $this->drupalGet('/media/' . $slideshow->id() . '/delete');
-    $this->drupalPostForm(NULL, [], t('Delete'));
+    $this->submitForm([], t('Delete'));
     $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()->pageTextContains('The media item My first slideshow has been deleted');
   }

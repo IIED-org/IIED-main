@@ -349,8 +349,7 @@ class CustomSQLQuery extends SourcePluginBase implements ContainerFactoryPluginI
    *   TRUE if the row has changed otherwise FALSE.
    */
   protected function rowChanged(Row $row) {
-    return TRUE;
-//    return $this->trackChanges && $row->changed();
+    return $this->trackChanges && $row->changed();
   }
 }
 

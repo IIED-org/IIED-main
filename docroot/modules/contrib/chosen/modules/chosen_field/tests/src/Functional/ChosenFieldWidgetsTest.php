@@ -49,7 +49,7 @@ class ChosenFieldWidgetsTest extends FieldTestBase {
   /**
    * Function used to setup before running the test.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Field storage with cardinality 1.

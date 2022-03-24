@@ -8,7 +8,7 @@ frontUi:
   dependencies:
     - core/drupal
     - core/jquery
-    - core/jquery.once
+    - core/once
 
 adminUi:
   version: 1.0
@@ -17,4 +17,4 @@ adminUi:
   dependencies:
     - core/drupal
     - core/jquery
-    - core/jquery.once
+    - core/once

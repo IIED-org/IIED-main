@@ -3,7 +3,7 @@
 namespace Drupal\actions_permissions\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Drupal\Component\EventDispatcher\Event;
 use Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionManager;
 
 /**
@@ -31,7 +31,7 @@ class ActionsPermissionsEventSubscriber implements EventSubscriberInterface {
   /**
    * Alter the actions' definitions.
    *
-   * @var \Symfony\Component\EventDispatcher\Event $event
+   * @var \Drupal\Component\EventDispatcher\Event $event
    *   The event to respond to.
    */
   public function alterActions(Event $event) {

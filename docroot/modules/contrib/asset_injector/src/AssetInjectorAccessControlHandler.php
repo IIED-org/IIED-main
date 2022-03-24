@@ -178,7 +178,7 @@ class AssetInjectorAccessControlHandler extends EntityAccessControlHandler imple
    * @param \Drupal\Core\Access\AccessResult $access
    *   The access result object.
    * @param \Drupal\Core\Condition\ConditionInterface[] $conditions
-   *   List of conditions conditions.
+   *   List of conditions.
    */
   protected function mergeCacheabilityFromConditions(AccessResult $access, array $conditions) {
     foreach ($conditions as $condition) {
