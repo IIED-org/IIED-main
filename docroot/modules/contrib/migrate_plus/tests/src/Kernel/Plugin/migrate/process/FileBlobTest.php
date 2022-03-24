@@ -21,7 +21,7 @@ class FileBlobTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'migrate',
     'migrate_plus',
     'system',

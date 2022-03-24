@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display the current search string.
+ *
+ * @todo review template suggestions
+ * Accepts suggestions as: facets-source-summary-facet--{facet_id}.
+ *
+ * Available variables:
+ * - label: The label configured by the user.
+ * - search_string: The current search string.
+ */
+#}
+<span class="source-summary-item source-summary-search-string">
+{% if search_string %}
+    {{ label }}: {{ search_string }}
+{% endif %}
+</span>

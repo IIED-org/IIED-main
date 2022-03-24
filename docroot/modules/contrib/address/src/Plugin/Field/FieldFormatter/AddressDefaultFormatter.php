@@ -165,7 +165,7 @@ class AddressDefaultFormatter extends FormatterBase implements ContainerFactoryP
         '#type' => 'html_tag',
         '#tag' => 'span',
         '#attributes' => ['class' => [$class]],
-        '#value' => Html::escape($values[$field]),
+        '#value' => !empty($values[$field]) ? Html::escape($values[$field]) : '',
         '#placeholder' => '%' . $field,
       ];
     }

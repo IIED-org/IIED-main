@@ -24,7 +24,7 @@ class DrushCommandsTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'node',
     'views',
     'views_bulk_operations',
@@ -34,7 +34,7 @@ class DrushCommandsTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Create some nodes for testing.
@@ -61,14 +61,19 @@ class DrushCommandsTest extends BrowserTestBase {
    * Tests the VBO Drush command.
    */
   public function testDrushCommand() {
+    $arguments = [
+      'views_bulk_operations_test',
+      'views_bulk_operations_simple_test_action',
+    ];
+
     // Basic test.
-    $this->drush('vbo-exec', ['views_bulk_operations_test', 'views_bulk_operations_simple_test_action']);
+    $this->drush('vbo-exec', $arguments);
     for ($i = 0; $i < self::TEST_NODE_COUNT; $i++) {
       $this->assertStringContainsString("Test action (preconfig: , label: Title $i)", $this->getErrorOutput());
     }
 
     // Exposed filters test.
-    $this->drush('vbo-exec', ['views_bulk_operations_test', 'views_bulk_operations_simple_test_action'], ['exposed' => 'sticky=1']);
+    $this->drush('vbo-exec', $arguments, ['exposed' => 'sticky=1']);
     for ($i = 0; $i < self::TEST_NODE_COUNT; $i++) {
       $test_string = "Test action (preconfig: , label: Title $i)";
       if ($i % 2) {

@@ -198,7 +198,7 @@ class QueryString extends UrlProcessorPluginBase {
 
       // Allow other modules to alter the result url built.
       $event = new QueryStringCreated($result_get_params, $filter_params, $result, $this->activeFilters, $facet);
-      $this->eventDispatcher->dispatch(QueryStringCreated::NAME, $event);
+      $this->eventDispatcher->dispatch($event);
       $filter_params = $event->getFilterParameters();
 
       asort($filter_params, \SORT_NATURAL);
@@ -366,7 +366,12 @@ class QueryString extends UrlProcessorPluginBase {
     $mapping = &drupal_static(__FUNCTION__);
     if (!isset($mapping[$facet_source_id][$url_alias])) {
       $storage = $this->entityTypeManager->getStorage('facets_facet');
-      $facet = current($storage->loadByProperties(['url_alias' => $url_alias, 'facet_source_id' => $facet_source_id]));
+      $facet = current($storage->loadByProperties(
+        [
+          'url_alias' => $url_alias,
+          'facet_source_id' => $facet_source_id,
+        ]
+      ));
       if (!$facet) {
         return NULL;
       }
@@ -390,7 +395,12 @@ class QueryString extends UrlProcessorPluginBase {
     $mapping = &drupal_static(__FUNCTION__);
     if (!isset($mapping[$facet_source_id][$facet_id])) {
       $storage = $this->entityTypeManager->getStorage('facets_facet');
-      $facet = current($storage->loadByProperties(['id' => $facet_id, 'facet_source_id' => $facet_source_id]));
+      $facet = current($storage->loadByProperties(
+        [
+          'id' => $facet_id,
+          'facet_source_id' => $facet_source_id,
+        ]
+      ));
       if (!$facet) {
         return FALSE;
       }

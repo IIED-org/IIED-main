@@ -40,6 +40,8 @@ trait BlockTestTrait {
       'id' => $id,
       'name' => $name,
       'weight' => 0,
+      'use_hierarchy' => FALSE,
+      'hierarchy' => ['type' => 'taxonomy', 'config' => []],
     ]);
     $facet->setFacetSourceId($facet_source);
     $facet->setFieldIdentifier($field);
@@ -89,7 +91,7 @@ trait BlockTestTrait {
 
     $this->drupalGet('admin/structure/block/manage/' . $this->blocks[$id]->id(), ['query' => ['destination' => 'admin']]);
     $this->clickLink('Remove block');
-    $this->drupalPostForm(NULL, [], 'Remove');
+    $this->submitForm([], 'Remove');
     $this->assertSession()->pageTextContains($orig_success_message);
   }
 

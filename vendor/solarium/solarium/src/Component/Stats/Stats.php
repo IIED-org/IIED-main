@@ -20,7 +20,7 @@ use Solarium\Exception\InvalidArgumentException;
 /**
  * Stats component.
  *
- * @see https://lucene.apache.org/solr/guide/the-stats-component.html
+ * @see https://solr.apache.org/guide/the-stats-component.html
  */
 class Stats extends AbstractComponent
 {
@@ -113,7 +113,7 @@ class Stats extends AbstractComponent
 
         $key = $field->getKey();
 
-        if (0 === \strlen($key)) {
+        if (null === $key || 0 === \strlen($key)) {
             throw new InvalidArgumentException('A field must have a key value');
         }
 

@@ -106,6 +106,8 @@ class SearchApiDisplay extends FacetSourcePluginBase implements SearchApiFacetSo
       return new \stdClass();
     }
 
+    $request_stack = $container->get('request_stack');
+
     return new static(
       $configuration,
       $plugin_id,
@@ -113,7 +115,9 @@ class SearchApiDisplay extends FacetSourcePluginBase implements SearchApiFacetSo
       $container->get('plugin.manager.facets.query_type'),
       $container->get('search_api.query_helper'),
       $container->get('plugin.manager.search_api.display'),
-      $container->get('request_stack')->getMasterRequest(),
+      // Support 9.3+.
+      // @todo remove switch after 9.3 or greater is required.
+      version_compare(\Drupal::VERSION, '9.3', '>=') ? $request_stack->getMainRequest() : $request_stack->getMasterRequest(),
       $container->get('module_handler')
     );
   }

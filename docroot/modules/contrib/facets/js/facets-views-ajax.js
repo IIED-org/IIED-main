@@ -106,7 +106,7 @@
 
     // Remove All Range Input Form Facet Blocks from being updated.
     if(settings.facets && settings.facets.rangeInput) {
-      $.each(settings.facets.rangeInput, function (index, value){
+      $.each(settings.facets.rangeInput, function (index, value) {
         delete facets_blocks[value.facetId];
       });
     }

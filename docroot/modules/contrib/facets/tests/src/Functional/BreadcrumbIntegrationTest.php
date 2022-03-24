@@ -14,7 +14,7 @@ class BreadcrumbIntegrationTest extends FacetsTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'views',
     'node',
     'search_api',
@@ -31,7 +31,7 @@ class BreadcrumbIntegrationTest extends FacetsTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     $this->drupalLogin($this->adminUser);
@@ -63,7 +63,7 @@ class BreadcrumbIntegrationTest extends FacetsTestBase {
     $this->createFacet('Type', $id);
     $this->resetAll();
     $this->drupalGet('admin/config/search/facets/' . $id . '/edit');
-    $this->drupalPostForm(NULL, ['facet_settings[weight]' => '1'], 'Save');
+    $this->submitForm(['facet_settings[weight]' => '1'], 'Save');
 
     // Test with a default filter key.
     $this->editFacetConfig(['filter_key' => 'f']);
@@ -93,7 +93,7 @@ class BreadcrumbIntegrationTest extends FacetsTestBase {
     $this->createFacet('Type', $id);
     $this->resetAll();
     $this->drupalGet('admin/config/search/facets/' . $id . '/edit');
-    $this->drupalPostForm(NULL, ['facet_settings[weight]' => '1'], 'Save');
+    $this->submitForm(['facet_settings[weight]' => '1'], 'Save');
     $this->editFacetConfig(['breadcrumb[before]' => FALSE]);
 
     $initial_query = ['search_api_fulltext' => 'foo'];
@@ -129,7 +129,7 @@ class BreadcrumbIntegrationTest extends FacetsTestBase {
       'breadcrumb[group]' => TRUE,
     ];
     $edit = array_merge($default_config, $config);
-    $this->drupalPostForm(NULL, $edit, 'Save');
+    $this->submitForm($edit, 'Save');
   }
 
   /**

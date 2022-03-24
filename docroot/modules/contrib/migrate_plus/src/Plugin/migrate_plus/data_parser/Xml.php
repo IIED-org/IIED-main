@@ -257,9 +257,12 @@ class Xml extends DataParserPluginBase {
           }
         }
       }
-      // Reduce single-value results to scalars.
+      // Reduce single-value arrays to scalars.
       foreach ($this->currentItem as $field_name => $values) {
-        if (count($values) == 1) {
+        // We cannot use reset for SimpleXmlElement because it might have
+        // attributes that are not counted. Get the first value, even if there
+        // are more values available.
+        if (is_array($values) && count($values) == 1) {
           $this->currentItem[$field_name] = reset($values);
         }
       }

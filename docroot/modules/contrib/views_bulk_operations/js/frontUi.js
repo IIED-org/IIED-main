@@ -12,7 +12,7 @@
    */
   Drupal.behaviors.views_bulk_operations = {
     attach: function (context, settings) {
-      $('.vbo-view-form').once('vbo-init').each(Drupal.viewsBulkOperationsFrontUi);
+      once('vbo-init', '.vbo-view-form', context).forEach(Drupal.viewsBulkOperationsFrontUi);
     }
   };
 
@@ -107,8 +107,8 @@
   /**
    * Callback used in {@link Drupal.behaviors.views_bulk_operations}.
    */
-  Drupal.viewsBulkOperationsFrontUi = function () {
-    var $vboForm = $(this);
+  Drupal.viewsBulkOperationsFrontUi = function (element) {
+    var $vboForm = $(element);
     var $viewsTables = $('.vbo-table', $vboForm);
     var $primarySelectAll = $('.vbo-select-all', $vboForm);
     var tableSelectAll = [];
@@ -116,7 +116,7 @@
     // When grouping is enabled, there can be multiple tables.
     if ($viewsTables.length) {
       $viewsTables.each(function (index) {
-        tableSelectAll[index] = $(this).find('.select-all input').first();
+        tableSelectAll[index] = $vboForm.find('.select-all input').first();
       });
       var $tableSelectAll = $(tableSelectAll);
     }

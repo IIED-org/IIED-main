@@ -87,6 +87,29 @@ class SimpleXmlTest extends KernelTestBase {
   }
 
   /**
+   * Tests current URL of parsed XML item.
+   */
+  public function testCurrentUrl() {
+    $urls = [
+      $this->path . '/tests/data/simple_xml_current_url1.xml',
+      $this->path . '/tests/data/simple_xml_current_url2.xml',
+    ];
+    $this->configuration['urls'] = $urls;
+    /** @var \Drupal\migrate_plus\DataParserPluginInterface $parser */
+    $parser = $this->pluginManager->createInstance('simple_xml', $this->configuration);
+
+    // First 2 items available in the first URL.
+    $parser->rewind();
+    $this->assertEquals($urls[0], $parser->currentUrl());
+    $parser->next();
+    $this->assertEquals($urls[0], $parser->currentUrl());
+
+    // Third item available in the second URL.
+    $parser->next();
+    $this->assertEquals($urls[1], $parser->currentUrl());
+  }
+
+  /**
    * Tests reducing single values.
    */
   public function testReduceSingleValue(): void {
@@ -131,7 +154,8 @@ class SimpleXmlTest extends KernelTestBase {
     $url = $this->path . '/tests/data/simple_xml_broken_missing_tag.xml';
     $this->configuration['urls'][0] = $url;
     $this->expectException(MigrateException::class);
-    $this->expectExceptionMessageRegExp('/^Fatal Error 73/');
+    // Newer versions of libxml mark it as an error 76, older ones as 73.
+    $this->expectExceptionMessageMatches('/^Fatal Error 7[0-9]/');
     $parser = $this->pluginManager->createInstance('simple_xml', $this->configuration);
     $parser->next();
   }
@@ -146,7 +170,7 @@ class SimpleXmlTest extends KernelTestBase {
     $this->configuration['urls'][0] = $url;
 
     $this->expectException(MigrateException::class);
-    $this->expectExceptionMessageRegExp('/^Fatal Error 76/');
+    $this->expectExceptionMessageMatches('/^Fatal Error 76/');
 
     $parser = $this->pluginManager->createInstance('simple_xml', $this->configuration);
     $parser->next();
@@ -162,7 +186,7 @@ class SimpleXmlTest extends KernelTestBase {
     $this->configuration['urls'][0] = $url;
 
     $this->expectException(MigrateException::class);
-    $this->expectExceptionMessageRegExp('/^Fatal Error 46/');
+    $this->expectExceptionMessageMatches('/^Fatal Error 46/');
     $parser = $this->pluginManager->createInstance('simple_xml', $this->configuration);
     $parser->next();
   }
@@ -177,7 +201,7 @@ class SimpleXmlTest extends KernelTestBase {
     $this->configuration['urls'][0] = $url;
 
     $this->expectException(MigrateException::class);
-    $this->expectExceptionMessage('file parser plugin: could not retrieve data from modules/contrib/migrate_plus/tests/data/simple_xml_non_existing.xml');
+    $this->expectExceptionMessage('file parser plugin: could not retrieve data from');
     $parser = $this->pluginManager->createInstance('simple_xml', $this->configuration);
     $parser->next();
   }

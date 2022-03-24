@@ -11,6 +11,9 @@
  */
 
 .ui-dialog {
+  position: absolute;
+  top: 0;
+  left: 0;
   padding: 0;
   border: 0;
   border-radius: 0.25rem;
@@ -162,4 +165,9 @@
 
 #drupal-off-canvas .form-type--boolean {
     margin-left: 0;
+  }
+
+#drupal-off-canvas .form-item .form-item__description {
+    color: var(--color-whitesmoke);
+    font-size: 0.75rem;
   }

@@ -13,17 +13,19 @@ use Nicebooks\Isbn\IsbnGroup;
  * It is not intended to be used in projects consuming this library.
  * All input is expected to be validated.
  *
+ * @psalm-type RangeType = array{string, string, string, list<array{int, string, string}>}
+ *
  * @internal
  */
-class RangeService
+final class RangeService
 {
     /**
-     * @var array|null
+     * @psalm-var list<RangeType>|null
      */
-    private static $ranges;
+    private static ?array $ranges = null;
 
     /**
-     * @return array
+     * @psalm-return list<RangeType>
      */
     private static function getRanges() : array
     {
@@ -35,8 +37,6 @@ class RangeService
     }
 
     /**
-     * @param bool $is13
-     *
      * @return IsbnGroup[]
      */
     public static function getGroups(bool $is13) : array
@@ -60,8 +60,6 @@ class RangeService
      * Splits an ISBN into parts.
      *
      * @param string $isbn The ISBN-10 or ISBN-13, regexp-validated.
-     *
-     * @return RangeInfo|null
      */
     public static function getRangeInfo(string $isbn) : ?RangeInfo
     {
@@ -83,9 +81,9 @@ class RangeService
                 continue;
             }
 
-            $rangeInfo = new RangeInfo;
-            $rangeInfo->groupIdentifier = ($length === 10 ? $groupIdentifier : $eanPrefix . '-' . $groupIdentifier);
-            $rangeInfo->groupName = $groupName;
+            $groupIdentifier = ($length === 10 ? $groupIdentifier : $eanPrefix . '-' . $groupIdentifier);
+
+            $parts = null;
 
             foreach ($ranges as $range) {
                 [$rangeLength, $rangeStart, $rangeEnd] = $range;
@@ -95,26 +93,21 @@ class RangeService
 
                 if (strcmp($rangeValue, $rangeStart) >= 0 && strcmp($rangeValue, $rangeEnd) <= 0) {
                     if ($length === 13) {
-                        $rangeInfo->parts = [$isbnPrefix, $isbnGroup, $rangeValue, $lastDigits, $checkDigit];
+                        $parts = [$isbnPrefix, $isbnGroup, $rangeValue, $lastDigits, $checkDigit];
                     } else {
-                        $rangeInfo->parts = [$isbnGroup, $rangeValue, $lastDigits, $checkDigit];
+                        $parts = [$isbnGroup, $rangeValue, $lastDigits, $checkDigit];
                     }
 
                     break;
                 }
             }
 
-            return $rangeInfo;
+            return new RangeInfo($groupIdentifier, $groupName, $parts);
         }
 
         return null;
     }
 
-    /**
-     * @param string $isbn
-     *
-     * @return string
-     */
     public static function format(string $isbn) : string
     {
         $rangeInfo = self::getRangeInfo($isbn);

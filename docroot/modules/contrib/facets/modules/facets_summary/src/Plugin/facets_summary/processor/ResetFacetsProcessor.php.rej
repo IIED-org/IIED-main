@@ -1,0 +1,40 @@
+--- modules/facets_summary/src/Plugin/facets_summary/processor/ResetFacetsProcessor.php
++++ modules/facets_summary/src/Plugin/facets_summary/processor/ResetFacetsProcessor.php
+@@ -64,13 +98,23 @@ public function build(FacetsSummaryInterface $facets_summary, array $build, arra
+     $configuration = $facets_summary->getProcessorConfigs()[$this->getPluginId()];
+     $hasReset = FALSE;
+ 
+-    // Do nothing if there are no selected facets.
+-    if (empty($build['#items'])) {
+-      return $build;
++    $request = $this->requestStack->getMasterRequest();
++    if (!empty($request->query)) {
++      $query_params = $request->query->all();
++    }
++
++    // Clear the text if set in the configuration.
++    if (isset($configuration['settings']['clear_string'])
++        && $configuration['settings']['clear_string'] === 1
++        && !empty($query_params[$facets_summary->getSearchFilterIdentifier()])) {
++      unset($query_params[$facets_summary->getSearchFilterIdentifier()]);
++      $hasReset = TRUE;
+     }
+ 
+-    $request = \Drupal::requestStack()->getMasterRequest();
+-    $query_params = $request->query->all();
++    // Do nothing else if there are no selected facets or reset text is empty.
++    if ((empty($build['#items']) || empty($configuration['settings']['link_text'])) && !$hasReset) {
++      return $build;
++    }
+ 
+     // Bypass all active facets and remove them from the query parameters array.
+     foreach ($facets as $facet) {
+@@ -79,7 +123,7 @@ public function build(FacetsSummaryInterface $facets_summary, array $build, arra
+ 
+       if ($facet->getActiveItems()) {
+         // This removes query params when using the query url processor.
+-        if(isset($query_params[$filter_key])){
++        if (isset($query_params[$filter_key])) {
+           foreach ($query_params[$filter_key] as $delta => $param) {
+             if (strpos($param, $url_alias . ':') !== FALSE) {
+               unset($query_params[$filter_key][$delta]);

@@ -11,7 +11,7 @@ entity.asset_injector_css.collection:
   path: '/admin/config/development/asset-injector/css'
   defaults:
     _entity_list: 'asset_injector_css'
-    _title: 'Css Injector'
+    _title: 'CSS Injector'
   requirements:
     _permission: 'administer css assets injector'
 
@@ -19,7 +19,7 @@ entity.asset_injector_css.add_form:
   path: '/admin/config/development/asset-injector/css/add'
   defaults:
     _entity_form: 'asset_injector_css.add'
-    _title: 'Add Css Injector'
+    _title: 'Add CSS Injector'
   requirements:
     _permission: 'administer css assets injector'
 
@@ -27,7 +27,7 @@ entity.asset_injector_css.edit_form:
   path: '/admin/config/development/asset-injector/css/{asset_injector_css}'
   defaults:
     _entity_form: 'asset_injector_css.edit'
-    _title: 'Edit Css Injector'
+    _title: 'Edit CSS Injector'
   requirements:
     _permission: 'administer css assets injector'
 
@@ -35,7 +35,7 @@ entity.asset_injector_css.canonical:
   path: '/admin/config/development/asset-injector/css/{asset_injector_css}'
   defaults:
     _entity_form: 'asset_injector_css.edit'
-    _title: 'Edit Css Injector'
+    _title: 'Edit CSS Injector'
   requirements:
     _permission: 'administer css assets injector'
 
@@ -43,7 +43,7 @@ entity.asset_injector_css.delete_form:
   path: '/admin/config/development/asset-injector/css/{asset_injector_css}/delete'
   defaults:
     _entity_form: 'asset_injector_css.delete'
-    _title: 'Delete Css Injector'
+    _title: 'Delete CSS Injector'
   requirements:
     _permission: 'administer css assets injector'
 
@@ -51,7 +51,7 @@ entity.asset_injector_css.enable:
   path: '/admin/config/development/asset-injector/css/{asset_injector_css}/enable'
   defaults:
     _entity_form: 'asset_injector_css.enable'
-    _title: 'Enable Css Injector'
+    _title: 'Enable CSS Injector'
   requirements:
     _permission: 'administer css assets injector'
 
@@ -59,7 +59,7 @@ entity.asset_injector_css.disable:
   path: '/admin/config/development/asset-injector/css/{asset_injector_css}/disable'
   defaults:
     _entity_form: 'asset_injector_css.disable'
-    _title: 'Disable Css Injector'
+    _title: 'Disable CSS Injector'
   requirements:
     _permission: 'administer css assets injector'
 

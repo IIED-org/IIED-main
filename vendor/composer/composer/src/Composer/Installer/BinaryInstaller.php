@@ -77,6 +77,10 @@ class BinaryInstaller
                 $this->io->writeError('    <warning>Skipped installation of bin '.$bin.' for package '.$package->getName().': file not found in package</warning>');
                 continue;
             }
+            if (is_dir($binPath)) {
+                $this->io->writeError('    <warning>Skipped installation of bin '.$bin.' for package '.$package->getName().': found a directory at that path</warning>');
+                continue;
+            }
             if (!$this->filesystem->isAbsolutePath($binPath)) {
                 // in case a custom installer returned a relative path for the
                 // $package, we can now safely turn it into a absolute path (as we
@@ -231,14 +235,14 @@ class BinaryInstaller
             return "@ECHO OFF\r\n".
                 "setlocal DISABLEDELAYEDEXPANSION\r\n".
                 "SET BIN_TARGET=%~dp0/".trim(ProcessExecutor::escape(basename($link, '.bat')), '"\'')."\r\n".
-                "SET COMPOSER_BIN_DIR=%~dp0\r\n".
+                "SET COMPOSER_RUNTIME_BIN_DIR=%~dp0\r\n".
                 "{$caller} \"%BIN_TARGET%\" %*\r\n";
         }
 
         return "@ECHO OFF\r\n".
             "setlocal DISABLEDELAYEDEXPANSION\r\n".
             "SET BIN_TARGET=%~dp0/".trim(ProcessExecutor::escape($binPath), '"\'')."\r\n".
-            "SET COMPOSER_BIN_DIR=%~dp0\r\n".
+            "SET COMPOSER_RUNTIME_BIN_DIR=%~dp0\r\n".
             "{$caller} \"%BIN_TARGET%\" %*\r\n";
     }
 
@@ -333,6 +337,16 @@ if (PHP_VERSION_ID < 80000) {
                 return \$operation ? flock(\$this->handle, \$operation) : true;
             }
 
+            public function stream_seek(\$offset, \$whence)
+            {
+                if (0 === fseek(\$this->handle, \$offset, \$whence)) {
+                    \$this->position = ftell(\$this->handle);
+                    return true;
+                }
+
+                return false;
+            }
+
             public function stream_tell()
             {
                 return \$this->position;
@@ -420,7 +434,7 @@ if [ -d /proc/cygdrive ]; then
     esac
 fi
 
-export COMPOSER_BIN_DIR=\$(cd "\${self%[/\\\\]*}" > /dev/null; pwd)
+export COMPOSER_RUNTIME_BIN_DIR=\$(cd "\${self%[/\\\\]*}" > /dev/null; pwd)
 
 # If bash is sourcing this file, we have to source the target as well
 bashSource="\$BASH_SOURCE"

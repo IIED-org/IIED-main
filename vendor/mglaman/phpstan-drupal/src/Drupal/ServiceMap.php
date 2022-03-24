@@ -1,49 +1,51 @@
 <?php declare(strict_types=1);
 
-namespace PHPStan\Drupal;
-
-use PHPStan\ShouldNotHappenException;
+namespace mglaman\PHPStanDrupal\Drupal;
 
 class ServiceMap
 {
-    /** @var \PHPStan\Drupal\DrupalServiceDefinition[] */
-    private $services = [];
+    /** @var DrupalServiceDefinition[] */
+    private static $services = [];
 
     public function getService(string $id): ?DrupalServiceDefinition
     {
-        // @see notes in DrupalAutoloader.
-        // This is all a work around due to inability to set container parameters.
-        if (count($this->services) === 0) {
-            $this->services = $GLOBALS['drupalServiceMap'] ?? [];
-            if (count($this->services) === 0) {
-                throw new ShouldNotHappenException('No Drupal service map was registered.');
-            }
-        }
-        return $this->services[$id] ?? null;
+        return self::$services[$id] ?? null;
     }
 
     /**
-     * @return \PHPStan\Drupal\DrupalServiceDefinition[]
+     * @return DrupalServiceDefinition[]
      */
     public function getServices(): array
     {
-        return $this->services;
+        return self::$services;
     }
 
     public function setDrupalServices(array $drupalServices): void
     {
-        $this->services = [];
+        self::$services = [];
 
         foreach ($drupalServices as $serviceId => $serviceDefinition) {
+            if (isset($serviceDefinition['parent'], $drupalServices[$serviceDefinition['parent']])) {
+                $serviceDefinition = $this->resolveParentDefinition($serviceDefinition['parent'], $serviceDefinition, $drupalServices);
+            }
+
             // @todo support factories
             if (!isset($serviceDefinition['class'])) {
                 if (isset($serviceDefinition['alias'], $drupalServices[$serviceDefinition['alias']])) {
-                    $serviceDefinition['class'] = $drupalServices[$serviceDefinition['alias']]['class'];
+                    $aliasedService = $drupalServices[$serviceDefinition['alias']];
+
+                    if (isset($aliasedService['class'])) {
+                        $serviceDefinition['class'] = $drupalServices[$serviceDefinition['alias']]['class'];
+                    } elseif (class_exists($serviceDefinition['alias'])) {
+                        $serviceDefinition['class'] = $serviceDefinition['alias'];
+                    }
+                } elseif (class_exists($serviceId)) {
+                    $serviceDefinition['class'] = $serviceId;
                 } else {
                     continue;
                 }
             }
-            $this->services[$serviceId] = new DrupalServiceDefinition(
+            self::$services[$serviceId] = new DrupalServiceDefinition(
                 (string) $serviceId,
                 $serviceDefinition['class'],
                 $serviceDefinition['public'] ?? true,
@@ -51,8 +53,34 @@ class ServiceMap
             );
             $deprecated = $serviceDefinition['deprecated'] ?? null;
             if ($deprecated) {
-                $this->services[$serviceId]->setDeprecated(true, $deprecated);
+                self::$services[$serviceId]->setDeprecated(true, $deprecated);
             }
         }
+    }
+
+    private function resolveParentDefinition(string $parentId, array $serviceDefinition, array $drupalServices): array
+    {
+        $parentDefinition = $drupalServices[$parentId] ?? [];
+        if ([] === $parentDefinition) {
+            return $serviceDefinition;
+        }
+
+        if (isset($parentDefinition['parent'])) {
+            if (!isset($drupalServices[$parentDefinition['parent']])) {
+                return $serviceDefinition;
+            }
+
+            $parentDefinition = $this->resolveParentDefinition($parentDefinition['parent'], $drupalServices[$parentDefinition['parent']], $drupalServices);
+        }
+
+        if (isset($parentDefinition['class']) && !isset($serviceDefinition['class'])) {
+            $serviceDefinition['class'] = $parentDefinition['class'];
+        }
+
+        if (isset($parentDefinition['public']) && !isset($serviceDefinition['public'])) {
+            $serviceDefinition['public'] = $parentDefinition['public'];
+        }
+
+        return $serviceDefinition;
     }
 }

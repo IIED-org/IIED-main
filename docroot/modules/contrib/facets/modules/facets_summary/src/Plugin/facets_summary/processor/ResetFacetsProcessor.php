@@ -64,23 +64,16 @@ class ResetFacetsProcessor extends ProcessorPluginBase implements BuildProcessor
     $configuration = $facets_summary->getProcessorConfigs()[$this->getPluginId()];
     $hasReset = FALSE;
 
-    $request = $this->requestStack->getMasterRequest();
-    if (!empty($request->query)) {
-      $query_params = $request->query->all();
-    }
-
-    // Clear the text if set in the configuration.
-    if (isset($configuration['settings']['clear_string'])
-        && $configuration['settings']['clear_string'] === 1
-        && !empty($query_params[$facets_summary->getSearchFilterIdentifier()])) {
-      unset($query_params[$facets_summary->getSearchFilterIdentifier()]);
-      $hasReset = TRUE;
-    }
-
-    // Do nothing else if there are no selected facets or reset text is empty.
-    if ((empty($build['#items']) || empty($configuration['settings']['link_text'])) && !$hasReset) {
+    // Do nothing if there are no selected facets.
+    if (empty($build['#items'])) {
       return $build;
     }
+
+    $request_stack = \Drupal::requestStack();
+    // Support 9.3+.
+    // @todo remove switch after 9.3 or greater is required.
+    $request = version_compare(\Drupal::VERSION, '9.3', '>=') ? $request_stack->getMainRequest() : $request_stack->getMasterRequest();
+    $query_params = $request->query->all();
 
     // Bypass all active facets and remove them from the query parameters array.
     foreach ($facets as $facet) {
@@ -114,7 +107,7 @@ class ResetFacetsProcessor extends ProcessorPluginBase implements BuildProcessor
     // Check if reset link text is not set or it contains only whitespaces.
     // Set text from settings or set default text.
     if (empty($configuration['settings']['link_text']) || strlen(trim($configuration['settings']['link_text'])) === 0) {
-      $itemText = t('Reset');
+      $itemText = $this->t('Reset');
     }
     else {
       $itemText = $configuration['settings']['link_text'];

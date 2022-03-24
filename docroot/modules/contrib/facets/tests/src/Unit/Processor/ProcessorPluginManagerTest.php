@@ -63,7 +63,7 @@ class ProcessorPluginManagerTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     $this->discovery = $this->createMock(DiscoveryInterface::class);
 
     $this->factory = $this->getMockBuilder(DefaultFactory::class)

@@ -33,7 +33,7 @@ interface AssetInjectorInterface extends ConfigEntityInterface {
    * Get internal file uri.
    *
    * @return string
-   *   Internal file uri like like public://asset_injector/...
+   *   Internal file uri like public://asset_injector/...
    */
   public function internalFileUri();
 
@@ -46,7 +46,7 @@ interface AssetInjectorInterface extends ConfigEntityInterface {
   public function extension();
 
   /**
-   * Get te asset's code.
+   * Get the asset's code.
    *
    * @return string
    *   The code of the asset.

@@ -3,11 +3,11 @@
 namespace Drupal\asset_injector\Entity;
 
 /**
- * Defines the Css Injector entity.
+ * Defines the CSS Injector entity.
  *
  * @ConfigEntityType(
  *   id = "asset_injector_css",
- *   label = @Translation("Css Injector"),
+ *   label = @Translation("CSS Injector"),
  *   list_cache_tags = { "library_info" },
  *   handlers = {
  *     "access" = "Drupal\asset_injector\AssetInjectorAccessControlHandler",

@@ -88,6 +88,7 @@ class MigrationListBuilder extends ConfigEntityListBuilder implements EntityHand
     $migration_group = $this->currentRouteMatch->getParameter('migration_group');
 
     $query = $this->getStorage()->getQuery()
+      ->accessCheck(TRUE)
       ->sort($this->entityType->getKey('id'));
 
     $migration_groups = MigrationGroup::loadMultiple();
@@ -141,6 +142,9 @@ class MigrationListBuilder extends ConfigEntityListBuilder implements EntityHand
     try {
       /** @var \Drupal\migrate\Plugin\MigrationInterface $migration */
       $migration = $this->migrationPluginManager->createInstance($migration_entity->id());
+      if (!$migration) {
+        return NULL;
+      }
       $migration_group = $migration_entity->get('migration_group');
       if (!$migration_group) {
         $migration_group = 'default';
@@ -160,7 +164,10 @@ class MigrationListBuilder extends ConfigEntityListBuilder implements EntityHand
       $row['status'] = $migration->getStatusLabel();
     }
     catch (\Exception $e) {
-      $this->logger->warning('Migration entity id %id is malformed: %orig', ['%id' => $migration_entity->id(), '%orig' => $e->getMessage()]);
+      $this->logger->warning('Migration entity id %id is malformed: %orig', [
+        '%id' => $migration_entity->id(),
+        '%orig' => $e->getMessage(),
+      ]);
       return NULL;
     }
 

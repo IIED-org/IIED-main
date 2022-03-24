@@ -11,22 +11,13 @@ use Nicebooks\Isbn\Internal\RangeInfo;
 /**
  * Represents a valid ISBN number. This class is immutable.
  */
-class Isbn
+final class Isbn
 {
-    /**
-     * @var string
-     */
-    private $isbn;
+    private string $isbn;
 
-    /**
-     * @var bool
-     */
-    private $is13;
+    private bool $is13;
 
-    /**
-     * @var RangeInfo|null
-     */
-    private $rangeInfo;
+    private ?RangeInfo $rangeInfo;
 
     /**
      * @param string $isbn The unformatted ISBN number, validated.
@@ -41,10 +32,6 @@ class Isbn
     }
 
     /**
-     * @param string $isbn
-     *
-     * @return Isbn
-     *
      * @throws Exception\InvalidIsbnException
      */
     public static function of(string $isbn) : Isbn
@@ -76,25 +63,16 @@ class Isbn
         throw Exception\InvalidIsbnException::forIsbn($isbn);
     }
 
-    /**
-     * @return bool
-     */
     public function is10() : bool
     {
         return ! $this->is13;
     }
 
-    /**
-     * @return bool
-     */
     public function is13() : bool
     {
         return $this->is13;
     }
 
-    /**
-     * @return bool
-     */
     public function isConvertibleTo10() : bool
     {
         if ($this->is13) {
@@ -141,8 +119,6 @@ class Isbn
      *
      * - getGroupIdentifier()
      * - getGroupName()
-     *
-     * @return bool
      */
     public function isValidGroup() : bool
     {
@@ -167,8 +143,6 @@ class Isbn
      * - getPublisherIdentifier()
      * - getTitleIdentifier()
      * - getParts()
-     *
-     * @return bool
      */
     public function isValidRange() : bool
     {
@@ -183,8 +157,6 @@ class Isbn
      * For ISBN-13, the identifier includes the GS1 (EAN) prefix, for example "978-2".
      * For the equivalent ISBN-10, the identifier would be "2".
      *
-     * @return string
-     *
      * @throws IsbnException If this ISBN is not in a recognized group.
      */
     public function getGroupIdentifier() : string
@@ -198,8 +170,6 @@ class Isbn
 
     /**
      * Returns the group name.
-     *
-     * @return string
      *
      * @throws IsbnException If this ISBN is not in a recognized group.
      */
@@ -216,8 +186,6 @@ class Isbn
      * Returns the publisher identifier.
      *
      * The publisher identifier identifies a particular publisher within a group.
-     *
-     * @return string
      *
      * @throws IsbnException If this ISBN is not in a recognized group or range.
      */
@@ -239,8 +207,6 @@ class Isbn
      *
      * The title identifier identifies a particular title or edition of a title.
      *
-     * @return string
-     *
      * @throws IsbnException If this ISBN is not in a recognized group or range.
      */
     public function getTitleIdentifier() : string
@@ -260,8 +226,6 @@ class Isbn
      * Returns the check digit.
      *
      * The check digit is the single digit at the end of the ISBN which validates the ISBN.
-     *
-     * @return string
      */
     public function getCheckDigit() : string
     {
@@ -269,8 +233,6 @@ class Isbn
     }
 
     /**
-     * @return array
-     *
      * @throws IsbnException If this ISBN is not in a recognized group or range.
      */
     public function getParts() : array
@@ -290,8 +252,6 @@ class Isbn
      * Returns the formatted (hyphenated) ISBN number.
      *
      * If the ISBN number is not in a recognized range, it is returned unformatted.
-     *
-     * @return string
      */
     public function format() : string
     {
@@ -315,8 +275,6 @@ class Isbn
 
     /**
      * Returns the unformatted ISBN number.
-     *
-     * @return string
      */
     public function __toString() : string
     {

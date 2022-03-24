@@ -7,7 +7,7 @@ use Drupal\migrate\MigrateMessage;
 use Drupal\migrate\MigrateMessageInterface;
 
 /**
- * Class DrushLogMigrateMessage.
+ * Logger implementation for drush.
  *
  * @package Drupal\migrate_tools
  */

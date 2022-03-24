@@ -16,7 +16,7 @@ class MigrationGroupTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['migrate', 'migrate_plus', 'migrate_plus_test'];
+  protected static $modules = ['migrate', 'migrate_plus', 'migrate_plus_test'];
 
   /**
    * Test that group configuration is properly merged into specific migrations.
@@ -136,7 +136,7 @@ class MigrationGroupTest extends KernelTestBase {
     /** @var \Drupal\migrate\Plugin\MigrationPluginManagerInterface $pluginManager */
     $pluginManager = \Drupal::service('plugin.manager.migration');
     $migration = $pluginManager->getDefinition('dummy');
-    $this->assertEqual($migration['migration_group'], 'default', 'Migrations without an explicit group are assigned the default group.');
+    $this->assertEquals($migration['migration_group'], 'default', 'Migrations without an explicit group are assigned the default group.');
   }
 
 }

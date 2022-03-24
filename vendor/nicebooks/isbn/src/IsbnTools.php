@@ -7,22 +7,12 @@ namespace Nicebooks\Isbn;
 /**
  * Tools to work with ISBN numbers as plain strings.
  */
-class IsbnTools
+final class IsbnTools
 {
-    /**
-     * @var bool
-     */
-    private $cleanupBeforeValidate;
+    private bool $cleanupBeforeValidate;
 
-    /**
-     * @var bool
-     */
-    private $validateCheckDigit;
+    private bool $validateCheckDigit;
 
-    /**
-     * @param bool $cleanupBeforeValidate
-     * @param bool $validateCheckDigit
-     */
     public function __construct(bool $cleanupBeforeValidate = true, bool $validateCheckDigit = true)
     {
         $this->cleanupBeforeValidate = $cleanupBeforeValidate;
@@ -33,8 +23,6 @@ class IsbnTools
      * Returns whether the given ISBN is a valid ISBN-10 or ISBN-13.
      *
      * @param string $isbn The unformatted ISBN.
-     *
-     * @return bool
      */
     public function isValidIsbn(string $isbn) : bool
     {
@@ -45,8 +33,6 @@ class IsbnTools
      * Returns whether the given ISBN is a valid ISBN-10.
      *
      * @param string $isbn The unformatted ISBN.
-     *
-     * @return bool
      */
     public function isValidIsbn10(string $isbn) : bool
     {
@@ -77,8 +63,6 @@ class IsbnTools
      * Returns whether the given ISBN is a valid ISBN-13.
      *
      * @param string $isbn The unformatted ISBN.
-     *
-     * @return bool
      */
     public function isValidIsbn13(string $isbn) : bool
     {

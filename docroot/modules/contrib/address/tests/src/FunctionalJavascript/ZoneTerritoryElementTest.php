@@ -35,12 +35,12 @@ class ZoneTerritoryElementTest extends WebDriverTestBase {
     $this->drupalGet('/address_test/zone_territory_test_form');
     $this->getSession()->getPage()->selectFieldOption('territory[country_code]', 'US');
     $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->assertFieldByName('territory[administrative_area]');
-    $this->assertFieldByName('territory[limit_by_postal_code]');
+    $this->assertSession()->fieldExists('territory[administrative_area]');
+    $this->assertSession()->fieldExists('territory[limit_by_postal_code]');
     $this->getSession()->getPage()->checkField('territory[limit_by_postal_code]');
     $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->assertFieldByName('territory[included_postal_codes]');
-    $this->assertFieldByName('territory[excluded_postal_codes]');
+    $this->assertSession()->fieldExists('territory[included_postal_codes]');
+    $this->assertSession()->fieldExists('territory[excluded_postal_codes]');
     $this->submitForm([
       'territory[administrative_area]' => 'SC',
       'territory[included_postal_codes]' => '29601',

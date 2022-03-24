@@ -7,7 +7,7 @@
 [![StyleCI](https://styleci.io/repos/38419604/shield?branch=master)](https://styleci.io/repos/38419604)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/pdf-to-image.svg?style=flat-square)](https://packagist.org/packages/spatie/pdf-to-image)
 
-This package provides an easy to work with class to convert pdf's to images.
+This package provides an easy to work with class to convert PDF's to images.
 
 Spatie is a webdesign agency in Antwerp, Belgium. You'll find an overview of all our open source projects [on our website](https://spatie.be/opensource).
 
@@ -64,6 +64,13 @@ $pdf->setOutputFormat('png')
 You can set the quality of compression from 0 to 100:
 ```php
 $pdf->setCompressionQuality(100); // sets the compression quality to maximum
+```
+
+You can specify the width of the resulting image:
+```php
+$pdf
+   ->width(400)
+   ->saveImage($pathToWhereImageShouldBeStored);
 ```
 
 ## Issues regarding Ghostscript

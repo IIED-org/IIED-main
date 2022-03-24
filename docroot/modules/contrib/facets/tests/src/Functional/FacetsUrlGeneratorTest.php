@@ -6,7 +6,7 @@ use Drupal\facets\Entity\Facet;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class FacetsUrlGeneratorTest.
+ * Provides the Facets Url Generator test.
  *
  * @group facets
  */
@@ -15,7 +15,7 @@ class FacetsUrlGeneratorTest extends FacetsTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'facets',
     'facets_search_api_dependency',
     'facets_query_processor',
@@ -38,7 +38,7 @@ class FacetsUrlGeneratorTest extends FacetsTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
     $this->urlGenerator = \Drupal::service('facets.utility.url_generator');
 

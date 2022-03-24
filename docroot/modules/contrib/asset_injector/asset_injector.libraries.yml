@@ -12,6 +12,7 @@ ace-editor:
       css/asset_injector.css: {}
   dependencies:
       - core/jquery.ui.resizable
+      - core/jquery.once
 
 asset_injector:
   version: VERSION

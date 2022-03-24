@@ -354,7 +354,7 @@ class Installer
                 $fundingCount++;
             }
         }
-        if ($fundingCount) {
+        if ($fundingCount > 0) {
             $this->io->writeError(array(
                 sprintf(
                     "<info>%d package%s you are using %s looking for funding.</info>",
@@ -471,6 +471,11 @@ class Installer
         $exitCode = $this->extractDevPackages($lockTransaction, $platformRepo, $aliases, $policy, $lockedRepository);
         if ($exitCode !== 0) {
             return $exitCode;
+        }
+
+        // exists as of composer/semver 3.3.0
+        if (method_exists('Composer\Semver\CompilingMatcher', 'clear')) { // @phpstan-ignore-line
+            \Composer\Semver\CompilingMatcher::clear();
         }
 
         // write lock
