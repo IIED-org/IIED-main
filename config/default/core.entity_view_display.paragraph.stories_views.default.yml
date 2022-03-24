@@ -1,0 +1,29 @@
+uuid: 4f71bf12-29ec-4f10-81a5-b0557b84785d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.stories_views.field_stories_views
+    - paragraphs.paragraphs_type.stories_views
+  module:
+    - viewsreference
+_core:
+  default_config_hash: zCYLsAROdfpvCrP625iQRE-gjpaOLYqf2VcuqJaUu0w
+id: paragraph.stories_views.default
+targetEntityType: paragraph
+bundle: stories_views
+mode: default
+content:
+  field_stories_views:
+    weight: 0
+    label: hidden
+    settings:
+      plugin_types:
+        - block
+    third_party_settings: {  }
+    type: viewsreference_formatter
+    region: content
+hidden:
+  created: true
+  search_api_excerpt: true
+  uid: true

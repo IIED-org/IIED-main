@@ -75,13 +75,41 @@ module.exports = {
               textDecoration: 'none',
               '&:hover': {
                 color: theme('colors.link[hover]'),
-                borderBottomWidth: '2px',
+                borderBottomWidth: '1px',
                 borderBottomColor: theme('colors.iiedblue.500'),
                 textDecoration: 'underline',
               },
             },
+            h2: {
+              fontWeight: '400',
+            },
             h3: {
               fontWeight: '400',
+            },
+            h4: {
+              fontWeight: '400',
+            },
+            blockquote: {
+              borderLeftWidth: false,
+              fontStyle: 'inherit',
+              color: '#ba3f8a',
+              paddingLeft: false,
+            },
+            'ul > li::marker': {
+              color: theme('colors.iiedpink-900'),
+            },
+            'ol > li': {
+              paddingLeft: false,
+            },
+            'ul > li': {
+              paddingLeft: false,
+            },
+            ul: {
+              li: {
+                '&::marker': {
+                  color: theme('colors.iiedpink.500'),
+                },
+              },
             },
           },
         },
@@ -91,7 +119,11 @@ module.exports = {
   variants: {
     extend: {},
   },
+  corePlugins: {
+    aspectRatio: false,
+  },
   plugins: [
     require('@tailwindcss/typography'),
+    require('@tailwindcss/aspect-ratio'),
   ],
 };

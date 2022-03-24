@@ -50,7 +50,7 @@
 
 {%
   set tag_classes = [
-    'h-10', 'px-4', 'py-2', 'transition-colors', 'duration-200', 'bg-gray-100', 'rounded-full', 'focus:shadow-outline', 'hover:bg-gray-200', 'text-base', 'text-gray-700',
+    'h-10', 'transition-colors', 'duration-200', 'bg-gray-100', 'rounded-full', 'focus:shadow-outline', 'hover:bg-gray-200', 'text-base', 'text-gray-700',
   ]
 %}
 
@@ -58,12 +58,12 @@
   {% if multiple %}
     <div{{ attributes.addClass(tags_classes) }}>
       {% for item in items %}
-        <div{{ item.attributes.addClass(tag_classes) }}>{{ item.content }}</div>
+      <a class="px-4 py-2 h-10 transition-colors duration-200 bg-gray-100 rounded-full focus:shadow-outline hover:bg-gray-200 text-base text-gray-700" href="{{ item.content['#url'] }}">{{ item.content['#title']}}</a>
       {% endfor %}
     </div>
   {% else %}
     {% for item in items %}
-      <div{{ attributes.addClass(tag_classes) }}>{{ item.content }}</div>
+      <a class="px-4 py-2 h-10 transition-colors duration-200 bg-gray-100 rounded-full focus:shadow-outline hover:bg-gray-200 text-base text-gray-700" href="{{ item.content['#url'] }}">{{ item.content['#title']}}</a>
     {% endfor %}
   {% endif %}
 {% else %}

@@ -1,0 +1,21 @@
+uuid: 6ddb6356-646f-4fde-bfe7-6a0061967027
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_stories_heading
+    - paragraphs.paragraphs_type.stories_table
+_core:
+  default_config_hash: '-s-YK-5gqaATF7K1sllDErr_yPtgcREHT8iB0omgbnc'
+id: paragraph.stories_table.field_stories_heading
+field_name: field_stories_heading
+entity_type: paragraph
+bundle: stories_table
+label: Heading
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

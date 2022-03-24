@@ -1,0 +1,23 @@
+uuid: e8cfec69-eb93-456d-a999-6747877efdd3
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+    - views
+    - viewsreference
+_core:
+  default_config_hash: JYb2fC3iJCmaF3qLTmooGXru1SDLqVSjTMTjNZ3xArg
+id: paragraph.field_stories_views
+field_name: field_stories_views
+entity_type: paragraph
+type: viewsreference
+settings:
+  target_type: view
+module: viewsreference
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

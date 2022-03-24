@@ -11,7 +11,7 @@ dependencies:
 id: iied_tw_footer
 theme: iied_tw
 region: footer
-weight: 0
+weight: -13
 provider: null
 plugin: 'block_content:390124bf-6d34-47b0-bdbc-32f93fa79cee'
 settings:

@@ -25,7 +25,7 @@
     @apply font-headline;
   }
   a {
-    @apply transition duration-300 ease-in-out text-link-text hover:underline underline-offset-2 hover:text-link-hover visited:text-link-visited;
+    @apply transition duration-300 ease-in-out text-link-text underline-offset-2 hover:text-link-hover visited:text-link-visited;
   }
   .iied-gradient {
     background: rgb(0, 179, 223);
@@ -60,16 +60,42 @@
   /* Elements -- twig partials */
   /* Buttons */
   .btn {
-    @apply px-3 py-2 transition rounded-full shadow-sm hover:shadow-none;
+    @apply px-3 py-2 transition rounded-full shadow-sm;
+  }
+  .btn-outline {
+    @apply px-3 py-2 transition bg-white border border-gray-300 rounded-full shadow-sm;
+    &:hover {
+      @apply shadow-none bg-gray-100 border-iiedblue-500;
+    }
+  }
+  .btn-icon {
+    @apply flex items-center;
+  }
+  .btn-orange {
+    @apply bg-iiedorange-500;
+    &:hover {
+      @apply bg-iiedorange-600;
+    }
   }
 
   /* Components -- twig templates */
   /* Cards */
   .card {
-    @apply border border-gray-300 p-4;
+    @apply border border-gray-300 p-4 rounded-xl;
   }
 
   [id$="-local-tasks"] ul {
     @apply list-disc list-inside;
+  }
+
+  .box-outline,
+  .boxbox {
+    @apply border border-gray-300 p-4 rounded-xl;
+  }
+  .bg-fill {
+    @apply p-4 bg-gray-100 rounded-xl;
+  }
+  .image-caption {
+    @apply mt-1 text-base leading-tight text-gray-500;
   }
 }

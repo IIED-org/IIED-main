@@ -1,0 +1,38 @@
+uuid: 5ed05fa3-6a8b-4a5f-b4dd-7d21cda438fe
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.stories_table.field_stories_heading
+    - field.field.paragraph.stories_table.field_stories_table
+    - paragraphs.paragraphs_type.stories_table
+  module:
+    - tablefield
+_core:
+  default_config_hash: _AIPqoUQoUoNMNHx2jthBNZ8eq3KQvbpd3qEXJ2W3aw
+id: paragraph.stories_table.default
+targetEntityType: paragraph
+bundle: stories_table
+mode: default
+content:
+  field_stories_heading:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_stories_table:
+    type: tablefield
+    label: hidden
+    settings:
+      row_header: true
+      column_header: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  created: true
+  search_api_excerpt: true
+  uid: true

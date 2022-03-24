@@ -11,7 +11,7 @@ dependencies:
 id: footer_2
 theme: iied_tw
 region: footer
-weight: 0
+weight: -14
 provider: null
 plugin: 'system_menu_block:footer'
 settings:
