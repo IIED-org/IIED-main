@@ -75,7 +75,7 @@ module.exports = {
               textDecoration: 'none',
               '&:hover': {
                 color: theme('colors.link[hover]'),
-                borderBottomWidth: '2px',
+                borderBottomWidth: '1px',
                 borderBottomColor: theme('colors.iiedblue.500'),
                 textDecoration: 'underline',
               },
