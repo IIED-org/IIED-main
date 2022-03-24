@@ -230,4 +230,37 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
     }
   }
 
+  // Image media migration.
+  if ($migration->id() == 'iied_d7_media_images') {
+
+    // Query image field tables to extract alt text where possible.
+    $image_fields = [
+      'field_main_image',
+      'field_second_image',
+      'field_gallery',
+      'field_cover_image',
+    ];
+    $fid = $row->getSourceProperty('fid');
+    $row->setSourceProperty('alt_text', 'No description available.');
+    $row->setSourceProperty('title_text', 'No title available.');
+
+    foreach ($image_fields as $image_field) {
+      $query = $source->getDatabase()->select('field_data_' . $image_field, 'fdi')
+        ->fields('fdi', [$image_field . '_alt', $image_field . '_title']);
+      $query->condition($image_field . '_fid', $fid);
+      $result = $query->execute()->fetchObject();
+      if (!empty($result)) {
+        $alt_value =  $result->{$image_field . '_alt'};
+        if (strlen($alt_value) > 1) {
+          $row->setSourceProperty('alt_text',$alt_value);
+        }
+        $title_value = $result->{$image_field . '_title'};
+        if (strlen($title_value) > 1) {
+          $row->setSourceProperty('title_text', $title_value);
+        }
+      }
+    }
+
+  }
+
 }

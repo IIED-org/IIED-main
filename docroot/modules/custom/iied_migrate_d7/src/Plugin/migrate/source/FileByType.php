@@ -28,26 +28,13 @@ class FileByType extends File {
       $query->condition('f.type', $this->configuration['type']);
     }
 
-    // Get the alt text, if configured.
-    if (isset($this->configuration['get_alt'])) {
-      $alt_alias = $query->addJoin('left', 'field_data_field_file_image_alt_text', 'alt', 'f.fid = %alias.entity_id');
-      $query->addField($alt_alias, 'field_file_image_alt_text_value', 'alt');
-    }
-
-    // Get the title text, if configured.
-    if (isset($this->configuration['get_title'])) {
-      $title_alias = $query->addJoin('left', 'field_data_field_file_image_title_text', 'title', 'f.fid = %alias.entity_id');
-      $query->addField($title_alias, 'field_file_image_title_text_value', 'title');
-    }
-
     return $query;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function fields()
-  {
+  public function fields() {
     $fields = parent::fields();
     $fields['type'] = $this->t('The type of file.');
     $fields['alt'] = $this->t('Alt text of the file (if present)');
