@@ -4,14 +4,25 @@ namespace Drupal\migrate_tools;
 
 use Drupal\migrate\Plugin\migrate\source\SourcePluginBase;
 use Drupal\migrate\Plugin\MigrateSourceInterface;
+use Drupal\migrate\Row;
 
 /**
  * Class to filter source by an ID list.
  */
-class SourceFilter extends \FilterIterator {
+class SourceFilter extends \FilterIterator implements MigrateSourceInterface {
+
+  /**
+   * Whether to filter the source IDs.
+   *
+   * @var bool
+   */
+  protected $filterSourceIds;
 
   /**
    * List of specific source IDs to import.
+   *
+   * The accept() method removes an item from this when it successfully filters
+   * a value.
    *
    * @var array
    */
@@ -28,6 +39,7 @@ class SourceFilter extends \FilterIterator {
   public function __construct(MigrateSourceInterface $source, array $id_list) {
     parent::__construct($source);
     $this->idList = $id_list;
+    $this->filterSourceIds = !empty($this->idList);
   }
 
   /**
@@ -35,7 +47,7 @@ class SourceFilter extends \FilterIterator {
    */
   public function accept() {
     // No idlist filtering, don't filter.
-    if (empty($this->idList)) {
+    if (!$this->filterSourceIds) {
       return TRUE;
     }
     // Some source plugins do not extend SourcePluginBase. These cannot be
@@ -44,10 +56,81 @@ class SourceFilter extends \FilterIterator {
       trigger_error(sprintf('The source plugin %s is not an instance of %s. Extend from %s to support idlist filtering.', $this->getInnerIterator()->getPluginId(), SourcePluginBase::class, SourcePluginBase::class));
       return TRUE;
     }
-    // Row is included.
-    if (in_array(array_values($this->getInnerIterator()->getCurrentIds()), $this->idList)) {
+
+    $id_list_key = \array_search(array_values($this->getInnerIterator()->getCurrentIds()), $this->idList);
+    if ($id_list_key !== FALSE) {
+      // Row is included.
+      unset($this->idList[$id_list_key]);
       return TRUE;
     }
+
+    return FALSE;
+  }
+
+  /**
+   * Gets the remaining ID list.
+   *
+   * @return array
+   *   An array of the the IDs which were not used by the filter.
+   */
+  public function getRemainingIdList() {
+    return $this->idList;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function fields() {
+    return $this->getInnerIterator()->fields();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function prepareRow(Row $row) {
+    return $this->getInnerIterator()->prepareRow($row);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __toString() {
+    return $this->getInnerIterator()->__toString();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getIds() {
+    return $this->getInnerIterator()->getIds();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSourceModule() {
+    return $this->getInnerIterator()->getSourceModule();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function count() {
+    return $this->getInnerIterator()->count();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPluginId() {
+    return $this->getInnerIterator()->getPluginId();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPluginDefinition() {
+    return $this->getInnerIterator()->getPluginDefinition();
   }
 
 }

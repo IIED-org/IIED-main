@@ -187,8 +187,9 @@ class MigrationExecuteForm extends FormBase {
 
     $migration = $this->getRouteMatch()->getParameter('migration');
     if ($migration) {
+      $migration_id = $migration->id();
       /** @var \Drupal\migrate\Plugin\MigrationInterface $migration_plugin */
-      $migration_plugin = $this->migrationPluginManager->createInstance($migration->id(), $migration->toArray());
+      $migration_plugin = $this->migrationPluginManager->createInstance($migration_id, $migration->toArray());
       $migrateMessage = new MigrateMessage();
 
       switch ($operation) {
@@ -214,18 +215,47 @@ class MigrationExecuteForm extends FormBase {
           ];
 
           $executable = new MigrateBatchExecutable($migration_plugin, $migrateMessage, $options);
-          $executable->rollback();
-
+          $status = $executable->rollback();
+          if ($status === MigrationInterface::RESULT_COMPLETED) {
+            $this->messenger()->addStatus($this->t('Rollback completed', ['@id' => $migration_id]));
+          }
+          else {
+            $this->messenger()->addError($this->t('Rollback of !name migration failed.', ['!name' => $migration_id]));
+          }
           break;
 
         case 'stop':
 
           $migration_plugin->interruptMigration(MigrationInterface::RESULT_STOPPED);
+          $status = $migration_plugin->getStatus();
+          switch ($status) {
+            case MigrationInterface::STATUS_IDLE:
+              $this->messenger()->addStatus($this->t('Migration @id is idle', ['@id' => $migration_id]));
+              break;
 
+            case MigrationInterface::STATUS_DISABLED:
+              $this->messenger()->addWarning($this->t('Migration @id is disabled', ['@id' => $migration_id]));
+              break;
+
+            case MigrationInterface::STATUS_STOPPING:
+              $this->messenger()->addWarning($this->t('Migration @id is already stopping', ['@id' => $migration_id]));
+              break;
+
+            default:
+              $migration->interruptMigration(MigrationInterface::RESULT_STOPPED);
+              $this->messenger()->addStatus($this->t('Migration @id requested to stop', ['@id' => $migration_id]));
+              break;
+          }
           break;
 
         case 'reset':
-
+          $status = $migration_plugin->getStatus();
+          if ($status === MigrationInterface::STATUS_IDLE) {
+            $this->messenger()->addWarning($this->t('Migration @id is already Idle', ['@id' => $migration_id]));
+          }
+          else {
+            $this->messenger()->addStatus($this->t('Migration @id reset to Idle', ['@id' => $migration_id]));
+          }
           $migration_plugin->setStatus(MigrationInterface::STATUS_IDLE);
 
           break;

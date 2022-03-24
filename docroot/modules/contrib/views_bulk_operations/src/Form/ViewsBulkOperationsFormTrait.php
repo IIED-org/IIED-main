@@ -146,6 +146,8 @@ trait ViewsBulkOperationsFormTrait {
    *   The entity to calculate a bulk form key for.
    * @param mixed $base_field_value
    *   The value of the base field for this view result.
+   * @param mixed $row_index
+   *   Index of view result.
    *
    * @return string
    *   The bulk form key representing the entity id, language and revision (if
@@ -153,7 +155,7 @@ trait ViewsBulkOperationsFormTrait {
    *
    * @see self::loadEntityFromBulkFormKey()
    */
-  public static function calculateEntityBulkFormKey(EntityInterface $entity, $base_field_value) {
+  public static function calculateEntityBulkFormKey(EntityInterface $entity, $base_field_value, $row_index) {
     // We don't really need the entity ID or type ID, since only the
     // base field value and language are used to select rows, but
     // other modules may need those values.
@@ -162,6 +164,7 @@ trait ViewsBulkOperationsFormTrait {
       $entity->language()->getId(),
       $entity->getEntityTypeId(),
       $entity->id(),
+      $row_index,
     ];
 
     // An entity ID could be an arbitrary string (although they are typically

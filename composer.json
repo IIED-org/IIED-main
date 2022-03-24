@@ -58,6 +58,7 @@
         "drupal/core-recommended": "^9",
         "drupal/core-vendor-hardening": "^8.8",
         "drupal/ctools": "^3.4",
+        "drupal/datalayer": "^1.0@beta",
         "drupal/devel_kint_extras": "^1.0",
         "drupal/dropdown_language": "^2.6",
         "drupal/ds": "^3.9",

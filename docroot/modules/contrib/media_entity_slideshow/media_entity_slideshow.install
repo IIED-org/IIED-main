@@ -11,7 +11,8 @@ use Drupal\Core\File\FileSystemInterface;
  * Implements hook_install().
  */
 function media_entity_slideshow_install() {
-  $source = drupal_get_path('module', 'media_entity_slideshow') . '/images/icons';
+  /** @var \Drupal\Core\Extension\ModuleExtensionList $extension_list */
+  $source = \Drupal::service('extension.list.module')->getPath('media_entity_slideshow') . '/images/icons';
   $destination = \Drupal::config('media.settings')->get('icon_base_uri');
   /** @var \Drupal\Core\File\FileSystemInterface $file_system */
   $file_system = \Drupal::service('file_system');

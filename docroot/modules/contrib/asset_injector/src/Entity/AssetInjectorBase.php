@@ -52,7 +52,7 @@ abstract class AssetInjectorBase extends ConfigEntityBase implements AssetInject
   protected $conditions = [];
 
   /**
-   * The available contexts for this asset and its conditions conditions.
+   * The available contexts for this asset and its conditions.
    *
    * @var array
    */

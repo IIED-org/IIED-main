@@ -138,7 +138,7 @@ class FieldFormatterWithInlineSettings extends FieldFormatterBase implements Con
     $field_definition = $this->getFieldDefinition($field_storage_definition);
     $formatters = $this->formatterPluginManager->getOptions($field_storage_definition->getType());
     $formatter_instances = array_map(function ($formatter_id) use ($field_definition) {
-      // TODO: Ensure it is right to empty all values here, see:
+      // @todo Ensure it is right to empty all values here, see:
       // https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Field%21FormatterPluginManager.php/class/FormatterPluginManager/8.2.x
       $configuration = [
         'field_definition' => $field_definition,

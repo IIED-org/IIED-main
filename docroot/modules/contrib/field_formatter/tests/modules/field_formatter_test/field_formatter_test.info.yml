@@ -1,6 +1,7 @@
 name: 'Field formatter test'
 type: module
 description: 'Support module for the Field formatter module tests.'
+core_version_requirement: ^8.9 || ^9
 package: Testing
 dependencies:
   - drupal:taxonomy
@@ -9,7 +10,7 @@ dependencies:
   - drupal:user
   - field_formatter:field_formatter
 
-# Information added by Drupal.org packaging script on 2022-02-04
-version: '3.0.0-rc0'
+# Information added by Drupal.org packaging script on 2022-03-24
+version: '3.0.0-rc1'
 project: 'field_formatter'
-datestamp: 1643987531
+datestamp: 1648127242

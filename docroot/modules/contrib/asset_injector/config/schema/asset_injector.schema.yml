@@ -1,6 +1,6 @@
 asset_injector.css.*:
   type: config_entity
-  label: 'Css Injector config'
+  label: 'CSS Injector config'
   mapping:
     id:
       type: string
@@ -23,6 +23,8 @@ asset_injector.css.*:
       sequence:
         type: condition.plugin.[id]
         label: 'Conditions Condition'
+    contexts:
+      type: sequence
     conditions_require_all:
       type: boolean
       label: 'Require all conditions'
@@ -62,6 +64,8 @@ asset_injector.js.*:
       sequence:
         type: condition.plugin.[id]
         label: 'Conditions Condition'
+    contexts:
+      type: sequence
     conditions_require_all:
       type: boolean
       label: 'Require all conditions'

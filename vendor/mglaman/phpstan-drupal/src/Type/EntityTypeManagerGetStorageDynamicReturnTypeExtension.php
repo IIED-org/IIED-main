@@ -1,7 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace PHPStan\Type;
+namespace mglaman\PHPStanDrupal\Type;
 
+use Drupal\Core\Config\Entity\ConfigEntityStorageInterface;
+use Drupal\Core\Entity\ContentEntityStorageInterface;
+use mglaman\PHPStanDrupal\Drupal\EntityDataRepository;
+use mglaman\PHPStanDrupal\Type\EntityStorage\ConfigEntityStorageType;
+use mglaman\PHPStanDrupal\Type\EntityStorage\ContentEntityStorageType;
+use mglaman\PHPStanDrupal\Type\EntityStorage\EntityStorageType;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
@@ -9,23 +15,28 @@ use PhpParser\Node\VariadicPlaceholder;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\ShouldNotHappenException;
+use PHPStan\Type\Constant\ConstantStringType;
+use PHPStan\Type\DynamicMethodReturnTypeExtension;
+use PHPStan\Type\ObjectType;
 
 class EntityTypeManagerGetStorageDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
+
     /**
-     * @var string[]
+     * @var EntityDataRepository
      */
-    private $entityTypeStorageMapping;
+    private $entityDataRepository;
 
     /**
      * EntityTypeManagerGetStorageDynamicReturnTypeExtension constructor.
      *
-     * @param string[] $entityTypeStorageMapping
+     * @param EntityDataRepository $entityDataRepository
      */
-    public function __construct(array $entityTypeStorageMapping = [])
+    public function __construct(EntityDataRepository $entityDataRepository)
     {
-        $this->entityTypeStorageMapping = $entityTypeStorageMapping;
+        $this->entityDataRepository = $entityDataRepository;
     }
 
     public function getClass(): string
@@ -42,7 +53,7 @@ class EntityTypeManagerGetStorageDynamicReturnTypeExtension implements DynamicMe
         MethodReflection $methodReflection,
         MethodCall $methodCall,
         Scope $scope
-    ): Type {
+    ): \PHPStan\Type\Type {
         $returnType = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
         if (!isset($methodCall->args[0])) {
             // Parameter is required.
@@ -64,15 +75,22 @@ class EntityTypeManagerGetStorageDynamicReturnTypeExtension implements DynamicMe
         if ($arg1 instanceof Concat) {
             return $returnType;
         }
-        if (!$arg1 instanceof String_) {
+
+        $type = $scope->getType($arg1);
+        if ($type instanceof ConstantStringType) {
+            $entityTypeId = $type->getValue();
+        } else {
             // @todo determine what these types are, and try to resolve entity name from.
             return $returnType;
         }
 
-        $entityTypeId = $arg1->value;
+        $storageType = $this->entityDataRepository->get($entityTypeId)->getStorageType();
+        if ($storageType !== null) {
+            return $storageType;
+        }
 
-        if (isset($this->entityTypeStorageMapping[$entityTypeId])) {
-            return new ObjectType($this->entityTypeStorageMapping[$entityTypeId]);
+        if ($returnType instanceof ObjectType) {
+            return new EntityStorageType($entityTypeId, $returnType->getClassName());
         }
         return $returnType;
     }

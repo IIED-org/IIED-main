@@ -17,7 +17,7 @@ function upgrade_status_requirements($phase) {
         'upgrade_status' => [
           'description' => t('External dependencies for Upgrade Status are not available. Composer must be used to download the module with dependencies. See <a href="@url">the Upgrade Status project page</a> for instructions.', ['@url' => 'https://drupal.org/project/upgrade_status']),
           'severity' => REQUIREMENT_ERROR,
-        ]
+        ],
       ];
     }
   }

@@ -4,11 +4,8 @@
     "description": "Provides a service to manage file metadata.",
     "require": {
         "drupal/core": "^9.2",
-        "phenx/php-font-lib": "^0.5.3",
-        "lsolesen/pel": "^0.9.8"
-    },
-    "conflict": {
-        "lsolesen/pel": "0.9.10"
+        "phenx/php-font-lib": "^0.5.4",
+        "lsolesen/pel": "^0.9.12"
     },
     "require-dev": {
         "drupal/image_effects": "*",

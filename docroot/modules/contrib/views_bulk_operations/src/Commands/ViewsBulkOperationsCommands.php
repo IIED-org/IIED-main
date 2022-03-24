@@ -2,6 +2,7 @@
 
 namespace Drupal\views_bulk_operations\Commands;
 
+use Consolidation\OutputFormatters\StructuredData\RowsOfFields;
 use Drush\Commands\DrushCommands;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -119,7 +120,6 @@ class ViewsBulkOperationsCommands extends DrushCommands {
       'user-id' => 1,
     ]
   ) {
-
     if (empty($view_id) || empty($action_id)) {
       throw new \Exception('You must specify the view ID and the action ID parameters.');
     }
@@ -158,10 +158,11 @@ class ViewsBulkOperationsCommands extends DrushCommands {
       // We set the clear_on_exposed parameter to true, otherwise with empty
       // selection exposed filters are not taken into account.
       'clear_on_exposed' => TRUE,
+      'exclude_mode' => FALSE,
     ];
 
-    // Login as superuser, as drush 9 doesn't support the
-    // --user parameter.
+    // Login as the provided user, as drush 9+ doesn't support the
+    // --user parameter. Default: user 1.
     $account = $this->userStorage->load($options['user-id']);
     $this->currentUser->setAccount($account);
 
@@ -250,6 +251,42 @@ class ViewsBulkOperationsCommands extends DrushCommands {
     return $this->t('Action processing results: @results.', [
       '@results' => implode(', ', $details),
     ]);
+  }
+
+  /**
+   * List available actions for a view.
+   *
+   * @return string
+   *   The summary message.
+   *
+   * @command views:bulk-operations:list
+   *
+   * @table-style default
+   * @field-labels
+   *   id: ID
+   *   label: Label
+   *   entity_type_id: Entity type ID
+   * @default-fields id,label,entity_type_id
+   *
+   * @usage drush views:bulk-operations:list some_view some_action
+   *   Execute some action on some view.
+   * @usage drush vbo-list
+   *   List all available actions info.
+   *
+   * @aliases vbo-list
+   */
+  public function vboList($options = ['format' => 'table']) {
+    $rows = [];
+    $actions = $this->actionManager->getDefinitions(['nocache' => TRUE]);
+    foreach ($actions as $id => $definition) {
+      $rows[] = [
+        'id' => $id,
+        'label' => $definition['label'],
+        'entity_type_id' => $definition['type'] ? $definition['type'] : dt('(any)'),
+      ];
+    }
+
+    return new RowsOfFields($rows);
   }
 
   /**

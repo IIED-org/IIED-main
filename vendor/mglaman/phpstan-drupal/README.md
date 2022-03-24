@@ -6,7 +6,7 @@ Extension for [PHPStan](https://phpstan.org/) to allow analysis of Drupal code.
 
 ## Sponsors
 
-<a href="https://www.undpaul.de/"><img src="https://www.undpaul.de/themes/custom/undpaul3/logo.svg" alt="undpaul" width="250" /></a> <a href="https://www.intracto.com/"><img src="https://digidak.be/wp-content/uploads/2020/03/logo-intracto-base-positief-grijs-blauw@4x-rgb.png" alt="Intracto" width="225" /></a> <a href="https://osinet.fr//"><img src="https://d3c0fbruclr8uq.cloudfront.net/sites/default/files/logo-osinet.png" alt="OSInet" width="250" /></a>
+<a href="https://www.undpaul.de/"><img src="https://www.undpaul.de/themes/custom/undpaul3/logo.svg" alt="undpaul" width="250" /></a> <a href="https://www.iodigital.com/en"><img src="https://www.drupal.org/files/iO-logo%2Bblack.png" alt="iO" width="225" /></a>
 
 [Would you like to sponsor?](https://github.com/sponsors/mglaman)
 
@@ -91,16 +91,16 @@ directory using the `drupal.drupal_root` parameter.
 
 ```
 parameters:
-    drupal:
-        drupal_root: /path/to/drupal
+	drupal:
+		drupal_root: /path/to/drupal
 ```
 
 You can also use container parameters. For instance you can always set it to the current working directory.
 
 ```
 parameters:
-    drupal:
-        drupal_root: %currentWorkingDirectory%
+	drupal:
+		drupal_root: %currentWorkingDirectory%
 ```
 
 ### Entity storage mappings.
@@ -111,11 +111,20 @@ default mapping can be found in `extension.neon`. For example:
 
 ```
 parameters:
-    drupal:
-        entityTypeStorageMapping:
-            node: Drupal\node\NodeStorage
-            taxonomy_term: Drupal\taxonomy\TermStorage
-            user: Drupal\user\UserStorage
+	drupal:
+		entityMapping:
+			block:
+				class: Drupal\block\Entity\Block
+				storage: Drupal\Core\Config\Entity\ConfigEntityStorage
+			node:
+				class: Drupal\node\Entity\Node
+				storage: Drupal\node\NodeStorage
+			taxonomy_term:
+				class: Drupal\taxonomy\Entity\Term
+				storage: Drupal\taxonomy\TermStorage
+			user:
+				class: Drupal\user\Entity\User
+				storage: Drupal\user\UserStorage
 ```
 
 To add support for custom entities, you may add the same definition in your project's `phpstan.neon`. See the following
@@ -123,8 +132,85 @@ example for adding a mapping for Search API:
 
 ```
 parameters:
-    drupal:
-        entityTypeStorageMapping:
-            search_api_index: Drupal\search_api\Entity\SearchApiConfigEntityStorage
-            search_api_server: Drupal\search_api\Entity\SearchApiConfigEntityStorage
+	drupal:
+		entityMapping:
+			block:
+				search_api_index:
+					class: Drupal\search_api\Entity\Index
+					storage: Drupal\search_api\Entity\SearchApiConfigEntityStorage
+				search_api_server:
+					class: Drupal\search_api\Entity\Server
+					storage: Drupal\search_api\Entity\SearchApiConfigEntityStorage			    
+```
+
+Similarly, the `EntityStorageDynamicReturnTypeExtension` service helps to determine the type of the entity which is
+loaded, created etc.. when using an entity storage.
+For instance when using
+
+```php
+$node = \Drupal::entityTypeManager()->getStorage('node')->create(['type' => 'page', 'title' => 'foo']);
+```
+
+It helps with knowing the type of the `$node` variable is `Drupal\node\Entity\Node`.
+
+The default mapping can be found in `extension.neon`:
+
+```neon
+parameters:
+	drupal:
+		entityMapping:
+			block:
+				class: Drupal\block\Entity\Block
+				storage: Drupal\Core\Config\Entity\ConfigEntityStorage
+			node:
+				class: Drupal\node\Entity\Node
+				storage: Drupal\node\NodeStorage
+			taxonomy_term:
+				class: Drupal\taxonomy\Entity\Term
+				storage: Drupal\taxonomy\TermStorage
+			user:
+				class: Drupal\user\Entity\User
+				storage: Drupal\user\UserStorage
+```
+
+To add support for custom entities, you may add the same definition in your project's `phpstan.neon` likewise.
+
+### Providing entity type mappings for a contrib module
+
+Contributed modules can provide their own mapping that can be automatically registered with a user's code base when 
+they use the `phpstan/extension-installer`.  The extension installer scans installed package's `composer.json` for a 
+value in `extra.phpstan`. This will automatically bundle the defined include that contains an entity mapping 
+configuration.
+
+For example, the Paragraphs module could have the following `entity_mapping.neon` file:
+
+```neon
+parameters:
+	entityMapping:
+		paragraph:
+			class: Drupal\paragraphs\Entity\Paragraph
+		paragraphs_type:
+			class: Drupal\paragraphs\Entity\ParagraphsType
+```
+
+Then in the `composer.json` for Paragraphs, the `entity_mapping.neon` would be provided as a PHPStan include
+
+```json
+{
+  "name": "drupal/paragraphs",
+  "description": "Enables the creation of Paragraphs entities.",
+  "type": "drupal-module",
+  "license": "GPL-2.0-or-later",
+  "require": {
+    "drupal/entity_reference_revisions": "~1.3"
+  },
+  "extra": {
+    "phpstan": {
+      "includes": [
+        "entity_mapping.neon"
+      ]
+    }
+  }
+}
+
 ```
