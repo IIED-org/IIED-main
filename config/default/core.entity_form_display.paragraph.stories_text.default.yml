@@ -15,13 +15,13 @@ bundle: stories_text
 mode: default
 content:
   field_stories_text_formatted:
+    type: text_textarea
     weight: 0
+    region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-    type: text_textarea
-    region: content
 hidden:
   created: true
   status: true

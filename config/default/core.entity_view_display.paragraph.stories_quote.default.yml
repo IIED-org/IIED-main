@@ -18,15 +18,15 @@ bundle: stories_quote
 mode: default
 content:
   field_stories_quote_citation:
-    weight: 1
+    type: string
     label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 1
     region: content
   field_stories_quote_citation_url:
-    weight: 2
+    type: link
     label: hidden
     settings:
       trim_length: 80
@@ -35,14 +35,14 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    type: link
+    weight: 2
     region: content
   field_stories_quote_text:
-    weight: 0
+    type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    weight: 0
     region: content
 hidden:
   created: true

@@ -15,13 +15,13 @@ bundle: stories_block
 mode: default
 content:
   field_stories_block:
+    type: block_field_default
     weight: 0
+    region: content
     settings:
       plugin_id: ''
       settings: {  }
     third_party_settings: {  }
-    type: block_field_default
-    region: content
 hidden:
   created: true
   status: true

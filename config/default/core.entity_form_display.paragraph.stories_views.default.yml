@@ -15,11 +15,11 @@ bundle: stories_views
 mode: default
 content:
   field_stories_views:
+    type: viewsreference_select
     weight: 0
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: viewsreference_select
-    region: content
 hidden:
   created: true
   status: true
