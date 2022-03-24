@@ -7,6 +7,7 @@
  * - alignment: left | right | center | vertical.
  * - style: tabs | pills
  * - fill: fill | justify
+ * - is_dropdown: true | false
  * - utility_classes: An array of utility classes.
  */
 #}
@@ -24,6 +25,7 @@
 
 {% set style = style ? 'nav-' ~ style : '' %}
 {% set fill = fill ? 'nav-' ~ fill : '' %}
+{% set is_dropdown = is_dropdown is null ? true %}
 
 {% set nav_classes = [ 'nav', style, alignment, fill]|merge(utility_classes ? utility_classes : []) %}
 
@@ -34,7 +36,7 @@
         {% set nav_item_classes = [
           'nav-item',
           item.in_active_trail ? 'active',
-          item.is_expanded and item.below ? 'dropdown'
+          is_dropdown ? 'dropdown'
         ] %}
         {% set nav_link_classes = ['nav-link'] %}
         {% if item.url.options.attributes.class is iterable %}
@@ -42,20 +44,23 @@
         {% elseif item.url.options.attributes.class %}
           {% set nav_link_classes = nav_link_classes|merge([item.url.options.attributes.class]) %}
         {% endif %}
-        <li class="{{ nav_item_classes|join(' ') }}">
-          {% if item.is_expanded and item.below %}
+        <li{{ item.attributes.addClass(nav_item_classes) }}>
+          {% if item.is_expanded and item.below and is_dropdown %}
             {{ link(item.title, item.url, { 'class': nav_link_classes|merge(['dropdown-toggle']), 'data-toggle': 'dropdown' }) }}
-            {% if item.below %}
-              {% include '@radix/dropdown/dropdown-menu.twig' with {
-                items: item.below
-              } %}
-            {% endif %}
+            {% include '@radix/dropdown/dropdown-menu.twig' with {
+              items: item.below
+            } %}
           {% else %}
             {{ link(item.title, item.url, { 'class': nav_link_classes }) }}
+            {% if item.is_expanded and item.below and not is_dropdown %}
+              {% include '@evo_radix/nav/nav.twig' with {
+                items: item.below,
+                is_dropdown: false,
+              } %}
+            {% endif %}
           {% endif %}
         </li>
       {% endfor %}
     {% endblock %}
   </ul>
 {% endif %}
-

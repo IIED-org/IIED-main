@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace PHPStan\Drupal;
+namespace mglaman\PHPStanDrupal\Drupal;
 
 use Drupal\Core\DependencyInjection\ContainerNotInitializedException;
 use DrupalFinder\DrupalFinder;
-use Nette\Utils\Finder;
 use PHPStan\DependencyInjection\Container;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
 class DrupalAutoloader
@@ -51,11 +51,6 @@ class DrupalAutoloader
     private $serviceClassProviders = [];
 
     /**
-     * @var ?\PHPStan\Drupal\ExtensionDiscovery
-     */
-    private $extensionDiscovery;
-
-    /**
      * @var array
      */
     private $namespaces = [];
@@ -63,7 +58,7 @@ class DrupalAutoloader
     public function register(Container $container): void
     {
         $drupalParams = $container->getParameter('drupal');
-        $drupalRoot = $drupalParams['drupal_root'];
+        $drupalRoot = realpath($drupalParams['drupal_root']);
         $finder = new DrupalFinder();
         $finder->locateRoot($drupalRoot);
 
@@ -81,29 +76,24 @@ class DrupalAutoloader
         $this->serviceClassProviders['core'] = '\Drupal\Core\CoreServiceProvider';
         $this->serviceMap['service_provider.core.service_provider'] = ['class' => $this->serviceClassProviders['core']];
 
-        $this->extensionDiscovery = new ExtensionDiscovery($this->drupalRoot);
-        $this->extensionDiscovery->setProfileDirectories([]);
-        $profiles = $this->extensionDiscovery->scan('profile');
+        $extensionDiscovery = new ExtensionDiscovery($this->drupalRoot);
+        $extensionDiscovery->setProfileDirectories([]);
+        $profiles = $extensionDiscovery->scan('profile');
         $profile_directories = array_map(static function (Extension $profile) : string {
             return $profile->getPath();
         }, $profiles);
-        $this->extensionDiscovery->setProfileDirectories($profile_directories);
+        $extensionDiscovery->setProfileDirectories($profile_directories);
 
-        $this->moduleData = array_merge($this->extensionDiscovery->scan('module'), $profiles);
+        $this->moduleData = array_merge($extensionDiscovery->scan('module'), $profiles);
         usort($this->moduleData, static function (Extension $a, Extension $b) {
             return strpos($a->getName(), '_test') !== false ? 10 : 0;
         });
-        $this->themeData = $this->extensionDiscovery->scan('theme');
-        $this->addTestNamespaces();
+        $this->themeData = $extensionDiscovery->scan('theme');
+        $this->addCoreTestNamespaces();
         $this->addModuleNamespaces();
         $this->addThemeNamespaces();
         $this->registerPs4Namespaces($this->namespaces);
         $this->loadLegacyIncludes();
-
-        // @todo stop requiring the bootstrap.php and just copy what is needed.
-        if (interface_exists(\PHPUnit\Framework\Test::class)) {
-            require $this->drupalRoot . '/core/tests/bootstrap.php';
-        }
 
         foreach ($this->moduleData as $extension) {
             $this->loadExtension($extension);
@@ -153,7 +143,7 @@ class DrupalAutoloader
                 }
                 $drushDir = dirname($reflect->getFileName(), $levels);
                 /** @var \SplFileInfo $file */
-                foreach (Finder::findFiles('*.inc')->in($drushDir . '/includes') as $file) {
+                foreach (Finder::create()->files()->name('*.inc')->in($drushDir . '/includes') as $file) {
                     require_once $file->getPathname();
                 }
             }
@@ -166,6 +156,13 @@ class DrupalAutoloader
                 continue;
             }
             foreach ($yaml['services'] as $serviceId => $serviceDefinition) {
+                // Check if this is an alias shortcut.
+                // @link https://symfony.com/doc/4.4/service_container/alias_private.html#aliasing
+                if (is_string($serviceDefinition)) {
+                    $serviceDefinition = [
+                        'alias' => str_replace('@', '', $serviceDefinition),
+                    ];
+                }
                 // Prevent \Nette\DI\ContainerBuilder::completeStatement from array_walk_recursive into the arguments
                 // and thinking these are real services for PHPStan's container.
                 if (isset($serviceDefinition['arguments']) && is_array($serviceDefinition['arguments'])) {
@@ -193,26 +190,26 @@ class DrupalAutoloader
         }
 
         $service_map = $container->getByType(ServiceMap::class);
-        assert($service_map instanceof ServiceMap);
-        // @todo this is a hack that needs investigation.
-        // We cannot manipulate the service container and add parameters, so we take the existing
-        // service and modify it's properties so that its reference is updated within the container.
-        //
-        // During debug this works, but other times it fails.
         $service_map->setDrupalServices($this->serviceMap);
-        // So, to work around whatever is happening we force it into globals.
-        $GLOBALS['drupalServiceMap'] = $service_map->getServices();
+
+        if (interface_exists(\PHPUnit\Framework\Test::class)
+            && class_exists('Drupal\TestTools\PhpUnitCompatibility\PhpUnit8\ClassWriter')) {
+            \Drupal\TestTools\PhpUnitCompatibility\PhpUnit8\ClassWriter::mutateTestBase($this->autoloader);
+        }
+
+        $extension_map = $container->getByType(ExtensionMap::class);
+        $extension_map->setExtensions($this->moduleData, $this->themeData, $profiles);
     }
 
     protected function loadLegacyIncludes(): void
     {
         /** @var \SplFileInfo $file */
-        foreach (Finder::findFiles('*.inc')->in($this->drupalRoot . '/core/includes') as $file) {
+        foreach (Finder::create()->files()->name('*.inc')->in($this->drupalRoot . '/core/includes') as $file) {
             require_once $file->getPathname();
         }
     }
 
-    protected function addTestNamespaces(): void
+    protected function addCoreTestNamespaces(): void
     {
         // Add core test namespaces.
         $core_tests_dir = $this->drupalRoot . '/core/tests/Drupal';
@@ -252,6 +249,8 @@ class DrupalAutoloader
             $this->serviceClassProviders[$module_name] = $class;
             $serviceId = "service_provider.$module_name.service_provider";
             $this->serviceMap[$serviceId] = ['class' => $class];
+
+            $this->registerExtensionTestNamespace($module);
         }
     }
     protected function addThemeNamespaces(): void
@@ -259,6 +258,29 @@ class DrupalAutoloader
         foreach ($this->themeData as $theme_name => $theme) {
             $theme_dir = $this->drupalRoot . '/' . $theme->getPath();
             $this->namespaces["Drupal\\$theme_name"] = $theme_dir . '/src';
+            $this->registerExtensionTestNamespace($theme);
+        }
+    }
+
+    protected function registerExtensionTestNamespace(Extension $extension): void
+    {
+        $suite_names = ['Unit', 'Kernel', 'Functional', 'Build', 'FunctionalJavascript'];
+        $dir = $this->drupalRoot . '/' . $extension->getPath();
+        $test_dir = $dir . '/tests/src';
+        if (is_dir($test_dir)) {
+            foreach ($suite_names as $suite_name) {
+                $suite_dir = $test_dir . '/' . $suite_name;
+                if (is_dir($suite_dir)) {
+                    // Register the PSR-4 directory for PHPUnit-based suites.
+                    $this->namespaces['Drupal\\Tests\\' . $extension->getName() . '\\' . $suite_name . '\\'][] = $suite_dir;
+                }
+            }
+            // Extensions can have a \Drupal\Tests\extension\Traits namespace for
+            // cross-suite trait code.
+            $trait_dir = $test_dir . '/Traits';
+            if (is_dir($trait_dir)) {
+                $this->namespaces['Drupal\\Tests\\' . $extension->getName() . '\\Traits\\'][] = $trait_dir;
+            }
         }
     }
 
@@ -289,7 +311,7 @@ class DrupalAutoloader
             require_once $path;
         } catch (ContainerNotInitializedException $e) {
             $path = str_replace(dirname($this->drupalRoot) . '/', '', $path);
-            // This can happen when drupal_get_path or drupal_get_filename are used outside of the scope of a function.
+            // This can happen when drupal_get_path or drupal_get_filename are used outside the scope of a function.
             @trigger_error("$path invoked the Drupal container outside of the scope of a function or class method. It was not loaded.", E_USER_WARNING);
         } catch (\Throwable $e) {
             $path = str_replace(dirname($this->drupalRoot) . '/', '', $path);

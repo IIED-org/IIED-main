@@ -2,13 +2,13 @@
 
 namespace Drupal\views_bulk_operations\Service;
 
+use Drupal\Component\EventDispatcher\Event;
+use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Action\ActionManager;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Symfony\Component\EventDispatcher\Event;
-use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 
 /**
  * Defines Views Bulk Operations action manager.
@@ -119,7 +119,11 @@ class ViewsBulkOperationsActionManager extends ActionManager {
       }
       // If this plugin was provided by a module that does not exist, remove the
       // plugin definition.
-      if (isset($plugin_definition['provider']) && !in_array($plugin_definition['provider'], ['core', 'component']) && !$this->providerExists($plugin_definition['provider'])) {
+      if (
+        isset($plugin_definition['provider']) &&
+        !in_array($plugin_definition['provider'], ['core', 'component']) &&
+        !$this->providerExists($plugin_definition['provider'])
+      ) {
         unset($definitions[$plugin_id]);
       }
     }
@@ -212,7 +216,8 @@ class ViewsBulkOperationsActionManager extends ActionManager {
     $event = new Event();
     $event->alterParameters = $this->alterParameters;
     $event->definitions = &$definitions;
-    $this->eventDispatcher->dispatch(static::ALTER_ACTIONS_EVENT, $event);
+
+    $this->eventDispatcher->dispatch($event, static::ALTER_ACTIONS_EVENT);
 
     // Include the expected behaviour (hook system) to avoid security issues.
     parent::alterDefinitions($definitions);

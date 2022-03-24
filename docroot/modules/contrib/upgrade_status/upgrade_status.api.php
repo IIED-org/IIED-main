@@ -8,7 +8,7 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Extension\Extension;
 
- /**
+/**
  * @addtogroup hooks
  * @{
  */
@@ -21,15 +21,15 @@ use Drupal\Core\Extension\Extension;
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   The submitted state of the upgrade status form.
  */
-function hook_upgrade_status_operations_alter(&$operations, FormStateInterface $form_state) {
+function hook_upgrade_status_operations_alter(array &$operations, FormStateInterface $form_state) {
   // Duplicate each operation with another one that runs rector on the
   // same extension.
   if (!empty($form_state->getValue('run_rector'))) {
     $keys = array_keys($operations);
-    foreach($keys as $key) {
+    foreach ($keys as $key) {
       $operations[] = [
         'update_rector_run_rector_batch',
-        [$operations[$key][1][0]]
+        [$operations[$key][1][0]],
       ];
     }
   }
@@ -47,7 +47,7 @@ function hook_upgrade_status_operations_alter(&$operations, FormStateInterface $
  *   The key for the result group. One of 'rector', 'now', 'uncategorized',
  *   'later' or 'ignore'.
  */
-function hook_upgrade_status_result_alter(&$build, Extension $extension, $group_key) {
+function hook_upgrade_status_result_alter(array &$build, Extension $extension, $group_key) {
   if ($group_key == 'rector') {
     $build['description']['#markup'] = t('Here is your patch...');
   }

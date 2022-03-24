@@ -24,12 +24,12 @@ _access development information_ permission to developers.
 - https://gitlab.com/drupalspoons/devel is our workplace for code, MRs, and CI. See
 [DrupalSpoons](https://gitlab.com/drupalcontrib/webmasters/-/blob/master/README.md)
 for more info.
-- We push back to git.drupalcode.org in order to keep
+- Drupalspoons auto-pushes back to git.drupalcode.org in order to keep
 [Security Team](https://www.drupal.org/security) coverage and packages.drupal.org integration.
 - Chat with us at [#devel](https://drupal.slack.com/archives/C012WAW1MH6) on Drupal Slack.
 
 #### Local Development
-1. Clone devel `git clone https://gitlab.com/drupalforks/devel.git`
+1. Clone devel `git clone https://gitlab.com/drupalforks/devel.git` (note - this is the shared fork, not the "spoon")
 1. `cd devel`
 1. Install the composer plugin from https://gitlab.com/drupalspoons/composer-plugin. Your source tree now looks like:
 ![Folder tree](/icons/folder.png)
@@ -44,12 +44,11 @@ for more info.
 - See [develCommandsTest.php](tests/src/Functional/DevelCommandsTest.php) for an example of Drush command testing. This uses [Drush Test Traits](https://www.drush.org/contribute/#drush-test-traits).
 
 #### Version Compatibility
-| Devel version | Drupal core | PHP | Drush |
-| ------ | ------ | ----- | ----- |
-| 4.x |8.8+ | 7.2+ | 9+
-| 8.x-2.x | 8.x |7.0+ | 8+
-
+| Devel version | Drupal core | PHP  | Drush |
+|---------------|-------------|------|-------|
+| 4.x           | 8.9+, 9, 10 | 7.2+ | 9+    |
+| 8.x-2.x       | 8.x         | 7.0+ | 8+    |
 
 #### Maintainers
 
-See https://gitlab.com/groups/drupaladmins/devel/-/group_members.
+See https://gitlab.com/groups/drupaladmins/devel/-/group_members. Note that the webprofiler module seeks a new co-maintainer.

@@ -68,7 +68,7 @@ class UpgradeStatusUiTest extends UpgradeStatusTestBase {
 
     // Click the first '5 problems' link. Should be the custom project.
     $this->clickLink('5 problems', 1);
-    $this->assertText('Upgrade status test error ' . \Drupal::VERSION);
+    $this->assertText('Upgrade status test error');
     $this->assertText('2 errors found. 3 warnings found.');
     $this->assertText('Syntax error, unexpected T_STRING on line 3');
 
@@ -76,7 +76,7 @@ class UpgradeStatusUiTest extends UpgradeStatusTestBase {
     // as well as an export specific title.
     $this->clickLink('Export as HTML');
     $this->assertText('Upgrade Status report');
-    $this->assertText('Upgrade status test error ' . \Drupal::VERSION);
+    $this->assertText('Upgrade status test error');
     $this->assertText('Custom projects');
     $this->assertNoText('Contributed projects');
     $this->assertText('2 errors found. 3 warnings found.');
@@ -86,7 +86,7 @@ class UpgradeStatusUiTest extends UpgradeStatusTestBase {
     $this->drupalGet(Url::fromRoute('upgrade_status.report'));
     $this->clickLink('5 problems', 1);
     $this->clickLink('Export as text');
-    $this->assertText('Upgrade status test error ' . \Drupal::VERSION);
+    $this->assertText('Upgrade status test error');
     $this->assertText('CUSTOM PROJECTS');
     $this->assertNoText('CONTRIBUTED PROJECTS');
     $this->assertText('2 errors found. 3 warnings found.');
@@ -106,9 +106,9 @@ class UpgradeStatusUiTest extends UpgradeStatusTestBase {
       $this->drupalPostForm('admin/reports/upgrade-status', $edit, $button);
       $this->assertText($assert[0]);
       $this->assertText($assert[1]);
-      $this->assertText('Upgrade status test contrib error ' . \Drupal::VERSION);
-      $this->assertText('Upgrade status test 9 compatible ' . \Drupal::VERSION);
-      $this->assertText('Upgrade status test error ' . \Drupal::VERSION);
+      $this->assertText('Upgrade status test contrib error');
+      $this->assertText('Upgrade status test 9 compatible');
+      $this->assertText('Upgrade status test error');
       $this->assertNoText('Upgrade status test root module');
       $this->assertNoText('Upgrade status test contrib 9 compatbile');
       $this->assertText('2 errors found. 3 warnings found.');
@@ -125,7 +125,7 @@ class UpgradeStatusUiTest extends UpgradeStatusTestBase {
       $authenticated->grantPermission('upgrade status invalid permission test');
       $authenticated->save();
       $this->drupalGet(Url::fromRoute('upgrade_status.report'));
-      $this->assertSession()->pageTextContains('"upgrade status invalid permission test" of user role: "Authenticated user".');
+      $this->assertSession()->pageTextContains('Permissions of user role: "Authenticated user":upgrade status invalid permission test');
     }
   }
 

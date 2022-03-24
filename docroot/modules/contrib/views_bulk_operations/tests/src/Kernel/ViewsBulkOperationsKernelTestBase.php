@@ -61,7 +61,7 @@ abstract class ViewsBulkOperationsKernelTestBase extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'user',
     'node',
     'field',
@@ -79,14 +79,13 @@ abstract class ViewsBulkOperationsKernelTestBase extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     $this->installEntitySchema('user');
     $this->installEntitySchema('node');
     $this->installSchema('node', 'node_access');
     $this->installSchema('system', 'sequences');
-    $this->installSchema('system', 'key_value_expire');
 
     $user = User::create();
     $user->setPassword('password');

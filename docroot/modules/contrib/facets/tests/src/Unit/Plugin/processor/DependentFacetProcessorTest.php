@@ -27,7 +27,7 @@ class DependentFacetProcessorTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     $facet = new Facet([], 'facets_facet');
     $this->results = [
       new Result($facet, 'snow_owl', 'Snow owl', 2),

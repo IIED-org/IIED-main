@@ -19,7 +19,7 @@ class UrlIntegrationTest extends FacetsTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'views',
     'node',
     'search_api',
@@ -32,7 +32,7 @@ class UrlIntegrationTest extends FacetsTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     $this->drupalLogin($this->adminUser);
@@ -72,7 +72,7 @@ class UrlIntegrationTest extends FacetsTestBase {
       'filter_key' => 'y',
       'url_processor' => 'query_string',
     ];
-    $this->drupalPostForm(NULL, $edit, 'Save');
+    $this->submitForm($edit, 'Save');
 
     /** @var \Drupal\facets\FacetInterface $facet */
     $facet = Facet::load($id);
@@ -96,7 +96,7 @@ class UrlIntegrationTest extends FacetsTestBase {
       'filter_key' => 'y',
       'url_processor' => 'dummy_query',
     ];
-    $this->drupalPostForm(NULL, $edit, 'Save');
+    $this->submitForm($edit, 'Save');
 
     /** @var \Drupal\facets\FacetInterface $facet */
     $facet = Facet::load($id);
@@ -216,7 +216,7 @@ class UrlIntegrationTest extends FacetsTestBase {
     $this->createFacet('Owl', 'owl');
     $this->createFacet('Another owl', 'another_owl');
     $this->drupalGet('admin/config/search/facets/another_owl/edit');
-    $this->drupalPostForm(NULL, ['facet_settings[url_alias]' => 'owl'], 'Save');
+    $this->submitForm(['facet_settings[url_alias]' => 'owl'], 'Save');
     $this->assertSession()->pageTextContains('This alias is already in use for another facet defined on the same source.');
   }
 

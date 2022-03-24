@@ -286,7 +286,7 @@ for FILE in $FILES; do
   ############################################################################
   ### JAVASCRIPT FILES
   ############################################################################
-  if [[ -f "$TOP_LEVEL/$FILE" ]] && [[ $FILE =~ \.js$ ]] && [[ ! $FILE =~ ^core/tests/Drupal/Nightwatch ]] && [[ ! $FILE =~ ^core/assets/vendor/jquery.ui/ui ]] && [[ ! $FILE =~ ^core/modules/ckeditor5/js/ckeditor5_plugins ]]; then
+  if [[ -f "$TOP_LEVEL/$FILE" ]] && [[ $FILE =~ \.js$ ]] && [[ ! $FILE =~ ^core/tests/Drupal/Nightwatch ]] && [[ ! $FILE =~ /tests/src/Nightwatch/ ]] && [[ ! $FILE =~ ^core/assets/vendor/jquery.ui/ui ]] && [[ ! $FILE =~ ^core/modules/ckeditor5/js/ckeditor5_plugins ]]; then
     # Work out the root name of the JavaScript so we can ensure that the ES6
     # version has been compiled correctly.
     if [[ $FILE =~ \.es6\.js$ ]]; then
@@ -424,7 +424,7 @@ for FILE in $FILES; do
     # has a corresponding .pcss don't do stylelint.
     if [[ $FILE =~ \.pcss\.css$ ]] || [[ ! -f "$TOP_LEVEL/$BASENAME.pcss.css" ]]; then
       cd "$TOP_LEVEL/core"
-      node_modules/.bin/stylelint "$TOP_LEVEL/$FILE"
+      node_modules/.bin/stylelint --allow-empty-input "$TOP_LEVEL/$FILE"
       if [ "$?" -ne "0" ]; then
         STATUS=1
       else

@@ -50,7 +50,7 @@ class AssetInjectorDisableForm extends EntityConfirmFormBase {
     $entity = $this->entity;
     $entity->disable()->save();
 
-    Drupal::logger('asset_injector')->notice('%type asset %id disabled', [
+    $this->logger('asset_injector')->notice('%type asset %id disabled', [
       '%type' => $entity->get('entityTypeId'),
       '%id' => $entity->id,
     ]);

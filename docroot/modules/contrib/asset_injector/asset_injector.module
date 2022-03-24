@@ -57,7 +57,10 @@ function asset_injector_css_alter(array &$css, AttachedAssetsInterface $assets) 
     if (in_array("asset_injector/$lib_id", $libraries) && !empty($library['css'])) {
       foreach ($library['css'] as $group) {
         foreach (array_keys($group) as $file) {
-          $css[trim($file, '/ ')]['group'] = 999;
+          $key = trim($file, '/ ');
+          if (array_key_exists($key, $css)) {
+            $css[$key]['group'] = 999;
+          }
         }
       }
     }
@@ -95,9 +98,10 @@ function asset_injector_library_info_build() {
 /**
  * Implements hook_page_attachments().
  *
- * Give the render system the IDs of the curently active assets (that may depend
- * on the curent page and other context - think config overrides). These IDs are
- * mapped to the actual assets in @see asset_injector_library_info_build().
+ * Give the render system the IDs of the currently active assets (that may
+ * depend on the current page and other context - think config overrides).
+ * These IDs are mapped to the actual assets
+ * in @see asset_injector_library_info_build().
  * Note that the IDs are namespaced with our module name.
  *
  * Concerning cache contexts: The config override system may introduce
@@ -106,7 +110,7 @@ function asset_injector_library_info_build() {
  * apply to the rendered result.
  *
  * Note that the list_cache_tags (library_info) are not added here and need not,
- * as tha caller already does it. Setting asset entityies' list_cache_tags to
+ * as the caller already does it. Setting asset entities list_cache_tags to
  * library_info makes the library-info invalidate on asset change.
  * While changing and deleting of assets will trigger invalidation by their
  * individual cache tags, the list cache tags guarantees invalidation on new
@@ -199,7 +203,12 @@ function asset_injector_get_entity_types(array $types = []) {
  * Delete all asset files.
  */
 function asset_injector_cache_flush() {
-  AssetFileStorage::deleteAllFiles();
+  try {
+    AssetFileStorage::deleteAllFiles();
+  }
+  catch (\Exception $e) {
+    \Drupal::messenger()->addWarning(t('Unable to regenerate the Asset Injector assets. This is due to a file permission issue, please contact the site administrator.'));
+  }
 }
 
 /**

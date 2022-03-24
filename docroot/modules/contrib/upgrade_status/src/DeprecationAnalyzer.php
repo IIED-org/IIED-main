@@ -8,7 +8,6 @@ use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Core\Extension\Extension;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
-use Drupal\Core\Template\TwigEnvironment;
 use DrupalFinder\DrupalFinder;
 use GuzzleHttp\Client;
 use Psr\Log\LoggerInterface;
@@ -83,11 +82,11 @@ final class DeprecationAnalyzer {
   protected $fileSystem;
 
   /**
-   * The Twig environment.
+   * The Twig deprecation analyzer.
    *
-   * @var \Drupal\Core\Template\TwigEnvironment
+   * @var \Drupal\upgrade_status\TwigDeprecationAnalyzer
    */
-  protected $twigEnvironment;
+  protected $twigDeprecationAnalyzer;
 
   /**
    * The library deprecation analyzer.
@@ -135,8 +134,8 @@ final class DeprecationAnalyzer {
    *   HTTP client.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   File system service.
-   * @param \Drupal\Core\Template\TwigEnvironment $twig_environment
-   *   The Twig environment.
+   * @param \Drupal\upgrade_status\TwigDeprecationAnalyzer $twig_deprecation_analyzer
+   *   The Twig deprecation analyzer.
    * @param \Drupal\upgrade_status\LibraryDeprecationAnalyzer $library_deprecation_analyzer
    *   The library deprecation analyzer.
    * @param \Drupal\upgrade_status\ThemeFunctionDeprecationAnalyzer $theme_function_deprecation_analyzer
@@ -149,7 +148,7 @@ final class DeprecationAnalyzer {
     LoggerInterface $logger,
     Client $http_client,
     FileSystemInterface $file_system,
-    TwigEnvironment $twig_environment,
+    TwigDeprecationAnalyzer $twig_deprecation_analyzer,
     LibraryDeprecationAnalyzer $library_deprecation_analyzer,
     ThemeFunctionDeprecationAnalyzer $theme_function_deprecation_analyzer,
     TimeInterface $time
@@ -158,7 +157,7 @@ final class DeprecationAnalyzer {
     $this->logger = $logger;
     $this->httpClient = $http_client;
     $this->fileSystem = $file_system;
-    $this->twigEnvironment = $twig_environment;
+    $this->twigDeprecationAnalyzer = $twig_deprecation_analyzer;
     $this->libraryDeprecationAnalyzer = $library_deprecation_analyzer;
     $this->themeFunctionDeprecationAnalyzer = $theme_function_deprecation_analyzer;
     $this->time = $time;
@@ -180,6 +179,25 @@ final class DeprecationAnalyzer {
 
     $this->finder = new DrupalFinder();
     $this->finder->locateRoot(DRUPAL_ROOT);
+
+    // If a Drupal project is built with Composer scaffolding, the "name"
+    // property in composer.json MUST NOT be "drupal/drupal". If it is, the
+    // webflo/drupal-finder package will assume we are NOT in a Composer
+    // scaffolded project and assume Drupal core is in the root directory.
+    // @see https://www.drupal.org/project/upgrade_status/issues/3229725
+    if (!is_dir($this->finder->getDrupalRoot() . '/core')) {
+      $composer_json_path = dirname(DRUPAL_ROOT) . '/composer.json';
+      if (!file_exists($composer_json_path)) {
+        throw new \Exception('Could not find the composer.json file for your Drupal site, assumed: ' . $composer_json_path);
+      }
+      $composer_data = \json_decode(file_get_contents($composer_json_path), TRUE);
+      if ($composer_data['name'] === 'drupal/drupal') {
+        throw new \Exception('Change the "name" property in ' . $composer_json_path . ' from "drupal/drupal" to a custom value.');
+      }
+      else {
+        throw new \Exception('Could not detect the location of "drupal/core", please open an issue at https://www.drupal.org/project/issues/upgrade_status.');
+      }
+    }
 
     $this->vendorPath = $this->finder->getVendorDir();
     $this->binPath = $this->findBinPath();
@@ -353,15 +371,11 @@ final class DeprecationAnalyzer {
       'data' => $json,
     ];
 
-    $twig_deprecations = $this->analyzeTwigTemplates($extension->getPath());
+    $twig_deprecations = $this->twigDeprecationAnalyzer->analyze($extension);
     foreach ($twig_deprecations as $twig_deprecation) {
-      preg_match('/\s([a-zA-Z0-9\_\-\/]+.html\.twig)\s/', $twig_deprecation, $file_matches);
-      preg_match('/\s(\d+).?$/', $twig_deprecation, $line_matches);
-      $twig_deprecation = preg_replace('! in (.+)\.twig at line \d+\.!', '.', $twig_deprecation);
-      $twig_deprecation .= ' See https://drupal.org/node/3071078.';
-      $result['data']['files'][$file_matches[1]]['messages'][] = [
-        'message' => $twig_deprecation,
-        'line' => $line_matches[1] ?: 0,
+      $result['data']['files'][$twig_deprecation->getFile()]['messages'][] = [
+        'message' => $twig_deprecation->getMessage(),
+        'line' => $twig_deprecation->getLine(),
       ];
       $result['data']['totals']['errors']++;
       $result['data']['totals']['file_errors']++;
@@ -419,7 +433,7 @@ final class DeprecationAnalyzer {
 
         if (!isset($info['core_version_requirement'])) {
           $result['data']['files'][$error_path]['messages'][] = [
-            'message' => "Add core_version_requirement: ^8 || ^9 to designate that the module is compatible with Drupal 9. See https://drupal.org/node/3070687.",
+            'message' => "Add core_version_requirement: ^8 || ^9 to designate that the extension is compatible with Drupal 9. See https://drupal.org/node/3070687.",
             'line' => 0,
           ];
           $result['data']['totals']['errors']++;

@@ -10,7 +10,7 @@ test_dependencies:
   - facets:facets
   - drupal:views
 
-# Information added by Drupal.org packaging script on 2021-12-10
-version: '2.0.0'
+# Information added by Drupal.org packaging script on 2022-01-20
+version: '2.0.1'
 project: 'facets'
-datestamp: 1639140523
+datestamp: 1642699688

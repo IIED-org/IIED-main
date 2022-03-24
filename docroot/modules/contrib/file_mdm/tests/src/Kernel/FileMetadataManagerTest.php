@@ -8,7 +8,7 @@ use Drupal\file_mdm\FileMetadataInterface;
 /**
  * Tests that File Metadata Manager works properly.
  *
- * @group File Metadata
+ * @group file_mdm
  */
 class FileMetadataManagerTest extends FileMetadataManagerTestBase {
 
@@ -17,7 +17,7 @@ class FileMetadataManagerTest extends FileMetadataManagerTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'file_mdm', 'file_test'];
+  protected static $modules = ['system', 'file_mdm', 'file_test'];
 
   /**
    * Tests using the 'getimagesize' plugin.

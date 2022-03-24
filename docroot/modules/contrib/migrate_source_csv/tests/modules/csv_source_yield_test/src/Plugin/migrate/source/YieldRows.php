@@ -35,7 +35,7 @@ class YieldRows extends CSV {
    * @codingStandardsIgnoreEnd
    */
   public function getYield(Reader $reader) {
-    foreach ($reader as $row_num => $row) {
+    foreach ($reader as $row) {
       $new_row = [];
       $new_row['id'] = $row['id'];
       yield($new_row);

@@ -8,7 +8,6 @@
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
@@ -235,7 +234,7 @@ function facets_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInter
   }
 
   foreach ($facet_sources_definitions as $definition) {
-    /* @var \Drupal\facets\FacetSource\FacetSourcePluginBase $facet_source_plugin */
+    /** @var \Drupal\facets\FacetSource\FacetSourcePluginBase $facet_source_plugin */
     $facetsource_id = $definition['id'];
     $facet_source_plugin = $facet_source_manager->createInstance($facetsource_id);
 
@@ -298,11 +297,11 @@ function facets_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInter
       }
     }
 
-    // TODO find a better way to construct the url for a crumb maybe url
+    // @todo find a better way to construct the url for a crumb maybe url
     // processor will have a function to get params for a result
     // without all the other request parameters; with this we could implement:
     // @see https://www.drupal.org/node/2861586
-    // TODO handle not grouped facets.
+    // @todo handle not grouped facets.
     /** @var \Drupal\facets\Result\ResultInterface[] $facet_results */
     foreach ($active_results as $facet_id => $facet_results) {
       $facet_used_result[$facet_id] = [];
@@ -339,7 +338,6 @@ function facets_language_switch_links_alter(array &$links, $type, Url $url) {
   $alterer = \Drupal::service('facets.language_switcher_links_alterer');
   $alterer->alter($links, $type, $url);
 }
-
 
 /**
  * Implements hook_form_FORM_ID_alter().

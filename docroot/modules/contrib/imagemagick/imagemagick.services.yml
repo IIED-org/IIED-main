@@ -6,7 +6,7 @@ services:
     arguments: ['@cache.default', '@config.factory', '@config.typed', '@?sophron.mime_map.manager']
   imagemagick.exec_manager:
     class: Drupal\imagemagick\ImagemagickExecManager
-    arguments: ['@logger.channel.image', '@config.factory', '@app.root', '@current_user', '@imagemagick.format_mapper', '@messenger']
+    arguments: ['@logger.channel.image', '@config.factory', '%app.root%', '@current_user', '@imagemagick.format_mapper', '@messenger']
   imagemagick.event_subscriber:
     class: Drupal\imagemagick\EventSubscriber\ImagemagickEventSubscriber
     arguments: ['@logger.channel.image', '@config.factory', '@file_system', '@stream_wrapper_manager', '@file_metadata_manager']

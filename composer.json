@@ -50,6 +50,7 @@
         "drupal/bootstrap_layouts": "^5.2",
         "drupal/chosen": "^3.0",
         "drupal/ckwordcount": "^1.0",
+        "drupal/components": "^2.4",
         "drupal/computed_field": "^3.0",
         "drupal/config_split": "^1.7",
         "drupal/core-composer-scaffold": "^9",
@@ -57,6 +58,7 @@
         "drupal/core-recommended": "^9",
         "drupal/core-vendor-hardening": "^8.8",
         "drupal/ctools": "^3.4",
+        "drupal/datalayer": "^1.0@beta",
         "drupal/dropdown_language": "^2.6",
         "drupal/ds": "^3.9",
         "drupal/eu_cookie_compliance": "^1.14",
@@ -127,7 +129,16 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/installers": true,
+            "cweagans/composer-patches": true,
+            "drupal/core-composer-scaffold": true,
+            "drupal/core-project-message": true,
+            "drupal/core-vendor-hardening": true,
+            "oomphinc/composer-installers-extender": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     },
     "extra": {
         "drupal-scaffold": {

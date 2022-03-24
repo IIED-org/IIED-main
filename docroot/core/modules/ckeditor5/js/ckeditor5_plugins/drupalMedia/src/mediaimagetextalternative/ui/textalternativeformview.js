@@ -11,6 +11,7 @@ import {
   createLabeledInputText,
   injectCssTransitionDisabler,
   submitHandler,
+  Template,
 } from 'ckeditor5/src/ui';
 import { FocusTracker, KeystrokeHandler } from 'ckeditor5/src/utils';
 import { icons } from 'ckeditor5/src/core';
@@ -23,8 +24,6 @@ export default class TextAlternativeFormView extends View {
    */
   constructor(locale) {
     super(locale);
-
-    const t = this.locale.t;
 
     /**
      * Tracks information about the DOM focus in the form.
@@ -42,10 +41,26 @@ export default class TextAlternativeFormView extends View {
     this.labeledInput = this._createLabeledInputView();
 
     /**
+     * The default alt text.
+     *
+     * @observable
+     *
+     * @member {string} #defaultAltText
+     */
+    this.set('defaultAltText', undefined);
+
+    /**
+     * The default alt text view.
+     *
+     * @type {module:ui/template~Template}
+     */
+    this.defaultAltTextView = this._createDefaultAltTextView();
+
+    /**
      * A button used to submit the form.
      */
     this.saveButtonView = this._createButton(
-      t('Save'),
+      Drupal.t('Save'),
       icons.check,
       'ck-button-save',
     );
@@ -55,7 +70,7 @@ export default class TextAlternativeFormView extends View {
      * A button used to cancel the form.
      */
     this.cancelButtonView = this._createButton(
-      t('Cancel'),
+      Drupal.t('Cancel'),
       icons.cancel,
       'ck-button-cancel',
       'cancel',
@@ -86,11 +101,16 @@ export default class TextAlternativeFormView extends View {
       tag: 'form',
 
       attributes: {
-        class: ['ck', 'ck-text-alternative-form', 'ck-responsive-form'],
+        class: ['ck', 'ck-media-alternative-text-form', 'ck-vertical-form'],
         tabindex: '-1',
       },
 
-      children: [this.labeledInput, this.saveButtonView, this.cancelButtonView],
+      children: [
+        this.defaultAltTextView,
+        this.labeledInput,
+        this.saveButtonView,
+        this.cancelButtonView,
+      ],
     });
 
     injectCssTransitionDisabler(this);
@@ -160,14 +180,54 @@ export default class TextAlternativeFormView extends View {
    *   Labeled field view instance.
    */
   _createLabeledInputView() {
-    const t = this.locale.t;
     const labeledInput = new LabeledFieldView(
       this.locale,
       createLabeledInputText,
     );
 
-    labeledInput.label = t('Override text alternative');
+    labeledInput.label = Drupal.t('Alternative text override');
 
     return labeledInput;
+  }
+
+  /**
+   * Creates a default alt text view.
+   *
+   * @return {module:ui/template~Template}
+   *   A template for default alt text view.
+   * @private
+   */
+  _createDefaultAltTextView() {
+    const bind = Template.bind(this, this);
+    return new Template({
+      tag: 'div',
+      attributes: {
+        class: [
+          'ck-media-alternative-text-form__default-alt-text',
+          bind.if('defaultAltText', 'ck-hidden', (value) => !value),
+        ],
+      },
+      children: [
+        {
+          tag: 'strong',
+          attributes: {
+            class: 'ck-media-alternative-text-form__default-alt-text-label',
+          },
+          children: [Drupal.t('Default alternative text:')],
+        },
+        ' ',
+        {
+          tag: 'span',
+          attributes: {
+            class: 'ck-media-alternative-text-form__default-alt-text-value',
+          },
+          children: [
+            {
+              text: [bind.to('defaultAltText')],
+            },
+          ],
+        },
+      ],
+    });
   }
 }

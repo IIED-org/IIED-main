@@ -3,7 +3,8 @@
 namespace Drupal\facets\Plugin\facets\processor;
 
 use Drupal\Core\TypedData\ComplexDataDefinitionInterface;
-use Drupal\Core\TypedData\DataReferenceDefinitionInterface;use Drupal\facets\FacetInterface;
+use Drupal\Core\TypedData\DataReferenceDefinitionInterface;
+use Drupal\facets\FacetInterface;
 use Drupal\facets\Processor\BuildProcessorInterface;
 use Drupal\facets\Processor\ProcessorPluginBase;
 use Drupal\user\Entity\User;

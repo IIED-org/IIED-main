@@ -11,7 +11,7 @@ class ViewsBulkOperationsActionProcessorTest extends ViewsBulkOperationsKernelTe
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     $this->createTestNodes([

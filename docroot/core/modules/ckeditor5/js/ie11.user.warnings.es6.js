@@ -14,6 +14,11 @@
   // created. Features such as Quick Edit that require the presence of a
   // Drupal.editors.ckeditor5, even for fields that do not use CKEditor 5.
   if (isIE11) {
+    // Explicitly set the global CKEditor5 object to null. This ensures code
+    // expecting the existence of the object does not fail, but is easily
+    // distinguishable from a valid CKEditor5 object.
+    window.CKEditor5 = null;
+
     // This will reference a MutationObserver used by several functions in
     // Drupal.editors.ckeditor5. It is declared here and not the editor object
     // in order to work with IE11 object scope.
@@ -37,7 +42,11 @@
         const editorMessages = new Drupal.Message(editorMessageContainer);
         editorMessages.add(
           Drupal.t(
-            'Internet Explorer 11 user: a rich text editor is available for this field when used with any other supported browser.',
+            'A rich text editor is available for this field when used with <a href="@supported-browsers">supported browsers</a> other than Internet Explorer.',
+            {
+              '@supported-browsers':
+                'https://www.drupal.org/docs/system-requirements/browser-requirements',
+            },
           ),
           {
             type: 'warning',

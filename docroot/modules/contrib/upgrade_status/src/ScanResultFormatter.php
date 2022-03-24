@@ -221,7 +221,7 @@ class ScanResultFormatter {
         $formatted_error = str_replace('\\', '\\<wbr>', $formatted_error);
 
         // Make drupal.org documentation links clickable.
-        $formatted_error = preg_replace('!See (https://drupal.org(.\S+)).$!', 'See <a href="\1">\1<a>.', $formatted_error);
+        $formatted_error = preg_replace('!See (https://drupal.org(.\S+))(\.|$)!', 'See <a href="\1">\1<a>.', $formatted_error);
 
         // Format core_version_requirement message.
         $formatted_error = preg_replace('!(core_version_requirement: .+) (to designate|is not)!', '<code>\1</code> \2', $formatted_error);

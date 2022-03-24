@@ -191,7 +191,7 @@ EOT;
     $this->assertStringNotContainsString('4', $this->getErrorOutput());
     $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load(2);
     $this->assertEquals('Banana', $term->label());
-    $this->assertEquals(3, \Drupal::entityTypeManager()->getStorage('taxonomy_term')->getQuery()->count()->execute());
+    $this->assertEquals(3, \Drupal::entityTypeManager()->getStorage('taxonomy_term')->getQuery()->accessCheck(TRUE)->count()->execute());
     $source = $this->container->get('config.factory')->getEditable('migrate_plus.migration.fruit_terms')->get('source');
     unset($source['data_rows'][1]);
     $source['data_rows'][] = ['name' => 'Grape'];
@@ -203,7 +203,7 @@ EOT;
     $this->assertStringContainsString('4/4', $this->getErrorOutput());
     $this->assertStringContainsString('[notice] Processed 3 items (1 created, 2 updated, 0 failed, 0 ignored) - done with \'fruit_terms\'', $this->getErrorOutput());
     $this->assertStringNotContainsString('5', $this->getErrorOutput());
-    $this->assertEquals(3, \Drupal::entityTypeManager()->getStorage('taxonomy_term')->getQuery()->count()->execute());
+    $this->assertEquals(3, \Drupal::entityTypeManager()->getStorage('taxonomy_term')->getQuery()->accessCheck(TRUE)->count()->execute());
     $this->assertEmpty(\Drupal::entityTypeManager()->getStorage('taxonomy_term')->load(2));
 
     /** @var \Drupal\migrate\Plugin\MigrateIdMapInterface $id_map */

@@ -9,15 +9,22 @@
       "email": "arshad@chummun.com",
       "homepage": "https://arshad.io",
       "role": "Maintainer"
+    },
+    {
+      "name": "Ng Chin Kiong",
+      "email": "ck@o8.agency",
+      "homepage": "https://www.o8.agency",
+      "role": "Maintainer"
     }
   ],
   "support": {
     "issues": "https://www.drupal.org/project/issues/radix"
   },
-  "license": "GPL-2.0+",
+  "license": "GPL-2.0-or-later",
   "minimum-stability": "dev",
-  "require": {
-    "drupal/components": "~2.0@beta"
+  "require-dev": {
+    "consolidation/robo": "^1.1.4 || ^2",
+    "drush/drush": "^10.6"
   },
   "autoload": {
     "psr-4": {

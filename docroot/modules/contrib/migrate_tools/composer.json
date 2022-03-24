@@ -24,7 +24,7 @@
     "prefer-stable": true,
     "require": {
         "php": ">=7.1",
-        "drupal/core": "^8.8 | ^9",
+        "drupal/core": "^9.1",
         "drupal/migrate_plus": "^5"
     },
     "require-dev": {

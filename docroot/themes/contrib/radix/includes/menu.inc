@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Theme and preprocess functions for menus.
@@ -12,7 +13,7 @@ function radix_preprocess_menu(&$variables, $hook) {
   if ($hook == 'menu__toolbar') {
     return;
   }
-  
+
   // Get the current path.
   $current_path = \Drupal::request()->getRequestUri();
 
@@ -21,7 +22,7 @@ function radix_preprocess_menu(&$variables, $hook) {
     // If path is current_path, set active to li.
     if ($item['url']->toString() == $current_path) {
       // Add active link.
-      $variables['items'][$key]['attributes']['class'] = 'active';
+      $variables['items'][$key]['in_active_trail'] = TRUE;
     }
   }
 }

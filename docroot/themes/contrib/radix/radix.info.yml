@@ -26,12 +26,11 @@ regions:
   page_bottom: Page bottom
   footer: Footer
 
-component-libraries:
-  radix:
-    paths:
-      - ./src/components
+components:
+  namespaces:
+    radix: src/components
 
-# Information added by Drupal.org packaging script on 2020-09-30
-version: '8.x-4.10'
+# Information added by Drupal.org packaging script on 2022-01-29
+version: '8.x-4.11'
 project: 'radix'
-datestamp: 1601449011
+datestamp: 1643470141

@@ -2,6 +2,8 @@
 
 namespace Drupal\search_api_autocomplete;
 
+@trigger_error('\Drupal\search_api_autocomplete\AutocompleteBackendInterface is deprecated in search_api_autocomplete:8.x-1.6 and is removed from search_api_autocomplete:2.0.0. Use \Drupal\search_api\Contrib\AutocompleteBackendInterface instead. See https://www.drupal.org/node/3256202.', E_USER_DEPRECATED);
+
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Backend\BackendInterface;
 
@@ -13,6 +15,12 @@ use Drupal\search_api\Backend\BackendInterface;
  *
  * Please note that this interface is purely documentational. You shouldn't, and
  * can't, implement it explicitly (unless your module is depending on this one).
+ *
+ * @deprecated in search_api_autocomplete:8.x-1.6 and is removed from
+ *   search_api_autocomplete:2.0.0. Use
+ *   \Drupal\search_api\Contrib\AutocompleteBackendInterface instead.
+ *
+ * @see https://www.drupal.org/node/3256202
  */
 interface AutocompleteBackendInterface extends BackendInterface {
 

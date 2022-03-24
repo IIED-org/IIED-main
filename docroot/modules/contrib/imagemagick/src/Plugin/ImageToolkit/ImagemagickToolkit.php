@@ -522,7 +522,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
       ->setWidth($width)
       ->setHeight($height)
       ->setExifOrientation(NULL)
-      ->setColorspace($this->getExecManager()->getPackage() === 'imagemagick' ? 'sRGB' : NULL)
+      ->setColorspace($this->getExecManager()->getPackage() === 'imagemagick' ? 'sRGB' : '')
       ->setProfiles([])
       ->setFrames(1);
     $this->arguments()
@@ -560,7 +560,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
     // available, but the temp file path is not resolved, or even the temp file
     // could be missing if it was copied locally from a remote file system.
     if (!$this->arguments()->getSourceLocalPath() && $this->getSource()) {
-      $this->eventDispatcher->dispatch(ImagemagickExecutionEvent::ENSURE_SOURCE_LOCAL_PATH, new ImagemagickExecutionEvent($this->arguments));
+      $this->eventDispatcher->dispatch(new ImagemagickExecutionEvent($this->arguments), ImagemagickExecutionEvent::ENSURE_SOURCE_LOCAL_PATH);
     }
     return $this->arguments()->getSourceLocalPath();
   }
@@ -607,7 +607,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
    * @return $this
    */
   public function setColorspace($colorspace): ImagemagickToolkit {
-    $this->colorspace = mb_strtoupper($colorspace);
+    $this->colorspace = mb_strtoupper($colorspace ?? '');
     return $this;
   }
 
@@ -721,7 +721,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
     $this->arguments()->setDestination($destination);
     if ($ret = $this->convert()) {
       // Allow modules to alter the destination file.
-      $this->eventDispatcher->dispatch(ImagemagickExecutionEvent::POST_SAVE, new ImagemagickExecutionEvent($this->arguments));
+      $this->eventDispatcher->dispatch(new ImagemagickExecutionEvent($this->arguments), ImagemagickExecutionEvent::POST_SAVE);
       // Reset local path to allow saving to other file.
       $this->arguments()->setDestinationLocalPath('');
     }
@@ -763,8 +763,8 @@ class ImagemagickToolkit extends ImageToolkitBase {
       // Only Imagemagick allows to get colorspace and profiles information
       // via 'identify'.
       if ($this->getExecManager()->getPackage() === 'imagemagick') {
-        $this->setColorspace($file_md->getMetadata(static::FILE_METADATA_PLUGIN_ID, 'colorspace'));
-        $this->setProfiles($file_md->getMetadata(static::FILE_METADATA_PLUGIN_ID, 'profiles'));
+        $this->setColorspace($file_md->getMetadata(static::FILE_METADATA_PLUGIN_ID, 'colorspace') ?? '');
+        $this->setProfiles($file_md->getMetadata(static::FILE_METADATA_PLUGIN_ID, 'profiles') ?? []);
       }
       return TRUE;
     }
@@ -786,7 +786,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
 
     // Allow modules to alter the command line parameters.
     $command = 'convert';
-    $this->eventDispatcher->dispatch(ImagemagickExecutionEvent::PRE_CONVERT_EXECUTE, new ImagemagickExecutionEvent($this->arguments));
+    $this->eventDispatcher->dispatch(new ImagemagickExecutionEvent($this->arguments), ImagemagickExecutionEvent::PRE_CONVERT_EXECUTE);
 
     // Delete any cached file metadata for the destination image file, before
     // creating a new one, and release the URI from the manager so that

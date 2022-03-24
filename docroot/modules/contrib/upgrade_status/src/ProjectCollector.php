@@ -55,6 +55,13 @@ class ProjectCollector {
   protected $configFactory;
 
   /**
+   * The current installation profile.
+   *
+   * @var string
+   */
+  private $installProfile;
+
+  /**
    * Update not checked for a project.
    */
   const UPDATE_NOT_CHECKED = 0;
@@ -147,19 +154,23 @@ class ProjectCollector {
    *   The expirable key/value storage.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration factory.
+   * @param string $install_profile
+   *   The current installation profile.
    */
   public function __construct(
     ModuleExtensionList $module_extension_list,
     ThemeExtensionList $theme_extension_list,
     ProfileExtensionList $profile_extension_list,
     KeyValueExpirableFactory $key_value_expirable,
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    $install_profile
   ) {
     $this->moduleExtensionList = $module_extension_list;
     $this->themeExtensionList = $theme_extension_list;
     $this->profileExtensionList = $profile_extension_list;
     $this->availableUpdates = $key_value_expirable->get('update_available_releases');
     $this->configFactory = $config_factory;
+    $this->installProfile = $install_profile;
   }
 
   /**
@@ -307,8 +318,9 @@ class ProjectCollector {
         // If the project was contrib and already Drupal 9 compatible, relax.
         $extension->info['upgrade_status_next'] = self::NEXT_RELAX;
       }
-      elseif (empty($extension->status)) {
-        // Uninstalled modules should be removed.
+      elseif (empty($extension->status) && ($name != $this->installProfile)) {
+        // Uninstalled extensions should be removed. Except if this is the
+        // profile. See https://www.drupal.org/project/drupal/issues/1170362
         $extension->info['upgrade_status_next'] = self::NEXT_REMOVE;
       }
       elseif (isset($extension->info['upgrade_status_update']) && $extension->info['upgrade_status_update'] == self::UPDATE_AVAILABLE) {
@@ -351,8 +363,14 @@ class ProjectCollector {
 
     /** @var \Drupal\Core\Extension\Extension $extension */
     foreach ($extensions as $key => $extension) {
-      if ($extension->origin === 'core' && !empty($extension->info['lifecycle']) && in_array($extension->info['lifecycle'], ['deprecated', 'obsolete'])) {
-        $deprecated_or_obsolete[$key] = $extension->info['name'];
+      if (!empty($extension->status) && $extension->origin === 'core' && !empty($extension->info['lifecycle']) && in_array($extension->info['lifecycle'], ['deprecated', 'obsolete'])) {
+        $prefix = '';
+        $suffix = '';
+        if (isset($extension->info['lifecycle_link'])) {
+          $prefix = '<a href="' . $extension->info['lifecycle_link'] . '">';
+          $suffix = ' (' . $this->t('read more') . ')</a>';
+        }
+        $deprecated_or_obsolete[$key] = $prefix . $extension->info['name'] . $suffix;
       }
     }
     return $deprecated_or_obsolete;
@@ -441,22 +459,27 @@ class ProjectCollector {
   }
 
   /**
-   * Get the Drupal 9 plan for a project, either explicitly fetched or cached.
+   * Get the Drupal 10 plan for a project, either explicitly fetched or cached.
    *
    * @param string $project_machine_name
    *   Machine name for project.
    *
    * @return NULL|string
-   *   Either NULL or the Drupal 9 plan for the project.
+   *   Either NULL or the Drupal 10 plan for the project.
    */
   public function getPlan(string $project_machine_name) {
-    // Return explicitly fetched Drupal 9 plan if available.
+    // Drupal 9 plans are discontinued, return NULL on Drupal 8.
+    if ($this->getDrupalCoreMajorVersion() < 9) {
+      return NULL;
+    }
+
+    // Return explicitly fetched Drupal 10 plan if available.
     $result = $this->getResults($project_machine_name);
     if (!empty($result) && !empty($result['plans'])) {
       return $result['plans'];
     }
 
-    // Read our shipped snapshot of Drupal 9 plans to find this one.
+    // Read our shipped snapshot of Drupal 10 plans to find this one.
     $file = fopen(drupal_get_path('module', 'upgrade_status') . '/project_plans.csv', 'r');
     while ($line = fgetcsv($file, 0, ";")) {
       if ($line[0] == $project_machine_name) {
@@ -565,7 +588,7 @@ class ProjectCollector {
       case 8:
         return '8.9';
       case 9:
-        return '9.1';
+        return '9.2';
     }
     return '';
   }

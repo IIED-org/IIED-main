@@ -16,7 +16,7 @@ use Solarium\QueryType\Update\Query\Query as UpdateQuery;
 /**
  * Update query add command.
  *
- * @see https://lucene.apache.org/solr/guide/uploading-data-with-index-handlers.html#adding-documents
+ * @see https://solr.apache.org/guide/uploading-data-with-index-handlers.html#adding-documents
  */
 class Add extends AbstractCommand
 {
@@ -82,6 +82,22 @@ class Add extends AbstractCommand
     }
 
     /**
+     * Set documents.
+     *
+     * This overwrite any previously added documents.
+     *
+     * @param DocumentInterface[] $documents
+     *
+     * @return self Provides fluent interface
+     */
+    public function setDocuments(array $documents): self
+    {
+        $this->documents = $documents;
+
+        return $this;
+    }
+
+    /**
      * Get all documents.
      *
      * @return DocumentInterface[]
@@ -89,6 +105,18 @@ class Add extends AbstractCommand
     public function getDocuments(): array
     {
         return $this->documents;
+    }
+
+    /**
+     * Clear all documents.
+     *
+     * @return self Provides fluent interface
+     */
+    public function clear(): self
+    {
+        $this->documents = [];
+
+        return $this;
     }
 
     /**

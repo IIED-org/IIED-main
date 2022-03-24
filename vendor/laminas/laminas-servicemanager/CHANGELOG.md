@@ -2,6 +2,69 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 3.10.0 - 2021-09-18
+
+
+-----
+
+### Release Notes for [3.10.0](https://github.com/laminas/laminas-servicemanager/milestone/19)
+
+Feature release (minor)
+
+### 3.10.0
+
+- Total issues resolved: **0**
+- Total pull requests resolved: **2**
+- Total contributors: **1**
+
+#### Enhancement
+
+ - [106: &#91;Php 7.4&#93; Apply php 7.4 typed property on private property only](https://github.com/laminas/laminas-servicemanager/pull/106) thanks to @samsonasik
+ - [105: &#91;Php 7.4&#93; Apply Php 7.4 Syntax](https://github.com/laminas/laminas-servicemanager/pull/105) thanks to @samsonasik
+
+## 3.9.0 - 2021-09-18
+
+
+-----
+
+### Release Notes for [3.9.0](https://github.com/laminas/laminas-servicemanager/milestone/17)
+
+Feature release (minor)
+
+### 3.9.0
+
+- Total issues resolved: **0**
+- Total pull requests resolved: **1**
+- Total contributors: **1**
+
+#### Enhancement
+
+ - [98: Refined ServiceManager factory, delegator and configuration types, to allow for easier introspection of mis-configuration at type level](https://github.com/laminas/laminas-servicemanager/pull/98) thanks to @boesing
+
+## 3.8.0 - 2021-09-14
+
+
+-----
+
+### Release Notes for [3.8.0](https://github.com/laminas/laminas-servicemanager/milestone/15)
+
+Feature release (minor)
+
+### 3.8.0
+
+- Total issues resolved: **0**
+- Total pull requests resolved: **3**
+- Total contributors: **3**
+
+#### Enhancement
+
+ - [103: Provide PHP 8.1 support](https://github.com/laminas/laminas-servicemanager/pull/103) thanks to @weierophinney
+ - [100: Remove check for `php:&lt;7`, since support was dropped](https://github.com/laminas/laminas-servicemanager/pull/100) thanks to @internalsystemerror
+
+#### Documentation,Enhancement
+
+ - [99: Explicitly declare that factories support `array&lt;mixed&gt;` for construct-time options, instead of just declaring `array`](https://github.com/laminas/laminas-servicemanager/pull/99) thanks to @fezfez
+
 ## 3.6.5 - TBD
 
 ### Added
