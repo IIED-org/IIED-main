@@ -70,101 +70,104 @@
  *   in different view modes.
  */
 #}
-<article{{ attributes.addClass('node') }}>
-  <div class="my-6">
-    <main>
-    {#-- grid --#}
-    <div
-      class="container mx-auto lg:px-8 xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12"
-    >
-      <div
-        class="order-1 xl:col-span-7 2xl:col-span-6 xl:col-start-4 md:order-2"
-      >
-        <nav aria-label="themes">
-          <div class="flex flex-wrap mb-6 space-x-3">
-            {{ content.field_theme_s_}}
-          </div>
-        </nav>
-        <h1 class="mb-6 text-4xl">{{ node.label }}</h1>
+    <article{{ attributes.addClass('node') }}>
+      <div class="my-6">
+        <main>
+          {#-- grid --#}
+          <div
+            class="container mx-auto lg:px-8 xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12"
+          >
+            <div
+              class="xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4"
+            >
+              <nav aria-label="themes">
+                <div class="flex flex-wrap mb-6 space-x-3">
+                  {{ content.field_theme_s_}}
+                </div>
+              </nav>
+              <h1 class="mb-6 text-4xl border-b-2 border-iiedorange-500">{{ node.label }}</h1>
 
-        {#-- standfirst --#}
-        <div
-          class="pb-6 mb-6 prose-lg border-b-2 lg:prose-xl border-iiedorange-500"
-        >
-          {{ content.field_standfirst }}
-        </div>
+              {#-- event details --#} 
+              <div
+                class="mb-6 prose border-b-2 border-iiedorange-500"
+              >
+              {{ content.field_event_type }} 
+              {{ content.field_date }} 
+              {{ content.field_display_time }} 
+              {{ content.field_where_and_how }} 
+              {{ content.field_registration_link }} 
+              
+              </div>
+              {#-- standfirst --#}
+              <div
+                class="mb-6 prose-lg lg:prose-xl"
+              >
+                {{ content.field_standfirst }}
+              </div>
 
-        {# attribution #} 
-        {#-- avatar group @todo add avatar and loop to add 'and' for second author--#}
+              {# attribution #} {#-- collection --#}
+              <div
+                class="pt-2 mb-6 xl:col-span-3 2xl:order-1 xl:pr-6 2xl:pr-12"
+              >
+                {{ content.field_collections }} 
+                {{ content.field_direct_link }}
+                
+              </div>
 
-        <div class="flex border-b border-gray-300">
-          <div class="flex mr-4 -space-x-3 shrink-0">
-              {{ node.field_author_s_[0].entity|view('avatar') }} {# images #}
-              {{ node.field_author_s_[1].entity|view('avatar') }}
-          </div>
-            <div class="flex mb-6">
-            {# {{ breakpoint(node.field_author_s_[0].entity.name ) }} #}
-            Blog by&nbsp;{{ node.field_author_s_[0].entity|view('name') }} 
-            {% if node.field_author_s_[1] %}
-             &nbsp;and&nbsp; {{ node.field_author_s_[1].entity|view('name') }} 
-            {% endif %}
+              {#-- date and share --#}
+              <div
+                class="flex flex-col flex-wrap justify-between pb-6 border-b border-gray-300 xl:border-none sm:flex-row"
+              >
+                {{ content.field_dates }}
+                <div class="flex items-center">
+                  {% include '@iied_tw/partials/_share_links.html.twig' %}
+                </div>
+              </div>
+              {# / attribution #}
             </div>
-            
-          {# @TODO: uncommment after migration fix
-            {{ content.field_blogger_info }} 
-          #}
-        </div>
-        {#-- date and share --#}
-        <div
-          class="flex flex-col flex-wrap justify-between py-6 border-b border-gray-300 xl:border-none sm:flex-row"
-        >
-    
-          {{ node.getCreatedTime|date('d F Y') }}
-          <div class="flex items-center">
-            {% include '@iied_tw/partials/_share_links.html.twig' %}
-          </div>
-        </div>
-      </div>
-      {# / attribution #} {#-- collection --#}
-      <div class="pt-2 mb-6 xl:col-span-3 2xl:order-1 xl:pr-6 2xl:pr-12">
-        {{ content.field_collections }}
-      </div>
-    </div>
 
-    {# main content #}
-    <div
-      class="container mx-auto lg:px-8 xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12">
-      <div
-        class="order-1 xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4 md:order-2">
-        {#-- image --#}
-        <figure class="mb-6 -mx-6 sm:mx-0">
-          {{ content.field_main_image[0] }}
-          <figcaption
-            class="px-6 mt-1 text-base leading-tight text-gray-500 sm:p-0">
-            {{ content.field_image_caption }}
-          </figcaption>
-        </figure>
-        {#-- body --#}
-        <div class="pb-12 prose border-b border-gray-300 md:prose-lg">
-          <div {{ content_attributes.addClass('node-content') }}> 
-          {{ content.body }} 
-          {{ content.field_paragraphs }}
+            {# Event hero #}
+            <div
+              class="lg:col-span-12 xl:col-span-9 2xl:col-span-8 xl:col-start-3 2xl:col-start-3"
+            >
+              {#-- image if field_display_image --#} 
+              {% if content.field_main_image %}
+              <figure class="mb-6 -mx-6 sm:mx-0">
+                {{ content.field_main_image[0] }}
+                <figcaption
+                  class="px-6 mt-1 text-base leading-tight text-gray-500 sm:p-0"
+                >
+                  {{ content.field_image_caption }}
+                </figcaption>
+              </figure>
+              {% endif %}
+            </div>
+
+            {# main content #}
+            <div
+              class="xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4"
+            >
+              {#-- body --#}
+              <div class="pb-6 prose border-b border-gray-300 md:prose-lg">
+                <div {{ content_attributes.addClass('node-content') }}> 
+                {{ content.body }} 
+                {{ content.field_paragraphs }}
+                </div>
+                {{ content.field_contact }}
+              </div>
+              {#-- tags --#} {{ content.field_tags }}
+
+              <div class="flex items-center py-4">
+                {% include '@iied_tw/partials/_share_links.html.twig' %} {%
+                include '@iied_tw/partials/_copy_print_links.html.twig' %}
+              </div>
+            </div>
+
+           {#-- end grid --#}
           </div>
-        {#-- about the author --#} 
-        {{ content.field_about_the_author }}  
-          <div class="flex flex-col">
-              {{ node.field_author_s_[0].entity|view('avatar') }} 
-              {{ node.field_author_s_[1].entity|view('avatar') }}
-          </div>
-        </div>
-        {#-- tags --#}
-         {{ content.field_tags }} 
-          {% include '@iied_tw/partials/_share_blog_links.html.twig' %}
-          
+        </main>
       </div>
-    </div>
-        
-        
-    </main>
-  </div>
-</article>
+    </article>
+
+
+
