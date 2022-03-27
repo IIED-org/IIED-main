@@ -1,0 +1,21 @@
+uuid: be116cb8-92f4-4b4a-8a98-2b8534768994
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_author_biog
+    - paragraphs.paragraphs_type.about_the_author
+  module:
+    - text
+id: paragraph.about_the_author.field_author_biog
+field_name: field_author_biog
+entity_type: paragraph
+bundle: about_the_author
+label: 'Author biog'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

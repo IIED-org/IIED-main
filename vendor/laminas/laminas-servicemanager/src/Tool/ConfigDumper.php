@@ -38,8 +38,7 @@ class ConfigDumper
 return %s;
 EOC;
 
-    /** @var ContainerInterface */
-    private $container;
+    private ?ContainerInterface $container;
 
     public function __construct(?ContainerInterface $container = null)
     {
@@ -72,9 +71,7 @@ EOC;
         $constructorArguments = $reflectionClass->getConstructor()->getParameters();
         $constructorArguments = array_filter(
             $constructorArguments,
-            function (ReflectionParameter $argument) {
-                return ! $argument->isOptional();
-            }
+            static fn(ReflectionParameter $argument): bool => ! $argument->isOptional()
         );
 
         // has no required parameters, treat it as an invokable

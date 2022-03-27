@@ -14,7 +14,7 @@ use Solarium\QueryType\Update\Query\Query as UpdateQuery;
 /**
  * Update query delete command.
  *
- * @see https://lucene.apache.org/solr/guide/uploading-data-with-index-handlers.html#delete-operations
+ * @see https://solr.apache.org/guide/uploading-data-with-index-handlers.html#delete-operations
  */
 class Delete extends AbstractCommand
 {
@@ -71,6 +71,16 @@ class Delete extends AbstractCommand
     }
 
     /**
+     * Get all ids of this delete command.
+     *
+     * @return array
+     */
+    public function getIds(): array
+    {
+        return $this->ids;
+    }
+
+    /**
      * Add a single query to the delete command.
      *
      * @param string $query
@@ -109,13 +119,16 @@ class Delete extends AbstractCommand
     }
 
     /**
-     * Get all qids of this delete command.
+     * Clear all ids and queries.
      *
-     * @return array
+     * @return self Provides fluent interface
      */
-    public function getIds(): array
+    public function clear(): self
     {
-        return $this->ids;
+        $this->ids = [];
+        $this->queries = [];
+
+        return $this;
     }
 
     /**

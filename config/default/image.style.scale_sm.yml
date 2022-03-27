@@ -1,0 +1,15 @@
+uuid: df1d6e45-1830-4e20-a655-d9a5158afafb
+langcode: en
+status: true
+dependencies: {  }
+name: scale_sm
+label: scale-sm
+effects:
+  213f0d27-0886-485a-beb8-9c666e3edc3f:
+    uuid: 213f0d27-0886-485a-beb8-9c666e3edc3f
+    id: image_scale
+    weight: 1
+    data:
+      width: 640
+      height: null
+      upscale: false

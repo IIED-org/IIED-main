@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_stories_heading
+    - paragraphs.paragraphs_type.stories_curated_content
+id: paragraph.stories_curated_content.field_stories_heading
+field_name: field_stories_heading
+entity_type: paragraph
+bundle: stories_curated_content
+label: Heading
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

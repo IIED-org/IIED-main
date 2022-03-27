@@ -1,0 +1,101 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:400,300,300italic,400italic,700,700italic,900,900italic");
+@import url("https://cloud.typography.com/7590498/6700612/css/fonts.css");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-4xl font-headline;
+  }
+  h2 {
+    @apply text-3xl font-headline;
+  }
+  h3 {
+    @apply text-2xl font-headline;
+  }
+  h4 {
+    @apply text-xl font-headline;
+  }
+  h5 {
+    @apply text-lg font-headline;
+  }
+  h6 {
+    @apply font-headline;
+  }
+  a {
+    @apply transition duration-300 ease-in-out text-link-text underline-offset-2 hover:text-link-hover visited:text-link-visited;
+  }
+  .iied-gradient {
+    background: rgb(0, 179, 223);
+    background: linear-gradient(
+      90deg,
+      rgba(0, 179, 223, 1) 0%,
+      rgba(252, 179, 22, 1) 33.3%,
+      rgba(206, 83, 158, 1) 66.6%,
+      rgba(170, 192, 44, 1) 100%
+    );
+  }
+  hr {
+    @apply my-6;
+  }
+}
+
+@layer components {
+  .site-name {
+    font-family: serif;
+  }
+  .block,
+  .node {
+    @apply mb-4;
+  }
+
+  .node__content p,
+  .node__content ul,
+  .node__content ol {
+    @apply mb-4 leading-normal;
+  }
+
+  /* Elements -- twig partials */
+  /* Buttons */
+  .btn {
+    @apply px-3 py-2 transition rounded-full shadow-sm;
+  }
+  .btn-outline {
+    @apply px-3 py-2 transition bg-white border border-gray-300 rounded-full shadow-sm;
+    &:hover {
+      @apply shadow-none bg-gray-100 border-iiedblue-500;
+    }
+  }
+  .btn-icon {
+    @apply flex items-center;
+  }
+  .btn-orange {
+    @apply bg-iiedorange-500;
+    &:hover {
+      @apply bg-iiedorange-600;
+    }
+  }
+
+  /* Components -- twig templates */
+  /* Cards */
+  .card {
+    @apply border border-gray-300 p-4 rounded-xl;
+  }
+
+  [id$="-local-tasks"] ul {
+    @apply list-disc list-inside;
+  }
+
+  .box-outline,
+  .boxbox {
+    @apply border border-gray-300 p-4 rounded-xl;
+  }
+  .bg-fill {
+    @apply p-4 bg-gray-100 rounded-xl;
+  }
+  .image-caption {
+    @apply mt-1 text-base leading-tight text-gray-500;
+  }
+}

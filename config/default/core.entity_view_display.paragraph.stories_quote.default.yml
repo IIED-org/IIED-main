@@ -1,0 +1,50 @@
+uuid: c86c400e-a5e6-4563-b561-38edc92b794e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.stories_quote.field_stories_quote_citation
+    - field.field.paragraph.stories_quote.field_stories_quote_citation_url
+    - field.field.paragraph.stories_quote.field_stories_quote_text
+    - paragraphs.paragraphs_type.stories_quote
+  module:
+    - link
+    - text
+_core:
+  default_config_hash: qNuLyZROGEiQeFMCKO7zVIjJm4YRDJBSOartWtgQztE
+id: paragraph.stories_quote.default
+targetEntityType: paragraph
+bundle: stories_quote
+mode: default
+content:
+  field_stories_quote_citation:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_stories_quote_citation_url:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_stories_quote_text:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  search_api_excerpt: true
+  uid: true

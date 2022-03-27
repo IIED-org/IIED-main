@@ -5,6 +5,8 @@ namespace Drupal\imagemagick\Plugin\ImageToolkit\Operation\imagemagick;
 use Drupal\Component\Utility\Color;
 use Drupal\Component\Utility\Rectangle;
 
+@trigger_error('\Drupal\imagemagick\Plugin\ImageToolkit\Operation\imagemagick\Rotate is deprecated in imagemagick:8.x-3.3 and is removed from imagemagick:4.0.0. Use the rotate operation provided by the Image Effects module instead. See https://www.drupal.org/project/imagemagick/issues/3251438', E_USER_DEPRECATED);
+
 /**
  * Defines imagemagick Rotate operation.
  *

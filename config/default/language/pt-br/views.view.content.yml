@@ -1,10 +1,9 @@
 label: Conteúdo
 display:
   default:
+    display_title: Padrão
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
+      title: Conteúdo
       fields:
         title:
           label: Título
@@ -16,6 +15,9 @@ display:
           label: Status
         operations:
           label: Operações
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         title:
           expose:
@@ -29,8 +31,6 @@ display:
         langcode:
           expose:
             label: Idioma
-      title: Conteúdo
-    display_title: Padrão
   page_1:
     display_options:
       menu:

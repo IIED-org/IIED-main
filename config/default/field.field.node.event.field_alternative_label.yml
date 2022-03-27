@@ -1,0 +1,21 @@
+uuid: c04f5688-f7cb-456b-b2fc-b84f1fccc42c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_alternative_label
+    - node.type.event
+  module:
+    - text
+id: node.event.field_alternative_label
+field_name: field_alternative_label
+entity_type: node
+bundle: event
+label: 'Alternative label'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

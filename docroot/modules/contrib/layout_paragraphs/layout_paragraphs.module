@@ -1,0 +1,130 @@
+<?php
+
+/**
+ * @file
+ * Contains layout_paragraphs.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\paragraphs\Entity\Paragraph;
+
+/**
+ * Implements hook_help().
+ */
+function layout_paragraphs_help($route_name, RouteMatchInterface $route_match) {
+  $output = '';
+  switch ($route_name) {
+    // Main module help for the layout_paragraphs module.
+    case 'help.page.layout_paragraphs':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Provide layout integration for paragraph fields.') . '</p>';
+      break;
+  }
+  return $output;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function layout_paragraphs_theme() {
+  return [
+    'layout_paragraphs' => [
+      'variables' => [
+        'elements' => '',
+        'content' => '',
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_theme_suggestions().
+ */
+function layout_paragraphs_theme_suggestions_layout_paragraphs(array $variables) {
+  $suggestions = [];
+  $sanitized_view_mode = strtr($variables['elements']['#view_mode'], '.', '_');
+  $suggestions[] = 'layout_paragraphs__' . $sanitized_view_mode;
+  $suggestions[] = 'layout_paragraphs__' . $variables['elements']['field_name'];
+  $suggestions[] = 'layout_paragraphs__' . $variables['elements']['field_name'] . '__' . $sanitized_view_mode;
+  return $suggestions;
+}
+
+/**
+ * Implements hook_prepreprocess_radios().
+ *
+ * Add wrapper class for layout selection.
+ */
+function layout_paragraphs_preprocess_radios(&$variables) {
+  if (isset($variables['element']['#wrapper_attributes'])) {
+    $variables['attributes'] += $variables['element']['#wrapper_attributes'];
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ *
+ * If "content_translation", move the form_alter implementation by the
+ * layout_paragraphs at the end of the list, so that it might be
+ * called after the content_translation one.
+ * Otherwise the $form['translatable'] won't be defined in
+ * layout_paragraphs_form_field_config_edit_form_alter.
+ *
+ * @see: https://www.hashbangcode.com/article/drupal-8-altering-hook-weights.
+ */
+function layout_paragraphs_module_implements_alter(&$implementations, $hook) {
+  // Move our hook_entity_type_alter() implementation to the end of the list.
+  if ($hook == 'form_alter' && isset($implementations['layout_paragraphs']) && isset($implementations['content_translation'])) {
+    $hook_init = $implementations['layout_paragraphs'];
+    unset($implementations['layout_paragraphs']);
+    $implementations['layout_paragraphs'] = $hook_init;
+  }
+}
+/**
+ * Implements hook_ENTITY_presave().
+ *
+ * Updates references to parent layout section uuids in cases
+ * where paragraphs are duplicated, for example when using the
+ * Replicate module.
+ *
+ * @todo Consider changing approach if this issue is addressed in core:
+ * https://www.drupal.org/project/drupal/issues/3040556
+ * (It is not possible to react to an entity being duplicated)
+ */
+function layout_paragraphs_paragraph_presave(Paragraph $paragraph) {
+  $behavior_settings = $paragraph->getAllBehaviorSettings();
+  $layout_paragraphs_settings = $behavior_settings['layout_paragraphs'] ?? [];
+  if (!empty($layout_paragraphs_settings['parent_uuid']) && $parent = $paragraph->getParentEntity()) {
+    $parent_field = $paragraph->get('parent_field_name');
+    $field_name = $parent_field->first()->getString();
+    $item_list = $parent->get($field_name);
+    /** @var \Drupal\Core\Field\EntityReferenceFieldItemList $item_list */
+    $sibling_paragraphs = $item_list->referencedEntities();
+    if (count($sibling_paragraphs)) {
+      $uuid_map = [];
+      foreach ($sibling_paragraphs as $delta => $item) {
+        $uuid_map[$item->uuid()] = $delta;
+      }
+      $parent_delta = $uuid_map[$layout_paragraphs_settings['parent_uuid']] ?? NULL;
+      // If the parent layout section is correctly referenced via
+      // parent_uuid, save the parent delta so we can correctly map
+      // uuids using the delta if content is duplicated.
+      if (isset($parent_delta)) {
+        $layout_paragraphs_settings['parent_delta'] = $parent_delta;
+      }
+      // If the parent layout section cannot be found via parent_uuid,
+      // use parent_delta to find and save the correct parent_uuid.
+      // This should only happen when the paragraph is being duplicated,
+      // and the parent layout section's uuid no longer matches parent_uuid.
+      elseif (isset($layout_paragraphs_settings['parent_delta'], $sibling_paragraphs[$layout_paragraphs_settings['parent_delta']])) {
+        $updated_parent_uuid = $sibling_paragraphs[$layout_paragraphs_settings['parent_delta']]->uuid();
+        $layout_paragraphs_settings['parent_uuid'] = $updated_parent_uuid;
+      }
+      // Since paragraph::preSave() has already been called,
+      // we have to set the serialized behavior settings directly
+      // rather than using setBehaviorSettings().
+      $behavior_settings['layout_paragraphs'] = $layout_paragraphs_settings;
+      $paragraph->set('behavior_settings', serialize($behavior_settings));
+    }
+  }
+}

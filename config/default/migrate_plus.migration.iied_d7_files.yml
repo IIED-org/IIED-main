@@ -1,4 +1,4 @@
-uuid: d74d2192-1fc1-470a-8a3d-4d2b58d24b8b
+uuid: 9964573f-ba98-4100-8c0e-3f5c0dd232de
 langcode: en
 status: true
 dependencies: {  }
@@ -58,8 +58,8 @@ process:
       source: timestamp
   uid:
     -
-      plugin: get
-      source: uid
+      plugin: default_value
+      default_value: '1'
   field_metatag:
     -
       plugin: d7_metatag_entities

@@ -14,13 +14,284 @@ backbone:
 
 ckeditor:
   remote: https://github.com/ckeditor/ckeditor4
-  version: "4.17.1"
+  version: "4.18.0"
   license:
     name: GNU-GPL-2.0-or-later
-    url: https://raw.githubusercontent.com/ckeditor/ckeditor4/4.17.1/LICENSE.md
+    url: https://raw.githubusercontent.com/ckeditor/ckeditor4/4.18.0/LICENSE.md
     gpl-compatible: true
   js:
     assets/vendor/ckeditor/ckeditor.js: { preprocess: false, minified: true }
+
+ckeditor5:
+  remote: https://github.com/ckeditor/ckeditor5
+  version: "31.0.0"
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/ckeditor/ckeditor5/blob/v31.0.0/LICENSE.md
+    gpl-compatible: true
+  js:
+    # This file is not aggregated to force the creation of a new aggregate file
+    # containing all files between this one and the next non-aggregated file
+    # (if it exists). The files loaded after this one will include CKEditor 5
+    # translations, enabled plugins, and the rest of the JavaScript needed on
+    # the page.
+    assets/vendor/ckeditor5/ckeditor5-dll/ckeditor5-dll.js: { preprocess: false, minified: true }
+  dependencies:
+    - core/ckeditor5.translations
+
+ckeditor5.editorClassic:
+  remote: https://github.com/ckeditor/ckeditor5
+  version: "31.0.0"
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/ckeditor/ckeditor5/blob/v31.0.0/LICENSE.md
+    gpl-compatible: true
+  js:
+    assets/vendor/ckeditor5/editor-classic/editor-classic.js: { minified: true }
+  dependencies:
+    - core/ckeditor5
+
+ckeditor5.editorDecoupled:
+  remote: https://github.com/ckeditor/ckeditor5
+  version: "31.0.0"
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/ckeditor/ckeditor5/blob/v31.0.0/LICENSE.md
+    gpl-compatible: true
+  js:
+    assets/vendor/ckeditor5/editor-decoupled/editor-decoupled.js: { minified: true }
+  dependencies:
+    - core/ckeditor5
+    - core/ckeditor5.htmlSupport
+
+ckeditor5.internal:
+  remote: https://github.com/ckeditor/ckeditor5
+  version: "31.0.0"
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/ckeditor/ckeditor5/blob/v31.0.0/LICENSE.md
+    gpl-compatible: true
+  js:
+    assets/vendor/ckeditor5/essentials/essentials.js: { minified: true }
+  dependencies:
+    - core/ckeditor5
+    - core/ckeditor5.heading
+
+ckeditor5.heading:
+  remote: https://github.com/ckeditor/ckeditor5
+  version: "31.0.0"
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/ckeditor/ckeditor5/blob/v31.0.0/LICENSE.md
+    gpl-compatible: true
+  js:
+    assets/vendor/ckeditor5/heading/heading.js: { minified: true }
+  dependencies:
+    - core/ckeditor5
+    - core/ckeditor5.translations
+
+ckeditor5.basic:
+  remote: https://github.com/ckeditor/ckeditor5
+  version: "31.0.0"
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/ckeditor/ckeditor5/blob/v31.0.0/LICENSE.md
+    gpl-compatible: true
+  js:
+    assets/vendor/ckeditor5/basic-styles/basic-styles.js: { minified: true }
+  dependencies:
+    - core/ckeditor5
+    - core/ckeditor5.translations
+
+ckeditor5.specialCharacters:
+  remote: https://github.com/ckeditor/ckeditor5
+  version: "31.0.0"
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/ckeditor/ckeditor5/blob/v31.0.0/LICENSE.md
+    gpl-compatible: true
+  js:
+    assets/vendor/ckeditor5/special-characters/special-characters.js: { minified: true }
+  dependencies:
+    - core/ckeditor5
+    - core/ckeditor5.translations
+
+ckeditor5.blockquote:
+  remote: https://github.com/ckeditor/ckeditor5
+  version: "31.0.0"
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/ckeditor/ckeditor5/blob/v31.0.0/LICENSE.md
+    gpl-compatible: true
+  js:
+    assets/vendor/ckeditor5/block-quote/block-quote.js: { minified: true }
+  dependencies:
+    - core/ckeditor5
+    - core/ckeditor5.translations
+
+ckeditor5.image:
+  remote: https://github.com/ckeditor/ckeditor5
+  version: "31.0.0"
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/ckeditor/ckeditor5/blob/v31.0.0/LICENSE.md
+    gpl-compatible: true
+  js:
+    assets/vendor/ckeditor5/image/image.js: { minified: true }
+  dependencies:
+    - core/ckeditor5
+    - core/ckeditor5.translations
+
+ckeditor5.link:
+  remote: https://github.com/ckeditor/ckeditor5
+  version: "31.0.0"
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/ckeditor/ckeditor5/blob/v31.0.0/LICENSE.md
+    gpl-compatible: true
+  js:
+    assets/vendor/ckeditor5/link/link.js: { minified: true }
+  dependencies:
+    - core/ckeditor5
+    - core/ckeditor5.translations
+
+ckeditor5.list:
+  remote: https://github.com/ckeditor/ckeditor5
+  version: "31.0.0"
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/ckeditor/ckeditor5/blob/v31.0.0/LICENSE.md
+    gpl-compatible: true
+  js:
+    assets/vendor/ckeditor5/list/list.js: { minified: true }
+  dependencies:
+    - core/ckeditor5
+    - core/ckeditor5.translations
+
+ckeditor5.horizontalLine:
+  remote: https://github.com/ckeditor/ckeditor5
+  version: "31.0.0"
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/ckeditor/ckeditor5/blob/v31.0.0/LICENSE.md
+    gpl-compatible: true
+  js:
+    assets/vendor/ckeditor5/horizontal-line/horizontal-line.js: { minified: true }
+  dependencies:
+    - core/ckeditor5
+    - core/ckeditor5.translations
+
+ckeditor5.htmlSupport:
+  remote: https://github.com/ckeditor/ckeditor5
+  version: "31.0.0"
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/ckeditor/ckeditor5/blob/v31.0.0/LICENSE.md
+    gpl-compatible: true
+  js:
+    assets/vendor/ckeditor5/html-support/html-support.js: { minified: true }
+  dependencies:
+    - core/ckeditor5
+    - core/ckeditor5.translations
+
+ckeditor5.alignment:
+  remote: https://github.com/ckeditor/ckeditor5
+  version: "31.0.0"
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/ckeditor/ckeditor5/blob/v31.0.0/LICENSE.md
+    gpl-compatible: true
+  js:
+    assets/vendor/ckeditor5/alignment/alignment.js: { minified: true }
+  dependencies:
+    - core/ckeditor5
+    - core/ckeditor5.translations
+
+ckeditor5.removeFormat:
+  remote: https://github.com/ckeditor/ckeditor5
+  version: "31.0.0"
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/ckeditor/ckeditor5/blob/v31.0.0/LICENSE.md
+    gpl-compatible: true
+  js:
+    assets/vendor/ckeditor5/remove-format/remove-format.js: { minified: true }
+  dependencies:
+    - core/ckeditor5
+    - core/ckeditor5.translations
+
+ckeditor5.pasteFromOffice:
+  remote: https://github.com/ckeditor/ckeditor5
+  version: "31.0.0"
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/ckeditor/ckeditor5/blob/v31.0.0/LICENSE.md
+    gpl-compatible: true
+  js:
+    assets/vendor/ckeditor5/paste-from-office/paste-from-office.js: { minified: true }
+  dependencies:
+    - core/ckeditor5
+
+ckeditor5.indent:
+  remote: https://github.com/ckeditor/ckeditor5
+  version: "31.0.0"
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/ckeditor/ckeditor5/blob/v31.0.0/LICENSE.md
+    gpl-compatible: true
+  js:
+    assets/vendor/ckeditor5/indent/indent.js: { minified: true }
+  dependencies:
+    - core/ckeditor5
+    - core/ckeditor5.translations
+
+ckeditor5.sourceEditing:
+  remote: https://github.com/ckeditor/ckeditor5
+  version: "31.0.0"
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/ckeditor/ckeditor5/blob/v31.0.0/LICENSE.md
+    gpl-compatible: true
+  js:
+    assets/vendor/ckeditor5/source-editing/source-editing.js: { minified: true }
+  dependencies:
+    - core/ckeditor5
+    - core/ckeditor5.translations
+
+ckeditor5.table:
+  remote: https://github.com/ckeditor/ckeditor5
+  version: "31.0.0"
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/ckeditor/ckeditor5/blob/v31.0.0/LICENSE.md
+    gpl-compatible: true
+  js:
+    assets/vendor/ckeditor5/table/table.js: { minified: true }
+  dependencies:
+    - core/ckeditor5
+    - core/ckeditor5.translations
+
+ckeditor5.language:
+  remote: https://github.com/ckeditor/ckeditor5
+  version: "31.0.0"
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/ckeditor/ckeditor5/blob/v31.0.0/LICENSE.md
+    gpl-compatible: true
+  js:
+    assets/vendor/ckeditor5/language/language.js: { minified: true }
+  dependencies:
+    - core/ckeditor5
+    - core/ckeditor5.translations
+
+ckeditor5.translations:
+  # No sensible version can be specified, since the translations may change at
+  # any time.
+  js:
+    # This file does not actually exist; it's a placeholder file that will be
+    # overridden by ckeditor5_js_alter(), and is here because empty libraries
+    # are not allowed.
+    assets/vendor/ckeditor5/translation.js: {}
 
 css.escape:
   remote: https://github.com/mathiasbynens/CSS.escape
@@ -84,7 +355,8 @@ drupal.ajax:
     - core/drupal
     - core/drupalSettings
     - core/drupal.progress
-    - core/jquery.once
+    - core/once
+    - core/jquery.once.bc
     - core/tabbable
 
 drupal.announce:
@@ -94,6 +366,16 @@ drupal.announce:
   dependencies:
     - core/drupal
     - core/drupal.debounce
+
+loadjs:
+  remote: https://github.com/muicss/loadjs
+  version: "4.2.0"
+  license:
+    name: MIT
+    url: https://raw.githubusercontent.com/muicss/loadjs/4.2.0/LICENSE.txt
+    gpl-compatible: true
+  js:
+    assets/vendor/loadjs/loadjs.min.js: { minified: true }
 
 drupal.autocomplete:
   version: VERSION
@@ -154,7 +436,8 @@ drupal.batch:
     - core/drupalSettings
     - core/drupal.ajax
     - core/drupal.progress
-    - core/jquery.once
+    - core/once
+    - core/jquery.once.bc
 
 drupal.checkbox:
   version: VERSION
@@ -174,7 +457,13 @@ drupal.collapse:
     - core/modernizr
     - core/drupal
     - core/drupal.form
-    - core/jquery.once
+    - core/once
+    - core/jquery.once.bc
+
+drupal.customevent:
+  version: VERSION
+  js:
+    misc/polyfills/customevent.js: { weight: -20 }
 
 drupal.date:
   version: VERSION
@@ -280,7 +569,8 @@ drupal.dropbutton:
     - core/jquery
     - core/drupal
     - core/drupalSettings
-    - core/jquery.once
+    - core/once
+    - core/jquery.once.bc
 
 drupal.element.closest:
   version: VERSION
@@ -309,7 +599,8 @@ drupal.form:
     - core/jquery
     - core/drupal
     - core/drupal.debounce
-    - core/jquery.once
+    - core/once
+    - core/jquery.once.bc
 
 drupal.machine-name:
   version: VERSION
@@ -317,7 +608,8 @@ drupal.machine-name:
     misc/machine-name.js: {}
   dependencies:
     - core/jquery
-    - core/jquery.once
+    - core/once
+    - core/jquery.once.bc
     - core/drupal
     - core/drupalSettings
     - core/drupal.form
@@ -357,7 +649,13 @@ drupal.states:
     - core/jquery
     - core/drupal
     - core/drupalSettings
-    - core/jquery.once
+    - core/once
+    - core/jquery.once.bc
+
+drupal.string.includes:
+  version: VERSION
+  js:
+    misc/polyfills/string.includes.js: { weight: -20 }
 
 drupal.tabbingmanager:
   version: VERSION
@@ -376,7 +674,8 @@ drupal.tabledrag:
     - core/jquery
     - core/drupal
     - core/drupalSettings
-    - core/jquery.once
+    - core/once
+    - core/jquery.once.bc
 
 drupal.tableheader:
   version: VERSION
@@ -386,7 +685,8 @@ drupal.tableheader:
     - core/jquery
     - core/drupal
     - core/drupalSettings
-    - core/jquery.once
+    - core/once
+    - core/jquery.once.bc
     - core/drupal.displace
 
 drupal.tableresponsive:
@@ -396,7 +696,8 @@ drupal.tableresponsive:
   dependencies:
     - core/jquery
     - core/drupal
-    - core/jquery.once
+    - core/once
+    - core/jquery.once.bc
 
 drupal.tableselect:
   version: VERSION
@@ -406,7 +707,8 @@ drupal.tableselect:
     - core/drupal
     - core/drupal.checkbox
     - core/jquery
-    - core/jquery.once
+    - core/once
+    - core/jquery.once.bc
 
 drupal.timezone:
   version: VERSION
@@ -414,7 +716,8 @@ drupal.timezone:
     misc/timezone.js: {}
   dependencies:
     - core/jquery
-    - core/jquery.once
+    - core/once
+    - core/jquery.once.bc
     - core/drupal
 
 drupal.vertical-tabs:
@@ -427,7 +730,8 @@ drupal.vertical-tabs:
       misc/vertical-tabs.css: {}
   dependencies:
     - core/jquery
-    - core/jquery.once
+    - core/once
+    - core/jquery.once.bc
     - core/drupal
     - core/drupalSettings
     - core/drupal.form
@@ -528,6 +832,21 @@ jquery.once:
     assets/vendor/jquery-once/jquery.once.min.js: { weight: -19, minified: true }
   dependencies:
     - core/jquery
+    - core/jquery.once.bc
+  deprecated: The %library_id% asset library is deprecated in Drupal 9.3.0 and will be removed in Drupal 10.0.0. Use the core/once library instead. See https://www.drupal.org/node/3158256
+
+# Internal library, do not depend on it.
+# The library will be removed in Drupal 10.0.0.
+jquery.once.bc:
+  version: VERSION
+  js:
+    assets/vendor/jquery-once/jquery.once.min.js: { weight: -19, minified: true }
+    misc/jquery.once.bc.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/once
+    - core/drupal.object.assign
 
 jquery.ui:
   version: &jquery_ui_version 1.12.1
@@ -763,10 +1082,10 @@ picturefill:
     assets/vendor/picturefill/picturefill.min.js: { weight: -10, minified: true }
 
 popperjs:
-  version: "2.9.2"
+  version: "2.10.2"
   license:
     name: MIT
-    url: https://raw.githubusercontent.com/popperjs/popper-core/v2.9.2/LICENSE.md
+    url: https://raw.githubusercontent.com/popperjs/popper-core/v2.10.2/LICENSE.md
     gpl-compatible: true
   js:
     assets/vendor/popperjs/popper.min.js: { minified: true }
@@ -777,20 +1096,20 @@ popperjs:
 
 sortable:
   remote: https://github.com/SortableJS/Sortable
-  version: "1.13.0"
+  version: "1.14.0"
   license:
     name: MIT
-    url: https://raw.githubusercontent.com/SortableJS/Sortable/1.13.0/LICENSE
+    url: https://raw.githubusercontent.com/SortableJS/Sortable/1.14.0/LICENSE
     gpl-compatible: true
   js:
     assets/vendor/sortable/Sortable.min.js: { minified: true }
 
 tabbable:
   remote: https://github.com/focus-trap/tabbable
-  version: "5.2.0"
+  version: "5.2.1"
   license:
     name: MIT
-    url: https://raw.githubusercontent.com/focus-trap/tabbable/v5.2.0/LICENSE
+    url: https://raw.githubusercontent.com/focus-trap/tabbable/v5.2.1/LICENSE
     gpl-compatible: true
   js:
     assets/vendor/tabbable/index.umd.min.js: { weight: -1, minified: true }
@@ -808,10 +1127,10 @@ tabbable.jquery.shim:
 
 underscore:
   remote: https://github.com/jashkenas/underscore
-  version: "1.13.1"
+  version: "1.13.2"
   license:
     name: MIT
-    url: https://raw.githubusercontent.com/jashkenas/underscore/1.13.1/LICENSE
+    url: https://raw.githubusercontent.com/jashkenas/underscore/1.13.2/LICENSE
     gpl-compatible: true
   js:
     assets/vendor/underscore/underscore-min.js: { weight: -20, minified: true }
@@ -839,6 +1158,8 @@ drupal.dialog.off_canvas:
       misc/dialog/off-canvas.layout.css: {}
   dependencies:
     - core/jquery
+    - core/once
+    - core/jquery.once.bc
     - core/drupal
     - core/drupal.ajax
     - core/drupal.announce
@@ -847,10 +1168,10 @@ drupal.dialog.off_canvas:
 
 js-cookie:
   remote: https://github.com/js-cookie/js-cookie
-  version: "v3.0.0-rc0"
+  version: "3.0.1"
   license:
     name: MIT
-    url: https://raw.githubusercontent.com/js-cookie/js-cookie/v3.0.0-rc.0/LICENSE
+    url: https://raw.githubusercontent.com/js-cookie/js-cookie/v3.0.1/LICENSE
     gpl-compatible: true
   js:
     assets/vendor/js-cookie/js.cookie.min.js: {}

@@ -1,0 +1,15 @@
+{#
+Purge whitelist:
+w-128
+h-24
+ #}
+<div class="flex items-center">
+  <span aria-hidden="true" class="mr-8">{{ 'Site by'|t }}</span>
+  <a class="inline-block" href="https://agile.coop/" aria-label="{{ 'Site by Agile Collective'|t }}">
+    {% include '@elements/icons/icon.twig' with {
+      icon_id: 'ac_logo',
+      width: 128,
+      height: 24,
+    } %}
+  </a>
+</div>

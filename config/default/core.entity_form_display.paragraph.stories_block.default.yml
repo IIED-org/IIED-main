@@ -1,0 +1,28 @@
+uuid: 995807ee-80b3-4296-b6a8-a70dc705d7dc
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.stories_block.field_stories_block
+    - paragraphs.paragraphs_type.stories_block
+  module:
+    - block_field
+_core:
+  default_config_hash: c2R_1y0332dDcBtGupi7ESaCWbbP4qeF2llrZSi17k4
+id: paragraph.stories_block.default
+targetEntityType: paragraph
+bundle: stories_block
+mode: default
+content:
+  field_stories_block:
+    type: block_field_default
+    weight: 0
+    region: content
+    settings:
+      plugin_id: ''
+      settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true
+  uid: true

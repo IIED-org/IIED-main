@@ -41,8 +41,8 @@ status_list: |-
 conditions:
   'entity_bundle:node':
     id: 'entity_bundle:node'
-    bundles:
-      publication: publication
     negate: false
     context_mapping:
       node: '@node.node_route_context:node'
+    bundles:
+      publication: publication

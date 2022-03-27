@@ -1,0 +1,21 @@
+uuid: b9d5153a-b064-4c6d-85bb-ef2a34ba69b3
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+    - text
+_core:
+  default_config_hash: 7gJXcN2GVgAghPJdH2u_Wl4-i_6Gzq4AFEh8HEqDemQ
+id: paragraph.field_stories_quote_text
+field_name: field_stories_quote_text
+entity_type: paragraph
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,45 @@
+{#
+/**
+ * @file
+ * Theme override to display a two-column layout.
+ *
+ * Available variables:
+ * - content: The content for this layout.
+ * - attributes: HTML attributes for the layout <div>.
+ * - first
+ * - second
+ * - third
+ */
+#}
+{% if content %}
+  <div{{ attributes }}>
+         <div class="container mx-auto lg:grid lg:gap-6 md:max-w-3xl lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl lg:grid-cols-12">
+      {% if content.first %}
+        <div {{ region_attributes.first.addClass('layout__region', 'layout__region--first', 'lg:col-span-4') }}>
+          {{ content.insert_before }}
+          {{ content.controls }}
+          {{ content.first }}
+          {{ content.insert_after }}
+        </div>
+      {% endif %}
+
+      {% if content.second %}
+        <div {{ region_attributes.second.addClass('layout__region', 'layout__region--second', 'lg:col-span-4') }}>
+          {{ content.insert_before }}
+          {{ content.controls }}
+          {{ content.second }}
+          {{ content.insert_after }}
+        </div>
+      {% endif %}
+
+      {% if content.third %}
+        <div {{ region_attributes.third.addClass('layout__region', 'layout__region--third', 'lg:col-span-4') }}>
+          {{ content.insert_before }}
+          {{ content.controls }}
+          {{ content.third }}
+          {{ content.insert_after }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}

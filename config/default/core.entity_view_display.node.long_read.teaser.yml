@@ -1,0 +1,55 @@
+uuid: 640d3166-4a5b-46ee-8b96-ab210f3e04bb
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.long_read.body
+    - field.field.node.long_read.field_author_s_
+    - field.field.node.long_read.field_collections
+    - field.field.node.long_read.field_content
+    - field.field.node.long_read.field_image_caption
+    - field.field.node.long_read.field_main_image
+    - field.field.node.long_read.field_project
+    - field.field.node.long_read.field_subheading
+    - field.field.node.long_read.field_tags
+    - field.field.node.long_read.field_theme_s_
+    - node.type.long_read
+  module:
+    - text
+    - user
+id: node.long_read.teaser
+targetEntityType: node
+bundle: long_read
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+  sharing_buttons:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_author_s_: true
+  field_collections: true
+  field_content: true
+  field_image_caption: true
+  field_main_image: true
+  field_project: true
+  field_subheading: true
+  field_tags: true
+  field_theme_s_: true
+  langcode: true
+  search_api_excerpt: true

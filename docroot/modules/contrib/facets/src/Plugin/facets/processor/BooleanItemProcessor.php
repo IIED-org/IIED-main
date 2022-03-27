@@ -5,6 +5,7 @@ namespace Drupal\facets\Plugin\facets\processor;
 use Drupal\Core\TypedData\ComplexDataDefinitionInterface;
 use Drupal\facets\FacetInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\facets\FacetSource\SearchApiFacetSourceInterface;
 use Drupal\facets\Processor\BuildProcessorInterface;
 use Drupal\facets\Processor\ProcessorPluginBase;
 
@@ -98,9 +99,11 @@ class BooleanItemProcessor extends ProcessorPluginBase implements BuildProcessor
   public function supportsFacet(FacetInterface $facet) {
     $field_identifier = $facet->getFieldIdentifier();
     $facet_source = $facet->getFacetSource();
-    $field = $facet_source->getIndex()->getField($field_identifier);
-    if ($field->getType() == "boolean") {
-      return TRUE;
+    if ($facet_source instanceof SearchApiFacetSourceInterface) {
+      $field = $facet_source->getIndex()->getField($field_identifier);
+      if ($field->getType() == "boolean") {
+        return TRUE;
+      }
     }
 
     $data_definition = $facet->getDataDefinition();

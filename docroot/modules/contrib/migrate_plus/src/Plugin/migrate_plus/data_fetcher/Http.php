@@ -99,6 +99,9 @@ class Http extends DataFetcherPluginBase implements ContainerFactoryPluginInterf
       if (!empty($this->configuration['authentication'])) {
         $options = array_merge($options, $this->getAuthenticationPlugin()->getAuthenticationOptions());
       }
+      if (!empty($this->configuration['request_options'])) {
+        $options = array_merge($options, $this->configuration['request_options']);
+      }
       $response = $this->httpClient->get($url, $options);
       if (empty($response)) {
         throw new MigrateException('No response at ' . $url . '.');

@@ -10,6 +10,7 @@
  * the Update Manager module.
  */
 
+use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\Updater\UpdaterException;
 use Drupal\Core\Url;
 
@@ -36,26 +37,21 @@ use Drupal\Core\Url;
  *   should use that response for the current page request.
  */
 function update_authorize_run_update($filetransfer, $projects) {
-  $operations = [];
+  $batch_builder = (new BatchBuilder())
+    ->setFile(\Drupal::service('extension.list.module')->getPath('update') . '/update.authorize.inc')
+    ->setInitMessage(t('Preparing to update your site'))
+    ->setFinishCallback('update_authorize_update_batch_finished');
+
   foreach ($projects as $project_info) {
-    $operations[] = [
-      'update_authorize_batch_copy_project',
-      [
-        $project_info['project'],
-        $project_info['updater_name'],
-        $project_info['local_url'],
-        $filetransfer,
-      ],
-    ];
+    $batch_builder->addOperation('update_authorize_batch_copy_project', [
+      $project_info['project'],
+      $project_info['updater_name'],
+      $project_info['local_url'],
+      $filetransfer,
+    ]);
   }
 
-  $batch = [
-    'init_message' => t('Preparing to update your site'),
-    'operations' => $operations,
-    'finished' => 'update_authorize_update_batch_finished',
-    'file' => drupal_get_path('module', 'update') . '/update.authorize.inc',
-  ];
-  batch_set($batch);
+  batch_set($batch_builder->toArray());
 
   // Since authorize.php has its own method for setting the page title, set it
   // manually here rather than passing it in to batch_set() as would normally
@@ -72,7 +68,7 @@ function update_authorize_run_update($filetransfer, $projects) {
  * Callback for system_authorized_init() in
  * update_manager_install_form_submit().
  *
- * @param FileTransfer $filetransfer
+ * @param \Drupal\Core\FileTransfer\FileTransfer $filetransfer
  *   The FileTransfer object created by authorize.php for use during this
  *   operation.
  * @param string $project
@@ -91,25 +87,19 @@ function update_authorize_run_update($filetransfer, $projects) {
  *   should use that response for the current page request.
  */
 function update_authorize_run_install($filetransfer, $project, $updater_name, $local_url) {
-  $operations[] = [
-    'update_authorize_batch_copy_project',
-    [
+  // @todo Instantiate our Updater to set the human-readable title?
+  $batch_builder = (new BatchBuilder())
+    ->setFile(\Drupal::service('extension.list.module')->getPath('update') . '/update.authorize.inc')
+    ->setInitMessage(t('Preparing to install'))
+    ->addOperation('update_authorize_batch_copy_project', [
       $project,
       $updater_name,
       $local_url,
       $filetransfer,
-    ],
-  ];
-
-  // @todo Instantiate our Updater to set the human-readable title?
-  $batch = [
-    'init_message' => t('Preparing to add'),
-    'operations' => $operations,
+    ])
     // @todo Use a different finished callback for different messages?
-    'finished' => 'update_authorize_install_batch_finished',
-    'file' => drupal_get_path('module', 'update') . '/update.authorize.inc',
-  ];
-  batch_set($batch);
+    ->setFinishCallback('update_authorize_install_batch_finished');
+  batch_set($batch_builder->toArray());
 
   // Since authorize.php has its own method for setting the page title, set it
   // manually here rather than passing it in to batch_set() as would normally
@@ -133,7 +123,7 @@ function update_authorize_run_install($filetransfer, $project, $updater_name, $l
  * @param string $local_url
  *   The URL to the locally installed temp directory where the project has
  *   already been downloaded and extracted into.
- * @param FileTransfer $filetransfer
+ * @param \Drupal\Core\FileTransfer\FileTransfer $filetransfer
  *   The FileTransfer object to use for performing this operation.
  * @param array $context
  *   Reference to an array used for Batch API storage.

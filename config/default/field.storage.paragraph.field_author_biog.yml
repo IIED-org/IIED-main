@@ -1,0 +1,19 @@
+uuid: 6b364e2f-b246-4d12-af3a-8d97aa661549
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+    - text
+id: paragraph.field_author_biog
+field_name: field_author_biog
+entity_type: paragraph
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

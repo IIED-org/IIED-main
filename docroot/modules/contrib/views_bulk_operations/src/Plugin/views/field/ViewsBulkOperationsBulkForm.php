@@ -637,7 +637,8 @@ class ViewsBulkOperationsBulkForm extends FieldPluginBase implements CacheableDe
         if ($entity = $this->getEntity($row)) {
           $bulk_form_keys[$row_index] = self::calculateEntityBulkFormKey(
             $entity,
-            $row->{$base_field}
+            $row->{$base_field},
+            $row_index
           );
           $entity_labels[$row_index] = $entity->label();
         }

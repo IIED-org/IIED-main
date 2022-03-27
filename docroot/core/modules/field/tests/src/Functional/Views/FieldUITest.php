@@ -7,7 +7,7 @@ use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\views\Views;
 
 /**
- * Tests the UI of the field field handler.
+ * Tests the UI of the field handler.
  *
  * @group field
  * @see \Drupal\field\Plugin\views\field\Field
@@ -98,7 +98,7 @@ class FieldUITest extends FieldTestBase {
     $this->assertEquals([], $view->field['field_name_0']->options['settings']);
 
     // Ensure that the view depends on the field storage.
-    $dependencies = \Drupal::service('config.manager')->findConfigEntityDependents('config', [$this->fieldStorages[0]->getConfigDependencyName()]);
+    $dependencies = \Drupal::service('config.manager')->findConfigEntityDependencies('config', [$this->fieldStorages[0]->getConfigDependencyName()]);
     $this->assertTrue(isset($dependencies['views.view.test_view_fieldapi']), 'The view is dependent on the field storage.');
   }
 

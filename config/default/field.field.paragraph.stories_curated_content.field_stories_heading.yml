@@ -1,0 +1,21 @@
+uuid: 698a314c-8200-487f-83ff-0d4181764c25
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_stories_heading
+    - paragraphs.paragraphs_type.stories_curated_content
+_core:
+  default_config_hash: 47p0Bx9qaFc8gWuD9OHTO74HmCtkpYdCBZyvFqC7vUI
+id: paragraph.stories_curated_content.field_stories_heading
+field_name: field_stories_heading
+entity_type: paragraph
+bundle: stories_curated_content
+label: Heading
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

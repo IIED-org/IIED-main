@@ -1,3 +1,5 @@
+_core:
+  default_config_hash: 2QzULf0zovJQx3J06Y9rufzzfi-CY2CTTlEfJJh2Qyw
 check:
   disabled_extensions: true
   interval_days: 7
@@ -10,5 +12,3 @@ notification:
     - webmaster@iied.org
     - admin@cbrody.com
   threshold: security
-_core:
-  default_config_hash: 2QzULf0zovJQx3J06Y9rufzzfi-CY2CTTlEfJJh2Qyw

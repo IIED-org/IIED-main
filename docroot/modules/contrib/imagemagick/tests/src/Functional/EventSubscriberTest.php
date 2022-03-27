@@ -12,7 +12,7 @@ use Drupal\Tests\imagemagick\Kernel\ToolkitSetupTrait;
 /**
  * Tests for ImagemagickEventSubscriber.
  *
- * @group Imagemagick
+ * @group imagemagick
  */
 class EventSubscriberTest extends BrowserTestBase {
 

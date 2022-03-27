@@ -1,0 +1,17 @@
+uuid: 19ff048a-d367-49f9-bdf4-4bd0d665fdc9
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Long read'
+type: long_read
+description: 'Page type for long form articles'
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

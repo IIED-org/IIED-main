@@ -13,11 +13,11 @@ bundle: info_box
 mode: default
 content:
   field_basic_text:
-    weight: 0
-    label: above
+    type: text_default
+    label: hidden
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    weight: 0
     region: content
 hidden:
   search_api_excerpt: true

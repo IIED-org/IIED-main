@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: stories_quote
+label: Quote
+icon_uuid: null
+description: null
+behavior_plugins: {  }

@@ -1,7 +1,9 @@
 <?php
 
-namespace PHPStan\Reflection;
+namespace mglaman\PHPStanDrupal\Reflection;
 
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
@@ -41,8 +43,10 @@ class FieldItemListPropertyReflection implements PropertyReflection
             return new ObjectType('Drupal\Core\Entity\EntityInterface');
         }
         if ($this->propertyName === 'target_id') {
+            // @todo needs to be union type.
             return new StringType();
         }
+        // @todo this is wrong, integer/bool/decimal/etc all use single value property.
         if ($this->propertyName === 'value') {
             return new StringType();
         }

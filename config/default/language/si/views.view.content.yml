@@ -1,7 +1,9 @@
 label: අන්තර්ගතය
 display:
   default:
+    display_title: Master
     display_options:
+      title: අන්තර්ගතය
       fields:
         title:
           label: මාතෘකාව
@@ -9,6 +11,9 @@ display:
           label: තත්වය
         operations:
           label: මෙහෙයුම්
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         title:
           expose:
@@ -19,7 +24,6 @@ display:
         langcode:
           expose:
             label: භාෂාව
-      title: අන්තර්ගතය
   page_1:
     display_options:
       menu:

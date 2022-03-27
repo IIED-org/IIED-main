@@ -1,0 +1,21 @@
+uuid: 204ce237-32c0-4744-a66c-0512db5b5461
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_standfirst
+    - taxonomy.vocabulary.person
+  module:
+    - text
+id: taxonomy_term.person.field_standfirst
+field_name: field_standfirst
+entity_type: taxonomy_term
+bundle: person
+label: 'Biography (summary)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

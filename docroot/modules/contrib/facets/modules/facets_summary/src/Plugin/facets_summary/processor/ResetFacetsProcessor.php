@@ -64,7 +64,10 @@ class ResetFacetsProcessor extends ProcessorPluginBase implements BuildProcessor
     $configuration = $facets_summary->getProcessorConfigs()[$this->getPluginId()];
     $hasReset = FALSE;
 
-    $request = $this->requestStack->getMasterRequest();
+    $request_stack = \Drupal::requestStack();
+    // Support 9.3+.
+    // @todo remove switch after 9.3 or greater is required.
+    $request = version_compare(\Drupal::VERSION, '9.3', '>=') ? $request_stack->getMainRequest() : $request_stack->getMasterRequest();
     if (!empty($request->query)) {
       $query_params = $request->query->all();
     }
@@ -114,7 +117,7 @@ class ResetFacetsProcessor extends ProcessorPluginBase implements BuildProcessor
     // Check if reset link text is not set or it contains only whitespaces.
     // Set text from settings or set default text.
     if (empty($configuration['settings']['link_text']) || strlen(trim($configuration['settings']['link_text'])) === 0) {
-      $itemText = t('Reset');
+      $itemText = $this->t('Reset');
     }
     else {
       $itemText = $configuration['settings']['link_text'];

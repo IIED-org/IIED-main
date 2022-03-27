@@ -10,21 +10,18 @@ namespace Nicebooks\Isbn\Internal;
  * This class is not part of the public API and can change at any time.
  * It is not intended to be used in projects consuming this library.
  *
+ * @psalm-immutable
+ *
  * @internal
  */
-class RangeInfo
+final class RangeInfo
 {
-    /**
-     * @var string
-     */
-    public $groupIdentifier;
+    public string $groupIdentifier;
 
     /**
      * The group name.
-     *
-     * @var string
      */
-    public $groupName;
+    public string $groupName;
 
     /**
      * The parts of the ISBN number.
@@ -34,7 +31,17 @@ class RangeInfo
      * If the ISBN number belongs to a known group, but does not fall within a valid range,
      * this property will be null.
      *
-     * @var array|null
+     * @var string[]|null
      */
-    public $parts;
+    public ?array $parts;
+
+    /**
+     * @param string[]|null $parts
+     */
+    public function __construct(string $groupIdentifier, string $groupName, ?array $parts)
+    {
+        $this->groupIdentifier = $groupIdentifier;
+        $this->groupName       = $groupName;
+        $this->parts           = $parts;
+    }
 }

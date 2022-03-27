@@ -1,0 +1,29 @@
+name: 'Stories Media'
+description: 'Enables Image, Video, and Slideshow media entities and enables corresponding paragraph types.'
+package: Authoring
+type: module
+core_version_requirement: ^8 || ^9
+dependencies:
+  - dropzonejs:dropzonejs_eb_widget (>=8.x-2.x)
+  - entity_browser:entity_browser (>=8.x-2.x)
+  - entity_browser:entity_browser_entity_form (>=8.x-2.x)
+  - drupal:field
+  - drupal:file
+  - drupal:image
+  - drupal:media (>=8.4)
+  - drupal:options
+  - drupal:path
+  - drupal:system (>=8.4)
+  - drupal:text
+  - drupal:user
+  - drupal:views
+  - inline_entity_form:inline_entity_form
+  - media_entity_slideshow:media_entity_slideshow (>=8.x-2.x)
+  - paragraphs:paragraphs
+  - video_embed_field:video_embed_field
+  - video_embed_field:video_embed_media
+
+# Information added by Drupal.org packaging script on 2021-03-18
+version: '8.x-2.0-alpha7'
+project: 'stories'
+datestamp: 1616083628

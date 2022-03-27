@@ -184,6 +184,15 @@ abstract class DataParserPluginBase extends PluginBase implements DataParserPlug
   /**
    * {@inheritdoc}
    */
+  public function currentUrl(): ?string {
+    $index = $this->activeUrl ?: \array_key_first($this->urls);
+
+    return $this->urls[$index] ?? NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function key() {
     return $this->currentId;
   }

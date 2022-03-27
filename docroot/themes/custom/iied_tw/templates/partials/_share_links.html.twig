@@ -1,0 +1,81 @@
+
+
+<div class="flex items-center">
+    {# Facebook #}
+    <a
+        href="https://www.facebook.com/sharer/sharer.php?u={{ url('<current>') }}" target="_blank"
+        class="flex items-center justify-center w-10 h-10 mr-2 text-gray-900 border border-gray-300 rounded-full hover:bg-gray-100 hover:border-iiedblue-500" title="Share to Facebook" aria-label="Share to Facebook" rel="noopener" tabindex="-1"
+    >
+        <svg
+        fill="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        class="w-5 h-5"
+        viewBox="0 0 24 24"
+        >
+        <path
+            d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"
+        ></path>
+        </svg>
+    </a>
+    {# Twitter #}
+    <a
+        href="https://twitter.com/intent/tweet?text={{ node.title.value|url_encode }}%20{{ url('<current>') }}" target="_blank"
+        class="flex items-center justify-center w-10 h-10 mr-2 text-gray-900 border border-gray-300 rounded-full hover:bg-gray-100 hover:border-iiedblue-500" title="Share to Twitter" aria-label="Share to Twitter" rel="noopener" tabindex="-1"
+    >
+        <svg
+        fill="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        class="w-5 h-5"
+        viewBox="0 0 24 24"
+        >
+        <path
+            d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"
+        ></path>
+        </svg>
+    </a>
+    {# linkedIn #}
+    <a
+        href="https://www.linkedin.com/sharing/share-offsite/?url={{ url('<current>') }}" target="_blank"
+        class="flex items-center justify-center w-10 h-10 mr-2 text-gray-900 border border-gray-300 rounded-full hover:bg-gray-100 hover:border-iiedblue-500" title="Share to Linkedin" aria-label="Share to Linkedin" rel="noopener" tabindex="-1"
+    >
+        <svg
+        fill="currentColor"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="0"
+        class="w-5 h-5"
+        viewBox="0 0 24 24"
+        >
+        <path
+            stroke="none"
+            d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"
+        ></path>
+        <circle cx="4" cy="4" r="2" stroke="none"></circle>
+        </svg>
+    </a>
+    {# email #}
+    <a
+        href="mailto:?subject={{ node.title.value|url_encode }} &amp;body={{ url('<current>') }}" title="Share to e-mail" aria-label="Share to e-mail" target="_blank" rel="noopener" tabindex="-1" class="flex items-center justify-center w-10 h-10 mr-2 text-gray-900 border border-gray-300 rounded-full hover:bg-gray-100 hover:border-iiedblue-500"
+    >
+        <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-6 h-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        >
+        <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+        />
+        </svg>
+    </a>
+</div>
+

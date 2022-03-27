@@ -1,0 +1,21 @@
+uuid: fe86945d-7843-49e0-898c-c0c16f671281
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_current_work
+    - taxonomy.vocabulary.person
+  module:
+    - text
+id: taxonomy_term.person.field_current_work
+field_name: field_current_work
+entity_type: taxonomy_term
+bundle: person
+label: 'Current work'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

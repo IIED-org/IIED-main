@@ -1,0 +1,15 @@
+uuid: ba4d9c0c-7fcd-4d37-b656-4f67291c14a9
+langcode: en
+status: true
+dependencies:
+  module:
+    - layout_paragraphs
+id: related_link
+label: 'Related link'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins:
+  layout_paragraphs:
+    enabled: false
+    available_layouts: {  }

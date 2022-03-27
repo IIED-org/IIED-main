@@ -1,0 +1,15 @@
+uuid: dc101c09-ead1-4288-b38d-a7827132b94d
+langcode: en
+status: true
+dependencies:
+  module:
+    - layout_paragraphs
+id: about_the_author
+label: 'About the author'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins:
+  layout_paragraphs:
+    enabled: false
+    available_layouts: {  }

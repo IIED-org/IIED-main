@@ -13,6 +13,7 @@ use Drupal\KernelTests\KernelTestBase;
  * crop, scale and crop, and desaturate.
  *
  * @group Image
+ * @requires extension gd
  */
 class ToolkitGdTest extends KernelTestBase {
 
@@ -60,18 +61,9 @@ class ToolkitGdTest extends KernelTestBase {
   protected function setUp(): void {
     parent::setUp();
 
+    $this->installConfig(['system']);
     // Set the image factory service.
     $this->imageFactory = $this->container->get('image.factory');
-  }
-
-  protected function checkRequirements() {
-    // GD2 support is available.
-    if (!function_exists('imagegd2')) {
-      return [
-        'Image manipulations for the GD toolkit cannot run because the GD toolkit is not available.',
-      ];
-    }
-    return parent::checkRequirements();
   }
 
   /**

@@ -1,6 +1,6 @@
 entity.asset_injector_css.add_form:
   route_name: 'entity.asset_injector_css.add_form'
-  title: 'Add Css Injector'
+  title: 'Add CSS Injector'
   appears_on:
     - entity.asset_injector_css.collection
 

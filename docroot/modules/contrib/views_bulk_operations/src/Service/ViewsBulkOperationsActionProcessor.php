@@ -2,6 +2,7 @@
 
 namespace Drupal\views_bulk_operations\Service;
 
+use Drupal\Core\Access\AccessResultReasonInterface;
 use Drupal\views\Views;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -211,15 +212,15 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
       $this->view->setExposedInput(['_views_bulk_operations_override' => TRUE]);
     }
 
+    $base_field = $this->view->storage->get('base_field');
+
     // In some cases we may encounter nondeterministic behaviour in
     // db queries with sorts allowing different order of results.
     // To fix this we're removing all sorts and setting one sorting
     // rule by the view base id field.
-    $sorts = $this->view->getHandlers('sort');
-    foreach ($sorts as $id => $sort) {
+    foreach (array_keys($this->view->getHandlers('sort')) as $id) {
       $this->view->setHandler($this->bulkFormData['display_id'], 'sort', $id, NULL);
     }
-    $base_field = $this->view->storage->get('base_field');
     $this->view->setHandler($this->bulkFormData['display_id'], 'sort', $base_field, [
       'id' => $base_field,
       'table' => $this->view->storage->get('base_table'),
@@ -227,7 +228,7 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
       'order' => 'ASC',
       'relationship' => 'none',
       'group_type' => 'group',
-      'exposed' => 'FALSE',
+      'exposed' => FALSE,
       'plugin_id' => 'standard',
     ]);
 
@@ -246,7 +247,6 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
     $this->moduleHandler->invokeAll('views_pre_execute', [$this->view]);
     $this->view->query->execute($this->view);
 
-    $base_field = $this->view->storage->get('base_field');
     foreach ($this->view->result as $row) {
       $entity = $this->viewDataService->getEntity($row);
 
@@ -353,6 +353,13 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
     // query. Give those modules the opportunity to alter the query again.
     $this->view->query->alter($this->view);
 
+    // Use a different pager ID so we don't break the real pager.
+    // @todo Check if we can use something else to set this value.
+    $pager = $this->view->getPager();
+    if (array_key_exists('id', $pager->options)) {
+      $pager->options['id'] += (1000 + $this->view->getItemsPerPage());
+    }
+
     // Execute the view.
     $this->moduleHandler->invokeAll('views_pre_execute', [$this->view]);
     $this->view->query->execute($this->view);
@@ -450,8 +457,21 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
 
     // Check access.
     foreach ($this->queue as $delta => $entity) {
-      if (!$this->action->access($entity, $this->currentUser)) {
-        $output[] = $this->t('Access denied');
+      $accessResult = $this->action->access($entity, $this->currentUser, TRUE);
+      if ($accessResult->isAllowed() === FALSE) {
+        $message = $this->t('Access denied');
+
+        // If we're given a reason why access was denied, display it.
+        if ($accessResult instanceof AccessResultReasonInterface) {
+          $reason = $accessResult->getReason();
+          if (!empty($reason)) {
+            $message = $this->t('Access denied: @reason', [
+              '@reason' => $accessResult->getReason(),
+            ]);
+          }
+        }
+
+        $output[] = $message;
         unset($this->queue[$delta]);
       }
     }

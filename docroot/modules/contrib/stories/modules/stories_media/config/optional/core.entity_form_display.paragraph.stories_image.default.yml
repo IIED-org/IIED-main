@@ -1,0 +1,40 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.stories_image.field_stories_alignment
+    - field.field.paragraph.stories_image.field_stories_image
+    - paragraphs.paragraphs_type.stories_image
+  module:
+    - entity_browser_entity_form
+    - inline_entity_form
+id: paragraph.stories_image.default
+targetEntityType: paragraph
+bundle: stories_image
+mode: default
+content:
+  field_stories_alignment:
+    weight: 1
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_stories_image:
+    weight: 0
+    settings:
+      form_mode: default
+      override_labels: true
+      label_singular: Image
+      label_plural: Images
+      allow_new: true
+      allow_existing: true
+      match_operator: CONTAINS
+    third_party_settings:
+      entity_browser_entity_form:
+        entity_browser_id: stories_image
+    type: inline_entity_form_complex
+    region: content
+hidden:
+  created: true
+  status: true
+  uid: true

@@ -13,12 +13,16 @@
 namespace Composer\Package;
 
 use Composer\Package\Version\VersionParser;
+use Composer\Pcre\Preg;
 use Composer\Util\ComposerMirror;
 
 /**
  * Core package definitions that are needed to resolve dependencies and install packages
  *
  * @author Nils Adermann <naderman@naderman.de>
+ *
+ * @phpstan-import-type AutoloadRules from PackageInterface
+ * @phpstan-import-type DevAutoloadRules from PackageInterface
  */
 class Package extends BasePackage
 {
@@ -78,9 +82,15 @@ class Package extends BasePackage
     protected $devRequires = array();
     /** @var array<string, string> */
     protected $suggests = array();
-    /** @var array{psr-0?: array<string, string|string[]>, psr-4?: array<string, string|string[]>, classmap?: list<string>, files?: list<string>} */
+    /**
+     * @var array
+     * @phpstan-var AutoloadRules
+     */
     protected $autoload = array();
-    /** @var array{psr-0?: array<string, string|string[]>, psr-4?: array<string, string|string[]>, classmap?: list<string>, files?: list<string>} */
+    /**
+     * @var array
+     * @phpstan-var DevAutoloadRules
+     */
     protected $devAutoload = array();
     /** @var string[] */
     protected $includePaths = array();
@@ -160,7 +170,7 @@ class Package extends BasePackage
             return null;
         }
 
-        return ltrim(preg_replace('{ (?:^|[\\\\/]+) \.\.? (?:[\\\\/]+|$) (?:\.\.? (?:[\\\\/]+|$) )*}x', '/', $this->targetDir), '/');
+        return ltrim(Preg::replace('{ (?:^|[\\\\/]+) \.\.? (?:[\\\\/]+|$) (?:\.\.? (?:[\\\\/]+|$) )*}x', '/', $this->targetDir), '/');
     }
 
     /**
@@ -456,6 +466,10 @@ class Package extends BasePackage
      */
     public function setRequires(array $requires)
     {
+        if (isset($requires[0])) { // @phpstan-ignore-line
+            $requires = $this->convertLinksToMap($requires, 'setRequires');
+        }
+
         $this->requires = $requires;
     }
 
@@ -476,6 +490,10 @@ class Package extends BasePackage
      */
     public function setConflicts(array $conflicts)
     {
+        if (isset($conflicts[0])) { // @phpstan-ignore-line
+            $conflicts = $this->convertLinksToMap($conflicts, 'setConflicts');
+        }
+
         $this->conflicts = $conflicts;
     }
 
@@ -497,6 +515,10 @@ class Package extends BasePackage
      */
     public function setProvides(array $provides)
     {
+        if (isset($provides[0])) { // @phpstan-ignore-line
+            $provides = $this->convertLinksToMap($provides, 'setProvides');
+        }
+
         $this->provides = $provides;
     }
 
@@ -518,6 +540,10 @@ class Package extends BasePackage
      */
     public function setReplaces(array $replaces)
     {
+        if (isset($replaces[0])) { // @phpstan-ignore-line
+            $replaces = $this->convertLinksToMap($replaces, 'setReplaces');
+        }
+
         $this->replaces = $replaces;
     }
 
@@ -539,6 +565,10 @@ class Package extends BasePackage
      */
     public function setDevRequires(array $devRequires)
     {
+        if (isset($devRequires[0])) { // @phpstan-ignore-line
+            $devRequires = $this->convertLinksToMap($devRequires, 'setDevRequires');
+        }
+
         $this->devRequires = $devRequires;
     }
 
@@ -577,7 +607,7 @@ class Package extends BasePackage
      *
      * @return void
      *
-     * @phpstan-param array{psr-0?: array<string, string|string[]>, psr-4?: array<string, string|string[]>, classmap?: list<string>, files?: list<string>} $autoload
+     * @phpstan-param AutoloadRules $autoload
      */
     public function setAutoload(array $autoload)
     {
@@ -599,7 +629,7 @@ class Package extends BasePackage
      *
      * @return void
      *
-     * @phpstan-param array{psr-0?: array<string, string|string[]>, psr-4?: array<string, string|string[]>, classmap?: list<string>, files?: list<string>} $devAutoload
+     * @phpstan-param DevAutoloadRules $devAutoload
      */
     public function setDevAutoload(array $devAutoload)
     {
@@ -683,10 +713,10 @@ class Package extends BasePackage
         // TODO generalize this a bit for self-managed/on-prem versions? Some kind of replace token in dist urls which allow this?
         if (
             $this->getDistUrl() !== null
-            && preg_match('{^https?://(?:(?:www\.)?bitbucket\.org|(api\.)?github\.com|(?:www\.)?gitlab\.com)/}i', $this->getDistUrl())
+            && Preg::isMatch('{^https?://(?:(?:www\.)?bitbucket\.org|(api\.)?github\.com|(?:www\.)?gitlab\.com)/}i', $this->getDistUrl())
         ) {
             $this->setDistReference($reference);
-            $this->setDistUrl(preg_replace('{(?<=/|sha=)[a-f0-9]{40}(?=/|$)}i', $reference, $this->getDistUrl()));
+            $this->setDistUrl(Preg::replace('{(?<=/|sha=)[a-f0-9]{40}(?=/|$)}i', $reference, $this->getDistUrl()));
         } elseif ($this->getDistReference()) { // update the dist reference if there was one, but if none was provided ignore it
             $this->setDistReference($reference);
         }
@@ -751,5 +781,21 @@ class Package extends BasePackage
         }
 
         return $urls;
+    }
+
+    /**
+     * @param  array<int, Link> $links
+     * @param  string $source
+     * @return array<string, Link>
+     */
+    private function convertLinksToMap(array $links, $source)
+    {
+        trigger_error('Package::'.$source.' must be called with a map of lowercased package name => Link object, got a indexed array, this is deprecated and you should fix your usage.');
+        $newLinks = array();
+        foreach ($links as $link) {
+            $newLinks[$link->getTarget()] = $link;
+        }
+
+        return $newLinks;
     }
 }

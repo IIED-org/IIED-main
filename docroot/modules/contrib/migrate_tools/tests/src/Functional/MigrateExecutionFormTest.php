@@ -55,10 +55,14 @@ class MigrateExecutionFormTest extends BrowserTestBase {
    */
   protected function setUp(): void {
     parent::setUp();
-    $this->vocabulary = $this->createVocabulary(['vid' => 'fruit', 'name' => 'Fruit']);
+    $this->vocabulary = $this->createVocabulary([
+      'vid' => 'fruit',
+      'name' => 'Fruit',
+    ]);
     $this->vocabularyQuery = $this->container->get('entity_type.manager')
       ->getStorage('taxonomy_term')
-      ->getQuery();
+      ->getQuery()
+      ->accessCheck(TRUE);
     // Log in as user 1. Migrations in the UI can only be performed as user 1.
     $this->drupalLogin($this->rootUser);
   }
@@ -80,21 +84,24 @@ class MigrateExecutionFormTest extends BrowserTestBase {
     $edit = [
       'operation' => 'import',
     ];
-    $this->drupalPostForm($urlPath, $edit, $this->t('Execute'));
+    $this->drupalGet($urlPath);
+    $this->submitForm($edit, 'Execute');
     $real_count = $this->vocabularyQuery->count()->execute();
     $expected_count = 3;
     $this->assertEquals($expected_count, $real_count);
     $edit = [
       'operation' => 'rollback',
     ];
-    $this->drupalPostForm($urlPath, $edit, $this->t('Execute'));
+    $this->drupalGet($urlPath);
+    $this->submitForm($edit, 'Execute');
     $real_count = $this->vocabularyQuery->count()->execute();
     $expected_count = 0;
     $this->assertEquals($expected_count, $real_count);
     $edit = [
       'operation' => 'import',
     ];
-    $this->drupalPostForm($urlPath, $edit, $this->t('Execute'));
+    $this->drupalGet($urlPath);
+    $this->submitForm($edit, 'Execute');
     $real_count = $this->vocabularyQuery->count()->execute();
     $expected_count = 3;
     $this->assertEquals($expected_count, $real_count);

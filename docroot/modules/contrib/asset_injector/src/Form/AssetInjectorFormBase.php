@@ -335,7 +335,7 @@ class AssetInjectorFormBase extends EntityForm {
       $condition = $form_state->get(['conditions', $condition_id]);
       $condition->submitConfigurationForm($form['conditions'][$condition_id], SubformState::createForSubform($form['conditions'][$condition_id], $form, $form_state));
       $condition_configuration = $condition->getConfiguration();
-      // Update the conditions conditions on the asset.
+      // Update the conditions on the asset.
       $this->entity->getConditionsCollection()
         ->addInstanceId($condition_id, $condition_configuration);
     }

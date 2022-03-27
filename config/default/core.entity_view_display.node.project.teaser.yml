@@ -7,7 +7,7 @@ dependencies:
     - field.field.node.project.body
     - field.field.node.project.field_additional_elements
     - field.field.node.project.field_additional_resources
-    - field.field.node.project.field_collection
+    - field.field.node.project.field_collections
     - field.field.node.project.field_contact
     - field.field.node.project.field_dates
     - field.field.node.project.field_display_image
@@ -25,7 +25,7 @@ dependencies:
     - field.field.node.project.field_standfirst
     - field.field.node.project.field_tagline
     - field.field.node.project.field_tags
-    - field.field.node.project.field_theme
+    - field.field.node.project.field_theme_s_
     - field.field.node.project.field_year
     - node.type.project
   module:
@@ -47,38 +47,38 @@ third_party_settings:
             uuid: d869278b-5881-4dbf-8c08-33f13038f76a
             region: content
             configuration:
+              id: 'extra_field_block:node:project:links'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'extra_field_block:node:project:links'
-            additional: {  }
             weight: 0
+            additional: {  }
           9d1c9c27-dec6-4656-852f-24de2da8f599:
             uuid: 9d1c9c27-dec6-4656-852f-24de2da8f599
             region: content
             configuration:
+              id: 'field_block:node:project:body'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:node:project:body'
               formatter:
-                label: hidden
                 type: text_summary_or_trimmed
+                label: hidden
                 settings:
                   trim_length: 600
                 third_party_settings: {  }
-            additional: {  }
             weight: 1
+            additional: {  }
           9a6b4501-8ae7-477b-ae88-423a18f5506b:
             uuid: 9a6b4501-8ae7-477b-ae88-423a18f5506b
             region: content
             configuration:
+              id: 'extra_field_block:node:project:sharing_buttons'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'extra_field_block:node:project:sharing_buttons'
-            additional: {  }
             weight: 2
+            additional: {  }
         third_party_settings: {  }
 id: node.project.teaser
 targetEntityType: node
@@ -86,27 +86,27 @@ bundle: project
 mode: teaser
 content:
   body:
-    label: hidden
     type: text_summary_or_trimmed
-    weight: 101
+    label: hidden
     settings:
       trim_length: 600
     third_party_settings: {  }
+    weight: 101
     region: content
   links:
-    weight: 100
     settings: {  }
     third_party_settings: {  }
+    weight: 100
     region: content
   sharing_buttons:
-    weight: 100
     settings: {  }
     third_party_settings: {  }
+    weight: 100
     region: content
 hidden:
   field_additional_elements: true
   field_additional_resources: true
-  field_collection: true
+  field_collections: true
   field_contact: true
   field_dates: true
   field_display_image: true
@@ -124,7 +124,7 @@ hidden:
   field_standfirst: true
   field_tagline: true
   field_tags: true
-  field_theme: true
+  field_theme_s_: true
   field_year: true
   langcode: true
   search_api_excerpt: true

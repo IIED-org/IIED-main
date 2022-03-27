@@ -49,7 +49,7 @@ class ViewsBulkOperationsViewData implements ViewsBulkOperationsViewDataInterfac
    *
    * @var array
    */
-  protected $data;
+  protected $data = [];
 
   /**
    * Entity type ids returned by this view.
@@ -91,7 +91,9 @@ class ViewsBulkOperationsViewData implements ViewsBulkOperationsViewDataInterfac
 
     // Get view entity types and results fetcher callable.
     $event = new ViewsBulkOperationsEvent($this->getViewProvider(), $this->getData(), $view);
-    $this->eventDispatcher->dispatch(ViewsBulkOperationsEvent::NAME, $event);
+
+    $this->eventDispatcher->dispatch($event, ViewsBulkOperationsEvent::NAME);
+
     $this->entityTypeIds = $event->getEntityTypeIds();
     $this->entityGetter = $event->getEntityGetter();
   }
@@ -110,18 +112,21 @@ class ViewsBulkOperationsViewData implements ViewsBulkOperationsViewDataInterfac
    *   Part of views data that refers to the current view.
    */
   protected function getData() {
-    if (!$this->data) {
-      $viewsData = Views::viewsData();
-      if (!empty($this->relationship) && $this->relationship != 'none') {
-        $relationship = $this->displayHandler->getOption('relationships')[$this->relationship];
-        $table_data = $viewsData->get($relationship['table']);
-        $this->data = $viewsData->get($table_data[$relationship['field']]['relationship']['base']);
-      }
-      else {
-        $this->data = $viewsData->get($this->view->storage->get('base_table'));
-      }
+    if (!empty($this->relationship) && $this->relationship != 'none') {
+      $relationship = $this->displayHandler->getOption('relationships')[$this->relationship];
+      $table_data = $viewsData->get($relationship['table']);
+      $key = $table_data[$relationship['field']]['relationship']['base'];
     }
-    return $this->data;
+    else {
+      $key = $this->view->storage->get('base_table');
+    }
+
+    if (!array_key_exists($key, $this->data)) {
+      $viewsData = Views::viewsData();
+      $this->data[$key] = $viewsData->get($key);
+    }
+
+    return $this->data[$key];
   }
 
   /**
@@ -220,7 +225,7 @@ class ViewsBulkOperationsViewData implements ViewsBulkOperationsViewDataInterfac
       $total_results = $view->total_rows;
     }
 
-    if (!empty($pager_options) && !empty($pager_options['id'])) {
+    if (!empty($pager_options) && isset($pager_options['id'])) {
       $this->pagerManager->createPager($pager_options['total_items'], $pager_options['items_per_page'], $pager_options['id']);
     }
 

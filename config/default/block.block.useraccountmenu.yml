@@ -18,20 +18,20 @@ plugin: 'system_menu_block:account'
 settings:
   id: 'system_menu_block:account'
   label: 'User account menu'
-  provider: system
   label_display: '0'
+  provider: system
   level: 1
   depth: 0
   expand_all_items: false
 visibility:
   user_role:
     id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
     roles:
       authenticated: authenticated
       viewer: viewer
       editor: editor
       manager: manager
       administrator: administrator
-    negate: false
-    context_mapping:
-      user: '@user.current_user_context:current_user'

@@ -16,14 +16,14 @@ class IntegrationTest extends FacetsTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'facets_summary',
   ];
 
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     $this->drupalLogin($this->adminUser);
@@ -49,8 +49,9 @@ class IntegrationTest extends FacetsTestBase {
       'id' => 'owl',
       'facet_source_id' => 'search_api:views_page__search_api_test_view__page_1',
     ];
-    $this->drupalPostForm('admin/config/search/facets/add-facet-summary', $values, 'Save');
-    $this->drupalPostForm(NULL, [], 'Save');
+    $this->drupalGet('admin/config/search/facets/add-facet-summary');
+    $this->submitForm($values, 'Save');
+    $this->submitForm([], 'Save');
 
     $this->drupalGet('admin/config/search/facets');
     $this->assertSession()->pageTextContains('Facets Summary');
@@ -71,11 +72,11 @@ class IntegrationTest extends FacetsTestBase {
     $this->assertSession()->checkboxNotChecked('edit-facets-llama-checked');
 
     // Post the form and check that no facets are checked after saving the form.
-    $this->drupalPostForm(NULL, [], 'Save');
+    $this->submitForm([], 'Save');
     $this->assertSession()->checkboxNotChecked('edit-facets-llama-checked');
 
     // Enable a facet and check it's status after saving.
-    $this->drupalPostForm(NULL, ['facets[llama][checked]' => TRUE], 'Save');
+    $this->submitForm(['facets[llama][checked]' => TRUE], 'Save');
     $this->assertSession()->checkboxChecked('edit-facets-llama-checked');
 
     $this->configureShowCountProcessor();
@@ -103,15 +104,17 @@ class IntegrationTest extends FacetsTestBase {
       'id' => 'owl',
       'facet_source_id' => 'search_api:views_page__search_api_test_view__page_1',
     ];
-    $this->drupalPostForm('admin/config/search/facets/add-facet-summary', $values, 'Save');
-    $this->drupalPostForm(NULL, [], 'Save');
+    $this->drupalGet('admin/config/search/facets/add-facet-summary');
+    $this->submitForm($values, 'Save');
+    $this->submitForm([], 'Save');
 
     // Edit the summary and enable the giraffe's.
     $summaries = [
       'facets[giraffe][checked]' => TRUE,
       'facets[giraffe][label]' => 'Summary giraffe',
     ];
-    $this->drupalPostForm('admin/config/search/facets/facet-summary/owl/edit', $summaries, 'Save');
+    $this->drupalGet('admin/config/search/facets/facet-summary/owl/edit');
+    $this->submitForm($summaries, 'Save');
 
     $block = [
       'region' => 'footer',
@@ -146,7 +149,8 @@ class IntegrationTest extends FacetsTestBase {
       'facets[llama][checked]' => TRUE,
       'facets[llama][label]' => 'Summary llama',
     ];
-    $this->drupalPostForm('admin/config/search/facets/facet-summary/owl/edit', $summaries, 'Save');
+    $this->drupalGet('admin/config/search/facets/facet-summary/owl/edit');
+    $this->submitForm($summaries, 'Save');
 
     $this->drupalGet('search-api-test-fulltext');
     $this->assertSession()->pageTextContains('Displaying 5 search results');
@@ -192,7 +196,8 @@ class IntegrationTest extends FacetsTestBase {
       'id' => 'owl',
       'facet_source_id' => 'search_api:views_page__search_api_test_view__page_1',
     ];
-    $this->drupalPostForm('admin/config/search/facets/add-facet-summary', $values, 'Save');
+    $this->drupalGet('admin/config/search/facets/add-facet-summary');
+    $this->submitForm($values, 'Save');
 
     // Edit the summary and enable the facets.
     $summaries = [
@@ -202,7 +207,7 @@ class IntegrationTest extends FacetsTestBase {
       'facets[llama][label]' => 'Summary llama',
       'facets_summary_settings[show_summary][status]' => TRUE,
     ];
-    $this->drupalPostForm(NULL, $summaries, 'Save');
+    $this->submitForm($summaries, 'Save');
 
     $block = [
       'region' => 'footer',
@@ -247,7 +252,8 @@ class IntegrationTest extends FacetsTestBase {
       'id' => $id,
       'facet_source_id' => 'search_api:views_page__search_api_test_view__page_1',
     ];
-    $this->drupalPostForm('admin/config/search/facets/add-facet-summary', $values, 'Save');
+    $this->drupalGet('admin/config/search/facets/add-facet-summary');
+    $this->submitForm($values, 'Save');
     $this->assertSession()->pageTextContains('Caching of view Search API Test Fulltext search view has been disabled.');
 
     // Check the view's cache settings again to see if they've been updated.
@@ -275,8 +281,10 @@ class IntegrationTest extends FacetsTestBase {
       'widget' => 'links',
       'widget_config[show_numbers]' => '1',
     ];
-    $this->drupalPostForm('admin/config/search/facets/otter/edit', $edit, 'Save');
-    $this->drupalPostForm('admin/config/search/facets/wolverine/edit', $edit, 'Save');
+    $this->drupalGet('admin/config/search/facets/otter/edit');
+    $this->submitForm($edit, 'Save');
+    $this->drupalGet('admin/config/search/facets/wolverine/edit');
+    $this->submitForm($edit, 'Save');
 
     // Add a summary.
     $values = [
@@ -284,7 +292,8 @@ class IntegrationTest extends FacetsTestBase {
       'id' => 'mustelidae',
       'facet_source_id' => 'search_api:views_page__search_api_test_view__page_1',
     ];
-    $this->drupalPostForm('admin/config/search/facets/add-facet-summary', $values, 'Save');
+    $this->drupalGet('admin/config/search/facets/add-facet-summary');
+    $this->submitForm($values, 'Save');
 
     // Configure the summary to hide the count.
     $summaries = [
@@ -295,7 +304,7 @@ class IntegrationTest extends FacetsTestBase {
       'facets[wolverine][label]' => 'Summary llama',
       'facets[wolverine][show_count]' => FALSE,
     ];
-    $this->drupalPostForm(NULL, $summaries, 'Save');
+    $this->submitForm($summaries, 'Save');
 
     // Place the block.
     $block = [
@@ -318,7 +327,8 @@ class IntegrationTest extends FacetsTestBase {
       'facets[otter][show_count]' => TRUE,
       'facets[wolverine][show_count]' => TRUE,
     ];
-    $this->drupalPostForm('admin/config/search/facets/facet-summary/mustelidae/edit', $summaries, 'Save');
+    $this->drupalGet('admin/config/search/facets/facet-summary/mustelidae/edit');
+    $this->submitForm($summaries, 'Save');
 
     $this->drupalGet('search-api-test-fulltext');
     $webAssert = $this->assertSession();
@@ -342,8 +352,9 @@ class IntegrationTest extends FacetsTestBase {
       'id' => $id,
       'facet_source_id' => 'search_api:views_page__search_api_test_view__page_1',
     ];
-    $this->drupalPostForm('admin/config/search/facets/add-facet-summary', $values, 'Save');
-    $this->drupalPostForm(NULL, [], 'Save');
+    $this->drupalGet('admin/config/search/facets/add-facet-summary');
+    $this->submitForm($values, 'Save');
+    $this->submitForm([], 'Save');
 
     $block_settings = [
       'region' => 'footer',
@@ -354,7 +365,7 @@ class IntegrationTest extends FacetsTestBase {
     $this->drupalGet('admin/structure/block');
     $this->assertSession()->pageTextContains($block->label());
 
-    $this->drupalGet('admin/structure/block/library/classy');
+    $this->drupalGet('admin/structure/block/library/' . $this->defaultTheme);
     $this->assertSession()->pageTextContains($name);
 
     // Check for the warning message that additional config entities will be
@@ -362,9 +373,9 @@ class IntegrationTest extends FacetsTestBase {
     $this->drupalGet('admin/config/search/facets/facet-summary/' . $id . '/delete');
     $this->assertSession()->pageTextContains('The listed configuration will be deleted.');
     $this->assertSession()->pageTextContains($block->label());
-    $this->drupalPostForm(NULL, [], 'Delete');
+    $this->submitForm([], 'Delete');
 
-    $this->drupalGet('admin/structure/block/library/classy');
+    $this->drupalGet('admin/structure/block/library/' . $this->defaultTheme);
     $this->assertSession()->pageTextNotContains($name);
   }
 
@@ -373,9 +384,9 @@ class IntegrationTest extends FacetsTestBase {
    */
   protected function configureShowCountProcessor() {
     $this->assertSession()->checkboxNotChecked('edit-facets-summary-settings-show-count-status');
-    $this->drupalPostForm(NULL, ['facets_summary_settings[show_count][status]' => TRUE], 'Save');
+    $this->submitForm(['facets_summary_settings[show_count][status]' => TRUE], 'Save');
     $this->assertSession()->checkboxChecked('edit-facets-summary-settings-show-count-status');
-    $this->assertSession()->pageTextContains(t('Facets Summary Owl has been updated.'));
+    $this->assertSession()->pageTextContains($this->t('Facets Summary Owl has been updated.'));
   }
 
   /**
@@ -395,13 +406,13 @@ class IntegrationTest extends FacetsTestBase {
    */
   protected function configureResetFacetsProcessor() {
     $this->assertSession()->checkboxNotChecked('edit-facets-summary-settings-reset-facets-status');
-    $this->drupalPostForm(NULL, ['facets_summary_settings[reset_facets][status]' => TRUE], 'Save');
+    $this->submitForm(['facets_summary_settings[reset_facets][status]' => TRUE], 'Save');
     $this->assertSession()->checkboxChecked('edit-facets-summary-settings-reset-facets-status');
-    $this->assertSession()->pageTextContains(t('Facets Summary Owl has been updated.'));
+    $this->assertSession()->pageTextContains($this->t('Facets Summary Owl has been updated.'));
 
     $this->assertSession()->fieldExists('facets_summary_settings[reset_facets][settings][link_text]');
-    $this->drupalPostForm(NULL, ['facets_summary_settings[reset_facets][settings][link_text]' => 'Reset facets'], 'Save');
-    $this->assertSession()->pageTextContains(t('Facets Summary Owl has been updated.'));
+    $this->submitForm(['facets_summary_settings[reset_facets][settings][link_text]' => 'Reset facets'], 'Save');
+    $this->assertSession()->pageTextContains($this->t('Facets Summary Owl has been updated.'));
     $this->assertSession()->fieldValueEquals('facets_summary_settings[reset_facets][settings][link_text]', 'Reset facets');
 
     // Clear the current search string checkbox attached
@@ -482,7 +493,7 @@ class IntegrationTest extends FacetsTestBase {
     // Create new facets summary.
     FacetsSummary::create([
       'id' => 'reset_facets',
-      'name' => t('Reset facets summary'),
+      'name' => $this->t('Reset facets summary'),
       'facet_source_id' => 'search_api:views_page__search_api_test_view__page_1',
       'facets' => [
         'giraffe' => [
@@ -581,7 +592,8 @@ class IntegrationTest extends FacetsTestBase {
       'id' => 'kepler',
       'facet_source_id' => 'search_api:views_page__search_api_test_view__page_1',
     ];
-    $this->drupalPostForm('admin/config/search/facets/add-facet-summary', $values, 'Save');
+    $this->drupalGet('admin/config/search/facets/add-facet-summary');
+    $this->submitForm($values, 'Save');
 
     // Place the block.
     $block = [
@@ -600,7 +612,8 @@ class IntegrationTest extends FacetsTestBase {
       'facets_summary_settings[reset_facets][status]' => 1,
       'facets_summary_settings[reset_facets][settings][link_text]' => 'Reset',
     ];
-    $this->drupalPostForm('admin/config/search/facets/facet-summary/kepler/edit', $summaries, 'Save');
+    $this->drupalGet('admin/config/search/facets/facet-summary/kepler/edit');
+    $this->submitForm($summaries, 'Save');
 
     // Go to the search view, and check that the summary, as well as the facets
     // are shown on the page.
@@ -629,7 +642,8 @@ class IntegrationTest extends FacetsTestBase {
       'id' => 'trappist',
       'facet_source_id' => 'search_api:views_page__search_api_test_view__page_1',
     ];
-    $this->drupalPostForm('admin/config/search/facets/add-facet-summary', $values, 'Save');
+    $this->drupalGet('admin/config/search/facets/add-facet-summary');
+    $this->submitForm($values, 'Save');
 
     // Place the block.
     $block = [
@@ -646,7 +660,8 @@ class IntegrationTest extends FacetsTestBase {
       'facets_summary_settings[reset_facets][status]' => 1,
       'facets_summary_settings[reset_facets][settings][link_text]' => 'Reset',
     ];
-    $this->drupalPostForm('admin/config/search/facets/facet-summary/trappist/edit', $summaries, 'Save');
+    $this->drupalGet('admin/config/search/facets/facet-summary/trappist/edit');
+    $this->submitForm($summaries, 'Save');
 
     // Go to the search view, and check that the summary, as well as the facets
     // are shown on the page.

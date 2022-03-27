@@ -3,7 +3,7 @@
 namespace Drupal\actions_permissions\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Drupal\Component\EventDispatcher\Event;
 use Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionManager;
 
 /**
@@ -21,14 +21,17 @@ class ActionsPermissionsEventSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events[ViewsBulkOperationsActionManager::ALTER_ACTIONS_EVENT][] = ['alterActions', static::PRIORITY];
+    $events[ViewsBulkOperationsActionManager::ALTER_ACTIONS_EVENT][] = [
+      'alterActions',
+      static::PRIORITY,
+    ];
     return $events;
   }
 
   /**
    * Alter the actions' definitions.
    *
-   * @var \Symfony\Component\EventDispatcher\Event $event
+   * @var \Drupal\Component\EventDispatcher\Event $event
    *   The event to respond to.
    */
   public function alterActions(Event $event) {

@@ -2,7 +2,7 @@
 
 namespace Drupal\views_bulk_operations;
 
-use Symfony\Component\EventDispatcher\Event;
+use Drupal\Component\EventDispatcher\Event;
 use Drupal\views\ViewExecutable;
 
 /**

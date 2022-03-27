@@ -23,17 +23,17 @@ third_party_settings:
             uuid: 9dc3924e-45df-4e27-9bd6-1e039f429d8c
             region: content
             configuration:
+              id: 'field_block:block_content:basic:body'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:block_content:basic:body'
               formatter:
-                label: hidden
                 type: text_default
+                label: hidden
                 settings: {  }
                 third_party_settings: {  }
-            additional: {  }
             weight: 0
+            additional: {  }
         third_party_settings: {  }
 _core:
   default_config_hash: orJpHUlAc_wiQLMUjIgEJXGeiqylGHMPcmNRjGtct-M
@@ -43,12 +43,12 @@ bundle: basic
 mode: default
 content:
   body:
-    label: hidden
     type: text_default
-    weight: 0
-    region: content
+    label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   langcode: true
   search_api_excerpt: true

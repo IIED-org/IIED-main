@@ -1,0 +1,15 @@
+name: 'TableField Cellspan'
+description: 'Use colspan and rowspan on table fields.'
+package: Field types
+
+type: module
+core: 8.x
+core_version_requirement: ^8 || ^9
+
+dependencies:
+  - tablefield:tablefield
+
+# Information added by Drupal.org packaging script on 2020-10-28
+version: '8.x-2.2'
+project: 'tablefield'
+datestamp: 1603881754

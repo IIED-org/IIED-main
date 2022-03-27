@@ -267,7 +267,7 @@ class EntityGenerateTest extends KernelTestBase implements MigrateMessageInterfa
     $migration = $this->migrationPluginManager->createStubMigration($definition);
     $migrationExecutable = (new MigrateExecutable($migration, $this));
     $migrationExecutable->import();
-    $this->assertEquals('Destination field type integer is not a recognized reference type.', $migration->getIdMap()->getMessages()->fetch()->message);
+    $this->assertStringEndsWith('Destination field type integer is not a recognized reference type.', $migration->getIdMap()->getMessages()->fetch()->message);
     $this->assertSame(1, $migration->getIdMap()->messageCount());
 
     // Enough context is provided so this should work.

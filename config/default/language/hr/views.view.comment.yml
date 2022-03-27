@@ -2,9 +2,6 @@ display:
   default:
     display_title: Zadano
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         subject:
           label: Naziv
@@ -12,6 +9,9 @@ display:
           label: Autor
         operations:
           label: Operacije
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         subject:
           expose:
@@ -21,13 +21,6 @@ display:
             label: Jezik
   page_unapproved:
     display_options:
-      filters:
-        subject:
-          expose:
-            label: Naziv
-        langcode:
-          expose:
-            label: Jezik
       fields:
         subject:
           label: Naziv
@@ -35,3 +28,10 @@ display:
           label: Autor
         operations:
           label: Operacije
+      filters:
+        subject:
+          expose:
+            label: Naziv
+        langcode:
+          expose:
+            label: Jezik

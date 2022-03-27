@@ -1,0 +1,29 @@
+uuid: 4f5550fd-35e9-4b91-999d-b633b53939e9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_project
+    - node.type.blog
+    - node.type.project
+id: node.blog.field_project
+field_name: field_project
+entity_type: node
+bundle: blog
+label: 'Project reference'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      project: project
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

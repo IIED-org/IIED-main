@@ -1,0 +1,81 @@
+/* stylelint-disable */
+/* purgecss start ignore */
+.webform-submission-form .js-form-type-checkbox, .eu-cookie-accordion {
+  @apply flex;
+  @apply items-center;
+
+  input[type='checkbox'] {
+    appearance: none;
+    @apply w-auto;
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    min-height: 24px;
+    @apply flex-shrink-0;
+    @apply bg-white;
+    @apply border-solid;
+    @apply border-black;
+    @apply border-3;
+    @apply rounded;
+    @apply relative;
+    @apply inline-block;
+    vertical-align: baseline;
+
+    &::after {
+      content: '';
+      width: 16px;
+      height: 13px;
+      @apply bg-cover;
+      @apply absolute;
+      top: 3px;
+      left: 1px;
+      @apply hidden;
+    }
+
+    &:disabled {
+      @apply opacity-50;
+    }
+
+    &:hover {
+      @apply border-colour-two;
+    }
+
+    &:focus {
+      @apply border-colour-two;
+      @apply outline-none;
+    }
+
+    &:checked {
+      &:focus {
+        &::after {
+          fill: theme('colors.colour-two');
+        }
+      }
+      &:hover {
+        &::after {
+          @apply opacity-100;
+        }
+      }
+      &::after {
+        @apply block;
+      }
+    }
+  }
+
+  label {
+    @apply block;
+    @apply text-black;
+    @apply ml-0;
+    @apply leading-145;
+    @apply text-18;
+    @apply font-normal;
+    @apply mb-0;
+
+    @screen lg {
+      vertical-align: top;
+      @apply inline-block;
+      @apply ml-16;
+    }
+  }
+}
+/* purgecss end ignore */

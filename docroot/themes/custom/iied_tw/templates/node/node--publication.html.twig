@@ -1,0 +1,163 @@
+{#
+/**
+ * @file
+ * Theme override to display a node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - node.getCreatedTime() will return the node creation timestamp.
+ *   - node.hasField('field_example') returns TRUE if the node bundle includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   - node.isPublished() will return whether the node is published or not.
+ *   Calling other methods, such as node.delete(), will result in an exception.
+ *   See \Drupal\node\Entity\Node for a full list of public properties and
+ *   methods for the node object.
+ * - label: The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - author_picture: The node author user entity, rendered using the "compact"
+ *   view mode.
+ * - metadata: Metadata for this node.
+ * - date: Themed creation date field.
+ * - author_name: Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+ *   The following are controlled through the node publishing options.
+ *   - node--promoted: Appears on nodes promoted to the front page.
+ *   - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+ *     teaser listings.
+ *   - node--unpublished: Appears on unpublished nodes visible only to site
+ *     admins.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ * - readmore: Flag for more state. Will be true if the teaser content of the
+ *   node cannot hold the main body content.
+ * - logged_in: Flag for authenticated user status. Will be true when the
+ *   current user is a logged-in member.
+ * - is_admin: Flag for admin user status. Will be true when the current user
+ *   is an administrator.
+ *
+ * @see template_preprocess_node()
+ *
+ * @todo Remove the id attribute (or make it a class), because if that gets
+ *   rendered twice on a page this is invalid CSS for example: two lists
+ *   in different view modes.
+ */
+#}
+<article{{ attributes.addClass('node') }}>
+
+  {#{{ title_prefix }}
+  {% if not page %}
+    <h2{{ title_attributes }}>
+      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+  {% endif %}
+  {{ title_suffix }}
+
+  {% if display_submitted %}
+    <footer>
+      {{ author_picture }}
+      <div{{ author_attributes }}>
+        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+        {{ metadata }}
+      </div>
+    </footer>
+  {% endif %}
+  #}
+
+    <div{{ content_attributes.addClass('node-content') }}>
+    <main class="container py-8 mx-auto md:grid md:grid-flow-row-dense md:grid-cols-3">
+{#  order 2  #}    
+      <div class="md:col-span-2 md:order-2">
+        <nav aria-label="themes">
+          <div class="flex flex-wrap mb-6 space-x-3">
+            {{ content.field_theme_s_}}
+          </div>
+        </nav>
+        <h1 class="mb-6 text-4xl">{{ node.label }}</h1>
+        <div class="flex mb-4">
+          {{ content.field_author_s_}} {{ content.field_editor_s_ }} {{ content.field_translator }}
+        </div>
+        <div class="flex mb-6">
+          {{ content.field_document_type }}
+              {% if content.field_pdf_pages %} 
+              , {{ content.field_pdf_pages.0 }} pages
+                    {% endif %}  
+        </div>
+          <div class="mb-6">
+            <div class="md:flex">
+              <div class="flex flex-col items-center justify-center">
+                {% include '@iied_tw/partials/_button.html.twig' with {'button_title':'Download', 'url': node.field_media | file_url} %}
+                {% set size = content.field_media[0]["field_size"][0]["#markup"] %}
+                <div>PDF ({{ (size/1048576)|number_format(2) }} MB)
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+
+{#  order 1  #}  
+      <div class="mb-4 md:order-1 md:row-span-2">
+        {% if content.field_cover_image[0] %}
+          {{ node.field_cover_image | view }}
+        {% else %}
+          {{ node.field_media | view }}
+        {% endif %}
+
+        {% include '@iied_tw/partials/_publication_details.html.twig' %}
+          <div>
+            {% include '@iied_tw/partials/_share_links.html.twig' %}
+          </div>
+      </div>
+
+{#  order 3  #}  
+      <div class="md:col-span-2 md:order-3">
+        <div class="prose prose-base lg:prose-lg lg:max-w-max">
+          {{ content.body }}
+        </div>
+   
+    {{ content.field_iied_url }}
+    
+    {# cite #}
+    {# TODO: Rewrite in twig instead of using views! #}
+        <div class="pl-4 my-8 border-l-2 border-iiedblue-500">
+          <span class="font-bold">How to cite:</span><br />
+          {{ drupal_view('citation', 'block_1') }}
+        </div>
+      </div>
+
+
+{# {{ drupal_entity('node', node.field_media.0.target_id, 'card') }} this sort of works to print a view mode #}
+{# {{ node.content.field_media.entity.name.value }} this prints the whole thing #}
+
+    </main>
+  </div>
+
+</article>
+

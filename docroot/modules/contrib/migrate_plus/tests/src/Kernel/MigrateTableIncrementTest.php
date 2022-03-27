@@ -24,7 +24,7 @@ class MigrateTableIncrementTest extends MigrateTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['migrate_plus'];
+  protected static $modules = ['migrate_plus'];
 
   /**
    * {@inheritdoc}

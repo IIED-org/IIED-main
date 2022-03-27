@@ -225,8 +225,22 @@ class UpgradeStatusForm extends FormBase {
     catch (\Exception $e) {
       $analyzer_ready = FALSE;
       // Message and impact description is not translated as the message
-      // is sourced from an exception thrown.
+      // is sourced from an exception thrown. Adding it to both the set
+      // of standard Drupal messages and to the bottom around the buttons.
       $this->messenger()->addError($e->getMessage() . ' Scanning is not possible until this is resolved.');
+      $form['warning'] = [
+        [
+          '#theme' => 'status_messages',
+          '#message_list' => [
+            'error' => [$e->getMessage() . ' Scanning is not possible until this is resolved.'],
+          ],
+          '#status_headings' => [
+            'error' => t('Error message'),
+          ],
+        ],
+        // Set weight lower than the "actions" element's 100.
+        '#weight' => 90,
+      ];
     }
 
     $environment = $this->buildEnvironmentChecks();
@@ -268,21 +282,23 @@ class UpgradeStatusForm extends FormBase {
       }
     }
 
-    $form['drupal_upgrade_status_form']['action']['submit'] = [
+
+    $form['actions']['#type'] = 'actions';
+    $form['actions']['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Scan selected'),
       '#weight' => 2,
       '#button_type' => 'primary',
       '#disabled' => !$analyzer_ready,
     ];
-    $form['drupal_upgrade_status_form']['action']['export'] = [
+    $form['actions']['export'] = [
       '#type' => 'submit',
       '#value' => $this->t('Export selected as HTML'),
       '#weight' => 5,
       '#submit' => [[$this, 'exportReport']],
       '#disabled' => !$analyzer_ready,
     ];
-    $form['drupal_upgrade_status_form']['action']['export_ascii'] = [
+    $form['actions']['export_ascii'] = [
       '#type' => 'submit',
       '#value' => $this->t('Export selected as text'),
       '#weight' => 6,
@@ -332,7 +348,7 @@ class UpgradeStatusForm extends FormBase {
           'label' => [
             '#type' => 'html_tag',
             '#tag' => 'label',
-            '#value' => $extension->info['name'],
+            '#value' => $extension->info['name'] . ' (' . $extension->getName() . ')',
             '#attributes' => [
               'for' => 'edit-' . $next_step . '-data-list-' . str_replace('_', '-', $name),
             ],
@@ -340,11 +356,34 @@ class UpgradeStatusForm extends FormBase {
         ],
         'class' => 'project-label',
       ];
+      $type = '';
+      if ($extension->info['upgrade_status_type'] == ProjectCollector::TYPE_CUSTOM) {
+        if ($extension->getType() == 'module') {
+          $type = $this->t('Custom module');
+        }
+        elseif ($extension->getType() == 'theme') {
+          $type = $this->t('Custom theme');
+        }
+        elseif ($extension->getType() == 'profile') {
+          $type = $this->t('Custom profile');
+        }
+      }
+      else {
+        if ($extension->getType() == 'module') {
+          $type = $this->t('Contributed module');
+        }
+        elseif ($extension->getType() == 'theme') {
+          $type = $this->t('Contributed theme');
+        }
+        elseif ($extension->getType() == 'profile') {
+          $type = $this->t('Contributed profile');
+        }
+      }
       $option['type'] = [
         'data' => [
           'label' => [
             '#type' => 'markup',
-            '#markup' => $extension->info['upgrade_status_type'] == ProjectCollector::TYPE_CUSTOM ? $this->t('Custom') : $this->t('Contributed'),
+            '#markup' => $type,
           ],
         ]
       ];
@@ -491,7 +530,6 @@ class UpgradeStatusForm extends FormBase {
         ];
       }
       else {
-        $plan = (string) $this->projectCollector->getPlan($name);
         $option['issues'] = [
           'data' => [
             'label' => [
@@ -687,7 +725,9 @@ MARKUP
 
       // Check PHP version.
       $version = PHP_VERSION;
-      if (version_compare($version, '8.0.0') >= 0) {
+      // The value of MINIMUM_PHP in Drupal 10.
+      $minimum_php = '8.1.0';
+      if (version_compare($version, $minimum_php) >= 0) {
         $class = 'no-known-error';
       }
       else {
@@ -699,7 +739,7 @@ MARKUP
         'data' => [
           'requirement' => [
             'class' => 'requirement-label',
-            'data' => $this->t('PHP version should be at least 8.0.0. Before updating to PHP 8, use <code>$ composer why-not php:8</code> to check if any projects need updating for compatibility. Also check custom projects manually.'),
+            'data' => $this->t('PHP version should be at least @minimum_php. Before updating to PHP 8, use <code>$ composer why-not php:8</code> to check if any projects need updating for compatibility. Also check custom projects manually.', ['@minimum_php' => $minimum_php]),
           ],
           'status' => [
             'data' => $this->t('Version @version', ['@version' => $version]),
@@ -708,11 +748,50 @@ MARKUP
         ]
       ];
 
+      // Check database version.
+      $database_type = $this->database->databaseType();
+      $version = $this->database->version();
+      $addendum = '';
+      if ($database_type == 'pgsql') {
+        $database_type_full_name = 'PostgreSQL';
+        $requirement = $this->t('When using PostgreSQL, minimum version is 12 <a href=":trgm">with the pg_trgm extension</a> created.', [':trgm' => 'https://www.postgresql.org/docs/10/pgtrgm.html']);
+        $has_trgm = $this->database->query("SELECT installed_version FROM pg_available_extensions WHERE name = 'pg_trgm'")->fetchField();
+        if (version_compare($version, '12') >= 0 && $has_trgm) {
+          $class = 'no-known-error';
+          $addendum = $this->t('Has pg_trgm extension.');
+        }
+        else {
+          $status = FALSE;
+          $class = 'known-error';
+          if (!$has_trgm) {
+            $addendum = $this->t('No pg_trgm extension.');
+          }
+        }
+        $build['data']['#rows'][] = [
+          'class' => [$class],
+          'data' => [
+            'requirement' => [
+              'class' => 'requirement-label',
+              'data' => [
+                '#type' => 'markup',
+                '#markup' => $requirement
+              ],
+            ],
+            'status' => [
+              'data' => trim($database_type_full_name . ' ' . $version . ' ' . $addendum),
+              'class' => 'status-info',
+            ],
+          ]
+        ];
+      }
+
       // Check JSON support in database.
       $class = 'no-known-error';
       $requirement = $this->t('Supported.');
       try {
-        $this->database->query('SELECT JSON_TYPE(\'1\')');
+        // A hasJson() method was added to Connection from Drupal 9.4.0
+        // but we cannot rely on being on Drupal 9.4.x+
+        $this->database->query($database_type == 'pgsql' ? 'SELECT JSON_TYPEOF(\'1\')' : 'SELECT JSON_TYPE(\'1\')');
       }
       catch (\Exception $e) {
         $class = 'known-error';
@@ -735,7 +814,7 @@ MARKUP
 
       // Check user roles on the site for invalid permissions.
       $class = 'no-known-error';
-      $requirement = [$this->t('None found.')];
+      $requirement = [];
       $user_roles = Role::loadMultiple();
       $all_permissions = array_keys(\Drupal::service('user.permissions')->getPermissions());
       foreach ($user_roles as $role) {
@@ -745,7 +824,11 @@ MARKUP
         if (!empty($invalid_role_permissions)) {
           $class = 'known-error';
           $status = FALSE;
-          $requirement = [$this->t('"@permissions" of user role: "@role".', ['@permissions' => implode('", "', $invalid_role_permissions), '@role' => $role->label()])];
+          $requirement[] = [
+            '#theme' => 'item_list',
+            '#prefix' => $this->t('Permissions of user role: "@role":', ['@role' => $role->label()]),
+            '#items' => $invalid_role_permissions,
+          ];
         }
       }
       $build['data']['#rows'][] = [
@@ -753,10 +836,14 @@ MARKUP
         'data' => [
           'requirement' => [
             'class' => 'requirement-label',
-            'data' => $this->t('Invalid permissions will trigger runtime exceptions in Drupal 10. Permissions should be defined in a permissions.yml file or a permission callback. See https://www.drupal.org/node/3193348'),
+            'data' => $this->t('<a href=":url">Invalid permissions will trigger runtime exceptions in Drupal 10.</a> Permissions should be defined in a permissions.yml file or a permission callback.', [':url' => 'https://www.drupal.org/node/3193348']),
           ],
           'status' => [
-            'data' => join(' ', $requirement),
+            'data' => [
+              '#theme' => 'item_list',
+              '#items' => $requirement,
+              '#empty' => $this->t('None found.'),
+            ],
             'class' => 'status-info',
           ],
         ]
@@ -779,7 +866,9 @@ MARKUP
             'data' => $this->t('Deprecated or obsolete core extensions installed. These will be removed in the next major version.'),
           ],
           'status' => [
-            'data' => $requirement,
+            'data' => [
+              '#markup' => $requirement,
+            ],
             'class' => 'status-info',
           ],
         ]
@@ -867,7 +956,7 @@ MARKUP
     ];
 
     // Check database version.
-    $type = $this->database->databaseType();
+    $database_type = $this->database->databaseType();
     $version = $this->database->version();
 
     // If running on Drupal 8, the mysql driver might
@@ -880,14 +969,14 @@ MARKUP
     // MariaDB databases report as MySQL. Detect MariaDB separately based on code from
     // https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Database%21Driver%21mysql%21Connection.php/function/Connection%3A%3AgetMariaDbVersionMatch/9.0.x
     // See also https://www.drupal.org/node/3119156 for test values.
-    if ($type == 'mysql') {
+    if ($database_type == 'mysql') {
       // MariaDB may prefix its version string with '5.5.5-', which should be
       // ignored.
       // @see https://github.com/MariaDB/server/blob/f6633bf058802ad7da8196d01fd19d75c53f7274/include/mysql_com.h#L42.
       $regex = '/^(?:5\\.5\\.5-)?(\\d+\\.\\d+\\.\\d+.*-mariadb.*)/i';
       preg_match($regex, $version, $matches);
       if (!empty($matches[1])) {
-        $type = 'MariaDB';
+        $database_type_full_name = 'MariaDB';
         $version = $matches[1];
         $requirement = $this->t('When using MariaDB, minimum version is 10.3.7');
         if (version_compare($version, '10.3.7') >= 0) {
@@ -904,7 +993,7 @@ MARKUP
         }
       }
       else {
-        $type = 'MySQL or Percona Server';
+        $database_type_full_name = 'MySQL or Percona Server';
         $requirement = $this->t('When using MySQL/Percona, minimum version is 5.7.8');
         if (version_compare($version, '5.7.8') >= 0) {
           $class = 'no-known-error';
@@ -920,8 +1009,8 @@ MARKUP
         }
       }
     }
-    elseif ($type == 'pgsql') {
-      $type = 'PostgreSQL';
+    elseif ($database_type == 'pgsql') {
+      $database_type_full_name = 'PostgreSQL';
       $requirement = $this->t('When using PostgreSQL, minimum version is 10 <a href=":trgm">with the pg_trgm extension</a> (The extension is not checked here).', [':trgm' => 'https://www.postgresql.org/docs/10/pgtrgm.html']);
       if (version_compare($version, '10') >= 0) {
         $class = 'no-known-error';
@@ -931,8 +1020,8 @@ MARKUP
         $class = 'known-error';
       }
     }
-    elseif ($type == 'sqlite') {
-      $type = 'SQLite';
+    elseif ($database_type == 'sqlite') {
+      $database_type_full_name = 'SQLite';
       $requirement = $this->t('When using SQLite, minimum version is 3.26');
       if (version_compare($version, '3.26') >= 0) {
         $class = 'no-known-error';
@@ -954,7 +1043,7 @@ MARKUP
           ],
         ],
         'status' => [
-          'data' => $type . ' ' . $version,
+          'data' => $database_type_full_name . ' ' . $version,
           'class' => 'status-info',
         ],
       ]

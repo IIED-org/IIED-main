@@ -1,8 +1,5 @@
 Migrate Source CSV is the contrib functionality for migrating CSV files.
 
-Over in #2931739: Bring migrate_source_csv to core, it was decided to port
-this module for use in core. Eventually, this module will sunset.
-
 Example
 =======
 The migrate_source_csv_test module in the tests/modules folder provides a

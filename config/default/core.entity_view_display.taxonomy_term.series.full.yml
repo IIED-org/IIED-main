@@ -15,8 +15,8 @@ dependencies:
     - text
 third_party_settings:
   layout_builder:
-    allow_custom: false
     enabled: false
+    allow_custom: false
   ds:
     layout:
       id: ds_1col
@@ -24,17 +24,17 @@ third_party_settings:
       disable_css: false
       entity_classes: all_classes
       settings:
-        label: ''
+        classes:
+          layout_class:
+            mb-3: mb-3
+          ds_content: {  }
         wrappers:
           ds_content: div
         outer_wrapper: div
         attributes: ''
         link_attribute: ''
         link_custom: ''
-        classes:
-          layout_class:
-            mb-3: mb-3
-          ds_content: {  }
+        label: ''
     regions:
       ds_content:
         - taxonomy_term_title
@@ -47,9 +47,9 @@ third_party_settings:
         label: hidden
         formatter: default
         settings:
+          link: false
           wrapper: h1
           class: page-title
-          link: false
         ft:
           id: default
           settings:
@@ -62,10 +62,8 @@ bundle: series
 mode: full
 content:
   description:
-    label: hidden
     type: text_default
-    weight: 2
-    region: ds_content
+    label: hidden
     settings: {  }
     third_party_settings:
       ds:
@@ -73,12 +71,12 @@ content:
           id: default
           settings:
             lb: ''
+            lb-col: false
             prefix: ''
             lbw: 0
             lbw-el: ''
             lbw-cl: ''
             lbw-at: ''
-            lb-col: false
             ow: 0
             ow-el: ''
             ow-cl: ''
@@ -96,10 +94,10 @@ content:
             fi-at: ''
             fi-def-at: 0
             suffix: ''
+    weight: 2
+    region: ds_content
   field_status:
     type: list_default
-    weight: 1
-    region: ds_content
     label: hidden
     settings: {  }
     third_party_settings:
@@ -108,29 +106,31 @@ content:
           id: expert
           settings:
             lb: ''
-            prefix: '<p class="text-muted">'
+            lbw: false
             lbw-el: ''
             lbw-cl: ''
             lbw-at: ''
+            lb-col: false
+            ow: false
             ow-el: div
             ow-cl: mb-3
             ow-at: ''
-            fis-el: ''
-            fis-cl: ''
-            fis-at: ''
-            fi-el: ''
-            fi-cl: ''
-            fi-at: ''
-            suffix: series</p>
-            lbw: false
-            lb-col: false
-            ow: false
             ow-def-at: false
             ow-def-cl: false
             fis: false
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
             fis-def-at: false
             fi: false
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
             fi-def-at: false
+            prefix: '<p class="text-muted">'
+            suffix: series</p>
+    weight: 1
+    region: ds_content
 hidden:
   field_code: true
   field_purpose: true

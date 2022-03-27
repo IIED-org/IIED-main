@@ -2,9 +2,6 @@ display:
   default:
     display_title: 默认
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         name:
           label: 用户名
@@ -14,6 +11,9 @@ display:
             format_custom_true: 有效
         operations:
           label: 操作
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         status:
           group_info:

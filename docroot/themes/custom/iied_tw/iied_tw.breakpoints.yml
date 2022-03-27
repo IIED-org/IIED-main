@@ -1,0 +1,42 @@
+iied_tw.viewport:
+  label: viewport sizing
+  mediaQuery: "screen"
+  weight: 0
+  multipliers:
+    - 1x
+    - 2x
+iied_tw.sm:
+  label: small
+  mediaQuery: "screen and (min-width: 640px)"
+  weight: 1
+  multipliers:
+    - 1x
+    - 2x
+iied_tw.md:
+  label: medium
+  mediaQuery: "screen and (min-width: 768px)"
+  weight: 2
+  multipliers:
+    - 1x
+    - 2x
+iied_tw.lg:
+  label: large
+  mediaQuery: "screen and (min-width: 1024px)"
+  weight: 3
+  multipliers:
+    - 1x
+    - 2x
+iied_tw.xl:
+  label: xlarge
+  mediaQuery: "screen and (min-width: 1280px)"
+  weight: 4
+  multipliers:
+    - 1x
+    - 2x
+iied_tw.2xl:
+  label: xxlarge
+  mediaQuery: "screen and (min-width: 1536px)"
+  weight: 5
+  multipliers:
+    - 1x
+    - 2x

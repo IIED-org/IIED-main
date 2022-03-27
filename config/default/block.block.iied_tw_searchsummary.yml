@@ -1,0 +1,32 @@
+uuid: 22bd02fd-0935-48f3-98dc-07c2bb2edf76
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets_summary.facets_summary.search_summary
+  module:
+    - block_class
+    - facets_summary
+    - system
+  theme:
+    - iied_tw
+third_party_settings:
+  block_class:
+    classes: 'col-12 col-lg-8 float-lg-right order-lg-1'
+id: iied_tw_searchsummary
+theme: iied_tw
+region: content
+weight: -10
+provider: null
+plugin: 'facets_summary_block:search_summary'
+settings:
+  id: 'facets_summary_block:search_summary'
+  label: 'Search summary'
+  label_display: '0'
+  provider: facets_summary
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: '/search*'

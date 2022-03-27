@@ -46,7 +46,9 @@ Composer fires the following named events during its execution process:
 ### Installer Events
 
 - **pre-operations-exec**: occurs before the install/upgrade/.. operations
-  are executed when installing a lock file.
+  are executed when installing a lock file. Plugins that need to hook into
+  this event will need to be installed globally to be usable, as otherwise
+  they would not be loaded yet when a fresh install of a project happens.
 
 ### Package Events
 
@@ -71,7 +73,7 @@ Composer fires the following named events during its execution process:
   manipulate the `InputInterface` object's options and arguments to tweak
   a command's behavior.
 - **pre-pool-create**: occurs before the Pool of packages is created, and lets
-  you filter the list of packages which is going to enter the Solver.
+  you filter the list of packages that is going to enter the Solver.
 
 > **Note:** Composer makes no assumptions about the state of your dependencies
 > prior to `install` or `update`. Therefore, you should not specify scripts
@@ -166,7 +168,7 @@ class MyClass
 `COMPOSER_DEV_MODE` will be added to the environment. If the command was run
 with the `--no-dev` flag, this variable will be set to 0, otherwise it will be
 set to 1. The variable is also available while `dump-autoload` runs, and it
-will be set to same as the last `install` or `update` was run in.
+will be set to the same as the last `install` or `update` was run in.
 
 ## Event classes
 

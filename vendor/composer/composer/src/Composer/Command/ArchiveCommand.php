@@ -49,7 +49,7 @@ class ArchiveCommand extends BaseCommand
             ->setDefinition(array(
                 new InputArgument('package', InputArgument::OPTIONAL, 'The package to archive instead of the current project'),
                 new InputArgument('version', InputArgument::OPTIONAL, 'A version constraint to find the package to archive'),
-                new InputOption('format', 'f', InputOption::VALUE_REQUIRED, 'Format of the resulting archive: tar or zip'),
+                new InputOption('format', 'f', InputOption::VALUE_REQUIRED, 'Format of the resulting archive: tar, tar.gz, tar.bz2 or zip (default tar)'),
                 new InputOption('dir', null, InputOption::VALUE_REQUIRED, 'Write the archive to this directory'),
                 new InputOption('file', null, InputOption::VALUE_REQUIRED, 'Write the archive with the given file name.'
                     .' Note that the format will be appended.'),
@@ -61,7 +61,7 @@ The <info>archive</info> command creates an archive of the specified format
 containing the files and directories of the Composer project or the specified
 package in the specified version and writes it to the specified directory.
 
-<info>php composer.phar archive [--format=zip] [--dir=/foo] [package [version]]</info>
+<info>php composer.phar archive [--format=zip] [--dir=/foo] [--file=filename] [package [version]]</info>
 
 Read more at https://getcomposer.org/doc/03-cli.md#archive
 EOT

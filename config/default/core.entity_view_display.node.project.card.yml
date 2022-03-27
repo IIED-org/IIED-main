@@ -7,7 +7,7 @@ dependencies:
     - field.field.node.project.body
     - field.field.node.project.field_additional_elements
     - field.field.node.project.field_additional_resources
-    - field.field.node.project.field_collection
+    - field.field.node.project.field_collections
     - field.field.node.project.field_contact
     - field.field.node.project.field_dates
     - field.field.node.project.field_display_image
@@ -25,7 +25,7 @@ dependencies:
     - field.field.node.project.field_standfirst
     - field.field.node.project.field_tagline
     - field.field.node.project.field_tags
-    - field.field.node.project.field_theme
+    - field.field.node.project.field_theme_s_
     - field.field.node.project.field_year
     - image.style.card_370
     - node.type.project
@@ -34,142 +34,56 @@ dependencies:
     - field_group
     - image
     - layout_builder
-    - text
     - user
 third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-  ds:
-    layout:
-      id: ds_1col
-      library: null
-      disable_css: false
-      entity_classes: all_classes
-      settings:
-        label: ''
-        wrappers:
-          ds_content: div
-        outer_wrapper: div
-        attributes: 'role|link, tabindex|0'
-        link_attribute: content
-        link_custom: '[node:field_link]'
-        classes:
-          layout_class: {  }
-          ds_content: {  }
-    regions:
-      ds_content:
-        - group_project_card
-        - group_row_nogutters
-        - field_image
-        - group_col_md_8
-        - group_card_body
-        - node_title
-        - body
-    fields:
-      node_title:
-        plugin_id: node_title
-        weight: 37
-        label: hidden
-        formatter: default
-        settings:
-          link: true
-          wrapper: h4
-          class: card-title
-        ft:
-          id: expert
-          settings:
-            lb: ''
-            prefix: ''
-            lbw-el: ''
-            lbw-cl: ''
-            lbw-at: ''
-            ow-el: ''
-            ow-cl: ''
-            ow-at: ''
-            fis-el: ''
-            fis-cl: ''
-            fis-at: ''
-            fi-el: span
-            fi-cl: stretched-link
-            fi-at: ''
-            suffix: ''
-            lbw: false
-            lb-col: false
-            ow: false
-            ow-def-at: false
-            ow-def-cl: false
-            fis: false
-            fis-def-at: false
-            fi: false
-            fi-def-at: false
   field_group:
     group_project_card:
-      children:
-        - group_row_nogutters
-      parent_name: ''
-      weight: 0
-      format_type: html_element
-      region: ds_content
-      format_settings:
-        element: div
-        show_label: false
-        label_element: h3
-        label_element_classes: ''
-        attributes: ''
-        effect: none
-        speed: fast
-        id: ''
-        classes: 'card pointer overflow-hidden'
+      children: {  }
       label: Project-card
+      parent_name: ''
+      region: hidden
+      weight: 28
+      format_type: html_element
+      format_settings:
+        classes: 'card pointer overflow-hidden'
+        id: ''
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
     group_row_nogutters:
-      children:
-        - field_image
-        - group_col_md_8
-      parent_name: group_project_card
-      weight: 1
-      format_type: html_element
-      region: ds_content
-      format_settings:
-        id: ''
-        classes: 'row no-gutters'
-        element: div
-        show_label: false
-        label_element: h3
-        label_element_classes: ''
-        attributes: ''
-        effect: none
-        speed: fast
+      children: {  }
       label: Row-nogutters
+      parent_name: ''
+      region: hidden
+      weight: 29
+      format_type: html_element
+      format_settings:
+        classes: 'row no-gutters'
+        id: ''
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
     group_card_body:
-      children:
-        - node_title
-        - body
-      parent_name: group_col_md_8
-      weight: 36
-      format_type: html_element
-      region: ds_content
-      format_settings:
-        id: ''
-        classes: card-body
-        element: div
-        show_label: false
-        label_element: h3
-        label_element_classes: ''
-        attributes: ''
-        effect: none
-        speed: fast
+      children: {  }
       label: 'card body'
-    group_col_md_8:
-      children:
-        - group_card_body
-      parent_name: group_row_nogutters
-      weight: 35
+      parent_name: ''
+      region: hidden
+      weight: 30
       format_type: html_element
-      region: ds_content
       format_settings:
+        classes: card-body
         id: ''
-        classes: col-md-8
         element: div
         show_label: false
         label_element: h3
@@ -177,88 +91,77 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
+    group_col_md_8:
+      children: {  }
       label: col-md-8
+      parent_name: ''
+      region: hidden
+      weight: 27
+      format_type: html_element
+      format_settings:
+        classes: col-md-8
+        id: ''
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
 id: node.project.card
 targetEntityType: node
 bundle: project
 mode: card
 content:
-  body:
-    label: hidden
-    type: text_default
-    weight: 38
-    settings: {  }
-    third_party_settings:
-      ds:
-        ft:
-          id: expert
-          settings:
-            lb: ''
-            prefix: ''
-            lbw-el: ''
-            lbw-cl: ''
-            lbw-at: ''
-            ow-el: ''
-            ow-cl: ''
-            ow-at: ''
-            fis-el: ''
-            fis-cl: ''
-            fis-at: ''
-            fi-el: ''
-            fi-cl: ''
-            fi-at: ''
-            suffix: ''
-            lbw: false
-            lb-col: false
-            ow: false
-            ow-def-at: false
-            ow-def-cl: false
-            fis: false
-            fis-def-at: false
-            fi: false
-            fi-def-at: false
-    region: ds_content
   field_image:
-    weight: 34
+    type: image
     label: hidden
     settings:
-      image_style: card_370
       image_link: ''
+      image_style: card_370
     third_party_settings:
       ds:
         ft:
           id: expert
           settings:
             lb: ''
-            prefix: ''
+            lbw: false
             lbw-el: ''
             lbw-cl: ''
             lbw-at: ''
+            lb-col: false
             ow: true
             ow-el: div
             ow-cl: col-md-4
             ow-at: ''
-            fis-el: ''
-            fis-cl: ''
-            fis-at: ''
-            fi-el: ''
-            fi-cl: ''
-            fi-at: ''
-            suffix: ''
-            lbw: false
-            lb-col: false
             ow-def-at: false
             ow-def-cl: false
             fis: false
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
             fis-def-at: false
             fi: false
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
             fi-def-at: false
-    type: image
-    region: ds_content
+            prefix: ''
+            suffix: ''
+    weight: 0
+    region: content
+  field_tagline:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
 hidden:
+  body: true
   field_additional_elements: true
   field_additional_resources: true
-  field_collection: true
+  field_collections: true
   field_contact: true
   field_dates: true
   field_display_image: true
@@ -273,9 +176,8 @@ hidden:
   field_project_status: true
   field_projectnumber: true
   field_standfirst: true
-  field_tagline: true
   field_tags: true
-  field_theme: true
+  field_theme_s_: true
   field_year: true
   langcode: true
   links: true

@@ -1,0 +1,14 @@
+uuid: b4959f5a-f1ec-436b-8afc-0ef2351be46a
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.collection
+id: taxonomy_vocabulary_collection
+entity_type_id: taxonomy_vocabulary
+entity_id: collection
+action: display_page
+allow_override: 1
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

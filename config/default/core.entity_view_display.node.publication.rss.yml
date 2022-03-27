@@ -69,22 +69,22 @@ bundle: publication
 mode: rss
 content:
   body:
-    label: inline
     type: text_default
-    weight: 1
+    label: inline
     settings: {  }
     third_party_settings: {  }
+    weight: 1
     region: content
   field_author_s_:
-    weight: 15
+    type: entity_reference_label
     label: inline
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 15
     region: content
   field_date_published:
-    weight: 18
+    type: datetime_default
     label: inline
     settings:
       timezone_override: ''
@@ -97,15 +97,14 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    type: datetime_default
+    weight: 18
     region: content
   field_media:
     type: media_thumbnail
-    weight: 40
     label: inline
     settings:
-      image_style: media_library
       image_link: ''
+      image_style: media_library
     third_party_settings:
       ds:
         ft:
@@ -114,19 +113,20 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
+    weight: 40
     region: content
   field_product_code:
-    weight: 12
+    type: string
     label: inline
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 12
     region: content
   sharing_buttons:
-    weight: 100
     settings: {  }
     third_party_settings: {  }
+    weight: 100
     region: content
 hidden:
   field_a_serial: true

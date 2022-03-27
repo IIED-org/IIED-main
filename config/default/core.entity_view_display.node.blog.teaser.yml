@@ -1,0 +1,63 @@
+uuid: 053959da-d1dc-4ebe-9121-768f47e75553
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.blog.body
+    - field.field.node.blog.field_about_the_author
+    - field.field.node.blog.field_author_s_
+    - field.field.node.blog.field_blogger_info
+    - field.field.node.blog.field_collections
+    - field.field.node.blog.field_display_image
+    - field.field.node.blog.field_image_caption
+    - field.field.node.blog.field_main_image
+    - field.field.node.blog.field_paragraphs
+    - field.field.node.blog.field_project
+    - field.field.node.blog.field_standfirst
+    - field.field.node.blog.field_tagline
+    - field.field.node.blog.field_tags
+    - field.field.node.blog.field_theme_s_
+    - node.type.blog
+  module:
+    - text
+    - user
+id: node.blog.teaser
+targetEntityType: node
+bundle: blog
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+  sharing_buttons:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_about_the_author: true
+  field_author_s_: true
+  field_blogger_info: true
+  field_collections: true
+  field_display_image: true
+  field_image_caption: true
+  field_main_image: true
+  field_paragraphs: true
+  field_project: true
+  field_standfirst: true
+  field_tagline: true
+  field_tags: true
+  field_theme_s_: true
+  langcode: true
+  search_api_excerpt: true

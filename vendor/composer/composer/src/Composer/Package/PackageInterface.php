@@ -18,6 +18,9 @@ use Composer\Repository\RepositoryInterface;
  * Defines the essential information a package has that is used during solving/installation
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
+ *
+ * @phpstan-type AutoloadRules    array{psr-0?: array<string, string|string[]>, psr-4?: array<string, string|string[]>, classmap?: list<string>, files?: list<string>, exclude-from-classmap?: list<string>}
+ * @phpstan-type DevAutoloadRules array{psr-0?: array<string, string|string[]>, psr-4?: array<string, string|string[]>, classmap?: list<string>, files?: list<string>}
  */
 interface PackageInterface
 {
@@ -249,7 +252,7 @@ interface PackageInterface
      * Returns a set of links to packages which need to be installed before
      * this package can be installed
      *
-     * @return array<string, Link> An array of package links defining required packages
+     * @return array<string, Link> A map of package links defining required packages, indexed by the require package's name
      */
     public function getRequires();
 
@@ -281,7 +284,7 @@ interface PackageInterface
      * Returns a set of links to packages which are required to develop
      * this package. These are installed if in dev mode.
      *
-     * @return array<string, Link> An array of package links defining packages required for development
+     * @return array<string, Link> A map of package links defining packages required for development, indexed by the require package's name
      */
     public function getDevRequires();
 
@@ -303,7 +306,7 @@ interface PackageInterface
      * directories for autoloading using the type specified.
      *
      * @return array Mapping of autoloading rules
-     * @phpstan-return array{psr-0?: array<string, string|string[]>, psr-4?: array<string, string|string[]>, classmap?: list<string>, files?: list<string>}
+     * @phpstan-return AutoloadRules
      */
     public function getAutoload();
 
@@ -316,7 +319,7 @@ interface PackageInterface
      * directories for autoloading using the type specified.
      *
      * @return array Mapping of dev autoloading rules
-     * @phpstan-return array{psr-0?: array<string, string|string[]>, psr-4?: array<string, string|string[]>, classmap?: list<string>, files?: list<string>}
+     * @phpstan-return DevAutoloadRules
      */
     public function getDevAutoload();
 

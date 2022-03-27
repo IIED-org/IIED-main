@@ -1,0 +1,29 @@
+uuid: 6afea702-1b37-4b4d-b11a-97e4d5fc01f9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_project
+    - node.type.news
+    - node.type.project
+id: node.news.field_project
+field_name: field_project
+entity_type: node
+bundle: news
+label: Project
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      project: project
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

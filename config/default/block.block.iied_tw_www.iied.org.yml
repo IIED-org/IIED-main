@@ -1,0 +1,31 @@
+uuid: a9dd4d02-7407-4bc4-b7ad-75f437987681
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:8f77f3ca-de59-4e54-a7b1-14041a4aabb3'
+  module:
+    - block_content
+    - system
+  theme:
+    - iied_tw
+id: iied_tw_www.iied.org
+theme: iied_tw
+region: navbar_branding
+weight: -13
+provider: null
+plugin: 'block_content:8f77f3ca-de59-4e54-a7b1-14041a4aabb3'
+settings:
+  id: 'block_content:8f77f3ca-de59-4e54-a7b1-14041a4aabb3'
+  label: www.iied.org
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: '<front>'

@@ -1,0 +1,17 @@
+uuid: 3018ed52-1ec1-471b-9a99-2e5cacd9d106
+langcode: en
+status: true
+dependencies:
+  module:
+    - layout_paragraphs
+_core:
+  default_config_hash: WPZELSBpsvMgOqwThaCwrzh7ZQzFztwfIQnG0hVFffA
+id: stories_text
+label: Text
+icon_uuid: null
+icon_default: null
+description: null
+behavior_plugins:
+  layout_paragraphs:
+    enabled: false
+    available_layouts: {  }

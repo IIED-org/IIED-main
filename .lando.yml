@@ -31,10 +31,29 @@ services:
       image: dehy/adminer
       command: '/bin/s6-svscan /etc/services.d'
     portforward: true
+  node:
+    type: node:16
+    ssl: true
+    # command: cd /app/docroot/themes/custom/iied_tw && npm run watch
+    port: 80
+    overrides:
+     ports:
+      - 3000:3000
+      - 3001:3001
 proxy:
   adminer:
     - adminer.iied-main.lndo.site
+  node:
+    - bs.iied-main.lndo.site:3000
 tooling:
+  npm:
+    service: node
+  yarn:
+    service: node
+  node:
+    service: node
+  gulp:
+    service: node
   xdebug-on:
     service: appserver
     description: Enable xdebug for apache.

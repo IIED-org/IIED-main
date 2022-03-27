@@ -1,0 +1,19 @@
+uuid: c4dc384a-00ee-4ce6-a71b-b8c44cd0e7cd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_quotes
+    - taxonomy.vocabulary.person
+id: taxonomy_term.person.field_quotes
+field_name: field_quotes
+entity_type: taxonomy_term
+bundle: person
+label: Quotes
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

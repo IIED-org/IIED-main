@@ -1,0 +1,21 @@
+uuid: 3a383fcb-a15c-4cdf-9d3f-5bb7f3e84d61
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_admin
+    - node.type.news
+  module:
+    - text
+id: node.news.field_admin
+field_name: field_admin
+entity_type: node
+bundle: news
+label: 'Admin notes'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

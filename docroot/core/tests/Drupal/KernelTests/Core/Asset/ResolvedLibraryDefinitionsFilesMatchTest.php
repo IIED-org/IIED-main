@@ -74,6 +74,8 @@ class ResolvedLibraryDefinitionsFilesMatchTest extends KernelTestBase {
   protected $librariesToSkip = [
     // Locale has a "dummy" library that does not actually exist.
     'locale/translations',
+    // Core has a "dummy" library that does not actually exist.
+    'core/ckeditor5.translations',
   ];
 
   /**
@@ -125,6 +127,10 @@ class ResolvedLibraryDefinitionsFilesMatchTest extends KernelTestBase {
     $this->allModules[] = 'system';
     $this->allModules[] = 'user';
     $this->allModules[] = 'path_alias';
+    $database_module = \Drupal::database()->getProvider();
+    if ($database_module !== 'core') {
+      $this->allModules[] = $database_module;
+    }
     sort($this->allModules);
     $this->container->get('module_installer')->install($this->allModules);
 

@@ -1,0 +1,23 @@
+uuid: c19b08b3-fda4-4b0a-aacc-7073137bdc2f
+langcode: en
+status: false
+dependencies:
+  config:
+    - facets.facet.theme
+  module:
+    - facets
+  theme:
+    - iied_tw
+id: iied_tw_theme_2
+theme: iied_tw
+region: header
+weight: -11
+provider: null
+plugin: 'facet_block:theme'
+settings:
+  id: 'facet_block:theme'
+  label: 'Filter by theme'
+  label_display: visible
+  provider: facets
+  block_id: theme_2
+visibility: {  }

@@ -5,6 +5,7 @@ namespace Drupal\migrate_tools\Controller;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
+use Drupal\migrate\Plugin\MigrateIdMapInterface;
 use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\Plugin\MigrationPluginManagerInterface;
 use Drupal\migrate_plus\Entity\MigrationGroupInterface;
@@ -103,6 +104,10 @@ class MessageController extends ControllerBase {
       'data' => $this->t('Message'),
       'field' => 'message',
     ];
+    $header[] = [
+      'data' => $this->t('Status'),
+      'field' => 'source_row_status',
+    ];
 
     $result = [];
     $message_table = $migration_plugin->getIdMap()->messageTableName();
@@ -120,6 +125,13 @@ class MessageController extends ControllerBase {
         ->execute();
     }
 
+    $status_strings = [
+      MigrateIdMapInterface::STATUS_IMPORTED => $this->t('Imported'),
+      MigrateIdMapInterface::STATUS_NEEDS_UPDATE => $this->t('Pending'),
+      MigrateIdMapInterface::STATUS_IGNORED => $this->t('Ignored'),
+      MigrateIdMapInterface::STATUS_FAILED => $this->t('Failed'),
+    ];
+
     foreach ($result as $message_row) {
       $column_number = 1;
       foreach ($source_id_field_names as $source_id_field_name) {
@@ -128,7 +140,11 @@ class MessageController extends ControllerBase {
       }
       $row['level'] = $message_row->level;
       $row['message'] = $message_row->message;
-      $row['class'] = [Html::getClass('migrate-message-' . $message_row->level), $classes[$message_row->level]];
+      $row['status'] = $status_strings[$message_row->source_row_status];
+      $row['class'] = [
+        Html::getClass('migrate-message-' . $message_row->level),
+        $classes[$message_row->level],
+      ];
       $rows[] = $row;
     }
 

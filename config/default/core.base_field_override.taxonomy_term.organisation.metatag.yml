@@ -1,0 +1,18 @@
+uuid: b5a1d22c-c334-4901-8360-1408a450881b
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.organisation
+id: taxonomy_term.organisation.metatag
+field_name: metatag
+entity_type: taxonomy_term
+bundle: organisation
+label: 'Metatags (Hidden field for JSON support)'
+description: 'The meta tags for the entity.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: map

@@ -73,28 +73,28 @@ bundle: publication
 mode: token
 content:
   body:
-    label: hidden
     type: text_default
-    weight: 1
+    label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 1
     region: content
   field_admin:
-    weight: 41
+    type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    weight: 41
     region: content
   field_area_list:
-    weight: 14
+    type: address_country_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: address_country_default
+    weight: 14
     region: content
   field_author_s_:
-    weight: 12
+    type: entity_reference_label
     label: above
     settings:
       link: false
@@ -107,19 +107,19 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    type: entity_reference_label
+    weight: 12
     region: content
   field_cover_image:
     type: entity_reference_entity_view
-    weight: 42
     label: above
     settings:
       view_mode: default
       link: false
     third_party_settings: {  }
+    weight: 42
     region: content
   field_date_published:
-    weight: 15
+    type: datetime_plain
     label: above
     settings:
       timezone_override: ''
@@ -131,18 +131,18 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    type: datetime_plain
+    weight: 15
     region: content
   field_deptlist:
-    weight: 35
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 35
     region: content
   field_document_type:
-    weight: 3
+    type: entity_reference_label
     label: above
     settings:
       link: false
@@ -154,10 +154,10 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    type: entity_reference_label
+    weight: 3
     region: content
   field_doi:
-    weight: 18
+    type: link
     label: above
     settings:
       trim_length: 80
@@ -173,10 +173,10 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    type: link
+    weight: 18
     region: content
   field_editor_s_:
-    weight: 13
+    type: entity_reference_label
     label: above
     settings:
       link: false
@@ -189,10 +189,10 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    type: entity_reference_label
+    weight: 13
     region: content
   field_external_url:
-    weight: 23
+    type: link
     label: above
     settings:
       trim_length: 80
@@ -208,10 +208,10 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    type: link
+    weight: 23
     region: content
   field_iied_url:
-    weight: 22
+    type: link
     label: above
     settings:
       trim_length: 80
@@ -227,33 +227,33 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    type: link
+    weight: 22
     region: content
   field_isbn:
-    weight: 16
+    type: isbn_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: isbn_default
+    weight: 16
     region: content
   field_issn:
-    weight: 17
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 17
     region: content
   field_journal_ref:
-    weight: 20
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 20
     region: content
   field_lists:
-    weight: 43
+    type: entity_reference_label
     label: above
     settings:
       link: false
@@ -266,33 +266,33 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    type: entity_reference_label
+    weight: 43
     region: content
   field_lit_code:
-    weight: 2
+    type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: list_default
+    weight: 2
     region: content
   field_media:
     type: entity_reference_entity_view
-    weight: 37
     label: above
     settings:
       view_mode: default
       link: false
     third_party_settings: {  }
+    weight: 37
     region: content
   field_meta_tags:
-    weight: 45
+    type: metatag_empty_formatter
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: metatag_empty_formatter
+    weight: 45
     region: content
   field_parent:
-    weight: 38
+    type: entity_reference_label
     label: above
     settings:
       link: false
@@ -304,35 +304,35 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    type: entity_reference_label
+    weight: 38
     region: content
   field_pdf:
-    weight: 5
+    type: file_default
     label: above
     settings:
       use_description_as_link_text: true
     third_party_settings: {  }
-    type: file_default
+    weight: 5
     region: content
   field_pdf_pages:
-    weight: 21
+    type: number_integer
     label: above
     settings:
       thousand_separator: ''
       prefix_suffix: true
     third_party_settings: {  }
-    type: number_integer
+    weight: 21
     region: content
   field_product_code:
-    weight: 10
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 10
     region: content
   field_project:
-    weight: 8
+    type: entity_reference_label
     label: above
     settings:
       link: false
@@ -344,10 +344,10 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    type: entity_reference_label
+    weight: 8
     region: content
   field_publisher:
-    weight: 6
+    type: entity_reference_label
     label: above
     settings:
       link: false
@@ -360,82 +360,82 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    type: entity_reference_label
+    weight: 6
     region: content
   field_publisher_legacy:
-    weight: 26
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 26
     region: content
   field_reportagency1:
-    weight: 32
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 32
     region: content
   field_reportagency2:
-    weight: 33
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 33
     region: content
   field_reportagency3:
-    weight: 34
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 34
     region: content
   field_reportfin1:
-    weight: 29
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 29
     region: content
   field_reportfin2:
-    weight: 30
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 30
     region: content
   field_reportfin3:
-    weight: 31
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 31
     region: content
   field_reportingcode1:
-    weight: 27
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 27
     region: content
   field_reportingcode2:
-    weight: 28
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 28
     region: content
   field_series:
-    weight: 24
+    type: entity_reference_label
     label: above
     settings:
       link: false
@@ -447,41 +447,41 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    type: entity_reference_label
+    weight: 24
     region: content
   field_series_item_code:
-    weight: 25
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 25
     region: content
   field_short_title:
-    weight: 4
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 4
     region: content
   field_source_publication:
-    weight: 19
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 19
     region: content
   field_status:
-    weight: 11
+    type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: list_default
+    weight: 11
     region: content
   field_tags:
-    weight: 9
+    type: entity_reference_label
     label: above
     settings:
       link: false
@@ -494,17 +494,17 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    type: entity_reference_label
+    weight: 9
     region: content
   field_team:
-    weight: 36
+    type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: list_default
+    weight: 36
     region: content
   field_theme_s_:
-    weight: 7
+    type: entity_reference_label
     label: above
     settings:
       link: false
@@ -517,10 +517,10 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    type: entity_reference_label
+    weight: 7
     region: content
   field_translator:
-    weight: 40
+    type: entity_reference_label
     label: above
     settings:
       link: false
@@ -533,12 +533,10 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    type: entity_reference_label
+    weight: 40
     region: content
   langcode:
     type: language
-    weight: 46
-    region: content
     label: above
     settings:
       link_to_entity: false
@@ -551,16 +549,18 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
+    weight: 46
+    region: content
   links:
+    settings: {  }
+    third_party_settings: {  }
     weight: 0
     region: content
+  sharing_buttons:
     settings: {  }
     third_party_settings: {  }
-  sharing_buttons:
     weight: 44
     region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden:
   field_a_serial: true
   field_product_code_new: true

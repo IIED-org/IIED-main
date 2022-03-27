@@ -1,0 +1,76 @@
+uuid: 1d97b0d2-ad25-485c-9d21-d0aa4ed9e64d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.collection.field_about
+    - field.field.taxonomy_term.collection.field_containers
+    - field.field.taxonomy_term.collection.field_downloads
+    - field.field.taxonomy_term.collection.field_publications_more_link
+    - field.field.taxonomy_term.collection.field_short_description
+    - field.field.taxonomy_term.collection.field_theme
+    - taxonomy.vocabulary.collection
+  module:
+    - entity_reference_revisions
+    - text
+id: taxonomy_term.collection.default
+targetEntityType: taxonomy_term
+bundle: collection
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_about:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_containers:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_downloads:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_publications_more_link:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_short_description:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_theme:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 6
+    region: content
+hidden:
+  langcode: true
+  search_api_excerpt: true

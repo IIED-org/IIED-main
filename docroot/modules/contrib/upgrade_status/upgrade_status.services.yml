@@ -6,7 +6,7 @@ services:
       - '@logger.channel.upgrade_status'
       - '@http_client'
       - '@file_system'
-      - '@twig'
+      - '@upgrade_status.twig_deprecation_analyzer'
       - '@upgrade_status.library_deprecation_analyzer'
       - '@upgrade_status.theme_function_deprecation_analyzer'
       - '@datetime.time'
@@ -21,6 +21,9 @@ services:
   upgrade_status.theme_function_deprecation_analyzer:
     class: Drupal\upgrade_status\ThemeFunctionDeprecationAnalyzer
     arguments: ['@service_container']
+  upgrade_status.twig_deprecation_analyzer:
+    class: Drupal\upgrade_status\TwigDeprecationAnalyzer
+    arguments: ['@twig']
   upgrade_status.project_collector:
     class: Drupal\upgrade_status\ProjectCollector
     arguments:
@@ -29,6 +32,7 @@ services:
       - '@extension.list.profile'
       - '@keyvalue.expirable'
       - '@config.factory'
+      - '%install_profile%'
   upgrade_status.result_formatter:
     class: Drupal\upgrade_status\ScanResultFormatter
     arguments: ['@keyvalue', '@date.formatter', '@datetime.time', '@module_handler']

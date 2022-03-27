@@ -1,4 +1,4 @@
-# Migration configuration for project content.
+  # Migration configuration for project content.
 id: iied_projects
 label: 'Projects from IIED site (RSS)'
 migration_group: pubs
@@ -67,14 +67,9 @@ process:
     source:
       - constants/BASE_PATH
       - link
-  field_collection/format:
-    plugin: default_value
-    default_value: full_html
-  field_collection/value: collection
-
   field_nid: guid
   field_year: year
-  field_theme:
+  field_theme_s_:
    -
      plugin: explode
      delimiter: ', '
