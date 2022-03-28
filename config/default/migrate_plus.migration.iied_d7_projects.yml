@@ -225,6 +225,7 @@ destination:
     - field_additional_resources/format
     - field_partners/value
     - field_partners/format
+    - field_collections
     - field_theme_s_
     - field_tags
     - field_funded_by/value

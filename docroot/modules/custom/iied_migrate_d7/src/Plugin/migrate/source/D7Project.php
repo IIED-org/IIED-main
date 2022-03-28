@@ -29,15 +29,8 @@ class D7Project extends Node {
     // Since we are mapping incoming projects to existing nodes, we only want to
     // select the source project nodes that are published.
     $query->condition('n.status', 1);
+    // $query->condition('n.nid', '19291');
     return $query;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function prepareRow(Row $row) {
-    $x = '';
-    return parent::prepareRow($row);
   }
 
 }
