@@ -2,9 +2,6 @@ display:
   default:
     display_title: Domyślny
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         subject:
           label: Tytuł
@@ -12,6 +9,9 @@ display:
           label: Autor
         operations:
           label: Operacje
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         subject:
           expose:
@@ -21,13 +21,6 @@ display:
             label: Język
   page_unapproved:
     display_options:
-      filters:
-        subject:
-          expose:
-            label: Tytuł
-        langcode:
-          expose:
-            label: Język
       fields:
         subject:
           label: Tytuł
@@ -35,3 +28,10 @@ display:
           label: Autor
         operations:
           label: Operacje
+      filters:
+        subject:
+          expose:
+            label: Tytuł
+        langcode:
+          expose:
+            label: Język
