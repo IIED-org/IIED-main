@@ -188,9 +188,6 @@
           "drupal/address": {
             "Migrate using country names": "https://www.drupal.org/files/issues/2020-02-21/country_lookup_migrate_process_plugin-3114991-2.patch"
           },
-          "drupal/radix": {
-            "Language switcher patch": "https://www.drupal.org/files/issues/2020-01-05/3060563-7.patch"
-          },
           "drupal/media_thumbnails": {
             "Make thumbnails editable": "https://www.drupal.org/files/issues/2020-08-06/media_thumbnails-3149842-4.patch"
           },
@@ -200,10 +197,6 @@
             "Media Thumbnail Formatter doesn't translate the title attribute correctly":"https://www.drupal.org/files/issues/2019-11-12/media-thumbnail-formatter-title-not-translated-workaround-3089216-4.patch",
             "The language of content entities incorrectly falls back to the default language...":"https://www.drupal.org/files/issues/2021-09-16/3061761-46.patch"
           },
-          "drupal/facets": {
-            "AJAX facets broken": "https://www.drupal.org/files/issues/2021-06-21/Facets-with-AJAX-not-working-in-most-of-situations.patch",
-            "Show search term in summary": "https://www.drupal.org/files/issues/2020-12-02/2979223--39.patch"
-          },
           "drupal/ds": {
             "Provide entity context to DS block fields":"https://www.drupal.org/files/issues/2020-10-12/ds-content_entity-2939322-14.patch"
           },
@@ -212,6 +205,9 @@
           },
           "drupal/readonlymode": {
             "Got fatal error when running this module":"https://www.drupal.org/files/issues/2020-12-23/readonlymode-string_not_array-3115119-9.patch"
+          },
+          "drupal/datalayer": {
+            "Exception page because of incorrect path.alias_manager service name": "https://www.drupal.org/files/issues/2020-09-18/3171896-path_alias-manager.patch"
           }
         }
     }

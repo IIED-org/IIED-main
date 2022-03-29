@@ -215,7 +215,7 @@ function datalayer_get_user_data() {
     if ($exp_user_urls && count($matched_roles)) {
       $path = Url::fromRoute("<current>")->toString();
       $path_matcher = \Drupal::service('path.matcher');
-      $alias_manager = \Drupal::service('path.alias_manager');
+      $alias_manager = \Drupal::service('path_alias.manager');
       $path_alias = $alias_manager->getAliasByPath($path);
       if ($path_matcher->matchPath($path, $exp_user_urls) ||
           $path_matcher->matchPath($path_alias, $exp_user_urls)) {
@@ -307,7 +307,7 @@ function _datalayer_get_entity_data($entity) {
       $depth = $datalayer_settings->get('ia_depth');
       // Retrieve an array which contains the path pieces.
       $current_path = \Drupal::service('path.current')->getPath();
-      $result = \Drupal::service('path.alias_manager')
+      $result = \Drupal::service('path_alias.manager')
         ->getAliasByPath($current_path);
       $path_args = explode('/', $result);
       $i = 0;

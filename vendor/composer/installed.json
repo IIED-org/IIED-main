@@ -4954,6 +4954,9 @@
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Exception page because of incorrect path.alias_manager service name": "https://www.drupal.org/files/issues/2020-09-18/3171896-path_alias-manager.patch"
                 }
             },
             "installation-source": "dist",
