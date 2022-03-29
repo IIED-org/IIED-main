@@ -2,14 +2,14 @@ display:
   default:
     display_title: 默认
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         filename:
           label: 名称
         status:
           label: 状态
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         status:
           expose:

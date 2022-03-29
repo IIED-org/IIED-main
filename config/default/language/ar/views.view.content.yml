@@ -1,10 +1,9 @@
 label: المحتوى
 display:
   default:
+    display_title: الافتراضي
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
+      title: المحتوى
       fields:
         title:
           label: العنوان
@@ -16,6 +15,9 @@ display:
           label: الحالة
         operations:
           label: عمليات
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         title:
           expose:
@@ -29,8 +31,6 @@ display:
         langcode:
           expose:
             label: اللغة
-      title: المحتوى
-    display_title: الافتراضي
   page_1:
     display_options:
       menu:

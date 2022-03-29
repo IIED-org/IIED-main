@@ -30,4 +30,8 @@ services:
 proxy:
   adminer:
     - adminer.iied-main.lndo.site
-
+tooling:
+  drush:
+    service: appserver
+    # Enable cmd line below for Windows, disable for MacOS.
+    cmd: php /app/vendor/drush/drush/drush

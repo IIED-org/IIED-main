@@ -1,7 +1,9 @@
 label: အကြောင်းအရာ
 display:
   default:
+    display_title: Master
     display_options:
+      title: အကြောင်းအရာ
       fields:
         title:
           label: ခေါင်းစဉ်
@@ -13,6 +15,9 @@ display:
           label: အခြေအနေ
         operations:
           label: လုပ်ဆောင်ချက်များ
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         title:
           expose:
@@ -26,7 +31,6 @@ display:
         langcode:
           expose:
             label: ဘာသာစကား
-      title: အကြောင်းအရာ
   page_1:
     display_options:
       menu:
