@@ -45,8 +45,13 @@ process:
       plugin: default_value
       default_value: 'full_html'
   field_article_type:
-    - plugin: get
+    - 
+      plugin: get
       source: field_article_type/0/value
+  field_alternative_label/value:
+    -
+      plugin: get
+      source: field_set_info/0/value
   field_dates:
     -
       plugin: get
