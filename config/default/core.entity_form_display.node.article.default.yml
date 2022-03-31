@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.node.article.body
     - field.field.node.article.comment
+    - field.field.node.article.field_alternative_label
     - field.field.node.article.field_article_type
     - field.field.node.article.field_collections
     - field.field.node.article.field_contact
@@ -16,7 +17,6 @@ dependencies:
     - field.field.node.article.field_main_image
     - field.field.node.article.field_paragraphs
     - field.field.node.article.field_project
-    - field.field.node.article.field_set_info
     - field.field.node.article.field_standfirst
     - field.field.node.article.field_tagline
     - field.field.node.article.field_tags
@@ -58,6 +58,14 @@ content:
     weight: 19
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_alternative_label:
+    type: string_textfield
+    weight: 29
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   field_article_type:
     type: options_select
@@ -164,14 +172,6 @@ content:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  field_set_info:
-    type: text_textarea
-    weight: 26
-    region: content
-    settings:
-      rows: 5
       placeholder: ''
     third_party_settings: {  }
   field_standfirst:

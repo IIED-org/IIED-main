@@ -1,18 +1,18 @@
-uuid: 63b4641f-68dd-4a37-8695-dd0e008f7dee
+uuid: fa0c178e-25f7-46b9-9360-d627825d8f80
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.field_alternative_label
-    - node.type.event
-id: node.event.field_alternative_label
+    - node.type.article
+id: node.article.field_alternative_label
 field_name: field_alternative_label
 entity_type: node
-bundle: event
+bundle: article
 label: 'Alternative label'
 description: ''
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings: {  }

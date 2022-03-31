@@ -49,6 +49,10 @@ process:
     -
       plugin: get
       source: field_article_type/0/value
+  field_alternative_label/value:
+    -
+      plugin: get
+      source: field_set_info/0/value
   field_dates:
     -
       plugin: get

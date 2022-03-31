@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.node.rss
     - field.field.node.article.body
     - field.field.node.article.comment
+    - field.field.node.article.field_alternative_label
     - field.field.node.article.field_article_type
     - field.field.node.article.field_collections
     - field.field.node.article.field_contact
@@ -17,7 +18,6 @@ dependencies:
     - field.field.node.article.field_main_image
     - field.field.node.article.field_paragraphs
     - field.field.node.article.field_project
-    - field.field.node.article.field_set_info
     - field.field.node.article.field_standfirst
     - field.field.node.article.field_tagline
     - field.field.node.article.field_tags
@@ -78,6 +78,7 @@ content:
 hidden:
   body: true
   comment: true
+  field_alternative_label: true
   field_article_type: true
   field_collections: true
   field_contact: true
@@ -89,7 +90,6 @@ hidden:
   field_main_image: true
   field_paragraphs: true
   field_project: true
-  field_set_info: true
   field_standfirst: true
   field_tagline: true
   field_tags: true
