@@ -54,10 +54,6 @@ process:
     -
       plugin: get
       source: field_set_info/0/value
-  field_alternative_label/format:
-    -
-      plugin: default_value
-      default_value: 'full_html'
   field_main_image:
     -
       plugin: sub_process

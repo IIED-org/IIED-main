@@ -1,16 +1,18 @@
-uuid: 21aa91e0-ef92-40a9-befe-ade1315ec1f3
+uuid: d35c6b9b-3922-4caf-bce2-d457b704f2c7
 langcode: en
 status: true
 dependencies:
   module:
     - node
-    - text
 id: node.field_alternative_label
 field_name: field_alternative_label
 entity_type: node
-type: text_long
-settings: {  }
-module: text
+type: string
+settings:
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
+module: core
 locked: false
 cardinality: 1
 translatable: true

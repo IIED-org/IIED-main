@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_display.comment.comment.default
     - field.field.node.article.body
     - field.field.node.article.comment
+    - field.field.node.article.field_alternative_label
     - field.field.node.article.field_article_type
     - field.field.node.article.field_collections
     - field.field.node.article.field_contact
@@ -17,7 +18,6 @@ dependencies:
     - field.field.node.article.field_main_image
     - field.field.node.article.field_paragraphs
     - field.field.node.article.field_project
-    - field.field.node.article.field_set_info
     - field.field.node.article.field_standfirst
     - field.field.node.article.field_tagline
     - field.field.node.article.field_tags
@@ -306,21 +306,6 @@ third_party_settings:
                 third_party_settings: {  }
             weight: 18
             additional: {  }
-          4f39e79d-bba5-4fa1-bb4b-98aeaec2049a:
-            uuid: 4f39e79d-bba5-4fa1-bb4b-98aeaec2049a
-            region: content
-            configuration:
-              id: 'field_block:node:article:field_set_info'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: text_default
-                label: above
-                settings: {  }
-                third_party_settings: {  }
-            weight: 19
-            additional: {  }
           6f9414d8-9617-43f1-ba24-921d766cadc9:
             uuid: 6f9414d8-9617-43f1-ba24-921d766cadc9
             region: content
@@ -353,6 +338,22 @@ third_party_settings:
                 third_party_settings: {  }
             weight: 21
             additional: {  }
+          4898462a-5c6e-4e19-b07f-8dbc45d1de08:
+            uuid: 4898462a-5c6e-4e19-b07f-8dbc45d1de08
+            region: content
+            configuration:
+              id: 'field_block:node:article:field_alternative_label'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: string
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+            weight: 22
+            additional: {  }
         third_party_settings: {  }
 _core:
   default_config_hash: ChmU3AVqDKU32A_fyChG0W9dTRKmVBR58B6OClCLvZI
@@ -376,6 +377,14 @@ content:
       pager_id: 0
     third_party_settings: {  }
     weight: 110
+    region: content
+  field_alternative_label:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 127
     region: content
   field_article_type:
     type: list_default
@@ -468,13 +477,6 @@ content:
       link: true
     third_party_settings: {  }
     weight: 122
-    region: content
-  field_set_info:
-    type: text_default
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 124
     region: content
   field_standfirst:
     type: text_default
