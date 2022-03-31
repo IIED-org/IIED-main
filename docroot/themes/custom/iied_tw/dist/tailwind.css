@@ -3010,6 +3010,10 @@ hr{
     grid-column: span 10 / span 10;
   }
 
+  .lg\:col-span-12{
+    grid-column: span 12 / span 12;
+  }
+
   .lg\:grid{
     display: grid;
   }
