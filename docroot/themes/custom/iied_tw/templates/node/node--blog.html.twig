@@ -89,7 +89,7 @@
 
         {#-- standfirst --#}
         <div
-          class="pb-6 mb-6 prose-lg border-b-2 lg:prose-xl border-iiedorange-500"
+          class="mb-6 prose-lg border-b-2 lg:prose-xl border-iiedorange-500"
         >
           {{ content.field_standfirst }}
         </div>
@@ -102,17 +102,19 @@
               {{ node.field_author_s_[0].entity|view('avatar') }} {# images #}
               {{ node.field_author_s_[1].entity|view('avatar') }}
           </div>
-            <div class="flex mb-6">
-            {# {{ breakpoint(node.field_author_s_[0].entity.name ) }} #}
-            Blog by&nbsp;{{ node.field_author_s_[0].entity|view('name') }} 
-            {% if node.field_author_s_[1] %}
-             &nbsp;and&nbsp; {{ node.field_author_s_[1].entity|view('name') }} 
-            {% endif %}
+          <div class="flex flex-col mb-6">
+            <div class="flex">
+              {# {{ breakpoint(node.field_author_s_[0].entity.name ) }} #}
+              Blog by&nbsp;{{ node.field_author_s_[0].entity|view('name') }} 
+              {% if node.field_author_s_[1] %}
+              &nbsp;and&nbsp; {{ node.field_author_s_[1].entity|view('name') }} 
+              {% endif %}
             </div>
-            
-          {# @TODO: uncommment after migration fix
-            {{ content.field_blogger_info }} 
-          #}
+              {% set bloggerinfo %}
+              {{ content.field_blogger_info }} 
+              {% endset %}
+              <div>{{ bloggerinfo|striptags }} </div>
+          </div>  
         </div>
         {#-- date and share --#}
         <div
@@ -145,18 +147,26 @@
           </figcaption>
         </figure>
         {#-- body --#}
-        <div class="pb-12 prose border-b border-gray-300 md:prose-lg">
+        <div class="pb-12 prose border-b border-gray-300 md:prose-lg lg:max-w-none">
           <div {{ content_attributes.addClass('node-content') }}> 
           {{ content.body }} 
           {{ content.field_paragraphs }}
           </div>
+        </div>  
         {#-- about the author --#} 
-        {{ content.field_about_the_author }}  
-          <div class="flex flex-col">
-              {{ node.field_author_s_[0].entity|view('avatar') }} 
-              {{ node.field_author_s_[1].entity|view('avatar') }}
+        {% if content.field_about_the_author %}
+        <section class="py-6 border-b border-gray-300 lg:max-w-none">
+          <h3>About the author</h3>
+          <div class="flex flex-col prose sm:justify-between sm:flex-row sm:gap-x-6 md:prose-lg lg:max-w-none">
+          {{ content.field_about_the_author[0] }} 
+            <div class="not-prose shrink-0">
+              {{ node.field_author_s_[0].entity|view('avatar_md') }}
+              {{ node.field_author_s_[1].entity|view('avatar_md') }}
+            </div>
           </div>
-        </div>
+        </section>
+        {% endif %}
+        
         {#-- tags --#}
          {{ content.field_tags }} 
           {% include '@iied_tw/partials/_share_blog_links.html.twig' %}
