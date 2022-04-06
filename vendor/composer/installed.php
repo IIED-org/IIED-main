@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '505478badd995b826f526b17ffa438ad8728e22e',
+        'reference' => '29570b23cf5681ec7081641709d96babed4b32d3',
         'name' => 'drupal/recommended-project',
         'dev' => true,
     ),
@@ -1167,6 +1167,24 @@
             'reference' => '8.x-3.7',
             'dev_requirement' => false,
         ),
+        'drupal/gin' => array(
+            'pretty_version' => '3.0.0-beta1',
+            'version' => '3.0.0.0-beta1',
+            'type' => 'drupal-theme',
+            'install_path' => __DIR__ . '/../../docroot/themes/contrib/gin',
+            'aliases' => array(),
+            'reference' => '8.x-3.0-beta1',
+            'dev_requirement' => false,
+        ),
+        'drupal/gin_toolbar' => array(
+            'pretty_version' => '1.0.0-beta21',
+            'version' => '1.0.0.0-beta21',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/gin_toolbar',
+            'aliases' => array(),
+            'reference' => '8.x-1.0-beta21',
+            'dev_requirement' => false,
+        ),
         'drupal/google_analytics' => array(
             'pretty_version' => '4.0.0',
             'version' => '4.0.0.0',
@@ -1680,7 +1698,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '505478badd995b826f526b17ffa438ad8728e22e',
+            'reference' => '29570b23cf5681ec7081641709d96babed4b32d3',
             'dev_requirement' => false,
         ),
         'drupal/redirect' => array(
@@ -1868,6 +1886,15 @@
             'replaced' => array(
                 0 => '9.3.9',
             ),
+        ),
+        'drupal/taxonomy_import' => array(
+            'pretty_version' => '2.0.5',
+            'version' => '2.0.5.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/taxonomy_import',
+            'aliases' => array(),
+            'reference' => '2.0.5',
+            'dev_requirement' => false,
         ),
         'drupal/taxonomy_manager' => array(
             'pretty_version' => '2.0.6',

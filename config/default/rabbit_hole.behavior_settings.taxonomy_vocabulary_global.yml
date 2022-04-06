@@ -1,0 +1,14 @@
+uuid: c9fbdc96-326f-492a-b4c5-fadbbfb79999
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.global
+id: taxonomy_vocabulary_global
+entity_type_id: taxonomy_vocabulary
+entity_id: global
+action: display_page
+allow_override: 1
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied
