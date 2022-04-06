@@ -75,48 +75,52 @@
         <main>
           {#-- grid --#}
           <div
-            class="container mx-auto lg:px-8 xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12"
+            class="container mx-auto lg:px-8 xl:grid xl:gap-x-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12"
           >
-            <div
-              class="xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4"
-            >
+            {#-- main --#}
+            <div class="pt-6 xl:col-span-9 xl:col-start-4 lg:col-span-12">
               <nav aria-label="themes">
                 <div class="flex flex-wrap mb-6 space-x-3">
                   {{ content.field_theme_s_}}
                 </div>
               </nav>
-              <h1 class="mb-6 text-4xl border-b-2 border-iiedorange-500">{{ node.label }}</h1>
-
+              <h1 class="mb-6">{{ node.label }}</h1>
+            </div>
               {#-- event details --#} 
-              <div
-                class="mb-6 prose border-b-2 border-iiedorange-500"
-              >
-              {{ content.field_event_type }} 
-              {{ content.field_date }} 
-              {{ content.field_display_time }} 
-              {{ content.field_where_and_how }} 
-              {{ content.field_registration_link }} 
-              
+            <div class="top-0 order-first row-span-3 pb-6 prose xl:pt-6 xl:h-screen xl:sticky xl:col-span-3"> 
+              <div class="relative inline-block mb-2">
+                <span
+                  class="absolute block -skew-y-3 -inset-1 bg-iiedblue-500"
+                  aria-hidden="true"
+                ></span>
+              {% set eventtype %}
+              {{ content.field_event_type }}
+              {% endset %}
+              <span class="relative font-bold">{{ eventtype|striptags }}</span>
               </div>
+
               {#-- standfirst --#}
               <div
-                class="mb-6 prose-lg lg:prose-xl"
+                class="mb-6 prose border-b-2 md:prose-lg border-iiedblue-500"
               >
                 {{ content.field_standfirst }}
               </div>
-
-              {# attribution #} {#-- collection --#}
-              <div
-                class="pt-2 mb-6 xl:col-span-3 2xl:order-1 xl:pr-6 2xl:pr-12"
-              >
-                {{ content.field_collections }} 
-                {{ content.field_direct_link }}
-                
+              
+              <div class="pb-6 mb-6 prose border-b-2 border-iiedblue-500">
+                {{ content.field_date }} {{ content.field_display_time }}
+                {{ content.field_where_and_how }}
+                {{ content.field_registration_link }}
               </div>
 
+              {# attribution #} {#-- collection --#}
+              <div class="pb-6 border-b border-gray-300">
+                {{ content.field_collections }}
+                {{ content.field_direct_link }}
+              </div>
+              
               {#-- date and share --#}
               <div
-                class="flex flex-col flex-wrap justify-between pb-6 border-b border-gray-300 xl:border-none sm:flex-row"
+                class="flex flex-col flex-wrap justify-between gap-6 pb-6 border-b border-gray-300 xl:border-none sm:flex-row"
               >
                 {{ content.field_dates }}
                 <div class="flex items-center">
@@ -126,13 +130,14 @@
               {# / attribution #}
             </div>
 
-            {# Event hero #}
+
+            {# Event hero image #}
             <div
-              class="lg:col-span-12 xl:col-span-9 2xl:col-span-8 xl:col-start-3 2xl:col-start-3"
+              class="xl:col-span-9 xl:col-start-4 lg:col-span-12"
             >
               {#-- image if field_display_image --#} 
               {% if content.field_main_image %}
-              <figure class="mb-6 -mx-6 sm:mx-0">
+              <figure class="-mx-6 overflow-hidden xl:mb-2 sm:mx-0">
                 {{ content.field_main_image[0] }}
                 <figcaption
                   class="px-6 mt-1 text-base leading-tight text-gray-500 sm:p-0"
@@ -158,8 +163,8 @@
               {#-- tags --#} {{ content.field_tags }}
 
               <div class="flex items-center py-4">
-                {% include '@iied_tw/partials/_share_links.html.twig' %} {%
-                include '@iied_tw/partials/_copy_print_links.html.twig' %}
+                {% include '@iied_tw/partials/_share_links.html.twig' %} 
+                {% include '@iied_tw/partials/_copy_print_links.html.twig' %}
               </div>
             </div>
 
