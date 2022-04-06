@@ -15,10 +15,10 @@ mode: default
 content:
   field_author_biog:
     type: text_default
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 0
     region: content
 hidden:
   field_author_reference: true

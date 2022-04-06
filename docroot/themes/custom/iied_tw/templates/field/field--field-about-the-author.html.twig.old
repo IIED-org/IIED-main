@@ -47,7 +47,7 @@
     'flex', 'flex-wrap', 'gap-2', 'py-6', 'overflow-hidden', 'border-b', 'border-gray-300',
   ]
 %}
-<section class="py-6 border-b border-gray-300">
+
   {% if label_hidden %}
     {% if multiple %}
       <div{{ attributes }}>
@@ -74,4 +74,3 @@
       {% endif %}
     </div>
   {% endif %}
-</section>
