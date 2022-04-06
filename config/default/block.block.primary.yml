@@ -1,0 +1,25 @@
+uuid: ab895735-57d1-4a74-9d59-2f2b79c48439
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.primary
+  module:
+    - system
+  theme:
+    - iied_tw
+id: primary
+theme: iied_tw
+region: primary_menu
+weight: -15
+provider: null
+plugin: 'system_menu_block:primary'
+settings:
+  id: 'system_menu_block:primary'
+  label: Primary
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility: {  }

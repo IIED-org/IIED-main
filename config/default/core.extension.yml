@@ -121,7 +121,6 @@ module:
   serial: 0
   serialization: 0
   shortcut: 0
-  sidr: 0
   sophron: 0
   stories: 0
   syslog: 0

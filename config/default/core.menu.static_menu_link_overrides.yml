@@ -152,100 +152,100 @@ definitions:
     expanded: false
     enabled: true
   'taxonomy_menu__menu_link:taxonomy_menu__menu_link__themes_menu__4436':
+    expanded: false
+    parent: 'admin:entity.menu.collection'
+    weight: 0
     menu_name: main
-    parent: 'menu_link_content:a2956567-724d-46ef-8e18-a219066e2559'
-    weight: -50
-    expanded: true
     enabled: true
   'taxonomy_menu__menu_link:taxonomy_menu__menu_link__themes_menu__4441':
+    expanded: false
+    parent: 'admin:entity.menu.collection'
+    weight: 0
     menu_name: main
-    parent: 'menu_link_content:a2956567-724d-46ef-8e18-a219066e2559'
-    weight: -49
-    expanded: true
     enabled: true
   'taxonomy_menu__menu_link:taxonomy_menu__menu_link__themes_menu__4446':
+    expanded: false
+    parent: 'admin:entity.menu.collection'
+    weight: 0
     menu_name: main
-    parent: 'menu_link_content:a2956567-724d-46ef-8e18-a219066e2559'
-    weight: -48
-    expanded: true
     enabled: true
   'taxonomy_menu__menu_link:taxonomy_menu__menu_link__themes_menu__4451':
+    expanded: false
+    parent: 'admin:entity.menu.collection'
+    weight: 0
     menu_name: main
-    parent: 'menu_link_content:a2956567-724d-46ef-8e18-a219066e2559'
-    weight: -45
-    expanded: true
     enabled: true
   'taxonomy_menu__menu_link:taxonomy_menu__menu_link__themes_menu__4456':
+    expanded: false
+    parent: 'admin:entity.menu.collection'
+    weight: 0
     menu_name: main
-    parent: 'menu_link_content:a2956567-724d-46ef-8e18-a219066e2559'
-    weight: -47
-    expanded: true
     enabled: true
   'taxonomy_menu__menu_link:taxonomy_menu__menu_link__themes_menu__4461':
+    expanded: false
+    parent: 'admin:entity.menu.collection'
+    weight: 0
     menu_name: main
-    parent: 'menu_link_content:a2956567-724d-46ef-8e18-a219066e2559'
-    weight: -46
-    expanded: true
     enabled: true
   'taxonomy_menu__menu_link:taxonomy_menu__menu_link__themes_menu__4466':
+    expanded: false
+    parent: 'admin:entity.menu.collection'
+    weight: 0
     menu_name: main
-    parent: 'menu_link_content:a2956567-724d-46ef-8e18-a219066e2559'
-    weight: -44
-    expanded: true
     enabled: true
   'taxonomy_menu__menu_link:taxonomy_menu__menu_link__themes_menu__4471':
+    expanded: false
+    parent: 'admin:entity.menu.collection'
+    weight: 0
     menu_name: main
-    parent: 'menu_link_content:a2956567-724d-46ef-8e18-a219066e2559'
-    weight: -43
-    expanded: true
     enabled: true
   'taxonomy_menu__menu_link:taxonomy_menu__menu_link__themes_menu__4476':
+    expanded: false
+    parent: 'admin:entity.menu.collection'
+    weight: 0
     menu_name: main
-    parent: 'menu_link_content:a2956567-724d-46ef-8e18-a219066e2559'
-    weight: -42
-    expanded: true
     enabled: true
   'taxonomy_menu__menu_link:taxonomy_menu__menu_link__themes_menu__4481':
+    expanded: false
+    parent: 'admin:entity.menu.collection'
+    weight: 0
     menu_name: main
-    parent: 'menu_link_content:a2956567-724d-46ef-8e18-a219066e2559'
-    weight: -41
-    expanded: true
     enabled: true
   'taxonomy_menu__menu_link:taxonomy_menu__menu_link__themes_menu__4486':
+    expanded: false
+    parent: 'admin:entity.menu.collection'
+    weight: 0
     menu_name: main
-    parent: 'menu_link_content:a2956567-724d-46ef-8e18-a219066e2559'
-    weight: -40
-    expanded: true
     enabled: true
   'taxonomy_menu__menu_link:taxonomy_menu__menu_link__themes_menu__4491':
+    expanded: false
+    parent: 'admin:entity.menu.collection'
+    weight: 0
     menu_name: main
-    parent: 'menu_link_content:a2956567-724d-46ef-8e18-a219066e2559'
-    weight: -39
-    expanded: true
     enabled: true
   'taxonomy_menu__menu_link:taxonomy_menu__menu_link__themes_menu__4496':
+    expanded: false
+    parent: 'admin:entity.menu.collection'
+    weight: 0
     menu_name: main
-    parent: 'menu_link_content:a2956567-724d-46ef-8e18-a219066e2559'
-    weight: -38
-    expanded: true
     enabled: true
   'taxonomy_menu__menu_link:taxonomy_menu__menu_link__themes_menu__4501':
+    expanded: false
+    parent: 'admin:entity.menu.collection'
+    weight: 0
     menu_name: main
-    parent: 'menu_link_content:a2956567-724d-46ef-8e18-a219066e2559'
-    weight: -37
-    expanded: true
     enabled: true
   'taxonomy_menu__menu_link:taxonomy_menu__menu_link__themes_menu__4546':
+    expanded: false
+    parent: 'admin:entity.menu.collection'
+    weight: 0
     menu_name: main
-    parent: 'menu_link_content:a2956567-724d-46ef-8e18-a219066e2559'
-    weight: -36
-    expanded: true
     enabled: true
   'taxonomy_menu__menu_link:taxonomy_menu__menu_link__themes_menu__4506':
+    expanded: false
+    parent: 'admin:entity.menu.collection'
+    weight: 0
     menu_name: main
-    parent: 'menu_link_content:a2956567-724d-46ef-8e18-a219066e2559'
-    weight: -35
-    expanded: true
     enabled: true
   'taxonomy_menu__menu_link:taxonomy_menu__menu_link__themes_menu__4511':
     menu_name: main
@@ -260,32 +260,32 @@ definitions:
     expanded: true
     enabled: true
   'taxonomy_menu__menu_link:taxonomy_menu__menu_link__themes_menu__4516':
+    expanded: false
+    parent: 'admin:entity.menu.collection'
+    weight: 0
     menu_name: main
-    parent: 'menu_link_content:a2956567-724d-46ef-8e18-a219066e2559'
-    weight: -34
-    expanded: true
     enabled: true
   'taxonomy_menu__menu_link:taxonomy_menu__menu_link__themes_menu__4521':
+    expanded: false
+    parent: 'admin:entity.menu.collection'
+    weight: 0
     menu_name: main
-    parent: 'menu_link_content:a2956567-724d-46ef-8e18-a219066e2559'
-    weight: -33
-    expanded: true
     enabled: true
   'taxonomy_menu__menu_link:taxonomy_menu__menu_link__themes_menu__4531':
+    expanded: false
+    parent: 'admin:entity.menu.collection'
+    weight: 0
     menu_name: main
-    parent: 'menu_link_content:a2956567-724d-46ef-8e18-a219066e2559'
-    weight: -32
-    expanded: true
     enabled: true
   'taxonomy_menu__menu_link:taxonomy_menu__menu_link__themes_menu__4536':
+    expanded: false
+    parent: 'admin:entity.menu.collection'
+    weight: 0
     menu_name: main
-    parent: 'menu_link_content:a2956567-724d-46ef-8e18-a219066e2559'
-    weight: -31
-    expanded: true
     enabled: true
   'taxonomy_menu__menu_link:taxonomy_menu__menu_link__themes_menu__4541':
+    expanded: false
+    parent: 'admin:entity.menu.collection'
+    weight: 0
     menu_name: main
-    parent: 'menu_link_content:a2956567-724d-46ef-8e18-a219066e2559'
-    weight: -30
-    expanded: true
     enabled: true
