@@ -2,3 +2,6 @@ global-styling:
   css:
     base:
       dist/tailwind.css: {}
+alpine:
+  js:
+    https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js: { type: external, minified: true }
