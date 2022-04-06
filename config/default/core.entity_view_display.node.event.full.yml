@@ -31,6 +31,7 @@ dependencies:
     - node.type.event
   module:
     - datetime
+    - ds
     - entity_reference_revisions
     - layout_builder
     - link
@@ -70,12 +71,19 @@ content:
     region: content
   field_date:
     type: datetime_default
-    label: hidden
+    label: inline
     settings:
       timezone_override: ''
-      format_type: medium
-    third_party_settings: {  }
-    weight: 1
+      format_type: long
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 3
     region: content
   field_dates:
     type: string
@@ -83,18 +91,26 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 5
+    weight: 6
     region: content
   field_direct_link:
     type: link
     label: hidden
     settings:
-      trim_length: 80
+      trim_length: null
       url_only: false
       url_plain: false
-      rel: ''
-      target: ''
-    third_party_settings: {  }
+      rel: '0'
+      target: '0'
+    third_party_settings:
+      ds:
+        ds_limit: ''
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
     weight: 7
     region: content
   field_display_time:
@@ -109,7 +125,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: 1
     region: content
   field_image_caption:
     type: text_default
@@ -146,14 +162,14 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 6
+    weight: 5
     region: content
   field_standfirst:
     type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 4
+    weight: 2
     region: content
   field_tags:
     type: entity_reference_label
@@ -173,10 +189,17 @@ content:
     region: content
   field_where_and_how:
     type: basic_string
-    label: hidden
+    label: inline
     settings: {  }
-    third_party_settings: {  }
-    weight: 2
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: Where
+            lb-col: false
+            classes: {  }
+    weight: 4
     region: content
 hidden:
   field_alternative_label: true
