@@ -1,0 +1,8 @@
+uuid: 41617439-a154-4946-a09c-380998ffaf90
+langcode: en
+status: true
+dependencies: {  }
+name: Global
+vid: global
+description: 'Sitewide terms'
+weight: 0

@@ -4,5 +4,5 @@ status: true
 dependencies: {  }
 name: 'Person type'
 vid: person_type
-description: ''
+description: 'Staff, former staff, guest'
 weight: 0

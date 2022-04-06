@@ -1,13 +1,13 @@
-uuid: a4aea52d-581d-431e-9a9d-c18e83a381f6
+uuid: c9fbdc96-326f-492a-b4c5-fadbbfb79999
 langcode: en
 status: true
 dependencies:
   config:
-    - taxonomy.vocabulary.tags
-id: taxonomy_vocabulary_tags
+    - taxonomy.vocabulary.global
+id: taxonomy_vocabulary_global
 entity_type_id: taxonomy_vocabulary
-entity_id: tags
-action: page_not_found
+entity_id: global
+action: display_page
 allow_override: 1
 redirect: ''
 redirect_code: 301
