@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Uninstall functions for the Taxonomy Import module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function taxonomy_import_uninstall() {
+  // Delete file on uninstall.
+  // TODO: Drupal Rector Notice: Please delete the following comment after you've made any necessary changes.
+  // You will need to use `\Drupal\core\Database\Database::getConnection()` if you do not yet have access to the container here.
+  $files = \Drupal::database()->query('SELECT file_managed.fid FROM file_managed WHERE uri LIKE :fid', [':fid' => 'public://taxonomy_files/%']);
+
+  $location = [];
+  foreach ($files as $val) {
+    // Get location of the file.
+    $location[] = $val->fid;
+  }
+
+  $storage = \Drupal::entityTypeManager()->getStorage('file');
+  $entities = $storage->loadMultiple($location);
+  $storage->delete($entities);
+
+  // Remove directory on uninstall.
+  rmdir('public://taxonomy_files/');
+  drupal_flush_all_caches();
+}
