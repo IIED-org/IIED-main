@@ -4,6 +4,14 @@ module.exports = {
     '**/*.pcss'
   ],
   theme: {
+    container: { center: true,
+      padding: {
+      DEFAULT: '0.5rem', sm: '1rem',
+      lg: '1.5rem',
+      xl: '2rem'
+      }, 
+    },
+    
     extend: {
       fontFamily: {
         sans: ['Lato', 'sans-serif'],
@@ -64,6 +72,9 @@ module.exports = {
           "visited": "#51758B"
         }
       },
+      content: {
+        'keypoint': 'url("/themes/custom/iied_tw/templates/layout/icons/keypoint.svg")',
+      },
       typography: (theme) => ({
         DEFAULT: {
           css: {
@@ -79,6 +90,9 @@ module.exports = {
                 borderBottomColor: theme('colors.iiedblue.500'),
                 textDecoration: 'underline',
               },
+            },
+            h1: {
+              fontWeight: '400',
             },
             h2: {
               fontWeight: '400',
