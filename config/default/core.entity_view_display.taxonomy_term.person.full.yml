@@ -32,11 +32,11 @@ dependencies:
     - field.field.taxonomy_term.person.field_video
     - taxonomy.vocabulary.person
   module:
+    - ds
+    - entity_reference_revisions
     - layout_builder
     - layout_paragraphs
-    - media
     - name
-    - options
     - text
 third_party_settings:
   layout_builder:
@@ -52,58 +52,58 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 4
-    region: content
-  field_appointed_role:
-    type: list_key
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 14
+    weight: 2
     region: content
   field_author_picture:
-    type: media_thumbnail
+    type: entity_reference_entity_view
     label: hidden
     settings:
-      image_link: ''
-      image_style: ''
-    third_party_settings: {  }
-    weight: 13
+      view_mode: default
+      link: false
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 11
     region: content
   field_before_iied:
     type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 10
+    weight: 8
     region: content
   field_biography:
     type: text_default
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 12
+    weight: 10
     region: content
   field_current_work:
     type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 17
+    weight: 13
     region: content
   field_email:
     type: email_mailto
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 18
+    weight: 4
     region: content
   field_expertise:
     type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 16
+    weight: 12
     region: content
   field_languages:
     type: string
@@ -111,13 +111,13 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 8
+    weight: 6
     region: content
   field_name:
     type: name_default
     label: hidden
     settings:
-      format: default
+      format: short_full
       markup: none
       list_format: ''
       link_target: ''
@@ -125,16 +125,15 @@ content:
       preferred_field_reference_separator: ', '
       alternative_field_reference: ''
       alternative_field_reference_separator: ', '
-    third_party_settings: {  }
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
     weight: 0
-    region: content
-  field_organisation:
-    type: entity_reference_label
-    label: inline
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 3
     region: content
   field_paragraphs:
     type: layout_paragraphs
@@ -143,7 +142,7 @@ content:
       view_mode: default
       link: false
     third_party_settings: {  }
-    weight: 15
+    weight: 14
     region: content
   field_position:
     type: text_default
@@ -152,28 +151,21 @@ content:
     third_party_settings: {  }
     weight: 1
     region: content
-  field_research_group:
-    type: list_key
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 7
-    region: content
   field_researcher_profiles:
-    type: layout_paragraphs
+    type: entity_reference_revisions_entity_view
     label: hidden
     settings:
       view_mode: default
-      link: false
+      link: ''
     third_party_settings: {  }
-    weight: 9
+    weight: 7
     region: content
   field_standfirst:
     type: text_default
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 11
+    weight: 9
     region: content
   field_twitter_username:
     type: string
@@ -181,25 +173,28 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 6
-    region: content
-  field_video:
-    type: media_thumbnail
-    label: hidden
-    settings:
-      image_link: ''
-      image_style: ''
-    third_party_settings: {  }
     weight: 5
     region: content
+  field_video:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 3
+    region: content
 hidden:
+  field_appointed_role: true
   field_department: true
   field_iied_user_id: true
   field_legacy_iscanonical: true
   field_link: true
+  field_organisation: true
   field_person_type: true
   field_position_short: true
   field_quotes: true
+  field_research_group: true
   field_theme: true
   field_twitter_bio: true
   langcode: true

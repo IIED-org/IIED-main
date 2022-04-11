@@ -87,7 +87,7 @@
               <h1 class="mb-6">{{ node.label }}</h1>
             </div>
               {#-- event details --#} 
-            <div class="top-0 order-first row-span-3 pb-6 prose xl:pt-6 xl:h-screen xl:sticky xl:col-span-3"> 
+            <div class="top-0 order-first row-span-3 pb-6 prose xl:pt-6 xl:h-screen xl:sticky xl:col-span-3 max-w-none"> 
               <div class="relative inline-block mb-2">
                 <span
                   class="absolute block -skew-y-3 -inset-1 bg-iiedblue-500"
@@ -101,22 +101,40 @@
 
               {#-- standfirst --#}
               <div
-                class="mb-6 prose border-b-2 md:prose-lg border-iiedblue-500"
+                class="mb-6 prose border-b-2 md:prose-lg border-iiedblue-500 max-w-none"
               >
                 {{ content.field_standfirst }}
               </div>
               
-              <div class="pb-6 mb-6 prose border-b-2 border-iiedblue-500">
+              <div class="pb-6 mb-6 prose border-b-2 border-iiedblue-500 max-w-none">
                 {{ content.field_date }} {{ content.field_display_time }}
                 {{ content.field_where_and_how }}
-                {{ content.field_registration_link }}
+
+              {#-- register link (TODO refactor using partial, additional classes needed when within prose) --#}
+              {% if node.field_registration_link.title %}
+                <div class="flex flex-col items-center justify-center">
+                  <button
+                    class="h-12 max-w-xs px-6 py-2 m-2 mb-1 text-lg transition-colors duration-150 rounded-full shadow-sm bg-iiedorange-500 hover:bg-iiedorange-600 focus:shadow-outline"
+                  >
+                    <a
+                      class="font-semibold text-gray-800 no-underline border-b-0 hover:border-b-0 hover:no-underline hover:text-gray-900"
+                      href="{{ node.field_registration_link.0.url }}"
+                      title="{{ node.field_registration_link.title }}"
+                      >{{ node.field_registration_link.title }}</a
+                    >
+                  </button>
+                </div>
+              {% endif %}
+
               </div>
 
               {# attribution #} {#-- collection --#}
-              <div class="pb-6 border-b border-gray-300">
-                {{ content.field_collections }}
+              {{ content.field_collections }}
+              {% if content.field_direct_link %}
+              <div class="pb-6 mb-6 border-b border-gray-300">
                 {{ content.field_direct_link }}
               </div>
+              {% endif %}
               
               {#-- date and share --#}
               <div
@@ -153,7 +171,7 @@
               class="xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4"
             >
               {#-- body --#}
-              <div class="pb-6 prose border-b border-gray-300 md:prose-lg">
+              <div class="pb-6 prose border-b border-gray-300 md:prose-lg max-w-none">
                 <div {{ content_attributes.addClass('node-content') }}> 
                 {{ content.body }} 
                 {{ content.field_paragraphs }}

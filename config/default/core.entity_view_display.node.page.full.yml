@@ -16,26 +16,6 @@ third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-  ds:
-    layout:
-      id: ds_1col
-      library: null
-      disable_css: false
-      entity_classes: all_classes
-      settings:
-        classes:
-          layout_class: {  }
-          ds_content: {  }
-        wrappers:
-          ds_content: div
-        outer_wrapper: div
-        attributes: ''
-        link_attribute: ''
-        link_custom: ''
-        label: ''
-    regions:
-      ds_content:
-        - body
 _core:
   default_config_hash: g1S3_GLaxq4l3I9RIca5Mlz02MxI2KmOquZpHw59akM
 id: node.page.full
@@ -77,7 +57,7 @@ content:
             prefix: ''
             suffix: ''
     weight: 0
-    region: ds_content
+    region: content
 hidden:
   field_rows: true
   langcode: true
