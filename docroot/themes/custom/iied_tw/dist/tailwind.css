@@ -1583,6 +1583,10 @@ hr{
   visibility: visible;
 }
 
+.invisible{
+  visibility: hidden;
+}
+
 .absolute{
   position: absolute;
 }
@@ -1628,6 +1632,10 @@ hr{
 
 .row-span-3{
   grid-row: span 3 / span 3;
+}
+
+.float-left{
+  float: left;
 }
 
 .m-2{
@@ -1951,6 +1959,10 @@ hr{
   overflow: visible;
 }
 
+.whitespace-nowrap{
+  white-space: nowrap;
+}
+
 .rounded-full{
   border-radius: 9999px;
 }
@@ -2054,6 +2066,10 @@ hr{
 .bg-iiedorange-500{
   --tw-bg-opacity: 1;
   background-color: rgb(252 179 22 / var(--tw-bg-opacity));
+}
+
+.bg-opacity-50{
+  --tw-bg-opacity: 0.5;
 }
 
 .fill-iiedorange-500{
@@ -2233,6 +2249,10 @@ hr{
 
 .font-normal{
   font-weight: 400;
+}
+
+.font-medium{
+  font-weight: 500;
 }
 
 .not-italic{

@@ -56,16 +56,15 @@
   {{ page.navbar_left }}
   {{ page.navbar_right }}
 
-  <div x-data="{ mobileMenuOpen : false }" class="flex flex-wrap flex-row">
+  <div x-data="{ mobileMenuOpen : false }" class="flex">
     <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden w-8 h-8 bg-white text-gray-600 p-1">
       <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd">
         </path>
       </svg>
-    </button> 
-    <div class="z-20 hidden md:flex flex-col md:flex-row md:space-x-6 w-full bg-white shadow-md rounded-lg md:rounded-none md:shadow-none md:bg-transparent p-6 pt-0 md:p-0" :class="{ 'flex' : mobileMenuOpen , 'hidden' : !mobileMenuOpen}" @click.away="mobileMenuOpen = false">
+    </button>
+    <div class="z-20 hidden md:flex flex-col w-full bg-admin-light shadow-md md:shadow-none md:bg-transparent p-6 pt-0 md:p-0" :class="{ 'flex' : mobileMenuOpen , 'hidden' : !mobileMenuOpen}" @click.away="mobileMenuOpen = false">
     {{ page.primary_menu }}
-    <hr class="w-full border-b-1" />
     {{ page.secondary_menu }}
     </div>
   </div>

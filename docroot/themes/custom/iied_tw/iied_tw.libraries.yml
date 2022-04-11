@@ -5,3 +5,9 @@ global-styling:
 alpine:
   js:
     https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js: { type: external, minified: true }
+priority-nav:
+  css:
+    theme:
+      dist/priority-nav/priority-nav-core.css: {}
+  js:
+    dist/priority-nav/priority-nav.min.js: { async: true, minified: true }
