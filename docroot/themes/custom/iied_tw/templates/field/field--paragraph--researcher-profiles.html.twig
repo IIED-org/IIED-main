@@ -58,7 +58,7 @@
   {% endif %}
 {% else %}
   <div{{ attributes }}>
-    <div{{ title_attributes.addClass(title_classes) }}><h2>{{ label }}</h2></div>
+    <h2{{ title_attributes.addClass(title_classes) }}>{{ label }}</h2>
     {% if multiple %}
       <div>
     {% endif %}
@@ -70,3 +70,6 @@
     {% endif %}
   </div>
 {% endif %}
+
+
+

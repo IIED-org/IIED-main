@@ -79,7 +79,7 @@ third_party_settings:
         - field_event_type
         - field_contact
         - field_alternative_label
-      label: 'Event information card'
+      label: 'Event info'
       region: content
       parent_name: group_tabs
       weight: 11
@@ -121,8 +121,8 @@ third_party_settings:
       children:
         - field_theme_s_
         - field_tags
-        - field_collection
         - field_project
+        - field_collections
       label: Taxonomy
       region: content
       parent_name: group_tabs
@@ -174,7 +174,7 @@ content:
     third_party_settings: {  }
   field_collections:
     type: entity_reference_autocomplete
-    weight: 26
+    weight: 17
     region: content
     settings:
       match_operator: CONTAINS
@@ -269,7 +269,7 @@ content:
     third_party_settings: {  }
   field_project:
     type: entity_reference_autocomplete
-    weight: 17
+    weight: 16
     region: content
     settings:
       match_operator: CONTAINS
