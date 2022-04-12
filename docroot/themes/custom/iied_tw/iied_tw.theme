@@ -67,3 +67,18 @@ function iied_tw_theme_suggestions_taxonomy_term_alter(array &$suggestions, arra
   $suggestions[] = 'taxonomy_term__' . $term->bundle() . '__' . $sanitized_view_mode;
   $suggestions[] = 'taxonomy_term__' . $term->id() . '__' . $sanitized_view_mode;
 }
+
+function iied_tw_preprocess_page(&$variables) {
+  $variables['#attached']['drupalSettings']['responsive_menu']['custom'] = [
+    'options' => [
+      'navbar' => [
+        'add' => FALSE
+      ],
+      'offCanvas' => [
+        'position' => 'right-front'
+      ]
+    ],
+    'config' => [
+    ],
+  ];
+}

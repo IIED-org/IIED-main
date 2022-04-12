@@ -30,17 +30,23 @@
 }
 
 .priority-nav__dropdown {
-  position: absolute;
+  /* position: absolute; */
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
   visibility: hidden;
+  height: 0;
 }
 
 .priority-nav__dropdown.show {
   visibility: visible;
+  height: auto;
 }
 
 .priority-nav__dropdown-toggle {
   visibility: hidden;
   position: absolute;
+  right: 0;
 }
 
 .priority-nav-is-visible {

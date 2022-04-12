@@ -28,7 +28,7 @@ class HeaderSearch extends FormBase {
     $form['#method'] = 'get';
     $form['k'] = [
       '#type' => 'search',
-      '#title' => $this->t('Search publications'),
+      '#title' => $this->t('Search this site'),
       '#maxlength' => 64,
       '#size' => 15,
       '#title_display' => 'invisible',
