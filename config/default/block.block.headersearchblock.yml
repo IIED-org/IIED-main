@@ -1,0 +1,20 @@
+uuid: 2c91f44b-21fd-4c2b-966c-491316daa7ea
+langcode: en
+status: true
+dependencies:
+  module:
+    - iied_utils
+  theme:
+    - iied_tw
+id: headersearchblock
+theme: iied_tw
+region: navbar_right
+weight: -14
+provider: null
+plugin: header_search_block
+settings:
+  id: header_search_block
+  label: 'Header search block'
+  label_display: '0'
+  provider: iied_utils
+visibility: {  }
