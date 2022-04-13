@@ -32,6 +32,7 @@ class HeaderSearch extends FormBase {
       '#maxlength' => 64,
       '#size' => 15,
       '#title_display' => 'invisible',
+      '#placeholder' => 'Search',
     ];
 
     $form['submit'] = [
