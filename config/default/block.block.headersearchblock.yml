@@ -1,4 +1,4 @@
-uuid: 2c91f44b-21fd-4c2b-966c-491316daa7ea
+uuid: 2281ad38-3c19-479b-8adf-a5b62a5274f6
 langcode: en
 status: true
 dependencies:
@@ -9,7 +9,7 @@ dependencies:
 id: headersearchblock
 theme: iied_tw
 region: navbar_right
-weight: -14
+weight: 0
 provider: null
 plugin: header_search_block
 settings:
