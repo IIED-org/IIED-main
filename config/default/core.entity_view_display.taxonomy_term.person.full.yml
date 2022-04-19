@@ -107,10 +107,17 @@ content:
     region: content
   field_languages:
     type: string
-    label: inline
+    label: hidden
     settings:
       link_to_entity: false
-    third_party_settings: {  }
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
     weight: 6
     region: content
   field_name:

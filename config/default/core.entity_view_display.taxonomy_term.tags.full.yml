@@ -1,0 +1,101 @@
+uuid: 638ef40b-3574-4d80-86a4-dfa034042d4a
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.taxonomy_term.full
+    - field.field.taxonomy_term.tags.field_iied_tid
+    - field.field.taxonomy_term.tags.field_importance
+    - field.field.taxonomy_term.tags.field_tag_type
+    - field.field.taxonomy_term.tags.layout_builder__layout
+    - taxonomy.vocabulary.tags
+    - views.view.taxonomy_tag_display
+  module:
+    - ds
+    - layout_builder
+    - text
+    - views
+  theme:
+    - iied_tw
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: true
+    sections:
+      -
+        layout_id: tw-1-2-col-grid
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          wrappers:
+            first: div
+          outer_wrapper: div
+          attributes: ''
+          link_attribute: ''
+          link_custom: ''
+          classes:
+            layout_class: {  }
+            first: {  }
+        components:
+          751f01f9-39a3-49e5-b8ca-b8e804faed43:
+            uuid: 751f01f9-39a3-49e5-b8ca-b8e804faed43
+            region: first
+            configuration:
+              id: 'views_block:taxonomy_tag_display-block_1'
+              label: ''
+              label_display: visible
+              provider: views
+              context_mapping: {  }
+              views_label: ''
+              items_per_page: none
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: ds_1col
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          wrappers:
+            ds_content: div
+          outer_wrapper: div
+          attributes: ''
+          link_attribute: ''
+          link_custom: ''
+          classes:
+            layout_class: {  }
+            ds_content: {  }
+        components:
+          3a7b9049-0473-4b42-b46e-f7ab4ddf843c:
+            uuid: 3a7b9049-0473-4b42-b46e-f7ab4ddf843c
+            region: ds_content
+            configuration:
+              id: 'views_block:taxonomy_tag_display-block_1'
+              label: ''
+              label_display: visible
+              provider: views
+              context_mapping: {  }
+              views_label: ''
+              items_per_page: '4'
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+id: taxonomy_term.tags.full
+targetEntityType: taxonomy_term
+bundle: tags
+mode: full
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_iied_tid: true
+  field_importance: true
+  field_tag_type: true
+  langcode: true
+  layout_builder__layout: true
+  search_api_excerpt: true

@@ -41,6 +41,7 @@ settings:
             - DrupalImage
             - Table
             - HorizontalRule
+            - video_embed
         -
           name: 'Block Formatting'
           items:
@@ -51,13 +52,35 @@ settings:
             - ShowBlocks
             - Source
   plugins:
+    language:
+      language_list: un
     stylescombo:
       styles: ''
+    wordcount:
+      enable: true
+      show_remaining: false
+      show_paragraphs: true
+      show_word_count: true
+      show_char_count: true
+      count_bytes: false
+      count_spaces: false
+      count_html: 0
+      count_line_breaks: false
+      max_words: -1
+      max_chars: -1
+      hard_limit: 1
+    video_embed:
+      defaults:
+        children:
+          autoplay: false
+          responsive: true
+          width: '854'
+          height: '480'
 image_upload:
   status: true
   scheme: public
   directory: inline-images
   max_size: ''
   max_dimensions:
-    width: 0
-    height: 0
+    width: null
+    height: null
