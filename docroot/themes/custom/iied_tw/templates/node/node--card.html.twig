@@ -1,0 +1,52 @@
+
+{#
+For the most general card display
+#}
+
+<article{{ attributes.addClass(classes) }}>
+
+        <a href="{{ url }}" class="hover:no-underline">
+          <div
+            class="flex content-start h-full overflow-hidden transition-shadow bg-white border border-gray-300 grow card rounded-xl hover:shadow-xl"
+          >
+            <div class="w-3/12 h-auto p-2">
+
+            {% set image_uri = node.field_main_image|file_uri %}
+            {% set image_alt = node.field_main_image.alt %}
+{% if image_uri is not null %}
+  <img class="w-24 h-auto shadow-md lg:w-48" src="{{ image_uri|image_style('card_370') }}" alt="{{ image_alt }}" />
+{% endif %}
+
+            </div>
+            <div class="flex flex-col justify-between w-9/12">
+              <h5 class="m-4 text-gray-900">
+                {{ label }}
+              </h5>
+
+              <p class="m-4 text-gray-500">{{ node.type.entity.label() }}, {{ node.getCreatedTime|date('d F Y') }} </p>
+            </div>
+          </div>
+        </a>
+
+</article>
+
+
+{#
+Attempts not working 
+{% set image_styled = {
+  '#theme': 'image_style',
+  '#style_name': 'card_370',
+  '#uri': node.field_main_image[0].entity.uri.value,
+  '#alt': node.field_main_image[0].alt,
+} %}
+{{ image_styled }}
+
+<img  src="{{ file_url(content.field_main_image['#items'].entity.uri.value) }}" alt="{{ node.field_main_image.alt }}" />
+
+<img src="{{ file_url(content.field_main_image['#items'][0].entity.uri.value) }}" alt="{{ node.field_main_image.alt }}" />
+
+<img class="w-24 h-auto shadow-md lg:w-48" src="{{ file_url(node.field_main_image[key].entity.uri.value) }}" alt="{{ node.field_main_image[key].alt  }}" />
+
+<img src="{{ item.entity.field_main_image.entity.uri.value | image_style('card_370') }}" alt="{{item.entity.field_image.alt}}"/>
+
+#}
