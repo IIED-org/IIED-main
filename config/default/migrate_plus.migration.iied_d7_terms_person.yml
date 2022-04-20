@@ -23,7 +23,7 @@ process:
       plugin: migration_lookup
       migration: iied_d7_media_images
       source: picture
-  field_name/given: name
+  field_name/given: first_name
   field_name/family: field_surname/0/value
   name:
     -
