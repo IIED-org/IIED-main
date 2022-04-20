@@ -8,21 +8,78 @@ dependencies:
     - field.field.taxonomy_term.theme.field_link
     - field.field.taxonomy_term.theme.layout_builder__layout
     - taxonomy.vocabulary.theme
+    - views.view.taxonomy_all_display
+    - views.view.taxonomy_featured_display
   module:
     - ds
     - layout_builder
     - link
     - text
+    - views
+  theme:
+    - iied_tw
 third_party_settings:
   layout_builder:
     enabled: true
     allow_custom: true
     sections:
       -
-        layout_id: layout_builder_blank
+        layout_id: tw-container
         layout_settings:
           label: ''
-        components: {  }
+          context_mapping: {  }
+          wrappers:
+            first: div
+          outer_wrapper: div
+          attributes: ''
+          link_attribute: ''
+          link_custom: ''
+          classes:
+            layout_class: {  }
+            first: {  }
+        components:
+          f5812cde-9588-4655-89c4-3d04307be7a7:
+            uuid: f5812cde-9588-4655-89c4-3d04307be7a7
+            region: first
+            configuration:
+              id: 'views_block:taxonomy_featured_display-block_3'
+              label: ''
+              label_display: visible
+              provider: views
+              context_mapping: {  }
+              views_label: ''
+              items_per_page: none
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: tw-container
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          wrappers:
+            first: div
+          outer_wrapper: div
+          attributes: ''
+          link_attribute: ''
+          link_custom: ''
+          classes:
+            layout_class: {  }
+            first: {  }
+        components:
+          83565ce3-dd6f-4b96-9ef2-4678f2e1baaf:
+            uuid: 83565ce3-dd6f-4b96-9ef2-4678f2e1baaf
+            region: first
+            configuration:
+              id: 'views_block:taxonomy_all_display-block_3'
+              label: ''
+              label_display: '0'
+              provider: views
+              context_mapping: {  }
+              views_label: ''
+              items_per_page: none
+            weight: 0
+            additional: {  }
         third_party_settings: {  }
 id: taxonomy_term.theme.full
 targetEntityType: taxonomy_term

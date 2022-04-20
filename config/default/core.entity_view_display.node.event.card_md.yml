@@ -1,0 +1,102 @@
+uuid: aa668858-1d3d-4451-94a2-0c3d00952cc2
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.card_md
+    - field.field.node.event.body
+    - field.field.node.event.field_alternative_label
+    - field.field.node.event.field_alternative_title
+    - field.field.node.event.field_collections
+    - field.field.node.event.field_contact
+    - field.field.node.event.field_date
+    - field.field.node.event.field_dates
+    - field.field.node.event.field_direct_link
+    - field.field.node.event.field_display_time
+    - field.field.node.event.field_event_type
+    - field.field.node.event.field_hero_media
+    - field.field.node.event.field_image_caption
+    - field.field.node.event.field_main_image
+    - field.field.node.event.field_paragraphs
+    - field.field.node.event.field_project
+    - field.field.node.event.field_registration_link
+    - field.field.node.event.field_second_image
+    - field.field.node.event.field_second_image_caption
+    - field.field.node.event.field_series_badge
+    - field.field.node.event.field_standfirst
+    - field.field.node.event.field_tagline
+    - field.field.node.event.field_tags
+    - field.field.node.event.field_theme_s_
+    - field.field.node.event.field_where_and_how
+    - node.type.event
+  module:
+    - datetime
+    - layout_builder
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.event.card_md
+targetEntityType: node
+bundle: event
+mode: card_md
+content:
+  field_alternative_title:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_date:
+    type: datetime_default
+    label: hidden
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_main_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_tagline:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+hidden:
+  body: true
+  field_alternative_label: true
+  field_collections: true
+  field_contact: true
+  field_dates: true
+  field_direct_link: true
+  field_display_time: true
+  field_event_type: true
+  field_hero_media: true
+  field_image_caption: true
+  field_paragraphs: true
+  field_project: true
+  field_registration_link: true
+  field_second_image: true
+  field_second_image_caption: true
+  field_series_badge: true
+  field_standfirst: true
+  field_tags: true
+  field_theme_s_: true
+  field_where_and_how: true
+  langcode: true
+  links: true
+  search_api_excerpt: true
+  sharing_buttons: true

@@ -9,9 +9,9 @@ dependencies:
     - field.field.taxonomy_term.tags.field_tag_type
     - field.field.taxonomy_term.tags.layout_builder__layout
     - taxonomy.vocabulary.tags
-    - views.view.taxonomy_tag_display
+    - views.view.taxonomy_all_display
+    - views.view.taxonomy_featured_display
   module:
-    - ds
     - layout_builder
     - text
     - views
@@ -23,7 +23,7 @@ third_party_settings:
     allow_custom: true
     sections:
       -
-        layout_id: tw-1-2-col-grid
+        layout_id: tw-container
         layout_settings:
           label: ''
           context_mapping: {  }
@@ -37,13 +37,13 @@ third_party_settings:
             layout_class: {  }
             first: {  }
         components:
-          751f01f9-39a3-49e5-b8ca-b8e804faed43:
-            uuid: 751f01f9-39a3-49e5-b8ca-b8e804faed43
+          5d323bd3-4559-4605-b79a-32b419c1f4a2:
+            uuid: 5d323bd3-4559-4605-b79a-32b419c1f4a2
             region: first
             configuration:
-              id: 'views_block:taxonomy_tag_display-block_1'
+              id: 'views_block:taxonomy_featured_display-block_2'
               label: ''
-              label_display: visible
+              label_display: '0'
               provider: views
               context_mapping: {  }
               views_label: ''
@@ -52,31 +52,31 @@ third_party_settings:
             additional: {  }
         third_party_settings: {  }
       -
-        layout_id: ds_1col
+        layout_id: tw-container
         layout_settings:
           label: ''
           context_mapping: {  }
           wrappers:
-            ds_content: div
+            first: div
           outer_wrapper: div
           attributes: ''
           link_attribute: ''
           link_custom: ''
           classes:
             layout_class: {  }
-            ds_content: {  }
+            first: {  }
         components:
-          3a7b9049-0473-4b42-b46e-f7ab4ddf843c:
-            uuid: 3a7b9049-0473-4b42-b46e-f7ab4ddf843c
-            region: ds_content
+          1b3292d6-ff15-4ffc-b159-602e6bac7080:
+            uuid: 1b3292d6-ff15-4ffc-b159-602e6bac7080
+            region: first
             configuration:
-              id: 'views_block:taxonomy_tag_display-block_1'
+              id: 'views_block:taxonomy_all_display-block_2'
               label: ''
-              label_display: visible
+              label_display: '0'
               provider: views
               context_mapping: {  }
               views_label: ''
-              items_per_page: '4'
+              items_per_page: none
             weight: 0
             additional: {  }
         third_party_settings: {  }
