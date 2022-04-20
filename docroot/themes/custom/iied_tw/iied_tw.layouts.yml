@@ -102,3 +102,13 @@ tw-1-2-4-col-grid:
   regions:
     first:
       label: Main
+tw-container:
+  label: "IIED container"
+  category: "IIED layouts"
+  class: '\Drupal\ds\Plugin\DsLayout'
+  template: templates/layout/layout--tw-container
+  icon: templates/layout/icons/tw-container.svg
+  default_region: main
+  regions:
+    first:
+      label: Main
