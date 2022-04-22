@@ -1,0 +1,38 @@
+uuid: 010bff31-19b4-4aed-b4d2-71ba497dad13
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.collection_card
+    - field.field.block_content.collection_card.field_reference_term
+id: block_content.collection_card.default
+targetEntityType: block_content
+bundle: collection_card
+mode: default
+content:
+  field_reference_term:
+    type: entity_reference_autocomplete
+    weight: 26
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  info:
+    type: string_textfield
+    weight: -5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+hidden: {  }

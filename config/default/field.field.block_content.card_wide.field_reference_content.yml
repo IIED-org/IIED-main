@@ -1,0 +1,41 @@
+uuid: 1aa6e8f7-37fe-469c-9c4a-84514d49027a
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.card_wide
+    - field.storage.block_content.field_reference_content
+    - node.type.article
+    - node.type.blog
+    - node.type.event
+    - node.type.long_read
+    - node.type.news
+    - node.type.project
+    - node.type.publication
+id: block_content.card_wide.field_reference_content
+field_name: field_reference_content
+entity_type: block_content
+bundle: card_wide
+label: 'Reference content'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      article: article
+      blog: blog
+      event: event
+      long_read: long_read
+      news: news
+      project: project
+      publication: publication
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: article
+field_type: entity_reference

@@ -1,0 +1,38 @@
+uuid: 4ed29f8f-a1de-4be2-9609-576ad1efe7cc
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.card_wide
+    - field.field.block_content.card_wide.field_reference_content
+id: block_content.card_wide.default
+targetEntityType: block_content
+bundle: card_wide
+mode: default
+content:
+  field_reference_content:
+    type: entity_reference_autocomplete
+    weight: 26
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  info:
+    type: string_textfield
+    weight: -5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+hidden: {  }
