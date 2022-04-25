@@ -30,17 +30,17 @@ class HeaderSearch extends FormBase {
       '#type' => 'search',
       '#title' => $this->t('Search this site'),
       '#maxlength' => 64,
-      '#size' => 15,
+      '#size' => 17,
       '#title_display' => 'invisible',
       '#placeholder' => 'Search',
     ];
 
-    $form['submit'] = [
-      '#type' => 'submit',
-      '#value' => $this->t('Search'),
-      // Prevent op from showing up in the query string.
-      '#name' => '',
-    ];
+    // $form['submit'] = [
+    //   '#type' => 'submit',
+    //   '#value' => $this->t('Search'),
+    //   // Prevent op from showing up in the query string.
+    //   '#name' => '',
+    // ];
 
     return $form;
   }

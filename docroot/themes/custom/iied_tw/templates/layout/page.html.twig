@@ -56,12 +56,14 @@
       {{ page.primary_menu }}
     </div>
     {{ page.navbar_left }}
-    {{ page.navbar_right }}
+    <div class="md:absolute md:right-4">
+      {{ page.navbar_right }}
+    </div>
     <div class="hidden md:inline-block bg-iiedblue-50">
         {{ page.secondary_menu }}
     </div>
-    </div>
-  </div>
+ </div>
+
 
   {{ page.breadcrumb }}
 
