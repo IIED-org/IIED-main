@@ -33,59 +33,66 @@
           {{ title_prefix }}
             <h1 class="mb-6">{{ content.field_name }}</h1>
           {{ title_suffix }}
-            <h2>{{ content.field_position }}</h2>
+          {% if content.field_position[0] is not empty %}
+            <h3 class="pb-6">{{ content.field_position|render|striptags }}</h3>
+          {% endif %} 
       </div>  
       {#-- right column --#}
-      <div class="xl:col-span-3 2xl:col-span-3 xl:row-span-2">
-        <div class="flex flex-wrap overflow-hidden">
+      {% if content.field_author_picture[0] is not empty %}
+        <div class="xl:col-span-3 2xl:col-span-3 xl:row-span-2">
+          <div class="flex flex-wrap overflow-hidden">
+  
+              {% if content.field_author_picture[0] is not empty %}
+                <div class="m-4">
+                  <img 
+                  src="{{ term.field_author_picture.entity.field_media_image.0.entity.uri.value|image_style('medium') }}"
+                  alt="{{ term.name.value }}'s picture"
+                  class="object-cover w-32 h-32 border-2 border-white rounded-full md:w-48 md:h-48 sm:mb-6 ring-1 ring-iiedblue-500"
+                  />
+                </div>
+              {% endif %}
+
+              <div class="">
+                {% if content.field_email[0] is not empty %}
+                  <div class="flex items-center mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M14.243 5.757a6 6 0 10-.986 9.284 1 1 0 111.087 1.678A8 8 0 1118 10a3 3 0 01-4.8 2.401A4 4 0 1114 10a1 1 0 102 0c0-1.537-.586-3.07-1.757-4.243zM12 10a2 2 0 10-4 0 2 2 0 004 0z" clip-rule="evenodd" />
+                  </svg>
+                  {{ content.field_email }}
+                  </div>
+                {% endif %} 
+
+
+                {% if content.field_twitter_username[0] is not empty %}
+                  <a href="https://twitter.com/{{ content.field_twitter_username.value }}" target="_blank" class="flex items-center mb-2 border-b-0 hover:border-b-0" title="Twitter profile">
+                  <svg
+                  fill="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  class="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  >
+                  <path
+                      d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"
+                  ></path>
+                  </svg>
+                  {{ content.field_twitter_username }}
+                  </a>
+                {% endif %}
+
+                <div class="mb-2 bg-gray-100">
+                {{ content.field_researcher_profiles }}
+                </div>
         
-           <div class="mr-4">
-              {% if content.field_author_picture %}
-              <img 
-              src="{{ term.field_author_picture.entity.field_media_image.0.entity.uri.value|image_style('medium') }}"
-              alt="{{ term.name.value }}'s picture"
-              class="object-cover w-32 h-32 border-2 border-white rounded-full md:w-48 md:h-48 sm:mb-6 ring-1 ring-iiedblue-500"
-              />
-              {% endif %}
+                <div class="mb-4"><span class="font-bold">Languages: </span>
+                {{ 'English, ' }}
+                {{ content.field_languages|render|striptags }}</div>
             </div>
-            <div class="">
-              {% if content.field_email %}
-              <div class="flex items-center mb-2">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M14.243 5.757a6 6 0 10-.986 9.284 1 1 0 111.087 1.678A8 8 0 1118 10a3 3 0 01-4.8 2.401A4 4 0 1114 10a1 1 0 102 0c0-1.537-.586-3.07-1.757-4.243zM12 10a2 2 0 10-4 0 2 2 0 004 0z" clip-rule="evenodd" />
-              </svg>
-              {{ content.field_email }}
-              </div>
-              {% endif %} 
 
-
-              {% if content.field_twitter_username %}
-              <a href="https://twitter.com/{{ content.field_twitter_username.value }}" target="_blank" class="flex items-center mb-2 border-b-0 hover:border-b-0" title="Twitter profile">
-              <svg
-              fill="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              class="w-5 h-5"
-              viewBox="0 0 24 24"
-              >
-              <path
-                  d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"
-              ></path>
-              </svg>
-              {{ content.field_twitter_username }}
-              </a>
-              {% endif %}
-
-              <div class="mb-2 bg-gray-100">
-              {{ content.field_researcher_profiles }}
-              </div>
-      
-              <div class="mb-4">{{ content.field_languages }}</div>
-          </div>
-
-        </div>  
-      </div>
+          </div>  
+        </div>
+      {% endif %}
 
       <div class="prose md:prose-lg xl:col-span-7 2xl:col-span-6">
         {#-- Biography (summary) --#}

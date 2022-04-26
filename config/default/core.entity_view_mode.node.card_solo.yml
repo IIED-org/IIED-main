@@ -1,0 +1,10 @@
+uuid: 1767c039-2b64-4dee-aaf5-cd4352a7b6f8
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.card_solo
+label: 'Card solo'
+targetEntityType: node
+cache: true

@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '29570b23cf5681ec7081641709d96babed4b32d3',
+        'reference' => '7650a92a13dd9e51c8cc260a78f6e6de3a8814a4',
         'name' => 'drupal/recommended-project',
         'dev' => true,
     ),
@@ -1698,7 +1698,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '29570b23cf5681ec7081641709d96babed4b32d3',
+            'reference' => '7650a92a13dd9e51c8cc260a78f6e6de3a8814a4',
             'dev_requirement' => false,
         ),
         'drupal/redirect' => array(
@@ -2077,6 +2077,15 @@
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/views_field_view',
             'aliases' => array(),
             'reference' => '8.x-1.0-beta3',
+            'dev_requirement' => false,
+        ),
+        'drupal/views_layout' => array(
+            'pretty_version' => '1.2.0',
+            'version' => '1.2.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/views_layout',
+            'aliases' => array(),
+            'reference' => '8.x-1.2',
             'dev_requirement' => false,
         ),
         'drupal/views_ui' => array(

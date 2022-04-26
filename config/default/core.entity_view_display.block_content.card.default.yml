@@ -1,0 +1,33 @@
+uuid: b4a1a54b-7996-4df2-b492-cbf4740269fc
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.card
+    - field.field.block_content.card.field_reference_content
+  module:
+    - ds
+id: block_content.card.default
+targetEntityType: block_content
+bundle: card
+mode: default
+content:
+  field_reference_content:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: card_md
+      link: false
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 0
+    region: content
+hidden:
+  langcode: true
+  search_api_excerpt: true

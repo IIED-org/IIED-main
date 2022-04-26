@@ -1,6 +1,6 @@
 uuid: 00fc83bb-2f59-4330-808d-d931ffcf4938
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - core.entity_view_mode.node.card
@@ -21,7 +21,6 @@ dependencies:
     - taxonomy
     - text
     - user
-    - views_bootstrap
 _core:
   default_config_hash: uvMAn5Qf8Uni989mhr5KY4hx66xkSpP8nFYZMHgj7kY
 id: taxonomy_term
@@ -248,16 +247,11 @@ display:
         groups:
           1: AND
       style:
-        type: views_bootstrap_grid
+        type: default
         options:
           row_class: ''
           default_row_class: false
           uses_fields: false
-          col_xs: col-auto
-          col_sm: col-sm-12
-          col_md: col-md-6
-          col_lg: col-lg-4
-          col_xl: col-xl-3
       row:
         type: 'entity:node'
         options:

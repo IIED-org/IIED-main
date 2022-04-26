@@ -1,0 +1,36 @@
+
+{#
+For the most general card display
+#}
+
+<div class="card-md">
+<article{{ attributes.addClass(classes) }}>
+
+        <a href="{{ url }}" class="hover:no-underline">
+          <div
+            class="flex flex-col flex-grow overflow-hidden border border-gray-300 rounded-xl hover:shadow-xl"
+          >
+            <div class="">
+
+            {% set image_uri = node.field_main_image|file_uri %}
+            {% set image_alt = node.field_main_image.alt %}
+{% if image_uri is not null %}
+  <img class="w-24 h-auto shadow-md lg:w-48" src="{{ image_uri|image_style('card_370') }}" alt="{{ image_alt }}" />
+{% endif %}
+
+            </div>
+            <div class="flex flex-col justify-between p-4">
+              <h2 class="mb-4 text-lg text-gray-900 lg:text-2xl">
+                {{ label }}
+              </h2>
+              <p class="m-4 text-gray-500">{{ node.type.entity.label() }}, {{ node.getCreatedTime|date('d F Y') }} </p>
+            </div>
+          </div>
+        </a>
+
+</article>
+</div>
+
+{#
+
+#}
