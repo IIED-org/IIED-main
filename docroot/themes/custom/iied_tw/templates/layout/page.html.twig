@@ -46,17 +46,24 @@
  */
 #}
 
-
   <header role="banner">
     {{ page.header }}
   </header>
 
+<div class="flex flex-col flex-wrap items-start md:flex-row">
   {{ page.navbar_branding }}
-  {{ page.navbar_left }}
-  {{ page.navbar_right }}
+    <div class="hidden md:inline-block mt-4">
+      {{ page.primary_menu }}
+    </div>
+    {{ page.navbar_left }}
+    <div class="md:absolute md:right-4">
+      {{ page.navbar_right }}
+    </div>
+    <div class="hidden md:inline-block bg-iiedblue-50">
+        {{ page.secondary_menu }}
+    </div>
+ </div>
 
-  {{ page.primary_menu }}
-  {{ page.secondary_menu }}
 
   {{ page.breadcrumb }}
 

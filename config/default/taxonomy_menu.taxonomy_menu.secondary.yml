@@ -1,12 +1,12 @@
-uuid: 0cecd153-4b9f-4638-a46a-b65d886b3591
+uuid: 3775a051-4545-49b1-92c6-ddaca8b388b7
 langcode: en
 status: true
 dependencies:
   config:
     - system.menu.secondary
     - taxonomy.vocabulary.theme
-id: themes_menu
-label: 'Themes menu'
+id: secondary
+label: Secondary
 vocabulary: theme
 menu: secondary
 expanded: false

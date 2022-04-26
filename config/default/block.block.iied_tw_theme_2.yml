@@ -1,6 +1,6 @@
 uuid: c19b08b3-fda4-4b0a-aacc-7073137bdc2f
 langcode: en
-status: false
+status: true
 dependencies:
   config:
     - facets.facet.theme
@@ -10,8 +10,8 @@ dependencies:
     - iied_tw
 id: iied_tw_theme_2
 theme: iied_tw
-region: header
-weight: -11
+region: content
+weight: -6
 provider: null
 plugin: 'facet_block:theme'
 settings:

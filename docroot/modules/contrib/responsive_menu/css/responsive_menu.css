@@ -107,7 +107,7 @@ body.user-logged-in.toolbar-fixed.mm-wrapper_opened {
 }
 
 .responsive-menu-toggle {
-  display: inline-block;
+  /* display: inline-block; */
 }
 
 .responsive-menu-toggle-icon {

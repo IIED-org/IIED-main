@@ -1,4 +1,4 @@
-uuid: 39884326-54a8-4aaa-9b3e-b60479be351d
+uuid: 08b22985-3185-45d2-b430-10c812fa24fe
 langcode: en
 status: true
 dependencies:
@@ -6,10 +6,10 @@ dependencies:
     - responsive_menu
   theme:
     - iied_tw
-id: iied_tw_responsivemenumobileicon
+id: responsivemenumobileicon_2
 theme: iied_tw
-region: navbar_right
-weight: -14
+region: navbar_branding
+weight: 1
 provider: null
 plugin: responsive_menu_toggle
 settings:
