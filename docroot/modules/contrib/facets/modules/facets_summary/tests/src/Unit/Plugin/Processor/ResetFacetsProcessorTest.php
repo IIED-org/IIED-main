@@ -6,7 +6,6 @@ use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\facets_summary\Entity\FacetsSummary;
 use Drupal\facets_summary\Plugin\facets_summary\processor\ResetFacetsProcessor;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Tests\UnitTestCase;
 
 /**
@@ -33,13 +32,14 @@ class ResetFacetsProcessorTest extends UnitTestCase {
 
     $container = new ContainerBuilder();
     $container->set('string_translation', $string_translation->reveal());
-    $requestStack = $this->getMockBuilder(RequestStack::class)
-      ->disableOriginalConstructor()
-      ->getMock();
-    $container->set('request_stack', $requestStack);
     \Drupal::setContainer($container);
 
-    $this->processor = new ResetFacetsProcessor(['settings' => ['link_text' => 'Text', 'clear_string' => FALSE]], 'reset_facets', [], $requestStack);
+    $this->processor = new ResetFacetsProcessor([
+      'settings' => [
+        'link_text' => 'Text',
+        'position' => ResetFacetsProcessor::POSITION_BEFORE,
+      ],
+    ], 'reset_facets', []);
   }
 
   /**
@@ -71,7 +71,10 @@ class ResetFacetsProcessorTest extends UnitTestCase {
     $config = [
       'processor_id' => 'reset_facets',
       'weights' => [],
-      'settings' => ['link_text' => 'Text'],
+      'settings' => [
+        'link_text' => 'Text',
+        'position' => ResetFacetsProcessor::POSITION_BEFORE,
+      ],
     ];
     $summary->addProcessor($config);
 

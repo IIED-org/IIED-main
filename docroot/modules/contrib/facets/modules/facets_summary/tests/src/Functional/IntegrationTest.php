@@ -4,6 +4,7 @@ namespace Drupal\Tests\facets_summary\Functional;
 
 use Drupal\Tests\facets\Functional\FacetsTestBase;
 use Drupal\facets_summary\Entity\FacetsSummary;
+use Drupal\facets_summary\Plugin\facets_summary\processor\ResetFacetsProcessor;
 use Drupal\views\Views;
 
 /**
@@ -81,8 +82,6 @@ class IntegrationTest extends FacetsTestBase {
 
     $this->configureShowCountProcessor();
     $this->configureResetFacetsProcessor();
-    $this->configureShowStringProcessor();
-    $this->configureResetStringProcessor();
   }
 
   /**
@@ -173,8 +172,6 @@ class IntegrationTest extends FacetsTestBase {
 
     $this->checkShowCountProcessor();
     $this->checkResetFacetsProcessor();
-    $this->checkShowStringProcessor();
-    $this->checkResetStringProcessor();
   }
 
   /**
@@ -390,18 +387,6 @@ class IntegrationTest extends FacetsTestBase {
   }
 
   /**
-   * Tests configuring show_string processor.
-   */
-  protected function configureShowStringProcessor() {
-    $this->assertSession()->checkboxNotChecked('edit-facets-summary-settings-show-string-status');
-    $this->drupalPostForm(NULL, ['facets_summary_settings[show_string][status]' => TRUE], 'Save');
-    $this->assertSession()->checkboxChecked('edit-facets-summary-settings-show-string-status');
-    $this->assertSession()->pageTextContains(t('Facets Summary Owl has been updated.'));
-
-    // @todo add text check, see below
-  }
-
-  /**
    * Tests configuring reset facets processor.
    */
   protected function configureResetFacetsProcessor() {
@@ -411,25 +396,14 @@ class IntegrationTest extends FacetsTestBase {
     $this->assertSession()->pageTextContains($this->t('Facets Summary Owl has been updated.'));
 
     $this->assertSession()->fieldExists('facets_summary_settings[reset_facets][settings][link_text]');
-    $this->submitForm(['facets_summary_settings[reset_facets][settings][link_text]' => 'Reset facets'], 'Save');
+    $this->assertSession()->fieldExists('facets_summary_settings[reset_facets][settings][position]');
+    $this->submitForm([
+      'facets_summary_settings[reset_facets][settings][link_text]' => 'Reset facets',
+      'facets_summary_settings[reset_facets][settings][position]' => ResetFacetsProcessor::POSITION_BEFORE,
+    ], 'Save');
     $this->assertSession()->pageTextContains($this->t('Facets Summary Owl has been updated.'));
     $this->assertSession()->fieldValueEquals('facets_summary_settings[reset_facets][settings][link_text]', 'Reset facets');
-
-    // Clear the current search string checkbox attached
-    // to the reset facets link.
-    // This checkbox depends on the state from the show_string processor.
-    $this->drupalPostForm(NULL, ['facets_summary_settings[show_string][status]' => TRUE], 'Save');
-    $this->assertSession()->checkboxNotChecked('edit-facets-summary-settings-reset-facets-settings-clear-string');
-    $this->drupalPostForm(NULL, ['facets_summary_settings[reset_facets][settings][clear_string]' => TRUE], 'Save');
-    $this->assertSession()->checkboxChecked('edit-facets-summary-settings-reset-facets-settings-clear-string');
-    $this->assertSession()->pageTextContains(t('Facets Summary Owl has been updated.'));
-  }
-
-  /**
-   * Tests configuring reset_string processor.
-   */
-  protected function configureResetStringProcessor() {
-    // @todo implement
+    $this->assertSession()->fieldValueEquals('facets_summary_settings[reset_facets][settings][position]', ResetFacetsProcessor::POSITION_BEFORE);
   }
 
   /**
@@ -515,12 +489,14 @@ class IntegrationTest extends FacetsTestBase {
         'reset_facets' => [
           'processor_id' => 'reset_facets',
           'weights' => ['build' => -10],
-          'settings' => ['link_text' => 'Reset facets'],
+          'settings' => [
+            'link_text' => 'Reset facets',
+            'position' => ResetFacetsProcessor::POSITION_BEFORE,
+          ],
         ],
       ],
     ])->save();
 
-    // @todo add test for optional reset string configuration
     // Clear the cache after the new facet summary entity was created.
     $this->resetAll();
 
@@ -546,20 +522,6 @@ class IntegrationTest extends FacetsTestBase {
     $this->assertSession()->addressEquals('/search-api-test-fulltext');
     $this->assertSession()->pageTextContains('Displaying 5 search results');
     $this->assertSession()->pageTextNotContains('Reset facets');
-  }
-
-  /**
-   * Tests show_string processor.
-   */
-  protected function checkShowStringProcessor() {
-    // @todo implement
-  }
-
-  /**
-   * Tests reset_string processor.
-   */
-  protected function checkResetStringProcessor() {
-    // @todo implement
   }
 
   /**
@@ -611,6 +573,7 @@ class IntegrationTest extends FacetsTestBase {
       'facets[keywords][weight]' => 1,
       'facets_summary_settings[reset_facets][status]' => 1,
       'facets_summary_settings[reset_facets][settings][link_text]' => 'Reset',
+      'facets_summary_settings[reset_facets][settings][position]' => ResetFacetsProcessor::POSITION_BEFORE,
     ];
     $this->drupalGet('admin/config/search/facets/facet-summary/kepler/edit');
     $this->submitForm($summaries, 'Save');
@@ -659,6 +622,7 @@ class IntegrationTest extends FacetsTestBase {
       'facets[orval][weight]' => 0,
       'facets_summary_settings[reset_facets][status]' => 1,
       'facets_summary_settings[reset_facets][settings][link_text]' => 'Reset',
+      'facets_summary_settings[reset_facets][settings][position]' => ResetFacetsProcessor::POSITION_BEFORE,
     ];
     $this->drupalGet('admin/config/search/facets/facet-summary/trappist/edit');
     $this->submitForm($summaries, 'Save');
@@ -676,13 +640,6 @@ class IntegrationTest extends FacetsTestBase {
     $this->clickLink('article_category');
     $links = $this->xpath('//a[normalize-space(text())=:label]', [':label' => 'Reset']);
     $this->assertNotEmpty($links);
-  }
-
-  /**
-   * Tests the reset string link.
-   */
-  public function testResetStringLink() {
-    // @todo implement
   }
 
 }

@@ -5,7 +5,6 @@ namespace Drupal\facets\Controller;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
-use Drupal\Core\Block\BlockManager;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Http\RequestStack as DrupalRequestStack;
 use Drupal\Core\Path\CurrentPathStack;
@@ -66,13 +65,6 @@ class FacetBlockAjaxController extends ControllerBase {
   protected $currentRouteMatch;
 
   /**
-   * The block manager service.
-   *
-   * @var \Drupal\Core\Block\BlockManager
-   */
-  protected $blockManager;
-
-  /**
    * Constructs a FacetBlockAjaxController object.
    *
    * @param \Drupal\Core\Render\RendererInterface $renderer
@@ -85,20 +77,14 @@ class FacetBlockAjaxController extends ControllerBase {
    *   The path processor manager.
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
    *   The current route match service.
-   * @param \Drupal\Core\Block\BlockManager $blockManager
-   *   The block manager service.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function __construct(RendererInterface $renderer, CurrentPathStack $currentPath, RouterInterface $router, PathProcessorManager $pathProcessor, CurrentRouteMatch $currentRouteMatch, BlockManager $blockManager) {
+  public function __construct(RendererInterface $renderer, CurrentPathStack $currentPath, RouterInterface $router, PathProcessorManager $pathProcessor, CurrentRouteMatch $currentRouteMatch) {
     $this->storage = $this->entityTypeManager()->getStorage('block');
     $this->renderer = $renderer;
     $this->currentPath = $currentPath;
     $this->router = $router;
     $this->pathProcessor = $pathProcessor;
     $this->currentRouteMatch = $currentRouteMatch;
-    $this->blockManager = $blockManager;
   }
 
   /**
@@ -110,8 +96,7 @@ class FacetBlockAjaxController extends ControllerBase {
       $container->get('path.current'),
       $container->get('router'),
       $container->get('path_processor_manager'),
-      $container->get('current_route_match'),
-      $container->get('plugin.manager.block')
+      $container->get('current_route_match')
     );
   }
 
@@ -152,8 +137,9 @@ class FacetBlockAjaxController extends ControllerBase {
       $request_stack = new SymfonyRequestStack();
     }
     $processed = $this->pathProcessor->processInbound($path, $new_request);
+    $processed_request = Request::create($processed);
 
-    $this->currentPath->setPath($processed);
+    $this->currentPath->setPath($processed_request->getPathInfo());
     $request->attributes->add($this->router->matchRequest($new_request));
     $this->currentRouteMatch->resetRouteMatch();
     $request_stack->push($new_request);
@@ -164,7 +150,6 @@ class FacetBlockAjaxController extends ControllerBase {
 
     // Build the facets blocks found for the current request and update.
     foreach ($facets_blocks as $block_id => $block_selector) {
-      $block_view = '';
       $block_entity = $this->storage->load($block_id);
 
       if ($block_entity) {
@@ -172,20 +157,7 @@ class FacetBlockAjaxController extends ControllerBase {
         $block_view = $this->entityTypeManager
           ->getViewBuilder('block')
           ->view($block_entity);
-      }
-      else {
-        $instance = $this->blockManager->createInstance($block_id);
-        if ($instance) {
-          $block_view = $instance->build();
-          if (!empty($block_view[0]['#facet']) || !empty($block_view[0][0]['#facet'])) {
-            /** @var \Drupal\facets\Entity\Facet $facet */
-            $facet = !empty($block_view[0]['#facet']) ? $block_view[0]['#facet'] : $block_view[0][0]['#facet'];
-            $widget_type = $facet->get('widget')['type'];
-            $block_selector .= ' .facets-widget-' . $widget_type;
-          }
-        }
-      }
-      if ($block_view) {
+
         $block_view = (string) $this->renderer->renderPlain($block_view);
         $response->addCommand(new ReplaceCommand($block_selector, $block_view));
       }
@@ -196,18 +168,18 @@ class FacetBlockAjaxController extends ControllerBase {
     // Update filter summary block.
     $update_summary_block = $request->request->get('update_summary_block');
     if ($update_summary_block) {
-      $block_view = NULL;
-      $facet_summary_plugin_id = $request->request->get('facet_summary_plugin_id');
+      $facet_summary_block_id = $request->request->get('facet_summary_block_id');
       $facet_summary_wrapper_id = $request->request->get('facet_summary_wrapper_id');
-      if (!empty($facet_summary_plugin_id)) {
-        $instance = $this->blockManager->createInstance($facet_summary_plugin_id);
-        if ($instance) {
-          $block_view = $instance->build();
-        }
-        if ($block_view) {
-          $block_view = (string) $this->renderer->renderPlain($block_view);
-          $response->addCommand(new ReplaceCommand('[data-drupal-facets-summary-id=' . $facet_summary_wrapper_id . ']', $block_view));
-        }
+      $facet_summary_block_id = str_replace('-', '_', $facet_summary_block_id);
+
+      if ($facet_summary_block_id) {
+        $block_entity = $this->storage->load($facet_summary_block_id);
+        $block_view = $this->entityTypeManager
+          ->getViewBuilder('block')
+          ->view($block_entity);
+        $block_view = (string) $this->renderer->renderPlain($block_view);
+
+        $response->addCommand(new ReplaceCommand('[data-drupal-facets-summary-id=' . $facet_summary_wrapper_id . ']', $block_view));
       }
     }
 

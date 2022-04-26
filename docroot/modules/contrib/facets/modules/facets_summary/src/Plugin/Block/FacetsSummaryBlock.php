@@ -84,6 +84,11 @@ class FacetsSummaryBlock extends BlockBase implements FacetsSummaryBlockInterfac
    * {@inheritdoc}
    */
   public function build() {
+    // Do not build the facet summary if the block is being previewed.
+    if ($this->getContextValue('in_preview')) {
+      return [];
+    }
+
     /** @var \Drupal\facets_summary\FacetsSummaryInterface $summary */
     $facets_summary = $this->getEntity();
 
@@ -96,8 +101,6 @@ class FacetsSummaryBlock extends BlockBase implements FacetsSummaryBlockInterfac
         'route_parameters' => ['facets_summary' => $facets_summary->id()],
       ];
     }
-
-    $build['#wrapper_attributes']['data-drupal-facets-summary-plugin-id'] = $this->getPluginId();
 
     /** @var \Drupal\views\ViewExecutable $view */
     if ($view = $facets_summary->getFacetSource()->getViewsDisplay()) {
@@ -124,6 +127,13 @@ class FacetsSummaryBlock extends BlockBase implements FacetsSummaryBlockInterfac
       return [$summary->getConfigDependencyKey() => [$summary->getConfigDependencyName()]];
     }
     return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPreviewFallbackString() {
+    return $this->t('Placeholder for the "@facet_summary" facet summary', ['@facet_summary' => $this->getDerivativeId()]);
   }
 
 }

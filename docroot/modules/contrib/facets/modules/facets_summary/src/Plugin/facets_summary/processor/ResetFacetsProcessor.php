@@ -8,54 +8,35 @@ use Drupal\Core\Url;
 use Drupal\facets_summary\FacetsSummaryInterface;
 use Drupal\facets_summary\Processor\BuildProcessorInterface;
 use Drupal\facets_summary\Processor\ProcessorPluginBase;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Provides a processor that adds a link to reset facet filters.
  *
  * @SummaryProcessor(
  *   id = "reset_facets",
- *   label = @Translation("Adds reset facets link"),
+ *   label = @Translation("Adds reset facets link."),
  *   description = @Translation("When checked, this facet will add a link to reset enabled facets."),
  *   stages = {
  *     "build" = 30
  *   }
  * )
  */
-class ResetFacetsProcessor extends ProcessorPluginBase implements BuildProcessorInterface, ContainerFactoryPluginInterface {
+class ResetFacetsProcessor extends ProcessorPluginBase implements BuildProcessorInterface {
 
   /**
-   * The request stack.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
+   * Indicates that reset link should be positioned before facet links.
    */
-  protected $requestStack;
+  const POSITION_BEFORE = 'before';
 
   /**
-   * Builds ResetFacetsProcessor object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param string $plugin_definition
-   *   The plugin_definition for the plugin instance.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   The request stack.
+   * Indicates that reset link should be positioned after facet links.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, RequestStack $request_stack) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->requestStack = $request_stack;
-  }
+  const POSITION_AFTER = 'after';
 
   /**
-   * {@inheritdoc}
+   * Indicates that reset link should replace facet links.
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static($configuration, $plugin_id, $plugin_definition, $container->get('request_stack'));
-  }
+  const POSITION_REPLACE = 'replace';
 
   /**
    * {@inheritdoc}
@@ -102,7 +83,16 @@ class ResetFacetsProcessor extends ProcessorPluginBase implements BuildProcessor
       return $build;
     }
 
-    $url = Url::fromUserInput($facets_summary->getFacetSource()->getPath());
+    $path = \Drupal::service('path.current')->getPath();
+    /** @var \Drupal\path_alias\AliasManager $pathAliasManager */
+    $pathAliasManager = \Drupal::service('path_alias.manager');
+    $path = $pathAliasManager->getAliasByPath($path);
+    try {
+      $url = Url::fromUserInput($path);
+    }
+    catch (InvalidArgumentException $e) {
+      $url = Url::fromUri($path);
+    }
     $url->setOptions(['query' => $query_params]);
     // Check if reset link text is not set or it contains only whitespaces.
     // Set text from settings or set default text.
@@ -118,7 +108,20 @@ class ResetFacetsProcessor extends ProcessorPluginBase implements BuildProcessor
         'facet-summary-item--clear',
       ],
     ];
-    array_unshift($build['#items'], $item);
+
+    // Place link at necessary position.
+    if ($configuration['settings']['position'] == static::POSITION_BEFORE) {
+      array_unshift($build['#items'], $item);
+    }
+    elseif ($configuration['settings']['position'] == static::POSITION_AFTER) {
+      $build['#items'][] = $item;
+    }
+    else {
+      $build['#items'] = [
+        $item,
+      ];
+    }
+
     return $build;
   }
 
@@ -134,17 +137,17 @@ class ResetFacetsProcessor extends ProcessorPluginBase implements BuildProcessor
       '#title' => $this->t('Reset facets link text'),
       '#default_value' => $config['link_text'],
     ];
-    $build['clear_string'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Clear the current search string'),
-      '#default_value' => $config['clear_string'],
-      '#description' => $this->t('If checked, the reset link will also clear the text used for the search.'),
-      '#states' => [
-        'visible' => [
-          // @todo get the processor id (show_string) dynamically
-          ':input[name="facets_summary_settings[show_string][status]"]' => ['checked' => TRUE],
-        ],
+
+    $build['position'] = [
+      '#type' => 'select',
+      '#options' => [
+        static::POSITION_BEFORE => $this->t('Show reset link before facets links'),
+        static::POSITION_AFTER => $this->t('Show reset link after facets links'),
+        static::POSITION_REPLACE => $this->t('Show only reset link'),
       ],
+      '#title' => $this->t('Position'),
+      '#description' => $this->t('Set position of the link to display it before, after or instead of facets links.'),
+      '#default_value' => $config['position'],
     ];
 
     return $build;
@@ -156,7 +159,7 @@ class ResetFacetsProcessor extends ProcessorPluginBase implements BuildProcessor
   public function defaultConfiguration() {
     return [
       'link_text' => '',
-      'clear_string' => FALSE,
+      'position' => static::POSITION_BEFORE,
     ];
   }
 

@@ -5,7 +5,7 @@ core: 8.x
 core_version_requirement: ^8 || ^9
 package: Config
 
-# Information added by Drupal.org packaging script on 2020-10-28
-version: '8.x-1.8'
+# Information added by Drupal.org packaging script on 2022-04-07
+version: '8.x-1.9'
 project: 'config_filter'
-datestamp: 1603870063
+datestamp: 1649336058

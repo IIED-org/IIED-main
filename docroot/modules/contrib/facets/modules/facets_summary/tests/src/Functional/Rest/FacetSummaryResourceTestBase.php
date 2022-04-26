@@ -62,7 +62,6 @@ abstract class FacetSummaryResourceTestBase extends EntityResourceTestBase {
       'langcode' => 'en',
       'name' => 'Tapir',
       'processor_configs' => [],
-      'search_filter_identifier' => NULL,
       'status' => TRUE,
       'uuid' => 'tapir-uuid',
     ];
