@@ -1,19 +1,21 @@
 // Toolbar Variables
 :root {
+  --ginToolbarSecondaryHeight: 48px;
   --ginToolbarHeight: 39px;
   --ginScrollOffset: 72px;
   --ginHorizontalToolbarOffset: var(--ginToolbarHeight);
   --ginVerticalToolbarOffset: 0px; // Needs px to work in calc() functions.
 
-  @include mq($breakpointLarge) {
+  @include mq($breakpointMedium) {
+    --ginToolbarSecondaryHeight: 60px;
     --ginToolbarHeight: 53px;
     --ginScrollOffset: 180px;
     --iconGinToolbar: 18px;
   }
 }
 
-.region-meta--frontend {
-  top: -60px;
+.gin-secondary-toolbar--frontend {
+  top: calc(var(--ginToolbarSecondaryHeight) * -1);
 }
 
 // Toolbar
@@ -27,7 +29,7 @@
       background: none;
     }
 
-    @include mq($breakpointLarge) {
+    @include mq($breakpointMedium) {
       height: 0;
     }
 
@@ -113,13 +115,6 @@
   }
 }
 
-// Inline Edit toggle
-.toolbar-tab > .toolbar-icon.toolbar-icon-edit.toolbar-item,
-.toolbar-tab > .toolbar-icon.toolbar-icon-edit.toolbar-item.is-active,
-.toolbar-tab > .toolbar-icon.toolbar-icon-edit.toolbar-item:focus {
-  background: var(--colorGinPrimary);
-}
-
 .toolbar-tray-horizontal a:focus,
 .toolbar-box a:focus,
 .toolbar .toolbar-icon.toolbar-handle:focus {
@@ -127,7 +122,7 @@
 }
 
 .toolbar-menu__trigger,
-.menu-item-title,
+.toolbar .menu-item-title,
 .menu-item-sub-title {
   display: none !important;
 }
@@ -142,10 +137,6 @@
 }
 
 .gin--classic-toolbar {
-  // .page-wrapper__node-edit-form .layout-region-node-secondary {
-  //   padding-top: 39px;
-  // }
-
   table.sticky-header {
     @include mq($breakpointLarge) {
       margin-top: 0;
@@ -199,6 +190,7 @@
     &,
     .toolbar-bar {
       height: var(--ginToolbarHeight);
+      background: var(--colorGinLayerBackground);
     }
   }
 

@@ -100,8 +100,8 @@ class PublishContentPublishEntity implements ContainerInjectionInterface {
     }
 
     if ($node->isTranslatable()) {
-      if ($langcode == '') {
-        $langcode = $this->languageManager->getCurrentLanguage()->getId();
+      if ($langcode === '') {
+        $langcode = $node->language()->getId();
       }
 
       if (!$node->hasTranslation($langcode)) {

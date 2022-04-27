@@ -30,5 +30,6 @@ plugin.plugin_configuration.facets_summary_processor.reset_facets:
     link_text:
       type: label
       label: 'The text to show for the reset link.'
-
-# @todo add reset_string + review other values
+    position:
+      type: string
+      label: 'Position of the reset link.'
