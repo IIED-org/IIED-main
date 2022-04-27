@@ -44,6 +44,12 @@ libraries-override:
 
   classy/dialog: claro/claro.drupal.dialog
 
+  # needed override to overcome dialog styling issues
+  claro/claro.drupal.dialog:
+    css:
+      theme:
+        css/components/dialog.css: false
+
   classy/base:
     css:
       component:
@@ -142,6 +148,11 @@ libraries-override:
       theme:
         css/paragraphs_ee.off_canvas.css: false
 
+  claro/global-styling:
+    css:
+      layout:
+        css/layout/local-actions.css: false
+
 libraries-extend:
   core/drupal.autocomplete:
     - gin/autocomplete
@@ -227,7 +238,7 @@ regions:
 regions_hidden:
   - sidebar_first
 
-# Information added by Drupal.org packaging script on 2022-03-10
-version: '8.x-3.0-beta1'
+# Information added by Drupal.org packaging script on 2022-04-11
+version: '8.x-3.0-beta2'
 project: 'gin'
-datestamp: 1646929488
+datestamp: 1649709351

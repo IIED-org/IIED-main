@@ -1,20 +1,22 @@
 :root {
+  --ginToolbarSecondaryHeight: 48px;
   --ginToolbarHeight: 39px;
   --ginScrollOffset: 72px;
   --ginHorizontalToolbarOffset: var(--ginToolbarHeight);
   --ginVerticalToolbarOffset: 0px;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 976px) {
   :root {
+    --ginToolbarSecondaryHeight: 60px;
     --ginToolbarHeight: 53px;
     --ginScrollOffset: 180px;
     --iconGinToolbar: 18px;
   }
 }
 
-.region-meta--frontend {
-  top: -60px;
+.gin-secondary-toolbar--frontend {
+  top: calc(var(--ginToolbarSecondaryHeight) * -1);
 }
 
 .toolbar .toolbar-bar {
@@ -29,7 +31,7 @@
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 976px) {
   .toolbar .toolbar-bar {
     height: 0;
   }
@@ -116,12 +118,6 @@
   background: var(--colorGinPrimary);
 }
 
-.toolbar-tab > .toolbar-icon.toolbar-icon-edit.toolbar-item,
-.toolbar-tab > .toolbar-icon.toolbar-icon-edit.toolbar-item.is-active,
-.toolbar-tab > .toolbar-icon.toolbar-icon-edit.toolbar-item:focus {
-  background: var(--colorGinPrimary);
-}
-
 .toolbar-tray-horizontal a:focus,
 .toolbar-box a:focus,
 .toolbar .toolbar-icon.toolbar-handle:focus {
@@ -195,6 +191,7 @@
   .gin--horizontal-toolbar #toolbar-administration,
 .gin--horizontal-toolbar #toolbar-administration .toolbar-bar {
     height: var(--ginToolbarHeight);
+    background: var(--colorGinLayerBackground);
   }
 }
 

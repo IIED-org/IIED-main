@@ -9,6 +9,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\gin_toolbar\Render\Element\GinToolbar;
+use Drupal\gin\GinUserPicture;
 use Drupal\gin\GinSettings;
 
 /**
@@ -150,10 +151,21 @@ function gin_toolbar_preprocess_toolbar(&$variables) {
     return;
   }
 
+  // Use single `:` to make ControllerResolver get the class from definition.
+  // @see Drupal\Core\Controller\ControllerResolver->createController().
+  $variables['user_picture'] = [
+    '#lazy_builder' => [
+      GinUserPicture::class . ':build',
+      [],
+    ],
+    '#create_placeholder' => TRUE,
+  ];
+
   // Expose Toolbar variant.
   /** @var \Drupal\gin\GinSettings $settings */
   $settings = \Drupal::classResolver(GinSettings::class);
   $variables['toolbar_variant'] = $settings->get('classic_toolbar');
+  $variables['secondary_toolbar_frontend'] = $settings->get('secondary_toolbar_frontend');
 
   if ($variables['toolbar_variant'] !== 'classic') {
     // Move Admin Toolbar Search to start.
@@ -217,8 +229,8 @@ function gin_toolbar_preprocess_menu__toolbar(&$variables) {
   // Get theme configs.
   /** @var \Drupal\gin\GinSettings $settings */
   $settings = \Drupal::classResolver(GinSettings::class);
-  $logo_path = $settings->getDefault('icon_path');
-  $logo_default = $settings->getDefault('icon_default');
+  $logo_path = $settings->getDefault('logo.path');
+  $logo_default = $settings->getDefault('logo.use_default');
   $variables['icon_default'] = $logo_default;
 
   if (!$logo_default) {

@@ -50,19 +50,19 @@
     {{ page.header }}
   </header>
 
-<div class="flex flex-col flex-wrap items-start md:flex-row">
+<div class="md:flex-row flex flex-col flex-wrap items-start">
   {{ page.navbar_branding }}
-    <div class="hidden md:inline-block mt-4">
+    <div class="md:inline-block hidden mt-4">
       {{ page.primary_menu }}
     </div>
     {{ page.navbar_left }}
     <div class="md:absolute md:right-4">
       {{ page.navbar_right }}
     </div>
-    <div class="hidden md:inline-block bg-iiedblue-50">
-        {{ page.secondary_menu }}
-    </div>
  </div>
+  <div class="md:inline-block bg-iiedblue-10 hidden">
+        {{ page.secondary_menu }}
+  </div>
 
 
   {{ page.breadcrumb }}
@@ -77,13 +77,13 @@
   <main role="main">
     <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
 
-    <div class="-mx-4 md:flex">
-      <div class="p-4 md:flex-1">
+    <div class="md:flex -mx-4">
+      <div class="md:flex-1 p-4">
         {{ page.content }}
       </div>{# /.layout-content #}
 
     {#{% if page.sidebar_first %}
-        <aside class="p-4 md:w-1/4" role="complementary">
+        <aside class="md:w-1/4 p-4" role="complementary">
           {{ page.sidebar_first }}
         </aside>
       {% endif %}

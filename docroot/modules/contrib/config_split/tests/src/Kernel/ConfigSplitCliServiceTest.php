@@ -67,8 +67,8 @@ class ConfigSplitCliServiceTest extends KernelTestBase {
     $archive_data = $file->fread($file->getSize());
     // Save the tar file to unpack and read it.
     // See \Drupal\config\Tests\ConfigExportUITest::testExport()
-    $uri = \Drupal::service('file_system')->saveData($archive_data, 'temporary://config.tar.gz');
-    $temp_folder = \Drupal::service('file_system')->getTempDirectory();
+    $uri = $this->container->get('file_system')->saveData($archive_data, 'temporary://config.tar.gz');
+    $temp_folder = $this->container->get('file_system')->getTempDirectory();
     $file_target = StreamWrapperManager::getTarget($uri);
     $file_path = $temp_folder . '/' . $file_target;
     $archiver = new Tar($file_path);
