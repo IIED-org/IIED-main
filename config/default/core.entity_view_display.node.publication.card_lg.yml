@@ -1,8 +1,9 @@
-uuid: a3d01b41-926c-406b-b59d-caaa82d99737
+uuid: cfaf9089-f960-431e-b4cd-8a05e048e55c
 langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.card_lg
     - field.field.node.publication.body
     - field.field.node.publication.field_a_serial
     - field.field.node.publication.field_admin
@@ -67,10 +68,10 @@ third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-id: node.publication.default
+id: node.publication.card_lg
 targetEntityType: node
 bundle: publication
-mode: default
+mode: card_lg
 content:
   body:
     type: text_default
@@ -110,7 +111,7 @@ content:
     region: content
   field_cover_image:
     type: entity_reference_entity_view
-    label: hidden
+    label: above
     settings:
       view_mode: default
       link: false
@@ -226,7 +227,7 @@ content:
     region: content
   field_media:
     type: entity_reference_entity_view
-    label: hidden
+    label: above
     settings:
       view_mode: default
       link: false
@@ -250,7 +251,7 @@ content:
     region: content
   field_pdf:
     type: file_default
-    label: hidden
+    label: above
     settings:
       use_description_as_link_text: true
     third_party_settings: {  }

@@ -1,6 +1,6 @@
 uuid: 275c0e7b-27ca-49c3-b589-70253e729bf2
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - views.view.related_project

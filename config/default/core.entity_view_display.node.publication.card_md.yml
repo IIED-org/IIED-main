@@ -1,9 +1,9 @@
-uuid: 64066262-89f4-427d-a36f-b901acc8f942
+uuid: 4ae11cef-142f-448b-a240-1c0b9f92135a
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.card
+    - core.entity_view_mode.node.card_md
     - field.field.node.publication.body
     - field.field.node.publication.field_a_serial
     - field.field.node.publication.field_admin
@@ -112,10 +112,10 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
-id: node.publication.card
+id: node.publication.card_md
 targetEntityType: node
 bundle: publication
-mode: card
+mode: card_md
 content:
   field_cover_image:
     type: entity_reference_label
