@@ -1,0 +1,3 @@
+fin up
+fin exec composer install
+fin exec /var/www/vendor/bin/run drupal:site-install

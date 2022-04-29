@@ -1,0 +1,22 @@
+
+.ajax-progress-throbber,  .ajax-progress-throbber .throbber {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  position: relative;
+}
+
+.layout-builder .ajax-progress-throbber:before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: .5em;
+  left: .5em;
+  width: 1.125em;
+  height: 1.125em;
+  -webkit-animation: gin-throbber 0.75s linear infinite;
+  animation: gin-throbber 0.75s linear infinite;
+  border: 2px solid var(--colorGinPrimary);
+  border-right: 2px dotted transparent;
+  border-radius: 50%;
+}
