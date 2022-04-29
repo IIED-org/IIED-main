@@ -1,29 +1,31 @@
 
 {#
-For the most general card display
+Standard card for the most general card display
 #}
 
-<article{{ attributes.addClass(classes) }}>
+<article{{ attributes.addClass('h-full') }}>
 
         <a href="{{ url }}" class="hover:no-underline">
           <div
-            class="flex content-start h-full overflow-hidden transition-shadow bg-white border border-gray-300 grow rounded-xl hover:shadow-xl"
+            class="flex h-full overflow-hidden transition-shadow bg-white border border-gray-300 rounded-xl group hover:shadow-md grow"
           >
-            <div class="w-3/12 h-auto p-2">
+      
+            {% block image %}
+                        {% set image_uri = node.field_main_image|file_uri %}
+                        {% set image_alt = node.field_main_image.alt %}
+            {% if image_uri is not null %}
+              <img class="object-cover w-3/12 h-auto" src="{{ image_uri|image_style('card_370') }}" alt="{{ image_alt }}" />
+            {% endif %}
+            {% endblock %}
 
-            {% set image_uri = node.field_main_image|file_uri %}
-            {% set image_alt = node.field_main_image.alt %}
-{% if image_uri is not null %}
-  <img class="w-24 h-auto shadow-md lg:w-48" src="{{ image_uri|image_style('card_370') }}" alt="{{ image_alt }}" />
-{% endif %}
-
-            </div>
-            <div class="flex flex-col justify-between w-9/12">
-              <h5 class="m-4 text-gray-900">
+          
+            <div class="flex flex-col justify-between w-9/12 p-4">
+              <h5 class="mb-4 text-xl text-gray-900">
                 {{ label }}
               </h5>
-
-              <p class="m-4 text-gray-500">{{ node.type.entity.label() }}, {{ node.getCreatedTime|date('d F Y') }} </p>
+              {% block date %}
+              <p class="text-gray-500">{{ node.type.entity.label() }}, {{ node.getCreatedTime|date('d F Y') }} </p>
+              {% endblock %}
             </div>
           </div>
         </a>
@@ -32,7 +34,7 @@ For the most general card display
 
 
 {#
-Attempts not working 
+Attempts to add alt not working 
 {% set image_styled = {
   '#theme': 'image_style',
   '#style_name': 'card_370',

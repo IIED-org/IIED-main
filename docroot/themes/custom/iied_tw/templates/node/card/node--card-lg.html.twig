@@ -1,0 +1,61 @@
+
+{#
+For large 3-4 col featured card display
+#}
+
+{# odd #}
+<article{{ attributes.addClass('h-full') }}>
+
+        <a href="{{ url }}" class="hover:no-underline">
+          <div
+            class="flex flex-col h-full overflow-hidden transition-shadow bg-white border border-gray-300 lg:relative lg:flex-row group rounded-xl hover:shadow-lg hover:brightness-95"
+          >
+            <div class="relative lg:static lg:order-2">
+
+              {% set image_uri = node.field_main_image|file_uri %}
+              {% set image_alt = node.field_main_image.alt %}
+              {% if image_uri is not null %}
+                <img class="object-cover w-full max-h-96" src="{{ image_uri|image_style('card_370') }}" alt="{{ image_alt }}" />
+              {% endif %}
+
+              <div
+                class="absolute bottom-0 left-0 z-10 px-4 pt-2 pb-5 text-gray-900 lg:h-10 lg:top-0 lg:z-30 bg-iiedblue-500 rounded-tr-xl lg:rounded-tr-none lg:rounded-br-xl"
+              >
+               {{ node.type.entity.label() }}
+              </div>
+
+                <svg
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="absolute right-0 w-3 h-3 bottom-3 fill-white lg:hidden"
+                >
+                  <path
+                    id="corner-tr"
+                    data-name="corner-r"
+                    d="M0,12A12,12,0,0,0,12,0V12Z"
+                  />
+                </svg>
+
+            </div>
+
+            <div class="z-20 flex flex-col justify-between h-full p-4 -mt-3 bg-white lg:mt-0 lg:-mr-3 rounded-tl-xl lg:w-9/12 lg:rounded-br-xl lg:relative">
+                <svg
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="top-0 hidden w-3 h-3 bottom-3 -right-3 fill-white lg:block lg:absolute"
+                >
+                  <path
+                    id="corner-tl"
+                    data-name="corner-tl"
+                    d="M12,0A12,12,0,0,0,0,12V0Z"
+                  />
+                </svg>
+              <h4 class="mb-4 text-xl text-gray-900 lg:text-2xl lg:mt-8">
+                {{ label }}
+              </h4>
+              <p class="text-gray-500">{{ node.getCreatedTime|date('d F Y') }}</p>
+            </div>
+          </div>
+        </a>
+
+</article>

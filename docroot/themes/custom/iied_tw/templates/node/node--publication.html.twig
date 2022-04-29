@@ -140,10 +140,9 @@
       <div class="md:col-span-2 md:order-3">
         <div class="prose prose-base lg:prose-lg lg:max-w-max">
           {{ content.body }}
-        </div>
-   
-    {{ content.field_iied_url }}
-    
+      
+          {{ content.field_iied_url }}
+          </div>
     {# cite #}
     {# TODO: Rewrite in twig instead of using views! #}
         <div class="pl-4 my-8 border-l-2 border-iiedblue-500">
@@ -161,3 +160,14 @@
 
 </article>
 
+{# related project #}
+
+      {% if content.field_project[0] %}
+      <section class="bg-gray-100">
+        <div class="container py-8 mx-auto">
+        <h2 class="mb-4">Related project</h2>    
+        {{ node.field_project[0].entity|view('card') }}
+        </div>
+      </section>
+      {% endif %}
+      
