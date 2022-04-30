@@ -7,11 +7,13 @@ dependencies:
     - field.field.taxonomy_term.collection.field_about
     - field.field.taxonomy_term.collection.field_containers
     - field.field.taxonomy_term.collection.field_downloads
+    - field.field.taxonomy_term.collection.field_overview
     - field.field.taxonomy_term.collection.field_publications_more_link
     - field.field.taxonomy_term.collection.field_short_description
     - field.field.taxonomy_term.collection.field_theme
     - field.field.taxonomy_term.collection.layout_builder__layout
     - taxonomy.vocabulary.collection
+    - views.view.project_publication_card
     - views.view.taxonomy_all_display
     - views.view.taxonomy_featured_display
   module:
@@ -41,11 +43,41 @@ third_party_settings:
             layout_class: {  }
             first: {  }
         components:
-          9fa600f4-1330-46b6-b07f-6fcba73022e7:
-            uuid: 9fa600f4-1330-46b6-b07f-6fcba73022e7
+          e228e755-d051-4dcd-a893-0b69562f5f29:
+            uuid: e228e755-d051-4dcd-a893-0b69562f5f29
             region: first
             configuration:
               id: 'views_block:taxonomy_featured_display-block_1'
+              label: ''
+              label_display: '0'
+              provider: views
+              context_mapping: {  }
+              views_label: ''
+              items_per_page: none
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: tw-container
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          wrappers:
+            first: div
+          outer_wrapper: div
+          attributes: ''
+          link_attribute: ''
+          link_custom: ''
+          classes:
+            layout_class:
+              bg-fill: bg-fill
+            first: {  }
+        components:
+          94c48576-f5a7-4673-a96f-b45516fcedcb:
+            uuid: 94c48576-f5a7-4673-a96f-b45516fcedcb
+            region: first
+            configuration:
+              id: 'views_block:project_publication_card-block_2'
               label: ''
               label_display: visible
               provider: views
@@ -70,13 +102,13 @@ third_party_settings:
             layout_class: {  }
             first: {  }
         components:
-          6d321b7e-aeb4-486a-a644-fb1de7d0cf61:
-            uuid: 6d321b7e-aeb4-486a-a644-fb1de7d0cf61
+          4d0d1344-f04c-426c-8770-67e1f0c9bd7d:
+            uuid: 4d0d1344-f04c-426c-8770-67e1f0c9bd7d
             region: first
             configuration:
               id: 'views_block:taxonomy_all_display-block_1'
               label: ''
-              label_display: visible
+              label_display: '0'
               provider: views
               context_mapping: {  }
               views_label: ''
@@ -143,6 +175,7 @@ content:
     weight: 6
     region: content
 hidden:
+  field_overview: true
   langcode: true
   layout_builder__layout: true
   search_api_excerpt: true
