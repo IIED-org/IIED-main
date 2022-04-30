@@ -70,6 +70,7 @@ module:
   language: 0
   language_switcher_extended: 0
   layout_builder: 0
+  layout_builder_styles: 0
   layout_builder_tabs: 0
   layout_discovery: 0
   layout_paragraphs: 0

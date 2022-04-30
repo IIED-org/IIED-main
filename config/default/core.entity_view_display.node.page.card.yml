@@ -1,0 +1,45 @@
+uuid: 296ed907-161c-4139-89d2-18dfbb43659f
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.card
+    - field.field.node.page.body
+    - field.field.node.page.field_content
+    - field.field.node.page.field_main_image
+    - field.field.node.page.field_rows
+    - node.type.page
+  module:
+    - layout_builder
+    - text
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+_core:
+  default_config_hash: g1S3_GLaxq4l3I9RIca5Mlz02MxI2KmOquZpHw59akM
+id: node.page.card
+targetEntityType: node
+bundle: page
+mode: card
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 101
+    region: content
+hidden:
+  field_content: true
+  field_main_image: true
+  field_rows: true
+  langcode: true
+  search_api_excerpt: true
+  sharing_buttons: true

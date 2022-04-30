@@ -1,15 +1,15 @@
-uuid: 6f06315d-ddcc-4f62-903c-32e98e177377
+uuid: b871395c-229e-4dbb-8a24-b8b378945ee4
 langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.card_solo
     - field.field.node.page.body
     - field.field.node.page.field_content
     - field.field.node.page.field_main_image
     - field.field.node.page.field_rows
     - node.type.page
   module:
-    - ds
     - entity_reference_revisions
     - layout_builder
     - text
@@ -20,10 +20,10 @@ third_party_settings:
     allow_custom: false
 _core:
   default_config_hash: g1S3_GLaxq4l3I9RIca5Mlz02MxI2KmOquZpHw59akM
-id: node.page.default
+id: node.page.card_solo
 targetEntityType: node
 bundle: page
-mode: default
+mode: card_solo
 content:
   body:
     type: text_default
