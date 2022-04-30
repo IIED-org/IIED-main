@@ -1,0 +1,8 @@
+layout_builder_styles.settings:
+  route_name: layout_builder_styles.settings
+  title: 'Settings'
+  base_route: entity.layout_builder_style.collection
+layout_builder_styles.collection:
+  route_name: entity.layout_builder_style.collection
+  title: 'Styles'
+  base_route: entity.layout_builder_style.collection

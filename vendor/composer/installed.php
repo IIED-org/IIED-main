@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '7d212edb514faea583a3d22fb8179c6168b3531d',
+        'reference' => '567c5bd06665f8b4fb649056acf5f696ec09d794',
         'name' => 'drupal/recommended-project',
         'dev' => true,
     ),
@@ -1365,6 +1365,15 @@
             'reference' => '8.x-2.13',
             'dev_requirement' => false,
         ),
+        'drupal/layout_builder_styles' => array(
+            'pretty_version' => '1.0.0-beta4',
+            'version' => '1.0.0.0-beta4',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/layout_builder_styles',
+            'aliases' => array(),
+            'reference' => '8.x-1.0-beta4',
+            'dev_requirement' => false,
+        ),
         'drupal/layout_builder_tabs' => array(
             'pretty_version' => '1.0.0-beta3',
             'version' => '1.0.0.0-beta3',
@@ -1743,7 +1752,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '7d212edb514faea583a3d22fb8179c6168b3531d',
+            'reference' => '567c5bd06665f8b4fb649056acf5f696ec09d794',
             'dev_requirement' => false,
         ),
         'drupal/redirect' => array(

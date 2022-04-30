@@ -1,0 +1,7 @@
+layout_builder_styles.settings:
+  path: '/admin/config/content/layout_builder_style/config'
+  defaults:
+    _form: '\Drupal\layout_builder_styles\Form\ModuleSettingsForm'
+    _title: 'Settings'
+  requirements:
+    _permission: 'administer layout builder styles configuration'
