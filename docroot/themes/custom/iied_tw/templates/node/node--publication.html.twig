@@ -168,6 +168,7 @@
         <h2 class="mb-4">Related project</h2>    
         {{ node.field_project[0].entity|view('card') }}
         </div>
+        {{ drupal_view('related_publications', 'block_1') }}
       </section>
       {% endif %}
       

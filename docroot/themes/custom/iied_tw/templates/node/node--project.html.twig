@@ -146,16 +146,23 @@
         {% endif %}
 
         {#-- body --#}
-        <div class="pb-6 prose border-b border-gray-300 md:prose-lg">
+        <div class="pb-6 prose md:prose-lg">
           <div {{ content_attributes.addClass('node-content') }}> 
           {{ content.body }} 
           {{ content.field_additional_elements }} {# paragraphs #}
+          </div>
+        </div>
+      </div>
+
+        <div class="order-3 mb-4 xl:col-span-12">  
+        {{ drupal_view('project_publication_card', 'block_1') }}
+        </div>
+
+      <div class="order-4 xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4">
+        <div class="pb-6 prose border-b border-gray-300 md:prose-lg">
           {{ content.field_additional_resources }}
           {{ content.field_partners }}
           {{ content.field_funded_by }}
-          </div>
-
-
         </div>
         {#-- tags --#}
          {{ content.field_tags }} 
