@@ -28,7 +28,9 @@ class D7Article extends Node {
     // Node 27381 is useful for testing as it hase a video_embed_standard para
     // that has been migrated into a video_embed paragraph on the
     // field_paragraphs field.
-    // $query->condition('n.nid', '138006');
+    // Node 140676 has multiple images in the rich text body field:
+    // https://www.iied.org/conservation-discrimination-case-studies-nepals-national-parks
+    // $query->condition('n.nid', '140321');
     return $query;
   }
 
