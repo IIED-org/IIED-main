@@ -151,6 +151,14 @@ content:
     third_party_settings: {  }
     weight: 14
     region: content
+  field_person_type:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 15
+    region: content
   field_position:
     type: text_default
     label: hidden
@@ -198,7 +206,6 @@ hidden:
   field_legacy_iscanonical: true
   field_link: true
   field_organisation: true
-  field_person_type: true
   field_position_short: true
   field_quotes: true
   field_research_group: true
