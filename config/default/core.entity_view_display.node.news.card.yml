@@ -11,6 +11,7 @@ dependencies:
     - field.field.node.news.field_display_image
     - field.field.node.news.field_image_caption
     - field.field.node.news.field_main_image
+    - field.field.node.news.field_news_type
     - field.field.node.news.field_notes
     - field.field.node.news.field_paragraphs
     - field.field.node.news.field_project
@@ -53,6 +54,7 @@ hidden:
   field_contact: true
   field_display_image: true
   field_image_caption: true
+  field_news_type: true
   field_notes: true
   field_paragraphs: true
   field_project: true

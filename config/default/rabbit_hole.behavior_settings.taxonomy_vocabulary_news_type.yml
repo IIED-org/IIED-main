@@ -1,0 +1,14 @@
+uuid: 8ccb87cf-90a6-40cf-9f9a-7f9350d950f5
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.news_type
+id: taxonomy_vocabulary_news_type
+entity_type_id: taxonomy_vocabulary
+entity_id: news_type
+action: page_not_found
+allow_override: 1
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

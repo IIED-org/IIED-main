@@ -1,0 +1,11 @@
+uuid: f7dae1d6-d51f-4b6f-88b3-77d85fc0b4d6
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.news_type
+id: taxonomy_term.news_type
+target_entity_type_id: taxonomy_term
+target_bundle: news_type
+default_langcode: site_default
+language_alterable: false
