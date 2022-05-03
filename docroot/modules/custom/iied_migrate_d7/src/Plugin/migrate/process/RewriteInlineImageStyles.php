@@ -7,6 +7,7 @@ use Drupal\migrate\Row;
 use Drupal\migrate\MigrateExecutableInterface;
 use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
+use Drush\Drush;
 
 /**
  * Perform custom value transformations.
@@ -50,7 +51,7 @@ class RewriteInlineImageStyles extends ProcessPluginBase {
 
     if (is_array($matches[0])) {
       foreach ($matches[0] as $key => $original_path) {
-        $file_name = $matches[1][$key];
+        $file_name = urldecode($matches[1][$key]);
         $db = \Drupal\Core\Database\Database::getConnection();
         $query = $db->select('file_managed', 'fm');
         $query->fields('fm', array('fid', 'uri'));
@@ -62,22 +63,29 @@ class RewriteInlineImageStyles extends ProcessPluginBase {
         ->loadByProperties(['filename' => $file_name]);
 
         $fid = $file_managed[0]->fid;
-        $file_object = File::load($fid);
-        //$file_url = $file_object->createFileUrl();
 
-        // Get origin image URI.
-        $image_uri = $file_object->getFileUri();
-        // Load image style.
-        $style = ImageStyle::load($new_style);
+        if ($fid) {
+          $file_object = File::load($fid);
+          //$file_url = $file_object->createFileUrl();
 
-        // Get URI.
-        $uri = $style->buildUri($image_uri);
+          // Get origin image URI.
+          $image_uri = $file_object->getFileUri();
+          // Load image style.
+          $style = ImageStyle::load($new_style);
 
-        $file_url_generator = \Drupal::service('file_url_generator');
-        $file_url = $file_url_generator->generateString($uri);
-        // Replace the original path with the new file url.
-        $value = str_replace($original_path, $file_url, $value);
+          // Get URI.
+          $uri = $style->buildUri($image_uri);
 
+          $file_url_generator = \Drupal::service('file_url_generator');
+          $file_url = $file_url_generator->generateString($uri);
+          // Replace the original path with the new file url.
+          $value = str_replace($original_path, $file_url, $value);
+        } else {
+          // We can't find a reference to this file in Drupal's managed files.
+          $node_id = $row->getSourceProperty(('nid'));
+          $message = "\nRewrite inline image styles: Cannot find reference to $file_name from node $node_id. \n";
+          Drush::output()->writeln($message);
+        }
       }
     }
 
