@@ -32,6 +32,9 @@ process:
     -
       plugin: get
       source: description
+    -
+      plugin: rewrite_inline_image_styles
+      new_style: 'scale_md'
   description/format:
     -
       plugin: default_value

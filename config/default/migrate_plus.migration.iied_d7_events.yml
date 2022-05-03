@@ -141,6 +141,9 @@ process:
     -
       plugin: get
       source: body/0/value
+    -
+      plugin: rewrite_inline_image_styles
+      new_style: scale_md
   body/summary:
     -
       plugin: get
