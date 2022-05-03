@@ -1598,10 +1598,6 @@ hr{
   visibility: hidden;
 }
 
-.static{
-  position: static;
-}
-
 .absolute{
   position: absolute;
 }
@@ -1774,6 +1770,11 @@ hr{
   margin-bottom: 2rem;
 }
 
+.my-10{
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
+}
+
 .mb-4{
   margin-bottom: 1rem;
 }
@@ -1922,6 +1923,10 @@ hr{
   height: 0.5rem;
 }
 
+.h-8{
+  height: 2rem;
+}
+
 .max-h-96{
   max-height: 24rem;
 }
@@ -1994,6 +1999,10 @@ hr{
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
+}
+
+.w-8{
+  width: 2rem;
 }
 
 .min-w-fit{
@@ -2571,10 +2580,6 @@ hr{
 .ring-gray-300{
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(209 213 219 / var(--tw-ring-opacity));
-}
-
-.filter{
-  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
 .transition{
