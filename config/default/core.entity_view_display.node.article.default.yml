@@ -11,7 +11,6 @@ dependencies:
     - field.field.node.article.field_collections
     - field.field.node.article.field_contact
     - field.field.node.article.field_display_image
-    - field.field.node.article.field_full_width_media
     - field.field.node.article.field_hide_date
     - field.field.node.article.field_image
     - field.field.node.article.field_image_caption
@@ -226,23 +225,6 @@ third_party_settings:
                 third_party_settings: {  }
             weight: 11
             additional: {  }
-          7ab711a5-534e-4de4-a076-d3353141f3c5:
-            uuid: 7ab711a5-534e-4de4-a076-d3353141f3c5
-            region: content
-            configuration:
-              id: 'field_block:node:article:field_full_width_media'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: entity_reference_revisions_entity_view
-                label: above
-                settings:
-                  view_mode: default
-                  link: ''
-                third_party_settings: {  }
-            weight: 12
-            additional: {  }
           dfeabeae-bdae-4b90-a9dc-fe849d9e016a:
             uuid: dfeabeae-bdae-4b90-a9dc-fe849d9e016a
             region: content
@@ -417,15 +399,6 @@ content:
       format_custom_true: ''
     third_party_settings: {  }
     weight: 116
-    region: content
-  field_full_width_media:
-    type: entity_reference_revisions_entity_view
-    label: above
-    settings:
-      view_mode: default
-      link: ''
-    third_party_settings: {  }
-    weight: 117
     region: content
   field_hide_date:
     type: boolean
