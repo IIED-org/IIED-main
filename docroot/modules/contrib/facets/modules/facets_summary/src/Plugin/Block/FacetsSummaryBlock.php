@@ -127,7 +127,7 @@ class FacetsSummaryBlock extends BlockBase implements FacetsSummaryBlockInterfac
 
       /** @var \Drupal\views\ViewExecutable $view */
       if ($view = $facets_summary->getFacetSource()->getViewsDisplay()) {
-        $build['#attached']['drupalSettings']['facets_views_ajax']['facets_summary_ajax_' . $facets_summary->id()] = [
+        $build['#attached']['drupalSettings']['facets_views_ajax']['facets_summary_ajax_summary'] = [
           'facets_summary_id' => $facets_summary->id(),
           'view_id' => $view->id(),
           'current_display_id' => $view->current_display,
