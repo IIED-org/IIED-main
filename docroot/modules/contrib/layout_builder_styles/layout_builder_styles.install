@@ -1,0 +1,156 @@
+<?php
+
+/**
+ * @file
+ * Layout Builder Styles install file.
+ */
+
+use Drupal\layout_builder\Entity\LayoutBuilderEntityViewDisplay;
+use Drupal\layout_builder\Plugin\SectionStorage\OverridesSectionStorage;
+use Drupal\layout_builder_styles\LayoutBuilderStyleInterface;
+
+/**
+ * Migrate away from using section component TPS to the old additional property.
+ */
+function layout_builder_styles_update_8001() {
+  // Make sure that the patch that applies TPS to section components is present.
+  // If it's not, this update cannot work, because we cannot retrieve the TPS
+  // from the section components without that interface.
+  if (!in_array('Drupal\Core\Config\Entity\ThirdPartySettingsInterface', class_implements('Drupal\layout_builder\Entity\LayoutBuilderEntityViewDisplay'))) {
+    throw new \Exception('Cannot run layout builder styles migration because the core patch that added third party settings to section components is not installed.');
+  }
+
+  // Function that moves the layout builder styles on section components from
+  // being stored in Third Party Settings to instead be stored in the
+  // "additional" property. The patch that added TPS support to section
+  // components is not viable anymore, so it cannot be used long term.
+  $migrateSectionComponents = function ($sections) {
+    $count = 0;
+
+    foreach ($sections as $sectionUuid => $section) {
+      /** @var \Drupal\layout_builder\Section $section */
+      $components = $section->getComponents();
+      foreach ($components as $componentUuid => $component) {
+        /** @var \Drupal\layout_builder\SectionComponent $component */
+        $style = $component->getThirdPartySetting('layout_builder_styles', 'style');
+        if ($style) {
+          $component->unsetThirdPartySetting('layout_builder_styles', 'style');
+          $component->set('layout_builder_styles_style', $style);
+          $count++;
+        }
+      }
+    }
+
+    return $count;
+  };
+
+  // Find all entity displays that have layout builder enabled.
+  $allDisplays = \Drupal::entityTypeManager()
+    ->getStorage('entity_view_display')
+    ->loadMultiple();
+  foreach ($allDisplays as $display) {
+    if (!$display instanceof LayoutBuilderEntityViewDisplay) {
+      continue;
+    }
+    if ($display->isLayoutBuilderEnabled()) {
+      $updatedComponents = $migrateSectionComponents($display->getSections());
+      if ($updatedComponents > 0) {
+        $display->save();
+        \Drupal::logger('layout_builder_styles')->info('Migrated TPS on %count section component(s) for the default layout on entity view display %id', ['%count' => $updatedComponents, '%id' => $display->id()]);
+      }
+    }
+
+    // Check for overrides now.
+    if ($display->isOverridable()) {
+      // Process all entities that are associated with the entity type that this
+      // entity view display belongs to.
+      $entityTypeId = $display->getTargetEntityTypeId();
+      $entityType = \Drupal::entityTypeManager()->getDefinition($entityTypeId);
+      $properties = [];
+      if ($entityType->hasKey('bundle')) {
+        $properties[$entityType->getKey('bundle')] = $display->getTargetBundle();
+      }
+      $entities = \Drupal::entityTypeManager()->getStorage($entityTypeId)->loadByProperties($properties);
+      foreach ($entities as $entity) {
+        /** @var \Drupal\layout_builder\Field\LayoutSectionItemList $layoutFieldData */
+        $layoutFieldData = $entity->{OverridesSectionStorage::FIELD_NAME};
+        $updatedComponents = $migrateSectionComponents($layoutFieldData->getSections());
+        if ($updatedComponents > 0) {
+          $entity->save();
+          \Drupal::logger('layout_builder_styles')
+            ->info('Migrated TPS on %count section component(s) on overridden layout on entity id %entity_id for entity view display %display_id',
+            [
+              '%count' => $updatedComponents,
+              '%display_id' => $display->id(),
+              '%entity_id' => $entity->id(),
+            ]
+          );
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Install new config for multiple styles.
+ */
+function layout_builder_styles_update_8002() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('layout_builder_styles.settings');
+  $config->set('multiselect', 'single');
+  $config->set('form_type', 'checkboxes');
+  $config->save();
+}
+
+/**
+ * Allow block styles per block type for any defined reusable block instances.
+ */
+function layout_builder_styles_update_8003() {
+  // Per #3068722, block restrictions/allowances will no longer be supported
+  // for individual block instances. Find any defined instance allowances
+  // and re-save that allowance as a block type whitelist.
+  // This will effectively maintain allowances for those block instances, while
+  // theoretically adding allowances for other block instances which had
+  // been restricted.
+  $styles = \Drupal::entityTypeManager()
+    ->getStorage('layout_builder_style')
+    ->loadByProperties([
+      'type' => LayoutBuilderStyleInterface::TYPE_COMPONENT,
+    ]);
+  foreach ($styles as $style) {
+    $restrictions = $style->getBlockRestrictions();
+    foreach ($restrictions as $key => $allowed) {
+      // If this is a reusable block, retrieve the block bundle.
+      if (strpos($allowed, "block_content:") === 0) {
+        $uuid = str_replace('block_content:', '', $allowed);
+        $bundle = \Drupal::service('entity.repository')->loadEntityByUuid('block_content', $uuid)
+          ->bundle();
+        if ($bundle && !in_array('inline_block:' . $bundle, $restrictions)) {
+          // Add a block type allowance if it doesn't exist.
+          array_push($restrictions, 'inline_block:' . $bundle);
+        }
+        // Remove the now defunct block instance allowance.
+        unset($restrictions[$key]);
+      }
+    }
+    // Re-save style restrictions.
+    $style->set('block_restrictions', $restrictions);
+    $style->save();
+  }
+}
+
+/**
+ * Add newly-available weight value to existing style entities.
+ */
+function layout_builder_styles_update_8004() {
+  $styles = \Drupal::entityTypeManager()
+    ->getStorage('layout_builder_style')
+    ->loadByProperties();
+  $weight = 0;
+  foreach ($styles as $style) {
+    // Re-save styles with weight value.
+    $style->set('weight', $weight);
+    $style->save();
+    $weight++;
+  }
+}

@@ -1,0 +1,7 @@
+tabs:
+  version: VERSION
+  css:
+    component:
+      css/tabs.css: {}
+  js:
+    js/tabs.js: {}

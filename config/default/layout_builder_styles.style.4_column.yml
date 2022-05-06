@@ -1,0 +1,13 @@
+uuid: 076ddffe-2421-4c60-bb55-e2031392491b
+langcode: en
+status: true
+dependencies: {  }
+id: 4_column
+label: '4 column'
+classes: 'sm:col-span-2 xl:col-span-4 h-full'
+type: component
+block_restrictions:
+  - 'inline_block:card_wide'
+  - 'inline_block:collection_card'
+layout_restrictions: {  }
+weight: 0

@@ -1,0 +1,42 @@
+
+{#
+For general featured card display
+#}
+
+<article{{ attributes.addClass('h-full') }}>
+
+        <a href="{{ url }}" class="hover:no-underline">
+          <div
+            class="flex content-start h-full overflow-hidden transition-shadow bg-white border border-gray-300 sm:flex-col grow group rounded-xl hover:shadow-lg sm:flex-wrap"
+          >
+            <div class="w-3/12 p-2 sm:overflow-hidden sm:bg-gray-300 sm:w-full max-h-44 2xl:max-h-56">
+
+        {% if content.field_cover_image[0] %}
+            {% set image_uri = node.field_cover_image|file_uri %}
+            {% set image_alt = node.field_cover_image.alt %}
+            {% if image_uri is not null %}
+              <img class="object-cover w-3/12 h-auto" src="{{ image_uri }}" alt="{{ image_alt }}" />
+            {% endif %}
+        {% else %}
+            {% set image_uri = node.field_media|file_uri %}
+            {% set image_alt = node.field_media.alt %}
+            {% if image_uri is not null %}
+              <img class="object-cover w-3/12 h-auto" src="{{ image_uri }}" alt="{{ image_alt }}" />
+            {% endif %}
+        {% endif %}
+
+            </div>
+
+            <div
+              class="flex flex-col justify-between w-9/12 p-4 sm:w-full grow sm:border-t-2 color-rotate"
+            >
+
+              <h4 class="mb-4 text-xl text-gray-900 lg:text-2xl">
+                {{ label }}
+              </h4>
+              <p class="text-gray-500">{{ node.getCreatedTime|date('d F Y') }}</p>
+            </div>
+          </div>
+        </a>
+
+</article>

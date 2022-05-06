@@ -1,0 +1,38 @@
+
+{#
+Standard collection card
+#}
+
+<article{{ attributes.addClass('h-full') }}>
+
+        <a href="{{ url }}" class="hover:no-underline group">
+          <div
+            class="relative flex transition bg-white border border-gray-300 min-h-[12rem] h-full rounded-xl group-hover:shadow-lg"
+          >
+            <span
+              class="absolute m-auto left-0 right-0 inset-0 w-[98%] -translate-y-2 bg-white ring-1 ring-gray-300 rounded-xl -z-10"
+            ></span>
+            <span
+              class="absolute m-auto left-0 right-0 inset-0 w-[96%] -translate-y-4 bg-white ring-1 ring-gray-300 rounded-xl -z-20"
+            ></span>
+            <div class="flex flex-col items-start justify-between h-full p-4">
+              <div class="flex">
+
+              {#image if available #}
+
+              <div class="">
+                  <h4 class="mb-4 text-xl text-gray-900 lg:text-2xl">{{ name }}</h4>
+                  <p class="mb-4 text-gray-700">
+                           {{ term.description.0.value|striptags }}
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <span class="font-bold text-gray-700">Collection </span>
+              </div>
+            </div>
+          </div>
+        </a>
+
+</article>

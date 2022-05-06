@@ -1,0 +1,13 @@
+name: Layout Builder Styles
+description: Apply styles to blocks in Layout Builder.
+core_version_requirement: ^8.7.7 || ^9
+type: module
+package: Layout Builder
+dependencies:
+  - drupal:layout_builder
+configure: entity.layout_builder_style.collection
+
+# Information added by Drupal.org packaging script on 2020-12-10
+version: '8.x-1.0-beta4'
+project: 'layout_builder_styles'
+datestamp: 1607616104

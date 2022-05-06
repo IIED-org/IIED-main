@@ -4,9 +4,12 @@ status: true
 dependencies:
   config:
     - field.field.node.page.body
+    - field.field.node.page.field_content
+    - field.field.node.page.field_main_image
     - field.field.node.page.field_rows
     - node.type.page
   module:
+    - layout_paragraphs
     - path
     - text
 _core:
@@ -31,6 +34,25 @@ content:
     weight: 4
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_content:
+    type: layout_paragraphs
+    weight: 27
+    region: content
+    settings:
+      preview_view_mode: default
+      nesting_depth: 0
+      require_layouts: 1
+    third_party_settings: {  }
+  field_main_image:
+    type: entity_reference_autocomplete
+    weight: 26
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   langcode:
     type: language_select

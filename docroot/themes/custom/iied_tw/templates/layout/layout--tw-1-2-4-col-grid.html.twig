@@ -11,7 +11,7 @@
 #}
 {% if content %}
   <div{{ attributes }}>
-         <div class="container mx-auto">
+         <div class="container mx-auto mb-10">
       {% if content.first %}
         <div {{ region_attributes.first.addClass('grid', 'grid-flow-row-dense', 'gap-6', 'xl:gap-10', 'md:grid-cols-2', 'xl:grid-cols-4') }}>
           {{ content.insert_before }}

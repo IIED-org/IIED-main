@@ -1,0 +1,5 @@
+services:
+  layout_builder_tabs.customTwigExtension:
+    class: Drupal\layout_builder_tabs\TwigExtension\SortByWeight
+    tags:
+      - { name: twig.extension }

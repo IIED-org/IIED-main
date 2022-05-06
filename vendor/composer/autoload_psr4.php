@@ -104,6 +104,7 @@ return array(
     'Drush\\Commands\\radix\\' => array($baseDir . '/docroot/themes/contrib/radix/Commands/radix'),
     'Drush\\' => array($vendorDir . '/drush/drush/src'),
     'Drupal\\sophron\\' => array($baseDir . '/docroot/modules/contrib/sophron/src'),
+    'Drupal\\gin_lb_settings\\' => array($baseDir . '/docroot/modules/contrib/gin_lb/src'),
     'Drupal\\Driver\\' => array($baseDir . '/docroot/drivers/lib/Drupal/Driver'),
     'Drupal\\Core\\' => array($baseDir . '/docroot/core/lib/Drupal/Core'),
     'Drupal\\Composer\\Plugin\\VendorHardening\\' => array($vendorDir . '/drupal/core-vendor-hardening'),

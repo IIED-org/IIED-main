@@ -1,0 +1,11 @@
+tabs:
+  label: Tabs
+  category: 'Extra Layouts'
+  template: templates/tabs
+  icon: layout_builder_tabs.svg
+  regions:
+    tabs:
+      label: Tab Set
+    # ideally this would be configurable so there could be a number of rows,
+    # each one of which is a tab, that can contain multiple blocks, but this
+    # would also require adding a label to each tab though configuration.

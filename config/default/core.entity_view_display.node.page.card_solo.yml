@@ -1,0 +1,73 @@
+uuid: b871395c-229e-4dbb-8a24-b8b378945ee4
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.card_solo
+    - field.field.node.page.body
+    - field.field.node.page.field_content
+    - field.field.node.page.field_main_image
+    - field.field.node.page.field_rows
+    - node.type.page
+  module:
+    - entity_reference_revisions
+    - layout_builder
+    - text
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+_core:
+  default_config_hash: g1S3_GLaxq4l3I9RIca5Mlz02MxI2KmOquZpHw59akM
+id: node.page.card_solo
+targetEntityType: node
+bundle: page
+mode: card_solo
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+  field_content:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 105
+    region: ds_content
+  field_main_image:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 104
+    region: ds_content
+  field_rows:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 103
+    region: ds_content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  sharing_buttons:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: ds_content
+hidden:
+  langcode: true
+  search_api_excerpt: true

@@ -79,7 +79,7 @@ third_party_settings:
       label: cover-image
       parent_name: ''
       region: hidden
-      weight: 41
+      weight: 47
       format_type: html_element
       format_settings:
         classes: ''
@@ -97,7 +97,7 @@ third_party_settings:
       label: pub-header
       parent_name: ''
       region: hidden
-      weight: 43
+      weight: 49
       format_type: html_element
       format_settings:
         classes: 'col-md-8 order-md-2 float-md-right mb-3'
@@ -114,7 +114,7 @@ third_party_settings:
       label: pub-body
       parent_name: ''
       region: hidden
-      weight: 42
+      weight: 48
       format_type: html_element
       format_settings:
         classes: 'col-md-8 float-md-right order-md-3'
@@ -135,10 +135,12 @@ third_party_settings:
         - field_journal_ref
         - field_lit_code
         - field_series
+        - field_reportagency1
+        - field_deptlist
       label: pub-detail
       parent_name: ''
       region: hidden
-      weight: 8
+      weight: 43
       format_type: html_element
       format_settings:
         classes: ''
@@ -156,7 +158,7 @@ third_party_settings:
       label: Related-project
       parent_name: ''
       region: hidden
-      weight: 40
+      weight: 46
       format_type: html_element
       format_settings:
         classes: 'border-gradient mb-5 order-5'
@@ -173,7 +175,7 @@ third_party_settings:
       label: 'Related publications'
       parent_name: ''
       region: hidden
-      weight: 39
+      weight: 45
       format_type: html_element
       format_settings:
         classes: 'mb-5 order-6 container'
@@ -190,7 +192,7 @@ third_party_settings:
       label: 'Related links'
       parent_name: ''
       region: hidden
-      weight: 38
+      weight: 44
       format_type: html_element
       format_settings:
         classes: ''
@@ -207,7 +209,7 @@ third_party_settings:
       label: row-one
       parent_name: ''
       region: hidden
-      weight: 44
+      weight: 50
       format_type: html_element
       format_settings:
         classes: 'row d-md-block mb-4'
@@ -224,7 +226,7 @@ third_party_settings:
       label: row-two
       parent_name: ''
       region: hidden
-      weight: 45
+      weight: 51
       format_type: html_element
       format_settings:
         classes: 'row cleared'
@@ -246,7 +248,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 6
+    weight: 33
     region: content
   field_a_serial:
     type: serial_default_formatter
@@ -260,14 +262,14 @@ content:
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 0
+    weight: 19
     region: content
   field_area_list:
     type: address_country_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 15
+    weight: 38
     region: content
   field_author_s_:
     type: entity_reference_label
@@ -275,7 +277,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 4
+    weight: 31
     region: content
   field_cover_image:
     type: media_thumbnail
@@ -291,7 +293,7 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    weight: 0
+    weight: 20
     region: content
   field_date_published:
     type: datetime_custom
@@ -300,7 +302,7 @@ content:
       timezone_override: ''
       date_format: 'Y-m-d\TH:i:s'
     third_party_settings: {  }
-    weight: 0
+    weight: 21
     region: content
   field_deptlist:
     type: string
@@ -308,7 +310,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 0
+    weight: 40
     region: content
   field_document_type:
     type: entity_reference_label
@@ -316,7 +318,7 @@ content:
     settings:
       link: false
     third_party_settings: {  }
-    weight: 3
+    weight: 30
     region: content
   field_doi:
     type: link
@@ -336,11 +338,11 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 5
+    weight: 32
     region: content
   field_external_url:
     type: link
-    label: above
+    label: hidden
     settings:
       trim_length: 80
       url_only: false
@@ -348,11 +350,11 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 0
+    weight: 23
     region: content
   field_iied_url:
     type: link
-    label: above
+    label: hidden
     settings:
       trim_length: 80
       url_only: false
@@ -367,7 +369,7 @@ content:
             lb: 'Related link'
             lb-col: false
             classes: {  }
-    weight: 0
+    weight: 22
     region: content
   field_isbn:
     type: isbn_default
@@ -397,7 +399,7 @@ content:
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 0
+    weight: 18
     region: content
   field_lit_code:
     type: list_key
@@ -423,14 +425,14 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    weight: 0
+    weight: 24
     region: content
   field_meta_tags:
     type: metatag_empty_formatter
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 0
+    weight: 25
     region: content
   field_parent:
     type: entity_reference_label
@@ -438,16 +440,16 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 0
+    weight: 26
     region: content
   field_pdf:
     type: field_link
-    label: above
+    label: hidden
     settings:
       type: ''
       settings: {  }
     third_party_settings: {  }
-    weight: 0
+    weight: 27
     region: content
   field_pdf_pages:
     type: number_integer
@@ -456,7 +458,7 @@ content:
       thousand_separator: ''
       prefix_suffix: true
     third_party_settings: {  }
-    weight: 1
+    weight: 28
     region: content
   field_product_code:
     type: string
@@ -464,7 +466,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 0
+    weight: 7
     region: content
   field_product_code_new:
     type: computed_string
@@ -474,7 +476,7 @@ content:
       cache_unit: -1
       cache_duration: 1
     third_party_settings: {  }
-    weight: 16
+    weight: 39
     region: content
   field_project:
     type: entity_reference_label
@@ -482,7 +484,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 10
+    weight: 35
     region: content
   field_publisher:
     type: entity_reference_label
@@ -490,7 +492,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 14
+    weight: 37
     region: content
   field_publisher_legacy:
     type: string
@@ -498,7 +500,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 0
+    weight: 15
     region: content
   field_reportagency1:
     type: string
@@ -506,63 +508,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 0
-    region: content
-  field_reportagency2:
-    type: string
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 0
-    region: content
-  field_reportagency3:
-    type: string
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 0
-    region: content
-  field_reportfin1:
-    type: string
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 0
-    region: content
-  field_reportfin2:
-    type: string
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 0
-    region: content
-  field_reportfin3:
-    type: string
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 0
-    region: content
-  field_reportingcode1:
-    type: string
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 0
-    region: content
-  field_reportingcode2:
-    type: string
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 0
+    weight: 9
     region: content
   field_series:
     type: entity_reference_rss_category
@@ -577,7 +523,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 0
+    weight: 8
     region: content
   field_short_title:
     type: string
@@ -585,7 +531,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 0
+    weight: 10
     region: content
   field_source_publication:
     type: string
@@ -593,28 +539,28 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 0
+    weight: 11
     region: content
   field_status:
     type: list_key
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 0
+    weight: 12
     region: content
   field_tags:
     type: entity_reference_rss_category
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 0
+    weight: 13
     region: content
   field_team:
     type: list_key
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 0
+    weight: 14
     region: content
   field_theme_s_:
     type: entity_reference_label
@@ -630,7 +576,7 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    weight: 0
+    weight: 17
     region: content
   field_translator:
     type: entity_reference_label
@@ -638,14 +584,14 @@ content:
     settings:
       link: false
     third_party_settings: {  }
-    weight: 2
+    weight: 29
     region: content
   field_work_programme_global_enga:
     type: list_key
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 0
+    weight: 16
     region: content
   langcode:
     type: language
@@ -654,13 +600,20 @@ content:
       link_to_entity: false
       native_language: false
     third_party_settings: {  }
-    weight: 12
+    weight: 36
     region: content
   links:
     settings: {  }
     third_party_settings: {  }
-    weight: 9
+    weight: 34
     region: content
 hidden:
+  field_reportagency2: true
+  field_reportagency3: true
+  field_reportfin1: true
+  field_reportfin2: true
+  field_reportfin3: true
+  field_reportingcode1: true
+  field_reportingcode2: true
   search_api_excerpt: true
   sharing_buttons: true

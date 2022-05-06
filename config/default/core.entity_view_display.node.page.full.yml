@@ -5,11 +5,14 @@ dependencies:
   config:
     - core.entity_view_mode.node.full
     - field.field.node.page.body
+    - field.field.node.page.field_content
+    - field.field.node.page.field_main_image
     - field.field.node.page.field_rows
     - node.type.page
   module:
     - ds
     - layout_builder
+    - layout_paragraphs
     - text
     - user
 third_party_settings:
@@ -57,6 +60,24 @@ content:
             prefix: ''
             suffix: ''
     weight: 0
+    region: content
+  field_content:
+    type: layout_paragraphs
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_main_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: true
+    third_party_settings: {  }
+    weight: 1
     region: content
 hidden:
   field_rows: true

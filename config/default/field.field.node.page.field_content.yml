@@ -1,0 +1,102 @@
+uuid: 1b0f4237-110c-4380-a65e-77452eda9989
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_content
+    - node.type.page
+    - paragraphs.paragraphs_type.basic_text
+    - paragraphs.paragraphs_type.file_upload
+    - paragraphs.paragraphs_type.section
+    - paragraphs.paragraphs_type.stories_quote
+    - paragraphs.paragraphs_type.stories_table
+  module:
+    - entity_reference_revisions
+id: node.page.field_content
+field_name: field_content
+entity_type: node
+bundle: page
+label: Content
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      basic_text: basic_text
+      file_upload: file_upload
+      section: section
+      stories_quote: stories_quote
+      stories_table: stories_table
+    negate: 0
+    target_bundles_drag_drop:
+      about_the_author:
+        weight: 23
+        enabled: false
+      basic_text:
+        weight: 24
+        enabled: true
+      file_upload:
+        weight: 25
+        enabled: true
+      image:
+        weight: 26
+        enabled: false
+      image_wide:
+        weight: 27
+        enabled: false
+      info_box:
+        weight: 28
+        enabled: false
+      linked_person:
+        weight: 29
+        enabled: false
+      media_embed:
+        weight: 30
+        enabled: false
+      quote:
+        weight: 31
+        enabled: false
+      related_link:
+        weight: 32
+        enabled: false
+      researcher_profiles:
+        weight: 33
+        enabled: false
+      row_of_4:
+        weight: 34
+        enabled: false
+      section:
+        weight: 35
+        enabled: true
+      stories_block:
+        weight: 36
+        enabled: false
+      stories_cta:
+        weight: 37
+        enabled: false
+      stories_curated_content:
+        weight: 38
+        enabled: false
+      stories_link_list:
+        weight: 39
+        enabled: false
+      stories_quote:
+        weight: 40
+        enabled: true
+      stories_table:
+        weight: 41
+        enabled: true
+      stories_text:
+        weight: 42
+        enabled: false
+      stories_views:
+        weight: 43
+        enabled: false
+      video_embed:
+        weight: 44
+        enabled: false
+field_type: entity_reference_revisions

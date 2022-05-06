@@ -35,6 +35,8 @@ module:
   ctools_block: 0
   datetime: 0
   devel_kint_extras: 0
+  draggableviews: 0
+  draggableviews_demo: 0
   dynamic_page_cache: 0
   editor: 0
   entity_reference_revisions: 0
@@ -48,6 +50,7 @@ module:
   file: 0
   file_mdm: 0
   filter: 0
+  flexslider: 0
   form_mode_control: 0
   geolocation: 0
   google_analytics: 0
@@ -68,6 +71,8 @@ module:
   language: 0
   language_switcher_extended: 0
   layout_builder: 0
+  layout_builder_styles: 0
+  layout_builder_tabs: 0
   layout_discovery: 0
   layout_paragraphs: 0
   link: 0
@@ -145,6 +150,7 @@ module:
   views_bulk_operations: 0
   views_data_export: 0
   views_field_view: 0
+  views_infinite_scroll: 0
   views_layout: 0
   viewsreference: 0
   ds: 1

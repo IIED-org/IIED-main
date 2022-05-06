@@ -4,6 +4,8 @@ status: true
 dependencies:
   config:
     - field.field.node.page.body
+    - field.field.node.page.field_content
+    - field.field.node.page.field_main_image
     - field.field.node.page.field_rows
     - node.type.page
   module:
@@ -14,71 +16,8 @@ dependencies:
     - user
 third_party_settings:
   layout_builder:
-    enabled: true
+    enabled: false
     allow_custom: false
-    sections:
-      -
-        layout_id: ds_1col
-        layout_settings:
-          label: ''
-          context_mapping: {  }
-          wrappers:
-            ds_content: div
-          outer_wrapper: div
-          attributes: ''
-          link_attribute: ''
-          link_custom: ''
-          classes:
-            layout_class:
-              col-md-8: col-md-8
-            ds_content: {  }
-        components:
-          62c155ba-3449-4e6e-b81c-4f8978471c47:
-            uuid: 62c155ba-3449-4e6e-b81c-4f8978471c47
-            region: ds_content
-            configuration:
-              id: 'field_block:node:page:body'
-              label: Body
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: text_default
-                label: hidden
-                settings: {  }
-                third_party_settings: {  }
-            weight: 0
-            additional: {  }
-          96702378-5dd1-4edc-b6e5-8d79698ec6cd:
-            uuid: 96702378-5dd1-4edc-b6e5-8d79698ec6cd
-            region: ds_content
-            configuration:
-              id: 'field_block:node:page:field_rows'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: entity_reference_revisions_entity_view
-                label: above
-                settings:
-                  view_mode: default
-                  link: ''
-                third_party_settings: {  }
-            weight: 2
-            additional: {  }
-          571d8f39-b989-4e3d-aa98-bb56ed14bfa6:
-            uuid: 571d8f39-b989-4e3d-aa98-bb56ed14bfa6
-            region: ds_content
-            configuration:
-              id: 'extra_field_block:node:page:sharing_buttons'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-            weight: 3
-            additional: {  }
-        third_party_settings: {  }
 _core:
   default_config_hash: g1S3_GLaxq4l3I9RIca5Mlz02MxI2KmOquZpHw59akM
 id: node.page.default
@@ -93,6 +32,23 @@ content:
     third_party_settings: {  }
     weight: 100
     region: content
+  field_content:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 105
+    region: ds_content
+  field_main_image:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 104
+    region: ds_content
   field_rows:
     type: entity_reference_revisions_entity_view
     label: above
