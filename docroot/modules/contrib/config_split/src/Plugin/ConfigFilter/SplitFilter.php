@@ -139,8 +139,8 @@ class SplitFilter extends ConfigFilterBase implements ContainerFactoryPluginInte
       return $data;
     }
 
-    $modules = $this->configuration['module'];
-    $themes = $this->configuration['theme'];
+    $modules = isset($this->configuration['module']) ? $this->configuration['module'] : [];
+    $themes = isset($this->configuration['theme']) ? $this->configuration['theme'] : [];
 
     if ($this->filtered) {
       // When filtering the 'read' operation, we are about to import the sync
@@ -153,8 +153,8 @@ class SplitFilter extends ConfigFilterBase implements ContainerFactoryPluginInte
       $themes = [];
       $updated = $this->filtered->read($this->configuration['config_name']);
       if (is_array($updated)) {
-        $modules = $updated['module'];
-        $themes = $updated['theme'];
+        $modules = isset($updated['module']) ? $updated['module'] : $modules;
+        $themes = isset($updated['theme']) ? $updated['theme'] : $themes;
       }
     }
 

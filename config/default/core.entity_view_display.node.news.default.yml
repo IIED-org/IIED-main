@@ -10,6 +10,7 @@ dependencies:
     - field.field.node.news.field_display_image
     - field.field.node.news.field_image_caption
     - field.field.node.news.field_main_image
+    - field.field.node.news.field_news_type
     - field.field.node.news.field_notes
     - field.field.node.news.field_paragraphs
     - field.field.node.news.field_project
@@ -80,6 +81,14 @@ content:
       link: true
     third_party_settings: {  }
     weight: 102
+    region: content
+  field_news_type:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 117
     region: content
   field_notes:
     type: text_default

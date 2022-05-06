@@ -42,6 +42,9 @@ process:
     -
       plugin: get
       source: body/0/value
+    -
+      plugin: rewrite_inline_image_styles
+      new_style: scale_md
   body/summary:
     -
       plugin: get
@@ -142,32 +145,6 @@ process:
     -
       plugin: get
       source: field_display_image
-  field_full_width_media:
-    -
-      plugin: skip_on_empty
-      method: process
-      source: field_full_width_media
-    -
-      plugin: sub_process
-      process:
-        target_id:
-          -
-            plugin: migration_lookup
-            migration: iied_d7_project_para_full_width_media
-            source: value
-          -
-            plugin: extract
-            index:
-              - 0
-        target_revision_id:
-          -
-            plugin: migration_lookup
-            migration: iied_d7_project_para_full_width_media
-            source: value
-          -
-            plugin: extract
-            index:
-              - 1
   field_additional_elements:
     -
       plugin: skip_on_empty
@@ -236,7 +213,6 @@ destination:
     - field_image_caption/value
     - field_image_caption/format
     - field_display_image
-    - field_full_width_media
     - field_additional_elements
     - path/alias
     - path
@@ -248,4 +224,3 @@ migration_dependencies:
     - iied_d7_terms_person
   optional:
     - iied_d7_project_para_additional_elements
-    - iied_d7_project_para_full_width_media

@@ -149,6 +149,9 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       $tid = array_key_first($term);
       $row->setSourceProperty('tid', $tid);
     }
+    // Split name into first name last name based on spaces.
+    $names = explode(' ', $name);
+    $row->setSourceProperty('first_name', $names[0]);
     $researcher_profiles = $row->getSourceProperty('field_researcher_profiles');
     // Determine the value for the new person_type taxonomy term. This replaces
     // the previous boolean fields for staff, guest and former staff.

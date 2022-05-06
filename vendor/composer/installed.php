@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '567c5bd06665f8b4fb649056acf5f696ec09d794',
+        'reference' => '7be0c12ef4f43fae2c9ff9870ab5cf12522ca2a5',
         'name' => 'drupal/recommended-project',
         'dev' => true,
     ),
@@ -29,12 +29,12 @@
             'dev_requirement' => false,
         ),
         'behat/mink' => array(
-            'pretty_version' => 'v1.9.0',
-            'version' => '1.9.0.0',
+            'pretty_version' => 'v1.10.0',
+            'version' => '1.10.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../behat/mink',
             'aliases' => array(),
-            'reference' => 'e35f4695de8800fc776af34ebf665ad58ebdd996',
+            'reference' => '19e58905632e7cfdc5b2bafb9b950a3521af32c5',
             'dev_requirement' => true,
         ),
         'behat/mink-browserkit-driver' => array(
@@ -44,12 +44,12 @@
             ),
         ),
         'behat/mink-selenium2-driver' => array(
-            'pretty_version' => 'v1.5.0',
-            'version' => '1.5.0.0',
+            'pretty_version' => 'v1.6.0',
+            'version' => '1.6.0.0',
             'type' => 'mink-driver',
             'install_path' => __DIR__ . '/../behat/mink-selenium2-driver',
             'aliases' => array(),
-            'reference' => '0dee8cceed7e198bf130b4af0fab0ffab6dab47f',
+            'reference' => 'e5f8421654930da725499fb92983e6948c6f973e',
             'dev_requirement' => true,
         ),
         'bower-asset/c3' => array(
@@ -89,12 +89,12 @@
             'dev_requirement' => false,
         ),
         'commerceguys/addressing' => array(
-            'pretty_version' => 'v1.2.2',
-            'version' => '1.2.2.0',
+            'pretty_version' => 'v1.3.0',
+            'version' => '1.3.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../commerceguys/addressing',
             'aliases' => array(),
-            'reference' => 'fb98dfc72f8a3d12fac55f69ab2477a0fbfa9860',
+            'reference' => '566febd56ca71e31dd383b014c4e1bec680507bf',
             'dev_requirement' => false,
         ),
         'composer/ca-bundle' => array(
@@ -107,12 +107,12 @@
             'dev_requirement' => true,
         ),
         'composer/composer' => array(
-            'pretty_version' => '2.2.9',
-            'version' => '2.2.9.0',
+            'pretty_version' => '2.2.12',
+            'version' => '2.2.12.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/./composer',
             'aliases' => array(),
-            'reference' => '07eccf080ad63d55d95a7c9133506db7d9029264',
+            'reference' => 'ba61e768b410736efe61df01b61f1ec44f51474f',
             'dev_requirement' => true,
         ),
         'composer/installers' => array(
@@ -170,12 +170,12 @@
             'dev_requirement' => true,
         ),
         'consolidation/annotated-command' => array(
-            'pretty_version' => '4.5.2',
-            'version' => '4.5.2.0',
+            'pretty_version' => '4.5.5',
+            'version' => '4.5.5.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../consolidation/annotated-command',
             'aliases' => array(),
-            'reference' => '24c1529436b4f4beec3d19aab71fd127817f47ef',
+            'reference' => '67cea8e8e7656b74da651ea6f49321853996c0fd',
             'dev_requirement' => false,
         ),
         'consolidation/config' => array(
@@ -251,18 +251,9 @@
             'dev_requirement' => false,
         ),
         'container-interop/container-interop' => array(
-            'pretty_version' => '1.2.0',
-            'version' => '1.2.0.0',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../container-interop/container-interop',
-            'aliases' => array(),
-            'reference' => '79cbf1341c22ec75643d841642dd5d6acd83bdb8',
             'dev_requirement' => false,
-        ),
-        'container-interop/container-interop-implementation' => array(
-            'dev_requirement' => false,
-            'provided' => array(
-                0 => '^1.2',
+            'replaced' => array(
+                0 => '^1.2.0',
             ),
         ),
         'cweagans/composer-patches' => array(
@@ -412,7 +403,7 @@
         'drupal/action' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/address' => array(
@@ -436,7 +427,7 @@
         'drupal/aggregator' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/asset_injector' => array(
@@ -451,25 +442,25 @@
         'drupal/automated_cron' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/ban' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/bartik' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/basic_auth' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/better_exposed_filters' => array(
@@ -493,13 +484,13 @@
         'drupal/big_pipe' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/block' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/block_class' => array(
@@ -514,7 +505,7 @@
         'drupal/block_content' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/block_field' => array(
@@ -529,7 +520,7 @@
         'drupal/book' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/bootstrap_layouts' => array(
@@ -544,7 +535,7 @@
         'drupal/breakpoint' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/chosen' => array(
@@ -568,13 +559,13 @@
         'drupal/ckeditor' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/ckeditor5' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/ckwordcount' => array(
@@ -589,13 +580,13 @@
         'drupal/claro' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/classy' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/coder' => array(
@@ -610,7 +601,7 @@
         'drupal/color' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/color_field' => array(
@@ -625,7 +616,7 @@
         'drupal/comment' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/components' => array(
@@ -649,7 +640,7 @@
         'drupal/config' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/config_devel' => array(
@@ -662,89 +653,89 @@
             'dev_requirement' => true,
         ),
         'drupal/config_filter' => array(
-            'pretty_version' => '1.8.0',
-            'version' => '1.8.0.0',
+            'pretty_version' => '1.9.0',
+            'version' => '1.9.0.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/config_filter',
             'aliases' => array(),
-            'reference' => '8.x-1.8',
+            'reference' => '8.x-1.9',
             'dev_requirement' => false,
         ),
         'drupal/config_split' => array(
-            'pretty_version' => '1.7.0',
-            'version' => '1.7.0.0',
+            'pretty_version' => '1.8.0',
+            'version' => '1.8.0.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/config_split',
             'aliases' => array(),
-            'reference' => '8.x-1.7',
+            'reference' => '8.x-1.8',
             'dev_requirement' => false,
         ),
         'drupal/config_translation' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/contact' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/content_moderation' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/content_translation' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/contextual' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core' => array(
-            'pretty_version' => '9.3.9',
-            'version' => '9.3.9.0',
+            'pretty_version' => '9.3.12',
+            'version' => '9.3.12.0',
             'type' => 'drupal-core',
             'install_path' => __DIR__ . '/../../docroot/core',
             'aliases' => array(),
-            'reference' => '86b0c4496e20ae7f945e9a7f0404fafe191ab774',
+            'reference' => 'ed6af33093f66a9c5048d02f9f2c326ad0e7e90c',
             'dev_requirement' => false,
         ),
         'drupal/core-annotation' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-assertion' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-bridge' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-class-finder' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-composer-scaffold' => array(
-            'pretty_version' => '9.3.9',
-            'version' => '9.3.9.0',
+            'pretty_version' => '9.3.12',
+            'version' => '9.3.12.0',
             'type' => 'composer-plugin',
             'install_path' => __DIR__ . '/../drupal/core-composer-scaffold',
             'aliases' => array(),
@@ -754,18 +745,18 @@
         'drupal/core-datetime' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-dependency-injection' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-dev' => array(
-            'pretty_version' => '9.3.9',
-            'version' => '9.3.9.0',
+            'pretty_version' => '9.3.12',
+            'version' => '9.3.12.0',
             'type' => 'metapackage',
             'install_path' => NULL,
             'aliases' => array(),
@@ -775,78 +766,78 @@
         'drupal/core-diff' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-discovery' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-event-dispatcher' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-file-cache' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-file-security' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-filesystem' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-front-matter' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-gettext' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-graph' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-http-foundation' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-php-storage' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-plugin' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-project-message' => array(
-            'pretty_version' => '9.3.9',
-            'version' => '9.3.9.0',
+            'pretty_version' => '9.3.12',
+            'version' => '9.3.12.0',
             'type' => 'composer-plugin',
             'install_path' => __DIR__ . '/../drupal/core-project-message',
             'aliases' => array(),
@@ -856,46 +847,46 @@
         'drupal/core-proxy-builder' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-recommended' => array(
-            'pretty_version' => '9.3.9',
-            'version' => '9.3.9.0',
+            'pretty_version' => '9.3.12',
+            'version' => '9.3.12.0',
             'type' => 'metapackage',
             'install_path' => NULL,
             'aliases' => array(),
-            'reference' => '3ce3f2b6145de56178e006fb2ef94089d32cf411',
+            'reference' => 'a8fa50016c1aa1eb7f4e54f590e6343d286c418f',
             'dev_requirement' => false,
         ),
         'drupal/core-render' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-serialization' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-transliteration' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-utility' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-uuid' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/core-vendor-hardening' => array(
@@ -910,7 +901,7 @@
         'drupal/core-version' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/csv_serialization' => array(
@@ -952,19 +943,19 @@
         'drupal/datetime' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/datetime_range' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/dblog' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/devel' => array(
@@ -1024,13 +1015,13 @@
         'drupal/dynamic_page_cache' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/editor' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/entity_browser' => array(
@@ -1045,7 +1036,7 @@
         'drupal/entity_reference' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/entity_reference_revisions' => array(
@@ -1067,12 +1058,12 @@
             'dev_requirement' => false,
         ),
         'drupal/facets' => array(
-            'pretty_version' => '2.0.1',
-            'version' => '2.0.1.0',
+            'pretty_version' => '2.0.2',
+            'version' => '2.0.2.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/facets',
             'aliases' => array(),
-            'reference' => '2.0.1',
+            'reference' => '2.0.2',
             'dev_requirement' => false,
         ),
         'drupal/facets_country' => array(
@@ -1089,7 +1080,7 @@
         'drupal/field' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/field_formatter' => array(
@@ -1122,19 +1113,19 @@
         'drupal/field_layout' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/field_ui' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/file' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/file_mdm' => array(
@@ -1149,7 +1140,7 @@
         'drupal/filter' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/flexslider' => array(
@@ -1173,25 +1164,25 @@
         'drupal/forum' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/geolocation' => array(
-            'pretty_version' => '3.7.0',
-            'version' => '3.7.0.0',
+            'pretty_version' => '3.9.0',
+            'version' => '3.9.0.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/geolocation',
             'aliases' => array(),
-            'reference' => '8.x-3.7',
+            'reference' => '8.x-3.9',
             'dev_requirement' => false,
         ),
         'drupal/gin' => array(
-            'pretty_version' => '3.0.0-beta1',
-            'version' => '3.0.0.0-beta1',
+            'pretty_version' => '3.0.0-beta2',
+            'version' => '3.0.0.0-beta2',
             'type' => 'drupal-theme',
             'install_path' => __DIR__ . '/../../docroot/themes/contrib/gin',
             'aliases' => array(),
-            'reference' => '8.x-3.0-beta1',
+            'reference' => '8.x-3.0-beta2',
             'dev_requirement' => false,
         ),
         'drupal/gin_lb' => array(
@@ -1204,12 +1195,12 @@
             'dev_requirement' => false,
         ),
         'drupal/gin_toolbar' => array(
-            'pretty_version' => '1.0.0-beta21',
-            'version' => '1.0.0.0-beta21',
+            'pretty_version' => '1.0.0-beta22',
+            'version' => '1.0.0.0-beta22',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/gin_toolbar',
             'aliases' => array(),
-            'reference' => '8.x-1.0-beta21',
+            'reference' => '8.x-1.0-beta22',
             'dev_requirement' => false,
         ),
         'drupal/google_analytics' => array(
@@ -1222,42 +1213,42 @@
             'dev_requirement' => false,
         ),
         'drupal/google_tag' => array(
-            'pretty_version' => '1.4.0',
-            'version' => '1.4.0.0',
+            'pretty_version' => '1.5.0',
+            'version' => '1.5.0.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/google_tag',
             'aliases' => array(),
-            'reference' => '8.x-1.4',
+            'reference' => '8.x-1.5',
             'dev_requirement' => false,
         ),
         'drupal/hal' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/help' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/help_topics' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/history' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/image' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/imagemagick' => array(
@@ -1270,18 +1261,18 @@
             'dev_requirement' => false,
         ),
         'drupal/inline_entity_form' => array(
-            'pretty_version' => '1.0.0-rc10',
-            'version' => '1.0.0.0-RC10',
+            'pretty_version' => '1.0.0-rc11',
+            'version' => '1.0.0.0-RC11',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/inline_entity_form',
             'aliases' => array(),
-            'reference' => '8.x-1.0-rc10',
+            'reference' => '8.x-1.0-rc11',
             'dev_requirement' => false,
         ),
         'drupal/inline_form_errors' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/isbn' => array(
@@ -1332,13 +1323,13 @@
         'drupal/jsonapi' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/language' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/language_switcher_extended' => array(
@@ -1353,7 +1344,7 @@
         'drupal/layout_builder' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/layout_builder_restrictions' => array(
@@ -1386,7 +1377,7 @@
         'drupal/layout_discovery' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/layout_paragraphs' => array(
@@ -1401,13 +1392,13 @@
         'drupal/link' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/locale' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/masquerade' => array(
@@ -1422,7 +1413,7 @@
         'drupal/media' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/media_entity_file_replace' => array(
@@ -1446,7 +1437,7 @@
         'drupal/media_library' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/media_pdf_thumbnail' => array(
@@ -1488,13 +1479,13 @@
         'drupal/menu_link_content' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/menu_ui' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/merge_translations' => array(
@@ -1518,7 +1509,7 @@
         'drupal/migrate' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/migrate_devel' => array(
@@ -1533,19 +1524,19 @@
         'drupal/migrate_drupal' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/migrate_drupal_multilingual' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/migrate_drupal_ui' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/migrate_file' => array(
@@ -1558,12 +1549,12 @@
             'dev_requirement' => false,
         ),
         'drupal/migrate_plus' => array(
-            'pretty_version' => '5.2.0',
-            'version' => '5.2.0.0',
+            'pretty_version' => '5.3.0',
+            'version' => '5.3.0.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/migrate_plus',
             'aliases' => array(),
-            'reference' => '8.x-5.2',
+            'reference' => '8.x-5.3',
             'dev_requirement' => false,
         ),
         'drupal/migrate_source_csv' => array(
@@ -1596,7 +1587,7 @@
         'drupal/minimal' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/name' => array(
@@ -1611,7 +1602,7 @@
         'drupal/node' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/notification' => array(
@@ -1626,40 +1617,40 @@
         'drupal/olivero' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/options' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/page_cache' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/paragraphs' => array(
-            'pretty_version' => '1.13.0',
-            'version' => '1.13.0.0',
+            'pretty_version' => '1.14.0',
+            'version' => '1.14.0.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/paragraphs',
             'aliases' => array(),
-            'reference' => '8.x-1.13',
+            'reference' => '8.x-1.14',
             'dev_requirement' => false,
         ),
         'drupal/path' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/path_alias' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/path_redirect_import' => array(
@@ -1672,12 +1663,12 @@
             'dev_requirement' => false,
         ),
         'drupal/pathauto' => array(
-            'pretty_version' => '1.9.0',
-            'version' => '1.9.0.0',
+            'pretty_version' => '1.10.0',
+            'version' => '1.10.0.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/pathauto',
             'aliases' => array(),
-            'reference' => '8.x-1.9',
+            'reference' => '8.x-1.10',
             'dev_requirement' => false,
         ),
         'drupal/pdf_preview_image' => array(
@@ -1699,18 +1690,18 @@
             'dev_requirement' => false,
         ),
         'drupal/publishcontent' => array(
-            'pretty_version' => '1.4.0',
-            'version' => '1.4.0.0',
+            'pretty_version' => '1.5.0',
+            'version' => '1.5.0.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/publishcontent',
             'aliases' => array(),
-            'reference' => '8.x-1.4',
+            'reference' => '8.x-1.5',
             'dev_requirement' => false,
         ),
         'drupal/quickedit' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/rabbit_hole' => array(
@@ -1734,7 +1725,7 @@
         'drupal/rdf' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/readonlymode' => array(
@@ -1752,7 +1743,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '567c5bd06665f8b4fb649056acf5f696ec09d794',
+            'reference' => '7be0c12ef4f43fae2c9ff9870ab5cf12522ca2a5',
             'dev_requirement' => false,
         ),
         'drupal/redirect' => array(
@@ -1767,7 +1758,7 @@
         'drupal/responsive_image' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/responsive_menu' => array(
@@ -1782,13 +1773,13 @@
         'drupal/rest' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/search' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/search_api' => array(
@@ -1830,25 +1821,25 @@
         'drupal/serialization' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/settings_tray' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/seven' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/shortcut' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/sidr' => array(
@@ -1881,19 +1872,19 @@
         'drupal/standard' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/stark' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/statistics' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/stories' => array(
@@ -1917,13 +1908,13 @@
         'drupal/syslog' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/system' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/tablefield' => array(
@@ -1938,7 +1929,7 @@
         'drupal/taxonomy' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/taxonomy_import' => array(
@@ -1971,13 +1962,13 @@
         'drupal/telephone' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/text' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/textfield_counter' => array(
@@ -2001,19 +1992,19 @@
         'drupal/toolbar' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/tour' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/tracker' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/twig_field_value' => array(
@@ -2046,7 +2037,7 @@
         'drupal/update' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/upgrade_status' => array(
@@ -2061,7 +2052,7 @@
         'drupal/user' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/video_embed_field' => array(
@@ -2076,7 +2067,7 @@
         'drupal/views' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/views_autocomplete_filters' => array(
@@ -2154,7 +2145,7 @@
         'drupal/views_ui' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/viewsreference' => array(
@@ -2169,13 +2160,13 @@
         'drupal/workflows' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drupal/workspaces' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '9.3.9',
+                0 => '9.3.12',
             ),
         ),
         'drush/drush' => array(
@@ -2296,21 +2287,21 @@
             'dev_requirement' => false,
         ),
         'instaclick/php-webdriver' => array(
-            'pretty_version' => '1.4.10',
-            'version' => '1.4.10.0',
+            'pretty_version' => '1.4.14',
+            'version' => '1.4.14.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../instaclick/php-webdriver',
             'aliases' => array(),
-            'reference' => '6bc1f44cf23031e68c326cd61e14ec32486f241b',
+            'reference' => '200b8df772b74d604bebf25ef42ad6f8ee6380a9',
             'dev_requirement' => true,
         ),
         'justinrainbow/json-schema' => array(
-            'pretty_version' => '5.2.11',
-            'version' => '5.2.11.0',
+            'pretty_version' => '5.2.12',
+            'version' => '5.2.12.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../justinrainbow/json-schema',
             'aliases' => array(),
-            'reference' => '2ab6744b7296ded80f8cc4f9509abbff393399aa',
+            'reference' => 'ad87d5a5ca981228e0e205c2bc7dfb8e24559b60',
             'dev_requirement' => true,
         ),
         'kint-php/kint' => array(
@@ -2350,12 +2341,12 @@
             'dev_requirement' => false,
         ),
         'laminas/laminas-servicemanager' => array(
-            'pretty_version' => '3.10.0',
-            'version' => '3.10.0.0',
+            'pretty_version' => '3.11.2',
+            'version' => '3.11.2.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../laminas/laminas-servicemanager',
             'aliases' => array(),
-            'reference' => 'e52b985909e0940bf22d34f322eb3f48bbef6bd1',
+            'reference' => '8a1f4d53ec93b2e18174f6f186922ef44d11a75a',
             'dev_requirement' => false,
         ),
         'laminas/laminas-stdlib' => array(
@@ -2431,12 +2422,12 @@
             'dev_requirement' => false,
         ),
         'mglaman/phpstan-drupal' => array(
-            'pretty_version' => '1.1.14',
-            'version' => '1.1.14.0',
+            'pretty_version' => '1.1.16',
+            'version' => '1.1.16.0',
             'type' => 'phpstan-extension',
             'install_path' => __DIR__ . '/../mglaman/phpstan-drupal',
             'aliases' => array(),
-            'reference' => '479217bf286ef87aaff58c40ec762c868acfb3e8',
+            'reference' => '2c72ac675e5630e1f421adb1bf4e6546310d6b05',
             'dev_requirement' => false,
         ),
         'mikey179/vfsstream' => array(
@@ -2467,12 +2458,12 @@
             'dev_requirement' => false,
         ),
         'nicebooks/isbn' => array(
-            'pretty_version' => '0.3.17',
-            'version' => '0.3.17.0',
+            'pretty_version' => '0.3.20',
+            'version' => '0.3.20.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../nicebooks/isbn',
             'aliases' => array(),
-            'reference' => 'e38e57e6e056a15bb2f8e4089a8ab809ad8f1cc5',
+            'reference' => 'a7f2ccc87eb792e042ce259c35be0b9aef17bc26',
             'dev_requirement' => false,
         ),
         'nikic/php-parser' => array(
@@ -2701,12 +2692,12 @@
             'dev_requirement' => true,
         ),
         'phpdocumentor/type-resolver' => array(
-            'pretty_version' => '1.6.0',
-            'version' => '1.6.0.0',
+            'pretty_version' => '1.6.1',
+            'version' => '1.6.1.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpdocumentor/type-resolver',
             'aliases' => array(),
-            'reference' => '93ebd0014cab80c4ea9f5e297ea48672f1b87706',
+            'reference' => '77a32518733312af16a44300404e945338981de3',
             'dev_requirement' => true,
         ),
         'phpspec/prophecy' => array(
@@ -2719,21 +2710,21 @@
             'dev_requirement' => true,
         ),
         'phpstan/phpdoc-parser' => array(
-            'pretty_version' => '1.2.0',
-            'version' => '1.2.0.0',
+            'pretty_version' => '1.4.5',
+            'version' => '1.4.5.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpstan/phpdoc-parser',
             'aliases' => array(),
-            'reference' => 'dbc093d7af60eff5cd575d2ed761b15ed40bd08e',
+            'reference' => '129a63b3bc7caeb593c224c41f420675e63cfefc',
             'dev_requirement' => true,
         ),
         'phpstan/phpstan' => array(
-            'pretty_version' => '1.4.10',
-            'version' => '1.4.10.0',
+            'pretty_version' => '1.6.2',
+            'version' => '1.6.2.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpstan/phpstan',
             'aliases' => array(),
-            'reference' => '898c479c39caa727bedf4311dd294a8f4e250e72',
+            'reference' => 'becb9603a31d70f5007d505877a7b812598dfe46',
             'dev_requirement' => false,
         ),
         'phpstan/phpstan-deprecation-rules' => array(
@@ -2791,12 +2782,12 @@
             'dev_requirement' => true,
         ),
         'phpunit/phpunit' => array(
-            'pretty_version' => '9.5.19',
-            'version' => '9.5.19.0',
+            'pretty_version' => '9.5.20',
+            'version' => '9.5.20.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpunit/phpunit',
             'aliases' => array(),
-            'reference' => '35ea4b7f3acabb26f4bb640f8c30866c401da807',
+            'reference' => '12bc8879fb65aef2138b26fc633cb1e3620cffba',
             'dev_requirement' => true,
         ),
         'psr/cache' => array(
@@ -2994,12 +2985,12 @@
             'dev_requirement' => true,
         ),
         'sebastian/environment' => array(
-            'pretty_version' => '5.1.3',
-            'version' => '5.1.3.0',
+            'pretty_version' => '5.1.4',
+            'version' => '5.1.4.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../sebastian/environment',
             'aliases' => array(),
-            'reference' => '388b6ced16caa751030f6a69e588299fa09200ac',
+            'reference' => '1b5dff7bb151a4db11d49d90e5408e4e938270f7',
             'dev_requirement' => true,
         ),
         'sebastian/exporter' => array(
@@ -3084,12 +3075,12 @@
             'dev_requirement' => true,
         ),
         'seld/jsonlint' => array(
-            'pretty_version' => '1.8.3',
-            'version' => '1.8.3.0',
+            'pretty_version' => '1.9.0',
+            'version' => '1.9.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../seld/jsonlint',
             'aliases' => array(),
-            'reference' => '9ad6ce79c342fbd44df10ea95511a1b24dee5b57',
+            'reference' => '4211420d25eba80712bff236a98960ef68b866b7',
             'dev_requirement' => true,
         ),
         'seld/phar-utils' => array(
@@ -3117,12 +3108,12 @@
             'dev_requirement' => true,
         ),
         'slevomat/coding-standard' => array(
-            'pretty_version' => '7.0.19',
-            'version' => '7.0.19.0',
+            'pretty_version' => '7.1',
+            'version' => '7.1.0.0',
             'type' => 'phpcodesniffer-standard',
             'install_path' => __DIR__ . '/../slevomat/coding-standard',
             'aliases' => array(),
-            'reference' => 'bef66a43815bbf9b5f49775e9ded3f7c6ba0cc37',
+            'reference' => 'b521bd358b5f7a7d69e9637fd139e036d8adeb6f',
             'dev_requirement' => true,
         ),
         'solarium/solarium' => array(
@@ -3312,12 +3303,12 @@
             'dev_requirement' => false,
         ),
         'symfony/lock' => array(
-            'pretty_version' => 'v4.4.38',
-            'version' => '4.4.38.0',
+            'pretty_version' => 'v4.4.40',
+            'version' => '4.4.40.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/lock',
             'aliases' => array(),
-            'reference' => '46c56527b2e98cfdbc5b39a1566029cbe73c9e3f',
+            'reference' => 'ec23fb51d9b531f7fcd2279afe5b474e624c2445',
             'dev_requirement' => true,
         ),
         'symfony/mime' => array(
@@ -3330,12 +3321,12 @@
             'dev_requirement' => false,
         ),
         'symfony/phpunit-bridge' => array(
-            'pretty_version' => 'v5.4.3',
-            'version' => '5.4.3.0',
+            'pretty_version' => 'v5.4.7',
+            'version' => '5.4.7.0',
             'type' => 'symfony-bridge',
             'install_path' => __DIR__ . '/../symfony/phpunit-bridge',
             'aliases' => array(),
-            'reference' => '216b07b05644607c81afd89a208e52641c1ce6b8',
+            'reference' => '31977d36f253607e1fc4e1fb54df18bd9f1e4348',
             'dev_requirement' => true,
         ),
         'symfony/polyfill-ctype' => array(
