@@ -60,6 +60,8 @@ class ResetStringProcessor extends ProcessorPluginBase implements BuildProcessor
    * {@inheritdoc}
    */
   public function build(FacetsSummaryInterface $facets_summary, array $build, array $facets) {
+    $configuration = $facets_summary->getProcessorConfigs()['reset_facets'];
+    $active_facets = FALSE;
     $request = $this->requestStack->getMasterRequest();
     if (!empty($request->query)) {
       $query_params = $request->query->all();
@@ -95,6 +97,34 @@ class ResetStringProcessor extends ProcessorPluginBase implements BuildProcessor
         $item,
       ];
     }
+
+    foreach ($facets as $facet) {
+      if ($facet->getActiveItems()) {
+        $active_facets = TRUE;
+        break;
+      }
+    }
+
+    if (!$active_facets) {
+      $url = Url::fromUserInput($facets_summary->getFacetSource()->getPath());
+      $url->setOptions(['query' => $query_params]);
+      // Check if reset link text is not set or it contains only whitespaces.
+      // Set text from settings or set default text.
+      if (empty($configuration['settings']['link_text']) || strlen(trim($configuration['settings']['link_text'])) === 0) {
+        $itemText = $this->t('Reset');
+      }
+      else {
+        $itemText = $configuration['settings']['link_text'];
+      }
+      $item = (new Link($itemText, $url))->toRenderable();
+      $item['#wrapper_attributes'] = [
+        'class' => [
+          'facet-summary-item--clear',
+        ],
+      ];
+      array_unshift($build['#items'], $item);
+    }
+
     return $build;
   }
 
