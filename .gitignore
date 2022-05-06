@@ -29,4 +29,7 @@ xdebug.log
 node_modules
 
 # Ignore MacOS files
-.DS_Store
+*.DS_Store
+
+# Dev mode: don't include tailwind.css 
+docroot/themes/custom/iied_tw/dist/tailwind.css
