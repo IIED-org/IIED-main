@@ -34,6 +34,7 @@ module:
   ctools: 0
   ctools_block: 0
   datetime: 0
+  default_content: 0
   devel_kint_extras: 0
   draggableviews: 0
   draggableviews_demo: 0
@@ -55,6 +56,7 @@ module:
   geolocation: 0
   google_analytics: 0
   google_tag: 0
+  hal: 0
   help: 0
   history: 0
   iied_migrate_d7: 0

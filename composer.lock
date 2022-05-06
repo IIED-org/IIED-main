@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "af123309be2e39f359d33ff4b92af344",
+    "content-hash": "c98f1274f923dbc3f586a56c1ca5cd31",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -15858,6 +15858,16 @@
             },
             "abandoned": "symfony/filesystem",
             "time": "2015-12-17T08:42:14+00:00"
+        },
+        {
+            "name": "woocommerce/flexslider",
+            "version": "2.7.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/woocommerce/FlexSlider.git",
+                "reference": "2.7.2"
+            },
+            "type": "drupal-library"
         }
     ],
     "packages-dev": [

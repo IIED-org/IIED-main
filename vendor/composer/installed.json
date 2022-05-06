@@ -20975,6 +20975,19 @@
                 "source": "https://github.com/webmozart/path-util/tree/2.3.0"
             },
             "install-path": "../webmozart/path-util"
+        },
+        {
+            "name": "woocommerce/flexslider",
+            "version": "2.7.2",
+            "version_normalized": "2.7.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/woocommerce/FlexSlider.git",
+                "reference": "2.7.2"
+            },
+            "type": "drupal-library",
+            "installation-source": "source",
+            "install-path": "../../docroot/libraries/flexslider"
         }
     ],
     "dev": true,
