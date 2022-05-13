@@ -11,7 +11,7 @@
                                                                           
 ```
 
-## Creating a new issue
+## Issue management
 Issues should be associated with the [IIED-main project](https://github.com/orgs/IIED-org/projects/2/views/2). Status columns are as follows:
 
 - **Backlog**: Issues go here when initially created
@@ -21,7 +21,7 @@ Issues should be associated with the [IIED-main project](https://github.com/orgs
 - **Done**: Issue is closed
 
 There are two [milestones ](https://github.com/IIED-org/pubs/milestones)
-* [Site freeze](https://github.com/IIED-org/pubs/milestone/1), which should contain all the pre-requisites in the [Teams channel](https://teams.microsoft.com/l/entity/com.microsoft.teamspace.tab.planner/_djb2_msteams_prefix_2584532485?context=%7B%22subEntityId%22%3Anull%2C%22channelId%22%3A%2219%3A4c87f5ca830a468780a27d73d3024b0c%40thread.skype%22%7D&groupId=662a2f37-a62f-4018-99ac-faea87204980&tenantId=d5c06f4c-c977-41f9-9baa-6c4050719973) and [Site freeze document](https://iied.sharepoint.com/:w:/s/WebTeam/EfX3W_u4pAlCn1Qkq6diPa4BSJ-8qP7jpJ9v7fExJrOcOw?e=MfaJkd).  
+* [Site freeze](https://github.com/IIED-org/pubs/milestone/1), which should contain all the pre-requisites in the [Teams channel](https://teams.microsoft.com/l/entity/com.microsoft.teamspace.tab.planner/_djb2_msteams_prefix_2584532485?context=%7B%22subEntityId%22%3Anull%2C%22channelId%22%3A%2219%3A4c87f5ca830a468780a27d73d3024b0c%40thread.skype%22%7D&groupId=662a2f37-a62f-4018-99ac-faea87204980&tenantId=d5c06f4c-c977-41f9-9baa-6c4050719973) and [Site freeze to launch document](https://iied.sharepoint.com/:w:/s/WebTeam/EfX3W_u4pAlCn1Qkq6diPa4BSJ-8qP7jpJ9v7fExJrOcOw?e=MfaJkd).  
 * [Soft launch](https://github.com/IIED-org/pubs/milestone/2), which is yet to be fully defined
 
 ## Local developer setup with Lando
