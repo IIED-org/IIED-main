@@ -114,6 +114,69 @@ third_party_settings:
                         suffix: ''
             weight: 1
             additional: {  }
+          07f05648-be24-4f79-8ac8-604433329995:
+            uuid: 07f05648-be24-4f79-8ac8-604433329995
+            region: ds_content
+            configuration:
+              id: 'field_block:taxonomy_term:theme:description'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: text_default
+                label: hidden
+                settings: {  }
+                third_party_settings: {  }
+            weight: 2
+            additional: {  }
+          4d933a7a-594f-433a-a0bc-6a415b8e3672:
+            uuid: 4d933a7a-594f-433a-a0bc-6a415b8e3672
+            region: ds_content
+            configuration:
+              id: 'field_block:taxonomy_term:theme:field_link'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: link
+                label: hidden
+                settings:
+                  trim_length: 80
+                  url_only: false
+                  url_plain: false
+                  rel: '0'
+                  target: '0'
+                third_party_settings:
+                  ds:
+                    ft:
+                      id: expert
+                      settings:
+                        lb: ''
+                        lbw: false
+                        lbw-el: ''
+                        lbw-cl: ''
+                        lbw-at: ''
+                        lb-col: false
+                        ow: true
+                        ow-el: div
+                        ow-cl: mb-3
+                        ow-at: ''
+                        ow-def-at: false
+                        ow-def-cl: false
+                        fis: false
+                        fis-el: ''
+                        fis-cl: ''
+                        fis-at: ''
+                        fis-def-at: false
+                        fi: false
+                        fi-el: ''
+                        fi-cl: ''
+                        fi-at: ''
+                        fi-def-at: false
+                        prefix: ''
+                        suffix: ''
+            weight: 3
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: tw-container
