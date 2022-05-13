@@ -32,13 +32,13 @@
 #}
 
 {% if items %}
-<div class="grid py-12 place-items-center">
+<div class="grid pt-12 place-items-center">
   <nav class="pager" role="navigation" aria-labelledby="{{ heading_id }}">
     <h4 id="{{ heading_id }}" class="visually-hidden">{{ 'Pagination'|t }}</h4>
-    <ul class="inline-flex -space-x-px pager__items js-pager__items">
+    <ul class="inline-flex -space-x-px overflow-hidden pager__items js-pager__items rounded-xl">
       {# Print first item if we are not on the first page. #}
       {% if items.first %}
-        <li class="px-4 py-2 border border-gray-300 pager__item pager__item--first">
+        <li class="px-4 py-2 border border-gray-300 rounded-l-xl pager__item pager__item--first">
           <a href="{{ items.first.href }}" title="{{ 'Go to first page'|t }}"{{ items.first.attributes|without('href', 'title') }}>
             <span class="visually-hidden">{{ 'First page'|t }}</span>
             <span aria-hidden="true">{{ items.first.text|default('« First'|t) }}</span>
@@ -60,7 +60,7 @@
       {% endif %}
       {# Now generate the actual pager piece. #}
       {% for key, item in items.pages %}
-        <li class="border border-gray-300 px-4 py-2 pager__item{{ current == key ? ' is-active' : '' }}">
+        <li class="border border-gray-300 px-4 py-2 pager__item{{ current == key ? ' is-active bg-iiedblue-300' : '' }}">
           {% if current == key %}
             {% set title = 'Current page'|t %}
           {% else %}
@@ -89,7 +89,7 @@
       {% endif %}
       {# Print last item if we are not on the last page. #}
       {% if items.last %}
-        <li class="px-4 py-2 border border-gray-300 pager__item pager__item--last">
+        <li class="px-4 py-2 border border-gray-300 rounded-r-xl pager__item pager__item--last">
           <a href="{{ items.last.href }}" title="{{ 'Go to last page'|t }}"{{ items.last.attributes|without('href', 'title') }}>
             <span class="visually-hidden">{{ 'Last page'|t }}</span>
             <span aria-hidden="true">{{ items.last.text|default('Last »'|t) }}</span>
