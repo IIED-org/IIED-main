@@ -16,7 +16,7 @@ New issues should be associated with the [IIED-main project](https://github.com/
 
 - **Backlog**: Issues go here when initially created
 - **Todo**: Issues go into this column when prioritised and optionally assigned
-- **In progress**: When the issue has been assigned and work commenced it moves here. The number of items in this column should ideally be limited (Kanban methodology) or addressed by means of sprints (Scrum).
+- **In progress**: When the issue has been assigned and work commenced it moves here. The number of items should ideally be limited ([Kanban](https://www.atlassian.com/agile/kanban/wip-limits) methodology) or addressed by means of sprints [Scrum](https://scrumguides.org/scrum-guide.html).
 - **Ready for test**: Issued assigned to someone else to check work is complete
 - **Done**: Issue is closed
 
