@@ -77,6 +77,7 @@
         "drupal/draggableviews": "^2.0",
         "drupal/dropdown_language": "^2.6",
         "drupal/ds": "^3.9",
+        "drupal/entityqueue": "^1.2",
         "drupal/eu_cookie_compliance": "^1.14",
         "drupal/facets": "^2.0",
         "drupal/facets_country": "1.x-dev@dev",
