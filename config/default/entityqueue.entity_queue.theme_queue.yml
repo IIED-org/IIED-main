@@ -1,0 +1,31 @@
+uuid: 363d7a5c-7082-4c3d-94f2-cb848efb5f7b
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: theme_queue
+label: 'Theme queue'
+handler: multiple
+handler_configuration: {  }
+entity_settings:
+  target_type: node
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      article: article
+      blog: blog
+      event: event
+      long_read: long_read
+      news: news
+      project: project
+    sort:
+      field: title
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: article
+queue_settings:
+  min_size: 0
+  max_size: 8
+  act_as_queue: true
+  reverse: false

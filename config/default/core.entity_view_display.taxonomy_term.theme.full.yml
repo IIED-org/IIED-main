@@ -3,13 +3,13 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.base_field_override.taxonomy_term.theme.description
     - core.entity_view_mode.taxonomy_term.full
     - field.field.taxonomy_term.theme.field_legacy_code
     - field.field.taxonomy_term.theme.field_link
     - field.field.taxonomy_term.theme.layout_builder__layout
     - taxonomy.vocabulary.theme
     - views.view.taxonomy_all_display
-    - views.view.taxonomy_featured_display
   module:
     - ds
     - layout_builder
@@ -38,19 +38,6 @@ third_party_settings:
             layout_class: {  }
             first: {  }
         components:
-          f5812cde-9588-4655-89c4-3d04307be7a7:
-            uuid: f5812cde-9588-4655-89c4-3d04307be7a7
-            region: first
-            configuration:
-              id: 'views_block:taxonomy_featured_display-block_3'
-              label: ''
-              label_display: visible
-              provider: views
-              context_mapping: {  }
-              views_label: ''
-              items_per_page: none
-            weight: 0
-            additional: {  }
           da10d384-6661-4a88-b2b0-58a1f3a82f6d:
             uuid: da10d384-6661-4a88-b2b0-58a1f3a82f6d
             region: ds_content
