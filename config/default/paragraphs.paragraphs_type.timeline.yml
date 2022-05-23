@@ -1,0 +1,10 @@
+uuid: 7014484a-693e-42f0-a642-106b06df452a
+langcode: en
+status: true
+dependencies: {  }
+id: timeline
+label: Timeline
+icon_uuid: null
+icon_default: null
+description: 'Displays a list of events in chronological order.'
+behavior_plugins: {  }
