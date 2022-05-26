@@ -1,0 +1,61 @@
+--- src/Commands/DefaultContentCommands.php
++++ src/Commands/DefaultContentCommands.php
+@@ -52,26 +52,46 @@ class DefaultContentCommands extends DrushCommands {
+   /**
+    * Exports an entity and all its referenced entities.
+    *
+-   * @param string $entity_type_id
++   * @param string|null $entity_type_id
+    *   The entity type to export.
+-   * @param int $entity_id
++   * @param int|null $entity_id
+    *   The ID of the entity to export.
+    *
+    * @command default-content:export-references
+-   * @option folder Folder to export to, entities are grouped by entity type into directories.
++   * @option folder
++   *   Folder to export to, entities are grouped by entity type into directories.
++   * @option property-name
++   *   The property name to be uses for filtering if an entity_id is not provided.
++   *   If no $entity_type_id is provided, this will be ignored.
++   * @option property-value
++   *   The value of the property. If no property-name is provided, this will be ignored.
+    * @aliases dcer
+    */
+-  public function contentExportReferences($entity_type_id, $entity_id = NULL, $options = ['folder' => NULL]) {
+-    $folder = $options['folder'];
+-    if (is_null($entity_id)) {
+-      $entities = \Drupal::entityQuery($entity_type_id)->execute();
++  public function contentExportReferences(string $entity_type_id = NULL, $entity_id = NULL, $options = ['folder' => NULL, 'property-name' => NULL, 'property-value' => NULL]) {
++    if (!$entity_type_id) {
++      if (!$this->io()->confirm('You did not provide an entity type id. The command will attempt to export content from all content types. Additionally any supplied property arguments will be ignored. Do you wish to continue?')) {
++        return;
++      }
++      $this->logger()->warning('Exporting All of the site\'s contents. This might take a while.');
++    }
++
++    if ($options['property-name'] && $options['property-value']) {
++      $properties = [
++        $options['property-name'] => $options['property-value'],
++      ];
+     }
+-    else {
+-      $entities = [$entity_id];
++
++    $entities = $this->defaultContentExporter->resolveExportedEntities($entity_type_id, $entity_id, $properties ?? []);
++    if (empty($entities)) {
++      $this->logger()->warning('No entities found, for the specified criteria.');
++      return;
+     }
+-    // @todo Add paging.
+-    foreach ($entities as $entity_id) {
+-      $this->defaultContentExporter->exportContentWithReferences($entity_type_id, $entity_id, $folder);
++
++    // @todo add paging.
++    foreach ($entities as $entity_type_id => $entity_ids) {
++      foreach ($entity_ids as $entity_id) {
++        $this->defaultContentExporter->exportContentWithReferences($entity_type_id, $entity_id, $options['folder']);
++      }
+     }
+   }
+ 

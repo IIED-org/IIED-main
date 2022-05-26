@@ -7,9 +7,6 @@
   "require": {
     "drupal/core": "^8.7.7 || ^9"
   },
-  "require-dev": {
-    "drupal/paragraphs": "^1"
-  },
   "extra": {
     "drush": {
       "services": {

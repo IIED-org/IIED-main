@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '123edea0c9031b6205b1de3d8d92b1deb7332c43',
+        'reference' => 'da9f4a82201d803c99f574fbb90b63fd8a21d180',
         'name' => 'drupal/recommended-project',
         'dev' => true,
     ),
@@ -959,12 +959,12 @@
             ),
         ),
         'drupal/default_content' => array(
-            'pretty_version' => '2.0.0-alpha1',
-            'version' => '2.0.0.0-alpha1',
+            'pretty_version' => '1.0.0-alpha9',
+            'version' => '1.0.0.0-alpha9',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/default_content',
             'aliases' => array(),
-            'reference' => '2.0.0-alpha1',
+            'reference' => '8.x-1.0-alpha9',
             'dev_requirement' => false,
         ),
         'drupal/devel' => array(
@@ -1752,7 +1752,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '123edea0c9031b6205b1de3d8d92b1deb7332c43',
+            'reference' => 'da9f4a82201d803c99f574fbb90b63fd8a21d180',
             'dev_requirement' => false,
         ),
         'drupal/redirect' => array(

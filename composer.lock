@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c98f1274f923dbc3f586a56c1ca5cd31",
+    "content-hash": "5f8a44763c7a375dd63c8495ee7164f4",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3918,29 +3918,26 @@
         },
         {
             "name": "drupal/default_content",
-            "version": "2.0.0-alpha1",
+            "version": "1.0.0-alpha9",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/default_content.git",
-                "reference": "2.0.0-alpha1"
+                "reference": "8.x-1.0-alpha9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/default_content-2.0.0-alpha1.zip",
-                "reference": "2.0.0-alpha1",
-                "shasum": "0d534ab8e44786a352e24c7cec3dc06bef155f66"
+                "url": "https://ftp.drupal.org/files/projects/default_content-8.x-1.0-alpha9.zip",
+                "reference": "8.x-1.0-alpha9",
+                "shasum": "e8d5cc6ae96b14e882852512fbf5887e752146a0"
             },
             "require": {
                 "drupal/core": "^8.7.7 || ^9"
             },
-            "require-dev": {
-                "drupal/paragraphs": "^1"
-            },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-alpha1",
-                    "datestamp": "1595072288",
+                    "version": "8.x-1.0-alpha9",
+                    "datestamp": "1588280141",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
