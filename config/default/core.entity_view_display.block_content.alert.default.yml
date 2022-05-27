@@ -1,0 +1,37 @@
+uuid: 13df2c29-f961-41f3-aa07-7229eec3a134
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.alert
+    - field.field.block_content.alert.field_alert_message
+    - field.field.block_content.alert.field_link
+  module:
+    - link
+id: block_content.alert.default
+targetEntityType: block_content
+bundle: alert
+mode: default
+content:
+  field_alert_message:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_link:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  langcode: true
+  search_api_excerpt: true

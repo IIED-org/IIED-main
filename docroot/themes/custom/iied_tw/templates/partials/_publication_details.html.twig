@@ -2,7 +2,7 @@
 
 <div class="flex flex-col mb-6">
  
- <div class="flex gap-1">
+ <div class="flex flex-wrap gap-1">
    <span class="font-bold">Language: </span><span>{{ drupal_block('language_block:language_interface', wrapper=false) }}
    </span>
   </div>
@@ -19,7 +19,7 @@
 
 
     {% if node.field_area_list.value %}
-      <div class="flex gap-1">
+      <div class="flex flex-wrap gap-1">
          <span class="font-bold">Area(s):</span> {{ drupal_view('country_list', 'default') }}  
       </div>
     {% endif %}
@@ -44,7 +44,12 @@
     {% endif %}   
   </div>
 
-  {{ content.field_source_publication }}
+    {% if node.field_source_publication.value %}
+      <div class="flex gap-1">
+          <span class="font-bold">Source&nbsp;publication:</span> {{ content.field_source_publication }}
+      </div>
+    {% endif %}
+
 
 {#
   <div class="flex gap-1">

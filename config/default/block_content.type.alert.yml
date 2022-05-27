@@ -1,0 +1,8 @@
+uuid: 330f7bb6-4e7c-4cdf-a324-e56408b188ce
+langcode: en
+status: true
+dependencies: {  }
+id: alert
+label: Alert
+revision: 0
+description: 'Displays a short, important message'

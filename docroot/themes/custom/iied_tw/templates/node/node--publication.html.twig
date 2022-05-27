@@ -102,11 +102,23 @@
         </nav>
         <h1 class="mb-6 text-4xl">{{ node.label }}</h1>
         <div class="flex mb-4">
-          {{ content.field_author_s_}} {{ content.field_editor_s_ }} {{ content.field_translator }}
+          {{ content.field_author_s_}} 
+          {% if node.field_editor_s_.value %}
+            {% if node.field_editor_s_.value %}
+            ,&nbsp;
+            {% endif %}
+          {{ content.field_editor_s_ }}&nbsp;(eds)
+          {% endif %}
+          {% if node.field_translator.value %} 
+            {% if node.field_editor_s_.value %}
+            ,&nbsp;
+            {% endif %}
+          {{ content.field_translator }}&nbsp;(translator)
+          {% endif %}
         </div>
         <div class="flex mb-6">
           {{ content.field_document_type }}
-              {% if content.field_pdf_pages %} 
+              {% if node.field_pdf_pages.value > 0 %} 
               , {{ content.field_pdf_pages.0 }} pages
                     {% endif %}  
         </div>
@@ -123,7 +135,7 @@
       </div>
 
 {#  order 1  #}  
-      <div class="mb-4 md:order-1 md:row-span-2">
+      <div class="mb-4 md:order-1 md:row-span-2 md:mr-4">
         {% if content.field_cover_image[0] %}
           {{ node.field_cover_image | view }}
         {% else %}
@@ -145,10 +157,13 @@
           </div>
     {# cite #}
     {# TODO: Rewrite in twig instead of using views! #}
+        {% if drupal_view_result('citation', 'block_1') is not empty %}
         <div class="pl-4 my-8 border-l-2 border-iiedblue-500">
           <span class="font-bold">How to cite:</span><br />
           {{ drupal_view('citation', 'block_1') }}
         </div>
+        {% endif %}
+
       </div>
 
 

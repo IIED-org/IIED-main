@@ -1,0 +1,21 @@
+uuid: 4aca3bbd-a32c-445a-8e1e-455f481644c5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_timeline_entry
+    - paragraphs.paragraphs_type.timeline
+  module:
+    - text
+id: paragraph.timeline.field_timeline_entry
+field_name: field_timeline_entry
+entity_type: paragraph
+bundle: timeline
+label: 'Timeline entry'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long
