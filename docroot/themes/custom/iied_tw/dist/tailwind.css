@@ -1575,7 +1575,6 @@ hr{
 }
 
 .bg-fill{
-  border-radius: 0.75rem;
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
   padding: 1rem;
@@ -2097,6 +2096,10 @@ hr{
 
 .transform{
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.cursor-pointer{
+  cursor: pointer;
 }
 
 .list-none{
@@ -3187,6 +3190,18 @@ hr{
 
   .md\:ml-4{
     margin-left: 1rem;
+  }
+
+  .md\:mr-12{
+    margin-right: 3rem;
+  }
+
+  .md\:mr-24{
+    margin-right: 6rem;
+  }
+
+  .md\:mr-4{
+    margin-right: 1rem;
   }
 
   .md\:inline-block{

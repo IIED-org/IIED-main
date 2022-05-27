@@ -7,12 +7,13 @@
  * - content: The content for this layout.
  * - attributes: HTML attributes for the layout <div>.
  * - first
+ * This is used on terms with layout builder
  */
 #}
 {% if content %}
-  <div{{ attributes }}>
+  <div{{ attributes.addClass('mb-12') }}>
       {% if content.first %}
-        <div {{ region_attributes.first.addClass('container', 'mb-12') }}>
+        <div {{ region_attributes.first.addClass('container') }}>
           {{ content.insert_before }}
           {{ content.controls }}
           {{ content.first }}

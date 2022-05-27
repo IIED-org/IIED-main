@@ -111,12 +111,14 @@
             </div>
           </div>
 
-          {% if content.field_project_contacts %}
-            <div class="flex space-x-1"><span>Contact:</span> {{ content.field_project_contacts[0] }} {{ content.field_contact }}
+          {% if node.field_project_contacts.value %}
+            <div class="flex space-x-1 1"><span>Contact:</span> {{ content.field_project_contacts[0] }} {{ content.field_contact }}
             </div>
             {% else %}
-            <div class="flex space-x-1"><span>Contact:</span> {{ content.field_contact }}
+            {% if node.field_contact.value %}
+            <div class="flex space-x-1 2"><span>Contact:</span> {{ content.field_contact }}
             </div>
+            {% endif %}
           {% endif %}
         </div>
 
@@ -154,9 +156,11 @@
         </div>
       </div>
 
+      {% if drupal_view_result('project_publication_card', 'block_1') is not empty %}
         <div class="order-3 mb-4 xl:col-span-12">  
         {{ drupal_view('project_publication_card', 'block_1') }}
         </div>
+      {% endif %}
 
       <div class="order-4 xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4">
         <div class="pb-6 prose border-b border-gray-300 md:prose-lg">
