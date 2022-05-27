@@ -49,6 +49,7 @@ class ComposerStaticInitc55356c53f91567181cb9bc578ac52ab
         '3917c79c5052b270641b5a200963dbc2' => __DIR__ . '/..' . '/kint-php/kint/init.php',
         '2d0bd6b7e257b7230c706e6559d6a87b' => __DIR__ . '/..' . '/mglaman/phpstan-drupal/drupal-phpunit-hack.php',
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
+        '2191cedbacc400f3030e0b51d4e2aaf1' => __DIR__ . '/..' . '/rogervila/array-diff-multidimensional/src/helpers.php',
         '92c8763cd6170fce6fcfe7e26b4e8c10' => __DIR__ . '/..' . '/symfony/phpunit-bridge/bootstrap.php',
     );
 
@@ -134,6 +135,7 @@ class ComposerStaticInitc55356c53f91567181cb9bc578ac52ab
         ),
         'R' => 
         array (
+            'Rogervila\\' => 10,
             'Robo\\' => 5,
             'React\\Promise\\' => 14,
         ),
@@ -479,6 +481,10 @@ class ComposerStaticInitc55356c53f91567181cb9bc578ac52ab
         'Seld\\JsonLint\\' => 
         array (
             0 => __DIR__ . '/..' . '/seld/jsonlint/src/Seld/JsonLint',
+        ),
+        'Rogervila\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/rogervila/array-diff-multidimensional/src',
         ),
         'Robo\\' => 
         array (

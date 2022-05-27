@@ -1,0 +1,13 @@
+name: 'Default Content Deploy'
+type: module
+description: 'Default content deploy solution for Drupal 9. Export and import content continuously.'
+package: Web services
+core_version_requirement: ^9.2 || ^10.0
+dependencies:
+  - drupal:hal
+configure: default_content_deploy.import
+
+# Information added by Drupal.org packaging script on 2021-12-28
+version: '2.0.0'
+project: 'default_content_deploy'
+datestamp: 1640711737
