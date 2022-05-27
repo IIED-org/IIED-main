@@ -3,7 +3,7 @@
 @import url("https://cloud.typography.com/7590498/6700612/css/fonts.css");
 
 /*
-! tailwindcss v3.0.22 | MIT License | https://tailwindcss.com
+! tailwindcss v3.0.24 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -473,8 +473,7 @@ a{
 }
 
 a:visited{
-  --tw-text-opacity: 1;
-  color: rgb(81 117 139 / var(--tw-text-opacity));
+  color: rgb(81 117 139 );
 }
 
 a:hover{
@@ -3190,14 +3189,6 @@ hr{
 
   .md\:ml-4{
     margin-left: 1rem;
-  }
-
-  .md\:mr-12{
-    margin-right: 3rem;
-  }
-
-  .md\:mr-24{
-    margin-right: 6rem;
   }
 
   .md\:mr-4{
