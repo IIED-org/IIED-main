@@ -26,6 +26,7 @@ dependencies:
     - paragraphs.paragraphs_type.stories_table
     - paragraphs.paragraphs_type.stories_text
     - paragraphs.paragraphs_type.stories_views
+    - paragraphs.paragraphs_type.timeline
     - paragraphs.paragraphs_type.video_embed
   module:
     - entity_reference_revisions
@@ -65,11 +66,15 @@ settings:
       stories_table: stories_table
       stories_text: stories_text
       stories_views: stories_views
+      timeline: timeline
     negate: 0
     target_bundles_drag_drop:
       about_the_author:
         weight: 14
         enabled: true
+      accordion_box:
+        weight: 27
+        enabled: false
       basic_text:
         weight: 15
         enabled: true
@@ -129,6 +134,12 @@ settings:
         enabled: true
       stories_views:
         weight: 41
+        enabled: true
+      tab_box:
+        weight: 48
+        enabled: false
+      timeline:
+        weight: 49
         enabled: true
       video_embed:
         weight: 26

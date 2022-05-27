@@ -8,6 +8,7 @@ ft-layout-builder: true
 classes:
   region:
     - 'bg-fill|Background fill grey'
+    - 'bg-green|Background fill green'
     - ''
     - ''
   field: {  }

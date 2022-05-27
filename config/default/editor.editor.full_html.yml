@@ -46,6 +46,7 @@ settings:
           name: 'Block Formatting'
           items:
             - Format
+            - Styles
         -
           name: Tools
           items:
@@ -55,7 +56,7 @@ settings:
     language:
       language_list: un
     stylescombo:
-      styles: ''
+      styles: 'h3.mt-0|h3 without top margin'
     wordcount:
       enable: true
       show_remaining: false
