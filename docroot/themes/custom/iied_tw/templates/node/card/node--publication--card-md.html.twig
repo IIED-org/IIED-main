@@ -34,7 +34,7 @@ For general featured card display
               <h4 class="mb-4 text-xl text-gray-900 lg:text-2xl">
                 {{ label }}
               </h4>
-              <p class="text-gray-500">{{ node.getCreatedTime|date('d F Y') }}</p>
+              <p class="text-gray-500">{{ node.field_date_published.value|date('d F Y') }}</p>
             </div>
           </div>
         </a>

@@ -89,50 +89,63 @@
 
         {#-- standfirst --#}
         <div
-          class="mb-6 prose-lg border-b-2 lg:prose-xl border-iiedorange-500"
+          class="mb-4 prose-lg border-b-2 lg:prose-xl border-iiedgreen-500"
         >
           {{ content.field_standfirst }}
         </div>
+      </div>
 
         {# attribution #} 
-
+      <div class="pt-2 mb-6 xl:col-span-3 2xl:order-1 xl:pr-4">
         {#-- date status contact --#}
-        
-        <div
-          class="pb-6 border-b border-gray-300 xl:border-none"
-        >
+        <div class="pb-4 border-b border-gray-300">
           <div class="flex flex-col flex-wrap justify-between sm:flex-row">
-            <div class="flex space-x-2">
-            {{ content.field_project_status }}
-            {{ content.field_dates }}
+            <div class="flex items-start xl:block"> 
+              {#-- label --#}
+              <div class="relative inline-block mb-4 mr-4">
+                <span
+                  class="absolute block -skew-y-3 -inset-1 bg-iiedgreen-500"
+                  aria-hidden="true"
+                ></span>
+              <span class="relative font-bold">Project</span>
+              </div>
+
+              <div class="mb-4"> 
+                <div class="flex flex-wrap space-x-1"> 
+                {% if node.field_project_status.value == '1' %}
+                {{ content.field_project_status }},
+                {% endif %}
+                {{ content.field_dates }}
+                </div>
+                {#-- contacts --#}
+                {% if node.field_project_contacts.value %}
+                <div class="flex flex-wrap space-x-1"><span>Contact:</span> {{ content.field_project_contacts[0] }} {{ content.field_contact }}
+                </div>
+                {% else %}
+                {% if node.field_contact.value %}
+                <div class="flex flex-wrap space-x-1"><span>Contact:</span> {{ content.field_contact }}
+                </div>
+                {% endif %}
+                {% endif %}
+              </div>
             </div>
-            <div class="flex items-center">
+
+            <div class="flex items-start">
               {% include '@iied_tw/partials/_share_links.html.twig' %}
             </div>
-          </div>
 
-          {% if node.field_project_contacts.value %}
-            <div class="flex space-x-1 1"><span>Contact:</span> {{ content.field_project_contacts[0] }} {{ content.field_contact }}
-            </div>
-            {% else %}
-            {% if node.field_contact.value %}
-            <div class="flex space-x-1 2"><span>Contact:</span> {{ content.field_contact }}
-            </div>
-            {% endif %}
-          {% endif %}
+          </div>
         </div>
 
-
-      </div>
-      {# / attribution #} {#-- collection --#}
-      <div class="pt-2 mb-6 xl:col-span-3 2xl:order-1 xl:pr-6 2xl:pr-12">
+      {#-- collection --#}
+        <div class="mb-4">
         {{ content.field_collections }}
+        </div>
       </div>
-    </div>
+      {# / attribution #} 
 
     {# main content #}
-    <div
-      class="container mx-auto lg:px-8 xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12">
+
       <div
         class="order-1 xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4 md:order-2">
         {#-- image if field_display_image --#}
@@ -183,3 +196,5 @@
     </main>
   </div>
 </article>
+
+{% include '@iied_tw/partials/_related_nodes.html.twig' %}

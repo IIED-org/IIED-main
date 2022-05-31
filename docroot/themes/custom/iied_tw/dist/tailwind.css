@@ -1973,6 +1973,12 @@ hr{
   min-height: 12rem;
 }
 
+.min-h-min{
+  min-height: -webkit-min-content;
+  min-height: -moz-min-content;
+  min-height: min-content;
+}
+
 .w-6{
   width: 1.5rem;
 }
@@ -2043,6 +2049,12 @@ hr{
   min-width: -webkit-fit-content;
   min-width: -moz-fit-content;
   min-width: fit-content;
+}
+
+.min-w-min{
+  min-width: -webkit-min-content;
+  min-width: -moz-min-content;
+  min-width: min-content;
 }
 
 .max-w-none{
@@ -3192,14 +3204,6 @@ hr{
     margin-left: 1rem;
   }
 
-  .md\:mr-12{
-    margin-right: 3rem;
-  }
-
-  .md\:mr-24{
-    margin-right: 6rem;
-  }
-
   .md\:mr-4{
     margin-right: 1rem;
   }
@@ -3856,6 +3860,10 @@ hr{
     padding-right: 2rem;
   }
 
+  .lg\:pr-4{
+    padding-right: 1rem;
+  }
+
   .lg\:text-2xl{
     font-size: 1.5rem;
     line-height: 2rem;
@@ -3916,6 +3924,10 @@ hr{
     margin-top: -2rem;
   }
 
+  .xl\:block{
+    display: block;
+  }
+
   .xl\:grid{
     display: grid;
   }
@@ -3934,6 +3946,10 @@ hr{
 
   .xl\:max-w-screen-xl{
     max-width: 1280px;
+  }
+
+  .xl\:flex-none{
+    flex: none;
   }
 
   .xl\:grid-cols-12{
@@ -3987,6 +4003,10 @@ hr{
 
   .xl\:pt-2{
     padding-top: 0.5rem;
+  }
+
+  .xl\:pr-4{
+    padding-right: 1rem;
   }
 }
 
