@@ -82,7 +82,6 @@ module.exports = {
       typography: (theme) => ({
         DEFAULT: {
           css: {
-            maxWidth: '70ch',
             a: {
               borderBottomWidth: '1px',
               borderBottomColor: theme('colors.iiedblue.200'),
