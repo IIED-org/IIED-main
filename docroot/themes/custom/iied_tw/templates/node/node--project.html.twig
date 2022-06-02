@@ -192,9 +192,16 @@
       </div>
     </div>
         
-        
     </main>
   </div>
 </article>
 
-{% include '@iied_tw/partials/_related_nodes.html.twig' %}
+<section class="py-12">
+    <div class="container">
+        {% if drupal_view_result('related_to_project', 'block_1') is not empty %}
+            {{ drupal_view('related_to_project', 'block_1') }}
+        {% endif %}
+    </div>
+</section>
+{% include '@iied_tw/partials/_related_project.html.twig' %}
+{% include '@iied_tw/partials/_related_nodes_research.html.twig' %}
