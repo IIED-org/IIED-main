@@ -14,3 +14,6 @@
             {% endif %}
         {% endif %}
     {% endblock %}
+    {% block date %}
+      <p class="text-gray-500">{{ node.type.entity.label() }}, {{ node.field_date_published.value|date('d F Y') }} </p>
+    {% endblock %}

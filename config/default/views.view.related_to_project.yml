@@ -1,28 +1,30 @@
-uuid: c896ad01-45ac-41eb-90fc-1c4faadaa32d
+uuid: 7bc25442-cf63-4d80-8594-0807d02e2ae2
 langcode: en
 status: true
 dependencies:
   config:
     - core.entity_view_mode.node.card
-    - node.type.project
+    - node.type.blog
+    - node.type.long_read
+    - node.type.news
   module:
     - node
     - user
-id: related_project
-label: 'Related project'
+id: related_to_project
+label: 'Related to project'
 module: views
-description: 'Formerly showing related project on publication, no longer needed'
-tag: deprecated
+description: 'Showing news and blogs related to projects'
+tag: ''
 base_table: node_field_data
 base_field: nid
 display:
   default:
     id: default
-    display_title: Master
+    display_title: Default
     display_plugin: default
     position: 0
     display_options:
-      title: 'Related project'
+      title: 'Updates on this project'
       fields:
         title:
           id: title
@@ -75,7 +77,7 @@ display:
         type: some
         options:
           offset: 0
-          items_per_page: 1
+          items_per_page: 10
       exposed_form:
         type: basic
         options:
@@ -108,20 +110,18 @@ display:
           order: DESC
           expose:
             label: ''
-            field_identifier: created
+            field_identifier: ''
           exposed: false
           granularity: second
       arguments:
-        nid:
-          id: nid
-          table: node_field_data
-          field: nid
-          relationship: reverse__node__field_project
+        field_project_target_id:
+          id: field_project_target_id
+          table: node__field_project
+          field: field_project_target_id
+          relationship: none
           group_type: group
           admin_label: ''
-          entity_type: node
-          entity_field: nid
-          plugin_id: node_nid
+          plugin_id: numeric
           default_action: default
           exception:
             value: all
@@ -141,7 +141,7 @@ display:
             sort_order: asc
             number_of_records: 0
             format: default_summary
-          specify_validation: true
+          specify_validation: false
           validate:
             type: none
             fail: 'not found'
@@ -166,20 +166,48 @@ display:
           id: type
           table: node_field_data
           field: type
+          relationship: none
+          group_type: group
+          admin_label: ''
           entity_type: node
           entity_field: type
           plugin_id: bundle
+          operator: in
           value:
-            project: project
+            blog: blog
+            long_read: long_read
+            news: news
+          group: 1
+          exposed: false
           expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
             operator_limit_selection: false
             operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
       style:
         type: default
-        options:
-          row_class: pb-5
-          default_row_class: false
-          uses_fields: false
       row:
         type: 'entity:node'
         options:
@@ -194,31 +222,16 @@ display:
           replica: false
           query_tags: {  }
       relationships:
-        reverse__node__field_project:
-          id: reverse__node__field_project
-          table: node_field_data
-          field: reverse__node__field_project
+        field_project:
+          id: field_project
+          table: node__field_project
+          field: field_project
           relationship: none
           group_type: group
-          admin_label: field_project
-          entity_type: node
-          plugin_id: entity_reverse
-          required: true
-      css_class: ''
-      header:
-        area:
-          id: area
-          table: views
-          field: area
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: text
-          empty: false
-          content:
-            value: '<h2 class="pt-4">Related IIED project</h2>'
-            format: full_html
-          tokenize: false
+          admin_label: 'field_project: Content'
+          plugin_id: standard
+          required: false
+      header: {  }
       footer: {  }
       display_extenders: {  }
     cache_metadata:
@@ -237,7 +250,6 @@ display:
     position: 1
     display_options:
       display_extenders: {  }
-      block_description: 'related project block'
     cache_metadata:
       max-age: -1
       contexts:

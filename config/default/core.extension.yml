@@ -54,6 +54,8 @@ module:
   flexslider: 0
   form_mode_control: 0
   geolocation: 0
+  gin_lb: 0
+  gin_toolbar: 0
   google_analytics: 0
   google_tag: 0
   hal: 0
@@ -73,6 +75,7 @@ module:
   language: 0
   language_switcher_extended: 0
   layout_builder: 0
+  layout_builder_restrictions: 0
   layout_builder_styles: 0
   layout_builder_tabs: 0
   layout_discovery: 0
