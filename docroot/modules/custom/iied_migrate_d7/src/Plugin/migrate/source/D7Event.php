@@ -21,7 +21,7 @@ class D7Event extends Node {
     $query = parent::query();
     // Select only source nodes that are published.
     $query->condition('n.status', 1);
-    // $query->condition('n.nid', '139731');
+    // $query->condition('n.nid', '11846');
     return $query;
   }
 

@@ -116,6 +116,19 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       ];
       $row->setSourceProperty('related_link_processed', $related_link_processed);
     }
+    // We have file upload paragraphs with multiple rows in one paragraph.
+    // We need to process this separately.
+
+    if ($row->getSourceProperty('bundle') == 'file_upload' ) {
+      // Load all the files and generate the array of sources.
+      $item_id = $row->getSourceProperty('item_id');
+      $file_ids = $source->getDatabase()->query('SELECT upload_fid FROM {field_data_upload} WHERE entity_id = :entity_id', array(':entity_id' => $item_id))->fetchCol();
+      foreach ($file_ids as $key => $value) {
+        $target_file_ids [$key]['target_id'] = $value;
+      }
+      $row->setSourceProperty('upload_fid_prepared', $target_file_ids);
+    }
+
   }
 
   // iied_d7_blogs migration. We need to lookup person terms to reference as

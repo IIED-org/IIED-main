@@ -153,8 +153,7 @@ process:
       default_value: 'full_html'
   field_paragraphs:
     -
-      plugin: skip_on_empty
-      method: process
+      plugin: get
       source: field_paragraphs
     -
       plugin: sub_process
