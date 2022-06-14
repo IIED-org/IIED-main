@@ -1865,16 +1865,12 @@ hr{
   margin-right: 0.25rem;
 }
 
-.-mt-3{
-  margin-top: -0.75rem;
-}
-
-.-mt-2{
-  margin-top: -0.5rem;
-}
-
 .-mt-4{
   margin-top: -1rem;
+}
+
+.-mt-3{
+  margin-top: -0.75rem;
 }
 
 .block{
@@ -2142,6 +2138,10 @@ hr{
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.flex-row{
+  flex-direction: row;
+}
+
 .flex-col{
   flex-direction: column;
 }
@@ -2176,14 +2176,6 @@ hr{
 
 .justify-between{
   justify-content: space-between;
-}
-
-.justify-around{
-  justify-content: space-around;
-}
-
-.justify-evenly{
-  justify-content: space-evenly;
 }
 
 .gap-6{
@@ -2238,12 +2230,6 @@ hr{
   --tw-space-x-reverse: 0;
   margin-right: calc(-0.75rem * var(--tw-space-x-reverse));
   margin-left: calc(-0.75rem * calc(1 - var(--tw-space-x-reverse)));
-}
-
-.space-y-6 > :not([hidden]) ~ :not([hidden]){
-  --tw-space-y-reverse: 0;
-  margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
-  margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
 }
 
 .overflow-hidden{
@@ -2867,6 +2853,10 @@ hr{
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
 }
 
+.group:hover .group-hover\:block{
+  display: block;
+}
+
 .group:hover .group-hover\:-rotate-2{
   --tw-rotate: -2deg;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
@@ -2899,6 +2889,10 @@ hr{
 }
 
 @media (min-width: 640px){
+  .sm\:visible{
+    visibility: visible;
+  }
+
   .sm\:col-span-2{
     grid-column: span 2 / span 2;
   }

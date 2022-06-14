@@ -23,29 +23,9 @@
  * @see template_preprocess_taxonomy_term()
  */
 #}
-{%
-  set classes = [
-    'taxonomy-term',
-    'vocabulary-' ~ term.bundle|clean_class,
-  ]
-%}
-<div{{ attributes.setAttribute('id', 'taxonomy-term-' ~ term.id).addClass(classes) }}>
-    <div class="container flex flex-wrap justify-between p-4 mx-auto overflow-hidden">
-      <div class="content">
-        {{ title_prefix }}
-        <h1 class="mb-6">{{ name }}</h1>
-        {{ title_suffix }}
 
-        <p>
-          {{ term.description.0.value }}
-        </p>
 
-        {{ content|without('field_logo') }}
-      </div>
+    <a href="#">{{ content.field_logo }}</a>
+    
 
-      <div class="my-4">
-        {{ content.field_logo }}
-      </div>
-    </div>
-</div>
 

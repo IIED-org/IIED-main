@@ -37,11 +37,36 @@
         {{ title_suffix }}
       </div>
       <div class="lg:col-span-8">
-        <p>
+        <p class="prose prose-lg">
         {{ term.description.0.value|striptags }}
         </p>
       </div>
     </div>
+
+{# tabs #}
+
+  <div class="mb-12 border-b border-gray-300">
+    <div
+      class="container"
+      x-data="{ activeTab: 'inseries' }"
+      x-init="activeTab = window.location.hash ? window.location.hash.replace('#', '') : 'inseries'"
+    >
+      <nav class="flex flex-row">
+        <button
+          class="block px-6 py-2 text-lg font-semibold text-gray-700 border-b-2 border-iiedblue-500 hover:text-gray-900 focus:outline-none"
+        >
+          In this series</button
+        ><button
+          class="block px-6 py-2 text-lg font-semibold text-gray-700 hover:text-gray-900 focus:outline-none"
+        >
+          Overview
+        </button>
+      </nav>
+    </div>
+  </div>
+
+{# /tabs #}
+
   <div class="content">
     {{ content }}
   </div>
