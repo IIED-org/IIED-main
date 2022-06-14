@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.taxonomy_term.full
     - field.field.taxonomy_term.collection.field_about
+    - field.field.taxonomy_term.collection.field_badge
     - field.field.taxonomy_term.collection.field_containers
     - field.field.taxonomy_term.collection.field_downloads
     - field.field.taxonomy_term.collection.field_overview
@@ -206,6 +207,7 @@ content:
     weight: 6
     region: content
 hidden:
+  field_badge: true
   field_overview: true
   langcode: true
   layout_builder__layout: true

@@ -10,7 +10,10 @@ dependencies:
     - paragraphs.paragraphs_type.gallery
     - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.info_box
+    - paragraphs.paragraphs_type.logo_block
     - paragraphs.paragraphs_type.media_embed
+    - paragraphs.paragraphs_type.modal_image
+    - paragraphs.paragraphs_type.stories_table
     - paragraphs.paragraphs_type.video_embed
   module:
     - entity_reference_revisions
@@ -35,6 +38,9 @@ settings:
       media_embed: media_embed
       video_embed: video_embed
       gallery: gallery
+      logo_block: logo_block
+      modal_image: modal_image
+      stories_table: stories_table
     negate: 0
     target_bundles_drag_drop:
       about_the_author:
@@ -64,8 +70,14 @@ settings:
       linked_person:
         weight: 12
         enabled: false
+      logo_block:
+        weight: 38
+        enabled: true
       media_embed:
         weight: 13
+        enabled: true
+      modal_image:
+        weight: 38
         enabled: true
       quote:
         weight: 37
@@ -99,7 +111,7 @@ settings:
         enabled: false
       stories_table:
         weight: 47
-        enabled: false
+        enabled: true
       stories_text:
         weight: 48
         enabled: false

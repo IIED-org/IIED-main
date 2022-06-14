@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.taxonomy_term.card
     - field.field.taxonomy_term.collection.field_about
+    - field.field.taxonomy_term.collection.field_badge
     - field.field.taxonomy_term.collection.field_containers
     - field.field.taxonomy_term.collection.field_downloads
     - field.field.taxonomy_term.collection.field_overview
@@ -34,6 +35,7 @@ content:
     region: content
 hidden:
   field_about: true
+  field_badge: true
   field_containers: true
   field_downloads: true
   field_overview: true
