@@ -1,5 +1,5 @@
 taxonomy_manager.settings:
-  type: mapping
+  type: config_object
   label: Settings
   mapping:
     taxonomy_manager_disable_mouseover:

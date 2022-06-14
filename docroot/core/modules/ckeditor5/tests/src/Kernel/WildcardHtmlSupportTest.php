@@ -57,7 +57,7 @@ class WildcardHtmlSupportTest extends KernelTestBase {
         ],
       ],
     ])->save();
-    $editor = Editor::create([
+    $editor_config = [
       'editor' => 'ckeditor5',
       'format' => 'test_format',
       'settings' => [
@@ -73,7 +73,14 @@ class WildcardHtmlSupportTest extends KernelTestBase {
       'image_upload' => [
         'status' => FALSE,
       ],
-    ]);
+    ];
+    if (in_array('alignment', $additional_toolbar_items, TRUE)) {
+      $editor_config['settings']['plugins']['ckeditor5_alignment'] = [
+        'enabled_alignments' => ['left', 'center', 'right', 'justify'],
+      ];
+    }
+
+    $editor = Editor::create($editor_config);
     $editor->save();
     $this->assertSame([], array_map(
       function (ConstraintViolation $v) {
@@ -85,7 +92,12 @@ class WildcardHtmlSupportTest extends KernelTestBase {
       ))
     ));
     $config = $this->manager->getCKEditor5PluginConfig($editor);
-    $this->assertEquals($expected_ghs_configuration, $config['config']['htmlSupport']['allow']);
+    $ghs_configuration = $config['config']['htmlSupport']['allow'];
+    // The first two entries in the GHS configuration are from the
+    // `ckeditor5_globalAttributeDir` and `ckeditor5_globalAttributeLang`
+    // plugins. They are out of scope for this test, so omit them.
+    $ghs_configuration = array_slice($ghs_configuration, 2);
+    $this->assertEquals($expected_ghs_configuration, $ghs_configuration);
   }
 
   public function providerGhsConfiguration(): array {

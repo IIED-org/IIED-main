@@ -84,12 +84,17 @@ class AddTermsToVocabularyForm extends FormBase {
       '#rows' => 10,
       '#required' => TRUE,
     ];
+    $form['keep_order'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Create the term in the order provided in the list.'),
+      '#description' => t('All terms will be added after the last existing term.'),
+    ];
     $form['add'] = [
       '#type' => 'submit',
       '#value' => $this->t('Add'),
-      '#attributes' => array(
+      '#attributes' => [
         'onclick' => 'javascript:var s=this;setTimeout(function(){s.value="Saving...";s.disabled=true;},1);',
-      ),
+      ],
     ];
     return $form;
   }
@@ -104,8 +109,9 @@ class AddTermsToVocabularyForm extends FormBase {
     $taxonomy_vocabulary = $form_state->getValue('voc');
     $parents = $form_state->getValue('parents');
     $mass_terms = $form_state->getValue('mass_add');
+    $keep_order = $form_state->getValue('keep_order');
 
-    $new_terms = $this->taxonomyManagerHelper->massAddTerms($mass_terms, $taxonomy_vocabulary->id(), $parents, $term_names_too_long);
+    $new_terms = $this->taxonomyManagerHelper->massAddTerms($mass_terms, $taxonomy_vocabulary->id(), $parents, $term_names_too_long, $keep_order);
     foreach ($new_terms as $term) {
       $term_names[] = $term->label();
     }
