@@ -1,0 +1,7 @@
+display:
+  default:
+    display_title: 默认
+    display_options:
+      fields:
+        id:
+          label: ID

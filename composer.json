@@ -111,7 +111,7 @@
         "npm-asset/imagesloaded": "^4.1",
         "npm-asset/masonry-layout": "^4.2",
         "oomphinc/composer-installers-extender": "^2.0",
-        "spatie/pdf-to-image": "^2.2"
+        "spatie/pdf-to-image": "^2.0"
     },
     "require-dev": {
         "drupal/config_devel": "^1.7",

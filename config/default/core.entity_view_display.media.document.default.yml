@@ -9,6 +9,7 @@ dependencies:
     - media.type.document
   module:
     - file
+    - media_pdf_thumbnail
 _core:
   default_config_hash: DXitcriWmE5QHvGvk2OzWouaSnXD5uipkRdAG6_pnkg
 id: media.document.default
@@ -22,7 +23,7 @@ content:
     settings:
       use_description_as_link_text: true
     third_party_settings: {  }
-    weight: 4
+    weight: 2
     region: content
   field_pdf_pages:
     type: number_integer
@@ -31,7 +32,7 @@ content:
       thousand_separator: ''
       prefix_suffix: true
     third_party_settings: {  }
-    weight: 2
+    weight: 0
     region: content
   field_size:
     type: number_integer
@@ -40,12 +41,59 @@ content:
       thousand_separator: ''
       prefix_suffix: true
     third_party_settings: {  }
-    weight: 3
+    weight: 1
+    region: content
+  thumbnail:
+    type: media_pdf_thumbnail_image_field_formatter
+    label: above
+    settings:
+      image_link: ''
+      image_style: ''
+      pdf_file_field: ''
+      pdf_page: ''
+      image_link_attributes_download: ''
+      image_link_attributes_target: ''
+      image_link_attributes_rel: ''
+      audio_page: ''
+      audio_field: ''
+      audio_enable: ''
+      audio_link: ''
+      audio_attributes_download: ''
+      audio_attributes_target: ''
+      audio_attributes_rel: ''
+      document_page: ''
+      document_field: ''
+      document_enable: ''
+      document_link: ''
+      document_attributes_download: ''
+      document_attributes_target: ''
+      document_attributes_rel: ''
+      image_page: ''
+      image_field: ''
+      image_enable: ''
+      image_attributes_download: ''
+      image_attributes_target: ''
+      image_attributes_rel: ''
+      remote_video_page: ''
+      remote_video_field: ''
+      remote_video_enable: ''
+      remote_video_link: ''
+      remote_video_attributes_download: ''
+      remote_video_attributes_target: ''
+      remote_video_attributes_rel: ''
+      video_page: ''
+      video_field: ''
+      video_enable: ''
+      video_link: ''
+      video_attributes_download: ''
+      video_attributes_target: ''
+      video_attributes_rel: ''
+    third_party_settings: {  }
+    weight: 4
     region: content
 hidden:
   created: true
   langcode: true
   name: true
   search_api_excerpt: true
-  thumbnail: true
   uid: true

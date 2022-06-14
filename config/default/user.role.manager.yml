@@ -23,6 +23,7 @@ dependencies:
     - filter
     - form_mode_control
     - media
+    - media_pdf_thumbnail
     - media_revisions_ui
     - merge_translations
     - node
@@ -53,6 +54,7 @@ permissions:
   - 'access taxonomy overview'
   - 'access toolbar'
   - 'access user profiles'
+  - 'add pdf image entity entities'
   - 'administer comment types'
   - 'administer comments'
   - 'administer content translation'
@@ -81,6 +83,7 @@ permissions:
   - 'delete own document media'
   - 'delete own image media'
   - 'delete own publication content'
+  - 'delete pdf image entity entities'
   - 'delete publication revisions'
   - 'delete terms in list'
   - 'delete terms in organisation'
@@ -98,6 +101,7 @@ permissions:
   - 'edit own page content'
   - 'edit own project content'
   - 'edit own publication content'
+  - 'edit pdf image entity entities'
   - 'edit terms in list'
   - 'edit terms in organisation'
   - 'edit terms in person'
@@ -139,5 +143,7 @@ permissions:
   - 'view page revisions'
   - 'view project revisions'
   - 'view publication revisions'
+  - 'view published pdf image entity entities'
   - 'view the administration theme'
   - 'view unpublished paragraphs'
+  - 'view unpublished pdf image entity entities'

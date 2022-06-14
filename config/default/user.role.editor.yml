@@ -16,6 +16,7 @@ dependencies:
     - file
     - filter
     - media
+    - media_pdf_thumbnail
     - media_revisions_ui
     - node
     - paragraphs
@@ -33,6 +34,7 @@ permissions:
   - 'access content overview'
   - 'access files overview'
   - 'access in-place editing'
+  - 'add pdf image entity entities'
   - 'create content translations'
   - 'create document media'
   - 'create image media'
@@ -40,6 +42,7 @@ permissions:
   - 'create terms in list'
   - 'create terms in organisation'
   - 'create terms in person'
+  - 'delete pdf image entity entities'
   - 'display eu cookie compliance popup'
   - 'edit any document media'
   - 'edit any image media'
@@ -72,5 +75,7 @@ permissions:
   - 'view own unpublished content'
   - 'view own unpublished media'
   - 'view publication revisions'
+  - 'view published pdf image entity entities'
   - 'view the administration theme'
   - 'view unpublished paragraphs'
+  - 'view unpublished pdf image entity entities'
