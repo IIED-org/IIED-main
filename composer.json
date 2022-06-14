@@ -64,6 +64,7 @@
         "drupal/chosen": "^3.0",
         "drupal/ckwordcount": "^1.0",
         "drupal/color_field": "^2.5",
+        "drupal/colorbox": "^1.10",
         "drupal/computed_field": "^3.0",
         "drupal/config_split": "^1.7",
         "drupal/core-composer-scaffold": "^9",

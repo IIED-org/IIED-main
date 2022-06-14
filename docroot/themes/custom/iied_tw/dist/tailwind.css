@@ -1869,8 +1869,12 @@ hr{
   margin-top: -0.75rem;
 }
 
-.ml-4{
-  margin-left: 1rem;
+.-mt-2{
+  margin-top: -0.5rem;
+}
+
+.-mt-4{
+  margin-top: -1rem;
 }
 
 .block{
@@ -2174,6 +2178,14 @@ hr{
   justify-content: space-between;
 }
 
+.justify-around{
+  justify-content: space-around;
+}
+
+.justify-evenly{
+  justify-content: space-evenly;
+}
+
 .gap-6{
   gap: 1.5rem;
 }
@@ -2226,6 +2238,12 @@ hr{
   --tw-space-x-reverse: 0;
   margin-right: calc(-0.75rem * var(--tw-space-x-reverse));
   margin-left: calc(-0.75rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+.space-y-6 > :not([hidden]) ~ :not([hidden]){
+  --tw-space-y-reverse: 0;
+  margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
 }
 
 .overflow-hidden{
@@ -3190,6 +3208,10 @@ hr{
     right: 1rem;
   }
 
+  .md\:order-last{
+    order: 9999;
+  }
+
   .md\:order-2{
     order: 2;
   }
@@ -3200,10 +3222,6 @@ hr{
 
   .md\:order-3{
     order: 3;
-  }
-
-  .md\:order-last{
-    order: 9999;
   }
 
   .md\:col-span-2{
