@@ -1,0 +1,36 @@
+uuid: ccda01ee-541c-48f4-90be-fa105a6513be
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.gallery.field_image_caption
+    - field.field.paragraph.gallery.field_main_image
+    - paragraphs.paragraphs_type.gallery
+  module:
+    - text
+id: paragraph.gallery.default
+targetEntityType: paragraph
+bundle: gallery
+mode: default
+content:
+  field_image_caption:
+    type: text_textarea
+    weight: 1
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_main_image:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true
