@@ -24,3 +24,6 @@ docroot/sites/default/settings.local.php
 
 # Ignore node
 */node_modules
+
+# Ignore logs
+*.log

@@ -2,20 +2,21 @@
 
 namespace Drupal\media_pdf_thumbnail\Form;
 
-use Drupal;
+use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\Messenger;
 use Drupal\Core\Messenger\MessengerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class ThumbnailGenerationSettingsForm
+ * Class PdfImageEntityPurgeForm
  *
  * @package Drupal\media_pdf_thumbnail\Form
  */
-class ThumbnailGenerationSettingsForm extends FormBase {
+class PdfImageEntityPurgeForm extends FormBase {
 
   /**
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
@@ -28,16 +29,16 @@ class ThumbnailGenerationSettingsForm extends FormBase {
   protected $messenger;
 
   /**
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   * @var \Drupal\Core\Config\ConfigFactory
    */
   protected $configFactory;
 
   /**
-   * SettingsForm constructor.
+   * PdfImageEntityPurgeForm constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   * @param \Drupal\Core\Messenger\Messenger $messenger
+   * @param \Drupal\Core\Config\ConfigFactory $configFactory
    */
   public function __construct(EntityTypeManagerInterface $entityTypeManager, MessengerInterface $messenger, ConfigFactoryInterface $configFactory) {
     $this->entityTypeManager = $entityTypeManager;
@@ -49,27 +50,21 @@ class ThumbnailGenerationSettingsForm extends FormBase {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static($container->get('entity_type.manager'),
-      $container->get('messenger'),
-      $container->get('config.factory'));
+    return new static($container->get('entity_type.manager'), $container->get('messenger'), $container->get('config.factory'));
   }
 
   /**
-   * RegenerateThumbnails.
-   *
-   * @param $mid
-   *
+   * @param $id
    * @param $context
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public static function regenerateThumbnail($mid, &$context) {
-    $media = Drupal::entityTypeManager()->getStorage('media')->load($mid);
-    $media->save();
-    $context['message'] = 'Processing - ' . $media->label();
-    $context['results'][] = $media->label();
+  public static function execute($id, &$context) {
+    $entity = \Drupal::entityTypeManager()->getStorage('pdf_image_entity')->load($id);
+    $context['message'] = 'Processing - ' . $entity->id();
+    $context['results'][] = $entity->id();
+    $entity->delete();
   }
 
   /**
@@ -84,13 +79,13 @@ class ThumbnailGenerationSettingsForm extends FormBase {
    */
   public static function finishedCallback($success, $results, $operations) {
     if ($success) {
-      $message = Drupal::translation()->formatPlural(count($results),
+      $message = \Drupal::translation()->formatPlural(count($results),
         'One task processed.',
         '@count tasks processed.');
-      Drupal::messenger()->addMessage($message);
+      \Drupal::messenger()->addMessage($message);
     }
     else {
-      Drupal::messenger()->addError(t('Finished with an error.'));
+      \Drupal::messenger()->addError(t('Finished with an error.'));
     }
   }
 
@@ -98,17 +93,18 @@ class ThumbnailGenerationSettingsForm extends FormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'thumbnail_generation_settings_form';
+    return 'pdf_image_entity_purge_form';
   }
 
   /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+
     $form['submit'] = [
       '#type' => 'submit',
-      '#value' => $this->t('Regenerate thumbnails'),
-      '#description' => $this->t('Regenerate thumbnail images for all media entities.'),
+      '#value' => $this->t('Clean'),
+      '#description' => $this->t('Submitting this form will delete all PDF entities and image files.'),
     ];
 
     return $form;
@@ -125,45 +121,28 @@ class ThumbnailGenerationSettingsForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $data = $this->configFactory->get('media_pdf_thumbnail.bundles.settings')
-      ->getRawData();
-    $bundles = [];
-
-    foreach ($data as $name => $item) {
-      $bundle = substr($name, 0, strpos($name, '_field'));
-      if (!empty($data[$bundle . '_enable'])) {
-        $bundles[] = $bundle;
-      }
-    }
-
-    if (empty($bundles)) {
-      return;
-    }
-
-    $mids = $this->entityTypeManager->getStorage('media')
-      ->getQuery()
-      ->condition('bundle', $bundles, 'IN')
-      ->execute();
 
     $operations = [];
 
-    foreach ($mids as $mid) {
+    $ids = \Drupal::entityTypeManager()->getStorage('pdf_image_entity')->getQuery()->execute();
+
+    foreach ($ids as $id) {
       $operations[] = [
-        'Drupal\media_pdf_thumbnail\Form\ThumbnailGenerationSettingsForm::regenerateThumbnail',
-        [$mid],
+        'Drupal\media_pdf_thumbnail\Form\PdfImageEntityPurgeForm::execute',
+        [$id],
       ];
     }
 
     $batch = [
-      'title' => t('Regenerates media thumbnails'),
+      'title' => t('Delete PDF image'),
       'operations' => $operations,
-      'init_message' => t('Thumbnail creating process is starting.'),
+      'init_message' => t('Task creating process is starting.'),
       'progress_message' => t('Processed @current out of @total. Estimated time: @estimate.'),
       'error_message' => t('An error occurred during processing'),
-      'finished' => '\Drupal\media_pdf_thumbnail\Form\ThumbnailGenerationSettingsForm::finishedCallback',
+      'finished' => '\Drupal\media_pdf_thumbnail\Form\PdfImageEntityPurgeForm::finishedCallback',
     ];
 
-    $batch['operations'] = batch_set($batch);
+    batch_set($batch);
   }
 
 }
