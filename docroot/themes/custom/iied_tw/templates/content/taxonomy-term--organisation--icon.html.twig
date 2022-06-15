@@ -25,7 +25,27 @@
 #}
 
 
-    <a href="#">{{ content.field_logo }}</a>
-    
+{% if content.field_url %}
+<a class="flex items-center justify-center pb-6" href="{{ content.field_url[0]['#url'] }}">{{ content.field_logo.0 }}</a>
+{% endif %}
 
 
+
+
+
+{#
+{% set url = {{ content.field_url[0]['#url'] }} %}
+<a class="block object-contain h-12" href="{{ url }}">
+  {% for item in items %}
+
+      <div class="flex items-center justify-center">
+    <a class="m-1 btn btn-secondary btn-lg" href="{{ item.content['#url'] }}">{{ item.content['#title']}}</a>
+  {% endfor %}
+  <div class="1">{{ content.field_url.0.value }}</div>
+<div class="2">{{ content.field_url.uri }}</div>
+<div class="3">{{ content.field_url.0.url }}</div>
+<div class="4">{{ content.field_url[0]['#url'] }}</div>
+<div class="5">{{ node.field_url.uri }}</div>
+<div class="6">{{ node.field_url.0.url }}</div>
+<div class="7">{{ node.field_url[0]['#url'] }}</div>
+  #}
