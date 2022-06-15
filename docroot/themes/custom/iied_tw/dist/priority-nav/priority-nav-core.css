@@ -30,12 +30,12 @@
 }
 
 .priority-nav__dropdown {
-  /* position: absolute; */
-  position: relative;
+  position: absolute;
   display: flex;
   flex-wrap: wrap;
   visibility: hidden;
   height: 0;
+  background-color: #E0F6FB;
 }
 
 .priority-nav__dropdown.show {
@@ -46,7 +46,6 @@
 .priority-nav__dropdown-toggle {
   visibility: hidden;
   position: absolute;
-  right: 0;
 }
 
 .priority-nav-is-visible {
