@@ -1,0 +1,33 @@
+uuid: 8e1a4b07-da89-4d41-9803-3dc9980f203f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.logo_block.field_organisation_logo
+    - paragraphs.paragraphs_type.logo_block
+  module:
+    - ds
+id: paragraph.logo_block.default
+targetEntityType: paragraph
+bundle: logo_block
+mode: default
+content:
+  field_organisation_logo:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: icon
+      link: false
+    third_party_settings:
+      ds:
+        ds_limit: ''
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

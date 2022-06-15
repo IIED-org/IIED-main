@@ -1,0 +1,36 @@
+uuid: 12cb9e8b-a5d0-4f0b-9198-da9ca4ed9db3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.modal_image.field_image
+    - field.field.paragraph.modal_image.field_image_caption
+    - image.style.thumbnail
+    - paragraphs.paragraphs_type.modal_image
+  module:
+    - image
+    - text
+id: paragraph.modal_image.default
+targetEntityType: paragraph
+bundle: modal_image
+mode: default
+content:
+  field_image:
+    type: image_image
+    weight: 0
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+  field_image_caption:
+    type: text_textarea
+    weight: 1
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

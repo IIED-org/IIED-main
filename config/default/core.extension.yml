@@ -22,6 +22,7 @@ module:
   ckwordcount: 0
   color: 0
   color_field: 0
+  colorbox: 0
   comment: 0
   components: 0
   computed_field: 0

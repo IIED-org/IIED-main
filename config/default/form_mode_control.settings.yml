@@ -58,3 +58,7 @@
 'use  The form mode default linked to  block_content entity( collection_card )': block_content.collection_card.default
 'use  The form mode default linked to  paragraph entity( timeline )': paragraph.timeline.default
 'use  The form mode default linked to  block_content entity( alert )': block_content.alert.default
+'use  The form mode default linked to  block_content entity( banner )': block_content.banner.default
+'use  The form mode default linked to  paragraph entity( gallery )': paragraph.gallery.default
+'use  The form mode default linked to  paragraph entity( modal_image )': paragraph.modal_image.default
+'use  The form mode default linked to  paragraph entity( logo_block )': paragraph.logo_block.default

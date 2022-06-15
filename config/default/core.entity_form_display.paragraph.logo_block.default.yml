@@ -1,0 +1,25 @@
+uuid: b00fee6d-f674-4936-a678-3084f0d4ff7d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.logo_block.field_organisation_logo
+    - paragraphs.paragraphs_type.logo_block
+id: paragraph.logo_block.default
+targetEntityType: paragraph
+bundle: logo_block
+mode: default
+content:
+  field_organisation_logo:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

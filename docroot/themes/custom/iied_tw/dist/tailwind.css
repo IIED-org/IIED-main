@@ -1741,6 +1741,10 @@ hr{
   margin: 0.5rem;
 }
 
+.m-1{
+  margin: 0.25rem;
+}
+
 .my-3{
   margin-top: 0.75rem;
   margin-bottom: 0.75rem;
@@ -1812,16 +1816,16 @@ hr{
   margin-right: 0.5rem;
 }
 
+.mb-12{
+  margin-bottom: 3rem;
+}
+
 .mb-3{
   margin-bottom: 0.75rem;
 }
 
 .mb-2{
   margin-bottom: 0.5rem;
-}
-
-.mb-12{
-  margin-bottom: 3rem;
 }
 
 .ml-10{
@@ -1862,6 +1866,10 @@ hr{
 
 .mr-1{
   margin-right: 0.25rem;
+}
+
+.-mt-4{
+  margin-top: -1rem;
 }
 
 .-mt-3{
@@ -2048,6 +2056,10 @@ hr{
   min-width: fit-content;
 }
 
+.max-w-screen-md{
+  max-width: 768px;
+}
+
 .max-w-none{
   max-width: none;
 }
@@ -2121,8 +2133,16 @@ hr{
   grid-auto-flow: row dense;
 }
 
+.grid-cols-1{
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
 .grid-cols-2{
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.flex-row{
+  flex-direction: row;
 }
 
 .flex-col{
@@ -2161,16 +2181,20 @@ hr{
   justify-content: space-between;
 }
 
-.gap-2{
-  gap: 0.5rem;
-}
-
 .gap-6{
   gap: 1.5rem;
 }
 
+.gap-2{
+  gap: 0.5rem;
+}
+
 .gap-1{
   gap: 0.25rem;
+}
+
+.gap-10{
+  gap: 2.5rem;
 }
 
 .space-x-4 > :not([hidden]) ~ :not([hidden]){
@@ -2274,16 +2298,16 @@ hr{
   border-bottom-width: 2px;
 }
 
+.border-b{
+  border-bottom-width: 1px;
+}
+
 .border-b-0{
   border-bottom-width: 0px;
 }
 
 .border-b-4{
   border-bottom-width: 4px;
-}
-
-.border-b{
-  border-bottom-width: 1px;
 }
 
 .border-l-2{
@@ -2300,6 +2324,11 @@ hr{
   border-color: rgb(255 255 255 / var(--tw-border-opacity));
 }
 
+.border-iiedblue-500{
+  --tw-border-opacity: 1;
+  border-color: rgb(0 179 223 / var(--tw-border-opacity));
+}
+
 .border-iiedgreen-500{
   --tw-border-opacity: 1;
   border-color: rgb(170 192 44 / var(--tw-border-opacity));
@@ -2313,11 +2342,6 @@ hr{
 .border-iiedorange-500{
   --tw-border-opacity: 1;
   border-color: rgb(252 179 22 / var(--tw-border-opacity));
-}
-
-.border-iiedblue-500{
-  --tw-border-opacity: 1;
-  border-color: rgb(0 179 223 / var(--tw-border-opacity));
 }
 
 .border-iiedpink-500{
@@ -2395,6 +2419,11 @@ hr{
   fill: #fff;
 }
 
+.object-contain{
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
 .object-cover{
   -o-object-fit: cover;
      object-fit: cover;
@@ -2409,12 +2438,12 @@ hr{
   padding: 1rem;
 }
 
-.p-8{
-  padding: 2rem;
-}
-
 .p-2{
   padding: 0.5rem;
+}
+
+.p-8{
+  padding: 2rem;
 }
 
 .px-3{
@@ -2427,6 +2456,11 @@ hr{
   padding-bottom: 0.5rem;
 }
 
+.px-6{
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
 .py-6{
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
@@ -2435,11 +2469,6 @@ hr{
 .px-4{
   padding-left: 1rem;
   padding-right: 1rem;
-}
-
-.px-6{
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
 }
 
 .py-4{
@@ -2758,6 +2787,11 @@ hr{
   border-color: rgb(0 179 223 / var(--tw-border-opacity));
 }
 
+.hover\:border-iiedorange-600:hover{
+  --tw-border-opacity: 1;
+  border-color: rgb(242 169 12 / var(--tw-border-opacity));
+}
+
 .hover\:bg-gray-200:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(229 231 235 / var(--tw-bg-opacity));
@@ -2831,6 +2865,10 @@ hr{
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
 }
 
+.group:hover .group-hover\:block{
+  display: block;
+}
+
 .group:hover .group-hover\:-rotate-2{
   --tw-rotate: -2deg;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
@@ -2863,6 +2901,10 @@ hr{
 }
 
 @media (min-width: 640px){
+  .sm\:visible{
+    visibility: visible;
+  }
+
   .sm\:col-span-2{
     grid-column: span 2 / span 2;
   }
@@ -3172,6 +3214,10 @@ hr{
     right: 1rem;
   }
 
+  .md\:order-last{
+    order: 9999;
+  }
+
   .md\:order-2{
     order: 2;
   }
@@ -3292,6 +3338,11 @@ hr{
 
   .md\:text-left{
     text-align: left;
+  }
+
+  .md\:text-lg{
+    font-size: 1.125rem;
+    line-height: 1.75rem;
   }
 }
 
@@ -3832,6 +3883,10 @@ hr{
 
   .lg\:grid-cols-2{
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lg\:grid-cols-8{
+    grid-template-columns: repeat(8, minmax(0, 1fr));
   }
 
   .lg\:flex-row{
