@@ -1826,16 +1826,16 @@ hr{
   margin: auto;
 }
 
+.m-1{
+  margin: 0.25rem;
+}
+
 .m-4{
   margin: 1rem;
 }
 
 .m-2{
   margin: 0.5rem;
-}
-
-.m-1{
-  margin: 0.25rem;
 }
 
 .my-3{
@@ -2113,16 +2113,16 @@ hr{
   width: 2.5rem;
 }
 
+.w-full{
+  width: 100%;
+}
+
 .w-4{
   width: 1rem;
 }
 
 .w-5{
   width: 1.25rem;
-}
-
-.w-full{
-  width: 100%;
 }
 
 .w-3{
@@ -2284,10 +2284,6 @@ hr{
 
 .gap-1{
   gap: 0.25rem;
-}
-
-.gap-10{
-  gap: 2.5rem;
 }
 
 .space-x-4 > :not([hidden]) ~ :not([hidden]){
@@ -2945,10 +2941,6 @@ hr{
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
-.focus\:w-full:focus{
-  width: 100%;
-}
-
 .focus\:outline-none:focus{
   outline: 2px solid transparent;
   outline-offset: 2px;
@@ -3378,10 +3370,6 @@ hr{
 
   .md\:w-48{
     width: 12rem;
-  }
-
-  .md\:w-2{
-    width: 0.5rem;
   }
 
   .md\:w-1\/4{
@@ -3945,10 +3933,6 @@ hr{
     max-height: 24rem;
   }
 
-  .lg\:w-full{
-    width: 100%;
-  }
-
   .lg\:w-1\/4{
     width: 25%;
   }
@@ -3959,6 +3943,10 @@ hr{
 
   .lg\:w-48{
     width: 12rem;
+  }
+
+  .lg\:w-full{
+    width: 100%;
   }
 
   .lg\:max-w-screen-lg{
@@ -3981,10 +3969,6 @@ hr{
 
   .lg\:grid-cols-2{
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .lg\:grid-cols-8{
-    grid-template-columns: repeat(8, minmax(0, 1fr));
   }
 
   .lg\:flex-row{
