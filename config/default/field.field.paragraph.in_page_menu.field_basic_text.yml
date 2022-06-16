@@ -1,0 +1,21 @@
+uuid: 1a3410e5-8d94-42dc-bd2d-2f24763c5032
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_basic_text
+    - paragraphs.paragraphs_type.in_page_menu
+  module:
+    - text
+id: paragraph.in_page_menu.field_basic_text
+field_name: field_basic_text
+entity_type: paragraph
+bundle: in_page_menu
+label: 'Basic text'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long
