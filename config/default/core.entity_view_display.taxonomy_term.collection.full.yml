@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.taxonomy_term.full
     - field.field.taxonomy_term.collection.field_about
+    - field.field.taxonomy_term.collection.field_badge
     - field.field.taxonomy_term.collection.field_containers
     - field.field.taxonomy_term.collection.field_downloads
     - field.field.taxonomy_term.collection.field_overview
@@ -19,6 +20,7 @@ dependencies:
   module:
     - entity_reference_revisions
     - layout_builder
+    - layout_builder_restrictions
     - text
     - views
   theme:
@@ -116,6 +118,36 @@ third_party_settings:
             weight: 0
             additional: {  }
         third_party_settings: {  }
+  layout_builder_restrictions:
+    allowed_block_categories: {  }
+    entity_view_mode_restriction:
+      allowed_layouts:
+        - tw-1-2-col-grid
+        - tw-1-2-4-col-grid
+        - tw-container
+        - tw-tabs
+      blacklisted_blocks: {  }
+      whitelisted_blocks: {  }
+      restricted_categories:
+        - '@entity'
+        - 'Better Social Sharing Buttons'
+        - 'Chaos Tools'
+        - 'Content fields'
+        - Dashboard
+        - Devel
+        - Facets
+        - 'Facets summary (Experimental)'
+        - Forms
+        - Geolocation
+        - Help
+        - 'IIED Utilities'
+        - 'Lists (Views)'
+        - Menus
+        - 'Read Only Mode'
+        - 'Responsive menu'
+        - System
+        - User
+        - core
 id: taxonomy_term.collection.full
 targetEntityType: taxonomy_term
 bundle: collection
@@ -175,6 +207,7 @@ content:
     weight: 6
     region: content
 hidden:
+  field_badge: true
   field_overview: true
   langcode: true
   layout_builder__layout: true

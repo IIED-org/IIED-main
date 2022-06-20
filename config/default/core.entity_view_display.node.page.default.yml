@@ -5,11 +5,11 @@ dependencies:
   config:
     - field.field.node.page.body
     - field.field.node.page.field_content
+    - field.field.node.page.field_image_caption
     - field.field.node.page.field_main_image
     - field.field.node.page.field_rows
     - node.type.page
   module:
-    - ds
     - entity_reference_revisions
     - layout_builder
     - text
@@ -41,6 +41,13 @@ content:
     third_party_settings: {  }
     weight: 105
     region: ds_content
+  field_image_caption:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 106
+    region: content
   field_main_image:
     type: entity_reference_label
     label: above

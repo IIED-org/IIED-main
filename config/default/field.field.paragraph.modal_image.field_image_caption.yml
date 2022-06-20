@@ -1,0 +1,21 @@
+uuid: aadf4b3e-61a2-428c-b202-d782a22012b8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_image_caption
+    - paragraphs.paragraphs_type.modal_image
+  module:
+    - text
+id: paragraph.modal_image.field_image_caption
+field_name: field_image_caption
+entity_type: paragraph
+bundle: modal_image
+label: Caption
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

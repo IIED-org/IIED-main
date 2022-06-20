@@ -1,0 +1,21 @@
+uuid: c42c31ee-d125-40e3-8334-3443a3ae2c05
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_image_caption
+    - node.type.page
+  module:
+    - text
+id: node.page.field_image_caption
+field_name: field_image_caption
+entity_type: node
+bundle: page
+label: 'Image caption'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

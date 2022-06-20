@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'bc6725a29c200acbf2acd790926db422176c6347',
+        'reference' => '84f7b8245909ebcddf2d5439ef72edd036a72647',
         'name' => 'drupal/recommended-project',
         'dev' => true,
     ),
@@ -611,6 +611,15 @@
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/color_field',
             'aliases' => array(),
             'reference' => '8.x-2.5',
+            'dev_requirement' => false,
+        ),
+        'drupal/colorbox' => array(
+            'pretty_version' => '1.10.0',
+            'version' => '1.10.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/colorbox',
+            'aliases' => array(),
+            'reference' => '8.x-1.10',
             'dev_requirement' => false,
         ),
         'drupal/comment' => array(
@@ -1761,7 +1770,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'bc6725a29c200acbf2acd790926db422176c6347',
+            'reference' => '84f7b8245909ebcddf2d5439ef72edd036a72647',
             'dev_requirement' => false,
         ),
         'drupal/redirect' => array(

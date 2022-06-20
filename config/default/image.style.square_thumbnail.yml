@@ -1,0 +1,15 @@
+uuid: e3d0d526-2044-4c73-9cb0-344d4318189f
+langcode: en
+status: true
+dependencies: {  }
+name: square_thumbnail
+label: 'square thumbnail (200x200)'
+effects:
+  04b8db99-9131-431d-9a79-c2494a172858:
+    uuid: 04b8db99-9131-431d-9a79-c2494a172858
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 200
+      height: 200
+      anchor: center-center

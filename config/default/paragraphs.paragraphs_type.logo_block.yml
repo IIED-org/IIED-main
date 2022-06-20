@@ -1,0 +1,10 @@
+uuid: 61734e53-4371-43af-a01e-3f97f973b13b
+langcode: en
+status: true
+dependencies: {  }
+id: logo_block
+label: 'Logo block'
+icon_uuid: null
+icon_default: null
+description: 'Add series of partner logos'
+behavior_plugins: {  }

@@ -122,17 +122,21 @@
               , {{ content.field_pdf_pages.0 }} pages
                     {% endif %}  
         </div>
+        {% if node.field_lit_code.0.value != 'X' %}
           <div class="mb-6">
             <div class="md:flex">
               <div class="flex flex-col items-center justify-center">
                 {% include '@iied_tw/partials/_button.html.twig' with {'button_title':'Download', 'url': node.field_media | file_url} %}
                 {% set size = content.field_media[0]["field_size"][0]["#markup"] %}
-                <div>PDF ({{ (size/1048576)|number_format(2) }} MB)
+                <div class="-mt-4">PDF ({{ (size/1048576)|number_format(2) }} MB)
                 </div>
               </div>
             </div>
           </div>
+        {% endif %}
       </div>
+
+      
 
 {#  order 1  #}  
       <div class="mb-4 md:order-1 md:row-span-2 md:mr-4">
@@ -153,7 +157,9 @@
         <div class="prose prose-base lg:prose-lg lg:max-w-max">
           {{ content.body }}
       
+          {{ content.field_external_url }}
           {{ content.field_iied_url }}
+          
           </div>
     {# cite #}
     {# TODO: Rewrite in twig instead of using views! #}

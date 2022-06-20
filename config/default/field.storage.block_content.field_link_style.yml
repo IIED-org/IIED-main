@@ -1,0 +1,30 @@
+uuid: faba7b79-8c5f-45e6-890e-1c92b834a5f6
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_content
+    - options
+id: block_content.field_link_style
+field_name: field_link_style
+entity_type: block_content
+type: list_integer
+settings:
+  allowed_values:
+    -
+      value: 1
+      label: 'Fill button'
+    -
+      value: 2
+      label: 'Outline button'
+    -
+      value: 3
+      label: 'Mini button'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
