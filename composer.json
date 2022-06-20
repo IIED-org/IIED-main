@@ -73,7 +73,8 @@
         "drupal/core-vendor-hardening": "^8.8",
         "drupal/ctools": "^3.4",
         "drupal/datalayer": "^1.0@beta",
-        "drupal/default_content": "^2.0",
+        "drupal/default_content": "^1",
+        "drupal/default_content_deploy": "^2.0",
         "drupal/devel_kint_extras": "^1.0",
         "drupal/draggableviews": "^2.0",
         "drupal/dropdown_language": "^2.6",
@@ -242,8 +243,7 @@
             "The language of content entities incorrectly falls back to the default language...":"https://www.drupal.org/files/issues/2021-09-16/3061761-46.patch"
           },
           "drupal/facets": {
-            "AJAX facets broken": "https://www.drupal.org/files/issues/2022-04-21/facets-ajax_not_working-3052574-146.patch",
-            "Show search term in summary": "https://www.drupal.org/files/issues/2022-03-23/facets-current_search_string-2979223-48.patch"
+            "AJAX facets broken": "https://www.drupal.org/files/issues/2022-04-21/facets-ajax_not_working-3052574-146.patch"
           },
           "drupal/ds": {
             "Provide entity context to DS block fields":"https://www.drupal.org/files/issues/2020-10-12/ds-content_entity-2939322-14.patch"
@@ -253,6 +253,9 @@
           },
           "drupal/readonlymode": {
             "Got fatal error when running this module":"https://www.drupal.org/files/issues/2020-12-23/readonlymode-string_not_array-3115119-9.patch"
+          },
+          "drupal/taxonomy_import": {
+            "CSVs not detected properly":"https://www.drupal.org/files/issues/2021-12-17/3255009-csvs_not_detected-2.patch"
           }
         }
     }

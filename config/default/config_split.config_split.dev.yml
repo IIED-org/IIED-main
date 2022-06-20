@@ -8,6 +8,7 @@ description: 'Development and staging environment settings'
 weight: 0
 folder: ../config/splits/dev
 module:
+  dblog: 0
   devel: 0
   devel_generate: 0
   migrate_devel: 0

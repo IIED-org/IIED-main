@@ -5231,30 +5231,27 @@
         },
         {
             "name": "drupal/default_content",
-            "version": "2.0.0-alpha1",
-            "version_normalized": "2.0.0.0-alpha1",
+            "version": "1.0.0-alpha9",
+            "version_normalized": "1.0.0.0-alpha9",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/default_content.git",
-                "reference": "2.0.0-alpha1"
+                "reference": "8.x-1.0-alpha9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/default_content-2.0.0-alpha1.zip",
-                "reference": "2.0.0-alpha1",
-                "shasum": "0d534ab8e44786a352e24c7cec3dc06bef155f66"
+                "url": "https://ftp.drupal.org/files/projects/default_content-8.x-1.0-alpha9.zip",
+                "reference": "8.x-1.0-alpha9",
+                "shasum": "e8d5cc6ae96b14e882852512fbf5887e752146a0"
             },
             "require": {
                 "drupal/core": "^8.7.7 || ^9"
             },
-            "require-dev": {
-                "drupal/paragraphs": "^1"
-            },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-alpha1",
-                    "datestamp": "1595072288",
+                    "version": "8.x-1.0-alpha9",
+                    "datestamp": "1588280141",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -5264,7 +5261,8 @@
                     "services": {
                         "drush.services.yml": "^9"
                     }
-                }
+                },
+                "patches_applied": []
             },
             "installation-source": "dist",
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5307,6 +5305,73 @@
                 "source": "https://git.drupalcode.org/project/default_content"
             },
             "install-path": "../../docroot/modules/contrib/default_content"
+        },
+        {
+            "name": "drupal/default_content_deploy",
+            "version": "2.0.0",
+            "version_normalized": "2.0.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/default_content_deploy.git",
+                "reference": "2.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/default_content_deploy-2.0.0.zip",
+                "reference": "2.0.0",
+                "shasum": "b382dd658965a37bbe6b95788209843f0bb1fd43"
+            },
+            "require": {
+                "drupal/core": "^9.2 || ^10.0",
+                "php": ">=7.3",
+                "rogervila/array-diff-multidimensional": "^2.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.0",
+                    "datestamp": "1640711736",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^9 || ^10"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Martin Klíma",
+                    "homepage": "https://www.drupal.org/user/340058",
+                    "email": "martin.klima@hqis.cz"
+                },
+                {
+                    "name": "Jakub Hnilička",
+                    "homepage": "https://www.drupal.org/user/2784335"
+                },
+                {
+                    "name": "Radoslav Terezka",
+                    "homepage": "https://www.drupal.org/user/3289357"
+                },
+                {
+                    "name": "Markus Kalkbrenner",
+                    "homepage": "https://www.drupal.org/user/124705"
+                }
+            ],
+            "description": "Drupal 9 module for exporting and deploying content in *.json files.",
+            "homepage": "https://www.drupal.org/project/default_content_deploy",
+            "support": {
+                "source": "https://git.drupalcode.org/project/default_content_deploy"
+            },
+            "install-path": "../../docroot/modules/contrib/default_content_deploy"
         },
         {
             "name": "drupal/devel",
@@ -10206,6 +10271,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "CSVs not detected properly": "https://www.drupal.org/files/issues/2021-12-17/3255009-csvs_not_detected-2.patch"
                 }
             },
             "installation-source": "dist",
@@ -16136,6 +16204,52 @@
                 }
             ],
             "install-path": "../react/promise"
+        },
+        {
+            "name": "rogervila/array-diff-multidimensional",
+            "version": "2.1.0",
+            "version_normalized": "2.1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rogervila/array-diff-multidimensional.git",
+                "reference": "d5afb18bfc256bf9d792594fa998f7af68179db0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rogervila/array-diff-multidimensional/zipball/d5afb18bfc256bf9d792594fa998f7af68179db0",
+                "reference": "d5afb18bfc256bf9d792594fa998f7af68179db0",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8 || ^5.0 || ^6.0 || ^7.0 || ^8.0 || ^9.0"
+            },
+            "time": "2021-10-28T08:07:19+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Rogervila\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Roger Vilà",
+                    "email": "rogervila@me.com"
+                }
+            ],
+            "description": "Compare the difference between two multidimensional arrays",
+            "support": {
+                "issues": "https://github.com/rogervila/array-diff-multidimensional/issues",
+                "source": "https://github.com/rogervila/array-diff-multidimensional/tree/2.1.0"
+            },
+            "install-path": "../rogervila/array-diff-multidimensional"
         },
         {
             "name": "sebastian/cli-parser",

@@ -9,7 +9,7 @@ default_content:
   node:
     - 0e45d92f-1919-47cd-8b60-964a8a761292
 
-# Information added by Drupal.org packaging script on 2020-07-18
-version: '2.0.0-alpha1'
+# Information added by Drupal.org packaging script on 2020-04-30
+version: '8.x-1.0-alpha9'
 project: 'default_content'
-datestamp: 1595072291
+datestamp: 1588280143

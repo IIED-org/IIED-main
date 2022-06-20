@@ -36,6 +36,7 @@ module:
   ctools_block: 0
   datetime: 0
   default_content: 0
+  default_content_deploy: 0
   devel_kint_extras: 0
   draggableviews: 0
   draggableviews_demo: 0

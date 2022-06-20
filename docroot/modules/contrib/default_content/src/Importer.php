@@ -5,13 +5,9 @@ namespace Drupal\default_content;
 use Drupal\Component\Graph\Graph;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\File\FileSystemInterface;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Session\AccountSwitcherInterface;
 use Drupal\default_content\Event\DefaultContentEvents;
 use Drupal\default_content\Event\ImportEvent;
-use Drupal\default_content\Normalizer\ContentEntityNormalizerInterface;
-use Drupal\file\FileInterface;
 use Drupal\hal\LinkManager\LinkManagerInterface;
 use Drupal\user\EntityOwnerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -74,11 +70,11 @@ class Importer implements ImporterInterface {
   protected $eventDispatcher;
 
   /**
-   * The content file storage.
+   * The file system scanner.
    *
-   * @var \Drupal\default_content\ContentFileStorageInterface
+   * @var \Drupal\default_content\ScannerInterface
    */
-  protected $contentFileStorage;
+  protected $scanner;
 
   /**
    * The account switcher.
@@ -86,13 +82,6 @@ class Importer implements ImporterInterface {
    * @var \Drupal\Core\Session\AccountSwitcherInterface
    */
   protected $accountSwitcher;
-
-  /**
-   * The YAML normalizer.
-   *
-   * @var \Drupal\default_content\Normalizer\ContentEntityNormalizer
-   */
-  protected $contentEntityNormalizer;
 
   /**
    * Constructs the default content manager.
@@ -105,24 +94,21 @@ class Importer implements ImporterInterface {
    *   The link manager service.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
    *   The event dispatcher.
-   * @param \Drupal\default_content\ContentFileStorageInterface $content_file_storage
+   * @param \Drupal\default_content\ScannerInterface $scanner
    *   The file scanner.
    * @param string $link_domain
    *   Defines relation domain URI for entity links.
    * @param \Drupal\Core\Session\AccountSwitcherInterface $account_switcher
    *   The account switcher.
-   * @param \Drupal\default_content\Normalizer\ContentEntityNormalizerInterface $content_entity_normaler
-   *   The YAML normalizer.
    */
-  public function __construct(Serializer $serializer, EntityTypeManagerInterface $entity_type_manager, LinkManagerInterface $link_manager, EventDispatcherInterface $event_dispatcher, ContentFileStorageInterface $content_file_storage, $link_domain, AccountSwitcherInterface $account_switcher, ContentEntityNormalizerInterface $content_entity_normaler) {
+  public function __construct(Serializer $serializer, EntityTypeManagerInterface $entity_type_manager, LinkManagerInterface $link_manager, EventDispatcherInterface $event_dispatcher, ScannerInterface $scanner, $link_domain, AccountSwitcherInterface $account_switcher) {
     $this->serializer = $serializer;
     $this->entityTypeManager = $entity_type_manager;
     $this->linkManager = $link_manager;
     $this->eventDispatcher = $event_dispatcher;
-    $this->contentFileStorage = $content_file_storage;
+    $this->scanner = $scanner;
     $this->linkDomain = $link_domain;
     $this->accountSwitcher = $account_switcher;
-    $this->contentEntityNormalizer = $content_entity_normaler;
   }
 
   /**
@@ -145,27 +131,17 @@ class Importer implements ImporterInterface {
         if (!file_exists($folder . '/' . $entity_type_id)) {
           continue;
         }
-        $files = $this->contentFileStorage->scan($folder . '/' . $entity_type_id);
+        $files = $this->scanner->scan($folder . '/' . $entity_type_id);
         // Default content uses drupal.org as domain.
         // @todo Make this use a uri like default-content:.
         $this->linkManager->setLinkDomain($this->linkDomain);
         // Parse all of the files and sort them in order of dependency.
         foreach ($files as $file) {
           $contents = $this->parseFile($file);
-
-          $extension = pathinfo($file->uri, PATHINFO_EXTENSION);
-
           // Decode the file contents.
-          if ($extension == 'json') {
-            $decoded = $this->serializer->decode($contents, 'hal_json');
-            // Get the link to this entity.
-            $item_uuid = $decoded['uuid'][0]['value'];
-          }
-          else {
-            $decoded = Yaml::decode($contents);
-            // Get the UUID to this entity.
-            $item_uuid = $decoded['_meta']['uuid'];
-          }
+          $decoded = $this->serializer->decode($contents, 'hal_json');
+          // Get the link to this entity.
+          $item_uuid = $decoded['uuid'][0]['value'];
 
           // Throw an exception when this UUID already exists.
           if (isset($file_map[$item_uuid])) {
@@ -181,27 +157,14 @@ class Importer implements ImporterInterface {
           // Create a vertex for the graph.
           $vertex = $this->getVertex($item_uuid);
           $this->graph[$vertex->id]['edges'] = [];
-          if ($extension == 'json') {
-            if (empty($decoded['_embedded'])) {
-              // No dependencies to resolve.
-              continue;
-            }
-            // Here we need to resolve our dependencies:
-            foreach ($decoded['_embedded'] as $embedded) {
-              foreach ($embedded as $item) {
-                $uuid = $item['uuid'][0]['value'];
-                $edge = $this->getVertex($uuid);
-                $this->graph[$vertex->id]['edges'][$edge->id] = TRUE;
-              }
-            }
+          if (empty($decoded['_embedded'])) {
+            // No dependencies to resolve.
+            continue;
           }
-          else {
-            if (empty($decoded['_meta']['depends'])) {
-              // No dependencies to resolve.
-              continue;
-            }
-            // Here we need to resolve our dependencies:
-            foreach (array_keys($decoded['_meta']['depends']) as $uuid) {
+          // Here we need to resolve our dependencies:
+          foreach ($decoded['_embedded'] as $embedded) {
+            foreach ($embedded as $item) {
+              $uuid = $item['uuid'][0]['value'];
               $edge = $this->getVertex($uuid);
               $this->graph[$vertex->id]['edges'][$edge->id] = TRUE;
             }
@@ -217,34 +180,13 @@ class Importer implements ImporterInterface {
           $entity_type_id = $file->entity_type_id;
           $class = $this->entityTypeManager->getDefinition($entity_type_id)->getClass();
           $contents = $this->parseFile($file);
-          $extension = pathinfo($file->uri, PATHINFO_EXTENSION);
-          if ($extension == 'json') {
-            $entity = $this->serializer->deserialize($contents, $class, 'hal_json', ['request_method' => 'POST']);
-          }
-          else {
-            $entity = $this->contentEntityNormalizer->denormalize(Yaml::decode($contents));
-          }
-
+          $entity = $this->serializer->deserialize($contents, $class, 'hal_json', ['request_method' => 'POST']);
           $entity->enforceIsNew(TRUE);
           // Ensure that the entity is not owned by the anonymous user.
           if ($entity instanceof EntityOwnerInterface && empty($entity->getOwnerId())) {
             $entity->setOwner($root_user);
           }
-
-          // If a file exists in the same folder, copy it to the designed
-          // target URI.
-          if ($entity instanceof FileInterface) {
-            $file_source = \dirname($file->uri) . '/' . $entity->getFilename();
-            if (\file_exists($file_source)) {
-              $target_directory = dirname($entity->getFileUri());
-              \Drupal::service('file_system')->prepareDirectory($target_directory, FileSystemInterface::CREATE_DIRECTORY);
-              $new_uri = \Drupal::service('file_system')->copy($file_source, $entity->getFileUri());
-              $entity->setFileUri($new_uri);
-            }
-          }
-
           $entity->save();
-
           $created[$entity->uuid()] = $entity;
         }
       }

@@ -1,0 +1,31 @@
+{
+  "name": "drupal/default_content_deploy",
+  "description": "Drupal 9 module for exporting and deploying content in *.json files.",
+  "type": "drupal-module",
+  "authors": [
+    {
+      "name": "Martin Klíma",
+      "email": "martin.klima@hqis.cz"
+    },
+    {
+      "name": "Jakub Hnilička"
+    },
+    {
+      "name": "Radoslav Terezka"
+    },
+    {
+      "name": "Markus Kalkbrenner"
+    }
+  ],
+  "require": {
+    "php": ">=7.3",
+    "rogervila/array-diff-multidimensional": "^2.0"
+  },
+  "extra": {
+    "drush": {
+      "services": {
+        "drush.services.yml": "^9 || ^10"
+      }
+    }
+  }
+}

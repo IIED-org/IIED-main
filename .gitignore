@@ -32,4 +32,4 @@ node_modules
 *.DS_Store
 
 # Dev mode: don't include tailwind.css 
-docroot/themes/custom/iied_tw/dist/tailwind.css
+tailwind.css
