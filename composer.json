@@ -254,8 +254,8 @@
           "drupal/readonlymode": {
             "Got fatal error when running this module":"https://www.drupal.org/files/issues/2020-12-23/readonlymode-string_not_array-3115119-9.patch"
           },
-          "drupal/default_content": {
-            "Drush comand to export all items from entity with defined criteria":"https://www.drupal.org/files/issues/2021-05-16/default_content-drush8-9-export-2786479-32-alpha1.patch"
+          "drupal/taxonomy_import": {
+            "CSVs not detected properly":"https://www.drupal.org/files/issues/2021-12-17/3255009-csvs_not_detected-2.patch"
           }
         }
     }

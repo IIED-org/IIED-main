@@ -10271,6 +10271,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "CSVs not detected properly": "https://www.drupal.org/files/issues/2021-12-17/3255009-csvs_not_detected-2.patch"
                 }
             },
             "installation-source": "dist",
