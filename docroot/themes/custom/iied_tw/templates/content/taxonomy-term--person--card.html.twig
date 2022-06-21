@@ -9,7 +9,7 @@ Standard person card
           <div
             class="relative flex transition bg-white border border-gray-300 min-h-[12rem] h-full rounded-xl group-hover:shadow-lg"
           >
-            <div class="flex flex-col items-center justify-between h-full p-4">
+            <div class="flex flex-col items-center w-full h-full p-4 text-center">
               {% if content.field_author_picture[0] is not empty %}
                 <div class="m-4">
                   <img 
@@ -24,7 +24,7 @@ Standard person card
                 {% if content.field_position[0] is not empty %}
                   <p class="pb-6 text-gray-700">{{ content.field_position|render|striptags }}</p>
                 {% endif %} 
-
+         
             </div>
           </div>
         </a>
