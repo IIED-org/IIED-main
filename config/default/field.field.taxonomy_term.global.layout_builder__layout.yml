@@ -1,0 +1,21 @@
+uuid: f8fd824e-6df0-4bde-8da2-59cc4f144b59
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.layout_builder__layout
+    - taxonomy.vocabulary.global
+  module:
+    - layout_builder
+id: taxonomy_term.global.layout_builder__layout
+field_name: layout_builder__layout
+entity_type: taxonomy_term
+bundle: global
+label: Layout
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: layout_section

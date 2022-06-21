@@ -289,3 +289,9 @@ definitions:
     weight: 0
     menu_name: main
     enabled: true
+  'taxonomy_menu__menu_link:taxonomy_menu__menu_link__primary__41330':
+    parent: 'admin_toolbar_tools.extra_links:entity.paragraphs_type.delete_form.basic_text'
+    weight: 0
+    expanded: false
+    enabled: false
+    menu_name: primary
