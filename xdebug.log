@@ -1022,3 +1022,46 @@
 [3442] [Step Debug] ERR: Time-out connecting to debugging client, waited: 200 ms. Tried: 172.26.211.118:9003 (fallback through xdebug.client_host/xdebug.client_port) :-(
 [3442] Log closed at 2022-06-22 12:58:33.274281
 
+[3463] Log opened at 2022-06-22 12:59:12.143886
+[3463] [Step Debug] INFO: Checking remote connect back address.
+[3463] [Step Debug] INFO: Checking header 'HTTP_X_FORWARDED_FOR'.
+[3463] [Step Debug] INFO: Checking header 'REMOTE_ADDR'.
+[3463] [Step Debug] WARN: Could not discover client host through HTTP headers, connecting to configured address/port: 172.26.211.118:9003. :-|
+[3463] [Step Debug] ERR: Time-out connecting to debugging client, waited: 200 ms. Tried: 172.26.211.118:9003 (fallback through xdebug.client_host/xdebug.client_port) :-(
+[3463] [Step Debug] INFO: Checking remote connect back address.
+[3463] [Step Debug] INFO: Checking header 'HTTP_X_FORWARDED_FOR'.
+[3463] [Step Debug] INFO: Checking header 'REMOTE_ADDR'.
+[3463] [Step Debug] WARN: Could not discover client host through HTTP headers, connecting to configured address/port: 172.26.211.118:9003. :-|
+[3463] [Step Debug] ERR: Time-out connecting to debugging client, waited: 200 ms. Tried: 172.26.211.118:9003 (fallback through xdebug.client_host/xdebug.client_port) :-(
+[3463] [Step Debug] INFO: Checking remote connect back address.
+[3463] [Step Debug] INFO: Checking header 'HTTP_X_FORWARDED_FOR'.
+[3463] [Step Debug] INFO: Checking header 'REMOTE_ADDR'.
+[3463] [Step Debug] WARN: Could not discover client host through HTTP headers, connecting to configured address/port: 172.26.211.118:9003. :-|
+[3463] [Step Debug] ERR: Time-out connecting to debugging client, waited: 200 ms. Tried: 172.26.211.118:9003 (fallback through xdebug.client_host/xdebug.client_port) :-(
+[3463] [Step Debug] INFO: Checking remote connect back address.
+[3463] [Step Debug] INFO: Checking header 'HTTP_X_FORWARDED_FOR'.
+[3463] [Step Debug] INFO: Checking header 'REMOTE_ADDR'.
+[3463] [Step Debug] WARN: Could not discover client host through HTTP headers, connecting to configured address/port: 172.26.211.118:9003. :-|
+[3463] [Step Debug] ERR: Time-out connecting to debugging client, waited: 200 ms. Tried: 172.26.211.118:9003 (fallback through xdebug.client_host/xdebug.client_port) :-(
+[3463] [Step Debug] INFO: Checking remote connect back address.
+[3463] [Step Debug] INFO: Checking header 'HTTP_X_FORWARDED_FOR'.
+[3463] [Step Debug] INFO: Checking header 'REMOTE_ADDR'.
+[3463] [Step Debug] WARN: Could not discover client host through HTTP headers, connecting to configured address/port: 172.26.211.118:9003. :-|
+[3463] [Step Debug] ERR: Time-out connecting to debugging client, waited: 200 ms. Tried: 172.26.211.118:9003 (fallback through xdebug.client_host/xdebug.client_port) :-(
+[3463] [Step Debug] INFO: Checking remote connect back address.
+[3463] [Step Debug] INFO: Checking header 'HTTP_X_FORWARDED_FOR'.
+[3463] [Step Debug] INFO: Checking header 'REMOTE_ADDR'.
+[3463] [Step Debug] WARN: Could not discover client host through HTTP headers, connecting to configured address/port: 172.26.211.118:9003. :-|
+[3463] [Step Debug] ERR: Time-out connecting to debugging client, waited: 200 ms. Tried: 172.26.211.118:9003 (fallback through xdebug.client_host/xdebug.client_port) :-(
+[3463] [Step Debug] INFO: Checking remote connect back address.
+[3463] [Step Debug] INFO: Checking header 'HTTP_X_FORWARDED_FOR'.
+[3463] [Step Debug] INFO: Checking header 'REMOTE_ADDR'.
+[3463] [Step Debug] WARN: Could not discover client host through HTTP headers, connecting to configured address/port: 172.26.211.118:9003. :-|
+[3463] [Step Debug] ERR: Time-out connecting to debugging client, waited: 200 ms. Tried: 172.26.211.118:9003 (fallback through xdebug.client_host/xdebug.client_port) :-(
+[3463] [Step Debug] INFO: Checking remote connect back address.
+[3463] [Step Debug] INFO: Checking header 'HTTP_X_FORWARDED_FOR'.
+[3463] [Step Debug] INFO: Checking header 'REMOTE_ADDR'.
+[3463] [Step Debug] WARN: Could not discover client host through HTTP headers, connecting to configured address/port: 172.26.211.118:9003. :-|
+[3463] [Step Debug] ERR: Time-out connecting to debugging client, waited: 200 ms. Tried: 172.26.211.118:9003 (fallback through xdebug.client_host/xdebug.client_port) :-(
+[3463] Log closed at 2022-06-22 12:59:58.186671
+

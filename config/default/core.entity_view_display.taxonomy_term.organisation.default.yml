@@ -364,6 +364,25 @@ third_party_settings:
                 third_party_settings: {  }
             weight: 19
             additional: {  }
+          a1d41cdd-922c-4633-9ca7-3627e3e85396:
+            uuid: a1d41cdd-922c-4633-9ca7-3627e3e85396
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:taxonomy_term:organisation:field_logo'
+              formatter:
+                type: image
+                label: above
+                settings:
+                  image_link: ''
+                  image_style: ''
+                  image_loading:
+                    attribute: lazy
+                third_party_settings: {  }
+            weight: 20
+            additional: {  }
         third_party_settings: {  }
 id: taxonomy_term.organisation.default
 targetEntityType: taxonomy_term
@@ -421,6 +440,8 @@ content:
     settings:
       image_link: ''
       image_style: ''
+      image_loading:
+        attribute: lazy
     third_party_settings: {  }
     weight: 5
     region: content
