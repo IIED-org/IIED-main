@@ -1,0 +1,34 @@
+uuid: 7ac4c599-cd7a-4295-9169-e6cd4aff34af
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.timeline.field_timeline_date
+    - field.field.paragraph.timeline.field_timeline_entry
+    - paragraphs.paragraphs_type.timeline
+  module:
+    - text
+id: paragraph.timeline.default
+targetEntityType: paragraph
+bundle: timeline
+mode: default
+content:
+  field_timeline_date:
+    type: text_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_timeline_entry:
+    type: text_textarea
+    weight: 1
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

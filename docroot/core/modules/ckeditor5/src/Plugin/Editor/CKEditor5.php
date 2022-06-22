@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\ckeditor5\Plugin\Editor;
 
+use Drupal\ckeditor5\CKEditor5StylesheetsMessage;
 use Drupal\ckeditor5\HTMLRestrictions;
 use Drupal\ckeditor5\Plugin\CKEditor5Plugin\Heading;
 use Drupal\ckeditor5\Plugin\CKEditor5PluginDefinition;
@@ -17,6 +18,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\SubformState;
 use Drupal\Core\Form\SubformStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\ckeditor5\SmartDefaultSettings;
 use Drupal\Core\Validation\Plugin\Validation\Constraint\PrimitiveTypeConstraint;
@@ -99,6 +101,13 @@ class CKEditor5 extends EditorBase implements ContainerFactoryPluginInterface {
   protected $cache;
 
   /**
+   * The ckeditor_stylesheets message utility.
+   *
+   * @var \Drupal\ckeditor5\CKEditor5StylesheetsMessage
+   */
+  private $stylesheetsMessage;
+
+  /**
    * Constructs a CKEditor5 editor plugin.
    *
    * @param array $configuration
@@ -117,14 +126,17 @@ class CKEditor5 extends EditorBase implements ContainerFactoryPluginInterface {
    *   The smart default settings utility.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   The cache.
+   * @param \Drupal\ckeditor5\CKEditor5StylesheetsMessage $stylesheets_message
+   *   The ckeditor_stylesheets message utility.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, CKEditor5PluginManagerInterface $ckeditor5_plugin_manager, LanguageManagerInterface $language_manager, ModuleHandlerInterface $module_handler, SmartDefaultSettings $smart_default_settings, CacheBackendInterface $cache) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, CKEditor5PluginManagerInterface $ckeditor5_plugin_manager, LanguageManagerInterface $language_manager, ModuleHandlerInterface $module_handler, SmartDefaultSettings $smart_default_settings, CacheBackendInterface $cache, CKEditor5StylesheetsMessage $stylesheets_message) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->ckeditor5PluginManager = $ckeditor5_plugin_manager;
     $this->languageManager = $language_manager;
     $this->moduleHandler = $module_handler;
     $this->smartDefaultSettings = $smart_default_settings;
     $this->cache = $cache;
+    $this->stylesheetsMessage = $stylesheets_message;
   }
 
   /**
@@ -139,7 +151,8 @@ class CKEditor5 extends EditorBase implements ContainerFactoryPluginInterface {
       $container->get('language_manager'),
       $container->get('module_handler'),
       $container->get('ckeditor5.smart_default_settings'),
-      $container->get('cache.default')
+      $container->get('cache.default'),
+      $container->get('ckeditor5.stylesheets.message')
     );
   }
 
@@ -251,8 +264,15 @@ class CKEditor5 extends EditorBase implements ContainerFactoryPluginInterface {
       assert($editor->getSettings() === $this->getDefaultSettings());
       if (!$format->isNew()) {
         [$editor, $messages] = $this->smartDefaultSettings->computeSmartDefaultSettings($editor, $format);
-        foreach ($messages as $message) {
-          $this->messenger()->addMessage($message);
+        foreach ($messages as $type => $messages_per_type) {
+          foreach ($messages_per_type as $message) {
+            $this->messenger()->addMessage($message, $type);
+          }
+        }
+        if (isset($messages[MessengerInterface::TYPE_WARNING]) || isset($messages[MessengerInterface::TYPE_ERROR])) {
+          $this->messenger()->addMessage($this->t('Check <a href=":handbook">this handbook page</a> for details about compatibility issues of contrib modules.', [
+            ':handbook' => 'https://www.drupal.org/node/3273985',
+          ]), MessengerInterface::TYPE_WARNING);
         }
       }
       $eventual_editor_and_format = $this->getEventualEditorWithPrimedFilterFormat($form_state, $editor);
@@ -265,6 +285,23 @@ class CKEditor5 extends EditorBase implements ContainerFactoryPluginInterface {
       // from $form_state->get('editor').
       // @see \Drupal\ckeditor5\Plugin\CKEditor5Plugin\ImageUpload::buildConfigurationForm
       $form_state->set('editor', $editor);
+    }
+
+    if ($css_warning = $this->stylesheetsMessage->getWarning()) {
+      // Explicitly render this single warning message visually close to the
+      // text editor since this is a very long form. Otherwise, it may be
+      // interpreted as a text format problem, or ignored entirely.
+      // All other messages will be rendered in the default location.
+      // @see \Drupal\Core\Render\Element\StatusMessages
+      $form['css_warning'] = [
+        '#theme' => 'status_messages',
+        '#message_list' => [
+          'warning' => [$css_warning],
+        ],
+        '#status_headings' => [
+          'warning' => t('Warning message'),
+        ],
+      ];
     }
 
     // AJAX validation errors should appear visually close to the text editor
@@ -384,20 +421,28 @@ class CKEditor5 extends EditorBase implements ContainerFactoryPluginInterface {
     // due to isEnabled() returning false, that should still have its config
     // form provided:
     // 1 - A conditionally enabled plugin that does not depend on a toolbar item
-    // to be active AND the plugins it depends on are enabled.
+    // to be active AND the plugins it depends on are enabled (if any) AND the
+    // filter it depends on is enabled (if any).
     // 2 - A conditionally enabled plugin that does depend on a toolbar item,
     // and that toolbar item is active.
     if ($definition->hasConditions()) {
       $conditions = $definition->getConditions();
       if (!array_key_exists('toolbarItem', $conditions)) {
+        $conclusion = TRUE;
+        // The filter this plugin depends on must be enabled.
+        if (array_key_exists('filter', $conditions)) {
+          $required_filter = $conditions['filter'];
+          $format_filters = $editor->getFilterFormat()->filters();
+          $conclusion = $conclusion && $format_filters->has($required_filter) && $format_filters->get($required_filter)->status;
+        }
         // The CKEditor 5 plugins this plugin depends on must be enabled.
         if (array_key_exists('plugins', $conditions)) {
           $all_plugins = $this->ckeditor5PluginManager->getDefinitions();
           $dependencies = array_intersect_key($all_plugins, array_flip($conditions['plugins']));
           $unmet_dependencies = array_diff_key($dependencies, $enabled_plugins);
-          return empty($unmet_dependencies);
+          $conclusion = $conclusion && empty($unmet_dependencies);
         }
-        return TRUE;
+        return $conclusion;
       }
       elseif (in_array($conditions['toolbarItem'], $editor->getSettings()['toolbar']['items'], TRUE)) {
         return TRUE;
@@ -487,7 +532,16 @@ class CKEditor5 extends EditorBase implements ContainerFactoryPluginInterface {
       ]);
       $submitted_filter_format = CKEditor5::getSubmittedFilterFormat($form_state);
       $fundamental_incompatibilities = CKEditor5::validatePair($minimal_ckeditor5_editor, $submitted_filter_format, FALSE);
+
       foreach ($fundamental_incompatibilities as $violation) {
+        // If the violation uses the nonAllowedElementsMessage template, it can
+        // be skipped because this is a violation that automatically fixed
+        // within SmartDefaultSettings, but SmartDefaultSettings does not
+        // execute until this validator passes.
+        if ($violation->getMessageTemplate() === $violation->getConstraint()->nonAllowedElementsMessage) {
+          continue;
+        }
+
         // @codingStandardsIgnoreLine
         $form_state->setErrorByName('editor][editor', t($violation->getMessageTemplate(), $violation->getParameters()));
       }

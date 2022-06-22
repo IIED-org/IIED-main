@@ -1,0 +1,8 @@
+uuid: 02ef9dba-297f-4457-a794-987c7b364fd4
+langcode: en
+status: true
+dependencies: {  }
+id: card
+label: Card
+revision: 0
+description: 'Standard card (1-2 column) for placement in layout builder.'

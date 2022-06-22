@@ -1,0 +1,1 @@
+C:37:"PHPUnit\Runner\DefaultTestResultCache":218:{a:2:{s:7:"defects";a:1:{s:73:"Drupal\Tests\gin_lb\Unit\TwigExtension\GinLbExtensionTest::testGinClasses";i:3;}s:5:"times";a:1:{s:73:"Drupal\Tests\gin_lb\Unit\TwigExtension\GinLbExtensionTest::testGinClasses";d:0.005;}}}

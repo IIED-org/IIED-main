@@ -1,0 +1,23 @@
+.glb-views-exposed-form.glb-views-exposed-form,
+.views-displays {
+  border: 1px solid var(--colorGinLayer2Border);
+  border-radius: $borderDefault;
+  overflow: hidden;
+  width: 100%;
+  padding: .75em;
+  background: var(--colorGinLayerBackground);
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  box-shadow: 20px 20px 40px rgba(226,229,236,0.98), -16px -16px 24px #fbfbff;
+
+  .glb-button {
+    margin-bottom: 1.5em !important;
+  }
+
+  .glb-form-item {
+    margin: 0.75em 0.5em 0 0;
+  }
+}

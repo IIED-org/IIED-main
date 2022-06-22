@@ -41,7 +41,8 @@ abstract class UpdateSemverTestBase extends UpdateTestBase {
     parent::setUp();
     $admin_user = $this->drupalCreateUser([
       'administer site configuration',
-    ]);
+      'view update notifications',
+      ]);
     $this->drupalLogin($admin_user);
     $this->drupalPlaceBlock('local_actions_block');
   }
@@ -200,7 +201,7 @@ abstract class UpdateSemverTestBase extends UpdateTestBase {
    *   - 8.0.2 Security update
    *   - 8.0.1 Insecure
    *   - 8.0.0 Insecure
-   * - [::$updateProject].sec.0.2-rc2.xml
+   * - [::$updateProject].sec.2.0-rc2.xml
    *   - 8.2.0-rc2 Security update
    *   - 8.2.0-rc1 Insecure
    *   - 8.2.0-beta2 Insecure
@@ -233,7 +234,7 @@ abstract class UpdateSemverTestBase extends UpdateTestBase {
    *   'supported_branches' that does not contain '8.0.'. It is used to ensure
    *   that the "Security update required!" is displayed even if the currently
    *   installed version is in an unsupported branch.
-   * - [::$updateProject].sec.0.2-rc2-b.xml
+   * - [::$updateProject].sec.2.0-rc2-b.xml
    *   - 8.2.0-rc2
    *   - 8.2.0-rc1
    *   - 8.2.0-beta2
@@ -264,7 +265,7 @@ abstract class UpdateSemverTestBase extends UpdateTestBase {
         'site_patch_version' => '0.2',
         'expected_security_release' => ['1.2', '2.0-rc2'],
         'expected_update_message_type' => static::UPDATE_AVAILABLE,
-        'fixture' => 'sec.0.2-rc2',
+        'fixture' => 'sec.2.0-rc2',
       ],
       // Two security releases available for site minor release 0.
       // 0.1 security release marked as insecure.
@@ -289,7 +290,7 @@ abstract class UpdateSemverTestBase extends UpdateTestBase {
         'site_patch_version' => '0.0',
         'expected_security_releases' => ['0.2', '1.2', '2.0-rc2'],
         'expected_update_message_type' => static::SECURITY_UPDATE_REQUIRED,
-        'fixture' => 'sec.0.2-rc2',
+        'fixture' => 'sec.2.0-rc2',
       ],
       // No newer security release for site minor 1.
       // Previous minor has security release.
@@ -297,7 +298,7 @@ abstract class UpdateSemverTestBase extends UpdateTestBase {
         'site_patch_version' => '1.2',
         'expected_security_releases' => [],
         'expected_update_message_type' => static::UPDATE_NONE,
-        'fixture' => 'sec.0.2-rc2',
+        'fixture' => 'sec.2.0-rc2',
       ],
       // No security release available for site minor release 0.
       // Security release available for next minor.
@@ -335,7 +336,7 @@ abstract class UpdateSemverTestBase extends UpdateTestBase {
         'site_patch_version' => '2.0-rc2',
         'expected_security_releases' => [],
         'expected_update_message_type' => static::UPDATE_NONE,
-        'fixture' => 'sec.0.2-rc2',
+        'fixture' => 'sec.2.0-rc2',
       ],
       // Ensure that 8.0.2 security release is not shown because it is earlier
       // version than 1.0.
@@ -343,7 +344,7 @@ abstract class UpdateSemverTestBase extends UpdateTestBase {
         'site_patch_version' => '1.0',
         'expected_security_releases' => ['1.2', '2.0-rc2'],
         'expected_update_message_type' => static::SECURITY_UPDATE_REQUIRED,
-        'fixture' => 'sec.0.2-rc2',
+        'fixture' => 'sec.2.0-rc2',
       ],
     ];
     $pre_releases = [
@@ -363,7 +364,7 @@ abstract class UpdateSemverTestBase extends UpdateTestBase {
         'site_patch_version' => $pre_release,
         'expected_security_releases' => [],
         'expected_update_message_type' => $pre_release === '2.0-rc2' ? static::UPDATE_NONE : static::UPDATE_AVAILABLE,
-        'fixture' => 'sec.0.2-rc2-b',
+        'fixture' => 'sec.2.0-rc2-b',
       ];
       // If the site is on an alpha/beta/RC of an upcoming minor and there is
       // an RC version with a security update, it should be recommended.
@@ -371,7 +372,7 @@ abstract class UpdateSemverTestBase extends UpdateTestBase {
         'site_patch_version' => $pre_release,
         'expected_security_releases' => $pre_release === '2.0-rc2' ? [] : ['2.0-rc2'],
         'expected_update_message_type' => $pre_release === '2.0-rc2' ? static::UPDATE_NONE : static::SECURITY_UPDATE_REQUIRED,
-        'fixture' => 'sec.0.2-rc2',
+        'fixture' => 'sec.2.0-rc2',
       ];
     }
     return $test_cases;

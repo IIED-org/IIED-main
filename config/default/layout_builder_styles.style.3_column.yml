@@ -1,0 +1,13 @@
+uuid: 0cd0e904-773f-4bd5-ae2e-288e70ea8a2d
+langcode: en
+status: true
+dependencies: {  }
+id: 3_column
+label: '3 column'
+classes: 'sm:col-span-2 xl:col-span-3 h-full'
+type: component
+block_restrictions:
+  - 'inline_block:card_wide'
+  - 'inline_block:collection_card'
+layout_restrictions: {  }
+weight: 0

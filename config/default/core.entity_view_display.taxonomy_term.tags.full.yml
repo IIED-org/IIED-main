@@ -1,0 +1,101 @@
+uuid: 638ef40b-3574-4d80-86a4-dfa034042d4a
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.taxonomy_term.full
+    - field.field.taxonomy_term.tags.field_iied_tid
+    - field.field.taxonomy_term.tags.field_importance
+    - field.field.taxonomy_term.tags.field_tag_type
+    - field.field.taxonomy_term.tags.layout_builder__layout
+    - taxonomy.vocabulary.tags
+    - views.view.taxonomy_all_display
+    - views.view.taxonomy_featured_display
+  module:
+    - layout_builder
+    - text
+    - views
+  theme:
+    - iied_tw
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: true
+    sections:
+      -
+        layout_id: tw-container
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          wrappers:
+            first: div
+          outer_wrapper: div
+          attributes: ''
+          link_attribute: ''
+          link_custom: ''
+          classes:
+            layout_class: {  }
+            first: {  }
+        components:
+          5d323bd3-4559-4605-b79a-32b419c1f4a2:
+            uuid: 5d323bd3-4559-4605-b79a-32b419c1f4a2
+            region: first
+            configuration:
+              id: 'views_block:taxonomy_featured_display-block_2'
+              label: ''
+              label_display: '0'
+              provider: views
+              context_mapping: {  }
+              views_label: ''
+              items_per_page: none
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: tw-container
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          wrappers:
+            first: div
+          outer_wrapper: div
+          attributes: ''
+          link_attribute: ''
+          link_custom: ''
+          classes:
+            layout_class: {  }
+            first: {  }
+        components:
+          1b3292d6-ff15-4ffc-b159-602e6bac7080:
+            uuid: 1b3292d6-ff15-4ffc-b159-602e6bac7080
+            region: first
+            configuration:
+              id: 'views_block:taxonomy_all_display-block_2'
+              label: ''
+              label_display: '0'
+              provider: views
+              context_mapping: {  }
+              views_label: ''
+              items_per_page: none
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+id: taxonomy_term.tags.full
+targetEntityType: taxonomy_term
+bundle: tags
+mode: full
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_iied_tid: true
+  field_importance: true
+  field_tag_type: true
+  langcode: true
+  layout_builder__layout: true
+  search_api_excerpt: true

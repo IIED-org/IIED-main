@@ -19,6 +19,7 @@ module.exports = {
       },
       colors: {
         iiedblue: {
+          "10": "#e0f6fb",
           "50": "#32e5ff",
           "100": "#28dbff",
           "200": "#1ed1fd",
@@ -31,6 +32,7 @@ module.exports = {
           "900": "#008bb7"
         }, 
         iiedorange: {
+          "10": "#fff3d9",
           "50": "#ffe548",
           "100": "#ffdb3e",
           "200": "#ffd134",
@@ -43,6 +45,7 @@ module.exports = {
           "900": "#d48b00"
         }, 
         iiedpink: {
+          "10": "#faedf5",
           "50": "#ff85d0",
           "100": "#f67bc6",
           "200": "#ec71bc",
@@ -55,6 +58,7 @@ module.exports = {
           "900": "#a62b76"
         },
         iiedgreen: {
+          "10": "#f3f6e1",
           "50": "#dcf25e",
           "100": "#d2e854",
           "200": "#c8de4a",

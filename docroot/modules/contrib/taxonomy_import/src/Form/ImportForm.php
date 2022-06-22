@@ -136,7 +136,7 @@ function create_taxonomy($voc_name) {
     $vocabulary->save();
   }
   // Code for fetch and save csv file.
-  if ($mimetype == "text/plain") {
+  if ($mimetype == "text/plain" || $mimetype == 'application/csv') {
     if (($handle = fopen($location, "r")) !== FALSE) {
       // Read all data including title.
       $data1 = fgetcsv($handle);

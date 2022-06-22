@@ -1,30 +1,40 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* cspell:words insertdrupalmedia drupalmediaediting */
+/* cspell:words insertdrupalmedia drupalmediaediting insertdrupalmediacommand drupalmediametadatarepository */
 
 import { Plugin } from 'ckeditor5/src/core';
 import { toWidget, Widget } from 'ckeditor5/src/widget';
 
 import InsertDrupalMediaCommand from './insertdrupalmedia';
-import { getPreviewContainer } from './utils';
+import { getPreviewContainer, isDrupalMedia } from './utils';
+import { METADATA_ERROR } from './mediaimagetextalternative/utils';
 
 /**
  * @module drupalMedia/drupalmediaediting
  */
 
 /**
- * @internal
+ * The Drupal Media Editing plugin.
+ *
+ * Handles the transformation from the CKEditor 5 UI to Drupal-specific markup.
+ *
+ * @private
  */
 export default class DrupalMediaEditing extends Plugin {
+  /**
+   * @inheritdoc
+   */
   static get requires() {
     return [Widget];
   }
 
+  /**
+   * @inheritdoc
+   */
   init() {
     this.attrs = {
       drupalMediaAlt: 'alt',
       drupalMediaEntityType: 'data-entity-type',
       drupalMediaEntityUuid: 'data-entity-uuid',
-      drupalMediaViewMode: 'data-view-mode',
     };
     const options = this.editor.config.get('drupalMedia');
     if (!options) {
@@ -43,11 +53,105 @@ export default class DrupalMediaEditing extends Plugin {
 
     this._defineSchema();
     this._defineConverters();
+    this._defineListeners();
 
     this.editor.commands.add(
       'insertDrupalMedia',
       new InsertDrupalMediaCommand(this.editor),
     );
+  }
+
+  /**
+   * Upcast `drupalMediaIsImage` from Drupal Media metadata.
+   *
+   * @param {module:engine/model/node~Node} modelElement
+   *   The `drupalMedia` model element.
+   *
+   * @see module:drupalMedia/drupalmediametadatarepository~DrupalMediaMetadataRepository
+   */
+  upcastDrupalMediaIsImage(modelElement) {
+    const { model, plugins } = this.editor;
+    const metadataRepository = plugins.get('DrupalMediaMetadataRepository');
+
+    // Get all metadata for drupalMedia elements to set value for
+    // drupalMediaIsImage attribute. When other plugins start using the
+    // metadata, this functionality will be handled more generically.
+    metadataRepository
+      .getMetadata(modelElement)
+      .then((metadata) => {
+        if (!modelElement) {
+          // Nothing to do if model element has been removed before
+          // promise was resolved.
+          return;
+        }
+        // Enqueue a model change that is not visible to the undo/redo feature.
+        model.enqueueChange({ isUndoable: false }, (writer) => {
+          writer.setAttribute(
+            'drupalMediaIsImage',
+            !!metadata.imageSourceMetadata,
+            modelElement,
+          );
+        });
+      })
+      .catch((e) => {
+        if (!modelElement) {
+          // Nothing to do if model element has been removed before
+          // promise was resolved.
+          return;
+        }
+        console.warn(e.toString());
+        model.enqueueChange({ isUndoable: false }, (writer) => {
+          writer.setAttribute(
+            'drupalMediaIsImage',
+            METADATA_ERROR,
+            modelElement,
+          );
+        });
+      });
+  }
+
+  /**
+   * Upcast `drupalMediaType` from Drupal Media metadata.
+   *
+   * @param {module:engine/model/node~Node} modelElement
+   *   The `drupalMedia` model element.
+   *
+   * @see module:drupalMedia/drupalmediametadatarepository~DrupalMediaMetadataRepository
+   *
+   * @private
+   */
+  upcastDrupalMediaType(modelElement) {
+    const metadataRepository = this.editor.plugins.get(
+      'DrupalMediaMetadataRepository',
+    );
+    // Get all metadata for drupalMedia elements to set value for
+    // drupalMediaType attribute. When other plugins start using the
+    // metadata, this functionality will be handled more generically.
+    metadataRepository
+      .getMetadata(modelElement)
+      .then((metadata) => {
+        if (!modelElement) {
+          // Nothing to do if model element has been removed before
+          // promise was resolved.
+          return;
+        }
+        // Enqueue a model change in `transparent` batch to make it
+        // invisible to the undo/redo functionality.
+        this.editor.model.enqueueChange({ isUndoable: false }, (writer) => {
+          writer.setAttribute('drupalMediaType', metadata.type, modelElement);
+        });
+      })
+      .catch((e) => {
+        if (!modelElement) {
+          // Nothing to do if model element has been removed before
+          // promise was resolved.
+          return;
+        }
+        console.warn(e.toString());
+        this.editor.model.enqueueChange({ isUndoable: false }, (writer) => {
+          writer.setAttribute('drupalMediaType', METADATA_ERROR, modelElement);
+        });
+      });
   }
 
   /**
@@ -84,25 +188,85 @@ export default class DrupalMediaEditing extends Plugin {
     return { label: this.labelError, preview: this.themeError };
   }
 
+  /**
+   * Registers drupalMedia as a block element in the DOM converter.
+   *
+   * @private
+   */
   _defineSchema() {
     const schema = this.editor.model.schema;
     schema.register('drupalMedia', {
       allowWhere: '$block',
       isObject: true,
       isContent: true,
+      isBlock: true,
       allowAttributes: Object.keys(this.attrs),
     });
+    // Register `<drupal-media>` as a block element in the DOM converter. This
+    // ensures that the DOM converter knows to handle the `<drupal-media>` as a
+    // block element.
+    this.editor.editing.view.domConverter.blockElements.push('drupal-media');
   }
 
+  /**
+   * Defines handling of drupal media element in the content lifecycle.
+   *
+   * @private
+   */
   _defineConverters() {
     const conversion = this.editor.conversion;
+    const metadataRepository = this.editor.plugins.get(
+      'DrupalMediaMetadataRepository',
+    );
 
-    conversion.for('upcast').elementToElement({
-      view: {
-        name: 'drupal-media',
-      },
-      model: 'drupalMedia',
-    });
+    conversion
+      .for('upcast')
+      .elementToElement({
+        view: {
+          name: 'drupal-media',
+        },
+        model: 'drupalMedia',
+      })
+      .add((dispatcher) => {
+        dispatcher.on(
+          'element:drupal-media',
+          (evt, data) => {
+            const [modelElement] = data.modelRange.getItems();
+            metadataRepository
+              .getMetadata(modelElement)
+              .then((metadata) => {
+                if (!modelElement) {
+                  return;
+                }
+                // On upcast, get `drupalMediaIsImage` attribute value from media metadata
+                // repository.
+                this.upcastDrupalMediaIsImage(modelElement);
+                // Enqueue a model change after getting modelElement.
+                this.editor.model.enqueueChange(
+                  { isUndoable: false },
+                  (writer) => {
+                    writer.setAttribute(
+                      'drupalMediaType',
+                      metadata.type,
+                      modelElement,
+                    );
+                  },
+                );
+              })
+              .catch((e) => {
+                // There isn't any UI indication for errors because this should be
+                // always called after the Drupal Media has been upcast, which would
+                // already display an error in the UI.
+                console.warn(e.toString());
+              });
+          },
+          // This converter needs to have the lowest priority to ensure that the
+          // model element and its attributes have already been converted. It is only used
+          // to gather metadata to make the UI tailored to the specific media entity that
+          // is being dealt with.
+          { priority: 'lowest' },
+        );
+      });
 
     conversion.for('dataDowncast').elementToElement({
       model: 'drupalMedia',
@@ -197,7 +361,10 @@ export default class DrupalMediaEditing extends Plugin {
         // List all attributes that should trigger re-rendering of the
         // preview.
         dispatcher.on('attribute:drupalMediaEntityUuid:drupalMedia', converter);
-        dispatcher.on('attribute:drupalMediaViewMode:drupalMedia', converter);
+        dispatcher.on(
+          'attribute:drupalElementStyleViewMode:drupalMedia',
+          converter,
+        );
         dispatcher.on('attribute:drupalMediaEntityType:drupalMedia', converter);
         dispatcher.on('attribute:drupalMediaAlt:drupalMedia', converter);
 
@@ -206,12 +373,13 @@ export default class DrupalMediaEditing extends Plugin {
 
     conversion.for('editingDowncast').add((dispatcher) => {
       dispatcher.on(
-        'attribute:drupalElementStyle:drupalMedia',
+        'attribute:drupalElementStyleAlign:drupalMedia',
         (evt, data, conversionApi) => {
           const alignMapping = {
-            alignLeft: 'drupal-media-style-align-left',
-            alignRight: 'drupal-media-style-align-right',
-            alignCenter: 'drupal-media-style-align-center',
+            // This is a map of CSS classes representing Drupal element styles for alignments.
+            left: 'drupal-media-style-align-left',
+            right: 'drupal-media-style-align-right',
+            center: 'drupal-media-style-align-center',
           };
           const viewElement = conversionApi.mapper.toViewElement(data.item);
           const viewWriter = conversionApi.writer;
@@ -265,6 +433,29 @@ export default class DrupalMediaEditing extends Plugin {
   }
 
   /**
+   * Defines behavior when an drupalMedia element is inserted.
+   *
+   * Listen to `insertContent` event on the model to set `drupalMediaIsImage`
+   * and `drupalMediaType` attribute when `drupalMedia` model element is
+   * inserted directly to the model.
+   *
+   * @see module:drupalMedia/insertdrupalmediacommand~InsertDrupalMediaCommand
+   *
+   * @private
+   */
+  _defineListeners() {
+    this.editor.model.on('insertContent', (eventInfo, [modelElement]) => {
+      if (!isDrupalMedia(modelElement)) {
+        return;
+      }
+      this.upcastDrupalMediaIsImage(modelElement);
+      // Need to upcast DrupalMediaType to model so it can be used to show
+      // correct buttons based on bundle.
+      this.upcastDrupalMediaType(modelElement);
+    });
+  }
+
+  /**
    * MediaFilterController::preview requires the saved element.
    *
    * Not previewing data-caption since it does not get updated by new changes.
@@ -273,21 +464,30 @@ export default class DrupalMediaEditing extends Plugin {
    *   The drupalMedia model element to be converted.
    * @return {string}
    *   The model element converted into HTML.
-   *
-   * @todo: is there a better way to get the rendered dataDowncast string
-   *   https://www.drupal.org/project/ckeditor5/issues/3231337?
    */
   _renderElement(modelElement) {
-    const attrs = modelElement.getAttributes();
-    let element = '<drupal-media';
-    Array.from(attrs).forEach((attr) => {
-      if (this.attrs[attr[0]] && attr[0] !== 'drupalMediaCaption') {
-        element += ` ${this.attrs[attr[0]]}="${attr[1]}"`;
-      }
-    });
-    element += '></drupal-media>';
+    // Create model document fragment which contains the model element so that
+    // it can be stringified using the dataDowncast.
+    const modelDocumentFragment = this.editor.model.change((writer) => {
+      const modelDocumentFragment = writer.createDocumentFragment();
+      // Create shallow clone of the model element to ensure that the original
+      // model element remains untouched and that the caption is not rendered
+      // into the preview.
+      const clonedModelElement = writer.cloneElement(modelElement, false);
+      // Remove attributes from the model element to ensure they are not
+      // downcast into the preview request. For example, the `linkHref` model
+      // attribute would downcast into a wrapping `<a>` element, which the
+      // preview endpoint would not be able to handle.
+      const attributeIgnoreList = ['linkHref'];
+      attributeIgnoreList.forEach((attribute) => {
+        writer.removeAttribute(attribute, clonedModelElement);
+      });
+      writer.append(clonedModelElement, modelDocumentFragment);
 
-    return element;
+      return modelDocumentFragment;
+    });
+
+    return this.editor.data.stringify(modelDocumentFragment);
   }
 
   /**

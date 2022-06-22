@@ -160,12 +160,12 @@ class CKEditor5PluginManager extends DefaultPluginManager implements CKEditor5Pl
       }
     }
 
-    // Only enable the General HTML Support plugin on text formats with no HTML
-    // restrictions.
+    // Only enable the arbitrary HTML Support plugin on text formats with no
+    // HTML restrictions.
     // @see https://ckeditor.com/docs/ckeditor5/latest/api/html-support.html
     // @see https://github.com/ckeditor/ckeditor5/issues/9856
     if ($editor->getFilterFormat()->getHtmlRestrictions() !== FALSE) {
-      unset($definitions['ckeditor5_htmlSupport']);
+      unset($definitions['ckeditor5_arbitraryHtmlSupport']);
     }
 
     // Evaluate `plugins` condition.
@@ -173,6 +173,22 @@ class CKEditor5PluginManager extends DefaultPluginManager implements CKEditor5Pl
       if (!empty(array_diff($definition->getConditions()['plugins'], array_keys($definitions)))) {
         unset($definitions[$plugin_id]);
       }
+    }
+
+    if (!isset($definitions['ckeditor5_arbitraryHtmlSupport'])) {
+      $restrictions = new HTMLRestrictions($this->getProvidedElements(array_keys($definitions), $editor, FALSE));
+      if ($restrictions->getWildcardSubset()->allowsNothing()) {
+        // This is only reached if arbitrary HTML is not enabled. If wildcard
+        // tags (such as $text-container) are present, they need to
+        // be resolved via the wildcardHtmlSupport plugin.
+        // @see \Drupal\ckeditor5\Plugin\CKEditor5PluginManager::getCKEditor5PluginConfig()
+        unset($definitions['ckeditor5_wildcardHtmlSupport']);
+      }
+    }
+    // When arbitrary HTML is already supported, there is no need to support
+    // wildcard tags.
+    else {
+      unset($definitions['ckeditor5_wildcardHtmlSupport']);
     }
 
     return $definitions;
@@ -254,6 +270,25 @@ class CKEditor5PluginManager extends DefaultPluginManager implements CKEditor5Pl
       $config[$plugin_id] = $plugin->getDynamicPluginConfig($definition->getCKEditor5Config(), $editor);
     }
 
+    // CKEditor 5 interprets wildcards from a "CKEditor 5 model element"
+    // perspective, Drupal interprets wildcards from a "HTML element"
+    // perspective. GHS is used to reconcile those two perspectives, to ensure
+    // all expected HTML elements truly are supported.
+    // The `ckeditor5_wildcardHtmlSupport` is automatically enabled when
+    // necessary, and only when necessary.
+    // @see \Drupal\ckeditor5\Plugin\CKEditor5PluginManager::getEnabledDefinitions()
+    if (isset($definitions['ckeditor5_wildcardHtmlSupport'])) {
+      $allowed_elements = new HTMLRestrictions($this->getProvidedElements(array_keys($definitions), $editor, FALSE));
+      // Compute the net new elements that the wildcard tags resolve into.
+      $concrete_allowed_elements = $allowed_elements->getConcreteSubset();
+      $net_new_elements = $allowed_elements->diff($concrete_allowed_elements);
+      $config['ckeditor5_wildcardHtmlSupport'] = [
+        'htmlSupport' => [
+          'allow' => $net_new_elements->toGeneralHtmlSupportConfig(),
+        ],
+      ];
+    }
+
     return [
       'plugins' => $this->mergeDefinitionValues('getCKEditor5Plugins', $definitions),
       'config' => NestedArray::mergeDeepArray($config),
@@ -263,7 +298,7 @@ class CKEditor5PluginManager extends DefaultPluginManager implements CKEditor5Pl
   /**
    * {@inheritdoc}
    */
-  public function getProvidedElements(array $plugin_ids = [], EditorInterface $editor = NULL): array {
+  public function getProvidedElements(array $plugin_ids = [], EditorInterface $editor = NULL, bool $resolve_wildcards = TRUE, bool $creatable_elements_only = FALSE): array {
     $plugins = $this->getDefinitions();
     if (!empty($plugin_ids)) {
       $plugins = array_intersect_key($plugins, array_flip($plugin_ids));
@@ -283,12 +318,8 @@ class CKEditor5PluginManager extends DefaultPluginManager implements CKEditor5Pl
         // that is allowed to return a superset. It's a special case because it
         // is through configuring this particular plugin that additional HTML
         // tags can be allowed.
-        // Even though its plugin definition says '<*>' is supported, this is a
-        // little lie to convey that this plugin is capable of supporting any
-        // HTML tag … but which ones are actually supported depends on the
-        // configuration.
-        // This also means that without any configuration, it does not support
-        // any HTML tags.
+        // The list of tags it supports is generated dynamically. In its default
+        // configuration it does support any HTML tags.
         if ($id === 'ckeditor5_sourceEditing') {
           $defined_elements = !isset($editor) ? [] : $this->getPlugin($id, $editor)->getElementsSubset();
         }
@@ -298,21 +329,38 @@ class CKEditor5PluginManager extends DefaultPluginManager implements CKEditor5Pl
         // work: otherwise it would not be able to know which plugins to enable.
         elseif (isset($editor)) {
           $subset = $this->getPlugin($id, $editor)->getElementsSubset();
-          $subset_violations = array_diff($subset, $defined_elements);
+          $subset_restrictions = HTMLRestrictions::fromString(implode($subset));
+          $defined_restrictions = HTMLRestrictions::fromString(implode($defined_elements));
+          $subset_violations = $subset_restrictions->diff($defined_restrictions)->toCKEditor5ElementsArray();
           if (!empty($subset_violations)) {
             throw new \LogicException(sprintf('The "%s" CKEditor 5 plugin implements ::getElementsSubset() and did not return a subset, the following tags are absent from the plugin definition: "%s".', $id, implode(' ', $subset_violations)));
+          }
+          // Also detect what is technically a valid subset, but has lost the
+          // ability to create tags that are still in the subset. This points to
+          // a bug in the plugin's ::getElementsSubset() logic.
+          $defined_creatable = HTMLRestrictions::fromString(implode($definition->getCreatableElements()));
+          $subset_creatable_actual = HTMLRestrictions::fromString(implode(array_filter($subset, [CKEditor5PluginDefinition::class, 'isCreatableElement'])));
+          $subset_creatable_needed = $subset_restrictions->extractPlainTagsSubset()
+            ->intersect($defined_creatable);
+          $missing_creatable_for_subset = $subset_creatable_needed->diff($subset_creatable_actual);
+          if (!$missing_creatable_for_subset->allowsNothing()) {
+            throw new \LogicException(sprintf('The "%s" CKEditor 5 plugin implements ::getElementsSubset() and did return a subset ("%s") but the following tags can no longer be created: "%s".', $id, implode($subset_restrictions->toCKEditor5ElementsArray()), implode($missing_creatable_for_subset->toCKEditor5ElementsArray())));
           }
           $defined_elements = $subset;
         }
       }
       assert(Inspector::assertAllStrings($defined_elements));
+      if ($creatable_elements_only) {
+        // @see \Drupal\ckeditor5\Plugin\CKEditor5PluginDefinition::getCreatableElements()
+        $defined_elements = array_filter($defined_elements, [CKEditor5PluginDefinition::class, 'isCreatableElement']);
+      }
       foreach ($defined_elements as $element) {
         $additional_elements = HTMLRestrictions::fromString($element);
         $elements = $elements->merge($additional_elements);
       }
     }
 
-    return $elements->getAllowedElements();
+    return $elements->getAllowedElements($resolve_wildcards);
   }
 
   /**

@@ -9,10 +9,10 @@ label: 'Taxonomy terms'
 type: 'canonical_entities:taxonomy_term'
 pattern: '[term:name]'
 selection_criteria:
-  00dde09e-18fc-4689-8ff5-5b5d269db43c:
+  c1214cb9-c989-42ea-8029-d28811c6a279:
     id: 'entity_bundle:taxonomy_term'
     negate: false
-    uuid: 00dde09e-18fc-4689-8ff5-5b5d269db43c
+    uuid: c1214cb9-c989-42ea-8029-d28811c6a279
     context_mapping:
       taxonomy_term: taxonomy_term
     bundles:

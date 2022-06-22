@@ -22,9 +22,9 @@ class AjaxTest extends WebDriverTestBase {
   protected $defaultTheme = 'stark';
 
   public function testAjaxWithAdminRoute() {
-    \Drupal::service('theme_installer')->install(['stable', 'seven']);
+    \Drupal::service('theme_installer')->install(['stable', 'claro']);
     $theme_config = \Drupal::configFactory()->getEditable('system.theme');
-    $theme_config->set('admin', 'seven');
+    $theme_config->set('admin', 'claro');
     $theme_config->set('default', 'stable');
     $theme_config->save();
 
@@ -35,7 +35,7 @@ class AjaxTest extends WebDriverTestBase {
     // admin theme.
     $this->drupalGet('admin/ajax-test/theme');
     $assert = $this->assertSession();
-    $assert->pageTextContains('Current theme: seven');
+    $assert->pageTextContains('Current theme: claro');
 
     // Now click the modal, which should also use the admin theme.
     $this->drupalGet('ajax-test/dialog');
@@ -44,7 +44,7 @@ class AjaxTest extends WebDriverTestBase {
     $assert->assertWaitOnAjaxRequest();
 
     $assert->pageTextContains('Current theme: stable');
-    $assert->pageTextNotContains('Current theme: seven');
+    $assert->pageTextNotContains('Current theme: claro');
   }
 
   /**
@@ -102,7 +102,7 @@ class AjaxTest extends WebDriverTestBase {
       'not-wrapped' => 'not-wrapped',
       'comment-string-not-wrapped' => '<!-- COMMENT -->comment-string-not-wrapped',
       'comment-not-wrapped' => '<!-- COMMENT --><div class="comment-not-wrapped">comment-not-wrapped</div>',
-      'svg' => '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><rect x="0" y="0" height="10" width="10" fill="green"/></svg>',
+      'svg' => '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><rect x="0" y="0" height="10" width="10" fill="green"></rect></svg>',
       'empty' => '',
     ];
     $render_multiple_root_unwrapper = [

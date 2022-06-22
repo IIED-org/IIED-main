@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Laminas\ServiceManager\Tool;
 
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Exception\InvalidArgumentException;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionParameter;
 
@@ -16,10 +16,10 @@ use function array_merge;
 use function array_shift;
 use function count;
 use function implode;
+use function preg_replace;
 use function sort;
 use function sprintf;
 use function str_repeat;
-use function str_replace;
 use function strrpos;
 use function substr;
 
@@ -65,7 +65,7 @@ class FactoryCreator
 
         return sprintf(
             self::FACTORY_TEMPLATE,
-            str_replace('\\' . $class, '', $className),
+            preg_replace('/\\\\' . $class . '$/', '', $className),
             $this->createImportStatements($className),
             $class,
             $class,
@@ -87,7 +87,7 @@ class FactoryCreator
     {
         $reflectionClass = new ReflectionClass($className);
 
-        if (! $reflectionClass || ! $reflectionClass->getConstructor()) {
+        if (! $reflectionClass->getConstructor()) {
             return [];
         }
 

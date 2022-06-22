@@ -1,0 +1,40 @@
+layout_builder_styles.style.*:
+  type: config_entity
+  label: 'Layout builder style config'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    classes:
+      type: string
+      label: 'Classes'
+    type:
+      type: string
+      label: 'Type'
+    block_restrictions:
+      type: sequence
+      label: 'Block restrictions'
+      sequence:
+        type: string
+    layout_restrictions:
+      type: sequence
+      label: 'Layout restrictions'
+      sequence:
+        type: string
+    weight:
+      type: integer
+      label: 'Weight'
+    uuid:
+      type: string
+layout_builder_styles.settings:
+  type: config_object
+  mapping:
+    multiselect:
+      type: string
+      label: "Multiple styles selectable"
+    form_type:
+      type: string
+      label: "How the styles selector should be displayed"

@@ -6,7 +6,7 @@ use Drupal\Core\TypedData\TypedData;
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 
 /**
- * Class GeolocationComputed.
+ * Class GeolocationComputed typed data.
  *
  * @package Drupal\geolocation
  */
@@ -32,15 +32,13 @@ class GeolocationComputed extends TypedData {
     /** @var \Drupal\geolocation\Plugin\Field\FieldType\GeolocationItem $item */
     $item = $this->getParent();
 
-    if ($item) {
+    // Ensure latitude and longitude exist.
+    if ($item && !$item->isEmpty()) {
       $lat = trim($item->get('lat')->getValue());
       $lng = trim($item->get('lng')->getValue());
 
-      // Ensure latitude and longitude exist.
-      if ($lat !== NULL && $lng !== NULL) {
-        // Format the returned value.
-        $this->value = $lat . ', ' . $lng;
-      }
+      // Format the returned value.
+      $this->value = $lat . ', ' . $lng;
     }
     return $this->value;
   }

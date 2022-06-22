@@ -85,8 +85,9 @@
             {{ content.field_theme_s_}}
           </div>
         </nav>
+        {{ title_prefix }}
         <h1 class="mb-6 text-4xl">{{ node.label }}</h1>
-
+        {{ title_suffix }}
         {#-- standfirst --#}
         <div
           class="mb-6 prose-lg border-b-2 lg:prose-xl border-iiedorange-500"
@@ -170,7 +171,6 @@
         {#-- tags --#}
          {{ content.field_tags }} 
           {% include '@iied_tw/partials/_share_blog_links.html.twig' %}
-          
       </div>
     </div>
         
@@ -178,3 +178,5 @@
     </main>
   </div>
 </article>
+{% include '@iied_tw/partials/_related_project.html.twig' %}
+{% include '@iied_tw/partials/_related_nodes_insight.html.twig' %}

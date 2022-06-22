@@ -1,0 +1,16 @@
+name: 'Layout Builder Tabs'
+description: 'Provides a layout to show blocks as a tabs set'
+package: Layouts
+type: module
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - layout_discovery
+
+# core: '8.x'
+# project: 'layout_builder_tabs'
+
+# Information added by Drupal.org packaging script on 2022-06-20
+version: '1.0.0-rc1'
+project: 'layout_builder_tabs'
+datestamp: 1655712821

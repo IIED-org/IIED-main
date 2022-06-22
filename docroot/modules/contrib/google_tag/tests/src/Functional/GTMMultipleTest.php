@@ -49,13 +49,13 @@ class GTMMultipleTest extends GTMTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function checkSnippetFiles() {
+  protected function checkSnippetContents() {
     foreach ($this->variables as $key => $variables) {
       $message = "Start on container $key";
       parent::assertTrue(TRUE, $message);
       foreach ($this->types as $type) {
-        $url = "$this->basePath/google_tag/{$key}/google_tag.$type.js";
-        $contents = @file_get_contents($url);
+        $function = $type == 'noscript' ? 'getSnippetFromCache' : 'getSnippetFromFile';
+        $contents = $this->$function($key, $type);
         $function = "verify{$type}Snippet";
         $this->$function($contents, $this->variables[$key]);
       }
@@ -68,15 +68,46 @@ class GTMMultipleTest extends GTMTestBase {
   protected function checkPageResponse() {
     parent::checkPageResponse();
 
+    $include_file = $this->config('google_tag.settings')->get('include_file');
+    $include_file ? $this->checkPageResponseFile() : $this->checkPageResponseInline();
+  }
+
+  /**
+   * Inspect the page response (based on file source).
+   */
+  protected function checkPageResponseFile() {
     foreach ($this->variables as $key => $variables) {
       $this->drupalGet('');
       $message = "Start on container $key";
       parent::assertTrue(TRUE, $message);
       foreach ($this->types as $type) {
         $uri = "$this->basePath/google_tag/{$key}/google_tag.$type.js";
-        $url = file_url_transform_relative(file_create_url($uri));
+        // Remove the if-else when core_version_requirement >= 9.3 for this module.
+        if (\Drupal::hasService('file_url_generator')) {
+          $generator = \Drupal::service('file_url_generator');
+          $url = $generator->transformRelative($generator->generateAbsoluteString($uri));
+        }
+        else {
+          $url = file_url_transform_relative(file_create_url($uri));
+        }
         $function = "verify{$type}Tag";
         $this->$function($url, $this->variables[$key]);
+      }
+    }
+  }
+
+  /**
+   * Inspect the page response (based on inline snippet).
+   */
+  protected function checkPageResponseInline() {
+    foreach ($this->variables as $key => $variables) {
+      $this->drupalGet('');
+      $message = "Start on container $key";
+      parent::assertTrue(TRUE, $message);
+      foreach ($this->types as $type) {
+        $contents = $this->getSnippetFromCache($key, $type);
+        $function = "verify{$type}TagInline";
+        $this->$function($this->variables[$key], $contents);
       }
     }
   }

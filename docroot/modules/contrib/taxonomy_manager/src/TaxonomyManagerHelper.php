@@ -104,18 +104,26 @@ class TaxonomyManagerHelper {
    * @param array $term_names_too_long
    *   Return value that is used to indicate that some term names were too long
    *   and truncated to 255 characters.
+   * @param bool $keep_order
+   *   Defines whether the term should have the weights corresponding to the
+   *   provided order.
    *
    * @return array
    *   An array of the newly inserted term objects
    */
-  public function massAddTerms($input, $vid, $parents, array &$term_names_too_long = []) {
+  public function massAddTerms($input, $vid, $parents, array &$term_names_too_long = [], $keep_order = FALSE) {
     $new_terms = [];
     $terms = explode("\n", str_replace("\r", '', $input));
     $parents = !empty($parents) ? $parents : 0;
 
+    if ($keep_order) {
+      $max_weight = self::getMaxWeight($vid, $parents);
+      $base_weight = $max_weight + 1;
+    }
+
     // Stores the current lineage of newly inserted terms.
     $last_parents = [];
-    foreach ($terms as $name) {
+    foreach ($terms as $term_index => $name) {
       if (empty($name)) {
         continue;
       }
@@ -182,6 +190,10 @@ class TaxonomyManagerHelper {
         'langcode' => $langcode,
       ];
 
+      if ($keep_order) {
+        $values['weight'] = $base_weight + $term_index;
+      }
+
       if (!empty($current_parents)) {
         foreach ($current_parents as $p) {
           $values['parent'][] = ['target_id' => $p];
@@ -221,7 +233,7 @@ class TaxonomyManagerHelper {
             $parents = $this->taxonomyTypeManager->loadParents($child->id());
             if ($delete_orphans) {
               if (count($parents) == 1) {
-                $orphans[$child->tid] = $child->id();
+                $orphans[$child->id()] = $child->id();
               }
               else {
                 $remaining_child_terms[$child->id()] = $child->getName();
@@ -257,6 +269,46 @@ class TaxonomyManagerHelper {
       $tids = $orphans;
     }
     return ['deleted_terms' => $deleted_terms, 'remaining_child_terms' => $remaining_child_terms];
+  }
+
+  /**
+   * Get the maximum weight for this vocabulary and these parents.
+   *
+   * @param int $vid
+   *   The vocabulary id.
+   * @param int $parents
+   *   An array of parent term ids for the new inserted terms. Can be 0.
+   *
+   * @return int
+   *   The max weight.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  protected static function getMaxWeight($vid, $parents) {
+    $taxonomy_entity_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    $vocabulary = $taxonomy_entity_storage->loadTree($vid, 0, 1, FALSE);
+    if (empty($vocabulary)) {
+      return 0;
+    }
+    // The base weight is the starting weight of the new terms.
+    $max_weight = 0;
+    if (!$parents) {
+      // Sorted by weight, then name, we can pull the last's weight to get max.
+
+      if (!empty($vocabulary)) {
+        $max_weight = (end($vocabulary)->weight);
+      }
+    } else {
+      $parent_vocabularies = [];
+      $parent_max_weights = [];
+      foreach ($parents as $index => $parent) {
+        $parent_vocabularies[$index] = $taxonomy_entity_storage->loadTree($vid, $parent, 1, FALSE);
+        $parent_max_weights[$index] = $parent_vocabularies[$index] ? (end($parent_vocabularies[$index])->weight) : 0 ;
+      }
+      $max_weight = max($parent_max_weights) ?? 0;
+    }
+    return $max_weight;
   }
 
 }

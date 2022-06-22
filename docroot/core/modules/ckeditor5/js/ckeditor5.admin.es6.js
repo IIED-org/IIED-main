@@ -1,6 +1,6 @@
 /**
  * @file
- * Provides admin UI for the CKEditor 5.
+ * Provides the admin UI for CKEditor 5.
  */
 
 ((Drupal, drupalSettings, $, JSON, once, Sortable, { tabbable }) => {
@@ -49,14 +49,14 @@
     }
 
     /**
-     * Notifies subscribers about new value.
+     * Notifies subscribers about new values.
      */
     notify() {
       this._listeners.forEach((listener) => listener(this._value));
     }
 
     /**
-     * Subscribes to be notified for changes.
+     * Subscribes a listener callback to changes.
      *
      * @param {Function} listener
      *   The function to be called when a new value is set.
@@ -251,6 +251,23 @@
           helpItem.condition,
       )
       .map((helpItem) => helpItem.message);
+
+    // Get the existing toolbar help message.
+    const existingToolbarHelpText = document.querySelector(
+      '[data-drupal-selector="ckeditor5-admin-help-message"]',
+    );
+
+    // If the existing toolbar help message does not match the message that is
+    // about to be rendered, it is new information that should be conveyed to
+    // assistive tech via announce().
+    if (
+      existingToolbarHelpText &&
+      toolbarHelpText.join('').trim() !==
+        existingToolbarHelpText.textContent.trim()
+    ) {
+      Drupal.announce(toolbarHelpText.join(' '));
+    }
+
     root.innerHTML = Drupal.theme.ckeditor5Admin({
       availableButtons: Drupal.theme.ckeditor5AvailableButtons({
         buttons: availableButtons.filter(
@@ -845,7 +862,7 @@
    * @return {string}
    *   The selected buttons markup.
    *
-   * @internal
+   * @private
    */
   Drupal.theme.ckeditor5SelectedButtons = ({ buttons }) => {
     return `
@@ -869,7 +886,7 @@
    * @return {string}
    *   The CKEditor 5 divider buttons markup.
    *
-   * @internal
+   * @private
    */
   Drupal.theme.ckeditor5DividerButtons = ({ buttons }) => {
     return `
@@ -893,7 +910,7 @@
    * @return {string}
    *   The CKEditor 5 available buttons markup.
    *
-   * @internal
+   * @private
    */
   Drupal.theme.ckeditor5AvailableButtons = ({ buttons }) => {
     return `
@@ -923,9 +940,18 @@
    * @return {string}
    *   The CKEditor 5 buttons markup.
    *
-   * @internal
+   * @private
    */
   Drupal.theme.ckeditor5Button = ({ button: { label, id }, listType }) => {
+    const buttonInstructions = {
+      divider: Drupal.t(
+        'Press the down arrow key to use this divider in the active button list',
+      ),
+      available: Drupal.t('Press the down arrow key to activate'),
+      active: Drupal.t(
+        'Press the up arrow key to deactivate. Use the right and left arrow keys to move position',
+      ),
+    };
     const visuallyHiddenLabel = Drupal.t(`@listType button @label`, {
       '@listType': listType !== 'divider' ? listType : 'available',
       '@label': label,
@@ -935,9 +961,11 @@
       listType === 'divider'
     }">
         <span class="ckeditor5-toolbar-button ckeditor5-toolbar-button-${id}">
-          <span class="visually-hidden">${visuallyHiddenLabel}</span>
+          <span class="visually-hidden">${visuallyHiddenLabel}. ${
+      buttonInstructions[listType]
+    }</span>
         </span>
-        <span class="ckeditor5-toolbar-tooltip" aria-hidden="true">${label}</span>
+        <span class="ckeditor5-toolbar-tooltip" aria-hidden="true">${label} </span>
       </li>
     `;
   };
@@ -958,7 +986,7 @@
    * @return {string}
    *   The CKEditor 5 admin UI markup.
    *
-   * @internal
+   * @private
    */
   Drupal.theme.ckeditor5Admin = ({
     availableButtons,
@@ -967,7 +995,7 @@
     helpMessage,
   }) => {
     return `
-    <div aria-live="polite" data-drupal-selector="ckeditor5-admin-help-message">
+    <div data-drupal-selector="ckeditor5-admin-help-message">
       <p>${helpMessage.join('</p><p>')}</p>
     </div>
     <div class="ckeditor5-toolbar-disabled">

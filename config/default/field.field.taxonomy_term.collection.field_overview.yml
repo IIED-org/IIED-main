@@ -1,0 +1,94 @@
+uuid: b0de612b-55f0-4cbe-a73d-86826a3af6a2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_overview
+    - paragraphs.paragraphs_type.basic_text
+    - taxonomy.vocabulary.collection
+  module:
+    - entity_reference_revisions
+id: taxonomy_term.collection.field_overview
+field_name: field_overview
+entity_type: taxonomy_term
+bundle: collection
+label: Overview
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      basic_text: basic_text
+    negate: 0
+    target_bundles_drag_drop:
+      about_the_author:
+        weight: 23
+        enabled: false
+      basic_text:
+        weight: 24
+        enabled: true
+      file_upload:
+        weight: 25
+        enabled: false
+      image:
+        weight: 26
+        enabled: false
+      image_wide:
+        weight: 27
+        enabled: false
+      info_box:
+        weight: 28
+        enabled: false
+      linked_person:
+        weight: 29
+        enabled: false
+      media_embed:
+        weight: 30
+        enabled: false
+      quote:
+        weight: 31
+        enabled: false
+      related_link:
+        weight: 32
+        enabled: false
+      researcher_profiles:
+        weight: 33
+        enabled: false
+      row_of_4:
+        weight: 34
+        enabled: false
+      section:
+        weight: 35
+        enabled: false
+      stories_block:
+        weight: 36
+        enabled: false
+      stories_cta:
+        weight: 37
+        enabled: false
+      stories_curated_content:
+        weight: 38
+        enabled: false
+      stories_link_list:
+        weight: 39
+        enabled: false
+      stories_quote:
+        weight: 40
+        enabled: false
+      stories_table:
+        weight: 41
+        enabled: false
+      stories_text:
+        weight: 42
+        enabled: false
+      stories_views:
+        weight: 43
+        enabled: false
+      video_embed:
+        weight: 44
+        enabled: false
+field_type: entity_reference_revisions

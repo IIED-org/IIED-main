@@ -1,0 +1,38 @@
+gin_lb_form:
+  version: VERSION
+  css:
+    theme:
+      dist/css/gin_lb.css: {  }
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+    - core/drupalSettings
+
+gin_lb_init:
+  version: VERSION
+  js:
+    dist/js/gin_lb_js.js: { minified: true, preprocess: false }
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+    - core/drupalSettings
+    - toolbar/toolbar
+    - toolbar/toolbar.escapeAdmin
+    - gin_lb/toastify
+
+gin_lb_accent:
+  version: VERSION
+  css:
+    theme:
+      dist/css/gin_lb_accent.css: { minified: true }
+
+toastify:
+  version: VERSION
+  js:
+    //cdn.jsdelivr.net/npm/toastify-js: { type: external }
+  css:
+    theme:
+      //cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css: { type: external }
+

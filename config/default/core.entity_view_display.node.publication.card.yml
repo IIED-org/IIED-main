@@ -53,7 +53,6 @@ dependencies:
     - node.type.publication
   module:
     - datetime
-    - ds
     - field_group
     - layout_builder
     - user
@@ -113,20 +112,6 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
-  ds:
-    layout:
-      id: layout_onecol
-      library: layout_discovery/onecol
-      disable_css: false
-      entity_classes: all_classes
-      settings:
-        label: ''
-    regions:
-      content:
-        - field_short_title
-        - field_cover_image
-        - field_date_published
-        - field_media
 id: node.publication.card
 targetEntityType: node
 bundle: publication

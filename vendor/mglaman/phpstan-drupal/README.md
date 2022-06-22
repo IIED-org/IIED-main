@@ -14,28 +14,23 @@ Extension for [PHPStan](https://phpstan.org/) to allow analysis of Drupal code.
 
 When you are using [`phpstan/extension-installer`](https://github.com/phpstan/extension-installer), `phpstan.neon` will be automatically included.
 
-Otherwise add `phpstan.neon` to your Drupal project.
+<details>
+  <summary>Manual installation</summary>
 
-Make sure it has
+If you don't want to use `phpstan/extension-installer`, include `extension.neon` in your project's PHPStan config:
 
-```neon
+```
 includes:
-	- vendor/mglaman/phpstan-drupal/extension.neon
+    - vendor/mglaman/phpstan-drupal/extension.neon
 ```
 
-## Enabling rules one-by-one
-
-If you don't want to start using all the available strict rules at once but only one or two, you can! Just don't include
-the whole `rules.neon` from this package in your configuration, but look at its contents and copy only the rules you
-want to your configuration under the `services` key:
+To include Drupal specific analysis rules, include this file:
 
 ```
-services:
-	-
-		class: PHPStan\Rules\Drupal\PluginManager\PluginManagerSetsCacheBackendRule
-		tags:
-			- phpstan.rules.rule
+includes:
+    - vendor/mglaman/phpstan-drupal/rules.neon
 ```
+</details>
 
 ## Excluding tests from analysis
 
@@ -134,13 +129,12 @@ example for adding a mapping for Search API:
 parameters:
 	drupal:
 		entityMapping:
-			block:
-				search_api_index:
-					class: Drupal\search_api\Entity\Index
-					storage: Drupal\search_api\Entity\SearchApiConfigEntityStorage
-				search_api_server:
-					class: Drupal\search_api\Entity\Server
-					storage: Drupal\search_api\Entity\SearchApiConfigEntityStorage			    
+			search_api_index:
+				class: Drupal\search_api\Entity\Index
+				storage: Drupal\search_api\Entity\SearchApiConfigEntityStorage
+			search_api_server:
+				class: Drupal\search_api\Entity\Server
+				storage: Drupal\search_api\Entity\SearchApiConfigEntityStorage			    
 ```
 
 Similarly, the `EntityStorageDynamicReturnTypeExtension` service helps to determine the type of the entity which is

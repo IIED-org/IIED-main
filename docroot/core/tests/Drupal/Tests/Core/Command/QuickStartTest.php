@@ -2,7 +2,7 @@
 
 namespace Drupal\Tests\Core\Command;
 
-use Drupal\Core\Database\Driver\sqlite\Install\Tasks;
+use Drupal\sqlite\Driver\Database\sqlite\Install\Tasks;
 use Drupal\Core\Test\TestDatabase;
 use Drupal\Tests\BrowserTestBase;
 use GuzzleHttp\Client;
@@ -85,9 +85,6 @@ class QuickStartTest extends TestCase {
    * Tests the quick-start command.
    */
   public function testQuickStartCommand() {
-    if (version_compare(phpversion(), \Drupal::MINIMUM_SUPPORTED_PHP) < 0) {
-      $this->markTestSkipped();
-    }
     if (version_compare(\SQLite3::version()['versionString'], Tasks::SQLITE_MINIMUM_VERSION) < 0) {
       $this->markTestSkipped();
     }
@@ -116,6 +113,8 @@ class QuickStartTest extends TestCase {
     });
     // The progress bar uses STDERR to write messages.
     $this->assertStringContainsString('Congratulations, you installed Drupal!', $process->getErrorOutput());
+    // Ensure the command does not trigger any PHP deprecations.
+    $this->assertStringNotContainsString('Deprecated', $process->getErrorOutput());
     $this->assertNotFalse($port, "Web server running on port $port");
 
     // Give the server a couple of seconds to be ready.
@@ -138,40 +137,9 @@ class QuickStartTest extends TestCase {
   }
 
   /**
-   * Tests that the installer throws a requirement error on older PHP versions.
-   */
-  public function testPhpRequirement() {
-    if (version_compare(phpversion(), \Drupal::MINIMUM_SUPPORTED_PHP) >= 0) {
-      $this->markTestSkipped();
-    }
-
-    $install_command = [
-      $this->php,
-      'core/scripts/drupal',
-      'quick-start',
-      'standard',
-      "--site-name='Test site {$this->testDb->getDatabasePrefix()}'",
-      '--suppress-login',
-    ];
-    $process = new Process($install_command, NULL, ['DRUPAL_DEV_SITE_PATH' => $this->testDb->getTestSitePath()]);
-    $process->setTimeout(500);
-    $process->run();
-    $error_output = $process->getErrorOutput();
-    $this->assertStringContainsString('Your PHP installation is too old.', $error_output);
-    $this->assertStringContainsString('Drupal requires at least PHP', $error_output);
-    $this->assertStringContainsString(\Drupal::MINIMUM_SUPPORTED_PHP, $error_output);
-
-    // Stop the web server.
-    $process->stop();
-  }
-
-  /**
    * Tests the quick-start commands.
    */
   public function testQuickStartInstallAndServerCommands() {
-    if (version_compare(phpversion(), \Drupal::MINIMUM_SUPPORTED_PHP) < 0) {
-      $this->markTestSkipped();
-    }
     if (version_compare(\SQLite3::version()['versionString'], Tasks::SQLITE_MINIMUM_VERSION) < 0) {
       $this->markTestSkipped();
     }

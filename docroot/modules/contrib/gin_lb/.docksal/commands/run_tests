@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+## Run phpunit tests
+##
+## Tests:
+## - fin run_tests --filter 'UiPatternsSettingsRenderTest'
+
+set -e
+
+fin exec /var/www/vendor/bin/phpunit $*

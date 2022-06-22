@@ -30,9 +30,9 @@
     <title>{{ head_title|safe_join(' | ') }}</title>
     <css-placeholder token="{{ placeholder_token }}">
     <js-placeholder token="{{ placeholder_token }}">
-    <!-- <script src="https://cdn.tailwindcss.com/"></script> --> {# For developing with tailwind #}
-  </head>
+   </head>
   <body{{ attributes }}>
+    <div>
     {#
       Keyboard navigation/accessibility link to main content section in
       page.html.twig.
@@ -43,6 +43,20 @@
     {{ page_top }}
     {{ page }}
     {{ page_bottom }}
+    </div>
     <js-bottom-placeholder token="{{ placeholder_token }}">
+    <script>/**
+      * Initiate priorityNav
+      */
+    var wrapper = document.querySelector(".secondary");
+    var nav = priorityNav.init({
+        mainNavWrapper: ".secondary",
+        breakPoint: 760,
+        throttleDelay: '50',
+        navDropdownLabel: 'More ▼',
+        offsetPixels: 0,
+        navDropdownBreakpointLabel: '',
+    });
+  </script>
   </body>
 </html>

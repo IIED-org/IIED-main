@@ -1,0 +1,13 @@
+uuid: 58edeaa6-3d8c-4024-8b61-0b4e96184628
+langcode: en
+status: true
+dependencies: {  }
+id: 2_column
+label: '2 column'
+classes: 'sm:col-span-2'
+type: component
+block_restrictions:
+  - 'inline_block:card'
+  - 'inline_block:collection_card'
+layout_restrictions: {  }
+weight: 0

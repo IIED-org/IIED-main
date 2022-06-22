@@ -63,6 +63,7 @@ dependencies:
     - layout_builder
     - link
     - media
+    - metatag
     - options
     - serial
     - taxonomy
@@ -78,7 +79,7 @@ third_party_settings:
       label: cover-image
       parent_name: ''
       region: hidden
-      weight: 43
+      weight: 47
       format_type: html_element
       format_settings:
         classes: ''
@@ -96,7 +97,7 @@ third_party_settings:
       label: pub-header
       parent_name: ''
       region: hidden
-      weight: 45
+      weight: 49
       format_type: html_element
       format_settings:
         classes: 'col-md-8 order-md-2 float-md-right mb-3'
@@ -113,7 +114,7 @@ third_party_settings:
       label: pub-body
       parent_name: ''
       region: hidden
-      weight: 44
+      weight: 48
       format_type: html_element
       format_settings:
         classes: 'col-md-8 float-md-right order-md-3'
@@ -134,15 +135,12 @@ third_party_settings:
         - field_journal_ref
         - field_lit_code
         - field_series
-        - field_admin
+        - field_reportagency1
         - field_deptlist
-        - field_lists
-        - field_parent
-        - field_reportingcode1
       label: pub-detail
       parent_name: ''
       region: hidden
-      weight: 39
+      weight: 43
       format_type: html_element
       format_settings:
         classes: ''
@@ -160,7 +158,7 @@ third_party_settings:
       label: Related-project
       parent_name: ''
       region: hidden
-      weight: 42
+      weight: 46
       format_type: html_element
       format_settings:
         classes: 'border-gradient mb-5 order-5'
@@ -177,7 +175,7 @@ third_party_settings:
       label: 'Related publications'
       parent_name: ''
       region: hidden
-      weight: 41
+      weight: 45
       format_type: html_element
       format_settings:
         classes: 'mb-5 order-6 container'
@@ -194,7 +192,7 @@ third_party_settings:
       label: 'Related links'
       parent_name: ''
       region: hidden
-      weight: 40
+      weight: 44
       format_type: html_element
       format_settings:
         classes: ''
@@ -211,7 +209,7 @@ third_party_settings:
       label: row-one
       parent_name: ''
       region: hidden
-      weight: 46
+      weight: 50
       format_type: html_element
       format_settings:
         classes: 'row d-md-block mb-4'
@@ -228,7 +226,7 @@ third_party_settings:
       label: row-two
       parent_name: ''
       region: hidden
-      weight: 47
+      weight: 51
       format_type: html_element
       format_settings:
         classes: 'row cleared'
@@ -250,21 +248,28 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 29
+    weight: 33
     region: content
   field_a_serial:
     type: serial_default_formatter
-    label: inline
+    label: above
     settings: {  }
     third_party_settings: {  }
     weight: 0
+    region: content
+  field_admin:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 19
     region: content
   field_area_list:
     type: address_country_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 34
+    weight: 38
     region: content
   field_author_s_:
     type: entity_reference_label
@@ -272,11 +277,11 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 27
+    weight: 31
     region: content
   field_cover_image:
     type: media_thumbnail
-    label: hidden
+    label: above
     settings:
       image_link: ''
       image_style: page
@@ -288,16 +293,24 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    weight: 17
+    weight: 20
     region: content
   field_date_published:
     type: datetime_custom
-    label: inline
+    label: above
     settings:
       timezone_override: ''
       date_format: 'Y-m-d\TH:i:s'
     third_party_settings: {  }
-    weight: 18
+    weight: 21
+    region: content
+  field_deptlist:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 40
     region: content
   field_document_type:
     type: entity_reference_label
@@ -305,11 +318,11 @@ content:
     settings:
       link: false
     third_party_settings: {  }
-    weight: 26
+    weight: 30
     region: content
   field_doi:
     type: link
-    label: inline
+    label: above
     settings:
       trim_length: 80
       url_only: false
@@ -325,7 +338,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 28
+    weight: 32
     region: content
   field_external_url:
     type: link
@@ -337,7 +350,7 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 20
+    weight: 23
     region: content
   field_iied_url:
     type: link
@@ -356,18 +369,18 @@ content:
             lb: 'Related link'
             lb-col: false
             classes: {  }
-    weight: 19
+    weight: 22
     region: content
   field_isbn:
     type: isbn_default
-    label: inline
+    label: above
     settings: {  }
     third_party_settings: {  }
     weight: 0
     region: content
   field_issn:
     type: string
-    label: inline
+    label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
@@ -375,15 +388,22 @@ content:
     region: content
   field_journal_ref:
     type: string
-    label: inline
+    label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
     weight: 0
     region: content
+  field_lists:
+    type: entity_reference_rss_category
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 18
+    region: content
   field_lit_code:
     type: list_key
-    label: inline
+    label: above
     settings: {  }
     third_party_settings: {  }
     weight: 0
@@ -405,7 +425,22 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    weight: 21
+    weight: 24
+    region: content
+  field_meta_tags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 25
+    region: content
+  field_parent:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 26
     region: content
   field_pdf:
     type: field_link
@@ -414,7 +449,7 @@ content:
       type: ''
       settings: {  }
     third_party_settings: {  }
-    weight: 23
+    weight: 27
     region: content
   field_pdf_pages:
     type: number_integer
@@ -423,7 +458,15 @@ content:
       thousand_separator: ''
       prefix_suffix: true
     third_party_settings: {  }
-    weight: 24
+    weight: 28
+    region: content
+  field_product_code:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 7
     region: content
   field_product_code_new:
     type: computed_string
@@ -433,7 +476,7 @@ content:
       cache_unit: -1
       cache_duration: 1
     third_party_settings: {  }
-    weight: 35
+    weight: 39
     region: content
   field_project:
     type: entity_reference_label
@@ -441,7 +484,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 31
+    weight: 35
     region: content
   field_publisher:
     type: entity_reference_label
@@ -449,26 +492,34 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 33
+    weight: 37
     region: content
   field_publisher_legacy:
     type: string
-    label: hidden
+    label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 14
+    weight: 15
+    region: content
+  field_reportagency1:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 9
     region: content
   field_series:
     type: entity_reference_rss_category
-    label: inline
+    label: above
     settings: {  }
     third_party_settings: {  }
     weight: 0
     region: content
   field_series_item_code:
     type: string
-    label: hidden
+    label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
@@ -476,11 +527,11 @@ content:
     region: content
   field_short_title:
     type: string
-    label: hidden
+    label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 9
+    weight: 10
     region: content
   field_source_publication:
     type: string
@@ -488,7 +539,28 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 10
+    weight: 11
+    region: content
+  field_status:
+    type: list_key
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 12
+    region: content
+  field_tags:
+    type: entity_reference_rss_category
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 13
+    region: content
+  field_team:
+    type: list_key
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 14
     region: content
   field_theme_s_:
     type: entity_reference_label
@@ -504,7 +576,7 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    weight: 16
+    weight: 17
     region: content
   field_translator:
     type: entity_reference_label
@@ -512,7 +584,14 @@ content:
     settings:
       link: false
     third_party_settings: {  }
-    weight: 25
+    weight: 29
+    region: content
+  field_work_programme_global_enga:
+    type: list_key
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 16
     region: content
   langcode:
     type: language
@@ -521,21 +600,14 @@ content:
       link_to_entity: false
       native_language: false
     third_party_settings: {  }
-    weight: 32
+    weight: 36
     region: content
   links:
     settings: {  }
     third_party_settings: {  }
-    weight: 30
+    weight: 34
     region: content
 hidden:
-  field_admin: true
-  field_deptlist: true
-  field_lists: true
-  field_meta_tags: true
-  field_parent: true
-  field_product_code: true
-  field_reportagency1: true
   field_reportagency2: true
   field_reportagency3: true
   field_reportfin1: true
@@ -543,9 +615,5 @@ hidden:
   field_reportfin3: true
   field_reportingcode1: true
   field_reportingcode2: true
-  field_status: true
-  field_tags: true
-  field_team: true
-  field_work_programme_global_enga: true
   search_api_excerpt: true
   sharing_buttons: true

@@ -282,7 +282,7 @@ display:
           entity_type: node
           plugin_id: entity_reverse
           required: true
-      css_class: pb-5
+      css_class: 'mb-12 container'
       header:
         area:
           id: area
@@ -294,7 +294,7 @@ display:
           plugin_id: text
           empty: false
           content:
-            value: '<h3>Further publications related to this project</h3>'
+            value: '<h3 class="mb-4">Further publications related to this project</h3>'
             format: basic_html
           tokenize: false
       footer: {  }

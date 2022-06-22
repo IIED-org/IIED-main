@@ -1,0 +1,294 @@
+<?php
+
+/**
+ * @file
+ * Layout Builder Styles module file.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\layout_builder_styles\LayoutBuilderStyleInterface;
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Modify the configuration form for layout builder components (blocks).
+ */
+function layout_builder_styles_form_alter(&$form, FormStateInterface $formState) {
+  if ($form['#form_id'] === 'layout_builder_add_block' || $form['#form_id'] === 'layout_builder_update_block') {
+    /** @var \Drupal\layout_builder\Form\ConfigureBlockFormBase $formObject */
+    $formObject = $formState->getFormObject();
+
+    $blockPluginId = $formObject
+      ->getCurrentComponent()
+      ->getPluginId();
+
+    $bundle = FALSE;
+    // If this is a reusable block, retrieve the block bundle.
+    if (strpos($blockPluginId, "block_content:") === 0) {
+      $uuid = str_replace('block_content:', '', $blockPluginId);
+      $bundle = \Drupal::service('entity.repository')->loadEntityByUuid('block_content', $uuid)
+        ->bundle();
+    }
+
+    $allStyles = _layout_builder_styles_retrieve_by_type(LayoutBuilderStyleInterface::TYPE_COMPONENT);
+
+    $styleOptions = [];
+    foreach ($allStyles as $style) {
+      $restrictions = $style->getBlockRestrictions();
+      $bundle_allowed = FALSE;
+      // If this is a re-usable block, propagate any inline_block allowances
+      // by comparing the block bundles.
+      if ($bundle && in_array('inline_block:' . $bundle, $restrictions)) {
+        $bundle_allowed = TRUE;
+      }
+      /** @var \Drupal\layout_builder_styles\LayoutBuilderStyleInterface $style */
+      if (empty($style->getBlockRestrictions()) || in_array($blockPluginId, $restrictions) || $bundle_allowed) {
+        $styleOptions[$style->id()] = $style->label();
+      }
+    }
+
+    if (!empty($styleOptions)) {
+      $component = $formObject->getCurrentComponent();
+
+      $selectedStyle = $component->get('layout_builder_styles_style');
+      _layout_builder_styles_add_style_selection_form_element($form, $styleOptions, $selectedStyle);
+
+      // Our submit handler must execute before the default one, because the
+      // default handler stores the section & component data in the tempstore
+      // and we need to update those objects before that happens.
+      array_unshift($form['#submit'], '_layout_builder_styles_submit_block_form');
+    }
+  }
+}
+
+/**
+ * Custom submit handler for submitting LB block forms.
+ *
+ * Persists the configured block style to the component configuration data,
+ * which is later persisted to section storage by layout builder's base form.
+ */
+function _layout_builder_styles_submit_block_form(array $form, FormStateInterface $formState) {
+  /** @var \Drupal\layout_builder\Form\ConfigureBlockFormBase $formObject */
+  $formObject = $formState->getFormObject();
+
+  $component = $formObject->getCurrentComponent();
+  $styles = _layout_builder_styles_prepare_styles_for_saving($formState->getValue('layout_builder_style'));
+  $component->set('layout_builder_styles_style', $styles);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Modify the configuration form for layout builder sections (layouts).
+ */
+function layout_builder_styles_form_layout_builder_configure_section_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $formObject = $form_state->getFormObject();
+  $layout_id = $formObject->getLayout()->getPluginId();
+  $allStyles = _layout_builder_styles_retrieve_by_type(LayoutBuilderStyleInterface::TYPE_SECTION);
+
+  $styleOptions = [];
+  foreach ($allStyles as $style) {
+    $restrictions = $style->getLayoutRestrictions();
+    if (empty($restrictions) || in_array($layout_id, $restrictions)) {
+      /** @var \Drupal\layout_builder_styles\LayoutBuilderStyleInterface $style */
+      $styleOptions[$style->id()] = $style->label();
+    }
+  }
+
+  if (!empty($styleOptions)) {
+    $config = $formObject->getLayout()->getConfiguration();
+    $selectedStyle = $config['layout_builder_styles_style'] ?? [];
+    _layout_builder_styles_add_style_selection_form_element($form, $styleOptions, $selectedStyle);
+
+    // Our submit handler must execute before the default one, because the
+    // default handler stores the section & component data in the tempstore
+    // and we need to update those objects before that happens.
+    array_unshift($form['#submit'], '_layout_builder_styles_submit_section_form');
+  }
+}
+
+/**
+ * Helper function to load style entities by type.
+ *
+ * @param string $type
+ *   The entity type (either 'section' or 'component')
+ *
+ * @return array
+ *   The style entities, sorted by label.
+ */
+function _layout_builder_styles_retrieve_by_type($type) {
+  $query = \Drupal::entityTypeManager()
+    ->getStorage('layout_builder_style')
+    ->getQuery()
+    ->condition('type', $type)
+    ->sort('weight', 'ASC');
+  $ids = $query->execute();
+  $allStyles = \Drupal::entityTypeManager()->getStorage('layout_builder_style')->loadMultiple($ids);
+  return $allStyles;
+}
+
+/**
+ * Custom submit handler for submitting LB section forms.
+ *
+ * This is used to persist the selected style to the layout configuration
+ * array, which layout builder's ConfigureSectionForm will persist to section
+ * storage.
+ */
+function _layout_builder_styles_submit_section_form(array $form, FormStateInterface $formState) {
+  $formObject = $formState->getFormObject();
+  $config = $formObject->getLayout()->getConfiguration();
+  if (!$config) {
+    $config = [];
+  }
+  $styles = _layout_builder_styles_prepare_styles_for_saving($formState->getValue('layout_builder_style'));
+  $config = array_merge($config, ['layout_builder_styles_style' => $styles]);
+
+  $formObject
+    ->getLayout()
+    ->setConfiguration($config);
+}
+
+/**
+ * Add a style selection form element to an existing form.
+ *
+ * @param array $form
+ *   The form array to add to.
+ * @param array $styleOptions
+ *   The style options to make available.
+ * @param mixed $selectedStyle
+ *   The existing selected style(s), either a string or array.
+ */
+function _layout_builder_styles_add_style_selection_form_element(array &$form, array $styleOptions, $selectedStyle) {
+  // Set form actions to a high weight, just so that we can make our form
+  // style element appear right before them.
+  $form['actions']['#weight'] = 100;
+  $form['layout_builder_style'] = [
+    '#type' => 'select',
+    '#options' => $styleOptions,
+    '#title' => t('Style'),
+    '#default_value' => $selectedStyle,
+    '#required' => FALSE,
+    '#empty_option' => t('- None -'),
+    '#weight' => 90,
+  ];
+
+  $config = \Drupal::config('layout_builder_styles.settings');
+  // If we're configured to allow a single selection, then we need to check
+  // if the previously saved selected style is actually an array of styles
+  // that were saved from previously allowing multiple. In this case, if there's
+  // just one style that was saved, then choose that as the current value.
+  // If there were multiple saved, we just clear them both out. There's not
+  // a good way to recover from that situation.
+  if ($config && $config->get('multiselect' === 'single')) {
+    if (is_array($selectedStyle)) {
+      $filtered = array_filter($selectedStyle);
+      if (count($filtered) === 1) {
+        $existingSelectedStyle = array_shift($filtered);
+      }
+      else {
+        $existingSelectedStyle = null;
+      }
+      $form['layout_builder_style']['#default_value'] = $existingSelectedStyle;
+    }
+  }
+
+  // If we're configured to allow multiple selections, then we need to change
+  // the form widget to one that supports multiple selections.
+  if ($config && $config->get('multiselect') === 'multiple') {
+    // The existing value may not be stored as an array if the site admin
+    // switched from allowing one selection to allowing multiple.
+    if (!is_array($selectedStyle)) {
+      $selectedStyle = [$selectedStyle];
+    }
+    $form['layout_builder_style']['#default_value'] = array_filter($selectedStyle);
+    if ($config->get('form_type') === 'checkboxes') {
+      $form['layout_builder_style']['#type'] = 'checkboxes';
+    }
+    else {
+      $form['layout_builder_style']['#multiple'] = TRUE;
+    }
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function layout_builder_styles_theme_suggestions_block_alter(array &$suggestions, array $variables) {
+  // Add theme hook suggestions for block templates based on the configured
+  // style. We only act if there is a single style selected for the block.
+  if (!empty($variables['elements']['#layout_builder_style']) && count($variables['elements']['#layout_builder_style']) < 2) {
+    $styleId = reset($variables['elements']['#layout_builder_style']);
+    if (!empty($styleId)) {
+      $suggestions[] = 'block__' . $styleId;
+      // For each existing suggestion, provide a duplicate one that adds the
+      // block style ID.
+      foreach ($suggestions as $suggestion) {
+        $suggestions[] = $suggestion . '__' . $styleId;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function layout_builder_styles_preprocess_layout(&$variables) {
+  // Apply a configured style to a layout by adding the style's CSS classes.
+  if (isset($variables['settings']['layout_builder_styles_style'])) {
+    $selected = $variables['settings']['layout_builder_styles_style'];
+    /** @var \Drupal\layout_builder_styles\LayoutBuilderStyleInterface $style */
+
+    // Convert single selection to an array for consistent processing.
+    if (!is_array($selected)) {
+      $selected = [$selected];
+    }
+
+    // Retrieve all styles from selection(s).
+    $grouped_classes = [];
+    foreach ($selected as $stylename) {
+      // Account for incorrectly configured section configuration which may
+      // have a NULL style ID. We cannot pass NULL to the storage handler or
+      // it will throw an exception.
+      if (empty($stylename)) {
+        continue;
+      }
+      if ($layout_style = \Drupal::entityTypeManager()->getStorage('layout_builder_style')->load($stylename)) {
+        $classes = \preg_split('(\r\n|\r|\n)', $layout_style->getClasses());
+        $grouped_classes = array_merge($grouped_classes, $classes);
+        $variables['#cache']['tags'][] = 'config:layout_builder_styles.style.' . $layout_style->id();
+      }
+    }
+
+    if (!empty($grouped_classes)) {
+      if (!isset($variables['attributes']['class']) || !is_array($variables['attributes']['class'])) {
+        $variables['attributes']['class'] = [];
+      }
+      $variables['attributes']['class'] = array_merge($variables['attributes']['class'], $grouped_classes);
+    }
+  }
+}
+
+/**
+ * Prepare submitted style(s) for saving in block/section config.
+ *
+ * This is necessary to groom submitted styles where multiple styles are allowed
+ *
+ *
+ * @param string|array $submittedStyles
+ *   The submitted style(s).
+ *
+ * @return string|array
+ *   The submitted style(s), now formatted correctly for saving.
+ */
+function _layout_builder_styles_prepare_styles_for_saving($submittedStyles) {
+  // Filter out empty selections that may be present from unselected checkboxes.
+  if (is_array($submittedStyles)) {
+    // Remove empty/unselected styles from form.
+    $submittedStyles = array_filter($submittedStyles);
+    // We don't need to store an associative array that the multi select
+    // and checkboxes form widgets provide. We just care to store an array of
+    // the style names as values.
+    return array_values($submittedStyles);
+  }
+  return $submittedStyles;
+}

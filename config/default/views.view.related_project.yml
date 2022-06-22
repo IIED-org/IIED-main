@@ -11,8 +11,8 @@ dependencies:
 id: related_project
 label: 'Related project'
 module: views
-description: 'Shows related project on a publication'
-tag: ''
+description: 'Formerly showing related project on publication, no longer needed'
+tag: deprecated
 base_table: node_field_data
 base_field: nid
 display:
@@ -236,22 +236,6 @@ display:
     display_plugin: block
     position: 1
     display_options:
-      defaults:
-        header: false
-      header:
-        area:
-          id: area
-          table: views
-          field: area
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: text
-          empty: false
-          content:
-            value: '<h2 class="py-4">Related IIED project</h2>'
-            format: full_html
-          tokenize: false
       display_extenders: {  }
       block_description: 'related project block'
     cache_metadata:

@@ -68,6 +68,7 @@ use Drupal\ckeditor5\Plugin\CKEditor5PluginDefinition;
  *     library: MODULE_NAME/ckeditor5.marquee
  *     elements:
  *       - <marquee>
+ *       - <marquee behavior>
  * @endcode
  *
  * Declared as an Annotation:
@@ -82,7 +83,7 @@ use Drupal\ckeditor5\Plugin\CKEditor5PluginDefinition;
  *  *   drupal = @DrupalAspectsOfCKEditor5Plugin(
  *  *     label = @Translation("Marquee"),
  *  *     library = "MODULE_NAME/ckeditor5.marquee"
- *  *     elements = { "<marquee>" },
+ *  *     elements = { "<marquee>", "<marquee behavior>" },
  *  *   )
  *  * )
  *  * /
@@ -119,11 +120,20 @@ use Drupal\ckeditor5\Plugin\CKEditor5PluginDefinition;
  *   make it discoverable.
  * - drupal.elements: A list of elements and attributes the plugin allows use of
  *   within CKEditor 5. This uses the same syntax as the 'filter_html' plugin
- *   with an additional special keyword: '<$block>' . Using
- *   '<$block [attribute(s)]>`  will permit the provided attributes in all block
- *   level tags that are explicitly enabled in any plugin. i.e. if only '<p>',
- *   '<h3>' and '<h2>' tags are allowed, then '<$block data-something>'  will
- *   allow the 'data-something' attribute for '<p>', '<h3>' and '<h2>' tags.
+ *   with an additional special keyword: '<$text-container>' . Using
+ *   '<$text-container [attribute(s)]>` will permit the provided
+ *   attributes in all CKEditor 5's `$block` text container tags that are
+ *   explicitly enabled in any plugin. i.e. if only '<p>', '<h3>' and '<h2>'
+ *   tags are allowed, then '<$text-container data-something>' will allow the
+ *   'data-something' attribute for '<p>', '<h3>' and '<h2>' tags.
+ *   Note that while the syntax is the same, some extra nuance is needed:
+ *   although this syntax can be used to create an attribute on an element, f.e.
+ *   (['<marquee behavior>']) creating the `behavior` attribute on `<marquee>`,
+ *   the tag itself must be creatable as well (['<marquee>']). If a plugin wants
+ *   the tag and attribute to be created, list both:
+ *   (['<marquee>', '<marquee behavior>']). Validation logic ensures that a
+ *   plugin supporting only the creation of attributes cannot be enabled if the
+ *   tag cannot be created via itself or through another CKEditor 5 plugin.
  * - drupal.toolbar_items: List of toolbar items the plugin provides. Keyed by a
  *   machine name and the value being a pair defining the label:
  *   @code

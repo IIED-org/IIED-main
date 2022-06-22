@@ -1,19 +1,16 @@
 import Mmenu from '../../core/oncanvas/mmenu.oncanvas';
-import options from './_options';
-import configs from './_configs';
-import { extendShorthandOptions } from './_options';
+import OPTIONS from './options';
+import CONFIGS from './configs';
 import * as DOM from '../../_modules/dom';
 import { extend } from '../../_modules/helpers';
 
-//	Add the options and configs.
-Mmenu.options.pageScroll = options;
-Mmenu.configs.pageScroll = configs;
+export default function (this: Mmenu) {
+    this.opts.pageScroll = this.opts.pageScroll || {};
+    this.conf.pageScroll = this.conf.pageScroll || {};
 
-export default function(this: Mmenu) {
-    var options = extendShorthandOptions(this.opts.pageScroll);
-    this.opts.pageScroll = extend(options, Mmenu.options.pageScroll);
-
-    var configs = this.conf.pageScroll;
+    //	Extend options.
+    const options = extend(this.opts.pageScroll, OPTIONS);
+    const configs = extend(this.conf.pageScroll, CONFIGS);
 
     /** The currently "active" section */
     var section: HTMLElement;
@@ -33,57 +30,45 @@ export default function(this: Mmenu) {
     }
     function anchorInPage(href: string) {
         try {
-            if (href != '#' && href.slice(0, 1) == '#') {
-                return Mmenu.node.page.querySelector(href) as HTMLElement;
+            if (href.slice(0, 1) == '#') {
+                return DOM.find(Mmenu.node.page, href)[0];
             }
-            return null;
-        } catch (err) {
-            return null;
-        }
+        } catch (err) { }
+
+        return null;
     }
 
-    //	Scroll to section after clicking menu item.
-    if (options.scroll) {
-        this.bind('close:finish', () => {
+    if (this.opts.offCanvas.use && options.scroll) {
+
+        //	Scroll to section after clicking menu item.
+        this.bind('close:after', () => {
             scrollTo();
         });
-    }
 
-    //	Add click behavior.
-    //	Prevents default behavior when clicking an anchor.
-    if (this.opts.offCanvas && options.scroll) {
-        this.clck.push((anchor: HTMLElement, args: mmClickArguments) => {
-            section = null;
-
-            //	Don't continue if the clicked anchor is not in the menu.
-            if (!args.inMenu) {
-                return;
-            }
-
-            //	Don't continue if the targeted section is not on the page.
-            var href = anchor.getAttribute('href');
+        this.node.menu.addEventListener('click', event => {
+            const href = (event.target as HTMLElement)?.closest('a[href]')?.getAttribute('href') || '';
 
             section = anchorInPage(href);
-            if (!section) {
-                return;
-            }
+            if (section) {
 
-            //	If the sidebar add-on is "expanded"...
-            if (
-                this.node.menu.matches('.mm-menu_sidebar-expanded') &&
-                this.node.wrpr.matches('.mm-wrapper_sidebar-expanded')
-            ) {
-                //	... scroll the page to the section.
-                scrollTo();
+                event.preventDefault();
 
-                //	... otherwise...
-            } else {
-                //	... close the menu.
-                return {
-                    close: true
-                };
+                //	If the sidebar add-on is "expanded"...
+                if (
+                    this.node.menu.matches('.mm-menu--sidebar-expanded') &&
+                    this.node.wrpr.matches('.mm-wrapper--sidebar-expanded')
+                ) {
+                    //	... scroll the page to the section.
+                    scrollTo();
+
+                    //	... otherwise...
+                } else {
+                    //	... close the menu.
+                    this.close();
+                }
             }
         });
+
     }
 
     //	Update selected menu item after scrolling.
@@ -91,10 +76,9 @@ export default function(this: Mmenu) {
         let scts: HTMLElement[] = [];
 
         this.bind('initListview:after', (listview: HTMLElement) => {
-            let listitems = DOM.children(listview, '.mm-listitem');
+            const listitems = DOM.children(listview, '.mm-listitem');
             DOM.filterLIA(listitems).forEach(anchor => {
-                var href = anchor.getAttribute('href');
-                var section = anchorInPage(href);
+                const section = anchorInPage(anchor.getAttribute('href'));
 
                 if (section) {
                     scts.unshift(section);
@@ -105,7 +89,7 @@ export default function(this: Mmenu) {
         let _selected = -1;
 
         window.addEventListener('scroll', evnt => {
-            var scrollTop = window.scrollY;
+            const scrollTop = window.scrollY;
 
             for (var s = 0; s < scts.length; s++) {
                 if (scts[s].offsetTop < scrollTop + configs.updateOffset) {
@@ -114,7 +98,7 @@ export default function(this: Mmenu) {
 
                         let panel = DOM.children(
                             this.node.pnls,
-                            '.mm-panel_opened'
+                            '.mm-panel--opened'
                         )[0];
 
                         let listitems = DOM.find(panel, '.mm-listitem');
@@ -131,6 +115,8 @@ export default function(this: Mmenu) {
                     break;
                 }
             }
+        }, {
+            passive: true
         });
     }
 }

@@ -5,19 +5,19 @@
  */
 #}
 {% include '@gin/navigation/toolbar--gin.html.twig' ignore missing %}
-{% if toolbar_variant != 'classic' %}
-<div class="region region-meta region-meta--frontend">
-  <div class="gin-layout-container">
-    <div class="breadcrumb-wrapper">
-      <div class="region region-breadcrumb">
-        <nav class="breadcrumb" role="navigation" aria-labelledby="system-breadcrumb">
+{% if secondary_toolbar_frontend and toolbar_variant != 'classic' %}
+<div class="gin-secondary-toolbar gin-secondary-toolbar--frontend">
+  <div class="gin-secondary-toolbar__layout-container">
+    <div class="gin-breadcrumb-wrapper">
+      <div class="region-breadcrumb">
+        <nav class="gin-breadcrumb" role="navigation" aria-labelledby="system-breadcrumb">
           <h2 id="system-breadcrumb" class="visually-hidden">{{ 'Breadcrumb'|t }}</h2>
-          <ol class="breadcrumb__list">
-            <li class="breadcrumb__item">
+          <ol class="gin-breadcrumb__list">
+            <li class="gin-breadcrumb__item">
               {% if entity_edit_url and entity_title %}
-                <a class="breadcrumb__link gin-back-to-admin" href="{{ entity_edit_url }}">{{ 'Edit %title'|t({ '%title': entity_title }) }}</a>
+                <a class="gin-breadcrumb__link gin-back-to-admin" href="{{ entity_edit_url }}">{{ 'Edit %title'|t({ '%title': entity_title }) }}</a>
               {% else %}
-                <a class="breadcrumb__link gin-back-to-admin" href="{{ path('system.admin_content') }}">{{ 'Back to Administration'|t }}</a>
+                <a class="gin-breadcrumb__link gin-back-to-admin" href="{{ path('system.admin_content') }}">{{ 'Back to Administration'|t }}</a>
               {% endif %}
             </li>
           </ol>

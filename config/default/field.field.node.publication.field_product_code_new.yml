@@ -19,6 +19,5 @@ default_value:
   -
     value: ''
 default_value_callback: ''
-settings:
-  code: '$value = '''';'
+settings: {  }
 field_type: computed_string

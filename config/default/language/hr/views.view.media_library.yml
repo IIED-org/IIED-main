@@ -1,6 +1,6 @@
 display:
   default:
-    display_title: Zadano
+    display_title: Default
     display_options:
       title: Mediji
       filters:

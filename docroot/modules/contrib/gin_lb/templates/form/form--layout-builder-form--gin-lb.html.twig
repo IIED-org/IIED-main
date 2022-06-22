@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * Theme override for a 'form' element.
+ *
+ * Available variables
+ * - attributes: A list of HTML attributes for the wrapper element.
+ * - children: The child elements of the form.
+ *
+ * @see template_preprocess_form()
+ */
+#}
+<div class="glb-toolbar glb-toolbar--small">
+  <div class="glb-toolbar__titelbar">
+    <div class="glb-toolbar__title">{{ "Layout builder setting"|t }}</div>
+    <div class="glb-toolbar__close"></div>
+  </div>
+  <form{{ attributes }}>
+    {{ children }}
+  </form>
+</div>

@@ -1,0 +1,75 @@
+{#
+/**
+ * @file
+ * Theme override to display a taxonomy term.
+ *
+ * Available variables:
+ * - url: URL of the current term.
+ * - name: (optional) Name of the current term.
+ * - content: Items for the content of the term (fields and description).
+ *   Use 'content' to print them all, or print a subset such as
+ *   'content.description'. Use the following code to exclude the
+ *   printing of a given child element:
+ *   @code
+ *   {{ content|without('description') }}
+ *   @endcode
+ * - attributes: HTML attributes for the wrapper.
+ * - page: Flag for the full page state.
+ * - term: The taxonomy term entity, including:
+ *   - id: The ID of the taxonomy term.
+ *   - bundle: Machine name of the current vocabulary.
+ * - view_mode: View mode, e.g. 'full', 'teaser', etc.
+ *
+ * @see template_preprocess_taxonomy_term()
+ */
+#}
+{%
+  set classes = [
+    'taxonomy-term',
+    'vocabulary-' ~ term.bundle|clean_class,
+  ]
+%}
+<div{{ attributes.setAttribute('id', 'taxonomy-term-' ~ term.id).addClass(classes) }}>
+    <div class="container items-baseline p-4 mx-auto overflow-hidden lg:grid lg:gap-x-6 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        {{ title_prefix }}
+        <h1 class="mb-6">{{ name }}</h1>
+        {{ title_suffix }}
+      </div>
+      <div class="lg:col-span-8">
+        <p class="prose prose-lg">
+        {{ term.description.0.value|striptags }}
+        </p>
+      </div>
+    </div>
+
+{# tabs #}
+
+  <div class="mb-12 border-b border-gray-300">
+    <div
+      class="container"
+      x-data="{ activeTab: 'inseries' }"
+      x-init="activeTab = window.location.hash ? window.location.hash.replace('#', '') : 'inseries'"
+    >
+      <nav class="flex flex-row">
+        <button
+          class="block px-6 py-2 text-lg font-semibold text-gray-700 border-b-2 border-iiedblue-500 hover:text-gray-900 focus:outline-none"
+        >
+          In this series</button
+        ><button
+          class="block px-6 py-2 text-lg font-semibold text-gray-700 hover:text-gray-900 focus:outline-none"
+        >
+          Overview
+        </button>
+      </nav>
+    </div>
+  </div>
+
+{# /tabs #}
+
+  <div class="content">
+    {{ content }}
+  </div>
+
+</div>
+

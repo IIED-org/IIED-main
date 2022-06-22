@@ -1,0 +1,139 @@
+
+.glb-button {
+  color: var(--colorGinPrimary) !important;
+  // color: var(--colorGinPrimaryActive);
+  background-color: transparent !important;
+  box-shadow: none !important;
+
+  font-family: Inter, -apple-system, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif !important;
+
+  &:hover {
+    background-color: var(--colorGinPrimaryHover) !important;
+  }
+
+  &:active, &:focus {
+    background-color: var(--colorGinPrimaryActive) !important;
+  }
+
+  &:hover, &:active, &:focus {
+    color: var(--colorGinButtonText);
+  }
+  display: inline-block !important;
+  margin: 1em 0.75em 1em 0 !important;
+  padding: calc(1em - 1px) calc(1.5em - 1px) !important;
+  cursor: pointer !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  border: 1px solid transparent !important;
+  border-radius: 2px !important;
+  font-size: 1em !important;
+  font-weight: 700 !important;
+  line-height: 1em !important;
+  appearance: none !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+.glb-button,
+.glb-button:not(:focus),
+.form-actions .glb-button,
+.glb-action-link--icon-trash.glb-action-link {
+  .gin--dark-mode & {
+    box-shadow: 0 2px 18px var(--colorGinButtonShadow) !important;
+  }
+
+  padding: calc(1em - 2px) calc(1.5em - 2px) !important;
+  // background: var(--colorGinPrimaryLightHover);
+  border: 2px solid var(--colorGinPrimary) !important;
+  // border: 2px solid transparent !important;
+  border-radius: $borderDefault !important;
+  box-shadow: 0 1px 2px var(--colorGinPrimaryLight) !important;
+  // box-shadow: 0 1px 2px var(--colorGinPrimaryLightShadow);
+  font-size: 16px !important;
+
+  &:hover {
+    background-color: var(--colorGinPrimaryHover) !important;
+    border-color: var(--colorGinPrimaryHover) !important;
+  }
+
+  &:active, &:focus {
+    border-color: var(--colorGinPrimaryActive) !important;
+  }
+
+  &:hover, &:active, &:focus, &:hover:focus {
+    color: var(--colorGinButtonText) !important;
+  }
+}
+
+.glb-button.button--small {
+  padding: .5em 1em !important;
+}
+
+.glb-button.button--extrasmall {
+  padding: .25em .75em !important;
+}
+
+.glb-button--primary,
+.glb-button--primary:not(:focus) {
+  background: var(--colorGinPrimary) !important;
+  box-shadow: 0 .125em .25em var(--colorGinPrimaryLightActive),
+              .1em .25em .5em var(--colorGinPrimaryLight),
+              -.25em -.5em 1em var(--colorGinAppBackground) !important;
+  filter: drop-shadow(0 6px 10px var(--colorGinPrimaryLight)) !important;
+
+  &:hover {
+    background-color: var(--colorGinPrimaryHover) !important;
+  }
+
+  &:active, &:focus {
+    background-color: var(--colorGinPrimaryActive) !important;
+  }
+
+  &, &:hover, &:active, &:focus {
+    color: var(--colorGinButtonText) !important;
+  }
+}
+
+a.glb-button:hover,
+a.glb-button:active {
+  color: var(--colorGinButtonText) !important;
+}
+
+a.glb-button--primary:hover,
+a.glb-button--primary:active,
+a.glb-button--primary:focus,
+a.glb-button--primary:focus:hover {
+  .gin--dark-mode & {
+    color: var(--colorGinAppBackground) !important;
+  }
+}
+
+.glb-button.glb-button:disabled, .glb-button.glb-button.is-disabled {
+  &, &:hover, &:active, &:focus {
+    border: 2px solid var(--colorGinDisabled) !important;
+  }
+
+  .gin--dark-mode & {
+    color: var(--colorGinDisabled) !important;
+    background-color: var(--colorGinLayer2Background) !important;
+  }
+}
+
+.glb-action-link.glb-action-link--icon-trash {
+  min-height: 48px !important;
+  padding: calc(.75em - 1px) calc(1.5em - 2px) !important;
+  box-sizing: border-box !important;
+
+  &, &:hover, &:active, &:focus, &:focus:hover {
+    border: 2px solid var(--colorGinDanger) !important;
+    // border: 2px solid transparent !important;
+  }
+}
+
+.inline-block-create-button {
+  @extend .glb-button;
+  background: none !important;
+}
+
+.glb-button.js-hide {
+  display: none !important;
+}

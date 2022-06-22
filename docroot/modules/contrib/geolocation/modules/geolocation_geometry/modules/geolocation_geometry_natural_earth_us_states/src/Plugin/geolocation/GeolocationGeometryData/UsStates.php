@@ -2,6 +2,7 @@
 
 namespace Drupal\geolocation_geometry_natural_earth_us_states\Plugin\geolocation\GeolocationGeometryData;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Shapefile\ShapefileException;
 use Drupal\geolocation_geometry_data\GeolocationGeometryDataBase;
 
@@ -19,7 +20,7 @@ class UsStates extends GeolocationGeometryDataBase {
   /**
    * {@inheritdoc}
    */
-  public $sourceUri = 'http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/ne_110m_admin_1_states_provinces.zip';
+  public $sourceUri = 'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/ne_110m_admin_1_states_provinces.zip';
 
   /**
    * {@inheritdoc}
@@ -39,7 +40,7 @@ class UsStates extends GeolocationGeometryDataBase {
   /**
    * {@inheritdoc}
    */
-  public function import(&$context) {
+  public function import(&$context): TranslatableMarkup {
     parent::import($context);
     $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
     $logger = \Drupal::logger('geolocation_us_states');

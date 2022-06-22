@@ -4,13 +4,14 @@ import { Plugin } from 'ckeditor5/src/core';
 import { setViewAttributes } from '@ckeditor/ckeditor5-html-support/src/conversionutils';
 
 /**
- * View-to-model conversion helper preserving allowed attributes on the Drupal Media model.
+ * View-to-model conversion helper for Drupal Media.
+ * Used for preserving allowed attributes on the Drupal Media model.
  *
  * @param {module:html-support/datafilter~DataFilter} dataFilter
  *   The General HTML support data filter.
  *
  * @return {function}
- *   function that adds an event listener to upcastDispatcher.
+ *   Function that adds an event listener to upcastDispatcher.
  */
 function viewToModelDrupalMediaAttributeConverter(dataFilter) {
   return (dispatcher) => {
@@ -18,7 +19,7 @@ function viewToModelDrupalMediaAttributeConverter(dataFilter) {
       'element:drupal-media',
       (evt, data, conversionApi) => {
         function preserveElementAttributes(viewElement, attributeName) {
-          const viewAttributes = dataFilter._consumeAllowedAttributes(
+          const viewAttributes = dataFilter.processViewAttributes(
             viewElement,
             conversionApi,
           );
@@ -127,15 +128,6 @@ function modelToEditingViewAttributeConverter() {
       },
       { priority: 'low' },
     );
-
-    // Render arbitrary attributes on the CKEditor 5 widget wrapper until
-    // arbitrary attributes are included as part of the server rendered preview.
-    // @see https://www.drupal.org/project/drupal/issues/3231337
-    dispatcher.on(
-      'attribute:htmlAttributes:drupalMedia',
-      modelToDataAttributeConverter,
-      { priority: 'low' },
-    );
   };
 }
 
@@ -143,7 +135,7 @@ function modelToEditingViewAttributeConverter() {
  * Model to data view attribute converter.
  *
  * @return {function}
- *   function that adds an event listener to downcastDispatcher.
+ *   Function that adds an event listener to downcastDispatcher.
  */
 function modelToDataViewAttributeConverter() {
   return (dispatcher) => {
@@ -181,7 +173,7 @@ function modelToDataViewAttributeConverter() {
 /**
  * Integrates Drupal Media with General HTML Support.
  *
- * @internal
+ * @private
  */
 export default class DrupalMediaGeneralHtmlSupport extends Plugin {
   /**

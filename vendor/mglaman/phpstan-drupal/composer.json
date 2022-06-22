@@ -12,7 +12,7 @@
     "require": {
         "php": "^7.4 || ^8.0",
         "symfony/finder": "~3.4.5 ||^4.2 || ^5.0 || ^6.0",
-        "phpstan/phpstan": "^1.0",
+        "phpstan/phpstan": "^1.7.0",
         "symfony/yaml": "~3.4.5 || ^4.2|| ^5.0 || ^6.0",
         "webflo/drupal-finder": "^1.2"
     },
@@ -25,6 +25,7 @@
         "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpstan/phpstan-strict-rules": "^1.0",
         "phpunit/phpunit": "^6.5 || ^7.5 || ^8.0 || ^9",
+        "slevomat/coding-standard": "^7.1",
         "squizlabs/php_codesniffer": "^3.3",
         "symfony/phpunit-bridge": "^3.4.3 || ^4.4 || ^5.4 || ^6.0"
     },
@@ -36,9 +37,6 @@
         "phpstan/phpstan-phpunit": "PHPUnit extensions and rules for PHPStan."
     },
     "autoload": {
-        "files": [
-            "drupal-phpunit-hack.php"
-        ],
         "psr-4": {
             "mglaman\\PHPStanDrupal\\": "src/"
         }
@@ -46,7 +44,10 @@
     "autoload-dev": {
         "psr-4": {
             "mglaman\\PHPStanDrupal\\Tests\\": "tests/src/"
-        }
+        },
+        "classmap": [
+            "tests/src/Type/data"
+        ]
     },
     "extra": {
         "branch-alias": {
@@ -61,7 +62,8 @@
         },
         "phpstan": {
             "includes": [
-                "extension.neon"
+                "extension.neon",
+                "rules.neon"
             ]
         }
     },

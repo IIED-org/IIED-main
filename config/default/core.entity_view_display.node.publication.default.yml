@@ -54,7 +54,6 @@ dependencies:
     - address
     - computed_field
     - datetime
-    - ds
     - file
     - isbn
     - layout_builder
@@ -68,64 +67,6 @@ third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-  ds:
-    layout:
-      id: layout_onecol
-      library: layout_discovery/onecol
-      disable_css: false
-      entity_classes: all_classes
-      settings:
-        label: ''
-    regions:
-      content:
-        - langcode
-        - links
-        - body
-        - field_lit_code
-        - field_document_type
-        - field_short_title
-        - field_pdf
-        - field_publisher
-        - field_theme_s_
-        - field_tags
-        - field_product_code
-        - field_status
-        - field_author_s_
-        - field_editor_s_
-        - field_area_list
-        - field_date_published
-        - field_isbn
-        - field_issn
-        - field_doi
-        - field_source_publication
-        - field_journal_ref
-        - field_pdf_pages
-        - field_iied_url
-        - field_external_url
-        - field_series
-        - field_series_item_code
-        - field_publisher_legacy
-        - field_reportingcode1
-        - field_reportingcode2
-        - field_reportfin1
-        - field_reportfin2
-        - field_reportfin3
-        - field_reportagency1
-        - field_reportagency2
-        - field_reportagency3
-        - field_deptlist
-        - field_team
-        - field_media
-        - field_parent
-        - field_translator
-        - field_admin
-        - field_cover_image
-        - field_lists
-        - sharing_buttons
-        - field_meta_tags
-        - field_work_programme_global_enga
-        - field_a_serial
-        - field_product_code_new
 id: node.publication.default
 targetEntityType: node
 bundle: publication
@@ -169,7 +110,7 @@ content:
     region: content
   field_cover_image:
     type: entity_reference_entity_view
-    label: above
+    label: hidden
     settings:
       view_mode: default
       link: false
@@ -309,7 +250,7 @@ content:
     region: content
   field_pdf:
     type: file_default
-    label: above
+    label: hidden
     settings:
       use_description_as_link_text: true
     third_party_settings: {  }

@@ -43,6 +43,9 @@
 }
 
 @layer components {
+  .menu-name--secondary {
+    @apply bg-iiedblue-10;
+  }
   .site-name {
     font-family: serif;
   }
@@ -55,6 +58,10 @@
   .node__content ul,
   .node__content ol {
     @apply mb-4 leading-normal;
+  }
+  /* fix for custom block cards height */
+  .grid-h-full > div:first-child {
+    @apply h-full;
   }
 
   /* Elements -- twig partials */
@@ -99,8 +106,13 @@
     @apply border border-gray-300 p-4 rounded-xl;
   }
   .bg-fill {
-    @apply p-4 bg-gray-100 rounded-xl;
+    @apply p-4 bg-gray-100;
   }
+
+  .bg-green {
+    @apply p-4 bg-iiedgreen-500;
+  }
+
   .image-caption {
     @apply mt-1 text-base leading-tight text-gray-500;
   }

@@ -15,7 +15,7 @@ use org\bovigo\vfs\vfsStream;
 use Symfony\Component\DependencyInjection\ParameterBag\FrozenParameterBag;
 use Symfony\Component\Yaml\Yaml;
 
-// cspell:ignore layercake everyblock justblockquote
+// cspell:ignore layercake everytextcontainer justheading
 
 /**
  * Tests different ways of enabling CKEditor 5 plugins.
@@ -982,7 +982,8 @@ PHP,
 
     // Configure the sneaky superset plugin to have a random tag as the subset.
     $sneaky_plugin_id = 'ckeditor5_plugin_elements_subset_sneakySuperset';
-    $random_tag = "<{$this->randomMachineName()}>";
+    $random_tag_name = strtolower($this->randomMachineName());
+    $random_tag = "<$random_tag_name>";
     $text_editor = Editor::create([
       'format' => 'dummy',
       'editor' => 'ckeditor5',
@@ -1020,6 +1021,8 @@ PHP,
       'ckeditor5_bold',
       'ckeditor5_emphasis',
       'ckeditor5_essentials',
+      'ckeditor5_globalAttributeDir',
+      'ckeditor5_globalAttributeLang',
       'ckeditor5_heading',
       'ckeditor5_paragraph',
       'ckeditor5_pasteFromOffice',
@@ -1030,6 +1033,7 @@ PHP,
       'ckeditor5/drupal.ckeditor5.emphasis',
       'ckeditor5/drupal.ckeditor5.internal',
       'core/ckeditor5.basic',
+      'core/ckeditor5.htmlSupport',
       'core/ckeditor5.internal',
       'core/ckeditor5.pasteFromOffice',
     ];
@@ -1113,16 +1117,33 @@ PHP,
     sort($expected_libraries);
     $this->assertSame($expected_libraries, $this->manager->getEnabledLibraries($editor));
 
-    // Case 7: GHS is only enabled for Full HTML (or any other text format that
-    // has no TYPE_HTML_RESTRICTOR filters).
+    // Case 7: GHS is enabled for other text editors if they are using a
+    // CKEditor 5 plugin that uses wildcard tags.
+    $settings['toolbar']['items'][] = 'alignment';
+    $editor->setSettings($settings);
+    $plugin_ids = array_keys($this->manager->getEnabledDefinitions($editor));
+    $expected_plugins = array_merge($expected_plugins, [
+      'ckeditor5_alignment',
+      'ckeditor5_wildcardHtmlSupport',
+    ]);
+    sort($expected_plugins);
+    $this->assertSame(array_values($expected_plugins), $plugin_ids);
+    $expected_libraries = array_merge($expected_libraries, [
+      'core/ckeditor5.alignment',
+    ]);
+    sort($expected_libraries);
+    $this->assertSame($expected_libraries, $this->manager->getEnabledLibraries($editor));
+
+    // Case 8: GHS is enabled for Full HTML (or any other text format that has
+    // no TYPE_HTML_RESTRICTOR filters).
     $editor = Editor::load('full_html');
     $definitions = array_keys($this->manager->getEnabledDefinitions($editor));
     $default_plugins = [
+      'ckeditor5_arbitraryHtmlSupport',
       'ckeditor5_bold',
       'ckeditor5_emphasis',
       'ckeditor5_essentials',
       'ckeditor5_heading',
-      'ckeditor5_htmlSupport',
       'ckeditor5_paragraph',
       'ckeditor5_pasteFromOffice',
     ];
@@ -1165,6 +1186,10 @@ PHP,
       'settings' => $text_editor_settings,
       'image_upload' => [],
     ]);
+    FilterFormat::create([
+      'format' => 'dummy',
+      'name' => 'dummy',
+    ])->save();
     $this->assertConfigSchema(
       $this->typedConfig,
       $text_editor->getConfigDependencyName(),
@@ -1281,26 +1306,24 @@ PHP,
         ],
         'expected_readable_string' => '<p class="text-align-left text-align-center text-align-right text-align-justify"> <h2 class> <h3 class> <h4 class> <h5 class> <h6 class> <h1 class>',
       ],
-      'blockquote combo' => [
+      'heading text container combo' => [
         'plugins' => [
-          'ckeditor5_plugin_elements_test_blockquoteCombo',
+          'ckeditor5_plugin_elements_test_headingCombo',
           'ckeditor5_paragraph',
         ],
         'text_editor_settings' => [
-          'plugins' => [
-            'ckeditor5_heading' => Heading::DEFAULT_CONFIGURATION,
-          ],
+          'plugins' => [],
         ],
         'expected_elements' => [
           'p' => [
-            'data-everyblock' => TRUE,
+            'data-everytextcontainer' => TRUE,
           ],
-          'blockquote' => [
-            'data-justblockquote' => TRUE,
-            'data-everyblock' => TRUE,
+          'h1' => [
+            'data-justheading' => TRUE,
+            'data-everytextcontainer' => TRUE,
           ],
         ],
-        'expected_readable_string' => '<p data-everyblock> <blockquote data-justblockquote data-everyblock>',
+        'expected_readable_string' => '<p data-everytextcontainer> <h1 data-justheading data-everytextcontainer>',
       ],
       'headings plus headings with attributes' => [
         'plugins' => [
@@ -1441,6 +1464,30 @@ PHP,
         'expected_plugin' => NULL,
       ],
     ];
+  }
+
+  /**
+   * @covers \Drupal\ckeditor5\Plugin\CKEditor5PluginDefinition::validateCKEditor5Aspects()
+   */
+  public function testAutomaticLinkDecoratorsDisallowed(): void {
+    $this->expectException(InvalidPluginDefinitionException::class);
+    $this->expectExceptionMessage('The "ckeditor5_automatic_link_decorator_test_llamaClass" CKEditor 5 plugin definition specifies an automatic decorator, this is not supported. Use the Drupal filter system instead.');
+
+    $this->enableModules(['ckeditor5_automatic_link_decorator_test']);
+
+    $this->manager->getDefinitions();
+  }
+
+  /**
+   * @covers \Drupal\ckeditor5\Plugin\CKEditor5PluginDefinition::validateCKEditor5Aspects()
+   */
+  public function testExternalLinkAutomaticLinkDecoratorDisallowed(): void {
+    $this->expectException(InvalidPluginDefinitionException::class);
+    $this->expectExceptionMessage('The "ckeditor5_automatic_link_decorator_test_2_addTargetToExternalLinks" CKEditor 5 plugin definition specifies an automatic decorator, this is not supported. Use the Drupal filter system instead.');
+
+    $this->enableModules(['ckeditor5_automatic_link_decorator_test_2']);
+
+    $this->manager->getDefinitions();
   }
 
 }

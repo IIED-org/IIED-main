@@ -1,0 +1,20 @@
+uuid: 57bae379-d9ef-4dd3-b484-a1789daecc44
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+    - text
+id: paragraph.field_timeline_date
+field_name: field_timeline_date
+entity_type: paragraph
+type: text
+settings:
+  max_length: 255
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
