@@ -10,6 +10,7 @@ dependencies:
     - media
     - media_library
     - user
+    - views_autocomplete_filters
   enforced:
     module:
       - media_library
@@ -1132,6 +1133,8 @@ display:
           settings:
             image_link: ''
             image_style: media_library
+            image_loading:
+              attribute: lazy
         name:
           id: name
           table: media_field_data

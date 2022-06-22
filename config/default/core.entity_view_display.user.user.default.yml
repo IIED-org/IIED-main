@@ -86,6 +86,25 @@ third_party_settings:
                         suffix: '<p></p><hr>'
             weight: 1
             additional: {  }
+          db20c18c-c7d3-410b-b6bb-5f4fddf7b92b:
+            uuid: db20c18c-c7d3-410b-b6bb-5f4fddf7b92b
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:user:user:user_picture'
+              formatter:
+                type: image
+                label: hidden
+                settings:
+                  image_link: content
+                  image_style: thumbnail
+                  image_loading:
+                    attribute: lazy
+                third_party_settings: {  }
+            weight: 2
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
@@ -218,6 +237,8 @@ content:
     settings:
       image_link: content
       image_style: thumbnail
+      image_loading:
+        attribute: lazy
     third_party_settings: {  }
     weight: 0
     region: content
