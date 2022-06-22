@@ -1,6 +1,11 @@
 services:
   gin_lb.twig:
-    arguments: ['@renderer', '@url_generator', '@theme.manager', '@date.formatter']
+    arguments:
+      - '@renderer'
+      - '@url_generator'
+      - '@theme.manager'
+      - '@date.formatter'
+      - '@file_url_generator'
     class: Drupal\gin_lb\TwigExtension\GinLbExtension
     tags:
       - { name: twig.extension }

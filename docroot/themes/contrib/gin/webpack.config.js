@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
+const postcssRTLCSS = require('postcss-rtlcss');
 
 module.exports = {
   entry: {
@@ -51,6 +52,7 @@ module.exports = {
     'components/toolbar_secondary': ['./styles/components/toolbar_secondary.scss'],
     'components/upgrade_status': ['./styles/components/upgrade_status.scss'],
     'components/webform': ['./styles/components/webform.scss'],
+    'components/workbench': ['./styles/components/workbench.scss'],
     // Layout
     'layout/toolbar': ['./styles/layout/toolbar.scss'],
     'layout/horizontal_toolbar': ['./styles/layout/horizontal_toolbar.scss'],
@@ -137,6 +139,7 @@ module.exports = {
               postcssOptions: {
                 plugins: [
                   autoprefixer(),
+                  postcssRTLCSS(),
                   ['postcss-perfectionist', {
                     format: 'expanded',
                     indentSize: 2,

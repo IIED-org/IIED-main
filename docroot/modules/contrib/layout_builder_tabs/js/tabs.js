@@ -30,6 +30,7 @@
       $(this).attr('aria-selected', 'false');
       $(this).attr('tabindex', '-1');
     }
+    $(this).addClass('tabs__link');
   });
   $('.tab-content .tab-pane').attr('role', 'tabpanel').each(function() {
     var thisId = $(this).attr('id');

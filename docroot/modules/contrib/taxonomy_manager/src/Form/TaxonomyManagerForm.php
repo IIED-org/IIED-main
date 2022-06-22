@@ -301,15 +301,20 @@ class TaxonomyManagerForm extends FormBase {
    */
   public function taxonomy_term_submit_handler(array &$form, FormStateInterface $form_state) {
     $tid = $form_state->getValue(['search_terms']);
-    $url = Url::fromRoute('entity.taxonomy_term.edit_form', array('taxonomy_term' => $tid));
+    $url = Url::fromRoute('entity.taxonomy_term.edit_form', [
+      'taxonomy_term' => $tid,
+    ]);
     $form_state->setRedirectUrl($url);
   }
+
   /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $form_state->getValue(['taxonomy', 'manager', 'tree']);
-    $url = Url::fromRoute('taxonomy_manager.admin_vocabulary', array('taxonomy_vocabulary' => $form_state->getValue(['vocabulary_switcher'])));
+    $url = Url::fromRoute('taxonomy_manager.admin_vocabulary', [
+      'taxonomy_vocabulary' => $form_state->getValue(['vocabulary_switcher']),
+    ]);
     $form_state->setRedirectUrl($url);
   }
 
