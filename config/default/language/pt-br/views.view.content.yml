@@ -1,7 +1,7 @@
 label: Conteúdo
 display:
   default:
-    display_title: Padrão
+    display_title: Default
     display_options:
       title: Conteúdo
       fields:

@@ -1,7 +1,7 @@
 label: 内容
 display:
   default:
-    display_title: 默认
+    display_title: Default
     display_options:
       title: 内容
       fields:
