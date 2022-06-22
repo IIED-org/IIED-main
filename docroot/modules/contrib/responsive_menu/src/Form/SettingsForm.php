@@ -2,6 +2,7 @@
 
 namespace Drupal\responsive_menu\Form;
 
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -187,11 +188,11 @@ class SettingsForm extends ConfigFormBase {
       '#description' => $this->t("Some themes don't have a wrapping div around all their regions (Bootstrap theme for example) and mmenu requires this div to render properly. Checking this option will add the wrapping div using a preprocess hook. Alternatively you can do this manually in your theme."),
       '#default_value' => $this->config->get('wrapper_theme'),
     ];
-    $form['responsive_menu']['theme_compatibility']['use_polyfills'] = [
+    $form['responsive_menu']['theme_compatibility']['toolbar_override'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Include IE11 polyfills'),
-      '#description' => $this->t("If your theme needs to support IE11 then you should check this to load the mmenu polyfills needed for the mmenu library to work with IE11."),
-      '#default_value' => $this->config->get('use_polyfills'),
+      '#title' => $this->t('Override the toolbar JavaScript positioning'),
+      '#description' => $this->t("This may be needed if you don't add the page wrapper div or specify your own one."),
+      '#default_value' => $this->config->get('toolbar_override'),
     ];
 
     // Left or right positioned panel.
@@ -200,8 +201,11 @@ class SettingsForm extends ConfigFormBase {
       '#options' => [
         'left' => $this->t('Left'),
         'right' => $this->t('Right'),
+        'left-front' => $this->t('Left front'),
+        'right-front' => $this->t('Right front'),
         // To switch left/right position based on the language.
         'contextual' => $this->t('Contextual'),
+        'contextual-front' => $this->t('Contextual front'),
       ],
       '#title' => $this->t("Which side the mobile menu panel should slide out from. Choose the 'Contextual' option to have the menu slide out from the left for LTR languages and from the right for RTL languages."),
       '#default_value' => $this->config->get('off_canvas_position'),
@@ -210,10 +214,10 @@ class SettingsForm extends ConfigFormBase {
     $form['responsive_menu']['theme'] = [
       '#type' => 'select',
       '#options' => [
-        'theme-light' => $this->t('Light'),
-        'theme-dark' => $this->t('Dark'),
-        'theme-black' => $this->t('Black'),
-        'theme-white' => $this->t('White'),
+        'light' => $this->t('Light'),
+        'dark' => $this->t('Dark'),
+        'black' => $this->t('Black'),
+        'white' => $this->t('White'),
       ],
       '#title' => $this->t('Which mmenu theme to use'),
       '#default_value' => $this->config->get('off_canvas_theme'),
@@ -313,7 +317,7 @@ class SettingsForm extends ConfigFormBase {
     if ($values['use_breakpoint'] && empty($values['horizontal_breakpoint'])) {
       $breakpoint_message = Link::fromTextAndUrl('breakpoint file', Url::fromUri('https://www.drupal.org/node/1803874'))->toRenderable();
       $form_state->setErrorByName('horizontal_breakpoint', $this->t("You have chosen to use a breakpoint but you have not selected one. This may happen if your @breakpoint is not properly set up.", [
-        '@breakpoint' => render($breakpoint_message),
+        '@breakpoint' => RendererInterface::render($breakpoint_message),
       ]));
     }
   }
@@ -337,7 +341,7 @@ class SettingsForm extends ConfigFormBase {
       ->set('use_bootstrap', $values['use_bootstrap'])
       ->set('wrapper_admin', $values['wrapper_admin'])
       ->set('wrapper_theme', $values['wrapper_theme'])
-      ->set('use_polyfills', $values['use_polyfills'])
+      ->set('toolbar_override', $values['toolbar_override'])
       ->set('pagedim', $values['pagedim'])
       ->set('modify_viewport', $values['modify_viewport'])
       ->set('off_canvas_menus', $values['off_canvas_menus'])
@@ -393,6 +397,7 @@ class SettingsForm extends ConfigFormBase {
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   *
    * @noinspection PhpFullyQualifiedNameUsageInspection
    */
   protected function getMenuOptions(array $menu_names = NULL) {

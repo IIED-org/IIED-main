@@ -3,7 +3,7 @@
         'name' => 'drupal/recommended-project',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '6b7fb5833581a42876a3287ced82dd5c741fea7c',
+        'reference' => '1253eb6ab4a71ead20c1eb0ac8c7325c6f4a43ff',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -1767,7 +1767,7 @@
         'drupal/recommended-project' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '6b7fb5833581a42876a3287ced82dd5c741fea7c',
+            'reference' => '1253eb6ab4a71ead20c1eb0ac8c7325c6f4a43ff',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -1789,12 +1789,14 @@
             ),
         ),
         'drupal/responsive_menu' => array(
-            'pretty_version' => '4.4.2',
-            'version' => '4.4.2.0',
-            'reference' => '4.4.2',
+            'pretty_version' => 'dev-5.0.x',
+            'version' => 'dev-5.0.x',
+            'reference' => '49cf4ed2611068216009487b9ede9ec7d6e85c6c',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/responsive_menu',
-            'aliases' => array(),
+            'aliases' => array(
+                0 => '5.0.x-dev',
+            ),
             'dev_requirement' => false,
         ),
         'drupal/rest' => array(

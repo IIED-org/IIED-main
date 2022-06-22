@@ -122,7 +122,7 @@
         "drupal/radix": "4.10",
         "drupal/readonlymode": "^1.1",
         "drupal/redirect": "^1.7",
-        "drupal/responsive_menu": "^4.4",
+        "drupal/responsive_menu": "^5.0-dev",
         "drupal/search_api": "^1.23",
         "drupal/search_api_autocomplete": "^1.6",
         "drupal/search_api_solr": "^4.2.7",
@@ -256,6 +256,9 @@
           },
           "drupal/taxonomy_import": {
             "CSVs not detected properly":"https://www.drupal.org/files/issues/2021-12-17/3255009-csvs_not_detected-2.patch"
+          },
+          "drupal/responsive_menu": {
+            "Add 'front' options to menu position":"https://www.drupal.org/files/issues/2022-06-20/responsive_menu-menuposition-3274889-3.diff"
           }
         }
     }
