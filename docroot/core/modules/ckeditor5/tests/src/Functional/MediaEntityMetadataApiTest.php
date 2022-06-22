@@ -3,6 +3,7 @@
 namespace Drupal\Tests\ckeditor5\Functional;
 
 use Drupal\ckeditor5\Plugin\Editor\CKEditor5;
+use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\editor\Entity\Editor;
 use Drupal\file\Entity\File;
 use Drupal\filter\Entity\FilterFormat;
@@ -78,6 +79,20 @@ class MediaEntityMetadataApiTest extends BrowserTestBase {
     parent::setUp();
 
     $this->uuidService = $this->container->get('uuid');
+    EntityViewMode::create([
+      'id' => 'media.view_mode_1',
+      'targetEntityType' => 'media',
+      'status' => TRUE,
+      'enabled' => TRUE,
+      'label' => 'View Mode 1',
+    ])->save();
+    EntityViewMode::create([
+      'id' => 'media.view_mode_2',
+      'targetEntityType' => 'media',
+      'status' => TRUE,
+      'enabled' => TRUE,
+      'label' => 'View Mode 2',
+    ])->save();
 
     $filtered_html_format = FilterFormat::create([
       'format' => 'filtered_html',
@@ -89,12 +104,23 @@ class MediaEntityMetadataApiTest extends BrowserTestBase {
           'status' => TRUE,
           'weight' => -10,
           'settings' => [
-            'allowed_html' => "<p> <br> <drupal-media data-entity-type data-entity-uuid alt>",
+            'allowed_html' => "<p> <br> <drupal-media data-entity-type data-entity-uuid data-view-mode alt>",
             'filter_html_help' => TRUE,
             'filter_html_nofollow' => TRUE,
           ],
         ],
-        'media_embed' => ['status' => TRUE],
+        'media_embed' => [
+          'id' => 'media_embed',
+          'status' => TRUE,
+          'settings' => [
+            'default_view_mode' => 'view_mode_1',
+            'allowed_view_modes' => [
+              'view_mode_1' => 'view_mode_1',
+              'view_mode_2' => 'view_mode_2',
+            ],
+            'allowed_media_types' => [],
+          ],
+        ],
       ],
       'roles' => [RoleInterface::AUTHENTICATED_ID],
     ]);
@@ -106,9 +132,26 @@ class MediaEntityMetadataApiTest extends BrowserTestBase {
         'toolbar' => [
           'items' => [],
         ],
+        'plugins' => [
+          'media_media' => [
+            'allow_view_mode_override' => TRUE,
+          ],
+        ],
       ],
     ]);
     $this->editor->save();
+    $filtered_html_format->setFilterConfig('media_embed', [
+      'status' => TRUE,
+      'settings' => [
+        'default_view_mode' => 'view_mode_1',
+        'allowed_media_types' => [],
+        'allowed_view_modes' => [
+          'view_mode_1' => 'view_mode_1',
+          'view_mode_2' => 'view_mode_2',
+        ],
+      ],
+    ])->save();
+
     $this->assertSame([], array_map(
       function (ConstraintViolation $v) {
         return (string) $v->getMessage();
@@ -168,7 +211,7 @@ class MediaEntityMetadataApiTest extends BrowserTestBase {
 
     $this->drupalGet($path, ['query' => ['uuid' => $uuid, 'token' => $token]]);
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertSame(json_encode(['imageSourceMetadata' => ['alt' => 'default alt']]), $this->getSession()->getPage()->getContent());
+    $this->assertSame(json_encode(["type" => "image", 'imageSourceMetadata' => ['alt' => 'default alt']]), $this->getSession()->getPage()->getContent());
 
     $this->mediaImage->set('field_media_image', [
       'target_id' => 1,
@@ -177,11 +220,11 @@ class MediaEntityMetadataApiTest extends BrowserTestBase {
     ])->save();
     $this->drupalGet($path, ['query' => ['uuid' => $uuid, 'token' => $token]]);
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertSame(json_encode(['imageSourceMetadata' => ['alt' => '']]), $this->getSession()->getPage()->getContent());
+    $this->assertSame(json_encode(['type' => 'image', 'imageSourceMetadata' => ['alt' => '']]), $this->getSession()->getPage()->getContent());
 
     $this->drupalGet($path, ['query' => ['uuid' => $this->mediaFile->uuid(), 'token' => $token]]);
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertSame(json_encode([]), $this->getSession()->getPage()->getContent());
+    $this->assertSame(json_encode(['type' => 'file']), $this->getSession()->getPage()->getContent());
 
     // Ensure that unpublished media returns 403.
     $this->mediaImage->setUnpublished()->save();
@@ -245,13 +288,13 @@ class MediaEntityMetadataApiTest extends BrowserTestBase {
     $this->drupalGet($path, ['query' => ['uuid' => $uuid, 'token' => $token], 'language' => $media_fi->language()]);
     $this->assertSession()->statusCodeEquals(200);
     // cSpell:disable-next-line
-    $this->assertSame(json_encode(['imageSourceMetadata' => ['alt' => 'oletus alt-teksti kuvalle']]), $this->getSession()->getPage()->getContent());
+    $this->assertSame(json_encode(['type' => 'image', 'imageSourceMetadata' => ['alt' => 'oletus alt-teksti kuvalle']]), $this->getSession()->getPage()->getContent());
 
     // Ensure that default translation is returned when no language is
     // specified.
     $this->drupalGet($path, ['query' => ['uuid' => $uuid, 'token' => $token]]);
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertSame(json_encode(['imageSourceMetadata' => ['alt' => 'default alt']]), $this->getSession()->getPage()->getContent());
+    $this->assertSame(json_encode(['type' => 'image', 'imageSourceMetadata' => ['alt' => 'default alt']]), $this->getSession()->getPage()->getContent());
   }
 
 }

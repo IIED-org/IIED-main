@@ -24,10 +24,14 @@ class PhpDocParser
 	/** @var ConstExprParser */
 	private $constantExprParser;
 
-	public function __construct(TypeParser $typeParser, ConstExprParser $constantExprParser)
+	/** @var bool */
+	private $requireWhitespaceBeforeDescription;
+
+	public function __construct(TypeParser $typeParser, ConstExprParser $constantExprParser, bool $requireWhitespaceBeforeDescription = false)
 	{
 		$this->typeParser = $typeParser;
 		$this->constantExprParser = $constantExprParser;
+		$this->requireWhitespaceBeforeDescription = $requireWhitespaceBeforeDescription;
 	}
 
 
@@ -90,7 +94,7 @@ class PhpDocParser
 			$tokens->pushSavePoint();
 			$tokens->next();
 
-			if ($tokens->isCurrentTokenType(Lexer::TOKEN_PHPDOC_TAG) || $tokens->isCurrentTokenType(Lexer::TOKEN_PHPDOC_EOL) || $tokens->isCurrentTokenType(Lexer::TOKEN_CLOSE_PHPDOC) || $tokens->isCurrentTokenType(Lexer::TOKEN_END)) {
+			if ($tokens->isCurrentTokenType(Lexer::TOKEN_PHPDOC_TAG, Lexer::TOKEN_PHPDOC_EOL, Lexer::TOKEN_CLOSE_PHPDOC, Lexer::TOKEN_END)) {
 				$tokens->rollback();
 				break;
 			}
@@ -205,6 +209,15 @@ class PhpDocParser
 					$tagValue = $this->parseTypeAliasImportTagValue($tokens);
 					break;
 
+				case '@phpstan-assert':
+				case '@phpstan-assert-if-true':
+				case '@phpstan-assert-if-false':
+				case '@psalm-assert':
+				case '@psalm-assert-if-true':
+				case '@psalm-assert-if-false':
+					$tagValue = $this->parseAssertTagValue($tokens);
+					break;
+
 				default:
 					$tagValue = new Ast\PhpDoc\GenericTagValueNode($this->parseOptionalDescription($tokens));
 					break;
@@ -221,14 +234,31 @@ class PhpDocParser
 	}
 
 
-	private function parseParamTagValue(TokenIterator $tokens): Ast\PhpDoc\ParamTagValueNode
+	/**
+	 * @return Ast\PhpDoc\ParamTagValueNode|Ast\PhpDoc\TypelessParamTagValueNode
+	 */
+	private function parseParamTagValue(TokenIterator $tokens): Ast\PhpDoc\PhpDocTagValueNode
 	{
-		$type = $this->typeParser->parse($tokens);
+		if (
+			$tokens->isCurrentTokenType(Lexer::TOKEN_REFERENCE)
+			|| $tokens->isCurrentTokenType(Lexer::TOKEN_VARIADIC)
+			|| $tokens->isCurrentTokenType(Lexer::TOKEN_VARIABLE)
+		) {
+			$type = null;
+		} else {
+			$type = $this->typeParser->parse($tokens);
+		}
+
 		$isReference = $tokens->tryConsumeTokenType(Lexer::TOKEN_REFERENCE);
 		$isVariadic = $tokens->tryConsumeTokenType(Lexer::TOKEN_VARIADIC);
 		$parameterName = $this->parseRequiredVariableName($tokens);
 		$description = $this->parseOptionalDescription($tokens);
-		return new Ast\PhpDoc\ParamTagValueNode($type, $isVariadic, $parameterName, $description, $isReference);
+
+		if ($type !== null) {
+			return new Ast\PhpDoc\ParamTagValueNode($type, $isVariadic, $parameterName, $description, $isReference);
+		}
+
+		return new Ast\PhpDoc\TypelessParamTagValueNode($isVariadic, $parameterName, $description, $isReference);
 	}
 
 
@@ -420,6 +450,15 @@ class PhpDocParser
 		return new Ast\PhpDoc\TypeAliasImportTagValueNode($importedAlias, new IdentifierTypeNode($importedFrom), $importedAs);
 	}
 
+	private function parseAssertTagValue(TokenIterator $tokens): Ast\PhpDoc\AssertTagValueNode
+	{
+		$isNegated = $tokens->tryConsumeTokenType(Lexer::TOKEN_NEGATED);
+		$type = $this->typeParser->parse($tokens);
+		$parameter = $this->parseRequiredVariableName($tokens);
+		$description = $this->parseOptionalDescription($tokens);
+		return new Ast\PhpDoc\AssertTagValueNode($type, $parameter, $isNegated, $description);
+	}
+
 	private function parseOptionalVariableName(TokenIterator $tokens): string
 	{
 		if ($tokens->isCurrentTokenType(Lexer::TOKEN_VARIABLE)) {
@@ -445,7 +484,6 @@ class PhpDocParser
 		return $parameterName;
 	}
 
-
 	private function parseOptionalDescription(TokenIterator $tokens, bool $limitStartToken = false): string
 	{
 		if ($limitStartToken) {
@@ -455,6 +493,14 @@ class PhpDocParser
 				}
 
 				$tokens->consumeTokenType(Lexer::TOKEN_OTHER); // will throw exception
+			}
+
+			if (
+				$this->requireWhitespaceBeforeDescription
+				&& !$tokens->isCurrentTokenType(Lexer::TOKEN_PHPDOC_EOL, Lexer::TOKEN_CLOSE_PHPDOC, Lexer::TOKEN_END)
+				&& !$tokens->isPrecededByHorizontalWhitespace()
+			) {
+				$tokens->consumeTokenType(Lexer::TOKEN_HORIZONTAL_WS); // will throw exception
 			}
 		}
 

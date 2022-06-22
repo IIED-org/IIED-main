@@ -90,6 +90,27 @@ final class CKEditor5PluginDefinition extends PluginDefinition implements Plugin
     if (!isset($definition['ckeditor5']['plugins'])) {
       throw new InvalidPluginDefinitionException($id, sprintf('The "%s" CKEditor 5 plugin definition must contain a "ckeditor5.plugins" key.', $id));
     }
+
+    // Automatic link decorators make sense in CKEditor 5, where the generated
+    // HTML must be assumed to be served as-is. But it does not make sense in
+    // in Drupal, where we prefer not storing (hardcoding) such decisions in the
+    // database. Drupal instead filters it on output, using the filter system.
+    if (isset($definition['ckeditor5']['config']['link'])) {
+      // @see https://ckeditor.com/docs/ckeditor5/latest/api/module_link_link-LinkDecoratorAutomaticDefinition.html
+      if (isset($definition['ckeditor5']['config']['link']['decorators']) && is_array($definition['ckeditor5']['config']['link']['decorators'])) {
+        foreach ($definition['ckeditor5']['config']['link']['decorators'] as $decorator) {
+          if ($decorator['mode'] === 'automatic') {
+            throw new InvalidPluginDefinitionException($id, sprintf('The "%s" CKEditor 5 plugin definition specifies an automatic decorator, this is not supported. Use the Drupal filter system instead.', $id));
+          }
+        }
+      }
+      // CKEditor 5 offers one preconfigured automatic link decorator under a
+      // special config flag.
+      // @see https://ckeditor.com/docs/ckeditor5/latest/api/module_link_link-LinkConfig.html#member-addTargetToExternalLinks
+      if (isset($definition['ckeditor5']['config']['link']['addTargetToExternalLinks']) && $definition['ckeditor5']['config']['link']['addTargetToExternalLinks']) {
+        throw new InvalidPluginDefinitionException($id, sprintf('The "%s" CKEditor 5 plugin definition specifies an automatic decorator, this is not supported. Use the Drupal filter system instead.', $id));
+      }
+    }
   }
 
   /**
@@ -122,27 +143,23 @@ final class CKEditor5PluginDefinition extends PluginDefinition implements Plugin
     if (!isset($definition['drupal']['elements'])) {
       throw new InvalidPluginDefinitionException($id, sprintf('The "%s" CKEditor 5 plugin definition must contain a "drupal.elements" key.', $id));
     }
+    // ckeditor5_sourceEditing is the edge case here: it is the only plugin that
+    // is allowed to return a superset. It's a special case because it is
+    // through configuring this particular plugin that additional HTML tags can
+    // be allowed.
+    // The list of tags it supports is generated dynamically. In its default
+    // configuration it does support any HTML tags.
+    // @see \Drupal\ckeditor5\Plugin\CKEditor5PluginManager::getProvidedElements()
+    elseif ($definition['id'] === 'ckeditor5_sourceEditing') {
+      assert($definition['drupal']['elements'] === []);
+    }
     elseif ($definition['drupal']['elements'] !== FALSE && !(is_array($definition['drupal']['elements']) && !empty($definition['drupal']['elements']) && Inspector::assertAllStrings($definition['drupal']['elements']))) {
       throw new InvalidPluginDefinitionException($id, sprintf('The "%s" CKEditor 5 plugin definition has a "drupal.elements" value that is neither a list of HTML tags/attributes nor false.', $id));
     }
     elseif (is_array($definition['drupal']['elements'])) {
       foreach ($definition['drupal']['elements'] as $index => $element) {
-        // ckeditor5_sourceEditing is the edge case here: it is the only plugin
-        // that is allowed to return a superset. It's a special case because it
-        // is through configuring this particular plugin that additional HTML
-        // tags can be allowed.
-        // Even though its plugin definition says '<*>' is supported, this is a
-        // little lie to convey that this plugin is capable of supporting any
-        // HTML tag … but which ones are actually supported depends on the
-        // configuration.
-        // This also means that without any configuration, it does not support
-        // any HTML tags.
-        // @see \Drupal\ckeditor5\Plugin\CKEditor5PluginManager::getProvidedElements()
-        if ($definition['id'] === 'ckeditor5_sourceEditing') {
-          continue;
-        }
         $parsed = HTMLRestrictions::fromString($element);
-        if ($parsed->isEmpty()) {
+        if ($parsed->allowsNothing()) {
           throw new InvalidPluginDefinitionException($id, sprintf('The "%s" CKEditor 5 plugin definition has a value at "drupal.elements.%d" that is not an HTML tag with optional attributes: "%s". Expected structure: "<tag allowedAttribute="allowedValue1 allowedValue2">".', $id, $index, $element));
         }
         if (count($parsed->getAllowedElements()) > 1) {
@@ -435,6 +452,42 @@ final class CKEditor5PluginDefinition extends PluginDefinition implements Plugin
    */
   public function getElements() {
     return $this->drupal['elements'];
+  }
+
+  /**
+   * Gets the elements this plugin allows to create.
+   *
+   * @return string[]
+   *   A list of plain tags (without attributes) that this plugin can create.
+   *
+   * @see \Drupal\ckeditor5\Annotation\DrupalAspectsOfCKEditor5Plugin::$elements
+   *
+   * @throws \LogicException
+   *   When called on a plugin definition that has no elements.
+   */
+  public function getCreatableElements(): array {
+    if (!$this->hasElements()) {
+      throw new \LogicException('::getCreatableElements() should only be called if ::hasElements() returns TRUE.');
+    }
+
+    return array_filter($this->getElements(), [__CLASS__, 'isCreatableElement']);
+  }
+
+  /**
+   * Checks if the element is a plain tag, meaning the plugin can create it.
+   *
+   * @param string $element
+   *   A single element, for example `<foo>`, `<foo bar>` or `<foo bar="baz'>`.
+   *
+   * @return bool
+   *   If it is a plain tag and hence a creatable element.
+   *
+   * @see \Drupal\ckeditor5\Annotation\DrupalAspectsOfCKEditor5Plugin::$elements
+   */
+  public static function isCreatableElement(string $element): bool {
+    return !HTMLRestrictions::fromString($element)
+      ->getPlainTagsSubset()
+      ->allowsNothing();
   }
 
   /**
