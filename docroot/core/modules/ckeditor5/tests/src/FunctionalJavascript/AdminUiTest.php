@@ -18,6 +18,7 @@ class AdminUiTest extends CKEditor5TestBase {
   protected static $modules = [
     'media_library',
     'ckeditor',
+    'ckeditor5_incompatible_filter_test',
   ];
 
   /**
@@ -68,11 +69,12 @@ class AdminUiTest extends CKEditor5TestBase {
     $assert_session->waitForText('Machine name');
     $page->checkField('roles[authenticated]');
 
-    // Enable a filter that is incompatible with CKEditor 5 if not configured
-    // correctly, so validation is triggered when attempting to switch.
+    // Enable a filter that is incompatible with CKEditor 5, so validation is
+    // triggered when attempting to switch.
+    $incompatible_filter_name = 'filters[filter_incompatible][status]';
     $number_ajax_instances_before = $this->getSession()->evaluateScript('Drupal.ajax.instances.length');
-    $this->assertTrue($page->hasUncheckedField('filters[filter_html][status]'));
-    $page->checkField('filters[filter_html][status]');
+    $this->assertTrue($page->hasUncheckedField($incompatible_filter_name));
+    $page->checkField($incompatible_filter_name);
     $this->assertEmpty($assert_session->waitForElement('css', '.ajax-progress-throbber'));
     $assert_session->assertWaitOnAjaxRequest();
     $number_ajax_instances_after = $this->getSession()->evaluateScript('Drupal.ajax.instances.length');
@@ -81,18 +83,20 @@ class AdminUiTest extends CKEditor5TestBase {
     $page->selectFieldOption('editor[editor]', 'ckeditor5');
     $assert_session->assertWaitOnAjaxRequest();
 
+    $filter_warning = 'CKEditor 5 only works with HTML-based text formats. The "A TYPE_MARKUP_LANGUAGE filter incompatible with CKEditor 5" (filter_incompatible) filter implies this text format is not HTML anymore.';
+
     // The presence of this validation error message confirms the AJAX callback
     // was invoked.
-    $assert_session->pageTextContains('CKEditor 5 needs at least the <p> and <br> tags to be allowed to be able to function. They are not allowed by the "Limit allowed HTML tags and correct faulty HTML" (filter_html) filter.');
+    $assert_session->pageTextContains($filter_warning);
 
     // Disable the incompatible filter. This should trigger another AJAX rebuild
     // which will include the removal of the validation error as the issue has
     // been corrected.
-    $this->assertTrue($page->hasCheckedField('filters[filter_html][status]'));
-    $page->uncheckField('filters[filter_html][status]');
+    $this->assertTrue($page->hasCheckedField($incompatible_filter_name));
+    $page->uncheckField($incompatible_filter_name);
     $this->assertNotEmpty($assert_session->waitForElement('css', '.ajax-progress-throbber'));
     $assert_session->assertWaitOnAjaxRequest();
-    $assert_session->pageTextNotContains('CKEditor 5 needs at least the <p> and <br> tags to be allowed to be able to function. They are not allowed by the "Limit allowed HTML tags and correct faulty HTML" (filter_html) filter.');
+    $assert_session->pageTextNotContains($filter_warning);
   }
 
   /**
@@ -215,6 +219,17 @@ class AdminUiTest extends CKEditor5TestBase {
 
     // The source plugin config form should be present.
     $assert_session->elementExists('css', '[data-drupal-selector="edit-editor-settings-plugins-ckeditor5-sourceediting"]');
+
+    // The filter-dependent configurable plugin should not be present.
+    $assert_session->elementNotExists('css', '[data-drupal-selector="edit-editor-settings-plugins-media-media"]');
+
+    // Enable the filter that the configurable plugin depends on.
+    $this->assertTrue($page->hasUncheckedField('filters[media_embed][status]'));
+    $page->checkField('filters[media_embed][status]');
+    $assert_session->assertWaitOnAjaxRequest();
+
+    // The filter-dependent configurable plugin should be present.
+    $assert_session->elementExists('css', '[data-drupal-selector="edit-editor-settings-plugins-media-media"]');
   }
 
   /**
@@ -233,6 +248,31 @@ class AdminUiTest extends CKEditor5TestBase {
     $this->assertNotEmpty($assert_session->waitForElement('css', '.ckeditor5-toolbar-item-textPartLanguage'));
     $this->triggerKeyUp('.ckeditor5-toolbar-item-textPartLanguage', 'ArrowDown');
     $assert_session->assertWaitOnAjaxRequest();
+
+    // The CKEditor 5 module should warn that `<span>` cannot be created.
+    $assert_session->waitForElement('css', '[role=alert][data-drupal-message-type="warning"]:contains("The Language plugin needs another plugin to create <span>, for it to be able to create the following attributes: <span lang dir>. Enable a plugin that supports creating this tag. If none exists, you can configure the Source Editing plugin to support it.")');
+
+    // Make `<span>` creatable.
+    $this->assertNotEmpty($assert_session->elementExists('css', '.ckeditor5-toolbar-item-sourceEditing'));
+    $this->triggerKeyUp('.ckeditor5-toolbar-item-sourceEditing', 'ArrowDown');
+    $assert_session->assertWaitOnAjaxRequest();
+    // The Source Editing plugin settings form should now be present and should
+    // have no allowed tags configured.
+    $page->clickLink('Source editing');
+    $this->assertNotNull($assert_session->waitForElementVisible('css', '[data-drupal-selector="edit-editor-settings-plugins-ckeditor5-sourceediting-allowed-tags"]'));
+    $javascript = <<<JS
+      const allowedTags = document.querySelector('[data-drupal-selector="edit-editor-settings-plugins-ckeditor5-sourceediting-allowed-tags"]');
+      allowedTags.value = '<span>';
+      allowedTags.dispatchEvent(new Event('input'));
+JS;
+    $this->getSession()->executeScript($javascript);
+    // Dispatching an `input` event does not work in WebDriver. Enabling another
+    // toolbar item which has no associated HTML elements forces it.
+    $this->triggerKeyUp('.ckeditor5-toolbar-item-undo', 'ArrowDown');
+    $assert_session->assertWaitOnAjaxRequest();
+
+    // Confirm there are no longer any warnings.
+    $assert_session->waitForElementRemoved('css', '[data-drupal-messages] [role="alert"]');
 
     // The language plugin config form should now be present.
     $assert_session->elementExists('css', '[data-drupal-selector="edit-editor-settings-plugins-ckeditor5-language"]');

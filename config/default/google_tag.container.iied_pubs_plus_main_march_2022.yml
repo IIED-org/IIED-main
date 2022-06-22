@@ -48,36 +48,6 @@ status_list: |-
   403
   404
 conditions:
-  'entity_bundle:block_content':
-    id: 'entity_bundle:block_content'
-    negate: false
-    context_mapping:
-      block_content: '@ds.ds_block_field_entity_context:block_content'
-    bundles: {  }
-  'entity_bundle:comment':
-    id: 'entity_bundle:comment'
-    negate: false
-    context_mapping:
-      comment: '@ds.ds_block_field_entity_context:comment'
-    bundles: {  }
-  'entity_bundle:contact_message':
-    id: 'entity_bundle:contact_message'
-    negate: false
-    context_mapping:
-      contact_message: '@ds.ds_block_field_entity_context:contact_message'
-    bundles: {  }
-  'entity_bundle:media':
-    id: 'entity_bundle:media'
-    negate: false
-    context_mapping:
-      media: '@ds.ds_block_field_entity_context:media'
-    bundles: {  }
-  'entity_bundle:menu_link_content':
-    id: 'entity_bundle:menu_link_content'
-    negate: false
-    context_mapping:
-      menu_link_content: '@ds.ds_block_field_entity_context:menu_link_content'
-    bundles: {  }
   'entity_bundle:node':
     id: 'entity_bundle:node'
     negate: false
@@ -86,27 +56,3 @@ conditions:
     bundles:
       article: article
       publication: publication
-  'entity_bundle:paragraph':
-    id: 'entity_bundle:paragraph'
-    negate: false
-    context_mapping:
-      paragraph: '@ds.ds_block_field_entity_context:paragraph'
-    bundles: {  }
-  'entity_bundle:redirect':
-    id: 'entity_bundle:redirect'
-    negate: false
-    context_mapping:
-      redirect: '@ds.ds_block_field_entity_context:redirect'
-    bundles: {  }
-  'entity_bundle:shortcut':
-    id: 'entity_bundle:shortcut'
-    negate: false
-    context_mapping:
-      shortcut: '@ds.ds_block_field_entity_context:shortcut'
-    bundles: {  }
-  'entity_bundle:taxonomy_term':
-    id: 'entity_bundle:taxonomy_term'
-    negate: false
-    context_mapping:
-      taxonomy_term: '@taxonomy_term.taxonomy_term_route_context:taxonomy_term'
-    bundles: {  }

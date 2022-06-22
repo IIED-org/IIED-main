@@ -12,7 +12,7 @@ taxonomy_manager.admin_vocabulary:
     _form: '\Drupal\taxonomy_manager\Form\TaxonomyManagerForm'
     _title_callback: '\Drupal\taxonomy_manager\Form\TaxonomyManagerForm::getTitle'
   requirements:
-    _permission: 'administer taxonomy'
+    _entity_create_access: 'taxonomy_term:{taxonomy_vocabulary}'
 
 taxonomy_manager.settings:
   path: '/admin/config/user-interface/taxonomy-manager-settings'
@@ -60,7 +60,7 @@ taxonomy_manager.admin_vocabulary.export:
     _form: '\Drupal\taxonomy_manager\Form\ExportTermsForm'
     _title: 'Export terms'
   requirements:
-    _permission: 'administer taxonomy'
+    _entity_create_access: 'taxonomy_term:{taxonomy_vocabulary}'
 
 taxonomy_manager.admin_vocabulary.exportlist:
   path: '/admin/structure/taxonomy_manager/voc/{taxonomy_vocabulary}/export/list'
@@ -68,7 +68,7 @@ taxonomy_manager.admin_vocabulary.exportlist:
     _form: '\Drupal\taxonomy_manager\Form\ExportTermsMiniForm'
     _title: 'Export terms'
   requirements:
-    _permission: 'administer taxonomy'
+    _entity_create_access: 'taxonomy_term:{taxonomy_vocabulary}'
 
 taxonomy_manager.admin_vocabulary.move:
   path: '/admin/structure/taxonomy_manager/voc/{taxonomy_vocabulary}/move'

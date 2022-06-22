@@ -177,7 +177,7 @@ class CKEditor5PluginManager extends DefaultPluginManager implements CKEditor5Pl
 
     if (!isset($definitions['ckeditor5_arbitraryHtmlSupport'])) {
       $restrictions = new HTMLRestrictions($this->getProvidedElements(array_keys($definitions), $editor, FALSE));
-      if ($restrictions->getWildcardSubset()->isEmpty()) {
+      if ($restrictions->getWildcardSubset()->allowsNothing()) {
         // This is only reached if arbitrary HTML is not enabled. If wildcard
         // tags (such as $text-container) are present, they need to
         // be resolved via the wildcardHtmlSupport plugin.
@@ -298,7 +298,7 @@ class CKEditor5PluginManager extends DefaultPluginManager implements CKEditor5Pl
   /**
    * {@inheritdoc}
    */
-  public function getProvidedElements(array $plugin_ids = [], EditorInterface $editor = NULL, bool $resolve_wildcards = TRUE): array {
+  public function getProvidedElements(array $plugin_ids = [], EditorInterface $editor = NULL, bool $resolve_wildcards = TRUE, bool $creatable_elements_only = FALSE): array {
     $plugins = $this->getDefinitions();
     if (!empty($plugin_ids)) {
       $plugins = array_intersect_key($plugins, array_flip($plugin_ids));
@@ -318,12 +318,8 @@ class CKEditor5PluginManager extends DefaultPluginManager implements CKEditor5Pl
         // that is allowed to return a superset. It's a special case because it
         // is through configuring this particular plugin that additional HTML
         // tags can be allowed.
-        // Even though its plugin definition says '<*>' is supported, this is a
-        // little lie to convey that this plugin is capable of supporting any
-        // HTML tag … but which ones are actually supported depends on the
-        // configuration.
-        // This also means that without any configuration, it does not support
-        // any HTML tags.
+        // The list of tags it supports is generated dynamically. In its default
+        // configuration it does support any HTML tags.
         if ($id === 'ckeditor5_sourceEditing') {
           $defined_elements = !isset($editor) ? [] : $this->getPlugin($id, $editor)->getElementsSubset();
         }
@@ -333,14 +329,31 @@ class CKEditor5PluginManager extends DefaultPluginManager implements CKEditor5Pl
         // work: otherwise it would not be able to know which plugins to enable.
         elseif (isset($editor)) {
           $subset = $this->getPlugin($id, $editor)->getElementsSubset();
-          $subset_violations = array_diff($subset, $defined_elements);
+          $subset_restrictions = HTMLRestrictions::fromString(implode($subset));
+          $defined_restrictions = HTMLRestrictions::fromString(implode($defined_elements));
+          $subset_violations = $subset_restrictions->diff($defined_restrictions)->toCKEditor5ElementsArray();
           if (!empty($subset_violations)) {
             throw new \LogicException(sprintf('The "%s" CKEditor 5 plugin implements ::getElementsSubset() and did not return a subset, the following tags are absent from the plugin definition: "%s".', $id, implode(' ', $subset_violations)));
+          }
+          // Also detect what is technically a valid subset, but has lost the
+          // ability to create tags that are still in the subset. This points to
+          // a bug in the plugin's ::getElementsSubset() logic.
+          $defined_creatable = HTMLRestrictions::fromString(implode($definition->getCreatableElements()));
+          $subset_creatable_actual = HTMLRestrictions::fromString(implode(array_filter($subset, [CKEditor5PluginDefinition::class, 'isCreatableElement'])));
+          $subset_creatable_needed = $subset_restrictions->extractPlainTagsSubset()
+            ->intersect($defined_creatable);
+          $missing_creatable_for_subset = $subset_creatable_needed->diff($subset_creatable_actual);
+          if (!$missing_creatable_for_subset->allowsNothing()) {
+            throw new \LogicException(sprintf('The "%s" CKEditor 5 plugin implements ::getElementsSubset() and did return a subset ("%s") but the following tags can no longer be created: "%s".', $id, implode($subset_restrictions->toCKEditor5ElementsArray()), implode($missing_creatable_for_subset->toCKEditor5ElementsArray())));
           }
           $defined_elements = $subset;
         }
       }
       assert(Inspector::assertAllStrings($defined_elements));
+      if ($creatable_elements_only) {
+        // @see \Drupal\ckeditor5\Plugin\CKEditor5PluginDefinition::getCreatableElements()
+        $defined_elements = array_filter($defined_elements, [CKEditor5PluginDefinition::class, 'isCreatableElement']);
+      }
       foreach ($defined_elements as $element) {
         $additional_elements = HTMLRestrictions::fromString($element);
         $elements = $elements->merge($additional_elements);
