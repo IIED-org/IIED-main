@@ -19,6 +19,9 @@ process:
     -
       plugin: get
       source: field_basic_text_value
+    -
+      plugin: rewrite_inline_image_styles
+      new_style: scale_md
   field_basic_text/format:
     -
       plugin: default_value
