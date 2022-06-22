@@ -1,70 +1,61 @@
-@import '../../mixins', '../../includes', '../../variables';
+@use "../../variables" as v;
 
-//	Animations
-.mm-page {
-    box-sizing: border-box;
-    position: relative;
-}
-
-.mm-slideout {
-    transition: transform $mm_transitionDuration $mm_transitionFunction;
-    z-index: 1;
-}
-
-//	Wrapper
-.mm-wrapper {
-    &_opened {
-        overflow-x: hidden;
-        position: relative;
-
-        .mm-page {
-            min-height: 100vh;
-        }
-    }
-    &_background {
-        .mm-page {
-            background: inherit;
-        }
-    }
+:root {
+    --mm-size: 80%;
+    --mm-min-size: 240px;
+    --mm-max-size: 440px;
 }
 
 //	Menu
-.mm-menu_offcanvas {
+.mm-menu--offcanvas {
     position: fixed;
-    right: auto;
     z-index: 0;
+    transition: visibility 0s linear v.$transDr;
 
-    &:not(.mm-menu_opened) {
-        display: none;
-    }
-}
-
-@include mm_offcanvas_size;
-
-@if ($mm_include_offcanvas_blocker) {
-    .mm-wrapper__blocker {
-        background: rgba(3, 2, 1, 0);
-        overflow: hidden;
-        display: none;
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 2;
+    &.mm-menu--opened {
+        transition-delay: 0s;
     }
 
-    .mm-wrapper_blocking {
-        overflow: hidden;
+    &:not(.mm-menu--opened) {
+        visibility: hidden;
+        pointer-events: none;
 
-        body {
-            overflow: hidden;
-        }
-
-        .mm-wrapper__blocker {
-            display: block;
+        // Visible panels undo the hidden menu :/
+        //  Use inherit so the transition-delay works down the DOM tree.
+        * {
+            visibility: inherit;
         }
     }
 }
 
-@import 'offcanvas.rtl';
+//	Page node
+.mm-page {
+    box-sizing: border-box;
+    min-height: 100vh;
+    background: inherit;
+}
+
+//  All sliding out nodes
+:where(.mm-slideout) {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    transition-duration: v.$transDr;
+    transition-timing-function: v.$transFn;
+    transition-property: width, transform;
+}
+
+//	Wrapper
+.mm-wrapper--opened {
+    &,
+    body {
+        overflow: hidden;
+    }
+}
+
+//  UI Blocker
+.mm-wrapper__blocker {
+    background: #00000066;
+}
+
+@import "positions";

@@ -1,42 +1,38 @@
 import Mmenu from '../../core/oncanvas/mmenu.oncanvas';
-import options from './_options';
-import configs from './_configs';
-import { extendShorthandOptions } from './_options';
+import CONFIGS from './configs';
+import { extendShorthandOptions } from './options';
+import { extend } from '../../_modules/helpers'
 import * as DOM from '../../_modules/dom';
 import * as media from '../../_modules/matchmedia';
 
-//  Add the options and configs.
-Mmenu.options.navbars = options;
-Mmenu.configs.navbars = configs;
 
-//  Add the classnames.
-Mmenu.configs.classNames.navbars = {
-    panelPrev: 'Prev',
-    panelTitle: 'Title'
-};
-
-import breadcrumbs from './_navbar.breadcrumbs';
-import close from './_navbar.close';
-import prev from './_navbar.prev';
-import searchfield from './_navbar.searchfield';
-import title from './_navbar.title';
+import breadcrumbs from './navbar.breadcrumbs';
+import close from './navbar.close';
+import prev from './navbar.prev';
+import searchfield from './navbar.searchfield';
+import title from './navbar.title';
+import tabs from './navbar.tabs';
 
 Navbars.navbarContents = {
     breadcrumbs,
     close,
     prev,
     searchfield,
-    title
+    title,
 };
 
-import tabs from './_navbar.tabs';
-
 Navbars.navbarTypes = {
-    tabs
+    tabs,
 };
 
 export default function Navbars(this: Mmenu) {
-    var navs = this.opts.navbars;
+    this.opts.navbars = this.opts.navbars || [];
+    this.conf.navbars = this.conf.navbars || {};
+
+    //	Extend options.
+    extend(this.conf.navbars, CONFIGS);
+
+    let navs = this.opts.navbars;
 
     if (typeof navs == 'undefined') {
         return;
@@ -45,25 +41,25 @@ export default function Navbars(this: Mmenu) {
     if (!(navs instanceof Array)) {
         navs = [navs];
     }
-
-    var navbars = {};
-
+    
     if (!navs.length) {
         return;
     }
+    
+    var navbars = {};
 
-    navs.forEach(options => {
+    navs.forEach((options) => {
         options = extendShorthandOptions(options);
 
         if (!options.use) {
-            return false;
+            return;
         }
 
         //	Create the navbar element.
-        var navbar = DOM.create('div.mm-navbar');
+        const navbar = DOM.create('div.mm-navbar');
 
         //	Get the position for the navbar.
-        var position = options.position;
+        let { position } = options;
 
         //	Restrict the position to either "bottom" or "top" (default).
         if (position !== 'bottom') {
@@ -72,17 +68,17 @@ export default function Navbars(this: Mmenu) {
 
         //	Create the wrapper for the navbar position.
         if (!navbars[position]) {
-            navbars[position] = DOM.create('div.mm-navbars_' + position);
+            navbars[position] = DOM.create('div.mm-navbars.mm-navbars--' + position);
         }
         navbars[position].append(navbar);
 
         //	Add content to the navbar.
         for (let c = 0, l = options.content.length; c < l; c++) {
-            let ctnt = options.content[c];
+            const ctnt = options.content[c];
 
             //	The content is a string.
             if (typeof ctnt == 'string') {
-                let func = Navbars.navbarContents[ctnt];
+                const func = Navbars.navbarContents[ctnt];
 
                 //	The content refers to one of the navbar-presets ("prev", "title", etc).
                 if (typeof func == 'function') {
@@ -98,7 +94,7 @@ export default function Navbars(this: Mmenu) {
                     node.innerHTML = ctnt;
 
                     //  If there was only a single node, use that.
-                    let children = DOM.children(node);
+                    const children = DOM.children(node);
                     if (children.length == 1) {
                         node = children[0];
                     }
@@ -115,7 +111,7 @@ export default function Navbars(this: Mmenu) {
         //	The type option is set.
         if (typeof options.type == 'string') {
             //	The function refers to one of the navbar-presets ("tabs").
-            let func = Navbars.navbarTypes[options.type];
+            const func = Navbars.navbarTypes[options.type];
             if (typeof func == 'function') {
                 //	Call the preset function.
                 func.call(this, navbar);
@@ -125,13 +121,15 @@ export default function Navbars(this: Mmenu) {
         //	En-/disable the navbar.
         let enable = () => {
             navbar.classList.remove('mm-hidden');
-            Mmenu.sr_aria(navbar, 'hidden', false);
         };
         let disable = () => {
             navbar.classList.add('mm-hidden');
-            Mmenu.sr_aria(navbar, 'hidden', true);
         };
-        if (typeof options.use != 'boolean') {
+
+        if (typeof options.use == 'boolean') {
+            this.bind('initMenu:after', enable);
+
+        } else {
             media.add(options.use, enable, disable);
         }
     });
@@ -139,7 +137,7 @@ export default function Navbars(this: Mmenu) {
     //	Add to menu.
     this.bind('initMenu:after', () => {
         for (let position in navbars) {
-            this.node.menu[position == 'bottom' ? 'append' : 'prepend'](
+            this.node.pnls[position == 'bottom' ? 'after' : 'before'](
                 navbars[position]
             );
         }

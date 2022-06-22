@@ -1,7 +1,7 @@
 label: අන්තර්ගතය
 display:
   default:
-    display_title: Master
+    display_title: Default
     display_options:
       title: අන්තර්ගතය
       fields:

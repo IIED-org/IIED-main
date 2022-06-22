@@ -1,7 +1,7 @@
 label: Contenido
 display:
   default:
-    display_title: 'Por defecto'
+    display_title: Default
     display_options:
       title: Contenido
       fields:
