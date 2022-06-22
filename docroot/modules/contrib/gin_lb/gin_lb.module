@@ -61,6 +61,7 @@ function gin_lb_is_layout_builder_form_id($form_id, array $form) {
     'layout_builder_add_block',
     'views_form_media_library_widget_image',
     'media_image_edit_form',
+    'media_library_add_form_oembed',
     'media_library_add_form_upload',
     'layout_builder_add_block',
     'layout_builder_remove_block',
@@ -378,11 +379,9 @@ function gin_lb_is_layout_builder_route() {
   if ($gin_lb_is_layout_builder_route !== NULL) {
     return $gin_lb_is_layout_builder_route;
   }
-  $rout_match = \Drupal::routeMatch();
-  $route_name = $rout_match->getRouteName();
+  $route_name = \Drupal::routeMatch()->getRouteName();
   $gin_lb_is_layout_builder_route = FALSE;
-  if (preg_match('/^(layout_builder\.([^.]+\.)?)/', $route_name)
-  ) {
+  if ($route_name !== NULL && preg_match('/^(layout_builder\.([^.]+\.)?)/', $route_name)) {
     $gin_lb_is_layout_builder_route = TRUE;
   }
   \Drupal::moduleHandler()->alter('gin_lb_is_layout_builder_route', $gin_lb_is_layout_builder_route, $context);
@@ -591,6 +590,15 @@ function gin_lb_preprocess_item_list__media_library_add_form_media_list(array &$
 function gin_lb_preprocess_media_library_item__widget(array &$variables) {
   $variables['content']['remove_button']['#attributes']['class'][] = 'media-library-item__remove';
   $variables['content']['remove_button']['#attributes']['class'][] = 'icon-link';
+}
+
+/**
+ * Implements toolbar preprocess.
+ */
+function gin_lb_preprocess_toolbar(&$variables) {
+  if (gin_lb_is_layout_builder_route()) {
+    $variables['secondary_toolbar_frontend'] = FALSE;
+  }
 }
 
 /**

@@ -13,7 +13,7 @@ use Drupal\Tests\TestFileCreationTrait;
 use Drupal\user\RoleInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 
-// cspell:ignore esque upcasted
+// cspell:ignore esque splitbutton upcasted sourceediting
 
 /**
  * Tests for CKEditor5.
@@ -227,6 +227,31 @@ class CKEditor5Test extends CKEditor5TestBase {
     $this->triggerKeyUp('.ckeditor5-toolbar-item-textPartLanguage', 'ArrowDown');
     $assert_session->assertWaitOnAjaxRequest();
 
+    // The CKEditor 5 module should warn that `<span>` cannot be created.
+    $assert_session->waitForElement('css', '[role=alert][data-drupal-message-type="warning"]:contains("The Language plugin needs another plugin to create <span>, for it to be able to create the following attributes: <span lang dir>. Enable a plugin that supports creating this tag. If none exists, you can configure the Source Editing plugin to support it.")');
+
+    // Make `<span>` creatable.
+    $this->assertNotEmpty($assert_session->elementExists('css', '.ckeditor5-toolbar-item-sourceEditing'));
+    $this->triggerKeyUp('.ckeditor5-toolbar-item-sourceEditing', 'ArrowDown');
+    $assert_session->assertWaitOnAjaxRequest();
+    // The Source Editing plugin settings form should now be present and should
+    // have no allowed tags configured.
+    $page->clickLink('Source editing');
+    $this->assertNotNull($assert_session->waitForElementVisible('css', '[data-drupal-selector="edit-editor-settings-plugins-ckeditor5-sourceediting-allowed-tags"]'));
+    $javascript = <<<JS
+      const allowedTags = document.querySelector('[data-drupal-selector="edit-editor-settings-plugins-ckeditor5-sourceediting-allowed-tags"]');
+      allowedTags.value = '<span>';
+      allowedTags.dispatchEvent(new Event('input'));
+JS;
+    $this->getSession()->executeScript($javascript);
+    // Dispatching an `input` event does not work in WebDriver. Enabling another
+    // toolbar item which has no associated HTML elements forces it.
+    $this->triggerKeyUp('.ckeditor5-toolbar-item-undo', 'ArrowDown');
+    $assert_session->assertWaitOnAjaxRequest();
+
+    // Confirm there are no longer any warnings.
+    $assert_session->waitForElementRemoved('css', '[data-drupal-messages] [role="alert"]');
+
     // Test for "United Nations' official languages" option.
     $languages = LanguageManager::getUnitedNationsLanguageList();
     $this->languageOfPartsPluginTestHelper($page, $assert_session, $languages, "un");
@@ -311,11 +336,11 @@ class CKEditor5Test extends CKEditor5TestBase {
     $page->checkField('editor[settings][plugins][ckeditor5_imageUpload][status]');
     $assert_session->assertWaitOnAjaxRequest();
 
-    // Enable language to add a second plugin config form.
-    $this->assertNotEmpty($assert_session->waitForElement('css', '.ckeditor5-toolbar-item-textPartLanguage'));
-    $this->triggerKeyUp('.ckeditor5-toolbar-item-textPartLanguage', 'ArrowDown');
-    $this->assertNotEmpty($assert_session->waitForElement('css', 'a[href^="#edit-editor-settings-plugins-ckeditor5-language"]'));
-    $this->assertNotEmpty($assert_session->waitForElement('css', '.ckeditor5-toolbar-active .ckeditor5-toolbar-item-textPartLanguage'));
+    // Enable Heading to add a second plugin config form.
+    $this->assertNotEmpty($assert_session->waitForElement('css', '.ckeditor5-toolbar-button-heading'));
+    $this->triggerKeyUp('.ckeditor5-toolbar-button-heading', 'ArrowDown');
+    $this->assertNotEmpty($assert_session->waitForElement('css', 'a[href^="#edit-editor-settings-plugins-ckeditor5-heading"]'));
+    $this->assertNotEmpty($assert_session->waitForElement('css', '.ckeditor5-toolbar-active .ckeditor5-toolbar-button-heading'));
     $assert_session->assertWaitOnAjaxRequest();
 
     $page->pressButton('Save configuration');
@@ -443,6 +468,133 @@ class CKEditor5Test extends CKEditor5TestBase {
     $page->pressButton('Save');
 
     $assert_session->responseContains('<p>This is a <em>test!</em></p>');
+  }
+
+  /**
+   * Tests list plugin.
+   */
+  public function testListPlugin() {
+    FilterFormat::create([
+      'format' => 'test_format',
+      'name' => 'CKEditor 5 with list',
+      'roles' => [RoleInterface::AUTHENTICATED_ID],
+    ])->save();
+    Editor::create([
+      'format' => 'test_format',
+      'editor' => 'ckeditor5',
+      'settings' => [
+        'toolbar' => [
+          'items' => ['sourceEditing', 'numberedList'],
+        ],
+        'plugins' => [
+          'ckeditor5_list' => [
+            'reversed' => FALSE,
+            'startIndex' => FALSE,
+          ],
+          'ckeditor5_sourceEditing' => [
+            'allowed_tags' => [],
+          ],
+        ],
+      ],
+    ])->save();
+    $this->assertSame([], array_map(
+      function (ConstraintViolation $v) {
+        return (string) $v->getMessage();
+      },
+      iterator_to_array(CKEditor5::validatePair(
+        Editor::load('test_format'),
+        FilterFormat::load('test_format')
+      ))
+    ));
+    $ordered_list_html = '<ol><li>apple</li><li>banana</li><li>cantaloupe</li></ol>';
+    $page = $this->getSession()->getPage();
+    $assert_session = $this->assertSession();
+    $this->drupalGet('node/add');
+    $page->fillField('title[0][value]', 'My test content');
+    $this->pressEditorButton('Source');
+    $source_text_area = $assert_session->waitForElement('css', '.ck-source-editing-area textarea');
+    $source_text_area->setValue($ordered_list_html);
+    // Click source again to make source inactive and have the numbered list
+    // splitbutton active.
+    $this->pressEditorButton('Source');
+    $numbered_list_dropdown_selector = '.ck-splitbutton__arrow';
+
+    // Check that there is no dropdown available for the numbered list because
+    // both reversed and startIndex are FALSE.
+    $assert_session->elementNotExists('css', $numbered_list_dropdown_selector);
+    // Save content so source content is kept after changing the editor config.
+    $page->pressButton('Save');
+    $edit_url = $this->getSession()->getCurrentURL() . '/edit';
+    $this->drupalGet($edit_url);
+    $this->waitForEditor();
+
+    // Enable the reversed functionality.
+    $editor = Editor::load('test_format');
+    $settings = $editor->getSettings();
+    $settings['plugins']['ckeditor5_list']['reversed'] = TRUE;
+    $editor->setSettings($settings);
+    $editor->save();
+    $this->getSession()->reload();
+    $this->waitForEditor();
+    $this->click($numbered_list_dropdown_selector);
+    $reversed_order_button_selector = '.ck.ck-button.ck-numbered-list-properties__reversed-order';
+    $assert_session->elementExists('css', $reversed_order_button_selector);
+    $assert_session->elementTextEquals('css', $reversed_order_button_selector, 'Reversed order');
+    $start_index_element_selector = '.ck.ck-numbered-list-properties__start-index';
+    $assert_session->elementNotExists('css', $start_index_element_selector);
+
+    // Have both the reversed and the start index enabled.
+    $editor = Editor::load('test_format');
+    $settings = $editor->getSettings();
+    $settings['plugins']['ckeditor5_list']['startIndex'] = TRUE;
+    $editor->setSettings($settings);
+    $editor->save();
+    $this->getSession()->reload();
+    $this->waitForEditor();
+    $this->click($numbered_list_dropdown_selector);
+    $assert_session->elementExists('css', $reversed_order_button_selector);
+    $assert_session->elementTextEquals('css', $reversed_order_button_selector, 'Reversed order');
+    $assert_session->elementExists('css', $start_index_element_selector);
+  }
+
+  /**
+   * Ensures that CKEditor 5 retains filter_html's allowed global attributes.
+   *
+   * FilterHtml always forbids the `style` and `on*` attributes, and always
+   * allows the `lang` attribute (with any value) and the `dir` attribute (with
+   * either `ltr` or `rtl` as value). It's important that those last two
+   * attributes are guaranteed to be retained.
+   *
+   * @see \Drupal\filter\Plugin\Filter\FilterHtml::getHTMLRestrictions()
+   * @see ckeditor5_globalAttributeDir
+   * @see ckeditor5_globalAttributeLang
+   * @see https://html.spec.whatwg.org/multipage/dom.html#global-attributes
+   */
+  public function testFilterHtmlAllowedGlobalAttributes(): void {
+    $page = $this->getSession()->getPage();
+    $assert_session = $this->assertSession();
+
+    // Add a node with text rendered via the Plain Text format.
+    $this->drupalGet('node/add');
+    $page->fillField('title[0][value]', 'Multilingual Hello World');
+    // cSpell:disable-next-line
+    $page->fillField('body[0][value]', '<p dir="ltr" lang="en">Hello World</p><p dir="rtl" lang="ar">مرحبا بالعالم</p>');
+    $page->pressButton('Save');
+
+    $this->createNewTextFormat($page, $assert_session);
+    $this->saveNewTextFormat($page, $assert_session);
+
+    $this->drupalGet('node/1/edit');
+    $page->selectFieldOption('body[0][format]', 'ckeditor5');
+    $this->assertNotEmpty($assert_session->waitForText('Change text format?'));
+    $page->pressButton('Continue');
+
+    $this->waitForEditor();
+    $page->pressButton('Save');
+
+    // @todo Remove the expected `xml:lang` attributes in https://www.drupal.org/project/drupal/issues/1333730
+    // cSpell:disable-next-line
+    $assert_session->responseContains('<p dir="ltr" lang="en" xml:lang="en">Hello World</p><p dir="rtl" lang="ar" xml:lang="ar">مرحبا بالعالم</p>');
   }
 
 }

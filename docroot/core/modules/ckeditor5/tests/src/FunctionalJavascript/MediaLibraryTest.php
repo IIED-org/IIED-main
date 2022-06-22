@@ -83,6 +83,9 @@ class MediaLibraryTest extends WebDriverTestBase {
           'ckeditor5_sourceEditing' => [
             'allowed_tags' => [],
           ],
+          'media_media' => [
+            'allow_view_mode_override' => FALSE,
+          ],
         ],
       ],
     ])->save();
@@ -229,12 +232,7 @@ class MediaLibraryTest extends WebDriverTestBase {
         ->setFilterConfig('media_embed', [
           'status' => TRUE,
           'settings' => [
-            'default_view_mode' => 'view_mode_1',
             'allowed_media_types' => $allowed_media_types,
-            'allowed_view_modes' => [
-              'view_mode_1' => 'view_mode_1',
-              'view_mode_2' => 'view_mode_2',
-            ],
           ],
         ])->save();
 

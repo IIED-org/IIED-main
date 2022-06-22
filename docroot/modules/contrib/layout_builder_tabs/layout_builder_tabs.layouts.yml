@@ -2,6 +2,7 @@ tabs:
   label: Tabs
   category: 'Extra Layouts'
   template: templates/tabs
+  class: '\Drupal\layout_builder_tabs\Plugin\Layout\TabsLayout'
   icon: layout_builder_tabs.svg
   regions:
     tabs:
