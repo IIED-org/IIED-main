@@ -130,6 +130,8 @@ class D7FieldParagraphs extends FieldableEntity {
       // Used to debug specific entity migrations.
       // $query->condition('pi.item_id', '1881');
 
+      $query->condition('fd.entity_id', '138216');
+
     }
 
     return $query;
