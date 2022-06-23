@@ -25,11 +25,9 @@ For general featured card display
                {{ node.type.entity.label() }}
               </div>
 
-              {% include '@iied_tw/layout/icons/corner-tr.svg' %}
-
             </div>
 
-            <div class="z-20 flex flex-col justify-between h-full p-4 -mt-3 bg-white rounded-tl-xl">
+            <div class="relative z-20 flex flex-col justify-between h-full p-4 -mt-3 bg-white rounded-odd-even">
               <h4 class="mb-4 text-xl text-gray-900 lg:text-2xl">
                 {{ label }}
               </h4>
@@ -41,44 +39,3 @@ For general featured card display
         </a>
 
 </article>
-
-{# even #}
-{# {% if loop.index is even %}...{% endif %}
-
-<article{{ attributes.addClass('h-full') }}>
-
-        <a href="{{ url }}" class="hover:no-underline">
-          <div
-            class="flex flex-col h-full overflow-hidden transition-shadow bg-white border border-gray-300 rounded-xl hover:shadow-lg group"
-          >
-            <div class="relative">
-
-              {% set image_uri = node.field_main_image|file_uri %}
-              {% set image_alt = node.field_main_image.alt %}
-              {% if image_uri is not null %}
-                <img class="w-full" src="{{ image_uri|image_style('card_370') }}" alt="{{ image_alt }}" />
-              {% endif %}
-
-              <div
-                class="absolute bottom-0 left-0 z-10 px-4 pt-2 pb-5 text-gray-900 bg-iiedblue-500 rounded-tr-xl"
-              >
-               {{ node.type.entity.label() }}
-              </div>
-
-              {% include '@iied_tw/layout/icons/corner-bl.svg' %}
-
-            </div>
-
-            <div class="z-20 flex flex-col justify-between h-full p-4 -mt-3 bg-white rounded-tr-xl">
-              <h4 class="mb-4 text-xl text-gray-900 lg:text-2xl">
-                {{ label }}
-              </h4>
-              <p class="text-gray-500">{{ node.getCreatedTime|date('d F Y') }}</p>
-            </div>
-          </div>
-        </a>
-
-</article>
-
-
-#}

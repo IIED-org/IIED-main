@@ -2434,6 +2434,36 @@ hr{
   }
 }
 
+.odd .rounded-odd-even{
+  border-top-left-radius: 0.75rem;
+}
+
+.even .rounded-odd-even{
+  border-top-right-radius: 0.75rem;
+}
+
+.odd .rounded-odd-even:before {
+  content: url(/themes/custom/iied_tw/templates/layout/icons/corner-tr.svg);
+  position: absolute;
+  top: -12px;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  margin: 0 0 0 0px;
+  fill: #fff;
+}
+
+.even .rounded-odd-even:before {
+  content: url(/themes/custom/iied_tw/templates/layout/icons/corner-bl.svg);
+  position: absolute;
+  top: -12px;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  margin: 0 0 0 0px;
+  fill: #fff;
+}
+
 .visible{
   visibility: visible;
 }
@@ -2853,6 +2883,10 @@ hr{
   width: 96%;
 }
 
+.w-full{
+  width: 100%;
+}
+
 .w-32{
   width: 8rem;
 }
@@ -2875,10 +2909,6 @@ hr{
 
 .w-5{
   width: 1.25rem;
-}
-
-.w-full{
-  width: 100%;
 }
 
 .w-3{

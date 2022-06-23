@@ -7,5 +7,6 @@
     id="corner-tl"
     data-name="corner-tl"
     d="M12,0A12,12,0,0,0,0,12V0Z"
+    fill="#fff"
   />
 </svg>
