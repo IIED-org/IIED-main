@@ -13,6 +13,7 @@ function iied_filters_theme($existing, $type, $theme, $path) {
         'url' => NULL,
         'style' => 'normal',
         'video_data' => [],
+        'embed_code' => NULL,
       ],
     ],
   ];
@@ -55,17 +56,6 @@ function template_preprocess_iied_filters_video_embed_code(&$variables) {
     $variables['url'] = 'http://' . $variables['url'];
   }
 
-  // Prepare embed code.
-  if ($handler && isset($handler['function']) && function_exists($handler['function'])) {
-    $embed_code = call_user_func($handler['function'], $variables['url'], $variables['style_settings']);
-    $variables['embed_code'] = ($embed_code);
-  } else {
-    $variables['embed_code'] = l($variables['url'], $variables['url']);
-  }
-
-  // Prepare video data.
-  $variables['data'] = $variables['video_data'];
-  unset($variables['video_data']);
 }
 
 

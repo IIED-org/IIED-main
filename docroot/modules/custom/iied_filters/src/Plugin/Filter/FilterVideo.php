@@ -49,9 +49,6 @@ class FilterVideo extends FilterBase {
 
       $variables['url'] = $parts[0];
 
-      $embed_code = "testing";
-      //$embed_code = $output;
-      //$embed_code = $output['#markup'] ;
 
       // Get the handler.
       $handler = iied_filters_get_handler($variables['url']);
@@ -87,10 +84,19 @@ class FilterVideo extends FilterBase {
 
 
 
+      $render = [
+        '#theme' => 'iied_filters_video_embed_code',
+        '#url' => $parts[0],
+        '#style' => $style,
+        '#embed_code' => $embed_code['#markup'],
+      ];
+
+      $output = \Drupal::service('renderer')->render($render);
 
 
 
-      $text = str_replace('[VIDEO::' . $tag . ']', $embed_code['#markup'], $text);
+
+      $text = str_replace('[VIDEO::' . $tag . ']', $output, $text);
     }
 
 
