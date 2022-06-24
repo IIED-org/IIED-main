@@ -37,29 +37,18 @@ class FilterVideo extends FilterBase {
         $style = 'normal';
       }
 
-      //$embed_code = theme('video_embed_field_embed_code', array('url' => $parts[0], 'style' => $style));
-
       $render = [
         '#theme' => 'iied_filters_video_embed_code',
         '#url' => $parts[0],
         '#style' => $style,
       ];
 
-      //$output = \Drupal::service('renderer')->render($render);
-
       $variables['url'] = $parts[0];
-
 
       // Get the handler.
       $handler = iied_filters_get_handler($variables['url']);
       $variables['handler'] = $handler['name'];
 
-      // // Load the style.
-      // $style = iied_filters_video_style_load($variables['style']);
-      // // If there was an issue load in the default style.
-      // if ($style == FALSE) {
-      //   $style = iied_filters_video_style_load('normal');
-      // }
       $style = [];
       if (isset($style->data[$variables['handler']])) {
         $variables['style_settings'] = $style->data[$variables['handler']];
@@ -82,8 +71,7 @@ class FilterVideo extends FilterBase {
         $variables['embed_code'] = l($variables['url'], $variables['url']);
       }
 
-
-
+      // Define render array to generate the markup
       $render = [
         '#theme' => 'iied_filters_video_embed_code',
         '#url' => $parts[0],
@@ -91,16 +79,15 @@ class FilterVideo extends FilterBase {
         '#embed_code' => $embed_code['#markup'],
       ];
 
+      // Render it, as we need to deliver the actual markup.
       $output = \Drupal::service('renderer')->render($render);
 
-
-
-
+      // Do the replacement
       $text = str_replace('[VIDEO::' . $tag . ']', $output, $text);
     }
 
-
-
     return new FilterProcessResult($text);
+
   }
+
 }

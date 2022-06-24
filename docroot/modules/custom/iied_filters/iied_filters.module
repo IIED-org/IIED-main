@@ -18,8 +18,6 @@ function iied_filters_theme($existing, $type, $theme, $path) {
     ],
   ];
 
-
-
 }
 
 /**
@@ -57,7 +55,6 @@ function template_preprocess_iied_filters_video_embed_code(&$variables) {
   }
 
 }
-
 
 /**
  * Retrieves the video handler for a video URL.
