@@ -39,10 +39,58 @@ class FilterVideo extends FilterBase {
 
       //$embed_code = theme('video_embed_field_embed_code', array('url' => $parts[0], 'style' => $style));
 
+      $render = [
+        '#theme' => 'iied_filters_video_embed_code',
+        '#url' => $parts[0],
+        '#style' => $style,
+      ];
+
+      //$output = \Drupal::service('renderer')->render($render);
+
+      $variables['url'] = $parts[0];
+
       $embed_code = "testing";
+      //$embed_code = $output;
+      //$embed_code = $output['#markup'] ;
+
+      // Get the handler.
+      $handler = iied_filters_get_handler($variables['url']);
+      $variables['handler'] = $handler['name'];
+
+      // // Load the style.
+      // $style = iied_filters_video_style_load($variables['style']);
+      // // If there was an issue load in the default style.
+      // if ($style == FALSE) {
+      //   $style = iied_filters_video_style_load('normal');
+      // }
+      $style = [];
+      if (isset($style->data[$variables['handler']])) {
+        $variables['style_settings'] = $style->data[$variables['handler']];
+      }
+      // Safety value for when we add new handlers and there are styles stored.
+      else {
+        $variables['style_settings'] = $handler['defaults'];
+      }
+
+      // Prepare the URL.
+      if (!stristr($variables['url'], 'http://') && !stristr($variables['url'], 'https://')) {
+        $variables['url'] = 'http://' . $variables['url'];
+      }
+
+      // Prepare embed code.
+      if ($handler && isset($handler['function']) && function_exists($handler['function'])) {
+        $embed_code = call_user_func($handler['function'], $variables['url'], $variables['style_settings']);
+        $variables['embed_code'] = ($embed_code);
+      } else {
+        $variables['embed_code'] = l($variables['url'], $variables['url']);
+      }
 
 
-      $text = str_replace('[VIDEO::' . $tag . ']', $embed_code, $text);
+
+
+
+
+      $text = str_replace('[VIDEO::' . $tag . ']', $embed_code['#markup'], $text);
     }
 
 

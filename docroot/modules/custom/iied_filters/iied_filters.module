@@ -35,12 +35,13 @@ function template_preprocess_iied_filters_video_embed_code(&$variables) {
   $handler = iied_filters_get_handler($variables['url']);
   $variables['handler'] = $handler['name'];
 
-  // Load the style.
-  $style = video_embed_field_video_style_load($variables['style']);
-  // If there was an issue load in the default style.
-  if ($style == FALSE) {
-    $style = video_embed_field_video_style_load('normal');
-  }
+  // // Load the style.
+  // $style = iied_filters_video_style_load($variables['style']);
+  // // If there was an issue load in the default style.
+  // if ($style == FALSE) {
+  //   $style = iied_filters_video_style_load('normal');
+  // }
+  $style = [];
   if (isset($style->data[$variables['handler']])) {
     $variables['style_settings'] = $style->data[$variables['handler']];
   }
@@ -57,7 +58,7 @@ function template_preprocess_iied_filters_video_embed_code(&$variables) {
   // Prepare embed code.
   if ($handler && isset($handler['function']) && function_exists($handler['function'])) {
     $embed_code = call_user_func($handler['function'], $variables['url'], $variables['style_settings']);
-    $variables['embed_code'] = drupal_render($embed_code);
+    $variables['embed_code'] = ($embed_code);
   } else {
     $variables['embed_code'] = l($variables['url'], $variables['url']);
   }
@@ -92,8 +93,8 @@ function iied_filters_get_handler($url) {
     $host = substr($host, 4);
   }
 
-  $domains = _video_embed_field_get_provider_domains();
-  $handlers = video_embed_get_handlers();
+  $domains = _iied_filters_get_provider_domains();
+  $handlers = iied_filters_get_handlers();
   if (isset($domains[$host])) {
     $handler_name = $domains[$host];
     $handler = $handlers[$handler_name];
@@ -102,4 +103,274 @@ function iied_filters_get_handler($url) {
   } else {
     return FALSE;
   }
+}
+
+/**
+ * Fetches all available provider domains.
+ *
+ * @return array
+ *   An array containing the allowed video domains.
+ */
+function _iied_filters_get_provider_domains()
+{
+  $domains = [
+    'youtube.com',
+    'youtu.be',
+  ];
+
+  $domains = array();
+
+  $handlers = iied_filters_get_handlers();
+  foreach ($handlers as $name => $handler) {
+    if (isset($handler['function']) && function_exists($handler['function'])) {
+      foreach ($handler['domains'] as $domain) {
+        $domains[$domain] = $name;
+      }
+    }
+  }
+
+  return $domains;
+
+  return $domains;
+}
+
+/**
+ * Creates a hook that other modules can implement to get handlers.
+ *
+ * Can be used to add more handlers if needed - from other modules and such.
+ *
+ * @see hook_video_embed_handler_info
+ * @see video_embed_field.api.php
+ */
+function iied_filters_get_handlers() {
+  $handlers['youtube'] = array(
+    'title' => 'Youtube',
+    'function' => 'iied_filters_handle_youtube',
+    'thumbnail_function' => 'iied_filters_handle_youtube_thumbnail',
+    'thumbnail_default' => drupal_get_path('module', 'iied_filters') . '/img/youtube.jpg',
+    'data_function' => 'iied_filters_handle_youtube_data',
+    'form' => 'iied_filters_handler_youtube_form',
+    'form_validate' => 'iied_filters_handler_youtube_form_validate',
+    'domains' => array(
+      'youtube.com',
+      'youtu.be',
+    ),
+    'defaults' => array(
+      'width' => 640,
+      'height' => 360,
+      'autoplay' => 0,
+      'vq' => 'large',
+      'rel' => 0,
+      'controls' => 1,
+      'autohide' => 2,
+      'showinfo' => 1,
+      'modestbranding' => 0,
+      'theme' => 'dark',
+      'iv_load_policy' => 1,
+      'class' => '',
+    ),
+  );
+
+  $handlers['vimeo'] = array(
+    'title' => 'Vimeo',
+    'function' => 'iied_filters_handle_vimeo',
+    'thumbnail_function' => 'iied_filters_handle_vimeo_thumbnail',
+    'thumbnail_default' => drupal_get_path('module', 'iied_filters') . '/img/vimeo.jpg',
+    'data_function' => '_iied_filters_get_vimeo_data',
+    'form' => 'iied_filters_handler_vimeo_form',
+    'form_validate' => 'iied_filters_handler_vimeo_form_validate',
+    'domains' => array(
+      'vimeo.com',
+    ),
+    'defaults' => array(
+      'width' => 640,
+      'height' => 360,
+      'color' => '00adef',
+      'portrait' => 1,
+      'title' => 1,
+      'byline' => 1,
+      'autoplay' => 0,
+      'loop' => 0,
+      'froogaloop' => 0,
+      'class' => ''
+    ),
+  );
+
+  return $handlers;
+
+  return $handlers;
+}
+
+/**
+ * Helper function to get the youtube video's id.
+ *
+ * @param string $url
+ *   The video URL.
+ *
+ * @return string|bool
+ *   The video ID, or FALSE in case the ID can't be retrieved from the URL.
+ */
+function _iied_filters_get_youtube_id($url)
+{
+  // Find the ID of the video they want to play from the url.
+  if (stristr($url, 'http://')) {
+    $url = substr($url, 7);
+  } elseif (stristr($url, 'https://')) {
+    $url = substr($url, 8);
+  }
+
+  if (stristr($url, 'playlist')) {
+    // Playlists need the appended ampersand to take the options properly.
+    $url = $url . '&';
+    $pos = strripos($url, '?list=');
+    if ($pos !== FALSE) {
+      $pos2 = stripos($url, '&');
+      $pos2++;
+    } else {
+      return FALSE;
+    }
+  }
+  // Alternate playlist link.
+  elseif (stristr($url, 'view_play_list')) {
+    $url = $url . '&';
+    // All playlist ID's are prepended with PL.
+    if (!stristr($url, '?p=PL')) {
+      $url = substr_replace($url, 'PL', strpos($url, '?p=') + 3, 0);
+    }
+    // Replace the links format with the embed format.
+    $url = str_ireplace('play_list?p=', 'videoseries?list=', $url);
+    $pos = strripos($url, 'videoseries?list=');
+    if ($pos !== FALSE) {
+      $pos2 = stripos($url, '&');
+      $pos2++;
+    } else {
+      return FALSE;
+    }
+  } else {
+    $pos = strripos($url, 'v=');
+    if ($pos !== FALSE) {
+      $pos += 2;
+      $pos2 = stripos($url, '&', $pos);
+      $pos_hash = stripos($url, '#', $pos);
+
+      $pos2 = _iied_filters_get_min($pos2, $pos_hash);
+    } else {
+      $pos = strripos($url, '/');
+      if ($pos !== FALSE) {
+        $pos++;
+        $pos2 = stripos($url, '?', $pos);
+        $pos_hash = stripos($url, '#', $pos);
+
+        $pos2 = _iied_filters_get_min($pos2, $pos_hash);
+      }
+    }
+  }
+  if ($pos === FALSE) {
+    return FALSE;
+  } else {
+    if ($pos2 > 0) {
+      $id = substr($url, $pos, $pos2 - $pos);
+    } else {
+      $id = substr($url, $pos);
+    }
+  }
+  return ($id);
+}
+
+/**
+ * Handler for Youtube videos.
+ *
+ * @param string $url
+ *   The video URL.
+ * @param array $settings
+ *   The settings array.
+ *
+ * @return array
+ *   The video iframe render array.
+ */
+function iied_filters_handle_youtube($url, $settings) {
+  $output = array();
+
+  if (preg_match('/#t=((?P<min>\d+)m)?((?P<sec>\d+)s)?((?P<tinsec>\d+))?/', $url, $matches)) {
+    if (isset($matches['tinsec'])) {
+      $settings['start'] = $matches['tinsec']; // url already in form #t=125 for 2 minutes and 5 seconds
+    } else {
+      // url in form #t=2m5s or with other useless data, this is why we still keep adding the default data..
+      // give it some default data in case there is no #t=...
+      $matches += array(
+        "min" => 0,
+        "sec" => 0,
+      );
+      if ($time = ($matches["min"] * 60) + $matches["sec"]) {
+        $settings['start'] = $time;
+      }
+    }
+  }
+
+  $id = _iied_filters_get_youtube_id($url);
+  if (!$id) {
+    // We can't decode the URL - just return the URL as a link.
+    $output['#markup'] = l($url, $url);
+    return $output;
+  }
+
+  // Add class to variable to avoid adding it to URL param string.
+  $class = $settings['class'];
+  unset($settings['class']);
+
+  // Construct the embed code.
+  $settings['wmode'] = 'opaque';
+  $settings_str = urlencode(_iied_filters_code_get_settings_str($settings));
+
+  $output['#markup'] = '<iframe class="' . ($class) . '" width="' . ($settings['width']) . '" height="' . ($settings['height']) . '" src="//www.youtube.com/embed/' . $id . '?' . $settings_str . '" frameborder="0" allowfullscreen></iframe>';
+
+  return $output;
+}
+
+
+/**
+ * Calculates the min index for use in finding the id of a youtube video.
+ *
+ * @param string $pos1
+ *   The first index.
+ * @param string $pos2
+ *   The second index.
+ *
+ * @return string
+ *   The min index.
+ */
+function _iied_filters_get_min($pos1, $pos2)
+{
+  if (!$pos1) {
+    return $pos2;
+  } elseif (!$pos2) {
+    return $pos1;
+  } else {
+    return min($pos1, $pos2);
+  }
+}
+
+
+/**
+ * Fetches settings string.
+ *
+ * @param array $settings
+ *   The settings array.
+ *
+ * @return string
+ *   The settings string generated from the settings array.
+ */
+function _iied_filters_code_get_settings_str($settings = array())
+{
+  $values = array();
+
+  foreach ($settings as $name => $value) {
+    if (!isset($value)) {
+      $values[] = $name;
+    } else {
+      $values[] = $name . '=' . $value;
+    }
+  }
+
+  return implode('&amp;', $values);
 }
