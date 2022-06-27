@@ -116,4 +116,38 @@
   .image-caption {
     @apply mt-1 text-base leading-tight text-gray-500;
   }
+
+  .lead {
+    @apply prose prose-lg lg:prose-xl;
+  }
+
+  .odd .rounded-odd-even {
+    @apply rounded-tl-xl;
+  }
+
+  .even .rounded-odd-even {
+    @apply rounded-tr-xl;
+  }
+
+  .odd .rounded-odd-even:before {
+    content: url(/themes/custom/iied_tw/templates/layout/icons/corner-tr.svg);
+    position: absolute;
+    top: -12px;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    margin: 0 0 0 0px;
+    fill: #fff;
+  }
+
+  .even .rounded-odd-even:before {
+    content: url(/themes/custom/iied_tw/templates/layout/icons/corner-bl.svg);
+    position: absolute;
+    top: -12px;
+    left: 0;
+    width: 12px;
+    height: 12px;
+    margin: 0 0 0 0px;
+    fill: #fff;
+  }
 }

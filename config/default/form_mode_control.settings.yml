@@ -62,3 +62,4 @@
 'use  The form mode default linked to  paragraph entity( gallery )': paragraph.gallery.default
 'use  The form mode default linked to  paragraph entity( modal_image )': paragraph.modal_image.default
 'use  The form mode default linked to  paragraph entity( logo_block )': paragraph.logo_block.default
+'use  The form mode default linked to  paragraph entity( in_page_menu )': paragraph.in_page_menu.default

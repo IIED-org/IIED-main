@@ -1,0 +1,10 @@
+uuid: 951effbc-213b-484c-9ad2-c8a892046e19
+langcode: en
+status: true
+dependencies: {  }
+id: in_page_menu
+label: 'In-page menu'
+icon_uuid: null
+icon_default: null
+description: 'Menu of anchor links'
+behavior_plugins: {  }

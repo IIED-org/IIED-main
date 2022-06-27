@@ -7,5 +7,6 @@
     id="corner-tr"
     data-name="corner-r"
     d="M0,12A12,12,0,0,0,12,0V12Z"
+    fill="#fff"
     />
 </svg>
