@@ -19,28 +19,20 @@
       // The instatiation of the mmenu must only happen once.
       if (offCanvas && !offCanvas.hasOwnProperty('mmApi') && typeof (Mmenu) !== 'undefined') {
         const settings = drupalSettings.responsive_menu;
-        const position = settings.position,
-          theme = settings.theme,
-          pagedim = settings.pagedim;
 
         const options = {
-          extensions: [
-            theme,
-            'fx-menu-slide',
-            position === 'left' ? 'position-left' : 'position-right'
-          ],
-          keyboardNavigation: {
-            enable: true,
-            enhance: true,
-          },
-          drag: {
-            open: settings.drag
+          theme: settings.theme,
+          offCanvas: {
+            position: settings.position,
           }
         };
 
-        if (pagedim !== 'none') {
-          options.extensions.push(pagedim);
+        if (settings.pageWrapper) {
+          options['offCanvas']['selector'] = '.responsive-menu-page-wrapper';
         }
+        else {
+          options['offCanvas']['selector'] = settings.offCanvasSelector;
+        };
 
         const config = {
           classNames: {

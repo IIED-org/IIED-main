@@ -1,7 +1,7 @@
 label: Konten
 display:
   default:
-    display_title: Bawaan
+    display_title: Default
     display_options:
       title: Konten
       fields:

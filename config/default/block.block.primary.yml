@@ -1,4 +1,4 @@
-uuid: ab895735-57d1-4a74-9d59-2f2b79c48439
+uuid: 35876d95-2880-4942-b7a0-d19e4753eabf
 langcode: en
 status: true
 dependencies:
@@ -10,8 +10,8 @@ dependencies:
     - iied_tw
 id: primary
 theme: iied_tw
-region: primary_menu
-weight: -13
+region: navbar_branding
+weight: -12
 provider: null
 plugin: 'system_menu_block:primary'
 settings:

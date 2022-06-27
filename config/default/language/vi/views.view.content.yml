@@ -1,7 +1,7 @@
 label: 'Nội dung'
 display:
   default:
-    display_title: 'Mặc định'
+    display_title: Default
     display_options:
       title: 'Nội dung'
       fields:

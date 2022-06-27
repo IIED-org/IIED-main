@@ -101,10 +101,10 @@ class DefaultContentTest extends BrowserTestBase {
 
     $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadMultiple();
     $term = reset($terms);
-    $this->assertNotEmpty($term);
+    $this->assertTrue(!empty($term));
     $this->assertEquals($term->name->value, 'A tag');
     $term_id = $node->field_tags->target_id;
-    $this->assertNotEmpty($term_id);
+    $this->assertTrue(!empty($term_id), 'Term reference populated');
   }
 
 }

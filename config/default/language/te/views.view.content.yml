@@ -1,7 +1,7 @@
 label: సారము
 display:
   default:
-    display_title: అప్రమేయం
+    display_title: Default
     display_options:
       title: సారము
       fields:

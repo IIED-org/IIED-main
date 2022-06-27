@@ -207,6 +207,8 @@ libraries-extend:
     - gin/webform
   webform/webform.form.tabs:
     - gin/webform
+  workbench/workbench.toolbar:
+   - gin/workbench
   paragraphs/drupal.paragraphs.widget:
     - gin/paragraphs
   paragraphs_ee/paragraphs_ee.paragraphs:
@@ -238,7 +240,7 @@ regions:
 regions_hidden:
   - sidebar_first
 
-# Information added by Drupal.org packaging script on 2022-04-11
-version: '8.x-3.0-beta2'
+# Information added by Drupal.org packaging script on 2022-05-25
+version: '8.x-3.0-beta3'
 project: 'gin'
-datestamp: 1649709351
+datestamp: 1653469873

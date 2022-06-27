@@ -2,16 +2,12 @@
 
 namespace Drupal\Tests\default_content\Kernel;
 
-use Drupal\Core\Serialization\Yaml;
-use Drupal\file\Entity\File;
 use Drupal\Tests\field\Traits\EntityReferenceTestTrait;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
-use Drupal\Tests\TestFileCreationTrait;
-use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
 
 /**
@@ -23,12 +19,11 @@ use Drupal\user\Entity\User;
 class ExporterIntegrationTest extends KernelTestBase {
 
   use EntityReferenceTestTrait;
-  use TestFileCreationTrait;
 
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['system', 'file', 'user'];
+  public static $modules = ['system'];
 
   /**
    * The tested default content exporter.
@@ -40,12 +35,10 @@ class ExporterIntegrationTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installSchema('system', ['sequences']);
-    $this->installEntitySchema('user');
-    $this->installEntitySchema('file');
   }
 
   /**
@@ -56,44 +49,31 @@ class ExporterIntegrationTest extends KernelTestBase {
       'taxonomy',
       'default_content',
     ]);
+    \Drupal::service('router.builder')->rebuild();
     $this->exporter = \Drupal::service('default_content.exporter');
 
     $vocabulary = Vocabulary::create(['vid' => 'test']);
     $vocabulary->save();
-    $term = Term::create([
-      'vid' => $vocabulary->id(),
-      'name' => 'test_name',
-      'description' => [
-        'value' => 'The description',
-        'format' => 'plain_text',
-      ]
-    ]);
+    $term = Term::create(['vid' => $vocabulary->id(), 'name' => 'test_name']);
     $term->save();
     $term = Term::load($term->id());
 
-    $exported = $this->exporter->exportContent('taxonomy_term', $term->id());
-    $exported_decoded = Yaml::decode($exported);
+    /** @var \Symfony\Component\Serializer\Serializer $serializer */
+    $serializer = \Drupal::service('serializer');
+    \Drupal::service('hal.link_manager')
+      ->setLinkDomain($this->container->getParameter('default_content.link_domain'));
+    $expected = $serializer->serialize($term, 'hal_json', ['json_encode_options' => JSON_PRETTY_PRINT]);
 
-    // Assert the meta data and field values.
-    $meta = [
-      'version' => '1.0',
-      'entity_type' => 'taxonomy_term',
-      'uuid' => $term->uuid(),
-      'bundle' => $term->bundle(),
-      'default_langcode' => $term->language()->getId(),
-    ];
-    $this->assertEquals($meta, $exported_decoded['_meta']);
-    $this->assertEquals($term->label(), $exported_decoded['default']['name'][0]['value']);
-    $expected_description = [
-      [
-        'value' => 'The description',
-        'format' => 'plain_text',
-      ]
-    ];
-    $this->assertEqual($expected_description, $exported_decoded['default']['description']);
+    $exported = $this->exporter->exportContent('taxonomy_term', $term->id());
+    $exported_decoded = json_decode($exported);
+
+    // Ensure the proper UUID is part of it.
+    $this->assertEqual($exported_decoded->uuid[0]->value, $term->uuid());
+    $this->assertEqual($exported, $expected);
 
     // Tests export of taxonomy parent field.
-    $child_term = Term::create([
+    // @todo Get rid of after https://www.drupal.org/node/2543726
+    $child_term = $term = Term::create([
       'vid' => $vocabulary->id(),
       'name' => 'child_name',
       'parent' => $term->id(),
@@ -101,9 +81,10 @@ class ExporterIntegrationTest extends KernelTestBase {
     $child_term->save();
     // Make sure parent relation is exported.
     $exported = $this->exporter->exportContent('taxonomy_term', $child_term->id());
-    $exported_decoded = Yaml::decode($exported);
-    $this->assertEquals($term->uuid(), $exported_decoded['default']['parent'][0]['entity']);
-    $this->assertEquals('taxonomy_term', $exported_decoded['_meta']['depends'][$term->uuid()]);
+    $relation_uri = 'http://drupal.org/rest/relation/taxonomy_term/test/parent';
+    $exported_decoded = json_decode($exported);
+    $this->assertFalse(empty($exported_decoded->_links->{$relation_uri}));
+    $this->assertFalse(empty($exported_decoded->_embedded->{$relation_uri}));
   }
 
   /**
@@ -111,14 +92,10 @@ class ExporterIntegrationTest extends KernelTestBase {
    */
   public function testExportWithReferences() {
     \Drupal::service('module_installer')->install(['node', 'default_content']);
+    \Drupal::service('router.builder')->rebuild();
     $this->exporter = \Drupal::service('default_content.exporter');
 
-    $role = Role::create([
-      'id' => 'example_role',
-    ]);
-    $role->save();
-
-    $user = User::create(['name' => 'my username', 'uid' => 2, 'roles' => $role->id()]);
+    $user = User::create(['name' => 'my username']);
     $user->save();
     // Reload the user to get the proper casted values from the DB.
     $user = User::load($user->id());
@@ -134,6 +111,14 @@ class ExporterIntegrationTest extends KernelTestBase {
     // Reload the node to get the proper casted values from the DB.
     $node = Node::load($node->id());
 
+    /** @var \Symfony\Component\Serializer\Serializer $serializer */
+    $serializer = \Drupal::service('serializer');
+    \Drupal::service('hal.link_manager')
+      ->setLinkDomain($this->container->getParameter('default_content.link_domain'));
+    \Drupal::service('account_switcher')->switchTo(User::load(1));
+    $expected_node = $serializer->serialize($node, 'hal_json', ['json_encode_options' => JSON_PRETTY_PRINT]);
+    $expected_user = $serializer->serialize($user, 'hal_json', ['json_encode_options' => JSON_PRETTY_PRINT]);
+
     $exported_by_entity_type = $this->exporter->exportContentWithReferences('node', $node->id());
 
     // Ensure that the node type is not tryed to be exported.
@@ -144,30 +129,8 @@ class ExporterIntegrationTest extends KernelTestBase {
     $this->assertEqual([$user->uuid()], array_keys($exported_by_entity_type['user']));
 
     // Compare the actual serialized data.
-    $meta = [
-      'version' => '1.0',
-      'entity_type' => 'node',
-      'uuid' => $node->uuid(),
-      'bundle' => $node->bundle(),
-      'default_langcode' => $node->language()->getId(),
-      'depends' => [
-        $user->uuid() => 'user',
-      ],
-    ];
-    $exported_node = Yaml::decode($exported_by_entity_type['node'][$node->uuid()]);
-    $this->assertEquals($meta, $exported_node['_meta']);
-    $this->assertEquals($node->label(), $exported_node['default']['title'][0]['value']);
-
-    $meta = [
-      'version' => '1.0',
-      'entity_type' => 'user',
-      'uuid' => $user->uuid(),
-      'default_langcode' => $node->language()->getId(),
-    ];
-    $exported_user = Yaml::decode($exported_by_entity_type['user'][$user->uuid()]);
-    $this->assertEquals($meta, $exported_user['_meta']);
-    $this->assertEquals($user->label(), $exported_user['default']['name'][0]['value']);
-    $this->assertEquals($role->id(), $exported_user['default']['roles'][0]['target_id']);
+    $this->assertEqual(reset($exported_by_entity_type['node']), $expected_node);
+    $this->assertEqual(reset($exported_by_entity_type['user']), $expected_user);
 
     // Ensure no recursion on export.
     $field_name = 'field_test_self_ref';
@@ -204,80 +167,23 @@ class ExporterIntegrationTest extends KernelTestBase {
       'default_content',
       'default_content_export_test',
     ]);
+    \Drupal::service('router.builder')->rebuild();
     $this->exporter = \Drupal::service('default_content.exporter');
 
     $test_uuid = '0e45d92f-1919-47cd-8b60-964a8a761292';
     $node_type = NodeType::create(['type' => 'test']);
     $node_type->save();
-
-    $user = User::create([
-      'name' => 'owner',
-    ]);
-    $user->save();
-
-    $node = Node::create([
-      'type' => $node_type->id(),
-      'title' => 'test node',
-      'uid' => $user->id(),
-    ]);
+    $node = Node::create(['type' => $node_type->id(), 'title' => 'test node']);
     $node->uuid = $test_uuid;
     $node->save();
-    /** @var \Drupal\node\NodeInterface $node */
     $node = Node::load($node->id());
-    $expected_node = [
-      '_meta' => [
-        'version' => '1.0',
-        'entity_type' => 'node',
-        'uuid' => '0e45d92f-1919-47cd-8b60-964a8a761292',
-        'bundle' => 'test',
-        'default_langcode' => 'en',
-      ],
-      'default' => [
-        'revision_uid' => [
-          0 => [
-            'target_id' => $node->getOwner()->id(),
-          ],
-        ],
-        'status' => [
-          0 => [
-            'value' => TRUE,
-          ],
-        ],
-        'uid' => [
-          0 => [
-            'target_id' => $node->getOwner()->id(),
-          ],
-        ],
-        'title' => [
-          0 => [
-            'value' => 'test node',
-          ],
-        ],
-        'created' => [
-          0 => [
-            'value' => $node->getCreatedTime(),
-          ],
-        ],
-        'promote' => [
-          0 => [
-            'value' => TRUE,
-          ],
-        ],
-        'sticky' => [
-          0 => [
-            'value' => FALSE,
-          ],
-        ],
-        'revision_translation_affected' => [
-          0 => [
-            'value' => TRUE,
-          ],
-        ],
-      ],
-    ];
+    $serializer = \Drupal::service('serializer');
+    \Drupal::service('hal.link_manager')
+      ->setLinkDomain($this->container->getParameter('default_content.link_domain'));
+    $expected_node = $serializer->serialize($node, 'hal_json', ['json_encode_options' => JSON_PRETTY_PRINT]);
 
     $content = $this->exporter->exportModuleContent('default_content_export_test');
-    $this->assertEquals($expected_node, Yaml::decode($content['node'][$test_uuid]));
+    $this->assertEqual($content['node'][$test_uuid], $expected_node);
   }
 
   /**
@@ -297,77 +203,6 @@ class ExporterIntegrationTest extends KernelTestBase {
 
     // Should throw an exception for missing uuid for the testing module.
     $this->defaultContentManager->exportModuleContent('default_content_export_test');
-  }
-
-  /**
-   * Tests exporting files.
-   */
-  public function testExportFiles() {
-    \Drupal::service('module_installer')->install([
-      'default_content',
-    ]);
-
-    $this->exporter = \Drupal::service('default_content.exporter');
-
-    $test_files = $this->getTestFiles('image');
-    $test_file = reset($test_files);
-
-    /** @var \Drupal\file\FileInterface $file */
-    $file = File::create([
-      'uri' => $test_file->uri,
-      'status' => \FILE_STATUS_PERMANENT,
-    ]);
-    $file->save();
-
-    $folder = 'temporary://default_content';
-    $exported_by_entity_type = $this->exporter->exportContentWithReferences('file', $file->id(), $folder);
-    $normalized_file = Yaml::decode($exported_by_entity_type['file'][$file->uuid()]);
-
-    $expected = [
-      '_meta' => [
-        'version' => '1.0',
-        'entity_type' => 'file',
-        'uuid' => $file->uuid(),
-        'default_langcode' => 'en',
-      ],
-      'default' => [
-        'filename' => [
-          0 => [
-            'value' => $file->getFilename(),
-          ],
-        ],
-        'uri' => [
-          0 => [
-            'value' => $file->getFileUri(),
-          ],
-        ],
-        'filemime' => [
-          0 => [
-            'value' => $file->getMimeType(),
-          ],
-        ],
-        'filesize' => [
-          0 => [
-            'value' => $file->getSize(),
-          ],
-        ],
-        'status' => [
-          0 => [
-            'value' => TRUE,
-          ],
-        ],
-        'created' => [
-          0 => [
-            'value' => $file->getCreatedTime(),
-          ],
-        ],
-      ],
-    ];
-
-    $this->assertEquals($expected, $normalized_file);
-
-    $this->assertFileExists($folder . '/file/' . $file->uuid() . '.yml');
-    $this->assertFileExists($folder . '/file/' . $file->getFilename());
   }
 
 }

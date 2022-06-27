@@ -8,8 +8,8 @@ dependencies:
     - iied_tw
 id: headersearchblock
 theme: iied_tw
-region: navbar_right
-weight: 0
+region: navbar_branding
+weight: -11
 provider: null
 plugin: header_search_block
 settings:

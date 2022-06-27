@@ -277,9 +277,9 @@ class SchemaTest extends KernelTestBase {
   }
 
   /**
-   * @covers \Drupal\Core\Database\Driver\mysql\Schema::introspectIndexSchema
-   * @covers \Drupal\Core\Database\Driver\pgsql\Schema::introspectIndexSchema
-   * @covers \Drupal\Core\Database\Driver\sqlite\Schema::introspectIndexSchema
+   * @covers \Drupal\mysql\Driver\Database\mysql\Schema::introspectIndexSchema
+   * @covers \Drupal\pgsql\Driver\Database\pgsql\Schema::introspectIndexSchema
+   * @covers \Drupal\sqlite\Driver\Database\sqlite\Schema::introspectIndexSchema
    */
   public function testIntrospectIndexSchema() {
     $table_specification = [
@@ -356,7 +356,7 @@ class SchemaTest extends KernelTestBase {
   /**
    * Tests that indexes on string fields are limited to 191 characters on MySQL.
    *
-   * @see \Drupal\Core\Database\Driver\mysql\Schema::getNormalizedIndexes()
+   * @see \Drupal\mysql\Driver\Database\mysql\Schema::getNormalizedIndexes()
    */
   public function testIndexLength() {
     if ($this->connection->databaseType() !== 'mysql') {
@@ -1319,6 +1319,61 @@ class SchemaTest extends KernelTestBase {
       'test_2_table',
     ];
     $this->assertEquals($expected, $tables, 'Two tables were found.');
+
+    // Check '_' and '%' wildcards.
+    $test_schema->createTable('test3table', $table_specification);
+    $test_schema->createTable('test4', $table_specification);
+    $test_schema->createTable('testTable', $table_specification);
+    $test_schema->createTable('test', $table_specification);
+
+    $tables = $test_schema->findTables('test%');
+    sort($tables);
+    $expected = [
+      'test',
+      'test3table',
+      'test4',
+      'testTable',
+      'test_1_table',
+      'test_2_table',
+    ];
+    $this->assertEquals($expected, $tables, 'All "test" prefixed tables were found.');
+
+    $tables = $test_schema->findTables('test_%');
+    sort($tables);
+    $expected = [
+      'test3table',
+      'test4',
+      'testTable',
+      'test_1_table',
+      'test_2_table',
+    ];
+    $this->assertEquals($expected, $tables, 'All "/^test..*?/" tables were found.');
+
+    $tables = $test_schema->findTables('test%table');
+    sort($tables);
+    $expected = [
+      'test3table',
+      'testTable',
+      'test_1_table',
+      'test_2_table',
+    ];
+    $this->assertEquals($expected, $tables, 'All "/^test.*?table/" tables were found.');
+
+    $tables = $test_schema->findTables('test_%table');
+    sort($tables);
+    $expected = [
+      'test3table',
+      'test_1_table',
+      'test_2_table',
+    ];
+    $this->assertEquals($expected, $tables, 'All "/^test..*?table/" tables were found.');
+
+    $tables = $test_schema->findTables('test_');
+    sort($tables);
+    $expected = [
+      'test4',
+    ];
+    $this->assertEquals($expected, $tables, 'All "/^test./" tables were found.');
 
     // Go back to the initial connection.
     Database::setActiveConnection('default');

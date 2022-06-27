@@ -116,11 +116,8 @@ function responsive_menu_preprocess_html(&$variables) {
  * Used to place the off-canvas menu and supporting libraries and configuration.
  */
 function responsive_menu_page_bottom(&$page) {
-  // Get the configuration.
-  $config = \Drupal::config('responsive_menu.settings');
-
   // A developer may not want to output the off-canvas menu's HTML into the DOM
-  // and activate the mmenu library. We allow a variable to by altered by a
+  // and activate the mmenu library. We allow a variable to be altered by a
   // custom hook. If the value is FALSE then rendering does not continue and no
   // output is added to page bottom.
   $off_canvas_output = TRUE;
@@ -129,6 +126,15 @@ function responsive_menu_page_bottom(&$page) {
   if ($off_canvas_output === FALSE) {
     return;
   }
+  $page['page_bottom']['off_canvas'] = responsive_menu_prepare_output();
+}
+
+/**
+ * Prepare the off-canvas responsive menu render array.
+ */
+function responsive_menu_prepare_output() {
+  // Get the configuration.
+  $config = \Drupal::config('responsive_menu.settings');
 
   // A site builder can allow this module to work with the admin theme.
   if ($config->get('allow_admin') == FALSE && _current_theme_is_admin()) {
@@ -155,14 +161,6 @@ function responsive_menu_page_bottom(&$page) {
   // Add the mmenu library.
   $output['#attached']['library'][] = 'responsive_menu/responsive_menu.mmenu';
 
-  // If the polyfills are requested and the file exists then add it too.
-  // Note that in the past the final build files have not included the
-  // polyfills file (see d.o issues #3143984, #3111949) so we need to
-  // check if its actually there to avoid a 404.
-  if ($config->get('use_polyfills') && file_exists(DRUPAL_ROOT . '/libraries/mmenu/dist/mmenu.polyfills.js')) {
-    $output['#attached']['library'][] = 'responsive_menu/responsive_menu.polyfills';
-  }
-
   // Add this module's configuration javascript.
   $output['#attached']['library'][] = 'responsive_menu/responsive_menu.config';
 
@@ -185,12 +183,19 @@ function responsive_menu_page_bottom(&$page) {
     'use_bootstrap' => $config->get('use_bootstrap'),
     'breakpoint' => $config->get('horizontal_media_query'),
     'drag' => $config->get('drag'),
+    'pageWrapper' => $config->get('wrapper_theme'),
   ];
 
   // Allow for the menu position to be based on the language direction.
   // @see issue #3095162 for details.
-  if ($config->get('off_canvas_position') === 'contextual') {
+  if ($config->get('off_canvas_position') === 'contextual' || $config->get('off_canvas_position') === 'contextual-front') {
     $language = \Drupal::languageManager()->getCurrentLanguage()->getDirection();
+    if ($config->get('off_canvas_position') === 'contextual-front') {
+      $language === 'rtl' ? 'right-front' : 'left-front';
+    }
+    else {
+      $language === 'rtl' ? 'right' : 'left';
+    }
     $output['#attached']['drupalSettings']['responsive_menu']['position'] = $language === 'rtl' ? 'right' : 'left';
   }
   else {
@@ -225,7 +230,7 @@ function responsive_menu_page_bottom(&$page) {
     $output['#cache']['context'][] = 'route.menu_active_trails:' . $menu_name;
   }
 
-  $page['page_bottom']['off_canvas'] = $output;
+  return $output;
 }
 
 /**
@@ -261,7 +266,7 @@ function responsive_menu_off_canvas_add_classes(array &$item) {
     }
     $uuid = Html::cleanCssIdentifier($parts[1]);
     $item['attributes']->addClass('menu-item--' . $uuid);
-    // Get the name of the menu and add it to the menu item's class list
+    // Get the name of the menu and add it to the menu item's class list.
     $link__menu_name = $link->getMenuName();
     $menu_name = Html::cleanCssIdentifier($link__menu_name);
     $item['attributes']->addClass('menu-name--' . $menu_name);
@@ -475,7 +480,12 @@ function responsive_menu_preprocess_toolbar(&$variables) {
   if (!$config->get('allow_admin') && _current_theme_is_admin()) {
     return;
   }
-  $variables['#attached']['library'][] = 'responsive_menu/responsive_menu.toolbar';
+
+  // Only add the toolbar positioning override if not using the theme wrapper
+  // or if the toolbar_override option has been selected.
+  if (!$config->get('wrapper_theme') || $config->get('toolbar_override')) {
+    $variables['#attached']['library'][] = 'responsive_menu/responsive_menu.toolbar';
+  }
 }
 
 /**

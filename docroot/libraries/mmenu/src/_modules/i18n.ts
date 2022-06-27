@@ -1,13 +1,22 @@
 import { extend } from './helpers';
-var translations = {};
+const translations = {};
+
+
+/**
+ * Show all translations.
+ * @return {object}	The translations.
+ */
+export const show = (): {} => {
+    return translations;
+};
 
 /**
  * Add translations to a language.
  * @param {object}  text        Object of key/value translations.
  * @param {string}  language    The translated language.
  */
-export function add(text: object, language: string) {
-    if (typeof translations[language] == 'undefined') {
+export const add = (text: object, language: string) => {
+    if (typeof translations[language] === 'undefined') {
         translations[language] = {};
     }
     extend(translations[language], text as object);
@@ -19,21 +28,12 @@ export function add(text: object, language: string) {
  * @param   {string} language   The language to search in.
  * @return  {string}            The translated text.
  */
-export function get(text: string, language?: string): string {
+export const get = (text: string, language?: string): string => {
     if (
-        typeof language == 'string' &&
-        typeof translations[language] != 'undefined'
+        typeof language === 'string' &&
+        typeof translations[language] !== 'undefined'
     ) {
         return translations[language][text] || text;
     }
     return text;
-}
-
-/**
- * Get all translated text in a language.
- * @param   {string} language   The language to search for.
- * @return  {object}            The translations.
- */
-export function all(language: string): object {
-    return translations;
-}
+};

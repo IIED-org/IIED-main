@@ -1,0 +1,20 @@
+display:
+  default:
+    display_title: Default
+    display_options:
+      fields:
+        type:
+          label: Kiểu
+        timestamp:
+          label: 'Ngày tháng'
+        name:
+          label: 'Người dùng'
+        link:
+          label: 'Thao tác'
+      exposed_form:
+        options:
+          submit_button: Filter
+      filters:
+        type:
+          expose:
+            label: Kiểu

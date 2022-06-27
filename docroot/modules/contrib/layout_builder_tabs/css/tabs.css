@@ -2,3 +2,6 @@
  * @file
  * Styles for tabs defined within Layout Builder.
  */
+.tabs-region .tabs__tab {
+  display: flex;
+}

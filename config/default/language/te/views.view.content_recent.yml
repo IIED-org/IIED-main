@@ -1,6 +1,6 @@
 label: 'Dashboard recent content'
 display:
   default:
-    display_title: అప్రమేయం
+    display_title: Default
     display_options:
       title: 'Dashboard recent content'
