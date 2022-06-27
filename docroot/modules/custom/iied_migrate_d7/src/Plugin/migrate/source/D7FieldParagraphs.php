@@ -79,6 +79,15 @@ class D7FieldParagraphs extends FieldableEntity {
         ]
       );
 
+      // Join the field_data_field_image_caption when needed.
+      $query->leftJoin('field_data_field_image_caption', 'fic', 'fic.entity_id = fd.' . $this->configuration['field_name'] . '_value');
+      $query->fields(
+        'fic',
+        [
+          'field_image_caption_value',
+        ]
+      );
+
       // Join the field_data_field_video_embed when needed.
       $query->leftJoin('field_data_field_video  ', 'fdfv', 'fdfv.entity_id = fd.' . $this->configuration['field_name'] . '_value');
       $query->fields(

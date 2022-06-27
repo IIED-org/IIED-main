@@ -92,7 +92,7 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
 
   // iied_d7_field_paragraphs, ignoring some paragraphs.
   if ($migration->id() == 'iied_d7_field_paragraphs') {
-    $x = ''; // Useful for debugging.
+
     $paragraphs_to_ignore = [
       'colorbox_gallery',
       'colorbox_gallery_thumbnails',

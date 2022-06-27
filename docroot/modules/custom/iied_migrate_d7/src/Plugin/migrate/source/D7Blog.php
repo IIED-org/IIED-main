@@ -25,6 +25,7 @@ class D7Blog extends Node {
     // Node 26866 is useful for testing.
     // $query->condition('n.nid', '26866');
     // $query->condition('n.nid', '2554'); // Good for second author.
+    // $query->condition('n.nid', '138216'); // Blog with Needs info_box component, basic_text paragraph missing styled image.
     return $query;
   }
 
