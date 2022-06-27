@@ -98,12 +98,7 @@ function iied_filters_get_handler($url) {
  * @return array
  *   An array containing the allowed video domains.
  */
-function _iied_filters_get_provider_domains()
-{
-  $domains = [
-    'youtube.com',
-    'youtu.be',
-  ];
+function _iied_filters_get_provider_domains() {
 
   $domains = array();
 
@@ -115,8 +110,6 @@ function _iied_filters_get_provider_domains()
       }
     }
   }
-
-  return $domains;
 
   return $domains;
 }
