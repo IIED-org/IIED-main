@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * @file
+ * The search404 module file, does all the searching when a 404 occurs.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+use Drupal\Core\Link;
+
+/**
+ * Implements hook_help().
+ *
+ * @inheritdoc
+ */
+function search404_help($route_name, RouteMatchInterface $route_match) {
+  $output = '';
+  switch ($route_name) {
+    // Main module help for the download_all_files module.
+    case 'help.page.search404':
+      $config_link = Url::fromRoute('search404.settings');
+      $link = Link::fromTextAndUrl(t('@text', ['@text' => 'search 404 settings']), $config_link)->toString();
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Instead of showing a default "Page not found"
+      for a 404 error, this module performs a search on the keywords in
+      the URL and display results based on the search. You can add basic
+      settings for the 404 resulting page and other search404
+      configurations in @link page.', ['@link' => $link]) . '</p>';
+      return $output;
+  }
+}
