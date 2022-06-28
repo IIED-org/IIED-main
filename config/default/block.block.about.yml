@@ -1,0 +1,29 @@
+uuid: 8b19b326-7744-4998-a8cf-126ea550e66c
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.about
+  module:
+    - system
+  theme:
+    - iied_tw
+id: about
+theme: iied_tw
+region: content
+weight: -10
+provider: null
+plugin: 'system_menu_block:about'
+settings:
+  id: 'system_menu_block:about'
+  label: About
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/about\r\n/people\r\n/contact\r\n/accountability\r\n/jobs-and-internships"

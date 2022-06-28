@@ -2,13 +2,13 @@ _core:
   default_config_hash: yTxtFqBHnEWxQswuWvkjE8mKw2t8oKuCL1q8KnfHuGE
 langcode: en
 uuid: ec7b147d-df7d-4eb7-bda0-d048ffbac6cf
-name: 'Publications Library'
-mail: newbooks@iied.org
+name: 'International Institute for Environment and Development'
+mail: webmaster@iied.org
 slogan: ''
 page:
   403: ''
   404: ''
-  front: /node
+  front: /taxonomy/term/41381
 admin_compact_mode: false
 weight_select_max: 100
 default_langcode: en

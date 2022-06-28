@@ -112,10 +112,10 @@ third_party_settings:
             uuid: ce6b935e-d996-4f17-9c07-22e90dc943b5
             region: content
             configuration:
+              id: 'field_block:node:article:field_image'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:node:article:field_image'
               formatter:
                 type: image
                 label: hidden
