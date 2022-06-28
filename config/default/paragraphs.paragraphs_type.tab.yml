@@ -1,0 +1,10 @@
+uuid: d514cfc6-9975-44a5-a966-7f967fa7b34e
+langcode: en
+status: true
+dependencies: {  }
+id: tab
+label: Tab
+icon_uuid: null
+icon_default: null
+description: 'A single tab to be used in a tabs paragraph component.'
+behavior_plugins: {  }
