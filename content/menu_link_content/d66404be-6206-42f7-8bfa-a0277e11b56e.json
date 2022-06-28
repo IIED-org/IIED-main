@@ -1,7 +1,7 @@
 {
     "_links": {
         "self": {
-            "href": "https:\/\/iied-main.lndo.site\/admin\/structure\/menu\/item\/31\/edit?_format=hal_json"
+            "href": "https:\/\/iied-main.lndo.site\/admin\/structure\/menu\/item\/33\/edit?_format=hal_json"
         },
         "type": {
             "href": "https:\/\/iied-main.lndo.site\/rest\/type\/menu_link_content\/menu_link_content"
@@ -9,12 +9,12 @@
     },
     "id": [
         {
-            "value": 31
+            "value": 33
         }
     ],
     "uuid": [
         {
-            "value": "dd4a0b9b-923c-41e2-8ab7-688dfb60978a"
+            "value": "d66404be-6206-42f7-8bfa-a0277e11b56e"
         }
     ],
     "langcode": [
@@ -30,7 +30,7 @@
     ],
     "revision_created": [
         {
-            "value": "2022-05-20T14:19:53+00:00",
+            "value": "2022-06-28T10:48:20+00:00",
             "format": "Y-m-d\\TH:i:sP"
         }
     ],
@@ -41,17 +41,17 @@
     ],
     "title": [
         {
-            "value": "About"
+            "value": "Board of trustees"
         }
     ],
     "menu_name": [
         {
-            "value": "primary"
+            "value": "people"
         }
     ],
     "link": [
         {
-            "uri": "internal:\/about",
+            "uri": "internal:\/board-trustees",
             "title": "",
             "options": []
         }
@@ -68,7 +68,7 @@
     ],
     "weight": [
         {
-            "value": -47
+            "value": 1
         }
     ],
     "expanded": [
@@ -78,7 +78,7 @@
     ],
     "changed": [
         {
-            "value": "2022-06-28T11:15:37+00:00",
+            "value": "2022-06-28T10:48:20+00:00",
             "format": "Y-m-d\\TH:i:sP"
         }
     ],

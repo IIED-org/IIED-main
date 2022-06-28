@@ -14,7 +14,7 @@
     },
     "tid": [
         {
-            "value": 41342
+            "value": 41431
         }
     ],
     "uuid": [
@@ -99,14 +99,14 @@
             "value": {
                 "canonical_url": "https:\/\/iied-main.lndo.site\/bloggers",
                 "shortlink": "https:\/\/iied-main.lndo.site\/admin\/config\/development\/dcd\/export",
-                "title": "Bloggers | Publications Library",
+                "title": "Bloggers | International Institute for Environment and Development",
                 "dcterms_title": "Default Content Deploy - Export",
-                "og_site_name": "Publications Library",
+                "og_site_name": "International Institute for Environment and Development",
                 "og_url": "https:\/\/iied-main.lndo.site\/admin\/config\/development\/dcd\/export",
                 "og_title": "Default Content Deploy - Export",
                 "twitter_cards_type": "summary_large_image",
                 "twitter_cards_site": "@IIED",
-                "twitter_cards_title": "Publications Library",
+                "twitter_cards_title": "International Institute for Environment and Development",
                 "twitter_cards_site_id": "39719681",
                 "twitter_cards_page_url": "https:\/\/iied-main.lndo.site\/admin\/config\/development\/dcd\/export"
             }
@@ -115,7 +115,7 @@
     "path": [
         {
             "alias": "\/bloggers",
-            "pid": 278130,
+            "pid": 278396,
             "langcode": "en",
             "lang": "en"
         }

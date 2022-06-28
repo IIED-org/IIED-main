@@ -51,7 +51,7 @@
     ],
     "link": [
         {
-            "uri": "internal:#",
+            "uri": "internal:\/publications",
             "title": "",
             "options": []
         }
@@ -78,7 +78,7 @@
     ],
     "changed": [
         {
-            "value": "2022-05-20T14:23:06+00:00",
+            "value": "2022-06-28T11:16:16+00:00",
             "format": "Y-m-d\\TH:i:sP"
         }
     ],

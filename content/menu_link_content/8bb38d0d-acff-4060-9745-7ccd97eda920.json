@@ -1,7 +1,7 @@
 {
     "_links": {
         "self": {
-            "href": "https:\/\/iied-main.lndo.site\/admin\/structure\/menu\/item\/31\/edit?_format=hal_json"
+            "href": "https:\/\/iied-main.lndo.site\/admin\/structure\/menu\/item\/48\/edit?_format=hal_json"
         },
         "type": {
             "href": "https:\/\/iied-main.lndo.site\/rest\/type\/menu_link_content\/menu_link_content"
@@ -9,12 +9,12 @@
     },
     "id": [
         {
-            "value": 31
+            "value": 48
         }
     ],
     "uuid": [
         {
-            "value": "dd4a0b9b-923c-41e2-8ab7-688dfb60978a"
+            "value": "8bb38d0d-acff-4060-9745-7ccd97eda920"
         }
     ],
     "langcode": [
@@ -30,7 +30,7 @@
     ],
     "revision_created": [
         {
-            "value": "2022-05-20T14:19:53+00:00",
+            "value": "2022-06-28T11:00:11+00:00",
             "format": "Y-m-d\\TH:i:sP"
         }
     ],
@@ -41,17 +41,17 @@
     ],
     "title": [
         {
-            "value": "About"
+            "value": "Events"
         }
     ],
     "menu_name": [
         {
-            "value": "primary"
+            "value": "news-and-insight"
         }
     ],
     "link": [
         {
-            "uri": "internal:\/about",
+            "uri": "internal:\/events",
             "title": "",
             "options": []
         }
@@ -78,7 +78,7 @@
     ],
     "changed": [
         {
-            "value": "2022-06-28T11:15:37+00:00",
+            "value": "2022-06-28T11:01:03+00:00",
             "format": "Y-m-d\\TH:i:sP"
         }
     ],
