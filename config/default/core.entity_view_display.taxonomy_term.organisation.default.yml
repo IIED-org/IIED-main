@@ -369,10 +369,10 @@ third_party_settings:
             uuid: 37ef68cd-575c-4e82-ba73-0aa482760bd0
             region: content
             configuration:
+              id: 'field_block:taxonomy_term:organisation:field_logo'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:taxonomy_term:organisation:field_logo'
               formatter:
                 type: image
                 label: above

@@ -14,7 +14,7 @@
     },
     "tid": [
         {
-            "value": 41340
+            "value": 41451
         }
     ],
     "uuid": [
@@ -99,14 +99,14 @@
             "value": {
                 "canonical_url": "https:\/\/iied-main.lndo.site\/natural-resources-research-group",
                 "shortlink": "https:\/\/iied-main.lndo.site\/admin\/config\/development\/dcd\/export",
-                "title": "Natural resources research group | Publications Library",
+                "title": "Natural resources research group | International Institute for Environment and Development",
                 "dcterms_title": "Default Content Deploy - Export",
-                "og_site_name": "Publications Library",
+                "og_site_name": "International Institute for Environment and Development",
                 "og_url": "https:\/\/iied-main.lndo.site\/admin\/config\/development\/dcd\/export",
                 "og_title": "Default Content Deploy - Export",
                 "twitter_cards_type": "summary_large_image",
                 "twitter_cards_site": "@IIED",
-                "twitter_cards_title": "Publications Library",
+                "twitter_cards_title": "International Institute for Environment and Development",
                 "twitter_cards_site_id": "39719681",
                 "twitter_cards_page_url": "https:\/\/iied-main.lndo.site\/admin\/config\/development\/dcd\/export"
             }
@@ -115,7 +115,7 @@
     "path": [
         {
             "alias": "\/natural-resources-research-group",
-            "pid": 278128,
+            "pid": 278397,
             "langcode": "en",
             "lang": "en"
         }

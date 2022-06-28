@@ -1,0 +1,46 @@
+search404.settings:
+  type: mapping
+  label: Settings
+  mapping:
+    search404_redirect_301:
+      type: boolean
+    search404_do_custom_search:
+      type: boolean
+    search404_custom_search_path:
+      type: string
+    search404_jump:
+      type: boolean
+    search404_skip_auto_search:
+      type: boolean
+    search404_disable_error_message:
+      type: boolean
+    search404_use_or:
+      type: boolean
+    search404_use_search_engine:
+      type: boolean
+    search404_ignore_extensions:
+      type: string
+    search404_ignore_query:
+      type: string
+    search404_first:
+      type: boolean
+    search404_first_on_paths:
+      type: string
+    search404_regex:
+      type: string
+    search404_page_text:
+      type: string
+    search404_do_google_cse:
+      type: boolean
+    search404_do_search_by_page:
+      type: boolean
+    search404_custom_error_message:
+      type: string
+    search404_page_redirect:
+      type: string
+    search404_page_title:
+      type: string
+    search404_ignore:
+      type: string
+    search404_ignore_paths:
+      type: string

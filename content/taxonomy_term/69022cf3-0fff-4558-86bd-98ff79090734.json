@@ -12,7 +12,7 @@
     },
     "tid": [
         {
-            "value": 41330
+            "value": 41381
         }
     ],
     "uuid": [
@@ -49,9 +49,17 @@
             "lang": "en"
         }
     ],
+    "description": [
+        {
+            "value": "<p>Hi we're home!<\/p>\r\n",
+            "format": "basic_html",
+            "processed": "<p>Hi we're home!<\/p>",
+            "lang": "en"
+        }
+    ],
     "weight": [
         {
-            "value": 15
+            "value": 0
         }
     ],
     "_embedded": {
@@ -61,7 +69,7 @@
     },
     "changed": [
         {
-            "value": "2022-06-20T14:24:19+00:00",
+            "value": "2022-06-28T10:39:36+00:00",
             "lang": "en",
             "format": "Y-m-d\\TH:i:sP"
         }
@@ -83,14 +91,15 @@
             "value": {
                 "canonical_url": "https:\/\/iied-main.lndo.site\/home",
                 "shortlink": "https:\/\/iied-main.lndo.site\/admin\/config\/development\/dcd\/export",
-                "title": "Home | Publications Library",
+                "title": "Home | International Institute for Environment and Development",
+                "description": "Hi we're home!",
                 "dcterms_title": "Default Content Deploy - Export",
-                "og_site_name": "Publications Library",
+                "og_site_name": "International Institute for Environment and Development",
                 "og_url": "https:\/\/iied-main.lndo.site\/admin\/config\/development\/dcd\/export",
                 "og_title": "Default Content Deploy - Export",
                 "twitter_cards_type": "summary_large_image",
                 "twitter_cards_site": "@IIED",
-                "twitter_cards_title": "Publications Library",
+                "twitter_cards_title": "International Institute for Environment and Development",
                 "twitter_cards_site_id": "39719681",
                 "twitter_cards_page_url": "https:\/\/iied-main.lndo.site\/admin\/config\/development\/dcd\/export"
             }
@@ -99,9 +108,24 @@
     "path": [
         {
             "alias": "\/home",
-            "pid": 278134,
+            "pid": 278418,
             "langcode": "en",
             "lang": "en"
+        }
+    ],
+    "rh_action": [
+        {
+            "value": "bundle_default"
+        }
+    ],
+    "rh_redirect_response": [
+        {
+            "value": 301
+        }
+    ],
+    "rh_redirect_fallback_action": [
+        {
+            "value": "bundle_default"
         }
     ]
 }
