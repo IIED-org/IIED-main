@@ -25,7 +25,8 @@
  * @see template_preprocess_block()
  */
 #}
-<div{{ attributes.addClass('grow-0 mb-4') }}>
+<div{{ attributes.addClass('grow-0 mb-4 self-end') }}>
+{# TODO align end #}
   {{ title_prefix }}
   {% if label %}
     <h2{{ title_attributes.addClass('mb-4') }}>{{ label }}</h2>

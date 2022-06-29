@@ -2640,6 +2640,14 @@ hr{
   right: -0.75rem;
 }
 
+.right-6{
+  right: 1.5rem;
+}
+
+.right-5{
+  right: 1.25rem;
+}
+
 .z-30{
   z-index: 30;
 }
@@ -3169,12 +3177,20 @@ hr{
   align-items: baseline;
 }
 
+.items-stretch{
+  align-items: stretch;
+}
+
 .justify-center{
   justify-content: center;
 }
 
 .justify-between{
   justify-content: space-between;
+}
+
+.justify-items-stretch{
+  justify-items: stretch;
 }
 
 .gap-6{
@@ -3229,6 +3245,14 @@ hr{
   --tw-space-x-reverse: 0;
   margin-right: calc(-0.75rem * var(--tw-space-x-reverse));
   margin-left: calc(-0.75rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+.self-end{
+  align-self: flex-end;
+}
+
+.justify-self-end{
+  justify-self: end;
 }
 
 .overflow-hidden{
@@ -3564,6 +3588,14 @@ hr{
   padding-bottom: 1.25rem;
 }
 
+.pb-3{
+  padding-bottom: 0.75rem;
+}
+
+.pb-2{
+  padding-bottom: 0.5rem;
+}
+
 .text-center{
   text-align: center;
 }
@@ -3799,8 +3831,24 @@ hr{
   content: var(--tw-content);
 }
 
+.visited\:border-b-4:visited{
+  border-bottom-width: 4px;
+}
+
+.visited\:text-gray-900:visited{
+  color: rgb(17 24 39 );
+}
+
 .hover\:border-b-0:hover{
   border-bottom-width: 0px;
+}
+
+.hover\:border-b-2:hover{
+  border-bottom-width: 2px;
+}
+
+.hover\:border-b-4:hover{
+  border-bottom-width: 4px;
 }
 
 .hover\:border-iiedblue-500:hover{
@@ -3811,6 +3859,10 @@ hr{
 .hover\:border-iiedorange-600:hover{
   --tw-border-opacity: 1;
   border-color: rgb(242 169 12 / var(--tw-border-opacity));
+}
+
+.hover\:border-current:hover{
+  border-color: currentColor;
 }
 
 .hover\:bg-gray-200:hover{
@@ -3836,6 +3888,11 @@ hr{
 .hover\:text-gray-900:hover{
   --tw-text-opacity: 1;
   color: rgb(17 24 39 / var(--tw-text-opacity));
+}
+
+.hover\:underline:hover{
+  -webkit-text-decoration-line: underline;
+          text-decoration-line: underline;
 }
 
 .hover\:no-underline:hover{
@@ -3875,6 +3932,10 @@ hr{
 .focus\:outline-none:focus{
   outline: 2px solid transparent;
   outline-offset: 2px;
+}
+
+.active\:border-b-4:active{
+  border-bottom-width: 4px;
 }
 
 .active\:bg-gray-100:active{
