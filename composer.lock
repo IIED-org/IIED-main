@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "582c7f7aa6c1af34ecd4c1175755523c",
+    "content-hash": "bdf61681ea5c59d916f39ce0a4f9e37c",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7323,6 +7323,50 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/notification",
                 "issues": "http://drupal.org/project/issues/notification"
+            }
+        },
+        {
+            "name": "drupal/optional_end_date",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/optional_end_date.git",
+                "reference": "8.x-1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/optional_end_date-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "a57e4febb464d5a8c44381fd83145d2c19ce85f5"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.2",
+                    "datestamp": "1626939283",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Birk",
+                    "homepage": "https://www.drupal.org/user/1033026"
+                }
+            ],
+            "description": "Make the end date in a Date range field optional.",
+            "homepage": "https://www.drupal.org/project/optional_end_date",
+            "support": {
+                "source": "https://git.drupalcode.org/project/optional_end_date"
             }
         },
         {
