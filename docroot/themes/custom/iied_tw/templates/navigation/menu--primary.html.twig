@@ -30,13 +30,13 @@
     {% import _self as menus %}
     {% if items %}
       {% if menu_level == 0 %}
-        <ul{{ attributes.addClass('flex flex-wrap justify-center md:mr-auto md:ml-4 md:pl-4 mb-4 whitespace-nowrap') }}>
+        <ul{{ attributes.addClass('flex flex-wrap justify-center md:mr-auto md:ml-4 md:pl-4 whitespace-nowrap') }}>
       {% else %}
         <ul>
       {% endif %}
       {% for item in items %}
         <li{{ item.attributes }}>
-          {{ link(item.title, item.url, { 'class':['block', 'mr-5', 'text-gray-900', 'hover:text-gray-900', 'font-headline', 'text-lg', 'hover:no-underline']}) }}
+          {{ link(item.title, item.url, { 'class':['block', 'mr-5', 'text-gray-900', 'hover:text-gray-900', 'font-headline', 'text-lg', 'hover:border-b-4', 'border-iiedblue-500','visited:text-gray-900', 'pb-1', 'active:border-b-4']}) }}
           {% if item.below %}
             {{ menus.menu_links(item.below, attributes, menu_level + 1) }}
           {% endif %}

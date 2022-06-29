@@ -46,6 +46,7 @@
 .priority-nav__dropdown-toggle {
   visibility: hidden;
   position: absolute;
+  display: inline-flex;
 }
 
 .priority-nav-is-visible {
