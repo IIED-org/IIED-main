@@ -37,6 +37,7 @@ module:
   ctools: 0
   ctools_block: 0
   datetime: 0
+  datetime_range: 0
   default_content: 0
   default_content_deploy: 0
   devel_kint_extras: 0
@@ -113,6 +114,7 @@ module:
   name: 0
   node: 0
   notification: 0
+  optional_end_date: 0
   options: 0
   page_cache: 0
   path: 0
