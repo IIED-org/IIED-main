@@ -52,10 +52,10 @@ third_party_settings:
             uuid: c09f4e5c-3851-4d88-be55-19506e849e60
             region: content
             configuration:
+              id: 'field_block:user:user:user_picture'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:user:user:user_picture'
               formatter:
                 type: image
                 label: hidden

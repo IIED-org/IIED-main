@@ -1,0 +1,7 @@
+display:
+  default:
+    display_title: الافتراضي
+    display_options:
+      fields:
+        id:
+          label: 'المعرف ID'

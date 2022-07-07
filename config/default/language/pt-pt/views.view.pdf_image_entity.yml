@@ -1,0 +1,7 @@
+display:
+  default:
+    display_title: Predefinido
+    display_options:
+      fields:
+        id:
+          label: ID
