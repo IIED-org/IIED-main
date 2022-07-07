@@ -1,15 +1,7 @@
-media_pdf_thumbnail.settings:
-  path: '/admin/media-pdf-thumbnail/settings'
+media_pdf_thumbnail.settings.purge:
+  path: '/admin/media-pdf-thumbnail/settings/purge'
   defaults:
-    _form: '\Drupal\media_pdf_thumbnail\Form\BundlesSettingsForm'
-    _title: 'Media PDF Thumbnail'
-  requirements:
-    _permission: 'administer_media_pdf_thumbnail'
-
-media_pdf_thumbnail.settings_regeneration:
-  path: '/admin/media-pdf-thumbnail/settings/regenerate'
-  defaults:
-    _form: '\Drupal\media_pdf_thumbnail\Form\ThumbnailGenerationSettingsForm'
+    _form: '\Drupal\media_pdf_thumbnail\Form\PdfImageEntityPurgeForm'
     _title: 'Media PDF Thumbnail'
   requirements:
     _permission: 'administer_media_pdf_thumbnail'

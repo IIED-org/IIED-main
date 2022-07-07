@@ -74,7 +74,7 @@
         "drupal/language_switcher_extended": "^1.0",
         "drupal/masquerade": "^2.0",
         "drupal/media_entity_file_replace": "^1.0",
-        "drupal/media_pdf_thumbnail": "^3.6",
+        "drupal/media_pdf_thumbnail": "^5.0",
         "drupal/media_revisions_ui": "^2.0",
         "drupal/media_thumbnails_pdf": "^1.0",
         "drupal/merge_translations": "^1.1",
@@ -111,7 +111,7 @@
         "npm-asset/imagesloaded": "^4.1",
         "npm-asset/masonry-layout": "^4.2",
         "oomphinc/composer-installers-extender": "^2.0",
-        "spatie/pdf-to-image": "^2.0"
+        "spatie/pdf-to-image": "^2.2"
     },
     "require-dev": {
         "drupal/config_devel": "^1.7",
@@ -208,6 +208,9 @@
           },
           "drupal/datalayer": {
             "Exception page because of incorrect path.alias_manager service name": "https://www.drupal.org/files/issues/2020-09-18/3171896-path_alias-manager.patch"
+          },
+          "spatie/pdf-to-image": {
+            "3221786": "https://www.drupal.org/files/issues/2021-12-03/remote-pdf-overlap-3221786-8.patch"
           }
         }
     }
