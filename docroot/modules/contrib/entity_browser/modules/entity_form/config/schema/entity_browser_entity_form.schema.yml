@@ -11,7 +11,7 @@ entity_browser.browser.widget.entity_form:
   label: 'Entity form widget configuration'
   mapping:
     submit_text:
-      type: string
+      type: label
       label: 'Submit button text'
     entity_type:
       type: string

@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * Install Pdf Image entity.
+ */
+function media_pdf_thumbnail_update_8002(&$sandbox) {
+  \Drupal::entityTypeManager()->clearCachedDefinitions();
+  \Drupal::entityDefinitionUpdateManager()->installEntityType(\Drupal::entityTypeManager()->getDefinition('pdf_image_entity'));
+}
+
+/**
+ * Install configs.
+ */
+function media_pdf_thumbnail_update_8003(&$sandbox) {
+  $path = Drupal::moduleHandler()->getModule('media_pdf_thumbnail')->getPath();
+  $configPath = $path . '/config/install';
+  $configSource = new \Drupal\Core\Config\FileStorage($configPath);
+  \Drupal::service('config.installer')->installOptionalConfig($configSource);
+}
+
+/**
+ * Uninstall old configs.
+ */
+function media_pdf_thumbnail_update_8004(&$sandbox) {
+  \Drupal::configFactory()->getEditable('media_pdf_thumbnail.bundles.settings')->delete();
+}

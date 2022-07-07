@@ -29,6 +29,14 @@ interface LayoutBuilderStyleInterface extends ConfigEntityInterface {
   public function getType();
 
   /**
+   * Returns the grouping this style is placed in..
+   *
+   * @return string
+   *   The group id this style applies to.
+   */
+  public function getGroup();
+
+  /**
    * Returns list of block plugin IDs to restrict this style to.
    *
    * @return array

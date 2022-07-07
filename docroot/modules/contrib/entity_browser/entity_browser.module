@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
@@ -70,7 +71,7 @@ function entity_browser_theme() {
  */
 function entity_browser_form_alter(&$form, FormStateInterface &$form_state) {
   $entity_browser_dialog_edit = \Drupal::service('request_stack')->getCurrentRequest()->get('_route');
-  if ($entity_browser_dialog_edit == 'entity_browser.edit_form') {
+  if ($entity_browser_dialog_edit == 'entity_browser.edit_form' && $form_state->getFormObject() instanceof EntityForm) {
     // Let's allow the save button only.
     foreach (Element::children($form['actions']) as $key) {
       $form['actions'][$key]['#access'] = $key == 'submit';

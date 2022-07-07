@@ -6,6 +6,7 @@ id: 2_column
 label: '2 column'
 classes: 'sm:col-span-2'
 type: component
+group: default
 block_restrictions:
   - 'inline_block:card'
   - 'inline_block:collection_card'

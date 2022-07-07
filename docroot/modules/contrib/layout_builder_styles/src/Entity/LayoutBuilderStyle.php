@@ -37,6 +37,7 @@ use Drupal\layout_builder_styles\LayoutBuilderStyleInterface;
  *     "label" = "label",
  *     "classes" = "classes",
  *     "type" = "type",
+ *     "group" = "group",
  *     "weight" = "weight",
  *     "block_restrictions" = "block_restrictions",
  *     "layout_restrictions" = "layout_restrictions",
@@ -81,6 +82,13 @@ class LayoutBuilderStyle extends ConfigEntityBase implements LayoutBuilderStyleI
   protected $type;
 
   /**
+   * A string indicating the group of this style (eg, Spacing, Color).
+   *
+   * @var string
+   */
+  protected $group;
+
+  /**
    * Order of style on the config page & in Layout Builder add/update forms.
    *
    * @var int
@@ -113,6 +121,13 @@ class LayoutBuilderStyle extends ConfigEntityBase implements LayoutBuilderStyleI
    */
   public function getType() {
     return $this->type;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getGroup() {
+    return empty($this->group) ? '' : $this->group;
   }
 
   /**

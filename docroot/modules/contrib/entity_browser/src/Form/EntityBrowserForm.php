@@ -162,6 +162,9 @@ class EntityBrowserForm extends FormBase implements EntityBrowserFormInterface, 
       return $form;
     }
 
+    // Allow submission in non-default workspace.
+    $form_state->set('workspace_safe', TRUE);
+
     $this->entityBrowser
       ->getWidgetSelector()
       ->setDefaultWidget($current_widget_id);

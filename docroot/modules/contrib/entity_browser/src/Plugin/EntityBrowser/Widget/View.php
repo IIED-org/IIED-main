@@ -41,10 +41,10 @@ class View extends WidgetBase implements ContainerFactoryPluginInterface {
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return [
+    return array_merge(parent::defaultConfiguration(), [
       'view' => NULL,
       'view_display' => NULL,
-    ] + parent::defaultConfiguration();
+    ]);
   }
 
   /**

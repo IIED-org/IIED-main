@@ -6,6 +6,7 @@ id: 3_column
 label: '3 column'
 classes: 'sm:col-span-2 xl:col-span-3 h-full'
 type: component
+group: default
 block_restrictions:
   - 'inline_block:card_wide'
   - 'inline_block:collection_card'

@@ -9,7 +9,7 @@
   margin-left: -.5rem;
   margin-right: -.5rem;
 
-  @include mq($breakpointSmall) {
+  @include mq(small) {
     padding: 0;
   }
 }
@@ -95,7 +95,7 @@
 .horizontal-tabs ul.horizontal-tabs-list {
   position: relative;
 
-  @include mq($breakpointSmall) {
+  @include mq(small) {
     width: 100%;
     padding: .3125rem .5rem 1.5rem;
     margin-bottom: -1.5rem;
@@ -118,7 +118,7 @@
     border-bottom: 1px solid var(--colorGinBorder);
     transition: var(--ginTransition);
 
-    @include mq($breakpointSmall) {
+    @include mq(small) {
       left: .5rem;
       bottom: 1.5rem;
       max-width: calc(100% - 1rem);
@@ -167,26 +167,20 @@
 
 .is-horizontal .tabs--primary,
 .is-horizontal .tabs--secondary {
-  @include mq($breakpointSmall) {
+  @include mq(small) {
     margin-left: 0;
     margin-right: 0;
   }
 }
 
-// .is-horizontal .tabs--primary {
-//   @include mq($breakpointSmall) {
-//     margin-bottom: -2.5rem;
-//   }
-// }
-
 .tabs--primary {
-  @include mq($breakpointSmall) {
+  @include mq(small) {
     margin-bottom: 0;
   }
 }
 
 .is-horizontal .tabs--primary {
-  @include mq($breakpointSmall) {
+  @include mq(small) {
     &::after {
       border-bottom: 0 none;
 
@@ -197,7 +191,16 @@
   }
 
   .tabs__tab {
-    @include mq($breakpointSmall) {
+    @include mq($to: small) {
+      background-color: var(--colorGinLayerBackground);
+      border-bottom: 1px solid var(--colorGinLayer2Border);
+
+      &[data-original-order="0"] {
+        border-bottom: none;
+      }
+    }
+
+    @include mq(small) {
       &:focus-within::after {
         display: none;
       }
@@ -208,7 +211,7 @@
     min-height: 3rem;
     height: 100%;
 
-    @include mq($breakpointSmall) {
+    @include mq(small) {
       padding: .75rem 1rem;
       margin-right: 0.25em;
       min-height: 0;
@@ -216,8 +219,10 @@
     }
 
     &.is-active {
-      color: var(--colorGinPrimaryActive);
-      background: var(--colorGinPrimaryLight);
+      @include mq(small) {
+        color: var(--colorGinPrimaryActive);
+        background: var(--colorGinPrimaryLight);
+      }
 
       &::before {
         display: none;
@@ -233,7 +238,7 @@
 }
 
 .is-horizontal .tabs--secondary {
-  @include mq($breakpointSmall) {
+  @include mq(small) {
     margin-top: 1rem;
 
     &::before {
@@ -265,7 +270,7 @@
     overflow: hidden;
 
     &:after {
-      @include mq($breakpointSmall) {
+      @include mq(small) {
         left: .5rem;
         max-width: calc(100% - 1rem);
       }
@@ -381,7 +386,7 @@
 
     &__menu-item.is-selected .vertical-tabs__menu-link {
       background: var(--colorGinAppBackground);
-      border-color: var(--colorGinBorder);
+      border-color: transparent;
     }
 
     &__menu-link {
@@ -391,6 +396,10 @@
     &__menu-link-summary {
       color: var(--colorGinTextLight);
     }
+
+    .claro-details__wrapper {
+      background: var(--colorGinAppBackground);
+    }
   }
 }
 
@@ -398,11 +407,25 @@
   &__items {
     border-radius: var(--ginBorderDefault);
 
+    @include mq(large) {
+      border-top-left-radius: 0;
+    }
+
     .vertical-tabs__item {
       border-radius: 0;
 
+      @include mq(1360px) {
+        border-top-right-radius: var(--ginBorderDefault);
+        border-bottom-right-radius: var(--ginBorderDefault);
+        border-bottom-left-radius: var(--ginBorderDefault);
+
+        ~ .vertical-tabs__item {
+          border-top-left-radius: var(--ginBorderDefault);
+        }
+      }
+
       .claro-details__summary {
-        @include mq($breakpointLarge) {
+        @include mq(large) {
           padding-left: 3rem;
 
           &::before {
@@ -411,16 +434,9 @@
         }
       }
 
-      &:first-of-type {
-        &, .claro-details__summary::after {
-          border-top-left-radius: var(--ginBorderDefault);
-          border-top-right-radius: var(--ginBorderDefault);
-        }
-      }
-
-      &:last-of-type, &:not([open='open']):last-of-type .claro-details__summary::after {
-        border-bottom-left-radius: var(--ginBorderDefault);
-        border-bottom-right-radius: var(--ginBorderDefault);
+      .claro-details__wrapper {
+        display: inline-block;
+        width: 100%;
       }
     }
   }
