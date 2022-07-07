@@ -1,3 +1,23 @@
 administer_media_pdf_thumbnail:
   title: 'Administer Media PDF Thumbnail'
   restrict access: true
+add pdf image entity entities:
+  title: 'Create new Pdf image entity entities'
+
+administer pdf image entity entities:
+  title: 'Administer Pdf image entity entities'
+  description: 'Allow to access the administration form to configure Pdf image entity entities.'
+  restrict access: true
+
+delete pdf image entity entities:
+  title: 'Delete Pdf image entity entities'
+
+edit pdf image entity entities:
+  title: 'Edit Pdf image entity entities'
+
+view published pdf image entity entities:
+  title: 'View published Pdf image entity entities'
+
+view unpublished pdf image entity entities:
+  title: 'View unpublished Pdf image entity entities'
+

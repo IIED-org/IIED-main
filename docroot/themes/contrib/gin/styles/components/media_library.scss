@@ -55,7 +55,7 @@
   }
 
   &--grid {
-    border-radius: var(--ginBorderBig);
+    border-radius: var(--ginBorderLarge);
 
     &::before,
     &.is-hover::before,
@@ -119,7 +119,7 @@
     position: relative;
     padding-bottom: 100%;
     border: 1px solid var(--colorGinBorder);
-    border-radius: var(--ginBorderBig);
+    border-radius: var(--ginBorderLarge);
     overflow: hidden;
 
     .field {
@@ -359,7 +359,7 @@ fieldset.media-library-widget {
 }
 
 .media-library-widget-modal .media-library-item--grid {
-  @include mq($breakpointBig) {
+  @include mq(ultra) {
     width: 20%;
   }
 }
@@ -376,7 +376,7 @@ fieldset.media-library-widget {
 }
 
 .media-library-selection .media-library-item--grid {
-  @include mq($breakpointWide) {
+  @include mq(wide) {
     width: 20%;
   }
 }

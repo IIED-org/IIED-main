@@ -83,7 +83,7 @@ class ConfigAccessTest extends BrowserTestBase {
     $this->drupalGet('/admin/config/content/entity_browser');
     $this->clickLink('Delete');
     $this->assertSession()->responseContains('This action cannot be undone.', 'Delete question found.');
-    $this->drupalPostForm(NULL, [], 'Delete Entity Browser');
+    $this->submitForm([], 'Delete Entity Browser');
 
     $this->assertSession()->responseContains('Entity browser <em class="placeholder">Test entity browser</em> was deleted.', 'Confirmation message found.');
     $this->assertSession()->responseContains('There are no entity browser entities yet.', 'Entity browsers table is empty.');

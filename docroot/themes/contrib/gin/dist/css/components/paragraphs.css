@@ -62,11 +62,11 @@
   background-color: var(--colorGinWarningLightBackground);
 }
 
-.paragraphs-tabs-wrapper .field-multiple-table .draggable.drag-previous {
+.paragraphs-tabs-wrapper .field-multiple-table .draggable.drag-previous > .tabledrag-cell {
   position: relative;
 }
 
-.paragraphs-tabs-wrapper .field-multiple-table .draggable.drag-previous::before {
+.paragraphs-tabs-wrapper .field-multiple-table .draggable.drag-previous > .tabledrag-cell::before {
   content: "";
   display: block;
   position: absolute;
@@ -77,12 +77,12 @@
   border-radius: var(--ginBorderTiny);
 }
 
-[dir="ltr"] .paragraphs-tabs-wrapper .field-multiple-table .draggable.drag-previous::before {
-  left: .5rem;
+[dir="ltr"] .paragraphs-tabs-wrapper .field-multiple-table .draggable.drag-previous > .tabledrag-cell::before {
+  left: 0;
 }
 
-[dir="rtl"] .paragraphs-tabs-wrapper .field-multiple-table .draggable.drag-previous::before {
-  right: .5rem;
+[dir="rtl"] .paragraphs-tabs-wrapper .field-multiple-table .draggable.drag-previous > .tabledrag-cell::before {
+  right: 0;
 }
 
 .paragraphs-tabs-wrapper .field-multiple-table .draggable td {
@@ -210,7 +210,7 @@
   min-width: 20px;
 }
 
-@media (min-width: 976px) {
+@media (min-width: 61em) {
   .js .field--widget-entity-reference-paragraphs .draggable .tabledrag-handle,
 .js .field--widget-paragraphs .draggable .tabledrag-handle {
     min-width: 24px;
@@ -255,7 +255,7 @@
   min-width: 32px;
 }
 
-@media (min-width: 976px) {
+@media (min-width: 61em) {
   .js .field--widget-entity-reference-paragraphs .draggable .tabledrag-handle {
     min-width: 40px;
   }

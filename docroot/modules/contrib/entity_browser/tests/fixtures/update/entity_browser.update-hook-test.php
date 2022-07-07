@@ -61,6 +61,7 @@ $connection->insert('config')
   ->execute();
 
 $config = Yaml::decode(file_get_contents(__DIR__ . '/../../modules/entity_browser_test/config/install/views.view.test_deprecated_field.yml'));
+$config['uuid'] = '3374cfd0-6708-4047-b3ee-51c0349fb11e';
 $connection->insert('config')
   ->fields([
     'collection',

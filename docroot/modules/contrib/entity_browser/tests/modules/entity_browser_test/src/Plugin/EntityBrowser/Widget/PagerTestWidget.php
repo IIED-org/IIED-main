@@ -58,7 +58,7 @@ class PagerTestWidget extends WidgetBase {
   /**
    * Submit callback for first page reset button.
    */
-  public function submitFirst(array &$form, FormStateInterface $form_state) {
+  public static function submitFirst(array &$form, FormStateInterface $form_state) {
     EntityBrowserPagerElement::setCurrentPage($form_state);
     $form_state->setRebuild();
   }
@@ -66,7 +66,7 @@ class PagerTestWidget extends WidgetBase {
   /**
    * Submit callback for last page reset button.
    */
-  public function submitLast(array &$form, FormStateInterface $form_state) {
+  public static function submitLast(array &$form, FormStateInterface $form_state) {
     EntityBrowserPagerElement::setCurrentPage($form_state, 4);
     $form_state->setRebuild();
   }

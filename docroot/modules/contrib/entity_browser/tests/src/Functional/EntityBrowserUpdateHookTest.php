@@ -45,8 +45,8 @@ class EntityBrowserUpdateHookTest extends UpdatePathTestBase {
    */
   protected function doSelectionTest() {
     parent::doSelectionTest();
-    $this->assertSession()->responseContains('8001 -   Updates submit text for existing Entity browsers.');
-    $this->assertSession()->responseContains('8002 -   Migrates duplicated Views entity_browser_select fields.');
+    $this->assertSession()->responseContains('8001 - Updates submit text for existing Entity browsers.');
+    $this->assertSession()->responseContains('8002 - Migrates duplicated Views entity_browser_select fields.');
   }
 
   /**

@@ -159,10 +159,6 @@ class Pdf
             $this->imagick->setCompressionQuality($this->compressionQuality);
         }
 
-        if (filter_var($this->pdfFile, FILTER_VALIDATE_URL)) {
-            return $this->getRemoteImageData($pathToImage);
-        }
-
         $this->imagick->readImage(sprintf('%s[%s]', $this->pdfFile, $this->page - 1));
 
         if (is_int($this->layerMethod)) {
@@ -197,21 +193,6 @@ class Pdf
         $this->thumbnailWidth = $thumbnailWidth;
 
         return $this;
-    }
-
-    protected function getRemoteImageData(string $pathToImage): Imagick
-    {
-        $this->imagick->readImage($this->pdfFile);
-
-        $this->imagick->setIteratorIndex($this->page - 1);
-
-        if (is_int($this->layerMethod)) {
-            $this->imagick = $this->imagick->mergeImageLayers($this->layerMethod);
-        }
-
-        $this->imagick->setFormat($this->determineOutputFormat($pathToImage));
-
-        return $this->imagick;
     }
 
     protected function determineOutputFormat(string $pathToImage): string

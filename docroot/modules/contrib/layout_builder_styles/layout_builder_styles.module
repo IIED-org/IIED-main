@@ -7,6 +7,7 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\layout_builder_styles\LayoutBuilderStyleInterface;
+use Drupal\layout_builder_styles\LayoutBuilderStyleGroupInterface;
 
 /**
  * Implements hook_form_alter().
@@ -24,7 +25,7 @@ function layout_builder_styles_form_alter(&$form, FormStateInterface $formState)
 
     $bundle = FALSE;
     // If this is a reusable block, retrieve the block bundle.
-    if (strpos($blockPluginId, "block_content:") === 0) {
+    if (strpos($blockPluginId, 'block_content:') === 0) {
       $uuid = str_replace('block_content:', '', $blockPluginId);
       $bundle = \Drupal::service('entity.repository')->loadEntityByUuid('block_content', $uuid)
         ->bundle();
@@ -43,7 +44,7 @@ function layout_builder_styles_form_alter(&$form, FormStateInterface $formState)
       }
       /** @var \Drupal\layout_builder_styles\LayoutBuilderStyleInterface $style */
       if (empty($style->getBlockRestrictions()) || in_array($blockPluginId, $restrictions) || $bundle_allowed) {
-        $styleOptions[$style->id()] = $style->label();
+        $styleOptions[$style->getGroup()][$style->id()] = $style->label();
       }
     }
 
@@ -51,7 +52,7 @@ function layout_builder_styles_form_alter(&$form, FormStateInterface $formState)
       $component = $formObject->getCurrentComponent();
 
       $selectedStyle = $component->get('layout_builder_styles_style');
-      _layout_builder_styles_add_style_selection_form_element($form, $styleOptions, $selectedStyle);
+      _layout_builder_styles_add_style_selection_form_elements($form, $styleOptions, $selectedStyle);
 
       // Our submit handler must execute before the default one, because the
       // default handler stores the section & component data in the tempstore
@@ -72,7 +73,7 @@ function _layout_builder_styles_submit_block_form(array $form, FormStateInterfac
   $formObject = $formState->getFormObject();
 
   $component = $formObject->getCurrentComponent();
-  $styles = _layout_builder_styles_prepare_styles_for_saving($formState->getValue('layout_builder_style'));
+  $styles = _layout_builder_styles_prepare_styles_for_saving($form, $formState);
   $component->set('layout_builder_styles_style', $styles);
 }
 
@@ -91,14 +92,14 @@ function layout_builder_styles_form_layout_builder_configure_section_alter(&$for
     $restrictions = $style->getLayoutRestrictions();
     if (empty($restrictions) || in_array($layout_id, $restrictions)) {
       /** @var \Drupal\layout_builder_styles\LayoutBuilderStyleInterface $style */
-      $styleOptions[$style->id()] = $style->label();
+      $styleOptions[$style->getGroup()][$style->id()] = $style->label();
     }
   }
 
   if (!empty($styleOptions)) {
     $config = $formObject->getLayout()->getConfiguration();
     $selectedStyle = $config['layout_builder_styles_style'] ?? [];
-    _layout_builder_styles_add_style_selection_form_element($form, $styleOptions, $selectedStyle);
+    _layout_builder_styles_add_style_selection_form_elements($form, $styleOptions, $selectedStyle);
 
     // Our submit handler must execute before the default one, because the
     // default handler stores the section & component data in the tempstore
@@ -140,7 +141,7 @@ function _layout_builder_styles_submit_section_form(array $form, FormStateInterf
   if (!$config) {
     $config = [];
   }
-  $styles = _layout_builder_styles_prepare_styles_for_saving($formState->getValue('layout_builder_style'));
+  $styles = _layout_builder_styles_prepare_styles_for_saving($form, $formState);
   $config = array_merge($config, ['layout_builder_styles_style' => $styles]);
 
   $formObject
@@ -149,7 +150,7 @@ function _layout_builder_styles_submit_section_form(array $form, FormStateInterf
 }
 
 /**
- * Add a style selection form element to an existing form.
+ * Add style selection form elements to an existing form.
  *
  * @param array $form
  *   The form array to add to.
@@ -158,57 +159,86 @@ function _layout_builder_styles_submit_section_form(array $form, FormStateInterf
  * @param mixed $selectedStyle
  *   The existing selected style(s), either a string or array.
  */
-function _layout_builder_styles_add_style_selection_form_element(array &$form, array $styleOptions, $selectedStyle) {
+function _layout_builder_styles_add_style_selection_form_elements(array &$form, array $styleOptions, $selectedStyle) {
   // Set form actions to a high weight, just so that we can make our form
   // style element appear right before them.
   $form['actions']['#weight'] = 100;
-  $form['layout_builder_style'] = [
-    '#type' => 'select',
-    '#options' => $styleOptions,
-    '#title' => t('Style'),
-    '#default_value' => $selectedStyle,
-    '#required' => FALSE,
-    '#empty_option' => t('- None -'),
-    '#weight' => 90,
-  ];
 
-  $config = \Drupal::config('layout_builder_styles.settings');
-  // If we're configured to allow a single selection, then we need to check
-  // if the previously saved selected style is actually an array of styles
-  // that were saved from previously allowing multiple. In this case, if there's
-  // just one style that was saved, then choose that as the current value.
-  // If there were multiple saved, we just clear them both out. There's not
-  // a good way to recover from that situation.
-  if ($config && $config->get('multiselect' === 'single')) {
-    if (is_array($selectedStyle)) {
-      $filtered = array_filter($selectedStyle);
-      if (count($filtered) === 1) {
-        $existingSelectedStyle = array_shift($filtered);
-      }
-      else {
-        $existingSelectedStyle = null;
-      }
-      $form['layout_builder_style']['#default_value'] = $existingSelectedStyle;
-    }
+  if (empty($selectedStyle)) {
+    $selectedStyle = [];
   }
 
-  // If we're configured to allow multiple selections, then we need to change
-  // the form widget to one that supports multiple selections.
-  if ($config && $config->get('multiselect') === 'multiple') {
-    // The existing value may not be stored as an array if the site admin
-    // switched from allowing one selection to allowing multiple.
-    if (!is_array($selectedStyle)) {
+  // Import all groups, sorted by weight.
+  $group_storage = \Drupal::entityTypeManager()->getStorage('layout_builder_style_group');
+  $query = $group_storage->getQuery();
+  $query->sort('weight', 'ASC');
+  $groups = $query->execute();
+
+  foreach ($groups as $group) {
+    // Group ID to group.
+    $group = $group_storage->load($group);
+
+    // Since we reference $style->$group by $group->$id, let's shortcut this.
+    $group_id = $group->id();
+    if (!isset($styleOptions[$group_id])) {
+      continue;
+    }
+    $options = $styleOptions[$group_id];
+    $element_name = 'layout_builder_style_' . $group_id;
+
+    if(!is_array($selectedStyle)) {
       $selectedStyle = [$selectedStyle];
     }
-    $form['layout_builder_style']['#default_value'] = array_filter($selectedStyle);
-    if ($config->get('form_type') === 'checkboxes') {
-      $form['layout_builder_style']['#type'] = 'checkboxes';
+
+    $optionValues = array_keys($options);
+    $elementSelectedStyles = array_filter($selectedStyle, function ($var) use ($optionValues) {
+      return !empty($var) && in_array($var, $optionValues);
+    });
+
+    $form[$element_name] = [
+      '#type' => 'select',
+      '#options' => $options,
+      '#title' => t($group->label()),
+      '#required' => $group->getRequired(),
+      '#weight' => 90,
+    ];
+
+    if (!$group->getRequired()) {
+      $form[$element_name]['#empty_option'] = t('- None -');
     }
-    else {
-      $form['layout_builder_style']['#multiple'] = TRUE;
+
+    // If we're configured to allow a single selection, then we need to check
+    // if the previously saved selected style is actually an array of styles
+    // that were saved from previously allowing multiple. In this case, if there's
+    // just one style that was saved, then choose that as the current value.
+    // If there were multiple saved, we just clear them both out. There's not
+    // a good way to recover from that situation.
+    if ($group->getMultiselect() === 'single') {
+      if (count($elementSelectedStyles) === 1) {
+        $elementSelectedStyles = array_shift($elementSelectedStyles);
+      }
+      else {
+        $elementSelectedStyles = null;
+      }
+      $form[$element_name]['#default_value'] = $elementSelectedStyles;
+    }
+
+    // If we're configured to allow multiple selections, then we need to change
+    // the form widget to one that supports multiple selections.
+    else if ($group->getMultiselect() === 'multiple') {
+      // The existing value may not be stored as an array if the site admin
+      // switched from allowing one selection to allowing multiple.
+      $form[$element_name]['#default_value'] = $elementSelectedStyles;
+      if ($group->getFormType() === 'checkboxes') {
+        $form[$element_name]['#type'] = 'checkboxes';
+      }
+      else {
+        $form[$element_name]['#multiple'] = TRUE;
+      }
     }
   }
 }
+
 
 /**
  * Implements hook_theme_suggestions_HOOK_alter().
@@ -280,15 +310,17 @@ function layout_builder_styles_preprocess_layout(&$variables) {
  * @return string|array
  *   The submitted style(s), now formatted correctly for saving.
  */
-function _layout_builder_styles_prepare_styles_for_saving($submittedStyles) {
-  // Filter out empty selections that may be present from unselected checkboxes.
-  if (is_array($submittedStyles)) {
-    // Remove empty/unselected styles from form.
-    $submittedStyles = array_filter($submittedStyles);
-    // We don't need to store an associative array that the multi select
-    // and checkboxes form widgets provide. We just care to store an array of
-    // the style names as values.
-    return array_values($submittedStyles);
+function _layout_builder_styles_prepare_styles_for_saving(array $form, FormStateInterface $formState) {
+  $selected_styles = [];
+  foreach ($form as $id => $el) {
+    if (strpos($id, 'layout_builder_style_') === 0) {
+      $value = $formState->getValue($id);
+      if (is_array($value)) {
+        $selected_styles += $value;
+      } else {
+        $selected_styles[] = $value;
+      }
+    }
   }
-  return $submittedStyles;
+  return $selected_styles;
 }

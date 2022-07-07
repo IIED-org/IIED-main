@@ -35,13 +35,6 @@ libraries-override:
       component:
         /core/themes/stable/css/core/dropbutton/dropbutton.css: /core/themes/claro/css/components/dropbutton.css
 
-  core/drupal.vertical-tabs:
-    css:
-      component:
-        /core/themes/stable/css/core/vertical-tabs.css: false
-    js:
-      misc/vertical-tabs.js: /core/themes/claro/js/vertical-tabs.js
-
   classy/dialog: claro/claro.drupal.dialog
 
   # needed override to overcome dialog styling issues
@@ -129,10 +122,6 @@ libraries-override:
     js:
       js/media_library.view.js: js/overrides/media_library.view.js
 
-  core/drupal.tabledrag:
-    js:
-      /core/themes/claro/js/tabledrag.js: false
-
   # Gin overrides
   core/drupal.dialog.off_canvas:
     css:
@@ -169,8 +158,6 @@ libraries-extend:
     - gin/media_library
   media_library/widget:
     - gin/media_library
-  core/drupal.tabledrag:
-    - gin/gin_tabledrag
   contextual/drupal.contextual-links:
     - gin/contextual_links
   autosave_form/drupal.autosave_form:
@@ -240,7 +227,7 @@ regions:
 regions_hidden:
   - sidebar_first
 
-# Information added by Drupal.org packaging script on 2022-05-25
-version: '8.x-3.0-beta3'
+# Information added by Drupal.org packaging script on 2022-06-24
+version: '8.x-3.0-beta5'
 project: 'gin'
-datestamp: 1653469873
+datestamp: 1656068150

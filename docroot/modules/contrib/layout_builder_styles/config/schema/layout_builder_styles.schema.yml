@@ -14,6 +14,9 @@ layout_builder_styles.style.*:
     type:
       type: string
       label: 'Type'
+    group:
+      type: string
+      label: 'Group'
     block_restrictions:
       type: sequence
       label: 'Block restrictions'
@@ -29,12 +32,28 @@ layout_builder_styles.style.*:
       label: 'Weight'
     uuid:
       type: string
-layout_builder_styles.settings:
-  type: config_object
+
+layout_builder_styles.group.*:
+  type: config_entity
+  label: 'Layout builder style group config'
   mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
     multiselect:
       type: string
-      label: "Multiple styles selectable"
+      label: 'Multiple styles'
     form_type:
       type: string
-      label: "How the styles selector should be displayed"
+      label: 'Form Element'
+    required:
+      type: boolean
+      label: 'Require Selection'
+    weight:
+      type: integer
+      label: 'Weight'
+    uuid:
+      type: string

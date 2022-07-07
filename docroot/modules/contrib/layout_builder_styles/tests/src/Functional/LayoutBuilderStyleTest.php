@@ -6,6 +6,8 @@ use Drupal\layout_builder\Entity\LayoutBuilderEntityViewDisplay;
 use Drupal\node\Entity\Node;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\layout_builder_styles\Entity\LayoutBuilderStyle;
+use Drupal\layout_builder_styles\Entity\LayoutBuilderStyleGroup;
+use Drupal\layout_builder_styles\LayoutBuilderStyleGroupInterface;
 
 /**
  * Tests the Layout Builder Styles apply as expected.
@@ -22,7 +24,7 @@ class LayoutBuilderStyleTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'layout_builder',
     'block',
     'block_content',
@@ -70,8 +72,15 @@ class LayoutBuilderStyleTest extends BrowserTestBase {
     $this->drupalLogin($this->drupalCreateUser([
       'configure any layout',
       'manage layout builder styles',
-      'administer layout builder styles configuration',
     ]));
+
+    LayoutBuilderStyleGroup::create([
+      'id' => 'group',
+      'label' => 'Group',
+      'multiselect' => LayoutBuilderStyleGroupInterface::TYPE_MULTIPLE,
+      'form_type' => LayoutBuilderStyleGroupInterface::TYPE_MULTIPLE_SELECT,
+      'required' => false,
+    ])->save();
 
     // Create styles for section.
     LayoutBuilderStyle::create([
@@ -79,6 +88,7 @@ class LayoutBuilderStyleTest extends BrowserTestBase {
       'label' => 'Foobar',
       'classes' => 'foo-style-class bar-style-class',
       'type' => 'section',
+      'group' => 'group'
     ])->save();
 
     LayoutBuilderStyle::create([
@@ -86,6 +96,7 @@ class LayoutBuilderStyleTest extends BrowserTestBase {
       'label' => 'Foobar2',
       'classes' => 'foo2-style-class bar2-style-class',
       'type' => 'section',
+      'group' => 'group'
     ])->save();
 
     // Add section to node with new styles.
@@ -96,28 +107,14 @@ class LayoutBuilderStyleTest extends BrowserTestBase {
     $page->clickLink('Add section');
     $page->clickLink('Two column');
     // Verify that only a single option may be selected.
-    $assert_session->elementExists('css', 'select#edit-layout-builder-style option');
-    $page->selectFieldOption('edit-layout-builder-style', 'Foobar');
+    $assert_session->elementExists('css', 'select#edit-layout-builder-style-group option');
+    $page->selectFieldOption('edit-layout-builder-style-group', 'Foobar');
     $page->pressButton('Add section');
 
     // Confirm section element contains the proper classes.
     $page->pressButton('Save layout');
     $assert_session->responseContains('foo-style-class bar-style-class');
     $assert_session->responseNotContains('foo2-style-class bar2-style-class');
-
-    // Set the configuration to allow multiple styles per block.
-    $this->drupalGet('admin/config/content/layout_builder_style/config');
-    $page->selectFieldOption('edit-multiselect-multiple', 'multiple');
-    $page->selectFieldOption('edit-form-type-multiple-select', 'multiple-select');
-    $page->pressButton('Save configuration');
-
-    $this->drupalGet('layout_builder/configure/section/overrides/node.' . $section_node->id() . '/0');
-    $page->selectFieldOption('edit-layout-builder-style', 'Foobar', TRUE);
-    $page->selectFieldOption('edit-layout-builder-style', 'Foobar2', TRUE);
-    $page->pressButton('Update');
-    $assert_session->responseContains('foo-style-class bar-style-class');
-    $assert_session->responseContains('foo2-style-class bar2-style-class');
-
   }
 
   /**
@@ -140,8 +137,15 @@ class LayoutBuilderStyleTest extends BrowserTestBase {
     $this->drupalLogin($this->drupalCreateUser([
       'configure any layout',
       'manage layout builder styles',
-      'administer layout builder styles configuration',
     ]));
+
+    LayoutBuilderStyleGroup::create([
+      'id' => 'group',
+      'label' => 'Group',
+      'multiselect' => LayoutBuilderStyleGroupInterface::TYPE_SINGLE,
+      'form_type' => LayoutBuilderStyleGroupInterface::TYPE_CHECKBOXES,
+      'required' => false,
+    ])->save();
 
     // Create styles for blocks.
     LayoutBuilderStyle::create([
@@ -149,6 +153,7 @@ class LayoutBuilderStyleTest extends BrowserTestBase {
       'label' => 'Foobar',
       'classes' => 'foo-style-class bar-style-class',
       'type' => 'component',
+      'group' => 'group'
     ])->save();
 
     LayoutBuilderStyle::create([
@@ -156,6 +161,7 @@ class LayoutBuilderStyleTest extends BrowserTestBase {
       'label' => 'Foobar2',
       'classes' => 'foo2-style-class bar2-style-class',
       'type' => 'component',
+      'group' => 'group'
     ])->save();
 
     // Add block to node with new style.
@@ -166,62 +172,14 @@ class LayoutBuilderStyleTest extends BrowserTestBase {
     $page->clickLink('Add block');
     $page->clickLink('Powered by Drupal');
     // Verify that only a single option may be selected.
-    $assert_session->elementExists('css', 'select#edit-layout-builder-style option');
-    $page->selectFieldOption('edit-layout-builder-style', 'Foobar');
+    $assert_session->elementExists('css', '[name=layout_builder_style_group]');
+    $page->selectFieldOption('layout_builder_style_group', 'Foobar');
     $page->pressButton('Add block');
     $page->pressButton('Save layout');
 
     // Confirm block element contains proper classes.
     $assert_session->responseContains('foo-style-class bar-style-class');
     $assert_session->responseNotContains('foo2-style-class bar2-style-class');
-
-    // Set the configuration to allow multiple styles per block.
-    $this->drupalGet('admin/config/content/layout_builder_style/config');
-    $page->selectFieldOption('edit-multiselect-multiple', 'multiple');
-    $page->selectFieldOption('edit-form-type-multiple-select', 'multiple-select');
-    $page->pressButton('Save configuration');
-
-    // Change block configuration to have multiple styles.
-    $components = Node::load($block_node->id())->get('layout_builder__layout')->getSection(0)->getComponents();
-    end($components);
-    $uuid = key($components);
-    $this->drupalGet('layout_builder/update/block/overrides/node.' . $block_node->id() . '/0/content/' . $uuid);
-    $page->selectFieldOption('edit-layout-builder-style', 'Foobar', TRUE);
-    $page->selectFieldOption('edit-layout-builder-style', 'Foobar2', TRUE);
-    $page->pressButton('Update');
-    $page->pressButton('Save layout');
-
-    // Confirm block element contains proper classes.
-    $assert_session->responseContains('foo-style-class bar-style-class');
-    $assert_session->responseContains('foo2-style-class bar2-style-class');
-
-    // Change block back to first style.
-    $this->drupalGet('layout_builder/update/block/overrides/node.' . $block_node->id() . '/0/content/' . $uuid);
-    $page->selectFieldOption('edit-layout-builder-style', 'Foobar');
-    $page->pressButton('Update');
-    $page->pressButton('Save layout');
-
-    // Confirm change to settings now only renders first style.
-    $assert_session->responseContains('foo-style-class bar-style-class');
-    $assert_session->responseNotContains('foo2-style-class bar2-style-class');
-
-    // Change configuration to use checkboxes element.
-    $this->drupalGet('admin/config/content/layout_builder_style/config');
-    $page->selectFieldOption('edit-multiselect-multiple', 'multiple');
-    $page->selectFieldOption('edit-form-type-checkboxes', 'checkboxes');
-    $page->pressButton('Save configuration');
-
-    // Change block to use the second style.
-    $this->drupalGet('layout_builder/update/block/overrides/node.' . $block_node->id() . '/0/content/' . $uuid);
-    $page->uncheckField('edit-layout-builder-style-foobar', 'Foobar');
-    $page->selectFieldOption('edit-layout-builder-style-foobar2', 'Foobar2');
-    $page->pressButton('Update');
-    $page->pressButton('Save layout');
-
-    // Confirm change to settings now only renders second style.
-    $assert_session->responseNotContains('foo-style-class bar-style-class');
-    $assert_session->responseContains('foo2-style-class bar2-style-class');
-
   }
 
 }

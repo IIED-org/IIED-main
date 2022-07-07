@@ -486,7 +486,7 @@ class EntityBrowserTest extends KernelTestBase {
     $role = $this->container->get('entity_type.manager')
       ->getStorage('user_role')
       ->create([
-        'name' => $this->randomString(),
+        'label' => $this->randomString(),
         'id' => $this->randomMachineName(),
       ]);
     $role->grantPermission('access content');
