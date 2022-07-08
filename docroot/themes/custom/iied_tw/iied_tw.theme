@@ -75,12 +75,6 @@ function iied_tw_preprocess_page(&$variables) {
         'add' => FALSE
       ],
     ],
-      // configuration
-      offCanvas: {
-        page: {
-            selector: "#page"
-        }
-    }
     'config' => [
     ],
   ];
