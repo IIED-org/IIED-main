@@ -1,0 +1,115 @@
+uuid: 74e92ade-fafd-402e-8131-8298dab3bf91
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_tabs
+    - paragraphs.paragraphs_type.tab
+    - paragraphs.paragraphs_type.tab_box
+  module:
+    - entity_reference_revisions
+id: paragraph.tab_box.field_tabs
+field_name: field_tabs
+entity_type: paragraph
+bundle: tab_box
+label: Tabs
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      tab: tab
+    negate: 0
+    target_bundles_drag_drop:
+      about_the_author:
+        weight: 30
+        enabled: false
+      accordion_box:
+        weight: 31
+        enabled: false
+      basic_text:
+        weight: 32
+        enabled: false
+      file_upload:
+        weight: 33
+        enabled: false
+      gallery:
+        weight: 34
+        enabled: false
+      image:
+        weight: 35
+        enabled: false
+      image_wide:
+        weight: 36
+        enabled: false
+      info_box:
+        weight: 37
+        enabled: false
+      linked_person:
+        weight: 38
+        enabled: false
+      logo_block:
+        weight: 39
+        enabled: false
+      media_embed:
+        weight: 40
+        enabled: false
+      modal_image:
+        weight: 41
+        enabled: false
+      quote:
+        weight: 42
+        enabled: false
+      related_link:
+        weight: 43
+        enabled: false
+      researcher_profiles:
+        weight: 44
+        enabled: false
+      row_of_4:
+        weight: 45
+        enabled: false
+      section:
+        weight: 46
+        enabled: false
+      stories_block:
+        weight: 47
+        enabled: false
+      stories_cta:
+        weight: 48
+        enabled: false
+      stories_curated_content:
+        weight: 49
+        enabled: false
+      stories_link_list:
+        weight: 50
+        enabled: false
+      stories_quote:
+        weight: 51
+        enabled: false
+      stories_table:
+        weight: 52
+        enabled: false
+      stories_text:
+        weight: 53
+        enabled: false
+      stories_views:
+        weight: 54
+        enabled: false
+      tab:
+        weight: 55
+        enabled: true
+      tab_box:
+        weight: 56
+        enabled: false
+      timeline:
+        weight: 57
+        enabled: false
+      video_embed:
+        weight: 58
+        enabled: false
+field_type: entity_reference_revisions
