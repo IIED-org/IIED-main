@@ -29,6 +29,7 @@
     'vocabulary-' ~ term.bundle|clean_class,
   ]
 %}
+
 <div{{ attributes.setAttribute('id', 'taxonomy-term-' ~ term.id).addClass(classes) }}>
     <div class="container items-baseline p-4 mx-auto overflow-hidden lg:grid lg:gap-x-6 lg:grid-cols-12">
       <div class="lg:col-span-4">
@@ -44,7 +45,7 @@
     </div>
 
 {# tabs #}
-{{ breakpoint() }}
+{{ attach_library('iied_tw/alpine') }}
   <div class="mb-12 border-b border-gray-300">
     <div class="container tab-wrapper" 
       x-data="{ tab: window.location.hash ? window.location.hash.substring(1) : 'inthiscollection' }"

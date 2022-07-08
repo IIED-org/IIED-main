@@ -104,23 +104,3 @@ function iied_tw_preprocess_paragraph(&$variables) {
     }
   }
 }
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function iied_tw_preprocess_taxonomy_term(&$variables) {
-
- // $vocabulary = $variables->vid;
-
-  //if ($vocabulary == 'collection' || $vocabulary == 'theme') {
-    // Attach the theme alpine library, as we're on the right vocabulary.
-    $variables['#attached']['library'][] =  'iied_tw/alpine';
-    // foreach ($variables['content']['field_tabs'] as $key => $tab) {
-    //   if (is_numeric($key)) {
-    //     $variables['tab_titles'][] = $tab['#paragraph']->field_tab_title->value;
-    //     $variables['tab_bodies'][] = $tab['#paragraph']->field_tab_body->value;
-    //   }
-    // }
- // }
-
-}
