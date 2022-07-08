@@ -56,12 +56,12 @@
           <a x-ref="inthiscollection" class="block px-6 py-2 text-lg font-semibold text-gray-700 border-b-2 focus:border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active': tab === 'inthiscollection' }" @click.prevent="tab = 'inthiscollection'; window.location.hash = 'inthiscollection'" href="#">In this collection</a>
           <a x-ref="overview" class="block px-6 py-2 text-lg font-semibold text-gray-700 border-b-2 focus:border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active': tab === 'overview' }" @click.prevent="tab = 'overview'; window.location.hash = 'overview'" href="#">Overview</a>
       </nav>
-        <div class="tab-panel pt-6" x-show="tab === 'inthiscollection'" x-transition:enter.duration.500ms>
+        <div class="tab-panel pt-6" x-show="tab === 'inthiscollection'" x-transition:enter.duration.750ms>
           <div class="content">
             {{ content|without('field_overview') }}
           </div>
         </div>
-        <div class="tab-panel pt-6" x-show="tab === 'overview'" x-transition:enter.duration.500ms>
+        <div class="tab-panel pt-6" x-show="tab === 'overview'" x-transition:enter.duration.750ms>
            <div class="content">
               {{ term.field_overview.value|raw }}
           </div>
