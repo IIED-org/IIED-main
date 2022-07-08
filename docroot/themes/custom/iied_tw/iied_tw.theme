@@ -74,10 +74,13 @@ function iied_tw_preprocess_page(&$variables) {
       'navbar' => [
         'add' => FALSE
       ],
-      'offCanvas' => [
-        'position' => 'right-front'
-      ]
     ],
+      // configuration
+      offCanvas: {
+        page: {
+            selector: "#page"
+        }
+    }
     'config' => [
     ],
   ];
