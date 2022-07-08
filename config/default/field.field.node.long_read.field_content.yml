@@ -26,6 +26,7 @@ dependencies:
     - paragraphs.paragraphs_type.stories_table
     - paragraphs.paragraphs_type.stories_text
     - paragraphs.paragraphs_type.stories_views
+    - paragraphs.paragraphs_type.tab
     - paragraphs.paragraphs_type.tab_box
     - paragraphs.paragraphs_type.timeline
     - paragraphs.paragraphs_type.video_embed
@@ -69,6 +70,7 @@ settings:
       stories_views: stories_views
       tab_box: tab_box
       timeline: timeline
+      tab: tab
     negate: 0
     target_bundles_drag_drop:
       about_the_author:
@@ -92,6 +94,9 @@ settings:
       image_wide:
         weight: 18
         enabled: true
+      in_page_menu:
+        weight: 39
+        enabled: false
       info_box:
         weight: 19
         enabled: true
@@ -148,7 +153,7 @@ settings:
         enabled: true
       tab:
         weight: 55
-        enabled: false
+        enabled: true
       tab_box:
         weight: 48
         enabled: true
