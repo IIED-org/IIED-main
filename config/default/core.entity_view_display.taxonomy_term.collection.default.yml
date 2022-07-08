@@ -65,13 +65,11 @@ content:
     weight: 3
     region: content
   field_overview:
-    type: entity_reference_revisions_entity_view
+    type: text_default
     label: hidden
-    settings:
-      view_mode: default
-      link: ''
+    settings: {  }
     third_party_settings: {  }
-    weight: 7
+    weight: 10
     region: content
   field_publications_more_link:
     type: text_default
