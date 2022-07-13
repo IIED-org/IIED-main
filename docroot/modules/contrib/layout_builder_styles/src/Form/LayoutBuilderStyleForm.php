@@ -8,8 +8,12 @@ use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Layout\LayoutPluginManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Url;
 use Drupal\layout_builder_styles\LayoutBuilderStyleInterface;
+use Drupal\layout_builder_styles\LayoutBuilderStyleGroupInterface;
+use Drupal\layout_builder_styles\Entity\LayoutBuilderStyleGroup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+
 
 /**
  * Class LayoutBuilderStyleForm.
@@ -67,7 +71,31 @@ class LayoutBuilderStyleForm extends EntityForm implements ContainerInjectionInt
   /**
    * {@inheritdoc}
    */
+  protected function actionsElement(array $form, FormStateInterface $form_state) {
+    // Prevent actions from rendering if there's no groups defined yet.
+    $groups = LayoutBuilderStyleGroup::loadMultiple();
+    if (empty($groups)) {
+      return [];
+    }
+    else {
+      return parent::actionsElement($form, $form_state);
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function form(array $form, FormStateInterface $form_state) {
+    $groups = LayoutBuilderStyleGroup::loadMultiple();
+    if (empty($groups)) {
+      $caption = '<p>' . $this->t(
+          'You must <a href="@group_url">create at least one group</a> before creating a style.',
+          ['@group_url' => Url::fromRoute('entity.layout_builder_style_group.add_form')->toString()]
+        ) . '</p>';
+      $form['description'] = ['#markup' => $caption];
+      return $form;
+    }
+
     $form = parent::form($form, $form_state);
 
     /** @var \Drupal\layout_builder_styles\LayoutBuilderStyleInterface $style */
@@ -103,12 +131,25 @@ class LayoutBuilderStyleForm extends EntityForm implements ContainerInjectionInt
       '#title' => $this->t('Type'),
       '#type' => 'radios',
       '#default_value' => $style->getType(),
-      '#description' => $this->t('Determines if this style applies to sections or blocks.'),
+      '#description' => $this->t('Determines if this style can be applied to sections or blocks.'),
       '#required' => TRUE,
       '#options' => [
         LayoutBuilderStyleInterface::TYPE_COMPONENT => $this->t('Block'),
         LayoutBuilderStyleInterface::TYPE_SECTION => $this->t('Section'),
       ],
+    ];
+
+    $groupOptions = [];
+    foreach ($groups as $group) {
+      $groupOptions[$group->id()] = $group->label();
+    }
+    $form['group'] = [
+      '#title' => $this->t('Group'),
+      '#type' => 'radios',
+      '#default_value' => $style->getGroup(),
+      '#description' => $this->t('Determines the group of this style.'),
+      '#required' => TRUE,
+      '#options' => $groupOptions,
     ];
 
     $blockDefinitions = $this->blockManager->getDefinitions();

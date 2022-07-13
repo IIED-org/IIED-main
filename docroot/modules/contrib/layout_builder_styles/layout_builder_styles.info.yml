@@ -7,7 +7,7 @@ dependencies:
   - drupal:layout_builder
 configure: entity.layout_builder_style.collection
 
-# Information added by Drupal.org packaging script on 2020-12-10
-version: '8.x-1.0-beta4'
+# Information added by Drupal.org packaging script on 2022-07-04
+version: '8.x-1.0-beta5'
 project: 'layout_builder_styles'
-datestamp: 1607616104
+datestamp: 1656948131

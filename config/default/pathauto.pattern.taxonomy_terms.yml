@@ -5,14 +5,14 @@ dependencies:
   module:
     - taxonomy
 id: taxonomy_terms
-label: 'Taxonomy terms'
+label: 'Taxonomy (term only)'
 type: 'canonical_entities:taxonomy_term'
 pattern: '[term:name]'
 selection_criteria:
-  c1214cb9-c989-42ea-8029-d28811c6a279:
+  a25f805c-a98c-438b-ba71-17da7cdc91fd:
     id: 'entity_bundle:taxonomy_term'
     negate: false
-    uuid: c1214cb9-c989-42ea-8029-d28811c6a279
+    uuid: a25f805c-a98c-438b-ba71-17da7cdc91fd
     context_mapping:
       taxonomy_term: taxonomy_term
     bundles:

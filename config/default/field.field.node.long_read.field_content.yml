@@ -26,6 +26,8 @@ dependencies:
     - paragraphs.paragraphs_type.stories_table
     - paragraphs.paragraphs_type.stories_text
     - paragraphs.paragraphs_type.stories_views
+    - paragraphs.paragraphs_type.tab
+    - paragraphs.paragraphs_type.tab_box
     - paragraphs.paragraphs_type.timeline
     - paragraphs.paragraphs_type.video_embed
   module:
@@ -66,7 +68,9 @@ settings:
       stories_table: stories_table
       stories_text: stories_text
       stories_views: stories_views
+      tab_box: tab_box
       timeline: timeline
+      tab: tab
     negate: 0
     target_bundles_drag_drop:
       about_the_author:
@@ -81,21 +85,33 @@ settings:
       file_upload:
         weight: 16
         enabled: true
+      gallery:
+        weight: 34
+        enabled: false
       image:
         weight: 17
         enabled: true
       image_wide:
         weight: 18
         enabled: true
+      in_page_menu:
+        weight: 39
+        enabled: false
       info_box:
         weight: 19
         enabled: true
       linked_person:
         weight: 20
         enabled: true
+      logo_block:
+        weight: 39
+        enabled: false
       media_embed:
         weight: 21
         enabled: true
+      modal_image:
+        weight: 41
+        enabled: false
       quote:
         weight: 31
         enabled: true
@@ -135,9 +151,12 @@ settings:
       stories_views:
         weight: 41
         enabled: true
+      tab:
+        weight: 55
+        enabled: true
       tab_box:
         weight: 48
-        enabled: false
+        enabled: true
       timeline:
         weight: 49
         enabled: true

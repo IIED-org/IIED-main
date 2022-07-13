@@ -143,7 +143,7 @@
         {% if content.field_cover_image[0] %}
           {{ node.field_cover_image | view }}
         {% else %}
-          {{ node.field_media | view }}
+          {{ node.field_media | view('embedded') }}
         {% endif %}
 
         {% include '@iied_tw/partials/_publication_details.html.twig' %}

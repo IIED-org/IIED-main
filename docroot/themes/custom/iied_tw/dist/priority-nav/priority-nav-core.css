@@ -15,6 +15,7 @@
 
 .priority-nav > ul {
   display: inline-block;
+  position: relative;
 }
 
 .priority-nav > ul > li {
@@ -29,24 +30,30 @@
   position: relative;
 }
 
+.nav__dropdown-wrapper svg {
+  pointer-events: none;
+}
+
 .priority-nav__dropdown {
   position: absolute;
-  display: flex;
   flex-wrap: wrap;
-  visibility: hidden;
+  display: none;
   height: 0;
   background-color: #E0F6FB;
 }
 
 .priority-nav__dropdown.show {
-  visibility: visible;
+  display: flex;
   height: auto;
+  position: relative;
 }
 
 .priority-nav__dropdown-toggle {
   visibility: hidden;
   position: absolute;
   display: inline-flex;
+  padding: .5rem;
+  padding-right: 2rem;
 }
 
 .priority-nav-is-visible {

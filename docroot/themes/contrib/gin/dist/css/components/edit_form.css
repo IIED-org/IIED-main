@@ -1,18 +1,18 @@
-@media (min-width: 1024px) {
+@media (min-width: 64em) {
   [dir="ltr"] .gin--edit-form {
-    padding-right: var(--ginSidebarWidth);
+    padding-right: var(--ginSidebarOffset);
   }
 
   [dir="rtl"] .gin--edit-form {
-    padding-left: var(--ginSidebarWidth);
+    padding-left: var(--ginSidebarOffset);
   }
 
   [dir="ltr"] .gin--edit-form .dialog-off-canvas-main-canvas {
-    transition: padding-left var(--ginTransition);
+    transition: padding-left var(--ginTransitionFast);
   }
 
   [dir="rtl"] .gin--edit-form .dialog-off-canvas-main-canvas {
-    transition: padding-right var(--ginTransition);
+    transition: padding-right var(--ginTransitionFast);
   }
 
   [dir="ltr"] .gin--edit-form.js-off-canvas-dialog-open {
@@ -30,6 +30,10 @@
 }
 
 .gin--edit-form [data-drupal-link-system-path*="/delete"] {
+  display: none;
+}
+
+.gin--edit-form .gin-secondary-toolbar .toolbar-secondary .toolbar-bar .contextual-toolbar-tab {
   display: none;
 }
 
@@ -57,7 +61,7 @@
   padding-left: 0;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64em) {
   .gin--edit-form .layout-region-node-main,
 .gin--edit-form .layout-region-node-footer {
     flex-basis: 40%;
@@ -67,13 +71,13 @@
   }
 }
 
-@media (min-width: 1730px) {
+@media (min-width: 108.125em) {
   .gin--edit-form .page-wrapper__node-edit-form .block-page-title-block {
     width: 100%;
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64em) {
   .gin--edit-form .page-wrapper__node-edit-form .block-page-title-block .page-title {
     width: auto;
     max-width: 800px;
@@ -82,7 +86,7 @@
   }
 }
 
-@media (min-width: 1440px) {
+@media (min-width: 90em) {
   .gin--edit-form .page-wrapper__node-edit-form .node-form {
     padding-left: 2.5rem;
     padding-right: 2.5rem;
@@ -104,37 +108,31 @@
 }
 
 .gin--edit-form .page-wrapper__node-edit-form .layout-region-node-secondary {
-  width: 100%;
+  z-index: 103;
+  width: var(--ginSidebarWidth);
+  height: calc(100% - var(--ginHorizontalToolbarOffset));
+  position: fixed;
+  top: var(--ginHorizontalToolbarOffset);
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: var(--colorGinLayerBackground);
+  transition: all var(--ginTransitionFast);
 }
 
-@media (min-width: 1024px) {
-  .gin--edit-form .page-wrapper__node-edit-form .layout-region-node-secondary {
-    z-index: 101;
-    flex-basis: var(--ginSidebarWidth);
-    width: var(--ginSidebarWidth) !important;
-    position: fixed;
-    top: 0;
-    margin: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    height: 100%;
-    background: var(--colorGinLayerBackground);
-  }
+[dir="ltr"] .gin--edit-form .page-wrapper__node-edit-form .layout-region-node-secondary {
+  right: 0;
+  border-left: 1px solid var(--colorGinLayerBorder);
+}
 
-  [dir="ltr"] .gin--edit-form .page-wrapper__node-edit-form .layout-region-node-secondary {
-    right: 0;
-    border-left: 1px solid var(--colorGinLayerBorder);
-  }
+[dir="rtl"] .gin--edit-form .page-wrapper__node-edit-form .layout-region-node-secondary {
+  left: 0;
+  border-right: 1px solid var(--colorGinLayerBorder);
+}
 
-  [dir="rtl"] .gin--edit-form .page-wrapper__node-edit-form .layout-region-node-secondary {
-    left: 0;
-    border-right: 1px solid var(--colorGinLayerBorder);
-  }
-
-  .gin--dark-mode .gin--edit-form .page-wrapper__node-edit-form .layout-region-node-secondary {
-    box-shadow: 0 0 4px rgba(0, 0, 0, .1);
-  }
+.gin--dark-mode .gin--edit-form .page-wrapper__node-edit-form .layout-region-node-secondary {
+  box-shadow: 0 0 4px rgba(0, 0, 0, .1);
 }
 
 .gin--edit-form .page-wrapper__node-edit-form .layout-region-node-secondary .gin-sidebar .form-actions {
@@ -158,16 +156,23 @@
 
 .gin--edit-form .page-wrapper__node-edit-form .layout-region-node-secondary .entity-meta__header {
   color: var(--colorGinText);
-  padding-left: 0;
-  padding-right: 0;
-  background: none;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  background-color: var(--colorGinLayerBackground);
   border: 0 none;
 }
 
-@media (min-width: 1024px) {
+@media (max-width: 60.99em) {
   .gin--edit-form .page-wrapper__node-edit-form .layout-region-node-secondary .entity-meta__header {
-    padding-left: 1.5rem;
+    padding-top: 1.25rem;
+  }
+
+  [dir="ltr"] .gin--edit-form .page-wrapper__node-edit-form .layout-region-node-secondary .entity-meta__header {
     padding-right: 1.5rem;
+  }
+
+  [dir="rtl"] .gin--edit-form .page-wrapper__node-edit-form .layout-region-node-secondary .entity-meta__header {
+    padding-left: 1.5rem;
   }
 }
 
@@ -252,13 +257,13 @@
   flex-wrap: wrap;
 }
 
-@media (min-width: 420px) {
+@media (min-width: 26.25em) {
   .gin--edit-form .page-wrapper__node-edit-form .layout-region-node-secondary .entity-meta > .accordion__item .form-datetime-wrapper .form-items-inline {
     flex-wrap: nowrap;
   }
 }
 
-@media (min-width: 1024px) and (max-width: 1280px) {
+@media (min-width: 64em) and (max-width: 79.99em) {
   .gin--edit-form .page-wrapper__node-edit-form .layout-region-node-secondary .entity-meta > .accordion__item .form-datetime-wrapper .form-items-inline {
     flex-wrap: wrap;
   }
@@ -270,19 +275,19 @@
   flex-grow: 1;
 }
 
-@media (min-width: 420px) {
+@media (min-width: 26.25em) {
   .gin--edit-form .page-wrapper__node-edit-form .layout-region-node-secondary .entity-meta > .accordion__item .form-datetime-wrapper .form-type--date {
     flex-basis: 50%;
   }
 }
 
-@media (min-width: 1024px) and (max-width: 1280px) {
+@media (min-width: 64em) and (max-width: 79.99em) {
   .gin--edit-form .page-wrapper__node-edit-form .layout-region-node-secondary .entity-meta > .accordion__item .form-datetime-wrapper .form-type--date {
     flex-basis: 100%;
   }
 }
 
-@media (min-width: 420px) {
+@media (min-width: 26.25em) {
   [dir="ltr"] .gin--edit-form .page-wrapper__node-edit-form .layout-region-node-secondary .entity-meta > .accordion__item .form-datetime-wrapper .form-type--date:first-of-type {
     margin-right: .5rem;
   }
@@ -292,7 +297,7 @@
   }
 }
 
-@media (min-width: 1024px) and (max-width: 1280px) {
+@media (min-width: 64em) and (max-width: 79.99em) {
   [dir="ltr"] .gin--edit-form .page-wrapper__node-edit-form .layout-region-node-secondary .entity-meta > .accordion__item .form-datetime-wrapper .form-type--date:first-of-type {
     margin-right: 0;
   }

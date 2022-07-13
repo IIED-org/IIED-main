@@ -1,5 +1,6 @@
 .region-sticky {
-  position: relative;
+  position: sticky;
+  top: calc(var(--ginHorizontalToolbarOffset) - 48px);
   z-index: 101;
   padding: 1rem 0 0;
   width: 100%;
@@ -7,8 +8,7 @@
   box-sizing: border-box;
   transition: var(--ginTransition);
 
-  @include mq($breakpointLarge) {
-    position: sticky;
+  @include mq(large) {
     top: -1px;
     width: 100%;
     height: var(--ginStickyHeight);
@@ -53,7 +53,7 @@
     align-items: center;
     margin-bottom: 1rem;
 
-    @include mq($breakpointSmall) {
+    @include mq(small) {
       height: 100%;
 
       .settings-tray-editable {
@@ -66,13 +66,7 @@
       flex-wrap: wrap;
       width: 100%;
 
-      // Set max-width to max content-width
-      // .gin--edit-form & {
-      //   max-width: $breakpointWide;
-      //   margin: 0 auto;
-      // }
-
-      @include mq($breakpointLarge) {
+      @include mq(large) {
         flex-wrap: nowrap;
         align-items: center;
         margin-bottom: 0;
@@ -97,10 +91,9 @@
     }
 
     .gin-sticky {
-      display: none;
+      display: flex;
 
-      @include mq($breakpointLarge) {
-        display: flex;
+      @include mq(large) {
         padding-left: 1.5rem;
       }
     }
@@ -115,7 +108,7 @@
 }
 
 .sticky-shadow {
-  @include mq($breakpointLarge) {
+  @include mq(large) {
     z-index: 98;
     position: relative;
     pointer-events: none;
@@ -128,7 +121,7 @@
     }
   }
 
-  @include mq($breakpointLarge) {
+  @include mq(large) {
     position: sticky;
     top: calc(var(--ginHorizontalToolbarOffset) + 32px);
     width: calc(100% - min(10vw, 96px) + 24px);
@@ -145,7 +138,7 @@
 }
 
 .page-wrapper {
-  @include mq($breakpointLarge) {
+  @include mq(large) {
     margin-top: 1px; // fix for top: auto;
   }
 }
@@ -155,12 +148,12 @@ body:not(.toolbar-tray-open) .layout-container {
   margin-left: 1rem;
   margin-right: 1rem;
 
-  @include mq($breakpointSmall) {
+  @include mq(small) {
     margin-left: 2rem;
     margin-right: 2rem;
   }
 
-  @include mq($breakpointMedium) {
+  @include mq(medium) {
     margin-left: m#{i}n(5vw, 48px);
     margin-right: m#{i}n(5vw, 48px);
 
@@ -171,57 +164,9 @@ body:not(.toolbar-tray-open) .layout-container {
   }
 }
 
-// Action bar
+// Hide action bar
 .layout-node-form__actions {
-  z-index: 102;
-  position: fixed;
-  bottom: 0;
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-  padding: 0 1rem;
-  margin-left: calc((.5em + 1.5rem) * -1);
-  background-color: var(--colorGinAppBackground);
-  box-shadow: 0 -4px 10px rgba(0, 0, 0, .1);
-  box-sizing: border-box;
-
-  @include mq($breakpointSmall) {
-    padding-left: 2rem;
-    padding-right: 2rem;
-    margin-left: calc((2em + 1.5rem) * -1);
-  }
-
-  @include mq($breakpointMedium) {
-    padding-left: m#{i}n(5vw, 48px);
-    padding-right: m#{i}n(5vw, 48px);
-  }
-
-  .toolbar-vertical.toolbar-tray-open & {
-    width: calc(100% - 240px);
-  }
-
-  @include mq($breakpointMedium 1023px) {
-    margin-left: 0;
-    left: 0;
-
-    .gin--vertical-toolbar & {
-      left: var(--ginToolbarWidthCollapsed);
-      width: calc(100% - var(--ginToolbarWidthCollapsed));
-    }
-
-    .gin--vertical-toolbar[data-toolbar-menu='open'] & {
-      left: var(--ginToolbarWidth);
-      width: calc(100% - var(--ginToolbarWidth));
-    }
-  }
-
-  @include mq($breakpointLarge) {
-    display: none; // Hide the real deal
-  }
-
-  @include mq($breakpointBig) {
-    margin-left: calc(100% + 2.5rem);
-  }
+  display: none;
 }
 
 .gin-sticky {
@@ -232,7 +177,7 @@ body:not(.toolbar-tray-open) .layout-container {
   justify-content: space-between;
   width: 100%;
 
-  @include mq($breakpointLarge) {
+  @include mq(large) {
     flex-wrap: nowrap;
     width: max-content;
   }

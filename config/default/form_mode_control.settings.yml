@@ -63,3 +63,23 @@
 'use  The form mode default linked to  paragraph entity( modal_image )': paragraph.modal_image.default
 'use  The form mode default linked to  paragraph entity( logo_block )': paragraph.logo_block.default
 'use  The form mode default linked to  paragraph entity( in_page_menu )': paragraph.in_page_menu.default
+'use  The form mode default linked to  paragraph entity( tab )': paragraph.tab.default
+'use  The form mode default linked to  paragraph entity( tab_box )': paragraph.tab_box.default
+creation+administrator+media+audio: media.audio.default
+modification+administrator+media+audio: media.audio.default
+creation+administrator+media+document: media.document.default
+modification+administrator+media+document: media.document.default
+creation+administrator+media+image: media.image.default
+modification+administrator+media+image: media.image.default
+creation+administrator+media+remote_video: media.remote_video.default
+modification+administrator+media+remote_video: media.remote_video.default
+creation+administrator+media+video: media.video.default
+modification+administrator+media+video: media.video.default
+creation+manager+node+publication: node.publication.manager_admin
+creation+administrator+node+publication: node.publication.manager_admin
+modification+manager+node+publication: node.publication.manager_admin
+modification+administrator+node+publication: node.publication.manager_admin
+creation+administrator+taxonomy_term+organisation: taxonomy_term.organisation.default
+modification+administrator+taxonomy_term+organisation: taxonomy_term.organisation.default
+creation+administrator+taxonomy_term+person: taxonomy_term.person.default
+modification+administrator+taxonomy_term+person: taxonomy_term.person.default

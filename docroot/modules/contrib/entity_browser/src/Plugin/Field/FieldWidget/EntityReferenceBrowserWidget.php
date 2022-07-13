@@ -815,7 +815,8 @@ class EntityReferenceBrowserWidget extends WidgetBase implements ContainerFactor
         $field_name_key = end($trigger['#parents']) === 'target_id' ? 2 : static::$deleteDepth + 1;
         $field_name_key = count($trigger['#parents']) - $field_name_key;
         $is_relevant_submit &= ($trigger['#parents'][$field_name_key] === $this->fieldDefinition->getName()) &&
-          (array_slice($trigger['#parents'], 0, count($element['#field_parents'])) == $element['#field_parents']);
+          (array_slice($trigger['#parents'], 0, count($element['#field_parents'])) == $element['#field_parents']) &&
+          (array_slice($trigger['#parents'], 0, $field_name_key) == $element['#field_parents']);
       }
     };
 

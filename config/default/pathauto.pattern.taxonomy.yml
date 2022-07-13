@@ -5,24 +5,22 @@ dependencies:
   module:
     - taxonomy
 id: taxonomy
-label: Taxonomy
+label: 'Taxonomy (default)'
 type: 'canonical_entities:taxonomy_term'
 pattern: '[term:vocabulary]/[term:name]'
 selection_criteria:
-  8bc9e754-192d-4106-ad34-839153bfa99c:
+  ceff100e-80ef-4179-b24c-ca39ad65077c:
     id: 'entity_bundle:taxonomy_term'
     negate: false
-    uuid: 8bc9e754-192d-4106-ad34-839153bfa99c
+    uuid: ceff100e-80ef-4179-b24c-ca39ad65077c
     context_mapping:
       taxonomy_term: taxonomy_term
     bundles:
       collection: collection
       document_type: document_type
       list: list
-      organisation: organisation
       person: person
       series: series
-      tags: tags
 selection_logic: and
 weight: -5
 relationships: {  }

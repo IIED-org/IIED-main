@@ -4,7 +4,7 @@
   > .help,
   > .region-content,
   > .region-highlighted {
-    @include mq($breakpointSmall) {
+    @include mq(small) {
       margin-top: 1.5rem;
     }
   }
@@ -43,7 +43,7 @@
 }
 
 .layer-wrapper,
-.block-system > form,
+.block-system-main-block > form,
 .view-content .views-form,
 .views-exposed-form.views-exposed-form,
 .panel,
@@ -66,12 +66,13 @@
   border: 1px solid var(--colorGinLayerBorder);
   box-sizing: border-box;
 
-  @include mq($breakpointSmall) {
+  @include mq(small) {
     padding: 1.5rem;
   }
 
-  @include mq($breakpointLarge) {
-    min-width: 100%;
-    width: fit-content;
+  // Remove extra spacing on top of form.
+  > .form-wrapper:first-of-type .form-item,
+  .layout-region-node-main > .form-wrapper:first-of-type .form-item {
+    margin-top: 0;
   }
 }
