@@ -1,5 +1,5 @@
 {% extends '@iied_tw/node/card/node--card.html.twig' %}
     {% block date %}
-        <p class="text-gray-500">{{ node.type.entity.label() }} on {{ node.field_date.value|date('d F Y') }} </p>
+        <p class="text-gray-500">{{ node.type.entity.label() }} on {{ node.field_daterange.0.value|date('d F Y') }} </p>
     {% endblock %}
 

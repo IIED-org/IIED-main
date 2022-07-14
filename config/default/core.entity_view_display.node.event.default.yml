@@ -9,6 +9,7 @@ dependencies:
     - field.field.node.event.field_collections
     - field.field.node.event.field_contact
     - field.field.node.event.field_date
+    - field.field.node.event.field_daterange
     - field.field.node.event.field_dates
     - field.field.node.event.field_direct_link
     - field.field.node.event.field_display_time
@@ -30,6 +31,7 @@ dependencies:
     - node.type.event
   module:
     - datetime
+    - datetime_range
     - entity_reference_revisions
     - link
     - options
@@ -86,6 +88,16 @@ content:
       format_type: medium
     third_party_settings: {  }
     weight: 104
+    region: content
+  field_daterange:
+    type: daterange_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+      separator: '-'
+    third_party_settings: {  }
+    weight: 129
     region: content
   field_dates:
     type: string

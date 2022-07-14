@@ -1,0 +1,21 @@
+uuid: 08048be1-fce8-4102-9c08-b1742ef661d5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_daterange
+    - node.type.event
+  module:
+    - datetime_range
+id: node.event.field_daterange
+field_name: field_daterange
+entity_type: node
+bundle: event
+label: 'Date range'
+description: 'Times and end date and are optional'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: daterange

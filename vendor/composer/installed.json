@@ -8918,6 +8918,53 @@
             "install-path": "../../docroot/modules/contrib/notification"
         },
         {
+            "name": "drupal/optional_end_date",
+            "version": "1.2.0",
+            "version_normalized": "1.2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/optional_end_date.git",
+                "reference": "8.x-1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/optional_end_date-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "a57e4febb464d5a8c44381fd83145d2c19ce85f5"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.2",
+                    "datestamp": "1626939283",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Birk",
+                    "homepage": "https://www.drupal.org/user/1033026"
+                }
+            ],
+            "description": "Make the end date in a Date range field optional.",
+            "homepage": "https://www.drupal.org/project/optional_end_date",
+            "support": {
+                "source": "https://git.drupalcode.org/project/optional_end_date"
+            },
+            "install-path": "../../docroot/modules/contrib/optional_end_date"
+        },
+        {
             "name": "drupal/paragraphs",
             "version": "1.14.0",
             "version_normalized": "1.14.0.0",
