@@ -1,20 +1,18 @@
-uuid: 192d18c3-8d52-4262-ac4f-a5cb40742839
+uuid: 568f778c-62d7-426a-89ea-f147c4755397
 langcode: en
 status: true
 dependencies:
   module:
-    - entity_reference_revisions
-    - paragraphs
     - taxonomy
+    - text
 id: taxonomy_term.field_overview
 field_name: field_overview
 entity_type: taxonomy_term
-type: entity_reference_revisions
-settings:
-  target_type: paragraph
-module: entity_reference_revisions
+type: text_long
+settings: {  }
+module: text
 locked: false
-cardinality: -1
+cardinality: 1
 translatable: true
 indexes: {  }
 persist_with_no_fields: false

@@ -1,0 +1,13 @@
+name: Optional end date
+type: module
+description: Make the end date in a Date range field optional.
+package: Fields
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - drupal:datetime_range
+
+# Information added by Drupal.org packaging script on 2021-07-22
+version: '8.x-1.2'
+project: 'optional_end_date'
+datestamp: 1626939289

@@ -20,7 +20,7 @@ breakpoint_css_filepath: 'public://css'
 use_breakpoint: true
 allow_admin: false
 wrapper_admin: true
-wrapper_theme: true
-modify_viewport: true
+wrapper_theme: false
+modify_viewport: false
 use_bootstrap: false
 toolbar_override: false

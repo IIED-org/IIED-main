@@ -74,9 +74,6 @@ function iied_tw_preprocess_page(&$variables) {
       'navbar' => [
         'add' => FALSE
       ],
-      'offCanvas' => [
-        'position' => 'right-front'
-      ]
     ],
     'config' => [
     ],
@@ -103,5 +100,4 @@ function iied_tw_preprocess_paragraph(&$variables) {
       }
     }
   }
-
 }

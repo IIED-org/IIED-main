@@ -29,6 +29,7 @@
     'vocabulary-' ~ term.bundle|clean_class,
   ]
 %}
+
 <div{{ attributes.setAttribute('id', 'taxonomy-term-' ~ term.id).addClass(classes) }}>
     <div class="container items-baseline p-4 mx-auto overflow-hidden lg:grid lg:gap-x-6 lg:grid-cols-12">
       <div class="lg:col-span-4">
@@ -43,33 +44,34 @@
       </div>
     </div>
 
-{# tabs #}
-
+{% if term.field_overview.value is not empty %}
+  {{ attach_library('iied_tw/alpine') }}
   <div class="mb-12 border-b border-gray-300">
-    <div
-      class="container"
-      x-data="{ activeTab: 'inseries' }"
-      x-init="activeTab = window.location.hash ? window.location.hash.replace('#', '') : 'inseries'"
-    >
+    <div class="container tab-wrapper" 
+      x-data="{ tab: window.location.hash ? window.location.hash.substring(1) : 'inthiscollection' }"
+      x-init="$refs[tab].focus()"
+      id="tab_wrapper"
+      >
       <nav class="flex flex-row">
-        <button
-          class="block px-6 py-2 text-lg font-semibold text-gray-700 border-b-2 border-iiedblue-500 hover:text-gray-900 focus:outline-none"
-        >
-          In this collection</button
-        ><button
-          class="block px-6 py-2 text-lg font-semibold text-gray-700 hover:text-gray-900 focus:outline-none"
-        >
-          Overview
-        </button>
+          <a x-ref="inthiscollection" class="block px-6 py-2 text-lg font-semibold text-gray-700 border-b-2 focus:border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active': tab === 'inthiscollection' }" @click.prevent="tab = 'inthiscollection'; window.location.hash = 'inthiscollection'" href="#">In this collection</a>
+          <a x-ref="overview" class="block px-6 py-2 text-lg font-semibold text-gray-700 border-b-2 focus:border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active': tab === 'overview' }" @click.prevent="tab = 'overview'; window.location.hash = 'overview'" href="#">Overview</a>
       </nav>
+        <div class="tab-panel pt-6" x-show="tab === 'inthiscollection'" x-transition:enter.duration.750ms>
+          <div class="content">
+            {{ content|without('field_overview') }}
+          </div>
+        </div>
+        <div class="tab-panel pt-6" x-show="tab === 'overview'" x-transition:enter.duration.750ms>
+           <div class="content">
+              {{ term.field_overview.value|raw }}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-
-{# /tabs #}
-
-  <div class="content">
-    {{ content }}
-  </div>
-
 </div>
-
+{% else %}
+  <div class="content">
+      {{ content }}
+  </div>
+{% endif %}

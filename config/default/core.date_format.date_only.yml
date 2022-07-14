@@ -1,0 +1,8 @@
+uuid: ce0adaab-cd3f-4e79-bab2-46a06b14931a
+langcode: en
+status: true
+dependencies: {  }
+id: date_only
+label: 'Date only'
+locked: false
+pattern: 'D, d M Y'

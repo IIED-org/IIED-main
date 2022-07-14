@@ -1662,6 +1662,15 @@
                 0 => '9.4.2',
             ),
         ),
+        'drupal/optional_end_date' => array(
+            'pretty_version' => '1.2.0',
+            'version' => '1.2.0.0',
+            'reference' => '8.x-1.2',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/optional_end_date',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'drupal/options' => array(
             'dev_requirement' => false,
             'replaced' => array(

@@ -10,6 +10,7 @@ dependencies:
     - field.field.node.event.field_collections
     - field.field.node.event.field_contact
     - field.field.node.event.field_date
+    - field.field.node.event.field_daterange
     - field.field.node.event.field_dates
     - field.field.node.event.field_direct_link
     - field.field.node.event.field_display_time
@@ -249,5 +250,6 @@ content:
     weight: 100
     region: content
 hidden:
+  field_daterange: true
   langcode: true
   search_api_excerpt: true

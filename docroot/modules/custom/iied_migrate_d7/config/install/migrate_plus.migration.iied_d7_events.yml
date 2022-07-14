@@ -38,6 +38,18 @@ process:
       source: field_date/0/value
       from_format: 'Y-m-d\TH:i:s'
       to_format: 'Y-m-d'
+  field_daterange/value:
+    -
+      plugin: format_date
+      source: field_date/0/value
+      from_format: 'Y-m-d\TH:i:s'
+      to_format: 'Y-m-d\TH:i:s'
+  field_daterange/end_value:
+    -
+      plugin: format_date
+      source: field_date/0/value2
+      from_format: 'Y-m-d\TH:i:s'
+      to_format: 'Y-m-d\TH:i:s'
   field_event_type:
     -
       plugin: get
