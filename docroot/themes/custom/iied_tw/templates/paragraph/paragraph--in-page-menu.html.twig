@@ -38,39 +38,25 @@
  * @ingroup themeable
  */
 #}
-
 {%
   set classes = [
     'paragraph',
+    'prose',
+    'xl:sticky',
+    'py-6',
+    'z-20', 
+    'top-0', 
     'paragraph--type--' ~ paragraph.bundle|clean_class,
     view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
     not paragraph.isPublished() ? 'paragraph--unpublished'
   ]
 %}
-
 {% block paragraph %}
-
-  <div{{attributes.addClass(classes)}}>
-
+  <div{{ attributes.addClass(classes) }}>
     {% block content %}
-
-      <div class="p-4 mb-8 prose border border-gray-300 max-w-none tab-wrapper rounded-xl" x-data="{ activeTab:  0 }">
-
-        <nav class="flex flex-col mb-4 border-b border-gray-300 sm:flex-row">
-          {% for key, tab_title in tab_titles %}
-          <button @click="activeTab = {{key}}" class="block px-6 py-2 font-semibold text-gray-700 tab-control hover:text-gray-900 focus:outline-none" :class="{ 'active': activeTab === {{key}} }">{{ tab_title }}</button>
-          {% endfor %}
-        </nav>
-
-        {% for key, tab_body in tab_bodies %}
-        <div class="tab-panel" :class="{ 'active': activeTab === {{key}} }" x-show.transition.in.opacity.duration.600="activeTab === {{key}}">
-          {{ tab_body|raw }}
-        </div>
-        {% endfor %}
-
+        <div class="p-4 xl:mr-8 mb-6 relative bg-gray-100 rounded-xl before:absolute before:content-[''] before:border-b-transparent before:border-t-gray-100 xl:before:border-t-transparent before:border-l-transparent xl:before:border-l-gray-100  before:border-[10px] before:border-r-transparent before:-bottom-5 before:left-[calc(50%_-_10px)] xl:before:left-[100%] xl:before:-right-5 xl:before:bottom-[80%] xl:before:top-5">
+      {{ content }}
       </div>
     {% endblock %}
-
   </div>
-
 {% endblock paragraph %}

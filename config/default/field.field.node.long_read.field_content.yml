@@ -10,6 +10,7 @@ dependencies:
     - paragraphs.paragraphs_type.file_upload
     - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.image_wide
+    - paragraphs.paragraphs_type.in_page_menu
     - paragraphs.paragraphs_type.info_box
     - paragraphs.paragraphs_type.linked_person
     - paragraphs.paragraphs_type.media_embed
@@ -65,6 +66,7 @@ settings:
       stories_curated_content: stories_curated_content
       stories_link_list: stories_link_list
       stories_quote: stories_quote
+      in_page_menu: in_page_menu
       stories_table: stories_table
       stories_text: stories_text
       stories_views: stories_views
@@ -96,7 +98,7 @@ settings:
         enabled: true
       in_page_menu:
         weight: 39
-        enabled: false
+        enabled: true
       info_box:
         weight: 19
         enabled: true

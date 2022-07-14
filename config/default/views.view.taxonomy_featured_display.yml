@@ -210,7 +210,17 @@ display:
           query_tags: {  }
       relationships: {  }
       css_class: ''
-      header: {  }
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: result
+          empty: false
+          content: '@total entries'
       footer: {  }
       display_extenders: {  }
     cache_metadata:
