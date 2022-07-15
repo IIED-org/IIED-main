@@ -3022,8 +3022,8 @@ hr{
   width: 1rem;
 }
 
-.w-48{
-  width: 12rem;
+.w-52{
+  width: 13rem;
 }
 
 .w-5{
@@ -3050,10 +3050,6 @@ hr{
 
 .w-56{
   width: 14rem;
-}
-
-.w-52{
-  width: 13rem;
 }
 
 .min-w-fit{
