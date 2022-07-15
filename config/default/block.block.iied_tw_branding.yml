@@ -11,7 +11,7 @@ _core:
 id: iied_tw_branding
 theme: iied_tw
 region: navbar_branding
-weight: -13
+weight: -14
 provider: null
 plugin: system_branding_block
 settings:

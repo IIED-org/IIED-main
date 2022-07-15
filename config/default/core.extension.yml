@@ -36,6 +36,7 @@ module:
   csv_serialization: 0
   ctools: 0
   ctools_block: 0
+  ctools_views: 0
   datetime: 0
   datetime_range: 0
   default_content: 0
@@ -58,6 +59,7 @@ module:
   filter: 0
   flexslider: 0
   form_mode_control: 0
+  format_bytes: 0
   geolocation: 0
   gin_lb: 0
   gin_toolbar: 0
@@ -158,7 +160,6 @@ module:
   video_embed_field: 0
   video_embed_wysiwyg: 0
   views_autocomplete_filters: 0
-  views_bootstrap: 0
   views_bulk_edit: 0
   views_bulk_operations: 0
   views_data_export: 0
