@@ -83,7 +83,7 @@ trait ViewsAutocompleteFiltersTrait {
       'autocomplete_field' => [
         '#type' => 'select',
         '#title' => $this->t('Field with autocomplete results'),
-        '#default_value' => $this->options['expose']['autocomplete_field'],
+        '#default_value' => $this->options['expose']['autocomplete_field'] ?? '',
         '#options' => $field_options,
         '#description' => $this->t('Selected field will be used for dropdown results of autocomplete. In most cases it should be the same field you use for filter.'),
         '#states' => $states,

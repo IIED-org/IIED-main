@@ -20,9 +20,18 @@ suggester_settings:
       field: ''
     view_modes:
       'entity:node':
+        article: ''
+        blog: ''
+        event: ''
+        long_read: ''
+        news: ''
+        page: ''
+        project: ''
         publication: ''
       'entity:taxonomy_term':
+        collection: ''
         person: search_autocomplete
+        theme: ''
 suggester_weights:
   live_results: -50
 suggester_limits:
@@ -36,6 +45,6 @@ options:
   limit: 20
   min_length: 2
   show_count: true
-  delay: 200
+  delay: 250
   submit_button_selector: ':submit'
   autosubmit: true

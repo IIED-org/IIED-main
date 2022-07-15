@@ -11,7 +11,7 @@ dependencies:
 id: about
 theme: iied_tw
 region: content
-weight: -10
+weight: -9
 provider: null
 plugin: 'system_menu_block:about'
 settings:

@@ -3,7 +3,7 @@
         'name' => 'drupal/recommended-project',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '8222124087e1d3382ec30a24339b6009eb64dcae',
+        'reference' => '8aaadb105a69720d80d10c9c435f570543d806a5',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -1197,6 +1197,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'drupal/format_bytes' => array(
+            'pretty_version' => '2.0.0',
+            'version' => '2.0.0.0',
+            'reference' => '2.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/format_bytes',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'drupal/forum' => array(
             'dev_requirement' => false,
             'replaced' => array(
@@ -1797,7 +1806,7 @@
         'drupal/recommended-project' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '8222124087e1d3382ec30a24339b6009eb64dcae',
+            'reference' => '8aaadb105a69720d80d10c9c435f570543d806a5',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -2038,6 +2047,24 @@
             'replaced' => array(
                 0 => '9.4.2',
             ),
+        ),
+        'drupal/term_merge' => array(
+            'pretty_version' => '2.0.0-beta1',
+            'version' => '2.0.0.0-beta1',
+            'reference' => '2.0.0-beta1',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/term_merge',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'drupal/term_reference_change' => array(
+            'pretty_version' => '1.0.0-beta1',
+            'version' => '1.0.0.0-beta1',
+            'reference' => '8.x-1.0-beta1',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/term_reference_change',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'drupal/text' => array(
             'dev_requirement' => false,
