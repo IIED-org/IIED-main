@@ -21,6 +21,9 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
     'iied_d7_blogs',
     'iied_d7_events',
     'iied_d7_news_media',
+    'iied_d7_terms_collection',
+    'iied_d7_terms_person',
+    'iied_d7_projects_translations',
   ];
   if (in_array($migration->id(), $themes_migrations) ) {
     // Themes are already in the pubs site, so quickest to simply map the term
@@ -232,7 +235,6 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       ->fields('ua', ['alias']);
     $query->condition('ua.source', 'taxonomy/term/' . $tid);
     $alias = $query->execute()->fetchField();
-
     if ($alias) {
       // Check if redirect exists
       $db = \Drupal\Core\Database\Database::getConnection();
