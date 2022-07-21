@@ -5,18 +5,12 @@ dependencies:
   config:
     - field.field.user.user.user_picture
     - image.style.thumbnail
-    - views.view.authors
-    - views.view.content_recent
-  content:
-    - 'block_content:basic:2e269474-0c90-4a0b-8c47-d12d521ca8b5'
   module:
-    - block_content
     - field_group
     - image
     - layout_builder
     - layout_discovery
     - user
-    - views
 third_party_settings:
   layout_builder:
     enabled: true
@@ -111,94 +105,7 @@ third_party_settings:
         layout_settings:
           label: ''
           context_mapping: {  }
-        components:
-          723bca1b-ec4b-4499-8327-e5bbdc631795:
-            uuid: 723bca1b-ec4b-4499-8327-e5bbdc631795
-            region: content
-            configuration:
-              id: 'block_content:2e269474-0c90-4a0b-8c47-d12d521ca8b5'
-              label: 'Create content'
-              label_display: visible
-              provider: block_content
-              status: true
-              info: ''
-              view_mode: full
-              context_mapping: {  }
-            weight: 1
-            additional: {  }
-        third_party_settings: {  }
-      -
-        layout_id: layout_onecol
-        layout_settings:
-          label: ''
-          context_mapping: {  }
-        components:
-          be75a506-0e24-4ce8-b1f3-256311da3a03:
-            uuid: be75a506-0e24-4ce8-b1f3-256311da3a03
-            region: content
-            configuration:
-              id: 'views_block:content_recent-block_2'
-              label: 'My publications'
-              label_display: visible
-              provider: views
-              context_mapping: {  }
-              views_label: 'My publications'
-              items_per_page: '5'
-            weight: 1
-            additional: {  }
-          226d65a4-3836-475b-a32a-74d8b96bb721:
-            uuid: 226d65a4-3836-475b-a32a-74d8b96bb721
-            region: content
-            configuration:
-              id: 'views_block:content_recent-block_3'
-              label: 'All publications'
-              label_display: visible
-              provider: views
-              context_mapping: {  }
-              views_label: 'All publications'
-              items_per_page: '5'
-            weight: 2
-            additional: {  }
-        third_party_settings: {  }
-      -
-        layout_id: layout_onecol
-        layout_settings:
-          label: 'Search/Edit Authors'
-          context_mapping: {  }
-        components:
-          2ff96f1e-a006-4be9-8c06-dbed96d8d494:
-            uuid: 2ff96f1e-a006-4be9-8c06-dbed96d8d494
-            region: content
-            configuration:
-              id: 'views_block:authors-block_2'
-              label: 'Search/Edit Authors'
-              label_display: visible
-              provider: views
-              context_mapping: {  }
-              views_label: 'Search/Edit Authors'
-              items_per_page: none
-            weight: 0
-            additional: {  }
-        third_party_settings: {  }
-      -
-        layout_id: layout_onecol
-        layout_settings:
-          label: 'Search/Edit Organisations'
-          context_mapping: {  }
-        components:
-          ed911345-352f-4165-a096-5a14df8b0506:
-            uuid: ed911345-352f-4165-a096-5a14df8b0506
-            region: content
-            configuration:
-              id: 'views_block:authors-block_3'
-              label: 'Search/Edit Organisations'
-              label_display: visible
-              provider: views
-              context_mapping: {  }
-              views_label: 'Search/Edit Organisations'
-              items_per_page: none
-            weight: 0
-            additional: {  }
+        components: {  }
         third_party_settings: {  }
   field_group:
     group_wha_:

@@ -1,0 +1,15 @@
+uuid: 48deab6d-4168-48bc-8e2e-7f3270cc8ef3
+langcode: en
+status: true
+dependencies: {  }
+name: md_16x9
+label: md_16x9
+effects:
+  672d794d-685d-4875-a0be-00fd200ab2ad:
+    uuid: 672d794d-685d-4875-a0be-00fd200ab2ad
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 768
+      height: 432
+      anchor: center-center
