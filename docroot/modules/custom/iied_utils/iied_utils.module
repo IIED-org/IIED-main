@@ -44,7 +44,7 @@ function iied_utils_search_api_solr_query_alter(\Solarium\Core\Query\QueryInterf
 
     // Boost documents by date.
     // @see https://www.drupal.org/project/search_api_solr/issues/2855329
-    $boost_functions = 'recip(abs(ms(NOW/HOUR,' . $solr_field_names['field_date_published'] . ')),3.16e-11,1,.4)^21.0';
+    $boost_functions = 'recip(abs(ms(NOW/HOUR,' . $solr_field_names['aggregated_field_date'] . ')),3.16e-11,1,.4)^21.0';
     $edismax->setBoostFunctions($boost_functions);
 
     // Avoid the conversion into a lucene parser expression, keep edismax.
