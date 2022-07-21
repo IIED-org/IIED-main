@@ -117,10 +117,17 @@ process:
     -
       plugin: default_value
       default_value: full_html
-  field_contact:
+  field_contact/value:
     -
       plugin: get
-      source: field_contact
+      source: field_contact_0/0/value
+    -
+      plugin: rewrite_inline_image_styles
+      new_style: scale_md
+  field_contact/format:
+    -
+      plugin: default_value
+      default_value: full_html
   field_project_contacts:
     -
       plugin: skip_on_empty
