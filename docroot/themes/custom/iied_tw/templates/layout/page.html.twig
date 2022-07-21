@@ -52,7 +52,7 @@
 
 <div>
   {{ page.navbar_branding }}
-    {# <div class="lg:inline-block hidden mt-4">
+    {# <div class="hidden mt-4 lg:inline-block">
       {{ page.primary_menu }}
     </div>
     {{ page.navbar_left }}
@@ -77,13 +77,13 @@
   <main role="main">
     <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
 
-    <div class="md:flex -mx-4">
-      <div class="md:flex-1 p-4">
+    <div class="-mx-4 md:flex">
+      <div class="px-4 md:flex-1">
         {{ page.content }}
       </div>{# /.layout-content #}
 
     {#{% if page.sidebar_first %}
-        <aside class="md:w-1/4 p-4" role="complementary">
+        <aside class="p-4 md:w-1/4" role="complementary">
           {{ page.sidebar_first }}
         </aside>
       {% endif %}
@@ -99,14 +99,14 @@
   </main>
 </div>{# /.layout-container #}
 
-  {% if page.postscript %}
-    <section class="bg-gray-100">
-      <div class="container p-4 mx-auto">
+ {# {% if page.postscript %}
+    <section>
+      <div class="container p-4">
         {{ page.postscript }}
       </div>
     </section>
   {% endif %}
-  
+        #}
 
   {% if page.footer %}
     <footer role="contentinfo">

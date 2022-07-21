@@ -70,7 +70,15 @@
  *   in different view modes.
  */
 #}
-<article{{ attributes.addClass('node') }}>
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    not node.isPublished() ? 'node--unpublished',
+  ]
+%}
+
+<article{{ attributes.addClass(classes) }}>
 
   {#{{ title_prefix }}
   {% if not page %}
@@ -143,7 +151,7 @@
         {% if content.field_cover_image[0] %}
           {{ node.field_cover_image | view }}
         {% else %}
-          {{ node.field_media | view('embedded') }}
+          {{ node.field_media.entity|view('embedded') }}
         {% endif %}
 
         {% include '@iied_tw/partials/_publication_details.html.twig' %}
@@ -189,7 +197,7 @@
         <h2 class="mb-4">Related project</h2>    
         {{ node.field_project[0].entity|view('card') }}
         </div>
-        {{ drupal_view('related_publications', 'block_1') }}
+        {{ drupal_view('related_pubs', 'block_1') }}
       </section>
       {% endif %}
       

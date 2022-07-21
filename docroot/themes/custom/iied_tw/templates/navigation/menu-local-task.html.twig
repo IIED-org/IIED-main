@@ -14,4 +14,14 @@
  * @see template_preprocess_menu_local_task()
  */
 #}
-<li{{ attributes }}>{{ link }}</li>
+  {%
+	set classes = [
+		'px-6',
+		'py-2',
+		'bg-iiedblue-10',
+    'rounded-full',
+	]
+  %}
+
+
+<li{{ attributes.addClass(classes) }}>{{ link }}</li>
