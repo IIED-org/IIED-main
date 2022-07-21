@@ -8,6 +8,7 @@
 use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\Plugin\MigrateSourceInterface;
 use Drupal\migrate\Row;
+use Drupal\redirect\Entity\Redirect;
 
 /**
  * Implements hook_migrate_prepare_row().
@@ -223,6 +224,31 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
     $tagline_value = $row->getSourceProperty('field_tagline');
     $trimmed_short_description = substr($tagline_value[0]['value'], 0, 255);
     $row->setSourceProperty('trimmed_short_description', $trimmed_short_description);
+    // Add a redirect from, for example:
+    // Source: https: //www.iied.org/localising-forest-climate-action
+    // Target: https://pubs-dev.ac.iied.org/collection/localising-forest-climate-action
+    $tid = $row->getSourceProperty('tid');
+    $query = $source->getDatabase()->select('url_alias', 'ua')
+      ->fields('ua', ['alias']);
+    $query->condition('ua.source', 'taxonomy/term/' . $tid);
+    $alias = $query->execute()->fetchField();
+
+    if ($alias) {
+      // Check if redirect exists
+      $db = \Drupal\Core\Database\Database::getConnection();
+      $query = $db->select('redirect', 'r');
+      $query->fields('r', array('redirect_source__path'));
+      $query->condition('redirect_source__path', $alias);
+      $existing_redirect = $query->execute()->fetchField();
+      if (!$existing_redirect) {
+        Redirect::create([
+          'redirect_source' => $alias,
+          'redirect_redirect' => 'internal:/collection/' . $alias,
+          'language' => 'und',
+          'status_code' => '301',
+        ])->save();
+      }
+    }
   }
 
   // Look up path aliases for node migrations.
