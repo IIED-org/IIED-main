@@ -17,16 +17,16 @@ Card for use in a slider only
               <img class="object-cover w-3/12 h-auto" src="{{ image_uri|image_style('search_cover') }}" alt="{{ image_alt }}" />
             {% endif %}
           {% else %}
-            {% set image_uri = node.field_media|file_uri %}
-            {% set image_alt = node.field_media.alt %}
-            {% if image_uri is not null %}
-              <img class="object-cover w-3/12 h-auto" src="{{ image_uri|image_style('search_cover') }}" alt="{{ image_alt }}" />
-            {% endif %}
+           <div class="m-auto transition duration-300 ease-out shadow-lg w-fit sm:w-fit sm:-rotate-2 group-hover:-rotate-1 group-hover:scale-105"
+              />
+             {{ node.field_media[0].entity|view('card_cover') }}
+        </div>
           {% endif %}
         </div>
-
-          <div class="p-4 border-t-2 grow color-rotate">
-            <h5 class="mb-4 text-xl text-gray-900">
+        
+{# color-rotate classes to be added #}
+          <div class="p-4 border-t-2 grow border-iiedorange-500 color-rotate">
+            <h5 class="mb-4 text-xl leading-relaxed text-gray-900">
               {{ label }}
             </h5>
           </div>

@@ -16,7 +16,7 @@ For general featured card display
               {% set image_uri = node.field_main_image|file_uri %}
               {% set image_alt = node.field_main_image.alt %}
               {% if image_uri is not null %}
-                <img class="w-full" src="{{ image_uri|image_style('card_370') }}" alt="{{ image_alt }}" />
+                <img class="w-full" src="{{ image_uri|image_style('sm_16x9') }}" alt="{{ image_alt }}" />
               {% endif %}
 
               <div
@@ -28,7 +28,7 @@ For general featured card display
             </div>
 
             <div class="relative z-20 flex flex-col justify-between h-full p-4 -mt-3 bg-white rounded-odd-even">
-              <h4 class="mb-4 text-xl text-gray-900 lg:text-2xl">
+              <h4 class="mb-4 text-xl leading-relaxed text-gray-900 lg:text-2xl">
                 {{ label }}
               </h4>
               {% block date %}

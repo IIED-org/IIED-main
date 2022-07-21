@@ -14,13 +14,13 @@ Standard card for the most general card display
                         {% set image_uri = node.field_main_image|file_uri %}
                         {% set image_alt = node.field_main_image.alt %}
             {% if image_uri is not null %}
-              <img class="object-cover w-3/12 h-auto" src="{{ image_uri|image_style('card_370') }}" alt="{{ image_alt }}" />
+              <img class="object-cover w-3/12 h-auto" src="{{ image_uri|image_style('card_256') }}" alt="{{ image_alt }}" />
             {% endif %}
             {% endblock %}
 
           
             <div class="flex flex-col justify-between w-9/12 p-4">
-              <h5 class="mb-4 text-xl text-gray-900">
+              <h5 class="mb-4 text-xl leading-relaxed text-gray-900">
                 {{ label }}
               </h5>
               {% block date %}
