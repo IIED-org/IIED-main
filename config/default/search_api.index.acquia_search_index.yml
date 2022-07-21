@@ -78,7 +78,6 @@ field_settings:
       fields:
         - 'entity:node/created'
         - 'entity:node/field_date_published'
-        - 'entity:node/field_daterange'
   body:
     label: Body
     datasource_id: 'entity:node'
