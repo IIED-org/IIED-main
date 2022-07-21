@@ -110,7 +110,6 @@
     background: transparent none repeat 0 0 / auto auto padding-box border-box scroll;
     border: medium none currentColor;
     border-collapse: separate;
-    -o-border-image: none;
     border-image: none;
     border-radius: 0;
     border-spacing: 0;
@@ -170,8 +169,6 @@
     perspective-origin: 50% 50%;
     position: static;
     right: auto;
-    -moz-tab-size: 8;
-    -o-tab-size: 8;
     tab-size: 8;
     table-layout: auto;
     text-align: left;
@@ -376,7 +373,6 @@
       background: transparent none repeat 0 0 / auto auto padding-box border-box scroll;
       border: medium none currentColor;
       border-collapse: separate;
-      -o-border-image: none;
       border-image: none;
       border-radius: 0;
       border-spacing: 0;
@@ -436,8 +432,6 @@
       perspective-origin: 50% 50%;
       position: static;
       right: auto;
-      -moz-tab-size: 8;
-      -o-tab-size: 8;
       tab-size: 8;
       table-layout: auto;
       text-align: left;
@@ -824,6 +818,10 @@
   width: 100%;
   min-height: 2.5rem;
   resize: vertical;
+}
+
+#drupal-off-canvas select[multiple] {
+  overflow: auto;
 }
 
 #drupal-off-canvas optgroup {

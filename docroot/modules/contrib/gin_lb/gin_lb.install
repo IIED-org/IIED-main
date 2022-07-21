@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Provides install/uninstall for gin_lb module.
+ */
+
+/**
+ * Set new Toastify CDN config.
+ */
+function gin_lb_update_8001() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('gin_lb.settings');
+  $config->set('toastify_cdn', 1);
+  $config->save(TRUE);
+}

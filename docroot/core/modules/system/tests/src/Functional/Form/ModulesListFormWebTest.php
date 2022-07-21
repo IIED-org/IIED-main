@@ -41,18 +41,51 @@ class ModulesListFormWebTest extends BrowserTestBase {
     $this->drupalGet('admin/modules');
 
     // Check that system_test's configure link was rendered correctly.
-    $this->assertSession()->elementExists('xpath', "//a[contains(@href, '/system-test/configure/bar') and text()='Configure ']/span[contains(@class, 'visually-hidden') and text()='the System test module']");
+    $this->assertSession()->elementExists('xpath', "//a[contains(@href, '/system-test/configure/bar') and text()='Configure ']/span[contains(@class, 'visually-hidden') and text()='System test']");
 
     // Check that system_test's permissions link was rendered correctly.
-    $this->assertSession()->elementExists('xpath', "//a[contains(@href, '/admin/people/permissions#module-system_test') and @title='Configure permissions']");
+    $this->assertSession()->elementExists('xpath', "//a[contains(@href, '/admin/people/permissions/module/system_test') and text()='Permissions ']/span[contains(@class, 'visually-hidden') and text()='for System test']");
 
     // Check that system_test's help link was rendered correctly.
-    $this->assertSession()->elementExists('xpath', "//a[contains(@href, '/admin/help/system_test') and @title='Help']");
+    $this->assertSession()->elementExists('xpath', "//a[contains(@href, '/admin/help/system_test') and text()='Help ']/span[contains(@class, 'visually-hidden') and text()='for System test']");
 
     // Ensure that the Database Logging module's machine name is printed. This
     // module is used because its machine name is different than its human
     // readable name.
     $this->assertSession()->pageTextContains('dblog');
+
+    // Check that the deprecated module link was rendered correctly.
+    $this->assertSession()->elementExists('xpath', "//a[contains(@aria-label, 'View information on the Deprecated status of the module Deprecated module')]");
+    $this->assertSession()->elementExists('xpath', "//a[contains(@href, 'http://example.com/deprecated')]");
+
+    // Check that obsolete modules are not displayed.
+    $this->assertSession()->pageTextNotContains('(Obsolete)');
+  }
+
+  /**
+   * Tests the status message when enabling one or more modules.
+   */
+  public function testModulesListFormStatusMessage() {
+    $this->drupalGet('admin/modules');
+
+    // Enable a module that does not define permissions.
+    $edit = ['modules[layout_discovery][enable]' => 'layout_discovery'];
+    $this->submitForm($edit, 'Install');
+    $this->assertSession()->elementTextContains('xpath', "//div[@role='contentinfo' and h2[text()='Status message']]", 'Module Layout Discovery has been enabled.');
+    $this->assertSession()->elementNotExists('xpath', "//div[@role='contentinfo' and h2[text()='Status message']]//a");
+
+    // Enable a module that defines permissions.
+    $edit = ['modules[action][enable]' => 'action'];
+    $this->submitForm($edit, 'Install');
+    $this->assertSession()->elementTextContains('xpath', "//div[@role='contentinfo' and h2[text()='Status message']]", 'Module Actions has been enabled.');
+    $this->assertSession()->elementExists('xpath', "//div[@role='contentinfo' and h2[text()='Status message']]//a[contains(@href, '/admin/people/permissions/module/action')]");
+
+    // Enable a module that has dependencies and both define permissions.
+    $edit = ['modules[content_moderation][enable]' => 'content_moderation'];
+    $this->submitForm($edit, 'Install');
+    $this->submitForm([], 'Continue');
+    $this->assertSession()->elementTextContains('xpath', "//div[@role='contentinfo' and h2[text()='Status message']]", '2 modules have been enabled: Content Moderation, Workflows.');
+    $this->assertSession()->elementExists('xpath', "//div[@role='contentinfo' and h2[text()='Status message']]//a[contains(@href, '/admin/people/permissions/module/content_moderation%2Cworkflows')]");
   }
 
   /**

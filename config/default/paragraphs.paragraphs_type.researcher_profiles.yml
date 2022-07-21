@@ -1,10 +1,15 @@
 uuid: 83340631-e54e-4f1e-bcee-6d5799a6289f
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - layout_paragraphs
 id: researcher_profiles
 label: 'Researcher profiles'
 icon_uuid: null
 icon_default: null
 description: ''
-behavior_plugins: {  }
+behavior_plugins:
+  layout_paragraphs:
+    enabled: false
+    available_layouts: {  }

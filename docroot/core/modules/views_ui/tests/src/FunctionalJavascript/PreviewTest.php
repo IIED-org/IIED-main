@@ -34,7 +34,7 @@ class PreviewTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'stark';
 
   /**
    * {@inheritdoc}
@@ -134,7 +134,7 @@ class PreviewTest extends WebDriverTestBase {
 
     // Test that the pager is present and rendered.
     $elements = $this->xpath('//ul[contains(@class, :class)]/li', [':class' => 'pager__items']);
-    $this->assertTrue(!empty($elements), 'Full pager found.');
+    $this->assertNotEmpty($elements, 'Full pager found.');
 
     // Verify elements and links to pages.
     // We expect to find 5 elements: current page == 1, links to pages 2 and
@@ -160,7 +160,7 @@ class PreviewTest extends WebDriverTestBase {
 
     // Test that the pager is present and rendered.
     $elements = $this->xpath('//ul[contains(@class, :class)]/li', [':class' => 'pager__items']);
-    $this->assertTrue(!empty($elements), 'Full pager found.');
+    $this->assertNotEmpty($elements, 'Full pager found.');
 
     // Verify elements and links to pages.
     // We expect to find 7 elements: links to '<< first' and '< previous'
@@ -192,35 +192,36 @@ class PreviewTest extends WebDriverTestBase {
 
     // Test that the pager is present and rendered.
     $elements = $this->xpath('//ul[contains(@class, :class)]/li', [':class' => 'pager__items']);
-    $this->assertTrue(!empty($elements), 'Mini pager found.');
+    $this->assertNotEmpty($elements, 'Mini pager found.');
 
     // Verify elements and links to pages.
     // We expect to find current pages element with no link, next page element
     // with a link, and not to find previous page element.
-    $this->assertClass($elements[0], 'is-active', 'Element for current page has .is-active class.');
+    $this->assertEquals('Page 1', trim($elements[0]->getHtml()), 'Element for current page is not a link.');
 
-    $this->assertClass($elements[1], 'pager__item--next', 'Element for next page has .pager__item--next class.');
-    $this->assertNotEmpty($elements[1]->find('css', 'a'), 'Link to next page found.');
+    $next_page_link = $elements[1]->find('css', 'a');
+    $this->assertNotEmpty($next_page_link, 'Link to next page found.');
+    $this->assertEquals('Go to next page', $next_page_link->getAttribute('title'));
 
     // Navigate to next page.
-    $element = $this->assertSession()->elementExists('xpath', '//li[contains(@class, "pager__item--next")]/a');
-    $this->clickPreviewLinkAJAX($element, 3);
+    $this->clickPreviewLinkAJAX($next_page_link, 3);
 
     // Test that the pager is present and rendered.
     $elements = $this->xpath('//ul[contains(@class, :class)]/li', [':class' => 'pager__items']);
-    $this->assertTrue(!empty($elements), 'Mini pager found.');
+    $this->assertNotEmpty($elements, 'Mini pager found.');
 
     // Verify elements and links to pages.
     // We expect to find 3 elements: previous page with a link, current
     // page with no link, and next page with a link.
-    $this->assertClass($elements[0], 'pager__item--previous', 'Element for previous page has .pager__item--previous class.');
-    $this->assertNotEmpty($elements[0]->find('css', 'a'), 'Link to previous page found.');
+    $previous_page_link = $elements[0]->find('css', 'a');
+    $this->assertNotEmpty($previous_page_link, 'Link to previous page found.');
+    $this->assertEquals('Go to previous page', $previous_page_link->getAttribute('title'));
 
-    $this->assertClass($elements[1], 'is-active', 'Element for current page has .is-active class.');
-    $this->assertEmpty($elements[1]->find('css', 'a'), 'Element for current page has no link.');
+    $this->assertEquals('Page 2', trim($elements[1]->getHtml()), 'Element for current page is not a link.');
 
-    $this->assertClass($elements[2], 'pager__item--next', 'Element for next page has .pager__item--next class.');
-    $this->assertNotEmpty($elements[2]->find('css', 'a'), 'Link to next page found.');
+    $next_page_link = $elements[2]->find('css', 'a');
+    $this->assertNotEmpty($next_page_link, 'Link to next page found.');
+    $this->assertEquals('Go to next page', $next_page_link->getAttribute('title'));
   }
 
   /**
@@ -282,9 +283,11 @@ class PreviewTest extends WebDriverTestBase {
    *
    * @param int $row_count
    *   The expected number of rows in the preview.
+   *
+   * @internal
    */
-  protected function assertPreviewAJAX($row_count) {
-    $elements = $this->getSession()->getPage()->findAll('css', '.view-content .views-row');
+  protected function assertPreviewAJAX(int $row_count): void {
+    $elements = $this->getSession()->getPage()->findAll('css', '#views-live-preview .views-row');
     $this->assertCount($row_count, $elements, 'Expected items found on page.');
   }
 
@@ -297,8 +300,10 @@ class PreviewTest extends WebDriverTestBase {
    *   The class to assert.
    * @param string $message
    *   (optional) A verbose message to output.
+   *
+   * @internal
    */
-  protected function assertClass(NodeElement $element, $class, $message = NULL) {
+  protected function assertClass(NodeElement $element, string $class, string $message = ''): void {
     if (!isset($message)) {
       $message = "Class .$class found.";
     }

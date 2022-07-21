@@ -74,7 +74,7 @@ EOD;
     $this->assertStringNotContainsString('5/5', $this->getErrorOutput());
     $vocabulary = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->load('genre');
     $this->assertEquals('Genre', $vocabulary->label());
-    $this->assertEquals(4, \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->getQuery()->count()->execute());
+    $this->assertEquals(4, \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->getQuery()->accessCheck(TRUE)->count()->execute());
 
     // Remove one vocab and replace with another.
     $this->sourceData = str_replace('genre,Genre,Genre description,1,0', 'fruit,Fruit,Fruit description,1,0', $this->sourceData);
@@ -87,7 +87,7 @@ EOD;
     $this->assertStringContainsString('4/4', $this->getErrorOutput());
     $this->assertStringContainsString('5/5', $this->getErrorOutput());
     $this->assertStringContainsString('100% [notice] Processed 4 items (1 created, 3 updated, 0 failed, 0 ignored) - done with \'csv_source_test\'', $this->getErrorOutput());
-    $this->assertEquals(4, \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->getQuery()->count()->execute());
+    $this->assertEquals(4, \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->getQuery()->accessCheck(TRUE)->count()->execute());
     // Flush cache so recently deleted vocabulary actually goes away.
     drupal_flush_all_caches();
     $this->assertEmpty(\Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->load('genre'));

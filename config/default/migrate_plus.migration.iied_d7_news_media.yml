@@ -71,6 +71,9 @@ process:
     -
       plugin: get
       source: body/0/value
+    -
+      plugin: rewrite_inline_image_styles
+      new_style: scale_md
   body/summary:
     -
       plugin: get
@@ -157,6 +160,17 @@ process:
   path/pathauto:
     plugin: default_value
     default_value: false
+  field_news_type:
+    -
+      plugin: default_value
+      default_value: News
+    -
+      plugin: entity_generate
+      entity_type: taxonomy_term
+      bundle: news_type
+      bundle_key: vid
+      value_key: name
+      ignore_case: true
 destination:
   plugin: 'entity_complete:node'
   translations: true

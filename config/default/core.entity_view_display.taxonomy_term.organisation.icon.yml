@@ -1,0 +1,72 @@
+uuid: 366745cd-e0a7-4665-8168-0820686b118b
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.taxonomy_term.icon
+    - field.field.taxonomy_term.organisation.field_alias
+    - field.field.taxonomy_term.organisation.field_email
+    - field.field.taxonomy_term.organisation.field_full_name
+    - field.field.taxonomy_term.organisation.field_location
+    - field.field.taxonomy_term.organisation.field_location_legacy
+    - field.field.taxonomy_term.organisation.field_logo
+    - field.field.taxonomy_term.organisation.field_type
+    - field.field.taxonomy_term.organisation.field_url
+    - field.field.taxonomy_term.organisation.field_valid
+    - image.style.medium
+    - taxonomy.vocabulary.organisation
+  module:
+    - ds
+    - image
+    - layout_builder
+    - link
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: taxonomy_term.organisation.icon
+targetEntityType: taxonomy_term
+bundle: organisation
+mode: icon
+content:
+  field_logo:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: medium
+      image_loading:
+        attribute: lazy
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 0
+    region: content
+  field_url:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  description: true
+  field_alias: true
+  field_email: true
+  field_full_name: true
+  field_location: true
+  field_location_legacy: true
+  field_type: true
+  field_valid: true
+  langcode: true
+  search_api_excerpt: true

@@ -39,8 +39,8 @@ class FilterNodeAccessTest extends NodeTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
-    parent::setUp($import_test_views);
+  protected function setUp($import_test_views = TRUE, $modules = ['node_test_views']): void {
+    parent::setUp($import_test_views, $modules);
 
     $this->drupalCreateContentType(['type' => 'article', 'name' => 'Article']);
 
@@ -68,7 +68,7 @@ class FilterNodeAccessTest extends NodeTestBase {
               'format' => filter_default_format(),
             ],
           ],
-          'title' => t('@private_public Article created by @user', ['@private_public' => $type, '@user' => $web_user->getAccountName()]),
+          'title' => "$type Article created by " . $web_user->getAccountName(),
           'type' => 'article',
           'uid' => $web_user->id(),
           'private' => (bool) $is_private,

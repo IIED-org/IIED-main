@@ -1,0 +1,9 @@
+    {# related project #}
+{% if node.field_project[0] %}
+    <section class="py-12 bg-gray-100">
+        <div class="container"> 
+            <h2 class="mb-4">Related project</h2>
+            {{ node.field_project[0].entity|view('card_ext') }}
+        </div>
+    </section>
+{% endif %}

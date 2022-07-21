@@ -1,0 +1,52 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - media.type.file
+    - views.view.stories_media_selectors
+  module:
+    - dropzonejs_eb_widget
+    - media
+    - views
+name: stories_file_uploader
+label: 'File w/ Uploader'
+display: modal
+display_configuration:
+  width: ''
+  height: ''
+  link_text: 'Select Files'
+  auto_open: false
+selection_display: no_display
+selection_display_configuration: {  }
+widget_selector: tabs
+widget_selector_configuration: {  }
+widgets:
+  454dc651-37cd-4e76-8006-af3a5d32e62e:
+    settings:
+      view: stories_media_selectors
+      view_display: file
+      submit_text: 'Select Files'
+      auto_select: false
+    uuid: 454dc651-37cd-4e76-8006-af3a5d32e62e
+    weight: 1
+    label: Library
+    id: view
+  f0c79261-f3a7-414c-a500-dc4bcac8cf6c:
+    settings:
+      form_mode: entity_browser
+      media_type: file
+      upload_location: 'public://[date:custom:Y]-[date:custom:m]'
+      dropzone_description: 'Drop files here to upload them'
+      max_filesize: 32M
+      extensions: 'txt doc xls pdf ppt pps odt ods odp'
+      clientside_resize: false
+      resize_width: null
+      resize_height: null
+      resize_quality: !!float 1
+      resize_method: contain
+      thumbnail_method: contain
+      submit_text: 'Create Files'
+    uuid: f0c79261-f3a7-414c-a500-dc4bcac8cf6c
+    weight: 2
+    label: Upload
+    id: dropzonejs_media_entity_inline_entity_form

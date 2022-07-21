@@ -13,7 +13,7 @@ namespace Nicebooks\Isbn\Internal;
  *
  * @internal
  */
-class CheckDigit
+final class CheckDigit
 {
     /**
      * @param string $isbn The partial ISBN-10, validated as a string starting with 9 digits.
@@ -23,7 +23,8 @@ class CheckDigit
     public static function calculateCheckDigit10(string $isbn) : string
     {
         for ($sum = 0, $i = 0; $i < 9; $i++) {
-            $sum += $isbn[$i] * (1 + $i);
+            $digit = (int) $isbn[$i];
+            $sum += $digit * (1 + $i);
         }
 
         $sum %= 11;
@@ -39,7 +40,8 @@ class CheckDigit
     public static function calculateCheckDigit13(string $isbn) : string
     {
         for ($sum = 0, $i = 0; $i < 12; $i++) {
-            $sum += $isbn[$i] * (1 + 2 * ($i % 2));
+            $digit = (int) $isbn[$i];
+            $sum += $digit * (1 + 2 * ($i % 2));
         }
 
         return (string) ((10 - ($sum % 10)) % 10);
@@ -47,8 +49,6 @@ class CheckDigit
 
     /**
      * @param string $isbn The ISBN-10, unformatted, uppercase.
-     *
-     * @return bool
      */
     public static function validateCheckDigit10(string $isbn) : bool
     {
@@ -57,8 +57,6 @@ class CheckDigit
 
     /**
      * @param string $isbn The ISBN-13, unformatted.
-     *
-     * @return bool
      */
     public static function validateCheckDigit13(string $isbn) : bool
     {

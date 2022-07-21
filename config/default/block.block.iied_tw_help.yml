@@ -1,0 +1,22 @@
+uuid: 4ae35edd-fd3a-4932-8ffa-6e9763877497
+langcode: en
+status: true
+dependencies:
+  module:
+    - help
+  theme:
+    - iied_tw
+_core:
+  default_config_hash: 8I8iACSa0sKO3k3jlvUG1ge52rfcKX7USJAQYnzuBgg
+id: iied_tw_help
+theme: iied_tw
+region: content
+weight: -12
+provider: null
+plugin: help_block
+settings:
+  id: help_block
+  label: Help
+  label_display: '0'
+  provider: help
+visibility: {  }

@@ -82,7 +82,7 @@ class ContainerForm extends EntityForm {
     // Build form elements.
     $form['label'] = [
       '#type' => 'textfield',
-      '#title' => 'Label',
+      '#title' => $this->t('Label'),
       '#default_value' => $container->label(),
       '#required' => TRUE,
     ];
@@ -160,7 +160,7 @@ class ContainerForm extends EntityForm {
 
     $fieldset['weight'] = [
       '#type' => 'weight',
-      '#title' => 'Weight',
+      '#title' => $this->t('Weight'),
       '#default_value' => $container->get('weight'),
     ];
 

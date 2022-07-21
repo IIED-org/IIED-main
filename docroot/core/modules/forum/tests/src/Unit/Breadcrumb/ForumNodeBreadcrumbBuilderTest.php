@@ -57,17 +57,7 @@ class ForumNodeBreadcrumbBuilderTest extends UnitTestCase {
     $translation_manager = $this->createMock('Drupal\Core\StringTranslation\TranslationInterface');
 
     // Make an object to test.
-    $builder = $this->getMockBuilder('Drupal\forum\Breadcrumb\ForumNodeBreadcrumbBuilder')
-      ->setConstructorArgs(
-        [
-          $entity_type_manager,
-          $config_factory,
-          $forum_manager,
-          $translation_manager,
-        ]
-      )
-      ->onlyMethods([])
-      ->getMock();
+    $builder = new ForumNodeBreadcrumbBuilder($entity_type_manager, $config_factory, $forum_manager, $translation_manager);
 
     $route_match = $this->createMock('Drupal\Core\Routing\RouteMatchInterface');
     $route_match->expects($this->once())
@@ -221,8 +211,8 @@ class ForumNodeBreadcrumbBuilderTest extends UnitTestCase {
     ];
     $breadcrumb = $breadcrumb_builder->build($route_match);
     $this->assertEquals($expected1, $breadcrumb->getLinks());
-    $this->assertEquals(['route'], $breadcrumb->getCacheContexts());
-    $this->assertEquals(['taxonomy_term:1', 'taxonomy_vocabulary:5'], $breadcrumb->getCacheTags());
+    $this->assertEqualsCanonicalizing(['route'], $breadcrumb->getCacheContexts());
+    $this->assertEqualsCanonicalizing(['taxonomy_term:1', 'taxonomy_vocabulary:5'], $breadcrumb->getCacheTags());
     $this->assertEquals(Cache::PERMANENT, $breadcrumb->getCacheMaxAge());
 
     // Second test.
@@ -234,8 +224,8 @@ class ForumNodeBreadcrumbBuilderTest extends UnitTestCase {
     ];
     $breadcrumb = $breadcrumb_builder->build($route_match);
     $this->assertEquals($expected2, $breadcrumb->getLinks());
-    $this->assertEquals(['route'], $breadcrumb->getCacheContexts());
-    $this->assertEquals(['taxonomy_term:1', 'taxonomy_term:2', 'taxonomy_vocabulary:5'], $breadcrumb->getCacheTags());
+    $this->assertEqualsCanonicalizing(['route'], $breadcrumb->getCacheContexts());
+    $this->assertEqualsCanonicalizing(['taxonomy_term:1', 'taxonomy_term:2', 'taxonomy_vocabulary:5'], $breadcrumb->getCacheTags());
     $this->assertEquals(Cache::PERMANENT, $breadcrumb->getCacheMaxAge());
   }
 

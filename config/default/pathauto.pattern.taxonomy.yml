@@ -3,27 +3,24 @@ langcode: en
 status: true
 dependencies:
   module:
-    - ctools
     - taxonomy
 id: taxonomy
-label: Taxonomy
+label: 'Taxonomy (default)'
 type: 'canonical_entities:taxonomy_term'
 pattern: '[term:vocabulary]/[term:name]'
 selection_criteria:
-  848aee86-7c6d-4d61-9ec7-6d588c0e40e5:
+  ceff100e-80ef-4179-b24c-ca39ad65077c:
     id: 'entity_bundle:taxonomy_term'
-    bundles:
-      document_type: document_type
-      list: list
-      organisation: organisation
-      person: person
-      series: series
-      tags: tags
-      theme: theme
     negate: false
+    uuid: ceff100e-80ef-4179-b24c-ca39ad65077c
     context_mapping:
       taxonomy_term: taxonomy_term
-    uuid: 848aee86-7c6d-4d61-9ec7-6d588c0e40e5
+    bundles:
+      collection: collection
+      document_type: document_type
+      list: list
+      person: person
+      series: series
 selection_logic: and
 weight: -5
 relationships: {  }

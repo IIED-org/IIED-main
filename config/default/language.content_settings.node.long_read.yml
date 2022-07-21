@@ -1,0 +1,16 @@
+uuid: 7ba12bf6-48f9-4ed5-9164-05ca7b97e333
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.long_read
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: node.long_read
+target_entity_type_id: node
+target_bundle: long_read
+default_langcode: site_default
+language_alterable: false

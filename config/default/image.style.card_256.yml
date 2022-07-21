@@ -1,0 +1,15 @@
+uuid: 05ff21c8-ceaa-444c-b603-2d77ca55e725
+langcode: en
+status: true
+dependencies: {  }
+name: card_256
+label: 'Card (256)'
+effects:
+  b4daf36a-490a-47f5-ba5c-7ed6751fe0fd:
+    uuid: b4daf36a-490a-47f5-ba5c-7ed6751fe0fd
+    id: image_scale
+    weight: 1
+    data:
+      width: 256
+      height: null
+      upscale: false

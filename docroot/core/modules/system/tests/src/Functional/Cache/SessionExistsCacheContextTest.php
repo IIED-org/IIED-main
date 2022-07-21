@@ -28,8 +28,6 @@ class SessionExistsCacheContextTest extends BrowserTestBase {
    * Tests \Drupal\Core\Cache\Context\SessionExistsCacheContext::getContext().
    */
   public function testCacheContext() {
-    $this->dumpHeaders = TRUE;
-
     // 1. No session (anonymous).
     $this->assertSessionCookieOnClient(FALSE);
     $this->drupalGet(Url::fromRoute('<front>'));
@@ -62,8 +60,10 @@ class SessionExistsCacheContextTest extends BrowserTestBase {
 
   /**
    * Asserts whether a session cookie is present on the client or not.
+   *
+   * @internal
    */
-  public function assertSessionCookieOnClient($expected_present) {
+  public function assertSessionCookieOnClient(bool $expected_present): void {
     $this->assertEquals($expected_present, (bool) $this->getSession()->getCookie($this->getSessionName()), 'Session cookie exists.');
   }
 

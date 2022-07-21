@@ -1,10 +1,9 @@
 label: సారము
 display:
   default:
+    display_title: Default
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
+      title: సారము
       fields:
         title:
           label: శీర్షిక
@@ -14,6 +13,9 @@ display:
           label: స్థితి
         operations:
           label: కార్యాలు
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         title:
           expose:
@@ -24,8 +26,6 @@ display:
         langcode:
           expose:
             label: భాష
-      title: సారము
-    display_title: అప్రమేయం
   page_1:
     display_options:
       menu:

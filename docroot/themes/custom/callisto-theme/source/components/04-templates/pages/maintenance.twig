@@ -1,0 +1,23 @@
+{#
+/**
+ * @file
+ * Theme override to display a single Drupal page while offline.
+ *
+ * All available variables are mirrored in page.html.twig.
+ * Some may be blank but they are provided for consistency.
+ *
+ * @see template_preprocess_maintenance_page()
+ */
+#}
+{% extends '@templates/layout/page.twig' %}
+
+
+{% block pageContent %}
+  <div class="container my-36">
+    {% if title %}
+      <h1>{{ title }} - 503</h1>
+    {% endif %}
+
+    {{ page.content }}
+  </div>
+{% endblock pageContent %}

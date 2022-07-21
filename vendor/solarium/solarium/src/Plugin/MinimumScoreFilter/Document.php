@@ -60,7 +60,7 @@ class Document implements DocumentInterface, \IteratorAggregate, \Countable, \Ar
     }
 
     /**
-     * Forward all other calls to the original document.
+     * Forward get call to the original document.
      *
      * @param string $name
      *
@@ -151,12 +151,13 @@ class Document implements DocumentInterface, \IteratorAggregate, \Countable, \Ar
         $this->document->offsetUnset($offset);
     }
 
+    #[\ReturnTypeWillChange]
     /**
      * ArrayAccess implementation.
      *
      * @param mixed $offset
      *
-     * @return mixed|null
+     * @return mixed
      */
     public function offsetGet($offset)
     {

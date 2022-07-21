@@ -17,7 +17,7 @@ use Solarium\Exception\InvalidArgumentException;
 /**
  * DisMax component.
  *
- * @see https://lucene.apache.org/solr/guide/the-dismax-query-parser.html
+ * @see https://solr.apache.org/guide/the-dismax-query-parser.html
  */
 class DisMax extends AbstractComponent
 {
@@ -313,11 +313,11 @@ class DisMax extends AbstractComponent
 
         $key = $boostQuery->getKey();
 
-        if (0 === \strlen($key)) {
+        if (null === $key || 0 === \strlen($key)) {
             throw new InvalidArgumentException('A boostquery must have a key value');
         }
 
-        //double add calls for the same BQ are ignored, but non-unique keys cause an exception
+        // double add calls for the same BQ are ignored, but non-unique keys cause an exception
         if (\array_key_exists($key, $this->boostQueries) && $this->boostQueries[$key] !== $boostQuery) {
             throw new InvalidArgumentException('A boostquery must have a unique key value within a query');
         }

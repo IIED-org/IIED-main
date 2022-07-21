@@ -27,6 +27,10 @@ use League\Csv\Reader;
  *   Defaults to double quote marks.
  * - escape: (optional) The field escape character (one character only).
  *   Defaults to a backslash (\).
+ * - create_record_number: (optional) Boolean value specifying whether to create
+ *   an incremented value for each record in the file. Defaults to FALSE.
+ * - record_number_field: (optional) The name of a field that holds an
+ *   incremented value for each record in the file. Defaults to record_num.
  *
  * @codingStandardsIgnoreStart
  *
@@ -130,6 +134,11 @@ class CSV extends SourcePluginBase implements ConfigurableInterface {
         }
       }
     }
+    // If "create_record_number" is specified, "record_number_field" must be a
+    // non-empty string.
+    if ($this->configuration['create_record_number'] && (!is_scalar($this->configuration['record_number_field']) || (empty($this->configuration['record_number_field'])))) {
+      throw new \InvalidArgumentException('The configuration "record_number_field" must be a non-empty string.');
+    }
   }
 
   /**
@@ -144,6 +153,8 @@ class CSV extends SourcePluginBase implements ConfigurableInterface {
       'delimiter' => ",",
       'enclosure' => "\"",
       'escape' => "\\",
+      'create_record_number' => FALSE,
+      'record_number_field' => 'record_number',
     ];
   }
 
@@ -229,7 +240,11 @@ class CSV extends SourcePluginBase implements ConfigurableInterface {
    * @codingStandardsIgnoreEnd
    */
   protected function getGenerator(\Iterator $records) {
+    $record_num = $this->configuration['header_offset'] ?? 0;
     foreach ($records as $record) {
+      if ($this->configuration['create_record_number']) {
+        $record[$this->configuration['record_number_field']] = ++$record_num;
+      }
       yield $record;
     }
   }

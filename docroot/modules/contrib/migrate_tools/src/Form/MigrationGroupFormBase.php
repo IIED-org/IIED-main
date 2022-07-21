@@ -6,7 +6,7 @@ use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class MigrationGroupFormBase.
+ * Base form for migration groups.
  *
  * @package Drupal\migrate_tools\Form
  *
@@ -85,7 +85,9 @@ class MigrationGroupFormBase extends EntityForm {
    *   TRUE if this format already exists, FALSE otherwise.
    */
   public function exists($entity_id, array $element, FormStateInterface $form_state) {
-    $query = $this->entityTypeManager->getStorage('migration_group')->getQuery();
+    $query = $this->entityTypeManager->getStorage('migration_group')
+      ->getQuery()
+      ->accessCheck(TRUE);
 
     // Query the entity ID to see if its in use.
     $result = $query->condition('id', $element['#field_prefix'] . $entity_id)

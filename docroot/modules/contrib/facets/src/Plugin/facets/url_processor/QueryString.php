@@ -5,6 +5,7 @@ namespace Drupal\facets\Plugin\facets\url_processor;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Url;
+use Drupal\facets\Event\ActiveFiltersParsed;
 use Drupal\facets\Event\QueryStringCreated;
 use Drupal\facets\FacetInterface;
 use Drupal\facets\UrlProcessor\UrlProcessorPluginBase;
@@ -55,7 +56,7 @@ class QueryString extends UrlProcessorPluginBase {
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('request_stack')->getMasterRequest(),
+      $container->get('request_stack')->getCurrentRequest(),
       $container->get('entity_type.manager'),
       $container->get('event_dispatcher')
     );
@@ -198,7 +199,7 @@ class QueryString extends UrlProcessorPluginBase {
 
       // Allow other modules to alter the result url built.
       $event = new QueryStringCreated($result_get_params, $filter_params, $result, $this->activeFilters, $facet);
-      $this->eventDispatcher->dispatch(QueryStringCreated::NAME, $event);
+      $this->eventDispatcher->dispatch($event);
       $filter_params = $event->getFilterParameters();
 
       asort($filter_params, \SORT_NATURAL);
@@ -330,25 +331,32 @@ class QueryString extends UrlProcessorPluginBase {
       return;
     }
 
+    $active_filters = [];
     // Explode the active params on the separator.
     foreach ($active_params as $param) {
       $explosion = explode($this->getSeparator(), $param);
       $url_alias = array_shift($explosion);
-      $facet_id = $this->getFacetIdByUrlAlias($url_alias, $facet_source_id);
-      $value = '';
-      while (count($explosion) > 0) {
-        $value .= array_shift($explosion);
-        if (count($explosion) > 0) {
-          $value .= $this->getSeparator();
+      if ($facet_id = $this->getFacetIdByUrlAlias($url_alias, $facet_source_id)) {
+        $value = '';
+        while (count($explosion) > 0) {
+          $value .= array_shift($explosion);
+          if (count($explosion) > 0) {
+            $value .= $this->getSeparator();
+          }
+        }
+        if (!isset($active_filters[$facet_id])) {
+          $active_filters[$facet_id] = [$value];
+        }
+        else {
+          $active_filters[$facet_id][] = $value;
         }
       }
-      if (!isset($this->activeFilters[$facet_id])) {
-        $this->activeFilters[$facet_id] = [$value];
-      }
-      else {
-        $this->activeFilters[$facet_id][] = $value;
-      }
     }
+
+    // Allow other modules to alter the parsed active filters.
+    $event = new ActiveFiltersParsed($facet_source_id, $active_filters, $url_parameters, $this->filterKey);
+    $this->eventDispatcher->dispatch($event);
+    $this->activeFilters = $event->getActiveFilters();
   }
 
   /**
@@ -366,7 +374,12 @@ class QueryString extends UrlProcessorPluginBase {
     $mapping = &drupal_static(__FUNCTION__);
     if (!isset($mapping[$facet_source_id][$url_alias])) {
       $storage = $this->entityTypeManager->getStorage('facets_facet');
-      $facet = current($storage->loadByProperties(['url_alias' => $url_alias, 'facet_source_id' => $facet_source_id]));
+      $facet = current($storage->loadByProperties(
+        [
+          'url_alias' => $url_alias,
+          'facet_source_id' => $facet_source_id,
+        ]
+      ));
       if (!$facet) {
         return NULL;
       }
@@ -390,7 +403,12 @@ class QueryString extends UrlProcessorPluginBase {
     $mapping = &drupal_static(__FUNCTION__);
     if (!isset($mapping[$facet_source_id][$facet_id])) {
       $storage = $this->entityTypeManager->getStorage('facets_facet');
-      $facet = current($storage->loadByProperties(['id' => $facet_id, 'facet_source_id' => $facet_source_id]));
+      $facet = current($storage->loadByProperties(
+        [
+          'id' => $facet_id,
+          'facet_source_id' => $facet_source_id,
+        ]
+      ));
       if (!$facet) {
         return FALSE;
       }

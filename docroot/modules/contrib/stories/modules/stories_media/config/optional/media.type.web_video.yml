@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - video_embed_media
+id: web_video
+label: 'Web Video'
+description: 'Add a video from an online streaming service like YouTube or Vimeo.'
+source: video_embed_field
+queue_thumbnail_downloads: false
+new_revision: true
+source_configuration:
+  source_field: field_media_video_embed_field
+field_map: {  }

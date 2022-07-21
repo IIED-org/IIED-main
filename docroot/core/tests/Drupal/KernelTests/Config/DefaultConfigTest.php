@@ -6,6 +6,7 @@ use Drupal\Core\Config\Entity\ConfigEntityDependency;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Config\StorageInterface;
+use Drupal\Core\Extension\ExtensionLifecycle;
 use Drupal\KernelTests\AssertConfigTrait;
 use Drupal\KernelTests\FileSystemModuleDiscoveryDataProviderTrait;
 use Drupal\KernelTests\KernelTestBase;
@@ -48,7 +49,7 @@ class DefaultConfigTest extends KernelTestBase {
   /**
    * Tests if installed config is equal to the exported config.
    *
-   * @dataProvider coreModuleListDataProvider
+   * @dataProvider moduleListDataProvider
    */
   public function testModuleConfig($module) {
     $this->assertExtensionConfig($module, 'module');
@@ -70,15 +71,42 @@ class DefaultConfigTest extends KernelTestBase {
    *   Extension name.
    * @param string $type
    *   Extension type, either 'module' or 'theme'.
+   *
+   * @internal
    */
-  protected function assertExtensionConfig(string $name, string $type) {
+  protected function assertExtensionConfig(string $name, string $type): void {
+    // Parse .info.yml file for module/theme $name. Since it's not installed at
+    // this point we can't retrieve it from the 'module_handler' service.
+    switch ($name) {
+      case 'test_deprecated_theme':
+        $file_name = DRUPAL_ROOT . '/core/modules/system/tests/themes/' . $name . '/' . $name . '.info.yml';
+        break;
+
+      case 'deprecated_module':
+        $file_name = DRUPAL_ROOT . '/core/modules/system/tests/modules/' . $name . '/' . $name . '.info.yml';
+        break;
+
+      default;
+        $file_name = DRUPAL_ROOT . '/core/' . $type . 's/' . $name . '/' . $name . '.info.yml';
+    }
+
+    $info = \Drupal::service('info_parser')->parse($file_name);
+    // Test we have a parsed info.yml file.
+    $this->assertNotEmpty($info);
+
+    // Skip deprecated extensions.
+    if (isset($info[ExtensionLifecycle::LIFECYCLE_IDENTIFIER])
+      && $info[ExtensionLifecycle::LIFECYCLE_IDENTIFIER] === ExtensionLifecycle::DEPRECATED) {
+      $this->markTestSkipped("The $type '$name' is deprecated.");
+    }
+
     // System and user are required in order to be able to install some of the
     // other modules. Therefore they are put into static::$modules, which though
     // doesn't install config files, so import those config files explicitly. Do
     // this for all tests in case optional configuration depends on it.
     $this->installConfig(['system', 'user']);
 
-    $extension_path = drupal_get_path($type, $name) . '/';
+    $extension_path = \Drupal::service('extension.path.resolver')->getPath($type, $name) . '/';
     $extension_config_storage = new FileStorage($extension_path . InstallStorage::CONFIG_INSTALL_DIRECTORY, StorageInterface::DEFAULT_COLLECTION);
     $optional_config_storage = new FileStorage($extension_path . InstallStorage::CONFIG_OPTIONAL_DIRECTORY, StorageInterface::DEFAULT_COLLECTION);
 
@@ -111,8 +139,11 @@ class DefaultConfigTest extends KernelTestBase {
   /**
    * A data provider that lists every theme in core.
    *
-   * @return array
-   *   An array of theme names to test.
+   * Also adds a deprecated theme with config.
+   *
+   * @return string[][]
+   *   An array of theme names to test, with both key and value being the name
+   *   of the theme.
    */
   public function themeListDataProvider() {
     $prefix = dirname(__DIR__, 4) . DIRECTORY_SEPARATOR . 'themes';
@@ -125,9 +156,30 @@ class DefaultConfigTest extends KernelTestBase {
     // Engines is not a theme.
     unset($themes_keyed['engines']);
 
+    // Add a deprecated theme with config.
+    $themes_keyed['test_deprecated_theme'] = 'test_deprecated_theme';
+
     return array_map(function ($theme) {
       return [$theme];
     }, $themes_keyed);
+  }
+
+  /**
+   * A data provider that lists every module in core.
+   *
+   * Also adds a deprecated module with config.
+   *
+   * @return string[][]
+   *   An array of module names to test, with both key and value being the name
+   *   of the module.
+   */
+  public function moduleListDataProvider() {
+    $modules_keyed = $this->coreModuleListDataProvider();
+
+    // Add a deprecated module with config.
+    $modules_keyed['deprecated_module'] = ['deprecated_module'];
+
+    return $modules_keyed;
   }
 
   /**
@@ -146,6 +198,9 @@ class DefaultConfigTest extends KernelTestBase {
     // the cache layer.
     $active_config_storage = $this->container->get('config.storage');
 
+    /** @var \Drupal\Core\Config\ConfigFactoryInterface $config_factory */
+    $config_factory = $this->container->get('config.factory');
+
     foreach ($default_config_storage->listAll() as $config_name) {
       if ($active_config_storage->exists($config_name)) {
         // If it is a config entity re-save it. This ensures that any
@@ -158,6 +213,11 @@ class DefaultConfigTest extends KernelTestBase {
             ->getConfigPrefix());
           $entity_storage->load($id)->calculateDependencies()->save();
         }
+        else {
+          // Ensure simple configuration is re-saved so any schema sorting is
+          // applied.
+          $config_factory->getEditable($config_name)->save();
+        }
         $result = $config_manager->diff($default_config_storage, $active_config_storage, $config_name);
         // ::assertConfigDiff will throw an exception if the configuration is
         // different.
@@ -165,7 +225,7 @@ class DefaultConfigTest extends KernelTestBase {
       }
       else {
         $info = $this->container->get('extension.list.module')->getExtensionInfo($module);
-        if (!isset($info['package']) || $info['package'] !== 'Core (Experimental)') {
+        if (!isset($info[ExtensionLifecycle::LIFECYCLE_IDENTIFIER]) || $info[ExtensionLifecycle::LIFECYCLE_IDENTIFIER] !== ExtensionLifecycle::EXPERIMENTAL) {
           $this->fail("$config_name provided by $module does not exist after installing all dependencies");
         }
       }

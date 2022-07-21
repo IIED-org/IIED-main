@@ -85,7 +85,7 @@ class FormTest extends BrowserTestBase {
     $elements['textarea']['element'] = ['#title' => $this->randomMachineName(), '#type' => 'textarea'];
     $elements['textarea']['empty_values'] = $empty_strings;
 
-    $elements['radios']['element'] = ['#title' => $this->randomMachineName(), '#type' => 'radios', '#options' => ['' => t('None'), $this->randomMachineName(), $this->randomMachineName(), $this->randomMachineName()]];
+    $elements['radios']['element'] = ['#title' => $this->randomMachineName(), '#type' => 'radios', '#options' => ['' => 'None', $this->randomMachineName(), $this->randomMachineName(), $this->randomMachineName()]];
     $elements['radios']['empty_values'] = $empty_arrays;
 
     $elements['checkbox']['element'] = ['#title' => $this->randomMachineName(), '#type' => 'checkbox', '#required' => TRUE];
@@ -94,7 +94,7 @@ class FormTest extends BrowserTestBase {
     $elements['checkboxes']['element'] = ['#title' => $this->randomMachineName(), '#type' => 'checkboxes', '#options' => [$this->randomMachineName(), $this->randomMachineName(), $this->randomMachineName()]];
     $elements['checkboxes']['empty_values'] = $empty_arrays;
 
-    $elements['select']['element'] = ['#title' => $this->randomMachineName(), '#type' => 'select', '#options' => ['' => t('None'), $this->randomMachineName(), $this->randomMachineName(), $this->randomMachineName()]];
+    $elements['select']['element'] = ['#title' => $this->randomMachineName(), '#type' => 'select', '#options' => ['' => 'None', $this->randomMachineName(), $this->randomMachineName(), $this->randomMachineName()]];
     $elements['select']['empty_values'] = $empty_strings;
 
     $elements['file']['element'] = ['#title' => $this->randomMachineName(), '#type' => 'file'];
@@ -109,7 +109,7 @@ class FormTest extends BrowserTestBase {
           $form_id = $this->randomMachineName();
           $form = [];
           $form_state = new FormState();
-          $form['op'] = ['#type' => 'submit', '#value' => t('Submit')];
+          $form['op'] = ['#type' => 'submit', '#value' => 'Submit'];
           $element = $data['element']['#title'];
           $form[$element] = $data['element'];
           $form[$element]['#required'] = $required;
@@ -147,7 +147,7 @@ class FormTest extends BrowserTestBase {
             else {
               // Make sure there is *no* form error for this element. We're
               // not using assertEmpty() because the array key might not exist.
-              $this->assertTrue(empty($errors[$element]), "Optional '$type' field '$element' has no errors with empty input");
+              $this->assertArrayNotHasKey($element, $errors, "Optional '$type' field '$element' should have no errors with empty input.");
             }
           }
         }
@@ -185,7 +185,7 @@ class FormTest extends BrowserTestBase {
         $expected[] = $form[$key]['#form_test_required_error'];
       }
       else {
-        $expected[] = t('@name field is required.', ['@name' => $form[$key]['#title']]);
+        $expected[] = $form[$key]['#title'] . ' field is required.';
       }
     }
 
@@ -651,8 +651,8 @@ class FormTest extends BrowserTestBase {
         // Create placeholder array.
         $placeholders = [
           '%name' => $form[$element]['#title'],
-          '%min' => isset($form[$element]['#min']) ? $form[$element]['#min'] : '0',
-          '%max' => isset($form[$element]['#max']) ? $form[$element]['#max'] : '0',
+          '%min' => $form[$element]['#min'] ?? '0',
+          '%max' => $form[$element]['#max'] ?? '0',
         ];
 
         foreach ($error_messages as $id => $message) {
@@ -769,7 +769,7 @@ class FormTest extends BrowserTestBase {
     // All the elements should be marked as disabled, including the ones below
     // the disabled container.
     $actual_count = count($disabled_elements);
-    $expected_count = 42;
+    $expected_count = 44;
     $this->assertEquals($expected_count, $actual_count, new FormattableMarkup('Found @actual elements with disabled property (expected @expected).', ['@actual' => count($disabled_elements), '@expected' => $expected_count]));
 
     // Mink does not "see" hidden elements, so we need to set the value of the
@@ -790,8 +790,10 @@ class FormTest extends BrowserTestBase {
 
   /**
    * Assert that the values submitted to a form matches the default values of the elements.
+   *
+   * @internal
    */
-  public function assertFormValuesDefault($values, $form) {
+  public function assertFormValuesDefault(array $values, array $form): void {
     foreach (Element::children($form) as $key) {
       if (isset($form[$key]['#default_value'])) {
         if (isset($form[$key]['#expected_value'])) {
@@ -801,7 +803,7 @@ class FormTest extends BrowserTestBase {
           $expected_value = $form[$key]['#default_value'];
         }
 
-        if ($key == 'checkboxes_multiple') {
+        if (in_array($key, ['checkboxes_multiple', 'checkboxes_single_select', 'checkboxes_single_unselect'], TRUE)) {
           // Checkboxes values are not filtered out.
           $values[$key] = array_filter($values[$key]);
         }
@@ -857,12 +859,11 @@ class FormTest extends BrowserTestBase {
       }
       $path = strtr($path, ['!type' => $type]);
       // Verify that the element exists.
-      $element = $this->xpath($path, [
+      $this->assertSession()->elementExists('xpath', $this->assertSession()->buildXPathQuery($path, [
         ':name' => Html::escape($name),
         ':div-class' => $class,
-        ':value' => isset($item['#value']) ? $item['#value'] : '',
-      ]);
-      $this->assertTrue(isset($element[0]), new FormattableMarkup('Disabled form element class found for #type %type.', ['%type' => $item['#type']]));
+        ':value' => $item['#value'] ?? '',
+      ]));
     }
 
     // Verify special element #type text-format.

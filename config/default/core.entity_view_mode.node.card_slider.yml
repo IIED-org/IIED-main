@@ -1,0 +1,10 @@
+uuid: 16aa83fd-6bc3-4900-9023-044808bd4e7a
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.card_slider
+label: 'Card slider'
+targetEntityType: node
+cache: true

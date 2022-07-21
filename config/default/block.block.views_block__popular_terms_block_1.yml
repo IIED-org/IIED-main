@@ -22,14 +22,15 @@ plugin: 'views_block:popular_terms-block_1'
 settings:
   id: 'views_block:popular_terms-block_1'
   label: ''
-  provider: views
   label_display: '0'
+  provider: views
+  context_mapping:
+    field_theme_target_id: '@ds.ds_block_field_entity_context:taxonomy_term'
   views_label: ''
   items_per_page: none
-  context_mapping: {  }
 visibility:
   request_path:
     id: request_path
-    pages: '<front>'
     negate: false
     context_mapping: {  }
+    pages: '<front>'

@@ -43,8 +43,8 @@ class NodeLanguageTest extends NodeTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
-    parent::setUp(FALSE);
+  protected function setUp($import_test_views = TRUE, $modules = []): void {
+    parent::setUp(FALSE, $modules);
 
     // Create Page content type.
     if ($this->profile != 'standard') {
@@ -281,8 +281,10 @@ class NodeLanguageTest extends NodeTestBase {
    *
    * @param bool $native
    *   (optional) Whether to assert the language name in its native form.
+   *
+   * @internal
    */
-  protected function assertLanguageNames($native = FALSE) {
+  protected function assertLanguageNames(bool $native = FALSE): void {
     $this->drupalGet('test-language');
     if ($native) {
       $this->assertSession()->pageTextContains('Français');

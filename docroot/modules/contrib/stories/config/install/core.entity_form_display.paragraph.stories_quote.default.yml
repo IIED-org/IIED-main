@@ -1,0 +1,44 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.stories_quote.field_stories_quote_citation
+    - field.field.paragraph.stories_quote.field_stories_quote_citation_url
+    - field.field.paragraph.stories_quote.field_stories_quote_text
+    - paragraphs.paragraphs_type.stories_quote
+  module:
+    - link
+    - text
+id: paragraph.stories_quote.default
+targetEntityType: paragraph
+bundle: stories_quote
+mode: default
+content:
+  field_stories_quote_citation:
+    weight: 1
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_stories_quote_citation_url:
+    weight: 2
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
+    region: content
+  field_stories_quote_text:
+    weight: 0
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
+    region: content
+hidden:
+  created: true
+  status: true
+  uid: true

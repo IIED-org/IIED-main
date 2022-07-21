@@ -59,7 +59,7 @@ class QueryStringTest extends UnitTestCase {
   /**
    * Creates a new processor object for use in the tests.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
@@ -203,11 +203,11 @@ class QueryStringTest extends UnitTestCase {
    * Tests with an active item already from url.
    */
   public function testBuildWithActiveItem() {
-    $facet = new Facet([], 'facets_facet');
+    $facet = new Facet(['id' => 'facet_1'], 'facets_facet');
     $facet->setFieldIdentifier('test');
     $facet->setUrlAlias('test');
     $facet->setFacetSourceId('facet_source__dummy');
-    $facet2 = new Facet([], 'facets_facet');
+    $facet2 = new Facet(['id' => 'facet_2'], 'facets_facet');
     $facet2->setFieldIdentifier('king');
     $facet2->setUrlAlias('king');
     $facet2->setFacetSourceId('facet_source__dummy');

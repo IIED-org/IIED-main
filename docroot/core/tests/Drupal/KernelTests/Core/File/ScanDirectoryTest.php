@@ -36,7 +36,8 @@ class ScanDirectoryTest extends FileTestBase {
     parent::setUp();
     // Hardcode the location of the fixtures files as it is already known
     // and shouldn't change, and we don't yet have a way to retrieve their
-    // location from drupal_get_filename() in a cached way.
+    // location from \Drupal\Core\Extension\ExtensionList::getPathname() in a
+    // cached way.
     // @todo Remove as part of https://www.drupal.org/node/2186491
     $this->path = 'core/tests/fixtures/files';
     $this->fileSystem = $this->container->get('file_system');
@@ -145,7 +146,7 @@ class ScanDirectoryTest extends FileTestBase {
    */
   public function testOptionRecurse() {
     $files = $this->fileSystem->scanDirectory($this->path . '/..', '/^javascript-/', ['recurse' => FALSE]);
-    $this->assertTrue(empty($files), "Without recursion couldn't find javascript files.");
+    $this->assertEmpty($files, "Without recursion couldn't find javascript files.");
 
     $files = $this->fileSystem->scanDirectory($this->path . '/..', '/^javascript-/', ['recurse' => TRUE]);
     $this->assertCount(2, $files, 'With recursion we found the expected javascript files.');
@@ -162,7 +163,7 @@ class ScanDirectoryTest extends FileTestBase {
     $this->assertCount(2, $files, 'No minimum-depth gets files in current directory.');
 
     $files = $this->fileSystem->scanDirectory($this->path, '/^javascript-/', ['min_depth' => 1]);
-    $this->assertTrue(empty($files), 'Minimum-depth of 1 successfully excludes files from current directory.');
+    $this->assertEmpty($files, 'Minimum-depth of 1 successfully excludes files from current directory.');
   }
 
   /**

@@ -15,7 +15,7 @@ class AdministrativeAreaFilterTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'node',
     'user',
     'views',
@@ -38,7 +38,7 @@ class AdministrativeAreaFilterTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->user = $this->drupalCreateUser(['access content']);

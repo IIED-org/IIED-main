@@ -1,0 +1,15 @@
+uuid: d692a7d4-032c-43a8-9265-f3079909d030
+langcode: en
+status: true
+dependencies: {  }
+name: scale_lg
+label: scale-lg
+effects:
+  26e69219-bc55-4492-b5bc-cb01484e6f9b:
+    uuid: 26e69219-bc55-4492-b5bc-cb01484e6f9b
+    id: image_scale
+    weight: 1
+    data:
+      width: 1024
+      height: null
+      upscale: false

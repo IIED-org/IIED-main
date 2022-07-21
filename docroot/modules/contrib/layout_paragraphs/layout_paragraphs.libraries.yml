@@ -1,0 +1,26 @@
+dragula:
+  remote: https://github.com/bevacqua/dragula
+  verion: 3.7.2
+  license:
+    name: MIT
+    url: https://github.com/bevacqua/dragula/blob/master/license
+    gpl-compatible: true
+  css:
+    theme:
+      https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.css: {type: external, minified: true}
+  js:
+    https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js: {type: external, minified: true}
+
+layout_paragraphs_widget:
+  css:
+    layout:
+      css/layout-paragraphs-widget.css: {}
+  js:
+    js/layout-paragraphs-widget.js: {}
+  dependencies:
+    - layout_paragraphs/dragula
+    - core/jquery
+    - core/jquery.ui.draggable
+    - core/drupal.dialog
+    - core/drupal.dialog.ajax
+    - core/drupal.ajax

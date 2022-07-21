@@ -31,7 +31,14 @@ class DisplayPageTest extends ViewsKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'user', 'field', 'views_test_data'];
+  protected static $modules = [
+    // @todo Remove this in https://www.drupal.org/node/3219959
+    'block',
+    'system',
+    'user',
+    'field',
+    'views_test_data',
+  ];
 
   /**
    * The router dumper to get all routes.
@@ -196,7 +203,7 @@ class DisplayPageTest extends ViewsKernelTestBase {
     $output = $renderer->renderRoot($output);
     $this->setRawContent($output);
     $result = $this->xpath('//div[@class=:class]/a', [':class' => 'more-link']);
-    $this->assertTrue(empty($result), 'The more link is not shown.');
+    $this->assertEmpty($result, 'The more link is not shown.');
 
     $view = Views::getView('test_display_more');
     $view->setDisplay();
@@ -214,7 +221,7 @@ class DisplayPageTest extends ViewsKernelTestBase {
     $output = $renderer->renderRoot($output);
     $this->setRawContent($output);
     $result = $this->xpath('//div[@class=:class]/a', [':class' => 'more-link']);
-    $this->assertTrue(empty($result), 'The more link is not shown when view has more records.');
+    $this->assertEmpty($result, 'The more link is not shown when view has more records.');
 
     // Test the default value of use_more_always.
     $view = View::create()->getExecutable();
@@ -232,11 +239,12 @@ class DisplayPageTest extends ViewsKernelTestBase {
 
     $styles = [
       'default' => '//div[@class="views-row"]',
-      'grid' => '//div[contains(@class, "views-col")]',
+      // Olivero does not use the 'views-col' class.
+      'grid' => '//div[contains(@class, "views-col") or contains(@class, "views-view-grid__item-inner")]',
       'html_list' => '//div[@class="item-list"]//li',
     ];
 
-    $themes = ['bartik', 'classy', 'seven', 'stable', 'stark'];
+    $themes = ['bartik', 'classy', 'olivero', 'seven', 'stable', 'stark'];
 
     foreach ($themes as $theme) {
       \Drupal::service('theme_installer')->install([$theme]);

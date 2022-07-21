@@ -6,7 +6,6 @@ use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate_source_csv\Plugin\migrate\source\CSV;
 use Drupal\Tests\UnitTestCase;
 use org\bovigo\vfs\vfsStream;
-use PHPUnit\Framework\Error\Warning;
 
 /**
  * @coversDefaultClass \Drupal\migrate_source_csv\Plugin\migrate\source\CSV
@@ -157,7 +156,7 @@ EOD;
     $this->assertEquals(count($expected), iterator_count($iterator));
     $iterator = $csv->initializeIterator();
     foreach ($expected as $record) {
-      $this->assertArrayEquals($record, $iterator->current());
+      $this->assertSame($record, $iterator->current());
       $iterator->next();
     }
 
@@ -245,6 +244,60 @@ EOD;
         ],
       ],
     ];
+    $data['default record number field name'] = [
+      'configuration' => [
+        'ids' => ['id'],
+        'create_record_number' => TRUE,
+      ],
+      'expected rows' => [
+        [
+          'id' => '1',
+          'first_name' => 'Justin',
+          'last_name' => 'Dean',
+          'email' => 'jdean0@example.com',
+          'country' => 'Indonesia',
+          'ip_address' => '60.242.130.40',
+          'record_number' => 1,
+        ],
+        [
+          'id' => '2',
+          'first_name' => 'Joan',
+          'last_name' => 'Jordan',
+          'email' => 'jjordan1@example.com',
+          'country' => 'Thailand',
+          'ip_address' => '137.230.209.171',
+          'record_number' => 2,
+        ],
+      ],
+    ];
+    $data['custom record number field name'] = [
+      'configuration' => [
+        'ids' => ['MyRowNumber'],
+        'create_record_number' => TRUE,
+        'record_number_field' => 'MyRowNumber',
+        'header_offset' => 1,
+      ],
+      'expected rows' => [
+        [
+          '1' => 'id',
+          'Justin' => 'first_name',
+          'Dean' => 'last_name',
+          'jdean0@example.com' => 'email',
+          'Indonesia' => 'country',
+          '60.242.130.40' => 'ip_address',
+          'MyRowNumber' => 2,
+        ],
+        [
+          '1' => '2',
+          'Justin' => 'Joan',
+          'Dean' => 'Jordan',
+          'jdean0@example.com' => 'jjordan1@example.com',
+          'Indonesia' => 'Thailand',
+          '60.242.130.40' => '137.230.209.171',
+          'MyRowNumber' => 3,
+        ],
+      ],
+    ];
     return $data;
   }
 
@@ -261,7 +314,7 @@ EOD;
    */
   public function testGetIds(array $configuration, array $expected): void {
     $csv = new CSV($configuration + ['path' => $this->standardCharsPath], $this->pluginId, $this->pluginDefinition, $this->migration);
-    $this->assertArrayEquals($expected, $csv->getIds());
+    $this->assertSame($expected, $csv->getIds());
   }
 
   /**
@@ -303,7 +356,7 @@ EOD;
    */
   public function testFields(array $configuration, array $expected): void {
     $csv = new CSV($configuration + ['path' => $this->standardCharsPath], $this->pluginId, $this->pluginDefinition, $this->migration);
-    $this->assertArrayEquals($expected, $csv->fields());
+    $this->assertSame($expected, $csv->fields());
   }
 
   /**

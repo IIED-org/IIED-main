@@ -114,7 +114,7 @@
  *   and HAL.
  * - Node entity support is configured by default. If you would like to support
  *   other types of entities, you can copy
- *   core/modules/rest/config/install/rest.settings.yml to your sync
+ *   core/modules/hal/config/optional/rest.resource.entity.node.yml to your sync
  *   configuration directory, appropriately modified for other entity types,
  *   and import it. Support for GET on the log from the Database Logging module
  *   can also be enabled in this way; in this case, the 'entity:node' line
@@ -191,7 +191,7 @@
  * // Find out when cron was last run; the key is 'system.cron_last'.
  * $time = $state->get('system.cron_last');
  * // Set the cron run time to the current request time.
- * $state->set('system.cron_last', REQUEST_TIME);
+ * $state->set('system.cron_last', \Drupal::time()->getRequestTime());
  * @endcode
  *
  * For more on the State API, see https://www.drupal.org/developing/api/8/state
@@ -734,18 +734,19 @@
  *
  * @section sec_overview Overview of container, injection, and services
  * The Services and Dependency Injection Container concepts have been adopted by
- * Drupal from the @link http://symfony.com/ Symfony framework. @endlink A
- * "service" (such as accessing the database, sending email, or translating user
- * interface text) is defined (given a name and an interface or at least a
- * class that defines the methods that may be called), and a default class is
- * designated to provide the service. These two steps must be done together, and
- * can be done by Drupal Core or a module. Other modules can then define
- * alternative classes to provide the same services, overriding the default
- * classes. Classes and functions that need to use the service should always
- * instantiate the class via the dependency injection container (also known
- * simply as the "container"), rather than instantiating a particular service
- * provider class directly, so that they get the correct class (default or
- * overridden).
+ * Drupal from the
+ * @link http://symfony.com/doc/current/components/dependency_injection.html
+ * Symfony DependencyInjection component. @endlink A "service" (such as
+ * accessing the database, sending email, or translating user interface text) is
+ * defined (given a name and an interface or at least a class that defines the
+ * methods that may be called), and a default class is designated to provide the
+ * service. These two steps must be done together, and can be done by Drupal
+ * Core or a module. Other modules can then define alternative classes to
+ * provide the same services, overriding the default classes. Classes and
+ * functions that need to use the service should always instantiate the class
+ * via the dependency injection container (also known simply as the
+ * "container"), rather than instantiating a particular service provider class
+ * directly, so that they get the correct class (default or overridden).
  *
  * See https://www.drupal.org/node/2133171 for more detailed information on
  * services and the dependency injection container.
@@ -851,6 +852,12 @@
  *
  * Services can also be defined dynamically, as in the
  * \Drupal\Core\CoreServiceProvider class, but this is less common for modules.
+ *
+ * @section sec_define Service autowiring
+ * Instead of specifying arguments explicitly, the container can also autowire
+ * a service's arguments from the constructor's type-hints. See
+ * @link https://symfony.com/doc/current/service_container/autowiring.html the Symfony documentation on defining services dependencies automatically @endlink
+ * for details.
  *
  * @section sec_tags Service tags
  * Some services have tags, which are defined in the service definition. See
@@ -1916,10 +1923,11 @@ function hook_cron() {
   // Short-running operation example, not using a queue:
   // Delete all expired records since the last cron run.
   $expires = \Drupal::state()->get('mymodule.last_check', 0);
+  $request_time = \Drupal::time()->getRequestTime();
   \Drupal::database()->delete('mymodule_table')
     ->condition('expires', $expires, '>=')
     ->execute();
-  \Drupal::state()->set('mymodule.last_check', REQUEST_TIME);
+  \Drupal::state()->set('mymodule.last_check', $request_time);
 
   // Long-running operation example, leveraging a queue:
   // Queue news feeds for updates once their refresh interval has elapsed.
@@ -1928,13 +1936,13 @@ function hook_cron() {
   foreach (Feed::loadMultiple($ids) as $feed) {
     if ($queue->createItem($feed)) {
       // Add timestamp to avoid queueing item more than once.
-      $feed->setQueuedTime(REQUEST_TIME);
+      $feed->setQueuedTime($request_time);
       $feed->save();
     }
   }
   $ids = \Drupal::entityQuery('aggregator_feed')
     ->accessCheck(FALSE)
-    ->condition('queued', REQUEST_TIME - (3600 * 6), '<')
+    ->condition('queued', $request_time - (3600 * 6), '<')
     ->execute();
   if ($ids) {
     $feeds = Feed::loadMultiple($ids);
@@ -2490,14 +2498,13 @@ function hook_validation_constraint_alter(array &$definitions) {
  * Overview of event dispatch and subscribing
  *
  * @section sec_intro Introduction and terminology
- * Events are part of the Symfony framework: they allow for different components
- * of the system to interact and communicate with each other. Each event has a
- * unique string name. One system component dispatches the event at an
- * appropriate time; many events are dispatched by Drupal core and the Symfony
- * framework in every request. Other system components can register as event
- * subscribers; when an event is dispatched, a method is called on each
- * registered subscriber, allowing each one to react. For more on the general
- * concept of events, see
+ * Events allow different components of the system to interact and communicate
+ * with each other. One system component dispatches the event at an appropriate
+ * time; many events are dispatched by Drupal core and the Symfony event system
+ * in every request. Other system components can register as event subscribers;
+ * when an event is dispatched, a method is called on each registered
+ * subscriber, allowing each one to react. For more on the general concept of
+ * events, see
  * http://symfony.com/doc/current/components/event_dispatcher/introduction.html
  *
  * @section sec_dispatch Dispatching events

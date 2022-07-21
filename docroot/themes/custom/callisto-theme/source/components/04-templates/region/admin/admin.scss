@@ -1,0 +1,100 @@
+/*
+Styling for elements when the admin toolbar/interface is present.
+This is not the place to add styling for the admin theme however.
+*/
+
+/* purgecss start ignore */
+.admin-region {
+  #block-callisto-theme-local-tasks--2 {
+    > ul {
+      @apply list-none;
+      @apply flex;
+      @apply flex-wrap;
+
+      a {
+        @apply block;
+        @apply text-white;
+        @apply p-16;
+        @apply pb-8;
+        @apply mx-8;
+        @apply border-b-2;
+        @apply border-transparent;
+
+        @apply duration-200;
+
+        &:first-of-type {
+          @apply ml-0;
+        }
+
+        &.is-active {
+          @apply border-admin-blue;
+        }
+
+        &:hover {
+          @apply border-admin-blue;
+
+          @apply duration-200;
+        }
+      }
+    }
+  }
+
+  .masquerade-block-form {
+    @apply my-24;
+
+    input[type="text"] {
+      @apply rounded-none;
+      @apply p-16;
+      @apply text-14;
+    }
+
+    input[type="submit"] {
+      @apply rounded-none;
+      @apply bg-black;
+      @apply p-16;
+      @apply text-14;
+      @apply text-white;
+    }
+  }
+}
+
+.user-login-form,
+.user-pass {
+
+
+  @apply my-64;
+
+  input {
+    border: 2px solid black;
+    @apply max-w-full;
+  }
+}
+
+.status-messages {
+  a {
+    @apply underline;
+  }
+}
+
+.toolbar-horizontal {
+  .header-container, .header-container.active {
+    top: 38px;
+  }
+
+  #sliding-popup {
+    padding-top: 38px;
+  }
+
+  &.toolbar-tray-open {
+    .header-container {
+      top: 79px;
+    }
+
+    #sliding-popup {
+      padding-top: 79px;
+    }
+  }
+}
+
+
+/* purgecss end ignore */

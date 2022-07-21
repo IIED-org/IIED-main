@@ -3,7 +3,6 @@
 namespace Drupal\Tests\views\Functional\Wizard;
 
 use Drupal\Component\Serialization\Json;
-use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Url;
 use Drupal\views\Views;
 
@@ -19,8 +18,8 @@ class BasicTest extends WizardTestBase {
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp($import_test_views = TRUE): void {
-    parent::setUp($import_test_views);
+  protected function setUp($import_test_views = TRUE, $modules = []): void {
+    parent::setUp($import_test_views, $modules);
 
     $this->drupalPlaceBlock('page_title_block');
   }
@@ -156,9 +155,6 @@ class BasicTest extends WizardTestBase {
     $this->assertSession()->pageTextContains($node1->label());
     $this->assertSession()->pageTextNotContains($node2->label());
 
-    // Make sure the listing page doesn't show disabled default views.
-    $this->assertSession()->pageTextNotContains('tracker');
-
     // Create a view with only a REST export.
     $view4 = [];
     $view4['label'] = $this->randomMachineName(16);
@@ -221,7 +217,7 @@ class BasicTest extends WizardTestBase {
 
     foreach ($displays as $display) {
       foreach (['query', 'exposed_form', 'pager', 'style', 'row'] as $type) {
-        $this->assertFalse(empty($display['display_options'][$type]['options']), new FormattableMarkup('Default options found for @plugin.', ['@plugin' => $type]));
+        $this->assertNotEmpty($display['display_options'][$type]['options'], "There should be default options available for '$type'.");
       }
     }
   }

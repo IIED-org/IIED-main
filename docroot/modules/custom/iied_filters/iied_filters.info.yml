@@ -1,0 +1,5 @@
+name: IIED filters
+description: Custom text filters including YouTube.
+type: module
+package: IIED
+core_version_requirement: ^8.8 || ^9

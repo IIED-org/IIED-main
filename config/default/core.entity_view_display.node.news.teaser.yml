@@ -11,6 +11,7 @@ dependencies:
     - field.field.node.news.field_display_image
     - field.field.node.news.field_image_caption
     - field.field.node.news.field_main_image
+    - field.field.node.news.field_news_type
     - field.field.node.news.field_notes
     - field.field.node.news.field_paragraphs
     - field.field.node.news.field_project
@@ -28,22 +29,22 @@ bundle: news
 mode: teaser
 content:
   body:
-    label: hidden
     type: text_summary_or_trimmed
-    weight: 101
+    label: hidden
     settings:
       trim_length: 600
     third_party_settings: {  }
+    weight: 101
     region: content
   links:
-    weight: 100
     settings: {  }
     third_party_settings: {  }
+    weight: 100
     region: content
   sharing_buttons:
-    weight: 100
     settings: {  }
     third_party_settings: {  }
+    weight: 100
     region: content
 hidden:
   field_admin: true
@@ -52,6 +53,7 @@ hidden:
   field_display_image: true
   field_image_caption: true
   field_main_image: true
+  field_news_type: true
   field_notes: true
   field_paragraphs: true
   field_project: true

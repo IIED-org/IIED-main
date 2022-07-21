@@ -11,12 +11,12 @@ pattern: '[node:field_product_code_new:value]'
 selection_criteria:
   4b99ff98-8359-4fdd-ae17-8e936a164434:
     id: node_type
-    bundles:
-      publication: publication
     negate: false
+    uuid: 4b99ff98-8359-4fdd-ae17-8e936a164434
     context_mapping:
       node: node
-    uuid: 4b99ff98-8359-4fdd-ae17-8e936a164434
+    bundles:
+      publication: publication
 selection_logic: and
 weight: -5
 relationships: {  }

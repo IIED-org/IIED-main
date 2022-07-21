@@ -1,10 +1,9 @@
 label: Konten
 display:
   default:
+    display_title: Default
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
+      title: Konten
       fields:
         title:
           label: Judul
@@ -16,6 +15,9 @@ display:
           label: Status
         operations:
           label: Operasi-operasi
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         title:
           expose:
@@ -29,8 +31,6 @@ display:
         langcode:
           expose:
             label: Bahasa
-      title: Konten
-    display_title: Bawaan
   page_1:
     display_options:
       menu:

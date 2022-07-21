@@ -1,10 +1,12 @@
 uuid: 84a04e2d-e27e-41e6-8d5b-f1c2c228e4b8
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  content:
+    - 'file:file:1ad15eed-0366-4d3b-8173-7f347c682ae3'
 id: basic_text
 label: 'Basic text'
-icon_uuid: null
-icon_default: null
+icon_uuid: 1ad15eed-0366-4d3b-8173-7f347c682ae3
+icon_default: 'data:image/png;base64,'
 description: ''
 behavior_plugins: {  }

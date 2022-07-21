@@ -2,8 +2,8 @@
 
 namespace Drupal\facets\Plugin\Block;
 
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -80,41 +80,65 @@ class FacetBlock extends BlockBase implements ContainerFactoryPluginInterface {
       return [];
     }
 
-    // Let the facet_manager build the facets.
-    $build = $this->facetManager->build($facet);
+    // Do not build the facet if the block is being previewed.
+    if ($this->getContextValue('in_preview')) {
+      return [];
+    }
 
-    if (!empty($build)) {
+    $build = [];
+
+    // Let the facet_manager build the facets.
+    $facet_build = $this->facetManager->build($facet);
+
+    if ($facet_build) {
       // Add extra elements from facet source, for example, ajax scripts.
       // @see Drupal\facets\Plugin\facets\facet_source\SearchApiDisplay
-      /* @var \Drupal\facets\FacetSource\FacetSourcePluginInterface $facet_source */
+      /** @var \Drupal\facets\FacetSource\FacetSourcePluginInterface $facet_source */
       $facet_source = $facet->getFacetSource();
-      $build += $facet_source->buildFacet();
+      $facet_build += $facet_source->buildFacet();
 
-      // Add contextual links only when we have results.
-      $build['#contextual_links']['facets_facet'] = [
-        'route_parameters' => ['facets_facet' => $facet->id()],
+      $build = [
+        '#type' => 'container',
+        '#contextual_links' => [
+          'facets_facet' => [
+            'route_parameters' => ['facets_facet' => $facet->id()],
+          ],
+        ],
+        '#attributes' => [
+          'class' => ['block-facet__wrapper'],
+        ],
+        'facet' => $facet_build,
       ];
 
-      if (!empty($build[0]['#attributes']['class']) && in_array('facet-active', $build[0]['#attributes']['class'], TRUE)) {
-        $build['#attributes']['class'][] = 'facet-active';
-      }
-      else {
-        $build['#attributes']['class'][] = 'facet-inactive';
+      // Add css classes.
+      if (!empty($facet_build[0]['#attributes']['class'])) {
+        $css_classes = $facet_build[0]['#attributes']['class'];
+        // Active/inactive css classes.
+        if (in_array('facet-active', $css_classes)) {
+          $build['#attributes']['class'][] = 'facet-active';
+        }
+        else {
+          $build['#attributes']['class'][] = 'facet-inactive';
+        }
+        // Whether it is necessary to add hide css class.
+        if (in_array('facet-hidden', $css_classes)) {
+          $build['#attributes']['class'][] = 'hidden';
+        }
       }
 
       // Add classes needed for ajax.
-      if (!empty($build['#use_ajax'])) {
+      if (!empty($facet_build['#use_ajax'])) {
         $build['#attributes']['class'][] = 'block-facets-ajax';
-        // The configuration block id isn't always set in the configuration.
-        if (isset($this->configuration['block_id'])) {
-          $build['#attributes']['class'][] = 'js-facet-block-id-' . $this->configuration['block_id'];
-          $build['#attributes']['id'] = Html::getUniqueId($this->configuration['block_id']);
-        }
-        else {
-          $build['#attributes']['class'][] = 'js-facet-block-id-' . $this->pluginId;
-          $build['#attributes']['id'] = Html::getUniqueId($this->pluginId);
-        }
+        $block_id = str_replace(':', '--', $this->pluginId);
+        $block_id = Html::cleanCssIdentifier($block_id);
+        $build['#attributes']['class'][] = 'js-facet-block-id-' . $block_id;
+        $build['#attributes']['id'] = Html::getUniqueId($block_id);
       }
+
+      // To render correctly in different situations.
+      $build = [
+        'facet_block' => $build,
+      ];
     }
 
     return $build;
@@ -174,6 +198,13 @@ class FacetBlock extends BlockBase implements ContainerFactoryPluginInterface {
       $block_id = $form['id']['#value'];
       $this->configuration['block_id'] = $block_id;
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPreviewFallbackString() {
+    return $this->t('Placeholder for the "@facet" facet', ['@facet' => $this->getDerivativeId()]);
   }
 
 }

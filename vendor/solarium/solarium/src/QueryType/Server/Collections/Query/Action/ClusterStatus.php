@@ -16,7 +16,7 @@ use Solarium\QueryType\Server\Query\Action\AbstractAsyncAction;
 /**
  * Class ClusterStatus.
  *
- * @see https://lucene.apache.org/solr/guide/cluster-node-management.html#clusterstatus
+ * @see https://solr.apache.org/guide/cluster-node-management.html#clusterstatus
  */
 class ClusterStatus extends AbstractAsyncAction
 {
@@ -97,11 +97,11 @@ class ClusterStatus extends AbstractAsyncAction
     /**
      * Get route.
      *
-     * @return string
+     * @return string|null
      */
-    public function getRoute(): string
+    public function getRoute(): ?string
     {
-        return $this->getOption('route');
+        return $this->getOption('_route_');
     }
 
     /**

@@ -116,6 +116,7 @@ class BackendCompilerPassTest extends UnitTestCase {
    * bag so the setParameter() call effects the parent container as well.
    *
    * @param $service
+   *   The service definition.
    *
    * @return \Symfony\Component\DependencyInjection\ContainerBuilder
    */
@@ -123,7 +124,7 @@ class BackendCompilerPassTest extends UnitTestCase {
     $container = new ContainerBuilder();
     $container->setDefinition('service', $service);
     $container->setDefinition('sqlite.service', new Definition(__NAMESPACE__ . '\\ServiceClassSqlite'));
-    $mock = $this->getMockBuilder('Drupal\Core\Database\Driver\sqlite\Connection')->onlyMethods([])->disableOriginalConstructor()->getMock();
+    $mock = $this->getMockBuilder('Drupal\sqlite\Driver\Database\sqlite\Connection')->onlyMethods([])->disableOriginalConstructor()->getMock();
     $container->set('database', $mock);
     return $container;
   }
@@ -135,6 +136,7 @@ class BackendCompilerPassTest extends UnitTestCase {
    * bag so the setParameter() call effects the parent container as well.
    *
    * @param $service
+   *   The service definition.
    *
    * @return \Symfony\Component\DependencyInjection\ContainerBuilder
    */
@@ -152,6 +154,7 @@ class BackendCompilerPassTest extends UnitTestCase {
    * bag so the setParameter() call effects the parent container as well.
    *
    * @param $service
+   *   The service definition.
    *
    * @return \Symfony\Component\DependencyInjection\ContainerBuilder
    */

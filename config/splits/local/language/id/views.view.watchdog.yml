@@ -1,0 +1,20 @@
+display:
+  default:
+    display_title: Default
+    display_options:
+      fields:
+        type:
+          label: Jenis
+        timestamp:
+          label: Tanggal
+        name:
+          label: Pengguna
+        link:
+          label: Operasi-operasi
+      exposed_form:
+        options:
+          submit_button: Filter
+      filters:
+        type:
+          expose:
+            label: Jenis

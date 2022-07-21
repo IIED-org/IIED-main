@@ -1,0 +1,17 @@
+{
+    "name": "drupal/taxonomy_import",
+    "description": "A module to import taxonomy using CSV or XML file to a user defined vocabulary.",
+    "type": "drupal-module",
+    "keywords": ["Drupal", "taxonomy_import"],
+    "homepage": "https://www.drupal.org/project/taxonomy_import",
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/taxonomy_import",
+        "documentation": "https://www.drupal.org/project/taxonomy_import",
+        "source": "http://cgit.drupalcode.org/taxonomy_import"
+    },
+    "license": "GPL-2.0+",
+    "minimum-stability": "dev",
+    "require": {
+        "drupal/core": "^8 || ^9"
+    }
+}

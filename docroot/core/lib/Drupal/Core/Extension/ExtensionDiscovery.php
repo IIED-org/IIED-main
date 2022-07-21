@@ -229,7 +229,7 @@ class ExtensionDiscovery {
   public function setProfileDirectoriesFromSettings() {
     $this->profileDirectories = [];
     if ($profile = \Drupal::installProfile()) {
-      $this->profileDirectories[] = drupal_get_path('profile', $profile);
+      $this->profileDirectories[] = \Drupal::service('extension.list.profile')->getPath($profile);
     }
     return $this;
   }
@@ -279,7 +279,7 @@ class ExtensionDiscovery {
         return TRUE;
       }
 
-      foreach ($this->profileDirectories as $weight => $profile_path) {
+      foreach ($this->profileDirectories as $profile_path) {
         if (strpos($file->getPath(), $profile_path) === 0) {
           // Parent profile found.
           return TRUE;
@@ -444,7 +444,7 @@ class ExtensionDiscovery {
         $type = FALSE;
         $file = $fileinfo->openFile('r');
         while (!$type && !$file->eof()) {
-          preg_match('@^type:\s*(\'|")?(\w+)\1?\s*$@', $file->fgets(), $matches);
+          preg_match('@^type:\s*(\'|")?(\w+)\1?\s*(?:\#.*)?$@', $file->fgets(), $matches);
           if (isset($matches[2])) {
             $type = $matches[2];
           }

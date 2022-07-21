@@ -63,7 +63,7 @@ function locale_translation_batch_status_check($project, $langcode, array $optio
       // Update the file object with the result data. In case of a redirect we
       // store the resulting uri.
       if (isset($result['last_modified'])) {
-        $remote_file->uri = isset($result['location']) ? $result['location'] : $remote_file->uri;
+        $remote_file->uri = $result['location'] ?? $remote_file->uri;
         $remote_file->timestamp = $result['last_modified'];
         locale_translation_status_save($source->name, $source->langcode, LOCALE_TRANSLATION_REMOTE, $remote_file);
       }
@@ -182,7 +182,7 @@ function locale_translation_batch_fetch_import($project, $langcode, $options, &$
     if (isset($source->type)) {
       if ($source->type == LOCALE_TRANSLATION_REMOTE || $source->type == LOCALE_TRANSLATION_LOCAL) {
         $file = $source->files[LOCALE_TRANSLATION_LOCAL];
-        module_load_include('bulk.inc', 'locale');
+        \Drupal::moduleHandler()->loadInclude('locale', 'inc', 'locale.bulk');
         $options += [
           'message' => t('Importing %langcode translation for %project.', ['%langcode' => $langcode, '%project' => $source->project]),
         ];
@@ -217,7 +217,7 @@ function locale_translation_batch_fetch_import($project, $langcode, $options, &$
  *   Batch results.
  */
 function locale_translation_batch_fetch_finished($success, $results) {
-  module_load_include('bulk.inc', 'locale');
+  \Drupal::moduleHandler()->loadInclude('locale', 'inc', 'locale.bulk');
   if ($success) {
     \Drupal::state()->set('locale.translation_last_checked', REQUEST_TIME);
   }

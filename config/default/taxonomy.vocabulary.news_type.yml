@@ -1,0 +1,8 @@
+uuid: 8749dbf7-0f55-4c60-96a7-505318c1d88e
+langcode: en
+status: true
+dependencies: {  }
+name: 'News type'
+vid: news_type
+description: 'Types of news article'
+weight: 0

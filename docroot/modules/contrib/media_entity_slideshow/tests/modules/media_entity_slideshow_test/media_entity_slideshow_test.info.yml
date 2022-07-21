@@ -1,0 +1,14 @@
+name: 'Media entity slideshow test'
+type: module
+description: 'Provides test bundle for media entity slideshow.'
+package: Testing
+dependencies:
+  - media_entity_slideshow:media_entity_slideshow
+  - drupal:media
+  - drupal:file
+  - drupal:image
+
+# Information added by Drupal.org packaging script on 2022-03-21
+version: '8.x-2.5'
+project: 'media_entity_slideshow'
+datestamp: 1647851727

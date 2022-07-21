@@ -27,7 +27,7 @@ class InstallTest extends BrowserTestBase {
   protected $defaultTheme = 'stark';
 
   /**
-   * Verify that drupal_get_schema() can be used during module installation.
+   * Verify that module's schema can be used during module installation.
    */
   public function testGetSchemaAtInstallTime() {
     // @see module_test_install()
@@ -51,9 +51,11 @@ class InstallTest extends BrowserTestBase {
    * Tests recorded schema versions of early installed modules in the installer.
    */
   public function testRequiredModuleSchemaVersions() {
-    $version = drupal_get_installed_schema_version('system', TRUE);
+    /** @var \Drupal\Core\Update\UpdateHookRegistry $update_registry */
+    $update_registry = \Drupal::service('update.update_hook_registry');
+    $version = $update_registry->getInstalledVersion('system');
     $this->assertGreaterThan(0, $version);
-    $version = drupal_get_installed_schema_version('user', TRUE);
+    $version = $update_registry->getInstalledVersion('user');
     $this->assertGreaterThan(0, $version);
 
     $post_update_key_value = \Drupal::keyValue('post_update');

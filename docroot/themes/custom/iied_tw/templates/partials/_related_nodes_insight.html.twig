@@ -1,0 +1,11 @@
+<section class="py-12 bg-gray-100">
+    <div class="container">
+        {% if drupal_view_result('related_nodes', 'block_ic') is not empty %}
+            {{ drupal_view('related_nodes', 'block_ic') }}
+            {% else %}
+            {% if drupal_view_result('related_nodes', 'block_it') is not empty %}
+            {{ drupal_view('related_nodes', 'block_it') }}
+            {% endif %}
+        {% endif %}
+    </div>
+</section>

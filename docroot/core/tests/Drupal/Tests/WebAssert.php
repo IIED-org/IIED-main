@@ -46,7 +46,7 @@ class WebAssert extends MinkWebAssert {
   /**
    * {@inheritdoc}
    */
-  protected function cleanUrl($url) {
+  protected function cleanUrl($url, $include_query = FALSE) {
     if ($url instanceof Url) {
       $url = $url->setAbsolute()->toString();
     }
@@ -54,12 +54,17 @@ class WebAssert extends MinkWebAssert {
     if ($this->baseUrl !== '' && strpos($url, $this->baseUrl) === 0) {
       $url = substr($url, strlen($this->baseUrl));
     }
+    $parts = parse_url($url);
     // Make sure there is a forward slash at the beginning of relative URLs for
     // consistency.
-    if (parse_url($url, PHP_URL_HOST) === NULL && strpos($url, '/') !== 0) {
-      $url = "/$url";
+    if (empty($parts['host']) && strpos($url, '/') !== 0) {
+      $parts['path'] = '/' . $parts['path'];
     }
-    return parent::cleanUrl($url);
+    $fragment = empty($parts['fragment']) ? '' : '#' . $parts['fragment'];
+    $path = empty($parts['path']) ? '/' : $parts['path'];
+    $query = $include_query && !empty($parts['query']) ? '?' . $parts['query'] : '';
+
+    return preg_replace('/^\/[^\.\/]+\.php\//', '/', $path) . $query . $fragment;
   }
 
   /**
@@ -754,7 +759,10 @@ class WebAssert extends MinkWebAssert {
     if (func_num_args() > 1) {
       @trigger_error('Calling ' . __METHOD__ . ' with more than one argument is deprecated in drupal:9.1.0 and will throw an \InvalidArgumentException in drupal:10.0.0. See https://www.drupal.org/node/3162537', E_USER_DEPRECATED);
     }
-    return parent::addressEquals($page);
+    $expected = $this->cleanUrl($page, TRUE);
+    $actual = $this->cleanUrl($this->session->getCurrentUrl(), strpos($expected, '?') !== FALSE);
+
+    $this->assert($actual === $expected, sprintf('Current page is "%s", but "%s" expected.', $actual, $expected));
   }
 
   /**
@@ -764,7 +772,10 @@ class WebAssert extends MinkWebAssert {
     if (func_num_args() > 1) {
       @trigger_error('Calling ' . __METHOD__ . ' with more than one argument is deprecated in drupal:9.1.0 and will throw an \InvalidArgumentException in drupal:10.0.0. See https://www.drupal.org/node/3162537', E_USER_DEPRECATED);
     }
-    return parent::addressNotEquals($page);
+    $expected = $this->cleanUrl($page, TRUE);
+    $actual = $this->cleanUrl($this->session->getCurrentUrl(), strpos($expected, '?') !== FALSE);
+
+    $this->assert($actual !== $expected, sprintf('Current page is "%s", but should not be.', $actual));
   }
 
   /**
@@ -1112,6 +1123,138 @@ class WebAssert extends MinkWebAssert {
       @trigger_error('Calling ' . __METHOD__ . ' with more than two arguments is deprecated in drupal:9.1.0 and will throw an \InvalidArgumentException in drupal:10.0.0. See https://www.drupal.org/node/3162537', E_USER_DEPRECATED);
     }
     return parent::checkboxNotChecked($field, $container);
+  }
+
+  /**
+   * Asserts that a status message exists.
+   *
+   * @param string|null $type
+   *   The optional message type: status, error, or warning.
+   */
+  public function statusMessageExists(string $type = NULL): void {
+    $selector = $this->buildStatusMessageSelector(NULL, $type);
+    try {
+      $this->elementExists('xpath', $selector);
+    }
+    catch (ExpectationException $e) {
+      Assert::fail($e->getMessage());
+    }
+  }
+
+  /**
+   * Asserts that a status message does not exist.
+   *
+   * @param string|null $type
+   *   The optional message type: status, error, or warning.
+   */
+  public function statusMessageNotExists(string $type = NULL): void {
+    $selector = $this->buildStatusMessageSelector(NULL, $type);
+    try {
+      $this->elementNotExists('xpath', $selector);
+    }
+    catch (ExpectationException $e) {
+      Assert::fail($e->getMessage());
+    }
+  }
+
+  /**
+   * Asserts that a status message containing a given string exists.
+   *
+   * @param string $message
+   *   The partial message to assert.
+   * @param string|null $type
+   *   The optional message type: status, error, or warning.
+   */
+  public function statusMessageContains(string $message, string $type = NULL): void {
+    $selector = $this->buildStatusMessageSelector($message, $type);
+    try {
+      $this->elementExists('xpath', $selector);
+    }
+    catch (ExpectationException $e) {
+      Assert::fail($e->getMessage());
+    }
+  }
+
+  /**
+   * Asserts that a status message containing a given string does not exist.
+   *
+   * @param string $message
+   *   The partial message to assert.
+   * @param string|null $type
+   *   The optional message type: status, error, or warning.
+   */
+  public function statusMessageNotContains(string $message, string $type = NULL): void {
+    $selector = $this->buildStatusMessageSelector($message, $type);
+    try {
+      $this->elementNotExists('xpath', $selector);
+    }
+    catch (ExpectationException $e) {
+      Assert::fail($e->getMessage());
+    }
+  }
+
+  /**
+   * Builds a xpath selector for a message with given type and text.
+   *
+   * The selector is designed to work with the status-messages.html.twig
+   * template in the system module.
+   *
+   * See Drupal\Core\Render\Element\StatusMessages for aria label definition.
+   *
+   * @param string|null $message
+   *   The optional message or partial message to assert.
+   * @param string|null $type
+   *   The optional message type: status, error, or warning.
+   *
+   * @return string
+   *   The xpath selector for the message.
+   *
+   * @throws \InvalidArgumentException
+   *   Thrown when $type is not an allowed type.
+   */
+  protected function buildStatusMessageSelector(string $message = NULL, string $type = NULL): string {
+    $allowed_types = [
+      'status',
+      'error',
+      'warning',
+      NULL,
+    ];
+    if (!in_array($type, $allowed_types, TRUE)) {
+      throw new \InvalidArgumentException(sprintf("If a status message type is specified, the allowed values are 'status', 'error', 'warning'. The value provided was '%s'.", $type));
+    }
+    $selector = '//div[@data-drupal-messages]';
+    $aria_label = NULL;
+    switch ($type) {
+      case 'status':
+        $aria_label = 'Status message';
+        break;
+
+      case 'error':
+        $aria_label = 'Error message';
+        break;
+
+      case 'warning':
+        $aria_label = 'Warning message';
+    }
+
+    if ($message && $aria_label) {
+      $selector = $this->buildXPathQuery($selector . '//div[contains(@aria-label, :aria_label) and contains(., :message)]', [
+        ':aria_label' => $aria_label,
+        ':message' => $message,
+      ]);
+    }
+    elseif ($message) {
+      $selector = $this->buildXPathQuery($selector . '//div[contains(., :message)]', [
+        ':message' => $message,
+      ]);
+    }
+    elseif ($aria_label) {
+      $selector = $this->buildXPathQuery($selector . '//div[@aria-label=:aria_label]', [
+        ':aria_label' => $aria_label,
+      ]);
+    }
+
+    return $selector;
   }
 
 }

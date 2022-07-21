@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Filter by administrative area.
  *
- * @todo: Rebuild the exposed filter element via AJAX when the country changes.
+ * @todo Rebuild the exposed filter element via AJAX when the country changes.
  * @see https://www.drupal.org/node/2840717
  *
  * @ingroup views_filter_handlers

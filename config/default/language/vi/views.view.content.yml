@@ -1,10 +1,9 @@
 label: 'Nội dung'
 display:
   default:
+    display_title: Default
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
+      title: 'Nội dung'
       fields:
         title:
           label: 'Tiêu đề'
@@ -16,6 +15,9 @@ display:
           label: 'Trạng thái'
         operations:
           label: 'Thao tác'
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         title:
           expose:
@@ -29,8 +31,6 @@ display:
         langcode:
           expose:
             label: 'Ngôn ngữ'
-      title: 'Nội dung'
-    display_title: 'Mặc định'
   page_1:
     display_options:
       menu:

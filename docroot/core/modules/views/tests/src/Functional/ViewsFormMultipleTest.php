@@ -24,8 +24,8 @@ class ViewsFormMultipleTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
-    parent::setUp($import_test_views);
+  protected function setUp($import_test_views = TRUE, $modules = ['views_test_config']): void {
+    parent::setUp($import_test_views, $modules);
 
     $this->enableViewsTestModule();
   }
@@ -36,8 +36,8 @@ class ViewsFormMultipleTest extends ViewTestBase {
   protected function viewsData() {
     $data = parent::viewsData();
     $data['views_test_data']['field_form_button_test']['field'] = [
-      'title' => t('Button test'),
-      'help' => t('Adds a test form button.'),
+      'title' => 'Button test',
+      'help' => 'Adds a test form button.',
       'id' => 'field_form_button_test',
     ];
     return $data;

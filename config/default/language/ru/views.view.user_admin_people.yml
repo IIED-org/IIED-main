@@ -1,10 +1,7 @@
 display:
   default:
-    display_title: 'По умолчанию'
+    display_title: Default
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         name:
           label: 'Имя пользователя'
@@ -14,6 +11,9 @@ display:
             format_custom_true: Активно
         operations:
           label: Операции
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         status:
           group_info:

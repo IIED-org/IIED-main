@@ -251,6 +251,7 @@ class Block extends DisplayPluginBase {
 
   /**
    * Perform any necessary changes to the form values prior to storage.
+   *
    * There is no need for this function to actually store the data.
    */
   public function submitOptionsForm(&$form, FormStateInterface $form_state) {
@@ -369,13 +370,10 @@ class Block extends DisplayPluginBase {
   }
 
   /**
-   * Block views use exposed widgets only if AJAX is set.
+   * {@inheritdoc}
    */
-  public function usesExposed() {
-    if ($this->ajaxEnabled()) {
-      return parent::usesExposed();
-    }
-    return FALSE;
+  public function usesExposedFormInBlock() {
+    return TRUE;
   }
 
   /**

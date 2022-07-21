@@ -1,0 +1,13 @@
+/.idea
+/vendor
+/composer.lock
+/docs/_build
+/build/
+/phpunit.xml
+/docker-compose.override.yml
+/runner.yml
+/.docksal/docksal-local.env
+/.editorconfig
+/.gitattributes
+/node_modules
+coverage

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Laminas\ServiceManager\Tool;
 
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Exception\InvalidArgumentException;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionParameter;
 
@@ -16,10 +16,10 @@ use function array_merge;
 use function array_shift;
 use function count;
 use function implode;
+use function preg_replace;
 use function sort;
 use function sprintf;
 use function str_repeat;
-use function str_replace;
 use function strrpos;
 use function substr;
 
@@ -27,13 +27,13 @@ class FactoryCreator
 {
     public const FACTORY_TEMPLATE = <<<'EOT'
         <?php
-        
+
         declare(strict_types=1);
-        
+
         namespace %s;
-        
+
         %s
-        
+
         class %sFactory implements FactoryInterface
         {
             /**
@@ -47,7 +47,7 @@ class FactoryCreator
                 return new %s(%s);
             }
         }
-        
+
         EOT;
 
     private const IMPORT_ALWAYS = [
@@ -65,7 +65,7 @@ class FactoryCreator
 
         return sprintf(
             self::FACTORY_TEMPLATE,
-            str_replace('\\' . $class, '', $className),
+            preg_replace('/\\\\' . $class . '$/', '', $className),
             $this->createImportStatements($className),
             $class,
             $class,
@@ -87,7 +87,7 @@ class FactoryCreator
     {
         $reflectionClass = new ReflectionClass($className);
 
-        if (! $reflectionClass || ! $reflectionClass->getConstructor()) {
+        if (! $reflectionClass->getConstructor()) {
             return [];
         }
 
@@ -135,9 +135,8 @@ class FactoryCreator
      */
     private function createArgumentString($className)
     {
-        $arguments = array_map(function (string $dependency): string {
-            return sprintf('$container->get(\\%s::class)', $dependency);
-        }, $this->getConstructorParameters($className));
+        $arguments = array_map(fn(string $dependency): string
+            => sprintf('$container->get(\\%s::class)', $dependency), $this->getConstructorParameters($className));
 
         switch (count($arguments)) {
             case 0:
@@ -160,8 +159,6 @@ class FactoryCreator
     {
         $imports = array_merge(self::IMPORT_ALWAYS, [$className]);
         sort($imports);
-        return implode("\n", array_map(function (string $import): string {
-            return sprintf('use %s;', $import);
-        }, $imports));
+        return implode("\n", array_map(static fn(string $import): string => sprintf('use %s;', $import), $imports));
     }
 }

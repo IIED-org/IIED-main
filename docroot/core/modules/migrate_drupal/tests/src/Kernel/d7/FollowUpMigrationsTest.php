@@ -22,12 +22,11 @@ class FollowUpMigrationsTest extends MigrateDrupal7TestBase {
     'content_translation',
     'comment',
     'datetime',
+    'datetime_range',
     'image',
     'language',
     'link',
     'menu_ui',
-    // A requirement for translation migrations.
-    'migrate_drupal_multilingual',
     'node',
     'taxonomy',
     'telephone',

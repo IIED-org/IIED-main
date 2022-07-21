@@ -5,11 +5,12 @@ namespace Drupal\Tests\address\Kernel;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\filter\Entity\FilterFormat;
+use Drupal\KernelTests\KernelTestBase;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
-use Drupal\Tests\token\Kernel\KernelTestBase;
+use Drupal\Tests\token\Functional\TokenTestTrait;
 
 /**
  * Tests the country name token.
@@ -20,6 +21,7 @@ use Drupal\Tests\token\Kernel\KernelTestBase;
 class CountryNameTokenTest extends KernelTestBase {
 
   use TaxonomyTestTrait;
+  use TokenTestTrait;
 
   /**
    * A test format.
@@ -40,19 +42,32 @@ class CountryNameTokenTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = [
-    'node', 'field', 'filter', 'address', 'taxonomy', 'language', 'text',
+  protected static $modules = [
+    'node',
+    'field',
+    'filter',
+    'address',
+    'taxonomy',
+    'language',
+    'token',
+    'token_module_test',
+    'text',
+    'user',
+    'system',
+    'path_alias',
   ];
 
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     if (\Drupal::entityTypeManager()->hasDefinition('path_alias')) {
       $this->installEntitySchema('path_alias');
     }
+    \Drupal::service('router.builder')->rebuild();
+    $this->installConfig(['system']);
     $this->installEntitySchema('node');
     $this->installEntitySchema('taxonomy_term');
     $this->installEntitySchema('user');
@@ -96,6 +111,7 @@ class CountryNameTokenTest extends KernelTestBase {
 
     $this->testFormat = FilterFormat::create([
       'format' => 'test',
+      'name' => 'Filter format test',
       'weight' => 1,
       'filters' => [
         'filter_html_escape' => ['status' => TRUE],

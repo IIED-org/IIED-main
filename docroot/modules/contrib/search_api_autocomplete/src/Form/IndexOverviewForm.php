@@ -141,7 +141,7 @@ class IndexOverviewForm extends FormBase {
         }
         $form[$group_label]['searches']['#type'] = 'tableselect';
         $form[$group_label]['searches']['#header'] = [
-          'label' => $this->t('label'),
+          'label' => $this->t('Label'),
           'operations' => $this->t('Operations'),
         ];
         $form[$group_label]['searches']['#empty'] = '';

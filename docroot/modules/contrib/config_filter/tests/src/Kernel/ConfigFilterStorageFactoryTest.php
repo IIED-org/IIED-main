@@ -13,10 +13,12 @@ use Drupal\KernelTests\KernelTestBase;
  */
 class ConfigFilterStorageFactoryTest extends KernelTestBase {
 
+  use ConfigStorageTestTrait;
+
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'system',
     'config_filter',
     'config_filter_test',
@@ -38,7 +40,7 @@ class ConfigFilterStorageFactoryTest extends KernelTestBase {
     // Config Filter makes the sync storage a filtered storage.
     $this->assertInstanceOf(FilteredStorageInterface::class, $this->container->get('config.storage.sync'));
     // Export the configuration. The pirate filter changes system.site.
-    $this->copyConfig($this->container->get('config.storage'), $this->container->get('config.storage.sync'));
+    $this->copyConfig($this->getExportStorage(), $this->getSyncFileStorage());
 
     // The pirate filter changes the system.site when importing.
     $this->assertEquals(['system.site'], $this->configImporter()->getStorageComparer()->getChangelist('update'));

@@ -1,5 +1,4 @@
 .form-element.chosen-container-single {
-  width: auto !important;
   padding: 0;
 }
 
@@ -20,7 +19,6 @@
 }
 
 .form-element.chosen-container-multi {
-  width: auto !important;
 }
 
 .form-element.chosen-container-multi .chosen-choices {
@@ -33,4 +31,8 @@
 .chosen-container-active.chosen-with-drop .chosen-single {
   background: none !important;
   border: 0 none !important;
+}
+
+.chosen-container-multi.chosen-with-drop .chosen-drop {
+  left: 0;
 }

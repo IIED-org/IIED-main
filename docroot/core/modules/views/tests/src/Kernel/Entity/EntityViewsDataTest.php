@@ -256,6 +256,11 @@ class EntityViewsDataTest extends KernelTestBase {
     $this->assertCount(1, $revision_data['table']['join']);
     $this->assertEquals(['entity_test' => ['left_field' => 'revision_id', 'field' => 'revision_id', 'type' => 'INNER']], $revision_data['table']['join']);
     $this->assertFalse(isset($data['data_table']));
+
+    $this->assertEquals('entity_test', $revision_data['id']['relationship']['base']);
+    $this->assertEquals('id', $revision_data['id']['relationship']['base field']);
+    $this->assertEquals('entity_test', $revision_data['revision_id']['relationship']['base']);
+    $this->assertEquals('revision_id', $revision_data['revision_id']['relationship']['base field']);
   }
 
   /**
@@ -294,16 +299,25 @@ class EntityViewsDataTest extends KernelTestBase {
     ], $revision_field_data['table']['join']);
 
     $revision_base_data = $data['entity_test_mulrev_revision'];
-    $this->assertCount(1, $revision_base_data['table']['join']);
+    $this->assertCount(2, $revision_base_data['table']['join']);
     $this->assertEquals([
       'entity_test_mulrev_property_revision' => [
         'left_field' => 'revision_id',
         'field' => 'revision_id',
         'type' => 'INNER',
       ],
+      'entity_test_mul_property_data' => [
+        'left_field' => 'revision_id',
+        'field' => 'revision_id',
+      ],
     ], $revision_base_data['table']['join']);
 
     $this->assertFalse(isset($data['data_table']));
+
+    $this->assertEquals('entity_test_mul_property_data', $revision_field_data['id']['relationship']['base']);
+    $this->assertEquals('id', $revision_field_data['id']['relationship']['base field']);
+    $this->assertEquals('entity_test_mul_property_data', $revision_field_data['revision_id']['relationship']['base']);
+    $this->assertEquals('revision_id', $revision_field_data['revision_id']['relationship']['base field']);
   }
 
   /**
@@ -341,15 +355,24 @@ class EntityViewsDataTest extends KernelTestBase {
     ], $revision_field_data['table']['join']);
 
     $revision_base_data = $data['entity_test_mulrev_revision'];
-    $this->assertCount(1, $revision_base_data['table']['join']);
+    $this->assertCount(2, $revision_base_data['table']['join']);
     $this->assertEquals([
       'entity_test_mulrev_property_revision' => [
         'left_field' => 'revision_id',
         'field' => 'revision_id',
         'type' => 'INNER',
       ],
+      'entity_test_mulrev_field_data' => [
+        'left_field' => 'revision_id',
+        'field' => 'revision_id',
+      ],
     ], $revision_base_data['table']['join']);
     $this->assertFalse(isset($data['data_table']));
+
+    $this->assertEquals('entity_test_mulrev_field_data', $revision_field_data['id']['relationship']['base']);
+    $this->assertEquals('id', $revision_field_data['id']['relationship']['base field']);
+    $this->assertEquals('entity_test_mulrev_field_data', $revision_field_data['revision_id']['relationship']['base']);
+    $this->assertEquals('revision_id', $revision_field_data['revision_id']['relationship']['base field']);
   }
 
   /**
@@ -583,6 +606,11 @@ class EntityViewsDataTest extends KernelTestBase {
     $this->assertNumericField($data['entity_test_mulrev_property_revision']['id']);
     $this->assertViewsDataField($data['entity_test_mulrev_property_revision']['id'], 'id');
 
+    $this->assertEquals('entity_test_mulrev_property_data', $data['entity_test_mulrev_property_revision']['id']['relationship']['base']);
+    $this->assertEquals('id', $data['entity_test_mulrev_property_revision']['id']['relationship']['base field']);
+    $this->assertEquals('entity_test_mulrev_property_data', $data['entity_test_mulrev_property_revision']['revision_id']['relationship']['base']);
+    $this->assertEquals('revision_id', $data['entity_test_mulrev_property_revision']['revision_id']['relationship']['base field']);
+
     $this->assertLanguageField($data['entity_test_mulrev_property_revision']['langcode']);
     $this->assertViewsDataField($data['entity_test_mulrev_property_revision']['langcode'], 'langcode');
     $this->assertEquals('Translation language', $data['entity_test_mulrev_property_revision']['langcode']['title']);
@@ -637,18 +665,22 @@ class EntityViewsDataTest extends KernelTestBase {
    *   The views data to check.
    * @param string $field_name
    *   The entity field name.
+   *
+   * @internal
    */
-  protected function assertViewsDataField($data, $field_name) {
+  protected function assertViewsDataField(array $data, string $field_name): void {
     $this->assertEquals($field_name, $data['entity field']);
   }
 
   /**
    * Tests views data for a string field.
    *
-   * @param $data
+   * @param array $data
    *   The views data to check.
+   *
+   * @internal
    */
-  protected function assertStringField($data) {
+  protected function assertStringField(array $data): void {
     $this->assertEquals('field', $data['field']['id']);
     $this->assertEquals('string', $data['filter']['id']);
     $this->assertEquals('string', $data['argument']['id']);
@@ -658,10 +690,12 @@ class EntityViewsDataTest extends KernelTestBase {
   /**
    * Tests views data for a URI field.
    *
-   * @param $data
+   * @param array $data
    *   The views data to check.
+   *
+   * @internal
    */
-  protected function assertUriField($data) {
+  protected function assertUriField(array $data): void {
     $this->assertEquals('field', $data['field']['id']);
     $this->assertEquals('string', $data['field']['default_formatter']);
     $this->assertEquals('string', $data['filter']['id']);
@@ -672,12 +706,14 @@ class EntityViewsDataTest extends KernelTestBase {
   /**
    * Tests views data for a long text field.
    *
-   * @param $data
+   * @param array $data
    *   The views data for the table this field is in.
-   * @param $field_name
+   * @param string $field_name
    *   The name of the field being checked.
+   *
+   * @internal
    */
-  protected function assertLongTextField($data, $field_name) {
+  protected function assertLongTextField(array $data, string $field_name): void {
     $value_field = $data[$field_name . '__value'];
     $this->assertEquals('field', $value_field['field']['id']);
     $this->assertEquals($field_name . '__format', $value_field['field']['format']);
@@ -693,8 +729,10 @@ class EntityViewsDataTest extends KernelTestBase {
    *
    * @param array $data
    *   The views data to check.
+   *
+   * @internal
    */
-  protected function assertUuidField($data) {
+  protected function assertUuidField(array $data): void {
     // @todo Can we provide additional support for UUIDs in views?
     $this->assertEquals('field', $data['field']['id']);
     $this->assertFalse($data['field']['click sortable']);
@@ -708,8 +746,10 @@ class EntityViewsDataTest extends KernelTestBase {
    *
    * @param array $data
    *   The views data to check.
+   *
+   * @internal
    */
-  protected function assertNumericField($data) {
+  protected function assertNumericField(array $data): void {
     $this->assertEquals('field', $data['field']['id']);
     $this->assertEquals('numeric', $data['filter']['id']);
     $this->assertEquals('numeric', $data['argument']['id']);
@@ -721,8 +761,10 @@ class EntityViewsDataTest extends KernelTestBase {
    *
    * @param array $data
    *   The views data to check.
+   *
+   * @internal
    */
-  protected function assertLanguageField($data) {
+  protected function assertLanguageField(array $data): void {
     $this->assertEquals('field', $data['field']['id']);
     $this->assertEquals('language', $data['filter']['id']);
     $this->assertEquals('language', $data['argument']['id']);
@@ -731,8 +773,10 @@ class EntityViewsDataTest extends KernelTestBase {
 
   /**
    * Tests views data for an entity reference field.
+   *
+   * @internal
    */
-  protected function assertEntityReferenceField($data) {
+  protected function assertEntityReferenceField(array $data): void {
     $this->assertEquals('field', $data['field']['id']);
     $this->assertEquals('numeric', $data['filter']['id']);
     $this->assertEquals('numeric', $data['argument']['id']);
@@ -741,8 +785,10 @@ class EntityViewsDataTest extends KernelTestBase {
 
   /**
    * Tests views data for a bundle field.
+   *
+   * @internal
    */
-  protected function assertBundleField($data) {
+  protected function assertBundleField(array $data): void {
     $this->assertEquals('field', $data['field']['id']);
     $this->assertEquals('bundle', $data['filter']['id']);
     $this->assertEquals('string', $data['argument']['id']);

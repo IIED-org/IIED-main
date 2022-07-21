@@ -10,6 +10,7 @@ dependencies:
     - field.field.node.event.field_collections
     - field.field.node.event.field_contact
     - field.field.node.event.field_date
+    - field.field.node.event.field_daterange
     - field.field.node.event.field_dates
     - field.field.node.event.field_direct_link
     - field.field.node.event.field_display_time
@@ -38,22 +39,22 @@ bundle: event
 mode: teaser
 content:
   body:
-    label: hidden
     type: text_summary_or_trimmed
-    weight: 101
+    label: hidden
     settings:
       trim_length: 600
     third_party_settings: {  }
+    weight: 101
     region: content
   links:
-    weight: 100
     settings: {  }
     third_party_settings: {  }
+    weight: 100
     region: content
   sharing_buttons:
-    weight: 100
     settings: {  }
     third_party_settings: {  }
+    weight: 100
     region: content
 hidden:
   field_alternative_label: true
@@ -61,6 +62,7 @@ hidden:
   field_collections: true
   field_contact: true
   field_date: true
+  field_daterange: true
   field_dates: true
   field_direct_link: true
   field_display_time: true

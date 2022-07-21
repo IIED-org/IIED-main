@@ -2,10 +2,12 @@
 
 namespace Drupal\views_bulk_operations\Service;
 
+use Drupal\Core\Access\AccessResultReasonInterface;
 use Drupal\views\Views;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\views_bulk_operations\ViewsBulkOperationsBatch;
 use Drupal\views_bulk_operations\Action\ViewsBulkOperationsActionInterface;
@@ -211,15 +213,15 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
       $this->view->setExposedInput(['_views_bulk_operations_override' => TRUE]);
     }
 
+    $base_field = $this->view->storage->get('base_field');
+
     // In some cases we may encounter nondeterministic behaviour in
     // db queries with sorts allowing different order of results.
     // To fix this we're removing all sorts and setting one sorting
     // rule by the view base id field.
-    $sorts = $this->view->getHandlers('sort');
-    foreach ($sorts as $id => $sort) {
+    foreach (array_keys($this->view->getHandlers('sort')) as $id) {
       $this->view->setHandler($this->bulkFormData['display_id'], 'sort', $id, NULL);
     }
-    $base_field = $this->view->storage->get('base_field');
     $this->view->setHandler($this->bulkFormData['display_id'], 'sort', $base_field, [
       'id' => $base_field,
       'table' => $this->view->storage->get('base_table'),
@@ -227,7 +229,7 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
       'order' => 'ASC',
       'relationship' => 'none',
       'group_type' => 'group',
-      'exposed' => 'FALSE',
+      'exposed' => FALSE,
       'plugin_id' => 'standard',
     ]);
 
@@ -246,7 +248,6 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
     $this->moduleHandler->invokeAll('views_pre_execute', [$this->view]);
     $this->view->query->execute($this->view);
 
-    $base_field = $this->view->storage->get('base_field');
     foreach ($this->view->result as $row) {
       $entity = $this->viewDataService->getEntity($row);
 
@@ -304,7 +305,9 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
       $batch_list = $list;
     }
 
-    $this->view->setItemsPerPage($batch_size);
+    // Note: this needs to be set to 0 because otherwise we may lose
+    // entity translations from the results.
+    $this->view->setItemsPerPage(0);
     $this->view->setCurrentPage(0);
     $this->view->setOffset(0);
     $this->view->initHandlers();
@@ -326,7 +329,7 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
     // Modify the view query: determine and apply the base field condition.
     $base_field_values = [];
     foreach ($batch_list as $item) {
-      $base_field_values[] = $item[0];
+      $base_field_values[$item[0]] = $item[0];
     }
     if (empty($base_field_values)) {
       return 0;
@@ -353,6 +356,13 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
     // query. Give those modules the opportunity to alter the query again.
     $this->view->query->alter($this->view);
 
+    // Use a different pager ID so we don't break the real pager.
+    // @todo Check if we can use something else to set this value.
+    $pager = $this->view->getPager();
+    if (array_key_exists('id', $pager->options)) {
+      $pager->options['id'] += (1000 + $this->view->getItemsPerPage());
+    }
+
     // Execute the view.
     $this->moduleHandler->invokeAll('views_pre_execute', [$this->view]);
     $this->view->query->execute($this->view);
@@ -360,21 +370,21 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
     // Get entities.
     $this->viewDataService->init($this->view, $this->view->getDisplay(), $this->bulkFormData['relationship_id']);
 
-    foreach ($this->view->result as $row_index => $row) {
-      // This may return rows for all possible languages.
-      // Check if the current language is on the list.
-      $found = FALSE;
-      $entity = $this->viewDataService->getEntity($row);
-      foreach ($batch_list as $delta => $item) {
+    // Get all the entities in the batch_list from the view.
+    // Check labnguage as well as the query will fetch results basing on
+    // base ID field for all languages.
+    $result_hits = [];
+    foreach ($batch_list as $delta => $item) {
+      foreach ($this->view->result as $row_index => $row) {
+        if (array_key_exists($row_index, $result_hits)) {
+          continue;
+        }
+        $entity = $this->viewDataService->getEntity($row);
         if ($row->{$base_field} === $item[0] && $entity->language()->getId() === $item[1]) {
+          $result_hits[$row_index] = TRUE;
           $this->queue[] = $entity;
-          $found = TRUE;
-          unset($batch_list[$delta]);
           break;
         }
-      }
-      if (!$found) {
-        unset($this->view->result[$row_index]);
       }
     }
 
@@ -450,14 +460,46 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
 
     // Check access.
     foreach ($this->queue as $delta => $entity) {
-      if (!$this->action->access($entity, $this->currentUser)) {
-        $output[] = $this->t('Access denied');
+      $accessResult = $this->action->access($entity, $this->currentUser, TRUE);
+      if ($accessResult->isAllowed() === FALSE) {
+        $message = $this->t('Access denied');
+
+        // If we're given a reason why access was denied, display it.
+        if ($accessResult instanceof AccessResultReasonInterface) {
+          $reason = $accessResult->getReason();
+          if (!empty($reason)) {
+            $message = $this->t('Access denied: @reason', [
+              '@reason' => $accessResult->getReason(),
+            ]);
+          }
+        }
+
+        $output[] = $message;
         unset($this->queue[$delta]);
       }
     }
 
     // Process queue.
     $results = $this->action->executeMultiple($this->queue);
+
+    // Prepare for the next major change: type hinting.
+    if ($this->action instanceof ViewsBulkOperationsActionInterface) {
+      $deprecated = FALSE;
+      if (!is_array($results)) {
+        $deprecated = TRUE;
+      }
+      else {
+        foreach ($results as $result) {
+          if (!$result instanceof MarkupInterface) {
+            $deprecated = TRUE;
+            break;
+          }
+        }
+      }
+      if ($deprecated) {
+        @trigger_error(sprintf('The executeMultiple method of the %s class must return an array of \Drupal\Component\Render\MarkupInterface, other return types are deprecated.', E_USER_DEPRECATED));
+      }
+    }
 
     // Populate output.
     if (empty($results)) {

@@ -1144,7 +1144,7 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
         // Allow for indexes and unique keys to specified as an array of column
         // name and length.
         if (is_array($column)) {
-          list($column_name, $length) = $column;
+          [$column_name, $length] = $column;
           $data[$real_key][] = [$column_mapping[$column_name], $length];
         }
         else {
@@ -2540,7 +2540,7 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
   }
 
   /**
-   * Typecasts values to proper datatypes.
+   * Typecasts values to the proper data type.
    *
    * MySQL PDO silently casts, e.g. FALSE and '' to 0, when inserting the value
    * into an integer column, but PostgreSQL PDO does not. Use the schema

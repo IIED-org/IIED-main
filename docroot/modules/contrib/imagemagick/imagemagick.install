@@ -69,3 +69,9 @@ function imagemagick_update_8302() {
 function imagemagick_update_8303() {
   \Drupal::service('module_installer')->install(['sophron']);
 }
+
+/**
+ * Force caches rebuild to reflect changes to service parameters.
+ */
+function imagemagick_update_8304() {
+}

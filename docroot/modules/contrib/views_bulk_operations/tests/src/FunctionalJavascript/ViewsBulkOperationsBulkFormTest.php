@@ -64,7 +64,7 @@ class ViewsBulkOperationsBulkFormTest extends WebDriverTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'node',
     'views',
     'views_bulk_operations',
@@ -74,7 +74,7 @@ class ViewsBulkOperationsBulkFormTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Create some nodes for testing.

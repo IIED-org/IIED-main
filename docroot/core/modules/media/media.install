@@ -19,7 +19,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
  * Implements hook_install().
  */
 function media_install() {
-  $source = drupal_get_path('module', 'media') . '/images/icons';
+  $source = \Drupal::service('extension.list.module')->getPath('media') . '/images/icons';
   $destination = \Drupal::config('media.settings')->get('icon_base_uri');
   /** @var \Drupal\Core\File\FileSystemInterface $file_system */
   $file_system = \Drupal::service('file_system');
@@ -73,20 +73,6 @@ function media_requirements($phase) {
         $description = $error . ' ' . $description;
         $requirements['media']['description'] = $description;
         $requirements['media']['severity'] = REQUIREMENT_ERROR;
-      }
-    }
-
-    // Prevent installation if the 1.x branch of the contrib module is enabled.
-    if (\Drupal::moduleHandler()->moduleExists('media_entity')) {
-      $info = \Drupal::service('extension.list.module')->getExtensionInfo('media_entity');
-      if (version_compare($info['version'], '8.x-2') < 0) {
-        $requirements['media_module_incompatibility'] = [
-          'title' => t('Media'),
-          'description' => t('The Media module is not compatible with contrib <a href=":url">Media Entity</a> 1.x branch. Please check the 2.x branch of that module for an upgrade path.', [
-            ':url' => 'https://drupal.org/project/media_entity',
-          ]),
-          'severity' => REQUIREMENT_ERROR,
-        ];
       }
     }
   }

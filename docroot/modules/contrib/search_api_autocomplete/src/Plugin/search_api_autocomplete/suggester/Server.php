@@ -6,11 +6,12 @@ use Drupal\Component\Transliteration\TransliterationInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
+use Drupal\search_api\Contrib\AutocompleteBackendInterface as NewAutocompleteBackendInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Plugin\PluginFormTrait;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\SearchApiException;
-use Drupal\search_api_autocomplete\AutocompleteBackendInterface;
+use Drupal\search_api_autocomplete\AutocompleteBackendInterface as OldAutocompleteBackendInterface;
 use Drupal\search_api_autocomplete\SearchInterface;
 use Drupal\search_api_autocomplete\Suggester\SuggesterPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -174,12 +175,7 @@ class Server extends SuggesterPluginBase implements PluginFormInterface {
     if ($this->configuration['fields']) {
       $query->setFulltextFields($this->configuration['fields']);
     }
-    try {
-      $query->preExecute();
-    }
-    catch (SearchApiException $e) {
-      return [];
-    }
+    $query->preExecute();
     return $backend->getAutocompleteSuggestions($query, $this->getSearch(), $incomplete_key, $user_input);
   }
 
@@ -204,7 +200,9 @@ class Server extends SuggesterPluginBase implements PluginFormInterface {
     catch (SearchApiException $e) {
       return NULL;
     }
-    if ($server->supportsFeature('search_api_autocomplete') || $backend instanceof AutocompleteBackendInterface) {
+    if ($server->supportsFeature('search_api_autocomplete')
+        || $backend instanceof NewAutocompleteBackendInterface
+        || $backend instanceof OldAutocompleteBackendInterface) {
       return $backend;
     }
     return NULL;

@@ -4,14 +4,19 @@ status: true
 dependencies:
   config:
     - field.field.taxonomy_term.collection.field_about
+    - field.field.taxonomy_term.collection.field_badge
     - field.field.taxonomy_term.collection.field_containers
     - field.field.taxonomy_term.collection.field_downloads
+    - field.field.taxonomy_term.collection.field_overview
     - field.field.taxonomy_term.collection.field_publications_more_link
     - field.field.taxonomy_term.collection.field_short_description
+    - field.field.taxonomy_term.collection.field_tags
     - field.field.taxonomy_term.collection.field_theme
+    - field.field.taxonomy_term.collection.layout_builder__layout
     - taxonomy.vocabulary.collection
   module:
     - entity_reference_revisions
+    - image
     - text
 id: taxonomy_term.collection.default
 targetEntityType: taxonomy_term
@@ -19,58 +24,85 @@ bundle: collection
 mode: default
 content:
   description:
-    label: hidden
     type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
     weight: 0
     region: content
-    settings: {  }
-    third_party_settings: {  }
   field_about:
-    weight: 2
-    label: above
+    type: text_default
+    label: hidden
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    weight: 2
+    region: content
+  field_badge:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 8
     region: content
   field_containers:
     type: entity_reference_revisions_entity_view
-    weight: 4
-    label: above
+    label: hidden
     settings:
       view_mode: default
       link: ''
     third_party_settings: {  }
+    weight: 4
     region: content
   field_downloads:
-    weight: 3
-    label: above
+    type: text_default
+    label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 3
+    region: content
+  field_overview:
     type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
     region: content
   field_publications_more_link:
-    weight: 5
-    label: above
+    type: text_default
+    label: hidden
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    weight: 5
     region: content
   field_short_description:
-    weight: 1
-    label: above
+    type: string
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 1
     region: content
-  field_theme:
-    weight: 6
+  field_tags:
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
+    weight: 9
+    region: content
+  field_theme:
     type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 6
     region: content
 hidden:
   langcode: true
+  layout_builder__layout: true
   search_api_excerpt: true

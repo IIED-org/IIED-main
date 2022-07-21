@@ -27,7 +27,7 @@ class DependentFacetProcessorTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     $facet = new Facet([], 'facets_facet');
     $this->results = [
       new Result($facet, 'snow_owl', 'Snow owl', 2),
@@ -81,7 +81,7 @@ class DependentFacetProcessorTest extends UnitTestCase {
     $facet->setActiveItem('snow_owl');
 
     $facetManager = $this->prophesize(DefaultFacetManager::class);
-    $facetManager->returnProcessedFacet($facet)->willReturn($facet);
+    $facetManager->returnBuiltFacet($facet)->willReturn($facet);
 
     $entityStorage = $this->prophesize(EntityStorageInterface::class);
     $entityStorage->load('owl')->willReturn($facet);

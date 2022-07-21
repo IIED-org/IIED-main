@@ -23,8 +23,6 @@ class MigrateNodeCompleteTest extends MigrateNodeTestBase {
     'language',
     'content_translation',
     'menu_ui',
-    // Required for translation migrations.
-    'migrate_drupal_multilingual',
   ];
 
   /**
@@ -96,8 +94,10 @@ class MigrateNodeCompleteTest extends MigrateNodeTestBase {
    *   An array of revision data matching a node_field_revision table row.
    * @param array $data
    *   An array of revision data.
+   *
+   * @internal
    */
-  protected function assertRevision(array $revision, array $data) {
+  protected function assertRevision(array $revision, array $data): void {
     /** @var  \Drupal\node\NodeInterface $actual */
     $actual = $this->nodeStorage->loadRevision($revision['vid'])
       ->getTranslation($revision['langcode']);

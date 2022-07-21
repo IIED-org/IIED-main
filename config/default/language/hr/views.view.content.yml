@@ -1,10 +1,9 @@
 label: Sadržaj
 display:
   default:
+    display_title: Default
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
+      title: Sadržaj
       fields:
         title:
           label: Naziv
@@ -16,6 +15,9 @@ display:
           label: Status
         operations:
           label: Operacije
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         title:
           expose:
@@ -29,8 +31,6 @@ display:
         langcode:
           expose:
             label: Jezik
-      title: Sadržaj
-    display_title: Zadano
   page_1:
     display_options:
       menu:

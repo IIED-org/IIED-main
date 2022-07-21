@@ -1,6 +1,8 @@
 display:
   default:
+    display_title: Default
     display_options:
+      title: မီဒီယာ
       filters:
         name:
           expose:
@@ -8,7 +10,6 @@ display:
         langcode:
           expose:
             label: ဘာသာစကား
-      title: မီဒီယာ
   page:
     display_options:
       fields:

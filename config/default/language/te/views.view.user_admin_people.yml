@@ -1,10 +1,7 @@
 display:
   default:
-    display_title: అప్రమేయం
+    display_title: Default
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         name:
           label: 'వాడుకరి పేరు'
@@ -12,6 +9,9 @@ display:
           label: స్థితి
         operations:
           label: కార్యాలు
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         status:
           group_info:

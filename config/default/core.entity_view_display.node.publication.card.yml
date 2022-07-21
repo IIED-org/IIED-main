@@ -53,7 +53,6 @@ dependencies:
     - node.type.publication
   module:
     - datetime
-    - ds
     - field_group
     - layout_builder
     - user
@@ -61,131 +60,17 @@ third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-  ds:
-    layout:
-      id: ds_1col
-      library: null
-      disable_css: false
-      entity_classes: all_classes
-      settings:
-        label: ''
-        wrappers:
-          ds_content: div
-        outer_wrapper: div
-        attributes: 'role|link, tabindex|0'
-        link_attribute: content
-        link_custom: ''
-        classes:
-          layout_class:
-            card: card
-            h-100: h-100
-            pointer: pointer
-          ds_content: {  }
-    regions:
-      ds_content:
-        - group_row
-        - 'dynamic_block_field:node-cover_image_card'
-        - group_card_footer
-        - node_title
-        - field_date_published
-        - group_card_body
-    fields:
-      'dynamic_block_field:node-cover_image_card':
-        plugin_id: 'dynamic_block_field:node-cover_image_card'
-        weight: 1
-        label: hidden
-        formatter: default
-        ft:
-          id: expert
-          settings:
-            lb: ''
-            prefix: ''
-            lbw-el: ''
-            lbw-cl: ''
-            lbw-at: ''
-            ow: true
-            ow-el: div
-            ow-cl: 'col-4 col-xl-12 p-3'
-            ow-at: ''
-            fis-el: ''
-            fis-cl: ''
-            fis-at: ''
-            fi-el: ''
-            fi-cl: ''
-            fi-at: ''
-            suffix: ''
-            lbw: false
-            lb-col: false
-            ow-def-at: false
-            ow-def-cl: false
-            fis: false
-            fis-def-at: false
-            fi: false
-            fi-def-at: false
-      node_title:
-        plugin_id: node_title
-        weight: 1
-        label: hidden
-        formatter: default
-        settings:
-          link: true
-          wrapper: ''
-          class: ''
-        ft:
-          id: expert
-          settings:
-            lb: ''
-            prefix: ''
-            lbw-el: ''
-            lbw-cl: ''
-            lbw-at: ''
-            ow-el: div
-            ow-cl: card-body
-            ow-at: ''
-            fis-el: ''
-            fis-cl: ''
-            fis-at: ''
-            fi: true
-            fi-el: h5
-            fi-cl: card-title
-            fi-at: ''
-            suffix: ''
-            lbw: false
-            lb-col: false
-            ow: false
-            ow-def-at: false
-            ow-def-cl: false
-            fis: false
-            fis-def-at: false
-            fi-def-at: false
   field_group:
     group_card_body:
-      children:
-        - group_card_footer
-      parent_name: group_row
-      weight: 3
-      format_type: html_element
-      region: ds_content
-      format_settings:
-        element: div
-        show_label: false
-        label_element: h3
-        label_element_classes: ''
-        attributes: ''
-        effect: none
-        speed: fast
-        id: ''
-        classes: 'col-8 col-xl-12'
+      children: {  }
       label: card-body
-    group_row:
-      children:
-        - 'dynamic_block_field:node-cover_image_card'
-        - group_card_body
       parent_name: ''
-      weight: 0
+      region: hidden
+      weight: 72
       format_type: html_element
-      region: ds_content
       format_settings:
+        classes: 'col-8 col-xl-12'
+        id: ''
         element: div
         show_label: false
         label_element: h3
@@ -193,18 +78,16 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
-        id: ''
-        classes: 'row no-gutters'
+    group_row:
+      children: {  }
       label: Row
-    group_card_footer:
-      children:
-        - node_title
-        - field_date_published
-      parent_name: group_card_body
-      weight: 1
+      parent_name: ''
+      region: hidden
+      weight: 70
       format_type: html_element
-      region: ds_content
       format_settings:
+        classes: 'row no-gutters'
+        id: ''
         element: div
         show_label: false
         label_element: h3
@@ -212,58 +95,67 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
-        id: ''
-        classes: card-body
+    group_card_footer:
+      children: {  }
       label: 'card inner'
+      parent_name: ''
+      region: hidden
+      weight: 71
+      format_type: html_element
+      format_settings:
+        classes: card-body
+        id: ''
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
 id: node.publication.card
 targetEntityType: node
 bundle: publication
 mode: card
 content:
+  field_cover_image:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
   field_date_published:
     type: datetime_custom
-    weight: 2
-    region: ds_content
     label: hidden
     settings:
       timezone_override: ''
-      date_format: 'F Y'
-    third_party_settings:
-      ds:
-        ft:
-          id: expert
-          settings:
-            lb: ''
-            prefix: ''
-            lbw-el: ''
-            lbw-cl: ''
-            lbw-at: ''
-            ow-el: ''
-            ow-cl: ''
-            ow-at: ''
-            fis: true
-            fis-el: div
-            fis-cl: text-muted
-            fis-at: ''
-            fi-el: ''
-            fi-cl: ''
-            fi-at: ''
-            suffix: ''
-            lbw: false
-            lb-col: false
-            ow: false
-            ow-def-at: false
-            ow-def-cl: false
-            fis-def-at: false
-            fi: false
-            fi-def-at: false
+      date_format: 'Y-m-d\TH:i:s'
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_media:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_short_title:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: -1
+    region: content
 hidden:
   body: true
   field_a_serial: true
   field_admin: true
   field_area_list: true
   field_author_s_: true
-  field_cover_image: true
   field_deptlist: true
   field_document_type: true
   field_doi: true
@@ -275,7 +167,6 @@ hidden:
   field_journal_ref: true
   field_lists: true
   field_lit_code: true
-  field_media: true
   field_meta_tags: true
   field_parent: true
   field_pdf: true
@@ -295,7 +186,6 @@ hidden:
   field_reportingcode2: true
   field_series: true
   field_series_item_code: true
-  field_short_title: true
   field_source_publication: true
   field_status: true
   field_tags: true

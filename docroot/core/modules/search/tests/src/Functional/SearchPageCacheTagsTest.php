@@ -26,11 +26,6 @@ class SearchPageCacheTagsTest extends BrowserTestBase {
   protected $defaultTheme = 'stark';
 
   /**
-   * {@inheritdoc}
-   */
-  protected $dumpHeaders = TRUE;
-
-  /**
    * A user with permission to search content.
    *
    * @var \Drupal\user\UserInterface
@@ -140,8 +135,8 @@ class SearchPageCacheTagsTest extends BrowserTestBase {
    */
   public function testSearchTagsBubbling() {
 
-    // Install field UI and entity reference modules.
-    $this->container->get('module_installer')->install(['field_ui', 'entity_reference']);
+    // Install field UI module.
+    $this->container->get('module_installer')->install(['field_ui']);
     $this->resetAll();
 
     // Creates a new content type that will have an entity reference.

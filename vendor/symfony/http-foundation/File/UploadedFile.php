@@ -254,7 +254,7 @@ class UploadedFile extends File
      *
      * @return int|float Returns float if size > PHP_INT_MAX
      */
-    private static function parseFilesize($size)
+    private static function parseFilesize(string $size)
     {
         if ('' === $size) {
             return 0;
@@ -263,9 +263,9 @@ class UploadedFile extends File
         $size = strtolower($size);
 
         $max = ltrim($size, '+');
-        if (0 === strpos($max, '0x')) {
+        if (str_starts_with($max, '0x')) {
             $max = \intval($max, 16);
-        } elseif (0 === strpos($max, '0')) {
+        } elseif (str_starts_with($max, '0')) {
             $max = \intval($max, 8);
         } else {
             $max = (int) $max;
@@ -273,11 +273,8 @@ class UploadedFile extends File
 
         switch (substr($size, -1)) {
             case 't': $max *= 1024;
-            // no break
             case 'g': $max *= 1024;
-            // no break
             case 'm': $max *= 1024;
-            // no break
             case 'k': $max *= 1024;
         }
 

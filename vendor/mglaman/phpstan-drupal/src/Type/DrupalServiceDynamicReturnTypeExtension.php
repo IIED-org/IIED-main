@@ -1,16 +1,19 @@
 <?php declare(strict_types=1);
 
-namespace PHPStan\Type;
+namespace mglaman\PHPStanDrupal\Type;
 
+use Drupal;
+use mglaman\PHPStanDrupal\Drupal\DrupalServiceDefinition;
+use mglaman\PHPStanDrupal\Drupal\ServiceMap;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\VariadicPlaceholder;
 use PHPStan\Analyser\Scope;
-use PHPStan\Drupal\DrupalServiceDefinition;
-use PHPStan\Drupal\ServiceMap;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\ShouldNotHappenException;
+use PHPStan\Type\DynamicStaticMethodReturnTypeExtension;
+use PHPStan\Type\Type;
 
 class DrupalServiceDynamicReturnTypeExtension implements DynamicStaticMethodReturnTypeExtension
 {
@@ -26,7 +29,7 @@ class DrupalServiceDynamicReturnTypeExtension implements DynamicStaticMethodRetu
 
     public function getClass(): string
     {
-        return \Drupal::class;
+        return Drupal::class;
     }
 
     public function isStaticMethodSupported(MethodReflection $methodReflection): bool
@@ -57,13 +60,7 @@ class DrupalServiceDynamicReturnTypeExtension implements DynamicStaticMethodRetu
         $serviceId = $arg1->value;
         $service = $this->serviceMap->getService($serviceId);
         if ($service instanceof DrupalServiceDefinition) {
-            // Work around Drupal misusing the SplString class for string
-            // pseudo-services such as 'app.root'.
-            // @see https://www.drupal.org/project/drupal/issues/3074585
-            if ($service->getClass() === 'SplString') {
-                return new StringType();
-            }
-            return new ObjectType($service->getClass() ?? $serviceId);
+            return $service->getType();
         }
         return $returnType;
     }

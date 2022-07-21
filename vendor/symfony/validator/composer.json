@@ -19,6 +19,7 @@
         "php": ">=7.1.3",
         "symfony/polyfill-ctype": "~1.8",
         "symfony/polyfill-mbstring": "~1.0",
+        "symfony/polyfill-php80": "^1.16",
         "symfony/translation-contracts": "^1.1|^2"
     },
     "require-dev": {
@@ -40,7 +41,7 @@
         "egulias/email-validator": "^2.1.10|^3"
     },
     "conflict": {
-        "doctrine/lexer": "<1.0.2",
+        "doctrine/lexer": "<1.1",
         "phpunit/phpunit": "<4.8.35|<5.4.3,>=5.0",
         "symfony/dependency-injection": "<3.4",
         "symfony/http-kernel": "<4.4",

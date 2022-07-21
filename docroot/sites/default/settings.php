@@ -830,6 +830,12 @@ $config['config_split.config_split.dev']['status'] = !$_env_is_prod;
 $config['config_split.config_split.live']['status'] = $_env_is_prod;
 $config['config_split.config_split.local']['status'] = FALSE;
 
+
+$settings['default_content_deploy_content_directory'] = $app_root . '/../content';
+
+$config['image.settings']['allow_insecure_derivatives'] = TRUE;
+$config['image.settings']['suppress_itok_output'] = TRUE;
+
 /**
  * Load local development override configuration, if available.
  *

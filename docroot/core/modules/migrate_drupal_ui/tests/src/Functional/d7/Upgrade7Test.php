@@ -6,7 +6,7 @@ use Drupal\node\Entity\Node;
 use Drupal\Tests\migrate_drupal_ui\Functional\MigrateUpgradeExecuteTestBase;
 use Drupal\user\Entity\User;
 
-// cspell:ignore Multiupload Imagefield
+// cspell:ignore Filefield Multiupload Imagefield
 
 /**
  * Tests Drupal 7 upgrade using the migrate UI.
@@ -21,10 +21,10 @@ class Upgrade7Test extends MigrateUpgradeExecuteTestBase {
    * {@inheritdoc}
    */
   protected static $modules = [
-    'aggregator',
     'book',
     'config_translation',
     'content_translation',
+    'datetime_range',
     'forum',
     'language',
     'migrate_drupal_ui',
@@ -45,6 +45,7 @@ class Upgrade7Test extends MigrateUpgradeExecuteTestBase {
   protected function setUp(): void {
     parent::setUp();
 
+    // @todo remove in https://www.drupal.org/project/drupal/issues/3267040
     // Delete the existing content made to test the ID Conflict form. Migrations
     // are to be done on a site without content. The test of the ID Conflict
     // form is being moved to its own issue which will remove the deletion
@@ -54,7 +55,10 @@ class Upgrade7Test extends MigrateUpgradeExecuteTestBase {
       ->getStorage('node');
     $this->nodeStorage->delete($this->nodeStorage->loadMultiple());
 
-    $this->loadFixture(drupal_get_path('module', 'migrate_drupal') . '/tests/fixtures/drupal7.php');
+    $this->loadFixture($this->getModulePath('migrate_drupal') . '/tests/fixtures/drupal7.php');
+
+    // @todo Remove this in https://www.drupal.org/node/3267515
+    \Drupal::service('module_installer')->uninstall(['rdf']);
   }
 
   /**
@@ -69,9 +73,7 @@ class Upgrade7Test extends MigrateUpgradeExecuteTestBase {
    */
   protected function getEntityCounts() {
     return [
-      'aggregator_item' => 11,
-      'aggregator_feed' => 1,
-      'block' => 25,
+      'block' => 27,
       'block_content' => 1,
       'block_content_type' => 1,
       'comment' => 4,
@@ -84,33 +86,32 @@ class Upgrade7Test extends MigrateUpgradeExecuteTestBase {
       'contact_form' => 3,
       'contact_message' => 0,
       'editor' => 2,
-      'field_config' => 90,
-      'field_storage_config' => 69,
+      'field_config' => 91,
+      'field_storage_config' => 70,
       'file' => 3,
       'filter_format' => 7,
       'image_style' => 7,
       'language_content_settings' => 24,
       'node' => 7,
       'node_type' => 8,
-      'rdf_mapping' => 8,
       'search_page' => 2,
       'shortcut' => 6,
       'shortcut_set' => 2,
-      'action' => 19,
+      'action' => 27,
       'menu' => 7,
       'taxonomy_term' => 25,
       'taxonomy_vocabulary' => 8,
       'path_alias' => 8,
       'tour' => 6,
       'user' => 4,
-      'user_role' => 3,
+      'user_role' => 4,
       'menu_link_content' => 12,
-      'view' => 16,
-      'date_format' => 11,
+      'view' => 14,
+      'date_format' => 12,
       'entity_form_display' => 24,
       'entity_form_mode' => 1,
-      'entity_view_display' => 37,
-      'entity_view_mode' => 14,
+      'entity_view_display' => 34,
+      'entity_view_mode' => 12,
       'base_field_override' => 4,
     ];
   }
@@ -135,12 +136,10 @@ class Upgrade7Test extends MigrateUpgradeExecuteTestBase {
    */
   protected function getAvailablePaths() {
     return [
-      'Aggregator',
       'Block languages',
       'Block',
       'Book',
       'Chaos tools',
-      'Color',
       'Comment',
       'Contact',
       'Content translation',
@@ -170,7 +169,6 @@ class Upgrade7Test extends MigrateUpgradeExecuteTestBase {
       'Options',
       'Path',
       'Phone',
-      'RDF',
       'Search',
       'Shortcut',
       'Statistics',
@@ -205,6 +203,11 @@ class Upgrade7Test extends MigrateUpgradeExecuteTestBase {
    */
   protected function getMissingPaths() {
     return [
+      'Aggregator',
+      // @todo Remove Color in https://www.drupal.org/project/drupal/issues/3270899
+      'Color',
+      // @todo Remove RDF in https://www.drupal.org/node/3267515
+      'RDF',
       'References',
       'Translation sets',
       'Variable realm',
@@ -229,12 +232,16 @@ class Upgrade7Test extends MigrateUpgradeExecuteTestBase {
     $this->assertUserLogIn(2, 'a password');
 
     $this->assertFollowUpMigrationResults();
+
+    $this->assertEmailsSent();
   }
 
   /**
    * Tests that follow-up migrations have been run successfully.
+   *
+   * @internal
    */
-  protected function assertFollowUpMigrationResults() {
+  protected function assertFollowUpMigrationResults(): void {
     $node = Node::load(2);
     $this->assertSame('4', $node->get('field_reference')->target_id);
     $this->assertSame('6', $node->get('field_reference_2')->target_id);

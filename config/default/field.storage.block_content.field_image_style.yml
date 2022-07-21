@@ -1,0 +1,18 @@
+uuid: de7dca6c-fbcc-41a3-9254-c9029907ed57
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_content
+id: block_content.field_image_style
+field_name: field_image_style
+entity_type: block_content
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

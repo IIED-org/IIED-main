@@ -38,6 +38,18 @@ process:
       source: field_date/0/value
       from_format: 'Y-m-d\TH:i:s'
       to_format: 'Y-m-d'
+  field_daterange/value:
+    -
+      plugin: format_date
+      source: field_date/0/value
+      from_format: 'Y-m-d\TH:i:s'
+      to_format: 'Y-m-d\TH:i:s'
+  field_daterange/end_value:
+    -
+      plugin: format_date
+      source: field_date/0/value2
+      from_format: 'Y-m-d\TH:i:s'
+      to_format: 'Y-m-d\TH:i:s'
   field_event_type:
     -
       plugin: get
@@ -53,15 +65,7 @@ process:
   field_alternative_label/value:
     -
       plugin: get
-      source: field_alternative_label/0/value:
-  field_alternative_label/format:
-    -
-      plugin: default_value
-      default_value: 'full_html'
-  field_set_info:
-   -
-     plugin: get
-     source: field_set_info
+      source: field_set_info/0/value
   field_main_image:
     -
       plugin: sub_process
@@ -148,6 +152,9 @@ process:
     -
       plugin: get
       source: body/0/value
+    -
+      plugin: rewrite_inline_image_styles
+      new_style: 'scale_md'
   body/summary:
     -
       plugin: get
@@ -158,8 +165,7 @@ process:
       default_value: 'full_html'
   field_paragraphs:
     -
-      plugin: skip_on_empty
-      method: process
+      plugin: get
       source: field_paragraphs
     -
       plugin: sub_process

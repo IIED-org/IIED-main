@@ -119,9 +119,6 @@ class UserAccessControlHandlerTest extends UnitTestCase {
 
     $this->accessControlHandler = new UserAccessControlHandler($entity_type);
     $module_handler = $this->createMock('Drupal\Core\Extension\ModuleHandlerInterface');
-    $module_handler->expects($this->any())
-      ->method('getImplementations')
-      ->will($this->returnValue([]));
     $this->accessControlHandler->setModuleHandler($module_handler);
 
     $this->items = $this->getMockBuilder('Drupal\Core\Field\FieldItemList')
@@ -135,8 +132,10 @@ class UserAccessControlHandlerTest extends UnitTestCase {
 
   /**
    * Asserts correct field access grants for a field.
+   *
+   * @internal
    */
-  public function assertFieldAccess($field, $viewer, $target, $view, $edit) {
+  public function assertFieldAccess(string $field, string $viewer, string $target, bool $view, bool $edit): void {
     $field_definition = $this->createMock('Drupal\Core\Field\FieldDefinitionInterface');
     $field_definition->expects($this->any())
       ->method('getName')

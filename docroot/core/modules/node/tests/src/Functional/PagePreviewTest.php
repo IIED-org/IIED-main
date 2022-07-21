@@ -45,7 +45,16 @@ class PagePreviewTest extends NodeTestBase {
   ];
 
   /**
-   * {@inheritdoc}
+   * The theme to install as the default for testing.
+   *
+   * @var string
+   *
+   * @todo The fact that PagePreviewTest::testPagePreview() makes assertions
+   *   related to the node type being used for a body class makes Stark a bad
+   *   fit as a base theme. Change the default theme to Starterkit once it is
+   *   stable.
+   *
+   * @see https://www.drupal.org/project/drupal/issues/3274077
    */
   protected $defaultTheme = 'classy';
 
@@ -213,7 +222,7 @@ class PagePreviewTest extends NodeTestBase {
 
     // Check that we see the class of the node type on the body element.
     $body_class_element = $this->xpath("//body[contains(@class, 'page-node-type-page')]");
-    $this->assertTrue(!empty($body_class_element), 'Node type body class found.');
+    $this->assertNotEmpty($body_class_element, 'Node type body class found.');
 
     // Get the UUID.
     $url = parse_url($this->getUrl());

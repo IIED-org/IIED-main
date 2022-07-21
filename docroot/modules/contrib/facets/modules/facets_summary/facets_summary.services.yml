@@ -8,6 +8,8 @@ services:
       - '@plugin.manager.facets.facet_source'
       - '@plugin.manager.facets_summary.processor'
       - '@facets.manager'
+      - '@plugin.manager.facets.url_processor'
+      - '@facets.utility.url_generator'
   facets_summary.search_api_subscriber:
     class: Drupal\facets_summary\EventSubscriber\SearchApiSubscriber
     arguments: ['@entity_type.manager']

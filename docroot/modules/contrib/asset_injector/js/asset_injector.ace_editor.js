@@ -10,7 +10,7 @@
       if (typeof ace == 'undefined' || typeof ace.edit != 'function') {
         return;
       }
-
+      $('body').addClass('ace-editor');
       $('.ace-editor').once('ace-editor-added').each(function () {
         var textarea = $(this).parent().siblings().find('textarea');
         var mode = $(textarea).attr('data-ace-mode');

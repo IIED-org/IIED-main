@@ -48,11 +48,6 @@ responsive_menu.bootstrap:
   dependencies:
     - responsive_menu/responsive_menu.config
 
-responsive_menu.polyfills:
-  version: VERSION
-  js:
-    /libraries/mmenu/dist/mmenu.polyfills.js: {}
-
 responsive_menu.toolbar:
   version: VERSION
   js:

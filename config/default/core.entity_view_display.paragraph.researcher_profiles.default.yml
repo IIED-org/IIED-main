@@ -15,8 +15,8 @@ bundle: researcher_profiles
 mode: default
 content:
   field_link:
-    weight: 1
-    label: above
+    type: link
+    label: hidden
     settings:
       trim_length: 80
       url_only: false
@@ -24,14 +24,14 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    type: link
+    weight: 1
     region: content
   field_profile_type:
-    weight: 0
-    label: above
+    type: list_default
+    label: hidden
     settings: {  }
     third_party_settings: {  }
-    type: list_default
+    weight: 0
     region: content
 hidden:
   search_api_excerpt: true

@@ -135,7 +135,8 @@ class ForumTest extends BrowserTestBase {
     // Check that the basic forum install creates a default forum topic
     $this->drupalGet('/forum');
     // Look for the "General discussion" default forum
-    $this->assertSession()->responseContains(Link::createFromRoute(t('General discussion'), 'forum.page', ['taxonomy_term' => 1])->toString());
+    $this->assertSession()->linkExists('General discussion');
+    $this->assertSession()->linkByHrefExists('/forum/1');
     // Check the presence of expected cache tags.
     $this->assertSession()->responseHeaderContains('X-Drupal-Cache-Tags', 'config:forum.settings');
 
@@ -381,8 +382,7 @@ class ForumTest extends BrowserTestBase {
     $this->drupalGet('admin/structure/taxonomy/manage/tags/add');
     $this->assertSession()->fieldExists('parent[]');
     // Test relations widget exists.
-    $relations_widget = $this->xpath("//details[@id='edit-relations']");
-    $this->assertTrue(isset($relations_widget[0]), 'Relations widget element found.');
+    $this->assertSession()->elementExists('xpath', "//details[@id='edit-relations']");
   }
 
   /**
@@ -463,7 +463,7 @@ class ForumTest extends BrowserTestBase {
       'description__value' => $description,
     ]);
     $term = array_shift($term);
-    $this->assertTrue(!empty($term), 'The ' . $type . ' exists in the database');
+    $this->assertNotEmpty($term, "The forum type '$type' should exist in the database.");
 
     // Verify forum hierarchy.
     $tid = $term->id();
@@ -583,14 +583,13 @@ class ForumTest extends BrowserTestBase {
     $this->drupalGet('node/add/forum', ['query' => ['forum_id' => $tid]]);
     $this->submitForm($edit, 'Save');
 
-    $type = t('Forum topic');
     if ($container) {
-      $this->assertSession()->pageTextNotContains("$type $title has been created.");
+      $this->assertSession()->pageTextNotContains("Forum topic $title has been created.");
       $this->assertSession()->pageTextContains("The item {$forum['name']} is a forum container, not a forum.");
       return;
     }
     else {
-      $this->assertSession()->pageTextContains($type . ' ' . $title . ' has been created.');
+      $this->assertSession()->pageTextContains("Forum topic $title has been created.");
       $this->assertSession()->pageTextNotContains("The item {$forum['name']} is a forum container, not a forum.");
 
       // Verify that the creation message contains a link to a node.
@@ -643,8 +642,8 @@ class ForumTest extends BrowserTestBase {
     $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()->titleEquals($node->label() . ' | Drupal');
     $breadcrumb_build = [
-      Link::createFromRoute(t('Home'), '<front>'),
-      Link::createFromRoute(t('Forums'), 'forum.index'),
+      Link::createFromRoute('Home', '<front>'),
+      Link::createFromRoute('Forums', 'forum.index'),
       Link::createFromRoute($this->forumContainer['name'], 'forum.page', ['taxonomy_term' => $this->forumContainer['tid']]),
       Link::createFromRoute($this->forum['name'], 'forum.page', ['taxonomy_term' => $this->forum['tid']]),
     ];
@@ -707,8 +706,8 @@ class ForumTest extends BrowserTestBase {
     $this->assertSession()->titleEquals($forum['name'] . ' | Drupal');
 
     $breadcrumb_build = [
-      Link::createFromRoute(t('Home'), '<front>'),
-      Link::createFromRoute(t('Forums'), 'forum.index'),
+      Link::createFromRoute('Home', '<front>'),
+      Link::createFromRoute('Forums', 'forum.index'),
     ];
     if (isset($parent)) {
       $breadcrumb_build[] = Link::createFromRoute($parent['name'], 'forum.page', ['taxonomy_term' => $parent['tid']]);

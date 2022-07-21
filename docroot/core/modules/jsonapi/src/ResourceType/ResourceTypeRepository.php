@@ -153,6 +153,7 @@ class ResourceTypeRepository implements ResourceTypeRepositoryInterface {
    *   A JSON:API resource type.
    */
   protected function createResourceType(EntityTypeInterface $entity_type, $bundle) {
+    $type_name = NULL;
     $raw_fields = $this->getAllFieldNames($entity_type, $bundle);
     $internalize_resource_type = $entity_type->isInternal();
     $fields = static::getFields($raw_fields, $entity_type, $bundle);
@@ -161,6 +162,7 @@ class ResourceTypeRepository implements ResourceTypeRepositoryInterface {
       $this->eventDispatcher->dispatch($event, ResourceTypeBuildEvents::BUILD);
       $internalize_resource_type = $event->resourceTypeShouldBeDisabled();
       $fields = $event->getFields();
+      $type_name = $event->getResourceTypeName();
     }
     return new ResourceType(
       $entity_type->id(),
@@ -170,7 +172,8 @@ class ResourceTypeRepository implements ResourceTypeRepositoryInterface {
       static::isLocatableResourceType($entity_type, $bundle),
       static::isMutableResourceType($entity_type, $bundle),
       static::isVersionableResourceType($entity_type),
-      $fields
+      $fields,
+      $type_name
     );
   }
 
@@ -183,7 +186,17 @@ class ResourceTypeRepository implements ResourceTypeRepositoryInterface {
       throw new PreconditionFailedHttpException('Server error. The current route is malformed.');
     }
 
-    return static::lookupResourceType($this->all(), $entity_type_id, $bundle);
+    $map_id = sprintf('jsonapi.resource_type.%s.%s', $entity_type_id, $bundle);
+    $cached = $this->cache->get($map_id);
+
+    if ($cached) {
+      return $cached->data;
+    }
+
+    $resource_type = static::lookupResourceType($this->all(), $entity_type_id, $bundle);
+    $this->cache->set($map_id, $resource_type, Cache::PERMANENT, $this->cacheTags);
+
+    return $resource_type;
   }
 
   /**
@@ -191,7 +204,7 @@ class ResourceTypeRepository implements ResourceTypeRepositoryInterface {
    */
   public function getByTypeName($type_name) {
     $resource_types = $this->all();
-    return isset($resource_types[$type_name]) ? $resource_types[$type_name] : NULL;
+    return $resource_types[$type_name] ?? NULL;
   }
 
   /**
@@ -370,9 +383,7 @@ class ResourceTypeRepository implements ResourceTypeRepositoryInterface {
    *   TRUE if the entity type is versionable, FALSE otherwise.
    */
   protected static function isVersionableResourceType(EntityTypeInterface $entity_type) {
-    // @todo: remove the following line and uncomment the next one when revisions have standardized access control. For now, it is unsafe to support all revisionable entity types.
-    return in_array($entity_type->id(), ['node', 'media']);
-    /* return $entity_type->isRevisionable(); */
+    return $entity_type->isRevisionable();
   }
 
   /**
@@ -511,8 +522,8 @@ class ResourceTypeRepository implements ResourceTypeRepositoryInterface {
    *   The resource type or NULL if one cannot be found.
    */
   protected static function lookupResourceType(array $resource_types, $entity_type_id, $bundle) {
-    if (isset($resource_types["$entity_type_id--$bundle"])) {
-      return $resource_types["$entity_type_id--$bundle"];
+    if (isset($resource_types[$entity_type_id . ResourceType::TYPE_NAME_URI_PATH_SEPARATOR . $bundle])) {
+      return $resource_types[$entity_type_id . ResourceType::TYPE_NAME_URI_PATH_SEPARATOR . $bundle];
     }
 
     foreach ($resource_types as $resource_type) {

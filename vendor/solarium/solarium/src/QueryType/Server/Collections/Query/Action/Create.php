@@ -12,13 +12,12 @@ namespace Solarium\QueryType\Server\Collections\Query\Action;
 use Solarium\QueryType\Server\Collections\Query\Query as CollectionsQuery;
 use Solarium\QueryType\Server\Collections\Result\CreateResult;
 use Solarium\QueryType\Server\Query\Action\AbstractAsyncAction;
-use Solarium\QueryType\Server\Query\Action\AsyncActionInterface;
 use Solarium\QueryType\Server\Query\Action\NameParameterTrait;
 
 /**
  * Class Create.
  *
- * @see https://lucene.apache.org/solr/guide/collection-management.html#create
+ * @see https://solr.apache.org/guide/collection-management.html#create
  */
 class Create extends AbstractAsyncAction
 {
@@ -290,20 +289,6 @@ class Create extends AbstractAsyncAction
     public function setAutoAddReplicas(bool $autoAddReplicas): self
     {
         $this->setOption('autoAddReplicas', $autoAddReplicas);
-
-        return $this;
-    }
-
-    /**
-     * Request ID to track this action which will be processed asynchronously.
-     *
-     * @param string $id
-     *
-     * @return self Provides fluent interface
-     */
-    public function setAsync(string $id): AsyncActionInterface
-    {
-        $this->setOption('async', $id);
 
         return $this;
     }

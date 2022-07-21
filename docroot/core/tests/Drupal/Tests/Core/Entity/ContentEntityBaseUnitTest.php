@@ -9,11 +9,13 @@ use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\Plugin\DataType\EntityAdapter;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\TypedData\TypedDataManagerInterface;
 use Drupal\Tests\UnitTestCase;
 use Drupal\Core\Language\Language;
+use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -157,7 +159,6 @@ class ContentEntityBaseUnitTest extends UnitTestCase {
     $this->typedDataManager = $this->createMock(TypedDataManagerInterface::class);
     $this->typedDataManager->expects($this->any())
       ->method('getDefinition')
-      ->with('entity')
       ->will($this->returnValue(['class' => '\Drupal\Core\Entity\Plugin\DataType\EntityAdapter']));
 
     $english = new Language(['id' => 'en']);
@@ -334,14 +335,91 @@ class ContentEntityBaseUnitTest extends UnitTestCase {
   }
 
   /**
+   * Data provider for the ::getTypedData() test.
+   *
+   * The following entity data definitions, the first two being derivatives of
+   * the last definition, will be tested in order:
+   *
+   * 1. entity:$entity_type:$bundle
+   * 2. entity:$entity_type
+   * 3. entity
+   *
+   * @see \Drupal\Core\Entity\EntityBase::getTypedData()
+   * @see \Drupal\Core\Entity\EntityBase::getTypedDataClass()
+   * @see \Drupal\Core\Entity\Plugin\DataType\Deriver\EntityDeriver
+   *
+   * @return array
+   *   Array of arrays with the following elements:
+   *   - A bool whether to provide a bundle-specific definition.
+   *   - A bool whether to provide an entity type-specific definition.
+   */
+  public function providerTestTypedData(): array {
+    return [
+      'Entity data definition derivative with entity type and bundle' => [
+        TRUE,
+        TRUE,
+      ],
+      'Entity data definition derivative with entity type' => [
+        FALSE,
+        TRUE,
+      ],
+      'Entity data definition' => [
+        FALSE,
+        FALSE,
+      ],
+    ];
+  }
+
+  /**
+   * Tests each condition in EntityBase::getTypedData().
+   *
+   * @covers ::getTypedData
+   * @dataProvider providerTestTypedData
+   */
+  public function testTypedData(bool $bundle_typed_data_definition, bool $entity_type_typed_data_definition): void {
+    $expected = EntityAdapter::class;
+
+    $typedDataManager = $this->createMock(TypedDataManagerInterface::class);
+    $typedDataManager->expects($this->once())
+      ->method('getDefinition')
+      ->willReturnMap([
+        [
+          "entity:{$this->entityTypeId}:{$this->bundle}", FALSE,
+          $bundle_typed_data_definition ? ['class' => $expected] : NULL,
+        ],
+        [
+          "entity:{$this->entityTypeId}", FALSE,
+          $entity_type_typed_data_definition ? ['class' => $expected] : NULL,
+        ],
+        [
+          'entity', TRUE,
+          ['class' => $expected],
+        ],
+      ]);
+
+    // Temporarily replace the appropriate services in the container.
+    $container = \Drupal::getContainer();
+    $container->set('typed_data_manager', $typedDataManager);
+    \Drupal::setContainer($container);
+
+    // Create a mock entity used to retrieve typed data.
+    $entity = $this->getMockForAbstractClass(ContentEntityBase::class, [
+      [],
+      $this->entityTypeId,
+      $this->bundle,
+    ], '', TRUE, TRUE, TRUE, ['isNew']);
+
+    // Assert that the returned data type is an instance of EntityAdapter.
+    $this->assertInstanceOf($expected, $entity->getTypedData());
+  }
+
+  /**
    * @covers ::validate
    */
   public function testValidate() {
     $validator = $this->createMock(ValidatorInterface::class);
-    /** @var \Symfony\Component\Validator\ConstraintViolationList|\PHPUnit\Framework\MockObject\MockObject $empty_violation_list */
-    $empty_violation_list = $this->getMockBuilder('\Symfony\Component\Validator\ConstraintViolationList')
-      ->onlyMethods([])
-      ->getMock();
+    /** @var \Symfony\Component\Validator\ConstraintViolationList $empty_violation_list */
+    $empty_violation_list = new ConstraintViolationList();
     $non_empty_violation_list = clone $empty_violation_list;
     $violation = $this->createMock('\Symfony\Component\Validator\ConstraintViolationInterface');
     $non_empty_violation_list->add($violation);
@@ -367,10 +445,8 @@ class ContentEntityBaseUnitTest extends UnitTestCase {
    */
   public function testRequiredValidation() {
     $validator = $this->createMock(ValidatorInterface::class);
-    /** @var \Symfony\Component\Validator\ConstraintViolationList|\PHPUnit\Framework\MockObject\MockObject $empty_violation_list */
-    $empty_violation_list = $this->getMockBuilder('\Symfony\Component\Validator\ConstraintViolationList')
-      ->onlyMethods([])
-      ->getMock();
+    /** @var \Symfony\Component\Validator\ConstraintViolationList $empty_violation_list */
+    $empty_violation_list = new ConstraintViolationList();
     $validator->expects($this->once())
       ->method('validate')
       ->with($this->entity->getTypedData())

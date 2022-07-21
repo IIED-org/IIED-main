@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<vocabulary>
+
+   <term>
+     <name>Afghanistan</name>
+     <parent></parent>
+     <description></description>
+   </term>
+   <term>
+     <name>Africa</name>
+     <parent></parent>
+     <description></description>
+   </term>
+   <term>
+     <name>Albania</name>
+     <parent>Africa</parent>
+     <description></description>
+   </term>  
+   <term>
+     <name>Algeria</name>
+     <parent></parent>
+     <description></description>
+   </term>  
+   <term>
+     <name>Andorra</name>
+     <parent></parent>
+     <description></description>
+   </term>  
+ </vocabulary>

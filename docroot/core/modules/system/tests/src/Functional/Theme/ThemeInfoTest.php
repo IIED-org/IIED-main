@@ -64,8 +64,8 @@ class ThemeInfoTest extends BrowserTestBase {
       ->set('default', 'test_subtheme')
       ->save();
 
-    $base = drupal_get_path('theme', 'test_basetheme');
-    $sub = drupal_get_path('theme', 'test_subtheme') . '/css';
+    $base = $this->getThemePath('test_basetheme');
+    $sub = $this->getThemePath('test_subtheme') . '/css';
 
     // All removals are expected to be based on a file's path and name and
     // should work nevertheless.
@@ -101,7 +101,7 @@ class ThemeInfoTest extends BrowserTestBase {
     $this->state->set('theme_test.modify_info_files', TRUE);
     $this->resetAll();
     $active_theme = $this->themeManager->getActiveTheme();
-    $this->assertEquals(['classy/base', 'classy/messages', 'core/normalize', 'test_theme/global-styling', 'core/backbone'], $active_theme->getLibraries());
+    $this->assertEquals(['classy/base', 'classy/messages', 'core/normalize', 'test_theme/global-styling', 'core/once'], $active_theme->getLibraries());
   }
 
 }

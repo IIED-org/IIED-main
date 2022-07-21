@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.stories_media_selectors
+  module:
+    - views
+name: stories_file
+label: File
+display: modal
+display_configuration:
+  width: ''
+  height: ''
+  link_text: 'Select Files'
+  auto_open: false
+selection_display: no_display
+selection_display_configuration: {  }
+widget_selector: single
+widget_selector_configuration: {  }
+widgets:
+  53b156ae-f817-4fd8-8f30-2be931e827a9:
+    settings:
+      view: stories_media_selectors
+      view_display: file
+      submit_text: 'Select Files'
+      auto_select: false
+    uuid: 53b156ae-f817-4fd8-8f30-2be931e827a9
+    weight: 1
+    label: Library
+    id: view

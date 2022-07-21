@@ -13,19 +13,19 @@ mode: default
 content:
   field_video:
     type: entity_reference_entity_view
-    weight: 2
-    label: above
+    label: hidden
     settings:
       view_mode: default
       link: false
     third_party_settings: {  }
+    weight: 0
     region: content
   field_video_description:
-    weight: 1
-    label: above
+    type: basic_string
+    label: hidden
     settings: {  }
     third_party_settings: {  }
-    type: basic_string
+    weight: 1
     region: content
 hidden:
   search_api_excerpt: true

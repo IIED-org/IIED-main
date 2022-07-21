@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the search404 module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function search404_install() {
+  \Drupal::configFactory()->getEditable('system.site')->set('page.404', '/search404')->save();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function search404_uninstall() {
+  $site_404 = \Drupal::config('system.site')->get('page.404');
+  if ($site_404 == '/search404') {
+    \Drupal::configFactory()->getEditable('system.site')->clear('page.404')->save();
+  }
+}

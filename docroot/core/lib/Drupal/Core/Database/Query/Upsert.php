@@ -35,6 +35,8 @@ abstract class Upsert extends Query implements \Countable {
    *   (optional) An array of database options.
    */
   public function __construct(Connection $connection, $table, array $options = []) {
+    // @todo Remove $options['return'] in Drupal 11.
+    // @see https://www.drupal.org/project/drupal/issues/3256524
     $options['return'] = Database::RETURN_AFFECTED;
     parent::__construct($connection, $options);
     $this->table = $table;
@@ -108,7 +110,14 @@ abstract class Upsert extends Query implements \Countable {
       }
     }
 
-    $affected_rows = $this->connection->query((string) $this, $values, $this->queryOptions);
+    $stmt = $this->connection->prepareStatement((string) $this, $this->queryOptions, TRUE);
+    try {
+      $stmt->execute($values, $this->queryOptions);
+      $affected_rows = $stmt->rowCount();
+    }
+    catch (\Exception $e) {
+      $this->connection->exceptionHandler()->handleExecutionException($e, $stmt, $values, $this->queryOptions);
+    }
 
     // Re-initialize the values array so that we can re-use this query.
     $this->insertValues = [];

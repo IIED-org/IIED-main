@@ -1,10 +1,7 @@
 display:
   default:
-    display_title: 'По умолчанию'
+    display_title: Default
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         subject:
           label: Тема
@@ -12,6 +9,9 @@ display:
           label: Автор
         operations:
           label: Операции
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         subject:
           expose:
@@ -21,13 +21,6 @@ display:
             label: Язык
   page_unapproved:
     display_options:
-      filters:
-        subject:
-          expose:
-            label: Тема
-        langcode:
-          expose:
-            label: Язык
       fields:
         subject:
           label: Тема
@@ -35,3 +28,10 @@ display:
           label: Автор
         operations:
           label: Операции
+      filters:
+        subject:
+          expose:
+            label: Тема
+        langcode:
+          expose:
+            label: Язык

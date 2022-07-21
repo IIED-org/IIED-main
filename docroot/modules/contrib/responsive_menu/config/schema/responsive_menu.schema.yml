@@ -44,9 +44,9 @@ responsive_menu.settings:
       type: boolean
     wrapper_theme:
       type: boolean
-    use_polyfills:
-      type: boolean
     modify_viewport:
       type: boolean
     use_bootstrap:
+      type: boolean
+    toolbar_override:
       type: boolean

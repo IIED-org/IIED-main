@@ -1,10 +1,7 @@
 display:
   default:
-    display_title: الافتراضي
+    display_title: Default
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         subject:
           label: الموضوع
@@ -12,6 +9,9 @@ display:
           label: المؤلف
         operations:
           label: عمليات
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         subject:
           expose:
@@ -21,13 +21,6 @@ display:
             label: اللغة
   page_unapproved:
     display_options:
-      filters:
-        subject:
-          expose:
-            label: الموضوع
-        langcode:
-          expose:
-            label: اللغة
       fields:
         subject:
           label: الموضوع
@@ -35,3 +28,10 @@ display:
           label: المؤلف
         operations:
           label: عمليات
+      filters:
+        subject:
+          expose:
+            label: الموضوع
+        langcode:
+          expose:
+            label: اللغة

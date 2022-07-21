@@ -13,17 +13,19 @@ use Nicebooks\Isbn\IsbnGroup;
  * It is not intended to be used in projects consuming this library.
  * All input is expected to be validated.
  *
+ * @psalm-type RangeType = array{string, string, string, list<array{int, string, string}>}
+ *
  * @internal
  */
-class RangeService
+final class RangeService
 {
     /**
-     * @var array|null
+     * @psalm-var list<RangeType>|null
      */
-    private static $ranges;
+    private static ?array $ranges = null;
 
     /**
-     * @return array
+     * @psalm-return list<RangeType>
      */
     private static function getRanges() : array
     {
@@ -35,17 +37,13 @@ class RangeService
     }
 
     /**
-     * @param bool $is13
-     *
      * @return IsbnGroup[]
      */
     public static function getGroups(bool $is13) : array
     {
         $groups = [];
 
-        foreach (self::getRanges() as $rangeData) {
-            [$rangePrefix, $groupIdentifier, $groupName] = $rangeData;
-
+        foreach (self::getRanges() as [$rangePrefix, $groupIdentifier, $groupName]) {
             if ($is13) {
                 $groups[] = new IsbnGroup($rangePrefix . '-' . $groupIdentifier, $groupName);
             } elseif ($rangePrefix === '978') {
@@ -60,8 +58,6 @@ class RangeService
      * Splits an ISBN into parts.
      *
      * @param string $isbn The ISBN-10 or ISBN-13, regexp-validated.
-     *
-     * @return RangeInfo|null
      */
     public static function getRangeInfo(string $isbn) : ?RangeInfo
     {
@@ -69,9 +65,7 @@ class RangeService
         $isbnPrefix = ($length === 10) ? '978' : substr($isbn, 0, 3);
         $isbnDigits = ($length === 10) ? $isbn : substr($isbn, 3);
 
-        foreach (self::getRanges() as $rangeData) {
-            [$eanPrefix, $groupIdentifier, $groupName, $ranges] = $rangeData;
-
+        foreach (self::getRanges() as [$eanPrefix, $groupIdentifier, $groupName, $ranges]) {
             if ($isbnPrefix !== $eanPrefix) {
                 continue;
             }
@@ -83,38 +77,32 @@ class RangeService
                 continue;
             }
 
-            $rangeInfo = new RangeInfo;
-            $rangeInfo->groupIdentifier = ($length === 10 ? $groupIdentifier : $eanPrefix . '-' . $groupIdentifier);
-            $rangeInfo->groupName = $groupName;
+            $groupIdentifier = ($length === 10 ? $groupIdentifier : $eanPrefix . '-' . $groupIdentifier);
 
-            foreach ($ranges as $range) {
-                [$rangeLength, $rangeStart, $rangeEnd] = $range;
+            $parts = null;
+
+            foreach ($ranges as [$rangeLength, $rangeStart, $rangeEnd]) {
                 $rangeValue = substr($isbnDigits, $groupLength, $rangeLength);
                 $lastDigits = substr($isbnDigits, $groupLength + $rangeLength, -1);
                 $checkDigit = substr($isbnDigits, -1);
 
                 if (strcmp($rangeValue, $rangeStart) >= 0 && strcmp($rangeValue, $rangeEnd) <= 0) {
                     if ($length === 13) {
-                        $rangeInfo->parts = [$isbnPrefix, $isbnGroup, $rangeValue, $lastDigits, $checkDigit];
+                        $parts = [$isbnPrefix, $isbnGroup, $rangeValue, $lastDigits, $checkDigit];
                     } else {
-                        $rangeInfo->parts = [$isbnGroup, $rangeValue, $lastDigits, $checkDigit];
+                        $parts = [$isbnGroup, $rangeValue, $lastDigits, $checkDigit];
                     }
 
                     break;
                 }
             }
 
-            return $rangeInfo;
+            return new RangeInfo($groupIdentifier, $groupName, $parts);
         }
 
         return null;
     }
 
-    /**
-     * @param string $isbn
-     *
-     * @return string
-     */
     public static function format(string $isbn) : string
     {
         $rangeInfo = self::getRangeInfo($isbn);

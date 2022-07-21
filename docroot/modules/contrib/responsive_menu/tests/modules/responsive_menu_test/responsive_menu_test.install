@@ -15,6 +15,7 @@ use Drupal\node\Entity\Node;
  * Implements hook_install().
  *
  * @throws \Drupal\Core\Entity\EntityStorageException
+ *
  * @noinspection PhpFullyQualifiedNameUsageInspection
  */
 function responsive_menu_test_install() {
@@ -106,6 +107,9 @@ function responsive_menu_test_install() {
   $node_ar->body->value = 'ترجمة جوجل مفيدة';
   $node_ar->body->format = 'basic_html';
   $node_ar->save();
+
+  // Rebuild the router so the correct title is shown.
+  \Drupal::service('router.builder')->rebuild();
 }
 
 /**
@@ -115,6 +119,7 @@ function responsive_menu_test_install() {
  *   An array of data for the new node.
  *
  * @throws \Drupal\Core\Entity\EntityStorageException
+ *
  * @noinspection PhpFullyQualifiedNameUsageInspection
  */
 function _create_node(array $node_data) {

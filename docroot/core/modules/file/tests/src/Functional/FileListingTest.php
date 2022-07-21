@@ -23,7 +23,7 @@ class FileListingTest extends FileFieldTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'stark';
 
   /**
    * An authenticated user.
@@ -116,11 +116,11 @@ class FileListingTest extends FileFieldTestBase {
     foreach ($nodes as $node) {
       $file = File::load($node->file->target_id);
       $this->assertSession()->pageTextContains($file->getFilename());
-      $this->assertSession()->linkByHrefExists(file_create_url($file->getFileUri()));
+      $this->assertSession()->linkByHrefExists($file->createFileUrl());
       $this->assertSession()->linkByHrefExists('admin/content/files/usage/' . $file->id());
     }
-    $this->assertSession()->elementTextNotContains('css', 'table.views-table', 'Temporary');
-    $this->assertSession()->elementTextContains('css', 'table.views-table', 'Permanent');
+    $this->assertSession()->elementTextNotContains('css', '.views-element-container table', 'Temporary');
+    $this->assertSession()->elementTextContains('css', '.views-element-container table', 'Permanent');
 
     // Use one file two times and check usage information.
     $orphaned_file = $nodes[1]->file->target_id;
@@ -227,8 +227,8 @@ class FileListingTest extends FileFieldTestBase {
       'filemime' => 'text/plain',
       'created' => 1,
       'changed' => 1,
-      'status' => FILE_STATUS_PERMANENT,
     ]);
+    $file->setPermanent();
     file_put_contents($file->getFileUri(), 'hello world');
 
     // Save it, inserting a new record.

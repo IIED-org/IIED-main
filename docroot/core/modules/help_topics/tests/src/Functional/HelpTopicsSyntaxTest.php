@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\help_topics\Functional;
 
+use Drupal\Core\Extension\ExtensionLifecycle;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\help_topics\HelpTopicDiscovery;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -32,7 +33,7 @@ class HelpTopicsSyntaxTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'stark';
 
   /**
    * Tests that all Core help topics can be rendered and have good syntax.
@@ -279,7 +280,11 @@ class HelpTopicsSyntaxTest extends BrowserTestBase {
     // Find the extensions of this type, even if they are not installed, but
     // excluding test ones.
     $lister = \Drupal::service('extension.list.' . $type);
-    foreach (array_keys($lister->getAllAvailableInfo()) as $name) {
+    foreach ($lister->getAllAvailableInfo() as $name => $info) {
+      // Skip obsolete and deprecated modules.
+      if ($info[ExtensionLifecycle::LIFECYCLE_IDENTIFIER] === ExtensionLifecycle::OBSOLETE || $info[ExtensionLifecycle::LIFECYCLE_IDENTIFIER] === ExtensionLifecycle::DEPRECATED) {
+        continue;
+      }
       $path = $lister->getPath($name);
       // You can tell test modules because they are in package 'Testing', but
       // test themes are only known by being found in test directories. So...

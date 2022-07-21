@@ -1,10 +1,9 @@
 label: Zawartość
 display:
   default:
+    display_title: Default
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
+      title: Zawartość
       fields:
         title:
           label: Tytuł
@@ -16,6 +15,9 @@ display:
           label: Status
         operations:
           label: Operacje
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         title:
           expose:
@@ -29,8 +31,6 @@ display:
         langcode:
           expose:
             label: Język
-      title: Zawartość
-    display_title: Domyślny
   page_1:
     display_options:
       menu:

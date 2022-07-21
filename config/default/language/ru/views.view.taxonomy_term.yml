@@ -1,4 +1,4 @@
 label: 'Термин таксономии'
 display:
   default:
-    display_title: 'По умолчанию'
+    display_title: Default

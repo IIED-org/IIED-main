@@ -34,8 +34,8 @@ class FilterTest extends ViewTestBase {
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp($import_test_views = TRUE): void {
-    parent::setUp($import_test_views);
+  protected function setUp($import_test_views = TRUE, $modules = ['views_test_config']): void {
+    parent::setUp($import_test_views, $modules);
 
     $this->enableViewsTestModule();
 
@@ -81,7 +81,7 @@ class FilterTest extends ViewTestBase {
     $this->executeView($view);
 
     // Make sure the query have where data.
-    $this->assertTrue(!empty($view->query->where));
+    $this->assertNotEmpty($view->query->where);
 
     // Check the data added.
     $where = $view->query->where;

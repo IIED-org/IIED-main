@@ -4,81 +4,20 @@ status: true
 dependencies:
   config:
     - field.field.node.page.body
+    - field.field.node.page.field_content
+    - field.field.node.page.field_image_caption
+    - field.field.node.page.field_main_image
     - field.field.node.page.field_rows
     - node.type.page
   module:
-    - ds
     - entity_reference_revisions
     - layout_builder
     - text
     - user
 third_party_settings:
   layout_builder:
-    enabled: true
+    enabled: false
     allow_custom: false
-    sections:
-      -
-        layout_id: ds_1col
-        layout_settings:
-          label: ''
-          wrappers:
-            ds_content: div
-          outer_wrapper: div
-          attributes: ''
-          link_attribute: ''
-          link_custom: ''
-          classes:
-            layout_class:
-              col-md-8: col-md-8
-            ds_content: {  }
-          context_mapping: {  }
-        components:
-          62c155ba-3449-4e6e-b81c-4f8978471c47:
-            uuid: 62c155ba-3449-4e6e-b81c-4f8978471c47
-            region: ds_content
-            configuration:
-              id: 'field_block:node:page:body'
-              label: Body
-              provider: layout_builder
-              label_display: '0'
-              formatter:
-                label: hidden
-                type: text_default
-                settings: {  }
-                third_party_settings: {  }
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-            additional: {  }
-            weight: 0
-          96702378-5dd1-4edc-b6e5-8d79698ec6cd:
-            uuid: 96702378-5dd1-4edc-b6e5-8d79698ec6cd
-            region: ds_content
-            configuration:
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              id: 'field_block:node:page:field_rows'
-              formatter:
-                type: entity_reference_revisions_entity_view
-                label: above
-                settings:
-                  view_mode: default
-                  link: ''
-                third_party_settings: {  }
-            additional: {  }
-            weight: 2
-          571d8f39-b989-4e3d-aa98-bb56ed14bfa6:
-            uuid: 571d8f39-b989-4e3d-aa98-bb56ed14bfa6
-            region: ds_content
-            configuration:
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              id: 'extra_field_block:node:page:sharing_buttons'
-            additional: {  }
-            weight: 3
-        third_party_settings: {  }
 _core:
   default_config_hash: g1S3_GLaxq4l3I9RIca5Mlz02MxI2KmOquZpHw59akM
 id: node.page.default
@@ -87,30 +26,54 @@ bundle: page
 mode: default
 content:
   body:
-    label: hidden
     type: text_default
-    weight: 100
-    region: content
+    label: hidden
     settings: {  }
     third_party_settings: {  }
-  field_rows:
+    weight: 100
+    region: content
+  field_content:
     type: entity_reference_revisions_entity_view
-    weight: 103
     label: above
     settings:
       view_mode: default
       link: ''
     third_party_settings: {  }
+    weight: 105
+    region: ds_content
+  field_image_caption:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 106
+    region: content
+  field_main_image:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 104
+    region: ds_content
+  field_rows:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 103
     region: ds_content
   links:
+    settings: {  }
+    third_party_settings: {  }
     weight: 101
     region: content
-    settings: {  }
-    third_party_settings: {  }
   sharing_buttons:
-    weight: 100
     settings: {  }
     third_party_settings: {  }
+    weight: 100
     region: ds_content
 hidden:
   langcode: true

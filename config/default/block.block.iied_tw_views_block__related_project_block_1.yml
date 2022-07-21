@@ -1,0 +1,33 @@
+uuid: 275c0e7b-27ca-49c3-b589-70253e729bf2
+langcode: en
+status: false
+dependencies:
+  config:
+    - views.view.related_project
+  module:
+    - node
+    - views
+  theme:
+    - iied_tw
+id: iied_tw_views_block__related_project_block_1
+theme: iied_tw
+region: postscript
+weight: -14
+provider: null
+plugin: 'views_block:related_project-block_1'
+settings:
+  id: 'views_block:related_project-block_1'
+  label: ''
+  label_display: '0'
+  provider: views
+  context_mapping: {  }
+  views_label: ''
+  items_per_page: none
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      publication: publication

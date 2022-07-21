@@ -1,0 +1,21 @@
+uuid: 55e30b54-4efb-4fa3-95d5-aa8e00f5e10d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_stories_quote_citation
+    - paragraphs.paragraphs_type.stories_quote
+_core:
+  default_config_hash: 6dnVEkeOwZZI0c78DNrlfg6V9a9BUWGZN9atQU7O2Tg
+id: paragraph.stories_quote.field_stories_quote_citation
+field_name: field_stories_quote_citation
+entity_type: paragraph
+bundle: stories_quote
+label: Citation
+description: 'Give credit for the quote.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

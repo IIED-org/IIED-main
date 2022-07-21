@@ -14,6 +14,8 @@ use Drupal\migrate\Plugin\MigrateIdMapInterface;
 use Drupal\migrate\Plugin\RequirementsInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+// cspell:ignore destid sourceid
+
 /**
  * Sources whose data may be fetched via a database connection.
  *
@@ -263,9 +265,6 @@ abstract class SqlBase extends SourcePluginBase implements ContainerFactoryPlugi
     // If a batch has run the query is already setup.
     if ($this->batch == 0) {
       $this->prepareQuery();
-
-      // Get the key values, for potential use in joining to the map table.
-      $keys = [];
 
       // The rules for determining what conditions to add to the query are as
       // follows (applying first applicable rule):

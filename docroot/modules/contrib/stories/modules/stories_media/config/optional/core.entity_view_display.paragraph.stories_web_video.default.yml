@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.stories_web_video.field_stories_alignment
+    - field.field.paragraph.stories_web_video.field_stories_web_video
+    - paragraphs.paragraphs_type.stories_web_video
+id: paragraph.stories_web_video.default
+targetEntityType: paragraph
+bundle: stories_web_video
+mode: default
+content:
+  field_stories_web_video:
+    weight: 0
+    label: hidden
+    settings:
+      link: true
+      view_mode: default
+    third_party_settings: {  }
+    type: entity_reference_entity_view
+    region: content
+hidden:
+  field_stories_alignment: true

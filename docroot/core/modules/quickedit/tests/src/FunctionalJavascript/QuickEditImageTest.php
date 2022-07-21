@@ -7,7 +7,7 @@ use Drupal\Tests\image\Kernel\ImageFieldCreationTrait;
 use Drupal\Tests\TestFileCreationTrait;
 
 /**
- * @coversDefaultClass \Drupal\image\Plugin\InPlaceEditor\Image
+ * @coversDefaultClass \Drupal\quickedit\Plugin\InPlaceEditor\Image
  * @group quickedit
  */
 class QuickEditImageTest extends QuickEditJavascriptTestBase {
@@ -95,8 +95,8 @@ class QuickEditImageTest extends QuickEditJavascriptTestBase {
     $file = File::create([
       'uri' => $valid_images[0]->uri,
       'uid' => $this->contentAuthorUser->id(),
-      'status' => FILE_STATUS_PERMANENT,
     ]);
+    $file->setPermanent();
     $file->save();
 
     // Use the first valid image to create a new Node.
@@ -104,7 +104,7 @@ class QuickEditImageTest extends QuickEditJavascriptTestBase {
     $image = $image_factory->get($valid_images[0]->uri);
     $node = $this->drupalCreateNode([
       'type' => 'article',
-      'title' => t('Test Node'),
+      'title' => 'Test Node',
       $field_name => [
         'target_id' => $file->id(),
         'alt' => 'Hello world',

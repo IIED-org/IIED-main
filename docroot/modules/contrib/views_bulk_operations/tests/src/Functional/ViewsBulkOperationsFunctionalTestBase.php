@@ -22,7 +22,7 @@ abstract class ViewsBulkOperationsFunctionalTestBase extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'node',
     'views',
     'views_bulk_operations',
@@ -32,7 +32,7 @@ abstract class ViewsBulkOperationsFunctionalTestBase extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Create some nodes for testing.
@@ -56,7 +56,7 @@ abstract class ViewsBulkOperationsFunctionalTestBase extends BrowserTestBase {
   }
 
   /**
-   * Helper function that gets configuration for a selected view.
+   * Helper function that executes en operation.
    *
    * @param string|null $path
    *   The path of the View page that includes VBO.
@@ -71,7 +71,10 @@ abstract class ViewsBulkOperationsFunctionalTestBase extends BrowserTestBase {
     foreach ($selection as $index) {
       $data["views_bulk_operations_bulk_form[$index]"] = TRUE;
     }
-    $this->drupalPostForm($path, $data, $button_text);
+    if ($path !== NULL) {
+      $this->drupalGet($path);
+    }
+    $this->submitForm($data, $button_text);
   }
 
 }

@@ -1,0 +1,10 @@
+layout_paragraphs.label_settings: # The first plugin ID
+  route_name: layout_paragraphs.label_settings
+  title: 'Labels'
+  base_route: layout_paragraphs.label_settings
+
+layout_paragraphs.section_settings: # The second plugin ID
+  route_name: layout_paragraphs.section_settings
+  title: 'Layout Sections'
+  base_route: layout_paragraphs.label_settings
+  weight: 100

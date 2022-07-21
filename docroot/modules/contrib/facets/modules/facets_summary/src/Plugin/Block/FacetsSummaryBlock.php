@@ -6,6 +6,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\UncacheableDependencyTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Url;
+use Drupal\Component\Utility\Html;
 use Drupal\facets_summary\Entity\FacetsSummary;
 use Drupal\facets_summary\FacetsSummaryBlockInterface;
 use Drupal\facets_summary\FacetsSummaryManager\DefaultFacetsSummaryManager;
@@ -84,35 +85,58 @@ class FacetsSummaryBlock extends BlockBase implements FacetsSummaryBlockInterfac
    * {@inheritdoc}
    */
   public function build() {
+    // Do not build the facet summary if the block is being previewed.
+    if ($this->getContextValue('in_preview')) {
+      return [];
+    }
+
     /** @var \Drupal\facets_summary\FacetsSummaryInterface $summary */
     $facets_summary = $this->getEntity();
 
     // Let the facet_manager build the facets.
-    $build = $this->facetsSummaryManager->build($facets_summary);
+    $build = [];
 
-    // Add contextual links only when we have results.
-    if (!empty($build)) {
-      $build['#contextual_links']['facets_summary'] = [
-        'route_parameters' => ['facets_summary' => $facets_summary->id()],
+    // Let the facet_manager build the facets.
+    $summary_build = $this->facetsSummaryManager->build($facets_summary);
+
+    if ($summary_build) {
+      $build = [
+        'facets_summary' => [
+          '#type' => 'container',
+          '#contextual_links' => [
+            'facets_summary' => [
+              'route_parameters' => ['facets_summary' => $facets_summary->id()],
+            ],
+          ],
+          '#attributes' => [
+            'data-drupal-facets-summary-id' => $facets_summary->id(),
+            'data-drupal-facets-summary-plugin-id' => $this->getPluginId(),
+            'id' => Html::getUniqueId(str_replace(':', '-', $this->getPluginId())),
+            'class' => [
+              'facets-summary-block__wrapper',
+            ],
+          ],
+          'summary_build' => $summary_build,
+        ],
       ];
-    }
 
-    $build['#wrapper_attributes']['data-drupal-facets-summary-plugin-id'] = $this->getPluginId();
+      // Hidden empty result.
+      if (!isset($summary_build['#items']) && !isset($summary_build['#message'])) {
+        $build['facets_summary']['#attributes']['class'][] = 'hidden';
+      }
 
-    /** @var \Drupal\views\ViewExecutable $view */
-    if ($view = $facets_summary->getFacetSource()->getViewsDisplay()) {
-      $build['#attached']['drupalSettings']['facets_views_ajax'] = [
-        'facets_summary_ajax' => [
+      /** @var \Drupal\views\ViewExecutable $view */
+      if ($view = $facets_summary->getFacetSource()->getViewsDisplay()) {
+        $build['#attached']['drupalSettings']['facets_views_ajax']['facets_summary_ajax_summary'] = [
           'facets_summary_id' => $facets_summary->id(),
           'view_id' => $view->id(),
           'current_display_id' => $view->current_display,
           'ajax_path' => Url::fromRoute('views.ajax')->toString(),
-        ],
-      ];
+        ];
+      }
     }
 
     return $build;
-
   }
 
   /**
@@ -124,6 +148,13 @@ class FacetsSummaryBlock extends BlockBase implements FacetsSummaryBlockInterfac
       return [$summary->getConfigDependencyKey() => [$summary->getConfigDependencyName()]];
     }
     return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPreviewFallbackString() {
+    return $this->t('Placeholder for the "@facet_summary" facet summary', ['@facet_summary' => $this->getDerivativeId()]);
   }
 
 }

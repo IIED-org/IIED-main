@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.stories_media_selectors
+  module:
+    - views
+name: stories_image
+label: Image
+display: modal
+display_configuration:
+  width: ''
+  height: ''
+  link_text: 'Select Images'
+  auto_open: false
+selection_display: no_display
+selection_display_configuration: {  }
+widget_selector: single
+widget_selector_configuration: {  }
+widgets:
+  8442ce77-9978-4fa9-8250-90892d493e79:
+    settings:
+      view: stories_media_selectors
+      view_display: image
+      submit_text: 'Select Images'
+      auto_select: false
+    uuid: 8442ce77-9978-4fa9-8250-90892d493e79
+    weight: 1
+    label: Images
+    id: view

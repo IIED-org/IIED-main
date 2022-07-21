@@ -1,0 +1,14 @@
+search404.page:
+  path: '/search404'
+  defaults:
+    _title_callback: '\Drupal\search404\Controller\Search404Controller::getTitle'
+    _controller: '\Drupal\search404\Controller\Search404Controller::search404Page'
+  requirements:
+    _permission: 'access content'
+search404.settings:
+  path: '/admin/config/search/search404'
+  defaults:
+    _title: 'Search 404 settings'
+    _form: '\Drupal\search404\Form\Search404Settings'
+  requirements:
+    _permission: 'administer search'

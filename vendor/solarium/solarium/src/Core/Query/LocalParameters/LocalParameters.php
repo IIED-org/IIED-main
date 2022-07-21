@@ -16,7 +16,7 @@ use Solarium\Exception\OutOfBoundsException;
 /**
  * Local Parameters.
  *
- * @see https://lucene.apache.org/solr/guide/local-parameters-in-queries.html
+ * @see https://solr.apache.org/guide/local-parameters-in-queries.html
  *
  * @author wicliff <wicliff.wolda@gmail.com>
  */
@@ -883,8 +883,13 @@ class LocalParameters implements \ArrayAccess
         return isset($this->parameters[$offset]);
     }
 
+    #[\ReturnTypeWillChange]
     /**
-     * {@inheritdoc}
+     * ArrayAccess implementation.
+     *
+     * @param mixed $offset
+     *
+     * @return mixed
      */
     public function offsetGet($offset)
     {
@@ -894,9 +899,9 @@ class LocalParameters implements \ArrayAccess
     /**
      * {@inheritdoc}
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
-        return $this->parameters[$offset] = $value;
+        $this->parameters[$offset] = $value;
     }
 
     /**
@@ -905,6 +910,23 @@ class LocalParameters implements \ArrayAccess
     public function offsetUnset($offset): void
     {
         unset($this->parameters[$offset]);
+    }
+
+    /**
+     * Get all local parameters in a key => value format.
+     *
+     * @return array
+     */
+    public function getParameters(): array
+    {
+        $params = [];
+
+        /** @var LocalParameterInterface $parameter */
+        foreach ($this->parameters as $parameter) {
+            $params[$parameter->getType()] = $parameter->getValues();
+        }
+
+        return $params;
     }
 
     /**
@@ -1011,22 +1033,5 @@ class LocalParameters implements \ArrayAccess
         }
 
         return $this->parameters[$type];
-    }
-
-    /**
-     * Get all local parameters in a key => value format.
-     *
-     * @return array
-     */
-    public function getParameters(): array
-    {
-        $params = [];
-
-        /** @var LocalParameterInterface $parameter */
-        foreach ($this->parameters as $parameter) {
-            $params[$parameter->getType()] = $parameter->getValues();
-        }
-
-        return $params;
     }
 }

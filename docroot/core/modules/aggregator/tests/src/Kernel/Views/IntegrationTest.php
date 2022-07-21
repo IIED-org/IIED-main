@@ -14,6 +14,7 @@ use Drupal\views\Tests\ViewTestData;
  * Tests basic integration of views data from the aggregator module.
  *
  * @group aggregator
+ * @group legacy
  */
 class IntegrationTest extends ViewsKernelTestBase {
 
@@ -58,6 +59,7 @@ class IntegrationTest extends ViewsKernelTestBase {
   protected function setUp($import_test_views = TRUE): void {
     parent::setUp();
 
+    $this->installConfig(['aggregator']);
     $this->installEntitySchema('aggregator_item');
     $this->installEntitySchema('aggregator_feed');
 

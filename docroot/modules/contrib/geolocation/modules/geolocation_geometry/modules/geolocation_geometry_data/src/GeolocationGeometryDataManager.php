@@ -60,7 +60,7 @@ class GeolocationGeometryDataManager extends DefaultPluginManager {
    * @param array $batch_settings
    *   Batch settings.
    *
-   * @return mixed
+   * @return array|\Symfony\Component\HttpFoundation\RedirectResponse|null
    *   Batch process.
    */
   public function executeGemeotryDataBatch(array $batch_settings) {

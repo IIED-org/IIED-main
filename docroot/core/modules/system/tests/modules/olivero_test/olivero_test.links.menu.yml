@@ -10,6 +10,12 @@ olivero_test.child:
   parent: olivero_test.front_page
   menu_name: main
   weight: 100
+olivero_test.child_child:
+  title: Child link
+  route_name: <front>
+  parent: olivero_test.child
+  menu_name: main
+  weight: 100
 olivero_test.button:
   title: Button
   route_name: <button>
@@ -24,5 +30,15 @@ olivero_test.child_button:
 olivero_test.anchor_link:
   title: "⚓️ Anchor link"
   url: "internal:#footer"
+  menu_name: main
+  weight: 200
+olivero_test.long_item_1:
+  title: Long long long long
+  route_name: <front>
+  menu_name: main
+  weight: 200
+olivero_test.long_item_2:
+  title: Long long long long
+  route_name: <front>
   menu_name: main
   weight: 200

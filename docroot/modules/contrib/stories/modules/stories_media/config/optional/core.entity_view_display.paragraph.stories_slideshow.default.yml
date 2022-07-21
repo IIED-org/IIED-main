@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.stories_slideshow.field_stories_alignment
+    - field.field.paragraph.stories_slideshow.field_stories_slideshow
+    - paragraphs.paragraphs_type.stories_slideshow
+id: paragraph.stories_slideshow.default
+targetEntityType: paragraph
+bundle: stories_slideshow
+mode: default
+content:
+  field_stories_slideshow:
+    type: entity_reference_entity_view
+    weight: 0
+    region: content
+    label: hidden
+    settings:
+      link: true
+      view_mode: default
+    third_party_settings: {  }
+hidden:
+  field_stories_alignment: true

@@ -17,7 +17,7 @@ class DrushTest extends MigrateTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'migrate_tools_test',
     'migrate_tools',
     'migrate_plus',
@@ -78,7 +78,6 @@ class DrushTest extends MigrateTestBase {
     $this->installConfig('migrate_tools_test');
     $this->installEntitySchema('taxonomy_term');
     $this->installEntitySchema('user');
-    $this->installSchema('system', ['key_value', 'key_value_expire']);
     $this->installSchema('user', ['users_data']);
     $this->migrationPluginManager = $this->container->get('plugin.manager.migration');
     $this->logger = $this->container->get('logger.channel.migrate_tools');
@@ -113,7 +112,7 @@ class DrushTest extends MigrateTestBase {
     // database is defined.
     \Drupal::service('module_installer')->uninstall(['migrate_tools_test']);
     $this->enableModules(['migrate_drupal']);
-    \Drupal::configFactory()->getEditable('migrate_plus.migration.fruit_terms')->delete();
+    $this->migrationPluginManager->clearCachedDefinitions();
     $rows = $this->commands->status();
     $this->assertEmpty($rows);
   }
@@ -140,7 +139,10 @@ class DrushTest extends MigrateTestBase {
     $this->assertSame(1, $id_map->importedCount());
     $this->commands->import('fruit_terms', $this->importBaseOptions);
     $this->assertSame(3, $id_map->importedCount());
-    $this->commands->import('fruit_terms', array_merge($this->importBaseOptions, ['idlist' => 'Apple', 'update' => TRUE]));
+    $this->commands->import('fruit_terms', array_merge($this->importBaseOptions, [
+      'idlist' => 'Apple',
+      'update' => TRUE,
+    ]));
     $this->assertCount(0, $id_map->getRowsNeedingUpdate(100));
   }
 

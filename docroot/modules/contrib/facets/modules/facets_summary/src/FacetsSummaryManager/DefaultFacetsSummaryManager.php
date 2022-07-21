@@ -4,13 +4,17 @@ namespace Drupal\facets_summary\FacetsSummaryManager;
 
 use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
 use Drupal\facets\Exception\InvalidProcessorException;
 use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\facets\FacetSource\FacetSourcePluginManager;
+use Drupal\facets\Result\Result;
 use Drupal\facets_summary\Processor\BuildProcessorInterface;
 use Drupal\facets_summary\Processor\ProcessorInterface;
 use Drupal\facets_summary\Processor\ProcessorPluginManager;
 use Drupal\facets_summary\FacetsSummaryInterface;
+use Drupal\facets\UrlProcessor\UrlProcessorPluginManager;
+use Drupal\facets\Utility\FacetsUrlGenerator;
 
 /**
  * The facet summary manager.
@@ -46,6 +50,20 @@ class DefaultFacetsSummaryManager {
   protected $facetManager;
 
   /**
+   * The url processor plugin manager.
+   *
+   * @var \Drupal\facets\UrlProcessor\UrlProcessorPluginManager
+   */
+  protected $urlProcessorPluginManager;
+
+  /**
+   * The facets url generator.
+   *
+   * @var \Drupal\facets\Utility\FacetsUrlGenerator
+   */
+  protected $facetsUrlGenerator;
+
+  /**
    * Constructs a new instance of the DefaultFacetManager.
    *
    * @param \Drupal\facets\FacetSource\FacetSourcePluginManager $facet_source_manager
@@ -54,11 +72,17 @@ class DefaultFacetsSummaryManager {
    *   The facets summary processor plugin manager.
    * @param \Drupal\facets\FacetManager\DefaultFacetManager $facet_manager
    *   The facet manager service.
+   * @param \Drupal\facets\UrlProcessor\UrlProcessorPluginManager $url_processor_plugin_manager
+   *   The url processor plugin manager.
+   * @param \Drupal\facets\Utility\FacetsUrlGenerator $facets_url_generator
+   *   The facets url generator.
    */
-  public function __construct(FacetSourcePluginManager $facet_source_manager, ProcessorPluginManager $processor_plugin_manager, DefaultFacetManager $facet_manager) {
+  public function __construct(FacetSourcePluginManager $facet_source_manager, ProcessorPluginManager $processor_plugin_manager, DefaultFacetManager $facet_manager, UrlProcessorPluginManager $url_processor_plugin_manager, FacetsUrlGenerator $facets_url_generator) {
     $this->facetSourcePluginManager = $facet_source_manager;
     $this->processorPluginManager = $processor_plugin_manager;
     $this->facetManager = $facet_manager;
+    $this->urlProcessorPluginManager = $url_processor_plugin_manager;
+    $this->facetsUrlGenerator = $facets_url_generator;
   }
 
   /**
@@ -116,16 +140,46 @@ class DefaultFacetsSummaryManager {
     $build = [
       '#theme' => 'facets_summary_item_list',
       '#facet_summary_id' => $facets_summary->id(),
-      '#wrapper_attributes' => [
-        'data-drupal-facets-summary-id' => $facets_summary->id(),
+      '#attributes' => [
+        'class' => ['facet-summary__items'],
       ],
     ];
 
     $results = [];
     foreach ($facets as $facet) {
-      $show_count = $facets_config[$facet->id()]['show_count'];
-      $results = array_merge($results, $this->buildResultTree($show_count, $facet->getResults()));
+      $enabled_processors = $facet->getProcessors(TRUE);
+      if (isset($enabled_processors["range_slider"])) {
+        $active_values = $facet->getActiveItems();
+        if ($active_values) {
+          $min = $active_values[0][0];
+          $max = $active_values[0][1];
+          $url_processor = $this->urlProcessorPluginManager->createInstance($facet->getFacetSourceConfig()->getUrlProcessorName(), ['facet' => $facet]);
+          $active_filters = $url_processor->getActiveFilters();
+          if (isset($active_filters[''])) {
+            unset($active_filters['']);
+          }
+          unset($active_filters[$facet->id()]);
+          // Only if there are still active filters, use url generator.
+          if ($active_filters) {
+            $url = $this->facetsUrlGenerator->getUrl($active_filters, FALSE);
+          }
+          else {
+            // @todo Keep non-facet related get params.
+            $url = Url::fromUserInput($facets_summary->getFacetSource()->getPath());
+          }
+          $result_without_current_rangeslider = new Result($facet, "(min:$min,max:$max)", " $min - $max", 1);
+          $result_without_current_rangeslider->setActiveState(TRUE);
+          $result_without_current_rangeslider->setUrl($url);
+          $results = array_merge($results, $this->buildResultTree(FALSE, [$result_without_current_rangeslider]));
+        }
+      }
+      else {
+        $show_count = $facets_config[$facet->id()]['show_count'];
+        $results = array_merge($results, $this->buildResultTree($show_count, $facet->getResults()));
+      }
+
     }
+
     $build['#items'] = $results;
 
     // Allow our Facets Summary processors to alter the build array in a

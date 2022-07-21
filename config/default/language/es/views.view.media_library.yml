@@ -1,7 +1,8 @@
 display:
   default:
-    display_title: 'Por defecto'
+    display_title: Default
     display_options:
+      title: Multimedia
       filters:
         name:
           expose:
@@ -9,7 +10,6 @@ display:
         langcode:
           expose:
             label: Idioma
-      title: Multimedia
   page:
     display_options:
       fields:

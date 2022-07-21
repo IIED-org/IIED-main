@@ -17,7 +17,6 @@ class MigrateBlockContentTranslationTest extends MigrateDrupal7TestBase {
   protected static $modules = [
     'node',
     'text',
-    'aggregator',
     'book',
     'block',
     'comment',
@@ -27,6 +26,7 @@ class MigrateBlockContentTranslationTest extends MigrateDrupal7TestBase {
     'block_content',
     'config_translation',
     'language',
+    'locale',
     'path_alias',
     'statistics',
     'taxonomy',

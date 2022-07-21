@@ -8,7 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
 /**
- * Builds the form to delete Css Injector entities.
+ * Builds the form to delete CSS Injector entities.
  */
 class AssetInjectorDeleteForm extends EntityConfirmFormBase {
 
@@ -43,7 +43,7 @@ class AssetInjectorDeleteForm extends EntityConfirmFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     /** @var \Drupal\Core\Config\Entity\ConfigEntityInterface $entity */
     $entity = $this->entity;
-    Drupal::logger('asset_injector')->notice('%type asset %id deleted', [
+    $this->logger('asset_injector')->notice('%type asset %id deleted', [
       '%type' => $entity->get('entityTypeId'),
       '%id' => $entity->id(),
     ]);

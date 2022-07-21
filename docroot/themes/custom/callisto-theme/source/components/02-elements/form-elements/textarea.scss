@@ -1,0 +1,33 @@
+/* purgecss start ignore */
+  .webform-submission-form textarea {
+    @apply max-w-full;
+
+    @apply min-w-0; /* needed for Firefox */
+    @apply w-full;
+
+    &[disabled],
+    &:disabled {
+      background:
+        repeating-linear-gradient(
+          -45deg,
+          white,
+          white 6px,
+          #f5f5f5 5px,
+          #f5f5f5 5px,
+          #f5f5f5 5px,
+          #f5f5f5 10px
+        );
+      @apply duration-200;
+    }
+    &:focus {
+      outline: none;
+      @apply border-colour-two;
+    }
+
+    @apply px-24;
+    @apply py-8;
+    @apply border-b-2;
+    @apply border-black;
+    @apply bg-gray-light;
+  }
+/* purgecss end ignore */

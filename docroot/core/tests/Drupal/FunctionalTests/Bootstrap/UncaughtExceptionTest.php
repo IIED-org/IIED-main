@@ -180,7 +180,7 @@ class UncaughtExceptionTest extends BrowserTestBase {
 
     $this->expectedExceptionMessage = PHP_VERSION_ID >= 80000 ?
       'Drupal\FunctionalTests\Bootstrap\ErrorContainer::Drupal\FunctionalTests\Bootstrap\{closure}(): Argument #1 ($container) must be of type Drupal\FunctionalTests\Bootstrap\ErrorContainer' :
-      'Argument 1 passed to Drupal\FunctionalTests\Bootstrap\ErrorContainer::Drupal\FunctionalTests\Bootstrap\{closur';
+      'Argument 1 passed to Drupal\FunctionalTests\Bootstrap\ErrorContainer::Drupal\FunctionalTests\Bootstrap\{closure';
     $this->drupalGet('');
     $this->assertSession()->statusCodeEquals(500);
 
@@ -265,8 +265,8 @@ class UncaughtExceptionTest extends BrowserTestBase {
     $this->assertStringContainsString('Failed to log error', $errors[0], 'The error handling logs when an error could not be logged to the logger.');
 
     $expected_path = \Drupal::root() . '/core/modules/system/tests/modules/error_service_test/src/MonkeysInTheControlRoom.php';
-    $expected_line = 61;
-    $expected_entry = "Failed to log error: Exception: Deforestation in Drupal\\error_service_test\\MonkeysInTheControlRoom->handle() (line ${expected_line} of ${expected_path})";
+    $expected_line = 62;
+    $expected_entry = "Failed to log error: Exception: Deforestation in Drupal\\error_service_test\\MonkeysInTheControlRoom->handle() (line {$expected_line} of {$expected_path})";
     $this->assertStringContainsString($expected_entry, $errors[0], 'Original error logged to the PHP error log when an exception is thrown by a logger');
 
     // The exception is expected. Do not interpret it as a test failure. Not
@@ -282,8 +282,10 @@ class UncaughtExceptionTest extends BrowserTestBase {
    *
    * @see \Drupal\simpletest\TestBase::prepareEnvironment()
    * @see \Drupal\Core\DrupalKernel::bootConfiguration()
+   *
+   * @internal
    */
-  protected function assertErrorLogged($error_message) {
+  protected function assertErrorLogged(string $error_message): void {
     $error_log_filename = DRUPAL_ROOT . '/' . $this->siteDirectory . '/error.log';
     $this->assertFileExists($error_log_filename);
 
@@ -310,8 +312,10 @@ class UncaughtExceptionTest extends BrowserTestBase {
    *
    * @see \Drupal\simpletest\TestBase::prepareEnvironment()
    * @see \Drupal\Core\DrupalKernel::bootConfiguration()
+   *
+   * @internal
    */
-  protected function assertNoErrorsLogged() {
+  protected function assertNoErrorsLogged(): void {
     // Since PHP only creates the error.log file when an actual error is
     // triggered, it is sufficient to check whether the file exists.
     $this->assertFileDoesNotExist(DRUPAL_ROOT . '/' . $this->siteDirectory . '/error.log');

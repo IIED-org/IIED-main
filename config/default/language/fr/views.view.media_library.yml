@@ -1,7 +1,8 @@
 display:
   default:
-    display_title: 'Par défaut'
+    display_title: Default
     display_options:
+      title: Média
       filters:
         name:
           expose:
@@ -9,7 +10,6 @@ display:
         langcode:
           expose:
             label: Langue
-      title: Média
   page:
     display_options:
       fields:

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PHPStan\Rules\Drupal\PluginManager;
+namespace mglaman\PHPStanDrupal\Rules\Drupal\PluginManager;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -42,9 +42,7 @@ class PluginManagerSetsCacheBackendRule extends AbstractPluginManagerRule
             throw new ShouldNotHappenException();
         }
 
-        $classReflection = $scopeClassReflection->getNativeReflection();
-
-        if (!$this->isPluginManager($classReflection)) {
+        if (!$this->isPluginManager($scopeClassReflection)) {
             return [];
         }
 

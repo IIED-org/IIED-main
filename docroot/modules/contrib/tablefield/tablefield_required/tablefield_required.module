@@ -1,0 +1,168 @@
+<?php
+
+/**
+ * @file
+ * Contains module hooks for tablefield_required.
+ */
+
+use Drupal\field\Entity\FieldConfig;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function tablefield_required_form_field_config_edit_form_alter(array &$form, FormStateInterface $form_state) {
+  /** @var \Drupal\field\Entity\FieldConfig $field_config */
+  $field_config = $form_state->getFormObject()->getEntity();
+  $field_type = $field_config->getType();
+
+  if ($field_type == 'tablefield') {
+    $tps = $field_config->getThirdPartySettings('tablefield_required');
+    $form['tablefield_required'] = [
+      '#parents' => [],
+      '#type' => 'details',
+      '#title' => t('Tablefield required settings'),
+      '#open' => TRUE,
+      '#states' => [
+        'visible' => [
+          'input[name="required"]' => ['checked' => FALSE],
+        ],
+      ],
+    ];
+    $form['tablefield_required']['required_rows'] = [
+      '#type' => 'textfield',
+      '#title' => t('Required rows.'),
+      '#default_value' => isset($tps['required_rows']) ? $tps['required_rows'] : '',
+      '#description' => t('Enter the comma-separated list of required row indexes, starting 
+        from "0" for first row, "1" for second and so on. For example, entering "0,2" will make 
+        required all inputs for first and third rows. Keep in mind if this field is marked as 
+        required into its definition, then this feature will be ignored.'),
+    ];
+    $form['tablefield_required']['required_cols'] = [
+      '#type' => 'textfield',
+      '#title' => t('Required columns.'),
+      '#default_value' => isset($tps['required_cols']) ? $tps['required_cols'] : '',
+      '#description' => t('Enter the comma-separated list of required column indexes, starting 
+        from "0" for first column, "1" for second and so on. For example, entering "0,2" will make 
+        required all inputs for first and third columns. Keep in mind if this field is marked as 
+        required into its definition, then this feature will be ignored.'),
+    ];
+    $form['tablefield_required']['multivalue_inherit'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Inherit mandatory property for multi-value tables.'),
+      '#default_value' => isset($tps['multivalue_inherit']) ? $tps['multivalue_inherit'] : FALSE,
+      '#description' => t('If this option is checked, multi-value tables will inherit same restriction.'),
+    ];
+    $form['#entity_builders'][] = 'tablefield_required_form_builder';
+  }
+}
+
+/**
+ * Update the field configuration once form is saved.
+ *
+ * @param string $entity_type
+ *   The entity type.
+ * @param \Drupal\field\Entity\FieldConfig $config
+ *   The field configuration entity.
+ * @param array $form
+ *   The complete form array.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The current state of the form.
+ */
+function tablefield_required_form_builder($entity_type, FieldConfig $config, array &$form, FormStateInterface $form_state) {
+  $required_rows = $form_state->getValue('required_rows');
+  $required_cols = $form_state->getValue('required_cols');
+  $multivalue_inherit = (bool) $form_state->getValue('multivalue_inherit');
+
+  $config->setThirdPartySetting('tablefield_required', 'required_rows', $required_rows);
+  $config->setThirdPartySetting('tablefield_required', 'required_cols', $required_cols);
+  $config->setThirdPartySetting('tablefield_required', 'multivalue_inherit', $multivalue_inherit);
+}
+
+/**
+ * Implements hook_field_widget_WIDGET_TYPE_form_alter().
+ */
+function tablefield_required_field_widget_tablefield_form_alter(&$element, &$form_state, $context) {
+  $config = $context['items']->getFieldDefinition()->getThirdPartySettings('tablefield_required');
+  if (!empty($config)) {
+    $element['#tablefield_required'] = $config;
+  }
+}
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function tablefield_required_element_info_alter(array &$info) {
+  if (isset($info['tablefield'])) {
+    $info['tablefield']['#process'][] = 'tablefield_required_process_tablefield';
+  }
+}
+
+/**
+ * Helper function to check if is admin path.
+ */
+function _tablefield_required_is_field_config_path() {
+  return strpos(\Drupal::routeMatch()->getRouteName(), 'entity.field_config') !== FALSE;
+}
+
+/**
+ * Helper function to process tablefield widgets.
+ */
+function tablefield_required_process_tablefield($element, $form_state, $complete_form) {
+  if (
+    !_tablefield_required_is_field_config_path()
+    && isset($element['tablefield']['table'])
+    && isset($element['#tablefield_required'])
+    && !$element['#required']
+    ) {
+    $config = $element['#tablefield_required'];
+
+    // Let's prepare our needed variables.
+    $rows = isset($config['required_rows']) && $config['required_rows'] ? explode(',', preg_replace('/\s+/', '', $config['required_rows'])) : [];
+    $cols = isset($config['required_cols']) && $config['required_cols'] ? explode(',', preg_replace('/\s+/', '', $config['required_cols'])) : [];
+    $inherit = isset($config['multivalue_inherit']) ? $config['multivalue_inherit'] : FALSE;
+
+    // Our array of settings to pass to the validation function.
+    $settings = [
+      'required_rows' => $rows,
+      'required_cols' => $cols,
+      'inherit' => $inherit,
+    ];
+
+    // Do not process if inheritance for multi-value tables is disabled.
+    if (!$settings['inherit'] && $element['#delta'] > 0) {
+      return $element;
+    }
+    foreach ($element['tablefield']['table'] as $row_index => &$row) {
+      if (is_numeric($row_index)) {
+        foreach ($row as $col_index => &$col) {
+          // We could to assign returned value, but better to keep it neutral.
+          if (tablefield_required_cell_is_required($row_index, $col_index, $settings)) {
+            $col['#required'] = TRUE;
+          }
+        }
+      }
+    }
+  }
+
+  return $element;
+}
+
+/**
+ * Helper function to check if a cell is required.
+ */
+function tablefield_required_cell_is_required($row_index, $col_index, array $settings) {
+  // If whole row is required.
+  if (!empty($settings['required_rows']) && in_array($row_index, $settings['required_rows'])) {
+    $required = TRUE;
+  }
+  // If whole column is required.
+  elseif (!empty($settings['required_cols']) && in_array($col_index, $settings['required_cols'])) {
+    $required = TRUE;
+  }
+  else {
+    $required = FALSE;
+  }
+
+  return $required;
+}

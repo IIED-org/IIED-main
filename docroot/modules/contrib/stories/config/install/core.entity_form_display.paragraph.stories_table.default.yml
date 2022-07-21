@@ -1,0 +1,33 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.stories_table.field_stories_heading
+    - field.field.paragraph.stories_table.field_stories_table
+    - paragraphs.paragraphs_type.stories_table
+  module:
+    - tablefield
+id: paragraph.stories_table.default
+targetEntityType: paragraph
+bundle: stories_table
+mode: default
+content:
+  field_stories_heading:
+    weight: 0
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_stories_table:
+    weight: 1
+    settings:
+      input_type: textfield
+    third_party_settings: {  }
+    type: tablefield
+    region: content
+hidden:
+  created: true
+  status: true
+  uid: true

@@ -1,10 +1,7 @@
 display:
   default:
-    display_title: Bawaan
+    display_title: Default
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         name:
           label: 'Nama pengguna'
@@ -14,6 +11,9 @@ display:
             format_custom_true: Aktif
         operations:
           label: Operasi-operasi
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         status:
           group_info:

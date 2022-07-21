@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\system\Functional\Module;
 
+use Drupal\Core\Extension\ExtensionLifecycle;
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\workspaces\Entity\Workspace;
 
@@ -59,9 +60,14 @@ class InstallUninstallTest extends ModuleTestBase {
 
     $required_modules['help'] = $all_modules['help'];
 
-    // Test uninstalling without hidden, required, and already enabled modules.
+    // Filter out contrib, hidden, testing, experimental, and deprecated
+    // modules. We also don't need to enable modules that are already enabled.
     $all_modules = array_filter($all_modules, function ($module) {
-      if (!empty($module->info['hidden']) || !empty($module->info['required']) || $module->status == TRUE || $module->info['package'] == 'Testing') {
+      if (!empty($module->info['hidden'])
+        || !empty($module->info['required'])
+        || $module->status == TRUE
+        || $module->info['package'] === 'Testing'
+        || $module->info[ExtensionLifecycle::LIFECYCLE_IDENTIFIER] === ExtensionLifecycle::DEPRECATED) {
         return FALSE;
       }
       return TRUE;
@@ -104,16 +110,27 @@ class InstallUninstallTest extends ModuleTestBase {
 
       // Install the module.
       $edit = [];
-      $package = $module->info['package'];
+      $lifecycle = $module->info[ExtensionLifecycle::LIFECYCLE_IDENTIFIER];
       $edit['modules[' . $name . '][enable]'] = TRUE;
       $this->drupalGet('admin/modules');
       $this->submitForm($edit, 'Install');
 
       // Handle experimental modules, which require a confirmation screen.
-      if ($package == 'Core (Experimental)') {
-        $this->assertSession()->pageTextContains('Are you sure you wish to enable experimental modules?');
+      if ($lifecycle === ExtensionLifecycle::EXPERIMENTAL) {
+        $this->assertSession()->pageTextContains('Are you sure you wish to enable an experimental module?');
         if (count($modules_to_install) > 1) {
           // When there are experimental modules, needed dependencies do not
+          // result in the same page title, but there will be expected text
+          // indicating they need to be enabled.
+          $this->assertSession()->pageTextContains('You must enable');
+        }
+        $this->submitForm([], 'Continue');
+      }
+      // Handle deprecated modules, which require a confirmation screen.
+      elseif ($lifecycle === ExtensionLifecycle::DEPRECATED) {
+        $this->assertSession()->pageTextContains('Are you sure you wish to enable a deprecated module?');
+        if (count($modules_to_install) > 1) {
+          // When there are deprecated modules, needed dependencies do not
           // result in the same page title, but there will be expected text
           // indicating they need to be enabled.
           $this->assertSession()->pageTextContains('You must enable');
@@ -206,20 +223,47 @@ class InstallUninstallTest extends ModuleTestBase {
     // - That enabling more than one module at the same time does not lead to
     //   any errors.
     $edit = [];
-    $experimental = FALSE;
+    $count_experimental = 0;
+    $count_deprecated = 0;
     foreach ($all_modules as $name => $module) {
       $edit['modules[' . $name . '][enable]'] = TRUE;
-      // Track whether there is at least one experimental module.
-      if ($module->info['package'] == 'Core (Experimental)') {
-        $experimental = TRUE;
+      if ($module->info[ExtensionLifecycle::LIFECYCLE_IDENTIFIER] === ExtensionLifecycle::EXPERIMENTAL) {
+        $count_experimental++;
+      }
+      if ($module->info[ExtensionLifecycle::LIFECYCLE_IDENTIFIER] === ExtensionLifecycle::DEPRECATED) {
+        $count_deprecated++;
       }
     }
     $this->drupalGet('admin/modules');
     $this->submitForm($edit, 'Install');
 
-    // If there are experimental modules, click the confirm form.
-    if ($experimental) {
-      $this->assertSession()->pageTextContains('Are you sure you wish to enable experimental modules?');
+    // If there are experimental and deprecated modules, click the confirm form.
+    if ($count_experimental > 0 && $count_deprecated > 0) {
+      $this->assertSession()->titleEquals('Are you sure you wish to enable experimental and deprecated modules? | Drupal');
+      $this->submitForm([], 'Continue');
+    }
+    // If there are experimental, and no deprecated modules, click the confirm
+    // form.
+    elseif ($count_experimental > 0) {
+      if ($count_experimental === 1) {
+        $page_title = 'Are you sure you wish to enable an experimental module? | Drupal';
+      }
+      else {
+        $page_title = 'Are you sure you wish to enable experimental modules? | Drupal';
+      }
+      $this->assertSession()->titleEquals($page_title);
+      $this->submitForm([], 'Continue');
+    }
+    // If there are deprecated, and no experimental modules, click the confirm
+    // form.
+    elseif ($count_deprecated > 0) {
+      if ($count_deprecated === 1) {
+        $page_title = 'Are you sure you wish to enable a deprecated module? | Drupal';
+      }
+      else {
+        $page_title = 'Are you sure you wish to enable deprecated modules? | Drupal';
+      }
+      $this->assertSession()->titleEquals($page_title);
       $this->submitForm([], 'Continue');
     }
     $this->assertSession()->pageTextContains(count($all_modules) . ' modules have been enabled: ');
@@ -230,8 +274,10 @@ class InstallUninstallTest extends ModuleTestBase {
    *
    * @param string $name
    *   Name of the module to check.
+   *
+   * @internal
    */
-  protected function assertModuleNotInstalled($name) {
+  protected function assertModuleNotInstalled(string $name): void {
     $this->assertModules([$name], FALSE);
     $this->assertModuleTablesDoNotExist($name);
   }
@@ -241,8 +287,10 @@ class InstallUninstallTest extends ModuleTestBase {
    *
    * @param string $name
    *   Name of the module to check.
+   *
+   * @internal
    */
-  protected function assertModuleSuccessfullyInstalled($name) {
+  protected function assertModuleSuccessfullyInstalled(string $name): void {
     $this->assertModules([$name], TRUE);
     $this->assertModuleTablesExist($name);
     $this->assertModuleConfig($name);
@@ -256,8 +304,10 @@ class InstallUninstallTest extends ModuleTestBase {
    * @param string $package
    *   (optional) The package of the module to uninstall. Defaults
    *   to 'Core'.
+   *
+   * @internal
    */
-  protected function assertSuccessfulUninstall($module, $package = 'Core') {
+  protected function assertSuccessfulUninstall(string $module, string $package = 'Core'): void {
     $edit = [];
     $edit['uninstall[' . $module . ']'] = TRUE;
     $this->drupalGet('admin/modules/uninstall');
@@ -285,14 +335,16 @@ class InstallUninstallTest extends ModuleTestBase {
    *
    * @param string $module
    *   The module that got installed.
+   *
+   * @internal
    */
-  protected function assertInstallModuleUpdates($module) {
+  protected function assertInstallModuleUpdates(string $module): void {
     /** @var \Drupal\Core\Update\UpdateRegistry $post_update_registry */
     $post_update_registry = \Drupal::service('update.post_update_registry');
     $all_update_functions = $post_update_registry->getPendingUpdateFunctions();
     $empty_result = TRUE;
     foreach ($all_update_functions as $function) {
-      list($function_module,) = explode('_post_update_', $function);
+      [$function_module] = explode('_post_update_', $function);
       if ($module === $function_module) {
         $empty_result = FALSE;
         break;
@@ -322,8 +374,10 @@ class InstallUninstallTest extends ModuleTestBase {
    *
    * @param string $module
    *   The module that got installed.
+   *
+   * @internal
    */
-  protected function assertUninstallModuleUpdates($module) {
+  protected function assertUninstallModuleUpdates(string $module): void {
     /** @var \Drupal\Core\Update\UpdateRegistry $post_update_registry */
     $post_update_registry = \Drupal::service('update.post_update_registry');
     $all_update_functions = $post_update_registry->getPendingUpdateFunctions();
@@ -349,8 +403,10 @@ class InstallUninstallTest extends ModuleTestBase {
    *   Machine name of the module to verify.
    * @param string $name
    *   Human-readable name of the module to verify.
+   *
+   * @internal
    */
-  protected function assertHelp($module, $name) {
+  protected function assertHelp(string $module, string $name): void {
     $this->drupalGet('admin/help/' . $module);
     $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()->pageTextContains($name . ' module');

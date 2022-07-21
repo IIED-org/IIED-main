@@ -25,7 +25,7 @@ class CommentFieldsTest extends CommentTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'stark';
 
   /**
    * Tests that the default 'comment_body' field is correctly added.
@@ -38,7 +38,7 @@ class CommentFieldsTest extends CommentTestBase {
 
     // Check that the 'comment_body' field is present on the comment bundle.
     $field = FieldConfig::loadByName('comment', 'comment', 'comment_body');
-    $this->assertTrue(!empty($field), 'The comment_body field is added when a comment bundle is created');
+    $this->assertNotEmpty($field, 'The comment_body field is added when a comment bundle is created');
 
     $field->delete();
 
@@ -85,13 +85,13 @@ class CommentFieldsTest extends CommentTestBase {
     $this->drupalLogin($this->webUser);
 
     $this->drupalGet('node/' . $node->nid->value);
-    $elements = $this->cssSelect('.field--type-comment');
+    $elements = $this->cssSelect('.comment-form');
     $this->assertCount(2, $elements, 'There are two comment fields on the node.');
 
     // Delete the first comment field.
     FieldStorageConfig::loadByName('node', 'comment')->delete();
     $this->drupalGet('node/' . $node->nid->value);
-    $elements = $this->cssSelect('.field--type-comment');
+    $elements = $this->cssSelect('.comment-form');
     $this->assertCount(1, $elements, 'There is one comment field on the node.');
   }
 

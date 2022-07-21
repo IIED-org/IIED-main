@@ -12,6 +12,8 @@
 
 namespace Composer\Platform;
 
+use Composer\Pcre\Preg;
+
 /**
  * @author Lars Strojny <lars@strojny.net>
  */
@@ -26,15 +28,20 @@ class Version
     {
         $isFips = false;
 
-        if (!preg_match('/^(?<version>[0-9.]+)(?<patch>[a-z]{0,2})?(?<suffix>(?:-?(?:dev|pre|alpha|beta|rc|fips)[\d]*)*)?(?<garbage>-\w+)?$/', $opensslVersion, $matches)) {
+        if (!Preg::isMatch('/^(?<version>[0-9.]+)(?<patch>[a-z]{0,2})?(?<suffix>(?:-?(?:dev|pre|alpha|beta|rc|fips)[\d]*)*)?(?<garbage>-\w+)?$/', $opensslVersion, $matches)) {
             return null;
+        }
+
+        // OpenSSL 1 used 1.2.3a style versioning, 3+ uses semver
+        $patch = '';
+        if (version_compare($matches['version'], '3.0.0', '<')) {
+            $patch = '.'.self::convertAlphaVersionToIntVersion($matches['patch']);
         }
 
         $isFips = strpos($matches['suffix'], 'fips') !== false;
         $suffix = strtr('-'.ltrim($matches['suffix'], '-'), array('-fips' => '', '-pre' => '-alpha'));
-        $patch = self::convertAlphaVersionToIntVersion($matches['patch']);
 
-        return rtrim($matches['version'].'.'.$patch.$suffix, '-');
+        return rtrim($matches['version'].$patch.$suffix, '-');
     }
 
     /**
@@ -43,7 +50,7 @@ class Version
      */
     public static function parseLibjpeg($libjpegVersion)
     {
-        if (!preg_match('/^(?<major>\d+)(?<minor>[a-z]*)$/', $libjpegVersion, $matches)) {
+        if (!Preg::isMatch('/^(?<major>\d+)(?<minor>[a-z]*)$/', $libjpegVersion, $matches)) {
             return null;
         }
 
@@ -56,7 +63,7 @@ class Version
      */
     public static function parseZoneinfoVersion($zoneinfoVersion)
     {
-        if (!preg_match('/^(?<year>\d{4})(?<revision>[a-z]*)$/', $zoneinfoVersion, $matches)) {
+        if (!Preg::isMatch('/^(?<year>\d{4})(?<revision>[a-z]*)$/', $zoneinfoVersion, $matches)) {
             return null;
         }
 

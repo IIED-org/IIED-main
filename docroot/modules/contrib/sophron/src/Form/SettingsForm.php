@@ -335,7 +335,7 @@ class SettingsForm extends ConfigFormBase {
 
     $rows = [];
     foreach ($extensions as $extension_string) {
-      $drupal_mime_type = $core_extended_guesser->guess('a.' . $extension_string);
+      $drupal_mime_type = $core_extended_guesser->guessMimeType('a.' . $extension_string);
 
       $extension = $this->mimeMapManager->getExtension($extension_string);
       if ($extension) {

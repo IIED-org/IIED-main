@@ -1,0 +1,16 @@
+uuid: 3775a051-4545-49b1-92c6-ddaca8b388b7
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.secondary
+    - taxonomy.vocabulary.theme
+id: secondary
+label: Secondary
+vocabulary: theme
+menu: secondary
+expanded: false
+depth: 0
+menu_parent: 'admin:entity.menu.collection'
+description_field_name: description
+use_term_weight_order: true

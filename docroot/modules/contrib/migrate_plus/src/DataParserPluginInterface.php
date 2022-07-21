@@ -12,4 +12,12 @@ namespace Drupal\migrate_plus;
  */
 interface DataParserPluginInterface extends \Iterator, \Countable {
 
+  /**
+   * Returns current source URL.
+   *
+   * @return string|null
+   *   The URL currently parsed on success, otherwise NULL.
+   */
+  public function currentUrl(): ?string;
+
 }

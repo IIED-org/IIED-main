@@ -1,15 +1,15 @@
 display:
   default:
-    display_title: Domyślny
+    display_title: Default
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         filename:
           label: Nazwa
         status:
           label: Status
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         status:
           expose:

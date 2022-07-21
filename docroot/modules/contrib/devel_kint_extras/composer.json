@@ -1,0 +1,26 @@
+{
+  "name": "drupal/devel_kint_extras",
+  "description": "Shows methods and statics available for an object when using Kint with Devel",
+  "type": "drupal-module",
+  "homepage": "https://www.drupal.org/project/devel_kint_extras",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+      {
+          "name": "Jan Chojnacki",
+          "homepage": "https://www.drupal.org/u/janchojnacki"
+      },
+      {
+          "name": "Other contributors",
+          "homepage": "https://www.drupal.org/node/3164492/committers"
+      }
+  ],
+  "support": {
+      "issues": "https://www.drupal.org/project/issues/devel_kint_extras",
+      "chat": "irc://irc.freenode.org/drupal-contribute",
+      "source": "http://git.drupal.org/project/devel_kint_extras.git"
+  },
+  "require": {
+    "drupal/devel": "^4.0",
+    "kint-php/kint": "^3.3"
+  }
+}

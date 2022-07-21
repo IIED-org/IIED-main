@@ -75,21 +75,23 @@ class ThemeTest extends BrowserTestBase {
     $file_relative = strtr($file->uri, ['public:/' => PublicStream::basePath()]);
     $default_theme_path = 'core/themes/classy';
 
+    /** @var \Drupal\Core\File\FileUrlGeneratorInterface $file_url_generator */
+    $file_url_generator = \Drupal::service('file_url_generator');
     $supported_paths = [
       // Raw stream wrapper URI.
       $file->uri => [
         'form' => StreamWrapperManager::getTarget($file->uri),
-        'src' => file_url_transform_relative(file_create_url($file->uri)),
+        'src' => $file_url_generator->generateString($file->uri),
       ],
       // Relative path within the public filesystem.
       StreamWrapperManager::getTarget($file->uri) => [
         'form' => StreamWrapperManager::getTarget($file->uri),
-        'src' => file_url_transform_relative(file_create_url($file->uri)),
+        'src' => $file_url_generator->generateString($file->uri),
       ],
       // Relative path to a public file.
       $file_relative => [
         'form' => $file_relative,
-        'src' => file_url_transform_relative(file_create_url($file->uri)),
+        'src' => $file_url_generator->generateString($file->uri),
       ],
       // Relative path to an arbitrary file.
       'core/misc/druplicon.png' => [
@@ -190,7 +192,7 @@ class ThemeTest extends BrowserTestBase {
 
     $this->drupalPlaceBlock('system_branding_block', ['region' => 'header']);
     $this->drupalGet('');
-    $this->assertSession()->elementAttributeContains('xpath', '//header//a[@rel="home"]/img', 'src', file_url_transform_relative(file_create_url($uploaded_filename)));
+    $this->assertSession()->elementAttributeContains('xpath', '//header//a[@rel="home"]/img', 'src', $file_url_generator->generateString($uploaded_filename));
 
     $this->container->get('theme_installer')->install(['bartik']);
 
@@ -286,6 +288,15 @@ class ThemeTest extends BrowserTestBase {
     $this->drupalGet('admin/appearance');
     $this->submitForm($edit, 'Save configuration');
 
+    // Check the display of non stable themes.
+    $themes = \Drupal::service('theme_handler')->rebuildThemeData();
+    $experimental_version = $themes['experimental_theme_test']->info['version'];
+    $deprecated_version = $themes['deprecated_theme_test']->info['version'];
+    $this->drupalGet('admin/appearance');
+    $this->assertSession()->pageTextContains('Experimental test ' . $experimental_version . ' (experimental theme)');
+    $this->assertSession()->pageTextContains('Test deprecated theme ' . $deprecated_version . ' (Deprecated)');
+    $this->assertSession()->elementExists('xpath', "//a[contains(@href, 'http://example.com/deprecated_theme')]");
+
     // Check that the administration theme is used on an administration page.
     $this->drupalGet('admin/config');
     $this->assertSession()->responseContains('core/themes/seven');
@@ -308,6 +319,10 @@ class ThemeTest extends BrowserTestBase {
     ];
     $this->drupalGet('admin/appearance');
     $this->submitForm($edit, 'Save configuration');
+
+    // Check that obsolete themes are not displayed.
+    $this->drupalGet('admin/appearance');
+    $this->assertSession()->pageTextNotContains('Obsolete test theme');
 
     // Check that the administration theme is used on an administration page.
     $this->drupalGet('admin/config');
@@ -507,7 +522,7 @@ class ThemeTest extends BrowserTestBase {
    * @param string $expected_text
    *   The expected incompatibility text.
    */
-  private function assertThemeIncompatibleText($theme_name, $expected_text) {
+  private function assertThemeIncompatibleText(string $theme_name, string $expected_text): void {
     $this->assertSession()->elementExists('css', ".theme-info:contains(\"$theme_name\") .incompatible:contains(\"$expected_text\")");
   }
 

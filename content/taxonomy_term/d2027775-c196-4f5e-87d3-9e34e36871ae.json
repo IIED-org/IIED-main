@@ -1,0 +1,123 @@
+{
+    "_links": {
+        "self": {
+            "href": "https:\/\/iied-main.lndo.site\/board-trustees?_format=hal_json"
+        },
+        "type": {
+            "href": "https:\/\/iied-main.lndo.site\/rest\/type\/taxonomy_term\/global"
+        },
+        "https:\/\/iied-main.lndo.site\/rest\/relation\/taxonomy_term\/global\/parent": [
+            {
+                "href": "https:\/\/iied-main.lndo.site\/people?_format=hal_json"
+            }
+        ]
+    },
+    "tid": [
+        {
+            "value": 41411
+        }
+    ],
+    "uuid": [
+        {
+            "value": "d2027775-c196-4f5e-87d3-9e34e36871ae"
+        }
+    ],
+    "langcode": [
+        {
+            "value": "en",
+            "lang": "en"
+        }
+    ],
+    "vid": [
+        {
+            "target_id": "global"
+        }
+    ],
+    "revision_created": [
+        {
+            "value": "2022-06-20T14:22:53+00:00",
+            "format": "Y-m-d\\TH:i:sP"
+        }
+    ],
+    "status": [
+        {
+            "value": true,
+            "lang": "en"
+        }
+    ],
+    "name": [
+        {
+            "value": "Board of trustees",
+            "lang": "en"
+        }
+    ],
+    "weight": [
+        {
+            "value": 0
+        }
+    ],
+    "_embedded": {
+        "https:\/\/iied-main.lndo.site\/rest\/relation\/taxonomy_term\/global\/parent": [
+            {
+                "_links": {
+                    "self": {
+                        "href": "https:\/\/iied-main.lndo.site\/people?_format=hal_json"
+                    },
+                    "type": {
+                        "href": "https:\/\/iied-main.lndo.site\/rest\/type\/taxonomy_term\/global"
+                    }
+                },
+                "uuid": [
+                    {
+                        "value": "71f6e89e-4bce-43aa-ae21-f1fba2e956a3"
+                    }
+                ]
+            }
+        ]
+    },
+    "changed": [
+        {
+            "value": "2022-06-28T11:13:51+00:00",
+            "lang": "en",
+            "format": "Y-m-d\\TH:i:sP"
+        }
+    ],
+    "default_langcode": [
+        {
+            "value": true,
+            "lang": "en"
+        }
+    ],
+    "revision_translation_affected": [
+        {
+            "value": true,
+            "lang": "en"
+        }
+    ],
+    "metatag": [
+        {
+            "value": {
+                "canonical_url": "https:\/\/iied-main.lndo.site\/board-trustees",
+                "shortlink": "https:\/\/iied-main.lndo.site\/admin\/config\/development\/dcd\/export",
+                "title": "Board of trustees | International Institute for Environment and Development",
+                "dcterms_title": "Default Content Deploy - Export",
+                "og_site_name": "International Institute for Environment and Development",
+                "og_url": "https:\/\/iied-main.lndo.site\/admin\/config\/development\/dcd\/export",
+                "og_title": "Default Content Deploy - Export",
+                "twitter_cards_type": "summary_large_image",
+                "twitter_cards_site": "@IIED",
+                "twitter_cards_title": "International Institute for Environment and Development",
+                "twitter_cards_site_id": "39719681",
+                "twitter_cards_page_url": "https:\/\/iied-main.lndo.site\/admin\/config\/development\/dcd\/export"
+            }
+        }
+    ],
+    "path": [
+        {
+            "alias": "\/board-trustees",
+            "pid": 278419,
+            "langcode": "en",
+            "lang": "en"
+        }
+    ]
+}

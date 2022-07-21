@@ -1,0 +1,25 @@
+uuid: 195964a1-7e3e-468a-8059-e349d6f0542d
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.secondary
+  module:
+    - system
+  theme:
+    - iied_tw
+id: secondary
+theme: iied_tw
+region: secondary_menu
+weight: -14
+provider: null
+plugin: 'system_menu_block:secondary'
+settings:
+  id: 'system_menu_block:secondary'
+  label: Secondary
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility: {  }

@@ -1,0 +1,10 @@
+uuid: 8a001227-efe3-40c6-b56d-1c510ad00db7
+langcode: en
+status: true
+dependencies: {  }
+id: modal_image
+label: 'Modal image'
+icon_uuid: null
+icon_default: null
+description: 'A single image that will open in Colorbox on click'
+behavior_plugins: {  }

@@ -1,0 +1,65 @@
+/* This contains styling for multi-value fields, eg fields where the user can choose how many fields they fill in */
+/* purgecss start ignore */
+.webform-submission-form .form-item.js-form-type-webform-multiple {
+  .visually-hidden {
+    display: unset;
+    position: absolute !important;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+    width: 1px;
+    height: 1px;
+    word-wrap: normal;
+  }
+  .tabledrag-toggle-weight-wrapper,
+  .webform-multiple-table--operations,
+  .webform-multiple-table--handle {
+    @apply hidden;
+  }
+
+  td {
+    @apply p-0;
+  }
+
+  .text-count-wrapper {
+    @apply text-14;
+  }
+
+  textarea {
+    min-height: 110px;
+  }
+
+  .webform-multiple-add  {
+    input {
+      &[type='submit'] {
+        @apply bg-black;
+        @apply text-white;
+        @apply font-bold;
+        @apply py-8;
+        @apply px-16;
+        @apply rounded;
+        @apply inline-block;
+        @apply w-auto;
+        @apply text-base;
+
+        &:hover {
+          cursor: pointer;
+        }
+
+        &:hover,
+        &:focus {
+          opacity: 0.9;
+          @apply duration-200;
+        }
+      }
+      &[type='number'] {
+        @apply py-8;
+        @apply px-16;
+        @apply text-base;
+      }
+    }
+    .field-suffix {
+      @apply text-base;
+    }
+  }
+}
+/* purgecss end ignore */

@@ -15,6 +15,7 @@ namespace Composer\Command;
 use Composer\Composer;
 use Composer\Factory;
 use Composer\Config;
+use Composer\Pcre\Preg;
 use Composer\Util\Filesystem;
 use Composer\Util\Platform;
 use Composer\SelfUpdate\Keys;
@@ -58,6 +59,7 @@ class SelfUpdateCommand extends BaseCommand
                 new InputOption('snapshot', null, InputOption::VALUE_NONE, 'Force an update to the snapshot channel'),
                 new InputOption('1', null, InputOption::VALUE_NONE, 'Force an update to the stable channel, but only use 1.x versions'),
                 new InputOption('2', null, InputOption::VALUE_NONE, 'Force an update to the stable channel, but only use 2.x versions'),
+                new InputOption('2.2', null, InputOption::VALUE_NONE, 'Force an update to the stable channel, but only use 2.2.x LTS versions'),
                 new InputOption('set-channel-only', null, InputOption::VALUE_NONE, 'Only store the channel as the default one and then exit'),
             ))
             ->setHelp(
@@ -102,7 +104,7 @@ EOT
         foreach (Versions::$channels as $channel) {
             if ($input->getOption($channel)) {
                 $requestedChannel = $channel;
-                $versionsUtil->setChannel($channel);
+                $versionsUtil->setChannel($channel, $io);
                 break;
             }
         }
@@ -157,9 +159,9 @@ EOT
         }
         $latestVersion = $latest['version'];
         $updateVersion = $input->getArgument('version') ?: $latestVersion;
-        $currentMajorVersion = preg_replace('{^(\d+).*}', '$1', Composer::getVersion());
-        $updateMajorVersion = preg_replace('{^(\d+).*}', '$1', $updateVersion);
-        $previewMajorVersion = preg_replace('{^(\d+).*}', '$1', $latestPreview['version']);
+        $currentMajorVersion = Preg::replace('{^(\d+).*}', '$1', Composer::getVersion());
+        $updateMajorVersion = Preg::replace('{^(\d+).*}', '$1', $updateVersion);
+        $previewMajorVersion = Preg::replace('{^(\d+).*}', '$1', $latestPreview['version']);
 
         if ($versionsUtil->getChannel() === 'stable' && !$input->getArgument('version')) {
             // if requesting stable channel and no specific version, avoid automatically upgrading to the next major
@@ -181,11 +183,15 @@ EOT
             }
         }
 
-        if ($requestedChannel && is_numeric($requestedChannel) && strpos($latestStable['version'], $requestedChannel) !== 0) {
-            $io->writeError('<warning>Warning: You forced the install of '.$latestVersion.' via --'.$requestedChannel.', but '.$latestStable['version'].' is the latest stable version. Updating to it via composer self-update --stable is recommended.</warning>');
+        $effectiveChannel = $requestedChannel === null ? $versionsUtil->getChannel() : $requestedChannel;
+        if (is_numeric($effectiveChannel) && strpos($latestStable['version'], $effectiveChannel) !== 0) {
+            $io->writeError('<warning>Warning: You forced the install of '.$latestVersion.' via --'.$effectiveChannel.', but '.$latestStable['version'].' is the latest stable version. Updating to it via composer self-update --stable is recommended.</warning>');
+        }
+        if (isset($latest['eol'])) {
+            $io->writeError('<warning>Warning: Version '.$latestVersion.' is EOL / End of Life. '.$latestStable['version'].' is the latest stable version. Updating to it via composer self-update --stable is recommended.</warning>');
         }
 
-        if (preg_match('{^[0-9a-f]{40}$}', $updateVersion) && $updateVersion !== $latestVersion) {
+        if (Preg::isMatch('{^[0-9a-f]{40}$}', $updateVersion) && $updateVersion !== $latestVersion) {
             $io->writeError('<error>You can not update to a specific SHA-1 as those phars are not available for download</error>');
 
             return 1;
@@ -218,11 +224,11 @@ EOT
             '%s/%s-%s%s',
             $rollbackDir,
             strtr(Composer::RELEASE_DATE, ' :', '_-'),
-            preg_replace('{^([0-9a-f]{7})[0-9a-f]{33}$}', '$1', Composer::VERSION),
+            Preg::replace('{^([0-9a-f]{7})[0-9a-f]{33}$}', '$1', Composer::VERSION),
             self::OLD_INSTALL_EXT
         );
 
-        $updatingToTag = !preg_match('{^[0-9a-f]{40}$}', $updateVersion);
+        $updatingToTag = !Preg::isMatch('{^[0-9a-f]{40}$}', $updateVersion);
 
         $io->write(sprintf("Upgrading to version <info>%s</info> (%s channel).", $updateVersion, $channelString));
         $remoteFilename = $baseUrl . ($updatingToTag ? "/download/{$updateVersion}/composer.phar" : '/composer.phar');
@@ -351,7 +357,7 @@ TAGSPUBKEY
         $io->write('Open <info>https://composer.github.io/pubkeys.html</info> to find the latest keys');
 
         $validator = function ($value) {
-            if (!preg_match('{^-----BEGIN PUBLIC KEY-----$}', trim($value))) {
+            if (!Preg::isMatch('{^-----BEGIN PUBLIC KEY-----$}', trim($value))) {
                 throw new \UnexpectedValueException('Invalid input');
             }
 
@@ -359,7 +365,7 @@ TAGSPUBKEY
         };
 
         $devKey = '';
-        while (!preg_match('{(-----BEGIN PUBLIC KEY-----.+?-----END PUBLIC KEY-----)}s', $devKey, $match)) {
+        while (!Preg::isMatch('{(-----BEGIN PUBLIC KEY-----.+?-----END PUBLIC KEY-----)}s', $devKey, $match)) {
             $devKey = $io->askAndValidate('Enter Dev / Snapshot Public Key (including lines with -----): ', $validator);
             while ($line = $io->ask('')) {
                 $devKey .= trim($line)."\n";
@@ -372,7 +378,7 @@ TAGSPUBKEY
         $io->write('Stored key with fingerprint: ' . Keys::fingerprint($keyPath));
 
         $tagsKey = '';
-        while (!preg_match('{(-----BEGIN PUBLIC KEY-----.+?-----END PUBLIC KEY-----)}s', $tagsKey, $match)) {
+        while (!Preg::isMatch('{(-----BEGIN PUBLIC KEY-----.+?-----END PUBLIC KEY-----)}s', $tagsKey, $match)) {
             $tagsKey = $io->askAndValidate('Enter Tags Public Key (including lines with -----): ', $validator);
             while ($line = $io->ask('')) {
                 $tagsKey .= trim($line)."\n";
@@ -467,6 +473,7 @@ TAGSPUBKEY
                 return $this->tryAsWindowsAdmin($localFilename, $newFilename);
             }
 
+            @unlink($newFilename);
             $action = 'Composer '.($backupTarget ? 'update' : 'rollback');
             throw new FilesystemException($action.' failed: "'.$localFilename.'" could not be written.'.PHP_EOL.$e->getMessage());
         }
@@ -619,7 +626,7 @@ EOT;
         exec('"'.$script.'"');
         @unlink($script);
 
-        // see if the file was moved and is still accessible
+        // see if the file was copied and is still accessible
         if ($result = Filesystem::isReadable($localFilename) && (hash_file('sha256', $localFilename) === $checksum)) {
             $io->writeError('<info>Operation succeeded.</info>');
             @unlink($newFilename);

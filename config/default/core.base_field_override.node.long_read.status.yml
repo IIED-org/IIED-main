@@ -1,0 +1,22 @@
+uuid: 996d7c71-5fe5-49ee-82cc-2ad2d09e8a2f
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.long_read
+id: node.long_read.status
+field_name: status
+entity_type: node
+bundle: long_read
+label: Published
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

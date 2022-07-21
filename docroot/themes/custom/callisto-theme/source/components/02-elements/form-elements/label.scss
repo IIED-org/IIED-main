@@ -1,0 +1,19 @@
+/* purgecss start ignore */
+  .webform-submission-form, .user-login-form, .user-pass {
+    label {
+      @apply font-normal;
+      @apply font-medium;
+      @apply leading-145;
+      @apply mb-8;
+      @apply block;
+      @apply text-black;
+
+      &.form-required {
+        &::after {
+          content: ' *';
+          @apply text-colour-two;
+        }
+      }
+    }
+  }
+/* purgecss end ignore */

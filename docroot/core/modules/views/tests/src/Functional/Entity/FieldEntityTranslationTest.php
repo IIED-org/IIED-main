@@ -39,8 +39,8 @@ class FieldEntityTranslationTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
-    parent::setUp($import_test_views);
+  protected function setUp($import_test_views = TRUE, $modules = ['views_test_config']): void {
+    parent::setUp($import_test_views, $modules);
 
     $node_type = NodeType::create([
       'type' => 'article',
@@ -168,8 +168,10 @@ class FieldEntityTranslationTest extends ViewTestBase {
    *
    * @param array $expected
    *   The expected rows of the result.
+   *
+   * @internal
    */
-  protected function assertRows($expected = []) {
+  protected function assertRows(array $expected = []): void {
     $actual = [];
     $rows = $this->cssSelect('div.views-row');
     foreach ($rows as $row) {

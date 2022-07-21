@@ -15,12 +15,10 @@ use Nicebooks\Isbn\Exception\IsbnNotConvertibleException;
  *
  * @internal
  */
-class Converter
+final class Converter
 {
     /**
      * @param string $isbn The ISBN-10, unformatted, regexp-validated.
-     *
-     * @return string
      */
     public static function convertIsbn10to13(string $isbn) : string
     {
@@ -31,8 +29,6 @@ class Converter
 
     /**
      * @param string $isbn The ISBN-13, unformatted, regexp-validated.
-     *
-     * @return string
      *
      * @throws \Nicebooks\Isbn\Exception\IsbnNotConvertibleException
      */

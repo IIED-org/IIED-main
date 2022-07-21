@@ -1,4 +1,6 @@
 display:
+  default:
+    display_title: Default
   block_1:
     display_options:
       block_category: 'පාවිච්චි කරන්නා'

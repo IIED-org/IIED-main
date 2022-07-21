@@ -1,0 +1,63 @@
+{# details  need to be if statements to avoid empty tags #} 
+
+<div class="flex flex-col mb-6">
+ 
+ <div class="flex flex-wrap gap-1">
+   <span class="font-bold">Language: </span><span>{{ drupal_block('language_block:language_interface', wrapper=false) }}
+   </span>
+  </div>
+
+  <div class="flex gap-1">
+    <span class="font-bold">Published: </span> {{ node.field_date_published.value|date('F Y') }}
+  </div>
+
+    {% if node.field_publisher.entity.name.value %}
+      <div class="flex gap-1">
+          <span class="font-bold">Publisher(s):</span> {{ content.field_publisher }}
+      </div>
+    {% endif %}
+
+
+    {% if node.field_area_list.value %}
+      <div class="flex flex-wrap gap-1">
+         <span class="font-bold">Area(s):</span> {{ drupal_view('country_list', 'default') }}  
+      </div>
+    {% endif %}
+
+  {{ node.field_series.entity.name.value }} 
+  
+  {{ content.field_journal_ref }} 
+
+  <div class="flex gap-1">  
+    {% if node.field_isbn.entity.name.value %}
+      <span class="font-bold">ISBN:</span> <span>{{ node.field_isbn.0.value }}</span>
+    {% endif %}
+  </div>
+
+  {{ content.field_issn }} 
+
+  {{ content.field_doi }}
+
+  <div class="flex gap-1">
+    {% if node.field_product_code_new.0.value %}
+      <span class="font-bold">Product code:</span><span>{{ node.field_product_code_new.0.value }}</span>
+    {% endif %}   
+  </div>
+
+    {% if node.field_source_publication.value %}
+      <div class="flex gap-1">
+          <span class="font-bold">Source&nbsp;publication:</span> {{ content.field_source_publication }}
+      </div>
+    {% endif %}
+
+
+{#
+  <div class="flex gap-1">
+    {% if node.field_area_list.value %}
+      {% set node.field_area_list.value = render_var(url('/search?f%5B0%5D=%3A&f%5B1%5D=country%3A')) ~ 'node.field_area_list.value' %}
+        <span class="font-bold">ISBN:</span> <span>{{ node.field_area_list.value|raw }}</span>
+    {% endif %}
+  </div>
+#}
+
+</div>

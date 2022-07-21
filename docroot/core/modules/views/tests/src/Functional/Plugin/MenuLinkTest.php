@@ -29,7 +29,7 @@ class MenuLinkTest extends ViewTestBase {
     'views_ui',
     'user',
     'node',
-    'menu_ui',
+    'menu_link_content',
     'block',
   ];
 
@@ -48,8 +48,8 @@ class MenuLinkTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
-    parent::setUp($import_test_views);
+  protected function setUp($import_test_views = TRUE, $modules = ['views_test_config']): void {
+    parent::setUp($import_test_views, $modules);
 
     $this->enableViewsTestModule();
 

@@ -1,0 +1,9 @@
+default content deploy import:
+  description: 'Allows user to import any exported content via UI. It will overwrite existing content.'
+  title: 'Import content'
+  restrict access: TRUE
+
+default content deploy export:
+  description: 'Allows user to export any content via UI.'
+  title: 'Export content'
+  restrict access: TRUE

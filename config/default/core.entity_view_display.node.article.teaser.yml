@@ -6,18 +6,17 @@ dependencies:
     - core.entity_view_mode.node.teaser
     - field.field.node.article.body
     - field.field.node.article.comment
+    - field.field.node.article.field_alternative_label
     - field.field.node.article.field_article_type
     - field.field.node.article.field_collections
     - field.field.node.article.field_contact
     - field.field.node.article.field_display_image
-    - field.field.node.article.field_full_width_media
     - field.field.node.article.field_hide_date
     - field.field.node.article.field_image
     - field.field.node.article.field_image_caption
     - field.field.node.article.field_main_image
     - field.field.node.article.field_paragraphs
     - field.field.node.article.field_project
-    - field.field.node.article.field_set_info
     - field.field.node.article.field_standfirst
     - field.field.node.article.field_tagline
     - field.field.node.article.field_tags
@@ -44,71 +43,90 @@ third_party_settings:
             uuid: b8c5a12f-7b58-4877-ad20-bf8de81b32b5
             region: content
             configuration:
+              id: 'field_block:node:article:field_image'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:node:article:field_image'
               formatter:
                 type: image
-                settings:
-                  image_style: medium
-                  image_link: content
-                third_party_settings: {  }
                 label: hidden
-            additional: {  }
+                settings:
+                  image_link: content
+                  image_style: medium
+                third_party_settings: {  }
             weight: 0
+            additional: {  }
           d60ef8f3-f378-45c0-90a3-f56146ac9885:
             uuid: d60ef8f3-f378-45c0-90a3-f56146ac9885
             region: content
             configuration:
+              id: 'field_block:node:article:body'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:node:article:body'
               formatter:
                 type: text_summary_or_trimmed
+                label: hidden
                 settings:
                   trim_length: 600
                 third_party_settings: {  }
-                label: hidden
-            additional: {  }
             weight: 1
+            additional: {  }
           f5d24b31-3c32-4ea6-924c-a9edbccc3ef7:
             uuid: f5d24b31-3c32-4ea6-924c-a9edbccc3ef7
             region: content
             configuration:
+              id: 'field_block:node:article:field_tags'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:node:article:field_tags'
               formatter:
                 type: entity_reference_label
+                label: above
                 settings:
                   link: true
                 third_party_settings: {  }
-                label: above
-            additional: {  }
             weight: 2
+            additional: {  }
           f3d376e0-341a-47f3-9d7c-912e81f1ebd3:
             uuid: f3d376e0-341a-47f3-9d7c-912e81f1ebd3
             region: content
             configuration:
+              id: 'extra_field_block:node:article:links'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'extra_field_block:node:article:links'
-            additional: {  }
             weight: 3
+            additional: {  }
           e0ee1c66-9238-45c7-9570-02fad5bdd7fa:
             uuid: e0ee1c66-9238-45c7-9570-02fad5bdd7fa
             region: content
             configuration:
+              id: 'extra_field_block:node:article:sharing_buttons'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'extra_field_block:node:article:sharing_buttons'
-            additional: {  }
             weight: 4
+            additional: {  }
+          ce6b935e-d996-4f17-9c07-22e90dc943b5:
+            uuid: ce6b935e-d996-4f17-9c07-22e90dc943b5
+            region: content
+            configuration:
+              id: 'field_block:node:article:field_image'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: image
+                label: hidden
+                settings:
+                  image_link: content
+                  image_style: medium
+                  image_loading:
+                    attribute: lazy
+                third_party_settings: {  }
+            weight: 5
+            additional: {  }
         third_party_settings: {  }
 _core:
   default_config_hash: 4NcL2hSQZBpJbYtNuh5jC6kyQTcAc1m5bQpTegEWEso
@@ -119,52 +137,53 @@ mode: teaser
 content:
   body:
     type: text_summary_or_trimmed
-    weight: 0
-    region: content
+    label: hidden
     settings:
       trim_length: 600
     third_party_settings: {  }
-    label: hidden
+    weight: 0
+    region: content
   field_image:
     type: image
+    label: hidden
+    settings:
+      image_link: content
+      image_style: medium
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
     weight: -1
     region: content
-    settings:
-      image_style: medium
-      image_link: content
-    third_party_settings: {  }
-    label: hidden
   field_tags:
     type: entity_reference_label
-    weight: 10
-    region: content
+    label: above
     settings:
       link: true
     third_party_settings: {  }
-    label: above
+    weight: 10
+    region: content
   links:
+    settings: {  }
+    third_party_settings: {  }
     weight: 100
     region: content
-    settings: {  }
-    third_party_settings: {  }
   sharing_buttons:
-    weight: 100
     settings: {  }
     third_party_settings: {  }
+    weight: 100
     region: content
 hidden:
   comment: true
+  field_alternative_label: true
   field_article_type: true
   field_collections: true
   field_contact: true
   field_display_image: true
-  field_full_width_media: true
   field_hide_date: true
   field_image_caption: true
   field_main_image: true
   field_paragraphs: true
   field_project: true
-  field_set_info: true
   field_standfirst: true
   field_tagline: true
   field_theme_s_: true

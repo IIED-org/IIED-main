@@ -1,0 +1,34 @@
+{#
+/**
+ * @file
+ * Theme override to display a two-column grid layout.
+ *
+ * Available variables:
+ * - content: The content for this layout.
+ * - attributes: HTML attributes for the layout <div>.
+ * - first
+ */
+#}
+{% if content %}
+  <div{{ attributes }}>
+         <div class="container">
+      {% if content.first %}
+        <div {{ region_attributes.first.addClass('mb-4') }}>
+          {{ content.insert_before }}
+          {{ content.controls }}
+          {{ content.first }}
+          {{ content.insert_after }}
+        </div>
+      {% endif %}
+
+      {% if content.second %}
+        <div {{ region_attributes.second.addClass('mb-4') }}>
+          {{ content.insert_before }}
+          {{ content.controls }}
+          {{ content.second }}
+          {{ content.insert_after }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}

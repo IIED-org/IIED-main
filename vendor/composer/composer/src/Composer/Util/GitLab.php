@@ -16,6 +16,7 @@ use Composer\IO\IOInterface;
 use Composer\Config;
 use Composer\Factory;
 use Composer\Downloader\TransportException;
+use Composer\Pcre\Preg;
 
 /**
  * @author Roshan Gautam <roshan.gautam@hotmail.com>
@@ -57,7 +58,7 @@ class GitLab
     public function authorizeOAuth($originUrl)
     {
         // before composer 1.9, origin URLs had no port number in them
-        $bcOriginUrl = preg_replace('{:\d+}', '', $originUrl);
+        $bcOriginUrl = Preg::replace('{:\d+}', '', $originUrl);
 
         if (!in_array($originUrl, $this->config->get('gitlab-domains'), true) && !in_array($bcOriginUrl, $this->config->get('gitlab-domains'), true)) {
             return false;
@@ -91,7 +92,14 @@ class GitLab
         if (isset($token)) {
             $username = is_array($token) && array_key_exists("username", $token) ? $token["username"] : $token;
             $password = is_array($token) && array_key_exists("token", $token) ? $token["token"] : 'private-token';
-            $this->io->setAuthentication($originUrl, $username, $password);
+
+            // Composer expects the GitLab token to be stored as username and 'private-token' or 'gitlab-ci-token' to be stored as password
+            // Detect cases where this is reversed and resolve automatically resolve it
+            if (in_array($username, array('private-token', 'gitlab-ci-token',  'oauth2'), true)) {
+                $this->io->setAuthentication($originUrl, $password, $username);
+            } else {
+                $this->io->setAuthentication($originUrl, $username, $password);
+            }
 
             return true;
         }

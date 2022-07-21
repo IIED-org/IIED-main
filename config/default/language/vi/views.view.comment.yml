@@ -1,10 +1,7 @@
 display:
   default:
-    display_title: 'Mặc định'
+    display_title: Default
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         subject:
           label: 'Tiêu đề'
@@ -12,6 +9,9 @@ display:
           label: 'Tác giả'
         operations:
           label: 'Thao tác'
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         subject:
           expose:
@@ -21,13 +21,6 @@ display:
             label: 'Ngôn ngữ'
   page_unapproved:
     display_options:
-      filters:
-        subject:
-          expose:
-            label: 'Tiêu đề'
-        langcode:
-          expose:
-            label: 'Ngôn ngữ'
       fields:
         subject:
           label: 'Tiêu đề'
@@ -35,3 +28,10 @@ display:
           label: 'Tác giả'
         operations:
           label: 'Thao tác'
+      filters:
+        subject:
+          expose:
+            label: 'Tiêu đề'
+        langcode:
+          expose:
+            label: 'Ngôn ngữ'

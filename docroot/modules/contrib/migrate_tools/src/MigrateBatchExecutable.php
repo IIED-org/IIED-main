@@ -45,6 +45,13 @@ class MigrateBatchExecutable extends MigrateExecutable {
   protected $batchContext = [];
 
   /**
+   * Migration plugin configuration.
+   *
+   * @var array
+   */
+  protected $configuration = [];
+
+  /**
    * Plugin manager for migration plugins.
    *
    * @var \Drupal\migrate\Plugin\MigrationPluginManagerInterface
@@ -68,8 +75,11 @@ class MigrateBatchExecutable extends MigrateExecutable {
       $this->syncSource = $options['sync'];
     }
 
-    parent::__construct($migration, $message, $options);
+    if (isset($options['configuration'])) {
+      $this->configuration = $options['configuration'];
+    }
 
+    parent::__construct($migration, $message, $options);
 
     $this->migrationPluginManager = \Drupal::getContainer()->get('plugin.manager.migration');
   }
@@ -106,6 +116,7 @@ class MigrateBatchExecutable extends MigrateExecutable {
       'update' => $this->updateExistingRows,
       'force' => $this->checkDependencies,
       'sync' => $this->syncSource,
+      'configuration' => $this->configuration,
     ]);
 
     if (count($operations) > 0) {
@@ -307,7 +318,7 @@ class MigrateBatchExecutable extends MigrateExecutable {
    *   The batch limit.
    */
   public function calculateBatchLimit($context) {
-    // TODO Maybe we need some other more sophisticated logic here?
+    // @TODO Maybe we need some other more sophisticated logic here?
     return ceil($context['sandbox']['total'] / 100);
   }
 

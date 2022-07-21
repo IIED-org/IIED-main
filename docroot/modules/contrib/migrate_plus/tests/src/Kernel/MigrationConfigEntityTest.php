@@ -17,7 +17,7 @@ class MigrationConfigEntityTest extends MigrateTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'migrate',
     'migrate_plus',
     'migrate_plus_test',
@@ -42,7 +42,6 @@ class MigrationConfigEntityTest extends MigrateTestBase {
     $this->pluginManager = \Drupal::service('plugin.manager.migration');
     $this->installConfig('migrate_plus');
     $this->installEntitySchema('taxonomy_term');
-    $this->installSchema('system', ['key_value', 'key_value_expire']);
   }
 
   /**

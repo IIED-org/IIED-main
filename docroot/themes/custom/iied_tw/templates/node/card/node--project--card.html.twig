@@ -1,0 +1,10 @@
+{% extends '@iied_tw/node/card/node--card.html.twig' %}
+    {% block date %}
+        <p class="text-gray-500">
+        {% set allowed_values = node.field_project_status.getSetting('allowed_values') %}
+        {% set list_values = node.field_project_status.getValue() %}
+        {% for list_value in list_values %}
+            {{ allowed_values[list_value['value']] }}
+        {% endfor %}
+        {{ node.type.entity.label() }}</p>
+    {% endblock %}

@@ -1,10 +1,7 @@
 display:
   default:
-    display_title: 'Par défaut'
+    display_title: Default
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         subject:
           label: Objet
@@ -12,6 +9,9 @@ display:
           label: Auteur
         operations:
           label: Actions
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         subject:
           expose:
@@ -21,13 +21,6 @@ display:
             label: Langue
   page_unapproved:
     display_options:
-      filters:
-        subject:
-          expose:
-            label: Objet
-        langcode:
-          expose:
-            label: Langue
       fields:
         subject:
           label: Objet
@@ -35,3 +28,10 @@ display:
           label: Auteur
         operations:
           label: Actions
+      filters:
+        subject:
+          expose:
+            label: Objet
+        langcode:
+          expose:
+            label: Langue

@@ -25,7 +25,7 @@ interface FacetInterface extends ConfigEntityInterface {
    *
    * @return array
    *   An associative array with the following structure:
-   *   - id: The widget plugin id as a string.
+   *   - type: The widget plugin id as a string.
    *   - config: The widget configuration as an array.
    */
   public function getWidget();
@@ -54,10 +54,18 @@ interface FacetInterface extends ConfigEntityInterface {
    *
    * @return array
    *   An associative array with the following structure:
-   *   - id: The hierarchy plugin id as a string.
+   *   - type: The hierarchy plugin id as a string.
    *   - config: The widget configuration as an array.
    */
   public function getHierarchy();
+
+  /**
+   * Returns an array of hierarchies with their configuration.
+   *
+   * @return \Drupal\facets\Hierarchy\HierarchyInterface[]
+   *   An array of hierarchies.
+   */
+  public function getHierarchies();
 
   /**
    * Returns the facet hierarchy instance.
@@ -173,6 +181,18 @@ interface FacetInterface extends ConfigEntityInterface {
    *   The results of the facet.
    */
   public function getResults();
+
+  /**
+   * Returns the flat result for the facet keyed by their raw values.
+   *
+   * @param \Drupal\facets\Result\ResultInterface[]|null $results
+   *   The results to be converted into a flat keyed by raw value array. If
+   *   not provided the entire current result set of the facet will be used.
+   *
+   * @return \Drupal\facets\Result\ResultInterface[]
+   *   The results of the facet.
+   */
+  public function getResultsKeyedByRawValue($results = NULL);
 
   /**
    * Sets the results for the facet.

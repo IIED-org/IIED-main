@@ -38,8 +38,8 @@ class NodeFieldFilterTest extends NodeTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE): void {
-    parent::setUp($import_test_views);
+  protected function setUp($import_test_views = TRUE, $modules = ['node_test_views']): void {
+    parent::setUp($import_test_views, $modules);
 
     // Create Page content type.
     if ($this->profile != 'standard') {
@@ -97,8 +97,10 @@ class NodeFieldFilterTest extends NodeTestBase {
    *   that translation should be shown on the given page.
    * @param string $message
    *   Message suffix to display.
+   *
+   * @internal
    */
-  protected function assertPageCounts($path, $counts, $message) {
+  protected function assertPageCounts(string $path, array $counts, string $message): void {
     // Disable read more links.
     \Drupal::service('entity_display.repository')
       ->getViewDisplay('node', 'page', 'teaser')

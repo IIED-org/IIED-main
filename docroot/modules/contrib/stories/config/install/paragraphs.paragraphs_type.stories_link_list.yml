@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: stories_link_list
+label: 'Link List'
+icon_uuid: null
+description: null
+behavior_plugins: {  }

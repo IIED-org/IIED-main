@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.taxonomy_term.search_result
     - field.field.taxonomy_term.theme.field_legacy_code
     - field.field.taxonomy_term.theme.field_link
+    - field.field.taxonomy_term.theme.layout_builder__layout
     - taxonomy.vocabulary.theme
   module:
     - ds
@@ -22,16 +23,16 @@ third_party_settings:
       disable_css: false
       entity_classes: all_classes
       settings:
-        label: ''
+        classes:
+          layout_class: {  }
+          ds_content: {  }
         wrappers:
           ds_content: div
         outer_wrapper: div
         attributes: ''
         link_attribute: ''
         link_custom: ''
-        classes:
-          layout_class: {  }
-          ds_content: {  }
+        label: ''
     regions:
       ds_content:
         - taxonomy_term_title
@@ -43,9 +44,9 @@ third_party_settings:
         label: hidden
         formatter: default
         settings:
+          link: false
           wrapper: h5
           class: ''
-          link: false
         ft:
           id: default
           settings:
@@ -58,10 +59,8 @@ bundle: theme
 mode: search_result
 content:
   description:
-    label: hidden
     type: text_trimmed
-    weight: 1
-    region: ds_content
+    label: hidden
     settings:
       trim_length: 300
     third_party_settings:
@@ -72,8 +71,11 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
+    weight: 1
+    region: ds_content
 hidden:
   field_legacy_code: true
   field_link: true
   langcode: true
+  layout_builder__layout: true
   search_api_excerpt: true

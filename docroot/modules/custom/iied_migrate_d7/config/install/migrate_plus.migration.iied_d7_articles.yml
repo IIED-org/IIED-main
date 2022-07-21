@@ -36,6 +36,9 @@ process:
     -
       plugin: get
       source: body/0/value
+    -
+      plugin: rewrite_inline_image_styles
+      new_style: 'scale_md'
   body/summary:
     -
       plugin: get
@@ -44,6 +47,14 @@ process:
     -
       plugin: default_value
       default_value: 'full_html'
+  field_article_type:
+    -
+      plugin: get
+      source: field_article_type/0/value
+  field_alternative_label/value:
+    -
+      plugin: get
+      source: field_set_info/0/value
   field_dates:
     -
       plugin: get
@@ -105,10 +116,17 @@ process:
     -
       plugin: default_value
       default_value: 'full_html'
-  field_contact:
+  field_contact/value:
     -
       plugin: get
-      source: field_contact
+      source: field_contact_0/0/value
+    -
+      plugin: rewrite_inline_image_styles
+      new_style: 'scale_md'
+  field_contact/format:
+    -
+      plugin: default_value
+      default_value: 'full_html'
   field_project_contacts:
     -
       plugin: skip_on_empty
@@ -143,32 +161,6 @@ process:
     -
       plugin: get
       source: field_display_image
-  field_full_width_media:
-    -
-      plugin: skip_on_empty
-      method: process
-      source: field_full_width_media
-    -
-      plugin: sub_process
-      process:
-        target_id:
-          -
-            plugin: migration_lookup
-            migration: iied_d7_project_para_full_width_media
-            source: value
-          -
-            plugin: extract
-            index:
-              - 0
-        target_revision_id:
-          -
-            plugin: migration_lookup
-            migration: iied_d7_project_para_full_width_media
-            source: value
-          -
-            plugin: extract
-            index:
-              - 1
   field_paragraphs:
     -
       plugin: skip_on_empty
@@ -199,6 +191,14 @@ process:
   path/pathauto:
     plugin: default_value
     default_value: false
+  field_project:
+    plugin: sub_process
+    source: field_project_number_reference
+    process:
+      target_id:
+        plugin: migration_lookup
+        migration: iied_projects
+        source: target_id
 destination:
   plugin: 'entity_complete:node'
   translations: true
@@ -209,4 +209,3 @@ migration_dependencies:
     - iied_d7_media_documents
   optional:
     - iied_d7_project_para_additional_elements
-    - iied_d7_project_para_full_width_media

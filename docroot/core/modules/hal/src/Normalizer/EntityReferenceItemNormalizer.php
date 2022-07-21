@@ -76,7 +76,7 @@ class EntityReferenceItemNormalizer extends FieldItemNormalizer implements UuidR
     // If the parent entity passed in a langcode, unset it before normalizing
     // the target entity. Otherwise, untranslatable fields of the target entity
     // will include the langcode.
-    $langcode = isset($context['langcode']) ? $context['langcode'] : NULL;
+    $langcode = $context['langcode'] ?? NULL;
     unset($context['langcode']);
     $context['included_fields'] = ['uuid'];
 
@@ -182,6 +182,13 @@ class EntityReferenceItemNormalizer extends FieldItemNormalizer implements UuidR
       }
       return $uuid;
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function hasCacheableSupportsMethod(): bool {
+    return TRUE;
   }
 
 }

@@ -125,10 +125,6 @@ EOF
 EOF
     );
     $modules = ['module_a', 'module_b', 'module_c'];
-    $this->moduleHandler->expects($this->any())
-      ->method('getImplementations')
-      ->with('permission')
-      ->willReturn([]);
 
     $this->moduleHandler->expects($this->any())
       ->method('getModuleList')
@@ -249,11 +245,6 @@ EOF
     $modules = ['module_a', 'module_b', 'module_c'];
 
     $this->moduleHandler->expects($this->any())
-      ->method('getImplementations')
-      ->with('permission')
-      ->willReturn([]);
-
-    $this->moduleHandler->expects($this->any())
       ->method('getModuleList')
       ->willReturn(array_flip($modules));
 
@@ -301,11 +292,6 @@ EOF
     $modules = ['module_a'];
 
     $this->moduleHandler->expects($this->any())
-      ->method('getImplementations')
-      ->with('permission')
-      ->willReturn([]);
-
-    $this->moduleHandler->expects($this->any())
       ->method('getModuleList')
       ->willReturn(array_flip($modules));
 
@@ -332,8 +318,10 @@ EOF
    *
    * @param array $actual_permissions
    *   The actual permissions
+   *
+   * @internal
    */
-  protected function assertPermissions(array $actual_permissions) {
+  protected function assertPermissions(array $actual_permissions): void {
     $this->assertCount(4, $actual_permissions);
     $this->assertEquals('single_description', $actual_permissions['access_module_a']['title']);
     $this->assertEquals('module_a', $actual_permissions['access_module_a']['provider']);

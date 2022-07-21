@@ -12,7 +12,7 @@ class DefaultMap extends AbstractMap
     /**
      * Singleton instance.
      *
-     * @var AbstractMap
+     * @var DefaultMap
      */
     protected static $instance;
 
@@ -229,6 +229,25 @@ class DefaultMap extends AbstractMap
       'e' =>
       array (
         0 => 'exi',
+      ),
+    ),
+    'application/fits' =>
+    array (
+      'a' =>
+      array (
+        0 => 'image/x-fits',
+        1 => 'image/fits',
+      ),
+      'desc' =>
+      array (
+        0 => 'FITS document',
+        1 => 'FITS: Flexible Image Transport System',
+      ),
+      'e' =>
+      array (
+        0 => 'fits',
+        1 => 'fit',
+        2 => 'fts',
       ),
     ),
     'application/font-tdpfr' =>
@@ -1230,13 +1249,24 @@ class DefaultMap extends AbstractMap
     ),
     'application/sparql-query' =>
     array (
+      'desc' =>
+      array (
+        0 => 'SPARQL query',
+        1 => 'SPARQL: SPARQL Protocol and RDF Query Language',
+      ),
       'e' =>
       array (
         0 => 'rq',
+        1 => 'qs',
       ),
     ),
     'application/sparql-results+xml' =>
     array (
+      'desc' =>
+      array (
+        0 => 'SPARQL query results',
+        1 => 'SPARQL: SPARQL Protocol and RDF Query Language',
+      ),
       'e' =>
       array (
         0 => 'srx',
@@ -1624,6 +1654,17 @@ class DefaultMap extends AbstractMap
         0 => 'pages',
       ),
     ),
+    'application/vnd.apple.pkpass' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'Apple Wallet pass',
+      ),
+      'e' =>
+      array (
+        0 => 'pkpass',
+      ),
+    ),
     'application/vnd.aristanetworks.swi' =>
     array (
       'e' =>
@@ -1761,7 +1802,7 @@ class DefaultMap extends AbstractMap
       ),
       'desc' =>
       array (
-        0 => 'comic book archive',
+        0 => 'comic book archive (zip container)',
       ),
       'e' =>
       array (
@@ -1776,7 +1817,7 @@ class DefaultMap extends AbstractMap
       ),
       'desc' =>
       array (
-        0 => 'comic book archive',
+        0 => 'comic book archive (rar container)',
       ),
       'e' =>
       array (
@@ -2542,6 +2583,7 @@ class DefaultMap extends AbstractMap
       'desc' =>
       array (
         0 => 'ICC profile',
+        1 => 'ICC: International Color Consortium',
       ),
       'e' =>
       array (
@@ -5038,6 +5080,18 @@ class DefaultMap extends AbstractMap
         0 => 'arj',
       ),
     ),
+    'application/x-asar' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'Electron Archive (ASAR)',
+        1 => 'ASAR: Atom Shell Archive Format',
+      ),
+      'e' =>
+      array (
+        0 => 'asar',
+      ),
+    ),
     'application/x-asp' =>
     array (
       'desc' =>
@@ -5122,7 +5176,7 @@ class DefaultMap extends AbstractMap
     array (
       'desc' =>
       array (
-        0 => 'BCPIO document',
+        0 => 'BCPIO archive',
         1 => 'BCPIO: Binary CPIO',
       ),
       'e' =>
@@ -5149,8 +5203,8 @@ class DefaultMap extends AbstractMap
       ),
       'e' =>
       array (
-        0 => 'blender',
-        1 => 'blend',
+        0 => 'blend',
+        1 => 'blender',
       ),
     ),
     'application/x-blorb' =>
@@ -5254,7 +5308,7 @@ class DefaultMap extends AbstractMap
     array (
       'desc' =>
       array (
-        0 => 'comic book archive',
+        0 => 'comic book archive (7z container)',
       ),
       'e' =>
       array (
@@ -5265,7 +5319,7 @@ class DefaultMap extends AbstractMap
     array (
       'desc' =>
       array (
-        0 => 'comic book archive',
+        0 => 'comic book archive (tar container)',
       ),
       'e' =>
       array (
@@ -5432,6 +5486,7 @@ class DefaultMap extends AbstractMap
       'desc' =>
       array (
         0 => 'DAR archive',
+        1 => 'DAR: Disk ARchive',
       ),
       'e' =>
       array (
@@ -5726,6 +5781,7 @@ class DefaultMap extends AbstractMap
       'desc' =>
       array (
         0 => 'Linux PSF console font',
+        1 => 'PSF: PC Screen Font',
       ),
       'e' =>
       array (
@@ -5737,6 +5793,7 @@ class DefaultMap extends AbstractMap
       'desc' =>
       array (
         0 => 'PCF font',
+        1 => 'PCF: Portable Compiled Format',
       ),
       'e' =>
       array (
@@ -5883,6 +5940,17 @@ class DefaultMap extends AbstractMap
         0 => 'gdi',
       ),
     ),
+    'application/x-gdscript' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'GDScript script',
+      ),
+      'e' =>
+      array (
+        0 => 'gd',
+      ),
+    ),
     'application/x-gedcom' =>
     array (
       'a' =>
@@ -6004,6 +6072,42 @@ class DefaultMap extends AbstractMap
         0 => 'sgf',
       ),
     ),
+    'application/x-godot-resource' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'Godot Engine resource',
+      ),
+      'e' =>
+      array (
+        0 => 'res',
+        1 => 'tres',
+      ),
+    ),
+    'application/x-godot-scene' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'Godot Engine scene',
+      ),
+      'e' =>
+      array (
+        0 => 'scn',
+        1 => 'tscn',
+        2 => 'escn',
+      ),
+    ),
+    'application/x-godot-shader' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'Godot Engine shader',
+      ),
+      'e' =>
+      array (
+        0 => 'gdshader',
+      ),
+    ),
     'application/x-gramps-xml' =>
     array (
       'e' =>
@@ -6038,6 +6142,7 @@ class DefaultMap extends AbstractMap
       'desc' =>
       array (
         0 => 'Linux PSF console font (gzip-compressed)',
+        1 => 'PSF: PC Screen Font',
       ),
       'e' =>
       array (
@@ -6520,6 +6625,7 @@ class DefaultMap extends AbstractMap
       'desc' =>
       array (
         0 => 'Lrzip archive',
+        1 => 'Lrzip: Long Range Zip',
       ),
       'e' =>
       array (
@@ -7041,6 +7147,7 @@ class DefaultMap extends AbstractMap
       'e' =>
       array (
         0 => 'o',
+        1 => 'mod',
       ),
     ),
     'application/x-oleo' =>
@@ -7052,6 +7159,18 @@ class DefaultMap extends AbstractMap
       'e' =>
       array (
         0 => 'oleo',
+      ),
+    ),
+    'application/x-openzim' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'OpenZIM file',
+        1 => 'ZIM: Zeno IMproved',
+      ),
+      'e' =>
+      array (
+        0 => 'zim',
       ),
     ),
     'application/x-pagemaker' =>
@@ -7847,7 +7966,7 @@ class DefaultMap extends AbstractMap
     array (
       'desc' =>
       array (
-        0 => 'Manpage manual document',
+        0 => 'Manual page',
       ),
       'e' =>
       array (
@@ -8413,6 +8532,7 @@ class DefaultMap extends AbstractMap
       'e' =>
       array (
         0 => 'zip',
+        1 => 'zipx',
       ),
     ),
     'application/zlib' =>
@@ -8541,6 +8661,7 @@ class DefaultMap extends AbstractMap
       'desc' =>
       array (
         0 => 'FLAC audio',
+        1 => 'FLAC: Free Lossless Audio Codec',
       ),
       'e' =>
       array (
@@ -8556,6 +8677,7 @@ class DefaultMap extends AbstractMap
       'desc' =>
       array (
         0 => 'MIDI audio',
+        1 => 'MIDI: Musical Instrument Digital Interface',
       ),
       'e' =>
       array (
@@ -8563,6 +8685,22 @@ class DefaultMap extends AbstractMap
         1 => 'midi',
         2 => 'kar',
         3 => 'rmi',
+      ),
+    ),
+    'audio/mobile-xmf' =>
+    array (
+      'a' =>
+      array (
+        0 => 'audio/vnd.nokia.mobile-xmf',
+      ),
+      'desc' =>
+      array (
+        0 => 'Mobile XMF audio',
+        1 => 'XMF: eXtensible Music Format',
+      ),
+      'e' =>
+      array (
+        0 => 'mxmf',
       ),
     ),
     'audio/mp2' =>
@@ -8720,6 +8858,7 @@ class DefaultMap extends AbstractMap
       'desc' =>
       array (
         0 => 'DTS audio',
+        1 => 'DTS: Digital Theater Systems',
       ),
       'e' =>
       array (
@@ -8734,7 +8873,8 @@ class DefaultMap extends AbstractMap
       ),
       'desc' =>
       array (
-        0 => 'DTSHD audio',
+        0 => 'DTS-HD audio',
+        1 => 'DTS-HD: Digital Theater Systems High Definition',
       ),
       'e' =>
       array (
@@ -8865,6 +9005,40 @@ class DefaultMap extends AbstractMap
       'e' =>
       array (
         0 => 'caf',
+      ),
+    ),
+    'audio/x-dff' =>
+    array (
+      'a' =>
+      array (
+        0 => 'audio/dff',
+      ),
+      'desc' =>
+      array (
+        0 => 'DSDIFF audio',
+        1 => 'DSDIFF: Direct Stream Digital Interchange File Format',
+      ),
+      'e' =>
+      array (
+        0 => 'dff',
+      ),
+    ),
+    'audio/x-dsf' =>
+    array (
+      'a' =>
+      array (
+        0 => 'audio/dsf',
+        1 => 'audio/x-dsd',
+        2 => 'audio/dsd',
+      ),
+      'desc' =>
+      array (
+        0 => 'DSF audio',
+        1 => 'DSF: Direct stream digital Stream File',
+      ),
+      'e' =>
+      array (
+        0 => 'dsf',
       ),
     ),
     'audio/x-flac+ogg' =>
@@ -9296,7 +9470,6 @@ class DefaultMap extends AbstractMap
       'a' =>
       array (
         0 => 'audio/xmf',
-        1 => 'audio/mobile-xmf',
       ),
       'desc' =>
       array (
@@ -9446,7 +9619,8 @@ class DefaultMap extends AbstractMap
       ),
       'desc' =>
       array (
-        0 => 'AV1 Image File Format (AVIF)',
+        0 => 'AVIF image',
+        1 => 'AVIF: AV1 Image File Format',
       ),
       'e' =>
       array (
@@ -9501,22 +9675,6 @@ class DefaultMap extends AbstractMap
         0 => 'emf',
       ),
     ),
-    'image/fits' =>
-    array (
-      'a' =>
-      array (
-        0 => 'image/x-fits',
-      ),
-      'desc' =>
-      array (
-        0 => 'FITS document',
-        1 => 'FITS: Flexible Image Transport System',
-      ),
-      'e' =>
-      array (
-        0 => 'fits',
-      ),
-    ),
     'image/g3fax' =>
     array (
       'a' =>
@@ -9526,6 +9684,7 @@ class DefaultMap extends AbstractMap
       'desc' =>
       array (
         0 => 'CCITT G3 fax image',
+        1 => 'CCITT: Comité Consultatif International Téléphonique et Télégraphique',
       ),
       'e' =>
       array (
@@ -9537,6 +9696,7 @@ class DefaultMap extends AbstractMap
       'desc' =>
       array (
         0 => 'GIF image',
+        1 => 'GIF: Graphics Interchange Format',
       ),
       'e' =>
       array (
@@ -9560,6 +9720,7 @@ class DefaultMap extends AbstractMap
       array (
         0 => 'heic',
         1 => 'heif',
+        2 => 'hif',
       ),
     ),
     'image/ief' =>
@@ -9601,6 +9762,7 @@ class DefaultMap extends AbstractMap
       'desc' =>
       array (
         0 => 'JPEG image',
+        1 => 'JPEG: Joint Photographic Experts Group',
       ),
       'e' =>
       array (
@@ -9684,6 +9846,7 @@ class DefaultMap extends AbstractMap
       'desc' =>
       array (
         0 => 'PNG image',
+        1 => 'PNG: Portable Network Graphics',
       ),
       'e' =>
       array (
@@ -9739,6 +9902,7 @@ class DefaultMap extends AbstractMap
       'e' =>
       array (
         0 => 'svgz',
+        1 => 'svg.gz',
       ),
     ),
     'image/tiff' =>
@@ -10482,6 +10646,7 @@ class DefaultMap extends AbstractMap
       'desc' =>
       array (
         0 => 'PNM image',
+        1 => 'PNM: Portable Anymap',
       ),
       'e' =>
       array (
@@ -10739,6 +10904,46 @@ class DefaultMap extends AbstractMap
         1 => 'mime',
       ),
     ),
+    'model/3mf' =>
+    array (
+      'a' =>
+      array (
+        0 => 'application/vnd.ms-3mfdocument',
+      ),
+      'desc' =>
+      array (
+        0 => '3MF document',
+        1 => '3MF: 3D Manufacturing Format',
+      ),
+      'e' =>
+      array (
+        0 => '3mf',
+      ),
+    ),
+    'model/gltf+json' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'glTF model',
+        1 => 'glTF: GL Transmission Format',
+      ),
+      'e' =>
+      array (
+        0 => 'gltf',
+      ),
+    ),
+    'model/gltf-binary' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'glTF model',
+        1 => 'glTF: GL Transmission Format',
+      ),
+      'e' =>
+      array (
+        0 => 'glb',
+      ),
+    ),
     'model/iges' =>
     array (
       'desc' =>
@@ -10759,6 +10964,28 @@ class DefaultMap extends AbstractMap
         0 => 'msh',
         1 => 'mesh',
         2 => 'silo',
+      ),
+    ),
+    'model/mtl' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'OBJ 3D model material library',
+      ),
+      'e' =>
+      array (
+        0 => 'mtl',
+      ),
+    ),
+    'model/obj' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'OBJ 3D model',
+      ),
+      'e' =>
+      array (
+        0 => 'obj',
       ),
     ),
     'model/stl' =>
@@ -11499,6 +11726,31 @@ class DefaultMap extends AbstractMap
         0 => 'dcl',
       ),
     ),
+    'text/x-devicetree-binary' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'Flattened Devicetree',
+        1 => 'DTB: Device Tree Binary',
+      ),
+      'e' =>
+      array (
+        0 => 'dtb',
+      ),
+    ),
+    'text/x-devicetree-source' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'Devicetree source code',
+        1 => 'DTS: Device Tree Source',
+      ),
+      'e' =>
+      array (
+        0 => 'dts',
+        1 => 'dtsi',
+      ),
+    ),
     'text/x-dsl' =>
     array (
       'desc' =>
@@ -11584,6 +11836,17 @@ class DefaultMap extends AbstractMap
         4 => 'f95',
       ),
     ),
+    'text/x-gcode-gx' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'G-code Extended file',
+      ),
+      'e' =>
+      array (
+        0 => 'gx',
+      ),
+    ),
     'text/x-genie' =>
     array (
       'desc' =>
@@ -11667,7 +11930,7 @@ class DefaultMap extends AbstractMap
     array (
       'desc' =>
       array (
-        0 => 'Gradle scripts',
+        0 => 'Gradle script',
       ),
       'e' =>
       array (
@@ -11909,6 +12172,17 @@ class DefaultMap extends AbstractMap
         0 => 'mof',
       ),
     ),
+    'text/x-mpl2' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'MPlayer2 subtitles',
+      ),
+      'e' =>
+      array (
+        0 => 'mpl',
+      ),
+    ),
     'text/x-mpsub' =>
     array (
       'desc' =>
@@ -11966,6 +12240,17 @@ class DefaultMap extends AbstractMap
       'e' =>
       array (
         0 => 'nfo',
+      ),
+    ),
+    'text/x-objc++src' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'Objective-C++ source code',
+      ),
+      'e' =>
+      array (
+        0 => 'mm',
       ),
     ),
     'text/x-objcsrc' =>
@@ -12036,6 +12321,7 @@ class DefaultMap extends AbstractMap
       'desc' =>
       array (
         0 => 'OPML syndication feed',
+        1 => 'OPML: Outline Processor Markup Language',
       ),
       'e' =>
       array (
@@ -13160,6 +13446,13 @@ class DefaultMap extends AbstractMap
         0 => 'video/3gpp2',
       ),
     ),
+    '3mf' =>
+    array (
+      't' =>
+      array (
+        0 => 'model/3mf',
+      ),
+    ),
     '7z' =>
     array (
       't' =>
@@ -13625,6 +13918,13 @@ class DefaultMap extends AbstractMap
       't' =>
       array (
         0 => 'application/x-applix-spreadsheet',
+      ),
+    ),
+    'asar' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/x-asar',
       ),
     ),
     'asc' =>
@@ -14911,6 +15211,13 @@ class DefaultMap extends AbstractMap
         0 => 'application/vnd.dreamfactory',
       ),
     ),
+    'dff' =>
+    array (
+      't' =>
+      array (
+        0 => 'audio/x-dff',
+      ),
+    ),
     'dgc' =>
     array (
       't' =>
@@ -15125,6 +15432,13 @@ class DefaultMap extends AbstractMap
         0 => 'text/prs.lines.tag',
       ),
     ),
+    'dsf' =>
+    array (
+      't' =>
+      array (
+        0 => 'audio/x-dsf',
+      ),
+    ),
     'dsl' =>
     array (
       't' =>
@@ -15144,6 +15458,7 @@ class DefaultMap extends AbstractMap
       't' =>
       array (
         0 => 'application/x-dtbook+xml',
+        1 => 'text/x-devicetree-binary',
       ),
     ),
     'dtd' =>
@@ -15158,6 +15473,7 @@ class DefaultMap extends AbstractMap
       't' =>
       array (
         0 => 'audio/vnd.dts',
+        1 => 'text/x-devicetree-source',
       ),
     ),
     'dtshd' =>
@@ -15165,6 +15481,13 @@ class DefaultMap extends AbstractMap
       't' =>
       array (
         0 => 'audio/vnd.dts.hd',
+      ),
+    ),
+    'dtsi' =>
+    array (
+      't' =>
+      array (
+        0 => 'text/x-devicetree-source',
       ),
     ),
     'dtx' =>
@@ -15497,6 +15820,13 @@ class DefaultMap extends AbstractMap
         0 => 'application/vnd.osgi.subsystem',
       ),
     ),
+    'escn' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/x-godot-scene',
+      ),
+    ),
     'esf' =>
     array (
       't' =>
@@ -15787,11 +16117,18 @@ class DefaultMap extends AbstractMap
         1 => 'image/x-xfig',
       ),
     ),
+    'fit' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/fits',
+      ),
+    ),
     'fits' =>
     array (
       't' =>
       array (
-        0 => 'image/fits',
+        0 => 'application/fits',
       ),
     ),
     'fl' =>
@@ -15977,6 +16314,13 @@ class DefaultMap extends AbstractMap
         0 => 'application/vnd.anser-web-funds-transfer-initiation',
       ),
     ),
+    'fts' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/fits',
+      ),
+    ),
     'fvt' =>
     array (
       't' =>
@@ -16097,6 +16441,13 @@ class DefaultMap extends AbstractMap
         0 => 'text/vcard',
       ),
     ),
+    'gd' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/x-gdscript',
+      ),
+    ),
     'gdi' =>
     array (
       't' =>
@@ -16109,6 +16460,13 @@ class DefaultMap extends AbstractMap
       't' =>
       array (
         0 => 'model/vnd.gdl',
+      ),
+    ),
+    'gdshader' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/x-godot-shader',
       ),
     ),
     'ged' =>
@@ -16228,6 +16586,20 @@ class DefaultMap extends AbstractMap
       't' =>
       array (
         0 => 'application/x-glade',
+      ),
+    ),
+    'glb' =>
+    array (
+      't' =>
+      array (
+        0 => 'model/gltf-binary',
+      ),
+    ),
+    'gltf' =>
+    array (
+      't' =>
+      array (
+        0 => 'model/gltf+json',
       ),
     ),
     'gml' =>
@@ -16471,6 +16843,13 @@ class DefaultMap extends AbstractMap
         0 => 'text/x-groovy',
       ),
     ),
+    'gx' =>
+    array (
+      't' =>
+      array (
+        0 => 'text/x-gcode-gx',
+      ),
+    ),
     'gxf' =>
     array (
       't' =>
@@ -16609,6 +16988,13 @@ class DefaultMap extends AbstractMap
       't' =>
       array (
         0 => 'text/x-c++hdr',
+      ),
+    ),
+    'hif' =>
+    array (
+      't' =>
+      array (
+        0 => 'image/heif',
       ),
     ),
     'hlp' =>
@@ -18391,7 +18777,8 @@ class DefaultMap extends AbstractMap
     array (
       't' =>
       array (
-        0 => 'text/x-troff-mm',
+        0 => 'text/x-objc++src',
+        1 => 'text/x-troff-mm',
       ),
     ),
     'mmd' =>
@@ -18469,7 +18856,8 @@ class DefaultMap extends AbstractMap
     array (
       't' =>
       array (
-        0 => 'audio/x-mod',
+        0 => 'application/x-object',
+        1 => 'audio/x-mod',
       ),
     ),
     'mods' =>
@@ -18633,7 +19021,8 @@ class DefaultMap extends AbstractMap
     array (
       't' =>
       array (
-        0 => 'video/mp2t',
+        0 => 'text/x-mpl2',
+        1 => 'video/mp2t',
       ),
     ),
     'mpls' =>
@@ -18800,6 +19189,13 @@ class DefaultMap extends AbstractMap
         0 => 'application/x-msx-rom',
       ),
     ),
+    'mtl' =>
+    array (
+      't' =>
+      array (
+        0 => 'model/mtl',
+      ),
+    ),
     'mtm' =>
     array (
       't' =>
@@ -18862,6 +19258,13 @@ class DefaultMap extends AbstractMap
       't' =>
       array (
         0 => 'application/vnd.recordare.musicxml',
+      ),
+    ),
+    'mxmf' =>
+    array (
+      't' =>
+      array (
+        0 => 'audio/mobile-xmf',
       ),
     ),
     'mxml' =>
@@ -19136,6 +19539,7 @@ class DefaultMap extends AbstractMap
       't' =>
       array (
         0 => 'application/x-tgif',
+        1 => 'model/obj',
       ),
     ),
     'ocl' =>
@@ -19938,6 +20342,13 @@ class DefaultMap extends AbstractMap
         0 => 'application/pkix-pkipath',
       ),
     ),
+    'pkpass' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/vnd.apple.pkpass',
+      ),
+    ),
     'pkr' =>
     array (
       't' =>
@@ -20478,6 +20889,13 @@ class DefaultMap extends AbstractMap
         0 => 'application/vnd.publishare-delta-tree',
       ),
     ),
+    'qs' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/sparql-query',
+      ),
+    ),
     'qt' =>
     array (
       't' =>
@@ -20693,6 +21111,7 @@ class DefaultMap extends AbstractMap
       't' =>
       array (
         0 => 'application/x-dtbresource+xml',
+        1 => 'application/x-godot-resource',
       ),
     ),
     'rgb' =>
@@ -21055,6 +21474,13 @@ class DefaultMap extends AbstractMap
       array (
         0 => 'application/vnd.lotus-screencam',
         1 => 'text/x-scheme',
+      ),
+    ),
+    'scn' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/x-godot-scene',
       ),
     ),
     'scope' =>
@@ -21965,6 +22391,13 @@ class DefaultMap extends AbstractMap
         0 => 'image/svg+xml',
       ),
     ),
+    'svg.gz' =>
+    array (
+      't' =>
+      array (
+        0 => 'image/svg+xml-compressed',
+      ),
+    ),
     'svgz' =>
     array (
       't' =>
@@ -22453,6 +22886,13 @@ class DefaultMap extends AbstractMap
         0 => 'application/vnd.trueapp',
       ),
     ),
+    'tres' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/x-godot-resource',
+      ),
+    ),
     'trig' =>
     array (
       't' =>
@@ -22473,6 +22913,13 @@ class DefaultMap extends AbstractMap
       array (
         0 => 'text/vnd.trolltech.linguist',
         1 => 'video/mp2t',
+      ),
+    ),
+    'tscn' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/x-godot-scene',
       ),
     ),
     'tsd' =>
@@ -24349,7 +24796,21 @@ class DefaultMap extends AbstractMap
         0 => 'application/vnd.zzazz.deck+xml',
       ),
     ),
+    'zim' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/x-openzim',
+      ),
+    ),
     'zip' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/zip',
+      ),
+    ),
+    'zipx' =>
     array (
       't' =>
       array (
@@ -24686,6 +25147,13 @@ class DefaultMap extends AbstractMap
       't' =>
       array (
         0 => 'application/x-hwt',
+      ),
+    ),
+    'application/vnd.ms-3mfdocument' =>
+    array (
+      't' =>
+      array (
+        0 => 'model/3mf',
       ),
     ),
     'application/vnd.ms-word' =>
@@ -25437,6 +25905,27 @@ class DefaultMap extends AbstractMap
         0 => 'audio/amr-wb',
       ),
     ),
+    'audio/dff' =>
+    array (
+      't' =>
+      array (
+        0 => 'audio/x-dff',
+      ),
+    ),
+    'audio/dsd' =>
+    array (
+      't' =>
+      array (
+        0 => 'audio/x-dsf',
+      ),
+    ),
+    'audio/dsf' =>
+    array (
+      't' =>
+      array (
+        0 => 'audio/x-dsf',
+      ),
+    ),
     'audio/imelody' =>
     array (
       't' =>
@@ -25456,13 +25945,6 @@ class DefaultMap extends AbstractMap
       't' =>
       array (
         0 => 'audio/mp4',
-      ),
-    ),
-    'audio/mobile-xmf' =>
-    array (
-      't' =>
-      array (
-        0 => 'audio/x-xmf',
       ),
     ),
     'audio/mp3' =>
@@ -25505,6 +25987,13 @@ class DefaultMap extends AbstractMap
       't' =>
       array (
         0 => 'audio/vnd.rn-realaudio',
+      ),
+    ),
+    'audio/vnd.nokia.mobile-xmf' =>
+    array (
+      't' =>
+      array (
+        0 => 'audio/mobile-xmf',
       ),
     ),
     'audio/vnd.wave' =>
@@ -25554,6 +26043,13 @@ class DefaultMap extends AbstractMap
       't' =>
       array (
         0 => 'audio/annodex',
+      ),
+    ),
+    'audio/x-dsd' =>
+    array (
+      't' =>
+      array (
+        0 => 'audio/x-dsf',
       ),
     ),
     'audio/x-dts' =>
@@ -25738,6 +26234,13 @@ class DefaultMap extends AbstractMap
         0 => 'image/g3fax',
       ),
     ),
+    'image/fits' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/fits',
+      ),
+    ),
     'image/heic' =>
     array (
       't' =>
@@ -25861,7 +26364,7 @@ class DefaultMap extends AbstractMap
     array (
       't' =>
       array (
-        0 => 'image/fits',
+        0 => 'application/fits',
       ),
     ),
     'image/x-icb' =>

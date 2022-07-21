@@ -1,10 +1,7 @@
 display:
   default:
-    display_title: Domyślny
+    display_title: Default
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filter
       fields:
         name:
           label: 'Nazwa użytkownika'
@@ -14,6 +11,9 @@ display:
             format_custom_true: Aktywne
         operations:
           label: Operacje
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         status:
           group_info:
