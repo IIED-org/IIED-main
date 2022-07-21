@@ -3,13 +3,13 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.body
     - field.storage.node.field_area_list
     - field.storage.node.field_author_s_
-    - field.storage.node.field_date_published
+    - field.storage.node.body
     - field.storage.node.field_document_type
     - field.storage.node.field_product_code
     - field.storage.node.field_product_code_new
+    - field.storage.node.field_date_published
     - field.storage.node.field_theme_s_
     - search_api.server.acquia_search_server
   module:
@@ -69,6 +69,16 @@ name: 'Acquia Search Solr Index'
 description: ''
 read_only: false
 field_settings:
+  aggregated_field_date:
+    label: 'Sort date'
+    property_path: aggregated_field
+    type: date
+    configuration:
+      type: max
+      fields:
+        - 'entity:node/created'
+        - 'entity:node/field_date_published'
+        - 'entity:node/field_daterange'
   body:
     label: Body
     datasource_id: 'entity:node'

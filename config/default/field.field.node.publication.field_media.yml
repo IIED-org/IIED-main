@@ -11,7 +11,7 @@ field_name: field_media
 entity_type: node
 bundle: publication
 label: 'Upload PDF file'
-description: "<i><big><strong>Hint: </strong>Files should ideally be 3MB or less for low-bandwidth access, but cannot be larger than 8MB. If your file is too large please request a smaller one from your designer, or contact web or marketing staff in the Comms team for help with reducing its size.</big></i>\r\n<p><i><big>Note: A cover image for your file will be generated automatically.</big</i></p>\r\n<p><i><big><strong>Note: In order to replace a file with a new version, existing versions MUST be deleted from the system first which can only be done by web or marketing staff in the Comms team. Please contact them if you need help with this</strong></big</i>.</p>\r\n"
+description: "<i><big><strong>Hint: </strong>Files should ideally be 3MB or less for low-bandwidth access, but cannot be larger than 8MB. If your file is too large please request a smaller one from your designer, or contact web or marketing staff in the Comms team for help with reducing its size.</big></i>\r\n<p><i><big>Note: A cover image for your file will be generated automatically.</big></i></p>\r\n<p><i><big><strong>Note: In order to replace a file with a new version, existing versions MUST be deleted from the system first which can only be done by web or marketing staff in the Comms team. Please contact them if you need help with this</strong></big></i>.</p>\r\n"
 required: false
 translatable: true
 default_value: {  }
@@ -23,6 +23,7 @@ settings:
       document: document
     sort:
       field: _none
+      direction: ASC
     auto_create: false
     auto_create_bundle: ''
 field_type: entity_reference
