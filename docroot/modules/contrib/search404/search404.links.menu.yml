@@ -1,0 +1,5 @@
+search404.settings:
+  title: 'Search 404 settings'
+  parent: system.admin_config_search
+  route_name: search404.settings
+  description: 'Configure searching for keywords from URLs that result in 404 errors.'

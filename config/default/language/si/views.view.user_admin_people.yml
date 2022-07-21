@@ -1,5 +1,6 @@
 display:
   default:
+    display_title: Default
     display_options:
       fields:
         name:
@@ -8,6 +9,9 @@ display:
           label: තත්වය
         operations:
           label: මෙහෙයුම්
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         status:
           group_info:

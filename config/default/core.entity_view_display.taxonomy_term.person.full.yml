@@ -33,52 +33,15 @@ dependencies:
     - taxonomy.vocabulary.person
   module:
     - ds
+    - entity_reference_revisions
     - layout_builder
-    - link
+    - layout_paragraphs
+    - name
     - text
 third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-  ds:
-    layout:
-      id: ds_1col
-      library: null
-      disable_css: false
-      entity_classes: all_classes
-      settings:
-        classes:
-          layout_class: {  }
-          ds_content: {  }
-        wrappers:
-          ds_content: div
-        outer_wrapper: div
-        attributes: ''
-        link_attribute: ''
-        link_custom: ''
-        label: ''
-    regions:
-      ds_content:
-        - taxonomy_term_title
-        - field_name
-        - description
-        - field_organisation
-    fields:
-      taxonomy_term_title:
-        plugin_id: taxonomy_term_title
-        weight: 0
-        label: hidden
-        formatter: default
-        settings:
-          link: false
-          wrapper: h1
-          class: page-title
-        ft:
-          id: default
-          settings:
-            lb: ''
-            lb-col: false
-            classes: {  }
 id: taxonomy_term.person.full
 targetEntityType: taxonomy_term
 bundle: person
@@ -90,51 +53,163 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 2
-    region: ds_content
-  field_link:
-    type: link
+    region: content
+  field_author_picture:
+    type: entity_reference_entity_view
     label: hidden
     settings:
-      trim_length: 80
-      url_only: false
-      url_plain: false
-      rel: ''
-      target: ''
+      view_mode: default
+      link: false
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 11
+    region: content
+  field_before_iied:
+    type: text_default
+    label: above
+    settings: {  }
     third_party_settings: {  }
-    weight: 3
-    region: ds_content
-  field_organisation:
+    weight: 8
+    region: content
+  field_biography:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  field_current_work:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 13
+    region: content
+  field_email:
+    type: email_mailto
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_expertise:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 12
+    region: content
+  field_languages:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 6
+    region: content
+  field_name:
+    type: name_default
+    label: hidden
+    settings:
+      format: short_full
+      markup: none
+      list_format: ''
+      link_target: ''
+      preferred_field_reference: ''
+      preferred_field_reference_separator: ', '
+      alternative_field_reference: ''
+      alternative_field_reference_separator: ', '
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 0
+    region: content
+  field_paragraphs:
+    type: layout_paragraphs
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 14
+    region: content
+  field_person_type:
     type: entity_reference_label
-    label: inline
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
+    weight: 15
+    region: content
+  field_position:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
     weight: 1
-    region: ds_content
+    region: content
+  field_researcher_profiles:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_standfirst:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 9
+    region: content
+  field_twitter_username:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_video:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 3
+    region: content
 hidden:
   field_appointed_role: true
-  field_author_picture: true
-  field_before_iied: true
-  field_biography: true
-  field_current_work: true
   field_department: true
-  field_email: true
-  field_expertise: true
   field_iied_user_id: true
-  field_languages: true
   field_legacy_iscanonical: true
-  field_name: true
-  field_paragraphs: true
-  field_person_type: true
-  field_position: true
+  field_link: true
+  field_organisation: true
   field_position_short: true
   field_quotes: true
   field_research_group: true
-  field_researcher_profiles: true
-  field_standfirst: true
   field_theme: true
   field_twitter_bio: true
-  field_twitter_username: true
-  field_video: true
   langcode: true
   search_api_excerpt: true

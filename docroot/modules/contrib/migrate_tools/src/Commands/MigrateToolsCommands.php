@@ -157,7 +157,7 @@ class MigrateToolsCommands extends DrushCommands {
    * @param string $migration_name
    *   The name of the migration to print dependencies for.
    */
-  protected function printDependencies($level, $prefix, $dependency_graph, $migration_name) {
+  protected function printDependencies($level, $prefix, array $dependency_graph, $migration_name) {
     $last_edge = end($dependency_graph[$migration_name]['edges']);
 
     foreach ($dependency_graph[$migration_name]['edges'] as $edge) {
@@ -170,7 +170,6 @@ class MigrateToolsCommands extends DrushCommands {
         $subtree_prefix = $prefix . '│  ';
       }
       $this->output()->writeln($prefix . $tree_string . $edge);
-
 
       $this->printDependencies($level + 1, $subtree_prefix, $dependency_graph, $edge);
     }
@@ -538,7 +537,7 @@ class MigrateToolsCommands extends DrushCommands {
    * @validate-module-enabled migrate_tools
    * @aliases mst, migrate-stop
    */
-  public function stop($migration_id = '') {
+  public function stop($migration_id) {
     /** @var \Drupal\migrate\Plugin\MigrationInterface $migration */
     $migration = $this->migrationPluginManager->createInstance(
       $migration_id
@@ -668,10 +667,13 @@ class MigrateToolsCommands extends DrushCommands {
     /** @var \Drupal\migrate\Plugin\MigrateIdMapInterface|\Drupal\migrate_tools\IdMapFilter $map */
     $map = new IdMapFilter($migration->getIdMap(), $id_list);
     $source_id_keys = $this->getSourceIdKeys($map);
+    if ($source_id_keys === NULL) {
+      $this->logger()->notice(dt('Migration has not yet run'));
+      return NULL;
+    }
     $table = [];
-    // TODO: Remove after 8.7 support goes away.
-    $iterator_method = method_exists($map, 'getMessages') ? 'getMessages' : 'getMessageIterator';
-    foreach ($map->{$iterator_method}() as $row) {
+
+    foreach ($map->getMessages() as $row) {
       unset($row->msgid);
       $array_row = (array) $row;
       // If the message includes useful IDs don't print the hash.
@@ -687,8 +689,8 @@ class MigrateToolsCommands extends DrushCommands {
           $destination_ids[$name] = $item;
         }
       }
-      $array_row['source_ids'] = implode(', ', $source_ids);
-      $array_row['destination_ids'] = implode(', ', $destination_ids);
+      $array_row['source_ids'] = implode(':', $source_ids);
+      $array_row['destination_ids'] = implode(':', $destination_ids);
       $table[] = $array_row;
     }
     if (empty($table)) {
@@ -720,6 +722,9 @@ class MigrateToolsCommands extends DrushCommands {
   protected function getSourceIdKeys(IdMapFilter $map) {
     $map->rewind();
     $columns = $map->currentSource();
+    if ($columns === NULL) {
+      return $columns;
+    }
     $source_id_keys = array_map(static function ($id) {
       return 'src_' . $id;
     }, array_keys($columns));
@@ -814,7 +819,7 @@ class MigrateToolsCommands extends DrushCommands {
         else {
           $error_message = dt('Migration @id does not exist', ['@id' => $given_migration_id]);
           if ($options['continue-on-failure']) {
-            $this->loggProcessPluginBaseer()->error($error_message);
+            $this->logger()->error($error_message);
           }
           else {
             throw new \Exception($error_message);
@@ -909,8 +914,8 @@ class MigrateToolsCommands extends DrushCommands {
     static $executed_migrations = [];
 
     if ($options['execute-dependencies']) {
-      $required_migrations = $this->getMigrationRequirements($migration);
-      $required_migrations = array_filter($required_migrations, function ($value) use ($executed_migrations) {
+      $required_migrations = $migration->getRequirements();
+      $required_migrations = array_filter($required_migrations, static function ($value) use ($executed_migrations) {
         return !isset($executed_migrations[$value]);
       });
 
@@ -991,34 +996,6 @@ class MigrateToolsCommands extends DrushCommands {
       $this->migrateMessage = new Drush9LogMigrateMessage($this->logger());
     }
     return $this->migrateMessage;
-  }
-
-  /**
-   * Returns the migration requirements for the provided migration.
-   *
-   * @param \Drupal\migrate\Plugin\MigrationInterface $migration
-   *   The migration instance.
-   *
-   * @return array
-   *   Array of migration requirements.
-   *
-   * @throws \ReflectionException
-   */
-  protected function getMigrationRequirements(MigrationInterface $migration) {
-    if (method_exists($migration, 'getRequirements')) {
-      // Use the getRequirements method on Drupal 9.1.x and newer.
-      return $migration->getRequirements();
-    }
-
-    // FIXME: Don't use reflection.
-    // @see https://www.drupal.org/project/migrate_tools/issues/3117485
-    // Maintain Drupal 8.x and 9.0.x compatibility using Reflection until an appropriate
-    // interface method or reimplementation is available.
-    $reflection = new \ReflectionClass($migration);
-    $property = $reflection->getProperty('requirements');
-    $property->setAccessible(TRUE);
-
-    return $property->getValue($migration);
   }
 
 }

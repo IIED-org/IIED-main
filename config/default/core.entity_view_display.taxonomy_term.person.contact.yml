@@ -1,0 +1,111 @@
+uuid: 09be0eb5-8c6c-4456-a3e3-33e1ce1b9ef4
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.taxonomy_term.contact
+    - field.field.taxonomy_term.person.field_appointed_role
+    - field.field.taxonomy_term.person.field_author_picture
+    - field.field.taxonomy_term.person.field_before_iied
+    - field.field.taxonomy_term.person.field_biography
+    - field.field.taxonomy_term.person.field_current_work
+    - field.field.taxonomy_term.person.field_department
+    - field.field.taxonomy_term.person.field_email
+    - field.field.taxonomy_term.person.field_expertise
+    - field.field.taxonomy_term.person.field_iied_user_id
+    - field.field.taxonomy_term.person.field_languages
+    - field.field.taxonomy_term.person.field_legacy_iscanonical
+    - field.field.taxonomy_term.person.field_link
+    - field.field.taxonomy_term.person.field_name
+    - field.field.taxonomy_term.person.field_organisation
+    - field.field.taxonomy_term.person.field_paragraphs
+    - field.field.taxonomy_term.person.field_person_type
+    - field.field.taxonomy_term.person.field_position
+    - field.field.taxonomy_term.person.field_position_short
+    - field.field.taxonomy_term.person.field_quotes
+    - field.field.taxonomy_term.person.field_research_group
+    - field.field.taxonomy_term.person.field_researcher_profiles
+    - field.field.taxonomy_term.person.field_standfirst
+    - field.field.taxonomy_term.person.field_theme
+    - field.field.taxonomy_term.person.field_twitter_bio
+    - field.field.taxonomy_term.person.field_twitter_username
+    - field.field.taxonomy_term.person.field_video
+    - taxonomy.vocabulary.person
+  module:
+    - ds
+    - layout_builder
+    - name
+    - options
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: taxonomy_term.person.contact
+targetEntityType: taxonomy_term
+bundle: person
+mode: contact
+content:
+  field_name:
+    type: name_default
+    label: hidden
+    settings:
+      format: default
+      markup: none
+      list_format: ''
+      link_target: _self
+      preferred_field_reference: ''
+      preferred_field_reference_separator: ', '
+      alternative_field_reference: ''
+      alternative_field_reference_separator: ', '
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 0
+    region: content
+  field_position_short:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_research_group:
+    type: list_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden:
+  description: true
+  field_appointed_role: true
+  field_author_picture: true
+  field_before_iied: true
+  field_biography: true
+  field_current_work: true
+  field_department: true
+  field_email: true
+  field_expertise: true
+  field_iied_user_id: true
+  field_languages: true
+  field_legacy_iscanonical: true
+  field_link: true
+  field_organisation: true
+  field_paragraphs: true
+  field_person_type: true
+  field_position: true
+  field_quotes: true
+  field_researcher_profiles: true
+  field_standfirst: true
+  field_theme: true
+  field_twitter_bio: true
+  field_twitter_username: true
+  field_video: true
+  langcode: true
+  search_api_excerpt: true

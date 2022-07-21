@@ -38,7 +38,10 @@
       <ul>
     {% endif %}
     {% for item in items %}
-      <li{{ item.attributes }}>
+      {% set classes = [
+        item.in_active_trail ? 'menu-item--active-trail',
+      ] %}
+      <li{{ item.attributes.addClass(classes) }}>
         {{ link(item.title, item.url) }}
         {% if item.below %}
           {{ menus.menu_links(item.below, attributes, menu_level + 1) }}

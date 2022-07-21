@@ -1,0 +1,21 @@
+uuid: 99104643-0cc1-4e04-a9ae-c28bc4e6a8a5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_stories_heading
+    - paragraphs.paragraphs_type.stories_cta
+_core:
+  default_config_hash: C0U68PZkC4JSSyRLt2Lw24BUm_OMw9Wr-qK2ayLSy3s
+id: paragraph.stories_cta.field_stories_heading
+field_name: field_stories_heading
+entity_type: paragraph
+bundle: stories_cta
+label: Heading
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

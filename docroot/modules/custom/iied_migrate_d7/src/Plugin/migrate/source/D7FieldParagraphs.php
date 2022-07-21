@@ -60,15 +60,15 @@ class D7FieldParagraphs extends FieldableEntity {
           'field_basic_text_value',
         ]
       );
-      // Join the field_data_upload when needed.
-      $query->leftJoin('field_data_upload', 'fdu', 'fdu.entity_id = fd.' . $this->configuration['field_name'] . '_value');
-      $query->fields(
-        'fdu',
-        [
-          'upload_fid',
-          'upload_description',
-        ]
-      );
+      // // Join the field_data_upload when needed.
+      // $query->leftJoin('field_data_upload', 'fdu', 'fdu.entity_id = fd.' . $this->configuration['field_name'] . '_value');
+      // $query->fields(
+      //   'fdu',
+      //   [
+      //     'upload_fid',
+      //     'upload_description',
+      //   ]
+      // );
 
       // Join the field_data_field_main_image when needed.
       $query->leftJoin('field_data_field_main_image', 'fmi', 'fmi.entity_id = fd.' . $this->configuration['field_name'] . '_value');
@@ -76,6 +76,15 @@ class D7FieldParagraphs extends FieldableEntity {
         'fmi',
         [
           'field_main_image_fid',
+        ]
+      );
+
+      // Join the field_data_field_image_caption when needed.
+      $query->leftJoin('field_data_field_image_caption', 'fic', 'fic.entity_id = fd.' . $this->configuration['field_name'] . '_value');
+      $query->fields(
+        'fic',
+        [
+          'field_image_caption_value',
         ]
       );
 
@@ -126,6 +135,9 @@ class D7FieldParagraphs extends FieldableEntity {
           'field_related_link_title',
         ]
       );
+
+      // Used to debug specific entity migrations.
+      // $query->condition('pi.item_id', '1881');
 
     }
 

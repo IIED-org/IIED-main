@@ -1,0 +1,45 @@
+
+{#
+For general featured card display
+#}
+
+<article{{ attributes.addClass('h-full') }}>
+
+        <a href="{{ url }}" class="hover:no-underline">
+          <div
+            class="relative flex content-start h-full overflow-hidden transition bg-white border border-gray-300 group grow card rounded-xl hover:shadow-lg hover:brightness-95"
+          >
+             <span class="absolute inset-x-0 bottom-0 h-2 bg-gradient-to-r from-iiedgreen-300 to-iiedblue-500">
+             </span>
+
+            <div class="w-3/12 p-2 max-h-44 md:max-h-56 lg:max-h-96">
+
+        {% if content.field_cover_image[0] %}
+            {% set image_uri = node.field_cover_image|file_uri %}
+            {% set image_alt = node.field_cover_image.alt %}
+            {% if image_uri is not null %}
+              <img class="m-auto transition duration-300 ease-out shadow-lg w-fit sm:-rotate-3 group-hover:-rotate-2 group-hover:scale-110" src="{{ image_uri }}" alt="{{ image_alt }}" />
+            {% endif %}
+        {% else %}
+              <div class="m-auto transition duration-300 ease-out shadow-lg w-fit sm:w-fit sm:-rotate-3 group-hover:-rotate-2 group-hover:scale-110">
+              {{ node.field_media[0].entity|view('card_cover') }}
+           </div>
+        {% endif %}
+
+            </div>
+
+            <div
+              class="flex flex-col justify-between w-9/12 h-full p-4"
+            >
+              <div>
+                <h4 class="mb-4 text-lg text-gray-900 lg:text-2xl">
+                  {{ label }}
+                </h4>
+                {#<p class="mb-4 text-gray-700"> short description could go here </p> #}
+              </div>
+              <p class="text-gray-500">{{ node.field_date_published.value|date('d F Y') }}</p>
+            </div>
+          </div>
+        </a>
+
+</article>

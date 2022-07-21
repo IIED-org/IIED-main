@@ -1,3 +1,7 @@
 display:
   default:
-    display_title: Domyślny
+    display_title: Default
+    display_options:
+      empty:
+        title:
+          title: 'Welcome to [site:name]'

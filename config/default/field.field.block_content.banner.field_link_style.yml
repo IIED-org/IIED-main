@@ -1,0 +1,21 @@
+uuid: a5f830c9-efa3-4766-b278-be2f3e9afdb0
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.banner
+    - field.storage.block_content.field_link_style
+  module:
+    - options
+id: block_content.banner.field_link_style
+field_name: field_link_style
+entity_type: block_content
+bundle: banner
+label: 'Link style'
+description: 'Select how link should be shown'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_integer

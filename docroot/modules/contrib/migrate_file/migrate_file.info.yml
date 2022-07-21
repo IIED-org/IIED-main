@@ -6,7 +6,7 @@ package: Migration
 dependencies:
   - drupal:migrate
 
-# Information added by Drupal.org packaging script on 2022-02-04
-version: '2.1.0'
+# Information added by Drupal.org packaging script on 2022-03-22
+version: '2.1.1'
 project: 'migrate_file'
-datestamp: 1644002856
+datestamp: 1647985113

@@ -1,0 +1,31 @@
+uuid: 43c8397f-f24c-4a8b-ae46-1e05a32d0abf
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.timeline.field_timeline_date
+    - field.field.paragraph.timeline.field_timeline_entry
+    - paragraphs.paragraphs_type.timeline
+  module:
+    - text
+id: paragraph.timeline.default
+targetEntityType: paragraph
+bundle: timeline
+mode: default
+content:
+  field_timeline_date:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_timeline_entry:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  search_api_excerpt: true

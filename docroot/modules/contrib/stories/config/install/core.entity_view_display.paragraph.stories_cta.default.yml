@@ -1,0 +1,46 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.stories_cta.field_stories_cta_description
+    - field.field.paragraph.stories_cta.field_stories_cta_link
+    - field.field.paragraph.stories_cta.field_stories_heading
+    - paragraphs.paragraphs_type.stories_cta
+  module:
+    - link
+    - text
+id: paragraph.stories_cta.default
+targetEntityType: paragraph
+bundle: stories_cta
+mode: default
+content:
+  field_stories_cta_description:
+    weight: 1
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_stories_cta_link:
+    weight: 2
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+    region: content
+  field_stories_heading:
+    weight: 0
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+hidden:
+  created: true
+  uid: true

@@ -10,7 +10,6 @@ dependencies:
     - media.type.document
   module:
     - ds
-    - file
     - layout_builder
 third_party_settings:
   layout_builder:
@@ -21,7 +20,7 @@ third_party_settings:
       id: ds_1col
       library: null
       disable_css: false
-      entity_classes: all_classes
+      entity_classes: no_classes
       settings:
         classes:
           layout_class: {  }
@@ -35,7 +34,7 @@ third_party_settings:
         label: ''
     regions:
       ds_content:
-        - field_media_document
+        - field_size
 _core:
   default_config_hash: DXitcriWmE5QHvGvk2OzWouaSnXD5uipkRdAG6_pnkg
 id: media.document.button
@@ -43,46 +42,45 @@ targetEntityType: media
 bundle: document
 mode: button
 content:
-  field_media_document:
-    type: file_default
+  field_size:
+    type: number_unformatted
     label: hidden
-    settings:
-      use_description_as_link_text: false
+    settings: {  }
     third_party_settings:
       ds:
         ft:
           id: expert
           settings:
-            lb: ''
+            lb: PDF
             lbw: false
-            lbw-el: button
-            lbw-cl: 'btn btn-primary'
+            lbw-el: ''
+            lbw-cl: ''
             lbw-at: ''
             lb-col: false
             ow: false
-            ow-el: div
-            ow-cl: text-muted
+            ow-el: ''
+            ow-cl: ''
             ow-at: ''
             ow-def-at: false
             ow-def-cl: false
-            fis: false
-            fis-el: a
+            fis: true
+            fis-el: span
             fis-cl: ''
             fis-at: ''
             fis-def-at: false
-            fi: true
-            fi-el: span
-            fi-cl: file-size
+            fi: false
+            fi-el: ''
+            fi-cl: ''
             fi-at: ''
-            fi-def-at: true
-            prefix: 'PDF&nbsp;'
-            suffix: ''
+            fi-def-at: false
+            prefix: (
+            suffix: )
     weight: 0
     region: ds_content
 hidden:
   created: true
+  field_media_document: true
   field_pdf_pages: true
-  field_size: true
   langcode: true
   name: true
   search_api_excerpt: true

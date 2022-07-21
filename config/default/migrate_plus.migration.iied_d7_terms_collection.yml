@@ -23,6 +23,9 @@ process:
     -
       plugin: get
       source: description
+    -
+      plugin: rewrite_inline_image_styles
+      new_style: scale_md
   description/format:
     -
       plugin: default_value
@@ -105,10 +108,10 @@ process:
     -
       plugin: get
       source: field_publications_more_link
-  field_tagline:
+  field_short_description:
     -
       plugin: get
-      source: field_tagline
+      source: trimmed_short_description
   field_metatag:
     -
       plugin: d7_metatag_entities

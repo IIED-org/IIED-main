@@ -95,7 +95,7 @@ class MigrateExecutable extends MigrateExecutableBase {
   /**
    * {@inheritdoc}
    */
-  public function __construct(MigrationInterface $migration, MigrateMessageInterface $message, array $options = []) {
+  public function __construct(MigrationInterface $migration, MigrateMessageInterface $message = NULL, array $options = []) {
     parent::__construct($migration, $message);
     if (isset($options['limit'])) {
       $this->itemLimit = $options['limit'];
@@ -240,6 +240,15 @@ class MigrateExecutable extends MigrateExecutableBase {
     $migrate_last_imported_store->set($event->getMigration()->id(), round(\Drupal::time()->getCurrentMicroTime() * 1000));
     $this->progressMessage();
     $this->removeListeners();
+
+    $unused_ids = $this->getSource()->getRemainingIdList();
+    if ($unused_ids) {
+      $this->message->display($this->t("The following specified IDs were not found in the source IDs: @idlist.", [
+        '@idlist' => implode(', ', array_map(static function ($ids) {
+          return implode(':', $ids);
+        }, $unused_ids)),
+      ]));
+    }
   }
 
   /**
@@ -382,7 +391,12 @@ class MigrateExecutable extends MigrateExecutableBase {
    * {@inheritdoc}
    */
   protected function getSource() {
-    return new SourceFilter(parent::getSource(), $this->idlist);
+    if (!isset($this->source)) {
+      // Re-set $this->source which the call to the parent will have set.
+      $this->source = new SourceFilter(parent::getSource(), $this->idlist);
+    }
+
+    return $this->source;
   }
 
   /**

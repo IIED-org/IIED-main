@@ -1,0 +1,185 @@
+uuid: 3fb8a4ef-5ea1-4e3c-91ae-cdee9eba86e5
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.card_ext
+    - field.field.node.project.body
+    - field.field.node.project.field_additional_elements
+    - field.field.node.project.field_additional_resources
+    - field.field.node.project.field_collections
+    - field.field.node.project.field_contact
+    - field.field.node.project.field_dates
+    - field.field.node.project.field_display_image
+    - field.field.node.project.field_funded_by
+    - field.field.node.project.field_image
+    - field.field.node.project.field_image_caption
+    - field.field.node.project.field_link
+    - field.field.node.project.field_main_image
+    - field.field.node.project.field_nid
+    - field.field.node.project.field_partners
+    - field.field.node.project.field_project_contacts
+    - field.field.node.project.field_project_status
+    - field.field.node.project.field_projectnumber
+    - field.field.node.project.field_standfirst
+    - field.field.node.project.field_tagline
+    - field.field.node.project.field_tags
+    - field.field.node.project.field_theme_s_
+    - field.field.node.project.field_year
+    - image.style.card_370
+    - node.type.project
+  module:
+    - ds
+    - field_group
+    - image
+    - layout_builder
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+  field_group:
+    group_project_card:
+      children: {  }
+      label: Project-card
+      parent_name: ''
+      region: hidden
+      weight: 28
+      format_type: html_element
+      format_settings:
+        classes: 'card pointer overflow-hidden'
+        id: ''
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+    group_row_nogutters:
+      children: {  }
+      label: Row-nogutters
+      parent_name: ''
+      region: hidden
+      weight: 29
+      format_type: html_element
+      format_settings:
+        classes: 'row no-gutters'
+        id: ''
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+    group_card_body:
+      children: {  }
+      label: 'card body'
+      parent_name: ''
+      region: hidden
+      weight: 30
+      format_type: html_element
+      format_settings:
+        classes: card-body
+        id: ''
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+    group_col_md_8:
+      children: {  }
+      label: col-md-8
+      parent_name: ''
+      region: hidden
+      weight: 27
+      format_type: html_element
+      format_settings:
+        classes: col-md-8
+        id: ''
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+id: node.project.card_ext
+targetEntityType: node
+bundle: project
+mode: card_ext
+content:
+  field_image:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: card_370
+      image_loading:
+        attribute: lazy
+    third_party_settings:
+      ds:
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            lbw: false
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            lb-col: false
+            ow: true
+            ow-el: div
+            ow-cl: col-md-4
+            ow-at: ''
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
+            fis-def-at: false
+            fi: false
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            fi-def-at: false
+            prefix: ''
+            suffix: ''
+    weight: 0
+    region: content
+  field_tagline:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  body: true
+  field_additional_elements: true
+  field_additional_resources: true
+  field_collections: true
+  field_contact: true
+  field_dates: true
+  field_display_image: true
+  field_funded_by: true
+  field_image_caption: true
+  field_link: true
+  field_main_image: true
+  field_nid: true
+  field_partners: true
+  field_project_contacts: true
+  field_project_status: true
+  field_projectnumber: true
+  field_standfirst: true
+  field_tags: true
+  field_theme_s_: true
+  field_year: true
+  langcode: true
+  links: true
+  search_api_excerpt: true
+  sharing_buttons: true

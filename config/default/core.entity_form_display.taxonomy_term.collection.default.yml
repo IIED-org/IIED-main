@@ -4,14 +4,19 @@ status: true
 dependencies:
   config:
     - field.field.taxonomy_term.collection.field_about
+    - field.field.taxonomy_term.collection.field_badge
     - field.field.taxonomy_term.collection.field_containers
     - field.field.taxonomy_term.collection.field_downloads
+    - field.field.taxonomy_term.collection.field_overview
     - field.field.taxonomy_term.collection.field_publications_more_link
     - field.field.taxonomy_term.collection.field_short_description
+    - field.field.taxonomy_term.collection.field_tags
     - field.field.taxonomy_term.collection.field_theme
+    - field.field.taxonomy_term.collection.layout_builder__layout
+    - image.style.thumbnail
     - taxonomy.vocabulary.collection
   module:
-    - paragraphs
+    - image
     - path
     - text
 id: taxonomy_term.collection.default
@@ -20,44 +25,32 @@ bundle: collection
 mode: default
 content:
   description:
-    type: text_textfield
-    weight: 0
+    type: text_textarea
+    weight: 1
     region: content
     settings:
-      size: 60
+      rows: 5
       placeholder: ''
     third_party_settings: {  }
   field_about:
     type: text_textarea
-    weight: 102
+    weight: 3
     region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-  field_containers:
-    type: entity_reference_paragraphs
-    weight: 104
+  field_badge:
+    type: image_image
+    weight: 6
     region: content
     settings:
-      title: Paragraph
-      title_plural: Paragraphs
-      edit_mode: open
-      add_mode: dropdown
-      form_display_mode: default
-      default_paragraph_type: ''
+      progress_indicator: throbber
+      preview_image_style: thumbnail
     third_party_settings: {  }
-  field_downloads:
+  field_overview:
     type: text_textarea
-    weight: 103
-    region: content
-    settings:
-      rows: 5
-      placeholder: ''
-    third_party_settings: {  }
-  field_publications_more_link:
-    type: text_textarea
-    weight: 105
+    weight: 11
     region: content
     settings:
       rows: 5
@@ -65,15 +58,25 @@ content:
     third_party_settings: {  }
   field_short_description:
     type: string_textfield
-    weight: 101
+    weight: 2
     region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_tags:
+    type: entity_reference_autocomplete
+    weight: 10
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   field_theme:
     type: entity_reference_autocomplete
-    weight: 106
+    weight: 5
     region: content
     settings:
       match_operator: CONTAINS
@@ -83,14 +86,14 @@ content:
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 2
+    weight: 7
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   name:
     type: string_textfield
-    weight: -5
+    weight: 0
     region: content
     settings:
       size: 60
@@ -98,15 +101,19 @@ content:
     third_party_settings: {  }
   path:
     type: path
-    weight: 30
+    weight: 8
     region: content
     settings: {  }
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 100
+    weight: 9
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  field_containers: true
+  field_downloads: true
+  field_publications_more_link: true
+  layout_builder__layout: true

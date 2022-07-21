@@ -92,7 +92,7 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
 
   // iied_d7_field_paragraphs, ignoring some paragraphs.
   if ($migration->id() == 'iied_d7_field_paragraphs') {
-    $x = ''; // Useful for debugging.
+
     $paragraphs_to_ignore = [
       'colorbox_gallery',
       'colorbox_gallery_thumbnails',
@@ -116,6 +116,19 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       ];
       $row->setSourceProperty('related_link_processed', $related_link_processed);
     }
+    // We have file upload paragraphs with multiple rows in one paragraph.
+    // We need to process this separately.
+
+    if ($row->getSourceProperty('bundle') == 'file_upload' ) {
+      // Load all the files and generate the array of sources.
+      $item_id = $row->getSourceProperty('item_id');
+      $file_ids = $source->getDatabase()->query('SELECT upload_fid FROM {field_data_upload} WHERE entity_id = :entity_id', array(':entity_id' => $item_id))->fetchCol();
+      foreach ($file_ids as $key => $value) {
+        $target_file_ids [$key]['target_id'] = $value;
+      }
+      $row->setSourceProperty('upload_fid_prepared', $target_file_ids);
+    }
+
   }
 
   // iied_d7_blogs migration. We need to lookup person terms to reference as
@@ -149,6 +162,9 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       $tid = array_key_first($term);
       $row->setSourceProperty('tid', $tid);
     }
+    // Split name into first name last name based on spaces.
+    $names = explode(' ', $name);
+    $row->setSourceProperty('first_name', $names[0]);
     $researcher_profiles = $row->getSourceProperty('field_researcher_profiles');
     // Determine the value for the new person_type taxonomy term. This replaces
     // the previous boolean fields for staff, guest and former staff.
@@ -181,10 +197,6 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       $row->setSourceProperty('field_full_width_media', []);
     }
   }
-  // iied_d7_events migration.
-  if ($migration->id() == 'iied_d7_events') {
-    $x = 0;
-  }
   // iied_d7_news_media migration.
   if ($migration->id() == 'iied_d7_news_media') {
     // Source node 3979 is giving an error, which seems to be referencing a
@@ -206,9 +218,11 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
     ];
     $row->setSourceProperty('field_link_processed', $field_link_processed);
   }
-  // Redirects migration
-  if ($migration->id() == 'iied_d7_redirects') {
-
+  // Collections terms migration.
+  if ($migration->id() == 'iied_d7_terms_collection') {
+    $tagline_value = $row->getSourceProperty('field_tagline');
+    $trimmed_short_description = substr($tagline_value[0]['value'], 0, 255);
+    $row->setSourceProperty('trimmed_short_description', $trimmed_short_description);
   }
 
   // Look up path aliases for node migrations.
@@ -230,6 +244,39 @@ function iied_migrate_d7_migrate_prepare_row(Row $row, MigrateSourceInterface $s
     if (!empty($alias)) {
       $row->setSourceProperty('alias', '/' . $alias);
     }
+  }
+
+  // Image media migration.
+  if ($migration->id() == 'iied_d7_media_images') {
+
+    // Query image field tables to extract alt text where possible.
+    $image_fields = [
+      'field_main_image',
+      'field_second_image',
+      'field_gallery',
+      'field_cover_image',
+    ];
+    $fid = $row->getSourceProperty('fid');
+    $row->setSourceProperty('alt_text', 'No description available.');
+    $row->setSourceProperty('title_text', 'No title available.');
+
+    foreach ($image_fields as $image_field) {
+      $query = $source->getDatabase()->select('field_data_' . $image_field, 'fdi')
+        ->fields('fdi', [$image_field . '_alt', $image_field . '_title']);
+      $query->condition($image_field . '_fid', $fid);
+      $result = $query->execute()->fetchObject();
+      if (!empty($result)) {
+        $alt_value =  $result->{$image_field . '_alt'};
+        if (strlen($alt_value) > 1) {
+          $row->setSourceProperty('alt_text',$alt_value);
+        }
+        $title_value = $result->{$image_field . '_title'};
+        if (strlen($title_value) > 1) {
+          $row->setSourceProperty('title_text', $title_value);
+        }
+      }
+    }
+
   }
 
 }

@@ -18,6 +18,7 @@ dependencies:
     - address
     - image
     - layout_builder
+    - layout_builder_restrictions
     - layout_discovery
     - link
     - text
@@ -364,7 +365,33 @@ third_party_settings:
                 third_party_settings: {  }
             weight: 19
             additional: {  }
+          37ef68cd-575c-4e82-ba73-0aa482760bd0:
+            uuid: 37ef68cd-575c-4e82-ba73-0aa482760bd0
+            region: content
+            configuration:
+              id: 'field_block:taxonomy_term:organisation:field_logo'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: image
+                label: above
+                settings:
+                  image_link: ''
+                  image_style: ''
+                  image_loading:
+                    attribute: lazy
+                third_party_settings: {  }
+            weight: 20
+            additional: {  }
         third_party_settings: {  }
+  layout_builder_restrictions:
+    allowed_block_categories: {  }
+    entity_view_mode_restriction:
+      allowed_layouts: {  }
+      blacklisted_blocks: {  }
+      whitelisted_blocks: {  }
+      restricted_categories: {  }
 id: taxonomy_term.organisation.default
 targetEntityType: taxonomy_term
 bundle: organisation
@@ -421,6 +448,8 @@ content:
     settings:
       image_link: ''
       image_style: ''
+      image_loading:
+        attribute: lazy
     third_party_settings: {  }
     weight: 5
     region: content

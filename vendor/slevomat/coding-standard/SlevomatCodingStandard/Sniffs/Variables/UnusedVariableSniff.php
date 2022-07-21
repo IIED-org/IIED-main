@@ -32,7 +32,10 @@ use const T_DOUBLE_COLON;
 use const T_DOUBLE_QUOTED_STRING;
 use const T_ECHO;
 use const T_ELSEIF;
+use const T_EMPTY;
 use const T_EQUAL;
+use const T_EVAL;
+use const T_EXIT;
 use const T_FOR;
 use const T_FOREACH;
 use const T_GLOBAL;
@@ -51,6 +54,8 @@ use const T_OPEN_TAG;
 use const T_OR_EQUAL;
 use const T_PLUS_EQUAL;
 use const T_POW_EQUAL;
+use const T_PRINT;
+use const T_RETURN;
 use const T_SL_EQUAL;
 use const T_SR_EQUAL;
 use const T_STATIC;
@@ -82,7 +87,6 @@ class UnusedVariableSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $variablePointer
 	 */
 	public function process(File $phpcsFile, $variablePointer): void
@@ -511,14 +515,21 @@ class UnusedVariableSniff implements Sniff
 
 	private function isValueInForeachAndErrorIsIgnored(File $phpcsFile, int $variablePointer): bool
 	{
-		if (!$this->ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach) {
-			return false;
-		}
-
 		$tokens = $phpcsFile->getTokens();
 
 		$parenthesisOwnerPointer = $this->findNestedParenthesisWithOwner($phpcsFile, $variablePointer);
-		return $parenthesisOwnerPointer !== null && $tokens[$parenthesisOwnerPointer]['code'] === T_FOREACH;
+		$isInForeach = $parenthesisOwnerPointer !== null && $tokens[$parenthesisOwnerPointer]['code'] === T_FOREACH;
+
+		if (!$isInForeach) {
+			return false;
+		}
+
+		$pointerAfterVariable = TokenHelper::findNextEffective($phpcsFile, $variablePointer + 1);
+		if ($pointerAfterVariable !== null && $tokens[$pointerAfterVariable]['code'] === T_DOUBLE_ARROW) {
+			return false;
+		}
+
+		return $this->ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach;
 	}
 
 	private function isStaticOrGlobalVariable(File $phpcsFile, int $functionPointer, string $variableName): bool
@@ -635,9 +646,18 @@ class UnusedVariableSniff implements Sniff
 			return false;
 		}
 
+		if ($tokens[$previousPointer]['code'] === T_OPEN_PARENTHESIS) {
+			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
+		}
+
 		return in_array(
 			$tokens[$previousPointer]['code'],
-			array_merge([T_STRING_CONCAT, T_ECHO], Tokens::$operators, Tokens::$assignmentTokens, Tokens::$booleanOperators),
+			array_merge(
+				[T_STRING_CONCAT, T_ECHO, T_RETURN, T_EXIT, T_PRINT, T_COMMA, T_EMPTY, T_EVAL, T_YIELD],
+				Tokens::$operators,
+				Tokens::$assignmentTokens,
+				Tokens::$booleanOperators
+			),
 			true
 		);
 	}

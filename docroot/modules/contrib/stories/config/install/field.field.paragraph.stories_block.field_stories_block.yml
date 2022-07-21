@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_stories_block
+    - paragraphs.paragraphs_type.stories_block
+  module:
+    - block_field
+id: paragraph.stories_block.field_stories_block
+field_name: field_stories_block
+entity_type: paragraph
+bundle: stories_block
+label: Block
+description: 'Choose a block to display. Edit this fields settings to allow different blocks.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  plugin_ids:
+    user_login_block: user_login_block
+    system_powered_by_block: system_powered_by_block
+field_type: block_field

@@ -3,8 +3,3 @@ type: theme
 description: 'Test theme for responsive_menu module.'
 core: 8.x
 base theme: stable
-
-# Information added by Drupal.org packaging script on 2021-10-06
-version: '4.4.2'
-project: 'responsive_menu'
-datestamp: 1633530568

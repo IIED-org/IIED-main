@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * @file
+ * Contains views_layout.module.
+ */
+
+use Drupal\Core\Template\Attribute;
+
+/**
+ * Prepares variables for views layout rows templates.
+ *
+ * Default template: views-layout-style.html.twig.
+ *
+ * Each row contains a single instance of the layout, populated with views
+ * results. For instance, if the layout has three populated regions, the row
+ * will be a grid that contains three of the result rows, rendered into the
+ * selected layout.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - view: The view object.
+ *   - rows: An array of row items. Each row is an array of content.
+ */
+function template_preprocess_views_layout_style(&$variables) {
+  $view = $variables['view'];
+  $rows = $variables['rows'];
+  $style = $view->style_plugin;
+  $options = $style->options;
+
+  $variables['default_row_class'] = !empty($options['default_row_class']);
+  foreach ($rows as $id => $row) {
+    $variables['rows'][$id] = [];
+    $variables['rows'][$id]['content'] = $row;
+    $variables['rows'][$id]['attributes'] = new Attribute();
+    if ($row_class = $view->style_plugin->getRowClass($id)) {
+      $variables['rows'][$id]['attributes']->addClass($row_class);
+    }
+  }
+}

@@ -588,7 +588,7 @@
 
 .ui-progressbar .ui-progressbar-value {
   height: 1.5em;
-  background: #0072b9 url(../../../../misc/progress.gif);
+  background: #003ecc url(../../../../misc/progress.gif);
 }
 
 /**
@@ -596,7 +596,6 @@
  */
 
 .ui-autocomplete {
-  overflow: hidden;
   color: #55565b;
   border: 1px solid rgba(216, 217, 224, 0.8);
   border-top: 0;
@@ -626,13 +625,13 @@
 .ui-autocomplete .ui-menu-item-wrapper.ui-state-active {
   margin: 0;
   color: #fff;
-  background: #003cc5;
+  background: #003ecc;
 }
 
 .ui-autocomplete .ui-menu-item.ui-state-focus,
 .autocomplete .ui-menu-item.ui-state-hover {
   margin: 0;
-  background: #0072b9;
+  background: #003ecc;
 }
 
 .ui-autocomplete .ui-state-focus a,

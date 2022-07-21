@@ -108,7 +108,7 @@ Bootstrap
 
 Breakpoint
 - Peter Droogmans 'attiks' https://www.drupal.org/u/attiks
-- Marc Drummond 'mdrummond' https://www.drupal.org/u/mdrummond
+- Heather Brooke Drummond 'RainbowArray' https://www.drupal.org/u/rainbowarray
 
 Cache
 - Nathaniel Catchpole 'catch' https://www.drupal.org/u/catch
@@ -117,6 +117,11 @@ CKEditor
 - Henrik Danielsson 'TwoD' https://www.drupal.org/u/TwoD
 - Wim Leers 'Wim Leers' https://www.drupal.org/u/wim-leers
 - Marek 'mlewand' Lewandowski https://www.drupal.org/u/mlewand
+
+CKEditor 5
+- Lauri Eskola 'lauriii' https://www.drupal.org/u/lauriii
+- Wim Leers 'Wim Leers' https://www.drupal.org/u/wim-leers
+- Ben Mullins 'bnjmnm' https://www.drupal.org/u/bnjmnm
 
 Claro
 - Cristina Chumillas 'ckrina' https://www.drupal.org/u/ckrina
@@ -162,7 +167,7 @@ Content Translation
 - ?
 
 Contextual
-- ?
+- Lee Rowlands 'larowlan' https://www.drupal.org/u/larowlan
 
 Cron
 - ?
@@ -370,7 +375,7 @@ REST
 
 Responsive Image
 - Peter Droogmans 'attiks' https://www.drupal.org/u/attiks
-- Marc Drummond 'mdrummond' https://www.drupal.org/u/mdrummond
+- Heather Brooke Drummond 'RainbowArray' https://www.drupal.org/u/rainbowarray
 - Jelle Sebreghts 'Jelle_S' https://www.drupal.org/u/jelle_s
 
 Routing
@@ -528,6 +533,10 @@ Decoupled Menus Initiative
 
 Media Initiative
 - Janez Urevc 'slashrsm' https://www.drupal.org/u/slashrsm
+
+Project Browser Initiative
+- Leslie Glynn 'leslieg' https://www.drupal.org/u/leslieg
+- Chris Wells 'chrisfromredfin' https://www.drupal.org/u/chrisfromredfin
 
 
 Core mentoring coordinators

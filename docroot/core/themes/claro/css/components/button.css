@@ -50,7 +50,6 @@
   font-weight: 700;
   line-height: 1rem;
   -webkit-appearance: none;
-  -moz-appearance: none;
   appearance: none;
   -webkit-font-smoothing: antialiased;  /* 3 */
 }
@@ -127,7 +126,7 @@ a.button:active {
 
 .button--primary {
   color: #fff;
-  background-color: #003cc5;
+  background-color: #003ecc;
 }
 
 .button--primary:hover {
@@ -136,7 +135,7 @@ a.button:active {
 }
 
 .button--primary:active {
-  background-color: #00339a;
+  background-color: #002e9a;
 }
 
 a.button--primary:hover,
@@ -148,16 +147,16 @@ a.button--primary:active {
 
 .button--danger {
   color: #fff;
-  background-color: #d72222;
+  background-color: #dc2323;
 }
 
 .button--danger:hover {
   color: #fff;
-  background-color: #c11f1f;
+  background-color: #c61f1f;
 }
 
 .button--danger:active {
-  background-color: #ab1b1b;
+  background-color: #b01c1c;
 }
 
 a.button--danger:hover,
@@ -205,6 +204,5 @@ a.button--danger:active {
   border: 0;
   background: none;
   -webkit-appearance: none;
-  -moz-appearance: none;
   appearance: none;
 }

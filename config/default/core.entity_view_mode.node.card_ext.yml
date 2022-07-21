@@ -1,0 +1,10 @@
+uuid: 3756c4ed-e9e2-47cb-873d-1c22e0f82a83
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.card_ext
+label: 'Card ext'
+targetEntityType: node
+cache: true

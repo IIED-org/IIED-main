@@ -2,11 +2,13 @@
 
 namespace Drupal\geolocation_geometry_data;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Shapefile\Shapefile;
 use Shapefile\ShapefileReader;
 use Shapefile\ShapefileException;
 
 /**
- * Class GeolocationGeometryDataBase.
+ * Class Geolocation GeometryData Base.
  *
  * @package Drupal\geolocation_geometry_data
  */
@@ -53,7 +55,7 @@ abstract class GeolocationGeometryDataBase {
    * @return array
    *   Batch return.
    */
-  public function getBatch() {
+  public function getBatch(): array {
     $operations = [
       [[$this, 'download'], []],
       [[$this, 'import'], []],
@@ -71,10 +73,10 @@ abstract class GeolocationGeometryDataBase {
   /**
    * Download batch callback.
    *
-   * @return string
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
    *   Batch return.
    */
-  public function download() {
+  public function download(): TranslatableMarkup {
     $destination = \Drupal::service('file_system')->getTempDirectory() . '/' . $this->sourceFilename;
 
     if (!is_file($destination)) {
@@ -83,11 +85,16 @@ abstract class GeolocationGeometryDataBase {
     }
 
     if (!empty($this->localDirectory) && substr(strtolower($this->sourceFilename), -3) === 'zip') {
+
+      \Drupal::service('file_system')->deleteRecursive(\Drupal::service('file_system')->getTempDirectory() . '/' . $this->localDirectory);
+
       $zip = new \ZipArchive();
       $res = $zip->open($destination);
       if ($res === TRUE) {
         $zip->extractTo(\Drupal::service('file_system')->getTempDirectory() . '/' . $this->localDirectory);
         $zip->close();
+
+        \Drupal::service('file_system')->delete($destination);
       }
       else {
         return t('ERROR downloading @url', ['@url' => $this->sourceUri]);
@@ -103,24 +110,28 @@ abstract class GeolocationGeometryDataBase {
    * @param mixed $context
    *   Batch context.
    *
-   * @return bool
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup|null
    *   Batch return.
    */
-  public function import(&$context) {
-    $logger = \Drupal::logger('geolocation_geometry_data');
-
+  public function import(&$context): ?TranslatableMarkup {
     if (empty($this->shapeFilename)) {
-      return FALSE;
+      return t('Shapefilename is empty');
     }
 
     try {
-      $this->shapeFile = new ShapefileReader(\Drupal::service('file_system')->getTempDirectory() . '/' . $this->localDirectory . '/' . $this->shapeFilename);
+      $this->shapeFile = new ShapefileReader(\Drupal::service('file_system')->getTempDirectory() . '/' . $this->localDirectory . '/' . $this->shapeFilename, [
+        Shapefile::OPTION_DBF_IGNORED_FIELDS => ['BRK_GROUP'],
+      ]);
     }
     catch (ShapefileException $e) {
-      $logger->warning($e->getMessage());
-      return FALSE;
+      return t('Failed %message', ['%message' => $e->getMessage()]);
     }
-    return TRUE;
+
+    if (empty($this->shapeFile)) {
+      throw new \Exception(t("Shapefile %file is empty.", ['%file' => \Drupal::service('file_system')->getTempDirectory() . '/' . $this->localDirectory . '/' . $this->shapeFilename]));
+    }
+
+    return NULL;
   }
 
 }

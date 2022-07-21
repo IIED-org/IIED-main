@@ -1,0 +1,126 @@
+tw-1-col-md:
+  label: "IIED one column standard"
+  category: "IIED layouts"
+  class: '\Drupal\ds\Plugin\DsLayout'
+  template: templates/layout/layout--tw-1-col-md
+  icon: templates/layout/icons/tw-1-col-md.svg
+  default_region: main
+  regions:
+    first:
+      label: Main
+tw-1-col-lg:
+  label: "IIED one column wide"
+  category: "IIED layouts"
+  class: '\Drupal\ds\Plugin\DsLayout'
+  template: templates/layout/layout--tw-1-col-lg
+  icon: templates/layout/icons/tw-1-col-lg.svg
+  default_region: main
+  regions:
+    first:
+      label: Main
+tw-1-col-xl:
+  label: "IIED one column full"
+  category: "IIED layouts"
+  class: '\Drupal\ds\Plugin\DsLayout'
+  template: templates/layout/layout--tw-1-col-xl
+  icon: templates/layout/icons/tw-1-col-xl.svg
+  default_region: main
+  regions:
+    first:
+      label: Main
+tw-1-2-col-sm-md:
+  label: "IIED main with aside"
+  category: "IIED layouts"
+  class: '\Drupal\ds\Plugin\DsLayout'
+  template: templates/layout/layout--tw-1-2-col-sm-md
+  icon: templates/layout/icons/tw-1-2-col-sm-md.svg
+  default_region: main
+  regions:
+    first:
+      label: Aside
+    second:
+      label: Main
+tw-1-2-col:
+  label: "IIED two column"
+  category: "IIED layouts"
+  class: '\Drupal\ds\Plugin\DsLayout'
+  template: templates/layout/layout--tw-1-2-col
+  icon: templates/layout/icons/tw-1-2-col.svg
+  default_region: main
+  regions:
+    first:
+      label: Column one
+    second:
+      label: Column two
+tw-1-3-col:
+  label: "IIED three column"
+  category: "IIED layouts"
+  class: '\Drupal\ds\Plugin\DsLayout'
+  template: templates/layout/layout--tw-1-3-col
+  icon: templates/layout/icons/tw-1-3-col.svg
+  default_region: main
+  regions:
+    first:
+      label: Column one
+    second:
+      label: Column two
+    third:
+      label: Column three
+tw-1-2-4-col:
+  label: "IIED four column"
+  category: "IIED layouts"
+  class: '\Drupal\ds\Plugin\DsLayout'
+  template: templates/layout/layout--tw-1-2-4-col
+  icon: templates/layout/icons/tw-1-2-4-col.svg
+  default_region: main
+  regions:
+    first:
+      label: Column one
+    second:
+      label: Column two
+    third:
+      label: Column three
+    fourth:
+      label: Column four
+tw-1-2-col-grid:
+  label: "IIED two column grid"
+  category: "IIED layouts"
+  class: '\Drupal\ds\Plugin\DsLayout'
+  template: templates/layout/layout--tw-1-2-col-grid
+  icon: templates/layout/icons/tw-1-2-col-grid.svg
+  default_region: main
+  regions:
+    first:
+      label: Main
+tw-1-2-4-col-grid:
+  label: "IIED four column grid"
+  category: "IIED layouts"
+  class: '\Drupal\ds\Plugin\DsLayout'
+  template: templates/layout/layout--tw-1-2-4-col-grid
+  icon: templates/layout/icons/tw-1-2-4-col-grid.svg
+  default_region: main
+  regions:
+    first:
+      label: Main
+tw-container:
+  label: "IIED container"
+  category: "IIED layouts"
+  class: '\Drupal\ds\Plugin\DsLayout'
+  template: templates/layout/layout--tw-container
+  icon: templates/layout/icons/tw-container.svg
+  default_region: main
+  regions:
+    first:
+      label: Main
+tw-tabs:
+  label: "IIED tabbed container"
+  category: "IIED layouts"
+  class: '\Drupal\ds\Plugin\DsLayout'
+  template: templates/layout/layout--tw-tabs
+  icon: templates/layout/icons/tw-tabs.svg
+  default_region: main
+  regions:
+    first:
+      label: Main
+    second:
+      label: Tab two

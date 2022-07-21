@@ -180,9 +180,7 @@ class DefaultFacetsSummaryManager {
 
     }
 
-    if ($results) {
-      $build['#items'] = $results;
-    }
+    $build['#items'] = $results;
 
     // Allow our Facets Summary processors to alter the build array in a
     // configured order.

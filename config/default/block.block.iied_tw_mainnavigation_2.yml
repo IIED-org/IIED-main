@@ -1,0 +1,25 @@
+uuid: 26f9ed1d-39fb-4e9d-bfc3-edef50d5bcf7
+langcode: en
+status: false
+dependencies:
+  config:
+    - system.menu.main
+  module:
+    - system
+  theme:
+    - iied_tw
+id: iied_tw_mainnavigation_2
+theme: iied_tw
+region: header
+weight: -12
+provider: null
+plugin: 'system_menu_block:main'
+settings:
+  id: 'system_menu_block:main'
+  label: 'Main navigation'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: true
+visibility: {  }

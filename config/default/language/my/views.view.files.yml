@@ -1,11 +1,15 @@
 display:
   default:
+    display_title: Default
     display_options:
       fields:
         filename:
           label: အမည်
         status:
           label: အခြေအနေ
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         status:
           expose:

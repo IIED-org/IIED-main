@@ -1,0 +1,8 @@
+uuid: 37ac92a7-8abf-4769-a209-22a6d15f5128
+langcode: en
+status: true
+dependencies: {  }
+id: collection_card
+label: 'Collection card'
+revision: 0
+description: 'Collection card (standard width) for placement in layout builder.'

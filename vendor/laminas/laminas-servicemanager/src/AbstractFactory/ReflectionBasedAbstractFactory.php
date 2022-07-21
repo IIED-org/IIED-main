@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Laminas\ServiceManager\AbstractFactory;
 
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\Factory\AbstractFactoryInterface;
+use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionParameter;
@@ -162,10 +162,9 @@ class ReflectionBasedAbstractFactory implements AbstractFactoryInterface
          * @return mixed
          * @throws ServiceNotFoundException If type-hinted parameter cannot be
          *   resolved to a service in the container.
+         * @psalm-suppress MissingClosureReturnType
          */
-        return function (ReflectionParameter $parameter) use ($container, $requestedName) {
-            return $this->resolveParameter($parameter, $container, $requestedName);
-        };
+        return fn(ReflectionParameter $parameter) => $this->resolveParameter($parameter, $container, $requestedName);
     }
 
     /**

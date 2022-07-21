@@ -1,0 +1,5 @@
+services:
+  format_bytes.twig_extension:
+    class: Drupal\format_bytes\Twig\ByteConversionTwigExtension
+    tags:
+      - { name: twig.extension }

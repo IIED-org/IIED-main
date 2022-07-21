@@ -1,16 +1,15 @@
 import Mmenu from '../../core/oncanvas/mmenu.oncanvas';
-import options from './_options';
-import { extendShorthandOptions } from './_options';
+import OPTIONS from './options';
 import * as DOM from '../../_modules/dom';
 import * as media from '../../_modules/matchmedia';
 import { type, extend } from '../../_modules/helpers';
 
-//  Add the options.
-Mmenu.options.iconbar = options;
 
 export default function (this: Mmenu) {
-    let options = extendShorthandOptions(this.opts.iconbar);
-    this.opts.iconbar = extend(options, Mmenu.options.iconbar);
+    this.opts.iconbar = this.opts.iconbar || {};
+
+    //	Extend options.
+    const options = extend(this.opts.iconbar, OPTIONS);
 
     if (!options.use) {
         return;
@@ -54,14 +53,12 @@ export default function (this: Mmenu) {
         });
 
         //	En-/disable the iconbar.
-        let classname = 'mm-menu_iconbar-' + options.position;
+        let classname = 'mm-menu--iconbar-' + options.position;
         let enable = () => {
             this.node.menu.classList.add(classname);
-            Mmenu.sr_aria(iconbar, 'hidden', false);
         };
         let disable = () => {
             this.node.menu.classList.remove(classname);
-            Mmenu.sr_aria(iconbar, 'hidden', true);
         };
 
         if (typeof options.use == 'boolean') {
@@ -72,49 +69,49 @@ export default function (this: Mmenu) {
 
         //	Tabs
         if (options.type == 'tabs') {
-            iconbar.classList.add('mm-iconbar_tabs');
+            iconbar.classList.add('mm-iconbar--tabs');
             iconbar.addEventListener('click', (evnt) => {
-                const anchor = evnt.target as HTMLElement;
+                const anchor = (evnt.target as HTMLElement).closest('.mm-iconbar__tab');
 
-                if (!anchor.matches('a')) {
+                if (!anchor) {
                     return;
                 }
 
-                if (anchor.matches('.mm-iconbar__tab_selected')) {
+                if (anchor.matches('.mm-iconbar__tab--selected')) {
                     evnt.stopImmediatePropagation();
                     return;
                 }
 
                 try {
-                    const panel = this.node.menu.querySelector(
-                        anchor.getAttribute('href')
-                    )[0];
-
-                    if (panel && panel.matches('.mm-panel')) {
+                    const panel = DOM.find(this.node.menu, `${anchor.getAttribute('href')}.mm-panel`)[0];
+                    if (panel) {
                         evnt.preventDefault();
                         evnt.stopImmediatePropagation();
 
                         this.openPanel(panel, false);
                     }
-                } catch (err) {}
+                } catch (err) { }
             });
 
             const selectTab = (panel: HTMLElement) => {
                 DOM.find(iconbar, 'a').forEach((anchor) => {
-                    anchor.classList.remove('mm-iconbar__tab_selected');
+                    anchor.classList.remove('mm-iconbar__tab--selected');
                 });
 
-                var anchor = DOM.find(iconbar, '[href="#' + panel.id + '"]')[0];
+                const anchor = DOM.find(
+                    iconbar,
+                    '[href="#' + panel.id + '"]'
+                )[0];
                 if (anchor) {
-                    anchor.classList.add('mm-iconbar__tab_selected');
+                    anchor.classList.add('mm-iconbar__tab--selected');
                 } else {
-                    let parent: HTMLElement = panel['mmParent'];
+                    const parent: HTMLElement = DOM.find(this.node.pnls, `#${panel.dataset.mmParent}`)[0];
                     if (parent) {
                         selectTab(parent.closest('.mm-panel') as HTMLElement);
                     }
                 }
             };
-            this.bind('openPanel:start', selectTab);
+            this.bind('openPanel:before', selectTab);
         }
     }
 }

@@ -1,0 +1,10 @@
+uuid: b1091a1a-d198-46cf-8f1d-07f7e6b78bfa
+langcode: en
+status: true
+dependencies: {  }
+id: gallery
+label: Gallery
+icon_uuid: null
+icon_default: null
+description: 'Create a gallery of thumbnails. Clicking on the thumbnail will open image in a Colorbox modal '
+behavior_plugins: {  }

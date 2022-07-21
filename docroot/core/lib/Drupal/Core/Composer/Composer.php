@@ -2,6 +2,7 @@
 
 namespace Drupal\Core\Composer;
 
+use Composer\DependencyResolver\Operation\UpdateOperation;
 use Composer\Installer\PackageEvent;
 use Composer\Script\Event;
 use Composer\Semver\Constraint\Constraint;
@@ -129,13 +130,6 @@ class Composer {
         $vendor_dir . '/symfony/http-kernel/TerminableInterface.php',
       ]);
     }
-    if ($repository->findPackage('symfony/http-kernel', $constraint)) {
-      $autoload['classmap'] = array_merge($autoload['classmap'], [
-        $vendor_dir . '/symfony/http-kernel/HttpKernel.php',
-        $vendor_dir . '/symfony/http-kernel/HttpKernelInterface.php',
-        $vendor_dir . '/symfony/http-kernel/TerminableInterface.php',
-      ]);
-    }
     if ($repository->findPackage('symfony/dependency-injection', $constraint)) {
       $autoload['classmap'] = array_merge($autoload['classmap'], [
         $vendor_dir . '/symfony/dependency-injection/ContainerAwareInterface.php',
@@ -186,7 +180,7 @@ class Composer {
     $vendor_dir = $event->getComposer()->getConfig()->get('vendor-dir');
     $io = $event->getIO();
     $op = $event->getOperation();
-    if ($op->getJobType() == 'update') {
+    if ($op instanceof UpdateOperation) {
       $package = $op->getTargetPackage();
     }
     else {

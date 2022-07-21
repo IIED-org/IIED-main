@@ -32,3 +32,9 @@ migrate_plus.source.csv:
     file_flags:
       type: integer
       label: 'Bitmask flags for the SplFileObject'
+    create_record_num:
+      type: boolean
+      label: 'Specifies whether to create an incremented value for each record in the file'
+    record_num_field:
+      type: string
+      label: 'Field name for record number field'

@@ -1,0 +1,38 @@
+{#
+/**
+ * @file
+ * Template for the Views layout style.
+ */
+ * Available variables:
+ * - attributes: HTML attributes for the wrapping element.
+ * - title: The title of this group of rows.
+ * - view: The view object.
+ * - rows: The rendered view results. Each row contains a single instance
+ *     of the layout, populated with views results. For instance, if the
+ *     layout has three populated regions, the row will be a grid that
+ *     contains three of the result rows, rendered into that layout.
+ * - options: The view plugin style options.
+ *   - layout_name: Name of the layout being rendered.
+ *   - layout_regions: Comma-separated list of regions to populate.
+ * - default_row_class: A flag indicating whether default classes should be
+ *
+ * @see template_preprocess_views_layout_style()
+ *
+ * @ingroup themeable
+ */
+#}
+{% if title %}
+  <h3>{{ title }}</h3>
+{% endif %}
+{% for row in rows %}
+  {%
+    set row_classes = [
+      default_row_class ? 'views-row',
+      'views-layout',
+      options.layout_name,
+    ]
+  %}
+  <div{{ row.attributes.addClass(row_classes) }}>
+    {{- row.content -}}
+  </div>
+{% endfor %}

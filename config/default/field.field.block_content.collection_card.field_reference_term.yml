@@ -1,0 +1,29 @@
+uuid: 7678ec5f-8451-4b57-b3a2-6513ee74e5b3
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.collection_card
+    - field.storage.block_content.field_reference_term
+    - taxonomy.vocabulary.collection
+id: block_content.collection_card.field_reference_term
+field_name: field_reference_term
+entity_type: block_content
+bundle: collection_card
+label: 'Reference term'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      collection: collection
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

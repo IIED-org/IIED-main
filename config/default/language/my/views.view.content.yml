@@ -1,6 +1,7 @@
 label: အကြောင်းအရာ
 display:
   default:
+    display_title: Default
     display_options:
       title: အကြောင်းအရာ
       fields:
@@ -14,6 +15,9 @@ display:
           label: အခြေအနေ
         operations:
           label: လုပ်ဆောင်ချက်များ
+      exposed_form:
+        options:
+          submit_button: Filter
       filters:
         title:
           expose:

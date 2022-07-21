@@ -1,0 +1,31 @@
+uuid: 1290b675-bf89-4868-9ef0-e2fc5e1d342d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_stories_table
+    - paragraphs.paragraphs_type.stories_table
+  module:
+    - tablefield
+_core:
+  default_config_hash: ZxbR2TMCwqe515ioFpYAOpnHCkoeolcxlr-x1vvRgcY
+id: paragraph.stories_table.field_stories_table
+field_name: field_stories_table
+entity_type: paragraph
+bundle: stories_table
+label: Table
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  export: true
+  restrict_rebuild: true
+  restrict_import: true
+  lock_values: false
+  cell_processing: 0
+  empty_rules:
+    ignore_table_structure: false
+    ignore_table_header: false
+field_type: tablefield

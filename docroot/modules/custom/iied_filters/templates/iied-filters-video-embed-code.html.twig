@@ -1,0 +1,14 @@
+<?php
+/**
+ * @file
+ * Default theme implementation to display a video embed field.
+ *
+ * Variables available:
+ * - $url: The URL of the video to display embed code for
+ * - $embed_code: The embed code
+ */
+?>
+
+<div class="aspect-video aspect-w-16 aspect-h-9 print:hidden">
+  {{ embed_code|raw }}
+</div>

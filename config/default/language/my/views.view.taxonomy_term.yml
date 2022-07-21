@@ -1,1 +1,4 @@
 label: 'Taxonomy အသုံးအနှုံး'
+display:
+  default:
+    display_title: Default

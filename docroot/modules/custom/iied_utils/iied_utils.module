@@ -70,7 +70,7 @@ use Drupal\Core\Datetime\DrupalDateTime;
  * @param $form_id
  */
 function iied_utils_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
-  if(($form_id == 'node_publication_edit_form')) {
+  if($form_id == 'node_publication_edit_form') {
       $legacy = '2019-04-01';
       $entity = $form_state->getFormObject()->getEntity();
       $date_value = $entity->get('field_date_published')->value;
@@ -80,4 +80,9 @@ function iied_utils_form_alter(&$form, FormStateInterface &$form_state, $form_id
         $form['field_work_programme_global_enga']['#type'] = 'hidden';
       }
     }
+  if($form_id == 'header_search') {
+    $form['form_build_id']['#access'] = FALSE;
+    $form['form_token']['#access'] = FALSE;
+    $form['form_id']['#access'] = FALSE;
+  }
 }

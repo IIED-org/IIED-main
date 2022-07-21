@@ -3,14 +3,14 @@ langcode: en
 status: true
 dependencies:
   config:
-    - system.menu.main
+    - system.menu.secondary
     - taxonomy.vocabulary.theme
 id: themes_menu
 label: 'Themes menu'
 vocabulary: theme
-menu: main
-expanded: true
+menu: secondary
+expanded: false
 depth: 0
-menu_parent: 'main:menu_link_content:a2956567-724d-46ef-8e18-a219066e2559'
+menu_parent: 'admin:entity.menu.collection'
 description_field_name: description
 use_term_weight_order: true

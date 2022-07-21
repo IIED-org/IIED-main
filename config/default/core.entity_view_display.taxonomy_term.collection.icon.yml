@@ -1,0 +1,76 @@
+uuid: b4ef5b9f-cd68-4d0c-ab82-0eb260c9addc
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.taxonomy_term.icon
+    - field.field.taxonomy_term.collection.field_about
+    - field.field.taxonomy_term.collection.field_badge
+    - field.field.taxonomy_term.collection.field_containers
+    - field.field.taxonomy_term.collection.field_downloads
+    - field.field.taxonomy_term.collection.field_overview
+    - field.field.taxonomy_term.collection.field_publications_more_link
+    - field.field.taxonomy_term.collection.field_short_description
+    - field.field.taxonomy_term.collection.field_tags
+    - field.field.taxonomy_term.collection.field_theme
+    - field.field.taxonomy_term.collection.layout_builder__layout
+    - image.style.thumbnail
+    - taxonomy.vocabulary.collection
+  module:
+    - ds
+    - image
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: taxonomy_term.collection.icon
+targetEntityType: taxonomy_term
+bundle: collection
+mode: icon
+content:
+  field_badge:
+    type: image
+    label: hidden
+    settings:
+      image_link: content
+      image_style: thumbnail
+      image_loading:
+        attribute: lazy
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 0
+    region: content
+  field_short_description:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 1
+    region: content
+hidden:
+  description: true
+  field_about: true
+  field_containers: true
+  field_downloads: true
+  field_overview: true
+  field_publications_more_link: true
+  field_tags: true
+  field_theme: true
+  langcode: true
+  layout_builder__layout: true
+  search_api_excerpt: true

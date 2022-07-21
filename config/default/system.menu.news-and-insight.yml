@@ -1,0 +1,8 @@
+uuid: 79ad5364-626e-4a44-ab27-270961c255ac
+langcode: en
+status: true
+dependencies: {  }
+id: news-and-insight
+label: 'News and insight'
+description: 'Tertiary menu'
+locked: false

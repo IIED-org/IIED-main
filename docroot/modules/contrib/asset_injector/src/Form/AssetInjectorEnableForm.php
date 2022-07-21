@@ -50,7 +50,7 @@ class AssetInjectorEnableForm extends EntityConfirmFormBase {
     $entity = $this->entity;
     $entity->enable()->save();
 
-    Drupal::logger('asset_injector')->notice('%type asset %id enabled', [
+    $this->logger('asset_injector')->notice('%type asset %id enabled', [
       '%type' => $entity->get('entityTypeId'),
       '%id' => $entity->id(),
     ]);

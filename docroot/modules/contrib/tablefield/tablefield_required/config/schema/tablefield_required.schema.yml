@@ -1,0 +1,15 @@
+# Schema for the tablefield_required module.
+
+field.field.*.*.*.third_party.tablefield_required:
+  type: mapping
+  label: 'Field settings for tablefield_required'
+  mapping:
+    required_rows:
+      type: string
+      label: 'Required rows'
+    required_cols:
+      type: string
+      label: 'Required cols'
+    multivalue_inherit:
+      type: boolean
+      label: 'Inherit for multi-value fields'

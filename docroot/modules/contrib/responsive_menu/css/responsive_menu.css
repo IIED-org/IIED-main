@@ -107,7 +107,7 @@ body.user-logged-in.toolbar-fixed.mm-wrapper_opened {
 }
 
 .responsive-menu-toggle {
-  display: inline-block;
+  /* display: inline-block; */
 }
 
 .responsive-menu-toggle-icon {
@@ -138,7 +138,7 @@ body.user-logged-in.toolbar-fixed.mm-wrapper_opened {
 .responsive-menu-toggle-icon:after,
 .responsive-menu-toggle-icon span.icon {
   background: #fff;
-  content: '';
+  /* content: ''; */
   display: block;
   width: 20px;
   height: 3px;

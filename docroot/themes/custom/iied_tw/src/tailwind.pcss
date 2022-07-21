@@ -1,0 +1,195 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:400,300,300italic,400italic,700,700italic,900,900italic");
+@import url("https://cloud.typography.com/7590498/6700612/css/fonts.css");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-4xl font-headline;
+  }
+  h2 {
+    @apply text-3xl font-headline;
+  }
+  h3 {
+    @apply text-2xl font-headline;
+  }
+  h4 {
+    @apply text-xl font-headline;
+  }
+  h5 {
+    @apply text-lg font-headline;
+  }
+  h6 {
+    @apply font-headline;
+  }
+  a {
+    @apply transition duration-300 ease-in-out text-link-text underline-offset-2 hover:text-link-hover visited:text-link-visited;
+  }
+  .iied-gradient {
+    background: rgb(0, 179, 223);
+    background: linear-gradient(
+      90deg,
+      rgba(0, 179, 223, 1) 0%,
+      rgba(252, 179, 22, 1) 33.3%,
+      rgba(206, 83, 158, 1) 66.6%,
+      rgba(170, 192, 44, 1) 100%
+    );
+  }
+  hr {
+    @apply my-6;
+  }
+}
+
+@layer components {
+  .menu-name--secondary {
+    @apply bg-iiedblue-10;
+  }
+  .site-name {
+    font-family: serif;
+  }
+  /* nt removed .block, */
+  .node {
+    @apply mb-4;
+  }
+
+  .node__content p,
+  .node__content ul,
+  .node__content ol {
+    @apply mb-4 leading-normal;
+  }
+  /* fix for custom block cards height */
+  .grid-h-full > div:first-child {
+    @apply h-full;
+  }
+
+  /* Elements -- twig partials */
+  /* Buttons */
+  .btn {
+    @apply px-3 py-2 transition rounded-full shadow-sm;
+  }
+  .btn-outline {
+    @apply px-3 py-2 transition bg-white border border-gray-300 rounded-full shadow-sm;
+    &:hover {
+      @apply shadow-none bg-gray-100 border-iiedblue-500;
+    }
+  }
+  .btn-icon {
+    @apply flex items-center;
+  }
+  .btn-orange {
+    @apply bg-iiedorange-500;
+    &:hover {
+      @apply bg-iiedorange-600;
+    }
+  }
+  .tab-wrapper button.active {
+    @apply border-b-2 border-iiedblue-500;
+  }
+  .keypoint {
+    @apply list-none pl-0 !important;
+  }
+  .keypoint li {
+    @apply before:content-keypoint before:mr-2;
+  }
+
+  /* Components -- twig templates */
+  /* Cards */
+  .card {
+    @apply border border-gray-300 p-4 rounded-xl;
+  }
+
+  /* [id$="-local-tasks"] ul {
+    @apply list-disc list-inside;
+  } */
+
+  .box-outline,
+  .boxbox {
+    @apply border border-gray-300 p-4 rounded-xl;
+  }
+  .bg-fill {
+    @apply p-4 bg-gray-100;
+  }
+
+  .bg-green {
+    @apply p-4 bg-iiedgreen-500;
+  }
+
+  .image-caption {
+    @apply mt-1 text-base leading-tight text-gray-500;
+  }
+
+  .lead {
+    @apply prose prose-lg lg:prose-xl;
+  }
+
+  .odd .rounded-odd-even {
+    @apply rounded-tl-xl;
+  }
+
+  .even .rounded-odd-even {
+    @apply rounded-tr-xl;
+  }
+
+  .odd .rounded-odd-even:before {
+    content: url(/themes/custom/iied_tw/templates/layout/icons/corner-tr.svg);
+    position: absolute;
+    top: -12px;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    margin: 0 0 0 0px;
+    fill: #fff;
+  }
+
+  .even .rounded-odd-even:before {
+    content: url(/themes/custom/iied_tw/templates/layout/icons/corner-bl.svg);
+    position: absolute;
+    top: -12px;
+    left: 0;
+    width: 12px;
+    height: 12px;
+    margin: 0 0 0 0px;
+    fill: #fff;
+  }
+
+  .mm-listitem {
+    border: white;
+  }
+
+  #block-exposedformsearchpage-2-5 .bef--secondary {
+    display: none;
+  }
+
+  .js input.form-autocomplete {
+    background-image: url(/themes/custom/iied_pubs/assets/images/search_icon.png);
+    background-position: 95% center !important;
+  }
+
+  /*-- rotate 4 colour borders for publiucations grid  --*/
+  .grid .views-row:nth-child(8n + 1) .color-rotate {
+    @apply border-iiedpink-500;
+  }
+  .grid .views-row:nth-child(8n + 2) .color-rotate {
+    @apply border-iiedorange-500;
+  }
+  .grid .views-row:nth-child(8n + 3) .color-rotate {
+    @apply border-iiedblue-500;
+  }
+  .grid .views-row:nth-child(8n + 4) .color-rotate {
+    @apply border-iiedgreen-500;
+  }
+  .grid .views-row:nth-child(8n + 5) .color-rotate {
+    @apply border-iiedgreen-500;
+  }
+  .grid .views-row:nth-child(8n + 6) .color-rotate {
+    @apply border-iiedblue-500;
+  }
+  .grid .views-row:nth-child(8n + 7) .color-rotate {
+    @apply border-iiedorange-500;
+  }
+  .grid .views-row:nth-child(8n + 8) .color-rotate {
+    @apply border-iiedpink-500;
+  }
+}

@@ -1,0 +1,48 @@
+uuid: 8418253e-25bd-434a-9635-0f2809678e6b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.modal_image.field_image
+    - field.field.paragraph.modal_image.field_image_caption
+    - image.style.scale_md
+    - paragraphs.paragraphs_type.modal_image
+  module:
+    - colorbox
+    - ds
+    - text
+id: paragraph.modal_image.default
+targetEntityType: paragraph
+bundle: modal_image
+mode: default
+content:
+  field_image:
+    type: colorbox
+    label: hidden
+    settings:
+      colorbox_node_style: scale_md
+      colorbox_node_style_first: ''
+      colorbox_image_style: ''
+      colorbox_gallery: post
+      colorbox_gallery_custom: ''
+      colorbox_caption: auto
+      colorbox_caption_custom: ''
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 0
+    region: content
+  field_image_caption:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  search_api_excerpt: true

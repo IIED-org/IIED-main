@@ -1,0 +1,8 @@
+uuid: c2e0749b-cf6d-4326-a530-2b0870f44b87
+langcode: en
+status: true
+dependencies: {  }
+id: card_wide
+label: 'Card wide'
+revision: 0
+description: 'Larger card (3-4 col) for placement in layout builder.'

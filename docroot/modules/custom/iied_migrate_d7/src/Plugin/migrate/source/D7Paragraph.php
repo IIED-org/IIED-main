@@ -85,7 +85,7 @@ class D7Paragraph extends FieldableEntity {
    * {@inheritdoc}
    */
   public function prepareRow(Row $row) {
-    $x = '';
+    // $x = '';
     return parent::prepareRow($row);
   }
 

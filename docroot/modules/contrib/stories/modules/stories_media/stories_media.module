@@ -1,0 +1,25 @@
+<?php
+/**
+ * @file
+ * Contains stories_media.module.
+ */
+
+/**
+ * Implements theme_preprocess_TEMPLATE().
+ */
+function stories_media_preprocess_paragraph(&$variables) {
+  $paragraph = $variables['paragraph'];
+  // Make sure Paragraph exists.
+  if (!$paragraph) {
+    return FALSE;
+  }
+
+  // Make sure the field exists.
+  if (!$paragraph->hasField('field_stories_alignment')) {
+    return FALSE;
+  }
+
+  // Add alignment data-align attribute.
+  $align = $paragraph->field_stories_alignment->getString();
+  $variables['attributes']['data-align'][] = $align;
+}

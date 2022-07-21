@@ -1,6 +1,6 @@
 display:
   default:
-    display_title: 'Par défaut'
+    display_title: Default
     display_options:
       fields:
         filename:

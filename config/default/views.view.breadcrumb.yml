@@ -1,6 +1,6 @@
 uuid: f6615f37-2b03-40e1-8d63-f3055e21e7fb
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - field.storage.node.field_theme_s_

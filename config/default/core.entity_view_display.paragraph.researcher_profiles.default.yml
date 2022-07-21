@@ -16,7 +16,7 @@ mode: default
 content:
   field_link:
     type: link
-    label: above
+    label: hidden
     settings:
       trim_length: 80
       url_only: false
@@ -28,7 +28,7 @@ content:
     region: content
   field_profile_type:
     type: list_default
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
     weight: 0

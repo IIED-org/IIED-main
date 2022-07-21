@@ -1,0 +1,19 @@
+tablefield.export:
+  path: 'tablefield/export/{entity_type}/{entity}/{field_name}/{langcode}/{delta}'
+  defaults:
+    _controller: '\Drupal\tablefield\Controller\TablefieldController::exportCsv'
+    _title: 'Export Table Data'
+  requirements:
+    _permission: 'export tablefield'
+    _custom_access: '\Drupal\tablefield\Controller\TablefieldController::access'
+  options:
+    parameters:
+      entity:
+        type: entity:{entity_type}
+tablefield.admin:
+  path: 'admin/config/content/tablefield'
+  defaults:
+    _form: '\Drupal\tablefield\Form\TablefieldConfigForm'
+    _title: 'Tablefield'
+  requirements:
+    _permission: 'configure tablefield'

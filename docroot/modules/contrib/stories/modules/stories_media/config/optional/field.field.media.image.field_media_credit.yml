@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_media_credit
+    - media.type.image
+  module:
+    - text
+id: media.image.field_media_credit
+field_name: field_media_credit
+entity_type: media
+bundle: image
+label: Credit
+description: 'Provide a credit for the source of this image.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

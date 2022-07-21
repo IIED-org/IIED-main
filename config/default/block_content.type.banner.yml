@@ -1,0 +1,8 @@
+uuid: df3f41de-83eb-4049-b4af-98414a373f7e
+langcode: en
+status: true
+dependencies: {  }
+id: banner
+label: Banner
+revision: 0
+description: 'Standard large banner with image and link '

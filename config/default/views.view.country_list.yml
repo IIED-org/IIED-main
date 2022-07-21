@@ -33,7 +33,7 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: field
-          label: Area
+          label: ''
           exclude: false
           alter:
             alter_text: false
@@ -65,10 +65,10 @@ display:
           element_type: ''
           element_class: ''
           element_label_type: ''
-          element_label_class: 'field__label font-weight-bold field-label-inline mr-1'
-          element_label_colon: true
+          element_label_class: ''
+          element_label_colon: false
           element_wrapper_type: div
-          element_wrapper_class: d-flex
+          element_wrapper_class: 'flex flex-wrap'
           element_default_classes: false
           empty: ''
           hide_empty: true
@@ -85,7 +85,7 @@ display:
           delta_reversed: false
           delta_first_last: false
           multi_type: separator
-          separator: ', '
+          separator: ',&nbsp;'
           field_api_classes: false
       pager:
         type: some
@@ -263,6 +263,11 @@ display:
         type: default
       row:
         type: fields
+        options:
+          default_field_elements: false
+          inline: {  }
+          separator: ''
+          hide_empty: false
       query:
         type: views_query
         options:

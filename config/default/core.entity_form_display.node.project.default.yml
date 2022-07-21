@@ -10,7 +10,6 @@ dependencies:
     - field.field.node.project.field_contact
     - field.field.node.project.field_dates
     - field.field.node.project.field_display_image
-    - field.field.node.project.field_full_width_media
     - field.field.node.project.field_funded_by
     - field.field.node.project.field_image
     - field.field.node.project.field_image_caption
@@ -74,8 +73,8 @@ third_party_settings:
         required_fields: true
     group_contacts:
       children:
-        - field_contact
         - field_project_contacts
+        - field_contact
       label: Contacts
       region: content
       parent_name: group_tabs
@@ -90,8 +89,6 @@ third_party_settings:
         required_fields: true
     group_taxonomy:
       children:
-        - field_theme
-        - field_collection
         - field_tags
       label: Taxonomy
       region: content
@@ -197,7 +194,7 @@ content:
     third_party_settings: {  }
   field_contact:
     type: text_textarea
-    weight: 12
+    weight: 14
     region: content
     settings:
       rows: 5
@@ -217,18 +214,6 @@ content:
     region: content
     settings:
       display_label: true
-    third_party_settings: {  }
-  field_full_width_media:
-    type: entity_reference_paragraphs
-    weight: 26
-    region: content
-    settings:
-      title: Paragraph
-      title_plural: Paragraphs
-      edit_mode: open
-      add_mode: dropdown
-      form_display_mode: default
-      default_paragraph_type: ''
     third_party_settings: {  }
   field_funded_by:
     type: text_textarea

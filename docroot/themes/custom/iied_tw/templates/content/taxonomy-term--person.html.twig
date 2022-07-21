@@ -1,0 +1,164 @@
+{#
+/**
+ * @file
+ * Theme override to display a taxonomy term.
+ *
+ * Available variables:
+ * - url: URL of the current term.
+ * - name: (optional) Name of the current term.
+ * - content: Items for the content of the term (fields and description).
+ *   Use 'content' to print them all, or print a subset such as
+ *   'content.description'. Use the following code to exclude the
+ *   printing of a given child element:
+ *   @code
+ *   {{ content|without('description') }}
+ *   @endcode
+ * - attributes: HTML attributes for the wrapper.
+ * - page: Flag for the full page state.
+ * - term: The taxonomy term entity, including:
+ *   - id: The ID of the taxonomy term.
+ *   - bundle: Machine name of the current vocabulary.
+ * - view_mode: View mode, e.g. 'full', 'teaser', etc.
+ *
+ * @see template_preprocess_taxonomy_term()
+ */
+#}
+<div class="my-6">
+  <main>
+    {#-- grid --#}
+    <div class="container mx-auto lg:px-8 xl:grid xl:gap-x-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12">
+      <div class="prose md:prose-lg xl:col-span-7 2xl:col-span-6">
+
+        {# <div{{ attributes }}></div #}
+          {{ title_prefix }}
+            <h1 class="mb-6">{{ content.field_name }}</h1>
+          {{ title_suffix }}
+          {% if content.field_position[0] is not empty %}
+            <h3 class="pb-6">{{ content.field_position|render|striptags }}</h3>
+          {% endif %} 
+      </div>  
+      {#-- right column --#}
+      {% if content.field_author_picture[0] is not empty %}
+        <div class="xl:col-span-3 2xl:col-span-3 xl:row-span-2">
+          <div class="flex flex-wrap overflow-hidden">
+  
+              {% if content.field_author_picture[0] is not empty %}
+                <div class="m-4">
+                  <img 
+                  src="{{ term.field_author_picture.entity.field_media_image.0.entity.uri.value|image_style('medium') }}"
+                  alt="{{ term.name.value }}'s picture"
+                  class="object-cover w-32 h-32 border-2 border-white rounded-full md:w-48 md:h-48 sm:mb-6 ring-1 ring-iiedblue-500"
+                  />
+                </div>
+              {% endif %}
+
+              <div class="mb-4">
+                {# on condition that person is IIED staff #}
+                {% if content.field_person_type[0]['#title'] == 'Staff' %}
+
+                <div class="flex items-center mb-2 space-x-1">
+                <span class="font-bold">Telephone:</span><span> 020 3463 7399</span>
+              </div>
+
+                {% if content.field_email[0] is not empty %}
+                  <div class="flex items-center mb-2 space-x-1">
+                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                  </svg>
+                  {{ content.field_email }}
+                  </div>
+                {% endif %} 
+                
+                {% endif %}
+
+                {% if content.field_twitter_username[0] is not empty %}
+                  <a href="https://twitter.com/{{ content.field_twitter_username.value }}" target="_blank" class="flex items-center mb-2 space-x-1 border-b-0 hover:border-b-0" title="Twitter profile">
+                  <svg
+                  fill="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  class="w-8 h-8"
+                  viewBox="0 0 24 24"
+                  >
+                  <path
+                      d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"
+                  ></path>
+                  </svg>
+                  {{ content.field_twitter_username }}
+                  </a>
+                {% endif %}
+
+                <div class="mb-2">
+              {{ content.field_researcher_profiles }}
+                </div>
+        
+        {% if content.field_languages[0] is not empty %} 
+                <div class="mb-4">
+                <span class="font-bold">Languages: </span>
+                {{ 'English, ' }}
+                {{ content.field_languages|render|striptags }}
+                </div>
+                {% endif %}
+
+            </div>
+
+          </div>  
+        </div>
+      {% endif %}
+
+      <div class="prose md:prose-lg xl:col-span-7 2xl:col-span-6">
+        {#-- Biography (summary) --#}
+          {{ content.field_standfirst }}
+        {#-- Biography (full)--#}
+          {{ content.field_biography }}
+
+          {{ content.field_expertise }}
+
+          {{ content.field_before_iied }}
+
+          {{ content.field_current_work }}
+
+          {{ content.field_appointed_role }}
+
+
+          {{ content.field_department }}
+
+          {{ content.field_video }}
+
+          {{ content.field_paragraphs }}
+      </div>
+
+
+    </div>
+
+      {% set view = drupal_view_result('person_content', 'block_1')|length %}
+      {% if view > 0 %}
+      <div class="container my-10">
+      <h2 class="mb-4">Projects</h2>
+      {{ drupal_view('person_content', 'block_1') }}
+      </div>
+      {% endif %}
+
+
+      {% set view = drupal_view_result('person_content', 'block_2')|length %}
+      {% if view > 0 %}
+      <div class="container my-10">
+      <h2 class="mb-4">Blogs</h2>
+      {{ drupal_view('person_content', 'block_2') }}
+      </div>
+      {% endif %}
+
+
+      {% set view = drupal_view_result('term_publications', 'block_1')|length %}
+      {% if view > 0 %}
+      <div class="container my-10">
+      <h2 class="mb-4">Publications</h2>
+      {{ drupal_view('term_publications', 'block_1') }}
+      </div>
+      {% endif %}
+
+  </main>
+</div>
+
+

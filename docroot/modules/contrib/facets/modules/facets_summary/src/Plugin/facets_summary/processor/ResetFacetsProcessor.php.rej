@@ -1,0 +1,14 @@
+--- modules/facets_summary/src/Plugin/facets_summary/processor/ResetFacetsProcessor.php
++++ modules/facets_summary/src/Plugin/facets_summary/processor/ResetFacetsProcessor.php
+@@ -164,7 +220,10 @@ class ResetFacetsProcessor extends ProcessorPluginBase implements BuildProcessor
+    * {@inheritdoc}
+    */
+   public function defaultConfiguration() {
+-    return ['link_text' => ''];
++    return [
++      'link_text' => '',
++      'clear_string' => FALSE,
++    ];
+   }
+ 
+ }

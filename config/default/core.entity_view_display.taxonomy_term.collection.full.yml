@@ -1,0 +1,216 @@
+uuid: 36dee068-e1d3-4d0d-85c5-39fe985995c9
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.taxonomy_term.full
+    - field.field.taxonomy_term.collection.field_about
+    - field.field.taxonomy_term.collection.field_badge
+    - field.field.taxonomy_term.collection.field_containers
+    - field.field.taxonomy_term.collection.field_downloads
+    - field.field.taxonomy_term.collection.field_overview
+    - field.field.taxonomy_term.collection.field_publications_more_link
+    - field.field.taxonomy_term.collection.field_short_description
+    - field.field.taxonomy_term.collection.field_tags
+    - field.field.taxonomy_term.collection.field_theme
+    - field.field.taxonomy_term.collection.layout_builder__layout
+    - taxonomy.vocabulary.collection
+    - views.view.project_publication_card
+    - views.view.taxonomy_all_display
+    - views.view.taxonomy_featured_display
+  module:
+    - entity_reference_revisions
+    - layout_builder
+    - layout_builder_restrictions
+    - text
+    - views
+  theme:
+    - iied_tw
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: true
+    sections:
+      -
+        layout_id: tw-container
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          wrappers:
+            first: div
+          outer_wrapper: div
+          attributes: ''
+          link_attribute: ''
+          link_custom: ''
+          classes:
+            layout_class: {  }
+            first: {  }
+        components:
+          e228e755-d051-4dcd-a893-0b69562f5f29:
+            uuid: e228e755-d051-4dcd-a893-0b69562f5f29
+            region: first
+            configuration:
+              id: 'views_block:taxonomy_featured_display-block_1'
+              label: ''
+              label_display: '0'
+              provider: views
+              context_mapping: {  }
+              views_label: ''
+              items_per_page: none
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: tw-container
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          wrappers:
+            first: div
+          outer_wrapper: div
+          attributes: ''
+          link_attribute: ''
+          link_custom: ''
+          classes:
+            layout_class:
+              bg-fill: bg-fill
+            first: {  }
+        components:
+          94c48576-f5a7-4673-a96f-b45516fcedcb:
+            uuid: 94c48576-f5a7-4673-a96f-b45516fcedcb
+            region: first
+            configuration:
+              id: 'views_block:project_publication_card-block_2'
+              label: ''
+              label_display: visible
+              provider: views
+              context_mapping: {  }
+              views_label: ''
+              items_per_page: none
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: tw-container
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          wrappers:
+            first: div
+          outer_wrapper: div
+          attributes: ''
+          link_attribute: ''
+          link_custom: ''
+          classes:
+            layout_class: {  }
+            first: {  }
+        components:
+          4d0d1344-f04c-426c-8770-67e1f0c9bd7d:
+            uuid: 4d0d1344-f04c-426c-8770-67e1f0c9bd7d
+            region: first
+            configuration:
+              id: 'views_block:taxonomy_all_display-block_1'
+              label: ''
+              label_display: '0'
+              provider: views
+              context_mapping: {  }
+              views_label: ''
+              items_per_page: none
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+  layout_builder_restrictions:
+    allowed_block_categories: {  }
+    entity_view_mode_restriction:
+      allowed_layouts:
+        - tw-1-2-col-grid
+        - tw-1-2-4-col-grid
+        - tw-container
+        - tw-tabs
+      blacklisted_blocks: {  }
+      whitelisted_blocks: {  }
+      restricted_categories:
+        - '@entity'
+        - 'Better Social Sharing Buttons'
+        - 'Chaos Tools'
+        - 'Content fields'
+        - Dashboard
+        - Devel
+        - Facets
+        - 'Facets summary (Experimental)'
+        - Forms
+        - Geolocation
+        - Help
+        - 'IIED Utilities'
+        - 'Lists (Views)'
+        - Menus
+        - 'Read Only Mode'
+        - 'Responsive menu'
+        - System
+        - User
+        - core
+id: taxonomy_term.collection.full
+targetEntityType: taxonomy_term
+bundle: collection
+mode: full
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_about:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_containers:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_downloads:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_publications_more_link:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_short_description:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_theme:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 6
+    region: content
+hidden:
+  field_badge: true
+  field_overview: true
+  field_tags: true
+  langcode: true
+  layout_builder__layout: true
+  search_api_excerpt: true

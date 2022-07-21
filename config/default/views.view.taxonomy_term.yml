@@ -1,6 +1,6 @@
 uuid: 00fc83bb-2f59-4330-808d-d931ffcf4938
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - core.entity_view_mode.node.card
@@ -12,7 +12,6 @@ dependencies:
     - field.storage.node.field_media
     - field.storage.node.field_product_code
     - image.style.card_370
-    - node.type.publication
   module:
     - datetime
     - media
@@ -22,7 +21,6 @@ dependencies:
     - taxonomy
     - text
     - user
-    - views_bootstrap
 _core:
   default_config_hash: uvMAn5Qf8Uni989mhr5KY4hx66xkSpP8nFYZMHgj7kY
 id: taxonomy_term
@@ -244,59 +242,16 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        type:
-          id: type
-          table: node_field_data
-          field: type
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: node
-          entity_field: type
-          plugin_id: bundle
-          operator: in
-          value:
-            publication: publication
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
       style:
-        type: views_bootstrap_grid
+        type: default
         options:
           row_class: ''
           default_row_class: false
           uses_fields: false
-          col_xs: col-auto
-          col_sm: col-sm-12
-          col_md: col-md-6
-          col_lg: col-lg-4
-          col_xl: col-xl-3
       row:
         type: 'entity:node'
         options:
@@ -337,7 +292,7 @@ display:
           admin_label: ''
           plugin_id: result
           empty: false
-          content: '<p class="mt-2">Displaying @start - @end of @total publications</p>'
+          content: '<p class="mt-2">Displaying @start - @end of @total items</p>'
       footer: {  }
       display_extenders: {  }
     cache_metadata:

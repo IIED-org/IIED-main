@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_stories_cta_link
+    - paragraphs.paragraphs_type.stories_cta
+  module:
+    - link
+id: paragraph.stories_cta.field_stories_cta_link
+field_name: field_stories_cta_link
+entity_type: paragraph
+bundle: stories_cta
+label: Link
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 2
+field_type: link

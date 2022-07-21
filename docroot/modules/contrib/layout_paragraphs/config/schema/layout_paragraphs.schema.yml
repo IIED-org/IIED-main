@@ -1,0 +1,48 @@
+layout_paragraphs.settings:
+  type: config_object
+  label: 'Layout Paragraphs general settings'
+  mapping:
+    show_paragraph_labels:
+      type: integer
+      label: 'Show Paragraph Labels'
+      description: 'This option allows to show the Paragraphs Type Label of each Item added in LP widget Sections/Layouts'
+    show_layout_labels:
+      type: integer
+      label: 'Show Layout Labels'
+      description: 'This option allows to show the Paragraphs Layout Label of each Item added in LP widget Sections/Layouts'
+
+field.formatter.settings.layout_paragraphs:
+  type: mapping
+  label: 'Layout Paragraphs format settings'
+  mapping:
+    view_mode:
+      type: string
+      label: 'View mode'
+
+field.widget.settings.layout_paragraphs:
+  type: mapping
+  label: 'Layout Paragraphs display format settings'
+  mapping:
+    preview_view_mode:
+      type: string
+      label: 'Preview view mode'
+    nesting_depth:
+      type: integer
+      label: 'Maximum nesting depth'
+    require_layouts:
+      type: integer
+      label: 'Require paragraphs to be added inside a layout'
+
+paragraphs.behavior.settings.layout_paragraphs:
+  type: paragraphs.behavior.settings_base
+  label: 'Layout Paragraphs Section settings'
+  mapping:
+    enabled:
+      type: boolean
+      label: 'Use as a Layout Section'
+    available_layouts:
+      type: sequence
+      label: 'Available Layouts'
+      sequence:
+        type: string
+        label: 'Layout'

@@ -247,7 +247,10 @@ class MigrationController extends ControllerBase implements ContainerInjectionIn
     $build['process']['run'] = [
       '#type' => 'link',
       '#title' => $this->t('Run'),
-      '#url' => Url::fromRoute('entity.migration.process.run', ['migration_group' => $migration_group->id(), 'migration' => $migration->id()]),
+      '#url' => Url::fromRoute('entity.migration.process.run', [
+        'migration_group' => $migration_group->id(),
+        'migration' => $migration->id(),
+      ]),
     ];
 
     return $build;

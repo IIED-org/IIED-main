@@ -1,0 +1,12 @@
+type: module
+name: 'Devel Kint Extras'
+description: 'Shows methods and statics available for an object when using Kint with Devel.'
+core: 8.x
+core_version_requirement: ^8 || ^9
+package: Development
+dependencies:
+  - devel:devel (>=4.x)
+# Information added by Drupal.org packaging script on 2020-08-11
+version: '1.0.0'
+project: 'devel_kint_extras'
+datestamp: 1597133802

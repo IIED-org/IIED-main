@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace PHPStan\Rules\Drupal\PluginManager;
+namespace mglaman\PHPStanDrupal\Rules\Drupal\PluginManager;
 
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Rules\Rule;
 
 /**
@@ -10,7 +11,7 @@ use PHPStan\Rules\Rule;
 abstract class AbstractPluginManagerRule implements Rule
 {
 
-    protected function isPluginManager(\ReflectionClass $classReflection): bool
+    protected function isPluginManager(ClassReflection $classReflection): bool
     {
         return
             !$classReflection->isInterface() &&

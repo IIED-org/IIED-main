@@ -1,0 +1,22 @@
+uuid: 9edc7da1-a4bf-4db8-b908-76d9077de8c8
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - iied_tw
+_core:
+  default_config_hash: 9EoWV2Lot6FVSr50t4hoKgiz1LIXYWNG-IIPYsWxBqo
+id: iied_tw_content
+theme: iied_tw
+region: content
+weight: -8
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  label_display: '0'
+  provider: system
+visibility: {  }

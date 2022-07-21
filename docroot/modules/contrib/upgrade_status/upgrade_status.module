@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * The base module for upgrade status.
+ */
+
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Extension\Extension;
 use Drupal\upgrade_status\ProjectCollector;
@@ -48,7 +53,7 @@ function upgrade_status_theme($existing, $type, $theme, $path) {
  * @param array $variables
  *   Array of template variables.
  */
-function template_preprocess_upgrade_status_html_export(&$variables) {
+function template_preprocess_upgrade_status_html_export(array &$variables) {
   $projects = $variables['projects'];
   $types = ['custom', 'contrib'];
   foreach ($types as $type) {
@@ -66,7 +71,7 @@ function template_preprocess_upgrade_status_html_export(&$variables) {
  * @param array $variables
  *   Array of template variables.
  */
-function template_preprocess_upgrade_status_ascii_export(&$variables) {
+function template_preprocess_upgrade_status_ascii_export(array &$variables) {
   template_preprocess_upgrade_status_html_export($variables);
 }
 

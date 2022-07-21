@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_stories_quote_citation_url
+    - paragraphs.paragraphs_type.stories_quote
+  module:
+    - link
+id: paragraph.stories_quote.field_stories_quote_citation_url
+field_name: field_stories_quote_citation_url
+entity_type: paragraph
+bundle: stories_quote
+label: 'Citation URL'
+description: 'Enter an optional link for the citation.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 0
+field_type: link

@@ -1,0 +1,23 @@
+uuid: ad773171-e63e-4442-b16c-ed96cc543548
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.in_page_menu.field_basic_text
+    - paragraphs.paragraphs_type.in_page_menu
+  module:
+    - text
+id: paragraph.in_page_menu.default
+targetEntityType: paragraph
+bundle: in_page_menu
+mode: default
+content:
+  field_basic_text:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

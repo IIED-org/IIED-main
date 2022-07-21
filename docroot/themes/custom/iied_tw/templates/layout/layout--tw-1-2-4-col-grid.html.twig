@@ -1,0 +1,25 @@
+{#
+/**
+ * @file
+ * Theme override to display a two-column grid layout.
+ *
+ * Available variables:
+ * - content: The content for this layout.
+ * - attributes: HTML attributes for the layout <div>.
+ * - first
+ */
+#}
+{% if content %}
+  <div{{ attributes }}>
+         <div class="container mx-auto mb-10">
+      {% if content.first %}
+        <div {{ region_attributes.first.addClass('grid', 'grid-flow-row-dense', 'gap-6', 'xl:gap-10', 'md:grid-cols-2', 'xl:grid-cols-4') }}>
+          {{ content.insert_before }}
+          {{ content.controls }}
+          {{ content.first }}
+          {{ content.insert_after }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}

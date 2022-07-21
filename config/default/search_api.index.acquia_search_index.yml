@@ -25,6 +25,7 @@ third_party_settings:
     finalize: false
     commit_before_finalize: false
     commit_after_finalize: false
+    debug_finalize: false
     highlighter:
       maxAnalyzedChars: 51200
       fragmenter: gap
@@ -221,6 +222,13 @@ datasource_settings:
     bundles:
       default: false
       selected:
+        - article
+        - blog
+        - event
+        - long_read
+        - news
+        - page
+        - project
         - publication
     languages:
       default: true
@@ -229,7 +237,9 @@ datasource_settings:
     bundles:
       default: false
       selected:
+        - collection
         - person
+        - theme
     languages:
       default: true
       selected: {  }
@@ -240,6 +250,7 @@ processor_settings:
     weights:
       preprocess_query: -30
   entity_status: {  }
+  entity_type: {  }
   hierarchy:
     weights:
       preprocess_index: -50
@@ -251,6 +262,7 @@ processor_settings:
     prefix: '<strong>'
     suffix: '</strong>'
     excerpt: true
+    excerpt_always: false
     excerpt_length: 300
     exclude_fields: {  }
     highlight: always

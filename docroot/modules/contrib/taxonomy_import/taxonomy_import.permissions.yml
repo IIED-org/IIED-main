@@ -1,0 +1,4 @@
+administer taxonomy import:
+  title: 'Administer taxonomy import'
+administer configure taxonomy import:
+  title: 'Administer configure of taxonomy import'

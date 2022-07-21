@@ -2,6 +2,7 @@
 
 namespace Drupal\media_pdf_thumbnail\Manager;
 
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Spatie\PdfToImage\Pdf;
 
@@ -12,39 +13,61 @@ use Spatie\PdfToImage\Pdf;
  */
 class MediaPdfThumbnailImagickManager {
 
-  protected $loggerFactory;
+  /**
+   * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
+   */
+  protected $logger;
+
+  /**
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
 
   /**
    * MediaPdfThumbnailImagickManager constructor.
    *
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerChannelFactory
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerChannel
+   * @param \Drupal\Core\File\FileSystemInterface $fileSystem
    */
-  public function __construct(LoggerChannelFactoryInterface $loggerChannelFactory) {
-    $this->loggerFactory = $loggerChannelFactory->get('Media PDF Thumbnail');
+  public function __construct(LoggerChannelFactoryInterface $loggerChannel, FileSystemInterface $fileSystem) {
+    $this->logger = $loggerChannel->get('Media PDF Thumbnail (MediaPdfThumbnailImagickManager');
+    $this->fileSystem = $fileSystem;
   }
 
   /**
-   * Generate image from PDF file.
+   * @param $source
+   * @param $target
+   * @param int $page
    *
-   * @param string $source
-   *   File source.
-   * @param string $target
-   *   File target.
-   *
-   * @return string
-   *   File path.
-   *
+   * @return mixed|null
    */
-  public function generateImageFromPDF($source, $target) {
+  public function generateImageFromPDF($source, $target, $page = 1) {
+    $directory = dirname($target);
+    $this->fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS | FileSystemInterface::EXISTS_REPLACE);
     try {
       $pdf = new Pdf($source);
-      $pdf->saveImage($target);
+      $pdf->getNumberOfPages() > intval($page) ? $pdf->setPage(intval($page)) : '';
+      $pdf->setLayerMethod(null);
+      if (file_exists($target)) {
+        $this->fileSystem->delete($target);
+      }
+      $status = $pdf->saveImage($target);
     }
     catch (\Exception $e) {
-      $this->loggerFactory->error($e->getMessage());
-      return FALSE;
+      try {
+        $pdf = new Pdf($this->fileSystem->realpath($source));
+        $pdf->getNumberOfPages() > intval($page) ? $pdf->setPage(intval($page)) : '';
+        if (file_exists($target)) {
+          $this->fileSystem->delete($target);
+        }
+        $status = $pdf->saveImage($target);
+      }
+      catch (\Exception $e) {
+        $this->logger->error($e->getMessage());
+        return NULL;
+      }
     }
-    return TRUE;
+    return $status ? $target : NULL;
   }
 
 }

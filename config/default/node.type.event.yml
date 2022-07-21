@@ -10,7 +10,7 @@ third_party_settings:
     parent: ''
 name: Event
 type: event
-description: 'Displayed in IIED general calendar'
+description: 'Single page, same for various types of event (workshop, webinar etc.) '
 help: ''
 new_revision: true
 preview_mode: 1

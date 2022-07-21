@@ -2,6 +2,7 @@
 
 namespace Drupal\publishcontent\Plugin\Menu\LocalTask;
 
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Menu\LocalTaskDefault;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -58,7 +59,7 @@ class PublishContentLocalTask extends LocalTaskDefault implements ContainerFacto
    * {@inheritdoc}
    */
   public function getTitle(Request $request = NULL) {
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
     /** @var \Drupal\node\NodeInterface $node */
     $node = $this->nodeStorage->load($this->routeMatch->getRawParameter('node'));
     if ($node->isTranslatable() && $node->hasTranslation($langcode)) {

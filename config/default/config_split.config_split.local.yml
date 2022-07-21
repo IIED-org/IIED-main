@@ -9,11 +9,13 @@ weight: 0
 folder: ../config/splits/local
 module:
   config_devel: 0
+  dblog: 0
   devel: 0
   devel_generate: 0
   help_topics: 0
   migrate_devel: 0
   stage_file_proxy: 0
+  taxonomy_import: 0
   views_ui: 0
 theme: {  }
 blacklist: {  }

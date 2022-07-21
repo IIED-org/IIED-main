@@ -15,7 +15,7 @@ class AssetInjectorCssDuplicateForm extends AssetInjectorCssForm {
    * {@inheritdoc}
    */
   public function form(array $form, FormStateInterface $form_state) {
-    /** @var \Drupal\asset_injector\Entity\AssetInjectorCsss $entity */
+    /** @var \Drupal\asset_injector\Entity\AssetInjectorCss $entity */
     $entity = $this->entity->createDuplicate();
     $entity->label = $this->t('Duplicate of @label', ['@label' => $this->entity->label()]);
     $this->entity = $entity;

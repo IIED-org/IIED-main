@@ -113,7 +113,7 @@ trait ConfigStorageTestTrait {
     // Create a filtered storage.
     $filtered = $this->container->get('config_filter.storage_factory')->getFilteredStorage($memory, ['config.storage.sync']);
     // Then write the core export storage to this new storage.
-    $this->copyConfig($unfiltered, $filtered);
+    self::replaceAllStorageContents($unfiltered, $filtered);
 
     return $memory;
   }
@@ -153,6 +153,44 @@ trait ConfigStorageTestTrait {
         static::assertEquals($expected_collection->read($name), $actual_collection->read($name), $message . ' ' . $name);
       }
     }
+  }
+
+  /**
+   * Copy the configuration from one storage to another and remove stale items.
+   *
+   * This method is the copy of how it worked prior to Drupal 9.4.
+   * See https://www.drupal.org/node/3273823 for more details.
+   *
+   * @param \Drupal\Core\Config\StorageInterface $source
+   *   The configuration storage to copy from.
+   * @param \Drupal\Core\Config\StorageInterface $target
+   *   The configuration storage to copy to.
+   */
+  private static function replaceAllStorageContents(StorageInterface $source, StorageInterface &$target) {
+    // Make sure there is no stale configuration in the target storage.
+    foreach (array_merge([StorageInterface::DEFAULT_COLLECTION], $target->getAllCollectionNames()) as $collection) {
+      $target->createCollection($collection)->deleteAll();
+    }
+
+    // Copy all the configuration from all the collections.
+    foreach (array_merge([StorageInterface::DEFAULT_COLLECTION], $source->getAllCollectionNames()) as $collection) {
+      $source_collection = $source->createCollection($collection);
+      $target_collection = $target->createCollection($collection);
+      foreach ($source_collection->listAll() as $name) {
+        $data = $source_collection->read($name);
+        if ($data !== FALSE) {
+          $target_collection->write($name, $data);
+        }
+        else {
+          \Drupal::logger('config')->notice('Missing required data for configuration: %config', [
+            '%config' => $name,
+          ]);
+        }
+      }
+    }
+
+    // Make sure that the target is set to the same collection as the source.
+    $target = $target->createCollection($source->getCollectionName());
   }
 
 }

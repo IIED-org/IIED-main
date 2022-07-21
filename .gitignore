@@ -10,6 +10,9 @@ docroot/sites/default/settings.local.php
 .vscode/
 *.code-workspace
 
+# Ignore xdebug log file genearted by lando
+xdebug.log
+
 # Ignore .env files as they are personal
 /.env
 
@@ -23,4 +26,10 @@ docroot/sites/default/settings.local.php
 .lando.local.yml
 
 # Ignore node
-*/node_modules
+node_modules
+
+# Ignore MacOS files
+*.DS_Store
+
+# Dev mode: don't include tailwind.css 
+tailwind.css

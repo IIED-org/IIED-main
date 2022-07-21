@@ -1,0 +1,30 @@
+.glb-preview-regions--enable {
+
+  .layout-builder__region {
+    position: relative;
+    &:after {
+      position: absolute;
+      border: 1px dashed var(--colorGinFormElementBorder);
+      content: '';
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      pointer-events: none;
+    }
+
+    .layout-builder__region-label {
+      padding: 0em 4px 0 4px !important;
+      font-size: 12px !important;
+      line-height: 20px !important;
+      position: absolute;
+      color: #ffffff;
+      display: block;
+      top: -18px;
+      left: 0px;
+      z-index: 1;
+      background: var(--colorGinFormElementBorder);
+    }
+  }
+
+}

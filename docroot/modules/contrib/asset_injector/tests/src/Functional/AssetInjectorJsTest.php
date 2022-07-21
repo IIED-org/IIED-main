@@ -3,6 +3,7 @@
 namespace Drupal\Tests\asset_injector\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class AssetInjectorJsTest.
@@ -12,6 +13,13 @@ use Drupal\Tests\BrowserTestBase;
  * @group asset_injector
  */
 class AssetInjectorJsTest extends BrowserTestBase {
+
+  use StringTranslationTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
 
   /**
    * Modules to install.
@@ -71,12 +79,12 @@ class AssetInjectorJsTest extends BrowserTestBase {
     $this->testJsPermissionGranted();
     $this->drupalGet('admin/config/development/asset-injector/js/add');
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertSession()->pageTextContains(t('Code'));
+    $this->assertSession()->pageTextContains($this->t('Code'));
     $this->submitForm([
-      'label' => t('Blocks'),
-      'id' => t('blocks'),
+      'label' => $this->t('Blocks'),
+      'id' => $this->t('blocks'),
       'code' => '.block {border:1px solid black;}',
-    ], t('Save'));
+    ], $this->t('Save'));
 
     $this->getSession()->getPage()->hasContent('asset_injector/js/blocks');
 
@@ -100,7 +108,7 @@ class AssetInjectorJsTest extends BrowserTestBase {
     $this->testJsPermissionGranted();
     $this->drupalGet('admin/config/development/asset-injector/js/add');
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertSession()->pageTextContains(t('Code'));
+    $this->assertSession()->pageTextContains($this->t('Code'));
     $page->fillField('Label', 'test save continue');
     $page->fillField('Machine-readable name', 'test_save_continue');
     $page->fillField('Code', 'var a;');

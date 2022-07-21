@@ -29,6 +29,8 @@ class Pdf
 
     protected $compressionQuality;
 
+    protected $thumbnailWidth;
+
     public function __construct(string $pdfFile)
     {
         if (! file_exists($pdfFile)) {
@@ -120,7 +122,7 @@ class Pdf
         return file_put_contents($pathToImage, $imageData) !== false;
     }
 
-    public function saveAllPagesAsImages(string $directory, string $prefix = ''): array
+        public function saveAllPagesAsImages(string $directory, string $prefix = ''): array
     {
         $numberOfPages = $this->getNumberOfPages();
 
@@ -157,14 +159,14 @@ class Pdf
             $this->imagick->setCompressionQuality($this->compressionQuality);
         }
 
-        if (filter_var($this->pdfFile, FILTER_VALIDATE_URL)) {
-            return $this->getRemoteImageData($pathToImage);
-        }
-
         $this->imagick->readImage(sprintf('%s[%s]', $this->pdfFile, $this->page - 1));
 
         if (is_int($this->layerMethod)) {
             $this->imagick = $this->imagick->mergeImageLayers($this->layerMethod);
+        }
+
+        if ($this->thumbnailWidth !== null) {
+            $this->imagick->thumbnailImage($this->thumbnailWidth, 0);
         }
 
         $this->imagick->setFormat($this->determineOutputFormat($pathToImage));
@@ -186,19 +188,11 @@ class Pdf
         return $this;
     }
 
-    protected function getRemoteImageData(string $pathToImage): Imagick
+    public function width(int $thumbnailWidth)
     {
-        $this->imagick->readImage($this->pdfFile);
+        $this->thumbnailWidth = $thumbnailWidth;
 
-        $this->imagick->setIteratorIndex($this->page - 1);
-
-        if (is_int($this->layerMethod)) {
-            $this->imagick = $this->imagick->mergeImageLayers($this->layerMethod);
-        }
-
-        $this->imagick->setFormat($this->determineOutputFormat($pathToImage));
-
-        return $this->imagick;
+        return $this;
     }
 
     protected function determineOutputFormat(string $pathToImage): string

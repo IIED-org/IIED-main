@@ -1,7 +1,7 @@
 label: Zawartość
 display:
   default:
-    display_title: Domyślny
+    display_title: Default
     display_options:
       title: Zawartość
       fields:
