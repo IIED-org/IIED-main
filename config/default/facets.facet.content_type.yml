@@ -79,7 +79,7 @@ processor_configs:
   hierarchy_processor:
     processor_id: hierarchy_processor
     weights:
-      build: 6
+      build: -4
     settings: {  }
   translate_entity:
     processor_id: translate_entity
@@ -90,5 +90,5 @@ processor_configs:
     processor_id: url_processor_handler
     weights:
       pre_query: 50
-      build: -3
+      build: -10
     settings: {  }
