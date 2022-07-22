@@ -1,6 +1,6 @@
 uuid: 744e2a9b-9e52-426e-9deb-a36fc7bf0525
 langcode: en
-status: false
+status: true
 dependencies:
   config:
     - facets.facet.country
@@ -10,8 +10,8 @@ dependencies:
     - iied_tw
 id: iied_tw_country_2
 theme: iied_tw
-region: header
-weight: -9
+region: content
+weight: -5
 provider: null
 plugin: 'facet_block:country'
 settings:

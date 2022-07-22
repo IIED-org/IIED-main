@@ -10,7 +10,7 @@ field_name: field_iied_user_id
 entity_type: taxonomy_term
 bundle: person
 label: 'IIED user ID'
-description: '<big><b><i>Hint: </b>If the Author is an IIED Staff member, please let the web team know and they will complete this field later (to enable linking to the Staff profile on the main IIED site).'
+description: '<big><i><strong>Hint: </strong>If the Author is an IIED Staff member, please let the web team know and they will complete this field later (to enable linking to the Staff profile on the main IIED site).</i></big>'
 required: false
 translatable: false
 default_value: {  }

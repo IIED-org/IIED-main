@@ -12,7 +12,7 @@ dependencies:
 id: iied_tw_editoroptionsmenu
 theme: iied_tw
 region: header
-weight: 0
+weight: -9
 provider: null
 plugin: 'block_content:997e941d-85a8-4bfc-9ab7-efa990ac000a'
 settings:

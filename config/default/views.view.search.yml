@@ -9,10 +9,13 @@ dependencies:
     - user.role.authenticated
   module:
     - better_exposed_filters
+    - rest
     - search_api
+    - serialization
     - text
     - user
     - views_autocomplete_filters
+    - views_data_export
 id: search
 label: Search
 module: views
@@ -270,10 +273,10 @@ display:
             label: Relevance
             field_identifier: relevance
           exposed: true
-        field_date_published:
-          id: field_date_published
+        field_sort_date:
+          id: field_sort_date
           table: search_api_index_acquia_search_index
-          field: field_date_published
+          field: field_sort_date
           relationship: none
           group_type: group
           admin_label: ''
@@ -281,7 +284,7 @@ display:
           order: DESC
           expose:
             label: Date
-            field_identifier: Date
+            field_identifier: field_sort_date
           exposed: true
         title:
           id: title
@@ -306,7 +309,7 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: views_autocomplete_filters_search_api_fulltext
-          operator: or
+          operator: and
           value: ''
           group: 1
           exposed: true
@@ -359,7 +362,7 @@ display:
       style:
         type: default
         options:
-          row_class: 'row border mb-2'
+          row_class: 'border-bottom mb-2'
           default_row_class: false
           uses_fields: false
       row:
@@ -398,6 +401,34 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - 'url.query_args:sort_by'
+        - 'user.node_grants:view'
+        - user.roles
+      tags:
+        - 'config:field.storage.node.body'
+        - 'config:search_api.index.acquia_search_index'
+  data_export_1:
+    id: data_export_1
+    display_title: 'Data export'
+    display_plugin: data_export
+    position: 2
+    display_options:
+      display_extenders: {  }
+      path: export
+      filename: ''
+      automatic_download: true
+      facet_settings: none
+      store_in_public_file_directory: null
+      custom_redirect_path: false
+      redirect_to_display: none
+      include_query_params: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - request_format
+        - url
         - 'url.query_args:sort_by'
         - 'user.node_grants:view'
         - user.roles
