@@ -8,8 +8,8 @@ dependencies:
   module:
     - search_api
 id: type
-name: Type
-weight: -1
+name: 'Document type'
+weight: 1
 min_count: 1
 url_alias: type
 facet_source_id: 'search_api:views_page__search__page_2'
@@ -22,7 +22,7 @@ keep_hierarchy_parents_active: false
 hierarchy:
   type: taxonomy
   config: {  }
-expand_hierarchy: false
+expand_hierarchy: true
 enable_parent_when_child_gets_disabled: false
 widget:
   type: checkbox
@@ -53,16 +53,41 @@ processor_configs:
       sort: 30
     settings:
       sort: DESC
+  dependent_processor:
+    processor_id: dependent_processor
+    weights:
+      build: 5
+    settings:
+      content_type:
+        enable: true
+        condition: values
+        values: publication
+        negate: false
+      country:
+        enable: false
+        condition: null
+        values: ''
+        negate: false
+      theme:
+        enable: false
+        condition: null
+        values: ''
+        negate: false
+      vocabulary:
+        enable: false
+        condition: null
+        values: ''
+        negate: false
   display_value_widget_order:
     processor_id: display_value_widget_order
     weights:
       sort: 40
     settings:
       sort: ASC
-  list_item:
-    processor_id: list_item
+  hierarchy_processor:
+    processor_id: hierarchy_processor
     weights:
-      build: 5
+      build: 100
     settings: {  }
   translate_entity:
     processor_id: translate_entity

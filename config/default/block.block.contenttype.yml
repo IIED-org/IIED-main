@@ -1,0 +1,44 @@
+uuid: 4fa04701-6505-4730-9bf9-bb853dc64cb4
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.content_type
+  module:
+    - context
+    - facets
+  theme:
+    - iied_tw
+id: contenttype
+theme: iied_tw
+region: content
+weight: -7
+provider: null
+plugin: 'facet_block:content_type'
+settings:
+  id: 'facet_block:content_type'
+  label: 'Filter by type'
+  label_display: visible
+  provider: facets
+  context_mapping: {  }
+  block_id: contenttype
+visibility:
+  user_status:
+    id: user_status
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    user_status:
+      viewing_profile: '0'
+      logged_viewing_profile: '0'
+      own_page_true: '0'
+      field_value: '0'
+    user_fields: uid
+  context_all:
+    id: context_all
+    negate: null
+    values: ''
+  context:
+    id: context
+    negate: null
+    values: ''
