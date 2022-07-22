@@ -59,8 +59,8 @@ class RewriteInlineImageStyles extends ProcessPluginBase {
         $file_managed = $query->execute()->fetchAll();
 
         $files = \Drupal::entityTypeManager()
-        ->getStorage('file')
-        ->loadByProperties(['filename' => $file_name]);
+          ->getStorage('file')
+          ->loadByProperties(['filename' => $file_name]);
 
         $fid = $file_managed[0]->fid;
 
@@ -90,17 +90,15 @@ class RewriteInlineImageStyles extends ProcessPluginBase {
     }
 
     // Add rewrites for pattersn like src="/files/filename.ext" > src="/sites/default/files/filename.ext"
-    $webroot_files_pattern = '/\/files\/(.*?.(?:png|jpeg|jpg|gif|bmp|pdf))/';
+    $webroot_files_pattern = '/src\="\/files\/(.*?.(?:png|jpeg|jpg|gif|bmp|pdf))"/';
     preg_match_all($webroot_files_pattern, $value, $webroot_filesmatches);
     if (is_array($webroot_filesmatches[0])) {
       foreach ($webroot_filesmatches[0] as $key => $original_path) {
-        $webroot_file_new_path = '/sites/default' . $original_path;
-        $value = str_replace($original_path, $webroot_file_new_path, $value);
+        $webroot_file_new_string = 'src="/sites/default/files/' . $webroot_filesmatches[1][$key] . '"';
+        $value = str_replace($original_path, $webroot_file_new_string, $value);
       }
     }
 
     return $value;
-
   }
-
 }
