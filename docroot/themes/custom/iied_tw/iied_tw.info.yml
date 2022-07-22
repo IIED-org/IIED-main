@@ -20,6 +20,7 @@ regions:
   help: Help
   preface: Preface
   content: Content
+  sidebar: Sidebar
   postscript: Postscript
   footer: Footer
 
