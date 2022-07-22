@@ -9,7 +9,7 @@ dependencies:
     - search_api
 id: theme
 name: Theme
-weight: -2
+weight: -3
 min_count: 1
 url_alias: theme
 facet_source_id: 'search_api:views_page__search__page_2'

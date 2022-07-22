@@ -3250,6 +3250,10 @@ hr{
   margin-top: -0.75rem;
 }
 
+.-mb-px{
+  margin-bottom: -1px;
+}
+
 .block{
   display: block;
 }
@@ -5476,6 +5480,10 @@ hr{
     max-width: -webkit-max-content;
     max-width: -moz-max-content;
     max-width: max-content;
+  }
+
+  .lg\:flex-1{
+    flex: 1 1 0%;
   }
 
   .lg\:grid-cols-12{

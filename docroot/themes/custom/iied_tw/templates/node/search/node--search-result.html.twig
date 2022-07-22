@@ -1,0 +1,44 @@
+{#
+/*
+*
+ */
+#}
+
+
+<a href="{{ url }}" class="hover:no-underline">
+  <div
+    class="flex h-full p-2 overflow-hidden bg-white border-b border-gray-300 grow hover:bg-gray-100"
+  >
+    <div class="w-3/12 p-2">
+      {% block image %} 
+      {% set image_uri = node.field_main_image|file_uri %}
+      {% set image_alt = node.field_main_image.alt %} {% if image_uri is not
+      null %}
+      <img
+        class="object-cover h-auto rounded"
+        src="{{ image_uri|image_style('card_256') }}"
+        alt="{{ image_alt }}"
+      />
+      {% endif %} {% endblock %}
+    </div>
+
+    <div class="flex flex-col justify-between w-9/12 p-2">
+    {% block main %} 
+      <h5 class="mb-2 text-xl leading-relaxed text-gray-900">
+        {{ node.label }}
+      </h5>
+      <div class="mb-2 text-gray-700">
+      {{ content.search_api_excerpt }} 
+      </div>
+      {% endblock %}
+      {% block meta %}
+      <div class="text-gray-500">
+        {{ node.type.entity.label() }}, {{ node.getCreatedTime|date('d F Y')
+        }}
+      </div>
+      {% endblock %}
+    </div>
+  </div>
+</a>
+
+

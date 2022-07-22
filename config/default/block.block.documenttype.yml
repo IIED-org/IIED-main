@@ -1,0 +1,44 @@
+uuid: a3229dad-6c3e-4567-8933-b88a8af92b93
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.type
+  module:
+    - context
+    - facets
+  theme:
+    - iied_tw
+id: documenttype
+theme: iied_tw
+region: content
+weight: -6
+provider: null
+plugin: 'facet_block:type'
+settings:
+  id: 'facet_block:type'
+  label: 'Filter by document type'
+  label_display: visible
+  provider: facets
+  context_mapping: {  }
+  block_id: documenttype
+visibility:
+  user_status:
+    id: user_status
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    user_status:
+      viewing_profile: '0'
+      logged_viewing_profile: '0'
+      own_page_true: '0'
+      field_value: '0'
+    user_fields: uid
+  context_all:
+    id: context_all
+    negate: null
+    values: ''
+  context:
+    id: context
+    negate: null
+    values: ''

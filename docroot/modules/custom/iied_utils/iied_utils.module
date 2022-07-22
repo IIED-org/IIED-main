@@ -17,48 +17,48 @@
  * @param \Drupal\search_api\Query\QueryInterface $query
  *   The Search API query object representing the executed search query.
  */
-function iied_utils_search_api_solr_query_alter(\Solarium\Core\Query\QueryInterface $solarium_query, \Drupal\search_api\Query\QueryInterface $query) {
-  // To get a list of solrium events:
-  // @see http://solarium.readthedocs.io/en/stable/customizing-solarium/#plugin-system
-  // If the Search API query has a 'my_custom_boost' option, use the edsimax
-  // query handler and add some boost queries.
-//  if ($query->getOption('my_custom_boost')) {
-    // $solr_field_names maps search_api field names to real field names in
-    // the Solr index.
-    $solr_field_names = $query->getIndex()->getServerInstance()->getBackend()->getSolrFieldNames($query->getIndex());
+// function iied_utils_search_api_solr_query_alter(\Solarium\Core\Query\QueryInterface $solarium_query, \Drupal\search_api\Query\QueryInterface $query) {
+//   // To get a list of solrium events:
+//   // @see http://solarium.readthedocs.io/en/stable/customizing-solarium/#plugin-system
+//   // If the Search API query has a 'my_custom_boost' option, use the edsimax
+//   // query handler and add some boost queries.
+// //  if ($query->getOption('my_custom_boost')) {
+//     // $solr_field_names maps search_api field names to real field names in
+//     // the Solr index.
+//     $solr_field_names = $query->getIndex()->getServerInstance()->getBackend()->getSolrFieldNames($query->getIndex());
 
-    /** @var \Solarium\Component\EdisMax $edismax */
-    $edismax = $solarium_query->getEDisMax();
+//     /** @var \Solarium\Component\EdisMax $edismax */
+//     $edismax = $solarium_query->getEDisMax();
 
-   //  $keys = $query->getKeys();
-   //  if (is_array($keys)) {
-   //    $keys = implode(' ', $keys);
-   //  }
-   //
-   //  if ($keys) {
-   //    $boost_queries['title_exact_phrase'] = [
-   //     'query' => $solr_field_names['title'] . ':' . $solarium_query->getHelper()->escapePhrase($keys) . '^5.0',
-   //   ];
-   //   $edismax->addBoostQueries($boost_queries);
-   // }
+//    //  $keys = $query->getKeys();
+//    //  if (is_array($keys)) {
+//    //    $keys = implode(' ', $keys);
+//    //  }
+//    //
+//    //  if ($keys) {
+//    //    $boost_queries['title_exact_phrase'] = [
+//    //     'query' => $solr_field_names['title'] . ':' . $solarium_query->getHelper()->escapePhrase($keys) . '^5.0',
+//    //   ];
+//    //   $edismax->addBoostQueries($boost_queries);
+//    // }
 
-    // Boost documents by date.
-    // @see https://www.drupal.org/project/search_api_solr/issues/2855329
-    $boost_functions = 'recip(abs(ms(NOW/HOUR,' . $solr_field_names['field_date_published'] . ')),3.16e-11,1,.4)^21.0';
-    $edismax->setBoostFunctions($boost_functions);
+//     // Boost documents by date.
+//     // @see https://www.drupal.org/project/search_api_solr/issues/2855329
+//     $boost_functions = 'recip(abs(ms(NOW/HOUR,' . $solr_field_names['aggregated_field_date'] . ')),3.16e-11,1,.4)^21.0';
+//     $edismax->setBoostFunctions($boost_functions);
 
-    // Avoid the conversion into a lucene parser expression, keep edismax.
-    $solarium_query->addParam('defType', 'edismax');
-//  }
-}
+//     // Avoid the conversion into a lucene parser expression, keep edismax.
+//     $solarium_query->addParam('defType', 'edismax');
+// //  }
+// }
 
-function computed_field_field_product_code_new_compute($entity_type_manager, $entity, $fields, $delta) {
-  $value = $entity->field_product_code->value;
-  if (!$value) {
-    $value = strval($entity->field_a_serial->value) . $entity->field_lit_code->value;
-  }
-  return $value;
-}
+// function computed_field_field_product_code_new_compute($entity_type_manager, $entity, $fields, $delta) {
+//   $value = $entity->field_product_code->value;
+//   if (!$value) {
+//     $value = strval($entity->field_a_serial->value) . $entity->field_lit_code->value;
+//   }
+//   return $value;
+// }
 
 // Hide work programmes field if field_date_published before 1 April 2019
 use Drupal\Core\Form\FormStateInterface;

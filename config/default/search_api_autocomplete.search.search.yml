@@ -5,7 +5,6 @@ dependencies:
   config:
     - search_api.index.acquia_search_index
     - views.view.search
-    - core.entity_view_mode.taxonomy_term.search_autocomplete
   module:
     - views
     - search_api_autocomplete
@@ -30,7 +29,7 @@ suggester_settings:
         publication: ''
       'entity:taxonomy_term':
         collection: ''
-        person: search_autocomplete
+        person: ''
         theme: ''
 suggester_weights:
   live_results: -50

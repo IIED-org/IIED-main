@@ -1,4 +1,4 @@
-uuid: d3e6ce17-129f-4258-b966-44529ea8c509
+uuid: c41d320e-64c0-4a7b-b77d-52850f2c4e4c
 langcode: en
 status: true
 dependencies:
@@ -7,13 +7,13 @@ dependencies:
     - views.view.search
   module:
     - search_api
-id: country
-name: Country
-weight: 0
+id: content_type
+name: 'Content type'
+weight: -1
 min_count: 1
-url_alias: country
+url_alias: content_type
 facet_source_id: 'search_api:views_page__search__page_2'
-field_identifier: field_area_list
+field_identifier: type
 query_operator: and
 hard_limit: 0
 exclude: false
@@ -28,13 +28,13 @@ widget:
   type: checkbox
   config:
     show_numbers: true
-    soft_limit: 10
+    soft_limit: 0
     show_reset_link: true
-    reset_text: 'Show all items'
+    reset_text: 'Show all'
     hide_reset_when_no_selection: false
     soft_limit_settings:
-      show_less_label: 'Show fewer areas'
-      show_more_label: 'Show more areas'
+      show_less_label: 'Show less'
+      show_more_label: 'Show more'
 empty_behavior:
   behavior: none
 only_visible_when_facet_source_is_visible: true
@@ -46,33 +46,30 @@ processor_configs:
     weights:
       sort: 20
     settings:
-      sort: ASC
+      sort: DESC
+  combine_processor:
+    processor_id: combine_processor
+    weights:
+      build: -8
+    settings:
+      country:
+        combine: false
+        mode: null
+      theme:
+        combine: false
+        mode: null
+      type:
+        combine: false
+        mode: null
+      vocabulary:
+        combine: true
+        mode: union
   count_widget_order:
     processor_id: count_widget_order
     weights:
       sort: 30
     settings:
       sort: DESC
-  dependent_processor:
-    processor_id: dependent_processor
-    weights:
-      build: 5
-    settings:
-      content_type:
-        enable: true
-        condition: values
-        values: publication
-        negate: false
-      theme:
-        enable: false
-        condition: null
-        values: ''
-        negate: false
-      type:
-        enable: false
-        condition: null
-        values: ''
-        negate: false
   display_value_widget_order:
     processor_id: display_value_widget_order
     weights:
@@ -82,16 +79,16 @@ processor_configs:
   hierarchy_processor:
     processor_id: hierarchy_processor
     weights:
-      build: 100
+      build: -4
     settings: {  }
-  translate_country:
-    processor_id: translate_country
+  translate_entity:
+    processor_id: translate_entity
     weights:
-      build: 5
+      build: -9
     settings: {  }
   url_processor_handler:
     processor_id: url_processor_handler
     weights:
       pre_query: 50
-      build: 15
+      build: -10
     settings: {  }

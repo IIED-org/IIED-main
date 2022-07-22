@@ -48,7 +48,7 @@ process:
       plugin: default_value
       default_value: 'full_html'
   field_position_short: field_position_short
-  field_email: mail
+  field_email: field_email
   field_languages: field_languages
   field_standfirst/value:
     -

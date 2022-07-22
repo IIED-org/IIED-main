@@ -16,7 +16,7 @@ third_party_settings:
 id: iied_tw_views_block__popular_terms_block_1
 theme: iied_tw
 region: header
-weight: -13
+weight: -15
 provider: null
 plugin: 'views_block:popular_terms-block_1'
 settings:
