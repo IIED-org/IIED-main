@@ -59,8 +59,8 @@ class RewriteInlineImageStyles extends ProcessPluginBase {
         $file_managed = $query->execute()->fetchAll();
 
         $files = \Drupal::entityTypeManager()
-        ->getStorage('file')
-        ->loadByProperties(['filename' => $file_name]);
+          ->getStorage('file')
+          ->loadByProperties(['filename' => $file_name]);
 
         $fid = $file_managed[0]->fid;
 
@@ -100,7 +100,5 @@ class RewriteInlineImageStyles extends ProcessPluginBase {
     }
 
     return $value;
-
   }
-
 }
