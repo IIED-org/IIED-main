@@ -1,8 +1,9 @@
-uuid: 77110612-366d-4025-abf1-01844c5aad62
+uuid: 9929ba07-6e39-4cda-aa9b-d81f6ac07238
 langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.taxonomy_term.full
     - field.field.taxonomy_term.global.layout_builder__layout
     - taxonomy.vocabulary.global
   module:
@@ -20,8 +21,8 @@ third_party_settings:
         layout_settings:
           label: ''
         components:
-          71819018-e9a9-4de5-bb34-f0e5266fd836:
-            uuid: 71819018-e9a9-4de5-bb34-f0e5266fd836
+          f73ff920-a65d-48ca-b126-2933182d9bd5:
+            uuid: f73ff920-a65d-48ca-b126-2933182d9bd5
             region: content
             configuration:
               id: 'field_block:taxonomy_term:global:description'
@@ -35,6 +36,32 @@ third_party_settings:
                 third_party_settings: {  }
             weight: 0
             additional: {  }
+          d73372ed-88d3-4255-9304-e2f11083cab4:
+            uuid: d73372ed-88d3-4255-9304-e2f11083cab4
+            region: content
+            configuration:
+              id: 'field_block:taxonomy_term:global:name'
+              label: Name
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: string
+                label: hidden
+                settings:
+                  link_to_entity: false
+                third_party_settings:
+                  ds:
+                    ft:
+                      id: default
+                      settings:
+                        lb: ''
+                        lb-col: false
+                        classes: {  }
+            weight: 1
+            additional: {  }
         third_party_settings: {  }
   layout_builder_restrictions:
     allowed_block_categories: {  }
@@ -46,10 +73,10 @@ third_party_settings:
       blacklisted_blocks: {  }
       whitelisted_blocks: {  }
       restricted_categories: {  }
-id: taxonomy_term.global.default
+id: taxonomy_term.global.full
 targetEntityType: taxonomy_term
 bundle: global
-mode: default
+mode: full
 content:
   description:
     type: text_default

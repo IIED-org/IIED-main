@@ -1,6 +1,5 @@
 display:
   default:
-    display_title: Default
     display_options:
       fields:
         type:
@@ -11,9 +10,6 @@ display:
           label: 'පාවිච්චි කරන්නා'
         link:
           label: මෙහෙයුම්
-      exposed_form:
-        options:
-          submit_button: Filter
       filters:
         type:
           expose:

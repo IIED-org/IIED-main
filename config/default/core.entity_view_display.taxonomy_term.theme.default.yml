@@ -9,6 +9,7 @@ dependencies:
     - taxonomy.vocabulary.theme
   module:
     - layout_builder
+    - layout_builder_restrictions
     - link
     - text
 third_party_settings:
@@ -22,6 +23,27 @@ third_party_settings:
           label: ''
         components: {  }
         third_party_settings: {  }
+  layout_builder_restrictions:
+    allowed_block_categories: {  }
+    entity_view_mode_restriction:
+      allowed_layouts:
+        - tw-1-2-col-grid
+        - tw-1-2-4-col-grid
+        - tw-container
+      blacklisted_blocks: {  }
+      whitelisted_blocks: {  }
+      restricted_categories:
+        - 'Better Social Sharing Buttons'
+        - 'Chaos Tools'
+        - Dashboard
+        - Debugging
+        - Devel
+        - Facets
+        - 'Facets summary (Experimental)'
+        - Help
+        - 'IIED Utilities'
+        - System
+        - User
 id: taxonomy_term.theme.default
 targetEntityType: taxonomy_term
 bundle: theme

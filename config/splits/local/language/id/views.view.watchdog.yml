@@ -1,6 +1,5 @@
 display:
   default:
-    display_title: Default
     display_options:
       fields:
         type:
@@ -11,9 +10,6 @@ display:
           label: Pengguna
         link:
           label: Operasi-operasi
-      exposed_form:
-        options:
-          submit_button: Filter
       filters:
         type:
           expose:
