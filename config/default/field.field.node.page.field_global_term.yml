@@ -1,0 +1,29 @@
+uuid: d32db1f7-22ef-4eba-b0b4-6d2611e67816
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_global_term
+    - node.type.page
+    - taxonomy.vocabulary.global
+id: node.page.field_global_term
+field_name: field_global_term
+entity_type: node
+bundle: page
+label: 'Global term'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      global: global
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
