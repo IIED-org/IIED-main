@@ -36,9 +36,9 @@
         <h1 class="mb-6">{{ name }}</h1>
         {{ title_suffix }}
 
-        <p>
-        {{ term.description.0.value|striptags }}
-        </p>
+        <div class="prose prose-lg">
+        {{ term.description.0.value }}
+        </div>
     </div>
   <div class="content">
     {{ content }}

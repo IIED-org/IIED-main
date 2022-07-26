@@ -13,7 +13,7 @@
 {% if content %}
   <div{{ attributes.addClass('mb-12') }}>
       {% if content.first %}
-        <div {{ region_attributes.first.addClass('container') }}>
+        <div {{ region_attributes.first.addClass('container py-4') }}>
           {{ content.insert_before }}
           {{ content.controls }}
           {{ content.first }}
