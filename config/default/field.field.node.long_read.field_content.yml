@@ -13,11 +13,12 @@ dependencies:
     - paragraphs.paragraphs_type.image_wide
     - paragraphs.paragraphs_type.in_page_menu
     - paragraphs.paragraphs_type.info_box
-    - paragraphs.paragraphs_type.logo_block
     - paragraphs.paragraphs_type.media_embed
     - paragraphs.paragraphs_type.quote
     - paragraphs.paragraphs_type.section
-    - paragraphs.paragraphs_type.stories_cta
+    - paragraphs.paragraphs_type.stories_block
+    - paragraphs.paragraphs_type.stories_curated_content
+    - paragraphs.paragraphs_type.stories_link_list
     - paragraphs.paragraphs_type.stories_table
     - paragraphs.paragraphs_type.tab_box
     - paragraphs.paragraphs_type.timeline
@@ -48,8 +49,9 @@ settings:
       video_embed: video_embed
       accordion_box: accordion_box
       quote: quote
-      gallery: gallery
-      stories_cta: stories_cta
+      stories_block: stories_block
+      stories_curated_content: stories_curated_content
+      stories_link_list: stories_link_list
       in_page_menu: in_page_menu
       logo_block: logo_block
       stories_table: stories_table
@@ -116,7 +118,7 @@ settings:
         enabled: false
       stories_cta:
         weight: 35
-        enabled: true
+        enabled: false
       stories_curated_content:
         weight: 36
         enabled: false

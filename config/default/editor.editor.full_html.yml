@@ -19,7 +19,6 @@ settings:
           items:
             - Bold
             - Italic
-            - Strike
             - Superscript
             - Subscript
             - '-'
@@ -50,6 +49,8 @@ settings:
         -
           name: Tools
           items:
+            - PasteText
+            - PasteFromWord
             - ShowBlocks
             - Source
   plugins:
