@@ -14,11 +14,12 @@ Card for use in a slider only
             {% set image_uri = node.field_cover_image|file_uri %}
             {% set image_alt = node.field_cover_image.alt %}
             {% if image_uri is not null %}
-              <img class="object-cover w-3/12 h-auto" src="{{ image_uri|image_style('search_cover') }}" alt="{{ image_alt }}" />
+             <div class="m-auto transition duration-300 ease-out shadow-lg w-fit sm:w-fit sm:-rotate-2 group-hover:-rotate-1 group-hover:scale-105">
+              <img src="{{ image_uri|image_style('card_cover') }}" alt="{{ image_alt }}" />
+              </div>
             {% endif %}
           {% else %}
-           <div class="m-auto transition duration-300 ease-out shadow-lg w-fit sm:w-fit sm:-rotate-2 group-hover:-rotate-1 group-hover:scale-105"
-              />
+           <div class="m-auto transition duration-300 ease-out shadow-lg w-fit sm:w-fit sm:-rotate-2 group-hover:-rotate-1 group-hover:scale-105">
              {{ node.field_media[0].entity|view('card_cover') }}
         </div>
           {% endif %}

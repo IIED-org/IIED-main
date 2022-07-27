@@ -5,9 +5,10 @@ dependencies:
   config:
     - field.storage.node.field_content
     - node.type.long_read
-    - paragraphs.paragraphs_type.about_the_author
+    - paragraphs.paragraphs_type.accordion_box
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.file_upload
+    - paragraphs.paragraphs_type.gallery
     - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.image_wide
     - paragraphs.paragraphs_type.in_page_menu
@@ -38,7 +39,6 @@ settings:
   handler: 'default:paragraph'
   handler_settings:
     target_bundles:
-      about_the_author: about_the_author
       basic_text: basic_text
       file_upload: file_upload
       image: image
@@ -47,11 +47,13 @@ settings:
       media_embed: media_embed
       section: section
       video_embed: video_embed
+      accordion_box: accordion_box
       quote: quote
       stories_block: stories_block
       stories_curated_content: stories_curated_content
       stories_link_list: stories_link_list
       in_page_menu: in_page_menu
+      logo_block: logo_block
       stories_table: stories_table
       tab_box: tab_box
       timeline: timeline
@@ -59,10 +61,10 @@ settings:
     target_bundles_drag_drop:
       about_the_author:
         weight: 14
-        enabled: true
+        enabled: false
       accordion_box:
         weight: 27
-        enabled: false
+        enabled: true
       basic_text:
         weight: 15
         enabled: true
@@ -71,7 +73,7 @@ settings:
         enabled: true
       gallery:
         weight: 34
-        enabled: false
+        enabled: true
       image:
         weight: 17
         enabled: true
@@ -89,7 +91,7 @@ settings:
         enabled: false
       logo_block:
         weight: 39
-        enabled: false
+        enabled: true
       media_embed:
         weight: 21
         enabled: true
@@ -113,16 +115,16 @@ settings:
         enabled: true
       stories_block:
         weight: 34
-        enabled: true
+        enabled: false
       stories_cta:
         weight: 35
         enabled: false
       stories_curated_content:
         weight: 36
-        enabled: true
+        enabled: false
       stories_link_list:
         weight: 37
-        enabled: true
+        enabled: false
       stories_quote:
         weight: 38
         enabled: false

@@ -1646,6 +1646,14 @@ hr{
   content: var(--tw-content);
 }
 
+.keynumber{
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  font-weight: 300;
+  --tw-text-opacity: 1;
+  color: rgb(0 169 213 / var(--tw-text-opacity));
+}
+
 /* Components -- twig templates */
 
 /* Cards */
@@ -1662,7 +1670,8 @@ hr{
     @apply list-disc list-inside;
   } */
 
-.box-outline, 
+.box, 
+  .box-outline, 
   .boxbox{
   border-radius: 0.75rem;
   border-width: 1px;
@@ -1671,19 +1680,31 @@ hr{
   padding: 1rem;
 }
 
+.box h2, 
+  .box h3, 
+  .box h4, 
+  .box h5{
+  margin-top: 0.5rem;
+}
+
 .bg-fill{
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
-  padding: 1rem;
 }
 
 .bg-green{
   --tw-bg-opacity: 1;
-  background-color: rgb(170 192 44 / var(--tw-bg-opacity));
-  padding: 1rem;
+  background-color: rgb(200 222 74 / var(--tw-bg-opacity));
 }
 
-.image-caption{
+.bg-blue{
+  --tw-bg-opacity: 1;
+  background-color: rgb(30 209 253 / var(--tw-bg-opacity));
+}
+
+.media-caption, 
+  .figure-caption, 
+  .image-caption{
   margin-top: 0.25rem;
   font-size: 1rem;
   line-height: 1.5rem;
@@ -2532,18 +2553,18 @@ hr{
 }
 
 .odd .rounded-odd-even{
-  border-top-left-radius: 0.75rem;
-}
-
-.even .rounded-odd-even{
   border-top-right-radius: 0.75rem;
 }
 
+.even .rounded-odd-even{
+  border-top-left-radius: 0.75rem;
+}
+
 .odd .rounded-odd-even:before {
-  content: url(/themes/custom/iied_tw/templates/layout/icons/corner-tr.svg);
+  content: url(/themes/custom/iied_tw/templates/layout/icons/corner-bl.svg);
   position: absolute;
   top: -12px;
-  right: 0;
+  left: 0;
   width: 12px;
   height: 12px;
   margin: 0 0 0 0px;
@@ -2551,10 +2572,10 @@ hr{
 }
 
 .even .rounded-odd-even:before {
-  content: url(/themes/custom/iied_tw/templates/layout/icons/corner-bl.svg);
+  content: url(/themes/custom/iied_tw/templates/layout/icons/corner-tr.svg);
   position: absolute;
   top: -12px;
-  left: 0;
+  right: 0;
   width: 12px;
   height: 12px;
   margin: 0 0 0 0px;
@@ -2902,6 +2923,10 @@ hr{
   margin-bottom: -1px;
 }
 
+.mt-0{
+  margin-top: 0px;
+}
+
 .-mt-3{
   margin-top: -0.75rem;
 }
@@ -3068,6 +3093,10 @@ hr{
 
 .w-5{
   width: 1.25rem;
+}
+
+.w-1\/2{
+  width: 50%;
 }
 
 .w-3{
@@ -3627,6 +3656,10 @@ hr{
   padding-bottom: 1.25rem;
 }
 
+.text-left{
+  text-align: left;
+}
+
 .text-center{
   text-align: center;
 }
@@ -3672,6 +3705,10 @@ hr{
 .text-sm{
   font-size: 0.875rem;
   line-height: 1.25rem;
+}
+
+.font-light{
+  font-weight: 300;
 }
 
 .font-bold{
@@ -3991,6 +4028,10 @@ hr{
 .hover\:brightness-95:hover{
   --tw-brightness: brightness(.95);
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
+.focus\:border-b-2:focus{
+  border-bottom-width: 2px;
 }
 
 .focus\:border-iiedblue-500:focus{
@@ -4487,10 +4528,6 @@ hr{
     width: 25%;
   }
 
-  .md\:w-1\/2{
-    width: 50%;
-  }
-
   .md\:w-10\/12{
     width: 83.333333%;
   }
@@ -4531,10 +4568,6 @@ hr{
 
   .md\:pl-4{
     padding-left: 1rem;
-  }
-
-  .md\:text-left{
-    text-align: left;
   }
 
   .md\:text-lg{
@@ -5046,6 +5079,10 @@ hr{
 
   .lg\:col-span-12{
     grid-column: span 12 / span 12;
+  }
+
+  .lg\:col-start-5{
+    grid-column-start: 5;
   }
 
   .lg\:-ml-20{

@@ -26,6 +26,7 @@ third_party_settings:
     regions:
       content:
         - taxonomy_term_title
+        - search_api_excerpt
     fields:
       taxonomy_term_title:
         plugin_id: taxonomy_term_title
@@ -67,11 +68,15 @@ id: taxonomy_term.theme.search_autocomplete
 targetEntityType: taxonomy_term
 bundle: theme
 mode: search_autocomplete
-content: {  }
+content:
+  search_api_excerpt:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   description: true
   field_legacy_code: true
   field_link: true
   langcode: true
   layout_builder__layout: true
-  search_api_excerpt: true

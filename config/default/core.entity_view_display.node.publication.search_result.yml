@@ -61,95 +61,13 @@ third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-  ds:
-    layout:
-      id: ds_1col_wrapper
-      library: null
-      disable_css: false
-      entity_classes: all_classes
-      settings:
-        classes:
-          layout_class: {  }
-          ds_content: {  }
-        wrappers:
-          ds_content: div
-        outer_wrapper: div
-        attributes: ''
-        link_attribute: tokens
-        link_custom: '[node:url]'
-        label: ''
-    regions:
-      ds_content:
-        - group_media
-        - 'dynamic_block_field:node-cover_image_search'
-        - group_result
-        - search_api_excerpt
-        - node_title
-        - group_meta
-        - field_date_published
-        - field_document_type
-        - field_author_s_
-        - field_editor_s_
-    fields:
-      'dynamic_block_field:node-cover_image_search':
-        plugin_id: 'dynamic_block_field:node-cover_image_search'
-        weight: 0
-        label: hidden
-        formatter: default
-        ft:
-          id: expert
-          settings:
-            lb: ''
-            lbw: false
-            lbw-el: ''
-            lbw-cl: ''
-            lbw-at: ''
-            lb-col: false
-            ow: false
-            ow-el: ''
-            ow-cl: ''
-            ow-at: ''
-            ow-def-at: false
-            ow-def-cl: false
-            fis: true
-            fis-el: div
-            fis-cl: 'mr-2 field-image'
-            fis-at: ''
-            fis-def-at: false
-            fi: false
-            fi-el: ''
-            fi-cl: ''
-            fi-at: ''
-            fi-def-at: false
-            prefix: ''
-            suffix: ''
-      node_title:
-        plugin_id: node_title
-        weight: 5
-        label: hidden
-        formatter: default
-        settings:
-          link: false
-          wrapper: h4
-          class: ''
-        ft:
-          id: default
-          settings:
-            lb: ''
-            lb-col: false
-            classes: {  }
   field_group:
     group_result:
       children:
-        - node_title
         - group_meta
-        - field_date_published
-        - field_document_type
-        - field_author_s_
-        - field_editor_s_
       label: Result
       parent_name: group_media
-      region: ds_content
+      region: hidden
       weight: 2
       format_type: html_element
       format_settings:
@@ -164,12 +82,11 @@ third_party_settings:
         speed: fast
     group_media:
       children:
-        - 'dynamic_block_field:node-cover_image_search'
         - group_result
       label: Media
       parent_name: ''
-      region: ds_content
-      weight: 0
+      region: hidden
+      weight: 7
       format_type: html_element
       format_settings:
         classes: media
@@ -182,11 +99,10 @@ third_party_settings:
         effect: none
         speed: fast
     group_meta:
-      children:
-        - search_api_excerpt
+      children: {  }
       label: Extract
       parent_name: group_result
-      region: ds_content
+      region: hidden
       weight: 6
       format_type: html_element
       format_settings:
@@ -239,8 +155,8 @@ content:
             fi-def-at: true
             prefix: ''
             suffix: '  '
-    weight: 9
-    region: ds_content
+    weight: 3
+    region: content
   field_date_published:
     type: datetime_default
     label: hidden
@@ -276,8 +192,8 @@ content:
             fi-def-at: false
             prefix: ''
             suffix: '<span class="meta"> • </span>'
-    weight: 7
-    region: ds_content
+    weight: 1
+    region: content
   field_document_type:
     type: entity_reference_entity_view
     label: hidden
@@ -313,8 +229,8 @@ content:
             fi-def-at: false
             prefix: ''
             suffix: '<span class="meta"> • </span>'
-    weight: 8
-    region: ds_content
+    weight: 2
+    region: content
   field_editor_s_:
     type: entity_reference_label
     label: hidden
@@ -350,13 +266,21 @@ content:
             fi-def-at: false
             prefix: ''
             suffix: '<span class="meta"> (eds.)</span>'
-    weight: 10
-    region: ds_content
+    weight: 4
+    region: content
+  field_media:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 5
+    region: content
   search_api_excerpt:
     settings: {  }
     third_party_settings: {  }
-    weight: 3
-    region: ds_content
+    weight: 0
+    region: content
 hidden:
   body: true
   field_a_serial: true
@@ -372,7 +296,6 @@ hidden:
   field_journal_ref: true
   field_lists: true
   field_lit_code: true
-  field_media: true
   field_meta_tags: true
   field_parent: true
   field_pdf: true

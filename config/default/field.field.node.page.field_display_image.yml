@@ -1,17 +1,18 @@
-uuid: c7fa87a2-e47e-4647-b0de-8d02a863286b
+uuid: 4ead91f6-cba2-4e8f-86a1-ba8c46f90a5f
 langcode: en
 status: true
 dependencies:
   config:
+    - field.storage.node.field_display_image
     - node.type.page
-id: node.page.status
-field_name: status
+id: node.page.field_display_image
+field_name: field_display_image
 entity_type: node
 bundle: page
-label: Published
+label: 'Display image'
 description: ''
 required: false
-translatable: false
+translatable: true
 default_value:
   -
     value: 0

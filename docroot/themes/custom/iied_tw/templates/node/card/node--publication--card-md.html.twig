@@ -16,18 +16,15 @@ For general featured card display
             {% set image_uri = node.field_cover_image|file_uri %}
             {% set image_alt = node.field_cover_image.alt %}
             {% if image_uri is not null %}
-              <img class="object-cover w-3/12 h-auto" src="{{ image_uri }}" alt="{{ image_alt }}" />
+              <div class="m-auto transition duration-300 ease-out shadow-lg w-fit sm:w-fit sm:-rotate-3 group-hover:-rotate-2 group-hover:scale-110">
+              <img src="{{ image_uri|image_style('card_cover') }}" alt="{{ image_alt }}" />
+              <div>  
             {% endif %}
-        {% else %}
-            {# {% set image_uri = node.field_media|file_uri %}
-            {% set image_alt = node.field_media.alt %}
-            {% if image_uri is not null %}
-              <img class="object-cover w-3/12 h-auto" src="{{ image_uri }}" alt="{{ image_alt }}" />
-            {% endif %} #}
-             <div class="m-auto transition duration-300 ease-out shadow-lg w-fit sm:w-fit sm:-rotate-3 group-hover:-rotate-2 group-hover:scale-110">
+            {% else %}
+              <div class="m-auto transition duration-300 ease-out shadow-lg w-fit sm:w-fit sm:-rotate-3 group-hover:-rotate-2 group-hover:scale-110">
               {{ node.field_media[0].entity|view('card_cover') }}
-           </div>
-        {% endif %}
+              </div>
+            {% endif %}
 
             </div>
 
