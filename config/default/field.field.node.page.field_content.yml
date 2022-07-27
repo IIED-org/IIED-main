@@ -7,9 +7,16 @@ dependencies:
     - node.type.page
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.file_upload
+    - paragraphs.paragraphs_type.gallery
+    - paragraphs.paragraphs_type.image
+    - paragraphs.paragraphs_type.image_wide
+    - paragraphs.paragraphs_type.in_page_menu
+    - paragraphs.paragraphs_type.quote
     - paragraphs.paragraphs_type.section
     - paragraphs.paragraphs_type.stories_quote
     - paragraphs.paragraphs_type.stories_table
+    - paragraphs.paragraphs_type.timeline
+    - paragraphs.paragraphs_type.video_embed
   module:
     - entity_reference_revisions
 id: node.page.field_content
@@ -28,13 +35,23 @@ settings:
     target_bundles:
       basic_text: basic_text
       file_upload: file_upload
+      image: image
+      image_wide: image_wide
+      quote: quote
+      gallery: gallery
       section: section
+      in_page_menu: in_page_menu
       stories_quote: stories_quote
       stories_table: stories_table
+      video_embed: video_embed
+      timeline: timeline
     negate: 0
     target_bundles_drag_drop:
       about_the_author:
         weight: 23
+        enabled: false
+      accordion_box:
+        weight: 32
         enabled: false
       basic_text:
         weight: 24
@@ -42,24 +59,36 @@ settings:
       file_upload:
         weight: 25
         enabled: true
+      gallery:
+        weight: 35
+        enabled: true
       image:
         weight: 26
-        enabled: false
+        enabled: true
       image_wide:
         weight: 27
-        enabled: false
+        enabled: true
+      in_page_menu:
+        weight: 39
+        enabled: true
       info_box:
         weight: 28
         enabled: false
       linked_person:
         weight: 29
         enabled: false
+      logo_block:
+        weight: 41
+        enabled: false
       media_embed:
         weight: 30
         enabled: false
+      modal_image:
+        weight: 43
+        enabled: false
       quote:
         weight: 31
-        enabled: false
+        enabled: true
       related_link:
         weight: 32
         enabled: false
@@ -96,7 +125,16 @@ settings:
       stories_views:
         weight: 43
         enabled: false
+      tab:
+        weight: 57
+        enabled: false
+      tab_box:
+        weight: 58
+        enabled: false
+      timeline:
+        weight: 59
+        enabled: true
       video_embed:
         weight: 44
-        enabled: false
+        enabled: true
 field_type: entity_reference_revisions
