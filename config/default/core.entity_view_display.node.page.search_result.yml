@@ -1,8 +1,9 @@
-uuid: 6f06315d-ddcc-4f62-903c-32e98e177377
+uuid: 18ed7f24-a082-44c4-a8b4-e234ddca27a2
 langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.search_result
     - field.field.node.page.body
     - field.field.node.page.field_content
     - field.field.node.page.field_image_caption
@@ -10,8 +11,8 @@ dependencies:
     - field.field.node.page.field_rows
     - node.type.page
   module:
+    - ds
     - layout_builder
-    - text
     - user
 third_party_settings:
   layout_builder:
@@ -19,34 +20,38 @@ third_party_settings:
     allow_custom: false
 _core:
   default_config_hash: g1S3_GLaxq4l3I9RIca5Mlz02MxI2KmOquZpHw59akM
-id: node.page.default
+id: node.page.search_result
 targetEntityType: node
 bundle: page
-mode: default
+mode: search_result
 content:
-  body:
-    type: text_default
+  field_main_image:
+    type: entity_reference_entity_view
     label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 100
+    settings:
+      view_mode: search_cover
+      link: false
+    third_party_settings:
+      ds:
+        ds_limit: ''
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 2
     region: content
-  field_image_caption:
-    type: text_default
-    label: above
+  search_api_excerpt:
     settings: {  }
     third_party_settings: {  }
-    weight: 106
-    region: content
-  links:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 101
+    weight: 1
     region: content
 hidden:
+  body: true
   field_content: true
-  field_main_image: true
+  field_image_caption: true
   field_rows: true
   langcode: true
-  search_api_excerpt: true
+  links: true
   sharing_buttons: true

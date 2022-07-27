@@ -1,0 +1,28 @@
+uuid: 9f043aec-3360-4226-8d48-7f685f304999
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: content_default_
+label: 'Content (default)'
+type: 'canonical_entities:node'
+pattern: '[node:title]'
+selection_criteria:
+  5b7a0b2c-e88c-479c-b08c-1b4ff1798572:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 5b7a0b2c-e88c-479c-b08c-1b4ff1798572
+    context_mapping:
+      node: node
+    bundles:
+      article: article
+      blog: blog
+      event: event
+      long_read: long_read
+      news: news
+      page: page
+      project: project
+selection_logic: and
+weight: -5
+relationships: {  }
