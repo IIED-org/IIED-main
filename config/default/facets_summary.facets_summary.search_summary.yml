@@ -37,21 +37,27 @@ processor_configs:
         value: 'No results found.'
         format: plain_text
 facets:
-  country:
-    checked: true
-    label: Country
-    separator: ', '
-    show_count: false
-    weight: 0
   theme:
     checked: true
     label: Theme
     separator: ', '
     show_count: false
     weight: 0
+  content_type:
+    checked: true
+    label: 'Content type'
+    separator: ', '
+    show_count: false
+    weight: 0
   type:
     checked: true
     label: Type
+    separator: ', '
+    show_count: false
+    weight: 0
+  country:
+    checked: true
+    label: Country
     separator: ', '
     show_count: false
     weight: 0

@@ -16,44 +16,6 @@ third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-  ds:
-    layout:
-      id: ds_1col_wrapper
-      library: null
-      disable_css: false
-      entity_classes: all_classes
-      settings:
-        classes:
-          layout_class: {  }
-          ds_content: {  }
-        wrappers:
-          ds_content: div
-        outer_wrapper: div
-        attributes: ''
-        link_attribute: ''
-        link_custom: ''
-        label: ''
-    regions:
-      ds_content:
-        - taxonomy_term_title
-        - search_api_excerpt
-        - description
-    fields:
-      taxonomy_term_title:
-        plugin_id: taxonomy_term_title
-        weight: 0
-        label: hidden
-        formatter: default
-        settings:
-          link: false
-          wrapper: h5
-          class: ''
-        ft:
-          id: default
-          settings:
-            lb: ''
-            lb-col: false
-            classes: {  }
 id: taxonomy_term.theme.search_result
 targetEntityType: taxonomy_term
 bundle: theme
@@ -73,12 +35,12 @@ content:
             lb-col: false
             classes: {  }
     weight: 1
-    region: ds_content
+    region: content
   search_api_excerpt:
     settings: {  }
     third_party_settings: {  }
     weight: 0
-    region: ds_content
+    region: content
 hidden:
   field_legacy_code: true
   field_link: true
