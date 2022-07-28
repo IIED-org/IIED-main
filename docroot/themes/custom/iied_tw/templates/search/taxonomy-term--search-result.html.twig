@@ -1,0 +1,26 @@
+{% extends '@iied_tw/search/node--search-result.html.twig' %}
+{% block image %} 
+{{ breakpoint() }}
+      {% set image_uri = term.field_main_image|file_uri %}
+      {% set image_alt = term.field_main_image.alt %} {% if image_uri is not
+      null %}
+      <img
+        class="object-cover h-auto rounded"
+        src="{{ image_uri|image_style('card_256') }}"
+        alt="{{ image_alt }}"
+      />
+      {% endif %} 
+{% endblock %}
+{% block main %}
+  <h5 class="mb-2 text-xl leading-relaxed text-gray-900">
+    {{ term.name.value }}
+  </h5>
+  <div class="mb-2 text-gray-700">
+  {{ term.description.0.value|striptags }}
+  </div>
+{% endblock %}
+ {% block meta %}
+  <div class="text-gray-500">
+   {{ term.vid.entity.label }}
+  </div>
+ {% endblock %}
