@@ -248,7 +248,8 @@
             "The language of content entities incorrectly falls back to the default language...":"https://www.drupal.org/files/issues/2021-09-16/3061761-46.patch"
           },
           "drupal/facets": {
-            "AJAX facets broken": "https://www.drupal.org/files/issues/2022-04-21/facets-ajax_not_working-3052574-146.patch"
+            "Add option to show current search string in facet summary": "https://www.drupal.org/files/issues/2022-07-12/facets-current_search_string-2979223-55.patch",
+            "Robustify how ajax finds the facet block": "https://www.drupal.org/files/issues/2022-04-12/facets-ajax-improvements-3013795-36.patch"
           },
           "drupal/ds": {
             "Provide entity context to DS block fields":"https://www.drupal.org/files/issues/2020-10-12/ds-content_entity-2939322-14.patch"
