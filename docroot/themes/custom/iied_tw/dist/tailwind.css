@@ -2985,6 +2985,11 @@ hr{
   border-color: rgb(206 83 158 / var(--tw-border-opacity));
 }
 
+.glb-toolbar {
+  opacity: 1;
+  bottom: 0;
+}
+
 .visible{
   visibility: visible;
 }
