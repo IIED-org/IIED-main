@@ -1,8 +1,0 @@
---- modules/facets_summary/config/schema/facets_summary.processor.schema.yml
-+++ modules/facets_summary/config/schema/facets_summary.processor.schema.yml
-@@ -30,3 +38,5 @@ plugin.plugin_configuration.facets_summary_processor.reset_facets:
-     link_text:
-       type: label
-       label: 'The text to show for the reset link.'
-+
-+# @todo add reset_string + review other values

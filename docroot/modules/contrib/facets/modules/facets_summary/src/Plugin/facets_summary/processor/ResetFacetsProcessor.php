@@ -80,17 +80,15 @@ class ResetFacetsProcessor extends ProcessorPluginBase implements BuildProcessor
     $hasReset = FALSE;
 
     $request_stack = \Drupal::requestStack();
-    // Support 9.3+.
-    // @todo remove switch after 9.3 or greater is required.
-    $request = version_compare(\Drupal::VERSION, '9.3', '>=') ? $request_stack->getMainRequest() : $request_stack->getMasterRequest();
+    $request = $request_stack->getMainRequest();
     if (!empty($request->query)) {
       $query_params = $request->query->all();
     }
 
     // Clear the text if set in the configuration.
     if (isset($configuration['settings']['clear_string'])
-        && $configuration['settings']['clear_string'] === 1
-        && !empty($query_params[$facets_summary->getSearchFilterIdentifier()])) {
+      && $configuration['settings']['clear_string'] === 1
+      && !empty($query_params[$facets_summary->getSearchFilterIdentifier()])) {
       unset($query_params[$facets_summary->getSearchFilterIdentifier()]);
       $hasReset = TRUE;
     }
@@ -152,18 +150,6 @@ class ResetFacetsProcessor extends ProcessorPluginBase implements BuildProcessor
         'facet-summary-item--clear',
       ],
     ];
-    $build['clear_string'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Clear the current search string'),
-      '#default_value' => $config['clear_string'],
-      '#description' => $this->t('If checked, the reset link will also clear the text used for the search.'),
-      '#states' => [
-        'visible' => [
-          // @todo get the processor id (show_string) dynamically
-          ':input[name="facets_summary_settings[show_string][status]"]' => ['checked' => TRUE],
-        ],
-      ],
-    ];
 
     // Place link at necessary position.
     if ($configuration['settings']['position'] == static::POSITION_BEFORE) {
@@ -193,6 +179,18 @@ class ResetFacetsProcessor extends ProcessorPluginBase implements BuildProcessor
       '#title' => $this->t('Reset facets link text'),
       '#default_value' => $config['link_text'],
     ];
+    $build['clear_string'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Clear the current search string'),
+      '#default_value' => $config['clear_string'],
+      '#description' => $this->t('If checked, the reset link will also clear the text used for the search.'),
+      '#states' => [
+        'visible' => [
+          // @todo get the processor id (show_string) dynamically
+          ':input[name="facets_summary_settings[show_string][status]"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
 
     $build['position'] = [
       '#type' => 'select',
@@ -215,6 +213,7 @@ class ResetFacetsProcessor extends ProcessorPluginBase implements BuildProcessor
   public function defaultConfiguration() {
     return [
       'link_text' => '',
+      'clear_string' => FALSE,
       'position' => static::POSITION_BEFORE,
     ];
   }
