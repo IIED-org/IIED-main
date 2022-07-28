@@ -45,6 +45,8 @@ content:
     region: content
 hidden:
   field_content: true
+  field_display_image: true
+  field_global_term: true
   field_main_image: true
   field_rows: true
   langcode: true

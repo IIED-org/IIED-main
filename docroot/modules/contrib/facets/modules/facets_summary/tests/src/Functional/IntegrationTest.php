@@ -253,6 +253,7 @@ class IntegrationTest extends FacetsTestBase {
       'id' => $id,
       'facet_source_id' => 'search_api:views_page__search_api_test_view__page_1',
     ];
+
     $this->drupalGet('admin/config/search/facets/add-facet-summary');
     $this->submitForm($values, 'Save');
     $this->assertSession()->pageTextContains('Caching of view Search API Test Fulltext search view has been disabled.');
@@ -420,6 +421,22 @@ class IntegrationTest extends FacetsTestBase {
     $this->assertSession()->pageTextContains($this->t('Facets Summary Owl has been updated.'));
     $this->assertSession()->fieldValueEquals('facets_summary_settings[reset_facets][settings][link_text]', 'Reset facets');
     $this->assertSession()->fieldValueEquals('facets_summary_settings[reset_facets][settings][position]', ResetFacetsProcessor::POSITION_BEFORE);
+
+    // Clear the current search string checkbox attached
+    // to the reset facets link.
+    // This checkbox depends on the state from the show_string processor.
+    $this->drupalPostForm(NULL, ['facets_summary_settings[show_string][status]' => TRUE], 'Save');
+    $this->assertSession()->checkboxNotChecked('edit-facets-summary-settings-reset-facets-settings-clear-string');
+    $this->drupalPostForm(NULL, ['facets_summary_settings[reset_facets][settings][clear_string]' => TRUE], 'Save');
+    $this->assertSession()->checkboxChecked('edit-facets-summary-settings-reset-facets-settings-clear-string');
+    $this->assertSession()->pageTextContains(t('Facets Summary Owl has been updated.'));
+  }
+
+  /**
+   * Tests configuring reset_string processor.
+   */
+  protected function configureResetStringProcessor() {
+    // @todo implement
   }
 
   /**

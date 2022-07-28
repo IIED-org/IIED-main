@@ -121,4 +121,6 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
+  field_display_image: true
+  field_global_term: true
   field_rows: true

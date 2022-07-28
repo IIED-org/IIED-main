@@ -1,0 +1,9 @@
+{% extends '@iied_tw/search/node--search-result.html.twig' %}
+{% block meta %}
+    {% if node.field_daterange[0].value is not empty %}
+        {% set eventDate = node.field_daterange[0].value %}
+    {% else %}
+        {% set eventDate = node.getCreatedTime %}
+    {% endif %}
+    <div class="text-gray-500">{{ node.type.entity.label() }}, {{ eventDate|date('d F Y') }} </div>
+{% endblock %}
