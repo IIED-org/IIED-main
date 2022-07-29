@@ -366,7 +366,7 @@ processor_settings:
       field_sort_date:
         boost: !!float 21
         resolution: NOW
-        m: '3.16e-11'
+        m: '6.32e-11'
         a: !!float 10
         b: 0.1
   solr_date_range:

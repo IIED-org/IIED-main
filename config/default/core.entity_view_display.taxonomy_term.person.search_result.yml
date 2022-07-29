@@ -34,76 +34,50 @@ dependencies:
   module:
     - ds
     - layout_builder
+    - text
 third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-  ds:
-    layout:
-      id: ds_1col_wrapper
-      library: null
-      disable_css: false
-      entity_classes: all_classes
-      settings:
-        classes:
-          layout_class: {  }
-          ds_content: {  }
-        wrappers:
-          ds_content: div
-        outer_wrapper: div
-        attributes: ''
-        link_attribute: content
-        link_custom: ''
-        label: ''
-    regions:
-      ds_content:
-        - taxonomy_term_title
-    fields:
-      taxonomy_term_title:
-        plugin_id: taxonomy_term_title
-        weight: 1
-        label: hidden
-        formatter: default
-        settings:
-          link: false
-          wrapper: ''
-          class: ''
-        ft:
-          id: expert
-          settings:
-            lb: ''
-            lbw: false
-            lbw-el: ''
-            lbw-cl: ''
-            lbw-at: ''
-            lb-col: false
-            ow: false
-            ow-el: h5
-            ow-cl: ''
-            ow-at: ''
-            ow-def-at: false
-            ow-def-cl: false
-            fis: true
-            fis-el: span
-            fis-cl: field-name
-            fis-at: ''
-            fis-def-at: false
-            fi: false
-            fi-el: span
-            fi-cl: field-author
-            fi-at: ''
-            fi-def-at: false
-            prefix: '<h5 class="mt-2">'
-            suffix: '&nbsp;[Author]</h5>'
 id: taxonomy_term.person.search_result
 targetEntityType: taxonomy_term
 bundle: person
 mode: search_result
-content: {  }
+content:
+  field_author_picture:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_organisation:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings:
+      ds:
+        ds_limit: ''
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 2
+    region: content
+  field_position:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
 hidden:
   description: true
   field_appointed_role: true
-  field_author_picture: true
   field_before_iied: true
   field_biography: true
   field_current_work: true
@@ -115,10 +89,8 @@ hidden:
   field_legacy_iscanonical: true
   field_link: true
   field_name: true
-  field_organisation: true
   field_paragraphs: true
   field_person_type: true
-  field_position: true
   field_position_short: true
   field_quotes: true
   field_research_group: true
