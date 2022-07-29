@@ -9,7 +9,7 @@ id: node.blog.field_tagline
 field_name: field_tagline
 entity_type: node
 bundle: blog
-label: 'Promo text'
+label: Tagline
 description: ''
 required: false
 translatable: true

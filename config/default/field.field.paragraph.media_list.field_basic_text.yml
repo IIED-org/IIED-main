@@ -1,0 +1,21 @@
+uuid: 6ec7e16a-2861-45e1-b16e-b1522d94bd60
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_basic_text
+    - paragraphs.paragraphs_type.media_list
+  module:
+    - text
+id: paragraph.media_list.field_basic_text
+field_name: field_basic_text
+entity_type: paragraph
+bundle: media_list
+label: 'Basic text'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

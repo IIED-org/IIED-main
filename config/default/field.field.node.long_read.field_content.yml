@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.storage.node.field_content
     - node.type.long_read
+    - paragraphs.paragraphs_type.about_the_author
     - paragraphs.paragraphs_type.accordion_box
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.file_upload
@@ -13,12 +14,12 @@ dependencies:
     - paragraphs.paragraphs_type.image_wide
     - paragraphs.paragraphs_type.in_page_menu
     - paragraphs.paragraphs_type.info_box
+    - paragraphs.paragraphs_type.logo_block
     - paragraphs.paragraphs_type.media_embed
+    - paragraphs.paragraphs_type.media_list
+    - paragraphs.paragraphs_type.modal_image
     - paragraphs.paragraphs_type.quote
     - paragraphs.paragraphs_type.section
-    - paragraphs.paragraphs_type.stories_block
-    - paragraphs.paragraphs_type.stories_curated_content
-    - paragraphs.paragraphs_type.stories_link_list
     - paragraphs.paragraphs_type.stories_table
     - paragraphs.paragraphs_type.tab_box
     - paragraphs.paragraphs_type.timeline
@@ -39,6 +40,7 @@ settings:
   handler: 'default:paragraph'
   handler_settings:
     target_bundles:
+      about_the_author: about_the_author
       basic_text: basic_text
       file_upload: file_upload
       image: image
@@ -49,25 +51,28 @@ settings:
       video_embed: video_embed
       accordion_box: accordion_box
       quote: quote
-      stories_block: stories_block
-      stories_curated_content: stories_curated_content
-      stories_link_list: stories_link_list
+      gallery: gallery
       in_page_menu: in_page_menu
       logo_block: logo_block
       stories_table: stories_table
+      modal_image: modal_image
+      media_list: media_list
       tab_box: tab_box
       timeline: timeline
     negate: 0
     target_bundles_drag_drop:
       about_the_author:
         weight: 14
-        enabled: false
+        enabled: true
       accordion_box:
         weight: 27
         enabled: true
       basic_text:
         weight: 15
         enabled: true
+      box:
+        weight: 36
+        enabled: false
       file_upload:
         weight: 16
         enabled: true
@@ -95,9 +100,12 @@ settings:
       media_embed:
         weight: 21
         enabled: true
+      media_list:
+        weight: 46
+        enabled: true
       modal_image:
         weight: 41
-        enabled: false
+        enabled: true
       quote:
         weight: 31
         enabled: true
