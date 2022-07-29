@@ -1,0 +1,30 @@
+{% extends '@iied_tw/search/node--search-result.html.twig' %}
+  {% block image %}
+    {% if content.field_author_picture[0] is not empty %}
+      <div class="w-32 h-auto mx-auto">
+        <img 
+        src="{{ term.field_author_picture.entity.field_media_image.0.entity.uri.value|image_style('medium') }}"
+        alt="{{ term.name.value }}'s picture"
+        class="object-cover w-32 h-32 border-2 border-white rounded-full sm:w-24 sm:h-24 ring-1 ring-iiedblue-500"
+        />
+      </div>
+    {% endif %}
+  {% endblock %}
+{% block main %}
+  <h5 class="mb-2 text-xl leading-relaxed text-gray-900">
+    {{ term.name.value }}
+  </h5>
+  {% if term.field_position.0.value is not empty %}
+    <div class="mb-2 text-gray-700">
+    {{ term.field_position.0.value|striptags|raw }}
+    </div>
+  {% endif %}
+{% endblock %}
+
+  {% block meta %}
+      <div class="text-gray-500">
+      </div>
+  {% endblock %}
+
+
+
