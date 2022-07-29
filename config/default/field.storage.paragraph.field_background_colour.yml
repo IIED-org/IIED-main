@@ -1,0 +1,36 @@
+uuid: 6ea2c995-9547-4f53-8001-fb80f4a84052
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paragraphs
+id: paragraph.field_background_colour
+field_name: field_background_colour
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: bg-gray-100
+      label: Grey
+    -
+      value: bg-iiedblue-10
+      label: Blue
+    -
+      value: bg-iiedgreen-10
+      label: Green
+    -
+      value: bg-iiedpink-10
+      label: Pink
+    -
+      value: bg-iiedorange-10
+      label: Orange
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,45 +1,57 @@
-uuid: f435d27a-3be7-4114-841c-4efd4191d4b7
+uuid: 7cae3df6-eeeb-4a9f-ac81-a519d80f4476
 langcode: en
 status: true
 dependencies:
   config:
-    - filter.format.basic_html
+    - filter.format.restricted_html
   module:
     - ckeditor
-_core:
-  default_config_hash: AqlPmO16LvJI4D0Ih6u4GFQIzqr5OnLgAUSjcUGWk2g
-format: basic_html
+format: restricted_html
 editor: ckeditor
 settings:
   toolbar:
     rows:
       -
         -
+          name: Formatting
+          items:
+            - Bold
+            - Italic
+        -
+          name: Links
+          items:
+            - DrupalLink
+            - DrupalUnlink
+        -
           name: Lists
           items:
             - BulletedList
             - NumberedList
         -
-          name: 'Block Formatting'
+          name: Media
           items:
-            - PasteFromWord
-            - RemoveFormat
+            - Blockquote
+            - DrupalImage
+        -
+          name: Tools
+          items:
+            - Source
   plugins:
     language:
       language_list: un
     stylescombo:
       styles: ''
     wordcount:
-      enable: true
-      show_remaining: true
+      enable: false
+      show_remaining: false
       show_paragraphs: false
-      show_word_count: true
+      show_word_count: false
       show_char_count: false
       count_bytes: false
       count_spaces: false
       count_html: 0
       count_line_breaks: false
-      max_words: 500
+      max_words: -1
       max_chars: -1
       hard_limit: 1
     video_embed:
@@ -50,7 +62,7 @@ settings:
           width: '854'
           height: '480'
 image_upload:
-  status: true
+  status: false
   scheme: public
   directory: inline-images
   max_size: ''

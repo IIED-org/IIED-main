@@ -65,3 +65,5 @@
 'use  The form mode default linked to  paragraph entity( in_page_menu )': paragraph.in_page_menu.default
 'use  The form mode default linked to  paragraph entity( tab )': paragraph.tab.default
 'use  The form mode default linked to  paragraph entity( tab_box )': paragraph.tab_box.default
+'use  The form mode default linked to  paragraph entity( box )': paragraph.box.default
+'use  The form mode default linked to  paragraph entity( media_list )': paragraph.media_list.default

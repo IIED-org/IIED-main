@@ -5,17 +5,24 @@ dependencies:
   config:
     - field.storage.node.field_content
     - node.type.page
+    - paragraphs.paragraphs_type.accordion_box
     - paragraphs.paragraphs_type.basic_text
+    - paragraphs.paragraphs_type.box
     - paragraphs.paragraphs_type.file_upload
     - paragraphs.paragraphs_type.gallery
     - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.image_wide
     - paragraphs.paragraphs_type.in_page_menu
+    - paragraphs.paragraphs_type.info_box
+    - paragraphs.paragraphs_type.media_embed
+    - paragraphs.paragraphs_type.media_list
+    - paragraphs.paragraphs_type.modal_image
     - paragraphs.paragraphs_type.quote
     - paragraphs.paragraphs_type.section
     - paragraphs.paragraphs_type.stories_cta
     - paragraphs.paragraphs_type.stories_quote
     - paragraphs.paragraphs_type.stories_table
+    - paragraphs.paragraphs_type.tab_box
     - paragraphs.paragraphs_type.timeline
     - paragraphs.paragraphs_type.video_embed
   module:
@@ -38,13 +45,21 @@ settings:
       file_upload: file_upload
       image: image
       image_wide: image_wide
+      info_box: info_box
+      media_embed: media_embed
       quote: quote
+      accordion_box: accordion_box
       gallery: gallery
       section: section
+      box: box
+      stories_cta: stories_cta
       in_page_menu: in_page_menu
       stories_quote: stories_quote
       stories_table: stories_table
+      modal_image: modal_image
       video_embed: video_embed
+      media_list: media_list
+      tab_box: tab_box
       timeline: timeline
     negate: 0
     target_bundles_drag_drop:
@@ -53,9 +68,12 @@ settings:
         enabled: false
       accordion_box:
         weight: 32
-        enabled: false
+        enabled: true
       basic_text:
         weight: 24
+        enabled: true
+      box:
+        weight: 36
         enabled: true
       file_upload:
         weight: 25
@@ -83,10 +101,13 @@ settings:
         enabled: false
       media_embed:
         weight: 30
-        enabled: false
+        enabled: true
+      media_list:
+        weight: 46
+        enabled: true
       modal_image:
         weight: 43
-        enabled: false
+        enabled: true
       quote:
         weight: 31
         enabled: true
@@ -131,7 +152,7 @@ settings:
         enabled: false
       tab_box:
         weight: 58
-        enabled: false
+        enabled: true
       timeline:
         weight: 59
         enabled: true

@@ -1,0 +1,21 @@
+uuid: 5a5de07b-50bb-4024-929d-0b463d04880e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_standfirst
+    - node.type.page
+  module:
+    - text
+id: node.page.field_standfirst
+field_name: field_standfirst
+entity_type: node
+bundle: page
+label: Standfirst
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long
