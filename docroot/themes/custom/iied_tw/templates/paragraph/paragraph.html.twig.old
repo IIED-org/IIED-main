@@ -41,25 +41,15 @@
 {%
   set classes = [
     'paragraph',
-    'prose', 
-    'md:prose-lg',
     'paragraph--type--' ~ paragraph.bundle|clean_class,
     view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
     not paragraph.isPublished() ? 'paragraph--unpublished'
   ]
 %}
-
-
-
-
-
 {% block paragraph %}
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
-    <blockquote class="pl-0 text-2xl prose-blockquote font-headline text-iiedpink-700">
-      {{ content.field_quote_text }}
-      <cite class="flex font-sans text-base not-italic font-normal text-gray-700"><span>– </span>{{ content.field_quote_citation }}</cite>
-      </blockquote>
+      {{ content }}
     {% endblock %}
   </div>
 {% endblock paragraph %}

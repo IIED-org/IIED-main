@@ -41,25 +41,23 @@
 {%
   set classes = [
     'paragraph',
-    'prose', 
-    'md:prose-lg',
     'paragraph--type--' ~ paragraph.bundle|clean_class,
     view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
     not paragraph.isPublished() ? 'paragraph--unpublished'
   ]
 %}
-
-
-
-
-
 {% block paragraph %}
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
-    <blockquote class="pl-0 text-2xl prose-blockquote font-headline text-iiedpink-700">
-      {{ content.field_quote_text }}
-      <cite class="flex font-sans text-base not-italic font-normal text-gray-700"><span>– </span>{{ content.field_quote_citation }}</cite>
-      </blockquote>
+    <figure class="mb-6 -mx-6 sm:mx-0">
+      {{ content.field_video }}
+
+      {% if content.field_video_description %}
+      <figcaption class="px-6 mt-1 text-base leading-tight text-gray-500 sm:p-0">
+       {{ content.field_video_description }}
+       </figcaption>
+      {% endif %}  
+    </figure>   
     {% endblock %}
   </div>
 {% endblock paragraph %}

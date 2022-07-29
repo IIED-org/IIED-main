@@ -50,16 +50,13 @@
 %}
 
 
-
-
-
 {% block paragraph %}
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
-    <blockquote class="pl-0 text-2xl prose-blockquote font-headline text-iiedpink-700">
-      {{ content.field_quote_text }}
-      <cite class="flex font-sans text-base not-italic font-normal text-gray-700"><span>– </span>{{ content.field_quote_citation }}</cite>
-      </blockquote>
+    <div class="flex">
+      {{ content.field_image }}
+      {{ content.field_basic_text }}
+    </div>
     {% endblock %}
   </div>
 {% endblock paragraph %}
