@@ -32,7 +32,7 @@ class Modal extends IFrame {
     DisplayBase::displayEntityBrowser($element, $form_state, $complete_form, $persistent_data);
     $js_event_object = new RegisterJSCallbacks($this->configuration['entity_browser_id'], $this->getUuid());
     $js_event_object->registerCallback('Drupal.entityBrowser.selectionCompleted');
-    $js_event = $this->eventDispatcher->dispatch(Events::REGISTER_JS_CALLBACKS, $js_event_object);
+    $js_event = $this->eventDispatcher->dispatch($js_event_object, Events::REGISTER_JS_CALLBACKS);
     $original_path = $this->currentPath->getPath();
 
     $data = [
@@ -47,7 +47,7 @@ class Modal extends IFrame {
       ],
     ];
     $event_object = new AlterEntityBrowserDisplayData($this->configuration['entity_browser_id'], $this->getUuid(), $this->getPluginDefinition(), $form_state, $data);
-    $event = $this->eventDispatcher->dispatch(Events::ALTER_BROWSER_DISPLAY_DATA, $event_object);
+    $event = $this->eventDispatcher->dispatch($event_object, Events::ALTER_BROWSER_DISPLAY_DATA);
     $data = $event->getData();
     return [
       '#theme_wrappers' => ['container'],

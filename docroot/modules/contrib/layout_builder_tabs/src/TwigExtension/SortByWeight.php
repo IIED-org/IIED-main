@@ -2,17 +2,19 @@
 
 namespace Drupal\layout_builder_tabs\TwigExtension;
 
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 /**
  * Class to provide a sort by '#weight' for arrays within Twig.
  */
-class SortByWeight extends \Twig_Extension {
+class SortByWeight extends AbstractExtension {
 
   /**
    * Generates a list of all Twig filters that this extension defines.
    */
   public function getFilters() {
     return [
-      new \Twig_SimpleFilter('sortbyweight', [$this, 'performSort'], ['is_safe' => ['html']]),
+      new TwigFilter('sortbyweight', [$this, 'performSort', 'is_safe' => ['html']]),
     ];
   }
 

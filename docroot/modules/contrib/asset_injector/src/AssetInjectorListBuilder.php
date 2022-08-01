@@ -5,11 +5,41 @@ namespace Drupal\asset_injector;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Render\RendererInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a listing of Asset Injector entities.
  */
 class AssetInjectorListBuilder extends ConfigEntityListBuilder {
+
+  /**
+   * Renderer service.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
+   * {@inheritDoc}
+   */
+  public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type) {
+    return new static(
+      $entity_type,
+      $container->get('entity_type.manager')->getStorage($entity_type->id()),
+      $container->get('renderer')
+    );
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, RendererInterface $renderer) {
+    parent::__construct($entity_type, $storage);
+    $this->renderer = $renderer;
+  }
 
   /**
    * {@inheritdoc}
@@ -32,7 +62,7 @@ class AssetInjectorListBuilder extends ConfigEntityListBuilder {
     foreach ($entity->getConditionsCollection() as $condition_id => $condition) {
       if ($condition_id == 'current_theme') {
         $config = $condition->getConfiguration();
-        $condition->setConfiguration(['theme' => implode(', ', $config['theme'])] + $config);
+        $condition->setConfiguration(['theme' => implode(', ', $config['theme'] ?: [])] + $config);
       }
 
       $data['conditions'][$condition_id] = $this->t('%plugin is configured.', ['%plugin' => $condition->getPluginDefinition()['label']]);
@@ -47,7 +77,7 @@ class AssetInjectorListBuilder extends ConfigEntityListBuilder {
       '#list_type' => 'ul',
       '#items' => empty($data['conditions']) ? [$this->t('Global')] : $data['conditions'],
     ];
-    $data['conditions'] = render($data['conditions']);
+    $data['conditions'] = $this->renderer->render($data['conditions']);
 
     $row = [
       'class' => $entity->status() ? 'enabled' : 'disabled',

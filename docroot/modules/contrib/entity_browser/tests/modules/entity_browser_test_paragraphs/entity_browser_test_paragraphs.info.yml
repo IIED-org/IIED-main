@@ -1,7 +1,6 @@
 name: 'Entity browser test paragraphs'
 type: module
 description: 'Test Paragraphs Integration.'
-core_version_requirement: ^8.7.7 || ^9
 package: Testing
 dependencies:
   - entity_reference_revisions:entity_reference_revisions
@@ -13,7 +12,7 @@ dependencies:
   - drupal:views
   - drupal:user
 
-# Information added by Drupal.org packaging script on 2022-06-22
-version: '8.x-2.7'
+# Information added by Drupal.org packaging script on 2022-07-22
+version: '8.x-2.8'
 project: 'entity_browser'
-datestamp: 1655931713
+datestamp: 1658509705

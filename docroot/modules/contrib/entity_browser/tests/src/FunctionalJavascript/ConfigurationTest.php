@@ -45,7 +45,7 @@ class ConfigurationTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->drupalPlaceBlock('local_tasks_block');
     $this->drupalPlaceBlock('local_actions_block');
@@ -166,17 +166,17 @@ class ConfigurationTest extends WebDriverTestBase {
     $this->assertSession()->selectExists('display')->selectOption('iframe');
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertSession()->fieldExists('display_configuration[width]');
-    $this->assertSession()->responseContains('Width of the iFrame', 'iFrame Display config form present');
+    $this->assertSession()->responseContains('Width of the iFrame');
 
     $this->assertSession()->selectExists('display')->selectOption('standalone');
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertSession()->fieldExists('display_configuration[path]');
-    $this->assertSession()->responseContains('The path at which the browser will be accessible.', 'Standalone Display config form present');
+    $this->assertSession()->responseContains('The path at which the browser will be accessible.');
 
     $this->assertSession()->selectExists('display')->selectOption('modal');
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertSession()->fieldExists('display_configuration[width]');
-    $this->assertSession()->responseContains('Width of the modal', 'iFrame Display config form present');
+    $this->assertSession()->responseContains('Width of the modal');
 
     // Test ajax update of Selection display plugin settings.
     $this->assertSession()->selectExists('selection_display')->selectOption('multi_step_display');

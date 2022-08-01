@@ -21,7 +21,7 @@ class EntityBrowserUpdateHookTest extends UpdatePathTestBase {
    */
   protected function setDatabaseDumpFiles() {
     $this->databaseDumpFiles = [
-      DRUPAL_ROOT . '/core/modules/system/tests/fixtures/update/drupal-8.8.0.bare.standard.php.gz',
+      DRUPAL_ROOT . '/core/modules/system/tests/fixtures/update/drupal-9.3.0.bare.standard.php.gz',
       __DIR__ . '/../../fixtures/update/entity_browser.update-hook-test.php',
     ];
   }
@@ -29,7 +29,7 @@ class EntityBrowserUpdateHookTest extends UpdatePathTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $entity_browser_type = $this->container
       ->get('entity_type.manager')

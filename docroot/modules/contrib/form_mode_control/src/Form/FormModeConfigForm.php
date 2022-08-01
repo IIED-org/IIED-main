@@ -42,8 +42,7 @@ class FormModeConfigForm extends ConfigFormBase {
     // Load all roles.
     $roles = Role::loadMultiple();
     // Load configuration of the module.
-    $configuration = \Drupal::configFactory()
-      ->getEditable('form_mode_control.settings');
+    $configuration = $this->config('form_mode_control.settings');
     // All data saved in configurations.
     $data = $configuration->getRawData();
     $entities_actives = array_intersect($this->getEntitiesFormModeActivated(), array_keys($entities_has_form_mode));
@@ -133,8 +132,7 @@ class FormModeConfigForm extends ConfigFormBase {
     unset($all_values['op']);
 
     // Load the current configuration associated to the config form.
-    $configuration = \Drupal::configFactory()
-      ->getEditable('form_mode_control.settings');
+    $configuration = $this->config('form_mode_control.settings');
 
     // Clear all entries in config data.
     $cleared_data = [];
@@ -206,10 +204,8 @@ class FormModeConfigForm extends ConfigFormBase {
    */
   protected function importPermissionByFormModId($form_modes_id) {
     $permissions = [];
-    $data = (\Drupal::configFactory()
-      ->getEditable('form_mode_control.settings')->getRawData());
+    $data = $this->config('form_mode_control.settings')->getRawData();
     foreach ($data as $key => $value) {
-
       if (substr_count($key, "linked to") != 0) {
         $permissions[$value] = $key;
       }

@@ -20,7 +20,7 @@ class CardinalityTest extends EntityBrowserWebDriverTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'entity_browser_test',
     'embed',
     'entity_embed',
@@ -32,7 +32,7 @@ class CardinalityTest extends EntityBrowserWebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     /** @var \Drupal\user\RoleInterface $role */

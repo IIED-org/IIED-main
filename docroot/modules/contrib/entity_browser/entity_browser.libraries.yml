@@ -3,7 +3,6 @@ common:
   js:
     js/entity_browser.common.js: {}
   dependencies:
-    - core/underscore
     - core/drupal.dialog.ajax
 
 pager:
@@ -33,7 +32,7 @@ iframe:
     js/entity_browser.iframe.js: {}
   dependencies:
     - core/drupalSettings
-    - core/jquery.once
+    - core/once
     - entity_browser/common
 
 iframe_selection:
@@ -68,7 +67,7 @@ modal:
     js/entity_browser.modal.js: {}
   dependencies:
     - core/drupalSettings
-    - core/underscore
+    - core/once
 
 modal_selection:
   version: VERSION
@@ -89,14 +88,14 @@ tabs:
     js/entity_browser.tabs.js: {}
   dependencies:
     - core/drupalSettings
-    - core/jquery.once
+    - core/once
 
 view:
   version: VERSION
   js:
     js/entity_browser.view.js: {}
   dependencies:
-    - core/jquery.once
+    - core/once
 
 multi_step_display:
   version: VERSION
@@ -106,3 +105,4 @@ multi_step_display:
   dependencies:
     - entity_browser/entity_list
     - core/sortable
+    - core/once

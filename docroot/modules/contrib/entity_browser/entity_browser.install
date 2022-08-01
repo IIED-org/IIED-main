@@ -20,7 +20,8 @@ function entity_browser_requirements($phase) {
       // If the version being used is -dev, $info['version'] will be empty. Try
       // an alternative method to detect if we are using the 2.x branch in that
       // case.
-      if (!file_exists(DRUPAL_ROOT . '/' . drupal_get_path('module', 'media_entity') . '/src/CliService.php')) {
+      $path = \Drupal::service('extension.list.module')->getPath('media_entity');
+      if (!file_exists(DRUPAL_ROOT . '/' . $path . '/src/CliService.php')) {
         $incompatible = TRUE;
       }
     }

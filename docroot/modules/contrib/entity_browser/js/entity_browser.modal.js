@@ -22,8 +22,11 @@
    */
   Drupal.behaviors.entityBrowserModal = {
     attach: function (context) {
-      _.each(drupalSettings.entity_browser.modal, function (instance) {
-        _.each(instance.js_callbacks, function (callback) {
+      // Object.prototype.entries() isn't available in D9/IE11.
+      for (var modalId in drupalSettings.entity_browser.modal) {
+        var instance = drupalSettings.entity_browser.modal[modalId]
+        for (var jsCallbackKey in instance.js_callbacks) {
+          var callback = drupalSettings.entity_browser.modal[modalId].js_callbacks[jsCallbackKey];
           // Get the callback.
           callback = callback.split('.');
           var fn = window;
@@ -36,11 +39,11 @@
             $(':input[data-uuid="' + instance.uuid + '"]').not('.entity-browser-processed')
               .bind('entities-selected', fn).addClass('entity-browser-processed');
           }
-        });
+        }
         if (instance.auto_open) {
           $('input[data-uuid="' + instance.uuid + '"]').click();
         }
-      });
+      }
     }
   };
 
@@ -50,10 +53,9 @@
   Drupal.behaviors.fluidModal = {
     attach: function (context) {
       var $window = $(window);
-      var $document = $(document);
 
       // Be sure to run only once per window document.
-      if ($document.once('fluid-modal').length === 0) {
+      if (once('fluid-modal', 'body').length) {
         return;
       }
 

@@ -33,7 +33,7 @@ class ViewsReferenceLimit extends PluginBase implements ViewsReferenceSettingInt
    * {@inheritdoc}
    */
   public function alterView(ViewExecutable $view, $value) {
-    if (!empty($value)) {
+    if ($value !== "") {
       $view->setItemsPerPage($value);
     }
   }

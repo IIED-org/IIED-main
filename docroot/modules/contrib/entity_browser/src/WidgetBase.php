@@ -340,12 +340,11 @@ abstract class WidgetBase extends PluginBase implements WidgetInterface, Contain
     $selected_entities = array_merge($selected_entities, $entities);
 
     $this->eventDispatcher->dispatch(
-      Events::SELECTED,
       new EntitySelectionEvent(
         $this->configuration['entity_browser_id'],
         $form_state->get(['entity_browser', 'instance_uuid']),
         $entities
-      ));
+      ), Events::SELECTED);
   }
 
   /**

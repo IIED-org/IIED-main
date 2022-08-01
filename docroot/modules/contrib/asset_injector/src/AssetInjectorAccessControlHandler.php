@@ -161,7 +161,8 @@ class AssetInjectorAccessControlHandler extends EntityAccessControlHandler imple
     $theme_condition = $conditions->get('current_theme');
     $config = $theme_condition->getConfig();
 
-    foreach ($config['theme'] as $theme) {
+    // If no themes were selected in the UI, the value of `theme` is an empty string. Change it to an array.
+    foreach (($config['theme'] ?: []) as $theme) {
       $new_theme_conditions = clone $theme_condition;
       $new_theme_conditions->setConfig('theme', $theme);
       $conditions->set("current_theme_$theme", $new_theme_conditions);

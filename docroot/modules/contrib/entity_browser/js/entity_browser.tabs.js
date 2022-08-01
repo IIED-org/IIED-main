@@ -4,7 +4,7 @@
  * Defines the behavior of the entity browser's tab display.
  */
 
-(function ($, Drupal, drupalSettings) {
+(function ($, Drupal, drupalSettings, once) {
 
   'use strict';
 
@@ -13,7 +13,7 @@
    */
   Drupal.behaviors.entityBrowserTabs = {
     attach: function (context) {
-      var $form = $(context).find('.entity-browser-form').once('entity-browser-admin');
+      var $form = $(once('entity-browser-admin', '.entity-browser-form', context));
       if (!$form.length) {
         return;
       }
@@ -83,4 +83,4 @@
     );
   };
 
-}(jQuery, Drupal, drupalSettings));
+}(jQuery, Drupal, drupalSettings, once));

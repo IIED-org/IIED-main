@@ -186,15 +186,15 @@ class TablefieldItem extends FieldItemBase {
     // If "Lock defaults" is enabled the table needs sorting.
     $lock = $this->getFieldDefinition()->getSetting('lock_values');
     if ($lock) {
-      // Sort columns on key.
-      foreach ($values['value'] as $key => $value) {
-        if (is_array($value)) {
-          ksort($value);
-          $values['value'][$key] = $value;
+      if (!empty($values['value']) && is_array($values['value'])) {
+        // Sort columns on key.
+        foreach ($values['value'] as $key => $value) {
+          if (is_array($value)) {
+            ksort($value);
+            $values['value'][$key] = $value;
+          }
         }
-      }
-      // Sort rows on key.
-      if (is_array($values['value'])) {
+        // Sort rows on key.
         ksort($values['value']);
       }
     }

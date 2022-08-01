@@ -176,7 +176,7 @@ function form_mode_control_control_access_form_mode(array $configuration, $mode,
    */
   // Default display id is a backup when a specified display was not found.
   $default_display_id = form_mode_control_get_the_right_display($configuration, $mode, $id_role, $context);
-  $default_display_id_parts = explode('.', $default_display_id);
+  $default_display_id_parts = !empty($default_display_id) ? explode('.', $default_display_id) : [];
 
   $form_mode_id = explode('.', $id)[2];
 
