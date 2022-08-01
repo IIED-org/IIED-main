@@ -6,6 +6,7 @@ dependencies:
     - field.storage.node.field_paragraphs
     - node.type.blog
     - paragraphs.paragraphs_type.basic_text
+    - paragraphs.paragraphs_type.box
     - paragraphs.paragraphs_type.file_upload
     - paragraphs.paragraphs_type.gallery
     - paragraphs.paragraphs_type.image
@@ -38,6 +39,7 @@ settings:
       media_embed: media_embed
       video_embed: video_embed
       gallery: gallery
+      box: box
       logo_block: logo_block
       modal_image: modal_image
       stories_table: stories_table
@@ -52,6 +54,9 @@ settings:
       basic_text:
         weight: 8
         enabled: true
+      box:
+        weight: 36
+        enabled: true
       file_upload:
         weight: 9
         enabled: true
@@ -63,6 +68,9 @@ settings:
         enabled: true
       image_wide:
         weight: 10
+        enabled: false
+      in_page_menu:
+        weight: 42
         enabled: false
       info_box:
         weight: 11
@@ -76,6 +84,9 @@ settings:
       media_embed:
         weight: 13
         enabled: true
+      media_list:
+        weight: 46
+        enabled: false
       modal_image:
         weight: 38
         enabled: true
@@ -117,6 +128,9 @@ settings:
         enabled: false
       stories_views:
         weight: 49
+        enabled: false
+      tab:
+        weight: 61
         enabled: false
       tab_box:
         weight: 50

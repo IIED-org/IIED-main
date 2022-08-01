@@ -289,8 +289,8 @@ third_party_settings:
         - tw-1-2-col-grid
         - tw-1-2-4-col-grid
         - tw-container
-      blacklisted_blocks: {  }
-      whitelisted_blocks: {  }
+      denylisted_blocks: {  }
+      allowlisted_blocks: {  }
       restricted_categories: {  }
 id: taxonomy_term.theme.full
 targetEntityType: taxonomy_term

@@ -8,6 +8,7 @@ dependencies:
     - paragraphs.paragraphs_type.about_the_author
     - paragraphs.paragraphs_type.accordion_box
     - paragraphs.paragraphs_type.basic_text
+    - paragraphs.paragraphs_type.box
     - paragraphs.paragraphs_type.file_upload
     - paragraphs.paragraphs_type.gallery
     - paragraphs.paragraphs_type.image
@@ -52,6 +53,7 @@ settings:
       accordion_box: accordion_box
       quote: quote
       gallery: gallery
+      box: box
       in_page_menu: in_page_menu
       logo_block: logo_block
       stories_table: stories_table
@@ -72,7 +74,7 @@ settings:
         enabled: true
       box:
         weight: 36
-        enabled: false
+        enabled: true
       file_upload:
         weight: 16
         enabled: true
