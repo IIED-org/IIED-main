@@ -1,0 +1,153 @@
+<?php
+
+/**
+ * @file
+ * Provides install hooks for the search_api_sorts module.
+ */
+
+/**
+ * Adds entries to key_value table for each search_api_sorts_field entity.
+ */
+function search_api_sorts_update_8101(&$sandbox) {
+  /** @var \Drupal\Core\Config\Entity\ConfigEntityStorage $field_storage */
+  $field_storage = \Drupal::service('entity_type.manager')
+    ->getStorage('search_api_sorts_field');
+
+  if (!isset($sandbox['total'])) {
+    drupal_flush_all_caches();
+    $sandbox['total'] = $field_storage->getQuery()->count()->execute();
+    $sandbox['current'] = 0;
+  }
+
+  // Nothing to be done if there are no entities to be updated.
+  if ($sandbox['total'] == 0) {
+    return t('search_api_sorts - no entities to be updated.');
+  }
+
+  $entity_batch = $field_storage->getQuery()
+    ->range($sandbox['current'], 250)
+    ->execute();
+
+  $entities = $field_storage->loadMultiple($entity_batch);
+
+  foreach ($entities as $e) {
+    /** @var \Drupal\search_api_sorts\Entity\SearchApiSortsField $e */
+    $e->save();
+    $sandbox['current']++;
+  }
+
+  $sandbox['#finished'] = $sandbox['current'] / $sandbox['total'];
+
+  if ($sandbox['#finished'] >= 1) {
+    return t('search_api_sorts - @entities entities updated.',
+      ['@entities' => $sandbox['total']]);
+  }
+  printf('Finished updating %d percent of search api sorts field entities.' . PHP_EOL, round($sandbox['#finished'] * 100));
+}
+
+/**
+ * Deletes sorts field configurations that are not enabled.
+ *
+ * This is done so that the number of config files saved in the file system is
+ * minimal.
+ */
+function search_api_sorts_update_8102(&$sandbox) {
+  /** @var \Drupal\Core\Config\Entity\ConfigEntityStorage $fieldStorage */
+  $field_storage = \Drupal::service('entity_type.manager')
+    ->getStorage('search_api_sorts_field');
+
+  if (!isset($sandbox['total'])) {
+    $sandbox['total'] = $field_storage->getQuery()->condition('status', FALSE)->count()->execute();
+    $sandbox['current'] = 0;
+  }
+
+  // Nothing to be done if there are no entities to be deleted.
+  if ($sandbox['total'] == 0) {
+    return t('search_api_sorts - no entities to be deleted.');
+  }
+
+  $entity_batch = $field_storage->getQuery()->condition('status', FALSE)
+    ->range(0, 100)
+    ->execute();
+
+  $entities = $field_storage->loadMultiple($entity_batch);
+
+  foreach ($entities as $e) {
+    if (!($e->getStatus())) {
+      $e->delete();
+      $sandbox['current']++;
+    }
+  }
+
+  $sandbox['#finished'] = $sandbox['current'] / $sandbox['total'];
+
+  if ($sandbox['#finished'] >= 1) {
+    return t('search_api_sorts - @entities entities deleted.',
+      ['@entities' => $sandbox['total']]);
+  }
+  printf('Finished deleting %d percent of search api sort field configs that are not enabled. ' . PHP_EOL, round($sandbox['#finished'] * 100));
+}
+
+/**
+ * Update the search_api_sorts_field config_translations.
+ */
+function search_api_sorts_update_8103(&$sandbox) {
+  $language_manager = \Drupal::languageManager();
+  $config_factory = \Drupal::configFactory();
+  $default_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
+  if (!$language_manager->isMultilingual()) {
+    print 'Skipped updating search_api_sorts config translation because there is only 1 language';
+    return;
+  }
+
+  $translated_labels = [];
+  $config_list = $config_factory->listAll('search_api_sorts.search_api_sorts_field');
+  foreach ($config_list as $config_name) {
+    $field_config = $config_factory->get($config_name);
+
+    if ($field_config->get('langcode') === $default_langcode) {
+      continue;
+    }
+    $label = $field_config->getOriginal('label', FALSE);
+    if (!empty($label)) {
+      $translated_labels[$config_name][$field_config->get('langcode')] = $label;
+    }
+    foreach ($language_manager->getLanguages() as $language) {
+      if (isset($translated_labels[$config_name][$language->getId()])) {
+        continue;
+      }
+      $field_config = $language_manager->getLanguageConfigOverride($language->getId(), $config_name);
+      $label = $field_config->get('label');
+      if (!empty($label)) {
+        $translated_labels[$config_name][$language->getId()] = $field_config->get('label');
+      }
+    }
+  }
+
+  foreach ($translated_labels as $config_name => $labels) {
+    $field_config = $config_factory->getEditable($config_name);
+    $label = $labels[$default_langcode] ?? $field_config->get('label');
+    $field_config->set('langcode', $default_langcode)
+      ->set('label', $label)
+      ->save();
+
+    foreach ($language_manager->getLanguages() as $language) {
+      $translated_field_config = $language_manager->getLanguageConfigOverride($language->getId(), $config_name);
+      $translated_field_config->delete();
+    }
+
+    foreach ($labels as $langcode => $label) {
+      if ($langcode === $default_langcode) {
+        continue;
+      }
+
+      $translated_field_config = $language_manager->getLanguageConfigOverride($langcode, $config_name);
+      $translated_field_config
+        ->set('label', $label)
+        ->save();
+    }
+  }
+
+  print 'finished updating search_api_sorts config translation';
+}

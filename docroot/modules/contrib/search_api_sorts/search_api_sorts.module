@@ -1,0 +1,77 @@
+<?php
+
+/**
+ * @file
+ * Create sort options for search queries executed via the Search API.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+use Drupal\search_api\IndexInterface;
+
+/**
+ * Implements hook_help().
+ */
+function search_api_sorts_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'entity.search_api_index.sorts':
+      return t('Select the display you would like to manage sort fields for. A display is one instance where this index can be shown, e.g. a views page using this index.');
+
+    case 'search_api_sorts.search_api_display.sorts':
+      return t('Select the indexed fields for which you want to enable sorting for this display. Before the sort blocks is actually displayed, you will have to enable and configure it at the <a href=":url">block administration page</a>.', [':url' => Url::fromRoute('block.admin_display')->toString()]);
+  }
+  return NULL;
+}
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function search_api_sorts_entity_type_alter(array &$entity_types) {
+  /** @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
+  if (isset($entity_types['search_api_index'])) {
+    $entity_types['search_api_index']->setFormClass('sorts', '\Drupal\search_api_sorts\Form\IndexSortsForm');
+    $entity_types['search_api_index']->setLinkTemplate('sorts', $entity_types['search_api_index']->getLinkTemplate('canonical') . '/sorts');
+  }
+}
+
+/**
+ * Implements hook_entity_operation_alter().
+ */
+function search_api_sorts_entity_operation_alter(&$operations, EntityInterface $entity) {
+  if ($entity->getEntityTypeId() == 'search_api_index') {
+    $operations['sorts'] = [
+      'title' => t('Sorts'),
+      'weight' => 50,
+      'url' => $entity->toUrl('sorts'),
+    ];
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function search_api_sorts_theme() {
+  $themes['search_api_sorts_sort'] = [
+    'variables' => [
+      'label' => '',
+      'url' => '',
+      'order' => '',
+      'active' => FALSE,
+      'order_indicator' => '',
+      'sort_field' => '',
+    ],
+  ];
+
+  return $themes;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ *
+ * When an search api index is updated, check if there are related sort fields
+ * that should be removed.
+ */
+function search_api_sorts_search_api_index_update(IndexInterface $index) {
+  \Drupal::service('search_api_sorts.manager')->cleanupSortFields($index);
+}

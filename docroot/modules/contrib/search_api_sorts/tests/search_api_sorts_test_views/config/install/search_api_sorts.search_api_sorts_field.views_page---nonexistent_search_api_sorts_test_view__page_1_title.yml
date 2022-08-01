@@ -1,0 +1,8 @@
+status: true
+id: views_page---nonexistent_search_api_sorts_test_view__page_1_title
+display_id: views_page---nonexistent_search_api_sorts_test_view__page_1
+field_identifier: title
+default_sort: false
+default_order: asc
+label: "I shouldn't exist"
+weight: -2

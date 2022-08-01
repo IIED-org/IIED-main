@@ -162,6 +162,15 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_theme_s_
+  field_title_or_name:
+    label: 'Title or name'
+    property_path: aggregated_field
+    type: string
+    configuration:
+      type: first
+      fields:
+        - 'entity:node/title'
+        - 'entity:taxonomy_term/name'
   given:
     label: 'Full name » Given'
     datasource_id: 'entity:taxonomy_term'
@@ -302,6 +311,7 @@ datasource_settings:
 processor_settings:
   add_url: {  }
   aggregated_field: {  }
+  auto_aggregated_fulltext_field: {  }
   content_access:
     weights:
       preprocess_query: -49
@@ -334,6 +344,7 @@ processor_settings:
       - field_area_list
       - field_product_code
       - field_product_code_new
+      - field_title_or_name
       - given
       - name
       - name_1
@@ -355,19 +366,13 @@ processor_settings:
   reverse_entity_references: {  }
   solr_boost_more_recent:
     weights:
-      preprocess_query: -50
+      preprocess_query: 0
     boosts:
-      field_date_published:
-        boost: !!float 21
-        resolution: NOW
-        m: '3.16e-11'
-        a: !!float 10
-        b: 0.1
       field_sort_date:
         boost: !!float 21
         resolution: NOW
-        m: '6.32e-11'
-        a: !!float 10
+        m: '3.16e-11'
+        a: !!float 1
         b: 0.1
   solr_date_range:
     weights:

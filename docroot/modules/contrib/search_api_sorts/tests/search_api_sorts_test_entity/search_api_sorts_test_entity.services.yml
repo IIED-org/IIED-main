@@ -1,0 +1,6 @@
+services:
+  search_api_sorts_test_entity.query.config:
+    class: Drupal\search_api_sorts_test_entity\Entity\SearchApiSortsTestEntityQueryFactory
+    arguments: ['@config.factory', '@keyvalue', '@config.manager']
+    tags:
+      - { name: event_subscriber }

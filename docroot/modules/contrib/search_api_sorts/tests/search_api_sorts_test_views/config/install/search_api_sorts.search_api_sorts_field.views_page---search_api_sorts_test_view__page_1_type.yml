@@ -1,0 +1,8 @@
+status: false
+id: views_page---search_api_sorts_test_view__page_1_type
+display_id: views_page---search_api_sorts_test_view__page_1
+field_identifier: type
+default_sort: false
+default_order: asc
+label: 'Type'
+weight: -1
