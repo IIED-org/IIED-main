@@ -1,0 +1,45 @@
+uuid: cdd811f1-97d1-4e79-8ca9-84c9ccb67b13
+langcode: en
+status: true
+dependencies:
+  module:
+    - context
+    - search_api_sorts
+  theme:
+    - iied_tw
+id: sortbyviewsearchdisplaypage
+theme: iied_tw
+region: sidebar
+weight: -13
+provider: null
+plugin: 'search_api_sorts_block:views_page:search__page_2'
+settings:
+  id: 'search_api_sorts_block:views_page:search__page_2'
+  label: 'Sort by'
+  label_display: visible
+  provider: search_api_sorts
+visibility:
+  user_status:
+    id: user_status
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    user_status:
+      viewing_profile: '0'
+      logged_viewing_profile: '0'
+      own_page_true: '0'
+      field_value: '0'
+    user_fields: uid
+  view_inclusion:
+    id: view_inclusion
+    negate: false
+    view_inclusion:
+      view-search-page_2: view-search-page_2
+  context_all:
+    id: context_all
+    negate: null
+    values: ''
+  context:
+    id: context
+    negate: null
+    values: ''
