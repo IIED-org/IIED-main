@@ -1,0 +1,9 @@
+{%
+  set classes = [
+    'sort-item',
+     active ? 'sort-' ~ order,
+     active ? 'is-active',
+    'sort-item--' ~ sort_field
+  ]
+%}
+<a href="{{ url }}" {{ attributes.addClass(classes) }}>{{ label }}{{ order_indicator }}</a>

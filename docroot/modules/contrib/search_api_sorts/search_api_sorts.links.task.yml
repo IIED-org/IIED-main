@@ -1,0 +1,9 @@
+entity.search_api_index.sorts:
+  route_name: entity.search_api_index.sorts
+  base_route: entity.search_api_index.canonical
+  title: 'Sorts'
+  weight: 25
+search_api_sorts.search_api_display.sorts:
+  route_name: search_api_sorts.search_api_display.sorts
+  parent_id: entity.search_api_index.sorts
+  title: 'Sorts'

@@ -1,0 +1,9 @@
+services:
+  search_api_sorts.manager:
+    class: Drupal\search_api_sorts\SearchApiSortsManager
+    arguments: ['@request_stack', '@entity_type.manager', '@module_handler', '@plugin.manager.search_api.display']
+  search_api_sorts.query_pre_execute:
+    class: Drupal\search_api_sorts\EventSubscriber\SearchApiSortsQueryPreExecute
+    arguments: ['@search_api_sorts.manager']
+    tags:
+      - { name: event_subscriber }

@@ -2934,7 +2934,8 @@ hr{
   border: white;
 }
 
-#block-exposedformsearchpage-2-5 .bef--secondary {
+#block-exposedformsearchpage-2-5 .bef--secondary,
+  #edit-submit-search--2 {
   display: none;
 }
 
@@ -3372,12 +3373,12 @@ hr{
   height: 0.25rem;
 }
 
-.h-3{
-  height: 0.75rem;
-}
-
 .h-auto{
   height: auto;
+}
+
+.h-3{
+  height: 0.75rem;
 }
 
 .h-2{
@@ -3452,16 +3453,16 @@ hr{
   width: 50%;
 }
 
-.w-3{
-  width: 0.75rem;
-}
-
 .w-3\/12{
   width: 25%;
 }
 
 .w-9\/12{
   width: 75%;
+}
+
+.w-3{
+  width: 0.75rem;
 }
 
 .w-fit{
@@ -3763,16 +3764,16 @@ hr{
   border-bottom-width: 4px;
 }
 
+.border-t{
+  border-top-width: 1px;
+}
+
 .border-l-2{
   border-left-width: 2px;
 }
 
 .border-t-2{
   border-top-width: 2px;
-}
-
-.border-t{
-  border-top-width: 1px;
 }
 
 .border-gray-300{
@@ -4452,10 +4453,6 @@ hr{
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
-.prose-blockquote\:pl-0 :is(:where(blockquote):not(:where([class~="not-prose"] *))){
-  padding-left: 0px;
-}
-
 @media (min-width: 640px){
   .sm\:visible{
     visibility: visible;
@@ -4491,8 +4488,16 @@ hr{
     display: inline;
   }
 
+  .sm\:h-24{
+    height: 6rem;
+  }
+
   .sm\:w-auto{
     width: auto;
+  }
+
+  .sm\:w-24{
+    width: 6rem;
   }
 
   .sm\:w-fit{
