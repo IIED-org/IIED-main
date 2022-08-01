@@ -3,7 +3,7 @@ core_version_requirement: ^8.8 || ^9
 type: module
 description: 'Allows an entity type to borrow the fields and display configuration of another entity type.'
 
-# Information added by Drupal.org packaging script on 2022-07-01
-version: '8.x-3.8'
+# Information added by Drupal.org packaging script on 2022-07-26
+version: '8.x-3.9'
 project: 'ctools'
-datestamp: 1656633726
+datestamp: 1658864515

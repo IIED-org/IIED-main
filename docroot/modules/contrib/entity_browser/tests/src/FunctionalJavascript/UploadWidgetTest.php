@@ -14,7 +14,7 @@ class UploadWidgetTest extends EntityBrowserWebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     // Grant permission to this user to use also the EB page we are testing.
@@ -37,7 +37,7 @@ class UploadWidgetTest extends EntityBrowserWebDriverTestBase {
     $page = $this->getSession()->getPage();
 
     // Make sure the test file is not present beforehand.
-    $this->assertFileNotExists('public://druplicon.png');
+    $this->assertFileDoesNotExist('public://druplicon.png');
 
     // Go to the widget standalone page and test the upload.
     $this->drupalGet($browser->getDisplay()->path());

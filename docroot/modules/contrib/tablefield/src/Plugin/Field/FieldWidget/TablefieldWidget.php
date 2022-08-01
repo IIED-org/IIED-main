@@ -167,7 +167,9 @@ class TablefieldWidget extends WidgetBase implements ContainerFactoryPluginInter
       $element['#description'] = $this->t('This form defines the table field defaults, but the number of rows/columns and content can be overridden on a per-node basis. The first row will appear as the table header. Leave the first row blank if you do not need a header.');
     }
 
-    $element['#element_validate'][] = [$this, 'validateTablefield'];
+    if ($form_state->getTriggeringElement()) {
+      $element['#element_validate'][] = [$this, 'validateTablefield'];
+    }
 
     // Allow the user to select input filters.
     if (!empty($field_settings['cell_processing'])) {

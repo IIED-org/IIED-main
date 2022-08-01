@@ -156,11 +156,10 @@ abstract class SelectionDisplayBase extends PluginBase implements SelectionDispl
   protected function selectionDone(FormStateInterface $form_state) {
     $form_state->set(['entity_browser', 'selection_completed'], TRUE);
     $this->eventDispatcher->dispatch(
-      Events::DONE,
       new SelectionDoneEvent(
         $this->configuration['entity_browser_id'],
         $form_state->get(['entity_browser', 'instance_uuid'])
-      ));
+      ), Events::DONE);
   }
 
 }

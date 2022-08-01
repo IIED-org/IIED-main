@@ -18,7 +18,7 @@ use Drupal\image\Entity\ImageStyle;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Component\Utility\Environment;
-use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface;
+use Symfony\Component\Mime\MimeTypeGuesserInterface;
 
 /**
  * Entity browser file widget.
@@ -67,7 +67,7 @@ class FileBrowserWidget extends EntityReferenceBrowserWidget {
   /**
    * The mime type guesser service.
    *
-   * @var \Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface
+   * @var \Symfony\Component\Mime\MimeTypeGuesserInterface
    */
   protected $mimeTypeGuesser;
 
@@ -98,7 +98,7 @@ class FileBrowserWidget extends EntityReferenceBrowserWidget {
    *   The current user.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger.
-   * @param \Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface $mime_type_guesser
+   * @param \Symfony\Component\Mime\MimeTypeGuesserInterface $mime_type_guesser
    *   The mime type guesser service.
    */
   public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings, EntityTypeManagerInterface $entity_type_manager, FieldWidgetDisplayManager $field_display_manager, ConfigFactoryInterface $config_factory, EntityDisplayRepositoryInterface $display_repository, ModuleHandlerInterface $module_handler, AccountInterface $current_user, MimeTypeGuesserInterface $mime_type_guesser, MessengerInterface $messenger) {
@@ -489,9 +489,9 @@ class FileBrowserWidget extends EntityReferenceBrowserWidget {
 
     if ($upload) {
       // Cap the upload size according to the PHP limit.
-      $max_filesize = Bytes::toInt(Environment::getUploadMaxSize());
+      $max_filesize = Bytes::toNumber(Environment::getUploadMaxSize());
       if (!empty($settings['max_filesize'])) {
-        $max_filesize = min($max_filesize, Bytes::toInt($settings['max_filesize']));
+        $max_filesize = min($max_filesize, Bytes::toNumber($settings['max_filesize']));
       }
       // There is always a file size limit due to the PHP server limit.
       $validators['file_validate_size'] = [$max_filesize];
@@ -534,7 +534,7 @@ class FileBrowserWidget extends EntityReferenceBrowserWidget {
     // only filter on exact values. Otherwise we would pass %png or use REGEXP.
     $mimetypes = [];
     foreach (explode(' ', $settings['file_extensions']) as $extension) {
-      if ($guess = $this->mimeTypeGuesser->guess('file.' . $extension)) {
+      if ($guess = $this->mimeTypeGuesser->guessMimeType('file.' . $extension)) {
         $mimetypes[] = $guess;
       }
     }

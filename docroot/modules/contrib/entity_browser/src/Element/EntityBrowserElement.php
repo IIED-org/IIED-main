@@ -224,8 +224,8 @@ class EntityBrowserElement extends FormElement {
    * {@inheritdoc}
    */
   public static function valueCallback(&$element, $input, FormStateInterface $form_state) {
-    if ($input === FALSE) {
-      return $element['#default_value'] ?: [];
+    if (empty($input)) {
+      return $element['#default_value'] ?? [];
     }
 
     $entities = [];

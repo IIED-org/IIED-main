@@ -54,8 +54,6 @@ settings:
             - ShowBlocks
             - Source
   plugins:
-    language:
-      language_list: un
     stylescombo:
       styles: 'h3.mt-0|h3 without top margin'
     wordcount:

@@ -16,7 +16,7 @@ class EntityBrowserExampleTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['entity_browser_example'];
+  protected static $modules = ['entity_browser_example'];
 
   /**
    * {@inheritdoc}

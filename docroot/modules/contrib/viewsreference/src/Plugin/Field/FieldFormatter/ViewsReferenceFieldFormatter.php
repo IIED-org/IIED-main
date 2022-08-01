@@ -94,7 +94,8 @@ class ViewsReferenceFieldFormatter extends FormatterBase {
       $view->preExecute();
       $view->execute($display_id);
 
-      if (!empty($view->result) || !empty($view->empty)) {
+      if (!empty($view->result) || !empty($view->empty) || !empty($view->exposed_widgets)) {
+        // Show view if there are results or empty behaviour defined or exposed widgets.
         if ($this->getSetting('plugin_types')) {
           // Add a custom template if the title is available.
           $title = $view->getTitle();

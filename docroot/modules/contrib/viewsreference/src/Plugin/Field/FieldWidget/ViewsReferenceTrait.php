@@ -105,7 +105,7 @@ trait ViewsReferenceTrait {
       '#type' => 'select',
       '#options' => $options,
       '#default_value' => $display_id,
-      '#empty_option' => '- Select -',
+      '#empty_option' => $this->t('- Select -'),
       '#empty_value' => '',
       '#weight' => 10,
       '#attributes' => [
@@ -119,6 +119,15 @@ trait ViewsReferenceTrait {
         ],
         'required' => [
           ':input[name="' . $target_id_name_string . '"]' => $view_selected_js_state,
+        ],
+      ],
+      '#ajax' => [
+        'callback' => [$class, 'itemAjaxRefresh'],
+        'event' => $ajax_event,
+        'wrapper' => $html_wrapper_id,
+        'progress' => [
+          'type' => 'throbber',
+          'message' => $this->t('Getting options...'),
         ],
       ],
     ];
@@ -311,6 +320,9 @@ trait ViewsReferenceTrait {
     /** @var \Drupal\views\Entity\View $view */
     if ($view = \Drupal::service('entity_type.manager')->getStorage('view')->load($view_id)) {
       if ($displays = $view->get('display')) {
+        usort($displays, function($a, $b) {
+          return $a['position'] <=> $b['position'];
+        });
         foreach ($displays as $display) {
           if (in_array($display['display_plugin'], $view_plugins, TRUE)) {
             $options[$display['id']] = $display['display_title'];

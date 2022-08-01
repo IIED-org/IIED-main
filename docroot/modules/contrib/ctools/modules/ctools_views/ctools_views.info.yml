@@ -8,7 +8,7 @@ dependencies:
   - drupal:block
   - drupal:views
 
-# Information added by Drupal.org packaging script on 2022-07-01
-version: '8.x-3.8'
+# Information added by Drupal.org packaging script on 2022-07-26
+version: '8.x-3.9'
 project: 'ctools'
-datestamp: 1656633726
+datestamp: 1658864515

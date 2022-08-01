@@ -29,7 +29,7 @@ class ImageFieldTest extends EntityBrowserWebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     FieldStorageConfig::create([
