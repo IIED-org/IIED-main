@@ -104,7 +104,6 @@ permissions:
   - 'edit terms in organisation'
   - 'edit terms in person'
   - 'edit terms in tags'
-  - 'merge taxonomy terms'
   - 'merge_permissions admin'
   - 'notify of path changes'
   - 'publish any content'
