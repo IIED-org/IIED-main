@@ -1,0 +1,8 @@
+uuid: 64e169ac-be94-4cb1-9761-9a74797e6a14
+langcode: en
+status: true
+dependencies: {  }
+id: icon_block
+label: 'Icon block'
+revision: 0
+description: 'Icon with link to related content'

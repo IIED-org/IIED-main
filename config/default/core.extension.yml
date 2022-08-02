@@ -7,6 +7,7 @@ module:
   admin_toolbar: 0
   admin_toolbar_links_access_filter: 0
   admin_toolbar_tools: 0
+  asset_injector: 0
   automated_cron: 0
   better_exposed_filters: 0
   better_social_sharing_buttons: 0
@@ -144,6 +145,8 @@ module:
   shortcut: 0
   sophron: 0
   stories: 0
+  svg_image: 0
+  svg_image_responsive: 0
   syslog: 0
   system: 0
   tablefield: 0

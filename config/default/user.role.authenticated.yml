@@ -2,13 +2,10 @@ uuid: 5136ae83-7b5f-4e5c-abb7-bceeec6c4db4
 langcode: en
 status: true
 dependencies:
-  config:
-    - filter.format.basic_html
   module:
     - comment
     - contact
     - eu_cookie_compliance
-    - filter
     - google_analytics
     - media
     - search_api_autocomplete
@@ -32,5 +29,4 @@ permissions:
   - 'skip comment approval'
   - 'use search_api_autocomplete for acquia_search_solr'
   - 'use search_api_autocomplete for search'
-  - 'use text format basic_html'
   - 'view media'

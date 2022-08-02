@@ -1,24 +1,26 @@
-uuid: 07e30875-54ec-4474-99be-2014d88ac31e
+uuid: 7f9d5ec2-c721-45d8-81a3-26a90e34c465
 langcode: en
 status: true
 dependencies:
   config:
-    - block_content.type.jumbotron
-    - field.field.block_content.jumbotron.field_text
+    - block_content.type.banner_custom
+    - field.field.block_content.banner_custom.body
   module:
     - text
-id: block_content.jumbotron.default
+id: block_content.banner_custom.default
 targetEntityType: block_content
-bundle: jumbotron
+bundle: banner_custom
 mode: default
 content:
-  field_text:
-    type: text_textarea
-    weight: 27
+  body:
+    type: text_textarea_with_summary
+    weight: 26
     region: content
     settings:
-      rows: 5
+      rows: 9
+      summary_rows: 3
       placeholder: ''
+      show_summary: false
     third_party_settings: {  }
   info:
     type: string_textfield

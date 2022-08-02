@@ -1,0 +1,8 @@
+uuid: dddeb93f-afea-47ac-96e9-77a49d91cb35
+langcode: en
+status: true
+dependencies: {  }
+id: banner_custom
+label: 'Banner (custom)'
+revision: 1
+description: 'Custom large banner with image and link'
