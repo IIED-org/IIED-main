@@ -1,0 +1,18 @@
+uuid: 6fa5f05c-59e6-4f46-9c04-bd60eab355ce
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.stories_table
+id: paragraph.stories_table.created
+field_name: created
+entity_type: paragraph
+bundle: stories_table
+label: 'Authored on'
+description: 'The time that the Paragraph was created.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: created

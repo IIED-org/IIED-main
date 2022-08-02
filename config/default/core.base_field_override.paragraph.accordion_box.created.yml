@@ -1,0 +1,18 @@
+uuid: 0f5df645-c9f5-4af8-8dc8-188462b8f6ec
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.accordion_box
+id: paragraph.accordion_box.created
+field_name: created
+entity_type: paragraph
+bundle: accordion_box
+label: 'Authored on'
+description: 'The time that the Paragraph was created.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: created

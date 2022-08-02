@@ -33,17 +33,32 @@ settings:
       video_embed: video_embed
     negate: 0
     target_bundles_drag_drop:
+      about_the_author:
+        weight: 33
+        enabled: false
+      accordion_box:
+        weight: 34
+        enabled: false
       basic_text:
         weight: 8
         enabled: true
+      box:
+        weight: 36
+        enabled: false
       file_upload:
         weight: 9
         enabled: true
+      gallery:
+        weight: 38
+        enabled: false
       image:
         weight: 12
         enabled: false
       image_wide:
         weight: 10
+        enabled: false
+      in_page_menu:
+        weight: 41
         enabled: false
       info_box:
         weight: 11
@@ -51,11 +66,65 @@ settings:
       linked_person:
         weight: 12
         enabled: false
+      logo_block:
+        weight: 44
+        enabled: false
       media_embed:
         weight: 13
         enabled: true
+      media_list:
+        weight: 46
+        enabled: false
+      modal_image:
+        weight: 47
+        enabled: false
+      quote:
+        weight: 48
+        enabled: false
+      related_link:
+        weight: 49
+        enabled: false
+      researcher_profiles:
+        weight: 50
+        enabled: false
       row_of_4:
         weight: 14
+        enabled: false
+      section:
+        weight: 52
+        enabled: false
+      stories_block:
+        weight: 53
+        enabled: false
+      stories_cta:
+        weight: 54
+        enabled: false
+      stories_curated_content:
+        weight: 55
+        enabled: false
+      stories_link_list:
+        weight: 56
+        enabled: false
+      stories_quote:
+        weight: 57
+        enabled: false
+      stories_table:
+        weight: 58
+        enabled: false
+      stories_text:
+        weight: 59
+        enabled: false
+      stories_views:
+        weight: 60
+        enabled: false
+      tab:
+        weight: 61
+        enabled: false
+      tab_box:
+        weight: 62
+        enabled: false
+      timeline:
+        weight: 63
         enabled: false
       video_embed:
         weight: 18

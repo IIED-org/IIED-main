@@ -1,0 +1,22 @@
+uuid: cb58e9ed-cbe8-4c9b-940d-621aed424f0f
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.stories_curated_content
+id: paragraph.stories_curated_content.status
+field_name: status
+entity_type: paragraph
+bundle: stories_curated_content
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

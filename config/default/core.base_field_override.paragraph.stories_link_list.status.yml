@@ -1,0 +1,22 @@
+uuid: f888cf05-82e0-4d17-95ec-4750151539bc
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.stories_link_list
+id: paragraph.stories_link_list.status
+field_name: status
+entity_type: paragraph
+bundle: stories_link_list
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

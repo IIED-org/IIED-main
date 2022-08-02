@@ -14,7 +14,7 @@ bundle: in_page_menu
 label: 'Basic text'
 description: ''
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings: {  }

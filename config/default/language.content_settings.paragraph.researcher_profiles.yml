@@ -1,0 +1,18 @@
+uuid: e6f11be1-7c83-498c-9bd7-470b28451954
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.researcher_profiles
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: paragraph.researcher_profiles
+target_entity_type_id: paragraph
+target_bundle: researcher_profiles
+default_langcode: site_default
+language_alterable: false

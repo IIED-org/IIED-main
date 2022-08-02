@@ -1,0 +1,18 @@
+uuid: c56b6afc-63ee-459f-92e6-84c26490c200
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.card_wide
+id: block_content.card_wide.info
+field_name: info
+entity_type: block_content
+bundle: card_wide
+label: 'Block description'
+description: 'A brief description of your block.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
