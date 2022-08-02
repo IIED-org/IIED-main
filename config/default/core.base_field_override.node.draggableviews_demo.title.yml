@@ -1,0 +1,18 @@
+uuid: c6eaeba3-54a8-4bed-994a-f944684824b6
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.draggableviews_demo
+id: node.draggableviews_demo.title
+field_name: title
+entity_type: node
+bundle: draggableviews_demo
+label: Title
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

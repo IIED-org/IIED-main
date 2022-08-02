@@ -1,0 +1,18 @@
+uuid: ac241b14-e59e-44df-a8d6-58ecc26c61cf
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.icon_block
+id: block_content.icon_block.info
+field_name: info
+entity_type: block_content
+bundle: icon_block
+label: 'Block description'
+description: 'A brief description of your block.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

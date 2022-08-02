@@ -1,0 +1,18 @@
+uuid: d8757061-03a6-4f27-9345-0627e7543e3a
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.stories_curated_content
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: paragraph.stories_curated_content
+target_entity_type_id: paragraph
+target_bundle: stories_curated_content
+default_langcode: site_default
+language_alterable: false
