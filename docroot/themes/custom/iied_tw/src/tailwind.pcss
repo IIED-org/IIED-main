@@ -94,7 +94,8 @@
     @apply before:content-keypoint before:mr-2;
   }
 
-  .keynumber {
+  .keynumber,
+  ol.big-list li::marker {
     @apply text-4xl font-light text-iiedblue-600;
   }
 
@@ -141,6 +142,13 @@
 
   .lead {
     @apply prose prose-lg lg:prose-xl;
+  }
+
+  .divide-above {
+    @apply border-t-2 border-iiedgreen-500;
+  }
+  .divide-below {
+    @apply border-b-2 border-iiedgreen-500;
   }
 
   .odd .rounded-odd-even {
@@ -214,8 +222,17 @@
     @apply border-iiedpink-500;
   }
 
+  /*-- active state for tabs --*/
+  .tab-wrapper .active {
+    @apply border-b-2  border-iiedblue-500;
+  }
+
   .glb-toolbar {
     opacity: 1;
     bottom: 0;
+  }
+
+  .node--unpublished {
+    background-color: #fcf7fa;
   }
 }

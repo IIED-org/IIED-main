@@ -70,7 +70,15 @@
  *   in different view modes.
  */
 #}
-<article{{ attributes.addClass('node') }}>
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    not node.isPublished() ? 'node--unpublished',
+  ]
+%}
+
+<article{{ attributes.addClass(classes) }}>
   <div class="my-6">
     <main>
     {#-- grid --#}
