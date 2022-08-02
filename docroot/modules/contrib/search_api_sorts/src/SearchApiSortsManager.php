@@ -66,7 +66,7 @@ class SearchApiSortsManager implements SearchApiSortsManagerInterface {
    * {@inheritdoc}
    */
   public function getActiveSort(DisplayInterface $display) {
-    $order = (strtolower($this->currentRequest->get('order')) === 'desc') ? 'desc' : 'asc';
+    $order = (strtolower($this->currentRequest->get('order', '')) === 'desc') ? 'desc' : 'asc';
     $active_sort = new SortsField($this->currentRequest->get('sort'), $order);
 
     // Allow altering the active sort (if there is an active sort).
@@ -128,6 +128,10 @@ class SearchApiSortsManager implements SearchApiSortsManagerInterface {
     foreach ($this->searchApiDisplayManager->getInstances() as $display) {
       if ($display->getIndex() instanceof IndexInterface && $index->id() === $display->getIndex()->id()) {
         foreach ($this->getSorts($display) as $search_api_sorts_field) {
+          // Dummy field therefore the index has no field.
+          if ($search_api_sorts_field->getFieldIdentifier() === 'search_api_relevance') {
+            continue;
+          }
           $field = $index->getField($search_api_sorts_field->getFieldIdentifier());
           if ($field === NULL) {
             $search_api_sorts_field->delete();

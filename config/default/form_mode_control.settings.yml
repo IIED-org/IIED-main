@@ -70,3 +70,21 @@
 'use  The form mode default linked to  block_content entity( banner_custom )': block_content.banner_custom.default
 'use  The form mode default linked to  block_content entity( icon_block )': block_content.icon_block.default
 'use  The form mode default linked to  taxonomy_term entity( global )': taxonomy_term.global.default
+creation+administrator+media+audio: media.audio.default
+modification+administrator+media+audio: media.audio.default
+creation+administrator+media+document: media.document.default
+modification+administrator+media+document: media.document.default
+creation+administrator+media+image: media.image.default
+modification+administrator+media+image: media.image.default
+creation+administrator+media+remote_video: media.remote_video.default
+modification+administrator+media+remote_video: media.remote_video.default
+creation+administrator+media+video: media.video.default
+modification+administrator+media+video: media.video.default
+creation+manager+node+publication: node.publication.manager_admin
+creation+administrator+node+publication: node.publication.manager_admin
+modification+manager+node+publication: node.publication.manager_admin
+modification+administrator+node+publication: node.publication.manager_admin
+creation+administrator+taxonomy_term+organisation: taxonomy_term.organisation.default
+modification+administrator+taxonomy_term+organisation: taxonomy_term.organisation.default
+creation+administrator+taxonomy_term+person: taxonomy_term.person.default
+modification+administrator+taxonomy_term+person: taxonomy_term.person.default

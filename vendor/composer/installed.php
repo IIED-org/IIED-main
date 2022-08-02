@@ -1323,12 +1323,14 @@
             'dev_requirement' => false,
         ),
         'drupal/search_api_sorts' => array(
-            'pretty_version' => '1.0.0',
-            'version' => '1.0.0.0',
-            'reference' => '8.x-1.0',
+            'pretty_version' => 'dev-1.x',
+            'version' => 'dev-1.x',
+            'reference' => '8e60f6f4165f136a90b2a28b7cccafe3b477bbcc',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/search_api_sorts',
-            'aliases' => array(),
+            'aliases' => array(
+                0 => '1.x-dev',
+            ),
             'dev_requirement' => false,
         ),
         'drupal/serial' => array(
