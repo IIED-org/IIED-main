@@ -18,13 +18,13 @@ For general featured card display
             {% if image_uri is not null %}
               <div class="m-auto transition duration-300 ease-out shadow-lg w-fit sm:w-fit sm:-rotate-3 group-hover:-rotate-2 group-hover:scale-110">
               <img src="{{ image_uri|image_style('card_cover') }}" alt="{{ image_alt }}" />
-              <div>  
+              </div>  
             {% endif %}
-            {% else %}
-              <div class="m-auto transition duration-300 ease-out shadow-lg w-fit sm:w-fit sm:-rotate-3 group-hover:-rotate-2 group-hover:scale-110">
-              {{ node.field_media[0].entity|view('card_cover') }}
-              </div>
-            {% endif %}
+        {% else %}
+          <div class="m-auto transition duration-300 ease-out shadow-lg w-fit sm:w-fit sm:-rotate-3 group-hover:-rotate-2 group-hover:scale-110">
+          {{ node.field_media[0].entity|view('card_cover') }}
+          </div>
+        {% endif %}
 
             </div>
 

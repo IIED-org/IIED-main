@@ -1,0 +1,30 @@
+{
+    "name": "drupal/search_api_sorts",
+    "description": "Create sort options for search queries executed via the Search API.",
+    "type": "drupal-module",
+    "homepage": "https://www.drupal.org/project/search_api_sorts",
+    "authors": [
+        {
+            "name": "borisson_",
+            "homepage": "https://www.drupal.org/user/2393360"
+        },
+        {
+            "name": "JeroenT",
+            "homepage": "https://www.drupal.org/user/2228934"
+        },
+        {
+            "name": "StryKaizer",
+            "homepage": "https://www.drupal.org/user/462700"
+        }
+    ],
+    "support": {
+        "source": "https://git.drupalcode.org/project/search_api_sorts"
+    },
+    "license": [
+        "GPL-2.0-or-later"
+    ],
+    "require": {
+        "drupal/core": "^8.8 || ^9",
+        "drupal/search_api": "^1.16"
+    }
+}

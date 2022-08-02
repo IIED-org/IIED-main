@@ -35,8 +35,11 @@ interface SearchApiSortsManagerInterface {
   /**
    * Returns all enabled sort fields for a given search api display.
    *
-   * * @param \Drupal\search_api\Display\DisplayInterface $display
+   * @param \Drupal\search_api\Display\DisplayInterface $display
    *   The display where the enabled sorts should be returned for.
+   *
+   * @return \Drupal\search_api_sorts\Entity\SearchApiSortsField[]
+   *   An array of sort field entities.
    */
   public function getEnabledSorts(DisplayInterface $display);
 
