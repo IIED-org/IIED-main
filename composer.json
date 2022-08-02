@@ -130,7 +130,7 @@
         "drupal/search_api": "^1.23",
         "drupal/search_api_autocomplete": "^1.6",
         "drupal/search_api_solr": "^4.2.7",
-        "drupal/search_api_sorts": "^1.0",
+        "drupal/search_api_sorts": "1.x-dev@dev",
         "drupal/serial": "^1.0@alpha",
         "drupal/sidr": "^3.1",
         "drupal/stage_file_proxy": "^1.2",

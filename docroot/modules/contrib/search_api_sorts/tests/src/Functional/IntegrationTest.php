@@ -77,6 +77,7 @@ class IntegrationTest extends SortsFunctionalBase {
     $this->drupalGet('admin/config/search/search-api/index/' . $this->indexId . '/sorts/' . $this->escapedDisplayId);
     $edit = [
       'sorts[id][status]' => TRUE,
+      'sorts[search_api_relevance][status]' => TRUE,
       'sorts[type][status]' => TRUE,
     ];
     $this->drupalPostForm(NULL, $edit, 'Save settings');
@@ -97,6 +98,11 @@ class IntegrationTest extends SortsFunctionalBase {
     $this->drupalGet('search-api-sorts-test');
     $this->assertSession()->linkExists('ID');
     $this->assertSession()->linkNotExists('Type');
+
+    // Make sure that the relevance field is not removed. Since this field is
+    // hardcoded it's not present in the index so there should be an extra
+    // check that this field is not removed when a search_api_index is updated.
+    $this->assertSession()->linkExists('Relevance');
 
     // Make sure the edit link of the search_api_sorts_field redirects to the
     // manage sorts form.

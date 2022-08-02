@@ -134,30 +134,29 @@
 
       {% set view = drupal_view_result('person_content', 'block_1')|length %}
       {% if view > 0 %}
-      <div class="container my-10">
-      <h2 class="mb-4">Projects</h2>
-      {{ drupal_view('person_content', 'block_1') }}
-      </div>
+        <div class="container my-10">
+        <h2 class="mb-4">Projects</h2>
+        {{ drupal_view('person_content', 'block_1') }}
+        </div>
       {% endif %}
 
 
       {% set view = drupal_view_result('person_content', 'block_2')|length %}
       {% if view > 0 %}
-      <div class="container my-10">
-      <h2 class="mb-4">Blogs</h2>
-      {{ drupal_view('person_content', 'block_2') }}
-      </div>
+        <div class="container my-10">
+        <h2 class="mb-4">Blogs</h2>
+        {{ drupal_view('person_content', 'block_2') }}
+        </div>
       {% endif %}
 
-{#
       {% set view = drupal_view_result('term_publications', 'block_1')|length %}
       {% if view > 0 %}
-      <div class="container my-10">
-      <h2 class="mb-4">Publications</h2>
-      {{ drupal_view('term_publications', 'block_1') }}
-      </div>
+        <div class="container my-10">
+        <h2 class="mb-4">Publications</h2>
+        {{ drupal_view('term_publications', 'block_1') }}
+        </div>
       {% endif %}
-#}
+
   </main>
 </div>
 
