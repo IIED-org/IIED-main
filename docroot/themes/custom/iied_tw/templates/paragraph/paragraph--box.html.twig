@@ -49,12 +49,12 @@
   ]
 %}
 
-{% set bg_colour = content.field_background_colour.value %}
+{% set bg_colour = content.field_background_colour.0 %}
 
 {% block paragraph %}
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
-      <aside class="box bg_colour">
+      <aside class="box {{ bg_colour }}">
       {{ content.field_basic_text }}
       </aside>  
     {% endblock %}

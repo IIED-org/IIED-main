@@ -2,15 +2,11 @@ uuid: 375d30ae-5b42-46f2-945a-54d19e43f8ae
 langcode: en
 status: true
 dependencies:
-  config:
-    - filter.format.basic_html
   module:
     - eu_cookie_compliance
-    - filter
 id: viewer
 label: Viewer
 weight: -8
 is_admin: null
 permissions:
   - 'display eu cookie compliance popup'
-  - 'use text format basic_html'

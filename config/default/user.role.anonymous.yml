@@ -2,13 +2,10 @@ uuid: 090e5b48-7dd5-434e-b2cb-e8fbffc3ba39
 langcode: en
 status: true
 dependencies:
-  config:
-    - filter.format.restricted_html
   module:
     - comment
     - contact
     - eu_cookie_compliance
-    - filter
     - media
     - search_api_autocomplete
     - system
@@ -26,5 +23,4 @@ permissions:
   - 'search content'
   - 'use search_api_autocomplete for acquia_search_solr'
   - 'use search_api_autocomplete for search'
-  - 'use text format restricted_html'
   - 'view media'
