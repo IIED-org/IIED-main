@@ -285,6 +285,8 @@ content:
     settings:
       image_link: ''
       image_style: page
+      image_loading:
+        attribute: lazy
     third_party_settings:
       ds:
         ft:
@@ -582,8 +584,16 @@ content:
     type: entity_reference_label
     label: hidden
     settings:
-      link: false
-    third_party_settings: {  }
+      link: true
+    third_party_settings:
+      ds:
+        ds_limit: ''
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
     weight: 29
     region: content
   field_work_programme_global_enga:

@@ -395,5 +395,5 @@ tracker_settings:
 options:
   cron_limit: 1000
   index_directly: true
-  track_changes_in_references: true
+  track_changes_in_references: false
 server: acquia_search_server
