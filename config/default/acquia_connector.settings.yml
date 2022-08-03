@@ -34,7 +34,7 @@ spi:
     variables: {  }
     time: 0
   cron_interval: 28800
-  site_environment: test
+  site_environment: null
   site_uuid: 53a9e309-734c-4742-b2c5-c8ccdb11652d
   env_detection_enabled: true
 mapping:
