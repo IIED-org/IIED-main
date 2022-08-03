@@ -1,28 +1,33 @@
-uuid: 2dbe3b6d-de55-4678-ad28-deebc7e6c099
+uuid: b229329e-ad12-465a-9a3d-dadf6d9c7f63
 langcode: en
 status: true
 dependencies:
   config:
-    - facets_summary.facets_summary.search_summary
+    - system.menu.news-and-insight
   module:
     - context
-    - facets_summary
     - system
   theme:
     - iied_tw
-id: searchsummary_2
+id: newsandinsight
 theme: iied_tw
 region: content
-weight: -7
+weight: -9
 provider: null
-plugin: 'facets_summary_block:search_summary'
+plugin: 'system_menu_block:news-and-insight'
 settings:
-  id: 'facets_summary_block:search_summary'
-  label: 'Search summary'
+  id: 'system_menu_block:news-and-insight'
+  label: 'News and insight'
   label_display: '0'
-  provider: facets_summary
-  context_mapping: {  }
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
 visibility:
+  context_all:
+    id: context_all
+    negate: null
+    values: ''
   user_status:
     id: user_status
     negate: false
@@ -34,10 +39,6 @@ visibility:
       own_page_true: '0'
       field_value: '0'
     user_fields: uid
-  context_all:
-    id: context_all
-    negate: null
-    values: ''
   context:
     id: context
     negate: null
@@ -45,4 +46,4 @@ visibility:
   request_path:
     id: request_path
     negate: false
-    pages: '/search*'
+    pages: "/news-and-insight\r\n/blogs\r\n/news\r\n/events\r\n/conversations\r\n/newsletters"
