@@ -93,13 +93,20 @@
         <h1 class="mb-6 text-4xl">{{ node.label }}</h1>
         <div class="flex mb-4">
           {{ content.field_author_s_}} 
-          {% if content.field_editor_s_ is not empty %}
+          {% if node.field_editor_s_.value %}
+            {% if node.field_author_s_.value %}
             ;&nbsp;
-            {{ content.field_editor_s_ }}&nbsp;(eds)
+            {% endif %}
+            {{ content.field_editor_s_ }} 
+            {% if node.field_editor_s_[1].value %}
+              &nbsp;(eds)
+            {% else %}
+              &nbsp;(ed)
+            {% endif %}
           {% endif %}
           {% if node.field_translator.value %} 
-            {% if node.field_editor_s_.value %}
-            ,&nbsp;
+            {% if content.field_editor_s_ is not empty %}
+            ;&nbsp;
             {% endif %}
           {{ content.field_translator }}&nbsp;(translator)
           {% endif %}
@@ -108,7 +115,7 @@
           {{ content.field_document_type }}
               {% if node.field_pdf_pages.value > 0 %} 
               , {{ content.field_pdf_pages.0 }} pages
-                    {% endif %}  
+              {% endif %}  
         </div>
         {% if node.field_lit_code.0.value != 'X' %}
           <div class="mb-6">
@@ -123,8 +130,7 @@
           </div>
         {% endif %}
       </div>
-
-      
+     
 
 {#  order 1  #}  
       <div class="mb-4 md:order-1 md:row-span-2 md:mr-4">
