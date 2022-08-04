@@ -2666,7 +2666,7 @@ hr{
 }
 
 .node--unpublished {
-  background-color: #fcf7fa;
+  background-color: #fbf0f7;
 }
 
 .visible{
@@ -2873,6 +2873,16 @@ hr{
 .my-8{
   margin-top: 2rem;
   margin-bottom: 2rem;
+}
+
+.my-12{
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+.mx-6{
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
 }
 
 .mb-4{
@@ -3153,6 +3163,14 @@ hr{
   width: 14rem;
 }
 
+.w-1\/4{
+  width: 25%;
+}
+
+.w-3\/4{
+  width: 75%;
+}
+
 .min-w-fit{
   min-width: -webkit-fit-content;
   min-width: -moz-fit-content;
@@ -3173,6 +3191,10 @@ hr{
 
 .max-w-6xl{
   max-width: 72rem;
+}
+
+.max-w-screen-lg{
+  max-width: 1024px;
 }
 
 .flex-auto{
@@ -3212,6 +3234,11 @@ hr{
 
 .-translate-y-1\/2{
   --tw-translate-y: -50%;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.-rotate-1{
+  --tw-rotate: -1deg;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
@@ -3321,6 +3348,10 @@ hr{
   gap: 0.25rem;
 }
 
+.gap-12{
+  gap: 3rem;
+}
+
 .space-x-4 > :not([hidden]) ~ :not([hidden]){
   --tw-space-x-reverse: 0;
   margin-right: calc(1rem * var(--tw-space-x-reverse));
@@ -3363,6 +3394,12 @@ hr{
   margin-left: calc(-0.75rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
+.space-x-6 > :not([hidden]) ~ :not([hidden]){
+  --tw-space-x-reverse: 0;
+  margin-right: calc(1.5rem * var(--tw-space-x-reverse));
+  margin-left: calc(1.5rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
 .self-end{
   align-self: flex-end;
 }
@@ -3397,6 +3434,10 @@ hr{
 
 .rounded{
   border-radius: 0.25rem;
+}
+
+.rounded-3xl{
+  border-radius: 1.5rem;
 }
 
 .rounded-b-3xl{
@@ -3548,8 +3589,23 @@ hr{
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
+.from-iiedpink-900{
+  --tw-gradient-from: #a62b76;
+  --tw-gradient-to: rgb(166 43 118 / 0);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.via-iiedpink-800{
+  --tw-gradient-to: rgb(176 53 128 / 0);
+  --tw-gradient-stops: var(--tw-gradient-from), #b03580, var(--tw-gradient-to);
+}
+
 .to-iiedblue-500{
   --tw-gradient-to: #00b3df;
+}
+
+.to-iiedpink-700{
+  --tw-gradient-to: #ba3f8a;
 }
 
 .fill-current{
@@ -3747,6 +3803,11 @@ hr{
   line-height: 1.25rem;
 }
 
+.text-5xl{
+  font-size: 3rem;
+  line-height: 1;
+}
+
 .font-light{
   font-weight: 300;
 }
@@ -3813,6 +3874,21 @@ hr{
 .text-iiedpink-700{
   --tw-text-opacity: 1;
   color: rgb(186 63 138 / var(--tw-text-opacity));
+}
+
+.text-iiedgreen-800{
+  --tw-text-opacity: 1;
+  color: rgb(140 162 14 / var(--tw-text-opacity));
+}
+
+.text-iiedblue-800{
+  --tw-text-opacity: 1;
+  color: rgb(0 149 193 / var(--tw-text-opacity));
+}
+
+.text-iiedorange-800{
+  --tw-text-opacity: 1;
+  color: rgb(222 149 0 / var(--tw-text-opacity));
 }
 
 .no-underline{
@@ -4521,6 +4597,10 @@ hr{
     grid-column: span 2 / span 2;
   }
 
+  .md\:col-span-4{
+    grid-column: span 4 / span 4;
+  }
+
   .md\:row-span-2{
     grid-row: span 2 / span 2;
   }
@@ -4595,6 +4675,10 @@ hr{
 
   .md\:grid-cols-3{
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .md\:grid-cols-4{
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .md\:flex-row{
@@ -5122,6 +5206,10 @@ hr{
     grid-column: span 12 / span 12;
   }
 
+  .lg\:col-span-1{
+    grid-column: span 1 / span 1;
+  }
+
   .lg\:col-start-5{
     grid-column-start: 5;
   }
@@ -5225,6 +5313,11 @@ hr{
          column-gap: 1.5rem;
   }
 
+  .lg\:gap-x-24{
+    -moz-column-gap: 6rem;
+         column-gap: 6rem;
+  }
+
   .lg\:rounded-tr-none{
     border-top-right-radius: 0px;
   }
@@ -5241,6 +5334,11 @@ hr{
   .lg\:text-2xl{
     font-size: 1.5rem;
     line-height: 2rem;
+  }
+
+  .lg\:text-5xl{
+    font-size: 3rem;
+    line-height: 1;
   }
 }
 
@@ -5436,11 +5534,6 @@ hr{
   .xl\:before\:bottom-\[80\%\]::before{
     content: var(--tw-content);
     bottom: 80%;
-  }
-
-  .xl\:before\:top-5::before{
-    content: var(--tw-content);
-    top: 1.25rem;
   }
 
   .xl\:before\:border-t-transparent::before{

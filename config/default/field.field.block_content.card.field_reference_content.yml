@@ -10,6 +10,7 @@ dependencies:
     - node.type.event
     - node.type.long_read
     - node.type.news
+    - node.type.page
     - node.type.project
     - node.type.publication
 id: block_content.card.field_reference_content
@@ -31,6 +32,7 @@ settings:
       event: event
       long_read: long_read
       news: news
+      page: page
       project: project
       publication: publication
     sort:

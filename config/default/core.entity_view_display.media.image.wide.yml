@@ -1,31 +1,37 @@
-uuid: 9f2f7b23-fd2e-498a-8c08-4a8c2db78bb5
+uuid: b60b59ea-295e-4301-870b-51f075958e52
 langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.media.wide
     - field.field.media.image.field_media_image
     - media.type.image
-    - responsive_image.styles.hero
+    - responsive_image.styles.wide
   module:
     - ds
+    - layout_builder
     - svg_image_responsive
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
 _core:
   default_config_hash: B1a2aBHmUulUZN6HrxITEH1tSResuVjXMBEv1lUBtOo
-id: media.image.default
+id: media.image.wide
 targetEntityType: media
 bundle: image
-mode: default
+mode: wide
 content:
   field_media_image:
     type: responsive_image
     label: hidden
     settings:
-      responsive_image_style: hero
+      responsive_image_style: wide
       image_link: ''
+      svg_render_as_image: '1'
       svg_attributes:
         width: ''
         height: ''
-      svg_render_as_image: true
     third_party_settings:
       ds:
         ft:

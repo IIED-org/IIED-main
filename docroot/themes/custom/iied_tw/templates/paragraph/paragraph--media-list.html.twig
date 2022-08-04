@@ -54,8 +54,12 @@
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
     <div class="flex">
-      {{ content.field_image }}
-      {{ content.field_basic_text }}
+        {% if "On" in content.field_image_round.0 %}
+          <div class="w-1/4 mr-4 overflow-hidden rounded-full not-prose">{{ content.field_image }}</div>
+          {% else %}
+          <div class="w-1/4 mr-4 not-prose">{{ content.field_image }}</div>
+        {% endif %}
+      <div class="w-3/4">{{ content.field_basic_text }}</div>
     </div>
     {% endblock %}
   </div>

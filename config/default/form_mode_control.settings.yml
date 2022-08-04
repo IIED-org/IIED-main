@@ -88,3 +88,5 @@ modification+administrator+taxonomy_term+person: taxonomy_term.person.default
 'use  The form mode default linked to  taxonomy_term entity( global )': taxonomy_term.global.default
 'use  The form mode default linked to  block_content entity( icon_block )': block_content.icon_block.default
 'use  The form mode default linked to  block_content entity( banner_custom )': block_content.banner_custom.default
+'use  The form mode default linked to  paragraph entity( image_round )': paragraph.image_round.default
+'use  The form mode default linked to  paragraph entity( image_small )': paragraph.image_small.default

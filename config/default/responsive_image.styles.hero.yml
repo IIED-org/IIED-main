@@ -3,26 +3,14 @@ langcode: en
 status: true
 dependencies:
   config:
-    - image.style.scale_2xl
     - image.style.scale_lg
     - image.style.scale_md
     - image.style.scale_sm
-    - image.style.scale_xl
   theme:
     - iied_tw
 id: hero
 label: Hero
 image_style_mappings:
-  -
-    image_mapping_type: image_style
-    image_mapping: scale_2xl
-    breakpoint_id: iied_tw.2xl
-    multiplier: 1x
-  -
-    image_mapping_type: image_style
-    image_mapping: scale_xl
-    breakpoint_id: iied_tw.xl
-    multiplier: 1x
   -
     image_mapping_type: image_style
     image_mapping: scale_lg
