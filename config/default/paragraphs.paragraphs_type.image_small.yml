@@ -1,0 +1,10 @@
+uuid: 73f805f6-0c0d-49f8-8da4-376bc82f66b6
+langcode: en
+status: true
+dependencies: {  }
+id: image_small
+label: 'Image small'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

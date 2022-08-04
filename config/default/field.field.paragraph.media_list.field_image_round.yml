@@ -1,0 +1,23 @@
+uuid: 01bfcd5b-aa0a-43bf-b7aa-9b5e84657370
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_image_round
+    - paragraphs.paragraphs_type.media_list
+id: paragraph.media_list.field_image_round
+field_name: field_image_round
+entity_type: paragraph
+bundle: media_list
+label: 'Image round'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

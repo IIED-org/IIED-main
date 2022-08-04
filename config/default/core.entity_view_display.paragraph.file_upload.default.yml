@@ -5,20 +5,11 @@ dependencies:
   config:
     - field.field.paragraph.file_upload.field_upload
     - paragraphs.paragraphs_type.file_upload
-  module:
-    - file
 id: paragraph.file_upload.default
 targetEntityType: paragraph
 bundle: file_upload
 mode: default
-content:
-  field_upload:
-    type: file_default
-    label: above
-    settings:
-      use_description_as_link_text: true
-    third_party_settings: {  }
-    weight: 0
-    region: content
+content: {  }
 hidden:
+  field_upload: true
   search_api_excerpt: true

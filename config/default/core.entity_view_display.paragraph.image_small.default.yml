@@ -1,29 +1,20 @@
-uuid: 634af423-3478-456e-81c6-d18c5609b320
+uuid: 977890ef-0900-44d3-81fe-04a5c5bbf496
 langcode: en
 status: true
 dependencies:
   config:
-    - field.field.paragraph.media_list.field_basic_text
-    - field.field.paragraph.media_list.field_image
-    - field.field.paragraph.media_list.field_image_round
+    - field.field.paragraph.image_small.field_image
+    - field.field.paragraph.image_small.field_image_round
     - image.style.medium
-    - paragraphs.paragraphs_type.media_list
+    - paragraphs.paragraphs_type.image_small
   module:
     - ds
     - svg_image
-    - text
-id: paragraph.media_list.default
+id: paragraph.image_small.default
 targetEntityType: paragraph
-bundle: media_list
+bundle: image_small
 mode: default
 content:
-  field_basic_text:
-    type: text_default
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 1
-    region: content
   field_image:
     type: image
     label: hidden
@@ -54,7 +45,7 @@ content:
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    weight: 2
+    weight: 1
     region: content
 hidden:
   search_api_excerpt: true

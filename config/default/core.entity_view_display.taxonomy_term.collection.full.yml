@@ -126,7 +126,6 @@ third_party_settings:
         - tw-1-2-col-grid
         - tw-1-2-4-col-grid
         - tw-container
-        - tw-tabs
       denylisted_blocks: {  }
       allowlisted_blocks: {  }
       restricted_categories:
@@ -135,6 +134,7 @@ third_party_settings:
         - 'Chaos Tools'
         - 'Content fields'
         - Dashboard
+        - Debugging
         - Devel
         - Facets
         - 'Facets summary (Experimental)'
@@ -146,6 +146,7 @@ third_party_settings:
         - Menus
         - 'Read Only Mode'
         - 'Responsive menu'
+        - 'Search API Sorts'
         - System
         - User
         - core

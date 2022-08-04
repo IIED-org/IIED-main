@@ -36,6 +36,7 @@ dependencies:
     - layout_builder
     - name
     - options
+    - text
 third_party_settings:
   layout_builder:
     enabled: false
@@ -67,12 +68,18 @@ content:
             classes: {  }
     weight: 0
     region: content
-  field_position_short:
-    type: string
+  field_position:
+    type: text_default
     label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
+    settings: {  }
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
     weight: 1
     region: content
   field_research_group:
@@ -99,7 +106,7 @@ hidden:
   field_organisation: true
   field_paragraphs: true
   field_person_type: true
-  field_position: true
+  field_position_short: true
   field_quotes: true
   field_researcher_profiles: true
   field_standfirst: true

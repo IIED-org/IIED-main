@@ -16,7 +16,7 @@ dependencies:
     - taxonomy.vocabulary.collection
   module:
     - entity_reference_revisions
-    - image
+    - svg_image
     - text
 id: taxonomy_term.collection.default
 targetEntityType: taxonomy_term
@@ -43,6 +43,10 @@ content:
     settings:
       image_link: ''
       image_style: ''
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
       image_loading:
         attribute: lazy
     third_party_settings: {  }
@@ -88,7 +92,7 @@ content:
     region: content
   field_tags:
     type: entity_reference_label
-    label: above
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
