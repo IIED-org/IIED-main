@@ -27,7 +27,7 @@
 
 {% set separator = ', ' %}
   <a href="{{ url }}">{{ name }}</a>{{ separator }}
-  {{ content.field_position_short }}
+  {{ content.field_position }}
   {% if content.field_research_group.0 %}
       {{ separator }}{{ content.field_research_group }}
   {% endif %}

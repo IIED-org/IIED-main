@@ -33,6 +33,8 @@
 <div{{ attributes.setAttribute('id', 'taxonomy-term-' ~ term.id).addClass(classes) }}>
     <div class="container items-baseline p-4 mx-auto overflow-hidden lg:grid lg:gap-x-6 lg:grid-cols-12">
       <div class="lg:col-span-4">
+      {# needs adjusting to show themes #}
+        {{ content.field_theme }} 
         {{ title_prefix }}
         <h1 class="mb-6">{{ name }}</h1>
         {{ title_suffix }}
@@ -60,7 +62,7 @@
       </nav>
         <div class="pt-6 tab-panel" x-show="tab === 'inthiscollection'" x-transition:enter.duration.750ms>
           <div class="content">
-            {{ content|without('field_overview') }}
+            {{ content|without('field_overview', 'field_tags', 'field_theme') }}
           </div>
         </div>
         <div class="pt-6 tab-panel" x-show="tab === 'overview'" x-transition:enter.duration.750ms>
@@ -79,6 +81,6 @@
       {{ content }}
   </div>
   
-{# tags need adjusting to show #}
+{# needs adjusting to show tags #}
   {{ content.field_tags }} 
 {% endif %}
