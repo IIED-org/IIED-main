@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * IIED Slider Views module help and theme functions.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function iied_slider_theme($existing, $type, $theme, $path) {
+  // Store TARDIS preprocess theme functions in a separate .inc file.
+  \Drupal::moduleHandler()->loadInclude('iied_slider', 'inc', 'iied_slider.theme');
+
+  return array(
+    'iied_slider' => array(
+      'file' => 'iied_silder.theme.inc',
+    ),
+  );
+}

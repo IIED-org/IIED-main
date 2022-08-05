@@ -1,0 +1,7 @@
+name: IIED Slider
+type: module
+description: 'Provides a View display style that ....'
+package: Views
+core_version_requirement: ^8.8 || ^9
+dependencies:
+  - drupal:views
