@@ -1,15 +1,26 @@
 {#
 /**
- * Default theme implementation for Views to output a TARDIS archive.
+ * Default theme implementation for Views to output a Swiper based slider with
+ * AlpineJS.
  *
  * Available variables:
  * - options: View plugin style options:
- *   - classes: CSS classes.
- *   - nesting: Whether months should be nested inside years.
- *   - path: Link path. Eg.: example.com/TARDIS/2016/03
- *   - time_pool: Two-dimension array containing years and months with content.
+ *   - loop: whether to loop
+ *   - slidesPerView1: number of slides
+ *   - spaceBetween1: space between
+ *   - slidesPerView2: number of slides
+ *   - spaceBetween2: space between
+ *   - slidesPerView3: number of slides
+ *   - spaceBetween3: space between
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
  *
- * @see template_preprocess_views_view_tardis()
+ * @see template_preprocess_views_view_iied_slider()
  *
  * @ingroup themeable
  */
@@ -19,7 +30,6 @@
     'relative w-10/12 mx-auto flex flex-row',
   ]
 %}
-<h2> Here's a thing {{ options.slidesPerView }}</h2>
 
 <div{{attributes.addClass(classes)}} style="width: {{ options.containerWidth }}px; height: {{ options.containerHeight }}px;"
 x-data="{swiper: null}"
@@ -57,7 +67,6 @@ x-data="{swiper: null}"
     <div class="swiper-wrapper">
 
       <!-- Slides -->
-
       {% for row in rows %}
         {%
           set row_classes = [
@@ -71,7 +80,6 @@ x-data="{swiper: null}"
             </div>
           </div>
         </div>
-
       {% endfor %}
 
     </div>
@@ -85,10 +93,4 @@ x-data="{swiper: null}"
     </button>
   </div>
 
-
 </div>
-
-  <h2> next thing </h2>
-
-
-

@@ -122,7 +122,5 @@ class Slider extends StylePluginBase {
       '#description' => t('The space between slides.'),
     );
 
-
-
   }
 }
