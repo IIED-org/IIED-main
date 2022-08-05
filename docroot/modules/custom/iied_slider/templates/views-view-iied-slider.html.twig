@@ -15,51 +15,80 @@
  */
 #}
 {%
-  set classes = [
-    'views-view-iied-silder',
-    options.classes
+    set classes = [
+    'relative w-10/12 mx-auto flex flex-row',
   ]
 %}
-<h2> Here's a thing </h2>
-<div{{attributes.addClass(classes)}}>
+<h2> Here's a thing {{ options.slidesPerView }}</h2>
 
-{% for row in rows %}
-  {%
-    set row_classes = [
-      default_row_class ? 'views-row',
-    ]
-  %}
-  <div{{row.attributes.addClass(row_classes)}}>
-    {{ row.content }}
+<div{{attributes.addClass(classes)}} style="width: {{ options.containerWidth }}px; height: {{ options.containerHeight }}px;"
+x-data="{swiper: null}"
+  x-init="swiper = new Swiper($refs.container, {
+      loop: {{ options.loop }},
+      slidesPerView: {{ options.slidesPerView3 }},
+      spaceBetween: {{ options.spaceBetween3 }},
+
+      breakpoints: {
+        {{ options.breakpoint1 }}: {
+          slidesPerView: {{ options.slidesPerView1 }},
+          spaceBetween: {{ options.spaceBetween1 }},
+        },
+        {{ options.breakpoint2 }}: {
+          slidesPerView: {{ options.slidesPerView2 }},
+          spaceBetween: {{ options.spaceBetween2 }},
+        },
+        {{ options.breakpoint3 }}: {
+          slidesPerView: {{ options.slidesPerView3 }},
+          spaceBetween: {{ options.spaceBetween3 }},
+        },
+      },
+    })"
+>
+
+  <div class="absolute inset-y-0 left-0 z-10 flex items-center">
+    <button @click="swiper.slidePrev()" class="bg-white -ml-2 lg:-ml-4 flex justify-center items-center w-10 h-10 rounded-full shadow focus:outline-none">
+      <svg viewbox="0 0 20 20" fill="currentColor" class="chevron-left w-6 h-6">
+        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+      </svg>
+    </button>
   </div>
-{% endfor %}
+
+  <div class="swiper-container" x-ref="container" >
+    <div class="swiper-wrapper">
+
+      <!-- Slides -->
+
+      {% for row in rows %}
+        {%
+          set row_classes = [
+            default_row_class ? 'views-row',
+          ]
+        %}
+        <div class="swiper-slide p-4">
+          <div class="flex flex-col rounded shadow overflow-hidden">
+            <div class="flex-shrink-0">
+             {{ row.content }}
+            </div>
+          </div>
+        </div>
+
+      {% endfor %}
+
+    </div>
+  </div>
+
+  <div class="absolute inset-y-0 right-0 z-10 flex items-center">
+    <button @click="swiper.slideNext()" class="bg-white -mr-2 lg:-mr-4 flex justify-center items-center w-10 h-10 rounded-full shadow focus:outline-none">
+      <svg viewbox="0 0 20 20" fill="currentColor" class="chevron-right w-6 h-6">
+        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+      </svg>
+    </button>
+  </div>
 
 
-<h2> next thing </h2>
-
-
-
-  <ul>
-    {% for key, item in options.time_pool %}
-      {% if options.nesting == 1 %}
-        <li>
-          <a href="/{{ options.path }}/{{ key }}">{{ key }}</a>
-          <ul>
-            {% for subkey, subitem in item %}
-              <li>
-                <a href="/{{ options.path }}/{{ key }}/{{ subkey }}">{{ subitem }}</a>
-              </li>
-            {% endfor %}
-          </ul>
-        </li>
-      {% else %}
-        {% for subkey, subitem in item %}
-          <li>
-            <a href="/{{ options.path }}/{{ key }}/{{ subkey }}">{{ subitem }}</a>
-          </li>
-        {% endfor %}
-      {% endif %}
-    {% endfor %}
-  </ul>
 </div>
+
+  <h2> next thing </h2>
+
+
 

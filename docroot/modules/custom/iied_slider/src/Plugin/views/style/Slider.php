@@ -47,69 +47,82 @@ class Slider extends StylePluginBase {
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
 
-    // Path prefix for IIED_Slider links.
-    $form['path'] = array(
+    $form['containerWidth'] = array(
+      '#type' => 'number',
+      '#title' => t('Container width.'),
+      '#default_value' => (isset($this->options['containerWidth'])) ? $this->options['containerWidth'] : '700',
+      '#description' => t('The width of the container.'),
+    );
+    $form['containerHeight'] = array(
+      '#type' => 'number',
+      '#title' => t('Container height.'),
+      '#default_value' => (isset($this->options['containerHeight'])) ? $this->options['containerHeight'] : '450',
+      '#description' => t('The height of the container.'),
+    );
+    $form['loop'] = array(
       '#type' => 'textfield',
-      '#title' => t('Link path'),
-      '#default_value' => (isset($this->options['path'])) ? $this->options['path'] : 'tardis',
-      '#description' => t('Path prefix for each TARDIS link, eg. example.com<strong>/tardis/</strong>2015/10.'),
+      '#title' => t('Loop'),
+      '#default_value' => (isset($this->options['loop'])) ? $this->options['loop'] : 'true',
+      '#description' => t('Whether to loop or not'),
+    );
+    $form['breakpoint1'] = array(
+      '#type' => 'number',
+      '#title' => t('breakpoint 1.'),
+      '#default_value' => (isset($this->options['breakpoint1'])) ? $this->options['breakpoint1'] : '640',
+      '#description' => t('The breakpoint width, in pixels.'),
+    );
+    $form['breakpoint2'] = array(
+      '#type' => 'number',
+      '#title' => t('breakpoint 2.'),
+      '#default_value' => (isset($this->options['breakpoint2'])) ? $this->options['breakpoint2'] : '768',
+      '#description' => t('The breakpoint width, in pixels.'),
+    );
+    $form['breakpoint3'] = array(
+      '#type' => 'number',
+      '#title' => t('breakpoint 3.'),
+      '#default_value' => (isset($this->options['breakpoint3'])) ? $this->options['breakpoint3'] : '1024',
+      '#description' => t('The breakpoint width, in pixels.'),
+    );
+    $form['slidesPerView1'] = array(
+      '#type' => 'number',
+      '#title' => t('Slides per view at breakpoint 1.'),
+      '#default_value' => (isset($this->options['slidesPerView1'])) ? $this->options['slidesPerView1'] : '1',
+      '#description' => t('The number of slides visisble inititally.'),
+    );
+    $form['spaceBetween1'] = array(
+      '#type' => 'number',
+      '#title' => t('Space between slides at breakpoint 1.'),
+      '#default_value' => (isset($this->options['spaceBetween1'])) ? $this->options['spaceBetween1'] : '0',
+      '#description' => t('The space between slides.'),
+    );
+    // slidesPerView.
+    $form['slidesPerView2'] = array(
+      '#type' => 'number',
+      '#title' => t('Slides per view at breakpoint 2.'),
+      '#default_value' => (isset($this->options['slidesPerView2'])) ? $this->options['slidesPerView2'] : '2',
+      '#description' => t('The number of slides visisble inititally.'),
+    );
+    $form['spaceBetween2'] = array(
+      '#type' => 'number',
+      '#title' => t('Space between slides at breakpoint 2'),
+      '#default_value' => (isset($this->options['spaceBetween2'])) ? $this->options['spaceBetween2'] : '0',
+      '#description' => t('The space between slides.'),
+    );
+    // slidesPerView.
+    $form['slidesPerView3'] = array(
+      '#type' => 'number',
+      '#title' => t('Slides per view at breakpoint 3.'),
+      '#default_value' => (isset($this->options['slidesPerView3'])) ? $this->options['slidesPerView3'] : '3',
+      '#description' => t('The number of slides visisble inititally.'),
+    );
+    $form['spaceBetween3'] = array(
+      '#type' => 'number',
+      '#title' => t('Space between slides at breakpoint 3.'),
+      '#default_value' => (isset($this->options['spaceBetween3'])) ? $this->options['spaceBetween3'] : '0',
+      '#description' => t('The space between slides.'),
     );
 
-    // Month date format.
-    $form['month_date_format'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Month date format'),
-      '#default_value' => (isset($this->options['month_date_format'])) ? $this->options['month_date_format'] : 'm',
-      '#description' => t('Valid PHP <a href="@url" target="_blank">Date function</a> parameter to display months.', array('@url' => 'http://php.net/manual/en/function.date.php')),
-    );
 
-    // Whether month links should be nested inside year links.
-    $options = array(
-      1 => 'yes',
-      0 => 'no',
-    );
-    $form['nesting'] = array(
-      '#type' => 'radios',
-      '#title' => t('Nesting'),
-      '#options' => $options,
-      '#default_value' => (isset($this->options['nesting'])) ? $this->options['nesting'] : 1,
-      '#description' => t('Should months be nested inside years? <br />
-        Example:
-        <table style="width:100px">
-          <thead>
-              <th>Nesting</th>
-              <th>No nesting</th>
-          </thead>
-          <tbody>
-            <td>
-              <ul>
-                <li>2016
-                  <ul>
-                    <li>03</li>
-                    <li>02</li>
-                    <li>01</li>
-                  </ul>
-                </li>
-              </ul>
-            </td>
-            <td>
-              <ul>
-                <li>2016/03</li>
-                <li>2016/02</li>
-                <li>2016/01</li>
-              </ul>
-            </td>
-          </tbody>
-        </table>
-      '),
-    );
 
-    // Extra CSS classes.
-    $form['classes'] = array(
-      '#type' => 'textfield',
-      '#title' => t('CSS classes'),
-      '#default_value' => (isset($this->options['classes'])) ? $this->options['classes'] : 'view-tardis',
-      '#description' => t('CSS classes for further customization of this TARDIS page.'),
-    );
   }
 }
