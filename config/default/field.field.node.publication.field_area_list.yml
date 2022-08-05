@@ -14,7 +14,7 @@ bundle: publication
 label: 'Country list'
 description: "<p><i><big><strong>Hint:</strong> List any/all countries mentioned.</big></i></p>\r\n<p><i><big>Select a Country from the drop-down list.</big></i></p>\r\n<p><i><big>For multiple countries click 'Add another item'.</big></i></p>"
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:

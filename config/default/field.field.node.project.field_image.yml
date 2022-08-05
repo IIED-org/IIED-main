@@ -6,14 +6,7 @@ dependencies:
     - field.storage.node.field_image
     - node.type.project
   module:
-    - content_translation
     - image
-third_party_settings:
-  content_translation:
-    translation_sync:
-      file: file
-      alt: '0'
-      title: '0'
 id: node.project.field_image
 field_name: field_image
 entity_type: node
@@ -21,7 +14,7 @@ bundle: project
 label: Image
 description: ''
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:

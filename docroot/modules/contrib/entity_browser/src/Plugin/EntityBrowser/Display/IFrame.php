@@ -16,10 +16,10 @@ use Drupal\entity_browser\Events\AlterEntityBrowserDisplayData;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Drupal\Core\Path\CurrentPathStack;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Render\BareHtmlPageRendererInterface;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 /**
  * Presents entity browser in an iFrame.
@@ -142,7 +142,7 @@ class IFrame extends DisplayBase implements DisplayRouterInterface {
     /** @var \Drupal\entity_browser\Events\RegisterJSCallbacks $event */
     $js_event_object = new RegisterJSCallbacks($this->configuration['entity_browser_id'], $this->getUuid());
     $js_event_object->registerCallback('Drupal.entityBrowser.selectionCompleted');
-    $callback_event = $this->eventDispatcher->dispatch(Events::REGISTER_JS_CALLBACKS, $js_event_object);
+    $callback_event = $this->eventDispatcher->dispatch($js_event_object, Events::REGISTER_JS_CALLBACKS);
     $original_path = $this->currentPath->getPath();
 
     $data = [
@@ -160,7 +160,7 @@ class IFrame extends DisplayBase implements DisplayRouterInterface {
       ],
     ];
     $event_object = new AlterEntityBrowserDisplayData($this->configuration['entity_browser_id'], $this->getUuid(), $this->getPluginDefinition(), $form_state, $data);
-    $event = $this->eventDispatcher->dispatch(Events::ALTER_BROWSER_DISPLAY_DATA, $event_object);
+    $event = $this->eventDispatcher->dispatch($event_object, Events::ALTER_BROWSER_DISPLAY_DATA);
     $data = $event->getData();
     return [
       '#theme_wrappers' => ['container'],
@@ -205,10 +205,10 @@ class IFrame extends DisplayBase implements DisplayRouterInterface {
    * Intercepts default response and injects response that will trigger JS to
    * propagate selected entities upstream.
    *
-   * @param \Symfony\Component\HttpKernel\Event\FilterResponseEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
    *   Response event.
    */
-  public function propagateSelection(FilterResponseEvent $event) {
+  public function propagateSelection(ResponseEvent $event) {
     $render = [
       '#attached' => [
         'library' => ['entity_browser/' . $this->pluginDefinition['id'] . '_selection'],

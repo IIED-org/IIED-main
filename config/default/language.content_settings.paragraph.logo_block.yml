@@ -1,0 +1,18 @@
+uuid: d6027708-793e-4dce-9c2c-27407d5ad35d
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.logo_block
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: paragraph.logo_block
+target_entity_type_id: paragraph
+target_bundle: logo_block
+default_langcode: site_default
+language_alterable: false

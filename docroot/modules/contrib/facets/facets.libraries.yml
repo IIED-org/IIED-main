@@ -79,4 +79,4 @@ drupal.facets.views-ajax:
   dependencies:
     - facets/widget
     - core/drupalSettings
-    - core/drupal.ajax
+    - views/views.ajax

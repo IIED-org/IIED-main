@@ -1,0 +1,28 @@
+search_api_sorts.search_api_sorts_field.*:
+  type: config_entity
+  label: 'Search API sorts field'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    weight:
+      type: integer
+      label: 'Weight'
+    display_id:
+      type: string
+      label: 'Display id'
+    field_identifier:
+      type: string
+      label: 'The identifier of the field'
+    status:
+      type: boolean
+      label: 'status'
+    default_sort:
+      type: boolean
+      label: 'Is default sort when no sort provided'
+    default_order:
+      type: string
+      label: 'Default order'

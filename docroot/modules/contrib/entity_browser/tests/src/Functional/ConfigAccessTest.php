@@ -41,7 +41,7 @@ class ConfigAccessTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->drupalPlaceBlock('local_tasks_block');
     $this->drupalPlaceBlock('local_actions_block');
@@ -58,15 +58,15 @@ class ConfigAccessTest extends BrowserTestBase {
   public function testEntityBrowserEditFormAccess() {
     // Test that anonymous user can't access admin pages.
     $this->drupalGet('/admin/config/content/entity_browser');
-    $this->assertSession()->statusCodeEquals(403, "Anonymous user can't access entity browser listing page.");
+    $this->assertSession()->statusCodeEquals(403);
     $this->drupalGet('/admin/config/content/entity_browser/add');
-    $this->assertSession()->statusCodeEquals(403, "Anonymous user can't access entity browser add form.");
+    $this->assertSession()->statusCodeEquals(403);
 
     // Test that user with "administer entity browsers" permission can access
     // admin pages.
     $this->drupalLogin($this->adminUser);
     $this->drupalGet('/admin/config/content/entity_browser');
-    $this->assertSession()->statusCodeEquals(200, 'Admin user is able to navigate to the entity browser listing page.');
+    $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()->responseContains('There are no entity browser entities yet.');
 
     $this->clickLink('Add Entity browser');
@@ -77,16 +77,16 @@ class ConfigAccessTest extends BrowserTestBase {
 
     $this->drupalLogout();
     $this->drupalGet('/admin/config/content/entity_browser/test_entity_browser');
-    $this->assertSession()->statusCodeEquals(404, "Anonymous user can't access entity browser edit form.");
+    $this->assertSession()->statusCodeEquals(404);
 
     $this->drupalLogin($this->adminUser);
     $this->drupalGet('/admin/config/content/entity_browser');
     $this->clickLink('Delete');
-    $this->assertSession()->responseContains('This action cannot be undone.', 'Delete question found.');
+    $this->assertSession()->responseContains('This action cannot be undone.');
     $this->submitForm([], 'Delete Entity Browser');
 
-    $this->assertSession()->responseContains('Entity browser <em class="placeholder">Test entity browser</em> was deleted.', 'Confirmation message found.');
-    $this->assertSession()->responseContains('There are no entity browser entities yet.', 'Entity browsers table is empty.');
+    $this->assertSession()->responseContains('Entity browser <em class="placeholder">Test entity browser</em> was deleted.');
+    $this->assertSession()->responseContains('There are no entity browser entities yet.');
     $this->drupalLogout();
   }
 

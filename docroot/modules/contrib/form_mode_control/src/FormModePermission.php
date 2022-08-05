@@ -62,55 +62,56 @@ class FormModePermission implements ContainerInjectionInterface {
     $all_form_modes = $this->entityManager->getStorage('entity_form_display')
       ->loadMultiple();
 
-    // Load configuration.
-    $configuration = \Drupal::configFactory()
-      ->getEditable('form_mode_control.settings');
-
-    // Load a copy of the configuration to determine what's unused.
-    $config_purgatory = $configuration->getRawData();
+    $to_add = [];
+    $to_delete = [];
 
     foreach ($all_form_modes as $id_form_mode => $form_mode) {
       $machine_name_form_mode = explode('.', $id_form_mode);
       $entity_type = $machine_name_form_mode[0];
       $bundle = $machine_name_form_mode[1];
       $form_mode_id = $machine_name_form_mode[2];
-
       $permissions_key = 'use  The form mode ' . $form_mode_id . ' linked to  ' . $entity_type . ' entity( ' . $bundle . ' )';
-
-      // Clear from the config purgatory, since this key will be processed.
-      unset($config_purgatory[$permissions_key]);
 
       // If the form mode is disabled don't add it to the list and make sure it
       // is cleared from configuration.
       // TODO : ( && $form_mode_id != "default") voir si c'est possible.
       if ($form_mode->status() == FALSE || !$form_mode_id) {
-        $configuration->clear($permissions_key);
-        continue;
+        $to_delete[] = $id_form_mode;
+      }
+      else {
+        // If the form mode is activated, we add a permission linked to this
+        // form mode.
+        $title = $this->t('Use the form mode %label_form_mode linked to %entity_type_id ( %bundle )', [
+          '%label_form_mode' => $form_mode_id,
+          '%entity_type_id' => form_mode_control_get_entity_type_label($entity_type),
+          '%bundle' => form_mode_control_get_bundle_label($entity_type, $bundle),
+        ]);
+
+        $permissions[$permissions_key] = ['title' => $title];
+        $to_add[$permissions_key] = $id_form_mode;
+      }
+    }
+
+    if ($to_delete || $to_add) {
+      // Load configuration.
+      $configuration = \Drupal::configFactory()
+        ->getEditable('form_mode_control.settings');
+
+      foreach ($to_delete as $key) {
+        $configuration->clear($key);
+      }
+      foreach ($to_add as $key => $value) {
+        $configuration->set($key, $value);
       }
 
-      // If the form mode is activated, we add a permission linked to this
-      // form mode.
-      $title = $this->t('Use the form mode %label_form_mode linked to %entity_type_id ( %bundle )', [
-        '%label_form_mode' => $form_mode_id,
-        '%entity_type_id' => form_mode_control_get_entity_type_label($entity_type),
-        '%bundle' => form_mode_control_get_bundle_label($entity_type, $bundle),
-      ]);
-
-      // Saving configurations.
-      $permissions[$permissions_key] = ['title' => $title];
-      $configuration->set($permissions_key, $id_form_mode);
+      $configuration->save(TRUE);
     }
-    // Purge anything left in the config purgatory.
-    foreach ($config_purgatory as $key => $data) {
-      $configuration->clear($key);
-    }
-
-    $configuration->save(TRUE);
 
     $permissions['access_all_form_modes'] = [
       'title' => $this->t('Access all form modes'),
       'description' => $this->t('To access to a form mode, you must add ?display=form_mode_searched,else a form mode default was launched by default.'),
     ];
+
     return $permissions;
   }
 
@@ -121,10 +122,12 @@ class FormModePermission implements ContainerInjectionInterface {
    *   The parameter to clear.
    */
   protected function clearDataPermissions($data) {
+    $configuration = \Drupal::configFactory()
+      ->getEditable('form_mode_control.settings');
+
     foreach ($data as $id => $permission) {
       if (!EntityFormDisplay::load($id)) {
-        \Drupal::configFactory()
-          ->getEditable('form_mode_control.settings')->clear($id);
+        $configuration->clear($id);
       }
     }
   }

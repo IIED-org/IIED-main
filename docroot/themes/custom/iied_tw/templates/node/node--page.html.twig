@@ -70,7 +70,16 @@
  *   in different view modes.
  */
 #}
-<article{{ attributes.addClass('node') }}>
+
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    not node.isPublished() ? 'node--unpublished',
+  ]
+%}
+
+<article{{ attributes.addClass(classes) }}>
   <div class="my-6">
     <main>
     {#-- grid --#}
@@ -78,11 +87,11 @@
       class="container mx-auto lg:px-8 xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12"
     >
       <div
-        class="order-1 xl:col-span-7 2xl:col-span-6 xl:col-start-4 md:order-2"
+        class="order-1 xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4 md:order-2"
       >
         <nav aria-label="themes">
           <div class="flex flex-wrap mb-6 space-x-3">
-            {{ content.field_theme_s_}}
+            {{ content.field_global_term }} 
           </div>
         </nav>
         <h1 class="mb-6 text-4xl">{{ node.label }}</h1>
@@ -102,26 +111,17 @@
           class="flex flex-col flex-wrap justify-between pb-6 border-b border-gray-300 xl:border-none sm:flex-row"
         >
 
-          {# date #}
-          {% if node.field_hide_date.value %}
-          {% else %}
+          {# date 
           <div class="flex items-center">
-          {% if node.field_article_type.value %} 
-          {{ content.field_article_type }},  
-          {% endif %}
           {{ node.getCreatedTime|date('d F Y') }}
           </div>
-          {% endif %}
+          {% endif %}#}
 
           <div class="flex items-center">
             {% include '@iied_tw/partials/_share_links.html.twig' %}
           </div>
         </div>
 
-      </div>
-      {# / attribution #} {#-- collection --#}
-      <div class="pt-2 mb-6 xl:col-span-3 2xl:order-1 xl:pr-6 2xl:pr-12">
-        {{ content.field_collections }}
       </div>
     </div>
 
@@ -143,7 +143,7 @@
         {% endif %}
 
         {#-- body --#}
-        <div class="pb-6 prose md:prose-lg">
+        <div class="prose md:prose-lg">
           <div {{ content_attributes.addClass('node-content') }}> 
           {{ content.body }} 
           </div>
@@ -156,11 +156,8 @@
       {{ content.field_content }}
 
     <div
-      class="container mx-auto lg:px-8 xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12">
-      <div class="xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4">
-        {#-- tags --#}
-         {{ content.field_tags }} 
-
+      class="container mx-auto my-4 lg:px-8 xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12">
+      <div class="border-t border-gray-300 xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4">
         <div class="flex items-center py-4">
           {% include '@iied_tw/partials/_share_links.html.twig' %}
           {% include '@iied_tw/partials/_copy_print_links.html.twig' %}

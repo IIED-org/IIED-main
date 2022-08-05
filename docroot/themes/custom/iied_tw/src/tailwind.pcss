@@ -94,6 +94,11 @@
     @apply before:content-keypoint before:mr-2;
   }
 
+  .keynumber,
+  ol.big-list li::marker {
+    @apply text-4xl font-light text-iiedblue-600;
+  }
+
   /* Components -- twig templates */
   /* Cards */
   .card {
@@ -104,18 +109,33 @@
     @apply list-disc list-inside;
   } */
 
+  .box,
   .box-outline,
   .boxbox {
     @apply border border-gray-300 p-4 rounded-xl;
   }
+
+  .box h2,
+  .box h3,
+  .box h4,
+  .box h5 {
+    @apply mt-2;
+  }
+
   .bg-fill {
-    @apply p-4 bg-gray-100;
+    @apply bg-gray-100;
   }
 
   .bg-green {
-    @apply p-4 bg-iiedgreen-500;
+    @apply bg-iiedgreen-200;
   }
 
+  .bg-blue {
+    @apply bg-iiedblue-200;
+  }
+
+  .media-caption,
+  .figure-caption,
   .image-caption {
     @apply mt-1 text-base leading-tight text-gray-500;
   }
@@ -124,26 +144,22 @@
     @apply prose prose-lg lg:prose-xl;
   }
 
-  .odd .rounded-odd-even {
-    @apply rounded-tl-xl;
+  .divide-above {
+    @apply border-t-2 border-iiedgreen-500;
+  }
+  .divide-below {
+    @apply border-b-2 border-iiedgreen-500;
   }
 
-  .even .rounded-odd-even {
+  .odd .rounded-odd-even {
     @apply rounded-tr-xl;
   }
 
-  .odd .rounded-odd-even:before {
-    content: url(/themes/custom/iied_tw/templates/layout/icons/corner-tr.svg);
-    position: absolute;
-    top: -12px;
-    right: 0;
-    width: 12px;
-    height: 12px;
-    margin: 0 0 0 0px;
-    fill: #fff;
+  .even .rounded-odd-even {
+    @apply rounded-tl-xl;
   }
 
-  .even .rounded-odd-even:before {
+  .odd .rounded-odd-even:before {
     content: url(/themes/custom/iied_tw/templates/layout/icons/corner-bl.svg);
     position: absolute;
     top: -12px;
@@ -154,11 +170,24 @@
     fill: #fff;
   }
 
+  .even .rounded-odd-even:before {
+    content: url(/themes/custom/iied_tw/templates/layout/icons/corner-tr.svg);
+    position: absolute;
+    top: -12px;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    margin: 0 0 0 0px;
+    fill: #fff;
+  }
+
   .mm-listitem {
     border: white;
   }
 
-  #block-exposedformsearchpage-2-5 .bef--secondary {
+  #block-exposedformsearchpage-2-5 .bef--secondary,
+  #edit-submit-search--2,
+  #edit-submit-search {
     display: none;
   }
 
@@ -191,5 +220,19 @@
   }
   .grid .views-row:nth-child(8n + 8) .color-rotate {
     @apply border-iiedpink-500;
+  }
+
+  /*-- active state for tabs --*/
+  .tab-wrapper .active {
+    @apply border-b-2  border-iiedblue-500;
+  }
+
+  .glb-toolbar {
+    opacity: 1;
+    bottom: 0;
+  }
+
+  .node--unpublished {
+    background-color: #fcf7fa;
   }
 }

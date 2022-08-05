@@ -6,12 +6,15 @@ dependencies:
     - core.entity_view_mode.node.full
     - field.field.node.page.body
     - field.field.node.page.field_content
+    - field.field.node.page.field_display_image
+    - field.field.node.page.field_global_term
     - field.field.node.page.field_image_caption
     - field.field.node.page.field_main_image
     - field.field.node.page.field_rows
+    - field.field.node.page.field_standfirst
+    - field.field.node.page.field_tagline
     - node.type.page
   module:
-    - ds
     - layout_builder
     - layout_paragraphs
     - text
@@ -60,7 +63,7 @@ content:
             fi-def-at: false
             prefix: ''
             suffix: ''
-    weight: 0
+    weight: 4
     region: content
   field_content:
     type: layout_paragraphs
@@ -69,7 +72,22 @@ content:
       view_mode: default
       link: false
     third_party_settings: {  }
-    weight: 2
+    weight: 5
+    region: content
+  field_global_term:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_image_caption:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
     region: content
   field_main_image:
     type: entity_reference_entity_view
@@ -78,11 +96,19 @@ content:
       view_mode: default
       link: true
     third_party_settings: {  }
+    weight: 2
+    region: content
+  field_standfirst:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
     weight: 1
     region: content
 hidden:
-  field_image_caption: true
+  field_display_image: true
   field_rows: true
+  field_tagline: true
   langcode: true
   layout_builder__layout: true
   links: true

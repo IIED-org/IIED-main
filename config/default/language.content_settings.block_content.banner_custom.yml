@@ -1,0 +1,18 @@
+uuid: cb8524ae-7e78-42c6-9726-180cbe81c30a
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.banner_custom
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: block_content.banner_custom
+target_entity_type_id: block_content
+target_bundle: banner_custom
+default_langcode: site_default
+language_alterable: false

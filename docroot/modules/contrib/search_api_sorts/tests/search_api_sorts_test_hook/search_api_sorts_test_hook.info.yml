@@ -1,0 +1,6 @@
+name: 'Search API sorts hooks test'
+type: module
+description: 'Support module for Search API tests, tests all the hooks.'
+package: Testing
+core_version_requirement: ^8.8 || ^9
+hidden: true

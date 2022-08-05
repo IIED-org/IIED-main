@@ -1,0 +1,18 @@
+uuid: f3278324-53e4-4fc9-bb48-ac3f5a71d4a0
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.person_type
+id: taxonomy_term.person_type.metatag
+field_name: metatag
+entity_type: taxonomy_term
+bundle: person_type
+label: 'Metatags (Hidden field for JSON support)'
+description: 'The meta tags for the entity.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: map

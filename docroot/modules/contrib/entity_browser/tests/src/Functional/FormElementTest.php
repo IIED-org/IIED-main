@@ -17,7 +17,7 @@ class FormElementTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['entity_browser_test', 'node', 'views'];
+  protected static $modules = ['entity_browser_test', 'node', 'views'];
 
   /**
    * Test nodes.
@@ -34,7 +34,7 @@ class FormElementTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->container
       ->get('entity_type.manager')
@@ -67,7 +67,7 @@ class FormElementTest extends BrowserTestBase {
 
     $this->assertSession()->buttonExists('Submit')->press();
     $expected = 'Selected entities: ' . $this->nodes[0]->label() . ', ' . $this->nodes[1]->label();
-    $this->assertSession()->responseContains($expected, 'Selected entities detected.');
+    $this->assertSession()->responseContains($expected);
 
     $default_entity = $this->nodes[0]->getEntityTypeId() . ':' . $this->nodes[0]->id();
     $this->drupalGet('/test-element', ['query' => ['default_entity' => $default_entity, 'selection_mode' => EntityBrowserElement::SELECTION_MODE_EDIT]]);
@@ -80,7 +80,7 @@ class FormElementTest extends BrowserTestBase {
 
     $this->submitForm([], 'Submit');
     $expected = 'Selected entities: ' . $this->nodes[1]->label() . ', ' . $this->nodes[0]->label();
-    $this->assertSession()->responseContains($expected, 'Selected entities detected.');
+    $this->assertSession()->responseContains($expected);
   }
 
 }

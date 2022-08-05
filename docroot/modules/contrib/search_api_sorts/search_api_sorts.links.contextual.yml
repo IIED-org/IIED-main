@@ -1,0 +1,4 @@
+search_api_sorts_block_manage_sort_fields:
+  title: 'Manage sort fields'
+  route_name: 'search_api_sorts.search_api_display.sorts'
+  group: 'search_api_sorts'

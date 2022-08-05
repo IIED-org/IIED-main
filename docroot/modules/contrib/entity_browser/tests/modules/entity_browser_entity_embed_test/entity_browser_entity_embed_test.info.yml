@@ -1,7 +1,6 @@
 name: 'Test IEF'
 type: module
 description: 'Test Entity Embed Integration'
-core_version_requirement: ^8.7.7 || ^9
 package: Testing
 dependencies:
   - drupal:media
@@ -17,7 +16,7 @@ dependencies:
   - entity_browser:entity_browser
   - entity_browser_test:entity_browser_test
 
-# Information added by Drupal.org packaging script on 2022-06-22
-version: '8.x-2.7'
+# Information added by Drupal.org packaging script on 2022-07-22
+version: '8.x-2.8'
 project: 'entity_browser'
-datestamp: 1655931713
+datestamp: 1658509705

@@ -1,0 +1,32 @@
+uuid: b62fa512-bbf4-4726-b6ef-32a112c98be3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.box.field_background_colour
+    - field.field.paragraph.box.field_basic_text
+    - paragraphs.paragraphs_type.box
+  module:
+    - options
+    - text
+id: paragraph.box.default
+targetEntityType: paragraph
+bundle: box
+mode: default
+content:
+  field_background_colour:
+    type: list_key
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_basic_text:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

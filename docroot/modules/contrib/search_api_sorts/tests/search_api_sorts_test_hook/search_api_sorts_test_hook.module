@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * Tests all the hooks.
+ */
+
+use Drupal\search_api\Display\DisplayInterface;
+use Drupal\search_api_sorts\SortsField;
+
+/**
+ * Implements hook_search_api_sorts_default_sort_alter().
+ */
+function search_api_sorts_test_hook_search_api_sorts_default_sort_alter(SortsField &$sort, DisplayInterface $display) {
+  $sort->setOrder(\Drupal::state()->get('search_api_sorts_default_sort'));
+  $sort->setFieldName('id');
+  \Drupal::messenger()->addStatus('Hook hook_search_api_sorts_default_sort_alter with order: ' . $sort->getOrder());
+}

@@ -7,6 +7,7 @@ module:
   admin_toolbar: 0
   admin_toolbar_links_access_filter: 0
   admin_toolbar_tools: 0
+  asset_injector: 0
   automated_cron: 0
   better_exposed_filters: 0
   better_social_sharing_buttons: 0
@@ -138,16 +139,21 @@ module:
   search_api_solr: 0
   search_api_solr_admin: 0
   search_api_solr_autocomplete: 0
+  search_api_sorts: 0
   serial: 0
   serialization: 0
   shortcut: 0
   sophron: 0
   stories: 0
+  svg_image: 0
+  svg_image_responsive: 0
   syslog: 0
   system: 0
   tablefield: 0
   taxonomy: 0
   taxonomy_menu: 0
+  term_merge: 0
+  term_reference_change: 0
   text: 0
   token: 0
   toolbar: 0

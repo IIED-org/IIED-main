@@ -1,0 +1,65 @@
+uuid: 18ed7f24-a082-44c4-a8b4-e234ddca27a2
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.search_result
+    - field.field.node.page.body
+    - field.field.node.page.field_content
+    - field.field.node.page.field_display_image
+    - field.field.node.page.field_global_term
+    - field.field.node.page.field_image_caption
+    - field.field.node.page.field_main_image
+    - field.field.node.page.field_rows
+    - field.field.node.page.field_standfirst
+    - field.field.node.page.field_tagline
+    - node.type.page
+  module:
+    - ds
+    - layout_builder
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+_core:
+  default_config_hash: g1S3_GLaxq4l3I9RIca5Mlz02MxI2KmOquZpHw59akM
+id: node.page.search_result
+targetEntityType: node
+bundle: page
+mode: search_result
+content:
+  field_main_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: search_cover
+      link: false
+    third_party_settings:
+      ds:
+        ds_limit: ''
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 2
+    region: content
+  search_api_excerpt:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  body: true
+  field_content: true
+  field_display_image: true
+  field_global_term: true
+  field_image_caption: true
+  field_rows: true
+  field_standfirst: true
+  field_tagline: true
+  langcode: true
+  links: true
+  sharing_buttons: true

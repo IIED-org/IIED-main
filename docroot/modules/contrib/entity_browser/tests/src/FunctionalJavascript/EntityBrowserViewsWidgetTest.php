@@ -21,7 +21,7 @@ class EntityBrowserViewsWidgetTest extends EntityBrowserWebDriverTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'node',
     'views',
     'entity_browser_test',
@@ -30,7 +30,7 @@ class EntityBrowserViewsWidgetTest extends EntityBrowserWebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $user = $this->drupalCreateUser([

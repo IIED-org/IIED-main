@@ -1,0 +1,18 @@
+uuid: 7a600d82-9580-4072-bd1f-c9f9bf2956a5
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.draggableviews_demo
+id: node.draggableviews_demo.created
+field_name: created
+entity_type: node
+bundle: draggableviews_demo
+label: 'Authored on'
+description: 'The time that the node was created.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: created

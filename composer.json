@@ -72,7 +72,7 @@
         "drupal/core-project-message": "^9",
         "drupal/core-recommended": "^9",
         "drupal/core-vendor-hardening": "^8.8",
-        "drupal/ctools": "^3.4",
+        "drupal/ctools": "3.9.0",
         "drupal/datalayer": "^1.0@beta",
         "drupal/default_content": "^1",
         "drupal/default_content_deploy": "^2.0",
@@ -130,11 +130,13 @@
         "drupal/search_api": "^1.23",
         "drupal/search_api_autocomplete": "^1.6",
         "drupal/search_api_solr": "^4.2.7",
+        "drupal/search_api_sorts": "1.x-dev@dev",
         "drupal/serial": "^1.0@alpha",
         "drupal/sidr": "^3.1",
         "drupal/stage_file_proxy": "^1.2",
         "drupal/stories": "^2.0@alpha",
         "drupal/string_translation_ui": "^1.2",
+        "drupal/svg_image": "^1.16",
         "drupal/taxonomy_import": "^2.0",
         "drupal/taxonomy_manager": "^2.0",
         "drupal/taxonomy_menu": "^3.4",
@@ -248,7 +250,8 @@
             "The language of content entities incorrectly falls back to the default language...":"https://www.drupal.org/files/issues/2021-09-16/3061761-46.patch"
           },
           "drupal/facets": {
-            "AJAX facets broken": "https://www.drupal.org/files/issues/2022-04-21/facets-ajax_not_working-3052574-146.patch"
+            "Add option to show current search string in facet summary": "https://www.drupal.org/files/issues/2022-07-12/facets-current_search_string-2979223-55.patch",
+            "Robustify how ajax finds the facet block": "https://www.drupal.org/files/issues/2022-04-12/facets-ajax-improvements-3013795-36.patch"
           },
           "drupal/ds": {
             "Provide entity context to DS block fields":"https://www.drupal.org/files/issues/2020-10-12/ds-content_entity-2939322-14.patch"

@@ -5,13 +5,14 @@ dependencies:
   config:
     - facets.facet.country
   module:
+    - context
     - facets
   theme:
     - iied_tw
 id: iied_tw_country_2
 theme: iied_tw
-region: content
-weight: -5
+region: sidebar
+weight: -9
 provider: null
 plugin: 'facet_block:country'
 settings:
@@ -19,5 +20,25 @@ settings:
   label: 'Filter by area'
   label_display: visible
   provider: facets
-  block_id: country_2
-visibility: {  }
+  context_mapping: {  }
+  block_id: iied_tw_country_2
+visibility:
+  context_all:
+    id: context_all
+    negate: null
+    values: ''
+  context:
+    id: context
+    negate: null
+    values: ''
+  user_status:
+    id: user_status
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    user_status:
+      viewing_profile: '0'
+      logged_viewing_profile: '0'
+      own_page_true: '0'
+      field_value: '0'
+    user_fields: uid

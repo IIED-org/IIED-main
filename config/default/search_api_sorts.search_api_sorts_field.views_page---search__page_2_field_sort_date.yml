@@ -1,0 +1,11 @@
+uuid: bcda293a-1099-4bfc-9999-9222805d6438
+langcode: en
+status: true
+dependencies: {  }
+id: views_page---search__page_2_field_sort_date
+label: Date
+weight: 2
+display_id: views_page---search__page_2
+field_identifier: field_sort_date
+default_sort: false
+default_order: desc

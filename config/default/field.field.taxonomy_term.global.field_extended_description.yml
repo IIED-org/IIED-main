@@ -1,0 +1,21 @@
+uuid: e4ff74a4-1ea6-459e-8851-9d60ecb2c5ea
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_extended_description
+    - taxonomy.vocabulary.global
+  module:
+    - text
+id: taxonomy_term.global.field_extended_description
+field_name: field_extended_description
+entity_type: taxonomy_term
+bundle: global
+label: 'Extended description'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

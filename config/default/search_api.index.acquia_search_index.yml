@@ -3,16 +3,16 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.storage.node.body
+    - field.storage.taxonomy_term.field_name
     - field.storage.node.field_area_list
     - field.storage.node.field_author_s_
-    - field.storage.node.body
     - field.storage.node.field_collections
+    - field.storage.node.field_date_published
     - field.storage.node.field_document_type
     - field.storage.node.field_product_code
     - field.storage.node.field_product_code_new
-    - field.storage.node.field_date_published
     - field.storage.node.field_theme_s_
-    - field.storage.taxonomy_term.field_name
     - search_api.server.acquia_search_server
   module:
     - acquia_search
@@ -162,6 +162,15 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_theme_s_
+  field_title_or_name:
+    label: 'Title or name'
+    property_path: aggregated_field
+    type: string
+    configuration:
+      type: first
+      fields:
+        - 'entity:node/title'
+        - 'entity:taxonomy_term/name'
   given:
     label: 'Full name » Given'
     datasource_id: 'entity:taxonomy_term'
@@ -302,9 +311,10 @@ datasource_settings:
 processor_settings:
   add_url: {  }
   aggregated_field: {  }
+  auto_aggregated_fulltext_field: {  }
   content_access:
     weights:
-      preprocess_query: -30
+      preprocess_query: -49
   entity_status: {  }
   entity_type: {  }
   hierarchy:
@@ -326,7 +336,7 @@ processor_settings:
   html_filter:
     weights:
       preprocess_index: -49
-      preprocess_query: -15
+      preprocess_query: -48
     all_fields: true
     fields:
       - body
@@ -334,6 +344,7 @@ processor_settings:
       - field_area_list
       - field_product_code
       - field_product_code_new
+      - field_title_or_name
       - given
       - name
       - name_1
@@ -362,7 +373,7 @@ processor_settings:
         resolution: NOW
         m: '3.16e-11'
         a: !!float 1
-        b: 0.4
+        b: 0.1
   solr_date_range:
     weights:
       preprocess_index: 0

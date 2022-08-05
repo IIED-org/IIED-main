@@ -1,0 +1,11 @@
+uuid: c595c6c7-c384-4362-bbb5-0df707bccd46
+langcode: en
+status: true
+dependencies: {  }
+id: views_page---search__page_2_field_title_or_name
+label: Title
+weight: 3
+display_id: views_page---search__page_2
+field_identifier: field_title_or_name
+default_sort: false
+default_order: asc

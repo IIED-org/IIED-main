@@ -1,0 +1,7 @@
+name: 'Search API Sorts'
+description: 'Create sort options for search queries executed via the Search API.'
+type: module
+core_version_requirement: ^8.8 || ^9
+package: Search
+dependencies:
+  - search_api:search_api (>=1.16)

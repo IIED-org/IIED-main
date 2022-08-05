@@ -19,7 +19,7 @@ class EntityFormWidgetTest extends WebDriverTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'entity_browser_entity_form_test',
     'views',
     'block',
@@ -39,7 +39,7 @@ class EntityFormWidgetTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->drupalCreateContentType(['type' => 'foo', 'name' => 'Foo']);

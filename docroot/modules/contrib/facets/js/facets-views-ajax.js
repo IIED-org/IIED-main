@@ -3,7 +3,7 @@
  * Facets views AJAX handling.
  */
 
-(function ($, Drupal) {
+(function ($, Drupal, drupalSettings) {
   'use strict';
 
   /**
@@ -16,125 +16,182 @@
    */
   Drupal.behaviors.facetsViewsAjax = {
     attach: function (context, settings) {
+      // Exit early if there are no views on the page.
+      if (!('instances' in Drupal.views)) {
+        return;
+      }
 
       // Loop through all facets.
       $.each(settings.facets_views_ajax, function (facetId, facetSettings) {
-        // Get the View for the current facet.
-        var view, current_dom_id, view_path;
-        if (settings.views && settings.views.ajaxViews) {
-          $.each(settings.views.ajaxViews, function (domId, viewSettings) {
-            // Check if we have facet for this view.
-            if (facetSettings.view_id == viewSettings.view_name && facetSettings.current_display_id == viewSettings.view_display_id) {
-              view = $('.js-view-dom-id-' + viewSettings.view_dom_id);
-              current_dom_id = viewSettings.view_dom_id;
-              view_path = facetSettings.ajax_path;
-            }
-          });
+        // Get the View for this facet.
+        var facetViewsInstance = findAjaxViewsInstance(facetSettings.view_id, facetSettings.current_display_id);
+        if (!facetViewsInstance) {
+          return true;
         }
 
-        if (!view || view.length != 1) {
-          return;
-        }
-
-        // Update view on range slider stop event.
-        if (typeof settings.facets !== "undefined" && settings.facets.sliders && settings.facets.sliders[facetId]) {
-          settings.facets.sliders[facetId].change = function (values, handle, unencoded, tap, positions, noUiSlider) {
-            const sliderSettings = settings.facets.sliders[facetId];
-            var href = sliderSettings.url.replace('__range_slider_min__', Math.round(unencoded[0])).replace('__range_slider_max__', Math.round(unencoded[1]));
-
-            // Update facet query params on the request.
-            var currentHref = window.location.href;
-            var currentQueryParams = Drupal.Views.parseQueryString(currentHref);
-            var newQueryParams = Drupal.Views.parseQueryString(href);
-
-            var queryParams = {};
-            var facetPositions = [];
-            var fCount = 0;
-            var value = '';
-            var facetKey = '';
-            for (var paramName in currentQueryParams) {
-              if (paramName.substr(0, 1) === 'f') {
-                value = currentQueryParams[paramName];
-                // Store the facet position so we can override it later.
-                facetKey = value.substr(0, value.indexOf(':'));
-                facetPositions[facetKey] = fCount;
-                queryParams['f[' + fCount + ']'] = value;
-                fCount++;
-              }
-              else {
-                queryParams[paramName] = currentQueryParams[paramName];
-              }
-            }
-
-            var paramKey = '';
-            for (let paramName in newQueryParams) {
-              if (paramName.substr(0, 1) === 'f') {
-                value = newQueryParams[paramName];
-                // Replace.
-                facetKey = value.substr(0, value.indexOf(':'));
-                if (typeof facetPositions[facetKey] !== 'undefined') {
-                  paramKey = 'f[' + facetPositions[facetKey] + ']';
-                }
-                else {
-                  paramKey = 'f[' + fCount + ']';
-                  fCount++;
-                }
-                queryParams[paramKey] = newQueryParams[paramName];
-              }
-              else {
-                queryParams[paramName] = newQueryParams[paramName];
-              }
-            }
-
-            href = '/' + Drupal.Views.getPath(href) + '?' + $.param(queryParams);
-
-            updateFacetsView(href, current_dom_id, view_path);
-          };
-        }
-        else if (facetId == 'facets_summary_ajax_summary' || facetId == 'facets_summary_ajax_summary_count') {
-          if (updateFacetsSummaryBlock()) {
-            $('[data-drupal-facets-summary-id=' + facetSettings.facets_summary_id + ']').children('ul').children('li').once().click(function (e) {
+        // Update view on summary block click.
+        if (updateFacetsSummaryBlock() && (facetId === 'facets_summary_ajax')) {
+          $('[data-drupal-facets-summary-id=' + facetSettings.facets_summary_id + ']').children('ul').children('li')
+            .data('facetsViewsInstance', facetViewsInstance)
+            .data('facetSettings', facetSettings)
+            .once('facetsViewsAjax').click(function (e) {
               e.preventDefault();
               var facetLink = $(this).find('a');
-              updateFacetsView(facetLink.attr('href'), current_dom_id, view_path);
+              var viewsInstance = $(this).data('facetsViewsInstance');
+              var facetSettings = $(this).data('facetSettings');
+              if (facetLink.length > 0 &&
+                  typeof viewsInstance !== 'undefined' && viewsInstance !== null &&
+                  typeof facetSettings !== 'undefined' && facetSettings !== null) {
+                $(this).trigger('facets_filtering');
+                updateFacetsView(facetLink.attr('href'), viewsInstance, facetSettings);
+              }
             });
-          }
         }
         // Update view on facet item click.
         else {
-          $('[data-drupal-facet-id |= ' + facetId + ']').each(function (index, facet_item) {
-            if ($(facet_item).hasClass('js-facets-widget')) {
-              $(facet_item).unbind('facets_filter.facets');
-              $(facet_item).on('facets_filter.facets', function (event, url) {
-                $('.js-facets-widget').trigger('facets_filtering');
+          $('[data-drupal-facet-id=' + facetId + ']').filter('.js-facets-widget')
+            .data('facetsViewsInstance', facetViewsInstance)
+            .data('facetSettings', facetSettings)
+            .once('facetsViewsAjax')
+            .off('facets_filter.facets')
+            .on('facets_filter.facets', function (event, url) {
+              var viewsInstance = $(this).data('facetsViewsInstance');
+              var facetSettings = $(this).data('facetSettings');
+              if (typeof viewsInstance !== 'undefined' && viewsInstance !== null &&
+                  typeof facetSettings !== 'undefined' && facetSettings !== null) {
+                $(this).trigger('facets_filtering');
+                updateFacetsView(url, viewsInstance, facetSettings);
+              }
+            });
+        }
+        // Update view on slider trigger.
+        if ("facets" in settings && "sliders" in settings.facets && settings.facets.sliders[facetId] !== 'undefined') {
+          $('[data-drupal-facet-id=' + facetId + ']')
+            .data('facetsViewsInstance', facetViewsInstance)
+            .data('facetSettings', facetSettings);
 
-                updateFacetsView(url, current_dom_id, view_path);
-              });
-            }
-          });
-
+            settings.facets.sliders[facetId].stop = function (e, ui) {
+              var facet = $(ui.handle).parents('[data-drupal-facet-id=' + facetId + ']');
+              var href = settings.facets.sliders[facetId].url.replace('__range_slider_min__', ui.values[0]).replace('__range_slider_max__', ui.values[1]);
+              var viewsInstance = $(facet).data('facetsViewsInstance');
+              var facetSettings = $(facet).data('facetSettings');
+              if (typeof viewsInstance !== 'undefined' && viewsInstance !== null &&
+                    typeof facetSettings !== 'undefined' && facetSettings !== null) {
+                  updateFacetsView(href, viewsInstance, facetSettings);
+                }
+            };
         }
       });
     }
   };
 
+// Find the AJAX views instance for the view.
+  var findAjaxViewsInstance = function(view_id, view_display_id) {
+    var targetViewsInstance = null;
+    $.each(Drupal.views.instances, function (viewsInstanceKey, viewsInstance) {
+      // Check if we have facet for this view.
+      if (('settings' in viewsInstance) &&
+          view_id == viewsInstance.settings.view_name &&
+          view_display_id == viewsInstance.settings.view_display_id &&
+          ('$view' in viewsInstance) && (typeof viewsInstance.$view !== 'undefined') &&
+          viewsInstance.$view !== null && viewsInstance.$view.length > 0) {
+        // Set facet views instance.
+        targetViewsInstance = viewsInstance;
+        return false;
+      }
+    });
+
+    return targetViewsInstance;
+  };
+
+  // Get the dom id of the element if it is an AJAX view.
+  var findAjaxViewsInstanceByElement = function ($element) {
+    var targetViewInstance = null;
+    if ($element.is('.view')) {
+      $.each(Drupal.views.instances, function (instanceKey, viewsInstance) {
+        if (('$view' in viewsInstance) &&
+            viewsInstance.$view.length > 0 &&
+            ('settings' in viewsInstance) &&
+            ('view_dom_id' in viewsInstance.settings) && viewsInstance.settings.view_dom_id &&
+            $element.is('.js-view-dom-id-' + viewsInstance.settings.view_dom_id)) {
+          // Set the target instance.
+          targetViewInstance = viewsInstance;
+          return false;
+        }
+      });
+    }
+
+    return targetViewInstance;
+  };
+
+  // Ensure the view instance exists.
+  var ensureAjaxViewsInstance = function (viewsInstance) {
+    // Return the instance if it has enough info.
+    if (('settings' in viewsInstance) &&
+        ('view_dom_id' in viewsInstance.settings) &&
+        viewsInstance.settings.view_dom_id &&
+        ('$view' in viewsInstance) &&
+        viewsInstance.$view.length > 0 ) {
+      return viewsInstance;
+    }
+
+    // Attempt to re-find the instance.
+    if ('view_name' in viewsInstance.settings &&
+        'view_display_id' in viewsInstance.settings) {
+      return findAjaxViewsInstance(viewsInstance.settings.view_name, viewsInstance.settings.view_display_id);
+    }
+
+    return null;
+  };
+
   // Helper function to update views output & Ajax facets.
-  var updateFacetsView = function (href, current_dom_id, view_path) {
-    // Refresh view.
+  var updateFacetsView = function (href, viewsInstance, facetSettings) {
+    if (viewsInstance === null) {
+      return;
+    }
+
+    // Ensure the current instance and find the new one if it has been lost.
+    viewsInstance = ensureAjaxViewsInstance(viewsInstance);
+    if (viewsInstance === null) {
+      return;
+    }
+
+    // Support nested empty view withing 2 levels.
+    var viewsParentInstance = null;
+    var parentLevel = 0;
+    var viewParent = viewsInstance.$view;
+    while (parentLevel < 2) {
+      parentLevel++;
+      viewParent = viewParent.parent();
+      viewsParentInstance = findAjaxViewsInstanceByElement(viewParent);
+      if (viewsParentInstance !== null) {
+        break;
+      }
+    }
+
+    if (viewsParentInstance !== null) {
+      updateFacetsViewRunner(href, viewsParentInstance, facetSettings);
+    }
+    else {
+      updateFacetsViewRunner(href, viewsInstance, facetSettings);
+    }
+  };
+
+  // Helper function to update views output & Ajax facets.
+  var updateFacetsViewRunner = function (href, viewsInstance, facetSettings) {
     var views_parameters = Drupal.Views.parseQueryString(href);
     var views_arguments = Drupal.Views.parseViewArgs(href, 'search');
     var views_settings = $.extend(
         {},
-        Drupal.views.instances['views_dom_id:' + current_dom_id].settings,
+        viewsInstance.settings,
         views_arguments,
         views_parameters
     );
 
     // Update View.
-    var views_ajax_settings = Drupal.views.instances['views_dom_id:' + current_dom_id].element_settings;
+    var views_ajax_settings = viewsInstance.element_settings;
     views_ajax_settings.submit = views_settings;
-    views_ajax_settings.url = view_path + '?q=' + href;
-
+    views_ajax_settings.url = facetSettings.ajax_path + '?q=' + href;
     Drupal.ajax(views_ajax_settings).execute();
 
     // Update url.
@@ -143,7 +200,7 @@
 
     // ToDo: Update views+facets with ajax on history back.
     // For now we will reload the full page.
-    window.addEventListener("popstate", function (e) {
+    window.addEventListener("popstate", function () {
       if (window.historyInitiated) {
         window.location.reload();
       }
@@ -151,7 +208,7 @@
 
     // Refresh facets blocks.
     updateFacetsBlocks(href);
-  }
+  };
 
   // Helper function, updates facet blocks.
   var updateFacetsBlocks = function (href) {
@@ -159,7 +216,7 @@
     var facets_blocks = facetsBlocks();
 
     // Remove All Range Input Form Facet Blocks from being updated.
-    if (settings.facets && settings.facets.rangeInput) {
+    if(settings.facets && settings.facets.rangeInput) {
       $.each(settings.facets.rangeInput, function (index, value) {
         delete facets_blocks[value.facetId];
       });
@@ -176,17 +233,17 @@
 
     // Update facets summary block.
     if (updateFacetsSummaryBlock()) {
-      facet_settings.submit.update_summary_block = true;
-      facet_settings.submit.facet_summary_plugin_ids = {};
-      let summary_selector = '[data-drupal-facets-summary-id=' + settings.facets_views_ajax.facets_summary_ajax_summary.facets_summary_id + ']';
-      if (settings.facets_views_ajax.facets_summary_ajax_summary_count !== undefined) {
-        summary_selector += ', [data-drupal-facets-summary-id=' + settings.facets_views_ajax.facets_summary_ajax_summary_count.facets_summary_id + ']';
+      var facet_summary_wrapper_id = $('[data-drupal-facets-summary-id=' + settings.facets_views_ajax.facets_summary_ajax.facets_summary_id + ']').attr('id');
+      var facet_summary_block_id = '';
+      if (facet_summary_wrapper_id.indexOf('--') !== -1) {
+        facet_summary_block_id = facet_summary_wrapper_id.substring(0, facet_summary_wrapper_id.indexOf('--')).replace('block-', '');
       }
-      $(summary_selector).each(function (index, summaryWrapper) {
-        let summaryPluginId = $(summaryWrapper).attr('data-drupal-facets-summary-plugin-id');
-        let summaryPluginIdWrapper = $(summaryWrapper).attr('id');
-        facet_settings.submit.facet_summary_plugin_ids[summaryPluginIdWrapper] = summaryPluginId;
-      });
+      else {
+        facet_summary_block_id = facet_summary_wrapper_id.replace('block-', '');
+      }
+      facet_settings.submit.update_summary_block = true;
+      facet_settings.submit.facet_summary_block_id = facet_summary_block_id;
+      facet_settings.submit.facet_summary_wrapper_id = settings.facets_views_ajax.facets_summary_ajax.facets_summary_id;
     }
 
     Drupal.ajax(facet_settings).execute();
@@ -198,7 +255,7 @@
     var settings = drupalSettings;
     var update_summary = false;
 
-    if (settings.facets_views_ajax.facets_summary_ajax_summary || settings.facets_views_ajax.facets_summary_ajax_summary_count) {
+    if (settings.facets_views_ajax.facets_summary_ajax) {
       update_summary = true;
     }
 
@@ -210,15 +267,15 @@
     // Get all ajax facets blocks from the current page.
     var facets_blocks = {};
 
-    $('.block-facets-ajax').each(function (index) {
+    $('.block-facets-ajax').each(function () {
       var block_id_start = 'js-facet-block-id-';
-      var block_id = $.map($(this).attr('class').split(' '), function (v, i) {
+      var block_id = $.map($(this).attr('class').split(' '), function (v) {
         if (v.indexOf(block_id_start) > -1) {
           return v.slice(block_id_start.length, v.length);
         }
       }).join();
-      var block_selector = $(this).attr('id');
-      facets_blocks[block_selector] = block_id;
+      var block_selector = '#' + $(this).attr('id');
+      facets_blocks[block_id] = block_selector;
     });
 
     return facets_blocks;
@@ -250,6 +307,7 @@
 
       if (reload) {
         href = addExposedFiltersToFacetsUrl(href, options.extraData.view_name, options.extraData.view_display_id);
+        options.url = addFacetsToExposedFilterRequest(options.url, href);
         updateFacetsBlocks(href);
       }
     }
@@ -258,7 +316,7 @@
     beforeSend.apply(this, arguments);
   }
 
-  // Helper function to add exposed form data to facets url.
+  // Helper function to add exposed form data to facets url
   var addExposedFiltersToFacetsUrl = function (href, view_name, view_display_id) {
     var $exposed_form = $('form#views-exposed-form-' + view_name.replace(/_/g, '-') + '-' + view_display_id.replace(/_/g, '-'));
 
@@ -271,4 +329,15 @@
     return href.split('?')[0] + '?' + $.param(params);
   };
 
-})(jQuery, Drupal);
+  // Helper function to add facets to exposed form ajax request
+  var addFacetsToExposedFilterRequest = function(url, facet_href) {
+    var urlParams = Drupal.Views.parseQueryString(url);
+
+      if (!urlParams.q) {
+        urlParams.q = facet_href;
+      }
+    return url.split('?')[0] + '?' + $.param(urlParams);
+  };
+
+
+})(jQuery, Drupal, window.drupalSettings);

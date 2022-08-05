@@ -2,16 +2,13 @@ uuid: 63bab446-6660-48b6-a2ee-4bc93dd03a29
 langcode: en
 status: true
 dependencies:
-  module:
-    - layout_paragraphs
+  content:
+    - 'file:file:33bbd5d3-3f7c-44ff-a313-31a8bd163c58'
 _core:
   default_config_hash: RbXLSN3eddkWTH4ta3NtbMcvUu_pxKXIpUfFNJMQzQU
 id: stories_table
 label: Table
-icon_uuid: null
-icon_default: null
-description: null
-behavior_plugins:
-  layout_paragraphs:
-    enabled: false
-    available_layouts: {  }
+icon_uuid: 33bbd5d3-3f7c-44ff-a313-31a8bd163c58
+icon_default: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAABlCAYAAACvBxpVAAAACXBIWXMAAAsSAAALEgHS3X78AAACXklEQVR4nO3dwU0bURSG0UuUAuiAdJB04MmCOpImWAfWbiKpw4uYTqADOnBkMUijRCgs/L/3GJ+zMhLSHcYfM4Znz1wcDoeCU/tgj5IgLCKERYSwiBAWEcIiQlhECIsIYREhLCKERYSwiBAWEcIiQlhECIsIYREhLCKERYSwiPjYc7fupu1lVX2vqktP70k9VdXP6/3NU68N6BpWVe2r6nPnbVir4y/sl14/W+9Toahyuu7b3kespbtxNuVd+zHCxg8T1vX+5naAzXj3dtN2iLD8VUiEsIgQFhHCIkJYRAiLCGERISwihEXEMP95301b16xcEUcsIoRFxEiL0BfpGbtpe7tY/b9LL3y3nlcDvaRwxCJCWEQIiwhhESEsIoRFhLCIEBYRwiJCWER0vRHmX8sP9w1Gfqqqq/nxY1U9rGze0eblQYtlsteM9EnozRu+55SuFk/6Gud15VRIxEhHrK8NZhyvwPJtfvzreKmflc07+t1gxn+N9LaZfXrGbtpOiy8f0jNbz5tnpke8iVMhEcIiQlhECIsIYREhLCKERYSwiBAWESO9u6HF5binxWL3/XwDgzXNq+XluL274Vnry0hvGr+jovW8rpwKiTi3O1Oc1amwp7O6M8V8kY6XJ3rf6KIgzeaVO1OwdsIiQlhECIsIYREhLCKERYSwiLAIva55ZRH6XxahV6T3qfBxVXtzLF33be8j1jR/7J3Ta/Fx/ld1fY3FevmrkAhhESEsIoRFhLCIEBYRwiJCWEQIiwhhESEsIoRFhLCIEBYRwiJCWEQIiwhhESEsIoTF6VXVHym3dGQIRSCSAAAAAElFTkSuQmCC'
+description: ''
+behavior_plugins: {  }

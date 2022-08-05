@@ -3,8 +3,8 @@ _core:
 definitions:
   contact__site_page:
     menu_name: footer
-    parent: ''
-    weight: 0
+    parent: 'menu_link_content:4893cf72-38e8-4fb8-b63f-c97f022d8014'
+    weight: -48
     expanded: false
     enabled: true
   standard__front_page:

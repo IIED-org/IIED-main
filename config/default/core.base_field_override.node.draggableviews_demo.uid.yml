@@ -1,0 +1,20 @@
+uuid: 8435a481-fcd2-4e69-b680-0c48fa8090d7
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.draggableviews_demo
+id: node.draggableviews_demo.uid
+field_name: uid
+entity_type: node
+bundle: draggableviews_demo
+label: 'Authored by'
+description: 'The username of the content author.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: 'Drupal\node\Entity\Node::getDefaultEntityOwner'
+settings:
+  handler: default
+  handler_settings: {  }
+field_type: entity_reference

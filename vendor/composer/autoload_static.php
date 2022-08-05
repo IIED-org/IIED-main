@@ -65,6 +65,10 @@ class ComposerStaticInitc55356c53f91567181cb9bc578ac52ab
         array (
             'lsolesen\\pel\\' => 13,
         ),
+        'e' => 
+        array (
+            'enshrined\\svgSanitize\\' => 22,
+        ),
         'c' => 
         array (
             'cweagans\\Composer\\' => 18,
@@ -284,6 +288,10 @@ class ComposerStaticInitc55356c53f91567181cb9bc578ac52ab
         'lsolesen\\pel\\' => 
         array (
             0 => __DIR__ . '/..' . '/lsolesen/pel/src',
+        ),
+        'enshrined\\svgSanitize\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/enshrined/svg-sanitize/src',
         ),
         'cweagans\\Composer\\' => 
         array (

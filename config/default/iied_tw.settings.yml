@@ -7,6 +7,6 @@ logo:
   use_default: 0
   path: themes/custom/iied_tw/logo.svg
 favicon:
-  use_default: 1
+  use_default: 0
   path: favicon.ico
   mimetype: image/vnd.microsoft.icon

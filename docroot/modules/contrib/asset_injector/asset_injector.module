@@ -72,7 +72,7 @@ function asset_injector_css_alter(array &$css, AttachedAssetsInterface $assets) 
  */
 function asset_injector_ckeditor_css_alter(array &$css, Editor $editor) {
   foreach (asset_injector_get_assets(TRUE, ['asset_injector_css']) as $asset) {
-    $css[] = file_create_url($asset->internalFileUri());
+    $css[] = \Drupal::service('file_url_generator')->generateAbsoluteString($asset->internalFileUri());
   }
 }
 

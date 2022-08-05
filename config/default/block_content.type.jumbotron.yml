@@ -1,8 +1,0 @@
-uuid: 80bf4c23-eb6b-46be-afc0-ca25ca6750a9
-langcode: en
-status: true
-dependencies: {  }
-id: jumbotron
-label: Jumbotron
-revision: 0
-description: 'Add Bootstrap jumbotron'

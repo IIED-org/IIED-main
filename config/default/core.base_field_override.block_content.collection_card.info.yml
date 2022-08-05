@@ -1,0 +1,18 @@
+uuid: 6c47d99f-9bee-4cae-b99a-a635f60394dc
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.collection_card
+id: block_content.collection_card.info
+field_name: info
+entity_type: block_content
+bundle: collection_card
+label: 'Block description'
+description: 'A brief description of your block.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

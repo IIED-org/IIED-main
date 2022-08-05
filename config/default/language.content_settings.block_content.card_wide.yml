@@ -4,6 +4,13 @@ status: true
 dependencies:
   config:
     - block_content.type.card_wide
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
 id: block_content.card_wide
 target_entity_type_id: block_content
 target_bundle: card_wide

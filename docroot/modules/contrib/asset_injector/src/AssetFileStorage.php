@@ -3,6 +3,7 @@
 namespace Drupal\asset_injector;
 
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\Logger\LoggerChannelTrait;
 
 /**
  * Class AssetFileStorage.
@@ -24,6 +25,8 @@ use Drupal\Core\File\FileSystemInterface;
  * @package Drupal\asset_injector
  */
 final class AssetFileStorage {
+
+  use LoggerChannelTrait;
 
   const DIRECTORY_URI = 'public://asset_injector';
 
@@ -55,8 +58,18 @@ final class AssetFileStorage {
     if (!is_file($internal_uri)) {
       $directory = dirname($internal_uri);
       $file_system = self::getFileSystemService();
-      $file_system->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
-      $file_system->saveData($this->asset->getCode(), $internal_uri, FileSystemInterface::EXISTS_REPLACE);
+
+      try {
+        $file_system->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
+        $file_system->saveData($this->asset->getCode(), $internal_uri, FileSystemInterface::EXISTS_REPLACE);
+      }
+      catch (\Throwable $e) {
+        $this->getLogger('asset_injector')
+          ->error('Failed to create asset file @uri. Ensure directory permissions are correctly configured: @message', [
+            '@uri' => $internal_uri,
+            '@message' => $e->getMessage(),
+          ]);
+      }
     }
     return $internal_uri;
   }

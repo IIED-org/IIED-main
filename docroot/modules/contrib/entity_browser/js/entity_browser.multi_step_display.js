@@ -2,7 +2,7 @@
  * @file entity_browser.multi_step_display.js
  */
 
-(function ($, Drupal, Sortable) {
+(function ($, Drupal, Sortable, once) {
 
   'use strict';
 
@@ -31,15 +31,14 @@
 
       var $entities = $(context).find('.entities-list');
       // Register add/remove entities event handlers.
-      $entities.once('register-add-entities')
+      $(once('register-add-entities', $entities))
         .bind('add-entities', Drupal.entityBrowserMultiStepDisplay.addEntities);
 
-      $entities.once('register-remove-entities')
+      $(once('register-remove-entities', $entities))
         .bind('remove-entities', Drupal.entityBrowserMultiStepDisplay.removeEntities);
 
       // Register event for remove button to use AJAX event.
-      var $remove_buttons = $entities.find('.entity-browser-remove-selected-entity');
-      $remove_buttons.once('register-click').on('click', function (event) {
+      $(once('register-click', $entities.find('.entity-browser-remove-selected-entity'))).on('click', function (event) {
         event.preventDefault();
 
         var button_element = $(event.target);
@@ -60,7 +59,7 @@
       }
 
       if ($entities.length > 0) {
-        $toggle.once('register-click').on('click', function (e) {
+        $(once('register-click', '.entity-browser-show-selection')).on('click', function (e) {
           e.preventDefault();
           $entities.slideToggle('fast', setToggleText);
         });
@@ -148,4 +147,4 @@
     entities_list.siblings('[name=ajax_commands_handler]').trigger('execute-commands', [true]);
   };
 
-}(jQuery, Drupal, Sortable));
+}(jQuery, Drupal, Sortable, once));

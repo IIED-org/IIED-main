@@ -1,0 +1,18 @@
+uuid: d40ec3e2-2511-4e20-be0b-8b7e71e79851
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.card
+id: block_content.card.info
+field_name: info
+entity_type: block_content
+bundle: card
+label: 'Block description'
+description: 'A brief description of your block.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

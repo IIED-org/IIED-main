@@ -1,0 +1,22 @@
+uuid: a0cfd7e7-c633-4b5e-aac6-6ed2f1e9eb95
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.modal_image
+id: paragraph.modal_image.status
+field_name: status
+entity_type: paragraph
+bundle: modal_image
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

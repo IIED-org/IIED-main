@@ -15,40 +15,56 @@ settings:
     rows:
       -
         -
+          name: 'Block Formatting'
+          items:
+            - Bold
+            - Italic
+            - Subscript
+            - Superscript
+            - RemoveFormat
+            - Indent
+            - Outdent
+            - Blockquote
+            - HorizontalRule
+            - SpecialChar
+        -
+          name: Linking
+          items:
+            - DrupalLink
+            - DrupalUnlink
+        -
           name: Lists
           items:
             - BulletedList
             - NumberedList
         -
-          name: 'Block Formatting'
+          name: 'Block formatting'
+          items:
+            - Format
+            - Styles
+        -
+          name: Tools
           items:
             - PasteFromWord
-            - RemoveFormat
+            - PasteText
+            - ShowBlocks
+            - Source
   plugins:
-    language:
-      language_list: un
     stylescombo:
       styles: ''
     wordcount:
       enable: true
       show_remaining: true
-      show_paragraphs: false
+      show_paragraphs: true
       show_word_count: true
-      show_char_count: false
+      show_char_count: true
       count_bytes: false
       count_spaces: false
       count_html: 0
       count_line_breaks: false
-      max_words: 300
+      max_words: -1
       max_chars: -1
       hard_limit: 1
-    video_embed:
-      defaults:
-        children:
-          autoplay: true
-          responsive: true
-          width: '854'
-          height: '480'
 image_upload:
   status: true
   scheme: public

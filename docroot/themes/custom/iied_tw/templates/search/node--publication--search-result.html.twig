@@ -1,0 +1,21 @@
+{% extends '@iied_tw/search/node--search-result.html.twig' %}
+  {% block image %} 
+    <div class="w-24 h-auto mx-auto rounded shadow-md">
+      {% if content.field_cover_image[0] %}
+        {% set image_uri = node.field_cover_image|file_uri %}
+        {% set image_alt = node.field_cover_image.alt %}
+        {% if image_uri is not null %}
+          <img class="object-cover w-3/12 h-auto" src="{{ image_uri|image_style('search_cover') }}" alt="{{ image_alt }}" />
+        {% endif %}
+      {% else %}
+          {{ node.field_media[0].entity|view('card_cover') }}
+      {% endif %}
+    </div>
+  {% endblock %}
+
+  {% block meta %}
+      <div class="text-gray-500">{{ node.type.entity.label() }}, {{ node.field_date_published.value|date('d F Y') }} </div>
+  {% endblock %}
+
+
+

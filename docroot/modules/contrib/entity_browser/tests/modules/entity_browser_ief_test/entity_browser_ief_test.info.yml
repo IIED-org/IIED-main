@@ -1,7 +1,6 @@
 name: 'Test IEF'
 type: module
 description: 'Test Inline Entity Form Integration'
-core_version_requirement: ^8.7.7 || ^9
 package: Testing
 dependencies:
   - drupal:file
@@ -12,7 +11,7 @@ dependencies:
   - inline_entity_form:inline_entity_form
   - drupal:views
 
-# Information added by Drupal.org packaging script on 2022-06-22
-version: '8.x-2.7'
+# Information added by Drupal.org packaging script on 2022-07-22
+version: '8.x-2.8'
 project: 'entity_browser'
-datestamp: 1655931713
+datestamp: 1658509705

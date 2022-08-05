@@ -9,10 +9,10 @@ id: node.article.field_tagline
 field_name: field_tagline
 entity_type: node
 bundle: article
-label: 'Carousel or highlight text'
+label: Tagline
 description: ''
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings: {  }

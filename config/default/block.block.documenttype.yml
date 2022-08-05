@@ -11,8 +11,8 @@ dependencies:
     - iied_tw
 id: documenttype
 theme: iied_tw
-region: content
-weight: -6
+region: sidebar
+weight: -10
 provider: null
 plugin: 'facet_block:type'
 settings:
