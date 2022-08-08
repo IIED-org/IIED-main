@@ -86,3 +86,48 @@ function iied_utils_form_alter(&$form, FormStateInterface &$form_state, $form_id
     $form['form_id']['#access'] = FALSE;
   }
 }
+
+use Drupal\Core\Entity\ContentEntityInterface;
+
+/**
+ * Implements hook_language_switch_links_alter().
+ */
+function iied_utils_language_switch_links_alter(array &$links, $type, $path) {
+  if ($entity = iied_utils_get_page_entity() ) {
+    if ($entity->bundle() != "publication") {
+      $new_links = array();
+      foreach ($links as $lang_code => $link) {
+        try {
+          if ($entity->getTranslation($lang_code)->access('view')) {
+            $new_links[$lang_code] = $link;
+          }
+        }
+        catch (\InvalidArgumentException $e) {
+          // This language is untranslated so do not add it to the links.
+        }
+      }
+      $links = $new_links;
+
+      // If we're left with less than 2 links, then there's nothing to switch.
+      // Hide the language switcher.
+      if (count($links) < 2) {
+        $links = array();
+      }
+    }
+  }
+}
+
+/**
+ * Retrieve the current page entity.
+ *
+ * @return Drupal\Core\Entity\ContentEntityInterface
+ *   The retrieved entity, or FALSE if none found.
+ */
+function iied_utils_get_page_entity() {
+  $params = \Drupal::routeMatch()->getParameters()->all();
+  $entity = reset($params);
+  if ($entity instanceof ContentEntityInterface) {
+    return $entity;
+  }
+  return FALSE;
+}
