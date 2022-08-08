@@ -79,8 +79,6 @@
 %}
 
 <article{{ attributes.addClass(classes) }}>
-{{ breakpoint() }}
-
     <div{{ content_attributes.addClass('node-content') }}>
     <main class="container py-8 mx-auto md:grid md:grid-flow-row-dense md:grid-cols-3">
 {#  order 2  #}    
@@ -177,7 +175,7 @@
         {% if drupal_view_result('citation', 'block_1') is not empty %}
         <div class="pl-4 my-8 border-l-2 border-iiedblue-500">
           <span class="font-bold">How to cite:</span><br />
-          {{ drupal_view('citation', 'block_1') }}
+          {{- drupal_view('citation', 'block_1') -}}
         </div>
         {% endif %}
 
