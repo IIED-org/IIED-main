@@ -13,4 +13,4 @@ expanded: false
 depth: 0
 menu_parent: 'admin:entity.menu.collection'
 description_field_name: description
-use_term_weight_order: true
+use_term_weight_order: false
