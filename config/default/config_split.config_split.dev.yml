@@ -14,7 +14,9 @@ module:
   migrate_devel: 0
   views_ui: 0
 theme: {  }
-blacklist: {  }
+blacklist:
+  - acquia_connector.settings
+  - search_api.server.acquia_search_server
 graylist: {  }
 graylist_dependents: true
 graylist_skip_equal: true
