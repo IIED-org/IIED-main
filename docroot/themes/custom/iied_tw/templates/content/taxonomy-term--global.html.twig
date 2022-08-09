@@ -39,7 +39,7 @@
       <div class="lg:col-span-8">
         <div class="prose prose-lg">
         {{ term.description.0.value|striptags }}
-        {{ content.field_extended_description }}
+        {{ content.field_extended_description|render|striptags }}
         </div>
       </div>  
     </div>
