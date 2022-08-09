@@ -33,11 +33,20 @@
 <div{{ attributes.setAttribute('id', 'taxonomy-term-' ~ term.id).addClass(classes) }}>
     <div class="container items-baseline p-4 mx-auto overflow-hidden lg:grid lg:gap-x-6 lg:grid-cols-12">
       <div class="lg:col-span-4">
-      {# needs adjusting to show themes #}
-        {{ content.field_theme }} 
+      {# TODO: add links to themes, display thems and language switch in correct location #}
+      <div class="mb-2">
+        {% for key, item in term.field_theme %}
+          {% if key is not empty %}
+            {{ item.entity.label }}
+            {{ not loop.last ? ' | ' }}
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="mb-2">{{ drupal_block('language_block:language_interface', wrapper=false) }}</div>
+   
         {{ title_prefix }}
         <h1 class="mb-6">{{ name }}</h1>
-        {{ title_suffix }}
+         {{ title_suffix }}
       </div>
       <div class="lg:col-span-8">
         <p class="prose prose-lg">
