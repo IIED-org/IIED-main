@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.taxonomy_term.collection.field_about
     - field.field.taxonomy_term.collection.field_badge
+    - field.field.taxonomy_term.collection.field_collection_type
     - field.field.taxonomy_term.collection.field_containers
     - field.field.taxonomy_term.collection.field_downloads
     - field.field.taxonomy_term.collection.field_overview
@@ -16,6 +17,7 @@ dependencies:
     - taxonomy.vocabulary.collection
   module:
     - entity_reference_revisions
+    - options
     - svg_image
     - text
 id: taxonomy_term.collection.default
@@ -51,6 +53,13 @@ content:
         attribute: lazy
     third_party_settings: {  }
     weight: 8
+    region: content
+  field_collection_type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 11
     region: content
   field_containers:
     type: entity_reference_revisions_entity_view

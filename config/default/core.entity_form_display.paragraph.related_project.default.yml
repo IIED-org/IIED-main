@@ -1,0 +1,25 @@
+uuid: cc99c641-f2f9-4867-b0b2-f375a7189b23
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.related_project.field_related_project
+    - paragraphs.paragraphs_type.related_project
+id: paragraph.related_project.default
+targetEntityType: paragraph
+bundle: related_project
+mode: default
+content:
+  field_related_project:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

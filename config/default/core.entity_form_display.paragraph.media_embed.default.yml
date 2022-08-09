@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.paragraph.media_embed.field_basic_text
+    - field.field.paragraph.media_embed.field_image_caption
     - paragraphs.paragraphs_type.media_embed
   module:
     - text
@@ -19,6 +20,19 @@ content:
     settings:
       rows: 5
       placeholder: ''
+    third_party_settings: {  }
+  field_image_caption:
+    type: text_textarea
+    weight: 1
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  translation:
+    weight: 2
+    region: content
+    settings: {  }
     third_party_settings: {  }
 hidden:
   created: true

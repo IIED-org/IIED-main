@@ -19,6 +19,8 @@ dependencies:
     - paragraphs.paragraphs_type.media_list
     - paragraphs.paragraphs_type.modal_image
     - paragraphs.paragraphs_type.quote
+    - paragraphs.paragraphs_type.related_content
+    - paragraphs.paragraphs_type.related_project
     - paragraphs.paragraphs_type.section
     - paragraphs.paragraphs_type.stories_cta
     - paragraphs.paragraphs_type.stories_table
@@ -61,6 +63,8 @@ settings:
       timeline: timeline
       in_page_menu: in_page_menu
       logo_block: logo_block
+      related_content: related_content
+      related_project: related_project
     negate: 0
     target_bundles_drag_drop:
       about_the_author:
@@ -83,9 +87,6 @@ settings:
         enabled: true
       image:
         weight: -68
-        enabled: true
-      image_round:
-        weight: -62
         enabled: true
       image_small:
         weight: -63
@@ -117,9 +118,15 @@ settings:
       quote:
         weight: -64
         enabled: true
+      related_content:
+        weight: 53
+        enabled: true
       related_link:
         weight: -59
         enabled: false
+      related_project:
+        weight: 55
+        enabled: true
       researcher_profiles:
         weight: -40
         enabled: false

@@ -6,6 +6,8 @@ dependencies:
     - field.field.paragraph.video_embed.field_video
     - field.field.paragraph.video_embed.field_video_description
     - paragraphs.paragraphs_type.video_embed
+  module:
+    - text
 id: paragraph.video_embed.default
 targetEntityType: paragraph
 bundle: video_embed
@@ -21,7 +23,7 @@ content:
     weight: 0
     region: content
   field_video_description:
-    type: basic_string
+    type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
