@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.taxonomy_term.collection.field_about
     - field.field.taxonomy_term.collection.field_badge
+    - field.field.taxonomy_term.collection.field_collection_type
     - field.field.taxonomy_term.collection.field_containers
     - field.field.taxonomy_term.collection.field_downloads
     - field.field.taxonomy_term.collection.field_overview
@@ -34,7 +35,7 @@ content:
     third_party_settings: {  }
   field_about:
     type: text_textarea
-    weight: 3
+    weight: 12
     region: content
     settings:
       rows: 5
@@ -47,6 +48,12 @@ content:
     settings:
       progress_indicator: throbber
       preview_image_style: thumbnail
+    third_party_settings: {  }
+  field_collection_type:
+    type: options_select
+    weight: 3
+    region: content
+    settings: {  }
     third_party_settings: {  }
   field_overview:
     type: text_textarea

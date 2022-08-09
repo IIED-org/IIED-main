@@ -23,13 +23,16 @@ Standard collection card
               <div class="">
                   <h4 class="mb-4 text-xl text-gray-900 lg:text-2xl">{{ name }}</h4>
                   <p class="mb-4 text-gray-700">
-                           {{ term.description.0.value|striptags }}
+                           {{ content.field_short_description|render|striptags }}
+                        
                   </p>
                 </div>
               </div>
 
               <div>
-                <span class="font-bold text-gray-700">Collection </span>
+              {% if content.field_collection_type %}
+                <span class="font-bold text-gray-700">{{ content.field_collection_type|render|striptags }}</span>
+              {% endif %}  
               </div>
             </div>
           </div>

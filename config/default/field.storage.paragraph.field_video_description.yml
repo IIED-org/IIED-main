@@ -1,16 +1,16 @@
-uuid: 176d53f4-0b86-4c60-9e91-20692bd8c25a
+uuid: 52adc824-486c-498c-a091-3408a4477fbf
 langcode: en
 status: true
 dependencies:
   module:
     - paragraphs
+    - text
 id: paragraph.field_video_description
 field_name: field_video_description
 entity_type: paragraph
-type: string_long
-settings:
-  case_sensitive: false
-module: core
+type: text_long
+settings: {  }
+module: text
 locked: false
 cardinality: 1
 translatable: true
