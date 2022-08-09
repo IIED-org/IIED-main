@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eef9fb289efda4f9028d7d32cc1a7cfa",
+    "content-hash": "0c05b4e5abd24c0ca3d051a9986d71b7",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3286,6 +3286,50 @@
                 "source": "https://git.drupalcode.org/project/config_split",
                 "issues": "https://www.drupal.org/project/issues/config_split",
                 "slack": "https://drupal.slack.com/archives/C45342CDD"
+            }
+        },
+        {
+            "name": "drupal/content_translation_redirect",
+            "version": "1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/content_translation_redirect.git",
+                "reference": "8.x-1.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/content_translation_redirect-8.x-1.3.zip",
+                "reference": "8.x-1.3",
+                "shasum": "ff580c60e956c3f87e3d2ed5735f77cb9fcebc65"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.3",
+                    "datestamp": "1603196273",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "WalkingDexter",
+                    "homepage": "https://www.drupal.org/user/3251330"
+                }
+            ],
+            "description": "Allows users to redirect from non-existent content translation to default content translation.",
+            "homepage": "https://www.drupal.org/project/content_translation_redirect",
+            "support": {
+                "source": "https://git.drupalcode.org/project/content_translation_redirect"
             }
         },
         {

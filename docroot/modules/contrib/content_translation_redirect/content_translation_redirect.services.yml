@@ -1,0 +1,6 @@
+services:
+  content_translation_redirect.request_subscriber:
+    class: Drupal\content_translation_redirect\EventSubscriber\RequestSubscriber
+    arguments: ['@config.factory', '@language_manager', '@entity_type.manager', '@current_route_match']
+    tags:
+      - { name: event_subscriber }
