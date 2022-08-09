@@ -1,12 +1,12 @@
-uuid: 3f3b2cad-682c-428a-b71d-63284ff0927a
+uuid: a5255a22-dbc6-4371-ad92-e7ed7958d0c2
 langcode: en
 status: true
 dependencies:
   config:
-    - taxonomy.vocabulary.organisation
-id: taxonomy_vocabulary_organisation
+    - taxonomy.vocabulary.series
+id: taxonomy_vocabulary_series
 entity_type_id: taxonomy_vocabulary
-entity_id: organisation
+entity_id: series
 action: display_page
 allow_override: 1
 redirect: ''

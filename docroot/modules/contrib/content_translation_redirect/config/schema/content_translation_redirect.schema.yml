@@ -1,0 +1,29 @@
+# Schema for the configuration files of the System module.
+
+content_translation_redirect.default:
+  type: config_object
+  label: 'Content Translation Redirect default settings'
+  mapping:
+    code:
+      type: integer
+      label: 'Redirect status'
+    message:
+      type: text
+      label: 'Message after redirection'
+
+content_translation_redirect.entity.*:
+  type: config_entity
+  label: 'Content Translation Redirect'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    code:
+      type: integer
+      label: 'Redirect status'
+    message:
+      type: text
+      label: 'Message after redirection'

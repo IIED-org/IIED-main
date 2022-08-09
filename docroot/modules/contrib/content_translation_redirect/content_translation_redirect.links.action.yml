@@ -1,0 +1,5 @@
+entity.content_translation_redirect.add_form:
+  route_name: 'entity.content_translation_redirect.add_form'
+  title: 'Add content translation redirect'
+  appears_on:
+    - entity.content_translation_redirect.collection

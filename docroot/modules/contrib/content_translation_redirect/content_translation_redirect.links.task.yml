@@ -1,0 +1,8 @@
+content_translation_redirect.default_settings:
+  title: 'Default settings'
+  route_name: content_translation_redirect.default_settings
+  base_route: content_translation_redirect.default_settings
+entity.content_translation_redirect.collection:
+  title: 'Entity settings'
+  route_name: entity.content_translation_redirect.collection
+  base_route: content_translation_redirect.default_settings

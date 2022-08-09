@@ -1,0 +1,16 @@
+name: 'Content Translation Redirect'
+type: module
+description: 'Allows users to redirect from non-existent content translation to default content translation.'
+package: Multilingual
+core: 8.x
+core_version_requirement: ^8 || ^9
+configure: content_translation_redirect.default_settings
+
+dependencies:
+  - drupal:content_translation
+  - drupal:system (>= 8.5)
+
+# Information added by Drupal.org packaging script on 2020-10-20
+version: '8.x-1.3'
+project: 'content_translation_redirect'
+datestamp: 1603196275

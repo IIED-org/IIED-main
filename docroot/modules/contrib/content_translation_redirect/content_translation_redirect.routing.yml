@@ -1,0 +1,39 @@
+content_translation_redirect.default_settings:
+  path: '/admin/config/regional/content-translation-redirect'
+  defaults:
+    _form: '\Drupal\content_translation_redirect\Form\DefaultSettingsForm'
+    _title: 'Content translation redirects'
+  requirements:
+    _permission: 'administer content translation redirects'
+
+entity.content_translation_redirect.collection:
+  path: '/admin/config/regional/content-translation-redirect/entity'
+  defaults:
+    _entity_list: 'content_translation_redirect'
+    _title: 'Entity settings'
+  requirements:
+    _permission: 'administer content translation redirects'
+
+entity.content_translation_redirect.add_form:
+  path: '/admin/config/regional/content-translation-redirect/entity/add'
+  defaults:
+    _entity_form: 'content_translation_redirect.add'
+    _title: 'Add content translation redirect'
+  requirements:
+    _entity_create_access: 'content_translation_redirect'
+
+entity.content_translation_redirect.edit_form:
+  path: '/admin/config/regional/content-translation-redirect/entity/{content_translation_redirect}'
+  defaults:
+    _entity_form: 'content_translation_redirect.edit'
+    _title: 'Edit content translation redirect'
+  requirements:
+    _entity_access: 'content_translation_redirect.update'
+
+entity.content_translation_redirect.delete_form:
+  path: '/admin/config/regional/content-translation-redirect/entity/{content_translation_redirect}/delete'
+  defaults:
+    _entity_form: 'content_translation_redirect.delete'
+    _title: 'Delete content translation redirect'
+  requirements:
+    _entity_access: 'content_translation_redirect.delete'
