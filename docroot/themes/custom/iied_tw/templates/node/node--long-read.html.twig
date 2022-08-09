@@ -89,11 +89,11 @@
             <div class="pt-6 xl:col-span-3 xl:row-span-2">
               <header class="">
               <nav aria-label="themes">
-                <div class="flex flex-wrap mb-6 space-x-3">
-                  {{ content.field_theme_s_}}
+                <div class="flex flex-wrap justify-between mb-4 space-x-3">
+                  <div class="mb-2">{{ content.field_theme_s_}}</div>
+                  <div class="mb-2">{{ drupal_block('language_block:language_interface', wrapper=false) }}</div>
                 </div>
               </nav>
-              {{ drupal_block('language_block:language_interface', wrapper=false) }}
                 <div class="pb-4 border-b-2 border-iiedpink-500">
                   <h1 class="mb-6">{{ node.label }}</h1>
                   <h2 class="mb-6 text-xl text-iiedpink-700">
