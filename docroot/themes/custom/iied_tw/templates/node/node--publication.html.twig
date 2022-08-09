@@ -196,7 +196,7 @@
       <section class="bg-gray-100">
         <div class="container py-8 mx-auto">
         <h2 class="mb-4">Related project</h2>    
-        {{ node.field_project[0].entity|view('card') }}
+        {{ node.field_project[0].entity|view('card_ext') }}
         </div>
         {{ drupal_view('related_pubs', 'block_1') }}
       </section>

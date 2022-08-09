@@ -21,6 +21,8 @@
  * - view_mode: View mode, e.g. 'full', 'teaser', etc.
  *
  * @see template_preprocess_taxonomy_term()
+
+ * About page
  */
 #}
 {%
@@ -30,22 +32,9 @@
   ]
 %}
 <div{{ attributes.setAttribute('id', 'taxonomy-term-' ~ term.id).addClass(classes) }}>
-    <div class="container items-baseline p-4 mx-auto overflow-hidden lg:grid lg:gap-x-6 lg:grid-cols-12">
-      <div class="lg:col-span-4">
-        {{ title_prefix }}
-        <h1 class="mb-6">{{ name }}</h1>
-        {{ title_suffix }}
-      </div>
-      <div class="lg:col-span-8">
-        <p class="prose prose-lg">
-         {{ term.description.0.value }}
-        </p>
-      </div>
-    </div>
-
-
   <div class="content">
     {{ content }}
   </div>
 
 </div>
+

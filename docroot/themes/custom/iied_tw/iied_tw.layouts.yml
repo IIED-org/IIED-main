@@ -112,15 +112,25 @@ tw-container:
   regions:
     first:
       label: Main
-tw-tabs:
-  label: "IIED tabbed container"
+tw-fluid:
+  label: "IIED fluid"
   category: "IIED layouts"
   class: '\Drupal\ds\Plugin\DsLayout'
-  template: templates/layout/layout--tw-tabs
-  icon: templates/layout/icons/tw-tabs.svg
+  template: templates/layout/layout--tw-fluid
+  icon: templates/layout/icons/tw-fluid.svg
   default_region: main
   regions:
     first:
       label: Main
+tw-1-2-col-thirds:
+  label: "IIED header with description"
+  category: "IIED layouts"
+  class: '\Drupal\ds\Plugin\DsLayout'
+  template: templates/layout/layout--tw-1-2-col-thirds
+  icon: templates/layout/icons/tw-2col-thirds.svg
+  default_region: main
+  regions:
+    first:
+      label: Heading
     second:
-      label: Tab two
+      label: Description
