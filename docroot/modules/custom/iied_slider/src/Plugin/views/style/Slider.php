@@ -45,6 +45,7 @@ class Slider extends StylePluginBase {
    * {@inheritdoc}
    */
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+
     parent::buildOptionsForm($form, $form_state);
 
     $form['containerWidth'] = array(
@@ -65,62 +66,99 @@ class Slider extends StylePluginBase {
       '#default_value' => (isset($this->options['loop'])) ? $this->options['loop'] : 'true',
       '#description' => t('Whether to loop or not'),
     );
-    $form['breakpoint1'] = array(
+    $form['breakpoint_sm'] = array(
       '#type' => 'number',
-      '#title' => t('breakpoint 1.'),
-      '#default_value' => (isset($this->options['breakpoint1'])) ? $this->options['breakpoint1'] : '640',
+      '#title' => t('breakpoint sm.'),
+      '#default_value' => (isset($this->options['breakpoint_sm'])) ? $this->options['breakpoint_sm'] : '640',
       '#description' => t('The breakpoint width, in pixels.'),
     );
-    $form['breakpoint2'] = array(
+    $form['breakpoint_md'] = array(
       '#type' => 'number',
-      '#title' => t('breakpoint 2.'),
-      '#default_value' => (isset($this->options['breakpoint2'])) ? $this->options['breakpoint2'] : '768',
+      '#title' => t('breakpoint md.'),
+      '#default_value' => (isset($this->options['breakpoint_md'])) ? $this->options['breakpoint_md'] : '768',
       '#description' => t('The breakpoint width, in pixels.'),
     );
-    $form['breakpoint3'] = array(
+    $form['breakpoint_lg'] = array(
       '#type' => 'number',
-      '#title' => t('breakpoint 3.'),
-      '#default_value' => (isset($this->options['breakpoint3'])) ? $this->options['breakpoint3'] : '1024',
+      '#title' => t('breakpoint lg.'),
+      '#default_value' => (isset($this->options['breakpoint_lg'])) ? $this->options['breakpoint_lg'] : '1024',
       '#description' => t('The breakpoint width, in pixels.'),
     );
-    $form['slidesPerView1'] = array(
+    $form['breakpoint_xl'] = array(
       '#type' => 'number',
-      '#title' => t('Slides per view at breakpoint 1.'),
-      '#default_value' => (isset($this->options['slidesPerView1'])) ? $this->options['slidesPerView1'] : '1',
+      '#title' => t('breakpoint xl.'),
+      '#default_value' => (isset($this->options['breakpoint_xl'])) ? $this->options['breakpoint_xl'] : '1280',
+      '#description' => t('The breakpoint width, in pixels.'),
+    );
+    $form['breakpoint_2xl'] = array(
+      '#type' => 'number',
+      '#title' => t('breakpoint 2xl.'),
+      '#default_value' => (isset($this->options['breakpoint_2xl'])) ? $this->options['breakpoint_2xl'] : '1536',
+      '#description' => t('The breakpoint width, in pixels.'),
+    );
+    $form['slidesPerView_sm'] = array(
+      '#type' => 'number',
+      '#title' => t('Slides per view at breakpoint sm.'),
+      '#default_value' => (isset($this->options['slidesPerView_sm'])) ? $this->options['slidesPerView_sm'] : '1',
       '#description' => t('The number of slides visisble inititally.'),
     );
-    $form['spaceBetween1'] = array(
+    $form['spaceBetween_sm'] = array(
       '#type' => 'number',
-      '#title' => t('Space between slides at breakpoint 1.'),
-      '#default_value' => (isset($this->options['spaceBetween1'])) ? $this->options['spaceBetween1'] : '0',
+      '#title' => t('Space between slides at breakpoint sm.'),
+      '#default_value' => (isset($this->options['spaceBetween_sm'])) ? $this->options['spaceBetween_sm'] : '0',
       '#description' => t('The space between slides.'),
     );
     // slidesPerView.
-    $form['slidesPerView2'] = array(
+    $form['slidesPerView_md'] = array(
       '#type' => 'number',
-      '#title' => t('Slides per view at breakpoint 2.'),
-      '#default_value' => (isset($this->options['slidesPerView2'])) ? $this->options['slidesPerView2'] : '2',
+      '#title' => t('Slides per view at breakpoint md.'),
+      '#default_value' => (isset($this->options['slidesPerView_md'])) ? $this->options['slidesPerView_md'] : '2',
       '#description' => t('The number of slides visisble inititally.'),
     );
-    $form['spaceBetween2'] = array(
+    $form['spaceBetween_md'] = array(
       '#type' => 'number',
-      '#title' => t('Space between slides at breakpoint 2'),
-      '#default_value' => (isset($this->options['spaceBetween2'])) ? $this->options['spaceBetween2'] : '0',
+      '#title' => t('Space between slides at breakpoint md'),
+      '#default_value' => (isset($this->options['spaceBetween_md'])) ? $this->options['spaceBetween_md'] : '0',
       '#description' => t('The space between slides.'),
     );
     // slidesPerView.
-    $form['slidesPerView3'] = array(
+    $form['slidesPerView_lg'] = array(
       '#type' => 'number',
-      '#title' => t('Slides per view at breakpoint 3.'),
-      '#default_value' => (isset($this->options['slidesPerView3'])) ? $this->options['slidesPerView3'] : '3',
+      '#title' => t('Slides per view at breakpoint lg.'),
+      '#default_value' => (isset($this->options['slidesPerView_lg'])) ? $this->options['slidesPerView_lg'] : '3',
       '#description' => t('The number of slides visisble inititally.'),
     );
-    $form['spaceBetween3'] = array(
+    $form['spaceBetween_lg'] = array(
       '#type' => 'number',
-      '#title' => t('Space between slides at breakpoint 3.'),
-      '#default_value' => (isset($this->options['spaceBetween3'])) ? $this->options['spaceBetween3'] : '0',
+      '#title' => t('Space between slides at breakpoint lg.'),
+      '#default_value' => (isset($this->options['spaceBetween_lg'])) ? $this->options['spaceBetween_lg'] : '0',
       '#description' => t('The space between slides.'),
     );
-
+    // slidesPerView.
+    $form['slidesPerView_xl'] = array(
+      '#type' => 'number',
+      '#title' => t('Slides per view at breakpoint xl.'),
+      '#default_value' => (isset($this->options['slidesPerView_xl'])) ? $this->options['slidesPerView_xl'] : '3',
+      '#description' => t('The number of slides visisble inititally.'),
+    );
+    $form['spaceBetween_xl'] = array(
+      '#type' => 'number',
+      '#title' => t('Space between slides at breakpoint xl.'),
+      '#default_value' => (isset($this->options['spaceBetween_xl'])) ? $this->options['spaceBetween_xl'] : '0',
+      '#description' => t('The space between slides.'),
+    );
+    // slidesPerView.
+    $form['slidesPerView_2xl'] = array(
+      '#type' => 'number',
+      '#title' => t('Slides per view at breakpoint 2xl.'),
+      '#default_value' => (isset($this->options['slidesPerView_2xl'])) ? $this->options['slidesPerView_2xl'] : '3',
+      '#description' => t('The number of slides visisble inititally.'),
+    );
+    $form['spaceBetween_2xl'] = array(
+      '#type' => 'number',
+      '#title' => t('Space between slides at breakpoint 2xl.'),
+      '#default_value' => (isset($this->options['spaceBetween_2xl'])) ? $this->options['spaceBetween_2xl'] : '0',
+      '#description' => t('The space between slides.'),
+    );
   }
 }
