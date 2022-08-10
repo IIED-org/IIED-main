@@ -3,6 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.base_field_override.taxonomy_term.global.description
+    - core.base_field_override.taxonomy_term.global.name
     - core.entity_view_mode.taxonomy_term.full
     - field.field.taxonomy_term.global.field_extended_description
     - field.field.taxonomy_term.global.layout_builder__layout
@@ -71,6 +73,8 @@ third_party_settings:
         - tw-1-2-col-grid
         - tw-1-2-4-col-grid
         - tw-container
+        - tw-fluid
+        - tw-1-2-col-thirds
       denylisted_blocks: {  }
       allowlisted_blocks: {  }
       restricted_categories: {  }
