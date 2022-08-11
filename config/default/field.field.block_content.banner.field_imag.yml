@@ -1,0 +1,21 @@
+uuid: ccd57773-9137-4c24-81e2-d0e30c662721
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.banner
+    - field.storage.block_content.field_imag
+  module:
+    - options
+id: block_content.banner.field_imag
+field_name: field_imag
+entity_type: block_content
+bundle: banner
+label: 'Image style'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,10 +1,10 @@
-uuid: a657856e-c85a-4d4c-b819-71865e8deeab
+uuid: 7c3bf17f-226b-4ba9-bd19-0b29a6b1627e
 langcode: en
 status: true
 dependencies: {  }
-id: grey_background
-label: 'Grey background'
-classes: "bg-gray-100 \r\npy-12"
+id: divider_above
+label: 'Divider above'
+classes: 'border-t-2 border-iiedgreen-500 mt-6'
 type: section
 group: default
 block_restrictions: {  }
@@ -13,4 +13,5 @@ layout_restrictions:
   - tw-1-2-4-col-grid
   - tw-container
   - tw-fluid
+  - tw-1-2-col-thirds
 weight: 0

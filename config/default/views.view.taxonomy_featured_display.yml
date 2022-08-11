@@ -210,17 +210,7 @@ display:
           query_tags: {  }
       relationships: {  }
       css_class: ''
-      header:
-        result:
-          id: result
-          table: views
-          field: result
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: result
-          empty: false
-          content: '@total entries'
+      header: {  }
       footer: {  }
       display_extenders: {  }
     cache_metadata:
@@ -281,8 +271,20 @@ display:
         show_admin_links: false
         pager: false
         sorts: false
+        header: false
       display_description: ''
       show_admin_links: true
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: result
+          empty: false
+          content: '@total entries'
       display_extenders: {  }
       block_description: 'Collection featured'
     cache_metadata:
@@ -308,8 +310,20 @@ display:
       defaults:
         show_admin_links: false
         pager: false
+        header: false
       display_description: ''
       show_admin_links: true
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: result
+          empty: false
+          content: '@total entries'
       display_extenders: {  }
       block_description: 'Tag featured'
     cache_metadata:
