@@ -10,7 +10,7 @@ id: node.publication.field_lists
 field_name: field_lists
 entity_type: node
 bundle: publication
-label: 'Lists - Coming soon, do not use yet!'
+label: Lists
 description: 'Add publication to a list'
 required: false
 translatable: false
