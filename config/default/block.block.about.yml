@@ -27,7 +27,7 @@ visibility:
   request_path:
     id: request_path
     negate: false
-    pages: "/about\r\n/people\r\n/contact\r\n/accountability\r\n/jobs-internships"
+    pages: "/about\r\n/people\r\n/contact\r\n/accountability\r\n/jobs-internships\r\n/iied-policies"
   context_all:
     id: context_all
     negate: null
