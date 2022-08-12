@@ -1,0 +1,121 @@
+uuid: 5b0b302b-4de2-41a7-b117-54b7bc1c2fb1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_accordion_section
+    - paragraphs.paragraphs_type.accordion_box
+    - paragraphs.paragraphs_type.accordion_section
+  module:
+    - entity_reference_revisions
+id: paragraph.accordion_box.field_accordion_section
+field_name: field_accordion_section
+entity_type: paragraph
+bundle: accordion_box
+label: 'Accordion section'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      accordion_section: accordion_section
+    negate: 0
+    target_bundles_drag_drop:
+      about_the_author:
+        weight: 32
+        enabled: false
+      accordion_box:
+        weight: 33
+        enabled: false
+      accordion_section:
+        weight: 34
+        enabled: true
+      basic_text:
+        weight: 35
+        enabled: false
+      file_upload:
+        weight: 36
+        enabled: false
+      gallery:
+        weight: 37
+        enabled: false
+      image:
+        weight: 38
+        enabled: false
+      image_wide:
+        weight: 39
+        enabled: false
+      in_page_menu:
+        weight: 41
+        enabled: false
+      info_box:
+        weight: 40
+        enabled: false
+      linked_person:
+        weight: 42
+        enabled: false
+      logo_block:
+        weight: 43
+        enabled: false
+      media_embed:
+        weight: 44
+        enabled: false
+      modal_image:
+        weight: 45
+        enabled: false
+      quote:
+        weight: 46
+        enabled: false
+      related_link:
+        weight: 47
+        enabled: false
+      researcher_profiles:
+        weight: 48
+        enabled: false
+      row_of_4:
+        weight: 49
+        enabled: false
+      section:
+        weight: 50
+        enabled: false
+      stories_block:
+        weight: 51
+        enabled: false
+      stories_cta:
+        weight: 52
+        enabled: false
+      stories_curated_content:
+        weight: 53
+        enabled: false
+      stories_link_list:
+        weight: 54
+        enabled: false
+      stories_quote:
+        weight: 55
+        enabled: false
+      stories_table:
+        weight: 56
+        enabled: false
+      stories_text:
+        weight: 57
+        enabled: false
+      stories_views:
+        weight: 58
+        enabled: false
+      tab:
+        weight: 59
+        enabled: false
+      tab_box:
+        weight: 60
+        enabled: false
+      timeline:
+        weight: 61
+        enabled: false
+      video_embed:
+        weight: 62
+        enabled: false
+field_type: entity_reference_revisions

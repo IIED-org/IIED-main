@@ -1,0 +1,10 @@
+uuid: 6b8d6365-b952-4db7-af72-58145722d88a
+langcode: en
+status: true
+dependencies: {  }
+id: accordion_section
+label: 'Accordion section'
+icon_uuid: null
+icon_default: null
+description: 'A section for the accordion box paragraph type.'
+behavior_plugins: {  }
