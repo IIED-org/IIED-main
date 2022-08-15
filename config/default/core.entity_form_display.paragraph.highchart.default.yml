@@ -1,0 +1,34 @@
+uuid: a219184a-2952-4d81-a1bf-07c6a7a319bb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.highchart.field_chart
+    - field.field.paragraph.highchart.field_chart_description
+    - paragraphs.paragraphs_type.highchart
+  module:
+    - charts
+    - text
+id: paragraph.highchart.default
+targetEntityType: paragraph
+bundle: highchart
+mode: default
+content:
+  field_chart:
+    type: chart_config_default
+    weight: 2
+    region: content
+    settings:
+      change_default_library: 0
+    third_party_settings: {  }
+  field_chart_description:
+    type: text_textarea
+    weight: 3
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

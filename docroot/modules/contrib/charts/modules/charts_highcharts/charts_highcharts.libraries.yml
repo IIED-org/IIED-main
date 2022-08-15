@@ -1,0 +1,43 @@
+charts_highcharts:
+  version: VERSION
+  js:
+    js/charts_highcharts.js: { weight: -1 }
+  dependencies:
+      - charts/global
+      - core/once
+highcharts:
+  remote: https://code.highcharts.com/highcharts.js
+  version: VERSION
+  license:
+      name: Non-commercial
+      url: https://creativecommons.org/licenses/by-nc/3.0/
+      gpl-compatible: false
+  cdn:
+    /libraries/highcharts/highcharts.js: https://code.highcharts.com/10.0.0/highcharts.js
+    /libraries/highcharts_more/highcharts-more.js: https://code.highcharts.com/10.0.0/highcharts-more.js
+    /libraries/highcharts_accessibility/accessibility.js: https://code.highcharts.com/10.0.0/modules/accessibility.js
+    /libraries/highcharts_3d/highcharts-3d.js: https://code.highcharts.com/10.0.0/highcharts-3d.js
+  js:
+    /libraries/highcharts/highcharts.js: {}
+    /libraries/highcharts_more/highcharts-more.js: {}
+    /libraries/highcharts_accessibility/accessibility.js: {}
+    /libraries/highcharts_3d/highcharts-3d.js: {}
+  dependencies:
+      - charts_highcharts/charts_highcharts
+
+highcharts_exporting:
+  remote: https://code.highcharts.com/highcharts.js
+  version: VERSION
+  license:
+    name: Non-commercial
+    url: https://creativecommons.org/licenses/by-nc/3.0/
+    gpl-compatible: false
+  cdn:
+    /libraries/highcharts_exporting/exporting.js: https://code.highcharts.com/10.0.0/modules/exporting.js
+    /libraries/highcharts_export-data/export-data.js: https://code.highcharts.com/10.0.0/modules/export-data.js
+  js:
+    /libraries/highcharts_exporting/exporting.js: {}
+    /libraries/highcharts_export-data/export-data.js: {}
+  dependencies:
+    - charts_highcharts/charts_highcharts
+    - charts_highcharts/highcharts

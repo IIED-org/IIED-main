@@ -1,0 +1,7 @@
+services:
+  plugin.manager.charts:
+    class: Drupal\charts\ChartManager
+    parent: default_plugin_manager
+  plugin.manager.charts_type:
+    class: Drupal\charts\TypeManager
+    arguments: ['@module_handler', '@cache.discovery', '@event_dispatcher']

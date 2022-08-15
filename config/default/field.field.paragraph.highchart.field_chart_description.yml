@@ -1,0 +1,21 @@
+uuid: 437822e1-7903-4892-9630-e61cee5194cd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_chart_description
+    - paragraphs.paragraphs_type.highchart
+  module:
+    - text
+id: paragraph.highchart.field_chart_description
+field_name: field_chart_description
+entity_type: paragraph
+bundle: highchart
+label: 'Chart description'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

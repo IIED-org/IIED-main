@@ -11,6 +11,7 @@ dependencies:
     - paragraphs.paragraphs_type.box
     - paragraphs.paragraphs_type.file_upload
     - paragraphs.paragraphs_type.gallery
+    - paragraphs.paragraphs_type.highchart
     - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.image_small
     - paragraphs.paragraphs_type.image_wide
@@ -67,6 +68,7 @@ settings:
       logo_block: logo_block
       timeline: timeline
       about_the_author: about_the_author
+      highchart: highchart
     negate: 0
     target_bundles_drag_drop:
       about_the_author:
@@ -86,6 +88,9 @@ settings:
         enabled: true
       gallery:
         weight: -61
+        enabled: true
+      highchart:
+        weight: 43
         enabled: true
       image:
         weight: -68

@@ -1,0 +1,19 @@
+uuid: f2a4a31c-ef96-4eb0-9f8a-0389646e956c
+langcode: en
+status: true
+dependencies:
+  module:
+    - charts
+    - paragraphs
+id: paragraph.field_chart
+field_name: field_chart
+entity_type: paragraph
+type: chart_config
+settings: {  }
+module: charts
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

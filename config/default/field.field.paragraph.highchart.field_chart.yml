@@ -1,0 +1,21 @@
+uuid: 81f75f02-78f9-40e8-9302-3e0af087567f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_chart
+    - paragraphs.paragraphs_type.highchart
+  module:
+    - charts
+id: paragraph.highchart.field_chart
+field_name: field_chart
+entity_type: paragraph
+bundle: highchart
+label: chart
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: chart_config

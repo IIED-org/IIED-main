@@ -1,0 +1,56 @@
+_core:
+  default_config_hash: e8mvR0COZjJgU8fqPmljK3sV33vefyvSCMdEBX2gpVg
+charts_default_settings:
+  library: highcharts
+  type: column
+  display:
+    title: ''
+    title_position: out
+    data_labels: false
+    data_markers: false
+    legend_position: right
+    background: ''
+    three_dimensional: 0
+    colors:
+      0: '#08bcc1'
+      25: '#bf4040'
+    polar: 0
+    tooltips: true
+    dimensions:
+      width: ''
+      width_units: '%'
+      height: ''
+      height_units: ''
+    gauge:
+      max: '100'
+      min: '0'
+      green_from: '85'
+      green_to: '100'
+      yellow_from: '50'
+      yellow_to: '85'
+      red_from: '0'
+      red_to: '50'
+  xaxis:
+    title: ''
+    labels_rotation: '0'
+  yaxis:
+    title: ''
+    min: ''
+    max: ''
+    prefix: ''
+    suffix: ''
+    decimal_count: ''
+    labels_rotation: '0'
+  highcharts_settings:
+    legend:
+      layout: ''
+      background_color: ''
+      border_width: 0
+      shadow: 0
+      item_style:
+        color: ''
+        overflow: ''
+    exporting_library: 0
+advanced:
+  requirements:
+    cdn: true
