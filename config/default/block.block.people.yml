@@ -1,0 +1,49 @@
+uuid: 105ed60a-6d54-4393-8cec-6e36a0059d05
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.people
+  module:
+    - context
+    - system
+  theme:
+    - iied_tw
+id: people
+theme: iied_tw
+region: content
+weight: 0
+provider: null
+plugin: 'system_menu_block:people'
+settings:
+  id: 'system_menu_block:people'
+  label: People
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 3
+  expand_all_items: false
+visibility:
+  context_all:
+    id: context_all
+    negate: null
+    values: ''
+  user_status:
+    id: user_status
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    user_status:
+      viewing_profile: '0'
+      logged_viewing_profile: '0'
+      own_page_true: '0'
+      field_value: '0'
+    user_fields: uid
+  context:
+    id: context
+    negate: null
+    values: ''
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/people\r\n/associates\r\n/board-trustees\r\n/leadership-0\r\n/leadership"

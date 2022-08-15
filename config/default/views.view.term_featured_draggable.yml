@@ -187,7 +187,7 @@ display:
         type: mini
         options:
           offset: 0
-          items_per_page: 20
+          items_per_page: 25
           total_pages: null
           id: 0
           tags:
