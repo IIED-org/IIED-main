@@ -1,0 +1,27 @@
+uuid: c9556cb5-550d-40f1-8c7e-01f614454404
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_content
+    - options
+id: block_content.field_imag
+field_name: field_imag
+entity_type: block_content
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: rounded-3xl
+      label: Rounded
+    -
+      value: rounded-full
+      label: 'Rounded full'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

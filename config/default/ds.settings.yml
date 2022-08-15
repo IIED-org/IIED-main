@@ -8,8 +8,6 @@ ft-layout-builder: true
 classes:
   region:
     - 'bg-fill|Background fill grey'
-    - 'bg-green|Background fill green'
-    - 'divide-above|Divider above'
-    - 'divide-below|Divider below'
+    - ''
   field: {  }
 use_field_names: true

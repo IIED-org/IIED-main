@@ -1,0 +1,17 @@
+uuid: 7c3bf17f-226b-4ba9-bd19-0b29a6b1627e
+langcode: en
+status: true
+dependencies: {  }
+id: divider_above
+label: 'Divider above'
+classes: 'border-t-2 border-iiedgreen-500 mt-6'
+type: section
+group: default
+block_restrictions: {  }
+layout_restrictions:
+  - tw-1-2-col-grid
+  - tw-1-2-4-col-grid
+  - tw-container
+  - tw-fluid
+  - tw-1-2-col-thirds
+weight: 0

@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.taxonomy_term.full
+    - field.field.taxonomy_term.tags.field_display_name
     - field.field.taxonomy_term.tags.field_iied_tid
     - field.field.taxonomy_term.tags.field_importance
     - field.field.taxonomy_term.tags.field_tag_type
@@ -93,6 +94,7 @@ content:
     weight: 0
     region: content
 hidden:
+  field_display_name: true
   field_iied_tid: true
   field_importance: true
   field_tag_type: true

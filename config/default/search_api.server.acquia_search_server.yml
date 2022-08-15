@@ -28,6 +28,7 @@ dependencies:
     - search_api_solr.solr_field_type.text_pt-br_7_0_0
     - search_api_solr.solr_field_type.text_pt-pt_7_0_0
     - search_api_solr.solr_field_type.text_ru_7_0_0
+    - search_api_solr.solr_field_type.text_string_und_6_0_0
     - search_api_solr.solr_field_type.text_und_7_0_0
     - search_api_solr.solr_field_type.text_zh-hans_7_0_0
     - search_api_solr.solr_field_type.text_zh-hant_7_0_0
@@ -49,7 +50,7 @@ name: 'Acquia Search API Solr server'
 description: ''
 backend: search_api_solr
 backend_config:
-  retrieve_data: true
+  retrieve_data: false
   highlight_data: true
   site_hash: true
   server_prefix: ''
@@ -65,8 +66,8 @@ backend_config:
     scheme: http
     host: s-1w1m0bhwu07-eu-west-1.sr-prod02.acquia.com
     port: 8983
-    path: /solr/AGHX-142716.dev.irforum
-    core: AGHX-142716.dev.irforum
+    path: /solr/AGHX-142716.test.irforum
+    core: AGHX-142716.test.irforum
     timeout: 5
     index_timeout: 5
     optimize_timeout: 10

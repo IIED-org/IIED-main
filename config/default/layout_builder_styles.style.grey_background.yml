@@ -1,0 +1,16 @@
+uuid: a657856e-c85a-4d4c-b819-71865e8deeab
+langcode: en
+status: true
+dependencies: {  }
+id: grey_background
+label: 'Grey background'
+classes: "bg-gray-100 \r\npy-12"
+type: section
+group: default
+block_restrictions: {  }
+layout_restrictions:
+  - tw-1-2-col-grid
+  - tw-1-2-4-col-grid
+  - tw-container
+  - tw-fluid
+weight: 0

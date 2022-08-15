@@ -2,10 +2,7 @@ uuid: 4a74abcc-71d9-43af-ab37-2f88b521ba09
 langcode: en
 status: false
 dependencies:
-  content:
-    - 'block_content:basic:997e941d-85a8-4bfc-9ab7-efa990ac000a'
   module:
-    - block_content
     - user
   theme:
     - iied_tw

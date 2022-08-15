@@ -1,0 +1,5 @@
+content_translation_redirect.default_settings:
+  title: 'Content Translation Redirect default settings'
+  base_route_name: content_translation_redirect.default_settings
+  names:
+    - content_translation_redirect.default

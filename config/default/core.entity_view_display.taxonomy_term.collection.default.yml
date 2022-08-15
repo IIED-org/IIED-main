@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.taxonomy_term.collection.field_about
     - field.field.taxonomy_term.collection.field_badge
+    - field.field.taxonomy_term.collection.field_collection_type
     - field.field.taxonomy_term.collection.field_containers
     - field.field.taxonomy_term.collection.field_downloads
     - field.field.taxonomy_term.collection.field_overview
@@ -16,7 +17,8 @@ dependencies:
     - taxonomy.vocabulary.collection
   module:
     - entity_reference_revisions
-    - image
+    - options
+    - svg_image
     - text
 id: taxonomy_term.collection.default
 targetEntityType: taxonomy_term
@@ -43,10 +45,21 @@ content:
     settings:
       image_link: ''
       image_style: ''
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
       image_loading:
         attribute: lazy
     third_party_settings: {  }
     weight: 8
+    region: content
+  field_collection_type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 11
     region: content
   field_containers:
     type: entity_reference_revisions_entity_view
@@ -88,7 +101,7 @@ content:
     region: content
   field_tags:
     type: entity_reference_label
-    label: above
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }

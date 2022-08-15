@@ -12,6 +12,7 @@ dependencies:
     - paragraphs.paragraphs_type.file_upload
     - paragraphs.paragraphs_type.gallery
     - paragraphs.paragraphs_type.image
+    - paragraphs.paragraphs_type.image_small
     - paragraphs.paragraphs_type.image_wide
     - paragraphs.paragraphs_type.in_page_menu
     - paragraphs.paragraphs_type.info_box
@@ -20,6 +21,8 @@ dependencies:
     - paragraphs.paragraphs_type.media_list
     - paragraphs.paragraphs_type.modal_image
     - paragraphs.paragraphs_type.quote
+    - paragraphs.paragraphs_type.related_content
+    - paragraphs.paragraphs_type.related_project
     - paragraphs.paragraphs_type.section
     - paragraphs.paragraphs_type.stories_table
     - paragraphs.paragraphs_type.tab_box
@@ -41,122 +44,134 @@ settings:
   handler: 'default:paragraph'
   handler_settings:
     target_bundles:
-      about_the_author: about_the_author
       basic_text: basic_text
-      file_upload: file_upload
+      box: box
+      quote: quote
       image: image
+      image_small: image_small
       image_wide: image_wide
-      info_box: info_box
       media_embed: media_embed
       section: section
       video_embed: video_embed
-      accordion_box: accordion_box
-      quote: quote
+      media_list: media_list
       gallery: gallery
-      box: box
+      modal_image: modal_image
+      info_box: info_box
+      file_upload: file_upload
+      stories_table: stories_table
+      tab_box: tab_box
+      accordion_box: accordion_box
+      related_content: related_content
+      related_project: related_project
       in_page_menu: in_page_menu
       logo_block: logo_block
-      stories_table: stories_table
-      modal_image: modal_image
-      media_list: media_list
-      tab_box: tab_box
       timeline: timeline
+      about_the_author: about_the_author
     negate: 0
     target_bundles_drag_drop:
       about_the_author:
-        weight: 14
+        weight: -47
         enabled: true
       accordion_box:
-        weight: 27
+        weight: -53
         enabled: true
       basic_text:
-        weight: 15
+        weight: -71
         enabled: true
       box:
-        weight: 36
+        weight: -70
         enabled: true
       file_upload:
-        weight: 16
+        weight: -58
         enabled: true
       gallery:
-        weight: 34
+        weight: -61
         enabled: true
       image:
-        weight: 17
+        weight: -68
+        enabled: true
+      image_small:
+        weight: -67
         enabled: true
       image_wide:
-        weight: 18
+        weight: -66
         enabled: true
       in_page_menu:
-        weight: 39
+        weight: -50
         enabled: true
       info_box:
-        weight: 19
+        weight: -59
         enabled: true
       linked_person:
-        weight: 20
+        weight: -55
         enabled: false
       logo_block:
-        weight: 39
+        weight: -49
         enabled: true
       media_embed:
-        weight: 21
+        weight: -65
         enabled: true
       media_list:
-        weight: 46
+        weight: -62
         enabled: true
       modal_image:
-        weight: 41
+        weight: -60
         enabled: true
       quote:
-        weight: 31
+        weight: -69
+        enabled: true
+      related_content:
+        weight: -52
         enabled: true
       related_link:
-        weight: 22
+        weight: -44
         enabled: false
+      related_project:
+        weight: -51
+        enabled: true
       researcher_profiles:
-        weight: 23
+        weight: -43
         enabled: false
       row_of_4:
-        weight: 24
+        weight: -37
         enabled: false
       section:
-        weight: 25
+        weight: -64
         enabled: true
       stories_block:
-        weight: 34
+        weight: -46
         enabled: false
       stories_cta:
-        weight: 35
+        weight: -56
         enabled: false
       stories_curated_content:
-        weight: 36
+        weight: -45
         enabled: false
       stories_link_list:
-        weight: 37
+        weight: -42
         enabled: false
       stories_quote:
-        weight: 38
+        weight: -41
         enabled: false
       stories_table:
-        weight: 39
+        weight: -57
         enabled: true
       stories_text:
-        weight: 40
+        weight: -40
         enabled: false
       stories_views:
-        weight: 41
+        weight: -39
         enabled: false
       tab:
-        weight: 55
+        weight: -38
         enabled: false
       tab_box:
-        weight: 48
+        weight: -54
         enabled: true
       timeline:
-        weight: 49
+        weight: -48
         enabled: true
       video_embed:
-        weight: 26
+        weight: -63
         enabled: true
 field_type: entity_reference_revisions

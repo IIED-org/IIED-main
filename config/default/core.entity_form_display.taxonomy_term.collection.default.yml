@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.taxonomy_term.collection.field_about
     - field.field.taxonomy_term.collection.field_badge
+    - field.field.taxonomy_term.collection.field_collection_type
     - field.field.taxonomy_term.collection.field_containers
     - field.field.taxonomy_term.collection.field_downloads
     - field.field.taxonomy_term.collection.field_overview
@@ -16,8 +17,8 @@ dependencies:
     - image.style.thumbnail
     - taxonomy.vocabulary.collection
   module:
-    - image
     - path
+    - svg_image
     - text
 id: taxonomy_term.collection.default
 targetEntityType: taxonomy_term
@@ -34,7 +35,7 @@ content:
     third_party_settings: {  }
   field_about:
     type: text_textarea
-    weight: 3
+    weight: 12
     region: content
     settings:
       rows: 5
@@ -42,15 +43,21 @@ content:
     third_party_settings: {  }
   field_badge:
     type: image_image
-    weight: 6
+    weight: 5
     region: content
     settings:
       progress_indicator: throbber
       preview_image_style: thumbnail
     third_party_settings: {  }
+  field_collection_type:
+    type: options_select
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   field_overview:
     type: text_textarea
-    weight: 11
+    weight: 4
     region: content
     settings:
       rows: 5
@@ -76,7 +83,7 @@ content:
     third_party_settings: {  }
   field_theme:
     type: entity_reference_autocomplete
-    weight: 5
+    weight: 9
     region: content
     settings:
       match_operator: CONTAINS
@@ -86,7 +93,7 @@ content:
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 7
+    weight: 6
     region: content
     settings:
       include_locked: true
@@ -101,16 +108,21 @@ content:
     third_party_settings: {  }
   path:
     type: path
-    weight: 8
+    weight: 7
     region: content
     settings: {  }
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 9
+    weight: 8
     region: content
     settings:
       display_label: true
+    third_party_settings: {  }
+  translation:
+    weight: 11
+    region: content
+    settings: {  }
     third_party_settings: {  }
 hidden:
   field_containers: true

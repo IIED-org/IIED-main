@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.taxonomy_term.card
     - field.field.taxonomy_term.collection.field_about
     - field.field.taxonomy_term.collection.field_badge
+    - field.field.taxonomy_term.collection.field_collection_type
     - field.field.taxonomy_term.collection.field_containers
     - field.field.taxonomy_term.collection.field_downloads
     - field.field.taxonomy_term.collection.field_overview
@@ -17,7 +18,7 @@ dependencies:
     - taxonomy.vocabulary.collection
   module:
     - layout_builder
-    - text
+    - options
 third_party_settings:
   layout_builder:
     enabled: false
@@ -27,21 +28,29 @@ targetEntityType: taxonomy_term
 bundle: collection
 mode: card
 content:
-  description:
-    type: text_default
+  field_collection_type:
+    type: list_default
     label: hidden
     settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_short_description:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
     third_party_settings: {  }
     weight: 0
     region: content
 hidden:
+  description: true
   field_about: true
   field_badge: true
   field_containers: true
   field_downloads: true
   field_overview: true
   field_publications_more_link: true
-  field_short_description: true
   field_tags: true
   field_theme: true
   langcode: true

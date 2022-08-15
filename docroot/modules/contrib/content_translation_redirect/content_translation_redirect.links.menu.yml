@@ -1,0 +1,6 @@
+content_translation_redirect.settings:
+  title: 'Content translation redirects'
+  description: 'Configure redirects for non-existent content translations.'
+  route_name: content_translation_redirect.default_settings
+  parent: system.admin_config_regional
+  weight: 11

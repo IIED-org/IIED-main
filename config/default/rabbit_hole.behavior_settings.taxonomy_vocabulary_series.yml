@@ -1,0 +1,14 @@
+uuid: a5255a22-dbc6-4371-ad92-e7ed7958d0c2
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.series
+id: taxonomy_vocabulary_series
+entity_type_id: taxonomy_vocabulary
+entity_id: series
+action: display_page
+allow_override: 1
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

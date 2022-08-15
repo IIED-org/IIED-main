@@ -5,14 +5,15 @@ dependencies:
   config:
     - block_content.type.banner
     - field.field.block_content.banner.body
+    - field.field.block_content.banner.field_imag
     - field.field.block_content.banner.field_image
     - field.field.block_content.banner.field_image_style
     - field.field.block_content.banner.field_link
     - field.field.block_content.banner.field_link_style
     - image.style.thumbnail
   module:
-    - image
     - link
+    - svg_image
     - text
 id: block_content.banner.default
 targetEntityType: block_content
@@ -28,6 +29,12 @@ content:
       summary_rows: 3
       placeholder: ''
       show_summary: false
+    third_party_settings: {  }
+  field_imag:
+    type: options_select
+    weight: 26
+    region: content
+    settings: {  }
     third_party_settings: {  }
   field_image:
     type: image_image

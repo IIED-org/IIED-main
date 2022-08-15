@@ -2,10 +2,6 @@ uuid: 8ae05742-0bea-4b38-9162-e205832143b9
 langcode: en
 status: false
 dependencies:
-  content:
-    - 'block_content:basic:390124bf-6d34-47b0-bdbc-32f93fa79cee'
-  module:
-    - block_content
   theme:
     - iied_tw
 id: iied_tw_footer

@@ -68,6 +68,22 @@ function iied_tw_theme_suggestions_taxonomy_term_alter(array &$suggestions, arra
   $suggestions[] = 'taxonomy_term__' . $term->id() . '__' . $sanitized_view_mode;
 }
 
+/**
+ * Implements hook_theme_suggestions_container_alter().
+ */
+function iied_tw_theme_suggestions_container_alter(&$suggestions, array $variables) {
+  $element = $variables['element'];
+
+  if (isset($element['#type']) && $element['#type'] == 'view') {
+    $suggestions[] = 'container__' . $element['#name'];
+    $suggestions[] = 'container__' . $element['#name'] . '__' . $element['#display_id'];
+  }
+
+  if (isset($element['#type']) && $element['#type'] == 'container' && isset($element['children']['#type'])) {
+    $suggestions[] = 'container__' . $element['children']['#type'];
+  }
+}
+
 function iied_tw_preprocess_page(&$variables) {
   $variables['#attached']['drupalSettings']['responsive_menu']['custom'] = [
     'options' => [

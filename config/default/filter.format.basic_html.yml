@@ -9,7 +9,7 @@ _core:
   default_config_hash: P8ddpAIKtawJDi5SzOwCzVnnNYqONewSTJ6Xn0dW_aQ
 name: 'Basic HTML'
 format: basic_html
-weight: -9
+weight: -10
 filters:
   filter_html:
     id: filter_html
@@ -44,6 +44,12 @@ filters:
     status: true
     weight: 11
     settings: {  }
+  filter_autop:
+    id: filter_autop
+    provider: filter
+    status: true
+    weight: 0
+    settings: {  }
   filter_url:
     id: filter_url
     provider: filter
@@ -51,12 +57,6 @@ filters:
     weight: 0
     settings:
       filter_url_length: 72
-  filter_autop:
-    id: filter_autop
-    provider: filter
-    status: true
-    weight: 0
-    settings: {  }
   iied_filter_video:
     id: iied_filter_video
     provider: iied_filters

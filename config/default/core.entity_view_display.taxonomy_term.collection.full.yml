@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.taxonomy_term.full
     - field.field.taxonomy_term.collection.field_about
     - field.field.taxonomy_term.collection.field_badge
+    - field.field.taxonomy_term.collection.field_collection_type
     - field.field.taxonomy_term.collection.field_containers
     - field.field.taxonomy_term.collection.field_downloads
     - field.field.taxonomy_term.collection.field_overview
@@ -126,7 +127,6 @@ third_party_settings:
         - tw-1-2-col-grid
         - tw-1-2-4-col-grid
         - tw-container
-        - tw-tabs
       denylisted_blocks: {  }
       allowlisted_blocks: {  }
       restricted_categories:
@@ -135,6 +135,7 @@ third_party_settings:
         - 'Chaos Tools'
         - 'Content fields'
         - Dashboard
+        - Debugging
         - Devel
         - Facets
         - 'Facets summary (Experimental)'
@@ -146,6 +147,7 @@ third_party_settings:
         - Menus
         - 'Read Only Mode'
         - 'Responsive menu'
+        - 'Search API Sorts'
         - System
         - User
         - core
@@ -209,6 +211,7 @@ content:
     region: content
 hidden:
   field_badge: true
+  field_collection_type: true
   field_overview: true
   field_tags: true
   langcode: true

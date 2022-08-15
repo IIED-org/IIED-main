@@ -1,0 +1,8 @@
+uuid: 8a81b1a0-89fb-49cb-9419-1e3bcede699a
+langcode: en
+status: true
+dependencies: {  }
+id: node___all
+label: 'Content: All bundles'
+code: 302
+message: ''

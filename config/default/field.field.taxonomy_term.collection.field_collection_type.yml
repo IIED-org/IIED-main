@@ -1,0 +1,23 @@
+uuid: 802098ca-2cc6-4934-9def-38e50a3e000c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_collection_type
+    - taxonomy.vocabulary.collection
+  module:
+    - options
+id: taxonomy_term.collection.field_collection_type
+field_name: field_collection_type
+entity_type: taxonomy_term
+bundle: collection
+label: 'Collection type'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: Collection
+default_value_callback: ''
+settings: {  }
+field_type: list_string

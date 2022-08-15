@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Theme override to display a single column container layout.
+ *
+ * Available variables:
+ * - content: The content for this layout.
+ * - attributes: HTML attributes for the layout <div>.
+ * - first
+ * This is used on terms with layout builder
+ */
+#}
+{% if content %}
+  <div{{ attributes }}>
+      {% if content.first %}
+        <div {{ region_attributes.first }}>
+          {{ content.insert_before }}
+          {{ content.controls }}
+          {{ content.first }}
+          {{ content.insert_after }}
+        </div>
+      {% endif %}
+  </div>
+{% endif %}

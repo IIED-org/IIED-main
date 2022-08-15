@@ -5,10 +5,11 @@ dependencies:
   config:
     - field.field.paragraph.media_list.field_basic_text
     - field.field.paragraph.media_list.field_image
+    - field.field.paragraph.media_list.field_image_round
     - image.style.thumbnail
     - paragraphs.paragraphs_type.media_list
   module:
-    - image
+    - svg_image
     - text
 id: paragraph.media_list.default
 targetEntityType: paragraph
@@ -17,7 +18,7 @@ mode: default
 content:
   field_basic_text:
     type: text_textarea
-    weight: 1
+    weight: 2
     region: content
     settings:
       rows: 5
@@ -30,6 +31,13 @@ content:
     settings:
       progress_indicator: throbber
       preview_image_style: thumbnail
+    third_party_settings: {  }
+  field_image_round:
+    type: boolean_checkbox
+    weight: 1
+    region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
 hidden:
   created: true

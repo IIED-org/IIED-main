@@ -1,0 +1,8 @@
+uuid: ff59d44f-2d83-4900-a83f-95aebd4aed6f
+langcode: en
+status: true
+dependencies: {  }
+id: media___all
+label: 'Media: All bundles'
+code: 302
+message: ''

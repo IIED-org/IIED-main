@@ -5,11 +5,12 @@ dependencies:
   config:
     - field.field.paragraph.media_list.field_basic_text
     - field.field.paragraph.media_list.field_image
-    - image.style.max_325x325
+    - field.field.paragraph.media_list.field_image_round
+    - image.style.medium
     - paragraphs.paragraphs_type.media_list
   module:
     - ds
-    - image
+    - svg_image
     - text
 id: paragraph.media_list.default
 targetEntityType: paragraph
@@ -28,7 +29,11 @@ content:
     label: hidden
     settings:
       image_link: ''
-      image_style: max_325x325
+      image_style: medium
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
       image_loading:
         attribute: lazy
     third_party_settings:
@@ -40,6 +45,16 @@ content:
             lb-col: false
             classes: {  }
     weight: 0
+    region: content
+  field_image_round:
+    type: boolean
+    label: hidden
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 2
     region: content
 hidden:
   search_api_excerpt: true

@@ -31,11 +31,27 @@
 %}
 
 <div{{ attributes.setAttribute('id', 'taxonomy-term-' ~ term.id).addClass(classes) }}>
+  <div class="container mx-auto p-4">
+      <nav aria-label="themes">
+      <div class="flex flex-wrap justify-between space-x-3">
+        <div class="mb-2">
+          {% for key, item in term.field_theme %}
+            {% if key is not empty %}
+              <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': item.entity.tid.value}) }}">
+              {{ item.entity.label }}</a>
+              {{ not loop.last ? ' | ' }}
+            {% endif %}
+          {% endfor %}
+        </div>
+        <div class="mb-2">{{ drupal_block('language_block:language_interface', wrapper=false) }}</div>
+      </div>
+    </nav>
+  </div>
     <div class="container items-baseline p-4 mx-auto overflow-hidden lg:grid lg:gap-x-6 lg:grid-cols-12">
       <div class="lg:col-span-4">
         {{ title_prefix }}
         <h1 class="mb-6">{{ name }}</h1>
-        {{ title_suffix }}
+         {{ title_suffix }}
       </div>
       <div class="lg:col-span-8">
         <p class="prose prose-lg">
@@ -60,7 +76,7 @@
       </nav>
         <div class="pt-6 tab-panel" x-show="tab === 'inthiscollection'" x-transition:enter.duration.750ms>
           <div class="content">
-            {{ content|without('field_overview') }}
+            {{ content|without('field_overview', 'field_tags', 'field_theme') }}
           </div>
         </div>
         <div class="pt-6 tab-panel" x-show="tab === 'overview'" x-transition:enter.duration.750ms>
@@ -79,6 +95,6 @@
       {{ content }}
   </div>
   
-{# tags need adjusting to show #}
+{# TODO: needs adjusting to show tags #}
   {{ content.field_tags }} 
 {% endif %}

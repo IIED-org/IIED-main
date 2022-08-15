@@ -5,14 +5,15 @@ dependencies:
   config:
     - block_content.type.banner
     - field.field.block_content.banner.body
+    - field.field.block_content.banner.field_imag
     - field.field.block_content.banner.field_image
     - field.field.block_content.banner.field_image_style
     - field.field.block_content.banner.field_link
     - field.field.block_content.banner.field_link_style
   module:
-    - image
     - link
     - options
+    - svg_image
     - text
 id: block_content.banner.default
 targetEntityType: block_content
@@ -25,6 +26,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 0
+    region: content
+  field_imag:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
     region: content
   field_image:
     type: image

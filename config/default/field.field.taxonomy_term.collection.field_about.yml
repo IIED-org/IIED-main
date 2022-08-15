@@ -11,8 +11,8 @@ id: taxonomy_term.collection.field_about
 field_name: field_about
 entity_type: taxonomy_term
 bundle: collection
-label: Introduction
-description: ''
+label: 'Introduction (legacy)'
+description: 'Remove text from here'
 required: false
 translatable: true
 default_value: {  }

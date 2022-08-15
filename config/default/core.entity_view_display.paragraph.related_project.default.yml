@@ -1,0 +1,32 @@
+uuid: bce84849-582d-4f7d-9a6a-a1be42eeb80c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.related_project.field_related_project
+    - paragraphs.paragraphs_type.related_project
+  module:
+    - ds
+id: paragraph.related_project.default
+targetEntityType: paragraph
+bundle: related_project
+mode: default
+content:
+  field_related_project:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: card_ext
+      link: false
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true
