@@ -1,0 +1,10 @@
+readmore_js.library:
+  js:
+    js/readmore.js: {}
+
+readmore_js.selector:
+  js:
+    js/selector.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once

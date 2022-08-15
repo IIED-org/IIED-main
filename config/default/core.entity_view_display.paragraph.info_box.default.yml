@@ -6,17 +6,32 @@ dependencies:
     - field.field.paragraph.info_box.field_basic_text
     - paragraphs.paragraphs_type.info_box
   module:
-    - text
+    - ds
+    - readmore_js
 id: paragraph.info_box.default
 targetEntityType: paragraph
 bundle: info_box
 mode: default
 content:
   field_basic_text:
-    type: text_default
+    type: read_more_field_formatter
     label: hidden
-    settings: {  }
-    third_party_settings: {  }
+    settings:
+      more_link: 'Read more'
+      close_link: Close
+      more_link_classes: ''
+      close_link_classes: ''
+      speed: '75'
+      collapsed_height: 200px
+      height_margin: 16px
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
     weight: 0
     region: content
 hidden:
