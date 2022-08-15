@@ -1,0 +1,67 @@
+<?php
+
+/**
+ * @file
+ * IIED Slider Views module help and theme functions.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function iied_slider_theme($existing, $type, $theme, $path) {
+  // Store TARDIS preprocess theme functions in a separate .inc file.
+  \Drupal::moduleHandler()->loadInclude('iied_slider', 'inc', 'iied_slider.theme');
+
+  return array(
+    'iied_slider' => array(
+      'file' => 'iied_silder.theme.inc',
+    ),
+  );
+}
+
+/**
+ * @file
+ * Theme for IIED Slider views.
+ */
+function template_preprocess_views_view_iied_slider(&$variables) {
+
+  $variables['#attached']['library'][] =  'iied_slider/alpine';
+  $variables['#attached']['library'][] =  'iied_slider/swiper';
+
+  // // View options set by user.
+  // $options = $variables['view']->style_plugin->options;
+
+  // // Build a two-dimension array with years and months.
+  // $time_pool = array();
+
+  // foreach ($variables['view']->result as $id => $result) {
+  //   $created = $result->node_field_data_created;
+  //   $created_year = date('Y', $created);
+  //   // Month date format.
+  //   $month_date_format = (isset($options['month_date_format'])) ? $options['month_date_format'] : 'm';
+  //   $created_month_digits = date('m', $created);
+  //   $created_month = date($month_date_format, $created);
+  //   $time_pool[$created_year][$created_month_digits] = "$created_month";
+  // }
+
+  // $options['time_pool'] = $time_pool;
+
+  // // Update options for twig.
+  // $variables['options'] = $options;
+
+  $view = $variables['view'];
+  $rows = $variables['rows'];
+  $style = $view->style_plugin;
+  $options = $style->options;
+  $variables['options'] = $options;
+
+  $variables['default_row_class'] = !empty($options['default_row_class']);
+  foreach ($rows as $id => $row) {
+    $variables['rows'][$id] = [];
+    $variables['rows'][$id]['content'] = $row;
+    $variables['rows'][$id]['attributes'] = new Attribute();
+    if ($row_class = $view->style_plugin->getRowClass($id)) {
+      $variables['rows'][$id]['attributes']->addClass($row_class);
+    }
+  }
+}
