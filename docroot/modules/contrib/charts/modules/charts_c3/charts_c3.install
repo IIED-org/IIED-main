@@ -1,0 +1,70 @@
+<?php
+
+/**
+ * @file
+ * Installation and uninstallation functions.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function charts_c3_requirements($phase) {
+  $requirements = [];
+
+  switch ($phase) {
+    case 'runtime':
+      $library_path = charts_c3_find_library();
+
+      if (!$library_path) {
+        $requirements['charts_c3_js'] = [
+          'title' => t('C3.js Library'),
+          'value' => t('Not Installed'),
+          'severity' => REQUIREMENT_WARNING,
+          'description' => t('You are missing the C3.js library in your Drupal installation directory. Please see the README file inside charts_c3 for instructions to install the library.'),
+        ];
+      }
+      else {
+        $requirements['charts_c3_js'] = [
+          'title' => t('C3.js Library'),
+          'severity' => REQUIREMENT_OK,
+          'value' => t('Installed'),
+        ];
+      }
+      break;
+  }
+
+  return $requirements;
+}
+
+/**
+ * Get the location of the C3.js library.
+ *
+ * @return string
+ *   The location of the library, or FALSE if the library isn't installed.
+ */
+function charts_c3_find_library() {
+  // The following logic is taken from libraries_get_libraries()
+  $searchdir = [];
+
+  // Similar to 'modules' and 'themes' directories inside an installation
+  // profile, installation profiles may want to place libraries into a
+  // 'libraries' directory.
+  $searchdir[] = 'profiles/' . \Drupal::installProfile() . '/libraries';
+
+  // Always search libraries.
+  $searchdir[] = 'libraries';
+
+  // Also search sites/<domain>/*.
+  $site_path = \Drupal::getContainer()->getParameter('site.path');
+  $site_path = explode('/', $site_path);
+  $site_name = $site_path[1];
+  $searchdir[] = $site_name . '/libraries';
+
+  foreach ($searchdir as $dir) {
+    if (file_exists($dir . '/c3/c3.min.js') || file_exists($dir . '/c3/c3.js')) {
+      return $dir . '/c3';
+    }
+  }
+
+  return FALSE;
+}
