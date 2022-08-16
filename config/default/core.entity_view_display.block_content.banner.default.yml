@@ -5,8 +5,8 @@ dependencies:
   config:
     - block_content.type.banner
     - field.field.block_content.banner.body
-    - field.field.block_content.banner.field_imag
     - field.field.block_content.banner.field_image
+    - field.field.block_content.banner.field_image_shape
     - field.field.block_content.banner.field_image_style
     - field.field.block_content.banner.field_link
     - field.field.block_content.banner.field_link_style
@@ -27,23 +27,27 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
-  field_imag:
-    type: list_default
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 5
-    region: content
   field_image:
     type: image
     label: hidden
     settings:
       image_link: ''
       image_style: ''
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
       image_loading:
         attribute: lazy
     third_party_settings: {  }
     weight: 4
+    region: content
+  field_image_shape:
+    type: list_key
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 6
     region: content
   field_image_style:
     type: boolean

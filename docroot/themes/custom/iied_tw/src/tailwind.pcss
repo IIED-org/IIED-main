@@ -235,4 +235,19 @@
   .node--unpublished {
     background-color: #fbf0f7;
   }
+  /*-- active states for menus --*/
+  .people-menu .is-active {
+    @apply bg-gray-100 rounded-full;
+  }
+  .tertiary-menu .is-active {
+    @apply border-b-2 border-iiedpink-500 pb-1;
+  }
+  /*-- extra padding for secondary menu --*/
+  .priority-nav__dropdown.show {
+    @apply pb-2;
+  }
+  /*-- views infinite scroll 2 col --*/
+  .views-infinite-scroll-content-wrapper {
+    @apply grid grid-flow-row-dense gap-6 xl:gap-10 md:grid-cols-2;
+  }
 }

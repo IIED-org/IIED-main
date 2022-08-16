@@ -143,7 +143,6 @@ third_party_settings:
         - Geolocation
         - Help
         - 'IIED Utilities'
-        - 'Lists (Views)'
         - Menus
         - 'Read Only Mode'
         - 'Responsive menu'

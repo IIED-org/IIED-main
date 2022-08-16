@@ -12,7 +12,7 @@
 #}
 {% if content %}
   <div{{ attributes }}>
-         <div class="container items-baseline p-4 mx-auto overflow-hidden lg:grid lg:gap-x-6 lg:grid-cols-12">
+         <div class="container items-baseline mb-12 overflow-hidden lg:grid lg:gap-x-6 lg:grid-cols-12">
       {% if content.first %}
         <div {{ region_attributes.first.addClass('layout__region', 'layout__region--first', 'lg:col-span-4') }}>
           {{ content.insert_before }}

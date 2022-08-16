@@ -31,7 +31,7 @@
 %}
 
 <div{{ attributes.setAttribute('id', 'taxonomy-term-' ~ term.id).addClass(classes) }}>
-  <div class="container mx-auto p-4">
+  <div class="container mb-4">
       <nav aria-label="themes">
       <div class="flex flex-wrap justify-between space-x-3">
         <div class="mb-2">
@@ -47,16 +47,21 @@
       </div>
     </nav>
   </div>
-    <div class="container items-baseline p-4 mx-auto overflow-hidden lg:grid lg:gap-x-6 lg:grid-cols-12">
+    <div class="container items-baseline mb-12 overflow-hidden lg:grid lg:gap-x-6 lg:grid-cols-12">
       <div class="lg:col-span-4">
         {{ title_prefix }}
-        <h1 class="mb-6">{{ name }}</h1>
+        <h1>{{ name }}</h1>
          {{ title_suffix }}
       </div>
-      <div class="lg:col-span-8">
+      <div class="flex justify-between lg:col-span-8">
         <p class="prose prose-lg">
         {{ term.description.0.value|striptags }}
         </p>
+          {% for key, item in term.field_badge %}
+             {% if key is not empty %}
+                <img class="ml-4" src="{{ item.entity.uri.value|image_style('scale_80') }}" alt="collection badge">
+            {% endif %}
+          {% endfor %}
       </div>
     </div>
 
@@ -98,3 +103,6 @@
 {# TODO: needs adjusting to show tags #}
   {{ content.field_tags }} 
 {% endif %}
+
+  
+

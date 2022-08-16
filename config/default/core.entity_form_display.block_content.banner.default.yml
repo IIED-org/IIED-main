@@ -5,8 +5,8 @@ dependencies:
   config:
     - block_content.type.banner
     - field.field.block_content.banner.body
-    - field.field.block_content.banner.field_imag
     - field.field.block_content.banner.field_image
+    - field.field.block_content.banner.field_image_shape
     - field.field.block_content.banner.field_image_style
     - field.field.block_content.banner.field_link
     - field.field.block_content.banner.field_link_style
@@ -30,12 +30,6 @@ content:
       placeholder: ''
       show_summary: false
     third_party_settings: {  }
-  field_imag:
-    type: options_select
-    weight: 26
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   field_image:
     type: image_image
     weight: 0
@@ -43,6 +37,12 @@ content:
     settings:
       progress_indicator: throbber
       preview_image_style: thumbnail
+    third_party_settings: {  }
+  field_image_shape:
+    type: options_select
+    weight: 27
+    region: content
+    settings: {  }
     third_party_settings: {  }
   field_image_style:
     type: boolean_checkbox

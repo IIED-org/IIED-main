@@ -1,1 +1,4 @@
 {% extends '@iied_tw/node/card/node--card-lg.html.twig' %}
+    {% block date %}
+    <p class="text-gray-500">{{ node.field_dates.value }}</p>
+    {% endblock %}

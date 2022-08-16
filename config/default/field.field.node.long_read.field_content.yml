@@ -7,6 +7,7 @@ dependencies:
     - node.type.long_read
     - paragraphs.paragraphs_type.about_the_author
     - paragraphs.paragraphs_type.accordion_box
+    - paragraphs.paragraphs_type.accordion_section
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.box
     - paragraphs.paragraphs_type.file_upload
@@ -68,6 +69,7 @@ settings:
       logo_block: logo_block
       timeline: timeline
       about_the_author: about_the_author
+      accordion_section: accordion_section
       highchart: highchart
     negate: 0
     target_bundles_drag_drop:
@@ -76,6 +78,9 @@ settings:
         enabled: true
       accordion_box:
         weight: -53
+        enabled: true
+      accordion_section:
+        weight: 40
         enabled: true
       basic_text:
         weight: -71

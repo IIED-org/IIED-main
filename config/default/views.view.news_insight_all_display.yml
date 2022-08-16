@@ -14,6 +14,8 @@ dependencies:
     - 'taxonomy_term:news_type:12bbfe9a-eca9-4fd6-948f-43a800e3d8d5'
     - 'taxonomy_term:news_type:a93a5e6d-91d9-41cf-a222-2f152edd6165'
   module:
+    - better_exposed_filters
+    - datetime
     - node
     - options
     - taxonomy
@@ -83,8 +85,8 @@ display:
       pager:
         type: full
         options:
-          offset: 0
-          items_per_page: 10
+          offset: 8
+          items_per_page: 24
           total_pages: null
           id: 0
           tags:
@@ -218,7 +220,8 @@ display:
           query_tags: {  }
       relationships: {  }
       css_class: ''
-      header:
+      header: {  }
+      footer:
         result:
           id: result
           table: views
@@ -229,7 +232,6 @@ display:
           plugin_id: result
           empty: false
           content: '@total entries'
-      footer: {  }
       display_extenders: {  }
     cache_metadata:
       max-age: -1
@@ -526,8 +528,8 @@ display:
       pager:
         type: full
         options:
-          offset: 0
-          items_per_page: 10
+          offset: 8
+          items_per_page: 24
           total_pages: null
           id: 0
           tags:
@@ -646,6 +648,48 @@ display:
           hierarchy: false
           limit: true
           error_message: true
+        langcode:
+          id: langcode
+          table: node_field_data
+          field: langcode
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: langcode
+          plugin_id: language
+          operator: in
+          value:
+            '***LANGUAGE_site_default***': '***LANGUAGE_site_default***'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
       filter_groups:
         operator: AND
         groups:
@@ -679,7 +723,7 @@ display:
         type: full
         options:
           offset: 0
-          items_per_page: 10
+          items_per_page: 24
           total_pages: null
           id: 0
           tags:
@@ -752,6 +796,51 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+        field_daterange_value:
+          id: field_daterange_value
+          table: node__field_daterange
+          field: field_daterange_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: datetime
+          operator: '<='
+          value:
+            min: ''
+            max: ''
+            value: today
+            type: date
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
       filter_groups:
         operator: AND
         groups:
@@ -761,8 +850,23 @@ display:
         pager: false
         filters: false
         filter_groups: false
+        header: false
       display_description: ''
       show_admin_links: true
+      header:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: false
+          content:
+            value: '<h2 class="mb-6">Past events</h2>'
+            format: full_html
+          tokenize: false
       display_extenders: {  }
       block_description: 'All in events'
     cache_metadata:
@@ -783,8 +887,8 @@ display:
       pager:
         type: full
         options:
-          offset: 0
-          items_per_page: 10
+          offset: 8
+          items_per_page: 24
           total_pages: null
           id: 0
           tags:
@@ -902,6 +1006,48 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           reduce_duplicates: false
+        langcode:
+          id: langcode
+          table: node_field_data
+          field: langcode
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: langcode
+          plugin_id: language
+          operator: in
+          value:
+            '***LANGUAGE_site_default***': '***LANGUAGE_site_default***'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
       filter_groups:
         operator: AND
         groups:
@@ -934,7 +1080,7 @@ display:
         type: full
         options:
           offset: 0
-          items_per_page: 10
+          items_per_page: 12
           total_pages: null
           id: 0
           tags:
@@ -943,14 +1089,41 @@ display:
             first: '« First'
             last: 'Last »'
           expose:
-            items_per_page: false
+            items_per_page: true
             items_per_page_label: 'Items per page'
-            items_per_page_options: '5, 10, 25, 50'
+            items_per_page_options: '12, 24, 48, 96'
             items_per_page_options_all: false
             items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
           quantity: 9
+      exposed_form:
+        type: bef
+        options:
+          submit_button: Apply
+          reset_button: false
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+          text_input_required: 'Select any filter and click on Apply to see results'
+          text_input_required_format: basic_html
+          bef:
+            general:
+              autosubmit: true
+              autosubmit_exclude_textfield: false
+              autosubmit_textfield_delay: 500
+              autosubmit_hide: true
+              input_required: false
+              allow_secondary: false
+              secondary_label: 'Advanced options'
+              secondary_open: false
+              reset_button_always_show: false
+            pager:
+              plugin_id: default
+              advanced:
+                is_secondary: false
       filters:
         status:
           id: status
@@ -1060,10 +1233,26 @@ display:
       defaults:
         show_admin_links: false
         pager: false
+        exposed_form: false
         filters: false
         filter_groups: false
+        header: false
       display_description: ''
       show_admin_links: true
+      header:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: false
+          content:
+            value: "<h2 class=\"mb-6\">Press releases</h2>\r\n"
+            format: full_html
+          tokenize: false
       display_extenders: {  }
       block_description: 'All in press'
     cache_metadata:

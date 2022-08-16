@@ -9,6 +9,7 @@ dependencies:
     - paragraphs.paragraphs_type.box
     - paragraphs.paragraphs_type.file_upload
     - paragraphs.paragraphs_type.gallery
+    - paragraphs.paragraphs_type.highchart
     - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.image_small
     - paragraphs.paragraphs_type.info_box
@@ -49,6 +50,7 @@ settings:
       logo_block: logo_block
       modal_image: modal_image
       file_upload: file_upload
+      highchart: highchart
     negate: 0
     target_bundles_drag_drop:
       about_the_author:
@@ -56,6 +58,9 @@ settings:
         enabled: false
       accordion_box:
         weight: -57
+        enabled: false
+      accordion_section:
+        weight: 40
         enabled: false
       basic_text:
         weight: -69
@@ -69,11 +74,11 @@ settings:
       gallery:
         weight: -61
         enabled: true
+      highchart:
+        weight: 45
+        enabled: true
       image:
         weight: -67
-        enabled: true
-      image_round:
-        weight: -58
         enabled: true
       image_small:
         weight: -59
@@ -105,8 +110,14 @@ settings:
       quote:
         weight: -64
         enabled: true
+      related_content:
+        weight: 57
+        enabled: false
       related_link:
         weight: -52
+        enabled: false
+      related_project:
+        weight: 59
         enabled: false
       researcher_profiles:
         weight: -48

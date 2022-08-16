@@ -9,6 +9,7 @@ dependencies:
   content:
     - 'taxonomy_term:list:85f1ee52-f4d3-4bc8-a993-df456ddcfa08'
   module:
+    - iied_slider
     - node
     - taxonomy
     - user
@@ -268,11 +269,29 @@ display:
             default_group_multiple: {  }
             group_items: {  }
       style:
-        type: default
+        type: iied_slider
         options:
           row_class: ''
           default_row_class: false
           uses_fields: false
+          containerWidth: '1440'
+          containerHeight: '449'
+          loop: 'true'
+          breakpoint_sm: '640'
+          breakpoint_md: '768'
+          breakpoint_lg: '1024'
+          breakpoint_xl: '1280'
+          breakpoint_2xl: '1536'
+          slidesPerView_sm: '2'
+          spaceBetween_sm: '24'
+          slidesPerView_md: '3'
+          spaceBetween_md: '24'
+          slidesPerView_lg: '4'
+          spaceBetween_lg: '24'
+          slidesPerView_xl: '5'
+          spaceBetween_xl: '24'
+          slidesPerView_2xl: '6'
+          spaceBetween_2xl: '24'
       row:
         type: 'entity:node'
         options:
@@ -324,8 +343,8 @@ display:
           plugin_id: text
           empty: false
           content:
-            value: '<a href="/search?k=&f%5B0%5D=content_type%3Apublication&f%5B1%5D=theme%3A{{ raw_arguments.tid }}">View more {{ arguments.tid }} publications</a>'
-            format: basic_html
+            value: "<button class=\"flex items-center px-3 py-2 transition bg-white border border-gray-300 rounded-full shadow-sm hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500\">\r\n<a href=\"/search?k=&f%5B0%5D=content_type%3Apublication&f%5B1%5D=theme%3A{{ raw_arguments.tid }}\">View more {{ arguments.tid }} publications</a>\r\n</button>"
+            format: restricted_html
           tokenize: true
       display_extenders: {  }
       block_description: 'Theme publications block'

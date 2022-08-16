@@ -26,22 +26,23 @@
  */
 #}
 <div{{ attributes.addClass('mb-6', 'overflow-hidden') }}>
-  <div class="container grid items-center grid-cols-1 gap-6 md:grid-cols-2">
-      
+  <div class="grid items-center grid-cols-1 gap-6 sm:gap-12 lg:gap-24 md:grid-cols-2">
+        {% set shape = content.field_image_shape.0 %}
         {% if "On" in content.field_image_style.0 %}
-          <div class="flex items-center justify-center md:order-last">{{ content.field_image }}</div>
+          <div class="flex items-center justify-center md:order-last overflow-hidden {{ shape }}">{{ content.field_image }}</div>
           {% else %}
-          <div class="flex items-center justify-center">{{ content.field_image }}</div>
+          <div class="flex items-center justify-center overflow-hidden {{ shape }}">{{ content.field_image }}</div>
         {% endif %}
 
       <div>
         {{ title_prefix }}
         {% if label %}
-          <h2{{ title_attributes.addClass('mb-4', 'max-w-screen-md') }}>{{ label }}</h2>
+          <h2{{ title_attributes.addClass('mb-6', 'max-w-screen-md') }}>{{ label }}</h2>
         {% endif %}
         {{ title_suffix }}
+
         {% block content %}
-        <div class="mb-6 md:text-lg">
+        <div class="mb-6 prose prose-lg">
             {{ content.body }}
         </div>
 
