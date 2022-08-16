@@ -1,17 +1,17 @@
-uuid: ccd57773-9137-4c24-81e2-d0e30c662721
+uuid: 9252cd39-330f-43f3-9321-9ff23e005a00
 langcode: en
 status: true
 dependencies:
   config:
     - block_content.type.banner
-    - field.storage.block_content.field_imag
+    - field.storage.block_content.field_image_shape
   module:
     - options
-id: block_content.banner.field_imag
-field_name: field_imag
+id: block_content.banner.field_image_shape
+field_name: field_image_shape
 entity_type: block_content
 bundle: banner
-label: 'Image style'
+label: 'Image shape'
 description: ''
 required: false
 translatable: false

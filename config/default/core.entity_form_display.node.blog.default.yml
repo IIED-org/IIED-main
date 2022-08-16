@@ -28,10 +28,8 @@ third_party_settings:
   field_group:
     group_tabs:
       children:
-        - group_images
         - group_copy
         - group_taxonomy
-        - group_authorship
       label: Tabs
       region: content
       parent_name: ''
@@ -44,14 +42,11 @@ third_party_settings:
         direction: horizontal
         width_breakpoint: 640
     group_images:
-      children:
-        - field_main_image
-        - field_image_caption
-        - field_display_image
+      children: {  }
       label: Images
-      region: content
-      parent_name: group_tabs
-      weight: 14
+      region: hidden
+      parent_name: ''
+      weight: 11
       format_type: tab
       format_settings:
         classes: ''
@@ -64,9 +59,12 @@ third_party_settings:
       children:
         - field_tagline
         - field_standfirst
+        - field_main_image
+        - field_image_caption
+        - field_display_image
         - body
         - field_paragraphs
-      label: Copy
+      label: Content
       region: content
       parent_name: group_tabs
       weight: 15
@@ -82,9 +80,14 @@ third_party_settings:
       children:
         - field_theme_s_
         - field_tags
-        - field_collection
+        - field_collections
         - field_project
-      label: Taxonomy
+        - field_blogger_info
+        - uid
+        - field_author_s_
+        - field_about_the_author
+        - created
+      label: Attribution
       region: content
       parent_name: group_tabs
       weight: 16
@@ -97,16 +100,11 @@ third_party_settings:
         description: ''
         required_fields: true
     group_authorship:
-      children:
-        - field_blogger_info
-        - uid
-        - field_author_s_
-        - field_about_the_author
-        - created
+      children: {  }
       label: Authorship
-      region: content
-      parent_name: group_tabs
-      weight: 17
+      region: hidden
+      parent_name: ''
+      weight: 10
       format_type: tab
       format_settings:
         classes: ''
@@ -122,7 +120,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 16
+    weight: 19
     region: content
     settings:
       rows: 9
@@ -132,13 +130,13 @@ content:
     third_party_settings: {  }
   created:
     type: datetime_timestamp
-    weight: 16
+    weight: 26
     region: content
     settings: {  }
     third_party_settings: {  }
   field_about_the_author:
     type: entity_reference_paragraphs
-    weight: 15
+    weight: 25
     region: content
     settings:
       title: Paragraph
@@ -150,7 +148,7 @@ content:
     third_party_settings: {  }
   field_author_s_:
     type: entity_reference_autocomplete
-    weight: 14
+    weight: 24
     region: content
     settings:
       match_operator: CONTAINS
@@ -160,7 +158,7 @@ content:
     third_party_settings: {  }
   field_blogger_info:
     type: text_textarea
-    weight: 12
+    weight: 22
     region: content
     settings:
       rows: 5
@@ -168,7 +166,7 @@ content:
     third_party_settings: {  }
   field_collections:
     type: entity_reference_autocomplete
-    weight: 26
+    weight: 20
     region: content
     settings:
       match_operator: CONTAINS
@@ -200,7 +198,7 @@ content:
     third_party_settings: {  }
   field_paragraphs:
     type: paragraphs
-    weight: 17
+    weight: 20
     region: content
     settings:
       title: Paragraph
@@ -311,7 +309,7 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 13
+    weight: 23
     region: content
     settings:
       match_operator: CONTAINS

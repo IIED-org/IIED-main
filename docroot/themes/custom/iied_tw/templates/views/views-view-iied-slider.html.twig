@@ -30,6 +30,7 @@
     'relative mx-auto flex flex-row',
   ]
 %}
+{# formerly: style="width: {{ options.containerWidth }}px; height: {{ options.containerHeight }}px;" #}
 <div{{attributes.addClass(classes)}} style="width: 100%;"
 x-data="{swiper: null}"
   x-init="swiper = new Swiper($refs.container, {

@@ -1,1 +1,8 @@
 {% extends '@iied_tw/node/card/node--card.html.twig' %}
+   {% block date %}
+   {% if "On" in content.field_hide_date.0 %}          
+    <p class="text-gray-500">{{ node.type.entity.label() }}</p>
+    {% else %}
+    <p class="text-gray-500">{{ node.type.entity.label() }}, {{ node.getCreatedTime|date('d F Y') }} </p>
+    {% endif %}
+   {% endblock %}

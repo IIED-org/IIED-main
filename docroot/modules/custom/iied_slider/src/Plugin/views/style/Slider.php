@@ -48,18 +48,6 @@ class Slider extends StylePluginBase {
 
     parent::buildOptionsForm($form, $form_state);
 
-    $form['containerWidth'] = array(
-      '#type' => 'number',
-      '#title' => t('Container width.'),
-      '#default_value' => (isset($this->options['containerWidth'])) ? $this->options['containerWidth'] : '700',
-      '#description' => t('The width of the container.'),
-    );
-    $form['containerHeight'] = array(
-      '#type' => 'number',
-      '#title' => t('Container height.'),
-      '#default_value' => (isset($this->options['containerHeight'])) ? $this->options['containerHeight'] : '450',
-      '#description' => t('The height of the container.'),
-    );
     $form['loop'] = array(
       '#type' => 'textfield',
       '#title' => t('Loop'),

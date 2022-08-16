@@ -274,17 +274,7 @@ display:
         header: false
       display_description: ''
       show_admin_links: true
-      header:
-        result:
-          id: result
-          table: views
-          field: result
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: result
-          empty: false
-          content: '@total entries'
+      header: {  }
       display_extenders: {  }
       block_description: 'Collection featured'
     cache_metadata:

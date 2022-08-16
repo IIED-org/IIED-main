@@ -30,9 +30,9 @@
   {% import _self as menus %}
   {% if items %}
     {% if menu_level == 0 %}
-      <ul{{ attributes.addClass('flex', 'container', 'space-x-6') }}>
+      <ul{{ attributes.addClass('flex', 'container', 'space-x-6', 'mb-6', 'tertiary-menu') }}>
     {% else %}
-      <ul class="container flex space-x-6">
+      <ul>
     {% endif %}
     {% for item in items %}
       <li{{ item.attributes }}>

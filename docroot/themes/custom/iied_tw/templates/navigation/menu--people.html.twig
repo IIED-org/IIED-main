@@ -18,8 +18,8 @@
  *   - in_active_trail: TRUE if the link is in the active trail.
  */
 #}
-
 {% import _self as menus %}
+
 {#
   We call a macro which calls itself to render the full tree.
   @see https://twig.symfony.com/doc/1.x/tags/macro.html
@@ -30,13 +30,13 @@
   {% import _self as menus %}
   {% if items %}
     {% if menu_level == 0 %}
-      <ul{{ attributes.addClass('whitespace-nowrap inline-block') }}>
+      <ul{{ attributes.addClass('people-menu', 'sm:flex', 'sm:flex-wrap') }}>
     {% else %}
       <ul>
     {% endif %}
     {% for item in items %}
       <li{{ item.attributes }}>
-        {{ link(item.title, item.url, { 'class':['block', 'py-2', 'px-4', 'text-gray-900', 'hover:text-gray-900','visited:text-gray-900']}) }}
+        {{ link(item.title, item.url, { 'class':['block', 'py-2', 'px-4']})  }}
         {% if item.below %}
           {{ menus.menu_links(item.below, attributes, menu_level + 1) }}
         {% endif %}

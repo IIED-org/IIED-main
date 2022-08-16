@@ -1,12 +1,12 @@
-uuid: c9556cb5-550d-40f1-8c7e-01f614454404
+uuid: ddc5d0d2-b9bc-4cac-8b90-06591343f803
 langcode: en
 status: true
 dependencies:
   module:
     - block_content
     - options
-id: block_content.field_imag
-field_name: field_imag
+id: block_content.field_image_shape
+field_name: field_image_shape
 entity_type: block_content
 type: list_string
 settings:

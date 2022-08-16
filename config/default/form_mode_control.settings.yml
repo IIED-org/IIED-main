@@ -92,3 +92,6 @@ modification+administrator+taxonomy_term+person: taxonomy_term.person.default
 'use  The form mode default linked to  paragraph entity( image_small )': paragraph.image_small.default
 'use  The form mode default linked to  paragraph entity( related_content )': paragraph.related_content.default
 'use  The form mode default linked to  paragraph entity( related_project )': paragraph.related_project.default
+'use  The form mode default linked to  paragraph entity( accordion_box )': paragraph.accordion_box.default
+'use  The form mode default linked to  paragraph entity( accordion_section )': paragraph.accordion_section.default
+'use  The form mode default linked to  paragraph entity( highchart )': paragraph.highchart.default
