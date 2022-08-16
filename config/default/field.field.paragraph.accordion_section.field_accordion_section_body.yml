@@ -1,0 +1,21 @@
+uuid: d05d5d0b-6386-4583-9d39-f07b173b7bce
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_accordion_section_body
+    - paragraphs.paragraphs_type.accordion_section
+  module:
+    - text
+id: paragraph.accordion_section.field_accordion_section_body
+field_name: field_accordion_section_body
+entity_type: paragraph
+bundle: accordion_section
+label: 'Accordion section body'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

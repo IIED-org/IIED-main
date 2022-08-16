@@ -116,4 +116,17 @@ function iied_tw_preprocess_paragraph(&$variables) {
       }
     }
   }
+  if ($paragraph_bundle == 'accordion_box' ) {
+
+    // Attach the theme alpine library, the accordion_box paragraph needs it!
+    $variables['#attached']['library'][] =  'iied_tw/alpine-collapse';
+    $variables['#attached']['library'][] =  'iied_tw/alpine';
+
+    foreach ($variables['content']['field_accordion_section'] as $key => $tab) {
+      if (is_numeric($key)) {
+        $variables['accordion_titles'][$key] = $tab['#paragraph']->field_accordion_section_title->value;
+        $variables['accordion_bodies'][$key] = $tab['#paragraph']->field_accordion_section_body->value;
+      }
+    }
+  }
 }
