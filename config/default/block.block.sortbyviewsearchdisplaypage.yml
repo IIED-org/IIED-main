@@ -10,7 +10,7 @@ dependencies:
 id: sortbyviewsearchdisplaypage
 theme: iied_tw
 region: sidebar
-weight: -16
+weight: -17
 provider: null
 plugin: 'search_api_sorts_block:views_page:search__page_2'
 settings:

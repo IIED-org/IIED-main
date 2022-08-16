@@ -12,7 +12,7 @@ dependencies:
 id: country
 theme: iied_tw
 region: sidebar
-weight: -8
+weight: -9
 provider: null
 plugin: 'facet_block:pubs_country'
 settings:

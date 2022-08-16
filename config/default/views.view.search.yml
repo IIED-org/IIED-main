@@ -251,46 +251,7 @@ display:
             value: '<a href="/search">Start a new search</a>'
             format: basic_html
           tokenize: false
-      sorts:
-        search_api_relevance:
-          id: search_api_relevance
-          table: search_api_index_acquia_search_index
-          field: search_api_relevance
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: search_api
-          order: DESC
-          expose:
-            label: Relevance
-            field_identifier: relevance
-          exposed: true
-        field_sort_date:
-          id: field_sort_date
-          table: search_api_index_acquia_search_index
-          field: field_sort_date
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: search_api
-          order: DESC
-          expose:
-            label: Date
-            field_identifier: field_sort_date
-          exposed: true
-        title:
-          id: title
-          table: search_api_index_acquia_search_index
-          field: title
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: search_api
-          order: ASC
-          expose:
-            label: Title
-            field_identifier: title
-          exposed: true
+      sorts: {  }
       arguments: {  }
       filters:
         search_api_fulltext:
@@ -393,7 +354,6 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-        - 'url.query_args:sort_by'
         - 'user.node_grants:view'
         - user.roles
       tags:
@@ -421,7 +381,6 @@ display:
         - 'languages:language_interface'
         - request_format
         - url
-        - 'url.query_args:sort_by'
         - 'user.node_grants:view'
         - user.roles
       tags:
@@ -445,20 +404,6 @@ display:
           sort_desc_label: Desc
       cache:
         type: none
-      empty:
-        area:
-          id: area
-          table: views
-          field: area
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: text
-          empty: true
-          content:
-            value: '<a href="/search/pubs">Start a new search</a>'
-            format: basic_html
-          tokenize: false
       sorts: {  }
       filters:
         search_api_fulltext:
@@ -562,7 +507,6 @@ display:
         groups:
           1: AND
       defaults:
-        empty: false
         cache: false
         css_class: false
         use_ajax: false
