@@ -168,3 +168,11 @@
     </main>
   </div>
 </article>
+
+  {% if drupal_view_result('related_nodes', 'block_gl') is not empty %}
+    <section class="py-12 bg-gray-100">
+      <div class="container">
+        {{ drupal_view('related_nodes', 'block_gl') }}
+    </div>
+    </section>
+  {% endif %}

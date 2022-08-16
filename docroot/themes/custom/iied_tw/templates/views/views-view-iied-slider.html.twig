@@ -1,0 +1,104 @@
+{#
+/**
+ * Default theme implementation for Views to output a Swiper based slider with
+ * AlpineJS.
+ *
+ * Available variables:
+ * - options: View plugin style options:
+ *   - loop: whether to loop
+ *   - slidesPerView1: number of slides
+ *   - spaceBetween1: space between
+ *   - slidesPerView2: number of slides
+ *   - spaceBetween2: space between
+ *   - slidesPerView3: number of slides
+ *   - spaceBetween3: space between
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_iied_slider()
+ *
+ * @ingroup themeable
+ */
+#}
+{%
+    set classes = [
+    'relative mx-auto flex flex-row',
+  ]
+%}
+{# formerly: style="width: {{ options.containerWidth }}px; height: {{ options.containerHeight }}px;" #}
+<div{{attributes.addClass(classes)}} style="width: 100%;"
+x-data="{swiper: null}"
+  x-init="swiper = new Swiper($refs.container, {
+      loop: {{ options.loop }},
+      slidesPerView: {{ options.slidesPerView_sm }},
+      spaceBetween: {{ options.spaceBetween_sm }},
+
+      breakpoints: {
+        {{ options.breakpoint_sm }}: {
+          slidesPerView: {{ options.slidesPerView_sm }},
+          spaceBetween: {{ options.spaceBetween_sm }},
+        },
+        {{ options.breakpoint_md }}: {
+          slidesPerView: {{ options.slidesPerView_md }},
+          spaceBetween: {{ options.spaceBetween_md }},
+        },
+        {{ options.breakpoint_lg }}: {
+          slidesPerView: {{ options.slidesPerView_lg }},
+          spaceBetween: {{ options.spaceBetween_lg }},
+        },
+        {{ options.breakpoint_xl }}: {
+          slidesPerView: {{ options.slidesPerView_xl }},
+          spaceBetween: {{ options.spaceBetween_xl }},
+        },
+        {{ options.breakpoint_2xl }}: {
+          slidesPerView: {{ options.slidesPerView_2xl }},
+          spaceBetween: {{ options.spaceBetween_2xl }},
+        },
+      },
+    })"
+>
+
+  <div class="absolute inset-y-0 left-0 z-10 flex items-center transform -translate-y-1/2 top-1/2">
+    <button @click="swiper.slidePrev()" class="flex items-center justify-center w-10 h-10 -ml-2 bg-white border border-gray-300 rounded-full lg:-ml-4 focus:outline-none">
+      <svg viewbox="0 0 20 20" fill="currentColor" class="w-6 h-6 chevron-left">
+        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+      </svg>
+    </button>
+  </div>
+
+  <div class="swiper-container" x-ref="container" >
+    <div class="swiper-wrapper">
+
+      <!-- Slides -->
+      {% for row in rows %}
+        {%
+          set row_classes = [
+            default_row_class ? 'views-row',
+          ]
+        %}
+        <div class="swiper-slide">
+          <div class="flex flex-col h-full overflow-hidden">
+            <div class="flex-shrink-0 h-full">
+             {{ row.content }}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+
+    </div>
+  </div>
+
+  <div class="absolute inset-y-0 right-0 z-10 flex items-center transform -translate-y-1/2 top-1/2">
+    <button @click="swiper.slideNext()" class="flex items-center justify-center w-10 h-10 -mr-2 bg-white border border-gray-300 rounded-full lg:-mr-4 focus:outline-none">
+      <svg viewbox="0 0 20 20" fill="currentColor" class="w-6 h-6 chevron-right">
+        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+      </svg>
+    </button>
+  </div>
+
+</div>
