@@ -12,7 +12,7 @@ dependencies:
 id: contenttype
 theme: iied_tw
 region: sidebar
-weight: -14
+weight: -15
 provider: null
 plugin: 'facet_block:content_type'
 settings:

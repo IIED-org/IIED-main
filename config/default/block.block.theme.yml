@@ -12,7 +12,7 @@ dependencies:
 id: theme
 theme: iied_tw
 region: sidebar
-weight: -10
+weight: -11
 provider: null
 plugin: 'facet_block:pubs_theme'
 settings:

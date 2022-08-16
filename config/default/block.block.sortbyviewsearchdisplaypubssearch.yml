@@ -1,16 +1,17 @@
-uuid: 5c3b3eea-cb79-464f-a8b9-96b72fad2375
+uuid: b71c90d7-9a95-4157-b35b-5d663c1b1a5b
 langcode: en
 status: true
 dependencies:
   module:
     - context
     - search_api_sorts
+    - system
   theme:
     - iied_tw
 id: sortbyviewsearchdisplaypubssearch
 theme: iied_tw
 region: sidebar
-weight: -11
+weight: -12
 provider: null
 plugin: 'search_api_sorts_block:views_page:search__page_1'
 settings:
@@ -19,6 +20,10 @@ settings:
   label_display: '0'
   provider: search_api_sorts
 visibility:
+  context_all:
+    id: context_all
+    negate: null
+    values: ''
   user_status:
     id: user_status
     negate: false
@@ -30,11 +35,11 @@ visibility:
       own_page_true: '0'
       field_value: '0'
     user_fields: uid
-  context_all:
-    id: context_all
-    negate: null
-    values: ''
   context:
     id: context
     negate: null
     values: ''
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/search/pubs*'
