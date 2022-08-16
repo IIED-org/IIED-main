@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "94e09198e945434db3993dd2d3629764",
+    "content-hash": "a63fd169d9a8b7ce983f3466325b497d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5365,6 +5365,52 @@
             }
         },
         {
+            "name": "drupal/formdazzle",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/formdazzle.git",
+                "reference": "2.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/formdazzle-2.1.0.zip",
+                "reference": "2.1.0",
+                "shasum": "49d8d4c8c689967358cd91c6f0faa67080e5dabc"
+            },
+            "require": {
+                "drupal/core": "^8.8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.1.0",
+                    "datestamp": "1606502479",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "JohnAlbin",
+                    "homepage": "https://www.drupal.org/user/32095",
+                    "email": "virtually.johnalbin@gmail.com"
+                }
+            ],
+            "description": "Provides a set of utilities that make form theming easier.",
+            "homepage": "https://drupal.org/project/formdazzle",
+            "support": {
+                "source": "https://git.drupalcode.org/project/formdazzle",
+                "issues": "https://drupal.org/project/issues/formdazzle"
+            }
+        },
+        {
             "name": "drupal/geolocation",
             "version": "3.10.0",
             "source": {
@@ -8454,6 +8500,55 @@
             "homepage": "https://www.drupal.org/project/search_api_sorts",
             "support": {
                 "source": "https://git.drupalcode.org/project/search_api_sorts"
+            }
+        },
+        {
+            "name": "drupal/search_api_sorts_widget",
+            "version": "1.0.0-beta3",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/search_api_sorts_widget.git",
+                "reference": "1.0.0-beta3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/search_api_sorts_widget-1.0.0-beta3.zip",
+                "reference": "1.0.0-beta3",
+                "shasum": "a6dc0ab82e8b49c52dcea7e14ae9381b76892011"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9",
+                "drupal/search_api_sorts": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-beta3",
+                    "datestamp": "1612391178",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "cosolom",
+                    "homepage": "https://www.drupal.org/user/1816882"
+                },
+                {
+                    "name": "malberts",
+                    "homepage": "https://www.drupal.org/user/436324"
+                }
+            ],
+            "description": "Provides a form widget for the Search API Sorts module.",
+            "homepage": "https://www.drupal.org/project/search_api_sorts_widget",
+            "support": {
+                "source": "https://git.drupalcode.org/project/search_api_sorts_widget"
             }
         },
         {

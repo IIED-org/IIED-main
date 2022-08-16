@@ -1,0 +1,48 @@
+uuid: abf866d5-5ff3-493e-85e6-c5e28aa30873
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets_summary.facets_summary.pubs_summary
+  module:
+    - context
+    - facets_summary
+    - system
+  theme:
+    - iied_tw
+id: pubssummary
+theme: iied_tw
+region: content
+weight: -9
+provider: null
+plugin: 'facets_summary_block:pubs_summary'
+settings:
+  id: 'facets_summary_block:pubs_summary'
+  label: 'Pubs summary'
+  label_display: '0'
+  provider: facets_summary
+  context_mapping: {  }
+visibility:
+  user_status:
+    id: user_status
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    user_status:
+      viewing_profile: '0'
+      logged_viewing_profile: '0'
+      own_page_true: '0'
+      field_value: '0'
+    user_fields: uid
+  context_all:
+    id: context_all
+    negate: null
+    values: ''
+  context:
+    id: context
+    negate: null
+    values: ''
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/search/pubs*'

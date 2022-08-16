@@ -1,0 +1,22 @@
+entity.search_api_index.sorts_widget:
+  path: '/admin/config/search/search-api/index/{search_api_index}/sorts_widget'
+  defaults:
+    _controller: '\Drupal\search_api_sorts_widget\Controller\AdminController::displayListing'
+    _title: 'Sorts widget'
+  requirements:
+    _permission: 'administer search_api'
+
+search_api_sorts_widget.search_api_display.sorts_widget:
+  path: '/admin/config/search/search-api/index/{search_api_index}/sorts_widget/{search_api_display}'
+  defaults:
+    _form: '\Drupal\search_api_sorts_widget\Form\ManageSortFieldsForm'
+    _title: 'Manage sort widgets'
+  requirements:
+    _permission: 'administer search_api'
+
+entity.search_api_sorts_widget.edit_form:
+  path: '/admin/config/search/search-api/sorts-widget/{search_api_sorts_widget}'
+  defaults:
+    _controller: '\Drupal\search_api_sorts_widget\Controller\AdminController::redirectEditForm'
+  requirements:
+    _permission: 'administer search_api'

@@ -1,0 +1,57 @@
+uuid: 589ee4b6-ce92-4b4b-9bc8-da8427f7595b
+langcode: en
+status: true
+dependencies:
+  config:
+    - search_api.index.acquia_search_index
+    - views.view.search
+  module:
+    - search_api
+id: pubs_summary
+name: 'Pubs summary'
+facet_source_id: 'search_api:views_page__search__page_1'
+search_filter_identifier: k
+processor_configs:
+  hide_when_not_rendered:
+    processor_id: hide_when_not_rendered
+    weights:
+      build: '-8'
+    settings: {  }
+  show_count:
+    processor_id: show_count
+    weights:
+      build: '-9'
+    settings: {  }
+  show_string:
+    processor_id: show_string
+    weights:
+      build: '-10'
+    settings:
+      label: 'for publications matching'
+  show_text_when_empty:
+    processor_id: show_text_when_empty
+    weights:
+      build: '-7'
+    settings:
+      text:
+        value: 'No results found.'
+        format: plain_text
+facets:
+  pubs_theme:
+    checked: true
+    label: Theme
+    separator: ', '
+    show_count: false
+    weight: 0
+  pubs_document_type:
+    checked: true
+    label: 'Document type'
+    separator: ', '
+    show_count: false
+    weight: 0
+  pubs_country:
+    checked: true
+    label: Area
+    separator: ', '
+    show_count: false
+    weight: 0

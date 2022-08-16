@@ -12,7 +12,7 @@ dependencies:
 id: iied_tw_country_2
 theme: iied_tw
 region: sidebar
-weight: -9
+weight: -12
 provider: null
 plugin: 'facet_block:country'
 settings:

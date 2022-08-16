@@ -1,0 +1,44 @@
+uuid: a6d93da1-5a2b-4098-9a1b-cd354ea94019
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.pubs_country
+  module:
+    - context
+    - facets
+  theme:
+    - iied_tw
+id: country
+theme: iied_tw
+region: sidebar
+weight: -8
+provider: null
+plugin: 'facet_block:pubs_country'
+settings:
+  id: 'facet_block:pubs_country'
+  label: 'Filter by area'
+  label_display: visible
+  provider: facets
+  context_mapping: {  }
+  block_id: country
+visibility:
+  user_status:
+    id: user_status
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    user_status:
+      viewing_profile: '0'
+      logged_viewing_profile: '0'
+      own_page_true: '0'
+      field_value: '0'
+    user_fields: uid
+  context_all:
+    id: context_all
+    negate: null
+    values: ''
+  context:
+    id: context
+    negate: null
+    values: ''

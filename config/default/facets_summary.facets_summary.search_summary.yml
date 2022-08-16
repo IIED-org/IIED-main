@@ -15,12 +15,12 @@ processor_configs:
   hide_when_not_rendered:
     processor_id: hide_when_not_rendered
     weights:
-      build: '-8'
+      build: '1'
     settings: {  }
   show_count:
     processor_id: show_count
     weights:
-      build: '-9'
+      build: '0'
     settings: {  }
   show_string:
     processor_id: show_string
@@ -28,14 +28,6 @@ processor_configs:
       build: '-10'
     settings:
       label: for
-  show_text_when_empty:
-    processor_id: show_text_when_empty
-    weights:
-      build: '-7'
-    settings:
-      text:
-        value: 'No results found.'
-        format: plain_text
 facets:
   theme:
     checked: true

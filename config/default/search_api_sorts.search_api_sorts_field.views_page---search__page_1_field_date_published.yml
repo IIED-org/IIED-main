@@ -1,0 +1,11 @@
+uuid: cdca87f4-7d61-4643-ad9e-61e5a0d796fe
+langcode: en
+status: true
+dependencies: {  }
+id: views_page---search__page_1_field_date_published
+label: 'Published date'
+weight: 0
+display_id: views_page---search__page_1
+field_identifier: field_date_published
+default_sort: false
+default_order: desc

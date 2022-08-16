@@ -12,7 +12,7 @@ dependencies:
 id: iied_tw_theme_2
 theme: iied_tw
 region: sidebar
-weight: -12
+weight: -15
 provider: null
 plugin: 'facet_block:theme'
 settings:
