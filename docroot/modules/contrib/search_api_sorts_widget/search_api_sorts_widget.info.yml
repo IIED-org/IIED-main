@@ -1,0 +1,13 @@
+name: Search API Sorts Widget
+type: module
+description: Provides a form widget for the Search API Sorts module.
+package: Search
+core_version_requirement: ^8 || ^9
+dependencies:
+  - search_api_sorts
+  - drupal:block
+
+# Information added by Drupal.org packaging script on 2021-02-03
+version: '1.0.0-beta3'
+project: 'search_api_sorts_widget'
+datestamp: 1612391181

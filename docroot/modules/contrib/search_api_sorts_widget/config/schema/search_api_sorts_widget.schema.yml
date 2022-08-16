@@ -1,0 +1,38 @@
+search_api_sorts_widget.search_api_sorts_widget.*:
+  type: config_entity
+  label: 'Search API sorts widget'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    display_id:
+      type: string
+      label: 'Display id'
+    status:
+      type: boolean
+      label: 'Status'
+    autosubmit:
+      type: boolean
+      label: 'Autosubmit'
+    autosubmit_hide:
+      type: boolean
+      label: 'Autosubmit hide'
+    sorts:
+      type: sequence
+      label: 'Sorts'
+      sequence:
+        type: mapping
+        label: 'Sort'
+        mapping:
+          weight:
+            type: integer
+            label: 'Weight'
+          field_name:
+            type: string
+            label: 'Field name'
+          label_asc:
+            type: label
+            label: 'Label for ASC direction'
+          label_desc:
+            type: label
+            label: 'Label for DESC direction'

@@ -1,0 +1,9 @@
+entity.search_api_index.sorts_widget:
+  route_name: entity.search_api_index.sorts_widget
+  base_route: entity.search_api_index.canonical
+  title: 'Sorts widget'
+  weight: 26
+search_api_sorts_widget.search_api_display.sorts_widget:
+  route_name: search_api_sorts_widget.search_api_display.sorts_widget
+  parent_id: entity.search_api_index.sorts_widget
+  title: 'Sorts widget'
