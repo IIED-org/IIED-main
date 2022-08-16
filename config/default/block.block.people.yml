@@ -12,7 +12,7 @@ dependencies:
 id: people
 theme: iied_tw
 region: content
-weight: 0
+weight: -7
 provider: null
 plugin: 'system_menu_block:people'
 settings:

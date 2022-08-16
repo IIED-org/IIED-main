@@ -3,16 +3,16 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.body
-    - field.storage.taxonomy_term.field_name
     - field.storage.node.field_area_list
     - field.storage.node.field_author_s_
+    - field.storage.node.body
     - field.storage.node.field_collections
-    - field.storage.node.field_date_published
     - field.storage.node.field_document_type
     - field.storage.node.field_product_code
     - field.storage.node.field_product_code_new
+    - field.storage.node.field_date_published
     - field.storage.node.field_theme_s_
+    - field.storage.taxonomy_term.field_name
     - search_api.server.acquia_search_server
   module:
     - acquia_search
@@ -167,7 +167,7 @@ field_settings:
     property_path: aggregated_field
     type: string
     configuration:
-      type: first
+      type: last
       fields:
         - 'entity:node/title'
         - 'entity:taxonomy_term/name'
@@ -244,6 +244,14 @@ field_settings:
     property_path: title
     type: text
     boost: !!float 3
+    dependencies:
+      module:
+        - node
+  title_1:
+    label: Title
+    datasource_id: 'entity:node'
+    property_path: title
+    type: string
     dependencies:
       module:
         - node
@@ -351,6 +359,7 @@ processor_settings:
       - name_2
       - name_3
       - title
+      - title_1
       - type
       - vid_1
     title: true

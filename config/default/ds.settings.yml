@@ -9,5 +9,6 @@ classes:
   region:
     - 'bg-fill|Background fill grey'
     - ''
+    - ''
   field: {  }
 use_field_names: true

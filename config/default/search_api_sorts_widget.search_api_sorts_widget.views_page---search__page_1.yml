@@ -1,0 +1,22 @@
+uuid: 63d6b70d-c48c-4999-a5ae-9815d2fcd5d2
+langcode: en
+status: true
+dependencies: {  }
+id: views_page---search__page_1
+display_id: views_page---search__page_1
+autosubmit: true
+autosubmit_hide: true
+sorts:
+  search_api_relevance:
+    weight: 0
+    label_asc: ''
+    label_desc: 'Sort by relevance'
+  field_date_published:
+    weight: 0
+    label_asc: ''
+    label_desc: 'Sort by date'
+  title_1:
+    weight: 0
+    label_asc: 'Sort by title ▲'
+    label_desc: 'Sort by title ▼'
+weight: null

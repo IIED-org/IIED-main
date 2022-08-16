@@ -1,33 +1,28 @@
-uuid: b229329e-ad12-465a-9a3d-dadf6d9c7f63
+uuid: abf866d5-5ff3-493e-85e6-c5e28aa30873
 langcode: en
 status: true
 dependencies:
   config:
-    - system.menu.news-and-insight
+    - facets_summary.facets_summary.pubs_summary
   module:
     - context
+    - facets_summary
     - system
   theme:
     - iied_tw
-id: newsandinsight
+id: pubssummary
 theme: iied_tw
 region: content
-weight: -12
+weight: -9
 provider: null
-plugin: 'system_menu_block:news-and-insight'
+plugin: 'facets_summary_block:pubs_summary'
 settings:
-  id: 'system_menu_block:news-and-insight'
-  label: 'News and insight'
+  id: 'facets_summary_block:pubs_summary'
+  label: 'Pubs summary'
   label_display: '0'
-  provider: system
-  level: 1
-  depth: 0
-  expand_all_items: false
+  provider: facets_summary
+  context_mapping: {  }
 visibility:
-  context_all:
-    id: context_all
-    negate: null
-    values: ''
   user_status:
     id: user_status
     negate: false
@@ -39,6 +34,10 @@ visibility:
       own_page_true: '0'
       field_value: '0'
     user_fields: uid
+  context_all:
+    id: context_all
+    negate: null
+    values: ''
   context:
     id: context
     negate: null
@@ -46,4 +45,4 @@ visibility:
   request_path:
     id: request_path
     negate: false
-    pages: "/news-and-insight\r\n/blogs\r\n/news\r\n/events\r\n/conversations\r\n/newsletters"
+    pages: '/search/pubs*'
