@@ -210,7 +210,8 @@ display:
           query_tags: {  }
       relationships: {  }
       css_class: ''
-      header:
+      header: {  }
+      footer:
         result:
           id: result
           table: views
@@ -221,7 +222,6 @@ display:
           plugin_id: result
           empty: false
           content: '@total entries'
-      footer: {  }
       display_extenders: {  }
     cache_metadata:
       max-age: -1
@@ -304,6 +304,14 @@ display:
       show_admin_links: true
       display_extenders: {  }
       block_description: 'All in collection'
+      allow:
+        items_per_page: true
+        offset: offset
+        pager: '0'
+        hide_fields: '0'
+        sort_fields: '0'
+        disable_filters: '0'
+        configure_sorts: '0'
     cache_metadata:
       max-age: -1
       contexts:
@@ -394,6 +402,48 @@ display:
             long_read: long_read
             news: news
             project: project
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        langcode:
+          id: langcode
+          table: node_field_data
+          field: langcode
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: langcode
+          plugin_id: language
+          operator: in
+          value:
+            '***LANGUAGE_site_default***': '***LANGUAGE_site_default***'
           group: 1
           exposed: false
           expose:

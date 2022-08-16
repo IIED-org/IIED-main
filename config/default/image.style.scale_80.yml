@@ -1,0 +1,15 @@
+uuid: f2bad5de-5c5e-4cac-b285-7ef85257023a
+langcode: en
+status: true
+dependencies: {  }
+name: scale_80
+label: 'scale 80'
+effects:
+  9641b223-6f35-4ce3-a666-bad14246a37a:
+    uuid: 9641b223-6f35-4ce3-a666-bad14246a37a
+    id: image_scale
+    weight: 1
+    data:
+      width: 80
+      height: null
+      upscale: false

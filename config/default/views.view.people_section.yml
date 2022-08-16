@@ -8,8 +8,9 @@ dependencies:
     - taxonomy.vocabulary.person
     - taxonomy.vocabulary.person_type
   content:
-    - 'taxonomy_term:person_type:0b7d8770-ad68-4d60-bd11-4893462cba75'
-    - 'taxonomy_term:person_type:dceef7ca-d0fc-4cc9-b1b1-d16f248f6a5a'
+    - 'taxonomy_term:person_type:0d0f3c93-7536-4f77-b3be-748b82331a56'
+    - 'taxonomy_term:person_type:d4900dd0-25af-4fc8-be78-cbaba551a7ae'
+    - 'taxonomy_term:person_type:d71b41df-48a0-492a-bed0-f3043d0ab2b5'
   module:
     - node
     - options
@@ -79,15 +80,17 @@ display:
           field_api_classes: false
           convert_spaces: false
       pager:
-        type: mini
+        type: full
         options:
           offset: 0
-          items_per_page: 10
+          items_per_page: 24
           total_pages: null
           id: 0
           tags:
             next: ››
             previous: ‹‹
+            first: '« First'
+            last: 'Last »'
           expose:
             items_per_page: false
             items_per_page_label: 'Items per page'
@@ -96,6 +99,7 @@ display:
             items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
+          quantity: 9
       exposed_form:
         type: basic
         options:
@@ -114,7 +118,20 @@ display:
         type: tag
         options: {  }
       empty: {  }
-      sorts: {  }
+      sorts:
+        field_name_family:
+          id: field_name_family
+          table: taxonomy_term__field_name
+          field: field_name_family
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: standard
+          order: ASC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
       arguments: {  }
       filters:
         status:
@@ -184,7 +201,7 @@ display:
             group_items: {  }
           reduce_duplicates: false
           vid: person_type
-          type: textfield
+          type: select
           hierarchy: false
           limit: true
           error_message: true
@@ -227,6 +244,85 @@ display:
     display_plugin: block
     position: 1
     display_options:
+      filters:
+        status:
+          id: status
+          table: taxonomy_term_field_data
+          field: status
+          entity_type: taxonomy_term
+          entity_field: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
+          expose:
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+        vid:
+          id: vid
+          table: taxonomy_term_field_data
+          field: vid
+          entity_type: taxonomy_term
+          entity_field: vid
+          plugin_id: bundle
+          value:
+            person: person
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
+        field_person_type_target_id:
+          id: field_person_type_target_id
+          table: taxonomy_term__field_person_type
+          field: field_person_type_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: taxonomy_index_tid
+          operator: or
+          value:
+            41068: 41068
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          vid: person_type
+          type: select
+          hierarchy: false
+          limit: true
+          error_message: true
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      defaults:
+        filters: false
+        filter_groups: false
       display_description: ''
       display_extenders: {  }
       block_description: 'All staff'
@@ -281,7 +377,7 @@ display:
           plugin_id: taxonomy_index_tid
           operator: or
           value:
-            - 40877
+            41068: 41068
           group: 1
           exposed: false
           expose:
@@ -313,7 +409,7 @@ display:
             group_items: {  }
           reduce_duplicates: false
           vid: person_type
-          type: textfield
+          type: select
           hierarchy: false
           limit: true
           error_message: true
@@ -430,6 +526,7 @@ display:
           plugin_id: bundle
           value:
             person: person
+          group: 1
           expose:
             operator_limit_selection: false
             operator_list: {  }
@@ -443,7 +540,8 @@ display:
           plugin_id: taxonomy_index_tid
           operator: or
           value:
-            - 40877
+            41074: 41074
+            41091: 41091
           group: 1
           exposed: false
           expose:
@@ -475,21 +573,23 @@ display:
             group_items: {  }
           reduce_duplicates: false
           vid: person_type
-          type: textfield
+          type: select
           hierarchy: false
           limit: true
           error_message: true
-        field_person_type_target_id_1:
-          id: field_person_type_target_id_1
-          table: taxonomy_term__field_person_type
-          field: field_person_type_target_id
-          relationship: none
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          relationship: reverse__node__field_author_s_
           group_type: group
           admin_label: ''
-          plugin_id: taxonomy_index_tid
-          operator: or
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          operator: in
           value:
-            - 40900
+            blog: blog
           group: 1
           exposed: false
           expose:
@@ -519,19 +619,27 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          reduce_duplicates: false
-          vid: person_type
-          type: textfield
-          hierarchy: false
-          limit: true
-          error_message: true
       filter_groups:
         operator: AND
         groups:
           1: AND
       defaults:
+        group_by: false
+        relationships: false
         filters: false
         filter_groups: false
+      relationships:
+        reverse__node__field_author_s_:
+          id: reverse__node__field_author_s_
+          table: taxonomy_term_field_data
+          field: reverse__node__field_author_s_
+          relationship: none
+          group_type: group
+          admin_label: field_author_s_
+          entity_type: taxonomy_term
+          plugin_id: entity_reverse
+          required: false
+      group_by: true
       display_description: ''
       display_extenders: {  }
       block_description: 'Guest bloggers block'
@@ -544,6 +652,7 @@ display:
         - user
         - user.permissions
       tags: {  }
+    deleted: false
   block_4:
     id: block_4
     display_title: 'Climate change group'
@@ -586,7 +695,7 @@ display:
           plugin_id: taxonomy_index_tid
           operator: or
           value:
-            - 40877
+            - 41068
           group: 1
           exposed: false
           expose:
@@ -724,7 +833,7 @@ display:
           plugin_id: taxonomy_index_tid
           operator: or
           value:
-            - 40877
+            - 41068
           group: 1
           exposed: false
           expose:
@@ -862,7 +971,7 @@ display:
           plugin_id: taxonomy_index_tid
           operator: or
           value:
-            - 40877
+            - 41068
           group: 1
           exposed: false
           expose:
@@ -1000,7 +1109,7 @@ display:
           plugin_id: taxonomy_index_tid
           operator: or
           value:
-            - 40877
+            - 41068
           group: 1
           exposed: false
           expose:

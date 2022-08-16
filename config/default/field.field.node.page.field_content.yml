@@ -6,10 +6,12 @@ dependencies:
     - field.storage.node.field_content
     - node.type.page
     - paragraphs.paragraphs_type.accordion_box
+    - paragraphs.paragraphs_type.accordion_section
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.box
     - paragraphs.paragraphs_type.file_upload
     - paragraphs.paragraphs_type.gallery
+    - paragraphs.paragraphs_type.highchart
     - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.image_small
     - paragraphs.paragraphs_type.in_page_menu
@@ -63,6 +65,8 @@ settings:
       timeline: timeline
       in_page_menu: in_page_menu
       logo_block: logo_block
+      accordion_section: accordion_section
+      highchart: highchart
       related_content: related_content
       related_project: related_project
     negate: 0
@@ -72,6 +76,9 @@ settings:
         enabled: false
       accordion_box:
         weight: -51
+        enabled: true
+      accordion_section:
+        weight: 40
         enabled: true
       basic_text:
         weight: -69
@@ -84,6 +91,9 @@ settings:
         enabled: true
       gallery:
         weight: -58
+        enabled: true
+      highchart:
+        weight: 45
         enabled: true
       image:
         weight: -68
