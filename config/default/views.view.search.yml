@@ -404,6 +404,20 @@ display:
           sort_desc_label: Desc
       cache:
         type: none
+      empty:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: true
+          content:
+            value: '<a href="/search/pubs">Start a new search</a>'
+            format: basic_html
+          tokenize: false
       sorts: {  }
       filters:
         search_api_fulltext:
@@ -507,6 +521,7 @@ display:
         groups:
           1: AND
       defaults:
+        empty: false
         cache: false
         css_class: false
         use_ajax: false
