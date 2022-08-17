@@ -452,7 +452,7 @@ display:
               manager: '0'
               administrator: '0'
             expose_fields: false
-            placeholder: Search
+            placeholder: 'Search publications'
             searched_fields_id: search_api_fulltext_searched_fields
             autocomplete_filter: 1
             autocomplete_min_chars: '2'

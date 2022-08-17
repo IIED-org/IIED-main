@@ -13,7 +13,7 @@ dependencies:
 id: pubssummary
 theme: iied_tw
 region: content
-weight: -9
+weight: -8
 provider: null
 plugin: 'facets_summary_block:pubs_summary'
 settings:
