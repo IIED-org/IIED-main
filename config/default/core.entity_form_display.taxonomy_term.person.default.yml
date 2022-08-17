@@ -249,7 +249,7 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_research_group:
-    type: options_select
+    type: options_buttons
     weight: 18
     region: content
     settings: {  }
@@ -334,5 +334,10 @@ content:
     region: content
     settings:
       display_label: true
+    third_party_settings: {  }
+  translation:
+    weight: 10
+    region: content
+    settings: {  }
     third_party_settings: {  }
 hidden: {  }
