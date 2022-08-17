@@ -13,7 +13,7 @@ dependencies:
 id: searchsummary_2
 theme: iied_tw
 region: content
-weight: -10
+weight: -9
 provider: null
 plugin: 'facets_summary_block:search_summary'
 settings:

@@ -46,4 +46,4 @@ visibility:
   request_path:
     id: request_path
     negate: false
-    pages: "/news-and-insight\r\n/blogs\r\n/news\r\n/events\r\n/conversations\r\n/newsletters"
+    pages: "/news-and-insight\r\n/blogs\r\n/news\r\n/events\r\n/conversations\r\n/newsletters\r\n/media-centre"
