@@ -52,6 +52,9 @@ function iied_tw_theme_suggestions_alter(array &$suggestions, array $variables, 
       $suggestions[] = "image__" . $node->bundle() . '__' . $image_style;;
     }
   }
+  if (isset($variables['element']['#gin_lb_form'])) {
+    return;
+  }
   return $suggestions;
 }
 

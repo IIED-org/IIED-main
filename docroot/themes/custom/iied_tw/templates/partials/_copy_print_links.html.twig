@@ -1,6 +1,7 @@
-{#-- copy and print links --#}
+{{ attach_library('iied_tw/copyprint') }}
+  {#-- copy and print links --#}
 <div class="flex items-center">
-  <button
+  <button id="copyUrl"
     class="flex items-center h-10 px-3 py-2 mr-2 transition bg-white border border-gray-300 rounded-full shadow-sm hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500"
   >
     <svg
@@ -17,7 +18,7 @@
     </svg>
     Copy link
   </button>
-  <button
+  <button id="printPdf"
     class="items-center hidden px-3 h-10 py-2 mr-2 transition bg-white border border-gray-300 rounded-full shadow-sm md:flex hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500"
   >
     <svg

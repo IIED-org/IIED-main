@@ -15,3 +15,6 @@ priority-nav:
       dist/priority-nav/priority-nav-core.css: {}
   js:
     dist/priority-nav/priority-nav.min.js: { async: true }
+copyprint:
+   js:
+    dist/js/copyprint.js: { async: true }
