@@ -131,6 +131,13 @@ module.exports = {
             },
           },
         },
+        lg: { 
+          css: {
+            blockquote: {
+              paddingLeft: false,
+            },
+          },
+        },  
       })
     },
   },

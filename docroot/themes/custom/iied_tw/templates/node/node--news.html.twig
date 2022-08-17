@@ -108,7 +108,8 @@
          <div
           class="flex flex-col flex-wrap justify-between pb-6 border-b border-gray-300 xl:border-none sm:flex-row"
         >
-          {{ node.type.entity.label() }}, {{ node.getCreatedTime|date('d F Y') }}
+          {{ node.field_news_type.entity.label }}, {{ node.getCreatedTime|date('d F Y') }}
+          
           <div class="flex items-center">
             {% include '@iied_tw/partials/_share_links.html.twig' %}
           </div>

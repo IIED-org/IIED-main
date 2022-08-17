@@ -50,10 +50,16 @@ For large 3-4 col featured card display
                     d="M12,0A12,12,0,0,0,0,12V0Z"
                   />
                 </svg>
-              <h4 class="mb-4 text-xl text-gray-900 lg:text-2xl lg:mt-8">
+              <div>  
+              <h4 class="mb-6 text-xl text-gray-900 lg:text-2xl lg:mt-8">
                 {{ label }}
               </h4>
+              {% block tagline %}
+              {% endblock %}
+              </div>
+              {% block date %}
               <p class="text-gray-500">{{ node.getCreatedTime|date('d F Y') }}</p>
+              {% endblock %}
             </div>
           </div>
         </a>

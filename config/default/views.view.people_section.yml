@@ -83,7 +83,7 @@ display:
         type: full
         options:
           offset: 0
-          items_per_page: 24
+          items_per_page: 48
           total_pages: null
           id: 0
           tags:

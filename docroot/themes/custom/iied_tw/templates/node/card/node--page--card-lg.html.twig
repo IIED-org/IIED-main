@@ -1,1 +1,4 @@
 {% extends '@iied_tw/node/card/node--card-lg.html.twig' %}
+    {% block tagline %}
+    <p class="text-gray-700">{{ node.field_tagline.0.value }}</p>
+    {% endblock %}

@@ -24,11 +24,11 @@
  */
 #}
           
-<div class="flex flex-row-reverse xl:flex-col">
+<div class="flex flex-row-reverse justify-end xl:flex-col">
   {{ content.field_badge }}
   <div>
-    <a class="font-semibold" href="{{ url }}">{{ name }}</a>
-    <p class="">{{ content.field_short_description }}</p>
+    <a class="text-lg font-semibold" href="{{ url }}">{{ name }}</a>
+    <p class="text-gray-500">{{ content.field_short_description }}</p>
   </div>
 </div>
 

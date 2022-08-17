@@ -139,6 +139,7 @@ module:
   rh_media: 0
   rh_node: 0
   rh_taxonomy: 0
+  search404: 0
   search_api: 0
   search_api_autocomplete: 0
   search_api_solr: 0
@@ -186,8 +187,8 @@ module:
   views: 10
   paragraphs: 11
   standard: 1000
-  eu_cookie_compliance: 1001
   readonlymode: 9999
+  eu_cookie_compliance: 10000
 theme:
   bartik: 0
   seven: 0

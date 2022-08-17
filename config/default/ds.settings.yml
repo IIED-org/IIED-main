@@ -8,6 +8,8 @@ ft-layout-builder: true
 classes:
   region:
     - 'bg-fill|Background fill grey'
+    - 'divide-above|Divider above'
+    - 'divide-below|Divider below'
     - ''
     - ''
   field: {  }

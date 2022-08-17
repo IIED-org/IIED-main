@@ -33,17 +33,17 @@
 <div{{ attributes.setAttribute('id', 'taxonomy-term-' ~ term.id).addClass(classes) }}>
   <div class="container mb-4">
       <nav aria-label="themes">
-      <div class="flex flex-wrap justify-between space-x-3">
-        <div class="mb-2">
+      <div class="flex flex-wrap justify-between">
+        <div class="flex flex-wrap items-center mb-4 space-x-3">
           {% for key, item in term.field_theme %}
             {% if key is not empty %}
               <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': item.entity.tid.value}) }}">
               {{ item.entity.label }}</a>
-              {{ not loop.last ? ' | ' }}
+              {{ not loop.last ? '<div aria-hidden="true" class="w-px h-4 bg-gray-300"></div>' }}
             {% endif %}
           {% endfor %}
         </div>
-        <div class="mb-2">{{ drupal_block('language_block:language_interface', wrapper=false) }}</div>
+        <div class="mb-4">{{ drupal_block('language_block:language_interface', wrapper=false) }}</div>
       </div>
     </nav>
   </div>
@@ -54,7 +54,7 @@
          {{ title_suffix }}
       </div>
       <div class="flex justify-between lg:col-span-8">
-        <p class="prose prose-lg">
+        <p class="prose prose-lg lg:prose-xl">
         {{ term.description.0.value|striptags }}
         </p>
           {% for key, item in term.field_badge %}

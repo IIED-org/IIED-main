@@ -30,15 +30,15 @@
   ]
 %}
 <div{{ attributes.setAttribute('id', 'taxonomy-term-' ~ term.id).addClass(classes) }}>
-    <div class="container items-baseline p-4 mx-auto overflow-hidden lg:grid lg:gap-x-6 lg:grid-cols-12">
-      <div class="lg:col-span-4">
+    <div class="container flex flex-wrap items-baseline overflow-hidden gap-x-12">
+      <div class="flex-1 w-1/3 max-w-3xl">
         {{ title_prefix }}
         <h1 class="mb-6">{{ name }}</h1>
         {{ title_suffix }}
       </div>
-      <div class="lg:col-span-8">
+      <div class="flex-1 w-2/3 max-w-3xl">
         <p class="prose prose-lg">
-         {{ term.description.0.value }}
+         {{ term.description.0.value|striptags }}
         </p>
       </div>
     </div>

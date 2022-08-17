@@ -30,13 +30,13 @@
   {% import _self as menus %}
   {% if items %}
     {% if menu_level == 0 %}
-      <ul{{ attributes.addClass('flex', 'container', 'space-x-6', 'mb-6', 'tertiary-menu') }}>
+      <ul{{ attributes.addClass('flex', 'container', 'my-6', 'tertiary-menu') }}>
     {% else %}
       <ul>
     {% endif %}
     {% for item in items %}
       <li{{ item.attributes }}>
-        {{ link(item.title, item.url) }}
+        {{ link(item.title, item.url, { 'class':['block', 'py-2', 'px-2', 'rounded']}) }}
         {% if item.below %}
           {{ menus.menu_links(item.below, attributes, menu_level + 1) }}
         {% endif %}

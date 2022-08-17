@@ -7,7 +7,7 @@ mail: webmaster@iied.org
 slogan: ''
 page:
   403: ''
-  404: ''
+  404: /search404
   front: /taxonomy/term/41531
 admin_compact_mode: false
 weight_select_max: 100
