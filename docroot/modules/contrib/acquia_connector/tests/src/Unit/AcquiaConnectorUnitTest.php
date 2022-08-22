@@ -7,7 +7,7 @@
 
 namespace Drupal\Tests\acquia_connector\Unit;
 
-use Drupal\acquia_connector\Client;
+use Drupal\acquia_connector\Client\AcquiaConnectorClient;
 use Drupal\acquia_connector\Controller\StatusController;
 use Drupal\Tests\UnitTestCase;
 
@@ -16,7 +16,7 @@ if (!defined('REQUEST_TIME')) {
 }
 
 /**
- * @coversDefaultClass \Drupal\acquia_connector\Client
+ * @coversDefaultClass \Drupal\acquia_connector\Client\AcquiaConnectorClient
  *
  * @group Acquia connector
  */
@@ -28,6 +28,7 @@ class AcquiaConnectorUnitTest extends UnitTestCase {
   public function testAuthenticators() {
     $identifier = $this->randomMachineName();
     $key = $this->randomMachineName();
+
     $params = ['time', 'nonce', 'hash'];
 
     $client = new ClientTest();
@@ -75,7 +76,7 @@ class AcquiaConnectorUnitTest extends UnitTestCase {
 /**
  * {@inheritdoc}
  */
-class ClientTest extends Client {
+class ClientTest extends AcquiaConnectorClient {
 
   /**
    * Construction method.

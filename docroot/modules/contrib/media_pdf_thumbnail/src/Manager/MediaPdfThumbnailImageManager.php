@@ -273,4 +273,15 @@ class MediaPdfThumbnailImageManager {
     return !empty($files) ? reset($files)->id() : NULL;
   }
 
+  /**
+   * @param $fileUri
+   *
+   * @return \Drupal\Core\Entity\EntityInterface[]
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function getPdfEntityByPdfFileUri($fileUri) {
+    return $this->entityTypeManager->getStorage('pdf_image_entity')->loadByProperties(['image_file_uri' => $fileUri]);
+  }
+
 }

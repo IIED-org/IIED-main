@@ -12,7 +12,7 @@ abstract class SearchApiSortsUpdateBase extends UpdatePathTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'search_api_sorts',
     'search_api_sorts_test_views',
   ];
@@ -43,7 +43,7 @@ abstract class SearchApiSortsUpdateBase extends UpdatePathTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  protected function setUp(): void {
     parent::setUp();
 
     // We need to manually set our entity types as "installed".

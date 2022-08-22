@@ -5,14 +5,13 @@ ace-editor:
     name: Ace Editor
     url: https://ace.c9.io
   js:
-    //pagecdn.io/lib/ace/1.4.8/ace.js: { type: external, minified: true }
+    //cdnjs.cloudflare.com/ajax/libs/ace/1.8.1/ace.min.js: { type: external, minified: true }
     js/asset_injector.ace_editor.js: {}
   css:
     base:
       css/asset_injector.css: {}
   dependencies:
-      - core/jquery.ui.resizable
-      - core/jquery.once
+      - core/once
 
 asset_injector:
   version: VERSION

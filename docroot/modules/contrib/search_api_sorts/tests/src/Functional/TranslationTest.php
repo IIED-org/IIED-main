@@ -14,7 +14,7 @@ class TranslationTest extends SortsFunctionalBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['config_translation', 'language'];
+  protected static $modules = ['config_translation', 'language'];
 
   /**
    * {@inheritdoc}
@@ -35,7 +35,7 @@ class TranslationTest extends SortsFunctionalBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  protected function setUp(): void {
     parent::setUp();
 
     // Create FR language.
@@ -77,11 +77,10 @@ class TranslationTest extends SortsFunctionalBase {
     // Check if translate link is not present.
     $this->assertSession()->linkByHrefNotExists(sprintf('admin/config/search/search-api/sorts/%s/translate', $this->escapedDisplayId . '_' . 'id'));
 
-    $edit = [
+    $this->submitForm([
       'sorts[id][status]' => TRUE,
       'default_sort' => 'id',
-    ];
-    $this->drupalPostForm(NULL, $edit, 'Save settings');
+    ], 'Save settings');
 
     // Check if the config is saved in the default language.
     $search_api_sorts_field = $this->searchApiSortsFieldStorage->load($this->escapedDisplayId . '_' . 'id');
@@ -112,11 +111,10 @@ class TranslationTest extends SortsFunctionalBase {
     // Check if translate link is not present.
     $this->assertSession()->linkByHrefNotExists(sprintf('admin/config/search/search-api/sorts/%s/translate', $this->escapedDisplayId . '_' . 'id'));
 
-    $edit = [
+    $this->submitForm([
       'sorts[id][status]' => TRUE,
       'default_sort' => 'id',
-    ];
-    $this->drupalPostForm(NULL, $edit, 'Save settings');
+    ], 'Save settings');
 
     // Check if config is saved in the default language (EN).
     $search_api_sorts_field = $this->searchApiSortsFieldStorage->load($this->escapedDisplayId . '_' . 'id');
@@ -138,10 +136,9 @@ class TranslationTest extends SortsFunctionalBase {
     // Check if the translate column is present.
     $this->assertSession()->elementContains('css', 'table#edit-sorts thead th:last-child', 'Translate');
 
-    $edit = [
+    $this->submitForm([
       'sorts[created][status]' => TRUE,
-    ];
-    $this->drupalPostForm(NULL, $edit, 'Save settings');
+    ], 'Save settings');
 
     // Check if ID field config is still saved in the default language.
     $search_api_sorts_field = $this->searchApiSortsFieldStorage->load($this->escapedDisplayId . '_' . 'id');
@@ -152,7 +149,8 @@ class TranslationTest extends SortsFunctionalBase {
     $this->assertEquals('en', $search_api_sorts_field->language()->getId());
 
     // Translate the ID field.
-    $this->drupalPostForm('admin/config/search/search-api/sorts/' . $this->escapedDisplayId . '_' . 'id' . '/translate/fr/add', [
+    $this->drupalGet('admin/config/search/search-api/sorts/' . $this->escapedDisplayId . '_' . 'id' . '/translate/fr/add');
+    $this->submitForm([
       'translation[config_names][search_api_sorts.search_api_sorts_field.' . $this->escapedDisplayId . '_' . 'id' . '][label]' => 'Identifiant',
     ], 'Save translation');
 

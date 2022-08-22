@@ -19,10 +19,16 @@ acquia_connector.settings:
     hide_signup_messages:
       type: integer
       label: 'Hide signup messages'
+    third_party_settings:
+      type: ignore
+      label: 'Product specific settings'
     spi:
       type: mapping
       label: 'SPI'
       mapping:
+        amplitude_api_key:
+          type: string
+          label: 'Amplitude API Key'
         server:
           type: string
           label: 'Acquia SPI server'
@@ -41,9 +47,6 @@ acquia_connector.settings:
         send_watchdog:
           type: integer
           label: 'Allow collection of Watchdog logs'
-        use_cron:
-          type: integer
-          label: 'Send via Drupal cron'
         dynamic_banner:
           type: integer
           label: 'Receive updates from Acquia Subscription'

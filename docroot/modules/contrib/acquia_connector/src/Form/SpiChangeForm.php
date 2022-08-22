@@ -76,9 +76,9 @@ class SpiChangeForm extends ConfigFormBase {
     elseif ($blocked) {
       $form['env_change_action'] = [
         '#type' => 'checkboxes',
-        '#title' => $this->t('The Acquia Connector is disabled and is not sending site profile data to Acquia Cloud for evaluation.'),
+        '#title' => $this->t('The Acquia Connector is disabled.'),
         '#options' => [
-          'unblock' => $this->t('Enable this site and send data to Acquia Cloud.'),
+          'unblock' => $this->t('Enable this site to retrieve subscription data.'),
         ],
         '#required' => TRUE,
       ];

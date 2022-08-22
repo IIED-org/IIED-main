@@ -1,5 +1,9 @@
 <?php
 
+use Drupal\Core\Config\FileStorage;
+use Drupal\user\Entity\Role;
+use Drupal\user\RoleInterface;
+
 /**
  * Install Pdf Image entity.
  */
@@ -14,7 +18,7 @@ function media_pdf_thumbnail_update_8002(&$sandbox) {
 function media_pdf_thumbnail_update_8003(&$sandbox) {
   $path = Drupal::moduleHandler()->getModule('media_pdf_thumbnail')->getPath();
   $configPath = $path . '/config/install';
-  $configSource = new \Drupal\Core\Config\FileStorage($configPath);
+  $configSource = new FileStorage($configPath);
   \Drupal::service('config.installer')->installOptionalConfig($configSource);
 }
 
@@ -23,4 +27,12 @@ function media_pdf_thumbnail_update_8003(&$sandbox) {
  */
 function media_pdf_thumbnail_update_8004(&$sandbox) {
   \Drupal::configFactory()->getEditable('media_pdf_thumbnail.bundles.settings')->delete();
+}
+
+/**
+ * Grant private thumbnail permission to authenticated role.
+ */
+function media_pdf_thumbnail_update_8005(&$sandbox) {
+  $role = Role::load(RoleInterface::AUTHENTICATED_ID);
+  $role->grantPermission('view private pdf thumbnails')->save();
 }
