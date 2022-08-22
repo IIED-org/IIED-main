@@ -41,8 +41,8 @@
 {%
   set classes = [
     'paragraph',
+    'my-6',
     'prose', 
-    'md:prose-lg',
     'paragraph--type--' ~ paragraph.bundle|clean_class,
     view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
     not paragraph.isPublished() ? 'paragraph--unpublished'
@@ -51,7 +51,9 @@
 {% block paragraph %}
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
+    <aside class="p-4 mb-8 border border-gray-300 prose-base rounded-xl">
       {{ content }}
+    </aside>
     {% endblock %}
   </div>
 {% endblock paragraph %}
