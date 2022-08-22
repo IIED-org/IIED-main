@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8e9d0416f6151e2c7d5d2f509fa350f2",
+    "content-hash": "1fa38feb5119ba28ff2730bcf3c1fd94",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3368,6 +3368,59 @@
                 "source": "https://git.drupalcode.org/project/config_split",
                 "issues": "https://www.drupal.org/project/issues/config_split",
                 "slack": "https://drupal.slack.com/archives/C45342CDD"
+            }
+        },
+        {
+            "name": "drupal/contact_block",
+            "version": "1.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/contact_block.git",
+                "reference": "8.x-1.6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/contact_block-8.x-1.6.zip",
+                "reference": "8.x-1.6",
+                "shasum": "bca712537dac0f3b91fcdefbaecaa00033fe9a74"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.6",
+                    "datestamp": "1633292142",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Sutharsan",
+                    "homepage": "https://www.drupal.org/user/73854"
+                },
+                {
+                    "name": "vuil",
+                    "homepage": "https://www.drupal.org/user/3568458"
+                }
+            ],
+            "description": "The Contact Block module provides contact forms in a block.",
+            "homepage": "https://www.drupal.org/project/contact_block",
+            "keywords": [
+                "Drupal",
+                "contact_block"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/contact_block",
+                "issues": "https://www.drupal.org/project/issues/contact_block"
             }
         },
         {
