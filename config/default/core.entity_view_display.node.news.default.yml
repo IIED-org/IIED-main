@@ -17,6 +17,7 @@ dependencies:
     - field.field.node.news.field_standfirst
     - field.field.node.news.field_tagline
     - field.field.node.news.field_tags
+    - field.field.node.news.field_theme_s_
     - field.field.node.news.field_video
     - node.type.news
   module:
@@ -135,6 +136,14 @@ content:
       link: true
     third_party_settings: {  }
     weight: 112
+    region: content
+  field_theme_s_:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 118
     region: content
   field_video:
     type: entity_reference_entity_view
