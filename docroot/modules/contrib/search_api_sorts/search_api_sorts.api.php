@@ -10,6 +10,9 @@
  * @{
  */
 
+use Drupal\search_api\Display\DisplayInterface;
+use Drupal\search_api_sorts\SortsField;
+
 /**
  * Alter the active sort.
  *
@@ -25,7 +28,7 @@
  *
  * @see \Drupal\search_api_sorts\SearchApiSortsManager
  */
-function hook_search_api_sorts_active_sort_alter(\Drupal\search_api_sorts\SortsField &$sort, \Drupal\search_api\Display\DisplayInterface $display) {
+function hook_search_api_sorts_active_sort_alter(SortsField $sort, DisplayInterface $display) {
 
   // Example: use different price for anonymous users when sorting on price.
   if ($sort->getFieldName() === "price" && \Drupal::currentUser()->isAnonymous()) {
@@ -48,7 +51,7 @@ function hook_search_api_sorts_active_sort_alter(\Drupal\search_api_sorts\SortsF
  *
  * @see \Drupal\search_api_sorts\SearchApiSortsManager
  */
-function hook_search_api_sorts_default_sort_alter(\Drupal\search_api_sorts\SortsField &$sort, \Drupal\search_api\Display\DisplayInterface $display) {
+function hook_search_api_sorts_default_sort_alter(SortsField $sort, DisplayInterface $display) {
   $sort->setFieldName("title");
   $sort->setOrder("desc");
 }

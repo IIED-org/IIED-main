@@ -30,8 +30,8 @@
   ]
 %}
 <div{{ attributes.setAttribute('id', 'taxonomy-term-' ~ term.id).addClass(classes) }}>
-    <div class="container flex flex-wrap items-baseline overflow-hidden gap-x-12">
-      <div class="flex-1 w-1/3 max-w-3xl">
+    <div class="container flex flex-wrap items-baseline mt-6 overflow-hidden gap-x-12">
+      <div class="flex-grow max-w-3xl">
         {{ title_prefix }}
         <h1 class="mb-6">{{ name }}</h1>
         {{ title_suffix }}

@@ -46,10 +46,8 @@ class CryptConnector extends PhpassHashedPassword {
    * @param string $setting
    *   An existing hash or the output of $this->generateSalt(). Must be at least
    *   12 characters (the settings and salt).
-   * @param mixed $extra_md5
-   *   (Deprecated) If not empty password needs to be hashed with MD5 first.
    */
-  public function __construct($algo, $password, $setting, $extra_md5) {
+  public function __construct($algo, $password, $setting) {
     $this->algo = $algo;
     $this->password = $password;
     $this->setting = $setting;

@@ -3,7 +3,12 @@ tabs:
   category: 'Extra Layouts'
   template: templates/tabs
   class: '\Drupal\layout_builder_tabs\Plugin\Layout\TabsLayout'
-  icon: layout_builder_tabs.svg
+  icon_map:
+    - [first, second, third]
+    - [all]
+    - [all]
+    - [all]
+    - [all]
   regions:
     tabs:
       label: Tab Set

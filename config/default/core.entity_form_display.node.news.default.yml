@@ -17,6 +17,7 @@ dependencies:
     - field.field.node.news.field_standfirst
     - field.field.node.news.field_tagline
     - field.field.node.news.field_tags
+    - field.field.node.news.field_theme_s_
     - field.field.node.news.field_video
     - node.type.news
   module:
@@ -248,6 +249,16 @@ content:
   field_tags:
     type: entity_reference_autocomplete
     weight: 14
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_theme_s_:
+    type: entity_reference_autocomplete
+    weight: 30
     region: content
     settings:
       match_operator: CONTAINS

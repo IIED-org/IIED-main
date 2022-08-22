@@ -18,6 +18,7 @@ dependencies:
     - field.field.node.news.field_standfirst
     - field.field.node.news.field_tagline
     - field.field.node.news.field_tags
+    - field.field.node.news.field_theme_s_
     - field.field.node.news.field_video
     - node.type.news
   module:
@@ -60,6 +61,7 @@ hidden:
   field_standfirst: true
   field_tagline: true
   field_tags: true
+  field_theme_s_: true
   field_video: true
   langcode: true
   search_api_excerpt: true

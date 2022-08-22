@@ -180,7 +180,11 @@
         
         {#-- tags --#}
          {{ content.field_tags }} 
-          {% include '@iied_tw/partials/_share_blog_links.html.twig' %}
+          <div class="flex items-center pt-4">
+            {% include '@iied_tw/partials/_share_links.html.twig' %}
+            {% include '@iied_tw/partials/_copy_print_links.html.twig' %}
+          </div>
+           {% include '@iied_tw/partials/_blog_links.html.twig' %}
       </div>
     </div>
         

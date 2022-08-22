@@ -11,7 +11,7 @@
  */
 #}
 {% if content %}
-  <div{{ attributes.addClass('mb-12') }}>
+  <div{{ attributes }}>
       {% if content.first %}
         <div {{ region_attributes.first.addClass('container') }}>
           {{ content.insert_before }}

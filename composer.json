@@ -52,8 +52,8 @@
         "bower-asset/d3": "^5.16",
         "composer/installers": "^1.9",
         "cweagans/composer-patches": "^1.7",
-        "drupal/acquia_connector": "^3",
-        "drupal/acquia_search": "^3",
+        "drupal/acquia_connector": "^4.0",
+        "drupal/acquia_search": "^3.1",
         "drupal/address": "^1.10",
         "drupal/admin_toolbar": "^3.1",
         "drupal/asset_injector": "^2.10",
@@ -263,7 +263,7 @@
             "Provide entity context to DS block fields":"https://www.drupal.org/files/issues/2020-10-12/ds-content_entity-2939322-14.patch"
           },
           "drupal/views_field_view": {
-            "Contextual filter parameter is not working":"https://www.drupal.org/files/issues/2020-09-17/multible_Contextual_filter_parameter-2873359-25.patch"
+            "Contextual filter parameter is not working":"https://www.drupal.org/files/issues/2022-08-09/multible_Contextual_filter_parameter-2873359-30.patch"
           },
           "drupal/readonlymode": {
             "Got fatal error when running this module":"https://www.drupal.org/files/issues/2020-12-23/readonlymode-string_not_array-3115119-9.patch"

@@ -14,6 +14,7 @@ dependencies:
     - paragraphs.paragraphs_type.highchart
     - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.image_small
+    - paragraphs.paragraphs_type.image_wide
     - paragraphs.paragraphs_type.in_page_menu
     - paragraphs.paragraphs_type.info_box
     - paragraphs.paragraphs_type.logo_block
@@ -47,6 +48,7 @@ settings:
     target_bundles:
       basic_text: basic_text
       image: image
+      image_wide: image_wide
       info_box: info_box
       media_embed: media_embed
       quote: quote
@@ -103,7 +105,7 @@ settings:
         enabled: true
       image_wide:
         weight: -67
-        enabled: false
+        enabled: true
       in_page_menu:
         weight: -48
         enabled: true

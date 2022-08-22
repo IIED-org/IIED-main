@@ -2,8 +2,7 @@
 
 namespace Drupal\Tests\acquia_connector\Functional;
 
-use Drupal\acquia_connector\Controller\SpiController;
-use Drupal\acquia_connector\Controller\VariablesController;
+use Drupal\acquia_connector\SiteProfile\VariablesController;
 use Drupal\Component\Serialization\Json;
 use Drupal\Tests\BrowserTestBase;
 
@@ -223,9 +222,9 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
     $this->drupalLogin($this->privilegedUser);
 
     // Setup variables.
-    $this->environmentChangePath = '/admin/config/system/acquia-connector/environment-change';
-    $this->credentialsPath = 'admin/config/system/acquia-connector/credentials';
-    $this->settingsPath = 'admin/config/system/acquia-connector';
+    $this->environmentChangePath = '/admin/config/services/acquia-connector/environment-change';
+    $this->credentialsPath = 'admin/config/services/acquia-connector/credentials';
+    $this->settingsPath = 'admin/config/services/acquia-connector';
     $this->statusReportUrl = 'admin/reports/status';
 
     // Local env.
@@ -312,44 +311,46 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
    */
   public function testAcquiaSpiUiTests() {
     $this->drupalGet($this->statusReportUrl);
-    $this->assertNoText($this->acquiaSPIStrings('spi-status-text'));
+    $this->assertSession()->pageTextNotContains($this->acquiaSPIStrings('spi-status-text'));
     // Connect site on key and id that will error.
     $edit_fields = [
       'acquia_identifier' => $this->acqtestErrorId,
       'acquia_key' => $this->acqtestErrorKey,
     ];
     $submit_button = 'Connect';
-    $this->drupalPostForm($this->credentialsPath, $edit_fields, $submit_button);
+    $this->drupalGet($this->credentialsPath);
+    $this->submitForm($edit_fields, $submit_button);
     // Even though the credentials are invalid, they should still be set and the
     // connection successful.
-    $this->assertText("Connection successful");
+    $this->assertSession()->pageTextContains("Connection successful");
 
     // If name and machine name are empty.
     $this->drupalGet($this->statusReportUrl);
-    $this->assertText($this->acquiaSPIStrings('spi-not-sent'));
-    $this->assertText($this->acquiaSPIStrings('provide-site-name'));
+    $this->assertSession()->pageTextContains($this->acquiaSPIStrings('spi-not-sent'));
+    $this->assertSession()->pageTextContains($this->acquiaSPIStrings('provide-site-name'));
 
     $edit_fields = [
       'name' => $this->acqtestName,
       'machine_name' => $this->acqtestMachineName,
     ];
     $submit_button = 'Save configuration';
-    $this->drupalPostForm($this->settingsPath, $edit_fields, $submit_button);
+    $this->drupalGet($this->settingsPath);
+    $this->submitForm($edit_fields, $submit_button);
 
     // Send SPI data.
     $this->drupalGet($this->statusReportUrl);
-    $this->assertText($this->acquiaSPIStrings('spi-status-text'));
+    $this->assertSession()->pageTextContains($this->acquiaSPIStrings('spi-status-text'));
     $this->clickLink($this->acquiaSPIStrings('spi-send-text'));
-    $this->assertNoText($this->acquiaSPIStrings('spi-data-sent'));
-    $this->assertText($this->acquiaSPIStrings('spi-data-sent-error'));
+    $this->assertSession()->pageTextNotContains($this->acquiaSPIStrings('spi-data-sent'));
+    $this->assertSession()->pageTextContains($this->acquiaSPIStrings('spi-data-sent-error'));
 
     // Connect site on non-error key and id.
     $this->connectSite();
     $this->drupalGet($this->statusReportUrl);
     $this->clickLink($this->acquiaSPIStrings('spi-send-text'));
-    $this->assertText($this->acquiaSPIStrings('spi-data-sent'));
-    $this->assertNoText($this->acquiaSPIStrings('spi-not-sent'));
-    $this->assertText('This is the first connection from this site, it may take awhile for it to appear.');
+    $this->assertSession()->pageTextContains($this->acquiaSPIStrings('spi-data-sent'));
+    $this->assertSession()->pageTextNotContains($this->acquiaSPIStrings('spi-not-sent'));
+    $this->assertSession()->pageTextContains('This is the first connection from this site, it may take awhile for it to appear.');
 
     // Machine name change.
     $edit_fields = [
@@ -357,11 +358,12 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
       'machine_name' => $this->acqtestMachineName . '_change',
     ];
     $submit_button = 'Save configuration';
-    $this->drupalPostForm($this->settingsPath, $edit_fields, $submit_button);
-    $this->assertText('A change has been detected in your site environment. Please check the Acquia SPI status on your Status Report page for more information.');
+    $this->drupalGet($this->settingsPath);
+    $this->submitForm($edit_fields, $submit_button);
+    $this->assertSession()->pageTextContains('A change has been detected in your site environment. Please check the Acquia SPI status on your Status Report page for more information.');
     $this->drupalGet($this->statusReportUrl);
     $this->clickLink($this->acquiaSPIStrings('confirm-action'));
-    $this->assertText('Your site machine name changed from ' . $this->acqtestMachineName . ' to ' . $this->acqtestMachineName . '_change' . '.');
+    $this->assertSession()->pageTextContains('Your site machine name changed from ' . $this->acqtestMachineName . ' to ' . $this->acqtestMachineName . '_change' . '.');
 
     // Block site.
     $edit_fields = [
@@ -369,8 +371,9 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
     ];
 
     $submit_button = 'Save configuration';
-    $this->drupalPostForm($this->environmentChangePath, $edit_fields, $submit_button);
-    $this->assertText($this->acquiaSPIStrings('block-site-message'));
+    $this->drupalGet($this->environmentChangePath);
+    $this->submitForm($edit_fields, $submit_button);
+    $this->assertSession()->pageTextContains($this->acquiaSPIStrings('block-site-message'));
     $this->clickLink($this->acquiaSPIStrings('unblock-site'));
 
     // Unblock site.
@@ -379,14 +382,15 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
     ];
 
     $submit_button = 'Save configuration';
-    $this->drupalPostForm($this->environmentChangePath, $edit_fields, $submit_button);
-    $this->assertText('Your site has been enabled and is sending data to Acquia Cloud');
-    $this->assertText($this->acquiaSPIStrings('spi-data-sent'));
-    $this->assertNoText($this->acquiaSPIStrings('spi-not-sent'));
+    $this->drupalGet($this->environmentChangePath);
+    $this->submitForm($edit_fields, $submit_button);
+    $this->assertSession()->pageTextContains('Your site has been enabled and is sending data to Acquia Cloud');
+    $this->assertSession()->pageTextContains($this->acquiaSPIStrings('spi-data-sent'));
+    $this->assertSession()->pageTextNotContains($this->acquiaSPIStrings('spi-not-sent'));
 
     // Update machine name on existing site.
     $this->clickLink($this->acquiaSPIStrings('spi-send-text'));
-    $this->assertText($this->acquiaSPIStrings('change-env-detected'));
+    $this->assertSession()->pageTextContains($this->acquiaSPIStrings('change-env-detected'));
     $this->clickLink($this->acquiaSPIStrings('confirm-action'));
 
     $edit_fields = [
@@ -394,7 +398,8 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
     ];
 
     $submit_button = 'Save configuration';
-    $this->drupalPostForm($this->environmentChangePath, $edit_fields, $submit_button);
+    $this->drupalGet($this->environmentChangePath);
+    $this->submitForm($edit_fields, $submit_button);
 
     // Name change.
     $edit_fields = [
@@ -402,11 +407,12 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
       'machine_name' => $this->acqtestMachineName . '_change',
     ];
     $submit_button = 'Save configuration';
-    $this->drupalPostForm($this->settingsPath, $edit_fields, $submit_button);
+    $this->drupalGet($this->settingsPath);
+    $this->submitForm($edit_fields, $submit_button);
     $this->drupalGet($this->statusReportUrl);
-    $this->assertNoText($this->acquiaSPIStrings('spi-not-sent'));
+    $this->assertSession()->pageTextNotContains($this->acquiaSPIStrings('spi-not-sent'));
     $this->clickLink($this->acquiaSPIStrings('spi-send-text'));
-    $this->assertText('Site name updated (from ' . $this->acqtestName . ' to ' . $this->acqtestName . ' change).');
+    $this->assertSession()->pageTextContains('Site name updated (from ' . $this->acqtestName . ' to ' . $this->acqtestName . ' change).');
   }
 
   /**
@@ -421,10 +427,11 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
       'machine_name' => $this->acqtestMachineName,
     ];
     $submit_button = 'Save configuration';
-    $this->drupalPostForm($this->settingsPath, $edit_fields, $submit_button);
+    $this->drupalGet($this->settingsPath);
+    $this->submitForm($edit_fields, $submit_button);
 
     // Test spiControllerTest::get.
-    $spi = new SpiController(\Drupal::service('acquia_connector.client'), \Drupal::service('config.factory'), \Drupal::service('path_alias.manager'));
+    $spi = \Drupal::service('acquia_connector.site_profile_report');
     $spi_data = $spi->get();
     $valid = is_array($spi_data);
     $this->assertTrue($valid, 'spiController::get returns an array');
@@ -437,7 +444,7 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
       }
       $this->assertTrue($valid, 'Array has expected keys');
       $private_key = \Drupal::service('private_key')->get();
-      $this->assertEqual(sha1($private_key), $spi_data['site_key'], 'Site key is sha1 of Drupal private key');
+      $this->assertEquals($spi_data['site_key'], sha1($private_key), 'Site key is sha1 of Drupal private key');
       $this->assertNotEmpty($spi_data['spi_data_version'], 'SPI data version is set');
       $vars = Json::decode($spi_data['system_vars']);
       $this->assertIsArray($vars, 'SPI data system_vars is a JSON-encoded array');
@@ -475,9 +482,10 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
       'machine_name' => $this->acqtestMachineName,
     ];
     $submit_button = 'Save configuration';
-    $this->drupalPostForm($this->settingsPath, $edit_fields, $submit_button);
+    $this->drupalGet($this->settingsPath);
+    $this->submitForm($edit_fields, $submit_button);
 
-    $spi = new SpiController(\Drupal::service('acquia_connector.client'), \Drupal::service('config.factory'), \Drupal::service('path_alias.manager'));
+    $spi = \Drupal::service('acquia_connector.site_profile_report');
     $spi_data = $spi->get();
 
     $this->assertFalse($this->isContainObjects($spi_data), 'SPI data does not contain PHP objects.');
@@ -493,15 +501,16 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
       'acquia_key' => $this->acqtestErrorKey,
     ];
     $submit_button = 'Connect';
-    $this->drupalPostForm($this->credentialsPath, $edit_fields, $submit_button);
+    $this->drupalGet($this->credentialsPath);
+    $this->submitForm($edit_fields, $submit_button);
 
     // Attempt to send something.
-    $client = \Drupal::service('acquia_connector.client');
+    $client = \Drupal::service('acquia_connector.client.factory');
     // Connect site on valid credentials.
     $this->connectSite();
 
     // Check that result is an array.
-    $spi = new SpiController(\Drupal::service('acquia_connector.client'), \Drupal::service('config.factory'), \Drupal::service('path_alias.manager'));
+    $spi = \Drupal::service('acquia_connector.site_profile_report');
     $spi_data = $spi->get();
     unset($spi_data['spi_def_update']);
     $result = $client->sendNspi($this->acqtestId, $this->acqtestKey, $spi_data);
@@ -531,15 +540,16 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
       'machine_name' => $this->acqtestMachineName,
     ];
     $submit_button = 'Save configuration';
-    $this->drupalPostForm($this->settingsPath, $edit_fields, $submit_button);
+    $this->drupalGet($this->settingsPath);
+    $this->submitForm($edit_fields, $submit_button);
 
     $def_timestamp = \Drupal::state()->get('acquia_spi_data.def_timestamp', 0);
-    $this->assertNotEqual($def_timestamp, 0, 'SPI definition timestamp set');
+    $this->assertNotEquals(0, $def_timestamp, 'SPI definition timestamp set');
     $def_vars = \Drupal::state()->get('acquia_spi_data.def_vars', []);
     $this->assertNotEmpty($def_vars, 'SPI definition variable set');
     \Drupal::state()->set('acquia_spi_data.def_waived_vars', ['test_variable_3']);
     // Test that new variables are in SPI data.
-    $spi = new SpiController(\Drupal::service('acquia_connector.client'), \Drupal::service('config.factory'), \Drupal::service('path_alias.manager'));
+    $spi = \Drupal::service('acquia_connector.site_profile_report');
     $spi_data = $spi->get();
     $vars = Json::decode($spi_data['system_vars']);
     $this->assertNotEmpty($vars['test_variable_1'], 'New variables included in SPI data');
@@ -558,9 +568,10 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
       'machine_name' => $this->acqtestMachineName,
     ];
     $submit_button = 'Save configuration';
-    $this->drupalPostForm($this->settingsPath, $edit_fields, $submit_button);
+    $this->drupalGet($this->settingsPath);
+    $this->submitForm($edit_fields, $submit_button);
 
-    $spi = new SpiController(\Drupal::service('acquia_connector.client'), \Drupal::service('config.factory'), \Drupal::service('path_alias.manager'));
+    $spi = \Drupal::service('acquia_connector.site_profile_report');
     $spi_data = $spi->get();
     $vars = Json::decode($spi_data['system_vars']);
     $this->assertEmpty($vars['acquia_spi_saved_variables']['variables'], 'Have not saved any variables');
@@ -568,7 +579,8 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
     $edit = [
       'error_level' => 'verbose',
     ];
-    $this->drupalPostForm('admin/config/development/logging', $edit, 'Save configuration');
+    $this->drupalGet('admin/config/development/logging');
+    $this->submitForm($edit, 'Save configuration');
 
     // Turn off error reporting.
     $set_variables = ['error_level' => 'hide'];
@@ -586,7 +598,7 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
     $set_variables = ['site_name' => 0];
     $variables->setVariables($set_variables);
     $after = \Drupal::config('system.site')->get('name');
-    $this->assertIdentical($current, $after, 'Non-whitelisted variable cannot be automatically set');
+    $this->assertSame($after, $current, 'Non-whitelisted variable cannot be automatically set');
     $vars = Json::decode($variables->getVariablesData());
     $this->assertNotContains('site_name', $vars['acquia_spi_saved_variables']['variables'], 'SPI data does not include anything about trying to save clean url');
 
@@ -604,7 +616,7 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
     $set_variables = ['acquia_spi_set_variables_automatic' => 'test_variable'];
     $variables->setVariables($set_variables);
     $vars = Json::decode($variables->getVariablesData());
-    $this->assertIdentical($vars['acquia_spi_set_variables_automatic'], 'test_variable', 'Altered approved list of variables that can be set');
+    $this->assertSame('test_variable', $vars['acquia_spi_set_variables_automatic'], 'Altered approved list of variables that can be set');
   }
 
   /**
@@ -631,7 +643,8 @@ class AcquiaConnectorSpiTest extends BrowserTestBase {
       'acquia_key' => $this->acqtestKey,
     ];
     $submit_button = 'Connect';
-    $this->drupalPostForm($this->credentialsPath, $edit_fields, $submit_button);
+    $this->drupalGet($this->credentialsPath);
+    $this->submitForm($edit_fields, $submit_button);
   }
 
 }

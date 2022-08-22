@@ -1,10 +1,8 @@
 name: 'Search API sorts Views Test'
 type: module
 description: 'Support module for Search API sorts Views tests'
-package: Search
+package: Testing
 dependencies:
   - search_api:search_api
   - drupal:node
   - drupal:views
-core_version_requirement: ^8.8 || ^9
-hidden: true

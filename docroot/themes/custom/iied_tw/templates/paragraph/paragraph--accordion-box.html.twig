@@ -45,9 +45,10 @@
 {%
   set classes = [
     'paragraph',
+    'my-6',
     'paragraph--type--' ~ paragraph.bundle|clean_class,
     'space-y-0',
-    'bg-white border border-gray-300 rounded-xl',
+    'bg-white border border-gray-300 rounded-xl overflow-hidden',
     view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
     not paragraph.isPublished() ? 'paragraph--unpublished'
   ]
@@ -59,12 +60,12 @@
     {% block content %}
 
       {% for key, accordion_title in accordion_titles %}
-      <div class="border border-gray-300">
+      <div class="py-2 border-b border-gray-300">
 
         <h3>
           <button
             @click="activeAccordion = activeAccordion === {{key}} ? false : {{key}}"
-            class="flex items-center justify-between w-full  px-5"
+            class="flex items-center justify-between w-full px-4"
           >
             <span>{{ accordion_title|raw }}</span>
             <span>
@@ -88,7 +89,7 @@
           </button>
         </h3>
 
-        <div x-show="activeAccordion === {{key}}" x-collapse class="mt-4 px-5">
+        <div x-show="activeAccordion === {{key}}" x-collapse class="px-4 mt-4 prose">
           {{ accordion_bodies[key]|raw }}
         </div>
 

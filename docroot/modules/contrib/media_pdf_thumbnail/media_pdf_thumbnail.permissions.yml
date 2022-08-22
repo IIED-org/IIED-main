@@ -1,6 +1,7 @@
 administer_media_pdf_thumbnail:
   title: 'Administer Media PDF Thumbnail'
   restrict access: true
+
 add pdf image entity entities:
   title: 'Create new Pdf image entity entities'
 
@@ -21,3 +22,6 @@ view published pdf image entity entities:
 view unpublished pdf image entity entities:
   title: 'View unpublished Pdf image entity entities'
 
+view private pdf thumbnails:
+  title: 'View private pdf thumbnails'
+  description: 'Allow generated thumbnails to be viewed when they are private'
