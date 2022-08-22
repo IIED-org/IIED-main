@@ -41,6 +41,7 @@
 {%
   set classes = [
     'paragraph',
+    'my-6',
     'paragraph--type--' ~ paragraph.bundle|clean_class,
     view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
     not paragraph.isPublished() ? 'paragraph--unpublished'
@@ -50,11 +51,11 @@
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
     <figure class="mb-6 -mx-6 sm:mx-0">
-      {{ content.field_video }}
+      {{ content.field_basic_text }}
 
-      {% if content.field_video_description %}
+      {% if content.field_image_description %}
       <figcaption class="px-6 mt-1 text-base leading-tight text-gray-500 sm:p-0">
-       {{ content.field_video_description }}
+       {{ content.field_image_description }}
        </figcaption>
       {% endif %}  
     </figure>   
