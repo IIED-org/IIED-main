@@ -282,6 +282,9 @@
           },
           "drupal/content_translation_redirect": {
             "3263317": "https://www.drupal.org/files/issues/2022-02-09/content-translation-redirect-all-bundles-3263317-3.patch"
+          },
+          "drupal/search404":{
+            "3007663":"https://www.drupal.org/files/issues/2020-11-04/path_validation-3007663-19.patch"
           }
         }
     }

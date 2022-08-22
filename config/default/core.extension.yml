@@ -33,6 +33,7 @@ module:
   config_filter: 0
   config_split: 0
   contact: 0
+  contact_block: 0
   content_translation_redirect: 0
   context: 0
   context_ui: 0

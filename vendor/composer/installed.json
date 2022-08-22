@@ -9930,6 +9930,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "3007663": "https://www.drupal.org/files/issues/2020-11-04/path_validation-3007663-19.patch"
                 }
             },
             "installation-source": "dist",
