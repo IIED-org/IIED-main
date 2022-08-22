@@ -12,7 +12,7 @@ class HooksTest extends SortsFunctionalBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['search_api_sorts_test_hook'];
+  protected static $modules = ['search_api_sorts_test_hook'];
 
   /**
    * Tests sorting.
@@ -22,8 +22,10 @@ class HooksTest extends SortsFunctionalBase {
     $this->drupalGet('admin/config/search/search-api/index/' . $this->indexId . '/fields');
     $sorts_config = 'admin/config/search/search-api/index/' . $this->indexId . '/sorts/' . $this->escapedDisplayId;
     $this->drupalGet($sorts_config);
-    $edit = ['sorts[id][status]' => TRUE, 'default_sort' => 'id'];
-    $this->drupalPostForm(NULL, $edit, 'Save settings');
+    $this->submitForm([
+      'sorts[id][status]' => TRUE,
+      'default_sort' => 'id',
+    ], 'Save settings');
 
     // Add and place the sorts block in the footer.
     $block_settings = ['region' => 'footer', 'id' => 'sorts-id'];

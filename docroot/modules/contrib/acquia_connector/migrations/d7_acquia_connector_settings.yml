@@ -17,7 +17,6 @@ source:
     - acquia_spi_admin_priv
     - acquia_spi_send_node_user
     - acquia_spi_send_watchdog
-    - acquia_spi_use_cron
     - acquia_dynamic_banner
     - acquia_spi_set_variables_override
     - acquia_spi_set_variables_automatic
@@ -38,7 +37,6 @@ process:
   spi/admin_priv: acquia_spi_admin_priv
   spi/send_node_user: acquia_spi_send_node_user
   spi/send_watchdog: acquia_spi_send_watchdog
-  spi/use_cron: acquia_spi_use_cron
   spi/dynamic_banner: acquia_dynamic_banner
   spi/set_variables_override: acquia_spi_set_variables_override
   spi/set_variables_automatic: acquia_spi_set_variables_automatic

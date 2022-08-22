@@ -30,7 +30,6 @@ class MigrateAcquiaConnectorConfigurationTest extends MigrateDrupal7TestBase {
         'admin_priv' => 1,
         'send_node_user' => 1,
         'send_watchdog' => 1,
-        'use_cron' => 1,
         'dynamic_banner' => 0,
         'set_variables_override' => 0,
         'set_variables_automatic' => [
@@ -46,7 +45,6 @@ class MigrateAcquiaConnectorConfigurationTest extends MigrateDrupal7TestBase {
           'acquia_spi_send_node_user',
           'acquia_spi_admin_priv',
           'acquia_spi_send_watchdog',
-          'acquia_spi_use_cron',
         ],
         'ignored_set_variables' => [],
         'saved_variables' => [
@@ -143,9 +141,17 @@ class MigrateAcquiaConnectorConfigurationTest extends MigrateDrupal7TestBase {
    */
   protected function setUp(): void {
     parent::setUp();
+    if (version_compare(\Drupal::VERSION, '9.3', '>=')) {
+      // phpcs:ignore
+      $path = \Drupal::service('extension.path.resolver')->getPath('module', 'acquia_connector');
+    }
+    else {
+      // @phpstan-ignore-next-line
+      $path = drupal_get_path('module', 'acquia_connector');
+    }
     $this->loadFixture(implode(DIRECTORY_SEPARATOR, [
       DRUPAL_ROOT,
-      drupal_get_path('module', 'acquia_connector'),
+      $path,
       'tests',
       'fixtures',
       'drupal7.php',

@@ -1,16 +1,41 @@
 services:
-  acquia_connector.init_subscriber:
-    class: Drupal\acquia_connector\EventSubscriber\InitSubscriber
-    arguments: ['@config.factory', '@state', '@cache.default', '@acquia_connector.spi']
+  acquia_connector.kernel_request.codestudio_message:
+    class: Drupal\acquia_connector\EventSubscriber\KernelRequest\CodeStudioMessage
+    arguments: ['@messenger']
     tags:
       - {name: event_subscriber}
-  acquia_connector.client:
-    class: Drupal\acquia_connector\Client
-    arguments: ['@config.factory', '@state']
-  acquia_connector.spi:
-    class: Drupal\acquia_connector\Controller\SpiController
-    arguments: ['@acquia_connector.client', '@config.factory', '@path_alias.manager']
-  logger.acquia_connector:
-    class: Drupal\acquia_connector\CronService
+  acquia_connector.telemetry:
+    class: Drupal\acquia_connector\EventSubscriber\KernelTerminate\AcquiaTelemetry
+    arguments: ['@extension.list.module', '@http_client', '@config.factory', '@state', '@datetime.time']
     tags:
-      - { name: logger }
+      - { name: event_subscriber }
+  acquia_connector.client.factory:
+    class: Drupal\acquia_connector\Client\ClientFactory
+    arguments: ['@logger.factory', '@extension.list.module', '@http_client_factory', '@datetime.time']
+  acquia_connector.site_profile:
+    class: Drupal\acquia_connector\SiteProfile\SiteProfile
+    arguments: ['@request_stack', '@state', '@config.factory', '@module_handler', '@path_alias.manager']
+  acquia_connector.site_profile_report:
+    class: Drupal\acquia_connector\SiteProfile\SiteProfileReport
+    arguments: ['@acquia_connector.subscription', '@state', '@acquia_connector.site_profile', '@module_handler']
+  acquia_connector.subscription:
+    class: Drupal\acquia_connector\Subscription
+    arguments: ['@event_dispatcher', '@cache.default', '@acquia_connector.client.factory', '@state', '@config.factory']
+  acquia_connector.logger_channel:
+    class: Drupal\Core\Logger\LoggerChannel
+    factory: logger.factory:get
+    arguments: ['acquia_connector']
+  acquia_connector.settings.acquiacloud:
+    class: Drupal\acquia_connector\EventSubscriber\GetSettings\FromAcquiaCloud
+    arguments: ['@acquia_connector.logger_channel', '@messenger', '@acquia_connector.site_profile', '@state']
+    tags:
+      - { name: event_subscriber }
+  acquia_connector.settings.core:
+    class: Drupal\acquia_connector\EventSubscriber\GetSettings\FromCoreSettings
+    tags:
+      - { name: event_subscriber }
+  acquia_connector.settings.state:
+    class: Drupal\acquia_connector\EventSubscriber\GetSettings\FromCoreState
+    arguments: ['@state']
+    tags:
+      - { name: event_subscriber }

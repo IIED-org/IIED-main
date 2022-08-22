@@ -17,8 +17,8 @@ dependencies:
   module:
     - acquia_search
     - search_api_solr
-    - taxonomy
     - node
+    - taxonomy
     - search_api
 third_party_settings:
   acquia_search:
@@ -79,6 +79,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
+  created:
+    label: 'Authored on'
+    datasource_id: 'entity:node'
+    property_path: created
+    type: date
+    dependencies:
+      module:
+        - node
   family:
     label: 'Full name » Family'
     datasource_id: 'entity:taxonomy_term'
@@ -375,14 +383,20 @@ processor_settings:
   reverse_entity_references: {  }
   solr_boost_more_recent:
     weights:
-      preprocess_query: 0
+      preprocess_query: -50
     boosts:
-      field_sort_date:
+      created:
         boost: !!float 21
         resolution: NOW
         m: '3.16e-11'
         a: !!float 1
-        b: 0.1
+        b: 0.5
+      field_date_published:
+        boost: !!float 1
+        resolution: NOW
+        m: '3.16e-11'
+        a: !!float 1
+        b: 0.5
   solr_date_range:
     weights:
       preprocess_index: 0

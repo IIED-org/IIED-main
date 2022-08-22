@@ -8,6 +8,7 @@ dependencies:
     - eu_cookie_compliance
     - google_analytics
     - media
+    - media_pdf_thumbnail
     - search_api_autocomplete
     - shortcut
     - system
@@ -30,3 +31,4 @@ permissions:
   - 'use search_api_autocomplete for acquia_search_solr'
   - 'use search_api_autocomplete for search'
   - 'view media'
+  - 'view private pdf thumbnails'

@@ -3,10 +3,12 @@
 namespace Drupal\acquia_connector\Controller;
 
 use Drupal\acquia_connector\Subscription;
-use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Access\AccessResultAllowed;
 use Drupal\Core\Access\AccessResultForbidden;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Http\RequestStack;
+use Drupal\Core\PageCache\ResponsePolicy\KillSwitch;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -15,14 +17,61 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class StatusController extends ControllerBase {
 
   /**
-   * Menu callback for 'admin/config/system/acquia-agent/refresh-status'.
+   * Acquia Subscription Service.
+   *
+   * @var \Drupal\acquia_connector\Subscription
+   */
+  protected $subscription;
+
+  /**
+   * Page Cache Kill Switch.
+   *
+   * @var \Drupal\Core\PageCache\ResponsePolicy\KillSwitch
+   */
+  protected $killSwitch;
+
+  /**
+   * Current Request.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
+
+  /**
+   * WebhooksSettingsForm constructor.
+   *
+   * @param \Drupal\acquia_connector\Subscription $subscription
+   *   The event dispatcher.
+   * @param \Drupal\Core\PageCache\ResponsePolicy\KillSwitch $kill_switch
+   *   The client factory.
+   * @param \Drupal\Core\Http\RequestStack $request_stack
+   *   The request stack.
+   */
+  public function __construct(Subscription $subscription, KillSwitch $kill_switch, RequestStack $request_stack) {
+    $this->subscription = $subscription;
+    $this->killSwitch = $kill_switch;
+    $this->request = $request_stack->getCurrentRequest();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('acquia_connector.subscription'),
+      $container->get('page_cache_kill_switch'),
+      $container->get('request_stack')
+    );
+  }
+
+  /**
+   * Menu callback for 'admin/config/services/acquia-agent/refresh-status'.
    */
   public function refresh() {
     // Refresh subscription information, so we are sure about our update status.
     // We send a heartbeat here so that all of our status information gets
     // updated locally via the return data.
-    $subscription = new Subscription();
-    $subscription->update();
+    $this->subscription->getSubscription(TRUE);
 
     // Return to the setting pages (or destination).
     return $this->redirect('system.status');
@@ -35,7 +84,7 @@ class StatusController extends ControllerBase {
    */
   public function json() {
     // We don't want this page cached.
-    \Drupal::service('page_cache_kill_switch')->trigger();
+    $this->killSwitch->trigger();
 
     $performance_config = $this->config('system.performance');
 
@@ -55,8 +104,7 @@ class StatusController extends ControllerBase {
    * Access callback for json() callback.
    */
   public function access() {
-    $request = \Drupal::request();
-    $nonce = $request->get('nonce', FALSE);
+    $nonce = $this->request->get('nonce', FALSE);
     $connector_config = $this->config('acquia_connector.settings');
 
     // If we don't have all the query params, leave now.
@@ -64,14 +112,16 @@ class StatusController extends ControllerBase {
       return AccessResultForbidden::forbidden();
     }
 
-    $sub_data = $this->state()->get('acquia_subscription_data');
-    $sub_uuid = $this->getIdFromSub($sub_data);
+    $sub_data = $this->subscription->getSubscription();
+    $sub_uuid = $sub_data['uuid'];
+
+    $expected_hash = '';
 
     if (!empty($sub_uuid)) {
       $expected_hash = hash('sha1', "{$sub_uuid}:{$nonce}");
 
       // If the generated hash matches the hash from $_GET['key'], we're good.
-      if ($request->get('key', FALSE) === $expected_hash) {
+      if ($this->request->get('key', FALSE) === $expected_hash) {
         return AccessResultAllowed::allowed();
       }
     }
@@ -82,40 +132,15 @@ class StatusController extends ControllerBase {
         'sub_data' => $sub_data,
         'sub_uuid_from_data' => $sub_uuid,
         'expected_hash' => $expected_hash,
-        'get' => $request->query->all(),
-        'server' => $request->server->all(),
-        'request' => $request->request->all(),
+        'get' => $this->request->query->all(),
+        'server' => $this->request->server->all(),
+        'request' => $this->request->request->all(),
       ];
 
       $this->getLogger('acquia_agent')->notice('Site status request: @data', ['@data' => var_export($info, TRUE)]);
     }
 
     return AccessResultForbidden::forbidden();
-  }
-
-  /**
-   * Gets the subscription UUID from subscription data.
-   *
-   * @param array $sub_data
-   *   An array of subscription data.
-   *
-   * @see acquia_agent_settings('acquia_subscription_data')
-   *
-   * @return string
-   *   The UUID taken from the subscription data.
-   */
-  public function getIdFromSub(array $sub_data) {
-    if (!empty($sub_data['uuid'])) {
-      return $sub_data['uuid'];
-    }
-
-    // Otherwise, get this form the sub url.
-    $url = UrlHelper::parse($sub_data['href']);
-    $parts = explode('/', $url['path']);
-    // Remove '/dashboard'.
-    array_pop($parts);
-
-    return end($parts);
   }
 
 }

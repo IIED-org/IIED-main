@@ -30,7 +30,7 @@ abstract class SortsFunctionalBase extends SearchApiBrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'block',
     'search_api_sorts',
     'search_api_test_db',
@@ -40,7 +40,7 @@ abstract class SortsFunctionalBase extends SearchApiBrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  protected function setUp(): void {
     parent::setUp();
 
     // Create an index and server to work with.

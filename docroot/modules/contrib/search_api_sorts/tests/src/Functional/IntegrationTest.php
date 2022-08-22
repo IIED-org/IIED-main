@@ -20,10 +20,9 @@ class IntegrationTest extends SortsFunctionalBase {
     // Add sorting on ID.
     $this->drupalGet('admin/config/search/search-api/index/' . $this->indexId . '/sorts');
     $this->drupalGet('admin/config/search/search-api/index/' . $this->indexId . '/sorts/' . $this->escapedDisplayId);
-    $edit = [
+    $this->submitForm([
       'sorts[id][status]' => TRUE,
-    ];
-    $this->drupalPostForm(NULL, $edit, 'Save settings');
+    ], 'Save settings');
 
     // Check for non-existence of the block first.
     $this->drupalGet('search-api-sorts-test');
@@ -75,12 +74,11 @@ class IntegrationTest extends SortsFunctionalBase {
 
     // Add sorting on type.
     $this->drupalGet('admin/config/search/search-api/index/' . $this->indexId . '/sorts/' . $this->escapedDisplayId);
-    $edit = [
+    $this->submitForm([
       'sorts[id][status]' => TRUE,
       'sorts[search_api_relevance][status]' => TRUE,
       'sorts[type][status]' => TRUE,
-    ];
-    $this->drupalPostForm(NULL, $edit, 'Save settings');
+    ], 'Save settings');
 
     // Make sure the ID and type link are available.
     $this->drupalGet('search-api-sorts-test');
@@ -91,7 +89,7 @@ class IntegrationTest extends SortsFunctionalBase {
     // Remove the type field from the index.
     $this->drupalGet('admin/config/search/search-api/index/' . $this->indexId . '/fields');
     $this->getSession()->getPage()->find('css', '#edit-fields-type-remove')->click();
-    $this->drupalPostForm(NULL, [], 'Save changes');
+    $this->submitForm([], 'Save changes');
 
     // The type field was removed from the index. Make sure the type field is
     // also removed from the sorts block.
@@ -119,13 +117,12 @@ class IntegrationTest extends SortsFunctionalBase {
 
     // Add sorting on ID, Authored on and Type.
     $this->drupalGet('admin/config/search/search-api/index/' . $this->indexId . '/sorts/' . $this->escapedDisplayId);
-    $edit = [
+    $this->submitForm([
       'sorts[id][status]' => TRUE,
       'sorts[created][status]' => TRUE,
       'sorts[type][status]' => TRUE,
       'default_sort' => 'id',
-    ];
-    $this->drupalPostForm(NULL, $edit, 'Save settings');
+    ], 'Save settings');
 
     $configs_to_be_saved = ['id', 'created', 'type'];
     $configs_not_to_be_saved = ['search_api_relevance',

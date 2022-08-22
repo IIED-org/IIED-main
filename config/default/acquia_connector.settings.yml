@@ -6,13 +6,13 @@ cron_interval: 30
 cron_interval_override: 0
 hide_signup_messages: 0
 spi:
+  amplitude_api_key: f32aacddde42ad34f5a3078a621f37a9
   server: 'https://nspi.acquia.com'
   ssl_override: false
   ssl_verify: true
   admin_priv: 1
   send_node_user: 1
   send_watchdog: 1
-  use_cron: 1
   dynamic_banner: 1
   set_variables_override: 1
   set_variables_automatic:
@@ -37,6 +37,7 @@ spi:
   site_environment: null
   site_uuid: 53a9e309-734c-4742-b2c5-c8ccdb11652d
   env_detection_enabled: true
+  use_cron: 1
 mapping:
   acquia_spi_send_node_user:
     - acquia_connector.settings

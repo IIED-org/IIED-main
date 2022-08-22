@@ -29,14 +29,16 @@ function media_pdf_thumbnail_help($route_name, RouteMatchInterface $route_match)
 
 /**
  * Implements hook_file_download().
- *
  */
 function media_pdf_thumbnail_file_download($uri) {
   if (strpos($uri, 'private://') !== FALSE) {
-    if (Drupal::currentUser()->isAuthenticated()) {
-      return 1;
+    $pdfEntity = Drupal::service('media_pdf_thumbnail.image.manager')->getPdfEntityByPdfFileUri($uri);
+    if (!empty($pdfEntity)) {
+      if (Drupal::currentUser()->hasPermission('view private pdf thumbnails')) {
+        return 1;
+      }
+      return -1;
     }
-    return -1;
   }
 }
 

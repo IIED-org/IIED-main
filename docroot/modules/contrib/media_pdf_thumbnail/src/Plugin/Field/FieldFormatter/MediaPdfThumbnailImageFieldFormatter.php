@@ -333,6 +333,7 @@ class MediaPdfThumbnailImageFieldFormatter extends ImageFormatter {
       $imageItem = $element[0]['#item'];
       $value = $imageItem->getValue();
       $value['target_id'] = $fieldInfos['image_id'];
+      $value['alt'] = $entity->name->value;
       $imageItem->setValue($value);
       $element[0]['#item'] = $imageItem;
     }
