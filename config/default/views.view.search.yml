@@ -306,7 +306,7 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          parse_mode: edismax
+          parse_mode: terms
           min_length: null
           fields: {  }
       filter_groups:
