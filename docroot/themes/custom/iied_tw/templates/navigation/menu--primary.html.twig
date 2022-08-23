@@ -36,7 +36,7 @@
       {% endif %}
       {% for item in items %}
         <li{{ item.attributes }}>
-          {{ link(item.title, item.url, { 'class':['block', 'mr-4', 'text-gray-900', 'hover:text-gray-900', 'font-headline', 'text-lg', 'hover:border-iiedblue-500', 'border-b-2', 'border-white','visited:text-gray-900', 'h-full', 'active:border-iiedblue-500']}) }}
+          {{ link(item.title, item.url, { 'class':['block', 'pb-1.5', 'mr-4', 'text-gray-900', 'hover:text-gray-900', 'font-headline', 'text-lg', 'hover:border-iiedblue-500', 'border-b-2', 'border-white','visited:text-gray-900', 'h-full', 'active:border-iiedblue-500']}) }}
           {% if item.below %}
             {{ menus.menu_links(item.below, attributes, menu_level + 1) }}
           {% endif %}

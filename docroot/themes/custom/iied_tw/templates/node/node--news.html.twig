@@ -80,7 +80,7 @@
 
 <article{{ attributes.addClass(classes) }}>
   <div class="my-6">
-    <main>
+ 
     {#-- grid --#}
     <div
       class="container mx-auto lg:px-8 xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12"
@@ -103,7 +103,9 @@
           {{ content.field_standfirst }}
         </div>
 
-                {#-- date and share --#}
+        {# attribution #} 
+        
+        {#-- date and share --#}
         
          <div
           class="flex flex-col flex-wrap justify-between pb-6 border-b border-gray-300 xl:border-none sm:flex-row"
@@ -116,7 +118,11 @@
         </div>
 
       </div>
-
+      {# / attribution #} {#-- collection --#}
+      <div class="pt-2 mb-6 xl:col-span-3 2xl:order-1 xl:pr-6 2xl:pr-12">
+        {{ content.field_collections }}
+      </div>
+      
     </div>
 
     {# main content #}
@@ -142,8 +148,17 @@
           {{ content.body }} 
           {{ content.field_paragraphs }}
           </div>
-
+          {{ content.field_contact }}
+          {{ content.field_notes }}
         </div>
+
+
+       {#-- contact block --#}
+       {% if node.field_news_type.target_id == '41530' %}
+        <div class="pb-6 prose border-b border-gray-300 md:prose-lg">
+        {{ drupal_entity('block_content', '1166') }} 
+        </div>
+        {% endif %}
 
         <div class="flex items-center py-4">
           {% include '@iied_tw/partials/_share_links.html.twig' %}
@@ -153,7 +168,7 @@
       </div>
     </div>
         
-    </main>
+
   </div>
 </article>
 {% include '@iied_tw/partials/_related_project.html.twig' %}
