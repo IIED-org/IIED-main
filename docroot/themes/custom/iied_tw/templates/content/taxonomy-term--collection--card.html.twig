@@ -15,7 +15,7 @@ Standard collection card
             <span
               class="absolute m-auto left-0 right-0 inset-0 w-[96%] -translate-y-2 bg-white ring-1 ring-gray-300 rounded-xl -z-20"
             ></span>
-            <div class="flex flex-col items-start justify-between h-full p-4">
+            <div class="flex flex-col items-start justify-between w-full h-full p-4">
               <div class="flex">
 
               {#image if available #}
@@ -29,11 +29,19 @@ Standard collection card
                 </div>
               </div>
 
-              <div>
+              <div class="flex items-end justify-between w-full">
               {% if content.field_collection_type %}
                 <span class="font-bold text-gray-700">{{ content.field_collection_type|render|striptags }}</span>
               {% endif %}  
+
+                {% for key, item in term.field_badge %}
+                  {% if key is not empty %}
+                    <img class="ml-4" src="{{ item.entity.uri.value|image_style('scale_80') }}" alt="collection badge">
+                  {% endif %}
+                {% endfor %}
               </div>
+
+
             </div>
           </div>
         </a>

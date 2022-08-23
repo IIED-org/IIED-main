@@ -1,0 +1,33 @@
+uuid: 7019e1f1-2f2f-4537-884a-7328192cd1c9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.related_publication_inline.field_related_publication
+    - paragraphs.paragraphs_type.related_publication_inline
+  module:
+    - ds
+id: paragraph.related_publication_inline.default
+targetEntityType: paragraph
+bundle: related_publication_inline
+mode: default
+content:
+  field_related_publication:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: card_md
+      link: false
+    third_party_settings:
+      ds:
+        ds_limit: ''
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

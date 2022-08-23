@@ -11,4 +11,4 @@ block_restrictions:
   - 'inline_block:card_wide'
   - 'inline_block:collection_card'
 layout_restrictions: {  }
-weight: 0
+weight: -9

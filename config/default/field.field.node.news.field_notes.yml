@@ -11,7 +11,7 @@ id: node.news.field_notes
 field_name: field_notes
 entity_type: node
 bundle: news
-label: Notes
+label: 'Notes to editors'
 description: ''
 required: false
 translatable: true

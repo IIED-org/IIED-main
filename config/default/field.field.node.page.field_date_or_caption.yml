@@ -1,0 +1,19 @@
+uuid: ac92f307-006b-427a-9a59-73a5ae347fac
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_date_or_caption
+    - node.type.page
+id: node.page.field_date_or_caption
+field_name: field_date_or_caption
+entity_type: node
+bundle: page
+label: 'Date or caption'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

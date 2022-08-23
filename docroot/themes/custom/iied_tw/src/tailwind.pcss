@@ -182,8 +182,12 @@
     fill: #fff;
   }
 
+  /*-- over ride for reposnsive menu --*/
   .mm-listitem {
     border: white;
+  }
+  #off-canvas .mm-panel {
+    @apply bg-white;
   }
 
   #block-exposedformsearchpage-2-5 .bef--secondary,
@@ -232,6 +236,9 @@
     background-color: #fbf0f7;
   }
   /*-- active states for menus --*/
+  #block-primary .is-active {
+    @apply border-iiedblue-500;
+  }
   .people-menu .is-active {
     @apply bg-gray-100 rounded-full;
   }
@@ -241,6 +248,9 @@
   /*-- extra padding for secondary menu --*/
   .priority-nav__dropdown.show {
     @apply pb-2;
+  }
+  .priority-nav__dropdown-toggle {
+    @apply font-semibold;
   }
   /*-- views infinite scroll 2 col --*/
   .views-infinite-scroll-content-wrapper {

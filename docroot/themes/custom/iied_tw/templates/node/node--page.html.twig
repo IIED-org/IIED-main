@@ -81,7 +81,7 @@
 
 <article{{ attributes.addClass(classes) }}>
   <div class="my-6">
-    <main>
+    
     {#-- grid --#}
     <div
       class="container mx-auto lg:px-8 xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12"
@@ -111,11 +111,11 @@
           class="flex flex-col flex-wrap justify-between pb-6 border-b border-gray-300 xl:border-none sm:flex-row"
         >
 
-          {# date 
+          {% if content.field_date_or_caption is not empty %}
           <div class="flex items-center">
-          {{ node.getCreatedTime|date('d F Y') }}
+          {{ content.field_date_or_caption }}
           </div>
-          {% endif %}#}
+          {% endif %}
 
           <div class="flex items-center">
             {% include '@iied_tw/partials/_share_links.html.twig' %}
@@ -165,7 +165,7 @@
       </div>
     </div>
         
-    </main>
+    
   </div>
 </article>
 

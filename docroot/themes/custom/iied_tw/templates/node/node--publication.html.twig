@@ -80,7 +80,7 @@
 
 <article{{ attributes.addClass(classes) }}>
     <div{{ content_attributes.addClass('node-content') }}>
-    <main class="container py-8 mx-auto md:grid md:grid-flow-row-dense md:grid-cols-3">
+    <div class="container py-8 mx-auto md:grid md:grid-flow-row-dense md:grid-cols-3">
 {#  order 2  #}    
       <div class="md:col-span-2 md:order-2">
         <nav aria-label="themes">
@@ -131,7 +131,7 @@
      
 
 {#  order 1  #}  
-      <div class="mb-4 md:order-1 md:row-span-2 md:mr-4">
+      <div class="md:order-1 md:row-span-2 md:mr-4">
       {{ breakpoint() }}
         {% if node.field_cover_image[0] is not empty %}
           {{ node.field_cover_image.entity|view('embedded') }}
@@ -156,8 +156,11 @@
         {% endif %}
 
         {% include '@iied_tw/partials/_publication_details.html.twig' %}
-          <div>
+        <div class="flex flex-row items-center md:items-start md:flex-col">
+          <div class="mb-6">
             {% include '@iied_tw/partials/_share_links.html.twig' %}
+          </div>
+          <div class="mb-6"><a href="/about-publications">About IIED's publications</a></div>
           </div>
       </div>
 
@@ -185,7 +188,7 @@
 {# {{ drupal_entity('node', node.field_media.0.target_id, 'card') }} this sort of works to print a view mode #}
 {# {{ node.content.field_media.entity.name.value }} this prints the whole thing #}
 
-    </main>
+    </div>
   </div>
 
 </article>
