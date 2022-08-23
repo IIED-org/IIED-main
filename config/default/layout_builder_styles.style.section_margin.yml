@@ -1,10 +1,10 @@
-uuid: f599b4ff-c337-4516-9cf2-93aa3d288562
+uuid: a9e6e2fd-a45b-4ec1-9aa4-ff4831bf0619
 langcode: en
 status: true
 dependencies: {  }
-id: divider_below
-label: 'Divider below'
-classes: 'border-b-2 border-iiedgreen-500 mb-6'
+id: section_margin
+label: 'Section margin'
+classes: my-12
 type: section
 group: default
 block_restrictions: {  }
@@ -14,4 +14,4 @@ layout_restrictions:
   - tw-container
   - tw-fluid
   - tw-1-2-col-thirds
-weight: -6
+weight: -3

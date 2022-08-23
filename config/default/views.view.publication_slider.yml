@@ -541,8 +541,8 @@ display:
           plugin_id: text
           empty: false
           content:
-            value: '<a href="/search?k=&f%5B0%5D=content_type%3Apublication&f%5B1%5D=theme%3A{{ raw_arguments.tid }}">View more {{ arguments.tid }} publications</a>'
-            format: basic_html
+            value: "<div class=\"flex flex-wrap justify-between\">\r\n<h2 class=\"mb-6\">Our latest publications</h2>\r\n<a href=\"/publications\">View more publications</a>\r\n</div>"
+            format: full_html
           tokenize: true
       display_extenders: {  }
       block_description: 'Home pubs slider block'

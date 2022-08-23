@@ -1,0 +1,20 @@
+uuid: 0bd8e2ec-4b7c-460d-9a8e-1612b8bf6d42
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - paragraphs
+id: paragraph.field_related_publication
+field_name: field_related_publication
+entity_type: paragraph
+type: entity_reference
+settings:
+  target_type: node
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

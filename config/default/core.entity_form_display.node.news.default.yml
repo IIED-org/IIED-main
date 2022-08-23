@@ -31,12 +31,11 @@ third_party_settings:
     group_tabs:
       children:
         - group_images
-        - group_copy
         - group_taxonomy
       label: Tabs
       region: content
       parent_name: ''
-      weight: 2
+      weight: 3
       format_type: tabs
       format_settings:
         classes: ''
@@ -45,17 +44,11 @@ third_party_settings:
         direction: horizontal
         width_breakpoint: 640
     group_copy:
-      children:
-        - field_tagline
-        - field_standfirst
-        - body
-        - field_paragraphs
-        - field_contact
-        - field_notes
+      children: {  }
       label: Copy
-      region: content
-      parent_name: group_tabs
-      weight: 26
+      region: hidden
+      parent_name: ''
+      weight: 13
       format_type: tab
       format_settings:
         classes: ''
@@ -66,11 +59,17 @@ third_party_settings:
         required_fields: true
     group_images:
       children:
+        - field_standfirst
+        - field_tagline
         - field_main_image
         - field_image_caption
         - field_display_image
+        - body
+        - field_paragraphs
+        - field_contact
+        - field_notes
         - field_video
-      label: Images
+      label: Content
       region: content
       parent_name: group_tabs
       weight: 25
@@ -84,10 +83,11 @@ third_party_settings:
         required_fields: true
     group_taxonomy:
       children:
-        - field_tags
-        - field_collection
         - field_project
-      label: Taxonomy
+        - field_theme_s_
+        - field_tags
+        - field_collections
+      label: Attribution
       region: content
       parent_name: group_tabs
       weight: 27
@@ -105,7 +105,7 @@ third_party_settings:
       label: 'Admin notes'
       region: content
       parent_name: ''
-      weight: 15
+      weight: 12
       format_type: details_sidebar
       format_settings:
         classes: ''
@@ -122,7 +122,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 17
+    weight: 21
     region: content
     settings:
       rows: 9
@@ -132,7 +132,7 @@ content:
     third_party_settings: {  }
   created:
     type: datetime_timestamp
-    weight: 5
+    weight: 6
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -146,7 +146,7 @@ content:
     third_party_settings: {  }
   field_collections:
     type: entity_reference_autocomplete
-    weight: 28
+    weight: 23
     region: content
     settings:
       match_operator: CONTAINS
@@ -156,7 +156,7 @@ content:
     third_party_settings: {  }
   field_contact:
     type: text_textarea
-    weight: 19
+    weight: 23
     region: content
     settings:
       rows: 5
@@ -164,14 +164,14 @@ content:
     third_party_settings: {  }
   field_display_image:
     type: boolean_checkbox
-    weight: 14
+    weight: 20
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   field_image_caption:
     type: text_textarea
-    weight: 13
+    weight: 19
     region: content
     settings:
       rows: 5
@@ -179,14 +179,14 @@ content:
     third_party_settings: {  }
   field_main_image:
     type: media_library_widget
-    weight: 12
+    weight: 18
     region: content
     settings:
       media_types: {  }
     third_party_settings: {  }
   field_news_type:
     type: entity_reference_autocomplete
-    weight: 29
+    weight: 2
     region: content
     settings:
       match_operator: CONTAINS
@@ -196,7 +196,7 @@ content:
     third_party_settings: {  }
   field_notes:
     type: text_textarea
-    weight: 20
+    weight: 24
     region: content
     settings:
       rows: 5
@@ -204,7 +204,7 @@ content:
     third_party_settings: {  }
   field_paragraphs:
     type: paragraphs
-    weight: 18
+    weight: 22
     region: content
     settings:
       title: Paragraph
@@ -222,7 +222,7 @@ content:
     third_party_settings: {  }
   field_project:
     type: entity_reference_autocomplete
-    weight: 16
+    weight: 20
     region: content
     settings:
       match_operator: CONTAINS
@@ -240,7 +240,7 @@ content:
     third_party_settings: {  }
   field_tagline:
     type: string_textarea
-    weight: 15
+    weight: 17
     region: content
     settings:
       rows: 5
@@ -248,7 +248,7 @@ content:
     third_party_settings: {  }
   field_tags:
     type: entity_reference_autocomplete
-    weight: 14
+    weight: 22
     region: content
     settings:
       match_operator: CONTAINS
@@ -258,7 +258,7 @@ content:
     third_party_settings: {  }
   field_theme_s_:
     type: entity_reference_autocomplete
-    weight: 30
+    weight: 21
     region: content
     settings:
       match_operator: CONTAINS
@@ -268,7 +268,7 @@ content:
     third_party_settings: {  }
   field_video:
     type: media_library_widget
-    weight: 15
+    weight: 25
     region: content
     settings:
       media_types: {  }
@@ -282,27 +282,27 @@ content:
     third_party_settings: {  }
   path:
     type: path
-    weight: 8
+    weight: 9
     region: content
     settings: {  }
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
-    weight: 6
+    weight: 7
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 10
+    weight: 11
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
-    weight: 7
+    weight: 8
     region: content
     settings:
       display_label: true
@@ -316,13 +316,13 @@ content:
       placeholder: ''
     third_party_settings: {  }
   translation:
-    weight: 4
+    weight: 5
     region: content
     settings: {  }
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 3
+    weight: 4
     region: content
     settings:
       match_operator: CONTAINS
@@ -331,7 +331,7 @@ content:
       placeholder: ''
     third_party_settings: {  }
   url_redirects:
-    weight: 9
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }

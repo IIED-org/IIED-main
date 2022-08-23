@@ -1,0 +1,10 @@
+uuid: 54ca0084-ec8c-42cf-9a32-de26e3b6527d
+langcode: en
+status: true
+dependencies: {  }
+id: related_publication_inline
+label: 'Related publication inline'
+icon_uuid: null
+icon_default: null
+description: 'Add a small inline card linking to a related project'
+behavior_plugins: {  }

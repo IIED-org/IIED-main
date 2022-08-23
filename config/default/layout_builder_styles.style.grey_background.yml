@@ -13,4 +13,4 @@ layout_restrictions:
   - tw-1-2-4-col-grid
   - tw-container
   - tw-fluid
-weight: 0
+weight: -5

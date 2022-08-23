@@ -1,0 +1,25 @@
+uuid: 9c488c93-2428-489b-9436-a9e9f0486ab6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.related_publication_inline.field_related_publication
+    - paragraphs.paragraphs_type.related_publication_inline
+id: paragraph.related_publication_inline.default
+targetEntityType: paragraph
+bundle: related_publication_inline
+mode: default
+content:
+  field_related_publication:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

@@ -6,6 +6,7 @@ dependencies:
     - field.storage.node.field_paragraphs
     - node.type.news
     - paragraphs.paragraphs_type.file_upload
+    - paragraphs.paragraphs_type.related_publication_inline
   module:
     - entity_reference_revisions
 id: node.news.field_paragraphs
@@ -23,6 +24,7 @@ settings:
   handler_settings:
     target_bundles:
       file_upload: file_upload
+      related_publication_inline: related_publication_inline
     negate: 0
     target_bundles_drag_drop:
       about_the_author:
@@ -30,6 +32,9 @@ settings:
         enabled: false
       accordion_box:
         weight: 34
+        enabled: false
+      accordion_section:
+        weight: 41
         enabled: false
       basic_text:
         weight: 12
@@ -43,8 +48,14 @@ settings:
       gallery:
         weight: 38
         enabled: false
+      highchart:
+        weight: 46
+        enabled: false
       image:
         weight: 14
+        enabled: false
+      image_small:
+        weight: 48
         enabled: false
       image_wide:
         weight: 15
@@ -73,9 +84,18 @@ settings:
       quote:
         weight: 48
         enabled: false
+      related_content:
+        weight: 58
+        enabled: false
       related_link:
         weight: 49
         enabled: false
+      related_project:
+        weight: 60
+        enabled: false
+      related_publication_inline:
+        weight: 61
+        enabled: true
       researcher_profiles:
         weight: 50
         enabled: false

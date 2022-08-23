@@ -55,7 +55,7 @@ settings:
             - Source
   plugins:
     stylescombo:
-      styles: "h3.mt-0|h3 without top margin\r\np.mb-6|p bottom margin\r\nimg.rounded-full|img rounded\r\ndiv.float-right.ml-6.mb-6.not-prose|div right\r\ndiv.float-left.mr-6.mb-6.not-prose|div left"
+      styles: "h3.mt-0|h3 without top margin\r\np.mb-6|p bottom margin\r\nimg.rounded-full|img rounded\r\ndiv.float-right.ml-6.mb-6.not-prose|div right\r\ndiv.float-left.mr-6.mb-6.not-prose|div left\r\ndiv.caption|div caption\r\ndiv.aspect-w-16.aspect-h-9|div 16x9\r\ndiv.not-prose|div not-prose"
     wordcount:
       enable: true
       show_remaining: false

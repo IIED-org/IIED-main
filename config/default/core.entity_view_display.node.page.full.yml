@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.node.full
     - field.field.node.page.body
     - field.field.node.page.field_content
+    - field.field.node.page.field_date_or_caption
     - field.field.node.page.field_display_image
     - field.field.node.page.field_global_term
     - field.field.node.page.field_image_caption
@@ -73,6 +74,14 @@ content:
       link: false
     third_party_settings: {  }
     weight: 5
+    region: content
+  field_date_or_caption:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 6
     region: content
   field_global_term:
     type: entity_reference_label

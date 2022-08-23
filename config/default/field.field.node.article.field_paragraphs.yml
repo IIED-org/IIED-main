@@ -17,6 +17,7 @@ dependencies:
     - paragraphs.paragraphs_type.media_list
     - paragraphs.paragraphs_type.modal_image
     - paragraphs.paragraphs_type.quote
+    - paragraphs.paragraphs_type.related_publication_inline
     - paragraphs.paragraphs_type.stories_table
     - paragraphs.paragraphs_type.tab_box
     - paragraphs.paragraphs_type.timeline
@@ -53,6 +54,7 @@ settings:
       tab_box: tab_box
       timeline: timeline
       highchart: highchart
+      related_publication_inline: related_publication_inline
     negate: 0
     target_bundles_drag_drop:
       about_the_author:
@@ -121,6 +123,9 @@ settings:
       related_project:
         weight: 59
         enabled: false
+      related_publication_inline:
+        weight: 61
+        enabled: true
       researcher_profiles:
         weight: -45
         enabled: false
