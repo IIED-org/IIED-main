@@ -22,7 +22,7 @@ dependencies:
     - search_api
 third_party_settings:
   acquia_search:
-    use_edismax: 1
+    use_edismax: 0
   search_api_solr:
     finalize: false
     commit_before_finalize: false
@@ -385,17 +385,11 @@ processor_settings:
     weights:
       preprocess_query: -50
     boosts:
-      created:
-        boost: !!float 21
+      field_sort_date:
+        boost: !!float 2
         resolution: NOW
         m: '3.16e-11'
-        a: !!float 1
-        b: 0.5
-      field_date_published:
-        boost: !!float 1
-        resolution: NOW
-        m: '3.16e-11'
-        a: !!float 1
+        a: !!float 10
         b: 0.5
   solr_date_range:
     weights:
@@ -410,8 +404,8 @@ processor_settings:
         datasource_boost: !!float 1
         bundle_boosts:
           collection: !!float 13
-          person: !!float 21
-          theme: !!float 0
+          person: !!float 8
+          theme: !!float 21
 tracker_settings:
   default:
     indexing_order: fifo

@@ -9,9 +9,8 @@ dependencies:
     - field.field.taxonomy_term.theme.layout_builder__layout
     - taxonomy.vocabulary.theme
   module:
-    - ds
+    - field_formatter
     - layout_builder
-    - text
 third_party_settings:
   layout_builder:
     enabled: false
@@ -22,22 +21,11 @@ bundle: theme
 mode: search_result
 content:
   description:
-    type: text_trimmed
-    label: hidden
+    type: field_link
+    label: above
     settings:
-      trim_length: 300
-    third_party_settings:
-      ds:
-        ft:
-          id: default
-          settings:
-            lb: ''
-            lb-col: false
-            classes: {  }
-    weight: 1
-    region: content
-  search_api_excerpt:
-    settings: {  }
+      type: ''
+      settings: {  }
     third_party_settings: {  }
     weight: 0
     region: content
@@ -46,3 +34,4 @@ hidden:
   field_link: true
   langcode: true
   layout_builder__layout: true
+  search_api_excerpt: true
