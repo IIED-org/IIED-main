@@ -57,7 +57,7 @@
                 {% if content.field_person_type[0]['#title'] == 'Staff' %}
 
                 <div class="flex items-center mb-2 space-x-1">
-                <span class="font-bold">Telephone:</span><span> 020 3463 7399</span>
+                <span class="font-bold">Telephone:</span><span> <a href="tel:+442034637399">+44 (0)20 3463 7399</a></span>
               </div>
 
                 {% if content.field_email[0] is not empty %}
@@ -72,7 +72,7 @@
                 {% endif %}
 
                 {% if content.field_twitter_username[0] is not empty %}
-                  <a href="https://twitter.com/{{ content.field_twitter_username.value }}" target="_blank" class="flex items-center mb-2 space-x-1 border-b-0 hover:border-b-0" title="Twitter profile">
+                  <a href="https://twitter.com/{{ content.field_twitter_username.0 }}" target="_blank" class="flex items-center mb-2 space-x-1 border-b-0 hover:border-b-0" title="Twitter profile">
                   <svg
                   fill="currentColor"
                   stroke-linecap="round"
