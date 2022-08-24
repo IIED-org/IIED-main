@@ -1,0 +1,29 @@
+uuid: f830038e-4941-4ca5-9884-03fe737098ed
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_list_reference
+    - taxonomy.vocabulary.collection
+    - taxonomy.vocabulary.list
+id: taxonomy_term.collection.field_list_reference
+field_name: field_list_reference
+entity_type: taxonomy_term
+bundle: collection
+label: 'List reference'
+description: 'Select a list for use when creating a slider of publications'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      list: list
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
