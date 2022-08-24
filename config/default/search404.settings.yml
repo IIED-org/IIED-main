@@ -5,6 +5,7 @@ search404_jump: false
 search404_skip_auto_search: false
 search404_disable_error_message: false
 search404_use_or: false
+search404_use_customclue: ''
 search404_use_search_engine: false
 search404_ignore_extensions: 'htm html php'
 search404_ignore_query: 'gif jpg jpeg bmp png'
@@ -14,11 +15,12 @@ search404_regex: ''
 search404_page_text: ''
 search404_do_google_cse: false
 search404_do_search_by_page: false
-search404_custom_error_message: ''
-search404_page_redirect: ''
+search404_custom_error_message: 'The page you were looking for cannot be found. A search for ''@keys'' has been done for your convenience.'
+search404_page_redirect: /
 search404_page_title: 'Page not found'
 search404_ignore: 'and or the'
 search404_ignore_paths: ''
 _core:
   default_config_hash: rpG1Ls9q9819JpDC_9UHvr9eb3a9nNr1s1yCykIlvlA
 site_404: search404
+search404_ignore_language: 0
