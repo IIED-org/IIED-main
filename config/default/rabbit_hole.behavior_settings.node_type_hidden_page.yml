@@ -1,0 +1,14 @@
+uuid: a3e55bd9-96ec-439d-a51c-1b6239e5eae9
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.hidden_page
+id: node_type_hidden_page
+entity_type_id: node_type
+entity_id: hidden_page
+action: page_not_found
+allow_override: 1
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

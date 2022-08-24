@@ -1,7 +1,9 @@
 uuid: 59e26687-e921-492a-aa26-2bd720a4450c
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - layout_paragraphs
 _core:
   default_config_hash: RcJghZXelXd0N3xDXgLoIuo9HhtRR754QW-vZjk0DC0
 id: stories_curated_content
@@ -9,4 +11,7 @@ label: 'Curated content'
 icon_uuid: null
 icon_default: null
 description: ''
-behavior_plugins: {  }
+behavior_plugins:
+  layout_paragraphs:
+    enabled: false
+    available_layouts: {  }

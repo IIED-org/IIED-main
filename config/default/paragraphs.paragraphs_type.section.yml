@@ -15,6 +15,7 @@ behavior_plugins:
   layout_paragraphs:
     enabled: true
     available_layouts:
+      tw-fluid: 'IIED fluid'
       tw-1-2-4-col: 'IIED four column'
       tw-1-2-col-sm-md: 'IIED main with aside'
       tw-1-col-xl: 'IIED one column full'

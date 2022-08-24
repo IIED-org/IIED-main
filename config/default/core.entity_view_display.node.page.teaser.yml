@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.page.body
+    - field.field.node.page.field_alternative_label
     - field.field.node.page.field_content
     - field.field.node.page.field_date_or_caption
     - field.field.node.page.field_display_image
@@ -93,6 +94,7 @@ content:
     weight: 100
     region: content
 hidden:
+  field_alternative_label: true
   field_content: true
   field_date_or_caption: true
   field_display_image: true

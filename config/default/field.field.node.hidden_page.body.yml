@@ -1,0 +1,23 @@
+uuid: 8331f489-f580-4c88-873b-5c98a9d01c87
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.hidden_page
+  module:
+    - text
+id: node.hidden_page.body
+field_name: body
+entity_type: node
+bundle: hidden_page
+label: Body
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+field_type: text_with_summary

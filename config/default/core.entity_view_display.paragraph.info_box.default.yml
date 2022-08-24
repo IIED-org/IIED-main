@@ -17,10 +17,10 @@ content:
     type: read_more_field_formatter
     label: hidden
     settings:
-      more_link: 'Read more'
-      close_link: Close
-      more_link_classes: ''
-      close_link_classes: ''
+      more_link: '+ Show'
+      close_link: '- Hide'
+      more_link_classes: 'absolute left-0 px-4 py-2 text-gray-900 rounded-full -bottom-12 hover:text-gray-900 bg-iiedblue-500 hover:bg-iiedblue-600'
+      close_link_classes: 'absolute left-0 px-4 py-2 text-gray-900 rounded-full -bottom-12 hover:text-gray-900 bg-iiedblue-500 hover:bg-iiedblue-600'
       speed: '75'
       collapsed_height: 200px
       height_margin: 16px

@@ -6,7 +6,7 @@ id: section_padding
 label: 'Section padding'
 classes: py-12
 type: section
-group: default
+group: spacing
 block_restrictions: {  }
 layout_restrictions:
   - tw-1-2-col-grid
