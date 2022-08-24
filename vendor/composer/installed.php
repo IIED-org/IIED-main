@@ -3,7 +3,7 @@
         'name' => 'drupal/recommended-project',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '7cd60742073319319570501af18d78bee35eb4e6',
+        'reference' => '293fa057149993e3aeede7829f5cc8acb8bea885',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -1466,7 +1466,7 @@
         'drupal/recommended-project' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '7cd60742073319319570501af18d78bee35eb4e6',
+            'reference' => '293fa057149993e3aeede7829f5cc8acb8bea885',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -1493,12 +1493,14 @@
             'dev_requirement' => false,
         ),
         'drupal/search404' => array(
-            'pretty_version' => '2.0.0',
-            'version' => '2.0.0.0',
-            'reference' => '2.0.0',
+            'pretty_version' => 'dev-2.x',
+            'version' => 'dev-2.x',
+            'reference' => '6ecf51a858440c7cb9802b6422b5b7dbf0cb229e',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/search404',
-            'aliases' => array(),
+            'aliases' => array(
+                0 => '2.x-dev',
+            ),
             'dev_requirement' => false,
         ),
         'drupal/search_api' => array(

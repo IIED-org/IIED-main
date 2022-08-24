@@ -107,7 +107,7 @@ class Search404Settings extends ConfigFormBase {
     $form['search404_custom_error_message'] = [
       '#title' => $this->t('Custom error message'),
       '#type' => 'textfield',
-      '#placeholder' => 'For example, Invalid search for @keys, Sorry the page does not exist, etc.',
+      '#placeholder' => $this->t('For example, Invalid search for @keys, Sorry the page does not exist, etc.'),
       '#description' => $this->t('A custom error message instead of default Drupal message, that should be displayed when search results are shown on a 404 page, use "@keys" to insert the searched key value if necessary.'),
       '#default_value' => \Drupal::config('search404.settings')->get('search404_custom_error_message'),
     ];
@@ -123,12 +123,32 @@ class Search404Settings extends ConfigFormBase {
       '#title' => $this->t('Use OR between keywords when searching'),
       '#default_value' => \Drupal::config('search404.settings')->get('search404_use_or'),
     ];
+    $form['advanced']['search404_use_customclue'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Use a custom string between keywords when searching'),
+      '#description' => $this->t('using a custom string (for example a hyphen) to concatenate the keywords, has no effect if OR keyword is chosen, leave this empty to concatenate by whitespace'),
+      '#default_value' => \Drupal::config('search404.settings')->get('search404_use_customclue'),
+      '#states' => [
+        'invisible' => [
+          ':input[name="search404_use_or"]' => ['checked' => TRUE]
+        ]
+      ]
+    ];
     $form['advanced']['search404_use_search_engine'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Use auto-detection of keywords from search engine referer'),
       '#description' => $this->t('This feature will conduct a search based on the query string got from a search engine if the URL of the search result points to a 404 page in the current website. Currently supported search engines: Google, Yahoo, Altavista, Lycos, Bing and AOL.'),
       '#default_value' => \Drupal::config('search404.settings')->get('search404_use_search_engine'),
     ];
+
+    // Ignore language code from search keyword.
+    $form['advanced']['search404_ignore_language'] = [
+      '#title' => $this->t('Ignore language code'),
+      '#type' => 'checkbox',
+      '#description' => $this->t('All enabled language codes will ignored from the search query.'),
+      '#default_value' => \Drupal::config('search404.settings')->get('search404_ignore_language'),
+    ];
+
     $form['advanced']['search404_ignore'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Words to ignore'),
@@ -220,12 +240,12 @@ class Search404Settings extends ConfigFormBase {
     if (!empty($form_state->getValue('search404_do_custom_search'))) {
       $custom_path = $form_state->getValue('search404_custom_search_path');
 
-      if (empty(preg_match("/\@keys$/", $custom_path))) {
-        $form_state->setErrorByName('search404_custom_search_path', $this->t('Custom search path should end with the following text: @keys'));
+      if (empty(preg_match("/@keys$/", $custom_path))) {
+        $form_state->setErrorByName('search404_custom_search_path', $this->t('Custom search path should end with search key pattern "@keys".'));
       }
       $url_path = explode("@keys", $custom_path);
-      if (!empty(preg_match('/[\'^Â£!`$%*()\{}\:.;,\[\]"@#~><>,|+Â¬-]/', $url_path[0]))) {
-        $form_state->setErrorByName('search404_custom_search_path', t('Custom search path should not contain special characters other than "/", "=", "?" and "&".'));
+      if (!empty(preg_match('/[\'^Ã‚Â£!`$%&*()\{}\:.;,\[\]"@#~><>,|+Ã‚Â¬-]/', $url_path[0]))) {
+        $form_state->setErrorByName('search404_custom_search_path', t('Custom search path should not contain special characters other than "/?=_".'));
       }
       if (strpos($custom_path, '/') === 0) {
         $form_state->setErrorByName('search404_custom_search_path', $this->t('Custom search path should not start with a slash.'));
@@ -245,6 +265,7 @@ class Search404Settings extends ConfigFormBase {
       ->set('search404_first_on_paths', $form_state->getValue('search404_first_on_paths'))
       ->set('search404_jump', $form_state->getValue('search404_jump'))
       ->set('search404_use_or', $form_state->getValue('search404_use_or'))
+      ->set('search404_use_customclue', $form_state->getValue('search404_use_customclue'))
       ->set('search404_ignore', $form_state->getValue('search404_ignore'))
       ->set('search404_ignore_paths', $form_state->getValue('search404_ignore_paths'))
       ->set('search404_ignore_query', $form_state->getValue('search404_ignore_query'))
@@ -256,7 +277,8 @@ class Search404Settings extends ConfigFormBase {
       ->set('search404_use_search_engine', $form_state->getValue('search404_use_search_engine'))
       ->set('search404_disable_error_message', $form_state->getValue('search404_disable_error_message'))
       ->set('search404_custom_error_message', $form_state->getValue('search404_custom_error_message'))
-      ->set('search404_page_redirect', $form_state->getValue('search404_page_redirect'));
+      ->set('search404_page_redirect', $form_state->getValue('search404_page_redirect'))
+      ->set('search404_ignore_language', $form_state->getValue('search404_ignore_language'));
 
     // Save custom path if the corresponding checkbox is checked.
     if (!empty($form_state->getValue('search404_do_custom_search'))) {
