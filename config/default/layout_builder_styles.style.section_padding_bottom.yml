@@ -6,7 +6,7 @@ id: section_padding_bottom
 label: 'Section padding bottom'
 classes: pb-12
 type: section
-group: default
+group: spacing
 block_restrictions: {  }
 layout_restrictions:
   - tw-1-2-col-grid

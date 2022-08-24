@@ -19,11 +19,13 @@ For general featured card display
                 <img class="w-full" src="{{ image_uri|image_style('sm_16x9') }}" alt="{{ image_alt }}" />
               {% endif %}
 
+              {% block label %}
               <div
                 class="absolute bottom-0 left-0 z-10 px-4 pt-2 pb-5 text-gray-900 bg-iiedblue-500 rounded-tr-xl"
               >
                {{ node.type.entity.label() }}
               </div>
+              {% endblock %}
 
             </div>
 

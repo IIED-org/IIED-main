@@ -1,0 +1,10 @@
+uuid: 9b20fd82-8b6e-43f1-b111-6d6218db32ea
+langcode: en
+status: true
+dependencies: {  }
+id: spacing
+label: Spacing
+multiselect: multiple
+form_type: multiple-select
+required: false
+weight: -9

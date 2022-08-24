@@ -1,0 +1,19 @@
+uuid: ffd894f0-aa2d-43d8-a130-b3e5e43b94a7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_alternative_label
+    - node.type.page
+id: node.page.field_alternative_label
+field_name: field_alternative_label
+entity_type: node
+bundle: page
+label: 'Alternative label'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

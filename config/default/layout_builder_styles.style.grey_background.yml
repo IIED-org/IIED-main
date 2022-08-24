@@ -4,7 +4,7 @@ status: true
 dependencies: {  }
 id: grey_background
 label: 'Grey background'
-classes: bg-gray-100
+classes: "bg-gray-100\r\noverflow-hidden"
 type: section
 group: default
 block_restrictions: {  }

@@ -1,10 +1,15 @@
 uuid: 85719b9b-d297-4678-afcf-968fc42df07f
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - layout_paragraphs
 id: related_content
 label: 'Related content'
 icon_uuid: null
 icon_default: null
 description: 'Add card linking to a related page'
-behavior_plugins: {  }
+behavior_plugins:
+  layout_paragraphs:
+    enabled: false
+    available_layouts: {  }

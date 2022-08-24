@@ -6,7 +6,7 @@ id: section_margin
 label: 'Section margin'
 classes: my-12
 type: section
-group: default
+group: spacing
 block_restrictions: {  }
 layout_restrictions:
   - tw-1-2-col-grid

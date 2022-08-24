@@ -6,3 +6,13 @@
     <p class="text-gray-500">{{ node.type.entity.label() }}, {{ node.getCreatedTime|date('d F Y') }} </p>
     {% endif %}
    {% endblock %}
+
+
+{# 
+If alternative label is needed 
+         {% if node.field_alternative_label is not empty %}
+         <p class="text-gray-500">{{ node.field_alternative_label.0.value|striptags }}</p>
+         {% else %}
+         <p class="text-gray-500">{{ node.type.entity.label() }}</p>
+         {% endif %}
+#}

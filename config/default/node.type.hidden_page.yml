@@ -1,0 +1,17 @@
+uuid: 893c4a65-8cbc-47a1-8eb2-5dfe982a1c93
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Hidden page'
+type: hidden_page
+description: ''
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

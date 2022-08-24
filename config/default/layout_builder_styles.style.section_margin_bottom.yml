@@ -6,7 +6,7 @@ id: section_margin_bottom
 label: 'Section margin bottom'
 classes: mb-12
 type: section
-group: default
+group: spacing
 block_restrictions: {  }
 layout_restrictions:
   - tw-1-2-col-grid

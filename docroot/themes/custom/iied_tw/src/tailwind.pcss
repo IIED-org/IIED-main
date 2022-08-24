@@ -40,6 +40,13 @@
   hr {
     @apply my-6;
   }
+  blockquote {
+    @apply text-xl font-headline;
+  }
+  cite {
+    font-style: inherit;
+    font-size: 1rem;
+  }
 }
 
 @layer components {
@@ -152,6 +159,10 @@
     @apply border-b-2 border-iiedgreen-500 mb-6;
   }
 
+  .paragraph--type--image-wide img {
+    @apply w-full;
+  }
+
   .odd .rounded-odd-even {
     @apply rounded-tr-xl;
   }
@@ -231,7 +242,9 @@
     opacity: 1;
     bottom: 0;
   }
-  :not(.glb-form-checkboxes):not(td):not(.media-library-item__click-to-select-checkbox):not(.field-content)>.glb-form-type--checkbox input {
+  :not(.glb-form-checkboxes):not(td):not(.media-library-item__click-to-select-checkbox):not(.field-content)
+    > .glb-form-type--checkbox
+    input {
     opacity: 1 !important;
     position: relative !important;
   }

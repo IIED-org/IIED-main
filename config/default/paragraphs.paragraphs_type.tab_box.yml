@@ -4,9 +4,14 @@ status: true
 dependencies:
   content:
     - 'file:file:f1604c35-6eea-4e91-a1a7-fb91725d318f'
+  module:
+    - layout_paragraphs
 id: tab_box
 label: 'Tab box'
 icon_uuid: f1604c35-6eea-4e91-a1a7-fb91725d318f
 icon_default: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAABlCAYAAACvBxpVAAAACXBIWXMAAAsSAAALEgHS3X78AAADHUlEQVR4nO3dz3HTQBiH4c8M97iDmAqgA5aDzqQDnAoIB52d+x5wBwkdhPNeVILTQUpwKjCzeJnxZDjYln7eXel9ZhgYSCRFvKN/K8mz3W5nwNDesUahQFiQICxIEBYkCAsShAUJwoIEYUGCsCBBWJAgLEgQFiQICxKEBQnCggRhQYKwIPE+52oNzj+a2bcMs341s5uma7sM856E3FusHFFFV2bmMs17ErJusUoRnJ+b2d2Zi9MdbvmC85/i1vDMaT02XftS7Io6QTFhNV07U88jOH9vZqv//FMM4+OZk10F5z/EIFJUcVpXZ06rT5RF4eB9b9Pz+xfp95f061zznstRDHaF+63lMji/OfE/dmlm12+msw3Ox2O3U3ari4zHmjKElTRduz7l61NA12//PsZlZvcnTmd0YbErhARhQYKwIJH13Q3B+cOZf7nALJcHxzO/4nWjHtNaH1yi+NHjzDJeYviZ/vzc43raoW3TtX3PdHspKSwM63fTtdmuibErHK+vOX8ywoLEpIZ0pqCUwwu2WJAgLEgQFiQICxKEBQnCggRhQYKwIEFYkCAsSFRza3Jw/ibdYjJlm6Zrn2r4+asIKzgf76N6KGBRsgvO3zZd2+c+souoZVe4SY/FT93rAI+qXUQVW6x4N2R6mmUUD3P28JT7ztBjVXOMlVZoFSsVnBVChLAgQViQICxIEBYkCAsShAWJmsYK14wV/h0rHOIRfLlaxgrj+6a+F7AouX0Ozsf3Mhz9/q1catkVrtMLM6buOa2L4tUyVvjvFYzsCvdvDCxeTWOF2/RGYlSAs0JIEBYkCAsShAUJwoIEYUGCsCBRy5DOvOcndF1CFY9lXUpNQzolRxU9BOcXR3zdJNQS1l0FY4W3Y/kQyyFUM1bIOGFdOHiHBGFBgrAgQViQICxIEBYkCAsShAUJwoJEMVfe07ODGImShnRWBSwDBpJ7V8gLa3WyrtvcW6xlunMBw8v6xPRstyviI4QxMpwVQoKwIEFYkCAsSBAWJAgLEoQFCcKCBGFBgrAgQViQICxIEBYkCAsShAUJwsLwzOwPoFecdSVSS+UAAAAASUVORK5CYII='
 description: 'Box with tabbed navigation'
-behavior_plugins: {  }
+behavior_plugins:
+  layout_paragraphs:
+    enabled: false
+    available_layouts: {  }

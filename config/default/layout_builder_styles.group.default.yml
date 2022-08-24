@@ -7,4 +7,4 @@ label: Style
 multiselect: single
 form_type: checkboxes
 required: false
-weight: 100
+weight: -10

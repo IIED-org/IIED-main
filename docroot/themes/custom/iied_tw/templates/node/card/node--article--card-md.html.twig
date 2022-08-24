@@ -1,7 +1,18 @@
 {% extends '@iied_tw/node/card/node--card-md.html.twig' %}
+
+   {% block label %}
+      <div class="absolute bottom-0 left-0 z-10 px-4 pt-2 pb-5 text-gray-900 bg-iiedblue-500 rounded-tr-xl">
+         {% if node.field_alternative_label is not empty %}
+         {{ node.field_alternative_label.0.value|striptags }}
+         {% else %}
+         {{ node.type.entity.label() }}
+         {% endif %}
+      </div>
+   {% endblock %}
+
    {% block date %}
-   {% if "On" in content.field_hide_date.0 %}          
-    {% else %}
-    <p class="text-gray-500">{{ node.getCreatedTime|date('d F Y') }} </p>
-    {% endif %}
+      {% if "On" in content.field_hide_date.0 %}          
+      {% else %}
+      <p class="text-gray-500">{{ node.getCreatedTime|date('d F Y') }} </p>
+      {% endif %}
    {% endblock %}

@@ -1,10 +1,15 @@
 uuid: 24c3757c-175b-4c05-b058-0ecec87cbf39
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - layout_paragraphs
 id: highchart
 label: Highchart
 icon_uuid: null
 icon_default: null
 description: 'Embed a chart using the Highcharts library.'
-behavior_plugins: {  }
+behavior_plugins:
+  layout_paragraphs:
+    enabled: false
+    available_layouts: {  }

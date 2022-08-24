@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.node.page.body
+    - field.field.node.page.field_alternative_label
     - field.field.node.page.field_content
     - field.field.node.page.field_date_or_caption
     - field.field.node.page.field_display_image
@@ -35,6 +36,14 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 0
+    region: content
+  field_alternative_label:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 7
     region: content
   field_date_or_caption:
     type: string
