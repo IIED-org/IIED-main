@@ -248,8 +248,8 @@ display:
           plugin_id: text
           empty: true
           content:
-            value: '<a href="/search">Start a new search</a>'
-            format: basic_html
+            value: '<a class="p-4" href="javascript:history.back();">Go back to previous page</a>'
+            format: full_html
           tokenize: false
       sorts: {  }
       arguments: {  }
@@ -392,6 +392,7 @@ display:
     display_plugin: page
     position: 2
     display_options:
+      title: 'Search publications'
       exposed_form:
         type: basic
         options:
@@ -415,8 +416,8 @@ display:
           plugin_id: text
           empty: true
           content:
-            value: '<a href="/search/pubs">Start a new search</a>'
-            format: basic_html
+            value: '<a class="p-4" href="/publications">Go to Publications home page</a>'
+            format: full_html
           tokenize: false
       sorts: {  }
       filters:
@@ -523,6 +524,7 @@ display:
       defaults:
         empty: false
         cache: false
+        title: false
         css_class: false
         use_ajax: false
         exposed_form: false

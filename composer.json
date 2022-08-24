@@ -132,7 +132,7 @@
         "drupal/readonlymode": "^1.1",
         "drupal/redirect": "^1.7",
         "drupal/responsive_menu": "^5.0-dev",
-        "drupal/search404": "^2.0",
+        "drupal/search404": "2.x-dev@dev",
         "drupal/search_api": "^1.23",
         "drupal/search_api_autocomplete": "^1.6",
         "drupal/search_api_solr": "^4.2.7",
@@ -283,9 +283,6 @@
           },
           "drupal/content_translation_redirect": {
             "3263317": "https://www.drupal.org/files/issues/2022-02-09/content-translation-redirect-all-bundles-3263317-3.patch"
-          },
-          "drupal/search404":{
-            "3007663":"https://www.drupal.org/files/issues/2020-11-04/path_validation-3007663-19.patch"
           }
         }
     }

@@ -8379,29 +8379,26 @@
         },
         {
             "name": "drupal/search404",
-            "version": "2.0.0",
+            "version": "dev-2.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search404.git",
-                "reference": "2.0.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search404-2.0.0.zip",
-                "reference": "2.0.0",
-                "shasum": "da7ee1a9b8a1d0f420e0dc8dfe9d02fd5b49b117"
+                "reference": "6ecf51a858440c7cb9802b6422b5b7dbf0cb229e"
             },
             "require": {
                 "drupal/core": "^8 || ^9"
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev"
+                },
                 "drupal": {
-                    "version": "2.0.0",
-                    "datestamp": "1591165027",
+                    "version": "2.x-dev",
+                    "datestamp": "1651789644",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -21203,6 +21200,7 @@
         "drupal/path_redirect_import": 10,
         "drupal/rabbit_hole": 10,
         "drupal/responsive_menu": 20,
+        "drupal/search404": 20,
         "drupal/search_api_sorts": 20,
         "drupal/serial": 15,
         "drupal/stories": 15,

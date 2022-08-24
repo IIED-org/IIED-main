@@ -16,6 +16,8 @@ search404.settings:
       type: boolean
     search404_use_or:
       type: boolean
+    search404_use_customclue:
+      type: string
     search404_use_search_engine:
       type: boolean
     search404_ignore_extensions:
