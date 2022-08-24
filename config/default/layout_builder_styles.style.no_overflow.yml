@@ -1,16 +1,17 @@
-uuid: a657856e-c85a-4d4c-b819-71865e8deeab
+uuid: 292838e0-05e6-4884-9872-95964dbd2238
 langcode: en
 status: true
 dependencies: {  }
-id: grey_background
-label: 'Grey background'
-classes: bg-gray-100
+id: no_overflow
+label: 'No overflow'
+classes: overflow-hidden
 type: section
-group: default
+group: spacing
 block_restrictions: {  }
 layout_restrictions:
   - tw-1-2-col-grid
   - tw-1-2-4-col-grid
   - tw-container
   - tw-fluid
-weight: -5
+  - tw-1-2-col-thirds
+weight: 0
