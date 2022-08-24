@@ -50,9 +50,9 @@
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
       {% if "On" in content.field_image_round.0 %}
-        <div class="inline-block mb-6 overflow-hidden rounded-full not-prose">{{ content.field_image }}</div>
+        <div class="inline-block overflow-hidden rounded-full not-prose">{{ content.field_image }}</div>
         {% else %}
-        <div class="inline-block mb-6 not-prose">{{ content.field_image }}</div>
+        <div class="inline-block not-prose">{{ content.field_image }}</div>
       {% endif %}
     {% endblock %}
   </div>

@@ -51,8 +51,10 @@
 {% block paragraph %}
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
-    <aside class="p-4 mb-8 border border-gray-300 prose-base rounded-xl">
+    <aside class="p-4 pb-6 mb-8 border border-gray-300 prose-base rounded-xl">
+      <div class="relative">
       {{ content }}
+      </div>
     </aside>
     {% endblock %}
   </div>

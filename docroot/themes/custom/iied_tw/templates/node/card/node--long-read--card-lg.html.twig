@@ -10,7 +10,7 @@ For large 3-4 col featured card display
           <div
             class="flex flex-col h-full overflow-hidden transition-shadow bg-gray-800 border border-gray-300 lg:relative lg:flex-row group rounded-xl hover:shadow-lg hover:brightness-95"
           >
-            <div class="border-b-4 lg:order-2 border-iiedpink-500">
+            <div class="border-b-4 lg:order-2 border-iiedpink-500 lg:w-1/2">
 
               {% set image_uri = node.field_main_image|file_uri %}
               {% set image_alt = node.field_main_image.alt %}
@@ -20,21 +20,21 @@ For large 3-4 col featured card display
 
             </div>
 
-            <div class="z-20 flex flex-col justify-between p-4 -mt-3 lg:mt-0 lg:-mr-3 rounded-tl-xl lg:w-9/12 lg:rounded-br-xl lg:relative">
+            <div class="flex flex-col justify-between p-4 lg:w-1/2">
 
               <div>  
               <h4 class="mb-6 text-xl text-white lg:text-2xl lg:mt-8">
                 {{ label }}
               </h4>
                 {% block tagline %}
-                <p class="text-gray-300">{{ node.field_tagline.0.value }}</p>
+                <p class="text-gray-300">{{ node.field_subheading.0.value }}</p>
                 {% endblock %}
               </div>
 
             <div
               class="-mr-4 border-b text-iiedorange-500 border-iiedorange-500"
             >
-              <span>{{ node.type.entity.label() }}</span>
+              <span>{{ node.type.entity.label() }}</span>&nbsp;
                 {% block date %}
               <span class="text-gray-300">{{ node.getCreatedTime|date('d F Y') }}</span>
               {% endblock %}
