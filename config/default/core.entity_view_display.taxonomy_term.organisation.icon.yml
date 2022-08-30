@@ -13,13 +13,13 @@ dependencies:
     - field.field.taxonomy_term.organisation.field_type
     - field.field.taxonomy_term.organisation.field_url
     - field.field.taxonomy_term.organisation.field_valid
-    - image.style.medium
+    - image.style.small_160
     - taxonomy.vocabulary.organisation
   module:
     - ds
-    - image
     - layout_builder
     - link
+    - svg_image
 third_party_settings:
   layout_builder:
     enabled: false
@@ -34,7 +34,11 @@ content:
     label: hidden
     settings:
       image_link: ''
-      image_style: medium
+      image_style: small_160
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
       image_loading:
         attribute: lazy
     third_party_settings:

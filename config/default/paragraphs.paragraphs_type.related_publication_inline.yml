@@ -2,14 +2,11 @@ uuid: 54ca0084-ec8c-42cf-9a32-de26e3b6527d
 langcode: en
 status: true
 dependencies:
-  module:
-    - layout_paragraphs
+  content:
+    - 'file:file:70a8a823-f37c-4b96-925d-6505c944c910'
 id: related_publication_inline
 label: 'Related publication inline'
-icon_uuid: null
-icon_default: null
+icon_uuid: 70a8a823-f37c-4b96-925d-6505c944c910
+icon_default: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAABlCAYAAACvBxpVAAAACXBIWXMAAAsSAAALEgHS3X78AAADY0lEQVR4nO3csVITQRzH8b+OvTyAM/AG+gZucz2WVkpjjcXV0jrb+AbExsJGCrstXHpnjG8Q3gCeAGdnNg5igFyS394/8P00IBOSePclu9nc3aPLy0sDNu0xWxQKhAUJwoIEYUGCsCBBWJAgLEgQFiQICxKEBQnCggRhQYKwIEFYkCAsSBAWJAgLEoQFCcKCBGFBgrAgQViQICxIEBYkCAsShAUJwoIEYUGCsCDxpNVmTSHumdlbduOoJl3uZy2eQJPLGKUQ983sm/yBsIxXXe5P1Fuq1SvWp/r14sr3aOvQzJ7W7X9vwtqtX0OX+2mjx8QVKcQS068r+0Kq6eSdqMbTets3m7zfJIW4Uyf1Oyvexc8u99/1zxRDjB5WHfPfmNnpCr/7zMw+pBA/d7nnHacjHsIqUb3vcj94Up9CPCphlftIIRpx+eEhrGLd8f/AzI6HxlWH4RdrPrZMl/vs9bndxUtYa+lyPylRDYmrRlV23HOv/69tHuLvxUc6KcRgZmVF+WMdFr84eFoP2ra/Yp3Uhb8f137+OoX49bYV5i73556HwW3nKqwUYhmaXt5yk4My7M3/UdZmUogljr1rt3tXlzDkK8xYzFVYXe7DCr8zq8PgX3VoHHxf2BwOm4GEt6Fwb8GwNiuvSnXIu2t1ftbqsBDcztvk/WhBWLn+fJkF1PltMTJvc6wb12xWmX9hPMyxIOFtjjVZMBQOkbvcMxQ6sA1zrCEGTdwbfFZ4/lCPQfM2x/pvTUql1WeFKcQmx5h7420o3F/iFWRadlQK8XDB8sN02Z1YPtJJIU7FYV20+kPxxttQuMwwuM5Q+Y/6LpRjuAS8DYVLH+y3yoGBaIflBkgQFiQICxKEBQnCggRhQYKwIOElrFVPr4dTHhZIf5cLgqUQywr4+Qbub6eeucOJFCPyEFY5omGy4QuznXEdrnGNHlb90Jih8J5h8g6JpmHVeRRG0HrbtxoKT+sZzsfENZr5GearXIdssFZhzd+l7d5xCj20zuq+kGtyOe65euo7RtLyeltNw8LDwbtCSBAWJAgLEoQFCcKCBGFBgrAgQViQICxIEBYkCAsShAUJwoIEYUGCsCBBWJAgLEgQFiQICxKEBQnCggRhQYKwIEFYkCAsSBAWJAgLEoQFCcLC5pnZH+i5yUbRd25hAAAAAElFTkSuQmCC'
 description: 'Add a small inline card linking to a related project'
-behavior_plugins:
-  layout_paragraphs:
-    enabled: false
-    available_layouts: {  }
+behavior_plugins: {  }

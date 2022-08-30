@@ -2,14 +2,11 @@ uuid: 73f805f6-0c0d-49f8-8da4-376bc82f66b6
 langcode: en
 status: true
 dependencies:
-  module:
-    - layout_paragraphs
+  content:
+    - 'file:file:62af5d87-4975-4a80-a72f-b1c81aef3ef6'
 id: image_small
 label: 'Image small'
-icon_uuid: null
-icon_default: null
+icon_uuid: 62af5d87-4975-4a80-a72f-b1c81aef3ef6
+icon_default: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAABlCAYAAACvBxpVAAAACXBIWXMAAAsSAAALEgHS3X78AAADd0lEQVR4nO3cMW7UQBSH8RdED6KiC5wg4QSYwnXgBGxOkKVwDdQuCCdgcwJC7YI5QnIApJRUCE4QNOENMpaTaIn/G2fm+0kRQlobb/Tpjdmd3a3z83MDpnaP3ygUCAsShAUJwoIEYUGCsCBBWJAgLEgQFiQICxKEBQnCggRhQYKwIEFYkCAsSBAWJAgLEoQFCcKCBGFBgrAgQViQICxIEBYkCAsShAUJwoIEYUHifu6/1q5qX5rZwswezuByop9mtqpDczyDa5HJ+muMuqqtzOzrDC5lzIs6NGF+lzWN3CdW5X9+MbPDW76WZGlme35thHXHncxlOvgU3ZvBpUhx8w4JwoIEYUGCsCBBWJAgLEiU8nKDjL+yv/Tzhzo07zJ8mmtjYt2Avyb12cye+8/brmrj20fFI6ybqUaOjhOseCyFA13V7vbiiG8YH9ehOVvjFPGY4hGW66o27n449iWt70NXtR/r0CxHDjv0nRPb/vdfZlb8PZaxFP7hUQWP6r2ZPa1Ds2Vmz/wN7IOualfD4+rQxOkUJ9y+/zyJ0y1OvXj/5dOvSMVPrF5UOzGOOjR/A6pDcxKXRY/qtT924UGlx1zsr/JzxcfGKbbdO//FFKtDM5fdFRtR9MTyiXI2FlVfHZq43B35roTggQ3PtfL/IUZv4n4rn2JnvpyOnjtXxU4sjypOqgdXRZXEuLqqjdPpwOOq0uRKE82XzX8mWpxmvYlnHlr2igyrF5Wts5Mz3sB3VRuXx08pLr+Bj1Ed+WQbO27hUcXHnU75XOaquKVwEFW17gZAn2z7vnx+uy6q3nFpOd250RO4I4oKaySqk/85Ty+uR2b2o/eWznXHLZhYmZkqqmQQ1+gN/SWy/nROUkpYj6eMKhksi+vElb1Swkr3P5NFlRDXuJLusSaPKhnEVdTrVZcpJayVKqrE43pVyj3UdUp5Hev7Jv6R3D82vw7ehIYEYUGCsCBBWJAgLEgQFiQICxKEBQnCggRhQSL3t3TS3vOlbyOeg93BtWUp97BWvmVmZ+SDqLfpNPddEFl/HXfiu0dn8z3v6p0Wc1BEWNg8bt4hQViQICxIEBYkCAsShAUJwoIEYUGCsCBBWJAgLEgQFiQICxKEBQnCggRhQYKwIEFYkCAsSBAWJAgLEoQFCcKCBGFBgrAgQViQICxIEBYkCAvTM7PfNXL5THFVM2MAAAAASUVORK5CYII='
 description: ''
-behavior_plugins:
-  layout_paragraphs:
-    enabled: false
-    available_layouts: {  }
+behavior_plugins: {  }

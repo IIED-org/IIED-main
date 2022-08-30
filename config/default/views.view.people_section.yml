@@ -731,17 +731,17 @@ display:
           hierarchy: false
           limit: true
           error_message: true
-        field_department_value:
-          id: field_department_value
-          table: taxonomy_term__field_department
-          field: field_department_value
+        field_research_group_value:
+          id: field_research_group_value
+          table: taxonomy_term__field_research_group
+          field: field_research_group_value
           relationship: none
           group_type: group
           admin_label: ''
           plugin_id: list_field
           operator: or
           value:
-            - '0'
+            1: '1'
           group: 1
           exposed: false
           expose:
@@ -869,17 +869,17 @@ display:
           hierarchy: false
           limit: true
           error_message: true
-        field_department_value:
-          id: field_department_value
-          table: taxonomy_term__field_department
-          field: field_department_value
+        field_research_group_value:
+          id: field_research_group_value
+          table: taxonomy_term__field_research_group
+          field: field_research_group_value
           relationship: none
           group_type: group
           admin_label: ''
           plugin_id: list_field
           operator: or
           value:
-            1: '1'
+            2: '2'
           group: 1
           exposed: false
           expose:
@@ -1007,17 +1007,17 @@ display:
           hierarchy: false
           limit: true
           error_message: true
-        field_department_value:
-          id: field_department_value
-          table: taxonomy_term__field_department
-          field: field_department_value
+        field_research_group_value:
+          id: field_research_group_value
+          table: taxonomy_term__field_research_group
+          field: field_research_group_value
           relationship: none
           group_type: group
           admin_label: ''
           plugin_id: list_field
           operator: or
           value:
-            2: '2'
+            4: '4'
           group: 1
           exposed: false
           expose:
@@ -1145,10 +1145,10 @@ display:
           hierarchy: false
           limit: true
           error_message: true
-        field_department_value:
-          id: field_department_value
-          table: taxonomy_term__field_department
-          field: field_department_value
+        field_research_group_value:
+          id: field_research_group_value
+          table: taxonomy_term__field_research_group
+          field: field_research_group_value
           relationship: none
           group_type: group
           admin_label: ''

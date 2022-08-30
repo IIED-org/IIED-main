@@ -31,8 +31,8 @@ dependencies:
   module:
     - ds
     - field_group
-    - image
     - layout_builder
+    - svg_image
     - user
 third_party_settings:
   layout_builder:
@@ -118,6 +118,10 @@ content:
     settings:
       image_link: ''
       image_style: card_370
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
       image_loading:
         attribute: lazy
     third_party_settings:

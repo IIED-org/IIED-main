@@ -10,7 +10,7 @@ field_name: field_type
 entity_type: taxonomy_term
 bundle: organisation
 label: Group
-description: 'Groups are not displayed in citations'
+description: 'Defines whether this entity is a group, rather than separate organisation. Groups are not displayed in citations'
 required: false
 translatable: false
 default_value:

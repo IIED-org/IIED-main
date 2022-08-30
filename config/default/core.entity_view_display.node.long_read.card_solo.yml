@@ -1,9 +1,9 @@
-uuid: c7b5e04b-6f29-4bec-a8b7-5ef74e3b5e8f
+uuid: 6e2e54a2-68cc-40ca-8a88-3f60a27f7509
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.card_md
+    - core.entity_view_mode.node.card_solo
     - field.field.node.long_read.body
     - field.field.node.long_read.field_author_s_
     - field.field.node.long_read.field_collections
@@ -23,10 +23,10 @@ third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-id: node.long_read.card_md
+id: node.long_read.card_solo
 targetEntityType: node
 bundle: long_read
-mode: card_md
+mode: card_solo
 content:
   field_author_s_:
     type: entity_reference_label

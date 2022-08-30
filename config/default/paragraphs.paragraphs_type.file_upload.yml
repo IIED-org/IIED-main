@@ -2,14 +2,11 @@ uuid: 9098d043-614d-4423-930d-c8662eb974c5
 langcode: en
 status: true
 dependencies:
-  module:
-    - layout_paragraphs
+  content:
+    - 'file:file:84cebc13-11a4-4847-8223-fcf169638ff9'
 id: file_upload
-label: 'File Upload'
-icon_uuid: null
-icon_default: null
+label: 'File upload'
+icon_uuid: 84cebc13-11a4-4847-8223-fcf169638ff9
+icon_default: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAABlCAYAAACvBxpVAAAACXBIWXMAAAsSAAALEgHS3X78AAADX0lEQVR4nO3dP24TQRiG8S8I0aGkoyQ3wCdAS7F14ASYG7jZPr0LnBvACTC1m+UGzg2ckgYR0dEsGmkCqyhOJmu/nmW+59fESvxP9qPNeGbXe9R1nQH79oRXFAqEBQnCggRhQYKwIEFYkCAsSBAWJAgLEoQFCcKCBGFBgrAgQViQICxIEBYkCAsShAUJwoIEYUGCsCDxtMSXdVXNT8xsYWaVmb080MNemVlrZrO6bX4e6DFHq7jDv2JUGzM7zvQUfpnZ67pt1pkefxRK3GItbkV1YWbqLcibEFO8/DxsuVbVvPIcV4lhVb3LH+q2+aR+wFU1t15YwbH3uEocvN+MqS4OEdUdLuOvbuKaZHgO2ZX8qTDXAHppZp/jZbdxMd0gULfN1HtchCXiPS7CEvIcF2GJeY2ryJn3zKZhmuGOp/DdzF54mYogrP3ofwIN0x0PLSOFuJZhy1Xq8o+bsFbV/NTMTgfefFO3zeaev4f5svAv71XCff02s2cxvmlcKSiOi7Di+uF6h/XDazM72fbHuNWZxLHT1utFP3qTqA9d97/lIqzwxq+q+SxuIYZImsFPHTPFJaCiuflXGJd3cizxuMR0AyQICxKEBQnCgoSneawwcH+fcNW/Owc+4jbJ9+mFiy1WnMdKXZ+bDLhN0n164mYe67Fv7pDb4B/GWJAgLEgQFiQ8fSoM46W3mR5+4e3oaE97N7QZj47OGXUWnvZumGb8lLfM9LjZeNq7YenxDc6FwTskCAsShAUJFqEfb8giNYvQJVIsKA9Z2PaERegR3WdJGGNBgrAgQViQ4BD7w1izCF2gPRxiv6uvLEIXaA+H2O/q3MPr3Mch9pBg8A4JwoIEYUGCr4rcQdwrNeUDwczbqU8Ia6DeqetSpjDOmW5AkjiFMUmcdHV3oibC2kH8wtv7vvTWLQbvkCAsSBAWJEoM6zr+nI3xnDVxiqJ4JQ7ew6H0Z71z1kwznhTzthD6x97vih34l3qy8bN4OcT1JfPz2eay5COzi/tXWLdN2GK9M7OrETydbb6Fk6KXvPPfUdd1I3gaGonntjk0F3uTFh0W8mG6ARKEBQnCggRhQYKwIEFYkCAsSBAWJAgLEoQFCcKCBGFBgrAgQViQICxIEBYkCAsShAUJwoIEYWH/zOwPv0rmw4SnidgAAAAASUVORK5CYII='
 description: ''
-behavior_plugins:
-  layout_paragraphs:
-    enabled: false
-    available_layouts: {  }
+behavior_plugins: {  }

@@ -1,9 +1,9 @@
-uuid: 6be0d613-5a14-433d-a7f9-67406aefef02
+uuid: 2450bcb1-79d0-45dc-b3f3-e01ee780c4df
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.card_md
+    - core.entity_view_mode.node.card_solo
     - field.field.node.news.body
     - field.field.node.news.field_admin
     - field.field.node.news.field_collections
@@ -28,10 +28,10 @@ third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-id: node.news.card_md
+id: node.news.card_solo
 targetEntityType: node
 bundle: news
-mode: card_md
+mode: card_solo
 content:
   field_main_image:
     type: entity_reference_label

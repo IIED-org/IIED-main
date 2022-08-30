@@ -9,7 +9,7 @@ id: node.project.field_tagline
 field_name: field_tagline
 entity_type: node
 bundle: project
-label: 'Carousel or highlight text'
+label: Tagline
 description: ''
 required: false
 translatable: true
