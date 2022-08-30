@@ -29,7 +29,7 @@
     {{ content.field_icon }}
   {{ title_prefix }}
   {% if label %}
-    <h3{{ title_attributes }}>{{ label }}</h3>
+    <h3{{ title_attributes.addClass('mt-2') }}>{{ label }}</h3>
   {% endif %}
   {{ title_suffix }}
   {% block content %}

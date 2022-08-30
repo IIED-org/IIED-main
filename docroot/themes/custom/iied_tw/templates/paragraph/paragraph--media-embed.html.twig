@@ -50,12 +50,12 @@
 {% block paragraph %}
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
-    <figure class="mb-6 -mx-6 sm:mx-0">
+    <figure class="mb-6 -mx-4 sm:mx-0">
       {{ content.field_basic_text }}
 
-      {% if content.field_image_description %}
-      <figcaption class="px-6 mt-1 text-base leading-tight text-gray-500 sm:p-0">
-       {{ content.field_image_description }}
+      {% if content.field_image_caption %}
+      <figcaption class="px-4 mt-1 text-base leading-tight text-gray-500 sm:p-0">
+       {{ content.field_image_caption }}
        </figcaption>
       {% endif %}  
     </figure>   

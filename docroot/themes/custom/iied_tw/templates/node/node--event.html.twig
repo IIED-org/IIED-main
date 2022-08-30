@@ -79,8 +79,7 @@
 %}
 
 <article{{ attributes.addClass(classes) }}>
-  <div class="my-6">
-    <main>
+ 
       {#-- grid --#}
       <div
         class="container mx-auto lg:px-8 xl:grid xl:gap-x-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12"
@@ -164,10 +163,10 @@
         >
           {#-- image if field_display_image --#} 
           {% if content.field_main_image %}
-          <figure class="-mx-6 overflow-hidden xl:mb-2 sm:mx-0">
+          <figure class="-mx-4 overflow-hidden xl:mb-2 sm:mx-0">
             {{ content.field_main_image[0] }}
             <figcaption
-              class="px-6 mt-1 text-base leading-tight text-gray-500 sm:p-0"
+              class="px-4 mt-1 text-base leading-tight text-gray-500 sm:p-0"
             >
               {{ content.field_image_caption }}
             </figcaption>
@@ -197,8 +196,7 @@
 
         {#-- end grid --#}
       </div>
-    </main>
-  </div>
+
 </article>
 {% include '@iied_tw/partials/_related_project.html.twig' %}
 {% include '@iied_tw/partials/_related_nodes_insight.html.twig' %}

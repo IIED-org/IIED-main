@@ -26,29 +26,23 @@
 {%
   set classes = [
     'taxonomy-term',
-    'mb-12',
     'vocabulary-' ~ term.bundle|clean_class,
   ]
 %}
 <div{{ attributes.setAttribute('id', 'taxonomy-term-' ~ term.id).addClass(classes) }}>
-  <div class="py-6 mb-6 border-b-4 border-iiedgreen-500">
-    <div class="container items-baseline overflow-hidden lg:grid lg:gap-x-6 lg:grid-cols-12">
-      <div class="lg:col-span-4">
+    <div class="container my-12 overflow-hidden">
+
         {{ title_prefix }}
         <h1 class="mb-6">{{ name }}</h1>
         {{ title_suffix }}
-      </div>
-      <div class="lg:col-span-8">
-        <p class="text-xl lg:text-2xl font-headline">
-        {{ term.description.0.value|striptags }}
+        <p class="text-gray-500">Publication list</p>
+        <p class="mb-12 prose prose-lg">
+         {{ term.description.0.value|striptags }}
         </p>
-      </div>
-    </div>
-  </div>
-
+   
   <div class="content">
-    {{ content }}
+    {{ drupal_view('term_publications', 'block_1') }}
   </div>
 
+    </div>
 </div>
-

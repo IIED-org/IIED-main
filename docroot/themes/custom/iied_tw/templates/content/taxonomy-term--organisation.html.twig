@@ -30,22 +30,25 @@
   ]
 %}
 <div{{ attributes.setAttribute('id', 'taxonomy-term-' ~ term.id).addClass(classes) }}>
-    <div class="container flex flex-wrap justify-between p-4 mx-auto overflow-hidden">
+    <div class="container flex flex-wrap justify-between my-12 overflow-hidden">
       <div class="content">
         {{ title_prefix }}
         <h1 class="mb-6">{{ name }}</h1>
         {{ title_suffix }}
-
         <p>
           {{ term.description.0.value }}
         </p>
-
         {{ content|without('field_logo') }}
       </div>
 
-      <div class="my-4">
+      <div>
         {{ content.field_logo }}
       </div>
+
     </div>
+
+    <div class="container mb-6">
+    {{ drupal_view('term_publications', 'block_1') }}
+  </div>
 </div>
 
