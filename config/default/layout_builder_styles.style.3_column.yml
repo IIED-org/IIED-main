@@ -4,7 +4,7 @@ status: true
 dependencies: {  }
 id: 3_column
 label: '3 column'
-classes: 'sm:col-span-2 xl:col-span-3 h-full'
+classes: 'sm:col-span-2 xl:col-span-3'
 type: component
 group: default
 block_restrictions:

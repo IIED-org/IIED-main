@@ -7,13 +7,17 @@ dependencies:
     - node.type.hidden_page
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.box
+    - paragraphs.paragraphs_type.gallery
     - paragraphs.paragraphs_type.highchart
     - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.image_small
     - paragraphs.paragraphs_type.image_wide
+    - paragraphs.paragraphs_type.media_embed
     - paragraphs.paragraphs_type.media_list
     - paragraphs.paragraphs_type.quote
     - paragraphs.paragraphs_type.section
+    - paragraphs.paragraphs_type.stories_block
+    - paragraphs.paragraphs_type.stories_text
     - paragraphs.paragraphs_type.video_embed
   module:
     - entity_reference_revisions
@@ -33,13 +37,17 @@ settings:
     target_bundles:
       basic_text: basic_text
       box: box
+      gallery: gallery
       highchart: highchart
       image: image
       image_small: image_small
       image_wide: image_wide
+      media_embed: media_embed
       media_list: media_list
       quote: quote
       section: section
+      stories_block: stories_block
+      stories_text: stories_text
       video_embed: video_embed
     negate: 0
     target_bundles_drag_drop:
@@ -63,7 +71,7 @@ settings:
         enabled: false
       gallery:
         weight: 45
-        enabled: false
+        enabled: true
       highchart:
         weight: 46
         enabled: true
@@ -90,7 +98,7 @@ settings:
         enabled: false
       media_embed:
         weight: 54
-        enabled: false
+        enabled: true
       media_list:
         weight: 55
         enabled: true
@@ -123,7 +131,7 @@ settings:
         enabled: true
       stories_block:
         weight: 65
-        enabled: false
+        enabled: true
       stories_cta:
         weight: 66
         enabled: false
@@ -141,7 +149,7 @@ settings:
         enabled: false
       stories_text:
         weight: 71
-        enabled: false
+        enabled: true
       stories_views:
         weight: 72
         enabled: false
