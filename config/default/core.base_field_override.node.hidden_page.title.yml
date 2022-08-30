@@ -1,0 +1,18 @@
+uuid: c032c3da-552d-4fd4-86ac-990192fffabf
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.hidden_page
+id: node.hidden_page.title
+field_name: title
+entity_type: node
+bundle: hidden_page
+label: Title
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

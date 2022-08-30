@@ -1,18 +1,18 @@
-uuid: 7ba12bf6-48f9-4ed5-9164-05ca7b97e333
+uuid: abccc953-bd38-4c8a-9abc-d5ec1b967c96
 langcode: en
 status: true
 dependencies:
   config:
-    - node.type.long_read
+    - paragraphs.paragraphs_type.image_small
   module:
     - content_translation
 third_party_settings:
   content_translation:
-    enabled: true
+    enabled: false
     bundle_settings:
       untranslatable_fields_hide: '0'
-id: node.long_read
-target_entity_type_id: node
-target_bundle: long_read
+id: paragraph.image_small
+target_entity_type_id: paragraph
+target_bundle: image_small
 default_langcode: site_default
-language_alterable: true
+language_alterable: false

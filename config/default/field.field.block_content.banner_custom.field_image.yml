@@ -6,14 +6,7 @@ dependencies:
     - block_content.type.banner_custom
     - field.storage.block_content.field_image
   module:
-    - content_translation
     - image
-third_party_settings:
-  content_translation:
-    translation_sync:
-      alt: alt
-      title: title
-      file: '0'
 id: block_content.banner_custom.field_image
 field_name: field_image
 entity_type: block_content
@@ -21,7 +14,7 @@ bundle: banner_custom
 label: Image
 description: ''
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:

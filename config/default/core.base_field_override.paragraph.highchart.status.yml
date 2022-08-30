@@ -1,20 +1,20 @@
-uuid: c8c160cc-3f7b-4a00-b3d2-757b39f24248
+uuid: f0946850-c806-4912-a0e5-2d1663ca088c
 langcode: en
 status: true
 dependencies:
   config:
-    - node.type.hidden_page
-id: node.hidden_page.promote
-field_name: promote
-entity_type: node
-bundle: hidden_page
-label: 'Promoted to front page'
+    - paragraphs.paragraphs_type.highchart
+id: paragraph.highchart.status
+field_name: status
+entity_type: paragraph
+bundle: highchart
+label: Published
 description: ''
 required: false
 translatable: false
 default_value:
   -
-    value: 0
+    value: 1
 default_value_callback: ''
 settings:
   on_label: 'On'

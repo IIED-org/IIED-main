@@ -1,14 +1,14 @@
-uuid: c8c160cc-3f7b-4a00-b3d2-757b39f24248
+uuid: c4c7d121-63e6-4560-9cbd-03ed377d80e7
 langcode: en
 status: true
 dependencies:
   config:
     - node.type.hidden_page
-id: node.hidden_page.promote
-field_name: promote
+id: node.hidden_page.sticky
+field_name: sticky
 entity_type: node
 bundle: hidden_page
-label: 'Promoted to front page'
+label: 'Sticky at top of lists'
 description: ''
 required: false
 translatable: false
