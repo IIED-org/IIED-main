@@ -97,3 +97,4 @@ modification+administrator+taxonomy_term+person: taxonomy_term.person.default
 'use  The form mode default linked to  paragraph entity( highchart )': paragraph.highchart.default
 'use  The form mode default linked to  paragraph entity( related_publication_inline )': paragraph.related_publication_inline.default
 'use  The form mode default linked to  node entity( hidden_page )': node.hidden_page.default
+'use  The form mode default linked to  contact_message entity( feedback )': contact_message.feedback.default
