@@ -10,7 +10,7 @@ eu_only_js: null
 popup_position: false
 fixed_top_position: true
 popup_info:
-  value: "<div class=\"mt-3\">We use cookies to help improve this website. Clicking any link on this site will be taken as your consent to this.</div>\r\n"
+  value: "<div class=\"mt-3\">We use cookies to improve the site and provide you with a better experience. Click OK or any link to give your consent.</div>\r\n"
   format: full_html
 mobile_popup_info:
   value: ''

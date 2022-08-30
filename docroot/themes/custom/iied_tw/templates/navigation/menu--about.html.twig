@@ -31,13 +31,13 @@
   {% if items %}
   <div class="container flex flex-wrap my-6"><span class="px-2 py-2 font-semibold">In this section:</span>
     {% if menu_level == 0 %}
-      <ul{{ attributes.addClass('flex', 'tertiary-menu') }}>
+      <ul{{ attributes.addClass('flex', 'flex-wrap', 'tertiary-menu') }}>
     {% else %}
       <ul>
     {% endif %}
     {% for item in items %}
       <li{{ item.attributes }}>
-        {{ link(item.title, item.url, { 'class':['block', 'py-2', 'px-2']}) }}
+        {{ link(item.title, item.url, { 'class':['block', 'py-2', 'px-2', 'mb-2']}) }}
         {% if item.below %}
           {{ menus.menu_links(item.below, attributes, menu_level + 1) }}
         {% endif %}

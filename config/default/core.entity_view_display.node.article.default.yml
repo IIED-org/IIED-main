@@ -26,11 +26,10 @@ dependencies:
   module:
     - comment
     - entity_reference_revisions
-    - image
     - layout_builder
     - layout_builder_restrictions
-    - layout_discovery
     - options
+    - svg_image
     - text
     - user
 third_party_settings:
@@ -123,6 +122,10 @@ content:
     settings:
       image_link: ''
       image_style: large
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
       image_loading:
         attribute: lazy
     third_party_settings: {  }

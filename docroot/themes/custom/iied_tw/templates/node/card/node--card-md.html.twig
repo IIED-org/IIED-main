@@ -6,7 +6,7 @@ For general featured card display
 {# odd #}
 
 <article{{ attributes.addClass('h-full') }}>
-
+    {{ node.field_main_image.value.alt }}
         <a href="{{ url }}" class="hover:no-underline">
           <div
             class="flex flex-col h-full overflow-hidden transition-shadow bg-white border border-gray-300 rounded-xl hover:shadow-lg group"

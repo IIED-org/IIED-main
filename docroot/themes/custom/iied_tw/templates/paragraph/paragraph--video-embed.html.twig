@@ -51,11 +51,11 @@
 {% block paragraph %}
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
-    <figure class="mb-6 -mx-6 sm:mx-0">
+    <figure class="mb-6 -mx-4 sm:mx-0">
       {{ content.field_video }}
 
       {% if content.field_video_description %}
-      <figcaption class="px-6 mt-1 text-base leading-tight text-gray-500 sm:p-0">
+      <figcaption class="px-4 mt-1 text-base leading-tight text-gray-500 sm:p-0">
        {{ content.field_video_description }}
        </figcaption>
       {% endif %}  

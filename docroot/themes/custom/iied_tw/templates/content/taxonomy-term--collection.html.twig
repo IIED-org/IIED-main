@@ -26,6 +26,7 @@
 {%
   set classes = [
     'taxonomy-term',
+    'mb-12',
     'vocabulary-' ~ term.bundle|clean_class,
   ]
 %}
@@ -103,6 +104,4 @@
 {# TODO: needs adjusting to show tags #}
   {{ content.field_tags }} 
 {% endif %}
-
-  
 

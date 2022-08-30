@@ -47,12 +47,12 @@
   {% if multiple %}
     <div{{ attributes }}>
       {% for item in items %}
-        <div{{ item.attributes.addClass('mb-4 ml-10 text-xl font-bold lg:-ml-20 lg:absolute') }}>{{ item.content }}</div>
+        <div{{ item.attributes.addClass('mb-4 ml-10 font-bold lg:-ml-20 lg:absolute') }}>{{ item.content }}</div>
       {% endfor %}
     </div>
   {% else %}
     {% for item in items %}
-      <div{{ attributes.addClass('mb-4 ml-10 text-xl font-bold lg:-ml-20 lg:absolute') }}>{{ item.content }}</div>
+      <div{{ attributes.addClass('mb-4 ml-10 font-bold lg:-ml-20 lg:absolute') }}>{{ item.content }}</div>
     {% endfor %}
   {% endif %}
 {% else %}

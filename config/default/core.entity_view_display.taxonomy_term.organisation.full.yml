@@ -18,55 +18,14 @@ dependencies:
   module:
     - address
     - ds
-    - image
     - layout_builder
     - link
+    - svg_image
     - text
 third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-  ds:
-    layout:
-      id: ds_1col
-      library: null
-      disable_css: false
-      entity_classes: all_classes
-      settings:
-        classes:
-          layout_class: {  }
-          ds_content: {  }
-        wrappers:
-          ds_content: div
-        outer_wrapper: div
-        attributes: ''
-        link_attribute: ''
-        link_custom: ''
-        label: ''
-    regions:
-      ds_content:
-        - taxonomy_term_title
-        - field_full_name
-        - field_location
-        - field_url
-        - field_logo
-        - description
-    fields:
-      taxonomy_term_title:
-        plugin_id: taxonomy_term_title
-        weight: 0
-        label: hidden
-        formatter: default
-        settings:
-          link: false
-          wrapper: h1
-          class: page-title
-        ft:
-          id: default
-          settings:
-            lb: ''
-            lb-col: false
-            classes: {  }
 id: taxonomy_term.organisation.full
 targetEntityType: taxonomy_term
 bundle: organisation
@@ -78,7 +37,7 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 5
-    region: ds_content
+    region: content
   field_full_name:
     type: string
     label: hidden
@@ -86,7 +45,7 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     weight: 1
-    region: ds_content
+    region: content
   field_location:
     type: address_default
     label: hidden
@@ -120,14 +79,18 @@ content:
             fi-def-at: false
             prefix: ''
             suffix: ''
-    weight: 2
-    region: ds_content
+    weight: 3
+    region: content
   field_logo:
     type: image
     label: hidden
     settings:
       image_link: ''
       image_style: page
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
       image_loading:
         attribute: lazy
     third_party_settings:
@@ -159,8 +122,8 @@ content:
             fi-def-at: false
             prefix: ''
             suffix: ''
-    weight: 4
-    region: ds_content
+    weight: 2
+    region: content
   field_url:
     type: link
     label: hidden
@@ -171,8 +134,8 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 3
-    region: ds_content
+    weight: 4
+    region: content
 hidden:
   field_alias: true
   field_email: true

@@ -17,45 +17,6 @@ third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-  ds:
-    layout:
-      id: ds_1col
-      library: null
-      disable_css: false
-      entity_classes: all_classes
-      settings:
-        classes:
-          layout_class:
-            mb-3: mb-3
-          ds_content: {  }
-        wrappers:
-          ds_content: div
-        outer_wrapper: div
-        attributes: ''
-        link_attribute: ''
-        link_custom: ''
-        label: ''
-    regions:
-      ds_content:
-        - taxonomy_term_title
-        - field_status
-        - description
-    fields:
-      taxonomy_term_title:
-        plugin_id: taxonomy_term_title
-        weight: 0
-        label: hidden
-        formatter: default
-        settings:
-          link: false
-          wrapper: h1
-          class: page-title
-        ft:
-          id: default
-          settings:
-            lb: ''
-            lb-col: false
-            classes: {  }
 id: taxonomy_term.series.full
 targetEntityType: taxonomy_term
 bundle: series
@@ -95,7 +56,7 @@ content:
             fi-def-at: 0
             suffix: ''
     weight: 2
-    region: ds_content
+    region: content
   field_status:
     type: list_default
     label: hidden
@@ -130,7 +91,7 @@ content:
             prefix: '<p class="text-muted">'
             suffix: series</p>
     weight: 1
-    region: ds_content
+    region: content
 hidden:
   field_code: true
   field_purpose: true

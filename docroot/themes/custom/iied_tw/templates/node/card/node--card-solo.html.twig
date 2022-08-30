@@ -1,31 +1,36 @@
 
 {#
-Standard card for the most general card display
+Card to display related content 
 #}
 
 <article{{ attributes.addClass('h-full') }}>
 
         <a href="{{ url }}" class="hover:no-underline">
           <div
-            class="flex h-full overflow-hidden transition-shadow bg-white border border-gray-300 rounded-xl group hover:shadow-md grow"
+            class="flex flex-row h-full overflow-hidden transition-shadow bg-white border border-gray-300 lg:flex-col rounded-xl group hover:shadow-md grow"
           >
       
-            {% block image %}
-                        {% set image_uri = node.field_main_image|file_uri %}
-                        {% set image_alt = node.field_main_image.alt %}
-            {% if image_uri is not null %}
-              <img class="object-cover w-3/12 h-auto" src="{{ image_uri|image_style('card_256') }}" alt="{{ image_alt }}" />
-            {% endif %}
-            {% endblock %}
+            <div class="relative lg:static lg:order-1">
 
-          
-            <div class="flex flex-col justify-between w-9/12 p-4">
+              {% block image %}
+                {% set image_uri = node.field_main_image|file_uri %}
+                {% set image_alt = node.field_main_image.alt %}
+              {% if image_uri is not null %}
+                <img class="object-cover w-3/12 h-full md:w-full" src="{{ image_uri|image_style('card_256') }}" alt="{{ image_alt }}" />
+              {% endif %}
+              {% endblock %}
+
+            </div>
+
+            <div class="flex flex-col justify-between w-9/12 p-4 lg:w-full lg:order-2">
               <h5 class="mb-4 text-xl leading-relaxed text-gray-900">
                 {{ label }}
               </h5>
+
               {% block date %}
               <p class="text-gray-500">{{ node.type.entity.label() }}, {{ node.getCreatedTime|date('d F Y') }} </p>
               {% endblock %}
+              
             </div>
           </div>
         </a>

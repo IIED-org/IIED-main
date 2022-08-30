@@ -1,9 +1,9 @@
-uuid: 476fbebe-b028-4529-b9b3-6ef18b9c6c24
+uuid: 1dba343e-f8ba-4630-bac1-c4f71014cd0b
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.card_lg
+    - core.entity_view_mode.node.card_solo
     - field.field.node.event.body
     - field.field.node.event.field_alternative_label
     - field.field.node.event.field_alternative_title
@@ -39,10 +39,10 @@ third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-id: node.event.card_lg
+id: node.event.card_solo
 targetEntityType: node
 bundle: event
-mode: card_lg
+mode: card_solo
 content:
   field_alternative_title:
     type: string

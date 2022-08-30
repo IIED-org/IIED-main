@@ -44,6 +44,13 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 3
+    region: content
+  field_tagline:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
     weight: 2
     region: content
   links:
@@ -60,7 +67,6 @@ hidden:
   field_main_image: true
   field_rows: true
   field_standfirst: true
-  field_tagline: true
   langcode: true
   search_api_excerpt: true
   sharing_buttons: true
