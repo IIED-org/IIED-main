@@ -1,9 +1,9 @@
-uuid: 73a9c24b-9dce-4123-8fa7-3cfbe1334611
+uuid: dbe70bf9-64f5-4741-bd39-21533c5659b7
 langcode: en
 status: true
 dependencies:
   config:
-    - node.type.hidden_page
+    - paragraphs.paragraphs_type.related_project
   module:
     - content_translation
 third_party_settings:
@@ -11,8 +11,8 @@ third_party_settings:
     enabled: false
     bundle_settings:
       untranslatable_fields_hide: '0'
-id: node.hidden_page
-target_entity_type_id: node
-target_bundle: hidden_page
+id: paragraph.related_project
+target_entity_type_id: paragraph
+target_bundle: related_project
 default_langcode: site_default
 language_alterable: false

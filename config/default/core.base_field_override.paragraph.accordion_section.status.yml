@@ -1,20 +1,20 @@
-uuid: f9848f7f-312a-41da-87e9-e6ea0e6056e8
+uuid: eb3b91b4-3837-4213-b594-9e7aa177de14
 langcode: en
 status: true
 dependencies:
   config:
-    - node.type.hidden_page
-id: node.hidden_page.status
+    - paragraphs.paragraphs_type.accordion_section
+id: paragraph.accordion_section.status
 field_name: status
-entity_type: node
-bundle: hidden_page
+entity_type: paragraph
+bundle: accordion_section
 label: Published
 description: ''
 required: false
 translatable: false
 default_value:
   -
-    value: 0
+    value: 1
 default_value_callback: ''
 settings:
   on_label: 'On'

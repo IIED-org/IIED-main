@@ -1,0 +1,18 @@
+uuid: 9ea993cc-0899-45a3-a66a-e48df4bac222
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.hidden_page
+id: node.hidden_page.created
+field_name: created
+entity_type: node
+bundle: hidden_page
+label: 'Authored on'
+description: 'The time that the node was created.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: created

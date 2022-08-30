@@ -1,0 +1,20 @@
+uuid: b1bf4f88-3be5-42c2-b56b-141857ad05b5
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.hidden_page
+  module:
+    - path
+id: node.hidden_page.path
+field_name: path
+entity_type: node
+bundle: hidden_page
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path
