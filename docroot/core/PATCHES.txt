@@ -17,3 +17,11 @@ The language of content entities incorrectly falls back to the default language.
 Source: https://www.drupal.org/files/issues/2021-09-16/3061761-46.patch
 
 
+3208030
+Source: https://www.drupal.org/files/issues/2022-07-08/3208030_16.patch
+
+
+3209204
+Source: https://www.drupal.org/files/issues/2021-09-07/3209204-adding-existing-translation_0.patch
+
+

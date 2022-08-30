@@ -12,6 +12,8 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\TypedData\TranslatableInterface as TranslatableDataInterface;
 use Drupal\Core\TypedData\TranslationStatusInterface;
 use Drupal\Core\TypedData\TypedDataInterface;
+use Drupal\Core\Url;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Implements Entity Field API specific enhancements to the Entity class.
@@ -814,7 +816,7 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
         if ($this->isDefaultTranslation()) {
           // Update the default internal language cache.
           $this->setDefaultLangcode();
-          if (isset($this->translations[$this->defaultLangcode])) {
+          if (isset($this->translations[$this->defaultLangcode]['status'], $this->translations[$this->defaultLangcode]['entity'])) {
             $message = new FormattableMarkup('A translation already exists for the specified language (@langcode).', ['@langcode' => $this->defaultLangcode]);
             throw new \InvalidArgumentException($message);
           }
@@ -964,11 +966,18 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
     // Make sure we do not attempt to create a translation if an invalid
     // language is specified or the entity cannot be translated.
     $this->getLanguages();
-    if (!isset($this->languages[$langcode]) || $this->hasTranslation($langcode) || $this->languages[$langcode]->isLocked()) {
+    if (!isset($this->languages[$langcode]) || $this->languages[$langcode]->isLocked()) {
       throw new \InvalidArgumentException("Invalid translation language ($langcode) specified.");
     }
     if ($this->languages[$this->defaultLangcode]->isLocked()) {
       throw new \InvalidArgumentException("The entity cannot be translated since it is language neutral ({$this->defaultLangcode}).");
+    }
+
+    // Redirect user to the correct edit page if this translation already exists.
+    if ($this->hasTranslation($langcode)) {
+      $route = 'entity.' . $this->getEntityTypeId() . '.edit_form';
+      $redirect = new RedirectResponse(Url::fromRoute($route, [$this->getEntityTypeId() => $this->id()])->toString());
+      $redirect->send();
     }
 
     // Initialize the translation object.
