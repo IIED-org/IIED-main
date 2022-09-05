@@ -78,3 +78,26 @@ You can try running the whole group with:
 ```bash
 lando drush mim --group=iied_migrate_d7
 ```
+
+## Importing changes to the migrations
+
+The migration configuration is stored in the config/install folder. When we
+make changes to the config there, we need to import it into the active config
+before exporting it to the default. One was to do this is as follows:
+
+```
+lando drush config-import --partial --source=modules/custom/iied_migrate_d7/config/install
+```
+
+## Run an update migration for news
+
+Once we've made changes to a migration config that has already run, we might
+want to run an update migration. To do this we can append --update to the
+migration import command.
+
+```
+lando drush mim iied_d7_news_press --update
+```
+
+In this case, we should be able to migrate the themes to the field_theme_s_
+field that got missed.
