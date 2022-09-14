@@ -163,15 +163,18 @@
     @apply w-full;
   }
 
-  .odd .rounded-odd-even {
+  .odd .rounded-odd-even,
+  .odd-even .even-odd:nth-child(odd) .rounded-odd-even {
     @apply rounded-tr-xl;
   }
 
-  .even .rounded-odd-even {
+  .even .rounded-odd-even,
+  .odd-even .even-odd:nth-child(even) .rounded-odd-even {
     @apply rounded-tl-xl;
   }
 
-  .odd .rounded-odd-even:before {
+  .odd .rounded-odd-even:before,
+  .odd-even .even-odd:nth-child(odd) .rounded-odd-even:before {
     content: url(/themes/custom/iied_tw/templates/layout/icons/corner-bl.svg);
     position: absolute;
     top: -12px;
@@ -182,7 +185,8 @@
     fill: #fff;
   }
 
-  .even .rounded-odd-even:before {
+  .even .rounded-odd-even:before,
+  .odd-even .even-odd:nth-child(even) .rounded-odd-even:before {
     content: url(/themes/custom/iied_tw/templates/layout/icons/corner-tr.svg);
     position: absolute;
     top: -12px;

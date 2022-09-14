@@ -2581,15 +2581,18 @@ cite {
   width: 100%;
 }
 
-.odd .rounded-odd-even{
+.odd .rounded-odd-even, 
+  .odd-even .even-odd:nth-child(odd) .rounded-odd-even{
   border-top-right-radius: 0.75rem;
 }
 
-.even .rounded-odd-even{
+.even .rounded-odd-even, 
+  .odd-even .even-odd:nth-child(even) .rounded-odd-even{
   border-top-left-radius: 0.75rem;
 }
 
-.odd .rounded-odd-even:before {
+.odd .rounded-odd-even:before,
+  .odd-even .even-odd:nth-child(odd) .rounded-odd-even:before {
   content: url(/themes/custom/iied_tw/templates/layout/icons/corner-bl.svg);
   position: absolute;
   top: -12px;
@@ -2600,7 +2603,8 @@ cite {
   fill: #fff;
 }
 
-.even .rounded-odd-even:before {
+.even .rounded-odd-even:before,
+  .odd-even .even-odd:nth-child(even) .rounded-odd-even:before {
   content: url(/themes/custom/iied_tw/templates/layout/icons/corner-tr.svg);
   position: absolute;
   top: -12px;
@@ -3224,6 +3228,10 @@ cite {
   height: 2rem;
 }
 
+.h-auto{
+  height: auto;
+}
+
 .h-10{
   height: 2.5rem;
 }
@@ -3258,20 +3266,12 @@ cite {
   height: max-content;
 }
 
-.h-auto{
-  height: auto;
-}
-
 .h-3{
   height: 0.75rem;
 }
 
 .h-2{
   height: 0.5rem;
-}
-
-.max-h-96{
-  max-height: 24rem;
 }
 
 .max-h-44{
@@ -3324,10 +3324,6 @@ cite {
 
 .w-8{
   width: 2rem;
-}
-
-.w-2\/3{
-  width: 66.666667%;
 }
 
 .w-10{
@@ -3404,8 +3400,12 @@ cite {
   max-width: none;
 }
 
-.flex-1{
-  flex: 1 1 0%;
+.max-w-\[75\%\]{
+  max-width: 75%;
+}
+
+.flex-none{
+  flex: none;
 }
 
 .flex-auto{
@@ -3418,10 +3418,6 @@ cite {
 
 .shrink-0{
   flex-shrink: 0;
-}
-
-.flex-grow{
-  flex-grow: 1;
 }
 
 .grow-0{
@@ -3653,6 +3649,12 @@ cite {
   margin-left: calc(-0.75rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
+.space-y-2 > :not([hidden]) ~ :not([hidden]){
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
+}
+
 .space-y-0 > :not([hidden]) ~ :not([hidden]){
   --tw-space-y-reverse: 0;
   margin-top: calc(0px * calc(1 - var(--tw-space-y-reverse)));
@@ -3661,6 +3663,10 @@ cite {
 
 .self-end{
   align-self: flex-end;
+}
+
+.self-center{
+  align-self: center;
 }
 
 .justify-self-end{
@@ -4684,6 +4690,10 @@ cite {
     visibility: visible;
   }
 
+  .sm\:order-2{
+    order: 2;
+  }
+
   .sm\:col-span-2{
     grid-column: span 2 / span 2;
   }
@@ -5164,10 +5174,6 @@ cite {
 
   .md\:w-1\/4{
     width: 25%;
-  }
-
-  .md\:w-10\/12{
-    width: 83.333333%;
   }
 
   .md\:w-full{
@@ -5722,12 +5728,12 @@ cite {
     grid-column: span 3 / span 3;
   }
 
-  .lg\:col-span-4{
-    grid-column: span 4 / span 4;
-  }
-
   .lg\:col-span-8{
     grid-column: span 8 / span 8;
+  }
+
+  .lg\:col-span-4{
+    grid-column: span 4 / span 4;
   }
 
   .lg\:col-span-6{
@@ -5749,10 +5755,6 @@ cite {
   .lg\:my-24{
     margin-top: 6rem;
     margin-bottom: 6rem;
-  }
-
-  .lg\:-ml-20{
-    margin-left: -5rem;
   }
 
   .lg\:-ml-4{
@@ -5807,6 +5809,10 @@ cite {
     width: 24rem;
   }
 
+  .lg\:w-1\/2{
+    width: 50%;
+  }
+
   .lg\:w-2\/4{
     width: 50%;
   }
@@ -5819,6 +5825,10 @@ cite {
     width: 25%;
   }
 
+  .lg\:w-3\/4{
+    width: 75%;
+  }
+
   .lg\:w-9\/12{
     width: 75%;
   }
@@ -5829,10 +5839,6 @@ cite {
 
   .lg\:w-48{
     width: 12rem;
-  }
-
-  .lg\:w-1\/2{
-    width: 50%;
   }
 
   .lg\:max-w-screen-lg{
@@ -5894,6 +5900,18 @@ cite {
   .lg\:gap-x-12{
     -moz-column-gap: 3rem;
          column-gap: 3rem;
+  }
+
+  .lg\:space-x-12 > :not([hidden]) ~ :not([hidden]){
+    --tw-space-x-reverse: 0;
+    margin-right: calc(3rem * var(--tw-space-x-reverse));
+    margin-left: calc(3rem * calc(1 - var(--tw-space-x-reverse)));
+  }
+
+  .lg\:space-x-6 > :not([hidden]) ~ :not([hidden]){
+    --tw-space-x-reverse: 0;
+    margin-right: calc(1.5rem * var(--tw-space-x-reverse));
+    margin-left: calc(1.5rem * calc(1 - var(--tw-space-x-reverse)));
   }
 
   .lg\:rounded-tr-none{
@@ -5984,6 +6002,14 @@ cite {
     grid-column: span 3 / span 3;
   }
 
+  .xl\:col-span-4{
+    grid-column: span 4 / span 4;
+  }
+
+  .xl\:col-span-8{
+    grid-column: span 8 / span 8;
+  }
+
   .xl\:col-span-7{
     grid-column: span 7 / span 7;
   }
@@ -6006,6 +6032,18 @@ cite {
 
   .xl\:row-span-2{
     grid-row: span 2 / span 2;
+  }
+
+  .xl\:mb-6{
+    margin-bottom: 1.5rem;
+  }
+
+  .xl\:-ml-48{
+    margin-left: -12rem;
+  }
+
+  .xl\:mb-0{
+    margin-bottom: 0px;
   }
 
   .xl\:mb-2{
@@ -6048,6 +6086,10 @@ cite {
     width: 12rem;
   }
 
+  .xl\:w-8\/12{
+    width: 66.666667%;
+  }
+
   .xl\:max-w-screen-xl{
     max-width: 1280px;
   }
@@ -6081,6 +6123,10 @@ cite {
     border-bottom-left-radius: 0.75rem;
   }
 
+  .xl\:border-b{
+    border-bottom-width: 1px;
+  }
+
   .xl\:border-l{
     border-left-width: 1px;
   }
@@ -6089,12 +6135,20 @@ cite {
     border-style: none;
   }
 
+  .xl\:pb-6{
+    padding-bottom: 1.5rem;
+  }
+
   .xl\:pr-6{
     padding-right: 1.5rem;
   }
 
   .xl\:pt-6{
     padding-top: 1.5rem;
+  }
+
+  .xl\:pb-0{
+    padding-bottom: 0px;
   }
 
   .xl\:pl-2{

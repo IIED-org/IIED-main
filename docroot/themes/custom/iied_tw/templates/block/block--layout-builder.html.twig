@@ -25,7 +25,7 @@
  * @see template_preprocess_block()
  */
 #}
-<div{{ attributes.addClass('h-full', 'grid-h-full') }}>
+<div{{ attributes.addClass('h-full', 'grid-h-full','even-odd') }}>
   {{ title_prefix }}
   {% if label %}
     <h3{{ title_attributes }}>{{ label }}</h3>

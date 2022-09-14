@@ -73,19 +73,19 @@
 
   {{ page.preface }}
 
-<div class="container p-4 my-12">
+<div class="container my-12">
   <main role="main">
     <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
 
-    <div>
+    <div class="lg:flex lg:space-x-6">
 
     {% if page.sidebar %}
-        <aside class="p-4 lg:w-1/4" role="complementary">
+        <aside class="mb-6 lg:w-1/4" role="complementary">
           {{ page.sidebar }}
         </aside>
       {% endif %}
 
-      <div>
+      <div class="lg:w-3/4">
         {{ page.content }}
       </div>{# /.layout-content #}
       

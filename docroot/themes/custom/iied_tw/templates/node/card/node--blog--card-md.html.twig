@@ -1,1 +1,14 @@
 {% extends '@iied_tw/node/card/node--card-md.html.twig' %}
+
+{# update to new name view 
+    {% block date %}
+    <div class="text-gray-500"> 
+    {{ node.field_author_s_[0].entity|view('author_name') }} 
+      {% if node.field_author_s_[1] %}
+        {{ node.field_author_s_[1].entity|view('author_name') }} 
+      {% endif %}
+
+    {{ node.getCreatedTime|date('d F Y') }}
+    </div>
+    {% endblock %}
+#}

@@ -1,6 +1,6 @@
 {% extends '@iied_tw/search/node--search-result.html.twig' %}
   {% block image %} 
-    <div class="w-24 h-auto mx-auto rounded shadow-md">
+    <div class="max-w-[75%] h-auto mx-auto rounded shadow-md">
       {% if content.field_cover_image[0] %}
         {% set image_uri = node.field_cover_image|file_uri %}
         {% set image_alt = node.field_cover_image.alt %}

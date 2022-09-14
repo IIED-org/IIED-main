@@ -43,6 +43,7 @@
     'paragraph',
     'prose', 
     'md:prose-lg',
+    'my-6',
     'paragraph--type--' ~ paragraph.bundle|clean_class,
     view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
     not paragraph.isPublished() ? 'paragraph--unpublished'
@@ -54,7 +55,7 @@
 {% block paragraph %}
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
-      <aside class="box {{ bg_colour }}">
+      <aside class="box{{ bg_colour }}">
       {{ content.field_basic_text }}
       </aside>  
     {% endblock %}

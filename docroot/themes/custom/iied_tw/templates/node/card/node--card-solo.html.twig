@@ -14,9 +14,9 @@ Card to display related content
 
               {% block image %}
                 {% set image_uri = node.field_main_image|file_uri %}
-                {% set image_alt = node.field_main_image.alt %}
+                {% set image_alt = node.field_main_image.entity.field_media_image.alt %}
               {% if image_uri is not null %}
-                <img class="object-cover w-3/12 h-full md:w-full" src="{{ image_uri|image_style('card_256') }}" alt="{{ image_alt }}" />
+                <img class="object-cover h-full md:w-full" src="{{ image_uri|image_style('card_256') }}" alt="{{ image_alt }}" />
               {% endif %}
               {% endblock %}
 

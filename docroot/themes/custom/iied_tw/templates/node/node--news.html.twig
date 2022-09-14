@@ -89,9 +89,9 @@
         class="order-1 xl:col-span-7 2xl:col-span-6 xl:col-start-4 md:order-2 2xl:col-start-4"
       >
         <nav aria-label="themes">
-          <div class="flex flex-wrap justify-between mb-4 space-x-3">
+          <div class="mb-4 sm:justify-between sm:flex">
+            <div class="mb-2 sm:order-2">{{ drupal_block('language_block:language_interface', wrapper=false) }}</div>
             <div class="mb-2">{{ content.field_theme_s_}}</div>
-            <div class="mb-2">{{ drupal_block('language_block:language_interface', wrapper=false) }}</div>
           </div>
         </nav>
         <h1 class="mb-6 text-4xl">{{ node.label }}</h1>

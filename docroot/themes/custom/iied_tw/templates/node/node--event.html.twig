@@ -87,9 +87,9 @@
         {#-- main --#}
         <div class="pt-6 xl:col-span-9 xl:col-start-4 lg:col-span-12">
           <nav aria-label="themes">
-            <div class="flex flex-wrap justify-between mb-4 space-x-3">
+            <div class="mb-4 sm:justify-between sm:flex">
+              <div class="mb-2 sm:order-2">{{ drupal_block('language_block:language_interface', wrapper=false) }}</div>
               <div class="mb-2">{{ content.field_theme_s_}}</div>
-              <div class="mb-2">{{ drupal_block('language_block:language_interface', wrapper=false) }}</div>
             </div>
           </nav>
           <h1 class="mb-6">{{ node.label }}</h1>
@@ -137,10 +137,14 @@
           </div>
 
           {# attribution #} {#-- collection --#}
-          {{ content.field_collections }}
           {% if content.field_direct_link %}
           <div class="pb-6 mb-6 border-b border-gray-300">
             {{ content.field_direct_link }}
+          </div>
+          {% endif %}
+          {% if content.field_collections %}
+          <div class="pb-6 mb-6 border-b border-gray-300 xl:pb-0 xl:mb-0 xl:border-none">
+           {{ content.field_collections }}
           </div>
           {% endif %}
           

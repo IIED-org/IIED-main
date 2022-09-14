@@ -13,9 +13,9 @@ For large 3-4 col featured card display
             <div class="border-b-4 lg:order-2 border-iiedpink-500 lg:w-1/2">
 
               {% set image_uri = node.field_main_image|file_uri %}
-              {% set image_alt = node.field_main_image.alt %}
+              {% set image_alt = node.field_main_image.entity.field_media_image.alt %}
               {% if image_uri is not null %}
-                <img class="object-cover w-full max-h-96" src="{{ image_uri|image_style('md_16x9') }}" alt="{{ image_alt }}" />
+                <img class="object-cover w-full h-full" src="{{ image_uri|image_style('md_16x9') }}" alt="{{ image_alt }}" />
               {% endif %}
 
             </div>
