@@ -9,3 +9,7 @@
          {% endif %}
       </div>
    {% endblock %}
+
+   {% block date %}
+   <p class="text-gray-500">{{ node.type.entity.label() }}, {{ content.field_date_or_caption }}</p>
+   {% endblock %}
