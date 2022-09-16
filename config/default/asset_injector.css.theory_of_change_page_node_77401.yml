@@ -6,7 +6,7 @@ dependencies:
     - context
     - system
 id: theory_of_change_page_node_77401
-label: 'theory of change page node/77401'
+label: 'theory of change page node/77401 + node/77151'
 code: |-
   #g-theory-of-change-diagramb-box .g-artboard {
   		margin:0 auto;
@@ -418,6 +418,6 @@ conditions:
   request_path:
     id: request_path
     negate: false
-    pages: /node/77401
+    pages: "/node/77401\r\n/node/77151"
 contexts: {  }
 conditions_require_all: true
