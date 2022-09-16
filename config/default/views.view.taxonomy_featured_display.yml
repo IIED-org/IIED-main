@@ -235,7 +235,7 @@ display:
         type: default
         options:
           row_class: ''
-          default_row_class: false
+          default_row_class: true
           uses_fields: false
       row:
         type: 'entity:node'
@@ -355,7 +355,7 @@ display:
           admin_label: ''
           plugin_id: result
           empty: false
-          content: '@total entries'
+          content: '<p class="mb-4">@total entries</p>'
       display_extenders: {  }
       block_description: 'Tag featured'
     cache_metadata:

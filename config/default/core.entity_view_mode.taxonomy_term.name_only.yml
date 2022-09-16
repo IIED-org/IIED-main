@@ -1,0 +1,10 @@
+uuid: bb8845ae-bab6-47ef-879f-83580e999b1c
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.name_only
+label: 'Name only'
+targetEntityType: taxonomy_term
+cache: true

@@ -1,18 +1,18 @@
-uuid: abccc953-bd38-4c8a-9abc-d5ec1b967c96
+uuid: c683014c-2150-48c6-bbad-60ebb9a278ae
 langcode: en
 status: true
 dependencies:
   config:
-    - paragraphs.paragraphs_type.image_small
+    - block_content.type.view_block
   module:
     - content_translation
 third_party_settings:
   content_translation:
-    enabled: true
+    enabled: false
     bundle_settings:
       untranslatable_fields_hide: '0'
-id: paragraph.image_small
-target_entity_type_id: paragraph
-target_bundle: image_small
+id: block_content.view_block
+target_entity_type_id: block_content
+target_bundle: view_block
 default_langcode: site_default
-language_alterable: true
+language_alterable: false

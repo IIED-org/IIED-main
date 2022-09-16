@@ -366,8 +366,37 @@ display:
           replica: false
           query_tags: {  }
       relationships: {  }
-      header: {  }
+      header:
+        area_1:
+          id: area_1
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: false
+          content:
+            value: '<h3 class="mb-4">Further reading</h3>'
+            format: full_html
+          tokenize: false
       footer: {  }
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - 'user.node_grants:view'
+        - user.permissions
+      tags: {  }
+  attachment_1:
+    id: attachment_1
+    display_title: Attachment
+    display_plugin: attachment
+    position: 6
+    display_options:
       display_extenders: {  }
     cache_metadata:
       max-age: -1
@@ -721,7 +750,7 @@ display:
         arguments: false
         filters: false
         filter_groups: false
-        header: false
+        header: true
       relationships:
         field_collections:
           id: field_collections
@@ -733,7 +762,6 @@ display:
           plugin_id: standard
           required: false
       display_description: ''
-      header: {  }
       display_extenders: {  }
       block_description: 'Insight by collection'
     cache_metadata:

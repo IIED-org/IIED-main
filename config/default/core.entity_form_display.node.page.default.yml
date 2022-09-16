@@ -28,7 +28,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 4
+    weight: 6
     region: content
     settings:
       rows: 9
@@ -44,7 +44,7 @@ content:
     third_party_settings: {  }
   field_alternative_label:
     type: string_textfield
-    weight: 26
+    weight: 16
     region: content
     settings:
       size: 60
@@ -86,7 +86,7 @@ content:
     third_party_settings: {  }
   field_image_caption:
     type: text_textarea
-    weight: 6
+    weight: 5
     region: content
     settings:
       rows: 5
@@ -94,7 +94,7 @@ content:
     third_party_settings: {  }
   field_main_image:
     type: entity_reference_autocomplete
-    weight: 5
+    weight: 4
     region: content
     settings:
       match_operator: CONTAINS

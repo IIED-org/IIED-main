@@ -5,8 +5,21 @@ dependencies:
   config:
     - field.storage.node.field_paragraphs
     - node.type.news
+    - paragraphs.paragraphs_type.basic_text
+    - paragraphs.paragraphs_type.box
     - paragraphs.paragraphs_type.file_upload
+    - paragraphs.paragraphs_type.gallery
+    - paragraphs.paragraphs_type.highchart
+    - paragraphs.paragraphs_type.image
+    - paragraphs.paragraphs_type.image_small
+    - paragraphs.paragraphs_type.info_box
+    - paragraphs.paragraphs_type.media_embed
+    - paragraphs.paragraphs_type.media_list
+    - paragraphs.paragraphs_type.modal_image
+    - paragraphs.paragraphs_type.quote
+    - paragraphs.paragraphs_type.related_project
     - paragraphs.paragraphs_type.related_publication_inline
+    - paragraphs.paragraphs_type.video_embed
   module:
     - entity_reference_revisions
 id: node.news.field_paragraphs
@@ -23,7 +36,20 @@ settings:
   handler: 'default:paragraph'
   handler_settings:
     target_bundles:
+      basic_text: basic_text
       file_upload: file_upload
+      image: image
+      info_box: info_box
+      media_embed: media_embed
+      video_embed: video_embed
+      box: box
+      gallery: gallery
+      highchart: highchart
+      media_list: media_list
+      modal_image: modal_image
+      image_small: image_small
+      quote: quote
+      related_project: related_project
       related_publication_inline: related_publication_inline
     negate: 0
     target_bundles_drag_drop:
@@ -38,25 +64,25 @@ settings:
         enabled: false
       basic_text:
         weight: 12
-        enabled: false
+        enabled: true
       box:
         weight: 36
-        enabled: false
+        enabled: true
       file_upload:
         weight: 13
         enabled: true
       gallery:
         weight: 38
-        enabled: false
+        enabled: true
       highchart:
         weight: 46
-        enabled: false
+        enabled: true
       image:
         weight: 14
-        enabled: false
+        enabled: true
       image_small:
         weight: 48
-        enabled: false
+        enabled: true
       image_wide:
         weight: 15
         enabled: false
@@ -65,7 +91,7 @@ settings:
         enabled: false
       info_box:
         weight: 16
-        enabled: false
+        enabled: true
       linked_person:
         weight: 17
         enabled: false
@@ -74,16 +100,16 @@ settings:
         enabled: false
       media_embed:
         weight: 18
-        enabled: false
+        enabled: true
       media_list:
         weight: 46
-        enabled: false
+        enabled: true
       modal_image:
         weight: 47
-        enabled: false
+        enabled: true
       quote:
         weight: 48
-        enabled: false
+        enabled: true
       related_content:
         weight: 58
         enabled: false
@@ -92,7 +118,7 @@ settings:
         enabled: false
       related_project:
         weight: 60
-        enabled: false
+        enabled: true
       related_publication_inline:
         weight: 61
         enabled: true
@@ -140,5 +166,5 @@ settings:
         enabled: false
       video_embed:
         weight: 20
-        enabled: false
+        enabled: true
 field_type: entity_reference_revisions

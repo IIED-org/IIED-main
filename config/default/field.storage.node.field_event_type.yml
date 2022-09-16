@@ -38,10 +38,13 @@ settings:
     -
       value: '9'
       label: Webinar
+    -
+      value: '10'
+      label: 'IIED Debates'
   allowed_values_function: ''
 module: options
 locked: false
-cardinality: 1
+cardinality: -1
 translatable: true
 indexes: {  }
 persist_with_no_fields: false
