@@ -1,14 +1,13 @@
 {% extends '@iied_tw/node/card/node--card-md.html.twig' %}
 
-{# update to new name view 
     {% block date %}
     <div class="text-gray-500"> 
-    {{ node.field_author_s_[0].entity|view('author_name') }} 
+    {{ node.field_author_s_[0].entity|view('name_only') }}
       {% if node.field_author_s_[1] %}
-        {{ node.field_author_s_[1].entity|view('author_name') }} 
+        {{ ' and ' }}{{ node.field_author_s_[1].entity|view('name_only') }}
       {% endif %}
 
-    {{ node.getCreatedTime|date('d F Y') }}
+    <br/>{{ node.getCreatedTime|date('d F Y') }}
     </div>
     {% endblock %}
-#}
+

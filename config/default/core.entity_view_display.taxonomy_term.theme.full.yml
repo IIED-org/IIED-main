@@ -289,6 +289,7 @@ third_party_settings:
         - tw-1-2-col-grid
         - tw-1-2-4-col-grid
         - tw-container
+        - tw-fluid
       denylisted_blocks: {  }
       allowlisted_blocks: {  }
       restricted_categories: {  }

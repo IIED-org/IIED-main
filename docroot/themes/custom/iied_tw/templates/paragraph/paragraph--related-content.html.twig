@@ -41,6 +41,7 @@
 {%
   set classes = [
     'paragraph',
+    'my-12',
     'paragraph--type--' ~ paragraph.bundle|clean_class,
     view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
     not paragraph.isPublished() ? 'paragraph--unpublished'
@@ -49,14 +50,7 @@
 {% block paragraph %}
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
-    <figure class="mb-12 -mx-4 sm:mx-0 not-prose">
-      {{ content.field_main_image }}
-        {% if content.field_image_caption %}
-      <figcaption class="px-4 mt-1 text-base leading-tight text-gray-500 sm:p-0">
-         {{ content.field_image_caption }}
-       </figcaption>
-      {% endif %}  
-    </figure>
+      {{ content }}
     {% endblock %}
   </div>
 {% endblock paragraph %}

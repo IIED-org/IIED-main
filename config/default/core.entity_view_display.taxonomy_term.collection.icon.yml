@@ -9,7 +9,6 @@ dependencies:
     - field.field.taxonomy_term.collection.field_collection_type
     - field.field.taxonomy_term.collection.field_containers
     - field.field.taxonomy_term.collection.field_downloads
-    - field.field.taxonomy_term.collection.field_list_reference
     - field.field.taxonomy_term.collection.field_overview
     - field.field.taxonomy_term.collection.field_publications_more_link
     - field.field.taxonomy_term.collection.field_short_description
@@ -70,7 +69,6 @@ hidden:
   field_collection_type: true
   field_containers: true
   field_downloads: true
-  field_list_reference: true
   field_overview: true
   field_publications_more_link: true
   field_tags: true

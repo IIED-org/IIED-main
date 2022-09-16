@@ -9,7 +9,6 @@ dependencies:
     - field.field.taxonomy_term.collection.field_collection_type
     - field.field.taxonomy_term.collection.field_containers
     - field.field.taxonomy_term.collection.field_downloads
-    - field.field.taxonomy_term.collection.field_list_reference
     - field.field.taxonomy_term.collection.field_overview
     - field.field.taxonomy_term.collection.field_publications_more_link
     - field.field.taxonomy_term.collection.field_short_description
@@ -17,7 +16,6 @@ dependencies:
     - field.field.taxonomy_term.collection.field_theme
     - field.field.taxonomy_term.collection.layout_builder__layout
     - taxonomy.vocabulary.collection
-    - views.view.project_publication_card
     - views.view.taxonomy_all_display
     - views.view.taxonomy_featured_display
   module:
@@ -128,6 +126,7 @@ third_party_settings:
         - tw-1-2-col-grid
         - tw-1-2-4-col-grid
         - tw-container
+        - tw-fluid
       denylisted_blocks: {  }
       allowlisted_blocks: {  }
       restricted_categories:
@@ -210,7 +209,6 @@ content:
 hidden:
   field_badge: true
   field_collection_type: true
-  field_list_reference: true
   field_overview: true
   field_tags: true
   langcode: true

@@ -1,0 +1,8 @@
+uuid: fa7cb8ec-6302-4879-a414-52af45c627c2
+langcode: en
+status: true
+dependencies: {  }
+id: view_block
+label: 'View block'
+revision: 0
+description: 'Add a view'

@@ -1,17 +1,17 @@
-uuid: 2503c44c-1209-4691-86a7-8376381f2385
+uuid: 2d0ebb73-4f3a-4412-a849-400ca9563809
 langcode: en
 status: true
 dependencies:
   config:
-    - paragraphs.paragraphs_type.related_project
-id: paragraph.related_project.status
+    - block_content.type.view_block
+id: block_content.view_block.status
 field_name: status
-entity_type: paragraph
-bundle: related_project
+entity_type: block_content
+bundle: view_block
 label: Published
 description: ''
 required: false
-translatable: true
+translatable: false
 default_value:
   -
     value: 1
