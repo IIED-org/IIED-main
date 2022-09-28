@@ -88,3 +88,13 @@ USAGE
 
     // Returns image linked to pdf html render
     $renderLink = $token->replace('[media_pdf_thumbnail:field_media_file:1:render:medium:link_pdf]', ['media' => $media]);
+
+  * Hook :
+
+  Alter pdf image render, example :
+
+  function hook_media_pdf_thumbnail_image_render_alter(&$element, $infos) {
+    $value = $element[0]["#item"]->getValue();
+    $value['alt'] = 'Thumbnail of the document ' . $infos['mediaEntity']->name->value;
+    $element[0]["#item"]->setValue($value);
+  }
