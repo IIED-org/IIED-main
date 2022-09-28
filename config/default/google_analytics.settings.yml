@@ -32,52 +32,60 @@ custom:
   parameters:
     dimension1:
       type: dimension
-      name: null
+      name: Team
       value: '[node:field_team]'
-    dimension3:
-      type: dimension
-      name: null
-      value: '[node:field_theme_s_]'
     dimension10:
       type: dimension
-      name: null
-      value: '[node:field_product_code_new]'
+      name: 'Country focus'
+      value: '[node:field_area_list]'
     dimension11:
       type: dimension
-      name: null
-      value: '[node:field_project]'
+      name: Author
+      value: '[node:field_author_s_]'
     dimension12:
       type: dimension
-      name: null
-      value: '[node:field_deptlist]'
+      name: 'Date published'
+      value: '[node:field_date_published]'
     dimension13:
       type: dimension
-      name: null
-      value: '[node:field_series]'
+      name: 'Content type'
+      value: '[node:content-type]'
     dimension14:
       type: dimension
-      name: null
+      name: 'Date created'
+      value: '[node:created:custom:c]'
+    dimension2:
+      type: dimension
+      name: Theme
+      value: '[node:field_theme_s_]'
+    dimension3:
+      type: dimension
+      name: 'Product code'
+      value: '[node:field_product_code_new]'
+    dimension4:
+      type: dimension
+      name: 'Project linked'
+      value: '[node:field_project]'
+    dimension5:
+      type: dimension
+      name: 'Department list'
+      value: '[node:field_deptlist]'
+    dimension6:
+      type: dimension
+      name: Series
+      value: '[node:field_series]'
+    dimension7:
+      type: dimension
+      name: Lists
       value: '[node:field_lists]'
-    dimension15:
+    dimension8:
       type: dimension
-      name: null
+      name: WP/GET
       value: '[node:field_reportagency1]'
-    dimension16:
+    dimension9:
       type: dimension
-      name: null
+      name: 'Document type'
       value: '[node:field_document_type]'
-    dimension17:
-      type: dimension
-      name: null
-      value: '[node:field_area_list]'
-    dimension18:
-      type: dimension
-      name: null
-      value: '[node:field_author_s_]'
-    dimension19:
-      type: dimension
-      name: null
-      value: '[node:field_date_published]'
 codesnippet:
   create: {  }
   before: ''
@@ -85,3 +93,4 @@ codesnippet:
 translation_set: false
 cache: false
 debug: false
+ua_legacy: null
