@@ -98,7 +98,7 @@
 
         {#-- standfirst --#}
         <div
-          class="mb-6 prose prose-lg border-b-2 lg:prose-xl border-iiedorange-500"
+          class="mb-4 prose prose-lg border-b-2 lg:prose-xl border-iiedorange-500"
         >
           {{ content.field_standfirst }}
         </div>
@@ -160,6 +160,9 @@
         </div>
         {% endif %}
 
+        {#-- tags --#}
+         {{ content.field_tags }} 
+         
         <div class="flex items-center py-4">
           {% include '@iied_tw/partials/_share_links.html.twig' %}
           {% include '@iied_tw/partials/_copy_print_links.html.twig' %}

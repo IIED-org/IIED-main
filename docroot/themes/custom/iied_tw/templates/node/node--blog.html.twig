@@ -100,7 +100,7 @@
         {{ title_suffix }}
         {#-- standfirst --#}
         <div
-          class="mb-6 prose prose-lg border-b-2 lg:prose-xl border-iiedorange-500"
+          class="mb-4 prose prose-lg border-b-2 lg:prose-xl border-iiedorange-500"
         >
           {{ content.field_standfirst }}
         </div>
@@ -113,7 +113,7 @@
               {{ node.field_author_s_[0].entity|view('avatar') }} {# images #}
               {{ node.field_author_s_[1].entity|view('avatar') }}
           </div>
-          <div class="flex flex-col mb-6">
+          <div class="flex flex-col mb-4">
             <div class="flex">
               {# {{ breakpoint(node.field_author_s_[0].entity.name ) }} #}
               Blog by&nbsp;{{ node.field_author_s_[0].entity|view('name') }} 
@@ -129,7 +129,7 @@
         </div>
         {#-- date and share --#}
         <div
-          class="flex flex-wrap justify-between py-6 space-y-2 border-b border-gray-300 xl:border-none sm:flex-row"
+          class="flex flex-wrap justify-between py-4 space-y-2 border-b border-gray-300 xl:border-none sm:flex-row"
         >
     
           {{ node.getCreatedTime|date('d F Y') }}

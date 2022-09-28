@@ -2785,6 +2785,40 @@ cite {
   }
 }
 
+/*-- ClickD form hacks --*/
+
+#clickdimform .clickdform input[type="text"]{
+  height: 2.25rem;
+  border-radius: 0.5rem;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(209 213 219 / var(--tw-border-opacity));
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+#clickdimform #btnSubmit{
+  cursor: pointer;
+  border-radius: 9999px;
+  border-style: none;
+  --tw-bg-opacity: 1;
+  background-color: rgb(252 179 22 / var(--tw-bg-opacity));
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
 .visible{
   visibility: visible;
 }
@@ -2858,6 +2892,10 @@ cite {
   bottom: -3rem;
 }
 
+.top-0{
+  top: 0px;
+}
+
 .-left-10{
   left: -2.5rem;
 }
@@ -2876,10 +2914,6 @@ cite {
 
 .right-8{
   right: 2rem;
-}
-
-.top-0{
-  top: 0px;
 }
 
 .bottom-0{
@@ -2916,6 +2950,10 @@ cite {
 
 .z-20{
   z-index: 20;
+}
+
+.order-2{
+  order: 2;
 }
 
 .order-1{
@@ -3080,6 +3118,10 @@ cite {
   margin-bottom: 6rem;
 }
 
+.-mt-6{
+  margin-top: -1.5rem;
+}
+
 .mb-8{
   margin-bottom: 2rem;
 }
@@ -3164,10 +3206,6 @@ cite {
   margin-right: -1rem;
 }
 
-.-mt-6{
-  margin-top: -1.5rem;
-}
-
 .block{
   display: block;
 }
@@ -3202,6 +3240,10 @@ cite {
 
 .hidden{
   display: none;
+}
+
+.h-9{
+  height: 2.25rem;
 }
 
 .h-6{
@@ -3803,6 +3845,10 @@ cite {
   border-left-width: 2px;
 }
 
+.border-none{
+  border-style: none;
+}
+
 .border-gray-300{
   --tw-border-opacity: 1;
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
@@ -3848,6 +3894,11 @@ cite {
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
 }
 
+.bg-iiedorange-500{
+  --tw-bg-opacity: 1;
+  background-color: rgb(252 179 22 / var(--tw-bg-opacity));
+}
+
 .bg-iiedblue-50{
   --tw-bg-opacity: 1;
   background-color: rgb(50 229 255 / var(--tw-bg-opacity));
@@ -3866,11 +3917,6 @@ cite {
 .bg-iiedgreen-500{
   --tw-bg-opacity: 1;
   background-color: rgb(170 192 44 / var(--tw-bg-opacity));
-}
-
-.bg-iiedorange-500{
-  --tw-bg-opacity: 1;
-  background-color: rgb(252 179 22 / var(--tw-bg-opacity));
 }
 
 .bg-iiedblue-10{
@@ -3966,6 +4012,11 @@ cite {
   padding-bottom: 0.5rem;
 }
 
+.px-4{
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
 .py-3{
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
@@ -3974,11 +4025,6 @@ cite {
 .py-4{
   padding-top: 1rem;
   padding-bottom: 1rem;
-}
-
-.px-4{
-  padding-left: 1rem;
-  padding-right: 1rem;
 }
 
 .py-20{
@@ -4053,6 +4099,18 @@ cite {
   padding-bottom: 6rem;
 }
 
+.pt-0{
+  padding-top: 0px;
+}
+
+.pb-3{
+  padding-bottom: 0.75rem;
+}
+
+.pl-8{
+  padding-left: 2rem;
+}
+
 .pt-16{
   padding-top: 4rem;
 }
@@ -4107,18 +4165,6 @@ cite {
 
 .pb-5{
   padding-bottom: 1.25rem;
-}
-
-.pt-0{
-  padding-top: 0px;
-}
-
-.pb-3{
-  padding-bottom: 0.75rem;
-}
-
-.pl-8{
-  padding-left: 2rem;
 }
 
 .text-left{
@@ -4195,6 +4241,10 @@ cite {
 
 .font-normal{
   font-weight: 400;
+}
+
+.uppercase{
+  text-transform: uppercase;
 }
 
 .lowercase{
@@ -6030,6 +6080,10 @@ cite {
     order: 1;
   }
 
+  .xl\:order-2{
+    order: 2;
+  }
+
   .xl\:col-span-3{
     grid-column: span 3 / span 3;
   }
@@ -6126,10 +6180,6 @@ cite {
     max-width: 1280px;
   }
 
-  .xl\:flex-none{
-    flex: none;
-  }
-
   .xl\:grid-cols-12{
     grid-template-columns: repeat(12, minmax(0, 1fr));
   }
@@ -6197,6 +6247,11 @@ cite {
 
   .xl\:pr-4{
     padding-right: 1rem;
+  }
+
+  .xl\:text-xl{
+    font-size: 1.25rem;
+    line-height: 1.75rem;
   }
 
   .xl\:before\:left-\[100\%\]::before{
