@@ -95,26 +95,26 @@
           <h1 class="mb-6">{{ node.label }}</h1>
         </div>
           {#-- event details --#} 
-        <div class="top-0 order-first row-span-3 pb-6 prose xl:pt-6 h-max xl:sticky xl:col-span-3 max-w-none"> 
+        <div class="top-0 order-first row-span-3 pb-4 prose xl:pt-6 h-max xl:sticky xl:col-span-3 max-w-none"> 
           <div class="relative inline-block mb-2">
             <span
               class="absolute block -skew-y-3 -inset-1 bg-iiedblue-500"
               aria-hidden="true"
             ></span>
           {% set eventtype %}
-          {{ content.field_event_type }}
+          {{ content.field_event_type.0 }}
           {% endset %}
           <span class="relative font-bold">{{ eventtype|striptags }}</span>
           </div>
 
           {#-- standfirst --#}
           <div
-            class="mb-6 prose border-b-2 md:prose-lg border-iiedblue-500 max-w-none"
+            class="mb-4 prose border-b-2 md:prose-lg border-iiedblue-500 max-w-none"
           >
             {{ content.field_standfirst }}
           </div>
           
-          <div class="pb-6 mb-6 prose border-b-2 border-iiedblue-500 max-w-none">
+          <div class="pb-4 mb-4 prose border-b-2 border-iiedblue-500 max-w-none">
             {{ content.field_daterange }} {{ content.field_display_time }}
             {{ content.field_where_and_how }}
 
@@ -138,19 +138,19 @@
 
           {# attribution #} {#-- collection --#}
           {% if content.field_direct_link %}
-          <div class="pb-6 mb-6 border-b border-gray-300">
+          <div class="pb-4 mb-4 border-b border-gray-300">
             {{ content.field_direct_link }}
           </div>
           {% endif %}
-          {% if content.field_collections %}
-          <div class="pb-6 mb-6 border-b border-gray-300 xl:pb-0 xl:mb-0 xl:border-none">
+          {% if content.field_collections[0] is not empty %}
+          <div class="pb-4 mb-4 border-b border-gray-300 xl:pb-0 xl:mb-0 xl:border-none xx">
            {{ content.field_collections }}
           </div>
           {% endif %}
           
           {#-- date and share --#}
           <div
-            class="flex flex-col flex-wrap justify-between gap-6 pb-6 border-b border-gray-300 xl:border-none sm:flex-row"
+            class="flex flex-col flex-wrap justify-between gap-6 sm:flex-row"
           >
             {{ content.field_dates }}
             <div class="flex items-center">

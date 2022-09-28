@@ -55,9 +55,9 @@
     {% block content %}
     <div class="flex">
         {% if "On" in content.field_image_round.0 %}
-          <div class="w-1/4 h-full mr-4 overflow-hidden rounded-full not-prose">{{ content.field_image }}</div>
+          <div class="w-1/4 h-full mb-4 mr-4 overflow-hidden rounded-full not-prose">{{ content.field_image }}</div>
           {% else %}
-          <div class="w-1/4 h-full mr-4 not-prose">{{ content.field_image }}</div>
+          <div class="w-1/4 h-full mb-4 mr-4 not-prose">{{ content.field_image }}</div>
         {% endif %}
       <div class="w-3/4">{{ content.field_basic_text }}</div>
     </div>
