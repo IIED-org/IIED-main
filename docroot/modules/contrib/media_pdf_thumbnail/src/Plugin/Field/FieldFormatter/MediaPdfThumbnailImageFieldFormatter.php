@@ -8,6 +8,8 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandler;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -71,6 +73,11 @@ class MediaPdfThumbnailImageFieldFormatter extends ImageFormatter {
   protected $routeMatch;
 
   /**
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * MediaPdfThumbnailImageFieldFormatter constructor.
    *
    * @param $plugin_id
@@ -89,8 +96,9 @@ class MediaPdfThumbnailImageFieldFormatter extends ImageFormatter {
    * @param \Drupal\media_pdf_thumbnail\Manager\MediaPdfThumbnailImageManager $mediaPdfThumbnailImageManager
    * @param \Drupal\Core\StreamWrapper\StreamWrapperManagerInterface $streamWrapperManager
    * @param \Drupal\Core\Routing\RouteMatchInterface $routeMatch
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, AccountInterface $current_user, EntityStorageInterface $image_style_storage, ConfigFactoryInterface $configFactory, EntityTypeManagerInterface $entityTypeManager, EntityTypeBundleInfoInterface $entityTypeBundleInfo, EntityFieldManagerInterface $entityFieldManager, MediaPdfThumbnailImageManager $mediaPdfThumbnailImageManager, StreamWrapperManagerInterface $streamWrapperManager, RouteMatchInterface $routeMatch) {
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, AccountInterface $current_user, EntityStorageInterface $image_style_storage, ConfigFactoryInterface $configFactory, EntityTypeManagerInterface $entityTypeManager, EntityTypeBundleInfoInterface $entityTypeBundleInfo, EntityFieldManagerInterface $entityFieldManager, MediaPdfThumbnailImageManager $mediaPdfThumbnailImageManager, StreamWrapperManagerInterface $streamWrapperManager, RouteMatchInterface $routeMatch, ModuleHandlerInterface $moduleHandler) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings, $current_user, $image_style_storage);
     $this->configFactory = $configFactory;
     $this->entityTypeManager = $entityTypeManager;
@@ -99,6 +107,7 @@ class MediaPdfThumbnailImageFieldFormatter extends ImageFormatter {
     $this->mediaPdfThumbnailImageManager = $mediaPdfThumbnailImageManager;
     $this->streamWrapperManager = $streamWrapperManager;
     $this->routeMatch = $routeMatch;
+    $this->moduleHandler = $moduleHandler;
   }
 
   /**
@@ -127,7 +136,8 @@ class MediaPdfThumbnailImageFieldFormatter extends ImageFormatter {
       $container->get('entity_field.manager'),
       $container->get('media_pdf_thumbnail.image.manager'),
       $container->get('stream_wrapper_manager'),
-      $container->get('current_route_match'));
+      $container->get('current_route_match'),
+      $container->get('module_handler'));
   }
 
   /**
@@ -356,6 +366,11 @@ class MediaPdfThumbnailImageFieldFormatter extends ImageFormatter {
 
       $element[0]['#url'] = Url::fromUri($stream, $options);
     }
+
+    // Invoke preprocessing hook
+    $infos = ['fieldInfo' => $fieldInfos, 'mediaEntity' => $entity, 'pdfEntity' => $this->mediaPdfThumbnailImageManager->getPdfEntityByPdfFileUri($fieldInfos['image_uri'])];
+    $this->moduleHandler->alter('media_pdf_thumbnail_image_render', $element, $infos);
+
     return $element;
   }
 
