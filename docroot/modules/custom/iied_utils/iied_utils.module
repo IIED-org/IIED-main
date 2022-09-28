@@ -52,13 +52,15 @@
 // //  }
 // }
 
-// function computed_field_field_product_code_new_compute($entity_type_manager, $entity, $fields, $delta) {
-//   $value = $entity->field_product_code->value;
-//   if (!$value) {
-//     $value = strval($entity->field_a_serial->value) . $entity->field_lit_code->value;
-//   }
-//   return $value;
-// }
+// Generate publication product ID and set field_product_code_new
+// Code reinstated 20220928 CB
+function computed_field_field_product_code_new_compute($entity_type_manager, $entity, $fields, $delta) {
+  $value = $entity->field_product_code->value;
+  if (!$value) {
+    $value = strval($entity->field_a_serial->value) . $entity->field_lit_code->value;
+  }
+  return $value;
+}
 
 // Hide work programmes field if field_date_published before 1 April 2019
 use Drupal\Core\Form\FormStateInterface;
