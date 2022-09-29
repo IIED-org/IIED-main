@@ -110,6 +110,7 @@ module:
   metatag_open_graph: 0
   metatag_pinterest: 0
   metatag_twitter_cards: 0
+  migrate: 0
   mysql: 0
   name: 0
   node: 0
