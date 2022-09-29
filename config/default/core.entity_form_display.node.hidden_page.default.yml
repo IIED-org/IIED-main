@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.node.hidden_page.body
     - field.field.node.hidden_page.field_content
+    - field.field.node.hidden_page.field_hidden_page_type
     - node.type.hidden_page
   module:
     - layout_paragraphs
@@ -39,6 +40,12 @@ content:
       preview_view_mode: default
       nesting_depth: 0
       require_layouts: 1
+    third_party_settings: {  }
+  field_hidden_page_type:
+    type: options_select
+    weight: 26
+    region: content
+    settings: {  }
     third_party_settings: {  }
   langcode:
     type: language_select

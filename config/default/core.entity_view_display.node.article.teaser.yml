@@ -10,6 +10,7 @@ dependencies:
     - field.field.node.article.field_article_type
     - field.field.node.article.field_collections
     - field.field.node.article.field_contact
+    - field.field.node.article.field_content
     - field.field.node.article.field_display_image
     - field.field.node.article.field_hide_date
     - field.field.node.article.field_image
@@ -24,9 +25,9 @@ dependencies:
     - image.style.medium
     - node.type.article
   module:
-    - image
     - layout_builder
     - layout_discovery
+    - svg_image
     - text
     - user
 third_party_settings:
@@ -178,6 +179,7 @@ hidden:
   field_article_type: true
   field_collections: true
   field_contact: true
+  field_content: true
   field_display_image: true
   field_hide_date: true
   field_image_caption: true

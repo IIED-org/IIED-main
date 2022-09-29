@@ -7,21 +7,24 @@ _core:
 id: global
 label: Global
 tags:
-  shortlink: '[current-page:url:unaliased]'
-  title: '[current-page:title] | [site:name]'
   canonical_url: '[current-page:url]'
-  dcterms_title: '[current-page:title]'
-  dcterms_publisher: '[node:field_publisher]'
-  dcterms_language: '[node:langcode]'
   dcterms_creator: '[node:field_author_s_]'
+  dcterms_language: '[node:langcode]'
+  dcterms_publisher: '[node:field_publisher]'
   dcterms_subject: '[node:field_theme_s_]'
+  dcterms_title: '[current-page:title]'
   og_image: '[node:field_image]'
-  og_url: '[current-page:url:absolute]'
   og_site_name: '[site:name]'
   og_title: '[current-page:title]'
-  twitter_cards_site: '@IIED'
-  twitter_cards_page_url: '[current-page:url:absolute]'
+  og_url: '[current-page:url:absolute]'
+  shortlink: '[current-page:url:unaliased]'
+  title: '[current-page:title] | [site:name]'
+  twitter_cards_creator: '@IIED'
+  twitter_cards_creator_id: '39719681'
   twitter_cards_description: '[site:slogan]'
-  twitter_cards_type: summary_large_image
+  twitter_cards_image: '[node:field_main_image]'
+  twitter_cards_page_url: '[current-page:url:absolute]'
+  twitter_cards_site: '@IIED'
   twitter_cards_site_id: '39719681'
   twitter_cards_title: '[site:name]'
+  twitter_cards_type: summary_large_image

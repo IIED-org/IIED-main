@@ -5,9 +5,11 @@ dependencies:
   config:
     - field.field.node.hidden_page.body
     - field.field.node.hidden_page.field_content
+    - field.field.node.hidden_page.field_hidden_page_type
     - node.type.hidden_page
   module:
     - entity_reference_revisions
+    - options
     - text
     - user
 id: node.hidden_page.default
@@ -24,12 +26,19 @@ content:
     region: content
   field_content:
     type: entity_reference_revisions_entity_view
-    label: above
+    label: hidden
     settings:
       view_mode: default
       link: ''
     third_party_settings: {  }
     weight: 1
+    region: content
+  field_hidden_page_type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
     region: content
 hidden:
   langcode: true

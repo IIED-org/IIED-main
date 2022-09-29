@@ -1,9 +1,9 @@
 uuid: 1d963533-01d7-4221-9804-08d156f35cec
-langcode: en
+langcode: zh-hans
 status: true
 dependencies: {  }
 id: zh-hans
-label: 'Chinese, Simplified'
+label: 简体中文
 direction: ltr
 weight: -7
 locked: false

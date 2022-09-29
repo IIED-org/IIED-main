@@ -4,4 +4,6 @@ status: true
 dependencies: {  }
 id: node__publication
 label: 'Content: Publication'
-tags: {  }
+tags:
+  book_isbn: '[node:field_isbn]'
+  title: '[node:title] | Publications Library'
