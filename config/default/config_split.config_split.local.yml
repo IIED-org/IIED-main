@@ -15,7 +15,6 @@ module:
   devel_kint_extras: 0
   help_topics: 0
   iied_migrate_d7: 0
-  migrate: 0
   migrate_devel: 0
   migrate_drupal: 0
   migrate_file: 0
