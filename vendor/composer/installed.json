@@ -8426,6 +8426,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "3308857": "https://www.drupal.org/files/issues/2022-09-09/3308857-error-empty-images.patch"
                 }
             },
             "installation-source": "dist",
