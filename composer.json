@@ -285,6 +285,9 @@
           },
           "drupal/content_translation_redirect": {
             "3263317": "https://www.drupal.org/files/issues/2022-02-09/content-translation-redirect-all-bundles-3263317-3.patch"
+          },
+          "drupal/media_pdf_thumbnail": {
+            "3308857": "https://www.drupal.org/files/issues/2022-09-09/3308857-error-empty-images.patch"
           }
         }
     }
