@@ -174,6 +174,7 @@ module:
   viewsreference: 0
   ds: 1
   pathauto: 1
+  xmlsitemap: 1
   content_translation: 10
   formdazzle: 10
   views: 10

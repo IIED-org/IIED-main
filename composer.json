@@ -159,6 +159,7 @@
         "drupal/views_field_view": "^1.0@beta",
         "drupal/views_infinite_scroll": "^2.0",
         "drupal/views_layout": "^1.2",
+        "drupal/xmlsitemap": "^1.4",
         "drush/drush": "^10.3",
         "npm-asset/imagesloaded": "^4.1",
         "npm-asset/masonry-layout": "^4.2",

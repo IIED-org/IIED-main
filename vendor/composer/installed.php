@@ -1829,6 +1829,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'drupal/xmlsitemap' => array(
+            'pretty_version' => '1.4.0',
+            'version' => '1.4.0.0',
+            'reference' => '8.x-1.4',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/xmlsitemap',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'drush/drush' => array(
             'pretty_version' => '10.6.2',
             'version' => '10.6.2.0',
