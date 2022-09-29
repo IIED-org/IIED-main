@@ -180,7 +180,9 @@
       </div>
 
       {% if drupal_view_result('project_publication_card', 'block_1') is not empty %}
+
         <div class="order-3 mb-4 xl:col-span-12">  
+          <h2 class="mb-6">Publications</h2>
         {{ drupal_view('project_publication_card', 'block_1') }}
         </div>
       {% endif %}
@@ -209,6 +211,7 @@
 <section class="py-12">
     <div class="container">
         {% if drupal_view_result('related_to_project', 'block_1') is not empty %}
+        <h3 class="mb-4">Latest news and updates</h3>
             {{ drupal_view('related_to_project', 'block_1') }}
         {% endif %}
     </div>
