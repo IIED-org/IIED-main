@@ -10,6 +10,7 @@ dependencies:
     - field.field.node.article.field_article_type
     - field.field.node.article.field_collections
     - field.field.node.article.field_contact
+    - field.field.node.article.field_content
     - field.field.node.article.field_display_image
     - field.field.node.article.field_hide_date
     - field.field.node.article.field_image
@@ -95,6 +96,15 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 119
+    region: content
+  field_content:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 128
     region: content
   field_display_image:
     type: boolean

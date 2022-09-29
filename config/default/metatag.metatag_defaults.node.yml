@@ -7,6 +7,8 @@ _core:
 id: node
 label: Content
 tags:
-  title: '[node:title] | [site:name]'
-  description: '[node:summary]'
   canonical_url: '[node:url]'
+  description: '[node:summary]'
+  image_src: '[node:field_main_image]'
+  og_image: '[node:field_main_image]'
+  title: '[node:title] | [site:name]'

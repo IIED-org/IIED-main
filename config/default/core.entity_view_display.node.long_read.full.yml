@@ -16,6 +16,7 @@ dependencies:
     - field.field.node.long_read.field_theme_s_
     - node.type.long_read
   module:
+    - ds
     - layout_builder
     - layout_paragraphs
     - text
@@ -72,9 +73,17 @@ content:
     type: entity_reference_entity_view
     label: hidden
     settings:
-      view_mode: default
-      link: true
-    third_party_settings: {  }
+      view_mode: wide
+      link: false
+    third_party_settings:
+      ds:
+        ds_limit: ''
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
     weight: 3
     region: content
   field_project:
