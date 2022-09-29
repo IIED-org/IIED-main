@@ -47,7 +47,6 @@ module:
   datetime_range: 0
   default_content: 0
   default_content_deploy: 0
-  devel_kint_extras: 0
   draggableviews: 0
   draggableviews_demo: 0
   dynamic_page_cache: 0
@@ -75,7 +74,6 @@ module:
   help: 0
   history: 0
   iied_filters: 0
-  iied_migrate_d7: 0
   iied_slider: 0
   iied_utils: 0
   image: 0
@@ -112,13 +110,6 @@ module:
   metatag_open_graph: 0
   metatag_pinterest: 0
   metatag_twitter_cards: 0
-  migrate: 0
-  migrate_drupal: 0
-  migrate_file: 0
-  migrate_plus: 0
-  migrate_pubs: 0
-  migrate_source_csv: 0
-  migrate_tools: 0
   mysql: 0
   name: 0
   node: 0
@@ -169,7 +160,6 @@ module:
   tour: 0
   twig_field_value: 0
   twig_tweak: 0
-  twig_xdebug: 0
   update: 0
   user: 0
   video_embed_field: 0
