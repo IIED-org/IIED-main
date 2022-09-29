@@ -5,6 +5,7 @@ namespace Drupal\Tests\charts\FunctionalJavascript;
 use Drupal\charts_test\Form\DataCollectorTableTestForm;
 use Drupal\Core\Url;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
+use Drupal\Tests\charts\Traits\ConfigUpdateTrait;
 
 /**
  * Tests the data collector table element.
@@ -12,6 +13,8 @@ use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
  * @group charts
  */
 class DataCollectorTableTest extends WebDriverTestBase {
+
+  use ConfigUpdateTrait;
 
   /**
    * Default theme.
@@ -35,6 +38,15 @@ class DataCollectorTableTest extends WebDriverTestBase {
   const TABLE_ROW_SELECTOR = 'table[data-drupal-selector="edit-series-data-collector-table"] tr.data-collector-table--row';
 
   const TABLE_COLUMN_SELECTOR = 'table[data-drupal-selector="edit-series-data-collector-table"] tbody tr:nth-child(1) td:not(.data-collector-table--row--delete)';
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp(): void {
+    parent::setUp();
+
+    $this->updateFooConfiguration('bar');
+  }
 
   /**
    * Tests the data collector table.
@@ -102,6 +114,28 @@ class DataCollectorTableTest extends WebDriverTestBase {
     // Delete all the rows and columns - skip for now.
     // Confirm that only one row and column left - skip.
     // Submit the form and verify the submitted data. - skip.
+  }
+
+  /**
+   * Tests the default colors pn the "chart_data_collector_table" element.
+   */
+  public function testColorDefaultColors() {
+    $chart_config = \Drupal::config('charts.settings');
+    $default_colors = $chart_config->get('charts_default_settings.display.colors');
+    $this->drupalGet('/charts_test/data_collector_table_test_form');
+    $page = $this->getSession()->getPage();
+
+    // Get the first row, then inside the first row get the color input and check
+    // its value.
+    $first_row_color_input = $page->find('css', static::TABLE_ROW_SELECTOR . ':first-child td:nth-child(2) input[type="color"]');
+    $this->assertEquals($default_colors[0], $first_row_color_input->getValue());
+
+    // Adding one column.
+    $this->doTableOperation('add', 'column');
+
+    // Checking if the added column also has the expected color.
+    $first_row_color_input = $page->find('css', static::TABLE_ROW_SELECTOR . ':first-child td:nth-child(3) input[type="color"]');
+    $this->assertEquals($default_colors[1], $first_row_color_input->getValue());
   }
 
   /**
@@ -182,7 +216,7 @@ class DataCollectorTableTest extends WebDriverTestBase {
    * @param string $on
    *   The element.
    */
-  protected function assertNewCellIsEmpty($on) {
+  protected function assertNewCellIsEmpty(string $on) {
     $page = $this->getSession()->getPage();
     if ($on === 'row') {
       $counter = DataCollectorTableTestForm::INITIAL_ROWS + 1;
@@ -244,7 +278,7 @@ class DataCollectorTableTest extends WebDriverTestBase {
   }
 
   /**
-   * Get url of ressources.
+   * Get url of resources.
    *
    * @return \Drupal\Core\GeneratedUrl|string
    *   The url.

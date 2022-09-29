@@ -14,8 +14,9 @@ trait DsTestTrait {
     $edit += [
       'ds_layout' => 'ds_2col_stacked',
     ];
+    $this->drupalGet($url, $options);
 
-    $this->drupalPostForm($url, $edit, t('Save'), $options);
+    $this->submitForm($edit, t('Save'));
 
     $assert += [
       'regions' => [
@@ -39,11 +40,12 @@ trait DsTestTrait {
     $edit += [
       'regions' => "class_name_1\nclass_name_2|Friendly name",
     ];
+    $this->drupalGet('admin/structure/ds/classes');
 
-    $this->drupalPostForm('admin/structure/ds/classes', $edit, t('Save configuration'));
+    $this->submitForm($edit, t('Save configuration'));
     $this->assertSession()->pageTextContains('The configuration options have been saved.');
-    $this->assertSession()->responseContains('class_name_1', 'Class name 1 found');
-    $this->assertSession()->responseContains('class_name_2', 'Class name 1 found');
+    $this->assertSession()->responseContains('class_name_1');
+    $this->assertSession()->responseContains('class_name_2');
   }
 
   /**
@@ -55,15 +57,17 @@ trait DsTestTrait {
       "layout_configuration[ds_classes][header][]" => 'class_name_1',
       "layout_configuration[ds_classes][footer][]" => 'class_name_2',
     ];
+    $this->drupalGet($url);
 
-    $this->drupalPostForm($url, $edit, t('Save'));
+    $this->submitForm($edit, t('Save'));
   }
 
   /**
    * Configure Field UI.
    */
   public function dsConfigureUi($edit, $url = 'admin/structure/types/manage/article/display') {
-    $this->drupalPostForm($url, $edit,'Save');
+    $this->drupalGet($url);
+    $this->submitForm($edit, 'Save');
   }
 
   /**
@@ -71,16 +75,17 @@ trait DsTestTrait {
    */
   public function dsEditFormatterSettings($edit, $field_name = 'body', $url = 'admin/structure/types/manage/article/display') {
     $element_value = 'edit ' . $field_name;
-    $this->drupalPostForm($url, [], $element_value);
+    $this->drupalGet($url);
+    $this->submitForm([], $element_value);
 
     if (isset($edit['fields[' . $field_name . '][settings_edit_form][third_party_settings][ds][ft][id]'])) {
-      $this->drupalPostForm(NULL, ['fields[' . $field_name . '][settings_edit_form][third_party_settings][ds][ft][id]' => $edit['fields[' . $field_name . '][settings_edit_form][third_party_settings][ds][ft][id]']], t('Update'));
-      $this->drupalPostForm(NULL, [], $element_value);
+      $this->submitForm(['fields[' . $field_name . '][settings_edit_form][third_party_settings][ds][ft][id]' => $edit['fields[' . $field_name . '][settings_edit_form][third_party_settings][ds][ft][id]']], t('Update'));
+      $this->submitForm([], $element_value);
       unset($edit['fields[' . $field_name . '][settings_edit_form][third_party_settings][ds][ft][id]']);
     }
 
-    $this->drupalPostForm(NULL, $edit, t('Update'));
-    $this->drupalPostForm(NULL, [], t('Save'));
+    $this->submitForm($edit, t('Update'));
+    $this->submitForm([], t('Save'));
   }
 
   /**
@@ -88,16 +93,17 @@ trait DsTestTrait {
    */
   public function dsEditLimitSettings($edit, $field_name = 'body', $url = 'admin/structure/types/manage/article/display') {
     $element_value = 'edit ' . $field_name;
-    $this->drupalPostForm($url, [], $element_value);
+    $this->drupalGet($url);
+    $this->submitForm([], $element_value);
 
     if (isset($edit['fields[' . $field_name . '][settings_edit_form][third_party_settings][ds][ft][id]'])) {
-      $this->drupalPostForm(NULL, ['fields[' . $field_name . '][settings_edit_form][third_party_settings][ds][ds_limit]' => $edit['fields[' . $field_name . '][settings_edit_form][third_party_settings][ds][ds_limit]']], t('Update'));
-      $this->drupalPostForm(NULL, [], $element_value);
+      $this->submitForm(['fields[' . $field_name . '][settings_edit_form][third_party_settings][ds][ds_limit]' => $edit['fields[' . $field_name . '][settings_edit_form][third_party_settings][ds][ds_limit]']], t('Update'));
+      $this->submitForm([], $element_value);
       unset($edit['fields[' . $field_name . '][settings_edit_form][third_party_settings][ds][ds_limit]']);
     }
 
-    $this->drupalPostForm(NULL, $edit, t('Update'));
-    $this->drupalPostForm(NULL, [], t('Save'));
+    $this->submitForm($edit, t('Update'));
+    $this->submitForm([], t('Save'));
   }
 
   /**
@@ -115,8 +121,9 @@ trait DsTestTrait {
       'entities[node]' => '1',
       'content[value]' => 'Test field',
     ];
+    $this->drupalGet($url);
 
-    $this->drupalPostForm($url, $edit, t('Save'));
+    $this->submitForm($edit, t('Save'));
     $text = t('The field %name has been saved', ['%name' => $edit['name']]);
     $this->assertSession()->responseContains((string) $text);
   }
@@ -136,8 +143,9 @@ trait DsTestTrait {
       'entities[node]' => '1',
       'block' => 'system_powered_by_block',
     ];
+    $this->drupalGet($url);
 
-    $this->drupalPostForm($url, $edit, t('Save'));
+    $this->submitForm($edit, t('Save'));
     $text = t('The field %name has been saved', ['%name' => $edit['name']]);
     $this->assertSession()->responseContains((string) $text);
   }
@@ -156,7 +164,8 @@ trait DsTestTrait {
 
     // Create field CSS classes.
     $edit = ['fields' => "test_field_class\ntest_field_class_2|Field class 2\n[node:nid]"];
-    $this->drupalPostForm('admin/structure/ds/classes', $edit,'Save configuration');
+    $this->drupalGet('admin/structure/ds/classes');
+    $this->submitForm($edit, 'Save configuration');
 
     // Create a token field.
     $token_field = [

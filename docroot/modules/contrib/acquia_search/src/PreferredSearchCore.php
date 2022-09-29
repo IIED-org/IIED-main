@@ -103,7 +103,7 @@ class PreferredSearchCore {
 
     $core = $this->getPreferredCore();
 
-    return $core['core_id'];
+    return $core['core_id'] ?? NULL;
 
   }
 
@@ -117,7 +117,7 @@ class PreferredSearchCore {
 
     $core = $this->getPreferredCore();
 
-    return $core['balancer'];
+    return $core['balancer'] ?? NULL;
 
   }
 
@@ -215,6 +215,10 @@ class PreferredSearchCore {
         $possible_core_ids[] = $this->acquiaIdentifier . '.' . $ah_env . '.' . $this->ahDbRole;
       }
 
+      // If there is a default core defined (eg: WXYZ-12345.[env]) use it next.
+      $possible_core_ids[] = $this->acquiaIdentifier . '.' . $ah_env;
+
+      // Last chance, search for folder if dbrole and default are missing.
       $possible_core_ids[] = $this->acquiaIdentifier . '.' . $ah_env . '.' . $sites_foldername;
     }
 

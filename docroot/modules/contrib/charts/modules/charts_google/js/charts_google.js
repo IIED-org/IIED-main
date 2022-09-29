@@ -16,7 +16,7 @@
   Drupal.behaviors.chartsGooglecharts = {
     attach: function (context) {
       // Load Google Charts API.
-      google.charts.load('current', {packages: ['corechart', 'gauge']});
+      google.charts.load('current', {packages: ['corechart', 'gauge', 'table']});
 
       // Re-draw charts if viewport size has been changed.
       window.addEventListener('resize', function () {
@@ -41,6 +41,9 @@
         const chartId = element.id;
         const dataAttributes = contents.getData(chartId);
         google.charts.setOnLoadCallback(Drupal.googleCharts.drawChart(chartId, dataAttributes['visualization'], dataAttributes['data'], dataAttributes['options']));
+        if (element.nextElementSibling && element.nextElementSibling.hasAttribute('data-charts-debug-container')) {
+          element.nextElementSibling.querySelector('code').innerText = JSON.stringify(dataAttributes, null, ' ');
+        }
       }
     });
   };
@@ -94,6 +97,9 @@
           break;
         case 'GeoChart':
           chart = new google.visualization.GeoChart(document.getElementById(chartId));
+          break;
+        case 'TableChart':
+          chart = new google.visualization.Table(document.getElementById(chartId));
       }
 
       // Fix for https://www.drupal.org/project/charts/issues/2950654.

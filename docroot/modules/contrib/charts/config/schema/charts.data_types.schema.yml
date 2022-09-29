@@ -92,6 +92,9 @@ charts_display:
     gauge:
       type: charts_gauge
       label: 'Gauge'
+    color_changer:
+        type: boolean
+        label: 'Expose color changer'
 
 charts_xaxis:
   type: mapping
@@ -200,3 +203,11 @@ charts_config:
     yaxis:
       type: charts_yaxis
       label: 'Y axis Display'
+    library_config:
+      type: charts.settings.library_plugin.[%parent.library]
+
+charts.settings.library_plugin.*:
+  type: charts_settings_library_plugin
+
+charts_settings_library_plugin:
+  type: mapping

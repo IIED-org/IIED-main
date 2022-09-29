@@ -2,9 +2,8 @@ name: 'DS Test layout theme'
 type: theme
 description: 'Theme for testing a theme-provided layout'
 base theme: classy
-core_version_requirement: ^8.8 || ^9
-
-# Information added by Drupal.org packaging script on 2021-06-23
-version: '8.x-3.13'
+core_version_requirement: ^9 || ^10
+# Information added by Drupal.org packaging script on 2022-09-10
+version: '8.x-3.15'
 project: 'ds'
-datestamp: 1624456616
+datestamp: 1662818541

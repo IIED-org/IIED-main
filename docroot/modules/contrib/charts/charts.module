@@ -68,6 +68,31 @@ function template_preprocess_charts_chart(&$variables) {
     '#attributes' => $attributes,
     '#value' => isset($element['#chart']) ? $element['#chart'] : '',
   ];
+  $variables['content_prefix'] = $element['#content_prefix'];
+  $variables['content_suffix'] = $element['#content_suffix'];
+  $config = \Drupal::service('config.factory')->getEditable('charts.settings');
+  $variables['debug'] = [];
+  if (!empty($config->get('advanced.debug'))) {
+    $variables['debug'] = [
+      '#type' => 'details',
+      '#title' => t('Chart JSON'),
+      '#open' => FALSE,
+      '#attributes' => [
+        'data-charts-debug-container' => TRUE,
+      ],
+      '#collapsible' => TRUE,
+      'json' => [
+        '#prefix' => '<pre class="language-json">',
+        '#type' => 'html_tag',
+        '#tag' => 'code',
+        '#attributes' => [
+          'class' => ['language-json'],
+        ],
+        '#value' => t('If this is blank, your library will need to implement code in your JavaScript. Please see the README.md.'),
+        '#suffix' => '</pre>',
+      ],
+    ];
+  }
 }
 
 /**
@@ -182,15 +207,27 @@ function _charts_library_info_alter_recursive(array &$library, array $cdn) {
  */
 function _charts_library_check_source_exists(string $source) {
   $source = rtrim($source, '/');
+
+  // @todo refactor the if statement below when dropping support for drupal 8.
+  if (version_compare(\Drupal::VERSION, '9.0', '<')) {
+    $app_root = \Drupal::service('app.root');
+    $site_path = \Drupal::service('site.path');
+  }
+  else {
+    $container = \Drupal::getContainer();
+    $app_root = $container->getParameter('app.root');
+    $site_path = $container->getParameter('site.path');
+  }
+
   // The following logic is taken from libraries_get_libraries()
   $search_dir = [];
-  $search_dir[] = \Drupal::service('app.root');
+  $search_dir[] = $app_root;
   // Similar to 'modules' and 'themes' directories inside an installation
   // profile, installation profiles may want to place libraries into a
   // 'libraries' directory.
   $search_dir[] = 'profiles/' . \Drupal::installProfile();
   // Also search sites/<domain>/*.
-  $search_dir[] = \Drupal::service('site.path');
+  $search_dir[] = $site_path;
 
   foreach ($search_dir as $dir) {
     if (file_exists($dir . $source) || file_exists($dir . $source)) {

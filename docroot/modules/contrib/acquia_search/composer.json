@@ -6,14 +6,15 @@
     "require": {
         "drupal/search_api_solr": "^4.1.12",
         "http-interop/http-factory-guzzle": "^1.0",
-        "php-http/guzzle6-adapter": "^2.0"
+        "guzzlehttp/guzzle": "^6.5 || ^7.2",
+        "php-http/guzzle6-adapter": "^2.0 || ^3.0"
     },
     "conflict": {
         "drupal/acquia_connector": "<3",
         "drupal/search_api_solr_multilingual": "<3"
     },
     "require-dev": {
-        "drush/drush": "^10.0"
+        "drush/drush": "^10 || ^11"
     },
     "extra": {
         "branch-alias": {
@@ -21,8 +22,11 @@
         },
         "drush": {
             "services": {
-                "drush.services.yml": "^10"
+                "drush.services.yml": "^10 || ^11"
             }
         }
+    },
+    "suggest": {
+        "php-http/guzzle6-adapter":"Required to use Acquia Connector with Guzzle 6 / Drupal 9.3 and lower"
     }
 }

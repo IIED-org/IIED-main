@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\Field\FieldItemList;
 use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\file\FileInterface;
 use Drupal\link\LinkItemInterface;
 use Drupal\media\MediaInterface;
@@ -25,10 +26,18 @@ class UrlExtractor {
   protected $entityTypeManager;
 
   /**
+   * The file URL generator.
+   *
+   * @var \Drupal\Core\File\FileUrlGeneratorInterface
+   */
+  protected $fileUrlGenerator;
+
+  /**
    * Constructs a UrlExtractor object.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, FileUrlGeneratorInterface $file_url_generator) {
     $this->entityTypeManager = $entity_type_manager;
+    $this->fileUrlGenerator = $file_url_generator;
   }
 
   /**
@@ -44,8 +53,7 @@ class UrlExtractor {
    */
   public function extractUrl($input, bool $relative = TRUE): ?string {
     if (is_string($input)) {
-      $url = file_create_url($input);
-      return $relative ? file_url_transform_relative($url) : $url;
+      return $this->fileUrlGenerator->{$relative ? 'generateString' : 'generateAbsoluteString'}($input);
     }
     elseif ($input instanceof LinkItemInterface) {
       return $input->getUrl()->toString();

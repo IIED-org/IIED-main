@@ -42,3 +42,51 @@ function charts_post_update_existing_default_colors_to_twenty_five(&$sandbox) {
     $config->save();
   }
 }
+
+/**
+ * Initialize the config value for the debug setting.
+ */
+function charts_post_update_initialize_debug_option(&$sandbox) {
+  $config = \Drupal::service('config.factory')
+    ->getEditable('charts.settings');
+
+  if ($config) {
+    $config->set('advanced.debug', FALSE);
+    $config->save();
+  }
+}
+
+/**
+ * Migrate library default settings to library_config key.
+ */
+function charts_post_update_migrate_library_default_settings_to_library_config(&$sandbox) {
+  /** @var \Drupal\Core\Config\ConfigFactoryInterface $config_factory */
+  $config_factory = \Drupal::service('config.factory');
+  $config = $config_factory->getEditable('charts.settings');
+
+  if ($config) {
+    $library_id = $config->get('charts_default_settings.library');
+    if ($library_id) {
+      $old_key = 'charts_default_settings.' . $library_id . '_settings';
+      $library_config = $config->get($old_key);
+      $config->set('charts_default_settings.library_config', $library_config);
+      $config->clear($old_key);
+      $config->save();
+    }
+  }
+}
+
+/**
+ * Clear library_config set on the wrong place. See drupal.org/i/3310145.
+ */
+function charts_post_update_clear_library_config_key_added_on_wrong_place(&$sandbox) {
+  /** @var \Drupal\Core\Config\ConfigFactoryInterface $config_factory */
+  $config_factory = \Drupal::service('config.factory');
+  $config = $config_factory->getEditable('charts.settings');
+  if ($config && $config->get('library_config')) {
+    // Not to be confused with "charts_default_settings.library_config" which is
+    // the proper key.
+    $config->clear('library_config');
+    $config->save();
+  }
+}

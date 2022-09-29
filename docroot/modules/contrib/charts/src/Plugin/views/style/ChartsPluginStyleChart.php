@@ -12,7 +12,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\Core\Template\TwigEnvironment;
 use Drupal\views\Plugin\views\field\EntityField;
 use Drupal\views\Plugin\views\style\StylePluginBase;
 use Drupal\views\ResultRow;
@@ -83,13 +82,6 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
   protected RouteMatchInterface $routeMatch;
 
   /**
-   * The Twig environment.
-   *
-   * @var \Drupal\Core\Template\TwigEnvironment
-   */
-  protected TwigEnvironment $twig;
-
-  /**
    * Constructs a ChartsPluginStyleChart object.
    *
    * @param array $configuration
@@ -106,16 +98,13 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
    *   The chart type manager.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The current route match.
-   * @param \Drupal\Core\Template\TwigEnvironment $twig
-   *   The Twig environment.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, ChartManager $chart_manager, TypeManager $chart_type_manager, RouteMatchInterface $route_match, TwigEnvironment $twig) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, ChartManager $chart_manager, TypeManager $chart_type_manager, RouteMatchInterface $route_match) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->chartManager = $chart_manager;
     $this->chartTypeManager = $chart_type_manager;
     $this->routeMatch = $route_match;
-    $this->twig = $twig;
   }
 
   /**
@@ -129,8 +118,7 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
       $container->get('config.factory'),
       $container->get('plugin.manager.charts'),
       $container->get('plugin.manager.charts_type'),
-      $container->get('current_route_match'),
-      $container->get('twig')
+      $container->get('current_route_match')
     );
   }
 
@@ -268,6 +256,7 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
       '#chart_id' => $chart_id,
       '#id' => Html::getUniqueId('chart_' . $chart_id),
       '#stacking' => $chart_settings['fields']['stacking'] ?? '0',
+      '#color_changer' => $chart_settings['fields']['color_changer'] ?? FALSE,
       '#polar' => $chart_settings['display']['polar'],
       '#three_dimensional' => $chart_settings['display']['three_dimensional'],
       '#gauge' => $chart_settings['display']['gauge'],
@@ -275,6 +264,7 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
       '#title_position' => $chart_settings['display']['title_position'],
       '#tooltips' => $chart_settings['display']['tooltips'],
       '#data_labels' => $chart_settings['display']['data_labels'],
+      '#data_markers' => $chart_settings['display']['data_markers'],
       // Colors only used if a grouped view or using a type such as a pie chart.
       '#colors' => $chart_settings['display']['colors'] ?? [],
       '#background' => $chart_settings['display']['background'] ?? 'transparent',
@@ -372,7 +362,7 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
           // from before the grouping, so we need to keep our own row number
           // when looping through the rows.
           foreach ($data_set['rows'] as $result_number => $row) {
-            $xaxis_label = strip_tags($this->getField($result_number, $label_field_key));
+            $xaxis_label = trim(strip_tags($this->getField($result_number, $label_field_key)));
             if ($label_field_key) {
               $xaxis_labels = $chart['xaxis']['#labels'] ?? [];
               if (!in_array($xaxis_label, $xaxis_labels)) {
@@ -601,9 +591,9 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
     else {
       $value = $this->getField($number, $field);
     }
-    if ($this->twig->isDebug()) {
-      $value = trim(strip_tags($value));
-    }
+
+    $value = trim(strip_tags($value));
+
     if (strpos($field, 'field_charts_fields_scatter') === 0 || strpos($field, 'field_charts_fields_bubble') === 0) {
 
       return Json::decode($value);

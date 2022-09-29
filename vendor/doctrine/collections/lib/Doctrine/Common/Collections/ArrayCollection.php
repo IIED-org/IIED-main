@@ -231,6 +231,8 @@ class ArrayCollection implements Collection, Selectable
 
     /**
      * {@inheritDoc}
+     *
+     * @template TMaybeContained
      */
     public function contains($element)
     {
@@ -253,6 +255,12 @@ class ArrayCollection implements Collection, Selectable
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-param TMaybeContained $element
+     *
+     * @psalm-return (TMaybeContained is T ? TKey|false : false)
+     *
+     * @template TMaybeContained
      */
     public function indexOf($element)
     {
@@ -340,7 +348,7 @@ class ArrayCollection implements Collection, Selectable
     /**
      * {@inheritDoc}
      *
-     * @psalm-param Closure(T=):U $func
+     * @psalm-param Closure(T):U $func
      *
      * @return static
      * @psalm-return static<TKey, U>

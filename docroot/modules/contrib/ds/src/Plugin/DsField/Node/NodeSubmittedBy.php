@@ -2,6 +2,7 @@
 
 namespace Drupal\ds\Plugin\DsField\Node;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Url;
 use Drupal\ds\Plugin\DsField\Date;
@@ -31,10 +32,9 @@ class NodeSubmittedBy extends Date {
   /**
    * Constructs a Display Suite field plugin.
    */
-  public function __construct($configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, Renderer $renderer, DateFormatterInterface $date_service) {
+  public function __construct($configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, Renderer $renderer, DateFormatterInterface $date_formatter, TimeInterface $time) {
     $this->renderer = $renderer;
-
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $date_service);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $date_formatter, $time);
   }
 
   /**
@@ -47,7 +47,8 @@ class NodeSubmittedBy extends Date {
       $plugin_definition,
       $container->get('entity_type.manager'),
       $container->get('renderer'),
-      $container->get('date.formatter')
+      $container->get('date.formatter'),
+      $container->get('datetime.time')
     );
   }
 

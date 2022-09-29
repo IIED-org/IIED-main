@@ -4,9 +4,11 @@ namespace Drupal\Tests\twig_tweak\Kernel;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
+use Drupal\Core\DrupalKernel;
 use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\responsive_image\Entity\ResponsiveImageStyle;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * A test for ImageViewBuilderTest.
@@ -34,6 +36,12 @@ final class ImageViewBuilderTest extends AbstractTestCase {
    */
   public function setUp(): void {
     parent::setUp();
+
+    // Add file_private_path setting.
+    $request = Request::create('/');
+    $site_path = DrupalKernel::findSitePath($request);
+    $this->setSetting('file_private_path', $site_path . '/private');
+
     $this->installEntitySchema('file');
     $this->installSchema('file', 'file_usage');
     ImageStyle::create(['name' => 'large'])->save();
@@ -75,7 +83,10 @@ final class ImageViewBuilderTest extends AbstractTestCase {
           'user',
           'user.permissions',
         ],
-        'tags' => ['tag_for_public://ocean.jpg'],
+        'tags' => [
+          'file:1',
+          'tag_for_public://ocean.jpg',
+        ],
         'max-age' => 70,
       ],
     ];
@@ -94,7 +105,10 @@ final class ImageViewBuilderTest extends AbstractTestCase {
           'user',
           'user.permissions',
         ],
-        'tags' => ['tag_for_public://ocean.jpg'],
+        'tags' => [
+          'file:1',
+          'tag_for_public://ocean.jpg',
+        ],
         'max-age' => 70,
       ],
     ];
@@ -113,7 +127,10 @@ final class ImageViewBuilderTest extends AbstractTestCase {
           'user',
           'user.permissions',
         ],
-        'tags' => ['tag_for_public://ocean.jpg'],
+        'tags' => [
+          'file:1',
+          'tag_for_public://ocean.jpg',
+        ],
         'max-age' => 70,
       ],
     ];
@@ -125,7 +142,10 @@ final class ImageViewBuilderTest extends AbstractTestCase {
     $expected_build = [
       '#cache' => [
         'contexts' => ['user'],
-        'tags' => ['tag_for_private://sea.jpg'],
+        'tags' => [
+          'file:2',
+          'tag_for_private://sea.jpg',
+        ],
         'max-age' => 70,
       ],
     ];
@@ -140,7 +160,7 @@ final class ImageViewBuilderTest extends AbstractTestCase {
       '#theme' => 'image',
       '#cache' => [
         'contexts' => [],
-        'tags' => [],
+        'tags' => ['file:2'],
         'max-age' => Cache::PERMANENT,
       ],
     ];

@@ -58,7 +58,7 @@ namespace Drupal\Tests\acquia_search\Unit\Commands {
     /**
      * {@inheritdoc}
      */
-    protected function setUp() {
+    protected function setUp(): void {
       parent::setUp();
 
       $state = $this->prophesize(State::class);
@@ -126,7 +126,7 @@ namespace Drupal\Tests\acquia_search\Unit\Commands {
       $container->set('datetime.time', $time->reveal());
       $container->set('http_client', $this->guzzleClient->reveal());
       $container->set('module_handler', $module_handler->reveal());
-      $container->set('site.path', 'sites/default');
+      $container->setParameter('site.path', 'sites/default');
       $container->set('state', $state->reveal());
       \Drupal::setContainer($container);
 
@@ -268,7 +268,7 @@ namespace Drupal\Tests\acquia_search\Unit\Commands {
 
       $_ENV['AH_SITE_ENVIRONMENT'] = 'dev';
 
-      $possible_cores = ['ABC-12345.dev.default'];
+      $possible_cores = ['ABC-12345.dev', 'ABC-12345.dev.default'];
 
       $this->output->writeln(print_r($possible_cores, TRUE))
         ->shouldBeCalledTimes(3);

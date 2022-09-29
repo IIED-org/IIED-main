@@ -13,7 +13,13 @@
  */
 #}
 {% if not label_hidden %}
-  <div class="field-label-{{ element['#label_display']|clean_class }}">
+  {%
+    set title_classes = [
+      'field-label-' ~ element['#label_display']|clean_class,
+      (element['#label_display'] == 'visually_hidden' ? 'visually-hidden'),
+    ]
+  %}
+  <div{{ attributes.addClass(title_classes) }}>
     {{- label }}{% if show_colon %}:{% endif -%}
   </div>
 {% endif %}

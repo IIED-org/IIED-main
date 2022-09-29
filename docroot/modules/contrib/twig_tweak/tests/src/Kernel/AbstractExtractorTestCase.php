@@ -3,6 +3,7 @@
 namespace Drupal\Tests\twig_tweak\Kernel;
 
 use Drupal\file\Entity\File;
+use Drupal\file\FileInterface;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\media\Entity\Media;
 use Drupal\node\Entity\Node;
@@ -53,18 +54,18 @@ abstract class AbstractExtractorTestCase extends KernelTestBase {
     $this->installEntitySchema('media');
 
     $test_files = $this->getTestFiles('image');
-    //
+
     $image_file = File::create([
       'uri' => $test_files[0]->uri,
       'uuid' => 'a2cb2b6f-7bf8-4da4-9de5-316e93487518',
-      'status' => FILE_STATUS_PERMANENT,
+      'status' => FileInterface::STATUS_PERMANENT,
     ]);
     $image_file->save();
 
     $media_file = File::create([
       'uri' => $test_files[2]->uri,
       'uuid' => '5dd794d0-cb75-4130-9296-838aebc1fe74',
-      'status' => FILE_STATUS_PERMANENT,
+      'status' => FileInterface::STATUS_PERMANENT,
     ]);
     $media_file->save();
 

@@ -149,7 +149,7 @@ class AcquiaSearchApiClient {
     $uri = $data['host'] . $path . '?' . $query_string;
     $options = [
       'headers' => $data['headers'],
-      'timeout' => 5,
+      'timeout' => 10,
     ];
 
     try {

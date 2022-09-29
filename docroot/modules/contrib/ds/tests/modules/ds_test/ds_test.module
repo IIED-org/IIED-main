@@ -22,12 +22,13 @@ function ds_test_theme_suggestions_alter(&$suggestions, $variables, $base_theme_
 }
 
 /**
- * Helper function to return the tag name basid on tid.
+ * Helper function to return the tag name based on tid.
  */
 function ds_test_get_tag_name($raw_value, $object) {
   $entity_manager = \Drupal::entityTypeManager();
+  /** @var \Drupal\taxonomy\TermInterface $term */
   $term = $entity_manager->getStorage('taxonomy_term')->load($raw_value);
-  return $term->name->value;
+  return $term->label();
 }
 
 /**

@@ -37,7 +37,7 @@ class BlockFieldPluginTest extends TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Ensure that the plugin definitions are cleared.
@@ -89,7 +89,8 @@ class BlockFieldPluginTest extends TestBase {
     $edit = [
       'use_block_title' => '1',
     ];
-    $this->drupalPostForm('admin/structure/ds/fields/manage_block/test_block_title_field', $edit, t('Save'));
+    $this->drupalGet('admin/structure/ds/fields/manage_block/test_block_title_field');
+    $this->submitForm($edit, t('Save'));
     $text = t('The field %name has been saved', ['%name' => 'Test block title field']);
     $this->assertSession()->responseContains((string) $text);
 
@@ -201,7 +202,8 @@ class BlockFieldPluginTest extends TestBase {
     $edit = [
       'add_block_wrappers' => '1',
     ];
-    $this->drupalPostForm('admin/structure/ds/fields/manage_block/test_block_title_field', $edit, t('Save'));
+    $this->drupalGet('admin/structure/ds/fields/manage_block/test_block_title_field');
+    $this->submitForm($edit, t('Save'));
 
     // Verify block wrappers do exist.
     $this->drupalGet('node/' . $node->id());

@@ -46,7 +46,7 @@ class ChartConfigItem extends FieldItemBase {
    * {@inheritdoc}
    */
   public static function schema(FieldStorageDefinitionInterface $field_definition) {
-    $schema = [
+    return [
       'columns' => [
         'config' => [
           'type' => 'blob',
@@ -68,8 +68,6 @@ class ChartConfigItem extends FieldItemBase {
         ],
       ],
     ];
-
-    return $schema;
   }
 
   /**

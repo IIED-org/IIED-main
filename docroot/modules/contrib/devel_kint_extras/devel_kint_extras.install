@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Contains devel_kint_extras.install.
+ */
+
+/**
+ * Update the default devel dumper if necessary.
+ */
+function devel_kint_extras_update_8001() {
+  $settings = \Drupal::configFactory()->getEditable('devel.settings');
+
+  if ($settings->get('devel_dumper') !== 'kint_extended') {
+    return 'No changes necessary.';
+  }
+
+  $settings->set('devel_dumper', 'kint');
+  $settings->save();
+
+  return 'Changed the default dumper from kint_extended to kint.';
+}

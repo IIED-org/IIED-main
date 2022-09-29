@@ -36,30 +36,32 @@ class RouteSubscriber extends RouteSubscriberBase {
   protected function alterRoutes(RouteCollection $collection) {
     foreach ($this->entityTypeManager->getDefinitions() as $entity_type_id => $entity_type) {
       $base_table = $entity_type->getBaseTable();
-      if ($entity_type->get('field_ui_base_route') && !empty($base_table)) {
+      if (($route_name = $entity_type->get('field_ui_base_route')) && !empty($base_table)) {
+
+        if (!$entity_route = $collection->get($route_name)) {
+          continue;
+        }
 
         if ($display = $entity_type->getLinkTemplate('display')) {
+
+          $options = [];
+          $options['parameters'][$entity_type_id] = [
+            'type' => 'entity:' . $entity_type_id,
+          ];
+
+          $defaults = [
+            'entity_type_id' => $entity_type_id,
+          ];
+
           $route = new Route(
             $display,
             [
               '_controller' => '\Drupal\ds\Controller\DsController::contextualTab',
               '_title' => 'Manage display',
-              'entity_type_id' => $entity_type_id,
-            ],
-            [
-              '_field_ui_view_mode_access' => 'administer ' . $entity_type_id . ' display',
-            ],
-            [
-              '_admin_route' => TRUE,
-              '_ds_entity_type_id' => $entity_type_id,
-              'parameters' => [
-                $entity_type_id => [
-                  'type' => 'entity:' . $entity_type_id,
-                ],
-              ],
-            ]
+            ] + $defaults,
+            ['_permission' => 'administer ' . $entity_type_id . ' display'],
+            $options
           );
-
           $collection->add("entity.$entity_type_id.display", $route);
         }
       }
@@ -69,7 +71,7 @@ class RouteSubscriber extends RouteSubscriberBase {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     $events = parent::getSubscribedEvents();
     $events[RoutingEvents::ALTER] = ['onAlterRoutes', 100];
     return $events;

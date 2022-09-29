@@ -16,6 +16,12 @@ eu_cookie_compliance.settings:
     popup_scrolling_confirmation:
       type: boolean
       label: 'Consent by scrolling'
+    eu_countries:
+      type: sequence
+      label: 'Array of EU countries'
+      sequence:
+        type: text
+        label: 'Country name.'
     eu_only:
       type: boolean
       label: 'Only display banner in EU countries.'
@@ -29,25 +35,11 @@ eu_cookie_compliance.settings:
       type: boolean
       label: "If the banner is at the top, don't scroll the banner with the page."
     popup_info:
-      type: mapping
+      type: text_format
       label: 'Cookie information banner message'
-      mapping:
-        value:
-          type: text
-          label: 'Cookie information banner message - Value'
-        format:
-          type: string
-          label: 'Cookie information banner message - Format'
     mobile_popup_info:
-      type: mapping
+      type: text_format
       label: 'Cookie information banner message - mobile'
-      mapping:
-        value:
-          type: text
-          label: 'Cookie information banner message - mobile - Value'
-        format:
-          type: string
-          label: 'Cookie information banner message - mobile - Format'
     popup_info_template:
       type: string
       label: 'Template to use for "consent by default" method'
@@ -70,15 +62,8 @@ eu_cookie_compliance.settings:
       type: label
       label: 'Disagree button label'
     popup_agreed:
-      type: mapping
+      type: text_format
       label: 'Thank you banner message'
-      mapping:
-        value:
-          type: text
-          label: 'Thank you banner message - Value'
-        format:
-          type: string
-          label: 'Thank you banner message - Format'
     popup_find_more_button_message:
       type: label
       label: 'More info button label'
@@ -139,6 +124,9 @@ eu_cookie_compliance.settings:
     use_bare_css:
       type: boolean
       label: 'Include minimal CSS, I want to style the overlay in the theme CSS'
+    use_olivero_css:
+      type: boolean
+      label: 'Include styles to support Drupal Olivero theme default CSS.'
     disagree_do_not_show_popup:
       type: boolean
       label: 'Do not show cookie policy when the user clicks the "Cookie Policy" button.'
@@ -176,15 +164,8 @@ eu_cookie_compliance.settings:
       type: string
       label: 'Consent storage method'
     withdraw_message:
-      type: mapping
+      type: text_format
       label: 'Withdraw consent banner message'
-      mapping:
-        value:
-          type: text
-          label: 'Withdraw consent banner message - Value'
-        format:
-          type: string
-          label: 'Withdraw consent banner message - Format'
     withdraw_tab_button_label:
       type: label
       label: 'Privacy settings tab label'
@@ -237,7 +218,7 @@ eu_cookie_compliance.settings:
       type: string
       label: 'Whitelisted cookies (DEPRECATED)'
     cookie_categories:
-      type: sting
+      type: string
       label: 'Cookie categories (DEPRECATED)'
     fix_first_cookie_category:
       type: boolean
@@ -248,3 +229,15 @@ eu_cookie_compliance.settings:
     accessibility_focus:
       type: boolean
       label: 'Buttons have red focus outline (for accessibility)'
+    close_button_action:
+      type: string
+      label: 'Close button action'
+    reject_button_label:
+      type: string
+      label: 'Reject button label'
+    reject_button_enabled:
+      type: boolean
+      label: 'Enable "Reject/deny all" button'
+    close_button_enabled:
+      type: boolean
+      label: 'Close button/box enabled'

@@ -26,11 +26,13 @@ class DataCollectorTableTestForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    $config = $this->config('charts.settings');
     $form['series'] = [
       '#type' => 'chart_data_collector_table',
       '#initial_rows' => self::INITIAL_ROWS,
       '#initial_columns' => self::INITIAL_COLUMNS,
       '#table_drag' => FALSE,
+      '#default_colors' => $config->get('charts_default_settings.display.colors') ?? [],
     ];
 
     return $form;

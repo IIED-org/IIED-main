@@ -1,0 +1,35 @@
+charts.settings.library_plugin.highcharts:
+  type: charts_settings_library_plugin
+  mapping:
+    legend:
+      label: Legend
+      type: mapping
+      mapping:
+        layout:
+          label: Layout
+          type: string
+        background_color:
+          label: 'Background color'
+          type: string
+        border_width:
+          label: 'Border width'
+          type: string
+        item_style:
+          label: 'Border width'
+          type: mapping
+          mapping:
+            color:
+              label: Color
+              type: string
+            overflow:
+              label: 'Text overflow'
+              type: string
+        shadow:
+          label: 'Enable legend shadow'
+          type: boolean
+    exporting_library:
+      label: 'Enable exporting library'
+      type: boolean
+    texture_library:
+      label: 'Enable texture library'
+      type: boolean

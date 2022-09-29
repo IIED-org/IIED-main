@@ -510,13 +510,11 @@ class BaseSettings extends FormElement {
       $settings = $form_state->getValue($element['#parents']);
       // Adding validate callback for the chart library settings.
       if (!empty($settings['library'])) {
-        $library = $settings['library'];
-        $library_form = $library . '_settings';
         /** @var \Drupal\Component\Plugin\PluginManagerInterface $plugin_manager */
         $plugin_manager = \Drupal::service('plugin.manager.charts');
         /** @var \Drupal\charts\Plugin\chart\Library\ChartInterface $plugin */
-        $plugin = $plugin_manager->createInstance($library);
-        $plugin->validateConfigurationForm($element[$library_form], $form_state);
+        $plugin = $plugin_manager->createInstance($settings['library']);
+        $plugin->validateConfigurationForm($element['library_config'], $form_state);
       }
     }
   }
@@ -536,14 +534,12 @@ class BaseSettings extends FormElement {
     if ($used_in === 'config_form') {
       $settings = $form_state->getValue($element['#parents']);
       if (!empty($settings['library'])) {
-        $library = $settings['library'];
-        $library_form = $library . '_settings';
         /** @var \Drupal\Component\Plugin\PluginManagerInterface $plugin_manager */
         $plugin_manager = \Drupal::service('plugin.manager.charts');
         /** @var \Drupal\charts\Plugin\chart\Library\ChartInterface $plugin */
-        $plugin = $plugin_manager->createInstance($library);
-        $plugin->submitConfigurationForm($element[$library_form], $form_state);
-        $form_state->setValueForElement($element[$library_form], $plugin->getConfiguration());
+        $plugin = $plugin_manager->createInstance($settings['library']);
+        $plugin->submitConfigurationForm($element['library_config'], $form_state);
+        $form_state->setValueForElement($element['library_config'], $plugin->getConfiguration());
       }
     }
   }
@@ -693,6 +689,14 @@ class BaseSettings extends FormElement {
       '#type' => 'checkbox',
       '#description' => new TranslatableMarkup('Enable stacking for this chart. Will stack based on the selected label field.'),
       '#default_value' => !empty($options['display']['stacking']),
+    ];
+
+    $element['display']['color_changer'] = [
+      '#title' => new TranslatableMarkup('Expose color changer'),
+      '#type' => 'checkbox',
+      '#description' => new TranslatableMarkup('Display a widget that enables users to switch the chart colors.'),
+      '#default_value' => !empty($options['display']['color_changer']),
+      '#weight' => 10,
     ];
 
     $element['yaxis']['inherit'] = [
@@ -854,6 +858,14 @@ class BaseSettings extends FormElement {
       '#title' => new TranslatableMarkup('Stacking'),
       '#description' => new TranslatableMarkup('Enable stacking for this chart. Will stack based on the selected label field.'),
       '#default_value' => !empty($options['fields']['stacking']) ? $options['fields']['stacking'] : FALSE,
+    ];
+
+    $element['fields']['color_changer'] = [
+      '#title' => new TranslatableMarkup('Expose color changer'),
+      '#type' => 'checkbox',
+      '#description' => new TranslatableMarkup('Display a widget that enables users to switch the chart colors.'),
+      '#default_value' => !empty($options['fields']['color_changer']),
+      '#weight' => 10,
     ];
 
     $element['fields']['data_providers'] = [
@@ -1146,6 +1158,14 @@ class BaseSettings extends FormElement {
       '#state_color_indexes_key' => $state_color_indexes_key,
     ];
 
+    $element['display']['color_changer'] = [
+      '#title' => new TranslatableMarkup('Expose color changer'),
+      '#type' => 'checkbox',
+      '#description' => new TranslatableMarkup('Display a widget that enables users to switch the chart colors.'),
+      '#default_value' => !empty($options['display']['color_changer']),
+      '#weight' => 10,
+    ];
+
     return $element;
   }
 
@@ -1225,12 +1245,16 @@ class BaseSettings extends FormElement {
       ];
     }
 
+    if (!empty($element['#default_value'])) {
+      $options = NestedArray::mergeDeep($options, $element['#default_value']);
+    }
     $element['series'] = [
       '#type' => 'chart_data_collector_table',
       '#initial_rows' => $element['#table_initial_rows'] ?? 5,
       '#initial_columns' => $element['#table_initial_columns'] ?? 2,
       '#table_drag' => FALSE,
       '#default_value' => $options['series'] ?? [],
+      '#default_colors' => $options['display']['colors'] ?? [],
     ];
 
     return $element;
@@ -1265,7 +1289,7 @@ class BaseSettings extends FormElement {
    *
    * @param array $form
    *   The form.
-   * @param \Drupal\core\form\FormStateInterface $form_state
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    *
    * @return array
@@ -1334,14 +1358,13 @@ class BaseSettings extends FormElement {
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   private static function buildLibraryConfigurationForm(array $element, FormStateInterface $form_state, $library) {
-    $library_form = $library . '_settings';
-    $plugin_configuration = $element['#value'][$library_form] ?? [];
+    $plugin_configuration = $element['#value']['library_config'] ?? [];
     // Using plugins to get the available installed libraries.
     /** @var \Drupal\charts\ChartManager $plugin_manager */
     $plugin_manager = \Drupal::service('plugin.manager.charts');
     /** @var \Drupal\charts\Plugin\chart\Library\ChartInterface $plugin */
     $plugin = $plugin_manager->createInstance($library, $plugin_configuration);
-    $element[$library_form] = [
+    $element['library_config'] = [
       '#type' => 'details',
       '#title' => new TranslatableMarkup('@library settings', [
         '@library' => $plugin->getPluginDefinition()['name'],
@@ -1349,7 +1372,7 @@ class BaseSettings extends FormElement {
       '#group' => $element['display']['#group'],
       '#weight' => 4,
     ];
-    $element[$library_form] = $plugin->buildConfigurationForm($element[$library_form], $form_state);
+    $element['library_config'] = $plugin->buildConfigurationForm($element['library_config'], $form_state);
     return $element;
   }
 

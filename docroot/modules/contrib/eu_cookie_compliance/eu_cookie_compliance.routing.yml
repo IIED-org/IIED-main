@@ -18,6 +18,7 @@ eu_cookie_compliance.store_consent:
     _controller: \Drupal\eu_cookie_compliance\Controller\StoreConsent::store
     _title: 'EU Cookie Compliance store consent'
   requirements:
+    # Access true
     _access: 'TRUE'
 route_callbacks:
   - '\Drupal\eu_cookie_compliance\Routing\CheckIfEuCountryJs::routes'

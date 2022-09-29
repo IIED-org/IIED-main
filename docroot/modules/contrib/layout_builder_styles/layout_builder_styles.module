@@ -246,8 +246,10 @@ function _layout_builder_styles_add_style_selection_form_elements(array &$form, 
 function layout_builder_styles_theme_suggestions_block_alter(array &$suggestions, array $variables) {
   // Add theme hook suggestions for block templates based on the configured
   // style. We only act if there is a single style selected for the block.
-  if (!empty($variables['elements']['#layout_builder_style']) && count($variables['elements']['#layout_builder_style']) < 2) {
-    $styleId = reset($variables['elements']['#layout_builder_style']);
+  $styles = $variables['elements']['#layout_builder_style'] ?? [];
+  $styles = array_filter($styles);
+  if (count($styles) == 1) {
+    $styleId = reset($styles);
     if (!empty($styleId)) {
       $suggestions[] = 'block__' . $styleId;
       // For each existing suggestion, provide a duplicate one that adds the

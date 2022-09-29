@@ -25,7 +25,7 @@ abstract class MediaRevisionsTestBase extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     /** @var \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager */
     $entityTypeManager = \Drupal::service('entity_type.manager');
@@ -75,7 +75,8 @@ abstract class MediaRevisionsTestBase extends BrowserTestBase {
     $result = $this->mediaStorage->getQuery()
       ->allRevisions()
       ->condition('mid', $media->id())
-      ->sort('vid', 'ASC')
+      ->sort('vid')
+      ->accessCheck(FALSE)
       ->range(NULL, 1)
       ->execute();
 

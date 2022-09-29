@@ -73,7 +73,7 @@ abstract class MasqueradeWebTestBase extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Create and configure User module's admin role.
