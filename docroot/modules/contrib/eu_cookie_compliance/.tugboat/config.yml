@@ -1,6 +1,6 @@
 services:
   php:
-    image: q0rban/tugboat-drupal:9.0
+    image: q0rban/tugboat-drupal:9.3
     default: true
     http: false
     depends: mysql
@@ -21,7 +21,7 @@ services:
         composer config repositories.tugboat vcs $TUGBOAT_ROOT
         # Now we can require this module, specifing the branch name we created
         # above that uses the $TUGBOAT_REPO_ID environment variable.
-        composer require drupal/eu_cookie_compliance:dev-$TUGBOAT_REPO_ID
+        composer require drupal/coloris:1.0.x-dev drupal/eu_cookie_compliance:dev-$TUGBOAT_REPO_ID
         # Install Drupal on the site.
         vendor/bin/drush \
           --yes \

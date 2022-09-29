@@ -18,27 +18,24 @@ class MediaRevisionsUiAccessTest extends MediaRevisionsTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'system',
-    'node',
     'media',
     'media_test_source',
     'media_revisions_ui',
-    'block',
   ];
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp() {
-    parent::setUp();
-    $this->drupalPlaceBlock('local_tasks_block');
-  }
 
   /**
    * Tests access of revision operations.
    */
   public function testOperationsAccess() {
+    // Authenticated role has a view media permission by default, so remove it
+    // to properly test permissions.
+    /** @var \Drupal\user\RoleInterface $authenticatedRole */
+    $authenticatedRole = \Drupal::entityTypeManager()->getStorage('user_role')->load('authenticated');
+    $authenticatedRole->revokePermission('view media');
+    $authenticatedRole->save();
+
     // Set up two media types.
     $type1 = $this->createMediaType('test');
     $type2 = $this->createMediaType('test');
@@ -78,6 +75,7 @@ class MediaRevisionsUiAccessTest extends MediaRevisionsTestBase {
 
     // Test that the user can only view all revisions but not revert or delete.
     $this->createUserWithPermissionsAndLogin([
+      'view media',
       'view all media revisions',
     ]);
 
@@ -119,6 +117,7 @@ class MediaRevisionsUiAccessTest extends MediaRevisionsTestBase {
 
     // Test individual permissions on media type.
     $this->createUserWithPermissionsAndLogin([
+      'view media',
       "view {$type1->id()} media revisions",
     ]);
 
@@ -152,6 +151,13 @@ class MediaRevisionsUiAccessTest extends MediaRevisionsTestBase {
     $this->assertRevisionViewStatusCode($media2Revision, 403);
     $this->assertRevisionRevertStatusCode($media2Revision, 403);
     $this->assertRevisionDeleteStatusCode($media2Revision, 403);
+
+    // Test that view media revision does not work without view media
+    // permission.
+    $this->createUserWithPermissionsAndLogin([
+      "view {$type1->id()} media revisions",
+    ]);
+    $this->assertRevisionViewStatusCode($mediaRevision, 403);
 
     // Test that revert media revision does not work without update media
     // permission.

@@ -110,10 +110,9 @@ class MediaRevisionRevertForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, $media_revision = NULL) {
-    $this->revision = $this->mediaStorage->loadRevision($media_revision);
-    $form = parent::buildForm($form, $form_state);
+    $this->revision = $media_revision;
 
-    return $form;
+    return parent::buildForm($form, $form_state);
   }
 
   /**

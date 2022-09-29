@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 
 /**
- * Field handler to provide x and y values for a bubble chart.
+ * Field handler to provide x, y, and z values for a bubble chart.
  *
  * @ingroup views_field_handlers
  * @ViewsField("field_charts_fields_bubble")

@@ -9,6 +9,7 @@ use Drupal\Core\Config\Entity\ConfigEntityType;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_cookie_compliance\Entity\CookieCategoryInterface;
+use Drupal\language\ConfigurableLanguageManagerInterface;
 use Drupal\user\Entity\Role;
 use Drupal\Core\Database\Database;
 use Drupal\filter\Entity\FilterFormat;
@@ -78,7 +79,7 @@ function eu_cookie_compliance_schema() {
  * Implements hook_install().
  */
 function eu_cookie_compliance_install() {
-  module_load_include('module', 'eu_cookie_compliance', 'eu_cookie_compliance');
+  \Drupal::moduleHandler()->loadInclude('eu_cookie_compliance', 'module', 'eu_cookie_compliance');
 
   $roles = Role::loadMultiple();
   $permission = 'display eu cookie compliance popup';
@@ -112,7 +113,24 @@ function eu_cookie_compliance_install() {
     $config->set('uuid', \Drupal::service('uuid')->generate());
   }
 
-  $config->set('popup_agreed.format', $default_filter_format)
+  // Set the defaults here rather than in the install file, to overcome a
+  // translation issue in Drupal core that resets translated config when
+  // translated strings are updated or another module gets installed.
+  $config->set('popup_agreed.value', t('<h2>Thank you for accepting cookies</h2><p>You can now hide this message or find out more about cookies.</p>'))
+    ->set('popup_agree_button_message', t('Accept'))
+    ->set('popup_more_info_button_message', t('More info'))
+    ->set('popup_find_more_button_message', t('More info'))
+    ->set('popup_hide_button_message', t('Hide'))
+    ->set('popup_info.value', t('<h2>We use cookies on this site to enhance your user experience</h2><p>By clicking the Accept button, you agree to us doing so.</p>'))
+    ->set('mobile_popup_info.value', t('<h2>We use cookies on this site to enhance your user experience</h2><p>By tapping the Accept button, you agree to us doing so.</p>'))
+    ->set('popup_link', '<front>')
+    ->set('disagree_button_label', t('No, thanks'))
+    ->set('withdraw_message.value', t('<h2>We use cookies on this site to enhance your user experience</h2><p>You have given your consent for us to set cookies.</p>'))
+    ->set('withdraw_action_button_label', t('Withdraw consent'))
+    ->set('withdraw_tab_button_label', t('Privacy settings'))
+    ->set('save_preferences_button_label', t('Save preferences'))
+    ->set('accept_all_categories_button_label', t('Accept all cookies'))
+    ->set('popup_agreed.format', $default_filter_format)
     ->set('popup_info.format', $default_filter_format)
     ->set('mobile_popup_info.format', $default_filter_format)
     ->set('withdraw_message.format', $default_filter_format)
@@ -129,35 +147,48 @@ function eu_cookie_compliance_requirements($phase) {
 
   $language_manager = \Drupal::languageManager();
 
-  // Get all configured languages.
-  $languages = $language_manager->getLanguages();
-  // Store a reference to the current language.
-  $current_language = $language_manager->getCurrentLanguage();
+  $default_language = $language_manager->getDefaultLanguage();
+  // Retrieve the show privacy button setting here as it's universal for all
+  // languages.
+  $show_policy = Drupal::config('eu_cookie_compliance.settings')->get('show_more_info');
 
-  if ($phase === 'runtime') {
+  if ($phase === 'runtime' && $language_manager instanceof ConfigurableLanguageManagerInterface && \Drupal::service('module_handler')->moduleExists('config_translation')) {
+
+    // Get all configured languages.
+    $languages = $language_manager->getLanguages();
+
     foreach ($languages as $key => $language) {
       // Set the language override.
-      $language_manager->setConfigOverrideLanguage($language);
+      $config = $language_manager->getLanguageConfigOverride($language->getId(), 'eu_cookie_compliance.settings');
 
       // Get the config variables. This will use the overridden language.
-      $popup_link = Drupal::config('eu_cookie_compliance.settings')
-        ->get('popup_link');
-      $show_policy = Drupal::config('eu_cookie_compliance.settings')->get('show_more_info');
+      $popup_link = $config->get('popup_link') ?: '<front>';
 
       // Check the current language for wrongly configured policy link.
-      if ($popup_link === '<front>' && $show_policy) {
+      if ($popup_link === '<front>' && $show_policy && $default_language->getId() !== $language->getId()) {
         $requirements['eu_cookie_compliance_' . $key] = [
           'title' => t('EU Cookie Compliance'),
           'severity' => REQUIREMENT_WARNING,
-          'description' => t('Language @language_id: Your privacy policy link is pointing at the front page. This is the default value after installation, and unless your privacy policy is actually posted at the front page, you will need to create a separate page for the privacy policy and link to that page.', ['@language_id' => $language->getName()]),
+          'description' => t('Language @language_id: Your privacy policy link is not set or is pointing at the front page. This is the default value after installation, and unless your privacy policy is actually posted at the front page, you will need to create a separate page for the privacy policy and link to that page.', ['@language_id' => $language->getName()]),
           'value' => t('Privacy policy link not provided'),
         ];
       }
     }
   }
+  if ($phase === 'runtime') {
+    // Get the config variables.
+    $popup_link = Drupal::config('eu_cookie_compliance.settings')
+      ->get('popup_link');
 
-  // Reset the language manager.
-  $language_manager->setConfigOverrideLanguage($current_language);
+    if ($popup_link === '<front>' && $show_policy) {
+      $requirements['eu_cookie_compliance'] = [
+        'title' => t('EU Cookie Compliance'),
+        'severity' => REQUIREMENT_WARNING,
+        'description' => t('Language @language_id: Your privacy policy link is pointing at the front page. This is the default value after installation, and unless your privacy policy is actually posted at the front page, you will need to create a separate page for the privacy policy and link to that page.', ['@language_id' => $default_language->getName()]),
+        'value' => t('Privacy policy link not provided'),
+      ];
+    }
+  }
 
   return $requirements;
 }
@@ -307,7 +338,7 @@ function eu_cookie_compliance_update_8107() {
  * Change module weight to load after other modules, ensure all JSs are handled.
  */
 function eu_cookie_compliance_update_8108() {
-  module_load_include('module', 'eu_cookie_compliance', 'eu_cookie_compliance');
+  \Drupal::moduleHandler()->loadInclude('eu_cookie_compliance', 'module', 'eu_cookie_compliance');
   eu_cookie_compliance_module_set_weight();
 }
 
@@ -647,5 +678,40 @@ function eu_cookie_compliance_update_8125() {
   \Drupal::configFactory()
     ->getEditable('eu_cookie_compliance.settings')
     ->set('accessibility_focus', FALSE)
+    ->save();
+}
+
+/**
+ * Add default popup_info_template value to the config.
+ */
+function eu_cookie_compliance_update_8126() {
+  \Drupal::configFactory()
+    ->getEditable('eu_cookie_compliance.settings')
+    ->set('popup_info_template', 'new')
+    ->save();
+}
+
+/**
+ * Trigger building a JavaScript file (see https://www.drupal.org/node/3029549).
+ */
+function eu_cookie_compliance_update_8127() {
+  // Clear the cache so we can see the new EventSubscriber.
+  drupal_flush_all_caches();
+  // Save config to trigger rebuilding the JavaScript file.
+  \Drupal::configFactory()
+    ->getEditable('eu_cookie_compliance.settings')
+    ->save();
+}
+
+/**
+ * Add defaults for reject button.
+ */
+function eu_cookie_compliance_update_8128() {
+  \Drupal::configFactory()
+    ->getEditable('eu_cookie_compliance.settings')
+    ->set('close_button_enabled', FALSE)
+    ->set('reject_button_enabled', FALSE)
+    ->set('reject_button_label', '')
+    ->set('close_button_action', 'close_banner')
     ->save();
 }

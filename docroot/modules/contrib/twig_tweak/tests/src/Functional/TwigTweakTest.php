@@ -5,6 +5,7 @@ namespace Drupal\Tests\twig_tweak\Functional;
 use Drupal\Core\Link;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Url;
+use Drupal\file\FileInterface;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\TestFileCreationTrait;
 use Drupal\file\Entity\File;
@@ -25,7 +26,7 @@ final class TwigTweakTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'claro';
 
   /**
    * {@inheritdoc}
@@ -53,14 +54,14 @@ final class TwigTweakTest extends BrowserTestBase {
     $image_file = File::create([
       'uri' => $test_files[0]->uri,
       'uuid' => 'b2c22b6f-7bf8-4da4-9de5-316e93487518',
-      'status' => FILE_STATUS_PERMANENT,
+      'status' => FileInterface::STATUS_PERMANENT,
     ]);
     $image_file->save();
 
     $media_file = File::create([
       'uri' => $test_files[8]->uri,
       'uuid' => '5dd794d0-cb75-4130-9296-838aebc1fe74',
-      'status' => FILE_STATUS_PERMANENT,
+      'status' => FileInterface::STATUS_PERMANENT,
     ]);
     $media_file->save();
 
@@ -133,21 +134,20 @@ final class TwigTweakTest extends BrowserTestBase {
 
     // -- Block.
     $xpath = '//div[@class = "tt-block"]';
-    $xpath .= '/img[contains(@src, "/core/themes/classy/logo.svg") and @alt="Home"]';
+    $xpath .= '/img[contains(@src, "/core/themes/claro/logo.svg") and @alt="Home"]';
     $this->assertXpath($xpath);
 
     // -- Block with wrapper.
     $xpath = '//div[@class = "tt-block-with-wrapper"]';
     $xpath .= '/div[@class = "block block-system block-system-branding-block"]';
     $xpath .= '/h2[text() = "Branding"]';
-    $xpath .= '/following-sibling::a[img[contains(@src, "/core/themes/classy/logo.svg") and @alt="Home"]]';
+    $xpath .= '/following-sibling::a[img[contains(@src, "/core/themes/claro/logo.svg") and @alt="Home"]]';
     $xpath .= '/following-sibling::div[@class = "site-name"]/a';
     $this->assertXpath($xpath);
 
     // -- Region.
-    $xpath = '//div[@class = "tt-region"]/div[@class = "region region-sidebar-first"]';
-    $xpath .= '/div[contains(@class, "block-page-title-block") and h1[@class="page-title" and text() = "Twig Tweak Test"]]';
-    $xpath .= '/following-sibling::div[contains(@class, "block-system-powered-by-block")]/span[. = "Powered by Drupal"]';
+    $xpath = '//div[@class = "tt-region"]/div[@class = "region region-highlighted"]';
+    $xpath .= '/div[contains(@class, "block-system-powered-by-block")]/span[. = "Powered by Drupal"]';
     $this->assertXpath($xpath);
 
     // -- Entity (default view mode).
@@ -190,13 +190,13 @@ final class TwigTweakTest extends BrowserTestBase {
     // -- Entity add form.
     $xpath = '//div[@class = "tt-entity-add-form"]/form';
     $xpath .= '//input[@name = "title[0][value]" and @value = ""]';
-    $xpath .= '/../../../div/input[@type = "submit" and @value = "Save"]';
+    $xpath .= '/../../../../..//div/input[@type = "submit" and @value = "Save"]';
     $this->assertXpath($xpath);
 
     // -- Entity edit form.
     $xpath = '//div[@class = "tt-entity-edit-form"]/form';
     $xpath .= '//input[@name = "title[0][value]" and @value = "Alpha"]';
-    $xpath .= '/../../../div/input[@type = "submit" and @value = "Save"]';
+    $xpath .= '/../../../../..//div/input[@type = "submit" and @value = "Save"]';
     $this->assertXpath($xpath);
 
     // -- Field.
@@ -390,6 +390,30 @@ final class TwigTweakTest extends BrowserTestBase {
     $xpath = '//div[@class = "tt-file-url-from-media-field" and contains(text(), "/files/image-1.png")]';
     $this->assertXpath($xpath);
 
+    // -- Entity URL (canonical).
+    $xpath = '//div[@class = "tt-entity-url" and contains(text(), "/node/1#test") and not(contains(text(), "http"))]';
+    $this->assertXpath($xpath);
+
+    // -- Entity URL (absolute).
+    $xpath = '//div[@class = "tt-entity-url-absolute" and contains(text(), "/node/1") and contains(text(), "http")]';
+    $this->assertXpath($xpath);
+
+    // -- Entity URL (edit form).
+    $xpath = '//div[@class = "tt-entity-url-edit-form" and contains(text(), "/node/1/edit")]';
+    $this->assertXpath($xpath);
+
+    // -- Entity Link (canonical).
+    $xpath = '//div[@class = "tt-entity-link"]/a[text() = "Alpha" and contains(@href, "/node/1")  and not(contains(@href, "http"))]';
+    $this->assertXpath($xpath);
+
+    // -- Entity Link (absolute).
+    $xpath = '//div[@class = "tt-entity-link-absolute"]/a[text() = "Example" and contains(@href, "/node/1") and contains(@href, "http")]';
+    $this->assertXpath($xpath);
+
+    // -- Entity Link (edit form).
+    $xpath = '//div[@class = "tt-entity-link-edit-form"]/a[text() = "Edit" and contains(@href, "/node/1/edit")]';
+    $this->assertXpath($xpath);
+
     // -- Entity translation.
     // This is just a smoke test because the node is not translatable.
     $xpath = '//div[@class = "tt-translation" and contains(text(), "Alpha")]';
@@ -409,7 +433,7 @@ final class TwigTweakTest extends BrowserTestBase {
   }
 
   /**
-   * Checks that an element specified by a the xpath exists on the current page.
+   * Checks that an element specified by the xpath exists on the current page.
    */
   private function assertXpath(string $xpath): void {
     $this->assertSession()->elementExists('xpath', $xpath);

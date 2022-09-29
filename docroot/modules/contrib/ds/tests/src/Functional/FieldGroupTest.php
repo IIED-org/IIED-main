@@ -17,7 +17,6 @@ class FieldGroupTest extends TestBase {
    * Test tabs.
    */
   public function testFieldPlugin() {
-
     return;
 
     // Create a node.

@@ -264,6 +264,7 @@ class MediaRevisionController extends ControllerBase {
       ->allRevisions()
       ->condition('mid', $media->id())
       ->sort('vid', 'DESC')
+      ->accessCheck()
       ->pager(50)
       ->execute();
 

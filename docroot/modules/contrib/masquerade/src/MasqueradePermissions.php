@@ -31,6 +31,9 @@ class MasqueradePermissions {
       $permissions['masquerade as ' . $role->id()] = [
         'title' => $this->t('Masquerade as @role', ['@role' => $role->label()]),
         'restrict access' => TRUE,
+        'dependencies' => [
+          $role->getConfigDependencyKey() => [$role->getConfigDependencyName()]
+        ]
       ];
     }
 

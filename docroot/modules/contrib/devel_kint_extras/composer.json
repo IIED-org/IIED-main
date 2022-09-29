@@ -20,7 +20,7 @@
       "source": "http://git.drupal.org/project/devel_kint_extras.git"
   },
   "require": {
-    "drupal/devel": "^4.0",
-    "kint-php/kint": "^3.3"
+    "drupal/devel": "^4.0 || ^5.0",
+    "kint-php/kint": "^3.3 || ^4.0"
   }
 }

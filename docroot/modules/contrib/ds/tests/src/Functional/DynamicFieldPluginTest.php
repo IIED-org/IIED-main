@@ -22,9 +22,10 @@ class DynamicFieldPluginTest extends TestBase {
     ];
 
     $this->dsCreateTokenField($edit);
+    $this->drupalGet('admin/structure/ds/fields/manage_token');
 
     // Create the same and assert it already exists.
-    $this->drupalPostForm('admin/structure/ds/fields/manage_token', $edit, 'Save');
+    $this->submitForm($edit, 'Save');
     $this->assertSession()->pageTextContains('The machine-readable name is already in use. It must be unique.');
 
     $this->dsSelectLayout();
@@ -41,7 +42,8 @@ class DynamicFieldPluginTest extends TestBase {
     $edit = [
       'name' => 'Test field 2',
     ];
-    $this->drupalPostForm('admin/structure/ds/fields/manage_token/test_field', $edit,'Save');
+    $this->drupalGet('admin/structure/ds/fields/manage_token/test_field');
+    $this->submitForm($edit, 'Save');
     $this->assertSession()->pageTextContains('The field Test field 2 has been saved');
 
     // Use the Field UI limit option.
@@ -50,7 +52,8 @@ class DynamicFieldPluginTest extends TestBase {
     $edit = [
       'ui_limit' => 'article|default',
     ];
-    $this->drupalPostForm('admin/structure/ds/fields/manage_token/test_field', $edit,'Save');
+    $this->drupalGet('admin/structure/ds/fields/manage_token/test_field');
+    $this->submitForm($edit, 'Save');
 
     $this->drupalGet('admin/structure/types/manage/article/display');
     $this->assertSession()->responseContains('fields[dynamic_token_field:node-test_field][weight]');
@@ -62,14 +65,16 @@ class DynamicFieldPluginTest extends TestBase {
     $edit = [
       'ui_limit' => 'article|*',
     ];
-    $this->drupalPostForm('admin/structure/ds/fields/manage_token/test_field', $edit,'Save');
+    $this->drupalGet('admin/structure/ds/fields/manage_token/test_field');
+    $this->submitForm($edit, 'Save');
     $this->drupalGet('admin/structure/types/manage/article/display');
     $this->assertSession()->responseContains('fields[dynamic_token_field:node-test_field][weight]');
     $this->drupalGet('admin/structure/types/manage/article/display/teaser');
     $this->assertSession()->responseContains('fields[dynamic_token_field:node-test_field][weight]');
+    $this->drupalGet('admin/structure/ds/fields/delete/test_field');
 
     // Remove the field.
-    $this->drupalPostForm('admin/structure/ds/fields/delete/test_field', [],'Confirm');
+    $this->submitForm([], 'Confirm');
     $this->assertSession()->pageTextContains('The field Test field 2 has been deleted');
 
     // Assert the field is gone at the manage display screen.
@@ -85,9 +90,10 @@ class DynamicFieldPluginTest extends TestBase {
     ];
 
     $this->dsCreateBlockField($edit);
+    $this->drupalGet('admin/structure/ds/fields/manage_block');
 
     // Create the same and assert it already exists.
-    $this->drupalPostForm('admin/structure/ds/fields/manage_block', $edit,'Save');
+    $this->submitForm($edit, 'Save');
     $this->assertSession()->pageTextContains('The machine-readable name is already in use. It must be unique.');
 
     $this->dsSelectLayout();
@@ -104,11 +110,13 @@ class DynamicFieldPluginTest extends TestBase {
     $edit = [
       'name' => 'Test block field 2',
     ];
-    $this->drupalPostForm('admin/structure/ds/fields/manage_block/test_block_field', $edit,'Save');
+    $this->drupalGet('admin/structure/ds/fields/manage_block/test_block_field');
+    $this->submitForm($edit, 'Save');
     $this->assertSession()->pageTextContains('The field Test block field 2 has been saved');
+    $this->drupalGet('admin/structure/ds/fields/delete/test_block_field');
 
     // Remove the block field.
-    $this->drupalPostForm('admin/structure/ds/fields/delete/test_block_field', [],'Confirm');
+    $this->submitForm([], 'Confirm');
     $this->assertSession()->pageTextContains('The field Test block field 2 has been deleted');
 
     // Assert the block field is gone at the manage display screen.
@@ -129,7 +137,8 @@ class DynamicFieldPluginTest extends TestBase {
     $edit = [
       'depth' => '3',
     ];
-    $this->drupalPostForm('admin/structure/ds/fields/manage_block/test_block_configurable/block_config', $edit,'Save');
+    $this->drupalGet('admin/structure/ds/fields/manage_block/test_block_configurable/block_config');
+    $this->submitForm($edit, 'Save');
 
     // Assert it's found on the Field UI for article.
     $this->drupalGet('admin/structure/types/manage/article/display');
@@ -160,7 +169,8 @@ class DynamicFieldPluginTest extends TestBase {
     $edit = [
       'level' => '2',
     ];
-    $this->drupalPostForm('admin/structure/ds/fields/manage_block/test_block_configurable/block_config', $edit,'Save');
+    $this->drupalGet('admin/structure/ds/fields/manage_block/test_block_configurable/block_config');
+    $this->submitForm($edit, 'Save');
 
     // Look at node and verify the menu is not visible.
     $this->drupalGet('node/' . $node->id());

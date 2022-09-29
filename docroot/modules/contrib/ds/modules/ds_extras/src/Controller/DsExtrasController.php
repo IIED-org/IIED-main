@@ -6,6 +6,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -49,17 +50,20 @@ class DsExtrasController extends ControllerBase {
   /**
    * Displays a node revision.
    *
-   * @param int $node_revision
-   *   The node revision ID.
-   *
    * @return array
    *   An array suitable for drupal_render().
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function revisionShow($node_revision) {
-    /* @var \Drupal\node\NodeInterface $node */
-    $node = $this->entityTypeManager()
-      ->getStorage('node')
-      ->loadRevision($node_revision);
+  public function revisionShow($node_revision = NULL) {
+
+    if ($node_revision instanceof NodeInterface) {
+      $node = $node_revision;
+    }
+    else {
+      $this->entityTypeManager()->getStorage('node')->loadRevision($node_revision);
+    }
 
     // Determine view mode.
     $view_mode = \Drupal::config('ds_extras.settings')

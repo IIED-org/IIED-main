@@ -33,12 +33,12 @@ final class RegionViewBuilderTest extends AbstractTestCase {
   public function setUp(): void {
     parent::setUp();
     $this->installEntitySchema('block');
-    $this->container->get('theme_installer')->install(['stable']);
+    $this->container->get('theme_installer')->install(['stark']);
 
     $values = [
       'id' => 'public_block',
       'plugin' => 'system_powered_by_block',
-      'theme' => 'stable',
+      'theme' => 'stark',
       'region' => 'sidebar_first',
     ];
     Block::create($values)->save();
@@ -46,7 +46,7 @@ final class RegionViewBuilderTest extends AbstractTestCase {
     $values = [
       'id' => 'private_block',
       'plugin' => 'system_powered_by_block',
-      'theme' => 'stable',
+      'theme' => 'stark',
       'region' => 'sidebar_first',
     ];
     Block::create($values)->save();
@@ -61,7 +61,7 @@ final class RegionViewBuilderTest extends AbstractTestCase {
     $renderer = $this->container->get('renderer');
 
     $build = $view_builder->build('sidebar_first');
-    // The build should be empty because 'stable' is not a default theme.
+    // The build should be empty because 'stark' is not a default theme.
     $expected_build = [
       '#cache' => [
         'contexts' => [],
@@ -72,7 +72,7 @@ final class RegionViewBuilderTest extends AbstractTestCase {
     self::assertSame($expected_build, $build);
 
     // Specify the theme name explicitly.
-    $build = $view_builder->build('sidebar_first', 'stable');
+    $build = $view_builder->build('sidebar_first', 'stark');
     $expected_build = [
       // Only public_block should be rendered.
       // @see twig_tweak_test_block_access()
@@ -129,11 +129,11 @@ final class RegionViewBuilderTest extends AbstractTestCase {
     $actual_html = $renderer->renderPlain($build);
     self::assertSame(self::normalizeHtml($expected_html), self::normalizeHtml($actual_html));
 
-    // Set 'stable' as default site theme and check if the view builder without
+    // Set 'stark' as default site theme and check if the view builder without
     // 'theme' argument returns the same result.
     $this->container->get('config.factory')
       ->getEditable('system.theme')
-      ->set('default', 'stable')
+      ->set('default', 'stark')
       ->save();
 
     $build = $view_builder->build('sidebar_first');

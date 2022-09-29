@@ -72,7 +72,7 @@ class Runtime {
     $ah_env = $_ENV['AH_SITE_ENVIRONMENT'] ?? '';
     $ah_site_name = $_ENV['AH_SITE_NAME'] ?? '';
     $ah_site_group = $_ENV['AH_SITE_GROUP'] ?? '';
-    $conf_path = \Drupal::service('site.path');
+    $conf_path = \Drupal::getContainer()->getParameter('site.path');
     $sites_folder_name = substr($conf_path, strrpos($conf_path, '/') + 1);
     $ah_db_role = '';
 

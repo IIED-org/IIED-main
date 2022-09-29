@@ -121,7 +121,7 @@ function ds_switch_view_mode_form_node_form_alter(&$form, FormStateInterface $fo
       $layout_settings = $chosen_layout->getThirdPartySettings('ds');
 
       $ds_layouts = Ds::getLayouts();
-      $fallback_image = drupal_get_path('module', 'ds') . '/images/preview.png';
+      $fallback_image = \Drupal::service('extension.list.module')->getPath('ds') . '/images/preview.png';
 
       if (isset($layout_settings['layout'])) {
         /** @var \Drupal\Core\Layout\LayoutDefinition $chosen_layout */

@@ -26,6 +26,7 @@
   display: inline-block;
   text-align: left;
   width: 100%;
+  position: relative;
 }
 
 .eu-cookie-compliance-buttons {
@@ -161,10 +162,18 @@
 .eu-cookie-compliance-message h2,
 .eu-cookie-compliance-message h3,
 .eu-cookie-compliance-message p {
-  color: #fff;
   font-weight: bold;
   line-height: 1.4;
   margin: 0 0 5px 0;
+}
+
+.eu-cookie-compliance-message h1,
+.eu-cookie-compliance-message h2,
+.eu-cookie-compliance-message h3,
+.eu-cookie-compliance-message p,
+.eu-cookie-compliance-message button,
+.eu-cookie-compliance-category label {
+  color: #fff;
 }
 
 .eu-cookie-compliance-message h1 {
@@ -213,6 +222,22 @@
 
 .eu-cookie-withdraw-wrapper.sliding-popup-top .eu-cookie-withdraw-tab {
   transform: translate(-50%, -100%) scaleY(-1);
+}
+
+.eu-cookie-compliance-close-button {
+  background: url('../images/close.png');
+  width: 24px;
+  height: 24px;
+  border-width: 0;
+  font-size: 0px;
+  position: absolute;
+  right: 2px;
+  top: -12px;
+  cursor: pointer;
+}
+
+body:not(.eu-cookie-compliance-popup-open) .eu-cookie-compliance-close-button {
+  display: none;
 }
 
 @media screen and (max-width: 600px) {

@@ -14,7 +14,7 @@ class LayoutClassesTest extends TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setup() {
+  protected function setup(): void {
     parent::setup();
 
     // Set extra fields.
@@ -144,7 +144,8 @@ class LayoutClassesTest extends TestBase {
 
     // Remove all the node classes.
     $edit = ['entity_classes' => 'no_classes'];
-    $this->drupalPostForm('admin/structure/types/manage/article/display', $edit, t('Save'));
+    $this->drupalGet('admin/structure/types/manage/article/display');
+    $this->submitForm($edit, t('Save'));
     $this->drupalGet('node/' . $node->id());
 
     // Assert that there are no entity classes.
@@ -152,7 +153,8 @@ class LayoutClassesTest extends TestBase {
 
     // Only show view mode (deprecated).
     $edit = ['entity_classes' => 'old_view_mode'];
-    $this->drupalPostForm('admin/structure/types/manage/article/display', $edit, t('Save'));
+    $this->drupalGet('admin/structure/types/manage/article/display');
+    $this->submitForm($edit, t('Save'));
     $this->drupalGet('node/' . $node->id());
 
     // Assert that the old view mode class name is added (deprecated).
@@ -160,7 +162,8 @@ class LayoutClassesTest extends TestBase {
 
     // Let's create a block field, enable the full mode first.
     $edit = ['display_modes_custom[full]' => '1'];
-    $this->drupalPostForm('admin/structure/types/manage/article/display', $edit, t('Save'));
+    $this->drupalGet('admin/structure/types/manage/article/display');
+    $this->submitForm($edit, t('Save'));
 
     // Select layout.
     $layout = [
@@ -180,7 +183,8 @@ class LayoutClassesTest extends TestBase {
       'new_block_region' => 'Block region',
       'new_block_region_key' => 'block_region',
     ];
-    $this->drupalPostForm('admin/structure/types/manage/article/display/full', $edit, t('Save'));
+    $this->drupalGet('admin/structure/types/manage/article/display/full');
+    $this->submitForm($edit, t('Save'));
     $this->assertSession()->responseContains('<td colspan="9">' . t('Block region') . '</td>');
 
     // Configure fields.
@@ -204,7 +208,8 @@ class LayoutClassesTest extends TestBase {
       'ds_right' => 'footer',
       'ds_block_region' => 'footer',
     ];
-    $this->drupalPostForm('admin/structure/ds/change-layout/node/article/full/ds_2col_stacked', $edit, t('Save'));
+    $this->drupalGet('admin/structure/ds/change-layout/node/article/full/ds_2col_stacked');
+    $this->submitForm($edit, t('Save'));
     $this->drupalGet('admin/structure/types/manage/article/display/full');
 
     // Verify new regions.
@@ -233,7 +238,8 @@ class LayoutClassesTest extends TestBase {
       'ds_layout' => '_none',
       'display_modes_custom[full]' => FALSE,
     ];
-    $this->drupalPostForm('admin/structure/types/manage/article/display', $edit, 'Save');
+    $this->drupalGet('admin/structure/types/manage/article/display');
+    $this->submitForm($edit, 'Save');
 
     $elements = $this->xpath('//*[@id="edit-fields-body-region"]');
 

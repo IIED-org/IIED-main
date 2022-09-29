@@ -47,10 +47,11 @@ class MediaRevisionPermissions implements ContainerInjectionInterface {
    *
    * @see \Drupal\user\PermissionHandlerInterface::getPermissions()
    */
-  public function mediaRevisionTypePermissions() {
+  public function mediaRevisionTypePermissions(): array {
     $perms = [];
     // Generate media revision permissions for all media types.
     $media_types = $this->entityTypeManager->getStorage('media_type')->loadMultiple();
+    /** @var \Drupal\media\MediaTypeInterface $type */
     foreach ($media_types as $type) {
       $perms += $this->buildPermissions($type);
     }
@@ -66,20 +67,20 @@ class MediaRevisionPermissions implements ContainerInjectionInterface {
    * @return array
    *   An associative array of permission names and descriptions.
    */
-  protected function buildPermissions(MediaTypeInterface $type) {
+  protected function buildPermissions(MediaTypeInterface $type): array {
     $type_id = $type->id();
     $type_params = ['%type_name' => $type->label()];
 
     return [
-      "view {$type_id} media revisions" => [
+      "view $type_id media revisions" => [
         'title' => $this->t('%type_name: View media revisions', $type_params),
         'description' => $this->t('To view a revision, you also need permission to view the media item.'),
       ],
-      "revert {$type_id} media revisions" => [
+      "revert $type_id media revisions" => [
         'title' => $this->t('%type_name: Revert media revisions', $type_params),
         'description' => $this->t('To revert a revision, you also need permission to update the media item.'),
       ],
-      "delete {$type_id} media revisions" => [
+      "delete $type_id media revisions" => [
         'title' => $this->t('%type_name: Delete media revisions', $type_params),
         'description' => $this->t('To delete a revision, you also need permission to delete the media item.'),
       ],

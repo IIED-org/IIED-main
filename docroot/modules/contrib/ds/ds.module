@@ -58,7 +58,7 @@ function ds_theme() {
           'render element' => 'elements',
           'template' => strtr($plugin['theme'], '_', '-'),
           'base hook' => 'field',
-          'path' => drupal_get_path('module', $plugin['provider']) . '/templates',
+          'path' => \Drupal::service('extension.list.module')->getPath($plugin['provider']) . '/templates',
         ];
 
         if (!empty($plugin['path'])) {
@@ -1169,7 +1169,7 @@ function ds_entity_type_alter(array &$entity_types) {
     }
   }
   // Undo field_layout changes to EntityViewDisplay.
-  if (\Drupal::moduleHandler()->moduleExists('field_layout')) {
+  if (\Drupal::moduleHandler()->moduleExists('field_layout') && !\Drupal::moduleHandler()->moduleExists('layout_builder')) {
     $entity_types['entity_view_display']->setClass($entity_types['entity_view_display']->getOriginalClass());
     if (\Drupal::moduleHandler()->moduleExists('field_ui')) {
       $entity_types['entity_view_display']->setFormClass('edit', 'Drupal\field_ui\Form\EntityViewDisplayEditForm');

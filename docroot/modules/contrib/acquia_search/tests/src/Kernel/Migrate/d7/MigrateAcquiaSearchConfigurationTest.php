@@ -37,7 +37,7 @@ class MigrateAcquiaSearchConfigurationTest extends MigrateDrupal7TestBase {
     parent::setUp();
     $this->loadFixture(implode(DIRECTORY_SEPARATOR, [
       DRUPAL_ROOT,
-      drupal_get_path('module', 'acquia_search'),
+      \Drupal::service('extension.list.module')->getPath('acquia_search'),
       'tests',
       'fixtures',
       'drupal7.php',

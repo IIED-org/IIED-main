@@ -11,5 +11,5 @@ drush en twig_tweak
 
 ## LINKS
 * Project page: https://www.drupal.org/project/twig_tweak
-* Twig home page: https://twig.sensiolabs.org
-* Drupal 8 Twig documentation: https://www.drupal.org/docs/8/theming/twig
+* Twig home page: https://twig.symfony.com/
+* Drupal Twig documentation: https://www.drupal.org/docs/theming-drupal/twig-in-drupal

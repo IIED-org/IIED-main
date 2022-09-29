@@ -39,7 +39,7 @@ class BlockTest extends TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Create a test user.
@@ -63,14 +63,16 @@ class BlockTest extends TestBase {
       'label' => 'Basic Block',
       'id' => 'basic',
     ];
-    $this->drupalPostForm('admin/structure/block/block-content/types/add', $edit,'Save', []);
+    $this->drupalGet('admin/structure/block/block-content/types/add', []);
+    $this->submitForm($edit, 'Save');
     $this->assertSession()->pageTextContains('Custom block type Basic Block has been added.');
 
     // Create a basic block.
     $edit = [];
     $edit['info[0][value]'] = 'Test Block';
     $edit['body[0][value]'] = $this->randomMachineName(16);
-    $this->drupalPostForm('block/add/basic', $edit, t('Save'), []);
+    $this->drupalGet('block/add/basic', []);
+    $this->submitForm($edit, t('Save'));
     $this->assertSession()->pageTextContains('Basic Block Test Block has been created.');
 
     // Place the block.
@@ -81,12 +83,14 @@ class BlockTest extends TestBase {
     ];
     $block = BlockContent::load(1);
     $url = 'admin/structure/block/add/block_content:' . $block->uuid() . '/' . $this->config('system.theme')->get('default');
-    $this->drupalPostForm($url, $instance, t('Save block'));
+    $this->drupalGet($url);
+    $this->submitForm($instance, t('Save block'));
 
     // Change to a DS layout.
     $url = 'admin/structure/block/block-content/manage/basic/display';
     $edit = ['ds_layout' => 'ds_2col'];
-    $this->drupalPostForm($url, $edit, t('Save'), []);
+    $this->drupalGet($url, []);
+    $this->submitForm($edit, t('Save'));
 
     $fields = [
       'fields[block_description][region]' => 'left',

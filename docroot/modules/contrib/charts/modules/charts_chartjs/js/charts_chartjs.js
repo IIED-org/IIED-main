@@ -18,7 +18,6 @@
   Drupal.behaviors.chartsChartjs = {
     attach: function (context) {
       const contents = new Drupal.Charts.Contents();
-
       once('load-charts-chartjs', '.charts-chartjs', context).forEach(function (element) {
         const chartId = element.id;
         // Switching div for canvas element.
@@ -37,6 +36,9 @@
           data: chart['data'],
           options: options,
         });
+        if (canvas.nextElementSibling && canvas.nextElementSibling.hasAttribute('data-charts-debug-container')) {
+          canvas.nextElementSibling.querySelector('code').innerText = JSON.stringify(chart, null, ' ');
+        }
       });
     }
   };

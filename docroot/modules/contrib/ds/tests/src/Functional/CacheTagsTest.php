@@ -19,7 +19,8 @@ class CacheTagsTest extends TestBase {
 
     // Create field CSS classes.
     $edit = ['fields' => "test_field_class\ntest_field_class_2|Field class 2"];
-    $this->drupalPostForm('admin/structure/ds/classes', $edit, t('Save configuration'));
+    $this->drupalGet('admin/structure/ds/classes');
+    $this->submitForm($edit, t('Save configuration'));
 
     // Create a token field.
     $token_field = [
@@ -44,7 +45,7 @@ class CacheTagsTest extends TestBase {
     $this->dsConfigureUi($fields);
 
     $this->drupalGet('node/' . $node->id());
-    $headers = $this->drupalGetHeader('X-Drupal-Cache-Tags');
+    $headers = $this->getSession()->getResponseHeader('X-Drupal-Cache-Tags');
     $this->assertNotEmpty(
       strpos($headers, 'user:' . $node->getRevisionUser()->getOriginalId()),
       'User cache tag found'

@@ -2,7 +2,6 @@ dstest_1col:
   label: Test One column
   category: Display Suite
   class: '\Drupal\ds\Plugin\DsLayout'
-  type: partial
   template: templates/dstest-1col
   regions:
     ds_content:
@@ -11,7 +10,6 @@ dstest_1col_title:
   label: Test one column only title
   category: Display Suite
   class: '\Drupal\ds\Plugin\DsLayout'
-  type: partial
   template: templates/dstest-1col-title
   regions:
     ds_content:
@@ -20,7 +18,6 @@ dstest_2col:
   label: Test Two column
   category: Display Suite
   class: '\Drupal\ds\Plugin\DsLayout'
-  type: partial
   template: templates/dstest-2col
   library: ds_test/dstest_2col
   regions:
@@ -32,7 +29,6 @@ dstest_2col_fluid:
   label: Test Fluid two column
   category: Display Suite
   class: '\Drupal\ds\Plugin\DsLayout'
-  type: partial
   template: templates/dstest-2col-fluid
   library: ds_test/dstest_2col_fluid
   regions:

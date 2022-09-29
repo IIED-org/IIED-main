@@ -34,6 +34,7 @@
     {%
       set title_classes = [
         'field-label-' ~ element['#label_display']|clean_class,
+         (element['#label_display'] == 'visually_hidden' ? 'visually-hidden'),
       ]
     %}
     {%- if settings['lbw-def-at'] -%}

@@ -9,12 +9,6 @@ use Psr\Container\ContainerInterface;
 
 /**
  * Provides a Kint Extended dumper plugin.
- *
- * @DevelDumper(
- *   id = "kint_extended",
- *   label = @Translation("Kint Extended"),
- *   description = @Translation("Wrapper for <a href='https://github.com/kint-php/kint'>Kint</a> debugging tool with extra plugins."),
- * )
  */
 class KintExtended extends Kint {
 

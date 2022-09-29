@@ -11,7 +11,9 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\search_api_solr\SolrConnector\SolrConnectorPluginBase;
+use GuzzleHttp\Client as GuzzleClient;
 use Http\Adapter\Guzzle6\Client as Guzzle6Client;
+use Psr\Http\Client\ClientInterface;
 use Solarium\Core\Client\Client;
 use Solarium\Core\Client\Endpoint;
 use Solarium\Exception\UnexpectedValueException;
@@ -325,7 +327,18 @@ class SearchApiSolrAcquiaConnector extends SolrConnectorPluginBase {
     // incompatible with remote_stream_wrapper.
     // See https://www.drupal.org/project/acquia_search/issues/3209704
     // And https://www.drupal.org/project/acquia_search_solr/issues/3171407
-    $httpClient = new Guzzle6Client();
+    $httpClient = new GuzzleClient();
+    if (!($httpClient instanceof ClientInterface)) {
+      // BC for Drupal 9 and 8 using Guzzle 6.
+      if (class_exists(Guzzle6Client::class)) {
+        $httpClient = new Guzzle6Client();
+      }
+      else {
+        \Drupal::logger('acquia_search')->error("Guzzle7 or php-http/guzzle6-adapter is required to use Acquia Search");
+        return FALSE;
+      }
+    }
+
     $adapter = new TimeoutAwarePsr18Adapter($httpClient);
 
     $this->solr = new Client($adapter, $this->eventDispatcher);

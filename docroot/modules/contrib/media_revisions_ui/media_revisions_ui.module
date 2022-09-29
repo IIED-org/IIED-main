@@ -5,10 +5,11 @@
  * Contains media_revisions_ui.module.
  */
 
-use Drupal\Core\Cache\Cache;
-use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\media\MediaInterface;
 
 /**
  * Implements hook_help().
@@ -20,7 +21,6 @@ function media_revisions_ui_help($route_name, RouteMatchInterface $route_match) 
       $output = '';
       $output .= '<h3>' . t('About') . '</h3>';
       $output .= '<p>' . t('The Media Revisions UI module adds a Revisions tab for Media entities, where revisions can be reverted or deleted.') . '</p>';
-      $output .= '<p>' . t('After a revision is added/saved, a new Revisions tab will be displayed on the media Edit page.') . '</p>';
       $output .= '<h3>' . t('Uses') . '</h3>';
       $output .= '<dl>';
       $output .= '<dt>' . t('Administering media revisions') . '</dt>';
@@ -29,9 +29,7 @@ function media_revisions_ui_help($route_name, RouteMatchInterface $route_match) 
       $output .= '<dd>' . t('The Media Revisions UI module uses the Media permissions, which can be set by role on the <a href=":permissions">permissions page</a>.', [
         ':permissions' => Url::fromRoute('user.admin_permissions', [], ['fragment' => 'module-media'])->toString(),
       ]) . '</dd>';
-      $output .= '<dd>' . t('The Media Revisions UI module also uses the Node permissions, which can be set by role on the <a href=":permissions">permissions page</a>.', [
-        ':permissions' => Url::fromRoute('user.admin_permissions', [], ['fragment' => 'module-node'])->toString(),
-      ]) . '</dd>';
+      $output .= '</dl>';
 
       return $output;
 
@@ -41,10 +39,53 @@ function media_revisions_ui_help($route_name, RouteMatchInterface $route_match) 
 }
 
 /**
- * Implements hook_ENTITY_TYPE_revision_delete().
+ * Implements hook_ENTITY_TYPE_access().
  */
-function media_revisions_ui_media_revision_delete(EntityInterface $entity) {
-  Cache::invalidateTags([
-    'media:' . $entity->id() . ':revisions_list',
-  ]);
+function media_revisions_ui_media_access(MediaInterface $entity, $operation, AccountInterface $account) {
+  $revisionOperationsMap = [
+    'view all revisions' => ['view', 'view'],
+    'view revision' => ['view', 'view'],
+    'revert revision' => ['revert', 'update'],
+    'delete revision' => ['delete', 'delete'],
+  ];
+
+  [$revisionPermissionOperation, $entityOperation] = $revisionOperationsMap[$operation] ?? [
+    NULL,
+    NULL,
+  ];
+
+  if (!$revisionPermissionOperation) {
+    return AccessResult::neutral();
+  }
+
+  $bundle = $entity->bundle();
+  if (
+    !$account->hasPermission("$revisionPermissionOperation all media revisions") &&
+    !$account->hasPermission("$revisionPermissionOperation $bundle media revisions") &&
+    !$account->hasPermission('administer media')
+  ) {
+    return AccessResult::neutral();
+  }
+
+  // If this is the default revision, return access denied for revert or
+  // delete operations.
+  if (
+    $entity->isDefaultRevision() &&
+    ($operation === 'revert revision' || $operation === 'delete revision')
+  ) {
+    return AccessResult::forbidden();
+  }
+  elseif ($account->hasPermission('administer media')) {
+    return AccessResult::allowed();
+  }
+
+  // First check the access to the default revision and finally, if the media
+  // passed in is not the default revision then check access to that, too.
+  $storage = Drupal::entityTypeManager()->getStorage($entity->getEntityTypeId());
+  $access = $storage->load($entity->id())->access($entityOperation, $account, TRUE);
+  if (!$entity->isDefaultRevision()) {
+    $access = $access->andIf($entity->access($entityOperation, $account, TRUE));
+  }
+
+  return $access;
 }

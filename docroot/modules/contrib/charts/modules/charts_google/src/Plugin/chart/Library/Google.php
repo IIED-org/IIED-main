@@ -116,6 +116,10 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
       $element['#id'] = Html::getUniqueId('google-chart-render');
     }
 
+    if (!empty($element['#height']) || !empty($element['#width'])) {
+      $element['#attributes']['style'] = 'height:' . $element['#height'] . $element['#height_units'] . ';width:' . $element['#width'] . $element['#width_units'].  ';';
+    }
+
     // Trim out empty options.
     ChartElement::trimArray($chart_definition['options']);
 
@@ -142,6 +146,7 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
       'scatter' => 'ScatterChart',
       'bubble' => 'BubbleChart',
       'geo' => 'GeoChart',
+      'table' => 'TableChart',
     ];
     $this->moduleHandler->alter('charts_google_visualization_types', $types);
     return isset($types[$renderable_type]) ? $types[$renderable_type] : FALSE;
@@ -201,8 +206,6 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
     $chart_definition['options']['legend']['textStyle']['bold'] = $element['#legend_font_weight'] === 'bold';
     $chart_definition['options']['legend']['textStyle']['italic'] = $element['#legend_font_style'] === 'italic';
     $chart_definition['options']['legend']['textStyle']['fontSize'] = $element['#legend_font_size'];
-    $chart_definition['options']['width'] = $element['#width'] ?? NULL;
-    $chart_definition['options']['height'] = $element['#height'] ?? NULL;
     // If your labels are truncated, you may need to add (try adjusting the %).
     // $chart_definition['options']['chartArea']['height'] = '50%'.
     $chart_definition['options']['animation']['duration'] = 10000;
@@ -211,8 +214,8 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
     // Merge in chart raw options.
     if (!empty($element['#raw_options'])) {
       $chart_definition = NestedArray::mergeDeepArray([
-        $element['#raw_options'],
         $chart_definition,
+        $element['#raw_options'],
       ]);
     }
 
@@ -261,14 +264,14 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
         $axis['baselineColor'] = $element[$key]['#base_line_color'];
         $axis['minorGridlines']['color'] = $element[$key]['#minor_grid_line_color'];
         $axis['viewWindowMode'] = isset($element[$key]['#max']) ? 'explicit' : NULL;
-        $axis['viewWindow']['max'] = strlen($element[$key]['#max']) ? (int) $element[$key]['#max'] : NULL;
-        $axis['viewWindow']['min'] = strlen($element[$key]['#min']) ? (int) $element[$key]['#min'] : NULL;
+        $axis['viewWindow']['max'] = !empty($element[$key]['#max']) ? (int) $element[$key]['#max'] : NULL;
+        $axis['viewWindow']['min'] = !empty($element[$key]['#min']) ? (int) $element[$key]['#min'] : NULL;
 
         // Merge in axis raw options.
         if (!empty($element[$key]['#raw_options'])) {
           $axis = NestedArray::mergeDeepArray([
-            $element[$key]['#raw_options'],
             $axis,
+            $element[$key]['#raw_options'],
           ]);
         }
 
@@ -380,7 +383,11 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
         }
 
         $series['color'] = $element[$key]['#color'];
-        $series['pointSize'] = $element[$key]['#marker_radius'];
+        // Scatter charts are not visible if the data_markers are disabled.
+        if ($chart_type['id'] === 'scatter') {
+          $element['#data_markers'] = TRUE;
+        }
+        $series['pointSize'] = !empty($element['#data_markers']) ? 3 : 0;
         $series['visibleInLegend'] = $element[$key]['#show_in_legend'];
 
         // Labels only supported on pies.
@@ -389,8 +396,8 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
         // These properties are not real Google Charts properties. They are
         // utilized by the formatter in charts_google.js.
         $decimal_count = $element[$key]['#decimal_count'] ? '.' . str_repeat('0', $element[$key]['#decimal_count']) : '';
-        $prefix = $this->chartsGoogleEscapeIcuCharacters($element[$key]['#prefix']);
-        $suffix = $this->chartsGoogleEscapeIcuCharacters($element[$key]['#suffix']);
+        $prefix = $this->chartsGoogleEscapeIcuCharacters($element[$key]['#prefix'] ?? '');
+        $suffix = $this->chartsGoogleEscapeIcuCharacters($element[$key]['#suffix'] ?? '');
         $format = $prefix . '#' . $decimal_count . $suffix;
         $series['_format']['format'] = $format;
 
@@ -420,8 +427,8 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
         // Merge in point raw options.
         if (!empty($data_item['#raw_options'])) {
           $series = NestedArray::mergeDeepArray([
-            $data_item['#raw_options'],
             $series,
+            $data_item['#raw_options'],
           ]);
         }
 
@@ -450,7 +457,8 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
             // Merge in data point raw options.
             if (!empty($data_item['#raw_options'])) {
               $chart_definition['_data'][$sub_key + 1][$series_number + 1] = NestedArray::mergeDeepArray([
-                $data_item['#raw_options'], $chart_definition['_data'][$sub_key + 1][$series_number + 1],
+                $chart_definition['_data'][$sub_key + 1][$series_number + 1],
+                $data_item['#raw_options'],
               ]);
             }
 

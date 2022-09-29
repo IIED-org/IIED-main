@@ -162,10 +162,10 @@ class ChangeLayoutForm extends FormBase {
         '#suffix' => '</div>',
       ];
 
-      $fallback_image = drupal_get_path('module', 'ds') . '/images/preview.png';
+      $fallback_image = \Drupal::service('extension.list.module')->getPath('ds') . '/images/preview.png';
       $old_image = $old_layout_info->getIconPath() ?: $fallback_image;
       $new_image = $new_layout->getIconPath() ?: $fallback_image;
-      $arrow = drupal_get_path('module', 'ds') . '/images/arrow.png';
+      $arrow = \Drupal::service('extension.list.module')->getPath('ds') . '/images/arrow.png';
 
       $form['preview']['old_layout'] = [
         '#markup' => '<div class="ds-layout-preview-image"><img src="' . base_path() . $old_image . '"/></div>',

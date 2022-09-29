@@ -113,12 +113,7 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
     $this->filterFormatStorage = $entity_type_manager;
     $this->consentStorage = $consent_storage;
     $this->cacheBootstrap = $cache_bootstrap;
-    if ($cache_page->get('bin') === 'cache_page') {
-      $this->cachePage = $cache_page;
-    }
-    else {
-      $this->cachePage = NULL;
-    }
+    $this->cachePage = $cache_page;
   }
 
   /**
@@ -137,7 +132,7 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
       $container->get('cache.bootstrap'),
       // Use a cache that's available to the user if the page cache isn't
       // available.
-      $module_handler->moduleExists('cache.page') ? $container->get('cache.page') : $container->get('cache.render')
+      $module_handler->moduleExists('page_cache') ? $container->get('cache.page') : $container->get('cache.render')
     );
   }
 
@@ -242,7 +237,7 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
 
     $form['consent_option']['info'] = [
       '#type' => 'markup',
-      '#markup' => $this->t("The EU General Data Protection Regulation (GDPR) (see <a href=\"https://www.eugdpr.org/\" target=\"_blank\">https://www.eugdpr.org/</a>) comes into enforcement from 25 May 2018 and introduces new requirements for web sites which handle information that can be used to identify individuals. The regulation underlines that consent must be <strong>unambiguous</strong> and involve a <strong>clear affirmative action</strong>. When evaluating how to best handle the requirements in the GDPR, remember that if you have a basic web site where the visitors don't log in, you always have the option to <strong>not process data that identifies individuals</strong>, in which case you may not need this module. Also note that GDPR applies to any electronic processing or storage of personal data that your organization may do, and simply installing a module may not be enough to become fully GDPR compliant."),
+      '#markup' => $this->t("The EU General Data Protection Regulation (GDPR) (see <a href=\"https://gdpr.eu/\" target=\"_blank\">https://gdpr.eu/</a>) comes into enforcement from 25 May 2018 and introduces new requirements for web sites which handle information that can be used to identify individuals. The regulation underlines that consent must be <strong>unambiguous</strong> and involve a <strong>clear affirmative action</strong>. When evaluating how to best handle the requirements in the GDPR, remember that if you have a basic web site where the visitors don't log in, you always have the option to <strong>not process data that identifies individuals</strong>, in which case you may not need this module. Also note that GDPR applies to any electronic processing or storage of personal data that your organization may do, and simply installing a module may not be enough to become fully GDPR compliant."),
     ];
 
     $form['consent_option']['method'] = [
@@ -570,6 +565,7 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
     $form['withdraw_consent']['withdraw_enabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable floating privacy settings tab and withdraw consent banner'),
+      '#description' => $this->t('Adds a floating privacy settings tab and withdraw consent banner. This option also provides a "Cookie settings" button block and menu item suggestion in "Navigation" menu.'),
       '#default_value' => $config->get('withdraw_enabled'),
     ];
 
@@ -627,6 +623,56 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
       '#title' => $this->t('Withdraw consent button label'),
       '#default_value' => $config->get('withdraw_action_button_label'),
       '#description' => $this->t('This button will withdraw consent when clicked.'),
+    ];
+
+    $form['reject_button'] = [
+      '#type' => 'details',
+      '#open' => TRUE,
+      '#title' => $this->t('Reject button and close box'),
+      '#states' => [
+        'visible' => ["input[name='method']" => ['value' => 'categories']],
+      ],
+    ];
+
+    $form['reject_button']['reject_button_enabled'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable "Reject/deny all" button'),
+      '#default_value' => $config->get('reject_button_enabled'),
+    ];
+
+    $form['reject_button']['reject_button_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Reject button label'),
+      '#default_value' => $config->get('reject_button_label'),
+      '#states' => [
+        'visible' => [
+          "input[name='reject_button_enabled']" => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
+    $form['reject_button']['close_button_enabled'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Close button/box enabled'),
+      '#default_value' => $config->get('close_button_enabled'),
+    ];
+
+    $form['reject_button']['close_button_action'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Close button action'),
+      '#options' => [
+        'close_banner' => $this->t('Close banner'),
+        'accept_all_cookies' => $this->t('Accept all cookies'),
+        'reject_all_cookies' => $this->t('Reject all cookies'),
+        'save_preferences' => $this->t('Trigger Save preferences (for banner with categories)'),
+      ],
+      '#default_value' => $config->get('close_button_action'),
+      '#states' => [
+        'visible' => [
+          "input[name='close_button_enabled']" => ['checked' => TRUE],
+        ],
+      ],
+      '#description' => $this->t('The default position of the close button is in the top right corner of the banner.'),
     ];
 
     $form['thank_you'] = [
@@ -737,17 +783,33 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
       '#title' => $this->t('Appearance'),
     ];
 
+    // Give users warning if the Olivero theme is enabled, but the styling for
+    // it is disabled.
+    if (!$config->get('use_olivero_css') && $this->config('system.theme')->get('default') === 'olivero') {
+      $this->messenger()->addWarning($this->t('Olivero theme is enabled, but Olivero style support is not enabled. You can enable this setting within the <a href="#edit-appearance">Appearance fieldset</a> to extend the look and feel of the Olivero theme.'));
+    }
+
+    $form['appearance']['use_olivero_css'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Include styles to support Drupal Olivero theme default CSS.'),
+      '#default_value' => !empty($config->get('use_olivero_css')) ? $config->get('use_olivero_css') : 0,
+      '#description' => $this->t('This uses opinionated styling to fit in with the Drupal Olivero theme. Enabling this will disable other appearance options.'),
+    ];
+
     $form_color_picker_type = 'textfield';
 
-    if ($this->moduleHandler->moduleExists('jquery_colorpicker')) {
-      $form_color_picker_type = 'jquery_colorpicker';
-      $jquery_colorpicker_version = _eu_cookie_compliance_get_jquery_colorpicker_version();
-      $bg_color = ($jquery_colorpicker_version === 2) ? '#' . $config->get('popup_bg_hex') : $config->get('popup_bg_hex');
-      $text_color = ($jquery_colorpicker_version === 2) ? '#' . $config->get('popup_text_hex') : $config->get('popup_text_hex');
+    if ($this->moduleHandler->moduleExists('coloris')) {
+      $form_color_picker_type = 'coloriswidget';
+      $bg_color = '#' . $config->get('popup_bg_hex');
+      $text_color = '#' . $config->get('popup_text_hex');
+      $text_color_description = $this->t('Change the text color of the banner.');
+      $bg_color_description = $this->t('Change the background color of the banner.');
     }
     else {
       $bg_color = $config->get('popup_bg_hex');
       $text_color = $config->get('popup_text_hex');
+      $text_color_description = $this->t('Change the text color of the banner. Provide HEX value without the #.');
+      $bg_color_description = $this->t('Change the background color of the banner. Provide HEX value without the #.');
     }
 
     $form['appearance']['containing_element'] = [
@@ -780,31 +842,64 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
       '#description' => $this->t('This may be useful if you want the banner to share the button style of your theme. Note that you will have to configure values like the banner width, text color and background color in your CSS file.'),
     ];
 
-    $form['appearance']['popup_text_hex'] = [
-      '#type' => $form_color_picker_type,
-      '#title' => $this->t('Text color'),
-      '#default_value' => $text_color,
-      '#description' => $this->t('Change the text color of the banner. Provide HEX value without the #.'),
-      '#element_validate' => ['eu_cookie_compliance_validate_hex'],
-      '#states' => [
-        'visible' => [
-          "input[name='use_bare_css']" => ['checked' => FALSE],
+    if ($form_color_picker_type === 'textfield') {
+      $form['appearance']['popup_text_hex'] = [
+        '#type' => $form_color_picker_type,
+        '#title' => $this->t('Text color'),
+        '#default_value' => $text_color,
+        '#description' => $text_color_description,
+        '#element_validate' => ['eu_cookie_compliance_validate_hex'],
+        '#states' => [
+          'visible' => [
+            "input[name='use_bare_css']" => ['checked' => FALSE],
+          ],
         ],
-      ],
-    ];
+      ];
 
-    $form['appearance']['popup_bg_hex'] = [
-      '#type' => $form_color_picker_type,
-      '#title' => $this->t('Background color'),
-      '#default_value' => $bg_color,
-      '#description' => $this->t('Change the background color of the banner. Provide HEX value without the #.'),
-      '#element_validate' => ['eu_cookie_compliance_validate_hex'],
-      '#states' => [
-        'visible' => [
-          "input[name='use_bare_css']" => ['checked' => FALSE],
+      $form['appearance']['popup_bg_hex'] = [
+        '#type' => $form_color_picker_type,
+        '#title' => $this->t('Background color'),
+        '#default_value' => $bg_color,
+        '#description' => $bg_color_description,
+        '#element_validate' => ['eu_cookie_compliance_validate_hex'],
+        '#states' => [
+          'visible' => [
+            "input[name='use_bare_css']" => ['checked' => FALSE],
+          ],
         ],
-      ],
-    ];
+      ];
+    }
+    else {
+      $form['appearance']['popup_text_hex'] = [
+        '#type' => $form_color_picker_type,
+        '#title' => $this->t('Text color'),
+        '#default_value' => $text_color,
+        '#description' => $text_color_description,
+        '#element_validate' => ['eu_cookie_compliance_validate_hex'],
+        '#data_theme' => 'polaroid',
+        '#alpha' => FALSE,
+        '#states' => [
+          'visible' => [
+            "input[name='use_bare_css']" => ['checked' => FALSE],
+          ],
+        ],
+      ];
+
+      $form['appearance']['popup_bg_hex'] = [
+        '#type' => $form_color_picker_type,
+        '#title' => $this->t('Background color'),
+        '#default_value' => $bg_color,
+        '#description' => $bg_color_description,
+        '#element_validate' => ['eu_cookie_compliance_validate_hex'],
+        '#data_theme' => 'polaroid',
+        '#alpha' => FALSE,
+        '#states' => [
+          'visible' => [
+            "input[name='use_bare_css']" => ['checked' => FALSE],
+          ],
+        ],
+      ];
+    }
 
     $form['appearance']['popup_height'] = [
       '#type' => 'number',
@@ -843,17 +938,29 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
     ];
 
     if ($this->moduleHandler->moduleExists('smart_ip') || $this->moduleHandler->moduleExists('geoip') || extension_loaded('geoip')) {
-      $form['eu_only']['eu_only'] = [
-        '#type' => 'checkbox',
-        '#title' => $this->t('Only display banner in EU countries.'),
-        '#default_value' => !empty($config->get('eu_only')) ? $config->get('eu_only') : 0,
-        '#description' => $this->t('You can limit the number of countries for which the banner is displayed by checking this option. If you want to provide a list of countries other than current EU states, you may place an array in <code>$config[\'eu_cookie_compliance.settings\'][\'eu_countries\']</code> in your <code>settings.php</code> file. Using the <a href="http://drupal.org/project/smart_ip">smart_ip</a> module or using the <a href="http://drupal.org/project/geoip">geoip</a> module or the <a href="http://www.php.net/manual/en/function.geoip-country-code-by-name.php">geoip_country_code_by_name()</a> PHP function.'),
+      $form['eu_only']['eu_info'] = [
+        '#type' => 'markup',
+        '#markup' => $this->t('<p>You can limit the number of countries for which the banner is displayed. If you want to provide a list of countries other than current EU states, you may place an array in <code>$conf[\'eu_cookie_compliance_eu_countries\']</code> in your <code>settings.php</code> file. Using the <a href="http://drupal.org/project/geoip">geoip</a> module or the <a href="http://drupal.org/project/smart_ip">smart_ip</a> module or the <a href="http://www.php.net/manual/en/function.geoip-country-code-by-name.php">geoip_country_code_by_name()</a> PHP function.</p>'),
       ];
-      $form['eu_only']['eu_only_js'] = [
-        '#type' => 'checkbox',
-        '#title' => $this->t('JavaScript-based (for Varnish): Only display banner in EU countries.'),
-        '#default_value' => !empty($config->get('eu_only_js')) ? $config->get('eu_only_js') : 0,
-        '#description' => $this->t('This option also works for visitors that bypass Varnish. You can limit the number of countries for which the banner is displayed by checking this option. If you want to provide a list of countries other than current EU states, you may place an array in <code>$config[\'eu_cookie_compliance.settings\'][\'eu_countries\']</code> in your <code>settings.php</code> file. Using the <a href="http://drupal.org/project/smart_ip">smart_ip</a> module or the <a href="http://www.php.net/manual/en/function.geoip-country-code-by-name.php">geoip_country_code_by_name()</a> PHP function.'),
+
+      if ($config->get('eu_only') == 1) {
+        $eu_option_default_value = 'eu_only';
+      }
+      elseif ($config->get('eu_only_js') == 1) {
+        $eu_option_default_value = 'eu_only_js';
+      }
+      else {
+        $eu_option_default_value = 'disabled';
+      }
+
+      $form['eu_only']['eu_option'] = [
+        '#type' => 'radios',
+        '#options' => [
+          'eu_only_js' => $this->t('Use JavaScript to determine if the visitor is in a country where GDPR applies. Required if caching is enabled or a caching strategy such as varnish is utilized.'),
+          'eu_only' => $this->t('I have no caching enabled or set up. Use non-JavaScript method.'),
+          'disabled' => $this->t('Disabled. Show the banner to all visitors, also those in non-GDPR countries.'),
+        ],
+        '#default_value' => $eu_option_default_value,
       ];
     }
     else {
@@ -1115,12 +1222,26 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    $eu_only = 0;
+    $eu_only_js = 0;
+    if ($form_state->getValue('eu_option') === 'eu_only') {
+      $eu_only = 1;
+    }
+    elseif ($form_state->getValue('eu_option') === 'eu_only_js') {
+      $eu_only_js = 1;
+    }
+
     // Clear values if we are using minimal css.
     if ($form_state->getValue('use_bare_css')) {
       $form_state->setValue('popup_bg_hex', '');
       $form_state->setValue('popup_text_hex', '');
       $form_state->setValue('popup_height', '');
       $form_state->setValue('popup_width', '');
+    }
+
+    // Clear values if we are using olivero css.
+    if ($form_state->getValue('use_olivero_css')) {
+      $form_state->getValue('use_bare_css', '');
     }
 
     // Cache needs to be cleared when enabling the EU only Varnish feature.
@@ -1198,13 +1319,26 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
       $this->messenger()->addWarning($this->t('The module weight could not be set because the <code>config_readonly</code> module is enabled. To allow setting of module weight, please add <code>core.extension</code> to the <code>config_readonly</code> allowlist.'));
     }
 
-    // Handle version 2 of jQuery colorpicker.
-    $jquery_colorpicker_version = _eu_cookie_compliance_get_jquery_colorpicker_version();
-    $bg_color = ($jquery_colorpicker_version === 2) ? substr($form_state->getValue('popup_bg_hex'), 1) : $form_state->getValue('popup_bg_hex');
-    $text_color = ($jquery_colorpicker_version === 2) ? substr($form_state->getValue('popup_text_hex'), 1) : $form_state->getValue('popup_text_hex');
+    if ($this->moduleHandler->moduleExists('coloris')) {
+      $bg_color = substr($form_state->getValue('popup_bg_hex'), 1);
+      $text_color = substr($form_state->getValue('popup_text_hex'), 1);
+    }
+    else {
+      $bg_color = $form_state->getValue('popup_bg_hex');
+      $text_color = $form_state->getValue('popup_text_hex');
+    }
+
+    if (!$form_state->getValue('close_button_enabled')) {
+      $form_state->setValue('close_button_action', 'close_banner');
+    }
+
+    if (!$form_state->getValue('reject_button_enabled')) {
+      $form_state->setValue('reject_button_label', '');
+    }
 
     // Save settings.
-    $this->config('eu_cookie_compliance.settings')
+    $config = $this->config('eu_cookie_compliance.settings');
+    $config
       ->set('cookie_policy_version', $form_state->getValue('cookie_policy_version'))
       ->set('domain', $form_state->getValue('domain'))
       ->set('popup_enabled', $form_state->getValue('popup_enabled'))
@@ -1242,8 +1376,9 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
       ->set('cookie_lifetime', $form_state->getValue('cookie_lifetime'))
       ->set('cookie_session', $form_state->getValue('cookie_session'))
       ->set('set_cookie_session_zero_on_disagree', $form_state->getValue('set_cookie_session_zero_on_disagree'))
-      ->set('eu_only', $form_state->getValue('eu_only'))
-      ->set('eu_only_js', $form_state->getValue('eu_only_js'))
+      ->set('eu_only', $eu_only)
+      ->set('eu_only_js', $eu_only_js)
+      ->set('use_olivero_css', $form_state->getValue('use_olivero_css'))
       ->set('use_bare_css', $form_state->getValue('use_bare_css'))
       ->set('disagree_do_not_show_popup', $form_state->getValue('disagree_do_not_show_popup'))
       ->set('reload_page', $form_state->getValue('reload_page'))
@@ -1274,7 +1409,27 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
       ->set('containing_element', $form_state->getValue('containing_element'))
       ->set('settings_tab_enabled', $form_state->getValue('settings_tab_enabled'))
       ->set('accessibility_focus', $form_state->getValue('accessibility_focus'))
-      ->save();
+      ->set('close_button_enabled', $form_state->getValue('close_button_enabled'))
+      ->set('reject_button_enabled', $form_state->getValue('reject_button_enabled'))
+      ->set('reject_button_label', $form_state->getValue('reject_button_label'))
+      ->set('close_button_action', $form_state->getValue('close_button_action'));
+
+    // Manually add dependencies on filter formats.
+    $dependencies = [];
+    $text_format_keys = [
+      'mobile_popup_info',
+      'popup_agreed',
+      'popup_info',
+      'withdraw_message',
+    ];
+
+    foreach ($text_format_keys as $key) {
+      $dependencies[] = 'filter.format.' . ($form_state->getValue($key)['format'] ?? filter_default_format());
+    }
+    $config->set('dependencies', [
+      'config' => array_unique($dependencies),
+    ]);
+    $config->save();
 
     parent::submitForm($form, $form_state);
   }
@@ -1287,7 +1442,7 @@ class EuCookieComplianceConfigForm extends ConfigFormBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   Form state.
    */
-  public function validatePopupLink(array $element, FormStateInterface &$form_state) {
+  public function validatePopupLink(array $element, FormStateInterface $form_state) {
     if (empty($element['#value'])) {
       return;
     }

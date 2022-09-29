@@ -54,7 +54,8 @@ class FieldPermissionsTest extends TestBase {
       'authenticated[view node_author on node]' => 1,
       'authenticated[view test_field on node]' => 1,
     ];
-    $this->drupalPostForm('admin/people/permissions', $edit,'Save permissions');
+    $this->drupalGet('admin/people/permissions');
+    $this->submitForm($edit, 'Save permissions');
     $this->drupalGet('node/' . $node->id());
     $this->assertSession()->responseContains('group-left');
     $this->assertSession()->pageTextContains('Test field plugin on node ' . $node->id());

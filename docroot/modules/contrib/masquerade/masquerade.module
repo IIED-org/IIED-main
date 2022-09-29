@@ -94,25 +94,17 @@ function masquerade_target_user_access(UserInterface $target_account) {
   }
 
   // Invoke hook_masquerade_access() implementations.
-  $access = NULL;
-  foreach (\Drupal::moduleHandler()->getImplementations('masquerade_access') as $module) {
-    $function = $module . '_masquerade_access';
-    $result = $function($user, $target_account);
-    // If an implementation explicitly denies access, then there is nothing else
-    // to check.
-    if ($result === FALSE) {
-      $access = FALSE;
-      break;
-    }
-    elseif ($result === TRUE) {
-      $access = TRUE;
-    }
-  }
-  // If no module granted access, then access is denied.
-  if (!isset($access) || !$access) {
+  $results = \Drupal::moduleHandler()->invokeAll('masquerade_access', [$user, $target_account]);
+
+  // If an implementation explicitly denies access, then there is nothing else
+  // to check.
+  if (in_array(FALSE, $results, TRUE)) {
     return FALSE;
   }
-  return TRUE;
+
+  // If access is not explicitly denied, allow access if at least one hook
+  // implementation allowed access.
+  return in_array(TRUE, $results, TRUE);
 }
 
 /**
@@ -242,5 +234,20 @@ function masquerade_switch_user_validate(UserInterface $target_account) {
     return t('You are not allowed to masquerade as %name.', [
       '%name' => $target_account->getDisplayName(),
     ]);
+  }
+}
+
+/**
+ * Implements hook_migration_plugins_alter().
+ *
+ * Names of masquerade permissions changed between Drupal 7 and 8|9. Map the
+ * permission names respectively.
+ */
+function masquerade_migration_plugins_alter(array &$migrations) {
+  if (
+    !empty($migrations['d7_user_role']['process']['permissions'][0]) &&
+    $migrations['d7_user_role']['process']['permissions'][0]['plugin'] === 'static_map'
+  ) {
+    $migrations['d7_user_role']['process']['permissions'][0]['map']['masquerade as admin'] = 'masquerade as super user';
   }
 }

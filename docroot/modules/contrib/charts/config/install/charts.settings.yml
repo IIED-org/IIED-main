@@ -29,6 +29,7 @@ charts_default_settings:
       - '#ff9b8f'
       - '#85000f'
       - '#ff7581'
+    color_changer: false
     title_position: out
     tooltips: true
     tooltips_use_html: false
@@ -65,5 +66,6 @@ charts_default_settings:
     decimal_count: ''
     labels_rotation: '0'
 advanced:
+  debug: false
   requirements:
     cdn: true

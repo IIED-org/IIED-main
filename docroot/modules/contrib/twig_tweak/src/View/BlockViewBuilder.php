@@ -121,9 +121,14 @@ class BlockViewBuilder {
     if ($access->isAllowed()) {
       // Title block needs a special treatment.
       if ($block_plugin instanceof TitleBlockPluginInterface) {
-        $request = $this->requestStack->getCurrentRequest();
-        $title = $this->titleResolver->getTitle($request, $this->routeMatch->getRouteObject());
-        $block_plugin->setTitle($title);
+        // Account for the scenario that a NullRouteMatch is returned. This, for
+        // example, is the case when Search API is indexing the site during
+        // Drush cron.
+        if ($route = $this->routeMatch->getRouteObject()) {
+          $request = $this->requestStack->getCurrentRequest();
+          $title = $this->titleResolver->getTitle($request, $route);
+          $block_plugin->setTitle($title);
+        }
       }
 
       // Place the content returned by the block plugin into a 'content' child
@@ -135,7 +140,7 @@ class BlockViewBuilder {
       if ($block_plugin instanceof TitleBlockPluginInterface) {
         $build['content']['#cache']['contexts'][] = 'url';
       }
-      // Some blocks returns NULL instead of array when empty.
+      // Some blocks return null instead of array when empty.
       // @see https://www.drupal.org/project/drupal/issues/3212354
       if ($wrapper && is_array($build['content']) && !Element::isEmpty($build['content'])) {
         $build += [
@@ -162,8 +167,8 @@ class BlockViewBuilder {
     }
 
     CacheableMetadata::createFromRenderArray($build)
-      ->merge(CacheableMetadata::createFromObject($access))
-      ->merge(CacheableMetadata::createFromObject($block_plugin))
+      ->addCacheableDependency($access)
+      ->addCacheableDependency($block_plugin)
       ->applyTo($build);
 
     if (!isset($build['#cache']['keys'])) {

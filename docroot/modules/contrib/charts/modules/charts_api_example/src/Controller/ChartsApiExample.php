@@ -353,6 +353,7 @@ class ChartsApiExample extends ControllerBase {
         'series' => $series,
         'x_axis' => $xaxis,
         'y_axis' => $yaxis,
+        '#color_changer' => TRUE,
         '#raw_options' => [],
       ];
 

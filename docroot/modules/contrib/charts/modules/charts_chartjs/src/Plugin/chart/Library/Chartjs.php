@@ -103,6 +103,17 @@ class Chartjs extends ChartBase {
       $element['#id'] = Html::getUniqueId('chartjs-render');
     }
 
+    if (!empty($element['#height']) || !empty($element['#width'])) {
+      $element['#content_prefix']['manual_sizing'] = [
+        '#type' => 'inline_template',
+        '#template' => '<div data-chartjs-render-wrapper style="display:inline-block;height:' . $element['#height'] . $element['#height_units'] . ';width:' . $element['#width'] . $element['#width_units'].  ';">',
+      ];
+      $element['#content_suffix']['manual_sizing'] = [
+        '#type' => 'inline_template',
+        '#template' => '</div>',
+      ];
+    }
+
     $chart_definition = $this->populateOptions($element, $chart_definition);
     $chart_definition = $this->populateCategories($element, $chart_definition);
     $chart_definition = $this->populateDatasets($element, $chart_definition);
@@ -135,12 +146,7 @@ class Chartjs extends ChartBase {
    *   Return the chart definition.
    */
   private function populateAxes(array $element, array $chart_definition) {
-    if (!empty($element['#stacking']) && $element['#stacking'] == 1) {
-      $stacking = TRUE;
-    }
-    else {
-      $stacking = FALSE;
-    }
+    $stacking = !empty($element['#stacking']) && $element['#stacking'] == 1;
     $chart_type = $chart_definition['type'];
     $children = Element::children($element);
     /*
@@ -343,8 +349,8 @@ class Chartjs extends ChartBase {
         // Merge in axis raw options.
         if (!empty($element[$child]['#raw_options'])) {
           $categories = NestedArray::mergeDeepArray([
-            $element[$child]['#raw_options'],
             $categories,
+            $element[$child]['#raw_options'],
           ]);
         }
       }
