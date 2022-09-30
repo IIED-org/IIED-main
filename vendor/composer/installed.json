@@ -9980,6 +9980,9 @@
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
                     }
+                },
+                "patches_applied": {
+                    "Fix readmore_js to prevent scroll to top.": "https://git.drupalcode.org/issue/readmore_js-3312818/-/commit/67f2912296417d5a3db83045909323c73dcdd605.patch"
                 }
             },
             "installation-source": "dist",
