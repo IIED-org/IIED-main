@@ -35,10 +35,27 @@ Allow: /profiles/*.png
 Allow: /profiles/*.svg
 # Directories
 Disallow: /core/
+Disallow: /modules/
 Disallow: /profiles/
+Disallow: /scripts/
+Disallow: /themes/
+Disallow: /libraries
 # Files
 Disallow: /README.txt
+Disallow: /README.md
 Disallow: /web.config
+Disallow: /CHANGELOG.txt
+Disallow: /cron.php
+Disallow: /INSTALL.mysql.txt
+Disallow: /INSTALL.pgsql.txt
+Disallow: /INSTALL.sqlite.txt
+Disallow: /install.php
+Disallow: /INSTALL.txt
+Disallow: /LICENSE.txt
+Disallow: /MAINTAINERS.txt
+Disallow: /update.php
+Disallow: /UPGRADE.txt
+Disallow: /xmlrpc.php
 # Paths (clean URLs)
 Disallow: /admin/
 Disallow: /comment/reply/

@@ -65,6 +65,10 @@ AddEncoding gzip svgz
   RewriteCond %{ENV:AH_SITE_ENVIRONMENT} !prod
   RewriteRule ^robots\.txt$ robots-noindex.txt [L]
 
+  # Redirect old pubs links before setting https
+  RewriteCond %{QUERY_STRING} ^o=(.*)$
+  RewriteRule ^pubs/display\.php$ http://www.iied.org/%1/ [QSD,L,R=302]
+
   RewriteCond %{ENV:AH_SITE_ENVIRONMENT} prod [NC]
   RewriteCond %{HTTPS} off
   RewriteCond %{HTTP:X-Forwarded-Proto} !https
@@ -136,6 +140,10 @@ AddEncoding gzip svgz
   # Rewrite pubs.iied.org/anything to www.iied.org/anything
   RewriteCond %{HTTP_HOST} ^pubs\.iied\.org
   RewriteRule ^(.*)$ https://www\.iied\.org/$1 [R=301]
+
+  # planotes.org
+  RewriteCond %{HTTP_HOST} ^(www\.)?planotes.org$
+  RewriteRule ^(.*) https://www.iied.org/participatory-learning-action-archive [R=301,L]
 
   # Make sure Authorization HTTP header is available to PHP
   # even when running as CGI or FastCGI.
