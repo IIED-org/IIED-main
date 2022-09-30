@@ -11,7 +11,6 @@ module:
   asset_injector: 0
   automated_cron: 0
   better_exposed_filters: 0
-  better_social_sharing_buttons: 0
   big_pipe: 0
   block: 0
   block_class: 0
@@ -48,7 +47,6 @@ module:
   default_content: 0
   default_content_deploy: 0
   draggableviews: 0
-  draggableviews_demo: 0
   dynamic_page_cache: 0
   editor: 0
   entity_reference_revisions: 0
