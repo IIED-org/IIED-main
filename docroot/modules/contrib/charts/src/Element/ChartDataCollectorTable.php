@@ -44,6 +44,7 @@ class ChartDataCollectorTable extends FormElement {
       '#table_attributes' => [],
       // Allows to toggle on/off drupal tabledrag functionality.
       '#table_drag' => TRUE,
+      '#default_colors' => [],
       '#process' => [
         [$class, 'processDataCollectorTable'],
       ],
@@ -85,7 +86,7 @@ class ChartDataCollectorTable extends FormElement {
       self::setElementState($parents, $form_state, $element_state);
     }
     else {
-      // This is hack to make ajax call retun the proper identifier.
+      // This is hack to make ajax call return the proper identifier.
       $element_state['table_categories_identifier'] = $value['table_categories_identifier'];
     }
 
@@ -138,7 +139,7 @@ class ChartDataCollectorTable extends FormElement {
       ];
     }
 
-    if ($element['#table_wrapper'] && $element['#table_wrapper'] === 'container') {
+    if ($element['#table_wrapper'] === 'container') {
       $element['table_wrapper'] = [
         '#type' => 'container',
         '#attributes' => $element['#table_wrapper_attributes'],
@@ -193,6 +194,10 @@ class ChartDataCollectorTable extends FormElement {
         ];
 
         if (!$is_category_cell && ($add_color_first_row || (!$is_first_column && $j === $first_col_key))) {
+          if (empty($column['color'])) {
+            $color_index = $is_first_column ? $j : $i;
+            $column['color'] = $element['#default_colors'][$color_index - 1] ?? self::randomColor();
+          }
           $row_form[$j]['#wrapper_attributes'] = [
             'class' => ['container-inline'],
           ];
@@ -203,7 +208,7 @@ class ChartDataCollectorTable extends FormElement {
             '#attributes' => ['TYPE' => 'color'],
             '#size' => 10,
             '#maxlength' => 7,
-            '#default_value' => $column['color'] ?? self::randomColor(),
+            '#default_value' => $column['color'],
           ];
         }
       }
@@ -285,7 +290,7 @@ class ChartDataCollectorTable extends FormElement {
 
     // Footer operations.
     $table['_operations'] = [
-      '#attributes' => ['class' => ['data-collector-table--oprations-row']],
+      '#attributes' => ['class' => ['data-collector-table--operations-row']],
     ];
     $table['_operations']['wrapper'] = [
       '#type' => 'container',
@@ -367,7 +372,7 @@ class ChartDataCollectorTable extends FormElement {
     $form_state->setValue($parents, $value);
 
     if ($element['#required'] && empty($value['table_categories_identifier'])) {
-      $form_state->setError($element['table_categories_identifier'], t('Please select how categories should be identiefied.'));
+      $form_state->setError($element['table_categories_identifier'], t('Please select how categories should be identified.'));
     }
   }
 
@@ -479,7 +484,7 @@ class ChartDataCollectorTable extends FormElement {
    *
    * Operation.
    */
-  private static function buildOperationButton($operation, $on, $id_prefix, $wrapper_id, $index = NULL, $attributes = [], $wrapper_atrributes = []) {
+  private static function buildOperationButton($operation, $on, $id_prefix, $wrapper_id, $index = NULL, $attributes = [], $wrapper_attributes = []) {
     $name = $id_prefix . '_' . $operation . '_' . $on;
     $submit = [];
 
@@ -492,8 +497,8 @@ class ChartDataCollectorTable extends FormElement {
       $submit['#attributes'] = $attributes;
     }
 
-    if ($wrapper_atrributes) {
-      $submit['#wrapper_attributes'] = $wrapper_atrributes;
+    if ($wrapper_attributes) {
+      $submit['#wrapper_attributes'] = $wrapper_attributes;
     }
 
     $submit += [
@@ -528,7 +533,7 @@ class ChartDataCollectorTable extends FormElement {
    * @return array
    *   The element state storage.
    */
-  private static function initializeEmptyTable(array $element, $identifier_value) {
+  private static function initializeEmptyTable(array $element, string $identifier_value) {
     $is_first_column = $identifier_value === self::FIRST_COLUMN;
     $columns = $element['#initial_columns'];
     $columns_arr = range(0, $columns - 1);
@@ -537,6 +542,8 @@ class ChartDataCollectorTable extends FormElement {
 
     $data = [];
     $first_row_key = NULL;
+    $counter_default_used_color_index = 0;
+    $max_default_colors = count($element['#default_colors']);
     foreach ($rows_arr as $i) {
       $first_row_key = $first_row_key === NULL ? $i : $first_row_key;
       $table_first_row = $i === $first_row_key;
@@ -548,7 +555,11 @@ class ChartDataCollectorTable extends FormElement {
         $is_category_cell = $table_first_col && $table_first_row;
         $data[$i][$j]['data'] = '';
         if (!$is_category_cell && (($is_first_column && $i === $first_row_key) || (!$is_first_column && $j === $first_col_key))) {
-          $data[$i][$j]['color'] = self::randomColor();
+          if ($counter_default_used_color_index === $max_default_colors) {
+            $counter_default_used_color_index = 0;
+          }
+          $data[$i][$j]['color'] = $element['#default_colors'][$counter_default_used_color_index] ?? self::randomColor();
+          $counter_default_used_color_index++;
         }
       }
     }
@@ -685,7 +696,7 @@ class ChartDataCollectorTable extends FormElement {
       return $data;
     }
 
-    // Try convert the data to UTF-8.
+    // Try to convert the data to UTF-8.
     if ($encoded_data = Unicode::convertToUtf8($data, $encoding)) {
       return $encoded_data;
     }
@@ -705,13 +716,10 @@ class ChartDataCollectorTable extends FormElement {
    * @return array
    *   The category label and data.
    */
-  public static function getCategoriesFromCollectedTable(array $data, $type) {
-    $categories_identifier = $data['table_categories_identifier'];
+  public static function getCategoriesFromCollectedTable(array $data, string $type) {
+    $categories_identifier = $data['table_categories_identifier'] ?? '';
     $table = $data['data_collector_table'];
-    $categories = [
-      'label' => '',
-      'data' => [],
-    ];
+    $categories = [];
 
     $is_first_column = $categories_identifier === self::FIRST_COLUMN;
     $first_row = current($table);
@@ -760,9 +768,9 @@ class ChartDataCollectorTable extends FormElement {
    * @return array
    *   The series.
    */
-  public static function getSeriesFromCollectedTable(array $data, $type) {
+  public static function getSeriesFromCollectedTable(array $data, string $type) {
     $table = $data['data_collector_table'];
-    $categories_identifier = $data['table_categories_identifier'];
+    $categories_identifier = $data['table_categories_identifier'] ?? '';
 
     /** @var \Drupal\charts\TypeManager $chart_type_plugin_manager */
     $chart_type_plugin_manager = \Drupal::service('plugin.manager.charts_type');
@@ -783,11 +791,11 @@ class ChartDataCollectorTable extends FormElement {
     foreach ($table as $row_key => $row) {
       if (!$is_first_column) {
         $name_key = key($row);
-        $series[$i]['name'] = $row[$name_key]['data'];
-        $series[$i]['color'] = $row[$name_key]['color'];
+        $series[$i]['name'] = $row[$name_key]['data'] ?? [];
+        $series[$i]['color'] = $row[$name_key]['color'] ?? '';
         // Removing the name from data array.
         unset($row[$name_key]);
-        foreach (array_values($row) as $column) {
+        foreach ($row as $column) {
           // Get all the data in this column and break out of this loop.
           if ($is_single_axis) {
             if (is_numeric($column) || is_string($column)) {
@@ -821,7 +829,7 @@ class ChartDataCollectorTable extends FormElement {
             continue;
           }
           elseif ($i === 0) {
-            // This is the first row which holds the data names.
+            // This is the first column which holds the data names and colors.
             $series[$j]['name'] = $column['data'] ?? $column;
             $series[$j]['color'] = $column['color'] ?? self::randomColor();
           }

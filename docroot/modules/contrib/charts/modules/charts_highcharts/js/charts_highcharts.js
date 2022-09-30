@@ -14,6 +14,9 @@
         let config = contents.getData(id);
         config.chart.renderTo = id;
         new Highcharts.Chart(config);
+        if (element.nextElementSibling && element.nextElementSibling.hasAttribute('data-charts-debug-container')) {
+          element.nextElementSibling.querySelector('code').innerText = JSON.stringify(config, null, ' ');
+        }
       });
     },
     detach: function (context, settings, trigger) {
@@ -22,7 +25,6 @@
           if (!element.dataset.hasOwnProperty('highchartsChart')) {
             return;
           }
-
           Highcharts.charts[element.dataset.highchartsChart].destroy();
         });
       }

@@ -1,0 +1,176 @@
+uuid: a1d5c82b-c734-4397-9ad0-f3d79a2313e7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_content
+    - node.type.article
+    - paragraphs.paragraphs_type.accordion_box
+    - paragraphs.paragraphs_type.basic_text
+    - paragraphs.paragraphs_type.box
+    - paragraphs.paragraphs_type.gallery
+    - paragraphs.paragraphs_type.highchart
+    - paragraphs.paragraphs_type.image
+    - paragraphs.paragraphs_type.image_small
+    - paragraphs.paragraphs_type.image_wide
+    - paragraphs.paragraphs_type.info_box
+    - paragraphs.paragraphs_type.logo_block
+    - paragraphs.paragraphs_type.media_embed
+    - paragraphs.paragraphs_type.media_list
+    - paragraphs.paragraphs_type.modal_image
+    - paragraphs.paragraphs_type.quote
+    - paragraphs.paragraphs_type.related_content
+    - paragraphs.paragraphs_type.related_project
+    - paragraphs.paragraphs_type.related_publication_inline
+    - paragraphs.paragraphs_type.section
+  module:
+    - entity_reference_revisions
+id: node.article.field_content
+field_name: field_content
+entity_type: node
+bundle: article
+label: Content
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      section: section
+      basic_text: basic_text
+      box: box
+      quote: quote
+      image: image
+      image_wide: image_wide
+      image_small: image_small
+      modal_image: modal_image
+      media_list: media_list
+      media_embed: media_embed
+      accordion_box: accordion_box
+      gallery: gallery
+      highchart: highchart
+      info_box: info_box
+      logo_block: logo_block
+      related_content: related_content
+      related_project: related_project
+      related_publication_inline: related_publication_inline
+    negate: 0
+    target_bundles_drag_drop:
+      about_the_author:
+        weight: -50
+        enabled: false
+      accordion_box:
+        weight: -67
+        enabled: true
+      accordion_section:
+        weight: -66
+        enabled: false
+      basic_text:
+        weight: -76
+        enabled: true
+      box:
+        weight: -75
+        enabled: true
+      file_upload:
+        weight: -54
+        enabled: false
+      gallery:
+        weight: -65
+        enabled: true
+      highchart:
+        weight: -64
+        enabled: true
+      image:
+        weight: -73
+        enabled: true
+      image_small:
+        weight: -71
+        enabled: true
+      image_wide:
+        weight: -72
+        enabled: true
+      in_page_menu:
+        weight: -56
+        enabled: false
+      info_box:
+        weight: -63
+        enabled: true
+      linked_person:
+        weight: -62
+        enabled: false
+      logo_block:
+        weight: -61
+        enabled: true
+      media_embed:
+        weight: -68
+        enabled: true
+      media_list:
+        weight: -69
+        enabled: true
+      modal_image:
+        weight: -70
+        enabled: true
+      quote:
+        weight: -74
+        enabled: true
+      related_content:
+        weight: -60
+        enabled: true
+      related_link:
+        weight: -55
+        enabled: false
+      related_project:
+        weight: -59
+        enabled: true
+      related_publication_inline:
+        weight: -58
+        enabled: true
+      researcher_profiles:
+        weight: -47
+        enabled: false
+      row_of_4:
+        weight: -45
+        enabled: false
+      section:
+        weight: -77
+        enabled: true
+      stories_block:
+        weight: -46
+        enabled: false
+      stories_cta:
+        weight: -57
+        enabled: false
+      stories_curated_content:
+        weight: -53
+        enabled: false
+      stories_link_list:
+        weight: -52
+        enabled: false
+      stories_quote:
+        weight: -51
+        enabled: false
+      stories_table:
+        weight: -49
+        enabled: false
+      stories_text:
+        weight: -48
+        enabled: false
+      stories_views:
+        weight: -44
+        enabled: false
+      tab:
+        weight: -43
+        enabled: false
+      tab_box:
+        weight: -42
+        enabled: false
+      timeline:
+        weight: -41
+        enabled: false
+      video_embed:
+        weight: -40
+        enabled: false
+field_type: entity_reference_revisions

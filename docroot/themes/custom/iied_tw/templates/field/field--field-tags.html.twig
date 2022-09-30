@@ -44,7 +44,7 @@
 
 {%
   set tags_classes = [
-    'flex', 'flex-wrap', 'gap-2', 'py-6', 'overflow-hidden', 'border-b', 'border-gray-300',
+    'flex', 'flex-wrap', 'gap-2', 'py-4', 'overflow-hidden', 'border-b', 'border-gray-300',
   ]
 %}
 
@@ -58,12 +58,12 @@
   {% if multiple %}
     <div{{ attributes.addClass(tags_classes) }}>
       {% for item in items %}
-      <a class="px-4 py-2 h-10 transition-colors duration-200 bg-gray-100 rounded-full focus:shadow-outline hover:bg-gray-200 text-base text-gray-700" href="{{ item.content['#url'] }}">{{ item.content['#title']}}</a>
+      <a class="h-10 px-4 py-2 text-base text-gray-700 truncate transition-colors duration-200 bg-gray-100 rounded-full focus:shadow-outline hover:bg-gray-200" href="{{ item.content['#url'] }}">{{ item.content['#title']}}</a>
       {% endfor %}
     </div>
   {% else %}
     {% for item in items %}
-      <a class="px-4 py-2 h-10 transition-colors duration-200 bg-gray-100 rounded-full focus:shadow-outline hover:bg-gray-200 text-base text-gray-700" href="{{ item.content['#url'] }}">{{ item.content['#title']}}</a>
+      <a class="h-10 px-4 py-2 text-base text-gray-700 truncate transition-colors duration-200 bg-gray-100 rounded-full focus:shadow-outline hover:bg-gray-200" href="{{ item.content['#url'] }}">{{ item.content['#title']}}</a>
     {% endfor %}
   {% endif %}
 {% else %}

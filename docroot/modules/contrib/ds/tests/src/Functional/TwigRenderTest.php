@@ -45,7 +45,8 @@ class TwigRenderTest extends TestBase {
     $edit = [
       'fs3[use_field_names]' => FALSE,
     ];
-    $this->drupalPostForm('admin/structure/ds/settings', $edit, 'Save configuration');
+    $this->drupalGet('admin/structure/ds/settings');
+    $this->submitForm($edit, 'Save configuration');
 
     $this->drupalGet('node/' . $node->id());
 

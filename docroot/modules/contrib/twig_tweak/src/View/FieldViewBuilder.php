@@ -64,8 +64,8 @@ class FieldViewBuilder {
     }
 
     CacheableMetadata::createFromRenderArray($build)
-      ->merge(CacheableMetadata::createFromObject($access))
-      ->merge(CacheableMetadata::createFromObject($entity))
+      ->addCacheableDependency($access)
+      ->addCacheableDependency($entity)
       ->applyTo($build);
 
     return $build;

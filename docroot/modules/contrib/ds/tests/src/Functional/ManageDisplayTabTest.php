@@ -13,6 +13,7 @@ class ManageDisplayTabTest extends TestBase {
    * Test tabs.
    */
   public function testFieldPlugin() {
+
     /* @var \Drupal\node\NodeInterface $node */
     $node = $this->entitiesTestSetup();
 

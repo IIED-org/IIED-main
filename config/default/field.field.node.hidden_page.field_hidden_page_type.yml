@@ -1,0 +1,21 @@
+uuid: 9ac300e7-6851-4e52-ad98-420da1080ba2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_hidden_page_type
+    - node.type.hidden_page
+  module:
+    - options
+id: node.hidden_page.field_hidden_page_type
+field_name: field_hidden_page_type
+entity_type: node
+bundle: hidden_page
+label: 'Hidden page type'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -7,7 +7,7 @@
 
 /**
  * @addtogroup hooks
- * @{
+ *
  * Hooks that extend the EU Cookie Compliance module.
  */
 

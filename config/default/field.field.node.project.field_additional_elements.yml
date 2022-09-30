@@ -5,10 +5,23 @@ dependencies:
   config:
     - field.storage.node.field_additional_elements
     - node.type.project
+    - paragraphs.paragraphs_type.accordion_box
     - paragraphs.paragraphs_type.basic_text
+    - paragraphs.paragraphs_type.box
     - paragraphs.paragraphs_type.file_upload
+    - paragraphs.paragraphs_type.gallery
+    - paragraphs.paragraphs_type.highchart
+    - paragraphs.paragraphs_type.image
+    - paragraphs.paragraphs_type.image_small
     - paragraphs.paragraphs_type.info_box
     - paragraphs.paragraphs_type.media_embed
+    - paragraphs.paragraphs_type.media_list
+    - paragraphs.paragraphs_type.modal_image
+    - paragraphs.paragraphs_type.quote
+    - paragraphs.paragraphs_type.related_publication_inline
+    - paragraphs.paragraphs_type.stories_table
+    - paragraphs.paragraphs_type.tab_box
+    - paragraphs.paragraphs_type.video_embed
   module:
     - entity_reference_revisions
 id: node.project.field_additional_elements
@@ -29,6 +42,19 @@ settings:
       file_upload: file_upload
       info_box: info_box
       media_embed: media_embed
+      image: image
+      video_embed: video_embed
+      accordion_box: accordion_box
+      box: box
+      gallery: gallery
+      highchart: highchart
+      media_list: media_list
+      modal_image: modal_image
+      image_small: image_small
+      quote: quote
+      stories_table: stories_table
+      related_publication_inline: related_publication_inline
+      tab_box: tab_box
     negate: 0
     target_bundles_drag_drop:
       about_the_author:
@@ -36,22 +62,31 @@ settings:
         enabled: false
       accordion_box:
         weight: 34
+        enabled: true
+      accordion_section:
+        weight: 41
         enabled: false
       basic_text:
         weight: -15
         enabled: true
       box:
         weight: 36
-        enabled: false
+        enabled: true
       file_upload:
         weight: -14
         enabled: true
       gallery:
         weight: 38
-        enabled: false
+        enabled: true
+      highchart:
+        weight: 46
+        enabled: true
       image:
         weight: 14
-        enabled: false
+        enabled: true
+      image_small:
+        weight: 48
+        enabled: true
       image_wide:
         weight: -11
         enabled: false
@@ -72,16 +107,25 @@ settings:
         enabled: true
       media_list:
         weight: 46
-        enabled: false
+        enabled: true
       modal_image:
         weight: 47
-        enabled: false
+        enabled: true
       quote:
         weight: 48
+        enabled: true
+      related_content:
+        weight: 58
         enabled: false
       related_link:
         weight: 49
         enabled: false
+      related_project:
+        weight: 60
+        enabled: false
+      related_publication_inline:
+        weight: 61
+        enabled: true
       researcher_profiles:
         weight: 50
         enabled: false
@@ -108,7 +152,7 @@ settings:
         enabled: false
       stories_table:
         weight: 58
-        enabled: false
+        enabled: true
       stories_text:
         weight: 59
         enabled: false
@@ -120,11 +164,11 @@ settings:
         enabled: false
       tab_box:
         weight: 62
-        enabled: false
+        enabled: true
       timeline:
         weight: 63
         enabled: false
       video_embed:
         weight: 20
-        enabled: false
+        enabled: true
 field_type: entity_reference_revisions

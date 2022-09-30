@@ -8,6 +8,7 @@ dependencies:
   module:
     - iied_slider
     - node
+    - options
     - user
 id: history_slider
 label: 'History slider'
@@ -155,21 +156,17 @@ display:
           expose:
             operator_limit_selection: false
             operator_list: {  }
-        nid:
-          id: nid
-          table: node_field_data
-          field: nid
+        field_hidden_page_type_value:
+          id: field_hidden_page_type_value
+          table: node__field_hidden_page_type
+          field: field_hidden_page_type_value
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: node
-          entity_field: nid
-          plugin_id: numeric
-          operator: regular_expression
+          plugin_id: list_field
+          operator: or
           value:
-            min: ''
-            max: ''
-            value: 77676|77681|77686
+            - '0'
           group: 1
           exposed: false
           expose:
@@ -186,9 +183,7 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-            min_placeholder: ''
-            max_placeholder: ''
-            placeholder: ''
+            reduce: false
           is_grouped: false
           group_info:
             label: ''
@@ -201,6 +196,7 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+          reduce_duplicates: false
       style:
         type: iied_slider
         options:

@@ -65,6 +65,10 @@ AddEncoding gzip svgz
   RewriteCond %{ENV:AH_SITE_ENVIRONMENT} !prod
   RewriteRule ^robots\.txt$ robots-noindex.txt [L]
 
+  # Redirect old pubs links before setting https
+  RewriteCond %{QUERY_STRING} ^o=(.*)$
+  RewriteRule ^pubs/display\.php$ http://www.iied.org/%1/ [QSD,L,R=302]
+
   RewriteCond %{ENV:AH_SITE_ENVIRONMENT} prod [NC]
   RewriteCond %{HTTPS} off
   RewriteCond %{HTTP:X-Forwarded-Proto} !https
@@ -87,47 +91,59 @@ AddEncoding gzip svgz
   # Rewrite theme search
 
   RewriteCond %{QUERY_STRING} c=biodiv
-  RewriteRule (.*) /theme/biodiversity [R=301,L,QSD]
+  RewriteRule (.*) /biodiversity [R=301,L,QSD]
   RewriteCond %{QUERY_STRING} c=climate
-  RewriteRule (.*) /theme/climate-change [R=301,L,QSD]
+  RewriteRule (.*) /climate-change [R=301,L,QSD]
   RewriteCond %{QUERY_STRING} c=comm
-  RewriteRule (.*) /theme/communication [R=301,L,QSD]
+  RewriteRule (.*) /communication [R=301,L,QSD]
   RewriteCond %{QUERY_STRING} c=dry
-  RewriteRule (.*) /theme/drylands-and-pastoralism [R=301,L,QSD]
+  RewriteRule (.*) /drylands-and-pastoralism [R=301,L,QSD]
   RewriteCond %{QUERY_STRING} c=econ
-  RewriteRule (.*) /theme/economics [R=301,L,QSD]
+  RewriteRule (.*) /economics [R=301,L,QSD]
   RewriteCond %{QUERY_STRING} c=energy
-  RewriteRule (.*) /theme/energy [R=301,L,QSD]
+  RewriteRule (.*) /energy [R=301,L,QSD]
   RewriteCond %{QUERY_STRING} c=fish
-  RewriteRule (.*) /theme/fisheries [R=301,L,QSD]
+  RewriteRule (.*) /fisheries [R=301,L,QSD]
   RewriteCond %{QUERY_STRING} c=foodag
-  RewriteRule (.*) /theme/food-and-agriculture [R=301,L,QSD]
+  RewriteRule (.*) /food-and-agriculture [R=301,L,QSD]
   RewriteCond %{QUERY_STRING} c=forest
-  RewriteRule (.*) /theme/forests [R=301,L,QSD]
+  RewriteRule (.*) /forests [R=301,L,QSD]
   RewriteCond %{QUERY_STRING} c=gender
-  RewriteRule (.*) /theme/gender [R=301,L,QSD]
+  RewriteRule (.*) /gender [R=301,L,QSD]
   RewriteCond %{QUERY_STRING} c=govern
-  RewriteRule (.*) /theme/governance [R=301,L,QSD]
+  RewriteRule (.*) /governance [R=301,L,QSD]
   RewriteCond %{QUERY_STRING} c=greenec
-  RewriteRule (.*) /theme/green-economy [R=301,L,QSD]
+  RewriteRule (.*) /green-economy [R=301,L,QSD]
   RewriteCond %{QUERY_STRING} c=land
-  RewriteRule (.*) /theme/land-acquisitions-and-rights [R=301,L,QSD]
+  RewriteRule (.*) /land-acquisitions-and-rights [R=301,L,QSD]
   RewriteCond %{QUERY_STRING} c=law
-  RewriteRule (.*) /theme/law [R=301,L,QSD]
+  RewriteRule (.*) /law [R=301,L,QSD]
   RewriteCond %{QUERY_STRING} c=nrm
-  RewriteRule (.*) /theme/natural-resource-management [R=301,L,QSD]
+  RewriteRule (.*) /natural-resource-management [R=301,L,QSD]
   RewriteCond %{QUERY_STRING} c=part
-  RewriteRule (.*) /theme/participation [R=301,L,QSD]
+  RewriteRule (.*) /participation [R=301,L,QSD]
   RewriteCond %{QUERY_STRING} c=policy
-  RewriteRule (.*) /theme/policy-planning [R=301,L,QSD]
+  RewriteRule (.*) /policy-planning [R=301,L,QSD]
   RewriteCond %{QUERY_STRING} c=pov
-  RewriteRule (.*) /theme/poverty [R=301,L,QSD]
+  RewriteRule (.*) /poverty [R=301,L,QSD]
   RewriteCond %{QUERY_STRING} c=susmkt
-  RewriteRule (.*) /theme/sustainable-markets [R=301,L,QSD]
+  RewriteRule (.*) /sustainable-markets [R=301,L,QSD]
   RewriteCond %{QUERY_STRING} c=urban
-  RewriteRule (.*) /theme/urban [R=301,L,QSD]
+  RewriteRule (.*) /urban [R=301,L,QSD]
   RewriteCond %{QUERY_STRING} c=water
-  RewriteRule (.*) /theme/water [R=301,L,QSD]
+  RewriteRule (.*) /water [R=301,L,QSD]
+
+  # Rewrite pubs.iied.org to www.iied.org/publications
+  RewriteCond %{HTTP_HOST} ^pubs\.iied\.org$
+  RewriteRule ^$ https://www\.iied\.org/publications [R=301]
+
+  # Rewrite pubs.iied.org/anything to www.iied.org/anything
+  RewriteCond %{HTTP_HOST} ^pubs\.iied\.org
+  RewriteRule ^(.*)$ https://www\.iied\.org/$1 [R=301]
+
+  # planotes.org
+  RewriteCond %{HTTP_HOST} ^(www\.)?planotes.org$
+  RewriteRule ^(.*) https://www.iied.org/participatory-learning-action-archive [R=301,L]
 
   # Make sure Authorization HTTP header is available to PHP
   # even when running as CGI or FastCGI.

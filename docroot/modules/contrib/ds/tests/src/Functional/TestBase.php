@@ -33,8 +33,6 @@ abstract class TestBase extends BrowserTestBase {
     'node',
     'user',
     'field_ui',
-    'rdf',
-    'quickedit',
     'taxonomy',
     'block',
     'ds',
@@ -42,7 +40,6 @@ abstract class TestBase extends BrowserTestBase {
     'ds_test',
     'ds_switch_view_mode',
     'layout_discovery',
-    //'field_group',
   ];
 
   /**
@@ -83,7 +80,7 @@ abstract class TestBase extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->drupalPlaceBlock('system_breadcrumb_block');
     $this->drupalPlaceBlock('local_tasks_block');
@@ -91,7 +88,6 @@ abstract class TestBase extends BrowserTestBase {
     // Create a test user.
     $this->adminUser = $this->drupalCreateUser([
       'access content',
-      'access in-place editing',
       'access user profiles',
       'admin classes',
       'admin display suite',

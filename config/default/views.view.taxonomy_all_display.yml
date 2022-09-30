@@ -252,6 +252,7 @@ display:
           query_tags: {  }
       relationships: {  }
       css_class: ''
+      use_ajax: true
       header: {  }
       footer:
         result:
@@ -263,7 +264,7 @@ display:
           admin_label: ''
           plugin_id: result
           empty: false
-          content: '@total entries'
+          content: '<p class="py-4">@total entries<p>'
       display_extenders: {  }
     cache_metadata:
       max-age: -1
@@ -412,7 +413,9 @@ display:
     position: 1
     display_options:
       defaults:
+        use_ajax: false
         show_admin_links: false
+      use_ajax: true
       display_description: ''
       show_admin_links: true
       display_extenders: {  }
@@ -562,10 +565,12 @@ display:
         groups:
           1: AND
       defaults:
+        use_ajax: false
         show_admin_links: false
         pager: false
         filters: false
         filter_groups: false
+      use_ajax: true
       display_description: ''
       show_admin_links: true
       display_extenders: {  }

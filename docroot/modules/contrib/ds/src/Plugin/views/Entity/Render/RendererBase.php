@@ -106,8 +106,13 @@ abstract class RendererBase extends EntityTranslationRendererBase {
 
         // The advanced selector invokes hook_ds_views_row_render_entity.
         if ($this->view->rowPlugin->options['advanced_fieldset']['advanced']) {
-          $modules = \Drupal::moduleHandler()->getImplementations('ds_views_row_render_entity');
-          foreach ($modules as $module) {
+
+          $hook = 'ds_views_row_render_entity';
+          $implementors = [];
+          \Drupal::moduleHandler()->invokeAllWith($hook, function (callable $hook, string $module) use (&$implementors) {
+            $implementors[] = $module;
+          });
+          foreach ($implementors as $module) {
             if ($content = \Drupal::moduleHandler()->invoke($module, 'ds_views_row_render_entity', [$entity, $view_mode])) {
               if (!is_array($content)) {
                 $content = ['#markup' => $content];

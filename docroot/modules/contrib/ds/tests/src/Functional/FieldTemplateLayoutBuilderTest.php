@@ -18,8 +18,6 @@ class FieldTemplateLayoutBuilderTest extends TestBase {
     'node',
     'user',
     'field_ui',
-    'rdf',
-    'quickedit',
     'taxonomy',
     'block',
     'ds',
@@ -33,7 +31,7 @@ class FieldTemplateLayoutBuilderTest extends TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setup() {
+  protected function setup(): void {
     parent::setup();
 
     // Enable field templates.
@@ -78,7 +76,7 @@ class FieldTemplateLayoutBuilderTest extends TestBase {
 
     // From the manage display page, go to manage the layout.
     $this->drupalGet("$field_ui_prefix/display/default");
-    $this->drupalPostForm(NULL, ['layout[enabled]' => TRUE], 'Save');
+    $this->submitForm(['layout[enabled]' => TRUE], 'Save');
     $this->clickLink('Manage layout');
 
     // Add the title field_block.

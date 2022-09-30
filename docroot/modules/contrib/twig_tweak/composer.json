@@ -12,11 +12,18 @@
     "require": {
         "php": ">=7.3",
         "ext-json": "*",
-        "drupal/core": "^9.0",
-        "twig/twig": "^2.12",
+        "drupal/core": "^9.3 || ^10.0",
+        "twig/twig": "^2.12 || ^3.3.8",
         "symfony/polyfill-php80": "^1.17"
     },
     "suggest": {
         "symfony/var-dumper": "Better dump() function for debugging Twig variables"
+    },
+    "extra": {
+        "drush": {
+            "services": {
+                "drush.services.yml": "^9 || ^10 || ^11"
+            }
+        }
     }
 }

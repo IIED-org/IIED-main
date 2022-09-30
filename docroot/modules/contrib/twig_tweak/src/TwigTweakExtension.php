@@ -112,6 +112,8 @@ class TwigTweakExtension extends AbstractExtension {
       new TwigFilter('children', [self::class, 'childrenFilter']),
       new TwigFilter('file_uri', [self::class, 'fileUriFilter']),
       new TwigFilter('file_url', [self::class, 'fileUrlFilter']),
+      new TwigFilter('entity_url', [self::class, 'entityUrl']),
+      new TwigFilter('entity_link', [self::class, 'entityLink']),
       new TwigFilter('translation', [self::class, 'entityTranslation']),
       new TwigFilter('cache_metadata', [self::class, 'CacheMetadata']),
     ];
@@ -181,7 +183,8 @@ class TwigTweakExtension extends AbstractExtension {
    */
   public static function drupalEntityForm(string $entity_type, ?string $id = NULL, string $form_mode = 'default', array $values = [], bool $check_access = TRUE): array {
     $entity_storage = \Drupal::entityTypeManager()->getStorage($entity_type);
-    $entity = $id ? $entity_storage->load($id) : $entity_storage->create($values);
+    $entity = $id ?
+      \Drupal::service('entity.repository')->getActive($entity_type, $id) : $entity_storage->create($values);
     if ($entity) {
       return \Drupal::service('twig_tweak.entity_form_view_builder')
         ->build($entity, $form_mode, $check_access);
@@ -244,10 +247,12 @@ class TwigTweakExtension extends AbstractExtension {
       ->getStorage('file')
       ->loadByProperties([$selector_type => $selector]);
 
-    // To avoid ambiguity render nothing unless exact one image has been found.
-    if (count($files) != 1) {
+    if (count($files) == 0) {
       return [];
     }
+
+    // To avoid ambiguity order by fid.
+    ksort($files);
 
     $file = reset($files);
     return \Drupal::service('twig_tweak.image_view_builder')->build($file, $style, $attributes, $responsive, $check_access);
@@ -320,7 +325,8 @@ class TwigTweakExtension extends AbstractExtension {
     if ($route = \Drupal::routeMatch()->getRouteObject()) {
       $title = \Drupal::service('title_resolver')->getTitle(\Drupal::request(), $route);
     }
-    $build['#markup'] = render($title);
+    $build['#markup'] = is_array($title) ?
+      \Drupal::service('renderer')->render($title) : $title;
     $build['#cache']['contexts'] = ['url'];
     return $build;
   }
@@ -499,7 +505,8 @@ class TwigTweakExtension extends AbstractExtension {
       return NULL;
     }
 
-    return file_url_transform_relative($image_style->buildUrl($path));
+    return \Drupal::service('file_url_generator')
+      ->transformRelative($image_style->buildUrl($path));
   }
 
   /**
@@ -549,7 +556,7 @@ class TwigTweakExtension extends AbstractExtension {
       /** @var \Drupal\Core\Entity\Plugin\DataType\EntityAdapter $parent */
       if ($parent = $object->getParent()) {
         CacheableMetadata::createFromRenderArray($build)
-          ->merge(CacheableMetadata::createFromObject($parent->getEntity()))
+          ->addCacheableDependency($parent->getEntity())
           ->applyTo($build);
       }
     }
@@ -627,6 +634,30 @@ class TwigTweakExtension extends AbstractExtension {
   }
 
   /**
+   * Gets the URL object for the entity.
+   *
+   * @todo Remove this once Drupal allows `toUrl` method in the sandbox policy.
+   *
+   * @see https://www.drupal.org/node/2907810
+   * @see \Drupal\Core\Entity\EntityInterface::toUrl()
+   */
+  public static function entityUrl(EntityInterface $entity, string $rel = 'canonical', array $options = []): Url {
+    return $entity->toUrl($rel, $options);
+  }
+
+  /**
+   * Gets the URL object for the entity.
+   *
+   * @todo Remove this once Drupal allows `toLink` method in the sandbox policy.
+   *
+   * @see https://www.drupal.org/node/2907810
+   * @see \Drupal\Core\Entity\EntityInterface::toLink()
+   */
+  public static function entityLink(EntityInterface $entity, ?string $text = NULL, string $rel = 'canonical', array $options = []): Link {
+    return $entity->toLink($text, $rel, $options);
+  }
+
+  /**
    * Returns the translation for the given entity.
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
@@ -668,7 +699,7 @@ class TwigTweakExtension extends AbstractExtension {
    */
   public static function phpFilter(array $context, string $code) {
     // Make Twig variables available in PHP code.
-    extract($context);
+    extract($context, EXTR_SKIP);
     ob_start();
     // phpcs:ignore Drupal.Functions.DiscouragedFunctions.Discouraged
     print eval($code);

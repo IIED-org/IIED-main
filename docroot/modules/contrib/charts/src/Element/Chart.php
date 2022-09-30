@@ -113,12 +113,14 @@ class Chart extends RenderElement implements ContainerFactoryPluginInterface {
       '#gauge' => [],
       '#background' => 'transparent',
       '#stacking' => NULL,
+      '#color_changer' => FALSE,
       '#pre_render' => [
         [$this, 'preRender'],
       ],
       '#tooltips' => TRUE,
       '#tooltips_use_html' => FALSE,
       '#data_labels' => FALSE,
+      '#data_markers' => FALSE,
       '#legend' => TRUE,
       '#legend_title' => '',
       '#legend_title_font_weight' => 'bold',
@@ -133,6 +135,8 @@ class Chart extends RenderElement implements ContainerFactoryPluginInterface {
       '#attributes' => [],
       '#chart_definition' => [],
       '#raw_options' => [],
+      '#content_prefix' => [],
+      '#content_suffix' => [],
     ];
   }
 
@@ -192,10 +196,8 @@ class Chart extends RenderElement implements ContainerFactoryPluginInterface {
     $library = $this->getLibrary($library);
 
     $element['#chart_library'] = $library;
-
-    $library_form = $library . '_settings';
     $charts_settings = $this->configFactory->get('charts.settings');
-    $plugin_configuration = $charts_settings->get("charts_default_settings.$library_form") ?? [];
+    $plugin_configuration = $charts_settings->get('charts_default_settings.library_config') ?? [];
     $plugin = $this->chartsManager->createInstance($library, $plugin_configuration);
     $element = $plugin->preRender($element);
 
@@ -317,7 +319,8 @@ class Chart extends RenderElement implements ContainerFactoryPluginInterface {
       '#title' => $settings['display']['title'],
       '#title_position' => $settings['display']['title_position'],
       '#tooltips' => $settings['display']['tooltips'] ?? [],
-      '#data_labels' => $settings['display']['data_labels'] ?? [],
+      '#data_labels' => $settings['display']['data_labels'] ?? FALSE,
+      '#data_markers' => $settings['display']['data_markers'] ?? FALSE,
       '#colors' => $display_colors,
       '#background' => $settings['display']['background'] ?? 'transparent',
       '#three_dimensional' => $settings['display']['three_dimensional'] ?? FALSE,
@@ -330,6 +333,7 @@ class Chart extends RenderElement implements ContainerFactoryPluginInterface {
       '#height' => $settings['display']['dimensions']['height'],
       '#width_units' => $settings['display']['dimensions']['width_units'],
       '#height_units' => $settings['display']['dimensions']['height_units'],
+      '#color_changer' => $settings['display']['color_changer'] ?? FALSE,
     ];
 
     if (empty($settings['series'])) {

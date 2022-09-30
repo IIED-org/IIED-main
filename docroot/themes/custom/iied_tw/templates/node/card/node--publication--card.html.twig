@@ -13,7 +13,7 @@
             {{ node.field_media[0].entity|view('search_cover') }}
           </div>
       {% endif %}
-  {% endblock %}
+  {% endblock %} 
   {% block date %}
       <p class="text-gray-500">{{ node.type.entity.label() }}, {{ node.field_date_published.value|date('d F Y') }} </p>
   {% endblock %}

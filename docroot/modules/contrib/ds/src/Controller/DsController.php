@@ -125,7 +125,7 @@ class DsController extends ControllerBase {
    *   A redirect response pointing to the corresponding display.
    */
   public function contextualTab(RouteMatchInterface $route_match) {
-    $parameter_name = $route_match->getRouteObject()->getOption('_ds_entity_type_id');
+    $parameter_name = $route_match->getRouteObject()->getDefault('entity_type_id');
     $entity = $route_match->getParameter($parameter_name);
     $entity_type_id = $entity->getEntityTypeId();
 

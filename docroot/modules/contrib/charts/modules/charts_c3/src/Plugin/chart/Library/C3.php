@@ -87,6 +87,10 @@ class C3 extends ChartBase implements ContainerFactoryPluginInterface {
     $chart_definition = $this->populateData($element, $chart_definition);
     $chart_definition = $this->populateAxes($element, $chart_definition);
 
+    if (!empty($element['#height']) || !empty($element['#width'])) {
+      $element['#attributes']['style'] = 'height:' . $element['#height'] . $element['#height_units'] . ';width:' . $element['#width'] . $element['#width_units'].  ';';
+    }
+
     if (!isset($element['#id'])) {
       $element['#id'] = Html::getUniqueId('chart-c3');
     }
@@ -226,8 +230,8 @@ class C3 extends ChartBase implements ContainerFactoryPluginInterface {
     // Merge in chart raw options.
     if (!empty($element['#raw_options'])) {
       $chart_definition = NestedArray::mergeDeepArray([
-        $element['#raw_options'],
         $chart_definition,
+        $element['#raw_options'],
       ]);
     }
 

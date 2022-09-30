@@ -5,8 +5,11 @@ namespace Drupal\charts_highcharts\Plugin\chart\Library;
 use Drupal\charts\Element\Chart as ChartElement;
 use Drupal\charts\Plugin\chart\Library\ChartBase;
 use Drupal\charts\TypeManager;
+use Drupal\charts_highcharts\Form\ColorChanger;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Form\FormBuilder;
+use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\Element;
@@ -39,6 +42,13 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
   protected $chartTypeManager;
 
   /**
+   * The chart type manager.
+   *
+   * @var \Drupal\Core\Form\FormBuilder
+   */
+  protected $formBuilder;
+
+  /**
    * Constructs a \Drupal\views\Plugin\Block\ViewsBlockBase object.
    *
    * @param array $configuration
@@ -51,11 +61,14 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
    *   The element info manager.
    * @param \Drupal\charts\TypeManager $chart_type_manager
    *   The chart type manager.
+   * @param \Drupal\Core\Form\FormBuilder $form_builder
+   *   The form builder.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ElementInfoManagerInterface $element_info, TypeManager $chart_type_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ElementInfoManagerInterface $element_info, TypeManager $chart_type_manager, FormBuilder $form_builder) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->elementInfo = $element_info;
     $this->chartTypeManager = $chart_type_manager;
+    $this->formBuilder = $form_builder;
   }
 
   /**
@@ -67,7 +80,8 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
       $plugin_id,
       $plugin_definition,
       $container->get('element_info'),
-      $container->get('plugin.manager.charts_type')
+      $container->get('plugin.manager.charts_type'),
+      $container->get('form_builder'),
     );
   }
 
@@ -87,6 +101,7 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
         ],
       ],
       'exporting_library' => TRUE,
+      'texture_library' => TRUE,
     ] + parent::defaultConfiguration();
 
     return $configurations;
@@ -187,6 +202,12 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
       '#default_value' => !empty($this->configuration['exporting_library']),
     ];
 
+    $form['texture_library'] = [
+      '#title' => $this->t('Enable Highcharts\' "Texture" library'),
+      '#type' => 'checkbox',
+      '#default_value' => !empty($this->configuration['texture_library']),
+    ];
+
     return $form;
   }
 
@@ -205,6 +226,7 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
       $values = $form_state->getValue($form['#parents']);
       $this->configuration['legend'] = $values['legend'];
       $this->configuration['exporting_library'] = $values['exporting_library'];
+      $this->configuration['texture_library'] = $values['texture_library'];
     }
   }
 
@@ -218,6 +240,10 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
     $chart_definition = $this->populateOptions($element, $chart_definition);
     $chart_definition = $this->populateAxes($element, $chart_definition);
     $chart_definition = $this->populateData($element, $chart_definition);
+
+    if (!empty($element['#height']) || !empty($element['#width'])) {
+      $element['#attributes']['style'] = 'height:' . $element['#height'] . $element['#height_units'] . ';width:' . $element['#width'] . $element['#width_units'].  ';';
+    }
 
     // Remove machine names from series. Highcharts series must be an array.
     $series = array_values($chart_definition['series']);
@@ -237,8 +263,21 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
     if (!empty($this->configuration['exporting_library'])) {
       $element['#attached']['library'][] = 'charts_highcharts/highcharts_exporting';
     }
+    if (!empty($this->configuration['texture_library'])) {
+      $element['#attached']['library'][] = 'charts_highcharts/texture';
+    }
     $element['#attributes']['class'][] = 'charts-highchart';
     $element['#chart_definition'] = $chart_definition;
+    // Show a form on the front-end so users can change chart colors.
+    if (!empty($element['#color_changer'])) {
+      $form_state = new FormState();
+      $form_state->set('chart_series', $series);
+      $form_state->set('chart_id', $element['#id']);
+      $form_state->set('chart_type', $chart_definition['chart']['type']);
+      $form_state->set('y_axis', $chart_definition['yAxis']);
+      $element['#attached']['library'][] = 'charts_highcharts/color_changer';
+      $element['#content_suffix']['color_changer'] = $this->formBuilder->buildForm(ColorChanger::class, $form_state);
+    }
 
     return $element;
   }
@@ -256,8 +295,6 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
    */
   private function populateOptions(array $element, array $chart_definition) {
     $chart_type = $this->getType($element['#chart_type']);
-    $chart_definition['chart']['width'] = $element['#width'] ?? NULL;
-    $chart_definition['chart']['height'] = $element['#height'] ?? NULL;
     $chart_definition['chart']['type'] = $chart_type;
     $chart_definition['chart']['backgroundColor'] = $element['#background'];
     $chart_definition['chart']['polar'] = $element['#polar'] ?? NULL;
@@ -265,9 +302,6 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
     $chart_definition['credits']['enabled'] = FALSE;
     $chart_definition['title']['text'] = $element['#title'] ?? '';
     $chart_definition['title']['style']['color'] = $element['#title_color'];
-    $chart_definition['title']['verticalAlign'] = $element['#title_position'] === 'in' ? 'top' : NULL;
-    $chart_definition['title']['y'] = $element['#title_position'] === 'in' ? 24 : NULL;
-    $chart_definition['colors'] = $element['#colors'];
     $chart_definition['title']['verticalAlign'] = $element['#title_position'] === 'in' ? 'top' : NULL;
     $chart_definition['title']['y'] = $element['#title_position'] === 'in' ? 24 : NULL;
     $chart_definition['colors'] = $element['#colors'];
@@ -361,8 +395,8 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
     // Merge in chart raw options.
     if (!empty($element['#raw_options'])) {
       $chart_definition = NestedArray::mergeDeepArray([
-        $element['#raw_options'],
         $chart_definition,
+        $element['#raw_options'],
       ]);
     }
 
@@ -473,8 +507,8 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
         // Merge in series raw options.
         if (!empty($element[$key]['#raw_options'])) {
           $series = NestedArray::mergeDeepArray([
-            $element[$key]['#raw_options'],
             $series,
+            $element[$key]['#raw_options'],
           ]);
         }
 
@@ -533,8 +567,8 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
             // Merge in point raw options.
             if (!empty($data_item['#raw_options'])) {
               $series_point = NestedArray::mergeDeepArray([
-                $data_item['#raw_options'],
                 $series_point,
+                $data_item['#raw_options'],
               ]);
             }
           }
@@ -596,8 +630,8 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
         // Merge in axis raw options.
         if (!empty($element[$key]['#raw_options'])) {
           $axis = NestedArray::mergeDeepArray([
-            $element[$key]['#raw_options'],
             $axis,
+            $element[$key]['#raw_options'],
           ]);
         }
 

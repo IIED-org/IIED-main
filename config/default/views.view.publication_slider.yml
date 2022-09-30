@@ -301,7 +301,7 @@ display:
           plugin_id: text
           empty: false
           content:
-            value: "<div class=\"flex flex-wrap justify-between\">\r\n<h2 class=\"mb-6\">Publications</h2>\r\n<a href=\"/search?k=&f%5B0%5D=content_type%3Apublication&f%5B1%5D=theme%3A{{ raw_arguments.tid }}\" class=\"mb-6\">View more <span class=\"lowercase\">{{ arguments.tid }}</span> publications</a>\r\n</div>"
+            value: "<div class=\"flex flex-wrap justify-between\">\r\n<h2 class=\"mb-6\">Publications</h2>\r\n<a href=\"/search?k=&f%5B0%5D=content_type%3Apublication&f%5B1%5D=theme%3A{{ raw_arguments.tid }}\" class=\"mb-4 mt-2\">View more <span class=\"lowercase\">{{ arguments.tid }}</span> publications</a>\r\n</div>"
             format: full_html
           tokenize: true
       display_extenders: {  }
@@ -499,7 +499,7 @@ display:
           plugin_id: text
           empty: false
           content:
-            value: "<div class=\"flex flex-wrap justify-between\">\r\n<h2 class=\"mb-6\">Our latest publications</h2>\r\n<a href=\"/publications\">View more publications</a>\r\n</div>"
+            value: "<div class=\"flex flex-wrap justify-between\">\r\n<h2 class=\"mb-6\">Our latest publications</h2>\r\n<a href=\"/publications\" class=\"mt-2 mb-4\">View more publications</a>\r\n</div>"
             format: full_html
           tokenize: true
       display_extenders: {  }

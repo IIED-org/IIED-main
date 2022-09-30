@@ -29,17 +29,17 @@ class ChartsConfigAdvancedForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-
-    $library_discovery = \Drupal::service('library.discovery');
-    $extension = 'charts_highcharts';
-    $libraries = $library_discovery->getLibrariesByExtension($extension);
-
     $config = $this->config('charts.settings');
     $form['advanced'] = [
       '#type' => 'container',
       '#tree' => TRUE,
     ];
-
+    $form['advanced']['debug'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable Charts Debug'),
+      '#description' => $this->t("Show the JSON generated for the chart in a code block below the chart."),
+      '#default_value' => $config->get('advanced.debug'),
+    ];
     $form['advanced']['requirements'] = [
       '#type' => 'details',
       '#title' => $this->t('Requirement settings'),

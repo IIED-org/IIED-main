@@ -132,7 +132,6 @@
 
 {#  order 1  #}  
       <div class="md:order-1 md:row-span-2 md:mr-4">
-      {{ breakpoint() }}
         {% if node.field_cover_image[0] is not empty %}
           {{ node.field_cover_image.entity|view('embedded') }}
         {% elseif node.field_media[0] is not empty  %}

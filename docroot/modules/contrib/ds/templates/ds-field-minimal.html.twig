@@ -18,9 +18,15 @@
     'field-name-' ~ element['#field_name']|clean_class,
   ]
 %}
+{%
+  set title_classes = [
+    'field-label-' ~ element['#label_display']|clean_class,
+    (element['#label_display'] == 'visually_hidden' ? 'visually-hidden'),
+  ]
+%}
 <div{{ attributes.addClass(classes) }}>
   {%- if not label_hidden -%}
-    <div class="field-label-{{ element['#label_display']|clean_class }}">
+    <div{{ attributes.addClass(title_classes) }}>
       {{- label }}{% if settings['lb-col'] %}:{% endif -%}
     </div>
   {%- endif -%}

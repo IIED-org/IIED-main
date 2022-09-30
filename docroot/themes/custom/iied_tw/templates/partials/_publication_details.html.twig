@@ -29,8 +29,8 @@
   {{ content.field_journal_ref }} 
 
   <div class="flex gap-1">  
-    {% if node.field_isbn.entity.name.value %}
-      <span class="font-bold">ISBN:</span> <span>{{ node.field_isbn.0.value }}</span>
+    {% if node.field_isbn.value %}
+      <span class="font-bold">ISBN:</span> <span>{{ node.field_isbn.value }}</span>
     {% endif %}
   </div>
 

@@ -987,7 +987,7 @@ function _ds_field_ui_table_layouts_preview(array &$form, FormStateInterface $fo
     }
 
     if ($form_state->hasValue('ds_layout') || (!empty($layout) && isset($layout['regions'])) && (!empty($chosen_layout))) {
-      $fallback_image = drupal_get_path('module', 'ds') . '/images/preview.png';
+      $fallback_image = \Drupal::service('extension.list.module')->getPath('ds') . '/images/preview.png';
       $current_layout = $form_state->hasValue('ds_layout') && (!isset($layout->layout) || $form_state->getValue('ds_layout') != $layout->layout) ? t('Current layout (after save)') : t('Current layout');
       $image = $chosen_layout->getIconPath();
       if (empty($image)) {
@@ -1234,6 +1234,7 @@ function _ds_field_ui_fields($entity_type, $bundle, $view_mode, array &$form, Fo
     'above' => t('Above'),
     'inline' => t('Inline'),
     'hidden' => t('- Hidden -'),
+    'visually_hidden' => t('- Visually Hidden -'),
   ];
   \Drupal::moduleHandler()->alter('ds_label_options', $field_label_options);
 

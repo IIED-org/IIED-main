@@ -4,7 +4,7 @@ namespace Drupal\eu_cookie_compliance\Plugin;
 
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Extension\ModuleHandler;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ThemeExtensionList;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\domain\Entity\Domain;
@@ -18,7 +18,7 @@ class EuCcClearCache {
   /**
    * The MIME type guesser.
    *
-   * @var \Drupal\Core\Extension\ModuleHandler
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
 
@@ -53,7 +53,7 @@ class EuCcClearCache {
   /**
    * Creates a new VendorFileDownloadController instance.
    *
-   * @param \Drupal\Core\Extension\ModuleHandler $module_handler
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The Module handler.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
@@ -67,7 +67,8 @@ class EuCcClearCache {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function __construct(ModuleHandler $module_handler, LanguageManagerInterface $language_manager, EntityTypeManagerInterface $domain_storage, ThemeExtensionList $theme_extension_list, CacheBackendInterface $cache_render) {
+  public function __construct(ModuleHandlerInterface $module_handler, LanguageManagerInterface $language_manager, EntityTypeManagerInterface $domain_storage, ThemeExtensionList $theme_extension_list, CacheBackendInterface
+$cache_render) {
     $this->moduleHandler = $module_handler;
     $this->languageManager = $language_manager;
     if ($this->moduleHandler->moduleExists('domain')) {

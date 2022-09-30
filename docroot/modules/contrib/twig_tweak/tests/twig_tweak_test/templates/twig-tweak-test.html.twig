@@ -30,7 +30,7 @@
   <div class="tt-view-result">{{ drupal_view_result('twig_tweak_test', 'page_1')|length }}</div>
   <div class="tt-block">{{ drupal_block('system_branding_block', {use_site_name: false}, false) }}</div>
   <div class="tt-block-with-wrapper">{{ drupal_block('system_branding_block', {label: 'Branding'}) }}</div>
-  <div class="tt-region">{{ drupal_region('sidebar_first') }}</div>
+  <div class="tt-region">{{ drupal_region('highlighted') }}</div>
   <div class="tt-entity-default">{{ drupal_entity('node', 1) }}</div>
   <div class="tt-entity-teaser">{{ drupal_entity('node', 1, 'teaser') }}</div>
   <div class="tt-entity-uuid">{{ drupal_entity('node', 'ad1b902a-344f-41d1-8c61-a69f0366dbfa') }}</div>
@@ -99,6 +99,12 @@
   <div class="tt-file-url-from-image-field">{{ node.field_image|file_url }}</div>
   <div class="tt-file-url-from-image-field-delta">{{ node.field_image[0]|file_url }}</div>
   <div class="tt-file-url-from-media-field">{{ node.field_media|file_url }}</div>
+  <div class="tt-entity-url">{{ node|entity_url(options={fragment: 'test'}) }}</div>
+  <div class="tt-entity-url-absolute">{{ node|entity_url(options={absolute: true}) }}</div>
+  <div class="tt-entity-url-edit-form">{{ node|entity_url('edit-form') }}</div>
+  <div class="tt-entity-link">{{ node|entity_link }}</div>
+  <div class="tt-entity-link-absolute">{{ node|entity_link('Example', options={absolute: true}) }}</div>
+  <div class="tt-entity-link-edit-form">{{ node|entity_link('Edit', 'edit-form') }}</div>
   <div class="tt-translation">{{ (node|translation).title.value }}</div>
   <div class="tt-functions_alter">{{ foo('bar') }}</div>
   <div class="tt-filters_alter">{{ 'foo'|bar }}</div>

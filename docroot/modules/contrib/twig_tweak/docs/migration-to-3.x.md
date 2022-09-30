@@ -38,14 +38,14 @@ function preprocess_page(array &$variables): void {
 element. This may break some CSS rules.
 
 Before:
-```HTML
+```html
 <div>
   <div class="from-block-plugin">Block content</div>
 </div>
 ```
 
 After:
-```HTML
+```html
 <div class="from-block-plugin">
   <div>Block content</div>
 </div>

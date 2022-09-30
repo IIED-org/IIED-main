@@ -9,6 +9,9 @@ charts.settings:
       type: mapping
       label: Advanced
       mapping:
+        debug:
+          type: boolean
+          label: 'Enable Charts Debug'
         requirements:
           type: mapping
           label: Requirements

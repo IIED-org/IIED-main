@@ -61,6 +61,8 @@ abstract class AbstractLazyCollection implements Collection
 
     /**
      * {@inheritDoc}
+     *
+     * @template TMaybeContained
      */
     public function contains($element)
     {
@@ -260,6 +262,8 @@ abstract class AbstractLazyCollection implements Collection
 
     /**
      * {@inheritDoc}
+     *
+     * @template TMaybeContained
      */
     public function indexOf($element)
     {
@@ -347,6 +351,8 @@ abstract class AbstractLazyCollection implements Collection
      * Is the lazy collection already initialized?
      *
      * @return bool
+     *
+     * @psalm-assert-if-true Collection<TKey,T> $this->collection
      */
     public function isInitialized()
     {

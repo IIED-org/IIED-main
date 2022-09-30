@@ -52,7 +52,8 @@ class ImageViewBuilder {
     }
 
     CacheableMetadata::createFromRenderArray($build)
-      ->merge(CacheableMetadata::createFromObject($access))
+      ->addCacheableDependency($access)
+      ->addCacheableDependency($file)
       ->applyTo($build);
 
     return $build;

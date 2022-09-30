@@ -1,0 +1,27 @@
+uuid: 5337e7c7-2afd-4139-99c0-dd53280c50c0
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_hidden_page_type
+field_name: field_hidden_page_type
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: '0'
+      label: History
+    -
+      value: '1'
+      label: 'Thank you'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -50,8 +50,8 @@ class EntityFormViewBuilder {
     }
 
     CacheableMetadata::createFromRenderArray($build)
-      ->merge(CacheableMetadata::createFromObject($entity))
-      ->merge(CacheableMetadata::createFromObject($access))
+      ->addCacheableDependency($access)
+      ->addCacheableDependency($entity)
       ->applyTo($build);
 
     return $build;

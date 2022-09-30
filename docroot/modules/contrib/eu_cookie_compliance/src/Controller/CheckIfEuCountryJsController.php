@@ -3,7 +3,7 @@
 namespace Drupal\eu_cookie_compliance\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Extension\ModuleHandler;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -13,19 +13,19 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class CheckIfEuCountryJsController extends ControllerBase {
 
   /**
-   * The MIME type guesser.
+   * The Module handler.
    *
-   * @var \Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface
+   * @var \Drupal\Core\Extension\ModuleHandler
    */
   protected $moduleHandler;
 
   /**
    * Creates a new VendorFileDownloadController instance.
    *
-   * @param \Drupal\Core\Extension\ModuleHandler $module_handler
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The Module handler.
    */
-  public function __construct(ModuleHandler $module_handler) {
+  public function __construct(ModuleHandlerInterface $module_handler) {
     $this->moduleHandler = $module_handler;
   }
 

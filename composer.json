@@ -80,7 +80,6 @@
         "drupal/datalayer": "^1.0@beta",
         "drupal/default_content": "^1",
         "drupal/default_content_deploy": "^2.0",
-        "drupal/devel_kint_extras": "^1.0",
         "drupal/draggableviews": "^2.0",
         "drupal/dropdown_language": "^2.6",
         "drupal/ds": "^3.9",
@@ -113,7 +112,7 @@
         "drupal/media_entity_file_replace": "^1.0",
         "drupal/media_pdf_thumbnail": "^5.0",
         "drupal/media_revisions_ui": "^2.0",
-        "drupal/media_thumbnails_pdf": "^1.0",
+        "drupal/memcache": "^2.5",
         "drupal/merge_translations": "^1.1",
         "drupal/metatag": "^1.19",
         "drupal/migrate_file": "^2.1",
@@ -161,6 +160,7 @@
         "drupal/views_field_view": "^1.0@beta",
         "drupal/views_infinite_scroll": "^2.0",
         "drupal/views_layout": "^1.2",
+        "drupal/xmlsitemap": "^1.4",
         "drush/drush": "^10.3",
         "npm-asset/imagesloaded": "^4.1",
         "npm-asset/masonry-layout": "^4.2",
@@ -173,6 +173,7 @@
         "drupal/core-dev": "^9",
         "drupal/custom_sql_migrate_source_plugin": "^1.1",
         "drupal/devel": "^4.1",
+        "drupal/devel_kint_extras": "^1.0",
         "drupal/migrate_devel": "^2",
         "drupal/migrate_plus": "^5.2",
         "drupal/migrate_source_csv": "^3.4",
@@ -288,6 +289,9 @@
           },
           "drupal/content_translation_redirect": {
             "3263317": "https://www.drupal.org/files/issues/2022-02-09/content-translation-redirect-all-bundles-3263317-3.patch"
+          },
+          "drupal/media_pdf_thumbnail": {
+            "3308857": "https://www.drupal.org/files/issues/2022-09-09/3308857-error-empty-images.patch"
           }
         }
     }

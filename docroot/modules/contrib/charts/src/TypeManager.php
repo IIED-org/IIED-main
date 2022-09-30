@@ -95,7 +95,7 @@ class TypeManager extends DefaultPluginManager {
 
     // Allow other modules to alter the definition list.
     $event = new TypesInfoEvent($definitions);
-    $this->eventDispatcher->dispatch(ChartsEvents::TYPE_INFO, $event);
+    $this->eventDispatcher->dispatch($event, ChartsEvents::TYPE_INFO);
     $definitions = $event->getTypes();
 
     return $definitions;

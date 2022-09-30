@@ -227,6 +227,10 @@ class SearchSubscriber extends AbstractPlugin implements EventSubscriberInterfac
     if (empty($derived_key)) {
       $derived_key = $this->getDerivedKey($env_id);
     }
+    // If the derived key still cannot be fetched, return false.
+    if (!$derived_key) {
+      return FALSE;
+    }
 
     return $hmac == hash_hmac('sha1', $nonce . $string, $derived_key);
 

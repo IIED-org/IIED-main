@@ -14,6 +14,7 @@ use Prophecy\Argument;
 
 /**
  * @coversDefaultClass \Drupal\acquia_search\PreferredSearchCore
+ * @coversDefaultClass \Drupal\acquia_search\PreferredSearchCore
  * @group Acquia Search Solr
  */
 class PreferredSearchCoreTest extends UnitTestCase {
@@ -35,7 +36,7 @@ class PreferredSearchCoreTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $state = $this->prophesize(State::class);
@@ -68,7 +69,7 @@ class PreferredSearchCoreTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function tearDown() {
+  protected function tearDown(): void {
     parent::tearDown();
     $container = new ContainerBuilder();
     \Drupal::setContainer($container);
@@ -126,6 +127,7 @@ class PreferredSearchCoreTest extends UnitTestCase {
     $core_service = new PreferredSearchCore(Storage::getIdentifier(), $ah_env, $sites_folder_name, $ah_db_role, $available_cores);
     $this->assertEquals([
       'ABC-12345.dev.database',
+      'ABC-12345.dev',
       'ABC-12345.dev.default',
     ], $core_service->getListOfPossibleCores());
     $this->assertEquals([
@@ -160,6 +162,7 @@ class PreferredSearchCoreTest extends UnitTestCase {
     $core_service = new PreferredSearchCore(Storage::getIdentifier(), $ah_env, $sites_folder_name, $ah_db_role, $available_cores);
     $this->assertEquals([
       'ABC-12345.prod.database',
+      'ABC-12345.prod',
       'ABC-12345.prod.default',
     ], $core_service->getListOfPossibleCores());
     $this->assertEquals([
@@ -293,7 +296,7 @@ class PreferredSearchCoreTest extends UnitTestCase {
     $available_cores = $this->getAvailableSearchCores();
     $core_service = new PreferredSearchCore(Storage::getIdentifier(), $ah_env, $sites_folder_name, $ah_db_role, $available_cores);
 
-    $expected = ['ABC-12345.dev.site_1_db', 'ABC-12345.dev.sitefolder1'];
+    $expected = ['ABC-12345.dev.site_1_db', 'ABC-12345.dev', 'ABC-12345.dev.sitefolder1'];
     $context = [
       'ah_env' => 'dev',
       'ah_db_role' => 'site_1_db',

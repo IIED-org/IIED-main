@@ -16,3 +16,13 @@ entity.cookie_category.collection:
   description: 'Administer cookie categories.'
   parent: eu_cookie_compliance
   weight: 99
+eu_cookie_compliance.toggle_cookie_settings_withdraw:
+  title: "Cookie settings"
+  description: "Toggle the cookie consent settings tray"
+  url: "internal:#sliding-popup"
+  menu_name: tools
+  options:
+    attributes:
+      onclick: "if (Drupal.eu_cookie_compliance) { Drupal.eu_cookie_compliance.toggleWithdrawBanner(); } return false;"
+      class:
+        - eu-cookie-compliance-toggle-withdraw-banner

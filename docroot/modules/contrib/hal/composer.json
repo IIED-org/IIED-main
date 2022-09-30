@@ -1,0 +1,9 @@
+{
+  "name": "drupal/hal",
+  "description": "Hypermedia Application Language (HAL)",
+  "type": "drupal-module",
+  "license": "GPL-2.0-or-later",
+  "require": {
+    "drupal/core": "^9"
+  }
+}

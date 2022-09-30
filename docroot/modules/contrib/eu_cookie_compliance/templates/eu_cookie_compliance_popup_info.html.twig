@@ -31,8 +31,13 @@
  * - privacy_settings_tab_label: Label text for the Privacy settings tab.
  * - withdraw_button_on_info_popup: Show the withdraw button on this popup.
  * - method: Chosen consent method.
+ * - olivero_primary_button_classes: Additional primary button classes that is only populated when
+ *   option to extend Olivero theme's styles is enabled.
+ * - olivero_secondary_button_classes: Additional secondary button classes that is only populated when
+ *   option to extend Olivero theme's styles is enabled.
  */
 #}
+
 {% if privacy_settings_tab_label %}
   <button type="button" class="eu-cookie-withdraw-tab">{{ privacy_settings_tab_label }}</button>
 {% endif %}
@@ -41,9 +46,12 @@
   'eu-cookie-compliance-banner-info',
   'eu-cookie-compliance-banner--' ~ method|clean_class,
 ] %}
-<div role="alertdialog" aria-labelledby="popup-text" {{ attributes.addClass(classes) }}>
+<div aria-labelledby="popup-text" {{ attributes.addClass(classes) }}>
   <div class="popup-content info eu-cookie-compliance-content">
-    <div id="popup-text" class="eu-cookie-compliance-message">
+    {% if close_button_enabled %}
+      <button class="eu-cookie-compliance-close-button">Close</button>
+    {% endif %}
+    <div id="popup-text" class="eu-cookie-compliance-message" role="document">
       {{ message }}
       {% if more_info_button %}
         <button type="button" class="find-more-button eu-cookie-compliance-more-button">{{ more_info_button }}</button>
@@ -55,7 +63,7 @@
         {% for key, category in cookie_categories %}
           <div class="eu-cookie-compliance-category">
             <div>
-              <input type="checkbox" name="cookie-categories" id="cookie-category-{{ key }}"
+              <input type="checkbox" name="cookie-categories" class="eu-cookie-compliance-category-checkbox" id="cookie-category-{{ key }}"
                      value="{{ key }}"
                      {% if category.checkbox_default_state in ['checked', 'required'] %} checked {% endif %}
                      {% if category.checkbox_default_state == 'required' %} disabled {% endif %} >
@@ -69,13 +77,16 @@
         {% if save_preferences_button_label %}
           <div class="eu-cookie-compliance-categories-buttons">
             <button type="button"
-                    class="eu-cookie-compliance-save-preferences-button">{{ save_preferences_button_label }}</button>
+                    class="eu-cookie-compliance-save-preferences-button {{ olivero_secondary_button_classes }}">{{ save_preferences_button_label }}</button>
           </div>
         {% endif %}
       </div>
     {% endif %}
 
     <div id="popup-buttons" class="eu-cookie-compliance-buttons{% if cookie_categories %} eu-cookie-compliance-has-categories{% endif %}">
+      {% if tertiary_button_label %}
+        <button type="button" class="{{ tertiary_button_class }}">{{ tertiary_button_label }}</button>
+      {% endif %}
       <button type="button" class="{{ primary_button_class }}">{{ agree_button }}</button>
       {% if secondary_button_label %}
         <button type="button" class="{{ secondary_button_class }}">{{ secondary_button_label }}</button>
