@@ -101,6 +101,7 @@ module:
   media_library: 0
   media_pdf_thumbnail: 0
   media_revisions_ui: 0
+  memcache: 0
   menu_link_content: 0
   menu_ui: 0
   merge_translations: 0
