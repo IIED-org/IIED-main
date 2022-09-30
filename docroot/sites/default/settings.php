@@ -830,6 +830,9 @@ $config['config_split.config_split.dev']['status'] = !$_env_is_prod;
 $config['config_split.config_split.live']['status'] = $_env_is_prod;
 $config['config_split.config_split.local']['status'] = FALSE;
 
+if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
+  $settings['cache']['default'] = 'cache.backend.memcache';
+}
 
 $settings['default_content_deploy_content_directory'] = $app_root . '/../content';
 
