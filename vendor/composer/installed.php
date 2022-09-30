@@ -3,7 +3,7 @@
         'name' => 'drupal/recommended-project',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'c6aaa282ff68a4845cd8c5a1d96ce8c2fc284d4f',
+        'reference' => '576d09a2a52bf12d6b163f142ad53d28c2283ef2',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -1292,6 +1292,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'drupal/memcache' => array(
+            'pretty_version' => '2.5.0',
+            'version' => '2.5.0.0',
+            'reference' => '8.x-2.5',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/memcache',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'drupal/merge_translations' => array(
             'pretty_version' => '1.1.0',
             'version' => '1.1.0.0',
@@ -1484,7 +1493,7 @@
         'drupal/recommended-project' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'c6aaa282ff68a4845cd8c5a1d96ce8c2fc284d4f',
+            'reference' => '576d09a2a52bf12d6b163f142ad53d28c2283ef2',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
