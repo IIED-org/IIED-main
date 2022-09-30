@@ -41,16 +41,17 @@ charts_default_settings:
     suffix: ''
     decimal_count: ''
     labels_rotation: '0'
-  highcharts_settings:
+  library_config:
     legend:
       layout: ''
       background_color: ''
-      border_width: 0
-      shadow: 0
+      border_width: '0'
       item_style:
         color: ''
         overflow: ''
-    exporting_library: 0
+      shadow: false
+    exporting_library: false
 advanced:
+  debug: false
   requirements:
     cdn: true
