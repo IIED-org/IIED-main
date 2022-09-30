@@ -277,6 +277,9 @@
           "drupal/responsive_menu": {
             "Add 'front' options to menu position":"https://www.drupal.org/files/issues/2022-06-20/responsive_menu-menuposition-3274889-3.diff"
           },
+	  "drupal/readmore_js": {
+            "Fix readmore_js to prevent scroll to top.":"https://git.drupalcode.org/issue/readmore_js-3312818/-/commit/67f2912296417d5a3db83045909323c73dcdd605.patch"
+          },
           "spatie/pdf-to-image": {
             "3221786": "https://www.drupal.org/files/issues/2021-12-03/remote-pdf-overlap-3221786-8.patch"
           },
