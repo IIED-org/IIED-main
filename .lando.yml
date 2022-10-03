@@ -21,6 +21,12 @@ services:
         - ../iied-d7/docroot/:/app/d7-files
     build_as_root:                                                                                                                                                                            
       - apt update && apt install libgmp-dev -y && docker-php-ext-install gmp
+  filesdb:
+    type: mysql
+    creds:
+      user: database
+      password: database
+      database: database
   d7db:
     type: mysql
     creds:
