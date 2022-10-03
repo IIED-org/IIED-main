@@ -5,25 +5,33 @@ dependencies:
   config:
     - filter.format.basic_html
     - filter.format.full_html
-    - filter.format.simple_html
     - media.type.document
     - media.type.image
     - node.type.article
     - node.type.page
     - node.type.project
     - node.type.publication
+    - taxonomy.vocabulary.collection
+    - taxonomy.vocabulary.global
     - taxonomy.vocabulary.list
     - taxonomy.vocabulary.organisation
     - taxonomy.vocabulary.person
     - taxonomy.vocabulary.tags
   module:
+    - block
+    - block_class
+    - charts
     - comment
+    - contact
     - content_translation
     - contextual
+    - draggableviews
     - eu_cookie_compliance
     - file
     - filter
     - form_mode_control
+    - layout_builder
+    - masquerade
     - media
     - media_revisions_ui
     - merge_translations
@@ -32,41 +40,54 @@ dependencies:
     - path
     - pathauto
     - publishcontent
-    - quickedit
+    - rabbit_hole
     - redirect
     - shortcut
     - system
     - taxonomy
     - toolbar
+    - view_unpublished
 id: manager
 label: Manager
-weight: -6
+weight: -5
 is_admin: null
 permissions:
   - 'access administration pages'
+  - 'access all charts'
   - 'access content'
   - 'access content overview'
   - 'access contextual links'
+  - 'access draggableviews'
   - 'access files overview'
-  - 'access in-place editing'
   - 'access media overview'
   - 'access shortcuts'
+  - 'access site in maintenance mode'
   - 'access site reports'
   - 'access taxonomy overview'
   - 'access toolbar'
   - 'access user profiles'
+  - access_all_form_modes
+  - 'administer block classes'
+  - 'administer blocks'
   - 'administer comment types'
   - 'administer comments'
+  - 'administer contact forms'
   - 'administer content translation'
   - 'administer media'
+  - 'administer menu'
   - 'administer nodes'
   - 'administer redirects'
-  - 'administer taxonomy'
   - 'administer url aliases'
+  - 'administer users'
+  - 'configure any layout'
+  - 'create and edit custom blocks'
   - 'create content translations'
   - 'create document media'
   - 'create image media'
+  - 'create media'
   - 'create publication content'
+  - 'create terms in collection'
+  - 'create terms in global'
   - 'create terms in list'
   - 'create terms in organisation'
   - 'create terms in person'
@@ -76,34 +97,35 @@ permissions:
   - 'delete all revisions'
   - 'delete any document media'
   - 'delete any image media'
-  - 'delete any publication content'
+  - 'delete any media'
   - 'delete content translations'
   - 'delete document media revisions'
   - 'delete image media revisions'
+  - 'delete media'
   - 'delete own document media'
   - 'delete own image media'
-  - 'delete own publication content'
   - 'delete publication revisions'
+  - 'delete terms in collection'
+  - 'delete terms in global'
   - 'delete terms in list'
   - 'delete terms in organisation'
+  - 'delete terms in person'
   - 'delete terms in tags'
   - 'display eu cookie compliance popup'
   - 'edit any article content'
   - 'edit any document media'
   - 'edit any image media'
-  - 'edit any page content'
-  - 'edit any project content'
   - 'edit any publication content'
-  - 'edit own article content'
   - 'edit own document media'
   - 'edit own image media'
-  - 'edit own page content'
-  - 'edit own project content'
   - 'edit own publication content'
+  - 'edit terms in collection'
+  - 'edit terms in global'
   - 'edit terms in list'
   - 'edit terms in organisation'
   - 'edit terms in person'
   - 'edit terms in tags'
+  - 'masquerade as any user'
   - 'merge_permissions admin'
   - 'notify of path changes'
   - 'publish any content'
@@ -111,30 +133,34 @@ permissions:
   - 'publish editable content'
   - 'publish editable node type publication'
   - 'publish own node type publication'
+  - 'rabbit hole administer media'
+  - 'rabbit hole administer node'
+  - 'rabbit hole administer taxonomy_term'
+  - 'rabbit hole bypass media'
+  - 'rabbit hole bypass node'
+  - 'rabbit hole bypass taxonomy_term'
   - 'revert all media revisions'
   - 'revert all revisions'
-  - 'revert article revisions'
   - 'revert document media revisions'
   - 'revert image media revisions'
-  - 'revert page revisions'
-  - 'revert project revisions'
   - 'revert publication revisions'
   - 'translate any entity'
-  - 'translate document media'
-  - 'translate publication node'
+  - 'translate editable entities'
+  - 'translate paragraph'
   - 'unpublish any content'
   - 'unpublish any node type publication'
   - 'unpublish editable content'
   - 'unpublish editable node type publication'
   - 'unpublish own node type publication'
+  - 'update any media'
   - 'update content translations'
+  - 'update media'
   - 'use  The form mode manager_admin linked to  node entity( publication )'
   - 'use text format basic_html'
   - 'use text format full_html'
-  - 'use text format simple_html'
   - 'view all media revisions'
   - 'view all revisions'
-  - 'view article revisions'
+  - 'view any unpublished content'
   - 'view document media revisions'
   - 'view image media revisions'
   - 'view media'

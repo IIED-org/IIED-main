@@ -1,0 +1,14 @@
+uuid: d23c3c29-7c87-4110-bbe7-e2085747cb0e
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.publications_editor
+  module:
+    - user
+id: user_remove_role_action.publications_editor
+label: 'Remove the Publications editor role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: publications_editor
