@@ -64,10 +64,10 @@ backend_config:
     api_host: 'https://api.sr-prod02.acquia.com'
     skip_schema_check: true
     scheme: http
-    host: s-1w1m0bhwu07-eu-west-1.sr-prod02.acquia.com
+    host: s7020-eu-west-1.sr-prod02.acquia.com
     port: 8983
-    path: /solr/AGHX-142716.test.irforum
-    core: AGHX-142716.test.irforum
+    path: /solr/AGHX-142716.prod.irforum
+    core: AGHX-142716.prod.irforum
     timeout: 5
     index_timeout: 5
     optimize_timeout: 10
