@@ -167,6 +167,19 @@ $databases['d7migrate']['default'] = [
   'collation' => 'utf8mb4_general_ci',
 ];
 
+// Migration database source for Drupal 7 migrations.
+$databases['filesdb']['default'] = [
+  'database' => 'database',
+  'username' => 'database',
+  'password' => 'database',
+  'host' => 'filesdb',
+  'port' => '3306',
+  'driver' => 'mysql',
+  'prefix' => '',
+  'collation' => 'utf8mb4_general_ci',
+];
+
+
 // Defining the pubs key as legacy migrations require this.
 $databases['pubs'] = $databases['d7migrate'];
 
