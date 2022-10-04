@@ -28,63 +28,59 @@ track:
 privacy:
   anonymizeip: true
 custom:
-  parameters:
-    dimension1:
-      type: dimension
-      name: Team
+  dimension:
+    1:
       value: '[node:field_team]'
-    dimension10:
-      type: dimension
-      name: 'Country focus'
-      value: '[node:field_area_list]'
-    dimension11:
-      type: dimension
-      name: Author
-      value: '[node:field_author_s_]'
-    dimension12:
-      type: dimension
-      name: 'Date published'
-      value: '[node:field_date_published]'
-    dimension13:
-      type: dimension
-      name: 'Content type'
+      index: 1
+    2:
       value: '[node:content-type]'
-    dimension14:
-      type: dimension
-      name: 'Date created'
-      value: '[node:created:custom:c]'
-    dimension2:
-      type: dimension
-      name: Theme
+      index: 2
+    3:
       value: '[node:field_theme_s_]'
-    dimension3:
-      type: dimension
-      name: 'Product code'
-      value: '[node:field_product_code_new]'
-    dimension4:
-      type: dimension
-      name: 'Project linked'
+      index: 3
+    5:
+      value: '[node:field_author_s_]'
+      index: 5
+    6:
       value: '[node:field_project]'
-    dimension5:
-      type: dimension
-      name: 'Department list'
+      index: 6
+    8:
+      value: '[node:created:custom:c]'
+      index: 8
+    9:
+      value: '[node:field_author_s_:0:entity:field_person_type]'
+      index: 9
+    10:
+      value: '[node:field_product_code_new:value]'
+      index: 10
+    11:
+      value: '[node:field_project:entity:url]'
+      index: 11
+    12:
       value: '[node:field_deptlist]'
-    dimension6:
-      type: dimension
-      name: Series
+      index: 12
+    13:
       value: '[node:field_series]'
-    dimension7:
-      type: dimension
-      name: Lists
+      index: 13
+    14:
       value: '[node:field_lists]'
-    dimension8:
-      type: dimension
-      name: WP/GET
-      value: '[node:field_reportagency1]'
-    dimension9:
-      type: dimension
-      name: 'Document type'
+      index: 14
+    15:
+      value: '[node:field_work_programme_global_enga]'
+      index: 15
+    16:
       value: '[node:field_document_type]'
+      index: 16
+    17:
+      value: '[node:field_area_list]'
+      index: 17
+    18:
+      value: '[node:field_author_s_]'
+      index: 18
+    19:
+      value: '[node:field_date_published]'
+      index: 19
+  metric: {  }
 codesnippet:
   create: {  }
   before: ''
@@ -92,3 +88,4 @@ codesnippet:
 translation_set: false
 cache: false
 debug: false
+premium: 0

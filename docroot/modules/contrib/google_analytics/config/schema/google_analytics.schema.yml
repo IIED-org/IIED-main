@@ -7,6 +7,9 @@ google_analytics.settings:
     account:
       type: string
       label: 'Web Property ID'
+    premium:
+      type: boolean
+      label: 'Premium account'
     domain_mode:
       type: integer
       label: 'What are you tracking?'
@@ -45,9 +48,6 @@ google_analytics.settings:
         mailto:
           type: boolean
           label: 'Track clicks on mailto links'
-        tel:
-          type: boolean
-          label: 'Track clicks on tel links'
         files:
           type: boolean
           label: 'Track downloads'
@@ -92,19 +92,29 @@ google_analytics.settings:
       type: mapping
       label: 'Custom variables'
       mapping:
-        parameters:
+        dimension:
           type: sequence
-          label: 'Custom Parameters'
+          label: 'Custom dimensions'
           sequence:
             type: mapping
-            label: 'Parameter'
+            label: 'Dimension'
             mapping:
-              type:
+              index:
+                type: integer
+                label: Index
+              value:
                 type: string
-                label: type
-              name:
-                type: string
-                label: Name
+                label: Value
+        metric:
+          type: sequence
+          label: 'Custom metrics'
+          sequence:
+            type: mapping
+            label: 'Metric'
+            mapping:
+              index:
+                type: integer
+                label: Index
               value:
                 type: string
                 label: Value
@@ -114,10 +124,10 @@ google_analytics.settings:
       mapping:
         create:
           type: sequence
-          label: 'Parameters'
+          label: 'Create only fields'
           sequence:
             type: ignore
-            label: 'Parameter'
+            label: 'Create field'
         before:
           type: string
           label: 'Code snippet (before)'
