@@ -64,14 +64,14 @@ AddEncoding gzip svgz
   # Determine whether environment is production and serve different robots.txt
   RewriteCond %{ENV:AH_SITE_ENVIRONMENT} !prod
   RewriteRule ^robots\.txt$ robots-noindex.txt [L]
-
+  
   # Rewrite pubs.iied.org to www.iied.org/publications
   RewriteCond %{HTTP_HOST} ^pubs\.iied\.org$
-  RewriteRule ^$ https://www.iied.org/publications [R=301]
+  RewriteRule ^$ https://www.iied.org/publications [L,R=301]
 
   # Rewrite pubs.iied.org/anything to www.iied.org/anything
   RewriteCond %{HTTP_HOST} ^pubs\.iied\.org
-  RewriteRule ^(.*)$ https://www.iied.org/$1 [R=301]
+  RewriteRule ^(.*)$ https://www.iied.org/$1 [L,R=301]
 
   # Redirect old pubs links before setting https
   RewriteCond %{QUERY_STRING} ^o=(.*)$
