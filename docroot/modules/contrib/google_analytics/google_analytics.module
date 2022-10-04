@@ -229,7 +229,7 @@ function google_analytics_page_attachments(array &$page) {
           };
 
           // Add variables to tracker.
-          $custom_var .= 'ga("set", ' . Json::encode($google_analytics_custom_type . $google_analytics_custom_var['index']) . ', ' . Json::encode($google_analytics_custom_var['value']) . ');';
+          $custom_var .= 'ga("set", ' . Json::encode($google_analytics_custom_type . $google_analytics_custom_var['index']) . ', ' . Json::encode(strip_tags($google_analytics_custom_var['value'])) . ');';
         }
       }
     }
