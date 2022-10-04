@@ -16,10 +16,11 @@ services:
         DRUSH_OPTIONS_ROOT: '/app/docroot'
         DRUSH_OPTIONS_URI: 'https://iied-main.lndo.site'
         # Support debugging Drush with XDEBUG. Use lando drush to debug.
+        XDEBUG_SESSION_START: lando
         PHP_IDE_CONFIG: "serverName=localhost"
       volumes:
         - ../iied-d7/docroot/:/app/d7-files
-    build_as_root:                                                                                                                                                                            
+    build_as_root:
       - apt update && apt install libgmp-dev -y && docker-php-ext-install gmp
   filesdb:
     type: mysql
@@ -76,4 +77,4 @@ tooling:
     service: appserver
     description: Update Imagick policy for PDF
     cmd: sed -i 's/<policy domain="coder" rights="none" pattern="PDF" \/>/<policy domain="coder" rights="read|write" pattern="PDF" \/>/g' /etc/ImageMagick-6/policy.xml
-    user: root 
+    user: root
