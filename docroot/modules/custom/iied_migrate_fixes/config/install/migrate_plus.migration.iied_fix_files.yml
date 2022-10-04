@@ -1,0 +1,62 @@
+uuid: 528e8796-0a5a-4867-b757-2b7646f5a760
+langcode: en
+status: true
+dependencies: {  }
+id: iied_fix_files
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 9'
+  - Files
+migration_group: iied_migrate_fixes
+label: 'IIED fix files'
+source:
+  plugin: fix_iied_files
+  key: filesdb
+  scheme: public
+  constants:
+    source_base_path: /app/d7-files
+process:
+  filename:
+    -
+      plugin: get
+      source: filename
+  source_full_path:
+    -
+      plugin: concat
+      delimiter: /
+      source:
+        - constants/source_base_path
+        - filepath
+    -
+      plugin: urlencode
+  uri:
+    -
+      plugin: get
+      source: uri
+  filemime:
+    -
+      plugin: get
+      source: filemime
+  status:
+    -
+      plugin: get
+      source: status
+  created:
+    -
+      plugin: get
+      source: timestamp
+  changed:
+    -
+      plugin: get
+      source: changed
+  uid:
+    -
+      plugin: default_value
+      default_value: '1'
+destination:
+  plugin: 'entity:file'
+migration_dependencies:
+  required: {  }
+  optional: {  }
