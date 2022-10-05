@@ -6,7 +6,6 @@ dependencies:
     - field.storage.node.field_date_published
     - field.storage.node.field_product_code_new
     - node.type.publication
-    - taxonomy.vocabulary.theme
     - user.role.administrator
     - user.role.editor
     - user.role.manager
@@ -15,7 +14,6 @@ dependencies:
     - computed_field
     - datetime
     - node
-    - taxonomy
     - user
     - views_autocomplete_filters
 _core:
@@ -242,6 +240,7 @@ display:
     display_plugin: block
     position: 1
     display_options:
+      enabled: false
       display_extenders: {  }
     cache_metadata:
       max-age: -1
@@ -257,6 +256,7 @@ display:
     display_plugin: block
     position: 2
     display_options:
+      enabled: false
       title: 'My publications'
       fields:
         title:
@@ -944,6 +944,7 @@ display:
     display_plugin: block
     position: 2
     display_options:
+      enabled: false
       title: 'Dashboard all publications'
       fields:
         title:
@@ -2433,7 +2434,7 @@ display:
           plugin_id: text
           empty: false
           content:
-            value: "<div id=\"block-gin-local-actions\">\r\n        <ul class=\"local-actions\">\r\n<li class=\"local-actions__item\"><a href=\"/node/add/publication\" class=\"button button--action button--primary\" data-drupal-link-system-path=\"node/add\">Add publication</a></li>\r\n    </ul>\r\n  </div>"
+            value: "<div style=\"position:relative;\">\r\n<div id=\"block-gin-local-actions\" style=\"position: absolute; right: 20px; top: 20px;\">\r\n        <ul class=\"local-actions\">\r\n<li class=\"local-actions__item\"><a href=\"/node/add/publication\" class=\"button button--action button--primary\" data-drupal-link-system-path=\"node/add\">Add publication</a></li>\r\n    </ul>\r\n  </div>\r\n</div>"
             format: full_html
           tokenize: false
       footer: {  }
@@ -3115,27 +3116,27 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        field_theme_s__target_id:
-          id: field_theme_s__target_id
-          table: node__field_theme_s_
-          field: field_theme_s__target_id
+        field_product_code_new_value:
+          id: field_product_code_new_value
+          table: node__field_product_code_new
+          field: field_product_code_new_value
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: taxonomy_index_tid
-          operator: or
-          value: {  }
+          plugin_id: views_autocomplete_filters_string
+          operator: contains
+          value: ''
           group: 1
           exposed: true
           expose:
-            operator_id: field_theme_s__target_id_op
-            label: Theme
+            operator_id: field_product_code_new_value_op
+            label: 'Product code'
             description: ''
             use_operator: false
-            operator: field_theme_s__target_id_op
+            operator: field_product_code_new_value_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: field_theme_s__target_id
+            identifier: field_product_code_new_value
             required: false
             remember: false
             multiple: false
@@ -3146,7 +3147,14 @@ display:
               editor: '0'
               manager: '0'
               administrator: '0'
-            reduce: false
+            placeholder: ''
+            autocomplete_filter: 0
+            autocomplete_min_chars: '0'
+            autocomplete_items: '10'
+            autocomplete_field: field_product_code_new
+            autocomplete_raw_suggestion: 1
+            autocomplete_raw_dropdown: 1
+            autocomplete_dependent: 0
           is_grouped: false
           group_info:
             label: ''
@@ -3159,12 +3167,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          reduce_duplicates: false
-          vid: theme
-          type: select
-          hierarchy: false
-          limit: true
-          error_message: true
         status:
           id: status
           table: node_field_data
@@ -3397,7 +3399,6 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user
         - 'user.node_grants:view'
         - user.roles
       tags:
