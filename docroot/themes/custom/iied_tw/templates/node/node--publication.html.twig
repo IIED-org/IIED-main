@@ -89,11 +89,10 @@
           </div>
         </nav>
         <h1 class="mb-6 text-4xl">{{ node.label }}</h1>
-        <div class="flex mb-4">
+        <div class="mb-4">
           {{ content.field_author_s_}} 
           {% if node.field_editor_s_.value %}
             {% if node.field_author_s_.value %}
-            ;&nbsp;
             {% endif %}
             {{ content.field_editor_s_ }} 
             {% if node.field_editor_s_[1].value %}
@@ -104,7 +103,6 @@
           {% endif %}
           {% if node.field_translator.value %} 
             {% if content.field_editor_s_ is not empty %}
-            ;&nbsp;
             {% endif %}
           {{ content.field_translator }}&nbsp;(translator)
           {% endif %}
