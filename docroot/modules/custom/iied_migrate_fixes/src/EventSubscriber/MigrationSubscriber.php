@@ -6,6 +6,7 @@ use Drupal\migrate\Event\MigrateEvents;
 use Drupal\migrate\Event\MigrateImportEvent;
 use Drupal\migrate\Event\MigratePostRowSaveEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Drupal\Core\Path\AliasManager;
 
 /**
  * Class MigrationSubscriber.
@@ -37,8 +38,6 @@ class MigrationSubscriber implements EventSubscriberInterface {
    */
   public function onMigratePreImport(MigrateImportEvent $event) {
     $migration_id = $event->getMigration()->getBaseId();
-
-    $event->logMessage('We got this far.');
   }
 
 
@@ -64,7 +63,7 @@ class MigrationSubscriber implements EventSubscriberInterface {
 
     $row = $event->getRow();
     $original_media_entity_id = $row->getSourceProperty('entity_id');
-
+    $original_media_entity_uri = $row->getSourceProperty('uri');
     $ids = $event->getDestinationIdValues();
     $updated_file_id =  $ids [0];
 
@@ -77,8 +76,20 @@ class MigrationSubscriber implements EventSubscriberInterface {
     ->condition('entity_id', $original_media_entity_id )
     ->execute();
 
+    // Look up the original node or entity:
+    $query = $connection->select('node__field_media', 'nfm');
+    $query->fields('nfm');
+    $query->condition('field_media_target_id', $original_media_entity_id);
+    $results = $query->execute();
+    $node_path = '[undefined]';
+    $alias = '[undefined]';
+    foreach ($results as $result) {
+      $node_path = '/node/' . $result->entity_id;
+      $alias = \Drupal::service('path_alias.manager')->getAliasByPath('/node/' . $result->entity_id);
+    }
 
-    $migration_id = $event->getMigration()->getBaseId();
+    // Log a message.
+    $event->logMessage("$num_updated media entity updated. Entity ID: $original_media_entity_id URI: $original_media_entity_uri. The node that references this media entity is $node_path or $alias .");
   }
 
 }
