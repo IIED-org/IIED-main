@@ -21,7 +21,7 @@ class DependencyRemovalTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'entity_test',
     'search_api_autocomplete',
     'search_api_autocomplete_test',
@@ -50,7 +50,7 @@ class DependencyRemovalTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Do not use a batch for tracking the initial items after creating an
@@ -64,7 +64,6 @@ class DependencyRemovalTest extends KernelTestBase {
     $this->installEntitySchema('search_api_task');
     $this->installEntitySchema('user');
     $this->installSchema('search_api', ['search_api_item']);
-    $this->installSchema('system', ['key_value_expire']);
     $this->installConfig('search_api');
     $this->installConfig('search_api_autocomplete_test');
 

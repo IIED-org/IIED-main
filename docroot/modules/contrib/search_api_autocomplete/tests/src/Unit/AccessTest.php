@@ -32,14 +32,14 @@ class AccessTest extends UnitTestCase {
   /**
    * The search entity used in this test.
    *
-   * @var \Drupal\search_api_autocomplete\SearchInterface|\PHPUnit_Framework_MockObject_MockObject
+   * @var \Drupal\search_api_autocomplete\SearchInterface|\PHPUnit\Framework\MockObject\MockObject
    */
   protected $search;
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $element_info = $this->createMock(ElementInfoManagerInterface::class);
@@ -96,7 +96,7 @@ class AccessTest extends UnitTestCase {
       $this->search->method('getIndex')->willReturn($index);
     }
 
-    /** @var \Drupal\Core\Session\AccountInterface|\PHPUnit_Framework_MockObject_MockObject $account */
+    /** @var \Drupal\Core\Session\AccountInterface|\PHPUnit\Framework\MockObject\MockObject $account */
     $account = $this->createMock(AccountInterface::class);
     $permission = 'use search_api_autocomplete for ' . $this->search->id();
     $account->method('hasPermission')->willReturnMap([

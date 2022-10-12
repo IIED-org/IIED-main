@@ -8,8 +8,7 @@ use Drupal\term_merge\TermMergeEventNames;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * This event subscriber prints a message to the screen when
- * some terms are merged.
+ * Prints a message to the screen when some terms are merged.
  */
 class TermsMergedEventSubscriber implements EventSubscriberInterface {
 

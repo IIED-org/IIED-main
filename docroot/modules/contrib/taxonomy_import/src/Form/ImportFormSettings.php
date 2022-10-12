@@ -33,7 +33,7 @@ class ImportFormSettings extends ConfigFormBase {
    */
   protected function getEditableConfigNames() {
     return [
-      'import_taxonomy.config',
+      'taxonomy_import.config',
     ];
   }
 
@@ -41,21 +41,21 @@ class ImportFormSettings extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-	  return 'import_taxonomy_settings_form';
+    return 'taxonomy_import_settings_form';
   }
 
   /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $config = $this->config('import_taxonomy.config');
+    $config = $this->config('taxonomy_import.config');
     $form['file_extensions'] = [
       '#type' => 'textfield',
       '#size' => 40,
       '#title' => $this->t('Allowed file extensions'),
       '#required' => TRUE,
       '#default_value' => $config->get('file_extensions') ?? static::DEFAULT_FILE_EXTENSION,
-	    '#description' => t('Extensions of files.'),
+      '#description' => t('Extensions of files.'),
     ];
     $form['file_max_size'] = [
       '#type' => 'number',
@@ -78,10 +78,10 @@ class ImportFormSettings extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $this->configFactory->getEditable('import_taxonomy.config')
+    $this->configFactory->getEditable('taxonomy_import.config')
       ->set('file_extensions', $form_state->getValue('file_extensions'))
       ->save();
-    $this->configFactory->getEditable('import_taxonomy.config')
+    $this->configFactory->getEditable('taxonomy_import.config')
       ->set('file_max_size', $form_state->getValue('file_max_size'))
       ->save();
 

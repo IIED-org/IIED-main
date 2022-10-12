@@ -24,7 +24,10 @@ class IntegrationTest extends TermMergeTestBase {
   public function setUp(): void {
     parent::setUp();
 
-    $permissions = ['merge taxonomy terms', 'edit terms in ' . $this->vocabulary->id()];
+    $permissions = [
+      'merge taxonomy terms',
+      'edit terms in ' . $this->vocabulary->id(),
+    ];
     $this->user = $this->drupalCreateUser($permissions);
     $this->drupalLogin($this->user);
   }

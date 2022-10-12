@@ -22,92 +22,51 @@
   Drupal.behaviors.euCookieCompliancePopup = {
     attach: function (context) {
       if (typeof drupalSettings.eu_cookie_compliance !== 'undefined') {
-        if (typeof $('body').once !== 'undefined') {
-          $(drupalSettings.eu_cookie_compliance.containing_element).once('eu-cookie-compliance').each(function (element) {
-
-            // Initialize internal variables.
-            _euccCurrentStatus = self.getCurrentStatus();
-            _euccSelectedCategories = self.getAcceptedCategories();
-            // If configured, check JSON callback to determine if in EU.
-            if (drupalSettings.eu_cookie_compliance.popup_eu_only_js) {
-              if (Drupal.eu_cookie_compliance.showBanner()) {
-                var url = drupalSettings.path.baseUrl + drupalSettings.path.pathPrefix + 'eu-cookie-compliance-check';
-                var data = {};
-                $.getJSON(url, data, function (data) {
-                  // If in the EU, show the compliance banner.
-                  if (data.in_eu) {
-                    Drupal.eu_cookie_compliance.execute();
-                  }
-
-                  // If not in EU, set an agreed cookie automatically.
-                  else {
-                    Drupal.eu_cookie_compliance.setStatus(cookieValueAgreed);
-                    // Set the geoip_match to false so it can be used elsewhere.
-                    drupalSettings.eu_cookie_compliance.geoip_match = false;
-                    if (!euCookieComplianceHasLoadedScripts && typeof euCookieComplianceLoadScripts === "function") {
-                      euCookieComplianceLoadScripts();
-                    }
-                    // Also set all the categories as agreed if applicable, and load
-                    // scripts.
-                    if (drupalSettings.eu_cookie_compliance.method === 'categories') {
-                      var categories = drupalSettings.eu_cookie_compliance.cookie_categories;
-                      Drupal.eu_cookie_compliance.setAcceptedCategories(categories);
-                      Drupal.eu_cookie_compliance.loadCategoryScripts(categories);
-                    }
-                  }
-                });
-              }
-            }
-
-            // Otherwise, fallback to standard behavior which is to render the banner.
-            else if (!drupalSettings.eu_cookie_compliance.hide_the_banner) {
-              Drupal.eu_cookie_compliance.execute();
-            }
-            $(this).addClass('eu-cookie-compliance-status-' + Drupal.eu_cookie_compliance.getCurrentStatus());
-          });
+        const element = document.querySelector(drupalSettings.eu_cookie_compliance.containing_element);
+        if (!element.getAttribute('data-eu-cookie-compliance-once')) {
+          element.setAttribute('data-eu-cookie-compliance-once', 'true');
+        } else {
+          return;
         }
-        else {
-          const elements = once('eu-cookie-compliance', drupalSettings.eu_cookie_compliance.containing_element, context);
-          elements.forEach(function (element) {
-
-            // Initialize internal variables.
-            _euccCurrentStatus = self.getCurrentStatus();
-            _euccSelectedCategories = self.getAcceptedCategories();
-            // If configured, check JSON callback to determine if in EU.
-            if (drupalSettings.eu_cookie_compliance.popup_eu_only_js) {
-              if (Drupal.eu_cookie_compliance.showBanner()) {
-                var url = drupalSettings.path.baseUrl + drupalSettings.path.pathPrefix + 'eu-cookie-compliance-check';
-                var data = {};
-                $.getJSON(url, data, function (data) {
-                  // If in the EU, show the compliance banner.
-                  if (data.in_eu) {
-                    Drupal.eu_cookie_compliance.execute();
-                  }
-
-                  // If not in EU, set an agreed cookie automatically.
-                  else {
-                    Drupal.eu_cookie_compliance.setStatus(cookieValueAgreed);
-                    // Set the geoip_match to false so it can be used elsewhere.
-                    drupalSettings.eu_cookie_compliance.geoip_match = false;
-                    // Also set all the categories as agreed if applicable, and load
-                    // scripts.
-                    if (drupalSettings.eu_cookie_compliance.method === 'categories') {
-                      var categories = drupalSettings.eu_cookie_compliance.cookie_categories;
-                      Drupal.eu_cookie_compliance.setAcceptedCategories(categories);
-                      Drupal.eu_cookie_compliance.loadCategoryScripts(categories);
-                    }
-                  }
-                });
+        // Initialize internal variables.
+        _euccCurrentStatus = self.getCurrentStatus();
+        _euccSelectedCategories = self.getAcceptedCategories();
+        // If configured, check JSON callback to determine if in EU.
+        if (drupalSettings.eu_cookie_compliance.popup_eu_only_js) {
+          if (Drupal.eu_cookie_compliance.showBanner()) {
+            var url = drupalSettings.path.baseUrl + drupalSettings.path.pathPrefix + 'eu-cookie-compliance-check';
+            var data = {};
+            $.getJSON(url, data, function (data) {
+              // If in the EU, show the compliance banner.
+              if (data.in_eu) {
+                Drupal.eu_cookie_compliance.execute();
               }
-            }
 
-            // Otherwise, fallback to standard behavior which is to render the banner.
-            else if (!drupalSettings.eu_cookie_compliance.hide_the_banner) {
-              Drupal.eu_cookie_compliance.execute();
-            }
-            $(element).addClass('eu-cookie-compliance-status-' + Drupal.eu_cookie_compliance.getCurrentStatus());
-          });
+              // If not in EU, set an agreed cookie automatically.
+              else {
+                Drupal.eu_cookie_compliance.setStatus(cookieValueAgreed);
+                // Set the geoip_match to false so it can be used elsewhere.
+                drupalSettings.eu_cookie_compliance.geoip_match = false;
+                if (!euCookieComplianceHasLoadedScripts && typeof euCookieComplianceLoadScripts === "function") {
+                  euCookieComplianceLoadScripts();
+                }
+                // Also set all the categories as agreed if applicable, and load
+                // scripts.
+                if (drupalSettings.eu_cookie_compliance.method === 'categories') {
+                  var categories = drupalSettings.eu_cookie_compliance.cookie_categories;
+                  Drupal.eu_cookie_compliance.setAcceptedCategories(categories);
+                  Drupal.eu_cookie_compliance.loadCategoryScripts(categories);
+                }
+              }
+            });
+          }
         }
+
+        // Otherwise, fallback to standard behavior which is to render the banner.
+        else if (!drupalSettings.eu_cookie_compliance.hide_the_banner) {
+          Drupal.eu_cookie_compliance.execute();
+        }
+        $(element).addClass('eu-cookie-compliance-status-' + Drupal.eu_cookie_compliance.getCurrentStatus());
       }
     },
   };
@@ -218,6 +177,7 @@
       Drupal.eu_cookie_compliance.attachWithdrawEvents();
       if (_euccCurrentStatus === cookieValueAgreedShowThankYou || _euccCurrentStatus === cookieValueAgreed) {
         $('.eu-cookie-withdraw-button').removeClass('visually-hidden');
+        $('.eu-cookie-compliance-reject-button').addClass('visually-hidden');
       }
     }
   }
@@ -656,6 +616,7 @@
       Drupal.eu_cookie_compliance.attachWithdrawEvents();
       if (_euccCurrentStatus === cookieValueAgreedShowThankYou || _euccCurrentStatus === cookieValueAgreed) {
         $('.eu-cookie-withdraw-button').removeClass('visually-hidden');
+        $('.eu-cookie-compliance-reject-button').addClass('visually-hidden');
       }
     }
   };

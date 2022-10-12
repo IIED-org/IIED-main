@@ -7,7 +7,7 @@ dependencies:
 core_version_requirement: ^9
 hidden: true
 
-# Information added by Drupal.org packaging script on 2021-12-20
-version: '2.0.0-beta1'
+# Information added by Drupal.org packaging script on 2022-10-07
+version: '2.0.0-beta4'
 project: 'term_merge'
-datestamp: 1640027767
+datestamp: 1665158258

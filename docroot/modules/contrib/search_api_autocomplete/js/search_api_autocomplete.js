@@ -3,7 +3,7 @@
  * Expands the behaviour of the default autocompletion.
  */
 
-(function ($, Drupal, drupalSettings) {
+(function ($, Drupal, drupalSettings, once) {
 
   'use strict';
 
@@ -57,10 +57,9 @@
   Drupal.behaviors.searchApiAutocomplete = {
     attach: function (context, settings) {
       // Find all our fields with autocomplete settings.
-      $(context)
-        .find('.ui-autocomplete-input[data-search-api-autocomplete-search]')
-        .once('search-api-autocomplete')
-        .each(function () {
+      $(once('search-api-autocomplete',
+        '.ui-autocomplete-input[data-search-api-autocomplete-search]',
+        context)).each(function () {
           var uiAutocomplete = $(this).data('ui-autocomplete');
           if (!uiAutocomplete) {
             return;
@@ -100,4 +99,4 @@
 
   Drupal.SearchApiAutocomplete = autocomplete;
 
-})(jQuery, Drupal, drupalSettings);
+})(jQuery, Drupal, drupalSettings, once);

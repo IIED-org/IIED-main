@@ -2,7 +2,7 @@
 
 namespace Drupal\Tests\search_api_autocomplete\FunctionalJavascript;
 
-use Behat\Mink\Driver\GoutteDriver;
+use Behat\Mink\Driver\BrowserKitDriver;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api_autocomplete\Entity\Search;
 use Drupal\search_api_autocomplete\Tests\TestsHelper;
@@ -22,7 +22,7 @@ class IntegrationTest extends IntegrationTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'search_api_autocomplete_test',
   ];
 
@@ -57,7 +57,7 @@ class IntegrationTest extends IntegrationTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $permissions = [
@@ -275,9 +275,9 @@ class IntegrationTest extends IntegrationTestBase {
     $suggestion_elements[$keys]->click();
     $this->logPageChange();
     $keys = urlencode($keys);
-    // @todo Replace with $assert_session->addressMatches() (and prepend "^")
-    //   once we depend on Drupal 9.1+.
-    $this->assertRegExp("#/search-api-autocomplete-test\\?(?:.*&)?keys=$keys#", $this->getUrl());
+    // We cannot use $assert_session->addressMatches() as it is using clean URLs
+    // and we therefore cannot test the part of the URL after the path.
+    $this->assertMatchesRegularExpression("#/search-api-autocomplete-test\\?(?:.*&)?keys=$keys#", $this->getUrl());
 
     // Check that autocomplete in the "Name" filter works, too, and that it sets
     // the correct fields on the query.
@@ -586,7 +586,7 @@ class IntegrationTest extends IntegrationTestBase {
   protected function logPageChange($url = NULL, $method = 'GET') {
     $session = $this->getSession();
     $driver = $session->getDriver();
-    if (!$this->htmlOutputEnabled || $driver instanceof GoutteDriver) {
+    if (!$this->htmlOutputEnabled || $driver instanceof BrowserKitDriver) {
       return;
     }
     $current_url = $session->getCurrentUrl();

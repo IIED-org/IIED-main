@@ -1,3 +1,18 @@
+Search API Autocomplete 1.7 (2022-10-05):
+-----------------------------------------
+- #3262214 by Lal_, japerry, balintpekker, drunken monkey, Berdir: Fixed
+  several problems with Drupal 10 compatibility.
+- #2948566 by stephenrodrigo@yahoo.com, drunken monkey, tvhung: Added an option
+  for Live Results to suggest result labels as keys.
+- #3248581 by drunken monkey: Fixed parse mode used for Search API Pages
+  autocomplete.
+- #3251257 by paulocs, drunken monkey: Fixed search_api requirement in
+  composer.json.
+- #3268954 by drunken monkey, kimberlly_amaral: Changed indents in
+  composer.json to 4 spaces.
+- #3257941 by drunken monkey, mkalkbrenner: Added notes about the Search API
+  Solr Autocomplete module.
+
 Search API Autocomplete 1.6 (2022-01-12):
 -----------------------------------------
 - #3238635 by drunken monkey, mkalkbrenner: Deprecated

@@ -26,8 +26,8 @@ function taxonomy_import_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
     case 'help.page.taxonomy_import':
       global $base_url;
-      $sample_csv = $base_url . '/' . drupal_get_path('module', 'taxonomy_import') . '/CSV_Test.csv';
-      $sample_xml = $base_url . '/' . drupal_get_path('module', 'taxonomy_import') . '/XML_Test.xml';
+      $sample_csv = $base_url . '/' . \Drupal::service('extension.list.module')->getPath('taxonomy_import') . '/CSV_Test.csv';
+      $sample_xml = $base_url . '/' . \Drupal::service('extension.list.module')->getPath('taxonomy_import') . '/XML_Test.xml';
       $output = '<h3>' . t('Introduction') . '</h3>';
       $output .= '<p>' . t('This module can be used to create taxonomy terms by importing data from
       CSV or XML file to a specified Vocabulary.') . '</p>';

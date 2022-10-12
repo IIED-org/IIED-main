@@ -4,18 +4,21 @@ namespace Drupal\search_api_autocomplete\Form;
 
 use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\RedirectDestinationInterface;
 use Drupal\Core\Url;
 use Drupal\search_api\IndexInterface;
+use Drupal\search_api\SearchApiException;
 use Drupal\search_api_autocomplete\Entity\Search;
 use Drupal\search_api_autocomplete\Search\SearchPluginInterface;
 use Drupal\search_api_autocomplete\Search\SearchPluginManager;
 use Drupal\search_api_autocomplete\Utility\PluginHelperInterface;
+use Drupal\search_api_solr\SolrBackendInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Messenger\MessengerInterface;
 
 /**
  * Defines the overview of all search autocompletion configurations.
@@ -65,6 +68,13 @@ class IndexOverviewForm extends FormBase {
   protected $messenger;
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * Creates a new AutocompleteSearchAdminOverview instance.
    *
    * @param \Drupal\Component\Plugin\PluginManagerInterface $suggester_manager
@@ -79,14 +89,17 @@ class IndexOverviewForm extends FormBase {
    *   The redirect destination.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    */
-  public function __construct(PluginManagerInterface $suggester_manager, SearchPluginManager $search_plugin_manager, PluginHelperInterface $plugin_helper, EntityTypeManagerInterface $entity_type_manager, RedirectDestinationInterface $redirect_destination, MessengerInterface $messenger) {
+  public function __construct(PluginManagerInterface $suggester_manager, SearchPluginManager $search_plugin_manager, PluginHelperInterface $plugin_helper, EntityTypeManagerInterface $entity_type_manager, RedirectDestinationInterface $redirect_destination, MessengerInterface $messenger, ModuleHandlerInterface $module_handler) {
     $this->suggesterManager = $suggester_manager;
     $this->searchPluginManager = $search_plugin_manager;
     $this->pluginHelper = $plugin_helper;
     $this->entityTypeManager = $entity_type_manager;
     $this->redirectDestination = $redirect_destination;
     $this->messenger = $messenger;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -99,7 +112,8 @@ class IndexOverviewForm extends FormBase {
       $container->get('search_api_autocomplete.plugin_helper'),
       $container->get('entity_type.manager'),
       $container->get('redirect.destination'),
-      $container->get('messenger')
+      $container->get('messenger'),
+      $container->get('module_handler'),
     );
   }
 
@@ -114,6 +128,20 @@ class IndexOverviewForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, IndexInterface $search_api_index = NULL) {
+    try {
+      // Display hint about using the new Search API Solr Autocomplete module.
+      if (interface_exists(SolrBackendInterface::class)
+          && $search_api_index->hasValidServer()
+          && $search_api_index->getServerInstance()->getBackend() instanceof SolrBackendInterface
+          && version_compare(SolrBackendInterface::SEARCH_API_SOLR_SCHEMA_VERSION, '4.2.5', '>=')
+          && !$this->moduleHandler->moduleExists('search_api_solr_autocomplete')) {
+        $this->messenger->addWarning($this->t('When using a Solr server as the search backend, it is recommended to enable the "Search API Solr Autocomplete" module for improved autocomplete functionality.'));
+      }
+    }
+    catch (SearchApiException $e) {
+      // Ignore here, will cause enough problems elsewhere.
+    }
+
     $form_state->set('index', $search_api_index);
     $index_id = $search_api_index->id();
 

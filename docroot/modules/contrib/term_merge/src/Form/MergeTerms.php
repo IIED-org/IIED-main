@@ -5,6 +5,7 @@ namespace Drupal\term_merge\Form;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element\Checkboxes;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\taxonomy\TermStorageInterface;
 use Drupal\taxonomy\VocabularyInterface;
@@ -79,18 +80,15 @@ class MergeTerms extends FormBase {
 
   /**
    * {@inheritdoc}
-   *
-   * @SuppressWarnings(camelCase)
    */
   public function buildForm(array $form, FormStateInterface $form_state, VocabularyInterface $taxonomy_vocabulary = NULL) {
     $this->vocabulary = $taxonomy_vocabulary;
 
     $form['terms'] = [
-      '#type' => 'select',
+      '#type' => 'checkboxes',
       '#title' => $this->t('Terms to merge'),
       '#options' => $this->getTermOptions($taxonomy_vocabulary),
-      '#empty_option' => $this->t('Select two or more terms to merge together'),
-      '#multiple' => TRUE,
+      '#description' => $this->t('Select two or more terms to merge together'),
       '#required' => TRUE,
     ];
 
@@ -121,7 +119,7 @@ class MergeTerms extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $selected_terms = $form_state->getValue('terms');
+    $selected_terms = Checkboxes::getCheckedCheckboxes($form_state->getValue('terms'));
 
     $term_store = $this->tempStoreFactory->get('term_merge');
     $term_store->set('terms', $selected_terms);
@@ -153,7 +151,7 @@ class MergeTerms extends FormBase {
    * @return string[]
    *   An array of taxonomy term labels keyed by their id.
    */
-  private function getTermOptions(VocabularyInterface $vocabulary) {
+  protected function getTermOptions(VocabularyInterface $vocabulary) {
     $options = [];
 
     $terms = $this->termStorage->loadByProperties(['vid' => $vocabulary->id()]);
@@ -161,7 +159,8 @@ class MergeTerms extends FormBase {
       $options[$term->id()] = $term->label();
     }
 
+    asort($options);
+
     return $options;
   }
-
 }

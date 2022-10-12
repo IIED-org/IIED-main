@@ -39,7 +39,7 @@ class TermMerger implements TermMergerInterface {
    *
    * @var \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher
    */
-  private ContainerAwareEventDispatcher $dispatcher;
+  protected ContainerAwareEventDispatcher $dispatcher;
 
   /**
    * TermMerger constructor.
@@ -122,10 +122,10 @@ class TermMerger implements TermMergerInterface {
   /**
    * Asserts that all terms have the same vocabulary.
    *
-   * @param \Drupal\taxonomy\TermInterface[] $termsToAssert
+   * @param \Drupal\taxonomy\TermInterface[] $terms_to_assert
    *   The array to assert.
    */
-  private function assertAllTermsHaveSameVocabulary(array $terms_to_assert): void {
+  protected function assertAllTermsHaveSameVocabulary(array $terms_to_assert): void {
     $vocabulary = '';
 
     foreach ($terms_to_assert as $term) {
@@ -145,7 +145,7 @@ class TermMerger implements TermMergerInterface {
    * @param \Drupal\taxonomy\TermInterface[] $terms_to_assert
    *   The array to assert.
    */
-  private function assertTermsNotEmpty(array $terms_to_assert) {
+  protected function assertTermsNotEmpty(array $terms_to_assert) {
     if (empty($terms_to_assert)) {
       throw new \RuntimeException('You must provide at least 1 term');
     }
@@ -159,7 +159,7 @@ class TermMerger implements TermMergerInterface {
    * @param \Drupal\taxonomy\TermInterface $to_term
    *   The term to migrate to.
    */
-  private function migrateReferences(array $from_terms, TermInterface $to_term): void {
+  protected function migrateReferences(array $from_terms, TermInterface $to_term): void {
     foreach ($from_terms as $from_term) {
       $this->migrator->migrateReference($from_term, $to_term);
     }

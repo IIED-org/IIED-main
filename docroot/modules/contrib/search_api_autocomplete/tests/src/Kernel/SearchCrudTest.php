@@ -21,7 +21,7 @@ class SearchCrudTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'search_api_autocomplete',
     'search_api_autocomplete_test',
     'search_api',
@@ -32,7 +32,7 @@ class SearchCrudTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     $this->installEntitySchema('search_api_task');

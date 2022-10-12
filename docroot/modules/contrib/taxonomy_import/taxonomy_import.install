@@ -10,9 +10,10 @@
  */
 function taxonomy_import_uninstall() {
   // Delete file on uninstall.
-  // TODO: Drupal Rector Notice: Please delete the following comment after you've made any necessary changes.
-  // You will need to use `\Drupal\core\Database\Database::getConnection()` if you do not yet have access to the container here.
-  $files = \Drupal::database()->query('SELECT file_managed.fid FROM file_managed WHERE uri LIKE :fid', [':fid' => 'public://taxonomy_files/%']);
+  // @todo Drupal Rector Notice: Please delete the following comment after you've made any necessary changes.
+  // You will need to use `\Drupal\core\Database\Database::getConnection()`.
+  // if you do not yet have access tothe container here.
+  $files = \Drupal::database()->query('SELECT f.fid FROM {file_managed} f WHERE f.uri LIKE :fid', [':fid' => 'public://taxonomy_files/%']);
 
   $location = [];
   foreach ($files as $val) {

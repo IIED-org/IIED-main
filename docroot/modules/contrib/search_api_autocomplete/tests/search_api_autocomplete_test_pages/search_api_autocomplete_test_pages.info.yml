@@ -3,13 +3,10 @@ description: "Support module for testing integration of Search API Autocomplete 
 dependencies:
   - search_api_autocomplete:search_api_autocomplete_test
   - search_api_page:search_api_page
-core: 8.x
-core_version_requirement: ^8 || ^9
 type: module
-package: Search
-hidden: true
+package: Testing
 
-# Information added by Drupal.org packaging script on 2022-01-12
-version: '8.x-1.6'
+# Information added by Drupal.org packaging script on 2022-10-05
+version: '8.x-1.7'
 project: 'search_api_autocomplete'
-datestamp: 1641998787
+datestamp: 1664975439

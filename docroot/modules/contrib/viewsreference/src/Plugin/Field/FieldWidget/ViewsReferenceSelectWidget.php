@@ -34,7 +34,7 @@ class ViewsReferenceSelectWidget extends OptionsSelectWidget {
       $selected_views = array_diff($selected_views, ['0']);
       $selected_views = $this->getViewNames($selected_views);
       if (count($selected_views) >= 1) {
-        $first_option = ['_none' => $this->t('- None -')];
+        $first_option = ['_none' => $this->t('- Select a value -')];
         $select_element['target_id']['#options'] = array_merge($first_option, $selected_views);
       }
     }

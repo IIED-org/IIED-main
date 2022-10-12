@@ -33,7 +33,7 @@
   {% if label %}
     <span class="autocomplete-suggestion-label">{{ label }}</span>
   {% endif %}
-  {% spaceless %}
+  {% apply spaceless %}
     {% if suggestion_prefix %}
       <span class="autocomplete-suggestion-suggestion-prefix">{{ suggestion_prefix }}</span>
     {% endif %}
@@ -43,7 +43,7 @@
     {% if suggestion_suffix %}
       <span class="autocomplete-suggestion-suggestion-suffix">{{ suggestion_suffix }}</span>
     {% endif %}
-  {% endspaceless %}
+  {% endapply %}
   {% if results_count %}
     <span class="autocomplete-suggestion-results-count">{{ results_count }}</span>
   {% endif %}

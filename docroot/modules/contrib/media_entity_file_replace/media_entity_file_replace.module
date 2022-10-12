@@ -30,9 +30,9 @@ function media_entity_file_replace_help($route_name, RouteMatchInterface $route_
 function media_entity_file_replace_entity_extra_field_info() {
   $extra = [];
 
-  // Create an psuedo-field on form displays to allow site builders to control
-  // if they want to enable our custom file replacement widget on media
-  // edit forms.
+  // Create an pseudo-field on form displays to allow site builders to control
+  // if they want to enable our custom file replacement widget on media edit
+  // forms.
   if (\Drupal::service('module_handler')->moduleExists('media')) {
     $mediaTypes = \Drupal::entityTypeManager()
       ->getStorage('media_type')
@@ -59,7 +59,7 @@ function media_entity_file_replace_entity_extra_field_info() {
  *
  * Modify media edit form to add a custom replacement file form field.
  * The custom field we add here will not be automatically hidden unless the
- * entity form display has enabled the the pseudo-widget we defined in
+ * entity form display has enabled the pseudo-widget we defined in
  * media_entity_file_replace_entity_extra_field_info().
  */
 function media_entity_file_replace_form_media_form_alter(&$form, FormStateInterface $form_state, $form_id) {
@@ -114,9 +114,12 @@ function media_entity_file_replace_form_media_form_alter(&$form, FormStateInterf
     ];
     $form['replace_file']['replacement_file']['#description'] = \Drupal::service('renderer')->renderPlain($helpText);
 
+    // Inform the user that when replacing the original file, the new one
+    // must have the same extension.
+    $originalExtension = '.' . pathinfo($fileFieldItem->entity->getFilename(), PATHINFO_EXTENSION);
     $form['replace_file']['keep_original_filename'] = [
-      '#title' => t('Overwrite original file'),
-      '#description' => t('When checked, the original filename is kept and its contents are replaced with the new file. If unchecked, the filename of the replacement file will be used, and the original file may be deleted if no previous revision references it (depending on your specific site configuration).'),
+      '#title' => t('Overwrite original file (@originalExtension)', ['@originalExtension' => $originalExtension]),
+      '#description' => t('When checked, the original filename is kept and its contents are replaced with the new file, which <strong>must have the same file extension: @originalExtension</strong>. If unchecked, the filename of the replacement file will be used with any allowed file type and the original file may be deleted if no previous revision references it (depending on your specific site configuration).', ['@originalExtension' => $originalExtension]),
       '#type' => 'checkbox',
       '#default_value' => TRUE,
     ];
@@ -206,7 +209,7 @@ function _media_entity_file_replace_validate($form, FormStateInterface $formStat
   // file, and browsers use that content type when interpretting the data.
   if ($formState->getValue('keep_original_filename')) {
     $originalFileEntity = $media->get($sourceFieldName)->first()->entity;
-    $originalExtension = pathinfo($originalFileEntity->getFilename(), PATHINFO_EXTENSION);
+    $originalExtension = pathinfo($originalFileEntity->getFileUri(), PATHINFO_EXTENSION);
     $uploadValidators['file_validate_extensions'] = [$originalExtension];
   }
 
