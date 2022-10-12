@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Support module for the Login And Logout Redirect Per Role module tests.
+ */
+
+use Drupal\Core\Session\AccountInterface;
+
+/**
+ * Implements hook_user_login().
+ */
+function login_redirect_per_role_test_user_login(AccountInterface $account) {
+  \Drupal::state()->set('login_redirect_per_role_test.user_login_called', TRUE);
+}
+
+/**
+ * Implements hook_user_logout().
+ */
+function login_redirect_per_role_test_user_logout(AccountInterface $account) {
+  \Drupal::state()->set('login_redirect_per_role_test.user_logout_called', TRUE);
+}

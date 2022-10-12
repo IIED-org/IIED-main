@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @file
+ * Contains login_redirect_per_role.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Session\AccountInterface;
+
+/**
+ * Implements hook_help().
+ */
+function login_redirect_per_role_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the login_redirect_per_role module.
+    case 'help.page.login_redirect_per_role':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Module provides ability:') . '</p>';
+      $output .= '<ul>';
+      $output .= '<li>' . t('Redirect user (to specific URL) on Log in') . '</li>';
+      $output .= '<li>' . t('Redirect user (to specific URL) on Log out') . '</li>';
+      $output .= '<li>' . t('Set specific redirect URL for each role') . '</li>';
+      $output .= '<li>' . t('Set roles redirect priority') . '</li>';
+      $output .= '<li>' . t('Use Tokens in Redirect URL value') . '</li>';
+      $output .= '<li>' . t('CAS integration') . '</li>';
+      $output .= '</ul><br>';
+      $output .= t('Roles order in list is their priorities: higher in list - higher priority.<br>For example: You set roles ordering as:<br>+ Admin<br>+ Manager<br>+ Authenticated<br>it means that when some user log in (or log out) module will check:<br><em>Does this user have Admin role?</em><ul><li>Yes and Redirect URL is not empty - redirect to related URL</li><li>No or Redirect URL is empty:</li></ul><em>Does this user have Manager role?</em><ul><li>Yes and Redirect URL is not empty - redirect to related URL</li><li>No or Redirect URL is empty:</li></ul><em>Does this user have Authenticated role?</em><ul><li>Yes and Redirect URL is not empty - redirect to related URL</li><li>No or Redirect URL is empty - use default Drupal action</li></ul>');
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function login_redirect_per_role_user_login(AccountInterface $account) {
+  \Drupal::service('login_redirect_per_role.service')->setLoginDestination($account);
+}
+
+/**
+ * Implements hook_user_logout().
+ */
+function login_redirect_per_role_user_logout(AccountInterface $account) {
+  \Drupal::service('login_redirect_per_role.service')->setLogoutDestination($account);
+}

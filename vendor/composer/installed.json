@@ -8438,6 +8438,64 @@
             "install-path": "../../docroot/modules/contrib/layout_paragraphs"
         },
         {
+            "name": "drupal/login_redirect_per_role",
+            "version": "1.9.0",
+            "version_normalized": "1.9.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/login_redirect_per_role.git",
+                "reference": "8.x-1.9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/login_redirect_per_role-8.x-1.9.zip",
+                "reference": "8.x-1.9",
+                "shasum": "90b3648a504f5385612cc9836c6b42539bb78087"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9 || ^10"
+            },
+            "require-dev": {
+                "drupal/token": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.9",
+                    "datestamp": "1660919146",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Antonnavi",
+                    "homepage": "https://www.drupal.org/user/875410"
+                },
+                {
+                    "name": "JeroenT",
+                    "homepage": "https://www.drupal.org/user/2228934"
+                },
+                {
+                    "name": "pratik.mehta19",
+                    "homepage": "https://www.drupal.org/user/2876261"
+                }
+            ],
+            "description": "Provides ability to redirect user on Log in and Log out depending on user role.",
+            "homepage": "https://www.drupal.org/project/login_redirect_per_role",
+            "support": {
+                "source": "https://git.drupalcode.org/project/login_redirect_per_role"
+            },
+            "install-path": "../../docroot/modules/contrib/login_redirect_per_role"
+        },
+        {
             "name": "drupal/masquerade",
             "version": "2.0.0-rc1",
             "version_normalized": "2.0.0.0-RC1",
@@ -10189,66 +10247,6 @@
                 "source": "https://git.drupalcode.org/project/redirect"
             },
             "install-path": "../../docroot/modules/contrib/redirect"
-        },
-        {
-            "name": "drupal/redirect_after_login",
-            "version": "2.7.0",
-            "version_normalized": "2.7.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/redirect_after_login.git",
-                "reference": "8.x-2.7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/redirect_after_login-8.x-2.7.zip",
-                "reference": "8.x-2.7",
-                "shasum": "3ce87df792e918c2ec5a00e24818c893e558d111"
-            },
-            "require": {
-                "drupal/core": "^8 || ^9"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-2.7",
-                    "datestamp": "1611645039",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "installation-source": "dist",
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Shamsher Alam",
-                    "homepage": "https://www.drupal.org/u/shamsher_alam",
-                    "role": "Author"
-                },
-                {
-                    "name": "pen",
-                    "homepage": "https://www.drupal.org/user/2435634"
-                },
-                {
-                    "name": "prempatel2447",
-                    "homepage": "https://www.drupal.org/user/3250112"
-                },
-                {
-                    "name": "rahul-kr-sh",
-                    "homepage": "https://www.drupal.org/user/3561577"
-                }
-            ],
-            "description": "Redirect user after login to a configured url",
-            "homepage": "https://drupal.org/project/redirect_after_login",
-            "support": {
-                "source": "https://git.drupalcode.org/project/redirect_after_login"
-            },
-            "install-path": "../../docroot/modules/contrib/redirect_after_login"
         },
         {
             "name": "drupal/responsive_menu",

@@ -1,0 +1,12 @@
+name: 'Login And Logout Redirect Per Role tests'
+type: module
+description: 'Support module for the Login And Logout Redirect Per Role module tests.'
+package: Testing
+dependencies:
+  - login_redirect_per_role:login_redirect_per_role
+  - token:token
+
+# Information added by Drupal.org packaging script on 2022-08-19
+version: '8.x-1.9'
+project: 'login_redirect_per_role'
+datestamp: 1660919147
