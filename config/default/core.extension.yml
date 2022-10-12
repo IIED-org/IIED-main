@@ -127,7 +127,6 @@ module:
   rdf: 0
   readmore_js: 0
   redirect: 0
-  redirect_after_login: 0
   responsive_image: 0
   responsive_menu: 0
   rest: 0
@@ -182,6 +181,7 @@ module:
   formdazzle: 10
   views: 10
   paragraphs: 11
+  login_redirect_per_role: 1000
   standard: 1000
   readonlymode: 9999
   eu_cookie_compliance: 10000

@@ -1458,7 +1458,7 @@ display:
     display_plugin: page
     position: 2
     display_options:
-      enabled: true
+      enabled: false
       title: 'Dashboard check authors'
       fields:
         name:
@@ -1853,7 +1853,7 @@ display:
       display_extenders: {  }
       path: admin/edit/authors
       menu:
-        type: tab
+        type: none
         title: Authors
         description: ''
         weight: 2
@@ -1876,7 +1876,7 @@ display:
     display_plugin: page
     position: 2
     display_options:
-      enabled: true
+      enabled: false
       title: 'Dashboard check organisations'
       fields:
         name:
@@ -2271,7 +2271,7 @@ display:
       display_extenders: {  }
       path: admin/edit/organisations
       menu:
-        type: tab
+        type: none
         title: Organisations
         description: ''
         weight: 3
