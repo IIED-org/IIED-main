@@ -97,7 +97,7 @@
         "drupal/geolocation": "^3.2",
         "drupal/gin": "^3.0",
         "drupal/gin_lb": "^1.0@beta",
-        "drupal/google_analytics": "^4.0",
+        "drupal/google_analytics": "^2.5",
         "drupal/google_tag": "^1.4",
         "drupal/imagemagick": "^3.3",
         "drupal/inline_entity_form": "^1.0@RC",
@@ -279,7 +279,7 @@
           "drupal/responsive_menu": {
             "Add 'front' options to menu position":"https://www.drupal.org/files/issues/2022-06-20/responsive_menu-menuposition-3274889-3.diff"
           },
-	  "drupal/readmore_js": {
+	        "drupal/readmore_js": {
             "Fix readmore_js to prevent scroll to top.":"https://git.drupalcode.org/issue/readmore_js-3312818/-/commit/67f2912296417d5a3db83045909323c73dcdd605.patch"
           },
           "spatie/pdf-to-image": {
@@ -293,6 +293,9 @@
           },
           "drupal/media_pdf_thumbnail": {
             "3308857": "https://www.drupal.org/files/issues/2022-09-09/3308857-error-empty-images.patch"
+          },
+          "drupal/google_analytics": {
+            "3258588": "https://www.drupal.org/files/issues/2022-09-01/3258588_google_analytics_deprecated_function_2_5_001.patch"
           }
         }
     }

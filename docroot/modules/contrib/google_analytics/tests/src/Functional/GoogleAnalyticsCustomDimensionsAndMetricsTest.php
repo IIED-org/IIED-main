@@ -3,7 +3,6 @@
 namespace Drupal\Tests\google_analytics\Functional;
 
 use Drupal\Component\Serialization\Json;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -15,33 +14,22 @@ use Drupal\Tests\BrowserTestBase;
  */
 class GoogleAnalyticsCustomDimensionsAndMetricsTest extends BrowserTestBase {
 
-  use StringTranslationTrait;
-
   /**
    * Modules to enable.
    *
    * @var array
    */
-  protected static $modules = ['google_analytics', 'token', 'node'];
-
-  /**
-   * Default theme.
-   *
-   * @var string
-   */
-  protected $defaultTheme = 'stark';
-
-  /**
-   * Admin user.
-   *
-   * @var \Drupal\user\Entity\User|bool
-   */
-  protected $adminUser;
+  public static $modules = ['google_analytics', 'token', 'node'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected $defaultTheme = 'stark';
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
     parent::setUp();
 
     $permissions = [
@@ -58,8 +46,8 @@ class GoogleAnalyticsCustomDimensionsAndMetricsTest extends BrowserTestBase {
     ]);
 
     // User to set up google_analytics.
-    $this->adminUser = $this->drupalCreateUser($permissions);
-    $this->drupalLogin($this->adminUser);
+    $this->admin_user = $this->drupalCreateUser($permissions);
+    $this->drupalLogin($this->admin_user);
   }
 
   /**
@@ -74,116 +62,88 @@ class GoogleAnalyticsCustomDimensionsAndMetricsTest extends BrowserTestBase {
 
     // Basic test if the feature works.
     $google_analytics_custom_dimension = [
-      'dimension1' => [
-        'type' => 'dimension',
-        'name' => 'bar1',
+      1 => [
+        'index' => 1,
         'value' => 'Bar 1',
       ],
-      'dimension2' => [
-        'type' => 'dimension',
-        'name' => 'bar2',
+      2 => [
+        'index' => 2,
         'value' => 'Bar 2',
       ],
-      'dimension3' => [
-        'type' => 'dimension',
-        'name' => 'bar2',
+      3 => [
+        'index' => 3,
         'value' => 'Bar 3',
       ],
-      'dimension4' => [
-        'type' => 'dimension',
-        'name' => 'bar4',
+      4 => [
+        'index' => 4,
         'value' => 'Bar 4',
       ],
-      'dimension5' => [
-        'type' => 'dimension',
-        'name' => 'bar5',
+      5 => [
+        'index' => 5,
         'value' => 'Bar 5',
       ],
     ];
-    $this->config('google_analytics.settings')->set('custom.parameters', $google_analytics_custom_dimension)->save();
+    $this->config('google_analytics.settings')->set('custom.dimension', $google_analytics_custom_dimension)->save();
     $this->drupalGet('');
 
-    $custom_map = [];
-    $custom_vars = [];
-    foreach ($google_analytics_custom_dimension as $index => $dimension) {
-      $custom_map['custom_map'][$index] = $dimension['name'];
-      $custom_vars[$dimension['name']] = $dimension['value'];
+    foreach ($google_analytics_custom_dimension as $dimension) {
+      $this->assertSession()->responseContains('ga("set", ' . Json::encode('dimension' . $dimension['index']) . ', ' . Json::encode($dimension['value']) . ');');
     }
-    // Verify the account ID exists in the config.
-    $this->assertSession()->responseContains('gtag("config", ' . Json::encode($ua_code));
-    // Check the dimensions.
-    $this->assertSession()->responseContains('"custom_map":' . Json::encode($custom_map['custom_map']));
-    $this->assertSession()->responseContains('gtag("event", "custom", ' . Json::encode($custom_vars) . ');');
 
     // Test whether tokens are replaced in custom dimension values.
     $site_slogan = $this->randomMachineName(16);
     $this->config('system.site')->set('slogan', $site_slogan)->save();
 
     $google_analytics_custom_dimension = [
-      'dimension1' => [
-        'type' => 'dimension',
-        'name' => 'site_slogan',
+      1 => [
+        'index' => 1,
         'value' => 'Value: [site:slogan]',
       ],
-      'dimension2' => [
-        'type' => 'dimension',
-        'name' => 'machine_name',
+      2 => [
+        'index' => 2,
         'value' => $this->randomMachineName(16),
       ],
-      'dimension3' => [
-        'type' => 'dimension',
-        'name' => 'foo3',
+      3 => [
+        'index' => 3,
         'value' => '',
       ],
       // #2300701: Custom dimensions and custom metrics not outputed on zero
       // value.
-      'dimension4' => [
-        'type' => 'dimension',
-        'name' => 'bar4',
+      4 => [
+        'index' => 4,
         'value' => '0',
       ],
-      'dimension5' => [
-        'type' => 'dimension',
-        'name' => 'node_type',
+      5 => [
+        'index' => 5,
         'value' => '[node:type]',
       ],
       // Test google_analytics_tokens().
-      'dimension6' => [
-        'type' => 'dimension',
-        'name' => 'current_user_role_names',
+      6 => [
+        'index' => 6,
         'value' => '[current-user:role-names]',
       ],
-      'dimension7' => [
-        'type' => 'dimension',
-        'name' => 'current_user_role_ids',
+      7 => [
+        'index' => 7,
         'value' => '[current-user:role-ids]',
       ],
     ];
-    $this->config('google_analytics.settings')->set('custom.parameters', $google_analytics_custom_dimension)->save();
-    dump('<pre>' . print_r($google_analytics_custom_dimension, TRUE) . '</pre>');
+    $this->config('google_analytics.settings')->set('custom.dimension', $google_analytics_custom_dimension)->save();
+    $this->verbose('<pre>' . print_r($google_analytics_custom_dimension, TRUE) . '</pre>');
 
     // Test on frontpage.
     $this->drupalGet('');
-    $this->assertSession()->responseContains(Json::encode('dimension1') . ':' . Json::encode($google_analytics_custom_dimension['dimension1']['name']));
-    $this->assertSession()->responseContains(Json::encode($google_analytics_custom_dimension['dimension1']['name']) . ':' . Json::encode("Value: $site_slogan"));
-    $this->assertSession()->responseContains(Json::encode('dimension2') . ':' . Json::encode($google_analytics_custom_dimension['dimension2']['name']));
-    $this->assertSession()->responseContains(Json::encode($google_analytics_custom_dimension['dimension2']['name']) . ':' . Json::encode($google_analytics_custom_dimension['dimension2']['value']));
-    $this->assertSession()->responseNotContains(Json::encode('dimension3') . ':' . Json::encode($google_analytics_custom_dimension['dimension3']['name']));
-    $this->assertSession()->responseNotContains(Json::encode($google_analytics_custom_dimension['dimension3']['name']) . ':' . Json::encode(''));
-    $this->assertSession()->responseContains(Json::encode('dimension4') . ':' . Json::encode($google_analytics_custom_dimension['dimension4']['name']));
-    $this->assertSession()->responseContains(Json::encode($google_analytics_custom_dimension['dimension4']['name']) . ':' . Json::encode('0'));
-    $this->assertSession()->responseNotContains(Json::encode('dimension5') . ':' . Json::encode($google_analytics_custom_dimension['dimension5']['name']));
-    $this->assertSession()->responseNotContains(Json::encode($google_analytics_custom_dimension['dimension5']['name']) . ':' . Json::encode('article'));
-    $this->assertSession()->responseContains(Json::encode('dimension6') . ':' . Json::encode($google_analytics_custom_dimension['dimension6']['name']));
-    $this->assertSession()->responseContains(Json::encode($google_analytics_custom_dimension['dimension6']['name']) . ':' . Json::encode(implode(',', \Drupal::currentUser()->getRoles())));
-    $this->assertSession()->responseContains(Json::encode('dimension7') . ':' . Json::encode($google_analytics_custom_dimension['dimension7']['name']));
-    $this->assertSession()->responseContains(Json::encode($google_analytics_custom_dimension['dimension7']['name']) . ':' . Json::encode(implode(',', array_keys(\Drupal::currentUser()->getRoles()))));
+    $this->assertSession()->responseContains('ga("set", ' . Json::encode('dimension1') . ', ' . Json::encode("Value: $site_slogan") . ');');
+    $this->assertSession()->responseContains('ga("set", ' . Json::encode('dimension2') . ', ' . Json::encode($google_analytics_custom_dimension['2']['value']) . ');');
+    $this->assertSession()->responseNotContains('ga("set", ' . Json::encode('dimension3') . ', ' . Json::encode('') . ');');
+    $this->assertSession()->responseContains('ga("set", ' . Json::encode('dimension4') . ', ' . Json::encode('0') . ');');
+    $this->assertSession()->responseNotContains('ga("set", ' . Json::encode('dimension5') . ', ' . Json::encode('article') . ');');
+    $this->assertSession()->responseContains('ga("set", ' . Json::encode('dimension6') . ', ' . Json::encode(implode(',', \Drupal::currentUser()->getRoles())) . ');');
+    $this->assertSession()->responseContains('ga("set", ' . Json::encode('dimension7') . ', ' . Json::encode(implode(',', array_keys(\Drupal::currentUser()->getRoles()))) . ');');
 
     // Test on a node.
     $this->drupalGet('node/' . $node->id());
-    $this->assertSession()->pageTextContains($node->getTitle());
-    $this->assertSession()->responseContains(Json::encode('dimension5') . ':' . Json::encode($google_analytics_custom_dimension['dimension5']['name']));
-    $this->assertSession()->responseContains(Json::encode($google_analytics_custom_dimension['dimension5']['name']) . ':' . Json::encode('article'));
+    $this->assertText($node->getTitle());
+    $this->assertSession()->responseContains('ga("set", ' . Json::encode('dimension5') . ', ' . Json::encode('article') . ');');
   }
 
   /**
@@ -195,86 +155,88 @@ class GoogleAnalyticsCustomDimensionsAndMetricsTest extends BrowserTestBase {
 
     // Basic test if the feature works.
     $google_analytics_custom_metric = [
-      'metric1' => [
-        'type' => 'metric',
-        'name' => 'foo1',
+      1 => [
+        'index' => 1,
         'value' => '6',
       ],
-      'metric2' => [
-        'type' => 'metric',
-        'name' => 'foo2',
+      2 => [
+        'index' => 2,
         'value' => '8000',
       ],
-      'metric3' => [
-        'type' => 'metric',
-        'name' => 'foo3',
+      3 => [
+        'index' => 3,
         'value' => '7.8654',
       ],
-      'metric4' => [
-        'type' => 'metric',
-        'name' => 'foo4',
+      4 => [
+        'index' => 4,
         'value' => '1123.4',
       ],
-      'metric5' => [
-        'type' => 'metric',
-        'name' => 'foo5',
+      5 => [
+        'index' => 5,
         'value' => '5,67',
       ],
     ];
 
-    $this->config('google_analytics.settings')->set('custom.parameters', $google_analytics_custom_metric)->save();
+    $this->config('google_analytics.settings')->set('custom.metric', $google_analytics_custom_metric)->save();
     $this->drupalGet('');
 
-    $custom_map = [];
-    $custom_vars = [];
-    foreach ($google_analytics_custom_metric as $index => $metric) {
-      $custom_map['custom_map'][$index] = $metric['name'];
-      $custom_vars[$metric['name']] = floatval($metric['value']);
+    foreach ($google_analytics_custom_metric as $metric) {
+      $this->assertSession()->responseContains('ga("set", ' . Json::encode('metric' . $metric['index']) . ', ' . Json::encode((float) $metric['value']) . ');');
     }
-
-    // Verify the account ID exists in the config.
-    $this->assertSession()->responseContains('gtag("config", ' . Json::encode($ua_code));
-    // Check the dimensions.
-    $this->assertSession()->responseContains('"custom_map":' . Json::encode($custom_map['custom_map']));
-    $this->assertSession()->responseContains('gtag("event", "custom", ' . Json::encode($custom_vars) . ');');
 
     // Test whether tokens are replaced in custom metric values.
     $google_analytics_custom_metric = [
-      'metric1' => [
-        'type' => 'metric',
-        'name' => 'bar1',
+      1 => [
+        'index' => 1,
         'value' => '[current-user:roles:count]',
       ],
-      'metric2' => [
-        'type' => 'metric',
-        'name' => 'bar2',
+      2 => [
+        'index' => 2,
         'value' => mt_rand(),
       ],
-      'metric3' => [
-        'type' => 'metric',
-        'name' => 'bar3',
+      3 => [
+        'index' => 3,
         'value' => '',
       ],
       // #2300701: Custom dimensions and custom metrics not outputed on zero
       // value.
-      'metric4' => [
-        'type' => 'metric',
-        'name' => 'bar4',
+      4 => [
+        'index' => 4,
         'value' => '0',
       ],
     ];
-    $this->config('google_analytics.settings')->set('custom.parameters', $google_analytics_custom_metric)->save();
-    //dump(print_r($google_analytics_custom_metric, TRUE));
+    $this->config('google_analytics.settings')->set('custom.metric', $google_analytics_custom_metric)->save();
+    $this->verbose('<pre>' . print_r($google_analytics_custom_metric, TRUE) . '</pre>');
 
     $this->drupalGet('');
-    $this->assertSession()->responseContains(Json::encode('metric1') . ':' . Json::encode($google_analytics_custom_metric['metric1']['name']));
-    $this->assertSession()->responseContains(Json::encode($google_analytics_custom_metric['metric1']['name']) . ':');
-    $this->assertSession()->responseContains(Json::encode('metric2') . ':' . Json::encode($google_analytics_custom_metric['metric2']['name']));
-    $this->assertSession()->responseContains(Json::encode($google_analytics_custom_metric['metric2']['name']) . ':' . Json::encode($google_analytics_custom_metric['metric2']['value']));
-    $this->assertSession()->responseNotContains(Json::encode('metric3') . ':' . Json::encode($google_analytics_custom_metric['metric3']['name']));
-    $this->assertSession()->responseNotContains(Json::encode($google_analytics_custom_metric['metric3']['name']) . ':' . Json::encode(''));
-    $this->assertSession()->responseContains(Json::encode('metric4') . ':' . Json::encode($google_analytics_custom_metric['metric4']['name']));
-    $this->assertSession()->responseContains(Json::encode($google_analytics_custom_metric['metric4']['name']) . ':' . Json::encode(0));
+    $this->assertSession()->responseContains('ga("set", ' . Json::encode('metric1') . ', ');
+    $this->assertSession()->responseContains('ga("set", ' . Json::encode('metric2') . ', ' . Json::encode($google_analytics_custom_metric['2']['value']) . ');');
+    $this->assertSession()->responseNotContains('ga("set", ' . Json::encode('metric3') . ', ' . Json::encode('') . ');');
+    $this->assertSession()->responseContains('ga("set", ' . Json::encode('metric4') . ', ' . Json::encode(0) . ');');
+  }
+
+  /**
+   * Tests if Custom Dimensions token form validation works.
+   */
+  public function testGoogleAnalyticsCustomDimensionsTokenFormValidation() {
+    $ua_code = 'UA-123456-1';
+
+    // Check form validation.
+    $edit['google_analytics_account'] = $ua_code;
+    $edit['google_analytics_custom_dimension[indexes][1][value]'] = '[current-user:name]';
+    $edit['google_analytics_custom_dimension[indexes][2][value]'] = '[current-user:edit-url]';
+    $edit['google_analytics_custom_dimension[indexes][3][value]'] = '[user:name]';
+    $edit['google_analytics_custom_dimension[indexes][4][value]'] = '[term:name]';
+    $edit['google_analytics_custom_dimension[indexes][5][value]'] = '[term:tid]';
+
+    $this->drupalPostForm('admin/config/system/google-analytics', $edit, t('Save configuration'));
+
+    $this->assertSession()->responseContains(t('The %element-title is using the following forbidden tokens with personal identifying information: @invalid-tokens.', ['%element-title' => t('Custom dimension value #@index', ['@index' => 1]), '@invalid-tokens' => implode(', ', ['[current-user:name]'])]));
+    $this->assertSession()->responseContains(t('The %element-title is using the following forbidden tokens with personal identifying information: @invalid-tokens.', ['%element-title' => t('Custom dimension value #@index', ['@index' => 2]), '@invalid-tokens' => implode(', ', ['[current-user:edit-url]'])]));
+    $this->assertSession()->responseContains(t('The %element-title is using the following forbidden tokens with personal identifying information: @invalid-tokens.', ['%element-title' => t('Custom dimension value #@index', ['@index' => 3]), '@invalid-tokens' => implode(', ', ['[user:name]'])]));
+    // BUG #2037595
+    //$this->assertSession()->responseNotContains(t('The %element-title is using the following forbidden tokens with personal identifying information: @invalid-tokens.', ['%element-title' => t('Custom dimension value #@index', ['@index' => 4]), '@invalid-tokens' => implode(', ', ['[term:name]'])]));
+    //$this->assertSession()->responseNotContains(t('The %element-title is using the following forbidden tokens with personal identifying information: @invalid-tokens.', ['%element-title' => t('Custom dimension value #@index', ['@index' => 5]), '@invalid-tokens' => implode(', ', ['[term:tid]'])]));
   }
 
 }
