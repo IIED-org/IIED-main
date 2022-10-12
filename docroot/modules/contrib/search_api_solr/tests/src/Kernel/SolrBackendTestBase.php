@@ -7,6 +7,8 @@ use Drupal\search_api\Entity\Server;
 use Drupal\search_api_solr_test\Logger\InMemoryLogger;
 use Drupal\Tests\search_api\Kernel\BackendTestBase;
 use Drupal\search_api_solr\Utility\SolrCommitTrait;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
 defined('SOLR_CLOUD') || define('SOLR_CLOUD', getenv('SOLR_CLOUD') ?: 'false');
 
@@ -24,7 +26,7 @@ abstract class SolrBackendTestBase extends BackendTestBase {
    *
    * @var string[]
    */
-  protected static $modules = [
+  public static $modules = [
     'search_api_solr',
     'search_api_solr_test',
   ];

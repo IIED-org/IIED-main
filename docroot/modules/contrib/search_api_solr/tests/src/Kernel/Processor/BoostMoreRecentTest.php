@@ -33,7 +33,7 @@ class BoostMoreRecentTest extends ProcessorTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'datetime',
     'search_api_solr',
     'search_api_solr_test',

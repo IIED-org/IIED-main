@@ -28,7 +28,7 @@ class FacetsTest extends SearchApiBrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'block',
     'views',
     'search_api_solr',

@@ -10,15 +10,6 @@
  * @{
  */
 
-use Drupal\search_api_solr\SolrBackendInterface;
-use Drupal\search_api_solr\Solarium\Autocomplete\Query;
-use Drupal\search_api\IndexInterface;
-use Drupal\search_api\Query\QueryInterface;
-use Drupal\search_api\Query\ResultSetInterface;
-use Solarium\Core\Query\QueryInterface as SolariumQueryInterface;
-use Solarium\QueryType\Select\Result\Result;
-use ZipStream\ZipStream;
-
 /**
  * Lets modules alter the Solarium select query before executing it.
  *
@@ -43,14 +34,14 @@ use ZipStream\ZipStream;
  * @see https://www.drupal.org/project/search_api_solr/issues/3203375
  * @see \Drupal\search_api_solr\Event\PreQueryEvent
  */
-function hook_search_api_solr_query_alter(SolariumQueryInterface $solarium_query, QueryInterface $query) {
-  // To get a list of solarium events:
+function hook_search_api_solr_query_alter(\Solarium\Core\Query\QueryInterface $solarium_query, \Drupal\search_api\Query\QueryInterface $query) {
+  // To get a list of solrium events:
   // @see http://solarium.readthedocs.io/en/stable/customizing-solarium/#plugin-system
   // If the Search API query has a 'my_custom_boost' option, boost German
   // results.
   if ($query->getOption('my_custom_boost')) {
     if ($boosts = $query->getOption('solr_document_boost_factors', [])) {
-      $boosts['search_api_language'] = sprintf('if(eq(%s,"%s"),%2F,0.0)', SolrBackendInterface::FIELD_PLACEHOLDER, 'de', 1.2);
+      $boosts['search_api_language'] = sprintf('if(eq(%s,"%s"),%2F,0.0)', \Drupal\search_api_solr\SolrBackendInterface::FIELD_PLACEHOLDER, 'de', 1.2);
       $query->setOption('solr_document_boost_factors', $boosts);
     }
   }
@@ -68,7 +59,7 @@ function hook_search_api_solr_query_alter(SolariumQueryInterface $solarium_query
  * @see https://www.drupal.org/project/search_api_solr/issues/3203375
  * @see \Drupal\search_api_solr\Event\PreAutocompleteTermsQueryEvent
  */
-function hook_search_api_solr_terms_autocomplete_query_alter(QueryInterface $query) {
+function hook_search_api_solr_terms_autocomplete_query_alter(\Drupal\search_api\Query\QueryInterface $query) {
   // If the Search API query has a 'terms' component, set a custom option.
   $query->setOption('solr_param_code', 'custom-value');
 }
@@ -87,7 +78,7 @@ function hook_search_api_solr_terms_autocomplete_query_alter(QueryInterface $que
  * @see https://www.drupal.org/project/search_api_solr/issues/3203375
  * @see \Drupal\search_api_solr_autocomplete\Event\PreSpellcheckQueryEvent
  */
-function hook_search_api_solr_spellcheck_autocomplete_query_alter(Query $solarium_query, QueryInterface $query) {
+function hook_search_api_solr_spellcheck_autocomplete_query_alter(\Drupal\search_api_solr\Solarium\Autocomplete\Query $solarium_query, \Drupal\search_api\Query\QueryInterface $query) {
   // If the Search API query has a 'spellcheck' component, set a custom
   // dictionary.
   $solarium_query->getSpellcheck()->setDictionary('custom');
@@ -107,7 +98,7 @@ function hook_search_api_solr_spellcheck_autocomplete_query_alter(Query $solariu
  * @see https://www.drupal.org/project/search_api_solr/issues/3203375
  * @see \Drupal\search_api_solr_autocomplete\Event\PreSuggesterQueryEvent
  */
-function hook_search_api_solr_suggester_autocomplete_query_alter(Query $solarium_query, QueryInterface $query) {
+function hook_search_api_solr_suggester_autocomplete_query_alter(\Drupal\search_api_solr\Solarium\Autocomplete\Query $solarium_query, \Drupal\search_api\Query\QueryInterface $query) {
   // If the Search API query has a 'suggester' component, set a custom
   // dictionary.
   $solarium_query->getSuggester()->setDictionary('custom');
@@ -132,7 +123,7 @@ function hook_search_api_solr_suggester_autocomplete_query_alter(Query $solarium
  * @see https://www.drupal.org/project/search_api_solr/issues/3203375
  * @see \Drupal\search_api_solr\Event\PostConvertedQueryEvent
  */
-function hook_search_api_solr_converted_query_alter(SolariumQueryInterface $solarium_query, QueryInterface $query) {
+function hook_search_api_solr_converted_query_alter(\Solarium\Core\Query\QueryInterface $solarium_query, \Drupal\search_api\Query\QueryInterface $query) {
   // If the Search API query has a 'I_know_what_I_am_doing' option set to
   // 'really!', overwrite the 'q' parameter, query handler and add some boost
   // queries.
@@ -163,7 +154,7 @@ function hook_search_api_solr_converted_query_alter(SolariumQueryInterface $sola
  * @see https://www.drupal.org/project/search_api_solr/issues/3203375
  * @see \Drupal\search_api_solr\Event\PostFieldMappingEvent
  */
-function hook_search_api_solr_field_mapping_alter(IndexInterface $index, array &$fields, string $language_id) {
+function hook_search_api_solr_field_mapping_alter(\Drupal\search_api\IndexInterface $index, array &$fields, string $language_id) {
   $fields['fieldname'] = 'ss_fieldname';
 }
 
@@ -184,7 +175,7 @@ function hook_search_api_solr_field_mapping_alter(IndexInterface $index, array &
  * @see https://www.drupal.org/project/search_api_solr/issues/3203375
  * @see \Drupal\search_api_solr\Event\PostCreateIndexDocumentsEvent
  */
-function hook_search_api_solr_documents_alter(array &$documents, IndexInterface $index, array $items) {
+function hook_search_api_solr_documents_alter(array &$documents, \Drupal\search_api\IndexInterface $index, array $items) {
   // Adds a "foo" field with value "bar" to all documents.
   foreach ($documents as $document) {
     $document->setField('foo', 'bar');
@@ -207,7 +198,7 @@ function hook_search_api_solr_documents_alter(array &$documents, IndexInterface 
  * @see https://www.drupal.org/project/search_api_solr/issues/3203375
  * @see \Drupal\search_api_solr\Event\PostExtractResultsEvent
  */
-function hook_search_api_solr_search_results_alter(ResultSetInterface $result_set, QueryInterface $query, Result $result) {
+function hook_search_api_solr_search_results_alter(\Drupal\search_api\Query\ResultSetInterface $result_set, \Drupal\search_api\Query\QueryInterface $query, \Solarium\QueryType\Select\Result\Result $result) {
   $result_data = $result->getData();
   if (isset($result_data['facet_counts']['facet_fields']['custom_field'])) {
     // Do something with $result_set.
@@ -269,7 +260,7 @@ function search_api_solr_hook_search_api_data_type_info() {
  * @see https://www.drupal.org/project/search_api_solr/issues/3203375
  * @see \Drupal\search_api_solr\Event\PreIndexFinalizationEvent
  */
-function hook_search_api_solr_finalize_index(IndexInterface $index) {
+function hook_search_api_solr_finalize_index(\Drupal\search_api\IndexInterface $index) {
 
 }
 
@@ -313,7 +304,7 @@ function hook_search_api_solr_config_files_alter(array &$files, string $lucene_m
  * @see https://www.drupal.org/project/search_api_solr/issues/3203375
  * @see \Drupal\search_api_solr\Event\PostConfigSetGenerationEvent
  */
-function hook_search_api_solr_config_zip_alter(ZipStream $zip, string $lucene_match_version, string $server_id = '') {
+function hook_search_api_solr_config_zip_alter(\ZipStream\ZipStream $zip, string $lucene_match_version, string $server_id = '') {
 }
 
 /**

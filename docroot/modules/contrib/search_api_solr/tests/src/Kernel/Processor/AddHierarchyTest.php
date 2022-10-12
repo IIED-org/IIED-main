@@ -20,7 +20,7 @@ class AddHierarchyTest extends SearchApiAddHierarchyTest {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'search_api_solr',
     'search_api_solr_test',
   ];

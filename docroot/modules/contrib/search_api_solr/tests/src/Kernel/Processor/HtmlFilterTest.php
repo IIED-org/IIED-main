@@ -30,7 +30,7 @@ class HtmlFilterTest extends ProcessorTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'filter',
     'search_api_solr',
     'search_api_solr_test',
