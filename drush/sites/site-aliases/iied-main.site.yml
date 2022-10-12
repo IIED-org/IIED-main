@@ -6,7 +6,7 @@ dev:
   host: 'irforumreafzs3cco.ssh.devcloud.acquia-sites.com'
   user: 'irforum.dev'
   root: '/var/www/html/irforum.dev/docroot'
-  uri: 'pubs-dev.ac.iied.org'
+  uri: 'iied-main-dev.ac.iied.org'
   ac-site: 'irforum'
   ac-env: 'dev'
   ac-realm: 'prod'
@@ -19,7 +19,7 @@ test:
   ac-site: 'irforum'
   ac-env: 'test'
   ac-realm: 'prod'
-  uri: 'pubs-stage.ac.iied.org'
+  uri: 'iied-main-stage.ac.iied.org'
   paths:
     drush-script: 'drush10'
 prod:
@@ -29,6 +29,6 @@ prod:
   ac-site: 'irforum'
   ac-env: 'prod'
   ac-realm: 'prod'
-  uri: 'pubs.iied.org'
+  uri: 'www.iied.org'
   paths:
     drush-script: 'drush10'
