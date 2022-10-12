@@ -144,11 +144,19 @@ content:
     region: content
   field_paragraphs:
     type: layout_paragraphs
-    label: hidden
+    label: above
     settings:
       view_mode: default
       link: false
-    third_party_settings: {  }
+    third_party_settings:
+      ds:
+        ds_limit: ''
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
     weight: 14
     region: content
   field_person_type:

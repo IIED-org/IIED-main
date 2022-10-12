@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * Handles installation and upgrade tasks.
+ */
+
+/**
+ * Enabling the new config for the default logo and brand image.
+ */
+function gin_login_update_8101() {
+  /** @var \Drupal\Core\Config\Config $config */
+  $config = \Drupal::configFactory()->getEditable('gin_login.settings');
+  $config
+    ->set('logo.use_default', TRUE)
+    ->set('brand_image.use_default', TRUE)
+    ->save();
+}

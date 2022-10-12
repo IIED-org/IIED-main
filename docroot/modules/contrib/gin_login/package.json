@@ -1,0 +1,52 @@
+{
+  "name": "gin",
+  "version": "3.1.0",
+  "description": "Frontend build tools",
+  "scripts": {
+    "start": "npm run build",
+    "build": "webpack --progress --config webpack.config.build.js"
+  },
+  "email": "hello@saschaeggenberger.com",
+  "author": "Sascha Eggenberger",
+  "license": "MIT",
+  "homepage": "https://sascha.is",
+  "keywords": [
+    "drupal",
+    "webpack",
+    "gin",
+    "frontend"
+  ],
+  "devDependencies": {
+    "@babel/cli": "^7.10.1",
+    "@babel/core": "^7.13.8",
+    "@babel/plugin-syntax-dynamic-import": "7.0.0",
+    "@babel/preset-env": "^7.13.9",
+    "autoprefixer": "^9.7.3",
+    "babel-eslint": "10.0.1",
+    "babel-loader": "^8.2.2",
+    "breakpoint-sass": "^2.7.1",
+    "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^3.4.1",
+    "dotenv-webpack": "^7.0.1",
+    "es6-promise": "^4.1.1",
+    "mini-css-extract-plugin": "^0.11.3",
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^12.3.0",
+    "svg-inline-loader": "^0.8.0",
+    "svg-spritemap-webpack-plugin": "^3.9.0",
+    "webpack": "^5.26.3",
+    "webpack-cli": "^4.5.0",
+    "webpack-merge": "^5.7.3",
+    "webpack-notifier": "^1.13.0",
+    "webpack-remove-empty-scripts": "^0.7.1"
+  },
+  "dependencies": {
+    "core-js": "^3.9.1",
+    "file-loader": "^6.2.0",
+    "sass": "^1.44.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git.drupalcode.org/project/gin"
+  }
+}

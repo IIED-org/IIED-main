@@ -1,0 +1,107 @@
+<?php
+
+/**
+ * @file
+ * A simple module providing a feature to redirect users according to an
+ * URL-defined parameter after logging in. Allows redirect only internal url
+ * of site.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+use Drupal\user\UserInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+
+/**
+ * Implements hook_help().
+ */
+function redirect_after_login_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.redirect_after_login':
+      $readme = __DIR__ . '/README.TXT';
+      $text = file_get_contents($readme);
+      $output = '';
+
+      // If the Markdown module is installed, use it to render the README.
+      if ($text && Drupal::moduleHandler()
+          ->moduleExists('markdown') === TRUE) {
+        $filter_manager = Drupal::service('plugin.manager.filter');
+        $settings = Drupal::configFactory()
+          ->get('markdown.settings')
+          ->getRawData();
+        $config = ['settings' => $settings];
+        $filter = $filter_manager->createInstance('markdown', $config);
+        $output = $filter->process($text, 'en');
+      }
+      // Else the Markdown module is not installed output the README as text.
+      else {
+        if ($text) {
+          $output = '<pre>' . $text . '</pre>';
+        }
+      }
+
+      // Add a link to the Drupal.org project.
+      $output .= '<p>';
+      $output .= t('Visit the <a href=":project_link">project pages</a> on Drupal.org for more information.', [
+        ':project_link' => 'https://www.drupal.org/project/redirect_after_login',
+      ]);
+      $output .= '</p>';
+
+      return $output;
+  }
+
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function redirect_after_login_user_login($account) {
+  $current_route = Drupal::routeMatch()->getRouteName();
+  $request = Drupal::request();
+  if ($request->getRequestFormat() !== 'html') {
+    return;
+  }
+  $destination = $request->query->get('destination');
+  if ($destination && $destination != '/user/login') {
+    return;
+  }
+
+ //Accessing the site in maintenance mode.
+  if (\Drupal::state()
+      ->get('system.maintenance_mode') && !$account->hasPermission('access site in maintenance mode')) {
+    // The site is in maintenance mode and the user is not allowed in.
+    // Step out and let Drupal handle it.
+    $homeResponse = new RedirectResponse(URL::fromUserInput('/')->toString());
+    $homeResponse->send();
+  }
+
+  $config = Drupal::config('redirect_after_login.settings');
+  $currentUrl = Drupal::service('path.current')->getPath();
+  $urls = preg_split("/\\r\\n|\\r|\\n/", $config->get('exclude_urls'));
+  $pathMatcher = Drupal::service('path.matcher');
+
+  // Check excluded urls.
+  foreach ($urls as $url) {
+    if ($pathMatcher->matchPath($currentUrl, $url)) {
+      return;
+    }
+  }
+
+  if (!in_array($current_route, ['user.reset', 'user.reset.login'])) {
+    // We want to redirect user on login.
+    $current_user = Drupal::currentUser();
+    $username = $current_user->getRoles();
+    $login_redirection = Drupal::config('redirect_after_login.settings')
+      ->get('login_redirection');
+    if (isset($login_redirection[array_reverse($username)[0]])) {
+      $response = new RedirectResponse(Url::fromUserInput($login_redirection[array_reverse($username)[0]])
+        ->toString());
+      $response->send();
+    }
+    else {
+      $homeResponse = new RedirectResponse(URL::fromUserInput('/')->toString());
+      $homeResponse->send();
+    }
+  }
+}

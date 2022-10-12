@@ -65,6 +65,7 @@ module:
   format_bytes: 0
   geolocation: 0
   gin_lb: 0
+  gin_login: 0
   gin_toolbar: 0
   google_analytics: 0
   google_tag: 0
@@ -126,6 +127,7 @@ module:
   rdf: 0
   readmore_js: 0
   redirect: 0
+  redirect_after_login: 0
   responsive_image: 0
   responsive_menu: 0
   rest: 0

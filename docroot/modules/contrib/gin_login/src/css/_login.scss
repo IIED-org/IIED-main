@@ -1,0 +1,196 @@
+body.gin-login {
+  $breakpoint: 800px;
+
+  .toolbar-icon-default {
+    text-indent: -999em;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      background-color: var(--colorGinText, #000);
+      mask-image: url(../../images/gin.svg);
+      mask-repeat: no-repeat;
+      mask-position: center center;
+      mask-size: 100% 100%;
+
+      @media (min-width: $breakpoint) {
+        width: 40px;
+        height: 40px;
+      }
+
+      &:hover {
+        background-color: var(--colorGinPrimary, #003cc5);
+      }
+    }
+  }
+
+  .user-form-page {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 100vh;
+    max-height: 100%;
+    background: var(--colorGinLayerBackground, #fff);
+
+    @media (min-width: $breakpoint) {
+      flex-wrap: nowrap;
+    }
+
+    &, * {
+      box-sizing: border-box;
+    }
+
+    &__user-form,
+    &__wallpaper {
+      width: 100%;
+
+      @media (min-width: $breakpoint) {
+        flex-basis: 50%;
+      }
+    }
+
+    &__user-form {
+      display: flex;
+      flex-wrap: wrap;
+      max-width: $breakpoint;
+
+      @media (max-width: $breakpoint) {
+        flex-basis: 100%;
+        align-content: flex-start;
+      }
+
+      @media (min-width: $breakpoint) {
+        min-width: 640px;
+      }
+
+      img {
+        width: 100%;
+        max-height: 40px;
+      }
+    }
+
+    &__wallpaper {
+      display: none;
+      pointer-events: none;
+      position: relative;
+      background-color: #ccc;
+
+      @media (min-width: $breakpoint) {
+        display: flex;
+        flex-grow: 1;
+        flex-basis: 70%;
+      }
+
+      img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    &__page-title {
+      font-size: 2rem;
+      margin-top: 0;
+      margin-bottom: 1rem;
+      width: 100%;
+      max-width: 100%;
+      text-overflow: unset;
+      white-space: normal;
+
+      @media (min-width: $breakpoint) {
+        font-size: 3rem;
+        margin-top: 2rem;
+      }
+    }
+
+    .content-header {
+      flex-basis: 100%;
+      padding-top: 2.25rem;
+      background: transparent;
+
+      @media (max-width: $breakpoint) {
+        margin-bottom: 4rem;
+      }
+
+      a {
+        display: inline-flex;
+      }
+    }
+
+    .layout-container {
+      max-width: 560px;
+      margin: 0 auto !important;
+      padding-left: 24px;
+      padding-right: 24px;
+
+      @media (min-width: $breakpoint) {
+        padding-left: 48px;
+        padding-right: 48px;
+      }
+    }
+
+    .block-system > form {
+      padding: 0;
+      border: 0 none;
+      box-shadow: none;
+      background: transparent;
+    }
+
+    .form-type--text,
+    .form-type--password,
+    .form-type--email {
+      input {
+        width: 100%;
+      }
+    }
+
+    .form-element {
+      width: 100%;
+      padding: 1rem;
+    }
+
+    .more-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    .register-button {
+      width: 100%;
+      margin-right: 0;
+    }
+
+    .forgot-password-link {
+      display: inline-block;
+      margin-top: 2rem;
+    }
+  }
+
+  .user-login-form {
+    .button {
+      width: 100%;
+      padding: 1.25rem 1rem;
+      margin-right: 0;
+      margin-bottom: 0;
+
+      &--primary {
+        margin-top: 0;
+      }
+    }
+
+    .form-actions {
+      display: block;
+      margin-bottom: 0;
+    }
+  }
+
+  .page-wrapper {
+    margin-top: 0;
+  }
+}
