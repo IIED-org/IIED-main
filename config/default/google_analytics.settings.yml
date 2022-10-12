@@ -1,6 +1,7 @@
 _core:
   default_config_hash: HD-kJquDfx3JureBUmIIt_ADNReD_jLvKg4fwKISoJs
 account: UA-334389-1
+premium: false
 domain_mode: 0
 cross_domains: ''
 visibility:
@@ -14,7 +15,6 @@ visibility:
 track:
   outbound: true
   mailto: true
-  tel: true
   files: true
   files_extensions: '7z|aac|arc|arj|asf|asx|avi|bin|csv|doc(x|m)?|dot(x|m)?|exe|flv|gif|gz|gzip|hqx|jar|jpe?g|js|mp(2|3|4|e?g)|mov(ie)?|msi|msp|pdf|phps|png|ppt(x|m)?|pot(x|m)?|pps(x|m)?|ppam|sld(x|m)?|thmx|qtm?|ra(m|r)?|sea|sit|tar|tgz|torrent|txt|wav|wma|wmv|wpd|xls(x|m|b)?|xlt(x|m)|xlam|xml|z|zip'
   colorbox: true
@@ -25,61 +25,62 @@ track:
   site_search: false
   adsense: false
   displayfeatures: false
+  tel: true
 privacy:
   anonymizeip: true
 custom:
   dimension:
     1:
-      value: '[node:field_team]'
       index: 1
+      value: '[node:field_team]'
     2:
-      value: '[node:content-type]'
       index: 2
+      value: '[node:content-type]'
     3:
-      value: '[node:field_theme_s_]'
       index: 3
+      value: '[node:field_theme_s_]'
     5:
-      value: '[node:field_author_s_]'
       index: 5
-    6:
-      value: '[node:field_project]'
-      index: 6
-    8:
-      value: '[node:created:custom:c]'
-      index: 8
-    9:
-      value: '[node:field_author_s_:0:entity:field_person_type]'
-      index: 9
-    10:
-      value: '[node:field_product_code_new:value]'
-      index: 10
-    11:
-      value: '[node:field_project:entity:url]'
-      index: 11
-    12:
-      value: '[node:field_deptlist]'
-      index: 12
-    13:
-      value: '[node:field_series]'
-      index: 13
-    14:
-      value: '[node:field_lists]'
-      index: 14
-    15:
-      value: '[node:field_work_programme_global_enga]'
-      index: 15
-    16:
-      value: '[node:field_document_type]'
-      index: 16
-    17:
-      value: '[node:field_area_list]'
-      index: 17
-    18:
       value: '[node:field_author_s_]'
+    6:
+      index: 6
+      value: '[node:field_project]'
+    8:
+      index: 8
+      value: '[node:created:custom:c]'
+    9:
+      index: 9
+      value: '[node:field_author_s_:0:entity:field_person_type]'
+    10:
+      index: 10
+      value: '[node:field_product_code_new:value]'
+    11:
+      index: 11
+      value: '[node:field_project:entity:url]'
+    12:
+      index: 12
+      value: '[node:field_deptlist]'
+    13:
+      index: 13
+      value: '[node:field_series]'
+    14:
+      index: 14
+      value: '[node:field_lists]'
+    15:
+      index: 15
+      value: '[node:field_work_programme_global_enga]'
+    16:
+      index: 16
+      value: '[node:field_document_type]'
+    17:
+      index: 17
+      value: '[node:field_area_list]'
+    18:
       index: 18
+      value: '[node:field_author_s_]'
     19:
-      value: '[node:field_date_published]'
       index: 19
+      value: '[node:field_date_published]'
   metric: {  }
 codesnippet:
   create: {  }
@@ -88,4 +89,3 @@ codesnippet:
 translation_set: false
 cache: false
 debug: false
-premium: 0
