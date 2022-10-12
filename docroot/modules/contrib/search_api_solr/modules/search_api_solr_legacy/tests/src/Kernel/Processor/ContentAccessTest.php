@@ -17,7 +17,7 @@ class ContentAccessTest extends SearchApiSolrContentAccessTest {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'search_api_solr_legacy',
     'search_api_solr_legacy_test',
   ];

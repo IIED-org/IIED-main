@@ -136,7 +136,7 @@
         "drupal/search404": "2.x-dev@dev",
         "drupal/search_api": "^1.23",
         "drupal/search_api_autocomplete": "^1.6",
-        "drupal/search_api_solr": "^4.2.7",
+        "drupal/search_api_solr": "4.2.8",
         "drupal/search_api_sorts": "1.x-dev@dev",
         "drupal/search_api_sorts_widget": "^1.0",
         "drupal/serial": "^1.0@alpha",
@@ -296,9 +296,6 @@
           },
           "drupal/google_analytics": {
             "3258588": "https://www.drupal.org/files/issues/2022-09-01/3258588_google_analytics_deprecated_function_2_5_001.patch"
-          },
-          "drupal/search_api_solr": {
-            "3314711": "https://www.drupal.org/files/issues/2022-10-11/search-api-solr-3314711-5.patch"
           }
         }
     }

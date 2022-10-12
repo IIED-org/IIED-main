@@ -36,7 +36,7 @@ class DateRangeTest extends ProcessorTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'datetime',
     'datetime_range',
     'search_api_solr',
