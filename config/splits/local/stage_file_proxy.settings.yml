@@ -1,0 +1,5 @@
+hotlink: false
+origin: 'https://www.iied.org'
+origin_dir: sites/default/files
+use_imagecache_root: false
+verify: false

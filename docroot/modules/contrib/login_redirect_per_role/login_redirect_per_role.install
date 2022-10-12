@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Installation functions for Login And Logout Redirect Per Role module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function login_redirect_per_role_install() {
+  login_redirect_per_role_update_8001();
+}
+
+/**
+ * Set big weight to be sure that module hooks will be called the last.
+ */
+function login_redirect_per_role_update_8001() {
+  module_set_weight('login_redirect_per_role', 1000);
+}

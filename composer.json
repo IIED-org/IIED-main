@@ -109,6 +109,7 @@
         "drupal/layout_builder_styles": "^1.0@beta",
         "drupal/layout_builder_tabs": "^1.0@beta",
         "drupal/layout_paragraphs": "^1.0",
+        "drupal/login_redirect_per_role": "^1.9",
         "drupal/masquerade": "^2.0",
         "drupal/media_entity_file_replace": "^1.0",
         "drupal/media_pdf_thumbnail": "^5.0",
@@ -131,7 +132,6 @@
         "drupal/readmore_js": "^2.0",
         "drupal/readonlymode": "^1.1",
         "drupal/redirect": "^1.7",
-        "drupal/redirect_after_login": "^2.7",
         "drupal/responsive_menu": "^5.0-dev",
         "drupal/search404": "2.x-dev@dev",
         "drupal/search_api": "^1.23",
@@ -275,9 +275,6 @@
           },
           "drupal/readonlymode": {
             "Got fatal error when running this module":"https://www.drupal.org/files/issues/2020-12-23/readonlymode-string_not_array-3115119-9.patch"
-          },
-          "drupal/taxonomy_import": {
-            "CSVs not detected properly":"https://www.drupal.org/files/issues/2021-12-17/3255009-csvs_not_detected-2.patch"
           },
           "drupal/responsive_menu": {
             "Add 'front' options to menu position":"https://www.drupal.org/files/issues/2022-06-20/responsive_menu-menuposition-3274889-3.diff"

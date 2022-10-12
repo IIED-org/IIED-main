@@ -1,0 +1,4 @@
+services:
+  login_redirect_per_role.service:
+    class: Drupal\login_redirect_per_role\LoginRedirectPerRole
+    arguments: ['@current_route_match', '@request_stack', '@config.factory', '@current_user', '@token']

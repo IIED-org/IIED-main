@@ -1,0 +1,6 @@
+login_redirect_per_role.redirect_url_admin_settings:
+  title: 'Login and Logout Redirect per role'
+  route_name: login_redirect_per_role.redirect_url_admin_settings
+  description: 'Redirect user as per role menu'
+  parent: system.admin_config_system
+  weight: 99

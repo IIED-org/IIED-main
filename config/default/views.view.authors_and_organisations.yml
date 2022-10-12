@@ -7,6 +7,10 @@ dependencies:
     - taxonomy.vocabulary.organisation
     - taxonomy.vocabulary.person
     - taxonomy.vocabulary.tags
+    - user.role.administrator
+    - user.role.editor
+    - user.role.manager
+    - user.role.publications_editor
   module:
     - better_exposed_filters
     - name
@@ -182,9 +186,13 @@ display:
                   collapsible: false
                   is_secondary: false
       access:
-        type: perm
+        type: role
         options:
-          perm: 'access content'
+          role:
+            publications_editor: publications_editor
+            editor: editor
+            manager: manager
+            administrator: administrator
       cache:
         type: tag
         options: {  }
@@ -306,7 +314,7 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user.permissions
+        - user.roles
       tags: {  }
   feed_1:
     id: feed_1
@@ -477,7 +485,7 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
-        - user.permissions
+        - user.roles
       tags: {  }
   page_1:
     id: page_1
@@ -676,8 +684,8 @@ display:
         description: ''
         weight: 3
         expanded: false
-        menu_name: main
-        parent: ''
+        menu_name: admin
+        parent: 'admin_toolbar_tools.extra_links:views_ui.content_recent'
         context: '0'
     cache_metadata:
       max-age: -1
@@ -686,7 +694,7 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user.permissions
+        - user.roles
       tags:
         - 'config:field.storage.taxonomy_term.field_name'
   page_2:
@@ -836,8 +844,8 @@ display:
         description: ''
         weight: 4
         expanded: false
-        menu_name: main
-        parent: ''
+        menu_name: admin
+        parent: 'admin_toolbar_tools.extra_links:views_ui.content_recent'
         context: '0'
     cache_metadata:
       max-age: -1
@@ -846,7 +854,7 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user.permissions
+        - user.roles
       tags: {  }
   page_3:
     id: page_3
@@ -1051,8 +1059,8 @@ display:
         description: ''
         weight: 5
         expanded: false
-        menu_name: main
-        parent: ''
+        menu_name: admin
+        parent: 'admin_toolbar_tools.extra_links:views_ui.content_recent'
         context: '0'
     cache_metadata:
       max-age: -1
@@ -1061,5 +1069,5 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user.permissions
+        - user.roles
       tags: {  }

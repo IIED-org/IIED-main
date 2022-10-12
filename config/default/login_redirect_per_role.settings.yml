@@ -1,0 +1,50 @@
+login:
+  authenticated:
+    redirect_url: ''
+    allow_destination: false
+    weight: 0
+  viewer:
+    redirect_url: ''
+    allow_destination: false
+    weight: 0
+  publications_editor:
+    redirect_url: /admin/edit
+    allow_destination: false
+    weight: 0
+  editor:
+    redirect_url: ''
+    allow_destination: false
+    weight: 0
+  manager:
+    redirect_url: ''
+    allow_destination: false
+    weight: 0
+  administrator:
+    redirect_url: ''
+    allow_destination: false
+    weight: 0
+logout:
+  authenticated:
+    redirect_url: ''
+    allow_destination: false
+    weight: 0
+  viewer:
+    redirect_url: ''
+    allow_destination: false
+    weight: 0
+  publications_editor:
+    redirect_url: /
+    allow_destination: false
+    weight: 0
+  editor:
+    redirect_url: ''
+    allow_destination: false
+    weight: 0
+  manager:
+    redirect_url: ''
+    allow_destination: false
+    weight: 0
+  administrator:
+    redirect_url: ''
+    allow_destination: false
+    weight: 0

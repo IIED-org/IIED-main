@@ -1,0 +1,11 @@
+ {
+    "name": "drupal/login_redirect_per_role",
+    "description": "Provides ability to redirect user on Log in and Log out depending on user role.",
+    "type": "drupal-module",
+    "license": [
+       "GPL-2.0-or-later"
+    ],
+    "require-dev": {
+      "drupal/token": "*"
+    }
+}

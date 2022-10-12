@@ -11,6 +11,7 @@ dependencies:
   module:
     - content_translation
     - filter
+    - form_mode_control
     - media
     - media_revisions_ui
     - node
@@ -25,6 +26,8 @@ label: 'Publications editor'
 weight: -7
 is_admin: null
 permissions:
+  - 'access administration pages'
+  - 'access user profiles'
   - 'create document media'
   - 'create image media'
   - 'create publication content'
@@ -42,6 +45,13 @@ permissions:
   - 'unpublish any node type publication'
   - 'unpublish editable node type publication'
   - 'unpublish own node type publication'
+  - 'use  The form mode default linked to  media entity( document )'
+  - 'use  The form mode default linked to  media entity( image )'
+  - 'use  The form mode default linked to  node entity( publication )'
+  - 'use  The form mode default linked to  taxonomy_term entity( organisation )'
+  - 'use  The form mode default linked to  taxonomy_term entity( person )'
+  - 'use  The form mode media_library linked to  media entity( document )'
+  - 'use  The form mode media_library linked to  media entity( image )'
   - 'use text format simple_html'
   - 'view all media revisions'
   - 'view any unpublished content'

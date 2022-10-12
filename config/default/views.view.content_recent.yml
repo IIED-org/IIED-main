@@ -9,6 +9,7 @@ dependencies:
     - user.role.administrator
     - user.role.editor
     - user.role.manager
+    - user.role.publications_editor
   module:
     - better_exposed_filters
     - computed_field
@@ -2970,6 +2971,7 @@ display:
         type: role
         options:
           role:
+            publications_editor: publications_editor
             editor: editor
             manager: manager
             administrator: administrator
@@ -3382,10 +3384,10 @@ display:
         type: tab
         title: 'All publications'
         description: ''
-        weight: 0
+        weight: 1
         expanded: false
-        menu_name: main
-        parent: ''
+        menu_name: admin
+        parent: 'admin_toolbar_tools.extra_links:views_ui.content_recent'
         context: '0'
       tab_options:
         type: tab
