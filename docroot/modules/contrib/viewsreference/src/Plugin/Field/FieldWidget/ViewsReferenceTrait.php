@@ -324,7 +324,10 @@ trait ViewsReferenceTrait {
           return $a['position'] <=> $b['position'];
         });
         foreach ($displays as $display) {
-          if (in_array($display['display_plugin'], $view_plugins, TRUE)) {
+          // Only add the display to the list when it is enabled. If the key
+          // doesn't exist, enabled is assumed. See Views::getApplicableViews.
+          $display_enabled = !empty($display['display_options']['enabled']) || !array_key_exists('enabled', $display['display_options']);
+          if ($display_enabled && in_array($display['display_plugin'], $view_plugins, TRUE)) {
             $options[$display['id']] = $display['display_title'];
           }
         }

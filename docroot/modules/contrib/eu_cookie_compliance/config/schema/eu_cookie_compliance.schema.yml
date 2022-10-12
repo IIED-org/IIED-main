@@ -233,7 +233,7 @@ eu_cookie_compliance.settings:
       type: string
       label: 'Close button action'
     reject_button_label:
-      type: string
+      type: label
       label: 'Reject button label'
     reject_button_enabled:
       type: boolean

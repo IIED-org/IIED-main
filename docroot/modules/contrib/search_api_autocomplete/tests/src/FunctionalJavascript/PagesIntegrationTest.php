@@ -18,7 +18,7 @@ class PagesIntegrationTest extends IntegrationTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'search_api_autocomplete_test_pages',
   ];
 
@@ -53,7 +53,7 @@ class PagesIntegrationTest extends IntegrationTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $permissions = [
@@ -212,7 +212,7 @@ class PagesIntegrationTest extends IntegrationTestBase {
     $edit = [
       'suggesters[settings][server][fields][body]' => TRUE,
     ];
-    $this->drupalPostForm(NULL, $edit, 'Save');
+    $this->submitForm($edit, 'Save');
 
     $this->drupalGet('test-search');
 

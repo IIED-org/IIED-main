@@ -2,7 +2,7 @@
 
 namespace Drupal\Tests\search_api_autocomplete\FunctionalJavascript;
 
-use Behat\Mink\Driver\GoutteDriver;
+use Behat\Mink\Driver\BrowserKitDriver;
 use Behat\Mink\Element\NodeElement;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\search_api_test\PluginTestTrait;
@@ -41,6 +41,7 @@ abstract class IntegrationTestBase extends WebDriverTestBase {
    */
   protected function getAutocompleteSuggestions($field_html_id = 'edit-keys', $input = 'Tést') {
     $page = $this->getSession()->getPage();
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assert_session */
     $assert_session = $this->assertSession();
     $field = $assert_session->elementExists('css', "input[data-drupal-selector=\"$field_html_id\"]");
     $field->setValue($input);
@@ -119,7 +120,7 @@ abstract class IntegrationTestBase extends WebDriverTestBase {
   protected function logPageChange($url = NULL, $method = 'GET') {
     $session = $this->getSession();
     $driver = $session->getDriver();
-    if (!$this->htmlOutputEnabled || $driver instanceof GoutteDriver) {
+    if (!$this->htmlOutputEnabled || $driver instanceof BrowserKitDriver) {
       return;
     }
     $current_url = $session->getCurrentUrl();

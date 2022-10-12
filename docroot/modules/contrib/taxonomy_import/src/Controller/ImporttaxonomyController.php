@@ -3,7 +3,7 @@
 namespace Drupal\taxonomy_import\Controller;
 
 /**
- * Contains \Drupal\taxonomy_import\Controller\ImporttaxonomyController.
+ * Class for Import Taxonomy.
  */
 class ImporttaxonomyController {
 

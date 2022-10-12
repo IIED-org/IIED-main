@@ -15,7 +15,7 @@ use \Drupal\views\ViewExecutable;
  */
 function viewsreference_help($route_name, RouteMatchInterface $arg) {
   if ($route_name === 'help.page.viewsreference') {
-    $output = file_get_contents(drupal_get_path('module', 'viewsreference') . '/README.md');
+    $output = file_get_contents(\Drupal::service('extension.list.module')->getPath('viewsreference') . '/README.md');
     return \Drupal::moduleHandler()->moduleExists('markdown') ? Xss::filterAdmin(\Drupal::moduleHandler()->invoke('markdown', 'filter', ['process', 0, -1, $output])) : '<h3>viewsreference README</h3><pre>' . Html::escape($output) . '</pre>';
   }
 }

@@ -144,9 +144,8 @@ class MergeTermsTarget extends FormBase {
       $this->getTempStore()->set('target', $term);
     }
 
-    $route_name = 'entity.taxonomy_vocabulary.merge_confirm';
     $route_parameters['taxonomy_vocabulary'] = $this->vocabulary->id();
-    $form_state->setRedirect($route_name, $route_parameters);
+    $form_state->setRedirect('entity.taxonomy_vocabulary.merge_confirm', $route_parameters);
   }
 
   /**
@@ -172,6 +171,8 @@ class MergeTermsTarget extends FormBase {
     foreach ($terms as $term) {
       $options[$term->id()] = $term->label();
     }
+
+    asort($options);
 
     return $options;
   }

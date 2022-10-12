@@ -102,6 +102,9 @@ plugin.plugin_configuration.search_api_autocomplete_suggester.live_results:
         field:
           type: string
           label: 'The field to replace the live result'
+    suggest_keys:
+      type: boolean
+      label: 'Whether to suggest keywords instead of result links'
     view_modes:
       type: sequence
       label: 'The view modes to use for displaying results'

@@ -30,7 +30,7 @@ class CacheInvalidationTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Change the view to use an exposed form block.

@@ -37,6 +37,11 @@ abstract class MergeTermsTestBase extends BrowserTestBase {
     'system',
   ];
 
+  /**
+   * Name of the theme to use in tests.
+   *
+   * @var string
+   */
   protected $defaultTheme = 'stark';
 
   /**
@@ -71,11 +76,11 @@ abstract class MergeTermsTestBase extends BrowserTestBase {
    * Create a new vocabulary with random properties.
    *
    * @return \Drupal\taxonomy\VocabularyInterface
-   *   The created vocabulary
+   *   The created vocabulary.
    */
   public function createVocabulary(): VocabularyInterface {
     return $this->traitCreateVocabulary();
-   }
+  }
 
   /**
    * Returns the number of terms that should be set up by the setUp function.
@@ -102,7 +107,6 @@ abstract class MergeTermsTestBase extends BrowserTestBase {
     /** @var \Drupal\Core\Session\AccountInterface $account */
     $account_proxy->setAccount($account);
     \Drupal::getContainer()->set('current_user', $account_proxy);
-
 
     $this->createTerms($this->numberOfTermsToSetUp());
   }

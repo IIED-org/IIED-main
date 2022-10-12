@@ -22,7 +22,7 @@ use Drupal\Core\TypedData\DataDefinition;
  *   category = @Translation("Reference"),
  *   default_widget = "viewsreference_autocomplete",
  *   default_formatter = "viewsreference_formatter",
- *   list_class = "\Drupal\Core\Field\EntityReferenceFieldItemList",
+ *   list_class = "\Drupal\viewsreference\Plugin\Field\ViewsReferenceFieldItemList",
  * )
  */
 class ViewsReferenceItem extends EntityReferenceItem {
@@ -92,6 +92,14 @@ class ViewsReferenceItem extends EntityReferenceItem {
     if (isset($values['target_id']) && is_array($values['target_id'])) {
       $values['target_id'] = isset($values['target_id'][0]['target_id']) ? $values['target_id'][0]['target_id'] : NULL;
     }
+
+    // Empty string argument only possible if no argument supplied.
+    $data = unserialize($values['data'], ['allowed_classes' => FALSE]);
+    if (isset($data['argument']) && $data['argument'] === '') {
+      $data['argument'] = NULL;
+      $values['data'] = serialize($data);
+    }
+
     parent::setValue($values, FALSE);
   }
 

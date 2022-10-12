@@ -162,7 +162,8 @@ function eu_cookie_compliance_requirements($phase) {
       $config = $language_manager->getLanguageConfigOverride($language->getId(), 'eu_cookie_compliance.settings');
 
       // Get the config variables. This will use the overridden language.
-      $popup_link = $config->get('popup_link') ?: '<front>';
+      $original_config = \Drupal::config('eu_cookie_compliance.settings');
+      $popup_link = $config->get('popup_link') ?: ($original_config->get('popup_link') ?: '<front>');
 
       // Check the current language for wrongly configured policy link.
       if ($popup_link === '<front>' && $show_policy && $default_language->getId() !== $language->getId()) {
@@ -175,7 +176,7 @@ function eu_cookie_compliance_requirements($phase) {
       }
     }
   }
-  if ($phase === 'runtime') {
+  elseif ($phase === 'runtime') {
     // Get the config variables.
     $popup_link = Drupal::config('eu_cookie_compliance.settings')
       ->get('popup_link');

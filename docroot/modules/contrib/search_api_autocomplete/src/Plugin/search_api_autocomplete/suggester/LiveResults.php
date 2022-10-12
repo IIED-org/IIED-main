@@ -122,11 +122,12 @@ class LiveResults extends SuggesterPluginBase implements PluginFormInterface {
   public function defaultConfiguration() {
     return [
       'fields' => [],
-      'view_modes' => [],
       'highlight' => [
         'enabled' => FALSE,
         'field' => '',
       ],
+      'suggest_keys' => FALSE,
+      'view_modes' => [],
     ];
   }
 
@@ -153,10 +154,24 @@ class LiveResults extends SuggesterPluginBase implements PluginFormInterface {
       '#attributes' => ['class' => ['search-api-checkboxes-list']],
     ];
 
+    $form['suggest_keys'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Suggest result labels as keywords'),
+      '#default_value' => $this->configuration['suggest_keys'],
+      '#description' => $this->t('By default, the found results will be displayed to the visitor as links to those results. When this option is enabled, the label of the result will be instead presented as a suggestion for search keywords.'),
+    ];
+
     $form['view_modes'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('View modes'),
       '#description' => $this->t('Please select the view modes to use for live results.'),
+      '#states' => [
+        'invisible' => [
+          ':input[name="suggesters[settings][live_results][suggest_keys]"]' => [
+            'checked' => TRUE,
+          ],
+        ],
+      ],
     ];
     // Let the user select the view mode to use for live results.
     $selected_view_modes = $this->configuration['view_modes'];
@@ -315,6 +330,7 @@ class LiveResults extends SuggesterPluginBase implements PluginFormInterface {
 
     $suggestions = [];
     $view_modes = $this->configuration['view_modes'];
+    $suggest_keys = $this->configuration['suggest_keys'];
     $highlight_field = NULL;
     if ($this->isHighlightingEnabled()) {
       $highlight_field = $this->configuration['highlight']['field'];
@@ -362,8 +378,16 @@ class LiveResults extends SuggesterPluginBase implements PluginFormInterface {
           continue;
         }
       }
-      // If no view mode was selected for this bundle, just use the label.
-      if (empty($view_modes[$datasource_id][$bundle])) {
+
+      if ($suggest_keys) {
+        // Return the item label as suggested keywords, if one can be retrieved.
+        $label = $datasource->getItemLabel($object);
+        if ($label) {
+          $suggestions[] = $factory->createFromSuggestedKeys($label);
+        }
+      }
+      elseif (empty($view_modes[$datasource_id][$bundle])) {
+        // If no view mode was selected for this bundle, just use the label.
         $label = $datasource->getItemLabel($object);
         $suggestions[] = $factory->createUrlSuggestion($url, $label);
       }

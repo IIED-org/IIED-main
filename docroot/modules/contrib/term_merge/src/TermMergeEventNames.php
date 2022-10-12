@@ -8,8 +8,7 @@ namespace Drupal\term_merge;
 final class TermMergeEventNames {
 
   /**
-   * The name of the event triggered when one or more terms are merged into
-   * some other term.
+   * Name of event triggered when one or more terms are merged into another.
    *
    * This event allows modules to react to a term merge. The event listener
    * method receives a \Drupal\term_merge\TermsMergedEvent instance.

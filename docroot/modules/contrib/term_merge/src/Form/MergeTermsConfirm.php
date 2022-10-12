@@ -92,15 +92,12 @@ class MergeTermsConfirm extends FormBase {
 
   /**
    * {@inheritdoc}
-   *
-   * @SuppressWarnings(camelCase)
-   * @SuppressWarnings("else")
    */
   public function buildForm(array $form, FormStateInterface $form_state, VocabularyInterface $taxonomy_vocabulary = NULL) {
     $this->vocabulary = $taxonomy_vocabulary;
-    $selectedTermIds = $this->getSelectedTermIds();
+    $selected_term_ids = $this->getSelectedTermIds();
 
-    if (empty($selectedTermIds)) {
+    if (empty($selected_term_ids)) {
       $this->messenger()->addError($this->t("You must submit at least one term."), 'error');
       return $form;
     }
@@ -112,7 +109,7 @@ class MergeTermsConfirm extends FormBase {
     }
 
     $arguments = [
-      '%termCount' => count($selectedTermIds),
+      '%termCount' => count($selected_term_ids),
       '%termName' => is_string($target) ? $target : $target->label(),
     ];
 
@@ -145,16 +142,21 @@ class MergeTermsConfirm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $selected_terms = $this->loadSelectedTerms();
 
+    /** @var \Drupal\taxonomy\TermInterface|string $target */
     $target = $this->tempStoreFactory->get('term_merge')->get('target');
+    // Stashing the destination tid in the form_state allows implementations of
+    // hook_form_alter() to access it.
     if (is_string($target)) {
-      $this->termMerger->mergeIntoNewTerm($selected_terms, $target);
-      $this->setSuccessfullyMergedMessage(count($selected_terms), $target);
-      $this->redirectToTermMergeForm($form_state);
-      return;
+      $target_label = $target;
+      $term_destination = $this->termMerger->mergeIntoNewTerm($selected_terms, $target);
+      $form_state->set('destination_tid', $term_destination->id());
     }
-
-    $this->termMerger->mergeIntoTerm($selected_terms, $target);
-    $this->setSuccessfullyMergedMessage(count($selected_terms), $target->label());
+    else {
+      $target_label = $target->label();
+      $this->termMerger->mergeIntoTerm($selected_terms, $target);
+      $form_state->set('destination_tid', $target->id());
+    }
+    $this->setSuccessfullyMergedMessage(count($selected_terms), $target_label);
     $this->redirectToTermMergeForm($form_state);
   }
 
@@ -216,8 +218,7 @@ class MergeTermsConfirm extends FormBase {
    */
   protected function redirectToTermMergeForm(FormStateInterface $formState): void {
     $parameters['taxonomy_vocabulary'] = $this->vocabulary->id();
-    $routeName = 'entity.taxonomy_vocabulary.merge_form';
-    $formState->setRedirect($routeName, $parameters);
+    $formState->setRedirect('entity.taxonomy_vocabulary.merge_form', $parameters);
   }
 
   /**

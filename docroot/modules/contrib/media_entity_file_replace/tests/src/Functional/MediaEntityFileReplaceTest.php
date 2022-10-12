@@ -21,7 +21,7 @@ class MediaEntityFileReplaceTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'system',
     'field_ui',
     'media',
@@ -132,11 +132,11 @@ class MediaEntityFileReplaceTest extends BrowserTestBase {
     // the contents of the file have.
     $updatedDocument = $this->loadMediaEntityByName('Foobar');
     $updatedFile = $this->loadFileEntity($updatedDocument->getSource()->getSourceFieldValue($updatedDocument));
-    $this->assertEqual($updatedFile->id(), $originalFile->id());
-    $this->assertEqual($updatedFile->getFileUri(), $originalFile->getFileUri());
-    $this->assertEqual($updatedFile->getFilename(), $originalFile->getFilename());
-    $this->assertNotEqual($updatedFile->getSize(), $originalFile->getSize());
-    $this->assertEqual(file_get_contents($updatedFile->getFileUri()), 'new');
+    $this->assertEquals($updatedFile->id(), $originalFile->id());
+    $this->assertEquals($updatedFile->getFileUri(), $originalFile->getFileUri());
+    $this->assertEquals($updatedFile->getFilename(), $originalFile->getFilename());
+    $this->assertNotEquals($updatedFile->getSize(), $originalFile->getSize());
+    $this->assertEquals(file_get_contents($updatedFile->getFileUri()), 'new');
 
     // Now upload another replacement document, but this time don't overwrite
     // the original.
@@ -155,12 +155,12 @@ class MediaEntityFileReplaceTest extends BrowserTestBase {
     // previous one.
     $updatedDocument = $this->loadMediaEntityByName('Foobar');
     $updatedFile = $this->loadFileEntity($updatedDocument->getSource()->getSourceFieldValue($updatedDocument));
-    $this->assertNotEqual($updatedFile->id(), $originalFile->id());
-    $this->assertNotEqual($updatedFile->getFileUri(), $originalFile->getFileUri());
-    $this->assertNotEqual($updatedFile->getFilename(), $originalFile->getFilename());
-    $this->assertNotEqual($updatedFile->getSize(), $originalFile->getSize());
-    $this->assertNotEqual(file_get_contents($updatedFile->getFileUri()), file_get_contents($originalFile->getFileUri()));
-    $this->assertEqual(file_get_contents($updatedFile->getFileUri()), 'foo-new');
+    $this->assertNotEquals($updatedFile->id(), $originalFile->id());
+    $this->assertNotEquals($updatedFile->getFileUri(), $originalFile->getFileUri());
+    $this->assertNotEquals($updatedFile->getFilename(), $originalFile->getFilename());
+    $this->assertNotEquals($updatedFile->getSize(), $originalFile->getSize());
+    $this->assertNotEquals(file_get_contents($updatedFile->getFileUri()), file_get_contents($originalFile->getFileUri()));
+    $this->assertEquals(file_get_contents($updatedFile->getFileUri()), 'foo-new');
     $this->assertFalse($updatedFile->isTemporary());
 
     // The old file entity should still exist, and should not be marked as
