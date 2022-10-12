@@ -296,6 +296,9 @@
           },
           "drupal/google_analytics": {
             "3258588": "https://www.drupal.org/files/issues/2022-09-01/3258588_google_analytics_deprecated_function_2_5_001.patch"
+          },
+          "drupal/search_api_solr": {
+            "3314711": "https://www.drupal.org/files/issues/2022-10-11/search-api-solr-3314711-5.patch"
           }
         }
     }

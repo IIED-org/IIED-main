@@ -1289,10 +1289,15 @@ class Utility {
       }
     }
 
-    $specific_languages = array_keys(array_filter($index->getThirdPartySetting('search_api_solr', 'multilingual', ['specific_languages' => []])['specific_languages']));
-    if (!empty($specific_languages)) {
-      $language_ids = array_intersect($language_ids, $specific_languages);
-      $fallback_languages = array_intersect($fallback_languages, $specific_languages);
+    $third_party_settings = $index->getThirdPartySetting('search_api_solr', 'multilingual', ['specific_languages' => []]);
+    if ($third_party_settings) {
+      if (isset($third_party_settings['specific_languages'])) {
+        $specific_languages = array_keys(array_filter($third_party_settings['specific_languages']));
+        if (!empty($specific_languages)) {
+          $language_ids = array_intersect($language_ids, $specific_languages);
+          $fallback_languages = array_intersect($fallback_languages, $specific_languages);
+        }
+      }
     }
 
     array_walk($language_ids, function (&$item, $key) {

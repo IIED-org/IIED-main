@@ -10562,6 +10562,9 @@
                     "services": {
                         "drush.services.yml": ">=9"
                     }
+                },
+                "patches_applied": {
+                    "3314711": "https://www.drupal.org/files/issues/2022-10-11/search-api-solr-3314711-5.patch"
                 }
             },
             "installation-source": "dist",
