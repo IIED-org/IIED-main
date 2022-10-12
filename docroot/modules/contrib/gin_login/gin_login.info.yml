@@ -1,0 +1,10 @@
+type: module
+name: Gin Login
+description: Custom Drupal Login for Gin theme
+configure: gin_login.configuration_form
+core_version_requirement: ^8 || ^9 || ^10
+
+# Information added by Drupal.org packaging script on 2022-07-29
+version: '8.x-1.3'
+project: 'gin_login'
+datestamp: 1659121149

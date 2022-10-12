@@ -1,0 +1,259 @@
+<?php
+
+/**
+ * @file
+ * gin_login.module
+ */
+
+use Drupal\Core\Url;
+use Drupal\user\UserInterface;
+use Drupal\gin\GinSettings;
+
+/**
+ * Page_attachments_alter()
+ */
+function gin_login_page_attachments_alter(&$page) {
+  if (_gin_login__check_path()) {
+    if (_gin_login_gin_is_active()) {
+      // Get Gin settings.
+      /** @var \Drupal\gin\GinSettings $settings */
+      $settings = \Drupal::classResolver(GinSettings::class);
+
+      // Attach the init script.
+      $page['#attached']['library'][] = 'gin/gin_init';
+
+      // Attach Gin styles.
+      $page['#attached']['library'][] = 'gin/gin';
+
+      // Attach accent overrides CSS.
+      $page['#attached']['library'][] = 'gin/gin_accent';
+
+      // Attach custom Gin overrides.
+      if (file_exists('public://gin-custom.css')) {
+        $page['#attached']['library'][] = 'gin/gin_custom_css';
+      }
+
+      // Expose settings to JS.
+      $page['#attached']['drupalSettings']['gin']['darkmode'] = $settings->get('enable_darkmode');
+      $page['#attached']['drupalSettings']['gin']['darkmode_class'] = 'gin--dark-mode';
+      $page['#attached']['drupalSettings']['gin']['preset_accent_color'] = $settings->get('preset_accent_color');
+      $page['#attached']['drupalSettings']['gin']['accent_color'] = $settings->get('accent_color');
+      $page['#attached']['drupalSettings']['gin']['preset_focus_color'] = $settings->get('preset_focus_color');
+      $page['#attached']['drupalSettings']['gin']['focus_color'] = $settings->get('focus_color');
+      $page['#attached']['drupalSettings']['gin']['highcontrastmode'] = $settings->get('high_contrast_mode');
+      $page['#attached']['drupalSettings']['gin']['highcontrastmode_class'] = 'gin--high-contrast-mode';
+    }
+
+    // Check if path is available and we're at user level.
+    $page['#attached']['library'][] = 'gin_login/gin_login';
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for html.
+ */
+function gin_login_preprocess_html(&$variables) {
+  if (_gin_login__check_path() && _gin_login_gin_is_active()) {
+    // Get Gin settings.
+    /** @var \Drupal\gin\GinSettings $settings */
+    $settings = \Drupal::classResolver(GinSettings::class);
+
+    // Set accent color.
+    $variables['attributes']['data-gin-accent'] = $settings->get('preset_accent_color');
+
+    // Set focus color.
+    $variables['attributes']['data-gin-focus'] = $settings->get('preset_focus_color');
+
+    // High contrast mode.
+    if ($settings->get('high_contrast_mode')) {
+      $variables['attributes']['class'][] = 'gin--high-contrast-mode';
+    }
+
+    // Add identification class to paths.
+    $variables['attributes']['class'][] = 'gin-login';
+  }
+}
+
+/**
+ * Form_alter()
+ */
+function gin_login_form_alter(&$form, $form_state, $form_id) {
+  // User form (Login, Register or Forgot password)
+  if (strpos($form_id, 'user_login') !== FALSE || strpos($form_id, 'user_register') !== FALSE || strpos($form_id, 'user_pass') !== FALSE) {
+    $form['actions']['submit']['#attributes']['class'][] = 'button--primary';
+  }
+
+  // Adding button/links to Register and Forgot password.
+  if (strpos($form_id, 'user_login') !== FALSE) {
+    // Move actions before new elements.
+    $form['actions']['#weight'] = '98';
+
+    // Add new class to submit button.
+    $form['actions']['submit']['#attributes']['class'][] = 'button-login';
+
+    // New wrapper.
+    $form['more-links'] = [
+      '#type' => 'container',
+      '#weight' => '99',
+      '#attributes' => ['class' => ['more-links']],
+    ];
+
+    // Register button.
+    if (\Drupal::config('user.settings')->get('register') != UserInterface::REGISTER_ADMINISTRATORS_ONLY) {
+      $form['more-links']['register_button'] = [
+        '#type' => 'link',
+        '#url' => Url::fromRoute('user.register'),
+        '#title' => t('Create new account'),
+        '#attributes' => [
+          'class' => [
+            'register-button',
+            'button',
+            'button--secondary',
+          ],
+        ],
+        '#weight' => '1',
+      ];
+    }
+
+    // Forgot password link.
+    $form['more-links']['forgot_password_link'] = [
+      '#type' => 'link',
+      '#url' => Url::fromRoute('user.pass'),
+      '#title' => t('Forgot your password?'),
+      '#attributes' => ['class' => ['link', 'forgot-password-link']],
+      '#weight' => '2',
+    ];
+  }
+
+  // Changing name of Reset button.
+  if (strpos($form_id, 'user_pass') !== FALSE) {
+    $form['actions']['submit']['#value'] = t('Reset');
+  }
+}
+
+/**
+ * Theme()
+ */
+function gin_login_theme() {
+  // Page.
+  $theme['page__user__login'] = [
+    'template' => 'page--user--login',
+    'preprocess functions' => ['gin_login_preprocess_ginlogin'],
+  ];
+  $theme['page__user__password'] = [
+    'template' => 'page--user--password',
+    'preprocess functions' => ['gin_login_preprocess_ginlogin'],
+  ];
+  $theme['page__user__register'] = [
+    'template' => 'page--user--register',
+    'preprocess functions' => ['gin_login_preprocess_ginlogin'],
+  ];
+
+  return $theme;
+}
+
+/**
+ * CSS_alter()
+ */
+function gin_login_css_alter(&$css, $assets) {
+  $path = \Drupal::service('extension.list.module')->getPath('gin_login') . '/dist/css/login.css';
+  if (isset($css[$path])) {
+    // Use anything greater than 100 to have it load
+    // after the theme as CSS_AGGREGATE_THEME is set to 100.
+    $css[$path]['group'] = 201;
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function gin_login_preprocess_ginlogin(&$variables) {
+  $config = \Drupal::config('gin_login.settings');
+  $theme = \Drupal::theme()->getActiveTheme()->getName();
+  $variables['site_name'] = \Drupal::config('system.site')->get('name');
+  $themeIconPath = theme_get_setting('icon_path', $theme);
+  $themeUseDefaultIcon = theme_get_setting('icon_default', $theme);
+  $darkmode = theme_get_setting('enable_darkmode', $theme);
+  $fileUrlGenerator = \Drupal::service('file_url_generator');
+
+  // #3258015: Make sure we're compatible with the new variant.
+  if ($themeUseDefaultIcon === NULL) {
+    $themeIconPath = theme_get_setting('logo.path', $theme);
+    $themeUseDefaultIcon = theme_get_setting('logo.use_default', $theme);
+  }
+
+  if (!$themeUseDefaultIcon && !empty($themeIconPath)) {
+    $variables['icon_path'] = $fileUrlGenerator->generateAbsoluteString($themeIconPath);
+  }
+
+  $configData = $config->get();
+
+  if ($configData['logo']['use_default'] == "0") {
+    if (isset($configData['logo']['path']) && !empty($configData['logo']['path'])) {
+      $variables['icon_path'] = $fileUrlGenerator->generateAbsoluteString($configData['logo']['path']);
+    }
+  }
+
+  $variables['brand_image'] = '//source.unsplash.com/collection/9407737';
+  $variables['brand_alt'] = 'Random image from unsplash';
+
+  if ($configData['brand_image']['use_default'] == "0") {
+    if (isset($configData['brand_image']['path']) && !empty($configData['brand_image']['path'])) {
+      $variables['brand_image'] = $fileUrlGenerator->generateAbsoluteString($configData['brand_image']['path']);
+      $variables['brand_alt'] = '';
+    }
+  }
+}
+
+/**
+ * Helper function to check if we're on the right paths.
+ */
+function _gin_login__check_path() {
+  // Get path from Route.
+  $route = \Drupal::routeMatch()->getRouteName();
+
+  if (
+    $route == 'user.login' ||
+    $route == 'user.pass' ||
+    $route == 'user.register'
+  ) {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Helper function for check if Gin is active.
+ */
+function _gin_login_gin_is_active() {
+  $theme_handler = \Drupal::service('theme_handler')->listInfo();
+
+  // Check if set as frontend theme.
+  $frontend_theme_name = \Drupal::config('system.theme')->get('default');
+
+  // Check if base themes are set.
+  if (isset($theme_handler[$frontend_theme_name]->base_themes)) {
+    $frontend_base_themes = $theme_handler[$frontend_theme_name]->base_themes;
+  }
+
+  // Add theme name to base theme array.
+  $frontend_base_themes[$frontend_theme_name] = $frontend_theme_name;
+
+  // Check if set as admin theme.
+  $admin_theme_name = \Drupal::config('system.theme')->get('admin');
+
+  // Admin theme will have no value if is set to use the default theme.
+  if ($admin_theme_name) {
+    $admin_base_themes = isset($theme_handler[$admin_theme_name]->base_themes) ? $theme_handler[$admin_theme_name]->base_themes : [];
+    $admin_base_themes[$admin_theme_name] = $admin_theme_name;
+  }
+  else {
+    $admin_base_themes = $frontend_base_themes;
+  }
+
+  $gin_activated = array_key_exists('gin', $admin_base_themes);
+
+  return $gin_activated;
+}

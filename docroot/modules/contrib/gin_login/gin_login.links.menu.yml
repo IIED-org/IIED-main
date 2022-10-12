@@ -1,0 +1,6 @@
+gin_login.configuration_form:
+  title: 'Gin Login'
+  route_name: gin_login.configuration_form
+  description: 'Gin Login.'
+  parent: system.admin_config_system
+  weight: 99

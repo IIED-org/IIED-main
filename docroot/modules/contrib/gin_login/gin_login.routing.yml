@@ -1,0 +1,9 @@
+gin_login.configuration_form:
+  path: 'admin/config/system/configuration/gin-login'
+  defaults:
+    _form: '\Drupal\gin_login\Form\GinLoginConfigurationForm'
+    _title: 'Gin Login Configuration Form'
+  requirements:
+    _permission: 'administer site configuration'
+  options:
+    _admin_route: TRUE

@@ -97,6 +97,7 @@
         "drupal/geolocation": "^3.2",
         "drupal/gin": "^3.0",
         "drupal/gin_lb": "^1.0@beta",
+        "drupal/gin_login": "^1.3",
         "drupal/google_analytics": "^2.5",
         "drupal/google_tag": "^1.4",
         "drupal/imagemagick": "^3.3",
@@ -130,6 +131,7 @@
         "drupal/readmore_js": "^2.0",
         "drupal/readonlymode": "^1.1",
         "drupal/redirect": "^1.7",
+        "drupal/redirect_after_login": "^2.7",
         "drupal/responsive_menu": "^5.0-dev",
         "drupal/search404": "2.x-dev@dev",
         "drupal/search_api": "^1.23",
@@ -204,7 +206,8 @@
             },
             "file-mapping": {
               "[web-root]/.htaccess": false,
-              "[web-root]/sites/development.services.yml": false
+              "[web-root]/sites/development.services.yml": false,
+              "[web-root]/robots.txt": false
             }
         },
         "installer-types": [

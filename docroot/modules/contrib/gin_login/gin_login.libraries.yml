@@ -1,0 +1,5 @@
+gin_login:
+  version: 1.x
+  css:
+    theme:
+      dist/css/login.css: { minified: false, weight: -99 }

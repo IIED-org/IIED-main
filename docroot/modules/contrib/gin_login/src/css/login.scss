@@ -1,0 +1,8 @@
+@import "__vars";
+@import "_color-overrides";
+@import "_login";
+
+// Hide EU Cookies: Custom overrides
+#sliding-popup {
+  display: none !important;
+}

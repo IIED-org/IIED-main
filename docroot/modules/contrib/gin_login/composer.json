@@ -1,0 +1,31 @@
+{
+    "name": "drupal/gin_login",
+    "type": "drupal-module",
+    "description": "Custom Drupal Login for Gin theme",
+    "keywords": ["Drupal"],
+    "license": "GPL-2.0+",
+    "homepage": "https://www.drupal.org/project/gin_login",
+    "minimum-stability": "dev",
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/gin_login",
+        "source": "http://cgit.drupalcode.org/gin_login"
+    },
+    "authors": [
+        {
+            "name": "Sascha Eggenberger (saschaeggi)",
+            "homepage": "https://www.drupal.org/u/saschaeggi",
+            "role": "Maintainer"
+        }
+    ],
+    "require": {},
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/saschaeggi"
+        },
+        {
+            "type": "other",
+            "url": "https://paypal.me/saschaeggi"
+        }
+    ]
+}

@@ -1,0 +1,3 @@
+administer redirect_after_login settings:
+  title: 'Administer redirect_after_login settings'
+  restrict access: true
