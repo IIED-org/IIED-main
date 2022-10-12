@@ -1,89 +1,52 @@
-uuid: 0c5c536b-ef92-46e9-9ce2-2c082ff45df8
+uuid: cca7e902-dbc0-418f-ba53-1d7888bfe55d
 langcode: en
 status: true
 dependencies:
   config:
-    - filter.format.basic_html
-    - filter.format.full_html
+    - filter.format.simple_html
     - media.type.document
     - media.type.image
-    - node.type.article
-    - node.type.blog
-    - node.type.event
-    - node.type.long_read
-    - node.type.news
-    - node.type.project
     - node.type.publication
     - taxonomy.vocabulary.organisation
-    - taxonomy.vocabulary.person
   module:
     - content_translation
-    - eu_cookie_compliance
-    - file
     - filter
     - media
     - media_revisions_ui
     - node
     - paragraphs
-    - path
     - pathauto
     - publishcontent
     - system
     - taxonomy
     - view_unpublished
-id: editor
-label: Editor
-weight: -6
+id: publications_editor
+label: 'Publications editor'
+weight: -7
 is_admin: null
 permissions:
-  - 'access content'
-  - 'access content overview'
-  - 'access files overview'
-  - 'administer nodes'
-  - 'create content translations'
   - 'create document media'
   - 'create image media'
   - 'create publication content'
-  - 'create terms in organisation'
-  - 'create terms in person'
-  - 'create url aliases'
-  - 'display eu cookie compliance popup'
-  - 'edit any document media'
-  - 'edit any image media'
   - 'edit any publication content'
   - 'edit own document media'
   - 'edit own image media'
-  - 'edit own publication content'
   - 'edit terms in organisation'
   - 'notify of path changes'
-  - 'publish any content'
   - 'publish any node type publication'
   - 'publish editable content'
   - 'publish editable node type publication'
   - 'publish own node type publication'
   - 'revert publication revisions'
-  - 'translate article node'
-  - 'translate blog node'
-  - 'translate document media'
-  - 'translate event node'
-  - 'translate long_read node'
-  - 'translate news node'
-  - 'translate paragraph'
-  - 'translate project node'
   - 'translate publication node'
-  - 'unpublish any content'
   - 'unpublish any node type publication'
-  - 'unpublish editable content'
   - 'unpublish editable node type publication'
   - 'unpublish own node type publication'
-  - 'update content translations'
-  - 'use text format basic_html'
-  - 'use text format full_html'
+  - 'use text format simple_html'
   - 'view all media revisions'
   - 'view any unpublished content'
   - 'view document media revisions'
   - 'view image media revisions'
-  - 'view media'
   - 'view own unpublished content'
   - 'view own unpublished media'
   - 'view publication revisions'

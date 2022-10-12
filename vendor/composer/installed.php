@@ -1757,6 +1757,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'drupal/view_unpublished' => array(
+            'pretty_version' => '1.0.0',
+            'version' => '1.0.0.0',
+            'reference' => '8.x-1.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/view_unpublished',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'drupal/views_autocomplete_filters' => array(
             'pretty_version' => '1.3.0',
             'version' => '1.3.0.0',

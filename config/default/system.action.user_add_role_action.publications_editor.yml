@@ -1,0 +1,14 @@
+uuid: 4f7ea37d-0d6e-4a5d-ba22-7a11307585d9
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.publications_editor
+  module:
+    - user
+id: user_add_role_action.publications_editor
+label: 'Add the Publications editor role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: publications_editor
