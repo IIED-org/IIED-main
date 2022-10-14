@@ -14,11 +14,8 @@ use org\bovigo\vfs\vfsStream;
  * @coversDefaultClass \Drupal\twig_field_value\Twig\Extension\FieldValueExtension
  * @group twig_field_value
  */
-class FieldValueTest extends EntityKernelTestBase {
+class FieldRawTest extends EntityKernelTestBase {
 
-  /**
-   * {@inheritdoc}
-   */
   protected static $modules = [
     'twig_field_value',
     'twig_field_value_test',
@@ -119,13 +116,13 @@ class FieldValueTest extends EntityKernelTestBase {
     // Check output of the field_value filter.
     $element = [
       '#type' => 'inline_template',
-      '#template' => '{{ field|field_value|safe_join(", ") }}',
+      '#template' => '{{ field|field_raw("target_id")|safe_join(", ") }}',
       '#context' => [
         'field' => $render_field($entity),
       ],
     ];
     $content = \Drupal::service('renderer')->renderPlain($element);
-    $this->assertSame('entity1, entity4', (string) $content);
+    $this->assertSame('', (string) $content);
   }
 
   /**
@@ -167,7 +164,7 @@ class FieldValueTest extends EntityKernelTestBase {
     // Check output of the field_value filter.
     $element = [
       '#type' => 'inline_template',
-      '#template' => '{{ field|field_value|safe_join(", ") }}',
+      '#template' => '{{ field|field_raw("target_id")|safe_join(", ") }}',
       '#context' => [
         'field' => $render_field($entity),
       ],
@@ -186,37 +183,40 @@ class FieldValueTest extends EntityKernelTestBase {
   public function testStringFieldValue() {
     $entity = EntityTest::create([
       'field_string' => [
-        'string one',
-        'string two',
-        'string three',
-        'string four',
+        'Iet wiet',
+        'waait',
+        'is eerlijk',
+        'weg',
       ],
     ]);
     $entity->save();
-    $render_field = function (FieldableEntityInterface $entity) {
+    $string_field = function (FieldableEntityInterface $entity) {
       return $entity->get('field_string')->view([
         'type' => 'string_hidden_third_child',
+        'settings' => [
+          'link' => FALSE,
+        ],
       ]);
     };
-    $element = $render_field($entity);
+    $element = $string_field($entity);
 
     // Check the field values by rendering the formatter without any filter.
     $content = \Drupal::service('renderer')->renderPlain($element);
-    $this->assertStringContainsString('string one', (string) $content);
-    $this->assertStringContainsString('string two', (string) $content);
-    $this->assertStringNotContainsString('string three', (string) $content);
-    $this->assertStringContainsString('string four', (string) $content);
+    $this->assertStringContainsString('Iet wiet', (string) $content);
+    $this->assertStringContainsString('waait', (string) $content);
+    $this->assertStringNotContainsString('is eerlijk', (string) $content);
+    $this->assertStringContainsString('weg', (string) $content);
 
-    // Check output of the field_value filter.
+    // Check output of the field_raw filter.
     $element = [
       '#type' => 'inline_template',
-      '#template' => '{{ field|field_value|safe_join(", ") }}',
+      '#template' => '{{ field|field_raw("value")|safe_join(", ") }}',
       '#context' => [
-        'field' => $render_field($entity),
+        'field' => $string_field($entity),
       ],
     ];
     $content = \Drupal::service('renderer')->renderPlain($element);
-    $this->assertSame('string one, string two, string four', (string) $content);
+    $this->assertSame('Iet wiet, waait, weg', (string) $content);
   }
 
   /**
@@ -227,29 +227,32 @@ class FieldValueTest extends EntityKernelTestBase {
   public function testStringFieldAccess() {
     $entity = EntityTest::create([
       'field_string' => [
-        'string one',
-        'string two',
+        'Iet wiet',
+        'waait',
       ],
     ]);
     $entity->save();
-    $render_field = function (FieldableEntityInterface $entity) {
+    $string_field = function (FieldableEntityInterface $entity) {
       return $entity->get('field_string')->view([
         'type' => 'string_hidden_field',
+        'settings' => [
+          'link' => FALSE,
+        ],
       ]);
     };
-    $element = $render_field($entity);
+    $element = $string_field($entity);
 
     // Check the field values by rendering the formatter without any filter.
     $content = \Drupal::service('renderer')->renderPlain($element);
-    $this->assertStringNotContainsString('string one', (string) $content);
-    $this->assertStringNotContainsString('string two', (string) $content);
+    $this->assertStringNotContainsString('Iet wiet', (string) $content);
+    $this->assertStringNotContainsString('waait', (string) $content);
 
-    // Check output of the field_value filter.
+    // Check output of the field_raw filter.
     $element = [
       '#type' => 'inline_template',
-      '#template' => '{{ field|field_value|safe_join(", ") }}',
+      '#template' => '{{ field|field_raw("value")|safe_join(", ") }}',
       '#context' => [
-        'field' => $render_field($entity),
+        'field' => $string_field($entity),
       ],
     ];
     $content = \Drupal::service('renderer')->renderPlain($element);
