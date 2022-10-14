@@ -10,8 +10,10 @@ dependencies:
     - node.type.article
     - node.type.blog
     - node.type.event
+    - node.type.hidden_page
     - node.type.long_read
     - node.type.news
+    - node.type.page
     - node.type.project
     - node.type.publication
     - taxonomy.vocabulary.organisation
@@ -31,6 +33,7 @@ dependencies:
     - publishcontent
     - system
     - taxonomy
+    - toolbar
     - view_unpublished
 id: editor
 label: Editor
@@ -41,11 +44,19 @@ permissions:
   - 'access content'
   - 'access content overview'
   - 'access files overview'
+  - 'access toolbar'
   - 'access user profiles'
   - 'administer nodes'
+  - 'create article content'
+  - 'create blog content'
   - 'create content translations'
   - 'create document media'
+  - 'create event content'
   - 'create image media'
+  - 'create long_read content'
+  - 'create news content'
+  - 'create page content'
+  - 'create project content'
   - 'create publication content'
   - 'create terms in organisation'
   - 'create terms in person'
@@ -54,10 +65,19 @@ permissions:
   - 'edit any document media'
   - 'edit any image media'
   - 'edit any publication content'
+  - 'edit own article content'
+  - 'edit own blog content'
   - 'edit own document media'
+  - 'edit own event content'
+  - 'edit own hidden_page content'
   - 'edit own image media'
+  - 'edit own long_read content'
+  - 'edit own news content'
+  - 'edit own page content'
+  - 'edit own project content'
   - 'edit own publication content'
   - 'edit terms in organisation'
+  - 'edit terms in person'
   - 'notify of path changes'
   - 'publish any content'
   - 'publish any node type publication'
@@ -68,6 +88,7 @@ permissions:
   - 'translate article node'
   - 'translate blog node'
   - 'translate document media'
+  - 'translate editable entities'
   - 'translate event node'
   - 'translate long_read node'
   - 'translate news node'
@@ -80,6 +101,8 @@ permissions:
   - 'unpublish editable node type publication'
   - 'unpublish own node type publication'
   - 'update content translations'
+  - 'use  The form mode dashboard_add_author linked to  taxonomy_term entity( person )'
+  - 'use  The form mode dashboard_add_organisation linked to  taxonomy_term entity( organisation )'
   - 'use  The form mode default linked to  block_content entity( alert )'
   - 'use  The form mode default linked to  block_content entity( banner )'
   - 'use  The form mode default linked to  block_content entity( banner_custom )'

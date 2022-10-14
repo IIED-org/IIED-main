@@ -14,14 +14,6 @@ module:
   devel_generate: 0
   devel_kint_extras: 0
   help_topics: 0
-  iied_migrate_d7: 0
-  migrate_devel: 0
-  migrate_drupal: 0
-  migrate_file: 0
-  migrate_plus: 0
-  migrate_pubs: 0
-  migrate_source_csv: 0
-  migrate_tools: 0
   stage_file_proxy: 0
   twig_xdebug: 0
   views_ui: 0
