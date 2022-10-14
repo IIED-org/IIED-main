@@ -14,11 +14,8 @@ use org\bovigo\vfs\vfsStream;
  * @coversDefaultClass \Drupal\twig_field_value\Twig\Extension\FieldValueExtension
  * @group twig_field_value
  */
-class FieldValueTest extends EntityKernelTestBase {
+class FieldTargetEntityTest extends EntityKernelTestBase {
 
-  /**
-   * {@inheritdoc}
-   */
   protected static $modules = [
     'twig_field_value',
     'twig_field_value_test',
@@ -46,31 +43,16 @@ class FieldValueTest extends EntityKernelTestBase {
       'bundle' => 'entity_test',
     ]);
     $fieldConfig->save();
-    $fieldStorage = FieldStorageConfig::create([
-      'field_name' => 'field_string',
-      'type' => 'string',
-      'entity_type' => 'entity_test',
-      'cardinality' => FieldStorageConfigInterface::CARDINALITY_UNLIMITED,
-    ]);
-    $fieldStorage->save();
-    $fieldConfig = FieldConfig::create([
-      'field_storage' => $fieldStorage,
-      'bundle' => 'entity_test',
-    ]);
-    $fieldConfig->save();
     $current_user = $this->container->get('current_user');
     $current_user->setAccount($this->createUser([], ['view test entity']));
   }
 
   /**
-   * Check if inaccessible content is _not_ displayed.
+   * Check if inaccessible entity is _not_ displayed.
    *
-   * This test uses two types of not accessible content. 1. An entity to which
-   * access is denied; 2. A field item to which access is denied. The latter
-   * is realized with a specially crafted field formatter that denies access to
-   * the third field item.
+   * This test uses an entity to which access is denied.
    */
-  public function testEntityReferenceFieldValue() {
+  public function testEntityAccess() {
     $entity1 = EntityTest::create([
       'name' => 'entity1',
     ]);
@@ -80,6 +62,62 @@ class FieldValueTest extends EntityKernelTestBase {
     // AccessResult::forbidden for it.
     $entity2 = EntityTest::create([
       'name' => 'forbid_access',
+    ]);
+    $entity2->save();
+    $entity3 = EntityTest::create([
+      'name' => 'entity3',
+    ]);
+    $entity3->save();
+    $entity = EntityTest::create([
+      'field_reference' => [
+        $entity1->id(),
+        $entity2->id(),
+        $entity3->id(),
+      ],
+    ]);
+    $entity->save();
+    $render_field = function (FieldableEntityInterface $entity) {
+      return $entity->get('field_reference')->view([
+        'type' => 'entity_reference_label',
+        'settings' => [
+          'link' => FALSE,
+        ],
+      ]);
+    };
+    $element = $render_field($entity);
+
+    // Check the field values by rendering the formatter without any filter.
+    $content = \Drupal::service('renderer')->renderPlain($element);
+    $this->assertStringContainsString('entity1', (string) $content);
+    $this->assertStringNotContainsString('forbid_access', (string) $content);
+    $this->assertStringContainsString('entity3', (string) $content);
+
+    // Check output of the field_target_entity filter.
+    $element = [
+      '#type' => 'inline_template',
+      '#template' => '{% for target in field|field_target_entity %}{{ target.label }}, {% endfor %}',
+      '#context' => [
+        'field' => $render_field($entity),
+      ],
+    ];
+    $content = \Drupal::service('renderer')->renderPlain($element);
+    $this->assertSame('entity1, entity3, ', (string) $content);
+  }
+
+  /**
+   * Check if an inaccessible field item is _not_ displayed.
+   *
+   * This test uses a field item to which access is denied. This is realized
+   * with a specially crafted field formatter that denies access to the third
+   * field item.
+   */
+  public function testFieldItemAccess() {
+    $entity1 = EntityTest::create([
+      'name' => 'entity1',
+    ]);
+    $entity1->save();
+    $entity2 = EntityTest::create([
+      'name' => 'entity2',
     ]);
     $entity2->save();
     $entity3 = EntityTest::create([
@@ -112,20 +150,20 @@ class FieldValueTest extends EntityKernelTestBase {
     // Check the field values by rendering the formatter without any filter.
     $content = \Drupal::service('renderer')->renderPlain($element);
     $this->assertStringContainsString('entity1', (string) $content);
-    $this->assertStringNotContainsString('forbid_access', (string) $content);
+    $this->assertStringContainsString('entity2', (string) $content);
     $this->assertStringNotContainsString('entity3', (string) $content);
     $this->assertStringContainsString('entity4', (string) $content);
 
-    // Check output of the field_value filter.
+    // Check output of the field_target_entity filter.
     $element = [
       '#type' => 'inline_template',
-      '#template' => '{{ field|field_value|safe_join(", ") }}',
+      '#template' => '{% for target in field|field_target_entity %}{{ target.label }}, {% endfor %}',
       '#context' => [
         'field' => $render_field($entity),
       ],
     ];
     $content = \Drupal::service('renderer')->renderPlain($element);
-    $this->assertSame('entity1, entity4', (string) $content);
+    $this->assertSame('', (string) $content);
   }
 
   /**
@@ -133,13 +171,13 @@ class FieldValueTest extends EntityKernelTestBase {
    *
    * This test uses a field for which #access is set to false.
    */
-  public function testEntityReferenceFieldAccess() {
+  public function testFieldAccess() {
     $entity1 = EntityTest::create([
       'name' => 'entity1',
     ]);
     $entity1->save();
     $entity2 = EntityTest::create([
-      'name' => 'entity3',
+      'name' => 'entity2',
     ]);
     $entity2->save();
     $entity = EntityTest::create([
@@ -164,90 +202,10 @@ class FieldValueTest extends EntityKernelTestBase {
     $this->assertStringNotContainsString('entity1', (string) $content);
     $this->assertStringNotContainsString('entity2', (string) $content);
 
-    // Check output of the field_value filter.
+    // Check output of the field_target_entity filter.
     $element = [
       '#type' => 'inline_template',
-      '#template' => '{{ field|field_value|safe_join(", ") }}',
-      '#context' => [
-        'field' => $render_field($entity),
-      ],
-    ];
-    $content = \Drupal::service('renderer')->renderPlain($element);
-    $this->assertSame('', (string) $content);
-  }
-
-  /**
-   * Check if inaccessible content is _not_ displayed.
-   *
-   * This test uses a field item to which access is denied. This is realized
-   * with a specially crafted field formatter that denies access to the third
-   * field item.
-   */
-  public function testStringFieldValue() {
-    $entity = EntityTest::create([
-      'field_string' => [
-        'string one',
-        'string two',
-        'string three',
-        'string four',
-      ],
-    ]);
-    $entity->save();
-    $render_field = function (FieldableEntityInterface $entity) {
-      return $entity->get('field_string')->view([
-        'type' => 'string_hidden_third_child',
-      ]);
-    };
-    $element = $render_field($entity);
-
-    // Check the field values by rendering the formatter without any filter.
-    $content = \Drupal::service('renderer')->renderPlain($element);
-    $this->assertStringContainsString('string one', (string) $content);
-    $this->assertStringContainsString('string two', (string) $content);
-    $this->assertStringNotContainsString('string three', (string) $content);
-    $this->assertStringContainsString('string four', (string) $content);
-
-    // Check output of the field_value filter.
-    $element = [
-      '#type' => 'inline_template',
-      '#template' => '{{ field|field_value|safe_join(", ") }}',
-      '#context' => [
-        'field' => $render_field($entity),
-      ],
-    ];
-    $content = \Drupal::service('renderer')->renderPlain($element);
-    $this->assertSame('string one, string two, string four', (string) $content);
-  }
-
-  /**
-   * Check if an inaccessible field is _not_ displayed.
-   *
-   * This test uses a field for which #access is set to false.
-   */
-  public function testStringFieldAccess() {
-    $entity = EntityTest::create([
-      'field_string' => [
-        'string one',
-        'string two',
-      ],
-    ]);
-    $entity->save();
-    $render_field = function (FieldableEntityInterface $entity) {
-      return $entity->get('field_string')->view([
-        'type' => 'string_hidden_field',
-      ]);
-    };
-    $element = $render_field($entity);
-
-    // Check the field values by rendering the formatter without any filter.
-    $content = \Drupal::service('renderer')->renderPlain($element);
-    $this->assertStringNotContainsString('string one', (string) $content);
-    $this->assertStringNotContainsString('string two', (string) $content);
-
-    // Check output of the field_value filter.
-    $element = [
-      '#type' => 'inline_template',
-      '#template' => '{{ field|field_value|safe_join(", ") }}',
+      '#template' => '{% for target in field|field_target_entity %}{{ target.label }}, {% endfor %}',
       '#context' => [
         'field' => $render_field($entity),
       ],
