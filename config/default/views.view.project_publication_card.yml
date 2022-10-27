@@ -8,7 +8,6 @@ dependencies:
   module:
     - better_exposed_filters
     - node
-    - taxonomy
     - user
     - views_infinite_scroll
 id: project_publication_card
@@ -248,6 +247,7 @@ display:
           entity_type: node
           plugin_id: entity_reverse
           required: true
+      use_ajax: true
       header: {  }
       footer: {  }
       display_extenders: {  }

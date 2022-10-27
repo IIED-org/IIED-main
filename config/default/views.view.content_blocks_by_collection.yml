@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.card_md
     - node.type.article
     - node.type.blog
     - node.type.event
@@ -28,7 +29,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: 'Content blocks by collection'
+      title: ''
       fields:
         title:
           id: title
@@ -282,7 +283,10 @@ display:
       style:
         type: default
       row:
-        type: fields
+        type: 'entity:node'
+        options:
+          relationship: none
+          view_mode: card_md
       query:
         type: views_query
         options:
