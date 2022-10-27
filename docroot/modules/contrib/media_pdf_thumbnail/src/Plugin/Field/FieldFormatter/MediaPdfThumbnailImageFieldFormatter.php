@@ -367,11 +367,13 @@ class MediaPdfThumbnailImageFieldFormatter extends ImageFormatter {
       $element[0]['#url'] = Url::fromUri($stream, $options);
     }
 
-    // Invoke preprocessing hook
-    if (!empty($fieldInfos['image_uri'])) {
-      $infos = ['fieldInfo' => $fieldInfos, 'mediaEntity' => $entity, 'pdfEntity' => $this->mediaPdfThumbnailImageManager->getPdfEntityByPdfFileUri($fieldInfos['image_uri'])];
-      $this->moduleHandler->alter('media_pdf_thumbnail_image_render', $element, $infos);
-    }
+    // Invokes preprocessing hook
+    $infos = [
+      'fieldInfo' => $fieldInfos,
+      'mediaEntity' => $entity,
+      'pdfEntity' => !empty($fieldInfos['image_uri']) ? $this->mediaPdfThumbnailImageManager->getPdfEntityByPdfFileUri($fieldInfos['image_uri']) : NULL,
+    ];
+    $this->moduleHandler->alter('media_pdf_thumbnail_image_render', $element, $infos);
 
     return $element;
   }
@@ -381,7 +383,7 @@ class MediaPdfThumbnailImageFieldFormatter extends ImageFormatter {
    * @param $field
    * @param $page
    *
-   * @return array|\Drupal\Core\Entity\EntityInterface[]|false|void|null
+   * @return array|\Drupal\Core\Entity\EntityInterface[]|false|null
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\Entity\EntityStorageException

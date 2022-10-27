@@ -8,15 +8,12 @@ use Drupal\Component\Utility\Crypt;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\State\StateInterface;
-use Drupal\Core\TypedData\Type\DateTimeInterface;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\GuzzleException;
-use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\TerminateEvent;
+use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-
 
 /**
  * Acquia Telemetry Event Subscriber.
@@ -82,8 +79,8 @@ class AcquiaTelemetry implements EventSubscriberInterface {
    *   The config.factory service.
    * @param \Drupal\Core\State\StateInterface $state
    *   The state service.
-   * @param string $app_root
-   *   The Drupal application root.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   The time service.
    */
   public function __construct(ModuleExtensionList $module_list, ClientInterface $http_client, ConfigFactoryInterface $config_factory, StateInterface $state, TimeInterface $time) {
     $this->moduleList = $module_list;
@@ -101,14 +98,15 @@ class AcquiaTelemetry implements EventSubscriberInterface {
     return $events;
   }
 
-
   /**
    * Sends Telemetry on a daily basis. This occurs after the response is sent.
    *
+   * @param \Symfony\Component\HttpKernel\Event\KernelEvent $event
+   *   The event.
    */
-  public function onTerminateResponse(TerminateEvent $event) {
+  public function onTerminateResponse(KernelEvent $event) {
     $send_timestamp = $this->state->get('acquia_connector.telemetry.timestamp');
-    if ($this->time->getCurrentTime() - $send_timestamp > 86400){
+    if ($this->time->getCurrentTime() - $send_timestamp > 86400) {
       $this->sendTelemetry("Drupal Module Statistics");
       $this->state->set('acquia_connector.telemetry.timestamp', $this->time->getCurrentTime());
     }
@@ -119,17 +117,14 @@ class AcquiaTelemetry implements EventSubscriberInterface {
    *
    * This is not intended to be private. It is typically included in client
    * side code. Fetching data requires an additional API secret.
-
+   *
    * @see https://developers.amplitude.com/#http-api
    *
    * @return string
    *   The Amplitude API key.
    */
   private function getApiKey() {
-    $key = $this->configFactory->get('acquia_connector.settings')
-      ->get('spi.amplitude_api_key');
-
-    return $key ?: 'f32aacddde42ad34f5a3078a621f37a9';
+    return Settings::get('acquia_connector.telemetry.key', 'f32aacddde42ad34f5a3078a621f37a9');
   }
 
   /**
@@ -138,7 +133,7 @@ class AcquiaTelemetry implements EventSubscriberInterface {
    * @param array $event
    *   The Amplitude event.
    *
-   * @throws GuzzleException
+   * @throws \GuzzleHttp\Exception\GuzzleException
    *
    * @see https://developers.amplitude.com/#http-api
    */
@@ -200,14 +195,18 @@ class AcquiaTelemetry implements EventSubscriberInterface {
     $extension_info = [];
 
     foreach ($all_modules as $name => $extension) {
-      // Remove all custom modules from reporting
+      // Remove all custom modules from reporting.
       if (strpos($this->moduleList->getPath($name), '/custom/') !== FALSE) {
         continue;
       }
 
       // Tag all core modules in use. If the version matches the core
       // Version, assume it is a core module.
-      $core_comparison = [$extension['version'], $extension['core_version_requirement'], \Drupal::VERSION];
+      $core_comparison = [
+        $extension['version'],
+        $extension['core_version_requirement'],
+        \Drupal::VERSION,
+      ];
       if (count(array_unique($core_comparison)) === 1) {
         if (array_key_exists($name, $installed_modules)) {
           $extension_info['core'][$name] = 'enabled';
@@ -217,7 +216,7 @@ class AcquiaTelemetry implements EventSubscriberInterface {
 
       // Version is unset for dev versions. In order to generate reports, we
       // need some value for version, even if it is just the major version.
-      $extension_info['contrib'][$name]['version'] = $extension['version'] ?? 'dev';;
+      $extension_info['contrib'][$name]['version'] = $extension['version'] ?? 'dev';
 
       // Check if module is installed.
       $extension_info['contrib'][$name]['status'] = array_key_exists($name, $installed_modules) ? 'enabled' : 'disabled';
@@ -246,7 +245,7 @@ class AcquiaTelemetry implements EventSubscriberInterface {
       ],
       'drupal' => [
         'version' => \Drupal::VERSION,
-        'core_enabled' => $modules['core']
+        'core_enabled' => $modules['core'],
       ],
     ];
 
@@ -277,8 +276,7 @@ class AcquiaTelemetry implements EventSubscriberInterface {
     $module_names = array_keys($this->moduleList->getAllAvailableInfo());
 
     return array_filter($module_names, function ($name) {
-      return
-        strpos($name, 'acquia') !== FALSE ||
+      return strpos($name, 'acquia') !== FALSE ||
         strpos($name, 'lightning_') !== FALSE ||
         strpos($name, 'acms') !== FALSE;
     });

@@ -16,20 +16,6 @@ use Drupal\Core\Config\Config;
 class Settings {
 
   /**
-   * The user friendly site name.
-   *
-   * @var string
-   */
-  protected $siteName;
-
-  /**
-   * Machine name for site name.
-   *
-   * @var string
-   */
-  protected $machineName;
-
-  /**
    * Acquia Network ID.
    *
    * Eg: ABCD-12345.
@@ -46,18 +32,18 @@ class Settings {
   protected $secretKey;
 
   /**
+   * The Application UUID.
+   *
+   * @var string
+   */
+  protected $applicationUuid;
+
+  /**
    * The endpoint to access subscription data.
    *
    * @var string
    */
   protected $url;
-
-  /**
-   * The shared secret.
-   *
-   * @var string|null
-   */
-  protected $sharedSecret;
 
   /**
    * Config object from acquia_connector.settings.
@@ -92,19 +78,16 @@ class Settings {
    *   Subscription Identifier.
    * @param string $secret_key
    *   Secret key.
-   * @param string $name
-   *   Site Name.
-   * @param string $machine_name
-   *   Site Machine Name.
+   * @param string $application_uuid
+   *   Application UUID.
    * @param array|string $metadata
    *   Settings Metadata.
    */
-  public function __construct(Config $config, string $network_id = NULL, string $secret_key = NULL, string $name = NULL, string $machine_name = NULL, $metadata = NULL) {
+  public function __construct(Config $config, string $network_id = NULL, string $secret_key = NULL, string $application_uuid, $metadata = NULL) {
     $this->config = $config;
-    $this->siteName = $name ?? '';
-    $this->machineName = $machine_name ?? '';
     $this->identifier = $network_id ?? '';
     $this->secretKey = $secret_key ?? '';
+    $this->applicationUuid = $application_uuid ?? '';
     $this->metadata = $metadata ?? [];
   }
 
@@ -129,43 +112,13 @@ class Settings {
   }
 
   /**
-   * Returns site name.
+   * Returns Acquia Subscription Application UUID.
    *
    * @return mixed
-   *   Acquia Site Name.
+   *   Acquia Application UUID identifier.
    */
-  public function getSiteName() {
-    return $this->siteName ?? NULL;
-  }
-
-  /**
-   * Returns machine name of the site.
-   *
-   * @return mixed
-   *   Acquia Site Name.
-   */
-  public function getMachineName() {
-    return $this->machineName ?? NULL;
-  }
-
-  /**
-   * Retrieves Subscription data from site's State.
-   *
-   * @return array
-   *   The Raw Subscription Data.
-   */
-  public function getSubscriptionData() {
-    return \Drupal::state()->get('acquia_subscription_data') ?? [];
-  }
-
-  /**
-   * Returns URL of the Acquia Subscription API.
-   *
-   * @return string
-   *   URL of the endpoint.
-   */
-  public function getApiUrl() {
-    return $this->config->get('spi.server') ?? 'https://nspi.acquia.com';
+  public function getApplicationUuid() {
+    return $this->applicationUuid ?? NULL;
   }
 
   /**
@@ -206,6 +159,7 @@ class Settings {
     \Drupal::state()->deleteMultiple([
       'acquia_connector.key',
       'acquia_connector.identifier',
+      'acquia_connector.application_uuid',
       'spi.site_name',
       'spi.site_machine_name',
       'acquia_subscription_data',
@@ -218,7 +172,7 @@ class Settings {
    * @return bool
    *   Readonly Status.
    */
-  public function getReadonly() {
+  public function isReadonly() {
     return $this->readonly;
   }
 

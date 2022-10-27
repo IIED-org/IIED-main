@@ -51,12 +51,12 @@ class DraggableViewsSort extends SortPluginBase {
 
     $form['draggable_views_null_order'] = [
       '#type' => 'radios',
-      '#title' => $this->t('NULL Value Order'),
+      '#title' => $this->t('Position of new/unsorted items'),
       '#options' => [
-        'before' => "Before",
-        'after' => "After",
+        'before' => 'Above',
+        'after' => 'Below',
       ],
-      '#description' => $this->t('If an entity does not currently belong in the list, should it be added to the list at the begining or the end.'),
+      '#description' => $this->t('New items means elements (for example nodes) that do not have a saved weight (newly created). You can choose to either display them above or below the items that have been sorted.'),
       '#default_value' => $this->options['draggable_views_null_order'],
       '#weight' => -1,
     ];
@@ -115,12 +115,11 @@ class DraggableViewsSort extends SortPluginBase {
 
     $this->alias = $this->query->addRelationship($alias, $join, $this->query->view->storage->get('base_table'), $this->relationship);
 
-    if ($this->options['draggable_views_null_order'] == "before") {
-      $formula = "!ISNULL($this->alias.$this->realField)";
-    }
-    else {
-      $formula = "ISNULL($this->alias.$this->realField)";
-    }
+    // We cannot use ISNULL() for compatibility with postgres, so use coalesce
+    // function instead. We use the mix or max php integer as default value based
+    // on if we want those with null before or after.
+    $coalesce_null_value = $this->options['draggable_views_null_order'] == "before" ? PHP_INT_MIN : PHP_INT_MAX;
+    $formula = "COALESCE($this->alias.$this->realField, $coalesce_null_value)";
 
     // We add both to handle ordering of NULL values.
     $this->query->addOrderBy(NULL, $formula, $this->options['order'], $this->alias . "_" . $this->realField);
