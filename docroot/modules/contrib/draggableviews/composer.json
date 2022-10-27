@@ -14,7 +14,7 @@
       "name": "Andrii Podanenko (podarok)",
       "email": "podarokua@gmail.com",
       "homepage": "https://www.drupal.org/u/podarok",
-      "role": "Drupal 7 to 8 Porter"
+      "role": "Drupal 10+, maintenance."
     },
     {
       "name": "Yuriy Gerasimov (ygerasimov)",
@@ -33,8 +33,5 @@
     "source": "https://cgit.drupalcode.org/draggableviews"
   },
   "license": "GPL-2.0-or-later",
-  "minimum-stability": "dev",
-  "require": {
-    "drupal/core": "^8 || ^9"
-  }
+  "minimum-stability": "dev"
 }

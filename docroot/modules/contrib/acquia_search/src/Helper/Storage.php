@@ -10,6 +10,66 @@ namespace Drupal\acquia_search\Helper;
 class Storage {
 
   /**
+   * Gets a setting from Acquia Connector.
+   *
+   * @param string $key
+   *   The key.
+   *
+   * @return string|null
+   *   The value.
+   */
+  private static function getConnectorSetting($key) {
+    if (!\Drupal::moduleHandler()->moduleExists('acquia_connector')) {
+      return '';
+    }
+    if (\Drupal::hasService('acquia_connector.subscription')) {
+      /** @var \Drupal\acquia_connector\Subscription $subscription */
+      $subscription = \Drupal::service('acquia_connector.subscription');
+      if ($key === 'identifier') {
+        return $subscription->getSettings()->getIdentifier() ?? '';
+      }
+      if ($key === 'key') {
+        return $subscription->getSettings()->getSecretKey() ?? '';
+      }
+      if ($key === 'uuid') {
+        return $subscription->getSettings()->getApplicationUuid() ?? '';
+      }
+      return '';
+    }
+
+    if ($key === 'identifier') {
+      return \Drupal::state()->get('acquia_connector.identifier') ?? '';
+    }
+    if ($key === 'key') {
+      return \Drupal::state()->get('acquia_connector.key') ?? '';
+    }
+    if ($key === 'uuid') {
+      $subscription_data = \Drupal::state()->get('acquia_subscription_data', []);
+      return $subscription_data['uuid'] ?? '';
+    }
+    return '';
+  }
+
+  /**
+   * Gets value, with fallback to Acquia Connector.
+   *
+   * @param string $key
+   *   The value key.
+   * @param string $connector_key
+   *   The connector value key.
+   *
+   * @return string|null
+   *   The value.
+   */
+  private static function getValue($key, $connector_key) {
+    $value = \Drupal::state()->get("acquia_search.$key", '');
+    if (empty($value)) {
+      $value = self::getConnectorSetting($connector_key);
+    }
+    return $value;
+  }
+
+  /**
    * Returns Acquia Search API host.
    *
    * To manage Acquia Search.
@@ -28,7 +88,7 @@ class Storage {
    *   Acquia Connector key.
    */
   public static function getApiKey() {
-    return \Drupal::state()->get('acquia_search.api_key', '');
+    return self::getValue('api_key', 'key');
   }
 
   /**
@@ -38,7 +98,7 @@ class Storage {
    *   Acquia Subscription identifier.
    */
   public static function getIdentifier(): string {
-    return \Drupal::state()->get('acquia_search.identifier', '');
+    return self::getValue('identifier', 'identifier');
   }
 
   /**
@@ -48,7 +108,7 @@ class Storage {
    *   Acquia Application UUID.
    */
   public static function getUuid(): string {
-    return \Drupal::state()->get('acquia_search.uuid', '');
+    return self::getValue('uuid', 'uuid');
   }
 
   /**

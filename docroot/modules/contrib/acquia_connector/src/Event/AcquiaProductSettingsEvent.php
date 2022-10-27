@@ -3,14 +3,13 @@
 namespace Drupal\acquia_connector\Event;
 
 use Drupal\acquia_connector\Subscription;
-use Drupal\Component\EventDispatcher\Event;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Event to let individual products create configurations within Connector.
  */
-class AcquiaProductSettingsEvent extends Event {
+class AcquiaProductSettingsEvent extends EventBase {
 
   use StringTranslationTrait;
 
@@ -89,7 +88,6 @@ class AcquiaProductSettingsEvent extends Event {
       '#collapsed' => FALSE,
     ];
     $this->form['product_settings'][$product_machine_name]['settings'] = $product_setting_form;
-
   }
 
   /**

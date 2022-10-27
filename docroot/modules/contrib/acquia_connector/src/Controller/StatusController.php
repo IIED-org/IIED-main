@@ -3,13 +3,12 @@
 namespace Drupal\acquia_connector\Controller;
 
 use Drupal\acquia_connector\Subscription;
-use Drupal\Core\Access\AccessResultAllowed;
-use Drupal\Core\Access\AccessResultForbidden;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Http\RequestStack;
-use Drupal\Core\PageCache\ResponsePolicy\KillSwitch;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Checks the current status of the Acquia Service.
@@ -24,33 +23,33 @@ class StatusController extends ControllerBase {
   protected $subscription;
 
   /**
-   * Page Cache Kill Switch.
+   * The request stack.
    *
-   * @var \Drupal\Core\PageCache\ResponsePolicy\KillSwitch
+   * @var \Symfony\Component\HttpFoundation\RequestStack
    */
-  protected $killSwitch;
+  protected $requestStack;
 
   /**
-   * Current Request.
+   * The module handler.
    *
-   * @var \Symfony\Component\HttpFoundation\Request
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
-  protected $request;
+  protected $moduleHandler;
 
   /**
    * WebhooksSettingsForm constructor.
    *
    * @param \Drupal\acquia_connector\Subscription $subscription
    *   The event dispatcher.
-   * @param \Drupal\Core\PageCache\ResponsePolicy\KillSwitch $kill_switch
-   *   The client factory.
-   * @param \Drupal\Core\Http\RequestStack $request_stack
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    */
-  public function __construct(Subscription $subscription, KillSwitch $kill_switch, RequestStack $request_stack) {
+  public function __construct(Subscription $subscription, RequestStack $request_stack, ModuleHandlerInterface $module_handler) {
     $this->subscription = $subscription;
-    $this->killSwitch = $kill_switch;
-    $this->request = $request_stack->getCurrentRequest();
+    $this->requestStack = $request_stack;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -59,8 +58,8 @@ class StatusController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('acquia_connector.subscription'),
-      $container->get('page_cache_kill_switch'),
-      $container->get('request_stack')
+      $container->get('request_stack'),
+      $container->get('module_handler')
     );
   }
 
@@ -83,16 +82,11 @@ class StatusController extends ControllerBase {
    * Used by Acquia uptime monitoring.
    */
   public function json() {
-    // We don't want this page cached.
-    $this->killSwitch->trigger();
-
-    $performance_config = $this->config('system.performance');
-
     $data = [
       'version' => '1.0',
       'data' => [
         'maintenance_mode' => (bool) $this->state()->get('system.maintenance_mode'),
-        'cache' => $performance_config->get('cache.page.use_internal'),
+        'cache' => $this->moduleHandler->moduleExists('page_cache'),
         'block_cache' => FALSE,
       ],
     ];
@@ -104,26 +98,26 @@ class StatusController extends ControllerBase {
    * Access callback for json() callback.
    */
   public function access() {
-    $nonce = $this->request->get('nonce', FALSE);
+    $request = $this->requestStack->getCurrentRequest();
+    assert($request !== NULL);
+    $nonce = $request->get('nonce', FALSE);
     $connector_config = $this->config('acquia_connector.settings');
 
     // If we don't have all the query params, leave now.
     if (!$nonce) {
-      return AccessResultForbidden::forbidden();
+      return AccessResult::forbidden('Missing nonce.');
     }
 
     $sub_data = $this->subscription->getSubscription();
+    if (empty($sub_data['uuid'])) {
+      return AccessResult::forbidden('Missing application UUID.');
+    }
     $sub_uuid = $sub_data['uuid'];
 
-    $expected_hash = '';
-
-    if (!empty($sub_uuid)) {
-      $expected_hash = hash('sha1', "{$sub_uuid}:{$nonce}");
-
-      // If the generated hash matches the hash from $_GET['key'], we're good.
-      if ($this->request->get('key', FALSE) === $expected_hash) {
-        return AccessResultAllowed::allowed();
-      }
+    $expected_hash = hash('sha1', "{$sub_uuid}:{$nonce}");
+    // If the generated hash matches the hash from $_GET['key'], we're good.
+    if ($request->get('key', FALSE) === $expected_hash) {
+      return AccessResult::allowed();
     }
 
     // Log the request if validation failed and debug is enabled.
@@ -132,15 +126,15 @@ class StatusController extends ControllerBase {
         'sub_data' => $sub_data,
         'sub_uuid_from_data' => $sub_uuid,
         'expected_hash' => $expected_hash,
-        'get' => $this->request->query->all(),
-        'server' => $this->request->server->all(),
-        'request' => $this->request->request->all(),
+        'get' => $request->query->all(),
+        'server' => $request->server->all(),
+        'request' => $request->request->all(),
       ];
 
       $this->getLogger('acquia_agent')->notice('Site status request: @data', ['@data' => var_export($info, TRUE)]);
     }
 
-    return AccessResultForbidden::forbidden();
+    return AccessResult::forbidden('Could not validate key.');
   }
 
 }

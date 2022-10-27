@@ -56,6 +56,7 @@ class PreferredSearchCoreTest extends UnitTestCase {
       ->willReturn($config->reveal());
 
     $module_handler = $this->prophesize(ModuleHandlerInterface::class);
+    $module_handler->moduleExists('acquia_connector')->willReturn(FALSE);
     $module_handler->alter(Argument::any(), Argument::any(), Argument::any())->willReturn(NULL);
     $this->moduleHandler = $module_handler;
 

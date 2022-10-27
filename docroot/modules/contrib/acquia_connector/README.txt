@@ -9,13 +9,13 @@ telephone support.
 
 These modules allow you to connect any Drupal 8.x site to Acquia Insight.
 
-[1] https://docs.acquia.com/acquia-cloud/insight/
+[1] https://docs.acquia.com/cloud-platform/onboarding/
 
 Installation
 --------------------------------------------------------------------------------
 
 Consult the online documentation at
-https://docs.acquia.com/acquia-cloud/insight/install/ for installation
+https://docs.acquia.com/cloud-platform/onboarding/install/ for installation
 instructions.
 
 
