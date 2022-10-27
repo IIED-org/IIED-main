@@ -36,14 +36,14 @@ content:
             ow-at: ''
             ow-def-at: false
             ow-def-cl: false
-            fis: true
-            fis-el: div
-            fis-cl: 'not-prose mb-4'
+            fis: false
+            fis-el: ''
+            fis-cl: ''
             fis-at: ''
             fis-def-at: false
-            fi: false
-            fi-el: ''
-            fi-cl: ''
+            fi: true
+            fi-el: div
+            fi-cl: mt-0
             fi-at: ''
             fi-def-at: false
             prefix: ''
@@ -54,12 +54,19 @@ content:
     type: link
     label: hidden
     settings:
-      trim_length: 80
+      trim_length: null
       url_only: false
       url_plain: false
-      rel: ''
-      target: ''
-    third_party_settings: {  }
+      rel: '0'
+      target: '0'
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
     weight: 0
     region: content
 hidden:

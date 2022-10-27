@@ -1188,11 +1188,28 @@ display:
         groups:
           1: AND
       style:
-        type: default
+        type: table
         options:
           grouping: {  }
           row_class: ''
           default_row_class: true
+          columns:
+            name: name
+          default: '-1'
+          info:
+            name:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+          override: true
+          sticky: false
+          summary: ''
+          empty_table: false
+          caption: ''
+          description: ''
       row:
         type: fields
         options:
@@ -1202,6 +1219,7 @@ display:
           hide_empty: false
       defaults:
         title: false
+        css_class: false
         pager: false
         group_by: false
         style: false
@@ -1212,6 +1230,7 @@ display:
         filters: false
         filter_groups: false
       relationships: {  }
+      css_class: 'container my-12'
       group_by: false
       display_description: ''
       display_extenders: {  }

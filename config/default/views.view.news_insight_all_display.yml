@@ -329,18 +329,19 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        field_article_type_value:
-          id: field_article_type_value
-          table: node__field_article_type
-          field: field_article_type_value
+        langcode:
+          id: langcode
+          table: node_field_data
+          field: langcode
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: list_field
-          operator: or
+          entity_type: node
+          entity_field: langcode
+          plugin_id: language
+          operator: in
           value:
-            1: '1'
-            2: '2'
+            '***LANGUAGE_language_content***': '***LANGUAGE_language_content***'
           group: 1
           exposed: false
           expose:
@@ -370,7 +371,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          reduce_duplicates: false
       filter_groups:
         operator: AND
         groups:
@@ -1080,7 +1080,7 @@ display:
         type: full
         options:
           offset: 0
-          items_per_page: 12
+          items_per_page: 24
           total_pages: null
           id: 0
           tags:
@@ -1089,7 +1089,7 @@ display:
             first: '« First'
             last: 'Last »'
           expose:
-            items_per_page: true
+            items_per_page: false
             items_per_page_label: 'Items per page'
             items_per_page_options: '12, 24, 48, 96'
             items_per_page_options_all: false
@@ -1231,12 +1231,14 @@ display:
         groups:
           1: AND
       defaults:
+        use_ajax: false
         show_admin_links: false
         pager: false
         exposed_form: false
         filters: false
         filter_groups: false
         header: false
+      use_ajax: true
       display_description: ''
       show_admin_links: true
       header:

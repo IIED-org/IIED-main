@@ -1322,7 +1322,7 @@ display:
           exclude: true
           alter:
             alter_text: true
-            text: 'https://pubs.iied.org{{ path(''entity.node.canonical'', {''node'': nid}) }}'
+            text: 'https://www.iied.org{{ path(''entity.node.canonical'', {''node'': nid}) }}'
             make_link: true
             path: '{{ path(''entity.node.canonical'', {''node'': nid}) }}'
             absolute: true
@@ -1538,7 +1538,7 @@ display:
             preserve_tags: ''
             html: false
           element_type: span
-          element_class: ''
+          element_class: mr-4
           element_label_type: ''
           element_label_class: ''
           element_label_colon: false
@@ -1779,7 +1779,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: 'https://pubs.iied.org/{{ field_product_code_new__value }}'
+            text: 'https://www.iied.org/{{ field_product_code_new__value }}'
             make_link: true
             path: '/{{ field_product_code_new__value }}'
             absolute: false
