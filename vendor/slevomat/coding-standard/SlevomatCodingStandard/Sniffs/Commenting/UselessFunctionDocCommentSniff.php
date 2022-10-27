@@ -6,7 +6,6 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
@@ -119,9 +118,9 @@ class UselessFunctionDocCommentSniff implements Sniff
 		$changeEnd = TokenHelper::findNextEffective($phpcsFile, $docCommentClosePointer + 1) - 1;
 
 		$phpcsFile->fixer->beginChangeset();
-
-		FixerHelper::removeBetweenIncluding($phpcsFile, $changeStart, $changeEnd);
-
+		for ($i = $changeStart; $i <= $changeEnd; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 		$phpcsFile->fixer->endChangeset();
 	}
 

@@ -5,7 +5,6 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ClassHelper;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function assert;
@@ -105,7 +104,6 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 
 		if ($linesBetween > $maxExpectedLines) {
 			$lastPointerOnLine = TokenHelper::findLastTokenOnLine($phpcsFile, $semicolonPointer);
-			$firstPointerOnNextLine = TokenHelper::findFirstTokenOnLine($phpcsFile, $nextPointer);
 
 			$phpcsFile->fixer->beginChangeset();
 
@@ -113,7 +111,9 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 				$phpcsFile->fixer->addContent($lastPointerOnLine, str_repeat($phpcsFile->eolChar, $maxExpectedLines));
 			}
 
-			FixerHelper::removeBetween($phpcsFile, $lastPointerOnLine, $firstPointerOnNextLine);
+			for ($i = $lastPointerOnLine + 1; $i < TokenHelper::findFirstTokenOnLine($phpcsFile, $nextPointer); $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
 
 			$phpcsFile->fixer->endChangeset();
 		} else {

@@ -2,11 +2,8 @@
 
 namespace Drupal\Tests\views_bulk_operations\Unit;
 
-use Drupal\Core\Messenger\Messenger;
-use Drupal\Core\StringTranslation\TranslationManager;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Tests\UnitTestCase;
-use Drupal\views_bulk_operations\ViewsBulkOperationsBatch;
+use Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionProcessor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
@@ -23,53 +20,43 @@ class ViewsBulkOperationsBatchTest extends UnitTestCase {
   protected static array $modules = ['node'];
 
   /**
-   * Messages storage.
-   *
-   * @var string[]|null
-   */
-  private $messages = NULL;
-
-  /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
     parent::setUp();
 
     $this->container = new ContainerBuilder();
-
-    // Mock translation manager.
-    $this->translationManager = $this->createPartialMock(TranslationManager::class, ['translateString']);
-    $this->translationManager->expects($this->any())
-      ->method('translateString')
-      ->willReturnCallback(function (TranslatableMarkup $translated_string) {
-        return \strtr($translated_string->getUntranslatedString(), $translated_string->getOptions());
-      });
-
-    $this->container->set('string_translation', $this->translationManager);
-
-    // Mock messanger.
-    $this->messenger = $this->createMock(Messenger::class);
-    $this->messenger->expects($this->any())
-      ->method('addMessage')
-      ->willReturnCallback(function ($message, $type, $repeat) {
-        if ($this->messages === NULL) {
-          $this->messages = (string) $message;
-        }
-        else {
-          $this->messages .= ' | ' . (string) $message;
-        }
-      });
-    $this->messenger->expects($this->any())
-      ->method('all')
-      ->willReturnCallback(function () {
-        $messages = $this->messages;
-        $this->messages = NULL;
-        return $messages;
-      });
-
-    $this->container->set('messenger', $this->messenger);
-
     \Drupal::setContainer($this->container);
+  }
+
+  /**
+   * Returns a stub ViewsBulkOperationsActionProcessor that returns dummy data.
+   *
+   * @return \Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionProcessor
+   *   A mocked action processor.
+   */
+  public function getViewsBulkOperationsActionProcessorStub($entities_count): ViewsBulkOperationsActionProcessor {
+    $actionProcessor = $this->getMockBuilder('Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionProcessor')
+      ->disableOriginalConstructor()
+      ->getMock();
+
+    $actionProcessor->expects($this->any())
+      ->method('populateQueue')
+      ->will($this->returnValue($entities_count));
+
+    $actionProcessor->expects($this->any())
+      ->method('process')
+      ->will($this->returnCallback(static function () use ($entities_count) {
+        $return = [];
+        for ($i = 0; $i < $entities_count; $i++) {
+          $return[] = [
+            'message' => 'Some action',
+          ];
+        }
+        return $return;
+      }));
+
+    return $actionProcessor;
   }
 
   /**
@@ -82,9 +69,9 @@ class ViewsBulkOperationsBatchTest extends UnitTestCase {
       'list' => [[0, 'en', 'node', 1]],
       'some_data' => [],
       'action_label' => '',
-      'finished_callback' => [ViewsBulkOperationsBatch::class, 'finished'],
+      'finished_callback' => [TestViewsBulkOperationsBatch::class, 'finished'],
     ];
-    $batch = ViewsBulkOperationsBatch::getBatch($data);
+    $batch = TestViewsBulkOperationsBatch::getBatch($data);
     $this->assertArrayHasKey('title', $batch);
     $this->assertArrayHasKey('operations', $batch);
     $this->assertArrayHasKey('finished', $batch);
@@ -106,8 +93,8 @@ class ViewsBulkOperationsBatchTest extends UnitTestCase {
       ],
       'api_version' => '1',
     ];
-    ViewsBulkOperationsBatch::finished(TRUE, $results, []);
-    $this->assertEquals('Action processing results: Some operation (2).', $this->messenger->all());
+    TestViewsBulkOperationsBatch::finished(TRUE, $results, []);
+    $this->assertEquals('Action processing results: Some operation (2).', TestViewsBulkOperationsBatch::message());
 
     $results = [
       'operations' => [
@@ -125,8 +112,8 @@ class ViewsBulkOperationsBatchTest extends UnitTestCase {
       'api_version' => '1',
     ];
 
-    ViewsBulkOperationsBatch::finished(TRUE, $results, []);
-    $this->assertEquals('Action processing results: Some operation1 (1). | Action processing results: Some operation2 (1).', $this->messenger->all());
+    TestViewsBulkOperationsBatch::finished(TRUE, $results, []);
+    $this->assertEquals('Action processing results: Some operation1 (1). | Action processing results: Some operation2 (1).', TestViewsBulkOperationsBatch::message());
   }
 
 }

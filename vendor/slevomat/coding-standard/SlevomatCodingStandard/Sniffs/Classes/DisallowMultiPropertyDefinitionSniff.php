@@ -5,7 +5,6 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -132,16 +131,21 @@ class DisallowMultiPropertyDefinitionSniff implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 
 		$phpcsFile->fixer->addContent($visibilityPointer, ' ');
-
-		FixerHelper::removeBetween($phpcsFile, $visibilityPointer, $pointerAfterVisibility);
+		for ($i = $visibilityPointer + 1; $i < $pointerAfterVisibility; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 
 		if ($typeHint !== null) {
 			$phpcsFile->fixer->addContent($typeHintEndPointer, ' ');
-			FixerHelper::removeBetween($phpcsFile, $typeHintEndPointer, $pointerAfterTypeHint);
+			for ($i = $typeHintEndPointer + 1; $i < $pointerAfterTypeHint; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
 		}
 
 		foreach ($commaPointers as $commaPointer) {
-			FixerHelper::removeBetween($phpcsFile, $data[$commaPointer]['pointerBeforeComma'], $commaPointer);
+			for ($i = $data[$commaPointer]['pointerBeforeComma'] + 1; $i < $commaPointer; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
 
 			$phpcsFile->fixer->replaceToken(
 				$commaPointer,
@@ -157,10 +161,14 @@ class DisallowMultiPropertyDefinitionSniff implements Sniff
 				)
 			);
 
-			FixerHelper::removeBetween($phpcsFile, $commaPointer, $data[$commaPointer]['pointerAfterComma']);
+			for ($i = $commaPointer + 1; $i < $data[$commaPointer]['pointerAfterComma']; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
 		}
 
-		FixerHelper::removeBetween($phpcsFile, $pointerBeforeSemicolon, $semicolonPointer);
+		for ($i = $pointerBeforeSemicolon + 1; $i < $semicolonPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 
 		$phpcsFile->fixer->endChangeset();
 	}

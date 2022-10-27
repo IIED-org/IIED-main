@@ -14,7 +14,6 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -230,7 +229,9 @@ class RequireExplicitAssertionSniff implements Sniff
 
 			$phpcsFile->fixer->beginChangeset();
 
-			FixerHelper::removeBetweenIncluding($phpcsFile, $variableAnnotation->getStartPointer(), $variableAnnotation->getEndPointer());
+			for ($i = $variableAnnotation->getStartPointer(); $i <= $variableAnnotation->getEndPointer(); $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
 
 			$docCommentUseful = false;
 			$docCommentClosePointer = $tokens[$docCommentOpenPointer]['comment_closer'];
@@ -258,7 +259,9 @@ class RequireExplicitAssertionSniff implements Sniff
 			);
 
 			if (!$docCommentUseful) {
-				FixerHelper::removeBetweenIncluding($phpcsFile, $pointerBeforeDocComment + 1, $pointerAfterDocComment);
+				for ($i = $pointerBeforeDocComment + 1; $i <= $pointerAfterDocComment; $i++) {
+					$phpcsFile->fixer->replaceToken($i, '');
+				}
 			}
 
 			if (

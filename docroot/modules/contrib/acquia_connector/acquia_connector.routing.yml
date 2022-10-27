@@ -5,27 +5,19 @@ acquia_connector.settings:
   requirements:
     _permission: 'administer site configuration'
 
-acquia_connector.setup_manual:
-  path: '/admin/config/services/acquia-connector/manual'
+acquia_connector.setup:
+  path: '/admin/config/services/acquia-connector/setup'
+  defaults:
+    _form: '\Drupal\acquia_connector\Form\SetupForm'
+    _title: 'Acquia Subscription automatic setup'
+  requirements:
+    _permission: 'administer site configuration'
+
+acquia_connector.credentials:
+  path: '/admin/config/services/acquia-connector/credentials'
   defaults:
     _form: '\Drupal\acquia_connector\Form\CredentialForm'
-    _title: 'Acquia Subscription credentials manual entry'
-  requirements:
-    _permission: 'administer site configuration'
-
-acquia_connector.setup_oauth:
-  path: '/admin/config/services/acquia-connector/login'
-  defaults:
-    _controller: Drupal\acquia_connector\Controller\AuthController::setup
-    _title: 'Connect to Acquia Cloud'
-  requirements:
-    _permission: 'administer site configuration'
-
-acquia_connector.setup_configure:
-  path: '/admin/config/services/acquia-connector/configure'
-  defaults:
-    _form: Drupal\acquia_connector\Form\ConfigureApplicationForm
-    _title: 'Select application'
+    _title: 'Acquia Subscription credentials'
   requirements:
     _permission: 'administer site configuration'
 
@@ -47,21 +39,11 @@ acquia_connector.refresh_status:
     _csrf_token: 'TRUE'
     _permission: 'administer site configuration'
 
-acquia_connector.auth.begin:
-  path: '/acquia-connector/auth/begin'
+acquia_connector.test_validate:
+  path: '/system/acquia-connector-test-validate'
   defaults:
-    _controller: Drupal\acquia_connector\Controller\AuthController::begin
+    _controller: '\Drupal\acquia_connector\SiteProfile\TestStatusController::testStatus'
+    _title: 'Acquia SPI Custom Test Validation'
+    log: TRUE
   requirements:
-    _csrf_token: 'TRUE'
-    _permission: 'administer site configuration'
-  options:
-    no_cache: TRUE
-
-acquia_connector.auth.return:
-  path: '/acquia-connector/auth/return'
-  defaults:
-    _controller: Drupal\acquia_connector\Controller\AuthController::return
-  requirements:
-    _permission: 'administer site configuration'
-  options:
-    no_cache: TRUE
+    _permission: 'access site reports'

@@ -7,7 +7,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
@@ -466,22 +465,27 @@ class ClassStructureSniff implements Sniff
 		int $nextGroupMemberPointer
 	): void
 	{
+		$tokens = $file->getTokens();
+
 		$previousMemberEndPointer = $this->findPreviousMemberEndPointer($file, $groupFirstMemberPointer);
 
 		$groupStartPointer = $this->findGroupStartPointer($file, $groupFirstMemberPointer, $previousMemberEndPointer);
 		$groupEndPointer = $this->findGroupEndPointer($file, $groupLastMemberPointer);
-		$groupContent = TokenHelper::getContent($file, $groupStartPointer, $groupEndPointer);
 
 		$nextGroupMemberStartPointer = $this->findGroupStartPointer($file, $nextGroupMemberPointer);
 
 		$file->fixer->beginChangeset();
 
-		FixerHelper::removeBetweenIncluding($file, $groupStartPointer, $groupEndPointer);
+		$content = '';
+		for ($i = $groupStartPointer; $i <= $groupEndPointer; $i++) {
+			$content .= $tokens[$i]['content'];
+			$file->fixer->replaceToken($i, '');
+		}
 
 		$linesBetween = $this->removeBlankLinesAfterMember($file, $previousMemberEndPointer, $groupStartPointer);
 
 		$newLines = str_repeat($file->eolChar, $linesBetween);
-		$file->fixer->addContentBefore($nextGroupMemberStartPointer, $groupContent . $newLines);
+		$file->fixer->addContentBefore($nextGroupMemberStartPointer, $content . $newLines);
 
 		$file->fixer->endChangeset();
 	}

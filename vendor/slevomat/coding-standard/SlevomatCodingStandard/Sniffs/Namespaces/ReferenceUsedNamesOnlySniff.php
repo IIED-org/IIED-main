@@ -14,7 +14,6 @@ use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\CommentHelper;
 use SlevomatCodingStandard\Helpers\ConstantHelper;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedName;
@@ -302,9 +301,9 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 							);
 
 							$phpcsFile->fixer->replaceToken($startPointer, $fixedAnnotationContent);
-
-							FixerHelper::removeBetweenIncluding($phpcsFile, $startPointer + 1, $reference->endPointer);
-
+							for ($i = $startPointer + 1; $i <= $reference->endPointer; $i++) {
+								$phpcsFile->fixer->replaceToken($i, '');
+							}
 						} elseif ($reference->source === self::SOURCE_ANNOTATION_CONSTANT_FETCH) {
 							$fixedAnnotationContent = AnnotationHelper::fixAnnotationConstantFetchNode(
 								$phpcsFile,
@@ -314,8 +313,10 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 							);
 
 							$phpcsFile->fixer->replaceToken($startPointer, $fixedAnnotationContent);
+							for ($i = $startPointer + 1; $i <= $reference->endPointer; $i++) {
+								$phpcsFile->fixer->replaceToken($i, '');
+							}
 
-							FixerHelper::removeBetweenIncluding($phpcsFile, $startPointer + 1, $reference->endPointer);
 						} else {
 							$phpcsFile->fixer->replaceToken($startPointer, substr($tokens[$startPointer]['content'], 1));
 						}
@@ -512,7 +513,9 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 				$phpcsFile->fixer->replaceToken($startPointer, $nameToReference);
 			}
 
-			FixerHelper::removeBetweenIncluding($phpcsFile, $startPointer + 1, $reference->endPointer);
+			for ($i = $startPointer + 1; $i <= $reference->endPointer; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
 		}
 
 		$phpcsFile->fixer->endChangeset();
@@ -577,7 +580,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 
 		$useStatementPlacePointer = $openTagPointer;
 
-		$nonWhitespacePointerAfterOpenTag = TokenHelper::findNextNonWhitespace($phpcsFile, $openTagPointer + 1);
+		$nonWhitespacePointerAfterOpenTag = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $openTagPointer + 1);
 		if (in_array($tokens[$nonWhitespacePointerAfterOpenTag]['code'], Tokens::$commentTokens, true)) {
 			$commentEndPointer = CommentHelper::getCommentEndPointer($phpcsFile, $nonWhitespacePointerAfterOpenTag);
 
@@ -587,7 +590,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 				$newLineAfterComment = $commentEndPointer + 1;
 
 				if (array_key_exists($newLineAfterComment, $tokens) && $tokens[$newLineAfterComment]['content'] === $phpcsFile->eolChar) {
-					$pointerAfterCommentEnd = TokenHelper::findNextNonWhitespace($phpcsFile, $newLineAfterComment + 1);
+					$pointerAfterCommentEnd = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $newLineAfterComment + 1);
 
 					if (TokenHelper::findNextContent(
 						$phpcsFile,

@@ -7,7 +7,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\Annotation\Annotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -201,8 +200,9 @@ class DocCommentSpacingSniff implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 
 		$phpcsFile->fixer->replaceToken($docCommentOpenerPointer, '/**' . $phpcsFile->eolChar);
-
-		FixerHelper::removeBetween($phpcsFile, $docCommentOpenerPointer, $firstContentStartPointer);
+		for ($i = $docCommentOpenerPointer + 1; $i < $firstContentStartPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 
 		for ($i = 1; $i <= $this->linesCountBeforeFirstContent; $i++) {
 			$phpcsFile->fixer->addContent($docCommentOpenerPointer, sprintf('%s *%s', $indentation, $phpcsFile->eolChar));
@@ -268,8 +268,9 @@ class DocCommentSpacingSniff implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 
 		$phpcsFile->fixer->addNewline($firstContentEndPointer);
-
-		FixerHelper::removeBetween($phpcsFile, $firstContentEndPointer, $firstAnnotation->getStartPointer());
+		for ($i = $firstContentEndPointer + 1; $i < $firstAnnotation->getStartPointer(); $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 
 		for ($i = 1; $i <= $this->linesCountBetweenDescriptionAndAnnotations; $i++) {
 			$phpcsFile->fixer->addContent($firstContentEndPointer, sprintf('%s *%s', $indentation, $phpcsFile->eolChar));
@@ -336,8 +337,9 @@ class DocCommentSpacingSniff implements Sniff
 			$phpcsFile->fixer->beginChangeset();
 
 			$phpcsFile->fixer->addNewline($previousAnnotation->getEndPointer());
-
-			FixerHelper::removeBetween($phpcsFile, $previousAnnotation->getEndPointer(), $annotation->getStartPointer());
+			for ($i = $previousAnnotation->getEndPointer() + 1; $i < $annotation->getStartPointer(); $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
 
 			for ($i = 1; $i <= $this->linesCountBetweenDifferentAnnotationsTypes; $i++) {
 				$phpcsFile->fixer->addContent($previousAnnotation->getEndPointer(), sprintf('%s *%s', $indentation, $phpcsFile->eolChar));
@@ -427,12 +429,9 @@ class DocCommentSpacingSniff implements Sniff
 			$phpcsFile->fixer->beginChangeset();
 
 			$phpcsFile->fixer->addNewline($lastAnnotationInPreviousGroup->getEndPointer());
-
-			FixerHelper::removeBetween(
-				$phpcsFile,
-				$lastAnnotationInPreviousGroup->getEndPointer(),
-				$firstAnnotationInActualGroup->getStartPointer()
-			);
+			for ($i = $lastAnnotationInPreviousGroup->getEndPointer() + 1; $i < $firstAnnotationInActualGroup->getStartPointer(); $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
 
 			for ($i = 1; $i <= $this->linesCountBetweenAnnotationsGroups; $i++) {
 				$phpcsFile->fixer->addContent(
@@ -632,13 +631,14 @@ class DocCommentSpacingSniff implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 		if ($endOfLineBeforeFirstAnnotation === null) {
 			$phpcsFile->fixer->replaceToken($docCommentOpenerPointer, '/**' . $phpcsFile->eolChar . $fixedAnnotations);
-
-			FixerHelper::removeBetweenIncluding($phpcsFile, $docCommentOpenerPointer + 1, $docCommentContentEndPointer);
-
+			for ($i = $docCommentOpenerPointer + 1; $i <= $docCommentContentEndPointer; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
 		} else {
 			$phpcsFile->fixer->replaceToken($endOfLineBeforeFirstAnnotation + 1, $fixedAnnotations);
-
-			FixerHelper::removeBetweenIncluding($phpcsFile, $endOfLineBeforeFirstAnnotation + 2, $docCommentContentEndPointer);
+			for ($i = $endOfLineBeforeFirstAnnotation + 2; $i <= $docCommentContentEndPointer; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
 		}
 		$phpcsFile->fixer->endChangeset();
 	}
@@ -763,8 +763,9 @@ class DocCommentSpacingSniff implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 
 		$phpcsFile->fixer->addNewline($lastContentEndPointer);
-
-		FixerHelper::removeBetween($phpcsFile, $lastContentEndPointer, $docCommentCloserPointer);
+		for ($i = $lastContentEndPointer + 1; $i < $docCommentCloserPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 
 		for ($i = 1; $i <= $this->linesCountAfterLastContent; $i++) {
 			$phpcsFile->fixer->addContent($lastContentEndPointer, sprintf('%s *%s', $indentation, $phpcsFile->eolChar));

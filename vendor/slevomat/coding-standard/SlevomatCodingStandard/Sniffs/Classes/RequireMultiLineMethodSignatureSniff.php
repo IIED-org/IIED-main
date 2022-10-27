@@ -4,7 +4,6 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use Exception;
 use PHP_CodeSniffer\Files\File;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
@@ -14,6 +13,7 @@ use function preg_match;
 use function sprintf;
 use function strlen;
 use const T_COMMA;
+use const T_WHITESPACE;
 
 class RequireMultiLineMethodSignatureSniff extends AbstractMethodSignature
 {
@@ -104,8 +104,13 @@ class RequireMultiLineMethodSignatureSniff extends AbstractMethodSignature
 			}
 
 			$phpcsFile->fixer->addContent($pointerBeforeParameter, $phpcsFile->eolChar . IndentationHelper::addIndentation($indentation));
+			for ($i = $pointerBeforeParameter + 1; $i < $parameter['token']; $i++) {
+				if ($tokens[$i]['code'] !== T_WHITESPACE) {
+					break;
+				}
 
-			FixerHelper::removeWhitespaceAfter($phpcsFile, $pointerBeforeParameter);
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
 		}
 
 		$phpcsFile->fixer->addContentBefore($tokens[$methodPointer]['parenthesis_closer'], $phpcsFile->eolChar . $indentation);

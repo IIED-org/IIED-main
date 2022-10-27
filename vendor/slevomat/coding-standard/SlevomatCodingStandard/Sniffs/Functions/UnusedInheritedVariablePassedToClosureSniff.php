@@ -4,7 +4,6 @@ namespace SlevomatCodingStandard\Sniffs\Functions;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\VariableHelper;
 use function in_array;
@@ -130,8 +129,9 @@ class UnusedInheritedVariablePassedToClosureSniff implements Sniff
 		} while (true);
 
 		$phpcsFile->fixer->beginChangeset();
-
-		FixerHelper::removeBetweenIncluding($phpcsFile, $fixStartPointer, $fixEndPointer);
+		for ($i = $fixStartPointer; $i <= $fixEndPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 
 		$emptyUse = true;
 		for ($i = $useParenthesisOpenerPointer + 1; $i < $useParenthesisCloserPointer; $i++) {
@@ -141,7 +141,9 @@ class UnusedInheritedVariablePassedToClosureSniff implements Sniff
 			}
 		}
 		if ($emptyUse) {
-			FixerHelper::removeBetweenIncluding($phpcsFile, $usePointer, $useParenthesisCloserPointer);
+			for ($i = $usePointer; $i <= $useParenthesisCloserPointer; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
 		}
 
 		$phpcsFile->fixer->endChangeset();

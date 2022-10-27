@@ -14,14 +14,45 @@ class MigrateAcquiaConnectorConfigurationTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['acquia_connector', 'path_alias'];
+  public static $modules = ['acquia_connector', 'path_alias'];
 
   protected $expectedConfig = [
     'acquia_connector.settings' => [
+      'subscription_name' => 'Test',
       'debug' => FALSE,
       'cron_interval' => 30,
       'cron_interval_override' => 0,
       'hide_signup_messages' => 0,
+      'spi' => [
+        'server' => 'https://nspi.acquia.com',
+        'ssl_override' => FALSE,
+        'ssl_verify' => TRUE,
+        'admin_priv' => 1,
+        'send_node_user' => 1,
+        'send_watchdog' => 1,
+        'dynamic_banner' => 0,
+        'set_variables_override' => 0,
+        'set_variables_automatic' => [
+          'acquia_spi_set_variables_automatic ',
+          'error_level',
+          'preprocess_js',
+          'page_cache_maximum_age',
+          'block_cache',
+          'preprocess_css',
+          'page_compression',
+          'image_allow_insecure_derivatives',
+          'googleanalytics_cache',
+          'acquia_spi_send_node_user',
+          'acquia_spi_admin_priv',
+          'acquia_spi_send_watchdog',
+        ],
+        'ignored_set_variables' => [],
+        'saved_variables' => [
+          'variables' => [],
+          'time' => 0,
+        ],
+        'cron_interval' => 30,
+      ],
     ],
   ];
 

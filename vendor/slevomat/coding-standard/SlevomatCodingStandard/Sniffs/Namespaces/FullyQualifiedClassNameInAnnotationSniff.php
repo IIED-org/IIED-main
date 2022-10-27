@@ -10,9 +10,6 @@ use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationConstantExpressionHelper;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
-use SlevomatCodingStandard\Helpers\FixerHelper;
-use SlevomatCodingStandard\Helpers\NamespaceHelper;
-use SlevomatCodingStandard\Helpers\ReferencedName;
 use SlevomatCodingStandard\Helpers\TypeHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use function sprintf;
@@ -94,8 +91,9 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 						$phpcsFile->fixer->beginChangeset();
 
 						$phpcsFile->fixer->replaceToken($annotation->getStartPointer(), $fixedAnnotationContent);
-
-						FixerHelper::removeBetweenIncluding($phpcsFile, $annotation->getStartPointer() + 1, $annotation->getEndPointer());
+						for ($i = $annotation->getStartPointer() + 1; $i <= $annotation->getEndPointer(); $i++) {
+							$phpcsFile->fixer->replaceToken($i, '');
+						}
 
 						$phpcsFile->fixer->endChangeset();
 					}
@@ -103,35 +101,19 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 
 				foreach (AnnotationHelper::getAnnotationConstantExpressions($annotation) as $constantExpression) {
 					foreach (AnnotationConstantExpressionHelper::getConstantFetchNodes($constantExpression) as $constantFetchNode) {
-						$isClassConstant = $constantFetchNode->className !== '';
+						$typeHint = $constantFetchNode->className;
 
-						$typeHint = $isClassConstant
-							? $constantFetchNode->className
-							: $constantFetchNode->name;
-
-						if ($typeHint === 'self') {
-							continue;
-						}
-
-						$fullyQualifiedTypeHint = $isClassConstant
-							? NamespaceHelper::resolveClassName(
-								$phpcsFile,
-								$typeHint,
-								$annotation->getStartPointer()
-							) : NamespaceHelper::resolveName(
-								$phpcsFile,
-								$typeHint,
-								ReferencedName::TYPE_CONSTANT,
-								$annotation->getStartPointer()
-							);
-
+						$fullyQualifiedTypeHint = TypeHintHelper::getFullyQualifiedTypeHint(
+							$phpcsFile,
+							$annotation->getStartPointer(),
+							$typeHint
+						);
 						if ($fullyQualifiedTypeHint === $typeHint) {
 							continue;
 						}
 
 						$fix = $phpcsFile->addFixableError(sprintf(
-							'%s name %s in %s should be referenced via a fully qualified name.',
-							$isClassConstant ? 'Class' : 'Constant',
+							'Class name %s in %s should be referenced via a fully qualified name.',
 							$fullyQualifiedTypeHint,
 							$annotationName
 						), $annotation->getStartPointer(), self::CODE_NON_FULLY_QUALIFIED_CLASS_NAME);
@@ -140,22 +122,19 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 							continue;
 						}
 
-						$fixedConstantFetchNode = $isClassConstant
-							? new ConstFetchNode($fullyQualifiedTypeHint, $constantFetchNode->name)
-							: new ConstFetchNode('', $fullyQualifiedTypeHint);
-
 						$fixedAnnotationContent = AnnotationHelper::fixAnnotationConstantFetchNode(
 							$phpcsFile,
 							$annotation,
 							$constantFetchNode,
-							$fixedConstantFetchNode
+							new ConstFetchNode($fullyQualifiedTypeHint, $constantFetchNode->name)
 						);
 
 						$phpcsFile->fixer->beginChangeset();
 
 						$phpcsFile->fixer->replaceToken($annotation->getStartPointer(), $fixedAnnotationContent);
-
-						FixerHelper::removeBetweenIncluding($phpcsFile, $annotation->getStartPointer() + 1, $annotation->getEndPointer());
+						for ($i = $annotation->getStartPointer() + 1; $i <= $annotation->getEndPointer(); $i++) {
+							$phpcsFile->fixer->replaceToken($i, '');
+						}
 
 						$phpcsFile->fixer->endChangeset();
 					}

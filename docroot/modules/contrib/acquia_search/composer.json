@@ -6,7 +6,8 @@
     "require": {
         "drupal/search_api_solr": "^4.1.12",
         "http-interop/http-factory-guzzle": "^1.0",
-        "guzzlehttp/guzzle": "^6 || ^7"
+        "guzzlehttp/guzzle": "^6.5 || ^7.2",
+        "php-http/guzzle6-adapter": "^2.0 || ^3.0"
     },
     "conflict": {
         "drupal/acquia_connector": "<3",
@@ -24,5 +25,8 @@
                 "drush.services.yml": "^10 || ^11"
             }
         }
+    },
+    "suggest": {
+        "php-http/guzzle6-adapter":"Required to use Acquia Connector with Guzzle 6 / Drupal 9.3 and lower"
     }
 }

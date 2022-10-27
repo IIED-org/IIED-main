@@ -17,7 +17,7 @@ class FromCoreSettings implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events[AcquiaConnectorEvents::GET_SETTINGS][] = ['onGetSettings', 50];
+    $events[AcquiaConnectorEvents::GET_SETTINGS][] = ['onGetSettings', 100];
     return $events;
   }
 
@@ -34,7 +34,6 @@ class FromCoreSettings implements EventSubscriberInterface {
     if ($settings instanceof Settings) {
       $event->setSettings($settings);
       $event->setProvider('core_settings');
-      // @phpstan-ignore-next-line
       $event->stopPropagation();
     }
   }

@@ -2,6 +2,7 @@
 
 namespace Drupal\acquia_search\Plugin\SolrConnector;
 
+use Drupal\acquia_search\Client\Adapter\TimeoutAwarePsr18Adapter;
 use Drupal\acquia_search\Helper\Messages;
 use Drupal\acquia_search\Helper\Runtime;
 use Drupal\acquia_search\Helper\Storage;
@@ -10,6 +11,10 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\search_api_solr\SolrConnector\SolrConnectorPluginBase;
+use GuzzleHttp\Client as GuzzleClient;
+use Http\Adapter\Guzzle6\Client as Guzzle6Client;
+use Psr\Http\Client\ClientInterface;
+use Solarium\Core\Client\Client;
 use Solarium\Core\Client\Endpoint;
 use Solarium\Exception\UnexpectedValueException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -202,17 +207,19 @@ class SearchApiSolrAcquiaConnector extends SolrConnectorPluginBase {
       $form['connector']['#markup'] = $this->t('Search settings are being automatically set by your <a href=":connector">Acquia Connector</a> subscription.', [
         ':connector' => base_path() . Url::fromRoute('acquia_connector.settings')->getInternalPath(),
       ]);
+
+      $subscription = \Drupal::state()->get('acquia_subscription_data');
       $form['identifier'] = [
         '#type' => 'value',
-        '#value' => $this->storage::getIdentifier(),
+        '#value' => \Drupal::state()->get('acquia_connector.identifier') ?? '',
       ];
       $form['api_key'] = [
         '#type' => 'value',
-        '#value' => $this->storage::getApiKey(),
+        '#value' => \Drupal::state()->get('acquia_connector.key') ?? '',
       ];
       $form['uuid'] = [
         '#type' => 'value',
-        '#value' => $this->storage::getUuid(),
+        '#value' => $subscription['uuid'] ?? '',
       ];
     }
     else {
@@ -311,16 +318,38 @@ class SearchApiSolrAcquiaConnector extends SolrConnectorPluginBase {
    * {@inheritdoc}
    */
   protected function connect() {
+
     if ($this->solr) {
       return;
     }
+
+    // Create a PSR-18 adapter instance, since Solarium's HTTP adapter is
+    // incompatible with remote_stream_wrapper.
+    // See https://www.drupal.org/project/acquia_search/issues/3209704
+    // And https://www.drupal.org/project/acquia_search_solr/issues/3171407
+    $httpClient = new GuzzleClient();
+    if (!($httpClient instanceof ClientInterface)) {
+      // BC for Drupal 9 and 8 using Guzzle 6.
+      if (class_exists(Guzzle6Client::class)) {
+        $httpClient = new Guzzle6Client();
+      }
+      else {
+        \Drupal::logger('acquia_search')->error("Guzzle7 or php-http/guzzle6-adapter is required to use Acquia Search");
+        return FALSE;
+      }
+    }
+
+    $adapter = new TimeoutAwarePsr18Adapter($httpClient);
+
+    $this->solr = new Client($adapter, $this->eventDispatcher);
 
     // Scheme should always be https and port 443.
     $this->configuration['scheme'] = 'https';
     $this->configuration['port'] = 443;
     $this->configuration['key'] = self::ENDPOINT_KEY;
+    $this->configuration['path'] = '/';
+    $this->configuration[self::QUERY_TIMEOUT] = $this->configuration['timeout'];
 
-    $this->solr = $this->createClient($this->configuration);
     $this->solr->createEndpoint($this->configuration, TRUE);
     $this->solr->registerPlugin('acquia_solr_search_subscriber', $this->searchSubscriber);
   }
@@ -332,6 +361,7 @@ class SearchApiSolrAcquiaConnector extends SolrConnectorPluginBase {
    *   Renderable array.
    */
   protected function getAcquiaSearchCores(): array {
+
     if (!$this->storage->getApiKey() || !$this->storage->getIdentifier() || !$this->storage->getUuid() || !$this->storage->getApiHost()) {
       return [
         '#markup' => $this->t('Please provide API credentials for Acquia Search.'),

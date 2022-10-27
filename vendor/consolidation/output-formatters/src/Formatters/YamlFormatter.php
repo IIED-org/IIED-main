@@ -1,5 +1,4 @@
 <?php
-
 namespace Consolidation\OutputFormatters\Formatters;
 
 use Symfony\Component\Yaml\Yaml;

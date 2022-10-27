@@ -5,15 +5,14 @@
  * Defines the behaviors needed for draggableviews integration.
  */
 
-(function (Drupal) {
+(function ($, Drupal) {
   Drupal.behaviors.draggableviewsWeights = {
     attach: function (context, settings) {
-      let weights = document.querySelectorAll('.draggableviews-weight');
-      if (weights.length) {
-        weights.forEach(function (el, weight) {
-          el.setAttribute('value', weight);
+      if ($('.draggableviews-weight').length) {
+        $('.draggableviews-weight').each(function(i, obj) {
+          $(this).attr('value', i);
         });
       }
     }
   };
-})(Drupal);
+})(jQuery, Drupal);

@@ -4,7 +4,6 @@ namespace SlevomatCodingStandard\Sniffs\Variables;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_keys;
@@ -42,6 +41,7 @@ use const T_STATIC;
 use const T_SWITCH;
 use const T_VARIABLE;
 use const T_WHILE;
+use const T_WHITESPACE;
 use const T_XOR_EQUAL;
 
 class UselessVariableSniff implements Sniff
@@ -166,14 +166,18 @@ class UselessVariableSniff implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 
 		if ($tokens[$assigmentPointer]['code'] === T_EQUAL) {
-			FixerHelper::removeBetweenIncluding($phpcsFile, $previousVariablePointer, $assigmentPointer - 1);
+			for ($i = $previousVariablePointer; $i < $assigmentPointer; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
 			$phpcsFile->fixer->replaceToken($assigmentPointer, 'return');
 		} else {
 			$phpcsFile->fixer->addContentBefore($previousVariablePointer, 'return ');
 			$phpcsFile->fixer->replaceToken($assigmentPointer, $assigmentFixerMapping[$tokens[$assigmentPointer]['code']]);
 		}
 
-		FixerHelper::removeBetweenIncluding($phpcsFile, $previousVariableSemicolonPointer + 1, $returnSemicolonPointer);
+		for ($i = $previousVariableSemicolonPointer + 1; $i <= $returnSemicolonPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 
 		$phpcsFile->fixer->endChangeset();
 	}
@@ -317,7 +321,7 @@ class UselessVariableSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$pointerBeforeVariable = TokenHelper::findPreviousNonWhitespace($phpcsFile, $variablePointer - 1);
+		$pointerBeforeVariable = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $variablePointer - 1);
 		if ($tokens[$pointerBeforeVariable]['code'] !== T_DOC_COMMENT_CLOSE_TAG) {
 			return false;
 		}

@@ -17,7 +17,6 @@ use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
@@ -128,7 +127,7 @@ class PropertyTypeHintSniff implements Sniff
 
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $pointer + 1);
 		if (in_array($tokens[$nextPointer]['code'], [T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY, T_STATIC], true)) {
-			// We don't want to report the same property twice
+			// We don't want to report the some property twice
 			return;
 		}
 
@@ -542,7 +541,9 @@ class PropertyTypeHintSniff implements Sniff
 			$changeEnd = TokenHelper::findNextEffective($phpcsFile, $docCommentClosePointer + 1) - 1;
 
 			$phpcsFile->fixer->beginChangeset();
-			FixerHelper::removeBetweenIncluding($phpcsFile, $changeStart, $changeEnd);
+			for ($i = $changeStart; $i <= $changeEnd; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
 			$phpcsFile->fixer->endChangeset();
 
 			return;
@@ -556,9 +557,10 @@ class PropertyTypeHintSniff implements Sniff
 			[T_DOC_COMMENT_CLOSE_TAG, T_DOC_COMMENT_STAR],
 			$propertyAnnotation->getEndPointer() + 1
 		) - 1;
-
 		$phpcsFile->fixer->beginChangeset();
-		FixerHelper::removeBetweenIncluding($phpcsFile, $changeStart, $changeEnd);
+		for ($i = $changeStart; $i <= $changeEnd; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 		$phpcsFile->fixer->endChangeset();
 	}
 

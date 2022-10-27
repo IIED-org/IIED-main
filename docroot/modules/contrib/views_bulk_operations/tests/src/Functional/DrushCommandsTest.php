@@ -49,7 +49,7 @@ class DrushCommandsTest extends BrowserTestBase {
       $this->testNodes[] = $this->drupalCreateNode([
         'type' => 'page',
         'title' => 'Title ' . $i,
-        'sticky' => $i % 2,
+        'sticky' => $i % 2 ? TRUE : FALSE,
         'created' => $time,
         'changed' => $time,
       ]);

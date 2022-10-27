@@ -6,7 +6,6 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\ConditionHelper;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
 use function in_array;
@@ -104,7 +103,9 @@ class UselessIfConditionWithReturnSniff implements Sniff
 
 			$phpcsFile->fixer->beginChangeset();
 			$phpcsFile->fixer->replaceToken($ifPointer, sprintf('return %s;', $newCondition()));
-			FixerHelper::removeBetweenIncluding($phpcsFile, $ifPointer + 1, $tokens[$elsePointer]['scope_closer']);
+			for ($i = $ifPointer + 1; $i <= $tokens[$elsePointer]['scope_closer']; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
 			$phpcsFile->fixer->endChangeset();
 		} else {
 			$returnPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$ifPointer]['scope_closer'] + 1);
@@ -135,7 +136,9 @@ class UselessIfConditionWithReturnSniff implements Sniff
 
 			$phpcsFile->fixer->beginChangeset();
 			$phpcsFile->fixer->replaceToken($ifPointer, sprintf('return %s;', $newCondition()));
-			FixerHelper::removeBetweenIncluding($phpcsFile, $ifPointer + 1, $semicolonPointer);
+			for ($i = $ifPointer + 1; $i <= $semicolonPointer; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
 			$phpcsFile->fixer->endChangeset();
 		}
 	}

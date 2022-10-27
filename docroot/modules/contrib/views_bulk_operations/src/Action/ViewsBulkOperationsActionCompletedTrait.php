@@ -3,7 +3,6 @@
 namespace Drupal\views_bulk_operations\Action;
 
 use Drupal\Component\Render\FormattableMarkup;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -16,7 +15,7 @@ trait ViewsBulkOperationsActionCompletedTrait {
    *
    * @see \Drupal\Core\Messenger\MessengerInterface
    */
-  public static function message($message = NULL, $type = 'status', $repeat = TRUE): void {
+  public static function message($message = NULL, $type = 'status', $repeat = TRUE) {
     \Drupal::messenger()->addMessage($message, $type, $repeat);
   }
 
@@ -25,7 +24,7 @@ trait ViewsBulkOperationsActionCompletedTrait {
    *
    * @see \Drupal\Core\StringTranslation\TranslationInterface:translate()
    */
-  public static function translate($string, array $args = [], array $options = []): TranslatableMarkup {
+  public static function translate($string, array $args = [], array $options = []) {
     return \Drupal::translation()->translate($string, $args, $options);
   }
 

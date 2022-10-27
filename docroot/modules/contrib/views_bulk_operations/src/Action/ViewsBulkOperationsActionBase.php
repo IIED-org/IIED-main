@@ -21,7 +21,8 @@ abstract class ViewsBulkOperationsActionBase extends ActionBase implements Views
   /**
    * Action context.
    *
-   * Contains view data and optionally batch operation context.
+   * @var array
+   *   Contains view data and optionally batch operation context.
    */
   protected array $context;
 
@@ -34,7 +35,6 @@ abstract class ViewsBulkOperationsActionBase extends ActionBase implements Views
    * Configuration array.
    *
    * @var array
-   *   NOTE: Don't add a type hint due to parent declaration unless changed.
    */
   protected $configuration;
 
@@ -88,7 +88,7 @@ abstract class ViewsBulkOperationsActionBase extends ActionBase implements Views
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state object.
    */
-  public function validateConfigurationForm(array &$form, FormStateInterface $form_state): void {
+  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
 
   }
 
@@ -103,7 +103,7 @@ abstract class ViewsBulkOperationsActionBase extends ActionBase implements Views
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state object.
    */
-  public function submitConfigurationForm(array &$form, FormStateInterface $form_state): void {
+  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     $form_state->cleanValues();
     foreach ($form_state->getValues() as $key => $value) {
       $this->configuration[$key] = $value;

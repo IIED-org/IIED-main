@@ -1,5 +1,4 @@
 <?php
-
 namespace Consolidation\OutputFormatters\Transformations\Wrap;
 
 use Symfony\Component\Console\Helper\TableStyle;
@@ -80,7 +79,7 @@ class CalculateWidths
         // word in each column.
         foreach ($rows as $rowkey => $row) {
             foreach ($row as $colkey => $cell) {
-                $value = $fn((string) $cell);
+                $value = $fn($cell);
                 if ((!isset($widths[$colkey]) || ($widths[$colkey] < $value))) {
                     $widths[$colkey] = $value;
                 }

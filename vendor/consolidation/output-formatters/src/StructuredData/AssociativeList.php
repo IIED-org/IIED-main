@@ -1,5 +1,4 @@
 <?php
-
 namespace Consolidation\OutputFormatters\StructuredData;
 
 /**
@@ -9,4 +8,5 @@ namespace Consolidation\OutputFormatters\StructuredData;
  */
 class AssociativeList extends PropertyList
 {
+
 }

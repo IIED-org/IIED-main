@@ -4,7 +4,6 @@ namespace SlevomatCodingStandard\Sniffs\Functions;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_COMMA;
 use const T_WHITESPACE;
@@ -65,7 +64,9 @@ class DisallowTrailingCommaInDeclarationSniff implements Sniff
 		$phpcsFile->fixer->replaceToken($pointerBeforeParenthesisCloser, '');
 
 		if ($tokens[$pointerBeforeParenthesisCloser]['line'] === $tokens[$parenthesisCloserPointer]['line']) {
-			FixerHelper::removeBetween($phpcsFile, $pointerBeforeParenthesisCloser, $parenthesisCloserPointer);
+			for ($i = $pointerBeforeParenthesisCloser + 1; $i < $parenthesisCloserPointer; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
 		}
 
 		$phpcsFile->fixer->endChangeset();

@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\views_bulk_operations\Functional;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Tests\BrowserTestBase;
 
 /**

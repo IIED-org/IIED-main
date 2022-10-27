@@ -283,7 +283,9 @@ class YodaHelper
 		/** @var int $lastOldPointer */
 		$lastOldPointer = key($oldTokens);
 
-		FixerHelper::removeBetweenIncluding($phpcsFile, $firstOldPointer, $lastOldPointer);
+		for ($i = $firstOldPointer; $i <= $lastOldPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 
 		$phpcsFile->fixer->addContent($firstOldPointer, implode('', array_map(static function (array $token): string {
 			/** @var string $content */

@@ -9,7 +9,6 @@ use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use function count;
 use function sprintf;
 use function strtolower;
@@ -83,7 +82,9 @@ class NullTypeHintOnLastPositionSniff implements Sniff
 
 						$phpcsFile->fixer->beginChangeset();
 
-						FixerHelper::removeBetweenIncluding($phpcsFile, $annotation->getStartPointer(), $annotation->getEndPointer());
+						for ($i = $annotation->getStartPointer(); $i <= $annotation->getEndPointer(); $i++) {
+							$phpcsFile->fixer->replaceToken($i, '');
+						}
 
 						$fixedTypeNodes = [];
 						foreach ($unionTypeNode->types as $typeNode) {
@@ -104,7 +105,9 @@ class NullTypeHintOnLastPositionSniff implements Sniff
 						);
 
 						$phpcsFile->fixer->replaceToken($annotation->getStartPointer(), $fixedAnnotationContent);
-						FixerHelper::removeBetweenIncluding($phpcsFile, $annotation->getStartPointer() + 1, $annotation->getEndPointer());
+						for ($i = $annotation->getStartPointer() + 1; $i <= $annotation->getEndPointer(); $i++) {
+							$phpcsFile->fixer->replaceToken($i, '');
+						}
 
 						$phpcsFile->fixer->endChangeset();
 					}

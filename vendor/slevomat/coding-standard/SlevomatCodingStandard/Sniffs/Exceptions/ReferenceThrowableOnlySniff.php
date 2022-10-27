@@ -6,7 +6,6 @@ use Exception;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\CatchHelper;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
@@ -108,7 +107,9 @@ class ReferenceThrowableOnlySniff implements Sniff
 
 			$phpcsFile->fixer->beginChangeset();
 
-			FixerHelper::removeBetweenIncluding($phpcsFile, $referencedName->getStartPointer(), $referencedName->getEndPointer());
+			for ($i = $referencedName->getStartPointer(); $i <= $referencedName->getEndPointer(); $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
 
 			$phpcsFile->fixer->addContent($referencedName->getStartPointer(), '\Throwable');
 			$phpcsFile->fixer->endChangeset();
