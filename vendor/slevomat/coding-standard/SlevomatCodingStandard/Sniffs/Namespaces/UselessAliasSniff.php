@@ -4,7 +4,6 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
@@ -71,9 +70,9 @@ class UselessAliasSniff implements Sniff
 				$useSemicolonPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $asPointer + 1);
 
 				$phpcsFile->fixer->beginChangeset();
-
-				FixerHelper::removeBetween($phpcsFile, $nameEndPointer, $useSemicolonPointer);
-
+				for ($i = $nameEndPointer + 1; $i < $useSemicolonPointer; $i++) {
+					$phpcsFile->fixer->replaceToken($i, '');
+				}
 				$phpcsFile->fixer->endChangeset();
 			}
 		}

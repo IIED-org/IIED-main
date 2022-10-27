@@ -189,7 +189,7 @@ class DocCommentHelper
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$nextPointer = TokenHelper::findNextNonWhitespace($phpcsFile, $tokens[$docCommentOpenPointer]['comment_closer'] + 1);
+		$nextPointer = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $tokens[$docCommentOpenPointer]['comment_closer'] + 1);
 
 		if (
 			$nextPointer !== null

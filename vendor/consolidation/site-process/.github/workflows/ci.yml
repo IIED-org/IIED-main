@@ -4,10 +4,10 @@
 on:
   pull_request:
     branches:
-      - 4.x
+      - main
   push:
     branches:
-      - 4.x
+      - main
 
 name: CI
 
@@ -60,12 +60,10 @@ jobs:
       - name: Install roave/backward-compatibility-check
         run: |
           mkdir -p tools
-          echo '{}' > tools/composer.json
-          composer --working-dir=tools config --no-plugins allow-plugins.ocramius/package-versions true
           composer --working-dir=tools require roave/backward-compatibility-check:^5
 
       - name: Run roave/backward-compatibility-check
-        run: ./tools/vendor/bin/roave-backward-compatibility-check --from=4.2.1
+        run: ./tools/vendor/bin/roave-backward-compatibility-check --from=4.1.2
 
   tests:
     name: Tests
@@ -156,9 +154,6 @@ jobs:
       - name: Install highest dependencies with composer
         if: matrix.dependencies == 'highest'
         run: composer update --no-ansi --no-interaction --no-progress
-
-      - name: Show dependencies
-        run: composer info
 
       # Use "script" hack to give us a tty. See https://github.com/actions/runner/issues/241#issuecomment-745902718
       - name: Run tests with phpunit

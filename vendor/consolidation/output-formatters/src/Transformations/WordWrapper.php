@@ -1,5 +1,4 @@
 <?php
-
 namespace Consolidation\OutputFormatters\Transformations;
 
 use Consolidation\OutputFormatters\Transformations\Wrap\CalculateWidths;

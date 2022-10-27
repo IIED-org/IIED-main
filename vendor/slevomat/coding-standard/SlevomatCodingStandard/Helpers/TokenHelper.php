@@ -173,15 +173,6 @@ class TokenHelper
 	}
 
 	/**
-	 * @param int $startPointer Search starts at this token, inclusive
-	 * @param int|null $endPointer Search ends at this token, exclusive
-	 */
-	public static function findNextNonWhitespace(File $phpcsFile, int $startPointer, ?int $endPointer = null): ?int
-	{
-		return self::findNextExcluding($phpcsFile, T_WHITESPACE, $startPointer, $endPointer);
-	}
-
-	/**
 	 * @param int|string|array<int|string, int|string> $types
 	 * @param int $startPointer Search starts at this token, inclusive
 	 * @param int|null $endPointer Search ends at this token, exclusive
@@ -244,15 +235,6 @@ class TokenHelper
 	}
 
 	/**
-	 * @param int $startPointer Search starts at this token, inclusive
-	 * @param int|null $endPointer Search ends at this token, exclusive
-	 */
-	public static function findPreviousNonWhitespace(File $phpcsFile, int $startPointer, ?int $endPointer = null): ?int
-	{
-		return self::findPreviousExcluding($phpcsFile, T_WHITESPACE, $startPointer, $endPointer);
-	}
-
-	/**
 	 * @param int|string|array<int|string, int|string> $types
 	 * @param int $startPointer Search starts at this token, inclusive
 	 * @param int|null $endPointer Search ends at this token, exclusive
@@ -308,22 +290,6 @@ class TokenHelper
 		} while (array_key_exists($pointer, $tokens) && $tokens[$pointer]['line'] === $line);
 
 		return $pointer - 1;
-	}
-
-	/**
-	 * @param int $pointer Search starts at this token, inclusive
-	 */
-	public static function findLastTokenOnPreviousLine(File $phpcsFile, int $pointer): int
-	{
-		$tokens = $phpcsFile->getTokens();
-
-		$line = $tokens[$pointer]['line'];
-
-		do {
-			$pointer--;
-		} while ($tokens[$pointer]['line'] === $line);
-
-		return $pointer;
 	}
 
 	/**

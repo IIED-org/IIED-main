@@ -2,8 +2,6 @@
 
 namespace Drupal\views_bulk_operations\Service;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
-
 /**
  * Defines Views Bulk Operations action processor.
  */
@@ -83,6 +81,6 @@ interface ViewsBulkOperationsActionProcessorInterface {
    * @param mixed $view
    *   The current view object or NULL.
    */
-  public function executeProcessing(array &$data, $view = NULL): RedirectResponse;
+  public function executeProcessing(array &$data, $view = NULL): void;
 
 }

@@ -16,7 +16,6 @@ use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationConstantExpressionHelper;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedName;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
@@ -284,9 +283,9 @@ class UnusedUsesSniff implements Sniff
 				$endPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $unusedUse->getPointer()) + 1;
 
 				$phpcsFile->fixer->beginChangeset();
-
-				FixerHelper::removeBetweenIncluding($phpcsFile, $unusedUse->getPointer(), $endPointer);
-
+				for ($i = $unusedUse->getPointer(); $i <= $endPointer; $i++) {
+					$phpcsFile->fixer->replaceToken($i, '');
+				}
 				$phpcsFile->fixer->endChangeset();
 			}
 		}

@@ -4,7 +4,6 @@ namespace SlevomatCodingStandard\Sniffs\PHP;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function strtolower;
 use const T_OBJECT_OPERATOR;
@@ -59,7 +58,9 @@ class DisallowDirectMagicInvokeCallSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		FixerHelper::removeBetweenIncluding($phpcsFile, $objectOperator, $parenthesisOpenerPointer - 1);
+		for ($i = $objectOperator; $i < $parenthesisOpenerPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 
 		$phpcsFile->fixer->endChangeset();
 	}

@@ -4,7 +4,6 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_ANON_CLASS;
 use const T_CLOSE_PARENTHESIS;
@@ -18,6 +17,7 @@ use const T_INLINE_THEN;
 use const T_NEW;
 use const T_OPEN_PARENTHESIS;
 use const T_SEMICOLON;
+use const T_WHITESPACE;
 
 class NewWithoutParenthesesSniff implements Sniff
 {
@@ -82,7 +82,7 @@ class NewWithoutParenthesesSniff implements Sniff
 			return;
 		}
 
-		$nextPointer = TokenHelper::findNextNonWhitespace($phpcsFile, $parenthesisOpenerPointer + 1);
+		$nextPointer = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $parenthesisOpenerPointer + 1);
 		if ($nextPointer !== $tokens[$parenthesisOpenerPointer]['parenthesis_closer']) {
 			return;
 		}
@@ -93,13 +93,9 @@ class NewWithoutParenthesesSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-
-		FixerHelper::removeBetweenIncluding(
-			$phpcsFile,
-			$parenthesisOpenerPointer,
-			$tokens[$parenthesisOpenerPointer]['parenthesis_closer']
-		);
-
+		for ($i = $parenthesisOpenerPointer; $i <= $tokens[$parenthesisOpenerPointer]['parenthesis_closer']; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 		$phpcsFile->fixer->endChangeset();
 	}
 

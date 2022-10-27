@@ -5,7 +5,6 @@ namespace SlevomatCodingStandard\Sniffs\Operators;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
@@ -141,7 +140,9 @@ class RequireCombinedAssignmentOperatorSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 		$phpcsFile->fixer->replaceToken($equalPointer, $operators[$tokens[$operatorPointer]['code']]);
-		FixerHelper::removeBetweenIncluding($phpcsFile, $equalPointer + 1, $operatorPointer);
+		for ($i = $equalPointer + 1; $i <= $operatorPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 		$phpcsFile->fixer->endChangeset();
 	}
 

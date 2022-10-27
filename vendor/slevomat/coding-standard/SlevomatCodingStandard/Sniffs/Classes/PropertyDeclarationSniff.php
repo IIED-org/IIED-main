@@ -4,7 +4,6 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -88,7 +87,7 @@ class PropertyDeclarationSniff implements Sniff
 
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $modifierPointer + 1);
 		if (in_array($tokens[$nextPointer]['code'], TokenHelper::$propertyModifiersTokenCodes, true)) {
-			// We don't want to report the same property twice
+			// We don't want to report the some property twice
 			return;
 		}
 
@@ -195,7 +194,9 @@ class PropertyDeclarationSniff implements Sniff
 
 		$phpcsFile->fixer->replaceToken($firstModifierPointer, $expectedModifiersFormatted);
 
-		FixerHelper::removeBetweenIncluding($phpcsFile, $firstModifierPointer + 1, $lastModifierPointer);
+		for ($i = $firstModifierPointer + 1; $i <= $lastModifierPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 
 		$phpcsFile->fixer->endChangeset();
 	}
@@ -255,7 +256,9 @@ class PropertyDeclarationSniff implements Sniff
 
 		$phpcsFile->fixer->replaceToken($firstModifierPointer, $expectedModifiersFormatted);
 
-		FixerHelper::removeBetweenIncluding($phpcsFile, $firstModifierPointer + 1, $lastModifierPointer);
+		for ($i = $firstModifierPointer + 1; $i <= $lastModifierPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 
 		$phpcsFile->fixer->endChangeset();
 	}

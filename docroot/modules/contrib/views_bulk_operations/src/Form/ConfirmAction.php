@@ -5,7 +5,6 @@ namespace Drupal\views_bulk_operations\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
-use Drupal\Core\Url;
 use Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionManager;
 use Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionProcessorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -114,9 +113,8 @@ class ConfirmAction extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $form_data = $form_state->get('views_bulk_operations');
     $this->deleteTempstoreData($form_data['view_id'], $form_data['display_id']);
-    $response = $this->actionProcessor->executeProcessing($form_data);
-    $url = Url::fromUri($response->getTargetUrl());
-    $form_state->setRedirectUrl($url);
+    $this->actionProcessor->executeProcessing($form_data);
+    $form_state->setRedirectUrl($form_data['redirect_url']);
   }
 
 }

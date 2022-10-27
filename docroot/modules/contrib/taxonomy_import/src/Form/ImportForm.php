@@ -2,15 +2,14 @@
 
 namespace Drupal\taxonomy_import\Form;
 
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Database;
-use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Contribute form.
@@ -25,28 +24,17 @@ class ImportForm extends FormBase {
   protected $config;
 
   /**
-   * The vocabulary storage.
-   *
-   * @var \Drupal\Core\Entity\EntityStorageInterface
-   */
-  protected $vocabularyStorage;
-
-  /**
    * {@inheritdoc}
    */
-  public function __construct(ConfigFactoryInterface $config_factory, EntityStorageInterface $vocabulary_storage) {
+  public function __construct(ConfigFactoryInterface $config_factory) {
     $this->config = $config_factory->get('taxonomy_import.config');
-    $this->vocabularyStorage = $vocabulary_storage;
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('config.factory'),
-      $container->get('entity_type.manager')->getStorage('taxonomy_vocabulary'),
-    );
+    return new static($container->get('config.factory'));
   }
 
   /**
@@ -57,12 +45,11 @@ class ImportForm extends FormBase {
   }
 
   use StringTranslationTrait;
-
   /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $vocabularies = $this->vocabularyStorage->loadMultiple();
+    $vocabularies = Vocabulary::loadMultiple();
     $vocabulariesList = [];
     foreach ($vocabularies as $vid => $vocablary) {
       $vocabulariesList[$vid] = $vocablary->get('name');

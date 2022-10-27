@@ -5,7 +5,6 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TernaryOperatorHelper;
@@ -250,7 +249,9 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 			$phpcsFile->fixer->addContent($conditionStartPointer, sprintf(' ?? %s', $defaultContent));
 		}
 
-		FixerHelper::removeBetweenIncluding($phpcsFile, $conditionStartPointer + 1, $conditionEndPointer);
+		for ($i = $conditionStartPointer + 1; $i <= $conditionEndPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 
 		$phpcsFile->fixer->endChangeset();
 	}
@@ -316,7 +317,9 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 
 		$phpcsFile->fixer->replaceToken($conditionStartPointer, sprintf('%s?%s', $identificator, $identificatorDifference));
 
-		FixerHelper::removeBetweenIncluding($phpcsFile, $conditionStartPointer + 1, $nextIdentificatorEndPointer);
+		for ($i = $conditionStartPointer + 1; $i <= $nextIdentificatorEndPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 
 		$phpcsFile->fixer->endChangeset();
 

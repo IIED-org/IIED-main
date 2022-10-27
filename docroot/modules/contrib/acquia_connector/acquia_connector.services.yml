@@ -1,6 +1,6 @@
 services:
-  acquia_connector.kernel_view.codestudio_message:
-    class: Drupal\acquia_connector\EventSubscriber\KernelView\CodeStudioMessage
+  acquia_connector.kernel_request.codestudio_message:
+    class: Drupal\acquia_connector\EventSubscriber\KernelRequest\CodeStudioMessage
     arguments: ['@messenger']
     tags:
       - {name: event_subscriber}
@@ -11,19 +11,23 @@ services:
       - { name: event_subscriber }
   acquia_connector.client.factory:
     class: Drupal\acquia_connector\Client\ClientFactory
-    arguments: ['@logger.factory', '@extension.list.module', '@http_client_factory', '@datetime.time', '@acquia_connector.auth_service', '@http_handler_stack']
+    arguments: ['@logger.factory', '@extension.list.module', '@http_client_factory', '@datetime.time']
   acquia_connector.site_profile:
     class: Drupal\acquia_connector\SiteProfile\SiteProfile
-    arguments: ['@request_stack']
+    arguments: ['@request_stack', '@state', '@config.factory', '@module_handler', '@path_alias.manager']
+  acquia_connector.site_profile_report:
+    class: Drupal\acquia_connector\SiteProfile\SiteProfileReport
+    arguments: ['@acquia_connector.subscription', '@state', '@acquia_connector.site_profile', '@module_handler']
   acquia_connector.subscription:
     class: Drupal\acquia_connector\Subscription
-    arguments: ['@event_dispatcher', '@acquia_connector.client.factory', '@state', '@config.factory']
+    arguments: ['@event_dispatcher', '@cache.default', '@acquia_connector.client.factory', '@state', '@config.factory']
   acquia_connector.logger_channel:
-    parent: logger.channel_base
+    class: Drupal\Core\Logger\LoggerChannel
+    factory: logger.factory:get
     arguments: ['acquia_connector']
   acquia_connector.settings.acquiacloud:
     class: Drupal\acquia_connector\EventSubscriber\GetSettings\FromAcquiaCloud
-    arguments: ['@acquia_connector.logger_channel', '@messenger', '@state']
+    arguments: ['@acquia_connector.logger_channel', '@messenger', '@acquia_connector.site_profile', '@state']
     tags:
       - { name: event_subscriber }
   acquia_connector.settings.core:
@@ -33,15 +37,5 @@ services:
   acquia_connector.settings.state:
     class: Drupal\acquia_connector\EventSubscriber\GetSettings\FromCoreState
     arguments: ['@state']
-    tags:
-      - { name: event_subscriber }
-
-  acquia_connector.auth_service:
-    class: Drupal\acquia_connector\AuthService
-    arguments: ['@csrf_token', '@http_client_factory', '@session', '@keyvalue.expirable', '@state', '@datetime.time']
-
-  acquia_connector.connector_settings_subscriber:
-    class: Drupal\acquia_connector\EventSubscriber\ConfigSubscriber
-    arguments: ['@acquia_connector.subscription']
     tags:
       - { name: event_subscriber }

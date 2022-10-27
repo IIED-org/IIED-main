@@ -10,15 +10,12 @@ use Drupal\Tests\BrowserTestBase;
  * @group draggableviews
  */
 class DraggableviewsTest extends BrowserTestBase {
-
-  protected $defaultTheme = 'stark';
-
   /**
    * Modules to enable.
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'views',
     'draggableviews',
@@ -35,7 +32,7 @@ class DraggableviewsTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     parent::setUp();
 
     // Create users.

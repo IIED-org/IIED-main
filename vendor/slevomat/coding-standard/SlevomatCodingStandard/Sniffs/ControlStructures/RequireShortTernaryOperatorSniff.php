@@ -4,7 +4,6 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TernaryOperatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function ltrim;
@@ -75,12 +74,16 @@ class RequireShortTernaryOperatorSniff implements Sniff
 		if ($tokens[$conditionStartPointer]['code'] === T_BOOLEAN_NOT) {
 			$phpcsFile->fixer->replaceToken($conditionStartPointer, '');
 
-			FixerHelper::removeBetweenIncluding($phpcsFile, $inlineThenPointer + 1, $inlineElseEndPointer);
+			for ($i = $inlineThenPointer + 1; $i <= $inlineElseEndPointer; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
 
 			$phpcsFile->fixer->addContent($inlineThenPointer, sprintf(': %s', $thenContent));
 
 		} else {
-			FixerHelper::removeBetween($phpcsFile, $inlineThenPointer, $inlineElsePointer);
+			for ($i = $inlineThenPointer + 1; $i < $inlineElsePointer; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
 		}
 
 		$phpcsFile->fixer->endChangeset();

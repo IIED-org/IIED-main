@@ -3,11 +3,12 @@
 namespace Drupal\acquia_connector\Event;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Component\EventDispatcher\Event;
 
 /**
  * The event dispatched to find settings for Acquia Connector.
  */
-class AcquiaSubscriptionDataEvent extends EventBase {
+class AcquiaSubscriptionDataEvent extends Event {
 
   /**
    * Raw subscription data to alter.
@@ -15,15 +16,6 @@ class AcquiaSubscriptionDataEvent extends EventBase {
    * @var array
    */
   protected $subscriptionData;
-
-  /**
-   * Product Data to alter.
-   *
-   * @var array
-   */
-  protected $productData = [
-    'view' => 'Acquia Network',
-  ];
 
   /**
    * Config Factory for events to fetch their own configs.
@@ -56,16 +48,6 @@ class AcquiaSubscriptionDataEvent extends EventBase {
   }
 
   /**
-   * Gets product specific subscription data.
-   *
-   * @return array
-   *   The Acquia Subscription data.
-   */
-  public function getProductData() {
-    return $this->productData;
-  }
-
-  /**
    * Return static config for an event subscriber.
    *
    * @return \Drupal\Core\Config\Config
@@ -87,21 +69,6 @@ class AcquiaSubscriptionDataEvent extends EventBase {
    */
   public function setData(array $data): void {
     $this->subscriptionData = $data;
-  }
-
-  /**
-   * Set Acquia Product Data.
-   *
-   * This event is preferable to use over the setData method, which overwrites
-   * all data. This limits the scope of data to a specific product array key.
-   *
-   * @param string $product
-   *   Acquia Product to set data to.
-   * @param array $data
-   *   Data to set.
-   */
-  public function setProductData(string $product, array $data): void {
-    $this->productData[$product] = $data;
   }
 
 }

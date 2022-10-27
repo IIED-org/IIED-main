@@ -4,7 +4,6 @@ namespace SlevomatCodingStandard\Sniffs\PHP;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -21,6 +20,7 @@ use const T_EQUAL;
 use const T_OPEN_PARENTHESIS;
 use const T_OPEN_SHORT_ARRAY;
 use const T_USE;
+use const T_WHITESPACE;
 
 class ReferenceSpacingSniff implements Sniff
 {
@@ -52,7 +52,7 @@ class ReferenceSpacingSniff implements Sniff
 			return;
 		}
 
-		$pointerAfterWhitespace = TokenHelper::findNextNonWhitespace($phpcsFile, $referencePointer + 1);
+		$pointerAfterWhitespace = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $referencePointer + 1);
 
 		$whitespace = TokenHelper::getContent($phpcsFile, $referencePointer + 1, $pointerAfterWhitespace - 1);
 
@@ -79,8 +79,9 @@ class ReferenceSpacingSniff implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 
 		$phpcsFile->fixer->addContent($referencePointer, str_repeat(' ', $this->spacesCountAfterReference));
-
-		FixerHelper::removeBetween($phpcsFile, $referencePointer, $pointerAfterWhitespace);
+		for ($i = $referencePointer + 1; $i < $pointerAfterWhitespace; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 
 		$phpcsFile->fixer->endChangeset();
 	}

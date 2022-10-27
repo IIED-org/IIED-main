@@ -110,9 +110,9 @@ abstract class AbstractLineCondition implements Sniff
 
 	protected function getLineEnd(File $phpcsFile, int $pointer): string
 	{
-		$lastPointerOnLine = TokenHelper::findLastTokenOnLine($phpcsFile, $pointer);
+		$firstPointerOnNextLine = TokenHelper::findFirstTokenOnNextLine($phpcsFile, $pointer);
 
-		return rtrim(TokenHelper::getContent($phpcsFile, $pointer, $lastPointerOnLine));
+		return rtrim(TokenHelper::getContent($phpcsFile, $pointer, $firstPointerOnNextLine - 1));
 	}
 
 }

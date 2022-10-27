@@ -75,14 +75,20 @@ class ViewsBulkOperationsController extends ControllerBase implements ContainerI
    * @param string $display_id
    *   The display ID of the current view.
    */
-  public function execute($view_id, $display_id): RedirectResponse {
+  public function execute($view_id, $display_id) {
     $view_data = $this->getTempstoreData($view_id, $display_id);
     if (empty($view_data)) {
       throw new NotFoundHttpException();
     }
     $this->deleteTempstoreData();
 
-    return $this->actionProcessor->executeProcessing($view_data);
+    $this->actionProcessor->executeProcessing($view_data);
+    if ($view_data['batch']) {
+      return \batch_process($view_data['redirect_url']);
+    }
+    else {
+      return new RedirectResponse($view_data['redirect_url']->setAbsolute()->toString());
+    }
   }
 
   /**
@@ -95,13 +101,14 @@ class ViewsBulkOperationsController extends ControllerBase implements ContainerI
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The request object.
    */
-  public function updateSelection($view_id, $display_id, Request $request): AjaxResponse {
+  public function updateSelection($view_id, $display_id, Request $request) {
     $response = [];
     $tempstore_data = $this->getTempstoreData($view_id, $display_id);
     if (empty($tempstore_data)) {
       throw new NotFoundHttpException();
     }
 
+    //$list = json_decode($request->request->get('list'));
     $parameters = $request->request->all();
 
     // Reverse operation when in exclude mode.

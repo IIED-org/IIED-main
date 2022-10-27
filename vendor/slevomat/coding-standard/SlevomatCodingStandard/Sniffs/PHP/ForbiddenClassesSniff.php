@@ -4,7 +4,6 @@ namespace SlevomatCodingStandard\Sniffs\PHP;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -200,7 +199,9 @@ class ForbiddenClassesSniff implements Sniff
 
 				$phpcsFile->fixer->beginChangeset();
 				$phpcsFile->fixer->replaceToken($reference['startPointer'], $alternative);
-				FixerHelper::removeBetweenIncluding($phpcsFile, $reference['startPointer'] + 1, $reference['endPointer']);
+				for ($i = $reference['startPointer'] + 1; $i <= $reference['endPointer']; $i++) {
+					$phpcsFile->fixer->replaceToken($i, '');
+				}
 				$phpcsFile->fixer->endChangeset();
 			}
 		}

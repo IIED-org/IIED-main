@@ -17,8 +17,7 @@
   "license": "GPL-2.0-or-later",
   "minimum-stability": "dev",
   "require": {
-    "drupal/core": "^9.4 || ^10",
-    "php": ">=7.4.0"
+    "drupal/core": "^9.4 || ^10"
   },
   "require-dev": {
     "drush/drush": "^11"

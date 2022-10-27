@@ -6,7 +6,6 @@ use Exception;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ConditionHelper;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -30,6 +29,7 @@ use const T_IF;
 use const T_OPEN_CURLY_BRACKET;
 use const T_SEMICOLON;
 use const T_WHILE;
+use const T_WHITESPACE;
 
 class EarlyExitSniff implements Sniff
 {
@@ -158,7 +158,9 @@ class EarlyExitSniff implements Sniff
 
 			$phpcsFile->fixer->beginChangeset();
 
-			FixerHelper::removeBetweenIncluding($phpcsFile, $ifPointer, $tokens[$elsePointer]['scope_closer']);
+			for ($i = $ifPointer; $i <= $tokens[$elsePointer]['scope_closer']; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
 
 			$phpcsFile->fixer->addContent(
 				$ifPointer,
@@ -208,11 +210,9 @@ class EarlyExitSniff implements Sniff
 			)
 		);
 
-		FixerHelper::removeBetweenIncluding(
-			$phpcsFile,
-			$tokens[$previousConditionPointer]['scope_closer'] + 2,
-			$tokens[$elsePointer]['scope_closer']
-		);
+		for ($i = $tokens[$previousConditionPointer]['scope_closer'] + 2; $i <= $tokens[$elsePointer]['scope_closer']; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 
 		$phpcsFile->fixer->endChangeset();
 	}
@@ -260,11 +260,13 @@ class EarlyExitSniff implements Sniff
 		}
 
 		/** @var int $pointerBeforeElseIfPointer */
-		$pointerBeforeElseIfPointer = TokenHelper::findPreviousNonWhitespace($phpcsFile, $elseIfPointer - 1);
+		$pointerBeforeElseIfPointer = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $elseIfPointer - 1);
 
 		$phpcsFile->fixer->beginChangeset();
 
-		FixerHelper::removeBetween($phpcsFile, $pointerBeforeElseIfPointer, $elseIfPointer);
+		for ($i = $pointerBeforeElseIfPointer + 1; $i < $elseIfPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 
 		$phpcsFile->fixer->addNewline($pointerBeforeElseIfPointer);
 		$phpcsFile->fixer->addNewline($pointerBeforeElseIfPointer);
@@ -286,7 +288,7 @@ class EarlyExitSniff implements Sniff
 			return;
 		}
 
-		$nextPointer = TokenHelper::findNextNonWhitespace($phpcsFile, $tokens[$ifPointer]['scope_closer'] + 1);
+		$nextPointer = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $tokens[$ifPointer]['scope_closer'] + 1);
 		if ($nextPointer === null || $tokens[$nextPointer]['code'] !== T_CLOSE_CURLY_BRACKET) {
 			return;
 		}
@@ -382,7 +384,9 @@ class EarlyExitSniff implements Sniff
 			)
 		);
 
-		FixerHelper::removeBetweenIncluding($phpcsFile, $ifPointer + 1, $tokens[$ifPointer]['scope_closer']);
+		for ($i = $ifPointer + 1; $i <= $tokens[$ifPointer]['scope_closer']; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 
 		$phpcsFile->fixer->endChangeset();
 	}

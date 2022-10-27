@@ -1,5 +1,4 @@
 <?php
-
 namespace Consolidation\OutputFormatters\StructuredData;
 
 use Consolidation\OutputFormatters\StructuredData\RestructureInterface;

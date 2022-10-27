@@ -8,7 +8,6 @@ use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
@@ -42,6 +41,7 @@ use const T_READONLY;
 use const T_SEMICOLON;
 use const T_SWITCH;
 use const T_VARIABLE;
+use const T_WHITESPACE;
 
 class RequireConstructorPropertyPromotionSniff implements Sniff
 {
@@ -198,7 +198,7 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 				$propertyEndPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $propertyPointer + 1);
 				$pointerAfterProperty = TokenHelper::findFirstTokenOnLine(
 					$phpcsFile,
-					TokenHelper::findNextNonWhitespace($phpcsFile, $propertyEndPointer + 1)
+					TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $propertyEndPointer + 1)
 				);
 
 				$pointerBeforeParameterStart = TokenHelper::findPrevious($phpcsFile, [T_COMMA, T_OPEN_PARENTHESIS], $parameterPointer - 1);
@@ -212,7 +212,9 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 
 				$phpcsFile->fixer->beginChangeset();
 
-				FixerHelper::removeBetweenIncluding($phpcsFile, $pointerBeforeProperty, $pointerAfterProperty - 1);
+				for ($i = $pointerBeforeProperty; $i < $pointerAfterProperty; $i++) {
+					$phpcsFile->fixer->replaceToken($i, '');
+				}
 
 				if ($isReadonly) {
 					$phpcsFile->fixer->addContentBefore($parameterStartPointer, 'readonly ');
@@ -224,7 +226,9 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 					$phpcsFile->fixer->addContent($parameterPointer, sprintf(' = %s', $propertyDefaultValue));
 				}
 
-				FixerHelper::removeBetweenIncluding($phpcsFile, $pointerBeforeAssignment, $pointerAfterAssignment);
+				for ($i = $pointerBeforeAssignment; $i <= $pointerAfterAssignment; $i++) {
+					$phpcsFile->fixer->replaceToken($i, '');
+				}
 
 				$phpcsFile->fixer->endChangeset();
 			}

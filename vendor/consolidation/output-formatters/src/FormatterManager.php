@@ -1,5 +1,4 @@
 <?php
-
 namespace Consolidation\OutputFormatters;
 
 use Consolidation\OutputFormatters\Exception\IncompatibleDataException;
@@ -59,7 +58,7 @@ class FormatterManager
              $defaultFormatters['var_dump'] = '\Consolidation\OutputFormatters\Formatters\VarDumpFormatter';
         }
         foreach ($defaultFormatters as $id => $formatterClassname) {
-            $formatter = new $formatterClassname();
+            $formatter = new $formatterClassname;
             $this->addFormatter($id, $formatter);
         }
         $this->addFormatter('', $this->formatters['string']);

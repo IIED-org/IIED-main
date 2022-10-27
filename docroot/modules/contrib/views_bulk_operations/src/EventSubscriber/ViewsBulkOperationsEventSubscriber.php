@@ -15,7 +15,7 @@ class ViewsBulkOperationsEventSubscriber implements EventSubscriberInterface {
 
   // Subscribe to the VBO event with high priority
   // to prepopulate the event data.
-  private const PRIORITY = 999;
+  const PRIORITY = 999;
 
   /**
    * Object that gets the current view data.

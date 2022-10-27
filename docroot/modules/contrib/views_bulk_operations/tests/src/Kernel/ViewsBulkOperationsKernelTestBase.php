@@ -57,16 +57,6 @@ abstract class ViewsBulkOperationsKernelTestBase extends KernelTestBase {
   protected ?ViewsBulkOperationsViewDataInterface $vboDataService;
 
   /**
-   * Messages static for testing purposes.
-   *
-   * @var array
-   *
-   * @todo Move this to message() method static when PHP 7.4 is no longer
-   * supported.
-   */
-  private static $messages = [];
-
-  /**
    * {@inheritdoc}
    */
   protected static $modules = [
@@ -319,10 +309,11 @@ abstract class ViewsBulkOperationsKernelTestBase extends KernelTestBase {
    * @return string|null
    */
   public static function message($message = NULL, $type = 'status', $repeat = TRUE) {
+    static $messages = [];
     if ($message === NULL) {
-      return self::$messages;
+      return $messages;
     }
-    self::$messages[] = [
+    $messages[] = [
       'message' => (string) $message,
       'type' => $type,
     ];

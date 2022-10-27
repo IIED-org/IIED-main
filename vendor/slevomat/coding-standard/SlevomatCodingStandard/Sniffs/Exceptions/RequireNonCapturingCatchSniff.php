@@ -5,7 +5,6 @@ namespace SlevomatCodingStandard\Sniffs\Exceptions;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\CatchHelper;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\ParameterHelper;
 use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
@@ -107,7 +106,9 @@ class RequireNonCapturingCatchSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		FixerHelper::removeBetween($phpcsFile, $pointerBeforeVariable, $fixEndPointer);
+		for ($i = $pointerBeforeVariable + 1; $i < $fixEndPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 
 		$phpcsFile->fixer->endChangeset();
 	}

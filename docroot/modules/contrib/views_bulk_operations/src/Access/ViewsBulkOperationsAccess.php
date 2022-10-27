@@ -37,7 +37,7 @@ class ViewsBulkOperationsAccess implements AccessInterface {
    * @param \Drupal\Core\Routing\RouteMatch $routeMatch
    *   The matched route.
    */
-  public function access(AccountInterface $account, RouteMatch $routeMatch): AccessResult {
+  public function access(AccountInterface $account, RouteMatch $routeMatch) {
     $parameters = $routeMatch->getParameters()->all();
 
     if ($view = Views::getView($parameters['view_id'])) {

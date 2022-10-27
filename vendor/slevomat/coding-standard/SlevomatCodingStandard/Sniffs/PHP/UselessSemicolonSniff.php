@@ -4,7 +4,6 @@ namespace SlevomatCodingStandard\Sniffs\PHP;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
 use function count;
@@ -151,9 +150,9 @@ class UselessSemicolonSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-
-		FixerHelper::removeBetweenIncluding($phpcsFile, $fixStartPointer, $fixEndPointer);
-
+		for ($i = $fixStartPointer; $i <= $fixEndPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 		$phpcsFile->fixer->endChangeset();
 	}
 

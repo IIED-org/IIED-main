@@ -5,6 +5,7 @@
  * Install, update, and uninstall functions for the Acquia Connector module.
  */
 
+use Drupal\acquia_connector\SiteProfile\TestStatusController;
 use Drupal\Core\Url;
 
 /**
@@ -71,6 +72,58 @@ function acquia_connector_requirements($phase) {
       ]),
     ];
   }
+
+  // Acquia SPI custom tests status.
+  $variables = [
+    ':help' => Url::fromUri('base:admin/help/acquia_connector', ['absolute' => TRUE])
+      ->toString(),
+    ':validate' => Url::fromRoute('acquia_connector.test_validate', [], ['absolute' => TRUE])
+      ->toString(),
+  ];
+
+  // Compatibility for Drupal 9.2.
+  if (method_exists(\Drupal::moduleHandler(), 'invokeAllWith')) {
+    $modules = [];
+    \Drupal::moduleHandler()->invokeAllWith('acquia_connector_spi_test', function (callable $hook, string $module) use (&$modules) {
+      // There is minimal overhead since the hook is not invoked.
+      $modules[] = $module;
+    });
+  }
+  else {
+    //@phpstan-ignore-next-line
+    $modules = \Drupal::moduleHandler()->getImplementations('acquia_connector_spi_test');
+  }
+
+  if (empty($modules)) {
+    $description = t('No custom tests were detected in any module.');
+    $value = t('Not implemented (<a href=":help">more information</a>)', $variables);
+    $severity = REQUIREMENT_OK;
+  }
+  else {
+    $status = new TestStatusController();
+    $result = $status->testStatus();
+
+    if (!empty($result)) {
+      $variables['%modules'] = implode(', ', array_keys($result));
+      $description = t('Custom tests within the following module(s) have failed validation and will not be sent: %modules. <br/>Please check the error logs for more information regarding how to pass validation or <a href=":validate">perform another validation check</a>. A validation check can also be performed via the Drush command, "spi-test-validate".', $variables);
+      $value = t('Failed (<a href=":help">more information</a>)', $variables);
+      $severity = REQUIREMENT_ERROR;
+    }
+    else {
+      $variables['%modules'] = implode(', ', $modules);
+      $description = t('Custom test data is structured properly and is sending from: %modules', $variables);
+      $value = t('Passed');
+      $severity = REQUIREMENT_OK;
+    }
+
+  }
+
+  $requirements['acquia_spi_test'] = [
+    'title' => t('Acquia Subscription SPI Custom Tests'),
+    'description' => $description,
+    'value' => $value,
+    'severity' => $severity,
+  ];
 
   return $requirements;
 }

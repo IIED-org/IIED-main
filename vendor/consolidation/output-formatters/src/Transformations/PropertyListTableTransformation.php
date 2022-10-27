@@ -1,5 +1,4 @@
 <?php
-
 namespace Consolidation\OutputFormatters\Transformations;
 
 class PropertyListTableTransformation extends TableTransformation
