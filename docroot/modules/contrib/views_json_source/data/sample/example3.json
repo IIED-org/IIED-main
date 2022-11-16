@@ -1,0 +1,40 @@
+[
+  {
+    "nid": 1,
+    "title": "Sample One",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing.",
+    "related": [
+      {
+        "id": 11,
+        "author": {
+          "name": "One1"
+        }
+      },
+      {
+        "id": 12,
+        "author": {
+          "name": "One2"
+        }
+      }
+    ]
+  },
+  {
+    "nid": 2,
+    "title": "Sample Two",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing.",
+    "related": [
+      {
+        "id": 21,
+        "author": {
+          "name": "Two1"
+        }
+      },
+      {
+        "id": 22,
+        "author": {
+          "name": "Two2"
+        }
+      }
+    ]
+  }
+]

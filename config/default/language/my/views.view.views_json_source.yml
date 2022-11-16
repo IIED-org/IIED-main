@@ -1,0 +1,6 @@
+display:
+  example_3:
+    display_options:
+      fields:
+        value_1:
+          label: စာရေးသူ

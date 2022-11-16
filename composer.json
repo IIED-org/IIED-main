@@ -162,6 +162,7 @@
         "drupal/views_data_export": "^1.1",
         "drupal/views_field_view": "^1.0@beta",
         "drupal/views_infinite_scroll": "^2.0",
+        "drupal/views_json_source": "^1.4",
         "drupal/views_layout": "^1.2",
         "drupal/xmlsitemap": "^1.4",
         "drush/drush": "^10.3",
