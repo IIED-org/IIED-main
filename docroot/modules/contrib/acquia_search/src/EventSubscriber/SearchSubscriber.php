@@ -2,13 +2,15 @@
 
 namespace Drupal\acquia_search\EventSubscriber;
 
+use Drupal\acquia_connector\Subscription;
 use Drupal\acquia_search\AcquiaCryptConnector;
+use Drupal\acquia_search\AcquiaSearchApiClient;
+use Drupal\acquia_search\Client\Solarium\Endpoint as AcquiaSearchEndpoint;
 use Drupal\acquia_search\Helper\Flood;
-use Drupal\acquia_search\Helper\Runtime;
-use Drupal\acquia_search\Helper\Storage;
+use Drupal\acquia_search\PreferredCoreService;
 use Drupal\Component\Utility\Crypt;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Solarium\Core\Client\Adapter\AdapterHelper;
-use Solarium\Core\Client\Client;
 use Solarium\Core\Client\Response;
 use Solarium\Core\Event\Events;
 use Solarium\Core\Plugin\AbstractPlugin;
@@ -24,12 +26,14 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class SearchSubscriber extends AbstractPlugin implements EventSubscriberInterface {
 
+  use StringTranslationTrait;
+
   /**
-   * {@inheritdoc}
+   * Acquia search endpoint.
    *
-   * @var \Solarium\Client
+   * @var \Drupal\acquia_search\Client\Solarium\Endpoint
    */
-  protected $client;
+  protected $endpoint;
 
   /**
    * Array of derived keys, keyed by environment id.
@@ -53,6 +57,56 @@ class SearchSubscriber extends AbstractPlugin implements EventSubscriberInterfac
   protected $uri = '';
 
   /**
+   * Preferred Core service.
+   *
+   * @var \Drupal\acquia_search\PreferredCoreService
+   */
+  protected $preferredCoreService;
+
+  /**
+   * Acquia subscription service.
+   *
+   * @var \Drupal\acquia_connector\Subscription
+   */
+  protected $subscription;
+
+  /**
+   * Flood protection service.
+   *
+   * @var \Drupal\acquia_search\Helper\Flood
+   */
+  protected $flood;
+
+  /**
+   * Acquia Search Api Client.
+   *
+   * @var \Drupal\acquia_search\AcquiaSearchApiClient
+   */
+  protected $acquiaSearchApiClient;
+
+  /**
+   * Solarium Search Credential Subscriber.
+   *
+   * @param \Drupal\acquia_search\PreferredCoreService $preferredCoreService
+   *   Preferred Core Service.
+   * @param \Drupal\acquia_connector\Subscription $subscription
+   *   Acquia Subscription Service.
+   * @param \Drupal\acquia_search\AcquiaSearchApiClient $acquia_search_api_client
+   *   Acquia Search Api Client.
+   * @param \Drupal\acquia_search\Helper\Flood $flood
+   *   Flood protection service.
+   * @param array|null $options
+   *   Options passed from Solarium.
+   */
+  public function __construct(PreferredCoreService $preferredCoreService, Subscription $subscription, AcquiaSearchApiClient $acquia_search_api_client, Flood $flood, array $options = NULL) {
+    $this->preferredCoreService = $preferredCoreService;
+    $this->subscription = $subscription;
+    $this->flood = $flood;
+    $this->acquiaSearchApiClient = $acquia_search_api_client;
+    parent::__construct($options);
+  }
+
+  /**
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
@@ -73,18 +127,22 @@ class SearchSubscriber extends AbstractPlugin implements EventSubscriberInterfac
     /** @var \Solarium\Core\Client\Request $request */
     $request = $event->getRequest();
 
-    if (!($this->client instanceof Client)) {
+    if (!$event->getEndpoint() instanceof AcquiaSearchEndpoint) {
       return;
     }
 
+    $this->endpoint = $event->getEndpoint();
+
     // Run Flood control checks.
-    if (!Flood::isAllowed($request->getHandler())) {
+    if (!$this->flood->isAllowed($request->getHandler())) {
       // If request should be blocked, show an error message.
-      $message = 'The Acquia Search flood control mechanism has blocked a Solr query due to API usage limits. You should retry in a few seconds. Contact the site administrator if this message persists.';
+      $message = $this->t('<a href=":link">The Acquia Search flood control mechanism has blocked a Solr query due to API usage limits.</a> You should retry in a few seconds. Contact the site administrator if this message persists.', [
+        ':link' => Flood::FLOOD_LIMIT_ARTICLE_URL,
+      ]);
       \Drupal::messenger()->addError($message);
 
       // Build a static response which avoids a network request to Solr.
-      $response = new Response($message, ['HTTP/1.1 429 Too Many Requests']);
+      $response = new Response((string) $message, ['HTTP/1.1 429 Too Many Requests']);
       $event->setResponse($response);
       $event->stopPropagation();
       return;
@@ -99,12 +157,11 @@ class SearchSubscriber extends AbstractPlugin implements EventSubscriberInterfac
     // If we're hosted on Acquia, and have an Acquia request ID,
     // append it to the request so that we map Solr queries to Acquia search
     // requests.
-    if (isset($_ENV['HTTP_X_REQUEST_ID'])) {
-      $xid = empty($_ENV['HTTP_X_REQUEST_ID']) ? '-' : $_ENV['HTTP_X_REQUEST_ID'];
+    if (getenv('HTTP_X_REQUEST_ID')) {
+      $xid = empty(getenv('HTTP_X_REQUEST_ID')) ? '-' : getenv('HTTP_X_REQUEST_ID');
       $request->addParam('x-request-id', $xid, TRUE);
     }
-    $endpoint = $this->client->getEndpoint();
-    $this->uri = AdapterHelper::buildUri($request, $endpoint);
+    $this->uri = AdapterHelper::buildUri($request, $this->endpoint);
 
     $this->nonce = Crypt::randomBytesBase64(24);
     $raw_post_data = $request->getRawData();
@@ -116,10 +173,10 @@ class SearchSubscriber extends AbstractPlugin implements EventSubscriberInterfac
       $raw_post_data = $path . $query;
     }
 
+    $module_version = $this->subscription->getSubscription()['acquia_search']['module_version'];
     $cookie = $this->calculateAuthCookie($raw_post_data, $this->nonce);
     $request->addHeader('Cookie: ' . $cookie);
-    $request->addHeader('User-Agent: ' . 'acquia_search/' . Storage::getVersion());
-
+    $request->addHeader('User-Agent: ' . 'acquia_search/' . $module_version);
   }
 
   /**
@@ -131,12 +188,12 @@ class SearchSubscriber extends AbstractPlugin implements EventSubscriberInterfac
    * @throws \Solarium\Exception\HttpException
    */
   public function postExecuteRequest($event) {
-    if (!($this->client instanceof Client)) {
-      return;
-    }
-
     /** @var \Solarium\Core\Event\PostExecuteRequest $event */
     $response = $event->getResponse();
+    if (!$event->getEndpoint()) {
+      return;
+    }
+    $this->endpoint = $event->getEndpoint();
 
     if ($response->getStatusCode() != 200) {
       throw new HttpException(
@@ -193,11 +250,9 @@ class SearchSubscriber extends AbstractPlugin implements EventSubscriberInterfac
 
     $reg = [];
 
-    if (is_array($headers)) {
-      foreach ($headers as $value) {
-        if (stristr($value, 'pragma') && preg_match("/hmac_digest=([^;]+);/i", $value, $reg)) {
-          return trim($reg[1]);
-        }
+    foreach ($headers as $value) {
+      if (stristr($value, 'pragma') && preg_match("/hmac_digest=([^;]+);/i", $value, $reg)) {
+        return trim($reg[1]);
       }
     }
 
@@ -227,10 +282,6 @@ class SearchSubscriber extends AbstractPlugin implements EventSubscriberInterfac
     if (empty($derived_key)) {
       $derived_key = $this->getDerivedKey($env_id);
     }
-    // If the derived key still cannot be fetched, return false.
-    if (!$derived_key) {
-      return FALSE;
-    }
 
     return $hmac == hash_hmac('sha1', $nonce . $string, $derived_key);
 
@@ -251,7 +302,11 @@ class SearchSubscriber extends AbstractPlugin implements EventSubscriberInterfac
   public function getDerivedKey($env_id = NULL): ?string {
 
     if (empty($env_id)) {
-      $env_id = $this->client->getEndpoint()->getKey();
+      $env_id = $this->endpoint->getKey();
+    }
+
+    if (isset($this->derivedKey[$env_id])) {
+      return $this->derivedKey[$env_id];
     }
 
     // Get derived key for Acquia Search V3.
@@ -306,17 +361,18 @@ class SearchSubscriber extends AbstractPlugin implements EventSubscriberInterfac
    *   Search v3 index keys.
    */
   public function getSearchIndexKeys(): ?array {
-
-    $core_service = Runtime::getPreferredSearchCoreService();
-
     // Preferred core isn't available - you have to configure it using settings
     // described in the README.txt.
-    if (!$core_service->isPreferredCoreAvailable()) {
+    if (!$this->preferredCoreService->isPreferredCoreAvailable()) {
       return NULL;
     }
+    $preferredCoreId = $this->preferredCoreService->getPreferredCoreId();
+    if ($preferredCoreId) {
+      $keys = $this->acquiaSearchApiClient->getSearchIndexKeys($preferredCoreId);
+      return $keys ?: NULL;
+    }
 
-    return $core_service->getPreferredCore()['data'];
-
+    return NULL;
   }
 
 }

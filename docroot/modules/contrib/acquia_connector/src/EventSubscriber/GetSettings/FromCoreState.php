@@ -34,7 +34,7 @@ class FromCoreState implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events[AcquiaConnectorEvents::GET_SETTINGS][] = ['onGetSettings', 100];
+    $events[AcquiaConnectorEvents::GET_SETTINGS][] = ['onGetSettings', 0];
     return $events;
   }
 
@@ -50,24 +50,21 @@ class FromCoreState implements EventSubscriberInterface {
     $state = $this->state->getMultiple([
       'acquia_connector.key',
       'acquia_connector.identifier',
-      'spi.site_name',
-      'spi.site_machine_name',
+      'acquia_connector.application_uuid',
     ]);
 
     $settings = new Settings(
       $event->getConfig(),
       $state['acquia_connector.identifier'] ?? '',
       $state['acquia_connector.key'] ?? '',
-      $state['spi.site_name'] ?? '',
-      $state['spi.site_machine_name'] ?? '',
+      $state['acquia_connector.application_uuid'] ?? '',
     );
 
-    if ($settings) {
-      $settings->setReadOnly(FALSE);
-      $event->setSettings($settings);
-      $event->setProvider('core_state');
-      $event->stopPropagation();
-    }
+    $settings->setReadOnly(FALSE);
+    $event->setSettings($settings);
+    $event->setProvider('core_state');
+    // @phpstan-ignore-next-line
+    $event->stopPropagation();
   }
 
 }

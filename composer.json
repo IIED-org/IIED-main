@@ -133,7 +133,7 @@
         "drupal/readonlymode": "^1.1",
         "drupal/redirect": "^1.7",
         "drupal/responsive_menu": "^5.0-dev",
-        "drupal/search404": "2.x-dev@dev",
+        "drupal/search404": "^2.1",
         "drupal/search_api": "^1.23",
         "drupal/search_api_autocomplete": "^1.6",
         "drupal/search_api_solr": "4.2.8",
@@ -290,9 +290,6 @@
           },
           "drupal/content_translation_redirect": {
             "3263317": "https://www.drupal.org/files/issues/2022-02-09/content-translation-redirect-all-bundles-3263317-3.patch"
-          },
-          "drupal/media_pdf_thumbnail": {
-            "3308857": "https://www.drupal.org/files/issues/2022-09-09/3308857-error-empty-images.patch"
           },
           "drupal/google_analytics": {
             "3258588": "https://www.drupal.org/files/issues/2022-09-01/3258588_google_analytics_deprecated_function_2_5_001.patch"

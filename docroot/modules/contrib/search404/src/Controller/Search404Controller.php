@@ -3,11 +3,13 @@
 namespace Drupal\search404\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Path\CurrentPathStack;
+use Drupal\Core\Path\PathMatcherInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Drupal\search\Entity\SearchPage;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Component\Utility\Html;
 use Drupal\search\Form\SearchPageForm;
 use Drupal\Core\Messenger\MessengerInterface;
@@ -32,26 +34,71 @@ class Search404Controller extends ControllerBase {
   protected $messenger;
 
   /**
+   * The path matcher service.
+   *
+   * @var \Drupal\Core\Path\PathMatcherInterface
+   */
+  protected $pathMatcher;
+
+  /**
+   * The current path.
+   *
+   * @var \Drupal\Core\Path\CurrentPathStack
+   */
+  protected $currentPath;
+
+  /**
+   * The request stack.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+
+  protected $requestStack;
+
+  /**
+   * The search page repository.
+   *
+   * @var \Drupal\search\SearchPageRepositoryInterface
+   */
+  protected $searchPageRepository;
+
+  /**
    * Constructor for search404controller.
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Inject the logger channel factory interface.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger service.
+   * @param \Drupal\Core\Path\PathMatcherInterface $path_matcher
+   *   The path matcher service.
+   * @param \Drupal\Core\Path\CurrentPathStack $currentPath
+   *   The current path service.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+   *   The request stack.
    */
-  public function __construct(LoggerChannelFactoryInterface $logger_factory, MessengerInterface $messenger) {
+  public function __construct(LoggerChannelFactoryInterface $logger_factory, MessengerInterface $messenger, PathMatcherInterface $path_matcher, CurrentPathStack $currentPath, RequestStack $requestStack) {
     $this->logger = $logger_factory->get('search404');
     $this->messenger = $messenger;
+    $this->pathMatcher = $path_matcher;
+    $this->currentPath = $currentPath;
+    $this->requestStack = $requestStack;
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static(
+    $instance = new static(
       $container->get('logger.factory'),
-      $container->get('messenger')
+      $container->get('messenger'),
+      $container->get('path.matcher'),
+      $container->get('path.current'),
+      $container->get('request_stack')
     );
+    if ($container->get('module_handler')->moduleExists('search')) {
+      $instance->searchPageRepository = $container->get('search.search_page_repository');
+    }
+    return $instance;
   }
 
   /**
@@ -60,9 +107,9 @@ class Search404Controller extends ControllerBase {
    * Set title for the page not found(404) page.
    */
   public function getTitle() {
-    $search_404_page_title = \Drupal::config('search404.settings')->get('search404_page_title');
-    $title = !empty($search_404_page_title) ? $search_404_page_title : 'Page not found ';
-    return $this->t($title);
+    $search_404_page_title = $this->config('search404.settings')->get('search404_page_title');
+    $title = !empty($search_404_page_title) ? $search_404_page_title : $this->t('Page not found');
+    return $title;
   }
 
   /**
@@ -73,11 +120,11 @@ class Search404Controller extends ControllerBase {
 
     // If the current path is set as one of the ignore path,
     // then do not get into the complex search functions.
-    $paths_to_ignore = \Drupal::config('search404.settings')->get('search404_ignore_paths');
+    $paths_to_ignore = $this->config('search404.settings')->get('search404_ignore_paths');
     if (!empty($paths_to_ignore)) {
       $path_array = preg_split('/\R/', $paths_to_ignore);
       // If OR case enabled.
-      if (\Drupal::config('search404.settings')->get('search404_use_or')) {
+      if ($this->config('search404.settings')->get('search404_use_or')) {
         $keywords = str_replace(' OR ', '/', $keys);
       }
       else {
@@ -130,13 +177,12 @@ class Search404Controller extends ControllerBase {
       }
     }
 
-    if (\Drupal::moduleHandler()->moduleExists('search') && (\Drupal::currentUser()->hasPermission('search content') || \Drupal::currentUser()->hasPermission('search by page'))) {
+    if ($this->moduleHandler()->moduleExists('search') && ($this->currentUser()->hasPermission('search content') || $this->currentUser()->hasPermission('search by page'))) {
 
       // Get and use the default search engine for the site.
-      $search_page_repository = \Drupal::service('search.search_page_repository');
-      $default_search_page = $search_page_repository->getDefaultSearchPage();
+      $default_search_page = $this->searchPageRepository->getDefaultSearchPage();
 
-      $entity = SearchPage::load($default_search_page);
+      $entity = $this->entityTypeManager()->getStorage('search_page')->load($default_search_page);
       $plugin = $entity->getPlugin();
       $build = [];
       $results = [];
@@ -144,9 +190,9 @@ class Search404Controller extends ControllerBase {
       // Build the form first, because it may redirect during the submit,
       // and we don't want to build the results based on last time's request.
       $plugin->setSearch($keys, $request->query->all(), $request->attributes->all());
-      if ($keys && !\Drupal::config('search404.settings')->get('search404_skip_auto_search')) {
+      if ($keys && !$this->config('search404.settings')->get('search404_skip_auto_search')) {
         // If custom search enabled.
-        if (\Drupal::moduleHandler()->moduleExists('search_by_page') && \Drupal::config('search404.settings')->get('search404_do_search_by_page')) {
+        if ($this->moduleHandler()->moduleExists('search_by_page') && $this->config('search404.settings')->get('search404_do_search_by_page')) {
           $this->search404CustomErrorMessage($keys);
           return $this->search404Goto('search_pages/' . $keys);
         }
@@ -158,7 +204,10 @@ class Search404Controller extends ControllerBase {
           if ($plugin->isSearchExecutable()) {
             // Log the search.
             if ($this->config('search.settings')->get('logging')) {
-              $this->logger->notice('Searched %type for %keys.', ['%keys' => $keys, '%type' => $entity->label()]);
+              $this->logger->notice(
+                'Searched %type for %keys.',
+                ['%keys' => $keys, '%type' => $entity->label()],
+              );
             }
             // Collect the search results.
             $results = $plugin->buildResults();
@@ -169,19 +218,20 @@ class Search404Controller extends ControllerBase {
             // if there is only one result and if jump to first is selected or
             // if there are more than one results and force jump
             // to first is selected.
-            $patterns = \Drupal::config('search404.settings')->get('search404_first_on_paths');
+            $patterns = $this->config('search404.settings')->get('search404_first_on_paths');
             $path_matches = TRUE;
 
             // Check if the current path exists in the set paths list.
             if (!empty($patterns)) {
               $path = str_replace(' ', '/', $keys);
-              $path_matches = \Drupal::service('path.matcher')->matchPath($path, $patterns);
+              $path_matches = $this->pathMatcher->matchPath($path, $patterns);
             }
-            if (is_array($results) &&
-                (
-                (count($results) == 1 && \Drupal::config('search404.settings')->get('search404_jump'))
-                || (count($results) >= 1 && \Drupal::config('search404.settings')->get('search404_first') && $path_matches)
-                )
+            if (
+              is_array($results) &&
+              (
+                (count($results) == 1 && $this->config('search404.settings')->get('search404_jump'))
+                || (count($results) >= 1 && $this->config('search404.settings')->get('search404_first') && $path_matches)
+              )
             ) {
               $this->search404CustomErrorMessage($keys);
               if (isset($results[0]['#result']['link'])) {
@@ -193,8 +243,8 @@ class Search404Controller extends ControllerBase {
               $this->search404CustomErrorMessage($keys);
               // Redirecting the page for empty search404 result,
               // if redirect url is configured.
-              if (!count($results) && \Drupal::config('search404.settings')->get('search404_page_redirect')) {
-                $redirect_path = \Drupal::config('search404.settings')->get('search404_page_redirect');
+              if (!count($results) && $this->config('search404.settings')->get('search404_page_redirect')) {
+                $redirect_path = $this->config('search404.settings')->get('search404_page_redirect');
                 return $this->search404Goto($redirect_path);
               }
             }
@@ -209,23 +259,26 @@ class Search404Controller extends ControllerBase {
       $build['search_form'] = $this->formBuilder()->getForm(SearchPageForm::class, $entity);
 
       // Set the custom page text on the top of the results.
-      $search_404_page_text = \Drupal::config('search404.settings')->get('search404_page_text');
+      $search_404_page_text = $this->config('search404.settings')->get('search404_page_text');
       if (!empty($search_404_page_text)) {
-        $build['content']['#markup'] = '<div id="search404-page-text">' . $this->t($search_404_page_text) . '</div>';
+        $build['content']['#markup'] = '<div id="search404-page-text">' . $search_404_page_text . '</div>';
         $build['content']['#weight'] = -100;
       }
 
       // Text for, if search results is empty.
       $no_results = '';
-      if (!\Drupal::config('search404.settings')->get('search404_skip_auto_search')) {
-        $no_results = t('<ul>
+      if (!$this->config('search404.settings')->get('search404_skip_auto_search')) {
+        $no_results = $this->t('<ul>
         <li>Check if your spelling is correct.</li>
         <li>Remove quotes around phrases to search for each word individually. <em>bike shed</em> will often show more results than <em>&quot;bike shed&quot;</em>.</li>
         <li>Consider loosening your query with <em>OR</em>. <em>bike OR shed</em> will often show more results than <em>bike shed</em>.</li>
         </ul>');
       }
       $build['search_results'] = [
-        '#theme' => ['item_list__search_results__' . $plugin->getPluginId(), 'item_list__search_results'],
+        '#theme' => [
+          'item_list__search_results__' . $plugin->getPluginId(),
+          'item_list__search_results',
+        ],
         '#items' => $results,
         '#empty' => [
           '#markup' => '<h3>' . $this->t('Your search yielded no results.') . '</h3>' . $no_results,
@@ -247,9 +300,11 @@ class Search404Controller extends ControllerBase {
       ];
       $build['#attached']['library'][] = 'search/drupal.search.results';
     }
-    if (\Drupal::config('search404.settings')->get('search404_do_custom_search') &&
-    !\Drupal::config('search404.settings')->get('search404_skip_auto_search')) {
-      $custom_search_path = \Drupal::config('search404.settings')->get('search404_custom_search_path');
+    if (
+      $this->config('search404.settings')->get('search404_do_custom_search') &&
+      !$this->config('search404.settings')->get('search404_skip_auto_search')
+    ) {
+      $custom_search_path = $this->config('search404.settings')->get('search404_custom_search_path');
 
       $this->search404CustomErrorMessage($keys);
       if ($keys != '') {
@@ -273,7 +328,7 @@ class Search404Controller extends ControllerBase {
   public function search404Goto($path = '') {
     // Set redirect response.
     $response = new RedirectResponse($path);
-    if (\Drupal::config('search404.settings')->get('search404_redirect_301')) {
+    if ($this->config('search404.settings')->get('search404_redirect_301')) {
       $response->setStatusCode(301);
     }
     return $response->send();
@@ -317,20 +372,20 @@ class Search404Controller extends ControllerBase {
     $keys = [];
     // Try to get keywords from the search result (if it was one)
     // that resulted in the 404 if the config is set.
-    if (\Drupal::config('search404.settings')->get('search404_use_search_engine')) {
+    if ($this->config('search404.settings')->get('search404_use_search_engine')) {
       $keys = $this->search404SearchEngineQuery();
     }
 
     // If keys are not yet populated from a search engine referer
     // use keys from the path that resulted in the 404.
     if (empty($keys)) {
-      $path = \Drupal::service('path.current')->getPath();
+      $path = $this->currentPath->getPath();
       $path = urldecode($path);
       $path = preg_replace('/[_+-.,!@#$^&*();\'"?=]|[|]|[{}]|[<>]/', '/', $path);
       $paths = explode('/', $path);
       // Removing the custom search path value from the keyword search.
-      if (\Drupal::config('search404.settings')->get('search404_do_custom_search')) {
-        $custom_search_path = \Drupal::config('search404.settings')->get('search404_custom_search_path');
+      if ($this->config('search404.settings')->get('search404_do_custom_search')) {
+        $custom_search_path = $this->config('search404.settings')->get('search404_custom_search_path');
         $custom_search = explode('/', $custom_search_path);
         $search_path = array_diff($custom_search, ["@keys"]);
         $keywords = array_diff($paths, $search_path);
@@ -344,7 +399,6 @@ class Search404Controller extends ControllerBase {
       foreach ($keys as $key => $value) {
         $keys_with_space_hypen[$key] = explode(' ', $value);
         $keys_with_space_hypen[$key] = array_filter($keys_with_space_hypen[$key]);
-
       }
       if (!empty($keys)) {
         $keys = call_user_func_array('array_merge', $keys_with_space_hypen);
@@ -352,30 +406,30 @@ class Search404Controller extends ControllerBase {
     }
 
     // Checking Language code in keys.
-    if (\Drupal::moduleHandler()->moduleExists('language')) {
-      $ignore_language = \Drupal::config('search404.settings')->get('search404_ignore_language');
+    if ($this->moduleHandler()->moduleExists('language')) {
+      $ignore_language = $this->config('search404.settings')->get('search404_ignore_language');
       if ($ignore_language) {
 
         // List of languages enabled.
-        $langcodes = \Drupal::languageManager()->getLanguages();
+        $langcodes = $this->languageManager()->getLanguages();
         $langcodesList = array_keys($langcodes);
         $first_key = reset($keys);
 
         // Confirming Language code from URL path.
-        $current_path = \Drupal::request()->getPathInfo();
+        $current_path = $this->requestStack->getCurrentRequest()->getPathInfo();
         $path_args = explode('/', $current_path);
         $first_argument = $path_args[1];
         if ($first_argument == $first_key) {
           // If key is in language code list.
           if (in_array($first_key, $langcodesList)) {
-            $languageRemoved = array_shift($keys);
+            array_shift($keys);
           }
         }
       }
     }
 
     // Abort query on certain extensions, e.g: gif jpg jpeg png.
-    $extensions = explode(' ', \Drupal::config('search404.settings')->get('search404_ignore_query'));
+    $extensions = explode(' ', $this->config('search404.settings')->get('search404_ignore_query'));
     $extensions = trim(implode('|', $extensions));
     if (!empty($extensions)) {
       foreach ($keys as $key) {
@@ -386,7 +440,7 @@ class Search404Controller extends ControllerBase {
     }
 
     // PCRE filter from query.
-    $regex_filter = \Drupal::config('search404.settings')->get('search404_regex');
+    $regex_filter = $this->config('search404.settings')->get('search404_regex');
     if (!empty($regex_filter)) {
       // Get filtering patterns as array.
       $filter_data = explode('[', $regex_filter);
@@ -404,27 +458,27 @@ class Search404Controller extends ControllerBase {
     }
 
     // Ignore certain extensions from query.
-    $extensions = explode(' ', \Drupal::config('search404.settings')->get('search404_ignore_extensions'));
+    $extensions = explode(' ', $this->config('search404.settings')->get('search404_ignore_extensions'));
     if (!empty($extensions)) {
       $keys = array_diff($keys, $extensions);
     }
 
     // Ignore certain words (use case insensitive search).
-    $keys = array_udiff($keys, explode(' ', \Drupal::config('search404.settings')->get('search404_ignore')), 'strcasecmp');
+    $keys = array_udiff($keys, explode(' ', $this->config('search404.settings')->get('search404_ignore')), 'strcasecmp');
     // Sanitize the keys.
     foreach ($keys as $a => $b) {
       $keys[$a] = Html::escape($b);
     }
 
     // When using keywords with OR operator.
-    if (\Drupal::config('search404.settings')->get('search404_use_or')) {
+    if ($this->config('search404.settings')->get('search404_use_or')) {
       $keys = trim(implode(' OR ', $keys));
     }
-    // Using a custom string to concatenate keywords
-    elseif (\Drupal::config('search404.settings')->get('search404_use_customclue')) {
-      $keys = trim(implode(\Drupal::config('search404.settings')->get('search404_use_customclue'), $keys));
+    // Using a custom string to concatenate keywords.
+    elseif ($this->config('search404.settings')->get('search404_use_customclue')) {
+      $keys = trim(implode($this->config('search404.settings')->get('search404_use_customclue'), $keys));
     }
-    // By default using whitespace between keywords
+    // By default using whitespace between keywords.
     else {
       $keys = trim(implode(' ', $keys));
     }
@@ -439,11 +493,11 @@ class Search404Controller extends ControllerBase {
    */
   public function search404CustomErrorMessage($keys) {
     $error_message = '';
-    $disable_error = \Drupal::config('search404.settings')->get('search404_disable_error_message');
+    $disable_error = $this->config('search404.settings')->get('search404_disable_error_message');
     if ($disable_error) {
       return;
     }
-    if ($custom_error_message = \Drupal::config('search404.settings')->get('search404_custom_error_message')) {
+    if ($custom_error_message = $this->config('search404.settings')->get('search404_custom_error_message')) {
       if (empty($keys)) {
         $error_message = str_replace('@keys', 'Invalid keys used', $custom_error_message);
       }

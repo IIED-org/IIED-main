@@ -191,10 +191,7 @@ class ComposerStaticInitc55356c53f91567181cb9bc578ac52ab
         ),
         'H' => 
         array (
-            'Http\\Promise\\' => 13,
             'Http\\Factory\\Guzzle\\' => 20,
-            'Http\\Client\\' => 12,
-            'Http\\Adapter\\Guzzle6\\' => 21,
         ),
         'G' => 
         array (
@@ -272,6 +269,7 @@ class ComposerStaticInitc55356c53f91567181cb9bc578ac52ab
         array (
             'Asm89\\Stack\\' => 12,
             'Ajgl\\Twig\\Extension\\' => 20,
+            'Acquia\\Hmac\\' => 12,
         ),
     );
 
@@ -607,21 +605,9 @@ class ComposerStaticInitc55356c53f91567181cb9bc578ac52ab
         array (
             0 => __DIR__ . '/..' . '/justinrainbow/json-schema/src/JsonSchema',
         ),
-        'Http\\Promise\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/php-http/promise/src',
-        ),
         'Http\\Factory\\Guzzle\\' => 
         array (
             0 => __DIR__ . '/..' . '/http-interop/http-factory-guzzle/src',
-        ),
-        'Http\\Client\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/php-http/httplug/src',
-        ),
-        'Http\\Adapter\\Guzzle6\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/php-http/guzzle6-adapter/src',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (
@@ -758,7 +744,7 @@ class ComposerStaticInitc55356c53f91567181cb9bc578ac52ab
         'Doctrine\\Common\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/common/lib/Doctrine/Common',
-            1 => __DIR__ . '/..' . '/doctrine/event-manager/lib/Doctrine/Common',
+            1 => __DIR__ . '/..' . '/doctrine/event-manager/src',
             2 => __DIR__ . '/..' . '/doctrine/persistence/lib/Doctrine/Common',
             3 => __DIR__ . '/..' . '/doctrine/reflection/lib/Doctrine/Common',
         ),
@@ -850,6 +836,10 @@ class ComposerStaticInitc55356c53f91567181cb9bc578ac52ab
         'Ajgl\\Twig\\Extension\\' => 
         array (
             0 => __DIR__ . '/..' . '/ajgl/breakpoint-twig-extension/src',
+        ),
+        'Acquia\\Hmac\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/acquia/http-hmac-php/src',
         ),
     );
 

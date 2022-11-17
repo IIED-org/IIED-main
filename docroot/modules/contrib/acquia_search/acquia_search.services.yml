@@ -1,5 +1,58 @@
 services:
   acquia_search.search_subscriber:
     class: Drupal\acquia_search\EventSubscriber\SearchSubscriber
+    arguments: [ '@acquia_search.preferred_core', '@acquia_connector.subscription', '@acquia_search.api_client', '@acquia_search.flood' ]
     tags:
-    - { name: 'event_subscriber' }
+      - { name: 'event_subscriber' }
+  acquia_search.subscription_data:
+    class: Drupal\acquia_search\EventSubscriber\AcquiaSubscriptionData\AcquiaSearchData
+    arguments: [ '@extension.list.module' ]
+    tags:
+      - { name: 'event_subscriber' }
+  acquia_search.possible_cores.local_override:
+    class: Drupal\acquia_search\EventSubscriber\PossibleCores\LocalOverride
+    arguments: ['@acquia_connector.subscription', '@config.factory', '@messenger']
+    tags:
+      - { name: 'event_subscriber' }
+  acquia_search.possible_cores.acquia_hosting:
+    class: Drupal\acquia_search\EventSubscriber\PossibleCores\AcquiaHosting
+    arguments: ['@database', '@acquia_connector.subscription', '%site.path%']
+    tags:
+      - { name: 'event_subscriber' }
+  acquia_search.possible_cores.default_core:
+    class: Drupal\acquia_search\EventSubscriber\PossibleCores\DefaultCore
+    arguments: ['@acquia_connector.subscription', '@acquia_search.api_client', '%site.path%']
+    tags:
+      - { name: 'event_subscriber' }
+  acquia_search.logger_channel:
+    class: Drupal\Core\Logger\LoggerChannel
+    factory: logger.factory:get
+    arguments: ['acquia_search']
+  acquia_search.api_client:
+    class: Drupal\acquia_search\AcquiaSearchApiClient
+    arguments: [ '@acquia_search.logger_channel', '@acquia_connector.subscription', '@http_client_factory', '@cache.acquia_search.indexes', '@datetime.time', '@lock' ]
+  acquia_search.preferred_core:
+    class: Drupal\acquia_search\PreferredCoreService
+    arguments: [ '@event_dispatcher', '@acquia_connector.subscription', '@acquia_search.api_client' ]
+  acquia_search.solarium.guzzle:
+    class: Drupal\acquia_search\Client\Solarium\AcquiaGuzzle
+  acquia_search.prequery.edismax:
+    class: Drupal\acquia_search\EventSubscriber\PreQuery\EdisMax
+    tags:
+      - { name: 'event_subscriber' }
+  acquia_search.postcreateindexdocument.remove_boost:
+    class: Drupal\acquia_search\EventSubscriber\PostCreateIndexDocument\RemoveBoost
+    tags:
+      - { name: 'event_subscriber' }
+  acquia_search.flood:
+    class: Drupal\acquia_search\Helper\Flood
+    arguments: ['@flood', '@config.factory', '@acquia_search.logger_channel']
+  acquia_search.memory_cache:
+    class: Drupal\Core\Cache\MemoryCache\MemoryCache
+  cache.acquia_search.indexes:
+    class: Drupal\Core\Cache\BackendChain
+    calls:
+      - [ appendBackend, [ '@acquia_search.memory_cache' ] ]
+      - [ appendBackend, [ '@cache.data' ] ]
+    tags:
+      - { name: cache.bin }

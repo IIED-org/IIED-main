@@ -2,10 +2,10 @@
 
 namespace Drupal\stage_file_proxy\EventDispatcher;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
- * Class AlterExcludedPathsEvent.
+ * Class of AlterExcludedPathsEvent.
  *
  * @package Drupal\stage_file_proxy\EventDispatcher
  */

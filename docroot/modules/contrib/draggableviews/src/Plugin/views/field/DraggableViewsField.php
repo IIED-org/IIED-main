@@ -19,7 +19,7 @@ class DraggableViewsField extends BulkForm {
   /**
    * The entity manager.
    *
-   * @var \Drupal\Core\Entity\EntityManagerInterface
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityManager;
 
@@ -76,19 +76,19 @@ class DraggableViewsField extends BulkForm {
     parent::buildOptionsForm($form, $form_state);
     // Remove all the fields that would break this or are completely ignored
     // when rendering the drag interface.
-    unset($form['custom_label']);
-    unset($form['label']);
-    unset($form['element_label_colon']);
-    unset($form['action_title']);
-    unset($form['include_exclude']);
-    unset($form['selected_actions']);
-    unset($form['exclude']);
-    unset($form['alter']);
-    unset($form['empty_field_behavior']);
-    unset($form['empty']);
-    unset($form['empty_zero']);
-    unset($form['hide_empty']);
-    unset($form['hide_alter_empty']);
+    $form['custom_label']['#access'] = FALSE;
+    $form['label']['#access'] = FALSE;
+    $form['element_label_colon']['#access'] = FALSE;
+    $form['action_title']['#access'] = FALSE;
+    $form['include_exclude']['#access'] = FALSE;
+    $form['selected_actions']['#access'] = FALSE;
+    $form['exclude']['#access'] = FALSE;
+    $form['alter']['#access'] = FALSE;
+    $form['empty_field_behavior']['#access'] = FALSE;
+    $form['empty']['#access'] = FALSE;
+    $form['empty_zero']['#access'] = FALSE;
+    $form['hide_empty']['#access'] = FALSE;
+    $form['hide_alter_empty']['#access'] = FALSE;
   }
 
   /**

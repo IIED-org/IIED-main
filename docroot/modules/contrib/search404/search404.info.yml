@@ -1,7 +1,6 @@
 name: 'Search 404'
 description: 'Automatically search for the keywords in URLs that result in 404 errors and show results instead of Page-Not-Found.'
-core: 8.x
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^8 || ^9 || ^10
 type: module
 package: Search
 

@@ -7,8 +7,8 @@
 
 use Drupal\acquia_search\Helper\Messages;
 use Drupal\acquia_search\Helper\Runtime;
-use Drupal\acquia_search\Helper\Storage;
 use Drupal\search_api\Entity\Server;
+use Drupal\search_api\ServerInterface;
 
 /**
  * Implements hook_requirements().
@@ -31,10 +31,10 @@ function acquia_search_requirements($phase) {
       $requirements['acquia_search_ssl']['description'] = t('In order to protect the privacy of your content with the Acquia Search module you must have SSL support enabled in PHP on your host.');
     }
 
-    /** @var \Drupal\search_api\Entity\Server[] $servers */
+    /** @var \Drupal\search_api\ServerInterface[] $servers */
     $servers = Server::loadMultiple();
 
-    $acquia_servers = array_filter($servers, function (Server $server) {
+    $acquia_servers = array_filter($servers, static function (ServerInterface $server) {
       return Runtime::isAcquiaServer($server);
     });
 
@@ -58,7 +58,7 @@ function acquia_search_requirements($phase) {
       ];
     }
 
-    if (!Runtime::getPreferredSearchCoreService()->isPreferredCoreAvailable()) {
+    if (!\Drupal::service('acquia_search.preferred_core')->isPreferredCoreAvailable()) {
       $requirements['acquia_search_read_only'] = [
         'title' => t('Acquia Search Solr'),
         'value' => t('No preferred search core'),
@@ -69,37 +69,13 @@ function acquia_search_requirements($phase) {
 
   }
 
-  // Update the cached version whenever we may be updating the module.
-  if ($phase == 'runtime' || $phase == 'update') {
-    Storage::getVersion();
-  }
-
   return $requirements;
-}
-
-/**
- * Implements hook_uninstall().
- */
-function acquia_search_uninstall() {
-
-  $storage = new Storage();
-  $storage->deleteAllData();
-  \Drupal::configFactory()->getEditable('acquia_search.settings')->delete();
-
 }
 
 /**
  * Implements hook_install().
  */
 function acquia_search_install() {
-  // Import settings from the connector if it is installed and configured.
-  $connector = \Drupal::moduleHandler()->moduleExists('acquia_connector');
-  $subscription = \Drupal::state()->get('acquia_subscription_data');
-  $storage = new Storage();
-  if ($connector && isset($subscription)) {
-    $storage->setApiHost(\Drupal::config('acquia_search.settings')->get('api_host') ?? 'https://api.sr-prod02.acquia.com');
-    $storage->setApiKey(\Drupal::state()->get('acquia_connector.key'));
-    $storage->setIdentifier(\Drupal::state()->get('acquia_connector.identifier'));
-    $storage->setUuid($subscription['uuid']);
-  }
+  // Indicate that default index needs to be re-connected to the server.
+  \Drupal::state()->set('acquia_search.connect_index', TRUE);
 }

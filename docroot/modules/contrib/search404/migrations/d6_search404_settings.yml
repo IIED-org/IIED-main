@@ -1,0 +1,50 @@
+id: d6_search404_settings
+label: Search404 settings
+migration_tags:
+  - Drupal 6
+  - Configuration
+source:
+  plugin: variable
+  variables:
+    # Note the 6.x-1.x settings search404_do_google_cse_adv, and
+    # search404_do_fuzzysearch have no equivalents in the 2.x branch.
+    - search404_block_show
+    - search404_custom_search_path
+    - search404_disable_error_message
+    - search404_do_custom_search
+    - search404_do_google_cse
+    - search404_do_search_by_page
+    - search404_first
+    - search404_ignore
+    - search404_ignore_extensions
+    - search404_ignore_query
+    - search404_jump
+    - search404_page_text
+    - search404_page_title
+    - search404_redirect_301
+    - search404_regex
+    - search404_skip_auto_search
+    - search404_use_or
+    - search404_use_search_engine
+  source_module: search404
+process:
+  search404_custom_search_path: search404_custom_search_path
+  search404_disable_error_message: search404_disable_error_message
+  search404_do_custom_search: search404_do_custom_search
+  search404_do_google_cse: search404_do_google_cse
+  search404_do_search_by_page: search404_do_search_by_page
+  search404_first: search404_first
+  search404_ignore: search404_ignore
+  search404_ignore_extensions: search404_ignore_extensions
+  search404_ignore_query: search404_ignore_query
+  search404_jump: search404_jump
+  search404_page_text: search404_page_text
+  search404_page_title: search404_page_title
+  search404_redirect_301: search404_redirect_301
+  search404_regex: search404_regex
+  search404_skip_auto_search: search404_skip_auto_search
+  search404_use_or: search404_use_or
+  search404_use_search_engine: search404_use_search_engine
+destination:
+  plugin: config
+  config_name: search404.settings

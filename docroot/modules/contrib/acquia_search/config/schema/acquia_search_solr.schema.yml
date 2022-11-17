@@ -15,3 +15,7 @@ acquia_search.settings:
     override_search_core:
       type: string
       label: 'String containing desired search core id. The search core should be available via Acquia Search API for the Acquia Subscription'
+
+plugin.plugin_configuration.search_api_solr_connector.solr_acquia_connector:
+  type: plugin.plugin_configuration.search_api_solr_connector.standard
+  label: 'Search API Acquia Search connector settings'

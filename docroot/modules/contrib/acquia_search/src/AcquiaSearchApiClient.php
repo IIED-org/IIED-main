@@ -2,25 +2,29 @@
 
 namespace Drupal\acquia_search;
 
+use Acquia\Hmac\Digest\Digest;
+use Acquia\Hmac\Digest\DigestInterface;
+use Acquia\Hmac\Guzzle\HmacAuthMiddleware;
+use Acquia\Hmac\Key;
+use Drupal\acquia_connector\Subscription;
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Serialization\Json;
-use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Cache\CacheBackendInterface;
-use GuzzleHttp\Client;
+use Drupal\Core\Http\ClientFactory;
+use Drupal\Core\Lock\LockBackendInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\HandlerStack;
 
 /**
- * Acquia implementation of the Search API Client.
+ * Acquia Search API Client.
+ *
+ * Not to be confused with Search API, this is the service that works with RAGE
+ * to fetch the cores available to a customer.
  *
  * @package Drupal\acquia_search
  */
 class AcquiaSearchApiClient {
-
-  /**
-   * Authentication array.
-   *
-   * @var array
-   */
-  protected $authInfo;
 
   /**
    * Cache backend.
@@ -30,11 +34,18 @@ class AcquiaSearchApiClient {
   protected $cache;
 
   /**
-   * The HTTP client to fetch the feed data with.
+   * The HTTP client factory service.
    *
-   * @var \GuzzleHttp\Client
+   * @var \Drupal\Core\Http\ClientFactory
    */
-  protected $client;
+  protected $clientFactory;
+
+  /**
+   * Acquia Search Logger Channel.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
 
   /**
    * HTTP headers.
@@ -47,69 +58,136 @@ class AcquiaSearchApiClient {
   ];
 
   /**
+   * Time Service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $time;
+
+  /**
+   * Acquia Subscription Service.
+   *
+   * @var \Drupal\acquia_connector\Subscription
+   */
+  protected $subscription;
+
+  /**
+   * Drupal's locking layer instance.
+   *
+   * @var \Drupal\Core\Lock\LockBackendInterface
+   */
+  protected $lock;
+
+  /**
+   * The message digest to use when signing requests.
+   *
+   * @var \Acquia\Hmac\Digest\DigestInterface
+   */
+  protected $digest;
+
+  /**
    * AcquiaSearchApiClient constructor.
    *
-   * @param array $auth_info
-   *   Authorization array.
-   * @param \GuzzleHttp\Client $http_client
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger_channel
+   *   Logger Channel service.
+   * @param \Drupal\acquia_connector\Subscription $subscription
+   *   The Acquia subscription service.
+   * @param \Drupal\Core\Http\ClientFactory $http_client_factory
    *   HTTP client.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache backend.
+   * @param \Drupal\Component\Datetime\TimeInterface $date_time
+   *   Time Interface service.
+   * @param \Drupal\Core\Lock\LockBackendInterface $lock
+   *   Drupal's locking layer instance.
+   * @param \Acquia\Hmac\Digest\DigestInterface|null $digest
+   *   The message digest to use when signing requests.
    */
-  public function __construct(array $auth_info, Client $http_client, CacheBackendInterface $cache) {
-
-    $this->authInfo = $auth_info;
-    $this->client = $http_client;
+  public function __construct(LoggerChannelInterface $logger_channel, Subscription $subscription, ClientFactory $http_client_factory, CacheBackendInterface $cache, TimeInterface $date_time, LockBackendInterface $lock, DigestInterface $digest = NULL) {
+    $this->logger = $logger_channel;
+    $this->subscription = $subscription;
+    $this->clientFactory = $http_client_factory;
+    $this->time = $date_time;
     $this->cache = $cache;
+    $this->lock = $lock;
+    $this->digest = $digest ?: new Digest();
   }
 
   /**
    * Helper function to fetch all search v3 indexes for given subscription.
    *
-   * @param string $id
-   *   Acquia Subscription Identifier.
-   *
    * @return array|bool
    *   Acquia Search indexes array, FALSE on Acquia Search API failure.
+   *
+   * @throws \Exception
    */
-  public function getSearchIndexes(string $id) {
-
-    if (empty($id)) {
-      return FALSE;
-    }
-
+  public function getSearchIndexes() {
+    $id = $this->subscription->getSettings()->getIdentifier();
     $cid = 'acquia_search.indexes.' . $id;
-    $now = \Drupal::time()->getRequestTime();
+    $now = $this->time->getRequestTime();
 
-    if (($cache = $this->cache->get($cid)) && $cache->expire > $now) {
+    if ($cache = $this->cache->get($cid)) {
       return $cache->data;
     }
 
-    $path = '/v2/index/configure';
-    $query_string = 'network_id=' . $id;
+    $path = '/v2/indexes';
+    $query_string = 'filter[network_id]=' . $id;
     $result = [];
+
+    $timeout = 30;
+    while (!$this->lock->acquire('acquia_search_get_search_indexes')) {
+      // Throw an exception after X amount of seconds.
+      if (($now + $timeout) < $this->time->getRequestTime()) {
+        throw new \Exception("Couldn't acquire lock for 'acquia_search_get_search_indexes' in less than $timeout seconds.");
+      }
+    }
 
     $indexes = $this->searchRequest($path, $query_string);
     if (empty($indexes) && !is_array($indexes)) {
       // When API is not reachable, cache it for 1 minute.
-      $this->cache->set($cid, FALSE, \Drupal::time()->getRequestTime() + 60);
+      $this->cache->set($cid, FALSE, $now + 60, ['acquia_search_indexes']);
 
       return FALSE;
     }
+    $this->lock->release('acquia_search_get_search_indexes');
 
-    foreach ($indexes as $index) {
-      $result[$index['key']] = [
-        'balancer' => $index['host'],
-        'core_id' => $index['key'],
-        'data' => $index,
-      ];
+    if (isset($indexes['data'])) {
+      foreach ($indexes['data'] as $index) {
+        $result[$index['id']] = [
+          'balancer' => parse_url($index['attributes']['url'], PHP_URL_HOST),
+          'core_id' => $index['id'],
+          'data' => $index,
+        ];
+      }
     }
     // Cache will be set in both cases, 1. when search v3 cores are found and
     // 2. when there are no search v3 cores but api is reachable.
-    $this->cache->set($cid, $result, $now + (24 * 60 * 60));
+    $this->cache->set($cid, $result, $now + (24 * 60 * 60), ['acquia_search_indexes']);
 
     return $result;
+  }
 
+  /**
+   * Gets the key for a given search index.
+   *
+   * @param string $index_name
+   *   The index name.
+   *
+   * @return array|false
+   *   Returns the keys, or FALSE if there was a failure in request.
+   */
+  public function getSearchIndexKeys(string $index_name) {
+    $id = $this->subscription->getSettings()->getIdentifier();
+    $cid = "acquia_search.indexes.{$id}.{$index_name}";
+    $now = $this->time->getRequestTime();
+
+    if (($cache = $this->cache->get($cid))) {
+      return $cache->data;
+    }
+    $keys = $this->searchRequest('/v2/index/key', 'index_name=' . $index_name);
+    $this->cache->set($cid, $keys, $now + (24 * 60 * 60), ['acquia_search_indexes']);
+
+    return $keys;
   }
 
   /**
@@ -123,103 +201,68 @@ class AcquiaSearchApiClient {
    * @return array|false
    *   Response array or FALSE.
    */
-  public function searchRequest(string $path, string $query_string) {
-
-    $host = $this->authInfo['host'];
-    $req_time = \Drupal::time()->getRequestTime();
-    $authorization_string = $this->calculateAuthString();
-    $req_params = [
-      'GET',
-      preg_replace('/^https?:\/\//', '', $host),
-      $path,
-      $query_string,
-      $authorization_string,
-      $req_time,
-    ];
-    $authorization_header = $this->calculateAuthHeader($req_params, $authorization_string);
-
-    $data = [
-      'host' => $host,
-      'headers' => [
-        'Authorization' => $authorization_header,
-        'X-Authorization-Timestamp' => $req_time,
-      ],
-    ];
-
-    $uri = $data['host'] . $path . '?' . $query_string;
+  private function searchRequest(string $path, string $query_string) {
+    $subscription_data = $this->subscription->getSubscription();
+    // Return no results if there is no subscription data.
+    if (!$subscription_data || !$this->subscription->isActive()) {
+      return FALSE;
+    }
     $options = [
-      'headers' => $data['headers'],
+      'headers' => [
+        'X-Authorization-Timestamp' => $this->time->getRequestTime(),
+      ],
       'timeout' => 10,
     ];
 
     try {
-      $response = $this->client->get($uri, $options);
+      // Create a new HMAC key for the middleware.
+      $key_id = $subscription_data['uuid'];
+      $key_secret = $this->subscription->getSettings()->getSecretKey();
+      $key = new Key($key_id, $key_secret);
+
+      // Create the client from factory using the HMAC middleware.
+      $middleware = new HmacAuthMiddleware($key, 'search', []);
+      $stack = HandlerStack::create();
+      $stack->push($middleware);
+      $client = $this->clientFactory->fromOptions(['handler' => $stack]);
+
+      $host = $subscription_data['acquia_search']['api_host'];
+      $uri = $host . $path . '?' . $query_string;
+      $response = $client->get($uri, $options);
       if (!$response) {
         throw new \Exception('Empty Response');
       }
-      $stream_size = $response->getBody()->getSize();
-      $data = Json::decode($response->getBody()->read($stream_size));
       $status_code = $response->getStatusCode();
-
       if ($status_code < 200 || $status_code > 299) {
-        \Drupal::logger('acquia_search')->error("Couldn't connect to search v3 API: @message",
+        $this->logger->error("Couldn't connect to search v3 API: @message",
           ['@message' => $response->getReasonPhrase()]);
         return FALSE;
       }
-      return $data;
+
+      return Json::decode((string) $response->getBody());
     }
     catch (RequestException $e) {
       if ($e->getCode() == 401) {
-        \Drupal::logger('acquia_search')->error("Couldn't connect to search v3 API:
-          Received a 401 response from the API. @message", ['@message' => $e->getMessage()]);
+        $this->logger->error("Couldn't connect to search v3 API:
+        Received a 401 response from the API. @message",
+          ['@message' => $e->getMessage()]);
       }
       elseif ($e->getCode() == 404) {
-        \Drupal::logger('acquia_search')->error("Couldn't connect to search v3 API:
-          Received a 404 response from the API. @message", ['@message' => $e->getMessage()]);
+        $this->logger->error("Couldn't connect to search v3 API:
+        Received a 404 response from the API. @message",
+          ['@message' => $e->getMessage()]);
       }
       else {
-        \Drupal::logger('acquia_search')->error("Couldn't connect to search v3 API:
-          @message", ['@message' => $e->getMessage()]);
+        $this->logger->error("Couldn't connect to search v3 API:
+        @message", ['@message' => $e->getMessage()]);
       }
     }
     catch (\Exception $e) {
-      \Drupal::logger('acquia_search')->error("Couldn't connect to search v3 API: @message",
+      $this->logger->error("Couldn't connect to search v3 API: @message",
         ['@message' => $e->getMessage()]);
     }
 
     return FALSE;
-  }
-
-  /**
-   * Creates an authenticator based on a HMAC V2 signer.
-   *
-   * @param array $req_params
-   *   Request parameters.
-   * @param string $authorization_string
-   *   Authorization string.
-   *
-   * @return string
-   *   Returns the signed auth header
-   */
-  private function calculateAuthHeader(array $req_params, string $authorization_string): string {
-    $signature_base_string = implode("\n", $req_params);
-    $digest = hash_hmac('sha256', $signature_base_string, base64_decode($this->authInfo['key'], TRUE), TRUE);
-    $signature = base64_encode($digest);
-    $authorization_header_string = str_replace("=", "=\"", str_replace("&", "\",", $authorization_string));
-    return 'acquia-http-hmac ' . $authorization_header_string . '",signature="' . $signature . '"';
-  }
-
-  /**
-   * Calculates authorization string.
-   *
-   * @return string
-   *   Returns the auth string.
-   */
-  private function calculateAuthString() {
-
-    $nonce = Crypt::randomBytesBase64(24);
-    return 'id=' . $this->authInfo['app_uuid'] . '&nonce=' . $nonce . '&realm=search&version=2.0';
-
   }
 
 }

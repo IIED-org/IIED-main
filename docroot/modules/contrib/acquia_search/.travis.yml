@@ -24,8 +24,8 @@ services:
 env:
   global:
     - ORCA_SUT_NAME=drupal/acquia_search
-    - ORCA_SUT_BRANCH=3.x
-    - ORCA_VERSION=~3.22.2
+    - ORCA_SUT_BRANCH=3.1.x
+    - ORCA_VERSION=^3
     - ORCA_PACKAGES_CONFIG_ALTER=../acquia_search/tests/packages_alter.yml
     - ORCA_TELEMETRY_ENABLE=TRUE
 

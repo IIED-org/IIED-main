@@ -5,9 +5,7 @@
  * Acquia Connector module.
  */
 
-use Drupal\acquia_connector\Subscription;
 use Drupal\Core\Link;
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 
 // Version of SPI data format.
@@ -25,12 +23,12 @@ define('ACQUIA_CONNECTOR_ACQUIA_SPI_METHOD_INSIGHT', 'insight');
 /**
  * Implements hook_help().
  */
-function acquia_connector_help($route_name, RouteMatchInterface $route_match) {
+function acquia_connector_help($route_name) {
   switch ($route_name) {
     case 'help.page.acquia_connector':
       $output = '<h2>' . t('Acquia Connector') . '</h2>';
       $output .= '<p>' . t('The Acquia Connector module allows you to connect your site to Acquia.') . '<p>';
-      $output .= '<p>' . Link::fromTextAndUrl(t('Read more about the installation and use of the Acquia Connector module on the Acquia Library'), Url::fromUri('https://docs.acquia.com/acquia-cloud/insight/install/', []))->toString() . '</p>';
+      $output .= '<p>' . Link::fromTextAndUrl(t('Read more about the installation and use of the Acquia Connector module on the Acquia Library'), Url::fromUri('https://docs.acquia.com/cloud-platform/onboarding/install/', []))->toString() . '</p>';
 
       $output .= '<dt>' . t('Receive updates from Acquia Subscription') . '</dt>';
       $output .= '<dd>' . t('Receive dynamic updates on the Network Settings page from Acquia.com about your subscription and new features.') . '</dd>';
@@ -48,7 +46,7 @@ function acquia_connector_theme() {
   return [
     'acquia_connector_banner' => [
       'render element' => 'form',
-      'template' => 'acquia_connector_banner'
+      'template' => 'acquia_connector_banner',
     ],
   ];
 }
@@ -58,7 +56,7 @@ function acquia_connector_theme() {
  */
 function acquia_connector_toolbar() {
   if (!\Drupal::currentUser()->hasPermission('view acquia connector toolbar')) {
-        return [];
+    return [];
   }
 
   $link = [
@@ -70,23 +68,32 @@ function acquia_connector_toolbar() {
     ],
   ];
 
-  /** @var Subscription $subscription */
+  /** @var \Drupal\acquia_connector\Subscription $subscription */
   $subscription = Drupal::service('acquia_connector.subscription');
   if ($subscription->isActive()) {
     $subscription_data = $subscription->getSubscription();
-    if (is_array($subscription_data['expiration_date']) && isset($subscription_data['active']) && $subscription_data['active'] !== FALSE) {
-      $link['#title'] = t('Subscription active (expires @date)', [
-        '@date' => \Drupal::service('date.formatter')->format(strtotime($subscription_data['expiration_date']['value']), 'custom', 'Y/n/j'),
-      ]);
-      $link['#attributes']['class'][] = 'acquia-active-subscription';
-      $link['#url'] = Url::fromUri('https://cloud.acquia.com/app/develop/applications/' . $subscription_data['uuid']);
+    if (isset($subscription_data['active']) && $subscription_data['active'] !== FALSE) {
+      // Throw gratis information if subscription is expired.
+      if ($subscription_data['gratis']) {
+        $link['#title'] = t('Renew subscription (expired @date)', [
+          '@date' => \Drupal::service('date.formatter')->format(strtotime($subscription_data['expiration_date']['value']), 'custom', 'Y/n/j'),
+        ]);
+        $link['#attributes']['class'][] = 'acquia-unknown-subscription';
+      }
+      else {
+        $link['#title'] = isset($subscription_data['expiration_date']['value']) ? t('Subscription active (expires @date)', [
+          '@date' => \Drupal::service('date.formatter')->format(strtotime($subscription_data['expiration_date']['value']), 'custom', 'Y/n/j'),
+        ]) : t('Subscription active');
+        $link['#attributes']['class'][] = 'acquia-active-subscription';
+      }
+      $link['#url'] = Url::fromUri('https://cloud.acquia.com/app/develop/applications/' . $subscription->getSettings()->getApplicationUuid());
     }
   }
 
   if (empty($link['#url'])) {
     $link['#title'] = t('Subscription not active');
     $link['#attributes']['class'][] = 'acquia-inactive-subscription';
-    $link['#url'] = Url::fromUri('https://cloud.acquia.com');
+    $link['#url'] = Url::fromRoute('acquia_connector.setup_oauth');
   }
 
   return [
@@ -95,9 +102,7 @@ function acquia_connector_toolbar() {
       'tab' => $link,
       '#weight' => 200,
       '#cache' => [
-        'contexts' => [
-          'user.roles:authenticated',
-        ],
+        'tags' => ['acquia_connector_subscription'],
       ],
       '#attached' => [
         'library' => [
@@ -107,7 +112,6 @@ function acquia_connector_toolbar() {
     ],
   ];
 }
-
 
 /**
  * Implements hook_modules_installed().
@@ -119,6 +123,13 @@ function acquia_connector_modules_installed(array $modules) {
   if ($installed_acquia_extensions) {
     $event_properties = ['installed_extensions' => array_values($installed_acquia_extensions)];
     $telemetry_service->sendTelemetry('Acquia extensions installed', $event_properties);
+  }
+
+  $acquia_modules = array_filter($modules, static function (string $name) {
+    return str_starts_with($name, 'acquia_');
+  });
+  if (count($acquia_modules) > 0) {
+    \Drupal::service('acquia_connector.subscription')->getSubscription(TRUE);
   }
 }
 
@@ -133,5 +144,19 @@ function acquia_connector_modules_uninstalled(array $modules) {
     $event_properties = ['uninstalled_extensions' => array_values($uninstalled_acquia_extensions)];
     $telemetry_service->sendTelemetry('Acquia extensions uninstalled', $event_properties);
   }
+
+  $acquia_modules = array_filter($modules, static function (string $name) {
+    return str_starts_with($name, 'acquia_');
+  });
+  if (count($acquia_modules) > 0) {
+    \Drupal::service('acquia_connector.subscription')->getSubscription(TRUE);
+  }
 }
 
+/**
+ * Implements hook_cron().
+ */
+function acquia_connector_cron() {
+  $auth_service = \Drupal::service('acquia_connector.auth_service');
+  $auth_service->cronRefresh();
+}

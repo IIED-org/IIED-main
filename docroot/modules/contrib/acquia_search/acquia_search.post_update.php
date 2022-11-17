@@ -5,7 +5,6 @@
  * Search Solr updates once other modules have made their own updates.
  */
 
-use Drupal\acquia_search\Helper\Storage;
 use Drupal\Core\PhpStorage\PhpStorageFactory;
 
 /**
@@ -37,14 +36,15 @@ function acquia_search_post_update_move_search_modules() {
 
   // Import settings from the connector if it is installed and configured.
   $subscription = \Drupal::state()->get('acquia_subscription_data');
-  $storage = new Storage();
   if (isset($subscription)) {
-    $storage->setApiHost(\Drupal::config('acquia_search_solr.settings')
-      ->get('api_host') ?? 'https://api.sr-prod02.acquia.com');
-    $storage->setApiKey(\Drupal::state()->get('acquia_connector.key'));
-    $storage->setIdentifier(\Drupal::state()
+    \Drupal::configFactory()->getEditable('acquia_search.settings')
+      ->set('api_host', \Drupal::config('acquia_search_solr.settings')->get('api_host') ?? 'https://api.sr-prod02.acquia.com')
+      ->save();
+
+    \Drupal::state()->set('acquia_search.api_key', \Drupal::state()->get('acquia_connector.key'));
+    \Drupal::state()->set('acquia_search.identifier', \Drupal::state()
       ->get('acquia_connector.identifier'));
-    $storage->setUuid($subscription['uuid']);
+    \Drupal::state()->set('acquia_search.uuid', $subscription['uuid']);
   }
 
   if ($search_config = $config_factory->getEditable('acquia_search.settings')) {
@@ -53,9 +53,16 @@ function acquia_search_post_update_move_search_modules() {
       $search_config->clear('default_search_core');
       $search_config->save();
     }
-    if ($override_settings = $search_config->get('default_search_core')) {
+    if ($search_config->get('default_search_core')) {
       \Drupal::messenger()->addWarning(t(
-          "'acquia_connector.settings.default_search_core' is being overridden by settings.php. Update the key to acquia_connector.settings.override_search_core to continue overridding the core (usually for local development)"));
+          "'acquia_connector.settings.default_search_core' is being overridden by settings.php. Update the key to acquia_connector.settings.override_search_core to continue overriding the core (usually for local development)"));
     }
   }
+}
+
+/**
+ * Service definition updates, empty post_update for container rebuild.
+ */
+function acquia_search_post_update_service_definition_updates() {
+  // Empty post-update hook.
 }
