@@ -136,7 +136,7 @@
         "drupal/search404": "^2.1",
         "drupal/search_api": "^1.23",
         "drupal/search_api_autocomplete": "^1.6",
-        "drupal/search_api_solr": "4.2.8",
+        "drupal/search_api_solr": "^4.2",
         "drupal/search_api_sorts": "1.x-dev@dev",
         "drupal/search_api_sorts_widget": "^1.0",
         "drupal/serial": "^1.0@alpha",
