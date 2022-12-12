@@ -642,6 +642,13 @@ class Utility {
       }
     }
 
+    if (preg_match('/^([a-z]+)m(_.*)/', $first_solr_field_name, $matches)) {
+      // For other multi-valued fields (which aren't sortable by nature) we
+      // use the same hackish workaround like the DB backend: just copy the
+      // first value in a single value field for sorting.
+      $first_solr_field_name =  $matches[1] . 's' . $matches[2];
+    }
+
     return $first_solr_field_name;
   }
 
