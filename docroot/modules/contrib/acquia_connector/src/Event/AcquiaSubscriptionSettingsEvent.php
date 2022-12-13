@@ -4,12 +4,11 @@ namespace Drupal\acquia_connector\Event;
 
 use Drupal\acquia_connector\Settings;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Component\EventDispatcher\Event;
 
 /**
  * The event dispatched to find settings for Acquia Connector.
  */
-class AcquiaSubscriptionSettingsEvent extends Event {
+class AcquiaSubscriptionSettingsEvent extends EventBase {
 
   /**
    * The Acquia Connector settings object.
@@ -66,9 +65,9 @@ class AcquiaSubscriptionSettingsEvent extends Event {
    * Set the Acquia settings object.
    *
    * @param \Drupal\acquia_connector\Settings $settings
-   *   The Content Hub client settings.
+   *   The client settings.
    */
-  public function setSettings(settings $settings) {
+  public function setSettings(Settings $settings) {
     $this->settings = $settings;
   }
 

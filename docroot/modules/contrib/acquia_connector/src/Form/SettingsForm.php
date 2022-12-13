@@ -3,7 +3,6 @@
 namespace Drupal\acquia_connector\Form;
 
 use Drupal\acquia_connector\AcquiaConnectorEvents;
-use Drupal\acquia_connector\ConnectorException;
 use Drupal\acquia_connector\Event\AcquiaProductSettingsEvent;
 use Drupal\acquia_connector\SiteProfile\SiteProfile;
 use Drupal\acquia_connector\Subscription;
@@ -13,10 +12,10 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\PrivateKey;
 use Drupal\Core\State\StateInterface;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-
 
 /**
  * Acquia Connector Settings.
@@ -28,7 +27,7 @@ class SettingsForm extends ConfigFormBase {
   /**
    * The event dispatcher.
    *
-   * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
    */
   protected $dispatcher;
 
@@ -89,7 +88,7 @@ class SettingsForm extends ConfigFormBase {
    *   The State handler.
    * @param \Drupal\acquia_connector\SiteProfile\SiteProfile $site_profile
    *   Connector Site Profile Service.
-   * @param \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $dispatcher
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
    *   Event Dispatcher Service.
    */
   public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, PrivateKey $private_key, Subscription $subscription, StateInterface $state, SiteProfile $site_profile, EventDispatcherInterface $dispatcher) {
@@ -136,32 +135,14 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-
-    $settings = $this->subscription->getSettings();
-    // Fetch config from setting object, as the event can alter it.
-    $config = $settings->getConfig();
-    $identifier = $settings->getIdentifier();
-    $key = $settings->getSecretKey();
-
-    if (empty($identifier) || empty($key)) {
-      return new RedirectResponse((string) \Drupal::service('url_generator')->generateFromRoute('acquia_connector.setup'));
+    if (!$this->subscription->isActive()) {
+      return new RedirectResponse(
+        Url::fromRoute('acquia_connector.setup_oauth')->toString()
+      );
     }
 
     // Start with an empty subscription.
-    $subscription = [];
-    // Check our connection to the Acquia and validate credentials.
-    try {
-      // Force a refresh of subscription data.
-      $subscription = $this->subscription->getSubscription(TRUE);
-    }
-    catch (ConnectorException $e) {
-      $error_message = $this->subscription->connectionErrorMessage($e->getCustomMessage('code', FALSE));
-      $ssl_available = in_array('ssl', stream_get_transports(), TRUE) && !defined('ACQUIA_CONNECTOR_TEST_ACQUIA_DEVELOPMENT_NOSSL') && $config->get('spi.ssl_verify');
-      if (empty($error_message) && $ssl_available) {
-        $error_message = $this->t('There was an error in validating your subscription credentials. You may want to try disabling SSL peer verification by setting the variable acquia_connector.settings:spi.ssl_verify to false.');
-      }
-      $this->messenger()->addError($error_message);
-    }
+    $subscription = $this->subscription->getSubscription(TRUE);
 
     $form['connected'] = [
       '#markup' => $this->t('<h3>Connected to Acquia</h3>'),
@@ -171,7 +152,7 @@ class SettingsForm extends ConfigFormBase {
       $form['subscription'] = [
         '#markup' => $this->t('Subscription: @sub <a href=":url">change</a>', [
           '@sub' => $subscription['subscription_name'],
-          ':url' => (string) \Drupal::service('url_generator')->generateFromRoute('acquia_connector.setup'),
+          ':url' => Url::fromRoute('acquia_connector.setup_configure')->toString(),
         ]),
       ];
     }
@@ -197,7 +178,7 @@ class SettingsForm extends ConfigFormBase {
       '#maxlength' => 255,
       '#required' => TRUE,
       '#disabled' => TRUE,
-      '#default_value' => $this->state->get('spi.site_name') ?? $this->siteProfile->getSiteName($subscription['subscription_name']),
+      '#default_value' => $this->state->get('spi.site_name') ?? $this->siteProfile->getSiteName($subscription['uuid']),
     ];
 
     if (!empty($form['identification']['site']['name']['#default_value']) && $this->siteProfile->checkAcquiaHosted()) {
@@ -217,7 +198,7 @@ class SettingsForm extends ConfigFormBase {
         'exists' => [$this, 'exists'],
         'source' => ['identification', 'site', 'name'],
       ],
-      '#default_value' => $this->siteProfile->getMachineName($subscription),
+      '#default_value' => $this->siteProfile->getMachineName($subscription['uuid']),
     ];
 
     $form['identification']['site']['machine_name']['#disabled'] = TRUE;
@@ -226,7 +207,16 @@ class SettingsForm extends ConfigFormBase {
     // Refresh the subscription from Acquia
     // Allow other modules to add metadata to the subscription.
     $event = new AcquiaProductSettingsEvent($form, $form_state, $this->subscription);
-    $this->dispatcher->dispatch($event, AcquiaConnectorEvents::ACQUIA_PRODUCT_SETTINGS);
+
+    // @todo Remove after dropping support for Drupal 8.
+    if (version_compare(\Drupal::VERSION, '9.0', '>=')) {
+      $this->dispatcher->dispatch($event, AcquiaConnectorEvents::ACQUIA_PRODUCT_SETTINGS);
+    }
+    else {
+      // @phpstan-ignore-next-line
+      $this->dispatcher->dispatch(AcquiaConnectorEvents::ACQUIA_PRODUCT_SETTINGS, $event);
+    }
+
     $form = $event->getForm();
     if (isset($form['product_settings'])) {
       $form['product_settings']['#type'] = 'fieldset';
@@ -253,11 +243,19 @@ class SettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $event = new AcquiaProductSettingsEvent($form, $form_state, $this->subscription);
-    $this->dispatcher->dispatch($event, AcquiaConnectorEvents::ALTER_PRODUCT_SETTINGS_SUBMIT);
+    // @todo Remove after dropping support for Drupal 8.
+    if (version_compare(\Drupal::VERSION, '9.0', '>=')) {
+      $this->dispatcher->dispatch($event, AcquiaConnectorEvents::ALTER_PRODUCT_SETTINGS_SUBMIT);
+    }
+    else {
+      // @phpstan-ignore-next-line
+      $this->dispatcher->dispatch(AcquiaConnectorEvents::ALTER_PRODUCT_SETTINGS_SUBMIT, $event);
+    }
 
     $values = $form_state->getValues();
     $this->state->set('spi.site_name', $values['name']);
 
+    $config = $this->config('acquia_connector.settings');
     // Save individual product settings within connector config.
     if (!empty($values['product_settings'])) {
       // Loop through each product.
@@ -270,15 +268,15 @@ class SettingsForm extends ConfigFormBase {
           }
           // Delete the setting if the value is null.
           if (empty($value)) {
-            $this->config('acquia_connector.settings')->clear('third_party_settings.' . $product_name . '.' . $key);
+            $config->clear('third_party_settings.' . $product_name . '.' . $key);
             continue;
           }
-          // Save the setting if its not empty.
-          $this->config('acquia_connector.settings')->set('third_party_settings.' . $product_name . '.' . $key, $value);
+          // Save the setting if it's not empty.
+          $config->set('third_party_settings.' . $product_name . '.' . $key, $value);
         }
       }
     }
-    $this->config('acquia_connector.settings')->save();
+    $config->save();
 
     parent::submitForm($form, $form_state);
   }

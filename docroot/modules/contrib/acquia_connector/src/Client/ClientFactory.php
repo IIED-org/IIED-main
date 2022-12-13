@@ -2,32 +2,24 @@
 
 namespace Drupal\acquia_connector\Client;
 
-use Drupal\acquia_connector\Settings;
+use Drupal\acquia_connector\AuthService;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Http\ClientFactory as HttpClientFactory;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Site\Settings as CoreSettings;
+use GuzzleHttp\Client;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
+use GuzzleHttp\Psr7\Uri;
+use Psr\Http\Message\RequestInterface;
+
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Instantiates an Acquia Connector Client object.
- *
- * @see \Acquia\ContentHubClient\ContentHub
  */
 class ClientFactory {
-
-  /**
-   * The contenthub client object.
-   *
-   * @var \Drupal\acquia_connector\Client\AcquiaConnectorClient
-   */
-  protected $client;
-
-  /**
-   * Settings object.
-   *
-   * @var \Drupal\acquia_connector\Settings
-   */
-  protected $settings;
 
   /**
    * The module extension list.
@@ -65,6 +57,20 @@ class ClientFactory {
   protected $time;
 
   /**
+   * The auth service.
+   *
+   * @var \Drupal\acquia_connector\AuthService
+   */
+  protected $authService;
+
+  /**
+   * The handler stack.
+   *
+   * @var \GuzzleHttp\HandlerStack
+   */
+  protected $stack;
+
+  /**
    * ClientManagerFactory constructor.
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
@@ -75,40 +81,76 @@ class ClientFactory {
    *   The date time service.
    * @param \Drupal\Component\Datetime\TimeInterface $date_time
    *   The date time service.
+   * @param \Drupal\acquia_connector\AuthService $auth_service
+   *   The auth service.
+   * @param \GuzzleHttp\HandlerStack $stack
+   *   The handler stack.
    */
-  public function __construct(LoggerChannelFactoryInterface $logger_factory, ModuleExtensionList $module_list, HttpClientFactory $client_factory, TimeInterface $date_time) {
+  public function __construct(LoggerChannelFactoryInterface $logger_factory, ModuleExtensionList $module_list, HttpClientFactory $client_factory, TimeInterface $date_time, AuthService $auth_service, HandlerStack $stack) {
     $this->loggerFactory = $logger_factory;
     $this->moduleList = $module_list;
     $this->time = $date_time;
     $this->httpClientFactory = $client_factory;
+    $this->authService = $auth_service;
+    $this->stack = $stack;
   }
 
   /**
-   * Get the Acquia Cloud Client.
+   * Get a client for Cloud API.
    *
-   * @param \Drupal\acquia_connector\Settings $settings
-   *   Settings object with credentials.
-   *
-   * @return \Drupal\acquia_connector\Client\AcquiaConnectorClient
-   *   Connector Client.
+   * @return \GuzzleHttp\Client
+   *   The client.
    */
-  public function getClient(Settings $settings) {
-    // If the client is cached, return it now.
-    if (isset($this->client)) {
-      return $this->client;
-    }
+  public function getCloudApiClient(): Client {
+    // Do not influence global handler stack.
+    $stack = clone $this->stack;
+    $stack->after('prepare_body', Middleware::mapRequest(function (RequestInterface $request) {
+      $access_data = $this->authService->getAccessToken();
+      if (isset($access_data['access_token'])) {
+        return $request->withHeader('Authorization', 'Bearer ' . $access_data['access_token']);
+      }
+      return $request;
+    }));
+    $stack->after('prepare_body', function (callable $next) {
+      return function (RequestInterface $request, array $options = []) use ($next) {
+        $access_data = $this->authService->getAccessToken();
+        if (!isset($access_data['access_token'])) {
+          return $next($request, $options);
+        }
 
-    $client = $this->httpClientFactory->fromOptions(
-      [
-        'verify' => (boolean) $settings->getConfig()->get('spi.ssl_verify'),
-        'client-user-agent' => $this->getClientUserAgent(),
-        'http_errors' => FALSE,
-      ]
-    );
-
-    $this->client = new AcquiaConnectorClient($client, $settings->getApiUrl(), $this->time->getRequestTime());
-
-    return $this->client;
+        if (!isset($options['retries'])) {
+          $options['retries'] = 0;
+        }
+        return $next($request, $options)->then(
+          function ($value) use ($next, $request, $options) {
+            if ($options['retries'] > 0) {
+              return $value;
+            }
+            if (!$value instanceof ResponseInterface) {
+              return $value;
+            }
+            // The status should be 401 for an expired access token, but
+            // the Cloud API returns 403. We handle both status codes.
+            // @see https://www.rfc-editor.org/rfc/rfc6750#section-3.1.
+            if (!in_array($value->getStatusCode(), [401, 403], TRUE)) {
+              return $value;
+            }
+            $this->authService->refreshAccessToken();
+            return $next($request, $options);
+          },
+        );
+      };
+    });
+    return $this->httpClientFactory->fromOptions([
+      'base_uri' => (new Uri())
+        ->withScheme('https')
+        ->withHost(CoreSettings::get('acquia_connector.cloud_api_host', 'cloud.acquia.com')),
+      'headers' => [
+        'User-Agent' => $this->getClientUserAgent(),
+        'Accept' => 'application/json, version=2',
+      ],
+      'handler' => $stack,
+    ]);
   }
 
   /**
@@ -118,12 +160,16 @@ class ClientFactory {
    *   User Agent.
    */
   protected function getClientUserAgent() {
-    // Find out the module version in use.
-    $module_info = $this->moduleList->getExtensionInfo('acquia_connector');
-    $module_version = (isset($module_info['version'])) ? $module_info['version'] : '0.0.0';
-    $drupal_version = (isset($module_info['core'])) ? $module_info['core'] : '0.0.0';
+    static $agent;
+    if ($agent === NULL) {
+      // Find out the module version in use.
+      $module_info = $this->moduleList->getExtensionInfo('acquia_connector');
+      $module_version = $module_info['version'] ?? '0.0.0';
+      $drupal_version = $module_info['core'] ?? '0.0.0';
 
-    return 'AcquiaConnector/' . $drupal_version . '-' . $module_version;
+      $agent = 'AcquiaConnector/' . $drupal_version . '-' . $module_version;
+    }
+    return $agent;
   }
 
 }

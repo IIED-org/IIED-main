@@ -2,6 +2,10 @@
 
 namespace Drupal\acquia_search\Helper;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Flood\FloodInterface;
+use Psr\Log\LoggerInterface;
+
 /**
  * Class Flood.
  *
@@ -32,10 +36,49 @@ namespace Drupal\acquia_search\Helper;
  */
 class Flood {
 
+  const FLOOD_LIMIT_ARTICLE_URL = "https://support-acquia.force.com/s/article/1500008925761-The-Acquia-Search-flood-control-mechanism-has-blocked-a-Solr-query-due-to-API-usage-limits";
+
+  /**
+   * The core flood service.
+   *
+   * @var \Drupal\Core\Flood\FloodInterface
+   */
+  private $flood;
+
+  /**
+   * The config.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  private $config;
+
+  /**
+   * The logger.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
+  private $logger;
+
+  /**
+   * Constructs a new Flood object.
+   *
+   * @param \Drupal\Core\Flood\FloodInterface $core_flood
+   *   The core flood service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   The logger.
+   */
+  public function __construct(FloodInterface $core_flood, ConfigFactoryInterface $config_factory, LoggerInterface $logger) {
+    $this->flood = $core_flood;
+    $this->config = $config_factory->get('acquia_search.settings');
+    $this->logger = $logger;
+  }
+
   /**
    * List of values by each Solarium request type.
    */
-  public static function getFloodDefaults() {
+  private static function getFloodDefaults() {
     return [
       'select' => ['window' => 10, 'limit' => 50],
       'update' => ['window' => 60, 'limit' => 600],
@@ -56,36 +99,11 @@ class Flood {
    * @return int
    *   Integer value for specified type and option.
    */
-  public static function getConfigValue(string $request_type, string $value_name) {
+  private function getConfigValue(string $request_type, string $value_name) {
     $defaults = self::getFloodDefaults();
     $escaped_request_type = str_replace('/', '_', $request_type);
     $config_id = 'flood_limit.' . $escaped_request_type . '.' . $value_name;
-    return \Drupal::config('acquia_search.settings')->get($config_id) ?? $defaults[$request_type][$value_name];
-  }
-
-  /**
-   * Return boolean value stating if logging is enabled.
-   *
-   * @return bool
-   *   If logging is enabled or not.
-   */
-  public static function isLoggingEnabled(): bool {
-    return \Drupal::config('acquia_search.settings')->get('flood_logging') ?? TRUE;
-  }
-
-  /**
-   * Return the window for the given request type.
-   *
-   * @param string $request_type
-   *   The incoming request type.
-   */
-  public static function logFloodLimit(string $request_type) {
-    if (self::isLoggingEnabled()) {
-      \Drupal::logger('acquia_search')->warning(
-        'Flood protection has blocked request of type @id.',
-        ['@id' => $request_type]
-      );
-    }
+    return $this->config->get($config_id) ?? $defaults[$request_type][$value_name];
   }
 
   /**
@@ -97,7 +115,7 @@ class Flood {
    * @return bool
    *   If the request type is controlled
    */
-  public static function isControlled(string $request_type): bool {
+  private static function isControlled(string $request_type): bool {
     $defaults = self::getFloodDefaults();
     return isset($defaults[$request_type]);
   }
@@ -110,34 +128,42 @@ class Flood {
    *
    * @return bool
    *   If the request is allowed
-   *
-   * @throws \Exception
    */
-  public static function isAllowed(string $request_type): bool {
-
+  public function isAllowed(string $request_type): bool {
     // Allow all requests from types that aren't controlled.
     if (!self::isControlled($request_type)) {
       return TRUE;
     }
 
+    $limit = $this->getConfigValue($request_type, 'limit');
+    $window = $this->getConfigValue($request_type, 'window');
+
     // Use the Drupal Flood service to check if we can run this request.
-    $is_allowed = \Drupal::flood()->isAllowed(
+    $is_allowed = $this->flood->isAllowed(
       'acquia_search',
-      self::getConfigValue($request_type, 'limit'),
-      self::getConfigValue($request_type, 'window'),
+      $limit,
+      $window,
       $request_type
     );
 
     // If this request should be blocked, log if needed and return.
     if (!$is_allowed) {
-      self::logFloodLimit($request_type);
+      if ($this->config->get('flood_logging') === TRUE) {
+        $this->logger->warning(
+          'Flood protection has blocked request of type @id. See more at <a href="@url">The Acquia Search flood control mechanism has blocked a Solr query due to API usage limits</a>',
+          [
+            '@id' => $request_type,
+            '@url' => self::FLOOD_LIMIT_ARTICLE_URL,
+          ]
+        );
+      }
       return FALSE;
     }
 
     // Log the allowed request into the Flood service.
-    \Drupal::flood()->register(
+    $this->flood->register(
       'acquia_search',
-      self::getConfigValue($request_type, 'window'),
+      $window,
       $request_type
     );
     return TRUE;

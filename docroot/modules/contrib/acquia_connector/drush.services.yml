@@ -1,6 +1,0 @@
-services:
-  acquia_connector.commands:
-    class: Drupal\acquia_connector\Commands\AcquiaConnectorCommands
-    arguments: ['@acquia_connector.site_profile_report', '@module_handler']
-    tags:
-      - { name: drush.command }

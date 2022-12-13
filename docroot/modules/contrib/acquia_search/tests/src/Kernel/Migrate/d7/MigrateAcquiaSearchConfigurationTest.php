@@ -10,22 +10,35 @@ use Drupal\Tests\migrate_drupal\Kernel\d7\MigrateDrupal7TestBase;
  * @group migrate_drupal_7
  */
 class MigrateAcquiaSearchConfigurationTest extends MigrateDrupal7TestBase {
+
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
+    'acquia_connector',
     'acquia_search',
     'search_api_solr',
     'views',
     'search_api',
   ];
 
+  /**
+   * Expected Config.
+   *
+   * @var array[]
+   */
   protected $expectedConfig = [
     'acquia_search.settings' => [
       'api_host' => 'https://api.sr-prod02.acquia.com',
       'read_only' => TRUE,
     ],
   ];
+
+  /**
+   * Expected bundles to index.
+   *
+   * @var \string[][]
+   */
   protected $expectedIndexBundles = [
     'node' => ['page', 'article'],
   ];
@@ -33,11 +46,20 @@ class MigrateAcquiaSearchConfigurationTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
+    // phpcs:ignore
+    // @todo Remove when support for Drupal 9.2 dropped.
+    if (version_compare(\Drupal::VERSION, '9.3', '>=')) {
+      $path = \Drupal::service('extension.path.resolver')->getPath('module', 'acquia_search');
+    }
+    else {
+      // @phpstan-ignore-next-line
+      $path = drupal_get_path('module', 'acquia_search');
+    }
     $this->loadFixture(implode(DIRECTORY_SEPARATOR, [
       DRUPAL_ROOT,
-      \Drupal::service('extension.list.module')->getPath('acquia_search'),
+      $path,
       'tests',
       'fixtures',
       'drupal7.php',
@@ -53,7 +75,7 @@ class MigrateAcquiaSearchConfigurationTest extends MigrateDrupal7TestBase {
   /**
    * Tests that all expected configuration gets migrated.
    */
-  public function testConfigurationMigration() {
+  public function testConfigurationMigration(): void {
     foreach ($this->expectedConfig as $config_id => $values) {
       $actual = \Drupal::config($config_id)->get();
       $this->assertSame($values, $actual);
@@ -63,7 +85,7 @@ class MigrateAcquiaSearchConfigurationTest extends MigrateDrupal7TestBase {
   /**
    * Tests that all search index entity bundles gets migrated.
    */
-  public function testSearchIndex() {
+  public function testSearchIndex(): void {
     foreach ($this->expectedIndexBundles as $entityType => $bundle) {
       $path = 'datasource_settings.entity:' . $entityType . '.bundles.selected';
       $actual = \Drupal::config('search_api.index.acquia_search_index')->get($path);

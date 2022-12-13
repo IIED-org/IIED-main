@@ -6,9 +6,11 @@ use Drupal\acquia_connector\Client\ClientFactory;
 use Drupal\acquia_connector\Event\AcquiaSubscriptionDataEvent;
 use Drupal\acquia_connector\Event\AcquiaSubscriptionSettingsEvent;
 use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
-use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\State\StateInterface;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * Acquia Subscription service.
@@ -51,13 +53,6 @@ class Subscription {
    * @var \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher
    */
   protected $dispatcher;
-
-  /**
-   * Cache.
-   *
-   * @var \Drupal\Core\Cache\CacheBackendInterface
-   */
-  protected $cache;
 
   /**
    * Settings Provider.
@@ -106,8 +101,6 @@ class Subscription {
    *
    * @param \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher $dispatcher
    *   The event dispatcher.
-   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   Cache Backend Service.
    * @param \Drupal\acquia_connector\Client\ClientFactory $client_factory
    *   The acquia connector client factory.
    * @param \Drupal\Core\State\StateInterface $state
@@ -115,9 +108,8 @@ class Subscription {
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory.
    */
-  public function __construct(ContainerAwareEventDispatcher $dispatcher, CacheBackendInterface $cache, ClientFactory $client_factory, StateInterface $state, ConfigFactoryInterface $config_factory) {
+  public function __construct(ContainerAwareEventDispatcher $dispatcher, ClientFactory $client_factory, StateInterface $state, ConfigFactoryInterface $config_factory) {
     $this->dispatcher = $dispatcher;
-    $this->cache = $cache;
     $this->state = $state;
     $this->clientFactory = $client_factory;
     $this->configFactory = $config_factory;
@@ -129,7 +121,16 @@ class Subscription {
    */
   public function populateSettings() {
     $event = new AcquiaSubscriptionSettingsEvent($this->configFactory);
-    $this->dispatcher->dispatch($event, AcquiaConnectorEvents::GET_SETTINGS);
+
+    // @todo Remove after dropping support for Drupal 8.
+    if (version_compare(\Drupal::VERSION, '9.0', '>=')) {
+      $this->dispatcher->dispatch($event, AcquiaConnectorEvents::GET_SETTINGS);
+    }
+    else {
+      // @phpstan-ignore-next-line
+      $this->dispatcher->dispatch(AcquiaConnectorEvents::GET_SETTINGS, $event);
+    }
+
     $this->settings = $event->getSettings();
     $this->settingsProvider = $event->getProvider();
   }
@@ -164,41 +165,92 @@ class Subscription {
     // If Settings do not exist, we have no subscription to fetch.
     if (!$this->hasCredentials()) {
       // Ensure subscription data is scrubbed.
-      $this->cache->delete('acquia_connector.subscription_data');
+      $this->state->delete('acquia_connector.subscription_data');
+      Cache::invalidateTags(['acquia_connector_subscription']);
       return ['active' => FALSE];
     }
     // Used the cached data if refresh is NULL or FALSE.
     if (isset($this->subscriptionData) && $refresh !== TRUE) {
       return $this->subscriptionData;
     }
-    $cache = $this->cache->get('acquia_connector.subscription_data');
-    if (!empty($cache->data) && $refresh !== TRUE) {
-      return $cache->data;
+    $subscriptionData = $this->state->get('acquia_connector.subscription_data', []);
+    if ($subscriptionData !== [] && $refresh !== TRUE) {
+      return $subscriptionData;
     }
-    // If refresh is TRUE or NULL get subscription data from Acquia.
-    $client = $this->clientFactory->getClient($this->settings);
+    // If there is no local subscription data, retrieve it.
+    $client = $this->clientFactory->getCloudApiClient();
+    $subscriptionData += $this->getDefaultSubscriptionData();
     try {
-      $subscriptionData = $client->getSubscription($this->settings->getIdentifier(), $this->settings->getSecretKey(), $body);
+      $application_response = $client->get('/api/applications/' . $this->settings->getApplicationUuid());
+      $application_data = Json::decode((string) $application_response->getBody());
+      $subscription_uuid = $application_data['subscription']['uuid'];
+      $subscription_response = $client->get('/api/subscriptions/' . $subscription_uuid);
+      $subscription_info = Json::decode((string) $subscription_response->getBody());
+
+      $subscriptionData['active'] = $subscription_info['flags']['active'];
+      $subscriptionData['subscription_name'] = $subscription_info['name'];
+      // Expiration Date may have been a string, ensure its set as an array.
+      $subscriptionData['expiration_date'] = [
+        'value' => $subscription_info['expire_at'],
+      ];
     }
-    catch (ConnectorException $e) {
-      return ['active' => FALSE];
+    catch (RequestException $exception) {
     }
-    // Refresh the subscription from Acquia
+
+    // If subscription expiration date passed, set gratis value to TRUE.
+    if (isset($subscriptionData['expiration_date']['value'])) {
+      $subscriptionData['gratis'] = strtotime($subscriptionData['expiration_date']['value']) < strtotime(date("m/d/Y"));
+    }
     // Allow other modules to add metadata to the subscription.
     $event = new AcquiaSubscriptionDataEvent($this->configFactory, $subscriptionData);
-    $this->dispatcher->dispatch($event, AcquiaConnectorEvents::GET_SUBSCRIPTION);
+    // @todo Remove after dropping support for Drupal 8.
+    if (version_compare(\Drupal::VERSION, '9.0', '>=')) {
+      $this->dispatcher->dispatch($event, AcquiaConnectorEvents::GET_SUBSCRIPTION);
+    }
+    else {
+      // @phpstan-ignore-next-line
+      $this->dispatcher->dispatch(AcquiaConnectorEvents::GET_SUBSCRIPTION, $event);
+    }
+    // Get data from subscription event.
     $this->subscriptionData = $event->getData();
-    $this->cache->set('acquia_connector.subscription_data', $this->subscriptionData);
+
+    // Get product data from subscription event.
+    $this->subscriptionData['product'] = $event->getProductData();
+
+    // Save subscription data to state.
+    $this->state->set('acquia_connector.subscription_data', $this->subscriptionData);
+    Cache::invalidateTags(['acquia_connector_subscription']);
 
     return $this->subscriptionData;
+  }
+
+  /**
+   * Build a subscription data object to mimic legacy NSPI responses.
+   *
+   * @return array
+   *   The subscription data.
+   */
+  private function getDefaultSubscriptionData() {
+    if (!$this->hasCredentials()) {
+      return ['active' => FALSE];
+    }
+
+    return [
+      'active' => TRUE,
+      'gratis' => FALSE,
+      'href' => "",
+      'uuid' => $this->settings->getApplicationUuid(),
+      'subscription_name' => "",
+      "expiration_date" => "",
+      "search_service_enabled" => 1,
+    ];
   }
 
   /**
    * Delete any subscription data held in the database.
    */
   public function delete() {
-    $this->cache->set('acquia_connector.subscription_data', ['active' => FALSE]);
-    $this->state->delete('acquia_subscription_data');
+    $this->state->set('acquia_connector.subscription_data', ['active' => FALSE]);
     $this->state->delete('spi.site_name');
     $this->state->delete('spi.site_machine_name');
   }
@@ -207,30 +259,20 @@ class Subscription {
    * Helper function to check if an identifier and key exist.
    */
   public function hasCredentials() {
-    return $this->settings->getIdentifier() && $this->settings->getSecretKey();
-  }
-
-  /**
-   * Function to check if an $cache is initialised.
-   */
-  protected function initialiseCacheBin() {
-    if (empty($this->cache)) {
-      $cache = \Drupal::cache();
-      $this->cache = $cache;
-    }
+    return $this->settings->getIdentifier() && $this->settings->getSecretKey() && $this->settings->getApplicationUuid();
   }
 
   /**
    * Helper function to check if the site has an active subscription.
    */
   public function isActive() {
-    $this->initialiseCacheBin();
     $active = FALSE;
     // Subscription cannot be active if we have no credentials.
-    if (self::hasCredentials()) {
-      if ($cache = $this->cache->get('acquia_connector.subscription_data')) {
-        if (is_array($cache->data) && $cache->expire > time()) {
-          return !empty($cache->data['active']);
+    if ($this->hasCredentials()) {
+      $data = $this->state->get('acquia_connector.subscription_data');
+      if ($data !== NULL) {
+        if (is_array($data)) {
+          return !empty($data['active']);
         }
       }
       // Only retrieve cached subscription at this time.
@@ -240,7 +282,7 @@ class Subscription {
       if (!isset($subscription['timestamp']) || (isset($subscription['timestamp']) && (time() - $subscription['timestamp'] > 60 * 60 * 24))) {
         try {
           $subscription = $this->getSubscription(TRUE, ['no_heartbeat' => 1]);
-          $this->cache->set('acquia_connector.subscription_data', $subscription, time() + (60 * 60));
+          $this->state->set('acquia_connector.subscription_data', $subscription);
         }
         catch (ConnectorException $e) {
         }

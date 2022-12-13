@@ -2,8 +2,8 @@
 
 namespace Drupal\acquia_search\Commands;
 
-use Drupal\acquia_search\Helper\Runtime;
-use Drupal\acquia_search\Helper\Storage;
+use Drupal\acquia_connector\Subscription;
+use Drupal\acquia_search\PreferredCoreService;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drush\Commands\DrushCommands;
@@ -26,18 +26,37 @@ class AcquiaSearchCommands extends DrushCommands {
    *
    * @var \Drupal\Core\Cache\CacheBackendInterface
    */
-  private $cache;
+  protected $cache;
+
+  /**
+   * Preferred Search Core Service.
+   *
+   * @var \Drupal\acquia_search\PreferredCoreService
+   */
+  protected $preferredCoreService;
+
+  /**
+   * Acquia Subscription Service.
+   *
+   * @var \Drupal\acquia_connector\Subscription
+   */
+  protected $subscription;
 
   /**
    * AcquiaSearchCommands constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache backend service.
+   * @param \Drupal\acquia_search\PreferredCoreService $preferredCoreService
+   *   Preferred Core Service.
+   * @param \Drupal\acquia_connector\Subscription $subscription
+   *   Acquia Subscription Service.
    */
-  public function __construct(CacheBackendInterface $cache) {
-    parent::__construct();
-
+  public function __construct(CacheBackendInterface $cache, PreferredCoreService $preferredCoreService, Subscription $subscription) {
     $this->cache = $cache;
+    $this->preferredCoreService = $preferredCoreService;
+    $this->subscription = $subscription;
+    parent::__construct();
   }
 
   /**
@@ -66,7 +85,7 @@ class AcquiaSearchCommands extends DrushCommands {
    */
   public function searchSolrCoresList(array $options = ['format' => NULL]) {
 
-    if (!$available_cores = Runtime::getAcquiaSearchApiClient(Storage::getUuid())->getSearchIndexes(Storage::getIdentifier())) {
+    if (!$available_cores = $this->preferredCoreService->getAvailableCores()) {
       throw new \Exception('No Acquia search cores available');
     }
 
@@ -127,7 +146,7 @@ class AcquiaSearchCommands extends DrushCommands {
     $id = $options['id'];
 
     if (empty($id)) {
-      $id = Storage::getIdentifier();
+      $id = $this->subscription->getSettings()->getIdentifier();
       if (empty($id)) {
         throw new \Exception('No Acquia subscription identifier specified in command line or by configuration.');
       }
@@ -176,7 +195,7 @@ class AcquiaSearchCommands extends DrushCommands {
    */
   public function searchSolrCoresPossible(array $options = ['format' => NULL]) {
 
-    if (!$possible_cores = Runtime::getPreferredSearchCoreService()->getListOfPossibleCores()) {
+    if (!$possible_cores = $this->preferredCoreService->getListOfPossibleCores()) {
       throw new \Exception('No possible cores');
     }
 
@@ -217,7 +236,7 @@ class AcquiaSearchCommands extends DrushCommands {
    */
   public function searchSolrCoresPreferred() {
 
-    if (!$preferred_core = Runtime::getPreferredSearchCoreService()->getPreferredCore()) {
+    if (!$preferred_core = $this->preferredCoreService->getPreferredCore()) {
       throw new \Exception('No preferred search core available');
     }
 

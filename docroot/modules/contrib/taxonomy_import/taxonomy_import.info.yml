@@ -5,7 +5,7 @@ type: module
 core_version_requirement: ^8 || ^9 || ^10
 configure: taxonomy_import.config
 
-# Information added by Drupal.org packaging script on 2022-10-08
-version: '2.0.8'
+# Information added by Drupal.org packaging script on 2022-10-16
+version: '2.0.11'
 project: 'taxonomy_import'
-datestamp: 1665212503
+datestamp: 1665938899

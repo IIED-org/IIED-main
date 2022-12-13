@@ -191,6 +191,8 @@ class TypeHintHelper
 				'empty',
 				'positive-int',
 				'negative-int',
+				'min',
+				'max',
 			];
 		}
 
@@ -251,7 +253,7 @@ class TypeHintHelper
 			array_merge([T_WHITESPACE], TokenHelper::getTypeHintTokenCodes()),
 			$endPointer - 1
 		);
-		return TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $previousPointer + 1);
+		return TokenHelper::findNextNonWhitespace($phpcsFile, $previousPointer + 1);
 	}
 
 	private static function isTemplate(File $phpcsFile, int $docCommentOpenPointer, string $typeHint): bool

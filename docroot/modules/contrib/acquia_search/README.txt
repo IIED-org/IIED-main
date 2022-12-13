@@ -1,4 +1,4 @@
-Acquia Search Solr module
+Acquia Search module
 ================================================================================
 
 Provides integration between your Drupal site and Acquia's hosted search
@@ -6,11 +6,11 @@ service, Acquia Search [1]. Requires Search API Solr module.
 
 [1] https://docs.acquia.com/acquia-search/
 
-Notes on Acquia Search Solr data protection and core auto-switching
+Notes on Acquia Search data protection and core auto-switching
 -------------------------------------------------------------------
 
-Acquia Search Solr module attempts to auto-detect your environment and
-automatically connect to the best-fit Acquia Search Solr core available. This is
+Acquia Search module attempts to auto-detect your environment and
+automatically connect to the best-fit Acquia Search core available. This is
 done to attempt to protect your data in your production Solr instance.
 
 Depending on the Solr cores already provisioned on your Acquia Subscription, the
@@ -31,10 +31,11 @@ however, poses risks to your data that you should be aware of.
 Hidden settings
 ----------------
 - acquia_search.settings.read_only
-    Boolean value; if TRUE then there is enforcing of read-only mode.
+    Boolean value; if FALSE then search will allow writes to the selected core.
+    By default, read_only is TRUE to protect solr from local content changes.
 
     Example settings.php override:
-    # $config['acquia_search.settings']['read_only'] = TRUE;
+    # $settings['acquia_search']['read_only'] = FALSE;
 
 - acquia_search.settings.override_search_core
     String that contains the ID of an Acquia Search core. When provided (and if
@@ -46,7 +47,7 @@ Hidden settings
     Here's an example for settings.php:
 
     # Override Acquia Search Solr search core.
-    # $config['acquia_search.settings']['override_search_core'] =
+    # $settings['acquia_search']['override_search_core'] =
       'ABCD-12345.prod.mysite';
 
 - acquia_search.settings.extract_query_handler_option
@@ -55,7 +56,7 @@ Hidden settings
     See SearchApiSolrSearchApiSolrAcquiaConnector::getExtractQuery() for details.
 
     Here's an example for settings.php:
+    Note, unlike credentials, this option is stored in config and can be overridden:
 
     # Override Acquia Search Solr extract query handler option..
-    # $config['acquia_search.settings']['extract_query_handler_option'] =
-    # 'some/value';
+    # $config['acquia_search']['extract_query_handler_option'] = 'some/value';

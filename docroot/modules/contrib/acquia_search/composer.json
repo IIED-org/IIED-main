@@ -4,29 +4,30 @@
     "description": "Provides integration between your Drupal site and Acquia's hosted search service.",
     "license": "GPL-2.0-or-later",
     "require": {
-        "drupal/search_api_solr": "^4.1.12",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-zip": "*",
+        "acquia/http-hmac-php": ">=5.0",
+        "drupal/acquia_connector": "^4.0",
+        "drupal/search_api_solr": "^4.2",
+        "guzzlehttp/guzzle": "^6.5.2 || ^7.0",
         "http-interop/http-factory-guzzle": "^1.0",
-        "guzzlehttp/guzzle": "^6.5 || ^7.2",
-        "php-http/guzzle6-adapter": "^2.0 || ^3.0"
+        "psr/event-dispatcher": "^1.0"
     },
     "conflict": {
-        "drupal/acquia_connector": "<3",
         "drupal/search_api_solr_multilingual": "<3"
     },
     "require-dev": {
-        "drush/drush": "^10 || ^11"
+        "drush/drush": ">=10"
     },
     "extra": {
         "branch-alias": {
-            "dev-3.x": "3.x-dev"
+            "dev-3.1.x": "3.1.x-dev"
         },
         "drush": {
             "services": {
-                "drush.services.yml": "^10 || ^11"
+                "drush.services.yml": "^10"
             }
         }
-    },
-    "suggest": {
-        "php-http/guzzle6-adapter":"Required to use Acquia Connector with Guzzle 6 / Drupal 9.3 and lower"
     }
 }

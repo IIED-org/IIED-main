@@ -19,7 +19,7 @@ services:
         PHP_IDE_CONFIG: "serverName=localhost"
       volumes:
         - ../iied-d7/docroot/:/app/d7-files
-    build_as_root:                                                                                                                                                                            
+    build_as_root:
       - apt update && apt install libgmp-dev -y && docker-php-ext-install gmp
   d7db:
     type: mysql
@@ -42,6 +42,12 @@ services:
      ports:
       - 3000:3000
       - 3001:3001
+  solr:
+    type: solr:7
+    portforward: false
+    core: lando
+    config:
+      dir: lando/solr
 proxy:
   adminer:
     - adminer.iied-main.lndo.site
@@ -70,4 +76,4 @@ tooling:
     service: appserver
     description: Update Imagick policy for PDF
     cmd: sed -i 's/<policy domain="coder" rights="none" pattern="PDF" \/>/<policy domain="coder" rights="read|write" pattern="PDF" \/>/g' /etc/ImageMagick-6/policy.xml
-    user: root 
+    user: root

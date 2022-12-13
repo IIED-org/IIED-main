@@ -45,7 +45,7 @@ function hook_acquia_search_get_list_of_possible_cores_alter(array &$possible_co
  *   The read-only flag. TRUE if a read-only mode enforced on a search core.
  */
 function hook_acquia_search_should_enforce_read_only_alter(&$read_only) {
-  if (!$_ENV['AH_SITE_ENVIRONMENT']) {
+  if (getenv('AH_SITE_ENVIRONMENT')) {
     $read_only = TRUE;
   }
 }

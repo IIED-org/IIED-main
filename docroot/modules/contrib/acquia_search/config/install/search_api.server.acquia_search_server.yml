@@ -15,17 +15,17 @@ backend_config:
   connector: solr_acquia_connector
   connector_config:
     scheme: https
-    timeout: '10'
-    index_timeout: '10'
-    optimize_timeout: '10'
-    finalize_timeout: '30'
-    commit_within: '1000'
+    timeout: 10
+    index_timeout: 10
+    optimize_timeout: 10
+    finalize_timeout: 30
+    commit_within: 1000
     solr_version: ''
     http_method: AUTO
-    jmx: 0
+    jmx: false
+    skip_schema_check: true
   retrieve_data: true
   highlight_data: true
-  skip_schema_check: true
   server_prefix: ''
   domain: generic
   site_hash: true

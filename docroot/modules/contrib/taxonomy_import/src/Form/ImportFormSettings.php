@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\taxonomy_import\Form\ImportForm.
- */
 
 namespace Drupal\taxonomy_import\Form;
 
@@ -55,14 +51,14 @@ class ImportFormSettings extends ConfigFormBase {
       '#title' => $this->t('Allowed file extensions'),
       '#required' => TRUE,
       '#default_value' => $config->get('file_extensions') ?? static::DEFAULT_FILE_EXTENSION,
-      '#description' => t('Extensions of files.'),
+      '#description' => $this->t('Extensions of files.'),
     ];
     $form['file_max_size'] = [
       '#type' => 'number',
       '#title' => $this->t('Max size of file'),
       '#required' => TRUE,
       '#default_value' => $config->get('file_max_size') ?? static::DEFAULT_FILE_SIZE,
-      '#description' => t('Max size of file in bytes'),
+      '#description' => $this->t('Max size of file in bytes'),
     ];
 
     return parent::buildForm($form, $form_state);
