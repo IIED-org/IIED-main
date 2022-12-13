@@ -74,7 +74,7 @@ class DefaultCore implements EventSubscriberInterface {
    * @see \Drupal\acquia_connector\Settings
    */
   public function onGetPossibleCores(AcquiaPossibleCoresEvent $event) {
-    // Return if the settings provider isn't acquia_cloud.
+    // Return if the settings provider is acquia_cloud.
     if ($this->subscription->getProvider() === 'acquia_cloud') {
       return;
     }

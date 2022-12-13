@@ -1,0 +1,25 @@
+
+ARG BASE_IMAGE=devops-orca-container:latest
+
+ARG REPO_LOCATION
+
+ARG ORCA_VERSION=^3
+
+FROM ${REPO_LOCATION}${BASE_IMAGE}
+
+ENV CI=true
+ENV CHROMEDRIVER_VERSION 93.0.4577.63
+ENV CHROMEDRIVER_DIR /chromedriver
+ENV DEBIAN_FRONTEND=noninteractive
+
+ENV CI_WORKSPACE=/acquia/acquia_search
+ENV ORCA_SUT_NAME=drupal/acquia_search
+ENV ORCA_SUT_BRANCH=3.1.x
+
+ENV ORCA_PACKAGES_CONFIG_ALTER=../acquia_search/tests/packages_alter.yml
+
+RUN echo 'memory_limit = 2048M' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini
+
+WORKDIR $CI_WORKSPACE
+
+COPY . ./

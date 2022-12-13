@@ -11,8 +11,8 @@ use Drupal\Tests\acquia_search\Unit\AcquiaSearchTestCase;
 use Solarium\QueryType\Update\Query\Document;
 
 /**
- * @coversDefaultClass \Drupal\acquia_search\EventSubscriber\PostCreateIndexDocument\RemoveBoost
  * @group acquia_search
+ * @coversDefaultClass \Drupal\acquia_search\EventSubscriber\PostCreateIndexDocument\RemoveBoost
  */
 final class RemoveBoostTest extends AcquiaSearchTestCase {
 

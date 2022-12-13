@@ -22,6 +22,9 @@ use Drupal\search_api\Entity\Server;
 use Drupal\search_api\ServerInterface;
 use Drupal\search_api_solr\SolrBackendInterface;
 
+/**
+ * @group acquia_search
+ */
 final class HookRequirementsTest extends AcquiaSearchTestCase {
 
   /**

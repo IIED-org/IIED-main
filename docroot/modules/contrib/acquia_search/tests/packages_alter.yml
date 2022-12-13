@@ -1,6 +1,6 @@
 ---
 drupal/acquia_connector:
-  version: ^4.0.0-beta1
+  version: ^4.0.1
   version_dev: 4.x-dev
 
 drupal/acquia_search:

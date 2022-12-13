@@ -66,3 +66,10 @@ function acquia_search_post_update_move_search_modules() {
 function acquia_search_post_update_service_definition_updates() {
   // Empty post-update hook.
 }
+
+/**
+ * Service definition updates, empty post_update for container rebuild.
+ */
+function acquia_search_post_update_local_override_definition_update() {
+  // Empty post-update hook.
+}
