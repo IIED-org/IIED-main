@@ -10,6 +10,7 @@ use Drupal\acquia_search\EventSubscriber\PossibleCores\LocalOverride;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Tests\acquia_search\Unit\AcquiaSearchTestCase;
 
@@ -28,7 +29,8 @@ final class LocalOverrideTest extends AcquiaSearchTestCase {
     $sut = new LocalOverride(
       $subscription,
       $this->createConfigFactoryMock('', ''),
-      $this->createMock(MessengerInterface::class)
+      $this->createMock(MessengerInterface::class),
+      $this->createMock(RouteMatchInterface::class)
     );
     $sut->onGetPossibleCores(new AcquiaPossibleCoresEvent([]));
   }
@@ -50,20 +52,28 @@ final class LocalOverrideTest extends AcquiaSearchTestCase {
       ],
     ]);
 
+    $route_match = $this->createMock(RouteMatchInterface::class);
+
     $messenger = $this->createMock(MessengerInterface::class);
     if ($config_override_core !== '' || $config_solr_override_core !== '') {
       $messenger->expects($this->once())
         ->method('addWarning');
+      $route_match->expects($this->once())
+        ->method('getRouteName')
+        ->willReturn('search_api_route_name');
     }
     else {
       $messenger->expects($this->never())
         ->method('addWarning');
+      $route_match->expects($this->never())
+        ->method('getRouteName');
     }
 
     $sut = new LocalOverride(
       $subscription,
       $this->createConfigFactoryMock($config_override_core, $config_solr_override_core),
-      $messenger
+      $messenger,
+      $route_match
     );
     $event = new AcquiaPossibleCoresEvent([]);
     $sut->onGetPossibleCores($event);
@@ -112,7 +122,8 @@ final class LocalOverrideTest extends AcquiaSearchTestCase {
     $sut = new LocalOverride(
       $subscription,
       $this->createConfigFactoryMock('', ''),
-      $this->createMock(MessengerInterface::class)
+      $this->createMock(MessengerInterface::class),
+      $this->createMock(RouteMatchInterface::class)
     );
     $event = new AcquiaPossibleCoresEvent([]);
     $sut->onGetPossibleCores($event);

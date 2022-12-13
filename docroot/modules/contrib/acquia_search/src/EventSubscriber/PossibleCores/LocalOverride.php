@@ -7,6 +7,7 @@ use Drupal\acquia_search\AcquiaSearchEvents;
 use Drupal\acquia_search\Event\AcquiaPossibleCoresEvent;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Site\Settings as CoreSettings;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -51,6 +52,13 @@ class LocalOverride implements EventSubscriberInterface {
   protected $acquiaSearchSolrConfig;
 
   /**
+   * The route match.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $routeMatch;
+
+  /**
    * Get Possible Cores from local settings file.
    *
    * @param \Drupal\acquia_connector\Subscription $subscription
@@ -59,13 +67,16 @@ class LocalOverride implements EventSubscriberInterface {
    *   Config Factory.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   Drupal Messenger Service.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The route match.
    */
-  public function __construct(Subscription $subscription, ConfigFactoryInterface $config_factory, MessengerInterface $messenger) {
+  public function __construct(Subscription $subscription, ConfigFactoryInterface $config_factory, MessengerInterface $messenger, RouteMatchInterface $route_match) {
     $this->deprecated = $config_factory->get('acquia_search.settings')->get('override_search_core') || $config_factory->get('acquia_search_solr.settings')->get('override_search_core');
     $this->acquiaSearchConfig = $config_factory->get('acquia_search.settings')->get('override_search_core') ?? '';
     $this->acquiaSearchSolrConfig = $config_factory->get('acquia_search_solr.settings')->get('override_search_core') ?? '';
     $this->messenger = $messenger;
     $this->subscription = $subscription;
+    $this->routeMatch = $route_match;
   }
 
   /**
@@ -93,7 +104,7 @@ class LocalOverride implements EventSubscriberInterface {
     }
 
     // Show deprecated config message on Search config pages.
-    if (preg_match('/admin\/config\/search\/search-api/', \Drupal::request()->getUri()) && $this->deprecated) {
+    if ($this->deprecated && str_contains($this->routeMatch->getRouteName() ?? '', 'search_api')) {
       $this->messenger->addWarning("Acquia Search detected deprecated config settings. Please review README.txt and update 'override_search_core' setting to override.");
     }
 

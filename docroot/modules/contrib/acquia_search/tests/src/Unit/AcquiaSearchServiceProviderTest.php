@@ -10,6 +10,7 @@ use Drupal\Tests\UnitTestCase;
 use Symfony\Component\DependencyInjection\Definition;
 
 /**
+ * @group acquia_search
  * @coversDefaultClass \Drupal\acquia_search\AcquiaSearchServiceProvider
  */
 final class AcquiaSearchServiceProviderTest extends UnitTestCase {

@@ -46,6 +46,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
+ * @group acquia_search
  * @coversDefaultClass \Drupal\acquia_search\Plugin\SolrConnector\SearchApiSolrAcquiaConnector
  */
 final class SearchApiSolrAcquiaConnectorTest extends UnitTestCase {
@@ -53,6 +54,23 @@ final class SearchApiSolrAcquiaConnectorTest extends UnitTestCase {
   public function testCoreLink(): void {
     $container = $this->createContainerMock();
     $sut = $this->createInstance($container);
+    // '<a href="https://foobarbaz.host:443/solr/FooBarBaz/">https://foobarbaz.host:443/solr/FooBarBaz/</a>'
+    self::assertEquals(
+      [
+        '#type' => 'link',
+        '#url' => Url::fromUri('https://solr.acquia.com:443/solr/abc123.prod/'),
+        '#title' => 'https://solr.acquia.com:443/solr/abc123.prod/',
+      ],
+      $sut->getCoreLink()->toRenderable()
+    );
+  }
+
+  public function testCoreLinkWithExistingConfiguration(): void {
+    $container = $this->createContainerMock();
+    $sut = $this->createInstance($container, [
+      'port' => '8983',
+      'scheme' => 'http',
+    ]);
     // '<a href="https://foobarbaz.host:443/solr/FooBarBaz/">https://foobarbaz.host:443/solr/FooBarBaz/</a>'
     self::assertEquals(
       [

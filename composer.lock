@@ -1690,17 +1690,17 @@
         },
         {
             "name": "drupal/acquia_search",
-            "version": "3.1.0-rc1",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/acquia_search.git",
-                "reference": "3.1.0-rc1"
+                "reference": "3.1.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acquia_search-3.1.0-rc1.zip",
-                "reference": "3.1.0-rc1",
-                "shasum": "6c7ebb3d09ab74bb8a64df224339b361b2cac882"
+                "url": "https://ftp.drupal.org/files/projects/acquia_search-3.1.1.zip",
+                "reference": "3.1.1",
+                "shasum": "a235590691f3469d65139f735ace63caf0ce9645"
             },
             "require": {
                 "acquia/http-hmac-php": ">=5.0",
@@ -1723,11 +1723,11 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.1.0-rc1",
-                    "datestamp": "1667976753",
+                    "version": "3.1.1",
+                    "datestamp": "1670538710",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "RC releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "branch-alias": {

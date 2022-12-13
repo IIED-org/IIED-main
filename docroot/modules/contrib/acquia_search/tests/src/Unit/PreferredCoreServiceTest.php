@@ -26,6 +26,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
+ * @group acquia_search
  * @coversDefaultClass \Drupal\acquia_search\PreferredCoreService
  */
 final class PreferredCoreServiceTest extends AcquiaSearchTestCase {

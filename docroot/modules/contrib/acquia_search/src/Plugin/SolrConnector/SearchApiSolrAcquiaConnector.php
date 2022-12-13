@@ -124,7 +124,8 @@ class SearchApiSolrAcquiaConnector extends SolrConnectorPluginBase implements
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     // Our schema (8.1.7) is newer than Solr's version, 4.1.1.
     $configuration['skip_schema_check'] = TRUE;
-
+    // Ensure platform config is always used.
+    $configuration = array_merge($configuration, self::getPlatformConfig());
     $instance = new static(
       $configuration,
       $plugin_id,
@@ -511,7 +512,7 @@ class SearchApiSolrAcquiaConnector extends SolrConnectorPluginBase implements
 
     // If connection settings are empty, direct users to Acquia Connector.
     if (!$this->subscription->hasCredentials()) {
-      $uri = Url::fromRoute('acquia_connector.setup');
+      $uri = Url::fromRoute('acquia_connector.setup_oauth');
       $link = Link::fromTextAndUrl($this->t('Setup Acquia Connector'), $uri);
       $this->messenger->addWarning($this->t('Cannot connect to Search due to missing credentials. @acquia_connector.', ['@acquia_connector' => $link->toString()]));
     }
