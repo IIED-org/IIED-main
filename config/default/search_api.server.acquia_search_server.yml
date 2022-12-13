@@ -8,15 +8,15 @@ dependencies:
     - search_api_solr.solr_cache.cache_filter_default_7_0_0
     - search_api_solr.solr_cache.cache_persegfilter_default_7_0_0
     - search_api_solr.solr_cache.cache_queryresult_default_7_0_0
-    - search_api_solr.solr_field_type.text_ar_6_0_0
-    - search_api_solr.solr_field_type.text_edge_und_6_0_0
+    - search_api_solr.solr_field_type.text_ar_7_0_0
+    - search_api_solr.solr_field_type.text_edge_und_7_0_0
     - search_api_solr.solr_field_type.text_edgestring_und_6_0_0
-    - search_api_solr.solr_field_type.text_en_6_0_0
-    - search_api_solr.solr_field_type.text_es_6_0_0
-    - search_api_solr.solr_field_type.text_fr_6_0_0
+    - search_api_solr.solr_field_type.text_en_7_0_0
+    - search_api_solr.solr_field_type.text_es_7_0_0
+    - search_api_solr.solr_field_type.text_fr_7_0_0
     - search_api_solr.solr_field_type.text_hr_7_0_0
     - search_api_solr.solr_field_type.text_id_7_0_0
-    - search_api_solr.solr_field_type.text_ngram_und_6_0_0
+    - search_api_solr.solr_field_type.text_ngram_und_7_0_0
     - search_api_solr.solr_field_type.text_ngramstring_und_6_0_0
     - search_api_solr.solr_field_type.text_phonetic_en_7_0_0
     - search_api_solr.solr_field_type.text_phonetic_es_7_0_0
@@ -27,9 +27,9 @@ dependencies:
     - search_api_solr.solr_field_type.text_pl_7_0_0
     - search_api_solr.solr_field_type.text_pt-br_7_0_0
     - search_api_solr.solr_field_type.text_pt-pt_7_0_0
-    - search_api_solr.solr_field_type.text_ru_6_0_0
+    - search_api_solr.solr_field_type.text_ru_7_0_0
     - search_api_solr.solr_field_type.text_string_und_6_0_0
-    - search_api_solr.solr_field_type.text_und_6_0_0
+    - search_api_solr.solr_field_type.text_und_7_0_0
     - search_api_solr.solr_field_type.text_zh-hans_7_0_0
     - search_api_solr.solr_field_type.text_zh-hant_7_0_0
     - search_api_solr.solr_request_dispatcher.request_dispatcher_httpcachingnever_default_7_0_0
@@ -60,14 +60,14 @@ backend_config:
   connector_config:
     identifier: AGHX-142716
     api_key: 6b524e42da671f7a44a16f19ffa00c38
-    uuid: ''
+    uuid: a70da4cc-a976-4f36-999d-94e46d72df37
     api_host: 'https://api.sr-prod02.acquia.com'
     skip_schema_check: true
     scheme: http
-    host: s-1w1m0bhwu07-eu-west-1.sr-prod02.acquia.com
+    host: s7020-eu-west-1.sr-prod02.acquia.com
     port: 8983
-    path: /solr/AGHX-142716.dev.irforum
-    core: AGHX-142716.dev.irforum
+    path: /solr/AGHX-142716.prod.irforum
+    core: AGHX-142716.prod.irforum
     timeout: 5
     index_timeout: 5
     optimize_timeout: 10
