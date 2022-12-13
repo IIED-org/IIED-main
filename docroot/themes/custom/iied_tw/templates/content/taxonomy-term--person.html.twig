@@ -126,7 +126,6 @@
 
           {{ content.field_video }}
 
-          {{ content.field_paragraphs }}
       </div>
 
 
@@ -134,7 +133,7 @@
 
       {% set view = drupal_view_result('person_content', 'block_1')|length %}
       {% if view > 0 %}
-        <div class="container my-10">
+        <div class="container my-12">
         <h2 class="mb-4">Projects</h2>
         {{ drupal_view('person_content', 'block_1') }}
         </div>
@@ -143,7 +142,7 @@
 
       {% set view = drupal_view_result('person_content', 'block_2')|length %}
       {% if view > 0 %}
-        <div class="container my-10">
+        <div class="container my-12">
         <h2 class="mb-4">Blogs</h2>
         {{ drupal_view('person_content', 'block_2') }}
         </div>
@@ -151,11 +150,17 @@
 
       {% set view = drupal_view_result('term_publications', 'block_1')|length %}
       {% if view > 0 %}
-        <div class="container my-10">
+        <div class="container my-12">
         <h2 class="mb-4">Publications</h2>
         {{ drupal_view('term_publications', 'block_1') }}
         </div>
       {% endif %}
+
+    <div class="container mx-auto lg:px-8 xl:grid xl:gap-x-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12">
+      <div class="prose md:prose-lg xl:col-span-7 2xl:col-span-6">
+          {{ content.field_paragraphs }}
+      </div>
+    </div>
 
   </main>
 </div>

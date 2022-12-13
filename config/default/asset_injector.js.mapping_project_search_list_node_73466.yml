@@ -1,0 +1,48 @@
+uuid: d70fe406-98e4-47d3-ae5a-bb18d114f280
+langcode: en
+status: true
+dependencies:
+  module:
+    - context
+    - system
+id: mapping_project_search_list_node_73466
+label: 'Mapping project search list node/73466'
+code: |-
+  <script>
+        function slFunction() {
+          var input, filter, ul, li, a, i, txtValue;
+          input = document.getElementById("slInput");
+          filter = input.value.toUpperCase();
+          ul = document.getElementById("slUL");
+          li = ul.getElementsByTagName("li");
+          for (i = 0; i < li.length; i++) {
+            a = li[i].getElementsByTagName("a")[0];
+            txtValue = a.textContent || a.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+              li[i].style.display = "";
+            } else {
+              li[i].style.display = "none";
+            }
+          }
+        }
+  </script>
+noscript: ''
+noscriptRegion: {  }
+jquery: false
+header: false
+preprocess: true
+conditions:
+  context_all:
+    id: context_all
+    negate: null
+    values: ''
+  context:
+    id: context
+    negate: null
+    values: ''
+  request_path:
+    id: request_path
+    negate: false
+    pages: /node/73466
+contexts: {  }
+conditions_require_all: true
