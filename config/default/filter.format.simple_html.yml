@@ -4,7 +4,7 @@ status: true
 dependencies: {  }
 name: 'Simple HTML'
 format: simple_html
-weight: -7
+weight: -8
 filters:
   filter_autop:
     id: filter_autop
