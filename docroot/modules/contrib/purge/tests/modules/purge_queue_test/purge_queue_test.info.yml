@@ -1,0 +1,11 @@
+name: 'Purge tests support (queues)'
+type: module
+description: "Provides queues for testing."
+package: Testing
+dependencies:
+  - purge:purge
+
+# Information added by Drupal.org packaging script on 2022-09-14
+version: '8.x-3.4'
+project: 'purge'
+datestamp: 1663188468

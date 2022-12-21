@@ -1,0 +1,85 @@
+<?php
+
+/**
+ * @file
+ * Purge files that have changed in the system (uri / size).
+ */
+
+use Drupal\file\FileInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function purge_file_file_insert(FileInterface $file) {
+  purge_file_purge($file);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function purge_file_file_update(FileInterface $file) {
+  if ($file->original instanceof FileInterface
+    && ($file->getFileUri() != $file->original->getFileUri() || $file->getSize() != $file->original->getSize())) {
+    purge_file_purge($file);
+    if ($file->original->createFileUrl(FALSE) != $file->createFileUrl(FALSE)) {
+      purge_file_purge($file->original);
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function purge_file_file_delete(FileInterface $file) {
+  purge_file_purge($file);
+}
+
+/**
+ * Purge a file using the late runtime processor.
+ */
+function purge_file_purge(FileInterface $file) {
+  /** @var \Drupal\purge\Plugin\Purge\Invalidation\InvalidationsServiceInterface $invalidator */
+  $purge_file_config = \Drupal::config('purge_file.settings');
+  $processor = $purge_file_config->get('processor');
+  if (!empty($processor)) {
+    try {
+      $invalidator_factory = \Drupal::service('purge.invalidation.factory');
+      $purgeProcessors = \Drupal::service('purge.processors');
+      $purgePurgers = \Drupal::service('purge.purgers');
+
+      $base_urls = $purge_file_config->get('base_urls');
+      $urls = [];
+      if (!empty($base_urls)) {
+        $base_urls = explode(',', $base_urls);
+        foreach ($base_urls as $base_url) {
+          $urls[] = $base_url . $file->createFileUrl();
+        }
+      }
+      else {
+        $urls[] = $file->createFileUrl(FALSE);
+      }
+
+      $invalidations = [];
+      if ($purge_file_config->get('debug')) {
+        \Drupal::logger('purge_file')->info(sprintf('Purging file with the following URL(s): %s', implode(',', $urls)));
+      }
+      foreach ($urls as $url) {
+        $invalidations[] = $invalidator_factory->get('url', $url);
+      }
+
+      $processor = $purgeProcessors->get($processor);
+      $purgePurgers->invalidate($processor, $invalidations);
+    }
+    catch (Exception $exception) {
+      \Drupal::logger('purge_file')
+        ->error(sprintf(
+            '%s exception during file invalidation. File id: %d . File url: %s. Error: %s',
+            get_class($exception),
+            $file->id(),
+            $file->getFileUri(),
+            $exception->getMessage(),
+          )
+        );
+    }
+  }
+}

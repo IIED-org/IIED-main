@@ -1,0 +1,19 @@
+services:
+  acquia_purge.platforminfo:
+    class: Drupal\acquia_purge\AcquiaCloud\PlatformInfo
+    arguments: ['%site.path%', '@settings', '@state']
+    public: true
+  acquia_purge.tagsheaders.cacheable_response_subscriber:
+    class: Drupal\acquia_purge\EventSubscriber\CacheableResponseSubscriber
+    arguments: ['@purge.tagsheaders']
+    public: true
+    tags:
+      - { name: event_subscriber }
+  http_client_middleware.acquia_purge_balancer_middleware:
+    class: Drupal\acquia_purge\Http\AcquiaCloudBalancerMiddleware
+    tags:
+      - { name: http_client_middleware }
+  http_client_middleware.acquia_purge_debugger_middleware:
+    class: Drupal\acquia_purge\Http\DebuggerMiddleware
+    tags:
+      - { name: http_client_middleware }

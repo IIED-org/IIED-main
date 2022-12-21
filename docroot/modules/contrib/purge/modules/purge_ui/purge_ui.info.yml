@@ -1,0 +1,13 @@
+name: 'Purge UI'
+type: module
+description: 'Administrative interface for Purge.'
+package: Purge
+configure: purge_ui.dashboard
+dependencies:
+  - purge:purge
+core_version_requirement: '^9.2 || ^10'
+
+# Information added by Drupal.org packaging script on 2022-09-14
+version: '8.x-3.4'
+project: 'purge'
+datestamp: 1663188468

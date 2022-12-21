@@ -1,0 +1,13 @@
+name: Purge file
+type: module
+description: Purge files from external caches
+package: Purge
+core_version_requirement: ^8 || ^9
+dependencies:
+  - purge:purge
+configure: purge_file.settings
+
+# Information added by Drupal.org packaging script on 2022-04-07
+version: '1.0.0'
+project: 'purge_file'
+datestamp: 1649326475

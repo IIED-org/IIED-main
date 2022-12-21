@@ -1,0 +1,7 @@
+purge_file.settings:
+  path: '/admin/config/development/performance/purge-file'
+  defaults:
+    _title: 'Purge file'
+    _form: 'Drupal\purge_file\Form\SettingsForm'
+  requirements:
+    _permission: 'administer site configuration'
