@@ -18,6 +18,8 @@ dependencies:
     - node.type.project
     - node.type.publication
     - taxonomy.vocabulary.organisation
+    - user.role.administrator
+    - user.role.manager
   content:
     - 'taxonomy_term:organisation:0028f2b9-61ba-439a-b056-f2f221d45de6'
     - 'taxonomy_term:organisation:03b93b74-d2ab-470d-a1af-47f3a6d82462'
@@ -717,9 +719,11 @@ display:
                   collapsible: false
                   is_secondary: false
       access:
-        type: perm
+        type: role
         options:
-          perm: 'access content'
+          role:
+            manager: manager
+            administrator: administrator
       cache:
         type: tag
         options: {  }
@@ -858,7 +862,7 @@ display:
         - 'languages:language_interface'
         - url.query_args
         - 'user.node_grants:view'
-        - user.permissions
+        - user.roles
       tags:
         - 'config:field.storage.node.field_publisher'
   page_1:
@@ -1607,7 +1611,7 @@ display:
         - url.query_args
         - user
         - 'user.node_grants:view'
-        - user.permissions
+        - user.roles
       tags:
         - 'config:field.storage.node.field_author_s_'
         - 'config:field.storage.node.field_date_published'
@@ -2175,7 +2179,7 @@ display:
         - url
         - url.query_args
         - 'user.node_grants:view'
-        - user.permissions
+        - user.roles
       tags:
         - 'config:field.storage.node.field_dates'
         - 'config:field.storage.node.field_funded_by'
@@ -2683,7 +2687,7 @@ display:
         - 'languages:language_interface'
         - url.query_args
         - 'user.node_grants:view'
-        - user.permissions
+        - user.roles
       tags:
         - 'config:field.storage.node.field_author_s_'
         - 'config:field.storage.node.field_project'
@@ -3989,7 +3993,7 @@ display:
         - url.query_args
         - user
         - 'user.node_grants:view'
-        - user.permissions
+        - user.roles
       tags:
         - 'config:field.storage.node.field_author_s_'
         - 'config:field.storage.node.field_date_published'

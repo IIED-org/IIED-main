@@ -172,6 +172,7 @@ module:
   views_data_export: 0
   views_field_view: 0
   views_infinite_scroll: 0
+  views_json_source: 0
   views_layout: 0
   viewsreference: 0
   ds: 1

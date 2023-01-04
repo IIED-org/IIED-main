@@ -1,0 +1,8 @@
+display:
+  example_3:
+    display_options:
+      fields:
+        value:
+          label: Mã
+        value_1:
+          label: 'Tác giả'
