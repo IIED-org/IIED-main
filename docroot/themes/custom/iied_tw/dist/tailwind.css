@@ -2682,7 +2682,9 @@ cite {
   bottom: 0;
 }
 
-:not(.glb-form-checkboxes):not(td):not(.media-library-item__click-to-select-checkbox):not(.field-content)
+:not(.glb-form-checkboxes):not(td):not(
+      .media-library-item__click-to-select-checkbox
+    ):not(.field-content)
     > .glb-form-type--checkbox
     input {
   opacity: 1 !important;
@@ -2823,6 +2825,17 @@ cite {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
+}
+
+.tracker-select select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url(/themes/custom/iied_tw/templates/layout/icons/chevron-down.svg);
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
 }
 
 .visible{
@@ -3052,11 +3065,6 @@ cite {
   margin-bottom: 1.5rem;
 }
 
-.my-10{
-  margin-top: 2.5rem;
-  margin-bottom: 2.5rem;
-}
-
 .my-4{
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -3167,6 +3175,10 @@ cite {
 
 .mb-10{
   margin-bottom: 2.5rem;
+}
+
+.mt-8{
+  margin-top: 2rem;
 }
 
 .mt-4{
@@ -3906,14 +3918,14 @@ cite {
   border-color: rgb(255 255 255 / var(--tw-border-opacity));
 }
 
-.border-gray-200{
-  --tw-border-opacity: 1;
-  border-color: rgb(229 231 235 / var(--tw-border-opacity));
-}
-
 .border-iiedorange-500{
   --tw-border-opacity: 1;
   border-color: rgb(252 179 22 / var(--tw-border-opacity));
+}
+
+.border-gray-200{
+  --tw-border-opacity: 1;
+  border-color: rgb(229 231 235 / var(--tw-border-opacity));
 }
 
 .border-iiedblue-500{
@@ -4610,6 +4622,11 @@ cite {
   background-color: rgb(242 169 12 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-iiedblue-10:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(224 246 251 / var(--tw-bg-opacity));
+}
+
 .hover\:text-link-hover:hover{
   --tw-text-opacity: 1;
   color: rgb(14 97 150 / var(--tw-text-opacity));
@@ -4657,6 +4674,11 @@ cite {
 .hover\:ring-white:hover{
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(255 255 255 / var(--tw-ring-opacity));
+}
+
+.hover\:ring-iiedorange-500:hover{
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(252 179 22 / var(--tw-ring-opacity));
 }
 
 .hover\:brightness-95:hover{

@@ -1,0 +1,40 @@
+{
+  "data": {
+    "nodes": {
+      "contents": [
+        {
+          "id": 1,
+          "title": "Sample One",
+          "misc": {
+            "description": "Sample One : Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+          }
+        },
+        {
+          "id": 2,
+          "title": "Sample Two",
+          "misc": {
+            "description": "Sample Two : Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+          }
+        }
+      ]
+    },
+    "taxonomy": {
+      "contents": [
+        {
+          "id": 1,
+          "title": "Category One",
+          "misc": {
+            "description": "Category One : Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+          }
+        },
+        {
+          "id": 2,
+          "title": "Category Two",
+          "misc": {
+            "description": "Category Two : Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+          }
+        }
+      ]
+    }
+  }
+}

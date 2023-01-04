@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * Default theme implementation for an export icon.
+ *
+ * Available variables:
+ * - url: An internal system path of the data export.
+ * - attributes: Remaining HTML attributes for the export link.
+ *   - format: The export format (csv, json, xml).
+ *   - class: HTML classes to be applied to the export link.
+ *
+ * @ingroup themeable
+ */
+ * override from modeules > contrib > views_data_export > templates
+
+#}
+<a href="{{ url }}"{{ attributes.addClass('inline-block hover:no-underline') }}>
+<span class="flex items-center px-3 py-2 transition border rounded-full shadow-sm border-iiedorange-500 hover:shadow-none hover:ring-iiedorange-500 hover:ring-1">
+  {{ 'Download @format'|t({'@format': format}) }}
+  </span>
+</a>
