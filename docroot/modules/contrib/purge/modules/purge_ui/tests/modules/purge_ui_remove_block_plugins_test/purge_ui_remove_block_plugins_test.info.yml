@@ -1,0 +1,12 @@
+name: 'Remove block queuer and processor.'
+type: module
+description: 'Replace ProcessorsService and QueuersService to load Drupal without plugins.'
+package: Testing
+dependencies:
+  - purge:purge
+  - purge:purge_ui
+
+# Information added by Drupal.org packaging script on 2022-09-14
+version: '8.x-3.4'
+project: 'purge'
+datestamp: 1663188468

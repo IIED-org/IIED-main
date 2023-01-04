@@ -1,0 +1,20 @@
+{
+  "name": "drupal/purge_file",
+  "description": "Purge files from external caches.",
+  "type": "drupal-module",
+  "homepage": "https://www.drupal.org/project/purge_file",
+  "authors": [
+    {
+      "name": "omarlopesino",
+      "homepage": "https://www.drupal.org/u/omarlopesino"
+    }
+  ],
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/purge_file",
+    "source": "https://git.drupal.org/project/purge_file.git"
+  },
+  "license": "GPL-2.0+",
+  "require": {
+    "drupal/core": "^8 || ^9"
+  }
+}

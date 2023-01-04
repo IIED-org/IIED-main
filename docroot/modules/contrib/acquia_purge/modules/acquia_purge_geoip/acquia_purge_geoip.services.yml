@@ -1,0 +1,5 @@
+services:
+  acquia_purge_geoip_subscriber:
+    class: '\Drupal\acquia_purge_geoip\EventSubscriber\SetVaryHeader'
+    tags:
+      - { name: 'event_subscriber' }

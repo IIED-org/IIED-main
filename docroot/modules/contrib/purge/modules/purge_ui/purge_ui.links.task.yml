@@ -1,0 +1,4 @@
+purge_ui.dashboard:
+  title: 'Purge'
+  route_name: purge_ui.dashboard
+  base_route: system.performance_settings

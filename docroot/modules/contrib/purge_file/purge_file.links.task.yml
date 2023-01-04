@@ -1,0 +1,4 @@
+purge_file.settings:
+  title: 'Purge file'
+  route_name: purge_file.settings
+  base_route: system.performance_settings
