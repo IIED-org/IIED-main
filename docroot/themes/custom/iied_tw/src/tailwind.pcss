@@ -245,7 +245,9 @@
     opacity: 1;
     bottom: 0;
   }
-  :not(.glb-form-checkboxes):not(td):not(.media-library-item__click-to-select-checkbox):not(.field-content)
+  :not(.glb-form-checkboxes):not(td):not(
+      .media-library-item__click-to-select-checkbox
+    ):not(.field-content)
     > .glb-form-type--checkbox
     input {
     opacity: 1 !important;
@@ -290,5 +292,16 @@
   }
   #clickdimform #btnSubmit {
     @apply px-3 py-2 border-none transition rounded-full shadow-sm bg-iiedorange-500 cursor-pointer;
+  }
+
+  .tracker-select select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url(/themes/custom/iied_tw/templates/layout/icons/chevron-down.svg);
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
   }
 }

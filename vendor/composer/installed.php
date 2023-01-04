@@ -1903,6 +1903,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'drupal/views_json_source' => array(
+            'pretty_version' => '1.4.0',
+            'version' => '1.4.0.0',
+            'reference' => '8.x-1.4',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/views_json_source',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'drupal/views_layout' => array(
             'pretty_version' => '1.2.0',
             'version' => '1.2.0.0',

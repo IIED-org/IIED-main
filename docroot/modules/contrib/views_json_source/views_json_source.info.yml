@@ -1,0 +1,13 @@
+name: 'Views JSON Source'
+description: 'Adds a views backend to query JSON data.'
+package: Views
+core_version_requirement: ^8 || ^9 || ^10
+configure: views_json_source.settings
+dependencies:
+  - drupal:views
+type: module
+
+# Information added by Drupal.org packaging script on 2022-08-30
+version: '8.x-1.4'
+project: 'views_json_source'
+datestamp: 1661850527

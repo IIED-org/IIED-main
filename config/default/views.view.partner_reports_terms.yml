@@ -6,6 +6,8 @@ dependencies:
     - field.storage.taxonomy_term.field_type
     - taxonomy.vocabulary.organisation
     - taxonomy.vocabulary.person
+    - user.role.administrator
+    - user.role.manager
   module:
     - node
     - taxonomy
@@ -306,9 +308,11 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: perm
+        type: role
         options:
-          perm: 'access content'
+          role:
+            manager: manager
+            administrator: administrator
       cache:
         type: tag
         options: {  }
@@ -394,7 +398,7 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url.query_args
-        - user.permissions
+        - user.roles
       tags:
         - 'config:field.storage.taxonomy_term.field_type'
   page_1:
@@ -679,7 +683,7 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
-        - user.permissions
+        - user.roles
       tags:
         - 'config:field.storage.taxonomy_term.field_type'
   page_2:
@@ -904,5 +908,5 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
-        - user.permissions
+        - user.roles
       tags: {  }

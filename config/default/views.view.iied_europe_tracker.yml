@@ -1,0 +1,787 @@
+uuid: dfd850d9-403d-479a-aace-4e07d3d55869
+langcode: en
+status: true
+dependencies:
+  module:
+    - better_exposed_filters
+    - csv_serialization
+    - rest
+    - serialization
+    - views_data_export
+    - views_json_source
+id: iied_europe_tracker
+label: 'IIED Europe tracker'
+module: views
+description: 'Shows filtered list of priorities from Json source'
+tag: ''
+base_table: json
+base_field: ''
+display:
+  default:
+    id: default
+    display_title: Default
+    display_plugin: default
+    position: 0
+    display_options:
+      title: 'IIED Europe global research priority tracker'
+      fields:
+        value:
+          id: value
+          table: json
+          field: value
+          relationship: none
+          group_type: group
+          admin_label: Priority
+          entity_type: null
+          entity_field: null
+          plugin_id: views_json_source_field
+          label: Priority
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          key: Priority
+          trusted_html: 0
+        value_1:
+          id: value_1
+          table: json
+          field: value
+          relationship: none
+          group_type: group
+          admin_label: Category
+          plugin_id: views_json_source_field
+          label: Category
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          key: Category
+          trusted_html: 0
+        value_2:
+          id: value_2
+          table: json
+          field: value
+          relationship: none
+          group_type: group
+          admin_label: Tag
+          plugin_id: views_json_source_field
+          label: Tag
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          key: Tag
+          trusted_html: 0
+        value_3:
+          id: value_3
+          table: json
+          field: value
+          relationship: none
+          group_type: group
+          admin_label: How
+          plugin_id: views_json_source_field
+          label: How
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          key: How
+          trusted_html: 0
+        value_4:
+          id: value_4
+          table: json
+          field: value
+          relationship: none
+          group_type: group
+          admin_label: Region
+          plugin_id: views_json_source_field
+          label: Region
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          key: Region
+          trusted_html: 0
+      pager:
+        type: none
+        options:
+          offset: 0
+          items_per_page: null
+      exposed_form:
+        type: bef
+        options:
+          submit_button: Apply
+          reset_button: true
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+          text_input_required: 'Select any filter and click on Apply to see results'
+          text_input_required_format: basic_html
+          bef:
+            general:
+              autosubmit: false
+              autosubmit_exclude_textfield: false
+              autosubmit_textfield_delay: 500
+              autosubmit_hide: false
+              input_required: false
+              allow_secondary: false
+              secondary_label: 'Advanced options'
+              secondary_open: false
+              reset_button_always_show: true
+      access:
+        type: none
+        options: {  }
+      cache:
+        type: tag
+        options: {  }
+      empty: {  }
+      sorts: {  }
+      arguments: {  }
+      filters:
+        value:
+          id: value
+          table: json
+          field: value
+          relationship: none
+          group_type: group
+          admin_label: Category
+          plugin_id: views_json_source_filter
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: value_op
+            label: 'JSON Field'
+            description: ''
+            use_operator: false
+            operator: value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: cat
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              viewer: '0'
+              publications_editor: '0'
+              editor: '0'
+              manager: '0'
+              administrator: '0'
+          is_grouped: true
+          group_info:
+            label: Category
+            description: ''
+            identifier: cat
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items:
+              1:
+                title: 'Climate change'
+                operator: contains
+                value: 'Climate change'
+              2:
+                title: 'Economics, finance, business and trade'
+                operator: contains
+                value: 'Economics, finance, business and trade'
+              3:
+                title: 'Food systems'
+                operator: contains
+                value: 'Food systems'
+              4:
+                title: 'Gender, equality and human rights'
+                operator: contains
+                value: 'Gender, equality and human rights'
+              5:
+                title: Governance
+                operator: contains
+                value: Governance
+              6:
+                title: Health
+                operator: contains
+                value: Health
+              7:
+                title: 'Just transition'
+                operator: contains
+                value: 'Just transition'
+              8:
+                title: Localisation
+                operator: contains
+                value: Localisation
+              9:
+                title: 'Monitoring, reporting, evaluation and learning (MREL), evidence, data and knowledge management'
+                operator: contains
+                value: 'Monitoring, reporting, evaluation and learning (MREL), evidence, data and knowledge management'
+              10:
+                title: 'Natural resources'
+                operator: contains
+                value: 'Natural resources'
+              11:
+                title: 'Urban development'
+                operator: contains
+                value: 'Urban development'
+          key: Category
+        value_1:
+          id: value_1
+          table: json
+          field: value
+          relationship: none
+          group_type: group
+          admin_label: Tag
+          plugin_id: views_json_source_filter
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: value_1_op
+            label: 'JSON Field'
+            description: null
+            use_operator: false
+            operator: value_1_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: value_1
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: true
+          group_info:
+            label: Tag
+            description: ''
+            identifier: tag
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items:
+              1:
+                title: Agriculture
+                operator: contains
+                value: Agriculture
+              2:
+                title: Biodiversity
+                operator: contains
+                value: Biodiversity
+              3:
+                title: 'Climate adaptation'
+                operator: contains
+                value: 'Climate adaptation'
+              4:
+                title: Economics
+                operator: contains
+                value: Economics
+              5:
+                title: Energy
+                operator: contains
+                value: Energy
+              6:
+                title: Environment
+                operator: contains
+                value: Environment
+              7:
+                title: Equality
+                operator: contains
+                value: Equality
+              8:
+                title: 'EU policy'
+                operator: contains
+                value: 'EU policy'
+              9:
+                title: Farmers
+                operator: contains
+                value: Farmers
+              10:
+                title: Finance
+                operator: contains
+                value: Finance
+              11:
+                title: 'Fossil fuels'
+                operator: contains
+                value: 'Fossil fuels'
+              12:
+                title: 'Gender equality'
+                operator: contains
+                value: 'Gender equality'
+              13:
+                title: 'Human rights'
+                operator: contains
+                value: 'Human rights'
+              14:
+                title: Inclusion
+                operator: contains
+                value: Inclusion
+              15:
+                title: 'Indigenous peoples'
+                operator: contains
+                value: 'Indigenous peoples'
+              16:
+                title: Industry
+                operator: contains
+                value: Industry
+              17:
+                title: 'Informal economy'
+                operator: contains
+                value: 'Informal economy'
+              18:
+                title: Investment
+                operator: contains
+                value: Investment
+              19:
+                title: Participation
+                operator: contains
+                value: Participation
+          key: Tag
+        value_2:
+          id: value_2
+          table: json
+          field: value
+          relationship: none
+          group_type: group
+          admin_label: How
+          plugin_id: views_json_source_filter
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: value_2_op
+            label: 'JSON Field'
+            description: null
+            use_operator: false
+            operator: value_2_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: value_2
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: true
+          group_info:
+            label: How
+            description: ''
+            identifier: how
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items:
+              1:
+                title: Finance
+                operator: contains
+                value: Finance
+              2:
+                title: Health
+                operator: contains
+                value: Health
+              3:
+                title: Impact
+                operator: contains
+                value: Impact
+              4:
+                title: 'SDG achievement'
+                operator: contains
+                value: 'SDG achievement'
+              5:
+                title: 'Strategy analysis'
+                operator: contains
+                value: 'Strategy analysis'
+              6:
+                title: Support
+                operator: contains
+                value: Support
+          key: How
+        value_3:
+          id: value_3
+          table: json
+          field: value
+          relationship: none
+          group_type: group
+          admin_label: Region
+          plugin_id: views_json_source_filter
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: value_3_op
+            label: 'JSON Field'
+            description: null
+            use_operator: false
+            operator: value_3_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: value_3
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: true
+          group_info:
+            label: Region
+            description: ''
+            identifier: loc
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items:
+              1:
+                title: Caribbean
+                operator: contains
+                value: Caribbean
+              2:
+                title: 'Central Africa'
+                operator: contains
+                value: 'Central Africa'
+              3:
+                title: 'East Asia'
+                operator: contains
+                value: 'East Asia'
+              4:
+                title: 'European Union'
+                operator: contains
+                value: 'European Union'
+              5:
+                title: Non-attributable
+                operator: contains
+                value: Non-attributable
+              6:
+                title: 'North America'
+                operator: contains
+                value: 'North America'
+              7:
+                title: 'Other Europe'
+                operator: contains
+                value: 'Other Europe'
+              8:
+                title: 'South America'
+                operator: contains
+                value: 'South America'
+              9:
+                title: 'South Asia'
+                operator: contains
+                value: 'South Asia'
+              10:
+                title: 'Southern Africa'
+                operator: contains
+                value: 'Southern Africa'
+          key: Region
+        value_4:
+          id: value_4
+          table: json
+          field: value
+          relationship: none
+          group_type: group
+          admin_label: Priority
+          plugin_id: views_json_source_filter
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: value_4_op
+            label: Priority
+            description: ''
+            use_operator: false
+            operator: value_4_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: qu
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              viewer: '0'
+              publications_editor: '0'
+              editor: '0'
+              manager: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          key: Priority
+      style:
+        type: table
+      row:
+        type: fields
+      query:
+        type: views_query
+        options:
+          json_file: /sites/default/files/uploads/2023/01/iied-europe-tracker-data.json
+          row_apath: '%'
+          headers: ''
+          single_payload: 0
+          show_errors: 1
+      relationships: {  }
+      header: {  }
+      footer: {  }
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_interface'
+        - url
+      tags: {  }
+  block_1:
+    id: block_1
+    display_title: Block
+    display_plugin: block
+    position: 1
+    display_options:
+      display_extenders: {  }
+      block_description: 'IIED Europe priority tracker block'
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_interface'
+        - url
+      tags: {  }
+  data_export_1:
+    id: data_export_1
+    display_title: 'Data export'
+    display_plugin: data_export
+    position: 2
+    display_options:
+      style:
+        type: data_export
+        options:
+          formats:
+            csv: csv
+          csv_settings:
+            delimiter: ','
+            enclosure: '"'
+            escape_char: \
+            strip_tags: true
+            trim: true
+            encoding: utf8
+            utf8_bom: '0'
+            use_serializer_encode_only: false
+      display_extenders: {  }
+      path: tracker/priorities
+      displays:
+        block_1: block_1
+        default: '0'
+      filename: ''
+      automatic_download: false
+      store_in_public_file_directory: null
+      custom_redirect_path: false
+      redirect_to_display: none
+      include_query_params: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_interface'
+        - request_format
+        - url
+      tags: {  }

@@ -1,0 +1,7 @@
+views_json_source.settings:
+  path: '/admin/config/user-interface/views-json-source-settings'
+  defaults:
+    _form: '\Drupal\views_json_source\Form\ViewsJsonSourceSettingsForm'
+    _title: 'Views JSON Source Configuration'
+  requirements:
+    _permission: 'administer site configuration'
