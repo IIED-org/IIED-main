@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * Implements hook_requirements().
+ */
+function purge_file_requirements($phase) {
+  if ($phase !== 'runtime') {
+    return [];
+  }
+
+  $requirements = [];
+
+  $purgers = \Drupal::service('purge.purgers');
+
+  $purge_purgers_severity = in_array('url', $purgers->getTypes()) ? REQUIREMENT_OK : REQUIREMENT_ERROR;
+  $requirements['purge_purgers_available'] = [
+    'title' => t('Purge file: Purgers are enabled'),
+    'description' => t('There must exists at least one purger that supports URLs.'),
+    'severity' => $purge_purgers_severity,
+  ];
+
+  $purgers = \Drupal::service('purge.processors');
+
+  $purge_processors_severity = !empty($purgers->getPluginsEnabled()) ? REQUIREMENT_OK : REQUIREMENT_ERROR;
+  $requirements['purge_processors_available'] = [
+    'title' => t('Purge file: Processors are available'),
+    'description' => t('There must exists at one purge processor available.'),
+    'severity' => $purge_processors_severity,
+  ];
+
+  return $requirements;
+}

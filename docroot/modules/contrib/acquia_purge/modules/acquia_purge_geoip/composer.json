@@ -1,0 +1,7 @@
+{
+    "name": "drupal/acquia_purge_geoip",
+    "type": "drupal-module",
+    "description": "Adds the X-Geo-Country header to Drupal's Vary response header so that your site gets varied by content.",
+    "license": "GPL-2.0-or-later",
+    "require": {}
+}

@@ -1,0 +1,12 @@
+{
+    "name": "drupal/purge_queuer_coretags",
+    "type": "drupal-module",
+    "description": "Queues every tag that Drupal invalidates internally.",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Niels van Mourik",
+            "homepage": "http://www.nielsvm.org"
+        }
+    ]
+}
