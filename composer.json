@@ -57,6 +57,7 @@
         "drupal/acquia_search": "^3.1",
         "drupal/address": "^1.10",
         "drupal/admin_toolbar": "^3.1",
+        "drupal/allowed_formats": "^2.0",
         "drupal/anchor_link": "^2.5",
         "drupal/asset_injector": "^2.10",
         "drupal/better_exposed_filters": "^5.0",
@@ -298,6 +299,9 @@
           },
           "drupal/google_analytics": {
             "3258588": "https://www.drupal.org/files/issues/2022-09-01/3258588_google_analytics_deprecated_function_2_5_001.patch"
+          },
+          "drupal/allowed_formats": {
+            "Default value for format dropdown missing": "https://www.drupal.org/files/issues/2022-02-02/2950548-allowed_formats-missing_default_value.patch"
           }
         }
     }

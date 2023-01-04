@@ -451,6 +451,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'drupal/allowed_formats' => array(
+            'pretty_version' => '2.0.0',
+            'version' => '2.0.0.0',
+            'reference' => '2.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/allowed_formats',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'drupal/anchor_link' => array(
             'pretty_version' => '2.5.0',
             'version' => '2.5.0.0',
