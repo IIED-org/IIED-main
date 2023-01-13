@@ -25,5 +25,5 @@ tags:
   twitter_cards_page_url: '[current-page:url:absolute]'
   twitter_cards_site: '@IIED'
   twitter_cards_site_id: '39719681'
-  twitter_cards_title: '[site:name]'
+  twitter_cards_title: '[current-page:title] | [site:name]'
   twitter_cards_type: summary_large_image
