@@ -186,9 +186,9 @@ display:
           field: value
           relationship: none
           group_type: group
-          admin_label: How
+          admin_label: 'Entry point'
           plugin_id: views_json_source_field
-          label: How
+          label: 'Entry point'
           exclude: false
           alter:
             alter_text: false
@@ -229,7 +229,7 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          key: How
+          key: 'Entry point'
           trusted_html: 0
         value_4:
           id: value_4
@@ -523,6 +523,34 @@ display:
                 title: Participation
                 operator: contains
                 value: Participation
+              20:
+                title: Partnership
+                operator: contains
+                value: Partnership
+              21:
+                title: Policy
+                operator: contains
+                value: Policy
+              22:
+                title: 'Private sector'
+                operator: contains
+                value: 'Private sector'
+              23:
+                title: Resilience
+                operator: contains
+                value: Resilience
+              24:
+                title: 'Technology change'
+                operator: contains
+                value: 'Technology change'
+              25:
+                title: Trade
+                operator: contains
+                value: Trade
+              26:
+                title: Urban
+                operator: contains
+                value: Urban
           key: Tag
         value_2:
           id: value_2
@@ -530,7 +558,7 @@ display:
           field: value
           relationship: none
           group_type: group
-          admin_label: How
+          admin_label: 'Entry point'
           plugin_id: views_json_source_filter
           operator: contains
           value: ''
@@ -552,9 +580,9 @@ display:
               authenticated: authenticated
           is_grouped: true
           group_info:
-            label: How
+            label: 'Entry point'
             description: ''
-            identifier: how
+            identifier: entry
             optional: true
             widget: select
             multiple: false
@@ -586,7 +614,7 @@ display:
                 title: Support
                 operator: contains
                 value: Support
-          key: How
+          key: 'Entry point'
         value_3:
           id: value_3
           table: json
@@ -642,9 +670,9 @@ display:
                 operator: contains
                 value: 'European Union'
               5:
-                title: Non-attributable
+                title: 'Non-attributable (mixed source)'
                 operator: contains
-                value: Non-attributable
+                value: 'Non-attributable (mixed source)'
               6:
                 title: 'North America'
                 operator: contains
@@ -665,6 +693,10 @@ display:
                 title: 'Southern Africa'
                 operator: contains
                 value: 'Southern Africa'
+              11:
+                title: 'West, Central and Eastern Africa'
+                operator: contains
+                value: 'West, Central and Eastern Africa'
           key: Region
         value_4:
           id: value_4
@@ -718,13 +750,23 @@ display:
       query:
         type: views_query
         options:
-          json_file: /sites/default/files/uploads/2023/01/iied-europe-tracker-data.json
+          json_file: /sites/default/files/uploads/2023/01/iied-europe-priorities-data.json
           row_apath: '%'
           headers: ''
           single_payload: 0
           show_errors: 1
       relationships: {  }
-      header: {  }
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: result
+          empty: false
+          content: 'Showing @total of 232'
       footer: {  }
       display_extenders: {  }
     cache_metadata:
@@ -739,6 +781,9 @@ display:
     display_plugin: block
     position: 1
     display_options:
+      title: ''
+      defaults:
+        title: false
       display_extenders: {  }
       block_description: 'IIED Europe priority tracker block'
     cache_metadata:
@@ -768,11 +813,11 @@ display:
             utf8_bom: '0'
             use_serializer_encode_only: false
       display_extenders: {  }
-      path: tracker/priorities
+      path: tracker
       displays:
         block_1: block_1
         default: '0'
-      filename: ''
+      filename: iied-europe-global-research-priority-tracker-2023.csv
       automatic_download: false
       store_in_public_file_directory: null
       custom_redirect_path: false
