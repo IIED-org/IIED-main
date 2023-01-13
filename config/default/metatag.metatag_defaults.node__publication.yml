@@ -6,4 +6,7 @@ id: node__publication
 label: 'Content: Publication'
 tags:
   book_isbn: '[node:field_isbn]'
-  title: '[node:title] | Publications Library'
+  image_src: '[node:field_media]'
+  og_image: '[node:field_media]'
+  title: '[current-page:title] | IIED Publications Library'
+  twitter_cards_image: '[node:field_media]'
