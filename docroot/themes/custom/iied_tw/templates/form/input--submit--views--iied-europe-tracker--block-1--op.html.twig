@@ -1,0 +1,25 @@
+{#
+/**
+ * @file
+ * Theme override for an 'input' #type form element.
+ *
+ * Available variables:
+ * - attributes: A list of HTML attributes for the input element.
+ * - children: Optional additional rendered elements.
+ *
+ * @see template_preprocess_input()
+ */
+
+ * Secondary button
+#}
+
+
+{%
+  set classes = [
+    'h-12 px-6 py-2 mt-8 transition-colors duration-150 rounded-full shadow-sm border border-iiedorange-500',
+    'hover:shadow-none bg-white hover:bg-gray-100 focus:shadow-outline',
+    'text-lg font-semibold text-gray-800 hover:no-underline hover:text-gray-900 cursor-pointer',
+  ]
+%}
+
+<input{{ attributes.addClass(classes) }} />{{ children }}
