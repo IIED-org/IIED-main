@@ -1,0 +1,8 @@
+uuid: 3ae38968-19f9-49dd-a7dc-323766d4d21c
+langcode: en
+status: true
+dependencies: {  }
+id: media__document
+label: 'Media: Document'
+tags:
+  og_image: '[media_pdf_thumbnail:field_media_document:1:image_url]'

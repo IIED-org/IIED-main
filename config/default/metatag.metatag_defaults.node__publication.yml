@@ -6,8 +6,7 @@ id: node__publication
 label: 'Content: Publication'
 tags:
   book_isbn: '[node:field_isbn]'
-  image_src: '[media_pdf_thumbnail:field_media_document:page:render:scale_lg:link_pdf]'
+  image_src: '[node:field_media]'
+  og_image: '[node:field_media]'
   title: '[current-page:title] | IIED Publications Library'
-  og_image: '[media_pdf_thumbnail:field_media_document:page:render:scale_lg:link_pdf]'
-  title: '[current-page:title] | [site:name]'
-  twitter_cards_image: '[media_pdf_thumbnail:field_media_document:page:render:scale_lg:link_pdf]'
+  twitter_cards_image: '[node:field_media]'
