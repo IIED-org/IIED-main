@@ -750,7 +750,7 @@ display:
       query:
         type: views_query
         options:
-          json_file: /sites/default/files/uploads/2023/01/iied-europe-priorities-data.json
+          json_file: /sites/default/files/uploads/2023/01/iied-europe-priority-data.json
           row_apath: '%'
           headers: ''
           single_payload: 0
@@ -766,7 +766,7 @@ display:
           admin_label: ''
           plugin_id: result
           empty: false
-          content: 'Showing @total of 232'
+          content: 'Showing @total of 230'
       footer: {  }
       display_extenders: {  }
     cache_metadata:
@@ -782,8 +782,269 @@ display:
     position: 1
     display_options:
       title: ''
+      fields:
+        value:
+          id: value
+          table: json
+          field: value
+          relationship: none
+          group_type: group
+          admin_label: Priority
+          entity_type: null
+          entity_field: null
+          plugin_id: views_json_source_field
+          label: Priority
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          key: Priority
+          trusted_html: 1
+        value_1:
+          id: value_1
+          table: json
+          field: value
+          relationship: none
+          group_type: group
+          admin_label: Category
+          plugin_id: views_json_source_field
+          label: Category
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          key: Category
+          trusted_html: 0
+        value_2:
+          id: value_2
+          table: json
+          field: value
+          relationship: none
+          group_type: group
+          admin_label: Tag
+          plugin_id: views_json_source_field
+          label: Tag
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          key: Tag
+          trusted_html: 0
+        value_3:
+          id: value_3
+          table: json
+          field: value
+          relationship: none
+          group_type: group
+          admin_label: 'Entry point'
+          plugin_id: views_json_source_field
+          label: 'Entry point'
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          key: 'Entry point'
+          trusted_html: 0
+        value_4:
+          id: value_4
+          table: json
+          field: value
+          relationship: none
+          group_type: group
+          admin_label: Region
+          plugin_id: views_json_source_field
+          label: Region
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          key: Region
+          trusted_html: 0
       defaults:
         title: false
+        use_ajax: false
+        fields: false
+      use_ajax: false
       display_extenders: {  }
       block_description: 'IIED Europe priority tracker block'
     cache_metadata:
