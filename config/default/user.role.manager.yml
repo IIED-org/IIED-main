@@ -34,12 +34,14 @@ dependencies:
     - draggableviews
     - eu_cookie_compliance
     - file
+    - file_delete
     - filter
     - form_mode_control
     - layout_builder
     - layout_paragraphs
     - masquerade
     - media
+    - media_pdf_thumbnail
     - media_revisions_ui
     - merge_translations
     - node
@@ -74,6 +76,7 @@ permissions:
   - 'access toolbar'
   - 'access user profiles'
   - access_all_form_modes
+  - 'add pdf image entity entities'
   - 'administer block classes'
   - 'administer blocks'
   - 'administer comment types'
@@ -83,6 +86,7 @@ permissions:
   - 'administer media'
   - 'administer menu'
   - 'administer nodes'
+  - 'administer pdf image entity entities'
   - 'administer redirects'
   - 'administer url aliases'
   - 'administer users'
@@ -125,6 +129,7 @@ permissions:
   - 'delete any publication content'
   - 'delete content translations'
   - 'delete document media revisions'
+  - 'delete files'
   - 'delete image media revisions'
   - 'delete media'
   - 'delete own article content'
@@ -138,6 +143,7 @@ permissions:
   - 'delete own page content'
   - 'delete own project content'
   - 'delete own publication content'
+  - 'delete pdf image entity entities'
   - 'delete publication revisions'
   - 'delete terms in collection'
   - 'delete terms in global'
@@ -169,6 +175,7 @@ permissions:
   - 'edit own page content'
   - 'edit own project content'
   - 'edit own publication content'
+  - 'edit pdf image entity entities'
   - 'edit terms in collection'
   - 'edit terms in global'
   - 'edit terms in list'
@@ -237,3 +244,4 @@ permissions:
   - 'view publication revisions'
   - 'view the administration theme'
   - 'view unpublished paragraphs'
+  - 'view unpublished pdf image entity entities'
