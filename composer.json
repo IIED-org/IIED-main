@@ -91,6 +91,7 @@
         "drupal/field_formatter": "^3.0",
         "drupal/field_formatter_file_size": "^2.0",
         "drupal/field_group": "^3.1",
+        "drupal/file_delete": "^2.0",
         "drupal/file_mdm": "^2.2",
         "drupal/flexslider": "^2.0",
         "drupal/form_mode_control": "^2.0@RC",

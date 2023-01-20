@@ -3,7 +3,7 @@
         'name' => 'drupal/recommended-project',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '48fcfab73e1bb476ee9b2a4aeeaad77c92bbca42',
+        'reference' => '297c125d3bff5d9fcb0370e1f0d504587da4448a',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -1062,6 +1062,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'drupal/file_delete' => array(
+            'pretty_version' => '2.0.0',
+            'version' => '2.0.0.0',
+            'reference' => '2.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/file_delete',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'drupal/file_mdm' => array(
             'pretty_version' => '2.5.0',
             'version' => '2.5.0.0',
@@ -1569,7 +1578,7 @@
         'drupal/recommended-project' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '48fcfab73e1bb476ee9b2a4aeeaad77c92bbca42',
+            'reference' => '297c125d3bff5d9fcb0370e1f0d504587da4448a',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
