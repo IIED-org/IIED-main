@@ -1,4 +1,4 @@
-#Charts
+# Charts
 
 Transform **data** into **information**. The Charts module for Drupal enables
 you to build dynamic charts without needing to write a line of code. If you are
@@ -15,14 +15,14 @@ requires knowledge and access that many Drupal site builders will not have.
 Charts is designed so that anyone who wants a chart on their site can have a
 chart -- and be happy with it.
 
-##How Does The Charts Module Work (Technically)?
+## How Does The Charts Module Work (Technically)?
 
 The Charts module takes data and configuration from your site, and with the help
 of a submodule, organizes it into a JSON object that is saved as an attribute
 on an HTML element on your page; the JSON objected is handed to your selected
 charting library, which renders it into a chart.
 
-##Charting Providers / Libraries
+## Charting Providers / Libraries
 
 Out of the box, you will be able to use 5 charting solutions (referred to as
 "providers" or "libraries". Each of them has particular advantages and
@@ -40,7 +40,7 @@ additional features, such as radar charts.
   animations, it requires a commercial license. It's free for non-commercial
   use. See http://www.highcharts.com
 
-##Installing Libraries
+## Installing Libraries
 
 All the Charts submodules default to using a content delivery network (CDN) to
 pull in the necessary JavaScript files unless a local copy is present, or you

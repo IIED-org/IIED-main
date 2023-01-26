@@ -20,7 +20,7 @@ class ChosenFormTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['chosen', 'chosen_test'];
+  protected static $modules = ['chosen', 'chosen_test'];
 
   /**
    * Test the form page.

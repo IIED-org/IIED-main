@@ -50,30 +50,30 @@
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   height: 100%;
-  background: var(--colorGinLayerBackground);
+  background: var(--gin-bg-layer);
   -webkit-box-shadow: 0 0 48px rgba(0, 0, 0, 0.075);
   box-shadow: 0 0 48px rgba(0, 0, 0, 0.075);
-  border-left: 1px solid var(--colorGinLayerBorder);
+  border-left: 1px solid var(--gin-border-color-layer);
 }
 
 .ui-dialog-content,
 .ui-dialog-off-canvas .ui-dialog-titlebar {
-  background: var(--colorGinLayerBackground) !important;
-  color: var(--colorGinText) !important;
+  background: var(--gin-bg-layer) !important;
+  color: var(--gin-color-text) !important;
 }
 
 .ui-dialog-off-canvas {
 
   .ui-dialog-title {
-    color: var(--colorGinTitle) !important;
+    color: var(--gin-color-title) !important;
   }
   .ui-icon-closethick {
-    background-color: var(--colorGinText) !important;
+    background-color: var(--gin-color-text) !important;
   }
 }
 
 #drupal-off-canvas.ui-dialog-content div {
-  color: var(--colorGinText);
+  color: var(--gin-color-text);
 }
 
 #drupal-off-canvas {

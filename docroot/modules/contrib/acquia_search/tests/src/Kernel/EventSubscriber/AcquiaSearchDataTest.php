@@ -10,6 +10,7 @@ use Drupal\Tests\acquia_search\Kernel\AcquiaSearchTestBase;
  * Tests the `acquia_search` data is added to subscription data.
  *
  * @group acquia_search
+ * @group orca_public
  * @coversDefaultClass \Drupal\acquia_search\EventSubscriber\AcquiaSubscriptionData\AcquiaSearchData
  */
 final class AcquiaSearchDataTest extends AcquiaSearchTestBase {

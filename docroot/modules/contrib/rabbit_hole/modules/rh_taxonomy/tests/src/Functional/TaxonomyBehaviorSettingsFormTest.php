@@ -3,6 +3,7 @@
 namespace Drupal\Tests\rh_taxonomy\Functional;
 
 use Drupal\Core\Url;
+use Drupal\rabbit_hole\Entity\BehaviorSettings;
 use Drupal\Tests\rabbit_hole\Functional\RabbitHoleBehaviorSettingsFormTestBase;
 use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
 
@@ -43,6 +44,23 @@ class TaxonomyBehaviorSettingsFormTest extends RabbitHoleBehaviorSettingsFormTes
   protected function createEntityBundle() {
     $this->bundle = $this->createVocabulary();
     return $this->bundle->id();
+  }
+
+  /**
+   * Test redirect after entity form save.
+   */
+  public function testEntityFormSaveRedirect() {
+    $override = BehaviorSettings::OVERRIDE_DISALLOW;
+    $action = 'access_denied';
+    $this->createEntityBundleFormSubmit($action, $override);
+    $this->loadCreateEntityForm();
+    $this->assertNoRabbitHoleSettings();
+    // Workaround for taxonomy terms: https://www.drupal.org/i/3277238.
+    $this->submitForm(['name[0][value]' => $this->randomString()], $this->getEntityFormSubmit());
+
+    // Make sure the editor didn't hit error page after the form save in case
+    // there is no Rabbit Hole actions available.
+    $this->assertSession()->statusCodeEquals(200);
   }
 
   /**

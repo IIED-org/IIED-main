@@ -1,7 +1,6 @@
 .glb-canvas-form {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   margin-left: -20px;
   margin-right: -20px;
   flex: 1;
@@ -17,8 +16,8 @@
 
   &__actions {
     position: relative;
-    border-top: 1px solid var(--colorGinLayerBorder);
-    background: var(--colorGinAppBackground);
+    border-top: 1px solid var(--gin-border-color-layer);
+    background: var(--gin-bg-app);
     flex-grow: 0;
     padding-left: 20px;
   }

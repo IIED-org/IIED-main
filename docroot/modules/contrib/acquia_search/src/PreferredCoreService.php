@@ -4,6 +4,7 @@ namespace Drupal\acquia_search;
 
 use Drupal\acquia_connector\Subscription;
 use Drupal\acquia_search\Event\AcquiaPossibleCoresEvent;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -37,6 +38,13 @@ class PreferredCoreService {
   protected $coreReadonly = TRUE;
 
   /**
+   * Module Handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * Preferred Search Core Service constructor.
    *
    *   E.g.
@@ -53,11 +61,14 @@ class PreferredCoreService {
    *   Acquia Subscription Service.
    * @param \Drupal\acquia_search\AcquiaSearchApiClient $acquia_search_api_client
    *   Acquia Search API Client.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler (for deprecated alter hook).
    */
-  public function __construct(EventDispatcherInterface $dispatcher, Subscription $subscription, AcquiaSearchApiClient $acquia_search_api_client) {
+  public function __construct(EventDispatcherInterface $dispatcher, Subscription $subscription, AcquiaSearchApiClient $acquia_search_api_client, ModuleHandlerInterface $module_handler) {
     $this->dispatcher = $dispatcher;
     $this->subscription = $subscription;
     $this->acquiaSearchApiClient = $acquia_search_api_client;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -185,9 +196,15 @@ class PreferredCoreService {
       // @phpstan-ignore-next-line
       $this->dispatcher->dispatch(AcquiaSearchEvents::GET_POSSIBLE_CORES, $event);
     }
-
     $this->coreReadonly = $event->isReadOnly();
-    return $event->getPossibleCores();
+    $possible_cores = $original_possible_cores = $event->getPossibleCores();
+    $deprecated_message = 'This hook is deprecated in acquia_search:3.1.0 and is removed from acquia_search:4.0.0. Please use the "acquia_search.acquia_search_get_possible_cores" event instead.';
+    $this->moduleHandler->alterDeprecated($deprecated_message, 'acquia_search_get_list_of_possible_cores', $possible_cores);
+    // Override readonly if the possible cores changed in the alter hook.
+    if (!empty(array_diff($possible_cores, $original_possible_cores))) {
+      $this->coreReadonly = FALSE;
+    }
+    return $possible_cores;
   }
 
   /**

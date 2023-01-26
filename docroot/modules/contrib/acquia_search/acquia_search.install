@@ -5,6 +5,7 @@
  * Install, update, and uninstall functions for the Acquia Search Solr module.
  */
 
+use Drupal\acquia_connector\Subscription;
 use Drupal\acquia_search\Helper\Messages;
 use Drupal\acquia_search\Helper\Runtime;
 use Drupal\search_api\Entity\Server;
@@ -17,6 +18,15 @@ function acquia_search_requirements($phase) {
   $requirements = [];
 
   if ($phase == 'runtime') {
+    if (!\Drupal::moduleHandler()->moduleExists('acquia_connector') || !class_exists(Subscription::class)) {
+      $requirements['acquia_search_requirements'] = [
+        'title' => t('Acquia Search'),
+        'value' => t('Requirements Missing: acquia_connector'),
+        'severity' => REQUIREMENT_ERROR,
+        'description' => ['#markup' => t('Acquia connector 4.x is required for Acquia Search 3.1.0 and above.')],
+      ];
+      return $requirements;
+    }
     $requirements['acquia_search_ssl'] = [
       'title' => t('Acquia Search Solr'),
       'value' => 'Security',
@@ -78,4 +88,11 @@ function acquia_search_requirements($phase) {
 function acquia_search_install() {
   // Indicate that default index needs to be re-connected to the server.
   \Drupal::state()->set('acquia_search.connect_index', TRUE);
+}
+
+/**
+ * Enable the acquia_connector module.
+ */
+function acquia_search_update_8310() {
+  \Drupal::service('module_installer')->install(['acquia_connector']);
 }

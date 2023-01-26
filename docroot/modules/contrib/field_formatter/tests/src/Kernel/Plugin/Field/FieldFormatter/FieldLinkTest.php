@@ -14,12 +14,12 @@ class FieldLinkTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['entity_test', 'field_formatter', 'user'];
+  protected static $modules = ['entity_test', 'field_formatter', 'user'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->installEntitySchema('entity_test');

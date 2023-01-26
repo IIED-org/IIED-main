@@ -16,7 +16,7 @@ class TaxonomyManagerConfigTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['taxonomy_manager'];
+  protected static $modules = ['taxonomy_manager'];
 
   /**
    * Tests configuration options of the taxonomy_manager module.
@@ -31,10 +31,10 @@ class TaxonomyManagerConfigTest extends BrowserTestBase {
     $edit = [];
     $edit['taxonomy_manager_disable_mouseover'] = '1';
     $edit['taxonomy_manager_pager_tree_page_size'] = '50';
-    $this->drupalPostForm('admin/config/user-interface/taxonomy-manager-settings', $edit, $this->t('Save configuration'));
-    $this->assertResponse(200);
-    $this->assertText($this->t('The configuration options have been saved.'), "Saving configuration options successfully.");
-
+    $this->drupalGet('admin/config/user-interface/taxonomy-manager-settings');
+    $this->submitForm($edit, $this->t('Save configuration'));
+    $this->assertSession()->statusCodeEquals(200);
+    $this->assertSession()->pageTextContains($this->t('The configuration options have been saved.'));
   }
 
 }

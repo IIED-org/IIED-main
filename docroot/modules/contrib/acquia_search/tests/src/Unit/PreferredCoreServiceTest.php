@@ -14,6 +14,7 @@ use Drupal\Component\Datetime\Time;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Uuid\Php as PhpUuid;
 use Drupal\Core\Cache\MemoryBackend;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Http\ClientFactory;
 use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -27,6 +28,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * @group acquia_search
+ * @group orca_public
  * @coversDefaultClass \Drupal\acquia_search\PreferredCoreService
  */
 final class PreferredCoreServiceTest extends AcquiaSearchTestCase {
@@ -36,10 +38,10 @@ final class PreferredCoreServiceTest extends AcquiaSearchTestCase {
     $settings = $this->createMock(Settings::class);
     $settings->method('getIdentifier')->willReturn('ABC123');
     $settings->method('getSecretKey')->willReturn('FooBar');
+    $settings->method('getApplicationUuid')->willReturn((new PhpUuid())->generate());
     $subscription->method('getSettings')->willReturn($settings);
     $subscription->method('isActive')->willReturn(TRUE);
     $subscription->method('getSubscription')->willReturn([
-      'uuid' => (new PhpUuid())->generate(),
       'acquia_search' => [
         'api_host' => 'https://localhost',
       ],
@@ -81,7 +83,8 @@ final class PreferredCoreServiceTest extends AcquiaSearchTestCase {
     $sut = new PreferredCoreService(
       $this->createMock(EventDispatcherInterface::class),
       $subscription,
-      $acquia_search_api_client
+      $acquia_search_api_client,
+      $this->createMock(ModuleHandlerInterface::class)
     );
     self::assertEquals(array_keys($expected), $sut->getListOfAvailableCores());
   }
@@ -105,7 +108,8 @@ final class PreferredCoreServiceTest extends AcquiaSearchTestCase {
     $sut = new PreferredCoreService(
       $this->createMock(EventDispatcherInterface::class),
       $subscription,
-      $acquia_search_api_client
+      $acquia_search_api_client,
+      $this->createMock(ModuleHandlerInterface::class)
     );
     self::assertEquals($expected, $sut->getAvailableCores());
   }
@@ -133,7 +137,8 @@ final class PreferredCoreServiceTest extends AcquiaSearchTestCase {
     $sut = new PreferredCoreService(
       $event_dispatcher,
       $subscription,
-      $acquia_search_api_client
+      $acquia_search_api_client,
+      $this->createMock(ModuleHandlerInterface::class)
     );
     self::assertEquals(['FooBarBaz'], $sut->getListOfPossibleCores());
   }
@@ -167,7 +172,8 @@ final class PreferredCoreServiceTest extends AcquiaSearchTestCase {
     $sut = new PreferredCoreService(
       $event_dispatcher,
       $subscription,
-      $acquia_search_api_client
+      $acquia_search_api_client,
+      $this->createMock(ModuleHandlerInterface::class)
     );
     $result = $sut->getPreferredCore();
     if (count($indexes) === 0) {

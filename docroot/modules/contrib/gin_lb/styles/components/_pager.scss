@@ -60,20 +60,20 @@
   // Gin styles.
 
   .pager__link {
-    color: var(--colorGinText) !important;
+    color: var(--gin-color-text) !important;
     background-color: transparent !important;
   }
 
   .pager__link.is-active,
   .pager__item--current {
-    color: var(--colorGinAppBackground) !important;
-    background: var(--colorGinPrimary) !important;
+    color: var(--gin-bg-app) !important;
+    background: var(--gin-color-primary) !important;
   }
 
   .pager__link:hover,
   .pager__link.is-active:hover {
-    color: var(--colorGinButtonText) !important;
-    background: var(--colorGinPrimaryHover) !important;
+    color: var(--gin-color-button-text) !important;
+    background: var(--gin-color-primary-hover) !important;
   }
 
   .pager__item--first .pager__link::before {
@@ -98,12 +98,12 @@
   .pager__item--last .pager__link {
     &::before,
     &::after {
-      background: var(--colorGinTextLight) !important;
+      background: var(--gin-color-textLight) !important;
     }
 
     &:hover::before,
     &:hover::after {
-      background: var(--colorGinAppBackground) !important;
+      background: var(--gin-bg-app) !important;
     }
   }
 

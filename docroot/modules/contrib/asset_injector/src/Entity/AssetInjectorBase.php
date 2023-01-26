@@ -99,12 +99,9 @@ abstract class AssetInjectorBase extends ConfigEntityBase implements AssetInject
   }
 
   /**
-   * Get file path relative to drupal root to use in library info.
-   *
-   * @return string
-   *   File path relative to drupal root, with leading slash.
+   * {@inheritdoc}
    */
-  protected function filePathRelativeToDrupalRoot() {
+  public function filePathRelativeToDrupalRoot() {
     $path = \Drupal::service('file_url_generator')
       ->generateAbsoluteString($this->internalFileUri());
     return str_replace(base_path(), '/', parse_url($path, PHP_URL_PATH));

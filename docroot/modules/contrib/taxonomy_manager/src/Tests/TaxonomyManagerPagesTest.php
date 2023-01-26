@@ -32,12 +32,12 @@ class TaxonomyManagerPagesTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['taxonomy_manager'];
+  protected static $modules = ['taxonomy_manager'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser(['administer taxonomy']);
@@ -50,8 +50,8 @@ class TaxonomyManagerPagesTest extends BrowserTestBase {
   public function testConfigurationPageIsAccessible() {
     $this->drupalLogin($this->adminUser);
     $this->drupalGet("admin/config");
-    $this->assertResponse(200);
-    $this->assertRaw("Advanced settings for the Taxonomy Manager", "The settings page is accessible.");
+    $this->assertSession()->statusCodeEquals(200);
+    $this->assertSession()->responseContains("Advanced settings for the Taxonomy Manager");
     $this->drupalLogout();
   }
 
@@ -61,12 +61,12 @@ class TaxonomyManagerPagesTest extends BrowserTestBase {
   public function testVocabulariesListIsAccessible() {
     $this->drupalLogin($this->adminUser);
     $this->drupalGet("admin/structure");
-    $this->assertResponse(200);
-    $this->assertRaw("Administer vocabularies with the Taxonomy Manager", "The link to the page listing vocabularies is accessible.");
+    $this->assertSession()->statusCodeEquals(200);
+    $this->assertSession()->responseContains("Advanced settings for the Taxonomy Manager");
 
     $this->drupalGet("admin/structure/taxonomy_manager/voc");
-    $this->assertResponse(200);
-    $this->assertRaw("Edit vocabulary settings", "The page listing vocabularies is accessible.");
+    $this->assertSession()->statusCodeEquals(200);
+    $this->assertSession()->responseContains("Administer vocabularies with the Taxonomy Manager");
     $this->drupalLogout();
   }
 
@@ -78,8 +78,8 @@ class TaxonomyManagerPagesTest extends BrowserTestBase {
     $voc_name = $this->vocabulary->label();
     // Check admin/structure/taxonomy_manager/voc/{$new_voc_name}.
     $this->drupalGet("admin/structure/taxonomy_manager/voc/$voc_name");
-    $this->assertResponse(200);
-    $this->assertRaw("Taxonomy Manager - $voc_name", "The taxonomy manager form for editing terms is accessible.");
+    $this->assertSession()->statusCodeEquals(200);
+    $this->assertSession()->responseContains("Taxonomy Manager - $voc_name");
     $this->drupalLogout();
   }
 

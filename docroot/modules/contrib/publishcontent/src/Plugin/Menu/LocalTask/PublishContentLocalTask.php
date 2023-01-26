@@ -69,4 +69,17 @@ class PublishContentLocalTask extends LocalTaskDefault implements ContainerFacto
     return $node->isPublished() ? $this->config->get('unpublish_text_value') : $this->config->get('publish_text_value');
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    $routeParameters = $this->getRouteParameters($this->routeMatch);
+    if (array_key_exists('node', $routeParameters)) {
+
+      return ['node:' . $routeParameters['node']];
+    }
+
+    return [];
+  }
+
 }

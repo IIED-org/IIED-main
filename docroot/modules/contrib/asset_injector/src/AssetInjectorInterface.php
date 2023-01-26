@@ -38,6 +38,14 @@ interface AssetInjectorInterface extends ConfigEntityInterface {
   public function internalFileUri();
 
   /**
+   * Get file path relative to drupal root to use in library info.
+   *
+   * @return string
+   *   File path relative to drupal root, with leading slash.
+   */
+  public function filePathRelativeToDrupalRoot();
+
+  /**
    * Get file extension.
    *
    * @return string

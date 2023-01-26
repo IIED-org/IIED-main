@@ -7,10 +7,15 @@
   Drupal.behaviors.ginLbToastify = {
     attach: (context) => {
       let offset = $( '.ui-dialog-off-canvas' ).length ? $( '.ui-dialog-off-canvas').width() : 0;
-      $('.glb-messages--warning', context).once('.glb-messages--warning').each(function(){
+
+      once('glb-messages-warning', '.glb-messages--warning', context).forEach((item)=>{
+        if ($(item).hasClass('toastify')) {
+          return;
+        }
         Toastify({
-          text: $(this).html(),
+          text: $(item).html(),
           escapeMarkup: false,
+          close: true,
           gravity: "bottom",
           duration: 6000,
           position: "right",
@@ -18,32 +23,44 @@
             x: 0,
           },
           className:"glb-messages glb-messages--warning",
-          backgroundColor:"var(--colorGinWarningBackground)"
+          style: {
+            background: "var(--colorGinWarningBackground)",
+          },
         }).showToast();
-        $(this).hide();
-      });
-      $('.glb-messages--error', context).once('.glb-messages--error').each(function(){
+        $(item).hide();
+      })
+      once('glb-messages-error', '.glb-messages--error', context).forEach((item)=>{
+        if ($(item).hasClass('toastify')) {
+          return;
+        }
         Toastify({
-          text: $(this).html(),
+          text: $(item).html(),
           escapeMarkup: false,
           gravity: "bottom",
           duration: 6000,
           position: "right",
+          close: true,
           offset: {
             x: offset,
           },
           className:"glb-messages glb-messages--error",
-          backgroundColor:"var(--colorGinErrorBackground)"
+          style: {
+            background: "var(--colorGinErrorBackground)",
+          },
         }).showToast();
-        $(this).hide();
-      });
-      $('.glb-messages--status', context).once('.glb-messages--status').each(function(){
-        if ($(this).parents('.glb-toolbar').length >= 1) {
+        $(item).hide();
+      })
+      once('glb-messages-status', '.glb-messages--status', context).forEach((item)=>{
+        if ($(item).hasClass('toastify')) {
+          return;
+        }
+        if ($(item).parents('.glb-sidebar__content').length >= 1) {
           return;
         }
         Toastify({
-          text: $(this).html(),
+          text: $(item).html(),
           escapeMarkup: false,
+          close: true,
           gravity: "bottom",
           duration: 6000,
           position: "right",
@@ -51,11 +68,12 @@
             x: offset,
           },
           className:"glb-messages glb-messages--status",
-          backgroundColor:"var(--colorGinStatusBackground)"
+          style: {
+            background: "var(--colorGinStatusBackground)",
+          },
         }).showToast();
-        $(this).hide();
+        $(item).hide();
       });
-
     }
   };
 

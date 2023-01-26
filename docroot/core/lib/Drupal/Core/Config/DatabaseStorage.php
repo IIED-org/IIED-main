@@ -215,7 +215,7 @@ class DatabaseStorage implements StorageInterface {
   /**
    * Implements Drupal\Core\Config\StorageInterface::delete().
    *
-   * @throws PDOException
+   * @throws \PDOException
    *
    * @todo Ignore replica targets for data manipulation operations.
    */
@@ -232,7 +232,7 @@ class DatabaseStorage implements StorageInterface {
   /**
    * Implements Drupal\Core\Config\StorageInterface::rename().
    *
-   * @throws PDOException
+   * @throws \PDOException
    */
   public function rename($name, $new_name) {
     // @todo Remove the 'return' option in Drupal 11.
@@ -255,7 +255,7 @@ class DatabaseStorage implements StorageInterface {
   /**
    * Implements Drupal\Core\Config\StorageInterface::decode().
    *
-   * @throws ErrorException
+   * @throws \ErrorException
    *   The unserialize() call will trigger E_NOTICE if the string cannot
    *   be unserialized.
    */
@@ -324,9 +324,8 @@ class DatabaseStorage implements StorageInterface {
   public function getAllCollectionNames() {
     try {
       return $this->connection->query('SELECT DISTINCT [collection] FROM {' . $this->connection->escapeTable($this->table) . '} WHERE [collection] <> :collection ORDER by [collection]', [
-          ':collection' => StorageInterface::DEFAULT_COLLECTION,
-        ]
-      )->fetchCol();
+        ':collection' => StorageInterface::DEFAULT_COLLECTION,
+      ])->fetchCol();
     }
     catch (\Exception $e) {
       return [];

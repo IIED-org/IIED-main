@@ -114,14 +114,14 @@ class CookieJar implements CookieJarInterface
         return null;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         return array_map(function (SetCookie $cookie) {
             return $cookie->toArray();
         }, $this->getIterator()->getArrayCopy());
     }
 
-    public function clear($domain = null, $path = null, $name = null)
+    public function clear($domain = null, $path = null, $name = null) :void
     {
         if (!$domain) {
             $this->cookies = [];
@@ -153,7 +153,7 @@ class CookieJar implements CookieJarInterface
         }
     }
 
-    public function clearSessionCookies()
+    public function clearSessionCookies(): void
     {
         $this->cookies = array_filter(
             $this->cookies,
@@ -163,7 +163,7 @@ class CookieJar implements CookieJarInterface
         );
     }
 
-    public function setCookie(SetCookie $cookie)
+    public function setCookie(SetCookie $cookie): bool
     {
         // If the name string is empty (but not 0), ignore the set-cookie
         // string entirely.
@@ -239,7 +239,7 @@ class CookieJar implements CookieJarInterface
     public function extractCookies(
         RequestInterface $request,
         ResponseInterface $response
-    ) {
+    ): void {
         if ($cookieHeader = $response->getHeader('Set-Cookie')) {
             foreach ($cookieHeader as $cookie) {
                 $sc = SetCookie::fromString($cookie);
@@ -281,7 +281,7 @@ class CookieJar implements CookieJarInterface
         return substr($uriPath, 0, $lastSlashPos);
     }
 
-    public function withCookieHeader(RequestInterface $request)
+    public function withCookieHeader(RequestInterface $request): RequestInterface
     {
         $values = [];
         $uri = $request->getUri();

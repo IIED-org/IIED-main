@@ -3,7 +3,7 @@
  * Attaches behaviors for the Chosen module.
  */
 
-(function($, Drupal, drupalSettings) {
+(function($, Drupal, drupalSettings, once) {
   'use strict';
 
   // Temporal workaround while  https://github.com/harvesthq/chosen/issues/515
@@ -76,7 +76,7 @@
      */
     attach: function(context, settings) {
       this.settings = this.getSettings(settings);
-      this.getElements(context).once('chosen').each(function (i, element) {
+      $(once('chosen', this.getElements(context))).each(function (i, element) {
         this.createChosen(element);
       }.bind(this));
     },
@@ -196,4 +196,4 @@
 
 };
 
-})(jQuery, Drupal, drupalSettings);
+})(jQuery, Drupal, drupalSettings, once);

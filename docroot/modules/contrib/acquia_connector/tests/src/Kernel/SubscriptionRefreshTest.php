@@ -133,4 +133,34 @@ final class SubscriptionRefreshTest extends AcquiaConnectorTestBase {
 
   }
 
+  /**
+   * Test getSubscription().
+   */
+  public function testGetSubscription(): void {
+    $this->container->get('state')->setMultiple([
+      'acquia_connector.identifier' => 'ABC',
+      'acquia_connector.key' => 'DEF',
+      'acquia_connector.application_uuid' => 'a47ac10b-58cc-4372-a567-0e02b2c3d470',
+    ]);
+    $this->container->get('acquia_connector.subscription')->populateSettings();
+
+    // Assert that we don't get data if oAuth data is empty.
+    $keys = ["subscription_name", "expiration_date"];
+    $subscription_data_no_oauth = $this->container->get('acquia_connector.subscription')
+      ->getSubscription(TRUE);
+
+    foreach ($keys as $key) {
+      $this->assertEmpty($subscription_data_no_oauth[$key]);
+    }
+
+    // Assert again with oAuth data set.
+    $this->populateOauthSettings();
+    $subscription_data_with_oauth = $this->container->get('acquia_connector.subscription')
+      ->getSubscription(TRUE);
+
+    foreach ($keys as $key) {
+      $this->assertNotEmpty($subscription_data_with_oauth[$key]);
+    }
+  }
+
 }

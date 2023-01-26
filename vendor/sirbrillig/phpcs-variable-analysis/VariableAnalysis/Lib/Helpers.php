@@ -69,6 +69,9 @@ class Helpers
 	{
 		$tokens = $phpcsFile->getTokens();
 		if (isset($tokens[$stackPtr]['nested_parenthesis'])) {
+			/**
+			 * @var array<int|string|null>
+			 */
 			$openPtrs = array_keys($tokens[$stackPtr]['nested_parenthesis']);
 			return (int)end($openPtrs);
 		}
@@ -755,7 +758,7 @@ class Helpers
 				$parentSquareBracket = self::findContainingOpeningSquareBracket($phpcsFile, $listOpenerIndex);
 				if (is_int($parentSquareBracket)) {
 					// Collect the opening index, but we don't actually need the closing paren index so just make that 0
-					$parents[$parentSquareBracket] = 0;
+					$parents = [$parentSquareBracket => 0];
 				}
 			}
 			// If we have no parents, this is not a nested assignment and therefore is not an assignment
@@ -1081,6 +1084,9 @@ class Helpers
 		if (empty($token['nested_parenthesis'])) {
 			return null;
 		}
+		/**
+		 * @var array<int|string|null>
+		 */
 		$startingParenthesis = array_keys($token['nested_parenthesis']);
 		$startOfArguments = end($startingParenthesis);
 		if (! is_int($startOfArguments)) {

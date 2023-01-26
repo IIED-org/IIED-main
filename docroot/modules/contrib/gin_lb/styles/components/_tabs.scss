@@ -29,7 +29,7 @@
 
     &__tab {
       .gin--dark-mode & {
-        background-color: var(--colorGinItemHover);
+        background-color: var(--gin-bg-item-hover);
         border-color: #8E929C;
       }
     }
@@ -38,11 +38,11 @@
 
 .gin--dark-mode {
   .tabs {
-    border-color: var(--colorGinLayer2Border);
+    border-color: var(--gin-border-color-layer2);
 
     .tabs__tab,
     .tabs__tab.is-active {
-      border-color: var(--colorGinLayer2Border);
+      border-color: var(--gin-border-color-layer2);
       background-color: transparent;
     }
   }
@@ -52,7 +52,7 @@
 .claro-details__summary,
 .horizontal-tabs ul.horizontal-tabs-list li.horizontal-tab-button a
 {
-  color: var(--colorGinText);
+  color: var(--gin-color-text);
   font-weight: 600;
   padding-top: 1.25em;
   padding-bottom: 1.25em;
@@ -62,10 +62,10 @@
   }
 
   &.is-active {
-    filter: drop-shadow(0 -8px 12px var(--colorGinPrimaryLightHover));
+    filter: drop-shadow(0 -8px 12px var(--gin-color-primary-light-hover));
 
     .gin--dark-mode & {
-      filter: drop-shadow(0 4px 12px var(--colorGinPrimaryLightHover));
+      filter: drop-shadow(0 4px 12px var(--gin-color-primary-light-hover));
     }
   }
 }
@@ -80,14 +80,14 @@
 .horizontal-tabs ul.horizontal-tabs-list li.horizontal-tab-button a {
   &:hover,
   &:focus {
-    color: var(--colorGinPrimary);
-    background: var(--colorGinItemHover);
+    color: var(--gin-color-primary);
+    background: var(--gin-bg-item-hover);
   }
 }
 
 .claro-details {
-  color: var(--colorGinText);
-  border: 1px solid var(--colorGinBorder);
+  color: var(--gin-color-text);
+  border: 1px solid var(--gin-border-color);
   border-radius: $borderDefault;
   box-shadow: none;
 }
@@ -98,8 +98,8 @@
   }
 
   &:hover {
-    color: var(--colorGinPrimary);
-    background-color: var(--colorGinItemHover);
+    color: var(--gin-color-primary);
+    background-color: var(--gin-bg-item-hover);
   }
 }
 
@@ -128,7 +128,7 @@
     display: block;
     width: 100%;
     max-width: calc(100% + .5em);
-    border-bottom: 1px solid var(--colorGinBorder);
+    border-bottom: 1px solid var(--gin-border-color);
     transition: $transition;
 
     @include mq($breakpointSmall) {
@@ -147,7 +147,7 @@
         content: "";
         width: calc(100% + 8px);
         height: 4px;
-        background: var(--colorGinAppBackground);
+        background: var(--gin-bg-app);
         display: block;
         position: absolute;
         bottom: -4px;
@@ -160,7 +160,7 @@
   .horizontal-tab-button {
     &:focus-within {
       &::after {
-        background: var(--colorGinLayerBackground);
+        background: var(--gin-bg-layer);
       }
     }
   }
@@ -169,7 +169,7 @@
 .horizontal-tabs ul.horizontal-tabs-list {
   &::before {
     z-index: 1;
-    background: var(--colorGinLayerBackground);
+    background: var(--gin-bg-layer);
   }
 
   &::after {
@@ -198,7 +198,7 @@
       border-bottom: 0 none;
 
       .gin--dark-mode & {
-        border-bottom: 1px solid var(--colorGinBorder);
+        border-bottom: 1px solid var(--gin-border-color);
       }
     }
   }
@@ -271,13 +271,13 @@
       }
 
       &.selected a {
-        color: var(--colorGinPrimary);
+        color: var(--gin-color-primary);
 
         &::before {
           z-index: 1;
           border-left: none;
           border-right: none;
-          border-bottom: 3px solid var(--colorGinPrimary);
+          border-bottom: 3px solid var(--gin-color-primary);
           top: auto;
           bottom: 0;
           left: 0;
@@ -311,7 +311,7 @@
 // Icon
 .claro-details__summary::before,
 .claro-details[open] > .claro-details__summary::before {
-  background: var(--colorGinText);
+  background: var(--gin-color-text);
   mask-image: icon('handle');
   mask-repeat: no-repeat;
   mask-position: center center;
@@ -325,12 +325,12 @@
 .claro-details[open] > .claro-details__summary--accordion::before,
 .claro-details[open] > .claro-details__summary--accordion-item::before,
 .claro-details[open] > .claro-details__summary--vertical-tabs-item::before {
-  background: var(--colorGinPrimary);
+  background: var(--gin-color-primary);
 }
 
 .claro-details {
   &__description {
-    color: var(--colorGinTextLight);
+    color: var(--gin-color-textLight);
   }
 }
 
@@ -343,14 +343,14 @@
   }
 
   .claro-details {
-    border-color: var(--colorGinBorder);
+    border-color: var(--gin-border-color);
   }
 
   .glb-claro-details__wrapper--accordion,
   .glb-claro-details__wrapper--accordion-item,
   .glb-claro-details__wrapper--vertical-tabs-item {
-    border: 1px solid var(--colorGinBorder);
-    background: var(--colorGinAppBackground);
+    border: 1px solid var(--gin-border-color);
+    background: var(--gin-bg-app);
   }
 
   .vertical-tabs {
@@ -360,16 +360,16 @@
     }
 
     &__menu-item.is-selected a {
-      background: var(--colorGinAppBackground);
-      border-color: var(--colorGinBorder);
+      background: var(--gin-bg-app);
+      border-color: var(--gin-border-color);
     }
 
     &__menu-link {
-      color: var(--colorGinText);
+      color: var(--gin-color-text);
     }
 
     &__menu-link-summary {
-      color: var(--colorGinTextLight);
+      color: var(--gin-color-textLight);
     }
   }
 }

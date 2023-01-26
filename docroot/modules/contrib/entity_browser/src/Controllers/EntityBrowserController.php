@@ -73,7 +73,7 @@ class EntityBrowserController extends ControllerBase {
     if ($operation && $form_state && !$form_state->isExecuted()) {
       // Return the form as a modal dialog.
       $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
-      $title = $this->t('Edit entity @entity', ['@entity' => $entity->label()]);
+      $title = $this->t('Edit @entity', ['@entity' => $entity->label()]);
       $response = (new AjaxResponse())->addCommand(new OpenDialogCommand('#' . $entity->getEntityTypeId() . '-' . $entity->id() . '-edit-dialog', $title, $form, ['modal' => TRUE, 'width' => 800]));
       return $response;
     }

@@ -1,0 +1,13 @@
+gin_lb.settings:
+  type: config_object
+  label: 'Gin Layout Builder settings'
+  mapping:
+    toastify_loading:
+      type: string
+      label: 'Define how to load Toastify.'
+    enable_preview_regions:
+      type: boolean
+      label: 'Enable regions preview by default.'
+    save_behavior:
+      type: string
+      label: 'Stay on edit or forward to entity view.'

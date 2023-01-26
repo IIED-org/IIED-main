@@ -1,2 +1,3 @@
-toastify_cdn: 1
-enable_preview_regions: 0
+toastify_loading: 'cdn'
+enable_preview_regions: false
+safe_behavior: 'stay'

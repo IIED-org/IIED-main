@@ -5,8 +5,7 @@ migration_tags:
   - Configuration
 source:
   plugin: d7_acquia_search_index
-  source_module:
-    - acquia_search
+  source_module: acquia_search
 process:
   datasource_settings/entity:node/bundles/selected: bundle
 destination:

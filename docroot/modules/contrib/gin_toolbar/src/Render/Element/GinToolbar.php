@@ -46,7 +46,9 @@ class GinToolbar implements TrustedCallbackInterface {
       ->onlyEnabledLinks();
 
     if (\Drupal::moduleHandler()->moduleExists('admin_toolbar')) {
-      $parameters->setMaxDepth(4);
+      $admin_toolbar_settings = \Drupal::config('admin_toolbar.settings');
+      $max_depth = $admin_toolbar_settings->get('menu_depth') ?? 4;
+      $parameters->setMaxDepth($max_depth);
     }
 
     $tree = $menu_tree->load('admin', $parameters);

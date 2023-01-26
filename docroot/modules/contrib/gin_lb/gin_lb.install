@@ -14,3 +14,15 @@ function gin_lb_update_8001() {
   $config->set('toastify_cdn', 1);
   $config->save(TRUE);
 }
+
+/**
+ * Set new Toastify loading config.
+ */
+function gin_lb_update_8002() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('gin_lb.settings');
+  $toastify_loading = $config->get('toastify_cdn') ? 'cdn' : 'custom';
+  $config->set('toastify_loading', $toastify_loading);
+  $config->set('safe_behavior', 'stay');
+  $config->save(TRUE);
+}

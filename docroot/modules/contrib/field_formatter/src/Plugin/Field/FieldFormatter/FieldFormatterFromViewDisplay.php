@@ -20,7 +20,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "field_formatter_from_view_display",
  *   label = @Translation("Field formatter from view display"),
  *   field_types = {
- *     "entity_reference"
+ *     "entity_reference",
+ *     "entity_reference_revisions"
  *   }
  * )
  */

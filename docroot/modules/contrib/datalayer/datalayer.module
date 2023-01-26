@@ -9,7 +9,6 @@ use Drupal\Core\Url;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\taxonomy\Entity\Term;
-use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\group\Entity\GroupContentType;
 use Drupal\user\Entity\User;
@@ -23,41 +22,83 @@ function datalayer_form_field_config_form_alter(&$form, FormStateInterface $form
     $field = $form_state->getFormObject()->getEntity();
     $form['third_party_settings']['datalayer']['expose'] = [
       '#type' => 'checkbox',
-      '#title' => t('Expose in dataLayer'),
+      '#title' => t('Expose field data in JavaScript <code>dataLayer</code> variable.'),
       '#default_value' => $field->getThirdPartySetting('datalayer', 'expose', 0),
-      '#description' => t('Checking this box will result in this field being included in the dataLayer object.'),
+      '#description' => t("Checking this box will result in this field's value being included in the <code>dataLayer</code> object provided by the dataLayer module."),
     ];
     $form['third_party_settings']['datalayer']['label'] = [
       '#type' => 'textfield',
       '#title' => t('DataLayer label'),
       '#default_value' => $field->getThirdPartySetting('datalayer', 'label', $field->get('field_name')),
-      '#description' => t('Enter the label you would like in the datalayer output.'),
+      '#description' => t('Enter the label/key to use when adding this field to the <code>datalayer</code> object. Example; <code>dataLayer.fieldName: value</code>'),
+      '#states' => [
+        'visible' => [
+          ':input[name="third_party_settings[datalayer][expose]"]' => [
+            'checked' => TRUE,
+          ],
+        ],
+      ],
     ];
+  }
+
+  $form['actions']['submit']['#submit'][] = 'datalayer_field_config_submit';
+}
+
+/**
+ * Submit callback for field_config_form.
+ *
+ * If the datalayer configuration to expose the field's data is disabled we
+ * should remove any previously set third party settings.
+ *
+ * @param array $form
+ *   The form array.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The $form_state object.
+ */
+function datalayer_field_config_submit(array &$form, FormStateInterface $form_state) {
+  /** @var \Drupal\field\Entity\FieldConfig $field */
+  $field = $form_state->getFormObject()->getEntity();
+  if (empty($field->getThirdPartySetting('datalayer', 'expose'))) {
+    $settings = $field->getThirdPartySettings('datalayer');
+    foreach ($settings as $key => $value) {
+      $field->unsetThirdPartySetting('datalayer', $key);
+    }
+    $field->save();
   }
 }
 
 /**
  * Add data for output.
+ *
+ * This can be an expensive function whose result is not being modified.
+ * Adding static cache.
+ *
+ * @param bool $reset
+ *   Boolean indicating whether the static cache should be cleared or not.
  */
-function datalayer_get_data_from_page() {
-  $datalayer_settings = \Drupal::config('datalayer.settings');
-  $user = \Drupal::currentUser();
+function datalayer_get_data_from_page($reset = FALSE) {
+  $datalayer = &drupal_static(__FUNCTION__);
 
-  // Add details about the page entity.
-  if ($datalayer_settings->get('add_page_meta')) {
-    datalayer_add(datalayer_get_page_data());
+  if (!$datalayer || $reset) {
+    $datalayer_settings = \Drupal::config('datalayer.settings');
+    $user = \Drupal::currentUser();
+
+    // Add details about the page entity.
+    if ($datalayer_settings->get('add_page_meta')) {
+      datalayer_add(datalayer_get_page_data());
+    }
+
+    // Expose user details.
+    if ($datalayer_settings->get('expose_user_details')) {
+      datalayer_add(datalayer_get_user_data());
+    }
+
+    // Always output active uid.
+    $datalayer = datalayer_add(['userUid' => $user->id()]);
+
+    // Allow modules to alter data with hook_datalayer_alter().
+    \Drupal::moduleHandler()->alter('datalayer', $datalayer);
   }
-
-  // Expose user details.
-  if ($datalayer_settings->get('expose_user_details')) {
-    datalayer_add(datalayer_get_user_data());
-  }
-
-  // Always output active uid.
-  $datalayer = datalayer_add(['userUid' => $user->id()]);
-
-  // Allow modules to alter data with hook_datalayer_alter().
-  \Drupal::moduleHandler()->alter('datalayer', $datalayer);
 
   return $datalayer;
 }
@@ -68,6 +109,13 @@ function datalayer_get_data_from_page() {
  * Load all meta tags for this page.
  */
 function datalayer_page_attachments(array &$attachments) {
+  $datalayer_settings = \Drupal::config('datalayer.settings');
+
+  // Optionally do not run dataLayer code on admin pages.
+  if (\Drupal::service('router.admin_context')->isAdminRoute() && $datalayer_settings->get('remove_from_admin_routes') === TRUE) {
+    return;
+  }
+
   if (empty($attachments['#attached'])) {
     $attachments['#attached'] = [];
   }
@@ -80,17 +128,26 @@ function datalayer_page_attachments(array &$attachments) {
     [
       '#type' => 'html_tag',
       '#tag' => 'script',
-      '#value' => 'window.dataLayer = window.dataLayer || []; window.dataLayer.push(' . Json::encode($datalayer_attachment) . ');',
+      // Use json_encode() instead of
+      // Drupal\Component\Serialization\Json::encode() because we want to pass
+      // the additional JSON_UNESCAPED_UNICODE flag.
+      '#value' => 'window.dataLayer = window.dataLayer || []; window.dataLayer.push(' . json_encode($datalayer_attachment, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE) . ');',
     ],
     'datalayers-js',
   ];
 
+  // If we're exposing user data make sure that context is added to the
+  // cachability for the page. And, we add this regardless of configuration
+  // becasue in datalayer_get_data_from_page() we always add userUid no matter
+  // what.
+  $attachments['#cache']['contexts'][] = 'user';
+
   // Include data-layer-helper library.
-  if (\Drupal::config('datalayer.settings')->get('lib_helper')) {
+  if ($datalayer_settings->get('lib_helper')) {
     $attachments['#attached']['library'][] = 'datalayer/helper';
   }
 
-  // Output configred language data.
+  // Output configured language data.
   $languages = \Drupal::languageManager()->getLanguages();
   if (count($languages)) {
     $langs = [];
@@ -106,6 +163,7 @@ function datalayer_page_attachments(array &$attachments) {
       }
     }
     $attachments['#attached']['drupalSettings']['dataLayer']['languages'] = $langs;
+    $attachments['#cache']['contexts'][] = 'languages:language_content';
   }
 
   // Common datalayer JS.
@@ -215,7 +273,7 @@ function datalayer_get_user_data() {
     if ($exp_user_urls && count($matched_roles)) {
       $path = Url::fromRoute("<current>")->toString();
       $path_matcher = \Drupal::service('path.matcher');
-      $alias_manager = \Drupal::service('path.alias_manager');
+      $alias_manager = \Drupal::service('path_alias.manager');
       $path_alias = $alias_manager->getAliasByPath($path);
       if ($path_matcher->matchPath($path, $exp_user_urls) ||
           $path_matcher->matchPath($path_alias, $exp_user_urls)) {
@@ -307,7 +365,7 @@ function _datalayer_get_entity_data($entity) {
       $depth = $datalayer_settings->get('ia_depth');
       // Retrieve an array which contains the path pieces.
       $current_path = \Drupal::service('path.current')->getPath();
-      $result = \Drupal::service('path.alias_manager')
+      $result = \Drupal::service('path_alias.manager')
         ->getAliasByPath($current_path);
       $path_args = explode('/', $result);
       $i = 0;
@@ -405,7 +463,7 @@ function datalayer_add(array $data = [], $overwrite = FALSE) {
 function _datalayer_defaults() {
   $datalayer_settings = \Drupal::config('datalayer.settings');
 
-  $language = \Drupal::languageManager()->getDefaultLanguage();
+  $language = \Drupal::languageManager()->getCurrentLanguage();
   $site_config = \Drupal::config('system.date');
   $site_name = \Drupal::config('system.site');
   return [
@@ -533,7 +591,7 @@ function _datalayer_field_get_value($field_item, $field_type) {
 
     case 'metatag':
       $field = $field_item->getValue();
-      $values = unserialize($field['value']);
+      $values = unserialize($field['value'], ['allowed_classes' => FALSE]);
       foreach ($values as $key => $thisvalue) {
         $value[$key] = $thisvalue;
       }
@@ -551,22 +609,6 @@ function _datalayer_field_get_value($field_item, $field_type) {
   \Drupal::moduleHandler()->alter('datalayer_field', $value, $field_item, $field_type);
 
   return $value;
-}
-
-/**
- * Implements hook_google_tag_snippets_alter().
- *
- * If the google_tag module is installed, avoid conflicts with
- * the datalayer variables.
- */
-function datalayer_google_tag_snippets_alter(&$snippets) {
-  $config = \Drupal::config('google_tag.settings');
-  $data_layer = $config->get('data_layer');
-  $data_layer = trim(json_encode($data_layer), '"');
-  // Combine the dataLayer module variable with the google_tag dataLayer array.
-  $init_value = $data_layer === 'dataLayer' ? 'window.dataLayer' : "window.dataLayer || window.$data_layer";
-  $snippets['data_layer'] = preg_replace("/.*($data_layer) =.*?\[(.*)\](;.*$)/",
-    'window.$1 = ' . $init_value . ' || []; window.$1.push($2)$3', $snippets['data_layer']);
 }
 
 /**

@@ -28,7 +28,7 @@ class MultivalueTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['chosen', 'options', 'node'];
+  protected static $modules = ['chosen', 'options', 'node'];
 
   /**
    * {@inheritdoc}

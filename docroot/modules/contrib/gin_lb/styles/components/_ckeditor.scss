@@ -4,12 +4,12 @@
     .cke_wysiwyg_frame,
     .cke_wysiwyg_div {
       .gin--dark-mode & {
-        background: var(--colorGinLayer2Background) !important;
+        background: var(--gin-bg-layer2) !important;
       }
     }
 
     &.cke_chrome {
-      border-color: var(--colorGinFormElementBorder) !important;
+      border-color: var(--gin-border-color-form-element) !important;
       border-radius: $borderDefault !important;
     }
 
@@ -18,17 +18,17 @@
     }
 
     .cke_top {
-      background: var(--colorGinLayerBackground) !important;
-      border-bottom: 1px solid var(--colorGinBorder) !important;
+      background: var(--gin-bg-layer) !important;
+      border-bottom: 1px solid var(--gin-border-color) !important;
       border-radius: #{$borderDefault - 1} #{$borderDefault - 1} 0 0!important;
 
       .gin--dark-mode & {
-        background: var(--colorGinLayer2Background) !important;
+        background: var(--gin-bg-layer2) !important;
       }
     }
 
     .cke_bottom {
-      background: var(--colorGinLayer3Background) !important;
+      background: var(--gin-bg-layer3) !important;
       border-radius: 0 0 #{$borderDefault - 1} #{$borderDefault - 1} !important;
     }
 
@@ -43,25 +43,25 @@
 
     .cke_combo {
       &::after {
-        border-right: 1px solid var(--colorGinBorder) !important;
+        border-right: 1px solid var(--gin-border-color) !important;
       }
     }
 
     .cke_combo_text {
-      color: var(--colorGinText) !important;
+      color: var(--gin-color-text) !important;
     }
 
     .cke_combo_on a.cke_combo_button,
     .cke_combo_off a.cke_combo_button:hover,
     .cke_combo_off a.cke_combo_button:focus,
     .cke_combo_off a.cke_combo_button:active {
-      background: var(--colorGinAppBackground) !important;
-      border: 1px solid var(--colorGinLayer2Background) !important;
+      background: var(--gin-bg-app) !important;
+      border: 1px solid var(--gin-bg-layer2) !important;
     }
 
     a.cke_path_item,
     span.cke_path_empty {
-      color: var(--colorGinTextLight) !important;
+      color: var(--gin-color-textLight) !important;
     }
 
     a.cke_button {
@@ -76,8 +76,8 @@
       &:hover,
       &:focus,
       &:active {
-        background: var(--colorGinItemHover) !important;
-        border: 1px solid var(--colorGinLayer2Border) !important;
+        background: var(--gin-bg-item-hover) !important;
+        border: 1px solid var(--gin-border-color-layer2) !important;
       }
     }
 
@@ -90,7 +90,7 @@
     }
 
     &.cke_panel {
-      background-color: var(--colorGinAppBackground) !important;
+      background-color: var(--gin-bg-app) !important;
       border: 0 none !important;
     }
   }
@@ -103,17 +103,17 @@
   .cke:hover .cke_contents,
   .cke:hover .cke_top,
   .cke:hover .cke_bottom {
-    border-color: var(--colorGinText) !important;
+    border-color: var(--gin-color-text) !important;
 
     .gin--dark-mode & {
-      border-color: var(--colorGinLayer2Border) !important;
+      border-color: var(--gin-border-color-layer2) !important;
     }
   }
 
   .cke:hover .cke_top {
     &,
     .gin--dark-mode & {
-      border-bottom-color: var(--colorGinBorder) !important;
+      border-bottom-color: var(--gin-border-color) !important;
     }
   }
 
@@ -125,7 +125,7 @@
   .error + .cke.cke_focus .cke_contents,
   .error + .cke.cke_focus .cke_top,
   .error + .cke.cke_focus .cke_bottom {
-    border-color: var(--colorGinText) !important;
+    border-color: var(--gin-color-text) !important;
   }
 
   .cke_top,
@@ -133,7 +133,7 @@
   .cke.cke_focus .cke_top,
   .error + .cke.cke_focus .cke_top,
   .error + .cke.cke_chrome.cke_focus:hover .cke_top {
-    border-bottom: 1px solid var(--colorGinBorder) !important;
+    border-bottom: 1px solid var(--gin-border-color) !important;
   }
 
   .cke textarea.cke_source {
@@ -143,20 +143,20 @@
   body .cke_notification_info {
     opacity: 1 !important;
     padding: .5em !important;
-    background: var(--colorGinLayer4Background) !important;
+    background: var(--gin-bg-layer4) !important;
     border: 0 none !important;
     border-radius: $borderDefault !important;
     box-shadow: 0 1px 2px rgba(0, 0, 0, .15),
     20px 20px 40px rgba(0, 0, 0, .12) !important;
 
     .cke_notification_message {
-      color: var(--colorGinText) !important;
+      color: var(--gin-color-text) !important;
     }
 
     .cke_notification_close {
       top: 4px !important;
       right: 4px !important;
-      background: var(--colorGinText) !important;
+      background: var(--gin-color-text) !important;
       mask-image: icon('close') !important;
       mask-position: center center !important;
       mask-repeat: no-repeat !important;
@@ -165,7 +165,7 @@
   }
 
   .filter-tips {
-    color: var(--colorGinTextLight) !important;
+    color: var(--gin-color-textLight) !important;
   }
 
 }

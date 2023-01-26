@@ -190,9 +190,10 @@ class SearchSubscriber extends AbstractPlugin implements EventSubscriberInterfac
   public function postExecuteRequest($event) {
     /** @var \Solarium\Core\Event\PostExecuteRequest $event */
     $response = $event->getResponse();
-    if (!$event->getEndpoint()) {
+    if (!$event->getEndpoint() instanceof AcquiaSearchEndpoint) {
       return;
     }
+
     $this->endpoint = $event->getEndpoint();
 
     if ($response->getStatusCode() != 200) {

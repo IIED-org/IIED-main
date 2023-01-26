@@ -74,6 +74,13 @@ class SettingsForm extends ConfigFormBase {
   protected $siteProfile;
 
   /**
+   * Reset to Defaults data.
+   *
+   * @var array
+   */
+  protected $resetData;
+
+  /**
    * Acquia Connector Settings Form Constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -135,10 +142,16 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    // Redirect to Connector Setup if no subscription is active.
     if (!$this->subscription->isActive()) {
       return new RedirectResponse(
         Url::fromRoute('acquia_connector.setup_oauth')->toString()
       );
+    }
+
+    // Redirect to confirmation form when resetting network ID.
+    if ($this->resetData) {
+      return \Drupal::formBuilder()->getForm('Drupal\acquia_connector\Form\ResetConfirmationForm');
     }
 
     // Start with an empty subscription.
@@ -150,9 +163,27 @@ class SettingsForm extends ConfigFormBase {
 
     if (!empty($subscription)) {
       $form['subscription'] = [
-        '#markup' => $this->t('Subscription: @sub <a href=":url">change</a>', [
+        '#markup' => $this->t('<strong>Subscription:</strong> @sub <a href=":url">change</a> <br />', [
           '@sub' => $subscription['subscription_name'],
           ':url' => Url::fromRoute('acquia_connector.setup_configure')->toString(),
+        ]),
+      ];
+      if (isset($subscription['application'])) {
+        $form['app_name'] = [
+          '#markup' => $this->t('<strong>Application Name:</strong> @app_name <br />', [
+            '@app_name' => $subscription['application']['name'],
+          ]),
+        ];
+      }
+      $form['identifier'] = [
+        '#markup' => $this->t('<strong>Identifier:</strong> @identifier @overridden <br />', [
+          '@identifier' => $this->subscription->getSettings()->getIdentifier(),
+          '@overridden' => $this->isCloudOverridden() ? '(Overridden)' : '',
+        ]),
+      ];
+      $form['app_uuid'] = [
+        '#markup' => $this->t('<strong>Application UUID:</strong> @app_uuid', [
+          '@app_uuid' => $this->subscription->getSettings()->getApplicationUuid(),
         ]),
       ];
     }
@@ -178,7 +209,7 @@ class SettingsForm extends ConfigFormBase {
       '#maxlength' => 255,
       '#required' => TRUE,
       '#disabled' => TRUE,
-      '#default_value' => $this->state->get('spi.site_name') ?? $this->siteProfile->getSiteName($subscription['uuid']),
+      '#default_value' => $this->siteProfile->getSiteName($this->subscription->getSettings()->getApplicationUuid()),
     ];
 
     if (!empty($form['identification']['site']['name']['#default_value']) && $this->siteProfile->checkAcquiaHosted()) {
@@ -225,7 +256,19 @@ class SettingsForm extends ConfigFormBase {
       $form['product_settings']['#tree'] = TRUE;
     }
 
-    return parent::buildForm($form, $form_state);
+    $form = parent::buildForm($form, $form_state);
+
+    // Allow customers to reset the connection if it mismatches hosting.
+    if ($this->isCloudOverridden()) {
+      $form['actions']['reset'] = [
+        '#type' => 'submit',
+        '#value' => $this->t('Reset to default'),
+        '#button_type' => 'danger',
+        '#submit' => [[$this, 'submitReset']],
+      ];
+    }
+
+    return $form;
   }
 
   /**
@@ -239,9 +282,31 @@ class SettingsForm extends ConfigFormBase {
   }
 
   /**
+   * Submit handler for the Reset Defaults button.
+   */
+  public function submitReset(array &$form, FormStateInterface $form_state) {
+    $form_state->setRebuild();
+    $this->resetData = $form_state->getValues();
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    // If we're just resetting the values, do it first.
+    if ($form_state->getValue('confirm')) {
+      $this->state->deleteMultiple([
+        'acquia_connector.identifier',
+        'acquia_connector.key',
+        'acquia_connector.application_uuid',
+      ]);
+
+      // Repopulate Settings and reset the subscription data.
+      $this->subscription->populateSettings();
+      $this->subscription->getSubscription(TRUE);
+      $this->messenger()->addStatus($this->t('Successfully reset Acquia Connector Identifier and Key.'));
+      return;
+    }
     $event = new AcquiaProductSettingsEvent($form, $form_state, $this->subscription);
     // @todo Remove after dropping support for Drupal 8.
     if (version_compare(\Drupal::VERSION, '9.0', '>=')) {
@@ -279,6 +344,22 @@ class SettingsForm extends ConfigFormBase {
     $config->save();
 
     parent::submitForm($form, $form_state);
+  }
+
+  /**
+   * Checks if Acquia Cloud's values are overridden.
+   *
+   * @return bool
+   *   Determines whether the subscription matches AH values.
+   */
+  protected function isCloudOverridden() {
+    if ($this->subscription->getProvider() !== 'acquia_cloud') {
+      return FALSE;
+    }
+    if ($this->subscription->getSettings()->getMetadata('ah_network_identifier') !== $this->subscription->getSettings()->getIdentifier()) {
+      return TRUE;
+    }
+    return FALSE;
   }
 
 }

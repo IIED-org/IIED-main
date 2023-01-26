@@ -60,7 +60,7 @@
     width: 13.75em;
     margin-right: 1.25em;
 
-    background: var(--colorGinAppBackground);
+    background: var(--gin-bg-app);
 
     img
     {
@@ -157,7 +157,7 @@
         &.sortable-chosen
         {
             outline: none;
-            background: var(--colorGinLayerBackground);
+            background: var(--gin-bg-layer);
             box-shadow: 0 0 48px rgba(0, 0, 0, .075) !important;
 
             // Hide emove button on ghost.
@@ -170,7 +170,7 @@
         // Show where to drag to.
         &.sortable-ghost
         {
-            border: 2px dashed var(--colorGinBorder);
+            border: 2px dashed var(--gin-border-color);
         }
     }
 
@@ -198,7 +198,7 @@
         text-overflow: initial !important;
         word-break: break-all;
 
-        color: var(--colorGinText);
+        color: var(--gin-color-text);
     }
 
     &__attributes
@@ -236,13 +236,13 @@
 
     &.is-hover &__preview
     {
-        border-color: var(--colorGinText);
+        border-color: var(--gin-color-text);
     }
 
     &.checked &__preview,
     &.is-active &__preview
     {
-        border-color: var(--colorGinPrimary);
+        border-color: var(--gin-color-primary);
     }
     .media-library-edit__link
     {
@@ -255,7 +255,7 @@
         height: 29px !important;
 
         color: transparent !important;
-        border-color: var(--colorGinBorder) !important;
+        border-color: var(--gin-border-color) !important;
         text-shadow: none !important;
     }
 
@@ -276,7 +276,7 @@
         transition: .2s border-color !important;
 
         color: transparent !important;
-        border-color: var(--colorGinBorder) !important;
+        border-color: var(--gin-border-color) !important;
         background-image: url('data:image/svg+xml,%3csvg width=\'16\' height=\'16\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3e%3cpath d=\'M2.344 2.343l11.313 11.313M2.344 13.657L13.657 2.343\' stroke=\'%2355565B\' stroke-width=\'3\'/%3e%3c/svg%3e') !important;
         background-repeat: no-repeat !important;
         background-position: center !important;
@@ -292,7 +292,7 @@
         &:hover,
         &:focus
         {
-            border-color: var(--colorGinPrimary) !important;
+            border-color: var(--gin-color-primary) !important;
         }
 
         &,
@@ -309,9 +309,9 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, .15) !important;
         }
     }
-
-    &__edit
-    {
+    & .glb-media-library-item__edit
+      {
+        background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"%3E%3C/path%3E%3C/svg%3E%0A') !important;
         right: 3.125em;
     }
 
@@ -340,7 +340,7 @@
 
             &:checked
             {
-                border-color: var(--colorGinPrimary);
+                border-color: var(--gin-color-primary);
                 box-shadow: none;
             }
         }
@@ -393,7 +393,7 @@
                 box-shadow: 0 2px 4px rgba(0,0,0,.15) !important;
         &:checked
         {
-            border-color: var(--colorGinPrimary) !important;
+            border-color: var(--gin-color-primary) !important;
             background-image: url('data:image/svg+xml,%3csvg width=\'16\' height=\'16\' xmlns=\'http://www.w3.org/2000/svg\'%3e%3cpath d=\'M3.795 7.096l2.387 2.506 6.023-6.327 1.484 1.56-7.507 7.89L2.31 8.656z\' fill=\'%23fff\'/%3e%3c/svg%3e') !important;
             box-shadow: none !important;
         }
@@ -404,7 +404,7 @@ fieldset.glb-media-library-widget
 {
     padding: 1.5em;
 
-    border: 1px solid var(--colorGinBorder);
+    border: 1px solid var(--gin-border-color);
     border-radius: 6px;
 
     .media-library-widget__toggle-weight
@@ -429,14 +429,14 @@ fieldset.glb-media-library-widget
 }
 .glb-media-library-widget-empty-text
 {
-    color: var(--colorGinTextLight);
+    color: var(--gin-color-textLight);
 }
 
 .glb-media-library-add-form
 {
     &__preview
     {
-        background: var(--colorGinAppBackground);
+        background: var(--gin-bg-app);
     }
 
     &__input-wrapper
@@ -461,8 +461,8 @@ fieldset.glb-media-library-widget
 
     list-style: none !important;
 
-    border-color: var(--colorGinBorder) !important;
-    background-color: var(--colorGinAppBackground) !important;
+    border-color: var(--gin-border-color) !important;
+    background-color: var(--gin-bg-app) !important;
 
     &__item
     {
@@ -499,8 +499,8 @@ fieldset.glb-media-library-widget
         word-wrap: break-word;
         hyphens: auto;
 
-        color: var(--colorGinText);
-        border: 1px solid var(--colorGinBorder);
+        color: var(--gin-color-text);
+        border: 1px solid var(--gin-border-color);
         border-width: 1px 0 1px 4px;
         border-radius: 2px 0 0 2px;
 
@@ -509,10 +509,10 @@ fieldset.glb-media-library-widget
         &:focus,
         &.active
         {
-            color: var(--colorGinPrimary);
+            color: var(--gin-color-primary);
             border-right: 0 none;
-            border-bottom: 1px solid var(--colorGinBorder);
-            background-color: var(--colorGinLayerBackground);
+            border-bottom: 1px solid var(--gin-border-color);
+            background-color: var(--gin-bg-layer);
             box-shadow: none;
             text-shadow: none;
         }
@@ -553,7 +553,7 @@ fieldset.glb-media-library-widget
         width: 100%;
         padding: 1em;
 
-        border-left: 1px solid var(--colorGinBorder);
+        border-left: 1px solid var(--gin-border-color);
         outline: none;
         box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
     }
@@ -576,9 +576,9 @@ fieldset.glb-media-library-widget
         text-align: right;
         text-decoration: none;
 
-        color: var(--colorGinText);
+        color: var(--gin-color-text);
         border-radius: $borderDefault;
-        background: var(--colorGinLayer3Background);
+        background: var(--gin-bg-layer3);
         box-shadow: 0 1px 2px rgba(0, 0, 0, .08),
         20px 20px 40px rgba(0, 0, 0, .12);
     }
@@ -599,7 +599,7 @@ fieldset.glb-media-library-widget
         white-space: nowrap;
         text-decoration: none;
 
-        color: var(--colorGinText);
+        color: var(--gin-color-text);
         color: #333;
 
         &:before
@@ -615,16 +615,16 @@ fieldset.glb-media-library-widget
 
             content: '';
 
-            background-color: var(--colorGinText);
+            background-color: var(--gin-color-text);
         }
 
         &.is-active
         {
-            color: var(--colorGinPrimary);
+            color: var(--gin-color-primary);
 
             &:before
             {
-                background-color: var(--colorGinPrimary);
+                background-color: var(--gin-color-primary);
             }
         }
     }
@@ -648,7 +648,7 @@ fieldset.glb-media-library-widget
 
 .glb-media-library-content
 {
-    border-color: var(--colorGinBorder);
+    border-color: var(--gin-border-color);
 }
 
 .glb-media-library-select-all
@@ -656,9 +656,9 @@ fieldset.glb-media-library-widget
     margin-top: 0;
     padding: 1em;
 
-    color: var(--colorGinTitle);
+    color: var(--gin-color-title);
     border-radius: $borderDefault;
-    background: var(--colorGinTableHeader);
+    background: var(--gin-bg-header);
     box-shadow: 0 2px 6px 2px rgba(0, 0, 0, .03);
 }
 
@@ -678,7 +678,7 @@ fieldset.glb-media-library-widget
     {
         .gin--dark-mode &
         {
-            background: var(--colorGinLayer2Background) !important;
+            background: var(--gin-bg-layer2) !important;
             box-shadow: 0 6px 16px rgba(0,0,0,.05) !important;
         }
     }

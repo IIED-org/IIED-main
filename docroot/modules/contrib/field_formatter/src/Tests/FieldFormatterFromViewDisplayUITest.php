@@ -23,7 +23,7 @@ class FieldFormatterFromViewDisplayUITest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'field_formatter_test',
     'field_ui',
   ];
@@ -36,7 +36,7 @@ class FieldFormatterFromViewDisplayUITest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser([
@@ -58,8 +58,8 @@ class FieldFormatterFromViewDisplayUITest extends BrowserTestBase {
       'name[0][value]' => $term_name,
       'field_test_field[0][value]' => $field,
     ];
-    $this->drupalPostForm(NULL, $edit_term, $this->t('Save'));
-    $this->assertText("Created new term $term_name.", 'Created term.');
+    $this->submitForm($edit_term, $this->t('Save'));
+    $this->assertSession()->pageTextContains("Created new term $term_name.");
 
     // Add content.
     $this->drupalGet('node/add/test_content_type');
@@ -68,9 +68,9 @@ class FieldFormatterFromViewDisplayUITest extends BrowserTestBase {
       'title[0][value]' => $content_name,
       'field_field_test_ref[0][target_id]' => $term_name,
     ];
-    $this->drupalPostForm(NULL, $edit_content, $this->t('Save'));
-    $this->assertRaw('<div class="field__label">test_field</div>', 'Field is correctly displayed on node page.');
-    $this->assertRaw('<div class="field__item">' . $field . '</div>', "Field's content was found.");
+    $this->submitForm($edit_content, $this->t('Save'));
+    $this->assertSession()->responseContains('<div class="field__label">test_field</div>');
+    $this->assertSession()->responseContains('<div class="field__item">' . $field . '</div>');
   }
 
   /**
@@ -81,10 +81,10 @@ class FieldFormatterFromViewDisplayUITest extends BrowserTestBase {
     $this->drupalLogin($account);
 
     $this->drupalGet('admin/structure/types/manage/test_content_type/display');
-    $this->drupalPostForm(NULL, [], 'field_field_test_ref_settings_edit');
-    $this->assertFieldByName('fields[field_field_test_ref][settings_edit_form][settings][view_mode]', NULL, 'Field to select the view mode is available.');
-    $this->assertRaw('<option value="default">Default</option>', 'Default view mode can be selected.');
-    $this->assertFieldByName('fields[field_field_test_ref][settings_edit_form][settings][field_name]', NULL, 'Field to select the field name is available.');
+    $this->submitForm([], 'field_field_test_ref_settings_edit');
+    $this->assertSession()->fieldExists('fields[field_field_test_ref][settings_edit_form][settings][view_mode]');
+    $this->assertSession()->responseContains('<option value="default">Default</option>');
+    $this->assertSession()->fieldExists('fields[field_field_test_ref][settings_edit_form][settings][field_name]');
   }
 
 }

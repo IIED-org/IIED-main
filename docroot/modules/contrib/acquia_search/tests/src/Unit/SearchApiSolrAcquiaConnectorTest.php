@@ -20,10 +20,10 @@ use Drupal\Component\Datetime\Time;
 use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Crypt;
-use Drupal\Component\Uuid\Php as PhpUuid;
 use Drupal\Core\Cache\MemoryBackend;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Http\ClientFactory;
 use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
@@ -220,7 +220,9 @@ final class SearchApiSolrAcquiaConnectorTest extends UnitTestCase {
     $subscription->method('getSettings')->willReturn($settings);
     $subscription->method('getSubscription')->willReturn([
       'active' => TRUE,
-      'uuid' => (new PhpUuid())->generate(),
+      'uuid' => '',
+      'subscription_name' => '',
+      'expiration_date' => '',
       'acquia_search' => array_filter($subscription_data + [
         'api_host' => 'https://api.sr-prod02.acquia.com',
         'extract_query_handler_option' => 'update/extract',
@@ -324,7 +326,8 @@ final class SearchApiSolrAcquiaConnectorTest extends UnitTestCase {
     $preferred_core = new PreferredCoreService(
       $event_dispatcher,
       $subscription,
-      $api_client
+      $api_client,
+      $this->createMock(ModuleHandlerInterface::class)
     );
 
     $flood = $this->createMock(Flood::class);

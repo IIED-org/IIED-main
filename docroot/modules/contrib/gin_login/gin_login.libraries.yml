@@ -1,5 +1,7 @@
-gin_login:
-  version: 1.x
+login:
   css:
     theme:
       dist/css/login.css: { minified: false, weight: -99 }
+wallpaper:
+  js:
+    dist/js/wallpaper.js: { minified: false }

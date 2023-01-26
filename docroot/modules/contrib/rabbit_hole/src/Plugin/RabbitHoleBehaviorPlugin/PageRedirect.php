@@ -199,6 +199,8 @@ class PageRedirect extends RabbitHoleBehaviorPluginBase implements ContainerFact
       $langcode = LanguageInterface::LANGCODE_NOT_SPECIFIED;
     }
 
+    // Convert <front> into valid URI.
+    $target = $target === '<front>' ? 'base:/' : $target;
     $target = $this->token->replace($target, [
       $entity->getEntityTypeId() => $entity,
     ], [
@@ -318,7 +320,6 @@ class PageRedirect extends RabbitHoleBehaviorPluginBase implements ContainerFact
       '#default_value' => $redirect,
       '#description' => '<p>' . implode('</p><p>', $description) . '</p>',
       '#attributes' => ['class' => ['rabbit-hole-redirect-setting']],
-      '#rows' => substr_count($redirect, "\r\n") + 2,
       '#element_validate' => [],
       '#after_build' => [],
       '#states' => [

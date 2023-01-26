@@ -7,6 +7,7 @@ use Drupal\acquia_connector\Event\AcquiaSubscriptionSettingsEvent;
 use Drupal\acquia_connector\Settings;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Site\Settings as CoreSettings;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -88,12 +89,20 @@ class FromAcquiaCloud implements EventSubscriberInterface {
         $metadata[$var] = getenv($var);
       }
     }
+
     // If the expected Acquia cloud environment variables are missing, return.
     if (count($metadata) !== count(self::ENVIRONMENT_VARIABLES)) {
       return;
     }
+    // Cloud IDE environments do not have network information injected.
+    if (preg_match('/^(ide|ode\d*)$/', getenv('AH_SITE_ENVIRONMENT') ?: '') !== 0) {
+      return;
+    }
 
+    // Store the default Cloud settings in the metadata storage.
     global $config;
+    $metadata['ah_network_identifier'] = CoreSettings::get('ah_network_identifier') ?? $config['ah_network_identifier'];
+    $metadata['ah_network_key'] = CoreSettings::get('ah_network_key') ?? $config['ah_network_key'];
 
     // Use the state service since customers can override subscription data.
     $state = $this->state->getMultiple([
@@ -106,8 +115,8 @@ class FromAcquiaCloud implements EventSubscriberInterface {
 
     $settings = new Settings(
       $event->getConfig(),
-      $state['acquia_connector.identifier'] ?? $config['ah_network_identifier'],
-      $state['acquia_connector.key'] ?? $config['ah_network_key'],
+      $state['acquia_connector.identifier'] ?? $metadata['ah_network_identifier'],
+      $state['acquia_connector.key'] ?? $metadata['ah_network_key'],
       $state['acquia_connector.application_uuid'] ?? $metadata['AH_APPLICATION_UUID'],
       $metadata
     );

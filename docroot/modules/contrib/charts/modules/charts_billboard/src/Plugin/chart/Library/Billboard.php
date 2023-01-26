@@ -63,14 +63,10 @@ class Billboard extends ChartBase implements ContainerFactoryPluginInterface {
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildConfigurationForm($form, $form_state);
-    $form['placeholder'] = [
-      '#title' => $this->t('Placeholder'),
-      '#type' => 'fieldset',
-      '#description' => $this->t(
-        'This is a placeholder for Billboard.js-specific library options. If you would like to help build this out, please work from <a href="@issue_link">this issue</a>.', [
-          '@issue_link' => Url::fromUri('https://www.drupal.org/project/charts/issues/3046983')
-            ->toString(),
-        ]),
+    $form['intro_text'] = [
+      '#markup' => $this->t('This is a placeholder for Billboard.js-specific library options. If you would like to help build this out, please work from <a href="@issue_link">this issue</a>.', [
+        '@issue_link' => Url::fromUri('https://www.drupal.org/project/charts/issues/3046983')->toString(),
+      ]),
     ];
 
     return $form;
@@ -298,7 +294,7 @@ class Billboard extends ChartBase implements ContainerFactoryPluginInterface {
    *   Return the chart definition.
    */
   private function populateData(array &$element, array $chart_definition) {
-    $type = $this->getType($element['#chart_type']);
+    $type = $this->getType($element['#chart_type'], $element['#polar'] ?? FALSE);
     $types = [];
     $children = Element::children($element);
     $y_axes = [];
@@ -326,7 +322,7 @@ class Billboard extends ChartBase implements ContainerFactoryPluginInterface {
       }
       if (!in_array($type, ['pie', 'donut'])) {
         $series_title = strip_tags($child_element['#title']);
-        $types[$series_title] = $child_element['#chart_type'] ? $this->getType($child_element['#chart_type']) : $type;
+        $types[$series_title] = $child_element['#chart_type'] ? $this->getType($child_element['#chart_type'], $element['#polar'] ?? FALSE) : $type;
         if (!in_array($type, ['scatter', 'bubble'])) {
           $columns[$columns_key_start][] = $series_title;
           foreach ($child_element['#data'] as $datum) {

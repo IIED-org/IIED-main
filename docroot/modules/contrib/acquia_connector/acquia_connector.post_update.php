@@ -5,39 +5,41 @@
  * Connector updates once other modules have made their own updates.
  */
 
-/**
- * Remove deprecated update functions.
- */
-function acquia_connector_removed_post_updates() {
-  return [
-    'acquia_connector_post_update_move_subscription_data_state' => '4.0.0',
-    'acquia_connector_post_update_move_acquia_search_modules' => '4.0.0',
-  ];
-}
+use Drupal\Core\Extension\ModuleUninstallValidatorException;
 
 /**
  * Migrate acquia telemetry settings to connector.
  */
 function acquia_connector_post_update_migrate_acquia_telemetry() {
-  // Bring over API key and Debug settings from previous module, uninstall.
-  $acquia_connector_config = \Drupal::configFactory()->getEditable('acquia_connector.settings');
-
   if (\Drupal::moduleHandler()->moduleExists('acquia_telemetry')) {
-    $api_key = \Drupal::configFactory()->get('acquia_telemetry.settings')
-      ->get('api_key');
     $debug = \Drupal::state()->get('acquia_telemetry.loud');
     if ($debug) {
       \Drupal::state()->set('acquia_connector.telemetry.loud', TRUE);
     }
     /** @var \Drupal\Core\Extension\ModuleInstallerInterface $module_installer */
     $module_installer = \Drupal::service('module_installer');
-    $module_installer->uninstall(['acquia_telemetry']);
+    try {
+      $module_installer->uninstall(['acquia_telemetry'], FALSE);
+    }
+    catch (ModuleUninstallValidatorException $e) {
+      // Do nothing, versions of acquia_cms_common and lightning_core declared
+      // acquia_telemetry as a dependency, and we cannot automatically uninstall
+      // the module.
+    }
   }
-  else {
-    $api_key = 'f32aacddde42ad34f5a3078a621f37a9';
+}
+
+/**
+ * Ensure old Amplitude API key is removed from config.
+ */
+function acquia_connector_post_update_remove_amplitude_keys() {
+  $acquia_connector_config = \Drupal::configFactory()->getEditable('acquia_connector.settings');
+  if ($acquia_connector_config->get('spi.amplitude_api_key')) {
+    $acquia_connector_config->clear('spi.amplitude_api_key');
+    // Anything left in SPI should be in state, not config.
+    $acquia_connector_config->clear('spi');
+    $acquia_connector_config->save();
   }
-  $acquia_connector_config->set('spi.amplitude_api_key', $api_key);
-  $acquia_connector_config->save();
 }
 
 /**
@@ -68,4 +70,7 @@ function acquia_connector_post_update_deprecated_variables() {
   // Get subscription data from V4 location, and set uuid properly.
   $acquia_subscription_data = \Drupal::state()->get('acquia_connector.subscription_data');
   \Drupal::state()->set('acquia_connector.application_uuid', $acquia_subscription_data['uuid']);
+
+  // Flush caches when upgrading from 3.0.x to 4.0.x.
+  drupal_flush_all_caches();
 }

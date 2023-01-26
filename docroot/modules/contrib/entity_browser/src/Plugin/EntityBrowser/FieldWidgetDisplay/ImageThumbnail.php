@@ -2,6 +2,7 @@
 
 namespace Drupal\entity_browser\Plugin\EntityBrowser\FieldWidgetDisplay;
 
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -62,6 +63,19 @@ class ImageThumbnail extends FieldWidgetDisplayBase implements ContainerFactoryP
    * {@inheritdoc}
    */
   public function view(EntityInterface $entity) {
+    if (!$entity->access('view')) {
+      $parameters = [
+        '@label' => $entity->getEntityType()->getSingularLabel(),
+        '@id' => $entity->id(),
+        '@langcode' => $entity->language()->getId(),
+        '@title' => $entity->label(),
+      ];
+      $restricted_access_label = $entity->access('view label')
+       ?  new FormattableMarkup('@label @id (@title)', $parameters)
+       :  new FormattableMarkup('@label @id', $parameters);
+      return ['#markup' => $restricted_access_label];
+    }
+
     return [
       '#theme' => 'image_style',
       '#style_name' => $this->configuration['image_style'],

@@ -922,7 +922,10 @@ class BaseSettings extends FormElement {
       $field_option_element['color'] = [
         '#type' => 'textfield',
         '#title' => new TranslatableMarkup('Color'),
-        '#attributes' => ['TYPE' => 'color'],
+        '#attributes' => [
+          'TYPE' => 'color',
+          'style' => 'min-width:50px;',
+        ],
         '#title_display' => 'invisible',
         '#size' => 10,
         '#maxlength' => 7,
@@ -1082,7 +1085,7 @@ class BaseSettings extends FormElement {
     $options_display_colors = $options['display']['colors'];
     if (!$element_state) {
       $element_state = $options;
-      $options_display_colors_indexes = array_keys($options_display_colors);
+      $options_display_colors_indexes = !empty($options_display_colors) ? array_keys($options_display_colors) : [];
       $element_state[$state_color_indexes_key] = $options_display_colors_indexes;
       static::setElementState($parents, $form_state, $element_state);
     }
@@ -1107,7 +1110,10 @@ class BaseSettings extends FormElement {
         '#type' => 'textfield',
         '#title' => new TranslatableMarkup('Color'),
         '#title_display' => 'invisible',
-        '#attributes' => ['TYPE' => 'color'],
+        '#attributes' => [
+          'TYPE' => 'color',
+          'style' => 'min-width:50px;',
+        ],
         '#size' => 10,
         '#maxlength' => 7,
         '#theme_wrappers' => [],

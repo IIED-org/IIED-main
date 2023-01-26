@@ -23,7 +23,7 @@ class FieldFormatterWithInlineSettingsUITest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'field_formatter_test',
     'field_ui',
   ];
@@ -36,7 +36,7 @@ class FieldFormatterWithInlineSettingsUITest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser([
@@ -60,8 +60,8 @@ class FieldFormatterWithInlineSettingsUITest extends BrowserTestBase {
       'name[0][value]' => $term_name,
       'field_test_field[0][value]' => $field,
     ];
-    $this->drupalPostForm(NULL, $edit_term, $this->t('Save'));
-    $this->assertText("Created new term $term_name.", 'Created term.');
+    $this->submitForm($edit_term, $this->t('Save'));
+    $this->assertSession()->pageTextContains("Created new term $term_name.");
 
     // Add content.
     $this->drupalGet('node/add/test_content_type');
@@ -70,21 +70,21 @@ class FieldFormatterWithInlineSettingsUITest extends BrowserTestBase {
       'title[0][value]' => $content_name,
       'field_field_test_ref_inline[0][target_id]' => $term_name,
     ];
-    $this->drupalPostForm(NULL, $edit_content, $this->t('Save'));
-    $this->assertRaw('<div class="field__label">test_field</div>', 'Field is correctly displayed on node page.');
-    $this->assertRaw('<div class="field__item">' . $field . '</div>', "Field's content was found.");
+    $this->submitForm($edit_content, $this->t('Save'));
+    $this->assertSession()->responseContains('<div class="field__label">test_field</div>');
+    $this->assertSession()->responseContains('<div class="field__item">' . $field . '</div>');
 
     // Check that on display management all fields of the destination entity
     // are available (all bundles).
     $this->drupalGet('admin/structure/types/manage/test_content_type/display');
     // Open the formatter settings.
-    $this->drupalPostForm(NULL, [], 'field_field_test_ref_inline_settings_edit');
-    $this->assertFieldByName('fields[field_field_test_ref_inline][settings_edit_form][settings][field_name]', NULL, 'Destination fields dropdown element found.');
+    $this->submitForm([], 'field_field_test_ref_inline_settings_edit');
+    $this->assertSession()->fieldExists('fields[field_field_test_ref_inline][settings_edit_form][settings][field_name]');
     $field_select_element = $this->xpath('//*[@name="fields[field_field_test_ref_inline][settings_edit_form][settings][field_name]"]');
     $field_select_id = $field_select_element[0]->getAttribute('id');
-    $this->assertOption($field_select_id, 'field_test_field', 'First target field is an available option.');
-    $this->assertOption($field_select_id, 'field_test_field2', 'Second target field is an available option.');
-    $this->assertFieldByName('fields[field_field_test_ref_inline][settings_edit_form][settings][label]', 'above', 'The "Label" dropdown element exists and is set to "Above".');
+    $this->assertSession()->optionExists($field_select_id, 'field_test_field');
+    $this->assertSession()->optionExists($field_select_id, 'field_test_field2');
+    $this->assertSession()->fieldValueEquals('fields[field_field_test_ref_inline][settings_edit_form][settings][label]', 'above');
 
   }
 

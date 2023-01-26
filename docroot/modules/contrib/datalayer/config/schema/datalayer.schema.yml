@@ -11,6 +11,9 @@ datalayer.settings:
     output_fields:
       label: 'Include enabled field values'
       type: boolean
+    remove_from_admin_routes:
+      label: 'Remove dataLayer on admin routes'
+      type: boolean
     lib_helper:
       label: 'Include "data layer helper" library'
       type: boolean
@@ -89,3 +92,15 @@ datalayer.settings:
       sequence:
         type: string
         label: 'Replacement'
+
+# Settings for datalayer module attached to each field instance.
+field.field.*.*.*.third_party.datalayer:
+  type: mapping
+  label: 'Extra settings for datalayer'
+  mapping:
+    expose:
+      type: integer
+      label: 'Expose'
+    label:
+      type: string
+      label: 'Label'

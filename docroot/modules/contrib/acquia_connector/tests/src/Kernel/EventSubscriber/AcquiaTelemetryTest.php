@@ -33,6 +33,7 @@ final class AcquiaTelemetryTest extends AcquiaConnectorTestBase {
    */
   public function testTelemetry(): void {
     $state = $this->container->get('state');
+
     $request = Request::create('/');
     $this->container->get('http_kernel')->terminate(
       $request,

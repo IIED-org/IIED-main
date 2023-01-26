@@ -3,7 +3,8 @@
  * Facets views AJAX handling.
  */
 
-(function ($, Drupal, drupalSettings) {
+
+(function ($, Drupal, drupalSettings, once) {
   'use strict';
 
   /**
@@ -103,7 +104,7 @@
 
     return targetViewsInstance;
   };
-
+ 
   // Get the dom id of the element if it is an AJAX view.
   var findAjaxViewsInstanceByElement = function ($element) {
     var targetViewInstance = null;
@@ -340,4 +341,4 @@
   };
 
 
-})(jQuery, Drupal, window.drupalSettings);
+})(jQuery, Drupal, drupalSettings, once);

@@ -216,7 +216,7 @@ class AcquiaSearchApiClient {
 
     try {
       // Create a new HMAC key for the middleware.
-      $key_id = $subscription_data['uuid'];
+      $key_id = $this->subscription->getSettings()->getApplicationUuid();
       $key_secret = $this->subscription->getSettings()->getSecretKey();
       $key = new Key($key_id, $key_secret);
 

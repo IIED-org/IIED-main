@@ -2,11 +2,12 @@
 
 namespace Drupal\gin_lb\Form;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class SettingsForm.
+ * GinLb Configuration form.
  */
 class SettingsForm extends ConfigFormBase {
 
@@ -31,16 +32,33 @@ class SettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('gin_lb.settings');
-    $form['toastify_cdn'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Load Toastify From CDN'),
-      '#description' => $this->t('If you uncheck this box, you will have load Toastify yourself in your theme.'),
-      '#default_value' => $config->get('toastify_cdn'),
+
+    $form['toastify_loading'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Load Toastify'),
+      '#description' => $this->t('Define how to load toasity.'),
+      '#options' => [
+        'cdn' => 'CDN',
+        'composer' => 'Composer',
+        'custom' => 'custom',
+      ],
+      '#default_value' => $config->get('toastify_loading'),
     ];
+
     $form['enable_preview_regions'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable "Regions" preview by default'),
       '#default_value' => $config->get('enable_preview_regions'),
+    ];
+
+    $form['save_behavior'] = [
+      '#type' => 'select',
+      '#title' => $this->t('After save behavior'),
+      '#options' => [
+        'stay' => $this->t('Stay on edit page'),
+        'default' => $this->t('Layout builder default behavior.'),
+      ],
+      '#default_value' => $config->get('save_behavior'),
     ];
     return parent::buildForm($form, $form_state);
   }
@@ -50,11 +68,12 @@ class SettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     parent::submitForm($form, $form_state);
-
     $this->config('gin_lb.settings')
-      ->set('toastify_cdn', $form_state->getValue('toastify_cdn'))
+      ->set('toastify_loading', $form_state->getValue('toastify_loading'))
       ->set('enable_preview_regions', $form_state->getValue('enable_preview_regions'))
+      ->set('save_behavior', $form_state->getValue('save_behavior'))
       ->save();
+    Cache::invalidateTags($this->config('gin_lb.settings')->getCacheTags());
   }
 
 }

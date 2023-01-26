@@ -59,8 +59,8 @@ $maxWidth: 520px;
     max-width: 100% !important;
     padding: calc(.75em - 1px) calc(1em - 1px) !important;
 
-    color: var(--colorGinText) !important;
-    border: 1px solid var(--colorGinFormElementBorder) !important;
+    color: var(--gin-color-text) !important;
+    border: 1px solid var(--gin-border-color-form-element) !important;
     border-radius: $borderDefault !important;
     background: #fff !important;
     box-shadow: 0 1px 2px rgba(0, 0, 0, .25) !important;
@@ -69,19 +69,19 @@ $maxWidth: 520px;
 
     &:hover
     {
-        border-color: var(--colorGinText) !important;
-        box-shadow: inset 0 0 0 1px var(--colorGinText) !important;
+        border-color: var(--gin-color-text) !important;
+        box-shadow: inset 0 0 0 1px var(--gin-color-text) !important;
     }
 
     &:focus,
     &:hover:focus
     {
-        box-shadow: inset 0 0 0 1px var(--colorGinText), 0 0 0 2px var(--colorGinLayerBackground), 0 0 0 4px var(--colorGinFocus) !important;
+        box-shadow: inset 0 0 0 1px var(--gin-color-text), 0 0 0 2px var(--gin-bg-layer), 0 0 0 4px var(--gin-color-focus) !important;
     }
 
     .gin--dark-mode &
     {
-        background-color: var(--colorGinLayer2Background) !important;
+        background-color: var(--gin-bg-layer2) !important;
     }
 }
 
@@ -120,19 +120,19 @@ $maxWidth: 520px;
 {
     &__title
     {
-        color: var(--colorGinTextLight) !important;
+        color: var(--gin-color-textLight) !important;
     }
 
     &__text
     {
-        color: var(--colorGinTitle) !important;
+        color: var(--gin-color-title) !important;
     }
 }
 
 .glb-password-suggestions
 {
-    color: var(--colorGinTextLight) !important;
-    border: 1px solid var(--colorGinLayer2Border) !important;
+    color: var(--gin-color-textLight) !important;
+    border: 1px solid var(--gin-border-color-layer2) !important;
     background-color: transparent !important;
 }
 
@@ -166,7 +166,7 @@ $maxWidth: 520px;
     width: 21px !important;
     height: 21px !important;
 
-    border-color: var(--colorGinFormElementBorder) !important;
+    border-color: var(--gin-border-color-form-element) !important;
     border-radius: $borderSmall !important;
 }
 
@@ -177,7 +177,7 @@ $maxWidth: 520px;
     {
         .gin--dark-mode &
         {
-            background: var(--colorGinLayer2Background);
+            background: var(--gin-bg-layer2);
         }
     }
 
@@ -247,7 +247,7 @@ $maxWidth: 520px;
 
                 .gin--dark-mode &
                 {
-                    background-color: var(--colorGinLayer2Background) !important;
+                    background-color: var(--gin-bg-layer2) !important;
                 }
             }
         }
@@ -288,7 +288,7 @@ $maxWidth: 520px;
 
         &:checked ~ .glb-checkbox-toggle .glb-checkbox-toggle__inner
         {
-            background-color: var(--colorGinSwitch) !important;
+            background-color: var(--gin-switch) !important;
 
             &:before
             {
@@ -299,7 +299,7 @@ $maxWidth: 520px;
         &:active ~ .glb-checkbox-toggle .glb-checkbox-toggle__inner,
         &:focus ~ .glb-checkbox-toggle .glb-checkbox-toggle__inner
         {
-            box-shadow: 0 0 0 2px var(--colorGinLayerBackground), 0 0 0 4px var(--colorGinFocus) !important;
+            box-shadow: 0 0 0 2px var(--gin-bg-layer), 0 0 0 4px var(--gin-color-focus) !important;
         }
 
         // Disabled state: set cursor to not-allowed
@@ -314,7 +314,7 @@ $maxWidth: 520px;
         &:disabled:checked ~ .glb-checkbox-toggle .glb-checkbox-toggle__inner,
         &:disabled:checked ~ .glb-checkbox-toggle:hover .glb-checkbox-toggle__inner
         {
-            background-color: var(--colorGinDisabled) !important;
+            background-color: var(--gin-color-disabled) !important;
         }
     }
 
@@ -326,7 +326,7 @@ $maxWidth: 520px;
         padding-bottom: 0 !important;
         padding-left: 4px !important;
 
-        color: var(--colorGinText) !important;
+        color: var(--gin-color-text) !important;
     }
 }
 
@@ -337,7 +337,7 @@ $maxWidth: 520px;
     {
         .gin--dark-mode &
         {
-            border-color: var(--colorGinText) !important;
+            border-color: var(--gin-color-text) !important;
             box-shadow: none !important;
         }
     }
@@ -351,25 +351,25 @@ $maxWidth: 520px;
     &:focus,
     &:hover:focus
     {
-        border-color: var(--colorGinFormElementBorder) !important;
+        border-color: var(--gin-border-color-form-element) !important;
         border-radius: 50% !important;
         background-color: #fff !important;
         background-image: none !important;
 
         .gin--dark-mode &
         {
-            background-color: var(--colorGinLayer2Background) !important;
+            background-color: var(--gin-bg-layer2) !important;
         }
     }
 
     &:hover
     {
-        box-shadow: inset 0 0 0 1px var(--colorGinLayer2Border) !important;
+        box-shadow: inset 0 0 0 1px var(--gin-border-color-layer2) !important;
 
         &,
         .gin--dark-mode &
         {
-            border-color: var(--colorGinText) !important;
+            border-color: var(--gin-color-text) !important;
         }
     }
 
@@ -383,12 +383,12 @@ $maxWidth: 520px;
         {
             background-color: #fff !important;
             background-image: none !important;
-            box-shadow: inset 0 0 0 4px var(--colorGinPrimary) !important;
+            box-shadow: inset 0 0 0 4px var(--gin-color-primary) !important;
 
             .gin--dark-mode &
             {
-                border-color: var(--colorGinPrimary) !important;
-                background-color: var(--colorGinLayer2Background) !important;
+                border-color: var(--gin-color-primary) !important;
+                background-color: var(--gin-bg-layer2) !important;
             }
         }
     }
@@ -435,7 +435,7 @@ fieldset:not(.fieldgroup)
     padding-left: 0;
 
     border: 1px;
-    border-color: var(--colorGinBorder);
+    border-color: var(--gin-border-color);
     border-radius: $borderDefault;
     background: transparent;
     box-shadow: none;
@@ -458,13 +458,13 @@ fieldset:not(.fieldgroup)
 .glb-fieldset__label--group,
 .glb-form-item__label
 {
-    color: var(--colorGinText) !important;
+    color: var(--gin-color-text) !important;
 }
 
 .glb-form-item__label.has-error,
 .glb-form-item__error-message
 {
-    color: var(--colorGinDanger) !important;
+    color: var(--gin-color-danger) !important;
 }
 
 .glb-form-item__description,
@@ -477,7 +477,7 @@ fieldset:not(.fieldgroup)
     margin-top: .375em;
     margin-bottom: .375em;
 
-    color: var(--colorGinTextLight) !important;
+    color: var(--gin-color-textLight) !important;
 }
 
 .glb-form-item__label.glb-form-required::after,
@@ -486,7 +486,7 @@ fieldset:not(.fieldgroup)
     content: '*' !important;
     vertical-align: text-top !important;
 
-    color: var(--colorGinDanger) !important;
+    color: var(--gin-color-danger) !important;
     background: none !important;
 }
 
@@ -508,10 +508,10 @@ fieldset:not(.fieldgroup)
   display: block;
   padding: 0.75rem 0.9375rem;
   background: inherit;
-  color: var(--colorGinPrimary) !important;
+  color: var(--gin-color-primary) !important;
   &:hover {
     color: white !important;
-    background: var(--colorGinPrimary) !important;
+    background: var(--gin-color-primary) !important;
   }
 
 }
@@ -529,7 +529,7 @@ fieldset:not(.fieldgroup)
 {
     &::after
     {
-        background: var(--colorGinDanger) !important;
+        background: var(--gin-color-danger) !important;
 
         mask-image: icon('asterisk') !important;
         mask-position: center center !important;
@@ -552,7 +552,7 @@ fieldset:not(.fieldgroup)
 
         padding-bottom: 4px;
 
-        color: var(--colorGinText);
+        color: var(--gin-color-text);
     }
 }
 
@@ -560,7 +560,7 @@ fieldset:not(.fieldgroup)
   .glb-claro-details {
     margin-left: 0 !important;
     margin-right: 0 !important;
-    border: 1px solid var(--colorGinBorder) !important;
+    border: 1px solid var(--gin-border-color) !important;
     border-radius: 8px !important;
     margin-top: 1em !important;
     margin-bottom: 1em !important;
@@ -637,18 +637,18 @@ fieldset:not(.fieldgroup)
 
     &:checked
     {
-        background-color: var(--colorGinPrimary) !important;
+        background-color: var(--gin-color-primary) !important;
 
         &:hover
         {
             border-color: #222330 !important;
-            background-color: var(--colorGinPrimaryHover) !important;
+            background-color: var(--gin-color-primary-hover) !important;
         }
     }
 
     &:focus
     {
-        box-shadow: 0 0 0 2px var(--colorGinLayerBackground),0 0 0 4px var(--colorGinFocus) !important;
+        box-shadow: 0 0 0 2px var(--gin-bg-layer),0 0 0 4px var(--gin-color-focus) !important;
     }
 }
 

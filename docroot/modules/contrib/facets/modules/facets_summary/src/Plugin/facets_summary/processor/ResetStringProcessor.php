@@ -71,8 +71,11 @@ class ResetStringProcessor extends ProcessorPluginBase implements BuildProcessor
     }
 
     unset($query_params[$facets_summary->getSearchFilterIdentifier()]);
-
-    $url = Url::fromUserInput($facets_summary->getFacetSource()->getPath());
+    $path = $facets_summary->getFacetSource()->getPath();
+    if (empty($path)) {
+      $path = $this->requestStack->getCurrentRequest()->getPathInfo();
+    }
+    $url = Url::fromUserInput($path);
     $url->setOptions(['query' => $query_params]);
 
     $item = [

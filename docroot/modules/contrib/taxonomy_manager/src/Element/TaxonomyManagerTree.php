@@ -37,7 +37,7 @@ class TaxonomyManagerTree extends FormElement {
 
     if (!empty($element['#vocabulary'])) {
       $taxonomy_vocabulary = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->load($element['#vocabulary']);
-      $pager_size = isset($element['#pager_size']) ? $element['#pager_size'] : -1;
+      $pager_size = $element['#pager_size'] ?? -1;
       $terms = TaxonomyManagerTree::loadTerms($taxonomy_vocabulary, 0, $pager_size);
       $list = TaxonomyManagerTree::getNestedListJsonArray($terms);
 
@@ -102,7 +102,7 @@ class TaxonomyManagerTree extends FormElement {
       // This site is still using the pre-Drupal 8.5 database schema, where
       // https://www.drupal.org/project/drupal/issues/2543726 was not yet
       // committed to Drupal core.
-      // @todo Remove both the try/catch wrapper and the code below the catch-
+      // @todo: Remove both the try/catch wrapper and the code below the catch-
       // statement once the taxonomy_manager module only supports Drupal 8.5 or
       // newer.
     }

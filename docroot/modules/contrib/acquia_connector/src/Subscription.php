@@ -175,12 +175,14 @@ class Subscription {
     }
     $subscriptionData = $this->state->get('acquia_connector.subscription_data', []);
     if ($subscriptionData !== [] && $refresh !== TRUE) {
+      // Ensure the legacy location of UUID is up-to-date.
+      $subscriptionData['uuid'] = $this->settings->getApplicationUuid();
       return $subscriptionData;
     }
     // If there is no local subscription data, retrieve it.
-    $client = $this->clientFactory->getCloudApiClient();
     $subscriptionData += $this->getDefaultSubscriptionData();
     try {
+      $client = $this->clientFactory->getCloudApiClient();
       $application_response = $client->get('/api/applications/' . $this->settings->getApplicationUuid());
       $application_data = Json::decode((string) $application_response->getBody());
       $subscription_uuid = $application_data['subscription']['uuid'];
@@ -188,13 +190,14 @@ class Subscription {
       $subscription_info = Json::decode((string) $subscription_response->getBody());
 
       $subscriptionData['active'] = $subscription_info['flags']['active'];
+      $subscriptionData['application'] = $application_data;
       $subscriptionData['subscription_name'] = $subscription_info['name'];
       // Expiration Date may have been a string, ensure its set as an array.
       $subscriptionData['expiration_date'] = [
         'value' => $subscription_info['expire_at'],
       ];
     }
-    catch (RequestException $exception) {
+    catch (RequestException | ConnectorException $e) {
     }
 
     // If subscription expiration date passed, set gratis value to TRUE.

@@ -2,12 +2,12 @@
 
 namespace Drupal\datalayer\Form;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Extension\ModuleHandler;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\taxonomy\Entity\Vocabulary;
 
 /**
  * Defines a form that configures datalayer module settings.
@@ -17,16 +17,24 @@ class DatalayerSettingsForm extends ConfigFormBase {
   /**
    * Drupal\Core\Extension\ModuleHandler definition.
    *
-   * @var Drupal\Core\Extension\ModuleHandler
+   * @var Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
 
   /**
+   * Entity type manager service.
+   *
+   * @var Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandler $module_handler) {
+  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($config_factory);
     $this->moduleHandler = $module_handler;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -35,7 +43,8 @@ class DatalayerSettingsForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -43,7 +52,7 @@ class DatalayerSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'settings_form';
+    return 'datalayer_settings_form';
   }
 
   /**
@@ -52,15 +61,14 @@ class DatalayerSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('datalayer.settings');
     $config->set('add_page_meta', $form_state->getValue('add_page_meta'))
-      ->set('output_terms', $form_state->getValue('output_terms'))
       ->set('output_fields', $form_state->getValue('output_fields'))
+      ->set('remove_from_admin_routes', $form_state->getValue('remove_from_admin_routes'))
       ->set('lib_helper', $form_state->getValue('lib_helper'))
       ->set('entity_meta', $form_state->getValue('global_entity_meta'))
       ->set('enable_ia', $form_state->getValue('enable_ia'))
       ->set('ia_depth', $form_state->getValue('ia_depth'))
       ->set('ia_category_primary', $form_state->getValue('ia_category_primary'))
       ->set('ia_category_sub', $form_state->getValue('ia_category_sub'))
-      ->set('vocabs', $form_state->getValue('vocabs'))
       ->set('expose_user_details', $form_state->getValue('expose_user_details'))
       ->set('expose_user_details_roles', $form_state->getValue('expose_user_details_roles'))
       ->set('current_user_meta', $form_state->getValue('current_user_meta'))
@@ -74,6 +82,12 @@ class DatalayerSettingsForm extends ConfigFormBase {
       ->set('site_name', $form_state->getValue('site_name'))
       ->set('key_replacements', $this->keyReplacementsToArray($form_state->getValue('key_replacements')))
       ->save();
+
+    if ($this->moduleHandler->moduleExists('taxonomy')) {
+      $config->set('output_terms', $form_state->getValue('output_terms'))
+        ->set('vocabs', $form_state->getValue('vocabs'))
+        ->save();
+    }
 
     if ($this->moduleHandler->moduleExists('group')) {
       $config->set('group', $form_state->getValue('group'))
@@ -124,12 +138,6 @@ class DatalayerSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    // Setup vocabs.
-    $vocabs = Vocabulary::loadMultiple();
-    $v_options = [];
-    foreach ($vocabs as $v) {
-      $v_options[$v->id()] = $v->label();
-    }
     $datalayer_settings = $this->config('datalayer.settings');
 
     // Get available meta data.
@@ -144,23 +152,34 @@ class DatalayerSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Add entity meta data to pages'),
       '#default_value' => $datalayer_settings->get('add_page_meta'),
     ];
-    $form['global']['output_terms'] = [
-      '#type' => 'checkbox',
-      '#states' => [
-        'enabled' => [
-          ':input[name="add_page_meta"]' => [
-            'checked' => TRUE,
+
+    if ($this->moduleHandler->moduleExists('taxonomy')) {
+      $form['global']['output_terms'] = [
+        '#type' => 'checkbox',
+        '#states' => [
+          'enabled' => [
+            ':input[name="add_page_meta"]' => [
+              'checked' => TRUE,
+            ],
           ],
         ],
-      ],
-      '#title' => $this->t('Include taxonomy terms'),
-      '#default_value' => $datalayer_settings->get('output_terms'),
-    ];
+        '#title' => $this->t('Include taxonomy terms'),
+        '#default_value' => $datalayer_settings->get('output_terms'),
+      ];
+    }
+
     $form['global']['output_fields'] = [
       '#type' => 'checkbox',
       '#description' => $this->t('Exposes a checkbox on field settings forms to expose data.'),
       '#title' => $this->t('Include enabled field values'),
       '#default_value' => $datalayer_settings->get('output_fields'),
+    ];
+
+    $form['global']['remove_from_admin_routes'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Remove dataLayer from admin routes'),
+      '#description' => $this->t('If enabled the dataLayer object will not be included admin routes.'),
+      '#default_value' => $datalayer_settings->get('remove_from_admin_routes'),
     ];
 
     $helper = $datalayer_settings->get('lib_helper');
@@ -226,7 +245,7 @@ class DatalayerSettingsForm extends ConfigFormBase {
     $form['ia']['ia_depth'] = [
       '#type' => 'number',
       '#title' => $this->t('Depth of paths'),
-      '#default_value' => isset($ia_depth) ? $ia_depth : '3',
+      '#default_value' => $ia_depth ?? '3',
       '#description' => $this->t('Define how many url path components get output in dataLayer.'),
     ];
 
@@ -234,7 +253,7 @@ class DatalayerSettingsForm extends ConfigFormBase {
     $form['ia']['ia_category_primary'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Depth of paths'),
-      '#default_value' => isset($ia_cat_primary) ? $ia_cat_primary : 'primaryCategory',
+      '#default_value' => $ia_cat_primary ?? 'primaryCategory',
       '#description' => $this->t('Define the key for the primary path component.'),
     ];
 
@@ -242,28 +261,38 @@ class DatalayerSettingsForm extends ConfigFormBase {
     $form['ia']['ia_category_sub'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Depth of paths'),
-      '#default_value' => isset($iacatSub) ? $iacatSub : 'subCategory',
+      '#default_value' => $iacatSub ?? 'subCategory',
       '#description' => $this->t('Define the key for sub-components (this value will get appended with numerical identifier).'),
     ];
 
-    $form['vocabs'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Taxonomy'),
-      '#description' => $this->t('The vocabularies which should be output within page meta data. Marking none will output everything available.'),
-    ];
-    $form['vocabs']['vocabs'] = [
-      '#type' => 'checkboxes',
-      '#states' => [
-        'enabled' => [
-          ':input[name="output_terms"]' => [
-            'checked' => TRUE,
+    if ($this->moduleHandler->moduleExists('taxonomy')) {
+      $vocabs = $this->entityTypeManager
+        ->getStorage('taxonomy_vocabulary')
+        ->loadMultiple();
+      $v_options = [];
+      foreach ($vocabs as $v) {
+        $v_options[$v->id()] = $v->label();
+      }
+
+      $form['vocabs'] = [
+        '#type' => 'details',
+        '#title' => $this->t('Taxonomy'),
+        '#description' => $this->t('The vocabularies which should be output within page meta data. Marking none will output everything available.'),
+      ];
+      $form['vocabs']['vocabs'] = [
+        '#type' => 'checkboxes',
+        '#states' => [
+          'enabled' => [
+            ':input[name="output_terms"]' => [
+              'checked' => TRUE,
+            ],
           ],
         ],
-      ],
-      '#title' => '',
-      '#default_value' => $datalayer_settings->get('vocabs'),
-      '#options' => $v_options,
-    ];
+        '#title' => '',
+        '#default_value' => $datalayer_settings->get('vocabs'),
+        '#options' => $v_options,
+      ];
+    }
 
     $form['user'] = [
       '#type' => 'details',
@@ -319,7 +348,7 @@ class DatalayerSettingsForm extends ConfigFormBase {
     $form['output']['entity_title'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Entity title'),
-      '#default_value' => isset($entity_title) ? $entity_title : 'entityTitle',
+      '#default_value' => $entity_title ?? 'entityTitle',
       '#description' => $this->t('Key for the title of an entity, e.g. node title, taxonomy term name, or username.'),
     ];
 
@@ -328,7 +357,7 @@ class DatalayerSettingsForm extends ConfigFormBase {
     $form['output']['entity_type'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Entity type'),
-      '#default_value' => isset($entity_type) ? $entity_type : 'entityType',
+      '#default_value' => $entity_type ?? 'entityType',
       '#description' => $this->t('Key for the type of an entity, e.g. node, user, or taxonomy_term.'),
     ];
 
@@ -337,7 +366,7 @@ class DatalayerSettingsForm extends ConfigFormBase {
     $form['output']['entity_bundle'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Entity bundle'),
-      '#default_value' => isset($entity_bundle) ? $entity_bundle : 'entityBundle',
+      '#default_value' => $entity_bundle ?? 'entityBundle',
       '#description' => $this->t('Key for the bundle of an entity, e.g. page, my_things.'),
     ];
 
@@ -346,7 +375,7 @@ class DatalayerSettingsForm extends ConfigFormBase {
     $form['output']['entity_identifier'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Entity identifier'),
-      '#default_value' => isset($entity_id) ? $entity_id : 'entityIdentifier',
+      '#default_value' => $entity_id ?? 'entityIdentifier',
       '#description' => $this->t('Key for the identifier of an entity, e.g. nid, uid, or tid.'),
     ];
 
@@ -355,7 +384,7 @@ class DatalayerSettingsForm extends ConfigFormBase {
     $form['output']['drupal_language'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Drupal language'),
-      '#default_value' => isset($drupal_lang) ? $drupal_lang : 'drupalLanguage',
+      '#default_value' => $drupal_lang ?? 'drupalLanguage',
       '#description' => $this->t('Key for the language of the site.'),
     ];
 
@@ -364,7 +393,7 @@ class DatalayerSettingsForm extends ConfigFormBase {
     $form['output']['drupal_country'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Drupal country'),
-      '#default_value' => isset($drupal_country) ? $drupal_country : 'drupalCountry',
+      '#default_value' => $drupal_country ?? 'drupalCountry',
       '#description' => $this->t('Key for the country of the site.'),
     ];
 
@@ -374,7 +403,7 @@ class DatalayerSettingsForm extends ConfigFormBase {
       $form['output']['group_label'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Group key'),
-        '#default_value' => isset($group_label) ? $group_label : 'groupKey',
+        '#default_value' => $group_label ?? 'groupKey',
         '#description' => $this->t('Key for the group.'),
       ];
     }
@@ -384,7 +413,7 @@ class DatalayerSettingsForm extends ConfigFormBase {
     $form['output']['site_name'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Drupal site name'),
-      '#default_value' => isset($drupal_sitename) ? $drupal_sitename : 'drupalSitename',
+      '#default_value' => $drupal_sitename ?? 'drupalSitename',
       '#description' => $this->t('Key for the site name value.'),
     ];
 

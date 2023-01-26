@@ -4,6 +4,7 @@ namespace Drupal\Tests\language_switcher_extended\Functional;
 
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Functional tests for the language_switcher_extended feature.
@@ -12,12 +13,14 @@ use Drupal\Tests\BrowserTestBase;
  */
 class LanguageSwitcherExtendedTest extends BrowserTestBase {
 
+  use StringTranslationTrait;
+
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'locale',
     'language',
     'node',
@@ -41,7 +44,7 @@ class LanguageSwitcherExtendedTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Login as root user.
@@ -51,14 +54,16 @@ class LanguageSwitcherExtendedTest extends BrowserTestBase {
     $edit = [
       'predefined_langcode' => 'de',
     ];
-    $this->drupalPostForm('admin/config/regional/language/add', $edit, t('Add language'));
+    $this->drupalGet('admin/config/regional/language/add');
+    $this->submitForm($edit, $this->t('Add language'));
 
     // Enable URL language detection and selection.
     $edit = ['language_interface[enabled][language-url]' => '1'];
-    $this->drupalPostForm('admin/config/regional/language/detection', $edit, t('Save settings'));
+    $this->drupalGet('admin/config/regional/language/detection');
+    $this->submitForm($edit, $this->t('Save settings'));
 
     // Enable the language switching block.
-    $block = $this->drupalPlaceBlock('language_block:' . LanguageInterface::TYPE_INTERFACE, [
+    $this->drupalPlaceBlock('language_block:' . LanguageInterface::TYPE_INTERFACE, [
       'id' => 'test_language_block',
     ]);
 
@@ -74,7 +79,7 @@ class LanguageSwitcherExtendedTest extends BrowserTestBase {
       'entity_types[node]' => TRUE,
       'settings[node][article][translatable]' => TRUE,
     ];
-    $this->drupalPostForm(NULL, $edit, t('Save configuration'));
+    $this->submitForm($edit, $this->t('Save configuration'));
 
     // Create a node without a translation.
     $this->node = $this->createNode([
@@ -113,7 +118,29 @@ class LanguageSwitcherExtendedTest extends BrowserTestBase {
     // Open the module's configuration page.
     $this->drupalGet('admin/config/regional/language/language-switcher-extended');
 
-    // Configure to link untranslated translations to the front.
+    // Configure to link untranslated translations to the front with
+    // translation detection enabled.
+    $edit = [
+      'mode' => 'process_untranslated',
+      'untranslated_handler' => 'link_to_front',
+      'translation_detection' => 'default',
+    ];
+    $this->submitForm($edit, 'Save configuration');
+
+    // Open the node without a translation.
+    $this->drupalGet('node/1');
+
+    // Verify, that the untranslated language switcher links lead to the
+    // frontpage.
+    $this->assertSession()
+      ->elementAttributeContains('css', '#block-test-language-block li[hreflang="en"] a', 'data-drupal-link-system-path', 'node/1');
+    $this->assertSession()
+      ->elementAttributeContains('css', '#block-test-language-block li[hreflang="de"] a', 'data-drupal-link-system-path', '<front>');
+
+    // Open the module's configuration page.
+    $this->drupalGet('admin/config/regional/language/language-switcher-extended');
+    // Configure to link untranslated translations to the front without
+    // translation detection enabled.
     $edit = [
       'mode' => 'process_untranslated',
       'untranslated_handler' => 'link_to_front',
@@ -125,6 +152,60 @@ class LanguageSwitcherExtendedTest extends BrowserTestBase {
 
     // Verify, that the untranslated language switcher links lead to the
     // frontpage.
+    $this->assertSession()
+      ->elementAttributeContains('css', '#block-test-language-block li[hreflang="en"] a', 'data-drupal-link-system-path', 'node/1');
+    $this->assertSession()
+      ->elementAttributeContains('css', '#block-test-language-block li[hreflang="de"] a', 'data-drupal-link-system-path', '<front>');
+
+    // Open the module's configuration page.
+    $this->drupalGet('admin/config/regional/language/language-switcher-extended');
+    // Configure to link untranslated translations to the front with
+    // "is published" translation detection enabled, which should behave
+    // the same as the other options if no other access related module is
+    // controlling access.
+    $edit = [
+      'mode' => 'process_untranslated',
+      'untranslated_handler' => 'link_to_front',
+      'translation_detection' => 'is_published',
+    ];
+    $this->submitForm($edit, 'Save configuration');
+
+    // Open the node without a translation.
+    $this->drupalGet('node/1');
+
+    // Verify, that the untranslated language switcher links lead to the
+    // frontpage.
+    $this->assertSession()
+      ->elementAttributeContains('css', '#block-test-language-block li[hreflang="en"] a', 'data-drupal-link-system-path', 'node/1');
+    $this->assertSession()
+      ->elementAttributeContains('css', '#block-test-language-block li[hreflang="de"] a', 'data-drupal-link-system-path', '<front>');
+  }
+
+  /**
+   * Tests, to link language switcher item for a translated unpublished entity.
+   */
+  public function testLinkTranslatedUnpublishedEntityLanguageToFront() {
+    // Open the module's configuration page.
+    $this->drupalGet('admin/config/regional/language/language-switcher-extended');
+
+    // Configure to link untranslated translations to the front with
+    // translation detection enabled.
+    $edit = [
+      'mode' => 'process_untranslated',
+      'untranslated_handler' => 'link_to_front',
+      'translation_detection' => 'is_published',
+    ];
+    $this->submitForm($edit, 'Save configuration');
+
+    // Create an unpublished translation for the node.
+    $translation = $this->node->addTranslation('de', $this->node->toArray());
+    $translation->setUnpublished()->save();
+
+    // Open the node.
+    $this->drupalGet('node/1');
+
+    // Verify, that the translated unpublished language switcher links lead to
+    // the frontpage.
     $this->assertSession()
       ->elementAttributeContains('css', '#block-test-language-block li[hreflang="en"] a', 'data-drupal-link-system-path', 'node/1');
     $this->assertSession()
@@ -268,7 +349,7 @@ class LanguageSwitcherExtendedTest extends BrowserTestBase {
 
     // Verify that the current language is not in the switcher items.
     $this->assertSession()
-    ->elementNotExists('css', '#block-test-language-block li[hreflang="en"]');
+      ->elementNotExists('css', '#block-test-language-block li[hreflang="en"]');
     // Verify that other language links lead to the homepage.
     $this->assertSession()
       ->elementAttributeContains('css', '#block-test-language-block li[hreflang="de"] a', 'data-drupal-link-system-path', '<front>');
@@ -293,9 +374,9 @@ class LanguageSwitcherExtendedTest extends BrowserTestBase {
 
     // Verify that the current language is not linked.
     $this->assertSession()
-    ->elementExists('css', '#block-test-language-block li.en .is-active');
+      ->elementExists('css', '#block-test-language-block li.en .is-active');
     $this->assertSession()
-    ->elementNotExists('css', '#block-test-language-block li.en a');
+      ->elementNotExists('css', '#block-test-language-block li.en a');
     // Verify that other language links lead to the homepage.
     $this->assertSession()
       ->elementAttributeContains('css', '#block-test-language-block li[hreflang="de"] a', 'data-drupal-link-system-path', '<front>');
@@ -332,4 +413,5 @@ class LanguageSwitcherExtendedTest extends BrowserTestBase {
     $this->assertSession()
       ->elementTextNotContains('css', '#block-test-language-block li.en', 'English');
   }
+
 }

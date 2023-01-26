@@ -6,17 +6,25 @@
 
   Drupal.behaviors.glb_preview_regions = {
     attach: (context) => {
-      if ($('#glb-preview-regions').is(':checked')) {
-        $('.layout__region-info').parent().addClass('layout-builder__region');
-      };
+      once('glb-preview-region', 'body').forEach(()=>{
+        const toolbarPreviewRegion = document.getElementById('glb-toolbar-preview-regions');
+        const toolbarPreviewContent = document.getElementById('glb-toolbar-preview-content');
+        const formPreviewContent = document.getElementById('layout-builder-content-preview');
+        const body = document.getElementsByTagName('body')[0];
+        toolbarPreviewContent.checked = formPreviewContent.checked;;
+        toolbarPreviewRegion.checked = body.classList.contains('glb-preview-regions--enable');
 
-      $('#glb-preview-regions').once('glb-preview-regions').each(()=>{
-        $('#glb-preview-regions', context).change(function (){
-          if($(this).is(':checked')){
-            $('.layout__region-info').parent().addClass('layout-builder__region');
-            $('body').addClass('glb-preview-regions--enable');
+        toolbarPreviewRegion.addEventListener('change',()=>{
+          if(toolbarPreviewRegion.checked){
+            document.querySelector('.layout__region-info').parentNode.classList.add('layout-builder__region');
+            document.querySelector('body').classList.add('glb-preview-regions--enable');
           } else {
-            $('body').removeClass('glb-preview-regions--enable');
+            body.classList.remove('glb-preview-regions--enable')
+          }
+        })
+        toolbarPreviewContent.addEventListener('change',()=>{
+          if (formPreviewContent.checked !== toolbarPreviewContent.checked) {
+            formPreviewContent.click();
           }
         })
       });

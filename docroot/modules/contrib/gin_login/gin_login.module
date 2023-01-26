@@ -14,6 +14,9 @@ use Drupal\gin\GinSettings;
  */
 function gin_login_page_attachments_alter(&$page) {
   if (_gin_login__check_path()) {
+    $config = \Drupal::config('gin_login.settings');
+    $configData = $config->get();
+
     if (_gin_login_gin_is_active()) {
       // Get Gin settings.
       /** @var \Drupal\gin\GinSettings $settings */
@@ -33,7 +36,7 @@ function gin_login_page_attachments_alter(&$page) {
         $page['#attached']['library'][] = 'gin/gin_custom_css';
       }
 
-      // Expose settings to JS.
+      // Expose Gin settings to JS.
       $page['#attached']['drupalSettings']['gin']['darkmode'] = $settings->get('enable_darkmode');
       $page['#attached']['drupalSettings']['gin']['darkmode_class'] = 'gin--dark-mode';
       $page['#attached']['drupalSettings']['gin']['preset_accent_color'] = $settings->get('preset_accent_color');
@@ -44,8 +47,17 @@ function gin_login_page_attachments_alter(&$page) {
       $page['#attached']['drupalSettings']['gin']['highcontrastmode_class'] = 'gin--high-contrast-mode';
     }
 
-    // Check if path is available and we're at user level.
-    $page['#attached']['library'][] = 'gin_login/gin_login';
+    // Expose Gin Login settings to JS.
+    $path = \Drupal::service('extension.list.module')->getPath('gin_login');
+    $page['#attached']['drupalSettings']['gin_login']['path'] = '/' . $path;
+
+    // Add login library.
+    $page['#attached']['library'][] = 'gin_login/login';
+
+    // Add wallpaper library if no custom wallpaper is set.
+    if ($configData['brand_image']['use_default'] != "0") {
+      $page['#attached']['library'][] = 'gin_login/wallpaper';
+    }
   }
 }
 
@@ -53,24 +65,26 @@ function gin_login_page_attachments_alter(&$page) {
  * Implements hook_preprocess_HOOK() for html.
  */
 function gin_login_preprocess_html(&$variables) {
-  if (_gin_login__check_path() && _gin_login_gin_is_active()) {
-    // Get Gin settings.
-    /** @var \Drupal\gin\GinSettings $settings */
-    $settings = \Drupal::classResolver(GinSettings::class);
-
-    // Set accent color.
-    $variables['attributes']['data-gin-accent'] = $settings->get('preset_accent_color');
-
-    // Set focus color.
-    $variables['attributes']['data-gin-focus'] = $settings->get('preset_focus_color');
-
-    // High contrast mode.
-    if ($settings->get('high_contrast_mode')) {
-      $variables['attributes']['class'][] = 'gin--high-contrast-mode';
-    }
-
+  if (_gin_login__check_path()) {
     // Add identification class to paths.
     $variables['attributes']['class'][] = 'gin-login';
+
+    if (_gin_login_gin_is_active()) {
+      // Get Gin settings.
+      /** @var \Drupal\gin\GinSettings $settings */
+      $settings = \Drupal::classResolver(GinSettings::class);
+
+      // Set accent color.
+      $variables['attributes']['data-gin-accent'] = $settings->get('preset_accent_color');
+
+      // Set focus color.
+      $variables['attributes']['data-gin-focus'] = $settings->get('preset_focus_color');
+
+      // High contrast mode.
+      if ($settings->get('high_contrast_mode')) {
+        $variables['attributes']['class'][] = 'gin--high-contrast-mode';
+      }
+    }
   }
 }
 
@@ -153,18 +167,6 @@ function gin_login_theme() {
 }
 
 /**
- * CSS_alter()
- */
-function gin_login_css_alter(&$css, $assets) {
-  $path = \Drupal::service('extension.list.module')->getPath('gin_login') . '/dist/css/login.css';
-  if (isset($css[$path])) {
-    // Use anything greater than 100 to have it load
-    // after the theme as CSS_AGGREGATE_THEME is set to 100.
-    $css[$path]['group'] = 201;
-  }
-}
-
-/**
  * Implements hook_preprocess_HOOK().
  */
 function gin_login_preprocess_ginlogin(&$variables) {
@@ -194,14 +196,13 @@ function gin_login_preprocess_ginlogin(&$variables) {
     }
   }
 
-  $variables['brand_image'] = '//source.unsplash.com/collection/9407737';
-  $variables['brand_alt'] = 'Random image from unsplash';
-
   if ($configData['brand_image']['use_default'] == "0") {
     if (isset($configData['brand_image']['path']) && !empty($configData['brand_image']['path'])) {
       $variables['brand_image'] = $fileUrlGenerator->generateAbsoluteString($configData['brand_image']['path']);
-      $variables['brand_alt'] = '';
     }
+  }
+  else {
+    $variables['brand_image'] = '';
   }
 }
 

@@ -79,7 +79,8 @@ function charts_chartjs_find_library() {
   $searchdir[] = 'libraries';
 
   // Also search sites/<domain>/*.
-  $site_path = \Drupal::getContainer()->getParameter('site.path');
+  $container = \Drupal::getContainer();
+  $site_path = $container->getParameter('site.path');
   $site_path = explode('/', $site_path);
   $site_name = $site_path[1];
   $searchdir[] = $site_name . '/libraries';

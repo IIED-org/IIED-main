@@ -205,7 +205,10 @@ class ChartDataCollectorTable extends FormElement {
             '#type' => 'textfield',
             '#title' => t('Color'),
             '#title_display' => 'invisible',
-            '#attributes' => ['TYPE' => 'color'],
+            '#attributes' => [
+              'TYPE' => 'color',
+              'style' => 'min-width:50px;',
+            ],
             '#size' => 10,
             '#maxlength' => 7,
             '#default_value' => $column['color'],
@@ -430,10 +433,6 @@ class ChartDataCollectorTable extends FormElement {
     $files = \Drupal::request()->files->get('files');
     /** @var  \Symfony\Component\HttpFoundation\File\UploadedFile $file_upload */
     $file_upload = $files[$id_prefix];
-
-    if (!ini_get("auto_detect_line_endings")) {
-      ini_set("auto_detect_line_endings", '1');
-    }
 
     $handle = $file_upload ? fopen($file_upload->getPathname(), 'r') : NULL;
     if ($handle) {

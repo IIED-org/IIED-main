@@ -123,7 +123,7 @@ class BehaviorSettings extends ConfigEntityBase implements BehaviorSettingsInter
    * {@inheritdoc}
    */
   public function setAllowOverride($allow_override) {
-    if (!is_bool($allow_override)) {
+    if (!\is_bool($allow_override)) {
       throw new InvalidBehaviorSettingException('allow_override');
     }
     $this->allow_override = $allow_override;
@@ -142,7 +142,7 @@ class BehaviorSettings extends ConfigEntityBase implements BehaviorSettingsInter
    * @todo Possibly this should instead rely on the redirect plugin?
    */
   public function setRedirectCode($redirect_code) {
-    if (!in_array($redirect_code, [
+    if (!\in_array($redirect_code, [
       self::REDIRECT_NOT_APPLICABLE,
       self::REDIRECT_MOVED_PERMANENTLY,
       self::REDIRECT_FOUND,

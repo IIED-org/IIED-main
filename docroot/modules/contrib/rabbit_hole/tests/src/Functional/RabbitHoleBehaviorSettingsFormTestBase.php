@@ -48,7 +48,7 @@ abstract class RabbitHoleBehaviorSettingsFormTestBase extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->behaviorSettingsManager = $this->container->get('rabbit_hole.behavior_settings_manager');
@@ -128,6 +128,7 @@ abstract class RabbitHoleBehaviorSettingsFormTestBase extends BrowserTestBase {
       'action' => 'access_denied',
       'allow_override' => BehaviorSettings::OVERRIDE_ALLOW,
       'redirect_code' => BehaviorSettings::REDIRECT_NOT_APPLICABLE,
+      'redirect_fallback_action' => 'access_denied',
     ], $this->bundleEntityTypeName, $bundle_allow);
     $this->loadCreateEntityForm();
     $this->assertRabbitHoleSettings();
@@ -137,6 +138,7 @@ abstract class RabbitHoleBehaviorSettingsFormTestBase extends BrowserTestBase {
       'action' => 'access_denied',
       'allow_override' => BehaviorSettings::OVERRIDE_DISALLOW,
       'redirect_code' => BehaviorSettings::REDIRECT_NOT_APPLICABLE,
+      'redirect_fallback_action' => 'access_denied',
     ], $this->bundleEntityTypeName, $bundle_disallow);
     $this->loadCreateEntityForm();
     $this->assertNoRabbitHoleSettings();

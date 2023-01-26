@@ -2,16 +2,23 @@
  * @file
  * JavaScript's integration between Highcharts and Drupal.
  */
-(function (Drupal, once) {
+(function (Drupal, once, drupalSettings) {
 
   'use strict';
 
   Drupal.behaviors.chartsHighcharts = {
     attach: function (context) {
       const contents = new Drupal.Charts.Contents();
+      if (drupalSettings.hasOwnProperty('charts') && drupalSettings.charts.highcharts.global_options) {
+        Highcharts.setOptions(drupalSettings.charts.highcharts.global_options);
+      }
       once('charts-highchart', '.charts-highchart', context).forEach(function (element) {
         const id = element.id;
         let config = contents.getData(id);
+        if (!config) {
+          return;
+        }
+
         config.chart.renderTo = id;
         new Highcharts.Chart(config);
         if (element.nextElementSibling && element.nextElementSibling.hasAttribute('data-charts-debug-container')) {
@@ -30,4 +37,4 @@
       }
     }
   };
-}(Drupal, once));
+}(Drupal, once, drupalSettings));

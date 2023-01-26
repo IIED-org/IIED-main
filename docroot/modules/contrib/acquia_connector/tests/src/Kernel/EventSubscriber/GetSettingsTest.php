@@ -87,10 +87,10 @@ final class GetSettingsTest extends AcquiaConnectorTestBase {
     $this->putEnv('AH_SITE_GROUP', 'bar');
     $this->putEnv('AH_APPLICATION_UUID', $uuid);
 
-    $this->container->get('state')->setMultiple([
-      'acquia_connector.identifier' => 'ABC-1234',
-      'acquia_connector.key' => 'TEST_KEY',
-    ]);
+    $settings = CoreSettings::getAll();
+    $settings['ah_network_identifier'] = 'ABC-1234';
+    $settings['ah_network_key'] = 'TEST_KEY';
+    new CoreSettings($settings);
 
     $event = $this->dispatchEvent();
     self::assertEquals('acquia_cloud', $event->getProvider());
@@ -103,7 +103,47 @@ final class GetSettingsTest extends AcquiaConnectorTestBase {
       'AH_SITE_NAME' => 'foo',
       'AH_SITE_GROUP' => 'bar',
       'AH_APPLICATION_UUID' => $uuid,
+      'ah_network_identifier' => 'ABC-1234',
+      'ah_network_key' => 'TEST_KEY',
     ], $event->getSettings()->getMetadata());
+  }
+
+  /**
+   * Tests with environment variables from Cloud IDE.
+   */
+  public function testFromAcquiaCloudIde(): void {
+    $uuid = (new PhpUuid())->generate();
+    $this->putEnv('AH_SITE_ENVIRONMENT', 'ide');
+    $this->putEnv('AH_SITE_NAME', 'foo');
+    $this->putEnv('AH_SITE_GROUP', 'bar');
+    $this->putEnv('AH_APPLICATION_UUID', $uuid);
+
+    $event = $this->dispatchEvent();
+    self::assertEquals('core_state', $event->getProvider());
+    self::assertEquals('', $event->getSettings()->getIdentifier());
+    self::assertEquals('', $event->getSettings()->getSecretKey());
+    self::assertFalse($event->getSettings()->isReadonly());
+    self::assertEquals('', $event->getSettings()->getApplicationUuid());
+    self::assertEquals([], $event->getSettings()->getMetadata());
+  }
+
+  /**
+   * Tests with environment variables from on-demand environment.
+   */
+  public function testFromAcquiaCloudOde(): void {
+    $uuid = (new PhpUuid())->generate();
+    $this->putEnv('AH_SITE_ENVIRONMENT', 'ode');
+    $this->putEnv('AH_SITE_NAME', 'foo');
+    $this->putEnv('AH_SITE_GROUP', 'bar');
+    $this->putEnv('AH_APPLICATION_UUID', $uuid);
+
+    $event = $this->dispatchEvent();
+    self::assertEquals('core_state', $event->getProvider());
+    self::assertEquals('', $event->getSettings()->getIdentifier());
+    self::assertEquals('', $event->getSettings()->getSecretKey());
+    self::assertFalse($event->getSettings()->isReadonly());
+    self::assertEquals('', $event->getSettings()->getApplicationUuid());
+    self::assertEquals([], $event->getSettings()->getMetadata());
   }
 
   /**
@@ -118,6 +158,8 @@ final class GetSettingsTest extends AcquiaConnectorTestBase {
       'TEST_KEY',
       '',
     );
+    $settings['ah_network_identifier'] = 'ABC-1234';
+    $settings['ah_network_key'] = 'TEST_KEY';
     new CoreSettings($settings);
 
     $this->putEnv('AH_SITE_ENVIRONMENT', 'test');
@@ -140,6 +182,8 @@ final class GetSettingsTest extends AcquiaConnectorTestBase {
       'AH_SITE_NAME' => 'foo',
       'AH_SITE_GROUP' => 'bar',
       'AH_APPLICATION_UUID' => '2847ba56-cb57-4d37-85f1-baa69ff0c604',
+      'ah_network_identifier' => 'ABC-1234',
+      'ah_network_key' => 'TEST_KEY',
     ], $event->getSettings()->getMetadata());
   }
 

@@ -5,7 +5,7 @@ entity.node.publish:
   requirements:
     _csrf_token: 'TRUE'
     _publish_access_check: 'TRUE'
-    _custom_access: 'Drupal\publishcontent\Controller\PublishContentPublishEntity::hasUILocalTask'
+    _custom_access: 'Drupal\publishcontent\Controller\PublishContentPublishEntity::hasUiLocalTask'
 
 entity.node.publish_translation:
   path: '/node/{node}/toggleStatus/{langcode}'
@@ -14,7 +14,7 @@ entity.node.publish_translation:
   requirements:
     _csrf_token: 'TRUE'
     _publish_access_check: 'TRUE'
-    _custom_access: 'Drupal\publishcontent\Controller\PublishContentPublishEntity::hasUILocalTask'
+    _custom_access: 'Drupal\publishcontent\Controller\PublishContentPublishEntity::hasUiLocalTask'
 
 publishcontent.settings:
   path: '/admin/config/workflow/publishcontent'

@@ -102,6 +102,7 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
       ],
       'exporting_library' => TRUE,
       'texture_library' => TRUE,
+      'global_options' => static::defaultGlobalOptions(),
     ] + parent::defaultConfiguration();
 
     return $configurations;
@@ -120,14 +121,21 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildConfigurationForm($form, $form_state);
-    $form['placeholder'] = [
-      '#title' => $this->t('Placeholder'),
-      '#type' => 'fieldset',
-      '#description' => $this->t(
-        'This is a placeholder for Highcharts-specific library options. If you would like to help build this out, please work from <a href="@issue_link">this issue</a>.', [
-          '@issue_link' => Url::fromUri('https://www.drupal.org/project/charts/issues/3046981')
-            ->toString(),
-        ]),
+
+    $form['intro_text'] = [
+      '#markup' => $this->t('<p>Charts is designed to be generic enough to work with multiple charting libraries. If you would like settings that apply to all Highcharts charts, you can <a href="https://www.drupal.org/project/issues/charts" target="_blank">submit a ticket</a> to have a setting added here, in the Highcharts-specific settings.</p>'),
+    ];
+
+    $form['exporting_library'] = [
+      '#title' => $this->t('Enable Highcharts\' "Exporting" library'),
+      '#type' => 'checkbox',
+      '#default_value' => !empty($this->configuration['exporting_library']),
+    ];
+
+    $form['texture_library'] = [
+      '#title' => $this->t('Enable Highcharts\' "Texture" library'),
+      '#type' => 'checkbox',
+      '#default_value' => !empty($this->configuration['texture_library']),
     ];
 
     $legend_configuration = $this->configuration['legend'] ?? [];
@@ -135,7 +143,6 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
       '#title' => $this->t('Legend Settings'),
       '#type' => 'fieldset',
     ];
-
     $form['legend']['layout'] = [
       '#title' => $this->t('Legend layout'),
       '#type' => 'select',
@@ -172,7 +179,6 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
       '#type' => 'checkbox',
       '#default_value' => !empty($legend_configuration['shadow']),
     ];
-
     $form['legend']['item_style'] = [
       '#title' => $this->t('Item Style'),
       '#type' => 'fieldset',
@@ -196,17 +202,124 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
       '#default_value' => $legend_configuration['item_style']['overflow'] ?? '',
     ];
 
-    $form['exporting_library'] = [
-      '#title' => $this->t('Enable Highcharts\' "Exporting" library'),
-      '#type' => 'checkbox',
-      '#default_value' => !empty($this->configuration['exporting_library']),
+    $form['global_options'] = [
+      '#title' => $this->t('Global options'),
+      '#type' => 'details',
+      '#collapsible' => TRUE,
+      '#tree' => TRUE,
     ];
+    $form['global_options']['lang'] = [
+      '#title' => $this->t('Language'),
+      '#type' => 'details',
+      '#collapsible' => TRUE,
+      '#tree' => TRUE,
+    ];
+    // Download menu item.
+    $lang_config = $this->defaultConfiguration()['global_options']['lang'];
+    foreach (array_keys($lang_config) as $property) {
+      if (strpos($property, 'download_') !== 0) {
+        continue;
+      }
 
-    $form['texture_library'] = [
-      '#title' => $this->t('Enable Highcharts\' "Texture" library'),
-      '#type' => 'checkbox',
-      '#default_value' => !empty($this->configuration['texture_library']),
+      [,$format] = explode('_', $property);
+      $form['global_options']['lang'][$property] = [
+        '#title' => $this->t('Download @format', ['@format' => $format]),
+        '#type' => 'textfield',
+        '#description' => $this->t('The text for the @format download menu item.', ['@format' => $format]),
+        '#default_value' => $this->configuration['global_options']['lang'][$property] ?? $lang_config[$property],
+        '#required' => TRUE,
+      ];
+    }
+    // Other simple string configs.
+    $form['global_options']['lang']['exit_fullscreen'] = [
+      '#title' => $this->t('Exit fullscreen'),
+      '#type' => 'textfield',
+      '#description' => $this->t('Exporting module only. The text for the menu item to exit the chart from full screen.'),
+      '#default_value' => $this->configuration['global_options']['lang']['exit_fullscreen'] ?? $lang_config['exit_fullscreen'],
+      '#required' => TRUE,
     ];
+    $form['global_options']['lang']['hide_data'] = [
+      '#title' => $this->t('Hide data'),
+      '#type' => 'textfield',
+      '#description' => $this->t('The text for the menu item.'),
+      '#default_value' => $this->configuration['global_options']['lang']['hide_data'] ?? $lang_config['hide_data'],
+      '#required' => TRUE,
+    ];
+    $form['global_options']['lang']['loading'] = [
+      '#title' => $this->t('Loading'),
+      '#type' => 'textfield',
+      '#description' => $this->t('The loading text that appears when the chart is set into the loading state following a call to <code>chart.showLoading</code>.'),
+      '#default_value' => $this->configuration['global_options']['lang']['loading'] ?? $lang_config['loading'],
+      '#required' => TRUE,
+    ];
+    $form['global_options']['lang']['main_breadcrumb'] = [
+      '#title' => $this->t('Main breadcrumb'),
+      '#type' => 'textfield',
+      '#default_value' => $this->configuration['global_options']['lang']['main_breadcrumb'] ?? $lang_config['main_breadcrumb'],
+      '#required' => TRUE,
+    ];
+    $form['global_options']['lang']['no_data'] = [
+      '#title' => $this->t('No data'),
+      '#type' => 'textfield',
+      '#description' => $this->t('The text to display when the chart contains no data.'),
+      '#default_value' => $this->configuration['global_options']['lang']['no_data'] ?? $lang_config['no_data'],
+      '#required' => TRUE,
+    ];
+    $form['global_options']['lang']['print_chart'] = [
+      '#title' => $this->t('Print chart'),
+      '#type' => 'textfield',
+      '#description' => $this->t('Exporting module only. The text for the menu item to print the chart.'),
+      '#default_value' => $this->configuration['global_options']['lang']['print_chart'] ?? $lang_config['print_chart'],
+      '#required' => TRUE,
+    ];
+    $form['global_options']['lang']['reset_zoom'] = [
+      '#title' => $this->t('Reset zoom'),
+      '#type' => 'textfield',
+      '#description' => $this->t('The text for the label appearing when a chart is zoomed.'),
+      '#default_value' => $this->configuration['global_options']['lang']['reset_zoom'] ?? $lang_config['reset_zoom'],
+      '#required' => TRUE,
+    ];
+    $form['global_options']['lang']['reset_zoom_title'] = [
+      '#title' => $this->t('Reset zoom title'),
+      '#type' => 'textfield',
+      '#description' => $this->t('The tooltip title for the label appearing when a chart is zoomed.'),
+      '#default_value' => $this->configuration['global_options']['lang']['reset_zoom_title'] ?? $lang_config['reset_zoom_title'],
+      '#required' => TRUE,
+    ];
+    $form['global_options']['lang']['view_data'] = [
+      '#title' => $this->t('View data'),
+      '#type' => 'textfield',
+      '#description' => $this->t('The text for the menu item.'),
+      '#default_value' => $this->configuration['global_options']['lang']['view_data'] ?? $lang_config['view_data'],
+      '#required' => TRUE,
+    ];
+    $form['global_options']['lang']['view_fullscreen'] = [
+      '#title' => $this->t('View fullscreen'),
+      '#type' => 'textfield',
+      '#description' => $this->t('Exporting module only. The text for the menu item to view the chart in full screen.'),
+      '#default_value' => $this->configuration['global_options']['lang']['view_fullscreen'] ?? $lang_config['view_fullscreen'],
+      '#required' => TRUE,
+    ];
+    // Dates related global options.
+    foreach ($this->datesDataForConfigForm() as $dates_data_key => $data) {
+      $form['global_options']['lang'][$dates_data_key] = [
+        '#type' => 'details',
+        '#title' => $data['label_plural'],
+        '#description' => $data['description'],
+        '#collapsible' => TRUE,
+        '#tree' => TRUE,
+      ];
+      foreach (range(0, $data['range_end']) as $counter) {
+        $form['global_options']['lang'][$dates_data_key][$counter] = [
+          '#title' => $this->t($data['label_singular'], [
+            '@count' => $counter + 1,
+          ]),
+          '#type' => 'textfield',
+          '#default_value' => $this->configuration['global_options']['lang'][$dates_data_key][$counter] ?? $lang_config[$dates_data_key][$counter],
+          '#required' => TRUE,
+        ];
+      }
+    }
 
     return $form;
   }
@@ -227,6 +340,7 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
       $this->configuration['legend'] = $values['legend'];
       $this->configuration['exporting_library'] = $values['exporting_library'];
       $this->configuration['texture_library'] = $values['texture_library'];
+      $this->configuration['global_options'] = $values['global_options'];
     }
   }
 
@@ -279,7 +393,79 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
       $element['#content_suffix']['color_changer'] = $this->formBuilder->buildForm(ColorChanger::class, $form_state);
     }
 
+    // Setting global options.
+    $element['#attached']['drupalSettings']['charts']['highcharts']['global_options'] = $this->processedGlobalOptions();
+
     return $element;
+  }
+
+  public static function defaultGlobalOptions() {
+    return [
+      'lang' => [
+        'download_CSV' => 'Download CSV',
+        'download_JPEG' => 'Download JPEG image',
+        'download_PDF' => 'Download PDF document',
+        'download_PNG' => 'Download PNG image ',
+        'download_SVG' => 'Download SVG vector image',
+        'download_XLS' => 'Download XLS',
+        'exit_fullscreen' => 'Exit from full screen',
+        'hide_data' => 'Hide data table',
+        'loading' => 'Loading...',
+        'main_breadcrumb' => 'Main',
+        'no_data' => 'No data to display',
+        'print_chart' => 'Print chart',
+        'reset_zoom' => 'Reset zoom',
+        'reset_zoom_title' => 'Reset zoom level 1:1',
+        'view_data' => 'View data table',
+        'view_fullscreen' => 'View in full screen',
+        'months' => [
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'August',
+          'September',
+          'October',
+          'November',
+          'December',
+        ],
+        'short_months' => [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sept',
+          'Oct',
+          'Nov',
+          'Dec',
+        ],
+        'weekdays' => [
+          'Sunday',
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday',
+          'Friday',
+          'Saturday',
+        ],
+        'short_weekdays' => [
+          'Sun',
+          'Mon',
+          'Tue',
+          'Wed',
+          'Thurs',
+          'Frid',
+          'Sat',
+        ],
+      ],
+    ];
   }
 
   /**
@@ -293,7 +479,7 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
    * @return array
    *   Return the chart definition.
    */
-  private function populateOptions(array $element, array $chart_definition) {
+  protected function populateOptions(array $element, array $chart_definition) {
     $chart_type = $this->getType($element['#chart_type']);
     $chart_definition['chart']['type'] = $chart_type;
     $chart_definition['chart']['backgroundColor'] = $element['#background'];
@@ -414,7 +600,7 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
    * @return array
    *   Return the chart definition.
    */
-  private function populateData(array &$element, array $chart_definition) {
+  protected function populateData(array &$element, array $chart_definition) {
     $categories = [];
     $chart_type = $this->getType($element['#chart_type']);
     foreach (Element::children($element) as $key) {
@@ -590,7 +776,7 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
    * @return array
    *   Return the chart definition.
    */
-  private function populateAxes(array $element, array $chart_definition) {
+  protected function populateAxes(array $element, array $chart_definition) {
     foreach (Element::children($element) as $key) {
       if ($element[$key]['#type'] === 'chart_xaxis' || $element[$key]['#type'] === 'chart_yaxis') {
         // Make sure defaults are loaded.
@@ -651,12 +837,67 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
    * @return string
    *   Return the chart type.
    */
-  private function getType($type) {
-    if ($type === 'donut') {
-      $type = 'pie';
-    }
+  protected function getType($type) {
+    return $type === 'donut' ? 'pie' : $type;
+  }
 
-    return $type;
+  private function datesDataForConfigForm() {
+    $month = [
+      'label_singular' => 'Month @count',
+      'label_plural' => $this->t('Months'),
+      'description' => $this->t('The full month names.'),
+      'range_end' => 11,
+    ];
+    $weekday = [
+      'label_singular' => 'Weekday @count',
+      'label_plural' => $this->t('Weekdays'),
+      'description' => $this->t('The weekday names, starting Sunday.'),
+      'range_end' => 6,
+    ];
+    return [
+      'months' => $month,
+      'short_months' => [
+        'label_plural' => $this->t('Short Months'),
+        'label_singular' => 'Short Month @count',
+        'description' => $this->t('The months names in abbreviated form. E.g. Jan, Feb, etc.'),
+      ] + $month,
+      'weekdays' => $weekday,
+      'short_weekdays' => [
+        'label_plural' => $this->t('Short Weekdays'),
+        'label_singular' => 'Short Weekday @count',
+        'description' => $this->t('Short week days, starting Sunday. E.g. Sun, Mon, etc.'),
+      ] + $weekday,
+    ];
+  }
+
+  private function processedGlobalOptions() {
+    $global_options = $this->configuration['global_options'] ?? ['lang' => []];
+    $global_options['lang'] += static::defaultGlobalOptions()['lang'];
+    $language_options = &$global_options['lang'];
+    foreach ($language_options as $option_key => $value) {
+      if (strpos($option_key, 'download_') === 0) {
+        $transformed_key = str_replace('_', '', $option_key);
+      }
+      else {
+        $transformed_key = $this->transformSnakeCaseToCamelCase($option_key);
+      }
+      if ($transformed_key === $option_key) {
+        continue;
+      }
+
+      $language_options[$transformed_key] = $value;
+      unset($language_options[$option_key]);
+    }
+    return $global_options;
+  }
+
+  private function transformSnakeCaseToCamelCase(string $input) {
+    $separator = '_';
+    $input = strtolower($input);
+    if (strpos($input, $separator) === FALSE) {
+      return $input;
+    }
+    return lcfirst(str_replace($separator, '', ucwords($input, $separator)));
   }
 
 }

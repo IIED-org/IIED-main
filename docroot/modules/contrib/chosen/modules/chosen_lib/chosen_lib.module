@@ -60,6 +60,9 @@ function _chosen_lib_get_chosen_path() {
     if (file_exists($dir . '/chosen-js/chosen.jquery.min.js') || file_exists($dir . '/chosen-js/chosen.jquery.js')) {
       return $dir . '/chosen-js';
     }
+    if (file_exists($dir . '/jquery.chosen/chosen.jquery.min.js') || file_exists($dir . '/jquery.chosen/chosen.jquery.js')) {
+      return $dir . '/jquery.chosen';
+    }
   }
 
   return FALSE;

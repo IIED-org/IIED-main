@@ -5,3 +5,7 @@ Provide entity context to DS block fields
 Source: https://www.drupal.org/files/issues/2020-10-12/ds-content_entity-2939322-14.patch
 
 
+3331674
+Source: https://www.drupal.org/files/issues/2023-01-07/ds-module-updated.patch
+
+

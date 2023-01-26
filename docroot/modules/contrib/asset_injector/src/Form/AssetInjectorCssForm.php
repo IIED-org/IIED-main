@@ -20,6 +20,9 @@ class AssetInjectorCssForm extends AssetInjectorFormBase {
     /** @var \Drupal\asset_injector\Entity\AssetInjectorCss $entity */
     $entity = $this->entity;
 
+    // Add CSS specific information about the wrapping element:
+    $form['code']['#description'] .= ' ' . $this->t('Do NOT include the wrapping %style element.', ['%style' => '<style>']);
+
     // Advanced options fieldset.
     $form['advanced'] = [
       '#type' => 'fieldset',

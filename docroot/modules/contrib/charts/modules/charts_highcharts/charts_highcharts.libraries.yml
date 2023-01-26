@@ -3,8 +3,10 @@ charts_highcharts:
   js:
     js/charts_highcharts.js: { weight: -1 }
   dependencies:
-    - charts/global
     - core/once
+    - core/drupalSettings
+    - charts/global
+
 highcharts:
   remote: https://code.highcharts.com/highcharts.js
   version: VERSION

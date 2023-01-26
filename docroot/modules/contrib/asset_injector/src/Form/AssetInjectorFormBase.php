@@ -226,7 +226,15 @@ class AssetInjectorFormBase extends EntityForm {
       $condition_form['#group'] = 'conditions_tabs';
 
       if ($condition_id == 'current_theme') {
-        $condition_form['theme']['#multiple'] = TRUE;
+        $condition_form['theme']['#empty_option'] = $this->t('- None -');
+        // Drupal 9.5+ added scheme for the current_theme condition plugin. This
+        // broke the ability to set an asset with more than 1 theme. To avoid
+        // the need for database updates, just present the user with some info
+        // and put the action on them.
+        if (isset($condition_config['theme']) && is_array($condition_config['theme']) && count($condition_config['theme']) >= 2) {
+          $this->messenger()
+            ->addWarning($this->t('Theme conditions is now only limited to a single theme per asset. The currently configured themes of %themes will be limited to only 1 theme upon saving. Please review the theme condition settings prior to saving. See the <a href="https://www.drupal.org/project/asset_injector/issues/3329577">Drupal.org issue</a> for more detailed information.', ['%themes' => implode(', ', $condition_config['theme'])]));
+        }
       }
 
       $form[$condition_id] = $condition_form;

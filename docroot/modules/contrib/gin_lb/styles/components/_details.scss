@@ -1,11 +1,14 @@
 .glb-claro-details {
   margin-left: -$offcanvasPadding !important;
   margin-right: -$offcanvasPadding !important;
+  margin-bottom: 0!important;
+  margin-top: 0!important;
   border: 0 none !important;
-  border-top: 1px solid var(--colorGinBorder) !important;
-  border-bottom: 1px solid var(--colorGinBorder) !important;
+  border-top: 1px solid var(--gin-border-color) !important;
+  border-bottom: 1px solid var(--gin-border-color) !important;
   border-radius: 0 !important;
   background-color: transparent !important;
+
 
   & + .glb-claro-details {
     border-top: 0 !important;
@@ -15,13 +18,13 @@
     transform: rotate(-90deg) !important;
   }
   &[open] > .glb-claro-details__summary {
-    color: var(--colorGinPrimary) !important;
+    color: var(--gin-color-primary) !important;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
   }
 
   &[open] > .glb-claro-details__summary:not(:focus):not(:active)::after {
     opacity: 1 !important;
-    border: 3px solid var(--colorGinPrimary) !important;
+    border: 3px solid var(--gin-color-primary) !important;
     border-width: 0 0 0 3px !important;
     box-shadow: none !important;
   }
@@ -33,7 +36,7 @@
 
   &__summary {
     position: relative !important;
-    color: var(--colorGinText) !important;
+    color: var(--gin-color-text) !important;
     font-weight: 600 !important;
     padding: 1.25em 1.5em 1.25em 2.5em !important;
     background: #fff !important;
@@ -47,8 +50,8 @@
     }
 
     &:hover {
-      color: var(--colorGinPrimary) !important;
-      background-color: var(--colorGinItemHover) !important;
+      color: var(--gin-color-primary) !important;
+      background-color: var(--gin-bg-item-hover) !important;
     }
 
     &::before {
@@ -63,7 +66,7 @@
       transition: transform 0.12s ease-in 0s !important;
       transform: rotate(90deg) !important;
       text-align: center !important;
-      background: var(--colorGinText) !important;
+      background: var(--gin-color-text) !important;
       mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3e%3cpath d='M5.21 1.314L3.79 2.723l5.302 5.353-5.303 5.354 1.422 1.408 6.697-6.762z' fill='currentColor'/%3e%3c/svg%3e") !important;
       background-size: contain !important;
     }
@@ -92,7 +95,7 @@
     background: transparent !important;
   }
   .glb-claro-details__wrapper {
-    border: 1px solid var(--colorGinBorder) !important;
-    background: var(--colorGinAppBackground) !important;
+    border: 1px solid var(--gin-border-color) !important;
+    background: var(--gin-bg-app) !important;
   }
 }

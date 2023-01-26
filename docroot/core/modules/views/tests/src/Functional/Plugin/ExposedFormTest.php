@@ -24,7 +24,7 @@ class ExposedFormTest extends ViewTestBase {
    *
    * @var array
    */
-  public static $testViews = ['test_exposed_form_buttons', 'test_exposed_block', 'test_exposed_form_sort_items_per_page', 'test_exposed_form_pager'];
+  public static $testViews = ['test_exposed_form_buttons', 'test_exposed_block', 'test_exposed_form_sort_items_per_page', 'test_exposed_form_pager', 'test_remember_selected'];
 
   /**
    * Modules to enable.
@@ -36,7 +36,7 @@ class ExposedFormTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'starterkit_theme';
 
   /**
    * Nodes to test.
@@ -45,6 +45,9 @@ class ExposedFormTest extends ViewTestBase {
    */
   protected $nodes = [];
 
+  /**
+   * {@inheritdoc}
+   */
   protected function setUp($import_test_views = TRUE, $modules = ['views_test_config']): void {
     parent::setUp($import_test_views, $modules);
 
@@ -505,6 +508,19 @@ class ExposedFormTest extends ViewTestBase {
         $this->assertSession()->pageTextNotContains($node->label());
       }
     }
+  }
+
+  /**
+   * Tests the "Remember the last selection" functionality.
+   */
+  public function testRememberSelected() {
+    $this->drupalGet('test_remember_selected');
+    $this->getSession()->getPage()->fillField('type', 'page');
+    $this->getSession()->getPage()->pressButton('Apply');
+
+    // Reload the page and ensure the filter is selected.
+    $this->drupalGet('test_remember_selected');
+    $this->assertTrue($this->assertSession()->optionExists('type', 'page')->isSelected());
   }
 
 }

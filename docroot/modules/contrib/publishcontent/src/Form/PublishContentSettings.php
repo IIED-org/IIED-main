@@ -9,7 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class PublishContentSettings.
+ * The form to configure the settings.
  */
 class PublishContentSettings extends ConfigFormBase {
 

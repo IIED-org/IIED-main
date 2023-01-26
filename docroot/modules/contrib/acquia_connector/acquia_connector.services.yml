@@ -45,3 +45,8 @@ services:
     arguments: ['@acquia_connector.subscription']
     tags:
       - { name: event_subscriber }
+
+  acquia_connector.polyfill.requirements_alter:
+    class: Drupal\acquia_connector\Polyfill\RequirementsAlter
+    parent: system.manager
+    decorates: system.manager

@@ -128,7 +128,9 @@ class EntityOperations extends FieldPluginBase {
    */
   public function render(ResultRow $values) {
     $entity = $this->getEntity($values);
-    if (!$entity) {
+    // Allow for the case where there is no entity, if we are on a non-required
+    // relationship.
+    if (empty($entity)) {
       return '';
     }
     $entity = $this->getEntityTranslation($entity, $values);

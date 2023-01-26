@@ -10,8 +10,7 @@ source:
   variables:
     - acquia_search_api_host
     - acquia_search_solr_forced_read_only
-  source_module:
-    - acquia_search
+  source_module: acquia_search
 process:
   api_host:
     plugin: default_value

@@ -96,6 +96,7 @@ function gin_toolbar_page_attachments_alter(&$page) {
   $page['#attached']['drupalSettings']['gin']['focus_color'] = $settings->get('focus_color');
   $page['#attached']['drupalSettings']['gin']['highcontrastmode'] = $settings->get('high_contrast_mode');
   $page['#attached']['drupalSettings']['gin']['highcontrastmode_class'] = 'gin--high-contrast-mode';
+  $page['#attached']['drupalSettings']['gin']['toolbar_variant'] = $settings->get('classic_toolbar');
 }
 
 /**
@@ -130,6 +131,10 @@ function gin_toolbar_library_info_alter(&$libraries, $extension) {
   if ($extension == 'media_library' && isset($libraries['view'])) {
     $libraries['view']['dependencies'][] = 'claro/media_library.theme';
     $libraries['view']['dependencies'][] = 'gin/media_library';
+  }
+
+  if ($extension == 'workbench' && isset($libraries['workbench.toolbar'])) {
+    $libraries['workbench.toolbar']['dependencies'][] = 'gin/workbench';
   }
 }
 

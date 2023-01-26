@@ -2,7 +2,6 @@
 
 namespace Drupal\Component\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
@@ -45,6 +44,8 @@ use Symfony\Contracts\Service\ResetInterface;
  * @ingroup container
  */
 class Container implements ContainerInterface, ResetInterface {
+
+  use ServiceIdHashTrait;
 
   /**
    * The parameters of the container.
@@ -200,10 +201,6 @@ class Container implements ContainerInterface, ResetInterface {
    * a new instance of the shared service.
    */
   public function reset() {
-    if (!empty($this->scopedServices)) {
-      throw new LogicException('Resetting the container is not allowed when a scope is active.');
-    }
-
     $this->services = [];
   }
 
@@ -536,10 +533,7 @@ class Container implements ContainerInterface, ResetInterface {
   }
 
   /**
-   * Gets all defined service IDs.
-   *
-   * @return array
-   *   An array of all defined service IDs.
+   * {@inheritdoc}
    */
   public function getServiceIds() {
     return array_keys($this->serviceDefinitions + $this->services);

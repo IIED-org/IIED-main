@@ -275,11 +275,11 @@ class AcquiaTelemetry implements EventSubscriberInterface {
   public function getAcquiaExtensionNames() {
     $module_names = array_keys($this->moduleList->getAllAvailableInfo());
 
-    return array_filter($module_names, function ($name) {
-      return strpos($name, 'acquia') !== FALSE ||
+    return array_values(array_filter($module_names, function ($name) {
+      return $name === 'cohesion' || strpos($name, 'acquia') !== FALSE ||
         strpos($name, 'lightning_') !== FALSE ||
         strpos($name, 'acms') !== FALSE;
-    });
+    }));
   }
 
 }

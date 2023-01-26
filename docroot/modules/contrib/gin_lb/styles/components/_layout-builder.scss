@@ -22,14 +22,14 @@
   font-size: 0.75em;
   position: absolute;
   padding-left: 20px;
-  color: var(--colorGinFormElementBorder);
+  color: var(--gin-border-color-form-element);
   top: -19px;
   left: 20px;
   z-index: 1;
   line-height: 19px;
   background: white;
   &:hover:after {
-    background-color: var(--colorGinPrimary) !important;
+    background-color: var(--gin-color-primary) !important;
     background-image: icon('edit-section');
     content: '';
     z-index: -1;
@@ -48,12 +48,12 @@
     content: '&amp;';
     width: 17px;
     height: 17px;
-    background-color: var(--colorGinFormElementBorder);
+    background-color: var(--gin-border-color-form-element);
   }
 
   &:hover {
-    background: var(--colorGinPrimary) !important;
-    color: var(--colorGinButtonText) !important;
+    background: var(--gin-color-primary) !important;
+    color: var(--gin-color-button-text) !important;
   }
 }
 
@@ -65,7 +65,7 @@
 .layout-builder__link--remove {
   &:hover {
     mask-image: none;
-    background-color: var(--colorGinPrimary) !important;
+    background-color: var(--gin-color-primary) !important;
   }
   &:hover:after {
     position: absolute;
@@ -82,7 +82,7 @@
     background-size: 17px 17px;
   }
 
-  background-color: var(--colorGinFormElementBorder);
+  background-color: var(--gin-border-color-form-element);
   background-position: center;
   background-repeat: no-repeat;
   mask-size: 17px 17px;
@@ -110,7 +110,7 @@
   position: relative;
   &:not(.gin-lb--disable-section-focus):hover:after {
     position: absolute;
-    border: 1px solid var(--colorGinPrimary) !important;
+    border: 1px solid var(--gin-color-primary) !important;
     content: '';
     width: 100%;
     height: 100%;
@@ -121,12 +121,12 @@
 
   &:hover {
     .layout-builder__link--remove {
-      background-color: var(--colorGinPrimary);
+      background-color: var(--gin-color-primary);
     }
     .layout-builder__link--configure {
-      color: var(--colorGinPrimary);
+      color: var(--gin-color-primary);
       &:after {
-        background-color: var(--colorGinPrimary);
+        background-color: var(--gin-color-primary);
       }
     }
   }
@@ -183,13 +183,25 @@
 
 #drupal-off-canvas .layout-selection li {
   display: block;
-  padding-bottom: 1em;
+  padding-bottom: 0;
+  position: relative;
 }
 
 #drupal-off-canvas .layout-selection li a {
   display: block;
+  border-bottom: 0px;
 }
-
+#drupal-off-canvas .layout-selection li:after {
+  content: "";
+  opacity: .75;
+  display: block;
+  position: absolute;
+  bottom: calc(var(--gin-spacing-s) * -1);
+  left: -2rem;
+  width: calc(100% + 4rem);
+  height: 1px;
+  border-bottom: 1px solid var(--gin-border-color-table);
+}
 #drupal-off-canvas .layout-selection li a svg {
   display: inline-block;
   margin-right: .5em;

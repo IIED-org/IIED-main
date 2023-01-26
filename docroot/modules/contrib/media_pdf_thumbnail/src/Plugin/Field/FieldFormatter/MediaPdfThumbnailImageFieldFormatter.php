@@ -2,23 +2,11 @@
 
 namespace Drupal\media_pdf_thumbnail\Plugin\Field\FieldFormatter;
 
-use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Extension\ModuleHandler;
-use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\StreamWrapper\StreamWrapperManagerInterface;
 use Drupal\Core\Url;
 use Drupal\image\Plugin\Field\FieldFormatter\ImageFormatter;
-use Drupal\media_pdf_thumbnail\Manager\MediaPdfThumbnailImageManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -78,66 +66,21 @@ class MediaPdfThumbnailImageFieldFormatter extends ImageFormatter {
   protected $moduleHandler;
 
   /**
-   * MediaPdfThumbnailImageFieldFormatter constructor.
-   *
-   * @param $plugin_id
-   * @param $plugin_definition
-   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
-   * @param array $settings
-   * @param $label
-   * @param $view_mode
-   * @param array $third_party_settings
-   * @param \Drupal\Core\Session\AccountInterface $current_user
-   * @param \Drupal\Core\Entity\EntityStorageInterface $image_style_storage
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entityTypeBundleInfo
-   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager
-   * @param \Drupal\media_pdf_thumbnail\Manager\MediaPdfThumbnailImageManager $mediaPdfThumbnailImageManager
-   * @param \Drupal\Core\StreamWrapper\StreamWrapperManagerInterface $streamWrapperManager
-   * @param \Drupal\Core\Routing\RouteMatchInterface $routeMatch
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
-   */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, AccountInterface $current_user, EntityStorageInterface $image_style_storage, ConfigFactoryInterface $configFactory, EntityTypeManagerInterface $entityTypeManager, EntityTypeBundleInfoInterface $entityTypeBundleInfo, EntityFieldManagerInterface $entityFieldManager, MediaPdfThumbnailImageManager $mediaPdfThumbnailImageManager, StreamWrapperManagerInterface $streamWrapperManager, RouteMatchInterface $routeMatch, ModuleHandlerInterface $moduleHandler) {
-    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings, $current_user, $image_style_storage);
-    $this->configFactory = $configFactory;
-    $this->entityTypeManager = $entityTypeManager;
-    $this->entityTypeBundleInfo = $entityTypeBundleInfo;
-    $this->entityFieldManager = $entityFieldManager;
-    $this->mediaPdfThumbnailImageManager = $mediaPdfThumbnailImageManager;
-    $this->streamWrapperManager = $streamWrapperManager;
-    $this->routeMatch = $routeMatch;
-    $this->moduleHandler = $moduleHandler;
-  }
-
-  /**
-   * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-   * @param array $configuration
-   * @param string $plugin_id
-   * @param mixed $plugin_definition
-   *
-   * @return \Drupal\Core\Field\FormatterBase|\Drupal\image\Plugin\Field\FieldFormatter\ImageFormatter|\Drupal\media_pdf_thumbnail\Plugin\Field\FieldFormatter\MediaPdfThumbnailImageFieldFormatter|static
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static($plugin_id,
-      $plugin_definition,
-      $configuration['field_definition'],
-      $configuration['settings'],
-      $configuration['label'],
-      $configuration['view_mode'],
-      $configuration['third_party_settings'],
-      $container->get('current_user'),
-      $container->get('entity_type.manager')->getStorage('image_style'),
-      $container->get('config.factory'),
-      $container->get('entity_type.manager'),
-      $container->get('entity_type.bundle.info'),
-      $container->get('entity_field.manager'),
-      $container->get('media_pdf_thumbnail.image.manager'),
-      $container->get('stream_wrapper_manager'),
-      $container->get('current_route_match'),
-      $container->get('module_handler'));
+    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
+
+    $instance->configFactory = $container->get('config.factory');
+    $instance->entityTypeManager = $container->get('entity_type.manager');
+    $instance->entityTypeBundleInfo = $container->get('entity_type.bundle.info');
+    $instance->entityFieldManager = $container->get('entity_field.manager');
+    $instance->mediaPdfThumbnailImageManager = $container->get('media_pdf_thumbnail.image.manager');
+    $instance->streamWrapperManager = $container->get('stream_wrapper_manager');
+    $instance->routeMatch = $container->get('current_route_match');
+    $instance->moduleHandler = $container->get('module_handler');
+
+    return $instance;
   }
 
   /**

@@ -1,0 +1,62 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the datalayer module.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function datalayer_requirements($phase) {
+  $requirements = [];
+  if ($phase == 'runtime') {
+    $library = \Drupal::service('library.discovery')->getLibraryByName('datalayer', 'helper');
+    $js_file_exists = file_exists(DRUPAL_ROOT . '/' . $library['js'][0]['data']);
+
+    $requirements['datalayer_helper'] = [
+      'title' => t('dataLayer helper library (optional)'),
+      'value' => $js_file_exists ? t('Installed') : t('Not installed'),
+      'description' => $js_file_exists ? '' : t('The data-layer-helper files can be <a href="@url">downloaded</a> and add to the /libraries/data-layer-helper/ directory in your Drupal installation directory. Example: /libraries/data-layer-helper/dist/data-layer-helper.js. If present they will be loaded on every page that uses the dataLayer variable.', ['@url' => 'https://github.com/google/data-layer-helper']),
+      // The library is optional, and the module will work fine withotu it,
+      // hower if you want to install it you can and it'll get loaded
+      // automatically.
+      'severity' => REQUIREMENT_OK,
+    ];
+  }
+
+  return $requirements;
+}
+
+/**
+ * Remove 3rd party settings from any field that doesn't need them.
+ */
+function datalayer_update_8001(&$sandbox) {
+  if (!$fields = \Drupal::entityTypeManager()->getStorage('field_config')->loadMultiple()) {
+    return;
+  }
+
+  // Existing fields may already have had 3rd party settings added, even if
+  // they are not needed, because the module didn't initially clean up if the
+  // expose setting was disabled. So this cleans up any existing field config
+  // that may have this unnecessary data.
+  /** @var \Drupal\field\FieldConfigInterface $field */
+  foreach ($fields as $field) {
+    if (empty($field->getThirdPartySetting('datalayer', 'expose'))) {
+      $settings = $field->getThirdPartySettings('datalayer');
+      foreach ($settings as $key => $value) {
+        $field->unsetThirdPartySetting('datalayer', $key);
+      }
+      $field->save();
+    }
+  }
+}
+
+/**
+ * Default the new remove_from_admin_routes setting to false for existing users.
+ */
+function datalayer_update_8002(&$sandbox) {
+  $datalayer_settings = \Drupal::configFactory()->getEditable('datalayer.settings');
+  $datalayer_settings->set('remove_from_admin_routes', FALSE)
+    ->save();
+}

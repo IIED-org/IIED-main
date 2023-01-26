@@ -4,6 +4,8 @@ namespace Drupal\language_switcher_extended;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
@@ -117,6 +119,33 @@ class LanguageSwitcherLinkProcessor {
   }
 
   /**
+   * Checks if an entity is not translated.
+   *
+   * Checks if an entity is translated based on the translation_detection
+   * configuration settings.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity to check.
+   * @param string $langcode
+   *   The langcode to check.
+   *
+   * @return bool
+   *   True if the entity is not translated.
+   */
+  protected function checkIsNotTranslated(EntityInterface $entity, $langcode) {
+    $config = $this->configFactory->get('language_switcher_extended.settings');
+    $translationDetection = $config->get('translation_detection');
+    if (empty($translationDetection) || $translationDetection === 'default' || !$entity instanceof EntityPublishedInterface) {
+      return !$entity->hasTranslation($langcode) || !$entity->getTranslation($langcode)
+        ->access('view');
+    }
+    elseif ($translationDetection === 'is_published') {
+      return !$entity->hasTranslation($langcode) || !$entity->getTranslation($langcode)
+        ->isPublished();
+    }
+  }
+
+  /**
    * Processes all untranslated language switcher items.
    *
    * @param array $links
@@ -129,8 +158,7 @@ class LanguageSwitcherLinkProcessor {
       $untranslatedHandler = $config->get('untranslated_handler');
 
       foreach ($links as $langcode => $link) {
-        if (!$entity->hasTranslation($langcode) || !$entity->getTranslation($langcode)
-          ->access('view')) {
+        if ($this->checkIsNotTranslated($entity, $langcode)) {
           switch ($untranslatedHandler) {
             case 'hide_link':
               unset($links[$langcode]);

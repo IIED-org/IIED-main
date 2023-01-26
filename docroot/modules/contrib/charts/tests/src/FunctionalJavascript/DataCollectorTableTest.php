@@ -21,7 +21,7 @@ class DataCollectorTableTest extends WebDriverTestBase {
    *
    * @var string
    */
-  protected $defaultTheme = 'stable';
+  protected $defaultTheme = 'stark';
 
   /**
    * List modules.
@@ -125,8 +125,8 @@ class DataCollectorTableTest extends WebDriverTestBase {
     $this->drupalGet('/charts_test/data_collector_table_test_form');
     $page = $this->getSession()->getPage();
 
-    // Get the first row, then inside the first row get the color input and check
-    // its value.
+    // Get the first row, then inside the first row get the color input and
+    // check its value.
     $first_row_color_input = $page->find('css', static::TABLE_ROW_SELECTOR . ':first-child td:nth-child(2) input[type="color"]');
     $this->assertEquals($default_colors[0], $first_row_color_input->getValue());
 

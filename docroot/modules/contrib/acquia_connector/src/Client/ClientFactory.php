@@ -3,6 +3,7 @@
 namespace Drupal\acquia_connector\Client;
 
 use Drupal\acquia_connector\AuthService;
+use Drupal\acquia_connector\ConnectorException;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Http\ClientFactory as HttpClientFactory;
@@ -102,6 +103,10 @@ class ClientFactory {
    *   The client.
    */
   public function getCloudApiClient(): Client {
+    if (!$this->authService->getAccessToken()) {
+      throw new ConnectorException("Missing access token.", 403);
+    }
+
     // Do not influence global handler stack.
     $stack = clone $this->stack;
     $stack->after('prepare_body', Middleware::mapRequest(function (RequestInterface $request) {

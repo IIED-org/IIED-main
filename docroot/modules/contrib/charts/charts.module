@@ -66,7 +66,7 @@ function template_preprocess_charts_chart(&$variables) {
     '#type' => 'html_tag',
     '#tag' => 'div',
     '#attributes' => $attributes,
-    '#value' => isset($element['#chart']) ? $element['#chart'] : '',
+    '#value' => $element['#chart'] ?? '',
   ];
   $variables['content_prefix'] = $element['#content_prefix'];
   $variables['content_suffix'] = $element['#content_suffix'];
@@ -208,16 +208,9 @@ function _charts_library_info_alter_recursive(array &$library, array $cdn) {
 function _charts_library_check_source_exists(string $source) {
   $source = rtrim($source, '/');
 
-  // @todo refactor the if statement below when dropping support for drupal 8.
-  if (version_compare(\Drupal::VERSION, '9.0', '<')) {
-    $app_root = \Drupal::service('app.root');
-    $site_path = \Drupal::service('site.path');
-  }
-  else {
-    $container = \Drupal::getContainer();
-    $app_root = $container->getParameter('app.root');
-    $site_path = $container->getParameter('site.path');
-  }
+  $container = \Drupal::getContainer();
+  $app_root = $container->getParameter('app.root');
+  $site_path = $container->getParameter('site.path');
 
   // The following logic is taken from libraries_get_libraries()
   $search_dir = [];
