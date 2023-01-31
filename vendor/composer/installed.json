@@ -6312,7 +6312,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Provide entity context to DS block fields": "https://www.drupal.org/files/issues/2020-10-12/ds-content_entity-2939322-14.patch"
+                    "Provide entity context to DS block fields": "https://www.drupal.org/files/issues/2020-10-12/ds-content_entity-2939322-14.patch",
+                    "Undefined index: #entity_type (https://www.drupal.org/project/ds/issues/3331674)": "https://git.drupalcode.org/issue/ds-3331674/-/commit/6f87865e8a6fe90db0770bec90d38914f7566f68.patch"
                 }
             },
             "installation-source": "dist",
