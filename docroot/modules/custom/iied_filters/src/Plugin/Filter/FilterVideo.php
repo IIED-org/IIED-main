@@ -15,7 +15,7 @@ use Drupal\filter\FilterProcessResult;
  *   id = "iied_filter_video",
  *   title = @Translation("IIED Video filter"),
  *   description = @Translation("Filter for legacy inline video tags from the https://www.drupal.org/project/video_embed_field module"),
- *   type = Drupal\filter\Plugin\FilterInterface::TYPE_MARKUP_LANGUAGE,
+ *   type = Drupal\filter\Plugin\FilterInterface::TYPE_TRANSFORM_IRREVERSIBLE,
  * )
  */
 
