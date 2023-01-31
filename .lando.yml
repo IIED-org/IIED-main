@@ -53,6 +53,8 @@ proxy:
     - adminer.iied-main.lndo.site
   node:
     - bs.iied-main.lndo.site:3000
+  solr:
+  - solr.iied-main.lndo.site:8983
 tooling:
   npm:
     service: node
