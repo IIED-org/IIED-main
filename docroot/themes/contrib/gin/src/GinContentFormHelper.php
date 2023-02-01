@@ -135,13 +135,6 @@ class GinContentFormHelper implements ContainerInjectionInterface {
         $form['actions']['preview']['#weight'] = $save_weight - 1;
       }
 
-      // Add sidebar toggle.
-      $form['actions']['gin_sidebar_toggle'] = [
-        '#markup' => '<a href="#toggle-sidebar" class="meta-sidebar__trigger trigger" role="button" title="' . t('Hide sidebar panel') . '" aria-controls="gin_sidebar"><span class="visually-hidden">' . t('Hide sidebar panel') . '</span></a>',
-        '#weight' => '999',
-      ];
-      $form['#attached']['library'][] = 'gin/sidebar';
-
       // Create gin_actions group.
       $form['gin_actions'] = [
         '#type' => 'container',
@@ -163,6 +156,13 @@ class GinContentFormHelper implements ContainerInjectionInterface {
       // Now let's just remove delete, as we'll move that over to gin_sidebar.
       unset($form['gin_actions']['actions']['delete']);
       unset($form['gin_actions']['actions']['delete_translation']);
+
+      // Add sidebar toggle.
+      $form['gin_actions']['gin_sidebar_toggle'] = [
+        '#markup' => '<a href="#toggle-sidebar" class="meta-sidebar__trigger trigger" role="button" title="' . t('Hide sidebar panel') . '" aria-controls="gin_sidebar"><span class="visually-hidden">' . t('Hide sidebar panel') . '</span></a>',
+        '#weight' => '999',
+      ];
+      $form['#attached']['library'][] = 'gin/sidebar';
 
       // Create gin_sidebar group.
       $form['gin_sidebar'] = [
@@ -190,9 +190,10 @@ class GinContentFormHelper implements ContainerInjectionInterface {
         $form['gin_sidebar']['actions']['delete_translation']['#attributes']['class'][] = 'action-link';
       }
 
-      // Add sidebar toggle.
+      // Sidebar close button.
+      $close_sidebar_translation = t('Close sidebar panel');
       $form['gin_sidebar']['gin_sidebar_close'] = [
-        '#markup' => '<a href="#close-sidebar" class="meta-sidebar__close trigger" role="button" title="' . t('Close sidebar panel') . '"><span class="visually-hidden">' . t('Close sidebar panel') . '</span></a>',
+        '#markup' => '<a href="#close-sidebar" class="meta-sidebar__close trigger" role="button" title="' . $close_sidebar_translation . '"><span class="visually-hidden">' . $close_sidebar_translation . '</span></a>',
       ];
 
       $form['gin_sidebar_overlay'] = [
@@ -206,6 +207,9 @@ class GinContentFormHelper implements ContainerInjectionInterface {
     // Attach libraries.
     $form['#attached']['library'][] = 'claro/node-form';
     $form['#attached']['library'][] = 'gin/edit_form';
+
+    // Add a class that allows the logic in edit_form.js to identify the form.
+    $form['#attributes']['class'][] = 'gin-node-edit-form';
 
     // If not logged in hide changed and author node info on add forms.
     $not_logged_in = $this->currentUser->isAnonymous();

@@ -9,6 +9,8 @@
  * Drupal manner.
  */
 
+use Drupal\Core\Field\FieldItemInterface;
+
 /**
  * @defgroup datalayer_hooks Data Layer hooks
  *
@@ -88,7 +90,7 @@ function hook_datalayer_alter(array &$data_layer) {
  * @param string $field_type
  *   Type of field, such as 'string' or 'entity_refernce'.
  */
-function hook_datalayer_field_alter(array &$value, \Drupal\Core\Field\FieldItemInterface $field_item, $field_type) {
+function hook_datalayer_field_alter(array &$value, FieldItemInterface $field_item, $field_type) {
   // EXAMPLE:
   // Remove the filter format for a text with summary field.
   if ($field_type == 'text_with_summary') {

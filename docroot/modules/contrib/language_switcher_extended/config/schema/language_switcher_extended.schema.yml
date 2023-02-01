@@ -11,6 +11,9 @@ language_switcher_extended.settings:
     untranslated_handler:
       type: string
       label: 'Untranslated Handler'
+    translation_detection:
+      type: string
+      label: 'Translation detection'
     hide_single_link:
       type: boolean
       label: 'Hide single link'

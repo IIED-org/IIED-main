@@ -43,7 +43,7 @@ final class AuthControllerTest extends AcquiaConnectorTestBase implements Logger
   /**
    * {@inheritdoc}
    */
-  public function log($level, $message, array $context = []) {
+  public function log($level, $message, array $context = []): void {
     $message_placeholders = $this->container
       ->get('logger.log_message_parser')
       ->parseMessagePlaceholders($message, $context);

@@ -36,7 +36,7 @@ function charts_c3_requirements($phase) {
         }
       }
       else {
-        // If the library directory contains a demo directory, provide a warning.
+        // If the library directory contains a demo directory, warn.
         if (file_exists($library_path . '/src')) {
           $requirements['charts_c3_js'] = [
             'title' => t('C3.js Library'),
@@ -79,7 +79,8 @@ function charts_c3_find_library() {
   $searchdir[] = 'libraries';
 
   // Also search sites/<domain>/*.
-  $site_path = \Drupal::getContainer()->getParameter('site.path');
+  $container = \Drupal::getContainer();
+  $site_path = $container->getParameter('site.path');
   $site_path = explode('/', $site_path);
   $site_name = $site_path[1];
   $searchdir[] = $site_name . '/libraries';

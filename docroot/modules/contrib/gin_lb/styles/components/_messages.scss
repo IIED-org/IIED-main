@@ -60,15 +60,15 @@
   }
 
   &.glb-messages--info {
-    color: var(--colorGinInfoLight) !important;
-    background-color: var(--colorGinInfoBackground) !important;
-    border-color: var(--colorGinInfoBackground) !important;
+    color: var(--gin-color-info-light) !important;
+    background-color: var(--gin-bg-info) !important;
+    border-color: var(--gin-bg-info) !important;
 
     .glb-messages__header {
       background: none !important;
 
       &:before {
-        background-color: var(--colorGinInfoLight) !important;
+        background-color: var(--gin-color-info-light) !important;
         mask-image: icon('info') !important;
         mask-repeat: no-repeat !important;
         mask-position: center left !important;
@@ -77,12 +77,12 @@
   }
 
   &.glb-messages--status {
-    color: var(--colorGinGreenLight) !important;
-    background-color: var(--colorGinGreenBackground) !important;
+    color: var(--gin-color-green-light) !important;
+    background-color: var(--gin-bg-green) !important;
 
     .glb-messages__header {
       &:before {
-        background-color: var(--colorGinGreenLight) !important;
+        background-color: var(--gin-color-green-light) !important;
         mask-image: icon('status');
         mask-repeat: no-repeat;
         mask-position: center left;
@@ -91,12 +91,12 @@
   }
 
   &.glb-messages--warning {
-    color: var(--colorGinWarningLight);
-    background-color: var(--colorGinWarningBackground) !important;
+    color: var(--gin-color-warning-light);
+    background-color: var(--gin-bg-warning) !important;
 
     .glb-messages__header {
       &:before {
-        background-color: var(--colorGinWarningLight) !important;
+        background-color: var(--gin-color-warning-light) !important;
         mask-image: icon('warning') !important;
         mask-repeat: no-repeat !important;
         mask-position: center left !important;
@@ -106,14 +106,14 @@
 
   &--error {
     div {
-      color: var(--colorGinDangerLight) !important;
+      color: var(--gin-color-danger-light) !important;
     }
-    color: var(--colorGinDangerLight) !important;
-    background-color: var(--colorGinDangerBackground) !important;
+    color: var(--gin-color-danger-light) !important;
+    background-color: var(--gin-bg-danger) !important;
 
     .glb-messages__header {
       &:before {
-        background-color: var(--colorGinDangerLight) !important;
+        background-color: var(--gin-color-danger-light) !important;
         mask-image: icon('error') !important;
         mask-repeat: no-repeat !important;
         mask-position: center left !important;

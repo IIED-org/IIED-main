@@ -21,6 +21,7 @@ function acquia_connector_uninstall() {
  */
 function acquia_connector_requirements($phase) {
   $requirements = [];
+
   if ($phase !== 'runtime') {
     return $requirements;
   }
@@ -73,4 +74,20 @@ function acquia_connector_requirements($phase) {
   }
 
   return $requirements;
+}
+
+/**
+ * Implements hook_requirements_alter().
+ */
+function acquia_connector_requirements_alter(array &$requirements): void {
+  $php_severity = $requirements['php']['severity'] ?? NULL;
+  // Customers always use a supported version of PHP on the Acquia Platform.
+  if ($php_severity === REQUIREMENT_ERROR) {
+    $requirements['php']['severity'] = REQUIREMENT_WARNING;
+    $requirements['php']['description'] = t('<p>@requirement</p><p>As part of your subscription, Acquia supports older versions of PHP in an effort to provide additional
+     time for our customers to make the transition to a supported version. Read our <a href="https://docs.acquia.com/cloud-platform/manage/php/">PHP Documentation</a> for more information.</p>',
+      [
+        '@requirement' => $requirements['php']['description'] ?? '',
+      ]);
+  }
 }

@@ -109,9 +109,22 @@ final class ConfigureApplicationForm extends FormBase {
       $response = $this->clientFactory->getCloudApiClient()->get('/api/applications');
       $data = Json::decode((string) $response->getBody());
       $applications = [];
-      foreach ($data['_embedded']['items'] as $item) {
-        $applications[$item['uuid']] = $item['name'];
+      foreach ($data['_embedded']['items'] as $key => $item) {
+        if (trim($item['subscription']['name']) !== trim($item['name'])) {
+          // Format for ACSF Sites.
+          if (preg_match('/.+?(?= - ACSF)/', trim($item['name']), $sub_name)) {
+            // For ACSF sites, remove the duplicate name in the subscription.
+            $applications[$item['uuid']] = $sub_name[0] . ': ' . substr($item['name'], strlen($sub_name[0]) + 2);
+          }
+          else {
+            $applications[$item['uuid']] = trim($item['subscription']['name'] . ': ' . $item['name']);
+          }
+        }
+        else {
+          $applications[$item['uuid']] = trim($item['name']);
+        }
       }
+      asort($applications);
     }
     catch (\Throwable $e) {
       $this->messenger()->addError('We could not retrieve account data, please re-authorize with your Acquia Cloud account');
@@ -120,12 +133,22 @@ final class ConfigureApplicationForm extends FormBase {
       ]);
       return new RedirectResponse(Url::fromRoute('acquia_connector.setup_oauth')->toString());
     }
+    // Set some defaults if we're hosted on Acquia Cloud.
+    $default_uuid = '';
+    if ($this->subscription->getProvider() === 'acquia_cloud') {
+      $default_uuid = $this->subscription->getSettings()->getMetadata('AH_APPLICATION_UUID');
+    }
 
     if (count($applications) === 0) {
       $this->messenger()->addError($this->t('No subscriptions were found for your account.'));
       return new RedirectResponse(Url::fromRoute('acquia_connector.setup_oauth')->toString());
     }
     if (count($applications) === 1) {
+      // Don't allow users on cloud to inadvertently override the default sub.
+      if ($default_uuid && key($applications) !== $default_uuid) {
+        $this->messenger()->addError($this->t("Unable to set Subscription: User does not have access to this application."));
+        return new RedirectResponse(Url::fromRoute('acquia_connector.setup_oauth')->toString());
+      }
       $form_state->setValue('application', key($applications));
       $this->submitForm($form, $form_state);
       $redirect = $form_state->getRedirect();
@@ -138,6 +161,7 @@ final class ConfigureApplicationForm extends FormBase {
       '#type' => 'select',
       '#required' => TRUE,
       '#options' => $applications,
+      '#default_value' => $default_uuid,
       '#title' => $this->t('Application'),
     ];
 

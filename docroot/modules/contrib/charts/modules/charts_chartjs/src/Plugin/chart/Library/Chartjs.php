@@ -3,6 +3,7 @@
 namespace Drupal\charts_chartjs\Plugin\chart\Library;
 
 use Drupal\charts\Plugin\chart\Library\ChartBase;
+use Drupal\charts\Plugin\chart\Library\ChartInterface;
 use Drupal\Component\Utility\Color;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
@@ -23,18 +24,31 @@ class Chartjs extends ChartBase {
   /**
    * {@inheritdoc}
    */
+  public function defaultConfiguration() {
+    return [
+      'xaxis' => [
+        'autoskip' => TRUE,
+        'horizontal_axis_title_align' => 'start',
+      ],
+      'yaxis' => [
+        'vertical_axis_title_align' => 'start',
+      ],
+    ] + parent::defaultConfiguration();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildConfigurationForm($form, $form_state);
-    $form['placeholder'] = [
-      '#title' => $this->t('Placeholder'),
-      '#type' => 'fieldset',
-      '#description' => $this->t(
-        'This is a placeholder for Chart.js-specific library options. If you would like to help build this out, please work from <a href="@issue_link">this issue</a>.', [
-          '@issue_link' => Url::fromUri('https://www.drupal.org/project/charts/issues/3046984')
-            ->toString(),
-        ]),
+
+    $form['intro_text'] = [
+      '#markup' => $this->t('<p>This is a placeholder for Chart.js-specific library options. If you would like to add more chartjs specific settings, please work from <a href="@issue_link">this issue</a>.</p>', [
+        '@issue_link' => Url::fromUri('https://www.drupal.org/project/charts/issues/3046984')->toString(),
+      ]),
     ];
-    $xaxis_configuration = $this->configuration['xaxis'] ?? [];
+
+    $xaxis_configuration = $this->configuration['xaxis'];
     $yaxis_configuration = $this->configuration['yaxis'] ?? [];
     $form['xaxis'] = [
       '#title' => $this->t('X-Axis Settings'),
@@ -44,7 +58,7 @@ class Chartjs extends ChartBase {
     $form['xaxis']['autoskip'] = [
       '#title' => $this->t('Enable autoskip'),
       '#type' => 'checkbox',
-      '#default_value' => $xaxis_configuration['autoskip'] ?? 1,
+      '#default_value' => !empty($xaxis_configuration['autoskip']),
     ];
     $form['xaxis']['horizontal_axis_title_align'] = [
       '#title' => $this->t('Align horizontal axis title'),
@@ -69,7 +83,7 @@ class Chartjs extends ChartBase {
         'center' => $this->t('Center'),
         'end' => $this->t('End'),
       ],
-      '#default_value' => $yaxis_configuration['vertical_axis_title_align'] ?? '',
+      '#default_value' => $this->configuration['yaxis']['vertical_axis_title_align'] ?? '',
     ];
 
     return $form;
@@ -186,11 +200,11 @@ class Chartjs extends ChartBase {
     // Build array of axes info.
     $axes_info = [
       'x' => [
-        'element' => $element[$x_axis_key],
+        'element' => $element[$x_axis_key] ?? [],
         'config' => $this->configuration[$x_axis_key] ?? [],
       ],
       'y' => [
-        'element' => $element[$y_axis_key],
+        'element' => $element[$y_axis_key] ?? [],
         'config' => $this->configuration[$y_axis_key] ?? [],
       ],
     ];
@@ -346,17 +360,24 @@ class Chartjs extends ChartBase {
       $type = $element[$child]['#type'];
       if ($type === 'chart_xaxis' && isset($element[$child]['#labels'])) {
         $categories = is_array($element[$child]['#labels']) ? array_map('strip_tags', $element[$child]['#labels']) : [];
-        // Merge in axis raw options.
-        if (!empty($element[$child]['#raw_options'])) {
-          $categories = NestedArray::mergeDeepArray([
-            $categories,
-            $element[$child]['#raw_options'],
-          ]);
+      }
+      if ($type !== 'chart_xaxis' && in_array($element['#chart_type'], ['donut', 'pie'])) {
+        if ($element[$child]['#type'] === 'chart_data') {
+          // Get the first item in each array inside $element[$child]['#data'].
+          $categories = array_map(function ($item) {
+            return $item[0];
+          }, $element[$child]['#data']);
         }
+      }
+      // Merge in axis raw options.
+      if (!empty($element[$child]['#raw_options'])) {
+        $categories = NestedArray::mergeDeepArray([
+          $categories,
+          $element[$child]['#raw_options'],
+        ]);
       }
     }
     $chart_definition['data']['labels'] = $categories;
-
     return $chart_definition;
   }
 

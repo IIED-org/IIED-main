@@ -88,7 +88,7 @@ class BehaviorInvoker implements BehaviorInvokerInterface {
     $this->rhEntityExtender = $entity_extender;
     $this->currentUser = $current_user;
     if (!$module_handler) {
-      @trigger_error('The module_handler service must be passed to ' . __NAMESPACE__ . '\BehaviorInvoker::__construct(). It was added in 8.x-1.0-beta8 and will be required in 2.0 version.', E_USER_DEPRECATED);
+      @trigger_error('This module handler workaround is deprecated in rabbit_hole:8.x-1.0 version and will be removed in rabbit_hole:2.x-2.0. The module_handler service must be passed to ' . __NAMESPACE__ . '\BehaviorInvoker::__construct(). See https://www.drupal.org/project/rabbit_hole/issues/3232505', E_USER_DEPRECATED);
       $module_handler = \Drupal::moduleHandler();
     }
     $this->moduleHandler = $module_handler;
@@ -155,7 +155,7 @@ class BehaviorInvoker implements BehaviorInvokerInterface {
       // Execute a fallback action until we have correct response object.
       // It allows us to have a chain of fallback actions until we execute the
       // final one.
-      while (!$response instanceof Response && is_string($response) && $this->rhBehaviorPluginManager->getDefinition($response, FALSE) !== NULL) {
+      while (!$response instanceof Response && \is_string($response) && $this->rhBehaviorPluginManager->getDefinition($response, FALSE) !== NULL) {
         $fallback_plugin = $this->rhBehaviorPluginManager->createInstance($response, []);
         $response = $fallback_plugin->performAction($entity, $current_response);
       }

@@ -41,6 +41,11 @@ final class HookRequirementsTest extends AcquiaSearchTestCase {
         ->with('read_only')
         ->willReturn($is_read_only);
 
+      $module_handler = $this->createMock(ModuleHandlerInterface::class);
+      $module_handler->expects($this->once())
+        ->method('moduleExists')
+        ->willReturn('acquia_connector');
+
       $entity_type_repository = $this->createMock(EntityTypeRepositoryInterface::class);
       $entity_type_repository
         ->method('getEntityTypeFromClass')
@@ -73,7 +78,7 @@ final class HookRequirementsTest extends AcquiaSearchTestCase {
         'entity_type.repository' => $entity_type_repository,
         'entity_type.manager' => $entity_type_manager,
         'config.factory' => $config_factory,
-        'module_handler' => $this->createMock(ModuleHandlerInterface::class),
+        'module_handler' => $module_handler,
         'acquia_search.preferred_core' => $acquia_search_preferred_core,
         'string_translation' => new TranslationManager(new LanguageDefault(['id' => 'en'])),
         'state' => $this->createMock(StateInterface::class),

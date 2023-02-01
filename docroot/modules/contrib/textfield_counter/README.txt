@@ -63,3 +63,4 @@ MAINTAINERS
 -----------
 
  * Jay Friendly (Jaypan) - https://www.drupal.org/u/jaypan
+ * Edmund Dunn  (edmund.dunn) - https://www.drupal.org/u/edmunddunn

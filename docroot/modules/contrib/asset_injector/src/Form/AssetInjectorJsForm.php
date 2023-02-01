@@ -19,6 +19,10 @@ class AssetInjectorJsForm extends AssetInjectorFormBase {
 
     /** @var \Drupal\asset_injector\Entity\AssetInjectorJs $entity */
     $entity = $this->entity;
+
+    // Add JS specific information about the wrapping element:
+    $form['code']['#description'] .= ' ' . $this->t('Do NOT include the wrapping %script element.', ['%script' => '<script>']);
+
     // Advanced options fieldset.
     $form['advanced'] = [
       '#type' => 'fieldset',
@@ -30,8 +34,8 @@ class AssetInjectorJsForm extends AssetInjectorFormBase {
 
     $form['advanced']['jquery'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Include jQuery'),
-      '#description' => $this->t('Not all pages load jQuery by default. Select this to include jQuery when loading this asset.'),
+      '#title' => $this->t('Requires jQuery'),
+      '#description' => $this->t('Not all pages load jQuery by default. Select this to include the jQuery library when loading this asset.'),
       '#options' => [
         0 => $this->t('No'),
         1 => $this->t('Yes'),
@@ -42,19 +46,22 @@ class AssetInjectorJsForm extends AssetInjectorFormBase {
     $form['advanced']['preprocess'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Preprocess JS'),
-      '#description' => $this->t('If the JS is preprocessed, and JS aggregation is enabled, the script file will be aggregated.'),
+      '#description' => $this->t('If the JS is preprocessed, and JS aggregation is enabled, the script file will be aggregated to improve performance and caching.'),
       '#default_value' => $entity->preprocess,
     ];
 
     $form['advanced']['header'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Load the script in the header of the page'),
+      '#title' => $this->t('Enable to load the script in the header, otherwise it will be loaded in the footer (Drupal default)
+        to improve performance.'),
       '#default_value' => $entity->header,
     ];
 
     $form['advanced']['use_noscript'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Include %noscript tag when file is included', ['%noscript' => '<noscript>']),
+      '#title' => $this->t('Add additional %noscript fallback element', ['%noscript' => '<noscript>']),
+      '#description' => $this->t('Allows to enter the contents for an additional %noscript element which is added to the page (if rules apply).
+        %noscript content is displayed for clients with JavaScript disabled.', ['%noscript' => '<noscript>']),
       '#default_value' => empty(array_filter($entity->noscriptRegion)) ? 0 : 1,
     ];
 

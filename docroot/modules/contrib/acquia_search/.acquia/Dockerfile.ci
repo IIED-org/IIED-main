@@ -1,5 +1,5 @@
 
-ARG BASE_IMAGE=devops-orca-container:latest
+ARG BASE_IMAGE=devops-orca-container:php81
 
 ARG REPO_LOCATION
 

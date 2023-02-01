@@ -85,8 +85,8 @@ function acquia_search_search_api_server_load(array $entities) {
  *   The server.
  */
 function acquia_search_connect_index(ServerInterface $server) {
+  \Drupal::state()->set('acquia_search.connect_index', FALSE);
   if ($index = Index::load('acquia_search_index')) {
-    \Drupal::state()->set('acquia_search.connect_index', FALSE);
     $server->addIndex($index);
     $index->setServer($server);
     $index->enable();
@@ -127,18 +127,16 @@ function acquia_search_search_api_index_load($entities) {
   /** @var \Drupal\acquia_search\PreferredCoreService $preferred_core_service */
   $preferred_core_service = \Drupal::service('acquia_search.preferred_core');
 
-  foreach ($entities as &$index) {
+  foreach ($entities as $index) {
     // Check for server-less indexes.
     // An infinite loop will occur if this tries to load a server.
     // @see https://www.drupal.org/project/acquia_connector/issues/2956737
-    $serverId = $index->getServerId();
-    if (!isset($serverId) || $serverId == '') {
+    $server = $index->getServerInstance();
+    if (!$server instanceof ServerInterface) {
       continue;
     }
 
-    $server = Server::load($serverId);
-
-    if (!$server || !$server->status()) {
+    if (!$server->status()) {
       continue;
     }
 
@@ -420,26 +418,6 @@ function acquia_search_search_api_solr_query_alter(SolariumQueryInterface $solar
     );
     if ($use_edismax) {
       $solarium_query->addParam('defType', 'edismax');
-    }
-  }
-}
-
-/**
- * Implements hook_search_api_solr_documents_alter().
- *
- * @todo Remove when support for Solr 4.2.1 is no longer supported.
- */
-function acquia_search_search_api_solr_documents_alter(array &$documents, IndexInterface $index, array $items) {
-  if (class_exists('Drupal\search_api_solr\Event\SearchApiSolrEvents')) {
-    return;
-  }
-
-  // Acquia Search defaults boost to 1.0 already, remove it from the payload.
-  foreach ($documents as $document) {
-    /** @var \Solarium\QueryType\Update\Query\Document $document */
-    $doc_fields = $document->getFields();
-    if (isset($doc_fields['boost_document']) && $doc_fields['boost_document'] === 1.0) {
-      $document->removeField('boost_document');
     }
   }
 }

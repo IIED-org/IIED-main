@@ -192,7 +192,7 @@ class ChosenLibCommands extends DrushCommands {
       drush_op('chdir', $cwd);
 
       if (!$return) {
-        throw new \Exception(dt('Unable to extract !filename.' . PHP_EOL . implode(PHP_EOL, $process->getOutput()), ['!filename' => $path]));
+        throw new \Exception(dt('Unable to extract !filename.' . PHP_EOL . $process->getOutput(), ['!filename' => $path]));
       }
     }
     else {
@@ -203,7 +203,7 @@ class ChosenLibCommands extends DrushCommands {
       drush_op('chdir', $cwd);
 
       if (!$return) {
-        throw new \Exception(dt('Unable to extract !filename.' . PHP_EOL . implode(PHP_EOL, $process->getOutput()), ['!filename' => $path]));
+        throw new \Exception(dt('Unable to extract !filename.' . PHP_EOL . $process->getOutput(), ['!filename' => $path]));
       }
     }
 

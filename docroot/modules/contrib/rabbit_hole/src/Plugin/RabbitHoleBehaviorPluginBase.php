@@ -4,6 +4,7 @@ namespace Drupal\rabbit_hole\Plugin;
 
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Component\Plugin\PluginBase;
+use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -11,6 +12,8 @@ use Drupal\Core\Form\FormStateInterface;
  * Base class for Rabbit hole behavior plugin plugins.
  */
 abstract class RabbitHoleBehaviorPluginBase extends PluginBase implements RabbitHoleBehaviorPluginInterface {
+
+  use DependencySerializationTrait;
 
   /**
    * {@inheritdoc}

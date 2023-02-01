@@ -2,7 +2,6 @@
 
 namespace Drupal\acquia_search\EventSubscriber\AcquiaSubscriptionData;
 
-use Drupal\acquia_connector\AcquiaConnectorEvents;
 use Drupal\acquia_connector\Event\AcquiaSubscriptionDataEvent;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -33,8 +32,11 @@ class AcquiaSearchData implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    // phpcs:ignore
-    $events[AcquiaConnectorEvents::GET_SUBSCRIPTION][] = ['onGetSubscriptionData', 100];
+    // Don't use AcquiaConnectorEvents::GET_SUBSCRIPTION, due to a race
+    // condition caused by the update system when the class may not exist yet.
+    $events['acquia_connector_get_subscription'][] = [
+      'onGetSubscriptionData', 100,
+    ];
     return $events;
   }
 

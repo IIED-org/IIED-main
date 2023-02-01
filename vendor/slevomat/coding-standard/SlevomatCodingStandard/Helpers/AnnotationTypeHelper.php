@@ -407,7 +407,7 @@ class AnnotationTypeHelper
 
 			/** @var IdentifierTypeNode $identificatorTypeNode */
 			$identificatorTypeNode = self::change($masterTypeNode->type, $typeNodeToChange, $changedTypeNode);
-			return new GenericTypeNode($identificatorTypeNode, $genericTypes);
+			return new GenericTypeNode($identificatorTypeNode, $genericTypes, $masterTypeNode->variances);
 		}
 
 		if ($masterTypeNode instanceof ArrayTypeNode) {
@@ -420,7 +420,7 @@ class AnnotationTypeHelper
 				$arrayShapeItemNodes[] = self::change($arrayShapeItemNode, $typeNodeToChange, $changedTypeNode);
 			}
 
-			return new ArrayShapeNode($arrayShapeItemNodes);
+			return new ArrayShapeNode($arrayShapeItemNodes, $masterTypeNode->sealed);
 		}
 
 		if ($masterTypeNode instanceof ArrayShapeItemNode) {

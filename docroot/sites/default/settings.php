@@ -808,7 +808,7 @@ function acquia_search_override_example_20210427() {
     'dev' =>  'AGHX-142716.dev.irforum',
     // Fallback Solr index to use for all other cases.
     // Including Local or other non-acquia-hosted Drupal environment
-    'FALLBACK' => 'AGHX-142716.dev.irforum'
+    'FALLBACK' => 'AGHX-142716.test.irforum'
   ];
 
   // END of editable part ==============

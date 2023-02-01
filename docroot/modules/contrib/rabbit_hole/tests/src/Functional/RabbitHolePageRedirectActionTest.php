@@ -43,7 +43,7 @@ class RabbitHolePageRedirectActionTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->behaviorSettingsManager = $this->container->get('rabbit_hole.behavior_settings_manager');
     $this->behaviorSettingsManager->saveBehaviorSettings([
@@ -76,6 +76,8 @@ class RabbitHolePageRedirectActionTest extends BrowserTestBase {
 
     $this->assertPageRedirect('/node', '/node');
     $this->assertPageRedirect('https://example.com', 'https://example.com');
+    $this->assertPageRedirect('/', '/');
+    $this->assertPageRedirect('<front>', '/');
     $this->assertPageRedirect('/<front>', '/');
     $this->assertPageRedirect('internal:/node', '/node');
     $this->assertPageRedirect('entity:node/' . $test_node->id(), $test_node->toUrl());
@@ -145,7 +147,15 @@ class RabbitHolePageRedirectActionTest extends BrowserTestBase {
     $node->save();
 
     $this->drupalGet($node->toUrl());
-    $expected_url = file_create_url($file->getFileUri());
+
+    if (\Drupal::hasService('file_url_generator')) {
+      $expected_url = \Drupal::service('file_url_generator')
+        ->generateAbsoluteString($file->getFileUri());
+    }
+    else {
+      // @phpstan-ignore-next-line
+      $expected_url = file_create_url($file->getFileUri());
+    }
     $this->assertSession()->addressEquals($expected_url);
     $this->assertSession()->responseContains('first');
 
@@ -155,7 +165,15 @@ class RabbitHolePageRedirectActionTest extends BrowserTestBase {
     $media->save();
 
     $this->drupalGet($node->toUrl());
-    $expected_url = file_create_url($file2->getFileUri());
+
+    if (\Drupal::hasService('file_url_generator')) {
+      $expected_url = \Drupal::service('file_url_generator')
+        ->generateAbsoluteString($file2->getFileUri());
+    }
+    else {
+      // @phpstan-ignore-next-line
+      $expected_url = file_create_url($file2->getFileUri());
+    }
     $this->assertSession()->addressEquals($expected_url);
     $this->assertSession()->responseContains('second');
   }
@@ -246,7 +264,7 @@ class RabbitHolePageRedirectActionTest extends BrowserTestBase {
       'filename' => "{$filename}.txt",
       'uri' => "public://{$filename}.txt",
       'filemime' => 'text/plain',
-      'status' => FILE_STATUS_PERMANENT,
+      'status' => 1,
     ]);
     file_put_contents($file->getFileUri(), $filename);
     $file->save();

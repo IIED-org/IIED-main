@@ -20,11 +20,10 @@ use Drupal\Tests\acquia_search\Unit\AcquiaSearchTestCase;
  */
 final class LocalOverrideTest extends AcquiaSearchTestCase {
 
-  public function testNothingIfProviderIsAcquiaCloud(): void {
+  public function testIsCalledIfProviderIsAcquiaCloud(): void {
     $subscription = $this->createMock(Subscription::class);
-    $subscription->expects($this->once())
-      ->method('getProvider')
-      ->willReturn('acquia_cloud');
+    $subscription->expects($this->never())
+      ->method('getProvider');
 
     $sut = new LocalOverride(
       $subscription,
@@ -40,17 +39,18 @@ final class LocalOverrideTest extends AcquiaSearchTestCase {
    */
   public function testOnGetPossibleCores(string $config_override_core, string $config_solr_override_core, string $settings_override_core, array $expected): void {
     $subscription = $this->createMock(Subscription::class);
-    $subscription->expects($this->once())
-      ->method('getProvider')
-      ->willReturn('core_state');
+    $subscription->expects($this->never())
+      ->method('getProvider');
     $subscription->expects($this->never())
       ->method('getSettings');
 
-    new Settings([
-      'acquia_search' => [
-        'override_search_core' => $settings_override_core,
-      ],
-    ]);
+    if ($settings_override_core !== '') {
+      new Settings([
+        'acquia_search' => [
+          'override_search_core' => $settings_override_core,
+        ],
+      ]);
+    }
 
     $route_match = $this->createMock(RouteMatchInterface::class);
 
@@ -78,26 +78,39 @@ final class LocalOverrideTest extends AcquiaSearchTestCase {
     $event = new AcquiaPossibleCoresEvent([]);
     $sut->onGetPossibleCores($event);
     self::assertEquals($expected, $event->getPossibleCores());
+    self::assertEquals(FALSE, $event->isReadOnly());
   }
 
   public function configData() {
-    yield [
+    yield 'config_override_core foo' => [
       'foo',
-      'bar',
-      'baz',
-      ['foo', 'bar', 'baz'],
+      '',
+      '',
+      ['foo'],
     ];
-    yield [
+    yield 'config_solr_override_core bar' => [
       '',
       'bar',
-      'baz',
-      ['bar', 'baz'],
+      '',
+      ['bar'],
     ];
-    yield [
+    yield 'settings_override_core baz' => [
       '',
       '',
       'baz',
       ['baz'],
+    ];
+    yield 'config_override_core foo settings_override_core baz' => [
+      'foo',
+      '',
+      'baz',
+      ['foo', 'baz'],
+    ];
+    yield 'config_solr_override_core bar settings_override_core baz' => [
+      '',
+      'bar',
+      'baz',
+      ['bar', 'baz'],
     ];
   }
 
@@ -107,9 +120,8 @@ final class LocalOverrideTest extends AcquiaSearchTestCase {
    */
   public function testWithOnlyReadOnly(bool $readonly): void {
     $subscription = $this->createMock(Subscription::class);
-    $subscription->expects($this->once())
-      ->method('getProvider')
-      ->willReturn('core_state');
+    $subscription->expects($this->never())
+      ->method('getProvider');
     $subscription->expects($this->never())
       ->method('getSettings');
 

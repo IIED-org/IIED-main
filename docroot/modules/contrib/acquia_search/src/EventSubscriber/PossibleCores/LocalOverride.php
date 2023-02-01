@@ -98,10 +98,6 @@ class LocalOverride implements EventSubscriberInterface {
    * @see \Drupal\acquia_connector\Settings
    */
   public function onGetPossibleCores(AcquiaPossibleCoresEvent $event) {
-    // Never allow overridden settings on Acquia Cloud.
-    if ($this->subscription->getProvider() === 'acquia_cloud') {
-      return;
-    }
 
     // Show deprecated config message on Search config pages.
     if ($this->deprecated && str_contains($this->routeMatch->getRouteName() ?? '', 'search_api')) {
@@ -126,7 +122,7 @@ class LocalOverride implements EventSubscriberInterface {
 
     $search_settings = CoreSettings::get('acquia_search');
     if (is_array($search_settings)) {
-      $readonly = $search_settings['read_only'] ?? TRUE;
+      $readonly = $search_settings['read_only'] ?? FALSE;
       $event->setReadOnly($readonly);
 
       if (isset($search_settings['override_search_core'])) {

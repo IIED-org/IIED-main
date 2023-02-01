@@ -16,7 +16,6 @@ function chosen_requirements($phase) {
 
   switch ($phase) {
     case 'runtime':
-      module_load_include('module', 'chosen_lib');
       $chosen_path = _chosen_lib_get_chosen_path();
 
       if (!$chosen_path) {

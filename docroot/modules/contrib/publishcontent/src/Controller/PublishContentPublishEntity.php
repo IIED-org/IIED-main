@@ -61,6 +61,13 @@ class PublishContentPublishEntity implements ContainerInjectionInterface {
   protected $logger;
 
   /**
+   * The time service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $time;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -72,6 +79,7 @@ class PublishContentPublishEntity implements ContainerInjectionInterface {
     $instance->config = $container->get('config.factory')->get('publishcontent.settings');
     $instance->currentUser = $container->get('current_user');
     $instance->logger = $container->get('logger.factory')->get('publishcontent');
+    $instance->time = $container->get('datetime.time');
     return $instance;
   }
 
@@ -135,7 +143,7 @@ class PublishContentPublishEntity implements ContainerInjectionInterface {
           '@status' => $status,
           '@user' => $this->currentUser->getDisplayName(),
         ]);
-        $node->setRevisionCreationTime(REQUEST_TIME);
+        $node->setRevisionCreationTime($this->time->getRequestTime());
         $node->setRevisionUserId($this->currentUser->id());
       }
 
@@ -162,7 +170,7 @@ class PublishContentPublishEntity implements ContainerInjectionInterface {
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function hasUILocalTask() {
+  public function hasUiLocalTask() {
     return AccessResult::allowedIf(!empty($this->config) &&
       !empty($this->config->get('ui_localtask')));
   }

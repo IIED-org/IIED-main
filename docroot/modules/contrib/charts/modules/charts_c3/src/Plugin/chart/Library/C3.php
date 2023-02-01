@@ -63,14 +63,10 @@ class C3 extends ChartBase implements ContainerFactoryPluginInterface {
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildConfigurationForm($form, $form_state);
-    $form['placeholder'] = [
-      '#title' => $this->t('Placeholder'),
-      '#type' => 'fieldset',
-      '#description' => $this->t(
-        'This is a placeholder for C3.js-specific library options. If you would like to help build this out, please work from <a href="@issue_link">this issue</a>.', [
-          '@issue_link' => Url::fromUri('https://www.drupal.org/project/charts/issues/3046982')
-            ->toString(),
-        ]),
+    $form['intro_text'] = [
+      '#markup' => $this->t('<p>This is a placeholder for C3.js-specific library options. If you would like to help build this out, please work from <a href="@issue_link">this issue</a>.</p>', [
+        '@issue_link' => Url::fromUri('https://www.drupal.org/project/charts/issues/3046982')->toString(),
+      ]),
     ];
 
     return $form;

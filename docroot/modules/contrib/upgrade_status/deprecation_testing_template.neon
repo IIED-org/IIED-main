@@ -1,5 +1,7 @@
 # FROM mglaman/drupal-check/phpstan/deprecation_testing.neon
 parameters:
+	parallel:
+		maximumNumberOfProcesses: 0
 	customRulesetUsed: true
 	ignoreErrors:
 		- '#\Drupal calls should be avoided in classes, use dependency injection instead#'

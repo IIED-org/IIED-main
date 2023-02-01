@@ -2,6 +2,7 @@
 
 namespace Drupal\entity_browser\Plugin\EntityBrowser\FieldWidgetDisplay;
 
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\entity_browser\FieldWidgetDisplayBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -61,6 +62,15 @@ class EntityLabel extends FieldWidgetDisplayBase implements ContainerFactoryPlug
    */
   public function view(EntityInterface $entity) {
     $translation = $this->entityRepository->getTranslationFromContext($entity);
+
+    if (!$translation->access('view label')) {
+      $restricted_access_label = new FormattableMarkup('@label @id', [
+        '@label' => $entity->getEntityType()->getSingularLabel(),
+        '@id' => $entity->id(),
+      ]);
+      return ['#markup' => $restricted_access_label];
+    }
+
     return $translation->label();
   }
 

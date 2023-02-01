@@ -22,7 +22,7 @@ class ChosenFieldWidgetsTest extends FieldTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'node',
     'options',
     'entity_test',

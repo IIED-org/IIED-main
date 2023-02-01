@@ -118,6 +118,36 @@ final class SettingsFormTest extends AcquiaConnectorTestBase implements EventSub
   }
 
   /**
+   * Tests the site name generated if Acquia Cloud hosting.
+   */
+  public function testSiteNameGeneratedOnAcquiaCloud(): void {
+    $this->container->get('state')->setMultiple([
+      'acquia_connector.identifier' => 'ABC',
+      'acquia_connector.key' => 'DEF',
+      'acquia_connector.application_uuid' => 'a47ac10b-58cc-4372-a567-0e02b2c3d470',
+      'spi.site_name' => 'old_stored_site_name',
+    ]);
+    $this->container->get('acquia_connector.subscription')->populateSettings();
+
+    $request = Request::create(
+      Url::fromRoute('acquia_connector.settings')->toString(),
+      'GET',
+      [],
+      [],
+      [],
+      [
+        'AH_SITE_ENVIRONMENT' => 'test',
+        'AH_SITE_NAME' => 'foobar',
+      ]
+    );
+    $response = $this->doRequest($request);
+    self::assertEquals(200, $response->getStatusCode());
+    $this->assertRaw('<h3>Connected to Acquia</h3>');
+    $site_name = (string) $this->cssSelect('input[name="name"]')[0]->attributes()->value[0];
+    self::assertStringContainsString('0e02b2c3d470: test', $site_name);
+  }
+
+  /**
    * Tests the form with subscription data available.
    */
   public function testWithSubscriptionData(): void {
@@ -125,6 +155,7 @@ final class SettingsFormTest extends AcquiaConnectorTestBase implements EventSub
       'acquia_connector.identifier' => 'ABC',
       'acquia_connector.key' => 'DEF',
       'acquia_connector.application_uuid' => 'a47ac10b-58cc-4372-a567-0e02b2c3d470',
+      'spi.site_name' => 'old_stored_site_name',
     ]);
     $this->container->get('acquia_connector.subscription')->populateSettings();
 

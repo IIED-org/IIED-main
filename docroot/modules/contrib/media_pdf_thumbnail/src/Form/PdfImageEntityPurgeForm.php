@@ -124,7 +124,7 @@ class PdfImageEntityPurgeForm extends FormBase {
 
     $operations = [];
 
-    $ids = \Drupal::entityTypeManager()->getStorage('pdf_image_entity')->getQuery()->execute();
+    $ids = \Drupal::entityTypeManager()->getStorage('pdf_image_entity')->getQuery()->accessCheck(false)->execute();
 
     foreach ($ids as $id) {
       $operations[] = [

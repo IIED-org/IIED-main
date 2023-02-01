@@ -2,7 +2,7 @@
  * @file Common data layer helper.
  */
 
-(function ($) {
+(function () {
   Drupal.behaviors.dataLayer = {
 
     /**
@@ -20,10 +20,6 @@
         }
       }
       return langList;
-
-      // With Underscore.js dependency.
-      //var list = _.pluck(Drupal.settings.datalayer.languages, 'prefix');
-      //return _.filter(list, function(lang) { return lang });
     },
 
     /**
@@ -32,4 +28,4 @@
     attach: function() { return }
 
   };
-})(jQuery);
+})();

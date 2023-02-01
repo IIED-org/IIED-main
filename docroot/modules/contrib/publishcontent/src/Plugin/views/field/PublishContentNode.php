@@ -61,7 +61,7 @@ class PublishContentNode extends FieldPluginBase {
    * {@inheritdoc}
    */
   public function render(ResultRow $values) {
-    /* @var \Drupal\node\NodeInterface $node */
+    /** @var \Drupal\node\NodeInterface $node */
     $node = $values->_entity;
 
     // Sanity check.

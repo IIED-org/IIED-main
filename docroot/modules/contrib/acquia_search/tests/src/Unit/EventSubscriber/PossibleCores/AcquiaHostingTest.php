@@ -25,6 +25,11 @@ final class AcquiaHostingTest extends AcquiaSearchTestCase {
     }
   }
 
+  private static function assertPossibleCoresEvent(AcquiaPossibleCoresEvent $event, array $expected_possible_cores, bool $expected_read_only): void {
+    self::assertEquals($expected_possible_cores, $event->getPossibleCores());
+    self::assertEquals($expected_read_only, $event->isReadOnly());
+  }
+
   public function testNothingIfProviderIsNotAcquiaCloud(): void {
     $subscription = $this->createMock(Subscription::class);
     $subscription->expects($this->once())
@@ -38,13 +43,16 @@ final class AcquiaHostingTest extends AcquiaSearchTestCase {
       $subscription,
       'foobar'
     );
-    $sut->onGetPossibleCores(new AcquiaPossibleCoresEvent([]));
+    $event = new AcquiaPossibleCoresEvent([]);
+    $sut->onGetPossibleCores($event);
+    self::assertEquals([], $event->getPossibleCores());
+    self::assertTrue($event->isReadOnly());
   }
 
   /**
    * @dataProvider acquiaCloudInfo
    */
-  public function testOnGetPossibleCores(string $ah_environment, string $connection_db_name, string $ah_db_role, array $expected): void {
+  public function testOnGetPossibleCores(string $ah_environment, string $connection_db_name, string $ah_db_role, array $expected_possible_cores, bool $expected_read_only): void {
     $subscription = $this->createMock(Subscription::class);
     $subscription->expects($this->once())
       ->method('getProvider')
@@ -83,7 +91,8 @@ final class AcquiaHostingTest extends AcquiaSearchTestCase {
     );
     $event = new AcquiaPossibleCoresEvent([]);
     $sut->onGetPossibleCores($event);
-    self::assertEquals($expected, $event->getPossibleCores());
+    self::assertEquals($expected_possible_cores, $event->getPossibleCores());
+    self::assertEquals($expected_read_only, $event->isReadOnly());
   }
 
   public function acquiaCloudInfo() {
@@ -96,6 +105,7 @@ final class AcquiaHostingTest extends AcquiaSearchTestCase {
         'abc123.prod',
         'abc123.prod.default',
       ],
+      FALSE,
     ];
     yield 'test' => [
       'test',
@@ -106,6 +116,7 @@ final class AcquiaHostingTest extends AcquiaSearchTestCase {
         'abc123.test',
         'abc123.test.default',
       ],
+      FALSE,
     ];
     yield 'dev' => [
       'dev',
@@ -116,12 +127,14 @@ final class AcquiaHostingTest extends AcquiaSearchTestCase {
         'abc123.dev',
         'abc123.dev.default',
       ],
+      FALSE,
     ];
     yield 'no site env' => [
       '',
       'foobar_db',
       'foobar_db',
       [],
+      TRUE,
     ];
 
     yield 'no ah db role' => [
@@ -132,6 +145,7 @@ final class AcquiaHostingTest extends AcquiaSearchTestCase {
         'abc123.dev',
         'abc123.dev.default',
       ],
+      FALSE,
     ];
   }
 

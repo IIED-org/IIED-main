@@ -74,7 +74,7 @@ function acquia_connector_toolbar() {
     $subscription_data = $subscription->getSubscription();
     if (isset($subscription_data['active']) && $subscription_data['active'] !== FALSE) {
       // Throw gratis information if subscription is expired.
-      if ($subscription_data['gratis']) {
+      if (isset($subscription_data['gratis']) && $subscription_data['gratis'] === TRUE) {
         $link['#title'] = t('Renew subscription (expired @date)', [
           '@date' => \Drupal::service('date.formatter')->format(strtotime($subscription_data['expiration_date']['value']), 'custom', 'Y/n/j'),
         ]);
@@ -159,4 +159,15 @@ function acquia_connector_modules_uninstalled(array $modules) {
 function acquia_connector_cron() {
   $auth_service = \Drupal::service('acquia_connector.auth_service');
   $auth_service->cronRefresh();
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function acquia_connector_module_implements_alter(&$implementations, $hook) {
+  // The acquia_telemetry is deprecated, if the module could not be uninstalled
+  // while upgrading to acquia_connector:4.0.0.
+  if (isset($implementations['acquia_telemetry'])) {
+    unset($implementations['acquia_telemetry']);
+  }
 }

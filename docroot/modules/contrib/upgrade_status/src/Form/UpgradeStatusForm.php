@@ -6,7 +6,7 @@ use Composer\Semver\Semver;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\DrupalKernelInterface;
 use Drupal\Core\Extension\Extension;
-use Drupal\Core\Extension\ModuleHandler;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DateFormatter;
 use Drupal\Core\Form\FormBase;
@@ -67,7 +67,7 @@ class UpgradeStatusForm extends FormBase {
   /**
    * The module handler service.
    *
-   * @var \Drupal\Core\Extension\ModuleHandler
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
 
@@ -153,7 +153,7 @@ class UpgradeStatusForm extends FormBase {
    *   The renderer service.
    * @param \Psr\Log\LoggerInterface $logger
    *   The logger.
-   * @param \Drupal\Core\Extension\ModuleHandler $module_handler
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
    * @param \Drupal\upgrade_status\DeprecationAnalyzer $deprecation_analyzer
    *   The deprecation analyzer.
@@ -174,7 +174,7 @@ class UpgradeStatusForm extends FormBase {
     ScanResultFormatter $result_formatter,
     RendererInterface $renderer,
     LoggerInterface $logger,
-    ModuleHandler $module_handler,
+    ModuleHandlerInterface $module_handler,
     DeprecationAnalyzer $deprecation_analyzer,
     StateInterface $state,
     DateFormatter $date_formatter,

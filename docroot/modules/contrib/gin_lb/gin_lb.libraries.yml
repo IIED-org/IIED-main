@@ -18,9 +18,7 @@ gin_lb_init:
     - core/jquery.once
     - core/drupal
     - core/drupalSettings
-    - toolbar/toolbar
-    - toolbar/toolbar.escapeAdmin
-    - gin_lb/toastify
+    - gin/sidebar
 
 gin_lb_accent:
   version: VERSION
@@ -28,7 +26,7 @@ gin_lb_accent:
     theme:
       dist/css/gin_lb_accent.css: { minified: true }
 
-toastify:
+toastify_cdn:
   version: VERSION
   js:
     //cdn.jsdelivr.net/npm/toastify-js: { type: external }
@@ -36,3 +34,9 @@ toastify:
     theme:
       //cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css: { type: external }
 
+toastify_composer:
+  css:
+    component:
+      /libraries/toastify-js/src/toastify.css: {}
+  js:
+    /libraries/toastify-js/src/toastify.js: {}

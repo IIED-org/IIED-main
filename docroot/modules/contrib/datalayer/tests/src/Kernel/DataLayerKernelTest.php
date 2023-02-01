@@ -100,7 +100,7 @@ class DataLayerKernelTest extends KernelTestBase {
    * Test DataLayer Defaults function.
    */
   public function testDataLayerDefaults() {
-    $this->assertEqual(
+    $this->assertEquals(
       [
         'drupalLanguage' => Language::$defaultValues['id'],
         'drupalCountry' => $this->config('system.date')->get('country.default'),
@@ -115,7 +115,7 @@ class DataLayerKernelTest extends KernelTestBase {
    */
   public function testDataLayerAddWillAddData() {
     $this->setupEmptyDataLayer();
-    $this->assertEqual(
+    $this->assertEquals(
       ['foo' => 'bar'],
       datalayer_add(['foo' => 'bar'])
     );
@@ -127,7 +127,7 @@ class DataLayerKernelTest extends KernelTestBase {
   public function testDataLayerAddDoesNotOverwriteByDefault() {
     $this->setupEmptyDataLayer();
     datalayer_add(['foo' => 'bar']);
-    $this->assertEqual(
+    $this->assertEquals(
       ['foo' => 'bar'],
       datalayer_add(['foo' => 'baz'])
     );
@@ -139,7 +139,7 @@ class DataLayerKernelTest extends KernelTestBase {
   public function testDataLayerAddWillOverwriteWithFlag() {
     $this->setupEmptyDataLayer();
     datalayer_add(['foo' => 'bar']);
-    $this->assertEqual(
+    $this->assertEquals(
       ['foo' => 'baz'],
       datalayer_add(['foo' => 'baz'], TRUE)
     );
@@ -162,7 +162,7 @@ class DataLayerKernelTest extends KernelTestBase {
     $this->setupMockRouteMatch();
     $object = _datalayer_menu_get_any_object();
     $this->assertTrue(is_object($object));
-    $this->assertEqual($object->getEntityTypeId(), 'node');
+    $this->assertEquals($object->getEntityTypeId(), 'node');
   }
 
   /**
@@ -171,7 +171,7 @@ class DataLayerKernelTest extends KernelTestBase {
   public function testDataLayerGetEntityTermsReturnsEmptyArray() {
     $this->setupMockNode();
     $terms = _datalayer_get_entity_terms($this->node);
-    $this->assertEqual([], $terms);
+    $this->assertEquals([], $terms);
   }
 
   /**
@@ -180,7 +180,7 @@ class DataLayerKernelTest extends KernelTestBase {
   public function testDataLayerGetEntityTermsReturnsTermArray() {
     $this->setupMockNodeWithTerm();
     $terms = _datalayer_get_entity_terms($this->node);
-    $this->assertEqual(['tags' => [1 => 'someTag']], $terms);
+    $this->assertEquals(['tags' => [1 => 'someTag']], $terms);
   }
 
   /**
@@ -190,7 +190,7 @@ class DataLayerKernelTest extends KernelTestBase {
     $this->setupEmptyDataLayer();
     $this->setupMockNodeWithTerm();
     $entity_data = _datalayer_get_entity_data($this->node);
-    $this->assertEqual(
+    $this->assertEquals(
       $this->getExpectedEntityDataArray(),
       $entity_data
     );
@@ -215,6 +215,7 @@ class DataLayerKernelTest extends KernelTestBase {
    * Setup empty datalayer.
    */
   public function setupEmptyDataLayer() {
+    // phpcs:ignore DrupalPractice.CodeAnalysis.VariableAnalysis.UnusedVariable
     $data = &drupal_static('datalayer_add', []);
   }
 

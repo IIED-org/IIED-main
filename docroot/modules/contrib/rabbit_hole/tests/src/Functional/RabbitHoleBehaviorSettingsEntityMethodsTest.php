@@ -40,7 +40,7 @@ class RabbitHoleBehaviorSettingsEntityMethodsTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->configFactory = $this->container->get('config.factory');
   }
@@ -176,7 +176,7 @@ class RabbitHoleBehaviorSettingsEntityMethodsTest extends BrowserTestBase {
   private function behaviorSettingExceptionThrown(BehaviorSettings $entity, $method, array $args, $parent) {
     $exception_was_thrown = FALSE;
     try {
-      call_user_func([$entity, $method], $args);
+      \call_user_func([$entity, $method], $args);
     }
     catch (InvalidBehaviorSettingException $ex) {
       $exception_was_thrown = TRUE;

@@ -105,7 +105,7 @@ interface EntityStorageInterface {
   public function deleteRevision($revision_id);
 
   /**
-   * Load entities by their property values.
+   * Load entities by their property values without any access checks.
    *
    * @param array $values
    *   An associative array where the keys are the property names and the
@@ -145,7 +145,7 @@ interface EntityStorageInterface {
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The entity to save.
    *
-   * @return
+   * @return int|null
    *   SAVED_NEW or SAVED_UPDATED is returned depending on the operation
    *   performed.
    *

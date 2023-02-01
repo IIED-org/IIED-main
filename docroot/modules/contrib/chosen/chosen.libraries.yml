@@ -13,7 +13,7 @@ drupal.chosen:
   dependencies:
     - core/drupal
     - core/jquery
-    - core/jquery.once
+    - core/once
     - chosen_lib/chosen
 drupal.chosen.all:
   dependencies:

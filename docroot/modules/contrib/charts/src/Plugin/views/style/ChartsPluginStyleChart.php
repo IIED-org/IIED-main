@@ -362,7 +362,7 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
           // from before the grouping, so we need to keep our own row number
           // when looping through the rows.
           foreach ($data_set['rows'] as $result_number => $row) {
-            $xaxis_label = trim(strip_tags($this->getField($result_number, $label_field_key)));
+            $xaxis_label = trim(strip_tags((string)$this->getField($result_number, $label_field_key)));
             if ($label_field_key) {
               $xaxis_labels = $chart['xaxis']['#labels'] ?? [];
               if (!in_array($xaxis_label, $xaxis_labels)) {

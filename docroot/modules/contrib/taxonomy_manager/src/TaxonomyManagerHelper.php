@@ -184,7 +184,7 @@ class TaxonomyManagerHelper {
 
       $values = [
         'name' => $name,
-        // @todo do we need to set a format?
+        // @todo: do we need to set a format?
         'format' => $format->id(),
         'vid' => $vid,
         'langcode' => $langcode,

@@ -24,7 +24,8 @@ use Drupal\Component\Utility\NestedArray;
  *   id = "field_formatter_with_inline_settings",
  *   label = @Translation("Field formatter with inline settings"),
  *   field_types = {
- *     "entity_reference"
+ *     "entity_reference",
+ *     "entity_reference_revisions"
  *   }
  * )
  */

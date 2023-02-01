@@ -71,7 +71,6 @@ class AssetInjectorAccessControlHandler extends EntityAccessControlHandler imple
    * {@inheritdoc}
    */
   protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account) {
-
     // "View" operation is used as an indicator that the asset will be added
     // to the page. This doesn't restrict access to view the asset via the url.
     if ($operation != 'view') {
@@ -161,8 +160,9 @@ class AssetInjectorAccessControlHandler extends EntityAccessControlHandler imple
     $theme_condition = $conditions->get('current_theme');
     $config = $theme_condition->getConfig();
 
+    $themes = is_array($config['theme']) ? $config['theme'] : [$config['theme']];
     // If no themes were selected in the UI, the value of `theme` is an empty string. Change it to an array.
-    foreach (($config['theme'] ?: []) as $theme) {
+    foreach ($themes as $theme) {
       $new_theme_conditions = clone $theme_condition;
       $new_theme_conditions->setConfig('theme', $theme);
       $conditions->set("current_theme_$theme", $new_theme_conditions);

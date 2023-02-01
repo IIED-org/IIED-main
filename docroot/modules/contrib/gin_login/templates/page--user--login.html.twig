@@ -76,6 +76,8 @@
 
   <div class="user-form-page__wallpaper">
     <!-- Wallpaper goes here -->
-    <img src="{{ brand_image }}" alt="{{ brand_alt }}" />
+    {% if brand_image %}
+      <img src="{{ brand_image }}" alt="" />
+    {% endif %}
   </div>
 </div>

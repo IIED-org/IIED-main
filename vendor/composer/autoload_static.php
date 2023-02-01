@@ -218,7 +218,7 @@ class ComposerStaticInitc55356c53f91567181cb9bc578ac52ab
             'Drush\\Commands\\radix\\' => 21,
             'Drush\\' => 6,
             'Drupal\\sophron\\' => 15,
-            'Drupal\\gin_lb_settings\\' => 23,
+            'Drupal\\gin_lb\\' => 14,
             'Drupal\\Driver\\' => 14,
             'Drupal\\Core\\' => 12,
             'Drupal\\Composer\\Plugin\\VendorHardening\\' => 39,
@@ -665,7 +665,7 @@ class ComposerStaticInitc55356c53f91567181cb9bc578ac52ab
         array (
             0 => __DIR__ . '/../..' . '/docroot/modules/contrib/sophron/src',
         ),
-        'Drupal\\gin_lb_settings\\' => 
+        'Drupal\\gin_lb\\' => 
         array (
             0 => __DIR__ . '/../..' . '/docroot/modules/contrib/gin_lb/src',
         ),
@@ -1024,6 +1024,7 @@ class ComposerStaticInitc55356c53f91567181cb9bc578ac52ab
         'PHPUnit\\Framework\\MockObject\\CannotUseOnlyMethodsException' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/MockObject/Exception/CannotUseOnlyMethodsException.php',
         'PHPUnit\\Framework\\MockObject\\ClassAlreadyExistsException' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/MockObject/Exception/ClassAlreadyExistsException.php',
         'PHPUnit\\Framework\\MockObject\\ClassIsFinalException' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/MockObject/Exception/ClassIsFinalException.php',
+        'PHPUnit\\Framework\\MockObject\\ClassIsReadonlyException' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/MockObject/Exception/ClassIsReadonlyException.php',
         'PHPUnit\\Framework\\MockObject\\ConfigurableMethod' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/MockObject/ConfigurableMethod.php',
         'PHPUnit\\Framework\\MockObject\\ConfigurableMethodsAlreadyInitializedException' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/MockObject/Exception/ConfigurableMethodsAlreadyInitializedException.php',
         'PHPUnit\\Framework\\MockObject\\DuplicateMethodException' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/MockObject/Exception/DuplicateMethodException.php',

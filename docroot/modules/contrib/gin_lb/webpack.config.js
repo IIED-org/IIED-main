@@ -12,7 +12,6 @@ module.exports = {
   entry: {
     gin_lb: ['./styles/gin_lb.scss'],
     gin_lb_js: ['./js/gin_lb.js'],
-    gin_lb_toolbar: ['./js/gin_lb_toolbar.js']
   },
   output: {
     devtoolLineToLine: true,

@@ -28,8 +28,10 @@ class GlobalDrupalDependencyInjectionRule implements Rule
             return [];
         }
         $scopeClassReflection = $scope->getClassReflection();
-        if ($scopeClassReflection === null) {
-            throw new ShouldNotHappenException();
+
+        // Enums cannot have dependency injection.
+        if ($scopeClassReflection->isEnum()) {
+            return [];
         }
 
         $allowed_list = [

@@ -4,7 +4,7 @@ namespace Drupal\Tests\rabbit_hole\Functional;
 
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
-use Drupal\Tests\views\Functional\ViewTestBase;
+use Drupal\Tests\BrowserTestBase;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginManager;
@@ -18,7 +18,7 @@ use Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPlugin\PageRedirect;
  *
  * @group rabbit_hole
  */
-class RabbitHoleBehaviorPluginTest extends ViewTestBase {
+class RabbitHoleBehaviorPluginTest extends BrowserTestBase {
   const TEST_CONTENT_TYPE_ID = 'rh_test_content_type';
   const TEST_NODE_NAME = 'rh_test_node';
 
@@ -51,8 +51,8 @@ class RabbitHoleBehaviorPluginTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE) {
-    parent::setUp(FALSE);
+  protected function setUp(): void {
+    parent::setUp();
     $this->manager = $this->container->get('plugin.manager.rabbit_hole_behavior_plugin');
 
     // Create a content type and entity to test with.

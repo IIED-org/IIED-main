@@ -12,6 +12,6 @@ use Drupal\Core\Url;
  */
 function language_switcher_extended_language_switch_links_alter(array &$links, $type, Url $url) {
   $processor = Drupal::service('language_switcher_extended.link_processor');
-  /* @var \Drupal\language_switcher_extended\LanguageSwitcherLinkProcessor $processor */
+  /** @var \Drupal\language_switcher_extended\LanguageSwitcherLinkProcessor $processor */
   $processor->process($links);
 }

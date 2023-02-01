@@ -35,9 +35,11 @@ commands:
     - { task: "symlink", from: "../../../../tests", to: "${drupal.root}/modules/custom/gin_lb/tests" }
     - { task: "symlink", from: "../../../../dist", to: "${drupal.root}/modules/custom/gin_lb/dist" }
     - { task: "symlink", from: "../../../../css", to: "${drupal.root}/modules/custom/gin_lb/css" }
+    - { task: "symlink", from: "../../../../config", to: "${drupal.root}/modules/custom/gin_lb/config" }
     - { task: "symlink", from: "../../../../templates", to: "${drupal.root}/modules/custom/gin_lb/templates" }
     - { task: "symlink", from: "../../../../gin_lb.info.yml", to: "${drupal.root}/modules/custom/gin_lb/gin_lb.info.yml" }
     - { task: "symlink", from: "../../../../gin_lb.routing.yml", to: "${drupal.root}/modules/custom/gin_lb/gin_lb.routing.yml" }
+    - { task: "symlink", from: "../../../../gin_lb.links.menu.yml", to: "${drupal.root}/modules/custom/gin_lb/gin_lb.links.menu.yml" }
     - { task: "symlink", from: "../../../../gin_lb.module", to: "${drupal.root}/modules/custom/gin_lb/gin_lb.module" }
     - { task: "symlink", from: "../../../../gin_lb.services.yml", to: "${drupal.root}/modules/custom/gin_lb/gin_lb.services.yml" }
     - { task: "symlink", from: "../../../../gin_lb.libraries.yml", to: "${drupal.root}/modules/custom/gin_lb/gin_lb.libraries.yml" }

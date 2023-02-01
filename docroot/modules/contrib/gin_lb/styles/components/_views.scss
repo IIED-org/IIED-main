@@ -1,11 +1,11 @@
 .glb-views-exposed-form.glb-views-exposed-form,
 .views-displays {
-  border: 1px solid var(--colorGinLayer2Border);
+  border: 1px solid var(--gin-border-color-layer2);
   border-radius: $borderDefault;
   overflow: hidden;
   width: 100%;
   padding: .75em;
-  background: var(--colorGinLayerBackground);
+  background: var(--gin-bg-layer);
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   display: flex;

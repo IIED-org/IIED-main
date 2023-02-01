@@ -10,9 +10,7 @@ source:
     - acquia_spi_cron_interval
     - acquia_spi_cron_interval_override
     - acquia_agent_hide_signup_messages
-  source_module:
-    - acquia_spi
-    - acquia_agent
+  source_module: acquia_agent
 process:
   debug: acquia_agent_debug
   cron_interval: acquia_spi_cron_interval

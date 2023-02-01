@@ -220,6 +220,7 @@ class TaxonomyManagerForm extends FormBase {
         'callback' => '::exportListFormCallback',
       ],
     ];
+
     /* Vocabulary switcher */
     $vocabularies = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->loadMultiple();
     foreach ($vocabularies as $voc) {
@@ -227,7 +228,7 @@ class TaxonomyManagerForm extends FormBase {
     }
 
     $current_path = \Drupal::service('path.current')->getPath();
-    $url_parts = explode('/',$current_path);
+    $url_parts = explode('/', $current_path);
     $voc_id = end($url_parts);
     $form['toolbar']['vocabulary_switcher'] = [
       '#type' => 'select',
@@ -402,7 +403,7 @@ class TaxonomyManagerForm extends FormBase {
   /**
    * Term data submit handler.
    *
-   * @TODO: redirect to taxonomy manager
+   * @todo: redirect to taxonomy manager
    */
   public static function termDataFormSubmit($form, FormStateInterface $form_state) {
 

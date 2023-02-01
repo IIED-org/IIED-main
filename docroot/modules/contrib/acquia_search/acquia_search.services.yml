@@ -33,15 +33,11 @@ services:
     arguments: [ '@acquia_search.logger_channel', '@acquia_connector.subscription', '@http_client_factory', '@cache.acquia_search.indexes', '@datetime.time', '@lock' ]
   acquia_search.preferred_core:
     class: Drupal\acquia_search\PreferredCoreService
-    arguments: [ '@event_dispatcher', '@acquia_connector.subscription', '@acquia_search.api_client' ]
+    arguments: [ '@event_dispatcher', '@acquia_connector.subscription', '@acquia_search.api_client', '@module_handler' ]
   acquia_search.solarium.guzzle:
     class: Drupal\acquia_search\Client\Solarium\AcquiaGuzzle
   acquia_search.prequery.edismax:
     class: Drupal\acquia_search\EventSubscriber\PreQuery\EdisMax
-    tags:
-      - { name: 'event_subscriber' }
-  acquia_search.postcreateindexdocument.remove_boost:
-    class: Drupal\acquia_search\EventSubscriber\PostCreateIndexDocument\RemoveBoost
     tags:
       - { name: 'event_subscriber' }
   acquia_search.flood:

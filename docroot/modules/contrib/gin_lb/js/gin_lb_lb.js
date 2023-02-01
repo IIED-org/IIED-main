@@ -5,9 +5,8 @@
 (($, Drupal, drupalSettings) => {
 
   Drupal.behaviors.gin_lb_lb = {
-    attach: () => {
-      $('.layout-builder-block').once('gin-lb-lb').each((item, elm)=>{
-
+    attach: (context) => {
+      once('gin-lb-lb', '.layout-builder-block', context).forEach((elm)=>{
         var $div = $(elm);
         const activeClass = 'gin-lb--disable-section-focus';
         const observer = new MutationObserver(function(mutations) {
@@ -24,7 +23,7 @@
         observer.observe($div[0], {
           attributes: true
         });
-      });
+      })
     }
   };
 

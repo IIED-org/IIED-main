@@ -108,6 +108,21 @@ class LanguageSwitcherExtendedSettingsForm extends ConfigFormBase {
         ],
       ],
     ];
+    $form['translation_detection'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Translation detection'),
+      '#description' => $this->t('How should the translation of an entity be detected.'),
+      '#default_value' => $config->get('translation_detection'),
+      '#options' => [
+        'default' => $this->t('Check for translation and for view access.'),
+        'is_published' => $this->t('Check for translation and if the translation is published'),
+      ],
+      '#states' => [
+        'visible' => [
+          ':input[name="mode"]' => ['value' => 'process_untranslated'],
+        ],
+      ],
+    ];
     $form['show_langcode'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Show language code'),
@@ -124,6 +139,7 @@ class LanguageSwitcherExtendedSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('language_switcher_extended.settings');
     $config->set('mode', $form_state->getValue('mode'));
+    $config->set('translation_detection', $form_state->getValue('translation_detection'));
     $config->set('untranslated_handler', $form_state->getValue('untranslated_handler'));
     $config->set('current_language_mode', $form_state->getValue('current_language_mode'));
     $config->set('hide_single_link', $form_state->getValue('hide_single_link'));

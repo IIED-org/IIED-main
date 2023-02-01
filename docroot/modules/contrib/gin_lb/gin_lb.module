@@ -9,6 +9,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\views\ViewExecutable;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_preprocess_form_element().
@@ -59,7 +61,6 @@ function gin_lb_is_layout_builder_form_id($form_id, array $form) {
   }
   $form_ids = [
     'layout_builder_add_block',
-    'views_form_media_library_widget_image',
     'media_image_edit_form',
     'media_library_add_form_oembed',
     'media_library_add_form_upload',
@@ -72,6 +73,7 @@ function gin_lb_is_layout_builder_form_id($form_id, array $form) {
   ];
   $form_id_contains = [
     'layout_builder_translate_form',
+    'views_form_media_library_widget_',
   ];
 
   foreach ($form_id_contains as $form_id_contain) {
@@ -100,6 +102,7 @@ function gin_lb_module_implements_alter(&$implementations, $hook) {
   switch ($hook) {
     case 'suggestions_alter':
     case 'form_alter':
+    case 'preprocess':
       $group = $implementations['gin_lb'];
       unset($implementations['gin_lb']);
       $implementations['gin_lb'] = $group;
@@ -212,7 +215,14 @@ function gin_lb_theme_suggestions_alter(
       $add_suggestions = TRUE;
     }
   }
-
+  if (gin_lb_is_layout_builder_route() && in_array(
+      $hook,
+      [
+        'toolbar',
+      ]
+    )) {
+    $suggestions[] = $hook . '__gin_lb';
+  }
   if (gin_lb_is_layout_builder_route() && in_array(
       $hook,
       [
@@ -227,12 +237,15 @@ function gin_lb_theme_suggestions_alter(
     )) {
     $add_suggestions = TRUE;
   }
-
   if (isset($variables['element']['#gin_lb_form']) || $add_suggestions === TRUE) {
 
     // Fix form element suggestions when they are not implemented in the theme.
     if (empty($suggestions) && !empty($variables['theme_hook_original'])) {
       $suggestions = [$variables['theme_hook_original']];
+    }
+
+    if ($hook === 'input' && isset($variables['element']['#type']) && $variables['element']['#type'] === 'checkbox') {
+      $suggestions[] = 'input__checkbox__toggle';
     }
 
     $additional_suggestions = [];
@@ -264,7 +277,7 @@ function gin_lb_theme_suggestions_form_alter(
     $route_name = \Drupal::routeMatch()->getRouteName();
     $gin_lb_show_toolbar = TRUE;
 
-    \Drupal::moduleHandler()->alter('gin_lb_show_toolbar',$gin_lb_show_toolbar);
+    \Drupal::moduleHandler()->alter('gin_lb_show_toolbar', $gin_lb_show_toolbar);
     // Disable toolbar for layout library.
     // Layout builder is part of the layout library form.
     if (strpos($route_name, 'layout_builder.layout_library.') !== 0
@@ -300,6 +313,24 @@ function gin_lb_preprocess_html(&$variables) {
   if (gin_lb_is_layout_builder_route() && \Drupal::config('gin_lb.settings')->get('enable_preview_regions')) {
     $variables['attributes']['class'][] = 'glb-preview-regions--enable';
   }
+  if (gin_lb_is_layout_builder_route()) {
+    $variables['attributes']['class'][] = 'glb-body';
+  }
+
+}
+
+/**
+ * Layout builder Form redirect handler.
+ */
+function gin_lb_form_redirect_submit(&$form, FormStateInterface $form_state) {
+  $config = \Drupal::config('gin_lb.settings');
+  if ($config->get('safe_behavior') === 'stay') {
+    $form_state->setRedirectUrl(
+      Url::fromUri(
+        'base:' . Drupal::service('path.current')->getPath()
+      )
+    );
+  }
 }
 
 /**
@@ -317,32 +348,16 @@ function gin_lb_form_alter(&$form, FormStateInterface $form_state, $form_id) {
 
   if (strpos($form_id, 'layout_builder_form') !== FALSE) {
     $form['advanced']['#type'] = 'container';
-    $form['actions']['preview_toggle']['toggle_content_preview']['#title'] = t(
-      'Preview'
-    );
-
-    $form['actions']['configure'] = [
-      '#type' => 'markup',
-      '#markup' => '<div class="glb-configure"></div>',
-      '#weight' => -100,
-    ];
-
-    $weight = $form["actions"]["preview_toggle"]["#weight"] ?? 0;
-    $form['actions']['preview_regions'] = [
-      '#type' => 'checkbox',
-      '#title' => t('Regions'),
-      '#weight' => $weight + 1,
-      '#id' => 'glb-preview-regions',
-      '#default_value' => \Drupal::config('gin_lb.settings')->get('enable_preview_regions'),
-    ];
-
+    if (isset($form['actions']['submit']['#submit'])) {
+      $form['actions']['submit']['#submit'][] = 'gin_lb_form_redirect_submit';
+    }
   }
   if (in_array($form_id, [
     'layout_builder_update_block',
     'layout_builder_add_block',
     'layout_builder_configure_section',
     'layout_builder_remove_section',
-    'layout_builder_remove_block'
+    'layout_builder_remove_block',
   ])) {
     $form['#attributes']['class'][] = 'canvas-form';
     if (isset($form['settings'])) {
@@ -414,8 +429,11 @@ function gin_lb_page_attachments(array &$attachments) {
     $attachments['#attached']['library'][] = 'gin_lb/gin_lb_form';
 
     $config = \Drupal::config('gin_lb.settings');
-    if ($config->get('toastify_cdn')) {
-      $attachments['#attached']['library'][] = 'gin_lb/toastify';
+    if ($config->get('toastify_loading') === 'cdn') {
+      $attachments['#attached']['library'][] = 'gin_lb/toastify_cdn';
+    }
+    if ($config->get('toastify_loading') === 'composer') {
+      $attachments['#attached']['library'][] = 'gin_lb/toastify_composer';
     }
   }
 }
@@ -434,6 +452,7 @@ function gin_lb_overwritten_themes() {
     'form/form-element',
     'form/container',
     'form/input--checkbox',
+    'form/input--checkbox--toggle',
     'form/checkboxes',
     'form/details',
     'form/radios',
@@ -460,6 +479,10 @@ function gin_lb_overwritten_themes() {
     'status-messages',
     'views-mini-pager',
     'pager',
+    'toolbar',
+    'menu-local-tasks',
+    'menu-local-task',
+
   ];
 }
 
@@ -474,6 +497,10 @@ function gin_lb_preprocess_media_library_item(array &$variables) {
   }
   $variables['content']['remove_button']['#attributes']['class'][] = 'media-library-item__remove';
   $variables['content']['remove_button']['#attributes']['class'][] = 'icon-link';
+
+  if (isset($variables['content']['media_edit'])) {
+    $variables['content']['media_edit']['#attributes']['class'][] = 'glb-media-library-item__edit';
+  }
 }
 
 /**
@@ -595,10 +622,35 @@ function gin_lb_preprocess_media_library_item__widget(array &$variables) {
 /**
  * Implements toolbar preprocess.
  */
-function gin_lb_preprocess_toolbar(&$variables) {
-  if (gin_lb_is_layout_builder_route()) {
-    $variables['secondary_toolbar_frontend'] = FALSE;
+function gin_lb_preprocess_toolbar__gin_lb(&$variables) {
+  $variables['secondary_toolbar_frontend'] = FALSE;
+
+  if (preg_match('#layout_builder\.overrides\.(?<entity_type_id>.+)\.view#', $variables['route_name'], $matches)) {
+    $entity = \Drupal::request()->attributes->get($matches['entity_type_id']);
+
+    if ($entity instanceof EntityInterface && $entity->hasLinkTemplate('edit-form')) {
+      $variables['entity_title'] = $entity->label();
+      $variables['entity_edit_url'] = $entity->toUrl('edit-form');
+    }
+    if ($entity instanceof EntityInterface && $entity->hasLinkTemplate('canonical')) {
+      $variables['entity_view_url'] = $entity->toUrl();
+    }
   }
+  $variables['preview_region'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Preview Regions'),
+    '#gin_lb_form' => TRUE,
+    '#id' => 'glb-toolbar-preview-regions',
+    '#default_value' => \Drupal::config('gin_lb.settings')->get('enable_preview_regions'),
+  ];
+  $variables['preview_content'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Preview Content'),
+    '#gin_lb_form' => TRUE,
+    '#id' => 'glb-toolbar-preview-content',
+  ];
+
+  $variables['#cache']['tags'] = \Drupal::config('gin_lb.settings')->getCacheTags();
 }
 
 /**
@@ -675,14 +727,19 @@ function gin_lb_preprocess_field_multiple_value_form(&$variables) {
 
     if ($variables['multiple']) {
       // Add an additional CSS class for the field label table cell.
-      // This repeats the logic of template_preprocess_field_multiple_value_form()
+      // This repeats the logic of .ate_preprocess_field_multiple_value_form()
       // without using '#prefix' and '#suffix' for the wrapper element.
       //
       // If the field is multiple, we don't have to check the existence of the
       // table header cell.
       //
       // @see template_preprocess_field_multiple_value_form().
-      $header_attributes = ['class' => ['form-item__label', 'form-item__label--multiple-value-form']];
+      $header_attributes = [
+        'class' => [
+          'form-item__label',
+          'form-item__label--multiple-value-form',
+        ],
+      ];
       if (!empty($variables['element']['#required'])) {
         $header_attributes['class'][] = 'js-form-required';
         $header_attributes['class'][] = 'form-required';
@@ -764,7 +821,7 @@ function gin_lb_css_alter(&$css, AttachedAssetsInterface $assets) {
     $stable_themes = ['stable', 'stable9'];
     foreach ($stable_themes as $stable_theme) {
       if ($theme_handler->themeExists($stable_theme)) {
-        $stable_theme_css = drupal_get_path('theme', $stable_theme) . '/css';
+        $stable_theme_css = \Drupal::service('extension.list.theme')->getPath($stable_theme) . '/css';
         // Remove very specific CSS files that this module is overriding.
         unset($css[$stable_theme_css . '/layout_builder/layout-builder.css']);
         unset($css[$stable_theme_css . '/core/dialog/off-canvas.theme.css']);

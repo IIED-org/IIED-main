@@ -3,5 +3,13 @@
   background-color: transparent;
   border: 0;
   outline: 0;
-  -moz-outline-style: none;
+  outline-style: none;
+}
+
+.fancytree-title {
+  white-space: normal;
+}
+
+.ui-fancytree.fancytree-container > li {
+  margin-bottom: 10px;
 }

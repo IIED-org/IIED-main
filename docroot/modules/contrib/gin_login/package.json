@@ -1,5 +1,5 @@
 {
-  "name": "gin",
+  "name": "gin_login",
   "version": "3.1.0",
   "description": "Frontend build tools",
   "scripts": {
@@ -47,6 +47,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git.drupalcode.org/project/gin"
+    "url": "git.drupalcode.org/project/gin_login"
   }
 }

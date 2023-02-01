@@ -47,7 +47,7 @@ class EntityExtender implements EntityExtenderInterface {
    */
   public function getRabbitHoleFields($entity_type_id) {
     $entity_types = $this->rhEntityPluginManager->loadSupportedEntityTypes();
-    if (in_array($entity_type_id, $entity_types)) {
+    if (\in_array($entity_type_id, $entity_types)) {
       return $this->getGeneralExtraFields();
     }
   }

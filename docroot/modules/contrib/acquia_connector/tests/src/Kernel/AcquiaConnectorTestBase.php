@@ -127,4 +127,28 @@ abstract class AcquiaConnectorTestBase extends KernelTestBase {
     return (string) $this->container->get('renderer')->renderPlain($build);
   }
 
+  /**
+   * Populates the oAuth settings with dummy data.
+   *
+   * @param array $data
+   *   oAuth settings data.
+   */
+  protected function populateOauthSettings(array $data = []): void {
+    if (!$data) {
+      $data = [
+        'access_token' => 'ACCESS_TOKEN',
+        'refresh_token' => 'REFRESH_TOKEN',
+      ];
+    }
+
+    $this->container
+      ->get('keyvalue.expirable')
+      ->get('acquia_connector')
+      ->setWithExpire(
+        'oauth',
+        $data,
+        5400
+      );
+  }
+
 }

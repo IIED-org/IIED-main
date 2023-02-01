@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\acquia_connector\Kernel\Form;
 
+use Drupal\Core\Site\Settings as CoreSettings;
 use Drupal\Core\Url;
 use Drupal\Tests\acquia_connector\Kernel\AcquiaConnectorTestBase;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,15 +17,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class ConfigureApplicationFormTest extends AcquiaConnectorTestBase {
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp(): void {
-    parent::setUp();
-    $this->createUserWithSession();
-  }
-
   public function testWithNoAuth(): void {
+    $this->createUserWithSession();
+
     $request = Request::create(
       Url::fromRoute('acquia_connector.setup_configure')->toString()
     );
@@ -41,6 +36,8 @@ final class ConfigureApplicationFormTest extends AcquiaConnectorTestBase {
   }
 
   public function testWithErrorGettingApplicationKeys(): void {
+    $this->createUserWithSession();
+
     $this->setAccessToken('ACCESS_TOKEN_ERROR_GETTING_APPLICATION_KEYS');
 
     $request = Request::create(
@@ -59,6 +56,8 @@ final class ConfigureApplicationFormTest extends AcquiaConnectorTestBase {
   }
 
   public function testWithNoApplications(): void {
+    $this->createUserWithSession();
+
     $this->setAccessToken('ACCESS_TOKEN_NO_APPLICATIONS');
 
     $request = Request::create(
@@ -76,7 +75,41 @@ final class ConfigureApplicationFormTest extends AcquiaConnectorTestBase {
     );
   }
 
+  public function testApplicationCloudMismatch(): void {
+    $this->setAccessToken('ACCESS_TOKEN_ONE_APPLICATION');
+
+    // Emulate Acquia Cloud -- Hardcode the uuid to ensure it is a mismatch.
+    $uuid = 'a6ce3b66-febf-487f-8d35-2802c1964a55';
+    $this->putEnv('AH_SITE_ENVIRONMENT', 'test');
+    $this->putEnv('AH_SITE_NAME', 'foo');
+    $this->putEnv('AH_SITE_GROUP', 'bar');
+    $this->putEnv('AH_APPLICATION_UUID', $uuid);
+    $settings = CoreSettings::getAll();
+    $settings['ah_network_identifier'] = 'WRNG-12345';
+    $settings['ah_network_key'] = 'TEST_KEY';
+    new CoreSettings($settings);
+
+    // User session must be made AFTER we setup cloud environment variables.
+    $this->createUserWithSession();
+
+    $request = Request::create(
+      Url::fromRoute('acquia_connector.setup_configure')->toString()
+    );
+    $response = $this->doRequest($request);
+    self::assertEquals(302, $response->getStatusCode());
+    self::assertEquals(
+      Url::fromRoute('acquia_connector.setup_oauth')->toString(),
+      $response->headers->get('Location')
+    );
+    self::assertEquals(
+      ['Unable to set Subscription: User does not have access to this application.'],
+      $this->container->get('messenger')->messagesByType('error')
+    );
+  }
+
   public function testWithOneApplication(): void {
+    $this->createUserWithSession();
+
     $this->setAccessToken('ACCESS_TOKEN_ONE_APPLICATION');
 
     $request = Request::create(
@@ -107,12 +140,23 @@ final class ConfigureApplicationFormTest extends AcquiaConnectorTestBase {
         ],
         'search_service_enabled' => 1,
         'gratis' => FALSE,
+        'application' => [
+          'id' => 1234,
+          'uuid' => 'a47ac10b-58cc-4372-a567-0e02b2c3d470',
+          'name' => 'Sample application 1',
+          'subscription' => [
+            'uuid' => 'f47ac10b-58cc-4372-a567-0e02b2c3d470',
+            'name' => 'Sample subscription',
+          ],
+        ],
       ],
       $this->container->get('acquia_connector.subscription')->getSubscription()
     );
   }
 
   public function testWithMultipleApplications(): void {
+    $this->createUserWithSession();
+
     $this->setAccessToken('ACCESS_TOKEN_MULTIPLE_APPLICATIONS');
 
     $request = Request::create(
@@ -158,6 +202,15 @@ final class ConfigureApplicationFormTest extends AcquiaConnectorTestBase {
         ],
         'search_service_enabled' => 1,
         'gratis' => FALSE,
+        'application' => [
+          'id' => 1234,
+          'uuid' => 'a47ac10b-58cc-4372-a567-0e02b2c3d470',
+          'name' => 'Sample application 1',
+          'subscription' => [
+            'uuid' => 'f47ac10b-58cc-4372-a567-0e02b2c3d470',
+            'name' => 'Sample subscription',
+          ],
+        ],
       ],
       $this->container->get('acquia_connector.subscription')->getSubscription()
     );
