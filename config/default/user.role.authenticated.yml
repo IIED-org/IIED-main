@@ -33,3 +33,4 @@ permissions:
   - 'use search_api_autocomplete for search'
   - 'view media'
   - 'view private pdf thumbnails'
+  - 'view published pdf image entity entities'
