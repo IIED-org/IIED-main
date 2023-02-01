@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.storage.node.field_paragraphs
     - node.type.event
+    - paragraphs.paragraphs_type.accordion_box
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.box
     - paragraphs.paragraphs_type.file_upload
@@ -45,6 +46,7 @@ settings:
       quote: quote
       video_embed: video_embed
       media_embed: media_embed
+      accordion_box: accordion_box
       image_small: image_small
       gallery: gallery
       modal_image: modal_image
@@ -58,7 +60,7 @@ settings:
         enabled: false
       accordion_box:
         weight: -57
-        enabled: false
+        enabled: true
       accordion_section:
         weight: 41
         enabled: false
@@ -124,9 +126,6 @@ settings:
         enabled: true
       researcher_profiles:
         weight: -47
-        enabled: false
-      row_of_4:
-        weight: -60
         enabled: false
       section:
         weight: -46

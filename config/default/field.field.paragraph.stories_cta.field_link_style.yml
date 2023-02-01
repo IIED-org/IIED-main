@@ -1,0 +1,21 @@
+uuid: 90043b2c-3cb6-488f-8b01-d6452f1099ac
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_link_style
+    - paragraphs.paragraphs_type.stories_cta
+  module:
+    - options
+id: paragraph.stories_cta.field_link_style
+field_name: field_link_style
+entity_type: paragraph
+bundle: stories_cta
+label: 'Link style'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

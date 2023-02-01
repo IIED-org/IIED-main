@@ -27,6 +27,7 @@ dependencies:
     - paragraphs.paragraphs_type.related_project
     - paragraphs.paragraphs_type.related_publication_inline
     - paragraphs.paragraphs_type.section
+    - paragraphs.paragraphs_type.stories_cta
     - paragraphs.paragraphs_type.stories_table
     - paragraphs.paragraphs_type.tab_box
     - paragraphs.paragraphs_type.timeline
@@ -62,6 +63,7 @@ settings:
       info_box: info_box
       file_upload: file_upload
       stories_table: stories_table
+      stories_cta: stories_cta
       tab_box: tab_box
       accordion_box: accordion_box
       related_content: related_content
@@ -147,9 +149,6 @@ settings:
       researcher_profiles:
         weight: -46
         enabled: false
-      row_of_4:
-        weight: -40
-        enabled: false
       section:
         weight: -70
         enabled: true
@@ -158,7 +157,7 @@ settings:
         enabled: false
       stories_cta:
         weight: -62
-        enabled: false
+        enabled: true
       stories_curated_content:
         weight: -48
         enabled: false

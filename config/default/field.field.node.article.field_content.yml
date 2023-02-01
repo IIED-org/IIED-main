@@ -8,6 +8,7 @@ dependencies:
     - paragraphs.paragraphs_type.accordion_box
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.box
+    - paragraphs.paragraphs_type.file_upload
     - paragraphs.paragraphs_type.gallery
     - paragraphs.paragraphs_type.highchart
     - paragraphs.paragraphs_type.image
@@ -24,6 +25,11 @@ dependencies:
     - paragraphs.paragraphs_type.related_publication_inline
     - paragraphs.paragraphs_type.section
     - paragraphs.paragraphs_type.stories_block
+    - paragraphs.paragraphs_type.stories_cta
+    - paragraphs.paragraphs_type.stories_table
+    - paragraphs.paragraphs_type.tab_box
+    - paragraphs.paragraphs_type.timeline
+    - paragraphs.paragraphs_type.video_embed
   module:
     - entity_reference_revisions
 id: node.article.field_content
@@ -59,6 +65,12 @@ settings:
       related_project: related_project
       related_publication_inline: related_publication_inline
       stories_block: stories_block
+      stories_cta: stories_cta
+      file_upload: file_upload
+      stories_table: stories_table
+      tab_box: tab_box
+      timeline: timeline
+      video_embed: video_embed
     negate: 0
     target_bundles_drag_drop:
       about_the_author:
@@ -78,7 +90,7 @@ settings:
         enabled: true
       file_upload:
         weight: -50
-        enabled: false
+        enabled: true
       gallery:
         weight: -63
         enabled: true
@@ -141,7 +153,7 @@ settings:
         enabled: true
       stories_cta:
         weight: -53
-        enabled: false
+        enabled: true
       stories_curated_content:
         weight: -49
         enabled: false
@@ -153,7 +165,7 @@ settings:
         enabled: false
       stories_table:
         weight: -45
-        enabled: false
+        enabled: true
       stories_text:
         weight: -44
         enabled: false
@@ -165,11 +177,11 @@ settings:
         enabled: false
       tab_box:
         weight: -41
-        enabled: false
+        enabled: true
       timeline:
         weight: -40
-        enabled: false
+        enabled: true
       video_embed:
         weight: -39
-        enabled: false
+        enabled: true
 field_type: entity_reference_revisions

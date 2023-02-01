@@ -1,0 +1,30 @@
+uuid: 450180fa-d249-49ab-a748-4d2860b8a218
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paragraphs
+id: paragraph.field_link_style
+field_name: field_link_style
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: '1'
+      label: 'Large button'
+    -
+      value: '2'
+      label: 'Large button centred'
+    -
+      value: '3'
+      label: 'Small round button'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
