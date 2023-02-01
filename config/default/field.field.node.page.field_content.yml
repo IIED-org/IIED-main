@@ -6,7 +6,6 @@ dependencies:
     - field.storage.node.field_content
     - node.type.page
     - paragraphs.paragraphs_type.accordion_box
-    - paragraphs.paragraphs_type.accordion_section
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.box
     - paragraphs.paragraphs_type.file_upload
@@ -68,7 +67,6 @@ settings:
       timeline: timeline
       in_page_menu: in_page_menu
       logo_block: logo_block
-      accordion_section: accordion_section
       highchart: highchart
       related_content: related_content
       related_project: related_project
@@ -83,7 +81,7 @@ settings:
         enabled: true
       accordion_section:
         weight: 40
-        enabled: true
+        enabled: false
       basic_text:
         weight: -69
         enabled: true
@@ -146,9 +144,6 @@ settings:
         enabled: true
       researcher_profiles:
         weight: -40
-        enabled: false
-      row_of_4:
-        weight: -42
         enabled: false
       section:
         weight: -57

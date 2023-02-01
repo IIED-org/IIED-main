@@ -3,12 +3,14 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.paragraph.stories_cta.field_link_style
     - field.field.paragraph.stories_cta.field_stories_cta_description
     - field.field.paragraph.stories_cta.field_stories_cta_link
     - field.field.paragraph.stories_cta.field_stories_heading
     - paragraphs.paragraphs_type.stories_cta
   module:
     - link
+    - options
     - text
 _core:
   default_config_hash: lFiJMqU3GPOTfCBkNpbDa6pHS_BUGebnh7xQOlvbnRc
@@ -17,6 +19,13 @@ targetEntityType: paragraph
 bundle: stories_cta
 mode: default
 content:
+  field_link_style:
+    type: list_key
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
   field_stories_cta_description:
     type: text_default
     label: hidden

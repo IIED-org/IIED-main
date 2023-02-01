@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.paragraph.stories_cta.field_link_style
     - field.field.paragraph.stories_cta.field_stories_cta_description
     - field.field.paragraph.stories_cta.field_stories_cta_link
     - field.field.paragraph.stories_cta.field_stories_heading
@@ -17,6 +18,12 @@ targetEntityType: paragraph
 bundle: stories_cta
 mode: default
 content:
+  field_link_style:
+    type: options_select
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   field_stories_cta_description:
     type: text_textarea
     weight: 1
