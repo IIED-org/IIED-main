@@ -825,7 +825,7 @@ function acquia_search_override_example_20210427() {
   return $chosen_core;
 }
 
-// $settings['acquia_search']['override_search_core'] = acquia_search_override_example_20210427();
+$settings['acquia_search']['override_search_core'] = acquia_search_override_example_20210427();
 
 $_env_is_prod = isset($_ENV['AH_SITE_ENVIRONMENT']) && $_ENV['AH_SITE_ENVIRONMENT'] == 'prod';
 $config['config_split.config_split.dev']['status'] = !$_env_is_prod;
