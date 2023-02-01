@@ -1341,6 +1341,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'drupal/media_file_delete' => array(
+            'pretty_version' => '1.3.0',
+            'version' => '1.3.0.0',
+            'reference' => '1.3.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/media_file_delete',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'drupal/media_pdf_thumbnail' => array(
             'pretty_version' => '5.4.0',
             'version' => '5.4.0.0',

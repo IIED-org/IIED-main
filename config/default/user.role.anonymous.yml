@@ -7,6 +7,7 @@ dependencies:
     - contact
     - eu_cookie_compliance
     - media
+    - media_pdf_thumbnail
     - search_api_autocomplete
     - system
 _core:
@@ -25,3 +26,4 @@ permissions:
   - 'use search_api_autocomplete for acquia_search_solr'
   - 'use search_api_autocomplete for search'
   - 'view media'
+  - 'view published pdf image entity entities'
