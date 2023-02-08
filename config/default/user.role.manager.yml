@@ -182,6 +182,7 @@ permissions:
   - 'edit terms in organisation'
   - 'edit terms in person'
   - 'edit terms in tags'
+  - 'link to any page'
   - 'masquerade as any user'
   - 'merge_permissions admin'
   - 'notify of path changes'

@@ -78,6 +78,7 @@ permissions:
   - 'edit own publication content'
   - 'edit terms in organisation'
   - 'edit terms in person'
+  - 'link to any page'
   - 'notify of path changes'
   - 'publish any content'
   - 'publish any node type publication'
