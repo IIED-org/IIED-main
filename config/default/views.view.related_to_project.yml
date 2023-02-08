@@ -4,7 +4,9 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.card
+    - node.type.article
     - node.type.blog
+    - node.type.event
     - node.type.long_read
     - node.type.news
   module:
@@ -174,7 +176,9 @@ display:
           plugin_id: bundle
           operator: in
           value:
+            article: article
             blog: blog
+            event: event
             long_read: long_read
             news: news
           group: 1
