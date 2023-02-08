@@ -12,7 +12,6 @@ dependencies:
     - taxonomy.vocabulary.news_type
   content:
     - 'taxonomy_term:news_type:12bbfe9a-eca9-4fd6-948f-43a800e3d8d5'
-    - 'taxonomy_term:news_type:a93a5e6d-91d9-41cf-a222-2f152edd6165'
   module:
     - better_exposed_filters
     - datetime
@@ -602,52 +601,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        field_news_type_target_id:
-          id: field_news_type_target_id
-          table: node__field_news_type
-          field: field_news_type_target_id
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: taxonomy_index_tid
-          operator: or
-          value:
-            41529: 41529
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          reduce_duplicates: false
-          vid: news_type
-          type: select
-          hierarchy: false
-          limit: true
-          error_message: true
         langcode:
           id: langcode
           table: node_field_data
@@ -709,7 +662,6 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url.query_args
-        - user
         - 'user.node_grants:view'
         - user.permissions
       tags: {  }

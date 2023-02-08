@@ -1040,7 +1040,22 @@ display:
           hide_alter_empty: true
           key: Region
           trusted_html: 0
+      empty:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: true
+          content:
+            value: '<p class="my-6"><strong>Sorry, there are no exact matches found. Please click reset and try a different set of filters.</strong></p>'
+            format: full_html
+          tokenize: false
       defaults:
+        empty: false
         title: false
         use_ajax: false
         fields: false
