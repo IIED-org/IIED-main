@@ -178,7 +178,6 @@ third_party_settings:
         required_fields: true
     group_coming_soon_:
       children:
-        - field_lists
         - field_parent
       label: 'Coming soon...'
       region: hidden
@@ -211,6 +210,16 @@ content:
     settings:
       placeholder_url: ''
       placeholder_title: ''
+    third_party_settings: {  }
+  field_lists:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   field_lit_code:
     type: options_select
@@ -248,7 +257,6 @@ hidden:
   field_isbn: true
   field_issn: true
   field_journal_ref: true
-  field_lists: true
   field_media: true
   field_meta_tags: true
   field_parent: true
