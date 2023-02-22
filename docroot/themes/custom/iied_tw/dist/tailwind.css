@@ -4588,6 +4588,14 @@ cite {
   color: rgb(17 24 39 );
 }
 
+.visited\:text-gray-600:visited{
+  color: rgb(75 85 99 );
+}
+
+.visited\:text-gray-500:visited{
+  color: rgb(107 114 128 );
+}
+
 .hover\:border-b-0:hover{
   border-bottom-width: 0px;
 }
@@ -4866,6 +4874,10 @@ cite {
 
   .sm\:mt-0{
     margin-top: 0px;
+  }
+
+  .sm\:mr-auto{
+    margin-right: auto;
   }
 
   .sm\:ml-auto{

@@ -19,6 +19,7 @@ dependencies:
     - paragraphs.paragraphs_type.modal_image
     - paragraphs.paragraphs_type.quote
     - paragraphs.paragraphs_type.related_publication_inline
+    - paragraphs.paragraphs_type.stories_cta
     - paragraphs.paragraphs_type.stories_table
     - paragraphs.paragraphs_type.video_embed
   module:
@@ -51,6 +52,7 @@ settings:
       logo_block: logo_block
       modal_image: modal_image
       file_upload: file_upload
+      stories_cta: stories_cta
       highchart: highchart
       related_publication_inline: related_publication_inline
     negate: 0
@@ -127,9 +129,6 @@ settings:
       researcher_profiles:
         weight: -48
         enabled: false
-      row_of_4:
-        weight: -49
-        enabled: false
       section:
         weight: -47
         enabled: false
@@ -138,7 +137,7 @@ settings:
         enabled: false
       stories_cta:
         weight: -44
-        enabled: false
+        enabled: true
       stories_curated_content:
         weight: -43
         enabled: false
