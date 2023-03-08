@@ -16,7 +16,7 @@ class DataLayerFunctionalTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'datalayer',
     'dynamic_page_cache',
     'node',
@@ -33,7 +33,7 @@ class DataLayerFunctionalTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
     $admin_user = $this->drupalCreateUser([
       'access administration pages',
