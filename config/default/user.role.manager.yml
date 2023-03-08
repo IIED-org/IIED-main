@@ -53,6 +53,7 @@ dependencies:
     - redirect
     - shortcut
     - system
+    - tablefield
     - taxonomy
     - toolbar
     - view_unpublished
@@ -77,6 +78,7 @@ permissions:
   - 'access user profiles'
   - access_all_form_modes
   - 'add pdf image entity entities'
+  - 'addrow tablefield'
   - 'administer block classes'
   - 'administer blocks'
   - 'administer comment types'
@@ -182,6 +184,8 @@ permissions:
   - 'edit terms in organisation'
   - 'edit terms in person'
   - 'edit terms in tags'
+  - 'export tablefield'
+  - 'import tablefield'
   - 'link to any page'
   - 'masquerade as any user'
   - 'merge_permissions admin'
@@ -197,6 +201,7 @@ permissions:
   - 'rabbit hole bypass media'
   - 'rabbit hole bypass node'
   - 'rabbit hole bypass taxonomy_term'
+  - 'rebuild tablefield'
   - 'revert all media revisions'
   - 'revert all revisions'
   - 'revert article revisions'

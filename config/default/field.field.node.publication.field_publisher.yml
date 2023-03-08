@@ -6,6 +6,12 @@ dependencies:
     - field.storage.node.field_publisher
     - node.type.publication
     - taxonomy.vocabulary.organisation
+  module:
+    - datalayer
+third_party_settings:
+  datalayer:
+    expose: 1
+    label: field_publisher
 id: node.publication.field_publisher
 field_name: field_publisher
 entity_type: node

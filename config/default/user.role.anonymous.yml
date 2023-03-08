@@ -10,6 +10,7 @@ dependencies:
     - media_pdf_thumbnail
     - search_api_autocomplete
     - system
+    - tablefield
 _core:
   default_config_hash: pq_mEIu_B4widZN7Ap81iCJSjShFFdcL0jEiCi8VrDk
 id: anonymous
@@ -21,6 +22,7 @@ permissions:
   - 'access content'
   - 'access site-wide contact form'
   - 'display eu cookie compliance popup'
+  - 'export tablefield'
   - 'search content'
   - 'use search_api_autocomplete for acquia_search'
   - 'use search_api_autocomplete for acquia_search_solr'

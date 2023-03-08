@@ -44,6 +44,7 @@ module:
   ctools: 0
   ctools_block: 0
   ctools_views: 0
+  datalayer: 0
   datetime: 0
   datetime_range: 0
   default_content: 0
