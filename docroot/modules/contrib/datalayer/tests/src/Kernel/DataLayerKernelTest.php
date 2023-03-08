@@ -5,13 +5,13 @@ namespace Drupal\Tests\datalayer\Kernel;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\Language;
+use Drupal\Core\Routing\RouteObjectInterface;
 use Drupal\node\Entity\Node;
 use Drupal\user\Entity\User;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\node\Entity\NodeType;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
-use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\Routing\Route;
 
 /**
@@ -26,7 +26,7 @@ class DataLayerKernelTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'datalayer',
     'system',
     'user',
@@ -62,7 +62,7 @@ class DataLayerKernelTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
     $this->installEntitySchema('user');
     $this->installEntitySchema('node');

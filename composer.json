@@ -79,7 +79,7 @@
         "drupal/core-recommended": "^9",
         "drupal/core-vendor-hardening": "^8.8",
         "drupal/ctools": "3.9.0",
-        "drupal/datalayer": "^1.0@beta",
+        "drupal/datalayer": "^2.0",
         "drupal/default_content": "^1",
         "drupal/default_content_deploy": "^2.0",
         "drupal/draggableviews": "^2.0",

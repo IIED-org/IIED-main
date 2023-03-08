@@ -4,7 +4,7 @@
     {# Facebook #}
     <a
         href="https://www.facebook.com/sharer/sharer.php?u={{ url('<current>') }}" target="_blank"
-        class="flex items-center justify-center w-10 h-10 mr-2 text-gray-900 border border-gray-300 rounded-full hover:bg-gray-100 hover:border-iiedblue-500" title="Share to Facebook" aria-label="Share to Facebook" rel="noopener" tabindex="-1"
+        class="flex items-center justify-center w-10 h-10 mr-2 text-gray-900 border border-gray-300 rounded-full share-facebook hover:bg-gray-100 hover:border-iiedblue-500" title="Share to Facebook" aria-label="Share to Facebook" rel="noopener" tabindex="-1"
     >
         <svg
         fill="currentColor"
@@ -22,7 +22,7 @@
     {# Twitter #}
     <a
         href="https://twitter.com/share?text={{ node.title.value|url_encode }}&url={{ url('<current>') }}" target="_blank"
-        class="flex items-center justify-center w-10 h-10 mr-2 text-gray-900 border border-gray-300 rounded-full hover:bg-gray-100 hover:border-iiedblue-500" title="Share to Twitter" aria-label="Share to Twitter" rel="noopener" tabindex="-1"
+        class="flex items-center justify-center w-10 h-10 mr-2 text-gray-900 border border-gray-300 rounded-full share-twitter hover:bg-gray-100 hover:border-iiedblue-500" title="Share to Twitter" aria-label="Share to Twitter" rel="noopener" tabindex="-1"
     >
         <svg
         fill="currentColor"
@@ -40,7 +40,7 @@
     {# linkedIn #}
     <a
         href="https://www.linkedin.com/sharing/share-offsite/?url={{ url('<current>') }}" target="_blank"
-        class="flex items-center justify-center w-10 h-10 mr-2 text-gray-900 border border-gray-300 rounded-full hover:bg-gray-100 hover:border-iiedblue-500" title="Share to Linkedin" aria-label="Share to Linkedin" rel="noopener" tabindex="-1"
+        class="flex items-center justify-center w-10 h-10 mr-2 text-gray-900 border border-gray-300 rounded-full share-linkedin hover:bg-gray-100 hover:border-iiedblue-500" title="Share to Linkedin" aria-label="Share to Linkedin" rel="noopener" tabindex="-1"
     >
         <svg
         fill="currentColor"
@@ -60,7 +60,7 @@
     </a>
     {# email #}
     <a
-        href="mailto:?subject={{ node.title.value|url_encode }} &amp;body={{ url('<current>') }}" title="Share to e-mail" aria-label="Share to e-mail" target="_blank" rel="noopener" tabindex="-1" class="flex items-center justify-center w-10 h-10 mr-2 text-gray-900 border border-gray-300 rounded-full hover:bg-gray-100 hover:border-iiedblue-500"
+        href="mailto:?subject={{ node.title.value|url_encode }} &amp;body={{ url('<current>') }}" title="Share to e-mail" aria-label="Share to e-mail" target="_blank" rel="noopener" tabindex="-1" class="flex items-center justify-center w-10 h-10 mr-2 text-gray-900 border border-gray-300 rounded-full share-email hover:bg-gray-100 hover:border-iiedblue-500"
     >
         <svg
         xmlns="http://www.w3.org/2000/svg"

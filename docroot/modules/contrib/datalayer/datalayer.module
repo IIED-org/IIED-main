@@ -188,12 +188,11 @@ function _datalayer_collect_meta_properties($type = '') {
   // Avoid duplicate builds.
   $properties = &drupal_static(__FUNCTION__ . $type);
   if (!isset($properties)) {
-    $properties = [];
     foreach ($hooks as $hook) {
-      foreach (\Drupal::moduleHandler()->getImplementations($hook) as $module) {
-        // Call modules implementing datalayer_meta() and combine results.
-        $properties = array_merge($properties, \Drupal::moduleHandler()->invoke($module, $hook));
-      }
+      $properties = [];
+      \Drupal::moduleHandler()->invokeAllWith($hook, function (callable $hook, string $module) use (&$properties) {
+        $properties = array_merge($properties, $hook());
+      });
       if (!empty($properties)) {
         break;
       }
