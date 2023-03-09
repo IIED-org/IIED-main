@@ -6,12 +6,6 @@ dependencies:
     - field.storage.node.field_document_type
     - node.type.publication
     - taxonomy.vocabulary.document_type
-  module:
-    - datalayer
-third_party_settings:
-  datalayer:
-    expose: 1
-    label: field_document_type
 id: node.publication.field_document_type
 field_name: field_document_type
 entity_type: node

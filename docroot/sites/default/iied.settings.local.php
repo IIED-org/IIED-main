@@ -186,4 +186,4 @@ ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
 
 // Config for sstage file proxy remote files.
-$config['stage_file_proxy.settings']['origin']  = 'https://pubs.iied.org';
+$config['stage_file_proxy.settings']['origin']  = 'https://www.iied.org';

@@ -5,12 +5,6 @@ dependencies:
   config:
     - field.storage.node.field_author_s_
     - node.type.publication
-  module:
-    - datalayer
-third_party_settings:
-  datalayer:
-    expose: 1
-    label: field_author
 id: node.publication.field_author_s_
 field_name: field_author_s_
 entity_type: node

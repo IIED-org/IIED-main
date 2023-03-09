@@ -6,6 +6,12 @@ dependencies:
     - field.storage.node.field_project
     - node.type.project
     - node.type.publication
+  module:
+    - datalayer
+third_party_settings:
+  datalayer:
+    expose: 1
+    label: field_project
 id: node.publication.field_project
 field_name: field_project
 entity_type: node

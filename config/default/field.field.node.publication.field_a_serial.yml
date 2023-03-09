@@ -6,12 +6,7 @@ dependencies:
     - field.storage.node.field_a_serial
     - node.type.publication
   module:
-    - datalayer
     - serial
-third_party_settings:
-  datalayer:
-    expose: 1
-    label: field_a_serial
 id: node.publication.field_a_serial
 field_name: field_a_serial
 entity_type: node
