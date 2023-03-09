@@ -6,10 +6,10 @@ output_fields: true
 remove_from_admin_routes: true
 lib_helper: false
 entity_meta:
-  created: '0'
-  langcode: '0'
+  created: created
+  langcode: langcode
+  status: status
   name: '0'
-  status: '0'
   uid: '0'
   uuid: '0'
   vid: '0'

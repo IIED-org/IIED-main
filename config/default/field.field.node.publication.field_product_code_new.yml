@@ -7,6 +7,11 @@ dependencies:
     - node.type.publication
   module:
     - computed_field
+    - datalayer
+third_party_settings:
+  datalayer:
+    expose: 1
+    label: field_product_code_new
 id: node.publication.field_product_code_new
 field_name: field_product_code_new
 entity_type: node
