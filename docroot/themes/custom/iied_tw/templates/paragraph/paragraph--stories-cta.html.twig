@@ -52,7 +52,7 @@
 {% block paragraph %}
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
-      {% if content.field_stories_heading is not empty %}
+      {% if content.field_stories_heading.0 is not empty %}
         <h3>{{ content.field_stories_heading.0 }}</h3>
       {% endif %}
       {{ content.field_stories_cta_description }}

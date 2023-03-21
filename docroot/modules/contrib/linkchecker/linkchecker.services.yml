@@ -1,0 +1,59 @@
+services:
+  # Linkchecker Module logs
+  logger.channel.linkchecker:
+    parent: 'logger.channel_base'
+    arguments: ['linkchecker']
+
+  linkchecker.extractor:
+    class: Drupal\linkchecker\LinkExtractorService
+    arguments:
+      - '@plugin.manager.link_extractor'
+      - '@entity_type.manager'
+      - '@config.factory'
+      - '@request_stack'
+      - '@database'
+      - '@datetime.time'
+
+  plugin.manager.link_extractor:
+    class: Drupal\linkchecker\Plugin\LinkExtractorManager
+    parent: default_plugin_manager
+
+  linkchecker.extractor_batch:
+    class: Drupal\linkchecker\LinkExtractorBatch
+    arguments:
+      - '@linkchecker.extractor'
+      - '@entity_type.manager'
+      - '@database'
+
+  linkchecker.checker:
+    class: Drupal\linkchecker\LinkCheckerService
+    arguments:
+      - '@entity_type.manager'
+      - '@config.factory'
+      - '@http_client'
+      - '@datetime.time'
+      - '@queue'
+      - '@plugin.manager.link_status_handler'
+
+  plugin.manager.link_status_handler:
+    class: Drupal\linkchecker\Plugin\LinkStatusHandlerManager
+    parent: default_plugin_manager
+
+  linkchecker.checker_batch:
+    class: Drupal\linkchecker\LinkCheckerBatch
+    arguments:
+      - '@linkchecker.checker'
+      - '@entity_type.manager'
+      - '@lock'
+      - '@queue'
+      - '@plugin.manager.queue_worker'
+
+  linkchecker.clean_up:
+    class: Drupal\linkchecker\LinkCleanUp
+    arguments:
+      - '@entity_type.manager'
+      - '@linkchecker.extractor'
+      - '@database'
+
+  linkchecker.response_codes:
+    class: Drupal\linkchecker\LinkCheckerResponseCodes

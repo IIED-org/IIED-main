@@ -1,0 +1,299 @@
+<?php
+
+/**
+ * @file
+ * This module periodically check links in given node types, blocks etc.
+ *
+ * Developed by Alexander Hass, https://www.yaml-for-drupal.com/.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Logger\RfcLogLevel;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\field\FieldConfigInterface;
+use Drupal\linkchecker\LinkCheckerLinkInterface;
+use Drupal\migrate\Plugin\MigrateSourceInterface;
+use Drupal\migrate\Row;
+use Drupal\migrate\Plugin\MigrationInterface;
+use Drupal\migrate_drupal\Plugin\migrate\source\DrupalSqlBase;
+
+/**
+ * Implements hook_help().
+ */
+function linkchecker_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.linkchecker':
+      return '<p>' . t('This module provides an aid to finding broken links on your site. It periodically checks contents of all public nodes, tries to find any html links and check for their validity. It reports broken links through the admin interface. For more information about status codes see <a href="@rfc">Status Code Definitions</a>.', ['@rfc' => 'https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html']) . '</p>';
+  }
+}
+
+/**
+ * Conditionally logs a system message.
+ *
+ * @param $type
+ *   The category to which this message belongs. Can be any string, but the
+ *   general practice is to use the name of the module calling watchdog().
+ * @param $message
+ *   The message to store in the log. Keep $message translatable
+ *   by not concatenating dynamic values into it! Variables in the
+ *   message should be added by using placeholder strings alongside
+ *   the variables argument to declare the value of the placeholders.
+ *   See t() for documentation on how $message and $variables interact.
+ * @param $variables
+ *   Array of variables to replace in the message on display or
+ *   NULL if message is already translated or not possible to
+ *   translate.
+ * @param $severity
+ *   The severity of the message; one of the following values as defined in
+ * @param $link
+ *   A link to associate with the message.
+ *
+ * @link http://www.faqs.org/rfcs/rfc3164.html RFC 3164: @endlink
+ *   - WATCHDOG_EMERGENCY: Emergency, system is unusable.
+ *   - RfcLogLevel::ALERT: Alert, action must be taken immediately.
+ *   - RfcLogLevel::CRITICAL: Critical conditions.
+ *   - WATCHDOG_ERROR: Error conditions.
+ *   - WATCHDOG_WARNING: Warning conditions.
+ *   - RfcLogLevel::NOTICE: (default) Normal but significant conditions.
+ *   - WATCHDOG_INFO: Informational messages.
+ *   - WATCHDOG_DEBUG: Debug-level messages.
+ * @see watchdog_severity_levels()
+ * @see watchdog()
+ */
+function linkchecker_watchdog_log($type, $message, $variables = [], $severity = RfcLogLevel::NOTICE, $link = NULL) {
+  // @FIXME: $link is missing, could be in $variables.
+  if ($severity <= \Drupal::config('linkchecker.settings')->get('logging.level')) {
+    $logger = \Drupal::logger($type);
+    $logger->log($severity, $message, $variables);
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function linkchecker_form_field_config_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /** @var \Drupal\field\FieldConfigInterface $fieldConfig */
+  $fieldConfig = $form_state->getFormObject()->getEntity();
+
+  $form['third_party_settings']['linkchecker'] = [
+    '#type' => 'details',
+    '#title' => t('Link checker settings'),
+  ];
+
+  /** @var \Drupal\linkchecker\Plugin\LinkExtractorManager $linkExtractorManager */
+  $linkExtractorManager = \Drupal::service('plugin.manager.link_extractor');
+
+  $options = [];
+  foreach ($linkExtractorManager->getDefinitions() as $definition) {
+    if (in_array($fieldConfig->getType(), $definition['field_types'])) {
+      $options[$definition['id']] = $definition['label'];
+    }
+  }
+
+  if (empty($options)) {
+    $form['third_party_settings']['linkchecker']['#description'] = t('This field type is unsupported!');
+    return;
+  }
+
+  $form['third_party_settings']['linkchecker']['scan'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Scan broken links'),
+    '#default_value' => $fieldConfig->getThirdPartySetting('linkchecker', 'scan', FALSE),
+  ];
+
+  $form['third_party_settings']['linkchecker']['extractor'] = [
+    '#type' => 'select',
+    '#title' => t('Extractor'),
+    '#description' => t('Defines which extractor plugin to use'),
+    '#empty_value' => '',
+    '#options' => $options,
+    '#default_value' => $fieldConfig->getThirdPartySetting('linkchecker', 'extractor', count($options) === 1 ? key($options) : '_none'),
+    '#states' => [
+      'required' => [
+        ':input[name="third_party_settings[linkchecker][scan]"]' => [
+          'checked' => TRUE,
+        ],
+      ],
+      'visible' => [
+        ':input[name="third_party_settings[linkchecker][scan]"]' => [
+          'checked' => TRUE,
+        ],
+      ],
+    ],
+  ];
+
+  $form['#entity_builders'][] = 'linkchecker_form_field_config_form_builder';
+}
+
+function linkchecker_form_field_config_form_builder($entity_type, FieldConfigInterface $field_config, &$form, FormStateInterface $form_state) {
+  if ($form_state->getValue(['third_party_settings', 'linkchecker', 'scan']) === 1) {
+    $field_config->setThirdPartySetting('linkchecker', 'scan', TRUE);
+    $field_config->setThirdPartySetting('linkchecker', 'extractor', $form_state->getValue(['third_party_settings', 'linkchecker', 'extractor']));
+    return;
+  }
+
+  $field_config->unsetThirdPartySetting('linkchecker', 'scan');
+  $field_config->unsetThirdPartySetting('linkchecker', 'extractor');
+}
+
+/**
+ * Implements hook_cron().
+ */
+function linkchecker_cron() {
+  \Drupal::service('linkchecker.extractor_batch')->processEntities();
+  \Drupal::service('linkchecker.checker')->queueLinks();
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function linkchecker_entity_insert(EntityInterface $entity) {
+  if ($entity instanceof LinkCheckerLinkInterface) {
+    return;
+  }
+
+  if ($entity instanceof FieldableEntityInterface && !$entity->isNew()) {
+    /** @var \Drupal\linkchecker\LinkExtractorService $extractor */
+    $extractor = \Drupal::service('linkchecker.extractor');
+    $links = $extractor->extractFromEntity($entity);
+
+    if (!empty($links)) {
+      $extractor->saveLinkMultiple($links);
+      $extractor->updateEntityExtractIndex($entity);
+    }
+
+    \Drupal::service('linkchecker.clean_up')->cleanUpForEntity($entity);
+  }
+}
+
+/**
+ * Implements hook_entity_update().
+ */
+function linkchecker_entity_update(EntityInterface $entity) {
+  if ($entity instanceof LinkCheckerLinkInterface) {
+    return;
+  }
+
+  if ($entity instanceof FieldableEntityInterface) {
+    /** @var \Drupal\linkchecker\LinkExtractorService $extractor */
+    $extractor = \Drupal::service('linkchecker.extractor');
+    $links = $extractor->extractFromEntity($entity);
+
+    if (!empty($links)) {
+      $extractor->saveLinkMultiple($links);
+      $extractor->updateEntityExtractIndex($entity);
+    }
+
+    \Drupal::service('linkchecker.clean_up')->cleanUpForEntity($entity);
+  }
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function linkchecker_entity_delete(EntityInterface $entity) {
+  if ($entity instanceof LinkCheckerLinkInterface) {
+    return;
+  }
+
+  if ($entity instanceof FieldableEntityInterface) {
+    \Drupal::service('linkchecker.clean_up')->cleanUpForEntity($entity);
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function linkchecker_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form['#id'] != 'views-exposed-form-broken-links-report-page-1') {
+    return;
+  }
+
+  if (!empty($form['result'])) {
+    $form['result']['#states'] = [
+      'enabled' => [
+        ':input[name="code"]' => ['value' => ''],
+      ],
+    ];
+  }
+
+  if (!empty($form['code'])) {
+    $form['code']['#states'] = [
+      'enabled' => [
+        'select[name="result"]' => ['value' => 'All'],
+      ],
+    ];
+  }
+}
+
+/**
+ * Implements hook_migration_plugins_alter().
+ *
+ * Mapped "edit link settings" to edit "linkchecker link settings"
+ * as permission name is changed in Drupal 9.
+ *
+ * Adds third party settings migration process pipeline to field migrations to
+ * migrate linkchecker settings.
+ */
+function linkchecker_migration_plugins_alter(array &$migrations) {
+  if (!empty($migrations['d7_user_role']['process']['permissions'][0]['plugin']) && $migrations['d7_user_role']['process']['permissions'][0]['plugin'] === 'static_map') {
+    $migrations['d7_user_role']['process']['permissions'][0]['map']['edit link settings'] = 'edit linkchecker link settings';
+  }
+  $field_migrations = array_filter(
+    $migrations,
+    function ($definition) {
+      return $definition['id'] === 'd7_field_instance';
+    }
+  );
+
+  foreach (array_keys($field_migrations) as $plugin_id) {
+    $migrations[$plugin_id]['migration_tags'][] = 'linkchecker';
+    $migrations[$plugin_id]['process']['third_party_settings/linkchecker'] = 'linkchecker_config';
+  }
+}
+
+/**
+ * Implements hook_migrate_prepare_row().
+ */
+function linkchecker_migrate_prepare_row(Row $row, MigrateSourceInterface $source, MigrationInterface $migration) {
+  if (!$migration->getMigrationTags() || !in_array('linkchecker', $migration->getMigrationTags())) {
+    return;
+  }
+  $supported_field_types = [
+    'text',
+    'text_long',
+    'text_with_summary',
+  ];
+  if (!in_array($row->getSourceProperty('type'), $supported_field_types, TRUE)) {
+    return;
+  }
+  $entity_type_list = [
+    'node',
+    'comment',
+  ];
+  $entity_type = $row->getSourceProperty('entity_type');
+  if (!in_array($row->getSourceProperty('entity_type'), $entity_type_list, TRUE)) {
+    return;
+  }
+  $bundle = $row->getSourceProperty('bundle');
+  if ($entity_type == 'comment') {
+    $bundle = preg_replace("/^comment_node_/", "", $bundle);
+  }
+  if (!$source instanceof DrupalSqlBase) {
+    return;
+  }
+  $database_connection = $source->getDatabase();
+  $result = $database_connection->select('variable', 'v')
+    ->fields('v', ['value'])
+    ->condition('name', 'linkchecker_scan_' . $entity_type . '_' . $bundle)
+    ->execute()
+    ->fetchField();
+  $linkchecker_enabled = $result !== FALSE ? unserialize($result) : FALSE;
+  if ($linkchecker_enabled) {
+    $row->setSourceProperty(
+      'linkchecker_config',
+      ['scan' => TRUE, 'extractor' => 'html_link_extractor']);
+  }
+}

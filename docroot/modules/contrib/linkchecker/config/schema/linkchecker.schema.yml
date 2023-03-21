@@ -1,0 +1,112 @@
+# Schema for the configuration files of the linkchecker module.
+
+linkchecker.settings:
+  type: config_object
+  label: 'Linkchecker settings'
+  mapping:
+    scan_blocks:
+      type: boolean
+      label: 'Scan blocks for links'
+    check_links_types:
+      type: integer
+      label: 'What type of links should be checked?'
+    default_url_scheme:
+      type: string
+      label: 'Default URL scheme for scheme relative paths'
+    base_path:
+      type: string
+      label: 'Base path of internal URLs'
+    extract:
+      type: mapping
+      label: 'Link extraction'
+      mapping:
+        from_a:
+          type: boolean
+          label: 'Extract links in <a> and <area> tags'
+        from_audio:
+          type: boolean
+          label: 'Extract links in <audio>'
+        from_embed:
+          type: boolean
+          label: 'Extract links in <embed>'
+        from_iframe:
+          type: boolean
+          label: 'Extract links in <iframe>'
+        from_img:
+          type: boolean
+          label: 'Extract links in <img>'
+        from_object:
+          type: boolean
+          label: 'Extract links in <object> and <param> tags'
+        from_video:
+          type: boolean
+          label: 'Extract links in <video>'
+        filter_blacklist:
+          type: sequence
+          label: 'Filters disabled for link extraction'
+          sequence:
+            type: string
+            label: 'Filter name'
+    check:
+      type: mapping
+      label: 'Check settings'
+      mapping:
+        connections_max:
+          type: integer
+          label: 'Maximum number of simultaneous connections'
+        connections_max_per_domain:
+          type: integer
+          label: 'Maximum number of simultaneous connections per domain'
+        disable_link_check_for_urls:
+          type: string
+          label: 'Do not check the link status of links containing these URLs'
+        library:
+          type: string
+          label: 'Check library'
+        interval:
+          type: integer
+          label: 'Check interval for links'
+        useragent:
+          type: string
+          label: 'User-Agent'
+    error:
+      type: mapping
+      label: 'Error handling'
+      mapping:
+        action_status_code_301:
+          type: integer
+          label: 'Update permanently moved links'
+        action_status_code_404:
+          type: integer
+          label: 'Unpublish content on file not found error'
+        ignore_response_codes:
+          type: string
+          label: 'Do not treat these response codes as errors'
+        impersonate_account:
+          type: string
+          label: 'Impersonate user account'
+    logging:
+      type: mapping
+      label: 'Logging'
+      mapping:
+        level:
+          type: integer
+          label: 'Logging level'
+
+field.field.*.*.*.third_party.linkchecker:
+  type: mapping
+  label: 'Per-field linkchecker settings'
+  mapping:
+    scan:
+      type: boolean
+      label: 'Scan field'
+    extractor:
+      type: string
+      label: 'Extractor plugin machine name'
+
+views.field.linkcheckerlink_page_entity_label:
+  type: views.field.field
+  mapping:
+    link_to_entity:
+      type: integer
+      label: 'Link to entity.'
