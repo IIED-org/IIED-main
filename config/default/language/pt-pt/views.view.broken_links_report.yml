@@ -1,0 +1,12 @@
+display:
+  default:
+    display_options:
+      fields:
+        url:
+          label: URL
+        operations:
+          label: Operações
+      filters:
+        url:
+          expose:
+            label: URL

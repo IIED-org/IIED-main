@@ -1,0 +1,12 @@
+display:
+  default:
+    display_options:
+      fields:
+        url:
+          label: 'العنوان URL'
+        operations:
+          label: عمليات
+      filters:
+        url:
+          expose:
+            label: 'العنوان URL'

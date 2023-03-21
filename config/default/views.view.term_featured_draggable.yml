@@ -417,7 +417,16 @@ display:
     display_options:
       display_description: ''
       display_extenders: {  }
-      path: admin/collections/order
+      path: admin/manage/collections-order
+      menu:
+        type: tab
+        title: 'Collections order'
+        description: ''
+        weight: 6
+        expanded: false
+        menu_name: admin
+        parent: 'admin_toolbar_tools.extra_links:views_ui.content_recent'
+        context: '0'
     cache_metadata:
       max-age: 0
       contexts:

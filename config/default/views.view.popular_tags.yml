@@ -755,7 +755,7 @@ display:
       tags: {  }
   page_1:
     id: page_1
-    display_title: Page
+    display_title: 'Popular tags'
     display_plugin: page
     position: 2
     display_options:
@@ -1026,16 +1026,17 @@ display:
         fields: false
         filters: false
         filter_groups: false
+      display_description: ''
       display_extenders: {  }
-      path: admin/popular-tags
+      path: admin/all-tags/popular-tags
       menu:
-        type: none
+        type: tab
         title: 'Popular tags'
         description: ''
-        weight: 5
+        weight: 1
         expanded: false
         menu_name: admin
-        parent: 'admin_toolbar_tools.extra_links:views_ui.content_recent'
+        parent: 'admin_toolbar_tools.extra_links:views_ui.popular_tags'
         context: '0'
     cache_metadata:
       max-age: -1
@@ -1235,6 +1236,20 @@ display:
       display_description: ''
       display_extenders: {  }
       path: admin/all-tags
+      menu:
+        type: 'default tab'
+        title: 'IIED tags'
+        description: ''
+        weight: 0
+        expanded: false
+        menu_name: main
+        parent: ''
+        context: '0'
+      tab_options:
+        type: none
+        title: ''
+        description: ''
+        weight: 0
     cache_metadata:
       max-age: -1
       contexts:

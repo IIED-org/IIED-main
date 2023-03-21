@@ -1166,6 +1166,7 @@ display:
     display_plugin: data_export
     position: 9
     display_options:
+      enabled: false
       fields:
         field_product_code_new:
           id: field_product_code_new
@@ -1480,6 +1481,7 @@ display:
     display_plugin: data_export
     position: 4
     display_options:
+      enabled: false
       title: Projects
       fields:
         title:
@@ -2170,6 +2172,7 @@ display:
     display_plugin: data_export
     position: 6
     display_options:
+      enabled: false
       title: 'Pubs with no project link'
       fields:
         field_product_code_new:
@@ -4906,6 +4909,7 @@ display:
     display_plugin: data_export
     position: 3
     display_options:
+      enabled: false
       title: 'Product codes'
       fields:
         field_product_code_new:
@@ -6736,6 +6740,7 @@ display:
     display_plugin: page
     position: 7
     display_options:
+      enabled: false
       title: 'Pubs with ext link'
       fields:
         views_bulk_operations_bulk_form:
@@ -7440,6 +7445,7 @@ display:
     display_plugin: page
     position: 16
     display_options:
+      enabled: false
       title: 'Pubs with date filter csv export'
       fields:
         nid:
@@ -8429,6 +8435,7 @@ display:
     display_plugin: page
     position: 3
     display_options:
+      enabled: false
       title: 'Product codes'
       fields:
         field_product_code_new:
@@ -10122,15 +10129,15 @@ display:
       group_by: false
       display_description: ''
       display_extenders: {  }
-      path: admin/reports/publications-quarterly
+      path: admin/manage/publications-quarterly
       menu:
         type: tab
-        title: 'Pubs csv'
+        title: 'Q reports'
         description: ''
-        weight: 0
+        weight: 5
         expanded: false
         menu_name: admin
-        parent: admin_toolbar_tools.help
+        parent: 'admin_toolbar_tools.extra_links:views_ui.content_recent'
         context: '0'
     cache_metadata:
       max-age: -1
@@ -10960,6 +10967,7 @@ display:
     display_plugin: page
     position: 3
     display_options:
+      enabled: false
       title: 'Product codes'
       fields:
         field_product_code:
@@ -11444,6 +11452,7 @@ display:
     display_plugin: page
     position: 8
     display_options:
+      enabled: false
       title: 'Pubs with no project link'
       fields:
         field_product_code_new:
@@ -12149,6 +12158,7 @@ display:
     display_plugin: page
     position: 10
     display_options:
+      enabled: false
       title: 'Pubs media'
       fields:
         field_product_code_new:
@@ -13660,6 +13670,7 @@ display:
     display_plugin: page
     position: 11
     display_options:
+      enabled: false
       title: 'Pubs and authors'
       fields:
         field_product_code_new:
@@ -14556,6 +14567,7 @@ display:
     display_plugin: page
     position: 12
     display_options:
+      enabled: false
       title: Translations
       fields:
         field_product_code_new:
@@ -15390,6 +15402,7 @@ display:
     display_plugin: page
     position: 13
     display_options:
+      enabled: false
       title: 'Authors and editors'
       fields:
         views_bulk_operations_bulk_form:
@@ -16618,6 +16631,7 @@ display:
     display_plugin: page
     position: 14
     display_options:
+      enabled: false
       title: Publishers
       fields:
         views_bulk_operations_bulk_form:

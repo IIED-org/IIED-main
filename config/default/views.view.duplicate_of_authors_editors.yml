@@ -1,6 +1,6 @@
 uuid: 115903c2-9be2-4eea-a870-0b344df2f606
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - field.storage.taxonomy_term.field_legacy_iscanonical
@@ -10,6 +10,7 @@ dependencies:
     - node
     - taxonomy
     - user
+    - views_autocomplete_filters
 id: duplicate_of_authors_editors
 label: 'Duplicate of Authors & Editors'
 module: views

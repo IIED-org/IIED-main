@@ -50,6 +50,7 @@ module:
   default_content: 0
   default_content_deploy: 0
   draggableviews: 0
+  dynamic_entity_reference: 0
   dynamic_page_cache: 0
   editor: 0
   entity_reference_revisions: 0
@@ -98,6 +99,7 @@ module:
   layout_discovery: 0
   layout_paragraphs: 0
   link: 0
+  linkchecker: 0
   locale: 0
   masquerade: 0
   media: 0
