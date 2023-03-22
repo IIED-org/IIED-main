@@ -1,6 +1,6 @@
 {
     "name": "drupal/anchor_link",
-    "description": "This plugin module adds the better link dialog and anchor related features to CKEditor in Drupal 8.",
+    "description": "This plugin module adds the better link dialog and anchor related features to CKEditor in Drupal 9.",
     "type": "drupal-module",
     "license": "GPL-2.0-or-later",
     "minimum-stability": "dev",

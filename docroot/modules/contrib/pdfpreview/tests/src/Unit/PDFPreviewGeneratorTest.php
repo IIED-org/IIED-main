@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\pdfpreview\Unit;
 
+use Prophecy\PhpUnit\ProphecyTrait;
 use Drupal\Component\Transliteration\TransliterationInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
@@ -15,6 +16,7 @@ use Drupal\Tests\UnitTestCase;
  */
 class PDFPreviewGeneratorTest extends UnitTestCase {
 
+  use ProphecyTrait;
   /**
    * The config factory.
    *
@@ -25,7 +27,7 @@ class PDFPreviewGeneratorTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     $this->configFactory = $this->prophesize(ConfigFactoryInterface::class);
@@ -78,17 +80,13 @@ class PDFPreviewGeneratorTest extends UnitTestCase {
    *   Mocked PDF Preview Generator.
    */
   protected function getPdfPreviewGeneratorMock() {
-    $file_system = $this->getMockBuilder('\Drupal\Core\File\FileSystem')
-      ->disableOriginalConstructor()
-      ->getMock();
+    $file_system = $this->createMock('\Drupal\Core\File\FileSystem');
     $file_system
       ->expects($this->any())
       ->method('basename')
       ->with('public://Test File.pdf', '.pdf')
       ->willReturn('Test File');
-    $transliteration = $this->getMockBuilder(TransliterationInterface::class)
-      ->disableOriginalConstructor()
-      ->getMock();
+    $transliteration = $this->createMock(TransliterationInterface::class);
     $transliteration
       ->expects($this->any())
       ->method('transliterate')
@@ -97,17 +95,13 @@ class PDFPreviewGeneratorTest extends UnitTestCase {
 
     $image_toolkit_manager = $this->createMock('\Drupal\Core\ImageToolkit\ImageToolkitManager');
 
-    $language = $this->getMockBuilder('Drupal\Core\Language\Language')
-      ->disableOriginalConstructor()
-      ->getMock();
+    $language = $this->createMock('Drupal\Core\Language\Language');
     $language
       ->expects($this->any())
       ->method('getId')
       ->willReturn('en');
 
-    $language_manager = $this->getMockBuilder('Drupal\Core\Language\LanguageManager')
-      ->disableOriginalConstructor()
-      ->getMock();
+    $language_manager = $this->createMock('Drupal\Core\Language\LanguageManager');
     $language_manager
       ->expects($this->any())
       ->method('getCurrentLanguage')
@@ -139,10 +133,7 @@ class PDFPreviewGeneratorTest extends UnitTestCase {
    */
   protected function getFileMock($filename, $id) {
     $methods = ['id', 'getFileUri'];
-    $file = $this->getMockBuilder('\Drupal\file\Entity\File')
-      ->disableOriginalConstructor()
-      ->setMethods($methods)
-      ->getMock();
+    $file = $this->createMock('\Drupal\file\Entity\File');
     $file->expects($this->any())
       ->method('id')
       ->willReturn($id);

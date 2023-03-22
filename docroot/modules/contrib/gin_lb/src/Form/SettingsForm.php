@@ -51,6 +51,14 @@ class SettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('enable_preview_regions'),
     ];
 
+    $form['hide_discard_revert_button'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Hide "Discard changes" and "Revert to defaults" button'),
+      '#description' => $this->t('Layout builder provides buttons to revert to defaults and a discard changes -
+      check this option if you want to hide these.'),
+      '#default_value' => $config->get('hide_discard_revert_button'),
+    ];
+
     $form['save_behavior'] = [
       '#type' => 'select',
       '#title' => $this->t('After save behavior'),

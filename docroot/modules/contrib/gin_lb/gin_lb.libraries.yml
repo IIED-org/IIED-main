@@ -12,7 +12,7 @@ gin_lb_form:
 gin_lb_init:
   version: VERSION
   js:
-    dist/js/gin_lb_js.js: { minified: true, preprocess: false }
+    dist/js/gin_lb_js.js: { minified: false, preprocess: false }
   dependencies:
     - core/jquery
     - core/jquery.once

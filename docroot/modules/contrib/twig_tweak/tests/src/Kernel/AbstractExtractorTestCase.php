@@ -50,6 +50,7 @@ abstract class AbstractExtractorTestCase extends KernelTestBase {
 
     $this->installConfig(['node', 'twig_tweak_test']);
     $this->installSchema('file', 'file_usage');
+    $this->installEntitySchema('user');
     $this->installEntitySchema('file');
     $this->installEntitySchema('media');
 

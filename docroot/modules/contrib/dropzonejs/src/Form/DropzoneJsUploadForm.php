@@ -33,6 +33,13 @@ class DropzoneJsUploadForm extends FileUploadForm {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getFormId() {
+    return $this->getBaseFormId() . '_dropzonejs';
+  }
+
+  /**
    * Set the upload service.
    *
    * @param \Drupal\dropzonejs\DropzoneJsUploadSaveInterface $dropzoneJsUploadSave
@@ -55,11 +62,14 @@ class DropzoneJsUploadForm extends FileUploadForm {
     $process = (array) $this->elementInfo->getInfoProperty('dropzonejs', '#process', []);
     $form['container']['upload']['#type'] = 'dropzonejs';
     $form['container']['upload']['#process'] = array_merge(['::validateUploadElement'], $process);
+    $translation = \Drupal::translation();
+    $cardinality = $slots < 1 ? 0 : $slots;
+    $dropzone_description = $translation->formatPlural($cardinality, 'Drop file here to upload it', 'Drop files here to upload them');
     $dropzone_specific_properties = [
       '#max_files' => $slots < 1 ? 0 : $slots,
       '#max_filesize' => $settings['max_filesize'],
       '#extensions' => $settings['file_extensions'],
-      '#dropzone_description' => $this->t('Drop files here to upload them'),
+      '#dropzone_description' => $dropzone_description,
     ];
     $form['container']['upload'] += $dropzone_specific_properties;
 

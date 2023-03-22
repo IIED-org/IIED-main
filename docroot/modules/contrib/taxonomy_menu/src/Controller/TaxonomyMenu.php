@@ -14,7 +14,7 @@ class TaxonomyMenu extends ControllerBase {
   /**
    * Render taxonomy links.
    *
-   * @return string
+   * @return string[]
    *   Return Hello string.
    */
   public function renderTaxonomyLinks() {
@@ -29,10 +29,7 @@ class TaxonomyMenu extends ControllerBase {
       $links += $taxonomy_menu->getLinks([]);
     }
 
-    return [
-      '#type' => 'markup',
-      '#markup' => '',
-    ];
+    return $links;
   }
 
 }

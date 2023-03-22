@@ -2,12 +2,11 @@ name: 'TableField required'
 description: 'Set required on certain rows/cols.'
 package: Field types
 type: module
-core: 8.x
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^9.1 || ^10
 dependencies:
   - tablefield:tablefield
 
-# Information added by Drupal.org packaging script on 2022-08-01
-version: '8.x-2.3'
+# Information added by Drupal.org packaging script on 2023-02-24
+version: '8.x-2.4'
 project: 'tablefield'
-datestamp: 1659345821
+datestamp: 1677254143

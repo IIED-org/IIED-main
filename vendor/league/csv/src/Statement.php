@@ -20,7 +20,7 @@ use LimitIterator;
 use function array_reduce;
 
 /**
- * Criteria to filter a {@link Reader} object.
+ * Criteria to filter a {@link TabularDataReader} object.
  */
 class Statement
 {
@@ -47,7 +47,7 @@ class Statement
     }
 
     /**
-     * Set the Iterator filter method.
+     * Sets the Iterator filter method.
      */
     public function where(callable $where): self
     {
@@ -58,7 +58,7 @@ class Statement
     }
 
     /**
-     * Set an Iterator sorting callable function.
+     * Sets an Iterator sorting callable function.
      */
     public function orderBy(callable $order_by): self
     {
@@ -69,9 +69,9 @@ class Statement
     }
 
     /**
-     * Set LimitIterator Offset.
+     * Sets LimitIterator Offset.
      *
-     * @throws Exception if the offset is lesser than 0
+     * @throws Exception if the offset is less than 0
      */
     public function offset(int $offset): self
     {
@@ -90,9 +90,9 @@ class Statement
     }
 
     /**
-     * Set LimitIterator Count.
+     * Sets LimitIterator Count.
      *
-     * @throws Exception if the limit is lesser than -1
+     * @throws Exception if the limit is less than -1
      */
     public function limit(int $limit): self
     {
@@ -111,9 +111,11 @@ class Statement
     }
 
     /**
-     * Execute the prepared Statement on the {@link Reader} object.
+     * Executes the prepared Statement on the {@link Reader} object.
      *
      * @param array<string> $header an optional header to use instead of the CSV document header
+     *
+     * @throws SyntaxError
      */
     public function process(TabularDataReader $tabular_data, array $header = []): TabularDataReader
     {
@@ -121,11 +123,13 @@ class Statement
             $header = $tabular_data->getHeader();
         }
 
-        $iterator = $tabular_data->getRecords($header);
-        $iterator = array_reduce($this->where, [$this, 'filter'], $iterator);
-        $iterator = $this->buildOrderBy($iterator);
+        $iterator = $this->buildOrderBy(
+            array_reduce($this->where, $this->filter(...), $tabular_data->getRecords($header))
+        );
+        /** @var Iterator<array-key, array<array-key, string|null>> $iterator */
+        $iterator = new LimitIterator($iterator, $this->offset, $this->limit);
 
-        return new ResultSet(new LimitIterator($iterator, $this->offset, $this->limit), $header);
+        return new ResultSet($iterator, $header);
     }
 
     /**
@@ -137,7 +141,7 @@ class Statement
     }
 
     /**
-     * Sort the Iterator.
+     * Sorts the Iterator.
      */
     protected function buildOrderBy(Iterator $iterator): Iterator
     {
@@ -155,10 +159,8 @@ class Statement
             return $cmp ?? 0;
         };
 
-        $it = new ArrayIterator();
-        foreach ($iterator as $offset => $value) {
-            $it[$offset] = $value;
-        }
+        /** @var ArrayIterator<array-key, array<string|null>> $it */
+        $it = new ArrayIterator([...$iterator]);
         $it->uasort($compare);
 
         return $it;

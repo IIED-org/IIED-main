@@ -1,0 +1,7 @@
+name: Acquia Search Defaults
+type: module
+description: Provides default search index and view for Acquia Search.
+package: Acquia
+core_version_requirement: '>=8.9 <11'
+dependencies:
+  - acquia_search:acquia_search

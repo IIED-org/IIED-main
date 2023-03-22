@@ -33,7 +33,7 @@ use function strlen;
  */
 class EncloseField extends php_user_filter
 {
-    const FILTERNAME = 'convert.league.csv.enclosure';
+    public const FILTERNAME = 'convert.league.csv.enclosure';
 
     /** Default sequence. */
     protected string $sequence;
@@ -80,29 +80,33 @@ class EncloseField extends php_user_filter
     /**
      * Filter type and sequence parameters.
      *
-     * The sequence to force enclosure MUST contains one of the following character ("\n\r\t ")
+     * The sequence to force enclosure MUST contain one of the following character ("\n\r\t ")
      */
     protected static function isValidSequence(string $sequence): bool
     {
-        return strlen($sequence) != strcspn($sequence, self::$force_enclosure);
+        return strlen($sequence) !== strcspn($sequence, self::$force_enclosure);
     }
 
     public function onCreate(): bool
     {
-        return isset($this->params['sequence'])
+        return is_array($this->params)
+            && isset($this->params['sequence'])
             && self::isValidSequence($this->params['sequence']);
     }
 
     /**
      * @param resource $in
      * @param resource $out
-     * @param int      $consumed
-     * @param bool     $closing
+     * @param int $consumed
      */
-    public function filter($in, $out, &$consumed, $closing): int
+    public function filter($in, $out, &$consumed, bool $closing): int
     {
+        /** @var array $params */
+        $params = $this->params;
+        /** @var string $sequence */
+        $sequence = $params['sequence'];
         while (null !== ($bucket = stream_bucket_make_writeable($in))) {
-            $bucket->data = str_replace($this->params['sequence'], '', $bucket->data);
+            $bucket->data = str_replace($sequence, '', $bucket->data);
             $consumed += $bucket->datalen;
             stream_bucket_append($out, $bucket);
         }

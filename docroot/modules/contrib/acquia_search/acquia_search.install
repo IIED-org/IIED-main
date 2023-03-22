@@ -27,6 +27,17 @@ function acquia_search_requirements($phase) {
       ];
       return $requirements;
     }
+
+    $deprecated = \Drupal::configFactory()->get('acquia_search.settings')->get('override_search_core') || \Drupal::configFactory()->get('acquia_search_solr.settings')->get('override_search_core');
+    if ($deprecated) {
+      $requirements['acquia_search_deprecated_config'] = [
+        'title' => t('Acquia Search Local Overrides'),
+        'value' => 'Local overrides',
+        'description' => t("Acquia Search detected deprecated config settings. Please review README.txt and update 'override_search_core' setting to override."),
+        'severity' => REQUIREMENT_WARNING,
+      ];
+    }
+
     $requirements['acquia_search_ssl'] = [
       'title' => t('Acquia Search Solr'),
       'value' => 'Security',

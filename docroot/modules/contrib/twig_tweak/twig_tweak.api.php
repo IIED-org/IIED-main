@@ -7,6 +7,7 @@
 
 use Drupal\Component\Utility\Unicode;
 use Drupal\node\NodeInterface;
+use Twig\TwigFilter;
 use Twig\TwigFunction;
 use Twig\TwigTest;
 
@@ -45,9 +46,9 @@ function hook_twig_tweak_functions_alter(array &$functions): void {
  *   Twig filters to alter.
  */
 function hook_twig_tweak_filters_alter(array &$filters): void {
-  $filters[] = new TwigFunction('str_pad', 'str_pad');
-  $filters[] = new TwigFunction('ucfirst', [Unicode::class, 'ucfirst']);
-  $filters[] = new TwigFunction('lcfirst', [Unicode::class, 'lcfirst']);
+  $filters[] = new TwigFilter('str_pad', 'str_pad');
+  $filters[] = new TwigFilter('ucfirst', [Unicode::class, 'ucfirst']);
+  $filters[] = new TwigFilter('lcfirst', [Unicode::class, 'lcfirst']);
 }
 
 /**

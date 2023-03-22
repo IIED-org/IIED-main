@@ -3,7 +3,7 @@
 namespace Drupal\gin_lb\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -16,7 +16,7 @@ class LayoutBuilderBrowserEventSubscriber implements EventSubscriberInterface {
   /**
    * Add layout-builder-browser class layout_builder.choose_block build block.
    */
-  public function onView(GetResponseForControllerResultEvent $event) {
+  public function onView(ViewEvent $event) {
     $request = $event->getRequest();
     $route = $request->attributes->get('_route');
 

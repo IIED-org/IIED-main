@@ -69,15 +69,47 @@ class Tablefield extends FormElement {
 
     $element['tablefield']['table'] = [
       '#type' => 'table',
+      '#tabledrag' => [
+        [
+          'action' => 'order',
+          'relationship' => 'sibling',
+          'group' => 'table-rows-weight',
+        ],
+      ],
     ];
     // Assign value.
     $rows = isset($element['#rows']) ? $element['#rows'] : \Drupal::config('tablefield.settings')->get('rows');
     $cols = isset($element['#cols']) ? $element['#cols'] : \Drupal::config('tablefield.settings')->get('cols');
 
+    $table = $value['tablefield']['table'] ?? $value;
+    $weightedRows = [];
     for ($i = 0; $i < $rows; $i++) {
+      $weight = $table[$i]['weight'] ?? $i;
+      $weightedRows[$i] = [
+        // This element is required to give the drag handle something to attach
+        // to. Normally this would just be the first column of the table, but
+        // attempting to have the drag handle and textfield share a cell broke
+        // the layout. Additionally it can't share with the 'weight' column
+        // since that column is hidden and thus the drag handles would be too.
+        'spacer' => ['#markup' => ''],
+        'weight' => [
+          '#type' => 'weight',
+          '#title' => t('Weight'),
+          '#title_display' => 'invisible',
+          '#default_value' => $weight,
+          '#attributes' => [
+            'class' => ['table-rows-weight'],
+          ],
+          '#delta' => $rows,
+        ],
+        '#weight' => $weight,
+      ];
+
+      $draggable = TRUE;
       for ($ii = 0; $ii < $cols; $ii++) {
         if (!empty($element['#locked_cells'][$i][$ii]) && !empty($element['#lock'])) {
-          $element['tablefield']['table'][$i][$ii] = [
+          $draggable = FALSE;
+          $weightedRows[$i][$ii] = [
             '#type' => 'item',
             '#value' => $element['#locked_cells'][$i][$ii],
             '#title' => $element['#locked_cells'][$i][$ii],
@@ -85,7 +117,7 @@ class Tablefield extends FormElement {
         }
         else {
           $cell_value = isset($value[$i][$ii]) ? $value[$i][$ii] : '';
-          $element['tablefield']['table'][$i][$ii] = [
+          $weightedRows[$i][$ii] = [
             '#type' => $input_type,
             '#maxlength' => 2048,
             '#size' => 0,
@@ -97,7 +129,18 @@ class Tablefield extends FormElement {
           ];
         }
       }
+
+      // Only allow the row to be dragged if it does not contain locked cells.
+      // See https://www.drupal.org/project/tablefield/issues/2868077.
+      if ($draggable) {
+        $weightedRows[$i]['#attributes']['class'][] = 'draggable';
+      }
     }
+
+    // Sort rows by weight. This step is required so that the table stays
+    // properly ordered when doing ajax operations.
+    uasort($weightedRows, ['Drupal\Component\Utility\SortArray', 'sortByWeightProperty']);
+    $element['tablefield']['table'] += $weightedRows;
 
     // To change number of rows.
     if (!empty($element['#addrow'])) {

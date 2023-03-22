@@ -26,7 +26,7 @@
         },
         "drush": {
             "services": {
-                "drush.services.yml": "^10"
+                "drush.services.yml": ">=10"
             }
         }
     }

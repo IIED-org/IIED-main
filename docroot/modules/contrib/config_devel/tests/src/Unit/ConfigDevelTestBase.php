@@ -11,12 +11,12 @@ use Drupal\Tests\UnitTestCase;
 abstract class ConfigDevelTestBase extends UnitTestCase {
 
   /**
-   * @var \Drupal\Core\Config\ConfigFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+   * @var \Drupal\Core\Config\ConfigFactoryInterface|\PHPUnit\Framework\MockObject\MockObject
    */
   protected $configFactory;
 
   /**
-   * @var \Drupal\Core\Config\ConfigManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+   * @var \Drupal\Core\Config\ConfigManagerInterface|\PHPUnit\Framework\MockObject\MockObject
    */
   protected $configManager;
 
@@ -28,7 +28,7 @@ abstract class ConfigDevelTestBase extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
     $this->configFactory = $this->createMock('Drupal\Core\Config\ConfigFactoryInterface');
 

@@ -239,7 +239,7 @@ class ConfigImporterExporter {
 
       // Let everyone else have a change to update the exported data.
       $event = new ConfigDevelSaveEvent($file_names, $data);
-      $this->eventDispatcher->dispatch(ConfigDevelEvents::SAVE, $event);
+      $this->eventDispatcher->dispatch($event, ConfigDevelEvents::SAVE);
       $data = $event->getData();
       $file_names = $event->getFileNames();
 

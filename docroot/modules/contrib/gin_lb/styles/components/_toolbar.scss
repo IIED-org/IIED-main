@@ -1,7 +1,3 @@
-.glb-body {
-  padding-right: var(--gin-sidebar-offset);
-}
-
 body[data-meta-sidebar="closed"] .glb-sidebar {
   transform: translateX(var(--gin-sidebar-width));
 }
@@ -57,10 +53,6 @@ body[data-meta-sidebar="closed"] .glb-sidebar {
     margin-bottom: 1.25em !important;
     text-shadow: none !important;
     font-size: 1.231em !important;
-  }
-
-  #edit-discard-changes, #edit-revert {
-    display: none !important;
   }
 
   .form-actions {

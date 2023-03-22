@@ -2,14 +2,13 @@ name: PDF Preview
 type: module
 description: Show a snapshot of the first page of pdf files attached to nodes.
 package: Media
-core: 8.x
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^9.3 || ^10
 configure: pdfpreview.settings
 dependencies:
   - drupal:image
   - imagemagick:imagemagick (>=8.x-2.3)
 
-# Information added by Drupal.org packaging script on 2020-05-14
-version: '8.x-1.0'
+# Information added by Drupal.org packaging script on 2023-02-27
+version: '8.x-1.1'
 project: 'pdfpreview'
-datestamp: 1589434271
+datestamp: 1677468363

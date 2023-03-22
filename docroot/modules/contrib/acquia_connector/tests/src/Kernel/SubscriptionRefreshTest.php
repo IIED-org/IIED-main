@@ -141,6 +141,7 @@ final class SubscriptionRefreshTest extends AcquiaConnectorTestBase {
       'acquia_connector.identifier' => 'ABC',
       'acquia_connector.key' => 'DEF',
       'acquia_connector.application_uuid' => 'a47ac10b-58cc-4372-a567-0e02b2c3d470',
+      'acquia_connector.subscription_data' => 'bogus_data',
     ]);
     $this->container->get('acquia_connector.subscription')->populateSettings();
 

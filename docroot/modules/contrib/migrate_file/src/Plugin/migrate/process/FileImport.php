@@ -269,7 +269,7 @@ class FileImport extends FileCopy {
       $file = File::create([
         'uri' => $final_destination,
         'uid' => $uid,
-        'status' => FILE_STATUS_PERMANENT,
+        'status' => FileInterface::STATUS_PERMANENT,
       ]);
       $file->save();
       return $id_only ? $file->id() : ['target_id' => $file->id()];

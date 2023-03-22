@@ -8,7 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\TypedData\DataDefinition;
 use Drupal\Core\TypedData\MapDataDefinition;
 use Drupal\Core\Field\FieldItemBase;
-use Symfony\Cmf\Component\Routing\RouteObjectInterface;
+use Drupal\Core\Routing\RouteObjectInterface;
 
 /**
  * Plugin implementation of the 'tablefield' field type.
@@ -177,6 +177,10 @@ class TablefieldItem extends FieldItemBase {
       }
       $values['rebuild']['rows'] = isset($values['value']) ? count($values['value']) : 0;
       $values['rebuild']['cols'] = isset($values['value'][0]) ? count($values['value'][0]) : 0;
+      // If the weight column was saved, don't include it in the count.
+      if (isset($values['value'][0]['weight'])) {
+        --$values['rebuild']['cols'];
+      }
     }
 
     if (isset($values['caption'])) {

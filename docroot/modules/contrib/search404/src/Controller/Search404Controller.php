@@ -331,7 +331,9 @@ class Search404Controller extends ControllerBase {
     if ($this->config('search404.settings')->get('search404_redirect_301')) {
       $response->setStatusCode(301);
     }
-    return $response->send();
+    // Remove unwanted destination.
+    $this->requestStack->getCurrentRequest()->query->remove('destination');
+    return $response;
   }
 
   /**

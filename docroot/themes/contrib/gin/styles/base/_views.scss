@@ -51,6 +51,7 @@
     left: 0;
     padding: 0 var(--gin-spacing-m) var(--gin-spacing-m) var(--gin-spacing-m);
     border-radius: var(--gin-border-m);
+    background: rgba(var(--gin-color-sticky-rgb), .95);
 
     @supports (backdrop-filter: blur()) {
       opacity: .999; /* Fix Chrome issue with mask */
@@ -145,11 +146,7 @@
   margin-right: var(--gin-spacing-xs);
 }
 
-.view-files .view-content {
-  padding-top: 0;
-}
-
-.layer-wrapper {
+.gin-layer-wrapper {
   padding: var(--gin-spacing-l);
 
   @include mq($to: large) {
@@ -157,7 +154,7 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  & + .layer-wrapper {
+  & + .gin-layer-wrapper {
     margin-top: var(--gin-spacing-l);
   }
 
@@ -210,7 +207,7 @@
 .views-live-preview {
   padding: 0;
 
-  .layer-wrapper {
+  .gin-layer-wrapper {
     border-color: var(--gin-border-color);
   }
 }

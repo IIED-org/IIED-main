@@ -11,7 +11,9 @@
         // Watch sticky table header.
         const observer = new IntersectionObserver(
           ([e]) => {
-            context.querySelector('.gin-table-scroll-wrapper').classList.toggle('--is-sticky', e.intersectionRatio < 1 || window.scrollY > context.querySelector('.gin-table-scroll-wrapper').offsetTop);
+            if (context.querySelector('.gin-table-scroll-wrapper')) {
+              context.querySelector('.gin-table-scroll-wrapper').classList.toggle('--is-sticky', e.intersectionRatio < 1 || window.scrollY > context.querySelector('.gin-table-scroll-wrapper').offsetTop);
+            }
           },
           { threshold: [1], rootMargin: `-${this.stickyPosition()}px 0px 0px 0px` }
         );
@@ -65,6 +67,7 @@
       const header = table.querySelector(':scope > thead');
       header.querySelectorAll('th').forEach((el, i) => {
         table.querySelector(`table.sticky-header > thead th:nth-of-type(${i+1})`).style.width = `${el.offsetWidth}px`;
+        table.querySelector(`table.sticky-header`).style.width = `${el.parentNode.offsetWidth}px`;
       });
     },
   };

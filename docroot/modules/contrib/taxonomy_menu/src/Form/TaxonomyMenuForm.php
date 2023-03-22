@@ -4,7 +4,6 @@ namespace Drupal\taxonomy_menu\Form;
 
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\system\Entity\Menu;
 use Drupal\Core\Menu\MenuParentFormSelector;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityFieldManager;
@@ -153,7 +152,7 @@ class TaxonomyMenuForm extends EntityForm {
     ];
 
     // Menu selection.
-    $custom_menus = Menu::loadMultiple();
+    $custom_menus = $this->entityTypeManager->getStorage('menu')->loadMultiple();
     foreach ($custom_menus as $menu_name => $menu) {
       $custom_menus[$menu_name] = $menu->label();
     }
@@ -175,7 +174,7 @@ class TaxonomyMenuForm extends EntityForm {
     $form['use_term_weight_order'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Use term weight order'),
-      '#default_value' => isset($taxonomy_menu->use_term_weight_order) ? $taxonomy_menu->use_term_weight_order : TRUE,
+      '#default_value' => $taxonomy_menu->use_term_weight_order ?? TRUE,
     ];
 
     return $form;

@@ -90,7 +90,8 @@ final class CacheMetadataExtractorTest extends AbstractTestCase {
     self::assertRenderArray($expected_build, $build);
 
     // -- Wrong type.
-    self::expectErrorMessage('The input should be either instance of Drupal\Core\Cache\CacheableDependencyInterface or array. stdClass was given.');
+    $exception = new \InvalidArgumentException('The input should be either instance of Drupal\Core\Cache\CacheableDependencyInterface or array. stdClass was given.');
+    self::expectExceptionObject($exception);
     /* @noinspection PhpParamsInspection */
     $extractor->extractCacheMetadata(new \stdClass());
   }

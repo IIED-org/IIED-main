@@ -50,10 +50,10 @@ class HTMLConverter
     }
 
     /**
-     * Converts a tabular data collection into a HTML table string.
+     * Converts a tabular data collection into an HTML table string.
      *
-     * @param string[] $header_record An optional array of headers outputted using the`<thead>` section
-     * @param string[] $footer_record An optional array of footers to output to the table using `<tfoot>` and `<th>` elements
+     * @param array<string> $header_record An optional array of headers outputted using the `<thead>` and `<th>` elements
+     * @param array<string> $footer_record An optional array of footers outputted using the `<tfoot>` and `<th>` elements
      */
     public function convert(iterable $records, array $header_record = [], array $footer_record = []): string
     {
@@ -79,14 +79,11 @@ class HTMLConverter
 
         $doc->appendChild($table);
 
-        /** @var string $content */
-        $content = $doc->saveHTML();
-
-        return $content;
+        return (string) $doc->saveHTML();
     }
 
     /**
-     * Creates a DOMElement representing a HTML table heading section.
+     * Creates a DOMElement representing an HTML table heading section.
      */
     protected function appendHeaderSection(string $node_name, array $record, DOMElement $table): void
     {
@@ -128,7 +125,7 @@ class HTMLConverter
     public function table(string $class_name, string $id_value = ''): self
     {
         if (1 === preg_match(",\s,", $id_value)) {
-            throw new DOMException("the id attribute's value must not contain whitespace (spaces, tabs etc.)");
+            throw new DOMException("The id attribute's value must not contain whitespace (spaces, tabs etc.)");
         }
         $clone = clone $this;
         $clone->class_name = $class_name;

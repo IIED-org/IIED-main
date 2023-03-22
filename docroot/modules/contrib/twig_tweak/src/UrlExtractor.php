@@ -64,6 +64,7 @@ class UrlExtractor {
 
     $entity = $input;
     if ($input instanceof EntityReferenceFieldItemListInterface) {
+      /** @var \Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem $item */
       if ($item = $input->first()) {
         $entity = $item->entity;
       }

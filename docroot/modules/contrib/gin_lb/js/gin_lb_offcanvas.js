@@ -25,7 +25,7 @@
           }
         })
       }
-      $('body').once('gin-canvas-event').each(()=>{
+      once('gin-canvas-event', 'body').forEach(()=>{
         $('body').on( 'dialogresizestop', ( event, ui ) => {
           const sidebar = $('.ui-dialog-off-canvas');
           Drupal.behaviors.offCanvas.width = sidebar.width();
@@ -36,7 +36,7 @@
         });
       })
       window.setTimeout(() => {
-        $('a[data-dialog-renderer]').once('glb-offcanvas-width').each((item, elm)=> {
+        once('glb-offcanvas-width', 'a[data-dialog-renderer]').forEach((elm)=> {
           Drupal.behaviors.offCanvas.links.push(elm);
           setOptions(elm);
         });

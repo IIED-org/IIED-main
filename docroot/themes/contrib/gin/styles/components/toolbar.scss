@@ -277,10 +277,17 @@ body.gin--classic-toolbar {
 
     // Edit
     .toolbar-icon-edit,
-    .toolbar-icon-local-tasks,
     .toolbar-tab > .toolbar-icon-edit.toolbar-item {
       &:before {
         mask-image: icon('edit');
+        mask-size: var(--gin-icon-size-toolbar-secondary) var(--gin-icon-size-toolbar-secondary);
+      }
+    }
+
+    // Local tasks
+    .toolbar-icon-local-tasks{
+      &:before {
+        mask-image: icon('local-tasks');
         mask-size: var(--gin-icon-size-toolbar-secondary) var(--gin-icon-size-toolbar-secondary);
       }
     }
@@ -456,6 +463,14 @@ body.gin--classic-toolbar {
 
   .level-1.menu-item:last-child {
     border-bottom: 1px solid var(--gin-border-color-layer);
+  }
+
+  .level-2 .toolbar-menu {
+    background-color: var(--gin-toolbar-bg-level2);
+  }
+
+  .level-3 .toolbar-menu {
+    background-color: var(--gin-toolbar-bg-level3);
   }
 
   .gin--dark-mode & {

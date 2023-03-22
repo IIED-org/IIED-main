@@ -140,7 +140,7 @@ function drush_config_devel_import_one($path) {
     \Drupal::service('config_devel.auto_import_subscriber')->importOne($path, '', $contents);
   }
   else {
-    drush_log("file '$path' not found", 'error');
+    \Drupal::logger('config_devel')->error('file @path not found', ['@path' => $path]);
     exit;
   }
 }
@@ -161,7 +161,7 @@ function drush_config_devel_import_one($path) {
  *   TRUE when the configuration was successfully exported. FALSE otherwise.
  */
 function drush_config_devel_process_config($config_list, $type, $extension, $directory) {
-  $config_path = drupal_get_path($type, $extension) . "/$directory";
+  $config_path = \Drupal::service('extension.path.resolver')->getPath($type, $extension) . "/$directory";
 
   // Ensure the directory always exists.
   if (!file_exists($config_path) && !\Drupal::service('file_system')->mkdir($config_path, NULL, TRUE)) {
@@ -192,7 +192,7 @@ function drush_config_devel_process_config($config_list, $type, $extension, $dir
  *   The directory we're exporting to.
  */
 function drush_config_devel_import_config($config_list, $type, $extension, $directory) {
-  $config_path = drupal_get_path($type, $extension) . "/$directory";
+  $config_path = \Drupal::service('extension.path.resolver')->getPath($type, $extension) . "/$directory";
   foreach ($config_list as $name) {
     $file_name = $config_path . '/' . $name . '.yml';
     drush_config_devel_import_one($file_name);
@@ -210,7 +210,7 @@ function drush_config_devel_import_config($config_list, $type, $extension, $dire
  *   An array containing install and optional config
  */
 function drush_config_devel_get_config($type, $extension) {
-  $filename = drupal_get_path($type, $extension) . '/' . $extension .'.info.yml';
+  $filename = \Drupal::service('extension.path.resolver')->getPath($type, $extension) . '/' . $extension .'.info.yml';
   $info = \Drupal::service('info_parser')->parse($filename);
 
   $config = array();

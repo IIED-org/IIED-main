@@ -9,7 +9,6 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ConfigManagerInterface;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\InstallStorage;
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Yaml\Exception\DumpException;
@@ -107,7 +106,7 @@ class ConfigDevelAutoExportSubscriber extends ConfigDevelSubscriberBase implemen
 
       // Let everyone else have a change to update the exported data.
       $event = new ConfigDevelSaveEvent($file_names, $data);
-      $this->eventDispatcher->dispatch(ConfigDevelEvents::SAVE, $event);
+      $this->eventDispatcher->dispatch($event, ConfigDevelEvents::SAVE);
       $data = $event->getData();
       $file_names = $event->getFileNames();
 
