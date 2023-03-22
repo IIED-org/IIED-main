@@ -40,6 +40,7 @@ path_list: |-
   /node/*/delete
   /user/*/edit*
   /user/*/cancel*
+  /taxonomy/term/*/layout
 role_toggle: 'include listed'
 role_list:
   anonymous: anonymous
@@ -72,6 +73,17 @@ conditions:
     id: context_all
     negate: null
     values: ''
+  user_status:
+    id: user_status
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    user_status:
+      viewing_profile: '0'
+      logged_viewing_profile: '0'
+      own_page_true: '0'
+      field_value: '0'
+    user_fields: uid
   'entity_bundle:block_content':
     id: 'entity_bundle:block_content'
     negate: false
@@ -134,14 +146,3 @@ conditions:
     id: request_domain
     negate: false
     domains: ''
-  user_status:
-    id: user_status
-    negate: false
-    context_mapping:
-      user: '@user.current_user_context:current_user'
-    user_status:
-      viewing_profile: '0'
-      logged_viewing_profile: '0'
-      own_page_true: '0'
-      field_value: '0'
-    user_fields: uid

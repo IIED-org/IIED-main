@@ -246,6 +246,15 @@ display:
       display_description: ''
       display_extenders: {  }
       path: admin/manage/lists
+      menu:
+        type: tab
+        title: Lists
+        description: ''
+        weight: 3
+        expanded: false
+        menu_name: admin
+        parent: 'admin_toolbar_tools.extra_links:views_ui.content_recent'
+        context: '0'
     cache_metadata:
       max-age: -1
       contexts:
@@ -1001,6 +1010,15 @@ display:
           tokenize: false
       display_extenders: {  }
       path: admin/manage/authors
+      menu:
+        type: tab
+        title: Authors
+        description: ''
+        weight: 1
+        expanded: false
+        menu_name: admin
+        parent: 'admin_toolbar_tools.extra_links:views_ui.content_recent'
+        context: '0'
     cache_metadata:
       max-age: 0
       contexts:
@@ -1152,6 +1170,15 @@ display:
           tokenize: false
       display_extenders: {  }
       path: admin/manage/organisations
+      menu:
+        type: tab
+        title: Organisations
+        description: ''
+        weight: 2
+        expanded: false
+        menu_name: admin
+        parent: 'admin_toolbar_tools.extra_links:views_ui.content_recent'
+        context: '0'
     cache_metadata:
       max-age: -1
       contexts:

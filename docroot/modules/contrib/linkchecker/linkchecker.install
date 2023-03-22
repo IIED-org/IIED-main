@@ -1,0 +1,71 @@
+<?php
+
+/**
+ * @file
+ * Installation file for Link Checker module.
+ */
+
+use Drupal\Core\Config\FileStorage;
+use Drupal\Core\Database\Database;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\user\Entity\User;
+
+/**
+ * Implements hook_install().
+ */
+function linkchecker_install() {
+  $linkchecker_default_impersonate_account = User::load(1);
+  \Drupal::configFactory()->getEditable('linkchecker.settings')->set(
+    'error.impersonate_account',
+    $linkchecker_default_impersonate_account->getAccountName()
+  )->save();
+}
+
+/**
+ * Implements hook_schema().
+ */
+function linkchecker_schema() {
+  $schema['linkchecker_index'] = [
+    'description' => 'Stores entities from which links where extracted.',
+    'fields' => [
+      'entity_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Entity ID.',
+      ],
+      'entity_type' => [
+        'type' => 'varchar',
+        'length' => EntityTypeInterface::ID_MAX_LENGTH,
+        'not null' => TRUE,
+        'description' => "Entity type.",
+      ],
+      'last_extracted_time' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Stores time when extraction from entity was executed.',
+      ],
+    ],
+    'primary key' => ['entity_id', 'entity_type'],
+  ];
+
+  return $schema;
+}
+
+/**
+ * Added new functionality to broken links view.
+ */
+function linkchecker_update_8001() {
+  $config_path = \Drupal::service('extension.path.resolver')->getPath('module', 'linkchecker') . '/config/optional';
+  $config_source = new FileStorage($config_path);
+  \Drupal::service('config.installer')->installOptionalConfig($config_source);
+}
+
+/**
+ * Update default last_check value for existing entities.
+ */
+function linkchecker_update_8002() {
+  Database::getConnection()->update('linkchecker_link')
+    ->fields(['last_check' => NULL])
+    ->condition('last_check', 0)
+    ->execute();
+}

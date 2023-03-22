@@ -1,0 +1,4 @@
+linkchecker.admin_settings_form_tab:
+  route_name: linkchecker.admin_settings_form
+  title: Settings
+  base_route: linkchecker.admin_settings_form

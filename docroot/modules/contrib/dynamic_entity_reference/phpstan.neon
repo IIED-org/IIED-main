@@ -1,0 +1,17 @@
+parameters:
+#  level: 0
+  reportUnmatchedIgnoredErrors: false
+  customRulesetUsed: true
+  checkMissingIterableValueType: false
+  fileExtensions:
+    - module
+    - theme
+    - profile
+    - install
+  bootstrapFiles:
+    - core/tests/bootstrap.php
+  # @todo remove this once diff supports D10.
+  excludePaths:
+    - *DynamicEntityReferenceFieldBuilder.php
+  ignoreErrors:
+    - '#Plugin definitions cannot be altered.#'

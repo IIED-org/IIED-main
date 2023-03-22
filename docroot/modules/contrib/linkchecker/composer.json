@@ -1,0 +1,35 @@
+{
+  "name": "drupal/linkchecker",
+  "description": "Periodically checks for broken links in node types, blocks and fields and reports the results.",
+  "type": "drupal-module",
+  "homepage": "https://www.drupal.org/project/linkchecker",
+  "authors": [
+    {
+      "name": "hass",
+      "homepage": "https://www.drupal.org/u/hass"
+    },
+    {
+      "name": "See other contributors",
+      "homepage":"https://www.drupal.org/node/243795/committers"
+    }
+  ],
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/linkchecker",
+    "source": "https://git.drupal.org/project/linkchecker.git"
+  },
+  "license": "GPL-2.0-or-later",
+  "require": {
+    "drupal/core": "^9.4 || ^10.0",
+    "drupal/dynamic_entity_reference": "^3.0 || ^4.0"
+  },
+  "require-dev": {
+     "drupal/redirect": "^1.8"
+  },
+  "extra": {
+    "drush": {
+      "services": {
+        "drush.services.yml": "^10 || ^11"
+      }
+    }
+  }
+}

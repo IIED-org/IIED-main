@@ -716,6 +716,15 @@ display:
     display_options:
       display_extenders: {  }
       path: admin/manage/add-list
+      menu:
+        type: tab
+        title: 'Manage lists'
+        description: ''
+        weight: 4
+        expanded: false
+        menu_name: admin
+        parent: 'admin_toolbar_tools.extra_links:views_ui.content_recent'
+        context: '0'
     cache_metadata:
       max-age: 0
       contexts:
