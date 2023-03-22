@@ -16,6 +16,13 @@ use Symfony\Component\HttpFoundation\Request;
 final class HooksTest extends AcquiaSearchTestBase {
 
   /**
+   * {@inheritdoc}
+   */
+  protected static $modules = [
+    'acquia_search_defaults',
+  ];
+
+  /**
    * Tests implementation of hook_entity_operation_alter().
    */
   public function testEntityOperationsAlter(): void {

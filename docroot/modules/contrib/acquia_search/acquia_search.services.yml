@@ -11,7 +11,7 @@ services:
       - { name: 'event_subscriber' }
   acquia_search.possible_cores.local_override:
     class: Drupal\acquia_search\EventSubscriber\PossibleCores\LocalOverride
-    arguments: ['@acquia_connector.subscription', '@config.factory', '@messenger', '@current_route_match']
+    arguments: ['@acquia_connector.subscription', '@config.factory']
     tags:
       - { name: 'event_subscriber' }
   acquia_search.possible_cores.acquia_hosting:

@@ -23,9 +23,7 @@ class ConfigDevelAutoExportSubscriberTest extends ConfigDevelTestBase {
       'uuid' => '836769f4-6791-402d-9046-cc06e20be87f',
     );
 
-    $config = $this->getMockBuilder('\Drupal\Core\Config\Config')
-      ->disableOriginalConstructor()
-      ->getMock();
+    $config = $this->createMock('\Drupal\Core\Config\Config');
     $config->expects($this->any())
       ->method('getName')
       ->will($this->returnValue($this->randomMachineName()));

@@ -174,6 +174,10 @@ class Subscription {
       return $this->subscriptionData;
     }
     $subscriptionData = $this->state->get('acquia_connector.subscription_data', []);
+    // Handle edge cases where acquia_connector.subscription_data is set wrong.
+    if (!is_array($subscriptionData)) {
+      $subscriptionData = [];
+    }
     if ($subscriptionData !== [] && $refresh !== TRUE) {
       // Ensure the legacy location of UUID is up-to-date.
       $subscriptionData['uuid'] = $this->settings->getApplicationUuid();

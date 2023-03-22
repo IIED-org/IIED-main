@@ -40,9 +40,11 @@
     color: var(--gin-color-primary);
   }
 }
+
 .gin--dark-mode .glb-list-item img {
   filter: invert(1);
 }
+
 .glb-list {
   margin-left: 0 !important;
   margin-right: 0 !important;
@@ -62,4 +64,16 @@
   }
 }
 
+.glb-list {
+  svg {
+    fill: #F3F4F6;
+  }
+  a {
+    text-decoration: none !important;
 
+    &:focus {
+      outline: solid 2px var(--gin-color-primary);
+      border-radius: $borderDefault;
+    }
+  }
+}

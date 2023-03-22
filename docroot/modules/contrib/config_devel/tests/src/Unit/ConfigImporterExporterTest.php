@@ -2,6 +2,15 @@
 
 namespace Drupal\Tests\config_devel\Unit;
 
+use Prophecy\PhpUnit\ProphecyTrait;
+use Drupal\Core\Config\StorageInterface;
+use Drupal\Core\ProxyClass\Lock\PersistentDatabaseLockBackend;
+use Drupal\Core\Config\TypedConfigManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\ProxyClass\Extension\ModuleInstaller;
+use Drupal\Core\Extension\ThemeHandlerInterface;
+use Drupal\Core\StringTranslation\TranslationManager;
+use Drupal\Core\Extension\ModuleExtensionList;
 use org\bovigo\vfs\vfsStream;
 use Drupal\Component\Serialization\Yaml;
 
@@ -13,6 +22,7 @@ use Drupal\config_devel\ConfigImporterExporter;
  */
 class ConfigImporterExporterTest extends ConfigDevelTestBase {
 
+  use ProphecyTrait;
   /**
    * Test ConfigImporterExporter::writeBackConfig().
    */
@@ -23,9 +33,7 @@ class ConfigImporterExporterTest extends ConfigDevelTestBase {
       'uuid' => '836769f4-6791-402d-9046-cc06e20be87f',
     );
 
-    $config = $this->getMockBuilder('\Drupal\Core\Config\Config')
-      ->disableOriginalConstructor()
-      ->getMock();
+    $config = $this->createMock('\Drupal\Core\Config\Config');
     $config->expects($this->any())
       ->method('getName')
       ->will($this->returnValue($this->randomMachineName()));
@@ -40,16 +48,16 @@ class ConfigImporterExporterTest extends ConfigDevelTestBase {
 
     $configDevelSubscriber = new ConfigImporterExporter(
       $this->configFactory,
-      $this->prophesize(\Drupal\Core\Config\StorageInterface::class)->reveal(),
+      $this->prophesize(StorageInterface::class)->reveal(),
       $this->configManager,
       $this->eventDispatcher,
-      $this->prophesize(\Drupal\Core\ProxyClass\Lock\PersistentDatabaseLockBackend::class)->reveal(),
-      $this->prophesize(\Drupal\Core\Config\TypedConfigManagerInterface::class)->reveal(),
-      $this->prophesize(\Drupal\Core\Extension\ModuleHandlerInterface::class)->reveal(),
-      $this->prophesize(\Drupal\Core\ProxyClass\Extension\ModuleInstaller::class)->reveal(),
-      $this->prophesize(\Drupal\Core\Extension\ThemeHandlerInterface::class)->reveal(),
-      $this->prophesize(\Drupal\Core\StringTranslation\TranslationManager::class)->reveal(),
-      $this->prophesize(\Drupal\Core\Extension\ModuleExtensionList::class)->reveal()
+      $this->prophesize(PersistentDatabaseLockBackend::class)->reveal(),
+      $this->prophesize(TypedConfigManagerInterface::class)->reveal(),
+      $this->prophesize(ModuleHandlerInterface::class)->reveal(),
+      $this->prophesize(ModuleInstaller::class)->reveal(),
+      $this->prophesize(ThemeHandlerInterface::class)->reveal(),
+      $this->prophesize(TranslationManager::class)->reveal(),
+      $this->prophesize(ModuleExtensionList::class)->reveal()
     );
 
     $configDevelSubscriber->writeBackConfig($config, $file_names);

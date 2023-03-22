@@ -1,12 +1,11 @@
 name: Taxonomy Menu
 type: module
 description: Embed a taxonomy tree into a menu
-core: 8.x
-core_version_requirement: '^8 || ^9'
+core_version_requirement: ^9.1 || ^10
 package: Menu
 configure: entity.taxonomy_menu.collection
 
-# Information added by Drupal.org packaging script on 2021-09-15
-version: '8.x-3.5'
+# Information added by Drupal.org packaging script on 2023-02-22
+version: '8.x-3.6'
 project: 'taxonomy_menu'
-datestamp: 1631710784
+datestamp: 1677065088

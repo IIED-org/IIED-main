@@ -11,6 +11,7 @@ use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\views\ViewExecutable;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
+use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
  * Implements hook_preprocess_form_element().
@@ -324,11 +325,9 @@ function gin_lb_preprocess_html(&$variables) {
  */
 function gin_lb_form_redirect_submit(&$form, FormStateInterface $form_state) {
   $config = \Drupal::config('gin_lb.settings');
-  if ($config->get('safe_behavior') === 'stay') {
+  if ($config->get('save_behavior') === 'stay') {
     $form_state->setRedirectUrl(
-      Url::fromUri(
-        'base:' . Drupal::service('path.current')->getPath()
-      )
+      Url::fromRoute('<current>')
     );
   }
 }
@@ -344,6 +343,11 @@ function gin_lb_form_alter(&$form, FormStateInterface $form_state, $form_id) {
     $form['#after_build'][] = 'gin_lb_after_build';
     $form['#gin_lb_form'] = TRUE;
     $form['#attributes']['class'][] = 'glb-form';
+
+    if (\Drupal::config('gin_lb.settings')->get('hide_discard_revert_buttons')) {
+      $form['actions']['discard_changes']['#access'] = FALSE;
+      $form['actions']['revert']['#access'] = FALSE;
+    }
   }
 
   if (strpos($form_id, 'layout_builder_form') !== FALSE) {
@@ -461,6 +465,9 @@ function gin_lb_overwritten_themes() {
     'form/text-format-wrapper',
     'form/fieldset',
     'form/textarea',
+    'content-edit/file-managed-file',
+    'content-edit/file-widget-multiple',
+    'content-edit/image-widget',
     'links',
     'media-library/container--media-library-content',
     'media-library/container--media-library-widget-selection',
@@ -847,5 +854,39 @@ function gin_lb_css_alter(&$css, AttachedAssetsInterface $assets) {
     unset($css['core/misc/dialog/off-canvas.form.css']);
     unset($css['core/misc/dialog/off-canvas.button.css']);
     unset($css['core/assets/vendor/jquery.ui/themes/base/theme.css']);
+
+    // Drupal 10.
+    unset($css['core/misc/dialog/off-canvas/css/reset.css']);
+    unset($css['core/misc/dialog/off-canvas/css/wrapper.css']);
+    unset($css['core/misc/dialog/off-canvas/css/titlebar.css']);
+    unset($css['core/misc/dialog/off-canvas/css/dropbutton.css']);
+    unset($css['core/misc/dialog/off-canvas/css/messages.css']);
+    unset($css['core/misc/dialog/off-canvas/css/details.css']);
+    unset($css['core/misc/dialog/off-canvas/css/form.css']);
+    unset($css['core/misc/dialog/off-canvas/css/button.css']);
+    unset($css['core/misc/dialog/off-canvas/css/base.css']);
+    unset($css['core/misc/dialog/off-canvas/css/table.css']);
   }
+}
+
+/**
+ * Implements hook_help().
+ */
+function gin_lb_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.gin_lb':
+      $text = file_get_contents(dirname(__FILE__) . '/README.md');
+      if (!\Drupal::moduleHandler()->moduleExists('markdown')) {
+        return '<pre>' . $text . '</pre>';
+      }
+      else {
+        // Use the Markdown filter to render the README.
+        $filter_manager = \Drupal::service('plugin.manager.filter');
+        $settings = \Drupal::configFactory()->get('markdown.settings')->getRawData();
+        $config = ['settings' => $settings];
+        $filter = $filter_manager->createInstance('markdown', $config);
+        return $filter->process($text, 'en');
+      }
+  }
+  return NULL;
 }

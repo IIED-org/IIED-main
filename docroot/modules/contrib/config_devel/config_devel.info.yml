@@ -3,13 +3,12 @@ type: module
 description: 'Helps developers work with configuration.'
 package: Configuration
 # version: VERSION
-core: 8.x
-core_version_requirement: '^8 || ^9'
+core_version_requirement: ^9.3 || ^10
 configure: config_devel.settings
 dependencies:
   - drupal:config
 
-# Information added by Drupal.org packaging script on 2020-12-30
-version: '8.x-1.8'
+# Information added by Drupal.org packaging script on 2023-03-08
+version: '8.x-1.9'
 project: 'config_devel'
-datestamp: 1609324319
+datestamp: 1678264816

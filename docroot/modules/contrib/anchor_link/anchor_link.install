@@ -18,7 +18,7 @@ function anchor_link_requirements($phase) {
 
     // If library is not found, then look in the current profile libraries path.
     if (!$library_found) {
-      $profile_path = drupal_get_path('profile', \Drupal::installProfile());
+      $profile_path = \Drupal::service('extension.list.profile')->getPath(\Drupal::installProfile());
       $profile_path .= '/libraries/link';
       // Is the library found in the current profile libraries path.
       $library_found = file_exists(DRUPAL_ROOT . $profile_path);

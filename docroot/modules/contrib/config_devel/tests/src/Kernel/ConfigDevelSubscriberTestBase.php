@@ -10,7 +10,7 @@ abstract class ConfigDevelSubscriberTestBase extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = array('config_devel');
+  protected static $modules = array('config_devel');
 
   /**
    * Name of the config object.

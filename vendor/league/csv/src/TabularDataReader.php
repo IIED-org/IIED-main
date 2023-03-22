@@ -22,6 +22,8 @@ use IteratorAggregate;
  *
  * @method Iterator fetchColumnByName(string $name)  returns a column from its name
  * @method Iterator fetchColumnByOffset(int $offset) returns a column from its offset
+ * @method array    first()                          returns the first record from the tabular data.
+ * @method array    nth(int $nth_record)             returns the nth record from the tabular data.
  */
 interface TabularDataReader extends Countable, IteratorAggregate
 {
@@ -42,13 +44,15 @@ interface TabularDataReader extends Countable, IteratorAggregate
      * If the CSV document is inconsistent. Missing record fields are
      * filled with null values while extra record fields are strip from
      * the returned object.
+     *
+     * @return Iterator<array-key, array<string|null>>
      */
     public function getIterator(): Iterator;
 
     /**
      * Returns the header associated with the tabular data.
      *
-     * The header must contains unique string or is an empty array
+     * The header must contain unique string or to be an empty array
      * if no header was specified.
      *
      * @return array<string>
@@ -68,17 +72,23 @@ interface TabularDataReader extends Countable, IteratorAggregate
      * the returned object.
      *
      * @param array<string> $header an optional header to use instead of the CSV document header
+     *
+     * @return Iterator<array-key,array<string|null>>
      */
     public function getRecords(array $header = []): Iterator;
 
     /**
+     * DEPRECATION WARNING! This class will be removed in the next major point release.
+     *
+     * @deprecated since version 9.9.0
+     *
      * Returns the nth record from the tabular data.
      *
-     * By default if no index is provided the first record of the tabular data is returned
+     * By default, if no index is provided the first record of the tabular data is returned
      *
      * @param int $nth_record the tabular data record offset
      *
-     * @throws UnableToProcessCsv if argument is lesser than 0
+     * @throws UnableToProcessCsv if argument is less than 0
      */
     public function fetchOne(int $nth_record = 0): array;
 
@@ -92,7 +102,7 @@ interface TabularDataReader extends Countable, IteratorAggregate
      *
      * Returns a single column from the next record of the tabular data.
      *
-     * By default if no value is supplied the first column is fetch
+     * By default, if no value is supplied the first column is fetched
      *
      * @param string|int $index CSV column index
      *
@@ -104,7 +114,7 @@ interface TabularDataReader extends Countable, IteratorAggregate
      * Returns the next key-value pairs from the tabular data (first
      * column is the key, second column is the value).
      *
-     * By default if no column index is provided:
+     * By default, if no column index is provided:
      * - the first column is used to provide the keys
      * - the second column is used to provide the value
      *

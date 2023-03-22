@@ -34,7 +34,7 @@ class FieldViewBuilder {
    * @param string $field_name
    *   The field name.
    * @param string|array $view_mode
-   *   (optional) The view mode that should be used to render the field.
+   *   (optional) The view mode or display options.
    * @param string $langcode
    *   (optional) Language code to load translation.
    * @param bool $check_access
@@ -42,6 +42,8 @@ class FieldViewBuilder {
    *
    * @return array
    *   A render array for the field.
+   *
+   * @see \Drupal\Core\Entity\EntityViewBuilderInterface::viewField()
    */
   public function build(
     EntityInterface $entity,

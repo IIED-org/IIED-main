@@ -6,6 +6,7 @@ namespace Drupal\acquia_connector\Controller;
 
 use Drupal\acquia_connector\AuthService;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\RendererInterface;
@@ -60,6 +61,13 @@ final class AuthController implements ContainerInjectionInterface {
   private LoggerInterface $logger;
 
   /**
+   * Module List for getting the module's path.
+   *
+   * @var \Drupal\Core\Extension\ModuleExtensionList
+   */
+  private ModuleExtensionList $moduleList;
+
+  /**
    * Construct a new AuthController object.
    *
    * @param \Drupal\Core\Render\RendererInterface $renderer
@@ -72,13 +80,16 @@ final class AuthController implements ContainerInjectionInterface {
    *   The messenger.
    * @param \Psr\Log\LoggerInterface $logger
    *   The logger.
+   * @param \Drupal\Core\Extension\ModuleExtensionList $module_list
+   *   Module Extension List.
    */
-  public function __construct(RendererInterface $renderer, RequestStack $request_stack, AuthService $auth_service, MessengerInterface $messenger, LoggerInterface $logger) {
+  public function __construct(RendererInterface $renderer, RequestStack $request_stack, AuthService $auth_service, MessengerInterface $messenger, LoggerInterface $logger, ModuleExtensionList $module_list) {
     $this->renderer = $renderer;
     $this->requestStack = $request_stack;
     $this->authService = $auth_service;
     $this->messenger = $messenger;
     $this->logger = $logger;
+    $this->moduleList = $module_list;
   }
 
   /**
@@ -90,7 +101,8 @@ final class AuthController implements ContainerInjectionInterface {
       $container->get('request_stack'),
       $container->get('acquia_connector.auth_service'),
       $container->get('messenger'),
-      $container->get('acquia_connector.logger_channel')
+      $container->get('acquia_connector.logger_channel'),
+      $container->get('extension.list.module')
     );
     $instance->setStringTranslation($container->get('string_translation'));
     return $instance;
@@ -109,6 +121,9 @@ final class AuthController implements ContainerInjectionInterface {
         'library' => [
           'acquia_connector/acquia_connector.form',
         ],
+      ],
+      '#attributes' => [
+        'path' => $this->moduleList->getPath('acquia_connector'),
       ],
       'actions' => [
         '#type' => 'actions',

@@ -269,14 +269,14 @@ final class TwigTweakTest extends BrowserTestBase {
     $url = Url::fromUserInput('/node/1/edit', ['absolute' => TRUE]);
     $link = Link::fromTextAndUrl('Edit', $url)->toString();
     $xpath = '//div[@class = "tt-link"]';
-    self::assertEquals($link, $this->xpath($xpath)[0]->getHtml());
+    self::assertSame((string) $link, $this->xpath($xpath)[0]->getHtml());
 
     // -- Link with HTML.
     $text = Markup::create('<b>Edit</b>');
     $url = Url::fromUserInput('/node/1/edit', ['absolute' => TRUE]);
     $link = Link::fromTextAndUrl($text, $url)->toString();
     $xpath = '//div[@class = "tt-link-html"]';
-    self::assertEquals($link, $this->xpath($xpath)[0]->getHtml());
+    self::assertSame((string) $link, $this->xpath($xpath)[0]->getHtml());
 
     // -- Status messages.
     $xpath = '//div[@class = "tt-messages"]//div[contains(@class, "messages--status") and contains(., "Hello world!")]';

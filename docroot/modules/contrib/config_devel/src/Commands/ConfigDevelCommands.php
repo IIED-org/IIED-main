@@ -287,7 +287,7 @@ class ConfigDevelCommands extends DrushCommands {
    *   An array containing install and optional config.
    */
   protected function getExtensionConfig($type, $extension) {
-    $filename = drupal_get_path($type, $extension) . '/' . $extension .'.info.yml';
+    $filename = \Drupal::service('extension.path.resolver')->getPath($type, $extension) . '/' . $extension .'.info.yml';
     $info = $this->infoParser->parse($filename);
 
     $config = [];
@@ -331,7 +331,7 @@ class ConfigDevelCommands extends DrushCommands {
    *   created.
    */
   protected function exportConfig($config_list, $type, $extension, $directory) {
-    $config_path = drupal_get_path($type, $extension) . "/$directory";
+    $config_path = \Drupal::service('extension.path.resolver')->getPath($type, $extension) . "/$directory";
     // Ensure the directory always exists.
     if (!file_exists($config_path) && !$this->fileSystem->mkdir($config_path, NULL, TRUE)) {
       throw new \Exception(sprintf('The %s directory could not be created', $config_path));
@@ -372,7 +372,7 @@ class ConfigDevelCommands extends DrushCommands {
    *   or \Drupal\Core\Config\InstallStorage\InstallStorage::CONFIG_OPTIONAL_DIRECTORY.
    */
   protected function importConfig($config_list, $type, $extension, $directory) {
-    $config_path = drupal_get_path($type, $extension) . "/$directory";
+    $config_path = \Drupal::service('extension.path.resolver')->getPath($type, $extension) . "/$directory";
     foreach ($config_list as $name) {
       $file_name = $config_path . '/' . $name . '.yml';
       $this->importSingle($file_name);

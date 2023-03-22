@@ -96,7 +96,7 @@ class TaxonomyMenuHelper {
 
     // Load relevant taxonomy menus.
     $tax_menus = $this->getTermMenusByVocabulary($term->bundle());
-    /* @var $menu \Drupal\taxonomy_menu\TaxonomyMenuInterface */
+    /** @var \Drupal\taxonomy_menu\TaxonomyMenuInterface $menu */
     foreach ($tax_menus as $menu) {
 
       $links = $menu->getLinks([], TRUE);
@@ -135,7 +135,7 @@ class TaxonomyMenuHelper {
   public function removeTaxonomyMenuEntries(TermInterface $term, $rebuild_all = TRUE) {
     // Load relevant taxonomy menus.
     $tax_menus = $this->getTermMenusByVocabulary($term->bundle());
-    /* @var $menu \Drupal\taxonomy_menu\TaxonomyMenuInterface */
+    /** @var \Drupal\taxonomy_menu\TaxonomyMenuInterface $menu */
     foreach ($tax_menus as $menu) {
       // Remove all links.
       if ($rebuild_all) {

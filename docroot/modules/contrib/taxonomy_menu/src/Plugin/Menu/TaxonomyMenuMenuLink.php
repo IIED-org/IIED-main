@@ -3,6 +3,7 @@
 namespace Drupal\taxonomy_menu\Plugin\Menu;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Menu\MenuLinkBase;
 use Drupal\Core\Menu\StaticMenuLinkOverridesInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -47,6 +48,13 @@ class TaxonomyMenuMenuLink extends MenuLinkBase implements ContainerFactoryPlugi
   protected $staticOverride;
 
   /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * Constructs a new TaxonomyMenuMenuLink.
    *
    * @param array $configuration
@@ -59,19 +67,23 @@ class TaxonomyMenuMenuLink extends MenuLinkBase implements ContainerFactoryPlugi
    *   The entity type manager.
    * @param \Drupal\Core\Menu\StaticMenuLinkOverridesInterface $static_override
    *   The static menu override.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
    */
   public function __construct(
     array $configuration,
     $plugin_id,
     $plugin_definition,
     EntityTypeManagerInterface $entity_type_manager,
-    StaticMenuLinkOverridesInterface $static_override
+    StaticMenuLinkOverridesInterface $static_override,
+    LanguageManagerInterface $language_manager
   ) {
     $this->configuration = $configuration;
     $this->pluginId = $plugin_id;
     $this->pluginDefinition = $plugin_definition;
     $this->entityTypeManager = $entity_type_manager;
     $this->staticOverride = $static_override;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -83,7 +95,8 @@ class TaxonomyMenuMenuLink extends MenuLinkBase implements ContainerFactoryPlugi
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
-      $container->get('menu_link.static.overrides')
+      $container->get('menu_link.static.overrides'),
+      $container->get('language_manager')
     );
   }
 
@@ -95,11 +108,12 @@ class TaxonomyMenuMenuLink extends MenuLinkBase implements ContainerFactoryPlugi
     $link = $this->entityTypeManager->getStorage('taxonomy_term')
       ->load($this->pluginDefinition['metadata']['taxonomy_term_id']);
 
-    $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $language = $this->languageManager->getCurrentLanguage()->getId();
     if (!empty($link) && $link->hasTranslation($language)) {
       $translation = $link->getTranslation($language);
       return $translation->label();
-    } else if ($link) {
+    }
+    elseif ($link) {
       return $link->label();
     }
 
@@ -118,7 +132,7 @@ class TaxonomyMenuMenuLink extends MenuLinkBase implements ContainerFactoryPlugi
     $taxonomy_menu = $this->entityTypeManager->getStorage('taxonomy_menu')->load($this->pluginDefinition['metadata']['taxonomy_menu_id']);
     $description_field_name = !empty($taxonomy_menu) ? $taxonomy_menu->getDescriptionFieldName() : '';
 
-    $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $language = $this->languageManager->getCurrentLanguage()->getId();
 
     if (!empty($link) && $link->hasTranslation($language)) {
       $translation = $link->getTranslation($language);
@@ -168,4 +182,5 @@ class TaxonomyMenuMenuLink extends MenuLinkBase implements ContainerFactoryPlugi
     $override = $this->staticOverride->loadOverride($this->getPluginId());
     return $override !== NULL && !empty($override);
   }
+
 }

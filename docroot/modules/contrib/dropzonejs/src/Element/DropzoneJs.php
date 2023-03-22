@@ -156,6 +156,8 @@ class DropzoneJs extends FormElement {
       array_unshift($element['#attached']['library'], 'dropzonejs/exif-js');
     }
 
+    $element['#attached']['library'][] = 'dropzonejs/widget';
+
     static::setAttributes($element, ['dropzone-enable']);
     return $element;
   }

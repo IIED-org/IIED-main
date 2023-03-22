@@ -10,12 +10,13 @@ use Drupal\Tests\BrowserTestBase;
  * @group taxonomy_menu
  */
 class TaxonomyMenuOperationsTest extends BrowserTestBase {
+
   /**
    * List of modules.
    *
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'taxonomy_menu', 'system', 'menu_ui', 'taxonomy', 'dblog',
   ];
 
@@ -27,11 +28,14 @@ class TaxonomyMenuOperationsTest extends BrowserTestBase {
   /**
    * Set up for all tests.
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     // Create user with permission to create policy.
-    $user1 = $this->drupalCreateUser(['administer site configuration', 'administer taxonomy']);
+    $user1 = $this->drupalCreateUser([
+      'administer site configuration',
+      'administer taxonomy',
+    ]);
     $this->drupalLogin($user1);
 
     // Create a testing taxonomy vocabulary.
@@ -41,7 +45,7 @@ class TaxonomyMenuOperationsTest extends BrowserTestBase {
       'vid' => 'test_tax_vocab',
       'name' => 'Test',
     ];
-    $this->drupalPostForm(NULL, $edit, t('Save'));
+    $this->submitForm($edit, 'Save');
 
     // Create logged in user.
     $perms = [
@@ -57,20 +61,20 @@ class TaxonomyMenuOperationsTest extends BrowserTestBase {
     $edit = [
       'name[0][value]' => 'test term 1',
     ];
-    $this->drupalPostForm(NULL, $edit, t('Save'));
+    $this->submitForm($edit, 'Save');
 
     $this->drupalGet('admin/structure/taxonomy/manage/test_tax_vocab/add');
     $edit = [
       'name[0][value]' => 'test term 1-A',
       'parent[]' => '1',
     ];
-    $this->drupalPostForm(NULL, $edit, t('Save'));
+    $this->submitForm($edit, 'Save');
 
     $this->drupalGet('admin/structure/taxonomy/manage/test_tax_vocab/add');
     $edit = [
       'name[0][value]' => 'test term 2',
     ];
-    $this->drupalPostForm(NULL, $edit, t('Save'));
+    $this->submitForm($edit, 'Save');
 
     // Create a testing menu.
     $this->drupalGet('admin/structure/menu/add');
@@ -78,7 +82,7 @@ class TaxonomyMenuOperationsTest extends BrowserTestBase {
       'id' => 'test-menu',
       'label' => 'Test',
     ];
-    $this->drupalPostForm(NULL, $edit, t('Save'));
+    $this->submitForm($edit, 'Save');
 
     // Create new taxonomy menu.
     $this->drupalGet('admin/structure/taxonomy_menu/add');
@@ -91,7 +95,7 @@ class TaxonomyMenuOperationsTest extends BrowserTestBase {
       'depth' => '1',
       'menu_parent' => 'test-menu:',
     ];
-    $this->drupalPostForm(NULL, $edit, t('Save'));
+    $this->submitForm($edit, 'Save');
   }
 
   /**
@@ -101,24 +105,25 @@ class TaxonomyMenuOperationsTest extends BrowserTestBase {
     // Check menu for taxonomy-based menu items keyed 1, 2, and 3.
     $this->drupalGet('admin/structure/menu/manage/test-menu');
 
-    // We should expect to see enabled field for taxonomy term 1
+    // We should expect to see enabled field for taxonomy term 1.
     $this->assertSession()->fieldExists(
       'links[menu_plugin_id:taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.1][enabled]'
     );
 
-    // We should expect to see enabled field for taxonomy term 2
+    // We should expect to see enabled field for taxonomy term 2.
     $this->assertSession()->fieldExists(
       'links[menu_plugin_id:taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.2][enabled]'
     );
 
-    // We should expect to see enabled field for taxonomy term 3
+    // We should expect to see enabled field for taxonomy term 3.
     $this->assertSession()->fieldExists(
       'links[menu_plugin_id:taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.3][enabled]'
     );
 
     // Check 2 is a parent of 1.
     $this->drupalGet('admin/structure/menu/link/taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.2/edit');
-    // We should expect to see taxonomy term 2 have a parent of taxonomy term 1'
+    // We should expect to see taxonomy term 2 have a parent
+    // of taxonomy term 1'.
     $this->assertSession()->fieldExists(
       'menu_parent'
     );
@@ -138,11 +143,11 @@ class TaxonomyMenuOperationsTest extends BrowserTestBase {
     $edit = [
       'name[0][value]' => 'test term 3',
     ];
-    $this->drupalPostForm(NULL, $edit, t('Save'));
+    $this->submitForm($edit, 'Save');
 
     $this->drupalGet('admin/structure/menu/manage/test-menu');
     // Check for it within the menu.
-    // We should expect to see enabled field for taxonomy term 4
+    // We should expect to see enabled field for taxonomy term 4.
     $this->assertSession()->fieldExists(
       'links[menu_plugin_id:taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.3][enabled]'
     );
@@ -155,10 +160,10 @@ class TaxonomyMenuOperationsTest extends BrowserTestBase {
     // Delete a term.
     $this->drupalGet('taxonomy/term/3/delete');
     $edit = [];
-    $this->drupalPostForm(NULL, $edit, t('Delete'));
+    $this->submitForm($edit, 'Delete');
 
     // Check for it within the menu.
-    // We should not expect to see enabled field for taxonomy term 3
+    // We should not expect to see enabled field for taxonomy term 3.
     $this->assertSession()->fieldNotExists(
       'enabled'
     );
@@ -169,7 +174,7 @@ class TaxonomyMenuOperationsTest extends BrowserTestBase {
    */
   public function testTaxMenuLinkExpanded() {
     $this->drupalGet('admin/structure/menu/link/taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.1/edit');
-    // We should expect to see expanded value for menu based on taxonomy term 1
+    // We should expect to see expanded value for menu based on taxonomy term 1.
     $this->assertSession()->fieldValueEquals(
       'expanded',
       1

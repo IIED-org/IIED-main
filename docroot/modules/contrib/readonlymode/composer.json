@@ -1,0 +1,39 @@
+{
+  "name": "drupal/readonlymode",
+  "type": "drupal-module",
+  "description": "Read Only Mode provides an alternate to the built in Maintenance Mode in Drupal.",
+  "keywords": ["Drupal"],
+  "authors": [
+    {
+      "name": "Sharique Farooqui",
+      "email": "safknw@gmail.com",
+      "homepage": "https://www.drupal.org/u/sharique",
+      "role": "Maintainer"
+    },
+    {
+      "name": "Fabian Bircher",
+      "email": "opensource@fabianbircher.com",
+      "homepage": "https://www.drupal.org/u/bircher",
+      "role": "Maintainer"
+    }
+  ],
+  "homepage": "https://www.drupal.org/project/readonlymode",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/readonlymode",
+    "source": "https://git.drupalcode.org/project/readonlymode"
+  },
+  "license": "GPL-2.0-or-later",
+  "conflict": {
+    "drush/drush": "<10"
+  },
+  "extra": {
+    "drush": {
+      "services": {
+        "drush.services.yml": "^10"
+      }
+    }
+  },
+  "require": {
+    "drupal/core": "^8 || ^9 || ^10"
+  }
+}

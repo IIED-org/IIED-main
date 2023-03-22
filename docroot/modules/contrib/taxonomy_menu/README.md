@@ -1,52 +1,42 @@
-CONTENTS OF THIS FILE
----------------------
+# Taxonomy Menu
 
- * Introduction
- * Requirements
- * Installation
- * Configuration
- * Maintainers
+Transforms your taxonomy vocabularies into menus with ease!
 
+For a full description of the module, visit the
+[project page](https://www.drupal.org/project/taxonomy_menu).
 
-INTRODUCTION
-------------
-
-The Taxonomy Menu transforms your taxonomy vocabularies into menus.
-
- * For a full description of the module visit:
-   https://www.drupal.org/project/taxonomy_menu
-
- * To submit bug reports and feature suggestions, or to track changes visit:
-   https://www.drupal.org/project/issues/taxonomy_menu
-
- * If you prefer GitHub or GitLab, feel free to send a pull/merge request:
-   https://github.com/unn/taxonomy_menu https://gitlab.com/dstol/taxonomy_menu
+Submit bug reports and feature suggestions, or track changes in the
+[issue queue](https://www.drupal.org/project/issues/taxonomy_menu).
 
 
-REQUIREMENTS
-------------
+## Table of contents
+
+- Requirements
+- Installation
+- Configuration
+- Maintainers
+
+
+## Requirements
 
 This module requires no modules outside of Drupal core.
 
 
-INSTALLATION
-------------
+## Installation
 
- * Install the Taxonomy Menu module as you would normally install a contributed
-   Drupal module. Visit https://www.drupal.org/node/1897420 for further
-   information.
+Install as you would normally install a contributed Drupal module. For further
+information, see
+[Installing Drupal Modules](https://www.drupal.org/docs/extending-drupal/installing-drupal-modules).
 
 
-CONFIGURATION
--------------
+## Configuration
 
-    1. Navigate to Administration > Extend and enable the module.
-    2. Navigate to Administration > Structure > Taxonomy menu to add a new
-       taxonomy menu.
-    3. From the appropriate dropdown, assign a vocabulary.
-    4. From the appropriate dropdown, assign a menu.
-    5. Save.
-    6. Clear caches.
+1. Navigate to Administration > Extend and enable the module.
+2. Navigate to Administration > Structure > Taxonomy menu to add a new taxonomy menu.
+3. From the appropriate dropdown, assign a vocabulary.
+4. From the appropriate dropdown, assign a menu.
+5. Save.
+6. Clear caches.
 
 Modify the menu:
 Please note - once the taxonomy menu is created, the menu items are decoupled
@@ -66,17 +56,16 @@ Menu items are heavily cached. Upon making changes to menus and/or taxonomy,
 please clear the cache before submitting an issue.
 
 
-MAINTAINERS
------------
+## Maintainers
 
- * Adam Bergstein (nerdstein) - https://www.drupal.org/u/nerdstein
- * Andrey Troeglazov (andrey.troeglazov) -
-   https://www.drupal.org/u/andreytroeglazov
- * David Stoline (dstol) - https://www.drupal.org/u/dstol
- * Nick Wilde (NickWilde) - https://www.drupal.org/u/nickwilde
+- David Stoline - [dstol](https://www.drupal.org/u/dstol)
+- Andrey Troeglazov - [andrey.troeglazov](https://www.drupal.org/u/andreytroeglazov)
+- Ashraf Abed - [ashrafabed](https://www.drupal.org/u/ashrafabed)
+- Benni Mack - [bmack](https://www.drupal.org/u/bmack)
+- Damien McKenna - [DamienMcKenna](https://www.drupal.org/u/damienmckenna)
+- Adam Bergstein - [nerdstein](https://www.drupal.org/u/nerdstein)
+- Nick Dickinson-Wilde - [NickDickinsonWilde](https://www.drupal.org/u/nickdickinsonwilde)
+- Russel Anthony - [rwanth](https://www.drupal.org/u/rwanth)
 
-Supporting organization
-
- * Hook 42 - https://www.drupal.org/hook-42
-
-Development proudly supported through a PhpStorm license from JetBrains.
+Supporting organization:
+- [Hook 42](https://www.drupal.org/hook-42)

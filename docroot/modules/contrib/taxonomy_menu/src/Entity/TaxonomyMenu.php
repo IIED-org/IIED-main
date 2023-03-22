@@ -145,7 +145,7 @@ class TaxonomyMenu extends ConfigEntityBase implements TaxonomyMenuInterface {
    *   True or false.
    */
   public function useTermWeightOrder() {
-    return isset($this->use_term_weight_order) ? $this->use_term_weight_order : TRUE;
+    return $this->use_term_weight_order ?? TRUE;
   }
 
   /**
@@ -196,7 +196,7 @@ class TaxonomyMenu extends ConfigEntityBase implements TaxonomyMenuInterface {
    * {@inheritdoc}
    */
   public function getLinks(array $base_plugin_definition = [], $include_base_plugin_id = FALSE) {
-    /* @var $termStorage \Drupal\taxonomy\TermStorageInterface */
+    /** @var \Drupal\taxonomy\TermStorageInterface $termStorage */
     $termStorage = $this->entityTypeManager()->getStorage('taxonomy_term');
     // Load taxonomy terms for tax menu vocab.
     $terms = $termStorage->loadTree($this->getVocabulary(), 0, $this->getDepth() + 1);
@@ -256,10 +256,10 @@ class TaxonomyMenu extends ConfigEntityBase implements TaxonomyMenuInterface {
     $menu_id = $this->getMenu();
 
     // Determine parent link.
-    // TODO:
-    // Evaluate use case of multiple parents (should we make many menu items?)
+    // @todo Evaluate use case of multiple parents
+    // (should we make many menu items?)
     $menu_parent_id = NULL;
-    /* @var $termStorage \Drupal\taxonomy\TermStorageInterface */
+    /** @var \Drupal\taxonomy\TermStorageInterface $termStorage */
     $termStorage = $this->entityTypeManager()->getStorage('taxonomy_term');
     $parents = $termStorage->loadParents($term_id);
     $parents = array_values($parents);
@@ -274,7 +274,7 @@ class TaxonomyMenu extends ConfigEntityBase implements TaxonomyMenuInterface {
       $menu_parent_id = str_replace($this->getMenu() . ':', '', $this->getMenuParent());
     }
 
-    // TODO: Consider implementing a forced weight based on taxonomy tree.
+    // @todo Consider implementing a forced weight based on taxonomy tree.
     // Generate link.
     $arguments = ['taxonomy_term' => $term_id];
 

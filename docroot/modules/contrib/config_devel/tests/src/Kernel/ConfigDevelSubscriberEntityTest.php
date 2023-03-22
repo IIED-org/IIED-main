@@ -12,7 +12,7 @@ class ConfigDevelSubscriberEntityTest extends ConfigDevelSubscriberTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = array('config_test');
+  protected static $modules = array('config_test');
 
   /**
    * {@inheritdoc}
@@ -24,9 +24,9 @@ class ConfigDevelSubscriberEntityTest extends ConfigDevelSubscriberTestBase {
    */
   protected function doAssert(array $data, array $exported_data) {
     $entity = \Drupal::entityTypeManager()->getStorage('config_test')->load('test');
-    $this->assertIdentical($data['label'], $entity->get('label'));
-    $this->assertIdentical($exported_data['label'], $data['label']);
-    $this->assertIdentical($exported_data['id'], 'test');
+    $this->assertSame($data['label'], $entity->get('label'));
+    $this->assertSame($exported_data['label'], $data['label']);
+    $this->assertSame($exported_data['id'], 'test');
     $this->assertFalse(isset($exported_data['uuid']));
   }
 }

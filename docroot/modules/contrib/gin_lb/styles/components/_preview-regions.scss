@@ -25,12 +25,10 @@
       position: absolute;
       color: #ffffff;
       display: block;
-      top: 0px;
-      left: -19px;
+      top: -19px;
+      right: 0;
       z-index: 1;
       background: var(--gin-border-color-form-element);
-      transform: rotate(-90deg) translateX(-100%);
-      transform-origin: top left;
       height: 20px;
     }
   }

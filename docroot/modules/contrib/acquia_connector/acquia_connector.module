@@ -73,21 +73,12 @@ function acquia_connector_toolbar() {
   if ($subscription->isActive()) {
     $subscription_data = $subscription->getSubscription();
     if (isset($subscription_data['active']) && $subscription_data['active'] !== FALSE) {
-      // Throw gratis information if subscription is expired.
-      if (isset($subscription_data['gratis']) && $subscription_data['gratis'] === TRUE) {
-        $link['#title'] = t('Renew subscription (expired @date)', [
-          '@date' => \Drupal::service('date.formatter')->format(strtotime($subscription_data['expiration_date']['value']), 'custom', 'Y/n/j'),
-        ]);
-        $link['#attributes']['class'][] = 'acquia-unknown-subscription';
-      }
-      else {
-        $link['#title'] = isset($subscription_data['expiration_date']['value']) ? t('Subscription active (expires @date)', [
-          '@date' => \Drupal::service('date.formatter')->format(strtotime($subscription_data['expiration_date']['value']), 'custom', 'Y/n/j'),
-        ]) : t('Subscription active');
-        $link['#attributes']['class'][] = 'acquia-active-subscription';
-      }
-      $link['#url'] = Url::fromUri('https://cloud.acquia.com/app/develop/applications/' . $subscription->getSettings()->getApplicationUuid());
+      $link['#title'] = isset($subscription_data['expiration_date']['value']) ? t('Subscription active (expires @date)', [
+        '@date' => \Drupal::service('date.formatter')->format(strtotime($subscription_data['expiration_date']['value']), 'custom', 'Y/n/j'),
+      ]) : t('Subscription active');
+      $link['#attributes']['class'][] = 'acquia-active-subscription';
     }
+    $link['#url'] = Url::fromUri('https://cloud.acquia.com/app/develop/applications/' . $subscription->getSettings()->getApplicationUuid());
   }
 
   if (empty($link['#url'])) {

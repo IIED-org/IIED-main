@@ -44,6 +44,7 @@ function dropzonejs_theme() {
  *   - element: A render element representing the file.
  */
 function template_preprocess_dropzonejs(array &$variables) {
+  $translation = \Drupal::translation();
   $element = $variables['element'];
 
   $variables['attributes'] = [];
@@ -53,10 +54,14 @@ function template_preprocess_dropzonejs(array &$variables) {
   if (!empty($element['#attributes']['class'])) {
     $variables['attributes']['class'] = (array) $element['#attributes']['class'];
   }
+  $cardinality = 0;
+  if (isset($element['#max_files'])) {
+    $cardinality = $element['#max_files'];
+  }
 
   $variables['dropzone_description'] = $element['#dropzone_description'];
   $variables['or_text'] = t('or');
-  $variables['select_files_button_text'] = t('Select files');
+  $variables['select_files_button_text'] = $translation->formatPlural($cardinality, 'Select file', 'Select files');
   $variables['uploaded_files'] = $element['uploaded_files'];
 }
 

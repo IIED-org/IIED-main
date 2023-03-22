@@ -16,7 +16,7 @@ function anchor_link_help($route_name, RouteMatchInterface $route_match) {
     case 'help.page.anchor_link':
       $output = '';
       $output .= '<h3>' . t('About') . '</h3>';
-      $output .= '<p>' . t('This plugin module adds the better link dialog and anchor related features to CKEditor in Drupal 8') . '</p>';
+      $output .= '<p>' . t('This plugin module adds the better link dialog and anchor related features to CKEditor in Drupal 9') . '</p>';
       $output .= '<p><ul>';
       $output .= '  <li>Dialog to insert links and anchors with some properties.</li>';
       $output .= '  <li>Context menu option to edit or remove links and anchors.</li>';

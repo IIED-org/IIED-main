@@ -51,13 +51,19 @@ class DraggableViews {
   /**
    * Get depth by index.
    */
-  public function getDepth($index) {
+  public function getDepth($index): int {
     if (!isset($this->view->result[$index])) {
-      return FALSE;
+      return 0;
     }
     $row = $this->view->result[$index];
+    $parentIndex = (int) $this->getIndex($row->draggableviews_structure_parent);
+
+    // Prevent infinite recursion.
+    if ($parentIndex === $index) {
+      return 0;
+    }
     // If parent is available, set parent's depth +1.
-    return (!empty($row->draggableviews_structure_parent)) ? $this->getDepth($this->getIndex($row->draggableviews_structure_parent)) + 1 : 0;
+    return (!empty($row->draggableviews_structure_parent)) ? $this->getDepth($parentIndex) + 1 : 0;
   }
 
   /**

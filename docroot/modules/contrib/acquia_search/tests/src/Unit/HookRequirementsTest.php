@@ -36,10 +36,12 @@ final class HookRequirementsTest extends AcquiaSearchTestCase {
 
     $this->createMockContainer(function () use ($is_read_only, $servers, $preferred_core) {
       $acquia_search_settings = $this->createMock(Config::class);
-      $acquia_search_settings->expects($this->once())
+      $acquia_search_settings
         ->method('get')
-        ->with('read_only')
-        ->willReturn($is_read_only);
+        ->willReturnMap([
+          ['read_only', $is_read_only],
+          ['override_search_core', ''],
+        ]);
 
       $module_handler = $this->createMock(ModuleHandlerInterface::class);
       $module_handler->expects($this->once())
@@ -62,11 +64,13 @@ final class HookRequirementsTest extends AcquiaSearchTestCase {
           ['search_api_server', $server_storage],
         ]);
 
+      // @todo This needs to be expanded
       $config_factory = $this->createMock(ConfigFactoryInterface::class);
       $config_factory
         ->method('get')
         ->willReturnMap([
           ['acquia_search.settings', $acquia_search_settings],
+          ['acquia_search_solr.settings', $this->createMock(Config::class)],
         ]);
 
       $acquia_search_preferred_core = $this->createMock(PreferredCoreService::class);
@@ -277,6 +281,111 @@ final class HookRequirementsTest extends AcquiaSearchTestCase {
           ],
         ],
       ],
+    ];
+  }
+
+  /**
+   * Tests deprecated override requirements check.
+   *
+   * @param string $acquia_search_core
+   *   The deprecated `acquia_search.settings` override.
+   * @param string $acquia_search_solr_core
+   *   The deprecated `acquia_search_solr.settings` override.
+   * @param bool $is_deprecated
+   *   If the overrides should be considered deprecated.
+   *
+   * @dataProvider deprecatedCoreOverrideValues
+   */
+  public function testDeprecatedCoreOverride(string $acquia_search_core, string $acquia_search_solr_core, bool $is_deprecated): void {
+    require_once $this->root . '/core/includes/install.inc';
+    require_once __DIR__ . '/../../../acquia_search.install';
+
+    $this->createMockContainer(function () use ($acquia_search_core, $acquia_search_solr_core) {
+      $acquia_search_settings = $this->createMock(Config::class);
+      $acquia_search_settings
+        ->method('get')
+        ->willReturnMap([
+          ['read_only', FALSE],
+          ['override_search_core', $acquia_search_core],
+        ]);
+      $acquia_search_solr_settings = $this->createMock(Config::class);
+      $acquia_search_solr_settings
+        ->method('get')
+        ->with('override_search_core')
+        ->willReturn($acquia_search_solr_core);
+      $config_factory = $this->createMock(ConfigFactoryInterface::class);
+      $config_factory
+        ->method('get')
+        ->willReturnMap([
+          ['acquia_search.settings', $acquia_search_settings],
+          ['acquia_search_solr.settings', $acquia_search_solr_settings],
+        ]);
+
+      $entity_type_repository = $this->createMock(EntityTypeRepositoryInterface::class);
+      $entity_type_repository
+        ->method('getEntityTypeFromClass')
+        ->with(Server::class)
+        ->willReturn('search_api_server');
+
+      $server_storage = $this->createMock(EntityStorageInterface::class);
+      $server_storage->method('loadMultiple')->willReturn([]);
+
+      $entity_type_manager = $this->createMock(EntityTypeManagerInterface::class);
+      $entity_type_manager
+        ->method('getStorage')
+        ->willReturnMap([
+          ['search_api_server', $server_storage],
+        ]);
+
+      $module_handler = $this->createMock(ModuleHandlerInterface::class);
+      $module_handler->expects($this->once())
+        ->method('moduleExists')
+        ->willReturn('acquia_connector');
+
+      $acquia_search_preferred_core = $this->createMock(PreferredCoreService::class);
+      $acquia_search_preferred_core
+        ->method('isPreferredCoreAvailable')
+        ->willReturn('FOO');
+
+      return [
+        'config.factory' => $config_factory,
+        'module_handler' => $module_handler,
+        'entity_type.repository' => $entity_type_repository,
+        'entity_type.manager' => $entity_type_manager,
+        'acquia_search.preferred_core' => $acquia_search_preferred_core,
+      ];
+    });
+
+    $requirements = acquia_search_requirements('runtime');
+    self::assertEquals($is_deprecated, isset($requirements['acquia_search_deprecated_config']));
+  }
+
+  /**
+   * Data for testing deprecated core overrides.
+   *
+   * @return \Generator
+   *   The test data.
+   */
+  public static function deprecatedCoreOverrideValues() {
+    yield 'no deprecated' => [
+      '',
+      '',
+      FALSE,
+    ];
+    yield 'acquia_search.settings: deprecated' => [
+      'OVERRIDE',
+      '',
+      TRUE,
+    ];
+    yield 'acquia_search_solr.settings: deprecated' => [
+      '',
+      'OVERRIDE',
+      TRUE,
+    ];
+    yield 'both deprecated' => [
+      'OVERRIDE',
+      'OVERRIDE',
+      TRUE,
     ];
   }
 

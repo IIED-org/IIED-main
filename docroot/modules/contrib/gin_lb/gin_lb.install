@@ -26,3 +26,18 @@ function gin_lb_update_8002() {
   $config->set('safe_behavior', 'stay');
   $config->save(TRUE);
 }
+
+/**
+ * Rename save_behavior variable and hide_discard_revert_buttons.
+ */
+function gin_lb_update_8003() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('gin_lb.settings');
+  $toastify_loading = $config->get('toastify_cdn') ? 'cdn' : 'custom';
+  $config->set('toastify_loading', $toastify_loading);
+  $config->set('safe_behavior', NULL);
+  $config->set('save_behavior', 'stay');
+  $hide_discard_revert_buttons = $config->get('hide_discard_revert_buttons') ?? TRUE;
+  $config->set('hide_discard_revert_buttons', $hide_discard_revert_buttons);
+  $config->save(TRUE);
+}

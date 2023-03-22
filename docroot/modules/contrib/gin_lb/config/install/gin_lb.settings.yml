@@ -1,3 +1,4 @@
 toastify_loading: 'cdn'
 enable_preview_regions: false
-safe_behavior: 'stay'
+hide_discard_revert_buttons: true
+save_behavior: 'stay'

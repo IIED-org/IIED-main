@@ -10,6 +10,7 @@ use Drupal\Core\Extension\ProfileExtensionList;
 use Drupal\Core\Extension\ThemeExtensionList;
 use Drupal\Core\Extension\Exception\UnknownExtensionException;
 use Drupal\Core\KeyValueStore\KeyValueExpirableFactory;
+use Drupal\Core\KeyValueStore\KeyValueExpirableFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
@@ -150,7 +151,7 @@ class ProjectCollector {
    *   The theme extension handler service.
    * @param \Drupal\Core\Extension\ProfileExtensionList $profile_extension_list
    *   The profile extension handler service.
-   * @param \Drupal\Core\KeyValueStore\KeyValueExpirableFactory $key_value_expirable
+   * @param \Drupal\Core\KeyValueStore\KeyValueExpirableFactoryInterface $key_value_expirable
    *   The expirable key/value storage.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration factory.
@@ -161,7 +162,7 @@ class ProjectCollector {
     ModuleExtensionList $module_extension_list,
     ThemeExtensionList $theme_extension_list,
     ProfileExtensionList $profile_extension_list,
-    KeyValueExpirableFactory $key_value_expirable,
+    KeyValueExpirableFactoryInterface $key_value_expirable,
     ConfigFactoryInterface $config_factory,
     $install_profile
   ) {

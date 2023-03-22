@@ -6,7 +6,7 @@ package: Media
 dependencies:
   - drupal:file
 
-# Information added by Drupal.org packaging script on 2022-09-21
-version: '8.x-2.7'
+# Information added by Drupal.org packaging script on 2023-02-21
+version: '8.x-2.8'
 project: 'dropzonejs'
-datestamp: 1663761777
+datestamp: 1676965469

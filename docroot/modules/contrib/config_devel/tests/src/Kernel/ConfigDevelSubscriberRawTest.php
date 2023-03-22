@@ -18,8 +18,8 @@ class ConfigDevelSubscriberRawTest extends ConfigDevelSubscriberTestBase {
    * {@inheritdoc}
    */
   protected function doAssert(array $data, array $exported_data) {
-    $this->assertIdentical($data, $this->storage->read(static::CONFIGNAME));
-    $this->assertIdentical($data, $exported_data);
+    $this->assertSame($data, $this->storage->read(static::CONFIGNAME));
+    $this->assertSame($data, $exported_data);
   }
 
 }
