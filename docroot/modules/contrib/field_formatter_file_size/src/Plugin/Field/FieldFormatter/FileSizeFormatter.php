@@ -11,8 +11,6 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\file\Plugin\Field\FieldFormatter\FileFormatterBase;
 
 /**
- * Plugin implementation of the 'Youtube_code' formatter.
- *
  * @FieldFormatter(
  *   id = "File_size",
  *   label = @Translation("File Size"),

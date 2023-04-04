@@ -2,12 +2,12 @@ name: Field Formatter File Size
 type: module
 description: Field Formatter File Size is a field formatter to display the file size.
 package: Fields
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^8 || ^9 || ^10
 dependencies:
   - drupal:field
   - drupal:file
 
-# Information added by Drupal.org packaging script on 2021-09-30
-version: '2.0.0'
+# Information added by Drupal.org packaging script on 2023-04-03
+version: '2.0.1'
 project: 'field_formatter_file_size'
-datestamp: 1633001287
+datestamp: 1680536267

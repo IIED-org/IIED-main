@@ -628,12 +628,6 @@ class Helpers
 	public static function getArrowFunctionOpenClose(File $phpcsFile, $stackPtr)
 	{
 		$tokens = $phpcsFile->getTokens();
-		if (defined('T_FN') && $tokens[$stackPtr]['code'] === T_FN) {
-			return [
-				'scope_opener' => $tokens[$stackPtr]['scope_opener'],
-				'scope_closer' => $tokens[$stackPtr]['scope_closer'],
-			];
-		}
 		if ($tokens[$stackPtr]['content'] !== 'fn') {
 			return null;
 		}
@@ -644,26 +638,95 @@ class Helpers
 		}
 		// Find the associated close parenthesis
 		$closeParenIndex = $tokens[$openParenIndex]['parenthesis_closer'];
-		// Make sure the next token is a fat arrow
+		// Make sure the next token is a fat arrow or a return type
 		$fatArrowIndex = $phpcsFile->findNext(Tokens::$emptyTokens, $closeParenIndex + 1, null, true);
 		if (! is_int($fatArrowIndex)) {
 			return null;
 		}
-		if ($tokens[$fatArrowIndex]['code'] !== T_DOUBLE_ARROW && $tokens[$fatArrowIndex]['type'] !== 'T_FN_ARROW') {
+		if (
+			$tokens[$fatArrowIndex]['code'] !== T_DOUBLE_ARROW &&
+			$tokens[$fatArrowIndex]['type'] !== 'T_FN_ARROW' &&
+			$tokens[$fatArrowIndex]['code'] !== T_COLON
+		) {
 			return null;
 		}
+
 		// Find the scope closer
-		$endScopeTokens = [
-			T_COMMA,
-			T_SEMICOLON,
-			T_CLOSE_PARENTHESIS,
-			T_CLOSE_CURLY_BRACKET,
-			T_CLOSE_SHORT_ARRAY,
-		];
-		$scopeCloserIndex = $phpcsFile->findNext($endScopeTokens, $fatArrowIndex	+ 1);
+		$scopeCloserIndex = null;
+		$foundCurlyPairs = 0;
+		$foundArrayPairs = 0;
+		$foundParenPairs = 0;
+		$arrowBodyStart = $tokens[$stackPtr]['parenthesis_closer'] + 1;
+		$lastToken = self::getLastNonEmptyTokenIndexInFile($phpcsFile);
+		for ($index = $arrowBodyStart; $index < $lastToken; $index++) {
+			$token = $tokens[$index];
+			if (empty($token['code'])) {
+				$scopeCloserIndex = $index;
+				break;
+			}
+
+			$code = $token['code'];
+
+			// A semicolon is always a closer.
+			if ($code === T_SEMICOLON) {
+				$scopeCloserIndex = $index;
+				break;
+			}
+
+			// Track pair opening tokens.
+			if ($code === T_OPEN_CURLY_BRACKET) {
+				$foundCurlyPairs += 1;
+				continue;
+			}
+			if ($code === T_OPEN_SHORT_ARRAY || $code === T_OPEN_SQUARE_BRACKET) {
+				$foundArrayPairs += 1;
+				continue;
+			}
+			if ($code === T_OPEN_PARENTHESIS) {
+				$foundParenPairs += 1;
+				continue;
+			}
+
+			// A pair closing is only an arrow func closer if there was no matching opening token.
+			if ($code === T_CLOSE_CURLY_BRACKET) {
+				if ($foundCurlyPairs === 0) {
+					$scopeCloserIndex = $index;
+					break;
+				}
+				$foundCurlyPairs -= 1;
+				continue;
+			}
+			if ($code === T_CLOSE_SHORT_ARRAY || $code === T_CLOSE_SQUARE_BRACKET) {
+				if ($foundArrayPairs === 0) {
+					$scopeCloserIndex = $index;
+					break;
+				}
+				$foundArrayPairs -= 1;
+				continue;
+			}
+			if ($code === T_CLOSE_PARENTHESIS) {
+				if ($foundParenPairs === 0) {
+					$scopeCloserIndex = $index;
+					break;
+				}
+				$foundParenPairs -= 1;
+				continue;
+			}
+
+			// A comma is a closer only if we are not inside an opening token.
+			if ($code === T_COMMA) {
+				if (empty($foundArrayPairs) && empty($foundParenPairs) && empty($foundCurlyPairs)) {
+					$scopeCloserIndex = $index;
+					break;
+				}
+				continue;
+			}
+		}
+
 		if (! is_int($scopeCloserIndex)) {
 			return null;
 		}
+
 		return [
 			'scope_opener' => $stackPtr,
 			'scope_closer' => $scopeCloserIndex,
@@ -1445,11 +1508,11 @@ class Helpers
 
 		// If the previous token is a visibility keyword, this is constructor
 		// promotion. eg: `public $foobar`.
-		$prev = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($stackPtr - 1), $functionIndex, true);
-		if (! is_int($prev)) {
+		$prevIndex = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($stackPtr - 1), $functionIndex, true);
+		if (! is_int($prevIndex)) {
 			return false;
 		}
-		$prevToken = $tokens[$prev];
+		$prevToken = $tokens[$prevIndex];
 		if (in_array($prevToken['code'], Tokens::$scopeModifiers, true)) {
 			return true;
 		}
@@ -1457,12 +1520,26 @@ class Helpers
 		// If the previous token is not a visibility keyword, but the one before it
 		// is, the previous token was probably a typehint and this is constructor
 		// promotion. eg: `public boolean $foobar`.
-		$prev = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($prev - 1), $functionIndex, true);
-		if (! is_int($prev)) {
+		$prev2Index = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($prevIndex - 1), $functionIndex, true);
+		if (! is_int($prev2Index)) {
 			return false;
 		}
-		$prevToken = $tokens[$prev];
-		if (in_array($prevToken['code'], Tokens::$scopeModifiers, true)) {
+		$prev2Token = $tokens[$prev2Index];
+		if (in_array($prev2Token['code'], Tokens::$scopeModifiers, true)) {
+			return true;
+		}
+
+		// If the previous token is not a visibility keyword, but the one two
+		// before it is, and one of the tokens is `readonly`, the previous token
+		// was probably a typehint and this is constructor promotion. eg: `public
+		// readonly boolean $foobar`.
+		$prev3Index = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($prev2Index - 1), $functionIndex, true);
+		if (! is_int($prev3Index)) {
+			return false;
+		}
+		$prev3Token = $tokens[$prev3Index];
+		$wasPreviousReadonly = $prevToken['content'] === 'readonly' || $prev2Token['content'] === 'readonly';
+		if (in_array($prev3Token['code'], Tokens::$scopeModifiers, true) && $wasPreviousReadonly) {
 			return true;
 		}
 
