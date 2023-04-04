@@ -37,6 +37,7 @@ dependencies:
     - taxonomy.vocabulary.series
     - taxonomy.vocabulary.theme
     - user.role.administrator
+    - user.role.editor
     - user.role.manager
   module:
     - computed_field
@@ -967,6 +968,7 @@ display:
         type: role
         options:
           role:
+            editor: editor
             manager: manager
             administrator: administrator
       cache:
@@ -10124,10 +10126,25 @@ display:
         sorts: false
         filters: false
         filter_groups: false
+        header: false
       relationships: {  }
       use_ajax: false
       group_by: false
       display_description: ''
+      header:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: true
+          content:
+            value: "<h2>[view:title]</h2>\r\n<p>Includes filter for Product code type ≠ External\r\n<p>Page [view:current-page] of [view:page-count] ([view:total-rows] total rows)<p> "
+            format: full_html
+          tokenize: false
       display_extenders: {  }
       path: admin/manage/publications-quarterly
       menu:

@@ -35,10 +35,9 @@
         {{ title_prefix }}
         <h1 class="mb-6">{{ name }}</h1>
         {{ title_suffix }}
-        <p>
-          {{ term.description.0.value }}
-        </p>
+        <div class="prose">
         {{ content|without('field_logo') }}
+        </div>
       </div>
 
       <div>

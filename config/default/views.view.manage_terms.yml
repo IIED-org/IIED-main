@@ -8,6 +8,7 @@ dependencies:
     - taxonomy.vocabulary.person
     - taxonomy.vocabulary.person_type
     - user.role.administrator
+    - user.role.editor
     - user.role.manager
   module:
     - node
@@ -132,6 +133,7 @@ display:
         type: role
         options:
           role:
+            editor: editor
             manager: manager
             administrator: administrator
       cache:
@@ -1005,8 +1007,8 @@ display:
           plugin_id: text
           empty: true
           content:
-            value: "<h2>Authors</h2>\r\n<p>Page [view:current-page] of [view:page-count] ([view:total-rows] total rows)<p> \r\n<em>Additional filters: <br/>\r\nPerson type (empty)  |  Author picture (empty)  |  Biography (full) (empty) | Biography (summary) (empty) | Position (empty) | Position short (empty) | Content: Editor(s) (empty) | Content: Author(s) (empty)\r\n</em>"
-            format: basic_html
+            value: "<h2>Authors</h2>\r\n<p>Page [view:current-page] of [view:page-count] ([view:total-rows] total rows)<p> \r\n<div class=\"text-sm\"> Includes filters: <br/>\r\nPerson type (empty)  |  Author picture (empty)  |  Biography (full) (empty) | Biography (summary) (empty) | Position (empty) | Position short (empty) | Content: Editor(s) (empty) | Content: Author(s) (empty)\r\n</div>"
+            format: full_html
           tokenize: false
       display_extenders: {  }
       path: admin/manage/authors

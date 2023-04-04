@@ -38,7 +38,6 @@ dependencies:
     - form_mode_control
     - layout_builder
     - layout_paragraphs
-    - linkchecker
     - masquerade
     - media
     - media_file_delete
@@ -65,14 +64,12 @@ is_admin: null
 permissions:
   - 'access administration pages'
   - 'access all charts'
-  - 'access broken links report'
   - 'access content'
   - 'access content overview'
   - 'access contextual links'
   - 'access draggableviews'
   - 'access files overview'
   - 'access media overview'
-  - 'access own broken links report'
   - 'access shortcuts'
   - 'access site in maintenance mode'
   - 'access site reports'
