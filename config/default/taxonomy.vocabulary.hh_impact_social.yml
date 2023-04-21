@@ -1,0 +1,8 @@
+uuid: a90f4865-f829-4969-878b-28bc15886f97
+langcode: en
+status: true
+dependencies: {  }
+name: 'HH impact social'
+vid: hh_impact_social
+description: 'Hidden handbrake content impact area'
+weight: 0

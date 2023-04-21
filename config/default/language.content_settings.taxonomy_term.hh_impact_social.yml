@@ -1,0 +1,11 @@
+uuid: 32fdfa35-66b1-4ea6-ab15-b834a8b95bc2
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.hh_impact_social
+id: taxonomy_term.hh_impact_social
+target_entity_type_id: taxonomy_term
+target_bundle: hh_impact_social
+default_langcode: site_default
+language_alterable: false

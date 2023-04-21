@@ -1,0 +1,23 @@
+display:
+  default:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: လုပ်ဆောင်ချက်များ
+  embed_administer:
+    display_options:
+      fields:
+        operations:
+          label: လုပ်ဆောင်ချက်များ
+  embed_manage:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: လုပ်ဆောင်ချက်များ
+        edit_webform_submission:
+          label: လုပ်ဆောင်ချက်များ
+  embed_review:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: လုပ်ဆောင်ချက်များ

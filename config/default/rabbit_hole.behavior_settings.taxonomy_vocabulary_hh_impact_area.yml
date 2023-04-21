@@ -1,0 +1,14 @@
+uuid: 0200cda0-cc19-47da-871d-06f928c4ac6d
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.hh_impact_area
+id: taxonomy_vocabulary_hh_impact_area
+entity_type_id: taxonomy_vocabulary
+entity_id: hh_impact_area
+action: page_not_found
+allow_override: 1
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

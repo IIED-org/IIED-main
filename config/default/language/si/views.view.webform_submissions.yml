@@ -1,0 +1,23 @@
+display:
+  default:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: මෙහෙයුම්
+  embed_administer:
+    display_options:
+      fields:
+        operations:
+          label: මෙහෙයුම්
+  embed_manage:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: මෙහෙයුම්
+        edit_webform_submission:
+          label: මෙහෙයුම්
+  embed_review:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: මෙහෙයුම්

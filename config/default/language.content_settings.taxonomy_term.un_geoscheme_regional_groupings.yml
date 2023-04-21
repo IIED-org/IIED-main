@@ -1,0 +1,11 @@
+uuid: cd8d5515-5f1e-46c8-a6bf-ca0cf835189d
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.un_geoscheme_regional_groupings
+id: taxonomy_term.un_geoscheme_regional_groupings
+target_entity_type_id: taxonomy_term
+target_bundle: un_geoscheme_regional_groupings
+default_langcode: site_default
+language_alterable: false

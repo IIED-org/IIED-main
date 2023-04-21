@@ -189,6 +189,18 @@ module:
   views_json_source: 0
   views_layout: 0
   viewsreference: 0
+  webform: 0
+  webform_access: 0
+  webform_examples: 0
+  webform_image_select: 0
+  webform_node: 0
+  webform_options_limit: 0
+  webform_scheduled_email: 0
+  webform_submission_export_import: 0
+  webform_submission_log: 0
+  webform_templates: 0
+  webform_ui: 0
+  webform_views: 0
   ds: 1
   pathauto: 1
   xmlsitemap: 1

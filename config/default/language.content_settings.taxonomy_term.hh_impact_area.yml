@@ -1,0 +1,11 @@
+uuid: b92a1658-a1a0-4ceb-a3f1-e654b0595458
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.hh_impact_area
+id: taxonomy_term.hh_impact_area
+target_entity_type_id: taxonomy_term
+target_bundle: hh_impact_area
+default_langcode: site_default
+language_alterable: false

@@ -1,0 +1,23 @@
+display:
+  default:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: Operasi-operasi
+  embed_administer:
+    display_options:
+      fields:
+        operations:
+          label: Operasi-operasi
+  embed_manage:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: Operasi-operasi
+        edit_webform_submission:
+          label: Operasi-operasi
+  embed_review:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: Operasi-operasi

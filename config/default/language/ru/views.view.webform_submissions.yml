@@ -1,0 +1,23 @@
+display:
+  default:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: Операции
+  embed_administer:
+    display_options:
+      fields:
+        operations:
+          label: Операции
+  embed_manage:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: Операции
+        edit_webform_submission:
+          label: Операции
+  embed_review:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: Операции

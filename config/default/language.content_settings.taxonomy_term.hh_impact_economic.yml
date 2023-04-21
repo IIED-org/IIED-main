@@ -1,0 +1,11 @@
+uuid: 4aefcc6f-fcc7-43e6-9a4e-e04ade45da21
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.hh_impact_economic
+id: taxonomy_term.hh_impact_economic
+target_entity_type_id: taxonomy_term
+target_bundle: hh_impact_economic
+default_langcode: site_default
+language_alterable: false

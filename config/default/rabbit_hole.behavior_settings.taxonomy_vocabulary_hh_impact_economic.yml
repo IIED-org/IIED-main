@@ -1,0 +1,14 @@
+uuid: 3f3e94d9-3d04-45c0-bf9d-eea3acd79475
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.hh_impact_economic
+id: taxonomy_vocabulary_hh_impact_economic
+entity_type_id: taxonomy_vocabulary
+entity_id: hh_impact_economic
+action: page_not_found
+allow_override: 1
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied
