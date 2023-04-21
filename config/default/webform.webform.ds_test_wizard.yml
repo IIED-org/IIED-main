@@ -100,36 +100,19 @@ elements: |-
       '#attributes':
         class:
           - webform-horizontal-rule--dashed
-    impact_area:
-      '#type': label
-      '#title': 'Impact area (please tick all that apply)'
-    environmental_change:
+    zzimpact_area_please_tick_all_that_apply_:
       '#type': webform_entity_checkboxes
-      '#title': 'Environmental change'
+      '#title': 'Impact area (please tick all that apply)'
+      '#required': true
+      '#required_error': 'Please complete the ''Impact area'' field.'
       '#target_type': taxonomy_term
       '#selection_handler': 'default:taxonomy_term'
       '#selection_settings':
         target_bundles:
-          hh_impact_area: hh_impact_area
+          hh_impact: hh_impact
         sort:
           field: name
           direction: ASC
-    economic_change:
-      '#type': webform_entity_checkboxes
-      '#title': 'Economic change'
-      '#target_type': taxonomy_term
-      '#selection_handler': 'default:taxonomy_term'
-      '#selection_settings':
-        target_bundles:
-          hh_impact_economic: hh_impact_economic
-    social_change:
-      '#type': webform_entity_checkboxes
-      '#title': 'Social change'
-      '#target_type': taxonomy_term
-      '#selection_handler': 'default:taxonomy_term'
-      '#selection_settings':
-        target_bundles:
-          hh_impact_social: hh_impact_social
     horizontal_rule_02:
       '#type': webform_horizontal_rule
       '#display_on': both
@@ -183,7 +166,7 @@ elements: |-
           - webform-horizontal-rule--dashed
     audience:
       '#type': webform_entity_radios
-      '#title': 'Which of our audiences does your hidden handbrake submission represent? (select one, or complete the ''Other audience'' box)'
+      '#title': 'What type of organization is it? (select one, or complete the ''other'' box)'
       '#target_type': taxonomy_term
       '#selection_handler': 'default:taxonomy_term'
       '#selection_settings':
@@ -194,7 +177,7 @@ elements: |-
           direction: ASC
     other_audience:
       '#type': textfield
-      '#title': 'Other audience'
+      '#title': 'Other organisation type'
     horizontal_rule_06:
       '#type': webform_horizontal_rule
       '#display_on': both
