@@ -1,8 +1,0 @@
-uuid: 9980d600-16dd-4b8c-9086-da04fbe6b8df
-langcode: en
-status: true
-dependencies: {  }
-name: 'HH impact environmental'
-vid: hh_impact_area
-description: 'Hidden handbrake content impact area'
-weight: 0
