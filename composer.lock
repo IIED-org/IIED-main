@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6917e32bd01cb626b7b1be852071256e",
+    "content-hash": "f0d7a473f68ec5f673203a5b336e2976",
     "packages": [
         {
             "name": "acquia/http-hmac-php",
@@ -8766,6 +8766,52 @@
             "support": {
                 "source": "https://cgit.drupalcode.org/responsive_menu",
                 "issues": "https://drupal.org/project/issues/responsive_menu"
+            }
+        },
+        {
+            "name": "drupal/scn",
+            "version": "2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/scn.git",
+                "reference": "2.0.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/scn-2.0.2.zip",
+                "reference": "2.0.2",
+                "shasum": "86e59fab576c6bcc5a8a530421ef222ec37a70a9"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9 || ^10"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.2",
+                    "datestamp": "1659788910",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Andrei Ivnitskii",
+                    "homepage": "https://www.drupal.org/u/ivnish",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Notifies the site administrator by e-mail or telegram about new comments on the site.",
+            "homepage": "https://www.drupal.org/project/scn",
+            "support": {
+                "source": "https://git.drupalcode.org/project/scn",
+                "issues": "https://www.drupal.org/project/issues/scn"
             }
         },
         {

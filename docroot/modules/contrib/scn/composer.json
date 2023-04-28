@@ -1,0 +1,19 @@
+{
+    "name": "drupal/scn",
+    "description": "Notifies the site administrator by e-mail or telegram about new comments on the site.",
+    "type": "drupal-module",
+    "homepage": "https://www.drupal.org/project/scn",
+    "authors": [
+        {
+            "name": "Andrei Ivnitskii",
+            "homepage": "https://www.drupal.org/u/ivnish",
+            "role": "Maintainer"
+        }
+    ],
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/scn",
+        "source": "https://git.drupalcode.org/project/scn"
+    },
+    "minimum-stability": "dev",
+    "require": {}
+}

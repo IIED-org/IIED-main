@@ -1,0 +1,6 @@
+scn.settings:
+  title: 'Simple Comment Notify'
+  description: 'Change Simple Comment Notify settings'
+  parent: system.admin_config_system
+  route_name: scn.settings
+  weight: 1

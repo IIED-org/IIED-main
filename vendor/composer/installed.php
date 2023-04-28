@@ -3,7 +3,7 @@
         'name' => 'drupal/recommended-project',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '5a232f3090a12e85be8def17a4a303c3d4641505',
+        'reference' => '374850de8a8cad6351979f97e0215c2b06e7c7b5',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -1614,7 +1614,7 @@
         'drupal/recommended-project' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '5a232f3090a12e85be8def17a4a303c3d4641505',
+            'reference' => '374850de8a8cad6351979f97e0215c2b06e7c7b5',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -1638,6 +1638,15 @@
             'aliases' => array(
                 0 => '5.0.x-dev',
             ),
+            'dev_requirement' => false,
+        ),
+        'drupal/scn' => array(
+            'pretty_version' => '2.0.2',
+            'version' => '2.0.2.0',
+            'reference' => '2.0.2',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/scn',
+            'aliases' => array(),
             'dev_requirement' => false,
         ),
         'drupal/search404' => array(

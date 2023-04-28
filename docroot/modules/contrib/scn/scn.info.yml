@@ -1,0 +1,13 @@
+name: Simple Comment Notify
+type: module
+description: Notifies the site administrator by e-mail or telegram about new comments on the site.
+core_version_requirement: ^8 || ^9 || ^10
+package: Comments
+configure: scn.settings
+dependencies:
+  - drupal:comment
+
+# Information added by Drupal.org packaging script on 2022-08-06
+version: '2.0.2'
+project: 'scn'
+datestamp: 1659788911
