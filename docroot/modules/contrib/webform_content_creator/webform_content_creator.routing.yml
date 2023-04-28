@@ -1,0 +1,81 @@
+webform_content_creator.collection:
+  path: '/admin/config/webform_content_creator'
+  defaults:
+    _entity_list: 'webform_content_creator'
+    _title: 'Webform Content Creator'
+    name: 'Webform Content Creator'
+  requirements:
+    _permission: 'access webform content creator configuration'
+    
+webform_content_creator.add_form:
+  path: '/admin/config/webform_content_creator/add'
+  defaults:
+    _entity_form: 'webform_content_creator.add'
+    _title: 'Add Webform Content Creator entity'
+  requirements:
+    _permission: 'access webform content creator configuration'
+    
+webform_content_creator.edit_form:
+  path: '/admin/config/webform_content_creator/{webform_content_creator}'
+  defaults:
+    _entity_form: 'webform_content_creator.edit'
+    _title: 'Edit Webform Content Creator entity'
+  requirements:
+    _permission: 'access webform content creator configuration'
+
+webform_content_creator.delete_form:
+  path: '/admin/config/webform_content_creator/{webform_content_creator}/delete'
+  defaults:
+    _entity_form: 'webform_content_creator.delete'
+    _title: 'Delete Webform Content Creator entity'
+  requirements:
+    _permission: 'access webform content creator configuration'
+
+webform_content_creator.manage_fields_form:
+  path: '/admin/config/webform_content_creator/manage/{webform_content_creator}/fields'
+  defaults:
+    _entity_form: 'webform_content_creator.manage_fields'
+    _title: 'Manage fields'
+  requirements:
+    _permission: 'access webform content creator configuration'
+
+entity.webform_content_creator.collection:
+  path: '/admin/config/webform_content_creator'
+  defaults:
+    _entity_list: 'webform_content_creator'
+    _title: 'Webform Content Creator'
+    name: 'Webform Content Creator'
+  requirements:
+    _permission: 'access webform content creator configuration'
+    
+entity.webform_content_creator.add_form:
+  path: '/admin/config/webform_content_creator/add'
+  defaults:
+    _entity_form: 'webform_content_creator.add'
+    _title: 'Add Webform Content Creator entity'
+  requirements:
+    _permission: 'access webform content creator configuration'
+    
+entity.webform_content_creator.edit_form:
+  path: '/admin/config/webform_content_creator/{webform_content_creator}'
+  defaults:
+    _entity_form: 'webform_content_creator.edit'
+    _title: 'Edit Webform Content Creator entity'
+  requirements:
+    _permission: 'access webform content creator configuration'
+
+entity.webform_content_creator.delete_form:
+  path: '/admin/config/webform_content_creator/{webform_content_creator}/delete'
+  defaults:
+    _entity_form: 'webform_content_creator.delete'
+    _title: 'Delete Webform Content Creator entity'
+  requirements:
+    _permission: 'access webform content creator configuration'
+
+entity.webform_content_creator.manage_fields_form:
+  path: '/admin/config/webform_content_creator/manage/{webform_content_creator}/fields'
+  defaults:
+    _entity_form: 'webform_content_creator.manage_fields'
+    _title: 'Manage fields'
+  requirements:
+    _permission: 'access webform content creator configuration'

@@ -1,0 +1,206 @@
+<?php
+
+/**
+ * @file
+ * Allows to call functions after creating/editing/deleting webform submissions.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_webform_submission_insert().
+ */
+function webform_content_creator_webform_submission_insert($webform_submission) {
+  if (empty($webform_submission)) {
+    return;
+  }
+
+  if (!$webform_submission->isDraft()) {
+    $entities = \Drupal::entityTypeManager()->getStorage('webform_content_creator')->loadMultiple();
+    foreach ($entities as $e) {
+      if (!$e->equalsWebform($webform_submission->bundle()) || !$e->existsEntityType() || !$e->existsBundle()) {
+        continue;
+      }
+      $e->createContent($webform_submission);
+    }
+  }
+}
+
+/**
+ * Implements hook_webform_submission_update().
+ */
+function webform_content_creator_webform_submission_update($webform_submission) {
+  if (empty($webform_submission) || empty($webform_submission->original)) {
+    return;
+  }
+
+  if (!$webform_submission->isDraft()) {
+    $entities = \Drupal::entityTypeManager()->getStorage('webform_content_creator')->loadMultiple();
+    foreach ($entities as $e) {
+      if (!$e->equalsWebform($webform_submission->bundle()) || !$e->existsEntityType() || !$e->existsBundle()) {
+        continue;
+      }
+      if ($webform_submission->original->isDraft()) {
+        $e->createContent($webform_submission);
+      }
+      else {
+        $e->updateContent($webform_submission, 'edit');
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_webform_submission_delete().
+ */
+function webform_content_creator_webform_submission_delete($webform_submission) {
+  $entities = \Drupal::entityTypeManager()->getStorage('webform_content_creator')->loadMultiple();
+  foreach ($entities as $e) {
+    if (!$e->equalsWebform($webform_submission->bundle()) || !$e->existsEntityType() || !$e->existsBundle()) {
+      continue;
+    }
+    $e->updateContent($webform_submission, 'delete');
+  }
+}
+
+/**
+ * Implements hook_entity_type_delete().
+ */
+function webform_content_creator_entity_type_delete(EntityInterface $entity) {
+  $entities = \Drupal::entityTypeManager()->getStorage('webform_content_creator')->loadMultiple();
+  foreach ($entities as $e) {
+    if ($e->equalsBundle($entity->id()) && $e->equalsEntityType($entity->getEntityTypeId())) {
+      $e->delete();
+    }
+  }
+}
+
+/**
+ * Implements hook_webform_delete().
+ */
+function webform_content_creator_webform_delete(EntityInterface $entity) {
+  $entities = \Drupal::entityTypeManager()->getStorage('webform_content_creator')->loadMultiple();
+  foreach ($entities as $e) {
+    if ($e->equalsWebform($entity->id())) {
+      $e->delete();
+    }
+  }
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function webform_content_creator_page_attachments(array &$attachments) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  if ($route_name === 'entity.webform_content_creator.manage_fields_form') {
+    $attachments['#attached']['library'][] = 'webform_content_creator/webform_content_creator';
+  }
+}
+
+/**
+ * Implements hook_help().
+ */
+function webform_content_creator_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.webform_content_creator':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Webform Content Creator provides the ability to create content entities after submitting webforms, and to have mappings between the fields of the created content entity and webform submission values. It is possible to trigger the creation of a content entity (configurable content type id and content field values) after submitting a Webform (configurable webform entity id). Moreover, you can map the content field values according to webform submission values (tokens can be used) and/or custom values.') . '</p>';
+      $output .= '<h3>' . t('Uses') . '</h3>';
+      $output .= '<p>' . t('In order to use this module, you should follow these steps:') . '</p>';
+      $output .= '<ol>  ';
+      $output .= '<li>' . t('Enable Webform Content Creator module;') . '</li>';
+      $output .= '<li>' . t('Go to Webform Content Creator configuration page; (/admin/config/webform_content_creator);') . '</li>';
+      $output .= '<li>' . t('Click on "Add configuration";') . '</li>';
+      $output .= '<li>' . t('Give a title to Webform Content Creator entity and choose a Webform and a Content Type, in order to have mappings between Webform submission values and content field values, and then click on "Save";') . '</li>';
+      $output .= '<li>' . t('In the configuration page (/admin/config/webform_content_creator), click on "Manage fields" on the entity you have just created;') . '</li>';
+      $output .= '<li>' . t('In the "Title" input, you can give a title to the content that is created after submitting the Webform (tokens may be used);') . '</li>';
+      $output .= '<li>' . t('After that, you have the possibility to choose the Content fields used in the mapping;') . '</li>';
+      $output .= '<li>' . t('When choosing a Content field (checkbox on the left side of each field name), a Webform field can be chosen to match with this Content field (optionally, you can provide a custom text instead, using available tokens).') . '</li>';
+      $output .= '</ol>';
+      return $output;
+  }
+}
+
+/**
+ * Update Webform Content Creator entities' bundle and field title config parameters.
+ */
+function webform_content_creator_update_8001() {
+  $config_factory = \Drupal::configFactory();
+  $updated = FALSE;
+
+  foreach ($config_factory->listAll('webform_content_creator.webform_content_creator.') as $key_config_name) {
+    $key = $config_factory->getEditable($key_config_name);
+    $target_entity = $key->get('target_entity_type');
+    if (!empty($target_entity)) {
+      continue;
+    }
+
+    $key->set('target_entity_type', 'node');
+
+    // Update target_bundle config parameter to be equal to previous content_type config parameter.
+    $content_type = $key->get('content_type');
+    if (empty($content_type)) {
+      continue;
+    }
+    $key->set('target_bundle', $content_type);
+
+    // Update sync_content_field config parameter to be equal to previous sync_content_node_field config parameter.
+    $sync_content_field = $key->get('sync_content_node_field');
+    if (!empty($sync_content_field)) {
+      $key->set('sync_content_field', $sync_content_field);
+    }
+
+    // As field_title is not shown anymore in Manage Fields form, we need to pass it to Title field.
+    $field_title = $key->get('field_title');
+    if (empty($field_title)) {
+      $field_title = '[webform_submission:webform:title]';
+    }
+    $values = $key->get('elements');
+    $new_entry = [];
+    $new_entry['type'] = FALSE;
+    $new_entry['webform_field'] = '';
+    $new_entry['custom_check'] = TRUE;
+    $new_entry['custom_value'] = $field_title;
+    $values['title'] = $new_entry;
+    $key->set('elements', $values);
+    $updated = TRUE;
+    $key->save(TRUE);
+  }
+
+  if ($updated) {
+    return t('Updated deprecated config parameters in Webform Content Creator.');
+  } else {
+    return t('No changes are needed in Webform Content Creator configurations.');
+  }
+}
+
+/**
+ * Update Webform Content Creator entities' plugins.
+ */
+function webform_content_creator_update_8002() {
+  $config_factory = \Drupal::configFactory();
+  $updated = FALSE;
+
+  foreach ($config_factory->listAll('webform_content_creator.webform_content_creator.') as $key_config_name) {
+    $key = $config_factory->getEditable($key_config_name);
+    $values = $key->get('elements');
+    if (!empty($values) && is_array($values)) {
+      $keys = array_keys($values);
+      foreach ($keys as $k) {
+        $values[$k]['mapping'] = 'default_mapping';
+        $updated = TRUE;
+      }
+    }
+
+    $key->set('elements', $values);
+    $key->save(TRUE);
+  }
+
+  if ($updated) {
+    return t('Updated deprecated config parameters in Webform Content Creator.');
+  } else {
+    return t('No changes are needed in Webform Content Creator configurations.');
+  }
+}

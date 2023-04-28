@@ -169,6 +169,7 @@
         "drupal/views_json_source": "^1.4",
         "drupal/views_layout": "^1.2",
         "drupal/webform": "^6.1",
+        "drupal/webform_content_creator": "^4.0",
         "drupal/webform_views": "^5.1",
         "drupal/xmlsitemap": "^1.4",
         "drush/drush": "^10.3",
