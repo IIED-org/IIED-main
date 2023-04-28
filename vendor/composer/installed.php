@@ -3,7 +3,7 @@
         'name' => 'drupal/recommended-project',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'f83b37df7c7ad70d4a66ff7546e9a4b9d62fbb4c',
+        'reference' => '5a232f3090a12e85be8def17a4a303c3d4641505',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -1458,6 +1458,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'drupal/multiple_registration' => array(
+            'pretty_version' => '3.2.1',
+            'version' => '3.2.1.0',
+            'reference' => '3.2.1',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/multiple_registration',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'drupal/name' => array(
             'pretty_version' => '1.0.0-rc5',
             'version' => '1.0.0.0-RC5',
@@ -1605,7 +1614,7 @@
         'drupal/recommended-project' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'f83b37df7c7ad70d4a66ff7546e9a4b9d62fbb4c',
+            'reference' => '5a232f3090a12e85be8def17a4a303c3d4641505',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

@@ -1,0 +1,156 @@
+<?php
+
+/**
+ * @file
+ * multiple_registration.install
+ *
+ * Contains module installation instructions.
+ */
+
+use Drupal\multiple_registration\AvailableUserRolesService;
+use Drupal\Core\Database\Database;
+
+/**
+ * Implements hook_schema().
+ */
+function multiple_registration_schema() {
+  $schema['multiple_registration'] = [
+    'description' => 'Stores the correspondent rid for each user.',
+    'fields' => [
+      'uid' => [
+        'description' => 'The User ID.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'rid' => [
+        'description' => 'The identifier of the multiple_registration page definition.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+    ],
+    'foreign keys' => [
+      'uid' => ['users' => 'uid'],
+    ],
+    'primary key' => ['uid'],
+  ];
+
+  return $schema;
+}
+
+/**
+ * Update config variables to enable both Edit and Register form configs.
+ */
+function multiple_registration_update_8201() {
+  $configFactory = \Drupal::configFactory();
+  $entityTypeManager = \Drupal::entityTypeManager();
+  $availableUserRolesService = new AvailableUserRolesService($entityTypeManager, $configFactory);
+
+  $roles = $availableUserRolesService->getAvailableRoles();
+  $config = $configFactory->getEditable('multiple_registration.create_registration_page_form_config');
+
+  foreach ($roles as $rid => $role_name) {
+    // Get original value.
+    $original = $config->get('multiple_registration_form_mode_' . $rid);
+
+    // Set the new variables.
+    $config->set('multiple_registration_form_mode_edit_' . $rid, $original);
+    $config->set('multiple_registration_form_mode_register_' . $rid, $original);
+  }
+
+  $config->save();
+}
+
+/**
+ * Create database schema to store the correspondent rid for each user.
+ */
+function multiple_registration_update_8202() {
+  $spec = [
+    'description' => 'Stores the correspondent rid for each user.',
+    'fields' => [
+      'uid' => [
+        'description' => 'The User ID.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'rid' => [
+        'description' => 'The identifier of the multiple_registration page definition.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+    ],
+    'foreign keys' => [
+      'uid' => ['users' => 'uid'],
+    ],
+  ];
+  $schema = Database::getConnection()->schema();
+  $schema->createTable('multiple_registration', $spec);
+}
+
+/**
+ * Update configuration values.
+ */
+function multiple_registration_update_8203() {
+  $configFactory = \Drupal::configFactory();
+  $access_config_settings = $configFactory->getEditable('multiple_registration.access_settings_page_form_config');
+  if (!$access_config_settings->isNew() && !empty($access_config_settings->getRawData())) {
+    $old_allowed_list_values = $access_config_settings->get('multiple_registration_pages_white_list');
+    if (is_array($old_allowed_list_values)) {
+      $access_config_settings->set('multiple_registration_pages_allowed_list', $old_allowed_list_values);
+      $access_config_settings->save();
+    }
+  }
+}
+
+/**
+ * Add PK to {multiple_registration} table.
+ */
+function multiple_registration_update_8204() {
+  $schema = Database::getConnection()->schema();
+  $multiple_registration_schema = multiple_registration_schema();
+  if ($schema->tableExists('multiple_registration') && !empty($multiple_registration_schema['multiple_registration']['primary key'])) {
+    $schema->dropPrimaryKey('multiple_registration');
+    $schema->addPrimaryKey('multiple_registration', $multiple_registration_schema['multiple_registration']['primary key']);
+  }
+}
+
+/**
+ * Updates the configuration in accordance with the new structure.
+ */
+function multiple_registration_update_8205() {
+  $configFactory = \Drupal::configFactory();
+  $config = $configFactory->getEditable('multiple_registration.create_registration_page_form_config');
+  $config_properties_mapping = [
+    'path' => 'multiple_registration_path_',
+    'url' => 'multiple_registration_url_',
+    'redirect_path' => 'multiple_registration_redirect_path_',
+    'hidden' => 'multiple_registration_hidden_',
+    'form_mode_register' => 'multiple_registration_form_mode_register_',
+    'form_mode_edit' => 'multiple_registration_form_mode_edit_',
+  ];
+  $available_roles = \Drupal::service('multiple_registration.service')->getAvailableRoles();
+
+  if (!$config->isNew() && !empty($config->getRawData())) {
+    $roles = [];
+    foreach ($available_roles as $rid => $role_name) {
+      if ($config->get('multiple_registration_url_' . $rid)) {
+        $roles[$rid] = array_map(function ($value) use ($config, $rid) {
+          $needle = $value . $rid;
+          $value = $config->get($needle);
+          $config->clear($needle);
+          return $value;
+        }, $config_properties_mapping);
+        $config->set('roles', $roles);
+      }
+    }
+
+    $config->save();
+  }
+}

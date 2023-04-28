@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2ca915b0eea5d7b150f2e72e2e5268df",
+    "content-hash": "6917e32bd01cb626b7b1be852071256e",
     "packages": [
         {
             "name": "acquia/http-hmac-php",
@@ -7660,6 +7660,67 @@
                 "source": "https://git.drupalcode.org/project/migrate_upgrade",
                 "issues": "https://www.drupal.org/project/issues/migrate_upgrade",
                 "slack": "#migrate"
+            }
+        },
+        {
+            "name": "drupal/multiple_registration",
+            "version": "3.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/multiple_registration.git",
+                "reference": "3.2.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/multiple_registration-3.2.1.zip",
+                "reference": "3.2.1",
+                "shasum": "53b92990fe702e196e58f809d99cd41670467f90"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9 || ^10"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "3.2.1",
+                    "datestamp": "1682510943",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Oleksandr Ivanchenko (oleksandr-ivanchenko)",
+                    "homepage": "https://www.drupal.org/u/oleksandr-ivanchenko",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Yaroslav Samoilenko (ysamoylenko)",
+                    "homepage": "https://www.drupal.org/u/ysamoylenko",
+                    "role": "Co-maintainer"
+                },
+                {
+                    "name": "Alex Liannoy (alex-liannoy)",
+                    "homepage": "https://www.drupal.org/u/alex-liannoy",
+                    "role": "Co-maintainer"
+                }
+            ],
+            "description": "Ability to create role-specific registration pages.",
+            "homepage": "https://www.drupal.org/project/multiple_registration",
+            "keywords": [
+                "Drupal",
+                "Multiple Registration",
+                "multiple_registration"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/multiple_registration",
+                "issues": "https://www.drupal.org/project/multiple_registration"
             }
         },
         {
