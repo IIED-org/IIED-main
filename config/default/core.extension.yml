@@ -118,6 +118,7 @@ module:
   metatag_pinterest: 0
   metatag_twitter_cards: 0
   migrate: 0
+  multiple_registration: 0
   mysql: 0
   name: 0
   node: 0
@@ -147,6 +148,7 @@ module:
   rh_media: 0
   rh_node: 0
   rh_taxonomy: 0
+  scn: 0
   search404: 0
   search_api: 0
   search_api_autocomplete: 0
@@ -191,14 +193,13 @@ module:
   viewsreference: 0
   webform: 0
   webform_access: 0
-  webform_examples: 0
+  webform_content_creator: 0
   webform_image_select: 0
   webform_node: 0
   webform_options_limit: 0
   webform_scheduled_email: 0
   webform_submission_export_import: 0
   webform_submission_log: 0
-  webform_templates: 0
   webform_ui: 0
   webform_views: 0
   ds: 1

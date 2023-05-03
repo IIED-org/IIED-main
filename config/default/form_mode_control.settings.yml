@@ -141,3 +141,4 @@ modification+manager+taxonomy_term+person: taxonomy_term.person.default
 modification+administrator+taxonomy_term+person: taxonomy_term.person.default
 'use  The form mode default linked to  node entity( book )': node.book.default
 'use  The form mode default linked to  node entity( webform )': node.webform.default
+'use  The form mode default linked to  node entity( hidden_handbrake )': node.hidden_handbrake.default
