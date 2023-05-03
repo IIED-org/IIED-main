@@ -1,0 +1,22 @@
+uuid: 64ff6020-643b-48fa-9d9a-b4a63ee49b4b
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.hidden_handbrake
+id: node.hidden_handbrake.promote
+field_name: promote
+entity_type: node
+bundle: hidden_handbrake
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

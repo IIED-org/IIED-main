@@ -1,0 +1,27 @@
+uuid: 65501d61-0f97-4c84-8e9e-9a7a2446c66e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.hidden_handbrake
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    allowed_formats: {  }
+id: node.hidden_handbrake.body
+field_name: body
+entity_type: node
+bundle: hidden_handbrake
+label: Summary
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+field_type: text_with_summary

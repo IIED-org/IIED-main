@@ -1,0 +1,14 @@
+uuid: e7e4cf0c-2d5d-4ee7-a3cb-13ced4220f4a
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.hh_contributor
+  module:
+    - user
+id: user_add_role_action.hh_contributor
+label: 'Add the HH contributor role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: hh_contributor

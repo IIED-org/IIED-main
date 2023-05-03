@@ -1,0 +1,11 @@
+uuid: 7f5d6cf5-079a-44ef-a609-0fdfbb390d69
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.hidden_handbrake
+id: node.hidden_handbrake
+target_entity_type_id: node
+target_bundle: hidden_handbrake
+default_langcode: site_default
+language_alterable: false
