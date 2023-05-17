@@ -2838,6 +2838,13 @@ cite {
   padding-right: 2.5rem;
 }
 
+/*-- Comments --*/
+
+.indented {
+  margin-left: 1rem;
+  margin-top: -1rem;
+}
+
 .visible{
   visibility: visible;
 }
@@ -2913,6 +2920,14 @@ cite {
 
 .top-0{
   top: 0px;
+}
+
+.-bottom-px{
+  bottom: -1px;
+}
+
+.-left-\[13px\]{
+  left: -13px;
 }
 
 .-left-10{
@@ -3145,16 +3160,16 @@ cite {
   margin-top: -1.5rem;
 }
 
+.ml-4{
+  margin-left: 1rem;
+}
+
 .mb-8{
   margin-bottom: 2rem;
 }
 
 .-mt-8{
   margin-top: -2rem;
-}
-
-.ml-4{
-  margin-left: 1rem;
 }
 
 .mb-3{
@@ -3197,16 +3212,16 @@ cite {
   margin-right: 1rem;
 }
 
+.mr-1{
+  margin-right: 0.25rem;
+}
+
 .-mb-10{
   margin-bottom: -2.5rem;
 }
 
 .mb-1{
   margin-bottom: 0.25rem;
-}
-
-.mr-1{
-  margin-right: 0.25rem;
 }
 
 .-mt-4{
@@ -3850,12 +3865,16 @@ cite {
   border-bottom-left-radius: 1rem;
 }
 
+.rounded-tl-xl{
+  border-top-left-radius: 0.75rem;
+}
+
 .rounded-tr-xl{
   border-top-right-radius: 0.75rem;
 }
 
-.rounded-tl-xl{
-  border-top-left-radius: 0.75rem;
+.rounded-br-xl{
+  border-bottom-right-radius: 0.75rem;
 }
 
 .border{
@@ -4590,10 +4609,6 @@ cite {
 
 .visited\:text-gray-600:visited{
   color: rgb(75 85 99 );
-}
-
-.visited\:text-gray-500:visited{
-  color: rgb(107 114 128 );
 }
 
 .hover\:border-b-0:hover{
