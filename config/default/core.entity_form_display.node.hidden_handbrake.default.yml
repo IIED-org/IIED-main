@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.node.hidden_handbrake.body
+    - field.field.node.hidden_handbrake.comment
     - field.field.node.hidden_handbrake.field_author_based_in
     - field.field.node.hidden_handbrake.field_author_location
     - field.field.node.hidden_handbrake.field_date_published
@@ -17,6 +18,7 @@ dependencies:
     - node.type.hidden_handbrake
   module:
     - address
+    - comment
     - datetime
     - media_library
     - path
@@ -35,6 +37,12 @@ content:
       summary_rows: 3
       placeholder: ''
       show_summary: false
+    third_party_settings: {  }
+  comment:
+    type: comment_default
+    weight: 26
+    region: content
+    settings: {  }
     third_party_settings: {  }
   created:
     type: datetime_timestamp

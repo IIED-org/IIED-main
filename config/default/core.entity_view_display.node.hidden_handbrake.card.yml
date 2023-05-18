@@ -1,9 +1,9 @@
-uuid: 3759b1e4-59db-4fba-bc89-33972cfd979a
+uuid: dedd77d7-5f33-4dc3-af0b-5ae1c579d9bd
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.teaser
+    - core.entity_view_mode.node.card
     - field.field.node.hidden_handbrake.body
     - field.field.node.hidden_handbrake.comment
     - field.field.node.hidden_handbrake.field_author_based_in
@@ -18,31 +18,32 @@ dependencies:
     - field.field.node.hidden_handbrake.field_submitted_by
     - node.type.hidden_handbrake
   module:
-    - text
+    - datetime
+    - layout_builder
     - user
-id: node.hidden_handbrake.teaser
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.hidden_handbrake.card
 targetEntityType: node
 bundle: hidden_handbrake
-mode: teaser
+mode: card
 content:
-  body:
-    type: text_summary_or_trimmed
+  field_date_published:
+    type: datetime_default
     label: hidden
     settings:
-      trim_length: 600
+      timezone_override: ''
+      format_type: medium
     third_party_settings: {  }
-    weight: 101
-    region: content
-  links:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 100
+    weight: 0
     region: content
 hidden:
+  body: true
   comment: true
   field_author_based_in: true
   field_author_location: true
-  field_date_published: true
   field_hh_webform_sync: true
   field_hidden_handbrake_image: true
   field_how_stuck_handbrake: true
@@ -51,4 +52,5 @@ hidden:
   field_region_affected_3: true
   field_submitted_by: true
   langcode: true
+  links: true
   search_api_excerpt: true
