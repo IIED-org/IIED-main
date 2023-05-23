@@ -1,0 +1,5 @@
+{% extends '@iied_tw/node/card/node--card.html.twig' %}
+
+    {% block date %}
+    <p class="text-gray-500">{{ node.getCreatedTime|date('d F Y') }}</p>
+    {% endblock %}
