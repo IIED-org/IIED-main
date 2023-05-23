@@ -1,0 +1,31 @@
+{
+  "name": "drupal/webform_shs",
+  "description": "Provides an SHS term select element for webform",
+  "type": "drupal-module",
+  "homepage": "https://drupal.org/project/webform_shs",
+  "authors": [
+    {
+      "name": "hugronaphor",
+      "homepage": "https://www.drupal.org/u/hugronaphor",
+      "role": "Maintainer"
+    },
+    {
+      "name": "Adam Bramley",
+      "homepage": "https://www.drupal.org/u/acbramley",
+      "role": "Initial Drupal 8 port"
+    },
+    {
+      "name": "Kevin Reynen",
+      "homepage": "https://www.drupal.org/u/kreynen",
+      "role": "Support for Drupal 10"
+    }
+  ],
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/webform_shs",
+    "source": "https://git.drupalcode.org/project/webform_shs"
+  },
+  "license": "GPL-2.0+",
+    "require": {
+        "drupal/core": "^9 || ^10"
+    }
+}
