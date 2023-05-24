@@ -23,7 +23,11 @@ class ViewUnpublishedMultilingualTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['view_unpublished', 'node', 'content_translation'];
+  protected static $modules = [
+    'view_unpublished',
+    'node',
+    'content_translation',
+  ];
 
   /**
    * {@inheritdoc}
@@ -40,7 +44,7 @@ class ViewUnpublishedMultilingualTest extends BrowserTestBase {
   /**
    * Sets up the test.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Create Basic page node type.
@@ -80,7 +84,8 @@ class ViewUnpublishedMultilingualTest extends BrowserTestBase {
     $edit[$title_key] = $this->randomMachineName(8);
     $edit[$body_key] = $this->randomMachineName(16);
     $edit[$status_key] = 1;
-    $this->drupalPostForm('node/add/page', $edit, $this->t('Save'));
+    $this->drupalGet('node/add/page');
+    $this->submitForm($edit, 'Save');
 
     // Check the node language.
     $node = $this->getNodeByTitle($edit[$title_key]);
@@ -95,7 +100,8 @@ class ViewUnpublishedMultilingualTest extends BrowserTestBase {
     $this->drupalLogin($this->adminUser);
     $edit[$body_key] = $this->randomMachineName(16);
     $edit[$status_key] = 0;
-    $this->drupalPostForm($node->toUrl('edit-form'), $edit, $this->t('Save'));
+    $this->drupalGet($node->toUrl('edit-form'));
+    $this->submitForm($edit, 'Save');
     $this->drupalLogout();
     $this->drupalGet($node->toUrl());
     $this->assertSession()->statusCodeEquals(403);
@@ -109,7 +115,8 @@ class ViewUnpublishedMultilingualTest extends BrowserTestBase {
     $this->drupalLogin($this->adminUser);
     $edit[$body_key] = $this->randomMachineName(16);
     $edit[$status_key] = 1;
-    $this->drupalPostForm($node->toUrl('edit-form'), $edit, $this->t('Save'));
+    $this->drupalGet($node->toUrl('edit-form'));
+    $this->submitForm($edit, 'Save');
     $this->drupalLogout();
 
     // Anonymous users should have access.
@@ -129,7 +136,8 @@ class ViewUnpublishedMultilingualTest extends BrowserTestBase {
     $edit[$status_key] = 0;
     // Unpublish the node and now anonymous users should not have access.
     $edit[$status_key] = 0;
-    $this->drupalPostForm($add_translation_url, $edit, $this->t('Save (this translation)'));
+    $this->drupalGet($add_translation_url);
+    $this->submitForm($edit, 'Save (this translation)');
     // Reset the node so we pick up the translation.
     $node = $this->getNodeByTitle($edit[$title_key], TRUE);
     $this->drupalLogout();

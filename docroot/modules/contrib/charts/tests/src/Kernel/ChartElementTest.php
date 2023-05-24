@@ -2,9 +2,7 @@
 
 namespace Drupal\Tests\charts\Kernel;
 
-use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\charts\Traits\ConfigUpdateTrait;
-use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Tests the chart type element.
@@ -42,12 +40,12 @@ class ChartElementTest extends ChartsKernelTestBase {
       '#chart_type' => 'column',
     ];
 
-    $json = "{'title':{'text':null,'color':'#000','position':'out','font':{'weight':'normal','style':'normal','size':14}},'colors':['#2f7ed8','#0d233a','#8bbc21','#910000','#1aadce','#492970','#f28f43','#77a1e5','#c42525','#a6c96a'],'tooltips':true,'foo_configuration':'bar','series':[]}";
+    $json = "{'title':{'text':null,'color':'#000','position':'out','font':{'weight':'normal','style':'normal','size':14}},'subtitle':{'text':null},'colors':['#2f7ed8','#0d233a','#8bbc21','#910000','#1aadce','#492970','#f28f43','#77a1e5','#c42525','#a6c96a'],'tooltips':true,'foo_configuration':'bar','series':[]}";
     $this->assertElementJson($element, $json);
 
     // Testing raw options.
     $element['#raw_options'] = ['title' => ['text' => 'Foo']];
-    $path = ['title','text'];
+    $path = ['title', 'text'];
     $this->assertJsonPropertyHasValue($element, $path, 'Foo');
   }
 

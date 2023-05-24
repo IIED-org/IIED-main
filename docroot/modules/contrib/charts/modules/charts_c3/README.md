@@ -121,7 +121,8 @@ file as follows.
    the code below.
 
         "scripts": {
-            "clean-c3js": "chmod +x scripts/clean-c3js.sh && ./scripts/clean-c3js.sh",
+            "clean-c3js": "chmod +x scripts/clean-c3js.sh &&
+             ./scripts/clean-c3js.sh",
             "post-install-cmd": [
               "@clean-c3js"
             ],

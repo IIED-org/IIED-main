@@ -4,6 +4,7 @@
     "description": "Provides integration between your Drupal site and Acquia's hosted search service.",
     "license": "GPL-2.0-or-later",
     "require": {
+        "php": "^7.4 || ^8",
         "ext-curl": "*",
         "ext-json": "*",
         "ext-zip": "*",

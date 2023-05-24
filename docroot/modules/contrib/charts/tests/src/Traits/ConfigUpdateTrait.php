@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\charts\Traits;
 
+/**
+ * Provides a trait to update the configuration.
+ */
 trait ConfigUpdateTrait {
 
   /**
@@ -9,8 +12,8 @@ trait ConfigUpdateTrait {
    *
    * @param string $value
    *   The value to set.
-   *
-   * @return void
+   * @param string $library
+   *   Library to be rendered.
    */
   protected function updateFooConfiguration(string $value, $library = 'charts_test_library'): void {
     $config = $this->config('charts.settings');

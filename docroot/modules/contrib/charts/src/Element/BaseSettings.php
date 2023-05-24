@@ -175,6 +175,18 @@ class BaseSettings extends FormElement {
       '#default_value' => $options['display']['title'],
     ];
 
+    $element['display']['subtitle'] = [
+      '#title' => new TranslatableMarkup('Chart subtitle'),
+      '#type' => 'textfield',
+      '#default_value' => $options['display']['subtitle'] ?? '',
+      '#description' => new TranslatableMarkup('Not all charting libraries support this option. Disabled until there is a title value.'),
+      '#states' => [
+        'disabled' => [
+          ':input[name="' . $element['#name'] . '[display][title]"]' => ['value' => ''],
+        ],
+      ],
+    ];
+
     $element['xaxis'] = [
       '#title' => new TranslatableMarkup('Horizontal axis'),
       '#type' => 'fieldset',
@@ -636,7 +648,7 @@ class BaseSettings extends FormElement {
       return;
     }
     $triggering_element = $form_state->getTriggeringElement();
-    $button_type = isset($triggering_element['#button_type']) ? $triggering_element['#button_type'] : '';
+    $button_type = $triggering_element['#button_type'] ?? '';
     if ($button_type != 'primary' && count($form_state->getButtons()) > 1) {
       // The form was submitted, but not via the primary button, which
       // indicates that it will probably be rebuilt.
@@ -1432,7 +1444,7 @@ class BaseSettings extends FormElement {
     $grouping_field_configs = $field_config_storage->loadByProperties(['field_name' => $metadata['grouping_field_name']]);
     $entity_type_id = $metadata['entity_type_id'];
     $bundle_ids = [];
-    foreach ($grouping_field_configs as $key => $grouping_field_config) {
+    foreach ($grouping_field_configs as $grouping_field_config) {
       $field_settings = $grouping_field_config->getSettings();
       if (empty($field_settings['target_type']) || $field_settings['target_type'] !== $entity_type_id) {
         continue;
@@ -1457,7 +1469,7 @@ class BaseSettings extends FormElement {
       ],
     ];
     $bundle_key = $entity_type->getKey('bundle');
-    $query = $entity_storage->getQuery()
+    $query = $entity_storage->getQuery()->accessCheck(FALSE)
       ->condition($bundle_key, $bundle_ids, 'IN');
 
     if ($entity_type instanceof EntityPublishedInterface) {
@@ -1528,7 +1540,7 @@ class BaseSettings extends FormElement {
     /** @var \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager */
     $entity_field_manager = \Drupal::service('entity_field.manager');
     $color_field_options = [];
-    foreach ($grouping_field_configs as $key => $grouping_field_config) {
+    foreach ($grouping_field_configs as $grouping_field_config) {
       $field_settings = $grouping_field_config->getSettings();
       if (empty($field_settings['target_type']) || $field_settings['target_type'] !== $entity_type_id) {
         continue;

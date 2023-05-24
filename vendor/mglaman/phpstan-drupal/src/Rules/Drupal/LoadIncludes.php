@@ -6,7 +6,6 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\RuleErrorBuilder;
-use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\ObjectType;
 
 class LoadIncludes extends LoadIncludeBase
@@ -31,23 +30,20 @@ class LoadIncludes extends LoadIncludeBase
         if (\count($args) < 2) {
             return [];
         }
-        $variable = $node->var;
-        if (!$variable instanceof Node\Expr\Variable) {
-            return [];
-        }
-        $var_name = $variable->name;
-        if (!is_string($var_name)) {
-            throw new ShouldNotHappenException(sprintf('Expected string for variable in %s, please open an issue on GitHub https://github.com/mglaman/phpstan-drupal/issues', static::class));
-        }
+        $type = $scope->getType($node->var);
         $moduleHandlerInterfaceType = new ObjectType(ModuleHandlerInterface::class);
-        $variableType = $scope->getVariableType($var_name);
-        if (!$variableType->isSuperTypeOf($moduleHandlerInterfaceType)->yes()) {
+        if (!$type->isSuperTypeOf($moduleHandlerInterfaceType)->yes()) {
             return [];
         }
 
         try {
             // Try to invoke it similarly as the module handler itself.
             [$moduleName, $filename] = $this->parseLoadIncludeArgs($args[0], $args[1], $args[2] ?? null, $scope);
+            if (!$moduleName && !$filename) {
+                // Couldn't determine module- nor file-name, most probably
+                // because it's a variable. Nothing to load, bail now.
+                return [];
+            }
             $module = $this->extensionMap->getModule($moduleName);
             if ($module === null) {
                 return [

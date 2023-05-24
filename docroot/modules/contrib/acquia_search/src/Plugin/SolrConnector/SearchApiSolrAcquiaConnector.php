@@ -7,11 +7,9 @@ use Drupal\acquia_search\AcquiaSearchApiClient;
 use Drupal\acquia_search\Client\Solarium\AcquiaGuzzle;
 use Drupal\acquia_search\Client\Solarium\Endpoint as AcquiaEndpoint;
 use Drupal\acquia_search\Helper\Messages;
-use Drupal\acquia_search\PreferredCoreService;
 use Drupal\acquia_search\Solarium\EventDispatcher\Psr14Bridge;
 use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
@@ -84,11 +82,11 @@ class SearchApiSolrAcquiaConnector extends SolrConnectorPluginBase implements
   protected $acquiaSearchApiClient;
 
   /**
-   * Preferred Search Core Service.
+   * Acquia specific Guzzle instance for Solarium.
    *
-   * @var \Drupal\acquia_search\PreferredCoreService
+   * @var \Drupal\acquia_search\Client\Solarium\AcquiaGuzzle
    */
-  protected $preferredCoreService;
+  private $acquiaGuzzle;
 
   /**
    * {@inheritdoc}
@@ -99,23 +97,18 @@ class SearchApiSolrAcquiaConnector extends SolrConnectorPluginBase implements
     array $plugin_definition,
     LoggerChannelFactoryInterface $logger_factory,
     AcquiaGuzzle $acquia_guzzle,
-    DateFormatterInterface $date_formatter,
     MessengerInterface $messenger,
     CacheBackendInterface $cache,
     Subscription $subscription,
-    AcquiaSearchApiClient $acquia_search_api_client,
-    PreferredCoreService $preferred_search_core
+    AcquiaSearchApiClient $acquia_search_api_client
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->acquiaGuzzle = $acquia_guzzle;
     $this->acquiaSearchApiClient = $acquia_search_api_client;
-    $this->dateFormatter = $date_formatter;
     $this->messenger = $messenger;
     $this->subscription = $subscription;
-    $this->preferredCoreService = $preferred_search_core;
     $this->cache = $cache;
     $this->setLogger($logger_factory->get('acquia_search'));
-    $this->configuration['core'] = self::getPlatformConfig()['core'];
   }
 
   /**
@@ -125,19 +118,16 @@ class SearchApiSolrAcquiaConnector extends SolrConnectorPluginBase implements
     // Our schema (8.1.7) is newer than Solr's version, 4.1.1.
     $configuration['skip_schema_check'] = TRUE;
     // Ensure platform config is always used.
-    $configuration = array_merge($configuration, self::getPlatformConfig());
     $instance = new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
       $container->get('logger.factory'),
       $container->get('acquia_search.solarium.guzzle'),
-      $container->get('date.formatter'),
       $container->get('messenger'),
       $container->get('cache.default'),
       $container->get('acquia_connector.subscription'),
-      $container->get('acquia_search.api_client'),
-      $container->get('acquia_search.preferred_core')
+      $container->get('acquia_search.api_client')
     );
     $instance->setEventDispatcher($container->get('event_dispatcher'));
     return $instance;
@@ -159,34 +149,13 @@ class SearchApiSolrAcquiaConnector extends SolrConnectorPluginBase implements
   }
 
   /**
-   * Returns platform-specific Solr configuration.
-   *
-   * @return array
-   *   Acquia platform Solr configuration.
-   */
-  public static function getPlatformConfig() {
-    /** @var \Drupal\acquia_search\PreferredCoreService $preferredCoreService */
-    $preferredCoreService = \Drupal::service('acquia_search.preferred_core');
-
-    $data = [
-      'scheme' => 'https',
-      'host' => $preferredCoreService->getPreferredCoreHostname() ?? 'localhost',
-      'port' => '443',
-      'path' => 'solr',
-      'core' => $preferredCoreService->getPreferredCoreId(),
-      'overridden_by_acquia_search' => self::OVERRIDE_AUTO_SET,
-    ];
-    return $data;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
     return array_merge(
       parent::defaultConfiguration(),
-      self::getPlatformConfig(),
       [
+        // Our schema (8.1.7) is newer than Solr's version, 4.1.1.
         'skip_schema_check' => TRUE,
       ]
     );
@@ -230,20 +199,18 @@ class SearchApiSolrAcquiaConnector extends SolrConnectorPluginBase implements
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildConfigurationForm($form, $form_state);
 
-    $fields = [
+    $use_fields = [
       'timeout',
       SolrConnectorInterface::INDEX_TIMEOUT,
       SolrConnectorInterface::OPTIMIZE_TIMEOUT,
       SolrConnectorInterface::FINALIZE_TIMEOUT,
       'commit_within',
     ];
-    $form = array_filter(
-      $form,
-      function ($field_name) use ($fields) {
-        return in_array($field_name, $fields, TRUE);
-      },
-      ARRAY_FILTER_USE_KEY
-    );
+    foreach ($form as $k => $v) {
+      if (!in_array($k, $use_fields, TRUE)) {
+        $form[$k]['#access'] = FALSE;
+      }
+    }
 
     // Bail early if the subscription doesn't exist.
     if (!isset($this->subscription)) {
@@ -271,7 +238,7 @@ class SearchApiSolrAcquiaConnector extends SolrConnectorPluginBase implements
     }
 
     $subdata = $this->subscription->getSubscription();
-    if ($subdata['acquia_search']['read_only']) {
+    if (isset($subdata['acquia_search']['read_only']) && $subdata['acquia_search']['read_only']) {
       $form['readonly']['#markup'] = Messages::getReadOnlyModeWarning();
     }
     return $form;
@@ -292,19 +259,19 @@ class SearchApiSolrAcquiaConnector extends SolrConnectorPluginBase implements
    * {@inheritdoc}
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
-    $configuration = array_merge($this->defaultConfiguration(), $form_state->getValues());
-
-    $this->setConfiguration($configuration);
+    parent::submitConfigurationForm($form, $form_state);
 
     // Exclude Acquia Specific settings.
-    foreach (array_keys(self::getPlatformConfig()) as $key) {
+    $dynamic_config_keys = [
+      'scheme',
+      'host',
+      'port',
+      'path',
+      'core',
+      'overridden_by_acquia_search',
+    ];
+    foreach ($dynamic_config_keys as $key) {
       unset($this->configuration[$key]);
-    }
-
-    // Clear Acquia Search Solr indexes cache.
-    if (!empty($this->subscription->getSettings()->getIdentifier())) {
-      $cid = 'acquia_search.indexes.' . $this->subscription->getSettings()->getIdentifier();
-      $this->cache->delete($cid);
     }
   }
 
@@ -392,17 +359,17 @@ class SearchApiSolrAcquiaConnector extends SolrConnectorPluginBase implements
    */
   protected function getAcquiaSearchCores(): array {
 
-    if (!$cores = $this->acquiaSearchApiClient->getSearchIndexes()) {
+    $cores = $this->acquiaSearchApiClient->getSearchIndexes();
+    if ($cores === FALSE) {
       return [
         '#markup' => $this->t('Unable to connect to Acquia Search API.'),
       ];
     }
-    $preferred_core = $this->preferredCoreService->getPreferredCore();
 
     // We use core id as a key.
-    $cores = $this->preferredCoreService->getListOfAvailableCores();
+    $cores = array_keys($cores);
     foreach ($cores as $key => $core) {
-      if (isset($preferred_core['core_id']) && $core === $preferred_core['core_id']) {
+      if ($core === $this->configuration['core']) {
         $cores[$key] = $core . ' --> Currently Selected';
       }
     }

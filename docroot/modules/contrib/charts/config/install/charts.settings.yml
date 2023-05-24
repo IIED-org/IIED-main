@@ -3,6 +3,7 @@ charts_default_settings:
   type: line
   display:
     title: ''
+    subtitle: ''
     colors:
       - '#006fb0'
       - '#f07c33'

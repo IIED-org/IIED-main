@@ -93,7 +93,7 @@ function gin_login_preprocess_html(&$variables) {
  */
 function gin_login_form_alter(&$form, $form_state, $form_id) {
   // User form (Login, Register or Forgot password)
-  if (strpos($form_id, 'user_login') !== FALSE || strpos($form_id, 'user_register') !== FALSE || strpos($form_id, 'user_pass') !== FALSE) {
+  if (strpos($form_id, 'user_login') !== FALSE || strpos($form_id, 'user_register') !== FALSE || in_array($form_id, ['user_pass'])) {
     $form['actions']['submit']['#attributes']['class'][] = 'button--primary';
   }
 
@@ -140,7 +140,7 @@ function gin_login_form_alter(&$form, $form_state, $form_id) {
   }
 
   // Changing name of Reset button.
-  if (strpos($form_id, 'user_pass') !== FALSE) {
+  if (in_array($form_id, ['user_pass'])) {
     $form['actions']['submit']['#value'] = t('Reset');
   }
 }
@@ -190,13 +190,13 @@ function gin_login_preprocess_ginlogin(&$variables) {
 
   $configData = $config->get();
 
-  if ($configData['logo']['use_default'] == "0") {
+  if (isset($configData['logo']) && $configData['logo']['use_default'] == "0") {
     if (isset($configData['logo']['path']) && !empty($configData['logo']['path'])) {
       $variables['icon_path'] = $fileUrlGenerator->generateAbsoluteString($configData['logo']['path']);
     }
   }
 
-  if ($configData['brand_image']['use_default'] == "0") {
+  if (isset($configData['brand_image']) && $configData['brand_image']['use_default'] == "0") {
     if (isset($configData['brand_image']['path']) && !empty($configData['brand_image']['path'])) {
       $variables['brand_image'] = $fileUrlGenerator->generateAbsoluteString($configData['brand_image']['path']);
     }

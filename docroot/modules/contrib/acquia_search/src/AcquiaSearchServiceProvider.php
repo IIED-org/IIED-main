@@ -14,13 +14,13 @@ class AcquiaSearchServiceProvider implements ServiceProviderInterface {
    * {@inheritdoc}
    */
   public function register(ContainerBuilder $container) {
-    // @todo Delete this when dropping Drupal 8 support in https://www.drupal.org/project/cdn/issues/3103682.
+    // @todo Delete this when dropping Drupal 8 support.
     if (version_compare(\Drupal::VERSION, '9.0', '<')) {
-      // @see https://www.drupal.org/project/drupal/issues/3074585
+      // @see https://www.drupal.org/node/3080612
       $container->getDefinition('acquia_search.possible_cores.acquia_hosting')
-        ->setArgument(2, '@site.path.factory');
+        ->setArgument(2, '@site.path');
       $container->getDefinition('acquia_search.possible_cores.default_core')
-        ->setArgument(2, '@site.path.factory');
+        ->setArgument(2, '@site.path');
     }
   }
 

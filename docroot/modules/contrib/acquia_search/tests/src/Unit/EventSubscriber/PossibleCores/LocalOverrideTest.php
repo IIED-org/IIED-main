@@ -9,8 +9,6 @@ use Drupal\acquia_search\Event\AcquiaPossibleCoresEvent;
 use Drupal\acquia_search\EventSubscriber\PossibleCores\LocalOverride;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
-use Drupal\Core\Messenger\MessengerInterface;
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Tests\acquia_search\Unit\AcquiaSearchTestCase;
 
@@ -27,35 +25,38 @@ final class LocalOverrideTest extends AcquiaSearchTestCase {
 
     $sut = new LocalOverride(
       $subscription,
-      $this->createConfigFactoryMock('', ''),
-      $this->createMock(RouteMatchInterface::class)
+      $this->createConfigFactoryMock('', '')
     );
-    $sut->onGetPossibleCores(new AcquiaPossibleCoresEvent([]));
+    $sut->onGetPossibleCores(new AcquiaPossibleCoresEvent('foobar', []));
   }
 
   /**
    * @dataProvider configData
    */
-  public function testOnGetPossibleCores(string $config_override_core, string $config_solr_override_core, string $settings_override_core, array $expected): void {
+  public function testOnGetPossibleCores(string $config_override_core, string $config_solr_override_core, string $settings_override_core, array $server_overrides, array $expected): void {
     $subscription = $this->createMock(Subscription::class);
     $subscription->expects($this->never())
       ->method('getProvider');
     $subscription->expects($this->never())
       ->method('getSettings');
 
+    $settings = [
+      'acquia_search' => [],
+    ];
+
     if ($settings_override_core !== '') {
-      new Settings([
-        'acquia_search' => [
-          'override_search_core' => $settings_override_core,
-        ],
-      ]);
+      $settings['acquia_search']['override_search_core'] = $settings_override_core;
     }
+    if ($server_overrides !== []) {
+      $settings['acquia_search']['server_overrides'] = $server_overrides;
+    }
+    new Settings($settings);
 
     $sut = new LocalOverride(
       $subscription,
       $this->createConfigFactoryMock($config_override_core, $config_solr_override_core)
     );
-    $event = new AcquiaPossibleCoresEvent([]);
+    $event = new AcquiaPossibleCoresEvent('foobar', []);
     $sut->onGetPossibleCores($event);
     self::assertEquals($expected, $event->getPossibleCores());
     self::assertEquals(FALSE, $event->isReadOnly());
@@ -66,31 +67,63 @@ final class LocalOverrideTest extends AcquiaSearchTestCase {
       'foo',
       '',
       '',
+      [],
       ['foo'],
     ];
     yield 'config_solr_override_core bar' => [
       '',
       'bar',
       '',
+      [],
       ['bar'],
     ];
     yield 'settings_override_core baz' => [
       '',
       '',
       'baz',
+      [],
       ['baz'],
     ];
     yield 'config_override_core foo settings_override_core baz' => [
       'foo',
       '',
       'baz',
+      [],
       ['foo', 'baz'],
     ];
     yield 'config_solr_override_core bar settings_override_core baz' => [
       '',
       'bar',
       'baz',
+      [],
       ['bar', 'baz'],
+    ];
+    yield 'server overrides' => [
+      '',
+      '',
+      '',
+      [
+        'foobar' => 'baz',
+      ],
+      ['baz'],
+    ];
+    yield 'server_overrides not set' => [
+      '',
+      '',
+      '',
+      [
+        'bazBar' => 'baz',
+      ],
+      [],
+    ];
+    yield 'server_overrides precedence over settings_override_core' => [
+      '',
+      '',
+      'bar',
+      [
+        'foobar' => 'baz',
+      ],
+      ['baz'],
     ];
   }
 
@@ -113,11 +146,9 @@ final class LocalOverrideTest extends AcquiaSearchTestCase {
 
     $sut = new LocalOverride(
       $subscription,
-      $this->createConfigFactoryMock('', ''),
-      $this->createMock(MessengerInterface::class),
-      $this->createMock(RouteMatchInterface::class)
+      $this->createConfigFactoryMock('', '')
     );
-    $event = new AcquiaPossibleCoresEvent([]);
+    $event = new AcquiaPossibleCoresEvent('foobar', []);
     $sut->onGetPossibleCores($event);
     self::assertEquals([], $event->getPossibleCores());
     self::assertEquals($readonly, $event->isReadOnly());

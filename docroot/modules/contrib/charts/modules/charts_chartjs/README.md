@@ -37,13 +37,15 @@ by adding the following "installer-types" and "installer-paths" to the "extra"
 section of "composer.json". If you are not using the "web" directory, then
 remove "web/" from the lines below:
 
-        "extra": {
-            "installer-types": ["npm-asset"],
-            "installer-paths": {
-                "web/libraries/chartjs": ["npm-asset/chart.js"],
-                "web/libraries/chartjs-adapter-date-fns": ["npm-asset/chartjs-adapter-date-fns"],
-            },
-        }
+"extra": {
+    "installer-types": ["npm-asset"],
+    "installer-paths": {
+        "web/libraries/chartjs": ["npm-asset/chart.js"],
+        "web/libraries/chartjs-adapter-date-fns": [
+          "npm-asset/chartjs-adapter-date-fns"
+          ],
+    },
+}
 
 4. This and the following step is optional but recommended. The reason for
 them is that when installing the Chart.js package with Composer,
@@ -103,17 +105,19 @@ them. So: create a new directory in your project root called "scripts".
    "scripts" already exists, you will need to do a little more to incorporate
    the code below.
 
-        "scripts": {
-            "clean-chartjs": "chmod +x scripts/clean-chartjs.sh && ./scripts/clean-chartjs.sh",
-            "post-install-cmd": [
-              "@clean-chartjs"
-            ],
-            "post-update-cmd": [
-              "@clean-chartjs"
-            ]
-        }
+  "scripts": {
+      "clean-chartjs": "chmod +x scripts/clean-chartjs.sh &&
+      ./scripts/clean-chartjs.sh",
+      "post-install-cmd": [
+        "@clean-chartjs"
+      ],
+      "post-update-cmd": [
+        "@clean-chartjs"
+      ]
+  }
 
 7. Run the following command; you should find that new directories have been
    created under "/libraries".
 
-        composer require --prefer-dist npm-asset/chart.js:^3.3 npm-asset/chartjs-adapter-date-fns:^2
+    composer require --prefer-dist npm-asset/chart.js:^3.3
+    npm-asset/chartjs-adapter-date-fns:^2

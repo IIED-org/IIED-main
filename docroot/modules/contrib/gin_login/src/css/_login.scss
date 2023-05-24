@@ -33,6 +33,7 @@ body.gin-login {
     flex-wrap: wrap;
     min-height: 100vh;
     max-height: 100%;
+    margin-bottom: -1px;
     background: var(--colorGinLayerBackground, #fff);
 
     @media (min-width: $breakpoint) {

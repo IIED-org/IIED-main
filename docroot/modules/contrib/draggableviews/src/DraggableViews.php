@@ -56,6 +56,11 @@ class DraggableViews {
       return 0;
     }
     $row = $this->view->result[$index];
+
+    if (!property_exists($row, 'draggableviews_structure_parent') || !$row->draggableviews_structure_parent) {
+      return 0;
+    }
+
     $parentIndex = (int) $this->getIndex($row->draggableviews_structure_parent);
 
     // Prevent infinite recursion.
@@ -63,7 +68,7 @@ class DraggableViews {
       return 0;
     }
     // If parent is available, set parent's depth +1.
-    return (!empty($row->draggableviews_structure_parent)) ? $this->getDepth($parentIndex) + 1 : 0;
+    return $this->getDepth($parentIndex) + 1;
   }
 
   /**

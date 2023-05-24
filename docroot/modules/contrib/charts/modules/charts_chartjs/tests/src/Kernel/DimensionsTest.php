@@ -22,14 +22,14 @@ class DimensionsTest extends BaseDimensionsTest {
   /**
    * Test that the set dimensions are correctly added on the element.
    *
-   * @dataProvider provideChartElements
-   *
    * @param array $element
    *   The element to be tested.
    * @param string|null $expected_width
    *   The expected width to be found on the element.
    * @param string|null $expected_height
    *   The expected height to be found on the element.
+   *
+   * @dataProvider provideChartElements
    */
   public function testDimensions(array $element, string $expected_width = NULL, string $expected_height = NULL) {
     $element['#chart_library'] = 'chartjs';

@@ -43,7 +43,7 @@ final class AcquiaHostingTest extends AcquiaSearchTestCase {
       $subscription,
       'foobar'
     );
-    $event = new AcquiaPossibleCoresEvent([]);
+    $event = new AcquiaPossibleCoresEvent('foobar', []);
     $sut->onGetPossibleCores($event);
     self::assertEquals([], $event->getPossibleCores());
     self::assertTrue($event->isReadOnly());
@@ -89,7 +89,7 @@ final class AcquiaHostingTest extends AcquiaSearchTestCase {
       $subscription,
       'sites/default'
     );
-    $event = new AcquiaPossibleCoresEvent([]);
+    $event = new AcquiaPossibleCoresEvent('foobar', []);
     $sut->onGetPossibleCores($event);
     self::assertEquals($expected_possible_cores, $event->getPossibleCores());
     self::assertEquals($expected_read_only, $event->isReadOnly());
@@ -104,6 +104,7 @@ final class AcquiaHostingTest extends AcquiaSearchTestCase {
         'abc123.prod.sitename',
         'abc123.prod',
         'abc123.prod.default',
+        'abc123.prod.foobar_db',
       ],
       FALSE,
     ];
@@ -115,6 +116,7 @@ final class AcquiaHostingTest extends AcquiaSearchTestCase {
         'abc123.test.sitename',
         'abc123.test',
         'abc123.test.default',
+        'abc123.test.foobar_db',
       ],
       FALSE,
     ];
@@ -126,6 +128,7 @@ final class AcquiaHostingTest extends AcquiaSearchTestCase {
         'abc123.dev.sitename',
         'abc123.dev',
         'abc123.dev.default',
+        'abc123.dev.foobar_db',
       ],
       FALSE,
     ];
@@ -144,6 +147,7 @@ final class AcquiaHostingTest extends AcquiaSearchTestCase {
       [
         'abc123.dev',
         'abc123.dev.default',
+        'abc123.dev.foobar_db',
       ],
       FALSE,
     ];
