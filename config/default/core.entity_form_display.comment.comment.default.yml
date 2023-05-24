@@ -6,6 +6,7 @@ dependencies:
     - comment.type.comment
     - field.field.comment.comment.comment_body
   module:
+    - allowed_formats
     - text
 id: comment.comment.default
 targetEntityType: comment
@@ -24,7 +25,10 @@ content:
     settings:
       rows: 5
       placeholder: ''
-    third_party_settings: {  }
+    third_party_settings:
+      allowed_formats:
+        hide_help: '1'
+        hide_guidelines: '1'
   langcode:
     type: language_select
     weight: 1

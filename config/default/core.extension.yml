@@ -160,6 +160,7 @@ module:
   serial: 0
   serialization: 0
   shortcut: 0
+  shs: 0
   sophron: 0
   stories: 0
   svg_image: 0
@@ -198,6 +199,7 @@ module:
   webform_node: 0
   webform_options_limit: 0
   webform_scheduled_email: 0
+  webform_shs: 0
   webform_submission_export_import: 0
   webform_submission_log: 0
   webform_ui: 0

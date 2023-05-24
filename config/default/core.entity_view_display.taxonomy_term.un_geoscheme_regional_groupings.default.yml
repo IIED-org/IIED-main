@@ -1,0 +1,25 @@
+uuid: 6854ec82-e575-4674-ac97-a827049a7b6c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.un_geoscheme_regional_groupings.field_term_reference
+    - taxonomy.vocabulary.un_geoscheme_regional_groupings
+  module:
+    - text
+id: taxonomy_term.un_geoscheme_regional_groupings.default
+targetEntityType: taxonomy_term
+bundle: un_geoscheme_regional_groupings
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_term_reference: true
+  langcode: true
+  search_api_excerpt: true

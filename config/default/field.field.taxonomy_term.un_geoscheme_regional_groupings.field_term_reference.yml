@@ -1,0 +1,28 @@
+uuid: 271903b5-7726-43fc-8ef0-5209ad6d8388
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_term_reference
+    - taxonomy.vocabulary.un_geoscheme_regional_groupings
+id: taxonomy_term.un_geoscheme_regional_groupings.field_term_reference
+field_name: field_term_reference
+entity_type: taxonomy_term
+bundle: un_geoscheme_regional_groupings
+label: 'Term reference'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      un_geoscheme_regional_groupings: un_geoscheme_regional_groupings
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

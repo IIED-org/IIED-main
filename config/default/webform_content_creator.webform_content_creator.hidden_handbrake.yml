@@ -34,19 +34,19 @@ elements:
   field_region_affected:
     type: false
     mapping: entity_reference_mapping
-    webform_field: region_1_required_
+    webform_field: reegy
     custom_check: 0
     custom_value: ''
   field_region_affected_2:
     type: false
     mapping: entity_reference_mapping
-    webform_field: region_2_optional_
+    webform_field: title_required_max_80_characters_
     custom_check: 0
     custom_value: ''
   field_region_affected_3:
     type: false
     mapping: entity_reference_mapping
-    webform_field: region_3_optional_
+    webform_field: title_required_max_80_characters_
     custom_check: 0
     custom_value: ''
   field_submitted_by:

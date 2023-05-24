@@ -35,9 +35,10 @@ dependencies:
     - taxonomy
     - toolbar
     - view_unpublished
+    - webform
 id: editor
 label: Editor
-weight: -6
+weight: -4
 is_admin: null
 permissions:
   - 'access administration pages'
@@ -46,6 +47,7 @@ permissions:
   - 'access files overview'
   - 'access toolbar'
   - 'access user profiles'
+  - 'access webform submission user'
   - 'administer nodes'
   - 'create article content'
   - 'create blog content'

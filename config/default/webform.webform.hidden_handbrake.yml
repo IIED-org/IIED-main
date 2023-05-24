@@ -53,46 +53,17 @@ elements: |-
       '#attributes':
         class:
           - webform-horizontal-rule--dashed
-    which_geographic_region_s_are_being_affected_by_the_handbrake_:
-      '#type': label
+    reegy:
+      '#type': webform_shs_term_select
       '#title': 'Which geographic region(s) are being affected by the handbrake?'
-    region_1_required_:
-      '#type': webform_entity_select
-      '#title': 'Region 1'
-      '#description': '<em>(Required).</em>'
+      '#multiple': true
+      '#description': '<em>(Required). Please select at least one Region (and Sub-Region if applicable) from the drop-down lists below. To add further regions, click the &#39;Add another item&#39; link.</em>'
       '#description_display': before
       '#required': true
-      '#required_error': 'Please complete the ''Geographic region > Region 1 field.'
-      '#target_type': taxonomy_term
-      '#selection_handler': 'default:taxonomy_term'
-      '#selection_settings':
-        target_bundles:
-          un_geoscheme_regional_groupings: un_geoscheme_regional_groupings
-        sort:
-          field: name
-          direction: ASC
-    region_2_optional_:
-      '#type': webform_entity_select
-      '#title': 'Region 2'
-      '#target_type': taxonomy_term
-      '#selection_handler': 'default:taxonomy_term'
-      '#selection_settings':
-        target_bundles:
-          un_geoscheme_regional_groupings: un_geoscheme_regional_groupings
-        sort:
-          field: name
-          direction: ASC
-    region_3_optional_:
-      '#type': webform_entity_select
-      '#title': 'Region 3'
-      '#target_type': taxonomy_term
-      '#selection_handler': 'default:taxonomy_term'
-      '#selection_settings':
-        target_bundles:
-          un_geoscheme_regional_groupings: un_geoscheme_regional_groupings
-        sort:
-          field: name
-          direction: ASC
+      '#required_error': 'Please complete the ''Geographic region(s) affected field.'
+      '#vocabulary': un_geoscheme_regional_groupings
+      '#force_deepest': true
+      '#depth_labels': {  }
     horizontal_rule_09:
       '#type': webform_horizontal_rule
       '#display_on': both
@@ -393,48 +364,89 @@ settings:
 access:
   create:
     roles:
-      - anonymous
-      - authenticated
+      - hh_contributor
+      - hh_reviewer
+      - publications_editor
+      - editor
+      - manager
+      - administrator
     users: {  }
     permissions: {  }
   view_any:
-    roles: {  }
+    roles:
+      - hh_reviewer
+      - editor
+      - manager
+      - administrator
     users: {  }
     permissions: {  }
   update_any:
-    roles: {  }
+    roles:
+      - manager
+      - administrator
     users: {  }
     permissions: {  }
   delete_any:
-    roles: {  }
+    roles:
+      - hh_reviewer
+      - editor
+      - manager
+      - administrator
     users: {  }
     permissions: {  }
   purge_any:
-    roles: {  }
+    roles:
+      - hh_reviewer
+      - editor
+      - manager
+      - administrator
     users: {  }
     permissions: {  }
   view_own:
-    roles: {  }
+    roles:
+      - hh_contributor
+      - hh_reviewer
+      - publications_editor
+      - editor
+      - manager
+      - administrator
     users: {  }
     permissions: {  }
   update_own:
-    roles: {  }
+    roles:
+      - hh_contributor
+      - hh_reviewer
+      - publications_editor
+      - editor
+      - manager
+      - administrator
     users: {  }
     permissions: {  }
   delete_own:
-    roles: {  }
+    roles:
+      - hh_reviewer
+      - publications_editor
+      - editor
+      - manager
+      - administrator
     users: {  }
     permissions: {  }
   administer:
-    roles: {  }
+    roles:
+      - manager
+      - administrator
     users: {  }
     permissions: {  }
   test:
-    roles: {  }
+    roles:
+      - manager
+      - administrator
     users: {  }
     permissions: {  }
   configuration:
-    roles: {  }
+    roles:
+      - manager
+      - administrator
     users: {  }
     permissions: {  }
 handlers: {  }
