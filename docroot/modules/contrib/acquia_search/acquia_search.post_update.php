@@ -5,6 +5,7 @@
  * Search Solr updates once other modules have made their own updates.
  */
 
+use Drupal\acquia_search\Helper\Runtime;
 use Drupal\Core\PhpStorage\PhpStorageFactory;
 
 /**
@@ -65,4 +66,19 @@ function acquia_search_post_update_move_search_modules() {
  */
 function acquia_search_post_update_local_overrides_update() {
   // Empty post-update hook.
+}
+
+/**
+ * Update Search API servers for Acquia Search to use new backend plugin.
+ */
+function acquia_search_post_update_acquia_search_solr_backend(&$sandbox) {
+  /** @var \Drupal\search_api\ServerInterface[] $servers */
+  $servers = \Drupal::entityTypeManager()->getStorage('search_api_server')->loadMultiple();
+  foreach ($servers as $server) {
+    if (!Runtime::isAcquiaServer($server)) {
+      continue;
+    }
+    $server->set('backend', 'acquia_search_solr');
+    $server->save();
+  }
 }

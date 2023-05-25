@@ -2,10 +2,10 @@
 
 namespace Drupal\acquia_search\Helper;
 
+use Drupal\acquia_search\Plugin\search_api\backend\AcquiaSearchSolrBackend;
 use Drupal\acquia_search\Plugin\SolrConnector\SearchApiSolrAcquiaConnector;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\search_api\ServerInterface;
 
 /**
  * Class Messages.
@@ -30,10 +30,13 @@ class Messages {
 
   /**
    * Generates DSM with "could not find preferred core" message warning.
+   *
+   * @param \Drupal\acquia_search\Plugin\search_api\backend\AcquiaSearchSolrBackend $backend
+   *   The backend.
    */
-  public static function showNoPreferredCoreError() {
+  public static function showNoPreferredCoreError(AcquiaSearchSolrBackend $backend) {
 
-    $message = Messages::getNoPreferredCoreError();
+    $message = Messages::getNoPreferredCoreError($backend);
 
     \Drupal::messenger()->addWarning(Markup::create($message));
 
@@ -42,12 +45,14 @@ class Messages {
   /**
    * Returns formatted message if preferred search core is unavailable.
    *
+   * @param \Drupal\acquia_search\Plugin\search_api\backend\AcquiaSearchSolrBackend $backend
+   *   The backend.
+   *
    * @return string
    *   Formatted message.
    */
-  public static function getNoPreferredCoreError(): string {
-
-    $possible_cores = \Drupal::service('acquia_search.preferred_core')->getListOfPossibleCores();
+  public static function getNoPreferredCoreError(AcquiaSearchSolrBackend $backend): string {
+    $possible_cores = $backend->getListOfPossibleCores();
 
     $messages[] = t('Could not find a Solr core corresponding to your website and environment.');
 
@@ -58,7 +63,7 @@ class Messages {
       );
     }
 
-    $available_cores = \Drupal::service('acquia_search.preferred_core')->getListOfAvailableCores();
+    $available_cores = $backend->getListOfAvailableCores();
     if (!empty($available_cores)) {
       $messages[] = t(
         'Your subscription contains these cores: @list.',
@@ -93,8 +98,8 @@ class Messages {
   /**
    * Returns formatted message about Acquia Search connection details.
    *
-   * @param \Drupal\search_api\ServerInterface $server
-   *   Search server configuration entity.
+   * @param \Drupal\acquia_search\Plugin\search_api\backend\AcquiaSearchSolrBackend $backend
+   *   The backend.
    *
    * @return \Drupal\Component\Render\MarkupInterface|string
    *   Formatted message about Acquia Search connection details.
@@ -102,17 +107,16 @@ class Messages {
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    * @throws \Drupal\search_api\SearchApiException
    */
-  public static function getSearchStatusMessage(ServerInterface $server) {
+  public static function getSearchStatusMessage(AcquiaSearchSolrBackend $backend) {
 
-    /** @var \Drupal\search_api_solr\Plugin\search_api\backend\SearchApiSolrBackend $backend */
-    $backend = $server->getBackend();
+    /** @var \Drupal\acquia_search\Plugin\search_api\backend\AcquiaSearchSolrBackend $backend */
     $configuration = $backend->getSolrConnector()->getConfiguration();
 
     $items = [
-      self::getServerIdMessage($server->id()),
+      self::getServerIdMessage($backend->getServer()->id()),
     ];
 
-    if (\Drupal::service('acquia_search.preferred_core')->isPreferredCoreAvailable()) {
+    if ($backend->isPreferredCoreAvailable()) {
       $items[] = self::getServerUrlMessage($configuration);
 
       // Report on the behavior chosen.
@@ -120,11 +124,11 @@ class Messages {
         $items[] = self::getOverriddenModeMessage($configuration['overridden_by_acquia_search']);
       }
 
-      $items[] = self::getServerAvailabilityMessage($server);
-      $items[] = self::getServerAuthCheckMessage($server);
+      $items[] = self::getServerAvailabilityMessage($backend);
+      $items[] = self::getServerAuthCheckMessage($backend);
     }
     else {
-      $items[] = ['#markup' => '<span class="color-error">' . self::getNoPreferredCoreError() . '</span>'];
+      $items[] = ['#markup' => '<span class="color-error">' . self::getNoPreferredCoreError($backend) . '</span>'];
     }
 
     $list = ['#theme' => 'item_list', '#items' => $items];
@@ -195,17 +199,15 @@ class Messages {
   /**
    * Get text describing availability for the given server.
    *
-   * @param \Drupal\search_api\ServerInterface $server
-   *   Search server configuration entity.
+   * @param \Drupal\acquia_search\Plugin\search_api\backend\AcquiaSearchSolrBackend $backend
+   *   The backend.
    *
    * @return array|\Drupal\Core\StringTranslation\TranslatableMarkup
    *   Solr server availability message.
-   *
-   * @throws \Drupal\search_api\SearchApiException
    */
-  public static function getServerAvailabilityMessage(ServerInterface $server) {
+  public static function getServerAvailabilityMessage(AcquiaSearchSolrBackend $backend) {
 
-    if ($server->getBackend()->getSolrConnector()->pingCore()) {
+    if ($backend->getSolrConnector()->pingCore()) {
       return t('Solr core is currently reachable and up.');
     }
 
@@ -218,17 +220,15 @@ class Messages {
   /**
    * Get message describing authentication status for the given server.
    *
-   * @param \Drupal\search_api\ServerInterface $server
-   *   Search server configuration entity.
+   * @param \Drupal\acquia_search\Plugin\search_api\backend\AcquiaSearchSolrBackend $backend
+   *   The backend.
    *
    * @return array|\Drupal\Core\StringTranslation\TranslatableMarkup
    *   Solr server authentication status message.
-   *
-   * @throws \Drupal\search_api\SearchApiException
    */
-  public static function getServerAuthCheckMessage(ServerInterface $server) {
+  public static function getServerAuthCheckMessage(AcquiaSearchSolrBackend $backend) {
 
-    if ($server->getBackend()->getSolrConnector()->pingServer()) {
+    if ($backend->getSolrConnector()->pingServer()) {
       return t('Requests to Solr core are passing authentication checks.');
     }
 

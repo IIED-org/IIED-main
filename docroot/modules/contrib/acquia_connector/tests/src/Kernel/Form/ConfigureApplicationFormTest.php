@@ -30,7 +30,7 @@ final class ConfigureApplicationFormTest extends AcquiaConnectorTestBase {
       $response->headers->get('Location')
     );
     self::assertEquals(
-      ['We could not retrieve account data, please re-authorize with your Acquia Cloud account'],
+      ['We could not retrieve account data, please re-authorize with your Acquia Cloud account. For more information check <a target="_blank" href="https://docs.acquia.com/cloud-platform/known-issues/#unable-to-log-in-through-acquia-connector">this link</a>.'],
       $this->container->get('messenger')->messagesByType('error')
     );
   }

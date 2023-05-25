@@ -12,7 +12,7 @@ use Symfony\Component\DomCrawler\Crawler;
 abstract class ChartsKernelTestBase extends KernelTestBase {
 
   /**
-   * The renderer service
+   * The renderer service.
    *
    * @var \Drupal\Core\Render\Renderer
    */
@@ -46,10 +46,10 @@ abstract class ChartsKernelTestBase extends KernelTestBase {
    *   The element structure.
    * @param array $parents
    *   The parent structure where the value is.
-   * @param $expected_value
+   * @param string $expected_value
    *   The expected value.
    */
-  public function assertJsonPropertyHasValue(array $element, array $parents, $expected_value) {
+  public function assertJsonPropertyHasValue(array $element, array $parents, string $expected_value) {
     $json = $this->getDataChartJson($element);
     $decoded_json = json_decode(str_replace("'", '"', $json), TRUE);
     $actual_value = NestedArray::getValue($decoded_json, $parents);
@@ -57,10 +57,13 @@ abstract class ChartsKernelTestBase extends KernelTestBase {
   }
 
   /**
+   * Get the json data.
    *
    * @param array $element
+   *   The element to be rendered.
    *
    * @return string
+   *   The string with the data from the chart.
    */
   private function getDataChartJson(array $element): string {
     $renderer_output = $this->renderer->renderRoot($element);

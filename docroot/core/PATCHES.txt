@@ -10,7 +10,7 @@ Source: https://www.drupal.org/files/issues/2021-05-06/2961404-17.patch
 
 
 Media Thumbnail Formatter doesn't translate the title attribute correctly
-Source: https://www.drupal.org/files/issues/2019-11-12/media-thumbnail-formatter-title-not-translated-workaround-3089216-4.patch
+Source: https://www.drupal.org/files/issues/2023-05-12/media-thumbnail-formatter-title-not-translated-3089216.patch
 
 
 The language of content entities incorrectly falls back to the default language...

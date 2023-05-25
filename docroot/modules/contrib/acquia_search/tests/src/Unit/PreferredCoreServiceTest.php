@@ -9,7 +9,7 @@ use Drupal\acquia_connector\Subscription;
 use Drupal\acquia_search\AcquiaSearchApiClient;
 use Drupal\acquia_search\AcquiaSearchEvents;
 use Drupal\acquia_search\Event\AcquiaPossibleCoresEvent;
-use Drupal\acquia_search\PreferredCoreService;
+use Drupal\acquia_search\PreferredCoreServiceFactory;
 use Drupal\Component\Datetime\Time;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Uuid\Php as PhpUuid;
@@ -80,13 +80,13 @@ final class PreferredCoreServiceTest extends AcquiaSearchTestCase {
 
     $subscription = $this->createSubscription();
     $acquia_search_api_client = $this->createApiClient($subscription, $client_factory);
-    $sut = new PreferredCoreService(
+    $sut = new PreferredCoreServiceFactory(
       $this->createMock(EventDispatcherInterface::class),
       $subscription,
       $acquia_search_api_client,
       $this->createMock(ModuleHandlerInterface::class)
     );
-    self::assertEquals(array_keys($expected), $sut->getListOfAvailableCores());
+    self::assertEquals(array_keys($expected), $sut->get('foobar')->getListOfAvailableCores());
   }
 
   /**
@@ -105,13 +105,13 @@ final class PreferredCoreServiceTest extends AcquiaSearchTestCase {
 
     $subscription = $this->createSubscription();
     $acquia_search_api_client = $this->createApiClient($subscription, $client_factory);
-    $sut = new PreferredCoreService(
+    $sut = new PreferredCoreServiceFactory(
       $this->createMock(EventDispatcherInterface::class),
       $subscription,
       $acquia_search_api_client,
       $this->createMock(ModuleHandlerInterface::class)
     );
-    self::assertEquals($expected, $sut->getAvailableCores());
+    self::assertEquals($expected, $sut->get('foobar')->getAvailableCores());
   }
 
   public function testGetListOfPossibleCores(): void {
@@ -134,13 +134,13 @@ final class PreferredCoreServiceTest extends AcquiaSearchTestCase {
 
     $subscription = $this->createSubscription();
     $acquia_search_api_client = $this->createApiClient($subscription, $client_factory);
-    $sut = new PreferredCoreService(
+    $sut = new PreferredCoreServiceFactory(
       $event_dispatcher,
       $subscription,
       $acquia_search_api_client,
       $this->createMock(ModuleHandlerInterface::class)
     );
-    self::assertEquals(['FooBarBaz'], $sut->getListOfPossibleCores());
+    self::assertEquals(['FooBarBaz'], $sut->get('foobar')->getListOfPossibleCores());
   }
 
   /**
@@ -169,12 +169,13 @@ final class PreferredCoreServiceTest extends AcquiaSearchTestCase {
     $subscription = $this->createSubscription();
 
     $acquia_search_api_client = $this->createApiClient($subscription, $client_factory);
-    $sut = new PreferredCoreService(
+    $factory = new PreferredCoreServiceFactory(
       $event_dispatcher,
       $subscription,
       $acquia_search_api_client,
       $this->createMock(ModuleHandlerInterface::class)
     );
+    $sut = $factory->get('foobar');
     $result = $sut->getPreferredCore();
     if (count($indexes) === 0) {
       self::assertNull($result);

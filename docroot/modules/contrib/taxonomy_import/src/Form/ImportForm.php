@@ -45,7 +45,7 @@ class ImportForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->get('entity_type.manager')->getStorage('taxonomy_vocabulary'),
+      $container->get('entity_type.manager')->getStorage('taxonomy_vocabulary')
     );
   }
 
@@ -150,7 +150,7 @@ function create_taxonomy($voc_name) {
     $vocabulary->save();
   }
   // Code for fetch and save csv file.
-  if ($mimetype == "text/plain" || $mimetype == 'application/csv') {
+  if (in_array($mimetype, ['text/plain', 'application/csv', 'text/csv'])) {
     if (($handle = fopen($location, "r")) !== FALSE) {
       // Read all data including title.
       $data1 = fgetcsv($handle);

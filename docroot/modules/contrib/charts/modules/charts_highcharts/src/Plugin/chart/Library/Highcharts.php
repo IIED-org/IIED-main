@@ -14,7 +14,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\ElementInfoManagerInterface;
-use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -117,7 +116,7 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
    *   The form state.
    *
    * @return array
-   *   Return the from.
+   *   Return the form.
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildConfigurationForm($form, $form_state);
@@ -221,7 +220,7 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
         continue;
       }
 
-      [,$format] = explode('_', $property);
+      [, $format] = explode('_', $property);
       $form['global_options']['lang'][$property] = [
         '#title' => $this->t('Download @format', ['@format' => $format]),
         '#type' => 'textfield',
@@ -311,9 +310,9 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
       ];
       foreach (range(0, $data['range_end']) as $counter) {
         $form['global_options']['lang'][$dates_data_key][$counter] = [
-          '#title' => $this->t($data['label_singular'], [
-            '@count' => $counter + 1,
-          ]),
+          '#title' => $this->t('@label_singular', [
+            '@label_singular' => $data['label_singular'],
+          ]) . ' ' . $counter + 1,
           '#type' => 'textfield',
           '#default_value' => $this->configuration['global_options']['lang'][$dates_data_key][$counter] ?? $lang_config[$dates_data_key][$counter],
           '#required' => TRUE,
@@ -325,7 +324,7 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
   }
 
   /**
-   * Build configurations.
+   * Submit configurations.
    *
    * @param array $form
    *   The form element.
@@ -356,7 +355,7 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
     $chart_definition = $this->populateData($element, $chart_definition);
 
     if (!empty($element['#height']) || !empty($element['#width'])) {
-      $element['#attributes']['style'] = 'height:' . $element['#height'] . $element['#height_units'] . ';width:' . $element['#width'] . $element['#width_units'].  ';';
+      $element['#attributes']['style'] = 'height:' . $element['#height'] . $element['#height_units'] . ';width:' . $element['#width'] . $element['#width_units'] . ';';
     }
 
     // Remove machine names from series. Highcharts series must be an array.
@@ -388,7 +387,9 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
       $form_state->set('chart_series', $series);
       $form_state->set('chart_id', $element['#id']);
       $form_state->set('chart_type', $chart_definition['chart']['type']);
-      $form_state->set('y_axis', $chart_definition['yAxis']);
+      if (!empty($chart_definition['yAxis'])) {
+        $form_state->set('y_axis', $chart_definition['yAxis']);
+      }
       $element['#attached']['library'][] = 'charts_highcharts/color_changer';
       $element['#content_suffix']['color_changer'] = $this->formBuilder->buildForm(ColorChanger::class, $form_state);
     }
@@ -399,6 +400,9 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
     return $element;
   }
 
+  /**
+   * Defines the default global options.
+   */
   public static function defaultGlobalOptions() {
     return [
       'lang' => [
@@ -490,6 +494,7 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
     $chart_definition['title']['style']['color'] = $element['#title_color'];
     $chart_definition['title']['verticalAlign'] = $element['#title_position'] === 'in' ? 'top' : NULL;
     $chart_definition['title']['y'] = $element['#title_position'] === 'in' ? 24 : NULL;
+    $chart_definition['subtitle']['text'] = $element['#subtitle'] ?? '';
     $chart_definition['colors'] = $element['#colors'];
 
     $chart_definition['tooltip']['enabled'] = (bool) $element['#tooltips'];
@@ -497,6 +502,7 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
 
     $chart_definition['plotOptions']['series']['stacking'] = $element['#stacking'] ?? '';
     $chart_definition['plotOptions']['series']['dataLabels']['enabled'] = (bool) $element['#data_labels'];
+    $chart_definition['plotOptions']['series']['marker']['enabled'] = (bool) $element['#data_markers'];
 
     if ($element['#chart_type'] === 'gauge') {
       $chart_definition['yAxis']['plotBands'][] = [
@@ -658,6 +664,13 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
           if (isset($series_data[$data_index])) {
             $series_data[$data_index][] = $data;
           }
+          elseif ($chart_type === 'pie') {
+            $series_data[$data_index] = array_combine(['name', 'y'], $data);
+            $name = $series_data[$data_index]['name'];
+            if (!empty($element[$key]['#grouping_colors'][$data_index][$name])) {
+              $series_data[$data_index]['color'] = $element[$key]['#grouping_colors'][$data_index][$name];
+            }
+          }
           else {
             $series_data[$data_index] = $data;
           }
@@ -672,7 +685,7 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
         $series['color'] = $element[$key]['#color'];
 
         if ($element[$key]['#prefix'] || $element[$key]['#suffix']) {
-          $yaxis_index = isset($series['yAxis']) ? $series['yAxis'] : 0;
+          $yaxis_index = $series['yAxis'] ?? 0;
           // For axis formatting, we need to use a format string.
           // See http://docs.highcharts.com/#formatting.
           $decimal_formatting = $element[$key]['#decimal_count'] ? (':.' . $element[$key]['#decimal_count'] . 'f') : '';
@@ -841,15 +854,18 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
     return $type === 'donut' ? 'pie' : $type;
   }
 
+  /**
+   * Defines data for the config form.
+   */
   private function datesDataForConfigForm() {
     $month = [
-      'label_singular' => 'Month @count',
+      'label_singular' => 'Month',
       'label_plural' => $this->t('Months'),
       'description' => $this->t('The full month names.'),
       'range_end' => 11,
     ];
     $weekday = [
-      'label_singular' => 'Weekday @count',
+      'label_singular' => 'Weekday',
       'label_plural' => $this->t('Weekdays'),
       'description' => $this->t('The weekday names, starting Sunday.'),
       'range_end' => 6,
@@ -858,18 +874,21 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
       'months' => $month,
       'short_months' => [
         'label_plural' => $this->t('Short Months'),
-        'label_singular' => 'Short Month @count',
+        'label_singular' => 'Short Month',
         'description' => $this->t('The months names in abbreviated form. E.g. Jan, Feb, etc.'),
       ] + $month,
       'weekdays' => $weekday,
       'short_weekdays' => [
         'label_plural' => $this->t('Short Weekdays'),
-        'label_singular' => 'Short Weekday @count',
+        'label_singular' => 'Short Weekday',
         'description' => $this->t('Short week days, starting Sunday. E.g. Sun, Mon, etc.'),
       ] + $weekday,
     ];
   }
 
+  /**
+   * Returns the transformed global options.
+   */
   private function processedGlobalOptions() {
     $global_options = $this->configuration['global_options'] ?? ['lang' => []];
     $global_options['lang'] += static::defaultGlobalOptions()['lang'];
@@ -891,6 +910,9 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
     return $global_options;
   }
 
+  /**
+   * Transform the string from snakeCase to CamelCase.
+   */
   private function transformSnakeCaseToCamelCase(string $input) {
     $separator = '_';
     $input = strtolower($input);

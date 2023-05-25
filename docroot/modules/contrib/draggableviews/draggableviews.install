@@ -80,3 +80,17 @@ function draggableviews_update_8104(&$sandbox) {
   // the update hook here accidentally cropped in into 1.1 but it shouldn't be
   // there, I belivee that removing it should be harmless.
 }
+
+/**
+ * Update varchar length of arg field from 255 to 1024.
+ */
+function draggableviews_update_8105() {
+  $field_spec = [
+    'type' => 'varchar',
+    'length' => 1024,
+    'not null' => FALSE,
+    'default' => '',
+    'description' => 'Makes the order unique for a given set of arguments',
+  ];
+  \Drupal::database()->schema()->changeField('draggableviews_structure', 'args', 'args', $field_spec);
+}

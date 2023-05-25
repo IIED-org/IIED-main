@@ -7,9 +7,12 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
- * Class ViewUnpublishedInstallHelper.
+ * A helper class used by un-/install hooks.
+ *
+ * @see view_unpublished_install
+ * @see view_unpublished_uninstall
  */
-class ViewUnpublishedInstallHelper {
+final class ViewUnpublishedInstallHelper {
 
   /**
    * Drupal\Core\Config\ConfigFactoryInterface definition.
@@ -53,7 +56,11 @@ class ViewUnpublishedInstallHelper {
    */
   public function flagRebuild() {
     $query = $this->entityTypeManager->getStorage('node')->getQuery();
-    $count_unpublished = (int) $query->condition('status', FALSE)->count()->execute();
+    $count_unpublished = (int) $query
+      ->condition('status', FALSE)
+      ->accessCheck(FALSE)
+      ->count()
+      ->execute();
     if ($count_unpublished > 0) {
       node_access_needs_rebuild(TRUE);
     }

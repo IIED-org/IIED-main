@@ -42,13 +42,12 @@ dependencies:
     - search_api_solr.solr_request_handler.request_handler_tvrh_default_7_0_0
   module:
     - acquia_search
-    - search_api_solr
 _core:
   default_config_hash: vAg7gjLiDUAbeZyfPfKEy0oxgHeO6lxGofgdDOiqiaU
 id: acquia_search_server
 name: 'Acquia Search API Solr server'
 description: ''
-backend: search_api_solr
+backend: acquia_search_solr
 backend_config:
   retrieve_data: false
   highlight_data: true

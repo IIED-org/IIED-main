@@ -81,7 +81,17 @@ class LocalOverride implements EventSubscriberInterface {
       $readonly = $search_settings['read_only'] ?? FALSE;
       $event->setReadOnly($readonly);
 
-      if (isset($search_settings['override_search_core'])) {
+      // New core override format that allows overriding the Solr index used by
+      // specific Search API servers.
+      if (isset($search_settings['server_overrides']) && is_array($search_settings['server_overrides'])) {
+        $server_id = $event->getServerId();
+        if (isset($search_settings['server_overrides'][$server_id])) {
+          $event->addPossibleCore($search_settings['server_overrides'][$server_id]);
+          // @phpstan-ignore-next-line
+          $event->stopPropagation();
+        }
+      }
+      elseif (isset($search_settings['override_search_core'])) {
         $event->addPossibleCore($search_settings['override_search_core']);
         // @phpstan-ignore-next-line
         $event->stopPropagation();

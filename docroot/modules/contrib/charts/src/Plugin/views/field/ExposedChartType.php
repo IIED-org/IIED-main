@@ -86,6 +86,7 @@ class ExposedChartType extends FieldPluginBase {
 
     $options['chart_types'] = ['default' => []];
     $options['exposed_select_type'] = ['default' => 'checkboxes'];
+    $options['expose'] = ['default' => ['identifier' => 'ct']];
 
     return $options;
   }

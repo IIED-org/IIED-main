@@ -16,7 +16,7 @@ class RawOptionsTest extends ChartsKernelTestBase {
    */
   protected static $modules = [
     'charts',
-    'charts_chartjs'
+    'charts_chartjs',
   ];
 
   /**

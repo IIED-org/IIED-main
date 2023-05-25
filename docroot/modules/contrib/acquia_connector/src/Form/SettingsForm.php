@@ -356,10 +356,11 @@ class SettingsForm extends ConfigFormBase {
     if ($this->subscription->getProvider() !== 'acquia_cloud') {
       return FALSE;
     }
-    if ($this->subscription->getSettings()->getMetadata('ah_network_identifier') !== $this->subscription->getSettings()->getIdentifier()) {
-      return TRUE;
-    }
-    return FALSE;
+    $metadata = $this->subscription->getSettings()->getMetadata();
+    $settings = $this->subscription->getSettings();
+    return $metadata['ah_network_identifier'] !== $settings->getIdentifier() ||
+      $metadata['ah_network_key'] !== $settings->getSecretKey() ||
+      $metadata['AH_APPLICATION_UUID'] !== $settings->getApplicationUuid();
   }
 
 }

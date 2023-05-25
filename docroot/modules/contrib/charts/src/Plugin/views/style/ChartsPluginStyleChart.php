@@ -242,6 +242,12 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
       $tokens = $this->view->build_info['substitutions'];
       $title = $this->viewsTokenReplace($title, $tokens);
     }
+    // Allow argument tokens in the subtitle.
+    $subtitle = !empty($chart_settings['display']['subtitle']) ? $chart_settings['display']['subtitle'] : '';
+    if (!empty($this->view->build_info['substitutions'])) {
+      $tokens = $this->view->build_info['substitutions'];
+      $subtitle = $this->viewsTokenReplace($subtitle, $tokens);
+    }
 
     // To be used with the exposed chart type field.
     if ($this->view->storage->get('exposed_chart_type')) {
@@ -262,6 +268,7 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
       '#gauge' => $chart_settings['display']['gauge'],
       '#title' => $title,
       '#title_position' => $chart_settings['display']['title_position'],
+      '#subtitle' => $subtitle,
       '#tooltips' => $chart_settings['display']['tooltips'],
       '#data_labels' => $chart_settings['display']['data_labels'],
       '#data_markers' => $chart_settings['display']['data_markers'],
@@ -320,6 +327,7 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
         '#data' => $data,
         '#title' => $data_field['label'],
         '#color' => isset($chart_fields['data_providers'][$data_field_key]) ? $chart_fields['data_providers'][$data_field_key]['color'] : '',
+        '#grouping_colors' => $this->extractGroupingColorsForSingleAxisChartType($data),
       ];
     }
     else {
@@ -362,7 +370,7 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
           // from before the grouping, so we need to keep our own row number
           // when looping through the rows.
           foreach ($data_set['rows'] as $result_number => $row) {
-            $xaxis_label = trim(strip_tags((string)$this->getField($result_number, $label_field_key)));
+            $xaxis_label = trim(strip_tags((string) $this->getField($result_number, $label_field_key)));
             if ($label_field_key) {
               $xaxis_labels = $chart['xaxis']['#labels'] ?? [];
               if (!in_array($xaxis_label, $xaxis_labels)) {
@@ -811,6 +819,43 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
     }
 
     return $processed_data;
+  }
+
+  /**
+   * Returns the grouping colors for single axis chart type.
+   *
+   * @param array $data
+   *   The data.
+   *
+   * @return array
+   *   The grouping colors.
+   */
+  private function extractGroupingColorsForSingleAxisChartType(array $data): array {
+    if (empty($this->options['grouping'][0]['field'])) {
+      return [];
+    }
+
+    $grouping_colors = [];
+    $grouping_field = $this->options['grouping'][0]['field'];
+    $chart_settings = $this->options['chart_settings'];
+    $color_selection_method = $chart_settings['fields']['entity_grouping']['color_selection_method'] ?? '';
+    $grouping_entity_field = $this->view->field[$grouping_field];
+    $group_field_name = $grouping_entity_field ? ($grouping_entity_field->definition['field_name'] ?? '') : '';
+    foreach ($data as $index => $set) {
+      $row = $this->view->result[$index];
+      if ($color_selection_method && $group_field_name && $grouping_entity_field instanceof EntityField && $row instanceof ResultRow) {
+        switch ($color_selection_method) {
+          case 'by_entities_on_entity_reference':
+            $grouping_colors[$index][$set[0]] = $this->extractGroupedSelectedColorByEntity($grouping_entity_field, $row, $group_field_name);
+            break;
+
+          case 'by_field_on_referenced_entity':
+            $grouping_colors[$index][$set[0]] = $this->extractGroupedSelectedColorOnReferencedEntityField($grouping_entity_field, $row, $group_field_name);
+            break;
+        }
+      }
+    }
+    return $grouping_colors;
   }
 
 }

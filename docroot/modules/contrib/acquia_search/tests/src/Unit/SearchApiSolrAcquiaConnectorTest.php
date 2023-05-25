@@ -14,8 +14,9 @@ use Drupal\acquia_search\Client\Solarium\Endpoint as AcquiaEndpoint;
 use Drupal\acquia_search\Event\AcquiaPossibleCoresEvent;
 use Drupal\acquia_search\EventSubscriber\SearchSubscriber;
 use Drupal\acquia_search\Helper\Flood;
+use Drupal\acquia_search\Plugin\search_api\backend\AcquiaSearchSolrBackend;
 use Drupal\acquia_search\Plugin\SolrConnector\SearchApiSolrAcquiaConnector;
-use Drupal\acquia_search\PreferredCoreService;
+use Drupal\acquia_search\PreferredCoreServiceFactory;
 use Drupal\Component\Datetime\Time;
 use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Drupal\Component\Serialization\Json;
@@ -23,14 +24,21 @@ use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Cache\MemoryBackend;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Http\ClientFactory;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
+use Drupal\search_api\ServerInterface;
+use Drupal\search_api\Utility\DataTypeHelperInterface;
+use Drupal\search_api\Utility\FieldsHelperInterface;
+use Drupal\search_api_solr\SolrConnector\SolrConnectorPluginManager;
 use Drupal\search_api_solr\SolrConnectorInterface;
 use Drupal\Tests\UnitTestCase;
 use GuzzleHttp\Client;
@@ -40,6 +48,7 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerInterface;
 use Solarium\Core\Event\Events;
+use Solarium\Core\Query\Helper;
 use Solarium\QueryType\MorelikeThis\Query as MoreLikeThisQuery;
 use Solarium\QueryType\Update\Query\Query as UpdateQuery;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -155,15 +164,19 @@ final class SearchApiSolrAcquiaConnectorTest extends UnitTestCase {
   }
 
   private function createInstance(ContainerInterface $container, array $configuration = []): SearchApiSolrAcquiaConnector {
-    return SearchApiSolrAcquiaConnector::create(
+    $server = $this->createMock(ServerInterface::class);
+    $server->method('id')->willReturn('foobar');
+    $configuration['#server'] = $server;
+    $backend = AcquiaSearchSolrBackend::create(
       $container,
       $configuration,
-      'solr_acquia_connector',
+      'acquia_search_solr',
       [
-        'label' => 'Acquia Search Connector',
+        'label' => 'Acquia Search Solr',
         'description' => '',
       ]
     );
+    return $backend->getSolrConnector();
   }
 
   private function createContainerMock(
@@ -215,6 +228,7 @@ final class SearchApiSolrAcquiaConnectorTest extends UnitTestCase {
     $subscription = $this->createMock(Subscription::class);
     $settings = $this->createMock(Settings::class);
     $settings->method('getIdentifier')->willReturn('abc123');
+    $settings->method('getApplicationUuid')->willReturn('a47ac10b-58cc-4372-a567-0e02b2c3d470');
     $settings->method('getSecretKey')->willReturn('FooBar');
     $subscription->method('isActive')->willReturn(TRUE);
     $subscription->method('getSettings')->willReturn($settings);
@@ -323,7 +337,7 @@ final class SearchApiSolrAcquiaConnectorTest extends UnitTestCase {
       $lock
     );
 
-    $preferred_core = new PreferredCoreService(
+    $preferred_core = new PreferredCoreServiceFactory(
       $event_dispatcher,
       $subscription,
       $api_client,
@@ -336,7 +350,7 @@ final class SearchApiSolrAcquiaConnectorTest extends UnitTestCase {
         ['admin/system', TRUE],
       ]);
 
-    $search_subscriber = new SearchSubscriber($preferred_core, $subscription, $api_client, $flood);
+    $search_subscriber = new SearchSubscriber($subscription, $api_client, $flood);
 
     $container->set('state', $state);
     $container->set('logger.factory', $logger_factory);
@@ -347,9 +361,30 @@ final class SearchApiSolrAcquiaConnectorTest extends UnitTestCase {
     $container->set('acquia_connector.subscription', $subscription);
     $container->set('acquia_search.api_client', $api_client);
     $container->set('datetime.time', $datetime_time);
-    $container->set('acquia_search.preferred_core', $preferred_core);
+    $container->set('acquia_search.preferred_core_factory', $preferred_core);
     $container->set('event_dispatcher', $event_dispatcher);
     $container->set('acquia_search.search_subscriber', $search_subscriber);
+    $container->set('module_handler', $this->createMock(ModuleHandlerInterface::class));
+    $container->set('config.factory', $this->getConfigFactoryStub([
+      'search_api_solr.settings' => [],
+    ]));
+    $container->set('language_manager', $this->createMock(LanguageManagerInterface::class));
+
+    $plugin_manager_search_api_solr_connector = $this->createMock(SolrConnectorPluginManager::class);
+    $plugin_manager_search_api_solr_connector->method('createInstance')
+      ->willReturnCallback(function (string $plugin_id, array $config) use ($container) {
+        return SearchApiSolrAcquiaConnector::create($container, $config, $plugin_id, [
+          'label' => 'Acquia Search Connector',
+          'description' => '',
+        ]);
+      });
+    $container->set('plugin.manager.search_api_solr.connector', $plugin_manager_search_api_solr_connector);
+    $container->set('search_api.fields_helper', $this->createMock(FieldsHelperInterface::class));
+    $container->set('search_api.data_type_helper', $this->createMock(DataTypeHelperInterface::class));
+    $container->set('solarium.query_helper', new Helper());
+    $container->set('entity_type.manager', $this->createMock(EntityTypeManagerInterface::class));
+    $container->set('lock', $this->createMock(LockBackendInterface::class));
+    $container->set('extension.list.module', $this->createMock(ModuleExtensionList::class));
     \Drupal::setContainer($container);
     return $container;
   }

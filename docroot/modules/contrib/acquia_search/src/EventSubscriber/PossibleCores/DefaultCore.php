@@ -45,11 +45,6 @@ class DefaultCore implements EventSubscriberInterface {
    *   Drupal Site Path.
    */
   public function __construct(Subscription $subscription, AcquiaSearchApiClient $search_api_client, $site_path) {
-    // Provide BC compatibility with Drupal 8:
-    if (version_compare(\Drupal::VERSION, '9.0', '<')) {
-      $site_path = $site_path->get();
-    }
-
     $sites_foldername = substr($site_path, strrpos($site_path, '/') + 1);
     $this->sitesFolderName = preg_replace('/[^a-zA-Z0-9]+/', '', $sites_foldername);
     $this->subscription = $subscription;

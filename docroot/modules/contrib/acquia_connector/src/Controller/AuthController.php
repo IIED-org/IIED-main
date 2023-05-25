@@ -201,7 +201,9 @@ final class AuthController implements ContainerInjectionInterface {
       );
     }
     catch (\Throwable $e) {
-      $this->messenger->addError('We could not retrieve account data, please re-authorize with your Acquia Cloud account');
+      $this->messenger->addError($this->t('We could not retrieve account data, please re-authorize with your Acquia Cloud account. For more information check <a target="_blank" href=":url">this link</a>.', [
+        ':url' => Url::fromUri('https://docs.acquia.com/cloud-platform/known-issues/#unable-to-log-in-through-acquia-connector')->getUri(),
+      ]));
       $this->logger->error('Unable to finalize OAuth handshake with Acquia Cloud: @error', [
         '@error' => trim($e->getMessage()),
       ]);

@@ -3,9 +3,11 @@
 namespace Drupal\acquia_search\Commands;
 
 use Drupal\acquia_connector\Subscription;
-use Drupal\acquia_search\PreferredCoreService;
+use Drupal\acquia_search\AcquiaSearchApiClient;
+use Drupal\acquia_search\Plugin\search_api\backend\AcquiaSearchSolrBackend;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\search_api\Entity\Server;
 use Drush\Commands\DrushCommands;
 
 /**
@@ -29,13 +31,6 @@ class AcquiaSearchCommands extends DrushCommands {
   protected $cache;
 
   /**
-   * Preferred Search Core Service.
-   *
-   * @var \Drupal\acquia_search\PreferredCoreService
-   */
-  protected $preferredCoreService;
-
-  /**
    * Acquia Subscription Service.
    *
    * @var \Drupal\acquia_connector\Subscription
@@ -43,24 +38,31 @@ class AcquiaSearchCommands extends DrushCommands {
   protected $subscription;
 
   /**
+   * Acquia Search API Client.
+   *
+   * @var \Drupal\acquia_search\AcquiaSearchApiClient
+   */
+  protected $acquiaSearchApiClient;
+
+  /**
    * AcquiaSearchCommands constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache backend service.
-   * @param \Drupal\acquia_search\PreferredCoreService $preferredCoreService
-   *   Preferred Core Service.
    * @param \Drupal\acquia_connector\Subscription $subscription
    *   Acquia Subscription Service.
+   * @param \Drupal\acquia_search\AcquiaSearchApiClient $acquia_search_api_client
+   *   Acquia Search API Client.
    */
-  public function __construct(CacheBackendInterface $cache, PreferredCoreService $preferredCoreService, Subscription $subscription) {
+  public function __construct(CacheBackendInterface $cache, Subscription $subscription, AcquiaSearchApiClient $acquia_search_api_client) {
     $this->cache = $cache;
-    $this->preferredCoreService = $preferredCoreService;
     $this->subscription = $subscription;
+    $this->acquiaSearchApiClient = $acquia_search_api_client;
     parent::__construct();
   }
 
   /**
-   * Lists available Acquia search cores.
+   * Lists available Acquia search cores for a search server.
    *
    * @param array $options
    *   An associative array of options whose values come from cli, aliases,
@@ -84,8 +86,8 @@ class AcquiaSearchCommands extends DrushCommands {
    *   If no cores available.
    */
   public function searchSolrCoresList(array $options = ['format' => NULL]) {
-
-    if (!$available_cores = $this->preferredCoreService->getAvailableCores()) {
+    $available_cores = $this->acquiaSearchApiClient->getSearchIndexes();
+    if ($available_cores === FALSE) {
       throw new \Exception('No Acquia search cores available');
     }
 
@@ -172,6 +174,8 @@ class AcquiaSearchCommands extends DrushCommands {
    *
    * A search core should be in the available cores list to work properly.
    *
+   * @param string $server_id
+   *   The Search API server ID.
    * @param array $options
    *   An associative array of options whose values come from cli, aliases,
    *   config, etc.
@@ -193,9 +197,17 @@ class AcquiaSearchCommands extends DrushCommands {
    * @throws \Exception
    *   In case if no possible search cores found.
    */
-  public function searchSolrCoresPossible(array $options = ['format' => NULL]) {
+  public function searchSolrCoresPossible(string $server_id, array $options = ['format' => NULL]) {
+    $server = Server::load($server_id);
+    if ($server === NULL) {
+      throw new \Exception("$server_id is not a server");
+    }
+    $backend = $server->getBackend();
+    if (!$backend instanceof AcquiaSearchSolrBackend) {
+      throw new \Exception("$server_id is not an Acquia Search server");
+    }
 
-    if (!$possible_cores = $this->preferredCoreService->getListOfPossibleCores()) {
+    if (!$possible_cores = $backend->getListOfPossibleCores()) {
       throw new \Exception('No possible cores');
     }
 
@@ -221,6 +233,9 @@ class AcquiaSearchCommands extends DrushCommands {
   /**
    * Display preferred Acquia search core.
    *
+   * @param string $server_id
+   *   The Search API server ID.
+   *
    * @command acquia:search-solr:cores:preferred
    * @aliases acquia:ss:cores:preferred
    *
@@ -234,13 +249,21 @@ class AcquiaSearchCommands extends DrushCommands {
    * @throws \Exception
    *   In case if no preferred search core available.
    */
-  public function searchSolrCoresPreferred() {
+  public function searchSolrCoresPreferred(string $server_id) {
+    $server = Server::load($server_id);
+    if ($server === NULL) {
+      throw new \Exception("$server_id is not a server");
+    }
+    $backend = $server->getBackend();
+    if (!$backend instanceof AcquiaSearchSolrBackend) {
+      throw new \Exception("$server_id is not an Acquia Search server");
+    }
 
-    if (!$preferred_core = $this->preferredCoreService->getPreferredCore()) {
+    if (!$backend->isPreferredCoreAvailable()) {
       throw new \Exception('No preferred search core available');
     }
 
-    $this->output()->writeln($preferred_core['core_id']);
+    $this->output()->writeln($backend->getSolrConnector()->getConfiguration()['core']);
 
   }
 

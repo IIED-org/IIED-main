@@ -84,7 +84,7 @@ class Billboard extends ChartBase implements ContainerFactoryPluginInterface {
     $chart_definition = $this->populateAxes($element, $chart_definition);
 
     if (!empty($element['#height']) || !empty($element['#width'])) {
-      $element['#attributes']['style'] = 'height:' . $element['#height'] . $element['#height_units'] . ';width:' . $element['#width'] . $element['#width_units'].  ';';
+      $element['#attributes']['style'] = 'height:' . $element['#height'] . $element['#height_units'] . ';width:' . $element['#width'] . $element['#width_units'] . ';';
     }
 
     if (!isset($element['#id'])) {
@@ -181,7 +181,11 @@ class Billboard extends ChartBase implements ContainerFactoryPluginInterface {
    */
   private function populateOptions(array $element, array $chart_definition) {
     $type = $this->getType($element['#chart_type'], $element['#polar'] ?? FALSE);
-    $chart_definition['title']['text'] = $element['#title'] ?? '';
+    $title = $element['#title'] ?? '';
+    if (!empty($element['#subtitle'])) {
+      $title .= '\n' . $element['#subtitle'];
+    }
+    $chart_definition['title']['text'] = $title;
     $chart_definition['legend']['show'] = !empty($element['#legend_position']);
     if (!in_array($type, ['scatter', 'bubble'])) {
       $chart_definition['axis']['x']['type'] = 'category';
@@ -252,7 +256,7 @@ class Billboard extends ChartBase implements ContainerFactoryPluginInterface {
       if ($type === 'chart_xaxis') {
         $x_axis_key = $child;
         $chart_type = $this->getType($element['#chart_type']);
-        $categories = $element[$x_axis_key]['#labels'] ? array_map('strip_tags', $element[$x_axis_key]['#labels']) : [];
+        $categories = $this->stripLabelTags($element[$x_axis_key]['#labels']);
         if (!in_array($chart_type, ['pie', 'donut'])) {
           if ($chart_type === 'scatter' || $chart_type === 'bubble') {
             // Do nothing.
@@ -321,7 +325,7 @@ class Billboard extends ChartBase implements ContainerFactoryPluginInterface {
         $chart_definition['color']['pattern'][] = $child_element['#color'];
       }
       if (!in_array($type, ['pie', 'donut'])) {
-        $series_title = strip_tags($child_element['#title']);
+        $series_title = isset($child_element['#title']) ? strip_tags($child_element['#title']) : '';
         $types[$series_title] = $child_element['#chart_type'] ? $this->getType($child_element['#chart_type'], $element['#polar'] ?? FALSE) : $type;
         if (!in_array($type, ['scatter', 'bubble'])) {
           $columns[$columns_key_start][] = $series_title;
@@ -330,10 +334,12 @@ class Billboard extends ChartBase implements ContainerFactoryPluginInterface {
               if ($type === 'gauge') {
                 array_shift($datum);
               }
-              $columns[$columns_key_start][] = array_map('strip_tags', $datum);
+              $columns[$columns_key_start][] = array_map(function ($item) {
+                return isset($item) ? strip_tags($item) : NULL;
+              }, $datum);
             }
             else {
-              $columns[$columns_key_start][] = strip_tags($datum);
+              $columns[$columns_key_start][] = isset($datum) ? strip_tags($datum) : NULL;
             }
           }
         }
@@ -376,6 +382,27 @@ class Billboard extends ChartBase implements ContainerFactoryPluginInterface {
     }
 
     return $chart_definition;
+  }
+
+  /**
+   * Strip tags from each item in an array.
+   *
+   * @param array $items
+   *   The array.
+   *
+   * @return array
+   *   Return the cleaned array.
+   */
+  private function stripLabelTags(array $items): array {
+    if (empty($items)) {
+      return [];
+    }
+    $categories = [];
+    foreach ($items as $item) {
+      $categories[] = isset($item) ? strip_tags($item) : NULL;
+    }
+
+    return $categories;
   }
 
 }

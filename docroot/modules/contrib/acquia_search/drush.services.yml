@@ -1,6 +1,6 @@
 services:
   acquia_search.commands:
     class: Drupal\acquia_search\Commands\AcquiaSearchCommands
-    arguments: [ '@cache.default', '@acquia_search.preferred_core', '@acquia_connector.subscription' ]
+    arguments: [ '@cache.default', '@acquia_connector.subscription', '@acquia_search.api_client']
     tags:
       - { name: drush.command }

@@ -45,6 +45,27 @@ class PreferredCoreService {
   protected $moduleHandler;
 
   /**
+   * The Search API server ID.
+   *
+   * @var string
+   */
+  private $serverId;
+
+  /**
+   * Acquia connector subscription.
+   *
+   * @var \Drupal\acquia_connector\Subscription
+   */
+  protected $subscription;
+
+  /**
+   * Acquia search api client.
+   *
+   * @var \Drupal\acquia_search\AcquiaSearchApiClient
+   */
+  protected $acquiaSearchApiClient;
+
+  /**
    * Preferred Search Core Service constructor.
    *
    *   E.g.
@@ -55,6 +76,8 @@ class PreferredCoreService {
    *       ],
    *     ].
    *
+   * @param string $server_id
+   *   The Search API server ID.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
    *   The event dispatcher.
    * @param \Drupal\acquia_connector\Subscription $subscription
@@ -64,7 +87,8 @@ class PreferredCoreService {
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler (for deprecated alter hook).
    */
-  public function __construct(EventDispatcherInterface $dispatcher, Subscription $subscription, AcquiaSearchApiClient $acquia_search_api_client, ModuleHandlerInterface $module_handler) {
+  public function __construct(string $server_id, EventDispatcherInterface $dispatcher, Subscription $subscription, AcquiaSearchApiClient $acquia_search_api_client, ModuleHandlerInterface $module_handler) {
+    $this->serverId = $server_id;
     $this->dispatcher = $dispatcher;
     $this->subscription = $subscription;
     $this->acquiaSearchApiClient = $acquia_search_api_client;
@@ -74,7 +98,7 @@ class PreferredCoreService {
   /**
    * Returns a formatted list of Available cores.
    *
-   * @return array|bool|null
+   * @return array
    *   The Available Cores.
    */
   public function getListOfAvailableCores() {
@@ -112,7 +136,7 @@ class PreferredCoreService {
   /**
    * Returns expected core host based on the current site configs.
    *
-   * @return string
+   * @return string|null
    *   Hostname.
    */
   public function getPreferredCoreHostname() {
@@ -185,7 +209,7 @@ class PreferredCoreService {
    */
   public function getListOfPossibleCores() {
     $possible_core_ids = [];
-    $event = new AcquiaPossibleCoresEvent($possible_core_ids);
+    $event = new AcquiaPossibleCoresEvent($this->serverId, $possible_core_ids);
 
     // phpcs:ignore
     // @todo Remove when support for Drupal 9.2 dropped.

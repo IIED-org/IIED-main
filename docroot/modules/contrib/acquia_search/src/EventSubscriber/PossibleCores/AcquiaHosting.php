@@ -48,11 +48,6 @@ class AcquiaHosting implements EventSubscriberInterface {
    *   Drupal Site Path.
    */
   public function __construct(Connection $database, Subscription $subscription, $site_path) {
-    // Provide BC compatibility with Drupal 8:
-    if (version_compare(\Drupal::VERSION, '9.0', '<')) {
-      $site_path->get();
-    }
-
     $this->database = $database;
     $sites_foldername = substr($site_path, strrpos($site_path, '/') + 1);
     $this->sitesFolderName = preg_replace('/[^a-zA-Z0-9]+/', '', $sites_foldername);
@@ -103,6 +98,8 @@ class AcquiaHosting implements EventSubscriberInterface {
 
       // Last chance, search for folder if dbrole and default are missing.
       $event->addPossibleCore($acquiaIdentifier . '.' . $ahEnv . '.' . $this->sitesFolderName);
+      // Backward compatibility with dbName based indices.
+      $event->addPossibleCore($acquiaIdentifier . '.' . $ahEnv . '.' . $options['database']);
       $event->setReadOnly(FALSE);
     }
   }

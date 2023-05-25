@@ -10,6 +10,9 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Serialization\Yaml;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Manage the updates and upgrades of settings.
+ */
 class ConfigUpdater implements ContainerInjectionInterface {
 
   /**
@@ -38,6 +41,8 @@ class ConfigUpdater implements ContainerInjectionInterface {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    * @param \Drupal\Core\Extension\ModuleExtensionList $extension_list_module
    *   The module extension list.
    */
@@ -64,7 +69,8 @@ class ConfigUpdater implements ContainerInjectionInterface {
    * @param array $old_settings
    *   The old settings.
    * @param string $for
-   *   For which config the transformation is being made. Regular config or view.
+   *   The configuration for which the transformation is being done.
+   *    Regular config or view.
    *
    * @return array
    *   The new format settings.
@@ -145,6 +151,9 @@ class ConfigUpdater implements ContainerInjectionInterface {
     return $new_settings;
   }
 
+  /**
+   * Initialize the current default settings.
+   */
   public function initializedCurrentDefaultSettings() {
     $path = $this->moduleExtensionList->getPath('charts');
     $default_install_settings_file = $path . '/config/install/charts.settings.yml';
@@ -158,6 +167,9 @@ class ConfigUpdater implements ContainerInjectionInterface {
     return $default_install_settings;
   }
 
+  /**
+   * Updates settings from version 3 of views.
+   */
   public function updateExistingViewsVersion3ToNewSettings() {
     $view_storage = $this->entityTypeManager->getStorage('view');
     $view_ids = $view_storage->getQuery()
@@ -177,7 +189,7 @@ class ConfigUpdater implements ContainerInjectionInterface {
 
       $changed = FALSE;
       $displays = $view->get('display');
-      foreach ($displays as $id => &$display) {
+      foreach ($displays as &$display) {
         $style = &$display['display_options']['style'];
         if ($style['type'] !== 'chart' || !isset($style['options']['field_colors']) || !isset($style['options']['fields']['table'])) {
           continue;
@@ -230,7 +242,8 @@ class ConfigUpdater implements ContainerInjectionInterface {
   public function transformBoolStringValueToBool($value) {
     if ($value === 'FALSE' || $value === 'false') {
       return FALSE;
-    } elseif ($value === 'TRUE' || $value === 'true') {
+    }
+    elseif ($value === 'TRUE' || $value === 'true') {
       return TRUE;
     }
     return $value;
@@ -252,7 +265,8 @@ class ConfigUpdater implements ContainerInjectionInterface {
     foreach ($legacy_value as $field_id => $value) {
       if (Color::validateHex($value)) {
         $data_providers[$field_id]['color'] = $value;
-      } else {
+      }
+      else {
         $data_providers[$field_id]['enabled'] = !empty($value);
       }
       $data_providers[$field_id]['weight'] = $default_weight;
