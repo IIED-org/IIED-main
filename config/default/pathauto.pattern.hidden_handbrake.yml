@@ -1,0 +1,22 @@
+uuid: 48d66d38-3ed8-4621-b0a2-b0216f9b9995
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: hidden_handbrake
+label: 'Content (hidden handbrake)'
+type: 'canonical_entities:node'
+pattern: 'hidden-handbrake/[node:title]'
+selection_criteria:
+  49de8e68-5067-4c4d-9fea-1ad3ff4a0d33:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 49de8e68-5067-4c4d-9fea-1ad3ff4a0d33
+    context_mapping:
+      node: node
+    bundles:
+      hidden_handbrake: hidden_handbrake
+selection_logic: and
+weight: -5
+relationships: {  }

@@ -4,12 +4,14 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.user.compact
+    - field.field.user.user.field_first_name
+    - field.field.user.user.field_organisation
     - field.field.user.user.user_picture
     - image.style.thumbnail
   module:
-    - image
     - layout_builder
     - layout_discovery
+    - svg_image
     - user
 third_party_settings:
   layout_builder:
@@ -92,6 +94,8 @@ content:
     weight: 0
     region: content
 hidden:
+  field_first_name: true
+  field_organisation: true
   langcode: true
   member_for: true
   search_api_excerpt: true

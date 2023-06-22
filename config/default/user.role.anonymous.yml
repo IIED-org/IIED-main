@@ -6,6 +6,7 @@ dependencies:
     - comment
     - contact
     - eu_cookie_compliance
+    - form_mode_control
     - media
     - media_pdf_thumbnail
     - search_api_autocomplete
@@ -24,6 +25,7 @@ permissions:
   - 'display eu cookie compliance popup'
   - 'export tablefield'
   - 'search content'
+  - 'use  The form mode guest_register linked to  user entity( user )'
   - 'use search_api_autocomplete for acquia_search'
   - 'use search_api_autocomplete for acquia_search_solr'
   - 'use search_api_autocomplete for search'
