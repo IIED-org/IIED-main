@@ -1,0 +1,10 @@
+uuid: a50bfeb8-3cf3-4f64-862f-a432a1f5214f
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: user.guest_register
+label: 'Guest register'
+targetEntityType: user
+cache: true

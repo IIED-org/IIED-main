@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * @file
+ * Main file for the Colorbox Load.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * @file
+ * Allow you to load any content in a colorbox.
+ */
+
+/**
+ * Implements hook_page_attachments().
+ */
+function colorbox_load_page_attachments(array &$page) {
+  \Drupal::service('colorbox.attachment')->attach($page);
+  $page['#attached']['library'][] = 'colorbox_load/colorbox_load';
+}
+
+/**
+ * Implements hook_help().
+ */
+function colorbox_load_help($route_name, RouteMatchInterface $route_match) {
+  global $base_url;
+  switch ($route_name) {
+    case 'help.page.colorbox_load':
+      $output = '';
+      $output .= '<p>' . t("The Colorbox Load is an implementation of the core D7 colorbox feature of the same name, allowing you to load content into a colorbox via AJAX. If you're looking to open content in colorbox that is already on the page, you can use colorbox_inline.") . '</p>';
+      $output .= '<p>' . t('Colorbox Inline allows you to specify a series of paths using an admin interface.') . '</p>';
+      $output .= '<p>' . t('Any time a link is rendered for one paths configured in admin area, the content will be loaded in a Colorbox. This project depends on ng_lightbox for the path\'s interface, and plugins into it by way of a "main content renderer"') . '</p>';
+      $output .= '<p>' . t('This method can be used to render anything that has a page associated with it (views, nodes, page manager pages, you name it), and will fall back to a normal page load for bots and people who open in a new window.') . '</p>';
+      $output .= '<p>' . t('Once you\'ve installed colorbox_load and all its dependencies, head over to <a href="@ng-lightbox-configuration">admin/config/media/ng-lightbox</a> to configure the links.', ['@ng-lightbox-configuration' => $base_url . '/admin/config/media/ng-lightbox']) . '</p>';
+      return $output;
+  }
+}

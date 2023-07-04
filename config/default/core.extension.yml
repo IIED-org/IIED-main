@@ -28,6 +28,7 @@ module:
   color: 0
   color_field: 0
   colorbox: 0
+  colorbox_load: 0
   comment: 0
   components: 0
   computed_field: 0
@@ -121,6 +122,7 @@ module:
   multiple_registration: 0
   mysql: 0
   name: 0
+  ng_lightbox: 0
   node: 0
   notification: 0
   optional_end_date: 0
