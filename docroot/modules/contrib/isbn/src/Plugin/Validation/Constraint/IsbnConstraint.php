@@ -20,4 +20,5 @@ class IsbnConstraint extends Constraint {
    * @var string
    */
   public $message = 'The value provided isn\'t a valid ISBN number.';
+
 }

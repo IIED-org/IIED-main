@@ -7,14 +7,14 @@ body.gin--classic-toolbar {
 [dir="ltr"] body.gin--vertical-toolbar,
 [dir="ltr"] body.gin--horizontal-toolbar,
 [dir="ltr"] body.gin--classic-toolbar {
-  padding-left: var(--gin-toolbar-x-offset, 256px);
+  padding-left: var(--gin-toolbar-x-offset, 256px) !important;
   margin-left: 0;
 }
 
 [dir="rtl"] body.gin--vertical-toolbar,
 [dir="rtl"] body.gin--horizontal-toolbar,
 [dir="rtl"] body.gin--classic-toolbar {
-  padding-right: var(--gin-toolbar-x-offset, 256px);
+  padding-right: var(--gin-toolbar-x-offset, 256px) !important;
   margin-right: 0;
 }
 
@@ -495,6 +495,7 @@ body.gin--classic-toolbar {
 }
 
 .toolbar-tray-horizontal .menu-item.hover-intent,
+.toolbar-tray-horizontal .menu-item:focus-within,
 .toolbar-tray-horizontal .menu-item--expanded {
   background-color: transparent;
 }
@@ -567,19 +568,23 @@ body.gin--classic-toolbar {
   transform: scaleX(-1);
 }
 
-.toolbar .toolbar-icon.toolbar-handle.menu-item--active-trail::before, .toolbar .toolbar-handle.menu-item--active-trail.responsive-preview-icon::before, .toolbar .toolbar-icon.toolbar-handle:hover::before, .toolbar .toolbar-handle.responsive-preview-icon:hover::before, .toolbar .toolbar-icon.toolbar-handle:focus::before, .toolbar .toolbar-handle.responsive-preview-icon:focus::before,
+.toolbar .toolbar-icon.toolbar-handle.menu-item--active-trail::before, .toolbar .toolbar-handle.menu-item--active-trail.responsive-preview-icon::before, .toolbar .toolbar-icon.toolbar-handle:hover::before, .toolbar .toolbar-handle.responsive-preview-icon:hover::before, .toolbar .toolbar-icon.toolbar-handle:focus::before, .toolbar .toolbar-handle.responsive-preview-icon:focus::before, .toolbar .toolbar-icon.toolbar-handle:focus-within::before, .toolbar .toolbar-handle.responsive-preview-icon:focus-within::before,
 .toolbar .toolbar-icon.toolbar-handle.open.menu-item--active-trail::before,
 .toolbar .toolbar-icon.toolbar-handle.open:hover::before,
 .toolbar .toolbar-icon.toolbar-handle.open:focus::before,
+.toolbar .toolbar-icon.toolbar-handle.open:focus-within::before,
 .toolbar .toolbar-menu .toolbar-menu .toolbar-icon.toolbar-handle.menu-item--active-trail::before,
 .toolbar .toolbar-menu .toolbar-menu .toolbar-icon.toolbar-handle:hover::before,
 .toolbar .toolbar-menu .toolbar-menu .toolbar-icon.toolbar-handle:focus::before,
+.toolbar .toolbar-menu .toolbar-menu .toolbar-icon.toolbar-handle:focus-within::before,
 .toolbar .toolbar-menu .toolbar-menu .toolbar-icon.toolbar-handle.open.menu-item--active-trail::before,
 .toolbar .toolbar-menu .toolbar-menu .toolbar-icon.toolbar-handle.open:hover::before,
 .toolbar .toolbar-menu .toolbar-menu .toolbar-icon.toolbar-handle.open:focus::before,
+.toolbar .toolbar-menu .toolbar-menu .toolbar-icon.toolbar-handle.open:focus-within::before,
 .toolbar-tray-horizontal ul li.menu-item--expanded ul li.menu-item--expanded.menu-item--active-trail::before,
 .toolbar-tray-horizontal ul li.menu-item--expanded ul li.menu-item--expanded:hover::before,
-.toolbar-tray-horizontal ul li.menu-item--expanded ul li.menu-item--expanded:focus::before {
+.toolbar-tray-horizontal ul li.menu-item--expanded ul li.menu-item--expanded:focus::before,
+.toolbar-tray-horizontal ul li.menu-item--expanded ul li.menu-item--expanded:focus-within::before {
   background-color: var(--gin-color-primary);
 }
 
@@ -677,6 +682,7 @@ body.gin--classic-toolbar {
 #toolbar-item-user {
   display: inline-block;
   vertical-align: top;
+  min-width: unset;
 }
 
 #toolbar-item-user.icon-user {
@@ -859,5 +865,22 @@ body.gin--classic-toolbar {
 
 .toolbar-tray-horizontal .toolbar-icon:not(.toolbar-handle), .toolbar-tray-horizontal .responsive-preview-icon:not(.toolbar-handle) {
   width: 100%;
+}
+
+.toolbar-loading #toolbar-item-administration-tray {
+  background-color: transparent;
+}
+
+[dir="ltr"] .toolbar-loading #toolbar-item-administration-tray {
+  border-right: 0;
+}
+
+[dir="rtl"] .toolbar-loading #toolbar-item-administration-tray {
+  border-left: 0;
+}
+
+.toolbar-loading #toolbar-item-administration-tray .menu-item + .menu-item {
+  border-left: 0;
+  border-right: 0;
 }
 

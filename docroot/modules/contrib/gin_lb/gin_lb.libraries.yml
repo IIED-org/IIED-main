@@ -1,13 +1,21 @@
-gin_lb_form:
+gin_lb:
   version: VERSION
   css:
     theme:
       dist/css/gin_lb.css: {  }
   dependencies:
     - core/jquery
-    - core/jquery.once
+    - core/once
     - core/drupal
     - core/drupalSettings
+
+gin_lb_10:
+  version: VERSION
+  css:
+    theme:
+      dist/css/gin_lb_10.css: {  }
+  dependencies:
+    - gin_lb/gin_lb
 
 gin_lb_init:
   version: VERSION
@@ -15,7 +23,7 @@ gin_lb_init:
     dist/js/gin_lb_js.js: { minified: false, preprocess: false }
   dependencies:
     - core/jquery
-    - core/jquery.once
+    - core/once
     - core/drupal
     - core/drupalSettings
     - gin/sidebar

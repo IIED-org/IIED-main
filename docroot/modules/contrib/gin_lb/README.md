@@ -24,9 +24,16 @@ if (isset($variables['element']['#gin_lb_form'])) {
 
 ### Develop
 
+#### One time installation step
+
+`nvm install 14`
+
+#### Regular script execution
+
 Gin layout builder comes with a webpack configuration to builder SCSS styles.
 To use them run:
 
+`nvm use 14`
 `yarn install`
 `yarn dev`
 

@@ -6,12 +6,17 @@
 
   Drupal.behaviors.glb_preview_regions = {
     attach: (context) => {
+      if (document.getElementById('layout-builder-content-preview') === null) {
+        return;
+      }
       once('glb-preview-region', 'body').forEach(()=>{
         const toolbarPreviewRegion = document.getElementById('glb-toolbar-preview-regions');
         const toolbarPreviewContent = document.getElementById('glb-toolbar-preview-content');
         const formPreviewContent = document.getElementById('layout-builder-content-preview');
         const body = document.getElementsByTagName('body')[0];
-        toolbarPreviewContent.checked = formPreviewContent.checked;;
+        const contentPreviewId = formPreviewContent.dataset.contentPreviewId;
+        const isContentPreview= JSON.parse(localStorage.getItem(contentPreviewId)) !== false;
+        toolbarPreviewContent.checked = formPreviewContent.checked;
         toolbarPreviewRegion.checked = body.classList.contains('glb-preview-regions--enable');
 
         toolbarPreviewRegion.addEventListener('change',()=>{
@@ -27,6 +32,18 @@
             formPreviewContent.click();
           }
         })
+        formPreviewContent.addEventListener('change',()=>{
+          if (formPreviewContent.checked !== toolbarPreviewContent.checked) {
+            toolbarPreviewContent.click();
+          }
+        })
+
+        // Initial state.
+        // By default, the checkbox is checked, and it is JS that is unchecking
+        // it.
+        if (!isContentPreview) {
+          toolbarPreviewContent.click();
+        }
       });
 
     }

@@ -45,4 +45,5 @@ class IsbnPlainFormatter extends FormatterBase {
 
     return $element;
   }
+
 }

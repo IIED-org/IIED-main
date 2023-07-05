@@ -120,7 +120,7 @@ $maxWidth: 520px;
 {
     &__title
     {
-        color: var(--gin-color-textLight) !important;
+        color: var(--gin-color-text-light) !important;
     }
 
     &__text
@@ -131,7 +131,7 @@ $maxWidth: 520px;
 
 .glb-password-suggestions
 {
-    color: var(--gin-color-textLight) !important;
+    color: var(--gin-color-text-light) !important;
     border: 1px solid var(--gin-border-color-layer2) !important;
     background-color: transparent !important;
 }
@@ -433,12 +433,11 @@ fieldset:not(.fieldgroup)
     padding-top: 8px;
     padding-right: 0;
     padding-left: 0;
-
-    border: 1px;
     border-color: var(--gin-border-color);
     border-radius: $borderDefault;
     background: transparent;
     box-shadow: none;
+    border-width: 1px;
 
      > legend
     {
@@ -477,7 +476,7 @@ fieldset:not(.fieldgroup)
     margin-top: .375em;
     margin-bottom: .375em;
 
-    color: var(--gin-color-textLight) !important;
+    color: var(--gin-color-text-light) !important;
 }
 
 .glb-form-item__label.glb-form-required::after,

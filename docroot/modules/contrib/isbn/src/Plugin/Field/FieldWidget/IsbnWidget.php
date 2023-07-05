@@ -21,6 +21,9 @@ use Symfony\Component\Validator\ConstraintViolationInterface;
  */
 class IsbnWidget extends WidgetBase {
 
+  /**
+   * {@inheritdoc}
+   */
   public function errorElement(array $element, ConstraintViolationInterface $error, array $form, FormStateInterface $form_state) {
     return $element;
   }
@@ -29,13 +32,12 @@ class IsbnWidget extends WidgetBase {
    * {@inheritdoc}
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
-    $value = isset($items[$delta]->value) ? $items[$delta]->value : '';
-    $element += [
+    $element['value'] = $element + [
       '#type' => 'textfield',
-      '#default_value' => $value,
+      '#default_value' => $items[$delta]->value ?? '',
       '#size' => 20,
     ];
-    return ['value' => $element];
+    return $element;
   }
 
 }

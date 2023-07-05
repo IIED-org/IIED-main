@@ -1,19 +1,27 @@
 <?php
 
 /**
- *
- *  Implements hook_requirements().
- *
+ * @file
+ * Install/update/uninstall hooks.
+ */
+
+use Drupal\Component\Render\FormattableMarkup;
+
+/**
+ * Implements hook_requirements().
  */
 function isbn_requirements($phase) {
   $requirements = [];
-  if ($phase == 'install') {
-    if (!class_exists('\Nicebooks\Isbn\IsbnTools')) {
-      $requirements['isbn_library'] = [
-        'description' => t('ISBN module requires the nicebooks/isbn library.'),
-        'severity' => REQUIREMENT_ERROR,
-      ];
-    }
+
+  if (!class_exists('\Nicebooks\Isbn\IsbnTools')) {
+    $requirements['isbn_library'] = [
+      'title' => t('ISBN'),
+      'description' => t('The ISBN module requires the nicebooks/isbn library. Install the library with the command @command or if you cannot use composer, you can install it using the <a href=":url">Ludwig module</a>.', [
+        '@command' => new FormattableMarkup('<code>composer require nicebooks/isbn</code>', []),
+        ':url' => 'https://www.drupal.org/project/ludwig',
+      ]),
+      'severity' => REQUIREMENT_ERROR,
+    ];
   }
 
   return $requirements;

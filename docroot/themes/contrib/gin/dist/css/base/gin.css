@@ -586,12 +586,9 @@ body:not(.toolbar-tray-open) .layout-container {
 }
 
 .shortcut-action--remove .shortcut-action__icon {
-  background: var(--gin-color-primary);
-}
-
-.gin--high-contrast-mode .shortcut-action--remove .shortcut-action__icon {
   -webkit-mask-image: url("../../media/sprite.svg#shortcut-filled-view");
           mask-image: url("../../media/sprite.svg#shortcut-filled-view");
+  background: var(--gin-color-primary);
 }
 
 .shortcut-action--remove:hover .shortcut-action__icon {
@@ -600,10 +597,12 @@ body:not(.toolbar-tray-open) .layout-container {
 }
 
 .shortcut-action__message {
+  z-index: 2;
   position: absolute;
-  top: calc(100% + var(--gin-spacing-xs));
+  top: 0;
   min-width: 120px;
   pointer-events: none;
+  white-space: nowrap;
   padding: var(--gin-spacing-xs);
   margin-top: calc(var(--gin-spacing-xxs) * -1);
   color: var(--gin-color-contextual-text);
@@ -612,11 +611,11 @@ body:not(.toolbar-tray-open) .layout-container {
 }
 
 [dir="ltr"] .shortcut-action__message {
-  right: 0;
+  left: 100%;
 }
 
 [dir="rtl"] .shortcut-action__message {
-  left: 0;
+  right: 100%;
 }
 
 .modules-table-filter {
@@ -771,125 +770,6 @@ details summary {
   }
 }
 
-.block-system > .views-form .claro-details,
-.view-content .views-form .claro-details {
-  box-shadow: none;
-}
-
-.block-system > .views-form form,
-.view-content .views-form form {
-  display: flex;
-  flex-direction: column;
-}
-
-.block-system > .views-form .views-table,
-.view-content .views-form .views-table {
-  order: -1;
-  margin-top: 0;
-}
-
-.block-system > .views-form [data-drupal-selector*=edit-header],
-.view-content .views-form [data-drupal-selector*=edit-header] {
-  order: 99;
-  position: relative;
-  padding: 0 var(--gin-spacing-m) var(--gin-spacing-m) var(--gin-spacing-m);
-  border-radius: var(--gin-border-m);
-  background: rgba(var(--gin-color-sticky-rgb), .95);
-}
-
-[dir="ltr"] .block-system > .views-form [data-drupal-selector*=edit-header],
-[dir="ltr"] .view-content .views-form [data-drupal-selector*=edit-header] {
-  left: 0;
-}
-
-[dir="rtl"] .block-system > .views-form [data-drupal-selector*=edit-header],
-[dir="rtl"] .view-content .views-form [data-drupal-selector*=edit-header] {
-  right: 0;
-}
-
-@supports ((-webkit-backdrop-filter: blur()) or (backdrop-filter: blur())) {
-  .block-system > .views-form [data-drupal-selector*=edit-header],
-  .view-content .views-form [data-drupal-selector*=edit-header] {
-    opacity: .999; /* Fix Chrome issue with mask */
-    background: rgba(var(--gin-color-sticky-rgb), .9);
-    -webkit-backdrop-filter: blur(12px);
-            backdrop-filter: blur(12px);
-  }
-
-  .gin--dark-mode .block-system > .views-form [data-drupal-selector*=edit-header],
-  .gin--dark-mode .view-content .views-form [data-drupal-selector*=edit-header] {
-    background: rgba(27, 27, 29, .8);
-  }
-}
-
-[dir="ltr"] .block-system > .views-form [data-drupal-selector*=edit-header] [data-drupal-selector*=edit-views-bulk-operations-bulk-form] > *,
-[dir="ltr"] .view-content .views-form [data-drupal-selector*=edit-header] [data-drupal-selector*=edit-views-bulk-operations-bulk-form] > * {
-  margin-right: var(--gin-spacing-xs);
-}
-
-[dir="rtl"] .block-system > .views-form [data-drupal-selector*=edit-header] [data-drupal-selector*=edit-views-bulk-operations-bulk-form] > *,
-[dir="rtl"] .view-content .views-form [data-drupal-selector*=edit-header] [data-drupal-selector*=edit-views-bulk-operations-bulk-form] > * {
-  margin-left: var(--gin-spacing-xs);
-}
-
-.block-system > .views-form [data-drupal-selector*=edit-header] [data-drupal-selector*=edit-views-bulk-operations-bulk-form] .form-type--select,
-.block-system > .views-form [data-drupal-selector*=edit-header] [data-drupal-selector*=edit-views-bulk-operations-bulk-form] .form-actions,
-.view-content .views-form [data-drupal-selector*=edit-header] [data-drupal-selector*=edit-views-bulk-operations-bulk-form] .form-type--select,
-.view-content .views-form [data-drupal-selector*=edit-header] [data-drupal-selector*=edit-views-bulk-operations-bulk-form] .form-actions {
-  flex: 0 0 100%;
-  max-width: 100%;
-}
-
-.block-system > .views-form [data-drupal-selector*=edit-header] [data-drupal-selector*=edit-views-bulk-operations-bulk-form] .form-actions,
-.view-content .views-form [data-drupal-selector*=edit-header] [data-drupal-selector*=edit-views-bulk-operations-bulk-form] .form-actions {
-  justify-content: flex-end;
-}
-
-.block-system > .views-form [data-drupal-selector*=edit-header] [data-drupal-selector*=edit-views-bulk-operations-bulk-form] .form-type--checkbox,
-.view-content .views-form [data-drupal-selector*=edit-header] [data-drupal-selector*=edit-views-bulk-operations-bulk-form] .form-type--checkbox {
-  align-self: center;
-}
-
-.block-system > .views-form [data-drupal-selector*=edit-header] .form-item__label:not([for=edit-select-all]),
-.view-content .views-form [data-drupal-selector*=edit-header] .form-item__label:not([for=edit-select-all]) {
-  display: block;
-  top: 2px;
-  margin-top: var(--gin-spacing-xxs);
-  line-height: 1.75;
-}
-
-[dir="ltr"] .block-system > .views-form [data-drupal-selector*=edit-header] .form-item__label:not([for=edit-select-all]),
-[dir="ltr"] .view-content .views-form [data-drupal-selector*=edit-header] .form-item__label:not([for=edit-select-all]) {
-  float: left;
-  margin-right: var(--gin-spacing-m);
-}
-
-[dir="rtl"] .block-system > .views-form [data-drupal-selector*=edit-header] .form-item__label:not([for=edit-select-all]),
-[dir="rtl"] .view-content .views-form [data-drupal-selector*=edit-header] .form-item__label:not([for=edit-select-all]) {
-  float: right;
-  margin-left: var(--gin-spacing-m);
-}
-
-.block-system > .views-form [data-drupal-selector*=edit-header].is-sticky,
-.view-content .views-form [data-drupal-selector*=edit-header].is-sticky {
-  z-index: 4;
-  opacity: 1;
-  position: sticky;
-  bottom: var(--gin-spacing-xs);
-  box-shadow: 0 2px 6px 2px rgba(0, 0, 0, .03);
-  animation: fadeInBottom 320ms 1 forwards;
-}
-
-[dir="ltr"] .block-system > .views-form [data-drupal-selector*=edit-header].is-sticky,
-[dir="ltr"] .view-content .views-form [data-drupal-selector*=edit-header].is-sticky {
-  left: 0;
-}
-
-[dir="rtl"] .block-system > .views-form [data-drupal-selector*=edit-header].is-sticky,
-[dir="rtl"] .view-content .views-form [data-drupal-selector*=edit-header].is-sticky {
-  right: 0;
-}
-
 .views-exposed-form.views-exposed-form {
   padding-top: var(--gin-spacing-xs);
 }
@@ -906,6 +786,15 @@ details summary {
 [dir="rtl"] .views-exposed-form.views-exposed-form .form-type--boolean .form-boolean {
   margin-right: 0;
   margin-left: var(--gin-spacing-xs);
+}
+
+.views-exposed-form.views-exposed-form .form-type--boolean.form-type--checkbox {
+  margin-top: auto;
+  margin-bottom: var(--gin-spacing-s);
+}
+
+.views-exposed-form.views-exposed-form .form-type--boolean.form-type--checkbox .form-item__label {
+  margin-bottom: 0;
 }
 
 .views-exposed-form.views-exposed-form .fieldset--group {
@@ -1313,6 +1202,17 @@ a.views-field-excluded {
   margin-left: var(--gin-spacing-xs);
 }
 
+.views-field .marker {
+  font-size: var(--gin-font-size-xxs);
+  font-style: italic;
+  color: var(--gin-color-text-light);
+  padding: var(--gin-spacing-xxs);
+}
+
+.view-header {
+  margin-bottom: var(--gin-spacing-l);
+}
+
 .gin-table-scroll-wrapper {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
@@ -1325,7 +1225,7 @@ table.sticky-header {
   visibility: hidden;
   z-index: 98;
   position: fixed;
-  top: calc(var(--ginHorizontalToolbarOffset) + var(--ginStickyOffset)) !important;
+  top: calc(var(--gin-toolbar-y-offset) + var(--gin-sticky-offset)) !important;
   background: transparent;
 }
 
@@ -2368,7 +2268,7 @@ tr .form-item {
 }
 
 .button.button--small {
-  padding: var(--gin-spacing-xs) var(--gin-spacing-m);
+  padding: calc(var(--gin-spacing-xxs) + 2px) var(--gin-spacing-m);
   border-radius: var(--gin-border-s);
 }
 
@@ -2465,6 +2365,11 @@ a.button:active {
           mask-repeat: no-repeat;
   -webkit-mask-position: center center;
           mask-position: center center;
+}
+
+.dropbutton-widget,
+html.js .dropbutton-widget {
+  background-color: transparent;
 }
 
 .dropbutton {
@@ -2701,7 +2606,7 @@ a.button:active {
 .dropbutton .dropbutton__items > .dropbutton__item > .button, .dropbutton > .dropbutton__items > .dropbutton__item ~ .dropbutton__item > a,
 .dropbutton > .dropbutton__items > .dropbutton__item ~ .dropbutton__item > input,
 .dropbutton > .dropbutton__items > .dropbutton__item ~ .dropbutton__item > .button {
-  font-size: var(--gin-font-size-s);
+  font-size: var(--gin-font-size-s) !important;
   padding: .75em 1em !important;
 }
 
@@ -3776,6 +3681,10 @@ tr.color-error:focus,
   padding: 0;
   border: 0 none;
   box-shadow: none;
+}
+
+.block-system > form .gin-layer-wrapper {
+  padding-bottom: 1px;
 }
 
 .compact-link {

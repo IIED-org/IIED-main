@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * @file
+ * Contains devel_kint_extras.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\devel_kint_extras\Plugin\Devel\Dumper\KintExtended;
+
+/**
+ * Implements hook_help().
+ */
+function devel_kint_extras_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the devel_kint_extras module.
+    case 'help.page.devel_kint_extras':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Shows methods and statics available for an object when using Kint with Devel.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_devel_dumper_info_alter().
+ */
+function devel_kint_extras_devel_dumper_info_alter(&$info) {
+    $info['kint']['class'] = KintExtended::class;
+}

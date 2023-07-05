@@ -87,11 +87,10 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    $configurations = [
-        'use_material_design' => FALSE,
-      ] + parent::defaultConfiguration();
 
-    return $configurations;
+    return [
+      'use_material_design' => FALSE,
+    ] + parent::defaultConfiguration();
   }
 
   /**
@@ -204,7 +203,7 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
    *   The returned chart definition.
    */
   public function chartsGooglePopulateChartOptions(array $element, array $chart_definition) {
-    if ($this->configuration['use_material_design']) {
+    if (!empty($this->configuration['use_material_design'])) {
       $chart_definition['options']['theme'] = 'material';
       $chart_definition['options']['chart']['title'] = $element['#title'] ?? NULL;
       $chart_definition['options']['chart']['subtitle'] = $element['#subtitle'] ?? NULL;
@@ -421,6 +420,14 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
               ];
             }
             else {
+              if (!empty($data_value['color']) && (in_array($chart_type['id'], [
+                'pie',
+                'donut',
+              ]))) {
+                $chart_definition['options']['slices'][$index]['color'] = $data_value['color'];
+                unset($data_value['color']);
+                $data_value = array_values($data_value);
+              }
               $chart_definition['data'][$index + 1] = $data_value;
             }
           }
