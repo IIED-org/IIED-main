@@ -93,7 +93,7 @@
           <a x-ref="overview" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-2 focus:border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active': tab === 'overview' }" @click.prevent="tab = 'overview'; window.location.hash = 'overview'" href="#">Overview</a>
         {# My HH tab #}
         {% if (drupal_view_result('my_hidden_handbrakes', 'block_1') is not empty) and (logged_in) %}  
-          <a x-ref="my_hh" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-2 focus:border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active': tab === 'my_hh' }" @click.prevent="tab = 'my_hh'; window.location.hash = 'my_hh'" href="#">My hidden handbrakes</a>
+          <a x-ref="my_hh" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-2 focus:border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active': tab === 'my-hh' }" @click.prevent="tab = 'my-hh'; window.location.hash = 'my-hh'" href="#">My hidden handbrakes</a>
         {% endif %}
 
         </div>  
@@ -111,7 +111,7 @@
           </div>
         </div>
         {# My HH tab #}
-        <div class="pt-6 tab-panel" x-show="tab === 'my_hh'" x-transition:enter.duration.750ms>
+        <div class="pt-6 tab-panel" x-show="tab === 'my-hh'" x-transition:enter.duration.750ms>
            <div class="container content lg:grid lg:gap-x-6 lg:grid-cols-12">
               <div class="mb-12 lg:col-span-8 lg:col-start-5">
               {{ drupal_view('my_hidden_handbrakes', 'block_1') }}
