@@ -1,0 +1,15 @@
+name: Custom SQL Migrate Source Plugin
+type: module
+description: Migrations of content via custom SQL string.
+core: 8.x
+core_version_requirement: ^8 || ^9
+package: Custom
+dependencies:
+  - migrate
+  - migrate_plus
+  - migrate_tools
+
+# Information added by Drupal.org packaging script on 2022-02-01
+version: '8.x-1.3'
+project: 'custom_sql_migrate_source_plugin'
+datestamp: 1643744728

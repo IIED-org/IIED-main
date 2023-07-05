@@ -370,7 +370,10 @@ class Chartjs extends ChartBase {
         if ($element[$child]['#type'] === 'chart_data') {
           // Get the first item in each array inside $element[$child]['#data'].
           $categories = array_map(function ($item) {
-            return $item;
+            if (!empty($item['color'])) {
+              unset($item['color']);
+            }
+            return array_values($item);
           }, $element[$child]['#data']);
         }
       }
@@ -420,6 +423,13 @@ class Chartjs extends ChartBase {
                * https://github.com/chartjs/Chart.js/issues/3355
                */
               $data = ['y' => $data[1], 'x' => $data[0], 'r' => $data[2]];
+            }
+            // Convert the array from Views when using pie-type charts
+            // and no label field.
+            if (in_array($chart_type, $this->getPieStyleTypes()) && !empty($data['color'])) {
+              $element['#colors'][$data_index] = $data['color'];
+              unset($data['color']);
+              $data = array_values($data);
             }
             /*
              * This is here to account for differences between Views and

@@ -8,9 +8,12 @@ gin_lb.settings:
     enable_preview_regions:
       type: boolean
       label: 'Enable regions preview by default.'
-    hide_discard_revert_buttons:
+    hide_discard_button:
       type: boolean
-      label: 'Hide "discard changes" and "revert" button.'
+      label: 'Hide "discard changes" button.'
+    hide_revert_button:
+      type: boolean
+      label: 'Hide "revert" button.'
     save_behavior:
       type: string
       label: 'Stay on edit or forward to entity view.'

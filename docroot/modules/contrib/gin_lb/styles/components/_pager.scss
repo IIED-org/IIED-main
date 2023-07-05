@@ -98,7 +98,7 @@
   .pager__item--last .pager__link {
     &::before,
     &::after {
-      background: var(--gin-color-textLight) !important;
+      background: var(--gin-color-text-light) !important;
     }
 
     &:hover::before,

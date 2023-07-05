@@ -4,6 +4,8 @@ namespace Drupal\isbn\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
+use Drupal\isbn\IsbnToolsServiceInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the 'isbn_formatted_formatter' formatter.
@@ -17,6 +19,32 @@ use Drupal\Core\Field\FormatterBase;
  * )
  */
 class IsbnFormattedFormatter extends FormatterBase {
+
+  /**
+   * The ISBN Tools service.
+   *
+   * @var \Drupal\isbn\IsbnToolsServiceInterface
+   */
+  protected $isbnTools;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    $formatter = parent::create($container, $configuration, $plugin_id, $plugin_definition);
+    $formatter->setIsbnTools($container->get('isbn.isbn_service'));
+    return $formatter;
+  }
+
+  /**
+   * Sets the ISBN Tools service.
+   *
+   * @param \Drupal\isbn\IsbnToolsServiceInterface $isbn_tools
+   *   The ISBN Tools service.
+   */
+  public function setIsbnTools(IsbnToolsServiceInterface $isbn_tools) {
+    $this->isbnTools = $isbn_tools;
+  }
 
   /**
    * {@inheritdoc}
@@ -39,15 +67,11 @@ class IsbnFormattedFormatter extends FormatterBase {
       // Render each element as markup.
       $element[$delta] = [
         '#type' => 'markup',
-        '#markup' => $this->format($item->value),
+        '#markup' => $this->isbnTools->format($item->value),
       ];
     }
 
     return $element;
   }
 
-  private function format($isbn_number) {
-    $isbn_tools = \Drupal::service("isbn.isbn_service");
-    return $isbn_tools->format($isbn_number);
-  }
 }

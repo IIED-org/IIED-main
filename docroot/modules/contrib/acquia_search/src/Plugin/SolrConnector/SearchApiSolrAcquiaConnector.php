@@ -40,10 +40,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   description = @Translation("Index items using an Acquia Apache Solr search server.")
  * )
  */
-class SearchApiSolrAcquiaConnector extends SolrConnectorPluginBase implements
-    SolrConnectorInterface,
-    PluginFormInterface,
-    ContainerFactoryPluginInterface {
+class SearchApiSolrAcquiaConnector extends SolrConnectorPluginBase implements SolrConnectorInterface, PluginFormInterface, ContainerFactoryPluginInterface {
 
   /**
    * Automatically selected the proper Solr connection based on the environment.

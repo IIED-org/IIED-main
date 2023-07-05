@@ -288,7 +288,8 @@ class Chart extends RenderElement implements ContainerFactoryPluginInterface {
     $definitions = $this->chartsManager->getDefinitions();
     if (!$library || $library === 'site_default') {
       $charts_settings = $this->configFactory->get('charts.settings');
-      $library = $charts_settings->get('charts_default_settings.library') ?? key($definitions);
+      $default_settings_library = $charts_settings->get('charts_default_settings.library');
+      $library = !empty($default_settings_library) ? $default_settings_library : key($definitions);
     }
     elseif (!isset($definitions[$library])) {
       $library = key($definitions);

@@ -22,10 +22,44 @@ _orca_steps: &orca_steps
         - cp -ar /acquia /ramfs  &&  df -hT
     - before_install:
         - cd /ramfs${CI_WORKSPACE}
-        - ../orca/bin/ci/before_install.sh
+        - |
+          # If ORCA version is overridden then use that.
+          if [ "$ORCA_VERSION" != "$ORCA_VERSION_OVERRIDE" ]; then
+            # Remove ORCA if it is already installed and install appropriate version of
+            # ORCA using the ORCA_VERSION_OVERRIDE environment variable. This allows
+            # us to change the ORCA version at runtime.
+            rm -rf ../orca
+            composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION_OVERRIDE"
+          fi
+          ../orca/bin/ci/before_install.sh
     - "PHP version selection":
         - |
           cd /ramfs${CI_WORKSPACE}
+          # Override the default PHP version provided by the container to PHP 8.2.
+          if [ "$JENKINS_PHP_VERSION" = 8.2 ]; then
+            update-alternatives --install /usr/local/bin/php php /usr/bin/php8.2 82
+            update-alternatives --set php /usr/bin/php8.2
+
+            if [ "$ORCA_COVERAGE_ENABLE" = "TRUE" ]; then
+              # Updating php-config.
+              update-alternatives --install /usr/local/bin/php-config php-config /usr/bin/php-config8.2 82
+              update-alternatives --set php-config /usr/bin/php-config8.2
+              php-config --version
+
+              # Updating phpize.
+              update-alternatives --install /usr/local/bin/phpize phpize /usr/bin/phpize8.2 82
+              update-alternatives --set phpize /usr/bin/phpize8.2
+              phpize --version
+
+              # Installing xdebug.
+              pecl install xdebug
+
+              # Adding Configuration
+              echo "zend_extension=xdebug" > /etc/php/8.2/cli/conf.d/99-xdebug.ini
+              cat /etc/php/8.2/cli/conf.d/99-xdebug.ini
+            fi
+          fi
+          # Override the default PHP version provided by the container to PHP 8.0.
           if [ "$JENKINS_PHP_VERSION" = 8.0 ]; then
             update-alternatives --install /usr/local/bin/php php /usr/bin/php8.0 80
             update-alternatives --set php /usr/bin/php8.0
@@ -110,17 +144,17 @@ pre_build:
       <<: *orca_job
   ## Testing OLDEST SUPPORTED on php 7.4, php 8.0 and php 8.1 as this will resolve to D9.
   integrated_test_on_oldest_supported:
-    - args: --env ORCA_JOB=INTEGRATED_TEST_ON_OLDEST_SUPPORTED  --env JENKINS_PHP_VERSION=7.4
+    - args: --env ORCA_JOB=INTEGRATED_TEST_ON_OLDEST_SUPPORTED  --env JENKINS_PHP_VERSION=7.4 --env ORCA_VERSION_OVERRIDE=^3
       <<: *orca_job
   integrated_test_on_oldest_supported_php8:
-    - args: --env ORCA_JOB=INTEGRATED_TEST_ON_OLDEST_SUPPORTED --env JENKINS_PHP_VERSION=8.0
+    - args: --env ORCA_JOB=INTEGRATED_TEST_ON_OLDEST_SUPPORTED --env JENKINS_PHP_VERSION=8.0 --env ORCA_VERSION_OVERRIDE=^3
       <<: *orca_job
   integrated_test_on_oldest_supported_php81:
     - args: --env ORCA_JOB=INTEGRATED_TEST_ON_OLDEST_SUPPORTED
       <<: *orca_job
   ## Testing Latest LTS on php 7.4 only as most of the time this will resolve to NULL and exit early.
   integrated_test_on_latest_lts:
-    - args: --env ORCA_JOB=INTEGRATED_TEST_ON_LATEST_LTS  --env JENKINS_PHP_VERSION=7.4
+    - args: --env ORCA_JOB=INTEGRATED_TEST_ON_LATEST_LTS  --env JENKINS_PHP_VERSION=7.4 --env ORCA_VERSION_OVERRIDE=^3
       <<: *orca_job
   ## Testing Previous Minor on php 8.1 as this will resolve to D10 as soon as D 10.1 is released.
   integrated_test_on_prev_minor:
@@ -153,7 +187,7 @@ pre_build:
       <<: *orca_job
   isolated_test_on_next_minor:
     - args: --env ORCA_JOB=ISOLATED_TEST_ON_NEXT_MINOR
-      <<: *orca_job
+      <<: *orca_job_allow_failures
   isolated_test_on_next_minor_dev:
     - args: --env ORCA_JOB=ISOLATED_TEST_ON_NEXT_MINOR_DEV
       <<: *orca_job
@@ -171,6 +205,14 @@ pre_build:
       <<: *orca_job
   loose_deprecated_code_scan:
     - args: --env ORCA_JOB=LOOSE_DEPRECATED_CODE_SCAN
+      <<: *orca_job
+
+  # php 8.2 tests
+  isolated_test_on_current_php82:
+    - args: --env ORCA_JOB=ISOLATED_TEST_ON_CURRENT --env JENKINS_PHP_VERSION=8.2
+      <<: *orca_job
+  integrated_test_on_latest_lts_php82:
+    - args: --env ORCA_JOB=INTEGRATED_TEST_ON_LATEST_LTS --env JENKINS_PHP_VERSION=8.2
       <<: *orca_job
   # isolated_test_on_next_major_latest_minor_beta_later:
   #   - args: --env ORCA_JOB=ISOLATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_BETA_OR_LATER

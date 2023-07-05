@@ -46,6 +46,7 @@ gin_toolbar:
     - gin/settings_tray_edit
     - core/drupalSettings
     - core/once
+    - core/drupal.displace
 
 gin_horizontal_toolbar:
   css:
@@ -156,6 +157,11 @@ settings:
   dependencies:
     - core/drupalSettings
 
+tableselect:
+  css:
+    component:
+      dist/css/components/tableselect.css: { minified: false }
+
 tabs:
   css:
     component:
@@ -254,6 +260,11 @@ layout_paragraphs:
   css:
     component:
       dist/css/components/layout_paragraphs.css: { minified: false }
+
+layout_paragraphs2:
+  css:
+    component:
+      dist/css/components/layout_paragraphs_2.0.css: { minified: false }
 
 entity_reference_layout:
   css:

@@ -1,3 +1,8 @@
+.dropbutton-widget,
+html.js .dropbutton-widget {
+  background-color: transparent;
+}
+
 .dropbutton {
   border: 2px solid var(--gin-color-primary);
   border-radius: var(--gin-border-m);
@@ -162,7 +167,7 @@
     > a,
     > input,
     > .button {
-      font-size: var(--gin-font-size-s);
+      font-size: var(--gin-font-size-s) !important;
       padding: .75em 1em !important;
     }
   }

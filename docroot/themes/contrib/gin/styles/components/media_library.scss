@@ -290,9 +290,15 @@ fieldset.media-library-widget {
     border-radius: var(--gin-border-m);
     box-shadow: var(--gin-shadow-l1);
   }
+
+  .views-form {
+    background: transparent !important;
+  }
 }
 
 .media-library-wrapper {
+  margin-top: 0;
+
   .views-display-link {
     position: relative;
     color: var(--gin-color-text);
@@ -378,6 +384,8 @@ fieldset.media-library-widget {
 }
 
 .media-library-widget-modal .ui-dialog-buttonpane {
+  flex-direction: column;
+
   .form-actions {
     display: flex;
     flex-direction: row;
@@ -392,7 +400,16 @@ fieldset.media-library-widget {
 
   .media-library-selected-count {
     flex-grow: 1;
-    margin-left: 0;
+    margin-bottom: var(--gin-spacing-s);
+  }
+
+  @include mq(xsmall) {
+    flex-direction: row;
+
+    .media-library-selected-count {
+      margin-bottom: 0;
+      margin-left: 0;
+    }
   }
 }
 

@@ -6,12 +6,12 @@
 #}
 {% include '@gin/navigation/toolbar--gin.html.twig' ignore missing %}
 {% if secondary_toolbar_frontend and toolbar_variant != 'classic' %}
-<div class="gin-secondary-toolbar gin-secondary-toolbar--frontend">
+<div class="gin-secondary-toolbar gin-secondary-toolbar--frontend"{{ toolbar_variant == 'vertical' ? ' data-offset-top' : '' }}>
   <div class="gin-secondary-toolbar__layout-container">
     <div class="gin-breadcrumb-wrapper">
       <div class="region-breadcrumb">
-        <nav class="gin-breadcrumb" role="navigation" aria-labelledby="system-breadcrumb">
-          <h2 id="system-breadcrumb" class="visually-hidden">{{ 'Breadcrumb'|t }}</h2>
+        <nav class="gin-breadcrumb" role="navigation" aria-labelledby="gin-system-breadcrumb">
+          <h2 id="gin-system-breadcrumb" class="visually-hidden">{{ 'Breadcrumb'|t }}</h2>
           <ol class="gin-breadcrumb__list">
             <li class="gin-breadcrumb__item">
               {% if entity_edit_url and entity_title %}

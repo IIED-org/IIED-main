@@ -312,7 +312,7 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
         $form['global_options']['lang'][$dates_data_key][$counter] = [
           '#title' => $this->t('@label_singular', [
             '@label_singular' => $data['label_singular'],
-          ]) . ' ' . $counter + 1,
+          ]) . ' ' . ($counter + 1),
           '#type' => 'textfield',
           '#default_value' => $this->configuration['global_options']['lang'][$dates_data_key][$counter] ?? $lang_config[$dates_data_key][$counter],
           '#required' => TRUE,
@@ -653,7 +653,7 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
             $series_data[$label_index][0] = $label;
           }
         }
-        elseif ($categories && $chart_type === 'pie') {
+        elseif (!empty($categories) && $chart_type === 'pie') {
           foreach ($categories as $label_index => $label) {
             $series_data[$label_index][0] = $label;
           }
@@ -665,7 +665,12 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
             $series_data[$data_index][] = $data;
           }
           elseif ($chart_type === 'pie') {
-            $series_data[$data_index] = array_combine(['name', 'y'], $data);
+            if (count(array_keys($data)) === 2) {
+              $series_data[$data_index] = array_combine(['name', 'y'], $data);
+            }
+            else {
+              $series_data[$data_index] = array_combine(['name', 'color', 'y'], $data);
+            }
             $name = $series_data[$data_index]['name'];
             if (!empty($element[$key]['#grouping_colors'][$data_index][$name])) {
               $series_data[$data_index]['color'] = $element[$key]['#grouping_colors'][$data_index][$name];

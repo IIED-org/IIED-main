@@ -359,7 +359,12 @@ class C3 extends ChartBase implements ContainerFactoryPluginInterface {
         }
       }
       else {
-        foreach ($child_element['#data'] as $datum) {
+        foreach ($child_element['#data'] as $datum_index => $datum) {
+          if (!empty($datum['color'])) {
+            $chart_definition['color']['pattern'][$datum_index] = $datum['color'];
+            unset($datum['color']);
+            $datum = array_values($datum);
+          }
           $columns[] = $datum;
         }
       }
