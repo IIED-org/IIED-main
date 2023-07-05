@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.user.user.field_first_name
+    - field.field.user.user.field_occupation
     - field.field.user.user.field_organisation
     - field.field.user.user.user_picture
     - image.style.thumbnail
@@ -141,6 +142,22 @@ third_party_settings:
                 third_party_settings: {  }
             weight: 4
             additional: {  }
+          1c63aa84-9eb9-4f98-b1f1-e3f1f724d735:
+            uuid: 1c63aa84-9eb9-4f98-b1f1-e3f1f724d735
+            region: content
+            configuration:
+              id: 'field_block:user:user:field_occupation'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: string
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+            weight: 5
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
@@ -184,6 +201,14 @@ content:
       alternative_field_reference_separator: ', '
     third_party_settings: {  }
     weight: 52
+    region: content
+  field_occupation:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 53
     region: content
   field_organisation:
     type: string

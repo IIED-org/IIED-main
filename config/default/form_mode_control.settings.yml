@@ -145,3 +145,4 @@ modification+administrator+taxonomy_term+person: taxonomy_term.person.default
 'use  The form mode default linked to  taxonomy_term entity( un_geoscheme_regional_groupings )': taxonomy_term.un_geoscheme_regional_groupings.default
 'use  The form mode guest_register linked to  user entity( user )': user.user.guest_register
 'use  The form mode register linked to  user entity( user )': user.user.register
+'use  The form mode contributor linked to  user entity( user )': user.user.contributor

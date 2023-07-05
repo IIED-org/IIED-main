@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.user.user.field_first_name
+    - field.field.user.user.field_occupation
     - field.field.user.user.field_organisation
     - field.field.user.user.user_picture
     - image.style.thumbnail
@@ -59,6 +60,14 @@ content:
         family: description
         generational: description
         credentials: description
+    third_party_settings: {  }
+  field_occupation:
+    type: string_textfield
+    weight: 33
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   field_organisation:
     type: string_textfield

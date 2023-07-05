@@ -5,7 +5,7 @@ dependencies:
   module:
     - webform
 id: hh_contributor
-label: 'HH contributor'
+label: Contributor
 weight: -7
 is_admin: null
 permissions:
