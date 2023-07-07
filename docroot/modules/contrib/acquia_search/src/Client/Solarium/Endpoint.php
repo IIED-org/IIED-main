@@ -2,7 +2,6 @@
 
 namespace Drupal\acquia_search\Client\Solarium;
 
-use Drupal\acquia_search\Plugin\SolrConnector\SearchApiSolrAcquiaConnector;
 use Drupal\search_api_solr\SolrConnectorInterface;
 use Solarium\Core\Client\Endpoint as SolariumEndpoint;
 
@@ -44,7 +43,6 @@ class Endpoint extends SolariumEndpoint {
     ];
     $options = array_merge(
       $timeout_config,
-      SearchApiSolrAcquiaConnector::getPlatformConfig(),
       [
         'collection' => NULL,
         'leader' => FALSE,

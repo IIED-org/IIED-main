@@ -1,0 +1,8 @@
+guid,title,isbn
+1,Valid 10-digit,0123456789
+2,Valid 13-digit,9780123456786
+3,Valid formatted 10-digit,0-00-123456-0
+4,Valid formatted 13-digit,978-0-00-123456-7
+5,Invalid 10-digit,012345678X
+6,Invalid 13-digit,9780123456787
+7,Invalid,Lorem ipsum

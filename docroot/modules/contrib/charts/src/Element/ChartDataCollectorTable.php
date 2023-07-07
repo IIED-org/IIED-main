@@ -161,7 +161,7 @@ class ChartDataCollectorTable extends FormElement {
     $is_first_column = $element_state['table_categories_identifier'] === self::FIRST_COLUMN;
     $first_row_key = NULL;
     foreach ($element_state['data_collector_table'] as $i => $row) {
-      $first_row_key = $first_row_key === NULL ? $i : $first_row_key;
+      $first_row_key = $first_row_key ?? $i;
       $table_first_row = $i === $first_row_key;
       $add_color_first_row = ($is_first_column && $table_first_row);
       $first_col_key = NULL;
@@ -175,7 +175,7 @@ class ChartDataCollectorTable extends FormElement {
           continue;
         }
 
-        $first_col_key = $first_col_key === NULL ? $j : $first_col_key;
+        $first_col_key = $first_col_key ?? $j;
         $table_first_col = $j === $first_col_key;
         // To be used to skip color input on cell[0][0].
         $is_category_cell = $table_first_col && $table_first_row;
@@ -343,6 +343,7 @@ class ChartDataCollectorTable extends FormElement {
         '#csv_separator' => $element['#import_csv_separator'] ?? ',',
       ];
     }
+    $element['#attributes']['style'] = 'overflow: auto;';
 
     return $element;
   }
@@ -503,10 +504,12 @@ class ChartDataCollectorTable extends FormElement {
     $submit += [
       '#type' => 'submit',
       '#name' => $name,
-      '#value' => t('@op @on', [
-        '@op' => ucfirst($operation),
-        '@on' => $on,
-      ]),
+      '#value' => match(TRUE) {
+        $operation === 'add' && $on === 'row' => t('Add row'),
+        $operation === 'add' && $on === 'column' => t('Add column'),
+        $operation === 'delete' && $on === 'row' => t('Delete row'),
+        default => t('Delete column'),
+      },
       '#limit_validation_errors' => [],
       '#submit' => [[get_called_class(), 'tableOperationSubmit']],
       '#operation' => $operation,
@@ -544,11 +547,11 @@ class ChartDataCollectorTable extends FormElement {
     $counter_default_used_color_index = 0;
     $max_default_colors = count($element['#default_colors']);
     foreach ($rows_arr as $i) {
-      $first_row_key = $first_row_key === NULL ? $i : $first_row_key;
+      $first_row_key = $first_row_key ?? $i;
       $table_first_row = $i === $first_row_key;
       $first_col_key = NULL;
       foreach ($columns_arr as $j) {
-        $first_col_key = $first_col_key === NULL ? $j : $first_col_key;
+        $first_col_key = $first_col_key ?? $j;
         $table_first_col = $j === $first_col_key;
         // Used to skip category cell.
         $is_category_cell = $table_first_col && $table_first_row;
@@ -787,7 +790,7 @@ class ChartDataCollectorTable extends FormElement {
 
     $series = [];
     $i = 0;
-    foreach ($table as $row_key => $row) {
+    foreach ($table as $row) {
       if (!$is_first_column) {
         $name_key = key($row);
         $series[$i]['name'] = $row[$name_key]['data'] ?? [];

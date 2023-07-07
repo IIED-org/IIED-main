@@ -86,6 +86,16 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
   /**
    * {@inheritdoc}
    */
+  public function defaultConfiguration() {
+
+    return [
+      'use_material_design' => FALSE,
+    ] + parent::defaultConfiguration();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildConfigurationForm($form, $form_state);
     $form['placeholder'] = [
@@ -97,8 +107,31 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
             ->toString(),
         ]),
     ];
+    $form['use_material_design'] = [
+      '#title' => $this->t('Use Material Design'),
+      '#type' => 'checkbox',
+      '#default_value' => $this->configuration['use_material_design'],
+      '#description' => $this->t('Use Material Design for charts.'),
+    ];
 
     return $form;
+  }
+
+  /**
+   * Submit configurations.
+   *
+   * @param array $form
+   *   The form element.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   */
+  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
+    parent::submitConfigurationForm($form, $form_state);
+
+    if (!$form_state->getErrors()) {
+      $values = $form_state->getValue($form['#parents']);
+      $this->configuration['use_material_design'] = $values['use_material_design'];
+    }
   }
 
   /**
@@ -117,7 +150,7 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
     }
 
     if (!empty($element['#height']) || !empty($element['#width'])) {
-      $element['#attributes']['style'] = 'height:' . $element['#height'] . $element['#height_units'] . ';width:' . $element['#width'] . $element['#width_units'].  ';';
+      $element['#attributes']['style'] = 'height:' . $element['#height'] . $element['#height_units'] . ';width:' . $element['#width'] . $element['#width_units'] . ';';
     }
 
     // Trim out empty options.
@@ -126,6 +159,12 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
     $element['#attached']['library'][] = 'charts_google/google';
     $element['#attributes']['class'][] = 'charts-google';
     $element['#chart_definition'] = $chart_definition;
+
+    // Setting global options.
+    $element['#attached']['drupalSettings']['charts']['google']['global_options'] = [
+      'useMaterialDesign' => !empty($this->configuration['use_material_design']) ? 'true' : 'false',
+      'chartType' => $element['#chart_type'],
+    ];
 
     return $element;
   }
@@ -149,7 +188,7 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
       'table' => 'TableChart',
     ];
     $this->moduleHandler->alter('charts_google_visualization_types', $types);
-    return isset($types[$renderable_type]) ? $types[$renderable_type] : FALSE;
+    return $types[$renderable_type] ?? FALSE;
   }
 
   /**
@@ -164,7 +203,21 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
    *   The returned chart definition.
    */
   public function chartsGooglePopulateChartOptions(array $element, array $chart_definition) {
-    $chart_definition['options']['title'] = $element['#title'] ?? NULL;
+    if (!empty($this->configuration['use_material_design'])) {
+      $chart_definition['options']['theme'] = 'material';
+      $chart_definition['options']['chart']['title'] = $element['#title'] ?? NULL;
+      $chart_definition['options']['chart']['subtitle'] = $element['#subtitle'] ?? NULL;
+      if ($element['#chart_type'] === 'bar') {
+        $chart_definition['options']['bars'] = 'horizontal';
+      }
+    }
+    else {
+      $title = $element['#title'] ?? NULL;
+      if ($title && !empty($element['#subtitle'])) {
+        $title .= ': ' . $element['#subtitle'];
+      }
+      $chart_definition['options']['title'] = $title;
+    }
     $chart_definition['options']['titleTextStyle']['color'] = $element['#title_color'];
     $chart_definition['options']['titleTextStyle']['bold'] = $element['#title_font_weight'] === 'bold';
     $chart_definition['options']['titleTextStyle']['italic'] = $element['#title_font_style'] === 'italic';
@@ -367,6 +420,14 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
               ];
             }
             else {
+              if (!empty($data_value['color']) && (in_array($chart_type['id'], [
+                'pie',
+                'donut',
+              ]))) {
+                $chart_definition['options']['slices'][$index]['color'] = $data_value['color'];
+                unset($data_value['color']);
+                $data_value = array_values($data_value);
+              }
               $chart_definition['data'][$index + 1] = $data_value;
             }
           }
@@ -475,7 +536,7 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
     $data = $chart_definition['data'];
 
     // Stub out corner value.
-    $data[0][0] = isset($data[0][0]) ? $data[0][0] : 'x';
+    $data[0][0] = $data[0][0] ?? 'x';
     if ($element['#chart_type'] === 'bubble') {
       $data[0][2] = 'bubble';
     }
@@ -486,7 +547,7 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
     foreach ($data as $row => $values) {
 
       for ($n = 0; $n < $column_count; $n++) {
-        $data[$row][$n] = isset($data[$row][$n]) ? $data[$row][$n] : NULL;
+        $data[$row][$n] = $data[$row][$n] ?? NULL;
       }
       ksort($data[$row]);
     }

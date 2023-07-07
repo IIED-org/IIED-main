@@ -26,7 +26,7 @@ function charts_highcharts_charts_version3_to_new_settings_structure_alter(array
     'legend_layout' => 'legend_layout',
     'legend_background_color' => 'legend_background_color',
     'legend_border_width' => 'legend_border_width',
-    'legend_shadow' =>  'legend_shadow',
+    'legend_shadow' => 'legend_shadow',
     'item_style_color' => 'legend_item_style_color',
     'text_overflow' => 'legend_item_style_overflow',
   ];
@@ -59,19 +59,24 @@ function charts_highcharts_charts_version3_to_new_settings_structure_alter(array
       case 'layout':
         $library_config['legend']['layout'] = $value;
         break;
+
       case 'background_color':
         $library_config['legend']['background_color'] = $value;
         break;
+
       case 'border_width':
         $library_config['legend']['border_width'] = $value;
         break;
+
       case 'shadow':
         $library_config['legend']['shadow'] = $value;
         break;
+
       case 'item_style_color':
         $library_config['legend']['item_style']['color'] = $value;
         break;
-      default :
+
+      default:
         $library_config['legend']['item_style']['overflow'] = $value;
     }
 

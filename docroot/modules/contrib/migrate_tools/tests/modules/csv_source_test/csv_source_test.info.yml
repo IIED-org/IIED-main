@@ -8,3 +8,8 @@ dependencies:
   - drupal:migrate
   - migrate_plus:migrate_plus
   - migrate_plus:migrate_source_csv
+
+# Information added by Drupal.org packaging script on 2022-12-30
+version: '8.x-5.2'
+project: 'migrate_tools'
+datestamp: 1672425096

@@ -7,6 +7,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Files\LocalFile;
 use PHP_CodeSniffer\Runner;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Util\Common;
 use ReflectionClass;
 use function array_map;
 use function array_merge;
@@ -29,9 +30,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
 
 	/**
-	 * @param (string|int|bool|array<int|string, (string|int|bool|null)>)[] $sniffProperties
-	 * @param string[] $codesToCheck
-	 * @param string[] $cliArgs
+	 * @param array<string, string|int|bool|array<int|string, (string|int|bool|null)>> $sniffProperties
+	 * @param list<string> $codesToCheck
+	 * @param list<string> $cliArgs
 	 */
 	protected static function checkFile(string $filePath, array $sniffProperties = [], array $codesToCheck = [], array $cliArgs = []): File
 	{
@@ -165,21 +166,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		return $sniffClassName;
 	}
 
-	private static function getSniffName(): string
+	protected static function getSniffName(): string
 	{
-		return preg_replace(
-			[
-				'~\\\~',
-				'~\.Sniffs~',
-				'~Sniff$~',
-			],
-			[
-				'.',
-				'',
-				'',
-			],
-			static::getSniffClassName()
-		);
+		return Common::getSniffCode(static::getSniffClassName());
 	}
 
 	private static function getSniffClassReflection(): ReflectionClass
@@ -192,7 +181,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @param (string|int)[][][] $errorsOnLine
+	 * @param list<list<array{source: string, message: string}>> $errorsOnLine
 	 */
 	private static function hasError(array $errorsOnLine, string $sniffCode, ?string $message): bool
 	{
@@ -222,7 +211,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @param (string|int|bool)[][][] $errors
+	 * @param list<list<array{source: string, message: string}>> $errors
 	 */
 	private static function getFormattedErrors(array $errors): string
 	{

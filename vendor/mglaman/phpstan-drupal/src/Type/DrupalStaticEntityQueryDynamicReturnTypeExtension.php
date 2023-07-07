@@ -2,17 +2,16 @@
 
 namespace mglaman\PHPStanDrupal\Type;
 
+use Drupal\Core\Config\Entity\ConfigEntityStorageInterface;
+use Drupal\Core\Entity\ContentEntityStorageInterface;
 use mglaman\PHPStanDrupal\Drupal\EntityDataRepository;
 use mglaman\PHPStanDrupal\Type\EntityQuery\ConfigEntityQueryType;
 use mglaman\PHPStanDrupal\Type\EntityQuery\ContentEntityQueryType;
 use mglaman\PHPStanDrupal\Type\EntityQuery\EntityQueryType;
-use mglaman\PHPStanDrupal\Type\EntityStorage\ConfigEntityStorageType;
-use mglaman\PHPStanDrupal\Type\EntityStorage\ContentEntityStorageType;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
-use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\DynamicStaticMethodReturnTypeExtension;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -54,9 +53,8 @@ class DrupalStaticEntityQueryDynamicReturnTypeExtension implements DynamicStatic
             return $returnType;
         }
         $type = $scope->getType($args[0]->value);
-        if ($type instanceof ConstantStringType) {
-            $entityTypeId = $type->getValue();
-        } else {
+
+        if (count($type->getConstantStrings()) === 0) {
             // We're unsure what specific EntityQueryType it is, so let's stick
             // with the general class itself to ensure it gets access checked.
             return new EntityQueryType(
@@ -65,20 +63,21 @@ class DrupalStaticEntityQueryDynamicReturnTypeExtension implements DynamicStatic
                 $returnType->getClassReflection()
             );
         }
+        $entityTypeId = $type->getConstantStrings()[0]->getValue();
         $entityType = $this->entityDataRepository->get($entityTypeId);
         $entityStorageType = $entityType->getStorageType();
         if ($entityStorageType === null) {
             return $returnType;
         }
 
-        if ($entityStorageType instanceof ContentEntityStorageType) {
+        if ((new ObjectType(ContentEntityStorageInterface::class))->isSuperTypeOf($entityStorageType)->yes()) {
             return new ContentEntityQueryType(
                 $returnType->getClassName(),
                 $returnType->getSubtractedType(),
                 $returnType->getClassReflection()
             );
         }
-        if ($entityStorageType instanceof ConfigEntityStorageType) {
+        if ((new ObjectType(ConfigEntityStorageInterface::class))->isSuperTypeOf($entityStorageType)->yes()) {
             return new ConfigEntityQueryType(
                 $returnType->getClassName(),
                 $returnType->getSubtractedType(),

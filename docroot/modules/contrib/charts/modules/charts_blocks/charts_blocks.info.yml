@@ -4,9 +4,9 @@ description: Create Charts blocks without the need for Views.
 core_version_requirement: ^9.2 || ^10
 package: Charts
 dependencies:
-  - charts
+  - drupal:charts
 
-# Information added by Drupal.org packaging script on 2023-01-18
-version: '5.0.4'
+# Information added by Drupal.org packaging script on 2023-06-27
+version: '5.0.7'
 project: 'charts'
-datestamp: 1674072908
+datestamp: 1687898053

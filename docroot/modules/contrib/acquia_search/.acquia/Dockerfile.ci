@@ -3,10 +3,15 @@ ARG BASE_IMAGE=devops-orca-container:php81
 
 ARG REPO_LOCATION
 
-ARG ORCA_VERSION=^3
+ARG ORCA_VERSION=^4
 
 FROM ${REPO_LOCATION}${BASE_IMAGE}
 
+# Sets ORCA_VERSION environment variable.
+ENV ORCA_VERSION=^4
+# Overrides the ORCA_VERSION if a specific version is provided in a job. Defaults to the
+# ORCA_VERSION selected.
+ENV ORCA_VERSION_OVERRIDE=$ORCA_VERSION
 ENV CI=true
 ENV CHROMEDRIVER_VERSION 93.0.4577.63
 ENV CHROMEDRIVER_DIR /chromedriver

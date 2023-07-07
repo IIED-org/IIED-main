@@ -116,7 +116,7 @@ class AcquiaSearchApiClient {
   /**
    * Helper function to fetch all search v3 indexes for given subscription.
    *
-   * @return array|bool
+   * @return array|false
    *   Acquia Search indexes array, FALSE on Acquia Search API failure.
    *
    * @throws \Exception
@@ -185,7 +185,9 @@ class AcquiaSearchApiClient {
       return $cache->data;
     }
     $keys = $this->searchRequest('/v2/index/key', 'index_name=' . $index_name);
-    $this->cache->set($cid, $keys, $now + (24 * 60 * 60), ['acquia_search_indexes']);
+    if ($keys !== FALSE) {
+      $this->cache->set($cid, $keys, $now + (24 * 60 * 60), ['acquia_search_indexes']);
+    }
 
     return $keys;
   }
@@ -218,6 +220,10 @@ class AcquiaSearchApiClient {
       // Create a new HMAC key for the middleware.
       $key_id = $this->subscription->getSettings()->getApplicationUuid();
       $key_secret = $this->subscription->getSettings()->getSecretKey();
+      if (empty($key_id) || empty($key_secret)) {
+        $this->logger->error('Could not determine key and secret for HMAC authorization for Acquia Search API request.');
+        return FALSE;
+      }
       $key = new Key($key_id, $key_secret);
 
       // Create the client from factory using the HMAC middleware.

@@ -2,13 +2,12 @@
  * @file
  * JavaScript's integration between Highcharts and Drupal.
  */
-(function (Drupal, once) {
-
+((Drupal, once) => {
   'use strict';
 
   Drupal.behaviors.chartsHighchartsColorChanger = {
     attach: function (context) {
-      const colorChangerHandler = function(event) {
+      const colorChangerHandler = function (event) {
         const chartMetadata = JSON.parse(this.dataset.chartsHighchartsColorInfo);
         const chartsElement = document.getElementById(chartMetadata.chart_id);
         const chart = Highcharts.charts[chartsElement.dataset.highchartsChart];
@@ -19,10 +18,12 @@
               color: event.target.value
             });
             break;
+
           case 'gauge':
             chart.yAxis[0].plotLinesAndBands[0].options.color = event.target.value;
             chart.yAxis[0].update();
             break;
+
           default:
             chart.series[chartMetadata.series_index].update({
               color: event.target.value
@@ -38,4 +39,4 @@
       });
     }
   };
-}(Drupal, once));
+})(Drupal, once);

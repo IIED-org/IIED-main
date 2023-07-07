@@ -76,7 +76,7 @@ class ChartsTestLibrary extends ChartBase implements ContainerFactoryPluginInter
     $chart_definition = $this->populateData($element, $chart_definition);
 
     if (!empty($element['#height']) || !empty($element['#width'])) {
-      $element['#attributes']['style'] = 'height:' . $element['#height'] . $element['#height_units'] . ';width:' . $element['#width'] . $element['#width_units'].  ';';
+      $element['#attributes']['style'] = 'height:' . $element['#height'] . $element['#height_units'] . ';width:' . $element['#width'] . $element['#width_units'] . ';';
     }
 
     if (!isset($element['#id'])) {
@@ -104,6 +104,7 @@ class ChartsTestLibrary extends ChartBase implements ContainerFactoryPluginInter
     $chart_definition['title']['text'] = $element['#title'];
     $chart_definition['title']['color'] = $element['#title_color'];
     $chart_definition['title']['position'] = $element['#title_position'];
+    $chart_definition['subtitle']['text'] = $element['#subtitle'];
     $chart_definition['title']['font'] = [
       'weight' => $element['#title_font_weight'],
       'style' => $element['#title_font_style'],

@@ -3,7 +3,7 @@ body.gin--vertical-toolbar,
 body.gin--horizontal-toolbar,
 body.gin--classic-toolbar {
   padding-top: var(--gin-toolbar-y-offset) !important;
-  padding-left: var(--gin-toolbar-x-offset, 256px);
+  padding-left: var(--gin-toolbar-x-offset, 256px) !important;
   margin-left: 0; // Fix for Drupal 9.3+
 }
 
@@ -34,7 +34,7 @@ body.gin--classic-toolbar {
     }
 
     .toolbar-tab > .toolbar-item {
-      font-weight: var(--gin-font-weight-normal);;
+      font-weight: var(--gin-font-weight-normal);
     }
 
     .toolbar-tab > .toolbar-icon {
@@ -127,14 +127,6 @@ body.gin--classic-toolbar {
         }
       }
     }
-
-    // .menu-item--active-trail {
-    //   .toolbar-icon {
-    //     &::before {
-    //       background: var(--gin-color-primary-active) !important;
-    //     }
-    //   }
-    // }
 
     #toolbar-item-administration-tray .toolbar-icon-admin-toolbar-tools-help.toolbar-icon-default {
       &:before {
@@ -285,7 +277,7 @@ body.gin--classic-toolbar {
     }
 
     // Local tasks
-    .toolbar-icon-local-tasks{
+    .toolbar-icon-local-tasks {
       &:before {
         mask-image: icon('local-tasks');
         mask-size: var(--gin-icon-size-toolbar-secondary) var(--gin-icon-size-toolbar-secondary);
@@ -376,7 +368,7 @@ body.gin--classic-toolbar {
   a,
   span {
     color: var(--gin-color-text);
-    font-weight: var(--gin-font-weight-normal);;
+    font-weight: var(--gin-font-weight-normal);
 
     &:hover, &:active, &:focus, &.is-active {
       text-decoration: none;
@@ -493,6 +485,13 @@ body.gin--classic-toolbar {
 }
 
 .toolbar-tray-horizontal {
+  // admin_toolbar 3.3.1 fix
+  .menu-item.hover-intent,
+  .menu-item:focus-within,
+  .menu-item--expanded {
+    background-color: transparent;
+  }
+
   ul {
     li {
       &.menu-item {
@@ -504,12 +503,8 @@ body.gin--classic-toolbar {
         }
 
         &--expanded {
-          background-color: transparent;
-          [dir=rtl] & {
-            background-color: transparent;
-          }
-
-          &.hover-intent ul {
+          &.hover-intent ul,
+          &:focus-within ul {
             box-shadow: 0 8px 14px rgba(0, 0, 0, .15);
           }
         }
@@ -561,7 +556,8 @@ body.gin--classic-toolbar {
 
   &.menu-item--active-trail,
   &:hover,
-  &:focus {
+  &:focus,
+  &:focus-within {
     &::before {
       background-color: var(--gin-color-primary);
     }
@@ -576,6 +572,7 @@ body.gin--classic-toolbar {
   padding-top: 1.5em;
   padding-bottom: 1.5em;
 
+  &:visited,
   &:hover,
   &:focus {
     color: var(--gin-color-text);
@@ -647,6 +644,7 @@ body.gin--classic-toolbar {
 #toolbar-item-user {
   display: inline-block;
   vertical-align: top;
+  min-width: unset;
 
   &.icon-user {
     padding-left: 0;
@@ -746,9 +744,61 @@ body.gin--classic-toolbar {
     border-radius: var(--gin-border-s);
 
     &.ui-state-active {
-      color: var(--gin-color-button-text);
       background-color: var(--gin-color-primary);
       border: 0 none;
+
+      &, a {
+        color: var(--gin-color-button-text);
+      }
     }
+  }
+}
+
+// admin_toolbar 3.3.1 fix
+.toolbar-tray-horizontal .toolbar-menu .level-1 > .toolbar-box .toolbar-icon.toolbar-handle {
+  position: absolute;
+  right: .5rem;
+  top: 1.1875rem;
+  width: 1rem;
+  height: 1rem;
+  padding: 0;
+
+  &::before {
+    top: 0;
+    left: 0;
+    mask-size: 12px 12px;
+  }
+}
+
+.toolbar-tray-horizontal .level-1 .menu-item--expanded > .toolbar-box .toolbar-handle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 39px;
+  height: 100%;
+  padding: 0;
+  background: none;
+
+  &:focus {
+    box-shadow: inset 0 0 0 1px var(--gin-color-focus-border), inset 0 0 0 4px var(--gin-color-focus);
+  }
+
+  &::before {
+    display: none !important;
+  }
+}
+
+.toolbar-tray-horizontal .toolbar-icon:not(.toolbar-handle) {
+  width: 100%;
+}
+
+// Drupal 10.1 Toolbar loading overrides
+.toolbar-loading #toolbar-item-administration-tray {
+  border-right: 0;
+  background-color: transparent;
+
+  .menu-item + .menu-item {
+    border-left: 0;
+    border-right: 0;
   }
 }

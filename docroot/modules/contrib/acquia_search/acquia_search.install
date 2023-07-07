@@ -8,6 +8,7 @@
 use Drupal\acquia_connector\Subscription;
 use Drupal\acquia_search\Helper\Messages;
 use Drupal\acquia_search\Helper\Runtime;
+use Drupal\acquia_search\Plugin\search_api\backend\AcquiaSearchSolrBackend;
 use Drupal\search_api\Entity\Server;
 use Drupal\search_api\ServerInterface;
 
@@ -61,11 +62,16 @@ function acquia_search_requirements($phase) {
 
     // Show available Acquia Search Solr indexes.
     foreach ($acquia_servers as $server_id => $server) {
+      $backend = $server->getBackend();
       $requirements['acquia_search_status_' . $server_id] = [
         'title' => t('Acquia Search connection status'),
         'severity' => REQUIREMENT_OK,
-        'description' => ['#markup' => Messages::getSearchStatusMessage($server)],
+        'description' => ['#markup' => Messages::getSearchStatusMessage($server->getBackend())],
       ];
+      if ($backend instanceof AcquiaSearchSolrBackend && !$backend->isPreferredCoreAvailable()) {
+        $requirements['acquia_search_status_' . $server_id]['severity'] = REQUIREMENT_ERROR;
+        $requirements['acquia_search_status_' . $server_id]['description'] = ['#markup' => Messages::getNoPreferredCoreError($backend)];
+      }
     }
 
     // Flag when read-only mode was forced because of not finding the right
@@ -79,26 +85,9 @@ function acquia_search_requirements($phase) {
       ];
     }
 
-    if (!\Drupal::service('acquia_search.preferred_core')->isPreferredCoreAvailable()) {
-      $requirements['acquia_search_read_only'] = [
-        'title' => t('Acquia Search Solr'),
-        'value' => t('No preferred search core'),
-        'severity' => REQUIREMENT_ERROR,
-        'description' => ['#markup' => Messages::getNoPreferredCoreError()],
-      ];
-    }
-
   }
 
   return $requirements;
-}
-
-/**
- * Implements hook_install().
- */
-function acquia_search_install() {
-  // Indicate that default index needs to be re-connected to the server.
-  \Drupal::state()->set('acquia_search.connect_index', TRUE);
 }
 
 /**

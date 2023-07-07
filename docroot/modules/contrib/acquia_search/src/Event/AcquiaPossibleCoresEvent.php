@@ -24,22 +24,34 @@ class AcquiaPossibleCoresEvent extends EventBase {
   protected $possibleCores;
 
   /**
-   * Possible cores context.
+   * The Search API server ID.
    *
-   * @var array
-   *   Possible Cores.
+   * @var string
    */
-  protected $context;
+  private $serverId;
 
   /**
    * Pass in connector config by default to all events.
    *
+   * @param string $server_id
+   *   The Search API server ID.
    * @param array $possible_cores
-   *   Possible Cores.
+   *   The already considered possible cores.
    */
-  public function __construct(array $possible_cores) {
+  public function __construct(string $server_id, array $possible_cores) {
+    $this->serverId = $server_id;
     $this->possibleCores = $possible_cores;
     $this->coreReadonly = TRUE;
+  }
+
+  /**
+   * Get the Search API server ID.
+   *
+   * @return string
+   *   The Search API server ID.
+   */
+  public function getServerId(): string {
+    return $this->serverId;
   }
 
   /**

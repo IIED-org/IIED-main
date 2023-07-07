@@ -72,6 +72,13 @@ class SettingsForm extends ConfigFormBase {
       ];
     }
 
+    $form['wildcard'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Wilcard'),
+      '#description' => $this->t('Add wilcard to end of purge URL, purging all variants, such as query string tracking codes.'),
+      '#default_value' => $config->get('wildcard'),
+    ];
+
     $form['debug'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Debug'),
@@ -102,6 +109,7 @@ class SettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('purge_file.settings')
+      ->set('wildcard', $form_state->getValue('wildcard'))
       ->set('debug', $form_state->getValue('debug'))
       ->set('base_urls', $form_state->getValue('base_urls'))
       ->set('processor', $form_state->getValue('processor'))

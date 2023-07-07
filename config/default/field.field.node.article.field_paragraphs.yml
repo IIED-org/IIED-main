@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.storage.node.field_paragraphs
     - node.type.article
+    - paragraphs.paragraphs_type.accordion_box
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.box
     - paragraphs.paragraphs_type.file_upload
@@ -55,6 +56,7 @@ settings:
       modal_image: modal_image
       tab_box: tab_box
       timeline: timeline
+      accordion_box: accordion_box
       stories_cta: stories_cta
       highchart: highchart
       related_project: related_project
@@ -66,7 +68,7 @@ settings:
         enabled: false
       accordion_box:
         weight: -51
-        enabled: false
+        enabled: true
       accordion_section:
         weight: 40
         enabled: false

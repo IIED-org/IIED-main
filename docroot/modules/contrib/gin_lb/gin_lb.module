@@ -5,6 +5,7 @@
  * Provides hooks for gin_lb module.
  */
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Asset\AttachedAssetsInterface;
@@ -61,16 +62,20 @@ function gin_lb_is_layout_builder_form_id($form_id, array $form) {
     return FALSE;
   }
   $form_ids = [
+    'form-autocomplete',
     'layout_builder_add_block',
+    'layout_builder_block_move',
+    'layout_builder_configure_section',
+    'layout_builder_remove_block',
+    'layout_builder_update_block',
     'media_image_edit_form',
     'media_library_add_form_oembed',
     'media_library_add_form_upload',
-    'layout_builder_add_block',
-    'layout_builder_remove_block',
-    'layout_builder_update_block',
-    'layout_builder_block_move',
-    'layout_builder_configure_section',
+    'section_library_add_section_to_library',
+    'section_library_add_template_to_library',
     'form-autocomplete',
+    'editor_image_dialog',
+
   ];
   $form_id_contains = [
     'layout_builder_translate_form',
@@ -184,18 +189,20 @@ function gin_lb_theme_suggestions_alter(
   in_array(
     $route_name,
     [
+      'editor.image_dialog',
+      'editor.link_dialog',
+      'editor.media_dialog',
       'layout_builder.add_block',
       'layout_builder.choose_block',
       'layout_builder.choose_inline_block',
-      'layout_builder.remove_section',
-      'layout_builder.remove_block',
       'layout_builder.choose_section',
-      'view.media_library.widget_table',
-      'view.media_library.widget',
+      'layout_builder.remove_block',
+      'layout_builder.remove_section',
       'media_library.ui',
-      'editor.media_dialog',
-      'editor.link_dialog',
-      'editor.image_dialog',
+      'section_library.add_section_to_library',
+      'section_library.add_template_to_library',
+      'view.media_library.widget',
+      'view.media_library.widget_table',
     ]
   )
   ) {
@@ -290,6 +297,99 @@ function gin_lb_theme_suggestions_form_alter(
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for file_managed_file.
+ */
+function gin_lb_preprocess_file_managed_file(&$variables) {
+  if (gin_lb_is_valid_theme() === FALSE) {
+    return;
+  }
+  // Produce the same renderable element structure as image widget has.
+  $child_keys = Element::children($variables['element']);
+  foreach ($child_keys as $child_key) {
+    $variables['data'][$child_key] = $variables['element'][$child_key];
+  }
+
+  _gin_lb_preprocess_file_and_image_widget($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for image_widget.
+ */
+function gin_lb_preprocess_image_widget(&$variables) {
+  if (gin_lb_is_valid_theme() === FALSE) {
+    return;
+  }
+  // This prevents image widget templates from rendering preview container HTML
+  // to users that do not have permission to access these previews.
+  // @todo revisit in https://drupal.org/node/953034
+  // @todo revisit in https://drupal.org/node/3114318
+  if (isset($variables['data']['preview']['#access']) && $variables['data']['preview']['#access'] === FALSE) {
+    unset($variables['data']['preview']);
+  }
+
+  _gin_lb_preprocess_file_and_image_widget($variables);
+}
+
+/**
+ * Helper pre-process callback for file_managed_file and image_widget.
+ *
+ * @param array $variables
+ *   The renderable array of image and file widgets, with 'element' and 'data'
+ *   keys.
+ */
+function _gin_lb_preprocess_file_and_image_widget(array &$variables) {
+  $element = $variables['element'];
+  $main_item_keys = [
+    'upload',
+    'upload_button',
+    'remove_button',
+  ];
+
+  // Calculate helper values for the template.
+  $upload_is_accessible = !isset($element['upload']['#access']) || $element['upload']['#access'] !== FALSE;
+  $is_multiple = !empty($element['#cardinality']) && $element['#cardinality'] !== 1;
+  $has_value = isset($element['#value']['fids']) && !empty($element['#value']['fids']);
+
+  // File widget properties.
+  $display_can_be_displayed = !empty($element['#display_field']);
+  // Display is rendered in a separate table cell for multiple value widgets.
+  $display_is_visible = $display_can_be_displayed && !$is_multiple && isset($element['display']['#type']) && $element['display']['#type'] !== 'hidden';
+  $description_can_be_displayed = !empty($element['#description_field']);
+  $description_is_visible = $description_can_be_displayed && isset($element['description']);
+
+  // Image widget properties.
+  $alt_can_be_displayed = !empty($element['#alt_field']);
+  $alt_is_visible = $alt_can_be_displayed && (!isset($element['alt']['#access']) || $element['alt']['#access'] !== FALSE);
+  $title_can_be_displayed = !empty($element['#title_field']);
+  $title_is_visible = $title_can_be_displayed && (!isset($element['title']['#access']) || $element['title']['#access'] !== FALSE);
+
+  $variables['multiple'] = $is_multiple;
+  $variables['upload'] = $upload_is_accessible;
+  $variables['has_value'] = $has_value;
+  $variables['has_meta'] = $alt_is_visible || $title_is_visible || $display_is_visible || $description_is_visible;
+  $variables['display'] = $display_is_visible;
+
+  // Render file upload input and upload button (or file name and remove button,
+  // if the field is not empty) in an emphasized div.
+  foreach ($variables['data'] as $key => $item) {
+    $item_is_filename = isset($item['filename']['#file']) && $item['filename']['#file'] instanceof FileInterface;
+
+    // Move filename to main items.
+    if ($item_is_filename) {
+      $variables['main_items']['filename'] = $item;
+      unset($variables['data'][$key]);
+      continue;
+    }
+
+    // Move buttons, upload input and hidden items to main items.
+    if (in_array($key, $main_item_keys)) {
+      $variables['main_items'][$key] = $item;
+      unset($variables['data'][$key]);
+    }
+  }
+}
+
+/**
  * After build form process.
  *
  * Layout builder forms are attached later to setting form.
@@ -357,11 +457,11 @@ function gin_lb_form_alter(&$form, FormStateInterface $form_state, $form_id) {
     }
   }
   if (in_array($form_id, [
-    'layout_builder_update_block',
     'layout_builder_add_block',
     'layout_builder_configure_section',
     'layout_builder_remove_section',
     'layout_builder_remove_block',
+    'layout_builder_update_block',
   ])) {
     $form['#attributes']['class'][] = 'canvas-form';
     if (isset($form['settings'])) {
@@ -384,6 +484,69 @@ function gin_lb_form_alter(&$form, FormStateInterface $form_state, $form_id) {
 
     $form['actions']['#type'] = 'container';
     $form['actions']['#attributes']['class'][] = 'canvas-form__actions';
+
+    // Layout Builder Lock.
+    if (isset($form['layout_builder_lock_wrapper'])) {
+      $form['layout_builder_lock_wrapper'] = NestedArray::mergeDeepArray([
+        $form['layout_builder_lock_wrapper'],
+        [
+          '#attributes' => [
+            'class' => [
+              'canvas-form__actions',
+            ],
+          ],
+        ]
+      ]);
+    }
+    if (isset($form['layout_builder_lock_info'])) {
+      $form['layout_builder_lock_info'] = [
+        '#type' => 'container',
+        '#attributes' => [
+          'class' => [
+            'canvas-form__actions',
+          ],
+        ],
+        'message' => $form['layout_builder_lock_info'],
+      ];
+    }
+
+    // UI Styles Layout Builder.
+    if (isset($form['ui_styles_wrapper'])) {
+      $form['ui_styles_wrapper'] = NestedArray::mergeDeepArray([
+        $form['ui_styles_wrapper'],
+        [
+          '#attributes' => [
+            'class' => [
+              'canvas-form__actions',
+            ],
+          ],
+        ]
+      ]);
+    }
+    if (isset($form['ui_styles_title'])) {
+      $form['ui_styles_title'] = NestedArray::mergeDeepArray([
+        $form['ui_styles_title'],
+        [
+          '#attributes' => [
+            'class' => [
+              'canvas-form__actions',
+            ],
+          ],
+        ]
+      ]);
+    }
+    if (isset($form['ui_styles'])) {
+      $form['ui_styles'] = NestedArray::mergeDeepArray([
+        $form['ui_styles'],
+        [
+          '#attributes' => [
+            'class' => [
+              'canvas-form__actions',
+            ],
+          ],
+        ]
+      ]);
+    }
   }
 }
 
@@ -430,8 +593,10 @@ function gin_lb_page_attachments(array &$attachments) {
     $attachments['#attached']['library'][] = 'gin_lb/gin_lb_init';
     $attachments['#attached']['library'][] = 'gin/gin_ckeditor';
     $attachments['#attached']['library'][] = 'claro/claro.jquery.ui';
-    $attachments['#attached']['library'][] = 'gin_lb/gin_lb_form';
-
+    $attachments['#attached']['library'][] = 'gin_lb/gin_lb';
+    if (\Drupal::VERSION >= '10.0.0') {
+      $attachments['#attached']['library'][] = 'gin_lb/gin_lb_10';
+    }
     $config = \Drupal::config('gin_lb.settings');
     if ($config->get('toastify_loading') === 'cdn') {
       $attachments['#attached']['library'][] = 'gin_lb/toastify_cdn';
@@ -482,6 +647,7 @@ function gin_lb_overwritten_themes() {
     'media-library/media-library-element',
     'media-library/views-view-unformatted--media-library',
     'item-list',
+    'views/views-view-fields',
     'table',
     'status-messages',
     'views-mini-pager',
@@ -653,6 +819,7 @@ function gin_lb_preprocess_toolbar__gin_lb(&$variables) {
   $variables['preview_content'] = [
     '#type' => 'checkbox',
     '#title' => t('Preview Content'),
+    '#value' => TRUE,
     '#gin_lb_form' => TRUE,
     '#id' => 'glb-toolbar-preview-content',
   ];
@@ -683,8 +850,8 @@ function gin_lb_preprocess_table(&$variables) {
     }
 
     // Mark the whole table and the first cells if rows are draggable.
+    $draggable_row_found = FALSE;
     if (!empty($variables['rows'])) {
-      $draggable_row_found = FALSE;
       foreach ($variables['rows'] as &$row) {
         /** @var \Drupal\Core\Template\Attribute $row ['attributes'] */
         if (!empty($row['attributes']) && $row['attributes']->hasClass('draggable')) {

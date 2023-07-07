@@ -55,6 +55,8 @@ libraries-override:
         css/theme/colors.css: false
 
 libraries-extend:
+  core/drupal.tableselect:
+    - gin/tableselect
   core/drupal.autocomplete:
     - gin/autocomplete
   core/ckeditor:
@@ -120,6 +122,8 @@ libraries-extend:
     - gin/layout_paragraphs
   layout_paragraphs/layout_paragraphs_widget:
     - gin/layout_paragraphs
+  layout_paragraphs/builder:
+    - gin/layout_paragraphs2
   responsive_preview/drupal.responsive-preview:
     - gin/responsive_preview
 
@@ -144,7 +148,7 @@ regions:
 regions_hidden:
   - sidebar_first
 
-# Information added by Drupal.org packaging script on 2023-03-12
-version: '8.x-3.0-rc2'
+# Information added by Drupal.org packaging script on 2023-07-04
+version: '8.x-3.0-rc4'
 project: 'gin'
-datestamp: 1678627671
+datestamp: 1688474319

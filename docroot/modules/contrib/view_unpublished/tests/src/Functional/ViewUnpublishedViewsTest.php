@@ -19,7 +19,11 @@ class ViewUnpublishedViewsTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['view_unpublished', 'node', 'views'];
+  protected static $modules = [
+    'view_unpublished',
+    'node',
+    'views',
+  ];
 
   /**
    * {@inheritdoc}
@@ -29,7 +33,7 @@ class ViewUnpublishedViewsTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Rebuild node access which we have to do after installing the module.
@@ -52,12 +56,18 @@ class ViewUnpublishedViewsTest extends BrowserTestBase {
     $article_node->setUnPublished();
     $article_node->save();
 
-    $this->drupalLogin($this->createUser(['view any unpublished content', 'access content overview']));
+    $this->drupalLogin($this->createUser([
+      'view any unpublished content',
+      'access content overview',
+    ]));
     $this->drupalGet('admin/content');
     $this->assertSession()->pageTextContains($page_node->label());
     $this->assertSession()->pageTextContains($article_node->label());
 
-    $this->drupalLogin($this->createUser(['view any unpublished page content', 'access content overview']));
+    $this->drupalLogin($this->createUser([
+      'view any unpublished page content',
+      'access content overview',
+    ]));
     $this->drupalGet('admin/content');
     $this->assertSession()->pageTextContains($page_node->label());
     $this->assertSession()->pageTextNotContains($article_node->label());

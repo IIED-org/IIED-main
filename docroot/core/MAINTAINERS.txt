@@ -18,8 +18,8 @@ BDFL
 
 Product managers
 - Dries Buytaert 'dries' https://www.drupal.org/u/dries
-- Angela Byron 'webchick' https://www.drupal.org/u/webchick
 - Gábor Hojtsy 'Gábor Hojtsy' https://www.drupal.org/u/gábor-hojtsy
+- Lauri Eskola 'lauriii' https://www.drupal.org/u/lauriii
 - Roy Scholten 'yoroy' https://www.drupal.org/u/yoroy
 
 Framework managers
@@ -31,17 +31,16 @@ Framework managers
   - Lee Rowlands 'larowlan' https://www.drupal.org/u/larowlan
 
   Frontend
-  - Lauri Eskola 'lauriii' https://www.drupal.org/u/lauriii
+  - Ben Mullins 'bnjmnm' https://www.drupal.org/u/bnjmnm
   - (provisional) Théodore Biadala 'nod_' https://www.drupal.org/u/nod_
   - (provisional) Cristina Chumillas 'ckrina' https://www.drupal.org/u/ckrina
-  - (provisional) Ben Mullins 'bnjmnm' https://www.drupal.org/u/bnjmnm
   - (provisional) Sally Young 'justafish' https://www.drupal.org/u/justafish
 
 Release managers
 - Nathaniel Catchpole 'catch' https://www.drupal.org/u/catch
 - Jess Myrbo 'xjm' https://www.drupal.org/u/xjm
+- Victoria Spagnolo 'quietone' https://www.drupal.org/u/quietone
 - (provisional) Dave Long 'longwave' https://www.drupal.org/u/longwave
-- (provisional) Victoria Spagnolo 'quietone' https://www.drupal.org/u/quietone
 
 Core JavaScript packages
  - Théodore Biadala 'nod_' https://www.drupal.org/u/nod_
@@ -84,7 +83,7 @@ Bartik
 - Emma Maria Karayiannis 'emma.maria' https://www.drupal.org/u/emma.maria
 
 Base system
-- ?
+- See "Framework managers" above.
 
 Basic Auth
 - Juampy Novillo Requena 'juampy' https://www.drupal.org/u/juampy
@@ -155,7 +154,6 @@ Configuration UI
 
 Configuration Translation
 - Gábor Hojtsy 'Gábor Hojtsy' https://www.drupal.org/u/gábor-hojtsy
-- Tobias Zimmermann 'tstoeckler' https://www.drupal.org/u/tstoeckler
 - Vijayachandran Mani 'vijaycs85' https://www.drupal.org/u/vijaycs85
 
 Contact
@@ -217,7 +215,6 @@ Entity API
 - Nathaniel Catchpole 'catch' https://www.drupal.org/u/catch
 - Hristo Chonov 'hchonov' https://www.drupal.org/u/hchonov
 - Sascha Grossenbacher 'Berdir' https://www.drupal.org/u/berdir
-- Tobias Zimmermann 'tstoeckler' https://www.drupal.org/u/tstoeckler
 
 Extension API
 - ?
@@ -399,7 +396,6 @@ Seven
 - ?
 
 Shortcut
-- Tobias Zimmermann 'tstoeckler' https://www.drupal.org/u/tstoeckler
 - Jibran Ijaz 'jibran' https://www.drupal.org/u/jibran
 
 Stable

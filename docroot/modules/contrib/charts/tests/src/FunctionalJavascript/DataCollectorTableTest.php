@@ -6,6 +6,7 @@ use Drupal\charts_test\Form\DataCollectorTableTestForm;
 use Drupal\Core\Url;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\Tests\charts\Traits\ConfigUpdateTrait;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Tests the data collector table element.
@@ -15,6 +16,7 @@ use Drupal\Tests\charts\Traits\ConfigUpdateTrait;
 class DataCollectorTableTest extends WebDriverTestBase {
 
   use ConfigUpdateTrait;
+  use StringTranslationTrait;
 
   /**
    * Default theme.
@@ -67,7 +69,7 @@ class DataCollectorTableTest extends WebDriverTestBase {
     // Fill the table.
     $cell_input_selector = $table_id_selector . ' tr.data-collector-table--row td > .data-collector-table--row--cell .form-text';
     $cell_inputs = $this->cssSelect($cell_input_selector);
-    $this->assertNotEmpty($cell_inputs, t('@count inputs were found', [
+    $this->assertNotEmpty($cell_inputs, $this->t('@count inputs were found', [
       '@count' => count($cell_inputs),
     ]));
     $this->fillInputs($cell_inputs);

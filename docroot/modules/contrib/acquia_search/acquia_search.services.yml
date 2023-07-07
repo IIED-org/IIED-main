@@ -1,7 +1,7 @@
 services:
   acquia_search.search_subscriber:
     class: Drupal\acquia_search\EventSubscriber\SearchSubscriber
-    arguments: [ '@acquia_search.preferred_core', '@acquia_connector.subscription', '@acquia_search.api_client', '@acquia_search.flood' ]
+    arguments: [ '@acquia_connector.subscription', '@acquia_search.api_client', '@acquia_search.flood' ]
     tags:
       - { name: 'event_subscriber' }
   acquia_search.subscription_data:
@@ -31,9 +31,15 @@ services:
   acquia_search.api_client:
     class: Drupal\acquia_search\AcquiaSearchApiClient
     arguments: [ '@acquia_search.logger_channel', '@acquia_connector.subscription', '@http_client_factory', '@cache.acquia_search.indexes', '@datetime.time', '@lock' ]
+  acquia_search.preferred_core_factory:
+    class: Drupal\acquia_search\PreferredCoreServiceFactory
+    arguments: [ '@event_dispatcher', '@acquia_connector.subscription', '@acquia_search.api_client', '@module_handler' ]
   acquia_search.preferred_core:
     class: Drupal\acquia_search\PreferredCoreService
-    arguments: [ '@event_dispatcher', '@acquia_connector.subscription', '@acquia_search.api_client', '@module_handler' ]
+    factory: ['@acquia_search.preferred_core_factory', 'get']
+    # Provide the default Search API server ID for backward compatibility.
+    arguments: ['acquia_search_server']
+    deprecated: The "%service_id%" service is deprecated in acquia_search:3.1.x and is removed from acquia_search:4.0.x. Use the `acquia_search.preferred_core_factory` to retrieve a preferred core service.
   acquia_search.solarium.guzzle:
     class: Drupal\acquia_search\Client\Solarium\AcquiaGuzzle
   acquia_search.prequery.edismax:

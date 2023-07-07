@@ -18,6 +18,11 @@
             "role": "Co-Maintainer"
         },
         {
+            "name": "MegaChriz",
+            "homepage": "https://www.drupal.org/u/megachriz",
+            "role": "Co-Maintainer"
+        },
+        {
             "name": "Andy Austin",
             "role": "Creator"
         }
@@ -29,5 +34,8 @@
     },
     "require": {
         "nicebooks/isbn": "~0.0"
+    },
+    "require-dev": {
+        "drupal/feeds": "^3.0"
     }
 }

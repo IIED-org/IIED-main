@@ -41,3 +41,16 @@ function gin_lb_update_8003() {
   $config->set('hide_discard_revert_buttons', $hide_discard_revert_buttons);
   $config->save(TRUE);
 }
+
+/**
+ * Spliting out configuration for "Discard Changes" and "Revert to defaults" buttons.
+ */
+function gin_lb_update_8004() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('gin_lb.settings');
+  $hide_discard_revert_buttons = $config->get('hide_discard_revert_buttons') ?? TRUE;
+  $config->set('hide_discard_button', $hide_discard_revert_buttons);
+  $config->set('hide_revert_button', $hide_discard_revert_buttons);
+  $config->clear('hide_discard_revert_buttons');
+  $config->save(TRUE);
+}

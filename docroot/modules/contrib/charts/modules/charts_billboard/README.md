@@ -101,7 +101,8 @@ paste the following into it:
 the code below.
 
         "scripts": {
-            "clean-billboardjs": "chmod +x scripts/clean-billboardjs.sh && ./scripts/clean-billboardjs.sh",
+            "clean-billboardjs": "chmod +x scripts/clean-billboardjs.sh &&
+             ./scripts/clean-billboardjs.sh",
             "post-install-cmd": [
               "@clean-billboardjs"
             ],

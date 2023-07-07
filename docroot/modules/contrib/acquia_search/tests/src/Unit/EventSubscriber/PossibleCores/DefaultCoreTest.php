@@ -30,7 +30,7 @@ final class DefaultCoreTest extends AcquiaSearchTestCase {
       $this->createMock(AcquiaSearchApiClient::class),
       'sites/default'
     );
-    $sut->onGetPossibleCores(new AcquiaPossibleCoresEvent([]));
+    $sut->onGetPossibleCores(new AcquiaPossibleCoresEvent('foobar', []));
   }
 
   public function testNothingIfNoSubscriptionCredentials(): void {
@@ -51,7 +51,7 @@ final class DefaultCoreTest extends AcquiaSearchTestCase {
       $client,
       'sites/default'
     );
-    $sut->onGetPossibleCores(new AcquiaPossibleCoresEvent([]));
+    $sut->onGetPossibleCores(new AcquiaPossibleCoresEvent('foobar', []));
   }
 
   public function testNothingIfNoIndexes(): void {
@@ -75,7 +75,7 @@ final class DefaultCoreTest extends AcquiaSearchTestCase {
       $client,
       'sites/default'
     );
-    $sut->onGetPossibleCores(new AcquiaPossibleCoresEvent([]));
+    $sut->onGetPossibleCores(new AcquiaPossibleCoresEvent('foobar', []));
   }
 
   /**
@@ -109,7 +109,7 @@ final class DefaultCoreTest extends AcquiaSearchTestCase {
       $client,
       'sites/default'
     );
-    $event = new AcquiaPossibleCoresEvent([]);
+    $event = new AcquiaPossibleCoresEvent('foobar', []);
     $sut->onGetPossibleCores($event);
     self::assertEquals($expected, $event->getPossibleCores());
   }

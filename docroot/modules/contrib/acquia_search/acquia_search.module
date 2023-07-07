@@ -7,11 +7,11 @@
 
 use Drupal\acquia_search\Helper\Messages;
 use Drupal\acquia_search\Helper\Runtime;
+use Drupal\acquia_search\Plugin\search_api\backend\AcquiaSearchSolrBackend;
 use Drupal\acquia_search\Plugin\SolrConnector\SearchApiSolrAcquiaConnector;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Entity\Server;
 use Drupal\search_api\Form\IndexProcessorsForm;
 use Drupal\search_api\IndexInterface;
@@ -53,58 +53,33 @@ function acquia_search_search_api_server_load(array $entities) {
     return Runtime::isAcquiaServer($server);
   });
 
-  /** @var \Drupal\acquia_search\PreferredCoreService $preferred_core_service */
-  $preferred_core_service = \Drupal::service('acquia_search.preferred_core');
-
   foreach ($acquia_servers as $server) {
-    /** @var \Drupal\search_api\Entity\Server $server */
-    $backend_config = $server->getBackendConfig();
+    // This is needed in case anyone didn't re-export their config after running
+    // the post_update hook to update Search API server configuration.
+    // @see acquia_search_post_update_acquia_search_solr_backend().
+    if ($server->getBackendId() !== 'acquia_search_solr') {
+      $server->set('backend', 'acquia_search_solr');
+    }
 
-    $preferredCore = $preferred_core_service->getPreferredCore();
-    if (empty($preferredCore) && $server->status()) {
+    $backend = $server->getBackend();
+    if (!$backend instanceof AcquiaSearchSolrBackend) {
+      // This should never happen.
+      continue;
+    }
+
+    $backend_config = $backend->getConfiguration();
+
+    if (!$backend->isPreferredCoreAvailable() && $server->status()) {
       $server->disable();
       continue;
     }
 
-    if (\Drupal::state()->get('acquia_search.connect_index')) {
-      acquia_search_connect_index($server);
-    }
-
-    if ($preferred_core_service->isReadOnly()) {
+    if ($backend->isReadOnly()) {
       $backend_config['overridden_by_acquia_search'] = SearchApiSolrAcquiaConnector::READ_ONLY;
     }
 
     $server->setBackendConfig($backend_config);
   }
-}
-
-/**
- * Connects the default index to the default server.
- *
- * @param \Drupal\search_api\ServerInterface $server
- *   The server.
- */
-function acquia_search_connect_index(ServerInterface $server) {
-  \Drupal::state()->set('acquia_search.connect_index', FALSE);
-  if ($index = Index::load('acquia_search_index')) {
-    $server->addIndex($index);
-    $index->setServer($server);
-    $index->enable();
-    $index->save();
-
-  }
-}
-
-/**
- * Disconnects an index from its server.
- *
- * @param \Drupal\search_api\IndexInterface $index
- *   The index.
- */
-function acquia_search_disconnect_index(IndexInterface $index) {
-  $index->setServer();
-  $index->disable();
-  $index->save();
 }
 
 /**
@@ -114,19 +89,8 @@ function acquia_search_disconnect_index(IndexInterface $index) {
  * conditions (@see acquia_search_search_api_server_load()).
  */
 function acquia_search_search_api_index_load($entities) {
-  // Prevent recursion by stopping execution if this variable already got set.
-  static $indicies;
-  if ($indicies) {
-    return;
-  }
-  $indicies = $entities;
-
   // Loop through the Index entities.
   /** @var \Drupal\search_api\Entity\Index $index */
-
-  /** @var \Drupal\acquia_search\PreferredCoreService $preferred_core_service */
-  $preferred_core_service = \Drupal::service('acquia_search.preferred_core');
-
   foreach ($entities as $index) {
     // Check for server-less indexes.
     // An infinite loop will occur if this tries to load a server.
@@ -139,8 +103,9 @@ function acquia_search_search_api_index_load($entities) {
     if (!$server->status()) {
       continue;
     }
+    $backend = $server->getBackend();
 
-    if (!Runtime::isAcquiaServer($server)) {
+    if (!$backend instanceof AcquiaSearchSolrBackend) {
       continue;
     }
 
@@ -152,7 +117,7 @@ function acquia_search_search_api_index_load($entities) {
       $index->setOptions($options);
     }
 
-    if ($preferred_core_service->isReadOnly()) {
+    if ($backend->isReadOnly()) {
       // Set this index to read-only mode.
       $index->set('read_only', TRUE);
       // Flag this index as having been altered by this module.
@@ -167,22 +132,18 @@ function acquia_search_search_api_index_load($entities) {
  * Alters the Search API server's status form and displays a warning.
  */
 function acquia_search_form_search_api_server_status_alter(&$form) {
-
   if (empty($form['#server'])) {
     return;
   }
   $server = $form['#server'];
-
-  if (!is_object($server) || get_class($server) !== Server::class) {
+  if (!$server instanceof ServerInterface) {
     return;
   }
-
-  $config = $server->getBackendConfig();
-
-  /** @var \Drupal\search_api\Entity\Server $server */
-  if ($config['connector'] !== 'solr_acquia_connector') {
+  $backend = $server->getBackend();
+  if (!$backend instanceof AcquiaSearchSolrBackend) {
     return;
   }
+  $config = $backend->getConfiguration();
 
   if (isset($config['overridden_by_acquia_search']) && $config['overridden_by_acquia_search'] == SearchApiSolrAcquiaConnector::READ_ONLY) {
     // Show read-only warning and disable the "Delete all indexed data on this
@@ -192,37 +153,8 @@ function acquia_search_form_search_api_server_status_alter(&$form) {
     $form['actions']['clear']['#disabled'] = TRUE;
   }
 
-  if (!\Drupal::service('acquia_search.preferred_core')->isPreferredCoreAvailable()) {
-    // Show "could not find preferred core" message.
-    Messages::showNoPreferredCoreError();
-  }
-
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- *
- * Display the read-only warning.
- */
-function acquia_search_form_search_api_server_edit_form_alter(&$form) {
-
-  $server = Server::load($form['id']['#default_value']);
-
-  if (!$server) {
-    return;
-  }
-
-  if (!Runtime::isAcquiaServer($server)) {
-    return;
-  }
-
-  if (Runtime::shouldEnforceReadOnlyMode()) {
-    Messages::showReadOnlyModeWarning();
-  }
-
-  if (!\Drupal::service('acquia_search.preferred_core')->isPreferredCoreAvailable()) {
-    // Show "could not find preferred core" message.
-    Messages::showNoPreferredCoreError();
+  if (!$backend->isPreferredCoreAvailable()) {
+    Messages::showNoPreferredCoreError($backend);
   }
 
 }
@@ -240,8 +172,8 @@ function acquia_search_form_search_api_index_edit_form_alter(&$form, FormState $
   if (!$server) {
     return;
   }
-
-  if (!Runtime::isAcquiaServer($server)) {
+  $backend = $server->getBackend();
+  if (!$backend instanceof AcquiaSearchSolrBackend) {
     return;
   }
 
@@ -250,9 +182,9 @@ function acquia_search_form_search_api_index_edit_form_alter(&$form, FormState $
     $form['options']['read_only']['#disabled'] = TRUE;
   }
 
-  if (!\Drupal::service('acquia_search.preferred_core')->isPreferredCoreAvailable()) {
+  if (!$backend->isPreferredCoreAvailable()) {
     // Show "could not find preferred core" message.
-    Messages::showNoPreferredCoreError();
+    Messages::showNoPreferredCoreError($backend);
   }
 
   $settings = [];
@@ -329,12 +261,15 @@ function acquia_search_theme_registry_alter(&$theme_registry) {
  * @throws \Drupal\search_api\SearchApiException
  */
 function acquia_search_preprocess_search_api_index(array &$variables) {
-  /** @var \Drupal\search_api\Entity\Index $index */
+  /** @var \Drupal\search_api\IndexInterface $index */
   $index = $variables['index'];
   /** @var \Drupal\search_api\Entity\Server $server */
-  $server = Server::load($index->get('server'));
-
-  if (!$server || !Runtime::isAcquiaServer($server)) {
+  $server = $index->getServerInstance();
+  if ($server === NULL) {
+    return;
+  }
+  $backend = $server->getBackend();
+  if (!$backend instanceof AcquiaSearchSolrBackend) {
     return;
   }
 
@@ -342,15 +277,15 @@ function acquia_search_preprocess_search_api_index(array &$variables) {
     Messages::showReadOnlyModeWarning();
   }
 
-  if (!\Drupal::service('acquia_search.preferred_core')->isPreferredCoreAvailable()) {
+  if (!$backend->isPreferredCoreAvailable()) {
     // Show "could not find preferred core" message.
-    Messages::showNoPreferredCoreError();
+    Messages::showNoPreferredCoreError($backend);
   }
 
   $variables['acquia_search_info_box'] = [
     '#type' => 'fieldset',
     '#title' => t('Acquia Search status for this connection'),
-    '#markup' => Messages::getSearchStatusMessage($server),
+    '#markup' => Messages::getSearchStatusMessage($backend),
   ];
 }
 
@@ -378,7 +313,7 @@ function acquia_search_preprocess_search_api_server(array &$variables) {
   $variables['acquia_search_info_box'] = [
     '#type' => 'fieldset',
     '#title' => t('Acquia Search status for this connection'),
-    '#markup' => Messages::getSearchStatusMessage($server),
+    '#markup' => Messages::getSearchStatusMessage($server->getBackend()),
   ];
 }
 

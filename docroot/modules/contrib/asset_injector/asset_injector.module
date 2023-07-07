@@ -143,7 +143,9 @@ function asset_injector_get_assets($active = NULL, array $types = []) {
   $assets = [];
   foreach (asset_injector_get_entity_types($types) as $entity_type_id => $entity_type) {
     $entity_type_storage = $entity_type_manager->getStorage($entity_type_id);
-    $asset_ids = $entity_type_storage->getQuery()->execute();
+    $asset_ids = $entity_type_storage->getQuery()
+      ->accessCheck(TRUE)
+      ->execute();
     foreach ($entity_type_storage->loadMultiple($asset_ids) as $asset) {
 
       // Get both active and not active assets.

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\acquia_search\Unit;
 
+use Drupal\acquia_search\Plugin\search_api\backend\AcquiaSearchSolrBackend;
 use Drupal\acquia_search\Plugin\SolrConnector\SearchApiSolrAcquiaConnector;
 use Drupal\acquia_search\PreferredCoreService;
+use Drupal\acquia_search\PreferredCoreServiceFactory;
 use Drupal\Core\Config\Config;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -20,7 +22,6 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\StringTranslation\TranslationManager;
 use Drupal\search_api\Entity\Server;
 use Drupal\search_api\ServerInterface;
-use Drupal\search_api_solr\SolrBackendInterface;
 
 /**
  * @group acquia_search
@@ -73,17 +74,20 @@ final class HookRequirementsTest extends AcquiaSearchTestCase {
           ['acquia_search_solr.settings', $this->createMock(Config::class)],
         ]);
 
+      $preferred_core_factory = $this->createMock(PreferredCoreServiceFactory::class);
       $acquia_search_preferred_core = $this->createMock(PreferredCoreService::class);
       $acquia_search_preferred_core
         ->method('isPreferredCoreAvailable')
         ->willReturn($preferred_core);
+      $preferred_core_factory->method('get')
+        ->willReturn($acquia_search_preferred_core);
 
       return [
         'entity_type.repository' => $entity_type_repository,
         'entity_type.manager' => $entity_type_manager,
         'config.factory' => $config_factory,
         'module_handler' => $module_handler,
-        'acquia_search.preferred_core' => $acquia_search_preferred_core,
+        'acquia_search.preferred_core_factory' => $preferred_core_factory,
         'string_translation' => new TranslationManager(new LanguageDefault(['id' => 'en'])),
         'state' => $this->createMock(StateInterface::class),
         'extension.list.module' => $this->createMock(ExtensionList::class),
@@ -111,14 +115,6 @@ final class HookRequirementsTest extends AcquiaSearchTestCase {
           'severity' => 0,
           'description' => new TranslatableMarkup('The Acquia Search module is using SSL to protect the privacy of your content.'),
         ],
-        'acquia_search_read_only' => [
-          'title' => new TranslatableMarkup('Acquia Search Solr'),
-          'value' => new TranslatableMarkup('No preferred search core'),
-          'severity' => 2,
-          'description' => [
-            '#markup' => 'Could not find a Solr core corresponding to your website and environment. Your subscription contains no cores. To fix this problem, please read <a href="https://docs.acquia.com/acquia-search/multiple-cores/">our documentation</a>.',
-          ],
-        ],
       ],
     ];
     yield 'read only, no servers' => [
@@ -134,16 +130,17 @@ final class HookRequirementsTest extends AcquiaSearchTestCase {
         ],
         'acquia_search_read_only' => [
           'title' => new TranslatableMarkup('Acquia Search Solr'),
-          'value' => new TranslatableMarkup('No preferred search core'),
-          'severity' => 2,
+          'value' => new TranslatableMarkup('Read-only warning'),
+          'severity' => 1,
           'description' => [
-            '#markup' => 'Could not find a Solr core corresponding to your website and environment. Your subscription contains no cores. To fix this problem, please read <a href="https://docs.acquia.com/acquia-search/multiple-cores/">our documentation</a>.',
+            '#markup' => 'The read-only mode is set in the configuration of the Acquia Search Solr module.',
           ],
         ],
       ],
     ];
 
     $standard_server = $this->createMock(ServerInterface::class);
+    $standard_server->method('id')->willReturn('standard');
     $standard_server->expects($this->once())
       ->method('getBackendConfig')
       ->willReturn([
@@ -153,6 +150,7 @@ final class HookRequirementsTest extends AcquiaSearchTestCase {
       ->method('getBackend');
 
     $acquia_server = $this->createMock(ServerInterface::class);
+    $acquia_server->method('id')->willReturn('acquia_server');
     $acquia_server
       ->method('getBackendConfig')
       ->willReturn([
@@ -160,15 +158,17 @@ final class HookRequirementsTest extends AcquiaSearchTestCase {
       ]);
     $acquia_server
       ->method('getBackend')
-      ->willReturnCallback(function () {
+      ->willReturnCallback(function () use ($acquia_server) {
         $connector = $this->createMock(SearchApiSolrAcquiaConnector::class);
         $connector
           ->method('getConfiguration')
           ->willReturn([]);
-        $backend = $this->createMock(SolrBackendInterface::class);
+        $backend = $this->createMock(AcquiaSearchSolrBackend::class);
         $backend
           ->method('getSolrConnector')
           ->willReturn($connector);
+        $backend->method('isPreferredCoreAvailable')->willReturn(TRUE);
+        $backend->method('getServer')->willReturn($acquia_server);
         return $backend;
       });
     yield 'no read only, no acquia servers' => [
@@ -182,14 +182,6 @@ final class HookRequirementsTest extends AcquiaSearchTestCase {
           'severity' => 0,
           'description' => new TranslatableMarkup('The Acquia Search module is using SSL to protect the privacy of your content.'),
         ],
-        'acquia_search_read_only' => [
-          'title' => new TranslatableMarkup('Acquia Search Solr'),
-          'value' => new TranslatableMarkup('No preferred search core'),
-          'severity' => 2,
-          'description' => [
-            '#markup' => 'Could not find a Solr core corresponding to your website and environment. Your subscription contains no cores. To fix this problem, please read <a href="https://docs.acquia.com/acquia-search/multiple-cores/">our documentation</a>.',
-          ],
-        ],
       ],
     ];
     yield 'no read only, acquia servers' => [
@@ -202,14 +194,6 @@ final class HookRequirementsTest extends AcquiaSearchTestCase {
           'value' => 'Security',
           'severity' => 0,
           'description' => new TranslatableMarkup('The Acquia Search module is using SSL to protect the privacy of your content.'),
-        ],
-        'acquia_search_read_only' => [
-          'title' => new TranslatableMarkup('Acquia Search Solr'),
-          'value' => new TranslatableMarkup('No preferred search core'),
-          'severity' => 2,
-          'description' => [
-            '#markup' => 'Could not find a Solr core corresponding to your website and environment. Your subscription contains no cores. To fix this problem, please read <a href="https://docs.acquia.com/acquia-search/multiple-cores/">our documentation</a>.',
-          ],
         ],
         'acquia_search_status_acquia' => [
           'title' => new TranslatableMarkup('Acquia Search connection status'),
@@ -235,10 +219,10 @@ final class HookRequirementsTest extends AcquiaSearchTestCase {
         ],
         'acquia_search_read_only' => [
           'title' => new TranslatableMarkup('Acquia Search Solr'),
-          'value' => new TranslatableMarkup('No preferred search core'),
-          'severity' => 2,
+          'value' => new TranslatableMarkup('Read-only warning'),
+          'severity' => 1,
           'description' => [
-            '#markup' => 'Could not find a Solr core corresponding to your website and environment. Your subscription contains no cores. To fix this problem, please read <a href="https://docs.acquia.com/acquia-search/multiple-cores/">our documentation</a>.',
+            '#markup' => 'The read-only mode is set in the configuration of the Acquia Search Solr module.',
           ],
         ],
         'acquia_search_status_acquia' => [
@@ -352,7 +336,7 @@ final class HookRequirementsTest extends AcquiaSearchTestCase {
         'module_handler' => $module_handler,
         'entity_type.repository' => $entity_type_repository,
         'entity_type.manager' => $entity_type_manager,
-        'acquia_search.preferred_core' => $acquia_search_preferred_core,
+        'acquia_search.preferred_core_factory' => $acquia_search_preferred_core,
       ];
     });
 

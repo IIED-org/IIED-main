@@ -55,10 +55,12 @@ class IsbnItem extends FieldItemBase {
     return $properties;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function preSave() {
     parent::preSave();
-    $isbn_tools = \Drupal::service("isbn.isbn_service");
-    $clean_value = $isbn_tools->cleanup($this->getString());
+    $clean_value = \Drupal::service('isbn.isbn_service')->cleanup($this->getString());
     $this->setValue($clean_value);
   }
 

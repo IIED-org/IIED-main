@@ -3,7 +3,6 @@
 namespace Drupal\charts_chartjs\Plugin\chart\Library;
 
 use Drupal\charts\Plugin\chart\Library\ChartBase;
-use Drupal\charts\Plugin\chart\Library\ChartInterface;
 use Drupal\Component\Utility\Color;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
@@ -48,8 +47,7 @@ class Chartjs extends ChartBase {
       ]),
     ];
 
-    $xaxis_configuration = $this->configuration['xaxis'];
-    $yaxis_configuration = $this->configuration['yaxis'] ?? [];
+    $xaxis_configuration = $this->configuration['xaxis'] ?? [];
     $form['xaxis'] = [
       '#title' => $this->t('X-Axis Settings'),
       '#type' => 'fieldset',
@@ -120,7 +118,7 @@ class Chartjs extends ChartBase {
     if (!empty($element['#height']) || !empty($element['#width'])) {
       $element['#content_prefix']['manual_sizing'] = [
         '#type' => 'inline_template',
-        '#template' => '<div data-chartjs-render-wrapper style="display:inline-block;height:' . $element['#height'] . $element['#height_units'] . ';width:' . $element['#width'] . $element['#width_units'].  ';">',
+        '#template' => '<div data-chartjs-render-wrapper style="display:inline-block;height:' . $element['#height'] . $element['#height_units'] . ';width:' . $element['#width'] . $element['#width_units'] . ';">',
       ];
       $element['#content_suffix']['manual_sizing'] = [
         '#type' => 'inline_template',
@@ -174,7 +172,7 @@ class Chartjs extends ChartBase {
       if ($type === 'chart_xaxis') {
         $x_axis_key = $child;
         $xaxis_configuration = $this->configuration[$x_axis_key] ?? [];
-        if (!in_array($chart_type, ['pie', 'doughnut'])) {
+        if (!in_array($chart_type, $this->getPieStyleTypes())) {
           if ($chart_type !== 'radar') {
             $chart_definition['options']['scales']['x'] = [
               'stacked' => $stacking,
@@ -210,7 +208,7 @@ class Chartjs extends ChartBase {
     ];
 
     // Build axes options in chart_definition.
-    if (!in_array($chart_type, ['pie', 'doughnut'])) {
+    if (!in_array($chart_type, $this->getPieStyleTypes())) {
       if (!empty($element['#stacking']) && $element['#stacking'] == 1) {
         $stacking = TRUE;
       }
@@ -336,6 +334,12 @@ class Chartjs extends ChartBase {
     }
 
     $chart_definition['options']['plugins']['title'] = $this->buildTitle($element);
+    if (!empty($element['#subtitle'])) {
+      $chart_definition['options']['plugins']['subtitle'] = [
+        'display' => TRUE,
+        'text' => $element['#subtitle'],
+      ];
+    }
     $chart_definition['options']['plugins']['tooltip']['enabled'] = $element['#tooltips'];
     $chart_definition['options']['plugins']['legend'] = $this->buildLegend($element);
 
@@ -361,11 +365,15 @@ class Chartjs extends ChartBase {
       if ($type === 'chart_xaxis' && isset($element[$child]['#labels'])) {
         $categories = is_array($element[$child]['#labels']) ? array_map('strip_tags', $element[$child]['#labels']) : [];
       }
-      if ($type !== 'chart_xaxis' && in_array($element['#chart_type'], ['donut', 'pie'])) {
+      if (in_array($element['#chart_type'], $this->getPieStyleTypes())
+        && $type !== 'chart_xaxis') {
         if ($element[$child]['#type'] === 'chart_data') {
           // Get the first item in each array inside $element[$child]['#data'].
           $categories = array_map(function ($item) {
-            return $item[0];
+            if (!empty($item['color'])) {
+              unset($item['color']);
+            }
+            return array_values($item);
           }, $element[$child]['#data']);
         }
       }
@@ -416,11 +424,18 @@ class Chartjs extends ChartBase {
                */
               $data = ['y' => $data[1], 'x' => $data[0], 'r' => $data[2]];
             }
+            // Convert the array from Views when using pie-type charts
+            // and no label field.
+            if (in_array($chart_type, $this->getPieStyleTypes()) && !empty($data['color'])) {
+              $element['#colors'][$data_index] = $data['color'];
+              unset($data['color']);
+              $data = array_values($data);
+            }
             /*
              * This is here to account for differences between Views and
              * the API. Will change if someone can find a better way.
              */
-            if (in_array($chart_type, ['pie', 'doughnut']) && !empty($data[1])) {
+            if (in_array($chart_type, $this->getPieStyleTypes()) && !empty($data[1])) {
               $data = $data[1];
             }
             $series_data[$data_index] = $data;
@@ -434,12 +449,12 @@ class Chartjs extends ChartBase {
 
         // Set the background and border color.
         if (!empty($element[$key]['#color'])) {
-          if (!in_array($chart_type, ['pie', 'doughnut'])) {
+          if (!in_array($chart_type, $this->getPieStyleTypes())) {
             $dataset->borderColor = $element[$key]['#color'];
           }
           $dataset->backgroundColor = $element[$key]['#color'];
         }
-        if (in_array($chart_type, ['pie', 'doughnut']) && !empty($element['#colors'])) {
+        if (in_array($chart_type, $this->getPieStyleTypes()) && !empty($element['#colors'])) {
           $dataset->backgroundColor = $element['#colors'];
         }
 
@@ -512,7 +527,12 @@ class Chartjs extends ChartBase {
         break;
     }
     if (isset($element['#polar']) && $element['#polar'] == 1) {
-      $type = 'radar';
+      if ($element['#chart_type'] === 'area' || $element['#chart_type'] === 'polarArea') {
+        $type = 'polarArea';
+      }
+      else {
+        $type = 'radar';
+      }
     }
 
     return $type;
@@ -606,6 +626,20 @@ class Chartjs extends ChartBase {
     $rgb = Color::hexToRgb($color);
 
     return 'rgba(' . implode(",", $rgb) . ',' . 0.5 . ')';
+  }
+
+  /**
+   * Returns pie-style chart types.
+   *
+   * @return array
+   *   An array of pie-style chart types.
+   */
+  private static function getPieStyleTypes(): array {
+    return [
+      'pie',
+      'doughnut',
+      'polarArea',
+    ];
   }
 
 }

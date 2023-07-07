@@ -133,3 +133,15 @@ function iied_tw_preprocess_paragraph(&$variables) {
     }
   }
 }
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function iied_tw_preprocess_links__language_block(&$variables) {
+
+  // Remove the link to the current language.
+  $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  if (isset($variables['links'][$current_language]['link'])) {
+    unset($variables['links'][$current_language]['link']);
+  }
+}

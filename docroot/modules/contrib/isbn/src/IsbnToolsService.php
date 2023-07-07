@@ -2,49 +2,79 @@
 
 namespace Drupal\isbn;
 
-
 use Nicebooks\Isbn\Exception\InvalidIsbnException;
 use Nicebooks\Isbn\IsbnTools;
 
-class IsbnToolsService {
-
-  protected $isbn_tools;
+/**
+ * Wrapper around the IsbnTools class, provided as a Drupal service.
+ */
+class IsbnToolsService implements IsbnToolsServiceInterface {
 
   /**
-   * ISBNService constructor.
+   * A IsbnTools object.
+   *
+   * @var \Nicebooks\Isbn\IsbnTools
+   */
+  protected $isbnTools;
+
+  /**
+   * Constructs a new IsbnToolsService object.
+   *
+   * @throws \RuntimeException
+   *   In case the IsbnTools class cannot be found.
    */
   public function __construct() {
-    $this->isbn_tools = new IsbnTools();
+    if (!class_exists(IsbnTools::class)) {
+      throw new \RuntimeException('The ISBN module requires the nicebooks/isbn library.');
+    }
+    $this->isbnTools = new IsbnTools();
   }
 
-  public function format($number) {
+  /**
+   * {@inheritdoc}
+   */
+  public function format(string $isbn): ?string {
     try {
-      return $this->isbn_tools->format($number);
-    } catch (InvalidIsbnException $e) {
-
+      return $this->isbnTools->format($isbn);
+    }
+    catch (InvalidIsbnException $e) {
     }
   }
 
-  public function isValidIsbn($number) {
-    return $this->isbn_tools->isValidIsbn($number);
+  /**
+   * {@inheritdoc}
+   */
+  public function isValidIsbn(string $isbn): bool {
+    return $this->isbnTools->isValidIsbn($isbn);
   }
 
-  public function convertIsbn10to13($number) {
+  /**
+   * {@inheritdoc}
+   */
+  public function convertIsbn10to13(string $isbn): ?string {
     try {
-      return $this->isbn_tools->convertIsbn10to13($number);
-    } catch (InvalidIsbnException $e) {
+      return $this->isbnTools->convertIsbn10to13($isbn);
+    }
+    catch (InvalidIsbnException $e) {
     }
   }
 
-  public function convertIsbn13to10($number) {
+  /**
+   * {@inheritdoc}
+   */
+  public function convertIsbn13to10(string $isbn): ?string {
     try {
-      return $this->isbn_tools->convertIsbn13to10($number);
-    } catch (\Exception $e) {
+      return $this->isbnTools->convertIsbn13to10($isbn);
+    }
+    catch (\Exception $e) {
     }
   }
 
-  public function cleanup($number) {
-    return preg_replace('/[^0-9a-zA-Z]/', '', $number);
+  /**
+   * {@inheritdoc}
+   */
+  public function cleanup(string $isbn): string {
+    return preg_replace('/[^0-9a-zA-Z]/', '', $isbn);
   }
 
 }

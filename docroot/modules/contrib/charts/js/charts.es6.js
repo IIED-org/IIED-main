@@ -4,7 +4,6 @@
  */
 ((Drupal) => {
 
-
   Drupal.Charts = Drupal.Charts || {};
   Drupal.Charts.Configs = Drupal.Charts.Configs || [];
 
@@ -14,8 +13,8 @@
 
   Drupal.Charts.Contents = class {
     constructor() {
-      const charts_elements = document.querySelectorAll('[data-chart]');
-      charts_elements.forEach(function (el) {
+      const chartsElements = document.querySelectorAll('[data-chart]');
+      chartsElements.forEach(function (el) {
         const id = el.getAttribute('id');
         Drupal.Charts.Configs[id] = JSON.parse(el.getAttribute('data-chart'));
         Drupal.Charts.Configs[id].drupalChartDivElement = el;
@@ -44,6 +43,4 @@
       return {};
     }
   };
-
 })(Drupal);
-

@@ -15,8 +15,22 @@
    */
   Drupal.behaviors.chartsGooglecharts = {
     attach: function (context) {
+      const globalOptions = drupalSettings.charts.google.global_options;
+      let useMaterialDesign = globalOptions.useMaterialDesign;
+      let chartType = globalOptions.chartType;
+      const materialDesignPackages = ['bar', 'line', 'spline', 'scatter', 'column',];
+      const packages = ['corechart', 'gauge', 'table',];
+      if (useMaterialDesign === 'true' && materialDesignPackages.indexOf(chartType) !== -1) {
+        if (chartType === 'spline') {
+          chartType = 'line';
+        }
+        if (chartType === 'column') {
+          chartType = 'bar';
+        }
+        packages.push(chartType);
+      }
       // Load Google Charts API.
-      google.charts.load('current', {packages: ['corechart', 'gauge', 'table']});
+      google.charts.load('current', {packages: packages});
 
       // Re-draw charts if viewport size has been changed.
       window.addEventListener('resize', function () {
@@ -64,40 +78,59 @@
       const options = googleChartOptions;
       const googleChartTypeFormatted = chartType;
 
+      let visualizationNamespace = 'visualization';
+      let visualizationClass = chartType;
+      // Replace the 'Spline' chart type with 'Line'.
+      if (visualizationClass === 'SplineChart') {
+        visualizationClass = 'LineChart';
+      }
+      if (options.theme === 'material') {
+        // Material Design wants to use the 'charts' namespace.
+        visualizationNamespace = 'charts';
+        // Strip the 'Chart' suffix from the chart type.
+        visualizationClass = visualizationClass.replace('Chart', '');
+        // Replace the 'Column' chart type with 'Bar'.
+        if (visualizationClass === 'Column') {
+          visualizationClass = 'Bar';
+        }
+      }
+      console.log(visualizationClass);
+
       let chart;
       switch (googleChartTypeFormatted) {
         case 'BarChart':
-          chart = new google.visualization.BarChart(document.getElementById(chartId));
-          break;
         case 'ColumnChart':
-          chart = new google.visualization.ColumnChart(document.getElementById(chartId));
+        case 'LineChart':
+        case 'SplineChart':
+        case 'ScatterChart':
+          chart = new google[visualizationNamespace][visualizationClass](document.getElementById(chartId));
           break;
+
         case 'DonutChart':
         case 'PieChart':
           chart = new google.visualization.PieChart(document.getElementById(chartId));
           break;
-        case 'ScatterChart':
-          chart = new google.visualization.ScatterChart(document.getElementById(chartId));
-          break;
+
         case 'BubbleChart':
           chart = new google.visualization.BubbleChart(document.getElementById(chartId));
           break;
+
         case 'AreaChart':
           chart = new google.visualization.AreaChart(document.getElementById(chartId));
           break;
-        case 'LineChart':
-        case 'SplineChart':
-          chart = new google.visualization.LineChart(document.getElementById(chartId));
-          break;
+
         case 'Gauge':
           chart = new google.visualization.Gauge(document.getElementById(chartId));
           break;
+
         case 'ComboChart':
           chart = new google.visualization.ComboChart(document.getElementById(chartId));
           break;
+
         case 'GeoChart':
           chart = new google.visualization.GeoChart(document.getElementById(chartId));
           break;
+
         case 'TableChart':
           chart = new google.visualization.Table(document.getElementById(chartId));
       }
@@ -105,7 +138,7 @@
       // Fix for https://www.drupal.org/project/charts/issues/2950654.
       // Would be interested in a different approach that allowed the default
       // colors to be applied first, rather than unsetting.
-      if (options['colors'].length > 10) {
+      if (options['colors'] && options['colors'].length > 10) {
         for (const i in options) {
           if (i === 'colors') {
             delete options[i];

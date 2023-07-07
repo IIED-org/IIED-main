@@ -53,6 +53,9 @@ charts_display:
     title_position:
       type: string
       label: 'Title position'
+    subtitle:
+      type: string
+      label: 'Chart subtitle'
     data_labels:
       type: boolean
       label: 'Enable data labels'
@@ -93,8 +96,8 @@ charts_display:
       type: charts_gauge
       label: 'Gauge'
     color_changer:
-        type: boolean
-        label: 'Expose color changer'
+      type: boolean
+      label: 'Expose color changer'
 
 charts_xaxis:
   type: mapping

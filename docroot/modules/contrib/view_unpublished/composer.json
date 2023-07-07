@@ -1,5 +1,6 @@
 {
     "name": "drupal/view_unpublished",
+    "type": "drupal-module",
     "description": "Select which roles should be able to see unpublished nodes.",
     "license": "GPL-2.0-or-later",
     "authors": [

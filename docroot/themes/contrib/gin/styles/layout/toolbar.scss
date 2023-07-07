@@ -47,7 +47,7 @@
     }
 
     .toolbar-tab > .toolbar-item {
-      font-weight: var(--gin-font-weight-normal);;
+      font-weight: var(--gin-font-weight-normal);
     }
 
     #toolbar-item-administration-tray .toolbar-icon,
@@ -99,6 +99,7 @@
 
     // Custom logo
     #toolbar-item-administration-tray .toolbar-logo {
+      display: block;
       padding: var(--gin-spacing-xs) 0;
 
       img {
@@ -181,13 +182,14 @@
   }
 }
 
-.toolbar .toolbar-tray .menu-item--active-trail > .toolbar-box a,
+.toolbar .toolbar-tray .menu-item--active-trail > .toolbar-box > a.toolbar-icon,
 .toolbar .toolbar-tray a.is-active {
   color: var(--gin-color-primary);
   font-weight: var(--gin-font-weight-semibold);
   text-decoration: none;
 
   @include mq($to: medium) {
+    width: 100%;
     background: var(--gin-color-primary-light);
   }
 }
@@ -313,9 +315,16 @@ a.toolbar-menu__trigger,
     }
 
     .toolbar-tray-horizontal & {
-      ul li.menu-item--expanded .menu-item.hover-intent ul {
+      ul li.menu-item--expanded .menu-item.hover-intent ul,
+      ul li.menu-item--expanded .menu-item:focus-within ul {
         margin-top: 0;
         margin-left: calc(var(--gin-toolbar-width) - 2px);
+      }
+
+      // admin_toolbar 3.3.1 fix
+      // hide for vertical toolbar
+      .toolbar-icon.toolbar-handle {
+        display: none !important;
       }
     }
 
@@ -457,12 +466,16 @@ a.toolbar-menu__trigger,
           }
 
           .menu-item {
+            float: none;
             border-top: 0 none;
             border-left: 0 none;
             border-bottom: 0 none;
 
             .toolbar-icon {
               font-size:var(--gin-font-size);
+              display: block;
+              width: 100%;
+              max-width: calc(100% - var(--gin-spacing-l));
               padding: var(--gin-spacing-s) var(--gin-spacing-xl) var(--gin-spacing-s) var(--gin-spacing-s);
               margin: .25em var(--gin-spacing-s);
               border-radius: var(--gin-border-m);
@@ -489,7 +502,8 @@ a.toolbar-menu__trigger,
       }
     }
 
-    .menu-item.hover-intent > .toolbar-menu {
+    .menu-item.hover-intent > .toolbar-menu,
+    .menu-item:focus-within > .toolbar-menu {
       z-index: 2;
       display: block;
       border-right: 1px solid rgba(0,0,0,.075);
@@ -497,7 +511,10 @@ a.toolbar-menu__trigger,
         -12px 0 0 0 var(--gin-bg-layer);
     }
 
-    .menu-item .menu-item:hover > .toolbar-icon {
+    .menu-item .menu-item:hover > .toolbar-icon,
+    .menu-item .menu-item:focus-within > .toolbar-icon,
+    .menu-item .menu-item:hover > .toolbar-box > .toolbar-icon,
+    .menu-item .menu-item:focus-within > .toolbar-box > .toolbar-icon {
       color: var(--gin-color-primary-hover);
       background: var(--gin-color-primary-light);
     }
@@ -581,6 +598,12 @@ a.toolbar-menu__trigger,
       }
     }
   }
+}
+
+// Drupal 10.1 Toolbar loading overrides
+#toolbar-item-administration-tray,
+.toolbar-loading #toolbar-item-administration-tray {
+  box-shadow: none;
 }
 
 // New navigation approach.
