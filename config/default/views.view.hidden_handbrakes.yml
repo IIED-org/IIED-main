@@ -170,7 +170,7 @@ display:
           exposed: true
           expose:
             operator_id: body_value_op
-            label: ''
+            label: Search
             description: ''
             use_operator: false
             operator: body_value_op
@@ -184,12 +184,12 @@ display:
               authenticated: authenticated
               anonymous: '0'
               viewer: '0'
+              hh_contributor: '0'
+              hh_reviewer: '0'
               publications_editor: '0'
               editor: '0'
               manager: '0'
               administrator: '0'
-              hh_reviewer: '0'
-              hh_contributor: '0'
             placeholder: ''
             autocomplete_filter: 0
             autocomplete_min_chars: '0'

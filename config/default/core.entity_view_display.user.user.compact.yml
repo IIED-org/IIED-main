@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.user.compact
     - field.field.user.user.field_first_name
+    - field.field.user.user.field_occupation
     - field.field.user.user.field_organisation
     - field.field.user.user.user_picture
     - image.style.thumbnail
@@ -95,6 +96,7 @@ content:
     region: content
 hidden:
   field_first_name: true
+  field_occupation: true
   field_organisation: true
   langcode: true
   member_for: true

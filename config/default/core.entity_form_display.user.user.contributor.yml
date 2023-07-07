@@ -1,32 +1,31 @@
-uuid: b0a6d1c8-d7f9-4cb1-abb3-3c67417f0789
+uuid: 529b56fe-4e5a-469f-ba5e-cdd2b44938e9
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_form_mode.user.guest_register
+    - core.entity_form_mode.user.contributor
     - field.field.user.user.field_first_name
+    - field.field.user.user.field_occupation
     - field.field.user.user.field_organisation
     - field.field.user.user.user_picture
-    - image.style.thumbnail
   module:
     - name
-    - svg_image
     - user
 _core:
   default_config_hash: K-1rBM8mTIkFp9RqOC2tMRUukOQ1xbRCfSKK8dEddnA
-id: user.user.guest_register
+id: user.user.contributor
 targetEntityType: user
 bundle: user
-mode: guest_register
+mode: contributor
 content:
   account:
-    weight: 0
+    weight: 3
     region: content
     settings: {  }
     third_party_settings: {  }
   field_first_name:
     type: name_default
-    weight: 1
+    weight: 0
     region: content
     settings:
       override_field_settings: false
@@ -55,7 +54,7 @@ content:
         generational: description
         credentials: description
     third_party_settings: {  }
-  field_organisation:
+  field_occupation:
     type: string_textfield
     weight: 2
     region: content
@@ -63,13 +62,13 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  user_picture:
-    type: image_image
-    weight: 3
+  field_organisation:
+    type: string_textfield
+    weight: 1
     region: content
     settings:
-      progress_indicator: throbber
-      preview_image_style: thumbnail
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
 hidden:
   contact: true
@@ -78,3 +77,4 @@ hidden:
   language: true
   path: true
   timezone: true
+  user_picture: true
