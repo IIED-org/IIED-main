@@ -1,0 +1,14 @@
+uuid: ca1b5559-17e9-43a9-883b-f38635e1cd06
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.hh_reviewer
+  module:
+    - user
+id: user_remove_role_action.hh_reviewer
+label: 'Remove the HH Reviewer role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: hh_reviewer

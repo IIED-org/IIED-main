@@ -1,0 +1,37 @@
+webform_content_creator.webform_content_creator.*:
+  type: config_entity
+  label: 'Webform Content Creator config'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    title:
+      type: string
+      label: 'Title'
+    webform:
+      type: string
+      label: 'Webform'
+    content_type:
+      type: string
+      label: 'Content type'
+    field_title:
+      type: string
+      label: 'Title'
+    use_encrypt:
+      type: boolean
+      label: 'Use encryption'
+    encryption_profile:
+      type: string
+      label: 'Encryption profile'
+    sync_content:
+      type: boolean
+      label: 'Synchronize content in edition'
+    sync_content_delete:
+      type: boolean
+      label: 'Synchronize content in deletion'
+    sync_content_node_field:
+      type: string
+      label: 'Synchronization field machine name'
+    elements:
+      type: ignore
+      label: 'Elements'

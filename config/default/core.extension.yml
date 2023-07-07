@@ -28,6 +28,7 @@ module:
   color: 0
   color_field: 0
   colorbox: 0
+  colorbox_load: 0
   comment: 0
   components: 0
   computed_field: 0
@@ -118,8 +119,10 @@ module:
   metatag_pinterest: 0
   metatag_twitter_cards: 0
   migrate: 0
+  multiple_registration: 0
   mysql: 0
   name: 0
+  ng_lightbox: 0
   node: 0
   notification: 0
   optional_end_date: 0
@@ -147,6 +150,7 @@ module:
   rh_media: 0
   rh_node: 0
   rh_taxonomy: 0
+  scn: 0
   search404: 0
   search_api: 0
   search_api_autocomplete: 0
@@ -158,6 +162,7 @@ module:
   serial: 0
   serialization: 0
   shortcut: 0
+  shs: 0
   sophron: 0
   stories: 0
   svg_image: 0
@@ -189,6 +194,18 @@ module:
   views_json_source: 0
   views_layout: 0
   viewsreference: 0
+  webform: 0
+  webform_access: 0
+  webform_content_creator: 0
+  webform_image_select: 0
+  webform_node: 0
+  webform_options_limit: 0
+  webform_scheduled_email: 0
+  webform_shs: 0
+  webform_submission_export_import: 0
+  webform_submission_log: 0
+  webform_ui: 0
+  webform_views: 0
   ds: 1
   pathauto: 1
   xmlsitemap: 1

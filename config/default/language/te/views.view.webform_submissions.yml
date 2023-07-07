@@ -1,0 +1,23 @@
+display:
+  default:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: కార్యాలు
+  embed_administer:
+    display_options:
+      fields:
+        operations:
+          label: కార్యాలు
+  embed_manage:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: కార్యాలు
+        edit_webform_submission:
+          label: కార్యాలు
+  embed_review:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: కార్యాలు

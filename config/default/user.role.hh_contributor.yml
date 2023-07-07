@@ -1,0 +1,12 @@
+uuid: 2a667805-8d6e-4864-9c12-be0870e8a6cd
+langcode: en
+status: true
+dependencies:
+  module:
+    - webform
+id: hh_contributor
+label: Contributor
+weight: -7
+is_admin: null
+permissions:
+  - 'access webform submission user'

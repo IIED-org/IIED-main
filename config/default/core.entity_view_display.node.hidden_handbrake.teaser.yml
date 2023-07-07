@@ -1,0 +1,54 @@
+uuid: 3759b1e4-59db-4fba-bc89-33972cfd979a
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.hidden_handbrake.body
+    - field.field.node.hidden_handbrake.comment
+    - field.field.node.hidden_handbrake.field_author_based_in
+    - field.field.node.hidden_handbrake.field_author_location
+    - field.field.node.hidden_handbrake.field_date_published
+    - field.field.node.hidden_handbrake.field_hh_webform_sync
+    - field.field.node.hidden_handbrake.field_hidden_handbrake_image
+    - field.field.node.hidden_handbrake.field_how_stuck_handbrake
+    - field.field.node.hidden_handbrake.field_region_affected
+    - field.field.node.hidden_handbrake.field_region_affected_2
+    - field.field.node.hidden_handbrake.field_region_affected_3
+    - field.field.node.hidden_handbrake.field_submitted_by
+    - node.type.hidden_handbrake
+  module:
+    - text
+    - user
+id: node.hidden_handbrake.teaser
+targetEntityType: node
+bundle: hidden_handbrake
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  comment: true
+  field_author_based_in: true
+  field_author_location: true
+  field_date_published: true
+  field_hh_webform_sync: true
+  field_hidden_handbrake_image: true
+  field_how_stuck_handbrake: true
+  field_region_affected: true
+  field_region_affected_2: true
+  field_region_affected_3: true
+  field_submitted_by: true
+  langcode: true
+  search_api_excerpt: true

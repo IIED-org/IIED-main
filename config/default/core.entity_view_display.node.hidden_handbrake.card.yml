@@ -1,0 +1,56 @@
+uuid: dedd77d7-5f33-4dc3-af0b-5ae1c579d9bd
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.card
+    - field.field.node.hidden_handbrake.body
+    - field.field.node.hidden_handbrake.comment
+    - field.field.node.hidden_handbrake.field_author_based_in
+    - field.field.node.hidden_handbrake.field_author_location
+    - field.field.node.hidden_handbrake.field_date_published
+    - field.field.node.hidden_handbrake.field_hh_webform_sync
+    - field.field.node.hidden_handbrake.field_hidden_handbrake_image
+    - field.field.node.hidden_handbrake.field_how_stuck_handbrake
+    - field.field.node.hidden_handbrake.field_region_affected
+    - field.field.node.hidden_handbrake.field_region_affected_2
+    - field.field.node.hidden_handbrake.field_region_affected_3
+    - field.field.node.hidden_handbrake.field_submitted_by
+    - node.type.hidden_handbrake
+  module:
+    - datetime
+    - layout_builder
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.hidden_handbrake.card
+targetEntityType: node
+bundle: hidden_handbrake
+mode: card
+content:
+  field_date_published:
+    type: datetime_default
+    label: hidden
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  body: true
+  comment: true
+  field_author_based_in: true
+  field_author_location: true
+  field_hh_webform_sync: true
+  field_hidden_handbrake_image: true
+  field_how_stuck_handbrake: true
+  field_region_affected: true
+  field_region_affected_2: true
+  field_region_affected_3: true
+  field_submitted_by: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

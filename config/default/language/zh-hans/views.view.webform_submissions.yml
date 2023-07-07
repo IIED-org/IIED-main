@@ -1,0 +1,23 @@
+display:
+  default:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: 操作
+  embed_administer:
+    display_options:
+      fields:
+        operations:
+          label: 操作
+  embed_manage:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: 操作
+        edit_webform_submission:
+          label: 操作
+  embed_review:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: 操作

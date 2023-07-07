@@ -1,0 +1,23 @@
+uuid: dbac0666-2688-4fda-99db-134cacb7fa52
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_how_stuck_handbrake
+    - node.type.hidden_handbrake
+id: node.hidden_handbrake.field_how_stuck_handbrake
+field_name: field_how_stuck_handbrake
+entity_type: node
+bundle: hidden_handbrake
+label: 'How stuck handbrake'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

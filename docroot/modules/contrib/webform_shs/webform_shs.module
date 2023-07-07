@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * @file
+ * Webform component which renders a "shs" field.
+ */
+
+use Drupal\taxonomy\TermInterface;
+use Drupal\webform_shs\Element\ShsTermSelect;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+ /**
+ * Implements hook_help().
+ */
+function webform_shs_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the webform_shs module.
+    case 'help.page.webform_shs':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('This module simply provides a Webform component which renders a SHS field.') . '</p>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function webform_shs_taxonomy_term_presave(TermInterface $term) {
+  ShsTermSelect::invalidateOptionsCache($term->bundle());
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function webform_shs_taxonomy_term_delete(TermInterface $term) {
+  ShsTermSelect::invalidateOptionsCache($term->bundle());
+}

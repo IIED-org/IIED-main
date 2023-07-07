@@ -1,0 +1,11 @@
+uuid: 6e9e0a87-2882-4eb0-abf6-7d8976395f77
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.hh_audience
+id: taxonomy_term.hh_audience
+target_entity_type_id: taxonomy_term
+target_bundle: hh_audience
+default_langcode: site_default
+language_alterable: false

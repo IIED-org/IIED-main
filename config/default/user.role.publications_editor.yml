@@ -24,13 +24,15 @@ dependencies:
     - taxonomy
     - toolbar
     - view_unpublished
+    - webform
 id: publications_editor
 label: 'Publications editor'
-weight: -7
+weight: -5
 is_admin: null
 permissions:
   - 'access toolbar'
   - 'access user profiles'
+  - 'access webform submission user'
   - 'add pdf image entity entities'
   - 'create document media'
   - 'create image media'

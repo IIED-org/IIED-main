@@ -1,0 +1,66 @@
+uuid: 2084c501-48c7-4dec-9c57-6e4cfafd016e
+langcode: en
+status: true
+dependencies: {  }
+id: hidden_handbrake
+title: 'Hidden handbrake'
+webform: hidden_handbrake
+content_type: null
+field_title: null
+use_encrypt: null
+encryption_profile: null
+sync_content: true
+sync_content_delete: false
+sync_content_node_field: null
+elements:
+  body:
+    type: false
+    mapping: text_mapping
+    webform_field: summary
+    custom_check: 0
+    custom_value: ''
+  field_hh_webform_sync:
+    type: true
+    mapping: numeric_mapping
+    webform_field: sid
+    custom_check: 0
+    custom_value: ''
+  field_how_stuck_handbrake:
+    type: false
+    mapping: default_mapping
+    webform_field: just_how_stuck_is_this_handbrake_
+    custom_check: 0
+    custom_value: ''
+  field_region_affected:
+    type: false
+    mapping: entity_reference_mapping
+    webform_field: reegy
+    custom_check: 0
+    custom_value: ''
+  field_region_affected_2:
+    type: false
+    mapping: entity_reference_mapping
+    webform_field: title_required_max_80_characters_
+    custom_check: 0
+    custom_value: ''
+  field_region_affected_3:
+    type: false
+    mapping: entity_reference_mapping
+    webform_field: title_required_max_80_characters_
+    custom_check: 0
+    custom_value: ''
+  field_submitted_by:
+    type: true
+    mapping: entity_reference_mapping
+    webform_field: uid
+    custom_check: 0
+    custom_value: ''
+  title:
+    type: false
+    mapping: text_mapping
+    webform_field: title_required_max_80_characters_
+    custom_check: 0
+    custom_value: ''
+sync_content_field: field_hh_webform_synchronization
+target_entity_type: node
+target_bundle: hidden_handbrake

@@ -1,0 +1,17 @@
+{#
+/**
+ * @file
+ * Default theme implementation for checkbox tree level items.
+ *
+ * Available variables:
+ * - attributes: The attributes object for the container.
+ * - children: The items within the tree level item.
+ *
+ * @see template_preprocess_checkbox_tree_level()
+ */
+#}
+<ul{{ attributes }}>
+  {% for child in children %}
+    <li>{{ child }}</li>
+  {% endfor %}
+</ul>

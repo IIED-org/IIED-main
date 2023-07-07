@@ -1,0 +1,71 @@
+field.field.*.*.*.third_party.multiple_registration:
+  type: mapping
+  label: 'Extra settings for multiple registration'
+  mapping:
+    user_additional_register_form_required:
+      type: sequence
+      label: 'Field is required for next roles'
+      sequence:
+        type: ignore
+        label: 'Role'
+    user_additional_register_form:
+      type: sequence
+      label: 'Field is needed for next roles'
+      sequence:
+        type: ignore
+        label: 'Role'
+
+multiple_registration.common_settings_page_form_config:
+  type: config_entity
+  label: 'Common settings for multiple registration'
+  mapping:
+    multiple_registration_disable_main:
+      type: integer
+      label: 'Disable main registration page'
+    enable_redirect_to_user_profile_when_user_logged_in:
+      type: integer
+      label: 'Enable redirect to the user profile page for authenticated users'
+    enable_add_user_buttons_on_people_page:
+      type: integer
+      label: 'Enables "Add user" button on "People" page'
+
+multiple_registration.access_settings_page_form_config:
+  type: config_entity
+  label: 'Access settings for multiple registration'
+  mapping:
+    multiple_registration_pages_allowed_list:
+      type: sequence
+      label: 'Registration pages which will be accessible to anonymous user'
+      sequence:
+        type: ignore
+        label: 'Availability/Role'
+
+multiple_registration.create_registration_page_form_config:
+  type: config_entity
+  label: 'Registration page form config'
+  mapping:
+    roles:
+      type: sequence
+      label: 'Roles sequence'
+      sequence:
+        type: mapping
+        label: 'Role'
+        mapping:
+          path:
+            type: string
+            label: 'Path for registration page'
+          url:
+            type: string
+            label: 'URL for registration page'
+          redirect_path:
+            type: string
+            label: 'Path where the user should be redirected to after submitting the registration form'
+          hidden:
+            type: integer
+            label: 'Indicates whether form will be accessible only by url'
+          form_mode_register:
+            type: string
+            label: 'Form mode to render the Register form'
+          form_mode_edit:
+            type: string
+            label: 'Form mode to render the Edit form'

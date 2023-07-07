@@ -1,0 +1,8 @@
+uuid: af98aaf0-7af5-459d-8350-9245c727c4bc
+langcode: en
+status: true
+dependencies: {  }
+name: 'HH problem type'
+vid: hh_problem_type
+description: 'Hidden handbrake content problem type'
+weight: 0

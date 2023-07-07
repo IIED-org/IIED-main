@@ -1,0 +1,29 @@
+uuid: b1a402de-218c-4e33-a266-8eafc00ae1a5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_region_affected_3
+    - node.type.hidden_handbrake
+    - taxonomy.vocabulary.un_geoscheme_regional_groupings
+id: node.hidden_handbrake.field_region_affected_3
+field_name: field_region_affected_3
+entity_type: node
+bundle: hidden_handbrake
+label: 'Region affected 3'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      un_geoscheme_regional_groupings: un_geoscheme_regional_groupings
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -1,0 +1,567 @@
+<?php
+
+/**
+ * @file
+ * Contains multiple_registration.module.
+ */
+
+use Drupal\Core\Database\Database;
+use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
+use Drupal\Core\Render\Element;
+use Drupal\Core\Link;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Url;
+use Drupal\multiple_registration\Controller\MultipleRegistrationController;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Entity\Entity\EntityFormDisplay;
+use Drupal\Core\Config\Entity\ThirdPartySettingsInterface;
+use Drupal\Core\Block\BlockPluginInterface;
+use Drupal\Core\Field\WidgetBase;
+use Drupal\user\UserInterface;
+use Drupal\views\ViewExecutable;
+
+/**
+ * Implements hook_help().
+ */
+function multiple_registration_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the multiple_registration module.
+    case 'help.page.multiple_registration':
+      $path = dirname(__FILE__) . '/README.txt';
+      if (file_exists($path)) {
+        $readme = file_get_contents($path);
+      }
+
+      if (!isset($readme)) {
+        return NULL;
+      }
+
+      return '<pre>' . $readme . '</pre>';
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function multiple_registration_theme() {
+  $theme = [];
+  return $theme;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function multiple_registration_permission() {
+  return [
+    'administer multiple_registration' => [
+      'title' => t('Administer multiple registration'),
+      'description' => t('Configure multiple registration module'),
+    ],
+  ];
+}
+
+/**
+ * Implements hook_entity_operation_alter().
+ */
+function multiple_registration_entity_operation_alter(array &$operations, EntityInterface $entity) {
+  if ($entity->getEntityTypeId() === 'user_role') {
+    if (\Drupal::service('router.route_provider')->getRouteByName('multiple_registration.create_registration_page_form')) {
+      $available_roles = \Drupal::service('multiple_registration.service')->getAvailableRoles();
+      if (!array_key_exists($entity->id(), $available_roles)) {
+        return;
+      }
+      $operations['add_registration_page'] = [
+        'title' => t('Add own registration page'),
+        'url' => Url::fromRoute('multiple_registration.create_registration_page_form', ['rid' => $entity->id()]),
+        'weight' => 50,
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function multiple_registration_form_field_config_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $field = $form_state->getFormObject()->getEntity();
+  $instance = $field;
+
+  if ($instance->get('entity_type') === 'user' && !$instance->isDeleted() && !$instance->isReadonly()) {
+
+    $reg_pages = \Drupal::service('multiple_registration.service')->getRegistrationPages();
+    if ($reg_pages) {
+      $options[MultipleRegistrationController::MULTIPLE_REGISTRATION_GENERAL_REGISTRATION_ID] = t('General registered users');
+      foreach ($reg_pages as $rid => $page) {
+        $options[$rid] = t('Users with %role role', ['%role' => $page['role_name']]);
+      }
+      $descr = t('Specify which of options are actual for this field. If nothing is selected, field is available for all variants.');
+      $def_val = $instance->getThirdPartySetting('multiple_registration', 'user_additional_register_form', []);
+
+      $form['field']['third_party_settings']['multiple_registration'] = [
+        '#type' => 'checkboxes',
+        '#title' => t('This field is needed for:'),
+        '#description' => $descr,
+        '#default_value' => $def_val,
+        '#options' => $options,
+      ];
+
+      if (!isset($form['required']['#default_value']) || !$form['required']['#default_value']) {
+        $descr = t('Note: works only if "Required field" is unchecked!');
+        $def_val = $instance->getThirdPartySetting('multiple_registration', 'user_additional_register_form_required', []);
+
+        $form['field']['third_party_settings']['multiple_registration_required'] = [
+          '#type' => 'checkboxes',
+          '#title' => t('This field is required for:'),
+          '#description' => $descr,
+          '#default_value' => $def_val,
+          '#options' => $options,
+        ];
+      }
+
+      $form['actions']['submit']['#submit'][] = 'multiple_registration_field_config_form_submit';
+    }
+  }
+}
+
+/**
+ * Disabling of displaying fields assigned for special user roles at user page.
+ *
+ * @param array $variables
+ *   Provides theme hook variables array.
+ */
+function multiple_registration_preprocess_user(array &$variables) {
+  $user = $variables['elements']['#user'];
+  /** @var \Drupal\user\Entity\User $user */
+  $user_roles = $user->getRoles();
+  $fields = $user->getFields();
+  foreach ($fields as $field_name => $field_data) {
+    /** @var Drupal\Core\Field\FieldItemList $field_data */
+    $field_definition = $field_data->getFieldDefinition();
+    if (!property_exists($field_definition, 'third_party_settings')) {
+      continue;
+    }
+
+    /** @var Drupal\field\Entity\FieldConfig $field_definition */
+    $third_party_settings = $field_definition->get('third_party_settings');
+    if (!array_key_exists('multiple_registration', $third_party_settings)) {
+      continue;
+    }
+
+    $allowed_roles = $third_party_settings['multiple_registration']['user_additional_register_form'];
+    $allowed_roles_unique_values = array_values(array_unique($allowed_roles));
+    if ($allowed_roles_unique_values[0] === 0 && count($allowed_roles_unique_values) === 1) {
+      continue;
+    }
+
+    $found_roles = array_intersect($user_roles, $allowed_roles);
+    if (!empty($found_roles) || $field_name === 'user_picture') {
+      continue;
+    }
+    unset($variables['elements'][$field_name], $variables['content'][$field_name]);
+  }
+}
+
+/**
+ * Form submit to save additional field settings.
+ *
+ * @param array $form
+ *   Form data array.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   Form state object.
+ */
+function multiple_registration_field_config_form_submit(array &$form, FormStateInterface $form_state) {
+  $data = $form_state->getValue('multiple_registration');
+  $data_required = $form_state->getValue('multiple_registration_required');
+  $field = $form_state->getFormObject()->getEntity();
+  $field->setThirdPartySetting('multiple_registration', 'user_additional_register_form', $data);
+  $field->setThirdPartySetting('multiple_registration', 'user_additional_register_form_required', $data_required);
+  $field->save();
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function multiple_registration_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $storage = $form_state->getStorage();
+  if (!empty($storage['form_display']) && is_object($storage['form_display'])) {
+    $form_display = $storage['form_display'];
+    if ($form_display instanceof EntityFormDisplay && $form_display->getTargetEntityTypeId() === 'user') {
+      // Show only appropriate fields.
+      $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('user', 'user');
+      foreach ($field_definitions as $field_name => $field_definition) {
+        if (isset($form[$field_name]) && $field_definition instanceof ThirdPartySettingsInterface) {
+          $field_roles = array_filter($field_definition->getThirdPartySetting('multiple_registration', 'user_additional_register_form', []));
+          $field_roles_required = array_filter($field_definition->getThirdPartySetting('multiple_registration', 'user_additional_register_form_required', []));
+          if (!empty($field_roles)) {
+            // If something was selected.
+            $form[$field_name]['#access'] = MultipleRegistrationController::checkFieldAccess($field_roles);
+            $form[$field_name]['widget']['#required'] = MultipleRegistrationController::checkFieldAccess($field_roles_required);
+          }
+        }
+      }
+    }
+  }
+
+  $route_match = \Drupal::routeMatch();
+  $route = $route_match->getRouteObject();
+  $route_name = $route_match->getRouteName();
+  if ($route !== NULL && $route_name === 'multiple_registration.role_registration_page' && $form_id === 'user_register_form') {
+    $rid = \Drupal::routeMatch()->getParameter('rid');
+
+    // Hidden field to pass the rid.
+    $form['multiple_registration_rid'] = [
+      '#type' => 'hidden',
+      '#value' => $rid,
+    ];
+
+    // Custom submit handler to store the rid.
+    $form['actions']['submit']['#submit'][] = '_multiple_registration_rid';
+  }
+}
+
+/**
+ * Form submit handler to store the correspondent rid for the inserted user.
+ */
+function _multiple_registration_rid(array $form, FormStateInterface $form_state) {
+  $rid = $form_state->getValue('multiple_registration_rid');
+  $uid = $form_state->getValue('uid');
+  $config = \Drupal::config('multiple_registration.create_registration_page_form_config');
+
+  if ($rid && $uid) {
+    $connection = Database::getConnection();
+    $connection->upsert('multiple_registration')
+      ->fields([
+          'uid' => $uid,
+          'rid' => $rid,
+        ]
+      )
+      ->key('uid')
+      ->execute();
+  }
+
+  // Redirect users to custom path.
+  if ($redirectPath = $config->get('roles')[$rid]['redirect_path']) {
+    $form_state->setRedirectUrl(Url::fromUserInput($redirectPath));
+  }
+}
+
+/**
+ * Implements hook_field_widget_form_alter().
+ */
+function multiple_registration_field_widget_form_alter(&$element, FormStateInterface $form_state, $context) {
+  $field_definition = $context['items']->getFieldDefinition();
+  $field_name = $field_definition->getName();
+  $parents = $context['form']['#parents'];
+  $widget_state = WidgetBase::getWidgetState($parents, $field_name, $form_state);
+  if ($field_definition->getTargetEntityTypeId() === 'user' && $field_definition instanceof ThirdPartySettingsInterface) {
+    if ($field_definition->getThirdPartySetting('multiple_registration', 'user_additional_register_form')) {
+      $field_roles = $field_definition->getThirdPartySetting('multiple_registration', 'user_additional_register_form');
+    }
+    else {
+      $field_roles = [];
+    }
+    if ($field_definition->getThirdPartySetting('multiple_registration', 'user_additional_register_form_required')) {
+      $field_roles_required = $field_definition->getThirdPartySetting('multiple_registration', 'user_additional_register_form_required');
+    }
+    else {
+      $field_roles_required = [];
+    }
+
+    // Conditions for AJAX triggers and paragraphs with removed states.
+    $has_not_triggering_elements = $form_state->getTriggeringElement() === NULL;
+    $paragraphs_with_removed_mode = (!isset($form_state->getTriggeringElement()['#paragraphs_mode']) && (isset($form_state->getTriggeringElement()['#paragraphs_mode']) && $form_state->getTriggeringElement()['#paragraphs_mode'] !== 'removed'));
+
+    // If something was selected.
+    if (!empty($field_roles) && max($field_roles) !== 0) {
+      if ($has_not_triggering_elements || $paragraphs_with_removed_mode) {
+        $element['#access'] = MultipleRegistrationController::checkFieldAccess($field_roles);
+      }
+    }
+    if ((!isset($element['#required']) || $element['#required'] === FALSE) && !empty($field_roles_required)) {
+      // If something was selected.
+      if (max($field_roles_required) !== 0) {
+        $required = MultipleRegistrationController::checkFieldAccess($field_roles_required);
+        $element['#required'] = $required;
+        // Fix 'N/A' element option for 'required' widgets to make them
+        // similar with core widgets behaviour.
+        if (isset($element['#options']['_none'])) {
+          if ($element['#type'] === 'radios' || $element['#type'] === 'checkboxes') {
+            unset($element['#options']['_none']);
+          }
+          if ($element['#type'] === 'select') {
+            $element['#options']['_none'] = \Drupal::translation()->translate('- Select a value -');
+          }
+        }
+        foreach (Element::children($element) as $child) {
+          if ($widget_state['items_count'] === 0 || (isset($element[$child]['#delta']) && $element[$child]['#delta'] < $widget_state['items_count'])) {
+            $element[$child]['#required'] = $required;
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function multiple_registration_form_user_register_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $route_match = \Drupal::routeMatch();
+  $route = $route_match->getRouteName();
+  $current_user = \Drupal::currentUser();
+  if ($route === 'multiple_registration.role_registration_page') {
+
+    // Redirect authenticated user to user profile page instead of reg. form.
+    if ($current_user->isAuthenticated()) {
+      \Drupal::service('multiple_registration.controller_service')->authenticatedUserRedirect($current_user);
+    }
+
+    $rid = $route_match->getParameter('rid');
+
+    // Adding role id to the form array.
+    $form['rid'] = ['#type' => 'value', '#value' => $rid];
+    $form['#validate'][] = 'multiple_registration_user_register_form_validate';
+  }
+}
+
+/**
+ * Extra form validation handler for form_user_register_form().
+ */
+function multiple_registration_user_register_form_validate(array &$form, FormStateInterface $form_state) {
+  $rid = $form_state->getValue('rid');
+  // Force enable the role to user.
+  $form_state->setValue(['roles', $rid], $rid);
+}
+
+/**
+ * Implements hook_block_view_BASE_BLOCK_ID_alter().
+ */
+function multiple_registration_block_view_user_login_block_alter(array &$build, BlockPluginInterface $block) {
+  if (isset($build['content']['user_links'])) {
+    if (\Drupal::config('user.settings')->get('register') !== UserInterface::REGISTER_ADMINISTRATORS_ONLY) {
+      $reg_pages = \Drupal::service('multiple_registration.service')->getRegistrationPages();
+      foreach ($reg_pages as $rid => $role) {
+        $uri = 'base:' . $role['url'];
+        $reg_url = Url::fromUri($uri);
+        $reg_link = Link::fromTextAndUrl(t('Create new @role account', ['@role' => $role['role_name']]), $reg_url);
+        $build['content']['user_links']['#items']['multiple_registration_' . $rid] = $reg_link;
+      }
+    }
+  }
+}
+
+/**
+ * Implements form hook display alter to override user edit form per role.
+ *
+ * @param \Drupal\Core\Entity\Display\EntityFormDisplayInterface $form_display
+ *   Form display object.
+ * @param array $context
+ *   Current context array.
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ */
+function multiple_registration_entity_form_display_alter(EntityFormDisplayInterface &$form_display, array $context) {
+  $route_match = \Drupal::routeMatch();
+  $route = $route_match->getRouteObject();
+  $route_name = $route_match->getRouteName();
+  if ($route !== NULL) {
+    $is_user_register_form = $route_name === 'multiple_registration.role_registration_page' && $context['form_mode'] === 'register';
+    $is_user_edit_form = $route_name === 'entity.user.edit_form' && $context['form_mode'] === 'default';
+
+    if ($context['entity_type'] === 'user' && ($is_user_register_form || $is_user_edit_form)) {
+      $config = \Drupal::config('multiple_registration.create_registration_page_form_config');
+
+      switch ($route_name) {
+        case 'multiple_registration.role_registration_page':
+          $rid = \Drupal::routeMatch()->getParameter('rid');
+          $custom_form_mode = $config->get('roles')[$rid]['form_mode_register'] ?: 'register';
+          break;
+
+        case 'entity.user.edit_form':
+          // Current user id from the route context.
+          $user_entity_from_route = \Drupal::routeMatch()->getParameters()->all()['user'];
+          /** @var \Drupal\user\Entity\User $user_entity_from_route */
+          $uid = $user_entity_from_route->id();
+          $query = \Drupal::database()->select('multiple_registration', 'mr');
+          $query->condition('mr.uid', $uid);
+          $query->fields('mr', ['rid']);
+          $rid = $query->execute()->fetchField();
+          $custom_form_mode = $config->get('roles')[$rid]['form_mode_edit'] ?: 'default';
+          break;
+      }
+
+      if ($custom_form_mode) {
+        // Load the right entity form display.
+        $id = $context['entity_type'] . '.' . $context['bundle'] . '.' . $custom_form_mode;
+        $storage = \Drupal::entityTypeManager()
+          ->getStorage('entity_form_display');
+        $change_display = $storage->load($id);
+
+        // If form mode is activated, replace the given one with ours.
+        if ($change_display) {
+          $form_display = $change_display;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function multiple_registration_user_insert(EntityInterface $entity) {
+  try {
+    multiple_registration_handle_user_entity($entity);
+  }
+  catch (\Exception $exception) {
+    \Drupal::logger('multiple_registration')->notice($exception->getMessage());
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function multiple_registration_user_presave(EntityInterface $entity) {
+  try {
+    multiple_registration_handle_user_entity($entity);
+  }
+  catch (\Exception $exception) {
+    \Drupal::logger('multiple_registration')->notice($exception->getMessage());
+  }
+}
+
+/**
+ * Helper function to prevent code duplicates.
+ *
+ * @param object $entity
+ *   The user entity object.
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ */
+function multiple_registration_handle_user_entity($entity) {
+  /** @var \Drupal\user\Entity\User $entity */
+  $entity_id = $entity->id();
+  if (!$entity_id) {
+    // If there is no entity id, we can't do anything.
+    return;
+  }
+
+  $unsupported_roles = ['authenticated', 'administrator'];
+  $config = \Drupal::config('multiple_registration.create_registration_page_form_config');
+  $required_roles = array_diff($entity->getRoles(), $unsupported_roles);
+  // Get all available roles.
+  $users_roles = \Drupal::entityTypeManager()->getStorage('user_role')->loadMultiple();
+  if (!empty($required_roles)) {
+    foreach ($required_roles as $user_role) {
+      $config_data = $config->get('roles')[$user_role]['form_mode_edit'];
+      if ($config_data) {
+        multiple_registration_update_registration_table($entity_id, $user_role);
+        // Do not allow set more then one custom edit
+        // form for the same user with different roles.
+        break;
+      }
+    }
+    if (!$entity->isNew()) {
+      // Handle case, if user have different
+      // registration forms for different roles.
+      $required_roles = array_diff(array_keys($users_roles), $required_roles, $unsupported_roles);
+      if (!empty($required_roles)) {
+        foreach ($required_roles as $user_role) {
+          multiple_registration_update_registration_table($entity_id, $user_role, TRUE);
+        }
+      }
+    }
+  }
+  else {
+    $required_roles = array_diff(array_keys($users_roles), $unsupported_roles);
+    if (!empty($required_roles) && !$entity->isNew()) {
+      foreach ($required_roles as $required_role) {
+        // If config is not available, then we should delete
+        // such user from the multiple_registration table.
+        multiple_registration_update_registration_table($entity_id, $required_role, TRUE);
+      }
+    }
+  }
+}
+
+/**
+ * Helper method to handle the operations with database.
+ *
+ * @param int $user_id
+ *   User id.
+ * @param string $role_id
+ *   User role id.
+ * @param bool $remove_uid
+ *   Indicator for the uid param.
+ */
+function multiple_registration_update_registration_table($user_id, $role_id, $remove_uid = FALSE) {
+  $table_name = 'multiple_registration';
+  try {
+    $db_connection = Database::getConnection();
+    if ($remove_uid === FALSE) {
+      // Check table before insert data to prevent duplicates.
+      $user_data = $db_connection->select($table_name, 'mr')
+        ->fields('mr', ['uid'])
+        ->condition('uid', $user_id)
+        ->condition('rid', $role_id);
+      $result = $user_data->execute()->fetchAll();
+      if (empty($result)) {
+        $db_connection->insert($table_name)
+          ->fields(
+            [
+              'uid' => $user_id,
+              'rid' => $role_id,
+            ]
+          )
+          ->execute();
+      }
+    }
+    elseif ($remove_uid) {
+      $db_connection->delete($table_name)
+        ->condition('uid', $user_id)
+        ->condition('rid', $role_id)
+        ->execute();
+    }
+  }
+  catch (\Exception $exception) {
+    \Drupal::logger('multiple_registration')->notice($exception->getMessage());
+  }
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function multiple_registration_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
+  $enable_buttons = \Drupal::config('multiple_registration.common_settings_page_form_config')->get('enable_add_user_buttons_on_people_page');
+
+  if (!$enable_buttons) {
+    return;
+  }
+
+  if ($view->id() == 'user_admin_people' && $display_id === 'page_1') {
+    $result = [];
+    $service = \Drupal::service('multiple_registration.service');
+    $available_roles = $service->getRegistrationPages();
+
+    foreach ($available_roles as $role) {
+      $result[] = '<a class="button button-action button--primary button--small" href="' . $role["url"] . '">Add new ' . $role["role_name"] . '</a>';
+    }
+
+    $options = [
+      'id' => 'add_new_user_buttons',
+      'table' => 'views',
+      'field' => 'area_text_custom',
+      'relationship' => 'none',
+      'group_type' => 'none',
+      'admin_label' => '',
+      'empty' => TRUE,
+      'tokenize' => FALSE,
+      'content' => implode($result),
+      'plugin_id' => 'text_custom',
+    ];
+    $view->setHandler('page_1', 'header', 'add_new_user_buttons', $options);
+  }
+}

@@ -1,0 +1,14 @@
+uuid: 3defe4b4-7b83-4c9c-8ae7-a11c5b9b355f
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.hh_reviewer
+  module:
+    - user
+id: user_add_role_action.hh_reviewer
+label: 'Add the HH Reviewer role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: hh_reviewer

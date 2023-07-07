@@ -1,0 +1,12 @@
+uuid: 47b3602c-0da8-482a-8934-0cc1caa6ba8d
+langcode: en
+status: true
+dependencies:
+  module:
+    - webform
+id: hh_reviewer
+label: Reviewer
+weight: -6
+is_admin: null
+permissions:
+  - 'access webform submission user'

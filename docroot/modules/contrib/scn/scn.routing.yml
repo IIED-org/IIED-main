@@ -1,0 +1,7 @@
+scn.settings:
+  path: '/admin/config/system/scn'
+  defaults:
+    _form: '\Drupal\scn\Form\SCNSettingsForm'
+    _title: 'Simple Comment Notify'
+  requirements:
+    _permission: 'administer scn configuration'

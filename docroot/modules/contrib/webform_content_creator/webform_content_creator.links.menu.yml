@@ -1,0 +1,5 @@
+webform_content_creator.collection:
+  title: 'Webform Content Creator'
+  description: 'View and edit Webform content creator configurations.'
+  parent: system.admin_config
+  route_name: webform_content_creator.collection

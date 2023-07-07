@@ -1,0 +1,23 @@
+uuid: 273f9133-b02a-42ec-9579-0a8d5a5c1daf
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_hh_webform_sync
+    - node.type.hidden_handbrake
+id: node.hidden_handbrake.field_hh_webform_sync
+field_name: field_hh_webform_sync
+entity_type: node
+bundle: hidden_handbrake
+label: 'HH webform sync'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

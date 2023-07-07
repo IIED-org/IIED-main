@@ -1,0 +1,23 @@
+display:
+  default:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: عمليات
+  embed_administer:
+    display_options:
+      fields:
+        operations:
+          label: عمليات
+  embed_manage:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: عمليات
+        edit_webform_submission:
+          label: عمليات
+  embed_review:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: عمليات

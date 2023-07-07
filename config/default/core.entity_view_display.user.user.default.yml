@@ -3,13 +3,17 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.user.user.field_first_name
+    - field.field.user.user.field_occupation
+    - field.field.user.user.field_organisation
     - field.field.user.user.user_picture
     - image.style.thumbnail
   module:
     - field_group
-    - image
     - layout_builder
     - layout_discovery
+    - name
+    - svg_image
     - user
 third_party_settings:
   layout_builder:
@@ -99,6 +103,61 @@ third_party_settings:
                 third_party_settings: {  }
             weight: 2
             additional: {  }
+          7ea3ea7e-9c42-424f-a6aa-bea04f3394f3:
+            uuid: 7ea3ea7e-9c42-424f-a6aa-bea04f3394f3
+            region: content
+            configuration:
+              id: 'field_block:user:user:field_organisation'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: string
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+            weight: 3
+            additional: {  }
+          daa27801-022c-4fe3-ac82-6aa5a4863fcb:
+            uuid: daa27801-022c-4fe3-ac82-6aa5a4863fcb
+            region: content
+            configuration:
+              id: 'field_block:user:user:field_first_name'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: name_default
+                label: above
+                settings:
+                  format: default
+                  markup: none
+                  list_format: ''
+                  link_target: ''
+                  preferred_field_reference: ''
+                  preferred_field_reference_separator: ', '
+                  alternative_field_reference: ''
+                  alternative_field_reference_separator: ', '
+                third_party_settings: {  }
+            weight: 4
+            additional: {  }
+          1c63aa84-9eb9-4f98-b1f1-e3f1f724d735:
+            uuid: 1c63aa84-9eb9-4f98-b1f1-e3f1f724d735
+            region: content
+            configuration:
+              id: 'field_block:user:user:field_occupation'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: string
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+            weight: 5
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
@@ -128,6 +187,37 @@ targetEntityType: user
 bundle: user
 mode: default
 content:
+  field_first_name:
+    type: name_default
+    label: above
+    settings:
+      format: default
+      markup: none
+      list_format: ''
+      link_target: ''
+      preferred_field_reference: ''
+      preferred_field_reference_separator: ', '
+      alternative_field_reference: ''
+      alternative_field_reference_separator: ', '
+    third_party_settings: {  }
+    weight: 52
+    region: content
+  field_occupation:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 53
+    region: content
+  field_organisation:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 51
+    region: content
   masquerade:
     settings: {  }
     third_party_settings: {  }

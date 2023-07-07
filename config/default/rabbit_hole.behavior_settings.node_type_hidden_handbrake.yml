@@ -1,0 +1,14 @@
+uuid: 75fe6714-65a2-49fb-adb3-17de0f0d1326
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.hidden_handbrake
+id: node_type_hidden_handbrake
+entity_type_id: node_type
+entity_id: hidden_handbrake
+action: display_page
+allow_override: 1
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

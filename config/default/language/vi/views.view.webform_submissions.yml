@@ -1,0 +1,23 @@
+display:
+  default:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: 'Thao tác'
+  embed_administer:
+    display_options:
+      fields:
+        operations:
+          label: 'Thao tác'
+  embed_manage:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: 'Thao tác'
+        edit_webform_submission:
+          label: 'Thao tác'
+  embed_review:
+    display_options:
+      fields:
+        view_webform_submission:
+          label: 'Thao tác'

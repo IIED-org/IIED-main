@@ -1,0 +1,14 @@
+uuid: 32f96138-5814-4ff6-810a-374e8816a9c8
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.hh_contributor
+  module:
+    - user
+id: user_remove_role_action.hh_contributor
+label: 'Remove the HH contributor role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: hh_contributor

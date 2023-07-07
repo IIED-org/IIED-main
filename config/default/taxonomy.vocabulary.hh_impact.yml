@@ -1,0 +1,8 @@
+uuid: 012fa1be-a3ca-4a86-ab76-fad6d7e1231f
+langcode: en
+status: true
+dependencies: {  }
+name: 'HH impact'
+vid: hh_impact
+description: 'Hidden handbrake content impact areas'
+weight: 0

@@ -1,0 +1,22 @@
+uuid: 66bc0634-ac1f-4854-8110-5bd598de0e5e
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.hidden_handbrake
+id: node.hidden_handbrake.status
+field_name: status
+entity_type: node
+bundle: hidden_handbrake
+label: Published
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

@@ -1,0 +1,14 @@
+uuid: 1772ce7b-1dbd-49bf-9988-bd297d17bb0f
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.un_geoscheme_regional_groupings
+id: taxonomy_vocabulary_un_geoscheme_regional_groupings
+entity_type_id: taxonomy_vocabulary
+entity_id: un_geoscheme_regional_groupings
+action: page_not_found
+allow_override: 1
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

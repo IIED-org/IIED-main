@@ -1,0 +1,5 @@
+settings:
+  default_submit_button_label: Soumettre
+  default_delete_button_label: Supprimer
+mail:
+  default_from_name: '[site:name]'

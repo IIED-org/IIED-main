@@ -1,0 +1,11 @@
+uuid: 4f7255e7-140f-42ee-bc83-a63778c1304e
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.hh_problem_type
+id: taxonomy_term.hh_problem_type
+target_entity_type_id: taxonomy_term
+target_bundle: hh_problem_type
+default_langcode: site_default
+language_alterable: false

@@ -1,0 +1,14 @@
+uuid: 3ed5f89f-e130-43c2-82c0-dac0e23390e8
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.hh_audience
+id: taxonomy_vocabulary_hh_audience
+entity_type_id: taxonomy_vocabulary
+entity_id: hh_audience
+action: page_not_found
+allow_override: 1
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

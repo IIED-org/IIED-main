@@ -1,0 +1,24 @@
+uuid: 741df39f-97ad-4b46-b33a-a01d8081686b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_date_published
+    - node.type.hidden_handbrake
+  module:
+    - datetime
+id: node.hidden_handbrake.field_date_published
+field_name: field_date_published
+entity_type: node
+bundle: hidden_handbrake
+label: Posted
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    default_date_type: now
+    default_date: now
+default_value_callback: ''
+settings: {  }
+field_type: datetime
