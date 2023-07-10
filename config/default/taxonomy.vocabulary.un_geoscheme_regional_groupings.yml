@@ -2,7 +2,7 @@ uuid: 0383ad63-6570-4d6b-ac3c-b7742a7dc5fc
 langcode: en
 status: true
 dependencies: {  }
-name: 'UN geoscheme regional groupings'
+name: 'World continents'
 vid: un_geoscheme_regional_groupings
-description: 'as per: https://en.wikipedia.org/wiki/United_Nations_geoscheme'
+description: '7 continental regions - used in ''Hidden handbrake'' webform and content type'
 weight: 0

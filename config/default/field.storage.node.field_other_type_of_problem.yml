@@ -1,16 +1,17 @@
-uuid: f1790ee5-8520-4e1a-be01-138ff44d4c9f
+uuid: 95c62a86-d8c1-4ec4-8a78-97518346db4e
 langcode: en
 status: true
 dependencies:
   module:
     - node
-    - taxonomy
-id: node.field_region_affected_3
-field_name: field_region_affected_3
+id: node.field_other_type_of_problem
+field_name: field_other_type_of_problem
 entity_type: node
-type: entity_reference
+type: string
 settings:
-  target_type: taxonomy_term
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
 module: core
 locked: false
 cardinality: 1

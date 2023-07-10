@@ -31,28 +31,34 @@ elements:
     webform_field: just_how_stuck_is_this_handbrake_
     custom_check: 0
     custom_value: ''
+  field_impact_area:
+    type: false
+    mapping: default_mapping
+    webform_field: zzimpact_area_please_tick_all_that_apply_
+    custom_check: 0
+    custom_value: ''
+  field_other_type_of_problem:
+    type: false
+    mapping: default_mapping
+    webform_field: other
+    custom_check: 0
+    custom_value: ''
   field_region_affected:
     type: false
     mapping: entity_reference_mapping
-    webform_field: reegy
-    custom_check: 0
-    custom_value: ''
-  field_region_affected_2:
-    type: false
-    mapping: entity_reference_mapping
-    webform_field: title_required_max_80_characters_
-    custom_check: 0
-    custom_value: ''
-  field_region_affected_3:
-    type: false
-    mapping: entity_reference_mapping
-    webform_field: title_required_max_80_characters_
+    webform_field: world_continent
     custom_check: 0
     custom_value: ''
   field_submitted_by:
     type: true
     mapping: entity_reference_mapping
     webform_field: uid
+    custom_check: 0
+    custom_value: ''
+  field_type_of_problem:
+    type: false
+    mapping: entity_reference_mapping
+    webform_field: type_of_problem_tick_all_that_apply
     custom_check: 0
     custom_value: ''
   title:

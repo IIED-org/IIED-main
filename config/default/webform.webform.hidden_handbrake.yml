@@ -53,17 +53,20 @@ elements: |-
       '#attributes':
         class:
           - webform-horizontal-rule--dashed
-    reegy:
-      '#type': webform_shs_term_select
+    world_continent:
+      '#type': webform_entity_checkboxes
       '#title': 'Which geographic region(s) are being affected by the handbrake?'
-      '#multiple': true
-      '#description': '<em>(Required). Please select at least one Region (and Sub-Region if applicable) from the drop-down lists below. To add further regions, click the &#39;Add another item&#39; link.</em>'
+      '#description': '<em>(Required). Please tick all that apply, or the &#39;Global&#39; field.</em>'
       '#description_display': before
       '#required': true
-      '#required_error': 'Please complete the ''Geographic region(s) affected field.'
-      '#vocabulary': un_geoscheme_regional_groupings
-      '#force_deepest': true
-      '#depth_labels': {  }
+      '#target_type': taxonomy_term
+      '#selection_handler': 'default:taxonomy_term'
+      '#selection_settings':
+        target_bundles:
+          un_geoscheme_regional_groupings: un_geoscheme_regional_groupings
+        sort:
+          field: name
+          direction: ASC
     horizontal_rule_09:
       '#type': webform_horizontal_rule
       '#display_on': both
@@ -95,7 +98,7 @@ elements: |-
     zzimpact_area_please_tick_all_that_apply_:
       '#type': webform_entity_checkboxes
       '#title': 'Impact area'
-      '#description': '<em>&nbsp;Please tick all that apply.</em>'
+      '#description': '<em>&nbsp;(Required). Please tick all that apply.</em>'
       '#description_display': before
       '#required': true
       '#required_error': 'Please complete the ''Impact area'' field.'
@@ -133,90 +136,10 @@ elements: |-
       '#attributes':
         class:
           - webform-horizontal-rule--dashed
-  contact:
-    '#type': webform_wizard_page
-    '#title': 'About you'
-    '#open': true
-    job_title_role:
-      '#type': textfield
-      '#title': Role
-      '#description': '<em>(Required). Your job title/role.</em>'
-      '#description_display': before
-      '#required': true
-      '#required_error': 'Please complete the ''Job title/role'' field'
-    horizontal_rule_04:
-      '#type': webform_horizontal_rule
-      '#display_on': both
-      '#attributes':
-        class:
-          - webform-horizontal-rule--dashed
-    organization:
-      '#type': textfield
-      '#title': Organization
-      '#description': '<em>(Required). Your organization, university or other affiliation.</em>'
-      '#description_display': before
-      '#required': true
-      '#required_error': 'Please complete the ''Organization'' field'
-    horizontal_rule_05:
-      '#type': webform_horizontal_rule
-      '#display_on': both
-      '#attributes':
-        class:
-          - webform-horizontal-rule--dashed
-    audience:
-      '#type': webform_entity_radios
-      '#title': 'Organization type'
-      '#description': '<em>Select one, or complete the &#39;Other organization type&#39; field.</em>'
-      '#description_display': before
-      '#target_type': taxonomy_term
-      '#selection_handler': 'default:taxonomy_term'
-      '#selection_settings':
-        target_bundles:
-          hh_audience: hh_audience
-        sort:
-          field: name
-          direction: ASC
-    other_audience:
-      '#type': textfield
-      '#title': 'Other organisation type'
-    horizontal_rule_06:
-      '#type': webform_horizontal_rule
-      '#display_on': both
-      '#attributes':
-        class:
-          - webform-horizontal-rule--dashed
-    where_are_you_based_:
-      '#type': webform_address
-      '#title': 'Your location'
-      '#description': '<em>Where are you based?</em>'
-      '#title_display': ''
-      '#description_display': before
-      '#address__access': false
-      '#address_2__access': false
-      '#city__access': false
-      '#state_province__access': false
-      '#postal_code__access': false
-    horizontal_rule_10:
-      '#type': webform_horizontal_rule
-      '#display_on': both
-      '#attributes':
-        class:
-          - webform-horizontal-rule--dashed
-    anything_you_d_like_to_tell_us_about_yourself_e_g_how_you_found_:
-      '#type': textarea
-      '#title': 'Anything else?'
-      '#description': '<em>Anything you&#39;d like to tell us about yourself? (e.g. how you found us, how you&#39;re using the site...)</em>'
-      '#description_display': before
-    horizontal_rule_07:
-      '#type': webform_horizontal_rule
-      '#display_on': both
-      '#attributes':
-        class:
-          - webform-horizontal-rule--dashed
     i_have_read_and_agree_to_the_posting_guidelines:
       '#type': checkbox
       '#title': 'I have read and agree to the posting guidelines'
-      '#description': '<a href="#">Link to posting guidelines</a>'
+      '#description': '<em>(Required).&nbsp;<a href="#">Link to posting guidelines</a>.</em>'
       '#required': true
       '#required_error': 'This field is required.'
     horizontal_rule_08:

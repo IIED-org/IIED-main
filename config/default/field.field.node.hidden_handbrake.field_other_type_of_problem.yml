@@ -1,0 +1,19 @@
+uuid: 817a8082-e316-41cd-bdff-b49da68cfada
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_other_type_of_problem
+    - node.type.hidden_handbrake
+id: node.hidden_handbrake.field_other_type_of_problem
+field_name: field_other_type_of_problem
+entity_type: node
+bundle: hidden_handbrake
+label: 'Other type of problem'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

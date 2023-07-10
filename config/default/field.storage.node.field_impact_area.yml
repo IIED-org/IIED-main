@@ -1,19 +1,19 @@
-uuid: 739a7b44-8598-4cee-8077-a29e3e4d6d91
+uuid: 24b0f792-3b2a-4de1-a39a-43ed1991134c
 langcode: en
 status: true
 dependencies:
   module:
     - node
     - taxonomy
-id: node.field_region_affected_2
-field_name: field_region_affected_2
+id: node.field_impact_area
+field_name: field_impact_area
 entity_type: node
 type: entity_reference
 settings:
   target_type: taxonomy_term
 module: core
 locked: false
-cardinality: 1
+cardinality: -1
 translatable: true
 indexes: {  }
 persist_with_no_fields: false

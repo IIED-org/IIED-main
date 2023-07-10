@@ -5,16 +5,16 @@ dependencies:
   config:
     - field.field.node.hidden_handbrake.body
     - field.field.node.hidden_handbrake.comment
-    - field.field.node.hidden_handbrake.field_author_based_in
     - field.field.node.hidden_handbrake.field_author_location
     - field.field.node.hidden_handbrake.field_date_published
     - field.field.node.hidden_handbrake.field_hh_webform_sync
     - field.field.node.hidden_handbrake.field_hidden_handbrake_image
     - field.field.node.hidden_handbrake.field_how_stuck_handbrake
+    - field.field.node.hidden_handbrake.field_impact_area
+    - field.field.node.hidden_handbrake.field_other_type_of_problem
     - field.field.node.hidden_handbrake.field_region_affected
-    - field.field.node.hidden_handbrake.field_region_affected_2
-    - field.field.node.hidden_handbrake.field_region_affected_3
     - field.field.node.hidden_handbrake.field_submitted_by
+    - field.field.node.hidden_handbrake.field_type_of_problem
     - node.type.hidden_handbrake
   module:
     - address
@@ -40,7 +40,7 @@ content:
     third_party_settings: {  }
   comment:
     type: comment_default
-    weight: 26
+    weight: 20
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -50,19 +50,9 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_author_based_in:
-    type: entity_reference_autocomplete
-    weight: 10
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
   field_author_location:
     type: address_default
-    weight: 9
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -74,23 +64,41 @@ content:
     third_party_settings: {  }
   field_hh_webform_sync:
     type: number
-    weight: 8
+    weight: 9
     region: content
     settings:
       placeholder: ''
     third_party_settings: {  }
   field_hidden_handbrake_image:
     type: media_library_widget
-    weight: 6
+    weight: 7
     region: content
     settings:
       media_types: {  }
     third_party_settings: {  }
   field_how_stuck_handbrake:
     type: number
+    weight: 6
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_impact_area:
+    type: entity_reference_autocomplete
     weight: 5
     region: content
     settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_other_type_of_problem:
+    type: string_textfield
+    weight: 4
+    region: content
+    settings:
+      size: 60
       placeholder: ''
     third_party_settings: {  }
   field_region_affected:
@@ -103,29 +111,19 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  field_region_affected_2:
-    type: entity_reference_autocomplete
-    weight: 3
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  field_region_affected_3:
-    type: entity_reference_autocomplete
-    weight: 4
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
   field_submitted_by:
     type: entity_reference_autocomplete
-    weight: 7
+    weight: 8
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_type_of_problem:
+    type: entity_reference_autocomplete
+    weight: 3
     region: content
     settings:
       match_operator: CONTAINS
