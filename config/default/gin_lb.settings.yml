@@ -1,9 +1,9 @@
 _core:
   default_config_hash: JwHy7mL25SLjSzNTOkFsf3M9xID52Dh7GMlqwLCY5Ro
-enable_preview_regions: false
-toastify_cdn: 1
 toastify_loading: cdn
-safe_behavior: null
-save_behavior: stay
+enable_preview_regions: false
 hide_discard_button: true
 hide_revert_button: true
+save_behavior: stay
+toastify_cdn: 1
+safe_behavior: null

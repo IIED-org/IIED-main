@@ -17,7 +17,6 @@ dependencies:
     - field.field.node.hidden_handbrake.field_type_of_problem
     - node.type.hidden_handbrake
   module:
-    - address
     - comment
     - datetime
     - media_library
@@ -47,12 +46,6 @@ content:
   created:
     type: datetime_timestamp
     weight: 14
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  field_author_location:
-    type: address_default
-    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -188,4 +181,5 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  field_author_location: true
