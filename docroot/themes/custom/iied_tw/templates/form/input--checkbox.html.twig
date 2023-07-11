@@ -1,0 +1,28 @@
+{#
+/**
+ * @file
+ * Theme override for an 'input' #type form element.
+ *
+ * Available variables:
+ * - attributes: A list of HTML attributes for the input element.
+ * - children: Optional additional rendered elements.
+ *
+ * @see template_preprocess_input()
+ */
+#}
+
+{%
+  set classes = [
+    'rounded',
+    'border-gray-300',
+    'text-iiedpink-600',
+    'shadow-sm',
+    'focus:border-indigo-300',
+    'focus:ring',
+    'focus:ring-offset-0',
+    'focus:ring-iiedpink-500',
+    'focus:ring-opacity-50',
+  ]
+%}
+
+<input{{ attributes.addClass(classes) }} />{{ children }}
