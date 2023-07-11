@@ -29,7 +29,7 @@ elements: |-
     title_required_max_80_characters_:
       '#type': textfield
       '#title': Title
-      '#description': '<em>(Required). Max. 80 characters.</em>'
+      '#description': '<em>Max. 80 characters.</em>'
       '#description_display': before
       '#required': true
       '#required_error': 'Please complete the ''Title'' field'
@@ -44,7 +44,7 @@ elements: |-
     summary:
       '#type': textarea
       '#title': Summary
-      '#description': '<em>(Required). Please summarize your hidden handbrake. Max 200 words.</em>'
+      '#description': '<em>Please summarize your hidden handbrake. Max 200 words.</em>'
       '#description_display': before
       '#autocomplete': 'off'
       '#required': true
@@ -61,7 +61,7 @@ elements: |-
     world_continent:
       '#type': webform_entity_checkboxes
       '#title': 'Which geographic region(s) are being affected by the handbrake?'
-      '#description': '<em>(Required). Please tick all that apply, or the &#39;Global&#39; field.</em>'
+      '#description': '<em>Please tick all that apply, or the &#39;Global&#39; field.</em>'
       '#description_display': before
       '#required': true
       '#format': label
@@ -82,8 +82,10 @@ elements: |-
     type_of_problem_tick_all_that_apply:
       '#type': webform_entity_checkboxes
       '#title': 'Type of problem'
-      '#description': '<em>(Required). Please tick all that apply, or complete the &#39;Other type&#39; field.</em>'
+      '#description': '<em>Please tick all that apply.</em>'
       '#description_display': before
+      '#required': true
+      '#required_error': 'Please complete the ''Type of problem'' field.'
       '#format': label
       '#target_type': taxonomy_term
       '#selection_handler': 'default:taxonomy_term'
@@ -95,7 +97,7 @@ elements: |-
           direction: ASC
     other:
       '#type': textfield
-      '#title': 'Other type'
+      '#title': 'If ''Other'', please give details.'
     horizontal_rule_01:
       '#type': webform_horizontal_rule
       '#display_on': both
@@ -105,7 +107,7 @@ elements: |-
     zzimpact_area_please_tick_all_that_apply_:
       '#type': webform_entity_checkboxes
       '#title': 'Impact area'
-      '#description': '<em>(Required). Please tick all that apply.</em>'
+      '#description': '<em>Please tick all that apply.</em>'
       '#description_display': before
       '#required': true
       '#required_error': 'Please complete the ''Impact area'' field.'
@@ -127,7 +129,7 @@ elements: |-
     just_how_stuck_is_this_handbrake_:
       '#type': radios
       '#title': 'How stuck is this handbrake?'
-      '#description': '<em>(Required). Select from the range where 1 = &#39;slightly&#39; to 5 = &#39;very&#39;.</em>'
+      '#description': '<em>Select from the range where 1 = &#39;slightly&#39; to 5 = &#39;very&#39;.</em>'
       '#description_display': before
       '#options':
         1: '1'
@@ -147,9 +149,9 @@ elements: |-
     i_have_read_and_agree_to_the_posting_guidelines:
       '#type': checkbox
       '#title': 'I have read and agree to the posting guidelines'
-      '#description': '<em>(Required).&nbsp;<a href="#">Link to posting guidelines</a>.</em>'
+      '#description': '<em><a href="#">Link to posting guidelines</a>.</em>'
       '#required': true
-      '#required_error': 'This field is required.'
+      '#required_error': 'Please complete the ''Agree to posting guidelines'' field.'
     horizontal_rule_08:
       '#type': webform_horizontal_rule
       '#display_on': both

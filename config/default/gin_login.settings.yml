@@ -1,8 +1,0 @@
-_core:
-  default_config_hash: OhypfKr4_Eo8XwXg3Sios05lN-LjxOhSdSOSkEN9Ndo
-logo:
-  use_default: false
-  path: themes/custom/iied_tw/logo.svg
-brand_image:
-  use_default: false
-  path: 'public://17703IIED.pdf-p1_0.jpeg'
