@@ -310,4 +310,35 @@
     margin-left: 1rem;
     margin-top: -1rem;
   }
+
+  /*-- Webform --*/
+  .webform-submission-form .required.error {
+    @apply p-2 ring-offset-2 ring rounded-xl ring-iiedpink-100;
+  }
+  .webform-submission-form .required.error legend {
+    @apply bg-white px-2;
+  }
+
+  .form-item .form-required {
+    @apply after:content-['_(required)'];
+  }
+  .text-count-message,
+  .webform-element-description {
+    @apply text-gray-500;
+  }
+  /*-- Webform progress tracker --*/
+  .progress-step.is-active .progress-marker::before {
+    @apply bg-iiedblue-600;
+  }
+
+  .webform-progress-tracker
+    .progress-step:not(.is-active)
+    .progress-marker::before,
+  .webform-progress-tracker .progress-step:hover .progress-marker::before,
+  .webform-progress-tracker .progress-step .progress-marker::after {
+    color: white;
+  }
+  .progress-step.is-active .progress-marker::before {
+    @apply ring-offset-2 ring-2;
+  }
 }
