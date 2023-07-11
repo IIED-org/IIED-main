@@ -40,7 +40,7 @@ elements: |-
       '#display_on': both
       '#attributes':
         class:
-          - webform-horizontal-rule--dashed
+          - webform-horizontal-rule--thin
     summary:
       '#type': textarea
       '#title': Summary
@@ -57,13 +57,14 @@ elements: |-
       '#display_on': both
       '#attributes':
         class:
-          - webform-horizontal-rule--dashed
+          - webform-horizontal-rule--thin
     world_continent:
       '#type': webform_entity_checkboxes
       '#title': 'Which geographic region(s) are being affected by the handbrake?'
       '#description': '<em>(Required). Please tick all that apply, or the &#39;Global&#39; field.</em>'
       '#description_display': before
       '#required': true
+      '#format': label
       '#target_type': taxonomy_term
       '#selection_handler': 'default:taxonomy_term'
       '#selection_settings':
@@ -77,12 +78,13 @@ elements: |-
       '#display_on': both
       '#attributes':
         class:
-          - webform-horizontal-rule--dashed
+          - webform-horizontal-rule--thin
     type_of_problem_tick_all_that_apply:
       '#type': webform_entity_checkboxes
       '#title': 'Type of problem'
       '#description': '<em>(Required). Please tick all that apply, or complete the &#39;Other type&#39; field.</em>'
       '#description_display': before
+      '#format': label
       '#target_type': taxonomy_term
       '#selection_handler': 'default:taxonomy_term'
       '#selection_settings':
@@ -99,7 +101,7 @@ elements: |-
       '#display_on': both
       '#attributes':
         class:
-          - webform-horizontal-rule--dashed
+          - webform-horizontal-rule--thin
     zzimpact_area_please_tick_all_that_apply_:
       '#type': webform_entity_checkboxes
       '#title': 'Impact area'
@@ -107,6 +109,7 @@ elements: |-
       '#description_display': before
       '#required': true
       '#required_error': 'Please complete the ''Impact area'' field.'
+      '#format': label
       '#target_type': taxonomy_term
       '#selection_handler': 'default:taxonomy_term'
       '#selection_settings':
@@ -120,7 +123,7 @@ elements: |-
       '#display_on': both
       '#attributes':
         class:
-          - webform-horizontal-rule--dashed
+          - webform-horizontal-rule--thin
     just_how_stuck_is_this_handbrake_:
       '#type': radios
       '#title': 'How stuck is this handbrake?'
@@ -140,7 +143,7 @@ elements: |-
       '#display_on': both
       '#attributes':
         class:
-          - webform-horizontal-rule--dashed
+          - webform-horizontal-rule--thin
     i_have_read_and_agree_to_the_posting_guidelines:
       '#type': checkbox
       '#title': 'I have read and agree to the posting guidelines'
@@ -152,7 +155,7 @@ elements: |-
       '#display_on': both
       '#attributes':
         class:
-          - webform-horizontal-rule--dashed
+          - webform-horizontal-rule--thin
 css: ''
 javascript: ''
 settings:
