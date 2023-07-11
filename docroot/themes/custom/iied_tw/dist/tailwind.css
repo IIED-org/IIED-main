@@ -3034,13 +3034,14 @@ cite {
   padding-right: 0.5rem;
 }
 
-.form-item .form-required::after{
+.webform-submission-form .form-item .form-required::after{
   --tw-content: ' (required)';
   content: var(--tw-content);
 }
 
-.text-count-message, 
-  .webform-element-description{
+.text-count-message{
+  font-size: 0.875rem;
+  line-height: 1.25rem;
   --tw-text-opacity: 1;
   color: rgb(107 114 128 / var(--tw-text-opacity));
 }
@@ -4578,6 +4579,11 @@ cite {
   color: rgb(17 115 179 / var(--tw-text-opacity));
 }
 
+.text-gray-500{
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity));
+}
+
 .text-iiedpink-700{
   --tw-text-opacity: 1;
   color: rgb(186 63 138 / var(--tw-text-opacity));
@@ -4621,11 +4627,6 @@ cite {
 .text-gray-700{
   --tw-text-opacity: 1;
   color: rgb(55 65 81 / var(--tw-text-opacity));
-}
-
-.text-gray-500{
-  --tw-text-opacity: 1;
-  color: rgb(107 114 128 / var(--tw-text-opacity));
 }
 
 .text-iiedpink-600{
