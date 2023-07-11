@@ -21,6 +21,11 @@ elements: |-
     '#type': webform_wizard_page
     '#title': 'Add your hidden handbrake'
     '#open': true
+    webform_instructions_markup:
+      '#type': webform_markup
+      '#markup': |-
+        <p><strong>Please <a href="#">read the posting guidelines </a>before posting. All fields are required.</strong></p>
+        <br>
     title_required_max_80_characters_:
       '#type': textfield
       '#title': Title
@@ -76,7 +81,7 @@ elements: |-
     type_of_problem_tick_all_that_apply:
       '#type': webform_entity_checkboxes
       '#title': 'Type of problem'
-      '#description': '<em>&nbsp;Please tick all that apply, or complete the &#39;Other type&#39; field.</em>'
+      '#description': '<em>(Required). Please tick all that apply, or complete the &#39;Other type&#39; field.</em>'
       '#description_display': before
       '#target_type': taxonomy_term
       '#selection_handler': 'default:taxonomy_term'
@@ -98,7 +103,7 @@ elements: |-
     zzimpact_area_please_tick_all_that_apply_:
       '#type': webform_entity_checkboxes
       '#title': 'Impact area'
-      '#description': '<em>&nbsp;(Required). Please tick all that apply.</em>'
+      '#description': '<em>(Required). Please tick all that apply.</em>'
       '#description_display': before
       '#required': true
       '#required_error': 'Please complete the ''Impact area'' field.'
@@ -119,7 +124,7 @@ elements: |-
     just_how_stuck_is_this_handbrake_:
       '#type': radios
       '#title': 'How stuck is this handbrake?'
-      '#description': '<em>(Required). 1 = &#39;slightly&#39;, 5 = &#39;very&#39;.</em>'
+      '#description': '<em>(Required). Select from the range where 1 = &#39;slightly&#39; to 5 = &#39;very&#39;.</em>'
       '#description_display': before
       '#options':
         1: '1'
@@ -372,5 +377,56 @@ access:
       - administrator
     users: {  }
     permissions: {  }
-handlers: {  }
+handlers:
+  notification_of_hh_webform_submission_email:
+    id: email
+    handler_id: notification_of_hh_webform_submission_email
+    label: 'Notification of HH webform submission email'
+    notes: ''
+    status: true
+    conditions: {  }
+    weight: 0
+    settings:
+      states:
+        - completed
+      to_mail: david.sankar@iied.org
+      to_options: {  }
+      bcc_mail: ''
+      bcc_options: {  }
+      cc_mail: ''
+      cc_options: {  }
+      from_mail: _default
+      from_options: {  }
+      from_name: _default
+      reply_to: ''
+      return_path: ''
+      sender_mail: ''
+      sender_name: ''
+      subject: _default
+      body: "<p>A new Hidden Handbrake has been submitted. Please log in to the website to review the latest submission before publishing.</p>\r\n\r\n<p>Submitted on [webform_submission:created]</p>\r\n\r\n<p>Submitted by: [webform_submission:user]</p>\r\n[webform_submission:values]"
+      excluded_elements:
+        horizontal_rule_11: horizontal_rule_11
+        summary: summary
+        horizontal_rule: horizontal_rule
+        world_continent: world_continent
+        horizontal_rule_09: horizontal_rule_09
+        type_of_problem_tick_all_that_apply: type_of_problem_tick_all_that_apply
+        other: other
+        horizontal_rule_01: horizontal_rule_01
+        zzimpact_area_please_tick_all_that_apply_: zzimpact_area_please_tick_all_that_apply_
+        horizontal_rule_02: horizontal_rule_02
+        just_how_stuck_is_this_handbrake_: just_how_stuck_is_this_handbrake_
+        horizontal_rule_03: horizontal_rule_03
+        i_have_read_and_agree_to_the_posting_guidelines: i_have_read_and_agree_to_the_posting_guidelines
+        horizontal_rule_08: horizontal_rule_08
+      ignore_access: false
+      exclude_empty: true
+      exclude_empty_checkbox: false
+      exclude_attachments: false
+      html: true
+      attachments: false
+      twig: false
+      theme_name: ''
+      parameters: {  }
+      debug: false
 variants: {  }
