@@ -318,13 +318,11 @@
   .webform-submission-form .required.error legend {
     @apply bg-white px-2;
   }
-
-  .form-item .form-required {
+  .webform-submission-form .form-item .form-required {
     @apply after:content-['_(required)'];
   }
-  .text-count-message,
-  .webform-element-description {
-    @apply text-gray-500;
+  .text-count-message {
+    @apply text-gray-500 text-sm;
   }
   /*-- Webform progress tracker --*/
   .progress-step.is-active .progress-marker::before {

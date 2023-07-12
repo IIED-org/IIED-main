@@ -19,9 +19,9 @@ dependencies:
     - field.field.node.hidden_handbrake.field_type_of_problem
     - node.type.hidden_handbrake
   module:
-    - address
     - comment
     - datetime
+    - ds
     - layout_builder
     - text
     - user
@@ -48,14 +48,7 @@ content:
       view_mode: default
       pager_id: 0
     third_party_settings: {  }
-    weight: 11
-    region: content
-  field_author_location:
-    type: address_default
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 9
+    weight: 8
     region: content
   field_date_published:
     type: datetime_default
@@ -64,7 +57,7 @@ content:
       timezone_override: ''
       format_type: medium
     third_party_settings: {  }
-    weight: 7
+    weight: 6
     region: content
   field_hidden_handbrake_image:
     type: entity_reference_entity_view
@@ -82,23 +75,54 @@ content:
       thousand_separator: ''
       prefix_suffix: true
     third_party_settings: {  }
-    weight: 10
+    weight: 7
+    region: content
+  field_impact_area:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings:
+      ds:
+        ds_limit: ''
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 5
     region: content
   field_region_affected:
     type: entity_reference_label
     label: hidden
     settings:
-      link: true
-    third_party_settings: {  }
+      link: false
+    third_party_settings:
+      ds:
+        ds_limit: ''
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
     weight: 3
     region: content
   field_submitted_by:
     type: entity_reference_label
     label: hidden
     settings:
-      link: true
-    third_party_settings: {  }
-    weight: 6
+      link: false
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 4
     region: content
   links:
     settings: {  }
@@ -106,8 +130,8 @@ content:
     weight: 2
     region: content
 hidden:
+  field_author_location: true
   field_hh_webform_sync: true
-  field_impact_area: true
   field_other_type_of_problem: true
   field_type_of_problem: true
   langcode: true
