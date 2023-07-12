@@ -16,6 +16,7 @@ dependencies:
     - field.field.node.hidden_handbrake.field_other_type_of_problem
     - field.field.node.hidden_handbrake.field_region_affected
     - field.field.node.hidden_handbrake.field_submitted_by
+    - field.field.node.hidden_handbrake.field_tagline
     - field.field.node.hidden_handbrake.field_type_of_problem
     - node.type.hidden_handbrake
   module:
@@ -133,6 +134,7 @@ hidden:
   field_author_location: true
   field_hh_webform_sync: true
   field_other_type_of_problem: true
+  field_tagline: true
   field_type_of_problem: true
   langcode: true
   search_api_excerpt: true
