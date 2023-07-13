@@ -325,8 +325,23 @@ ui:
   toolbar_item: false
 libraries:
   excluded_libraries:
+    - algolia.places
     - choices
+    - ckeditor.autogrow
+    - ckeditor.codemirror
+    - ckeditor.fakeobjects
+    - ckeditor.image
+    - ckeditor.link
+    - codemirror
     - jquery.chosen
+    - jquery.inputmask
+    - jquery.intl-tel-input
+    - jquery.rateit
+    - jquery.select2
+    - jquery.timepicker
+    - signature_pad
+    - tabby
+    - tippyjs/6.x
 requirements:
   cdn: true
   clientside_validation: true
