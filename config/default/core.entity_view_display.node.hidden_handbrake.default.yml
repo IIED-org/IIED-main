@@ -15,6 +15,7 @@ dependencies:
     - field.field.node.hidden_handbrake.field_other_type_of_problem
     - field.field.node.hidden_handbrake.field_region_affected
     - field.field.node.hidden_handbrake.field_submitted_by
+    - field.field.node.hidden_handbrake.field_tagline
     - field.field.node.hidden_handbrake.field_type_of_problem
     - node.type.hidden_handbrake
   module:
@@ -117,6 +118,13 @@ content:
       link: true
     third_party_settings: {  }
     weight: 5
+    region: content
+  field_tagline:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 17
     region: content
   field_type_of_problem:
     type: entity_reference_label
