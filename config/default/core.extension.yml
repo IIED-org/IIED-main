@@ -150,7 +150,6 @@ module:
   rh_media: 0
   rh_node: 0
   rh_taxonomy: 0
-  scn: 0
   search404: 0
   search_api: 0
   search_api_autocomplete: 0
