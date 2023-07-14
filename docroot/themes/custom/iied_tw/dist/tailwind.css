@@ -3885,11 +3885,6 @@ cite {
   margin-right: 0.5rem;
 }
 
-.mx-8{
-  margin-left: 2rem;
-  margin-right: 2rem;
-}
-
 .my-8{
   margin-top: 2rem;
   margin-bottom: 2rem;
@@ -4303,6 +4298,10 @@ cite {
 
 .max-w-none{
   max-width: none;
+}
+
+.max-w-4xl{
+  max-width: 56rem;
 }
 
 .max-w-\[75\%\]{
@@ -4927,10 +4926,6 @@ cite {
 
 .p-2{
   padding: 0.5rem;
-}
-
-.p-8{
-  padding: 2rem;
 }
 
 .px-3{
