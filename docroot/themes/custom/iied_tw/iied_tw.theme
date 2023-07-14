@@ -145,3 +145,23 @@ function iied_tw_preprocess_links__language_block(&$variables) {
     unset($variables['links'][$current_language]['link']);
   }
 }
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function iied_tw_form_user_login_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Add reset password link.
+  $url_object = Url::fromRoute('user.pass');
+  $form['password_reset_link'] = [
+    '#type' => 'link',
+    '#url' => $url_object,
+    '#title' => t('Forgotten your username or password?'),
+    '#attributes' => [
+      'class' => ['user-reset-password-link'],
+    ],
+  ];
+}
