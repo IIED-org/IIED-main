@@ -1,0 +1,10 @@
+login_destination.settings:
+  type: config_object
+  label: 'Login destination settings'
+  mapping:
+    preserve_destination:
+      type: boolean
+      label: 'Preserve the destination parameter'
+    immediate_redirect:
+      type: boolean
+      label: 'Redirect immediately after using one-time login link'

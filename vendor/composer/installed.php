@@ -3,7 +3,7 @@
         'name' => 'drupal/recommended-project',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '03fa753fcb1ac061786ef7e0368b15e68cc5e74a',
+        'reference' => 'e0c6999990e914117df55eb6756dc2f81747a29b',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -1323,6 +1323,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'drupal/login_destination' => array(
+            'pretty_version' => '2.0.0-beta6',
+            'version' => '2.0.0.0-beta6',
+            'reference' => '8.x-2.0-beta6',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/login_destination',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'drupal/login_redirect_per_role' => array(
             'pretty_version' => '1.9.0',
             'version' => '1.9.0.0',
@@ -1632,7 +1641,7 @@
         'drupal/recommended-project' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '03fa753fcb1ac061786ef7e0368b15e68cc5e74a',
+            'reference' => 'e0c6999990e914117df55eb6756dc2f81747a29b',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
