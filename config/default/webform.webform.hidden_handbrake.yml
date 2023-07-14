@@ -21,10 +21,16 @@ elements: |-
     '#type': webform_wizard_page
     '#title': 'Add your hidden handbrake'
     '#open': true
+    webform_instructions_markup:
+      '#type': webform_markup
+      '#markup': |-
+        <div class="bg-iiedblue-10 p-4 prose rounded-xl mb-6">
+        <p>Please <a href="#">read the posting guidelines</a> before posting. All fields are required.</p>
+        </div>
     title_required_max_80_characters_:
       '#type': textfield
       '#title': Title
-      '#description': '<em>(Required). Max. 80 characters.</em>'
+      '#description': '<div class="text-gray-500">Maximum 80 characters.</div>'
       '#description_display': before
       '#required': true
       '#required_error': 'Please complete the ''Title'' field'
@@ -35,11 +41,11 @@ elements: |-
       '#display_on': both
       '#attributes':
         class:
-          - webform-horizontal-rule--dashed
+          - webform-horizontal-rule--thin
     summary:
       '#type': textarea
       '#title': Summary
-      '#description': '<em>(Required). Please summarize your hidden handbrake. Max 200 words.</em>'
+      '#description': '<div class="text-gray-500">Please summarize your hidden handbrake. Maximum 200 words.</div>'
       '#description_display': before
       '#autocomplete': 'off'
       '#required': true
@@ -52,29 +58,39 @@ elements: |-
       '#display_on': both
       '#attributes':
         class:
-          - webform-horizontal-rule--dashed
-    reegy:
-      '#type': webform_shs_term_select
+          - webform-horizontal-rule--thin
+    world_continent:
+      '#type': webform_entity_checkboxes
       '#title': 'Which geographic region(s) are being affected by the handbrake?'
-      '#multiple': true
-      '#description': '<em>(Required). Please select at least one Region (and Sub-Region if applicable) from the drop-down lists below. To add further regions, click the &#39;Add another item&#39; link.</em>'
+      '#description': '<div class="text-gray-500">Please tick all that apply, or choose &#39;Global&#39;.</div>'
       '#description_display': before
       '#required': true
-      '#required_error': 'Please complete the ''Geographic region(s) affected field.'
-      '#vocabulary': un_geoscheme_regional_groupings
-      '#force_deepest': true
-      '#depth_labels': {  }
+      '#format': label
+      '#target_type': taxonomy_term
+      '#selection_handler': 'default:taxonomy_term'
+      '#selection_settings':
+        target_bundles:
+          un_geoscheme_regional_groupings: un_geoscheme_regional_groupings
+        sort:
+          field: name
+          direction: ASC
     horizontal_rule_09:
       '#type': webform_horizontal_rule
       '#display_on': both
       '#attributes':
         class:
-          - webform-horizontal-rule--dashed
+          - webform-horizontal-rule--thin
     type_of_problem_tick_all_that_apply:
       '#type': webform_entity_checkboxes
       '#title': 'Type of problem'
-      '#description': '<em>&nbsp;Please tick all that apply, or complete the &#39;Other type&#39; field.</em>'
+      '#description': '<div class="text-gray-500">Please tick all that apply.</div>'
       '#description_display': before
+      '#required': true
+      '#required_error': 'Please complete the ''Type of problem'' field.'
+      '#wrapper_attributes':
+        class:
+          - mb-4
+      '#format': label
       '#target_type': taxonomy_term
       '#selection_handler': 'default:taxonomy_term'
       '#selection_settings':
@@ -85,20 +101,21 @@ elements: |-
           direction: ASC
     other:
       '#type': textfield
-      '#title': 'Other type'
+      '#title': 'If ''Other'', please give details.'
     horizontal_rule_01:
       '#type': webform_horizontal_rule
       '#display_on': both
       '#attributes':
         class:
-          - webform-horizontal-rule--dashed
+          - webform-horizontal-rule--thin
     zzimpact_area_please_tick_all_that_apply_:
       '#type': webform_entity_checkboxes
       '#title': 'Impact area'
-      '#description': '<em>&nbsp;Please tick all that apply.</em>'
+      '#description': '<div class="text-gray-500">Please tick all that apply.</div>'
       '#description_display': before
       '#required': true
       '#required_error': 'Please complete the ''Impact area'' field.'
+      '#format': label
       '#target_type': taxonomy_term
       '#selection_handler': 'default:taxonomy_term'
       '#selection_settings':
@@ -112,11 +129,11 @@ elements: |-
       '#display_on': both
       '#attributes':
         class:
-          - webform-horizontal-rule--dashed
+          - webform-horizontal-rule--thin
     just_how_stuck_is_this_handbrake_:
       '#type': radios
       '#title': 'How stuck is this handbrake?'
-      '#description': '<em>(Required). 1 = &#39;slightly&#39;, 5 = &#39;very&#39;.</em>'
+      '#description': '<div class="text-gray-500">Select from the range where 1 = &#39;slightly&#39; to 5 = &#39;very&#39;.</div>'
       '#description_display': before
       '#options':
         1: '1'
@@ -132,99 +149,19 @@ elements: |-
       '#display_on': both
       '#attributes':
         class:
-          - webform-horizontal-rule--dashed
-  contact:
-    '#type': webform_wizard_page
-    '#title': 'About you'
-    '#open': true
-    job_title_role:
-      '#type': textfield
-      '#title': Role
-      '#description': '<em>(Required). Your job title/role.</em>'
-      '#description_display': before
-      '#required': true
-      '#required_error': 'Please complete the ''Job title/role'' field'
-    horizontal_rule_04:
-      '#type': webform_horizontal_rule
-      '#display_on': both
-      '#attributes':
-        class:
-          - webform-horizontal-rule--dashed
-    organization:
-      '#type': textfield
-      '#title': Organization
-      '#description': '<em>(Required). Your organization, university or other affiliation.</em>'
-      '#description_display': before
-      '#required': true
-      '#required_error': 'Please complete the ''Organization'' field'
-    horizontal_rule_05:
-      '#type': webform_horizontal_rule
-      '#display_on': both
-      '#attributes':
-        class:
-          - webform-horizontal-rule--dashed
-    audience:
-      '#type': webform_entity_radios
-      '#title': 'Organization type'
-      '#description': '<em>Select one, or complete the &#39;Other organization type&#39; field.</em>'
-      '#description_display': before
-      '#target_type': taxonomy_term
-      '#selection_handler': 'default:taxonomy_term'
-      '#selection_settings':
-        target_bundles:
-          hh_audience: hh_audience
-        sort:
-          field: name
-          direction: ASC
-    other_audience:
-      '#type': textfield
-      '#title': 'Other organisation type'
-    horizontal_rule_06:
-      '#type': webform_horizontal_rule
-      '#display_on': both
-      '#attributes':
-        class:
-          - webform-horizontal-rule--dashed
-    where_are_you_based_:
-      '#type': webform_address
-      '#title': 'Your location'
-      '#description': '<em>Where are you based?</em>'
-      '#title_display': ''
-      '#description_display': before
-      '#address__access': false
-      '#address_2__access': false
-      '#city__access': false
-      '#state_province__access': false
-      '#postal_code__access': false
-    horizontal_rule_10:
-      '#type': webform_horizontal_rule
-      '#display_on': both
-      '#attributes':
-        class:
-          - webform-horizontal-rule--dashed
-    anything_you_d_like_to_tell_us_about_yourself_e_g_how_you_found_:
-      '#type': textarea
-      '#title': 'Anything else?'
-      '#description': '<em>Anything you&#39;d like to tell us about yourself? (e.g. how you found us, how you&#39;re using the site...)</em>'
-      '#description_display': before
-    horizontal_rule_07:
-      '#type': webform_horizontal_rule
-      '#display_on': both
-      '#attributes':
-        class:
-          - webform-horizontal-rule--dashed
+          - webform-horizontal-rule--thin
     i_have_read_and_agree_to_the_posting_guidelines:
       '#type': checkbox
       '#title': 'I have read and agree to the posting guidelines'
-      '#description': '<a href="#">Link to posting guidelines</a>'
+      '#description': '<div class="text-gray-500"><a href="#">Link to posting guidelines</a>.</div>'
       '#required': true
-      '#required_error': 'This field is required.'
+      '#required_error': 'Please complete the ''Agree to posting guidelines'' field.'
     horizontal_rule_08:
       '#type': webform_horizontal_rule
       '#display_on': both
       '#attributes':
         class:
-          - webform-horizontal-rule--dashed
+          - webform-horizontal-rule--thin
 css: ''
 javascript: ''
 settings:
@@ -449,5 +386,56 @@ access:
       - administrator
     users: {  }
     permissions: {  }
-handlers: {  }
+handlers:
+  notification_of_hh_webform_submission_email:
+    id: email
+    handler_id: notification_of_hh_webform_submission_email
+    label: 'Notification of HH webform submission email'
+    notes: ''
+    status: true
+    conditions: {  }
+    weight: 0
+    settings:
+      states:
+        - completed
+      to_mail: david.sankar@iied.org
+      to_options: {  }
+      bcc_mail: ''
+      bcc_options: {  }
+      cc_mail: ''
+      cc_options: {  }
+      from_mail: _default
+      from_options: {  }
+      from_name: _default
+      reply_to: ''
+      return_path: ''
+      sender_mail: ''
+      sender_name: ''
+      subject: _default
+      body: "<p>A new Hidden Handbrake has been submitted. Please log in to the website to review the latest submission before publishing.</p>\r\n\r\n<p>Submitted on [webform_submission:created]</p>\r\n\r\n<p>Submitted by: [webform_submission:user]</p>\r\n[webform_submission:values]"
+      excluded_elements:
+        horizontal_rule_11: horizontal_rule_11
+        summary: summary
+        horizontal_rule: horizontal_rule
+        world_continent: world_continent
+        horizontal_rule_09: horizontal_rule_09
+        type_of_problem_tick_all_that_apply: type_of_problem_tick_all_that_apply
+        other: other
+        horizontal_rule_01: horizontal_rule_01
+        zzimpact_area_please_tick_all_that_apply_: zzimpact_area_please_tick_all_that_apply_
+        horizontal_rule_02: horizontal_rule_02
+        just_how_stuck_is_this_handbrake_: just_how_stuck_is_this_handbrake_
+        horizontal_rule_03: horizontal_rule_03
+        i_have_read_and_agree_to_the_posting_guidelines: i_have_read_and_agree_to_the_posting_guidelines
+        horizontal_rule_08: horizontal_rule_08
+      ignore_access: false
+      exclude_empty: true
+      exclude_empty_checkbox: false
+      exclude_attachments: false
+      html: true
+      attachments: false
+      twig: false
+      theme_name: ''
+      parameters: {  }
+      debug: false
 variants: {  }

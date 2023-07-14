@@ -28,12 +28,12 @@ content:
     weight: 0
     region: content
     settings:
-      override_field_settings: false
+      override_field_settings: true
       labels:
         title: Title
-        given: Given
+        given: 'First name'
         middle: 'Middle name(s)'
-        family: Family
+        family: 'Last name'
         generational: Generational
         credentials: Credentials
       widget_layout: stacked
@@ -48,9 +48,9 @@ content:
         credentials: 35
       title_display:
         title: description
-        given: description
+        given: placeholder
         middle: description
-        family: description
+        family: placeholder
         generational: description
         credentials: description
     third_party_settings: {  }

@@ -2,6 +2,9 @@ uuid: 4a3f3dea-241b-4a42-ab16-6b91c162da23
 langcode: en
 status: true
 dependencies:
+  module:
+    - context
+    - user
   theme:
     - iied_tw
 _core:
@@ -19,4 +22,35 @@ settings:
   provider: core
   primary: true
   secondary: true
-visibility: {  }
+visibility:
+  context_all:
+    id: context_all
+    negate: null
+    values: ''
+  context:
+    id: context
+    negate: null
+    values: ''
+  user_status:
+    id: user_status
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    user_status:
+      viewing_profile: '0'
+      logged_viewing_profile: '0'
+      own_page_true: '0'
+      field_value: '0'
+    user_fields: uid
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      viewer: viewer
+      hh_reviewer: hh_reviewer
+      publications_editor: publications_editor
+      editor: editor
+      manager: manager
+      administrator: administrator

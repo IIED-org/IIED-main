@@ -1,8 +1,8 @@
 roles:
   hh_contributor:
-    path: /contributor/register
+    path: /user/register/contributor
     url: /user/register/hh_contributor
-    redirect_path: ''
+    redirect_path: /hidden-handbrakes
     hidden: 1
-    form_mode_register: contributor
+    form_mode_register: register
     form_mode_edit: contributor

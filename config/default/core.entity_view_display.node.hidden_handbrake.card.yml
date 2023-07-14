@@ -6,16 +6,17 @@ dependencies:
     - core.entity_view_mode.node.card
     - field.field.node.hidden_handbrake.body
     - field.field.node.hidden_handbrake.comment
-    - field.field.node.hidden_handbrake.field_author_based_in
     - field.field.node.hidden_handbrake.field_author_location
     - field.field.node.hidden_handbrake.field_date_published
     - field.field.node.hidden_handbrake.field_hh_webform_sync
     - field.field.node.hidden_handbrake.field_hidden_handbrake_image
     - field.field.node.hidden_handbrake.field_how_stuck_handbrake
+    - field.field.node.hidden_handbrake.field_impact_area
+    - field.field.node.hidden_handbrake.field_other_type_of_problem
     - field.field.node.hidden_handbrake.field_region_affected
-    - field.field.node.hidden_handbrake.field_region_affected_2
-    - field.field.node.hidden_handbrake.field_region_affected_3
     - field.field.node.hidden_handbrake.field_submitted_by
+    - field.field.node.hidden_handbrake.field_tagline
+    - field.field.node.hidden_handbrake.field_type_of_problem
     - node.type.hidden_handbrake
   module:
     - datetime
@@ -42,15 +43,16 @@ content:
 hidden:
   body: true
   comment: true
-  field_author_based_in: true
   field_author_location: true
   field_hh_webform_sync: true
   field_hidden_handbrake_image: true
   field_how_stuck_handbrake: true
+  field_impact_area: true
+  field_other_type_of_problem: true
   field_region_affected: true
-  field_region_affected_2: true
-  field_region_affected_3: true
   field_submitted_by: true
+  field_tagline: true
+  field_type_of_problem: true
   langcode: true
   links: true
   search_api_excerpt: true

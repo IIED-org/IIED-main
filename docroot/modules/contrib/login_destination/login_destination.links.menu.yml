@@ -1,0 +1,6 @@
+login_destination.list:
+  title: 'Login destinations'
+  parent: user.admin_index
+  description: 'Customize the destination that the user is redirected to after login.'
+  weight: -5
+  route_name: login_destination.list

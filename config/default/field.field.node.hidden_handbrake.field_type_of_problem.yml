@@ -1,0 +1,29 @@
+uuid: a1ed73a0-bb66-4ec8-a6cf-627a511b3d10
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_type_of_problem
+    - node.type.hidden_handbrake
+    - taxonomy.vocabulary.hh_problem_type
+id: node.hidden_handbrake.field_type_of_problem
+field_name: field_type_of_problem
+entity_type: node
+bundle: hidden_handbrake
+label: 'Type of problem'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      hh_problem_type: hh_problem_type
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

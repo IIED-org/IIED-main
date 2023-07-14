@@ -13,11 +13,30 @@
 
 
 {%
-  set classes = [
-    'h-12 px-6 py-2 mb-6 transition-colors duration-150 rounded-full shadow-sm',
+  set primary = [
+    'h-12 px-6 py-2 mb-6 mr-2 transition-colors duration-150 rounded-full shadow-sm',
     'hover:shadow-none bg-iiedorange-500 hover:bg-iiedorange-600 focus:shadow-outline',
     'text-lg font-semibold text-gray-800 hover:no-underline hover:text-gray-900 cursor-pointer',
   ]
 %}
 
-<input{{ attributes.addClass(classes) }} />{{ children }}
+{%
+  set secondary = [
+    'h-12 px-6 py-2 mb-6 mr-2 transition duration-150 rounded-full shadow-sm',
+    'hover:shadow-none bg-white hover:bg-iiedorange-600 focus:shadow-outline',
+    'border border-iiedorange-500', 
+    'text-lg font-semibold text-gray-800',
+    'hover:no-underline hover:text-gray-900 cursor-pointer hover:ring-iiedorange-500 hover:ring-1',
+  ]
+%}
+
+
+{% if attributes.hasClass('webform-button--draft') or attributes.hasClass('webform-button--previous') or attributes.hasClass('webform-wizard-pages-link') %}
+    <input{{ attributes.addClass(secondary) }} />{{ children }}
+  {% else %}  
+    <input{{ attributes.addClass(primary) }} />{{ children }}
+{% endif %}
+
+
+
+

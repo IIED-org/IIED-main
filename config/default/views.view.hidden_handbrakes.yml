@@ -5,6 +5,8 @@ dependencies:
   config:
     - core.entity_view_mode.node.card
     - node.type.hidden_handbrake
+    - taxonomy.vocabulary.hh_impact
+    - taxonomy.vocabulary.hh_problem_type
     - taxonomy.vocabulary.un_geoscheme_regional_groupings
   module:
     - better_exposed_filters
@@ -259,6 +261,112 @@ display:
             group_items: {  }
           reduce_duplicates: false
           vid: un_geoscheme_regional_groupings
+          type: select
+          hierarchy: false
+          limit: true
+          error_message: true
+        field_impact_area_target_id:
+          id: field_impact_area_target_id
+          table: node__field_impact_area
+          field: field_impact_area_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: taxonomy_index_tid
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_impact_area_target_id_op
+            label: 'Impact area'
+            description: ''
+            use_operator: false
+            operator: field_impact_area_target_id_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_impact_area_target_id
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              viewer: '0'
+              hh_contributor: '0'
+              hh_reviewer: '0'
+              publications_editor: '0'
+              editor: '0'
+              manager: '0'
+              administrator: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          vid: hh_impact
+          type: select
+          hierarchy: false
+          limit: true
+          error_message: true
+        field_type_of_problem_target_id:
+          id: field_type_of_problem_target_id
+          table: node__field_type_of_problem
+          field: field_type_of_problem_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: taxonomy_index_tid
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_type_of_problem_target_id_op
+            label: 'Problem type'
+            description: ''
+            use_operator: false
+            operator: field_type_of_problem_target_id_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_type_of_problem_target_id
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              viewer: '0'
+              hh_contributor: '0'
+              hh_reviewer: '0'
+              publications_editor: '0'
+              editor: '0'
+              manager: '0'
+              administrator: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          vid: hh_problem_type
           type: select
           hierarchy: false
           limit: true
