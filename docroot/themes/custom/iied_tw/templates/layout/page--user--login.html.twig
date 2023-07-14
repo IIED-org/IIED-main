@@ -1,0 +1,58 @@
+{#
+/**
+copy of page.html.twig for login pages 
+#}
+
+  <header role="banner">
+    {{ page.header }}
+  </header>
+
+<div>
+  {{ page.navbar_branding }}
+    {# <div class="hidden mt-4 lg:inline-block">
+      {{ page.primary_menu }}
+    </div>
+    {{ page.navbar_left }}
+   <div class="right-8">
+      {{ page.navbar_right }}
+    </div> #}
+ </div>
+  <div class="hidden lg:block bg-iiedblue-10">
+        {{ page.secondary_menu }}
+  </div>
+
+
+
+<div>  {# move class="container p-4 mx-auto" #}
+  <main role="main">
+    <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
+
+
+      <div class="flex h-screen flex-nowrap">
+        <div class="flex flex-col flex-wrap justify-center max-w-3xl place-content-center basis-3/5">
+        <h1 class="p-8">Log in</h1>
+          {{ page.content }}
+        </div>
+
+        <div class="relative flex grow basis-2/5">
+            <img class="absolute top-0 left-0 object-cover w-full h-full" src="https://www.iied.org/sites/default/files/17703IIED.pdf-p1_0.jpeg" alt="make change happen">
+        </div>
+      </div>
+
+  </main>
+</div>{# /.layout-container #}
+
+ {# {% if page.postscript %}
+    <section>
+      <div class="container p-4">
+        {{ page.postscript }}
+      </div>
+    </section>
+  {% endif %}
+        #}
+
+  {% if page.footer %}
+    <footer role="contentinfo">
+      {{ page.footer }}
+    </footer>
+  {% endif %}
