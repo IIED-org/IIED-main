@@ -1,0 +1,26 @@
+{
+  "name": "drupal/login_destination",
+  "description": "Customizes the destination the user is redirected to after login/logout/registration/one-time login.",
+  "type": "drupal-module",
+  "license": "GPL-2.0-or-later",
+  "homepage": "https://drupal.org/project/login_destination",
+  "authors": [
+    {
+      "name": "rsvelko",
+      "homepage": "https://www.drupal.org/u/rsvelko",
+      "role": "Creator, Maintainer"
+    },
+    {
+      "name": "Other Contributors",
+      "homepage": "https://www.drupal.org/node/69051/committers",
+      "role": "Contributors"
+    }
+  ],
+  "support": {
+    "issues": "https://drupal.org/project/issues/login_destination",
+    "source": "https://git.drupalcode.org/project/login_destination"
+  },
+  "require-dev": {
+    "drupal/admin_toolbar": "^1.23"
+  }
+}

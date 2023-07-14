@@ -1,0 +1,5 @@
+login_destination.add:
+  route_name: login_destination.add
+  title: 'Add Login Destination'
+  appears_on:
+    - login_destination.list
