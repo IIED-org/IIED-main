@@ -1,6 +1,6 @@
 _core:
   default_config_hash: ySh6lmKUH2SCk5s532zkdNU9PeyNywkaFGVLbWBbRWY
-patterns: "/hidden-handbrake*\r\n/user/register/contributor\r\n/user/register/contributor?destination=/hidden-handbrakes\r\n/user/login\r\n/user/password"
+patterns: "/user/register/contributor\r\n/user/register/contributor?destination=/hidden-handbrakes\r\n/user/login\r\n/user/password"
 default_width: 700
 lightbox_class: ''
 skip_admin_paths: true
