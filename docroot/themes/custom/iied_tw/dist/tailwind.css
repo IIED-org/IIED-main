@@ -3075,6 +3075,431 @@ cite {
   background-color: rgb(30 209 253 / var(--tw-bg-opacity));
 }
 
+/*-- one-time login page --*/
+
+.user-pass-reset{
+  color: var(--tw-prose-body);
+  max-width: 70ch;
+}
+
+.user-pass-reset :where([class~="lead"]):not(:where([class~="not-prose"] *)){
+  color: var(--tw-prose-lead);
+  font-size: 1.25em;
+  line-height: 1.6;
+  margin-top: 1.2em;
+  margin-bottom: 1.2em;
+}
+
+.user-pass-reset :where(a):not(:where([class~="not-prose"] *)){
+  color: #1173B3;
+  text-decoration: none;
+  font-weight: 400;
+  border-bottom-width: 1px;
+  border-bottom-color: #1ed1fd;
+}
+
+.user-pass-reset :where(a):not(:where([class~="not-prose"] *)):hover{
+  color: #0E6196;
+  border-bottom-width: 1px;
+  border-bottom-color: #00b3df;
+  text-decoration: underline;
+}
+
+.user-pass-reset :where(strong):not(:where([class~="not-prose"] *)){
+  color: var(--tw-prose-bold);
+  font-weight: 600;
+}
+
+.user-pass-reset :where(ol):not(:where([class~="not-prose"] *)){
+  list-style-type: decimal;
+  padding-left: 1.625em;
+}
+
+.user-pass-reset :where(ol[type="A"]):not(:where([class~="not-prose"] *)){
+  list-style-type: upper-alpha;
+}
+
+.user-pass-reset :where(ol[type="a"]):not(:where([class~="not-prose"] *)){
+  list-style-type: lower-alpha;
+}
+
+.user-pass-reset :where(ol[type="A" s]):not(:where([class~="not-prose"] *)){
+  list-style-type: upper-alpha;
+}
+
+.user-pass-reset :where(ol[type="a" s]):not(:where([class~="not-prose"] *)){
+  list-style-type: lower-alpha;
+}
+
+.user-pass-reset :where(ol[type="I"]):not(:where([class~="not-prose"] *)){
+  list-style-type: upper-roman;
+}
+
+.user-pass-reset :where(ol[type="i"]):not(:where([class~="not-prose"] *)){
+  list-style-type: lower-roman;
+}
+
+.user-pass-reset :where(ol[type="I" s]):not(:where([class~="not-prose"] *)){
+  list-style-type: upper-roman;
+}
+
+.user-pass-reset :where(ol[type="i" s]):not(:where([class~="not-prose"] *)){
+  list-style-type: lower-roman;
+}
+
+.user-pass-reset :where(ol[type="1"]):not(:where([class~="not-prose"] *)){
+  list-style-type: decimal;
+}
+
+.user-pass-reset :where(ul):not(:where([class~="not-prose"] *)){
+  list-style-type: disc;
+  padding-left: 1.625em;
+}
+
+.user-pass-reset :where(ul):not(:where([class~="not-prose"] *)) li::marker{
+  color: #ce539e;
+}
+
+.user-pass-reset :where(ol > li):not(:where([class~="not-prose"] *))::marker{
+  font-weight: 400;
+  color: var(--tw-prose-counters);
+}
+
+.user-pass-reset :where(ul > li):not(:where([class~="not-prose"] *))::marker{
+  color: var(--tw-prose-bullets);
+}
+
+.user-pass-reset :where(hr):not(:where([class~="not-prose"] *)){
+  border-color: var(--tw-prose-hr);
+  border-top-width: 1px;
+  margin-top: 3em;
+  margin-bottom: 3em;
+}
+
+.user-pass-reset :where(blockquote):not(:where([class~="not-prose"] *)){
+  font-weight: 500;
+  font-style: inherit;
+  color: #ba3f8a;
+  border-left-color: var(--tw-prose-quote-borders);
+  quotes: "\201C""\201D""\2018""\2019";
+  margin-top: 1.6em;
+  margin-bottom: 1.6em;
+}
+
+.user-pass-reset :where(blockquote p:first-of-type):not(:where([class~="not-prose"] *))::before{
+  content: open-quote;
+}
+
+.user-pass-reset :where(blockquote p:last-of-type):not(:where([class~="not-prose"] *))::after{
+  content: close-quote;
+}
+
+.user-pass-reset :where(h1):not(:where([class~="not-prose"] *)){
+  color: var(--tw-prose-headings);
+  font-weight: 400;
+  font-size: 2.25em;
+  margin-top: 0;
+  margin-bottom: 0.8888889em;
+  line-height: 1.1111111;
+}
+
+.user-pass-reset :where(h1 strong):not(:where([class~="not-prose"] *)){
+  font-weight: 900;
+}
+
+.user-pass-reset :where(h2):not(:where([class~="not-prose"] *)){
+  color: var(--tw-prose-headings);
+  font-weight: 400;
+  font-size: 1.5em;
+  margin-top: 2em;
+  margin-bottom: 1em;
+  line-height: 1.3333333;
+}
+
+.user-pass-reset :where(h2 strong):not(:where([class~="not-prose"] *)){
+  font-weight: 800;
+}
+
+.user-pass-reset :where(h3):not(:where([class~="not-prose"] *)){
+  color: var(--tw-prose-headings);
+  font-weight: 400;
+  font-size: 1.25em;
+  margin-top: 1.6em;
+  margin-bottom: 0.6em;
+  line-height: 1.6;
+}
+
+.user-pass-reset :where(h3 strong):not(:where([class~="not-prose"] *)){
+  font-weight: 700;
+}
+
+.user-pass-reset :where(h4):not(:where([class~="not-prose"] *)){
+  color: var(--tw-prose-headings);
+  font-weight: 400;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  line-height: 1.5;
+}
+
+.user-pass-reset :where(h4 strong):not(:where([class~="not-prose"] *)){
+  font-weight: 700;
+}
+
+.user-pass-reset :where(figure > *):not(:where([class~="not-prose"] *)){
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.user-pass-reset :where(figcaption):not(:where([class~="not-prose"] *)){
+  color: var(--tw-prose-captions);
+  font-size: 0.875em;
+  line-height: 1.4285714;
+  margin-top: 0.8571429em;
+}
+
+.user-pass-reset :where(code):not(:where([class~="not-prose"] *)){
+  color: var(--tw-prose-code);
+  font-weight: 600;
+  font-size: 0.875em;
+}
+
+.user-pass-reset :where(code):not(:where([class~="not-prose"] *))::before{
+  content: "`";
+}
+
+.user-pass-reset :where(code):not(:where([class~="not-prose"] *))::after{
+  content: "`";
+}
+
+.user-pass-reset :where(a code):not(:where([class~="not-prose"] *)){
+  color: var(--tw-prose-links);
+}
+
+.user-pass-reset :where(pre):not(:where([class~="not-prose"] *)){
+  color: var(--tw-prose-pre-code);
+  background-color: var(--tw-prose-pre-bg);
+  overflow-x: auto;
+  font-weight: 400;
+  font-size: 0.875em;
+  line-height: 1.7142857;
+  margin-top: 1.7142857em;
+  margin-bottom: 1.7142857em;
+  border-radius: 0.375rem;
+  padding-top: 0.8571429em;
+  padding-right: 1.1428571em;
+  padding-bottom: 0.8571429em;
+  padding-left: 1.1428571em;
+}
+
+.user-pass-reset :where(pre code):not(:where([class~="not-prose"] *)){
+  background-color: transparent;
+  border-width: 0;
+  border-radius: 0;
+  padding: 0;
+  font-weight: inherit;
+  color: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: inherit;
+}
+
+.user-pass-reset :where(pre code):not(:where([class~="not-prose"] *))::before{
+  content: none;
+}
+
+.user-pass-reset :where(pre code):not(:where([class~="not-prose"] *))::after{
+  content: none;
+}
+
+.user-pass-reset :where(table):not(:where([class~="not-prose"] *)){
+  width: 100%;
+  table-layout: auto;
+  text-align: left;
+  margin-top: 2em;
+  margin-bottom: 2em;
+  font-size: 0.875em;
+  line-height: 1.7142857;
+}
+
+.user-pass-reset :where(thead):not(:where([class~="not-prose"] *)){
+  border-bottom-width: 1px;
+  border-bottom-color: var(--tw-prose-th-borders);
+}
+
+.user-pass-reset :where(thead th):not(:where([class~="not-prose"] *)){
+  color: var(--tw-prose-headings);
+  font-weight: 600;
+  vertical-align: bottom;
+  padding-right: 0.5714286em;
+  padding-bottom: 0.5714286em;
+  padding-left: 0.5714286em;
+}
+
+.user-pass-reset :where(tbody tr):not(:where([class~="not-prose"] *)){
+  border-bottom-width: 1px;
+  border-bottom-color: var(--tw-prose-td-borders);
+}
+
+.user-pass-reset :where(tbody tr:last-child):not(:where([class~="not-prose"] *)){
+  border-bottom-width: 0;
+}
+
+.user-pass-reset :where(tbody td):not(:where([class~="not-prose"] *)){
+  vertical-align: baseline;
+  padding-top: 0.5714286em;
+  padding-right: 0.5714286em;
+  padding-bottom: 0.5714286em;
+  padding-left: 0.5714286em;
+}
+
+.user-pass-reset{
+  --tw-prose-body: #374151;
+  --tw-prose-headings: #111827;
+  --tw-prose-lead: #4b5563;
+  --tw-prose-links: #111827;
+  --tw-prose-bold: #111827;
+  --tw-prose-counters: #6b7280;
+  --tw-prose-bullets: #d1d5db;
+  --tw-prose-hr: #e5e7eb;
+  --tw-prose-quotes: #111827;
+  --tw-prose-quote-borders: #e5e7eb;
+  --tw-prose-captions: #6b7280;
+  --tw-prose-code: #111827;
+  --tw-prose-pre-code: #e5e7eb;
+  --tw-prose-pre-bg: #1f2937;
+  --tw-prose-th-borders: #d1d5db;
+  --tw-prose-td-borders: #e5e7eb;
+  --tw-prose-invert-body: #d1d5db;
+  --tw-prose-invert-headings: #fff;
+  --tw-prose-invert-lead: #9ca3af;
+  --tw-prose-invert-links: #fff;
+  --tw-prose-invert-bold: #fff;
+  --tw-prose-invert-counters: #9ca3af;
+  --tw-prose-invert-bullets: #4b5563;
+  --tw-prose-invert-hr: #374151;
+  --tw-prose-invert-quotes: #f3f4f6;
+  --tw-prose-invert-quote-borders: #374151;
+  --tw-prose-invert-captions: #9ca3af;
+  --tw-prose-invert-code: #fff;
+  --tw-prose-invert-pre-code: #d1d5db;
+  --tw-prose-invert-pre-bg: rgb(0 0 0 / 50%);
+  --tw-prose-invert-th-borders: #4b5563;
+  --tw-prose-invert-td-borders: #374151;
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.user-pass-reset :where(p):not(:where([class~="not-prose"] *)){
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+}
+
+.user-pass-reset :where(img):not(:where([class~="not-prose"] *)){
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.user-pass-reset :where(video):not(:where([class~="not-prose"] *)){
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.user-pass-reset :where(figure):not(:where([class~="not-prose"] *)){
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.user-pass-reset :where(h2 code):not(:where([class~="not-prose"] *)){
+  font-size: 0.875em;
+}
+
+.user-pass-reset :where(h3 code):not(:where([class~="not-prose"] *)){
+  font-size: 0.9em;
+}
+
+.user-pass-reset :where(li):not(:where([class~="not-prose"] *)){
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.user-pass-reset :where(ol > li):not(:where([class~="not-prose"] *)){
+}
+
+.user-pass-reset :where(ul > li):not(:where([class~="not-prose"] *)){
+}
+
+.user-pass-reset > :where(ul > li p):not(:where([class~="not-prose"] *)){
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
+}
+
+.user-pass-reset > :where(ul > li > *:first-child):not(:where([class~="not-prose"] *)){
+  margin-top: 1.25em;
+}
+
+.user-pass-reset > :where(ul > li > *:last-child):not(:where([class~="not-prose"] *)){
+  margin-bottom: 1.25em;
+}
+
+.user-pass-reset > :where(ol > li > *:first-child):not(:where([class~="not-prose"] *)){
+  margin-top: 1.25em;
+}
+
+.user-pass-reset > :where(ol > li > *:last-child):not(:where([class~="not-prose"] *)){
+  margin-bottom: 1.25em;
+}
+
+.user-pass-reset :where(ul ul, ul ol, ol ul, ol ol):not(:where([class~="not-prose"] *)){
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
+}
+
+.user-pass-reset :where(hr + *):not(:where([class~="not-prose"] *)){
+  margin-top: 0;
+}
+
+.user-pass-reset :where(h2 + *):not(:where([class~="not-prose"] *)){
+  margin-top: 0;
+}
+
+.user-pass-reset :where(h3 + *):not(:where([class~="not-prose"] *)){
+  margin-top: 0;
+}
+
+.user-pass-reset :where(h4 + *):not(:where([class~="not-prose"] *)){
+  margin-top: 0;
+}
+
+.user-pass-reset :where(thead th:first-child):not(:where([class~="not-prose"] *)){
+  padding-left: 0;
+}
+
+.user-pass-reset :where(thead th:last-child):not(:where([class~="not-prose"] *)){
+  padding-right: 0;
+}
+
+.user-pass-reset :where(tbody td:first-child):not(:where([class~="not-prose"] *)){
+  padding-left: 0;
+}
+
+.user-pass-reset :where(tbody td:last-child):not(:where([class~="not-prose"] *)){
+  padding-right: 0;
+}
+
+.user-pass-reset > :where(:first-child):not(:where([class~="not-prose"] *)){
+  margin-top: 0;
+}
+
+.user-pass-reset > :where(:last-child):not(:where([class~="not-prose"] *)){
+  margin-bottom: 0;
+}
+
+.user-pass-reset{
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 1.5rem;
+}
+
 /*-- hidden handbrakes how stuck is this handbrake --*/
 
 .slightly {
@@ -3420,6 +3845,11 @@ cite {
   margin: 0.5rem;
 }
 
+.mx-auto{
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .my-2{
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
@@ -3440,11 +3870,6 @@ cite {
   margin-right: 1rem;
 }
 
-.mx-auto{
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .my-6{
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
@@ -3458,6 +3883,11 @@ cite {
 .mx-2{
   margin-left: 0.5rem;
   margin-right: 0.5rem;
+}
+
+.mx-8{
+  margin-left: 2rem;
+  margin-right: 2rem;
 }
 
 .my-8{
@@ -3715,6 +4145,10 @@ cite {
   height: 1.25rem;
 }
 
+.h-screen{
+  height: 100vh;
+}
+
 .h-1\.5{
   height: 0.375rem;
 }
@@ -3899,6 +4333,14 @@ cite {
   flex-grow: 1;
 }
 
+.basis-3\/5{
+  flex-basis: 60%;
+}
+
+.basis-2\/5{
+  flex-basis: 40%;
+}
+
 .table-auto{
   table-layout: auto;
 }
@@ -4010,6 +4452,14 @@ cite {
 
 .flex-wrap{
   flex-wrap: wrap;
+}
+
+.flex-nowrap{
+  flex-wrap: nowrap;
+}
+
+.place-content-center{
+  place-content: center;
 }
 
 .place-items-center{
@@ -4386,6 +4836,11 @@ cite {
   background-color: rgb(170 192 44 / var(--tw-bg-opacity));
 }
 
+.bg-iiedorange-50{
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 229 72 / var(--tw-bg-opacity));
+}
+
 .bg-iiedblue-300{
   --tw-bg-opacity: 1;
   background-color: rgb(20 199 243 / var(--tw-bg-opacity));
@@ -4472,6 +4927,10 @@ cite {
 
 .p-2{
   padding: 0.5rem;
+}
+
+.p-8{
+  padding: 2rem;
 }
 
 .px-3{
