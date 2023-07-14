@@ -3068,6 +3068,145 @@ cite {
   --tw-ring-offset-width: 2px;
 }
 
+/*-- modal --*/
+
+.ui-widget-header{
+  --tw-bg-opacity: 1;
+  background-color: rgb(30 209 253 / var(--tw-bg-opacity));
+}
+
+/*-- hidden handbrakes how stuck is this handbrake --*/
+
+.slightly {
+  -webkit-animation: slightly 2s;
+          animation: slightly 2s;
+  transform: translate(-50%, -50%) rotate(-72deg);
+}
+
+.moderately {
+  -webkit-animation: moderately 2s;
+          animation: moderately 2s;
+  transform: translate(-50%, -50%) rotate(-36deg);
+}
+
+.very {
+  -webkit-animation: very 2s;
+          animation: very 2s;
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.extremely {
+  -webkit-animation: extremely 2s;
+          animation: extremely 2s;
+  transform: translate(-50%, -50%) rotate(36deg);
+}
+
+.jammed {
+  -webkit-animation: jammed 2s;
+          animation: jammed 2s;
+  transform: translate(0%, -56%) rotate(72deg);
+}
+
+@-webkit-keyframes slightly {
+  0% {
+    transform: translate(-50%, -50%) rotate(-90deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(-72deg);
+  }
+}
+
+@keyframes slightly {
+  0% {
+    transform: translate(-50%, -50%) rotate(-90deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(-72deg);
+  }
+}
+
+@-webkit-keyframes moderately {
+  0% {
+    transform: translate(-50%, -50%) rotate(-90deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(-36deg);
+  }
+}
+
+@keyframes moderately {
+  0% {
+    transform: translate(-50%, -50%) rotate(-90deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(-36deg);
+  }
+}
+
+@-webkit-keyframes very {
+  0% {
+    transform: translate(-50%, -50%) rotate(-90deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+}
+
+@keyframes very {
+  0% {
+    transform: translate(-50%, -50%) rotate(-90deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+}
+
+@-webkit-keyframes extremely {
+  0% {
+    transform: translate(-50%, -50%) rotate(-90deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(36deg);
+  }
+}
+
+@keyframes extremely {
+  0% {
+    transform: translate(-50%, -50%) rotate(-90deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(36deg);
+  }
+}
+
+@-webkit-keyframes jammed {
+  0% {
+    transform: translate(0%, -50%) rotate(-90deg);
+  }
+
+  100% {
+    transform: translate(0%, -56%) rotate(72deg);
+  }
+}
+
+@keyframes jammed {
+  0% {
+    transform: translate(0%, -50%) rotate(-90deg);
+  }
+
+  100% {
+    transform: translate(0%, -56%) rotate(72deg);
+  }
+}
+
 .visible{
   visibility: visible;
 }
@@ -3171,6 +3310,14 @@ cite {
 
 .right-8{
   right: 2rem;
+}
+
+.top-\[48\%\]{
+  top: 48%;
+}
+
+.left-1\/2{
+  left: 50%;
 }
 
 .bottom-0{
@@ -3764,6 +3911,10 @@ cite {
   border-collapse: collapse;
 }
 
+.origin-bottom-left{
+  transform-origin: bottom left;
+}
+
 .-translate-y-1{
   --tw-translate-y: -0.25rem;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
@@ -4255,6 +4406,12 @@ cite {
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
+.from-white{
+  --tw-gradient-from: #fff;
+  --tw-gradient-to: rgb(255 255 255 / 0);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
 .from-iiedgreen-300{
   --tw-gradient-from: #bed440;
   --tw-gradient-to: rgb(190 212 64 / 0);
@@ -4268,6 +4425,10 @@ cite {
 
 .to-iiedpink-700{
   --tw-gradient-to: #ba3f8a;
+}
+
+.to-iiedblue-10{
+  --tw-gradient-to: #e0f6fb;
 }
 
 .to-iiedblue-500{
@@ -4898,6 +5059,10 @@ cite {
   background-color: rgb(224 246 251 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-gradient-to-br:hover{
+  background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
+}
+
 .hover\:text-link-hover:hover{
   --tw-text-opacity: 1;
   color: rgb(14 97 150 / var(--tw-text-opacity));
@@ -4971,14 +5136,14 @@ cite {
   border-color: rgb(0 179 223 / var(--tw-border-opacity));
 }
 
-.focus\:border-indigo-300:focus{
-  --tw-border-opacity: 1;
-  border-color: rgb(165 180 252 / var(--tw-border-opacity));
-}
-
 .focus\:border-iiedpink-500:focus{
   --tw-border-opacity: 1;
   border-color: rgb(206 83 158 / var(--tw-border-opacity));
+}
+
+.focus\:border-indigo-300:focus{
+  --tw-border-opacity: 1;
+  border-color: rgb(165 180 252 / var(--tw-border-opacity));
 }
 
 .focus\:text-white:focus{

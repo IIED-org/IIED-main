@@ -339,4 +339,71 @@
   .progress-step.is-active .progress-marker::before {
     @apply ring-offset-2 ring-2;
   }
+
+  /*-- modal --*/
+  .ui-widget-header {
+    @apply bg-iiedblue-200;
+  }
+
+  /*-- hidden handbrakes how stuck is this handbrake --*/
+  .slightly {
+    animation: slightly 2s;
+    transform: translate(-50%, -50%) rotate(-72deg);
+  }
+  .moderately {
+    animation: moderately 2s;
+    transform: translate(-50%, -50%) rotate(-36deg);
+  }
+  .very {
+    animation: very 2s;
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  .extremely {
+    animation: extremely 2s;
+    transform: translate(-50%, -50%) rotate(36deg);
+  }
+  .jammed {
+    animation: jammed 2s;
+    transform: translate(0%, -56%) rotate(72deg);
+  }
+  @keyframes slightly {
+    0% {
+      transform: translate(-50%, -50%) rotate(-90deg);
+    }
+    100% {
+      transform: translate(-50%, -50%) rotate(-72deg);
+    }
+  }
+  @keyframes moderately {
+    0% {
+      transform: translate(-50%, -50%) rotate(-90deg);
+    }
+    100% {
+      transform: translate(-50%, -50%) rotate(-36deg);
+    }
+  }
+  @keyframes very {
+    0% {
+      transform: translate(-50%, -50%) rotate(-90deg);
+    }
+    100% {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+  }
+  @keyframes extremely {
+    0% {
+      transform: translate(-50%, -50%) rotate(-90deg);
+    }
+    100% {
+      transform: translate(-50%, -50%) rotate(36deg);
+    }
+  }
+  @keyframes jammed {
+    0% {
+      transform: translate(0%, -50%) rotate(-90deg);
+    }
+    100% {
+      transform: translate(0%, -56%) rotate(72deg);
+    }
+  }
 }

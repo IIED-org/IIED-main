@@ -1,5 +1,35 @@
-{% extends '@iied_tw/node/card/node--card.html.twig' %}
 
-    {% block date %}
-    <p class="text-gray-500">{{ node.getCreatedTime|date('d F Y') }}</p>
-    {% endblock %}
+{#
+Hidden handbrakes card
+#}
+
+<article{{ attributes.addClass('h-full') }}>
+
+        <a href="{{ url }}" class="hover:no-underline">
+          <div
+            class="flex h-full overflow-hidden transition-shadow bg-white border border-gray-300 rounded-xl group hover:shadow-md grow hover:bg-gradient-to-br from-white to-iiedblue-10"
+          >
+      
+            {% block image %}
+                        {% set image_uri = node.field_main_image|file_uri %}
+                        {% set image_alt = node.field_main_image.entity.field_media_image.alt %}
+            {% if image_uri is not null %}
+              <img class="object-cover w-3/12 h-auto" src="{{ image_uri|image_style('card_256') }}" alt="{{ image_alt }}" />
+            {% endif %}
+            {% endblock %}
+
+          
+            <div class="flex-col justify-between w-9/12 p-4 grow">
+              <h5 class="mb-4 text-xl leading-relaxed text-gray-900">
+                {{ label }}
+              </h5>
+
+                <p class="mb-2 text-gray-700">{{ node.field_tagline.0.value }}</p>
+              {% block date %}
+                <p class="text-gray-500">{{ node.getCreatedTime|date('d F Y') }}</p>
+              {% endblock %}
+            </div>
+          </div>
+        </a>
+
+</article>
