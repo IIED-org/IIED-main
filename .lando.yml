@@ -8,7 +8,7 @@ config:
 services:
   appserver:
     webroot: docroot
-    xdebug: true
+    xdebug: debug
     config:
       php: .vscode/php.ini
     overrides:
