@@ -8,10 +8,8 @@ dependencies:
     - field.field.user.user.field_occupation
     - field.field.user.user.field_organisation
     - field.field.user.user.user_picture
-    - image.style.thumbnail
   module:
     - name
-    - svg_image
     - user
 _core:
   default_config_hash: K-1rBM8mTIkFp9RqOC2tMRUukOQ1xbRCfSKK8dEddnA
@@ -72,14 +70,6 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  user_picture:
-    type: image_image
-    weight: 4
-    region: content
-    settings:
-      progress_indicator: throbber
-      preview_image_style: thumbnail
-    third_party_settings: {  }
 hidden:
   contact: true
   google_analytics: true
@@ -87,3 +77,4 @@ hidden:
   language: true
   path: true
   timezone: true
+  user_picture: true
