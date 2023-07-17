@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.user.compact
+    - field.field.user.user.field_email_updates
     - field.field.user.user.field_first_name
     - field.field.user.user.field_occupation
     - field.field.user.user.field_organisation
@@ -95,6 +96,7 @@ content:
     weight: 0
     region: content
 hidden:
+  field_email_updates: true
   field_first_name: true
   field_occupation: true
   field_organisation: true
