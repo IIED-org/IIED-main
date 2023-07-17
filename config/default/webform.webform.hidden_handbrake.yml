@@ -92,13 +92,12 @@ elements: |-
           - mb-4
       '#format': label
       '#target_type': taxonomy_term
-      '#selection_handler': 'default:taxonomy_term'
+      '#selection_handler': views
       '#selection_settings':
-        target_bundles:
-          hh_problem_type: hh_problem_type
-        sort:
-          field: vid
-          direction: ASC
+        view:
+          view_name: hh_problem_type_reference
+          display_name: entity_reference_1
+          arguments: {  }
     other:
       '#type': textfield
       '#title': 'If ''Other'', please give details.'
