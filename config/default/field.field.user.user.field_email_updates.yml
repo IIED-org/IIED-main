@@ -1,0 +1,33 @@
+uuid: 04e749e4-8386-4aca-9b4b-a171e50425d0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_email_updates
+  module:
+    - multiple_registration
+    - user
+third_party_settings:
+  multiple_registration:
+    user_additional_register_form_required:
+      authenticated: 0
+      hh_contributor: 0
+    user_additional_register_form:
+      hh_contributor: hh_contributor
+      authenticated: 0
+id: user.user.field_email_updates
+field_name: field_email_updates
+entity_type: user
+bundle: user
+label: 'Please send me updates by email'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

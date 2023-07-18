@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.user.user.field_email_updates
     - field.field.user.user.field_first_name
     - field.field.user.user.field_occupation
     - field.field.user.user.field_organisation
@@ -29,6 +30,13 @@ content:
     weight: 5
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_email_updates:
+    type: boolean_checkbox
+    weight: 34
+    region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   field_first_name:
     type: name_default

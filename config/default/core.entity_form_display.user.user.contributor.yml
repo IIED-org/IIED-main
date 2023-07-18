@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_form_mode.user.contributor
+    - field.field.user.user.field_email_updates
     - field.field.user.user.field_first_name
     - field.field.user.user.field_occupation
     - field.field.user.user.field_organisation
@@ -72,6 +73,7 @@ content:
     third_party_settings: {  }
 hidden:
   contact: true
+  field_email_updates: true
   google_analytics: true
   langcode: true
   language: true
