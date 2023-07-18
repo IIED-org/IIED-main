@@ -1,0 +1,16 @@
+name: 'Message UI test'
+type: module
+description: 'Dummy module for checking how other modules will interact with message UI'
+core_version_requirement: ^9 || ^10
+package: Message
+hidden: true
+
+dependencies:
+ - message:message
+ - drupal:views
+ - message_ui:message_ui
+
+# Information added by Drupal.org packaging script on 2023-07-03
+version: '8.x-1.0'
+project: 'message_ui'
+datestamp: 1688399907
