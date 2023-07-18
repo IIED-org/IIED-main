@@ -146,3 +146,5 @@ modification+administrator+taxonomy_term+person: taxonomy_term.person.default
 'use  The form mode guest_register linked to  user entity( user )': user.user.guest_register
 'use  The form mode register linked to  user entity( user )': user.user.register
 'use  The form mode contributor linked to  user entity( user )': user.user.contributor
+'use  The form mode default linked to  message entity( example_create_comment )': message.example_create_comment.default
+'use  The form mode default linked to  message entity( example_create_node )': message.example_create_node.default

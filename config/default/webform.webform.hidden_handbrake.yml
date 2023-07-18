@@ -258,7 +258,7 @@ settings:
   preview_excluded_elements: {  }
   preview_exclude_empty: true
   preview_exclude_empty_checkbox: false
-  draft: authenticated
+  draft: none
   draft_multiple: false
   draft_auto_save: true
   draft_saved_message: 'Draft saved'

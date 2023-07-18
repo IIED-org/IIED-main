@@ -1,0 +1,28 @@
+uuid: e7ed1449-bb91-4ff5-bbde-a4b5f8db0d46
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.message.mail_subject
+    - field.field.message.example_create_node.field_node_reference
+    - field.field.message.example_create_node.field_published
+    - message.template.example_create_node
+  module:
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: message.example_create_node.mail_subject
+targetEntityType: message
+bundle: example_create_node
+mode: mail_subject
+content:
+  partial_0:
+    weight: 0
+    region: content
+hidden:
+  field_node_reference: true
+  field_published: true
+  partial_1: true
+  search_api_excerpt: true

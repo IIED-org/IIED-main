@@ -1,0 +1,13 @@
+uuid: 30cb229b-ca50-4f57-b563-e9f063721acf
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: WArqHPVBq5KJjbo-hPLlt_3O5E9OSDuVkrW6lQ2PRfU
+template: example_create_comment
+label: 'Example - Create comment'
+description: 'A user created comment.'
+text:
+  -
+    value: "<p><a href='[message:user-url]'>[message:user-name]</a>&nbsp;<a href='[message:comment-url]'>commented</a> on&nbsp;[message:node-title]</p>\r\n <p>[message:node-render]</p>\r\n"
+settings: {  }

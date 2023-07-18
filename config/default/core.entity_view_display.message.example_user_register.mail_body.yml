@@ -1,0 +1,23 @@
+uuid: e141607e-bfee-4227-9912-c12e2bb52e87
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.message.mail_body
+    - message.template.example_user_register
+  module:
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: message.example_user_register.mail_body
+targetEntityType: message
+bundle: example_user_register
+mode: mail_body
+content:
+  partial_1:
+    weight: 0
+    region: content
+hidden:
+  partial_0: true

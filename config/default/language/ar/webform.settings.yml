@@ -1,3 +1,5 @@
 settings:
+  default_form_close_message: 'Sorry&hellip; This form is closed to new submissions.'
   default_submit_button_label: إضافة
   default_delete_button_label: حذف
+  default_preview_message: 'Please review your submission. Your submission is not complete until you press the &quot;Submit&quot; button!'
