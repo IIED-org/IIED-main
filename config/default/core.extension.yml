@@ -77,6 +77,7 @@ module:
   hal: 0
   help: 0
   history: 0
+  honeypot: 0
   iied_filters: 0
   iied_slider: 0
   iied_utils: 0

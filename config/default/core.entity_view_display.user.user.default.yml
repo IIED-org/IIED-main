@@ -177,6 +177,16 @@ third_party_settings:
                 third_party_settings: {  }
             weight: 6
             additional: {  }
+          bdfc5400-c155-470a-ad7f-127ae2b32444:
+            uuid: bdfc5400-c155-470a-ad7f-127ae2b32444
+            region: content
+            configuration:
+              id: 'extra_field_block:user:user:flag_subscribe_user'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 7
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
@@ -246,6 +256,11 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     weight: 51
+    region: content
+  flag_subscribe_user:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
     region: content
   masquerade:
     settings: {  }

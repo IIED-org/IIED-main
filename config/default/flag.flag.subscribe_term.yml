@@ -11,7 +11,6 @@ label: Terms
 bundles: {  }
 entity_type: taxonomy_term
 global: false
-weight: 0
 flag_short: Subscribe
 flag_long: ''
 flag_message: 'You are now subscribed to this item.'
@@ -19,6 +18,7 @@ unflag_short: Unsubscribe
 unflag_long: ''
 unflag_message: 'You are no longer subscribed to this item.'
 unflag_denied_text: ''
+weight: 0
 flag_type: 'entity:taxonomy_term'
 link_type: ajax_link
 flagTypeConfig:
