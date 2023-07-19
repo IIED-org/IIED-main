@@ -1,10 +1,10 @@
     {# banner for authenticated HH users  #}
     <div class="mb-6 bg-iiedblue-10">
         <div class="container items-center justify-between p-4 sm:flex sm:pace-x-6">
-            <p class="mb-2 mr-6 prose">Before submitting your hidden handbrake, please read the overview for supporting information and guidelines on submissions.</p>
+            <p class="mb-2 mr-6 prose">You are now logged in. Before submitting your hidden handbrake, please read the overview for supporting information and guidelines on submissions.</p>
 
             <div class="flex items-center space-x-4"> 
-            <a class="flex items-center h-10 px-3 py-2 mb-4 transition bg-white border border-gray-300 rounded-full shadow-sm shrink-0 webform-dialog webform-dialog-normal button hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500" href="/form/hidden-handbrake">Share a hidden handbreak
+            <a class="flex items-center h-10 px-3 py-2 mb-4 transition bg-white border border-gray-300 rounded-full shadow-sm shrink-0 webform-dialog webform-dialog-normal button hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500" href="/form/hidden-handbrake">Share a hidden handbrake
             </a>
 
             <a class="mb-4" href="{{ path('user.logout', {}, {'query': {'destination': path('<current>') }}) }}">{{ 'Log out'|t }}</a>
