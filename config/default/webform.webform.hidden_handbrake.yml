@@ -25,7 +25,7 @@ elements: |-
       '#type': webform_markup
       '#markup': |-
         <div class="bg-iiedblue-10 p-4 prose rounded-xl mb-6">
-        <p>Please <a href="#">read the posting guidelines</a> before posting. All fields are required.</p>
+        <p>Please <a href="/hidden-handbrakes#guidelines" target="_blank">read the posting guidelines</a> before posting. All fields are required.</p>
         </div>
     title_required_max_80_characters_:
       '#type': textfield
@@ -152,7 +152,7 @@ elements: |-
     i_have_read_and_agree_to_the_posting_guidelines:
       '#type': checkbox
       '#title': 'I have read and agree to the posting guidelines'
-      '#description': '<div class="text-gray-500"><a href="#">Link to posting guidelines</a>.</div>'
+      '#description': '<div class="text-gray-500"><a href="/hidden-handbrakes#guidelines" target="_blank">Link to posting guidelines</a>.</div>'
       '#required': true
       '#required_error': 'Please complete the ''Agree to posting guidelines'' field.'
     horizontal_rule_08:
@@ -397,11 +397,11 @@ handlers:
     settings:
       states:
         - completed
-      to_mail: david.sankar@iied.org
+      to_mail: 'James.Persad@iied.org, Jon.Sharman@iied.org, Sarah.Grainger@iied.org'
       to_options: {  }
       bcc_mail: ''
       bcc_options: {  }
-      cc_mail: ''
+      cc_mail: 'Matthew.Wright@iied.org, David.Sankar@iied.org'
       cc_options: {  }
       from_mail: _default
       from_options: {  }

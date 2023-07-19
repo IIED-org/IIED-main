@@ -78,14 +78,10 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_impact_area:
-    type: entity_reference_autocomplete
+    type: options_buttons
     weight: 6
     region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
   field_other_type_of_problem:
     type: string_textfield
@@ -96,14 +92,10 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_region_affected:
-    type: entity_reference_autocomplete
+    type: options_buttons
     weight: 3
     region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
   field_submitted_by:
     type: entity_reference_autocomplete
@@ -124,14 +116,10 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_type_of_problem:
-    type: entity_reference_autocomplete
+    type: options_buttons
     weight: 4
     region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
   langcode:
     type: language_select
