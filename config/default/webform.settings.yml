@@ -347,4 +347,7 @@ requirements:
   clientside_validation: true
   bootstrap: true
   spam: true
-third_party_settings: {  }
+third_party_settings:
+  honeypot:
+    honeypot: true
+    time_restriction: true

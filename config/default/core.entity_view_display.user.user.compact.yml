@@ -71,6 +71,16 @@ third_party_settings:
                 third_party_settings: {  }
             weight: 2
             additional: {  }
+          a7e5c5ec-0412-447a-ae87-72b50494d755:
+            uuid: a7e5c5ec-0412-447a-ae87-72b50494d755
+            region: content
+            configuration:
+              id: 'extra_field_block:user:user:flag_subscribe_user'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 3
+            additional: {  }
         third_party_settings: {  }
 _core:
   default_config_hash: '-cLsS3M3JycipXQt9rEb81_HxKneReoGuRh8ijcOPXs'
@@ -79,6 +89,11 @@ targetEntityType: user
 bundle: user
 mode: compact
 content:
+  flag_subscribe_user:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
   masquerade:
     settings: {  }
     third_party_settings: {  }

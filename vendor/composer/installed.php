@@ -3,7 +3,7 @@
         'name' => 'drupal/recommended-project',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '09eecf573310e16180cd9c2628a01d0d1d103e44',
+        'reference' => 'f5a3584b864c9d17e144069de2b77d6a5f836d65',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -1197,6 +1197,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'drupal/honeypot' => array(
+            'pretty_version' => '2.1.2',
+            'version' => '2.1.2.0',
+            'reference' => '2.1.2',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/honeypot',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'drupal/imagemagick' => array(
             'pretty_version' => '3.4.0',
             'version' => '3.4.0.0',
@@ -1686,7 +1695,7 @@
         'drupal/recommended-project' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '09eecf573310e16180cd9c2628a01d0d1d103e44',
+            'reference' => 'f5a3584b864c9d17e144069de2b77d6a5f836d65',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
