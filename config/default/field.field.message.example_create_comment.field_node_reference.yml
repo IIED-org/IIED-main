@@ -1,0 +1,30 @@
+uuid: ce24aadb-4580-4a55-bff5-7172b4c96be0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.message.field_node_reference
+    - message.template.example_create_comment
+    - node.type.article
+    - node.type.page
+_core:
+  default_config_hash: XO6WpNXMiLVkvlCGAS0Y4k9BgCJG-AdDduDVSuQnO1w
+id: message.example_create_comment.field_node_reference
+field_name: field_node_reference
+entity_type: message
+bundle: example_create_comment
+label: 'Node reference'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      article: article
+      page: page
+    sort:
+      field: _none
+field_type: entity_reference

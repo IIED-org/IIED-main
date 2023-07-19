@@ -1,0 +1,3 @@
+text:
+  -
+    value: "<p><a href='[message:user-url]'>[message:user-name]</a> created <a href='[message:node-url]'>[message:node-title]</a></p>\r\n <p>[message:node-render]</p>\r\n"
