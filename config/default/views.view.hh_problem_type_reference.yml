@@ -37,7 +37,7 @@ display:
           exclude: true
           alter:
             alter_text: true
-            text: '({{ description__value }} )'
+            text: '({{ description__value }})'
             make_link: false
             path: ''
             absolute: false
