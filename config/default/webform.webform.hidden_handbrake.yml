@@ -45,7 +45,7 @@ elements: |-
     summary:
       '#type': textarea
       '#title': Summary
-      '#description': '<div class="text-gray-500">Please summarize your hidden handbrake. Maximum 200 words.</div>'
+      '#description': '<div class="text-gray-500">Please summarise your hidden handbrake. Maximum 200 words.</div>'
       '#description_display': before
       '#autocomplete': 'off'
       '#required': true
@@ -53,6 +53,7 @@ elements: |-
       '#counter_type': word
       '#counter_minimum': 3
       '#counter_maximum': 200
+      '#format_items': comma
     horizontal_rule:
       '#type': webform_horizontal_rule
       '#display_on': both
@@ -268,7 +269,7 @@ settings:
   confirmation_type: inline
   confirmation_url: ''
   confirmation_title: ''
-  confirmation_message: '<strong>Thank you for submitting a hidden handbrake, Subject to our review, it will be published within 48 hours. If we would like to discuss your submission before publishing, we will contact you via email.</strong>'
+  confirmation_message: '<strong>Thank you for submitting a hidden handbrake. Subject to our review, it will be published within 48 hours. If we would like to discuss your submission before publishing, we will contact you via email.</strong>'
   confirmation_attributes: {  }
   confirmation_back: true
   confirmation_back_label: ''
