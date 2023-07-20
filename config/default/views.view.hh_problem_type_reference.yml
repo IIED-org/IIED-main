@@ -36,8 +36,8 @@ display:
           label: ''
           exclude: true
           alter:
-            alter_text: false
-            text: ''
+            alter_text: true
+            text: '({{ description__value }} )'
             make_link: false
             path: ''
             absolute: false
@@ -71,7 +71,7 @@ display:
           element_wrapper_class: ''
           element_default_classes: false
           empty: ''
-          hide_empty: false
+          hide_empty: true
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: value
@@ -165,7 +165,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: "{{ name }} <span class=\"text-gray-500\">({{ description__value }})</span>\r\n"
+            text: "{{ name }} <span class=\"text-gray-500\">{{ description__value }}</span>\r\n"
             make_link: false
             path: ''
             absolute: false
