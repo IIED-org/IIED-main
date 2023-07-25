@@ -12,6 +12,7 @@ pages_type: 0
 pages: ''
 language: ''
 roles:
+  hh_reviewer: hh_reviewer
   publications_editor: publications_editor
   editor: editor
 weight: 0

@@ -2,9 +2,15 @@ uuid: 919f1f56-aeee-4fbc-8fa4-a4f45b4bb81d
 langcode: en
 status: true
 dependencies:
+  config:
+    - user.role.administrator
+    - user.role.editor
+    - user.role.hh_reviewer
+    - user.role.manager
   module:
     - comment
     - user
+    - views_autocomplete_filters
 _core:
   default_config_hash: fsBo_zgUeLyYZdghaw4PkOHA-HqFxu7wmQLilF35XYg
 id: comment
@@ -865,6 +871,45 @@ display:
         - user.permissions
       tags: {  }
       cacheable: false
+  page_1:
+    id: page_1
+    display_title: 'All comments - tab shown on ''Recent content'' view'
+    display_plugin: page
+    position: 3
+    display_options:
+      title: 'All comments'
+      access:
+        type: role
+        options:
+          role:
+            hh_reviewer: hh_reviewer
+            editor: editor
+            manager: manager
+            administrator: administrator
+      defaults:
+        access: false
+        title: false
+      display_description: 'Comments tab on ''Recent content'' view display'
+      display_extenders: {  }
+      path: admin/edit/all-comments
+      menu:
+        type: tab
+        title: 'All comments'
+        description: ''
+        weight: 2
+        expanded: false
+        menu_name: admin
+        parent: 'admin_toolbar_tools.extra_links:views_ui.content_recent'
+        context: '0'
+    cache_metadata:
+      max-age: 0
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - user.roles
+      tags: {  }
   page_published:
     id: page_published
     display_title: 'Published comments'
