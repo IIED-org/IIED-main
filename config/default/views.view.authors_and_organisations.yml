@@ -683,7 +683,7 @@ display:
         type: tab
         title: People
         description: ''
-        weight: 3
+        weight: 5
         expanded: false
         menu_name: admin
         parent: 'admin_toolbar_tools.extra_links:views_ui.content_recent'

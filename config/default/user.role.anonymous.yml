@@ -6,7 +6,6 @@ dependencies:
     - comment
     - contact
     - eu_cookie_compliance
-    - form_mode_control
     - media
     - media_pdf_thumbnail
     - search_api_autocomplete

@@ -2,11 +2,53 @@ uuid: 47b3602c-0da8-482a-8934-0cc1caa6ba8d
 langcode: en
 status: true
 dependencies:
+  config:
+    - filter.format.simple_html
+    - media.type.image
+    - node.type.hidden_handbrake
   module:
-    - webform
+    - comment
+    - filter
+    - form_mode_control
+    - media
+    - media_revisions_ui
+    - node
+    - publishcontent
+    - system
+    - toolbar
+    - view_unpublished
 id: hh_reviewer
 label: Reviewer
 weight: -6
 is_admin: null
 permissions:
-  - 'access webform submission user'
+  - 'access toolbar'
+  - 'access user profiles'
+  - 'administer comments'
+  - 'create hidden_handbrake content'
+  - 'create image media'
+  - 'delete any hidden_handbrake content'
+  - 'delete hidden_handbrake revisions'
+  - 'delete own hidden_handbrake content'
+  - 'delete own image media'
+  - 'edit any hidden_handbrake content'
+  - 'edit own hidden_handbrake content'
+  - 'publish any node type hidden_handbrake'
+  - 'publish editable content'
+  - 'publish editable node type hidden_handbrake'
+  - 'publish own node type hidden_handbrake'
+  - 'revert hidden_handbrake revisions'
+  - 'unpublish any node type hidden_handbrake'
+  - 'unpublish editable content'
+  - 'unpublish editable node type hidden_handbrake'
+  - 'unpublish own node type hidden_handbrake'
+  - 'use  The form mode default linked to  media entity( image )'
+  - 'use  The form mode default linked to  node entity( hidden_page )'
+  - 'use  The form mode media_library linked to  media entity( image )'
+  - 'use text format simple_html'
+  - 'view any unpublished hidden_handbrake content'
+  - 'view hidden_handbrake revisions'
+  - 'view image media revisions'
+  - 'view own unpublished content'
+  - 'view the administration theme'
+  - 'view user email addresses'

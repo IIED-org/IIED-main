@@ -6,6 +6,7 @@ dependencies:
     - filter.format.simple_html
     - media.type.document
     - media.type.image
+    - node.type.hidden_handbrake
     - node.type.publication
     - taxonomy.vocabulary.organisation
     - taxonomy.vocabulary.person
@@ -24,7 +25,6 @@ dependencies:
     - taxonomy
     - toolbar
     - view_unpublished
-    - webform
 id: publications_editor
 label: 'Publications editor'
 weight: -5
@@ -32,15 +32,17 @@ is_admin: null
 permissions:
   - 'access toolbar'
   - 'access user profiles'
-  - 'access webform submission user'
   - 'add pdf image entity entities'
   - 'create document media'
+  - 'create hidden_handbrake content'
   - 'create image media'
   - 'create publication content'
   - 'create terms in organisation'
   - 'create terms in person'
+  - 'delete hidden_handbrake revisions'
   - 'edit any publication content'
   - 'edit own document media'
+  - 'edit own hidden_handbrake content'
   - 'edit own image media'
   - 'edit own publication content'
   - 'edit pdf image entity entities'

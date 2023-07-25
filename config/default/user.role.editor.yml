@@ -5,11 +5,13 @@ dependencies:
   config:
     - filter.format.basic_html
     - filter.format.full_html
+    - filter.format.simple_html
     - media.type.document
     - media.type.image
     - node.type.article
     - node.type.blog
     - node.type.event
+    - node.type.hidden_handbrake
     - node.type.hidden_page
     - node.type.long_read
     - node.type.news
@@ -19,12 +21,14 @@ dependencies:
     - taxonomy.vocabulary.organisation
     - taxonomy.vocabulary.person
   module:
+    - comment
     - content_translation
     - eu_cookie_compliance
     - file
     - filter
     - form_mode_control
     - media
+    - media_pdf_thumbnail
     - media_revisions_ui
     - node
     - paragraphs
@@ -35,7 +39,6 @@ dependencies:
     - taxonomy
     - toolbar
     - view_unpublished
-    - webform
 id: editor
 label: Editor
 weight: -4
@@ -47,13 +50,15 @@ permissions:
   - 'access files overview'
   - 'access toolbar'
   - 'access user profiles'
-  - 'access webform submission user'
+  - 'add pdf image entity entities'
+  - 'administer comments'
   - 'administer nodes'
   - 'create article content'
   - 'create blog content'
   - 'create content translations'
   - 'create document media'
   - 'create event content'
+  - 'create hidden_handbrake content'
   - 'create image media'
   - 'create long_read content'
   - 'create news content'
@@ -63,14 +68,19 @@ permissions:
   - 'create terms in organisation'
   - 'create terms in person'
   - 'create url aliases'
+  - 'delete any hidden_handbrake content'
+  - 'delete own hidden_handbrake content'
   - 'display eu cookie compliance popup'
   - 'edit any document media'
+  - 'edit any hidden_handbrake content'
   - 'edit any image media'
   - 'edit any publication content'
   - 'edit own article content'
   - 'edit own blog content'
+  - 'edit own comments'
   - 'edit own document media'
   - 'edit own event content'
+  - 'edit own hidden_handbrake content'
   - 'edit own hidden_page content'
   - 'edit own image media'
   - 'edit own long_read content'
@@ -83,10 +93,14 @@ permissions:
   - 'link to any page'
   - 'notify of path changes'
   - 'publish any content'
+  - 'publish any node type hidden_handbrake'
   - 'publish any node type publication'
   - 'publish editable content'
+  - 'publish editable node type hidden_handbrake'
   - 'publish editable node type publication'
+  - 'publish own node type hidden_handbrake'
   - 'publish own node type publication'
+  - 'revert hidden_handbrake revisions'
   - 'revert publication revisions'
   - 'translate article node'
   - 'translate blog node'
@@ -99,9 +113,12 @@ permissions:
   - 'translate project node'
   - 'translate publication node'
   - 'unpublish any content'
+  - 'unpublish any node type hidden_handbrake'
   - 'unpublish any node type publication'
   - 'unpublish editable content'
+  - 'unpublish editable node type hidden_handbrake'
   - 'unpublish editable node type publication'
+  - 'unpublish own node type hidden_handbrake'
   - 'unpublish own node type publication'
   - 'update content translations'
   - 'use  The form mode dashboard_add_author linked to  taxonomy_term entity( person )'
@@ -182,9 +199,12 @@ permissions:
   - 'use  The form mode media_library linked to  media entity( video )'
   - 'use text format basic_html'
   - 'use text format full_html'
+  - 'use text format simple_html'
   - 'view all media revisions'
   - 'view any unpublished content'
+  - 'view any unpublished hidden_handbrake content'
   - 'view document media revisions'
+  - 'view hidden_handbrake revisions'
   - 'view image media revisions'
   - 'view media'
   - 'view own unpublished content'
@@ -192,3 +212,4 @@ permissions:
   - 'view publication revisions'
   - 'view the administration theme'
   - 'view unpublished paragraphs'
+  - 'view user email addresses'
