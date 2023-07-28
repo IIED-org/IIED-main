@@ -72,7 +72,6 @@ module:
   geolocation: 0
   gin_lb: 0
   gin_toolbar: 0
-  google_analytics: 0
   google_tag: 0
   hal: 0
   help: 0

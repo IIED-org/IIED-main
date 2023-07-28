@@ -6,7 +6,6 @@ dependencies:
     - comment
     - contact
     - eu_cookie_compliance
-    - google_analytics
     - media
     - media_pdf_thumbnail
     - search_api_autocomplete
@@ -24,7 +23,6 @@ permissions:
   - 'access shortcuts'
   - 'access site-wide contact form'
   - 'display eu cookie compliance popup'
-  - 'opt-in or out of google analytics tracking'
   - 'post comments'
   - 'search content'
   - 'skip comment approval'
