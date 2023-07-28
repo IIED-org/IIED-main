@@ -148,7 +148,7 @@ regions:
 regions_hidden:
   - sidebar_first
 
-# Information added by Drupal.org packaging script on 2023-07-04
-version: '8.x-3.0-rc4'
+# Information added by Drupal.org packaging script on 2023-07-16
+version: '8.x-3.0-rc5'
 project: 'gin'
-datestamp: 1688474319
+datestamp: 1689504433

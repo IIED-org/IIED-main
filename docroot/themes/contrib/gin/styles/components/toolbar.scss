@@ -355,6 +355,14 @@ body.gin--classic-toolbar {
       }
     }
   }
+
+  .toolbar-menu {
+    .toolbar-icon {
+      @include mq(medium) {
+        padding-right: var(--gin-spacing-l);
+      }
+    }
+  }
 }
 
 .toolbar-horizontal .toolbar-tray {
@@ -641,7 +649,8 @@ body.gin--classic-toolbar {
   }
 }
 
-#toolbar-item-user {
+#toolbar-item-user,
+#toolbar-item-user-secondary {
   display: inline-block;
   vertical-align: top;
   min-width: unset;
