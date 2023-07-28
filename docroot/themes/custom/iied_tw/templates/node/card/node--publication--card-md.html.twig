@@ -33,7 +33,11 @@ For general featured card display
             >
 
               <h4 class="mb-4 text-xl leading-relaxed text-gray-900 lg:text-2xl">
+                {% if node.field_short_title.value %}
+                {{ node.field_short_title.value }}
+                {% else %}
                 {{ label }}
+                {% endif %}
               </h4>
               <p class="text-gray-500">{{ node.field_date_published.value|date('d F Y') }}</p>
             </div>

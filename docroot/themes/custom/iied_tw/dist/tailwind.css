@@ -2960,8 +2960,58 @@ cite {
   margin-bottom: 1rem;
 }
 
+/*-- highcharts title override --*/
+
+.highcharts-title{
+  font-family: Chronicle SSm A, Chronicle SSm B, serif !important;
+  font-size: 1.25rem !important;
+  line-height: 1.75rem !important;
+}
+
+.highcharts-subtitle{
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+/*-- eu-cookie-compliance-message --*/
+
 .eu-cookie-compliance-message button.eu-cookie-compliance-more-button {
   color: #1173b3;
+}
+
+.sliding-popup-bottom{
+  width: 100%;
+  --tw-bg-opacity: 1;
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.eu-cookie-compliance-secondary-button{
+  margin-right: 0.5rem;
+  cursor: pointer;
+  border-radius: 9999px;
+  border-style: none;
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 179 223 / var(--tw-bg-opacity));
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-weight: 600;
+  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.eu-cookie-compliance-secondary-button:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 169 213 / var(--tw-bg-opacity));
 }
 
 /*-- ClickD form hacks --*/
@@ -3915,6 +3965,10 @@ cite {
   margin-top: 0.25rem;
 }
 
+.mr-2{
+  margin-right: 0.5rem;
+}
+
 .mt-3{
   margin-top: 0.75rem;
 }
@@ -3925,10 +3979,6 @@ cite {
 
 .mt-2{
   margin-top: 0.5rem;
-}
-
-.mr-2{
-  margin-right: 0.5rem;
 }
 
 .mt-0{
@@ -4670,9 +4720,9 @@ cite {
   border-radius: 0.25rem;
 }
 
-.rounded-t-lg{
-  border-top-left-radius: 0.5rem;
-  border-top-right-radius: 0.5rem;
+.rounded-t-xl{
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
 }
 
 .rounded-t-3xl{
@@ -4797,6 +4847,11 @@ cite {
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
 }
 
+.bg-iiedblue-500{
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 179 223 / var(--tw-bg-opacity));
+}
+
 .bg-iiedorange-500{
   --tw-bg-opacity: 1;
   background-color: rgb(252 179 22 / var(--tw-bg-opacity));
@@ -4830,11 +4885,6 @@ cite {
 .bg-iiedgreen-10{
   --tw-bg-opacity: 1;
   background-color: rgb(243 246 225 / var(--tw-bg-opacity));
-}
-
-.bg-iiedblue-500{
-  --tw-bg-opacity: 1;
-  background-color: rgb(0 179 223 / var(--tw-bg-opacity));
 }
 
 .bg-gray-300{
@@ -4993,6 +5043,11 @@ cite {
 .py-6{
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
+}
+
+.px-1{
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
 }
 
 .py-8{
@@ -5165,12 +5220,12 @@ cite {
   font-weight: 300;
 }
 
-.font-medium{
-  font-weight: 500;
-}
-
 .font-semibold{
   font-weight: 600;
+}
+
+.font-medium{
+  font-weight: 500;
 }
 
 .font-bold{
@@ -5380,16 +5435,20 @@ cite {
   transition-duration: 300ms;
 }
 
-.duration-200{
-  transition-duration: 200ms;
-}
-
 .duration-150{
   transition-duration: 150ms;
 }
 
+.duration-200{
+  transition-duration: 200ms;
+}
+
 .ease-in-out{
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ease-in{
+  transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
 }
 
 .ease-out{
@@ -5484,6 +5543,26 @@ cite {
 
 .visited\:text-gray-600:visited{
   color: rgb(75 85 99 );
+}
+
+.hover\:translate-x-2:hover{
+  --tw-translate-x: 0.5rem;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.hover\:translate-x-1:hover{
+  --tw-translate-x: 0.25rem;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.hover\:translate-x-0\.5:hover{
+  --tw-translate-x: 0.125rem;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.hover\:translate-x-0:hover{
+  --tw-translate-x: 0px;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
 .hover\:border-b-0:hover{
@@ -5658,6 +5737,16 @@ cite {
 
 .group:hover .group-hover\:block{
   display: block;
+}
+
+.group:hover .group-hover\:translate-x-0\.5{
+  --tw-translate-x: 0.125rem;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.group:hover .group-hover\:translate-x-0{
+  --tw-translate-x: 0px;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
 .group:hover .group-hover\:-rotate-2{

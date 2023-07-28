@@ -62,7 +62,7 @@
       {% for key, accordion_title in accordion_titles %}
       <div class="py-2 border-b border-gray-300">
 
-        <h3>
+        <h4>
           <button
             @click="activeAccordion = activeAccordion === {{key}} ? false : {{key}}"
             class="flex items-center justify-between w-full px-4"
@@ -87,7 +87,7 @@
               </svg>
             </span>
           </button>
-        </h3>
+        </h4>
 
         <div x-show="activeAccordion === {{key}}" x-collapse class="px-4 my-4 prose">
           {{ accordion_bodies[key]|raw }}

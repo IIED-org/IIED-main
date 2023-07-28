@@ -284,8 +284,24 @@
     @apply mb-4;
   }
 
+  /*-- highcharts title override --*/
+  .highcharts-title {
+    @apply text-xl font-headline !important;
+  }
+
+  .highcharts-subtitle {
+    @apply text-lg;
+  }
+
+  /*-- eu-cookie-compliance-message --*/
   .eu-cookie-compliance-message button.eu-cookie-compliance-more-button {
     color: #1173b3;
+  }
+  .sliding-popup-bottom {
+    @apply bg-gray-100 py-2 w-full;
+  }
+  .eu-cookie-compliance-secondary-button {
+    @apply px-3 py-2 border-none transition rounded-full shadow-sm bg-iiedblue-500 cursor-pointer mr-2 font-semibold hover:bg-iiedblue-600;
   }
 
   /*-- ClickD form hacks --*/
