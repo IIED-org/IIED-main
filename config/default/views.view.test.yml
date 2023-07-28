@@ -1,6 +1,6 @@
 uuid: f063e6db-de88-41b1-bb11-a26cb367fe03
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
@@ -168,6 +168,7 @@ display:
       relationships: {  }
       header: {  }
       footer: {  }
+      display_extenders: {  }
     cache_metadata:
       max-age: -1
       contexts:
