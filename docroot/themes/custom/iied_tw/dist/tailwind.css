@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Lato:400,300,300italic,400italic,700,700italic,900,900italic");
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Noto+Serif:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap");
 
 /*
 ! tailwindcss v3.1.6 | MIT License | https://tailwindcss.com
@@ -589,37 +589,37 @@ select{
 }
 
 h1{
-  font-family: Chronicle SSm A, Chronicle SSm B, serif;
+  font-family: Noto Serif, serif;
   font-size: 2.25rem;
   line-height: 2.5rem;
 }
 
 h2{
-  font-family: Chronicle SSm A, Chronicle SSm B, serif;
+  font-family: Noto Serif, serif;
   font-size: 1.875rem;
   line-height: 2.25rem;
 }
 
 h3{
-  font-family: Chronicle SSm A, Chronicle SSm B, serif;
+  font-family: Noto Serif, serif;
   font-size: 1.5rem;
   line-height: 2rem;
 }
 
 h4{
-  font-family: Chronicle SSm A, Chronicle SSm B, serif;
+  font-family: Noto Serif, serif;
   font-size: 1.25rem;
   line-height: 1.75rem;
 }
 
 h5{
-  font-family: Chronicle SSm A, Chronicle SSm B, serif;
+  font-family: Noto Serif, serif;
   font-size: 1.125rem;
   line-height: 1.75rem;
 }
 
 h6{
-  font-family: Chronicle SSm A, Chronicle SSm B, serif;
+  font-family: Noto Serif, serif;
 }
 
 a{
@@ -659,7 +659,7 @@ hr{
 }
 
 blockquote{
-  font-family: Chronicle SSm A, Chronicle SSm B, serif;
+  font-family: Noto Serif, serif;
   font-size: 1.25rem;
   line-height: 1.75rem;
 }
@@ -5114,7 +5114,7 @@ cite {
 }
 
 .font-headline{
-  font-family: Chronicle SSm A, Chronicle SSm B, serif;
+  font-family: Noto Serif, serif;
 }
 
 .font-sans{

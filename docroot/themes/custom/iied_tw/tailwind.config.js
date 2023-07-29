@@ -15,7 +15,7 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ['Lato', 'sans-serif'],
-        headline: ['Chronicle SSm A', 'Chronicle SSm B', 'serif'],
+        headline: ['Noto Serif', 'serif'], 
       },
       colors: {
         iiedblue: {
