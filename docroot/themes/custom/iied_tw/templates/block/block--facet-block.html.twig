@@ -27,11 +27,11 @@
 #}
 {{ attach_library('iied_tw/alpine') }}
 {{ attach_library('iied_tw/alpine-collapse') }}
-  <div{{ attributes.addClass('mt-3', 'bg-white', 'border', 'border-gray-300', 'rounded-lg', 'px-3', 'py-3') }}>
+  <div{{ attributes.addClass('mt-3', 'bg-white', 'border', 'border-gray-300', 'rounded-xl', 'px-3', 'py-3') }}>
   <div x-data="{ expanded: false }">
    {{ title_prefix }}
     {% if label %}
-      <div{{ title_attributes.addClass('flex', 'justify-between', 'w-full', 'rounded-t-lg') }}
+      <div{{ title_attributes.addClass('flex', 'justify-between', 'w-full', 'rounded-t-xl') }}
       @click="expanded = ! expanded">
       <span>{{ label }}</span>
       <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

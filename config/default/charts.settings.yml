@@ -6,14 +6,15 @@ charts_default_settings:
   display:
     title: ''
     title_position: out
+    subtitle: ''
     data_labels: false
     data_markers: false
     legend_position: right
     background: ''
     three_dimensional: 0
     colors:
-      0: '#08bcc1'
-      25: '#bf4040'
+      - '#08bcc1'
+      - '#000000'
     polar: 0
     tooltips: true
     dimensions:
@@ -30,6 +31,7 @@ charts_default_settings:
       yellow_to: '85'
       red_from: '0'
       red_to: '50'
+    color_changer: false
   xaxis:
     title: ''
     labels_rotation: '0'
@@ -43,7 +45,7 @@ charts_default_settings:
     labels_rotation: '0'
   library_config:
     legend:
-      layout: ''
+      layout: vertical
       background_color: ''
       border_width: '0'
       item_style:
@@ -51,6 +53,67 @@ charts_default_settings:
         overflow: ''
       shadow: false
     exporting_library: false
+    texture_library: false
+    global_options:
+      lang:
+        download_CSV: 'Download CSV'
+        download_JPEG: 'Download JPEG image'
+        download_PDF: 'Download PDF document'
+        download_PNG: 'Download PNG image '
+        download_SVG: 'Download SVG vector image'
+        download_XLS: 'Download XLS'
+        exit_fullscreen: 'Exit from full screen'
+        hide_data: 'Hide data table'
+        loading: Loading...
+        main_breadcrumb: Main
+        no_data: 'No data to display'
+        print_chart: 'Print chart'
+        reset_zoom: 'Reset zoom'
+        reset_zoom_title: 'Reset zoom level 1:1'
+        view_data: 'View data table'
+        view_fullscreen: 'View in full screen'
+        months:
+          - January
+          - February
+          - March
+          - April
+          - May
+          - June
+          - July
+          - August
+          - September
+          - October
+          - November
+          - December
+        short_months:
+          - Jan
+          - Feb
+          - Mar
+          - Apr
+          - May
+          - Jun
+          - Jul
+          - Aug
+          - Sept
+          - Oct
+          - Nov
+          - Dec
+        weekdays:
+          - Sunday
+          - Monday
+          - Tuesday
+          - Wednesday
+          - Thursday
+          - Friday
+          - Saturday
+        short_weekdays:
+          - Sun
+          - Mon
+          - Tue
+          - Wed
+          - Thurs
+          - Frid
+          - Sat
 advanced:
   debug: false
   requirements:

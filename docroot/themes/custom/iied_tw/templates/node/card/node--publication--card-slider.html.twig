@@ -28,7 +28,11 @@ Card for use in a slider only
 {# color-rotate classes to be added #}
           <div class="p-4 border-t-2 grow border-iiedorange-500 color-rotate">
             <h5 class="mb-4 text-gray-900 sm:text-xl sm:leading-relaxed">
-              {{ label }}
+                {% if node.field_short_title.value %}
+                {{ node.field_short_title.value }}
+                {% else %}
+                {{ label }}
+                {% endif %}
             </h5>
           </div>
 

@@ -53,7 +53,7 @@
           {% elseif selectedStyle == 2 %}
           {% include '@iied_tw/partials/_button_outline.html.twig' with {'button_title':linktext, 'url':content.field_link[0]['#url']} %}
           {% elseif selectedStyle == 1 %}
-          {% include '@iied_tw/partials/_button.html.twig' with {'button_title':linktext, 'url':content.field_link[0]['#url']} %}
+          {% include '@iied_tw/partials/_button_cta.html.twig' with {'button_title':linktext, 'url':content.field_link[0]['#url']} %}
           {% else %}
           {{ content.field_link }}
           {% endif %}

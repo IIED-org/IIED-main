@@ -3,25 +3,25 @@ _core:
 langcode: en
 uuid: b909b05f-b373-4dab-9320-967ede546d2f
 popup_enabled: true
-popup_clicking_confirmation: true
+popup_clicking_confirmation: false
 popup_scrolling_confirmation: false
 eu_only: false
 eu_only_js: false
 popup_position: false
 fixed_top_position: true
 popup_info:
-  value: "<div class=\"mt-3\">We use cookies to improve the site and provide you with a better experience. Click OK or any link to give your consent.</div>\r\n"
+  value: "<div class=\"inline\">We use cookies to help improve your experience. Please click accept if you’re OK with this, or you can opt out if you wish.</div>\r\n"
   format: full_html
 mobile_popup_info:
   value: ''
   format: basic_html
 popup_info_template: new
-popup_agree_button_message: OK
-popup_more_info_button_message: 'More information'
+popup_agree_button_message: Accept
+popup_more_info_button_message: 'Learn more'
 mobile_breakpoint: 768
 popup_agreed_enabled: false
 popup_hide_agreed: false
-disagree_button_label: Disagree
+disagree_button_label: 'No thanks'
 popup_agreed:
   value: "<h2>Thank you for accepting cookies</h2>\r\n\r\n<p>You can now hide this message or find out more about cookies.</p>\r\n"
   format: full_html
@@ -30,11 +30,11 @@ popup_hide_button_message: Hide
 popup_link: 'https://www.iied.org/privacy-policy'
 popup_link_new_window: true
 popup_height: null
-popup_width: 100%
+popup_width: ''
 popup_delay: 500
 show_more_info: true
-popup_bg_hex: F3F4F6
-popup_text_hex: '111872'
+popup_bg_hex: ''
+popup_text_hex: ''
 domain: ''
 domains_option: 1
 domains_list: ''
@@ -44,8 +44,8 @@ cookie_session: 0
 set_cookie_session_zero_on_disagree: 0
 cookie_lifetime: 365
 use_mobile_message: false
-use_bare_css: false
-use_olivero_css: true
+use_bare_css: true
+use_olivero_css: false
 disagree_do_not_show_popup: false
 reload_page: false
 reload_options: 0
@@ -53,8 +53,8 @@ reload_routes_list: ''
 cookie_name: ''
 exclude_uid_1: false
 better_support_for_screen_readers: false
-method: default
-disabled_javascripts: ''
+method: opt_in
+disabled_javascripts: 'public://google_tag/iied_publications_container/google_tag.script.js'
 automatic_cookies_removal: true
 allowed_cookies: ''
 consent_storage_method: do_not_store
@@ -71,7 +71,7 @@ enable_save_preferences_button: true
 domain_all_sites: false
 settings_tab_enabled: false
 containing_element: body
-cookie_policy_version: 1.0.0
+cookie_policy_version: 2.1.8
 cookie_value_disagreed: '0'
 cookie_value_agreed_show_thank_you: '1'
 cookie_value_agreed: '2'

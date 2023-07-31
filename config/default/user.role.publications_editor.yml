@@ -12,6 +12,7 @@ dependencies:
     - taxonomy.vocabulary.person
   module:
     - content_translation
+    - eu_cookie_compliance
     - filter
     - form_mode_control
     - media
@@ -40,6 +41,7 @@ permissions:
   - 'create terms in organisation'
   - 'create terms in person'
   - 'delete hidden_handbrake revisions'
+  - 'display eu cookie compliance popup'
   - 'edit any publication content'
   - 'edit own document media'
   - 'edit own hidden_handbrake content'
