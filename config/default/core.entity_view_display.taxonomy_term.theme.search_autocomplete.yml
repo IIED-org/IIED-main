@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.taxonomy_term.search_autocomplete
     - field.field.taxonomy_term.theme.field_legacy_code
     - field.field.taxonomy_term.theme.field_link
+    - field.field.taxonomy_term.theme.field_term_image
     - field.field.taxonomy_term.theme.layout_builder__layout
     - taxonomy.vocabulary.theme
   module:
@@ -69,6 +70,11 @@ targetEntityType: taxonomy_term
 bundle: theme
 mode: search_autocomplete
 content:
+  flag_subscribe_term:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
   search_api_excerpt:
     settings: {  }
     third_party_settings: {  }
@@ -78,5 +84,6 @@ hidden:
   description: true
   field_legacy_code: true
   field_link: true
+  field_term_image: true
   langcode: true
   layout_builder__layout: true

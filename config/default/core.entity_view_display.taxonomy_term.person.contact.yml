@@ -35,7 +35,6 @@ dependencies:
     - ds
     - layout_builder
     - name
-    - options
     - text
 third_party_settings:
   layout_builder:
@@ -82,9 +81,7 @@ content:
             classes: {  }
     weight: 1
     region: content
-  field_research_group:
-    type: list_default
-    label: hidden
+  flag_subscribe_term:
     settings: {  }
     third_party_settings: {  }
     weight: 2
@@ -108,6 +105,7 @@ hidden:
   field_person_type: true
   field_position_short: true
   field_quotes: true
+  field_research_group: true
   field_researcher_profiles: true
   field_standfirst: true
   field_theme: true
