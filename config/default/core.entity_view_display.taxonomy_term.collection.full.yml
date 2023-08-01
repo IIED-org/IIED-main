@@ -13,6 +13,7 @@ dependencies:
     - field.field.taxonomy_term.collection.field_publications_more_link
     - field.field.taxonomy_term.collection.field_short_description
     - field.field.taxonomy_term.collection.field_tags
+    - field.field.taxonomy_term.collection.field_term_image
     - field.field.taxonomy_term.collection.field_theme
     - field.field.taxonomy_term.collection.layout_builder__layout
     - taxonomy.vocabulary.collection
@@ -57,6 +58,16 @@ third_party_settings:
               context_mapping: {  }
               views_label: ''
               items_per_page: none
+            weight: 0
+            additional: {  }
+          e93b0ef8-760c-42b5-97ec-0ebfd3b5f2af:
+            uuid: e93b0ef8-760c-42b5-97ec-0ebfd3b5f2af
+            region: main
+            configuration:
+              id: 'extra_field_block:taxonomy_term:collection:flag_subscribe_term'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
             weight: 0
             additional: {  }
         third_party_settings: {  }
@@ -206,11 +217,17 @@ content:
     third_party_settings: {  }
     weight: 6
     region: content
+  flag_subscribe_term:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: main
 hidden:
   field_badge: true
   field_collection_type: true
   field_overview: true
   field_tags: true
+  field_term_image: true
   langcode: true
   layout_builder__layout: true
   search_api_excerpt: true

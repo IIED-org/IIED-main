@@ -13,6 +13,7 @@ dependencies:
     - field.field.taxonomy_term.collection.field_publications_more_link
     - field.field.taxonomy_term.collection.field_short_description
     - field.field.taxonomy_term.collection.field_tags
+    - field.field.taxonomy_term.collection.field_term_image
     - field.field.taxonomy_term.collection.field_theme
     - field.field.taxonomy_term.collection.layout_builder__layout
     - image.style.thumbnail
@@ -63,6 +64,11 @@ content:
             classes: {  }
     weight: 1
     region: content
+  flag_subscribe_term:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
 hidden:
   description: true
   field_about: true
@@ -72,6 +78,7 @@ hidden:
   field_overview: true
   field_publications_more_link: true
   field_tags: true
+  field_term_image: true
   field_theme: true
   langcode: true
   layout_builder__layout: true

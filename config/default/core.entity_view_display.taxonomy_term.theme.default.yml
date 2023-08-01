@@ -5,12 +5,14 @@ dependencies:
   config:
     - field.field.taxonomy_term.theme.field_legacy_code
     - field.field.taxonomy_term.theme.field_link
+    - field.field.taxonomy_term.theme.field_term_image
     - field.field.taxonomy_term.theme.layout_builder__layout
     - taxonomy.vocabulary.theme
   module:
     - layout_builder
     - layout_builder_restrictions
     - link
+    - svg_image
     - text
 third_party_settings:
   layout_builder:
@@ -21,7 +23,40 @@ third_party_settings:
         layout_id: layout_builder_blank
         layout_settings:
           label: ''
-        components: {  }
+        components:
+          210e388b-4944-4d52-8cd8-f0728da42fdf:
+            uuid: 210e388b-4944-4d52-8cd8-f0728da42fdf
+            region: null
+            configuration:
+              id: 'extra_field_block:taxonomy_term:theme:flag_subscribe_term'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 0
+            additional: {  }
+          6df8f3c0-f060-4c49-8792-6f9f52305562:
+            uuid: 6df8f3c0-f060-4c49-8792-6f9f52305562
+            region: null
+            configuration:
+              id: 'field_block:taxonomy_term:theme:field_term_image'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: image
+                label: above
+                settings:
+                  image_link: ''
+                  image_style: ''
+                  svg_attributes:
+                    width: null
+                    height: null
+                  svg_render_as_image: true
+                  image_loading:
+                    attribute: lazy
+                third_party_settings: {  }
+            weight: 1
+            additional: {  }
         third_party_settings: {  }
   layout_builder_restrictions:
     allowed_block_categories: {  }
@@ -76,6 +111,26 @@ content:
     third_party_settings: {  }
     weight: 2
     region: content
+  field_term_image:
+    type: image
+    label: above
+    settings:
+      image_link: ''
+      image_style: ''
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 11
+    region: null
+  flag_subscribe_term:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: null
 hidden:
   langcode: true
   layout_builder__layout: true

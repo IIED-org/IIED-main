@@ -12,6 +12,7 @@ dependencies:
     - field.field.taxonomy_term.collection.field_publications_more_link
     - field.field.taxonomy_term.collection.field_short_description
     - field.field.taxonomy_term.collection.field_tags
+    - field.field.taxonomy_term.collection.field_term_image
     - field.field.taxonomy_term.collection.field_theme
     - field.field.taxonomy_term.collection.layout_builder__layout
     - taxonomy.vocabulary.collection
@@ -107,6 +108,21 @@ content:
     third_party_settings: {  }
     weight: 9
     region: content
+  field_term_image:
+    type: image
+    label: above
+    settings:
+      image_link: ''
+      image_style: ''
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 12
+    region: content
   field_theme:
     type: entity_reference_label
     label: hidden
@@ -114,6 +130,11 @@ content:
       link: true
     third_party_settings: {  }
     weight: 6
+    region: content
+  flag_subscribe_term:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
     region: content
 hidden:
   langcode: true

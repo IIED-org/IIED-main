@@ -7,6 +7,7 @@ dependencies:
     - core.entity_view_mode.taxonomy_term.full
     - field.field.taxonomy_term.theme.field_legacy_code
     - field.field.taxonomy_term.theme.field_link
+    - field.field.taxonomy_term.theme.field_term_image
     - field.field.taxonomy_term.theme.layout_builder__layout
     - taxonomy.vocabulary.theme
     - views.view.popular_tags
@@ -194,6 +195,16 @@ third_party_settings:
               items_per_page: none
             weight: 0
             additional: {  }
+          e832cdbd-fec6-40b9-b21c-fd2bfe87636b:
+            uuid: e832cdbd-fec6-40b9-b21c-fd2bfe87636b
+            region: main
+            configuration:
+              id: 'extra_field_block:taxonomy_term:theme:flag_subscribe_term'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 0
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: tw-container
@@ -345,8 +356,14 @@ content:
             suffix: ''
     weight: 2
     region: ds_content
+  flag_subscribe_term:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: main
 hidden:
   field_legacy_code: true
+  field_term_image: true
   langcode: true
   layout_builder__layout: true
   search_api_excerpt: true
