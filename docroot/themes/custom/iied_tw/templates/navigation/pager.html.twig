@@ -60,7 +60,7 @@
       {% endif %}
       {# Now generate the actual pager piece. #}
       {% for key, item in items.pages %}
-        <li class="border border-gray-300 py-2 pager__item{{ current == key ? ' is-active bg-iiedblue-300' : '' }}">
+        <li class="border border-gray-300 py-2 [&:nth-child(n+4)]:hidden sm:[&:nth-child(n+4)]:inline pager__item{{ current == key ? ' is-active bg-iiedblue-300' : '' }}">
           {% if current == key %}
             {% set title = 'Current page'|t %}
           {% else %}
