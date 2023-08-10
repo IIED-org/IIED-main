@@ -7,7 +7,6 @@ dependencies:
     - field.field.user.user.field_first_name
     - field.field.user.user.field_occupation
     - field.field.user.user.field_organisation
-    - field.field.user.user.message_subscribe_email
     - field.field.user.user.user_picture
     - image.style.thumbnail
   module:
@@ -286,5 +285,4 @@ content:
     region: content
 hidden:
   langcode: true
-  message_subscribe_email: true
   search_api_excerpt: true
