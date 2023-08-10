@@ -1,14 +1,14 @@
-uuid: 3b92a9b1-a7ed-478c-8bbb-558b2631039d
+uuid: bc13278e-03a9-4576-b7b0-dd37ac8686c9
 langcode: en
 status: true
 dependencies:
   module:
-    - message
+    - user
 _core:
-  default_config_hash: 83mqc2VsIf_cb1VMY_T4_CjHDBi2f6pKB8biAfBcTBQ
-id: message.field_published
-field_name: field_published
-entity_type: message
+  default_config_hash: 1Eb15pF9hoMytbNSzI8HQ_ZqCuB_tSp4IycZ-lFClnM
+id: user.message_subscribe_email
+field_name: message_subscribe_email
+entity_type: user
 type: boolean
 settings: {  }
 module: core

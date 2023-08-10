@@ -1,3 +1,0 @@
-text:
-  -
-    value: "<p><a href='[message:user-url]'>[message:user-name]</a>&nbsp;<a href='[message:comment-url]'>commented</a> on&nbsp;[message:node-title]</p>\r\n <p>[message:node-render]</p>\r\n"

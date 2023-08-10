@@ -398,11 +398,11 @@ handlers:
     settings:
       states:
         - completed
-      to_mail: 'James.Persad@iied.org, Jon.Sharman@iied.org, Sarah.Grainger@iied.org'
+      to_mail: 'Matthew.Wright@iied.org, David.Sankar@iied.org'
       to_options: {  }
       bcc_mail: ''
       bcc_options: {  }
-      cc_mail: 'Matthew.Wright@iied.org, David.Sankar@iied.org'
+      cc_mail: ''
       cc_options: {  }
       from_mail: _default
       from_options: {  }

@@ -113,11 +113,6 @@ module:
   menu_link_content: 0
   menu_ui: 0
   merge_translations: 0
-  message: 0
-  message_notify: 0
-  message_notify_ui: 0
-  message_subscribe: 0
-  message_ui: 0
   metatag: 0
   metatag_dc: 0
   metatag_facebook: 0
@@ -156,6 +151,7 @@ module:
   rh_media: 0
   rh_node: 0
   rh_taxonomy: 0
+  scn: 0
   search404: 0
   search_api: 0
   search_api_autocomplete: 0
@@ -214,6 +210,7 @@ module:
   ds: 1
   pathauto: 1
   xmlsitemap: 1
+  comment_notify: 10
   content_translation: 10
   formdazzle: 10
   views: 10

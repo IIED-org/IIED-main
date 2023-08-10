@@ -8,6 +8,7 @@ dependencies:
     - field.field.user.user.field_first_name
     - field.field.user.user.field_occupation
     - field.field.user.user.field_organisation
+    - field.field.user.user.message_subscribe_email
     - field.field.user.user.user_picture
   module:
     - name
@@ -83,6 +84,7 @@ hidden:
   google_analytics: true
   langcode: true
   language: true
+  message_subscribe_email: true
   path: true
   timezone: true
   user_picture: true

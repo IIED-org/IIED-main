@@ -7,6 +7,7 @@ dependencies:
     - field.field.user.user.field_first_name
     - field.field.user.user.field_occupation
     - field.field.user.user.field_organisation
+    - field.field.user.user.message_subscribe_email
     - field.field.user.user.user_picture
     - image.style.thumbnail
   module:
@@ -94,6 +95,13 @@ content:
     weight: 0
     region: content
     settings: {  }
+    third_party_settings: {  }
+  message_subscribe_email:
+    type: boolean_checkbox
+    weight: 25
+    region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   path:
     type: path

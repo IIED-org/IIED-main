@@ -3481,10 +3481,25 @@ display:
         arguments: false
         filters: false
         filter_groups: false
+        header: false
         footer: false
       css_class: form-inline
       use_ajax: true
       display_description: ''
+      header:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: false
+          content:
+            value: "<div style=\"position:relative;\">\r\n<div id=\"block-gin-local-actions\" style=\"position: absolute; right: 20px; top: 20px;\">\r\n        <ul class=\"local-actions\">\r\n<li class=\"local-actions__item\"><a href=\"/node/add\" class=\"button button--action button--primary\" data-drupal-link-system-path=\"node/add\">Add content</a></li>\r\n    </ul>\r\n  </div>\r\n</div>"
+            format: basic_html
+          tokenize: false
       footer:
         area:
           id: area

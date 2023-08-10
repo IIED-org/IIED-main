@@ -1,0 +1,15 @@
+uuid: 27713d0b-a7c6-4cc8-840e-c86bd897af93
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.subscribe_to_comments
+  module:
+    - flag
+id: flag_action.subscribe_to_comments_unflag
+label: 'Unflag this item'
+type: comment
+plugin: 'flag_action:subscribe_to_comments_unflag'
+configuration:
+  flag_id: subscribe_to_comments
+  flag_action: unflag
