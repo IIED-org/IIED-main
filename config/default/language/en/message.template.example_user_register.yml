@@ -1,3 +1,0 @@
-text:
-  -
-    value: "<p><a href='[message:user-url]'>@{message:user-name}</a> registered.</p>\r\n"

@@ -53,6 +53,7 @@ dependencies:
     - publishcontent
     - rabbit_hole
     - redirect
+    - scn
     - shortcut
     - system
     - tablefield
@@ -96,6 +97,7 @@ permissions:
   - 'administer nodes'
   - 'administer pdf image entity entities'
   - 'administer redirects'
+  - 'administer scn configuration'
   - 'administer url aliases'
   - 'administer users'
   - 'administer webform submission'

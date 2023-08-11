@@ -10,7 +10,8 @@ dependencies:
     - text
 third_party_settings:
   allowed_formats:
-    allowed_formats: {  }
+    allowed_formats:
+      - simple_html
 id: node.hidden_handbrake.body
 field_name: body
 entity_type: node

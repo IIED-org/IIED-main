@@ -1,0 +1,20 @@
+scn_admin: 0
+scn_roles:
+  hh_reviewer: hh_reviewer
+  authenticated: 0
+  viewer: 0
+  hh_contributor: 0
+  publications_editor: 0
+  editor: 0
+  manager: 0
+  administrator: 0
+scn_maillist: ''
+scn_telegram: 0
+scn_telegram_bottoken: ''
+scn_telegram_chatids: ''
+scn_telegram_proxy: 0
+scn_telegram_proxy_server: ''
+scn_telegram_proxy_login: ''
+scn_telegram_proxy_password: ''
+scn_add_admin_overview_link: 0
+scn_add_admin_comment_link: 0

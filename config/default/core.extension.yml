@@ -66,7 +66,6 @@ module:
   file: 0
   file_mdm: 0
   filter: 0
-  flag: 0
   form_mode_control: 0
   format_bytes: 0
   geolocation: 0
@@ -113,11 +112,6 @@ module:
   menu_link_content: 0
   menu_ui: 0
   merge_translations: 0
-  message: 0
-  message_notify: 0
-  message_notify_ui: 0
-  message_subscribe: 0
-  message_ui: 0
   metatag: 0
   metatag_dc: 0
   metatag_facebook: 0
@@ -156,6 +150,7 @@ module:
   rh_media: 0
   rh_node: 0
   rh_taxonomy: 0
+  scn: 0
   search404: 0
   search_api: 0
   search_api_autocomplete: 0
