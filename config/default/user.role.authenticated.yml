@@ -4,7 +4,6 @@ status: true
 dependencies:
   module:
     - comment
-    - comment_notify
     - contact
     - eu_cookie_compliance
     - media
@@ -27,7 +26,6 @@ permissions:
   - 'post comments'
   - 'search content'
   - 'skip comment approval'
-  - 'subscribe to comments'
   - 'use search_api_autocomplete for acquia_search'
   - 'use search_api_autocomplete for acquia_search_solr'
   - 'use search_api_autocomplete for search'
