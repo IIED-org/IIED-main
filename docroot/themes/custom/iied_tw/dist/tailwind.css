@@ -3789,6 +3789,18 @@ cite {
   right: 1.25rem;
 }
 
+.-top-0\.5{
+  top: -0.125rem;
+}
+
+.left-1{
+  left: 0.25rem;
+}
+
+.-top-0{
+  top: -0px;
+}
+
 .right-7{
   right: 1.75rem;
 }
@@ -3960,6 +3972,11 @@ cite {
   margin-right: -1rem;
 }
 
+.mx-6{
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+}
+
 .mb-4{
   margin-bottom: 1rem;
 }
@@ -4032,16 +4049,16 @@ cite {
   margin-top: -2rem;
 }
 
+.mt-6{
+  margin-top: 1.5rem;
+}
+
 .mb-3{
   margin-bottom: 0.75rem;
 }
 
 .mb-2{
   margin-bottom: 0.5rem;
-}
-
-.mt-6{
-  margin-top: 1.5rem;
 }
 
 .ml-10{
@@ -4348,6 +4365,10 @@ cite {
   max-width: 20rem;
 }
 
+.max-w-4xl{
+  max-width: 56rem;
+}
+
 .max-w-3xl{
   max-width: 48rem;
 }
@@ -4358,10 +4379,6 @@ cite {
 
 .max-w-none{
   max-width: none;
-}
-
-.max-w-4xl{
-  max-width: 56rem;
 }
 
 .max-w-\[75\%\]{
@@ -4497,6 +4514,10 @@ cite {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.grid-cols-2{
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .flex-row{
   flex-direction: row;
 }
@@ -4565,6 +4586,10 @@ cite {
   justify-content: space-around;
 }
 
+.justify-items-center{
+  justify-items: center;
+}
+
 .gap-6{
   gap: 1.5rem;
 }
@@ -4579,6 +4604,10 @@ cite {
 
 .gap-2{
   gap: 0.5rem;
+}
+
+.gap-4{
+  gap: 1rem;
 }
 
 .gap-1{
@@ -4785,12 +4814,12 @@ cite {
   border-bottom-width: 1px;
 }
 
-.border-b-0{
-  border-bottom-width: 0px;
-}
-
 .border-b-4{
   border-bottom-width: 4px;
+}
+
+.border-b-0{
+  border-bottom-width: 0px;
 }
 
 .border-t{
@@ -4825,6 +4854,11 @@ cite {
   border-color: rgb(255 255 255 / var(--tw-border-opacity));
 }
 
+.border-iiedblue-500{
+  --tw-border-opacity: 1;
+  border-color: rgb(0 179 223 / var(--tw-border-opacity));
+}
+
 .border-iiedorange-500{
   --tw-border-opacity: 1;
   border-color: rgb(252 179 22 / var(--tw-border-opacity));
@@ -4835,9 +4869,9 @@ cite {
   border-color: rgb(229 231 235 / var(--tw-border-opacity));
 }
 
-.border-iiedblue-500{
+.border-gray-500{
   --tw-border-opacity: 1;
-  border-color: rgb(0 179 223 / var(--tw-border-opacity));
+  border-color: rgb(107 114 128 / var(--tw-border-opacity));
 }
 
 .bg-white{
@@ -4895,6 +4929,11 @@ cite {
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
 
+.bg-iiedbg-10{
+  --tw-bg-opacity: 1;
+  background-color: rgb(249 248 246 / var(--tw-bg-opacity));
+}
+
 .bg-iiedgreen-500{
   --tw-bg-opacity: 1;
   background-color: rgb(170 192 44 / var(--tw-bg-opacity));
@@ -4910,6 +4949,11 @@ cite {
   background-color: rgb(20 199 243 / var(--tw-bg-opacity));
 }
 
+.bg-iiedblue-100{
+  --tw-bg-opacity: 1;
+  background-color: rgb(40 219 255 / var(--tw-bg-opacity));
+}
+
 .bg-gray-800{
   --tw-bg-opacity: 1;
   background-color: rgb(31 41 55 / var(--tw-bg-opacity));
@@ -4919,15 +4963,13 @@ cite {
   background-image: linear-gradient(to right, var(--tw-gradient-stops));
 }
 
+.bg-\[url\(\'\/themes\/custom\/iied_tw\/templates\/layout\/icons\/line-pattern\.svg\'\)\]{
+  background-image: url('/themes/custom/iied_tw/templates/layout/icons/line-pattern.svg');
+}
+
 .from-iiedpink-900{
   --tw-gradient-from: #a62b76;
   --tw-gradient-to: rgb(166 43 118 / 0);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-}
-
-.from-white{
-  --tw-gradient-from: #fff;
-  --tw-gradient-to: rgb(255 255 255 / 0);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
@@ -4944,10 +4986,6 @@ cite {
 
 .to-iiedpink-700{
   --tw-gradient-to: #ba3f8a;
-}
-
-.to-iiedblue-10{
-  --tw-gradient-to: #e0f6fb;
 }
 
 .to-iiedblue-500{
@@ -5613,10 +5651,6 @@ cite {
   background-color: rgb(224 246 251 / var(--tw-bg-opacity));
 }
 
-.hover\:bg-gradient-to-br:hover{
-  background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
-}
-
 .hover\:text-link-hover:hover{
   --tw-text-opacity: 1;
   color: rgb(14 97 150 / var(--tw-text-opacity));
@@ -5674,6 +5708,10 @@ cite {
 .hover\:brightness-95:hover{
   --tw-brightness: brightness(.95);
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
+.focus\:border-b-4:focus{
+  border-bottom-width: 4px;
 }
 
 .focus\:border-b-2:focus{
@@ -5755,6 +5793,16 @@ cite {
 
 .group:hover .group-hover\:translate-x-0{
   --tw-translate-x: 0px;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.group:hover .group-hover\:-translate-x-0\.5{
+  --tw-translate-x: -0.125rem;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.group:hover .group-hover\:-translate-x-0{
+  --tw-translate-x: -0px;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
@@ -5935,6 +5983,10 @@ cite {
 
   .sm\:grid-cols-2{
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sm\:grid-cols-4{
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .sm\:flex-row{
@@ -7047,6 +7099,10 @@ cite {
 
   .lg\:gap-12{
     gap: 3rem;
+  }
+
+  .lg\:gap-10{
+    gap: 2.5rem;
   }
 
   .lg\:gap-6{

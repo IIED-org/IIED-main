@@ -1,0 +1,22 @@
+{#
+/**
+ * @file
+ * Theme override for an 'input' #type form element.
+ *
+ * Available variables:
+ * - attributes: A list of HTML attributes for the input element.
+ * - children: Optional additional rendered elements.
+ *
+ * @see template_preprocess_input()
+ * generalised from input--textfield--views--iied-europe-tracker.html.twig 
+ */
+#}
+<div class='py-2'>
+    <label class='relative'>
+    <svg width="24" height="24" fill="none" aria-hidden="true" class="absolute -top-0.5 w-6 h-6 text-gray-400 left-1"><path d="m19 19-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></circle></svg>
+
+    <input{{ attributes.addClass('h-12 pl-8 w-full px-4 text-gray-700 bg-white border border-gray-300 rounded-xl') }} placeholder="Search..." />
+    </label>
+</div>
+{{ children }}
+

@@ -1,16 +1,16 @@
     {# banner for non-authenticated HH users #}
-    <div class="mb-6 bg-iiedblue-10">
+    <div class="bg-iiedblue-100">
         <div class="container items-center justify-between p-4 sm:flex sm:pace-x-6">
             <div>
-                <p class="mb-2 mr-6 prose">Can you help to expose any hidden handbrakes?<br />
+                <p class="mb-2 mr-6 text-lg prose">Can you help to expose any hidden handbrakes?<br />
                 Log in or create an account to share a hidden handbrake with the community.
                 </p>
             </div>
             <div class="flex">
-                <div class="flex items-center h-10 px-3 py-2 mb-4 mr-4 transition bg-white border border-gray-300 rounded-full shadow-sm shrink-0 hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500">
+                <div class="flex items-center h-10 px-3 py-2 mb-4 mr-4 font-semibold transition bg-white border border-gray-500 rounded-full shadow-sm shrink-0 hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500 hover:ring-1">
                 {{ link('Login', 'route:user.login') }}
                 </div> 
-                <div class="flex items-center h-10 px-3 py-2 mb-4 transition bg-white border border-gray-300 rounded-full shadow-sm shrink-0 hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500">
+                <div class="flex items-center h-10 px-3 py-2 mb-4 font-semibold transition bg-white border border-gray-500 rounded-full shadow-sm shrink-0 hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500 hover:ring-1">
                     <a href="{{ path('multiple_registration.role_registration_page', {'rid': 'contributor'}, {'query': {'destination': path('<current>') }}) }}" class="use-ajax" data-dialog-type ="modal" data-dialog-options="{&quot;width&quot;:700,&quot;dialogClass&quot;:&quot;&quot;}">{{ 'Register'|t }}</a>
                 </div>
             </div>

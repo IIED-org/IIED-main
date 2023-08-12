@@ -76,8 +76,8 @@
       >
       <nav class="border-b border-gray-300">
         <div class="container flex flex-row">
-          <a x-ref="inthiscollection" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-2 focus:border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active': tab === 'inthiscollection' }" @click.prevent="tab = 'inthiscollection'; window.location.hash = 'inthiscollection'" href="#">In this collection</a>
-          <a x-ref="overview" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-2 focus:border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active': tab === 'overview' }" @click.prevent="tab = 'overview'; window.location.hash = 'overview'" href="#">Overview</a>
+          <a x-ref="inthiscollection" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-2 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-2': tab === 'inthiscollection' }" @click.prevent="tab = 'inthiscollection'; window.location.hash = 'inthiscollection'" href="#">In this collection</a>
+          <a x-ref="overview" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-2 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-2': tab === 'overview' }" @click.prevent="tab = 'overview'; window.location.hash = 'overview'" href="#">Overview</a>
         </div>  
       </nav>
         <div class="pt-6 tab-panel" x-show="tab === 'inthiscollection'" x-transition:enter.duration.750ms>

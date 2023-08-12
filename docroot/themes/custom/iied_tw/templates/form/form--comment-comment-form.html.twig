@@ -10,17 +10,6 @@
  * @see template_preprocess_form()
  */
 #}
-
-{%
-  set classes = [
-    'grid',
-    'grid-cols-2',
-    'sm:grid-cols-4',
-    'gap-4', 
-    'lg:gap-10',
-  ]
-%}
-
-<form{{ attributes.addClass(classes) }}>
+<form{{ attributes.addClass('grid grid-cols-1 gap-4') }}>
   {{ children }}
 </form>
