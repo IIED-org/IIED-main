@@ -79,10 +79,8 @@
 %}
 
 <article{{ attributes.addClass(classes) }}>
-  
-   {% include '@iied_tw/partials/_hh_navigation.html.twig' %}
    
-  <div class="my-6">
+  <div class="my-12">
  
     {#-- grid --#}
     <div
@@ -91,9 +89,9 @@
       <div
         class="xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4"
       >
-        <nav aria-label="themes">
-          <div class="mb-4 sm:justify-between sm:flex">
-            <div class="mb-2 sm:order-2">{{ drupal_block('language_block:language_interface', wrapper=false) }}</div>
+        <nav aria-label="back to main page">
+          <div class="mb-10">
+            {% include '@iied_tw/partials/_hh_navigation.html.twig' %}
           </div>
         </nav>
         <h1 class="mb-6 text-4xl">{{ node.label }}</h1>
@@ -101,7 +99,7 @@
         {#-- body --#}
         <div class="mb-6">
           <div
-            class="mb-4 prose prose-lg lg:prose-xl"
+            class="mb-12 prose prose-lg"
           >
           <div {{ content_attributes.addClass('node-content') }}> 
             {{ content.body }}

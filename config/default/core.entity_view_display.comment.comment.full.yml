@@ -1,0 +1,60 @@
+uuid: 0a2fcf6b-497e-4c6a-bba3-69965b5b8ff7
+langcode: en
+status: false
+dependencies:
+  config:
+    - comment.type.comment
+    - core.entity_view_mode.comment.full
+    - field.field.comment.comment.comment_body
+  module:
+    - ds
+    - layout_builder
+    - text
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: comment.comment.full
+targetEntityType: comment
+bundle: comment
+mode: full
+content:
+  comment_body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings:
+      ds:
+        ft:
+          id: expert
+          settings:
+            lb: Comments
+            lbw: true
+            lbw-el: h3
+            lbw-cl: mb-4
+            lbw-at: ''
+            lb-col: false
+            ow: false
+            ow-el: ''
+            ow-cl: ''
+            ow-at: ''
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
+            fis-def-at: false
+            fi: false
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            fi-def-at: false
+            prefix: ''
+            suffix: ''
+    weight: 0
+    region: content
+hidden:
+  langcode: true
+  links: true
+  search_api_excerpt: true

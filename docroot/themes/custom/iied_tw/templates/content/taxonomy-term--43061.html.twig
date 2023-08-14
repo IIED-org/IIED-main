@@ -27,7 +27,6 @@
 {%
   set classes = [
     'taxonomy-term',
-    'mb-12',
     'vocabulary-' ~ term.bundle|clean_class,
   ]
 %}
@@ -78,7 +77,7 @@
 
 {% if term.field_overview.value is not empty %}
   {{ attach_library('iied_tw/alpine') }}
-  <div>
+  <div class="pt-6">
     <div class="tab-wrapper" 
       x-data="{ tab: window.location.hash ? window.location.hash.substring(1) : 'discover' }"
       x-init="$refs[tab].focus()"
@@ -86,24 +85,24 @@
       >
       <nav class="border-b border-gray-300">
         <div class="container flex flex-row">
-          <a x-ref="discover" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-2 focus:border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active': tab === 'discover' }" @click.prevent="tab = 'discover'; window.location.hash = 'discover'" href="#">Discover hidden handbrakes</a>
+          <a x-ref="discover" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-4 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-4': tab === 'discover' }" @click.prevent="tab = 'discover'; window.location.hash = 'discover'" href="#">Discover hidden handbrakes</a>
 
-          <a x-ref="overview" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-2 focus:border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active': tab === 'overview' }" @click.prevent="tab = 'overview'; window.location.hash = 'overview'" href="#">Overview</a>
+          <a x-ref="overview" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-4 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-4': tab === 'overview' }" @click.prevent="tab = 'overview'; window.location.hash = 'overview'" href="#">Overview</a>
         {# My HH tab
         {% if (drupal_view_result('my_hidden_handbrakes', 'block_1') is not empty) and (logged_in) %}  
-          <a x-ref="my_hh" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-2 focus:border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active': tab === 'my-hh' }" @click.prevent="tab = 'my-hh'; window.location.hash = 'my-hh'" href="#">My hidden handbrakes</a>
+          <a x-ref="my_hh" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-4 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-4': tab === 'my-hh' }" @click.prevent="tab = 'my-hh'; window.location.hash = 'my-hh'" href="#">My hidden handbrakes</a>
         {% endif %} #}
 
         </div>  
       </nav>
-        <div class="pt-6 tab-panel" x-show="tab === 'discover'" x-transition:enter.duration.750ms>
+        <div class="pt-6 tab-panel bg-iiedbg-10" x-show="tab === 'discover'" x-transition:enter.duration.750ms>
           <div class="content">
             {{ content|without('field_overview', 'field_tags', 'field_theme') }}
           </div>
         </div>
-        <div class="pt-6 tab-panel" x-show="tab === 'overview'" x-transition:enter.duration.750ms>
+        <div class="pt-6 tab-panel bg-iiedbg-10" x-show="tab === 'overview'" x-transition:enter.duration.750ms>
            <div class="container content lg:grid lg:gap-x-6 lg:grid-cols-12">
-              <div class="mb-12 prose md:prose-lg lg:col-span-8 lg:col-start-5">
+              <div class="mt-6 mb-24 prose md:prose-lg lg:col-span-8 lg:col-start-5">
               {{ term.field_overview.value|raw }}
               </div>
           </div>

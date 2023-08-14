@@ -74,6 +74,9 @@ module.exports = {
           "text": "#1173B3",
           "hover": "#0E6196",
           "visited": "#51758B"
+        },
+        iiedbg: {
+          "10": "#F9F8F6"
         }
       },
       content: {
