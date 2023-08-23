@@ -410,13 +410,14 @@ final class DeprecationAnalyzer {
     $more_deprecations = array_merge(
       $this->twigDeprecationAnalyzer->analyze($extension),
       $this->libraryDeprecationAnalyzer->analyze($extension),
-      $this->themeFunctionDeprecationAnalyzer->analyze($extension),
-      $metadataDeprecations
+      $this->routeDeprecationAnalyzer->analyze($extension),
+      $this->CSSDeprecationAnalyzer->analyze($extension),
+      $metadataDeprecations,
     );
-    if (projectCollector::getDrupalCoreMajorVersion() > 8) {
+    if (projectCollector::getDrupalCoreMajorVersion() < 10) {
+      // Theme function support is not present in Drupal 10 and cannot be checked.
       $more_deprecations = array_merge($more_deprecations,
-        $this->routeDeprecationAnalyzer->analyze($extension),
-        $this->CSSDeprecationAnalyzer->analyze($extension)
+        $this->themeFunctionDeprecationAnalyzer->analyze($extension),
       );
     }
 
@@ -521,7 +522,13 @@ final class DeprecationAnalyzer {
    *   If the PHPStan configuration file cannot be written.
    */
   protected function createModifiedNeonFile() {
-    $module_path = DRUPAL_ROOT . '/' . drupal_get_path('module', 'upgrade_status');
+    if (function_exists('drupal_get_path')) {
+      // @todo remove compatibility layer with Drupal 9.3.0 when removing Drupal 9 compatibility.
+      $module_path = DRUPAL_ROOT . '/' . drupal_get_path('module', 'upgrade_status');
+    }
+    else {
+      $module_path = DRUPAL_ROOT . '/' . \Drupal::service('extension.list.module')->getPath('upgrade_status');
+    }
     $config = file_get_contents($module_path . '/deprecation_testing_template.neon');
     $config = str_replace(
       'parameters:',
