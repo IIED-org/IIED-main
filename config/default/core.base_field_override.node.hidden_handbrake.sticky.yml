@@ -1,14 +1,14 @@
-uuid: 66bc0634-ac1f-4854-8110-5bd598de0e5e
+uuid: 17fff0c3-fadc-4efc-b9e0-55dd96a4a73c
 langcode: en
 status: true
 dependencies:
   config:
     - node.type.hidden_handbrake
-id: node.hidden_handbrake.status
-field_name: status
+id: node.hidden_handbrake.sticky
+field_name: sticky
 entity_type: node
 bundle: hidden_handbrake
-label: Published
+label: 'Sticky at top of lists'
 description: ''
 required: false
 translatable: false

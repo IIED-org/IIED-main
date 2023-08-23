@@ -1,0 +1,18 @@
+uuid: e80665a1-51ad-4e53-a82b-fe24ec4c803b
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.hh_impact
+id: taxonomy_term.hh_impact.name
+field_name: name
+entity_type: taxonomy_term
+bundle: hh_impact
+label: Name
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,20 +1,20 @@
-uuid: 66bc0634-ac1f-4854-8110-5bd598de0e5e
+uuid: b11f5ab9-5f62-4950-9550-f4335ba3c4ba
 langcode: en
 status: true
 dependencies:
   config:
-    - node.type.hidden_handbrake
-id: node.hidden_handbrake.status
+    - taxonomy.vocabulary.un_geoscheme_regional_groupings
+id: taxonomy_term.un_geoscheme_regional_groupings.status
 field_name: status
-entity_type: node
-bundle: hidden_handbrake
+entity_type: taxonomy_term
+bundle: un_geoscheme_regional_groupings
 label: Published
 description: ''
 required: false
 translatable: false
 default_value:
   -
-    value: 0
+    value: 1
 default_value_callback: ''
 settings:
   on_label: 'On'
