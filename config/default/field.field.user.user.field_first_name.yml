@@ -14,13 +14,13 @@ third_party_settings:
       hh_contributor: hh_contributor
       authenticated: 0
     user_additional_register_form:
+      authenticated: authenticated
       hh_contributor: hh_contributor
-      authenticated: 0
 id: user.user.field_first_name
 field_name: field_first_name
 entity_type: user
 bundle: user
-label: Name
+label: 'Full name'
 description: ''
 required: false
 translatable: false

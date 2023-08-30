@@ -1,0 +1,25 @@
+uuid: 4937f156-ea7e-4d57-9ef0-201765cbf53d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_basic_text
+    - paragraphs.paragraphs_type.sticky_box
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    allowed_formats: {  }
+id: paragraph.sticky_box.field_basic_text
+field_name: field_basic_text
+entity_type: paragraph
+bundle: sticky_box
+label: 'Basic text'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

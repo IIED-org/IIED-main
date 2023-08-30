@@ -1,0 +1,23 @@
+uuid: a8b9d0a8-1d89-4589-9103-b5896593a676
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.sticky_box.field_basic_text
+    - paragraphs.paragraphs_type.sticky_box
+  module:
+    - text
+id: paragraph.sticky_box.default
+targetEntityType: paragraph
+bundle: sticky_box
+mode: default
+content:
+  field_basic_text:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

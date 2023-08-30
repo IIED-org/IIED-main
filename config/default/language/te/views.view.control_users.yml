@@ -4,9 +4,3 @@ display:
       fields:
         name:
           label: పేరు
-        edit_user:
-          label: మార్చు
-      filters:
-        uid:
-          expose:
-            label: పేరు
