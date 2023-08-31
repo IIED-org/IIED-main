@@ -1,0 +1,18 @@
+uuid: ac02c9eb-1b5c-4c5d-bf23-f91573a6db3b
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.webform
+id: node.webform.metatag
+field_name: metatag
+entity_type: node
+bundle: webform
+label: 'Metatags (Hidden field for JSON support)'
+description: 'The meta tags for the entity.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: map

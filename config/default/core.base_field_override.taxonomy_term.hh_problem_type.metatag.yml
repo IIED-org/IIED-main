@@ -1,0 +1,18 @@
+uuid: ed7492a4-0d53-472f-9881-31f1b68e1a85
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.hh_problem_type
+id: taxonomy_term.hh_problem_type.metatag
+field_name: metatag
+entity_type: taxonomy_term
+bundle: hh_problem_type
+label: 'Metatags (Hidden field for JSON support)'
+description: 'The meta tags for the entity.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: map

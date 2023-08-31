@@ -1,17 +1,17 @@
-uuid: f0946850-c806-4912-a0e5-2d1663ca088c
+uuid: 974462bd-9d85-4619-a2c7-3c235ee8b255
 langcode: en
 status: true
 dependencies:
   config:
-    - paragraphs.paragraphs_type.highchart
-id: paragraph.highchart.status
+    - node.type.webform
+id: node.webform.status
 field_name: status
-entity_type: paragraph
-bundle: highchart
+entity_type: node
+bundle: webform
 label: Published
 description: ''
 required: false
-translatable: true
+translatable: false
 default_value:
   -
     value: 1

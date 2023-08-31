@@ -1,0 +1,20 @@
+uuid: 72c7881c-8646-4c82-b00b-7fb1a00a0eb0
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.hidden_handbrake
+id: node.hidden_handbrake.uid
+field_name: uid
+entity_type: node
+bundle: hidden_handbrake
+label: 'Authored by'
+description: 'The username of the content author.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: 'Drupal\node\Entity\Node::getDefaultEntityOwner'
+settings:
+  handler: default
+  handler_settings: {  }
+field_type: entity_reference

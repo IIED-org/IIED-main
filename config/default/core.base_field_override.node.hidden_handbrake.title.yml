@@ -1,19 +1,18 @@
-uuid: bf3ff136-e7cb-48a7-80b6-82a32e338652
+uuid: faef840b-c08d-4632-ac00-c54f897c3be8
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_tagline
     - node.type.hidden_handbrake
-id: node.hidden_handbrake.field_tagline
-field_name: field_tagline
+id: node.hidden_handbrake.title
+field_name: title
 entity_type: node
 bundle: hidden_handbrake
-label: Tagline
+label: Title
 description: ''
-required: false
+required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings: {  }
-field_type: string_long
+field_type: string

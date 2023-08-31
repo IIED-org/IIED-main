@@ -1,0 +1,20 @@
+uuid: b9210dd0-c9c0-43ca-9fbb-523499b6301e
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.hh_audience
+  module:
+    - path
+id: taxonomy_term.hh_audience.path
+field_name: path
+entity_type: taxonomy_term
+bundle: hh_audience
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

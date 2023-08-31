@@ -1,17 +1,17 @@
-uuid: f0946850-c806-4912-a0e5-2d1663ca088c
+uuid: fbb46eb9-1f4f-4e61-b70e-f4fda71701e9
 langcode: en
 status: true
 dependencies:
   config:
-    - paragraphs.paragraphs_type.highchart
-id: paragraph.highchart.status
+    - taxonomy.vocabulary.hh_problem_type
+id: taxonomy_term.hh_problem_type.status
 field_name: status
-entity_type: paragraph
-bundle: highchart
+entity_type: taxonomy_term
+bundle: hh_problem_type
 label: Published
 description: ''
 required: false
-translatable: true
+translatable: false
 default_value:
   -
     value: 1
