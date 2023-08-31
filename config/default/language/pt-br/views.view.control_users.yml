@@ -4,9 +4,3 @@ display:
       fields:
         name:
           label: Nome
-        edit_user:
-          label: Editar
-      filters:
-        uid:
-          expose:
-            label: Nome
