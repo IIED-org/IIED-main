@@ -10,10 +10,10 @@ dependencies:
     - field.field.user.user.user_picture
     - image.style.thumbnail
   module:
+    - ds
     - field_group
     - layout_builder
     - layout_builder_restrictions
-    - layout_discovery
     - name
     - svg_image
     - user
@@ -71,7 +71,14 @@ content:
       preferred_field_reference_separator: ', '
       alternative_field_reference: ''
       alternative_field_reference_separator: ', '
-    third_party_settings: {  }
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
     weight: 52
     region: content
   field_occupation:
@@ -111,6 +118,10 @@ content:
     settings:
       image_link: content
       image_style: thumbnail
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
       image_loading:
         attribute: lazy
     third_party_settings: {  }

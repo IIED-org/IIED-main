@@ -1,0 +1,20 @@
+uuid: c45fa5b9-4197-4e27-8ed6-3fb1b1b88970
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.hh_impact
+  module:
+    - text
+id: taxonomy_term.hh_impact.description
+field_name: description
+entity_type: taxonomy_term
+bundle: hh_impact
+label: Description
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

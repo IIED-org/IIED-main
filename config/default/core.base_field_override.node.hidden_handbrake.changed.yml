@@ -1,19 +1,18 @@
-uuid: bf3ff136-e7cb-48a7-80b6-82a32e338652
+uuid: 6172cdf6-73f6-412b-8ad8-29d48f29c2c7
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_tagline
     - node.type.hidden_handbrake
-id: node.hidden_handbrake.field_tagline
-field_name: field_tagline
+id: node.hidden_handbrake.changed
+field_name: changed
 entity_type: node
 bundle: hidden_handbrake
-label: Tagline
-description: ''
+label: Changed
+description: 'The time that the node was last edited.'
 required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings: {  }
-field_type: string_long
+field_type: changed

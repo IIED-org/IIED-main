@@ -1,0 +1,18 @@
+uuid: 64f8fec4-bbc9-43de-94a5-9fa37b12bc83
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.hh_audience
+id: taxonomy_term.hh_audience.changed
+field_name: changed
+entity_type: taxonomy_term
+bundle: hh_audience
+label: Changed
+description: 'The time that the term was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

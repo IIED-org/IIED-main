@@ -1,19 +1,18 @@
-uuid: bf3ff136-e7cb-48a7-80b6-82a32e338652
+uuid: b7a2b5f2-8d7c-4ec4-92ef-6180f324a2c5
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_tagline
     - node.type.hidden_handbrake
-id: node.hidden_handbrake.field_tagline
-field_name: field_tagline
+id: node.hidden_handbrake.metatag
+field_name: metatag
 entity_type: node
 bundle: hidden_handbrake
-label: Tagline
-description: ''
+label: 'Metatags (Hidden field for JSON support)'
+description: 'The meta tags for the entity.'
 required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings: {  }
-field_type: string_long
+field_type: map

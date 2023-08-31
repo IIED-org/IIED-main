@@ -1,0 +1,20 @@
+uuid: 1c9b5942-1c59-4f0c-8b33-c47ea797fa56
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.un_geoscheme_regional_groupings
+  module:
+    - path
+id: taxonomy_term.un_geoscheme_regional_groupings.path
+field_name: path
+entity_type: taxonomy_term
+bundle: un_geoscheme_regional_groupings
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

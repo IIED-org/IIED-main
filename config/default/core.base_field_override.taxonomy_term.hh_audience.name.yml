@@ -1,0 +1,18 @@
+uuid: fbe305a1-fa39-4499-93a0-5cf8b84631c9
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.hh_audience
+id: taxonomy_term.hh_audience.name
+field_name: name
+entity_type: taxonomy_term
+bundle: hh_audience
+label: Name
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

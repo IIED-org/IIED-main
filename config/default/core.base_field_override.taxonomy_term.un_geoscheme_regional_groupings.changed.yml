@@ -1,0 +1,18 @@
+uuid: 4a6665df-bdcf-4959-a713-164ccce8a0b7
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.un_geoscheme_regional_groupings
+id: taxonomy_term.un_geoscheme_regional_groupings.changed
+field_name: changed
+entity_type: taxonomy_term
+bundle: un_geoscheme_regional_groupings
+label: Changed
+description: 'The time that the term was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

@@ -1,17 +1,17 @@
-uuid: f0946850-c806-4912-a0e5-2d1663ca088c
+uuid: 809fd5b1-1157-4eb9-a383-b1dbead2fbd6
 langcode: en
 status: true
 dependencies:
   config:
-    - paragraphs.paragraphs_type.highchart
-id: paragraph.highchart.status
+    - taxonomy.vocabulary.hh_audience
+id: taxonomy_term.hh_audience.status
 field_name: status
-entity_type: paragraph
-bundle: highchart
+entity_type: taxonomy_term
+bundle: hh_audience
 label: Published
 description: ''
 required: false
-translatable: true
+translatable: false
 default_value:
   -
     value: 1
