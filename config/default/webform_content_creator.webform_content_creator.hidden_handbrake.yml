@@ -19,6 +19,12 @@ elements:
     webform_field: summary
     custom_check: 0
     custom_value: ''
+  field_examples:
+    type: false
+    mapping: text_mapping
+    webform_field: examples
+    custom_check: 0
+    custom_value: ''
   field_hh_webform_sync:
     type: true
     mapping: numeric_mapping
@@ -41,6 +47,12 @@ elements:
     type: false
     mapping: default_mapping
     webform_field: other
+    custom_check: 0
+    custom_value: ''
+  field_problems:
+    type: false
+    mapping: text_mapping
+    webform_field: problems
     custom_check: 0
     custom_value: ''
   field_region_affected:

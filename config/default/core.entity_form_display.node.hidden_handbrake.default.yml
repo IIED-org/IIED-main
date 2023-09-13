@@ -7,11 +7,13 @@ dependencies:
     - field.field.node.hidden_handbrake.comment
     - field.field.node.hidden_handbrake.field_author_location
     - field.field.node.hidden_handbrake.field_date_published
+    - field.field.node.hidden_handbrake.field_examples
     - field.field.node.hidden_handbrake.field_hh_webform_sync
     - field.field.node.hidden_handbrake.field_hidden_handbrake_image
     - field.field.node.hidden_handbrake.field_how_stuck_handbrake
     - field.field.node.hidden_handbrake.field_impact_area
     - field.field.node.hidden_handbrake.field_other_type_of_problem
+    - field.field.node.hidden_handbrake.field_problems
     - field.field.node.hidden_handbrake.field_region_affected
     - field.field.node.hidden_handbrake.field_submitted_by
     - field.field.node.hidden_handbrake.field_tagline
@@ -40,66 +42,82 @@ content:
     third_party_settings: {  }
   comment:
     type: comment_default
-    weight: 20
+    weight: 22
     region: content
     settings: {  }
     third_party_settings: {  }
   created:
     type: datetime_timestamp
-    weight: 14
+    weight: 16
     region: content
     settings: {  }
     third_party_settings: {  }
   field_date_published:
     type: datetime_default
-    weight: 11
+    weight: 13
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_examples:
+    type: text_textarea
+    weight: 4
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
   field_hh_webform_sync:
     type: number
-    weight: 10
+    weight: 12
     region: content
     settings:
       placeholder: ''
     third_party_settings: {  }
   field_hidden_handbrake_image:
     type: media_library_widget
-    weight: 8
+    weight: 10
     region: content
     settings:
       media_types: {  }
     third_party_settings: {  }
   field_how_stuck_handbrake:
     type: number
-    weight: 7
+    weight: 9
     region: content
     settings:
       placeholder: ''
     third_party_settings: {  }
   field_impact_area:
     type: options_buttons
-    weight: 6
+    weight: 8
     region: content
     settings: {  }
     third_party_settings: {  }
   field_other_type_of_problem:
     type: string_textfield
-    weight: 5
+    weight: 7
     region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_problems:
+    type: text_textarea
+    weight: 3
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
   field_region_affected:
     type: options_buttons
-    weight: 3
+    weight: 5
     region: content
     settings: {  }
     third_party_settings: {  }
   field_submitted_by:
     type: entity_reference_autocomplete
-    weight: 9
+    weight: 11
     region: content
     settings:
       match_operator: CONTAINS
@@ -117,40 +135,40 @@ content:
     third_party_settings: {  }
   field_type_of_problem:
     type: options_buttons
-    weight: 4
+    weight: 6
     region: content
     settings: {  }
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 12
+    weight: 14
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   path:
     type: path
-    weight: 17
+    weight: 19
     region: content
     settings: {  }
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
-    weight: 15
+    weight: 17
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 19
+    weight: 21
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
-    weight: 16
+    weight: 18
     region: content
     settings:
       display_label: true
@@ -165,7 +183,7 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 13
+    weight: 15
     region: content
     settings:
       match_operator: CONTAINS
@@ -174,7 +192,7 @@ content:
       placeholder: ''
     third_party_settings: {  }
   url_redirects:
-    weight: 18
+    weight: 20
     region: content
     settings: {  }
     third_party_settings: {  }

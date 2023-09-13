@@ -11,7 +11,6 @@ dependencies:
     - image.style.thumbnail
   module:
     - ds
-    - field_group
     - layout_builder
     - layout_builder_restrictions
     - name
@@ -21,20 +20,6 @@ third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-  field_group:
-    group_wha_:
-      children: {  }
-      label: 'Wha?'
-      parent_name: ''
-      region: hidden
-      weight: 20
-      format_type: details
-      format_settings:
-        classes: ''
-        id: ''
-        open: false
-        description: ''
-        required_fields: false
   layout_builder_restrictions:
     allowed_block_categories: {  }
     entity_view_mode_restriction:

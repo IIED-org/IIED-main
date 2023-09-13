@@ -8,11 +8,13 @@ dependencies:
     - field.field.node.hidden_handbrake.comment
     - field.field.node.hidden_handbrake.field_author_location
     - field.field.node.hidden_handbrake.field_date_published
+    - field.field.node.hidden_handbrake.field_examples
     - field.field.node.hidden_handbrake.field_hh_webform_sync
     - field.field.node.hidden_handbrake.field_hidden_handbrake_image
     - field.field.node.hidden_handbrake.field_how_stuck_handbrake
     - field.field.node.hidden_handbrake.field_impact_area
     - field.field.node.hidden_handbrake.field_other_type_of_problem
+    - field.field.node.hidden_handbrake.field_problems
     - field.field.node.hidden_handbrake.field_region_affected
     - field.field.node.hidden_handbrake.field_submitted_by
     - field.field.node.hidden_handbrake.field_tagline
@@ -22,7 +24,6 @@ dependencies:
     - address
     - comment
     - datetime
-    - ds
     - text
     - user
 id: node.hidden_handbrake.default
@@ -51,7 +52,7 @@ content:
       view_mode: default
       pager_id: 0
     third_party_settings: {  }
-    weight: 13
+    weight: 10
     region: content
   field_author_location:
     type: address_default
@@ -67,7 +68,14 @@ content:
       timezone_override: ''
       format_type: medium
     third_party_settings: {  }
-    weight: 8
+    weight: 7
+    region: content
+  field_examples:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
     region: content
   field_hidden_handbrake_image:
     type: entity_reference_entity_view
@@ -76,7 +84,7 @@ content:
       view_mode: default
       link: false
     third_party_settings: {  }
-    weight: 12
+    weight: 9
     region: content
   field_how_stuck_handbrake:
     type: number_integer
@@ -85,7 +93,7 @@ content:
       thousand_separator: ''
       prefix_suffix: true
     third_party_settings: {  }
-    weight: 11
+    weight: 8
     region: content
   field_impact_area:
     type: entity_reference_label
@@ -93,7 +101,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 15
+    weight: 12
     region: content
   field_other_type_of_problem:
     type: string
@@ -101,7 +109,14 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 16
+    weight: 13
+    region: content
+  field_problems:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
     region: content
   field_region_affected:
     type: entity_reference_label
@@ -109,7 +124,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 2
+    weight: 4
     region: content
   field_submitted_by:
     type: entity_reference_label
@@ -124,7 +139,7 @@ content:
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 17
+    weight: 14
     region: content
   field_type_of_problem:
     type: entity_reference_label
@@ -132,7 +147,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 14
+    weight: 11
     region: content
   links:
     settings: {  }
