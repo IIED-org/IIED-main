@@ -20,7 +20,7 @@ field_name: field_email_updates
 entity_type: user
 bundle: user
 label: 'Please send me updates by email'
-description: ''
+description: 'We may contact you by email to ask any questions we have about your contributions or comments. However, we will not add you to our hidden handbrake updates mailing list unless you check this box.'
 required: false
 translatable: false
 default_value:

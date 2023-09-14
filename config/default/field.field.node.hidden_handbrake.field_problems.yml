@@ -1,0 +1,26 @@
+uuid: 3b98a7db-c849-4c8b-8915-e4eacf75d597
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_problems
+    - node.type.hidden_handbrake
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    allowed_formats:
+      - simple_html
+id: node.hidden_handbrake.field_problems
+field_name: field_problems
+entity_type: node
+bundle: hidden_handbrake
+label: 'Problems caused'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long
