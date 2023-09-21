@@ -136,7 +136,7 @@ display:
           value:
             min: ''
             max: ''
-            value: '-15 minutes'
+            value: '-10 minutes'
             type: offset
           group: 1
           exposed: false
@@ -156,6 +156,9 @@ display:
               authenticated: authenticated
               anonymous: '0'
               administrator: '0'
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
           is_grouped: false
           group_info:
             label: ''

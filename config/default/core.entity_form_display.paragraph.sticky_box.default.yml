@@ -1,0 +1,25 @@
+uuid: dffa4d96-e4a2-4bf9-b7aa-b30b5d5a51ae
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.sticky_box.field_basic_text
+    - paragraphs.paragraphs_type.sticky_box
+  module:
+    - text
+id: paragraph.sticky_box.default
+targetEntityType: paragraph
+bundle: sticky_box
+mode: default
+content:
+  field_basic_text:
+    type: text_textarea
+    weight: 0
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

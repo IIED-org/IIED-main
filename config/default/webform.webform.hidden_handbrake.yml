@@ -54,6 +54,24 @@ elements: |-
       '#counter_minimum': 3
       '#counter_maximum': 200
       '#format_items': comma
+    problems:
+      '#type': textarea
+      '#title': 'Problems caused'
+      '#description': '<div class="text-gray-500">Please briefly describe what problems this causes.</div>'
+      '#description_display': before
+      '#help_display': element_after
+      '#wrapper_attributes':
+        class:
+          - mt-4
+    examples:
+      '#type': textarea
+      '#title': Examples
+      '#description': '<div class="text-gray-500">Please provide at least one example of this hidden handbrake in action.</div>'
+      '#description_display': before
+      '#help_display': title_after
+      '#wrapper_attributes':
+        class:
+          - mt-4
     horizontal_rule:
       '#type': webform_horizontal_rule
       '#display_on': both

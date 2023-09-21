@@ -8,11 +8,13 @@ dependencies:
     - field.field.node.hidden_handbrake.comment
     - field.field.node.hidden_handbrake.field_author_location
     - field.field.node.hidden_handbrake.field_date_published
+    - field.field.node.hidden_handbrake.field_examples
     - field.field.node.hidden_handbrake.field_hh_webform_sync
     - field.field.node.hidden_handbrake.field_hidden_handbrake_image
     - field.field.node.hidden_handbrake.field_how_stuck_handbrake
     - field.field.node.hidden_handbrake.field_impact_area
     - field.field.node.hidden_handbrake.field_other_type_of_problem
+    - field.field.node.hidden_handbrake.field_problems
     - field.field.node.hidden_handbrake.field_region_affected
     - field.field.node.hidden_handbrake.field_submitted_by
     - field.field.node.hidden_handbrake.field_tagline
@@ -43,11 +45,13 @@ hidden:
   comment: true
   field_author_location: true
   field_date_published: true
+  field_examples: true
   field_hh_webform_sync: true
   field_hidden_handbrake_image: true
   field_how_stuck_handbrake: true
   field_impact_area: true
   field_other_type_of_problem: true
+  field_problems: true
   field_region_affected: true
   field_submitted_by: true
   field_tagline: true

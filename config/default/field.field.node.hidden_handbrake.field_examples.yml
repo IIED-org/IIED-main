@@ -1,0 +1,26 @@
+uuid: a87aa0ab-a5a4-4fff-8001-ac4f99e74b98
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_examples
+    - node.type.hidden_handbrake
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    allowed_formats:
+      - simple_html
+id: node.hidden_handbrake.field_examples
+field_name: field_examples
+entity_type: node
+bundle: hidden_handbrake
+label: Examples
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

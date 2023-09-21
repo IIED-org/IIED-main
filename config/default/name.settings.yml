@@ -4,4 +4,4 @@ component_required_marker: '*'
 sep1: ' '
 sep2: ', '
 sep3: ''
-user_preferred: field_first_name
+user_preferred: null

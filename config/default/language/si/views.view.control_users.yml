@@ -4,9 +4,3 @@ display:
       fields:
         name:
           label: නම
-        edit_user:
-          label: සංස්කරණය
-      filters:
-        uid:
-          expose:
-            label: නම

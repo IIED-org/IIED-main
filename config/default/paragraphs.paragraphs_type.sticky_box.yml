@@ -1,0 +1,10 @@
+uuid: d212be89-4302-4ab7-a7e5-3249093d4da9
+langcode: en
+status: true
+dependencies: {  }
+id: sticky_box
+label: 'Sticky box'
+icon_uuid: null
+icon_default: null
+description: 'Aside with sticky positioning elements'
+behavior_plugins: {  }
