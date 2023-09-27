@@ -1,0 +1,17 @@
+id: taxonomy_manager_settings
+label: Taxonomy manager
+migration_tags:
+  - Drupal 7
+  - Configuration
+source:
+  plugin: variable
+  variables:
+    - taxonomy_manager_pager_tree_page_size
+    - taxonomy_manager_disable_mouseover
+  source_module: taxonomy_manager
+process:
+  taxonomy_manager_pager_tree_page_size: taxonomy_manager_pager_tree_page_size
+  taxonomy_manager_disable_mouseover: taxonomy_manager_disable_mouseover
+destination:
+  plugin: config
+  config_name: taxonomy_manager.settings

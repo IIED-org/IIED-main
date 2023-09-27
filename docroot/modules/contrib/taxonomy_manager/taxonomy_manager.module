@@ -17,7 +17,7 @@ function taxonomy_manager_admin_menu_map() {
   $map['admin/structure/taxonomy_manager/voc/%taxonomy_vocabulary_machine_name'] = [
     'parent' => 'admin/structure/taxonomy_manager/voc',
     'arguments' => [
-      ['%taxonomy_vocabulary_machine_name' => array_keys(taxonomy_vocabulary_get_names())],
+      ['%taxonomy_vocabulary_machine_name' => array_keys(Drupal::entityQuery('taxonomy_vocabulary')->execute())],
     ],
   ];
   return $map;

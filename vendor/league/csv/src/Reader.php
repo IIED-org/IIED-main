@@ -14,9 +14,11 @@ declare(strict_types=1);
 namespace League\Csv;
 
 use CallbackFilterIterator;
+use Closure;
 use Iterator;
 use JsonSerializable;
 use SplFileObject;
+
 use function array_combine;
 use function array_filter;
 use function array_pad;
@@ -29,6 +31,7 @@ use function mb_strlen;
 use function mb_substr;
 use function strlen;
 use function substr;
+
 use const STREAM_FILTER_READ;
 
 /**
@@ -43,14 +46,28 @@ class Reader extends AbstractCsv implements TabularDataReader, JsonSerializable
     protected bool $is_empty_records_included = false;
     /** @var array<string> header record. */
     protected array $header = [];
+    /** @var array<callable> callable collection to format the record before reading. */
+    protected array $formatters = [];
 
     public static function createFromPath(string $path, string $open_mode = 'r', $context = null): static
     {
         return parent::createFromPath($path, $open_mode, $context);
     }
 
+    /**
+     * Adds a record formatter.
+     */
+    public function addFormatter(callable $formatter): self
+    {
+        $this->formatters[] = $formatter;
+
+        return $this;
+    }
+
     protected function resetProperties(): void
     {
+        parent::resetProperties();
+
         $this->nb_records = -1;
         $this->header = [];
     }
@@ -70,13 +87,11 @@ class Reader extends AbstractCsv implements TabularDataReader, JsonSerializable
      */
     public function getHeader(): array
     {
-        if (null === $this->header_offset || [] !== $this->header) {
-            return $this->header;
-        }
-
-        $this->header = $this->setHeader($this->header_offset);
-
-        return $this->header;
+        return match (true) {
+            null === $this->header_offset,
+            [] !== $this->header => $this->header,
+            default => ($this->header = $this->setHeader($this->header_offset)),
+        };
     }
 
     /**
@@ -120,11 +135,10 @@ class Reader extends AbstractCsv implements TabularDataReader, JsonSerializable
         $this->getDocument()->seek($offset);
         $record = $this->document->current();
 
-        if (false === $record) {
-            return [];
-        }
-
-        return (array) $record;
+        return match (true) {
+            false === $record => [],
+            default => (array) $record,
+        };
     }
 
     /**
@@ -180,24 +194,18 @@ class Reader extends AbstractCsv implements TabularDataReader, JsonSerializable
         return ResultSet::createFromTabularDataReader($this)->fetchColumnByOffset($offset);
     }
 
-    /** @codeCoverageIgnore */
-    public function fetchColumn($index = 0): Iterator
-    {
-        return ResultSet::createFromTabularDataReader($this)->fetchColumn($index);
-    }
-
+    /**
+     * @throws Exception
+     */
     public function first(): array
     {
         return ResultSet::createFromTabularDataReader($this)->first();
     }
 
+    /**
+     * @throws Exception
+     */
     public function nth(int $nth_record): array
-    {
-        return ResultSet::createFromTabularDataReader($this)->nth($nth_record);
-    }
-
-    /** @codeCoverageIgnore */
-    public function fetchOne(int $nth_record = 0): array
     {
         return ResultSet::createFromTabularDataReader($this)->nth($nth_record);
     }
@@ -235,6 +243,85 @@ class Reader extends AbstractCsv implements TabularDataReader, JsonSerializable
     public function jsonSerialize(): array
     {
         return array_values([...$this->getRecords()]);
+    }
+
+    /**
+     * @param Closure(array<string|null>, array-key=): (void|bool|null) $closure
+     */
+    public function each(Closure $closure): bool
+    {
+        foreach ($this as $offset => $record) {
+            if (false === $closure($record, $offset)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param Closure(array<string|null>, array-key=): bool $closure
+     */
+    public function exists(Closure $closure): bool
+    {
+        foreach ($this as $offset => $record) {
+            if (true === $closure($record, $offset)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Closure(TInitial|null, array<string|null>, array-key=): TInitial $closure
+     * @param TInitial|null $initial
+     *
+     * @template TInitial
+     *
+     * @return TInitial|null
+     */
+    public function reduce(Closure $closure, mixed $initial = null): mixed
+    {
+        foreach ($this as $offset => $record) {
+            $initial = $closure($initial, $record, $offset);
+        }
+
+        return $initial;
+    }
+
+    /**
+     * @param Closure(array<string|int>, array-key): bool $closure
+     *
+     * @throws Exception
+     * @throws SyntaxError
+     */
+    public function filter(Closure $closure): TabularDataReader
+    {
+        return Statement::create()->where($closure)->process($this);
+    }
+
+    /**
+     * @param int<0, max> $offset
+     * @param int<-1, max> $length
+     *
+     * @throws Exception
+     * @throws SyntaxError
+     */
+    public function slice(int $offset, int $length = -1): TabularDataReader
+    {
+        return Statement::create()->offset($offset)->limit($length)->process($this);
+    }
+
+    /**
+     * @param Closure(array<string|null>, array<string|null>): int $orderBy
+     *
+     * @throws Exception
+     * @throws SyntaxError
+     */
+    public function sorted(Closure $orderBy): TabularDataReader
+    {
+        return Statement::create()->orderBy($orderBy)->process($this);
     }
 
     /**
@@ -299,12 +386,18 @@ class Reader extends AbstractCsv implements TabularDataReader, JsonSerializable
      */
     protected function combineHeader(Iterator $iterator, array $header): Iterator
     {
+        $formatter = fn (array $record): array => array_reduce(
+            $this->formatters,
+            fn (array $record, callable $formatter): array => $formatter($record),
+            $record
+        );
+
         if ([] === $header) {
-            return $iterator;
+            return new MapIterator($iterator, $formatter(...));
         }
 
         $field_count = count($header);
-        $mapper = function (array $record) use ($header, $field_count): array {
+        $mapper = function (array $record) use ($header, $field_count, $formatter): array {
             if (count($record) !== $field_count) {
                 $record = array_slice(array_pad($record, $field_count, null), 0, $field_count);
             }
@@ -312,7 +405,7 @@ class Reader extends AbstractCsv implements TabularDataReader, JsonSerializable
             /** @var array<string|null> $assocRecord */
             $assocRecord = array_combine($header, $record);
 
-            return $assocRecord;
+            return $formatter($assocRecord);
         };
 
         return new MapIterator($iterator, $mapper);
@@ -405,5 +498,17 @@ class Reader extends AbstractCsv implements TabularDataReader, JsonSerializable
     public function isEmptyRecordsIncluded(): bool
     {
         return $this->is_empty_records_included;
+    }
+
+    /** @codeCoverageIgnore */
+    public function fetchColumn($index = 0): Iterator
+    {
+        return ResultSet::createFromTabularDataReader($this)->fetchColumn($index);
+    }
+
+    /** @codeCoverageIgnore */
+    public function fetchOne(int $nth_record = 0): array
+    {
+        return $this->nth($nth_record);
     }
 }

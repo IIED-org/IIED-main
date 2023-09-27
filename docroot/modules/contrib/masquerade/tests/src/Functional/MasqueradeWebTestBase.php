@@ -36,11 +36,39 @@ abstract class MasqueradeWebTestBase extends BrowserTestBase {
   protected $defaultTheme = 'stark';
 
   /**
-   * Various users for the tests.
+   * Admin users for the tests.
    *
    * @var \Drupal\user\UserInterface
    */
-  protected $admin_user, $auth_user, $editor_user, $masquerade_user, $moderator_user;
+  protected $adminUser;
+
+  /**
+   * Admin users for the tests.
+   *
+   * @var \Drupal\user\UserInterface
+   */
+  protected $authUser;
+
+  /**
+   * Editor users for the tests.
+   *
+   * @var \Drupal\user\UserInterface
+   */
+  protected $editorUser;
+
+  /**
+   * Masquerade users for the tests.
+   *
+   * @var \Drupal\user\UserInterface
+   */
+  protected $masqueradeUser;
+
+  /**
+   * Moderator users for the tests.
+   *
+   * @var \Drupal\user\UserInterface
+   */
+  protected $moderatorUser;
 
   /**
    * Lead editor user.
@@ -57,11 +85,32 @@ abstract class MasqueradeWebTestBase extends BrowserTestBase {
   protected $superUser;
 
   /**
-   * Various roles for the tests.
+   * Admin roles for the tests.
    *
    * @var \Drupal\user\RoleInterface
    */
-  protected $admin_role, $editor_role, $masquerade_role, $moderator_role;
+  protected $adminRole;
+
+  /**
+   * Editor roles for the tests.
+   *
+   * @var \Drupal\user\RoleInterface
+   */
+  protected $editorRole;
+
+  /**
+   * Masquerade roles for the tests.
+   *
+   * @var \Drupal\user\RoleInterface
+   */
+  protected $masqueradeRole;
+
+  /**
+   * Moderator roles for the tests.
+   *
+   * @var \Drupal\user\RoleInterface
+   */
+  protected $moderatorRole;
 
   /**
    * Lead role.
@@ -77,29 +126,29 @@ abstract class MasqueradeWebTestBase extends BrowserTestBase {
     parent::setUp();
 
     // Create and configure User module's admin role.
-    $this->admin_role = Role::create([
+    $this->adminRole = Role::create([
       'id' => 'administrator',
       'label' => 'Administrator',
     ]);
     // Users in this role get all permissions assigned by default.
-    $this->admin_role->set('is_admin', TRUE)->save();
+    $this->adminRole->set('is_admin', TRUE)->save();
 
     // Create a 'masquerade' role to masquerade as users without roles.
-    $this->masquerade_role = Role::create([
+    $this->masqueradeRole = Role::create([
       'id' => 'masquerade',
       'label' => 'Masquerade',
     ]);
-    $this->masquerade_role
+    $this->masqueradeRole
       // Allow only authenticated (without any other roles).
       ->grantPermission('masquerade as authenticated')
       ->save();
 
     // Create an additional 'editor' role to masquerade as basic users.
-    $this->editor_role = Role::create([
+    $this->editorRole = Role::create([
       'id' => 'editor',
       'label' => 'Editor',
     ]);
-    $this->editor_role
+    $this->editorRole
       ->grantPermission('masquerade as masquerade')
       ->grantPermission('masquerade as authenticated')
       ->save();
@@ -115,32 +164,32 @@ abstract class MasqueradeWebTestBase extends BrowserTestBase {
       ->save();
 
     // Create an additional 'moderator' role to check 'masquerade as any user'.
-    $this->moderator_role = Role::create([
+    $this->moderatorRole = Role::create([
       'id' => 'moderator',
       'label' => 'Moderator',
     ]);
-    $this->moderator_role
+    $this->moderatorRole
       ->grantPermission('masquerade as any user')
       ->save();
 
     // Create test users with varying privilege levels.
     // Administrative user with User module's admin role *only*.
-    $this->admin_user = $this->drupalCreateUser();
-    $this->admin_user->setUsername('admin_user');
-    $this->admin_user->addRole($this->admin_role->id());
-    $this->admin_user->save();
+    $this->adminUser = $this->drupalCreateUser();
+    $this->adminUser->setUsername('admin_user');
+    $this->adminUser->addRole($this->adminRole->id());
+    $this->adminUser->save();
 
     // Moderator user.
-    $this->moderator_user = $this->drupalCreateUser();
-    $this->moderator_user->setUsername('moderator_user');
-    $this->moderator_user->addRole($this->moderator_role->id());
-    $this->moderator_user->save();
+    $this->moderatorUser = $this->drupalCreateUser();
+    $this->moderatorUser->setUsername('moderator_user');
+    $this->moderatorUser->addRole($this->moderatorRole->id());
+    $this->moderatorUser->save();
 
     // Editor user.
-    $this->editor_user = $this->drupalCreateUser();
-    $this->editor_user->setUsername('editor_user');
-    $this->editor_user->addRole($this->editor_role->id());
-    $this->editor_user->save();
+    $this->editorUser = $this->drupalCreateUser();
+    $this->editorUser->setUsername('editor_user');
+    $this->editorUser->addRole($this->editorRole->id());
+    $this->editorUser->save();
 
     // Lead editor user.
     $this->leadEditorUser = $this->drupalCreateUser();
@@ -151,18 +200,18 @@ abstract class MasqueradeWebTestBase extends BrowserTestBase {
     // Super user.
     $this->superUser = $this->drupalCreateUser();
     $this->superUser->setUsername('super_user');
-    $this->superUser->addRole($this->editor_role->id());
-    $this->superUser->addRole($this->admin_role->id());
+    $this->superUser->addRole($this->editorRole->id());
+    $this->superUser->addRole($this->adminRole->id());
     $this->superUser->save();
 
     // Masquerade user.
-    $this->masquerade_user = $this->drupalCreateUser();
-    $this->masquerade_user->setUsername('masquerade_user');
-    $this->masquerade_user->addRole($this->masquerade_role->id());
-    $this->masquerade_user->save();
+    $this->masqueradeUser = $this->drupalCreateUser();
+    $this->masqueradeUser->setUsername('masquerade_user');
+    $this->masqueradeUser->addRole($this->masqueradeRole->id());
+    $this->masqueradeUser->save();
 
     // Authenticated user.
-    $this->auth_user = $this->drupalCreateUser();
+    $this->authUser = $this->drupalCreateUser();
 
     // Place block to allow unmasquerade link accessible.
     $this->drupalPlaceBlock('system_menu_block:account');
@@ -180,20 +229,21 @@ abstract class MasqueradeWebTestBase extends BrowserTestBase {
   protected function masqueradeAs(AccountInterface $account) {
     $this->drupalGet('user/' . $account->id());
     $this->clickLink($this->t('Masquerade as @name', ['@name' => $account->getDisplayName()]));
-    //$this->drupalGet('user/' . $account->id() . '/masquerade', [
-    //  'query' => [
-    //    'token' => $this->drupalGetToken('user/' . $account->id() . '/masquerade'),
-    //  ],
-    //]);
-    //$this->assertSession()->statusCodeEquals(200);
+    // $this->drupalGet('user/' . $account->id() . '/masquerade', [
+    // 'query' => [
+    // 'token' =>
+    // $this->drupalGetToken('user/' . $account->id() . '/masquerade'),
+    // ],
+    // ]);
+    // $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()
       ->pageTextContains('You are now masquerading as ' . $account->label());
 
     // Update the logged in user account.
     // @see \Drupal\Tests\BrowserTestBase::drupalLogin()
     if (isset($this->session_id)) {
-      //$this->loggedInUser = $account;
-      //$this->loggedInUser->session_id = $this->session_id;
+      // $this->loggedInUser = $account;
+      // $this->loggedInUser->session_id = $this->session_id;
     }
   }
 
@@ -209,20 +259,20 @@ abstract class MasqueradeWebTestBase extends BrowserTestBase {
   protected function unmasquerade(AccountInterface $account) {
     $this->drupalGet('user/' . $account->id());
     $this->clickLink('Unmasquerade');
-    //$this->drupalGet('unmasquerade', [
-    //  'query' => [
-    //    'token' => $this->drupalGetToken('unmasquerade'),
-    //  ],
-    //]);
-    //$this->assertSession()->statusCodeEquals(200);
+    // $this->drupalGet('unmasquerade', [
+    // 'query' => [
+    // 'token' => $this->drupalGetToken('unmasquerade'),
+    // ],
+    // ]);
+    // $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()
       ->pageTextContains('You are no longer masquerading as ' . $account->label());
 
     // Update the logged in user account.
     // @see \Drupal\Tests\BrowserTestBase::drupalLogin()
     if (isset($this->session_id)) {
-      //$this->loggedInUser = $account;
-      //$this->loggedInUser->session_id = $this->session_id;
+      // $this->loggedInUser = $account;
+      // $this->loggedInUser->session_id = $this->session_id;
     }
   }
 
@@ -288,7 +338,7 @@ abstract class MasqueradeWebTestBase extends BrowserTestBase {
     $private_key = $this->container->get('private_key')->get();
     /** @var \Drupal\Core\Session\MetadataBag $session_metadata */
     $session_metadata = $this->container->get('session_manager.metadata_bag');
-    // @TODO Try to get seed from testing site, broken now.
+    // @todo Try to get seed from testing site, broken now.
     $seed = $session_metadata->getCsrfTokenSeed();
     return Crypt::hmacBase64($value, $seed . $private_key . Settings::getHashSalt());
   }

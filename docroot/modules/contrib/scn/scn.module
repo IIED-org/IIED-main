@@ -94,7 +94,7 @@ function _scn_send_telegram($url, $token, $chatid, $proxy = FALSE, $proxy_server
     curl_close($curl);
   }
   else {
-    \Drupal::logger('Simple Comment Notify')->notice(t("Can't initialize cURL. Is it installed on the server?"));
+    \Drupal::logger('Simple Comment Notify')->notice(t('Cannot initialize cURL. Is it installed on the server?'));
   }
 
 }
@@ -107,14 +107,14 @@ function scn_entity_insert(EntityInterface $entity) {
     $config = \Drupal::config('scn.settings');
     $subject = $entity->getSubject();
     $url = $entity->permalink()->setOption('absolute', TRUE)->toString();
-
     $site_url = \Drupal::request()->getSchemeAndHttpHost();
+
     if ($config->get('scn_add_admin_overview_link')) {
-      $url .= "\r\n" . t("Comments overview page: ") . Url::fromUri($site_url . "/admin/content/comment/approval")->toString();
+      $url .= "\r\n" . t('Comments overview page:') . ' ' . Url::fromUri($site_url . '/admin/content/comment/approval')->toString();
     }
 
     if ($config->get('scn_add_admin_comment_link')) {
-      $url .= "\r\n" . t("Comment admin page: ") . Url::fromUri($site_url . '/comment/'. $entity->id() . "/edit?destination=/admin/content/comment/approval")->toString();
+      $url .= "\r\n" . t('Comment admin page:') . ' ' . Url::fromUri($site_url . '/comment/' . $entity->id() . '/edit?destination=/admin/content/comment/approval')->toString();
     }
 
     $params = [
@@ -126,21 +126,28 @@ function scn_entity_insert(EntityInterface $entity) {
     if ($config->get('scn_admin')) {
       $account = User::load(1);
       $to = $account->getEmail();
-      _scn_send_mail($to, $subject, $params);
+      if ($to) {
+        _scn_send_mail($to, $subject, $params);
+      }
     }
 
     // Send to users with roles.
-    foreach (array_values($config->get('scn_roles')) as $user_role) {
-      if ($user_role !== 0) {
-        $ids = \Drupal::entityQuery('user')
-          ->condition('status', 1)
-          ->condition('roles', $user_role)
-          ->execute();
-        $users = User::loadMultiple($ids);
-        if (!empty(array_filter($users))) {
-          foreach ($users as $user) {
-            $to = $user->getEmail();
-            _scn_send_mail($to, $subject, $params);
+    if ($config->get('scn_roles')) {
+      foreach (array_values($config->get('scn_roles')) as $user_role) {
+        if ($user_role !== 0) {
+          $ids = \Drupal::entityQuery('user')
+            ->condition('status', 1)
+            ->condition('roles', $user_role)
+            ->accessCheck(false)
+            ->execute();
+          $users = User::loadMultiple($ids);
+          if (!empty(array_filter($users))) {
+            foreach ($users as $user) {
+              $to = $user->getEmail();
+              if ($to) {
+                _scn_send_mail($to, $subject, $params);
+              }
+            }
           }
         }
       }
@@ -151,11 +158,23 @@ function scn_entity_insert(EntityInterface $entity) {
       $mails = explode(',', $config->get('scn_maillist'));
       foreach ($mails as $mail) {
         $to = $mail;
+        if ($to) {
+          _scn_send_mail($to, $subject, $params);
+        }
+      }
+    }
+
+    // Send to node author.
+    if ($config->get('scn_node_author')) {
+      $node = $entity->getCommentedEntity();
+      $node_author = $node->getOwner();
+      $to = $node_author->getEmail();
+      if ($to) {
         _scn_send_mail($to, $subject, $params);
       }
     }
 
-    // Sent message to telegram.
+    // Send message to telegram.
     if ($config->get('scn_telegram')) {
       $token = $config->get('scn_telegram_bottoken');
       $chatids = explode(',', $config->get('scn_telegram_chatids'));

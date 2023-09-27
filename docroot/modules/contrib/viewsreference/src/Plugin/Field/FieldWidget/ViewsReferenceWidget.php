@@ -3,9 +3,9 @@
 namespace Drupal\viewsreference\Plugin\Field\FieldWidget;
 
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Field\Plugin\Field\FieldWidget\EntityReferenceAutocompleteWidget;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\Validator\ConstraintViolationInterface;
-use Drupal\Core\Field\Plugin\Field\FieldWidget\EntityReferenceAutocompleteWidget;
 
 /**
  * Plugin implementation of the 'entity_reference_autocomplete' widget.
@@ -36,7 +36,7 @@ class ViewsReferenceWidget extends EntityReferenceAutocompleteWidget {
    * {@inheritdoc}
    */
   public function errorElement(array $element, ConstraintViolationInterface $error, array $form, FormStateInterface $form_state) {
-    return isset($element['display_id']) ? $element['display_id'] : FALSE;
+    return $element['display_id'] ?? FALSE;
   }
 
 }

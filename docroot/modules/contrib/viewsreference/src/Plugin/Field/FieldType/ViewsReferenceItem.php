@@ -2,13 +2,13 @@
 
 namespace Drupal\viewsreference\Plugin\Field\FieldType;
 
-use Drupal\views\Views;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem;
 use Drupal\Core\TypedData\DataDefinition;
+use Drupal\views\Views;
 
 /**
  * Defines the 'viewsreference' entity field type.
@@ -90,12 +90,12 @@ class ViewsReferenceItem extends EntityReferenceItem {
   public function setValue($values, $notify = TRUE) {
     // Select widget has extra layer of items.
     if (isset($values['target_id']) && is_array($values['target_id'])) {
-      $values['target_id'] = isset($values['target_id'][0]['target_id']) ? $values['target_id'][0]['target_id'] : NULL;
+      $values['target_id'] = $values['target_id'][0]['target_id'] ?? NULL;
     }
 
     // Empty string argument only possible if no argument supplied.
-    $data = unserialize($values['data'], ['allowed_classes' => FALSE]);
-    if (isset($data['argument']) && $data['argument'] === '') {
+    $data = !empty($values['data']) ? unserialize($values['data'], ['allowed_classes' => FALSE]) : [];
+    if (isset($data['argument']) && '' === $data['argument']) {
       $data['argument'] = NULL;
       $values['data'] = serialize($data);
     }
@@ -109,9 +109,9 @@ class ViewsReferenceItem extends EntityReferenceItem {
   public function fieldSettingsForm(array $form, FormStateInterface $form_state) {
     $form = parent::fieldSettingsForm($form, $form_state);
     $settings = $this->getSettings();
-    $preselect_views = isset($settings['preselect_views']) ? $settings['preselect_views'] : [];
-    $default_plugins = isset($settings['plugin_types']) ? $settings['plugin_types'] : [];
-    $enabled_settings = isset($settings['enabled_settings']) ? $settings['enabled_settings'] : [];
+    $preselect_views = $settings['preselect_views'] ?? [];
+    $default_plugins = $settings['plugin_types'] ?? [];
+    $enabled_settings = $settings['enabled_settings'] ?? [];
     $display_options = $this->getAllViewDisplayIds();
     $view_list = $this->getAllViewsNames();
 
@@ -165,7 +165,7 @@ class ViewsReferenceItem extends EntityReferenceItem {
     $types = Views::pluginList();
     $options = [];
     foreach ($types as $key => $type) {
-      if ($type['type'] === 'display') {
+      if ('display' === $type['type']) {
         $options[str_replace('display:', '', $key)] = $type['title']->render();
       }
     }
@@ -192,7 +192,7 @@ class ViewsReferenceItem extends EntityReferenceItem {
    */
   public function isEmpty() {
     // Avoid loading the entity by first checking the 'display_id'.
-    if ($this->display_id === NULL || $this->display_id == '') {
+    if (NULL === $this->display_id || '' == $this->display_id) {
       return TRUE;
     }
     return parent::isEmpty();

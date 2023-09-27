@@ -74,16 +74,16 @@ class Settings {
    *
    * @param \Drupal\Core\Config\Config $config
    *   Static config for Acquia Connector.
-   * @param string $network_id
+   * @param string|null $network_id
    *   Subscription Identifier.
-   * @param string $secret_key
+   * @param string|null $secret_key
    *   Secret key.
-   * @param string $application_uuid
+   * @param string|null $application_uuid
    *   Application UUID.
    * @param array|string $metadata
    *   Settings Metadata.
    */
-  public function __construct(Config $config, string $network_id = NULL, string $secret_key = NULL, string $application_uuid, $metadata = NULL) {
+  public function __construct(Config $config, string $network_id = NULL, string $secret_key = NULL, string $application_uuid = NULL, $metadata = NULL) {
     $this->config = $config;
     $this->identifier = $network_id ?? '';
     $this->secretKey = $secret_key ?? '';

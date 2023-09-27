@@ -44,6 +44,12 @@ class SCNSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('scn_admin'),
       '#description' => $this->t('Send mail to user with uid=1'),
     ];
+    $form['fieldset']['scn_node_author'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Node author'),
+      '#default_value' => $config->get('scn_node_author'),
+      '#description' => $this->t('Send mail to the Node author'),
+    ];
     $form['fieldset']['scn_roles'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('Roles'),
@@ -113,10 +119,10 @@ class SCNSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('scn_telegram_proxy_password'),
     ];
     $form['fieldset']['scn_add_admin_overview_link'] = [
-     '#type' => 'checkbox',
-     '#title' => $this->t('Add admin overview link'),
-     '#default_value' => $config->get('scn_add_admin_overview_link'),
-     '#description' => '',
+      '#type' => 'checkbox',
+      '#title' => $this->t('Add admin overview link'),
+      '#default_value' => $config->get('scn_add_admin_overview_link'),
+      '#description' => '',
     ];
     $form['fieldset']['scn_add_admin_comment_link'] = [
       '#type' => 'checkbox',
@@ -135,6 +141,7 @@ class SCNSettingsForm extends ConfigFormBase {
     $values = $form_state->getValues();
     $this->config('scn.settings')
       ->set('scn_admin', $values['scn_admin'])
+      ->set('scn_node_author', $values['scn_node_author'])
       ->set('scn_roles', $values['scn_roles'])
       ->set('scn_maillist', $values['scn_maillist'])
       ->set('scn_telegram', $values['scn_telegram'])

@@ -40,9 +40,22 @@ class LinkFieldMapping extends FieldMappingBase {
 
   public function mapEntityField(ContentEntityInterface &$content, array $webform_element, FieldDefinitionInterface $field_definition, array $data = [], array $attributes = []) {
     $field_id = $field_definition->getName();
-    $field_value['uri'] = $data[$field_id];
-    $field_value['title'] = $data[$field_id];
-    $content->set($field_id, $field_value);
+
+    $field_value = [];
+    if (isset($data[$field_id])) {
+      if (!array_key_exists('url', $data[$field_id])) {
+        foreach ($data[$field_id] as $key => $field_value_item) {
+          $field_value[$key]['uri'] = $field_value_item['url'];
+          $field_value[$key]['title'] = $field_value_item['title'];
+        }
+      }
+      else {
+        $field_value['uri'] = $data[$field_id]['url'];
+        $field_value['title'] = $data[$field_id]['title'];
+      }
+      $content->set($field_id, $field_value);
+    }
+
   }
 
 }

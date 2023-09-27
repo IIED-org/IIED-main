@@ -6,7 +6,6 @@ namespace Drupal\Tests\acquia_connector\Kernel\EventSubscriber;
 
 use Drupal\acquia_connector\AcquiaConnectorEvents;
 use Drupal\acquia_connector\Event\AcquiaSubscriptionSettingsEvent;
-use Drupal\acquia_connector\Settings;
 use Drupal\Component\Uuid\Php as PhpUuid;
 use Drupal\Core\Site\Settings as CoreSettings;
 use Drupal\Tests\acquia_connector\Kernel\AcquiaConnectorTestBase;
@@ -60,13 +59,9 @@ final class GetSettingsTest extends AcquiaConnectorTestBase {
   public function testFromCoreSettings(): void {
     $uuid = (new PhpUuid())->generate();
     $settings = CoreSettings::getAll();
-    $settings['acquia_connector.settings'] = new Settings(
-      // @todo this impossible to set from $settings['acquia_connector.settings'].
-      $this->config('acquia_connector.settings'),
-      'ABC-1234',
-      'TEST_KEY',
-      $uuid,
-    );
+    $settings['ah_network_identifier'] = 'ABC-1234';
+    $settings['ah_network_key'] = 'TEST_KEY';
+    $settings['ah_application_uuid'] = $uuid;
     new CoreSettings($settings);
     $event = $this->dispatchEvent();
     self::assertEquals('core_settings', $event->getProvider());
@@ -150,22 +145,17 @@ final class GetSettingsTest extends AcquiaConnectorTestBase {
    * Tests with combination of values.
    */
   public function testWithCombination(): void {
+    $uuid = '2847ba56-cb57-4d37-85f1-baa69ff0c604';
     $settings = CoreSettings::getAll();
-    $settings['acquia_connector.settings'] = new Settings(
-    // Impossible to set from $settings['acquia_connector.settings'].
-      $this->config('acquia_connector.settings'),
-      'ABC-1234',
-      'TEST_KEY',
-      '',
-    );
     $settings['ah_network_identifier'] = 'ABC-1234';
     $settings['ah_network_key'] = 'TEST_KEY';
+    $settings['ah_application_uuid'] = $uuid;
     new CoreSettings($settings);
 
     $this->putEnv('AH_SITE_ENVIRONMENT', 'test');
     $this->putEnv('AH_SITE_NAME', 'foo');
     $this->putEnv('AH_SITE_GROUP', 'bar');
-    $this->putEnv('AH_APPLICATION_UUID', '2847ba56-cb57-4d37-85f1-baa69ff0c604');
+    $this->putEnv('AH_APPLICATION_UUID', $uuid);
 
     $this->container->get('state')->setMultiple([
       'acquia_connector.identifier' => 'ABC-1234',
@@ -181,7 +171,7 @@ final class GetSettingsTest extends AcquiaConnectorTestBase {
       'AH_SITE_ENVIRONMENT' => 'test',
       'AH_SITE_NAME' => 'foo',
       'AH_SITE_GROUP' => 'bar',
-      'AH_APPLICATION_UUID' => '2847ba56-cb57-4d37-85f1-baa69ff0c604',
+      'AH_APPLICATION_UUID' => $uuid,
       'ah_network_identifier' => 'ABC-1234',
       'ah_network_key' => 'TEST_KEY',
     ], $event->getSettings()->getMetadata());

@@ -94,6 +94,21 @@ trait TextFieldCounterWidgetTrait {
   }
 
   /**
+   * Add checkbox to allow any length submission (counter-only).
+   *
+   * @param array $form
+   *   The form render array to which the element should be added.
+   */
+  public function addCountOnlyModeSettingsFormElement(array &$form) {
+    $form['count_only_mode'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Count only mode (no validation)'),
+      '#description' => $this->t('Check this to allow submission even if the user has gone over the allowed character count.'),
+      '#default_value' => $this->getSetting('count_only_mode'),
+    ];
+  }
+
+  /**
    * Adds a form element to toggle JS prevention of form submission on error.
    *
    * @param array $form
@@ -106,8 +121,8 @@ trait TextFieldCounterWidgetTrait {
   public function addJsPreventSubmitSettingsFormElement(array &$form, $storageSettingMaxlengthField = FALSE) {
     $form['js_prevent_submit'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Prevent form submission when character limit exceeded'),
-      '#description' => $this->t('Prevent form submission using JavaScript if the user has gone over the allowed character count.'),
+      '#title' => $this->t('Add javascript validation'),
+      '#description' => $this->t('When validating, also use JS in addition to server-side validation to prevent submission if the user has gone over the allowed character count.'),
       '#default_value' => $this->getSetting('js_prevent_submit'),
     ];
 
@@ -247,8 +262,18 @@ trait TextFieldCounterWidgetTrait {
    */
   public function addJsSubmitPreventSummary(array &$summary) {
     if ($this->getSetting('maxlength') && !$this->getSetting('use_field_maxlength')) {
-      $summary['js_prevent_submit'] = $this->t('Prevent form submission when user goes over character count: %prevent', ['%prevent' => ($this->getSetting('js_prevent_submit') ? $this->t('Yes') : $this->t('No'))]);
+      $summary['js_prevent_submit'] = $this->t('Also use javascript when validating: %prevent', ['%prevent' => ($this->getSetting('js_prevent_submit') ? $this->t('Yes') : $this->t('No'))]);
     }
+  }
+
+  /**
+   * Adds the summary of the count_html_characters setting.
+   *
+   * @param array $summary
+   *   The array of summaries to which the summary should be added.
+   */
+  public function addCountOnlyModeSummary(array &$summary) {
+    $summary['count_only_mode'] = $this->t('Count only mode: %value', ['%value' => ($this->getSetting('count_only_mode') ? $this->t('Enabled') : $this->t('Disabled'))]);
   }
 
   /**
@@ -327,7 +352,7 @@ trait TextFieldCounterWidgetTrait {
     $element['#attached']['drupalSettings']['textfieldCounter'][$key]['counterPosition'] = $position;
     $element['#attached']['drupalSettings']['textfieldCounter'][$key]['textCountStatusMessage'] = $this->getSetting('textcount_status_message');
 
-    if ($this->getSetting('js_prevent_submit')) {
+    if (!$this->getSetting('count_only_mode') && $this->getSetting('js_prevent_submit')) {
       $element['#attached']['drupalSettings']['textfieldCounter'][$key]['preventSubmit'] = TRUE;
     }
 
@@ -349,7 +374,7 @@ trait TextFieldCounterWidgetTrait {
     $input_exists = FALSE;
     $value = NestedArray::getValue($form_state->getValues(), $element['#parents'], $input_exists);
     $value = is_array($value) ? $value['value'] : $value;
-    $value_length = self::getLengthOfSubmittedValue($element, $value);
+    $value_length = static::getLengthOfSubmittedValue($element, $value);
     if ($value_length > $element['#textfield-maxlength']) {
       $form_state->setError($element, t(
         '@name cannot be longer than %max characters but is currently %length characters long.',

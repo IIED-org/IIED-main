@@ -2,7 +2,7 @@
  * @file
  */
 
-(function ($) {
+(function ($, Drupal) {
 
   "use strict";
 
@@ -55,4 +55,4 @@
     }
   };
 
-})(jQuery, drupalSettings);
+})(jQuery, Drupal);

@@ -177,7 +177,7 @@ class BubbleField extends FieldPluginBase implements ContainerFactoryPluginInter
     }
 
     // Ensure the input is numeric.
-    if (!is_numeric($data)) {
+    if (!empty($data) && !is_numeric($data)) {
       $this->messenger->addError($this->t('Check the formatting of your
         Bubble Field inputs: one or both of them are not numeric.'));
     }

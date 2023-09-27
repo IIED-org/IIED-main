@@ -7,7 +7,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 
 /**
- * Class AvailableUserRolesService.
+ * Provides a service for getting available user roles in Multiple Registration.
  *
  * @package Drupal\multiple_registration
  */

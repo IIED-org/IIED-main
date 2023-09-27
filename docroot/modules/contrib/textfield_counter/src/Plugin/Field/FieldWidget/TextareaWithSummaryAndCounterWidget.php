@@ -31,6 +31,7 @@ class TextareaWithSummaryAndCounterWidget extends TextareaWithSummaryWidget {
       'summary_maxlength' => 0,
       'counter_position' => 'after',
       'js_prevent_submit' => TRUE,
+      'count_only_mode' => FALSE,
       'count_html_characters' => TRUE,
       'textcount_status_message' => self::getDefaultTextCountStatusMessage(),
     ] + parent::defaultSettings();
@@ -87,6 +88,7 @@ class TextareaWithSummaryAndCounterWidget extends TextareaWithSummaryWidget {
     ];
 
     $this->addMaxlengthSettingsFormElement($form);
+    $this->addCountOnlyModeSettingsFormElement($form);
     $this->addJsPreventSubmitSettingsFormElement($form);
     $this->addCountHtmlSettingsFormElement($form);
 
@@ -123,6 +125,7 @@ class TextareaWithSummaryAndCounterWidget extends TextareaWithSummaryWidget {
 
     $summary['num_rows'] = $textarea_rows;
     $this->addMaxlengthSummary($summary);
+    $this->addCountOnlyModeSummary($summary);
     $this->addJsSubmitPreventSummary($summary);
     $this->addCountHtmlSummary($summary);
 
@@ -149,20 +152,15 @@ class TextareaWithSummaryAndCounterWidget extends TextareaWithSummaryWidget {
       }
       $element['#textfield-maxlength'] = $maxlength;
       $element['#textfield-count-html'] = $count_html_characters;
-      $classes = class_uses($this);
-      if (count($classes)) {
-        $element['#element_validate'][] = [array_pop($classes), 'validateFieldFormElement'];
-      }
+      $element['#element_validate'][] = [static::class, 'validateFieldFormElement'];
     }
 
     if ($summary_maxlength = $this->getSetting('summary_maxlength')) {
       $this->fieldFormElement($element['summary'], $entity, $field_defintion, $delta, TRUE);
       $element['summary']['#textfield-maxlength'] = $summary_maxlength;
       $element['summary']['#textfield-count-html'] = $this->getSetting('count_html_characters');
-
-      $classes = class_uses($this);
-      if (count($classes)) {
-        $element['summary']['#element_validate'][] = [array_pop($classes), 'validateFieldFormElement'];
+      if (!$this->getSetting('count_only_mode')) {
+        $element['summary']['#element_validate'][] = [static::class, 'validateFieldFormElement'];
       }
     }
 

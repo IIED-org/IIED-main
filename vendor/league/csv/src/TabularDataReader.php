@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace League\Csv;
 
+use Closure;
 use Countable;
 use Iterator;
 use IteratorAggregate;
@@ -20,10 +21,16 @@ use IteratorAggregate;
 /**
  * Represents a Tabular data.
  *
- * @method Iterator fetchColumnByName(string $name)  returns a column from its name
+ * @method Iterator fetchColumnByName(string $name) returns a column from its name
  * @method Iterator fetchColumnByOffset(int $offset) returns a column from its offset
- * @method array    first()                          returns the first record from the tabular data.
- * @method array    nth(int $nth_record)             returns the nth record from the tabular data.
+ * @method array first() returns the first record from the tabular data.
+ * @method array nth(int $nth_record) returns the nth record from the tabular data.
+ * @method bool each(Closure $closure) iterates over each record and passes it to a closure. Iteration is interrupted if the closure returns false
+ * @method bool exists(Closure $closure) tells whether at least one record satisfies the predicate.
+ * @method mixed reduce(Closure $closure, mixed $initial = null) reduces the collection to a single value, passing the result of each iteration into the subsequent iteration
+ * @method TabularDataReader filter(Closure $closure) returns all the elements of this collection for which your callback function returns `true`
+ * @method TabularDataReader slice(int $offset, int $length = null) extracts a slice of $length elements starting at position $offset from the Collection.
+ * @method TabularDataReader sorted(Closure $orderBy) sorts the Collection according to the closure provided see Statement::orderBy method
  */
 interface TabularDataReader extends Countable, IteratorAggregate
 {
@@ -78,6 +85,21 @@ interface TabularDataReader extends Countable, IteratorAggregate
     public function getRecords(array $header = []): Iterator;
 
     /**
+     * Returns the next key-value pairs from the tabular data (first
+     * column is the key, second column is the value).
+     *
+     * By default, if no column index is provided:
+     * - the first column is used to provide the keys
+     * - the second column is used to provide the value
+     *
+     * @param string|int $offset_index The column index to serve as offset
+     * @param string|int $value_index The column index to serve as value
+     *
+     * @throws UnableToProcessCsv if the column index is invalid or not found
+     */
+    public function fetchPairs($offset_index = 0, $value_index = 1): Iterator;
+
+    /**
      * DEPRECATION WARNING! This class will be removed in the next major point release.
      *
      * @deprecated since version 9.9.0
@@ -109,19 +131,4 @@ interface TabularDataReader extends Countable, IteratorAggregate
      * @throws UnableToProcessCsv if the column index is invalid or not found
      */
     public function fetchColumn($index = 0): Iterator;
-
-    /**
-     * Returns the next key-value pairs from the tabular data (first
-     * column is the key, second column is the value).
-     *
-     * By default, if no column index is provided:
-     * - the first column is used to provide the keys
-     * - the second column is used to provide the value
-     *
-     * @param string|int $offset_index The column index to serve as offset
-     * @param string|int $value_index  The column index to serve as value
-     *
-     * @throws UnableToProcessCsv if the column index is invalid or not found
-     */
-    public function fetchPairs($offset_index = 0, $value_index = 1): Iterator;
 }

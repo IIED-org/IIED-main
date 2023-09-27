@@ -1,0 +1,7 @@
+block.settings.masquerade:
+  type: block_settings
+  label: 'Masquerade'
+  mapping:
+    show_unmasquerade_link:
+      type: boolean
+      label: 'Show unmasquerade link in block'

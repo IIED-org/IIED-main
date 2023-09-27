@@ -40,13 +40,23 @@ class TextFieldMapping extends FieldMappingBase {
     $field_id = $field_definition->getName();
     $field_value = $data[$field_id];
 
-
-    $max_length = $this->checkMaxFieldSizeExceeded($field_definition, $field_value);
-    if ($max_length === 0) {
+    if (is_array($field_value)) {
+      foreach ($field_value as &$field_value_item) {
+        $maxLength = $this->checkMaxFieldSizeExceeded($field_definition, $field_value_item);
+        if ($maxLength != 0) {
+          $field_value_item = substr($field_value_item, 0, $maxLength);
+        }
+      }
       $content->set($field_id, $field_value);
     }
     else {
-      $content->set($field_id, substr($field_value, 0, $max_length));
+      $maxLength = $this->checkMaxFieldSizeExceeded($field_definition, $field_value);
+      if ($maxLength === 0) {
+        $content->set($field_id, $field_value);
+      }
+      else {
+        $content->set($field_id, substr($field_value, 0, $maxLength));
+      }
     }
   }
 

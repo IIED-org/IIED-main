@@ -154,6 +154,7 @@ class TaxonomyManagerForm extends FormBase {
    *   The form structure.
    */
   public function buildForm(array $form, FormStateInterface $form_state, VocabularyInterface $taxonomy_vocabulary = NULL) {
+    $current_user = \Drupal::currentUser();
     $form['voc'] = [
       '#type' => 'value',
       "#value" => $taxonomy_vocabulary,
@@ -180,6 +181,7 @@ class TaxonomyManagerForm extends FormBase {
       '#ajax' => [
         'callback' => '::addFormCallback',
       ],
+      '#access' => $current_user->hasPermission('create terms in ' . $taxonomy_vocabulary->id()),
     ];
 
     $form['toolbar']['delete'] = [
@@ -192,6 +194,7 @@ class TaxonomyManagerForm extends FormBase {
       '#ajax' => [
         'callback' => '::deleteFormCallback',
       ],
+      '#access' => $current_user->hasPermission('delete terms in ' . $taxonomy_vocabulary->id()),
     ];
 
     $form['toolbar']['move'] = [
@@ -224,7 +227,9 @@ class TaxonomyManagerForm extends FormBase {
     /* Vocabulary switcher */
     $vocabularies = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->loadMultiple();
     foreach ($vocabularies as $voc) {
-      $voc_list[$voc->id()] = $voc->label();
+      if (\Drupal::entityTypeManager()->getAccessControlHandler('taxonomy_term')->createAccess($voc->id())) {
+        $voc_list[$voc->id()] = $voc->label();
+      }
     }
 
     $current_path = \Drupal::service('path.current')->getPath();

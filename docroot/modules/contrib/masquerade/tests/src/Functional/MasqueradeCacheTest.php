@@ -73,7 +73,7 @@ class MasqueradeCacheTest extends MasqueradeWebTestBase {
 
     // Login as admin and masquerade as the test user to have the page cached
     // as the test user.
-    $this->drupalLogin($this->admin_user);
+    $this->drupalLogin($this->adminUser);
     $this->masqueradeAs($test_user);
     $this->assertSession()->linkExists('Unmasquerade');
     // We only check here for the session cache context, because it is present

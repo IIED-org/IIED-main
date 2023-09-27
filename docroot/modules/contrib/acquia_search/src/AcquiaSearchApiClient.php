@@ -134,11 +134,12 @@ class AcquiaSearchApiClient {
     $query_string = 'filter[network_id]=' . $id;
     $result = [];
 
-    $timeout = 30;
-    while (!$this->lock->acquire('acquia_search_get_search_indexes')) {
+    $lock = 'acquia_search_get_search_indexes';
+    if (!$this->lock->acquire($lock)) {
+      $this->lock->wait($lock);
       // Throw an exception after X amount of seconds.
-      if (($now + $timeout) < $this->time->getRequestTime()) {
-        throw new \Exception("Couldn't acquire lock for 'acquia_search_get_search_indexes' in less than $timeout seconds.");
+      if (!$this->lock->acquire($lock)) {
+        throw new \Exception("Couldn't acquire lock for $lock in less than 30 seconds.");
       }
     }
 
@@ -149,7 +150,7 @@ class AcquiaSearchApiClient {
 
       return FALSE;
     }
-    $this->lock->release('acquia_search_get_search_indexes');
+    $this->lock->release($lock);
 
     if (isset($indexes['data'])) {
       foreach ($indexes['data'] as $index) {

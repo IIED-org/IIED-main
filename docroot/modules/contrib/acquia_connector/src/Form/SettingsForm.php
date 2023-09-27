@@ -240,7 +240,7 @@ class SettingsForm extends ConfigFormBase {
     $event = new AcquiaProductSettingsEvent($form, $form_state, $this->subscription);
 
     // @todo Remove after dropping support for Drupal 8.
-    if (version_compare(\Drupal::VERSION, '9.0', '>=')) {
+    if (version_compare(\Drupal::VERSION, '9.1', '>=')) {
       $this->dispatcher->dispatch($event, AcquiaConnectorEvents::ACQUIA_PRODUCT_SETTINGS);
     }
     else {
@@ -309,7 +309,7 @@ class SettingsForm extends ConfigFormBase {
     }
     $event = new AcquiaProductSettingsEvent($form, $form_state, $this->subscription);
     // @todo Remove after dropping support for Drupal 8.
-    if (version_compare(\Drupal::VERSION, '9.0', '>=')) {
+    if (version_compare(\Drupal::VERSION, '9.1', '>=')) {
       $this->dispatcher->dispatch($event, AcquiaConnectorEvents::ALTER_PRODUCT_SETTINGS_SUBMIT);
     }
     else {

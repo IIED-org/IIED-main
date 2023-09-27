@@ -88,6 +88,7 @@ class TaxonomyManagerTree extends FormElement {
   public static function loadTerms($vocabulary, $parent = 0, $pager_size = -1) {
     try {
       $query = \Drupal::entityQuery('taxonomy_term')
+        ->accessCheck()
         ->condition('vid', $vocabulary->id())
         ->condition('parent', $parent)
         ->sort('weight')

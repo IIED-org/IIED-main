@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\masquerade\Functional;
 
+use Drupal\block\Entity\Block;
+use Drupal\Tests\block\Traits\BlockCreationTrait;
+
 /**
  * Tests form permissions and user switching functionality.
  *
@@ -9,40 +12,77 @@ namespace Drupal\Tests\masquerade\Functional;
  */
 class MasqueradeTest extends MasqueradeWebTestBase {
 
+  use BlockCreationTrait;
+
   /**
    * Tests masquerade user links.
    */
   public function testMasquerade() {
-    $this->drupalLogin($this->admin_user);
+    $this->drupalLogin($this->adminUser);
 
     // Verify that a token is required.
     $this->drupalGet('user/0/masquerade');
     $this->assertSession()->statusCodeEquals(403);
-    $this->drupalGet('user/' . $this->auth_user->id() . '/masquerade');
+    $this->drupalGet('user/' . $this->authUser->id() . '/masquerade');
     $this->assertSession()->statusCodeEquals(403);
 
     // Verify that the admin user is able to masquerade.
-    $this->assertSessionByUid($this->admin_user->id());
-    $this->masqueradeAs($this->auth_user);
-    $this->assertSessionByUid($this->auth_user->id(), $this->admin_user->id());
-    $this->assertNoSessionByUid($this->admin_user->id());
+    $this->assertSessionByUid($this->adminUser->id());
+    $this->masqueradeAs($this->authUser);
+    $this->assertSessionByUid($this->authUser->id(), $this->adminUser->id());
+    $this->assertNoSessionByUid($this->adminUser->id());
 
     // Verify that a token is required to unmasquerade.
     $this->drupalGet('unmasquerade');
     $this->assertSession()->statusCodeEquals(403);
 
     // Verify that the web user cannot masquerade.
-    $this->drupalGet('user/' . $this->admin_user->id() . '/masquerade', [
+    $this->drupalGet('user/' . $this->adminUser->id() . '/masquerade', [
       'query' => [
-        'token' => $this->drupalGetToken('user/' . $this->admin_user->id() . '/masquerade'),
+        'token' => $this->drupalGetToken('user/' . $this->adminUser->id() . '/masquerade'),
       ],
     ]);
     $this->assertSession()->statusCodeEquals(403);
 
     // Verify that the user can unmasquerade.
-    $this->unmasquerade($this->auth_user);
-    $this->assertNoSessionByUid($this->auth_user->id());
-    $this->assertSessionByUid($this->admin_user->id());
+    $this->unmasquerade($this->authUser);
+    $this->assertNoSessionByUid($this->authUser->id());
+    $this->assertSessionByUid($this->adminUser->id());
+  }
+
+  /**
+   * Tests the unmasquerade block link.
+   */
+  public function testUnmasqueradeBlockLink(): void {
+    $this->placeBlock('masquerade', [
+      'region' => 'header',
+      'id' => 'masquerade',
+    ]);
+
+    $this->drupalLogin($this->adminUser);
+
+    // Check that the 'Switch back' link won't show in block if not enabled.
+    $this->submitForm(['masquerade_as' => $this->authUser->getDisplayName()], 'Switch');
+    $this->assertSessionByUid($this->authUser->id(), $this->adminUser->id());
+    $this->assertSession()->linkNotExistsExact('Switch back');
+
+    $this->clickLink('Unmasquerade');
+    $this->assertSession()->pageTextContains("You are no longer masquerading as {$this->authUser->getDisplayName()}.");
+
+    // Turn the link on in block settings.
+    $block = Block::load('masquerade');
+    $settings = $block->get('settings');
+    $settings['show_unmasquerade_link'] = TRUE;
+    $block->set('settings', $settings)->save();
+
+    // Check that the 'Switch back' link shows in the block.
+    $this->submitForm(['masquerade_as' => $this->authUser->getDisplayName()], 'Switch');
+    $this->assertSessionByUid($this->authUser->id(), $this->adminUser->id());
+    $this->assertSession()->linkExistsExact('Switch back');
+
+    // Check that the link works.
+    $this->clickLink('Switch back');
+    $this->assertSession()->pageTextContains("You are no longer masquerading as {$this->authUser->getDisplayName()}.");
   }
 
 }

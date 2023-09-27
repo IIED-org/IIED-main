@@ -665,13 +665,8 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
             $series_data[$data_index][] = $data;
           }
           elseif ($chart_type === 'pie') {
-            if (count(array_keys($data)) === 2) {
-              $series_data[$data_index] = array_combine(['name', 'y'], $data);
-            }
-            else {
-              $series_data[$data_index] = array_combine(['name', 'color', 'y'], $data);
-            }
-            $name = $series_data[$data_index]['name'];
+            $series_data[$data_index] = $data;
+            $name = $series_data[$data_index]['name'] ?? NULL;
             if (!empty($element[$key]['#grouping_colors'][$data_index][$name])) {
               $series_data[$data_index]['color'] = $element[$key]['#grouping_colors'][$data_index][$name];
             }

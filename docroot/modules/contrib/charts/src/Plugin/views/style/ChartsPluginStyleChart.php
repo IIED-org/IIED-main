@@ -293,7 +293,7 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
       $data = [];
       $this->renderFields($this->view->result);
       $renders = $this->rendered_fields;
-      if (!$label_field_key && count($renders) === 1 && count($data_fields) > 1) {
+      if (!$label_field_key && count($data_fields) > 1) {
         foreach ($data_fields as $field_id => $row) {
           $data_row = [];
           if (!empty($row['label'])) {

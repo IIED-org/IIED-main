@@ -14,20 +14,33 @@ function charts_highcharts_requirements($phase) {
   switch ($phase) {
     case 'runtime':
       $library_path = charts_highcharts_find_library();
+      $config = \Drupal::service('config.factory')->getEditable('charts.settings');
+      $cdn = $config->get('advanced.requirements.cdn') ?? FALSE;
 
       if (!$library_path) {
-        $requirements['charts_highcharts_js'] = [
-          'title' => t('Highcharts Library'),
-          'value' => t('Not Installed'),
-          'severity' => REQUIREMENT_WARNING,
-          'description' => t('You are missing the Highcharts library in your Drupal installation directory. Please see the README file inside charts_highcharts for instructions to install the library.'),
-        ];
+        if ($cdn) {
+          $requirements['charts_highcharts_js'] = [
+            'title' => t('Highcharts Library'),
+            'value' => t('Available through a CDN'),
+            'severity' => REQUIREMENT_WARNING,
+            'description' => t('You are using the Highcharts library via a content delivery network. It is generally considered better practice to install the library files locally. Please see the README file inside charts_highcharts for instructions to install the library.'),
+          ];
+        }
+        else {
+          $requirements['charts_highcharts_js'] = [
+            'title' => t('Highcharts Library'),
+            'value' => t('Not Installed'),
+            'severity' => REQUIREMENT_ERROR,
+            'description' => t('You are missing the Highcharts library in your Drupal installation directory and you have opted not to use a CDN. Please either enable use of the CDN in the Chart Settings under the Advanced tab or see the README file inside charts_highcharts for instructions to install the library.'),
+          ];
+        }
       }
       else {
         $requirements['charts_highcharts_js'] = [
           'title' => t('Highcharts Library'),
-          'severity' => REQUIREMENT_OK,
           'value' => t('Installed'),
+          'severity' => REQUIREMENT_OK,
+          'description' => t('You have installed the Highcharts.js library in your Drupal installation directory.'),
         ];
       }
       break;
@@ -35,7 +48,7 @@ function charts_highcharts_requirements($phase) {
 
   if (function_exists('libraries_detect') && $highcharts_info = libraries_detect('highcharts')) {
     if (is_dir($highcharts_info['library path'] . '/js/exporting-server')) {
-      $requirements['highcharts_security'] = [
+      $requirements['charts_highcharts_js'] = [
         'title' => t('Highcharts vulnerability'),
         'severity' => REQUIREMENT_ERROR,
         'value' => t('Dangerous sample code present'),

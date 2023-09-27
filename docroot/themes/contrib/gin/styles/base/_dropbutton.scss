@@ -43,6 +43,10 @@ html.js .dropbutton-widget {
   &__toggle {
     background: none;
     white-space: nowrap;
+
+    @media (forced-colors: active) {
+      border-width: 0 !important;
+    }
   }
 
   &__item:first-of-type > * {
@@ -54,24 +58,27 @@ html.js .dropbutton-widget {
     right: 2px;
     width: calc(var(--gin-spacing-xxl) + 1px);
     height: 2.75rem;
+    border-inline-start: var(--dropbutton-border-size) solid var(--gin-color-primary) !important;
 
     &:hover {
       background-color: var(--gin-color-primary);
     }
 
-    &::before {
-      background-image: none;
-      background-color: var(--gin-color-primary);
-      mask-image: icon('drop');
-      mask-repeat: no-repeat;
-      mask-position: center center;
-      mask-size: 12px 12px;
-    }
+    @media not (forced-colors: active) {
+      &::before {
+        background-image: none;
+        background-color: var(--gin-color-primary);
+        mask-image: icon('drop');
+        mask-repeat: no-repeat;
+        mask-position: center center;
+        mask-size: 12px 12px;
+      }
 
-    &:hover::before,
-    &:active::before,
-    &:focus::before {
-      background-color: var(--gin-color-button-text);
+      &:hover::before,
+      &:active::before,
+      &:focus::before {
+        background-color: var(--gin-color-button-text);
+      }
     }
   }
 
@@ -89,6 +96,10 @@ html.js .dropbutton-widget {
     .node-form & {
       left: 0;
       right: auto;
+    }
+
+    @media (forced-colors: active) {
+      border: 1px solid linktext;
     }
   }
 
@@ -142,6 +153,17 @@ html.js .dropbutton-widget {
         color: var(--gin-color-button-text);
         background: var(--gin-color-primary);
         border-radius: var(--gin-border-s);
+
+        @media (forced-colors: active) {
+          outline: 2px solid transparent;
+          outline-offset: -2px;
+        }
+      }
+
+      &:focus {
+        @media (forced-colors: active) {
+          outline-style: dotted;
+        }
       }
     }
   }
@@ -219,6 +241,10 @@ html.js.no-touchevents {
     height: 2.25rem;
     min-height: 2.25rem;
     border-radius: var(--gin-border-s);
+
+    .dropbutton__toggle {
+      width: calc(var(--dropbutton-small-toggle-size) + 1px);
+    }
   }
 
   .dropbutton--extrasmall {
@@ -226,6 +252,10 @@ html.js.no-touchevents {
     height: 1.75rem;
     min-height: 1.75rem;
     border-radius: var(--gin-border-s);
+
+    .dropbutton__toggle {
+      width: calc(var(--dropbutton-extrasmall-toggle-size) + 1px);
+    }
   }
 
   .dropbutton--multiple.dropbutton--extrasmall .dropbutton__items .dropbutton__item {

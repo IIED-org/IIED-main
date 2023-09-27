@@ -17,7 +17,7 @@ class ViewsReferenceFieldItemList extends EntityReferenceFieldItemList {
   public function equals(FieldItemListInterface $list_to_compare) {
     $count1 = count($this);
     $count2 = count($list_to_compare);
-    if ($count1 === 0 && $count2 === 0) {
+    if (0 === $count1 && 0 === $count2) {
       // Both are empty we can safely assume that it did not change.
       return TRUE;
     }
@@ -45,12 +45,12 @@ class ViewsReferenceFieldItemList extends EntityReferenceFieldItemList {
         // set. Do not filter out empty strings or other false-y values as e.g.
         // a NULL or FALSE in a boolean field is not the same.
         $value = array_filter($value, function ($property) {
-          return $property !== NULL;
+          return NULL !== $property;
         });
 
         // Unserialize data property so it can be compared without concern
         // for order.
-        if (isset($value['data']) && is_string($value['data'])) {
+        if (!empty($value['data']) && is_string($value['data'])) {
           $value['data'] = unserialize($value['data'], ['allowed_classes' => FALSE]);
         }
 
@@ -66,13 +66,13 @@ class ViewsReferenceFieldItemList extends EntityReferenceFieldItemList {
   /**
    * Recursively sort array by key.
    *
-   * @param $array
+   * @param array $array
    *   Array to sort recursively.
    *
    * @return bool
    *   Always TRUE.
    */
-  protected function recursiveKsort(&$array) {
+  protected function recursiveKsort(array &$array) {
     foreach ($array as &$value) {
       if (is_array($value)) {
         $this->recursiveKsort($value);

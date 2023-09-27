@@ -116,6 +116,11 @@ function multiple_registration_update_8204() {
   $schema = Database::getConnection()->schema();
   $multiple_registration_schema = multiple_registration_schema();
   if ($schema->tableExists('multiple_registration') && !empty($multiple_registration_schema['multiple_registration']['primary key'])) {
+    // Delete duplicates.
+    $schema->addField('multiple_registration', 'id', ['type' => 'serial', 'not null' => TRUE], ['primary key' => ['id']]);
+    \Drupal::database()->query('DELETE t1 FROM {multiple_registration} t1 INNER JOIN {multiple_registration} t2 WHERE t1.id < t2.id AND t1.uid = t2.uid');
+    $schema->dropField('multiple_registration', 'id');
+
     $schema->dropPrimaryKey('multiple_registration');
     $schema->addPrimaryKey('multiple_registration', $multiple_registration_schema['multiple_registration']['primary key']);
   }

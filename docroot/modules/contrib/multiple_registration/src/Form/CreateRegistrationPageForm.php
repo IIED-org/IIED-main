@@ -12,7 +12,7 @@ use Drupal\Core\ProxyClass\Routing\RouteBuilder;
 use Drupal\Core\Entity\EntityDisplayRepository;
 
 /**
- * Class CreateRegistrationPageForm.
+ * Provides a form for creating user registrations in Multiple Registration.
  *
  * @package Drupal\multiple_registration\Form
  */

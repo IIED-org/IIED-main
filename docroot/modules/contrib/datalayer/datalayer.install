@@ -44,10 +44,12 @@ function datalayer_update_8001(&$sandbox) {
   foreach ($fields as $field) {
     if (empty($field->getThirdPartySetting('datalayer', 'expose'))) {
       $settings = $field->getThirdPartySettings('datalayer');
-      foreach ($settings as $key => $value) {
-        $field->unsetThirdPartySetting('datalayer', $key);
+      if (!empty($settings)) {
+        foreach ($settings as $key => $value) {
+          $field->unsetThirdPartySetting('datalayer', $key);
+        }
+        $field->save();
       }
-      $field->save();
     }
   }
 }
