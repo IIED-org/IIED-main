@@ -5428,6 +5428,7 @@ display:
           batch: true
           batch_size: 100
           form_step: true
+          ajax_loader: false
           buttons: true
           action_title: Action
           clear_on_exposed: true
@@ -6797,6 +6798,7 @@ display:
           batch: true
           batch_size: 10
           form_step: true
+          ajax_loader: false
           buttons: false
           action_title: Action
           clear_on_exposed: true
@@ -15538,6 +15540,7 @@ display:
           batch: true
           batch_size: 50
           form_step: true
+          ajax_loader: false
           buttons: true
           action_title: Action
           clear_on_exposed: true
@@ -16767,6 +16770,7 @@ display:
           batch: true
           batch_size: 50
           form_step: true
+          ajax_loader: false
           buttons: true
           action_title: Action
           clear_on_exposed: true
