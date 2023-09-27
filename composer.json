@@ -151,7 +151,6 @@
         "drupal/serial": "^1.0@alpha",
         "drupal/stage_file_proxy": "^1.2",
         "drupal/stories": "^2.0@alpha",
-        "drupal/string_translation_ui": "^1.2",
         "drupal/svg_image": "^1.16",
         "drupal/taxonomy_import": "^2.0",
         "drupal/taxonomy_manager": "^2.0",

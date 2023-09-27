@@ -1,7 +1,0 @@
-string_translation_ui.add_strings:
-  path: '/admin/config/regional/translate/add_strings'
-  defaults:
-    _form: '\Drupal\string_translation_ui\Form\StringTranslationUiAddForm'
-    _title: 'Add Strings'
-  requirements:
-    _permission: 'translate interface'
