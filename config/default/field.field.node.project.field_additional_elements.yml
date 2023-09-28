@@ -14,6 +14,7 @@ dependencies:
     - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.image_small
     - paragraphs.paragraphs_type.info_box
+    - paragraphs.paragraphs_type.logo_block
     - paragraphs.paragraphs_type.media_embed
     - paragraphs.paragraphs_type.media_list
     - paragraphs.paragraphs_type.modal_image
@@ -47,6 +48,7 @@ settings:
       accordion_box: accordion_box
       box: box
       gallery: gallery
+      logo_block: logo_block
       highchart: highchart
       media_list: media_list
       modal_image: modal_image
@@ -101,7 +103,7 @@ settings:
         enabled: false
       logo_block:
         weight: 44
-        enabled: false
+        enabled: true
       media_embed:
         weight: -12
         enabled: true
@@ -129,11 +131,11 @@ settings:
       researcher_profiles:
         weight: 50
         enabled: false
-      row_of_4:
-        weight: -9
-        enabled: false
       section:
         weight: 52
+        enabled: false
+      sticky_box:
+        weight: 64
         enabled: false
       stories_block:
         weight: 53
