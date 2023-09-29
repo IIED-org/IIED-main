@@ -1,8 +1,0 @@
-uuid: 39dcca6c-9f92-4d75-938e-dac577fe9128
-langcode: en
-status: true
-dependencies: {  }
-id: taxonomy_term___all
-label: 'Taxonomy term: All bundles'
-code: 302
-message: ''

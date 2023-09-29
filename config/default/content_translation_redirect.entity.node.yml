@@ -1,0 +1,9 @@
+uuid: 81560ecc-4208-4f03-9407-3c5205f98199
+langcode: en
+status: true
+dependencies: {  }
+id: node
+label: Content
+code: 302
+path: ''
+translatable_entity_only: false
