@@ -3560,6 +3560,12 @@ cite {
   padding-top: 1.5rem;
 }
 
+/*-- temp fix to put background colour on modals --*/
+
+#drupal-modal {
+  background: white;
+}
+
 /*-- hidden handbrakes how stuck is this handbrake --*/
 
 .slightly {
@@ -4966,6 +4972,10 @@ cite {
   background-image: url('/themes/custom/iied_tw/templates/layout/icons/line-pattern.svg');
 }
 
+.bg-\[url\(\'\/sites\/default\/files\/2023-09\/clouds\.svg\'\)\]{
+  background-image: url('/sites/default/files/2023-09/clouds.svg');
+}
+
 .from-iiedpink-900{
   --tw-gradient-from: #a62b76;
   --tw-gradient-to: rgb(166 43 118 / 0);
@@ -4989,6 +4999,10 @@ cite {
 
 .to-iiedblue-500{
   --tw-gradient-to: #00b3df;
+}
+
+.bg-cover{
+  background-size: cover;
 }
 
 .fill-current{
