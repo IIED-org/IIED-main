@@ -196,15 +196,3 @@ Inspect the lando configuration:
 lando info
 ```
 
-## Drupal 7 migration setup
-
-The .lando.yml file includes definition for a second database server for the
-Drupal 7 source data to help with migration development and testing.
-
-To import a database into the d7db host, use lando db-import.
-
-For example:
-
-```
-lando db-import --host d7db acquia.2021-11-16-1637096083.sql
-```
