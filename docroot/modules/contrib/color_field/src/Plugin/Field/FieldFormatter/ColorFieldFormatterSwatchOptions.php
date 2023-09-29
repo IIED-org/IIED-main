@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\color_field\Plugin\Field\FieldFormatter;
 
+use Drupal\color_field\ColorHex;
 use Drupal\color_field\Plugin\Field\FieldType\ColorFieldType;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\color_field\ColorHex;
 use Drupal\Core\Template\Attribute;
 
 /**
@@ -25,12 +27,13 @@ class ColorFieldFormatterSwatchOptions extends ColorFieldFormatterSwatch {
   /**
    * {@inheritdoc}
    */
-  public function viewElements(FieldItemListInterface $items, $langcode) {
+  public function viewElements(FieldItemListInterface $items, $langcode): array {
     $settings = $this->getSettings();
 
     $elements = [];
 
     $name = Html::getUniqueId("color-field");
+
     foreach ($items as $delta => $item) {
       $hex = $this->viewRawValue($item);
       $id = Html::getUniqueId("color-field-$hex");
@@ -50,9 +53,12 @@ class ColorFieldFormatterSwatchOptions extends ColorFieldFormatterSwatch {
           ],
         ]),
       ];
-      if ($settings['data_attribute']) {
-        $elements[$delta]['#attributes']['data-color'] = $hex;
+
+      if (!$settings['data_attribute']) {
+        continue;
       }
+
+      $elements[$delta]['#attributes']['data-color'] = $hex;
     }
 
     return $elements;
@@ -67,7 +73,7 @@ class ColorFieldFormatterSwatchOptions extends ColorFieldFormatterSwatch {
    * @return string
    *   The color hex value.
    */
-  protected function viewRawValue(ColorFieldType $item) {
+  protected function viewRawValue(ColorFieldType $item): string {
     return (new ColorHex($item->color, $item->opacity))->toString(FALSE);
   }
 

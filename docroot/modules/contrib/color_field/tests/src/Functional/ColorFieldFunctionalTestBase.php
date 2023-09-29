@@ -1,10 +1,14 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\Tests\color_field\Functional;
 
+use Drupal\Core\Entity\Entity\EntityFormDisplay;
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\field\Entity\FieldConfig;
-use Drupal\Tests\BrowserTestBase;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Provide basic setup for all color field functional tests.
@@ -14,29 +18,18 @@ use Drupal\field\Entity\FieldStorageConfig;
 abstract class ColorFieldFunctionalTestBase extends BrowserTestBase {
 
   /**
-   * Modules to enable.
-   *
-   * @var array
-   */
-  public static $modules = [
-    'field',
-    'node',
-    'color_field',
-  ];
-
-  /**
    * The Entity View Display for the article node type.
    *
    * @var \Drupal\Core\Entity\Entity\EntityViewDisplay
    */
-  protected $display;
+  protected EntityViewDisplay $display;
 
   /**
    * The Entity Form Display for the article node type.
    *
    * @var \Drupal\Core\Entity\Entity\EntityFormDisplay
    */
-  protected $form;
+  protected EntityFormDisplay $form;
 
   /**
    * {@inheritdoc}
@@ -44,9 +37,20 @@ abstract class ColorFieldFunctionalTestBase extends BrowserTestBase {
   protected $defaultTheme = 'stark';
 
   /**
+   * Modules to enable.
+   *
+   * @var array
+   */
+  protected static $modules = [
+    'field',
+    'node',
+    'color_field',
+  ];
+
+  /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->drupalCreateContentType(['type' => 'article']);

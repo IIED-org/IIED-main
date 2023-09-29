@@ -40,7 +40,7 @@ jQuery.fn.addColorPicker = function (props) {
       .attr('title', color)
       .css('background-color',color);
     // Jq bug: chaining here fails if color is null b/c .css() returns (new String('transparent'))!
-    if (props.currentColor.toLowerCase() == color.toLowerCase()) {
+    if (props.currentColor.toLowerCase() === color.toLowerCase()) {
       elem.addClass('active');
     }
     if (props.clickCallback) {

@@ -6,7 +6,7 @@ use Drupal\Component\Plugin\FallbackPluginManagerInterface;
 use Drupal\Component\Plugin\PluginManagerInterface;
 
 /**
- * Interface DevelDumperPluginManagerInterface.
+ * Interface for DevelDumper plugin manager.
  */
 interface DevelDumperPluginManagerInterface extends PluginManagerInterface, FallbackPluginManagerInterface {
 

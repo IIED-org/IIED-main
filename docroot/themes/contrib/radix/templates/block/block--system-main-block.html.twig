@@ -4,4 +4,9 @@
  * Template for the main content block.
  */
 #}
-{% extends 'block.html.twig' %}
+{% include '@radix/block/block.twig' with {
+  html_tag: 'div',
+  block_utility_classes: [
+    'block--system-main',
+  ],
+} %}

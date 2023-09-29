@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\color_field\Plugin\Field\FieldFormatter;
 
-use Drupal\color_field\Plugin\Field\FieldType\ColorFieldType;
-use Drupal\Core\Field\FormatterBase;
-use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\color_field\ColorHex;
+use Drupal\color_field\Plugin\Field\FieldType\ColorFieldType;
+use Drupal\Component\Render\MarkupInterface;
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Field\FormatterBase;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Template\Attribute;
 
 /**
@@ -26,20 +29,7 @@ class ColorFieldFormatterSwatch extends FormatterBase {
   /**
    * {@inheritdoc}
    */
-  public static function defaultSettings() {
-    return [
-      'shape' => 'square',
-      'width' => 50,
-      'height' => 50,
-      'opacity' => TRUE,
-      'data_attribute' => FALSE,
-    ] + parent::defaultSettings();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
+  public function settingsForm(array $form, FormStateInterface $form_state): array {
     $opacity = $this->getFieldSetting('opacity');
 
     $elements = [];
@@ -85,31 +75,9 @@ class ColorFieldFormatterSwatch extends FormatterBase {
   }
 
   /**
-   * This is used to get the shape.
-   *
-   * @param string|null $shape
-   *   The specific shape name to get.
-   *
-   * @return array|string
-   *   An array of shape ids/names or translated name of the specified shape.
-   */
-  protected function getShape($shape = NULL) {
-    $formats = [];
-    $formats['square'] = $this->t('Square');
-    $formats['circle'] = $this->t('Circle');
-    $formats['parallelogram'] = $this->t('Parallelogram');
-    $formats['triangle'] = $this->t('Triangle');
-
-    if ($shape) {
-      return $formats[$shape];
-    }
-    return $formats;
-  }
-
-  /**
    * {@inheritdoc}
    */
-  public function settingsSummary() {
+  public function settingsSummary(): array {
     $opacity = $this->getFieldSetting('opacity');
     $settings = $this->getSettings();
 
@@ -138,7 +106,7 @@ class ColorFieldFormatterSwatch extends FormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function viewElements(FieldItemListInterface $items, $langcode) {
+  public function viewElements(FieldItemListInterface $items, $langcode): array {
     $settings = $this->getSettings();
 
     $elements = [];
@@ -159,10 +127,13 @@ class ColorFieldFormatterSwatch extends FormatterBase {
           ],
         ]),
       ];
-      if ($settings['data_attribute']) {
-        $color = new ColorHex($item->color, $item->opacity);
-        $elements[$delta]['#attributes']['data-color'] = $color->toString(FALSE);
+
+      if (!$settings['data_attribute']) {
+        continue;
       }
+
+      $color = new ColorHex($item->color, $item->opacity);
+      $elements[$delta]['#attributes']['data-color'] = $color->toString(FALSE);
     }
 
     return $elements;
@@ -171,20 +142,57 @@ class ColorFieldFormatterSwatch extends FormatterBase {
   /**
    * {@inheritdoc}
    */
-  protected function viewValue(ColorFieldType $item) {
+  public static function defaultSettings(): array {
+    return [
+      'shape' => 'square',
+      'width' => 50,
+      'height' => 50,
+      'opacity' => TRUE,
+      'data_attribute' => FALSE,
+    ] + parent::defaultSettings();
+  }
+
+  /**
+   * This is used to get the shape.
+   *
+   * @param string|null $shape
+   *   The specific shape name to get.
+   *
+   * @return \Drupal\Component\Render\MarkupInterface[]|\Drupal\Component\Render\MarkupInterface
+   *   An array of shape ids/names or translated name of the specified shape.
+   */
+  protected function getShape(?string $shape = NULL): array|MarkupInterface {
+    $formats = [];
+    $formats['square'] = $this->t('Square');
+    $formats['circle'] = $this->t('Circle');
+    $formats['parallelogram'] = $this->t('Parallelogram');
+    $formats['triangle'] = $this->t('Triangle');
+
+    if ($shape) {
+      return $formats[$shape];
+    }
+
+    return $formats;
+  }
+
+  /**
+   * View an individual field value.
+   *
+   * @param \Drupal\color_field\Plugin\Field\FieldType\ColorFieldType $item
+   *   The field.
+   *
+   * @return string
+   *   The field value as rgb/rgba string.
+   */
+  protected function viewValue(ColorFieldType $item): string {
     $opacity = $this->getFieldSetting('opacity');
     $settings = $this->getSettings();
 
     $color_hex = new ColorHex($item->color, $item->opacity);
 
-    if ($opacity && $settings['opacity']) {
-      $rgbtext = $color_hex->toRgb()->toString(TRUE);
-    }
-    else {
-      $rgbtext = $color_hex->toRgb()->toString(FALSE);
-    }
-
-    return $rgbtext;
+    return $opacity && $settings['opacity']
+        ? $color_hex->toRgb()->toString(TRUE)
+        : $color_hex->toRgb()->toString(FALSE);
   }
 
 }

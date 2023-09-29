@@ -23,7 +23,7 @@ class DevelEnforcedDependenciesTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->installEntitySchema('user');
@@ -60,7 +60,7 @@ class DevelEnforcedDependenciesTest extends KernelTestBase {
     $block->save();
 
     // Ensure that the menu and block instance depend on devel module.
-    $dependents = $config_manager->findConfigEntityDependents('module', ['devel']);
+    $dependents = $config_manager->findConfigEntityDependencies('module', ['devel']);
     $this->assertArrayHasKey('system.menu.devel', $dependents);
     $this->assertArrayHasKey('block.block.' . $block_id, $dependents);
 
@@ -72,7 +72,7 @@ class DevelEnforcedDependenciesTest extends KernelTestBase {
     $this->assertNull(Block::load($block_id));
 
     // Ensure that no config entities depend on devel once uninstalled.
-    $dependents = $config_manager->findConfigEntityDependents('module', ['devel']);
+    $dependents = $config_manager->findConfigEntityDependencies('module', ['devel']);
     $this->assertArrayNotHasKey('system.menu.devel', $dependents);
     $this->assertArrayNotHasKey('block.block.' . $block_id, $dependents);
   }

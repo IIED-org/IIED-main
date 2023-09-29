@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\color_field;
 
 /**
@@ -12,21 +14,21 @@ class ColorHSL extends ColorBase {
    *
    * @var int
    */
-  protected $hue;
+  protected int $hue;
 
   /**
    * Saturation value (0-100).
    *
    * @var int
    */
-  protected $sat;
+  protected int $sat;
 
   /**
    * Luminance value (0-100).
    *
    * @var int
    */
-  protected $lum;
+  protected int $lum;
 
   /**
    * Create a new HSL color.
@@ -42,14 +44,15 @@ class ColorHSL extends ColorBase {
    *
    * @throws \Exception
    */
-  public function __construct($hue, $sat, $lum, $opacity) {
-
+  public function __construct(int $hue, int $sat, int $lum, float $opacity) {
     if ($hue < 0 || $hue > 360) {
       throw new \Exception("Invalid hue: $hue");
     }
+
     if ($sat < 0 || $sat > 100) {
       throw new \Exception("Invalid saturation: $sat");
     }
+
     if ($lum < 0 || $lum > 100) {
       throw new \Exception("Invalid luminosity: $lum");
     }
@@ -57,7 +60,7 @@ class ColorHSL extends ColorBase {
     $this->hue = $hue;
     $this->sat = $sat;
     $this->lum = $lum;
-    $this->opacity = floatval($opacity);
+    $this->opacity = $opacity;
   }
 
   /**
@@ -66,7 +69,7 @@ class ColorHSL extends ColorBase {
    * @return int
    *   The hue value
    */
-  public function getHue() {
+  public function getHue(): int {
     return $this->hue;
   }
 
@@ -76,7 +79,7 @@ class ColorHSL extends ColorBase {
    * @return int
    *   The sat value
    */
-  public function getSat() {
+  public function getSat(): int {
     return $this->sat;
   }
 
@@ -86,7 +89,7 @@ class ColorHSL extends ColorBase {
    * @return int
    *   The lum value
    */
-  public function getLum() {
+  public function getLum(): int {
     return $this->lum;
   }
 
@@ -94,37 +97,36 @@ class ColorHSL extends ColorBase {
    * A string representation of this color in the current format.
    *
    * @param bool $opacity
-   *   Whether or not to display the opacity.
+   *   Whether to display the opacity.
    *
    * @return string
-   *   The color in format: #RRGGBB
+   *   The color as hsla(#, #, #, #) or hsl(#, #, #) if opacity is false.
    */
-  public function toString($opacity = TRUE) {
-    if ($opacity) {
-      $output = 'hsla(' . $this->hue . ',' . $this->sat . ',' . $this->lum . ',' . $this->getOpacity() . ')';
-    }
-    else {
-      $output = 'hsl(' . $this->hue . ',' . $this->sat . ',' . $this->lum . ')';
-    }
+  public function toString(bool $opacity = TRUE): string {
+    $output = $opacity
+        ? 'hsla(' . $this->hue . ',' . $this->sat . ',' . $this->lum . ',' . $this->getOpacity() . ')'
+        : 'hsl(' . $this->hue . ',' . $this->sat . ',' . $this->lum . ')';
+
     return strtolower($output);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function toHex() {
+  public function toHex(): ColorHex {
     return $this->toRGB()->toHex();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function toRgb() {
+  public function toRgb(): ColorRGB {
     $h = $this->getHue();
     $s = $this->getSat();
     $l = $this->getLum();
 
     $h /= 60;
+
     if ($h < 0) {
       $h = 6 - fmod(-$h, 6);
     }
@@ -173,13 +175,13 @@ class ColorHSL extends ColorBase {
     $g = round(($g + $m) * 255);
     $b = round(($b + $m) * 255);
 
-    return new ColorRGB(intval($r), intval($g), intval($b), $this->getOpacity());
+    return new ColorRGB((int) $r, (int) $g, (int) $b, $this->getOpacity());
   }
 
   /**
    * {@inheritdoc}
    */
-  public function toHsl() {
+  public function toHsl(): ColorHSL {
     return $this;
   }
 

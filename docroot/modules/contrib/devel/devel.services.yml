@@ -23,10 +23,14 @@ services:
 
   devel.dumper:
     class: Drupal\devel\DevelDumperManager
-    arguments: ['@config.factory', '@current_user', '@plugin.manager.devel_dumper']
+    arguments: ['@config.factory', '@current_user', '@plugin.manager.devel_dumper', '@entity_type.manager']
 
   devel.twig.debug_extension:
     class: Drupal\devel\Twig\Extension\Debug
     arguments: ['@devel.dumper']
     tags:
       - { name: twig.extension }
+
+  devel.switch_user_list_helper:
+    class: Drupal\devel\SwitchUserListHelper
+    arguments: ['@current_user', '@entity_type.manager']

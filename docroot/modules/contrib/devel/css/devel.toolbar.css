@@ -4,8 +4,8 @@
  */
 
 .toolbar .toolbar-tray-vertical .edit-devel-toolbar {
-  text-align: right; /* LTR */
   padding: 1em;
+  text-align: right; /* LTR */
 }
 
 [dir="rtl"] .toolbar .toolbar-tray-vertical .edit-devel-toolbar {

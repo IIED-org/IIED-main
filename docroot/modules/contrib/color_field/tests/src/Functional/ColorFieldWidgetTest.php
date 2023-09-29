@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\Tests\color_field\Functional;
 
 /**
@@ -12,7 +14,7 @@ class ColorFieldWidgetTest extends ColorFieldFunctionalTestBase {
   /**
    * Test color_field_widget_html5.
    */
-  public function testColorFieldWidgetHtml5() {
+  public function testColorFieldWidgetHtml5(): void {
     $this->form->setComponent('field_color', [
       'type' => 'color_field_widget_html5',
     ])->save();
@@ -38,7 +40,7 @@ class ColorFieldWidgetTest extends ColorFieldFunctionalTestBase {
       'field_color[0][opacity]' => 1,
     ];
 
-    $this->drupalPostForm(NULL, $edit, t('Save'));
+    $this->submitForm($edit, t('Save'));
     $session->responseContains('#E70000 1</div>');
   }
 

@@ -1,0 +1,37 @@
+{#
+/**
+ * @file
+ * Template for the page title.
+ */
+#}
+{% set title_tag = title_tag ?? 'h1' %}
+{% set is_page_title = is_page_title ?? true %}
+{% set link = link ?? false %}
+
+{% set title_classes = [
+  is_page_title ? 'page-title',
+  display_size ? 'display-' ~ display_size
+]|merge(title_utility_classes ? title_utility_classes : []) %}
+
+{% set title_link_classes = [
+  is_page_title ? 'page-title__link',
+]|merge(_title_link_classes ? _title_link_classes : []) %}
+
+{% if title_link_attributes is empty %}
+  {% set title_link_attributes = create_attribute() %}
+{% endif %}
+
+{{ title_prefix }}
+
+{% if title %}
+  <{{title_tag}} {{ title_attributes.addClass(title_classes) }}>
+    {% if link %}
+      <a href="{{ url }}" {{ title_link_attributes.addClass(title_link_classes) }}>{{ title }}</a>
+    {% else %}
+      {% block title %}
+        {{ title }}
+      {% endblock %}
+    {% endif %}
+  </{{title_tag}}>
+{% endif %}
+{{ title_suffix }}

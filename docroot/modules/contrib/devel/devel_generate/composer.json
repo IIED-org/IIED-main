@@ -1,6 +1,6 @@
 {
   "name": "drupal/devel_generate",
-  "description": "Generate dummy users, nodes, menus, taxonomy terms...",
+  "description": "Generate test users, nodes, menus, taxonomy terms...",
   "type": "drupal-module",
   "homepage": "http://drupal.org/project/devel",
   "authors": [

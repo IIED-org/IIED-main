@@ -4,6 +4,9 @@ namespace Drupal\content_translation_redirect\Entity;
 
 use Drupal\content_translation_redirect\ContentTranslationRedirectInterface;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
+use Drupal\Core\Config\Entity\ConfigEntityInterface;
+use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Url;
 
 /**
  * Defines the Content Translation Redirect entity.
@@ -12,7 +15,9 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *   id = "content_translation_redirect",
  *   label = @Translation("Content Translation Redirect"),
  *   handlers = {
- *     "list_builder" = "Drupal\content_translation_redirect\Controller\ContentTranslationRedirectListBuilder",
+ *     "storage" = "Drupal\content_translation_redirect\ContentTranslationRedirectStorage",
+ *     "list_builder" = "Drupal\content_translation_redirect\ContentTranslationRedirectListBuilder",
+ *     "access" = "Drupal\content_translation_redirect\ContentTranslationRedirectAccessControlHandler",
  *     "form" = {
  *       "add" = "Drupal\content_translation_redirect\Form\ContentTranslationRedirectForm",
  *       "edit" = "Drupal\content_translation_redirect\Form\ContentTranslationRedirectForm",
@@ -26,14 +31,16 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *     "label" = "label",
  *   },
  *   links = {
- *     "edit-form" = "/admin/config/regional/content-translation-redirect/entity/{content_translation_redirect}",
- *     "delete-form" = "/admin/config/regional/content-translation-redirect/entity/{content_translation_redirect}/delete",
+ *     "edit-form" = "/admin/config/regional/content-translation-redirect/{content_translation_redirect}",
+ *     "delete-form" = "/admin/config/regional/content-translation-redirect/{content_translation_redirect}/delete",
+ *     "collection" = "/admin/config/regional/content-translation-redirect",
  *   },
  *   config_export = {
  *     "id",
  *     "label",
  *     "code",
- *     "message",
+ *     "path",
+ *     "translatable_entity_only"
  *   }
  * )
  */
@@ -54,45 +61,138 @@ class ContentTranslationRedirect extends ConfigEntityBase implements ContentTran
   protected $label;
 
   /**
-   * Redirect status code.
+   * The redirect status code.
    *
    * @var int
    */
   protected $code;
 
   /**
-   * Message after redirection.
+   * The redirect path.
    *
    * @var string
    */
-  protected $message;
+  protected $path;
+
+  /**
+   * Should redirects only happen on translatable entities?
+   *
+   * @var bool
+   */
+  protected bool $translatable_entity_only = TRUE;
 
   /**
    * {@inheritdoc}
    */
-  public function setStatusCode($code) {
+  public function setStatusCode(?int $code): ContentTranslationRedirectInterface {
     $this->code = $code;
+    return $this;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function setMessage($message) {
-    $this->message = $message;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getStatusCode() {
+  public function getStatusCode(): ?int {
     return $this->code;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getMessage() {
-    return $this->message;
+  public function setPath(string $path): ContentTranslationRedirectInterface {
+    $this->path = $path;
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPath(): ?string {
+    return $this->path;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getUrl(): ?Url {
+    return $this->path ? Url::fromUserInput($this->path) : NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isLocked(): bool {
+    return $this->id() === ContentTranslationRedirectInterface::DEFAULT_ID;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function translatableEntityOnly(): bool {
+    return $this->translatable_entity_only;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function preSave(EntityStorageInterface $storage) {
+    parent::preSave($storage);
+
+    if ($this->isNew()) {
+      $parts = explode('__', $this->id());
+      $entity_type_id = $parts[0];
+
+      $entity_type = $this->entityTypeManager()
+        ->getDefinition($entity_type_id, FALSE);
+
+      if ($entity_type) {
+        $bundle_id = $parts[1] ?? NULL;
+
+        // Get the entity type label.
+        $label = (string) $entity_type->getLabel();
+
+        // Get the bundle label.
+        if ($bundle_id !== NULL) {
+          $bundle_info = $this->entityTypeBundleInfo()->getBundleInfo($entity_type_id);
+          $label .= ': ' . $bundle_info[$bundle_id]['label'];
+        }
+
+        // Set the label on new entity.
+        $this->set('label', $label);
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function sort(ConfigEntityInterface $a, ConfigEntityInterface $b) {
+    // Always put Default in first place.
+    if ($a->id() === ContentTranslationRedirectInterface::DEFAULT_ID) {
+      return -1;
+    }
+    elseif ($b->id() === ContentTranslationRedirectInterface::DEFAULT_ID) {
+      return 1;
+    }
+    return parent::sort($a, $b);
+  }
+
+  /**
+   * Returns redirect status codes.
+   *
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup[]
+   *   Redirect status codes.
+   */
+  public static function getStatusCodes(): array {
+    return [
+      300 => t('300 Multiple Choices'),
+      301 => t('301 Moved Permanently'),
+      302 => t('302 Found'),
+      303 => t('303 See Other'),
+      304 => t('304 Not Modified'),
+      305 => t('305 Use Proxy'),
+      307 => t('307 Temporary Redirect'),
+    ];
   }
 
 }

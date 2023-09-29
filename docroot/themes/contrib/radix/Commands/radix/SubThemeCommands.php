@@ -1,25 +1,24 @@
 <?php
-
 declare(strict_types = 1);
-
 namespace Drush\Commands\radix;
 
 use Consolidation\AnnotatedCommand\CommandData;
 use Consolidation\AnnotatedCommand\CommandError;
 use Drupal\Component\Utility\UrlHelper;
-use Drupal\radix\SubThemeGenerator;
+use Drush\Commands\radix\SubThemeGenerator;
 use Drush\Commands\DrushCommands;
-use Exception;
-use FilesystemIterator;
 use Robo\Contract\BuilderAwareInterface;
 use Robo\State\Data as RoboStateData;
 use Robo\TaskAccessor;
 use Symfony\Component\Filesystem\Filesystem;
 
-use Robo\Task\Archive\loadTasks as ArchiveTaskLoader;
-use Robo\Task\Filesystem\loadTasks as FilesystemTaskLoader;
+use Robo\Task\Archive\Tasks as ArchiveTaskLoader;
+use Robo\Task\Filesystem\Tasks as FilesystemTaskLoader;
 use Symfony\Component\Finder\Finder;
 
+/**
+ * Class SubThemeCommands.
+ */
 class SubThemeCommands extends DrushCommands implements BuilderAwareInterface {
 
   use TaskAccessor;
@@ -27,11 +26,15 @@ class SubThemeCommands extends DrushCommands implements BuilderAwareInterface {
   use FilesystemTaskLoader;
 
   /**
+   * {@inheritdoc}
+   *
    * @var \Drupal\radix\SubThemeGenerator
    */
   protected $subThemeCreator;
 
   /**
+   * {@inheritdoc}
+   *
    * @var \Symfony\Component\Filesystem\Filesystem
    */
   protected $fs;
@@ -84,14 +87,14 @@ class SubThemeCommands extends DrushCommands implements BuilderAwareInterface {
     $kit = $options['kit'];
 
     // @todo Use extension service.
-    $radixDir = drupal_get_path('theme', 'radix');
+    $radixDir = \Drupal::service('extension.list.theme')->getPath('radix');
     $srcDir = "$radixDir/src/kits/{$kit}";
 
     // Find kit from other active themes.
     /** @var \Drupal\Core\Extension\Extension[] $themes */
     foreach (\Drupal::service('theme_handler')->listInfo() as $theme) {
       $path = "{$theme->getPath()}/src/kits/{$kit}";
-      if($this->fs->exists($path)) {
+      if ($this->fs->exists($path)) {
         $srcDir = $path;
       }
     }
@@ -107,12 +110,7 @@ class SubThemeCommands extends DrushCommands implements BuilderAwareInterface {
 
       $cb->addCode(function (RoboStateData $data) use ($kitUrl): int {
         $logger = $this->logger();
-        $logger->debug(
-          'download Radix starter kit from <info>{kitUrl}</info>',
-          [
-            'kitUrl' => $kitUrl,
-          ]
-        );
+        $logger->debug(t('download Radix starter kit from @kitUrl', array('@kitUrl' => "<info>$kitUrl</info>")));
 
         $fileName = $this->getFileNameFromUrl($kitUrl);
         $packDir = "{$data['path']}/pack";
@@ -122,7 +120,7 @@ class SubThemeCommands extends DrushCommands implements BuilderAwareInterface {
           $this->fs->mkdir($packDir);
           $this->fs->copy($kitUrl, $data['packPath']);
         }
-        catch (Exception $e) {
+        catch (\Exception $e) {
           $logger->error($e->getMessage());
 
           return 1;
@@ -134,11 +132,13 @@ class SubThemeCommands extends DrushCommands implements BuilderAwareInterface {
       $cb->addCode(function (RoboStateData $data): int {
         $logger = $this->logger();
         $logger->debug(
-          'extract downloaded Radix starter kit from <info>{packPath}</info> to <info>{srcDir}</info>',
-          [
-            'packPath' => $data['packPath'],
-            'srcDir' => $data['srcDir'],
-          ]
+          t(
+            'extract downloaded Radix starter kit from @packPath to @srcDir',
+            array(
+              '@packPath' => "<info>$data[packPath]</info>", 
+              '@srcDir' => "<info>$data[srcDir]</info>"
+            )
+          )
         );
 
         $data['srcDir'] = "{$data['path']}/kit";
@@ -169,17 +169,19 @@ class SubThemeCommands extends DrushCommands implements BuilderAwareInterface {
     $cb->addCode(function (RoboStateData $data) use ($dstDir): int {
       $logger = $this->logger();
       $logger->debug(
-        'copy Radix starter kit from <info>{srcDir}</info> to <info>{dstDir}</info>',
-        [
-          'srcDir' => $data['srcDir'],
-          'dstDir' => $dstDir,
-        ]
+        t(
+          'copy Radix starter kit from @srcDir to @dstDir',
+          array(
+            '@srcDir' => "<info>$data[srcDir]</info>",
+            '@dstDir' => "<info>$dstDir</info>"
+          )
+        )
       );
 
       try {
         $this->fs->mirror($data['srcDir'], $dstDir);
       }
-      catch (Exception $e) {
+      catch (\Exception $e) {
         $this->logger()->error($e->getMessage());
 
         return 1;
@@ -191,10 +193,12 @@ class SubThemeCommands extends DrushCommands implements BuilderAwareInterface {
     $cb->addCode(function () use ($name, $options, $dstDir): int {
       $logger = $this->logger();
       $logger->debug(
-        'customize Radix starter kit in <info>{dstDir}</info> directory',
-        [
-          'dstDir' => $dstDir,
-        ]
+        t(
+          'customize Radix starter kit in @dstDir',
+          array(
+            '@dstDir' => "<info>$dstDir</info>"
+          )
+        )
       );
 
       $this
@@ -212,11 +216,12 @@ class SubThemeCommands extends DrushCommands implements BuilderAwareInterface {
   }
 
   /**
+   * {@inheritdoc}
+   *
    * @hook validate radix:create
    */
   public function onHookValidateRadixGenerateSubTheme(CommandData $commandData): ?CommandError {
     $input = $commandData->input();
-
 
     if (!$input->getOption('kit')) {
       $input->setOption('kit', 'default');
@@ -247,9 +252,12 @@ class SubThemeCommands extends DrushCommands implements BuilderAwareInterface {
   }
 
   /**
+   * {@inheritdoc}
+   *
    * @hook validate @radixArgLabel
    *
    * @return null|\Consolidation\AnnotatedCommand\CommandError
+   *   Returns null or CommandError.
    */
   public function onHookValidateRadixArgLabel(CommandData $commandData): ?CommandError {
     $annotationKey = 'radixArgLabel';
@@ -267,7 +275,10 @@ class SubThemeCommands extends DrushCommands implements BuilderAwareInterface {
     return $this->aggregateCommandErrors($commandErrors);
   }
 
-  protected function onHookValidateRadixArgLabelSingle(CommandData $commandData,  string $argName): ?CommandError {
+  /**
+   * {@inheritdoc}
+   */
+  protected function onHookValidateRadixArgLabelSingle(CommandData $commandData, string $argName): ?CommandError {
     $label = $commandData->input()->getArgument($argName);
     if (strlen($label) === 0) {
       return NULL;
@@ -281,6 +292,8 @@ class SubThemeCommands extends DrushCommands implements BuilderAwareInterface {
   }
 
   /**
+   * {@inheritdoc}
+   *
    * @hook validate @radixOptionMachineName
    */
   public function onHookValidateRadixOptionMachineName(CommandData $commandData) {
@@ -299,6 +312,9 @@ class SubThemeCommands extends DrushCommands implements BuilderAwareInterface {
     return $this->aggregateCommandErrors($commandErrors);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function onHookValidateRadixOptionMachineNameSingle(CommandData $commandData, $optionName): ?CommandError {
     $machineNames = $commandData->input()->getOption($optionName);
     if (!is_array($machineNames)) {
@@ -319,10 +335,16 @@ class SubThemeCommands extends DrushCommands implements BuilderAwareInterface {
     return NULL;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function parseMultiValueAnnotation(string $value): array {
     return $this->explodeCommaSeparatedList($value);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function explodeCommaSeparatedList(string $items): array {
     return array_filter(
       preg_split('/\s*,\s*/', trim($items)),
@@ -331,7 +353,10 @@ class SubThemeCommands extends DrushCommands implements BuilderAwareInterface {
   }
 
   /**
+   * {@inheritdoc}
+   *
    * @param \Consolidation\AnnotatedCommand\CommandError[] $commandErrors
+   *   Command errors.
    */
   protected function aggregateCommandErrors(array $commandErrors): ?CommandError {
     $errorCode = 0;
@@ -349,10 +374,16 @@ class SubThemeCommands extends DrushCommands implements BuilderAwareInterface {
     return NULL;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function convertLabelToMachineName(string $label): string {
     return mb_strtolower(preg_replace('/[^a-z0-9_]+/ui', '_', $label));
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function getDefaultDestination(): string {
     if ($this->fs->exists('./themes/contrib') || $this->fs->exists('./themes/custom')) {
       return './themes/custom';
@@ -361,24 +392,39 @@ class SubThemeCommands extends DrushCommands implements BuilderAwareInterface {
     return './themes';
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function getDefaultDescription(): string {
     return 'A theme based on Radix.';
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function isDirEmpty(string $dir): bool {
-    return !(new FilesystemIterator($dir))->valid();
+    return !(new \FilesystemIterator($dir))->valid();
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function getDirectDescendants(string $dir): Finder {
     return (new Finder())
       ->in($dir)
       ->depth('0');
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function getFileNameFromUrl(string $url): string {
     return pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_BASENAME);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function getTopLevelDir(string $parentDir): string {
     $directDescendants = $this->getDirectDescendants($parentDir);
     $iterator = $directDescendants->getIterator();

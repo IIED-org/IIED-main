@@ -36,7 +36,7 @@ class DevelGenerateManagerTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     // Mock a Discovery object to replace AnnotationClassDiscovery.
     $this->discovery = $this->createMock('Drupal\Component\Plugin\Discovery\DiscoveryInterface');
@@ -68,8 +68,7 @@ class DevelGenerateManagerTest extends UnitTestCase {
 }
 
 /**
- * Provides a testing version of DevelGeneratePluginManager with an empty
- * constructor.
+ * A testing version of DevelGeneratePluginManager with an empty constructor.
  */
 class TestDevelGeneratePluginManager extends DevelGeneratePluginManager {
 

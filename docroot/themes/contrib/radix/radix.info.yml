@@ -1,37 +1,32 @@
 name: Radix
 type: theme
 base theme: false
-description: Responsive base theme for Drupal.
+description: Responsive Bootstrap 5 base theme for Drupal.
 screenshot: screenshot.png
-core_version_requirement: ^8.7.7 || ^9.0
-
-stylesheets-remove:
-  - system.theme.css
-  - system.menus.css
-  - system.admin.css
-
-libraries:
-  - radix/bootstrap
-  - radix/style
+core_version_requirement: ^8.7.7 || ^9.0 || ^10
+dependencies:
+  - drupal:components
 
 libraries-override:
-  seven/global-styling: false
+  system/admin:
+    css:
+      theme:
+        css/system.admin.css: false
 
 regions:
   navbar_branding: Navbar branding
-  navbar_left:  Navbar left
+  navbar_left: Navbar left
   navbar_right: Navbar right
   header: Header
   content: Content
   page_bottom: Page bottom
   footer: Footer
 
-component-libraries:
-  radix:
-    paths:
-      - ./src/components
+components:
+  namespaces:
+    radix: src/components
 
-# Information added by Drupal.org packaging script on 2020-09-30
-version: '8.x-4.10'
+# Information added by Drupal.org packaging script on 2023-08-17
+version: '5.0.11'
 project: 'radix'
-datestamp: 1601449011
+datestamp: 1692276019

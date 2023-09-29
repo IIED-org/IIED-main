@@ -9,6 +9,7 @@ use Drupal\Core\Entity\Plugin\Condition\EntityBundle as CoreEntityBundle;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\ctools\Plugin\Condition\EntityBundle;
+use Drupal\ctools\Plugin\Condition\NodeType;
 
 /**
  * Implements hook_theme().
@@ -89,15 +90,15 @@ function template_preprocess_ctools_wizard_trail_links(&$variables) {
  * @param $definitions
  */
 function ctools_condition_info_alter(&$definitions) {
-  // If the node_type's class is unaltered, use a custom ctools implementation.
+  // Drupal 9.x only: override core node_type with ctools constraints.
   if (isset($definitions['node_type']) && $definitions['node_type']['class'] == 'Drupal\node\Plugin\Condition\NodeType') {
-    $definitions['node_type']['class'] = 'Drupal\ctools\Plugin\Condition\NodeType';
+    $definitions['node_type']['class'] = NodeType::class;
   }
 
   // Replace all generic entity bundle conditions classes if they are unaltered,
   // these exist in Drupal 9.3+.
   foreach ($definitions as $id => $definition) {
-    if (strpos($id, 'entity_bundle:') === 0 && $definition['class'] == CoreEntityBundle::class) {
+    if (strpos($id, 'entity_bundle:') === 0 && ($definition['class'] == CoreEntityBundle::class || $definition['class'] == 'Drupal\ctools\Plugin\Condition\EntityBundleConstraint')) {
       $definitions[$id]['class'] = EntityBundle::class;
     }
   }

@@ -31,7 +31,7 @@ function radix_preprocess_filter_caption(&$variables) {
   }
 
   // Add the figure-img class to the rendered image markup.
-  libxml_use_internal_errors(true);
+  libxml_use_internal_errors(TRUE);
   $doc = new DOMDocument();
   $doc->loadHTML($variables['node']);
   if ($image = $doc->getElementsByTagName('img')->item(0)) {
@@ -40,4 +40,11 @@ function radix_preprocess_filter_caption(&$variables) {
       '#markup' => $image->ownerDocument->saveHTML($image),
     ];
   }
+}
+
+/**
+ * Implements theme_suggestions_field_alter().
+ */
+function radix_theme_suggestions_field_alter(&$suggestions, $variables) {
+  $suggestions[] = 'field__' . $variables['element']['#entity_type'] . '__' . $variables['element']['#field_name'] . '__' . $variables['element']['#bundle'] . '__' . $variables['element']['#view_mode'];
 }

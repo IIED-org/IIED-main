@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\color_field\Plugin\Field\FieldWidget;
 
 use Drupal\Core\Field\FieldItemListInterface;
@@ -22,21 +24,7 @@ class ColorFieldWidgetGrid extends ColorFieldWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public static function defaultSettings() {
-    return [
-      'cell_width' => 10,
-      'cell_height' => 10,
-      'cell_margin' => 1,
-      'box_width' => 115,
-      'box_height' => 20,
-      'columns' => 16,
-    ] + parent::defaultSettings();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
+  public function settingsForm(array $form, FormStateInterface $form_state): array {
     $element = [];
 
     $element['cell_width'] = [
@@ -81,13 +69,14 @@ class ColorFieldWidgetGrid extends ColorFieldWidgetBase {
       '#required' => TRUE,
       '#description' => $this->t('Number of columns to display. Color order may look strange if this is altered.'),
     ];
+
     return $element;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function settingsSummary() {
+  public function settingsSummary(): array {
     $summary = [];
 
     $cell_width = $this->getSetting('cell_width');
@@ -131,7 +120,7 @@ class ColorFieldWidgetGrid extends ColorFieldWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
+  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
     $element = parent::formElement($items, $delta, $element, $form, $form_state);
 
     // We are nesting some sub-elements inside the parent, so we need a wrapper.
@@ -151,6 +140,20 @@ class ColorFieldWidgetGrid extends ColorFieldWidgetBase {
     $element['color']['#wrapper_attributes']['class'][] = 'clearfix';
 
     return $element;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function defaultSettings(): array {
+    return [
+      'cell_width' => 10,
+      'cell_height' => 10,
+      'cell_margin' => 1,
+      'box_width' => 115,
+      'box_height' => 20,
+      'columns' => 16,
+    ] + parent::defaultSettings();
   }
 
 }

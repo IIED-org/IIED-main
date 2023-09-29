@@ -7,7 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
 /**
- * Builds the form to delete an Content Translation Redirect.
+ * Builds the form to delete Content Translation Redirect entities.
  */
 class ContentTranslationRedirectDeleteForm extends EntityConfirmFormBase {
 
@@ -37,7 +37,7 @@ class ContentTranslationRedirectDeleteForm extends EntityConfirmFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->entity->delete();
-    $this->messenger()->addMessage($this->t('Content Translation Redirect %label has been deleted.', ['%label' => $this->entity->label()]));
+    $this->messenger()->addMessage($this->t('Deleted the content translation redirect of type %label.', ['%label' => $this->entity->label()]));
     $form_state->setRedirectUrl($this->getCancelUrl());
   }
 

@@ -1,0 +1,25 @@
+{% set page_main_classes = [
+  'py-5'
+]|merge(page_main_utility_classes ? page_main_utility_classes : []) %}
+
+<main{{ content_attributes.addClass(page_main_classes) }}>
+  {% if page.header %}
+    <header class="page__header mb-3">
+      <div class="container">
+        {% block page_header %}
+          {{ page.header }}
+        {% endblock %}
+      </div>
+    </header>
+  {% endif %}
+
+  {% if page.content %}
+    <div class="page__content" id="main-content">
+      <div class="container">
+        {% block page_inner_content %}
+          {{ page.content }}
+        {% endblock %}
+      </div>
+    </div>
+  {% endif %}
+</main>

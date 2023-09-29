@@ -47,6 +47,13 @@ class ColorboxFormatter extends ImageFormatterBase implements ContainerFactoryPl
   protected $imageStyleStorage;
 
   /**
+   * Element attachment allowing library to be attached to pages.
+   *
+   * @var \Drupal\colorbox\ElementAttachmentInterface
+   */
+  protected $attachment;
+
+  /**
    * Drupal\Core\Extension\ModuleHandlerInterface definition.
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
@@ -76,16 +83,16 @@ class ColorboxFormatter extends ImageFormatterBase implements ContainerFactoryPl
    * @param string $view_mode
    *   The view mode.
    * @param array $third_party_settings
-   *   Any third party settings settings.
+   *   Any third party settings.
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current user.
-   * @param Drupal\Core\Entity\EntityStorageInterface $image_style_storage
+   * @param \Drupal\Core\Entity\EntityStorageInterface $image_style_storage
    *   The image style storage.
    * @param \Drupal\colorbox\ElementAttachmentInterface $attachment
    *   Allow the library to be attached to the page.
-   * @param Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   Module handler services.
-   * @param Drupal\Core\Asset\LibraryDiscoveryInterface $libraryDiscovery
+   * @param \Drupal\Core\Asset\LibraryDiscoveryInterface $libraryDiscovery
    *   Library discovery service.
    */
   public function __construct($plugin_id,
@@ -451,8 +458,8 @@ class ColorboxFormatter extends ImageFormatterBase implements ContainerFactoryPl
       $style_ids[] = $this->getSetting('colorbox_node_style_first');
     }
     $style_ids[] = $this->getSetting('colorbox_image_style');
-    /** @var \Drupal\image\ImageStyleInterface $style */
     foreach ($style_ids as $style_id) {
+      /** @var \Drupal\image\ImageStyleInterface $style */
       if ($style_id && $style = ImageStyle::load($style_id)) {
         // If this formatter uses a valid image style to display the image, add
         // the image style configuration entity as dependency of this formatter.
@@ -473,8 +480,8 @@ class ColorboxFormatter extends ImageFormatterBase implements ContainerFactoryPl
       $style_ids['colorbox_node_style_first'] = $this->getSetting('colorbox_node_style_first');
     }
     $style_ids['colorbox_image_style'] = $this->getSetting('colorbox_image_style');
-    /** @var \Drupal\image\ImageStyleInterface $style */
     foreach ($style_ids as $name => $style_id) {
+      /** @var \Drupal\image\ImageStyleInterface $style */
       if ($style_id && $style = ImageStyle::load($style_id)) {
         if (!empty($dependencies[$style->getConfigDependencyKey()][$style->getConfigDependencyName()])) {
           $replacement_id = $this->imageStyleStorage->getReplacementId($style_id);

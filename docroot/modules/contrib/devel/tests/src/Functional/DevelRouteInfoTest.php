@@ -14,7 +14,7 @@ class DevelRouteInfoTest extends DevelBrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->drupalPlaceBlock('system_menu_block:devel');
     $this->drupalPlaceBlock('page_title_block');
@@ -128,7 +128,7 @@ class DevelRouteInfoTest extends DevelBrowserTestBase {
     $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()->pageTextContains($expected_title);
     $expected_url = Url::fromRoute('devel.route_info.item', [], ['query' => ['path' => $path]]);
-    $this->assertSession()->addressEquals($expected_url);
+    $this->assertSession()->addressEquals($expected_url->toString());
     $this->assertSession()->elementNotExists('xpath', $xpath_warning_messages);
 
     // Ensures that devel route detail works properly even when dynamic cache
@@ -141,7 +141,7 @@ class DevelRouteInfoTest extends DevelBrowserTestBase {
     $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()->pageTextContains($expected_title);
     $expected_url = Url::fromRoute('devel.route_info.item', [], ['query' => ['path' => $path]]);
-    $this->assertSession()->addressEquals($expected_url);
+    $this->assertSession()->addressEquals($expected_url->toString());
     $this->assertSession()->elementNotExists('xpath', $xpath_warning_messages);
 
     // Ensures that if a non existent path is passed as input, a warning

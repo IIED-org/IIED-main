@@ -20,7 +20,7 @@ class ActivationCheck implements ActivationCheckInterface {
   /**
    * The request stack.
    *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
+   * @var \Symfony\Component\HttpFoundation\Request
    */
   protected $request;
 

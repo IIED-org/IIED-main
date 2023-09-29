@@ -43,7 +43,8 @@ for more info.
 #### Version Compatibility
 | Devel version | Drupal core | PHP  | Drush |
 |---------------|-------------|------|-------|
-| 4.x           | 8.9+, 9, 10 | 7.2+ | 9+    |
+| 5.x           | 9,10        | 7.4+ | 11+   |
+| 4.x           | 8.9+,9      | 7.2+ | 9+    |
 | 8.x-2.x       | 8.x         | 7.0+ | 8+    |
 
 #### Maintainers

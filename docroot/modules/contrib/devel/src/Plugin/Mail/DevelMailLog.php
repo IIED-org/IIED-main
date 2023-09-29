@@ -3,7 +3,6 @@
 namespace Drupal\devel\Plugin\Mail;
 
 use Drupal\Component\FileSecurity\FileSecurity;
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Mail\MailFormatHelper;
@@ -138,7 +137,7 @@ class DevelMailLog implements MailInterface, ContainerFactoryPluginInterface {
     $mimeheaders = [];
     $message['headers']['To'] = $message['to'];
     foreach ($message['headers'] as $name => $value) {
-      $mimeheaders[] = $name . ': ' . Unicode::mimeHeaderEncode($value);
+      $mimeheaders[] = $name . ': ' . iconv_mime_decode($value);
     }
 
     $line_endings = Settings::get('mail_line_endings', PHP_EOL);

@@ -6,4 +6,5 @@
   padding: 0;
   border: none;
   overflow: hidden;
+  min-height: 0;
 }

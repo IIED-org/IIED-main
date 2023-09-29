@@ -4,6 +4,7 @@ namespace Drupal\Tests\block_class\Functional;
 
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\block_class\Constants\BlockClassConstants;
 
 /**
  * Tests the custom CSS classes for blocks.
@@ -18,7 +19,7 @@ class BlockClassTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['block', 'block_class'];
+  protected static $modules = ['block', 'block_class'];
 
   /**
    * {@inheritdoc}
@@ -31,7 +32,7 @@ class BlockClassTest extends BrowserTestBase {
   public function testBlockClass() {
 
     $admin_user = $this->drupalCreateUser([
-      'administer block classes',
+      BlockClassConstants::BLOCK_CLASS_PERMISSION,
       'administer blocks',
     ]);
     $this->drupalLogin($admin_user);
@@ -55,9 +56,9 @@ class BlockClassTest extends BrowserTestBase {
     // Go to the front page of the user.
     $this->drupalGet('<front>');
     // Assert the custom class in the content block.
-    $this->assertRaw('<div id="block-mainpagecontent" class="TestClass_content block block-system block-system-main-block">');
+    $this->assertSession()->responseContains('<div id="block-mainpagecontent" class="TestClass_content block block-system block-system-main-block">');
     // Assert the custom class in user menu.
-    $this->assertRaw('<nav role="navigation" aria-labelledby="block-useraccountmenu-menu" id="block-useraccountmenu" class="TestClass_menu block block-menu navigation menu--account">');
+    $this->assertSession()->responseContains('<nav role="navigation" aria-labelledby="block-useraccountmenu-menu" id="block-useraccountmenu" class="TestClass_menu block block-menu navigation menu--account">');
   }
 
 }

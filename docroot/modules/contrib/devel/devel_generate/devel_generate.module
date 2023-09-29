@@ -119,6 +119,7 @@ function devel_generate_add_comments(NodeInterface $node, FieldDefinitionInterfa
           ->condition('entity_type', 'node')
           ->condition('field_name', $field_name)
           ->range(0, 1)
+          ->accessCheck(FALSE)
           ->execute();
         break;
 
@@ -130,6 +131,7 @@ function devel_generate_add_comments(NodeInterface $node, FieldDefinitionInterfa
           ->condition('entity_type', 'node')
           ->condition('field_name', $field_name)
           ->range(0, 1)
+          ->accessCheck(FALSE)
           ->execute();
         break;
     }

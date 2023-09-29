@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="content_translation_redirect">
+  <description>Default PHP CodeSniffer configuration for the Content Translation Redirect module.</description>
+  <arg name="extensions" value="php,module,inc,install,yml"/>
+  <config name="drupal_core_version" value="8"/>
+  <file>.</file>
+
+  <rule ref="Drupal"/>
+  <rule ref="DrupalPractice"/>
+</ruleset>

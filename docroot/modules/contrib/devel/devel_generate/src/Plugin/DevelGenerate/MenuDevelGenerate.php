@@ -271,9 +271,10 @@ class MenuDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
   protected function deleteMenus() {
     if ($this->moduleHandler->moduleExists('menu_ui')) {
       $menu_ids = [];
-      foreach (menu_ui_get_menus(FALSE) as $menu => $menu_title) {
-        if (strpos($menu, 'devel-') === 0) {
-          $menu_ids[] = $menu;
+      $all = Menu::loadMultiple();
+      foreach ($all as $menu) {
+        if (strpos($menu->id(), 'devel-') === 0) {
+          $menu_ids[] = $menu->id();
         }
       }
 
@@ -287,6 +288,7 @@ class MenuDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
     $link_ids = $this->menuLinkContentStorage->getQuery()
       ->condition('menu_name', 'devel', '<>')
       ->condition('link__options', '%' . $this->database->escapeLike('s:5:"devel";b:1') . '%', 'LIKE')
+      ->accessCheck(FALSE)
       ->execute();
 
     if ($link_ids) {

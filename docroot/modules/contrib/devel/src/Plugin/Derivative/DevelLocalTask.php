@@ -92,6 +92,12 @@ class DevelLocalTask extends DeriverBase implements ContainerDeriverInterface {
             'title' => $this->t('Load'),
             'parent_id' => "devel.entities:$entity_type_id.devel_tab",
           ];
+          $this->derivatives["$entity_type_id.devel_load_with_references_tab"] = [
+            'route_name' => "entity.$entity_type_id.devel_load_with_references",
+            'weight' => 100,
+            'title' => $this->t('Load (with references)'),
+            'parent_id' => "devel.entities:$entity_type_id.devel_tab",
+          ];
         }
       }
     }

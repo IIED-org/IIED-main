@@ -130,7 +130,7 @@ class DevelGenerateCommands extends DrushCommands {
    * @option roles A comma delimited list of role IDs for new users. Don't specify 'authenticated'.
    * @option pass Specify a password to be set for all generated users.
    */
-  public function users($num = 50, array $options = ['kill' => FALSE, 'roles' => '']) {
+  public function users($num = 50, array $options = ['kill' => FALSE, 'roles' => self::REQ]) {
     // @todo pass $options to the plugins.
     $this->generate();
   }
@@ -155,7 +155,7 @@ class DevelGenerateCommands extends DrushCommands {
    * @option min-depth The minimum depth of hierarchy for the new terms.
    * @option max-depth The maximum depth of hierarchy for the new terms.
    */
-  public function terms($num = 50, array $options = ['kill' => FALSE, 'bundles' => NULL, 'feedback' => '1000', 'languages' => NULL, 'translations' => NULL, 'min-depth' => '1', 'max-depth' => '4']) {
+  public function terms($num = 50, array $options = ['kill' => FALSE, 'bundles' => self::REQ, 'feedback' => '1000', 'languages' => self::REQ, 'translations' => self::REQ, 'min-depth' => '1', 'max-depth' => '4']) {
     $this->generate();
   }
 
@@ -223,11 +223,12 @@ class DevelGenerateCommands extends DrushCommands {
    * @option authors A comma delimited list of authors ids. Defaults to all users.
    * @option feedback An integer representing interval for insertion rate logging.
    * @option skip-fields A comma delimited list of fields to omit when generating random values
+   * @option base-fields A comma delimited list of base field names to populate
    * @option languages A comma-separated list of language codes
    * @option translations A comma-separated list of language codes for translations.
    * @option add-type-label Add the content type label to the front of the node title
    */
-  public function content($num = 50, $max_comments = 0, array $options = ['kill' => FALSE, 'bundles' => 'page,article', 'authors' => NULL, 'feedback' => 1000, 'languages' => NULL, 'translations' => NULL, 'add-type-label' => FALSE]) {
+  public function content($num = 50, $max_comments = 0, array $options = ['kill' => FALSE, 'bundles' => 'page,article', 'authors' => self::REQ, 'feedback' => 1000, 'skip-fields' => self::REQ, 'base-fields' => self::REQ, 'languages' => self::REQ, 'translations' => self::REQ, 'add-type-label' => FALSE]) {
     $this->generate();
   }
 
@@ -246,11 +247,12 @@ class DevelGenerateCommands extends DrushCommands {
    *
    * @option kill Delete all media items before generating new media.
    * @option media-types A comma-delimited list of media types to create.
+   * @option skip-fields A comma delimited list of fields to omit when generating random values
+   * @option base-fields A comma delimited list of base field names to populate
    * @option feedback An integer representing interval for insertion rate logging.
-   * @option skip-fields A comma delimited list of fields to omit when generating random values.
    * @option languages A comma-separated list of language codes
    */
-  public function media($num = 50, array $options = ['kill' => FALSE, 'media-types' => NULL, 'feedback' => 1000]) {
+  public function media($num = 50, array $options = ['kill' => FALSE, 'media-types' => self::REQ, 'feedback' => 1000, 'skip-fields' => self::REQ, 'base-fields' => self::REQ]) {
     $this->generate();
   }
 

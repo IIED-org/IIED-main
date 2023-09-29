@@ -17,7 +17,7 @@ class TwigExtensionFunctionsTest extends UnitTestCase {
   /**
    * The renderer.
    *
-   * @var \Drupal\Core\Render\RendererInterface|\PHPUnit_Framework_MockObject_MockObject
+   * @var \Drupal\Core\Render\RendererInterface|\PHPUnit\Framework\MockObject\MockObject
    */
   protected $renderer;
 
@@ -38,16 +38,17 @@ class TwigExtensionFunctionsTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     $this->renderer = $this->createMock('\Drupal\Core\Render\RendererInterface');
     $urlGenerator = $this->createMock('\Drupal\Core\Routing\UrlGeneratorInterface');
     $themeManager = $this->createMock('\Drupal\Core\Theme\ThemeManagerInterface');
     $dateFormatter = $this->createMock('\Drupal\Core\Datetime\DateFormatterInterface');
+    $fileURLGenerator = $this->createMock('\Drupal\Core\File\FileUrlGeneratorInterface');
 
     $this->systemUnderTest = new TwigExtension();
-    $coreTwigExtension = new CoreTwigExtension($this->renderer, $urlGenerator, $themeManager, $dateFormatter);
+    $coreTwigExtension = new CoreTwigExtension($this->renderer, $urlGenerator, $themeManager, $dateFormatter, $fileURLGenerator);
 
     $loader = new StringLoader();
     $this->twigEnvironment = new Environment($loader);
@@ -74,13 +75,7 @@ class TwigExtensionFunctionsTest extends UnitTestCase {
       $exception = FALSE;
     }
     catch (\Exception $e) {
-      $needle = 'Templates with namespaces are not supported; "@stable/item-list.html.twig" given.';
-      if (method_exists($this, 'assertStringContainsString')) {
-        $this->assertStringContainsString($needle, $e->getMessage());
-      }
-      else {
-        $this->assertContains($needle, $e->getMessage());
-      }
+      $this->assertStringContainsString('Templates with namespaces are not supported; "@stable/item-list.html.twig" given.', $e->getMessage());
       $exception = TRUE;
     }
     if (!$exception) {

@@ -3,7 +3,7 @@
  * Attaches behaviors for Drupal's color field.
  */
 
-(function ($, Drupal) {
+(function ($, Drupal, once) {
 
     'use strict';
 
@@ -17,10 +17,7 @@
      */
     Drupal.behaviors.color_field = {
         attach: function (context, settings) {
-
-            var $context = $(context);
-
-            $context.find('.color-field-widget-box-form').once('colorField').each(function (index, element) {
+            $(once('colorField', '.color-field-widget-box-form', context)).each(function (index, element) {
                 var $element = $(element);
                 var $input = $element.prev().find('input');
                 $input.hide();
@@ -41,4 +38,4 @@
         },
     };
 
-})(jQuery, Drupal);
+})(jQuery, Drupal, once);

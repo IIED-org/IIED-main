@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\color_field\Plugin\Field\FieldWidget;
 
 use Drupal\Component\Utility\Html;
@@ -15,14 +17,16 @@ abstract class ColorFieldWidgetBase extends WidgetBase {
   /**
    * {@inheritdoc}
    */
-  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
+  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
     $element['#uid'] = Html::getUniqueId('color-field-' . $this->fieldDefinition->getName());
 
     // Prepare color.
     $color = NULL;
+
     if (isset($items[$delta]->color)) {
       $color = $items[$delta]->color;
-      if (substr($color, 0, 1) !== '#') {
+
+      if (!str_starts_with($color, '#')) {
         $color = '#' . $color;
       }
     }
@@ -37,9 +41,10 @@ abstract class ColorFieldWidgetBase extends WidgetBase {
 
     if ($this->getFieldSetting('opacity')) {
       $element['color'] = $input;
-      $element['color']['#title'] = $this->t('Color');
+      $element['color']['#title'] = $element['#title'];
+      $element['color']['#description'] = $element['#description'];
       $element['color']['#error_no_message'] = TRUE;
-      $element['#type'] = 'fieldset';
+      $element['#type'] = 'container';
 
       $element['opacity'] = [
         '#title' => $this->t('Opacity'),
@@ -48,7 +53,7 @@ abstract class ColorFieldWidgetBase extends WidgetBase {
         '#max' => 1,
         '#step' => 0.01,
         '#required' => $element['#required'],
-        '#default_value' => isset($items[$delta]->opacity) ? $items[$delta]->opacity : NULL,
+        '#default_value' => $items[$delta]->opacity ?? NULL,
         '#placeholder' => $this->getSetting('placeholder_opacity'),
         '#error_no_message' => TRUE,
       ];

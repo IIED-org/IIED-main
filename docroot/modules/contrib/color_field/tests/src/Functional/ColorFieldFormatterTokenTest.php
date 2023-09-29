@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\Tests\color_field\Functional;
 
 use Drupal\field\Entity\FieldConfig;
@@ -17,7 +19,7 @@ class ColorFieldFormatterTokenTest extends ColorFieldFunctionalTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'field',
     'node',
     'color_field',
@@ -27,7 +29,7 @@ class ColorFieldFormatterTokenTest extends ColorFieldFunctionalTestBase {
   /**
    * Test color_field_formatter_css formatter.
    */
-  public function testTokens() {
+  public function testTokens(): void {
     $this->form->setComponent('field_color', [
       'type' => 'color_field_widget_default',
     ])->save();
@@ -49,7 +51,8 @@ class ColorFieldFormatterTokenTest extends ColorFieldFunctionalTestBase {
       'label' => 'hidden',
     ])->save();
 
-    $this->drupalPostForm('node/add/article', $edit, t('Save'));
+    $this->drupalGet('node/add/article');
+    $this->submitForm($edit, t('Save'));
     $this->assertSession()->responseContains('.node-article { background-color: rgba(156,89,209,0.95); }');
 
     // Ensure 2 fields on the same entity are both rendered properly.
@@ -87,7 +90,8 @@ class ColorFieldFormatterTokenTest extends ColorFieldFunctionalTestBase {
       'field_text_color[0][color]' => "#000000",
       'field_text_color[0][opacity]' => 1,
     ];
-    $this->drupalPostForm('node/add/article', $edit, t('Save'));
+    $this->drupalGet('node/add/article');
+    $this->submitForm($edit, t('Save'));
     $this->assertSession()->responseContains('.node-article { background-color: rgba(0,0,0,0.1); }');
     $this->assertSession()->responseContains('.node-article { color: rgba(0,0,0,1); }');
   }

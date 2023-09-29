@@ -27,12 +27,14 @@
 {% else %}
   <span class="navbar-brand h1 mb-0 {{ utility_classes }}" aria-label="{{ text }}">
     {% if image %}
-      {{ navbar_brand.image(image, alt) }}
+      {{ navbar_brand.image(image, width, height, alt) }}
     {% endif %}
     {{ text }}
   </span>
 {% endif %}
 
 {% macro image(src, width, height, alt) %}
-  <img src="{{ src }}" width="{{ width|default(30) }}" height="{{ height|default('auto') }}" alt="{{ alt|default('') }}" class="mr-2" />
+  {% set height_attr = height != 'auto' ? 'height="' ~ height ~ '"'  %}
+
+  <img src="{{ src }}" width="{{ width|default(30) }}" {{ height_attr }} alt="{{ alt|default('') }}" class="me-2" />
 {% endmacro %}

@@ -43,6 +43,12 @@ function radix_preprocess_block(&$variables) {
 
   // Add bundle to template.
   $variables['bundle'] = $block_content->bundle();
+
+  // Add custom attribute class for block.
+  if ($variables['elements']['#base_plugin_id'] == 'block_content') {
+    $blockType = strtr($variables['bundle'], '_', '-');
+    $variables['attributes']['class'][] = 'block--type-' . $blockType;
+  }
 }
 
 /**
@@ -50,7 +56,7 @@ function radix_preprocess_block(&$variables) {
  */
 function radix_preprocess_block_content(&$variables) {
   // Helpful $content variable for templates.
-  $variables += array('content' => array());
+  $variables += ['content' => []];
   foreach (Element::children($variables['elements']) as $key) {
     $variables['content'][$key] = $variables['elements'][$key];
   }

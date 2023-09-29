@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\color_field\Feeds\Target;
 
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -23,46 +25,7 @@ class Color extends FieldTargetBase implements ConfigurableTargetInterface {
   /**
    * {@inheritdoc}
    */
-  protected static function prepareTarget(FieldDefinitionInterface $field_definition) {
-    return FieldTargetDefinition::createFromFieldDefinition($field_definition)
-      ->addProperty('color')
-      ->addProperty('opacity');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function prepareValue($delta, array &$values) {
-    // Clean up data and format it.
-    $color = trim($values['color']);
-    if (substr($color, 0, 1) === '#') {
-      $color = substr($color, 1);
-    }
-    switch ($this->configuration['format']) {
-      case '#HEXHEX':
-        $color = '#' . strtoupper($color);
-        break;
-
-      case 'HEXHEX':
-        $color = strtoupper($color);
-        break;
-
-      case '#hexhex':
-        $color = '#' . strtolower($color);
-        break;
-
-      case 'hexhex':
-        $color = strtolower($color);
-        break;
-    }
-    $values['color'] = $color;
-    $values['opacity'] = $values['opacity'] ? (float) $values['opacity'] : 0.0;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function defaultConfiguration() {
+  public function defaultConfiguration(): array {
     return parent::defaultConfiguration() + ['format' => '#hexhex'];
   }
 
@@ -97,6 +60,54 @@ class Color extends FieldTargetBase implements ConfigurableTargetInterface {
       $this->t('Color by default');
 
     return $summary;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function prepareValue($delta, array &$values) {
+    // Clean up data and format it.
+    $color = trim($values['color']);
+
+    if (str_starts_with($color, '#')) {
+      $color = substr($color, 1);
+    }
+
+    switch ($this->configuration['format']) {
+      case '#HEXHEX':
+        $color = '#' . strtoupper($color);
+
+        break;
+
+      case 'HEXHEX':
+        $color = strtoupper($color);
+
+        break;
+
+      case '#hexhex':
+        $color = '#' . strtolower($color);
+
+        break;
+
+      case 'hexhex':
+        $color = strtolower($color);
+
+        break;
+    }
+
+    $values['color'] = $color;
+    $values['opacity'] = $values['opacity']
+        ? (float) $values['opacity']
+        : 0.0;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected static function prepareTarget(FieldDefinitionInterface $field_definition) {
+    return FieldTargetDefinition::createFromFieldDefinition($field_definition)
+      ->addProperty('color')
+      ->addProperty('opacity');
   }
 
 }

@@ -11,6 +11,36 @@
  */
 
 /**
+ * Alter the list of namespaces for a particular theme.
+ *
+ * @param array $namespaces
+ *   The array of Twig namespaces where the key is the machine name of the
+ *   namespace and the value is an array of directory paths that are relative to
+ *   the Drupal root.
+ * @param string $theme
+ *   The name of the theme that the namespaces are defined for.
+ *
+ * @see https://www.drupal.org/node/3190969
+ */
+function hook_components_namespaces_alter(array &$namespaces, string $theme) {
+  // Add a new namespace.
+  $namespaces['new_namespace'] = [
+    // Paths must be relative to the Drupal root.
+    'libraries/new-components',
+    'themes/contrib/zen/new-components',
+    // Even paths adjacent to the Drupal root will work.
+    '../vendor/newFangled/new-components',
+  ];
+
+  // If you only want to change namespaces for a specific theme the $theme
+  // parameter has the name of the currently active theme.
+  if ($theme === 'zen') {
+    // Append a path to an existing namespace.
+    $namespaces['components'][] = \Drupal::service('extension.list.theme')->getPath('zen') . '/components';
+  }
+}
+
+/**
  * Alter the list of protected Twig namespaces.
  *
  * @param array $protectedNamespaces

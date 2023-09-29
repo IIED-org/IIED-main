@@ -10,7 +10,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -68,10 +68,10 @@ class ThemeInfoRebuildSubscriber implements EventSubscriberInterface {
   /**
    * Forces the system to rebuild the theme registry.
    *
-   * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
    *   The event to process.
    */
-  public function rebuildThemeInfo(GetResponseEvent $event) {
+  public function rebuildThemeInfo(RequestEvent $event) {
     if ($this->config->get('rebuild_theme')) {
       // Update the theme registry.
       drupal_theme_rebuild();

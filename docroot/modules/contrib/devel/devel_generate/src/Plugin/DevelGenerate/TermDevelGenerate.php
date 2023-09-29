@@ -12,7 +12,6 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\devel_generate\DevelGenerateBase;
 use Drupal\taxonomy\TermInterface;
-use Drush\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -30,7 +29,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *     "minimum_depth" = 1,
  *     "maximum_depth" = 4,
  *     "kill" = FALSE,
- *   }
+ *   },
+ *   dependencies = {
+ *     "taxonomy",
+ *   },
  * )
  */
 class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPluginInterface {
@@ -287,7 +289,7 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
       // Initialise the nested array for this vocabulary.
       $all_parents[$vid] = ['top_level' => [], 'lower_levels' => []];
       for ($depth = 1; $depth < $max_depth; $depth++) {
-        $query = \Drupal::entityQuery('taxonomy_term')->condition('vid', $vid);
+        $query = \Drupal::entityQuery('taxonomy_term')->accessCheck(FALSE)->condition('vid', $vid);
         if ($depth == 1) {
           // For the top level the parent id must be zero.
           $query->condition('parent', 0);
@@ -437,7 +439,7 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
     // Get default settings from the annotated command definition.
     $defaultSettings = $this->getDefaultSettings();
 
-    $bundles = StringUtils::csvToarray($options['bundles']);
+    $bundles = self::csvToarray($options['bundles']);
     if (count($bundles) < 1) {
       throw new \Exception(dt('Please provide a vocabulary machine name (--bundles).'));
     }
@@ -467,13 +469,13 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
       'minimum_depth' => $minimum_depth,
       'maximum_depth' => $maximum_depth,
     ];
-    $add_language = StringUtils::csvToArray($options['languages']);
+    $add_language = self::csvToArray($options['languages']);
     // Intersect with the enabled languages to make sure the language args
     // passed are actually enabled.
     $valid_languages = array_keys($this->languageManager->getLanguages(LanguageInterface::STATE_ALL));
     $values['add_language'] = array_intersect($add_language, $valid_languages);
 
-    $translate_language = StringUtils::csvToArray($options['translations']);
+    $translate_language = self::csvToArray($options['translations']);
     $values['translate_language'] = array_intersect($translate_language, $valid_languages);
     return $values;
   }

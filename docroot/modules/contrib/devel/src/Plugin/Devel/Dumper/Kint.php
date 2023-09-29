@@ -59,7 +59,7 @@ class Kint extends DevelDumperBase {
       // passed to Kint::dump does not match the number in the original call
       // that invoked the export (such as dsm). However, this second parameter
       // is just treated as the next variable to dump, it is not used as the
-      // label. So we give a dummy value that we can remove below.
+      // label. So we give a placeholder value that we can remove below.
       // @see https://gitlab.com/drupalspoons/devel/-/issues/252
       \Kint::dump($input, '---temporary-fix-see-issue-252---');
     }

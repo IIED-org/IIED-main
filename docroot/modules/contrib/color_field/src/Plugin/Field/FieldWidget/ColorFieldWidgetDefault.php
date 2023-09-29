@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\color_field\Plugin\Field\FieldWidget;
 
 use Drupal\Core\Field\FieldItemListInterface;
@@ -22,17 +24,8 @@ class ColorFieldWidgetDefault extends ColorFieldWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public static function defaultSettings() {
-    return [
-      'placeholder_color' => '',
-      'placeholder_opacity' => '',
-    ] + parent::defaultSettings();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
+  public function settingsForm(array $form, FormStateInterface $form_state): array {
+    $element = [];
     $element['placeholder_color'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Color placeholder'),
@@ -45,13 +38,14 @@ class ColorFieldWidgetDefault extends ColorFieldWidgetBase {
       '#default_value' => $this->getSetting('placeholder_opacity'),
       '#description' => $this->t('Text that will be shown inside the field until a value is entered. This hint is usually a sample value or a brief description of the expected format.'),
     ];
+
     return $element;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function settingsSummary() {
+  public function settingsSummary(): array {
     $summary = [];
 
     $placeholder_color = $this->getSetting('placeholder_color');
@@ -75,7 +69,7 @@ class ColorFieldWidgetDefault extends ColorFieldWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
+  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
     $element = parent::formElement($items, $delta, $element, $form, $form_state);
     $element['color']['#placeholder'] = $this->getSetting('placeholder_color');
 
@@ -84,6 +78,16 @@ class ColorFieldWidgetDefault extends ColorFieldWidgetBase {
     }
 
     return $element;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function defaultSettings(): array {
+    return [
+      'placeholder_color' => '',
+      'placeholder_opacity' => '',
+    ] + parent::defaultSettings();
   }
 
 }

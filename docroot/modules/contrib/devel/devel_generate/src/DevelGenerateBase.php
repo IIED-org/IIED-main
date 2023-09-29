@@ -9,6 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\PluginBase;
+use Drupal\Core\Entity\FieldableEntityInterface;
 
 /**
  * Provides a base DevelGenerate plugin implementation.
@@ -99,34 +100,33 @@ abstract class DevelGenerateBase extends PluginBase implements DevelGenerateBase
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The entity to be enriched with sample field values.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @param array $skip
+   *   A list of field names to avoid when populating.
+   * @param array $base
+   *   A list of base field names to populate.
    */
-  public static function populateFields(EntityInterface $entity) {
-    $properties = [
-      'entity_type' => $entity->getEntityType()->id(),
-      'bundle' => $entity->bundle(),
-    ];
-    $field_config_storage = \Drupal::entityTypeManager()->getStorage('field_config');
-    /** @var \Drupal\field\FieldConfigInterface[] $instances */
-    $instances = $field_config_storage->loadByProperties($properties);
-
-    // @todo not implemented for Drush9+. Possibly remove.
-    if ($skips = @$_REQUEST['skip-fields']) {
-      foreach (explode(',', $skips) as $skip) {
-        unset($instances[$skip]);
-      }
+  public static function populateFields(EntityInterface $entity, array $skip = [], array $base = []) {
+    if (!$entity->getEntityType()->entityClassImplements(FieldableEntityInterface::class)) {
+      // Nothing to do.
+      return;
     }
+
+    /** @var \Drupal\Core\Field\FieldDefinitionInterface[] $instances */
+    $instances = \Drupal::service('entity_field.manager')->getFieldDefinitions($entity->getEntityTypeId(), $entity->bundle());
+    $instances = array_diff_key($instances, array_flip($skip));
 
     foreach ($instances as $instance) {
       $field_storage = $instance->getFieldStorageDefinition();
+      $field_name = $field_storage->getName();
+      if ($field_storage->isBaseField() && !in_array($field_name, $base)) {
+        // Skip base field unless specifically requested.
+        continue;
+      }
       $max = $cardinality = $field_storage->getCardinality();
       if ($cardinality == FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED) {
         // Just an arbitrary number for 'unlimited'.
         $max = rand(1, 3);
       }
-      $field_name = $field_storage->getName();
       $entity->$field_name->generateSampleItems($max);
     }
   }
@@ -302,6 +302,28 @@ abstract class DevelGenerateBase extends PluginBase implements DevelGenerateBase
       return $this->languageManager->getDefaultLanguage()->getId();
     }
     return $add_language[array_rand($add_language)];
+  }
+
+  /**
+   * Convert a csv string into an array of items.
+   *
+   * Borrowed from Drush.
+   *
+   * @param string $args
+   *   A simple csv string; e.g. 'a,b,c'
+   *   or a simple list of items; e.g. array('a','b','c')
+   *   or some combination; e.g. array('a,b','c') or array('a,','b,','c,').
+   */
+  public static function csvToArray($args): array {
+    //
+    // 1: implode(',',$args) converts from array('a,','b,','c,') to 'a,,b,,c,'
+    // 2: explode(',', ...) converts to array('a','','b','','c','')
+    // 3: array_filter(...) removes the empty items
+    // 4: array_map(...) trims extra whitespace from each item
+    // (handles csv strings with extra whitespace, e.g. 'a, b, c')
+    //
+    $args = is_array($args) ? implode(',', array_map('strval', $args)) : (string) $args;
+    return array_map('trim', array_filter(explode(',', $args)));
   }
 
 }

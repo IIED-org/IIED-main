@@ -7,27 +7,6 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Element\RenderCallbackInterface;
 use Drupal\Core\Render\Markup;
 
-if (!function_exists('array_key_last')) {
-
-  /**
-   * PHP 7.2 and earlier backport of array_key_last().
-   *
-   * @param array $array
-   *   The array in which to find the last element.
-   *
-   * @return mixed|null
-   *   The index of the last element in the array.
-   */
-  function array_key_last(array $array) {
-    if (!is_array($array) || empty($array)) {
-      return NULL;
-    }
-
-    return array_keys($array)[count($array) - 1];
-  }
-
-}
-
 /**
  * A class providing methods to modify Drupal form elements.
  *
@@ -43,7 +22,7 @@ class Dazzler implements RenderCallbackInterface {
    * @param string $form_id
    *   The form id.
    */
-  public static function formAlter(array &$form, $form_id) {
+  public static function formAlter(array &$form, string $form_id) {
     // Instead of altering the form now, we wait until all hook_form_alter
     // functions are completed and make our changes during the #pre_render
     // phase of Drupal\Core\Render\Renderer::render().
@@ -68,7 +47,7 @@ class Dazzler implements RenderCallbackInterface {
    * @return array
    *   The modified form.
    */
-  public static function preRenderForm(array $form) {
+  public static function preRenderForm(array $form): array {
     // We always set these properties in formAlter(). If this is missing, an
     // earlier call to preRenderForm() has already consumed the #formdazzle
     // data. So we don't need to run this function.
@@ -84,7 +63,7 @@ class Dazzler implements RenderCallbackInterface {
       // suggestions are implemented. Which means we can safely set #markup to
       // print out Twig debugging comments about the not-implemented #theme
       // suggestions.
-      /** @var \Twig_Environment $twig_service */
+      /** @var \Twig\Environment $twig_service */
       $twig_service = \Drupal::service('twig');
       if ($twig_service->isDebug() && isset($form['#theme'])) {
         // Expand the list of theme suggestions.
@@ -127,7 +106,7 @@ class Dazzler implements RenderCallbackInterface {
    * @return string
    *   The generated $form_id_suggestion.
    */
-  public static function getFormIdSuggestion(array &$form, $form_id) {
+  public static function getFormIdSuggestion(array &$form, string $form_id): string {
     $form_id_suggestion = $form_id;
 
     $last_suggestion = '';
@@ -165,7 +144,7 @@ class Dazzler implements RenderCallbackInterface {
    * @param string $form_id_suggestion
    *   A suggestion to use based on the form ID.
    */
-  public static function traverse(array &$element, $form_id, $form_id_suggestion) {
+  public static function traverse(array &$element, string $form_id, string $form_id_suggestion) {
     // Add the default info for the #type of form element.
     self::addDefaultThemeProperties($element);
 
@@ -209,7 +188,7 @@ class Dazzler implements RenderCallbackInterface {
    * @param string $form_id_suggestion
    *   A suggestion to use based on the form ID.
    */
-  public static function addSuggestions(array &$element, $form_id, $form_id_suggestion) {
+  public static function addSuggestions(array &$element, string $form_id, string $form_id_suggestion) {
     $needs_theme_suggestion = isset($element['#theme']);
     $needs_theme_wrapper_suggestion = isset($element['#theme_wrappers']);
 
@@ -262,7 +241,7 @@ class Dazzler implements RenderCallbackInterface {
 
     // Most Drupal\Core\Render\Element's have generic suggestions, but some
     // don't have them when they should.
-    $type = isset($element['#type']) ? $element['#type'] : '';
+    $type = $element['#type'] ?? '';
     $type_suggestion = '';
     switch ($type) {
       case 'actions':
@@ -333,7 +312,7 @@ class Dazzler implements RenderCallbackInterface {
         if (is_string($key)) {
           $add_suggestions_to_keys = TRUE;
         }
-        elseif (strpos($value, $suggestion_suffix) === FALSE) {
+        elseif (!str_contains($value, $suggestion_suffix)) {
           $element['#theme_wrappers'][$key] = $value . $suggestion_suffix;
         }
       }
@@ -383,7 +362,7 @@ class Dazzler implements RenderCallbackInterface {
    * @param string $hook
    *   The name of the module hook being implemented.
    */
-  public static function moduleImplementsAlter(&$implementations, $hook) {
+  public static function moduleImplementsAlter(array &$implementations, string $hook) {
     if ($hook === 'form_alter') {
       $group = $implementations['formdazzle'];
       unset($implementations['formdazzle']);

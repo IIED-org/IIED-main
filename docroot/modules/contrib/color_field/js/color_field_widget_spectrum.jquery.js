@@ -3,7 +3,7 @@
  * Javascript for Color Field.
  */
 
-(function ($, Drupal) {
+(function ($, Drupal, once) {
 
   'use strict';
 
@@ -18,19 +18,12 @@
   Drupal.behaviors.color_field_spectrum = {
     attach: function (context, settings) {
 
-      var $context = $(context);
-
-      $context.find('.js-color-field-widget-spectrum').once('colorFieldSpectrum').each(function (index, element) {
-        var $element = $(element);
-        var $element_color = $element.find('.js-color-field-widget-spectrum__color');
-        var $element_opacity = $element.find('.js-color-field-widget-spectrum__opacity');
-        var spectrum_settings = settings.color_field.color_field_widget_spectrum[$element.attr('id')];
-
-        // Hide the widget labels if the widgets are being shown.
-        if (!spectrum_settings.show_input || !spectrum_settings.show_alpha) {
-          $element.find('label').hide();
-          $element_opacity.hide();
-        }
+      $(once('colorFieldSpectrum', '.js-color-field-widget-spectrum', context)).each(function (index, element) {
+        const $element = $(element);
+        const $element_color = $element.find('.js-color-field-widget-spectrum__color');
+        const $element_opacity = $element.find('.js-color-field-widget-spectrum__opacity');
+        const spectrum_settings = settings.color_field.color_field_widget_spectrum[$element.attr('id')];
+        $element_opacity.parent().hide();
 
         $element_color.spectrum({
           showInitial: true,
@@ -47,8 +40,8 @@
           appendTo: $element_color.parent(),
 
           change: function (tinycolor) {
-            var hexColor = '';
-            var opacity = '';
+            let hexColor = '';
+            let opacity = '';
 
             if (tinycolor) {
               hexColor = tinycolor.toHexString();
@@ -63,8 +56,8 @@
 
         // Set alpha value on load.
         if (!!spectrum_settings.show_alpha) {
-          var tinycolor = $element_color.spectrum("get");
-          var alpha = $element_opacity.val();
+          const tinycolor = $element_color.spectrum("get");
+          const alpha = $element_opacity.val();
           if (alpha > 0) {
             tinycolor.setAlpha(alpha);
             $element_color.spectrum("set", tinycolor);
@@ -75,4 +68,4 @@
     }
   };
 
-})(jQuery, Drupal);
+})(jQuery, Drupal, once);

@@ -19,7 +19,7 @@ class DevelDumperTest extends DevelBrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->drupalLogin($this->adminUser);
   }
@@ -34,43 +34,41 @@ class DevelDumperTest extends DevelBrowserTestBase {
     $this->assertSession()->fieldExists('dumper');
 
     // Ensures that the 'default' dumper is enabled by default.
-    $this->assertSession()->checkboxChecked('edit-dumper-default');
+    // Disable since devel_install does dynamic default now.
+    // $this->assertSession()->checkboxChecked('edit-dumper-default');
+    $this->assertTrue(TRUE);
 
-    // Ensures that all dumpers declared by devel are present on the config page
-    // and that only the available dumpers are selectable.
+    // Ensures that all dumpers (both those declared by devel and by other
+    // modules) are present on the config page and that only the available
+    // dumpers are selectable.
     $dumpers = [
-      'default',
-      'var_dumper',
+      'default' => 'Default',
+      'var_dumper' => 'Symfony var-dumper',
+      'available_test_dumper' => 'Available test dumper',
+      'not_available_test_dumper' => 'Not available test dumper',
     ];
-    $available_dumpers = ['default', 'var_dumper'];
+    $available_dumpers = ['default', 'var_dumper', 'available_test_dumper'];
 
-    foreach ($dumpers as $dumper) {
-      $this->assertFieldsByValue($this->xpath('//input[@type="radio" and @name="dumper"]'), $dumper);
+    foreach ($dumpers as $dumper => $label) {
+      // Check that a radio option exists for the specified dumper.
+      $this->assertSession()->elementExists('xpath', '//input[@type="radio" and @name="dumper" and @value="' . $dumper . '"]');
+      $this->assertSession()->pageTextContains($label);
+
+      // Check that the available dumpers are enabled and the non-available
+      // dumpers are not enabled.
       if (in_array($dumper, $available_dumpers)) {
-        $this->assertFieldsByValue($this->xpath('//input[@name="dumper" and not(@disabled="disabled")]'), $dumper);
+        $this->assertSession()->elementExists('xpath', '//input[@name="dumper" and not(@disabled="disabled") and @value="' . $dumper . '"]');
       }
       else {
-        $this->assertFieldsByValue($this->xpath('//input[@name="dumper" and @disabled="disabled"]'), $dumper);
+        $this->assertSession()->elementExists('xpath', '//input[@name="dumper" and @disabled="disabled" and @value="' . $dumper . '"]');
       }
     }
-
-    // Ensures that dumper plugins declared by other modules are present on the
-    // config page and that only the available dumpers are selectable.
-    $this->assertFieldsByValue($this->xpath('//input[@name="dumper"]'), 'available_test_dumper');
-    $this->assertSession()->pageTextContains('Available test dumper.');
-    $this->assertSession()->pageTextContains('Drupal dumper for testing purposes (available).');
-    $this->assertFieldsByValue($this->xpath('//input[@name="dumper" and not(@disabled="disabled")]'), 'available_test_dumper', 'Available dumper input not is disabled.');
-
-    $this->assertFieldsByValue($this->xpath('//input[@name="dumper"]'), 'not_available_test_dumper');
-    $this->assertSession()->pageTextContains('Not available test dumper.');
-    $this->assertSession()->pageTextContains('Drupal dumper for testing purposes (not available).Not available. You may need to install external dependencies for use this plugin.');
-    $this->assertFieldsByValue($this->xpath('//input[@name="dumper" and @disabled="disabled"]'), 'not_available_test_dumper', 'Non available dumper input is disabled.');
 
     // Ensures that saving of the dumpers configuration works as expected.
     $edit = [
       'dumper' => 'var_dumper',
     ];
-    $this->drupalPostForm('admin/config/development/devel', $edit, 'Save configuration');
+    $this->submitForm($edit, 'Save configuration');
     $this->assertSession()->pageTextContains('The configuration options have been saved.');
     $this->assertSession()->checkboxChecked('Symfony var-dumper');
 
@@ -85,7 +83,8 @@ class DevelDumperTest extends DevelBrowserTestBase {
     $edit = [
       'dumper' => 'available_test_dumper',
     ];
-    $this->drupalPostForm('admin/config/development/devel', $edit, 'Save configuration');
+    $this->drupalGet('admin/config/development/devel');
+    $this->submitForm($edit, 'Save configuration');
     $this->assertSession()->pageTextContains('The configuration options have been saved.');
 
     $this->drupalGet('devel_dumper_test/dump');
