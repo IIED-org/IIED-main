@@ -370,7 +370,7 @@ class Blocks extends ContextReactionPluginBase implements ContainerFactoryPlugin
       $block_configuration = $build['#configuration'];
       // Merge attributes from context.
       // @see #3150394 and #2979536.
-      $existing_attributes = isset($build['#attributes']) ? $build['#attributes'] : [];
+      $existing_attributes = $build['#attributes'] ?? [];
 
       // Merge existing attributes from block with class(es) configured
       // in Context.
@@ -594,7 +594,7 @@ class Blocks extends ContextReactionPluginBase implements ContainerFactoryPlugin
     $blocks = $this->getBlocks()->getAllByRegion($theme);
 
     // Get regions of the selected theme.
-    $regions = $this->getSystemRegionList($theme);
+    $regions = $this->getSystemRegionList($theme, BlockRepositoryInterface::REGIONS_VISIBLE);
 
     // Add each region.
     foreach ($regions as $region => $title) {

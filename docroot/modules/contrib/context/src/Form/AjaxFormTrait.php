@@ -35,7 +35,7 @@ trait AjaxFormTrait {
    *   Array with the add button AJAX modal attributes.
    */
   public static function getAjaxButtonAttributes() {
-    return NestedArray::mergeDeep(AjaxFormTrait::getAjaxAttributes(), [
+    return NestedArray::mergeDeep(self::getAjaxAttributes(), [
       'class' => [
         'button',
         'button--small',

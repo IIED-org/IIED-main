@@ -207,7 +207,7 @@ class ContextListBuilder extends ConfigEntityListBuilder implements FormInterfac
             '#type' => 'select',
             '#title' => $this->t('Group for @context context', ['@context' => $context->getLabel()]),
             '#title_display' => 'invisible',
-            '#default_value' => $context->getGroup(),
+            '#default_value' => $context->getGroup() ?? 'not_grouped',
             '#options' => $group_options,
             '#attributes' => [
               'class' => ['context-group-select', 'context-group-' . $group_class],

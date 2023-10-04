@@ -26,7 +26,7 @@ reaction.plugin:
           id:
             type: string
           label:
-            type: string
+            type: label
           provider:
             type: string
           label_display:

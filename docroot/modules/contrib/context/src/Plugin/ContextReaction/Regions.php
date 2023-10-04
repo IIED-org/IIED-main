@@ -121,7 +121,7 @@ class Regions extends ContextReactionPluginBase implements ContainerFactoryPlugi
         '#type' => 'checkboxes',
         '#options' => $regions,
         '#title' => $this->t('Disable the following'),
-        '#default_value' => isset($disabled_regions[$theme_id]) ? $disabled_regions[$theme_id] : [],
+        '#default_value' => $disabled_regions[$theme_id] ?? [],
       ];
     }
     return $form;
@@ -170,7 +170,7 @@ class Regions extends ContextReactionPluginBase implements ContainerFactoryPlugi
    */
   protected function getDisabledRegions() {
     $configurations = $this->getConfiguration();
-    return isset($configurations['regions']) ? $configurations['regions'] : [];
+    return $configurations['regions'] ?? [];
   }
 
 }

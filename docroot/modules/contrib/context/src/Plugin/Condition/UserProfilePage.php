@@ -9,7 +9,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityFieldManager;
 use Drupal\user\Entity\User;
-use Drupal\Core\Session\AccountProxy;
+use Drupal\Core\Session\AccountProxyInterface;
 
 /**
  * Provides a 'User profile page status' condition.
@@ -41,14 +41,14 @@ class UserProfilePage extends ConditionPluginBase implements ContainerFactoryPlu
   /**
    * Service current_user.
    *
-   * @var \Drupal\Core\Session\AccountProxy
+   * @var \Drupal\Core\Session\AccountProxyInterface
    */
   private $currentUser;
 
   /**
    * UserProfilePage constructor.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, CurrentRouteMatch $currentRouteMatch, EntityFieldManager $entityFieldManager, AccountProxy $currentUser) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, CurrentRouteMatch $currentRouteMatch, EntityFieldManager $entityFieldManager, AccountProxyInterface $currentUser) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->currentRouteMatch = $currentRouteMatch;
     $this->entityFieldManager = $entityFieldManager;
@@ -90,7 +90,7 @@ class UserProfilePage extends ConditionPluginBase implements ContainerFactoryPlu
       '#description' => 'If nothing is checked, the evaluation will return TRUE. If more than one option is checked, the evaluation will return TRUE if any of the options matches the condition.',
       '#type' => 'checkboxes',
       '#options' => $options,
-      '#default_value' => isset($configuration['user_status']) ? $configuration['user_status'] : [],
+      '#default_value' => $configuration['user_status'] ?? [],
     ];
 
     $form['user_fields'] = [
@@ -125,8 +125,10 @@ class UserProfilePage extends ConditionPluginBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
-    $this->configuration['user_status'] = $form_state->getValue('user_status');
-    $this->configuration['user_fields'] = $form_state->getValue('user_fields');
+    $this->configuration['user_status'] = array_filter($form_state->getValue('user_status'));
+    if (isset($form_state->getValue['user_status']['field_value'])) {
+      $this->configuration['user_fields'] = $form_state->getValue('user_fields');
+    }
     parent::submitConfigurationForm($form, $form_state);
   }
 

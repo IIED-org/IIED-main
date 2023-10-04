@@ -75,7 +75,7 @@
         "drupal/config_split": "^1.7",
         "drupal/contact_block": "^1.6",
         "drupal/content_translation_redirect": "^2.0",
-        "drupal/context": "^4.1",
+        "drupal/context": "^5.0",
         "drupal/core-composer-scaffold": "^9",
         "drupal/core-project-message": "^9",
         "drupal/core-recommended": "^9",
