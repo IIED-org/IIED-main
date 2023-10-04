@@ -5,7 +5,6 @@ dependencies:
   config:
     - system.menu.about
   module:
-    - context
     - system
   theme:
     - iied_tw
@@ -28,22 +27,3 @@ visibility:
     id: request_path
     negate: false
     pages: "/about\r\n/people\r\n/contact-us\r\n/accountability\r\n/jobs-internships\r\n/iied-policies\r\n/associates\r\n/leadership\r\n/board-trustees\r\n/bloggers\r\n/guest-bloggers\r\n/climate-change-research-group\r\n/human-settlements-research-group\r\n/natural-resources-research-group\r\n/sustainable-markets-research-group"
-  context_all:
-    id: context_all
-    negate: null
-    values: ''
-  user_status:
-    id: user_status
-    negate: false
-    context_mapping:
-      user: '@user.current_user_context:current_user'
-    user_status:
-      viewing_profile: '0'
-      logged_viewing_profile: '0'
-      own_page_true: '0'
-      field_value: '0'
-    user_fields: uid
-  context:
-    id: context
-    negate: null
-    values: ''

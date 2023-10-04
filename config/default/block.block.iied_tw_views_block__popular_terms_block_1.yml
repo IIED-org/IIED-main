@@ -28,6 +28,7 @@ settings:
     field_theme_target_id: '@ds.ds_block_field_entity_context:taxonomy_term'
   views_label: ''
   items_per_page: none
+  exposed: {  }
 visibility:
   request_path:
     id: request_path
