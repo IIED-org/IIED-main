@@ -117,10 +117,12 @@
           <div class="mb-6">
             <div class="md:flex">
               <div class="flex flex-col items-center justify-center">
-                {% include '@iied_tw/partials/_button.html.twig' with {'button_title':'Download', 'url': node.field_media[0] | file_url} %}
                 {% set size = content.field_media[0]["field_size"][0]["#markup"] %}
-                <div class="-mt-4">PDF ({{ size | format_bytes }})
-                </div>
+                {% if size %}
+                  {% include '@iied_tw/partials/_button.html.twig' with {'button_title':'Download', 'url': node.field_media[0] | file_url} %}
+                   <div class="-mt-4">PDF ({{ size | format_bytes }})
+                  </div>
+                {% endif %}
               </div>
             </div>
           </div>
