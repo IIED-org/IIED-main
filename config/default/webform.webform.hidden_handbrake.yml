@@ -13,7 +13,7 @@ archive: false
 id: hidden_handbrake
 title: 'Hidden handbrake'
 description: 'Web form for &#39;Hidden handbrake&#39; user generated content'
-category: ''
+categories: {  }
 elements: |-
   '#attributes':
     data-current-page: '[webform_submission:current-page]'
