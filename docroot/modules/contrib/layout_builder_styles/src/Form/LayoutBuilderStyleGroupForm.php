@@ -12,7 +12,7 @@ use Drupal\layout_builder_styles\LayoutBuilderStyleGroupInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class LayoutBuilderStyleGroupForm.
+ * Form for creating layout builder style groups.
  */
 class LayoutBuilderStyleGroupForm extends EntityForm implements ContainerInjectionInterface {
 
@@ -42,7 +42,7 @@ class LayoutBuilderStyleGroupForm extends EntityForm implements ContainerInjecti
    *
    * @param \Drupal\Core\Block\BlockManagerInterface $blockManager
    *   The block manager.
-   * @param \Drupal\Core\Block\LayoutPluginManagerInterface $layout_manager
+   * @param \Drupal\Core\Layout\LayoutPluginManagerInterface $layout_manager
    *   The layout plugin manager.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger.
@@ -70,7 +70,7 @@ class LayoutBuilderStyleGroupForm extends EntityForm implements ContainerInjecti
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
-    /** @var \Drupal\layout_builder_styles\LayoutBuilderStyleGroupInterface $style */
+    /** @var \Drupal\layout_builder_styles\LayoutBuilderStyleGroupInterface $group */
     $group = $this->entity;
 
     $form['label'] = [

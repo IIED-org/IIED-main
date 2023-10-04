@@ -1,0 +1,59 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Layout Paragraphs module.
+ */
+
+/**
+ * The "Disabled Items" feature has been deprecated in Layout Paragraphs 2.x.
+ *
+ * This update unpublishes all paragraphs that were previously saved under the
+ * "Disabled Items" region.
+ *
+ * @see https://www.drupal.org/docs/contributed-modules/layout-paragraphs/upgrading-from-1x-to-2x
+ * @see https://www.drupal.org/project/layout_paragraphs/issues/3228597
+ */
+function layout_paragraphs_update_9001(&$sandbox) {
+
+  if (!isset($sandbox['progress'])) {
+    $sandbox['progress'] = 0;
+    $sandbox['current_pk'] = 0;
+    $sandbox['max'] = (int) \Drupal::database()
+      ->select('paragraphs_item_field_data')
+      ->condition('behavior_settings', '%_disabled%', 'LIKE')
+      ->condition('behavior_settings', '%layout_paragraphs%', 'LIKE')
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+  }
+
+  $ids = Drupal::entityQuery('paragraph')
+    ->accessCheck(FALSE)
+    ->condition('behavior_settings', '_disabled', 'CONTAINS')
+    ->condition('behavior_settings', 'layout_paragraphs', 'CONTAINS')
+    ->range(0, 20)
+    ->execute();
+
+  foreach ($ids as $id) {
+
+    /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+    $paragraph = \Drupal::entityTypeManager()
+      ->getStorage('paragraph')
+      ->load($id);
+
+    $all_behavior_settings = $paragraph->getAllBehaviorSettings();
+    if (!empty($all_behavior_settings['layout_paragraphs']['region']) && $all_behavior_settings['layout_paragraphs']['region'] == '_disabled') {
+      $layout_paragraphs_settings = $all_behavior_settings['layout_paragraphs'];
+      $layout_paragraphs_settings['region'] = '';
+      $paragraph->setBehaviorSettings('layout_paragraphs', $layout_paragraphs_settings);
+      $paragraph->setUnpublished();
+      $paragraph->save();
+    }
+
+    $sandbox['progress']++;
+    $sandbox['current_pk'] = $id;
+  }
+  $sandbox['#finished'] = empty($sandbox['max']) ? 1 : $sandbox['progress'] / $sandbox['max'];
+
+}

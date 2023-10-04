@@ -17,7 +17,7 @@ class WebformAccessEntityJsonApiTest extends WebformBrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['webform', 'jsonapi'];
+  protected static $modules = ['webform', 'jsonapi'];
 
   /**
    * Tests webform entity REST acces.

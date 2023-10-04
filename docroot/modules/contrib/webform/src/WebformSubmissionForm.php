@@ -195,6 +195,13 @@ class WebformSubmissionForm extends ContentEntityForm {
   protected $bubbleableMetadata;
 
   /**
+   * Operation value, like 'default', add, edit, test, etc.
+   *
+   * @var string
+   */
+  protected $operation;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -2070,7 +2077,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     $file_limit = $this->getWebform()->getSetting('form_file_limit')
       ?: $this->configFactory->get('webform.settings')->get('settings.default_form_file_limit')
       ?: '';
-    $file_limit = Bytes::toInt($file_limit);
+    $file_limit = Bytes::toNumber($file_limit);
     if (!$file_limit) {
       return;
     }

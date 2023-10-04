@@ -8,7 +8,6 @@ use Drupal\Core\Database\Connection;
 use Drupal\stage_file_proxy\FetchManagerInterface;
 use Drush\Commands\DrushCommands;
 use GuzzleHttp\Exception\ClientException;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 
 /**
@@ -29,13 +28,6 @@ class StageFileProxyCommands extends DrushCommands {
    * @var \Drupal\stage_file_proxy\FetchManagerInterface
    */
   protected $fetchManager;
-
-  /**
-   * The logger.channel.stage_file_proxy service.
-   *
-   * @var \Psr\Log\LoggerInterface
-   */
-  protected $logger = NULL;
 
   /**
    * The module config.
@@ -62,8 +54,6 @@ class StageFileProxyCommands extends DrushCommands {
    *   The database service.
    * @param \Drupal\stage_file_proxy\FetchManagerInterface $fetchManager
    *   The stage_file_proxy.fetch_manager service.
-   * @param \Psr\Log\LoggerInterface $logger
-   *   The logger.channel.stage_file_proxy service.
    * @param string $root
    *   The app root.
    */
@@ -71,7 +61,6 @@ class StageFileProxyCommands extends DrushCommands {
     ConfigFactoryInterface $configFactory,
     Connection $database,
     FetchManagerInterface $fetchManager,
-    LoggerInterface $logger,
     string $root
   ) {
     parent::__construct();
@@ -79,7 +68,6 @@ class StageFileProxyCommands extends DrushCommands {
     $this->moduleConfig = $configFactory->get('stage_file_proxy.settings');
     $this->database = $database;
     $this->fetchManager = $fetchManager;
-    $this->logger = $logger;
     $this->root = $root;
   }
 
@@ -89,18 +77,28 @@ class StageFileProxyCommands extends DrushCommands {
    * @command stage_file_proxy:dl
    * @aliases stage-file-proxy-dl,sfdl
    * @option skip-progress-bar Skip displaying a progress bar.
+   * @option fid Only download the file that has this file id.
    */
-  public function dl(array $command_options = ['skip-progress-bar' => FALSE]) {
+  public function dl(array $command_options = [
+    'skip-progress-bar' => FALSE,
+    'fid' => 0,
+  ]) {
     $logger = $this->logger();
     $server = $this->moduleConfig->get('origin');
     if (empty($server)) {
       throw new \Exception('Configure stage_file_proxy.settings.origin in your settings.php (see INSTALL.txt).');
     }
 
-    $query = $this->database->select('file_managed', 'fm');
-    $results = $query->fields('fm', ['uri'])
-      ->orderBy('fm.fid', 'DESC')
-      ->execute()
+    $query = $this->database->select('file_managed', 'fm')
+      ->fields('fm', ['uri'])
+      ->orderBy('fm.fid', 'DESC');
+
+    $fid = $command_options['fid'];
+    if ($fid > 0) {
+      $query->condition('fm.fid', $fid);
+    }
+
+    $results = $query->execute()
       ->fetchCol();
 
     $fileDir = $this->fetchManager->filePublicPath();

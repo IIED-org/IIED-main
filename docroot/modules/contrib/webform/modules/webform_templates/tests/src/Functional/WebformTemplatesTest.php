@@ -18,7 +18,7 @@ class WebformTemplatesTest extends WebformBrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['webform', 'webform_templates'];
+  protected static $modules = ['webform', 'webform_templates'];
 
   /**
    * Webforms to load.
@@ -66,7 +66,7 @@ class WebformTemplatesTest extends WebformBrowserTestBase {
 
     // Check select template clears the description.
     $this->drupalGet('/admin/structure/webform/manage/test_form_template/duplicate');
-    $assert_session->fieldValueEquals('description[value]', '');
+    $assert_session->fieldValueEquals('description[value][value]', '');
 
     // Check that admin can not access manage templates.
     $this->drupalGet('/admin/structure/webform/templates/manage');
@@ -81,7 +81,7 @@ class WebformTemplatesTest extends WebformBrowserTestBase {
 
     // Check select template clears the description.
     $this->drupalGet('/admin/structure/webform/manage/test_form_template/duplicate', ['query' => ['template' => 1]]);
-    $assert_session->fieldValueEquals('description[value]', 'Test using a webform as a template.');
+    $assert_session->fieldValueEquals('description[value][value]', 'Test using a webform as a template.');
   }
 
 }

@@ -1,0 +1,8 @@
+services:
+  library.libraries_directory_file_finder:
+    class: 'Drupal\test_layout_paragraphs_libraries\MockLibrariesDirectoryFileFinder'
+    arguments:
+      - '%app.root%'
+      - '%site.path%'
+      - '@extension.list.profile'
+      - '%install_profile%'

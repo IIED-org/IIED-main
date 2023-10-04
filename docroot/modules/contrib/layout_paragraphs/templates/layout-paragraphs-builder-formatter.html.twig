@@ -1,0 +1,17 @@
+{% if is_empty %}
+<div class="lpb-enable__empty-message__wrapper">
+  <div class="lpb-enable__empty-message">
+    <p>
+      You haven't created any {{ field_label }} yet.
+      <a class="lpb-enable-button use-ajax" href="{{link_url}}">{% trans %}Start creating {{ field_label }}.{% endtrans %}</a>
+    </p>
+  </div>
+</div>
+{% else %}
+<div class="lpb-enable__wrapper">
+  <div class="lpb-enable">
+    <div class="lpb-enable__button"><a class="lpb-enable-button use-ajax" href="{{link_url}}"><span>{{link_text}}</span></a></div>
+  </div>
+</div>
+{{ root_components }}
+{% endif %}

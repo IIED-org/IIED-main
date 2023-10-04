@@ -4,6 +4,7 @@ namespace Drupal\Tests\serial\Functional;
 
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
@@ -15,12 +16,21 @@ use Drupal\field\Entity\FieldStorageConfig;
  */
 class SerialFieldTest extends BrowserTestBase {
 
+  use StringTranslationTrait;
+
+  /**
+   * Add a default theme as in https://www.drupal.org/node/3083055.
+   *
+   * @var string
+   */
+  protected $defaultTheme = 'stark';
+
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'field',
     'field_ui',
     'node',
@@ -66,7 +76,7 @@ class SerialFieldTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp() : void {
     parent::setUp();
 
     $this->webUser = $this->drupalCreateUser([
@@ -134,18 +144,15 @@ class SerialFieldTest extends BrowserTestBase {
 
     // Test basic definition of serial field on entity save.
     $edit = [];
-    $this->drupalPostForm(NULL, $edit, t('Save'));
+    $this->submitForm($edit, $this->t('Save'));
     // Make sure the entity was saved.
-    preg_match('|entity_test/manage/(\d+)|', $this->getSession()
-      ->getCurrentUrl(), $match);
+    preg_match('|entity_test/manage/(\d+)|', $this->getSession()->getCurrentUrl(), $match);
     $id = $match[1];
-    $this->assertSession()
-      ->pageTextContains(sprintf('entity_test %s has been created.', $id));
+    $this->assertSession()->pageTextContains(sprintf('entity_test %s has been created.', $id));
     // Make sure the serial id is in the output.
     $this->serialId = 1;
     $this->drupalGet('entity_test/' . $id);
-    $serial = $this->xpath('//div[contains(@class, "field__item") and text()="' . $this->serialId . '"]');
-    $this->assertEquals(1, count($serial));
+    $this->assertSession()->pageTextContains(sprintf('%s', $id));
   }
 
   /**
@@ -160,18 +167,15 @@ class SerialFieldTest extends BrowserTestBase {
     while ($i < $entities) {
       $this->drupalGet('entity_test/add');
       $edit = [];
-      $this->drupalPostForm(NULL, $edit, t('Save'));
+      $this->submitForm($edit, $this->t('Save'));
       // Make sure the entity was saved.
-      preg_match('|entity_test/manage/(\d+)|', $this->getSession()
-        ->getCurrentUrl(), $match);
+      preg_match('|entity_test/manage/(\d+)|', $this->getSession()->getCurrentUrl(), $match);
       $id = $match[1];
-      $this->assertSession()
-        ->pageTextContains(sprintf('entity_test %s has been created.', $id));
+      $this->assertSession()->pageTextContains(sprintf('entity_test %s has been created.', $id));
       // Make sure the serial id is in the output.
       $this->serialId++;
       $this->drupalGet('entity_test/' . $id);
-      $serial = $this->xpath('//div[contains(@class, "field__item") and text()="' . $this->serialId . '"]');
-      $this->assertEquals(1, count($serial));
+      $this->assertSession()->pageTextContains(sprintf('%s', $id));
       $i++;
     }
   }

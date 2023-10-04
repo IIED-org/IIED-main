@@ -5,8 +5,14 @@
  * Contains layout_paragraphs.module.
  */
 
+use Drupal\Core\Url;
+use Drupal\Component\Utility\Html;
+use Drupal\paragraphs\ParagraphInterface;
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\layout_paragraphs\Utility\Dialog;
+use Drupal\paragraphs\Entity\ParagraphsType;
 
 /**
  * Implements hook_help().
@@ -35,6 +41,54 @@ function layout_paragraphs_theme() {
         'content' => '',
       ],
     ],
+    'layout_paragraphs_builder' => [
+      'variables' => [
+        'attributes' => [],
+        'id' => '',
+        'root_components' => [],
+        'is_empty' => FALSE,
+        'empty_message' => '',
+        'insert_button' => '',
+        'translation_warning' => '',
+        'layout_paragraphs_layout' => NULL,
+      ],
+    ],
+    'layout_paragraphs_builder_formatter' => [
+      'variables' => [
+        'link_url' => NULL,
+        'link_text' => NULL,
+        'field_label' => NULL,
+        'is_empty' => FALSE,
+        'root_components' => [],
+      ],
+    ],
+    'layout_paragraphs_builder_controls' => [
+      'variables' => [
+        'attributes' => [],
+        'controls' => [],
+        'layout_paragraphs_layout' => NULL,
+        'uuid' => NULL,
+        'edit_access' => FALSE,
+        'duplicate_access' => FALSE,
+        'delete_access' => FALSE,
+      ],
+    ],
+    'layout_paragraphs_insert_component_btn' => [
+      'variables' => [
+        'title' => NULL,
+        'weight' => NULL,
+        'attributes' => [],
+        'url' => NULL,
+      ],
+    ],
+    'layout_paragraphs_builder_component_menu' => [
+      'variables' => [
+        'attributes' => [],
+        'types' => NULL,
+        'empty_message' => NULL,
+        'status_messages' => NULL,
+      ],
+    ],
   ];
 }
 
@@ -48,17 +102,6 @@ function layout_paragraphs_theme_suggestions_layout_paragraphs(array $variables)
   $suggestions[] = 'layout_paragraphs__' . $variables['elements']['field_name'];
   $suggestions[] = 'layout_paragraphs__' . $variables['elements']['field_name'] . '__' . $sanitized_view_mode;
   return $suggestions;
-}
-
-/**
- * Implements hook_prepreprocess_radios().
- *
- * Add wrapper class for layout selection.
- */
-function layout_paragraphs_preprocess_radios(&$variables) {
-  if (isset($variables['element']['#wrapper_attributes'])) {
-    $variables['attributes'] += $variables['element']['#wrapper_attributes'];
-  }
 }
 
 /**
@@ -80,6 +123,192 @@ function layout_paragraphs_module_implements_alter(&$implementations, $hook) {
     $implementations['layout_paragraphs'] = $hook_init;
   }
 }
+
+/**
+ * Implements hook_prepreprocess_radios().
+ *
+ * Add wrapper class for layout selection.
+ */
+function layout_paragraphs_preprocess_radios(&$variables) {
+  if (isset($variables['element']['#wrapper_attributes'])) {
+    $variables['attributes'] += $variables['element']['#wrapper_attributes'];
+  }
+}
+
+/**
+ * Implements hook_preprocess_layout_paragraphs_builder_controls().
+ *
+ * @todo Consider adding an alter/info hook for altering this output.
+ */
+function layout_paragraphs_preprocess_layout_paragraphs_builder_controls(&$variables) {
+  /** @var \Drupal\layout_paragraphs\LayoutParagraphsLayout $layout */
+  $layout = $variables['layout_paragraphs_layout'];
+  $uuid = $variables['uuid'];
+  $component = $layout->getComponentByUuid($uuid);
+  $entity = $component->getEntity();
+  $id = Html::getUniqueId('lpb-controls');
+
+  $variables['controls'] += [
+    'drag_handle' => [
+      '#type' => 'link',
+      '#title' => t('Drag'),
+      '#url' => Url::fromUri('internal:#move'),
+      '#attributes' => [
+        'class' => [
+          'lpb-drag',
+          'lpb-tooltip--hover',
+          'lpb-tooltip--focus',
+        ],
+        'aria-describedy' => $id . '--tip',
+      ],
+      '#weight' => 10,
+    ],
+    'nav_tooltip' => [
+      '#type' => 'html_tag',
+      '#tag' => 'span',
+      '#attributes' => [
+        'class' => [
+          'lpb-tooltiptext',
+        ],
+        'id' => $id . '--tip',
+      ],
+      '#value' => t('Drag or click and use arrow keys to move. <br />Press Return or Tab when finished.'),
+      '#weight' => 20,
+    ],
+    'label' => [
+      '#type' => 'html_tag',
+      '#tag' => 'span',
+      '#attributes' => [
+        'class' => ['lpb-controls-label'],
+      ],
+      '#value' => $entity->getParagraphType()->label,
+      '#weight' => 30,
+    ],
+    'move_up' => [
+      '#type' => 'link',
+      '#title' => t('Move up'),
+      '#url' => Url::fromUri('internal:#move-up'),
+      '#attributes' => [
+        'class' => ['lpb-up'],
+        'title' => t('Move up'),
+      ],
+      '#weight' => 40,
+    ],
+    'move_down' => [
+      '#type' => 'link',
+      '#url' => Url::fromUri('internal:#move-down'),
+      '#title' => t('Move down'),
+      '#attributes' => [
+        'class' => ['lpb-down'],
+        'title' => t('Move down'),
+      ],
+      '#weight' => 50,
+    ],
+    'edit_link' => [
+      '#type' => 'link',
+      '#url' => Url::fromRoute('layout_paragraphs.builder.edit_item', [
+        'layout_paragraphs_layout' => $layout->id(),
+        'component_uuid' => $entity->uuid(),
+      ]),
+      '#title' => t('Edit'),
+      '#attributes' => [
+        'class' => [
+          'lpb-edit',
+          'use-ajax',
+        ],
+        'data-dialog-type' => 'dialog',
+        'data-dialog-options' => Json::encode(Dialog::dialogSettings($layout)),
+        'title' => t('Edit'),
+      ],
+      '#access' => $variables['edit_access'],
+      '#weight' => 60,
+    ],
+    'duplicate_link' => [
+      '#type' => 'link',
+      '#url' => Url::fromRoute('layout_paragraphs.builder.duplicate_item', [
+        'layout_paragraphs_layout' => $layout->id(),
+        'source_uuid' => $entity->uuid(),
+      ]),
+      '#title' => t('Duplicate'),
+      '#attributes' => [
+        'class' => [
+          'lpb-duplicate',
+          'use-ajax',
+        ],
+        'title' => t('Duplicate'),
+      ],
+      '#access' => $variables['duplicate_access'],
+      '#weight' => 65,
+    ],
+    'delete_link' => [
+      '#type' => 'link',
+      '#url' => Url::fromRoute('layout_paragraphs.builder.delete_item', [
+        'layout_paragraphs_layout' => $layout->id(),
+        'component_uuid' => $entity->uuid(),
+      ]),
+      '#title' => t('Delete'),
+      '#attributes' => [
+        'class' => [
+          'lpb-delete',
+          'use-ajax',
+        ],
+        'data-dialog-type' => 'dialog',
+        'data-dialog-options' => Json::encode([
+          'modal' => TRUE,
+          'target' => Dialog::dialogId($layout),
+          'dialogClass' => 'lpb-dialog',
+          'width' => 'auto',
+        ]),
+        'title' => t('Delete'),
+      ],
+      '#access' => $variables['delete_access'],
+      '#weight' => 70,
+    ],
+  ];
+  if ($component->isLayout()) {
+    $variables['attributes']['class'][] = 'is-layout';
+  }
+}
+
+/**
+ * Implements hook_entity_extra_field_info().
+ *
+ * Adds the layout paragraphs form fields to "Manage form display" tab.
+ */
+function layout_paragraphs_entity_extra_field_info() {
+  $extra = [];
+  foreach (ParagraphsType::loadMultiple() as $paragraphs_type) {
+    if ($paragraphs_type->hasEnabledBehaviorPlugin('layout_paragraphs')) {
+      $extra['paragraph'][$paragraphs_type->id()]['form']['layout_paragraphs_fields'] = [
+        'label' => t('Layout selection and configuration form'),
+        'visible' => TRUE,
+        'weight' => -200,
+      ];
+    }
+  }
+  return $extra;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function layout_paragraphs_form_layout_paragraphs_component_form_alter(&$form, FormStateInterface $form_state) {
+  $display = $form['#display'];
+  if ($layout_paragraphs_fields = $display->getComponent('layout_paragraphs_fields')) {
+    $form['layout_paragraphs']['#weight'] = $layout_paragraphs_fields['weight'];
+  }
+}
+
+/**
+ * Adjusts the field weight based on settings from "Manage form display" tab.
+ */
+function _layout_paragraphs_form_field_weights(array &$form, FormStateInterface $form_state) {
+  $display = $form['#display'];
+  if ($layout_paragraphs_fields = $display->getComponent('layout_paragraphs_fields')) {
+    $form['layout_paragraphs']['#weight'] = $layout_paragraphs_fields['weight'];
+  }
+}
+
 /**
  * Implements hook_ENTITY_presave().
  *
@@ -91,40 +320,134 @@ function layout_paragraphs_module_implements_alter(&$implementations, $hook) {
  * https://www.drupal.org/project/drupal/issues/3040556
  * (It is not possible to react to an entity being duplicated)
  */
-function layout_paragraphs_paragraph_presave(Paragraph $paragraph) {
+function layout_paragraphs_paragraph_presave(ParagraphInterface $paragraph) {
   $behavior_settings = $paragraph->getAllBehaviorSettings();
-  $layout_paragraphs_settings = $behavior_settings['layout_paragraphs'] ?? [];
-  if (!empty($layout_paragraphs_settings['parent_uuid']) && $parent = $paragraph->getParentEntity()) {
-    $parent_field = $paragraph->get('parent_field_name');
-    $field_name = $parent_field->first()->getString();
-    $item_list = $parent->get($field_name);
-    /** @var \Drupal\Core\Field\EntityReferenceFieldItemList $item_list */
-    $sibling_paragraphs = $item_list->referencedEntities();
-    if (count($sibling_paragraphs)) {
-      $uuid_map = [];
-      foreach ($sibling_paragraphs as $delta => $item) {
-        $uuid_map[$item->uuid()] = $delta;
-      }
-      $parent_delta = $uuid_map[$layout_paragraphs_settings['parent_uuid']] ?? NULL;
-      // If the parent layout section is correctly referenced via
-      // parent_uuid, save the parent delta so we can correctly map
-      // uuids using the delta if content is duplicated.
-      if (isset($parent_delta)) {
-        $layout_paragraphs_settings['parent_delta'] = $parent_delta;
-      }
-      // If the parent layout section cannot be found via parent_uuid,
-      // use parent_delta to find and save the correct parent_uuid.
-      // This should only happen when the paragraph is being duplicated,
-      // and the parent layout section's uuid no longer matches parent_uuid.
-      elseif (isset($layout_paragraphs_settings['parent_delta'], $sibling_paragraphs[$layout_paragraphs_settings['parent_delta']])) {
-        $updated_parent_uuid = $sibling_paragraphs[$layout_paragraphs_settings['parent_delta']]->uuid();
-        $layout_paragraphs_settings['parent_uuid'] = $updated_parent_uuid;
-      }
-      // Since paragraph::preSave() has already been called,
-      // we have to set the serialized behavior settings directly
-      // rather than using setBehaviorSettings().
-      $behavior_settings['layout_paragraphs'] = $layout_paragraphs_settings;
-      $paragraph->set('behavior_settings', serialize($behavior_settings));
+  $parent_uuid = $behavior_settings['layout_paragraphs']['parent_uuid'] ?? NULL;
+  if (empty($parent_uuid)) {
+    return;
+  }
+
+  // If there is no host, the parent hasn't been saved and we are not cloning.
+  $host = $paragraph->getParentEntity();
+  if (empty($host)) {
+    return;
+  }
+
+  // If the parent component cannot be loaded, we are not cloning.
+  $parent_component = \Drupal::service('entity.repository')
+    ->loadEntityByUuid('paragraph', $parent_uuid);
+  if (empty($parent_component)) {
+    return;
+  }
+
+  // If the parent component does not have a parent entity, we are not cloning.
+  $parent_host = $parent_component->getParentEntity();
+  if (empty($parent_host)) {
+    return;
+  }
+
+  // If the current paragraph's host's id does not match
+  // the paragraph's parent's host's id, we ARE cloning.
+  if ($host->id() !== $parent_host->id()) {
+
+    // Map the UUIDs to deltas from the clone source.
+    $items = _layout_paragraphs_get_paragraphs($parent_component);
+    foreach ($items as $delta => $item) {
+      $uuid_map[$item->uuid()] = $delta;
     }
+
+    // Map the deltas to UUIds from the clone destination.
+    $items = _layout_paragraphs_get_paragraphs($paragraph);
+    $delta_map = [];
+    foreach ($items as $delta => $item) {
+      $delta_map[$delta] = $item->uuid();
+    }
+
+    // Assign the correct uuid.
+    $parent_delta = $uuid_map[$parent_uuid];
+    $correct_uuid = $delta_map[$parent_delta];
+
+    // Since paragraph::preSave() has already been called,
+    // we have to set the serialized behavior settings directly
+    // rather than using setBehaviorSettings().
+    $behavior_settings['layout_paragraphs']['parent_uuid'] = $correct_uuid;
+    $paragraph->set('behavior_settings', serialize($behavior_settings));
+  }
+}
+
+/**
+ * Returns a list of all sibling paragraphs given a single paragraph.
+ *
+ * The returned list contains all of the referenced entities,
+ * including the passed $paragraph.
+ *
+ * @param \Drupal\paragraphs\ParagraphInterface $paragraph
+ *   The paragraph to use for finding the complete list of siblings.
+ *
+ * @return \Drupal\Core\Field\EntityReferenceFieldItemList
+ *   The list of paragraphs.
+ */
+function _layout_paragraphs_get_paragraphs(ParagraphInterface $paragraph) {
+  $host = $paragraph->getParentEntity();
+  $parent_field = $paragraph->get('parent_field_name');
+  $field_name = $parent_field->first()->getString();
+  /** @var \Drupal\Core\Field\EntityReferenceFieldItemList $item_list */
+  $item_list = $host->get($field_name);
+  return $item_list->referencedEntities();
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function layout_paragraphs_library_info_alter(&$libraries, $extension) {
+  if ($extension !== 'layout_paragraphs') {
+    return;
+  }
+
+  foreach ($libraries as $name => &$library) {
+    if (!isset($library['cdn']) || !isset($library['directory'])) {
+      continue;
+    }
+    if (\Drupal::service('library.libraries_directory_file_finder')->find($name)) {
+      continue;
+    }
+    layout_paragraphs_alter_library_recursive($library, $library['cdn']);
+  }
+}
+
+/**
+ * Alter layout_paragraph libraries.
+ *
+ * @param array $library
+ *   A layout_paragraphs library defined in layout_paragraphs.libraries.yml.
+ * @param array $cdn
+ *   A associative array of library paths mapped to CDN URL.
+ */
+function layout_paragraphs_alter_library_recursive(array &$library, array $cdn) {
+  foreach ($library as $key => &$value) {
+    // CSS and JS files are listed in associative arrays keyed via string.
+    if (!is_string($key) || !is_array($value)) {
+      continue;
+    }
+
+    // Ignore the CDN's associative array.
+    if ($key === 'cdn') {
+      continue;
+    }
+
+    // Replace the CDN sources (i.e. /library/*) with the CDN URL destination
+    // (https://cdnjs.cloudflare.com/ajax/libs/*).
+    foreach ($cdn as $source => $destination) {
+      if (strpos($key, $source) === 0) {
+        $uri = str_replace($source, $destination, $key);
+        $library[$uri] = $value;
+        $library[$uri]['type'] = 'external';
+        unset($library[$key]);
+        break;
+      }
+    }
+
+    // Recurse downward to find nested libraries.
+    layout_paragraphs_alter_library_recursive($value, $cdn);
   }
 }

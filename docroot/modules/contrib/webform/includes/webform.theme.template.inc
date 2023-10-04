@@ -942,7 +942,7 @@ function template_preprocess_webform_element_managed_file(array &$variables) {
     $file = $variables['file'];
     $variables['uri'] = $file->createFileUrl(FALSE);
     $variables['extension'] = strtolower(pathinfo($variables['uri'], PATHINFO_EXTENSION));
-    $variables['type'] = \Drupal::service('file.mime_type.guesser')->guess($variables['uri']);
+    $variables['type'] = \Drupal::service('file.mime_type.guesser')->guessMimeType($variables['uri']);
     $variables['file_link'] = [
       '#theme' => 'file_link',
       '#file' => $file,

@@ -16,9 +16,13 @@ class LayoutBuilderStyleGroupDeleteForm extends EntityConfirmFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     // Prevent deleting a group that has styles associated with it.
-    $numStylesInThisGroup = $this->entityTypeManager->getStorage('layout_builder_style')->getQuery()
+    $numStylesInThisGroup = $this
+      ->entityTypeManager
+      ->getStorage('layout_builder_style')
+      ->getQuery()
       ->condition('group', $this->entity->id())
       ->count()
+      ->accessCheck()
       ->execute();
     if ($numStylesInThisGroup) {
       $caption = '<p>' . $this->t(

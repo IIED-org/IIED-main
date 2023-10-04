@@ -18,7 +18,7 @@ class WebformSubmissionImportExportFunctionalTest extends WebformBrowserTestBase
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'file',
     'webform',
     'webform_submission_export_import',

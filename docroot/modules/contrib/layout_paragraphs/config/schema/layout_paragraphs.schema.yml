@@ -10,6 +10,35 @@ layout_paragraphs.settings:
       type: integer
       label: 'Show Layout Labels'
       description: 'This option allows to show the Paragraphs Layout Label of each Item added in LP widget Sections/Layouts'
+    paragraph_behaviors_label:
+      type: string
+      label: 'Paragraph behaviors label'
+      descripton: 'The paragraph behaviors form fieldset label'
+    paragraph_behaviors_position:
+      type: integer
+      label: 'Paragraph behaviors fieldset position'
+      description: 'Whether to render the paragraph behaviors at the top or bottom of paragraph edit forms'
+    empty_message:
+      type: string
+      label: 'Empty Message'
+      description: 'Message to display from the "Choose a component" dialog when the list of available components is empty.'
+
+layout_paragraphs.modal_settings:
+  type: config_object
+  label: 'Layout Paragraphs modal settings'
+  mapping:
+    width:
+      type: string
+      label: 'Modal width'
+      description: 'Modal width in pixels or a percentage.'
+    height:
+      type: string
+      label: 'Modal height'
+      description: 'Modal height in pixels, as a percentage, or "auto".'
+    autoresize:
+      type: boolean
+      label: 'Modal autoresize'
+      description: 'If checked modal forms will automatically resize.'
 
 field.formatter.settings.layout_paragraphs:
   type: mapping
@@ -18,6 +47,32 @@ field.formatter.settings.layout_paragraphs:
     view_mode:
       type: string
       label: 'View mode'
+    link:
+      type: string
+      label: 'Link'
+
+field.formatter.settings.layout_paragraphs_builder:
+  type: mapping
+  label: 'Layout Paragraphs display format settings'
+  mapping:
+    view_mode:
+      type: string
+      label: 'View mode'
+    link:
+      type: string
+      label: 'Link'
+    preview_view_mode:
+      type: string
+      label: 'Preview view mode'
+    nesting_depth:
+      type: integer
+      label: 'Maximum nesting depth'
+    require_layouts:
+      type: integer
+      label: 'Require paragraphs to be added inside a layout'
+    empty_message:
+      type: string
+      label: 'Placeholder message to display when field is empty'
 
 field.widget.settings.layout_paragraphs:
   type: mapping
@@ -32,6 +87,9 @@ field.widget.settings.layout_paragraphs:
     require_layouts:
       type: integer
       label: 'Require paragraphs to be added inside a layout'
+    empty_message:
+      type: string
+      label: 'Placeholder message to display when field is empty'
 
 paragraphs.behavior.settings.layout_paragraphs:
   type: paragraphs.behavior.settings_base

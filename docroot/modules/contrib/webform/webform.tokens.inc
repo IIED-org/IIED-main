@@ -281,7 +281,7 @@ function webform_token_info() {
     'type' => 'date',
   ];
   $webform_submission['webform'] = [
-    'name' => t('Webform'),
+    'name' => t('Webform', [], ['context' => 'form']),
     'description' => t('The webform that the webform submission belongs to.'),
     'type' => 'webform',
   ];

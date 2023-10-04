@@ -1,0 +1,9 @@
+disable_reorder:
+  js:
+    js/disable-reorder.js: {}
+  css:
+    layout:
+      css/disable-reorder.css: {}
+  dependencies:
+    - core/jquery
+    - layout_paragraphs/builder

@@ -1,0 +1,160 @@
+<?php
+
+/**
+ * @file
+ * Contains layout paragraphs library module.
+ */
+
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\paragraphs_library\Entity\LibraryItem;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Alters the layout paragraphs component form to add 'Promote to library'.
+ */
+function layout_paragraphs_library_form_layout_paragraphs_component_form_alter(array &$form, FormStateInterface $form_state) {
+  /** @var \Drupal\layout_paragraphs\Contracts\ComponentFormInterface $form_object */
+  $form_object = $form_state->getFormObject();
+  $paragraph = $form_object->getParagraph();
+  $paragraph_type = $paragraph->getParagraphType();
+
+  // Only applies to paragraph types that allow being promoted to library.
+  // Section paragraphs cannot be used as library items.
+  $allow_library_conversion =
+    $paragraph_type->getThirdPartySetting('paragraphs_library', 'allow_library_conversion', FALSE)
+    && !$paragraph_type->hasEnabledBehaviorPlugin('layout_paragraphs');
+  if ($allow_library_conversion) {
+    $form['actions']['promote_to_library'] = [
+      '#type' => 'submit',
+      '#value' => t('Promote to library'),
+      '#submit' => ['layout_paragraphs_library_submit'],
+      '#name' => 'promote-to-library',
+      '#ajax' => [
+        'callback' => 'layout_paragraphs_library_ajax',
+      ],
+      '#attributes' => [
+        'class' => [
+          'lpb-btn--promote-to-library',
+        ],
+      ],
+      '#weight' => 110,
+    ];
+    // Fix inline_entity_form compabitility.
+    // @see https://www.drupal.org/project/inline_entity_form/issues/2830136
+    if ($form['actions']['submit']['#ief_submit_trigger']) {
+      $form['actions']['promote_to_library']['#ief_submit_trigger'] = TRUE;
+      $form['actions']['promote_to_library']['#ief_submit_trigger_all'] = TRUE;
+      array_unshift($form['actions']['promote_to_library']['#submit'], $form['actions']['submit']['#submit'][0]);
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Alters the paragraph types form.
+ */
+function layout_paragraphs_library_form_paragraphs_type_form_alter(array &$form, FormStateInterface $form_state) {
+  /** @var \Drupal\paragraphs\Form\ParagraphsTypeForm $form_object */
+  $form_object = $form_state->getFormObject();
+  /** @var \Drupal\paragraphs\ParagraphsTypeInterface $paragraph_type */
+  $paragraph_type = $form_object->getEntity();
+  if ($paragraph_type->id() != 'from_library' && $paragraph_type->hasEnabledBehaviorPlugin('layout_paragraphs')) {
+    $form['#process'][] = 'layout_paragraphs_library_disable_allow_library_conversion';
+  }
+}
+
+/**
+ * Form #process callback.
+ *
+ * Blocks access to 'allow_library_conversion' form field.
+ */
+function layout_paragraphs_library_disable_allow_library_conversion($form, FormStateInterface $form_state) {
+  if (isset($form['allow_library_conversion'])) {
+    $form['allow_library_conversion']['#access'] = FALSE;
+  }
+  return $form;
+}
+
+/**
+ * Form submit callback for "Promote to library" button.
+ */
+function layout_paragraphs_library_submit(&$form, FormStateInterface $form_state) {
+
+  $tempstore = \Drupal::service('layout_paragraphs.tempstore_repository');
+  /** @var \Drupal\layout_paragraphs\Contracts\ComponentFormInterface $form_object */
+  $form_object = $form_state->getFormObject();
+  $paragraph = $form_object->buildParagraphComponent($form, $form_state);
+  $layout_paragraphs_layout = $form_object->getLayoutParagraphsLayout();
+  $component = $layout_paragraphs_layout->getComponent($paragraph);
+  $component_settings = $component->getSettings();
+
+  $form_state->set('original_paragraph', $paragraph);
+
+  // Replacing element in the array.
+  $library_item = LibraryItem::createFromParagraph($paragraph);
+  $library_item->save();
+
+  // Replace this paragraph with a library reference one.
+  $library_paragraph = Paragraph::create([
+    'type' => 'from_library',
+    'field_reusable_paragraph' => $library_item,
+  ]);
+  $library_component = $layout_paragraphs_layout->getComponent($library_paragraph);
+  $library_component->setSettings($component_settings);
+  $form_object->setParagraph($library_component->getEntity());
+
+  if (get_class($form_object) == 'Drupal\layout_paragraphs\Form\EditComponentForm') {
+    $layout_paragraphs_layout->insertBeforeComponent($paragraph->uuid(), $library_component->getEntity());
+    $layout_paragraphs_layout->deleteComponent($paragraph->uuid());
+    $form_object->setLayoutParagraphsLayout($layout_paragraphs_layout);
+    $tempstore->set($form_object->getLayoutParagraphsLayout());
+  }
+  elseif (get_class($form_object) == 'Drupal\layout_paragraphs\Form\InsertComponentForm') {
+    $form_object->setParagraph($library_component->getEntity());
+    /** @var \Drupal\layout_paragraphs\Form\InsertComponentForm $form_object */
+    $form_object->insertComponent();
+    $tempstore->set($form_object->getLayoutParagraphsLayout());
+  }
+
+}
+
+/**
+ * Ajax callback for "Promote to library" button.
+ */
+function layout_paragraphs_library_ajax(&$form, FormStateInterface $form_state) {
+
+  // Check for errors.
+  if ($form_state->hasAnyErrors()) {
+    $form['status_messages'] = [
+      '#type' => 'status_messages',
+      '#weight' => -1000,
+    ];
+    $form['#sorted'] = FALSE;
+    $response = new AjaxResponse();
+    $response->addCommand(new ReplaceCommand('[data-drupal-selector="' . $form['#attributes']['data-drupal-selector'] . '"]', $form));
+    return $response;
+  }
+
+  $original_paragraph = $form_state->get('original_paragraph');
+  /** @var \Drupal\layout_paragraphs\Contracts\ComponentFormInterface $form_object */
+  $form_object = $form_state->getFormObject();
+  if (get_class($form_object) == 'Drupal\layout_paragraphs\Form\EditComponentForm') {
+    $response = $form_object->successfulAjaxSubmit($form, $form_state);
+    $wrong_selector = '[data-uuid=' . $form_object->getParagraph()->uuid() . ']';
+    $correct_selector = '[data-uuid=' . $original_paragraph->uuid() . ']';
+    foreach ($response->getCommands() as &$command) {
+      if ($command['command'] == 'insert' && $command['selector'] == $wrong_selector) {
+        $command['selector'] = $correct_selector;
+      }
+    };
+    return $response;
+  }
+  else {
+    return $form_object->successfulAjaxSubmit($form, $form_state);
+  }
+}

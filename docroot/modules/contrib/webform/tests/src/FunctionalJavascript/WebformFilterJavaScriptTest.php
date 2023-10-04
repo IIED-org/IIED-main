@@ -14,9 +14,9 @@ class WebformFilterJavaScriptTest extends WebformWebDriverTestBase {
    */
   public function testFilter() {
     // Set admin theme to seven.
-    \Drupal::service('theme_installer')->install(['seven']);
+    \Drupal::service('theme_installer')->install(['claro']);
     \Drupal::configFactory()->getEditable('system.theme')
-      ->set('admin', 'seven')
+      ->set('admin', 'claro')
       ->save();
 
     $session = $this->getSession();

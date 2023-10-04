@@ -16,7 +16,7 @@ function svg_image_uninstall() {
   $svgImageConfigs = ['svg_render_as_image', 'svg_attributes'];
 
   $dependentConfigs = $configManager
-    ->findConfigEntityDependents('module', ['svg_image']);
+    ->findConfigEntityDependencies('module', ['svg_image']);
 
   // Clear all dependent configs, set standard Image as a dependency and clear
   // SVG Image related field properties.

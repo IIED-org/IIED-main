@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @file
+ * Contains layout_paragraphs_alter_controls_test module.
+ */
+
+/**
+ * Implements hook_preprocess_layout_paragraphs_builder_controls().
+ */
+function layout_paragraphs_alter_controls_test_preprocess_layout_paragraphs_builder_controls(array &$variables) {
+  // Hide the edit link.
+  $variables['controls']['edit_link']['#access'] = FALSE;
+  // Delete the delete link.
+  unset($variables['controls']['delete_link']);
+  // Add an arbitrary span.
+  $variables['controls']['test_span'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'span',
+    '#value' => 'Arbitrary Control Element',
+    '#attributes' => [
+      'class' => ['lpb-alter-controls-test-element'],
+    ],
+  ];
+}

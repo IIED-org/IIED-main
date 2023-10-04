@@ -17,7 +17,7 @@ class WebformFormValidateTest extends WebformBrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['webform', 'webform_test_validate'];
+  protected static $modules = ['webform', 'webform_test_validate'];
 
   /**
    * Webforms to load.

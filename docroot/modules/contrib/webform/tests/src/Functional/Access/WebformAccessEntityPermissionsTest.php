@@ -17,7 +17,7 @@ class WebformAccessEntityPermissionsTest extends WebformBrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['node', 'webform', 'webform_test_submissions'];
+  protected static $modules = ['node', 'webform', 'webform_test_submissions'];
 
   /**
    * Tests webform entity access controls.

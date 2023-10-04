@@ -1,0 +1,13 @@
+name: Layout Paragraphs Complex Permissions Test
+description: Tests more complex layout permissions setup
+core_version_requirement: ^9.1 || ^10
+type: module
+package: Layout Paragraphs
+dependencies:
+  - layout_paragraphs
+  - layout_paragraphs_permissions
+
+# Information added by Drupal.org packaging script on 2023-05-13
+version: '2.0.3'
+project: 'layout_paragraphs'
+datestamp: 1683938209

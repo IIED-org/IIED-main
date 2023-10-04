@@ -5,10 +5,10 @@ namespace Drupal\svg_image\Plugin\Field\FieldFormatter;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Url;
 use Drupal\file\Entity\File;
 use Drupal\image\Plugin\Field\FieldFormatter\ImageFormatter;
 use Drupal\Core\Cache\Cache;
@@ -45,8 +45,8 @@ class SvgImageFormatter extends ImageFormatter {
   /**
    * {@inheritdoc}
    */
-  public function __construct($pluginId, $pluginDefinition, FieldDefinitionInterface $fieldDefinition, array $settings, $label, $viewMode, array $thirdPartySettings, AccountInterface $currentUser, EntityStorageInterface $ImageStyleStorage, LoggerInterface $logger) {
-    parent::__construct($pluginId, $pluginDefinition, $fieldDefinition, $settings, $label, $viewMode, $thirdPartySettings, $currentUser, $ImageStyleStorage);
+  public function __construct($pluginId, $pluginDefinition, FieldDefinitionInterface $fieldDefinition, array $settings, $label, $viewMode, array $thirdPartySettings, AccountInterface $currentUser, EntityStorageInterface $ImageStyleStorage, LoggerInterface $logger, FileUrlGeneratorInterface $file_url_generator) {
+    parent::__construct($pluginId, $pluginDefinition, $fieldDefinition, $settings, $label, $viewMode, $thirdPartySettings, $currentUser, $ImageStyleStorage, $file_url_generator);
     $this->logger = $logger;
   }
 
@@ -64,7 +64,8 @@ class SvgImageFormatter extends ImageFormatter {
       $configuration['third_party_settings'],
       $container->get('current_user'),
       $container->get('entity_type.manager')->getStorage('image_style'),
-      $container->get('logger.channel.file')
+      $container->get('logger.channel.file'),
+      $container->get('file_url_generator')
     );
   }
 
@@ -112,11 +113,9 @@ class SvgImageFormatter extends ImageFormatter {
         $attributes = $svg_attributes;
       }
 
-      $cacheContexts = [];
       if (isset($linkFile)) {
         $imageUri = $file->getFileUri();
-        $url = Url::fromUri(file_create_url($imageUri));
-        $cacheContexts[] = 'url.site';
+        $url = $this->fileUrlGenerator->generate($imageUri);
       }
       $cacheTags = Cache::mergeTags($cacheTags, $file->getCacheTags());
 
@@ -140,7 +139,6 @@ class SvgImageFormatter extends ImageFormatter {
           '#url' => $url,
           '#cache' => [
             'tags' => $cacheTags,
-            'contexts' => $cacheContexts,
           ],
         ];
       }
@@ -158,7 +156,6 @@ class SvgImageFormatter extends ImageFormatter {
               '#title' => Markup::create($svgRaw),
               '#cache' => [
                 'tags' => $cacheTags,
-                'contexts' => $cacheContexts,
               ],
             ];
           }
@@ -167,7 +164,6 @@ class SvgImageFormatter extends ImageFormatter {
               '#markup' => Markup::create($svgRaw),
               '#cache' => [
                 'tags' => $cacheTags,
-                'contexts' => $cacheContexts,
               ],
             ];
           }
@@ -183,8 +179,9 @@ class SvgImageFormatter extends ImageFormatter {
    */
   public static function defaultSettings() {
     return [
-        'svg_attributes' => ['width' => '', 'height' => ''], 'svg_render_as_image' => TRUE,
-      ] + parent::defaultSettings();
+      'svg_attributes' => ['width' => '', 'height' => ''],
+      'svg_render_as_image' => TRUE,
+    ] + parent::defaultSettings();
   }
 
   /**
@@ -240,7 +237,7 @@ class SvgImageFormatter extends ImageFormatter {
     $fileUri = $file->getFileUri();
 
     if (file_exists($fileUri)) {
-      // Make sure that SVG is safe
+      // Make sure that SVG is safe.
       $rawSvg = file_get_contents($fileUri);
       $svgSanitizer = new Sanitizer();
       return $svgSanitizer->sanitize($rawSvg);

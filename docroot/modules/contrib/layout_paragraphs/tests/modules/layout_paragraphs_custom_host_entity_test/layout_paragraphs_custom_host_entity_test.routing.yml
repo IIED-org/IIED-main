@@ -1,0 +1,7 @@
+entity.lp_host_entity.settings:
+  path: 'admin/structure/lp-host-entity'
+  defaults:
+    _form: '\Drupal\layout_paragraphs_custom_host_entity_test\Form\LpHostEntitySettingsForm'
+    _title: 'LP Host Entity'
+  requirements:
+    _permission: 'administer lp host entity'

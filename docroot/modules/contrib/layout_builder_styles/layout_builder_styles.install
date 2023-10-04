@@ -136,6 +136,7 @@ function layout_builder_styles_update_8003() {
     ->loadByProperties([
       'type' => LayoutBuilderStyleInterface::TYPE_COMPONENT,
     ]);
+  /** @var \Drupal\layout_builder_styles\Entity\LayoutBuilderStyle $style */
   foreach ($styles as $style) {
     $restrictions = $style->getBlockRestrictions();
     foreach ($restrictions as $key => $allowed) {
@@ -166,6 +167,7 @@ function layout_builder_styles_update_8004() {
     ->getStorage('layout_builder_style')
     ->loadByProperties();
   $weight = 0;
+  /** @var \Drupal\layout_builder_styles\Entity\LayoutBuilderStyle $style */
   foreach ($styles as $style) {
     // Re-save styles with weight value.
     $style->set('weight', $weight);

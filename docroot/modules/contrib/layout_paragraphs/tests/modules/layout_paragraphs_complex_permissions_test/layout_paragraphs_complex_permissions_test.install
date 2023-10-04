@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Contains layout_paragraphs_complex_permissions.install.
+ */
+
+/**
+ * Implments hook_install().
+ */
+function layout_paragraphs_complex_permissions_test_install() {
+  module_set_weight('layout_paragraphs_complex_permissions_test', 10);
+}

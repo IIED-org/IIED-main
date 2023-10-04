@@ -33,7 +33,7 @@ class WebformSettingsBehaviorsTest extends WebformBrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     // Disable description help icon.
     $this->config('webform.settings')->set('ui.description_help', FALSE)->save();

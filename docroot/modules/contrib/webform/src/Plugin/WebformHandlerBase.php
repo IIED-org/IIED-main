@@ -127,6 +127,13 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
   protected $tokenManager;
 
   /**
+   * The configuration array.
+   *
+   * @var array
+   */
+  protected $configuration;
+
+  /**
    * {@inheritdoc}
    *
    * IMPORTANT:
@@ -563,7 +570,7 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
   /**
    * {@inheritdoc}
    */
-  public function prePurge(array $webform_submissions) {}
+  public function prePurge(array &$webform_submissions) {}
 
   /**
    * {@inheritdoc}

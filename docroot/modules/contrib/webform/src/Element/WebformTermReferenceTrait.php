@@ -18,7 +18,7 @@ trait WebformTermReferenceTrait {
   public static function setOptions(array &$element) {
     $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
 
-    // Only intialize the term options once by checking the cache tags.
+    // Only initialize the term options once by checking the cache tags.
     $cache_tags = NestedArray::getValue($element, ['#cache', 'tags']) ?? [];
     if (in_array('taxonomy_term_list', $cache_tags)) {
       return;

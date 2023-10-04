@@ -825,10 +825,17 @@ function _webform_preprocess_element(array &$variables, $title_parents = ['title
  * Prepares #description and #help properties for form element templates.
  */
 function _webform_preprocess_description_help(array &$variables) {
+  /** @var \Drupal\webform\WebformRequestInterface $webform_request */
+  $webform_request = \Drupal::service('webform.request');
+  /** @var \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager */
+  $libraries_manager = \Drupal::service('webform.libraries_manager');
+
   $element = &$variables['element'];
+
   // Move #description to #help for webform admin routes.
   if (\Drupal::config('webform.settings')->get('ui.description_help')
-    && \Drupal::service('webform.request')->isWebformAdminRoute()
+    && $webform_request->isWebformAdminRoute()
+    && $libraries_manager->isIncluded('tippyjs')
     && \Drupal::routeMatch()->getRouteName() !== 'webform.contribute.settings'
     && !isset($element['#help'])
     && !empty($element['#title']) && (empty($element['#title_display']) || !in_array($element['#title_display'], ['attribute', 'invisible']))

@@ -1,0 +1,7 @@
+services:
+  layout_paragraphs.builder_access:
+    class: Drupal\layout_paragraphs_complex_permissions_test\Access\ReorderAccessByContentType
+    arguments:
+     - '@entity_type.manager'
+    tags:
+      - { name: access_check, applies_to: _layout_paragraphs_builder_access }

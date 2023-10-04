@@ -1,0 +1,7 @@
+services:
+  layout_paragraphs_allowed_types_subscriber:
+    class: \Drupal\layout_paragraphs_empty_component_list_test\EventSubscriber\LayoutParagraphsAllowedTypesSubscriber
+    arguments:
+      - '@messenger'
+    tags:
+      - { name: 'event_subscriber' }

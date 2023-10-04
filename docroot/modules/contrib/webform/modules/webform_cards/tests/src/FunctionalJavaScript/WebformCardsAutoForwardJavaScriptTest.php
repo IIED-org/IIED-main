@@ -16,7 +16,7 @@ class WebformCardsAutoForwardJavaScriptTest extends WebformWebDriverTestBase {
    *
    * @var array
    */
-  public static $modules = ['webform', 'webform_cards', 'webform_cards_test', 'webform_image_select'];
+  protected static $modules = ['webform', 'webform_cards', 'webform_cards_test', 'webform_image_select'];
 
   /**
    * Test webform cards auto-forward.

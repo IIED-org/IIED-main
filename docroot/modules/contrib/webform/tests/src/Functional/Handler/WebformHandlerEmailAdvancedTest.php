@@ -17,7 +17,7 @@ class WebformHandlerEmailAdvancedTest extends WebformBrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['filter', 'file', 'webform'];
+  protected static $modules = ['file', 'webform'];
 
   /**
    * Webforms to load.
@@ -29,7 +29,7 @@ class WebformHandlerEmailAdvancedTest extends WebformBrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Create filter.
@@ -163,7 +163,7 @@ class WebformHandlerEmailAdvancedTest extends WebformBrowserTestBase {
 
     // Check resend webform with custom message.
     $this->drupalGet("admin/structure/webform/manage/test_handler_email_advanced/submission/$sid/resend");
-    $this->submitForm(['message[body][value]' => 'Testing 123…'], 'Resend message');
+    $this->submitForm(['message[body][value][value]' => 'Testing 123…'], 'Resend message');
     $sent_email = $this->getLastEmail();
     $this->assertStringNotContainsString('<b>First name</b><br />John<br /><br />', $sent_email['params']['body']);
     $this->debug($sent_email['params']['body']);

@@ -34,6 +34,7 @@ class LayoutBuilderStyleGroupListBuilder extends DraggableListBuilder {
    */
   public function buildRow(EntityInterface $entity) {
     $row = [];
+    /** @var \Drupal\layout_builder_styles\Entity\LayoutBuilderStyleGroup $entity */
     $row['label'] = $entity->label();
     $row['id'] = ['#plain_text' => $entity->id()];
     $row['multiselect'] = [
@@ -45,4 +46,5 @@ class LayoutBuilderStyleGroupListBuilder extends DraggableListBuilder {
     $row['required'] = (empty($entity->getRequired())) ? ['#plain_text' => 'Optional'] : ['#plain_text' => 'Required'];
     return $row + parent::buildRow($entity);
   }
+
 }

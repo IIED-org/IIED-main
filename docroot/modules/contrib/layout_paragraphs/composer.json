@@ -18,5 +18,9 @@
   },
   "require": {
     "drupal/paragraphs": "^1.6"
+  },
+  "require-dev": {
+    "drupal/entity_usage": "2.x-dev",
+    "drupal/block_field": "~1.0"
   }
 }

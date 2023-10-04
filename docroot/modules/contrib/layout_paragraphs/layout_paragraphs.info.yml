@@ -1,15 +1,16 @@
 name: 'Layout Paragraphs'
 type: module
 description: 'Field widget and formatter for using layouts with paragraph fields.'
-core: 8.x
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^9.2 || ^10
 package: 'Paragraphs'
 configure: layout_paragraphs.label_settings
 dependencies:
-  - drupal:paragraphs
+  - paragraphs:paragraphs
   - drupal:layout_discovery
+test_dependencies:
+  - block_field:block_field
 
-# Information added by Drupal.org packaging script on 2021-05-20
-version: '1.0.0'
+# Information added by Drupal.org packaging script on 2023-05-13
+version: '2.0.3'
 project: 'layout_paragraphs'
-datestamp: 1621524312
+datestamp: 1683938209

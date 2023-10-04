@@ -1,0 +1,76 @@
+<?php
+
+/**
+ * @file
+ * Contains Layout Paragraphs Permissions module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\layout_paragraphs\LayoutParagraphsLayout;
+
+/**
+ * Implements hook_preprocess_layout_paragraphs_builder_controls().
+ */
+function layout_paragraphs_permissions_preprocess_layout_paragraphs_builder_controls(&$variables) {
+  foreach (['drag_handle', 'move_up', 'move_down'] as $key) {
+    $variables['controls'][$key]['#access'] = layout_paragraphs_permissions_access($variables['layout_paragraphs_layout'], 'reorder');
+  }
+  $variables['controls']['duplicate_link']['#access'] = layout_paragraphs_permissions_access($variables['layout_paragraphs_layout'], 'duplicate');
+}
+
+/**
+ * Implements hook_preprocess_layout_paragraphs_builder().
+ */
+function layout_paragraphs_permissions_preprocess_layout_paragraphs_builder(&$variables) {
+  if (layout_paragraphs_permissions_access($variables['layout_paragraphs_layout'], 'reorder')->isForbidden()) {
+    $variables['attributes']['class'][] = 'js-lpb-reordering-disabled';
+    $variables['#attached']['library'][] = 'layout_paragraphs_permissions/disable_reorder';
+  }
+}
+
+/**
+ * Checks access for current user on provided layout for provided operation.
+ *
+ * @param \Drupal\layout_paragraphs\LayoutParagraphsLayout $layout_paragraphs_layout
+ *   The layout.
+ * @param string $operation
+ *   The operation (i.e. "reorder" or "edit").
+ *
+ * @return AccessResult
+ *   The access.
+ */
+function layout_paragraphs_permissions_access(LayoutParagraphsLayout $layout_paragraphs_layout, string $operation) {
+  $access_handler = Drupal::service('layout_paragraphs.builder_access');
+  return $access_handler->access(
+    Drupal::currentUser(),
+    $layout_paragraphs_layout,
+    $operation
+  );
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function layout_paragraphs_permissions_form_layout_paragraphs_component_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['layout_paragraphs']['#process'][] = 'layout_paragraphs_permissions_layout_plugin_form_process';
+}
+
+/**
+ * Process callback to check permission for layout plugin forms.
+ *
+ * @param array $element
+ *   The element.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form state.
+ * @param array $complete_form
+ *   The complete form array.
+ *
+ * @return array
+ *   The processed element.
+ */
+function layout_paragraphs_permissions_layout_plugin_form_process(array $element, FormStateInterface $form_state, array $complete_form) {
+  if (!empty($element['config']) && is_array($element['config'])) {
+    $element['config']['#access'] = Drupal::currentUser()->hasPermission('edit layout paragraphs plugin config');
+  }
+  return $element;
+}

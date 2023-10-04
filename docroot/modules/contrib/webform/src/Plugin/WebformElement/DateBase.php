@@ -78,16 +78,6 @@ abstract class DateBase extends WebformElementBase {
     // Parse #default_value date input format.
     $this->parseInputFormat($element, '#default_value');
 
-    // If date picker does not exist, remove date picker related properties.
-    if (!$this->datePickerExists()) {
-      unset(
-        $element['#datepicker'],
-        $element['#datepicker_button'],
-        $element['#date_date_format'],
-        $element['#date_date_datepicker_button']
-      );
-    }
-
     // Set date min/max attributes.
     // This overrides extra attributes set via Datetime::processDatetime.
     // @see \Drupal\Core\Datetime\Element\Datetime::processDatetime
@@ -109,21 +99,13 @@ abstract class DateBase extends WebformElementBase {
       $element['#attributes']['data-days'] = implode(',', $element['#date_days']);
     }
 
-    // Display datepicker button.
-    if (!empty($element['#datepicker_button']) || !empty($element['#date_date_datepicker_button'])) {
-      $element['#attributes']['data-datepicker-button'] = TRUE;
-      $element['#attached']['drupalSettings']['webform']['datePicker']['buttonImage'] = base_path() . \Drupal::service('extension.list.module')->getPath('webform') . '/images/elements/date-calendar.png';
-    }
-
     // Set first day according to admin/config/regional/settings.
     $config = $this->configFactory->get('system.date');
     $element['#attached']['drupalSettings']['webform']['dateFirstDay'] = $config->get('first_day');
     $cacheability = CacheableMetadata::createFromObject($config);
     $cacheability->applyTo($element);
 
-    if ($this->datePickerExists()) {
-      $element['#attached']['library'][] = 'webform/webform.element.date';
-    }
+    $element['#attached']['library'][] = 'webform/webform.element.date';
 
     $element['#after_build'][] = [get_class($this), 'afterBuild'];
   }
@@ -309,9 +291,6 @@ abstract class DateBase extends WebformElementBase {
       '#required' => TRUE,
       '#weight' => 20,
     ];
-    if ($this->datePickerExists()) {
-      $form['date']['date_days']['#description'] .= ' ' . $this->t('Please note, the date picker will disable unchecked days of the week.');
-    }
 
     // Date/time min/max validation.
     if ($this->hasProperty('date_date_min')
@@ -707,20 +686,6 @@ abstract class DateBase extends WebformElementBase {
     /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
     $date_formatter = \Drupal::service('date.formatter');
     return $date_formatter->format($timestamp ?? \Drupal::time()->getRequestTime(), 'custom', $custom_format);
-  }
-
-  /**
-   * Determine if the jQuery UI date picker is supported.
-   *
-   * @return bool
-   *   TRUE if Drupal 8 or for Drupal 9 support the jQuery UI date picker
-   *   module is installed.
-   *
-   * @see \webform_library_info_alter
-   */
-  protected function datePickerExists() {
-    return (floatval(\Drupal::VERSION) < 9)
-      || $this->moduleHandler->moduleExists('jquery_ui_datepicker');
   }
 
 }

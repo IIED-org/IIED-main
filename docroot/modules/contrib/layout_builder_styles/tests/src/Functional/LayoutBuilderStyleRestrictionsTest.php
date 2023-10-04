@@ -81,7 +81,7 @@ class LayoutBuilderStyleRestrictionsTest extends BrowserTestBase {
       'label' => 'group',
       'multiselect' => LayoutBuilderStyleGroupInterface::TYPE_MULTIPLE,
       'form_type' => LayoutBuilderStyleGroupInterface::TYPE_MULTIPLE_SELECT,
-      'required' => false,
+      'required' => FALSE,
     ])->save();
 
     // Create an unrestricted layout style.
@@ -90,7 +90,7 @@ class LayoutBuilderStyleRestrictionsTest extends BrowserTestBase {
       'label' => 'Unrestricted',
       'classes' => 'unrestricted-class',
       'type' => 'section',
-      'group' => 'group'
+      'group' => 'group',
     ])->save();
 
     // Restrict the 2nd layout style to 'layout_onecol'.
@@ -203,7 +203,7 @@ class LayoutBuilderStyleRestrictionsTest extends BrowserTestBase {
       'label' => 'group',
       'multiselect' => LayoutBuilderStyleGroupInterface::TYPE_MULTIPLE,
       'form_type' => LayoutBuilderStyleGroupInterface::TYPE_MULTIPLE_SELECT,
-      'required' => false,
+      'required' => FALSE,
     ])->save();
 
     // Create block styles for blocks.
@@ -242,7 +242,10 @@ class LayoutBuilderStyleRestrictionsTest extends BrowserTestBase {
       'classes' => 'foo4-style-class bar4-style-class',
       'type' => 'component',
       'group' => 'group',
-      'block_restrictions' => ['inline_block:alternate', 'field_block:node:bundle_with_section_field:promote'],
+      'block_restrictions' => [
+        'inline_block:alternate',
+        'field_block:node:bundle_with_section_field:promote',
+      ],
     ])->save();
 
     // Block instances are not allowed to be restricted.

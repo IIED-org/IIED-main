@@ -3,7 +3,7 @@
  * JavaScript behaviors for Tippy.js tooltip integration.
  */
 
-(function ($, Drupal) {
+(function ($, Drupal, once) {
 
   'use strict';
 
@@ -11,7 +11,6 @@
     delay: 100
   };
 
-  // @see https://atomiks.github.io/tippyjs/v5/all-props/
   // @see https://atomiks.github.io/tippyjs/v6/all-props/
   Drupal.webform = Drupal.webform || {};
 
@@ -32,7 +31,7 @@
         return;
       }
 
-      $(context).find('.js-webform-tooltip-element').once('webform-tooltip-element').each(function () {
+      $(once('webform-tooltip-element', '.js-webform-tooltip-element', context)).each(function () {
         // Checkboxes, radios, buttons, toggles, etc… use fieldsets.
         // @see \Drupal\webform\Plugin\WebformElement\OptionsBase::prepare
         var $element = $(this);
@@ -65,7 +64,7 @@
         return;
       }
 
-      $(context).find('.js-webform-tooltip-link').once('webform-tooltip-link').each(function () {
+      $(once('webform-tooltip-link', '.js-webform-tooltip-link', context)).each(function () {
         var title = $(this).attr('title');
         if (title) {
           var options = $.extend({
@@ -79,4 +78,4 @@
     }
   };
 
-})(jQuery, Drupal);
+})(jQuery, Drupal, once);

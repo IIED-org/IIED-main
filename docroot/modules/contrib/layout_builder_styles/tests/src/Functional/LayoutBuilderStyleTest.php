@@ -3,7 +3,6 @@
 namespace Drupal\Tests\layout_builder_styles\Functional;
 
 use Drupal\layout_builder\Entity\LayoutBuilderEntityViewDisplay;
-use Drupal\node\Entity\Node;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\layout_builder_styles\Entity\LayoutBuilderStyle;
 use Drupal\layout_builder_styles\Entity\LayoutBuilderStyleGroup;
@@ -79,7 +78,7 @@ class LayoutBuilderStyleTest extends BrowserTestBase {
       'label' => 'Group',
       'multiselect' => LayoutBuilderStyleGroupInterface::TYPE_MULTIPLE,
       'form_type' => LayoutBuilderStyleGroupInterface::TYPE_MULTIPLE_SELECT,
-      'required' => false,
+      'required' => FALSE,
     ])->save();
 
     // Create styles for section.
@@ -88,7 +87,7 @@ class LayoutBuilderStyleTest extends BrowserTestBase {
       'label' => 'Foobar',
       'classes' => 'foo-style-class bar-style-class',
       'type' => 'section',
-      'group' => 'group'
+      'group' => 'group',
     ])->save();
 
     LayoutBuilderStyle::create([
@@ -96,7 +95,7 @@ class LayoutBuilderStyleTest extends BrowserTestBase {
       'label' => 'Foobar2',
       'classes' => 'foo2-style-class bar2-style-class',
       'type' => 'section',
-      'group' => 'group'
+      'group' => 'group',
     ])->save();
 
     // Add section to node with new styles.
@@ -144,7 +143,7 @@ class LayoutBuilderStyleTest extends BrowserTestBase {
       'label' => 'Group',
       'multiselect' => LayoutBuilderStyleGroupInterface::TYPE_SINGLE,
       'form_type' => LayoutBuilderStyleGroupInterface::TYPE_CHECKBOXES,
-      'required' => false,
+      'required' => FALSE,
     ])->save();
 
     // Create styles for blocks.
@@ -153,7 +152,7 @@ class LayoutBuilderStyleTest extends BrowserTestBase {
       'label' => 'Foobar',
       'classes' => 'foo-style-class bar-style-class',
       'type' => 'component',
-      'group' => 'group'
+      'group' => 'group',
     ])->save();
 
     LayoutBuilderStyle::create([
@@ -161,7 +160,7 @@ class LayoutBuilderStyleTest extends BrowserTestBase {
       'label' => 'Foobar2',
       'classes' => 'foo2-style-class bar2-style-class',
       'type' => 'component',
-      'group' => 'group'
+      'group' => 'group',
     ])->save();
 
     // Add block to node with new style.

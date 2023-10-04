@@ -6,7 +6,6 @@
  */
 
 use Drupal\webform\Utility\WebformOptionsHelper;
-use Drupal\Core\Locale\CountryManager;
 use Drupal\Core\Language\LanguageManager;
 
 /**

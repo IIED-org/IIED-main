@@ -1,0 +1,22 @@
+entity.lp_host_entity.settings:
+  title: Settings
+  route_name: entity.lp_host_entity.settings
+  base_route: entity.lp_host_entity.settings
+entity.lp_host_entity.view:
+  title: View
+  route_name: entity.lp_host_entity.canonical
+  base_route: entity.lp_host_entity.canonical
+entity.lp_host_entity.edit_form:
+  title: Edit
+  route_name: entity.lp_host_entity.edit_form
+  base_route: entity.lp_host_entity.canonical
+entity.lp_host_entity.delete_form:
+  title: Delete
+  route_name: entity.lp_host_entity.delete_form
+  base_route: entity.lp_host_entity.canonical
+  weight: 10
+entity.lp_host_entity.collection:
+  title: LP Host Entity
+  route_name: entity.lp_host_entity.collection
+  base_route: system.admin_content
+  weight: 10

@@ -1,14 +1,12 @@
 <?php
 
-use \Drupal\layout_builder_styles\LayoutBuilderStyleInterface;
-use \Drupal\layout_builder_styles\Entity\LayoutBuilderStyleGroup;
-use \Drupal\layout_builder_styles\LayoutBuilderStyleGroupInterface;
-
-
 /**
  * @file
  * Post-update functions for Layout Builder Styles module.
  */
+
+use Drupal\layout_builder_styles\LayoutBuilderStyleInterface;
+use Drupal\layout_builder_styles\Entity\LayoutBuilderStyleGroup;
 
 /**
  * Add newly-available layout restriction value to existing style entities.
@@ -17,6 +15,7 @@ function layout_builder_styles_post_update_update_add_layout_restrictions() {
   $styles = \Drupal::entityTypeManager()
     ->getStorage('layout_builder_style')
     ->loadByProperties();
+  /** @var \Drupal\layout_builder_styles\Entity\LayoutBuilderStyle $style */
   foreach ($styles as $style) {
     // Re-save existing styles with empty layout restrictions.
     if ($style->getType() === LayoutBuilderStyleInterface::TYPE_SECTION) {
@@ -98,8 +97,9 @@ function layout_builder_styles_post_update_add_group() {
     $styles = \Drupal::entityTypeManager()
       ->getStorage('layout_builder_style')
       ->loadByProperties();
+    /** @var \Drupal\layout_builder_styles\Entity\LayoutBuilderStyle $style */
     foreach ($styles as $style) {
-      if (empty($style->getGroup())){
+      if (empty($style->getGroup())) {
         $style->set('group', $group->id());
         $style->save();
       }
