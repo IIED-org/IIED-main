@@ -4835,6 +4835,10 @@ cite {
   border-left-width: 2px;
 }
 
+.border-dashed{
+  border-style: dashed;
+}
+
 .border-none{
   border-style: none;
 }
@@ -4968,12 +4972,12 @@ cite {
   background-image: linear-gradient(to right, var(--tw-gradient-stops));
 }
 
-.bg-\[url\(\'\/themes\/custom\/iied_tw\/templates\/layout\/icons\/line-pattern\.svg\'\)\]{
-  background-image: url('/themes/custom/iied_tw/templates/layout/icons/line-pattern.svg');
+.bg-\[url\(\'\/sites\/default\/files\/2023-10\/cloudsbd\.svg\'\)\]{
+  background-image: url('/sites/default/files/2023-10/cloudsbd.svg');
 }
 
-.bg-\[url\(\'\/sites\/default\/files\/2023-09\/clouds\.svg\'\)\]{
-  background-image: url('/sites/default/files/2023-09/clouds.svg');
+.bg-\[url\(\'\/themes\/custom\/iied_tw\/templates\/layout\/icons\/line-pattern\.svg\'\)\]{
+  background-image: url('/themes/custom/iied_tw/templates/layout/icons/line-pattern.svg');
 }
 
 .from-iiedpink-900{
@@ -6013,6 +6017,10 @@ cite {
     flex-wrap: nowrap;
   }
 
+  .sm\:items-center{
+    align-items: center;
+  }
+
   .sm\:justify-start{
     justify-content: flex-start;
   }
@@ -6431,6 +6439,10 @@ cite {
 
   .md\:items-start{
     align-items: flex-start;
+  }
+
+  .md\:items-center{
+    align-items: center;
   }
 
   .md\:space-y-0 > :not([hidden]) ~ :not([hidden]){
@@ -7101,6 +7113,10 @@ cite {
     flex-direction: column;
   }
 
+  .lg\:items-center{
+    align-items: center;
+  }
+
   .lg\:gap-24{
     gap: 6rem;
   }
@@ -7350,6 +7366,10 @@ cite {
 
   .xl\:flex-col{
     flex-direction: column;
+  }
+
+  .xl\:items-center{
+    align-items: center;
   }
 
   .xl\:gap-10{
