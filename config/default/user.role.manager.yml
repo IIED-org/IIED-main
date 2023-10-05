@@ -184,7 +184,6 @@ permissions:
   - 'edit any project content'
   - 'edit any publication content'
   - 'edit any webform content'
-  - 'edit layout paragraphs plugin config'
   - 'edit own article content'
   - 'edit own blog content'
   - 'edit own comments'
