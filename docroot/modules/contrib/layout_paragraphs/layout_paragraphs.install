@@ -54,6 +54,6 @@ function layout_paragraphs_update_9001(&$sandbox) {
     $sandbox['progress']++;
     $sandbox['current_pk'] = $id;
   }
-  $sandbox['#finished'] = empty($sandbox['max']) ? 1 : $sandbox['progress'] / $sandbox['max'];
+  $sandbox['#finished'] = empty($sandbox['max']) || count($ids) == 0 ? 1 : $sandbox['progress'] / $sandbox['max'];
 
 }
