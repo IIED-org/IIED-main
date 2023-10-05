@@ -1,0 +1,16 @@
+# Ignore all hidden files exept these.
+.*
+!/.github
+!/.gitignore
+!/.gitattributes
+!/.editorconfig
+!.gitkeep
+
+# Other ignored paths and files.
+/vendor
+/composer.lock
+
+/features/tmp/*
+!/features/tmp/.placeholder
+
+/.phpunit.cache

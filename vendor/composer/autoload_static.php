@@ -49,6 +49,7 @@ class ComposerStaticInitc55356c53f91567181cb9bc578ac52ab
         '3917c79c5052b270641b5a200963dbc2' => __DIR__ . '/..' . '/kint-php/kint/init.php',
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
         '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
+        '38143a9afc50997d55e4815db8489d1c' => __DIR__ . '/..' . '/rector/rector/bootstrap.php',
         '2191cedbacc400f3030e0b51d4e2aaf1' => __DIR__ . '/..' . '/rogervila/array-diff-multidimensional/src/helpers.php',
         '92c8763cd6170fce6fcfe7e26b4e8c10' => __DIR__ . '/..' . '/symfony/phpunit-bridge/bootstrap.php',
     );
@@ -228,6 +229,7 @@ class ComposerStaticInitc55356c53f91567181cb9bc578ac52ab
             'Drupal\\Composer\\Plugin\\ProjectMessage\\' => 38,
             'Drupal\\Component\\' => 17,
             'Drupal\\' => 7,
+            'DrupalRector\\' => 13,
             'DrupalPractice\\' => 15,
             'DrupalCodeGenerator\\' => 20,
             'Doctrine\\Persistence\\' => 21,
@@ -698,6 +700,10 @@ class ComposerStaticInitc55356c53f91567181cb9bc578ac52ab
         'Drupal\\' => 
         array (
             0 => __DIR__ . '/..' . '/drupal/coder/coder_sniffer/Drupal',
+        ),
+        'DrupalRector\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/palantirnet/drupal-rector/src',
         ),
         'DrupalPractice\\' => 
         array (

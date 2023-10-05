@@ -3,7 +3,7 @@
         'name' => 'drupal/recommended-project',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'e9a5734c0555525e9d01dbab895ae12c1b110ae3',
+        'reference' => '878699b90edcfe3b4beca0fe8033983768fc47ed',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -1605,7 +1605,7 @@
         'drupal/recommended-project' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'e9a5734c0555525e9d01dbab895ae12c1b110ae3',
+            'reference' => '878699b90edcfe3b4beca0fe8033983768fc47ed',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -2019,6 +2019,12 @@
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/xmlsitemap',
             'aliases' => array(),
             'dev_requirement' => false,
+        ),
+        'drupal8-rector/drupal8-rector' => array(
+            'dev_requirement' => true,
+            'replaced' => array(
+                0 => '*',
+            ),
         ),
         'drush/drush' => array(
             'pretty_version' => '10.6.2',
@@ -2437,6 +2443,21 @@
                 0 => '~2.0',
             ),
         ),
+        'palantirnet/drupal-rector' => array(
+            'pretty_version' => '0.15.1',
+            'version' => '0.15.1.0',
+            'reference' => '85382a67a07b928f5a963d94fbca11d7be33d6ca',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../palantirnet/drupal-rector',
+            'aliases' => array(),
+            'dev_requirement' => true,
+        ),
+        'palantirnet/drupal8-rector' => array(
+            'dev_requirement' => true,
+            'replaced' => array(
+                0 => '*',
+            ),
+        ),
         'pear/archive_tar' => array(
             'pretty_version' => '1.4.14',
             'version' => '1.4.14.0',
@@ -2745,6 +2766,15 @@
             'reference' => 'f913fb8cceba1e6644b7b90c4bfb678ed8a3ef38',
             'type' => 'library',
             'install_path' => __DIR__ . '/../react/promise',
+            'aliases' => array(),
+            'dev_requirement' => true,
+        ),
+        'rector/rector' => array(
+            'pretty_version' => '0.15.25',
+            'version' => '0.15.25.0',
+            'reference' => '015935c7ed9e48a4f5895ba974f337e20a263841',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../rector/rector',
             'aliases' => array(),
             'dev_requirement' => true,
         ),

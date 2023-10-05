@@ -191,7 +191,8 @@
         "drupal/devel": "^5.1",
         "drupal/devel_kint_extras": "^1.0",
         "drupal/migrate_source_csv": "^3.4",
-        "drupal/twig_xdebug": "^1.2"
+        "drupal/twig_xdebug": "^1.2",
+        "palantirnet/drupal-rector": "^0.15.1"
     },
     "conflict": {
         "drupal/drupal": "*"
@@ -307,6 +308,9 @@
           },
           "drupal/allowed_formats": {
             "Default value for format dropdown missing": "https://www.drupal.org/files/issues/2022-02-02/2950548-allowed_formats-missing_default_value.patch"
+          },
+          "drupal/layout_paragraphs": {
+            "3260656": "https://www.drupal.org/files/issues/2022-11-08/3260656-6-update2.x.diff"
           }
         }
     }
