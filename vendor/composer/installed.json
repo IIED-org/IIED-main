@@ -11430,6 +11430,9 @@
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
                     }
+                },
+                "patches_applied": {
+                    "3289530": "https://www.drupal.org/files/issues/2022-10-14/search_api_sorts_widget-3289530-5.patch"
                 }
             },
             "installation-source": "dist",

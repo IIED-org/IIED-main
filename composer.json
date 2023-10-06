@@ -311,6 +311,9 @@
           },
           "drupal/layout_paragraphs": {
             "3260656": "https://www.drupal.org/files/issues/2022-11-08/3260656-6-update2.x.diff"
+          },
+          "drupal/search_api_sorts_widget": {
+            "3289530": "https://www.drupal.org/files/issues/2022-10-14/search_api_sorts_widget-3289530-5.patch"
           }
         }
     }
