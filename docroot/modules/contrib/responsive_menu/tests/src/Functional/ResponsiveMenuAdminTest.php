@@ -101,7 +101,7 @@ class ResponsiveMenuAdminTest extends BrowserTestBase {
    */
   public function testPolyfillsInclusion() {
     $this->drupalGet('/admin/config/user-interface/responsive-menu');
-    $this->getSession()->getPage()->checkField('use_polyfills');
+    $this->getSession()->getPage()->checkField('Include IE11 polyfills');
     $this->getSession()->getPage()->pressButton('Save configuration');
     $this->drupalGet('/node/1');
     $this->assertSession()->elementContains('css', 'body', 'mmenu.polyfills.js');

@@ -19,24 +19,38 @@
       // The instatiation of the mmenu must only happen once.
       if (offCanvas && !offCanvas.hasOwnProperty('mmApi') && typeof (Mmenu) !== 'undefined') {
         const settings = drupalSettings.responsive_menu;
+        const position = settings.position,
+          theme = settings.theme,
+          pagedim = settings.pagedim;
 
         const options = {
-          theme: settings.theme,
-          offCanvas: {
-            position: settings.position,
+          extensions: [
+            theme,
+            'fx-menu-slide',
+            position === 'left' ? 'position-left' : 'position-right'
+          ],
+          keyboardNavigation: {
+            enable: true,
+            enhance: true,
+          },
+          drag: {
+            open: settings.drag
           }
         };
 
-        if (settings.pageWrapper) {
-          options['offCanvas']['selector'] = '.responsive-menu-page-wrapper';
-        }
-        else {
-          options['offCanvas']['selector'] = settings.offCanvasSelector;
+        if (pagedim !== 'none') {
+          options.extensions.push(pagedim);
         };
 
         const config = {
           classNames: {
             selected: 'menu-item--active-trail'
+          }
+        };
+
+        if (settings.pageWrapper) {
+          config['offCanvas'] = {
+            selector: '.responsive-menu-page-wrapper',
           }
         };
 

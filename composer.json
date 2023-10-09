@@ -314,6 +314,9 @@
           },
           "drupal/search_api_sorts_widget": {
             "3289530": "https://www.drupal.org/files/issues/2022-10-14/search_api_sorts_widget-3289530-5.patch"
+          },
+          "drupal/responsive_menu": {
+            "3297963": "https://www.drupal.org/files/issues/2023-04-18/d10-compatibility-3297964-12.patch"
           }
         }
     }

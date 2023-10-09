@@ -29,7 +29,7 @@ responsive_menu.superfish:
   dependencies:
     - responsive_menu/responsive_menu.config
     - core/jquery
-    - core/jquery.once
+    - core/once
 
 responsive_menu.superfish_hoverintent:
   version: VERSION
