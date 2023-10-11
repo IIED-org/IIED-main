@@ -9,6 +9,6 @@ dependencies:
   - notification:notification
 
 # Information added by Drupal.org packaging script on 2022-09-22
-version: '8.x-1.6'
+version: '2.1.0'
 project: 'ckwordcount'
-datestamp: 1663849821
+datestamp: 1663850621

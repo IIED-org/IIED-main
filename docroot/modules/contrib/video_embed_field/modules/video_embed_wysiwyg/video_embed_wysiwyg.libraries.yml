@@ -1,0 +1,15 @@
+video_embed:
+  js:
+    js/build/videoEmbed.js: { preprocess: false, minified: true }
+  css:
+    theme:
+      plugin/plugin.css: { }
+  dependencies:
+    - core/ckeditor5
+
+# Loaded in the text format configuration form to provide styling for the icon
+# used in toolbar config.
+admin.video_embed:
+  css:
+    theme:
+      css/video_embed.admin.css: { }
