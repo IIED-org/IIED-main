@@ -1,70 +1,73 @@
-uuid: f435d27a-3be7-4114-841c-4efd4191d4b7
+uuid: 06701b26-35a1-4e7d-b2c8-7688f74c3d13
 langcode: en
 status: true
 dependencies:
   config:
     - filter.format.basic_html
   module:
-    - ckeditor
-_core:
-  default_config_hash: AqlPmO16LvJI4D0Ih6u4GFQIzqr5OnLgAUSjcUGWk2g
+    - ckeditor5
 format: basic_html
-editor: ckeditor
+editor: ckeditor5
 settings:
   toolbar:
-    rows:
-      -
-        -
-          name: 'Block Formatting'
-          items:
-            - Bold
-            - Italic
-            - Subscript
-            - Superscript
-            - RemoveFormat
-            - Indent
-            - Outdent
-            - Blockquote
-            - HorizontalRule
-            - SpecialChar
-        -
-          name: Linking
-          items:
-            - DrupalLink
-            - DrupalUnlink
-        -
-          name: Lists
-          items:
-            - BulletedList
-            - NumberedList
-        -
-          name: 'Block formatting'
-          items:
-            - Format
-            - Styles
-        -
-          name: Tools
-          items:
-            - PasteFromWord
-            - PasteText
-            - ShowBlocks
-            - Source
+    items:
+      - bold
+      - italic
+      - subscript
+      - superscript
+      - removeFormat
+      - indent
+      - outdent
+      - blockQuote
+      - horizontalLine
+      - specialCharacters
+      - '|'
+      - link
+      - '|'
+      - bulletedList
+      - numberedList
+      - '|'
+      - heading
+      - style
   plugins:
-    stylescombo:
-      styles: "h3.mt-0|h3 without top margin\r\nh2.mt-0|h2 without top margin\r\np.mb-6|p bottom margin\r\nimg.rounded-full|img rounded\r\ndiv.float-right.ml-6.mb-6.not-prose|div right\r\ndiv.float-left.mr-6.mb-6.not-prose|div left\r\ndiv.caption|div caption"
-    wordcount:
-      enable: true
-      show_remaining: true
-      show_paragraphs: true
-      show_word_count: true
-      show_char_count: true
-      count_bytes: false
-      count_spaces: false
-      count_html: 0
-      count_line_breaks: false
-      max_words: -1
-      max_chars: -1
-      hard_limit: 1
+    ckeditor5_heading:
+      enabled_headings:
+        - heading2
+        - heading3
+        - heading4
+        - heading5
+        - heading6
+    ckeditor5_style:
+      styles:
+        -
+          label: 'h3 without top margin'
+          element: '<h3 class="mt-0">'
+        -
+          label: 'h2 without top margin'
+          element: '<h2 class="mt-0">'
+        -
+          label: 'p bottom margin'
+          element: '<p class="mb-6">'
+    ckeditor5_sourceEditing:
+      allowed_tags:
+        - '<cite>'
+        - '<dl>'
+        - '<dt>'
+        - '<dd>'
+        - '<div>'
+        - '<img src alt height width data-entity-type data-entity-uuid data-align data-caption>'
+        - '<a hreflang>'
+        - '<blockquote cite>'
+        - '<ul type>'
+        - '<ol type>'
+        - '<h4 id>'
+        - '<h5 id>'
+        - '<h6 id>'
+        - '<h3 id>'
+        - '<h2 id>'
+    ckeditor5_list:
+      reversed: false
+      startIndex: true
 image_upload:
   status: true
   scheme: public

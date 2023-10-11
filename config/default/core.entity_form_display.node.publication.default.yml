@@ -52,6 +52,7 @@ dependencies:
     - node.type.publication
   module:
     - address
+    - allowed_formats
     - datetime
     - field_group
     - isbn
@@ -164,7 +165,7 @@ third_party_settings:
         - field_parent
       label: 'Coming soon...'
       region: hidden
-      parent_name: group_legacy_fields_do_not_use
+      parent_name: ''
       weight: 21
       format_type: details
       format_settings:
@@ -187,7 +188,10 @@ content:
       summary_rows: 3
       placeholder: ''
       show_summary: false
-    third_party_settings: {  }
+    third_party_settings:
+      allowed_formats:
+        hide_help: '1'
+        hide_guidelines: '0'
   created:
     type: datetime_timestamp
     weight: 19
