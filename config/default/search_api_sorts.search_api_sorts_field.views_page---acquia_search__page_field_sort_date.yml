@@ -1,0 +1,11 @@
+uuid: fb5d93e1-68a2-4d6a-bc93-3a3d1390f49f
+langcode: en
+status: true
+dependencies: {  }
+id: views_page---acquia_search__page_field_sort_date
+label: Date
+weight: 0
+display_id: views_page---acquia_search__page
+field_identifier: field_sort_date
+default_sort: false
+default_order: desc
