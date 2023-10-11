@@ -10,12 +10,28 @@
     },
     "repositories": {
       "drupal": {
-      "type": "composer",
-      "url": "https://packages.drupal.org/8"
+        "type": "composer",
+        "url": "https://packages.drupal.org/8",
+        "exclude": [
+          "drupal/facets_country"
+        ]
+      },
+      "facets_country": {
+        "type": "package",
+        "package": {
+          "name": "drupal/facets_country",
+          "version": "dev-2.x",
+          "type": "drupal-module",
+          "source": {
+            "type": "git",
+            "url": "https://git.drupalcode.org/issue/facets_country-3392705.git",
+            "reference": "2.x"
+          }
+        }
       },
       "asset-packagist": {
-      "type": "composer",
-      "url": "https://asset-packagist.org"
+        "type": "composer",
+        "url": "https://asset-packagist.org"
       },
       "ckwordcount": {
       "type": "package",
@@ -89,7 +105,7 @@
         "drupal/ds": "^3.9",
         "drupal/eu_cookie_compliance": "^1.14",
         "drupal/facets": "^2.0",
-        "drupal/facets_country": "1.x-dev@dev",
+        "drupal/facets_country": "dev-2.x",
         "drupal/field_formatter": "^3.0",
         "drupal/field_formatter_file_size": "^2.0",
         "drupal/field_group": "^3.1",
@@ -317,6 +333,9 @@
           },
           "drupal/responsive_menu": {
             "3297963": "https://www.drupal.org/files/issues/2023-04-18/d10-compatibility-3297964-12.patch"
+          },
+          "drupal/readmore_js": {
+            "3385364": "https://www.drupal.org/files/issues/2023-09-06/drupal-10-compatibility-fixes-3385364-2.patch"
           }
         }
     }

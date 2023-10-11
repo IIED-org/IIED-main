@@ -3,7 +3,7 @@
         'name' => 'drupal/recommended-project',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '3c366997682ddbb2c6ec21611ba0445f23709d31',
+        'reference' => 'ab464218e3b212d3b334663a816a6f92682860fa',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -998,14 +998,12 @@
             'dev_requirement' => false,
         ),
         'drupal/facets_country' => array(
-            'pretty_version' => 'dev-1.x',
-            'version' => 'dev-1.x',
-            'reference' => '10c6be351945655f04944d6f8265d1dc7de98797',
+            'pretty_version' => 'dev-2.x',
+            'version' => 'dev-2.x',
+            'reference' => '2.x',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/facets_country',
-            'aliases' => array(
-                0 => '1.x-dev',
-            ),
+            'aliases' => array(),
             'dev_requirement' => false,
         ),
         'drupal/fakeobjects' => array(
@@ -1605,7 +1603,7 @@
         'drupal/recommended-project' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '3c366997682ddbb2c6ec21611ba0445f23709d31',
+            'reference' => 'ab464218e3b212d3b334663a816a6f92682860fa',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

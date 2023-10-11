@@ -6528,47 +6528,15 @@
         },
         {
             "name": "drupal/facets_country",
-            "version": "dev-1.x",
-            "version_normalized": "dev-1.x",
+            "version": "dev-2.x",
+            "version_normalized": "dev-2.x",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/project/facets_country.git",
-                "reference": "10c6be351945655f04944d6f8265d1dc7de98797"
-            },
-            "require": {
-                "drupal/core": "^8 || ^9",
-                "drupal/facets": "*"
+                "url": "https://git.drupalcode.org/issue/facets_country-3392705.git",
+                "reference": "2.x"
             },
             "type": "drupal-module",
-            "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
-                "drupal": {
-                    "version": "8.x-1.0+1-dev",
-                    "datestamp": "1583746910",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
-                    }
-                }
-            },
             "installation-source": "source",
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "lammensj",
-                    "homepage": "https://www.drupal.org/user/1939186"
-                }
-            ],
-            "description": "Provides a Facets processor for translating country ISO-codes to their corresponding label",
-            "homepage": "https://www.drupal.org/project/facets_country",
-            "support": {
-                "source": "https://git.drupalcode.org/project/facets_country"
-            },
             "install-path": "../../docroot/modules/contrib/facets_country"
         },
         {
@@ -10777,7 +10745,7 @@
                     }
                 },
                 "patches_applied": {
-                    "Fix readmore_js to prevent scroll to top.": "https://git.drupalcode.org/issue/readmore_js-3312818/-/commit/67f2912296417d5a3db83045909323c73dcdd605.patch"
+                    "3385364": "https://www.drupal.org/files/issues/2023-09-06/drupal-10-compatibility-fixes-3385364-2.patch"
                 }
             },
             "installation-source": "dist",

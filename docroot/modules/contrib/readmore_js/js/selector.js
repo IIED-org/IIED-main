@@ -9,7 +9,7 @@
   Drupal.behaviors.readmore_js = {
     attach: function (context, settings) {
 
-      $('html', context).once('readmore_js').each(function () {
+      $(once('readmore_js', 'html', context)).each(function () {
         // Iterate all fields
         $.each( settings.readmore_js, function(index,value){
             // Instantiate new Readmore.
@@ -22,8 +22,7 @@
               blockCSS: 'display: inline-block; width: auto;',
               afterToggle: function(trigger, element, expanded) {
                 if(!expanded) { // The "Close" link was clicked
-                  // Would be good to make this optional, commenting out for now.
-                  // window.scrollTo({ top: element.offsetTop, behavior: 'smooth' });
+                 window.scrollTo({ top: element.offsetTop, behavior: 'smooth' });
                 }
               }
             });

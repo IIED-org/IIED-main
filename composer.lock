@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "68a4aba89b0da8784bcd4cfe2d89b87c",
+    "content-hash": "4bbef7333660927676b0c7eacf71cfc3",
     "packages": [
         {
             "name": "acquia/http-hmac-php",
@@ -4873,45 +4873,13 @@
         },
         {
             "name": "drupal/facets_country",
-            "version": "dev-1.x",
+            "version": "dev-2.x",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/project/facets_country.git",
-                "reference": "10c6be351945655f04944d6f8265d1dc7de98797"
+                "url": "https://git.drupalcode.org/issue/facets_country-3392705.git",
+                "reference": "2.x"
             },
-            "require": {
-                "drupal/core": "^8 || ^9",
-                "drupal/facets": "*"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
-                "drupal": {
-                    "version": "8.x-1.0+1-dev",
-                    "datestamp": "1583746910",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "lammensj",
-                    "homepage": "https://www.drupal.org/user/1939186"
-                }
-            ],
-            "description": "Provides a Facets processor for translating country ISO-codes to their corresponding label",
-            "homepage": "https://www.drupal.org/project/facets_country",
-            "support": {
-                "source": "https://git.drupalcode.org/project/facets_country"
-            }
+            "type": "drupal-module"
         },
         {
             "name": "drupal/fakeobjects",
@@ -22838,5 +22806,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }

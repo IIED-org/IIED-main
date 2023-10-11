@@ -1,7 +1,7 @@
 name: 'Readmore.js Formatter'
 type: module
 description: 'Field Formatter for collapsing and expanding long blocks of text with "Read more" and "Close" links.'
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^8 || ^9 || ^10
 package: 'Fields'
 dependencies:
   - drupal:field
