@@ -3,6 +3,8 @@
 namespace Drupal\Core\Database;
 
 use Composer\Autoload\ClassLoader;
+use Drupal\Core\Database\Event\StatementExecutionEndEvent;
+use Drupal\Core\Database\Event\StatementExecutionStartEvent;
 use Drupal\Core\Extension\ExtensionDiscovery;
 
 /**
@@ -122,6 +124,10 @@ abstract class Database {
       // logging object associated with it.
       if (!empty(self::$connections[$key])) {
         foreach (self::$connections[$key] as $connection) {
+          $connection->enableEvents([
+            StatementExecutionStartEvent::class,
+            StatementExecutionEndEvent::class,
+          ]);
           $connection->setLogger(self::$logs[$key]);
         }
       }
@@ -234,31 +240,13 @@ abstract class Database {
       $info = $info[mt_rand(0, count($info) - 1)];
     }
 
-    // Parse the prefix information.
-    // @todo in Drupal 10, fail hard if $info['prefix'] is an array.
-    // @see https://www.drupal.org/project/drupal/issues/3124382
-    if (!isset($info['prefix'])) {
-      // Default to an empty prefix.
-      $info['prefix'] = '';
-    }
-    elseif (is_array($info['prefix'])) {
-      $prefix = $info['prefix']['default'] ?? '';
-      unset($info['prefix']['default']);
-      // If there are keys left besides the 'default' one, we are in a
-      // multi-prefix scenario (for per-table prefixing, or migrations).
-      // In that case, we put the non-default keys in a 'extra_prefix' key
-      // to avoid mixing up with the normal 'prefix', which is a string since
-      // Drupal 9.1.0.
-      if (count($info['prefix'])) {
-        $info['extra_prefix'] = $info['prefix'];
-      }
-      $info['prefix'] = $prefix;
-    }
+    // Prefix information, default to an empty prefix.
+    $info['prefix'] = $info['prefix'] ?? '';
 
     // Backwards compatibility layer for Drupal 8 style database connection
     // arrays. Those have the wrong 'namespace' key set, or not set at all
     // for core supported database drivers.
-    if (empty($info['namespace']) || (strpos($info['namespace'], 'Drupal\\Core\\Database\\Driver\\') === 0)) {
+    if (empty($info['namespace']) || str_starts_with($info['namespace'], 'Drupal\\Core\\Database\\Driver\\')) {
       switch (strtolower($info['driver'])) {
         case 'mysql':
           $info['namespace'] = 'Drupal\\mysql\\Driver\\Database\\mysql';
@@ -468,6 +456,10 @@ abstract class Database {
     // If we have any active logging objects for this connection key, we need
     // to associate them with the connection we just opened.
     if (!empty(self::$logs[$key])) {
+      $new_connection->enableEvents([
+        StatementExecutionStartEvent::class,
+        StatementExecutionEndEvent::class,
+      ]);
       $new_connection->setLogger(self::$logs[$key]);
     }
 
@@ -706,31 +698,6 @@ abstract class Database {
 
     $connection_class = $namespace . '\\Connection';
     return $connection_class::createUrlFromConnectionOptions($db_info['default']);
-  }
-
-  /**
-   * Gets the PHP namespace of a database driver from the connection info.
-   *
-   * @param array $connection_info
-   *   The database connection information, as defined in settings.php. The
-   *   structure of this array depends on the database driver it is connecting
-   *   to.
-   *
-   * @return string
-   *   The PHP namespace of the driver's database.
-   *
-   * @deprecated in drupal:9.1.0 and is removed from drupal:10.0.0. There is no
-   *   replacement as $connection_info['namespace'] is always set.
-   *
-   * @see https://www.drupal.org/node/3127769
-   */
-  protected static function getDatabaseDriverNamespace(array $connection_info) {
-    @trigger_error(__METHOD__ . " is deprecated in drupal:9.1.0 and is removed from drupal:10.0.0. There is no replacement as \$connection_info['namespace'] is always set. See https://www.drupal.org/node/3127769.", E_USER_DEPRECATED);
-    if (isset($connection_info['namespace'])) {
-      return $connection_info['namespace'];
-    }
-    // Fallback for when the namespace is not provided in settings.php.
-    return 'Drupal\\' . $connection_info['driver'] . '\\Driver\\Database\\' . $connection_info['driver'];
   }
 
   /**

@@ -66,7 +66,7 @@ class ContentEntityNormalizer extends NormalizerBase {
   /**
    * {@inheritdoc}
    */
-  public function normalize($entity, $format = NULL, array $context = []) {
+  public function normalize($entity, $format = NULL, array $context = []): array|string|int|float|bool|\ArrayObject|NULL {
     $context += [
       'account' => NULL,
       'included_fields' => NULL,
@@ -123,7 +123,7 @@ class ContentEntityNormalizer extends NormalizerBase {
    *
    * @throws \Symfony\Component\Serializer\Exception\UnexpectedValueException
    */
-  public function denormalize($data, $class, $format = NULL, array $context = []) {
+  public function denormalize($data, $class, $format = NULL, array $context = []): mixed {
     // Get type, necessary for determining which bundle to create.
     if (!isset($data['_links']['type'])) {
       throw new UnexpectedValueException('The type link relation must be specified.');

@@ -255,6 +255,14 @@ class DateList extends DateBase implements TrustedCallbackInterface {
         $validate_callback[0] = DateList::class;
       }
     }
+
+    // Copy the datelist element's states to child inputs.
+    if (isset($element['#states'])) {
+      foreach (Element::children($element) as $key) {
+        $element[$key]['#states'] = $element['#states'];
+      }
+    }
+
     return $element;
   }
 

@@ -1,25 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drush\Sql;
 
 use PDO;
 
 class SqlMysql extends SqlBase
 {
+    public string $queryExtra = '-A';
 
-    public $queryExtra = '-A';
-
-    public function command()
+    public function command(): string
     {
         return 'mysql';
     }
 
-    public function creds($hide_password = true)
+    public function creds($hide_password = true): string
     {
         $dbSpec = $this->getDbSpec();
         if ($hide_password) {
             // Default to unix socket if configured.
-            $unixSocket = !empty($dbSpec['unix_socket']) ? 'socket="' . $dbSpec['unix_socket'] . '"' : '';
+            $unixSocket = empty($dbSpec['unix_socket']) ? '' : 'socket="' . $dbSpec['unix_socket'] . '"';
 
             // EMPTY password is not the same as NO password, and is valid.
             $contents = <<<EOT
@@ -84,12 +85,12 @@ EOT;
         return $this->paramsToOptions($parameters);
     }
 
-    public function silent()
+    public function silent(): string
     {
         return '--silent';
     }
 
-    public function createdbSql($dbname, $quoted = false)
+    public function createdbSql($dbname, $quoted = false): string
     {
         $dbSpec = $this->getDbSpec();
         if ($quoted) {
@@ -120,13 +121,13 @@ EOT;
     /**
      * @inheritdoc
      */
-    public function dbExists()
+    public function dbExists(): bool
     {
         // Suppress output. We only care about return value.
         return $this->alwaysQuery("SELECT 1;");
     }
 
-    public function listTables()
+    public function listTables(): array
     {
         $tables = [];
         $this->alwaysQuery('SHOW TABLES;');
@@ -136,7 +137,7 @@ EOT;
         return $tables;
     }
 
-    public function listTablesQuoted()
+    public function listTablesQuoted(): array
     {
         $tables = $this->listTables();
         foreach ($tables as &$table) {
@@ -145,7 +146,7 @@ EOT;
         return $tables;
     }
 
-    public function dumpCmd($table_selection)
+    public function dumpCmd($table_selection): string
     {
         $dbSpec = $this->getDbSpec();
         $parens = false;
@@ -186,7 +187,7 @@ EOT;
                 $ignores[] = '--ignore-table=' . $dbSpec['database'] . '.' . $table;
                 $parens = true;
             }
-            $exec .= ' '. implode(' ', $ignores);
+            $exec .= ' ' . implode(' ', $ignores);
 
             // Run mysqldump again and append output if we need some structure only tables.
             if (!empty($structure_tables)) {

@@ -6,9 +6,9 @@
 
   Drupal.behaviors.ginLbToolbar = {
     attach: (context) => {
-      once('glb-primary-save', '.glb-primary-save ').forEach((item)=>{
+      once('glb-primary-save', '.js-glb-primary-save').forEach((item)=>{
         item.addEventListener('click', function (event) {
-          document.querySelector('#gin_sidebar .form-actions .glb-button--primary').click();
+          document.querySelector('#gin_sidebar .form-actions .js-glb-button--primary').click();
         });
       })
     }

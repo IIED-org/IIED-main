@@ -1,33 +1,44 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Drush\Commands;
 
 use Consolidation\AnnotatedCommand\CommandData;
+use Consolidation\AnnotatedCommand\Hooks\HookManager;
+use Consolidation\SiteProcess\ProcessManagerAwareInterface;
+use Consolidation\SiteProcess\ProcessManagerAwareTrait;
+use Drush\Attributes as CLI;
+use Drush\Config\ConfigAwareTrait;
 use Drush\Drush;
+use Drush\Exec\ExecTrait;
+use Drush\Log\DrushLoggerManager;
 use Drush\Style\DrushStyle;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Middleware;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use Psr\Log\LoggerInterface;
-use Drush\Config\ConfigAwareTrait;
-use Drush\Exec\ExecTrait;
+use Robo\Common\IO;
 use Robo\Contract\ConfigAwareInterface;
 use Robo\Contract\IOAwareInterface;
-use Robo\Common\IO;
 use Symfony\Component\Console\Input\InputOption;
-use Consolidation\SiteProcess\ProcessManagerAwareTrait;
-use Consolidation\SiteProcess\ProcessManagerAwareInterface;
-use Webmozart\PathUtil\Path;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Filesystem\Path;
 
 abstract class DrushCommands implements IOAwareInterface, LoggerAwareInterface, ConfigAwareInterface, ProcessManagerAwareInterface
 {
     use ProcessManagerAwareTrait;
     use ExecTrait;
+    use ConfigAwareTrait;
+    use LoggerAwareTrait;
+    use IO {
+        io as roboIo;
+    }
 
     // This is more readable.
-    const REQ=InputOption::VALUE_REQUIRED;
-    const OPT=InputOption::VALUE_OPTIONAL;
+    const REQ = InputOption::VALUE_REQUIRED;
+    const OPT = InputOption::VALUE_OPTIONAL;
 
     // Common exit codes.
     const EXIT_SUCCESS = 0;
@@ -35,16 +46,7 @@ abstract class DrushCommands implements IOAwareInterface, LoggerAwareInterface, 
     // Used to signal that the command completed successfully, but we still want to indicate a failure to the caller.
     const EXIT_FAILURE_WITH_CLARITY = 3;
 
-    use LoggerAwareTrait;
-    use ConfigAwareTrait;
-    use IO {
-        io as roboIo;
-    }
-
-    /**
-     * @var CommandData
-     */
-    protected $commandData;
+    protected ?CommandData $commandData = null;
 
     public function __construct()
     {
@@ -53,7 +55,7 @@ abstract class DrushCommands implements IOAwareInterface, LoggerAwareInterface, 
     /**
      * Override Robo's IO function with our custom style.
      */
-    protected function io()
+    protected function io(): SymfonyStyle
     {
         if (!$this->io) {
             // Specify our own Style class when needed.
@@ -64,10 +66,8 @@ abstract class DrushCommands implements IOAwareInterface, LoggerAwareInterface, 
 
     /**
      * Returns a logger object.
-     *
-     * @return LoggerInterface
      */
-    protected function logger()
+    protected function logger(): ?DrushLoggerManager
     {
         return $this->logger;
     }
@@ -78,9 +78,9 @@ abstract class DrushCommands implements IOAwareInterface, LoggerAwareInterface, 
      * @param string $file
      *   Full path to a file.
      */
-    protected function printFile($file)
+    protected function printFile(string $file): void
     {
-        if ((substr($file, -4) == ".htm") || (substr($file, -5) == ".html")) {
+        if (str_ends_with($file, ".htm") || str_ends_with($file, ".html")) {
             $tmp_file = drush_tempnam(basename($file));
             file_put_contents($tmp_file, drush_html_to_text(file_get_contents($file)));
             $file = $tmp_file;
@@ -99,11 +99,8 @@ abstract class DrushCommands implements IOAwareInterface, LoggerAwareInterface, 
 
     /**
      * Persist commandData for use in primary command callback. Used by 'topic' commands.
-     *
-     * @hook pre-command *
-     *
-     * @param \Consolidation\AnnotatedCommand\CommandData $commandData
      */
+    #[CLI\Hook(type: HookManager::PRE_COMMAND_HOOK, target: '*')]
     public function preHook(CommandData $commandData)
     {
         $this->commandData = $commandData;
@@ -126,7 +123,7 @@ abstract class DrushCommands implements IOAwareInterface, LoggerAwareInterface, 
      *
      * @see https://stackoverflow.com/questions/32681165/how-do-you-log-all-api-calls-using-guzzle-6.
      */
-    protected function getStack(): \GuzzleHttp\HandlerStack
+    protected function getStack(): HandlerStack
     {
         $stack = HandlerStack::create();
         $stack->push(Middleware::log($this->logger(), new MessageFormatter(Drush::debug() ? MessageFormatter::DEBUG : MessageFormatter::SHORT)));

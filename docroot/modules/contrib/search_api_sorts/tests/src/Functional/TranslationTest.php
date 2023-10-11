@@ -35,7 +35,7 @@ class TranslationTest extends SortsFunctionalBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  public function setUp(): void {
     parent::setUp();
 
     // Create FR language.

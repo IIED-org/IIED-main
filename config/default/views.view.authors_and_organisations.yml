@@ -17,7 +17,6 @@ dependencies:
     - options
     - taxonomy
     - user
-    - views_autocomplete_filters
 id: authors_and_organisations
 label: 'Authors, organisations and tags'
 module: views

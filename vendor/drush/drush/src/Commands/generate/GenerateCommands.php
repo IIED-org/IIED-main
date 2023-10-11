@@ -1,32 +1,39 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drush\Commands\generate;
 
-use Consolidation\SiteProcess\Util\Escape;
-use DrupalCodeGenerator\Command\BaseGenerator;
-use DrupalCodeGenerator\Command\GeneratorInterface;
-use DrupalCodeGenerator\GeneratorDiscovery;
-use DrupalCodeGenerator\Helper\Dumper;
-use DrupalCodeGenerator\Helper\Renderer;
-use Drush\Boot\AutoloaderAwareInterface;
-use Drush\Boot\AutoloaderAwareTrait;
+use Drush\Attributes as CLI;
+use Drush\Commands\core\DocsCommands;
 use Drush\Commands\DrushCommands;
-use Drush\Commands\generate\Helper\InputHandler;
-use Drush\Commands\generate\Helper\OutputHandler;
 use Drush\Commands\help\ListCommands;
-use Drush\Drupal\DrushServiceModifier;
-use Drush\Drush;
-use Robo\ClassDiscovery\RelativeNamespaceDiscovery;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Filesystem\Filesystem;
+use Psr\Container\ContainerInterface as DrushContainer;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Completion\CompletionInput;
+use Symfony\Component\Console\Completion\CompletionSuggestions;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-/**
- * Drush generate command.
- */
-class GenerateCommands extends DrushCommands implements AutoloaderAwareInterface
+final class GenerateCommands extends DrushCommands
 {
-    use AutoloaderAwareTrait;
+    const GENERATE = 'generate';
+
+    protected function __construct(
+        private ContainerInterface $container,
+        private DrushContainer $drush_container,
+    ) {
+    }
+
+    public static function create(ContainerInterface $container, DrushContainer $drush_container): self
+    {
+        $commandHandler = new static(
+            $container,
+            $drush_container,
+        );
+
+        return $commandHandler;
+    }
 
     /**
      * Generate boilerplate code for modules/plugins/services etc.
@@ -34,162 +41,82 @@ class GenerateCommands extends DrushCommands implements AutoloaderAwareInterface
      * Drush asks questions so that the generated code is as polished as possible. After
      * generating, Drush lists the files that were created.
      *
-     * @command generate
-     * @aliases gen
-     * @param string $generator A generator name. Omit to pick from available Generators.
-     * @option answers A JSON string containing pairs of question and answers.
-     * @option directory Absolute path to a base directory for file writing.
-     * @usage drush generate
-     *  Pick from available generators and then run it.
-     * @usage drush generate controller
-     *  Generate a controller class for your module.
-     * @usage drush generate drush-command-file
-     *  Generate a Drush commandfile for your module.
-     * @topics docs:generators
-     * @bootstrap max
+     * See https://github.com/Chi-teck/drupal-code-generator for a README and bug reports.
      */
-    public function generate($generator = '', $options = ['answers' => self::REQ, 'directory' => self::REQ])
+    #[CLI\Command(name: self::GENERATE, aliases: ['gen'])]
+    #[CLI\Argument(name: 'generator', description: 'A generator name. Omit to pick from available Generators.')]
+    #[CLI\Option(name: 'working-dir', description: 'Absolute path to working directory.')]
+    #[CLI\Option(name: 'dry-run', description: 'Output the generated code but not save it to file system.')]
+    #[CLI\Option(name: 'answer', description: 'Answer to generator question.')]
+    #[CLI\Option(name: 'destination', description: 'Path to a base directory for file writing.')]
+    #[CLI\Usage(name: 'drush generate', description: 'Pick from available generators and then run it.')]
+    #[CLI\Usage(name: 'drush generate drush-command-file', description: 'Generate a Drush commandfile for your module.')]
+    #[CLI\Usage(name: 'drush generate controller --answer=Example --answer=example', description: 'Generate a controller class and pre-fill the first two questions in the wizard.')]
+    #[CLI\Usage(name: 'drush generate controller -vvv --dry-run', description: 'Learn all the potential answers so you can re-run with several --answer options.')]
+    #[CLI\Topics(topics: [DocsCommands::GENERATORS])]
+    #[CLI\Complete(method_name_or_callable: 'generatorNameComplete')]
+    public function generate(string $generator = '', $options = ['replace' => false, 'working-dir' => self::REQ, 'answer' => [], 'destination' => self::REQ, 'dry-run' => false]): int
     {
-        // Disallow default Symfony console commands.
-        if ($generator == 'help' || $generator == 'list') {
-            $generator = null;
-        }
+        $application = (new ApplicationFactory($this->container, $this->drush_container, $this->logger()))->create();
 
-        $application = $this->createApplication();
-        if (!$generator) {
+        if (!$generator || $generator == 'list') {
             $all = $application->all();
-            unset($all['help'], $all['list']);
-            $namespaced = ListCommands::categorize($all, '-');
+            unset($all['help'], $all['list'], $all['completion']);
+            $namespaced = ListCommands::categorize($all);
             $preamble = dt('Run `drush generate [command]` and answer a few questions in order to write starter code to your project.');
             ListCommands::renderListCLI($application, $namespaced, $this->output(), $preamble);
-            return null;
-        } else {
-            // Symfony console cannot recognize the command by alias when
-            // multiple commands have the same prefix.
-            if ($generator == 'module') {
-                $generator = 'module-standard';
-            }
-
-            // Create an isolated input.
-            $argv = [
-                $generator,
-                '--answers=' .  Escape::shellArg($options['answers'], 'LINUX'),
-                '--directory=' . $options['directory']
-            ];
-            if ($options['ansi']) {
-                $argv[] = '--ansi';
-            }
-            if ($options['no-ansi']) {
-                $argv[] = '--no-ansi';
-            }
-            return $application->run(new StringInput(implode(' ', $argv)));
+            return self::EXIT_SUCCESS;
         }
+
+        // Symfony console app does not provide any way to remove registered commands.
+        if ($generator === 'completion') {
+            $this->io()->getErrorStyle()->error('Command "completion" is not defined.');
+            return Command::FAILURE;
+        }
+
+        // Create an isolated input.
+        $argv = ['dcg', $generator];
+
+        $argv[] = '--full-path';
+        if ($options['yes']) {
+            $argv[] = '--replace';
+        }
+        if ($options['working-dir']) {
+            $argv[] = '--working-dir=' . $options['working-dir'];
+        }
+        // annotated-command does not support short options (e.g. '-a' for answer).
+        foreach ($options['answer'] as $answer) {
+            $argv[] = '--answer=' . $answer;
+        }
+        if ($options['destination']) {
+            $argv[] = '--destination=' . $options['destination'];
+        }
+        if ($options['ansi']) {
+            $argv[] = '--ansi';
+        }
+        // @todo Why is this option missing?
+        if (!empty($options['no-ansi'])) {
+            $argv[] = '--no-ansi';
+        }
+        if ($options['dry-run']) {
+            $argv[] = '--dry-run';
+        }
+
+        return $application->run(new ArgvInput($argv), $this->output());
     }
 
     /**
-     * Creates Drush generate application.
-     *
-     * @return \Symfony\Component\Console\Application
-     *   Symfony console application.
+     * Generates completion for generator names.
      */
-    protected function createApplication()
+    public function generatorNameComplete(CompletionInput $input, CompletionSuggestions $suggestions): void
     {
-        $application = new Application('Drush generate', Drush::getVersion());
-        $helperSet = $application->getHelperSet();
-
-        $override = null;
-        if (Drush::affirmative()) {
-            $override = true;
-        } elseif (Drush::negative()) {
-            $override = false;
-        }
-        $dumper = new Dumper(new Filesystem(), $override);
-        $helperSet->set($dumper);
-
-        $twig_loader = new \Twig_Loader_Filesystem();
-        $renderer = new Renderer(\dcg_get_twig_environment($twig_loader));
-        $helperSet->set($renderer);
-
-        $helperSet->set(new InputHandler());
-        $helperSet->set(new OutputHandler());
-
-        // Discover generators.
-        $discovery = new GeneratorDiscovery(new Filesystem());
-
-        /**
-         * Discover generators.
-         */
-        $dcg_generators = $discovery->getGenerators([DCG_ROOT . '/src/Command/Drupal_8'], '\DrupalCodeGenerator\Command\Drupal_8');
-        $drush_generators = $discovery->getGenerators([__DIR__ . '/Generators'], '\Drush\Commands\generate\Generators');
-        $config_paths = $this->getConfig()->get('runtime.commandfile.paths', []);
-
-        $global_paths = [];
-
-        foreach ($config_paths as $path) {
-            $global_paths[] = $path . '/Generators';
-            $global_paths[] = $path . '/src/Generators';
-        }
-
-        $global_paths = array_filter($global_paths, 'file_exists');
-        $global_generators_deprecated =  $discovery->getGenerators($global_paths, '\Drush\Generators');
-        $global_generators = $this->discoverPsr4Generators();
-
-        $module_generators = [];
-
-        if (Drush::bootstrapManager()->hasBootstrapped(DRUSH_BOOTSTRAP_DRUPAL_FULL)) {
-            $container = \Drupal::getContainer();
-            if ($container->has(DrushServiceModifier::DRUSH_GENERATOR_SERVICES)) {
-                $module_generators = $container->get(DrushServiceModifier::DRUSH_GENERATOR_SERVICES)->getCommandList();
+        if ($input->mustSuggestArgumentValuesFor('generator')) {
+            $application = (new ApplicationFactory($this->container, $this->logger()))->create();
+            foreach ($application->all() as $name => $command) {
+                if ($command->isEnabled() && !$command->isHidden()) {
+                    $suggestions->suggestValue($name);
+                }
             }
         }
-
-        /** @var \Symfony\Component\Console\Command\Command[] $generators */
-        $generators = array_merge(
-            $dcg_generators,
-            $drush_generators,
-            $global_generators,
-            $global_generators_deprecated,
-            $module_generators
-        );
-
-        foreach ($generators as $generator) {
-            $sub_names = explode(':', $generator->getName());
-            if ($sub_names[0] == 'd8') {
-                // Remove d8 namespace.
-                array_shift($sub_names);
-            }
-            $new_name = implode('-', $sub_names);
-            $generator->setName($new_name);
-            // Remove alias if it is same as new name.
-            if ($aliases = $generator->getAliases()) {
-                $generator->setAliases(array_diff($aliases, [$new_name]));
-            }
-        }
-
-        $application->addCommands($generators);
-
-        $application->setAutoExit(false);
-        return $application;
-    }
-
-    protected function discoverPsr4Generators(): array
-    {
-        $generators = (new RelativeNamespaceDiscovery($this->autoloader()))
-          ->setRelativeNamespace('Drush\Generators')
-          ->setSearchPattern('/.*Generator\.php$/')
-          ->getClasses();
-
-        return array_map(
-            function (string $class): GeneratorInterface {
-                return new $class;
-            },
-            array_filter($generators, function (string $class): bool {
-                $reflectionClass = new \ReflectionClass($class);
-                return $reflectionClass->isSubclassOf(BaseGenerator::class)
-                  && !$reflectionClass->isAbstract()
-                  && !$reflectionClass->isInterface()
-                  && !$reflectionClass->isTrait();
-            })
-        );
     }
 }

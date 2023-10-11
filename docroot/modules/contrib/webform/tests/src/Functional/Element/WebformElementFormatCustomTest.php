@@ -51,7 +51,6 @@ class WebformElementFormatCustomTest extends WebformElementBrowserTestBase {
     $fid = (int) \Drupal::database()->query('SELECT MAX(fid) FROM {file_managed}')->fetchField();
     $file = File::load($fid);
     $file_name = $file->getFilename();
-    $file_size = $file->getSize();
     $file_url = $file->createFileUrl(FALSE);
 
     /* ********************************************************************** */

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Drush\Preflight;
 
 use Consolidation\Config\ConfigInterface;
@@ -14,7 +17,7 @@ interface PreflightArgsInterface
      * of dashes (one or two, as desired), and should end with a '='
      * if the option requires a value.
      */
-    public function optionsWithValues();
+    public function optionsWithValues(): array;
 
     /**
      * Copy any applicable arguments into the provided configuration
@@ -53,7 +56,7 @@ interface PreflightArgsInterface
      *
      * @param string $arg One argument
      */
-    public function addArg($arg);
+    public function addArg(string $arg);
 
     /**
      * Add everything in the provided array to the list returned by `args()`
@@ -78,5 +81,5 @@ interface PreflightArgsInterface
      *
      * @param string $alias The alias name '@site'
      */
-    public function setAlias($alias);
+    public function setAlias(string $alias);
 }

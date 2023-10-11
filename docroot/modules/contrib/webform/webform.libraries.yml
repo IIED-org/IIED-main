@@ -1329,14 +1329,14 @@ libraries.popperjs:
 
 libraries.tippyjs:
   remote: https://github.com/atomiks/tippyjs
-  version: '6.2.6'
+  version: '6.3.7'
   license:
     name: MIT
     url: https://github.com/atomiks/tippyjs/blob/master/LICENSE
     gpl-compatible: true
   directory: tippyjs
   cdn:
-    /libraries/tippyjs/dist/: https://unpkg.com/tippy.js@6.2.6/dist/
+    /libraries/tippyjs/dist/: https://unpkg.com/tippy.js@6.3.7/dist/
   js:
     /libraries/tippyjs/dist/tippy-bundle.umd.js: { }
   dependencies:

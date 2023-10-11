@@ -43,10 +43,17 @@ class WebformMailHelper {
   public static function formatAddress(string $address, string $name = '') {
     // Remove less than (<) and greater (>) than from name.
     $name = preg_replace('/[<>]/', '', $name);
-
-    $mime_address = new Address($address, $name);
-    $mailbox_header = new MailboxHeader('Temp', $mime_address);
-    return $mailbox_header->getBodyAsString();
+    // Issue #3371600 Email name and address details issue when
+    // using Mimemail formatter for languages other than English.
+    // @see https://www.drupal.org/project/webform/issues/3371600
+    if (\Drupal::moduleHandler()->moduleExists('mimemail')) {
+      return $name ? "$name <$address>" : $address;
+    }
+    else {
+      $mime_address = new Address($address, $name);
+      $mailbox_header = new MailboxHeader('Temp', $mime_address);
+      return $mailbox_header->getBodyAsString();
+    }
   }
 
 }

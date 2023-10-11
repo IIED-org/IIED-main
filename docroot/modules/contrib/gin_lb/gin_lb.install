@@ -16,26 +16,25 @@ function gin_lb_update_8001() {
 }
 
 /**
- * Set new Toastify loading config.
+ * Set new Toastify loading and safe behavior config.
  */
 function gin_lb_update_8002() {
   $config_factory = \Drupal::configFactory();
   $config = $config_factory->getEditable('gin_lb.settings');
   $toastify_loading = $config->get('toastify_cdn') ? 'cdn' : 'custom';
+  $config->clear('toastify_cdn');
   $config->set('toastify_loading', $toastify_loading);
   $config->set('safe_behavior', 'stay');
   $config->save(TRUE);
 }
 
 /**
- * Rename save_behavior variable and hide_discard_revert_buttons.
+ * Rename save_behavior variable and set hide_discard_revert_buttons.
  */
 function gin_lb_update_8003() {
   $config_factory = \Drupal::configFactory();
   $config = $config_factory->getEditable('gin_lb.settings');
-  $toastify_loading = $config->get('toastify_cdn') ? 'cdn' : 'custom';
-  $config->set('toastify_loading', $toastify_loading);
-  $config->set('safe_behavior', NULL);
+  $config->clear('safe_behavior');
   $config->set('save_behavior', 'stay');
   $hide_discard_revert_buttons = $config->get('hide_discard_revert_buttons') ?? TRUE;
   $config->set('hide_discard_revert_buttons', $hide_discard_revert_buttons);
@@ -43,7 +42,7 @@ function gin_lb_update_8003() {
 }
 
 /**
- * Spliting out configuration for "Discard Changes" and "Revert to defaults" buttons.
+ * Split configuration for "Discard Changes" and "Revert to defaults" buttons.
  */
 function gin_lb_update_8004() {
   $config_factory = \Drupal::configFactory();
@@ -52,5 +51,16 @@ function gin_lb_update_8004() {
   $config->set('hide_discard_button', $hide_discard_revert_buttons);
   $config->set('hide_revert_button', $hide_discard_revert_buttons);
   $config->clear('hide_discard_revert_buttons');
+  $config->save(TRUE);
+}
+
+/**
+ * Ensure toastify_cdn and safe_behavior config keys no more exist.
+ */
+function gin_lb_update_8005() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('gin_lb.settings');
+  $config->clear('toastify_cdn');
+  $config->clear('safe_behavior');
   $config->save(TRUE);
 }

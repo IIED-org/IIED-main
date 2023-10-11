@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * @file
@@ -8,7 +8,7 @@
 /**
  * Implements hook_requirements().
  */
-function sophron_requirements($phase) {
+function sophron_requirements(string $phase) {
   if ($phase === 'runtime') {
     return \Drupal::service('sophron.mime_map.manager')->requirements($phase);
   }

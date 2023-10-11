@@ -12,7 +12,7 @@ field_name: field_name
 entity_type: taxonomy_term
 bundle: person
 label: 'Full name'
-description: '<i><big><strong>Hint: </strong>''First name'' and ''Surname'' fields must be completed here as well as in the ''Name'' field in order to automatically generate citation information. Other fields are optional.</big></i>'
+description: "<i><big><strong>Hint: </strong>'First name' and 'Surname' fields must be completed here as well as in the 'Name' field in order to automatically generate citation information. Other fields are optional.</big></i>"
 required: true
 translatable: false
 default_value: {  }

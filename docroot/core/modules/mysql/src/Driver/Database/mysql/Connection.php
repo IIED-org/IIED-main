@@ -3,13 +3,14 @@
 namespace Drupal\mysql\Driver\Database\mysql;
 
 use Drupal\Core\Database\DatabaseAccessDeniedException;
-use Drupal\Core\Database\IntegrityConstraintViolationException;
 use Drupal\Core\Database\DatabaseExceptionWrapper;
-use Drupal\Core\Database\StatementWrapper;
+use Drupal\Core\Database\StatementWrapperIterator;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Database\DatabaseNotFoundException;
 use Drupal\Core\Database\DatabaseException;
 use Drupal\Core\Database\Connection as DatabaseConnection;
+use Drupal\Core\Database\DatabaseConnectionRefusedException;
+use Drupal\Core\Database\SupportsTemporaryTablesInterface;
 use Drupal\Core\Database\TransactionNoActiveException;
 
 /**
@@ -20,7 +21,7 @@ use Drupal\Core\Database\TransactionNoActiveException;
 /**
  * MySQL implementation of \Drupal\Core\Database\Connection.
  */
-class Connection extends DatabaseConnection {
+class Connection extends DatabaseConnection implements SupportsTemporaryTablesInterface {
 
   /**
    * Error code for "Unknown database" error.
@@ -31,6 +32,11 @@ class Connection extends DatabaseConnection {
    * Error code for "Access denied" error.
    */
   const ACCESS_DENIED = 1045;
+
+  /**
+   * Error code for "Connection refused".
+   */
+  const CONNECTION_REFUSED = 2002;
 
   /**
    * Error code for "Can't initialize character set" error.
@@ -50,12 +56,7 @@ class Connection extends DatabaseConnection {
   /**
    * {@inheritdoc}
    */
-  protected $statementClass = NULL;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $statementWrapperClass = StatementWrapper::class;
+  protected $statementWrapperClass = StatementWrapperIterator::class;
 
   /**
    * Flag to indicate if the cleanup function in __destruct() should run.
@@ -102,38 +103,22 @@ class Connection extends DatabaseConnection {
     // @see https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sqlmode_ansi_quotes
     $ansi_quotes_modes = ['ANSI_QUOTES', 'ANSI', 'DB2', 'MAXDB', 'MSSQL', 'ORACLE', 'POSTGRESQL'];
     $is_ansi_quotes_mode = FALSE;
-    foreach ($ansi_quotes_modes as $mode) {
-      // None of the modes in $ansi_quotes_modes are substrings of other modes
-      // that are not in $ansi_quotes_modes, so a simple stripos() does not
-      // return false positives.
-      if (stripos($connection_options['init_commands']['sql_mode'], $mode) !== FALSE) {
-        $is_ansi_quotes_mode = TRUE;
-        break;
+    if (isset($connection_options['init_commands']['sql_mode'])) {
+      foreach ($ansi_quotes_modes as $mode) {
+        // None of the modes in $ansi_quotes_modes are substrings of other modes
+        // that are not in $ansi_quotes_modes, so a simple stripos() does not
+        // return false positives.
+        if (stripos($connection_options['init_commands']['sql_mode'], $mode) !== FALSE) {
+          $is_ansi_quotes_mode = TRUE;
+          break;
+        }
       }
     }
+
     if ($this->identifierQuotes === ['"', '"'] && !$is_ansi_quotes_mode) {
       $this->identifierQuotes = ['`', '`'];
     }
     parent::__construct($connection, $connection_options);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function handleQueryException(\PDOException $e, $query, array $args = [], $options = []) {
-    // In case of attempted INSERT of a record with an undefined column and no
-    // default value indicated in schema, MySql returns a 1364 error code.
-    // Throw an IntegrityConstraintViolationException here like the other
-    // drivers do, to avoid the parent class to throw a generic
-    // DatabaseExceptionWrapper instead.
-    if (!empty($e->errorInfo[1]) && $e->errorInfo[1] === 1364) {
-      @trigger_error('Connection::handleQueryException() is deprecated in drupal:9.2.0 and is removed in drupal:10.0.0. Get a handler through $this->exceptionHandler() instead, and use one of its methods. See https://www.drupal.org/node/3187222', E_USER_DEPRECATED);
-      $query_string = ($query instanceof StatementInterface) ? $query->getQueryString() : $query;
-      $message = $e->getMessage() . ": " . $query_string . "; " . print_r($args, TRUE);
-      throw new IntegrityConstraintViolationException($message, is_int($e->getCode()) ? $e->getCode() : 0, $e);
-    }
-
-    parent::handleQueryException($e, $query, $args, $options);
   }
 
   /**
@@ -189,13 +174,36 @@ class Connection extends DatabaseConnection {
       $pdo = new \PDO($dsn, $connection_options['username'], $connection_options['password'], $connection_options['pdo']);
     }
     catch (\PDOException $e) {
-      if ($e->getCode() == static::DATABASE_NOT_FOUND) {
-        throw new DatabaseNotFoundException($e->getMessage(), $e->getCode(), $e);
+      switch ($e->getCode()) {
+        case static::CONNECTION_REFUSED:
+          if (isset($connection_options['unix_socket'])) {
+            // Show message for socket connection via 'unix_socket' option.
+            $message = 'Drupal is configured to connect to the database server via a socket, but the socket file could not be found.';
+            $message .= ' This message normally means that there is no MySQL server running on the system or that you are using an incorrect Unix socket file name when trying to connect to the server.';
+            throw new DatabaseConnectionRefusedException($e->getMessage() . ' [Tip: ' . $message . '] ', $e->getCode(), $e);
+          }
+          if (isset($connection_options['host']) && in_array(strtolower($connection_options['host']), ['', 'localhost'], TRUE)) {
+            // Show message for socket connection via 'host' option.
+            $message = 'Drupal was attempting to connect to the database server via a socket, but the socket file could not be found.';
+            $message .= ' A Unix socket file is used if you do not specify a host name or if you specify the special host name localhost.';
+            $message .= ' To connect via TPC/IP use an IP address (127.0.0.1 for IPv4) instead of "localhost".';
+            $message .= ' This message normally means that there is no MySQL server running on the system or that you are using an incorrect Unix socket file name when trying to connect to the server.';
+            throw new DatabaseConnectionRefusedException($e->getMessage() . ' [Tip: ' . $message . '] ', $e->getCode(), $e);
+          }
+          // Show message for TCP/IP connection.
+          $message = 'This message normally means that there is no MySQL server running on the system or that you are using an incorrect host name or port number when trying to connect to the server.';
+          $message .= ' You should also check that the TCP/IP port you are using has not been blocked by a firewall or port blocking service.';
+          throw new DatabaseConnectionRefusedException($e->getMessage() . ' [Tip: ' . $message . '] ', $e->getCode(), $e);
+
+        case static::DATABASE_NOT_FOUND:
+          throw new DatabaseNotFoundException($e->getMessage(), $e->getCode(), $e);
+
+        case static::ACCESS_DENIED:
+          throw new DatabaseAccessDeniedException($e->getMessage(), $e->getCode(), $e);
+
+        default:
+          throw $e;
       }
-      if ($e->getCode() == static::ACCESS_DENIED) {
-        throw new DatabaseAccessDeniedException($e->getMessage(), $e->getCode(), $e);
-      }
-      throw $e;
     }
 
     // Force MySQL to use the UTF-8 character set. Also set the collation, if a
@@ -224,6 +232,11 @@ class Connection extends DatabaseConnection {
     $connection_options['init_commands'] += [
       'sql_mode' => "SET sql_mode = 'ANSI,TRADITIONAL'",
     ];
+    if (!empty($connection_options['isolation_level'])) {
+      $connection_options['init_commands'] += [
+        'isolation_level' => 'SET SESSION TRANSACTION ISOLATION LEVEL ' . strtoupper($connection_options['isolation_level']),
+      ];
+    }
 
     // Execute initial commands.
     foreach ($connection_options['init_commands'] as $sql) {
@@ -251,7 +264,7 @@ class Connection extends DatabaseConnection {
    * {@inheritdoc}
    */
   public function queryTemporary($query, array $args = [], array $options = []) {
-    $tablename = $this->generateTemporaryTableName();
+    $tablename = 'db_temporary_' . uniqid();
     $this->query('CREATE TEMPORARY TABLE {' . $tablename . '} Engine=MEMORY ' . $query, $args, $options);
     return $tablename;
   }

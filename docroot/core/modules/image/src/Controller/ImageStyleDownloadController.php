@@ -64,16 +64,11 @@ class ImageStyleDownloadController extends FileDownloadController {
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The system service.
    */
-  public function __construct(LockBackendInterface $lock, ImageFactory $image_factory, StreamWrapperManagerInterface $stream_wrapper_manager, FileSystemInterface $file_system = NULL) {
+  public function __construct(LockBackendInterface $lock, ImageFactory $image_factory, StreamWrapperManagerInterface $stream_wrapper_manager, FileSystemInterface $file_system) {
     parent::__construct($stream_wrapper_manager);
     $this->lock = $lock;
     $this->imageFactory = $image_factory;
     $this->logger = $this->getLogger('image');
-
-    if (!isset($file_system)) {
-      @trigger_error('Not defining the $file_system argument to ' . __METHOD__ . ' is deprecated in drupal:9.1.0 and will throw an error in drupal:10.0.0.', E_USER_DEPRECATED);
-      $file_system = \Drupal::service('file_system');
-    }
     $this->fileSystem = $file_system;
   }
 
@@ -144,7 +139,7 @@ class ImageStyleDownloadController extends FileDownloadController {
     $token = $request->query->get(IMAGE_DERIVATIVE_TOKEN, '');
     $token_is_valid = hash_equals($image_style->getPathToken($image_uri), $token)
       || hash_equals($image_style->getPathToken($scheme . '://' . $target), $token);
-    if (!$this->config('image.settings')->get('allow_insecure_derivatives') || strpos(ltrim($target, '\/'), 'styles/') === 0) {
+    if (!$this->config('image.settings')->get('allow_insecure_derivatives') || str_starts_with(ltrim($target, '\/'), 'styles/')) {
       $valid = $valid && $token_is_valid;
     }
 
@@ -268,7 +263,7 @@ class ImageStyleDownloadController extends FileDownloadController {
     $private_path = Settings::get('file_private_path');
     if ($private_path) {
       $private_path = realpath($private_path);
-      if ($private_path && strpos($image_path, $private_path) === 0) {
+      if ($private_path && str_starts_with($image_path, $private_path)) {
         return FALSE;
       }
     }

@@ -1,23 +1,27 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Drush;
 
 use Composer\Autoload\ClassLoader;
 use Consolidation\AnnotatedCommand\AnnotatedCommand;
-use Consolidation\AnnotatedCommand\CommandFileDiscovery;
-use Consolidation\Filter\Hooks\FilterHooks;
 use Consolidation\SiteAlias\SiteAliasManager;
 use Drush\Boot\BootstrapManager;
+use Drush\Drush;
+use Drush\Boot\DrupalBootLevels;
 use Drush\Command\RemoteCommandProxy;
-use Drush\Commands\DrushCommands;
 use Drush\Config\ConfigAwareTrait;
-use Drush\Log\LogLevel;
 use Drush\Runtime\RedispatchHook;
 use Drush\Runtime\TildeExpansionHook;
+use Drush\Runtime\ServiceManager;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Robo\ClassDiscovery\RelativeNamespaceDiscovery;
 use Robo\Contract\ConfigAwareInterface;
+use Robo\Robo;
 use Symfony\Component\Console\Application as SymfonyApplication;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -48,19 +52,25 @@ class Application extends SymfonyApplication implements LoggerAwareInterface, Co
     /** @var TildeExpansionHook */
     protected $tildeExpansionHook;
 
+    /** @var ServiceManager */
+    protected $serviceManager;
+
     /**
      * Add global options to the Application and their default values to Config.
      */
     public function configureGlobalOptions()
     {
-        $this->getDefinition()
-            ->addOption(
-                new InputOption('--debug', 'd', InputOption::VALUE_NONE, 'Equivalent to -vv')
-            );
+        // Symfony 6.1+ has a --debug option for its completion command.
+        if ($this->getDefinition()->hasOption('--debug')) {
+            $this->getDefinition()
+                ->addOption(
+                    new InputOption('--debug', 'd', InputOption::VALUE_NONE, 'Equivalent to -vv')
+                );
+        }
 
         $this->getDefinition()
             ->addOption(
-                new InputOption('--yes', 'y', InputOption::VALUE_NONE, 'Equivalent to --no-interaction.')
+                new InputOption('--yes', 'y', InputOption::VALUE_NONE, 'Auto-accept the default for all user prompts. Equivalent to --no-interaction.')
             );
 
         // Note that -n belongs to Symfony Console's --no-interaction.
@@ -71,34 +81,18 @@ class Application extends SymfonyApplication implements LoggerAwareInterface, Co
 
         $this->getDefinition()
             ->addOption(
-                new InputOption('--remote-host', null, InputOption::VALUE_REQUIRED, 'Run on a remote server.')
-            );
-
-        $this->getDefinition()
-            ->addOption(
-                new InputOption('--remote-user', null, InputOption::VALUE_REQUIRED, 'The user to use in remote execution.')
-            );
-
-        $this->getDefinition()
-            ->addOption(
                 new InputOption('--root', '-r', InputOption::VALUE_REQUIRED, 'The Drupal root for this site.')
             );
 
 
         $this->getDefinition()
             ->addOption(
-                new InputOption('--uri', '-l', InputOption::VALUE_REQUIRED, 'Which multisite from the selected root to use.')
+                new InputOption('--uri', '-l', InputOption::VALUE_REQUIRED, 'A base URL for building links and selecting a multi-site. Defaults to <info>https://default</info>.')
             );
 
         $this->getDefinition()
             ->addOption(
                 new InputOption('--simulate', null, InputOption::VALUE_NONE, 'Run in simulated mode (show what would have happened).')
-            );
-
-        // TODO: Implement handling for 'pipe'
-        $this->getDefinition()
-            ->addOption(
-                new InputOption('--pipe', null, InputOption::VALUE_NONE, 'Select the canonical script-friendly output format.')
             );
 
         $this->getDefinition()
@@ -135,6 +129,11 @@ class Application extends SymfonyApplication implements LoggerAwareInterface, Co
     public function setTildeExpansionHook(TildeExpansionHook $tildeExpansionHook)
     {
         $this->tildeExpansionHook = $tildeExpansionHook;
+    }
+
+    public function setServiceManager(ServiceManager $serviceManager)
+    {
+        $this->serviceManager = $serviceManager;
     }
 
     /**
@@ -181,8 +180,7 @@ class Application extends SymfonyApplication implements LoggerAwareInterface, Co
         if ($uri) {
             return $uri;
         }
-        $uri = $this->bootstrapManager()->selectUri($cwd);
-        return $uri;
+        return $this->bootstrapManager()->selectUri($cwd);
     }
 
     /**
@@ -226,11 +224,11 @@ class Application extends SymfonyApplication implements LoggerAwareInterface, Co
                 throw $e;
             }
 
-            $this->logger->log(LogLevel::DEBUG, 'Bootstrap further to find {command}', ['command' => $name]);
+            $this->logger->debug('Bootstrap further to find {command}', ['command' => $name]);
             $this->bootstrapManager->bootstrapMax();
-            $this->logger->log(LogLevel::DEBUG, 'Done with bootstrap max in Application::bootstrapAndFind(): trying to find {command} again.', ['command' => $name]);
+            $this->logger->debug('Done with bootstrap max in Application::bootstrapAndFind(): trying to find {command} again.', ['command' => $name]);
 
-            if (!$this->bootstrapManager()->hasBootstrapped(DRUSH_BOOTSTRAP_DRUPAL_ROOT)) {
+            if (!$this->bootstrapManager()->hasBootstrapped(DrupalBootLevels::ROOT)) {
                 // Unable to progress in the bootstrap. Give friendly error message.
                 throw new CommandNotFoundException(dt('Command !command was not found. Pass --root or a @siteAlias in order to run Drupal-specific commands.', ['!command' => $name]));
             }
@@ -239,11 +237,11 @@ class Application extends SymfonyApplication implements LoggerAwareInterface, Co
             try {
                 return parent::find($name);
             } catch (CommandNotFoundException $e) {
-                if (!$this->bootstrapManager()->hasBootstrapped(DRUSH_BOOTSTRAP_DRUPAL_DATABASE)) {
+                if (!$this->bootstrapManager()->hasBootstrapped(DrupalBootLevels::DATABASE)) {
                     // Unable to bootstrap to DB. Give targetted error message.
                     throw new CommandNotFoundException(dt('Command !command was not found. Drush was unable to query the database. As a result, many commands are unavailable. Re-run your command with --debug to see relevant log messages.', ['!command' => $name]));
                 }
-                if (!$this->bootstrapManager()->hasBootstrapped(DRUSH_BOOTSTRAP_DRUPAL_FULL)) {
+                if (!$this->bootstrapManager()->hasBootstrapped(DrupalBootLevels::FULL)) {
                     // Unable to fully bootstrap. Give targetted error message.
                     throw new CommandNotFoundException(dt('Command !command was not found. Drush successfully connected to the database but was unable to fully bootstrap your site. As a result, many commands are unavailable. Re-run your command with --debug to see relevant log messages.', ['!command' => $name]));
                 } else {
@@ -320,90 +318,24 @@ class Application extends SymfonyApplication implements LoggerAwareInterface, Co
         // any of the configuration steps we do here.
         $this->configureIO($input, $output);
 
-        $commandClasses = array_unique(array_merge(
-            $this->discoverCommandsFromConfiguration(),
-            $this->discoverCommands($commandfileSearchpath, '\Drush'),
-            $this->discoverPsr4Commands($classLoader),
-            [FilterHooks::class]
-        ));
+        // Directly add the yaml-cli commands.
+        $this->addCommands($this->serviceManager->instantiateYamlCliCommands());
+
+        // Find the command handlers that we can instantiate without bootstrapping Drupal
+        $commandClasses = $this->serviceManager->discover($commandfileSearchpath, '\Drush');
 
         // Uncomment the lines below to use Console's built in help and list commands.
         // unset($commandClasses[__DIR__ . '/Commands/help/HelpCommands.php']);
         // unset($commandClasses[__DIR__ . '/Commands/help/ListCommands.php']);
 
-        // Use the robo runner to register commands with Symfony application.
-        // This method could / should be refactored in Robo so that we can use
-        // it without creating a Runner object that we would not otherwise need.
-        $runner = new \Robo\Runner();
-        $runner->registerCommandClasses($this, $commandClasses);
-    }
+        // Instantiate our command handler objects with the service manager
+        // (handles 'createEarly' static factories)
+        $commandInstances = $this->serviceManager->instantiateServices($commandClasses, Drush::getContainer());
 
-    protected function discoverCommandsFromConfiguration()
-    {
-        $commandList = [];
-        foreach ($this->config->get('drush.commands', []) as $key => $value) {
-            if (is_numeric($key)) {
-                $classname = $value;
-                $commandList[] = $classname;
-            } else {
-                $classname = ltrim($key, '\\');
-                $commandList[$value] = $classname;
-            }
-        }
-        $this->loadCommandClasses($commandList);
-        return array_keys($commandList);
-    }
-
-    /**
-     * Ensure that any discovered class that is not part of the autoloader
-     * is, in fact, included.
-     */
-    protected function loadCommandClasses($commandClasses)
-    {
-        foreach ($commandClasses as $file => $commandClass) {
-            if (!class_exists($commandClass)) {
-                include $file;
-            }
-        }
-    }
-
-    /**
-     * Discovers command classes.
-     */
-    protected function discoverCommands(array $directoryList, string $baseNamespace): array
-    {
-        $discovery = new CommandFileDiscovery();
-        $discovery
-            ->setIncludeFilesAtBase(true)
-            ->setSearchDepth(3)
-            ->ignoreNamespacePart('contrib', 'Commands')
-            ->ignoreNamespacePart('custom', 'Commands')
-            ->ignoreNamespacePart('src')
-            ->setSearchLocations(['Commands', 'Hooks', 'Generators'])
-            ->setSearchPattern('#.*(Command|Hook|Generator)s?.php$#');
-        $baseNamespace = ltrim($baseNamespace, '\\');
-        $commandClasses = $discovery->discover($directoryList, $baseNamespace);
-        $this->loadCommandClasses($commandClasses);
-        return array_values($commandClasses);
-    }
-
-    /**
-     * Discovers commands that are PSR4 auto-loaded.
-     */
-    protected function discoverPsr4Commands(ClassLoader $classLoader): array
-    {
-        $classes = (new RelativeNamespaceDiscovery($classLoader))
-            ->setRelativeNamespace('Drush\Commands')
-            ->setSearchPattern('/.*DrushCommands\.php$/')
-            ->getClasses();
-
-        return array_filter($classes, function (string $class): bool {
-            $reflectionClass = new \ReflectionClass($class);
-            return $reflectionClass->isSubclassOf(DrushCommands::class)
-                && !$reflectionClass->isAbstract()
-                && !$reflectionClass->isInterface()
-                && !$reflectionClass->isTrait();
-        });
+        // Register our commands with Robo, our application framework.
+        // Note that Robo::register can accept either Annotated Command
+        // command handlers or Symfony Console Command objects.
+        Robo::register($this, $commandInstances);
     }
 
     /**
@@ -414,5 +346,15 @@ class Application extends SymfonyApplication implements LoggerAwareInterface, Co
         $output->writeln('', OutputInterface::VERBOSITY_QUIET);
 
         $this->doRenderException($e, $output);
+    }
+
+    /**
+     * Renders a caught Throwable. Omits the command docs at end.
+     */
+    public function renderThrowable(\Throwable $e, OutputInterface $output): void
+    {
+        $output->writeln('', OutputInterface::VERBOSITY_QUIET);
+
+        $this->doRenderThrowable($e, $output);
     }
 }

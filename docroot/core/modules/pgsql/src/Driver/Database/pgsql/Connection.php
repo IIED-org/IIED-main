@@ -7,7 +7,8 @@ use Drupal\Core\Database\Connection as DatabaseConnection;
 use Drupal\Core\Database\DatabaseAccessDeniedException;
 use Drupal\Core\Database\DatabaseNotFoundException;
 use Drupal\Core\Database\StatementInterface;
-use Drupal\Core\Database\StatementWrapper;
+use Drupal\Core\Database\StatementWrapperIterator;
+use Drupal\Core\Database\SupportsTemporaryTablesInterface;
 
 // cSpell:ignore ilike nextval
 
@@ -19,7 +20,7 @@ use Drupal\Core\Database\StatementWrapper;
 /**
  * PostgreSQL implementation of \Drupal\Core\Database\Connection.
  */
-class Connection extends DatabaseConnection {
+class Connection extends DatabaseConnection implements SupportsTemporaryTablesInterface {
 
   /**
    * The name by which to obtain a lock for retrieve the next insert id.
@@ -42,12 +43,7 @@ class Connection extends DatabaseConnection {
   /**
    * {@inheritdoc}
    */
-  protected $statementClass = NULL;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $statementWrapperClass = StatementWrapper::class;
+  protected $statementWrapperClass = StatementWrapperIterator::class;
 
   /**
    * A map of condition operators to PostgreSQL operators.
@@ -77,6 +73,16 @@ class Connection extends DatabaseConnection {
    * Constructs a connection object.
    */
   public function __construct(\PDO $connection, array $connection_options) {
+    // Sanitize the schema name here, so we do not have to do it in other
+    // functions.
+    if (isset($connection_options['schema']) && ($connection_options['schema'] !== 'public')) {
+      $connection_options['schema'] = preg_replace('/[^A-Za-z0-9_]+/', '', $connection_options['schema']);
+    }
+
+    // We need to set the connectionOptions before the parent, because setPrefix
+    // needs this.
+    $this->connectionOptions = $connection_options;
+
     parent::__construct($connection, $connection_options);
 
     // Force PostgreSQL to use the UTF-8 character set by default.
@@ -86,6 +92,26 @@ class Connection extends DatabaseConnection {
     if (isset($connection_options['init_commands'])) {
       $this->connection->exec(implode('; ', $connection_options['init_commands']));
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setPrefix($prefix) {
+    assert(is_string($prefix), 'The \'$prefix\' argument to ' . __METHOD__ . '() must be a string');
+    $this->prefix = $prefix;
+
+    // Add the schema name if it is not set to public, otherwise it will use the
+    // default schema name.
+    $quoted_schema = '';
+    if (isset($this->connectionOptions['schema']) && ($this->connectionOptions['schema'] !== 'public')) {
+      $quoted_schema = $this->identifierQuotes[0] . $this->connectionOptions['schema'] . $this->identifierQuotes[1] . '.';
+    }
+
+    $this->tablePlaceholderReplacements = [
+      $quoted_schema . $this->identifierQuotes[0] . str_replace('.', $this->identifierQuotes[1] . '.' . $this->identifierQuotes[0], $prefix),
+      $this->identifierQuotes[1],
+    ];
   }
 
   /**
@@ -136,10 +162,10 @@ class Connection extends DatabaseConnection {
     }
     catch (\PDOException $e) {
       if (static::getSQLState($e) == static::CONNECTION_FAILURE) {
-        if (strpos($e->getMessage(), 'password authentication failed for user') !== FALSE) {
+        if (str_contains($e->getMessage(), 'password authentication failed for user')) {
           throw new DatabaseAccessDeniedException($e->getMessage(), $e->getCode(), $e);
         }
-        elseif (strpos($e->getMessage(), 'database') !== FALSE && strpos($e->getMessage(), 'does not exist') !== FALSE) {
+        elseif (str_contains($e->getMessage(), 'database') && str_contains($e->getMessage(), 'does not exist')) {
           throw new DatabaseNotFoundException($e->getMessage(), $e->getCode(), $e);
         }
       }
@@ -218,7 +244,7 @@ class Connection extends DatabaseConnection {
    * {@inheritdoc}
    */
   public function queryTemporary($query, array $args = [], array $options = []) {
-    $tablename = $this->generateTemporaryTableName();
+    $tablename = 'db_temporary_' . uniqid();
     $this->query('CREATE TEMPORARY TABLE {' . $tablename . '} AS ' . $query, $args, $options);
     return $tablename;
   }
@@ -242,22 +268,34 @@ class Connection extends DatabaseConnection {
   public function createDatabase($database) {
     // Escape the database name.
     $database = Database::getConnection()->escapeDatabase($database);
+    $db_created = FALSE;
 
-    // If the PECL intl extension is installed, use it to determine the proper
-    // locale.  Otherwise, fall back to en_US.
-    if (class_exists('Locale')) {
-      $locale = \Locale::getDefault();
-    }
-    else {
-      $locale = 'en_US';
+    // Try to determine the proper locales for character classification and
+    // collation. If we could determine locales other than 'en_US', try creating
+    // the database with these first.
+    $ctype = setlocale(LC_CTYPE, 0);
+    $collate = setlocale(LC_COLLATE, 0);
+    if ($ctype && $collate) {
+      try {
+        $this->connection->exec("CREATE DATABASE $database WITH TEMPLATE template0 ENCODING='UTF8' LC_CTYPE='$ctype.UTF-8' LC_COLLATE='$collate.UTF-8'");
+        $db_created = TRUE;
+      }
+      catch (\Exception $e) {
+        // It might be that the server is remote and does not support the
+        // locale and collation of the webserver, so we will try again.
+      }
     }
 
-    try {
-      // Create the database and set it as active.
-      $this->connection->exec("CREATE DATABASE $database WITH TEMPLATE template0 ENCODING='utf8' LC_CTYPE='$locale.utf8' LC_COLLATE='$locale.utf8'");
-    }
-    catch (\Exception $e) {
-      throw new DatabaseNotFoundException($e->getMessage());
+    // Otherwise fall back to creating the database using the 'en_US' locales.
+    if (!$db_created) {
+      try {
+        $this->connection->exec("CREATE DATABASE $database WITH TEMPLATE template0 ENCODING='UTF8' LC_CTYPE='en_US.UTF-8' LC_COLLATE='en_US.UTF-8'");
+      }
+      catch (\Exception $e) {
+        // If the database can't be created with the 'en_US' locale either,
+        // we're finally throwing an exception.
+        throw new DatabaseNotFoundException($e->getMessage());
+      }
     }
   }
 
@@ -313,12 +351,11 @@ class Connection extends DatabaseConnection {
    */
   public function getFullQualifiedTableName($table) {
     $options = $this->getConnectionOptions();
-    $prefix = $this->tablePrefix($table);
+    $schema = $options['schema'] ?? 'public';
 
     // The fully qualified table name in PostgreSQL is in the form of
-    // <database>.<schema>.<table>, so we have to include the 'public' schema in
-    // the return value.
-    return $options['database'] . '.public.' . $prefix . $table;
+    // <database>.<schema>.<table>.
+    return $options['database'] . '.' . $schema . '.' . $this->getPrefix() . $table;
   }
 
   /**

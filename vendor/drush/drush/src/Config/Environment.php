@@ -1,30 +1,32 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Drush\Config;
 
 use Composer\Autoload\ClassLoader;
-
 use Drush\Drush;
 use Drush\Utils\FsUtils;
 use Symfony\Component\Console\Terminal;
-use Webmozart\PathUtil\Path;
+use Symfony\Component\Filesystem\Path;
 
 /**
  * Store information about the environment
  */
 class Environment
 {
-    protected $homeDir;
-    protected $originalCwd;
-    protected $etcPrefix;
-    protected $sharePrefix;
-    protected $drushBasePath;
-    protected $vendorDir;
+    protected string $homeDir;
+    protected string $originalCwd;
+    protected string $etcPrefix;
+    protected string $sharePrefix;
+    protected string $drushBasePath;
+    protected string $vendorDir;
 
-    protected $docPrefix;
-    protected $configFileVariant;
+    protected ?string $docPrefix;
+    protected string $configFileVariant;
 
-    protected $loader;
-    protected $siteLoader;
+    protected ClassLoader $loader;
+    protected ?Classloader $siteLoader = null;
 
     /**
      * Environment constructor
@@ -32,7 +34,7 @@ class Environment
      * @param string $cwd The current working directory at the time Drush was called.
      * @param string $autoloadFile Path to the autoload.php file.
      */
-    public function __construct($homeDir, $cwd, $autoloadFile)
+    public function __construct(string $homeDir, string $cwd, string $autoloadFile)
     {
         $this->homeDir = $homeDir;
         $this->originalCwd = Path::canonicalize(FsUtils::realpath($cwd));
@@ -43,51 +45,10 @@ class Environment
     }
 
     /**
-     * Load the autoloader for the selected Drupal site
-     *
-     * @param string $root
-     * @return ClassLoader
-     */
-    public function loadSiteAutoloader($root)
-    {
-        $autloadFilePath = "$root/autoload.php";
-        if (!file_exists($autloadFilePath)) {
-            return $this->loader;
-        }
-
-        if ($this->siteLoader) {
-            return $this->siteLoader;
-        }
-
-        $this->siteLoader = require $autloadFilePath;
-        if ($this->siteLoader === false) {
-            // Nothing more to do. See https://github.com/drush-ops/drush/issues/3741.
-            return $this->loader;
-        }
-        if ($this->siteLoader === true) {
-            // The autoloader was already required. Assume that Drush and Drupal share an autoloader per
-            // "Point autoload.php to the proper vendor directory" - https://www.drupal.org/node/2404989
-            $this->siteLoader = $this->loader;
-        }
-
-        // Ensure that the site's autoloader has highest priority. Usually,
-        // the first classloader registered gets the first shot at loading classes.
-        // We want Drupal's classloader to be used first when a class is loaded,
-        // and have Drush's classloader only be called as a fallback measure.
-        $this->siteLoader->unregister();
-        $this->siteLoader->register(true);
-
-        return $this->siteLoader;
-    }
-
-    /**
      * Return the name of the user running drush.
-     *
-     * @return string
      */
-    protected function getUsername()
+    protected function getUsername(): string
     {
-        $name = null;
         if (!$name = getenv("username")) { // Windows
             if (!$name = getenv("USER")) {
                 // If USER not defined, use posix
@@ -98,10 +59,10 @@ class Environment
                 }
             }
         }
-        return $name;
+        return $name ?: '';
     }
 
-    protected function getTmp()
+    protected function getTmp(): string
     {
         $directories = [];
 
@@ -157,7 +118,7 @@ class Environment
      *
      * @return array Nested associative array that is overlayed on configuration.
      */
-    public function exportConfigData()
+    public function exportConfigData(): array
     {
         return [
             // Information about the environment presented to Drush
@@ -192,23 +153,19 @@ class Environment
     /**
      * The base directory of the Drush application itself
      * (where composer.json et.al. are found)
-     *
-     * @return string
      */
-    public function drushBasePath()
+    public function drushBasePath(): string
     {
         return $this->drushBasePath;
     }
 
     /**
      * Get the site:set alias from the current site:set file path.
-     *
-     * @return bool|string
      */
-    public function getSiteSetAliasName()
+    public function getSiteSetAliasName(): bool|string
     {
         $site_filename = $this->getSiteSetAliasFilePath();
-        if (file_exists($site_filename)) {
+        if ($site_filename && file_exists($site_filename)) {
             $site = file_get_contents($site_filename);
             if ($site) {
                 return $site;
@@ -219,25 +176,21 @@ class Environment
 
     /**
      * User's home directory
-     *
-     * @return string
      */
-    public function homeDir()
+    public function homeDir(): string
     {
         return $this->homeDir;
     }
 
     /**
      * The user's Drush configuration directory, ~/.drush
-     *
-     * @return string
      */
-    public function userConfigPath()
+    public function userConfigPath(): string
     {
         return $this->homeDir() . '/.drush';
     }
 
-    public function setConfigFileVariant($variant)
+    public function setConfigFileVariant($variant): void
     {
         $this->configFileVariant = $variant;
     }
@@ -254,30 +207,24 @@ class Environment
 
     /**
      * The original working directory
-     *
-     * @return string
      */
-    public function cwd()
+    public function cwd(): string
     {
         return $this->originalCwd;
     }
 
     /**
      * Return the path to Drush's vendor directory
-     *
-     * @return string
      */
-    public function vendorPath()
+    public function vendorPath(): string
     {
         return $this->vendorDir;
     }
 
     /**
      * The class loader returned when the autoload.php file is included.
-     *
-     * @return \Composer\Autoload\ClassLoader
      */
-    public function loader()
+    public function loader(): ?ClassLoader
     {
         return $this->loader;
     }
@@ -285,39 +232,34 @@ class Environment
     /**
      * Set the class loader from the autload.php file, if available.
      *
-     * @param \Composer\Autoload\ClassLoader $loader
+     * @param ClassLoader $loader
      */
-    public function setLoader(ClassLoader $loader)
+    public function setLoader(ClassLoader $loader): void
     {
         $this->loader = $loader;
     }
 
     /**
-     * Alter our default locations based on the value of environment variables
-     *
-     * @return $this
+     * Alter our default locations based on the value of environment variables.
      */
-    public function applyEnvironment()
+    public function applyEnvironment(): self
     {
         // Copy ETC_PREFIX and SHARE_PREFIX from environment variables if available.
         // This alters where we check for server-wide config and alias files.
         // Used by unit test suite to provide a clean environment.
         $this->setEtcPrefix(getenv('ETC_PREFIX'));
-        $this->setSharePrefix(getenv('SHARE_PREFIX'));
+        $this->setSharePrefix((string)getenv('SHARE_PREFIX'));
 
         return $this;
     }
 
     /**
      * Set the directory prefix to locate the directory that Drush will
-     * use as /etc (e.g. during the functional tests)
-     *
-     * @param string $etcPrefix
-     * @return $this
+     * use as /etc (e.g. during the functional tests).
      */
-    public function setEtcPrefix($etcPrefix)
+    public function setEtcPrefix(mixed $etcPrefix): self
     {
-        if (isset($etcPrefix)) {
+        if (!empty($etcPrefix)) {
             $this->etcPrefix = $etcPrefix;
         }
         return $this;
@@ -325,11 +267,9 @@ class Environment
 
     /**
      * Set the directory prefix to locate the directory that Drush will
-     * use as /user/share (e.g. during the functional tests)
-     * @param string $sharePrefix
-     * @return $this
+     * use as /user/share (e.g. during the functional tests).
      */
-    public function setSharePrefix($sharePrefix)
+    public function setSharePrefix(string $sharePrefix): self
     {
         if (isset($sharePrefix)) {
             $this->sharePrefix = $sharePrefix;
@@ -343,13 +283,12 @@ class Environment
      * this is within the Drush application, but some Drush RPM distributions
      * & c. for Linux platforms slice-and-dice the contents and put the docs
      * elsewhere.
-     *
-     * @return string
      */
-    public function docsPath()
+    public function docsPath(): ?string
     {
         if (!$this->docPrefix) {
-            $this->docPrefix = $this->findDocsPath($this->drushBasePath);
+            $foundPath = $this->findDocsPath($this->drushBasePath);
+            $this->docPrefix = $foundPath ?: null;
         }
         return $this->docPrefix;
     }
@@ -357,11 +296,8 @@ class Environment
     /**
      * Locate the Drush documentation. This is recalculated whenever the
      * share prefix is changed.
-     *
-     * @param string $drushBasePath
-     * @return string
      */
-    protected function findDocsPath($drushBasePath)
+    protected function findDocsPath(string $drushBasePath): string|bool
     {
         $candidates = [
             "$drushBasePath/README.md",
@@ -372,11 +308,8 @@ class Environment
 
     /**
      * Check a list of directories and return the first one that exists.
-     *
-     * @param array $candidates
-     * @return string|boolean
      */
-    protected function findFromCandidates($candidates)
+    protected function findFromCandidates(array $candidates): bool|string
     {
         foreach ($candidates as $candidate) {
             if (file_exists($candidate)) {
@@ -388,11 +321,8 @@ class Environment
 
     /**
      * Return the appropriate system path prefix, unless an override is provided.
-     * @param string $override
-     * @param string $defaultPrefix
-     * @return string
      */
-    protected static function systemPathPrefix($override = '', $defaultPrefix = '')
+    protected static function systemPathPrefix(string $override = '', string $defaultPrefix = ''): string
     {
         if ($override) {
             return $override;
@@ -402,30 +332,24 @@ class Environment
 
     /**
      * Return the system configuration path (default: /etc/drush)
-     *
-     * @return string
      */
-    public function systemConfigPath()
+    public function systemConfigPath(): string
     {
-        return static::systemPathPrefix($this->etcPrefix, '') . '/etc/drush';
+        return static::systemPathPrefix($this->etcPrefix) . '/etc/drush';
     }
 
     /**
      * Return the system shared commandfile path (default: /usr/share/drush/commands)
-     *
-     * @return string
      */
-    public function systemCommandFilePath()
+    public function systemCommandFilePath(): string
     {
         return static::systemPathPrefix($this->sharePrefix, '/usr') . '/share/drush/commands';
     }
 
     /**
      * Determine whether current OS is a Windows variant.
-     *
-     * @return boolean
      */
-    public static function isWindows($os = null)
+    public static function isWindows($os = null): bool
     {
         return strtoupper(substr($os ?: PHP_OS, 0, 3)) === 'WIN';
     }
@@ -433,21 +357,18 @@ class Environment
     /**
      * Verify that we are running PHP through the command line interface.
      *
-     * @return boolean
      *   A boolean value that is true when PHP is being run through the command line,
      *   and false if being run through cgi or mod_php.
      */
-    public function verifyCLI()
+    public function verifyCLI(): bool
     {
         return (php_sapi_name() == 'cli' || (is_numeric($_SERVER['argc']) && $_SERVER['argc'] > 0));
     }
 
     /**
      * Get terminal width.
-     *
-     * @return int
      */
-    public function calculateColumns()
+    public function calculateColumns(): int
     {
         return (new Terminal())->getWidth();
     }
@@ -455,13 +376,13 @@ class Environment
     /**
      * Returns the filename for the file that stores the DRUPAL_SITE variable.
      *
-     * @param string $filename_prefix
+     * @param $filename_prefix
      *   An arbitrary string to prefix the filename with.
      *
      * @return string|false
      *   Returns the full path to temp file if possible, or FALSE if not.
      */
-    protected function getSiteSetAliasFilePath($filename_prefix = 'drush-drupal-site-')
+    protected function getSiteSetAliasFilePath(string $filename_prefix = 'drush-drupal-site-'): string|false
     {
         $shell_pid = getenv('DRUSH_SHELL_PID');
         if (!$shell_pid && function_exists('posix_getppid')) {
@@ -475,6 +396,6 @@ class Environment
         $tmp = getenv('TMPDIR') ? getenv('TMPDIR') : '/tmp';
         $username = $this->getUsername();
 
-        return "{$tmp}/drush-env-{$username}/{$filename_prefix}" . $shell_pid;
+        return "$tmp/drush-env-{$username}/{$filename_prefix}" . $shell_pid;
     }
 }

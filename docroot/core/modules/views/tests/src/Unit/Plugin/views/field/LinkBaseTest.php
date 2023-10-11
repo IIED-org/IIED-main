@@ -10,11 +10,11 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Tests\UnitTestCase;
+use Drupal\Tests\views\Traits\ViewsLoggerTestTrait;
 use Drupal\views\Plugin\views\display\DisplayPluginBase;
 use Drupal\views\Plugin\views\field\LinkBase;
 use Drupal\views\ResultRow;
 use Drupal\views\ViewExecutable;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @coversDefaultClass \Drupal\views\Plugin\views\field\EntityLink
@@ -22,24 +22,27 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class LinkBaseTest extends UnitTestCase {
 
+  use ViewsLoggerTestTrait;
+
   /**
    * {@inheritdoc}
    */
-  protected function tearDown(): void {
-    parent::tearDown();
-    $container = new ContainerBuilder();
+  protected function setUp(): void {
+    parent::setUp();
+    $this->setUpMockLoggerWithMissingEntity();
+    $container = \Drupal::getContainer();
+    $container->set('string_translation', $this->createMock(TranslationInterface::class));
+    $container->set('renderer', $this->createMock(RendererInterface::class));
     \Drupal::setContainer($container);
   }
 
   /**
+   * Tests the render method when getEntity returns NULL.
+   *
    * @covers ::render
    */
-  public function testRender() {
+  public function testRenderNullEntity(): void {
     $row = new ResultRow();
-    $container = new ContainerBuilder();
-    $container->set('string_translation', $this->createMock(TranslationInterface::class));
-    $container->set('renderer', $this->createMock(RendererInterface::class));
-    \Drupal::setContainer($container);
 
     $access = new AccessResultAllowed();
     $languageManager = $this->createMock(LanguageManagerInterface::class);
@@ -48,7 +51,7 @@ class LinkBaseTest extends UnitTestCase {
       ->willReturn(TRUE);
     $field = $this->getMockBuilder(LinkBase::class)
       ->setConstructorArgs([
-        [],
+        ['entity_type' => 'foo', 'entity field' => 'bar'],
         'foo',
         [],
         $this->createMock(AccessManagerInterface::class),
@@ -56,7 +59,7 @@ class LinkBaseTest extends UnitTestCase {
         $this->createMock(EntityRepositoryInterface::class),
         $languageManager,
       ])
-      ->setMethods(['checkUrlAccess', 'getUrlInfo'])
+      ->onlyMethods(['checkUrlAccess', 'getUrlInfo'])
       ->getMock();
     $field->expects($this->any())
       ->method('checkUrlAccess')

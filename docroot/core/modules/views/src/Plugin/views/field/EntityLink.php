@@ -38,12 +38,13 @@ class EntityLink extends LinkBase {
   protected function getUrlInfo(ResultRow $row) {
     $template = $this->getEntityLinkTemplate();
     $entity = $this->getEntity($row);
-    if ($entity) {
-      if ($this->languageManager->isMultilingual()) {
-        $entity = $this->getEntityTranslation($entity, $row);
-      }
-      return $entity->toUrl($template)->setAbsolute($this->options['absolute']);
+    if ($entity === NULL) {
+      return NULL;
     }
+    if ($this->languageManager->isMultilingual()) {
+      $entity = $this->getEntityTranslationByRelationship($entity, $row);
+    }
+    return $entity->toUrl($template)->setAbsolute($this->options['absolute']);
   }
 
   /**

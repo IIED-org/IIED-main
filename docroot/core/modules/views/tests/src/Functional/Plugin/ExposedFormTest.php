@@ -14,6 +14,7 @@ use Drupal\views\Entity\View;
  * Tests exposed forms functionality.
  *
  * @group views
+ * @group #slow
  */
 class ExposedFormTest extends ViewTestBase {
 
@@ -234,7 +235,7 @@ class ExposedFormTest extends ViewTestBase {
     $block->getPlugin()->setConfigurationValue('views_label', '<strong>Custom</strong> title<script>alert("hacked!");</script>');
     $block->save();
 
-    // Test that the custom block label is found.
+    // Test that the content block label is found.
     $this->drupalGet('test_exposed_block');
     $this->assertSession()->responseContains('<strong>Custom</strong> titlealert("hacked!");');
 

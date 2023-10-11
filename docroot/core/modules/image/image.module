@@ -5,7 +5,6 @@
  * Exposes global functionality for creating image styles.
  */
 
-use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -15,7 +14,6 @@ use Drupal\field\FieldConfigInterface;
 use Drupal\field\FieldStorageConfigInterface;
 use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
-use Drupal\image\ImageConfigUpdater;
 
 /**
  * The name of the query parameter for image derivative tokens.
@@ -141,7 +139,7 @@ function image_file_download($uri) {
   $path = StreamWrapperManager::getTarget($uri);
 
   // Private file access for image style derivatives.
-  if (strpos($path, 'styles/') === 0) {
+  if (str_starts_with($path, 'styles/')) {
     $args = explode('/', $path);
 
     // Discard "styles", style name, and scheme from the path
@@ -289,10 +287,10 @@ function template_preprocess_image_style(&$variables) {
     ]);
   }
 
-  if (isset($variables['alt']) || array_key_exists('alt', $variables)) {
+  if (\array_key_exists('alt', $variables)) {
     $variables['image']['#alt'] = $variables['alt'];
   }
-  if (isset($variables['title']) || array_key_exists('title', $variables)) {
+  if (\array_key_exists('title', $variables)) {
     $variables['image']['#title'] = $variables['title'];
   }
 
@@ -368,15 +366,6 @@ function image_entity_presave(EntityInterface $entity) {
   // Both FieldStorageConfigInterface and FieldConfigInterface have a
   // setSetting() method.
   $entity->setSetting('default_image', $default_image);
-}
-
-/**
- * Implements hook_ENTITY_TYPE_presave() for entity_view_display.
- */
-function image_entity_view_display_presave(EntityViewDisplayInterface $view_display): void {
-  $config_updater = \Drupal::classResolver(ImageConfigUpdater::class);
-  assert($config_updater instanceof ImageConfigUpdater);
-  $config_updater->processImageLazyLoad($view_display);
 }
 
 /**

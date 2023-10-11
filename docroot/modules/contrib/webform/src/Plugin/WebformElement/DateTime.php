@@ -120,6 +120,24 @@ class DateTime extends DateBase implements TrustedCallbackInterface {
   /**
    * {@inheritdoc}
    */
+  public static function validateDate(&$element, FormStateInterface $form_state, &$complete_form) {
+    parent::validateDate($element, $form_state, $complete_form);
+
+    // Move inline time element errors to the date/time element.
+    // @see https://www.drupal.org/project/webform/issues/3371639
+    // @see \Drupal\Core\Datetime\Element\Datetime::processDatetime
+    if (\Drupal::moduleHandler()->moduleExists('inline_form_errors')
+      && empty($form_state->getError($element))
+      && isset($element['time'])
+      && !empty($form_state->getError($element['time']))
+    ) {
+      $form_state->setError($element, $form_state->getError($element['time']));
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function getElementSelectorInputsOptions(array $element) {
     $t_args = ['@title' => $this->getAdminLabel($element)];
     return [

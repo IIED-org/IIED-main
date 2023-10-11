@@ -1557,7 +1557,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     }
 
     // Get the current langcode.
-    $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $current_langcode = \Drupal::languageManager()->getConfigOverrideLanguage()->getId();
 
     // If the current langcode is the same as this webform's langcode
     // then return.

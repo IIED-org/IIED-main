@@ -1,35 +1,36 @@
 #!/usr/bin/env php
-<?php
+<?php declare(strict_types = 1);
 
-use DrupalCodeGenerator\ApplicationFactory;
-use DrupalCodeGenerator\Command\Navigation;
-use DrupalCodeGenerator\GeneratorDiscovery;
-use DrupalCodeGenerator\Utils;
-use Symfony\Component\Filesystem\Filesystem;
+use DrupalCodeGenerator\Application;
+use DrupalCodeGenerator\BootstrapHandler;
 
-// The autoloader may have a different location if DCG is installed as a local
-// Composer package.
-$autoloader = file_exists(__DIR__ . '/../vendor/autoload.php')
-  ? require __DIR__ . '/../vendor/autoload.php'
-  : require __DIR__ . '/../../../autoload.php';
+$dcg_exit = static function(string $message): never {
+  \fwrite(\STDERR, "\e[0;41m [ERROR] $message \e[0m" . \PHP_EOL);
+  exit(1);
+};
 
-// Create an application.
-$application = ApplicationFactory::create();
+// __DIR__ cannot be used here as it contains a path with symlinks resolved.
+$dcg_path = \str_starts_with($argv[0], '/') ?
+  $argv[0] : \getcwd() . '/' . $argv[0];
 
-// Discover generators.
-$discovery = new GeneratorDiscovery(new Filesystem());
-$commands_directories[] = ApplicationFactory::getRoot() . '/src/Command';
-$home = Utils::getHomeDirectory();
-if (file_exists($home . '/.dcg/Command')) {
-  $commands_directories[] = $home . '/.dcg/Command';
-  $autoloader->addPsr4('DrupalCodeGenerator\\', $home . '/.dcg');
+// DCG is installed as Composer package.
+$autoload_dir = \dirname($dcg_path) . '/..';
+if (!\file_exists($autoload_dir . '/autoload.php')) {
+  // DCG is installed as Composer project.
+  $autoload_dir = $autoload_dir . '/vendor';
 }
-$generators = $discovery->getGenerators($commands_directories);
-$application->addCommands($generators);
 
-// Add the navigation command.
-$application->add(new Navigation($generators));
-$application->setDefaultCommand('navigation');
+if (!\file_exists($autoload_dir . '/autoload.php')) {
+  $dcg_exit('Could not locate class loader.');
+}
 
-// Run.
-$application->run();
+$class_loader = require $autoload_dir . '/autoload.php';
+$bootstrap_handler = new BootstrapHandler($class_loader);
+try {
+  $container = $bootstrap_handler->bootstrap();
+}
+catch (\Exception $exception) {
+  $dcg_exit($exception->getMessage());
+}
+
+Application::create($container)->run();

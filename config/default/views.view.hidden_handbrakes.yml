@@ -13,7 +13,6 @@ dependencies:
     - node
     - taxonomy
     - user
-    - views_autocomplete_filters
 id: hidden_handbrakes
 label: 'Hidden handbrakes'
 module: views

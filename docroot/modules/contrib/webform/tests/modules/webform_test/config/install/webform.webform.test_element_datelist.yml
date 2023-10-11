@@ -83,6 +83,16 @@ elements: |
     '#default_value': '2009-08-18T01:00:00-05:00'
     '#required': 'Custom required error'
     '#required_error': 'Custom required error'
+  datelist_conditional:
+    '#type': checkbox
+    '#title': datelist_conditional
+  datelist_conditional_required:
+    '#type': datelist
+    '#title': datelist_conditional_required
+    '#states':
+      required:
+        ':input[name="datelist_conditional"]':
+          checked: true
   datelist_multiple:
     '#type': datelist
     '#title': datelist_multiple

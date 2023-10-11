@@ -89,6 +89,10 @@ class WebformEmailConfirm extends FormElement {
       }
     }
 
+    // Since the element's id is never rendered, move it to the wrapper so that
+    // inline validation works as expected.
+    $element['#wrapper_attributes']['id'] = $element['#id'];
+
     // Get mail 1 email element.
     $mail_1_properties = [
       '#title',

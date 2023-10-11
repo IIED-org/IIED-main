@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drush\Symfony;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -8,7 +10,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class BootstrapCompilerPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!$container->has('bootstrap.manager')) {
             return;

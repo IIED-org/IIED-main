@@ -136,7 +136,8 @@ class WebformShareTest extends WebformBrowserTestBase {
       ->save();
 
     // Check no page title.
-    $assert_session->responseNotContains('<h1 class="title page-title">Contact</h1>');
+    $this->drupalGet('/webform/contact/share');
+    $assert_session->responseNotContains('<h1>Contact</h1>');
 
     // Check iframe page iFrame-resizer script.
     $this->drupalGet("/webform/contact/share/$library/$version");

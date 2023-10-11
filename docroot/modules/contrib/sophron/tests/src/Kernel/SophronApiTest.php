@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Drupal\Tests\sophron\Kernel;
 
@@ -56,9 +56,23 @@ class SophronApiTest extends KernelTestBase {
     $manager = \Drupal::service('sophron.mime_map.manager');
     $this->assertContains('application/atomserv+xml', $manager->listTypes());
     $this->assertEquals(['atomsrv'], $manager->getType('application/atomserv+xml')->getExtensions());
+  }
+
+  /**
+   * @covers ::getType
+   */
+  public function testGetMissingType(): void {
+    $manager = \Drupal::service('sophron.mime_map.manager');
     // No extensions for type.
     $this->expectException(MappingException::class);
     $manager->getType('a/b')->getExtensions();
+  }
+
+  /**
+   * @covers ::getType
+   */
+  public function testGetMalformedType(): void {
+    $manager = \Drupal::service('sophron.mime_map.manager');
     // Malformed MIME type.
     $this->expectException(MalformedTypeException::class);
     $manager->getType('application/');

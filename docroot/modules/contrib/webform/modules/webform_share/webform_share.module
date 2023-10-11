@@ -5,6 +5,7 @@
  * Allows webforms to be shared on other websites using an iframe.
  */
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Render\Markup;
@@ -222,6 +223,11 @@ function template_preprocess_html__webform_share(&$variables) {
       }
     }
     $variables['attributes']['class'] = array_values($variables['attributes']['class']);
+  }
+
+  // Remove the page title.
+  if (!$webform->getSetting('share_title')) {
+    NestedArray::unsetValue($variables, ['page', 'content', 'page_title']);
   }
 }
 

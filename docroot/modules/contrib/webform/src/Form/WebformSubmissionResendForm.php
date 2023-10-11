@@ -90,20 +90,39 @@ class WebformSubmissionResendForm extends FormBase {
       $message_handler_id = $form_state->getValue('message_handler_id');
     }
     else {
-      $message_handler_id = key($options);
+      $message_handler_id = key($options['enabled'] + $options['disabled']);
     }
 
-    // Display message handler with change message Ajax submit button.
-    $form['message_handler'] = [];
-    $form['message_handler']['message_handler_id'] = [
-      '#type' => 'tableselect',
-      '#header' => $header,
-      '#options' => $options,
-      '#js_select' => TRUE,
-      '#empty' => $this->t('No messages are available.'),
-      '#multiple' => FALSE,
-      '#default_value' => $message_handler_id,
-    ];
+    // Enabled messages.
+    if ($options['enabled']) {
+      $form['enabled'] = [];
+      $form['enabled']['message_handler_id'] = [
+        '#type' => 'tableselect',
+        '#header' => $header,
+        '#options' => $options['enabled'],
+        '#js_select' => TRUE,
+        '#empty' => $this->t('No messages are available.'),
+        '#multiple' => FALSE,
+        '#default_value' => $message_handler_id,
+      ];
+    }
+
+    // Disabled messages.
+    if ($options['disabled']) {
+      $form['disabled'] = [
+        '#type' => 'details',
+        '#title' => $this->t('Disabled'),
+      ];
+      $form['disabled']['message_handler_id'] = [
+        '#type' => 'tableselect',
+        '#header' => $header,
+        '#options' => $options['disabled'],
+        '#js_select' => TRUE,
+        '#empty' => $this->t('No messages are available.'),
+        '#multiple' => FALSE,
+        '#default_value' => $message_handler_id,
+      ];
+    }
 
     // Message.
     $message_handler = $this->webformSubmission->getWebform()->getHandler($message_handler_id);
@@ -111,7 +130,7 @@ class WebformSubmissionResendForm extends FormBase {
     $resend_form = $message_handler->resendMessageForm($message);
     $form['message'] = [
       '#type' => 'details',
-      '#title' => $this->t('Message'),
+      '#title' => $this->t('Resend: @label', ['@label' => $message_handler->label()]),
       '#open' => TRUE,
       '#tree' => TRUE,
     ] + $resend_form;
@@ -137,13 +156,24 @@ class WebformSubmissionResendForm extends FormBase {
     ];
     $form['#attached']['library'][] = 'webform/webform.admin';
 
-    $this->buildAjaxElement(
-      'webform-message-handler',
-      $form['message'],
-      $form['message_handler']['message_handler_id'],
-      $form['message_handler']
-    );
+    // Add change message Ajax submit button to enabled and disabled messages..
+    if (isset($form['enabled'])) {
+      $this->buildAjaxElement(
+        'webform-message-handler',
+        $form['message'],
+        $form['enabled']['message_handler_id'],
+        $form['enabled']
+      );
+    }
 
+    if (isset($form['disabled'])) {
+      $this->buildAjaxElement(
+        'webform-message-handler',
+        $form['message'],
+        $form['disabled']['message_handler_id'],
+        $form['disabled']
+      );
+    }
     return $form;
   }
 
@@ -192,14 +222,17 @@ class WebformSubmissionResendForm extends FormBase {
    *   A webform submission.
    *
    * @return array
-   *   An associative array containing a webform submission's message handlers
-   *   as table select options.
+   *   An associative array containing a webform submission's
+   *   enabled and disabled message handlers as table select options.
    */
   protected function getMessageHandlerOptions(WebformSubmissionInterface $webform_submission) {
     $handlers = $webform_submission->getWebform()->getHandlers();
 
     // Get options.
-    $options = [];
+    $options = [
+      'enabled' => [],
+      'disabled' => [],
+    ];
     foreach ($handlers as $handler_id => $message_handler) {
       if (!($message_handler instanceof WebformHandlerMessageInterface)) {
         continue;
@@ -207,7 +240,8 @@ class WebformSubmissionResendForm extends FormBase {
 
       $message = $message_handler->getMessage($webform_submission);
 
-      $options[$handler_id]['title'] = [
+      $option = [];
+      $option['title'] = [
         'data' => [
           'label' => [
             '#type' => 'label',
@@ -217,13 +251,17 @@ class WebformSubmissionResendForm extends FormBase {
           ],
         ],
       ];
-      $options[$handler_id]['id'] = [
+      $option['id'] = [
         'data' => $message_handler->getHandlerId(),
       ];
-      $options[$handler_id]['summary'] = [
+      $option['summary'] = [
         'data' => $message_handler->getMessageSummary($message),
       ];
-      $options[$handler_id]['status'] = ($message_handler->isEnabled()) ? $this->t('Enabled') : $this->t('Disabled');
+      $option['status'] = ($message_handler->isEnabled()) ? $this->t('Enabled') : $this->t('Disabled');
+
+      $is_enabled = ($message_handler->isEnabled() && $message_handler->checkConditions($webform_submission));
+      $state = $is_enabled ? 'enabled' : 'disabled';
+      $options[$state][$handler_id] = $option;
     }
     return $options;
   }

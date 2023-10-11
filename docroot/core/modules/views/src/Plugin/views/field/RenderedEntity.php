@@ -130,18 +130,18 @@ class RenderedEntity extends FieldPluginBase implements CacheableDependencyInter
    */
   public function render(ResultRow $values) {
     $entity = $this->getEntity($values);
-    if ($entity) {
-      $build = [];
-      $entity = $this->getEntityTranslation($entity, $values);
-      $access = $entity->access('view', NULL, TRUE);
-      $build['#access'] = $access;
-      if ($access->isAllowed()) {
-        $view_builder = $this->entityTypeManager->getViewBuilder($this->getEntityTypeId());
-        $build += $view_builder->view($entity, $this->options['view_mode'], $entity->language()->getId());
-      }
-      return $build;
+    if ($entity === NULL) {
+      return '';
     }
-    return '';
+    $entity = $this->getEntityTranslationByRelationship($entity, $values);
+    $build = [];
+    $access = $entity->access('view', NULL, TRUE);
+    $build['#access'] = $access;
+    if ($access->isAllowed()) {
+      $view_builder = $this->entityTypeManager->getViewBuilder($this->getEntityTypeId());
+      $build += $view_builder->view($entity, $this->options['view_mode'], $entity->language()->getId());
+    }
+    return $build;
   }
 
   /**
@@ -165,7 +165,7 @@ class RenderedEntity extends FieldPluginBase implements CacheableDependencyInter
     foreach ($view_displays as $view_display) {
       $tags[] = $view_display->getCacheTags();
     }
-    return array_merge([], ...$tags);
+    return array_merge(...$tags);
   }
 
   /**

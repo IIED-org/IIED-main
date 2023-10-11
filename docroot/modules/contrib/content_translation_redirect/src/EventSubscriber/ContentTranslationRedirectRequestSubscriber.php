@@ -62,10 +62,13 @@ class ContentTranslationRedirectRequestSubscriber implements EventSubscriberInte
    *   The event to process.
    */
   public function onRequestCheckRedirect(RequestEvent $event): void {
-    $entity = $this->getEntity();
+    // Check that the site has more than one language.
+    if (!$this->languageManager->isMultilingual()) {
+      return;
+    }
 
-    // Check the translatable entity.
-    if (!($entity instanceof ContentEntityInterface)) {
+    $entity = $this->getEntity();
+    if ($entity === NULL) {
       return;
     }
 
@@ -83,6 +86,11 @@ class ContentTranslationRedirectRequestSubscriber implements EventSubscriberInte
 
     // Check whether we should act on translatable entity only or not.
     if ($redirect->translatableEntityOnly() && !$entity->isTranslatable()) {
+      return;
+    }
+
+    // Check whether we should act on untranslatable entity only or not.
+    if ($redirect->untranslatableEntityOnly() && $entity->isTranslatable()) {
       return;
     }
 

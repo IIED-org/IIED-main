@@ -111,6 +111,7 @@ class DynamicEntityReferenceFieldDefaultValueTest extends BrowserTestBase {
 
     // Set created node as default_value.
     $field_edit = [
+      'set_default_value' => '1',
       'default_value_input[' . $field_name . '][0][target_type]' => $referenced_node->getEntityTypeId(),
       'default_value_input[' . $field_name . '][0][target_id]' => $referenced_node->getTitle() . ' (' . $referenced_node->id() . ')',
     ];

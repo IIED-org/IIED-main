@@ -406,7 +406,7 @@ class DynamicEntityReferenceItemTest extends FieldKernelTestBase {
     ]);
     $errors = $entity->validate();
     $this->assertCount(1, $errors);
-    $this->assertEquals($errors[0]->getMessage(), (string) new FormattableMarkup('%property should not be null.', ['%property' => 'target_id']));
+    $this->assertEquals((string) $errors[0]->getMessage(), (string) new FormattableMarkup('%property should not be null.', ['%property' => 'target_id']));
     $this->assertEquals($errors[0]->getPropertyPath(), 'field_der.0.target_id');
     // This should rectify the issue, favoring the entity over the target_id.
     $entity->save();

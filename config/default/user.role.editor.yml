@@ -69,6 +69,7 @@ permissions:
   - 'create terms in person'
   - 'create url aliases'
   - 'delete any hidden_handbrake content'
+  - 'delete own files'
   - 'delete own hidden_handbrake content'
   - 'display eu cookie compliance popup'
   - 'edit any document media'

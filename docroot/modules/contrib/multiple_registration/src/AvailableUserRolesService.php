@@ -36,7 +36,7 @@ class AvailableUserRolesService {
    *   Config factory.
    */
   public function __construct(EntityTypeManagerInterface $entityTypeManager, ConfigFactoryInterface $configFactory) {
-    $this->entityTypeManager = $entityTypeManager;
+    $this->entityTypeManager = $entityTypeManager->getStorage('user_role');
     $this->configFactory = $configFactory;
   }
 
@@ -51,7 +51,7 @@ class AvailableUserRolesService {
    */
   public function getAvailableRoles() {
     $roles = user_role_names();
-    $role_storage = $this->entityTypeManager->getStorage('user_role');
+    $role_storage = $this->entityTypeManager;
     $admin_role = $role_storage->getQuery()
       ->condition('is_admin', TRUE)
       ->execute();

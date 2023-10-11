@@ -36,11 +36,11 @@ class SettingsForm extends ConfigFormBase {
     $form['toastify_loading'] = [
       '#type' => 'select',
       '#title' => $this->t('Load Toastify'),
-      '#description' => $this->t('Define how to load toasity.'),
+      '#description' => $this->t('Define how to load Toastify.'),
       '#options' => [
-        'cdn' => 'CDN',
-        'composer' => 'Composer',
-        'custom' => 'custom',
+        'cdn' => $this->t('CDN'),
+        'composer' => $this->t('Composer'),
+        'custom' => $this->t('Do not load'),
       ],
       '#default_value' => $config->get('toastify_loading'),
     ];
@@ -51,12 +51,18 @@ class SettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('enable_preview_regions'),
     ];
 
-    $form['hide_discard_revert_buttons'] = [
+    $form['hide_discard_button'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Hide "Discard changes" and "Revert to defaults" button'),
-      '#description' => $this->t('Layout builder provides buttons to revert to defaults and a discard changes -
-      check this option if you want to hide these.'),
-      '#default_value' => $config->get('hide_discard_revert_buttons'),
+      '#title' => $this->t('Hide "Discard changes" button'),
+      '#description' => $this->t('Layout builder provides a button to discard changes - check this option if you want to hide the button.'),
+      '#default_value' => $config->get('hide_discard_button'),
+    ];
+
+    $form['hide_revert_button'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Hide "Revert to defaults" button'),
+      '#description' => $this->t('Layout builder provides a button to revert to defaults - check this option if you want to hide the button.'),
+      '#default_value' => $config->get('hide_revert_button'),
     ];
 
     $form['save_behavior'] = [
@@ -79,7 +85,8 @@ class SettingsForm extends ConfigFormBase {
     $this->config('gin_lb.settings')
       ->set('toastify_loading', $form_state->getValue('toastify_loading'))
       ->set('enable_preview_regions', $form_state->getValue('enable_preview_regions'))
-      ->set('hide_discard_revert_buttons', $form_state->getValue('hide_discard_revert_buttons'))
+      ->set('hide_discard_button', $form_state->getValue('hide_discard_button'))
+      ->set('hide_revert_button', $form_state->getValue('hide_revert_button'))
       ->set('save_behavior', $form_state->getValue('save_behavior'))
       ->save();
     Cache::invalidateTags($this->config('gin_lb.settings')->getCacheTags());

@@ -12,12 +12,11 @@ dependencies:
     - user.role.editor
     - user.role.manager
   module:
-    - link
-    - node
-    - taxonomy
-    - user
-    - views_autocomplete_filters
-    - views_bulk_operations
+    0: link
+    1: node
+    2: taxonomy
+    3: user
+    5: views_bulk_operations
 id: manage_terms
 label: 'Manage terms'
 module: views

@@ -1,0 +1,22 @@
+--- modules/contact/src/Plugin/views/field/ContactLink.php
++++ modules/contact/src/Plugin/views/field/ContactLink.php
+@@ -30,7 +30,8 @@ public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+    * {@inheritdoc}
+    */
+   protected function getUrlInfo(ResultRow $row) {
+-    return Url::fromRoute('entity.user.contact_form', ['user' => $this->getEntity($row)->id()]);
++    $entity = $this->getEntity($row);
++    return $entity ? Url::fromRoute('entity.user.contact_form', ['user' => $entity->id()]) : NULL;
+   }
+ 
+   /**
+@@ -38,6 +39,9 @@ protected function getUrlInfo(ResultRow $row) {
+    */
+   protected function renderLink(ResultRow $row) {
+     $entity = $this->getEntity($row);
++    if (!$entity) {
++      return '';
++    }
+ 
+     $this->options['alter']['make_link'] = TRUE;
+     $this->options['alter']['url'] = $this->getUrlInfo($row);

@@ -84,8 +84,10 @@ function multiple_registration_entity_operation_alter(array &$operations, Entity
  * Implements hook_form_FORM_ID_alter().
  */
 function multiple_registration_form_field_config_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $field = $form_state->getFormObject()->getEntity();
-  $instance = $field;
+  /** @var \Drupal\Core\Entity\EntityFormInterface $field_object */
+  $field_object = $form_state->getFormObject();
+  /** @var \Drupal\field\Entity\FieldConfig $instance */
+  $instance = $field_object->getEntity();
 
   if ($instance->get('entity_type') === 'user' && !$instance->isDeleted() && !$instance->isReadonly()) {
 
@@ -173,7 +175,10 @@ function multiple_registration_preprocess_user(array &$variables) {
 function multiple_registration_field_config_form_submit(array &$form, FormStateInterface $form_state) {
   $data = $form_state->getValue('multiple_registration');
   $data_required = $form_state->getValue('multiple_registration_required');
-  $field = $form_state->getFormObject()->getEntity();
+  /** @var \Drupal\Core\Entity\EntityFormInterface $field_object */
+  $field_object = $form_state->getFormObject();
+  /** @var \Drupal\field\Entity\FieldConfig $field */
+  $field = $field_object->getEntity();
   $field->setThirdPartySetting('multiple_registration', 'user_additional_register_form', $data);
   $field->setThirdPartySetting('multiple_registration', 'user_additional_register_form_required', $data_required);
   $field->save();
@@ -247,9 +252,9 @@ function _multiple_registration_rid(array $form, FormStateInterface $form_state)
 }
 
 /**
- * Implements hook_field_widget_form_alter().
+ * Implements hook_field_widget_single_element_form_alter().
  */
-function multiple_registration_field_widget_form_alter(&$element, FormStateInterface $form_state, $context) {
+function multiple_registration_field_widget_single_element_form_alter(array &$element, FormStateInterface $form_state, array $context) {
   $field_definition = $context['items']->getFieldDefinition();
   $field_name = $field_definition->getName();
   $parents = $context['form']['#parents'];
@@ -363,6 +368,7 @@ function multiple_registration_block_view_user_login_block_alter(array &$build, 
  * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
  */
 function multiple_registration_entity_form_display_alter(EntityFormDisplayInterface &$form_display, array $context) {
+  $custom_form_mode = '';
   $route_match = \Drupal::routeMatch();
   $route = $route_match->getRouteObject();
   $route_name = $route_match->getRouteName();
@@ -376,7 +382,7 @@ function multiple_registration_entity_form_display_alter(EntityFormDisplayInterf
       switch ($route_name) {
         case 'multiple_registration.role_registration_page':
           $rid = \Drupal::routeMatch()->getParameter('rid');
-          $custom_form_mode = $config->get('roles')[$rid]['form_mode_register'] ?: 'register';
+          $custom_form_mode = $config->get('roles')[$rid]['form_mode_register'] ?? 'register';
           break;
 
         case 'entity.user.edit_form':

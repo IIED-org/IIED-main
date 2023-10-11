@@ -40,6 +40,7 @@ class ContentTranslationRedirectListBuilder extends ConfigEntityListBuilder {
     $header['label'] = $this->t('Type');
     $header['code'] = $this->t('Redirect status');
     $header['path'] = $this->t('Redirect path');
+    $header['mode'] = $this->t('Act on');
     return $header + parent::buildHeader();
   }
 
@@ -54,6 +55,7 @@ class ContentTranslationRedirectListBuilder extends ConfigEntityListBuilder {
     $row['label'] = $entity->label();
     $row['code'] = $code ? ContentTranslationRedirect::getStatusCodes()[$code] : $this->t('Not specified');
     $row['path'] = $path ? ($path === '/' ? $this->t('Front page') : Link::fromTextAndUrl($path, $entity->getUrl())) : $this->t('Original content');
+    $row['mode'] = ContentTranslationRedirect::getTranslationModes()[$entity->getTranslationMode()];
     return $row + parent::buildRow($entity);
   }
 

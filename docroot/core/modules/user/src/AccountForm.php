@@ -3,6 +3,7 @@
 namespace Drupal\user;
 
 use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Datetime\TimeZoneFormHelper;
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Entity\EntityConstraintViolationListInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
@@ -71,7 +72,7 @@ abstract class AccountForm extends ContentEntityForm implements TrustedCallbackI
     $language_interface = \Drupal::languageManager()->getCurrentLanguage();
 
     // Check for new account.
-    $register = $account->isAnonymous();
+    $register = $account->isNew();
 
     // For a new account, there are 2 sub-cases:
     // $self_register: A user creates their own, new, account
@@ -99,6 +100,7 @@ abstract class AccountForm extends ContentEntityForm implements TrustedCallbackI
       '#description' => $this->t('The email address is not made public. It will only be used if you need to be contacted about your account or for opted-in notifications.'),
       '#required' => !(!$account->getEmail() && $user->hasPermission('administer users')),
       '#default_value' => (!$register ? $account->getEmail() : ''),
+      '#access' => $account->mail->access('edit'),
     ];
 
     // Only show name field on registration form or user can change own username.
@@ -295,7 +297,7 @@ abstract class AccountForm extends ContentEntityForm implements TrustedCallbackI
       '#type' => 'select',
       '#title' => $this->t('Time zone'),
       '#default_value' => $account->getTimezone() ?: $system_date_config->get('timezone.default'),
-      '#options' => system_time_zones($account->id() != $user->id(), TRUE),
+      '#options' => TimeZoneFormHelper::getOptionsListByRegion($account->id() != $user->id()),
       '#description' => $this->t('Select the desired local time and time zone. Dates and times throughout this site will be displayed using this time zone.'),
     ];
 
@@ -306,7 +308,7 @@ abstract class AccountForm extends ContentEntityForm implements TrustedCallbackI
       $form['timezone']['timezone']['#attributes'] = ['class' => ['timezone-detect']];
     }
 
-    return parent::form($form, $form_state, $account);
+    return parent::form($form, $form_state);
   }
 
   /**
@@ -430,7 +432,7 @@ abstract class AccountForm extends ContentEntityForm implements TrustedCallbackI
   public function submitForm(array &$form, FormStateInterface $form_state) {
     parent::submitForm($form, $form_state);
 
-    $user = $this->getEntity($form_state);
+    $user = $this->getEntity();
     // If there's a session set to the users id, remove the password reset tag
     // since a new password was saved.
     $this->getRequest()->getSession()->remove('pass_reset_' . $user->id());

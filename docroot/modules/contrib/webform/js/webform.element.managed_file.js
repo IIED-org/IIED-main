@@ -18,7 +18,7 @@
       $(once('webform-auto-file-upload', 'form', context))
         .on('submit', function (event) {
           var $form = $(this);
-          if ($form.data('webform-auto-file-uploads') > 0 && blockSubmit($form)) {
+          if ($form.data('webform-auto-file-uploads') > 0 && Drupal.webformManagedFileBlockSubmit($form)) {
             event.preventDefault();
             return false;
           }
@@ -95,7 +95,7 @@
    * @return {boolean}
    *   TRUE if form submit should be blocked.
    */
-  function blockSubmit(form) {
+  Drupal.webformManagedFileBlockSubmit = function (form) {
     if ($(form).data('webform-auto-file-uploads') < 0) {
       return false;
     }

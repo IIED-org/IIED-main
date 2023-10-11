@@ -10,7 +10,6 @@ dependencies:
     - search_api
     - text
     - user
-    - views_autocomplete_filters
 _core:
   default_config_hash: 9Hnjt6A6DLNyxWjvL-uYrUwtdIYldvL79C5QsJYrato
 id: acquia_search

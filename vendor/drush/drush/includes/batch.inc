@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  *    Drush batch API.
@@ -25,37 +26,11 @@
  */
 
 use Drupal\Core\Database\Database;
+use Drupal\Core\Database\IntegrityConstraintViolationException;
 use Drush\Drush;
 
 /**
- * Class extending ArrayObject to allow the batch API to perform logging when
- * some keys of the array change.
- *
- * It is used to wrap batch's $context array and set log messages when values
- * are assigned to keys 'message' or 'error_message'.
- *
- * @see _drush_batch_worker().
- */
-class DrushBatchContext extends ArrayObject {
-  #[\ReturnTypeWillChange]
-  function offsetSet($name, $value) {
-    if ($name == 'message') {
-      Drush::logger()->notice(strip_tags($value));
-    }
-    elseif ($name == 'error_message') {
-      Drush::logger()->error(strip_tags($value));
-    }
-    parent::offsetSet($name, $value);
-  }
-}
-
-/**
  * Process a Drupal batch by spawning multiple Drush processes.
- *
- * This function will include the correct batch engine for the current
- * major version of Drupal, and will make use of the drush_backend_invoke
- * system to spawn multiple worker threads to handle the processing of
- * the current batch, while keeping track of available memory.
  *
  * The batch system will process as many batch sets as possible until
  * the entire batch has been completed or 60% of the available memory
@@ -116,7 +91,7 @@ function drush_batch_command($id) {
 function _drush_backend_batch_process($command = 'batch-process', $args = [], $options = []) {
   $result = NULL;
 
-  $batch =& batch_get();
+  $batch = &batch_get();
 
   if (isset($batch)) {
     $process_info = [
@@ -131,7 +106,20 @@ function _drush_backend_batch_process($command = 'batch-process', $args = [], $o
 
     // Assign an arbitrary id: don't rely on a serial column in the 'batch'
     // table, since non-progressive batches skip database storage completely.
-    $batch['id'] = \Drupal::database()->nextId();
+    /** @var \Drupal\Core\Batch\BatchStorageInterface $batch_storage */
+    $batch_storage = \Drupal::service('batch.storage');
+    if (method_exists($batch_storage, 'getId')) {
+      try {
+        $batch['id'] = $batch_storage->getId();
+      }
+      catch (IntegrityConstraintViolationException) {
+        // Remove calls to nextId() once 10.0 is no longer supported.
+        $batch['id'] = \Drupal::database()->nextId();
+      }
+    }
+    else {
+      $batch['id'] = \Drupal::database()->nextId();
+    }
     $args[] = $batch['id'];
 
     $batch['progressive'] = TRUE;
@@ -143,8 +131,6 @@ function _drush_backend_batch_process($command = 'batch-process', $args = [], $o
     }
 
     // Store the batch.
-    /** @var \Drupal\Core\Batch\BatchStorage $batch_storage */
-    $batch_storage = \Drupal::service('batch.storage');
     $batch_storage->create($batch);
     $finished = FALSE;
 
@@ -181,7 +167,7 @@ function _drush_backend_batch_process($command = 'batch-process', $args = [], $o
  *   A results array.
  */
 function _drush_batch_command($id) {
-  $batch =& batch_get();
+  $batch = &batch_get();
 
   $data = Database::getConnection()->select('batch', 'b')
     ->fields('b', ['batch'])
@@ -220,8 +206,8 @@ function _drush_batch_command($id) {
  * reached.
  */
 function _drush_batch_worker() {
-  $batch =& batch_get();
-  $current_set =& _batch_current_set();
+  $batch = &batch_get();
+  $current_set = &_batch_current_set();
   $set_changed = TRUE;
 
   if (empty($current_set['start'])) {
@@ -242,7 +228,7 @@ function _drush_batch_worker() {
     $finished = 1;
 
     if ($item = $queue->claimItem()) {
-      list($function, $args) = $item->data;
+      [$callback, $args] = $item->data;
 
       // Build the 'context' array and execute the function call.
       $batch_context = [
@@ -251,20 +237,17 @@ function _drush_batch_worker() {
         'finished' => &$finished,
         'message'  => &$task_message,
       ];
-      // Magic wrap to catch changes to 'message' key.
-      $batch_context = new DrushBatchContext($batch_context);
 
       // Tolerate recoverable errors.
       // See https://github.com/drush-ops/drush/issues/1930
       $halt_on_error = \Drush\Drush::config()->get('runtime.php.halt-on-error', TRUE);
       \Drush\Drush::config()->set('runtime.php.halt-on-error', FALSE);
-      $message = call_user_func_array($function, array_merge($args, [&$batch_context]));
-      if (!empty($message)) {
-        Drush::logger()->notice($message);
+      call_user_func_array($callback, array_merge($args, [&$batch_context]));
+      if (!empty($task_message)) {
+        Drush::logger()->notice(strip_tags($task_message));
       }
       \Drush\Drush::config()->set('runtime.php.halt-on-error', $halt_on_error);
 
-      $finished = $batch_context['finished'];
       if ($finished >= 1) {
         // Make sure this step is not counted twice when computing $current.
         $finished = 0;
@@ -376,8 +359,8 @@ function _drush_batch_finished() {
  */
 function _drush_batch_shutdown() {
   if ($batch = batch_get()) {
-      /** @var \Drupal\Core\Batch\BatchStorage $batch_storage */
-      $batch_storage = \Drupal::service('batch.storage');
-      $batch_storage->update($batch);
+    /** @var \Drupal\Core\Batch\BatchStorage $batch_storage */
+    $batch_storage = \Drupal::service('batch.storage');
+    $batch_storage->update($batch);
   }
 }

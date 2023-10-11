@@ -29,10 +29,10 @@ dependencies:
   module:
     - ds
     - entity_reference_revisions
-    - image
     - layout_builder
     - link
     - options
+    - svg_image
     - text
     - user
 third_party_settings:

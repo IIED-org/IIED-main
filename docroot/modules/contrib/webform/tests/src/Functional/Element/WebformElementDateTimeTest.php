@@ -105,6 +105,19 @@ class WebformElementDateTimeTest extends WebformElementBrowserTestBase {
     $submission = WebformSubmission::load($sid);
     $assert_session->responseNotContains('The datetime_no_seconds date is invalid.');
     $this->assertEquals($submission->getElementData('datetime_no_seconds'), '2009-08-18T16:00:00+1000');
+
+    // Check datetime #interval validation is displayed.
+    $this->drupalGet('/webform/test_element_datetime');
+    $edit = ['datetime_no_seconds[date]' => '2009-08-18', 'datetime_no_seconds[time]' => '00:01:00'];
+    $this->submitForm($edit, 'Submit');
+    $assert_session->responseContains('<em class="placeholder">datetime_no_seconds: Time</em> must be a valid time with intervals from the dropdown (<em class="placeholder">15</em> min/s).');
+
+    // Check datetime #interval validation is displayed via inline form errors.
+    \Drupal::service('module_installer')->install(['inline_form_errors']);
+    $this->drupalGet('/webform/test_element_datetime');
+    $edit = ['datetime_no_seconds[date]' => '2009-08-18', 'datetime_no_seconds[time]' => '00:02:00'];
+    $this->submitForm($edit, 'Submit');
+    $assert_session->responseContains('<em class="placeholder">datetime_no_seconds: Time</em> must be a valid time with intervals from the dropdown (<em class="placeholder">15</em> min/s).');
   }
 
 }

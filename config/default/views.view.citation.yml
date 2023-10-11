@@ -279,6 +279,15 @@ display:
             date_format: html_year
             custom_date_format: ''
             timezone: ''
+            tooltip:
+              date_format: ''
+              custom_date_format: ''
+            time_diff:
+              enabled: false
+              future_format: '@interval hence'
+              past_format: '@interval ago'
+              granularity: 2
+              refresh: 60
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -1169,6 +1178,15 @@ display:
             date_format: html_year
             custom_date_format: ''
             timezone: ''
+            tooltip:
+              date_format: ''
+              custom_date_format: ''
+            time_diff:
+              enabled: false
+              future_format: '@interval hence'
+              past_format: '@interval ago'
+              granularity: 2
+              refresh: 60
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -1322,9 +1340,9 @@ display:
           exclude: true
           alter:
             alter_text: true
-            text: 'https://www.iied.org{{ path(''entity.node.canonical'', {''node'': nid}) }}'
+            text: "https://www.iied.org{{ path('entity.node.canonical', {'node': nid}) }}"
             make_link: true
-            path: '{{ path(''entity.node.canonical'', {''node'': nid}) }}'
+            path: "{{ path('entity.node.canonical', {'node': nid}) }}"
             absolute: true
             external: false
             replace_spaces: false

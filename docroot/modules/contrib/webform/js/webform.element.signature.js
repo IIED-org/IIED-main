@@ -67,6 +67,8 @@
         // Set resize handler.
         $(window).on('resize', debounce(refresh, 10));
 
+        $input.closest('form').on('webform_cards:change', refresh);
+
         // Set reset handler.
         $button.on('click', function () {
           signaturePad.clear();

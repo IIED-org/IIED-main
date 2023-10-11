@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drush\Sql;
 
 use Drush\Drush;
@@ -8,12 +10,11 @@ define('PSQL_SHOW_TABLES', "SELECT tablename FROM pg_tables WHERE schemaname='pu
 
 class SqlPgsql extends SqlBase
 {
+    public string $queryExtra = "--no-align --field-separator=\"\t\" --pset tuples_only=on";
 
-    public $queryExtra = "--no-align --field-separator=\"\t\" --pset tuples_only=on";
+    public string $queryFile = "--file";
 
-    public $queryFile = "--file";
-
-    private $password_file = null;
+    private ?string $password_file = null;
 
     private function createPasswordFile()
     {
@@ -32,7 +33,7 @@ class SqlPgsql extends SqlBase
             array_walk($pgpass_parts, function (&$part) {
                   // The order of the replacements is important so that backslashes are
                   // not replaced twice.
-                  $part = str_replace(['\\', ':'], ['\\\\', '\:'], $part);
+                  $part = str_replace(['\\', ':'], ['\\\\', '\:'], (string)$part);
             });
             $pgpass_contents = implode(':', $pgpass_parts);
             $this->password_file = drush_save_data_to_temp_file($pgpass_contents);
@@ -41,24 +42,26 @@ class SqlPgsql extends SqlBase
         return $this->password_file;
     }
 
-    public function command()
+    public function command(): string
     {
-        return 'psql -q';
+        return 'psql -q ON_ERROR_STOP=1 ';
     }
 
-    public function getEnv()
+    public function getEnv(): array
     {
+        $return = [];
         $pw_file = $this->createPasswordFile();
         if (isset($pw_file)) {
-            return ['PGPASSFILE' => $pw_file];
+            $return = ['PGPASSFILE' => $pw_file];
         }
+        return $return;
     }
 
     /*
      * @param $hide_password
      *   Not used in postgres. We always hide via a .pgpass file.
      */
-    public function creds($hide_password = true)
+    public function creds($hide_password = true): string
     {
         $dbSpec = $this->getDbSpec();
         // Some drush commands (e.g. site-install) want to connect to the
@@ -78,7 +81,26 @@ class SqlPgsql extends SqlBase
         return $this->paramsToOptions($parameters);
     }
 
-    public function createdbSql($dbname, $quoted = false)
+    public function createdb(bool $quoted = false): ?bool
+    {
+        $db_spec_original = $this->getDbSpec();
+        $return = parent::createdb($quoted);
+        $this->setDbSpec($db_spec_original);
+        $this->alwaysQuery("CREATE EXTENSION IF NOT EXISTS pg_trgm;");
+        return $return;
+    }
+
+    public function drop(array $tables): ?bool
+    {
+        $return = true;
+        if ($tables) {
+            $sql = 'DROP TABLE ' . implode(', ', $tables) . ' CASCADE';
+            $return = $this->query($sql);
+        }
+        return $return;
+    }
+
+    public function createdbSql($dbname, $quoted = false): string
     {
         if ($quoted) {
             $dbname = '"' . $dbname . '"';
@@ -88,7 +110,7 @@ class SqlPgsql extends SqlBase
         return implode(' ', $sql);
     }
 
-    public function dbExists()
+    public function dbExists(): bool
     {
         $dbSpec = $this->getDbSpec();
         $database = $dbSpec['database'];
@@ -97,10 +119,12 @@ class SqlPgsql extends SqlBase
         unset($db_spec_no_db['database']);
         $sql_no_db = new SqlPgsql($db_spec_no_db, $this->getOptions());
         $query = "SELECT 1 AS result FROM pg_database WHERE datname='$database'";
-        $process = Drush::shell($sql_no_db->connect() . ' -t -c ' . $query, null, $this->getEnv());
+        $process = Drush::shell($sql_no_db->connect() . ' -t -c ' . escapeshellarg($query), null, $this->getEnv());
         $process->setSimulated(false);
         $process->run();
-        return $process->isSuccessful();
+
+        return $process->isSuccessful()
+            && trim($process->getOutput()) === '1';
     }
 
     public function queryFormat($query)
@@ -111,14 +135,14 @@ class SqlPgsql extends SqlBase
         return $query;
     }
 
-    public function listTables()
+    public function listTables(): array
     {
         $return = $this->alwaysQuery(PSQL_SHOW_TABLES);
         $tables = explode(PHP_EOL, trim($this->getProcess()->getOutput()));
         return array_filter($tables);
     }
 
-    public function dumpCmd($table_selection)
+    public function dumpCmd($table_selection): string
     {
         $parens = false;
         $skip_tables = $table_selection['skip'];
@@ -156,7 +180,7 @@ class SqlPgsql extends SqlBase
             foreach ($skip_tables as $table) {
                 $ignores[] = "--exclude-table=$table";
             }
-            $exec .= ' '. implode(' ', $ignores);
+            $exec .= ' ' . implode(' ', $ignores);
             // Run pg_dump again and append output if we need some structure only tables.
             if (!empty($structure_tables)) {
                 $parens = true;
@@ -171,10 +195,7 @@ class SqlPgsql extends SqlBase
         return $parens ? "($exec)" : $exec;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getPasswordFile()
+    public function getPasswordFile(): ?string
     {
         return $this->password_file;
     }

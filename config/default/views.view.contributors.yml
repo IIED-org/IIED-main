@@ -368,7 +368,7 @@ display:
         - 'config:field.storage.user.field_email_updates'
   page_1:
     id: page_1
-    display_title: 'All Contributors - Tab for ''Recent content'' view'
+    display_title: "All Contributors - Tab for 'Recent content' view"
     display_plugin: page
     position: 1
     display_options:
@@ -756,6 +756,15 @@ display:
             date_format: date_only
             custom_date_format: ''
             timezone: ''
+            tooltip:
+              date_format: ''
+              custom_date_format: ''
+            time_diff:
+              enabled: false
+              future_format: '@interval hence'
+              past_format: '@interval ago'
+              granularity: 2
+              refresh: 60
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -823,6 +832,15 @@ display:
             date_format: date_only
             custom_date_format: ''
             timezone: ''
+            tooltip:
+              date_format: ''
+              custom_date_format: ''
+            time_diff:
+              enabled: false
+              future_format: '@interval hence'
+              past_format: '@interval ago'
+              granularity: 2
+              refresh: 60
           group_column: value
           group_columns: {  }
           group_rows: true

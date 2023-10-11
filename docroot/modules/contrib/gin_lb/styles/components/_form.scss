@@ -502,17 +502,18 @@ fieldset:not(.fieldgroup)
     padding-right: 36px !important;
 }
 
-
-#drupal-off-canvas .ui-autocomplete .ui-menu-item-wrapper {
-  display: block;
-  padding: 0.75rem 0.9375rem;
-  background: inherit;
-  color: var(--gin-color-primary) !important;
-  &:hover {
-    color: white !important;
-    background: var(--gin-color-primary) !important;
+#drupal-off-canvas:not(.drupal-off-canvas-reset),
+#drupal-off-canvas-wrapper {
+  & .ui-autocomplete .ui-menu-item-wrapper {
+    display: block;
+    padding: 0.75rem 0.9375rem;
+    background: inherit;
+    color: var(--gin-color-primary) !important;
+    &:hover {
+      color: white !important;
+      background: var(--gin-color-primary) !important;
+    }
   }
-
 }
 
 .glb-entity-form-display-form

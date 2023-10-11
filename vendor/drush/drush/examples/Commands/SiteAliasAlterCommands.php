@@ -1,9 +1,12 @@
 <?php
+
 namespace Drush\Commands;
 
 use Consolidation\AnnotatedCommand\AnnotationData;
+use Consolidation\AnnotatedCommand\Hooks\HookManager;
 use Consolidation\SiteAlias\SiteAliasManagerAwareInterface;
 use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
+use Drush\Attributes as CLI;
 use Symfony\Component\Console\Input\InputInterface;
 
 /**
@@ -11,17 +14,12 @@ use Symfony\Component\Console\Input\InputInterface;
  */
 class SiteAliasAlterCommands extends DrushCommands implements SiteAliasManagerAwareInterface
 {
-
     use SiteAliasManagerAwareTrait;
 
     /**
      * A few example alterations to site aliases.
-     *
-     * @hook pre-init *
-     *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Consolidation\AnnotatedCommand\AnnotationData $annotationData
      */
+    #[CLI\Hook(type: HookManager::PRE_INITIALIZE, target: '*')]
     public function alter(InputInterface $input, AnnotationData $annotationData)
     {
         $self = $this->siteAliasManager()->getSelf();

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Drupal\sophron\Event;
 
@@ -19,27 +19,20 @@ class MapEvent extends Event {
   const INIT = 'sophron.map.initialize';
 
   /**
-   * The MimeMap class being processed.
-   *
-   * @var string
-   */
-  protected $mapClass;
-
-  /**
    * An array of errors collected by the event.
    *
    * @var array
    */
-  protected $errors = [];
+  protected array $errors = [];
 
   /**
    * Constructs the object.
    *
-   * @param string $map_class
+   * @param string $mapClass
    *   The MimeMap class being processed.
    */
-  public function __construct($map_class) {
-    $this->mapClass = $map_class;
+  public function __construct(
+    protected string $mapClass) {
   }
 
   /**
@@ -48,7 +41,7 @@ class MapEvent extends Event {
    * @return string
    *   The MimeMap class being processed.
    */
-  public function getMapClass() {
+  public function getMapClass(): string {
     return $this->mapClass;
   }
 
@@ -64,7 +57,7 @@ class MapEvent extends Event {
    * @param string $message
    *   A messagge detailing the error.
    */
-  public function addError($method, array $args, $type, $message) {
+  public function addError(string $method, array $args, string $type, string $message): static {
     $this->errors[] = [
       'method' => $method,
       'args' => $args,
@@ -80,7 +73,7 @@ class MapEvent extends Event {
    * @return array
    *   The array of errors collected.
    */
-  public function getErrors() {
+  public function getErrors(): array {
     return $this->errors;
   }
 

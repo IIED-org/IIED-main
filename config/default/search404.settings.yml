@@ -15,7 +15,7 @@ search404_regex: ''
 search404_page_text: ''
 search404_do_google_cse: false
 search404_do_search_by_page: false
-search404_custom_error_message: 'The page you were looking for cannot be found. A search for ''@keys'' has been done for your convenience.'
+search404_custom_error_message: "The page you were looking for cannot be found. A search for '@keys' has been done for your convenience."
 search404_page_redirect: /
 search404_page_title: 'Page not found'
 search404_ignore: 'and or the'

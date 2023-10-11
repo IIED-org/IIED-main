@@ -737,7 +737,7 @@ class FilterKernelTest extends KernelTestBase {
       ],
       '<p>Test &lt;br/&gt;: This is a www.example17.com example <strong>with</strong> various http://www.example18.com tags. *<br/>
        It is important www.example19.com to *<br/>test different URLs and http://www.example20.com in the same paragraph. *<br>
-      HTML www.example21.com soup by person@example22.com can litererally http://www.example23.com contain *img*<img> anything. Just a www.example24.com with http://www.example25.com thrown in. www.example26.com from person@example27.com with extra http://www.example28.com.
+       HTML www.example21.com soup by person@example22.com can literally http://www.example23.com contain *img*<img> anything. Just a www.example24.com with http://www.example25.com thrown in. www.example26.com from person@example27.com with extra http://www.example28.com.
       ' => [
         'href="http://www.example17.com"' => TRUE,
         'href="http://www.example18.com"' => TRUE,
@@ -1015,23 +1015,23 @@ class FilterKernelTest extends KernelTestBase {
 
     $f = Html::normalize('<script>alert("test")</script>');
     $this->assertEquals('<script>
-<!--//--><![CDATA[// ><!--
+//<![CDATA[
 alert("test")
-//--><!]]>
+//]]>
 </script>', $f, 'HTML corrector -- CDATA added to script element');
 
     $f = Html::normalize('<p><script>alert("test")</script></p>');
     $this->assertEquals('<p><script>
-<!--//--><![CDATA[// ><!--
+//<![CDATA[
 alert("test")
-//--><!]]>
+//]]>
 </script></p>', $f, 'HTML corrector -- CDATA added to a nested script element');
 
     $f = Html::normalize('<p><style> /* Styling */ body {color:red}</style></p>');
     $this->assertEquals('<p><style>
-<!--/*--><![CDATA[/* ><!--*/
+/*<![CDATA[*/
  /* Styling */ body {color:red}
-/*--><!]]>*/
+/*]]>*/
 </style></p>', $f, 'HTML corrector -- CDATA added to a style element.');
 
     $filtered_data = Html::normalize('<p><style>
@@ -1041,50 +1041,38 @@ body {color:red}
 /*]]>*/
 </style></p>');
     $this->assertEquals('<p><style>
-<!--/*--><![CDATA[/* ><!--*/
-
 /*<![CDATA[*/
 /* Styling */
 body {color:red}
-/*]]]]><![CDATA[>*/
-
-/*--><!]]>*/
+/*]]>*/
 </style></p>', $filtered_data,
       new FormattableMarkup('HTML corrector -- Existing cdata section @pattern_name properly escaped', ['@pattern_name' => '/*<![CDATA[*/'])
     );
 
     $filtered_data = Html::normalize('<p><style>
-  <!--/*--><![CDATA[/* ><!--*/
+/*<![CDATA[*/
   /* Styling */
   body {color:red}
-  /*--><!]]>*/
+/*]]>*/
 </style></p>');
     $this->assertEquals('<p><style>
-<!--/*--><![CDATA[/* ><!--*/
-
-  <!--/*--><![CDATA[/* ><!--*/
+/*<![CDATA[*/
   /* Styling */
   body {color:red}
-  /*--><!]]]]><![CDATA[>*/
-
-/*--><!]]>*/
+/*]]>*/
 </style></p>', $filtered_data,
       new FormattableMarkup('HTML corrector -- Existing cdata section @pattern_name properly escaped', ['@pattern_name' => '<!--/*--><![CDATA[/* ><!--*/'])
     );
 
     $filtered_data = Html::normalize('<p><script>
-<!--//--><![CDATA[// ><!--
+//<![CDATA[
   alert("test");
-//--><!]]>
+//]]>
 </script></p>');
     $this->assertEquals('<p><script>
-<!--//--><![CDATA[// ><!--
-
-<!--//--><![CDATA[// ><!--
+//<![CDATA[
   alert("test");
-//--><!]]]]><![CDATA[>
-
-//--><!]]>
+//]]>
 </script></p>', $filtered_data,
       new FormattableMarkup('HTML corrector -- Existing cdata section @pattern_name properly escaped', ['@pattern_name' => '<!--//--><![CDATA[// ><!--'])
     );
@@ -1092,18 +1080,43 @@ body {color:red}
     $filtered_data = Html::normalize('<p><script>
 // <![CDATA[
   alert("test");
-// ]]>
+//]]>
 </script></p>');
     $this->assertEquals('<p><script>
-<!--//--><![CDATA[// ><!--
-
 // <![CDATA[
   alert("test");
-// ]]]]><![CDATA[>
-
-//--><!]]>
+//]]>
 </script></p>', $filtered_data,
       new FormattableMarkup('HTML corrector -- Existing cdata section @pattern_name properly escaped', ['@pattern_name' => '// <![CDATA['])
+    );
+
+    $filtered_data = Html::normalize('<p><script>
+// <![CDATA[![CDATA[![CDATA[
+  alert("test");
+//]]]]]]>
+</script></p>');
+    $this->assertEquals('<p><script>
+// <![CDATA[![CDATA[![CDATA[
+  alert("test");
+//]]]]]]>
+</script></p>', $filtered_data,
+      new FormattableMarkup('HTML corrector -- Existing cdata section @pattern_name properly escaped', ['@pattern_name' => '// <![CDATA[![CDATA[![CDATA['])
+    );
+
+    // Test calling Html::normalize() twice.
+    $filtered_data = Html::normalize('<p><script>
+// <![CDATA[![CDATA[![CDATA[
+  alert("test");
+//]]]]]]>
+</script></p>');
+    $filtered_data = Html::normalize($filtered_data);
+
+    $this->assertEquals('<p><script>
+// <![CDATA[![CDATA[![CDATA[
+  alert("test");
+//]]]]]]>
+</script></p>', $filtered_data,
+      new FormattableMarkup('HTML corrector -- Existing cdata section @pattern_name properly escaped', ['@pattern_name' => '// <![CDATA[![CDATA[![CDATA['])
     );
 
   }
@@ -1112,7 +1125,7 @@ body {color:red}
    * Asserts that a text transformed to lowercase with HTML entities decoded does contains a given string.
    *
    * Otherwise fails the test with a given message, similar to all the
-   * SimpleTest assert* functions.
+   * PHPUnit assert* functions.
    *
    * Note that this does not remove nulls, new lines and other characters that
    * could be used to obscure a tag or an attribute name.
@@ -1123,12 +1136,10 @@ body {color:red}
    *   Lowercase, plain text to look for.
    * @param string $message
    *   (optional) Message to display if failed. Defaults to an empty string.
-   * @param string $group
-   *   (optional) The group this message belongs to. Defaults to 'Other'.
    *
    * @internal
    */
-  public function assertNormalized(string $haystack, string $needle, string $message = '', string $group = 'Other'): void {
+  public function assertNormalized(string $haystack, string $needle, string $message = ''): void {
     $this->assertStringContainsString($needle, strtolower(Html::decodeEntities($haystack)), $message);
   }
 
@@ -1136,7 +1147,7 @@ body {color:red}
    * Asserts that text transformed to lowercase with HTML entities decoded does not contain a given string.
    *
    * Otherwise fails the test with a given message, similar to all the
-   * SimpleTest assert* functions.
+   * PHPUnit assert* functions.
    *
    * Note that this does not remove nulls, new lines, and other character that
    * could be used to obscure a tag or an attribute name.
@@ -1147,12 +1158,10 @@ body {color:red}
    *   Lowercase, plain text to look for.
    * @param string $message
    *   (optional) Message to display if failed. Defaults to an empty string.
-   * @param string $group
-   *   (optional) The group this message belongs to. Defaults to 'Other'.
    *
    * @internal
    */
-  public function assertNoNormalized(string $haystack, string $needle, string $message = '', string $group = 'Other'): void {
+  public function assertNoNormalized(string $haystack, string $needle, string $message = ''): void {
     $this->assertStringNotContainsString($needle, strtolower(Html::decodeEntities($haystack)), $message);
   }
 

@@ -61,8 +61,8 @@ class BlockFilterTest extends WebDriverTestBase {
     $assert_session->assertWaitOnAjaxRequest();
 
     // Get all blocks, for assertions later.
-    $blocks = $page->findAll('css', '.js-layout-builder-block-link');
-    $categories = $page->findAll('css', '.js-layout-builder-categories li');
+    $blocks = $page->findAll('css', '.js-layout-builder-categories li');
+    $categories = $page->findAll('css', '.js-layout-builder-category');
 
     $filter = $assert_session->elementExists('css', '.js-layout-builder-filter');
 
@@ -111,7 +111,7 @@ class BlockFilterTest extends WebDriverTestBase {
     $visible_categories = $this->filterVisibleElements($categories);
     $this->assertCount(4, $visible_categories);
 
-    // Test blocks reappear after being filtered by repeating search for "a".
+    // Test blocks reappear after being filtered by repeating search for "a"
     $filter->setValue('a');
     $this->assertAnnounceContains('All available blocks are listed.');
 
@@ -132,7 +132,7 @@ class BlockFilterTest extends WebDriverTestBase {
     $this->assertCount(0, $visible_categories);
     $announce_element = $page->find('css', '#drupal-live-announce');
     $page->waitFor(2, function () use ($announce_element) {
-      return strpos($announce_element->getText(), '0 blocks are available') === 0;
+      return str_starts_with($announce_element->getText(), '0 blocks are available');
     });
 
     // Test Drupal.announce() message when all blocks are listed.

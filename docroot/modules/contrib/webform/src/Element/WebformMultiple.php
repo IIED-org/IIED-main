@@ -818,6 +818,10 @@ class WebformMultiple extends FormElement {
     $number_of_items_storage_key = static::getStorageKey($element, 'number_of_items');
     $number_of_items = $form_state->get($number_of_items_storage_key);
     $more_items = (int) $element['add']['more_items']['#value'];
+    // Limit to prevent out-of-memory errors.
+    if ($more_items > 100) {
+      $more_items = 100;
+    }
     $form_state->set($number_of_items_storage_key, $number_of_items + $more_items);
 
     // Reset values.

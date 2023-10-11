@@ -4,7 +4,6 @@ namespace Drupal\Core\Extension;
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Asset\AssetCollectionOptimizerInterface;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ConfigInstallerInterface;
 use Drupal\Core\Config\ConfigManagerInterface;
@@ -12,6 +11,7 @@ use Drupal\Core\Extension\Exception\UnknownExtensionException;
 use Drupal\Core\Routing\RouteBuilderInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Theme\Registry;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -100,8 +100,10 @@ class ThemeInstaller implements ThemeInstallerInterface {
    *   The state store.
    * @param \Drupal\Core\Extension\ModuleExtensionList $module_extension_list
    *   The module extension list.
+   * @param \Drupal\Core\Theme\Registry|null $themeRegistry
+   *   The theme registry.
    */
-  public function __construct(ThemeHandlerInterface $theme_handler, ConfigFactoryInterface $config_factory, ConfigInstallerInterface $config_installer, ModuleHandlerInterface $module_handler, ConfigManagerInterface $config_manager, AssetCollectionOptimizerInterface $css_collection_optimizer, RouteBuilderInterface $route_builder, LoggerInterface $logger, StateInterface $state, ModuleExtensionList $module_extension_list = NULL) {
+  public function __construct(ThemeHandlerInterface $theme_handler, ConfigFactoryInterface $config_factory, ConfigInstallerInterface $config_installer, ModuleHandlerInterface $module_handler, ConfigManagerInterface $config_manager, AssetCollectionOptimizerInterface $css_collection_optimizer, RouteBuilderInterface $route_builder, LoggerInterface $logger, StateInterface $state, ModuleExtensionList $module_extension_list, protected ?Registry $themeRegistry = NULL) {
     $this->themeHandler = $theme_handler;
     $this->configFactory = $config_factory;
     $this->configInstaller = $config_installer;
@@ -111,11 +113,11 @@ class ThemeInstaller implements ThemeInstallerInterface {
     $this->routeBuilder = $route_builder;
     $this->logger = $logger;
     $this->state = $state;
-    if ($module_extension_list === NULL) {
-      @trigger_error('The extension.list.module service must be passed to ' . __NAMESPACE__ . '\ThemeInstaller::__construct(). It was added in drupal:8.9.0 and will be required before drupal:10.0.0.', E_USER_DEPRECATED);
-      $module_extension_list = \Drupal::service('extension.list.module');
-    }
     $this->moduleExtensionList = $module_extension_list;
+    if ($this->themeRegistry === NULL) {
+      @trigger_error('Calling ' . __METHOD__ . '() without the $themeRegistry argument is deprecated in drupal:10.1.0 and will be required in drupal:11.0.0. See https://www.drupal.org/node/3350906', E_USER_DEPRECATED);
+      $this->themeRegistry = \Drupal::service('theme.registry');
+    }
   }
 
   /**
@@ -308,17 +310,7 @@ class ThemeInstaller implements ThemeInstallerInterface {
       $this->routeBuilder->setRebuildNeeded();
     }
 
-    // @todo It feels wrong to have the requirement to clear the local tasks
-    //   cache here.
-    Cache::invalidateTags(['local_task']);
-    $this->themeRegistryRebuild();
-  }
-
-  /**
-   * Wraps drupal_theme_rebuild().
-   */
-  protected function themeRegistryRebuild() {
-    drupal_theme_rebuild();
+    $this->themeRegistry->reset();
   }
 
 }

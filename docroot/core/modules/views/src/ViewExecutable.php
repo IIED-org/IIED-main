@@ -74,6 +74,16 @@ class ViewExecutable {
   protected $ajaxEnabled = FALSE;
 
   /**
+   * The plugin name.
+   */
+  public ?string $plugin_name;
+
+  /**
+   * The build execution time.
+   */
+  public string|float $build_time;
+
+  /**
    * Where the results of a query will go.
    *
    * The array must use a numeric index starting at 0.
@@ -244,7 +254,7 @@ class ViewExecutable {
   public $override_url;
 
   /**
-   * Allow to override the path used for generated urls.
+   * Allow to override the path used for generated URLs.
    *
    * @var string
    */
@@ -695,7 +705,7 @@ class ViewExecutable {
 
       $this->exposed_input = \Drupal::request()->query->all();
       // unset items that are definitely not our input:
-      foreach (['page', 'q'] as $key) {
+      foreach (['page', 'q', 'ajax_page_state'] as $key) {
         if (isset($this->exposed_input[$key])) {
           unset($this->exposed_input[$key]);
         }
@@ -1962,7 +1972,7 @@ class ViewExecutable {
     $path = $this->getPath();
 
     // Don't bother working if there's nothing to do:
-    if (empty($path) || (empty($args) && strpos($path, '%') === FALSE)) {
+    if (empty($path) || (empty($args) && !str_contains($path, '%'))) {
       return $display_handler->getUrlInfo();
     }
 

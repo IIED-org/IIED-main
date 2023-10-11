@@ -4,10 +4,26 @@ All notable changes to the Solarium library will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.3.2]
+### Added
+- Solarium\Component\ReRankQuery::setOperator()
+- Solarium\Component\ReRankQuery::setScale() and setMainScale()
+
+### Fixed
+- MinimumScoreFilter can have a null value in a ValueGroupResult
+- Warning when building an Extract request from a stream resource without an associated URI/filename
+
+### Changed
+- LoadBalancer plugin blocks Extract queries from load balancing by default
+
+### Removed
+- PHP 7 support
+
+
 ## [6.3.1]
 ### Added
 - Loadbalancer plugin can failover on an optional list of HTTP status codes
-- Solarium\QueryType\Extract\Query::setFile() now supports file pointer resources
+- Solarium\QueryType\Extract\Query::setFile() now supports stream resources
 - Solarium\QueryType\Extract\Result::getFile() and getFileMetadata() to access the retrieved data for `extractOnly=true`
 
 ### Fixed

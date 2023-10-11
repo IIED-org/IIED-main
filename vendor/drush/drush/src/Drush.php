@@ -1,25 +1,27 @@
 <?php
 
-/**
- * @file
- * Contains \Drush.
- */
+declare(strict_types=1);
+
 namespace Drush;
 
+use Composer\InstalledVersions;
+use Robo\Runner;
+use Robo\Robo;
+use Drush\Config\DrushConfig;
+use Drush\Boot\BootstrapManager;
+use Drush\Boot\Boot;
 use Consolidation\AnnotatedCommand\AnnotatedCommandFactory;
 use Consolidation\SiteAlias\SiteAliasInterface;
 use Consolidation\SiteAlias\SiteAliasManager;
 use Consolidation\SiteProcess\ProcessBase;
 use Consolidation\SiteProcess\SiteProcess;
 use Drush\SiteAlias\ProcessManager;
-use League\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
 // TODO: Not sure if we should have a reference to PreflightArgs here.
 // Maybe these constants should be in config, and PreflightArgs can
 // reference them from there as well.
@@ -29,13 +31,13 @@ use Symfony\Component\Process\Process;
 /**
  * Static Service Container wrapper.
  *
- * This code is analogous to the \Drupal class in Drupal 8.
+ * This code is analogous to the \Drupal class.
  *
  * We would like to move Drush towards the model of using constructor
  * injection rather than globals. This class serves as a unified global
  * accessor to arbitrary services for use by legacy Drush code.
  *
- * Advice from Drupal 8's 'Drupal' class:
+ * Advice from Drupal's 'Drupal' class:
  *
  * This class exists only to support legacy code that cannot be dependency
  * injected. If your code needs it, consider refactoring it to be object
@@ -46,7 +48,6 @@ use Symfony\Component\Process\Process;
  */
 class Drush
 {
-
     /**
      * The version of Drush from the drush.info file, or FALSE if not read yet.
      *
@@ -59,7 +60,7 @@ class Drush
     /**
      * The Robo Runner -- manages and constructs all commandfile classes
      *
-     * @var \Robo\Runner
+     * @var Runner
      */
     protected static $runner;
 
@@ -84,13 +85,20 @@ class Drush
     public static function getVersion()
     {
         if (!self::$version) {
-            $drush_info = self::drushReadDrushInfo();
-            self::$version = $drush_info['drush_version'];
+            self::$version = InstalledVersions::getVersion('drush/drush');
         }
         return self::$version;
     }
 
-    public static function getMajorVersion()
+    /**
+     * Convert internal Composer dev version to ".x"
+     */
+    public static function sanitizeVersionString($version)
+    {
+        return preg_replace('#\.9+\.9+\.9+#', '.x', $version);
+    }
+
+    public static function getMajorVersion(): string
     {
         if (!self::$majorVersion) {
             $drush_version = self::getVersion();
@@ -100,7 +108,7 @@ class Drush
         return self::$majorVersion;
     }
 
-    public static function getMinorVersion()
+    public static function getMinorVersion(): string
     {
         if (!self::$minorVersion) {
             $drush_version = self::getVersion();
@@ -113,17 +121,17 @@ class Drush
     /**
      * Sets a new global container.
      */
-    public static function setContainer($container)
+    public static function setContainer($container): void
     {
-        \Robo\Robo::setContainer($container);
+        Robo::setContainer($container);
     }
 
     /**
      * Unsets the global container.
      */
-    public static function unsetContainer()
+    public static function unsetContainer(): void
     {
-        \Robo\Robo::unsetContainer();
+        Robo::unsetContainer();
     }
 
     /**
@@ -131,12 +139,12 @@ class Drush
      *
      * @throws RuntimeException
      */
-    public static function getContainer()
+    public static function getContainer(): \Psr\Container\ContainerInterface
     {
-        if (!\Robo\Robo::hasContainer()) {
+        if (!Robo::hasContainer()) {
             throw new RuntimeException('Drush::$container is not initialized yet. \Drush::setContainer() must be called with a real container.');
         }
-        return \Robo\Robo::getContainer();
+        return Robo::getContainer();
     }
 
     /**
@@ -144,7 +152,7 @@ class Drush
      */
     public static function hasContainer(): bool
     {
-        return \Robo\Robo::hasContainer();
+        return Robo::hasContainer();
     }
 
     /**
@@ -158,10 +166,10 @@ class Drush
     /**
      * Return the Robo runner.
      */
-    public static function runner(): \Robo\Runner
+    public static function runner(): Runner
     {
         if (!isset(self::$runner)) {
-            self::$runner = new \Robo\Runner();
+            self::$runner = new Runner();
         }
         return self::$runner;
     }
@@ -213,7 +221,7 @@ class Drush
      *
      * @internal Commands should use $this->config() instead.
      */
-    public static function config(): Config\DrushConfig
+    public static function config(): DrushConfig
     {
         return self::service('config');
     }
@@ -356,7 +364,7 @@ class Drush
      * @return
      *   A wrapper around Symfony Process.
      */
-    public static function shell($command, $cwd = null, array $env = null, $input = null, $timeout = 60): Process
+    public static function shell(string $command, $cwd = null, array $env = null, $input = null, $timeout = 60): ProcessBase
     {
         return self::processManager()->shell($command, $cwd, $env, $input, $timeout);
     }
@@ -418,7 +426,7 @@ class Drush
     /**
      * Return the Bootstrap Manager.
      */
-    public static function bootstrapManager(): Boot\BootstrapManager
+    public static function bootstrapManager(): BootstrapManager
     {
         return self::service('bootstrap.manager');
     }
@@ -426,7 +434,7 @@ class Drush
     /**
      * Return the Bootstrap object.
      */
-    public static function bootstrap(): Boot\Boot
+    public static function bootstrap(): Boot
     {
         return self::bootstrapManager()->bootstrap();
     }
@@ -454,17 +462,10 @@ class Drush
         // Remove anything in $options that was not on the cli
         $options = array_intersect_key($options, array_flip($optionNamesFromCommandline));
 
+        // Don't suppress output as it is usually needed in redispatches. See https://github.com/drush-ops/drush/issues/4805 and https://github.com/drush-ops/drush/issues/4933
+        unset($options['quiet']);
+
         // Add in the 'runtime.context' items, which includes --include, --alias-path et. al.
         return $options + array_filter(self::config()->get(PreflightArgs::DRUSH_RUNTIME_CONTEXT_NAMESPACE));
-    }
-
-    /**
-     * Read the drush info file.
-     */
-    private static function drushReadDrushInfo(): array
-    {
-        $drush_info_file = dirname(__FILE__) . '/../drush.info';
-
-        return parse_ini_file($drush_info_file);
     }
 }

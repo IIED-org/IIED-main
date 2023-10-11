@@ -8,14 +8,13 @@ dependencies:
     - user.role.anonymous
     - user.role.authenticated
   module:
-    - better_exposed_filters
-    - rest
-    - search_api
-    - serialization
-    - text
-    - user
-    - views_autocomplete_filters
-    - views_data_export
+    0: better_exposed_filters
+    1: rest
+    2: search_api
+    3: serialization
+    4: text
+    5: user
+    7: views_data_export
 id: search
 label: Search
 module: views

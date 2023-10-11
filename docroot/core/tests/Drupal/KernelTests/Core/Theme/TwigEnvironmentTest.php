@@ -46,7 +46,7 @@ class TwigEnvironmentTest extends KernelTestBase {
       '#template' => 'test-with-context <label>{{ unsafe_content }}</label>',
       '#context' => ['unsafe_content' => $unsafe_string],
     ];
-    $this->assertEquals('test-with-context <label>' . Html::escape($unsafe_string) . '</label>', $renderer->renderRoot($element));
+    $this->assertSame('test-with-context <label>' . Html::escape($unsafe_string) . '</label>', (string) $renderer->renderRoot($element));
 
     // Enable twig_auto_reload and twig_debug.
     $settings = Settings::getAll();
@@ -106,7 +106,7 @@ class TwigEnvironmentTest extends KernelTestBase {
     $environment = \Drupal::service('twig');
 
     try {
-      $environment->loadTemplate('this-template-does-not-exist.html.twig')->render([]);
+      $environment->load('this-template-does-not-exist.html.twig')->render([]);
       $this->fail('Did not throw an exception as expected.');
     }
     catch (LoaderError $e) {
@@ -223,7 +223,6 @@ TWIG;
     // on a real site where you reload the page.
     $reflection = new \ReflectionClass(Environment::class);
     $property_reflection = $reflection->getProperty('templateClassPrefix');
-    $property_reflection->setAccessible(TRUE);
     $property_reflection->setValue($environment, 'otherPrefix');
 
     $output = $environment->load(basename($tempfile))->render();

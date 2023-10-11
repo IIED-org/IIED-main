@@ -14,7 +14,6 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\TypedData\DataDefinition;
 use Drupal\file\Entity\File;
 use Drupal\file\Plugin\Field\FieldType\FileItem;
-use Symfony\Component\Mime\MimeTypeGuesserInterface;
 
 /**
  * Plugin implementation of the 'image' field type.
@@ -159,6 +158,14 @@ class ImageItem extends FileItem {
       ->setDescription(new TranslatableMarkup('The height of the image in pixels.'));
 
     return $properties;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function storageSettingsSummary(FieldStorageDefinitionInterface $storage_definition): array {
+    // Bypass the parent setting summary as it produces redundant information.
+    return [];
   }
 
   /**
@@ -337,6 +344,17 @@ class ImageItem extends FileItem {
     $max_resolution = empty($settings['max_resolution']) ? '600x600' : $settings['max_resolution'];
     $extensions = array_intersect(explode(' ', $settings['file_extensions']), ['png', 'gif', 'jpg', 'jpeg']);
     $extension = array_rand(array_combine($extensions, $extensions));
+
+    $min = explode('x', $min_resolution);
+    $max = explode('x', $max_resolution);
+    if (intval($min[0]) > intval($max[0])) {
+      $max[0] = $min[0];
+    }
+    if (intval($min[1]) > intval($max[1])) {
+      $max[1] = $min[1];
+    }
+    $max_resolution = "$max[0]x$max[1]";
+
     // Generate a max of 5 different images.
     if (!isset($images[$extension][$min_resolution][$max_resolution]) || count($images[$extension][$min_resolution][$max_resolution]) <= 5) {
       /** @var \Drupal\Core\File\FileSystemInterface $file_system */
@@ -354,13 +372,7 @@ class ImageItem extends FileItem {
         $image->setFileUri($path);
         $image->setOwnerId(\Drupal::currentUser()->id());
         $guesser = \Drupal::service('file.mime_type.guesser');
-        if ($guesser instanceof MimeTypeGuesserInterface) {
-          $image->setMimeType($guesser->guessMimeType($path));
-        }
-        else {
-          $image->setMimeType($guesser->guess($path));
-          @trigger_error('\Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface is deprecated in drupal:9.1.0 and is removed from drupal:10.0.0. Implement \Symfony\Component\Mime\MimeTypeGuesserInterface instead. See https://www.drupal.org/node/3133341', E_USER_DEPRECATED);
-        }
+        $image->setMimeType($guesser->guessMimeType($path));
         $image->setFileName($file_system->basename($path));
         $destination_dir = static::doGetUploadLocation($settings);
         $file_system->prepareDirectory($destination_dir, FileSystemInterface::CREATE_DIRECTORY);

@@ -3,6 +3,7 @@
 namespace Drupal\KernelTests\Core\Entity;
 
 use Drupal\Core\Database\Database;
+use Drupal\Core\Entity\Query\QueryException;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\entity_test\Entity\EntityTestMulRev;
 use Drupal\field\Entity\FieldConfig;
@@ -1372,11 +1373,13 @@ class EntityQueryTest extends EntityKernelTestBase {
 
   /**
    * Test the accessCheck method is called.
-   *
-   * @group legacy
    */
   public function testAccessCheckSpecified() {
-    $this->expectDeprecation('Relying on entity queries to check access by default is deprecated in drupal:9.2.0 and an error will be thrown from drupal:10.0.0. Call \Drupal\Core\Entity\Query\QueryInterface::accessCheck() with TRUE or FALSE to specify whether access should be checked. See https://www.drupal.org/node/3201242');
+    $this->expectException(QueryException::class);
+    $this->expectExceptionMessage('Entity queries must explicitly set whether the query should be access checked or not. See Drupal\Core\Entity\Query\QueryInterface::accessCheck().');
+    // We are purposely testing an entity query without access check, so we need
+    // to tell PHPStan to ignore this.
+    // @phpstan-ignore-next-line
     $this->storage->getQuery()->execute();
   }
 

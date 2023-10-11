@@ -213,6 +213,7 @@ class ConfigImporter {
     $this->themeHandler = $theme_handler;
     $this->stringTranslation = $string_translation;
     if ($extension_list_theme === NULL) {
+      @trigger_error('Calling ' . __METHOD__ . ' without the $extension_list_theme argument is deprecated in drupal:10.1.0 and will be required in drupal:11.0.0. See https://www.drupal.org/node/3284397', E_USER_DEPRECATED);
       $extension_list_theme = \Drupal::service('extension.list.theme');
     }
     $this->themeExtensionList = $extension_list_theme;
@@ -429,11 +430,30 @@ class ConfigImporter {
 
     // Determine which modules to install.
     $install = array_keys(array_diff_key($new_extensions['module'], $current_extensions['module']));
+    // Always install required modules first. Respect the dependencies between
+    // the modules.
+    $install_required = [];
+    $install_non_required = [];
+    foreach ($install as $module) {
+      if (!isset($module_data[$module])) {
+        // The module doesn't exist. This is handled in
+        // \Drupal\Core\EventSubscriber\ConfigImportSubscriber::validateModules().
+        continue;
+      }
+      if (!empty($module_data[$module]->info['required'])) {
+        $install_required[$module] = $module_data[$module]->sort;
+      }
+      else {
+        $install_non_required[$module] = $module_data[$module]->sort;
+      }
+    }
     // Ensure that installed modules are sorted in exactly the reverse order
     // (with dependencies installed first, and modules of the same weight sorted
     // in alphabetical order).
-    $module_list = array_reverse($module_list);
-    $this->extensionChangelist['module']['install'] = array_intersect(array_keys($module_list), $install);
+    arsort($install_required);
+    arsort($install_non_required);
+
+    $this->extensionChangelist['module']['install'] = array_keys($install_required + $install_non_required);
 
     // If we're installing the install profile ensure it comes last. This will
     // occur when installing a site from configuration.
@@ -542,7 +562,7 @@ class ConfigImporter {
     }
     elseif (is_callable($sync_step)) {
       \Drupal::service('config.installer')->setSyncing(TRUE);
-      call_user_func_array($sync_step, [&$context, $this]);
+      $sync_step($context, $this);
     }
     else {
       throw new \InvalidArgumentException('Invalid configuration synchronization step');

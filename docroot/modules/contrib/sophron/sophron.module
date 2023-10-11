@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * @file
@@ -10,7 +10,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 /**
  * Implements hook_help().
  */
-function sophron_help($route_name, RouteMatchInterface $route_match) {
+function sophron_help(string $route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
     case 'sophron.settings':
       $output = '';

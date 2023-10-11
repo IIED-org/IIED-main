@@ -13,7 +13,7 @@ class WebformFilterJavaScriptTest extends WebformWebDriverTestBase {
    * Test filter.
    */
   public function testFilter() {
-    // Set admin theme to seven.
+    // Set admin theme to claro.
     \Drupal::service('theme_installer')->install(['claro']);
     \Drupal::configFactory()->getEditable('system.theme')
       ->set('admin', 'claro')
@@ -38,6 +38,7 @@ class WebformFilterJavaScriptTest extends WebformWebDriverTestBase {
     $assert_session->waitForElementVisible('css', '.webform-addons-summary');
     $assert_session->waitForText(count($addons_manager->getProjects()) . ' add-ons');
     $this->assertTrue($page->findLink('Address')->isVisible());
+    sleep(1);
     $this->assertFalse($page->find('css', '.webform-addons-no-results')->isVisible());
     $this->assertFalse($page->find('css', '.webform-form-filter-reset')->isVisible());
 

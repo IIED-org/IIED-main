@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 // @codingStandardsIgnoreFile
 
 /**
@@ -70,15 +70,7 @@ namespace Drupal\sophron_guesser\ProxyClass {
         /**
          * {@inheritdoc}
          */
-        public function guessMimeType(string $path): ?string
-        {
-            return $this->lazyLoadItself()->guessMimeType($path);
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-        public function guess($path)
+        public function guessMimeType(string $path): string
         {
             return $this->lazyLoadItself()->guessMimeType($path);
         }

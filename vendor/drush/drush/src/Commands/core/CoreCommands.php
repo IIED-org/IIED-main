@@ -1,40 +1,38 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Drush\Commands\core;
 
 use Consolidation\OutputFormatters\StructuredData\PropertyList;
+use Drush\Attributes as CLI;
 use Drush\Commands\DrushCommands;
 use Drush\Drush;
 use Consolidation\OutputFormatters\StructuredData\RowsOfFields;
 use Consolidation\SiteAlias\SiteAliasManagerAwareInterface;
 use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
+use Consolidation\OutputFormatters\Options\FormatterOptions;
 
-class CoreCommands extends DrushCommands implements SiteAliasManagerAwareInterface
+final class CoreCommands extends DrushCommands implements SiteAliasManagerAwareInterface
 {
-
     use SiteAliasManagerAwareTrait;
+
+    const VERSION = 'version';
 
     /**
      * All global options.
-     *
-     * @command core:global-options
-     * @hidden
-     * @topic
-     * @table-style default
-     * @field-labels
-     *   name: Name
-     *   description: Description
-     * @default-fields name,description
-     * @aliases core-global-options
-     *
-     * @filter-default-field name
-     * @return \Consolidation\OutputFormatters\StructuredData\RowsOfFields
      */
-    public function globalOptions($options = ['format' => 'table'])
+    #[CLI\Command(name: 'core:global-options', aliases: ['core-global-options'])]
+    #[CLI\Help(hidden: true)]
+    #[CLI\Topics(isTopic: true)]
+    #[CLI\FieldLabels(labels: ['name' => 'Name', 'description' => 'Description'])]
+    #[CLI\FilterDefaultField(field: 'name')]
+    public function globalOptions($options = ['format' => 'table']): RowsOfFields
     {
         $application = Drush::getApplication();
         $def = $application->getDefinition();
         foreach ($def->getOptions() as $key => $value) {
-            $name = '--'. $key;
+            $name = '--' . $key;
             if ($value->getShortcut()) {
                 $name = '-' . $value->getShortcut() . ', ' . $name;
             }
@@ -46,11 +44,18 @@ class CoreCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
 
         // Also document the keys that are recognized by PreflightArgs. It would be possible to redundantly declare
         // those as global options. We don't do that for now, to avoid confusion.
-        $ancient = drush_get_global_options();
-        foreach (['config', 'alias-path', 'include', 'local', 'strict', 'ssh-options'] as $name) {
+        $ancient = [
+            'config' => 'Specify an additional config file to load. See example.drush.yml. Example: /path/file',
+            'alias-path' => 'Specifies additional paths where Drush will search for alias files. Example: /path/alias1:/path/alias2',
+            'include' => 'Additional directories to search for Drush commands. Commandfiles should be placed in a subdirectory called <info>Commands</info>. Example: path/dir',
+            'local' => 'Don\'t look outside the Composer project for Drush config.',
+            'strict' => 'Return an error on unrecognized options. --strict=0 allows unrecognized options.',
+            'ssh-options' => 'A string of extra options that will be passed to the ssh command. Example: -p 100',
+        ];
+        foreach ($ancient as $name => $description) {
             $rows[] = [
                 'name' => '--' . $name,
-                'description' => $ancient[$name]['description'],
+                'description' => $description,
             ];
         }
         usort($rows, function ($a, $b) {
@@ -61,18 +66,23 @@ class CoreCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
 
     /**
      * Show Drush version.
-     *
-     * @command version
-     * @table-style compact
-     * @list-delimiter :
-     * @field-labels
-     *   drush-version: Drush version
-     *
-     * @return \Consolidation\OutputFormatters\StructuredData\PropertyList
-     *
      */
-    public function version($options = ['format' => 'table'])
+    #[CLI\Command(name: self::VERSION)]
+    #[CLI\HookSelector(name: 'table-style', value: 'compact')]
+    #[CLI\HookSelector(name: 'list-delimiter', value: ':')]
+    #[CLI\FieldLabels(labels: ['drush-version' => 'Drush version'])]
+    public function version($options = ['format' => 'table']): PropertyList
     {
-        return new PropertyList(['drush-version' => Drush::getVersion()]);
+        $versionPropertyList = new PropertyList(['drush-version' => Drush::getVersion()]);
+        $versionPropertyList->addRendererFunction(
+            function ($key, $cellData, FormatterOptions $options) {
+                if ($key == 'drush-version') {
+                    return Drush::sanitizeVersionString($cellData);
+                }
+                return $cellData;
+            }
+        );
+
+        return $versionPropertyList;
     }
 }

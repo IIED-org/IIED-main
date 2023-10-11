@@ -331,7 +331,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'title' => $this->t('Code Mirror'),
       'description' => $this->t('Code Mirror is a versatile text editor implemented in JavaScript for the browser.'),
       'notes' => $this->t('Code Mirror is used to provide a text editor for YAML, HTML, CSS, and JavaScript configuration settings and messages.'),
-      'homepage_url' => Url::fromUri('http://codemirror.net/'),
+      'homepage_url' => Url::fromUri('https://codemirror.net/'),
       // Issue #3177233: CodeMirror 5.70.0 is displaying vertical scrollbar.
       'download_url' => Url::fromUri('https://github.com/components/codemirror/archive/refs/tags/5.65.12.zip'),
       'issues_url' => Url::fromUri('https://github.com/codemirror/codemirror/issues'),
@@ -388,7 +388,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'title' => $this->t('Progress Tracker'),
       'description' => $this->t("A flexible SASS component to illustrate the steps in a multi-step process e.g. a multi-step form, a timeline or a quiz."),
       'notes' => $this->t('Progress Tracker is used by multi-step wizard forms.'),
-      'homepage_url' => Url::fromUri('http://nigelotoole.github.io/progress-tracker/'),
+      'homepage_url' => Url::fromUri('https://nigelotoole.github.io/progress-tracker/'),
       'download_url' => Url::fromUri('https://github.com/NigelOToole/progress-tracker/archive/refs/tags/2.0.7.zip'),
       'version' => '2.0.7',
       'license' => 'MIT',

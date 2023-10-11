@@ -11,6 +11,8 @@
 
 namespace Symfony\Component\HttpKernel\CacheWarmer;
 
+use Symfony\Component\Console\Style\SymfonyStyle;
+
 /**
  * Aggregates several cache warmers into a single one.
  *
@@ -20,12 +22,15 @@ namespace Symfony\Component\HttpKernel\CacheWarmer;
  */
 class CacheWarmerAggregate implements CacheWarmerInterface
 {
-    private $warmers;
-    private $debug;
-    private $deprecationLogsFilepath;
-    private $optionalsEnabled = false;
-    private $onlyOptionalsEnabled = false;
+    private iterable $warmers;
+    private bool $debug;
+    private ?string $deprecationLogsFilepath;
+    private bool $optionalsEnabled = false;
+    private bool $onlyOptionalsEnabled = false;
 
+    /**
+     * @param iterable<mixed, CacheWarmerInterface> $warmers
+     */
     public function __construct(iterable $warmers = [], bool $debug = false, string $deprecationLogsFilepath = null)
     {
         $this->warmers = $warmers;
@@ -33,22 +38,17 @@ class CacheWarmerAggregate implements CacheWarmerInterface
         $this->deprecationLogsFilepath = $deprecationLogsFilepath;
     }
 
-    public function enableOptionalWarmers()
+    public function enableOptionalWarmers(): void
     {
         $this->optionalsEnabled = true;
     }
 
-    public function enableOnlyOptionalWarmers()
+    public function enableOnlyOptionalWarmers(): void
     {
         $this->onlyOptionalsEnabled = $this->optionalsEnabled = true;
     }
 
-    /**
-     * Warms up the cache.
-     *
-     * @param string $cacheDir The cache directory
-     */
-    public function warmUp($cacheDir)
+    public function warmUp(string $cacheDir, SymfonyStyle $io = null): array
     {
         if ($collectDeprecations = $this->debug && !\defined('PHPUNIT_COMPOSER_INSTALL')) {
             $collectedLogs = [];
@@ -85,6 +85,7 @@ class CacheWarmerAggregate implements CacheWarmerInterface
             });
         }
 
+        $preload = [];
         try {
             foreach ($this->warmers as $warmer) {
                 if (!$this->optionalsEnabled && $warmer->isOptional()) {
@@ -94,13 +95,23 @@ class CacheWarmerAggregate implements CacheWarmerInterface
                     continue;
                 }
 
-                $warmer->warmUp($cacheDir);
+                $start = microtime(true);
+                foreach ((array) $warmer->warmUp($cacheDir) as $item) {
+                    if (is_dir($item) || (str_starts_with($item, \dirname($cacheDir)) && !is_file($item))) {
+                        throw new \LogicException(sprintf('"%s::warmUp()" should return a list of files or classes but "%s" is none of them.', $warmer::class, $item));
+                    }
+                    $preload[] = $item;
+                }
+
+                if ($io?->isDebug()) {
+                    $io->info(sprintf('"%s" completed in %0.2fms.', $warmer::class, 1000 * (microtime(true) - $start)));
+                }
             }
         } finally {
             if ($collectDeprecations) {
                 restore_error_handler();
 
-                if (file_exists($this->deprecationLogsFilepath)) {
+                if (is_file($this->deprecationLogsFilepath)) {
                     $previousLogs = unserialize(file_get_contents($this->deprecationLogsFilepath));
                     if (\is_array($previousLogs)) {
                         $collectedLogs = array_merge($previousLogs, $collectedLogs);
@@ -110,13 +121,10 @@ class CacheWarmerAggregate implements CacheWarmerInterface
                 file_put_contents($this->deprecationLogsFilepath, serialize(array_values($collectedLogs)));
             }
         }
+
+        return array_values(array_unique($preload));
     }
 
-    /**
-     * Checks whether this warmer is optional or not.
-     *
-     * @return bool always false
-     */
     public function isOptional(): bool
     {
         return false;

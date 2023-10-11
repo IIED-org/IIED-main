@@ -22,7 +22,7 @@
  * @see claro_preprocess_status_messages().
  */
 #}
-<div data-drupal-messages class="glb-messages-list">
+<div data-drupal-messages class="glb-messages-list{{ toastify ? ' glb-toastify' }}">
   {% for type, messages in message_list %}
     {%
       set classes = [

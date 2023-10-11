@@ -129,6 +129,12 @@ a.glb-button--primary:focus:hover {
 .inline-block-create-button {
   @extend .glb-button;
   background: none !important;
+
+  // Fix plus icon.
+  #drupal-off-canvas-wrapper &:before {
+    position: inherit !important;
+    padding-inline-end: 24px !important;
+  }
 }
 
 .glb-button.js-hide {

@@ -8,7 +8,7 @@ configure: entity.content_translation_redirect.collection
 dependencies:
   - drupal:content_translation
 
-# Information added by Drupal.org packaging script on 2023-06-05
-version: '2.0.0-alpha2'
+# Information added by Drupal.org packaging script on 2023-10-05
+version: '2.0.0-alpha3'
 project: 'content_translation_redirect'
-datestamp: 1685963360
+datestamp: 1696511926

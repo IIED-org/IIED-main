@@ -3,7 +3,8 @@
 namespace Drupal\Tests\Core\Database;
 
 use Composer\Autoload\ClassLoader;
-use Drupal\Core\Database\Statement;
+use Drupal\Core\Database\Database;
+use Drupal\Core\Database\StatementPrefetch;
 use Drupal\Tests\Core\Database\Stub\StubConnection;
 use Drupal\Tests\Core\Database\Stub\StubPDO;
 use Drupal\Tests\UnitTestCase;
@@ -27,18 +28,17 @@ class ConnectionTest extends UnitTestCase {
   public function providerPrefixRoundTrip() {
     return [
       [
-        ['' => 'test_'],
+        [
+          '' => 'test_',
+        ],
         'test_',
       ],
       [
         [
           'fooTable' => 'foo_',
-          'barTable' => 'bar_',
+          'barTable' => 'foo_',
         ],
-        [
-          'fooTable' => 'foo_',
-          'barTable' => 'bar_',
-        ],
+        'foo_',
       ],
     ];
   }
@@ -55,13 +55,12 @@ class ConnectionTest extends UnitTestCase {
     // setPrefix() is protected, so we make it accessible with reflection.
     $reflection = new \ReflectionClass('Drupal\Tests\Core\Database\Stub\StubConnection');
     $set_prefix = $reflection->getMethod('setPrefix');
-    $set_prefix->setAccessible(TRUE);
 
     // Set the prefix data.
     $set_prefix->invokeArgs($connection, [$prefix_info]);
     // Check the round-trip.
     foreach ($expected as $table => $prefix) {
-      $this->assertEquals($prefix, $connection->tablePrefix($table));
+      $this->assertEquals($prefix, $connection->getPrefix());
     }
   }
 
@@ -360,51 +359,6 @@ class ConnectionTest extends UnitTestCase {
   }
 
   /**
-   * Tests Connection::destroy().
-   *
-   * @group legacy
-   */
-  public function testDestroy() {
-    $this->expectDeprecation('Drupal\Core\Database\Connection::destroy() is deprecated in drupal:9.1.0 and is removed from drupal:10.0.0. Move custom database destruction logic to __destruct(). See https://www.drupal.org/node/3142866');
-    $mock_pdo = $this->createMock('Drupal\Tests\Core\Database\Stub\StubPDO');
-    // Mocking StubConnection gives us access to the $schema attribute.
-    $connection = new StubConnection($mock_pdo, ['namespace' => 'Drupal\\Tests\\Core\\Database\\Stub\\Driver']);
-    // Generate a schema object in order to verify that we've NULLed it later.
-    $this->assertInstanceOf(
-      'Drupal\\Tests\\Core\\Database\\Stub\\Driver\\Schema',
-      $connection->schema()
-    );
-    $connection->destroy();
-
-    $reflected_schema = (new \ReflectionObject($connection))->getProperty('schema');
-    $reflected_schema->setAccessible(TRUE);
-    $this->assertNull($reflected_schema->getValue($connection));
-  }
-
-  /**
-   * Tests Connection::__destruct().
-   *
-   * @group legacy
-   */
-  public function testDestructBcLayer() {
-    $this->expectDeprecation('Drupal\Core\Database\Connection::destroy() is deprecated in drupal:9.1.0 and is removed from drupal:10.0.0. Move custom database destruction logic to __destruct(). See https://www.drupal.org/node/3142866');
-    $mock_pdo = $this->createMock(StubPDO::class);
-    $fake_connection = new class($mock_pdo, ['namespace' => Driver::class]) extends StubConnection {
-
-      public function destroy() {
-        parent::destroy();
-      }
-
-    };
-    // Destroy the object which will result in the Connection::__destruct()
-    // calling Connection::destroy() and a deprecation error being triggered.
-    // @see \Drupal\KernelTests\Core\Database\ConnectionUnitTest for tests that
-    // connection object destruction does not trigger deprecations unless
-    // Connection::destroy() is overridden.
-    $fake_connection = NULL;
-  }
-
-  /**
    * Data provider for testMakeComments().
    *
    * @return array
@@ -468,7 +422,6 @@ class ConnectionTest extends UnitTestCase {
     // filterComment() is protected, so we make it accessible with reflection.
     $reflection = new \ReflectionClass('Drupal\Tests\Core\Database\Stub\StubConnection');
     $filter_comment = $reflection->getMethod('filterComment');
-    $filter_comment->setAccessible(TRUE);
 
     $this->assertEquals(
       $expected,
@@ -607,16 +560,6 @@ class ConnectionTest extends UnitTestCase {
 
   /**
    * @covers ::__construct
-   * @group legacy
-   */
-  public function testIdentifierQuotesDeprecation() {
-    $this->expectDeprecation('In drupal:10.0.0 not setting the $identifierQuotes property in the concrete Connection class will result in an RuntimeException. See https://www.drupal.org/node/2986894');
-    $mock_pdo = $this->createMock(StubPDO::class);
-    new StubConnection($mock_pdo, [], NULL);
-  }
-
-  /**
-   * @covers ::__construct
    */
   public function testIdentifierQuotesAssertCount() {
     $this->expectException(\AssertionError::class);
@@ -645,21 +588,6 @@ class ConnectionTest extends UnitTestCase {
   }
 
   /**
-   * Tests deprecation of the Statement class.
-   *
-   * @group legacy
-   */
-  public function testStatementDeprecation() {
-    if (PHP_VERSION_ID >= 80000) {
-      $this->markTestSkipped('Drupal\Core\Database\Statement is incompatible with PHP 8.0. Remove in https://www.drupal.org/node/3177490');
-    }
-    $this->expectDeprecation('\Drupal\Core\Database\Statement is deprecated in drupal:9.1.0 and is removed from drupal:10.0.0. Database drivers should use or extend StatementWrapper instead, and encapsulate client-level statement objects. See https://www.drupal.org/node/3177488');
-    $mock_statement = $this->getMockBuilder(Statement::class)
-      ->disableOriginalConstructor()
-      ->getMock();
-  }
-
-  /**
    * Test rtrim() of query strings.
    *
    * @dataProvider provideQueriesToTrim
@@ -669,7 +597,6 @@ class ConnectionTest extends UnitTestCase {
     $connection = new StubConnection($mock_pdo, []);
 
     $preprocess_method = new \ReflectionMethod($connection, 'preprocessStatement');
-    $preprocess_method->setAccessible(TRUE);
     $this->assertSame($expected, $preprocess_method->invoke($connection, $query, $options));
   }
 
@@ -718,30 +645,249 @@ class ConnectionTest extends UnitTestCase {
   }
 
   /**
-   * Tests the deprecation of Drupal 8 style database drivers.
+   * Tests that the proper caller is retrieved from the backtrace.
    *
-   * @group legacy
+   * @covers ::findCallerFromDebugBacktrace
+   * @covers ::removeDatabaseEntriesFromDebugBacktrace
+   * @covers ::getDebugBacktrace
    */
-  public function testLegacyDatabaseDriverInRootDriversDirectory() {
-    $this->expectDeprecation('Support for database drivers located in the "drivers/lib/Drupal/Driver/Database" directory is deprecated in drupal:9.1.0 and is removed in drupal:10.0.0. Contributed and custom database drivers should be provided by modules and use the namespace "Drupal\MODULE_NAME\Driver\Database\DRIVER_NAME". See https://www.drupal.org/node/3123251');
-    $namespace = 'Drupal\\Driver\\Database\\Stub';
-    $mock_pdo = $this->createMock(StubPDO::class);
-    $connection = new StubConnection($mock_pdo, ['namespace' => $namespace], ['"', '"']);
-    $this->assertEquals($namespace, $connection->getConnectionOptions()['namespace']);
+  public function testFindCallerFromDebugBacktrace() {
+    Database::addConnectionInfo('default', 'default', [
+      'driver' => 'test',
+      'namespace' => 'Drupal\Tests\Core\Database\Stub',
+    ]);
+    $connection = new StubConnection($this->createMock(StubPDO::class), []);
+    $result = $connection->findCallerFromDebugBacktrace();
+    $this->assertSame([
+      'file' => __FILE__,
+      'line' => 660,
+      'function' => 'testFindCallerFromDebugBacktrace',
+      'class' => 'Drupal\Tests\Core\Database\ConnectionTest',
+      'type' => '->',
+      'args' => [],
+    ], $result);
   }
 
   /**
-   * Tests the deprecation of \Drupal\Core\Database\Connection::$statementClass.
+   * Tests that a log called by a custom database driver returns proper caller.
+   *
+   * @param string $driver_namespace
+   *   The driver namespace to be tested.
+   * @param array $stack
+   *   A test debug_backtrace stack.
+   * @param array $expected_entry
+   *   The expected stack entry.
+   *
+   * @covers ::findCallerFromDebugBacktrace
+   * @covers ::removeDatabaseEntriesFromDebugBacktrace
+   *
+   * @dataProvider providerMockedBacktrace
    *
    * @group legacy
    */
-  public function testPdoStatementClass() {
-    if (PHP_VERSION_ID >= 80000) {
-      $this->markTestSkipped('Drupal\Core\Database\Statement is incompatible with PHP 8.0. Remove in https://www.drupal.org/node/3177490');
-    }
-    $this->expectDeprecation('\Drupal\Core\Database\Connection::$statementClass is deprecated in drupal:9.1.0 and is removed from drupal:10.0.0. Database drivers should use or extend StatementWrapper instead, and encapsulate client-level statement objects. See https://www.drupal.org/node/3177488');
+  public function testFindCallerFromDebugBacktraceWithMockedBacktrace(string $driver_namespace, array $stack, array $expected_entry): void {
+    $mock_builder = $this->getMockBuilder(StubConnection::class);
+    $connection = $mock_builder
+      ->onlyMethods(['getDebugBacktrace', 'getConnectionOptions'])
+      ->setConstructorArgs([$this->createMock(StubPDO::class), []])
+      ->getMock();
+    $connection->expects($this->once())
+      ->method('getConnectionOptions')
+      ->willReturn([
+        'driver' => 'test',
+        'namespace' => $driver_namespace,
+      ]);
+    $connection->expects($this->once())
+      ->method('getDebugBacktrace')
+      ->willReturn($stack);
+
+    $result = $connection->findCallerFromDebugBacktrace();
+    $this->assertEquals($expected_entry, $result);
+  }
+
+  /**
+   * Provides data for testFindCallerFromDebugBacktraceWithMockedBacktrace.
+   *
+   * @return array[]
+   *   A associative array of simple arrays, each having the following elements:
+   *   - the contrib driver PHP namespace
+   *   - a test debug_backtrace stack
+   *   - the stack entry expected to be returned.
+   *
+   * @see ::testFindCallerFromDebugBacktraceWithMockedBacktrace()
+   */
+  public function providerMockedBacktrace(): array {
+    $stack = [
+      [
+        'file' => '/var/www/core/lib/Drupal/Core/Database/Log.php',
+        'line' => 125,
+        'function' => 'findCaller',
+        'class' => 'Drupal\\Core\\Database\\Log',
+        'object' => 'test',
+        'type' => '->',
+        'args' => [
+          0 => 'test',
+        ],
+      ],
+      [
+        'file' => '/var/www/libraries/drudbal/lib/Statement.php',
+        'line' => 264,
+        'function' => 'log',
+        'class' => 'Drupal\\Core\\Database\\Log',
+        'object' => 'test',
+        'type' => '->',
+        'args' => [
+          0 => 'test',
+        ],
+      ],
+      [
+        'file' => '/var/www/libraries/drudbal/lib/Connection.php',
+        'line' => 213,
+        'function' => 'execute',
+        'class' => 'Drupal\\Driver\\Database\\dbal\\Statement',
+        'object' => 'test',
+        'type' => '->',
+        'args' => [
+          0 => 'test',
+        ],
+      ],
+      [
+        'file' => '/var/www/core/tests/Drupal/KernelTests/Core/Database/LoggingTest.php',
+        'line' => 23,
+        'function' => 'query',
+        'class' => 'Drupal\\Driver\\Database\\dbal\\Connection',
+        'object' => 'test',
+        'type' => '->',
+        'args' => [
+          0 => 'test',
+        ],
+      ],
+      [
+        'file' => '/var/www/vendor/phpunit/phpunit/src/Framework/TestCase.php',
+        'line' => 1154,
+        'function' => 'testEnableLogging',
+        'class' => 'Drupal\\KernelTests\\Core\\Database\\LoggingTest',
+        'object' => 'test',
+        'type' => '->',
+        'args' => [
+          0 => 'test',
+        ],
+      ],
+      [
+        'file' => '/var/www/vendor/phpunit/phpunit/src/Framework/TestCase.php',
+        'line' => 842,
+        'function' => 'runTest',
+        'class' => 'PHPUnit\\Framework\\TestCase',
+        'object' => 'test',
+        'type' => '->',
+        'args' => [
+          0 => 'test',
+        ],
+      ],
+      [
+        'file' => '/var/www/vendor/phpunit/phpunit/src/Framework/TestResult.php',
+        'line' => 693,
+        'function' => 'runBare',
+        'class' => 'PHPUnit\\Framework\\TestCase',
+        'object' => 'test',
+        'type' => '->',
+        'args' => [
+          0 => 'test',
+        ],
+      ],
+      [
+        'file' => '/var/www/vendor/phpunit/phpunit/src/Framework/TestCase.php',
+        'line' => 796,
+        'function' => 'run',
+        'class' => 'PHPUnit\\Framework\\TestResult',
+        'object' => 'test',
+        'type' => '->',
+        'args' => [
+          0 => 'test',
+        ],
+      ],
+      [
+        'file' => 'Standard input code',
+        'line' => 57,
+        'function' => 'run',
+        'class' => 'PHPUnit\\Framework\\TestCase',
+        'object' => 'test',
+        'type' => '->',
+        'args' => [
+          0 => 'test',
+        ],
+      ],
+      [
+        'file' => 'Standard input code',
+        'line' => 111,
+        'function' => '__phpunit_run_isolated_test',
+        'args' => [
+          0 => 'test',
+        ],
+      ],
+    ];
+
+    return [
+      // Test that if the driver namespace is in the stack trace, the first
+      // non-database entry is returned.
+      'contrib driver namespace' => [
+        'Drupal\\Driver\\Database\\dbal',
+        $stack,
+        [
+          'class' => 'Drupal\\KernelTests\\Core\\Database\\LoggingTest',
+          'function' => 'testEnableLogging',
+          'file' => '/var/www/core/tests/Drupal/KernelTests/Core/Database/LoggingTest.php',
+          'line' => 23,
+          'type' => '->',
+          'args' => [
+            0 => 'test',
+          ],
+        ],
+      ],
+      // Extreme case, should not happen at normal runtime - if the driver
+      // namespace is not in the stack trace, the first entry to a method
+      // in core database namespace is returned.
+      'missing driver namespace' => [
+        'Drupal\\Driver\\Database\\fake',
+        $stack,
+        [
+          'class' => 'Drupal\\Driver\\Database\\dbal\\Statement',
+          'function' => 'execute',
+          'file' => '/var/www/libraries/drudbal/lib/Statement.php',
+          'line' => 264,
+          'type' => '->',
+          'args' => [
+            0 => 'test',
+          ],
+        ],
+      ],
+    ];
+  }
+
+  /**
+   * Tests deprecation of the StatementWrapper class.
+   *
+   * @group legacy
+   */
+  public function testStatementWrapperDeprecation() {
+    $this->expectDeprecation('\\Drupal\\Core\\Database\\StatementWrapper is deprecated in drupal:10.1.0 and is removed from drupal:11.0.0. Use \\Drupal\\Core\\Database\\StatementWrapperIterator instead. See https://www.drupal.org/node/3265938');
     $mock_pdo = $this->createMock(StubPDO::class);
-    new StubConnection($mock_pdo, ['namespace' => 'Drupal\\Tests\\Core\\Database\\Stub\\Driver'], ['"', '"'], Statement::class);
+    $connection = new StubConnection($mock_pdo, []);
+    $this->expectError();
+    $connection->prepareStatement('boing', []);
+  }
+
+  /**
+   * Tests deprecation of the StatementPrefetch class.
+   *
+   * @group legacy
+   */
+  public function testStatementPrefetchDeprecation() {
+    $this->expectDeprecation('\\Drupal\\Core\\Database\\StatementPrefetch is deprecated in drupal:10.1.0 and is removed from drupal:11.0.0. Use \Drupal\Core\Database\StatementPrefetchIterator instead. See https://www.drupal.org/node/3265938');
+    $mockPdo = $this->createMock(StubPDO::class);
+    $mockConnection = new StubConnection($mockPdo, []);
+    $statement = new StatementPrefetch($mockPdo, $mockConnection, '');
+    $this->assertInstanceOf(StatementPrefetch::class, $statement);
   }
 
 }

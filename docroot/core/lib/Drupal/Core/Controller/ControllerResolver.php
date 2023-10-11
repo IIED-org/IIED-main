@@ -5,7 +5,6 @@ namespace Drupal\Core\Controller;
 use Drupal\Core\DependencyInjection\ClassResolverInterface;
 use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Controller\ControllerResolver as BaseControllerResolver;
 
 /**
  * ControllerResolver to enhance controllers beyond Symfony's basic handling.
@@ -22,7 +21,7 @@ use Symfony\Component\HttpKernel\Controller\ControllerResolver as BaseController
  *    controller by using a service:method notation (Symfony uses the same
  *    convention).
  */
-class ControllerResolver extends BaseControllerResolver implements ControllerResolverInterface {
+class ControllerResolver implements ControllerResolverInterface {
 
   /**
    * The class resolver.
@@ -59,7 +58,7 @@ class ControllerResolver extends BaseControllerResolver implements ControllerRes
       return $controller;
     }
 
-    if (strpos($controller, ':') === FALSE) {
+    if (!str_contains($controller, ':')) {
       if (function_exists($controller)) {
         return $controller;
       }
@@ -78,7 +77,7 @@ class ControllerResolver extends BaseControllerResolver implements ControllerRes
   /**
    * {@inheritdoc}
    */
-  public function getController(Request $request) {
+  public function getController(Request $request): callable|FALSE {
     if (!$controller = $request->attributes->get('_controller')) {
       return FALSE;
     }
@@ -107,7 +106,7 @@ class ControllerResolver extends BaseControllerResolver implements ControllerRes
       [$class_or_service, $method] = explode(':', $controller, 2);
     }
     // Controller in the class::method notation.
-    elseif (strpos($controller, '::') !== FALSE) {
+    elseif (str_contains($controller, '::')) {
       [$class_or_service, $method] = explode('::', $controller, 2);
     }
     else {

@@ -33,11 +33,11 @@ class MediaLibrarySelectFormTest extends UnitTestCase {
   /**
    * @covers ::viewsForm
    */
-  public function testViewsForm() {
+  public function testViewsForm(): void {
     $row = new ResultRow();
 
     $field = $this->getMockBuilder(MediaLibrarySelectForm::class)
-      ->setMethods(['getEntity'])
+      ->onlyMethods(['getEntity'])
       ->disableOriginalConstructor()
       ->getMock();
     $field->expects($this->any())
@@ -49,7 +49,7 @@ class MediaLibrarySelectFormTest extends UnitTestCase {
     \Drupal::setContainer($container);
 
     $query = $this->getMockBuilder(ParameterBag::class)
-      ->setMethods(['all'])
+      ->onlyMethods(['all'])
       ->disableOriginalConstructor()
       ->getMock();
     $query->expects($this->any())
@@ -62,7 +62,7 @@ class MediaLibrarySelectFormTest extends UnitTestCase {
     $request->query = $query;
 
     $view = $this->getMockBuilder(ViewExecutable::class)
-      ->setMethods(['getRequest', 'initStyle', 'getDisplay'])
+      ->onlyMethods(['getRequest', 'initStyle', 'getDisplay'])
       ->disableOriginalConstructor()
       ->getMock();
     $view->expects($this->any())

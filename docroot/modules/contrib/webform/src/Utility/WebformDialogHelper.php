@@ -60,6 +60,10 @@ class WebformDialogHelper {
    *   A render array.
    */
   public static function attachLibraries(array &$build) {
+    $build += ['#attached' => []];
+    $build['#attached'] += ['library' => []];
+    $build['#attached']['library'] = (array) $build['#attached']['library'];
+
     $build['#attached']['library'][] = 'webform/webform.admin.dialog';
     if (static::useOffCanvas()) {
       $build['#attached']['library'][] = 'webform/webform.admin.off_canvas';

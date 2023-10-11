@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\hal\Functional\page_cache;
 
+use Drupal\rest\Entity\RestResourceConfig;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\system\Functional\Cache\AssertPageCacheContextsAndTagsTrait;
 
@@ -57,6 +58,17 @@ class PageCacheTest extends BrowserTestBase {
       'rest',
       'basic_auth',
     ]);
+
+    // Load the default node config and allow hal_json as format.
+    /** @var \Drupal\rest\RestResourceConfigInterface $resource */
+    $resource = RestResourceConfig::load('entity.node');
+    $configuration = $resource->get('configuration');
+    $configuration['formats'][] = 'hal_json';
+    $resource->set('configuration', $configuration);
+    $resource->save();
+
+    \Drupal::service('router.builder')->rebuild();
+
     $this->drupalCreateContentType(['type' => 'article']);
     $node = $this->drupalCreateNode(['type' => 'article']);
     $node_uri = $node->toUrl();

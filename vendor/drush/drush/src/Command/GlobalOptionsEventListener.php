@@ -1,18 +1,19 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Drush\Command;
 
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use Drush\Preflight\LegacyPreflight;
-
 class GlobalOptionsEventListener implements EventSubscriberInterface
 {
     /**
      * @{@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         // Register our 'setGlobalOptions' command to run prior to
         // command dispatch.
@@ -26,9 +27,8 @@ class GlobalOptionsEventListener implements EventSubscriberInterface
      *
      * @param ConsoleCommandEvent $event
      */
-    public function setGlobalOptions(ConsoleCommandEvent $event)
+    public function setGlobalOptions(ConsoleCommandEvent $event): void
     {
-        /* @var Input $input */
         $input = $event->getInput();
         $output = $event->getOutput();
 

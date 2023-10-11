@@ -134,7 +134,7 @@ class WebformSignature extends FormElement {
     // Make sure the signature contains no colors.
     $image = imagecreatefrompng($temp_image);
     $number_of_colors = imagecolorstotal($image);
-    imagedestroy($image);
+    unset($image);
     if ($number_of_colors > 0) {
       return FALSE;
     }

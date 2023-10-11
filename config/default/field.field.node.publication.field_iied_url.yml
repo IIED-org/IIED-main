@@ -12,7 +12,7 @@ field_name: field_iied_url
 entity_type: node
 bundle: publication
 label: 'Other IIED main site URL'
-description: '<p><i><big><strong>Hint:</strong> If there is no related project page on the  site, enter the URL of another related page, e.g. Blog, Long-read etc. Do NOT link to IIED Home, Group or Theme pages.</big></i><br><i><big>Note: Link text will be displayed as a link in place of the URL, e.g. ''Read more...''.</i></big></p>'
+description: "<p><i><big><strong>Hint:</strong> If there is no related project page on the  site, enter the URL of another related page, e.g. Blog, Long-read etc. Do NOT link to IIED Home, Group or Theme pages.</big></i><br><i><big>Note: Link text will be displayed as a link in place of the URL, e.g. 'Read more...'.</i></big></p>"
 required: false
 translatable: false
 default_value: {  }

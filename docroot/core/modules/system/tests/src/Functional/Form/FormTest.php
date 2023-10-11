@@ -143,9 +143,9 @@ class FormTest extends BrowserTestBase {
             }
             if ($type == 'select') {
               // Select elements are going to have validation errors with empty
-              // input, since those are illegal choices. Just make sure the
+              // input, since those are not allowed choices. Just make sure the
               // error is not "field is required".
-              $this->assertTrue((empty($errors[$element]) || strpos('field is required', (string) $errors[$element]) === FALSE), "Optional '$type' field '$element' is not treated as a required element");
+              $this->assertTrue((empty($errors[$element]) || !str_contains('field is required', (string) $errors[$element])), "Optional '$type' field '$element' is not treated as a required element");
             }
             else {
               // Make sure there is *no* form error for this element. We're
@@ -886,7 +886,7 @@ class FormTest extends BrowserTestBase {
     // an input forgery.
     // @see \Drupal\form_test\Form\FormTestInputForgeryForm::postRender
     $this->submitForm(['checkboxes[one]' => TRUE, 'checkboxes[two]' => TRUE], 'Submit');
-    $this->assertSession()->pageTextContains('An illegal choice has been detected.');
+    $this->assertSession()->pageTextContains('The submitted value FORGERY in the Checkboxes element is not allowed.');
   }
 
   /**

@@ -33,6 +33,8 @@ class SettingsTest extends UnitTestCase {
    * @covers ::__construct
    */
   protected function setUp(): void {
+    parent::setUp();
+
     $this->config = [
       'one' => '1',
       'two' => '2',
@@ -144,7 +146,6 @@ class SettingsTest extends UnitTestCase {
 
     $class = new \ReflectionClass(Settings::class);
     $instance_property = $class->getProperty("instance");
-    $instance_property->setAccessible(TRUE);
     $instance_property->setValue(NULL);
 
     $this->expectException(\BadMethodCallException::class);
@@ -198,7 +199,6 @@ class SettingsTest extends UnitTestCase {
 
     $class = new \ReflectionClass(Settings::class);
     $instance_property = $class->getProperty('deprecatedSettings');
-    $instance_property->setAccessible(TRUE);
     $deprecated_settings = $instance_property->getValue();
     $deprecated_settings['deprecated_legacy'] = $deprecated_setting;
     $instance_property->setValue($deprecated_settings);
@@ -306,22 +306,6 @@ class SettingsTest extends UnitTestCase {
    */
   public function providerTestRealDeprecatedSettings(): array {
     return [
-      [
-        'sanitize_input_whitelist',
-        'The "sanitize_input_whitelist" setting is deprecated in drupal:9.1.0 and will be removed in drupal:10.0.0. Use Drupal\Core\Security\RequestSanitizer::SANITIZE_INPUT_SAFE_KEYS instead. See https://www.drupal.org/node/3163148.',
-      ],
-      [
-        'twig_sandbox_whitelisted_classes',
-        'The "twig_sandbox_whitelisted_classes" setting is deprecated in drupal:9.1.0 and is removed from drupal:10.0.0. Use "twig_sandbox_allowed_classes" instead. See https://www.drupal.org/node/3162897.',
-      ],
-      [
-        'twig_sandbox_whitelisted_methods',
-        'The "twig_sandbox_whitelisted_methods" setting is deprecated in drupal:9.1.0 and is removed from drupal:10.0.0. Use "twig_sandbox_allowed_methods" instead. See https://www.drupal.org/node/3162897.',
-      ],
-      [
-        'twig_sandbox_whitelisted_prefixes',
-        'The "twig_sandbox_whitelisted_prefixes" setting is deprecated in drupal:9.1.0 and is removed from drupal:10.0.0. Use "twig_sandbox_allowed_prefixes" instead. See https://www.drupal.org/node/3162897.',
-      ],
       [
         'block_interest_cohort',
         'The "block_interest_cohort" setting is deprecated in drupal:9.5.0. This setting should be removed from the settings file, since its usage has been removed. See https://www.drupal.org/node/3320787.',

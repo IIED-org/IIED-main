@@ -24,9 +24,11 @@ use Drupal\Tests\TestRequirementsTrait;
 use Drupal\Tests\Traits\PhpUnitWarnings;
 use Drupal\TestTools\Comparator\MarkupInterfaceComparator;
 use Drupal\TestTools\Extension\SchemaInspector;
+use Drupal\TestTools\Random;
 use Drupal\TestTools\TestVarDumper;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpFoundation\Request;
@@ -83,7 +85,6 @@ use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
  */
 abstract class KernelTestBase extends TestCase implements ServiceProviderInterface {
 
-  use AssertLegacyTrait;
   use AssertContentTrait;
   use RandomGeneratorTrait;
   use ConfigTestTrait;
@@ -91,6 +92,7 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
   use TestRequirementsTrait;
   use PhpUnitWarnings;
   use PhpUnitCompatibilityTrait;
+  use ProphecyTrait;
   use ExpectDeprecationTrait;
 
   /**
@@ -200,7 +202,7 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
    *
    * @var \Drupal\Core\KeyValueStore\KeyValueMemoryFactory
    */
-  protected $keyValue;
+  protected KeyValueMemoryFactory $keyValue;
 
   /**
    * The app root.
@@ -237,7 +239,7 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
   /**
    * {@inheritdoc}
    */
-  public static function setUpBeforeClass() {
+  public static function setUpBeforeClass(): void {
     parent::setUpBeforeClass();
     VarDumper::setHandler(TestVarDumper::class . '::cliHandler');
 
@@ -248,7 +250,7 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Allow tests to compare MarkupInterface objects via assertEquals().
@@ -258,6 +260,15 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
     $this->initFileCache();
     $this->bootEnvironment();
     $this->bootKernel();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __get(string $name) {
+    if ($name === 'randomGenerator') {
+      return Random::getGenerator();
+    }
   }
 
   /**
@@ -357,7 +368,7 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
     $driver = $connection_info['default']['driver'];
     $namespace = $connection_info['default']['namespace'] ?? '';
     $autoload = $connection_info['default']['autoload'] ?? '';
-    if (strpos($autoload, 'src/Driver/Database/') !== FALSE) {
+    if (str_contains($autoload, 'src/Driver/Database/')) {
       [$first, $second] = explode('\\', $namespace, 3);
       if ($first === 'Drupal' && strtolower($second) === $second) {
         // Add the module that provides the database driver to the list of
@@ -385,9 +396,9 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
 
     $this->container = $kernel->getContainer();
 
-    // Ensure database tasks have been run.
-    require_once __DIR__ . '/../../../includes/install.inc';
-    $errors = db_installer_object($driver, $namespace)->runTasks();
+    // Run database tasks and check for errors.
+    $installer_class = $namespace . "\\Install\\Tasks";
+    $errors = (new $installer_class())->runTasks();
     if (!empty($errors)) {
       $this->fail('Failed to run installer database tasks: ' . implode(', ', $errors));
     }
@@ -581,9 +592,10 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
         ->clearTag('path_processor_outbound');
     }
 
+    // Relax the password hashing cost in tests to avoid performance issues.
     if ($container->hasDefinition('password')) {
       $container->getDefinition('password')
-        ->setArguments([1]);
+        ->setArguments([PASSWORD_BCRYPT, ['cost' => 4]]);
     }
 
     // Add the on demand rebuild route provider service.
@@ -596,7 +608,7 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
     }
     $definition = $container->getDefinition($id);
     $definition->clearTag('needs_destruction');
-    $container->setDefinition("simpletest.$route_provider_service_name", $definition);
+    $container->setDefinition("test.$route_provider_service_name", $definition);
 
     $route_provider_definition = new Definition(RouteProvider::class);
     $route_provider_definition->setPublic(TRUE);
@@ -625,7 +637,7 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
   /**
    * {@inheritdoc}
    */
-  protected function assertPostConditions() {
+  protected function assertPostConditions(): void {
     // Execute registered Drupal shutdown functions prior to tearing down.
     // @see _drupal_shutdown_function()
     $callbacks = &drupal_register_shutdown_function();
@@ -645,7 +657,7 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
   /**
    * {@inheritdoc}
    */
-  protected function tearDown() {
+  protected function tearDown(): void {
     // Destroy the testing kernel.
     if (isset($this->kernel)) {
       $this->kernel->shutdown();
@@ -709,7 +721,7 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
   protected function installConfig($modules) {
     foreach ((array) $modules as $module) {
       if (!$this->container->get('module_handler')->moduleExists($module)) {
-        throw new \LogicException("$module module is not enabled.");
+        throw new \LogicException("$module module is not installed.");
       }
       try {
         $this->container->get('config.installer')->installDefaultConfig('module', $module);
@@ -741,20 +753,13 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
     // failures, we only allow the schema of explicitly loaded/enabled modules
     // to be installed.
     if (!$module_handler->moduleExists($module)) {
-      throw new \LogicException("$module module is not enabled.");
+      throw new \LogicException("$module module is not installed.");
     }
     $specification = SchemaInspector::getTablesSpecification($module_handler, $module);
     /** @var \Drupal\Core\Database\Schema $schema */
     $schema = $this->container->get('database')->schema();
     $tables = (array) $tables;
     foreach ($tables as $table) {
-      // The tables key_value and key_value_expire are lazy loaded and therefore
-      // no longer have to be created with the installSchema() method.
-      // @see https://www.drupal.org/node/3143286
-      if ($module === 'system' && in_array($table, ['key_value', 'key_value_expire'])) {
-        @trigger_error('Installing the tables key_value and key_value_expire with the method KernelTestBase::installSchema() is deprecated in drupal:9.1.0 and is removed from drupal:10.0.0. The tables are now lazy loaded and therefore will be installed automatically when used. See https://www.drupal.org/node/3143286', E_USER_DEPRECATED);
-        continue;
-      }
       if (empty($specification[$table])) {
         throw new \LogicException("$module module does not define a schema for table '$table'.");
       }
@@ -849,7 +854,7 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
     $module_handler->reload();
     foreach ($modules as $module) {
       if (!$module_handler->moduleExists($module)) {
-        throw new \RuntimeException("$module module is not enabled after enabling it.");
+        throw new \RuntimeException("$module module is not installed after installing it.");
       }
     }
   }
@@ -875,7 +880,7 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
     $extension_config = $this->config('core.extension');
     foreach ($modules as $module) {
       if (!$module_handler->moduleExists($module)) {
-        throw new \LogicException("$module module cannot be disabled because it is not enabled.");
+        throw new \LogicException("$module module cannot be uninstalled because it is not installed.");
       }
       unset($module_filenames[$module]);
       $extension_config->clear('module.' . $module);
@@ -894,7 +899,7 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
     $module_handler->reload();
     foreach ($modules as $module) {
       if ($module_handler->moduleExists($module)) {
-        throw new \RuntimeException("$module module is not disabled after disabling it.");
+        throw new \RuntimeException("$module module is not uninstalled after uninstalling it.");
       }
     }
   }

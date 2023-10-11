@@ -37,17 +37,9 @@ settings:
         - heading4
         - heading5
         - heading6
-    ckeditor5_style:
-      styles:
-        -
-          label: 'h3 without top margin'
-          element: '<h3 class="mt-0">'
-        -
-          label: 'h2 without top margin'
-          element: '<h2 class="mt-0">'
-        -
-          label: 'p bottom margin'
-          element: '<p class="mb-6">'
+    ckeditor5_list:
+      reversed: false
+      startIndex: true
     ckeditor5_sourceEditing:
       allowed_tags:
         - '<cite>'
@@ -65,9 +57,17 @@ settings:
         - '<h6 id>'
         - '<h3 id>'
         - '<h2 id>'
-    ckeditor5_list:
-      reversed: false
-      startIndex: true
+    ckeditor5_style:
+      styles:
+        -
+          label: 'h3 without top margin'
+          element: '<h3 class="mt-0">'
+        -
+          label: 'h2 without top margin'
+          element: '<h2 class="mt-0">'
+        -
+          label: 'p bottom margin'
+          element: '<p class="mb-6">'
 image_upload:
   status: true
   scheme: public

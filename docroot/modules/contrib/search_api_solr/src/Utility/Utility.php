@@ -183,6 +183,10 @@ class Utility {
     /** @var \Drupal\search_api_solr\SolrBackendInterface $backend */
     $backend = $server->getBackend();
     $response = $backend->getSolrConnector()->getFile($dir_name);
+    if (is_array($response)) {
+      // A connector might return a prepared list;
+      return $response;
+    }
 
     // Search for directories and recursively merge directory files.
     $files_data = json_decode($response->getBody(), TRUE);
@@ -588,8 +592,14 @@ class Utility {
     elseif (strpos($first_solr_field_name, 's') === 0 || strpos($first_solr_field_name, 't') === 0) {
       // For string and fulltext fields use the dedicated sort field for faster
       // and language specific sorts. If multiple languages are specified, use
-      // the first one.
-      $language_ids = $query->getLanguages() ?? [LanguageInterface::LANGCODE_NOT_SPECIFIED];
+      // the first one or the universal collation field if enabled.
+      $index_third_party_settings = $query->getIndex()->getThirdPartySettings('search_api_solr') + search_api_solr_default_index_third_party_settings();
+      if (!($index_third_party_settings['multilingual']['use_universal_collation'] ?? FALSE)) {
+        $language_ids = $query->getLanguages() ?? [LanguageInterface::LANGCODE_NOT_SPECIFIED];
+      }
+      else {
+        $language_ids = [LanguageInterface::LANGCODE_NOT_SPECIFIED];
+      }
       return Utility::encodeSolrName('sort' . SolrBackendInterface::SEARCH_API_SOLR_LANGUAGE_SEPARATOR . reset($language_ids) . '_' . $field_name);
     }
     elseif (preg_match('/^([a-z]+)m(_.*)/', $first_solr_field_name, $matches)) {
@@ -944,7 +954,7 @@ class Utility {
    * @param array|string $keys
    *   The keys array to flatten, formatted as specified by
    *   \Drupal\search_api\Query\QueryInterface::getKeys() or a phrase string.
-   * @param ParseModeInterface $parse_mode
+   * @param \Drupal\search_api\ParseMode\ParseModeInterface $parse_mode
    *   (optional) The parse mode. Defaults to "terms" if null.
    *
    * @return string
@@ -1227,7 +1237,7 @@ class Utility {
    */
   public static function getSolrConnector(ServerInterface $server): SolrConnectorInterface {
     $backend = $server->getBackend();
-     if (!($backend instanceof SolrBackendInterface)) {
+    if (!($backend instanceof SolrBackendInterface)) {
       throw new SearchApiSolrException(sprintf('Server %s is not a Solr server', $server->label()));
     }
 
@@ -1251,7 +1261,7 @@ class Utility {
       throw new SearchApiSolrException(sprintf('The configured connector for server %s (%s) is not a cloud connector.', $server->label(), $server->id()));
     }
 
-    /** @var SolrCloudConnectorInterface $connector */
+    /** @var \Drupal\search_api_solr\SolrCloudConnectorInterface $connector */
     return $connector;
   }
 
@@ -1296,7 +1306,7 @@ class Utility {
       }
     }
 
-    $specific_languages = array_keys(array_filter($index->getThirdPartySetting('search_api_solr', 'multilingual', ['specific_languages' => []])['specific_languages']));
+    $specific_languages = array_keys(array_filter($index->getThirdPartySetting('search_api_solr', 'multilingual', ['specific_languages' => []])['specific_languages'] ?? []));
     if (!empty($specific_languages)) {
       $language_ids = array_intersect($language_ids, $specific_languages);
       $fallback_languages = array_intersect($fallback_languages, $specific_languages);
@@ -1314,12 +1324,21 @@ class Utility {
       // LanguageInterface::LANGCODE_NOT_SPECIFIED above.
     }
 
-
     if (empty($fallback_languages)) {
       $query->setLanguages(array_unique($language_ids));
     }
 
-    return array_unique(array_merge($language_ids, $fallback_languages));
+    $language_ids = array_unique(array_merge($language_ids, $fallback_languages));
+
+    // In case of wrong configurations of the site, it could happen that an
+    // index is limited to some languages but the fallback processor or an old
+    // link might request another language. Instead of returning an empty array
+    // we set language undefined to avoid exceptions.
+    if (empty($language_ids)) {
+      $language_ids[] = LanguageInterface::LANGCODE_NOT_SPECIFIED;
+    }
+
+    return $language_ids;
   }
 
 }

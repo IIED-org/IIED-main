@@ -1177,7 +1177,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
           ],
           [
             'title' => $this->t('Display forms in a modal dialog with Drupal 8 | Agaric'),
-            'url' => 'http://agaric.com/blogs/display-forms-modal-dialog-drupal-8',
+            'url' => 'https://agaric.com/blogs/display-forms-modal-dialog-drupal-8',
           ],
           [
             'title' => $this->t('jQueryUI Dialog Documentation'),

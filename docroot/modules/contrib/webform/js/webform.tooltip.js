@@ -37,10 +37,14 @@
         var $element = $(this);
         var $description;
         if ($element.is('fieldset')) {
-          $description = $element.find('> .fieldset-wrapper > .description > .webform-element-description.visually-hidden');
+          $description = $element.find('> .fieldset-wrapper > .description > .webform-element-description.visually-hidden, > .fieldset__wrapper > .fieldset__suffix > .description.visually-hidden');
         }
         else {
           $description = $element.find('> .description > .webform-element-description.visually-hidden');
+        }
+
+        if (!$description.length) {
+          return;
         }
 
         var options = $.extend({

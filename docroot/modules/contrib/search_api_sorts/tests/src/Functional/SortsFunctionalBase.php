@@ -40,7 +40,7 @@ abstract class SortsFunctionalBase extends SearchApiBrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  public function setUp(): void {
     parent::setUp();
 
     // Create an index and server to work with.

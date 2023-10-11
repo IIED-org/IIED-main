@@ -72,11 +72,12 @@
   }
 }
 
-#drupal-off-canvas.ui-dialog-content div {
-  color: var(--gin-color-text);
-}
+#drupal-off-canvas:not(.drupal-off-canvas-reset).ui-dialog-content,
+#drupal-off-canvas-wrapper .ui-dialog-content {
+  & div {
+    color: var(--gin-color-text);
+  }
 
-#drupal-off-canvas {
   width: calc(100%) !important;
   height: calc(100% - #{$offcanvasTitleHeight}) !important;
   padding-left: $offcanvasPadding !important;
@@ -84,10 +85,11 @@
   box-sizing: border-box;
 }
 
-.ui-dialog-off-canvas #drupal-off-canvas {
+.ui-dialog-off-canvas #drupal-off-canvas:not(.drupal-off-canvas-reset),
+#drupal-off-canvas-wrapper .ui-dialog-content {
   display: flex;
   flex-direction: column;
-  padding: 0 20px 0px !important;
+  padding: 0 20px 0 !important;
 }
 
 #drupal-modal form > .form-actions {

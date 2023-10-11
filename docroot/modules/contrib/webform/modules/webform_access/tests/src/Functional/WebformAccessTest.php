@@ -92,6 +92,10 @@ class WebformAccessTest extends WebformAccessBrowserTestBase {
       'default_value_input[webform][0][settings][default_data]' => 'test: test',
       'default_value_input[webform][0][settings][webform_access_group][]' => 'manager',
     ];
+    // @todo Remove once Drupal 10.1.x is only supported.
+    if (floatval(\Drupal::VERSION) >= 10.1) {
+      $edit['set_default_value'] = TRUE;
+    }
     $this->submitForm($edit, 'Save settings');
     $this->drupalGet('/node/add/webform');
     $this->assertTrue($assert_session->optionExists('webform[0][settings][webform_access_group][]', 'manager')->hasAttribute('selected'));

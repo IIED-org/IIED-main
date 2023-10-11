@@ -14,7 +14,7 @@ abstract class MigrateUpgradeExecuteTestBase extends MigrateUpgradeTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Create content.
@@ -40,7 +40,6 @@ abstract class MigrateUpgradeExecuteTestBase extends MigrateUpgradeTestBase {
     $this->submitForm([], 'Perform upgrade');
     $this->assertUpgrade($this->getEntityCounts());
 
-    \Drupal::service('module_installer')->install(['forum']);
     \Drupal::service('module_installer')->install(['book']);
 
     // Test incremental migration.

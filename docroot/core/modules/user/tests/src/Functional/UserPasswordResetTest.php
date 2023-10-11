@@ -119,7 +119,7 @@ class UserPasswordResetTest extends BrowserTestBase {
 
     $resetURL = $this->getResetURL();
     $this->drupalGet($resetURL);
-    // Ensure that the current url does not contain the hash and timestamp.
+    // Ensure that the current URL does not contain the hash and timestamp.
     $this->assertSession()->addressEquals(Url::fromRoute('user.reset.form', ['uid' => $this->account->id()]));
 
     $this->assertSession()->responseHeaderDoesNotExist('X-Drupal-Cache');
@@ -338,6 +338,13 @@ class UserPasswordResetTest extends BrowserTestBase {
     $this->assertSession()->pageTextContains("Another user ({$this->account->getAccountName()}) is already logged into the site on this computer, but you tried to use a one-time link for user {$another_account->getAccountName()}. Please log out and try using the link again.");
     $this->assertSession()->linkExists('log out');
     $this->assertSession()->linkByHrefExists(Url::fromRoute('user.logout')->toString());
+
+    // Verify that the invalid password reset page does not show the user name.
+    $attack_reset_url = "user/reset/" . $another_account->id() . "/1/1";
+    $this->drupalGet($attack_reset_url);
+    $this->assertSession()->pageTextNotContains($another_account->getAccountName());
+    $this->assertSession()->addressEquals('user/' . $this->account->id());
+    $this->assertSession()->pageTextContains('The one-time login link you clicked is invalid.');
 
     $another_account->delete();
     $this->drupalGet($resetURL);

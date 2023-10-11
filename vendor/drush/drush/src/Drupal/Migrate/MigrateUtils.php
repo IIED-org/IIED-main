@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drush\Drupal\Migrate;
 
 /**
@@ -7,12 +9,11 @@ namespace Drush\Drupal\Migrate;
  */
 class MigrateUtils
 {
-
     /**
      * Parses as an array the list of IDs received from console.
      *
      * IDs are delimited by comma. Each ID consists in one are many ID columns,
-     * separated by a colon (:).
+     * separated by a colon (":").
      *
      * @param string|null $idlist
      *
@@ -20,7 +21,7 @@ class MigrateUtils
      */
     public static function parseIdList(?string $idlist): array
     {
-        $idlist = array_filter(str_getcsv($idlist));
+        $idlist = array_filter(str_getcsv((string) $idlist));
         array_walk($idlist, function (string &$value) {
             $value = str_getcsv(trim($value), ':');
         });

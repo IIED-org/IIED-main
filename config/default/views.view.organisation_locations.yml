@@ -13,7 +13,6 @@ dependencies:
     - image
     - taxonomy
     - user
-    - views_autocomplete_filters
 id: organisation_locations
 label: 'Organisation locations'
 module: views
