@@ -22,8 +22,9 @@ tags:
   twitter_cards_creator: '@IIED'
   twitter_cards_creator_id: '39719681'
   twitter_cards_description: '[site:slogan]'
+  twitter_cards_image: '[node:field_main_image]'
   twitter_cards_page_url: '[current-page:url:absolute]'
   twitter_cards_site: '@IIED'
   twitter_cards_site_id: '39719681'
   twitter_cards_title: '[current-page:title] | [site:name]'
-  twitter_cards_type: summary_large_image
+  twitter_cards_type: summary
