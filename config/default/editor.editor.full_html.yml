@@ -1,76 +1,83 @@
-uuid: 4e14a1f4-252e-4ed9-88a5-e11a185f81e1
+uuid: 0fc6845a-355f-4d27-b4d3-13072f7d7024
 langcode: en
 status: true
 dependencies:
   config:
     - filter.format.full_html
   module:
-    - ckeditor
-_core:
-  default_config_hash: 967ijj7p6i7rwrYl7r08WQFeCY_c23YAh0h8u-w_CXM
+    - ckeditor5
 format: full_html
-editor: ckeditor
+editor: ckeditor5
 settings:
   toolbar:
-    rows:
-      -
-        -
-          name: Formatting
-          items:
-            - Bold
-            - Italic
-            - Superscript
-            - Subscript
-            - '-'
-            - RemoveFormat
-        -
-          name: Linking
-          items:
-            - DrupalLink
-            - DrupalUnlink
-            - Anchor
-        -
-          name: Lists
-          items:
-            - BulletedList
-            - NumberedList
-        -
-          name: Media
-          items:
-            - Blockquote
-            - DrupalImage
-            - Table
-            - HorizontalRule
-            - video_embed
-        -
-          name: 'Block Formatting'
-          items:
-            - Format
-            - Styles
-        -
-          name: Tools
-          items:
-            - PasteText
-            - PasteFromWord
-            - ShowBlocks
-            - Source
+    items:
+      - bold
+      - italic
+      - superscript
+      - subscript
+      - removeFormat
+      - '|'
+      - link
+      - '|'
+      - bulletedList
+      - numberedList
+      - '|'
+      - blockQuote
+      - drupalInsertImage
+      - insertTable
+      - horizontalLine
+      - videoEmbed
+      - '|'
+      - heading
+      - codeBlock
+      - style
+      - '|'
+      - sourceEditing
   plugins:
-    stylescombo:
-      styles: "h3.mt-0|h3 without top margin\r\nh2.mt-0|h2 without top margin\r\np.mb-6|p bottom margin\r\nimg.rounded-full|img rounded\r\ndiv.float-right.ml-6.mb-6.not-prose|div right\r\ndiv.float-left.mr-6.mb-6.not-prose|div left\r\ndiv.caption|div caption\r\ndiv.aspect-w-16.aspect-h-9|div 16x9\r\ndiv.not-prose|div not-prose"
-    wordcount:
-      enable: true
-      show_remaining: false
-      show_paragraphs: true
-      show_word_count: true
-      show_char_count: true
-      count_bytes: false
-      count_spaces: false
-      count_html: 0
-      count_line_breaks: false
-      max_words: -1
-      max_chars: -1
-      hard_limit: 1
-    video_embed:
+    ckeditor5_heading:
+      enabled_headings:
+        - heading2
+        - heading3
+        - heading4
+        - heading5
+        - heading6
+    ckeditor5_style:
+      styles:
+        -
+          label: 'h3 without top margin'
+          element: '<h3 class="mt-0">'
+        -
+          label: 'h2 without top margin'
+          element: '<h2 class="mt-0">'
+        -
+          label: 'p bottom margin'
+          element: '<p class="mb-6">'
+        -
+          label: 'img rounded'
+          element: '<img class="rounded-full">'
+        -
+          label: 'div right'
+          element: '<div class="float-right ml-6 mb-6 not-prose">'
+        -
+          label: 'div left'
+          element: '<div class="float-left mr-6 mb-6 not-prose">'
+        -
+          label: 'div caption'
+          element: '<div class="caption">'
+        -
+          label: 'div 16x9'
+          element: '<div class="aspect-w-16 aspect-h-9">'
+        -
+          label: 'div not-prose'
+          element: '<div class="not-prose">'
+    ckeditor5_sourceEditing:
+      allowed_tags: {  }
+    ckeditor5_list:
+      reversed: true
+      startIndex: true
+    ckeditor5_imageResize:
+      allow_resize: true
+    video_embed_wysiwyg_video_embed:
       defaults:
         children:
           autoplay: false
@@ -83,5 +90,5 @@ image_upload:
   directory: inline-images
   max_size: ''
   max_dimensions:
-    width: null
-    height: null
+    width: 0
+    height: 0

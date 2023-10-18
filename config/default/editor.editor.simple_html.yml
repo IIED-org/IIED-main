@@ -1,41 +1,24 @@
-uuid: 8ad21bb8-2b85-48be-90cd-923dee580029
+uuid: f3f28a39-8b52-4a6f-856f-fa75cdd59407
 langcode: en
 status: true
 dependencies:
   config:
     - filter.format.simple_html
   module:
-    - ckeditor
+    - ckeditor5
 format: simple_html
-editor: ckeditor
+editor: ckeditor5
 settings:
   toolbar:
-    rows:
-      -
-        -
-          name: Formatting
-          items:
-            - Bold
-            - Italic
-        -
-          name: Lists
-          items:
-            - BulletedList
-            - NumberedList
+    items:
+      - bold
+      - italic
+      - bulletedList
+      - numberedList
   plugins:
-    wordcount:
-      enable: true
-      show_remaining: true
-      show_paragraphs: false
-      show_word_count: true
-      show_char_count: false
-      count_bytes: false
-      count_spaces: false
-      count_html: 0
-      count_line_breaks: false
-      max_words: 300
-      max_chars: -1
-      hard_limit: 1
+    ckeditor5_list:
+      reversed: false
+      startIndex: false
 image_upload:
   status: false
   scheme: public

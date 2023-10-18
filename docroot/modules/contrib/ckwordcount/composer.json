@@ -18,7 +18,9 @@
     "source": "https://git.drupalcode.org/project/ckwordcount"
   },
   "require": {
-    "drupal/notification": "^1.0",
-    "w8tcha/ckeditor-wordcount-plugin": "^1.17"
+    "drupal/notification": "^1.0"
+  },
+  "suggest": {
+    "w8tcha/ckeditor-wordcount-plugin": "Required to use drupal/ckwordcount. WordCount Plugin for CKEditor v4 (or above) that counts the words/characters and shows the word count and/or char count in the footer of the editor."
   }
 }

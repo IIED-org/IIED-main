@@ -1,0 +1,26 @@
+.ckeditor-wordcount-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    font-size: 16px;
+    font-family: 'Courier New',Courier,fixed;
+}
+
+.ckeditor-count-words {
+    padding: 0 10px;
+    padding-left: 30px;
+    background-image: url('../images/word_count.svg');
+    background-size: auto 80%;
+    background-position: 0 center;
+    background-repeat: no-repeat;
+    margin-right: 10px;
+}
+
+.ckeditor-count-characters {
+    padding: 0 10px;
+    padding-left: 30px;
+    background-image: url('../images/character_count.svg');
+    background-size: auto 80%;
+    background-position: 0 center;
+    background-repeat: no-repeat;
+}

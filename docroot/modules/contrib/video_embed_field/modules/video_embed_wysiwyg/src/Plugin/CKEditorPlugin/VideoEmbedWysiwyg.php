@@ -11,7 +11,7 @@ use Drupal\editor\Entity\Editor;
 use Drupal\video_embed_field\Plugin\Field\FieldFormatter\Video;
 
 /**
- * The media_entity plugin for video_embed_field.
+ * The CKE4 plugin for video_embed_field.
  *
  * @CKEditorPlugin(
  *   id = "video_embed",

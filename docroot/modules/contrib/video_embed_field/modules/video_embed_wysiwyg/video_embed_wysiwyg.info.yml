@@ -4,8 +4,9 @@ description: 'Integrates video_embed_field directly into ckeditor. Useful for we
 package: Video Embed Field
 core_version_requirement: ^9.2 || ^10
 dependencies:
+  - drupal:ckeditor5
   - drupal:field
-  - drupal:ckeditor
+  - drupal:editor
   - video_embed_field:video_embed_field
 
 # Information added by Drupal.org packaging script on 2022-12-19
