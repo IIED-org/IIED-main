@@ -1,7 +1,0 @@
-redirect.import:
-  path: '/admin/config/search/redirect/import'
-  defaults:
-    _form: '\Drupal\path_redirect_import\Form\RedirectImportForm'
-    _title: 'Import'
-  requirements:
-    _permission: 'administer redirects'

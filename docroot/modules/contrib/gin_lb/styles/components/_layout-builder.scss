@@ -4,7 +4,6 @@
  */
 
 .layout-builder__add-section {
-  background-color: #fff;
   width: 100%;
   text-align: center;
   margin-bottom: 1.5em;
@@ -181,45 +180,48 @@
   word-break: break-word;
 }
 
-#drupal-off-canvas .layout-selection li {
-  display: block;
-  padding-bottom: 0;
-  position: relative;
-}
+#drupal-off-canvas:not(.drupal-off-canvas-reset),
+#drupal-off-canvas-wrapper {
+  & .layout-selection li {
+    display: block;
+    padding-bottom: 0;
+    position: relative;
+  }
 
-#drupal-off-canvas .layout-selection li a {
-  display: block;
-  border-bottom: 0px;
-}
-#drupal-off-canvas .layout-selection li:after {
-  content: "";
-  opacity: .75;
-  display: block;
-  position: absolute;
-  bottom: calc(var(--gin-spacing-s) * -1);
-  left: -2rem;
-  width: calc(100% + 4rem);
-  height: 1px;
-  border-bottom: 1px solid var(--gin-border-color-table);
-}
-#drupal-off-canvas .layout-selection li a svg {
-  display: inline-block;
-  margin-right: .5em;
-  vertical-align: middle;
-}
+  & .layout-selection li a {
+    display: block;
+    border-bottom: 0;
+  }
+  & .layout-selection li:after {
+    content: "";
+    opacity: .75;
+    display: block;
+    position: absolute;
+    bottom: calc(var(--gin-spacing-s) * -1);
+    left: -2rem;
+    width: calc(100% + 4rem);
+    height: 1px;
+    border-bottom: 1px solid var(--gin-border-color-table);
+  }
+  & .layout-selection li a svg {
+    display: inline-block;
+    margin-right: .5em;
+    vertical-align: middle;
+  }
 
-#drupal-off-canvas .layout-selection li a div {
-  display: inline-block;
-}
+  & .layout-selection li a div {
+    display: inline-block;
+  }
 
-#drupal-off-canvas .inline-block-create-button {
-  display: block;
-  padding: 24px;
-  padding-left: 44px;
-  font-size: 16px;
-  color: #eee;
-  border-bottom: 1px solid #333;
-  background: url('/core/misc/icons/bebebe/plus.svg') transparent 16px no-repeat;
+  & .inline-block-create-button {
+    display: block;
+    padding: 24px;
+    padding-left: 44px;
+    font-size: 16px;
+    color: #eee;
+    border-bottom: 1px solid #333;
+    background: url('/core/misc/icons/bebebe/plus.svg') transparent 16px no-repeat;
+  }
 }
 
 .layout-builder__region-label,

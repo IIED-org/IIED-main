@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\webform\Functional\Handler;
+namespace Drupal\Tests\webform\Functional\Variant;
 
 use Drupal\Tests\webform\Functional\WebformBrowserTestBase;
 

@@ -7,6 +7,7 @@ use Drupal\filter\Entity\FilterFormat;
 /**
  * @covers ::media_filter_format_edit_form_validate
  * @group media
+ * @group #slow
  */
 class MediaEmbedFilterConfigurationUiTest extends MediaJavascriptTestBase {
 
@@ -52,7 +53,6 @@ class MediaEmbedFilterConfigurationUiTest extends MediaJavascriptTestBase {
 
   /**
    * @covers ::media_form_filter_format_add_form_alter
-   * @covers ::media_filter_format_edit_form_validate
    * @dataProvider providerTestValidations
    */
   public function testValidationWhenAdding($filter_html_status, $filter_align_status, $filter_caption_status, $filter_html_image_secure_status, $media_embed, $allowed_html, $expected_error_message) {
@@ -100,7 +100,6 @@ class MediaEmbedFilterConfigurationUiTest extends MediaJavascriptTestBase {
 
   /**
    * @covers ::media_form_filter_format_edit_form_alter
-   * @covers ::media_filter_format_edit_form_validate
    * @dataProvider providerTestValidations
    */
   public function testValidationWhenEditing($filter_html_status, $filter_align_status, $filter_caption_status, $filter_html_image_secure_status, $media_embed, $allowed_html, $expected_error_message) {
@@ -255,10 +254,10 @@ class MediaEmbedFilterConfigurationUiTest extends MediaJavascriptTestBase {
    */
   protected function showHiddenFields() {
     $script = <<<JS
-      var hidden_fields = document.querySelectorAll(".visually-hidden");
+      var hidden_fields = document.querySelectorAll(".hidden");
 
       [].forEach.call(hidden_fields, function(el) {
-        el.classList.remove("visually-hidden");
+        el.classList.remove("hidden");
       });
 JS;
 

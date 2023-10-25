@@ -93,7 +93,7 @@ class WebformTemplatesController extends ControllerBase implements ContainerInje
         if ($webform->access('update')) {
           $operations['edit'] = [
             'title' => $this->t('Build'),
-            'url' => $this->ensureDestination($webform->toUrl('edit-form')),
+            'url' => $webform->toUrl('edit-form'),
           ];
         }
         if ($webform->access('submission_page')) {

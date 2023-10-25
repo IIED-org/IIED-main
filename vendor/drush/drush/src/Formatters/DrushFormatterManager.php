@@ -1,13 +1,10 @@
 <?php
 
-/**
- * @file
- * Definition of Drush\Formatters\DrushFormatterManager.
- */
+declare(strict_types=1);
 
 namespace Drush\Formatters;
 
-use \Consolidation\OutputFormatters\FormatterManager;
+use Consolidation\OutputFormatters\FormatterManager;
 
 /**
  * Our own output formatter

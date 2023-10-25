@@ -31,7 +31,7 @@ use Drupal\dynamic_entity_reference\DataDynamicReferenceDefinition;
  *   id = "dynamic_entity_reference",
  *   label = @Translation("Dynamic entity reference"),
  *   description = @Translation("An entity field containing a dynamic entity reference."),
- *   category = @Translation("Dynamic Reference"),
+ *   category = "reference",
  *   no_ui = FALSE,
  *   list_class = "\Drupal\dynamic_entity_reference\Plugin\Field\FieldType\DynamicEntityReferenceFieldItemList",
  *   default_widget = "dynamic_entity_reference_default",
@@ -729,6 +729,24 @@ class DynamicEntityReferenceItem extends EntityReferenceItem {
     }
 
     return $options;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function storageSettingsSummary(FieldStorageDefinitionInterface $storage_definition): array {
+    $summary = [];
+    $types = [];
+    $entity_manager = \Drupal::entityTypeManager();
+    foreach (static::getTargetTypes($storage_definition->getSettings()) as $entity_type_id) {
+      if ($entity_manager->hasDefinition($entity_type_id) && $target_entity_type = $entity_manager->getDefinition($entity_type_id)) {
+        $types[] = $target_entity_type->getLabel();
+      }
+    }
+    $summary[] = new TranslatableMarkup('Reference types: @entity_types', [
+      '@entity_types' => implode(', ', $types),
+    ]);
+    return $summary;
   }
 
 }

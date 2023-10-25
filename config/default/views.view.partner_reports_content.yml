@@ -31,7 +31,6 @@ dependencies:
     - 'taxonomy_term:organisation:061c94f4-2105-46a1-b4ac-fbcdcc579d95'
     - 'taxonomy_term:organisation:065df67f-614c-4e6c-b5a0-a274a1101941'
     - 'taxonomy_term:organisation:074b9b41-0810-443b-aa9e-6b40d68fdd7c'
-    - 'taxonomy_term:organisation:076af641-0676-4c7c-83ea-1d78d07c3546'
     - 'taxonomy_term:organisation:0785d176-ab2d-47c4-8f9c-c9abae40bc8b'
     - 'taxonomy_term:organisation:07ec5a1f-1154-485f-9bcb-731a5d3dfce9'
     - 'taxonomy_term:organisation:07f4bb86-befb-4f27-9579-23a738a7cd36'
@@ -516,7 +515,6 @@ dependencies:
     - 'taxonomy_term:organisation:e832edff-3e5a-4838-819b-aa789f4fdf88'
     - 'taxonomy_term:organisation:e8371a7c-bbe2-4b8e-9111-d6c29ef37135'
     - 'taxonomy_term:organisation:e8969db7-e6c1-4db0-9c0e-d08735cb674a'
-    - 'taxonomy_term:organisation:e89a0f80-4621-45f0-a190-eed230301397'
     - 'taxonomy_term:organisation:e8a61fb9-f158-433b-8c4a-8622198a7639'
     - 'taxonomy_term:organisation:e973bee0-5d0b-4fca-a14f-d4c2c6653513'
     - 'taxonomy_term:organisation:e9a8ba85-17de-447c-a391-eed088599dc2'
@@ -2542,6 +2540,15 @@ display:
             date_format: html_date
             custom_date_format: ''
             timezone: ''
+            tooltip:
+              date_format: ''
+              custom_date_format: ''
+            time_diff:
+              enabled: false
+              future_format: '@interval hence'
+              past_format: '@interval ago'
+              granularity: 2
+              refresh: 60
           group_column: value
           group_columns: {  }
           group_rows: true

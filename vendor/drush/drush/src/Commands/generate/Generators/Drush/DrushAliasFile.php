@@ -1,42 +1,40 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drush\Commands\generate\Generators\Drush;
 
+use DrupalCodeGenerator\Asset\AssetCollection as Assets;
+use DrupalCodeGenerator\Attribute\Generator;
 use DrupalCodeGenerator\Command\BaseGenerator;
+use DrupalCodeGenerator\GeneratorType;
 use Drush\Drush;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\Question;
 
-/**
- * Implements drush-alias-file command.
- */
+#[Generator(
+    name: 'drush:alias-file',
+    description: 'Generates a Drush site alias file.',
+    aliases: ['daf'],
+    templatePath: __DIR__,
+    type: GeneratorType::MODULE_COMPONENT,
+)]
 class DrushAliasFile extends BaseGenerator
 {
-
-    protected $name = 'drush-alias-file';
-    protected $description = 'Generates a Drush site alias file.';
-    protected $alias = 'daf';
-    protected $templatePath = __DIR__;
-
     /**
      * {@inheritdoc}
      */
-    protected function interact(InputInterface $input, OutputInterface $output)
+    protected function generate(array &$vars, Assets $assets): void
     {
-        $questions['prefix'] = new Question('File prefix (one word)', 'self');
-        $questions['root'] = new Question('Path to Drupal root', Drush::bootstrapManager()->getRoot());
-        $questions['uri'] = new Question('Drupal uri', Drush::bootstrapManager()->getUri());
-        $questions['host'] = new Question('Remote host');
-        $vars = $this->collectVars($input, $output, $questions);
+        $ir = $this->createInterviewer($vars);
+
+        $vars['prefix'] = $ir->ask('File prefix (one word)', 'self');
+        $vars['root'] = $ir->ask('Path to Drupal root', Drush::bootstrapManager()->getRoot());
+        $vars['uri'] = $ir->ask('Drupal uri', Drush::bootstrapManager()->getUri() ?: null);
+        $vars['host'] = $ir->ask('Remote host');
 
         if ($vars['host']) {
-            $remote_questions['user'] = new Question('Remote user', Drush::config()->user());
-            $this->collectVars($input, $output, $remote_questions);
+            $vars['user'] = $ir->ask('Remote user', Drush::config()->user());
         }
 
-        $this->addFile()
-            ->path('drush/{prefix}.site.yml')
-            ->template('drush-alias-file.yml.twig');
+        $assets->addFile('drush/{prefix}.site.yml', 'drush-alias-file.yml.twig');
     }
 }

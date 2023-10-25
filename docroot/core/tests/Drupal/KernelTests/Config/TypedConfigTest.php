@@ -87,6 +87,9 @@ class TypedConfigTest extends KernelTestBase {
     $typed_config = $typed_config_manager->createFromNameAndData('config_test.validation', \Drupal::configFactory()->get('config_test.validation')->get());
     $this->assertInstanceOf(TypedConfigInterface::class, $typed_config);
     $this->assertEquals(['_core', 'llama', 'cat', 'giraffe', 'uuid'], array_keys($typed_config->getElements()));
+    $this->assertSame('config_test.validation', $typed_config->getName());
+    $this->assertSame('config_test.validation', $typed_config->getPropertyPath());
+    $this->assertSame('config_test.validation.llama', $typed_config->get('llama')->getPropertyPath());
 
     $config_test_entity = \Drupal::entityTypeManager()->getStorage('config_test')->create([
       'id' => 'asterix',
@@ -134,7 +137,7 @@ class TypedConfigTest extends KernelTestBase {
     $this->assertEmpty($result);
 
     // Test constrains on nested mapping.
-    $config->set('cat.type', 'miaus');
+    $config->set('cat.type', 'tiger');
     $config->save();
 
     $typed_config = $typed_config_manager->get('config_test.validation');

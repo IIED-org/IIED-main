@@ -1,12 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Drush\Command;
 
 use Consolidation\AnnotatedCommand\CommandInfoAltererInterface;
 use Consolidation\AnnotatedCommand\Parser\CommandInfo;
+use Drush\Commands\core\DocsCommands;
 
 class DrushCommandInfoAlterer implements CommandInfoAltererInterface
 {
-    public function alterCommandInfo(CommandInfo $commandInfo, $commandFileInstance)
+    public function alterCommandInfo(CommandInfo $commandInfo, $commandFileInstance): void
     {
         // If a command has a @filter-default-field annotation, that
         // implies that it also has an implicit @filter-output annotation.
@@ -22,7 +26,7 @@ class DrushCommandInfoAlterer implements CommandInfoAltererInterface
                 $commandInfo->removeAnnotation('topics');
                 $commandInfo->addAnnotation('topics', $values);
             }
-            $commandInfo->addAnnotation('topics', 'docs:output-formats-filters');
+            $commandInfo->addAnnotation('topics', DocsCommands::OUTPUT_FORMATS_FILTERS);
         }
     }
 }

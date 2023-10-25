@@ -1,79 +1,51 @@
 # Gin Layout Builder
 
-The Gin Layout Builder module brings the gin admin theme to the layout builder.
+## Overview
 
-For a full description of the module, visit the
-[Gin Layout Builder](https://www.drupal.org/project/gin_lb).
-
-Submit bug reports and feature suggestions, or track changes in the
-[issue queue](https://www.drupal.org/project/issues/gin_lb).
-
+The Gin Layout Builder module brings the Gin admin theme to the layout builder.
 
 ### Conflicts with your frontend theme.
 
-To avoid conflicts with your frontend theme, the module adds a
-CSS prefix "glb-" to all layout builder styles.
-If your theme uses theme suggestions there could be conflicts
-with the module theme suggestions from "gin layout builder".
+To avoid conflicts with your frontend theme, the module adds a CSS prefix "glb-"
+to all layout builder styles.
+
+If your theme uses theme suggestions there could be conflicts with the module
+theme suggestions from "gin layout builder".
+
 To avoid these conflicts add the following code to your
 hook_theme_suggestions inside your theme.
 
+```php
 if (isset($variables['element']['#gin_lb_form'])) {
-    return;
+  return;
 }
-
-### Develop
-
-#### One time installation step
-
-`nvm install 14`
-
-#### Regular script execution
-
-Gin layout builder comes with a webpack configuration to builder SCSS styles.
-To use them run:
-
-`nvm use 14`
-`yarn install`
-`yarn dev`
-
-For a full description of the module, visit the
-[project page](https://www.drupal.org/project/gin_lb).
-
-Submit bug reports and feature suggestions, or track changes in the
-[issue queue](https://www.drupal.org/project/issues/gin_lb).
-
-
-## Table of contents
-
-- Requirements
-- Installation
-- Configuration
-- Maintainers
-
+```
 
 ## Requirements
 
-This module requires the following modules other than core module:
+This module requires the following module:
 
-- [Gin Toolbar](https://www.drupal.org/project/gin_toolbar)
-
+* [Gin Toolbar](https://www.drupal.org/project/gin_toolbar)
 
 ## Installation
 
 Install as you would normally install a contributed Drupal module. For further
-information, see
-[Installing Drupal Modules](https://www.drupal.org/docs/extending-drupal/installing-drupal-modules).
-
+information, see [Installing Drupal Modules](https://www.drupal.org/docs/extending-drupal/installing-drupal-modules).
 
 ## Configuration
 
-The module has no menu or modifiable settings. There is no configuration at the
-module level.
-
+* Enable the Gin Layout Builder module on your site.
+* Go to the configuration page (`/admin/config/gin_lb/settings`) and choose your
+  module settings.
 
 ## Maintainers
 
-- Christian.wiedemann - [Christian.wiedemann](https://www.drupal.org/u/christianwiedemann)
-- Rafael Schally - [sch4lly](https://www.drupal.org/u/sch4lly)
-- Stangl David - [Duwid](https://www.drupal.org/u/duwid)
+Current maintainers:
+* [Christian Wiedemann (Christian.wiedemann)](https://www.drupal.org/user/861002)
+* [Rafael Schally (sch4lly)](https://www.drupal.org/user/856550)
+* [Stangl David (Duwid)](https://www.drupal.org/user/2693877)
+* [Florent Torregrosa (Grimreaper)](https://www.drupal.org/user/2388214)
+
+This project has been sponsored by:
+* [keytec GmbH & Co. KG](https://www.keytec.de/)
+* [Smile](https://https://www.smile.eu)

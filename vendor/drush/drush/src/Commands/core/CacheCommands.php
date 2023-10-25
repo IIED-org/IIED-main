@@ -1,56 +1,92 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Drush\Commands\core;
 
+use Consolidation\AnnotatedCommand\Hooks\HookManager;
+use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Consolidation\AnnotatedCommand\CommandData;
 use Consolidation\AnnotatedCommand\Events\CustomEventAwareInterface;
 use Consolidation\AnnotatedCommand\Events\CustomEventAwareTrait;
 use Consolidation\OutputFormatters\StructuredData\PropertyList;
-use Drush\Boot\AutoloaderAwareInterface;
-use Drush\Boot\AutoloaderAwareTrait;
+use Drush\Attributes as CLI;
+use Drush\Boot\BootstrapManager;
+use Drush\Boot\DrupalBootLevels;
 use Drush\Commands\DrushCommands;
-use Drupal\Core\DrupalKernel;
-use Drupal\Core\Site\Settings;
 use Drupal\Core\Cache\Cache;
-use Drush\Drush;
 use Drush\Utils\StringUtils;
 use Consolidation\AnnotatedCommand\Input\StdinAwareInterface;
 use Consolidation\AnnotatedCommand\Input\StdinAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
+use Composer\Autoload\ClassLoader;
 
 /*
  * Interact with Drupal's Cache API.
  */
-class CacheCommands extends DrushCommands implements CustomEventAwareInterface, AutoloaderAwareInterface, StdinAwareInterface
+final class CacheCommands extends DrushCommands implements CustomEventAwareInterface, StdinAwareInterface
 {
-
     use CustomEventAwareTrait;
-    use AutoloaderAwareTrait;
     use StdinAwareTrait;
+
+    const GET = 'cache:get';
+    const TAGS = 'cache:tags';
+    const CLEAR = 'cache:clear';
+    const SET = 'cache:set';
+    // @deprecated. Use CacheRebuildCommands::REBUILD
+    const REBUILD = 'cache:rebuild';
+    const EVENT_CLEAR = 'cache-clear';
+
+    public function __construct(
+        private CacheTagsInvalidatorInterface $invalidator,
+        private $themeRegistry,
+        private $routerBuilder,
+        private $jsOptimizer,
+        private $cssOptimizer,
+        private $pluginCacheClearer,
+        private BootstrapManager $bootstrapManager,
+        private ClassLoader $autoloader
+    ) {
+        parent::__construct();
+    }
+
+    public static function create(ContainerInterface $container, $drush_container): self
+    {
+        $commandHandler = new static(
+            $container->get('cache_tags.invalidator'),
+            $container->get('theme.registry'),
+            $container->get('router.builder'),
+            $container->get('asset.js.collection_optimizer'),
+            $container->get('asset.css.collection_optimizer'),
+            $container->get('plugin.cache_clearer'),
+            $drush_container->get('bootstrap.manager'),
+            $drush_container->get('loader')
+        );
+
+        return $commandHandler;
+    }
 
     /**
      * Fetch a cached object and display it.
-     *
-     * @command cache:get
-     * @param $cid The id of the object to fetch.
-     * @param $bin The cache bin to fetch from.
-     * @usage drush cache:get hook_info bootstrap
-     *   Display the data for the cache id "hook_info" from the "bootstrap" bin.
-     * @usage drush cache:get update_available_releases update
-     *   Display the data for the cache id "update_available_releases" from the "update" bin.
-     * @aliases cg,cache-get
-     * @bootstrap full
-     * @field-labels
-     *   cid: Cache ID
-     *   data: Data
-     *   created: Created
-     *   expire: Expire
-     *   tags: Tags
-     *   checksum: Checksum
-     *   valid: Valid
-     * @default-fields cid,data,created,expire,tags
-     * @return \Consolidation\OutputFormatters\StructuredData\PropertyList
      */
-    public function get($cid, $bin = 'default', $options = ['format' => 'json'])
+    #[CLI\Command(name: self::GET, aliases: ['cg', 'cache-get'])]
+    #[CLI\Argument(name: 'cid', description: 'The id of the object to fetch.')]
+    #[CLI\Argument(name: 'bin', description: 'The cache bin to fetch from.')]
+    #[CLI\Usage(name: 'drush cache:get hook_info bootstrap', description: 'Display the data for the cache id "hook_info" from the "bootstrap" bin.')]
+    #[CLI\Usage(name: 'drush cache:get update_available_releases update', description: 'Display the data for the cache id "update_available_releases" from the "update" bin.')]
+    #[CLI\Bootstrap(level: DrupalBootLevels::FULL)]
+    #[CLI\FieldLabels(labels: [
+        'cid' => 'Cache ID',
+        'data' => 'Data',
+        'created' => 'Created',
+        'expire' => 'Expire',
+        'tags' => 'Tags',
+        'checksum' => 'Checksum',
+        'valid' => 'Valid',
+    ])]
+    #[CLI\DefaultTableFields(fields: ['cid', 'data', 'created', 'expire', 'tags'])]
+    public function get($cid, $bin = 'default', $options = ['format' => 'json']): PropertyList
     {
         $result = \Drupal::cache($bin)->get($cid);
         if (empty($result)) {
@@ -61,49 +97,36 @@ class CacheCommands extends DrushCommands implements CustomEventAwareInterface, 
 
     /**
      * Invalidate by cache tags.
-     *
-     * @command cache:tags
-     * @param string $tags A comma delimited list of cache tags to clear.
-     * @aliases ct
-     * @bootstrap full
-     * @usage drush cache:tag node:12,user:4
-     *   Purge content associated with two cache tags.
      */
-    public function tags($tags)
+    #[CLI\Command(name: self::TAGS, aliases: ['ct'])]
+    #[CLI\Argument(name: 'tags', description: 'A comma delimited list of cache tags to clear.')]
+    #[CLI\Bootstrap(level: DrupalBootLevels::FULL)]
+    #[CLI\Usage(name: 'drush cache:tag node:12,user:4', description: 'Purge content associated with two cache tags.')]
+    public function tags(string $tags): void
     {
         $tags = StringUtils::csvToArray($tags);
-        Cache::invalidateTags($tags);
+        $this->invalidator->invalidateTags($tags);
         $this->logger()->success(dt("Invalidated tag(s): !list.", ['!list' => implode(' ', $tags)]));
     }
 
     /**
      * Clear a specific cache, or all Drupal caches.
-     *
-     * @command cache:clear
-     * @param string $type The particular cache to clear. Omit this argument to choose from available types.
-     * @param array $args Additional arguments as might be expected (e.g. bin name).
-     * @option cache-clear Set to 0 to suppress normal cache clearing; the caller should then clear if needed.
-     * @hidden-options cache-clear
-     * @aliases cc,cache-clear
-     * @bootstrap max
-     * @notify Caches have been cleared.
-     * @usage drush cc bin
-     *   Choose a bin to clear.
-     * @usage drush cc bin entity,bootstrap
-     *   Clear the entity and bootstrap cache bins.
      */
-    public function clear($type, array $args, $options = ['cache-clear' => true])
+    #[CLI\Command(name: self::CLEAR, aliases: ['cc', 'cache-clear'])]
+    #[CLI\Argument(name: 'type', description: 'The particular cache to clear. Omit this argument to choose from available types.')]
+    #[CLI\Argument(name: 'args', description: 'Additional arguments as might be expected (e.g. bin name).')]
+    #[CLI\Option(name: 'cache-clear', description: 'Set to 0 to suppress normal cache clearing; the caller should then clear if needed.')]
+    #[CLI\Bootstrap(level: DrupalBootLevels::MAX)]
+    #[CLI\Usage(name: 'drush cc bin', description: 'Choose a bin to clear.')]
+    #[CLI\Usage(name: 'drush cc bin entity,bootstrap', description: 'Clear the entity and bootstrap cache bins.')]
+    public function clear(string $type, array $args, $options = ['cache-clear' => true])
     {
-        $boot_manager = Drush::bootstrapManager();
-
         if (!$options['cache-clear']) {
             $this->logger()->info(dt("Skipping cache-clear operation due to --cache-clear=0 option."));
             return null;
         }
 
-        $types = $this->getTypes($boot_manager->hasBootstrapped((DRUSH_BOOTSTRAP_DRUPAL_FULL)));
-
-        // Do it.
+        $types = $this->getTypes($this->bootstrapManager->hasBootstrapped((DrupalBootLevels::FULL)));
         drush_op($types[$type], $args);
         // Avoid double confirm.
         if ($type !== 'bin') {
@@ -111,16 +134,13 @@ class CacheCommands extends DrushCommands implements CustomEventAwareInterface, 
         }
     }
 
-    /**
-     * @hook interact cache-clear
-     */
-    public function interact($input, $output)
+    #[CLI\Hook(type: HookManager::INTERACT, target: self::CLEAR)]
+    public function interact($input, $output): void
     {
-        $boot_manager = Drush::bootstrapManager();
         if (empty($input->getArgument('type'))) {
-            $types = $this->getTypes($boot_manager->hasBootstrapped(DRUSH_BOOTSTRAP_DRUPAL_FULL));
+            $types = $this->getTypes($this->bootstrapManager->hasBootstrapped(DrupalBootLevels::FULL));
             $choices = array_combine(array_keys($types), array_keys($types));
-            $type = $this->io()->choice(dt("Choose a cache to clear"), $choices, 'all');
+            $type = $this->io()->choice(dt("Choose a cache to clear"), $choices, 'render');
             $input->setArgument('type', $type);
         }
 
@@ -134,18 +154,16 @@ class CacheCommands extends DrushCommands implements CustomEventAwareInterface, 
 
     /**
      * Cache an object expressed in JSON or var_export() format.
-     *
-     * @command cache:set
-     * @param $cid The id of the object to set.
-     * @param $data The object to set in the cache. Use - to read the object from STDIN.
-     * @param $bin The cache bin to store the object in.
-     * @param $expire 'CACHE_PERMANENT', or a Unix timestamp.
-     * @param $tags A comma delimited list of cache tags.
-     * @option input-format The format of value. Use <info>json</info> for complex values.
-     * @option cache-get If the object is the result a previous fetch from the cache, only store the value in the 'data' property of the object in the cache.
-     * @aliases cs,cache-set
-     * @bootstrap full
      */
+    #[CLI\Command(name: self::SET, aliases: ['cs', 'cache-set'])]
+    #[CLI\Argument(name: 'cid', description: 'id of the object to set.')]
+    #[CLI\Argument(name: 'bin', description: 'The cache bin to store the object in.')]
+    #[CLI\Argument(name: 'data', description: 'The object to set in the cache. Use - to read the object from STDIN.')]
+    #[CLI\Argument(name: 'expire', description: "'CACHE_PERMANENT', or a Unix timestamp.")]
+    #[CLI\Argument(name: 'tags', description: 'A comma delimited list of cache tags.')]
+    #[CLI\Option(name: 'input-format', description: 'The format of value. Use <info>json</info> for complex values.')]
+    #[CLI\Option(name: 'cache-get', description: "If the object is the result a previous fetch from the cache, only store the value in the 'data' property of the object in the cache.")]
+    #[CLI\Bootstrap(level: DrupalBootLevels::FULL)]
     public function set($cid, $data, $bin = 'default', $expire = null, $tags = null, $options = ['input-format' => 'string', 'cache-get' => false])
     {
         $tags = is_string($tags) ? StringUtils::csvToArray($tags) : [];
@@ -193,69 +211,17 @@ class CacheCommands extends DrushCommands implements CustomEventAwareInterface, 
         return $data;
     }
 
-    /**
-     * Rebuild a Drupal 8 site.
-     *
-     * This is a copy of core/rebuild.php. Additionally
-     * it also clears Drush cache and Drupal's render cache.
-
-     *
-     * @command cache:rebuild
-     * @option cache-clear Set to 0 to suppress normal cache clearing; the caller should then clear if needed.
-     * @hidden-options cache-clear
-     * @aliases cr,rebuild,cache-rebuild
-     * @bootstrap site
-     */
-    public function rebuild($options = ['cache-clear' => true])
+    #[CLI\Hook(type: HookManager::ARGUMENT_VALIDATOR, target: self::CLEAR)]
+    public function validate(CommandData $commandData): void
     {
-        if (!$options['cache-clear']) {
-            $this->logger()->info(dt("Skipping cache-clear operation due to --no-cache-clear option."));
-            return true;
-        }
-        chdir(DRUPAL_ROOT);
-
-        // We no longer clear APC and similar caches as they are useless on CLI.
-        // See https://github.com/drush-ops/drush/pull/2450
-
-        $autoloader = $this->loadDrupalAutoloader(DRUPAL_ROOT);
-        require_once DRUSH_DRUPAL_CORE . '/includes/utility.inc';
-
-        $request = Drush::bootstrap()->getRequest();
-        // Manually resemble early bootstrap of DrupalKernel::boot().
-        require_once DRUSH_DRUPAL_CORE . '/includes/bootstrap.inc';
-        DrupalKernel::bootEnvironment();
-
-        // Avoid 'Only variables should be passed by reference'
-        $root  = DRUPAL_ROOT;
-        $site_path = DrupalKernel::findSitePath($request);
-        Settings::initialize($root, $site_path, $autoloader);
-
-        // drupal_rebuild() calls drupal_flush_all_caches() itself, so we don't do it manually.
-        drupal_rebuild($autoloader, $request);
-        $this->logger()->success(dt('Cache rebuild complete.'));
-
-        // As this command replaces `drush cache-clear all` for Drupal 8 users, clear
-        // the Drush cache as well, for consistency with that behavior.
-        CacheCommands::clearDrush();
-    }
-
-    /**
-     * @hook validate cache-clear
-     */
-    public function validate(CommandData $commandData)
-    {
-        $boot_manager = Drush::bootstrapManager();
-        $types = $this->getTypes($boot_manager->hasBootstrapped(DRUSH_BOOTSTRAP_DRUPAL_FULL));
+        $types = $this->getTypes($this->bootstrapManager->hasBootstrapped(DrupalBootLevels::FULL));
         $type = $commandData->input()->getArgument('type');
         // Check if the provided type ($type) is a valid cache type.
         if ($type && !array_key_exists($type, $types)) {
-            if ($type === 'all') {
-                throw new \Exception(dt('`cache-clear all` is deprecated for Drupal 8 and later. Please use the `cache-rebuild` command instead.'));
-            }
             // If we haven't done a full bootstrap, provide a more
             // specific message with instructions to the user on
             // bootstrapping a Drupal site for more options.
-            if (!$boot_manager->hasBootstrapped(DRUSH_BOOTSTRAP_DRUPAL_FULL)) {
+            if (!$this->bootstrapManager->hasBootstrapped(DrupalBootLevels::FULL)) {
                 $all_types = $this->getTypes(true);
                 if (array_key_exists($type, $all_types)) {
                     throw new \Exception(dt("'!type' cache requires a working Drupal site to operate on. Use the --root and --uri options, or a site @alias, or cd to a directory containing a Drupal settings.php file.", ['!type' => $type]));
@@ -270,7 +236,7 @@ class CacheCommands extends DrushCommands implements CustomEventAwareInterface, 
     /**
      * Types of caches available for clearing. Contrib commands can hook in their own.
      */
-    public function getTypes($include_bootstrapped_types = false)
+    public function getTypes($include_bootstrapped_types = false): array
     {
         $types = [
             'drush' => [$this, 'clearDrush'],
@@ -283,11 +249,12 @@ class CacheCommands extends DrushCommands implements CustomEventAwareInterface, 
                 'render' => [$this, 'clearRender'],
                 'plugin' => [$this, 'clearPlugin'],
                 'bin' => [$this, 'clearBins'],
+                'container' => [$this, 'clearContainer'],
             ];
         }
 
         // Command files may customize $types as desired.
-        $handlers = $this->getCustomEventHandlers('cache-clear');
+        $handlers = $this->getCustomEventHandlers(self::EVENT_CLEAR);
         foreach ($handlers as $handler) {
               $handler($types, $include_bootstrapped_types);
         }
@@ -297,80 +264,62 @@ class CacheCommands extends DrushCommands implements CustomEventAwareInterface, 
     /**
      * Clear caches internal to Drush core.
      */
-    public static function clearDrush()
+    public function clearDrush(): void
     {
         try {
-            drush_cache_clear_all(null, 'default');// No longer used by Drush core, but still cleared for backward compat.
-            drush_cache_clear_all(null, 'factory'); // command info from annotated-command library (i.e. parsed annotations)
+            $this->logger()->info(dt('Deprecation notice - Drush no longer caches anything.'));
         } catch (IOException $e) {
             // Sometimes another process writes files into a bin dir and \Drush\Cache\FileCache::clear fails.
             // That is not considered an error. https://github.com/drush-ops/drush/pull/4535.
-            Drush::logger()->info($e->getMessage());
+            $this->logger()->info($e->getMessage());
         }
     }
 
     /**
      * Clear one or more cache bins.
      */
-    public static function clearBins($args = ['default'])
+    public function clearBins($args = ['default']): void
     {
         $bins = StringUtils::csvToArray($args);
         foreach ($bins as $bin) {
             \Drupal::service("cache.$bin")->deleteAll();
-            Drush::logger()->success("$bin cache bin cleared.");
+            $this->logger()->success("$bin cache bin cleared.");
         }
     }
 
-    public static function clearThemeRegistry()
+    public function clearThemeRegistry(): void
     {
-        \Drupal::service('theme.registry')->reset();
+        $this->themeRegistry->reset();
     }
 
-    public static function clearRouter()
+    public function clearRouter(): void
     {
-        /** @var \Drupal\Core\Routing\RouteBuilderInterface $router_builder */
-        $router_builder = \Drupal::service('router.builder');
-        $router_builder->rebuild();
+        $this->routerBuilder->rebuild();
     }
 
-    public static function clearCssJs()
+    public function clearCssJs(): void
     {
         _drupal_flush_css_js();
-        \Drupal::service('asset.css.collection_optimizer')->deleteAll();
-        \Drupal::service('asset.js.collection_optimizer')->deleteAll();
+        $this->cssOptimizer->deleteAll();
+        $this->jsOptimizer->deleteAll();
+    }
+
+    public function clearContainer(): void
+    {
+        $boot_object = $this->bootstrapManager->bootstrap();
+        $boot_object->getKernel()->invalidateContainer();
     }
 
     /**
      * Clears the render cache entries.
      */
-    public static function clearRender()
+    public function clearRender(): void
     {
-        Cache::invalidateTags(['rendered']);
+        $this->invalidator->invalidateTags(['rendered']);
     }
 
-    public static function clearPlugin()
+    public function clearPlugin(): void
     {
-        \Drupal::getContainer()->get('plugin.cache_clearer')->clearCachedDefinitions();
-    }
-
-    /**
-     * Loads the Drupal autoloader and returns the instance.
-     */
-    public function loadDrupalAutoloader($drupal_root)
-    {
-        static $autoloader = false;
-
-        $autoloadFilePath = $drupal_root .'/autoload.php';
-        if (!$autoloader && file_exists($autoloadFilePath)) {
-            $autoloader = require $autoloadFilePath;
-        }
-
-        if ($autoloader === true) {
-            // The autoloader was already required. Assume that Drush and Drupal share an autoloader per
-            // "Point autoload.php to the proper vendor directory" - https://www.drupal.org/node/2404989
-            $autoloader = $this->autoloader();
-        }
-
-        return $autoloader;
+        $this->pluginCacheClearer->clearCachedDefinitions();
     }
 }

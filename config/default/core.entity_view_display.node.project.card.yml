@@ -31,8 +31,8 @@ dependencies:
   module:
     - ds
     - field_group
-    - image
     - layout_builder
+    - svg_image
     - user
 third_party_settings:
   layout_builder:

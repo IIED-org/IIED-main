@@ -51,10 +51,8 @@ class FinishResponseSubscriber implements EventSubscriberInterface {
 
   /**
    * The cache contexts manager service.
-   *
-   * @var \Drupal\Core\Cache\Context\CacheContextsManager
    */
-  protected $cacheContextsManager;
+  protected CacheContextsManager $cacheContextsManager;
 
   /**
    * Whether to send cacheability headers for debugging purposes.
@@ -116,10 +114,6 @@ class FinishResponseSubscriber implements EventSubscriberInterface {
 
     $request = $event->getRequest();
     $response = $event->getResponse();
-
-    // Set the X-UA-Compatible HTTP header to force IE to use the most recent
-    // rendering engine.
-    $response->headers->set('X-UA-Compatible', 'IE=edge', FALSE);
 
     // Set the Content-language header.
     $response->headers->set('Content-language', $this->languageManager->getCurrentLanguage()->getId());
@@ -310,7 +304,7 @@ class FinishResponseSubscriber implements EventSubscriberInterface {
    * @return array
    *   An array of event listener definitions.
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     $events[KernelEvents::RESPONSE][] = ['onRespond'];
     // There is no specific reason for choosing 16 beside it should be executed
     // before ::onRespond().

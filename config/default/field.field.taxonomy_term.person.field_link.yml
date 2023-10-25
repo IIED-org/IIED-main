@@ -12,7 +12,7 @@ field_name: field_link
 entity_type: taxonomy_term
 bundle: person
 label: Link
-description: '<p><i><big><strong>Hint:</strong> This field is intended for links back to profiles on the IIED website staff pages, e.g. <strong>URL:</strong> https://www.iied.org/users/david-dodman, <strong>Link text:</strong> Read more about this authors work''.</big></i>.</p>'
+description: "<p><i><big><strong>Hint:</strong> This field is intended for links back to profiles on the IIED website staff pages, e.g. <strong>URL:</strong> https://www.iied.org/users/david-dodman, <strong>Link text:</strong> Read more about this authors work'.</big></i>.</p>"
 required: false
 translatable: false
 default_value: {  }

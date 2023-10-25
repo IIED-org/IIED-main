@@ -78,6 +78,20 @@ abstract class DateBase extends WebformElementBase {
     // Parse #default_value date input format.
     $this->parseInputFormat($element, '#default_value');
 
+    // Unset date properties that are not valid dates (i.e. tokens)
+    // to prevent date parsing errors via DateTimePlus::createFromTimestamp.
+    $date_properties = [
+      '#date_date_min',
+      '#date_min',
+      '#date_date_max',
+      '#date_max',
+    ];
+    foreach ($date_properties as $date_property) {
+      if (isset($element[$date_property]) && strtotime($element[$date_property]) === FALSE) {
+        unset($element[$date_property]);
+      }
+    }
+
     // Set date min/max attributes.
     // This overrides extra attributes set via Datetime::processDatetime.
     // @see \Drupal\Core\Datetime\Element\Datetime::processDatetime
@@ -400,12 +414,12 @@ abstract class DateBase extends WebformElementBase {
     elseif (is_array($element[$property])) {
       foreach ($element[$property] as $key => $value) {
         $timestamp = strtotime($value);
-        $element[$property][$key] = ($timestamp) ? $this->dateFormatter->format($timestamp, 'html_' . $this->getDateType($element)) : NULL;
+        $element[$property][$key] = ($timestamp !== FALSE) ? $this->dateFormatter->format($timestamp, 'html_' . $this->getDateType($element)) : NULL;
       }
     }
     else {
       $timestamp = strtotime($element[$property]);
-      $element[$property] = ($timestamp) ? $this->dateFormatter->format($timestamp, 'html_' . $this->getDateType($element)) : NULL;
+      $element[$property] = ($timestamp !== FALSE) ? $this->dateFormatter->format($timestamp, 'html_' . $this->getDateType($element)) : NULL;
     }
   }
 

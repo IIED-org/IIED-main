@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Drupal\sophron\Form;
 
@@ -18,20 +18,6 @@ use Symfony\Component\Yaml\Yaml;
 class SettingsForm extends ConfigFormBase {
 
   use SchemaCheckTrait;
-
-  /**
-   * The MIME map manager service.
-   *
-   * @var \Drupal\sophron\MimeMapManagerInterface
-   */
-  protected $mimeMapManager;
-
-  /**
-   * The typed config service.
-   *
-   * @var \Drupal\Core\Config\TypedConfigManagerInterface
-   */
-  protected $typedConfig;
 
   /**
    * {@inheritdoc}
@@ -59,10 +45,12 @@ class SettingsForm extends ConfigFormBase {
    * @param \Drupal\Core\Config\TypedConfigManagerInterface $typed_config
    *   The typed config service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, MimeMapManagerInterface $mime_map_manager, TypedConfigManagerInterface $typed_config) {
+  public function __construct(
+    ConfigFactoryInterface $config_factory,
+    protected MimeMapManagerInterface $mimeMapManager,
+    protected TypedConfigManagerInterface $typedConfig
+  ) {
     parent::__construct($config_factory);
-    $this->mimeMapManager = $mime_map_manager;
-    $this->typedConfig = $typed_config;
   }
 
   /**
@@ -239,7 +227,8 @@ class SettingsForm extends ConfigFormBase {
     ];
     $rows = [];
     $i = 1;
-    foreach ($this->mimeMapManager->listExtensions() as $extension_string) {
+    foreach ($this->mimeMapManager->listExtensions() as $ext) {
+      $extension_string = (string) $ext;
       if ($extension = $this->mimeMapManager->getExtension($extension_string)) {
         $defaultExtensionType = $this->mimeMapManager->getType($extension->getDefaultType());
         $rows[] = [
@@ -328,14 +317,15 @@ class SettingsForm extends ConfigFormBase {
    *   An array of simple arrays, each having a file extension, its Drupal MIME
    *   type guess, and a gap information.
    */
-  protected function determineMapGaps() {
+  protected function determineMapGaps(): array {
     $core_extended_guesser = new CoreExtensionMimeTypeGuesserExtended();
 
     $extensions = $core_extended_guesser->listExtensions();
     sort($extensions);
 
     $rows = [];
-    foreach ($extensions as $extension_string) {
+    foreach ($extensions as $ext) {
+      $extension_string = (string) $ext;
       $drupal_mime_type = $core_extended_guesser->guessMimeType('a.' . $extension_string);
 
       $extension = $this->mimeMapManager->getExtension($extension_string);

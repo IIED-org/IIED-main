@@ -68,7 +68,7 @@ class JsonApiDocumentTopLevelNormalizerTest extends JsonapiKernelTestBase {
    *
    * @var \Drupal\node\Entity\NodeType
    */
-  protected $nodeType;
+  protected NodeType $nodeType;
 
   /**
    * A user to normalize.
@@ -82,28 +82,28 @@ class JsonApiDocumentTopLevelNormalizerTest extends JsonapiKernelTestBase {
    *
    * @var \Drupal\user\Entity\User
    */
-  protected $user2;
+  protected User $user2;
 
   /**
    * A vocabulary.
    *
    * @var \Drupal\taxonomy\Entity\Vocabulary
    */
-  protected $vocabulary;
+  protected Vocabulary $vocabulary;
 
   /**
    * A term.
    *
    * @var \Drupal\taxonomy\Entity\Term
    */
-  protected $term1;
+  protected Term $term1;
 
   /**
    * A term.
    *
    * @var \Drupal\taxonomy\Entity\Term
    */
-  protected $term2;
+  protected Term $term2;
 
   /**
    * The include resolver.
@@ -232,7 +232,7 @@ class JsonApiDocumentTopLevelNormalizerTest extends JsonapiKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public function tearDown(): void {
+  protected function tearDown(): void {
     if ($this->node) {
       $this->node->delete();
     }
@@ -251,6 +251,8 @@ class JsonApiDocumentTopLevelNormalizerTest extends JsonapiKernelTestBase {
     if ($this->user2) {
       $this->user2->delete();
     }
+
+    parent::tearDown();
   }
 
   /**
@@ -474,8 +476,8 @@ class JsonApiDocumentTopLevelNormalizerTest extends JsonapiKernelTestBase {
       )->getNormalization();
     $this->assertNotEmpty($jsonapi_doc_object['meta']['omitted']);
     foreach ($jsonapi_doc_object['meta']['omitted']['links'] as $key => $link) {
-      if (strpos($key, 'item--') === 0) {
-        // Ensure that resource link contains url with the alias field.
+      if (str_starts_with($key, 'item--')) {
+        // Ensure that resource link contains URL with the alias field.
         $resource_link = Url::fromUri('internal:/jsonapi/user/user/' . $user->uuid() . '/user_roles')->setAbsolute()->toString(TRUE);
         $this->assertEquals($resource_link->getGeneratedUrl(), $link['href']);
         $this->assertEquals("The current user is not allowed to view this relationship. The user only has authorization for the 'view label' operation.", $link['meta']['detail']);

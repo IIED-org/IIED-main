@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Drupal\sophron;
 
@@ -26,7 +26,7 @@ class CoreExtensionMimeTypeGuesserExtended extends ExtensionMimeTypeGuesser {
    * @return string[]
    *   A list of MIME types.
    */
-  public function listTypes() {
+  public function listTypes(): array {
     return $this->getMapping()['mimetypes'];
   }
 
@@ -36,14 +36,14 @@ class CoreExtensionMimeTypeGuesserExtended extends ExtensionMimeTypeGuesser {
    * @return string[]
    *   A list of file extensions.
    */
-  public function listExtensions() {
+  public function listExtensions(): array {
     return array_keys($this->getMapping()['extensions']);
   }
 
   /**
    * Ensures Drupal's core MIME type mapping is altered by modules.
    */
-  protected function getMapping() {
+  protected function getMapping(): array {
     if ($this->mapping === NULL) {
       $mapping = $this->defaultMapping;
       // Allow modules to alter the default mapping.

@@ -77,11 +77,12 @@ class ContentTranslationRedirectForm extends EntityForm {
       '#description' => $this->t('Path to redirect. Leave blank to redirect to original content.'),
       '#default_value' => $redirect->getPath(),
     ];
-    $form['translatable_entity_only'] = [
-      '#title' => $this->t('Only act on translatable entities'),
-      '#description' => $this->t('By default only translatable entities are redirected to the original language when there is a missing translation. Uncheck to also redirect entities that cannot be translated.'),
-      '#type' => 'checkbox',
-      '#default_value' => $redirect->translatableEntityOnly(),
+    $form['mode'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Act on'),
+      '#options' => ContentTranslationRedirect::getTranslationModes(),
+      '#default_value' => $redirect->getTranslationMode(),
+      '#required' => TRUE,
     ];
     return $form;
   }

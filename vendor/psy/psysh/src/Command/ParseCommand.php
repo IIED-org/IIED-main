@@ -3,7 +3,7 @@
 /*
  * This file is part of Psy Shell.
  *
- * (c) 2012-2020 Justin Hileman
+ * (c) 2012-2023 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -90,23 +90,17 @@ class ParseCommand extends Command implements ContextAware, PresenterAware
      */
     protected function configure()
     {
-        $definition = [
-            new CodeArgument('code', CodeArgument::REQUIRED, 'PHP code to parse.'),
-            new InputOption('depth', '', InputOption::VALUE_REQUIRED, 'Depth to parse.', 10),
-        ];
-
-        if ($this->parserFactory->hasKindsSupport()) {
-            $msg = 'One of PhpParser\\ParserFactory constants: '
-                .\implode(', ', ParserFactory::getPossibleKinds())
-                ." (default is based on current interpreter's version).";
-            $defaultKind = $this->parserFactory->getDefaultKind();
-
-            $definition[] = new InputOption('kind', '', InputOption::VALUE_REQUIRED, $msg, $defaultKind);
-        }
+        $kindMsg = 'One of PhpParser\\ParserFactory constants: '
+            .\implode(', ', ParserFactory::getPossibleKinds())
+            ." (default is based on current interpreter's version).";
 
         $this
             ->setName('parse')
-            ->setDefinition($definition)
+            ->setDefinition([
+            new CodeArgument('code', CodeArgument::REQUIRED, 'PHP code to parse.'),
+            new InputOption('depth', '', InputOption::VALUE_REQUIRED, 'Depth to parse.', 10),
+            new InputOption('kind', '', InputOption::VALUE_REQUIRED, $kindMsg, $this->parserFactory->getDefaultKind()),
+        ])
             ->setDescription('Parse PHP code and show the abstract syntax tree.')
             ->setHelp(
                 <<<'HELP'
@@ -128,13 +122,10 @@ HELP
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $code = $input->getArgument('code');
-        if (\strpos($code, '<?') === false) {
-            $code = '<?php '.$code;
-        }
-
-        $parserKind = $this->parserFactory->hasKindsSupport() ? $input->getOption('kind') : null;
+        $parserKind = $input->getOption('kind');
         $depth = $input->getOption('depth');
-        $nodes = $this->parse($this->getParser($parserKind), $code);
+
+        $nodes = $this->getParser($parserKind)->parse($code);
         $output->page($this->presenter->present($nodes, $depth));
 
         $this->context->setReturnValue($nodes);
@@ -143,38 +134,14 @@ HELP
     }
 
     /**
-     * Lex and parse a string of code into statements.
-     *
-     * @param Parser $parser
-     * @param string $code
-     *
-     * @return array Statements
-     */
-    private function parse(Parser $parser, $code)
-    {
-        try {
-            return $parser->parse($code);
-        } catch (\PhpParser\Error $e) {
-            if (\strpos($e->getMessage(), 'unexpected EOF') === false) {
-                throw $e;
-            }
-
-            // If we got an unexpected EOF, let's try it again with a semicolon.
-            return $parser->parse($code.';');
-        }
-    }
-
-    /**
      * Get (or create) the Parser instance.
      *
      * @param string|null $kind One of Psy\ParserFactory constants (only for PHP parser 2.0 and above)
-     *
-     * @return Parser
      */
-    private function getParser($kind = null)
+    private function getParser(string $kind = null): CodeArgumentParser
     {
         if (!\array_key_exists($kind, $this->parsers)) {
-            $this->parsers[$kind] = $this->parserFactory->createParser($kind);
+            $this->parsers[$kind] = new CodeArgumentParser($this->parserFactory->createParser($kind));
         }
 
         return $this->parsers[$kind];

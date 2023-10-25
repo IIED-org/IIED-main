@@ -8,10 +8,8 @@ use Drupal\search_api\Plugin\views\filter\SearchApiText;
  * Autocomplete for Search API fulltext fields to handle fulltext filtering.
  *
  * @ingroup views_filter_handlers
- *
- * @ViewsFilter("views_autocomplete_filters_search_api_text")
  */
-class ViewsAutocompleteFiltersSearchApiText extends SearchApiText implements ViewsAutocompleteFiltersInterface {
+class ViewsAutocompleteFiltersSearchApiText extends SearchApiText {
 
   // Exposed filter options.
   var $alwaysMultiple = TRUE;

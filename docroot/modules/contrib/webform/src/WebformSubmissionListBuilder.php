@@ -1307,7 +1307,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
     // If query is order(ed) by 'element__*' we need to build a custom table
     // sort using hook_query_TAG_alter().
     // @see webform_query_webform_submission_list_builder_alter()
-    if ($order && strpos($order['sql'], 'element__') === 0) {
+    if (!empty($order['sql']) && strpos($order['sql'], 'element__') === 0) {
       $name = $order['sql'];
       $column = $this->columns[$name];
       $query->addTag('webform_submission_list_builder')

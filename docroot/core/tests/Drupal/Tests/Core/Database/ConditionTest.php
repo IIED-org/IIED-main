@@ -33,7 +33,7 @@ class ConditionTest extends UnitTestCase {
 
   /**
    * @covers ::compile
-   * @dataProvider providerSimpleCondition()
+   * @dataProvider providerSimpleCondition
    */
   public function testSimpleCondition($expected, $field_name) {
     $connection = $this->prophesize(Connection::class);
@@ -41,7 +41,7 @@ class ConditionTest extends UnitTestCase {
       return preg_replace('/[^A-Za-z0-9_.]+/', '', $args[0]);
     });
     $connection->mapConditionOperator('=')->willReturn(['operator' => '=']);
-    $connection->condition('AND')->willReturn(new Condition('AND', FALSE));
+    $connection->condition('AND')->willReturn(new Condition('AND'));
     $connection = $connection->reveal();
 
     $query_placeholder = $this->prophesize(PlaceholderInterface::class);
@@ -54,7 +54,7 @@ class ConditionTest extends UnitTestCase {
     $query_placeholder = $query_placeholder->reveal();
 
     $condition = $connection->condition('AND');
-    $condition->condition($field_name, ['value']);
+    $condition->condition($field_name, 'value');
     $condition->compile($connection, $query_placeholder);
 
     $this->assertEquals($expected, $condition->__toString());
@@ -64,7 +64,7 @@ class ConditionTest extends UnitTestCase {
   /**
    * @covers ::compile
    *
-   * @dataProvider dataProviderTestCompileWithKnownOperators()
+   * @dataProvider dataProviderTestCompileWithKnownOperators
    *
    * @param string $expected
    *   The expected generated SQL condition.
@@ -83,7 +83,7 @@ class ConditionTest extends UnitTestCase {
       return preg_replace('/[^A-Za-z0-9_.]+/', '', $args[0]);
     });
     $connection->mapConditionOperator(Argument::any())->willReturn(NULL);
-    $connection->condition('AND')->willReturn(new Condition('AND', FALSE));
+    $connection->condition('AND')->willReturn(new Condition('AND'));
     $connection = $connection->reveal();
 
     $query_placeholder = $this->prophesize(PlaceholderInterface::class);
@@ -152,7 +152,7 @@ class ConditionTest extends UnitTestCase {
       return preg_replace('/[^A-Za-z0-9_.]+/', '', $args[0]);
     });
     $connection->mapConditionOperator(Argument::any())->willReturn(NULL);
-    $connection->condition('AND')->willReturn(new Condition('AND', FALSE));
+    $connection->condition('AND')->willReturn(new Condition('AND'));
     $connection = $connection->reveal();
 
     $query_placeholder = $this->prophesize(PlaceholderInterface::class);
@@ -201,17 +201,6 @@ class ConditionTest extends UnitTestCase {
     $connection = new StubConnection($mockPdo, $options);
     $condition = $connection->condition('AND');
     $this->assertSame('MockCondition', get_class($condition));
-  }
-
-  /**
-   * Tests the deprecation of the class Condition.
-   *
-   * @group legacy
-   */
-  public function testConditionClassDeprecation() {
-    $this->expectDeprecation('Creating an instance of this class is deprecated in drupal:9.1.0 and is removed in drupal:10.0.0. Use Database::getConnection()->condition() instead. See https://www.drupal.org/node/3159568');
-    $condition = new Condition('OR');
-    $this->assertSame('Drupal\Core\Database\Query\Condition', get_class($condition));
   }
 
 }

@@ -635,7 +635,8 @@ abstract class WebformManagedFileBase extends WebformElementBase implements Webf
    */
   protected function getDefaultFileExtensions() {
     $file_type = str_replace('webform_', '', $this->getPluginId());
-    return $this->configFactory->get('webform.settings')->get("file.default_{$file_type}_extensions");
+    $extensions = $this->configFactory->get('webform.settings')->get("file.default_{$file_type}_extensions");
+    return $extensions ?? '';
   }
 
   /**

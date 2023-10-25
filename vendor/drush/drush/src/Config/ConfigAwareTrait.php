@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Drush\Config;
 
 trait ConfigAwareTrait
@@ -13,7 +16,7 @@ trait ConfigAwareTrait
      *
      * @see https://stackoverflow.com/a/37687295.
      *
-     * @return \Drush\Config\DrushConfig
+     * @return DrushConfig
      */
     public function getConfig()
     {

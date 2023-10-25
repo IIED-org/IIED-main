@@ -1,8 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Drupal\sophron\EventSubscriber;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\ImmutableConfig;
 use Drupal\sophron\Event\MapEvent;
 use FileEye\MimeMap\MapHandler;
 use FileEye\MimeMap\MalformedTypeException;
@@ -15,18 +16,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class SophronEventSubscriber implements EventSubscriberInterface {
 
   /**
-   * The configuration factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
    * The module configuration settings.
    *
    * @var \Drupal\Core\Config\ImmutableConfig
    */
-  protected $sophronSettings;
+  protected ImmutableConfig $sophronSettings;
 
   /**
    * Constructs a SophronEventSubscriber object.
@@ -34,8 +28,9 @@ class SophronEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
    */
-  public function __construct(ConfigFactoryInterface $config_factory) {
-    $this->configFactory = $config_factory;
+  public function __construct(
+    protected ConfigFactoryInterface $configFactory
+  ) {
     $this->sophronSettings = $this->configFactory->get('sophron.settings');
   }
 
@@ -57,7 +52,7 @@ class SophronEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\sophron\Event\MapEvent $event
    *   Sophron's map event.
    */
-  public function initializeMap(MapEvent $event) {
+  public function initializeMap(MapEvent $event): void {
     $map_commands = $this->sophronSettings->get('map_commands') ?? [];
     $map = MapHandler::map($event->getMapClass());
     foreach ($map_commands as $command) {

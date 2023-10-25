@@ -465,7 +465,7 @@ class BigPipe {
       // - the HTML to load the CSS can be rendered.
       // - the HTML to load the JS (at the top) can be rendered.
       $fake_request = $this->requestStack->getMainRequest()->duplicate();
-      $fake_request->request->set('ajax_page_state', ['libraries' => implode(',', $cumulative_assets->getAlreadyLoadedLibraries())]);
+      $fake_request->query->set('ajax_page_state', ['libraries' => implode(',', $cumulative_assets->getAlreadyLoadedLibraries())]);
       try {
         $html_response = $this->filterEmbeddedResponse($fake_request, $html_response);
       }
@@ -575,7 +575,7 @@ class BigPipe {
       // - the attachments associated with the response are finalized, which
       //   allows us to track the total set of asset libraries sent in the
       //   initial HTML response plus all embedded AJAX responses sent so far.
-      $fake_request->request->set('ajax_page_state', ['libraries' => implode(',', $cumulative_assets->getAlreadyLoadedLibraries())] + $cumulative_assets->getSettings()['ajaxPageState']);
+      $fake_request->query->set('ajax_page_state', ['libraries' => implode(',', $cumulative_assets->getAlreadyLoadedLibraries())] + $cumulative_assets->getSettings()['ajaxPageState']);
       try {
         $ajax_response = $this->filterEmbeddedResponse($fake_request, $ajax_response);
       }
@@ -637,7 +637,7 @@ EOF;
    *   The request for which a response is being sent.
    * @param int $request_type
    *   The request type. Can either be
-   *   \Symfony\Component\HttpKernel\HttpKernelInterface::MASTER_REQUEST or
+   *   \Symfony\Component\HttpKernel\HttpKernelInterface::MAIN_REQUEST or
    *   \Symfony\Component\HttpKernel\HttpKernelInterface::SUB_REQUEST.
    * @param \Symfony\Component\HttpFoundation\Response $response
    *   The response to filter.
@@ -646,7 +646,7 @@ EOF;
    *   The filtered response.
    */
   protected function filterResponse(Request $request, $request_type, Response $response) {
-    assert($request_type === HttpKernelInterface::MASTER_REQUEST || $request_type === HttpKernelInterface::SUB_REQUEST);
+    assert($request_type === HttpKernelInterface::MAIN_REQUEST || $request_type === HttpKernelInterface::SUB_REQUEST);
     $this->requestStack->push($request);
     $event = new ResponseEvent($this->httpKernel, $request, $request_type, $response);
     $this->eventDispatcher->dispatch($event, KernelEvents::RESPONSE);
@@ -711,14 +711,11 @@ EOF;
    *   only keep the first occurrence.
    */
   protected function getPlaceholderOrder($html, $placeholders) {
-    $fragments = explode('<span data-big-pipe-placeholder-id="', $html);
-    array_shift($fragments);
     $placeholder_ids = [];
-
-    foreach ($fragments as $fragment) {
-      $t = explode('"></span>', $fragment, 2);
-      $placeholder_id = $t[0];
-      $placeholder_ids[] = $placeholder_id;
+    $dom = Html::load($html);
+    $xpath = new \DOMXPath($dom);
+    foreach ($xpath->query('//span[@data-big-pipe-placeholder-id]') as $node) {
+      $placeholder_ids[] = Html::escape($node->getAttribute('data-big-pipe-placeholder-id'));
     }
     $placeholder_ids = array_unique($placeholder_ids);
 

@@ -10,7 +10,6 @@ dependencies:
   module:
     - comment
     - user
-    - views_autocomplete_filters
 _core:
   default_config_hash: fsBo_zgUeLyYZdghaw4PkOHA-HqFxu7wmQLilF35XYg
 id: comment
@@ -400,6 +399,15 @@ display:
             date_format: short
             custom_date_format: ''
             timezone: ''
+            tooltip:
+              date_format: ''
+              custom_date_format: ''
+            time_diff:
+              enabled: false
+              future_format: '@interval hence'
+              past_format: '@interval ago'
+              granularity: 2
+              refresh: 60
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -873,7 +881,7 @@ display:
       cacheable: false
   page_1:
     id: page_1
-    display_title: 'All comments - tab shown on ''Recent content'' view'
+    display_title: "All comments - tab shown on 'Recent content' view"
     display_plugin: page
     position: 3
     display_options:
@@ -889,7 +897,7 @@ display:
       defaults:
         access: false
         title: false
-      display_description: 'Comments tab on ''Recent content'' view display'
+      display_description: "Comments tab on 'Recent content' view display"
       display_extenders: {  }
       path: admin/edit/all-comments
       menu:
@@ -1317,6 +1325,15 @@ display:
             date_format: short
             custom_date_format: ''
             timezone: ''
+            tooltip:
+              date_format: ''
+              custom_date_format: ''
+            time_diff:
+              enabled: false
+              future_format: '@interval hence'
+              past_format: '@interval ago'
+              granularity: 2
+              refresh: 60
           group_column: value
           group_columns: {  }
           group_rows: true

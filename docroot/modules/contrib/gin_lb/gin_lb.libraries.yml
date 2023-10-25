@@ -2,7 +2,7 @@ gin_lb:
   version: VERSION
   css:
     theme:
-      dist/css/gin_lb.css: {  }
+      dist/css/gin_lb.css: { minified: true }
   dependencies:
     - core/jquery
     - core/once
@@ -13,14 +13,14 @@ gin_lb_10:
   version: VERSION
   css:
     theme:
-      dist/css/gin_lb_10.css: {  }
+      dist/css/gin_lb_10.css: { minified: true }
   dependencies:
     - gin_lb/gin_lb
 
 gin_lb_init:
   version: VERSION
   js:
-    dist/js/gin_lb_js.js: { minified: false, preprocess: false }
+    dist/js/gin_lb_js.js: { minified: true, preprocess: false }
   dependencies:
     - core/jquery
     - core/once
@@ -28,11 +28,15 @@ gin_lb_init:
     - core/drupalSettings
     - gin/sidebar
 
-gin_lb_accent:
+gin_lb_toastify:
   version: VERSION
-  css:
-    theme:
-      dist/css/gin_lb_accent.css: { minified: true }
+  js:
+    dist/js/gin_lb_toastify.js: { minified: true }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+    - core/drupalSettings
 
 toastify_cdn:
   version: VERSION

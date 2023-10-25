@@ -692,7 +692,9 @@ function webform_preprocess_file_link(&$variables) {
   }
 
   // Add file size variable to Claro theme.
-  if (empty($variables['file_size']) && \Drupal::service('webform.theme_manager')->isActiveTheme('claro')) {
+  if (empty($variables['file_size'])
+    && $file->getSize()
+    && \Drupal::service('webform.theme_manager')->isActiveTheme('claro')) {
     $variables['file_size'] = format_size($file->getSize(), \Drupal::languageManager()->getCurrentLanguage()->getId());
   }
 }

@@ -1,6 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Drupal\sophron;
+
+use FileEye\MimeMap\Extension;
+use FileEye\MimeMap\Type;
 
 /**
  * Provides an interface for FileMapManager.
@@ -33,7 +36,7 @@ interface MimeMapManagerInterface {
    * @return bool
    *   TRUE if valid, FALSE otherwise.
    */
-  public function isMapClassValid($map_class);
+  public function isMapClassValid(string $map_class): bool;
 
   /**
    * Gets the FQCN of map currently in use by the manager.
@@ -41,7 +44,7 @@ interface MimeMapManagerInterface {
    * @return string
    *   A FQCN.
    */
-  public function getMapClass();
+  public function getMapClass(): string;
 
   /**
    * Sets the map class to use by the manager.
@@ -51,7 +54,7 @@ interface MimeMapManagerInterface {
    *
    * @return $this
    */
-  public function setMapClass($map_class);
+  public function setMapClass(string $map_class): MimeMapManagerInterface;
 
   /**
    * Gets the initialization errors of a map class.
@@ -62,7 +65,7 @@ interface MimeMapManagerInterface {
    * @return array
    *   The array of mapping errors.
    */
-  public function getMappingErrors($map_class);
+  public function getMappingErrors(string $map_class): array;
 
   /**
    * Gets the list of MIME types.
@@ -70,7 +73,7 @@ interface MimeMapManagerInterface {
    * @return string[]
    *   A simple array of MIME type strings.
    */
-  public function listTypes();
+  public function listTypes(): array;
 
   /**
    * Gets a MIME type.
@@ -81,9 +84,14 @@ interface MimeMapManagerInterface {
    * @return \FileEye\MimeMap\Type
    *   A Type object.
    *
+   * @throws \FileEye\MimeMap\MalformedTypeException
+   *   If the type string is malformed.
+   * @throws \FileEye\MimeMap\MappingException
+   *   If the type is not found.
+   *
    * @see \FileEye\MimeMap\Type
    */
-  public function getType($type);
+  public function getType(string $type): Type;
 
   /**
    * Gets the list of file extensions.
@@ -91,7 +99,7 @@ interface MimeMapManagerInterface {
    * @return string[]
    *   A simple array of file extension strings.
    */
-  public function listExtensions();
+  public function listExtensions(): array;
 
   /**
    * Gets a file extension.
@@ -102,9 +110,12 @@ interface MimeMapManagerInterface {
    * @return \FileEye\MimeMap\Extension
    *   An Extension object.
    *
+   * @throws \FileEye\MimeMap\MappingException
+   *   If the extension is not found.
+   *
    * @see \FileEye\MimeMap\Extension
    */
-  public function getExtension($extension);
+  public function getExtension(string $extension): Extension;
 
   /**
    * Check installation requirements and do status reporting.
@@ -115,6 +126,6 @@ interface MimeMapManagerInterface {
    * @return array
    *   An associative array of requirements.
    */
-  public function requirements($phase);
+  public function requirements(string $phase): array;
 
 }

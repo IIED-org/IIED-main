@@ -116,6 +116,7 @@ elements: |
     '#description': |
       @see <a href="https://www.drupal.org/node/2917107">Issue #2917107: Date and Time validation problem</a><br/>
       @see <a href="https://www.drupal.org/node/2723159">Issue #2723159: Datetime form element cannot validate when using a format without seconds</a><br/>
+      @see <a href="https://www.drupal.org/project/webform/issues/3371639">Issue #3371639: The form won't submit if the user enters a time out of the interval/step</a><br/>
     '#date_time_element': text
     '#date_time_format': 'H:i'
     '#date_time_step': '900'

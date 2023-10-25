@@ -1178,7 +1178,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
         foreach ($stream_wrappers as $stream_wrapper) {
           $file_directory = $stream_wrapper . '://webform/' . $webform->id() . '/' . $entity->id();
           // Clear empty webform submission directory.
-          if (file_exists($file_directory)
+          if (is_dir($file_directory)
             && empty($this->fileSystem->scanDirectory($file_directory, '/.*/'))) {
             $this->fileSystem->deleteRecursive($file_directory);
           }

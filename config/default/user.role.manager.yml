@@ -28,6 +28,7 @@ dependencies:
   module:
     - block
     - block_class
+    - block_content
     - charts
     - comment
     - contact
@@ -41,7 +42,6 @@ dependencies:
     - layout_builder
     - masquerade
     - media
-    - media_file_delete
     - media_pdf_thumbnail
     - media_revisions_ui
     - node
@@ -67,6 +67,7 @@ is_admin: null
 permissions:
   - 'access administration pages'
   - 'access all charts'
+  - 'access block library'
   - 'access content'
   - 'access content overview'
   - 'access contextual links'
@@ -85,6 +86,8 @@ permissions:
   - 'add pdf image entity entities'
   - 'addrow tablefield'
   - 'administer block classes'
+  - 'administer block content'
+  - 'administer block types'
   - 'administer blocks'
   - 'administer comment types'
   - 'administer comments'
@@ -150,6 +153,7 @@ permissions:
   - 'delete own blog content'
   - 'delete own document media'
   - 'delete own event content'
+  - 'delete own files'
   - 'delete own hidden_handbrake content'
   - 'delete own hidden_page content'
   - 'delete own image media'

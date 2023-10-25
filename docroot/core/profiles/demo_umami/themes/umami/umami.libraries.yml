@@ -5,8 +5,6 @@ global:
       css/base.css: {}
     component:
       css/components/blocks/banner/banner.css: {}
-      css/components/blocks/branding/branding.css: {}
-      css/components/blocks/disclaimer/disclaimer.css: {}
       css/components/blocks/help/help.css: {}
       css/components/blocks/page-title/page-title.css: {}
       css/components/blocks/footer-promo/footer-promo.css: {}
@@ -26,6 +24,7 @@ global:
       css/components/fields/summary.css: {}
       css/components/forms/buttons.css: {}
       css/components/forms/container-inline.module.css: {}
+      css/components/forms/form-items.css: {}
       css/components/views/promoted-items.css: {}
       css/components/views/frontpage.css: {}
       css/components/navigation/menu-footer/menu-footer.css: {}
@@ -56,7 +55,9 @@ global:
 messages:
   css:
     component:
-      css/components/messages/messages.css: { weight: -10 }
+      css/components/messages/messages.css: {}
+  js:
+    js/components/messages/messages.js: {}
 
 more-link:
   css:
@@ -132,7 +133,6 @@ classy.base:
       css/classy/components/action-links.css: { weight: -10 }
       css/classy/components/breadcrumb.css: { weight: -10 }
       css/classy/components/button.css: { weight: -10 }
-      css/classy/components/collapse-processed.css: { weight: -10 }
       css/classy/components/container-inline.css: { weight: -10 }
       css/classy/components/details.css: { weight: -10 }
       css/classy/components/exposed-filters.css: { weight: -10 }
@@ -149,7 +149,6 @@ classy.base:
       css/classy/components/tabledrag.css: { weight: -10 }
       css/classy/components/tableselect.css: { weight: -10 }
       css/classy/components/tablesort.css: { weight: -10 }
-      css/classy/components/tabs.css: { weight: -10 }
       css/classy/components/textarea.css: { weight: -10 }
       css/classy/components/ui-dialog.css: { weight: -10 }
 

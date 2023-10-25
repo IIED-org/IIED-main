@@ -9,10 +9,8 @@ use Drupal\views\Plugin\views\filter\StringFilter;
  * including equality, like, not like, etc.
  *
  * @ingroup views_filter_handlers
- *
- * @ViewsFilter("views_autocomplete_filters_string")
  */
-class ViewsAutocompleteFiltersString extends StringFilter implements ViewsAutocompleteFiltersInterface {
+class ViewsAutocompleteFiltersString extends StringFilter {
 
   // Exposed filter options.
   var $alwaysMultiple = TRUE;

@@ -16,14 +16,19 @@ interface ContentTranslationRedirectInterface extends ConfigEntityInterface {
   public const DEFAULT_ID = 'default';
 
   /**
-   * Sets the redirect status code.
-   *
-   * @param int|null $code
-   *   The redirect status code.
-   *
-   * @return $this
+   * Act on translatable entities.
    */
-  public function setStatusCode(?int $code): ContentTranslationRedirectInterface;
+  public const MODE_TRANSLATABLE = 'translatable';
+
+  /**
+   * Act on untranslatable entities.
+   */
+  public const MODE_UNTRANSLATABLE = 'untranslatable';
+
+  /**
+   * Act on all entities.
+   */
+  public const MODE_ALL = 'all';
 
   /**
    * Gets the redirect status code.
@@ -34,22 +39,12 @@ interface ContentTranslationRedirectInterface extends ConfigEntityInterface {
   public function getStatusCode(): ?int;
 
   /**
-   * Sets the redirect path.
-   *
-   * @param string $path
-   *   The redirect path.
-   *
-   * @return $this
-   */
-  public function setPath(string $path): ContentTranslationRedirectInterface;
-
-  /**
    * Gets the redirect path.
    *
-   * @return string|null
+   * @return string
    *   The redirect path.
    */
-  public function getPath(): ?string;
+  public function getPath(): string;
 
   /**
    * Gets the redirect Url object.
@@ -60,19 +55,35 @@ interface ContentTranslationRedirectInterface extends ConfigEntityInterface {
   public function getUrl(): ?Url;
 
   /**
+   * Gets the translation mode.
+   *
+   * @return string
+   *   The translation mode.
+   */
+  public function getTranslationMode(): string;
+
+  /**
+   * Should redirect only happen on translatable entities?
+   *
+   * @return bool
+   *   Whether we should act on translatable entity only or not.
+   */
+  public function translatableEntityOnly(): bool;
+
+  /**
+   * Should redirect only happen on untranslatable entities?
+   *
+   * @return bool
+   *   Whether we should act on untranslatable entity only or not.
+   */
+  public function untranslatableEntityOnly(): bool;
+
+  /**
    * Returns whether this redirect is locked.
    *
    * @return bool
    *   Whether the redirect is locked or not.
    */
   public function isLocked(): bool;
-
-  /**
-   * Should redirects only happen on translatable entities?
-   *
-   * @return bool
-   *   Whether we should act on translatable entity only or not.
-   */
-  public function translatableEntityOnly(): bool;
 
 }

@@ -255,7 +255,7 @@ class ImageStyle extends ConfigEntityBase implements ImageStyleInterface, Entity
     $file_url = $file_url_generator->generateAbsoluteString($uri);
     // Append the query string with the token, if necessary.
     if ($token_query) {
-      $file_url .= (strpos($file_url, '?') !== FALSE ? '&' : '?') . UrlHelper::buildQuery($token_query);
+      $file_url .= (str_contains($file_url, '?') ? '&' : '?') . UrlHelper::buildQuery($token_query);
     }
 
     return $file_url;
@@ -299,7 +299,7 @@ class ImageStyle extends ConfigEntityBase implements ImageStyleInterface, Entity
     $module_handler->invokeAll('image_style_flush', [$this]);
 
     // Clear caches so that formatters may be added for this style.
-    drupal_theme_rebuild();
+    \Drupal::service('theme.registry')->reset();
 
     Cache::invalidateTags($this->getCacheTagsToInvalidate());
 

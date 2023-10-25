@@ -11,6 +11,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Routing\RedirectDestinationTrait;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\TypedData\TranslatableInterface;
 use Drupal\views\Entity\Render\EntityTranslationRenderTrait;
 use Drupal\views\Plugin\views\display\DisplayPluginBase;
@@ -289,8 +290,8 @@ class BulkForm extends FieldPluginBase implements CacheableDependencyInterface {
       $form[$this->options['id']]['#tree'] = TRUE;
       foreach ($this->view->result as $row_index => $row) {
         $entity = $this->getEntity($row);
-        if ($entity) {
-          $entity = $this->getEntityTranslation($entity, $row);
+        if ($entity !== NULL) {
+          $entity = $this->getEntityTranslationByRelationship($entity, $row);
 
           $form[$this->options['id']][$row_index] = [
             '#type' => 'checkbox',
@@ -305,6 +306,7 @@ class BulkForm extends FieldPluginBase implements CacheableDependencyInterface {
         else {
           $form[$this->options['id']][$row_index] = [];
         }
+
       }
 
       // Replace the form submit button label.
@@ -325,6 +327,7 @@ class BulkForm extends FieldPluginBase implements CacheableDependencyInterface {
         '#type' => 'select',
         '#title' => $this->options['action_title'],
         '#options' => $this->getBulkOptions(),
+        '#empty_option' => $this->t('- Select -'),
       ];
 
       // Duplicate the form actions into the action container in the header.
@@ -448,12 +451,27 @@ class BulkForm extends FieldPluginBase implements CacheableDependencyInterface {
   }
 
   /**
+   * Returns the message that is displayed when no action is selected.
+   *
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
+   *   Message displayed when no action is selected.
+   */
+  protected function emptyActionMessage(): TranslatableMarkup {
+    return $this->t('No %title option selected.', ['%title' => $this->options['action_title']]);
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function viewsFormValidate(&$form, FormStateInterface $form_state) {
     $ids = $form_state->getValue($this->options['id']);
     if (empty($ids) || empty(array_filter($ids))) {
       $form_state->setErrorByName('', $this->emptySelectedMessage());
+    }
+
+    $action = $form_state->getValue('action');
+    if (empty($action)) {
+      $form_state->setErrorByName('', $this->emptyActionMessage());
     }
   }
 

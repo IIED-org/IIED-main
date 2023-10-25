@@ -9,6 +9,7 @@ use Drupal\views\Views;
  * Tests the core Drupal\views\Plugin\views\filter\StringFilter handler.
  *
  * @group views
+ * @group #slow
  */
 class FilterStringTest extends ViewsKernelTestBase {
 
@@ -71,7 +72,7 @@ class FilterStringTest extends ViewsKernelTestBase {
   /**
    * Build and return a Page view of the views_test_data table.
    *
-   * @return view
+   * @return \Drupal\views\ViewExecutable
    */
   protected function getBasicPageView() {
     $view = Views::getView('test_view');

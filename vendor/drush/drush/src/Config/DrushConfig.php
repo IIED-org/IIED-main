@@ -1,15 +1,15 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Drush\Config;
 
 use Consolidation\Config\Util\ConfigOverlay;
-use Symfony\Component\Filesystem\Exception\IOException;
-use Symfony\Component\Filesystem\Filesystem;
-use Webmozart\PathUtil\Path;
+use Robo\Config\Config;
 
 // TODO: Not sure if we should have a reference to PreflightArgs here.
 // Maybe these constants should be in config, and PreflightArgs can
 // reference them from there as well.
-use Drush\Preflight\PreflightArgs;
 
 /**
  * Accessors for common Drush config keys.
@@ -54,43 +54,14 @@ class DrushConfig extends ConfigOverlay
      */
     public function simulate()
     {
-        return $this->get(\Robo\Config\Config::SIMULATE);
-    }
-
-    /**
-     * Return 'true' if we are in backend mode.
-     */
-    public function backend()
-    {
-        return $this->get(PreflightArgs::BACKEND);
+        return $this->get(Config::SIMULATE);
     }
 
     /**
      * Return the list of paths to active Drush configuration files.
-     * @return array
      */
-    public function configPaths()
+    public function configPaths(): array
     {
         return $this->get('runtime.config.paths', []);
-    }
-
-    public function cache()
-    {
-        $candidates = [
-            $this->get('drush.paths.cache-directory'),
-            Path::join($this->home(), '.drush/cache'),
-            Path::join($this->tmp(), 'drush-' . $this->user() . '/cache'),
-        ];
-
-        $fs = new Filesystem();
-        foreach (array_filter($candidates) as $candidate) {
-            try {
-                $fs->mkdir($candidate);
-                return $candidate;
-            } catch (IOException $ioException) {
-                // Do nothing. Jump to the next candidate.
-            }
-        }
-        throw new \Exception('Cannot create the Drush cache directory. Tried next candidates: ' . implode(', ', $candidates));
     }
 }

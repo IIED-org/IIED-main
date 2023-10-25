@@ -122,11 +122,24 @@ class DynamicEntityReferenceTest extends BrowserTestBase {
     $this->drupalLogin($this->adminUser);
     // Add a new dynamic entity reference field.
     $this->drupalGet('entity_test/structure/entity_test/fields/add-field');
-    $edit = [
-      'label' => 'Foobar',
-      'field_name' => 'foobar',
-      'new_storage_type' => 'dynamic_entity_reference',
-    ];
+    if (version_compare(\Drupal::VERSION, '11.0-dev', '>=')) {
+      $test = [
+        'new_storage_type' => 'reference',
+      ];
+      $this->submitForm($test, 'Change field group');
+      $edit = [
+        'group_field_options_wrapper' => 'dynamic_entity_reference',
+        'label' => 'Foobar',
+        'field_name' => 'foobar',
+      ];
+    }
+    else {
+      $edit = [
+        'label' => 'Foobar',
+        'field_name' => 'foobar',
+        'new_storage_type' => 'dynamic_entity_reference',
+      ];
+    }
     $this->submitForm($edit, t('Save and continue'));
     $assert_session->optionNotExists('settings[entity_type_ids][]', 'settings[entity_test_no_id][handler_settings][target_bundles][entity_test_no_id]');
     $assert_session->optionNotExists('settings[entity_type_ids][]', 'settings[entity_test_no_id][handler_settings][target_bundles][entity_test_string_id]');
@@ -203,6 +216,7 @@ class DynamicEntityReferenceTest extends BrowserTestBase {
     // Check the default settings.
     $this->drupalGet('entity_test/structure/entity_test/fields/entity_test.entity_test.field_foobar');
     $this->submitForm([
+      'set_default_value' => '1',
       'default_value_input[field_foobar][0][target_type]' => 'user',
       'default_value_input[field_foobar][0][target_id]' => $this->adminUser->label() . ' (' . $this->adminUser->id() . ')',
     ], t('Save settings'));
@@ -222,11 +236,24 @@ class DynamicEntityReferenceTest extends BrowserTestBase {
     $this->drupalLogin($this->adminUser);
     // Add a new dynamic entity reference field.
     $this->drupalGet('entity_test/structure/entity_test/fields/add-field');
-    $edit = [
-      'label' => 'Foobar',
-      'field_name' => 'foobar',
-      'new_storage_type' => 'dynamic_entity_reference',
-    ];
+    if (version_compare(\Drupal::VERSION, '11.0-dev', '>=')) {
+      $test = [
+        'new_storage_type' => 'reference',
+      ];
+      $this->submitForm($test, 'Change field group');
+      $edit = [
+        'group_field_options_wrapper' => 'dynamic_entity_reference',
+        'label' => 'Foobar',
+        'field_name' => 'foobar',
+      ];
+    }
+    else {
+      $edit = [
+        'label' => 'Foobar',
+        'field_name' => 'foobar',
+        'new_storage_type' => 'dynamic_entity_reference',
+      ];
+    }
     $this->submitForm($edit, t('Save and continue'));
     $assert_session->optionNotExists('settings[entity_type_ids][]', 'settings[entity_test_no_id][handler_settings][target_bundles][entity_test_no_id]');
     $assert_session->optionNotExists('settings[entity_type_ids][]', 'settings[entity_test_no_id][handler_settings][target_bundles][entity_test_string_id]');
@@ -379,13 +406,7 @@ class DynamicEntityReferenceTest extends BrowserTestBase {
 
     // We don't know the order in which the entities will be listed, so just
     // assert parts and make sure both are shown.
-    // @todo remove this once 9.1 and 9.0 are not supported anymore.
-    if (version_compare(\Drupal::VERSION, '9.2', '>=')) {
-      $error_message = t('Multiple test entity entities match this reference;');
-    }
-    else {
-      $error_message = t('Multiple entities match this reference;');
-    }
+    $error_message = t('Multiple test entity entities match this reference;');
     $assert_session->responseContains($error_message);
     $assert_session->responseContains($labels[0]);
     $assert_session->responseContains($labels[1]);
@@ -408,13 +429,7 @@ class DynamicEntityReferenceTest extends BrowserTestBase {
     ];
     // We don't know which id it will display, so just assert a part of the
     // error.
-    // @todo remove this once 9.1 and 9.0 are not supported anymore.
-    if (version_compare(\Drupal::VERSION, '9.2', '>=')) {
-      $error_message = t('Many test entity entities are called %value. Specify the one you want by appending the id in parentheses', $params);
-    }
-    else {
-      $error_message = t('Many entities are called %value. Specify the one you want by appending the id in parentheses', $params);
-    }
+    $error_message = t('Many test entity entities are called %value. Specify the one you want by appending the id in parentheses', $params);
     $assert_session->responseContains($error_message);
 
     // Submit with a label that does not match anything.
@@ -424,13 +439,8 @@ class DynamicEntityReferenceTest extends BrowserTestBase {
       'field_foobar[1][target_id]' => 'does not exist',
     ];
     $this->submitForm($edit, t('Save'));
-    // @todo remove this once 9.1 and 9.0 are not supported anymore.
-    if (version_compare(\Drupal::VERSION, '9.2', '>=')) {
-      $assert_session->responseContains(t('There are no test entity entities matching "%value".', ['%value' => 'does not exist']));
-    }
-    else {
-      $assert_session->responseContains(t('There are no entities matching "%value".', ['%value' => 'does not exist']));
-    }
+
+    $assert_session->responseContains(t('There are no test entity entities matching "%value".', ['%value' => 'does not exist']));
 
     $this->drupalGet('entity_test/manage/' . $entity->id() . '/edit');
     $edit = [
@@ -470,11 +480,24 @@ class DynamicEntityReferenceTest extends BrowserTestBase {
     $this->drupalLogin($this->adminUser);
     // Add a new dynamic entity reference field.
     $this->drupalGet('entity_test/structure/entity_test/fields/add-field');
-    $edit = [
-      'label' => 'Foobar',
-      'field_name' => 'foobar',
-      'new_storage_type' => 'dynamic_entity_reference',
-    ];
+    if (version_compare(\Drupal::VERSION, '11.0-dev', '>=')) {
+      $test = [
+        'new_storage_type' => 'reference',
+      ];
+      $this->submitForm($test, 'Change field group');
+      $edit = [
+        'group_field_options_wrapper' => 'dynamic_entity_reference',
+        'label' => 'Foobar',
+        'field_name' => 'foobar',
+      ];
+    }
+    else {
+      $edit = [
+        'label' => 'Foobar',
+        'field_name' => 'foobar',
+        'new_storage_type' => 'dynamic_entity_reference',
+      ];
+    }
     $this->submitForm($edit, t('Save and continue'));
     $this->submitForm([
       'cardinality' => FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED,
@@ -558,11 +581,24 @@ class DynamicEntityReferenceTest extends BrowserTestBase {
 
     // Add a new dynamic entity reference field.
     $this->drupalGet('admin/structure/types/manage/article/fields/add-field');
-    $edit = [
-      'label' => 'DER',
-      'field_name' => 'der',
-      'new_storage_type' => 'dynamic_entity_reference',
-    ];
+    if (version_compare(\Drupal::VERSION, '11.0-dev', '>=')) {
+      $test = [
+        'new_storage_type' => 'reference',
+      ];
+      $this->submitForm($test, 'Change field group');
+      $edit = [
+        'group_field_options_wrapper' => 'dynamic_entity_reference',
+        'label' => 'DER',
+        'field_name' => 'der',
+      ];
+    }
+    else {
+      $edit = [
+        'label' => 'DER',
+        'field_name' => 'der',
+        'new_storage_type' => 'dynamic_entity_reference',
+      ];
+    };
     $this->submitForm($edit, t('Save and continue'));
     $this->submitForm([
       'cardinality' => FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED,

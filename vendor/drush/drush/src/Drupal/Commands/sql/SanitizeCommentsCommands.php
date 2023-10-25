@@ -1,7 +1,15 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Drush\Drupal\Commands\sql;
 
 use Consolidation\AnnotatedCommand\CommandData;
+use Consolidation\AnnotatedCommand\Hooks\HookManager;
+use Drupal\Core\Database\Connection;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drush\Attributes as CLI;
+use Drush\Boot\DrupalBootLevels;
 use Drush\Commands\DrushCommands;
 use Drush\Drush;
 use Symfony\Component\Console\Input\InputInterface;
@@ -9,30 +17,19 @@ use Symfony\Component\Console\Input\InputInterface;
 /**
  * This class is a good example of a sql-sanitize plugin.
  */
-class SanitizeCommentsCommands extends DrushCommands implements SanitizePluginInterface
+final class SanitizeCommentsCommands extends DrushCommands implements SanitizePluginInterface
 {
-    protected $database;
-    protected $moduleHandler;
-
-    /**
-     * SanitizeCommentsCommands constructor.
-     * @param $database
-     * @param $moduleHandler
-     */
-    public function __construct($database, $moduleHandler)
-    {
-        $this->database = $database;
-        $this->moduleHandler = $moduleHandler;
+    public function __construct(
+        protected Connection $database,
+        protected ModuleHandlerInterface $moduleHandler
+    ) {
     }
 
     /**
      * Sanitize comment names from the DB.
-     *
-     * @hook post-command sql-sanitize
-     *
-     * @inheritdoc
      */
-    public function sanitize($result, CommandData $commandData)
+    #[CLI\Hook(type: HookManager::POST_COMMAND_HOOK, target: 'sql-sanitize')]
+    public function sanitize($result, CommandData $commandData): void
     {
         if ($this->applies()) {
             //Update anon.
@@ -56,12 +53,8 @@ class SanitizeCommentsCommands extends DrushCommands implements SanitizePluginIn
         }
     }
 
-    /**
-     * @hook on-event sql-sanitize-confirms
-     *
-     * @inheritdoc
-     */
-    public function messages(&$messages, InputInterface $input)
+    #[CLI\Hook(type: HookManager::ON_EVENT, target: 'sql-sanitize-confirms')]
+    public function messages(&$messages, InputInterface $input): void
     {
         if ($this->applies()) {
             $messages[] = dt('Remove comment display names and emails.');
@@ -70,7 +63,7 @@ class SanitizeCommentsCommands extends DrushCommands implements SanitizePluginIn
 
     protected function applies()
     {
-        Drush::bootstrapManager()->doBootstrap(DRUSH_BOOTSTRAP_DRUPAL_FULL);
+        Drush::bootstrapManager()->doBootstrap(DrupalBootLevels::FULL);
         return $this->moduleHandler->moduleExists('comment');
     }
 }

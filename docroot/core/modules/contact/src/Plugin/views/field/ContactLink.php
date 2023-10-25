@@ -31,7 +31,10 @@ class ContactLink extends LinkBase {
    */
   protected function getUrlInfo(ResultRow $row) {
     $entity = $this->getEntity($row);
-    return $entity ? Url::fromRoute('entity.user.contact_form', ['user' => $entity->id()]) : NULL;
+    if (!$entity) {
+      return NULL;
+    }
+    return Url::fromRoute('entity.user.contact_form', ['user' => $entity->id()]);
   }
 
   /**

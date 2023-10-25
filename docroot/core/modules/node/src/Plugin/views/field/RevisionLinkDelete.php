@@ -20,7 +20,10 @@ class RevisionLinkDelete extends RevisionLink {
   protected function getUrlInfo(ResultRow $row) {
     /** @var \Drupal\node\NodeInterface $node */
     $node = $this->getEntity($row);
-    return $node ? Url::fromRoute('node.revision_delete_confirm', ['node' => $node->id(), 'node_revision' => $node->getRevisionId()]) : NULL;
+    if (!$node) {
+      return NULL;
+    }
+    return Url::fromRoute('node.revision_delete_confirm', ['node' => $node->id(), 'node_revision' => $node->getRevisionId()]);
   }
 
   /**

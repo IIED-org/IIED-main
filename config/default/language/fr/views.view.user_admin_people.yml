@@ -4,7 +4,7 @@ display:
     display_options:
       fields:
         name:
-          label: 'Nom d''utilisateur'
+          label: "Nom d'utilisateur"
         status:
           label: État
           settings:

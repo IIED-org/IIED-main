@@ -22,6 +22,12 @@ services:
    tags:
      # Priority must be higher than serializer.normalizer.field_item.hal.
      - { name: normalizer, priority: 20 }
+  serializer.normalizer.entity_reference_revisions_item.hal:
+    class: Drupal\hal\Normalizer\EntityReferenceRevisionItemNormalizer
+    arguments: [ '@hal.link_manager', '@serializer.entity_resolver', '@entity_type.manager' ]
+    # Priority must be higher than serializer.normalizer.entity_reference_item.hal.
+    tags:
+      - { name: normalizer, priority: 20 }
   serializer.normalizer.entity.hal:
     class: Drupal\hal\Normalizer\ContentEntityNormalizer
     arguments: ['@hal.link_manager', '@entity_type.manager', '@module_handler', '@entity_type.repository', '@entity_field.manager']

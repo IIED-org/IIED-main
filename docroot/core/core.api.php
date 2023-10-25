@@ -110,15 +110,14 @@
  * @section sec_rest Enabling REST for entities and the log
  * Here are the steps to take to use the REST operations provided by Drupal
  * Core:
- * - Enable the REST module, plus Basic Auth (or another authentication method)
- *   and HAL.
+ * - Enable the REST module, plus Basic Auth or another authentication method.
  * - Node entity support is configured by default. If you would like to support
  *   other types of entities, you can copy
- *   core/modules/hal/config/optional/rest.resource.entity.node.yml to your sync
- *   configuration directory, appropriately modified for other entity types,
- *   and import it. Support for GET on the log from the Database Logging module
- *   can also be enabled in this way; in this case, the 'entity:node' line
- *   in the configuration would be replaced by the appropriate plugin ID,
+ *   core/modules/rest/config/optional/rest.resource.entity.node.yml to your
+ *   sync configuration directory, appropriately modified for other entity
+ *   types, and import it. Support for GET on the log from the Database Logging
+ *   module can also be enabled in this way; in this case, the 'entity:node'
+ *   line in the configuration would be replaced by the appropriate plugin ID,
  *   'dblog'.
  * - Set up permissions to allow the desired REST operations for a role, and set
  *   up one or more user accounts to perform the operations.
@@ -129,7 +128,7 @@
  *   - The request method must be set to the REST method you are using (POST,
  *     GET, PATCH, etc.).
  *   - The content type for the data you send, or the accept type for the
- *     data you are receiving, must be set to 'application/hal+json'.
+ *     data you are receiving, must be set to 'application/json'.
  *   - If you are sending data, it must be JSON-encoded.
  *   - You'll also need to make sure the authentication information is sent
  *     with the request, unless you have allowed access to anonymous users.
@@ -163,9 +162,7 @@
  *     implements \GuzzleHttp\ClientInterface. See the
  *     @link container Services topic @endlink for more information on
  *     services. If you cannot use dependency injection to retrieve this
- *     service, the \Drupal::httpClient() method is available. A good example
- *     of how to use this service can be found in
- *     \Drupal\aggregator\Plugin\aggregator\fetcher\DefaultFetcher
+ *     service, the \Drupal::httpClient() method is available.
  *   - \Drupal\Component\Serialization\Json (JSON encoding and decoding).
  *   - PHP has functions and classes for parsing XML; see
  *     http://php.net/manual/refs.xml.php
@@ -249,7 +246,10 @@
  *   module B some time later, then module A's config/optional directory will be
  *   scanned at that time for newly met dependencies, and the configuration will
  *   be installed then. If module B is never installed, the configuration item
- *   will not be installed either.
+ *   will not be installed either. Optional configuration items are ignored if
+ *   they already exist or if they are not configuration entities (this also
+ *   includes configuration that has an implicit dependency on modules that
+ *   are not yet installed).
  * - Exporting and importing configuration.
  *
  * The file storage format for configuration information in Drupal is
@@ -792,11 +792,6 @@
  * be passed in; see the section at https://www.drupal.org/node/2133171 for more
  * detailed information.
  *
- * Services using factories can be defined as shown in the above example, if the
- * factory is itself a service. The factory can also be a class; details of how
- * to use service factories can be found in the section at
- * https://www.drupal.org/node/2133171.
- *
  * @section sec_container Accessing a service through the container
  * As noted above, if you need to use a service in your code, you should always
  * instantiate the service class via a call to the container, using the machine
@@ -1216,7 +1211,7 @@
  * Drupal has several distinct types of information, each with its own methods
  * for storage and retrieval:
  * - Content: Information meant to be displayed on your site: articles, basic
- *   pages, images, files, custom blocks, etc. Content is stored and accessed
+ *   pages, images, files, content blocks, etc. Content is stored and accessed
  *   using @link entity_api Entities @endlink.
  * - Session: Information about individual users' interactions with the site,
  *   such as whether they are logged in. This is really "state" information, but
@@ -1841,14 +1836,13 @@
  * where a strict FIFO ordering will likely not be preserved. Another example
  * would be an in-memory queue backend which might lose items if it crashes.
  * However, such a backend would be able to deal with significantly more writes
- * than a reliable queue and for many tasks this is more important. See
- * aggregator_cron() for an example of how to effectively use a non-reliable
- * queue. Another example is doing Twitter statistics -- the small possibility
- * of losing a few items is insignificant next to power of the queue being able
- * to keep up with writes. As described in the processing section, regardless
- * of the queue being reliable or not, the processing code should be aware that
- * an item might be handed over for processing more than once (because the
- * processing code might time out before it finishes).
+ * than a reliable queue and for many tasks this is more important. Another
+ * example is doing Twitter statistics -- the small possibility of losing a
+ * few items is insignificant next to power of the queue being able to keep
+ * up with writes. As described in the processing section, regardless of the
+ * queue being reliable or not, the processing code should be aware that an
+ * might be handed over for processing more than once (because the processing
+ * code might time out before it finishes).
  * @}
  */
 
@@ -1940,8 +1934,8 @@ function hook_cron() {
 
   // Long-running operation example, leveraging a queue:
   // Queue news feeds for updates once their refresh interval has elapsed.
-  $queue = \Drupal::queue('aggregator_feeds');
-  $ids = \Drupal::entityTypeManager()->getStorage('aggregator_feed')->getFeedIdsToRefresh();
+  $queue = \Drupal::queue('mymodule.feeds');
+  $ids = \Drupal::entityTypeManager()->getStorage('mymodule_feed')->getFeedIdsToRefresh();
   foreach (Feed::loadMultiple($ids) as $feed) {
     if ($queue->createItem($feed)) {
       // Add timestamp to avoid queueing item more than once.
@@ -1949,7 +1943,7 @@ function hook_cron() {
       $feed->save();
     }
   }
-  $ids = \Drupal::entityQuery('aggregator_feed')
+  $ids = \Drupal::entityQuery('mymodule_feed')
     ->accessCheck(FALSE)
     ->condition('queued', $request_time - (3600 * 6), '<')
     ->execute();
@@ -1992,7 +1986,7 @@ function hook_data_type_info_alter(&$data_types) {
 function hook_queue_info_alter(&$queues) {
   // This site has many feeds so let's spend 90 seconds on each cron run
   // updating feeds instead of the default 60.
-  $queues['aggregator_feeds']['cron']['time'] = 90;
+  $queues['mymodule_feeds']['cron']['time'] = 90;
 }
 
 /**

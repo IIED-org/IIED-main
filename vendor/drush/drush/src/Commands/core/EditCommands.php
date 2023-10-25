@@ -1,53 +1,52 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Drush\Commands\core;
 
 use Consolidation\SiteProcess\Util\Escape;
+use Drush\Attributes as CLI;
+use Drush\Boot\DrupalBootLevels;
 use Drush\Commands\DrushCommands;
 use Drush\Drush;
 use Consolidation\SiteAlias\SiteAliasManagerAwareInterface;
 use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
 use Drush\Exec\ExecTrait;
 
-class EditCommands extends DrushCommands implements SiteAliasManagerAwareInterface
+final class EditCommands extends DrushCommands implements SiteAliasManagerAwareInterface
 {
     use SiteAliasManagerAwareTrait;
     use ExecTrait;
 
+    const EDIT = 'core:edit';
+
     /**
      * Edit drush.yml, site alias, and Drupal settings.php files.
-     *
-     * @command core:edit
-     * @bootstrap max
-     * @param $filter A substring for filtering the list of files. Omit this argument to choose from loaded files.
-     * @optionset_get_editor
-     * @usage drush core:config
-     *   Pick from a list of config/alias/settings files. Open selected in editor.
-     * @usage drush --bg core-config
-     *   Return to shell prompt as soon as the editor window opens.
-     * @usage drush core:config etc
-     *   Edit the global configuration file.
-     * @usage drush core:config demo.alia
-     * Edit a particular alias file.
-     * @usage drush core:config sett
-     *   Edit settings.php for the current Drupal site.
-     * @usage drush core:config --choice=2
-     *  Edit the second file in the choice list.
-     * @aliases conf,config,core-edit
      */
-    public function edit($filter = null)
+    #[CLI\Command(name: self::EDIT, aliases: ['conf', 'config', 'core-edit'])]
+    #[CLI\Argument(name: 'filter', description: 'A substring for filtering the list of files. Omit this argument to choose from loaded files.')]
+    #[CLI\Usage(name: 'drush core:edit', description: 'Pick from a list of config/alias/settings files. Open selected in editor.')]
+    #[CLI\Usage(name: 'drush --bg core-config', description: 'Return to shell prompt as soon as the editor window opens.')]
+    #[CLI\Usage(name: 'drush core:edit etc', description: 'Edit the global configuration file.')]
+    #[CLI\Usage(name: 'drush core:edit demo.alia', description: 'Edit a particular alias file.')]
+    #[CLI\Usage(name: 'drush core:edit sett', description: 'Edit settings.php for the current Drupal site.')]
+    #[CLI\Usage(name: 'drush core:edit --choice=2', description: 'Edit the second file in the choice list.')]
+    #[CLI\Bootstrap(level: DrupalBootLevels::MAX)]
+    #[CLI\HookSelector(name: 'optionset_get_editor')]
+    public function edit($filter = null, array $options = []): void
     {
         $all = $this->load();
 
         // Apply any filter that was supplied.
         if ($filter) {
             foreach ($all as $file => $display) {
-                if (strpos($file, $filter) === false) {
+                if (!str_contains($file, $filter)) {
                     unset($all[$file]);
                 }
             }
         }
 
-        $editor = self::getEditor();
+        $editor = self::getEditor($options['editor']);
         if (count($all) == 1) {
             $filepath = current($all);
         } else {
@@ -66,9 +65,9 @@ class EditCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
         $process->mustRun();
     }
 
-    public function load($headers = true)
+    public function load($headers = true): array
     {
-        $php_header = $php = $rcs_header = $rcs = $aliases_header = $aliases = $drupal_header = $drupal = [];
+        $php_header = $rcs_header = $aliases_header = $drupal_header = $drupal = [];
         $php = $this->phpIniFiles();
         if (!empty($php)) {
             if ($headers) {
@@ -99,15 +98,17 @@ class EditCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
             }
         }
 
-        if (Drush::bootstrapManager()->hasBootstrapped(DRUSH_BOOTSTRAP_DRUPAL_FULL)) {
-            $site_root = \Drupal::service('kernel')->getSitePath();
+        $bootstrapManager = Drush::bootstrapManager();
+        if ($bootstrapManager->hasBootstrapped(DrupalBootLevels::FULL)) {
+            $boot = $bootstrapManager->bootstrap();
+            $site_root = $boot->getKernel()->getSitePath();
             $path = realpath($site_root . '/settings.php');
             $drupal[$path] = $path;
             if (file_exists($site_root . '/settings.local.php')) {
                 $path = realpath($site_root . '/settings.local.php');
                 $drupal[$path] = $path;
             }
-            if ($path = realpath(DRUPAL_ROOT . '/.htaccess')) {
+            if ($path = realpath($bootstrapManager->getRoot() . '/.htaccess')) {
                 $drupal[$path] = $path;
             }
             if ($headers) {
@@ -118,22 +119,21 @@ class EditCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
         return array_merge($php_header, $php, $bash_header, $bash, $rcs_header, $rcs, $aliases_header, $aliases, $drupal_header, $drupal);
     }
 
-    public static function phpIniFiles()
+    public static function phpIniFiles(): array
     {
-        $paths[] = php_ini_loaded_file();
-        return $paths;
+        $return = [];
+        if ($file = php_ini_loaded_file()) {
+            $return = [$file];
+        }
+        return $return;
     }
 
-    public function bashFiles()
+    public function bashFiles(): array
     {
         $bashFiles = [];
         $home = $this->getConfig()->home();
         if ($bashrc = self::findBashrc($home)) {
             $bashFiles[$bashrc] = $bashrc;
-        }
-        $prompt = $home . '/.drush/drush.prompt.sh';
-        if (file_exists($prompt)) {
-            $bashFiles[$prompt] = $prompt;
         }
         return $bashFiles;
     }
@@ -144,12 +144,12 @@ class EditCommands extends DrushCommands implements SiteAliasManagerAwareInterfa
      * TODO: Also exists as InitCommands::findBashrc. Decide on class-based
      * way to share code like this.
      */
-    public static function findBashrc($home)
+    public static function findBashrc($home): string
     {
         return $home . "/.bashrc";
     }
 
-    public function complete()
+    public function complete(): array
     {
         return ['values' => $this->load(false)];
     }

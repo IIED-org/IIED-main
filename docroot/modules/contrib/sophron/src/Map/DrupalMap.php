@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Drupal\sophron\Map;
 
@@ -251,6 +251,25 @@ class DrupalMap extends AbstractMap {
         0 => 'exi',
       ),
     ),
+    'application/fits' =>
+    array (
+      'a' =>
+      array (
+        0 => 'image/x-fits',
+        1 => 'image/fits',
+      ),
+      'desc' =>
+      array (
+        0 => 'FITS document',
+        1 => 'FITS: Flexible Image Transport System',
+      ),
+      'e' =>
+      array (
+        0 => 'fits',
+        1 => 'fit',
+        2 => 'fts',
+      ),
+    ),
     'application/font-tdpfr' =>
     array (
       'e' =>
@@ -381,29 +400,27 @@ class DrupalMap extends AbstractMap {
         0 => 'ipfix',
       ),
     ),
+    'application/java-archive' =>
+    array (
+      'a' =>
+      array (
+        0 => 'application/x-jar',
+        1 => 'application/x-java-archive',
+      ),
+      'desc' =>
+      array (
+        0 => 'Java archive',
+      ),
+      'e' =>
+      array (
+        0 => 'jar',
+      ),
+    ),
     'application/java-serialized-object' =>
     array (
       'e' =>
       array (
         0 => 'ser',
-      ),
-    ),
-    'application/javascript' =>
-    array (
-      'a' =>
-      array (
-        0 => 'application/x-javascript',
-        1 => 'text/javascript',
-      ),
-      'desc' =>
-      array (
-        0 => 'JavaScript program',
-      ),
-      'e' =>
-      array (
-        0 => 'js',
-        1 => 'jsm',
-        2 => 'mjs',
       ),
     ),
     'application/jrd+json' =>
@@ -1261,13 +1278,24 @@ class DrupalMap extends AbstractMap {
     ),
     'application/sparql-query' =>
     array (
+      'desc' =>
+      array (
+        0 => 'SPARQL query',
+        1 => 'SPARQL: SPARQL Protocol and RDF Query Language',
+      ),
       'e' =>
       array (
         0 => 'rq',
+        1 => 'qs',
       ),
     ),
     'application/sparql-results+xml' =>
     array (
+      'desc' =>
+      array (
+        0 => 'SPARQL query results',
+        1 => 'SPARQL: SPARQL Protocol and RDF Query Language',
+      ),
       'e' =>
       array (
         0 => 'srx',
@@ -1656,6 +1684,17 @@ class DrupalMap extends AbstractMap {
         0 => 'pages',
       ),
     ),
+    'application/vnd.apple.pkpass' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'Apple Wallet pass',
+      ),
+      'e' =>
+      array (
+        0 => 'pkpass',
+      ),
+    ),
     'application/vnd.aristanetworks.swi' =>
     array (
       'e' =>
@@ -1793,7 +1832,7 @@ class DrupalMap extends AbstractMap {
       ),
       'desc' =>
       array (
-        0 => 'comic book archive',
+        0 => 'comic book archive (zip container)',
       ),
       'e' =>
       array (
@@ -1808,7 +1847,7 @@ class DrupalMap extends AbstractMap {
       ),
       'desc' =>
       array (
-        0 => 'comic book archive',
+        0 => 'comic book archive (rar container)',
       ),
       'e' =>
       array (
@@ -2575,6 +2614,7 @@ class DrupalMap extends AbstractMap {
       'desc' =>
       array (
         0 => 'ICC profile',
+        1 => 'ICC: International Color Consortium',
       ),
       'e' =>
       array (
@@ -4424,7 +4464,7 @@ class DrupalMap extends AbstractMap {
     array (
       'desc' =>
       array (
-        0 => 'OpenOffice Calc spreadsheet',
+        0 => 'LibreOffice Calc spreadsheet',
       ),
       'e' =>
       array (
@@ -4435,7 +4475,7 @@ class DrupalMap extends AbstractMap {
     array (
       'desc' =>
       array (
-        0 => 'OpenOffice Calc template',
+        0 => 'LibreOffice Calc template',
       ),
       'e' =>
       array (
@@ -4446,7 +4486,7 @@ class DrupalMap extends AbstractMap {
     array (
       'desc' =>
       array (
-        0 => 'OpenOffice Draw drawing',
+        0 => 'LibreOffice Draw drawing',
       ),
       'e' =>
       array (
@@ -4457,7 +4497,7 @@ class DrupalMap extends AbstractMap {
     array (
       'desc' =>
       array (
-        0 => 'OpenOffice Draw template',
+        0 => 'LibreOffice Draw template',
       ),
       'e' =>
       array (
@@ -4468,7 +4508,7 @@ class DrupalMap extends AbstractMap {
     array (
       'desc' =>
       array (
-        0 => 'OpenOffice Impress presentation',
+        0 => 'LibreOffice Impress presentation',
       ),
       'e' =>
       array (
@@ -4479,7 +4519,7 @@ class DrupalMap extends AbstractMap {
     array (
       'desc' =>
       array (
-        0 => 'OpenOffice Impress template',
+        0 => 'LibreOffice Impress template',
       ),
       'e' =>
       array (
@@ -4490,7 +4530,7 @@ class DrupalMap extends AbstractMap {
     array (
       'desc' =>
       array (
-        0 => 'OpenOffice Math formula',
+        0 => 'LibreOffice Math formula',
       ),
       'e' =>
       array (
@@ -4501,7 +4541,7 @@ class DrupalMap extends AbstractMap {
     array (
       'desc' =>
       array (
-        0 => 'OpenOffice Writer document',
+        0 => 'LibreOffice Writer document',
       ),
       'e' =>
       array (
@@ -4512,7 +4552,7 @@ class DrupalMap extends AbstractMap {
     array (
       'desc' =>
       array (
-        0 => 'OpenOffice Writer global document',
+        0 => 'LibreOffice Writer global document',
       ),
       'e' =>
       array (
@@ -4523,7 +4563,7 @@ class DrupalMap extends AbstractMap {
     array (
       'desc' =>
       array (
-        0 => 'OpenOffice Writer template',
+        0 => 'LibreOffice Writer template',
       ),
       'e' =>
       array (
@@ -4844,17 +4884,6 @@ class DrupalMap extends AbstractMap {
         0 => 'cmp',
       ),
     ),
-    'application/vnd.youtube.yt' =>
-    array (
-      'desc' =>
-      array (
-        0 => 'YouTube media archive',
-      ),
-      'e' =>
-      array (
-        0 => 'yt',
-      ),
-    ),
     'application/vnd.zul' =>
     array (
       'e' =>
@@ -5088,6 +5117,18 @@ class DrupalMap extends AbstractMap {
         0 => 'arj',
       ),
     ),
+    'application/x-asar' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'Electron Archive (ASAR)',
+        1 => 'ASAR: Atom Shell Archive Format',
+      ),
+      'e' =>
+      array (
+        0 => 'asar',
+      ),
+    ),
     'application/x-asp' =>
     array (
       'desc' =>
@@ -5172,7 +5213,7 @@ class DrupalMap extends AbstractMap {
     array (
       'desc' =>
       array (
-        0 => 'BCPIO document',
+        0 => 'BCPIO archive',
         1 => 'BCPIO: Binary CPIO',
       ),
       'e' =>
@@ -5199,8 +5240,8 @@ class DrupalMap extends AbstractMap {
       ),
       'e' =>
       array (
-        0 => 'blender',
-        1 => 'blend',
+        0 => 'blend',
+        1 => 'blender',
       ),
     ),
     'application/x-blorb' =>
@@ -5304,7 +5345,7 @@ class DrupalMap extends AbstractMap {
     array (
       'desc' =>
       array (
-        0 => 'comic book archive',
+        0 => 'comic book archive (7z container)',
       ),
       'e' =>
       array (
@@ -5315,7 +5356,7 @@ class DrupalMap extends AbstractMap {
     array (
       'desc' =>
       array (
-        0 => 'comic book archive',
+        0 => 'comic book archive (tar container)',
       ),
       'e' =>
       array (
@@ -5486,6 +5527,7 @@ class DrupalMap extends AbstractMap {
       'desc' =>
       array (
         0 => 'DAR archive',
+        1 => 'DAR: Disk ARchive',
       ),
       'e' =>
       array (
@@ -5795,6 +5837,7 @@ class DrupalMap extends AbstractMap {
       'desc' =>
       array (
         0 => 'Linux PSF console font',
+        1 => 'PSF: PC Screen Font',
       ),
       'e' =>
       array (
@@ -5806,6 +5849,7 @@ class DrupalMap extends AbstractMap {
       'desc' =>
       array (
         0 => 'PCF font',
+        1 => 'PCF: Portable Compiled Format',
       ),
       'e' =>
       array (
@@ -5959,6 +6003,17 @@ class DrupalMap extends AbstractMap {
         0 => 'gdi',
       ),
     ),
+    'application/x-gdscript' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'GDScript script',
+      ),
+      'e' =>
+      array (
+        0 => 'gd',
+      ),
+    ),
     'application/x-gedcom' =>
     array (
       'a' =>
@@ -6080,6 +6135,42 @@ class DrupalMap extends AbstractMap {
         0 => 'sgf',
       ),
     ),
+    'application/x-godot-resource' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'Godot Engine resource',
+      ),
+      'e' =>
+      array (
+        0 => 'res',
+        1 => 'tres',
+      ),
+    ),
+    'application/x-godot-scene' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'Godot Engine scene',
+      ),
+      'e' =>
+      array (
+        0 => 'scn',
+        1 => 'tscn',
+        2 => 'escn',
+      ),
+    ),
+    'application/x-godot-shader' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'Godot Engine shader',
+      ),
+      'e' =>
+      array (
+        0 => 'gdshader',
+      ),
+    ),
     'application/x-gramps-xml' =>
     array (
       'e' =>
@@ -6121,6 +6212,7 @@ class DrupalMap extends AbstractMap {
       'desc' =>
       array (
         0 => 'Linux PSF console font (gzip-compressed)',
+        1 => 'PSF: PC Screen Font',
       ),
       'e' =>
       array (
@@ -6350,22 +6442,6 @@ class DrupalMap extends AbstractMap {
       'e' =>
       array (
         0 => 'class',
-      ),
-    ),
-    'application/x-java-archive' =>
-    array (
-      'a' =>
-      array (
-        0 => 'application/x-jar',
-        1 => 'application/java-archive',
-      ),
-      'desc' =>
-      array (
-        0 => 'Java archive',
-      ),
-      'e' =>
-      array (
-        0 => 'jar',
       ),
     ),
     'application/x-java-jce-keystore' =>
@@ -6658,6 +6734,7 @@ class DrupalMap extends AbstractMap {
       'desc' =>
       array (
         0 => 'Lrzip archive',
+        1 => 'Lrzip: Long Range Zip',
       ),
       'e' =>
       array (
@@ -8062,7 +8139,7 @@ class DrupalMap extends AbstractMap {
     array (
       'desc' =>
       array (
-        0 => 'Manpage manual document',
+        0 => 'Manual page',
       ),
       'e' =>
       array (
@@ -8635,6 +8712,7 @@ class DrupalMap extends AbstractMap {
       'e' =>
       array (
         0 => 'zip',
+        1 => 'zipx',
       ),
     ),
     'application/zlib' =>
@@ -8759,11 +8837,11 @@ class DrupalMap extends AbstractMap {
       'a' =>
       array (
         0 => 'audio/x-flac',
-        1 => 'application/x-flac',
       ),
       'desc' =>
       array (
         0 => 'FLAC audio',
+        1 => 'FLAC: Free Lossless Audio Codec',
       ),
       'e' =>
       array (
@@ -8779,6 +8857,7 @@ class DrupalMap extends AbstractMap {
       'desc' =>
       array (
         0 => 'MIDI audio',
+        1 => 'MIDI: Musical Instrument Digital Interface',
       ),
       'e' =>
       array (
@@ -8962,6 +9041,7 @@ class DrupalMap extends AbstractMap {
       'desc' =>
       array (
         0 => 'DTS audio',
+        1 => 'DTS: Digital Theater Systems',
       ),
       'e' =>
       array (
@@ -8976,7 +9056,8 @@ class DrupalMap extends AbstractMap {
       ),
       'desc' =>
       array (
-        0 => 'DTSHD audio',
+        0 => 'DTS-HD audio',
+        1 => 'DTS-HD: Digital Theater Systems High Definition',
       ),
       'e' =>
       array (
@@ -9110,6 +9191,40 @@ class DrupalMap extends AbstractMap {
       'e' =>
       array (
         0 => 'caf',
+      ),
+    ),
+    'audio/x-dff' =>
+    array (
+      'a' =>
+      array (
+        0 => 'audio/dff',
+      ),
+      'desc' =>
+      array (
+        0 => 'DSDIFF audio',
+        1 => 'DSDIFF: Direct Stream Digital Interchange File Format',
+      ),
+      'e' =>
+      array (
+        0 => 'dff',
+      ),
+    ),
+    'audio/x-dsf' =>
+    array (
+      'a' =>
+      array (
+        0 => 'audio/dsf',
+        1 => 'audio/x-dsd',
+        2 => 'audio/dsd',
+      ),
+      'desc' =>
+      array (
+        0 => 'DSF audio',
+        1 => 'DSF: Direct stream digital Stream File',
+      ),
+      'e' =>
+      array (
+        0 => 'dsf',
       ),
     ),
     'audio/x-flac+ogg' =>
@@ -9437,6 +9552,18 @@ class DrupalMap extends AbstractMap {
       'e' =>
       array (
         0 => 'stm',
+      ),
+    ),
+    'audio/x-tak' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'TAK audio',
+        1 => 'TAK: Tom\'s lossless Audio Kompressor',
+      ),
+      'e' =>
+      array (
+        0 => 'tak',
       ),
     ),
     'audio/x-tta' =>
@@ -10103,22 +10230,6 @@ class DrupalMap extends AbstractMap {
         0 => 'emf',
       ),
     ),
-    'image/fits' =>
-    array (
-      'a' =>
-      array (
-        0 => 'image/x-fits',
-      ),
-      'desc' =>
-      array (
-        0 => 'FITS document',
-        1 => 'FITS: Flexible Image Transport System',
-      ),
-      'e' =>
-      array (
-        0 => 'fits',
-      ),
-    ),
     'image/g3fax' =>
     array (
       'a' =>
@@ -10128,6 +10239,7 @@ class DrupalMap extends AbstractMap {
       'desc' =>
       array (
         0 => 'CCITT G3 fax image',
+        1 => 'CCITT: Comité Consultatif International Téléphonique et Télégraphique',
       ),
       'e' =>
       array (
@@ -10139,6 +10251,7 @@ class DrupalMap extends AbstractMap {
       'desc' =>
       array (
         0 => 'GIF image',
+        1 => 'GIF: Graphics Interchange Format',
       ),
       'e' =>
       array (
@@ -10162,6 +10275,7 @@ class DrupalMap extends AbstractMap {
       array (
         0 => 'heic',
         1 => 'heif',
+        2 => 'hif',
       ),
     ),
     'image/ief' =>
@@ -10203,6 +10317,7 @@ class DrupalMap extends AbstractMap {
       'desc' =>
       array (
         0 => 'JPEG image',
+        1 => 'JPEG: Joint Photographic Experts Group',
       ),
       'e' =>
       array (
@@ -10286,6 +10401,7 @@ class DrupalMap extends AbstractMap {
       'desc' =>
       array (
         0 => 'PNG image',
+        1 => 'PNG: Portable Network Graphics',
       ),
       'e' =>
       array (
@@ -10341,6 +10457,7 @@ class DrupalMap extends AbstractMap {
       'e' =>
       array (
         0 => 'svgz',
+        1 => 'svg.gz',
       ),
     ),
     'image/tiff' =>
@@ -11113,6 +11230,7 @@ class DrupalMap extends AbstractMap {
       'desc' =>
       array (
         0 => 'PNM image',
+        1 => 'PNM: Portable Anymap',
       ),
       'e' =>
       array (
@@ -11374,6 +11492,22 @@ class DrupalMap extends AbstractMap {
         1 => 'mime',
       ),
     ),
+    'model/3mf' =>
+    array (
+      'a' =>
+      array (
+        0 => 'application/vnd.ms-3mfdocument',
+      ),
+      'desc' =>
+      array (
+        0 => '3MF document',
+        1 => '3MF: 3D Manufacturing Format',
+      ),
+      'e' =>
+      array (
+        0 => '3mf',
+      ),
+    ),
     'model/gltf+json' =>
     array (
       'desc' =>
@@ -11418,6 +11552,28 @@ class DrupalMap extends AbstractMap {
         0 => 'msh',
         1 => 'mesh',
         2 => 'silo',
+      ),
+    ),
+    'model/mtl' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'OBJ 3D model material library',
+      ),
+      'e' =>
+      array (
+        0 => 'mtl',
+      ),
+    ),
+    'model/obj' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'OBJ 3D model',
+      ),
+      'e' =>
+      array (
+        0 => 'obj',
       ),
     ),
     'model/stl' =>
@@ -11620,6 +11776,35 @@ class DrupalMap extends AbstractMap {
       'e' =>
       array (
         0 => 'uls',
+      ),
+    ),
+    'text/javascript' =>
+    array (
+      'a' =>
+      array (
+        0 => 'application/x-javascript',
+        1 => 'application/javascript',
+      ),
+      'desc' =>
+      array (
+        0 => 'JavaScript program',
+      ),
+      'e' =>
+      array (
+        0 => 'js',
+        1 => 'mjs',
+        2 => 'jsm',
+      ),
+    ),
+    'text/julia' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'Julia source code',
+      ),
+      'e' =>
+      array (
+        0 => 'jl',
       ),
     ),
     'text/markdown' =>
@@ -12211,6 +12396,31 @@ class DrupalMap extends AbstractMap {
         0 => 'dcl',
       ),
     ),
+    'text/x-devicetree-binary' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'Flattened Devicetree',
+        1 => 'DTB: Device Tree Binary',
+      ),
+      'e' =>
+      array (
+        0 => 'dtb',
+      ),
+    ),
+    'text/x-devicetree-source' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'Devicetree source code',
+        1 => 'DTS: Device Tree Source',
+      ),
+      'e' =>
+      array (
+        0 => 'dts',
+        1 => 'dtsi',
+      ),
+    ),
     'text/x-dsl' =>
     array (
       'desc' =>
@@ -12296,6 +12506,17 @@ class DrupalMap extends AbstractMap {
         4 => 'f95',
       ),
     ),
+    'text/x-gcode-gx' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'G-code Extended file',
+      ),
+      'e' =>
+      array (
+        0 => 'gx',
+      ),
+    ),
     'text/x-genie' =>
     array (
       'desc' =>
@@ -12379,7 +12600,7 @@ class DrupalMap extends AbstractMap {
     array (
       'desc' =>
       array (
-        0 => 'Gradle scripts',
+        0 => 'Gradle script',
       ),
       'e' =>
       array (
@@ -12691,6 +12912,17 @@ class DrupalMap extends AbstractMap {
         0 => 'nfo',
       ),
     ),
+    'text/x-objc++src' =>
+    array (
+      'desc' =>
+      array (
+        0 => 'Objective-C++ source code',
+      ),
+      'e' =>
+      array (
+        0 => 'mm',
+      ),
+    ),
     'text/x-objcsrc' =>
     array (
       'desc' =>
@@ -12759,6 +12991,7 @@ class DrupalMap extends AbstractMap {
       'desc' =>
       array (
         0 => 'OPML syndication feed',
+        1 => 'OPML: Outline Processor Markup Language',
       ),
       'e' =>
       array (
@@ -13582,6 +13815,21 @@ class DrupalMap extends AbstractMap {
         1 => 'vivo',
       ),
     ),
+    'video/vnd.youtube.yt' =>
+    array (
+      'a' =>
+      array (
+        0 => 'application/vnd.youtube.yt',
+      ),
+      'desc' =>
+      array (
+        0 => 'YouTube media archive',
+      ),
+      'e' =>
+      array (
+        0 => 'yt',
+      ),
+    ),
     'video/webm' =>
     array (
       'desc' =>
@@ -13919,6 +14167,13 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'video/3gpp2',
+      ),
+    ),
+    '3mf' =>
+    array (
+      't' =>
+      array (
+        0 => 'model/3mf',
       ),
     ),
     '7z' =>
@@ -14400,6 +14655,13 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'application/x-applix-spreadsheet',
+      ),
+    ),
+    'asar' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/x-asar',
       ),
     ),
     'asc' =>
@@ -15848,6 +16110,13 @@ class DrupalMap extends AbstractMap {
         0 => 'application/vnd.dreamfactory',
       ),
     ),
+    'dff' =>
+    array (
+      't' =>
+      array (
+        0 => 'audio/x-dff',
+      ),
+    ),
     'dgc' =>
     array (
       't' =>
@@ -16079,6 +16348,13 @@ class DrupalMap extends AbstractMap {
         0 => 'text/prs.lines.tag',
       ),
     ),
+    'dsf' =>
+    array (
+      't' =>
+      array (
+        0 => 'audio/x-dsf',
+      ),
+    ),
     'dsl' =>
     array (
       't' =>
@@ -16098,6 +16374,7 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'application/x-dtbook+xml',
+        1 => 'text/x-devicetree-binary',
       ),
     ),
     'dtd' =>
@@ -16112,6 +16389,7 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'audio/vnd.dts',
+        1 => 'text/x-devicetree-source',
       ),
     ),
     'dtshd' =>
@@ -16119,6 +16397,13 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'audio/vnd.dts.hd',
+      ),
+    ),
+    'dtsi' =>
+    array (
+      't' =>
+      array (
+        0 => 'text/x-devicetree-source',
       ),
     ),
     'dtx' =>
@@ -16473,6 +16758,13 @@ class DrupalMap extends AbstractMap {
         0 => 'application/vnd.osgi.subsystem',
       ),
     ),
+    'escn' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/x-godot-scene',
+      ),
+    ),
     'esf' =>
     array (
       't' =>
@@ -16800,11 +17092,18 @@ class DrupalMap extends AbstractMap {
         1 => 'image/x-xfig',
       ),
     ),
+    'fit' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/fits',
+      ),
+    ),
     'fits' =>
     array (
       't' =>
       array (
-        0 => 'image/fits',
+        0 => 'application/fits',
       ),
     ),
     'fl' =>
@@ -16818,8 +17117,7 @@ class DrupalMap extends AbstractMap {
     array (
       't' =>
       array (
-        0 => 'application/x-flac',
-        1 => 'audio/flac',
+        0 => 'audio/flac',
       ),
     ),
     'flatpak' =>
@@ -17001,6 +17299,13 @@ class DrupalMap extends AbstractMap {
         0 => 'application/vnd.anser-web-funds-transfer-initiation',
       ),
     ),
+    'fts' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/fits',
+      ),
+    ),
     'fvt' =>
     array (
       't' =>
@@ -17164,6 +17469,13 @@ class DrupalMap extends AbstractMap {
         0 => 'text/vcard',
       ),
     ),
+    'gd' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/x-gdscript',
+      ),
+    ),
     'gdi' =>
     array (
       't' =>
@@ -17176,6 +17488,13 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'model/vnd.gdl',
+      ),
+    ),
+    'gdshader' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/x-godot-shader',
       ),
     ),
     'ged' =>
@@ -17583,6 +17902,13 @@ class DrupalMap extends AbstractMap {
         0 => 'text/x-groovy',
       ),
     ),
+    'gx' =>
+    array (
+      't' =>
+      array (
+        0 => 'text/x-gcode-gx',
+      ),
+    ),
     'gxf' =>
     array (
       't' =>
@@ -17721,6 +18047,13 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'text/x-c++hdr',
+      ),
+    ),
+    'hif' =>
+    array (
+      't' =>
+      array (
+        0 => 'image/heif',
       ),
     ),
     'hin' =>
@@ -18277,7 +18610,6 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'application/java-archive',
-        1 => 'application/x-java-archive',
       ),
     ),
     'java' =>
@@ -18314,6 +18646,13 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'application/x-java-keystore',
+      ),
+    ),
+    'jl' =>
+    array (
+      't' =>
+      array (
+        0 => 'text/julia',
       ),
     ),
     'jlt' =>
@@ -18449,14 +18788,14 @@ class DrupalMap extends AbstractMap {
     array (
       't' =>
       array (
-        0 => 'application/javascript',
+        0 => 'text/javascript',
       ),
     ),
     'jsm' =>
     array (
       't' =>
       array (
-        0 => 'application/javascript',
+        0 => 'text/javascript',
       ),
     ),
     'json' =>
@@ -19560,7 +19899,7 @@ class DrupalMap extends AbstractMap {
     array (
       't' =>
       array (
-        0 => 'application/javascript',
+        0 => 'text/javascript',
       ),
     ),
     'mk' =>
@@ -19632,7 +19971,8 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'application/x-freemind',
-        1 => 'text/x-troff-mm',
+        1 => 'text/x-objc++src',
+        2 => 'text/x-troff-mm',
       ),
     ),
     'mmd' =>
@@ -20096,6 +20436,13 @@ class DrupalMap extends AbstractMap {
         0 => 'application/x-msx-rom',
       ),
     ),
+    'mtl' =>
+    array (
+      't' =>
+      array (
+        0 => 'model/mtl',
+      ),
+    ),
     'mtm' =>
     array (
       't' =>
@@ -20447,6 +20794,7 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'application/x-tgif',
+        1 => 'model/obj',
       ),
     ),
     'ocl' =>
@@ -21305,6 +21653,13 @@ class DrupalMap extends AbstractMap {
         0 => 'application/pkix-pkipath',
       ),
     ),
+    'pkpass' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/vnd.apple.pkpass',
+      ),
+    ),
     'pkr' =>
     array (
       't' =>
@@ -21858,6 +22213,13 @@ class DrupalMap extends AbstractMap {
         0 => 'application/vnd.publishare-delta-tree',
       ),
     ),
+    'qs' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/sparql-query',
+      ),
+    ),
     'qt' =>
     array (
       't' =>
@@ -22085,6 +22447,7 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'application/x-dtbresource+xml',
+        1 => 'application/x-godot-resource',
       ),
     ),
     'rgb' =>
@@ -22466,6 +22829,13 @@ class DrupalMap extends AbstractMap {
       array (
         0 => 'application/vnd.lotus-screencam',
         1 => 'text/x-scheme',
+      ),
+    ),
+    'scn' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/x-godot-scene',
       ),
     ),
     'scope' =>
@@ -23421,6 +23791,13 @@ class DrupalMap extends AbstractMap {
         0 => 'image/svg+xml',
       ),
     ),
+    'svg.gz' =>
+    array (
+      't' =>
+      array (
+        0 => 'image/svg+xml-compressed',
+      ),
+    ),
     'svgz' =>
     array (
       't' =>
@@ -23564,6 +23941,13 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'application/vnd.mynfc',
+      ),
+    ),
+    'tak' =>
+    array (
+      't' =>
+      array (
+        0 => 'audio/x-tak',
       ),
     ),
     'tao' =>
@@ -23947,6 +24331,13 @@ class DrupalMap extends AbstractMap {
         0 => 'application/vnd.trueapp',
       ),
     ),
+    'tres' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/x-godot-resource',
+      ),
+    ),
     'trig' =>
     array (
       't' =>
@@ -23968,6 +24359,13 @@ class DrupalMap extends AbstractMap {
         0 => 'text/texmacs',
         1 => 'text/vnd.trolltech.linguist',
         2 => 'video/mp2t',
+      ),
+    ),
+    'tscn' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/x-godot-scene',
       ),
     ),
     'tsd' =>
@@ -25834,7 +26232,7 @@ class DrupalMap extends AbstractMap {
     array (
       't' =>
       array (
-        0 => 'application/vnd.youtube.yt',
+        0 => 'video/vnd.youtube.yt',
       ),
     ),
     'z' =>
@@ -25929,6 +26327,13 @@ class DrupalMap extends AbstractMap {
       ),
     ),
     'zip' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/zip',
+      ),
+    ),
+    'zipx' =>
     array (
       't' =>
       array (
@@ -26150,17 +26555,6 @@ class DrupalMap extends AbstractMap {
         0 => 'application/x-java',
       ),
     ),
-    'application/java-archive' =>
-    array (
-      'e' =>
-      array (
-        0 => 'jar',
-      ),
-      't' =>
-      array (
-        0 => 'application/x-java-archive',
-      ),
-    ),
     'application/java-byte-code' =>
     array (
       't' =>
@@ -26177,6 +26571,13 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'application/x-java',
+      ),
+    ),
+    'application/javascript' =>
+    array (
+      't' =>
+      array (
+        0 => 'text/javascript',
       ),
     ),
     'application/lotus123' =>
@@ -26339,6 +26740,13 @@ class DrupalMap extends AbstractMap {
         0 => 'application/x-hwt',
       ),
     ),
+    'application/vnd.ms-3mfdocument' =>
+    array (
+      't' =>
+      array (
+        0 => 'model/3mf',
+      ),
+    ),
     'application/vnd.ms-word' =>
     array (
       't' =>
@@ -26397,6 +26805,13 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'application/vnd.flatpak',
+      ),
+    ),
+    'application/vnd.youtube.yt' =>
+    array (
+      't' =>
+      array (
+        0 => 'video/vnd.youtube.yt',
       ),
     ),
     'application/wk1' =>
@@ -26579,17 +26994,6 @@ class DrupalMap extends AbstractMap {
         0 => 'application/x-fictionbook+xml',
       ),
     ),
-    'application/x-flac' =>
-    array (
-      'e' =>
-      array (
-        0 => 'flac',
-      ),
-      't' =>
-      array (
-        0 => 'audio/flac',
-      ),
-    ),
     'application/x-flash-video' =>
     array (
       't' =>
@@ -26764,7 +27168,14 @@ class DrupalMap extends AbstractMap {
     array (
       't' =>
       array (
-        0 => 'application/x-java-archive',
+        0 => 'application/java-archive',
+      ),
+    ),
+    'application/x-java-archive' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/java-archive',
       ),
     ),
     'application/x-java-class' =>
@@ -26785,7 +27196,7 @@ class DrupalMap extends AbstractMap {
     array (
       't' =>
       array (
-        0 => 'application/javascript',
+        0 => 'text/javascript',
       ),
     ),
     'application/x-kexiproject-sqlite' =>
@@ -27308,6 +27719,27 @@ class DrupalMap extends AbstractMap {
         0 => 'audio/amr-wb',
       ),
     ),
+    'audio/dff' =>
+    array (
+      't' =>
+      array (
+        0 => 'audio/x-dff',
+      ),
+    ),
+    'audio/dsd' =>
+    array (
+      't' =>
+      array (
+        0 => 'audio/x-dsf',
+      ),
+    ),
+    'audio/dsf' =>
+    array (
+      't' =>
+      array (
+        0 => 'audio/x-dsf',
+      ),
+    ),
     'audio/imelody' =>
     array (
       't' =>
@@ -27425,6 +27857,13 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'audio/annodex',
+      ),
+    ),
+    'audio/x-dsd' =>
+    array (
+      't' =>
+      array (
+        0 => 'audio/x-dsf',
       ),
     ),
     'audio/x-dts' =>
@@ -27625,6 +28064,13 @@ class DrupalMap extends AbstractMap {
         0 => 'image/g3fax',
       ),
     ),
+    'image/fits' =>
+    array (
+      't' =>
+      array (
+        0 => 'application/fits',
+      ),
+    ),
     'image/heic' =>
     array (
       't' =>
@@ -27770,7 +28216,7 @@ class DrupalMap extends AbstractMap {
     array (
       't' =>
       array (
-        0 => 'image/fits',
+        0 => 'application/fits',
       ),
     ),
     'image/x-icb' =>
@@ -27947,13 +28393,6 @@ class DrupalMap extends AbstractMap {
       't' =>
       array (
         0 => 'image/vnd.microsoft.icon',
-      ),
-    ),
-    'text/javascript' =>
-    array (
-      't' =>
-      array (
-        0 => 'application/javascript',
       ),
     ),
     'text/mathml' =>

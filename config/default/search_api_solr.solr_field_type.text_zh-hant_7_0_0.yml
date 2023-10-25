@@ -47,6 +47,7 @@ field_type:
           class: solr.CJKWidthFilterFactory
         -
           class: solr.LowerCaseFilterFactory
+  storeOffsetsWithPositions: true
 unstemmed_field_type: null
 spellcheck_field_type:
   name: text_spell_zh_hant
@@ -67,6 +68,7 @@ spellcheck_field_type:
         class: solr.CJKWidthFilterFactory
       -
         class: solr.LowerCaseFilterFactory
+  storeOffsetsWithPositions: true
 collated_field_type:
   name: collated_zh-hant
   class: solr.ICUCollationField

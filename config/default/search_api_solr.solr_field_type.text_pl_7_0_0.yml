@@ -22,7 +22,7 @@ field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_pl.txt
       tokenizer:
-        class: solr.WhitespaceTokenizerFactory
+        class: solr.StandardTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterGraphFilterFactory
@@ -36,6 +36,8 @@ field_type:
           catenateAll: 0
           catenateWords: 1
           stemEnglishPossessive: 0
+        -
+          class: solr.FlattenGraphFilterFactory
         -
           class: solr.LengthFilterFactory
           min: 2
@@ -57,7 +59,7 @@ field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_pl.txt
       tokenizer:
-        class: solr.WhitespaceTokenizerFactory
+        class: solr.StandardTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterGraphFilterFactory
@@ -88,6 +90,7 @@ field_type:
           class: solr.MorfologikFilterFactory
         -
           class: solr.RemoveDuplicatesTokenFilterFactory
+  storeOffsetsWithPositions: true
 unstemmed_field_type:
   name: text_unstemmed_pl
   class: solr.TextField
@@ -100,7 +103,7 @@ unstemmed_field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_pl.txt
       tokenizer:
-        class: solr.WhitespaceTokenizerFactory
+        class: solr.StandardTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterGraphFilterFactory
@@ -114,6 +117,8 @@ unstemmed_field_type:
           catenateAll: 0
           catenateWords: 1
           stemEnglishPossessive: 0
+        -
+          class: solr.FlattenGraphFilterFactory
         -
           class: solr.LengthFilterFactory
           min: 2
@@ -133,7 +138,7 @@ unstemmed_field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_pl.txt
       tokenizer:
-        class: solr.WhitespaceTokenizerFactory
+        class: solr.StandardTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterGraphFilterFactory
@@ -162,6 +167,7 @@ unstemmed_field_type:
           words: stopwords_pl.txt
         -
           class: solr.RemoveDuplicatesTokenFilterFactory
+  storeOffsetsWithPositions: true
 spellcheck_field_type: null
 collated_field_type:
   name: collated_pl
@@ -241,7 +247,7 @@ solr_configs:
               VALUE: sm_context_tags
             -
               name: buildOnCommit
-              VALUE: 'true'
+              VALUE: 'false'
             -
               name: buildOnStartup
               VALUE: 'false'

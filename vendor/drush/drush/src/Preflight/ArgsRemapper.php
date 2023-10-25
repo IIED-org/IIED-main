@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Drush\Preflight;
 
 /**
@@ -24,7 +27,7 @@ class ArgsRemapper
      *
      * @param string[] $argv
      */
-    public function remap($argv)
+    public function remap(array $argv): array
     {
         $result = [];
         $sawCommand = false;
@@ -42,10 +45,10 @@ class ArgsRemapper
      * it does, then the remapping is performed.
      *
      * @param string $arg One argument to inspect
-     * @param string $sawCommand True if drush command was found
+     * @param bool $sawCommand True if drush command was found
      * @return string The altered argument
      */
-    protected function checkRemap($arg, &$sawCommand)
+    protected function checkRemap(string $arg, bool &$sawCommand): string
     {
         if (!$sawCommand && ctype_alpha($arg[0])) {
             $sawCommand = true;
@@ -78,17 +81,14 @@ class ArgsRemapper
      * Check to see if the provided single arg matches the candidate.
      * If the candidate is `--foo`, then we will match the exact string
      * `--foo`, or the leading substring `--foo=`, and nothing else.
-     * @param string $arg
-     * @param string $candidate
-     * @return bool
      */
-    protected function matches($arg, $candidate)
+    protected function matches(string $arg, string $candidate): bool
     {
-        if (strpos($arg, $candidate) !== 0) {
+        if (!str_starts_with($arg, $candidate)) {
             return false;
         }
 
-        if (strlen($arg) == strlen($candidate)) {
+        if (strlen($arg) === strlen($candidate)) {
             return true;
         }
 

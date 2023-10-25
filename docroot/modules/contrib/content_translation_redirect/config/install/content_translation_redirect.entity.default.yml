@@ -5,4 +5,4 @@ id: default
 label: Default
 code: null
 path: ''
-translatable_entity_only: true
+mode: translatable

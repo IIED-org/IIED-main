@@ -40,7 +40,7 @@ use Drupal\Core\Url;
  *     "label",
  *     "code",
  *     "path",
- *     "translatable_entity_only"
+ *     "mode",
  *   }
  * )
  */
@@ -63,7 +63,7 @@ class ContentTranslationRedirect extends ConfigEntityBase implements ContentTran
   /**
    * The redirect status code.
    *
-   * @var int
+   * @var int|null
    */
   protected $code;
 
@@ -72,22 +72,14 @@ class ContentTranslationRedirect extends ConfigEntityBase implements ContentTran
    *
    * @var string
    */
-  protected $path;
+  protected $path = '';
 
   /**
-   * Should redirects only happen on translatable entities?
+   * The translation mode.
    *
-   * @var bool
+   * @var string
    */
-  protected bool $translatable_entity_only = TRUE;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setStatusCode(?int $code): ContentTranslationRedirectInterface {
-    $this->code = $code;
-    return $this;
-  }
+  protected $mode = self::MODE_TRANSLATABLE;
 
   /**
    * {@inheritdoc}
@@ -99,15 +91,7 @@ class ContentTranslationRedirect extends ConfigEntityBase implements ContentTran
   /**
    * {@inheritdoc}
    */
-  public function setPath(string $path): ContentTranslationRedirectInterface {
-    $this->path = $path;
-    return $this;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getPath(): ?string {
+  public function getPath(): string {
     return $this->path;
   }
 
@@ -121,15 +105,29 @@ class ContentTranslationRedirect extends ConfigEntityBase implements ContentTran
   /**
    * {@inheritdoc}
    */
-  public function isLocked(): bool {
-    return $this->id() === ContentTranslationRedirectInterface::DEFAULT_ID;
+  public function getTranslationMode(): string {
+    return $this->mode;
   }
 
   /**
    * {@inheritdoc}
    */
   public function translatableEntityOnly(): bool {
-    return $this->translatable_entity_only;
+    return $this->mode === static::MODE_TRANSLATABLE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function untranslatableEntityOnly(): bool {
+    return $this->mode === static::MODE_UNTRANSLATABLE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isLocked(): bool {
+    return $this->id() === static::DEFAULT_ID;
   }
 
   /**
@@ -168,10 +166,10 @@ class ContentTranslationRedirect extends ConfigEntityBase implements ContentTran
    */
   public static function sort(ConfigEntityInterface $a, ConfigEntityInterface $b) {
     // Always put Default in first place.
-    if ($a->id() === ContentTranslationRedirectInterface::DEFAULT_ID) {
+    if ($a->id() === static::DEFAULT_ID) {
       return -1;
     }
-    elseif ($b->id() === ContentTranslationRedirectInterface::DEFAULT_ID) {
+    elseif ($b->id() === static::DEFAULT_ID) {
       return 1;
     }
     return parent::sort($a, $b);
@@ -192,6 +190,20 @@ class ContentTranslationRedirect extends ConfigEntityBase implements ContentTran
       304 => t('304 Not Modified'),
       305 => t('305 Use Proxy'),
       307 => t('307 Temporary Redirect'),
+    ];
+  }
+
+  /**
+   * Returns translation modes.
+   *
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup[]
+   *   Translation modes.
+   */
+  public static function getTranslationModes(): array {
+    return [
+      static::MODE_TRANSLATABLE => t('Translatable entities'),
+      static::MODE_UNTRANSLATABLE => t('Untranslatable entities'),
+      static::MODE_ALL => t('All entities'),
     ];
   }
 

@@ -1,0 +1,13 @@
+include:
+  # https://docs.gitlab.com/ee/ci/yaml/index.html#includetemplate
+  - template: 'Workflows/Branch-Pipelines.gitlab-ci.yml'
+
+deploystacks:
+  trigger:
+    include: .drupalci/.gitlab-single-pipeline.yml
+    strategy: depend
+  parallel:
+    matrix:
+      - DRUPAL_CORE_CONSTRAINT: ["10.1", "11"]
+        PHP_VERSION: ["8.1", "8.2"]
+        MYSQL_VERSION: ["8"]

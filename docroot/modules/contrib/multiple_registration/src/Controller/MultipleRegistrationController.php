@@ -173,6 +173,7 @@ class MultipleRegistrationController extends ControllerBase {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function index() {
+    $rows = [];
     $regPages = $this->availableUserRolesService->getRegistrationPages();
     if ($regPages) {
       foreach ($regPages as $rid => $role) {

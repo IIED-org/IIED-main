@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - eu_cookie_compliance
+    - file
     - paragraphs
     - view_unpublished
 id: viewer
@@ -11,6 +12,7 @@ label: Viewer
 weight: -8
 is_admin: null
 permissions:
+  - 'delete own files'
   - 'display eu cookie compliance popup'
   - 'view any unpublished content'
   - 'view unpublished paragraphs'

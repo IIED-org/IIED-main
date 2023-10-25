@@ -10,7 +10,6 @@ dependencies:
     - node
     - taxonomy
     - user
-    - views_autocomplete_filters
 id: duplicate_of_authors_editors
 label: 'Duplicate of Authors & Editors'
 module: views

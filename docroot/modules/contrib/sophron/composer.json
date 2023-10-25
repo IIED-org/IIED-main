@@ -3,8 +3,8 @@
     "type": "drupal-module",
     "description": "Provides an extensive MIME types management API",
     "require": {
-        "drupal/core": "^9.2 || ^10",
-        "fileeye/mimemap": "^2"
+        "drupal/core": "^10",
+        "fileeye/mimemap": "^2.0.1"
     },
     "autoload": {
         "psr-4": {

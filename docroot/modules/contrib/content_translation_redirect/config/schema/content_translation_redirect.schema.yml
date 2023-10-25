@@ -16,6 +16,6 @@ content_translation_redirect.entity.*:
     path:
       type: path
       label: 'Redirect path'
-    translatable_entity_only:
-      type: boolean
-      label: 'Only act on translatable entities'
+    mode:
+      type: string
+      label: 'Translation mode'

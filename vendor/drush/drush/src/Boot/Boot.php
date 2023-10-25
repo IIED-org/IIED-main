@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drush\Boot;
 
 /**
@@ -18,9 +20,9 @@ interface Boot
     /**
      * Inject the uri for the specific site to be bootstrapped
      *
-     * @param string $uri Site to bootstrap
+     * @param $uri Site to bootstrap
      */
-    public function setUri($uri);
+    public function setUri(string $uri);
 
     /**
      * This function determines if the specified path points to
@@ -29,12 +31,8 @@ interface Boot
      *
      * These functions should be written such that one and only
      * one class will return TRUE for any given $path.
-     *
-     * @param $path to a directory to test
-     *
-     * @return TRUE if $path is a valid root directory
      */
-    public function validRoot($path);
+    public function validRoot(?string $path): bool;
 
     /**
      * Given a site root directory, determine the exact version of the software.
@@ -44,7 +42,7 @@ interface Boot
      * @return string|NULL
      *   The version string for the current version of the software, e.g. 8.1.3
      */
-    public function getVersion($root);
+    public function getVersion(string $root);
 
     /**
      * Returns an array that determines what bootstrap phases
@@ -64,7 +62,7 @@ interface Boot
      * strings (e.g. "full") to the corresponding bootstrap
      * phase index constant (e.g. DRUSH_BOOTSTRAP_DRUPAL_FULL).
      */
-    public function bootstrapPhaseMap();
+    public function bootstrapPhaseMap(): array;
 
     /**
      * Convert from a phase shorthand or constant to a phase index.

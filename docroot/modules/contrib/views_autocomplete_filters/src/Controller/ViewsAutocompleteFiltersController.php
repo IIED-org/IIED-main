@@ -7,6 +7,7 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\views\Plugin\views\display\DisplayPluginBase;
 use Drupal\views\ViewExecutable;
 use Drupal\views\Views;
@@ -26,14 +27,19 @@ class ViewsAutocompleteFiltersController implements ContainerInjectionInterface 
    */
   protected $logger;
 
+  /**
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
 
   /**
    * ViewsAutocompleteFiltersController constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
    */
-  public function __construct(LoggerInterface $logger) {
+  public function __construct(LoggerInterface $logger, EntityRepositoryInterface $entityRepository) {
     $this->logger = $logger;
+    $this->entityRepository = $entityRepository;
   }
 
 
@@ -42,7 +48,8 @@ class ViewsAutocompleteFiltersController implements ContainerInjectionInterface 
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('logger.factory')->get('views_autocomplete_filters')
+      $container->get('logger.factory')->get('views_autocomplete_filters'),
+      $container->get('entity.repository')
     );
   }
 
@@ -201,11 +208,14 @@ class ViewsAutocompleteFiltersController implements ContainerInjectionInterface 
     $use_raw_suggestion = !empty($expose_options['autocomplete_raw_suggestion']);
     $use_raw_dropdown = !empty($expose_options['autocomplete_raw_dropdown']);
 
+    /** @var \Drupal\views\Plugin\views\style\StylePluginBase $style_plugin */
+    $style_plugin = $display_handler->getPlugin('style');
+    /** @var \Drupal\views\Plugin\views\field\FieldHandlerInterface $handler */
+    $fields_handler = $display_handler->getHandlers('field');
+
     $view->row_index = 0;
     foreach ($view->result as $index => $row) {
       $view->row_index = $index;
-      /** @var \Drupal\views\Plugin\views\style\StylePluginBase $style_plugin */
-      $style_plugin = $display_handler->getPlugin('style');
 
       foreach ($field_names as $field_name) {
         $rendered_field = $raw_field = '';
@@ -215,9 +225,26 @@ class ViewsAutocompleteFiltersController implements ContainerInjectionInterface 
         }
         // Get the raw field value only if suggestion or dropdown item is in RAW format.
         if ($use_raw_suggestion || $use_raw_dropdown) {
-          $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-          $entity = $view->result[$index]->_entity->getTranslation($langcode);
-          $raw_field = $entity->$field_name->value;
+          $view_field = $fields_handler[$field_name];
+          // Make sure we get the right entity.
+          $view_entity = NULL;
+          $field_relationship = $view_field->options['relationship'];
+          if ($field_relationship === 'none') {
+            $view_entity = $view->result[$index]->_entity;
+          }
+          elseif (!empty($view->result[$index]->_relationship_entities[$field_relationship])) {
+            $view_entity = $view->result[$index]->_relationship_entities[$field_relationship];
+          }
+          if ($view_entity) {
+            $entity = $this->entityRepository->getTranslationFromContext($view_entity);
+            // Make sure we get the right entity field (value).
+            $real_field_name = $view_field->field;
+            $raw_field = $entity->$real_field_name->value;
+          }
+          // Get the view value, if the filter is not an entity field.
+          else {
+            $raw_field = $style_plugin->getFieldValue($index, $field_name);
+          }
           if (!is_array($raw_field)) {
             $raw_field = [['value' => $raw_field]];
           }

@@ -27,16 +27,37 @@ class SearchApiSolrTest extends SolrBackendTestBase {
   use SolrCommitTrait;
   use InvokeMethodTrait;
 
+  /**
+   * The language IDs.
+   *
+   * @var array
+   */
   protected $languageIds = [
+    'de' => 'de',
+    'de-at' => 'de',
+    'en' => 'en',
+    'nl' => 'nl',
+  ];
+
+  /**
+   * More language IDs.
+   *
+   * Keeping all languages installed will lead to massive multilingual
+   * queries in search_api's tests. Therefore we split the language list
+   * into languages that should be available in all test and those only
+   * required for special tests.
+   *
+   * @see checkSchemaLanguages()
+   *
+   * @var array
+   */
+  protected $moreLanguageIds = [
     'ar' => 'ar',
     'bg' => 'bg',
     'ca' => 'ca',
     'cs' => 'cs',
     'da' => 'da',
-    'de' => 'de',
-    'de-at' => 'de',
     'el' => 'el',
-    'en' => 'en',
     'es' => 'es',
     'et' => 'et',
     'fa' => 'fa',
@@ -49,9 +70,9 @@ class SearchApiSolrTest extends SolrBackendTestBase {
     'id' => 'id',
     'it' => 'it',
     'ja' => 'ja',
+    'ko' => 'ko',
     'lv' => 'lv',
     'nb' => 'nb',
-    'nl' => 'nl',
     'nn' => 'nn',
     'pl' => 'pl',
     'pt-br' => 'pt_br',
@@ -132,7 +153,7 @@ class SearchApiSolrTest extends SolrBackendTestBase {
   protected function regressionTest2469547() {
     return;
 
-    // @todo
+    // @todo Fix coding standard.
     // @codingStandardsIgnoreStart
     $query = $this->buildSearch();
     $facets = [];
@@ -273,17 +294,26 @@ class SearchApiSolrTest extends SolrBackendTestBase {
    * Tests if all supported languages are deployed correctly.
    */
   protected function checkSchemaLanguages() {
+    $languages = [];
+    foreach (array_keys($this->moreLanguageIds) as $language_id) {
+      $language = ConfigurableLanguage::createFromLangcode($language_id);
+      $language->save();
+      $languages[$language->id()] = $language;
+    }
+
     /** @var \Drupal\search_api_solr\SolrBackendInterface $backend */
     $backend = Server::load($this->serverId)->getBackend();
     $connector = $backend->getSolrConnector();
     $targeted_solr_major_version = (int) $connector->getSchemaTargetedSolrBranch();
-    $language_ids = $this->languageIds;
+    $language_ids = $this->languageIds + $this->moreLanguageIds;
     if (version_compare($targeted_solr_major_version, '9', '<')) {
       // 'et' requires Solr 8.2, the jump-start-config targets 8.0.
       $language_ids['et'] = FALSE;
       if (version_compare($targeted_solr_major_version, '8', '<')) {
         // 'ga' requires Solr 7.7, the jump-start-config targets 7.0.
         $language_ids['ga'] = FALSE;
+        // 'ko' requires Solr 7.5, the jump-start-config targets 7.0.
+        $language_ids['ko'] = FALSE;
         if (version_compare($targeted_solr_major_version, '7', '<')) {
           $language_ids['bg'] = FALSE;
           $language_ids['ca'] = FALSE;
@@ -317,7 +347,12 @@ class SearchApiSolrTest extends SolrBackendTestBase {
         }
       }
     }
+    $language_ids[LanguageInterface::LANGCODE_NOT_SPECIFIED] = LanguageInterface::LANGCODE_NOT_SPECIFIED;
     $this->assertEquals($language_ids, $backend->getSchemaLanguageStatistics());
+
+    foreach ($languages as $language) {
+      $language->delete();
+    }
   }
 
   /**
@@ -792,11 +827,11 @@ class SearchApiSolrTest extends SolrBackendTestBase {
    * Tests retrieve_data options.
    */
   protected function checkIndexFallback() {
-    global $index_fallback_test;
+    global $_search_api_solr_test_index_fallback_test;
 
     // If set to TRUE, search_api_solr_test_search_api_solr_documents_alter()
     // turns one out of five test documents into an illegal one.
-    $index_fallback_test = TRUE;
+    $_search_api_solr_test_index_fallback_test = TRUE;
 
     // If five documents are updated as batch, one illegal document causes the
     // entire batch to fail.
@@ -813,7 +848,7 @@ class SearchApiSolrTest extends SolrBackendTestBase {
     $this->assertEquals($this->indexItems($this->indexId), 4);
 
     // Don't mess up the remaining document anymore.
-    $index_fallback_test = FALSE;
+    $_search_api_solr_test_index_fallback_test = FALSE;
     // Disable the fallback to index the documents one by one.
     $config['index_single_documents_fallback_count'] = 0;
     $server->setBackendConfig($config);
@@ -900,7 +935,7 @@ class SearchApiSolrTest extends SolrBackendTestBase {
       $this->fail('Field uid must not yet exists in this index.');
     }
     catch (\Exception $e) {
-      $this->assertEquals('Filter term on unknown or unindexed field uid.', $e->getMessage());
+      // An expected exception occurred.
     }
 
     $index = $this->getIndex();
@@ -943,7 +978,7 @@ class SearchApiSolrTest extends SolrBackendTestBase {
       $this->fail('Field uid must not yet exists in this index.');
     }
     catch (\Exception $e) {
-      $this->assertEquals('Filter term on unknown or unindexed field uid.', $e->getMessage());
+      $this->assertEquals('An error occurred while searching, try again later.', $e->getMessage());
     }
   }
 
@@ -1049,9 +1084,8 @@ class SearchApiSolrTest extends SolrBackendTestBase {
     $backend = Server::load($this->serverId)->getBackend();
     $targeted_branch = $backend->getSolrConnector()->getSchemaTargetedSolrBranch();
     if ('3.x' !== $targeted_branch) {
-      // There's no real collated field for Solr 3.x. Therefore the sorting of
-      // of "non existing" values differ.
-
+      // There's no real collated field for Solr 3.x. Therefore, the sorting of
+      // "non-existing" values differ.
       // Type multi-value string. Uses first value.
       $results = $this->buildSearch(NULL, [], [], FALSE)
         ->sort('keywords')
@@ -1260,7 +1294,7 @@ class SearchApiSolrTest extends SolrBackendTestBase {
     $expected_results = [
       1 => 'en',
       2 => 'en',
-      7 => LanguageInterface::LANGCODE_NOT_APPLICABLE
+      7 => LanguageInterface::LANGCODE_NOT_APPLICABLE,
     ];
     $this->assertResults($expected_results, $results, 'Search content and unspecified language for "gene".');
 
@@ -1345,7 +1379,7 @@ class SearchApiSolrTest extends SolrBackendTestBase {
       'type' => 'item',
       'langcode' => LanguageInterface::LANGCODE_NOT_SPECIFIED,
     ]);
-    $count = \Drupal::entityQuery('entity_test_mulrev_changed')->count()->execute();
+    $count = \Drupal::entityQuery('entity_test_mulrev_changed')->count()->accessCheck()->execute();
     $this->assertEquals(8, $count, "$count items inserted.");
   }
 
@@ -1389,7 +1423,9 @@ class SearchApiSolrTest extends SolrBackendTestBase {
    */
   public function testConfigGeneration(array $files) {
     $server = $this->getServer();
-    $solr_major_version = $server->getBackend()->getSolrConnector()->getSolrMajorVersion();
+    /** @var SolrBackendInterface $backend */
+    $backend = $server->getBackend();
+    $solr_major_version = $backend->getSolrConnector()->getSolrMajorVersion();
     $backend_config = $server->getBackendConfig();
     $solr_configset_controller = new SolrConfigSetController(\Drupal::service('extension.list.module'));
     $solr_configset_controller->setServer($server);
@@ -1403,7 +1439,7 @@ class SearchApiSolrTest extends SolrBackendTestBase {
       }
     }
 
-    $config_name = 'name="drupal-' . SolrBackendInterface::SEARCH_API_SOLR_SCHEMA_VERSION . '-solr-' . $solr_major_version . '.x-'. SEARCH_API_SOLR_JUMP_START_CONFIG_SET .'"';
+    $config_name = 'name="drupal-' . $backend->getPreferredSchemaVersion() . '-solr-' . $solr_major_version . '.x-' . SEARCH_API_SOLR_JUMP_START_CONFIG_SET . '"';
     $this->assertStringContainsString($config_name, $config_files['solrconfig.xml']);
     $this->assertStringContainsString($config_name, $config_files['schema.xml']);
     $this->assertStringContainsString($server->id(), $config_files['test.txt']);
@@ -1420,15 +1456,31 @@ class SearchApiSolrTest extends SolrBackendTestBase {
 
     $backend_config['connector_config']['jmx'] = TRUE;
     $backend_config['connector_config']['jts'] = TRUE;
-    $backend_config['disabled_field_types'] = ['text_foo_en_4_5_0', 'text_foo_en_6_0_0', 'text_de_4_5_0', 'text_de_6_0_0', 'text_de_7_0_0'];
-    $backend_config['disabled_caches'] = ['cache_document_default_7_0_0', 'cache_filter_default_7_0_0'];
+    $backend_config['disabled_field_types'] = [
+      'text_foo_en_4_5_0',
+      'text_foo_en_6_0_0',
+      'text_de_4_5_0',
+      'text_de_6_0_0',
+      'text_de_7_0_0',
+    ];
+    $backend_config['disabled_caches'] = [
+      'cache_document_default_7_0_0',
+      'cache_filter_default_7_0_0',
+      'cache_document_default_9_0_0',
+      'cache_filter_default_9_0_0',
+    ];
     $server->setBackendConfig($backend_config);
     $server->save();
     // Reset static caches.
     $solr_configset_controller->setServer($server);
 
     $config_files = $solr_configset_controller->getConfigFiles();
-    $this->assertStringContainsString('<jmx />', $config_files['solrconfig_extra.xml']);
+    if (version_compare($solr_major_version, '9', '>=')) {
+      $this->assertStringNotContainsString('<jmx />', $config_files['solrconfig_extra.xml']);
+    }
+    else {
+      $this->assertStringContainsString('<jmx />', $config_files['solrconfig_extra.xml']);
+    }
     $this->assertStringContainsString('JtsSpatialContextFactory', $config_files['schema.xml']);
     $this->assertStringContainsString('text_en', $config_files['schema_extra_types.xml']);
     $this->assertStringNotContainsString('text_foo_en', $config_files['schema_extra_types.xml']);
@@ -1477,7 +1529,7 @@ class SearchApiSolrTest extends SolrBackendTestBase {
         #'fieldType name="text_phonetic_en" class="solr.TextField"',
         'fieldType name="text_en" class="solr.TextField"',
         'fieldType name="text_de" class="solr.TextField"',
-        '<fieldType name="collated_und" class="solr.ICUCollationField" locale="en" strength="primary" caseLevel="false"/>',
+        '<fieldType name="collated_und" class="solr.ICUCollationField" locale="" strength="primary" caseLevel="false"/>',
 '<fieldType name="text_foo_en" class="solr.TextField" positionIncrementGap="100">
   <analyzer type="index">
     <tokenizer class="solr.WhitespaceTokenizerFactory"/>

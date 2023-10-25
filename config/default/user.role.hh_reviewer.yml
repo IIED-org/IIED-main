@@ -9,6 +9,7 @@ dependencies:
   module:
     - comment
     - eu_cookie_compliance
+    - file
     - filter
     - form_mode_control
     - media
@@ -30,6 +31,7 @@ permissions:
   - 'create image media'
   - 'delete any hidden_handbrake content'
   - 'delete hidden_handbrake revisions'
+  - 'delete own files'
   - 'delete own hidden_handbrake content'
   - 'delete own image media'
   - 'display eu cookie compliance popup'

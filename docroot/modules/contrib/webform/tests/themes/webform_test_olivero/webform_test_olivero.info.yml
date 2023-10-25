@@ -5,7 +5,7 @@ name: 'Webform Olivero test'
 description: 'Support theme for webform Olivero integration testing.'
 package: 'Webform Testing'
 
-# Information added by Drupal.org packaging script on 2023-06-12
-version: '6.2.0-beta6'
+# Information added by Drupal.org packaging script on 2023-10-10
+version: '6.2.0-rc1'
 project: 'webform'
-datestamp: 1686598823
+datestamp: 1696976950

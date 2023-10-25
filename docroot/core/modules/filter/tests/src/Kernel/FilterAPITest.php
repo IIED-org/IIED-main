@@ -71,15 +71,15 @@ class FilterAPITest extends EntityKernelTestBase {
     $expected_filter_text_without_html_generators = "Text with evil content and a URL: https://www.drupal.org!";
 
     $actual_filtered_text = check_markup($text, 'filtered_html', '', []);
-    $this->assertEquals($expected_filtered_text, $actual_filtered_text, 'Expected filter result.');
+    $this->assertSame($expected_filtered_text, (string) $actual_filtered_text, 'Expected filter result.');
     $actual_filtered_text_without_html_generators = check_markup($text, 'filtered_html', '', [FilterInterface::TYPE_MARKUP_LANGUAGE]);
-    $this->assertEquals($expected_filter_text_without_html_generators, $actual_filtered_text_without_html_generators, 'Expected filter result when skipping FilterInterface::TYPE_MARKUP_LANGUAGE filters.');
+    $this->assertSame($expected_filter_text_without_html_generators, (string) $actual_filtered_text_without_html_generators, 'Expected filter result when skipping FilterInterface::TYPE_MARKUP_LANGUAGE filters.');
     // Related to @see FilterSecurityTest.php/testSkipSecurityFilters(), but
     // this check focuses on the ability to filter multiple filter types at once.
     // Drupal core only ships with these two types of filters, so this is the
     // most extensive test possible.
     $actual_filtered_text_without_html_generators = check_markup($text, 'filtered_html', '', [FilterInterface::TYPE_HTML_RESTRICTOR, FilterInterface::TYPE_MARKUP_LANGUAGE]);
-    $this->assertEquals($expected_filter_text_without_html_generators, $actual_filtered_text_without_html_generators, 'Expected filter result when skipping FilterInterface::TYPE_MARKUP_LANGUAGE filters, even when trying to disable filters of the FilterInterface::TYPE_HTML_RESTRICTOR type.');
+    $this->assertSame($expected_filter_text_without_html_generators, (string) $actual_filtered_text_without_html_generators, 'Expected filter result when skipping FilterInterface::TYPE_MARKUP_LANGUAGE filters, even when trying to disable filters of the FilterInterface::TYPE_HTML_RESTRICTOR type.');
   }
 
   /**
@@ -141,8 +141,11 @@ class FilterAPITest extends EntityKernelTestBase {
     $stupid_filtered_html_format->save();
     $this->assertSame(
       $stupid_filtered_html_format->getHtmlRestrictions(),
-      // No tag is allowed.
-      ['allowed' => []],
+      [
+        'allowed' => [
+          '*' => ['style' => FALSE, 'on*' => FALSE, 'lang' => TRUE, 'dir' => ['ltr' => TRUE, 'rtl' => TRUE]],
+        ],
+      ],
       'FilterFormatInterface::getHtmlRestrictions() works as expected for the stupid_filtered_html format.'
     );
     $this->assertSame(
@@ -315,7 +318,7 @@ class FilterAPITest extends EntityKernelTestBase {
     ];
     $this->assertEqualsCanonicalizing($expected_cache_contexts, $build['#cache']['contexts'], 'Expected cache contexts present.');
     $expected_markup = '<p>Hello, world!</p><p>This is a dynamic llama.</p>';
-    $this->assertEquals($expected_markup, $build['#markup'], 'Expected #lazy_builder callback has been applied.');
+    $this->assertSame($expected_markup, (string) $build['#markup'], 'Expected #lazy_builder callback has been applied.');
   }
 
   /**
@@ -327,9 +330,12 @@ class FilterAPITest extends EntityKernelTestBase {
 
     $this->assertInstanceOf(OptionsProviderInterface::class, $data);
 
-    $filtered_html_user = $this->createUser(['uid' => 2], [
-      FilterFormat::load('filtered_html')->getPermissionName(),
-    ]);
+    $filtered_html_user = $this->createUser(
+      [FilterFormat::load('filtered_html')->getPermissionName()],
+      NULL,
+      FALSE,
+      ['uid' => 2]
+    );
 
     // Test with anonymous user.
     $user = new AnonymousUserSession();
@@ -512,30 +518,6 @@ class FilterAPITest extends EntityKernelTestBase {
     $vars = $filter_format->__sleep();
     $this->assertContains('filters', $vars);
     $this->assertNotContains('filterCollection', $vars);
-  }
-
-  /**
-   * Tests deprecated "forbidden tags" functionality.
-   *
-   * @group legacy
-   */
-  public function testForbiddenTagsDeprecated(): void {
-    $this->expectDeprecation('forbidden_tags for FilterInterface::getHTMLRestrictions() is deprecated in drupal:9.4.0 and is removed from drupal:10.0.0');
-    FilterFormat::create([
-      'format' => 'forbidden_tags_deprecation_test',
-      'name' => 'Forbidden tags deprecation test',
-      'filters' => [
-        'filter_test_restrict_tags_and_attributes' => [
-          'status' => TRUE,
-          'settings' => [
-            'restrictions' => [
-              'forbidden_tags' => ['p' => FALSE],
-            ],
-          ],
-        ],
-      ],
-    ])->save();
-    FilterFormat::load('forbidden_tags_deprecation_test')->getHtmlRestrictions();
   }
 
 }

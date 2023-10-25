@@ -39,7 +39,7 @@ class MultipleRegistrationLocalTasks extends DeriverBase implements ContainerDer
    */
   public function __construct(AvailableUserRolesService $availableUserRolesService, $base_plugin_id) {
     $this->availableUserRolesService = $availableUserRolesService;
-    $this->base_plugin_id = $base_plugin_id;
+    $this->basePluginId = $base_plugin_id;
   }
 
   /**

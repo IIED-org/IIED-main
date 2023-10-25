@@ -6,12 +6,12 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Tests\UnitTestCase;
+use Drupal\Tests\views\Traits\ViewsLoggerTestTrait;
 use Drupal\user\PermissionHandlerInterface;
 use Drupal\user\Plugin\views\field\Permissions;
 use Drupal\views\Plugin\views\display\DisplayPluginBase;
 use Drupal\views\ResultRow;
 use Drupal\views\ViewExecutable;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @coversDefaultClass \Drupal\user\Plugin\views\field\Permissions
@@ -19,31 +19,33 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class PermissionsTest extends UnitTestCase {
 
+  use ViewsLoggerTestTrait;
+
   /**
    * {@inheritdoc}
    */
-  protected function tearDown(): void {
-    parent::tearDown();
-    $container = new ContainerBuilder();
+  protected function setUp(): void {
+    parent::setUp();
+    $this->setUpMockLoggerWithMissingEntity();
+    $container = \Drupal::getContainer();
+    $container->set('string_translation', $this->createMock(TranslationInterface::class));
+    $container->set('user.permissions', $this->createMock(PermissionHandlerInterface::class));
     \Drupal::setContainer($container);
   }
 
   /**
-   * Tests the preRender method.
+   * Tests the preRender method when getEntity returns NULL.
    *
    * @covers ::preRender
    */
-  public function testPreRender() {
+  public function testPreRenderNullEntity(): void {
     $values = [new ResultRow()];
-    $container = new ContainerBuilder();
-    $container->set('string_translation', $this->createMock(TranslationInterface::class));
-    $container->set('user.permissions', $this->createMock(PermissionHandlerInterface::class));
-    \Drupal::setContainer($container);
-    $field = new Permissions([], '', [], $this->createMock(ModuleHandlerInterface::class), $this->createMock(EntityTypeManagerInterface::class));
+    $field = new Permissions(['entity_type' => 'foo', 'entity field' => 'bar'], '', [], $this->createMock(ModuleHandlerInterface::class), $this->createMock(EntityTypeManagerInterface::class));
     $view = $this->createMock(ViewExecutable::class);
     $display = $this->createMock(DisplayPluginBase::class);
     $field->init($view, $display);
-    $this->assertEquals('', $field->preRender($values));
+    $field->preRender($values);
+    $this->assertEmpty($field->items);
   }
 
 }

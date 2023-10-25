@@ -158,7 +158,7 @@ third_party_settings:
         classes: ''
         id: ''
         open: false
-        description: '<i><big><strong>Hint: </strong>Save this entry BEFORE uploading your file in order to generate the correct product code (visible in the saved page URL e.g. <strong>''pubs.iied.org/20036iied''</strong>). Please remember your PDF file MUST be renamed to match the product code before uploading, e.g. ''<strong>20036iied.pdf''</strong>.<p>If your file is not in english, add an <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank"><strong>ISO 639-1 two-letter language code</strong></a> to the filename, e.g. <strong>''20036iiedsw.pdf''</strong> for Kiswahili.</p></big></i>'
+        description: "<i><big><strong>Hint: </strong>Save this entry BEFORE uploading your file in order to generate the correct product code (visible in the saved page URL e.g. <strong>'pubs.iied.org/20036iied'</strong>). Please remember your PDF file MUST be renamed to match the product code before uploading, e.g. '<strong>20036iied.pdf'</strong>.<p>If your file is not in english, add an <a href=\"https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes\" target=\"_blank\"><strong>ISO 639-1 two-letter language code</strong></a> to the filename, e.g. <strong>'20036iiedsw.pdf'</strong> for Kiswahili.</p></big></i>"
         required_fields: true
     group_legacy_fields_do_not_use:
       children:

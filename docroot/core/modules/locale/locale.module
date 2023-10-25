@@ -19,6 +19,7 @@ use Drupal\Core\File\Exception\FileException;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Installer\InstallerKernel;
 use Drupal\Core\Link;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -467,7 +468,7 @@ function locale_cache_flush() {
 /**
  * Implements hook_js_alter().
  */
-function locale_js_alter(&$javascript, AttachedAssetsInterface $assets) {
+function locale_js_alter(&$javascript, AttachedAssetsInterface $assets, LanguageInterface $language) {
   $files = [];
   foreach ($javascript as $item) {
     if (isset($item['type']) && $item['type'] == 'file') {
@@ -482,7 +483,7 @@ function locale_js_alter(&$javascript, AttachedAssetsInterface $assets) {
   // Replace the placeholder file with the actual JS translation file.
   $placeholder_file = 'core/modules/locale/locale.translation.js';
   if (isset($javascript[$placeholder_file])) {
-    if ($translation_file = locale_js_translate($files)) {
+    if ($translation_file = locale_js_translate($files, $language)) {
       $js_translation_asset = &$javascript[$placeholder_file];
       $js_translation_asset['data'] = $translation_file;
       // @todo Remove this when https://www.drupal.org/node/1945262 lands.
@@ -506,13 +507,17 @@ function locale_js_alter(&$javascript, AttachedAssetsInterface $assets) {
  *
  * @param array $files
  *   An array of local file paths.
+ * @param \Drupal\Core\Language\LanguageInterface $language_interface
+ *   The interface language the files should be translated into.
  *
  * @return string|null
  *   The filepath to the translation file or NULL if no translation is
  *   applicable.
  */
-function locale_js_translate(array $files = []) {
-  $language_interface = \Drupal::languageManager()->getCurrentLanguage();
+function locale_js_translate(array $files = [], $language_interface = NULL) {
+  if (!isset($language_interface)) {
+    $language_interface = \Drupal::languageManager()->getCurrentLanguage();
+  }
 
   $dir = 'public://' . \Drupal::config('locale.settings')->get('javascript.directory');
   $parsed = \Drupal::state()->get('system.javascript_parsed', []);
@@ -1224,6 +1229,14 @@ function _locale_rebuild_js($langcode = NULL) {
   $translations = [];
   foreach (\Drupal::service('locale.storage')->getTranslations($conditions) as $data) {
     $translations[$data->context][$data->source] = $data->translation;
+  }
+
+  // Include custom string overrides.
+  $custom_strings = Settings::get('locale_custom_strings_' . $language->getId(), []);
+  foreach ($custom_strings as $context => $strings) {
+    foreach ($strings as $source => $translation) {
+      $translations[$context][$source] = $translation;
+    }
   }
 
   // Construct the JavaScript file, if there are translations.

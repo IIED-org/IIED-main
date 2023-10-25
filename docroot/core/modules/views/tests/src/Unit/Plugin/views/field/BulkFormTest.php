@@ -29,7 +29,7 @@ class BulkFormTest extends UnitTestCase {
   /**
    * @covers ::viewsForm
    */
-  public function testViewsForm() {
+  public function testViewsForm(): void {
     $row = new ResultRow();
 
     $container = new ContainerBuilder();
@@ -37,7 +37,7 @@ class BulkFormTest extends UnitTestCase {
     \Drupal::setContainer($container);
 
     $field = $this->getMockBuilder(BulkForm::class)
-      ->setMethods(['getEntityType', 'getEntity'])
+      ->onlyMethods(['getEntityType', 'getEntity'])
       ->disableOriginalConstructor()
       ->getMock();
     $field->expects($this->any())
@@ -48,14 +48,14 @@ class BulkFormTest extends UnitTestCase {
       ->willReturn(NULL);
 
     $query = $this->getMockBuilder(QueryPluginBase::class)
-      ->setMethods(['getEntityTableInfo'])
+      ->onlyMethods(['getEntityTableInfo'])
       ->disableOriginalConstructor()
       ->getMock();
     $query->expects($this->any())
       ->method('getEntityTableInfo')
       ->willReturn([]);
     $view = $this->getMockBuilder(ViewExecutable::class)
-      ->setMethods(['getQuery'])
+      ->onlyMethods(['getQuery'])
       ->disableOriginalConstructor()
       ->getMock();
     $view->expects($this->any())

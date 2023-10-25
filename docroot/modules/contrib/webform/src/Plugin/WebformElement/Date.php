@@ -47,8 +47,10 @@ class Date extends DateBase {
    * {@inheritdoc}
    */
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
-    // Unset custom date format which is only used by datepicker.
-    if (isset($element['#date_date_format']) && !isset($element['#datepicker'])) {
+    // Unset custom date format which is only used by the
+    // webform_jqueryui_datepicker.module.
+    $has_datepicker = isset($element['#datepicker']) && $this->moduleHandler->moduleExists('webform_jqueryui_datepicker');
+    if (isset($element['#date_date_format']) && !$has_datepicker) {
       unset($element['#date_date_format']);
     }
 

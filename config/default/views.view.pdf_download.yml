@@ -40,7 +40,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: '{{ ''Download''|trans }}'
+            text: "{{ 'Download'|trans }}"
             make_link: true
             path: '{{ field_media_document }}'
             absolute: false

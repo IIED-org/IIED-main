@@ -525,8 +525,8 @@ function comment_preview(CommentInterface $comment, FormStateInterface $form_sta
     // parent entity output rendering the comment form and the comment form
     // rendering the parent entity. To prevent this infinite loop we temporarily
     // set the value of the comment field on a clone of the entity to hidden
-    // before calling entity_view(). That way when the output of the commented
-    // entity is rendered, it excludes the comment field output.
+    // before calling the entity view builder. That way when the output of
+    // the commented entity is rendered, it excludes the comment field output.
     $field_name = $comment->getFieldName();
     $entity = clone $entity;
     $entity->$field_name->status = CommentItemInterface::HIDDEN;
@@ -716,7 +716,7 @@ function comment_preprocess_field(&$variables) {
     $variables['comment_display_mode'] = $element[0]['#comment_display_mode'];
     $variables['comment_type'] = $element[0]['#comment_type'];
 
-    // Append additional attributes (eg. RDFa) from the first field item.
+    // Append additional attributes from the first field item.
     $variables['attributes'] += $variables['items'][0]['attributes']->storage();
 
     // Create separate variables for the comments and comment form.
