@@ -3,6 +3,10 @@
 namespace Drupal\devel\Twig\Extension;
 
 use Drupal\devel\DevelDumperManagerInterface;
+use Twig\Environment;
+use Twig\Extension\AbstractExtension;
+use Twig\Template;
+use Twig\TwigFunction;
 
 /**
  * Provides the Devel debugging function within Twig templates.
@@ -12,7 +16,7 @@ use Drupal\devel\DevelDumperManagerInterface;
  * Settings, so a container rebuild is necessary when toggling twig_debug on
  * and off.
  */
-class Debug extends \Twig_Extension {
+class Debug extends AbstractExtension {
 
   /**
    * The devel dumper service.
@@ -50,14 +54,14 @@ class Debug extends \Twig_Extension {
     ];
 
     return [
-      new \Twig_SimpleFunction('devel_dump', [$this, 'dump'], $options),
-      new \Twig_SimpleFunction('kpr', [$this, 'dump'], $options),
+      new TwigFunction('devel_dump', [$this, 'dump'], $options),
+      new TwigFunction('kpr', [$this, 'dump'], $options),
       // Preserve familiar kint() function for dumping.
-      new \Twig_SimpleFunction('kint', [$this, 'kint'], $options),
-      new \Twig_SimpleFunction('devel_message', [$this, 'message'], $options),
-      new \Twig_SimpleFunction('dpm', [$this, 'message'], $options),
-      new \Twig_SimpleFunction('dsm', [$this, 'message'], $options),
-      new \Twig_SimpleFunction('devel_breakpoint', [$this, 'breakpoint'], [
+      new TwigFunction('kint', [$this, 'kint'], $options),
+      new TwigFunction('devel_message', [$this, 'message'], $options),
+      new TwigFunction('dpm', [$this, 'message'], $options),
+      new TwigFunction('dsm', [$this, 'message'], $options),
+      new TwigFunction('devel_breakpoint', [$this, 'breakpoint'], [
         'needs_environment' => TRUE,
         'needs_context' => TRUE,
         'is_variadic' => TRUE,
@@ -70,7 +74,7 @@ class Debug extends \Twig_Extension {
    *
    * Handles 0, 1, or multiple arguments.
    *
-   * @param \Twig_Environment $env
+   * @param \Twig\Environment $env
    *   The twig environment instance.
    * @param array $context
    *   An array of parameters passed to the template.
@@ -82,12 +86,14 @@ class Debug extends \Twig_Extension {
    *
    * @see \Drupal\devel\DevelDumperManager::dump()
    */
-  public function dump(\Twig_Environment $env, array $context, array $args = []) {
+  public function dump(Environment $env, array $context, array $args = []) {
     return $this->doDump($env, $context, $args);
   }
 
   /**
-   * @param \Twig_Environment $env
+   * Writes the debug information for Twig templates.
+   *
+   * @param \Twig\Environment $env
    *   The twig environment instance.
    * @param array $context
    *   An array of parameters passed to the template.
@@ -96,11 +102,11 @@ class Debug extends \Twig_Extension {
    * @param string $plugin_id
    *   The plugin id. Defaults to null.
    *
-   * @return string|null
+   * @return false|string|null
    *   String representation of the input variables, or null if twig_debug mode
    *   is tunred off.
    */
-  private function doDump(\Twig_Environment $env, array $context, array $args = [], $plugin_id = NULL) {
+  private function doDump(Environment $env, array $context, array $args = [], $plugin_id = NULL) {
     if (!$env->isDebug()) {
       return NULL;
     }
@@ -129,7 +135,7 @@ class Debug extends \Twig_Extension {
    *
    * Handles 0, 1, or multiple arguments.
    *
-   * @param \Twig_Environment $env
+   * @param \Twig\Environment $env
    *   The twig environment instance.
    * @param array $context
    *   An array of parameters passed to the template.
@@ -141,7 +147,7 @@ class Debug extends \Twig_Extension {
    *
    * @see \Drupal\devel\DevelDumperManager::dump()
    */
-  public function kint(\Twig_Environment $env, array $context, array $args = []) {
+  public function kint(Environment $env, array $context, array $args = []) {
     return $this->doDump($env, $context, $args, 'kint');
   }
 
@@ -150,7 +156,7 @@ class Debug extends \Twig_Extension {
    *
    * Handles 0, 1, or multiple arguments.
    *
-   * @param \Twig_Environment $env
+   * @param \Twig\Environment $env
    *   The twig environment instance.
    * @param array $context
    *   An array of parameters passed to the template.
@@ -159,7 +165,7 @@ class Debug extends \Twig_Extension {
    *
    * @see \Drupal\devel\DevelDumperManager::message()
    */
-  public function message(\Twig_Environment $env, array $context, array $args = []) {
+  public function message(Environment $env, array $context, array $args = []) {
     if (!$env->isDebug()) {
       return;
     }
@@ -197,14 +203,14 @@ class Debug extends \Twig_Extension {
    * In this way you'll be able to inspect any variables available in the
    * template (environment, context, specific variables etc..) in your IDE.
    *
-   * @param \Twig_Environment $env
+   * @param \Twig\Environment $env
    *   The twig environment instance.
    * @param array $context
    *   An array of parameters passed to the template.
    * @param array $args
    *   An array of parameters passed the function.
    */
-  public function breakpoint(\Twig_Environment $env, array $context, array $args = []) {
+  public function breakpoint(Environment $env, array $context, array $args = []) {
     if (!$env->isDebug()) {
       return;
     }
@@ -226,7 +232,7 @@ class Debug extends \Twig_Extension {
   protected function getContextVariables(array $context) {
     $context_variables = [];
     foreach ($context as $key => $value) {
-      if (!$value instanceof \Twig_Template) {
+      if (!$value instanceof Template) {
         $context_variables[$key] = $value;
       }
     }
@@ -246,7 +252,7 @@ class Debug extends \Twig_Extension {
     $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS | DEBUG_BACKTRACE_PROVIDE_OBJECT);
 
     foreach ($backtrace as $index => $trace) {
-      if (isset($trace['object']) && $trace['object'] instanceof \Twig_Template && 'Twig_Template' !== get_class($trace['object'])) {
+      if (isset($trace['object']) && $trace['object'] instanceof Template && 'Twig_Template' !== get_class($trace['object'])) {
         $template = $trace['object'];
         $callee = $backtrace[$index - 1];
         break;
@@ -255,7 +261,7 @@ class Debug extends \Twig_Extension {
 
     $parameters = [];
 
-    /** @var \Twig_Template $template */
+    /** @var \Twig\Template $template */
     if (NULL !== $template && NULL !== $callee) {
       $line_number = $callee['line'];
       $debug_infos = $template->getDebugInfo();

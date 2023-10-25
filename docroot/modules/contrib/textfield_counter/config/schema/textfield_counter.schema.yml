@@ -17,6 +17,9 @@ field.widget.settings.text_textarea_with_counter:
     js_prevent_submit:
       type: boolean
       label: 'Whether or not form submission should be prevented using JavaScript when the character limit has been crossed'
+    count_only_mode:
+      type: boolean
+      label: 'When true, the form API will fail validation when the total characters exceed maxlength.'
     count_html_characters:
       type: boolean
       label: 'Whether or not HTML characters should be included in the character count.'
@@ -55,6 +58,9 @@ field.widget.settings.text_textarea_with_summary_and_counter:
     js_prevent_submit:
       type: boolean
       label: 'Whether or not form submission should be prevented using JavaScript when the character limit has been crossed'
+    count_only_mode:
+      type: boolean
+      label: 'When true, the form API will fail validation when the total characters exceed maxlength.'
     count_html_characters:
       type: boolean
       label: 'Whether or not HTML characters should be included in the character count.'
@@ -81,6 +87,9 @@ field.widget.settings.string_textarea_with_counter:
     js_prevent_submit:
       type: boolean
       label: 'Whether or not form submission should be prevented using JavaScript when the character limit has been crossed'
+    count_only_mode:
+      type: boolean
+      label: 'When true, the form API will fail validation when the total characters exceed maxlength.'
     count_html_characters:
       type: boolean
       label: 'Whether or not HTML characters should be included in the character count.'
@@ -110,6 +119,9 @@ field.widget.settings.string_textfield_with_counter:
     js_prevent_submit:
       type: boolean
       label: 'Whether or not form submission should be prevented using JavaScript when the character limit has been crossed'
+    count_only_mode:
+      type: boolean
+      label: 'When true, the form API will fail validation when the total characters exceed maxlength.'
     count_html_characters:
       type: boolean
       label: 'Whether or not HTML characters should be included in the character count.'
@@ -139,6 +151,9 @@ field.widget.settings.text_textfield_with_counter:
     js_prevent_submit:
       type: boolean
       label: 'Whether or not form submission should be prevented using JavaScript when the character limit has been crossed'
+    count_only_mode:
+      type: boolean
+      label: 'Enable character counting only, skipping all validation.  User may submit any length of input'
     count_html_characters:
       type: boolean
       label: 'Whether or not HTML characters should be included in the character count.'

@@ -3,7 +3,7 @@
 namespace Drupal\devel;
 
 /**
- * Interface DevelDumperManagerInterface.
+ * Interface for DevelDumper manager.
  *
  * @package Drupal\devel
  */
@@ -27,14 +27,16 @@ interface DevelDumperManagerInterface {
    * @param mixed $input
    *   The variable to dump.
    * @param string $name
-   *   (optional) The label to output before variable, defaults to NULL.
+   *   (optional) The label to output before variable.
    * @param string $plugin_id
    *   (optional) The plugin ID, defaults to NULL.
+   * @param bool $load_references
+   *   If the input is an entity, load the referenced entities.
    *
    * @return string
    *   String representation of a variable.
    */
-  public function export($input, $name = NULL, $plugin_id = NULL);
+  public function export($input, $name = NULL, $plugin_id = NULL, $load_references = FALSE);
 
   /**
    * Sets a message with a string representation of a variable.
@@ -42,13 +44,15 @@ interface DevelDumperManagerInterface {
    * @param mixed $input
    *   The variable to dump.
    * @param string $name
-   *   (optional) The label to output before variable, defaults to NULL.
+   *   The label to output before variable.
    * @param string $type
-   *   (optional) The message's type. Defaults to 'status'.
+   *   The message's type.
    * @param string $plugin_id
-   *   (optional) The plugin ID, defaults to NULL.
+   *   The plugin ID.
+   * @param bool $load_references
+   *   If the input is an entity, load the referenced entities.
    */
-  public function message($input, $name = NULL, $type = 'status', $plugin_id = NULL);
+  public function message($input, $name = NULL, $type = 'status', $plugin_id = NULL, $load_references = FALSE);
 
   /**
    * Logs a variable to a drupal_debug.txt in the site's temp directory.
@@ -92,13 +96,15 @@ interface DevelDumperManagerInterface {
    * @param mixed $input
    *   The variable to export.
    * @param string $name
-   *   (optional) The label to output before variable, defaults to NULL.
+   *   The label to output before variable.
    * @param string $plugin_id
-   *   (optional) The plugin ID, defaults to NULL.
+   *   The plugin ID.
+   * @param bool $load_references
+   *   If the input is an entity, also load the referenced entities.
    *
    * @return array
    *   String representation of a variable wrapped in a render array.
    */
-  public function exportAsRenderable($input, $name = NULL, $plugin_id = NULL);
+  public function exportAsRenderable($input, $name = NULL, $plugin_id = NULL, $load_references = FALSE);
 
 }

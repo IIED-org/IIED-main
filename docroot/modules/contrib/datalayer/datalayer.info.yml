@@ -5,7 +5,7 @@ core_version_requirement: ^9.4 || ^10
 type: module
 configure: datalayer.settings_form
 
-# Information added by Drupal.org packaging script on 2023-01-17
-version: '2.0.0-rc1'
+# Information added by Drupal.org packaging script on 2023-08-22
+version: '2.0.1'
 project: 'datalayer'
-datestamp: 1673987579
+datestamp: 1692714780

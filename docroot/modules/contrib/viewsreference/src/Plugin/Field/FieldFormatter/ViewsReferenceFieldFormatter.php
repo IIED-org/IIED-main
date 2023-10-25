@@ -2,10 +2,11 @@
 
 namespace Drupal\viewsreference\Plugin\Field\FieldFormatter;
 
-use Drupal\views\Views;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Security\TrustedCallbackInterface;
+use Drupal\views\Views;
 
 /**
  * Field formatter for Viewsreference Field.
@@ -16,7 +17,7 @@ use Drupal\Core\Form\FormStateInterface;
  *   field_types = {"viewsreference"}
  * )
  */
-class ViewsReferenceFieldFormatter extends FormatterBase {
+class ViewsReferenceFieldFormatter extends FormatterBase implements TrustedCallbackInterface {
 
   /**
    * {@inheritdoc}
@@ -35,7 +36,7 @@ class ViewsReferenceFieldFormatter extends FormatterBase {
     $types = Views::pluginList();
     $options = [];
     foreach ($types as $key => $type) {
-      if ($type['type'] == 'display') {
+      if ('display' == $type['type']) {
         $options[str_replace('display:', '', $key)] = $type['title']->render();
       }
     }
@@ -69,11 +70,18 @@ class ViewsReferenceFieldFormatter extends FormatterBase {
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
     $elements = [];
+
+    // Get the information for the parent entity and field to allow
+    // customizing the view / view results.
+    $parent_entity_type = $items->getEntity()->getEntityTypeId();
+    $parent_entity_id = $items->getEntity()->id();
+    $parent_field_name = $items->getFieldDefinition()->getName();
+
     foreach ($items as $delta => $item) {
       $view_name = $item->getValue()['target_id'];
       $display_id = $item->getValue()['display_id'];
-      $data = unserialize($item->getValue()['data'], ['allowed_classes' => FALSE]);
       $view = Views::getView($view_name);
+
       // Add an extra check because the view could have been deleted.
       if (!is_object($view)) {
         continue;
@@ -81,40 +89,96 @@ class ViewsReferenceFieldFormatter extends FormatterBase {
 
       $view->setDisplay($display_id);
       $enabled_settings = array_filter($this->getFieldSetting('enabled_settings') ?? []);
-
-      // Add properties to the view so our hook_views_pre_build() implementation
-      // can alter the view. This is pretty hacky, but we need this to fix ajax
-      // behaviour in views. The hook_views_pre_build() needs to know if the
-      // view was part of a viewsreference field or not.
-      $view->element['#viewsreference'] = [
-        'data' => $data,
-        'enabled_settings' => $enabled_settings,
+      $elements[$delta] = [
+        '#lazy_builder' => [
+          static::class . '::lazyBuilder',
+          [
+            $view_name,
+            $display_id,
+            $item->getValue()['data'] ?? '',
+            serialize($enabled_settings),
+            !empty(array_filter($this->getSetting('plugin_types'))),
+            $parent_entity_type,
+            (string) $parent_entity_id,
+            $parent_field_name,
+          ],
+        ],
+        '#create_placeholder' => TRUE,
       ];
+    }
+    return $elements;
+  }
 
-      $view->preExecute();
-      $view->execute($display_id);
+  /**
+   * {@inheritdoc}
+   */
+  public static function trustedCallbacks() {
+    return ['lazyBuilder'];
+  }
 
-      if (!empty($view->result) || !empty($view->empty) || !empty($view->exposed_widgets)) {
-        // Show view if there are results or empty behaviour defined or exposed widgets.
-        if ($this->getSetting('plugin_types')) {
-          // Add a custom template if the title is available.
-          $title = $view->getTitle();
-          if (!empty($title)) {
-            // If the title contains tokens, we need to render the view to
-            // populate the rowTokens.
-            if (strpos($title, '{{') !== FALSE) {
-              $view->render();
-              $title = $view->getTitle();
-            }
-            $elements[$delta]['title'] = [
-              '#theme' => 'viewsreference__view_title',
-              '#title' => $title,
-            ];
+  /**
+   * Lazy builder callback.
+   *
+   * @param string $view_name
+   *   The view name.
+   * @param string $display_id
+   *   The display ID.
+   * @param string $data
+   *   A serialized string containing the settings data.
+   * @param string $enabled_settings
+   *   A serialized string containing the enabled settings.
+   * @param bool $plugin_types
+   *   Whether plugin types were enabled.
+   * @param string|null $parent_entity_type
+   *   The parent entity type.
+   * @param string|null $parent_entity_id
+   *   The parent entity ID.
+   * @param string|null $parent_field_name
+   *   The parent field name.
+   */
+  public static function lazyBuilder(string $view_name, string $display_id, string $data, string $enabled_settings, bool $plugin_types, ?string $parent_entity_type, ?string $parent_entity_id, ?string $parent_field_name): array {
+    $unserialized_data = !empty($data) ? unserialize($data, ['allowed_classes' => FALSE]) : [];
+    $unserialized_enabled_settings = !empty($enabled_settings) ? unserialize($enabled_settings, ['allowed_classes' => FALSE]) : [];
+    $view = Views::getView($view_name);
+
+    // Add an extra check because the view could have been deleted.
+    if (!is_object($view)) {
+      return [];
+    }
+
+    $view->setDisplay($display_id);
+    // Add properties to the view so our hook_views_pre_build() implementation
+    // can alter the view. This is pretty hacky, but we need this to fix ajax
+    // behaviour in views. The hook_views_pre_build() needs to know if the
+    // view was part of a viewsreference field or not.
+    $view->element['#viewsreference'] = [
+      'data' => $unserialized_data,
+      'enabled_settings' => $unserialized_enabled_settings,
+      'parent_entity_type' => $parent_entity_type,
+      'parent_entity_id' => $parent_entity_id,
+      'parent_field_name' => $parent_field_name,
+    ];
+
+    $view->preExecute();
+    $view->execute($display_id);
+
+    $render_array = $view->buildRenderable($display_id, $view->args, FALSE);
+    if ($plugin_types) {
+      if (!empty($view->result) || !empty($view->empty)) {
+        // Add a custom template if the title is available.
+        $title = $view->getTitle();
+        if (!empty($title)) {
+          // If the title contains tokens, we need to render the view to
+          // populate the rowTokens.
+          if (mb_strpos($title, '{{') !== FALSE) {
+            $view->render();
+            $title = $view->getTitle();
           }
+          $render_array['title'] = [
+            '#theme' => 'viewsreference__view_title',
+            '#title' => $title,
+          ];
         }
-
-        $render_array = $view->buildRenderable($display_id, $view->args, FALSE);
-
         // The views_add_contextual_links() function needs the following
         // information in the render array in order to attach the contextual
         // links to the view.
@@ -122,11 +186,12 @@ class ViewsReferenceFieldFormatter extends FormatterBase {
         $render_array['#view_display_show_admin_links'] = $view->getShowAdminLinks();
         $render_array['#view_display_plugin_id'] = $view->getDisplay()->getPluginId();
         views_add_contextual_links($render_array, $render_array['#view_display_plugin_id'], $display_id);
-
-        $elements[$delta]['contents'] = $render_array;
       }
     }
-    return $elements;
+
+    // #lazy_builder can't return elements with #type, so we need to add a
+    // wrapper.
+    return [$render_array];
   }
 
 }

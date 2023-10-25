@@ -1,26 +1,60 @@
 dragula:
   remote: https://github.com/bevacqua/dragula
-  verion: 3.7.2
+  version: 3.7.2
   license:
     name: MIT
     url: https://github.com/bevacqua/dragula/blob/master/license
     gpl-compatible: true
+  directory: dragula
+  cdn:
+    /libraries/dragula/dist/: https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/
   css:
     theme:
-      https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.css: {type: external, minified: true}
+      /libraries/dragula/dist/dragula.min.css: { minified: true }
   js:
-    https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js: {type: external, minified: true}
+    /libraries/dragula/dist/dragula.min.js: { minified: true }
 
-layout_paragraphs_widget:
+component_form:
+  js:
+    js/component-form.js: {}
+  dependencies:
+    - core/jquery
+
+component_list:
   css:
     layout:
-      css/layout-paragraphs-widget.css: {}
+      css/component-list.css: {}
   js:
-    js/layout-paragraphs-widget.js: {}
+    js/component-list.js: {}
+  dependencies:
+    - core/jquery
+
+builder:
+  css:
+    layout:
+      css/builder.css: {}
+  js:
+    js/builder.js: {}
   dependencies:
     - layout_paragraphs/dragula
     - core/jquery
-    - core/jquery.ui.draggable
+    - core/once
     - core/drupal.dialog
     - core/drupal.dialog.ajax
     - core/drupal.ajax
+    - core/drupal.debounce
+
+builder_form:
+  css:
+    layout:
+      css/builder-form.css: {}
+  js:
+    js/builder-form.js: {}
+  dependencies:
+    - core/jquery
+    - core/once
+
+layout_select:
+  css:
+    layout:
+      css/layout-select.css: {}

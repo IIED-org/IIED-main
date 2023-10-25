@@ -3,6 +3,7 @@
 namespace Drupal\serial;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Entity\EntityFieldManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -26,19 +27,25 @@ class SerialSQLStorage implements ContainerInjectionInterface, SerialStorageInte
   protected $entityTypeManager;
 
   /**
+   * Drupal\Core\Entity\EntityTypeManager definition.
+   *
+   * @var \Drupal\Core\Entity\EntityFieldManager
+   */
+  protected $entityFieldManager;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager) {
+  public function __construct(EntityTypeManagerInterface $entityTypeManager, EntityFieldManager $entityFieldManager) {
     $this->entityTypeManager = $entityTypeManager;
+    $this->entityFieldManager = $entityFieldManager;
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('entity_type.manager')
-    );
+    return new static($container->get('entity_type.manager'), $container->get('entity_field.manager'));
   }
 
   /**
@@ -79,7 +86,7 @@ class SerialSQLStorage implements ContainerInjectionInterface, SerialStorageInte
         ->execute();
 
       // If there's a reason why it's come back undefined, reset it.
-      $sid = isset($sid) ? $sid : 0;
+      $sid = $sid ?? 0;
 
       // Delete the temporary record.
       if ($delete && $sid && ($sid % 10) == 0) {
@@ -147,7 +154,7 @@ class SerialSQLStorage implements ContainerInjectionInterface, SerialStorageInte
    * {@inheritdoc}
    */
   public function getAllFields() {
-    return \Drupal::getContainer()->get('entity_field.manager')->getFieldMapByFieldType(SerialStorageInterface::SERIAL_FIELD_TYPE);
+    return $this->entityFieldManager->getFieldMapByFieldType(SerialStorageInterface::SERIAL_FIELD_TYPE);
   }
 
   /**

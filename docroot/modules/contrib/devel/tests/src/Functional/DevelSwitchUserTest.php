@@ -42,7 +42,7 @@ class DevelSwitchUserTest extends DevelBrowserTestBase {
   /**
    * Set up test.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->block = $this->drupalPlaceBlock('devel_switch_user', ['id' => 'switch-user', 'label' => 'Switch Hit']);
@@ -68,7 +68,7 @@ class DevelSwitchUserTest extends DevelBrowserTestBase {
     $this->drupalLogin($this->develUser);
 
     $this->drupalGet('');
-    $this->assertSession()->pageTextContains($this->block->label(), 'Block title was found.');
+    $this->assertSession()->pageTextContains($this->block->label());
 
     // Ensure that if name in not passed the controller returns access denied.
     $this->drupalGet('/devel/switch');
@@ -91,7 +91,7 @@ class DevelSwitchUserTest extends DevelBrowserTestBase {
 
     // Use the search form to switch to another account.
     $edit = ['userid' => $this->switchUser->getDisplayName()];
-    $this->drupalPostForm(NULL, $edit, 'Switch');
+    $this->submitForm($edit, 'Switch');
     $this->assertSessionByUid($this->switchUser->id());
     $this->assertNoSessionByUid($this->develUser->id());
   }
@@ -110,7 +110,7 @@ class DevelSwitchUserTest extends DevelBrowserTestBase {
     $this->drupalLogin($this->develUser);
 
     $this->drupalGet('');
-    $this->assertSession()->pageTextContains($this->block->label(), 'Block title was found.');
+    $this->assertSession()->pageTextContains($this->block->label());
 
     // Ensure that block default configuration is effectively used. The block
     // default configuration is the following:
@@ -209,11 +209,11 @@ class DevelSwitchUserTest extends DevelBrowserTestBase {
    * Helper function for verify the number of items shown in the user list.
    *
    * @param int $number
-   *   The expected numer of items.
+   *   The expected number of items.
    */
   public function assertSwitchUserListCount($number) {
     $result = $this->xpath('//div[@id=:block]//ul/li/a', [':block' => 'block-switch-user']);
-    $this->assertTrue(count($result) == $number, 'The number of users shown in switch user is correct.');
+    $this->assertCount($number, $result);
   }
 
   /**
@@ -281,7 +281,7 @@ class DevelSwitchUserTest extends DevelBrowserTestBase {
     // Check that we have some results.
     $this->assertNotEmpty($result, sprintf('No session found for uid %s', $uid));
     // If there is more than one session, then that must be unexpected.
-    $this->assertTrue(count($result) == 1, sprintf('Found more than one session for uid %s', $uid));
+    $this->assertCount(1, $result, sprintf('Found more than one session for uid %s', $uid));
   }
 
   /**
@@ -299,7 +299,7 @@ class DevelSwitchUserTest extends DevelBrowserTestBase {
     $query->fields('sessions', ['uid']);
     $query->condition('uid', $uid);
     $result = $query->execute()->fetchAll();
-    $this->assertTrue(empty($result), "No session for uid $uid found.");
+    $this->assertEmpty($result, "No session for uid $uid found.");
   }
 
 }

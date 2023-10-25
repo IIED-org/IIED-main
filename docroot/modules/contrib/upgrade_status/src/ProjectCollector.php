@@ -481,7 +481,14 @@ class ProjectCollector {
     }
 
     // Read our shipped snapshot of Drupal 10 plans to find this one.
-    $file = fopen(drupal_get_path('module', 'upgrade_status') . '/project_plans.csv', 'r');
+    if (function_exists('drupal_get_path')) {
+      // @todo remove compatibility layer with Drupal 9.3.0 when removing Drupal 9 compatibility.
+      $module_path = drupal_get_path('module', 'upgrade_status');
+    }
+    else {
+      $module_path = \Drupal::service('extension.list.module')->getPath('upgrade_status');
+    }
+    $file = fopen($module_path . '/project_plans.csv', 'r');
     while ($line = fgetcsv($file, 0, ";")) {
       if ($line[0] == $project_machine_name) {
         fclose($file);
@@ -586,11 +593,11 @@ class ProjectCollector {
   public static function getOldestSupportedMinor(): string {
     $major = (int) \Drupal::VERSION;
     switch ($major) {
-      case 8:
-        return '8.9';
       case 9:
-        return '9.2';
-    }
+        return '9.4';
+      case 10:
+        return '10.0';
+      }
     return '';
   }
 

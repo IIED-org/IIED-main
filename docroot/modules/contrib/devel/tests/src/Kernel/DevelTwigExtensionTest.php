@@ -8,6 +8,7 @@ use Drupal\devel\Twig\Extension\Debug;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
+use Twig\TwigFunction;
 
 /**
  * Tests Twig extensions.
@@ -36,7 +37,7 @@ class DevelTwigExtensionTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->installEntitySchema('user');
@@ -80,7 +81,7 @@ class DevelTwigExtensionTest extends KernelTestBase {
    * Tests that the Twig dump functions are registered properly.
    */
   public function testDumpFunctionsRegistered() {
-    /** @var \Twig_SimpleFunction[] $functions */
+    /** @var \Twig\TwigFunction[] $functions */
     $functions = \Drupal::service('twig')->getFunctions();
 
     $dump_functions = ['devel_dump', 'kpr'];
@@ -89,7 +90,7 @@ class DevelTwigExtensionTest extends KernelTestBase {
 
     foreach ($registered_functions as $name) {
       $function = $functions[$name];
-      $this->assertTrue($function instanceof \Twig_SimpleFunction);
+      $this->assertTrue($function instanceof TwigFunction);
       $this->assertEquals($function->getName(), $name);
       $this->assertTrue($function->needsContext());
       $this->assertTrue($function->needsEnvironment());
@@ -109,9 +110,9 @@ class DevelTwigExtensionTest extends KernelTestBase {
    * Tests that the Twig function for XDebug integration is registered properly.
    */
   public function testXdebugIntegrationFunctionsRegistered() {
-    /** @var \Twig_SimpleFunction $function */
+    /** @var \Twig\TwigFunction $function */
     $function = \Drupal::service('twig')->getFunction('devel_breakpoint');
-    $this->assertTrue($function instanceof \Twig_SimpleFunction);
+    $this->assertTrue($function instanceof TwigFunction);
     $this->assertEquals($function->getName(), 'devel_breakpoint');
     $this->assertTrue($function->needsContext());
     $this->assertTrue($function->needsEnvironment());

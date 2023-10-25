@@ -3,7 +3,6 @@
 namespace Drupal\Tests\layout_builder_styles\Functional;
 
 use Drupal\layout_builder\Entity\LayoutBuilderEntityViewDisplay;
-use Drupal\node\Entity\Node;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\layout_builder_styles\Entity\LayoutBuilderStyle;
 use Drupal\layout_builder_styles\Entity\LayoutBuilderStyleGroup;
@@ -53,7 +52,7 @@ class LayoutBuilderStyleGroupTest extends BrowserTestBase {
   }
 
   /**
-   * Test Layout Builder section groups (with styles) can be created and applied.
+   * Test that section groups (with styles) can be created and applied.
    */
   public function testSectionStyleGroups() {
     $assert_session = $this->assertSession();
@@ -80,7 +79,7 @@ class LayoutBuilderStyleGroupTest extends BrowserTestBase {
       'id' => 'testmulti',
       'multiselect' => LayoutBuilderStyleGroupInterface::TYPE_MULTIPLE,
       'form_type' => LayoutBuilderStyleGroupInterface::TYPE_MULTIPLE_SELECT,
-      'required' => false,
+      'required' => FALSE,
     ])->save();
 
     LayoutBuilderStyleGroup::create([
@@ -96,7 +95,7 @@ class LayoutBuilderStyleGroupTest extends BrowserTestBase {
       'id' => 'testsingle',
       'multiselect' => LayoutBuilderStyleGroupInterface::TYPE_SINGLE,
       'form_type' => LayoutBuilderStyleGroupInterface::TYPE_CHECKBOXES,
-      'required' => false,
+      'required' => FALSE,
     ])->save();
 
     LayoutBuilderStyleGroup::create([
@@ -104,7 +103,7 @@ class LayoutBuilderStyleGroupTest extends BrowserTestBase {
       'id' => 'testempty',
       'multiselect' => LayoutBuilderStyleGroupInterface::TYPE_SINGLE,
       'form_type' => LayoutBuilderStyleGroupInterface::TYPE_CHECKBOXES,
-      'required' => false,
+      'required' => FALSE,
     ])->save();
 
     // Create styles for section.
@@ -205,6 +204,6 @@ class LayoutBuilderStyleGroupTest extends BrowserTestBase {
     $assert_session->responseContains('foo2-style-class bar2-style-class');
     $assert_session->responseContains('foo3-style-class bar3-style-class');
     $assert_session->responseNotContains('foo4-style-class bar4-style-class');
-
   }
+
 }

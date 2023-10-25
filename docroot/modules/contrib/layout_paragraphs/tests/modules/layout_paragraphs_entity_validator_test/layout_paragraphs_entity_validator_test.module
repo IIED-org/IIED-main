@@ -1,0 +1,11 @@
+<?php
+
+/**
+ * Implements hook_entity_type_alter().
+ *
+ * @param array $entity_types
+ */
+function layout_paragraphs_entity_validator_test_entity_type_alter(array &$entity_types) {
+  // Add validation constraint to the paragraph entity
+  $entity_types['paragraph']->addConstraint('LayoutParagraphsTestConstraint');
+}

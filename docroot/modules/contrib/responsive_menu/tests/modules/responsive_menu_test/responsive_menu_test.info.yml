@@ -2,6 +2,7 @@ name: 'Responsive Menu Test'
 type: module
 description: 'Support module for Responsive Menu tests.'
 package: Testing
+core_version_requirement: ^9 || ^10
 dependencies:
   - drupal:node
   - drupal:filter

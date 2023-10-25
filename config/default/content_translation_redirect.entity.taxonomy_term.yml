@@ -1,0 +1,9 @@
+uuid: f80f66b1-b96a-44f5-bd8e-ad5ef9601559
+langcode: en
+status: true
+dependencies: {  }
+id: taxonomy_term
+label: 'Taxonomy term'
+code: 302
+path: ''
+translatable_entity_only: false

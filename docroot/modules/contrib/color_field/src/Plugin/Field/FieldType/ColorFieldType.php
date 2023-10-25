@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\color_field\Plugin\Field\FieldType;
 
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -23,34 +25,16 @@ use Drupal\Core\TypedData\DataDefinition;
 class ColorFieldType extends FieldItemBase {
 
   /**
-   * {@inheritdoc}
+   * Hex value of color.
+   *
+   * @var string
    */
-  public static function mainPropertyName() {
-    return 'color';
-  }
+  protected string $color;
 
   /**
    * {@inheritdoc}
    */
-  public static function defaultFieldSettings() {
-    return [
-      'opacity' => TRUE,
-    ] + parent::defaultFieldSettings();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function defaultStorageSettings() {
-    return [
-      'format' => '#HEXHEX',
-    ] + parent::defaultStorageSettings();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function storageSettingsForm(array &$form, FormStateInterface $form_state, $has_data) {
+  public function storageSettingsForm(array &$form, FormStateInterface $form_state, $has_data): array {
     $element = [];
 
     $element['format'] = [
@@ -66,15 +50,13 @@ class ColorFieldType extends FieldItemBase {
       ],
     ];
 
-    $element += parent::storageSettingsForm($form, $form_state, $has_data);
-
-    return $element;
+    return $element + parent::storageSettingsForm($form, $form_state, $has_data);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function fieldSettingsForm(array $form, FormStateInterface $form_state) {
+  public function fieldSettingsForm(array $form, FormStateInterface $form_state): array {
     $element = [];
 
     $element['opacity'] = [
@@ -90,56 +72,16 @@ class ColorFieldType extends FieldItemBase {
   /**
    * {@inheritdoc}
    */
-  public static function schema(FieldStorageDefinitionInterface $field_definition) {
-    $format = $field_definition->getSetting('format');
-    $color_length = isset($format) ? strlen($format) : 7;
-    return [
-      'columns' => [
-        'color' => [
-          'description' => 'The color value',
-          'type' => 'varchar',
-          'length' => $color_length,
-          'not null' => FALSE,
-        ],
-        'opacity' => [
-          'description' => 'The opacity/alphavalue property',
-          'type' => 'float',
-          'size' => 'tiny',
-          'not null' => FALSE,
-        ],
-      ],
-      'indexes' => [
-        'color' => ['color'],
-      ],
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function propertyDefinitions(FieldStorageDefinitionInterface $field_definition) {
-    // Prevent early t() calls by using the TranslatableMarkup.
-    $properties['color'] = DataDefinition::create('string')
-      ->setLabel(new TranslatableMarkup('Color'));
-
-    $properties['opacity'] = DataDefinition::create('float')
-      ->setLabel(new TranslatableMarkup('Opacity'));
-
-    return $properties;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function isEmpty() {
+  public function isEmpty(): bool {
     $value = $this->get('color')->getValue();
+
     return $value === NULL || $value === '';
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getConstraints() {
+  public function getConstraints(): array {
     $constraint_manager = \Drupal::typedDataManager()->getValidationConstraintManager();
     $constraints = parent::getConstraints();
 
@@ -187,13 +129,129 @@ class ColorFieldType extends FieldItemBase {
   /**
    * {@inheritdoc}
    */
-  public static function generateSampleValue(FieldDefinitionInterface $field_definition) {
+  public function preSave() {
+    parent::preSave();
+
+    if ($format = $this->getSetting('format')) {
+      $color = $this->get('color')->getValue();
+
+      // Clean up data and format it.
+      $color = trim($color);
+
+      if (str_starts_with($color, '#')) {
+        $color = substr($color, 1);
+      }
+      switch ($format) {
+        case '#HEXHEX':
+          $color = '#' . strtoupper($color);
+
+          break;
+
+        case 'HEXHEX':
+          $color = strtoupper($color);
+
+          break;
+
+        case '#hexhex':
+          $color = '#' . strtolower($color);
+
+          break;
+
+        case 'hexhex':
+          $color = strtolower($color);
+
+          break;
+      }
+      $this->set('color', $color);
+    }
+    if ($this->getSetting('opacity')) {
+      return;
+    }
+
+    $this->set('opacity', NULL);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function mainPropertyName(): string {
+    return 'color';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function defaultFieldSettings(): array {
+    return [
+      'opacity' => TRUE,
+    ] + parent::defaultFieldSettings();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function defaultStorageSettings(): array {
+    return [
+      'format' => '#HEXHEX',
+    ] + parent::defaultStorageSettings();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function schema(FieldStorageDefinitionInterface $field_definition): array {
+    $format = $field_definition->getSetting('format');
+    $color_length = isset($format)
+        ? strlen($format)
+        : 7;
+
+    return [
+      'columns' => [
+        'color' => [
+          'description' => 'The color value',
+          'type' => 'varchar',
+          'length' => $color_length,
+          'not null' => FALSE,
+        ],
+        'opacity' => [
+          'description' => 'The opacity/alphavalue property',
+          'type' => 'float',
+          'size' => 'tiny',
+          'not null' => FALSE,
+        ],
+      ],
+      'indexes' => [
+        'color' => ['color'],
+      ],
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function propertyDefinitions(FieldStorageDefinitionInterface $field_definition): array {
+    $properties = [];
+    $properties['color'] = DataDefinition::create('string')
+      ->setLabel(new TranslatableMarkup('Color'));
+
+    $properties['opacity'] = DataDefinition::create('float')
+      ->setLabel(new TranslatableMarkup('Opacity'));
+
+    return $properties;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function generateSampleValue(FieldDefinitionInterface $field_definition): array {
     $settings = $field_definition->getSettings();
+    $values = [];
 
     if ($format = $settings['format']) {
       switch ($format) {
         case '#HEXHEX':
           $values['color'] = '#111AAA';
+
           break;
 
         case 'HEXHEX':
@@ -213,48 +271,6 @@ class ColorFieldType extends FieldItemBase {
     $values['opacity'] = 1;
 
     return $values;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function preSave() {
-    parent::preSave();
-
-    if ($format = $this->getSetting('format')) {
-      $color = $this->color;
-
-      // Clean up data and format it.
-      $color = trim($color);
-
-      if (substr($color, 0, 1) === '#') {
-        $color = substr($color, 1);
-      }
-
-      switch ($format) {
-        case '#HEXHEX':
-          $color = '#' . strtoupper($color);
-          break;
-
-        case 'HEXHEX':
-          $color = strtoupper($color);
-          break;
-
-        case '#hexhex':
-          $color = '#' . strtolower($color);
-          break;
-
-        case 'hexhex':
-          $color = strtolower($color);
-          break;
-      }
-
-      $this->color = $color;
-    }
-
-    if (!$this->getSetting('opacity')) {
-      unset($this->opacity);
-    }
   }
 
 }

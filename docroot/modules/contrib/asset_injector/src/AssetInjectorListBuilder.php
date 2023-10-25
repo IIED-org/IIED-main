@@ -70,7 +70,8 @@ class AssetInjectorListBuilder extends ConfigEntityListBuilder {
       $data['conditions'][$condition_id] = $this->t('%plugin is configured.', ['%plugin' => $condition->getPluginDefinition()['label']]);
       /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $summary */
       if ($summary = $condition->summary()) {
-        $data['conditions'][$condition_id] = Html::decodeEntities($summary->render());
+        $data['conditions'][$condition_id] = is_string($summary) ? Html::decodeEntities($summary) : Html::decodeEntities($summary->render());
+
       }
     }
 

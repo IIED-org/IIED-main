@@ -9,7 +9,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\layout_builder\LayoutBuilderEvents;
 
 /**
- * Class BlockComponentRenderArraySubscriber.
+ * Event subscriber to the initial render array.
  */
 class BlockComponentRenderArraySubscriber implements EventSubscriberInterface {
 
@@ -46,7 +46,10 @@ class BlockComponentRenderArraySubscriber implements EventSubscriberInterface {
   public static function getSubscribedEvents() {
     // Layout Builder also subscribes to this event to build the initial render
     // array. We use a higher weight so that we execute after it.
-    $events[LayoutBuilderEvents::SECTION_COMPONENT_BUILD_RENDER_ARRAY] = ['onBuildRender', 50];
+    $events[LayoutBuilderEvents::SECTION_COMPONENT_BUILD_RENDER_ARRAY] = [
+      'onBuildRender',
+      50,
+    ];
     return $events;
   }
 

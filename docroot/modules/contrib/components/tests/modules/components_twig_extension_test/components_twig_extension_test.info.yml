@@ -3,7 +3,7 @@ type: module
 description: 'Support module for Components twig extension testing.'
 package: Testing
 
-# Information added by Drupal.org packaging script on 2021-04-19
-version: '8.x-2.4'
+# Information added by Drupal.org packaging script on 2022-05-05
+version: '3.0.0-beta3'
 project: 'components'
-datestamp: 1618861607
+datestamp: 1651759491

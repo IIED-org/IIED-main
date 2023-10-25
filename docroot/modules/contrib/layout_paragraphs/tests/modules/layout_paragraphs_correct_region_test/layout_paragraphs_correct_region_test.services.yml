@@ -1,0 +1,5 @@
+services:
+  layout_paragraphs_correct_region_test_update_layout_subscriber:
+    class: \Drupal\layout_paragraphs_correct_region_test\EventSubscriber\LayoutParagraphsRefreshLayoutSubscriber
+    tags:
+      - { name: 'event_subscriber' }

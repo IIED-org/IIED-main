@@ -49,31 +49,12 @@ function webform_library_info_build() {
 function webform_library_info_alter(&$libraries, $extension) {
   // Only alter modules that declare webform libraries.
   // @see hook_webform_libraries_info()
-  $webform_libraries_modules = \Drupal::moduleHandler()->getImplementations('webform_libraries_info');
-  $webform_libraries_modules[] = 'webform';
-
-  if (!in_array($extension, $webform_libraries_modules)) {
+  if ($extension !== 'webform' && !\Drupal::moduleHandler()->hasImplementations('webform_libraries_info', $extension)) {
     return;
   }
 
   /** @var \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager */
   $libraries_manager = \Drupal::service('webform.libraries_manager');
-
-  // Use Tippy.js 6.x which is compatible with Drupal 9.x.
-  if (isset($libraries['libraries.tippyjs']) && floatval(\Drupal::VERSION) >= 9) {
-    $tippyjs_library = $libraries_manager->getLibrary('tippyjs/6.x');
-    $libraries['libraries.tippyjs']['directory'] = 'tippyjs/6.x';
-    $libraries['libraries.tippyjs']['version'] = $tippyjs_library['version'];
-    $libraries['libraries.tippyjs']['cdn'] = ['/libraries/tippyjs/6.x/' => 'https://unpkg.com/tippy.js@' . $tippyjs_library['version'] . '/dist/'];
-    $libraries['libraries.tippyjs']['js'] = ['/libraries/tippyjs/6.x/' . basename($tippyjs_library['download_url']->toString()) => []];
-  }
-
-  // If webform date element in D8 use the old dependency on 'core/drupal.date'.
-  if (isset($libraries['webform.element.date'])
-    && floatval(\Drupal::VERSION) < 9
-    && !\Drupal::moduleHandler()->moduleExists('jquery_ui_datepicker')) {
-    $libraries['webform.element.date']['dependencies'] = ['core/drupal.date', 'core/drupalSettings'];
-  }
 
   // If old version of the progress tracker (< 2.0.7) is installed
   // use the progress-tracker.css in /docs instead of /src.
@@ -184,23 +165,21 @@ function _webform_library_info_alter_recursive(array &$library, array $cdn) {
  * Implements hook_css_alter().
  */
 function webform_css_alter(&$css, AttachedAssetsInterface $assets) {
-  // Remove the stable.theme's off-canvas CSS reset for webform admin routes.
+  // Remove the off-canvas CSS reset for webform admin routes.
   // @see https://www.drupal.org/project/drupal/issues/2826722
-  //
-  // NOTE: Most admin themes correctly style jQuery UI dialogs because Drupal's
-  // admin UI, especially Views, relies on them.
-  $use_off_canvas = WebformDialogHelper::useOffCanvas();
-  // @todo Remove once Claro theme support offcanvas tray.
-  $route_name = \Drupal::routeMatch()->getRouteName();
-  $is_claro_theme = \Drupal::service('webform.theme_manager')->isActiveTheme('claro');
-  $is_admin_route = \Drupal::service('router.admin_context')->isAdminRoute();
-  $is_webform_route = ($route_name && preg_match('/(^webform|^entity\.webform|^entity\.node\.webform)/', $route_name));
-  if ($is_claro_theme || ($use_off_canvas && $is_admin_route && $is_webform_route)) {
-    foreach ($css as $key => $item) {
-      // @see 'core/misc/dialog/off-canvas
-      // @see core/themes/stable/css/core/dialog/off-canvas
-      if (strpos($key, '/off-canvas.') !== FALSE) {
-        unset($css[$key]);
+  if (WebformDialogHelper::useOffCanvas()) {
+    $has_webform_css = FALSE;
+    foreach (array_keys($css) as $key) {
+      if (str_contains($key, '/webform.admin.css')) {
+        $has_webform_css = TRUE;
+        break;
+      }
+    }
+    if ($has_webform_css) {
+      foreach ($css as $key => $item) {
+        if (str_contains($key, '/off-canvas')) {
+          unset($css[$key]);
+        }
       }
     }
   }

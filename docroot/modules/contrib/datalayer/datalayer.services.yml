@@ -1,0 +1,4 @@
+services:
+  datalayer.lazy_builders:
+    class: Drupal\datalayer\DatalayerLazyBuilders
+    arguments: ['@config.factory', '@router.admin_context']

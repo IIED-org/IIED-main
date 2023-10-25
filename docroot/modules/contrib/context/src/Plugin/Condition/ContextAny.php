@@ -89,7 +89,7 @@ class ContextAny extends ConditionPluginBase implements ContainerFactoryPluginIn
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildConfigurationForm($form, $form_state);
-    unset($form['negate']);
+    $form['negate']['#access'] = FALSE;
     $form['values'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Context (any)'),
@@ -143,9 +143,10 @@ class ContextAny extends ConditionPluginBase implements ContainerFactoryPluginIn
     // Handle negated contexts first.
     foreach ($negated_contexts as $name) {
       /** @var \Drupal\context\ContextInterface $negated_context */
-      $negated_context = $this->contextManager->getContext($name);
-      if ($this->contextManager->evaluateContextConditions($negated_context) && !$negated_context->disabled()) {
-        return FALSE;
+      if ($negated_context = $this->contextManager->getContext($name)) {
+        if ($this->contextManager->evaluateContextConditions($negated_context) && !$negated_context->disabled()) {
+          return FALSE;
+        }
       }
     }
 

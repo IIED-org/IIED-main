@@ -14,7 +14,8 @@ archive: false
 id: test_element_other
 title: 'Test: Element: Other'
 description: 'Test the webform other elements, includes select_other, checkboxes_other and radios_other.'
-category: 'Test: Element'
+categories:
+  - 'Test: Element'
 elements: |
   select_other:
     '#type': details
@@ -103,6 +104,25 @@ elements: |
       '#other__option_label': 'Is there another option you wish to enter?'
       '#other__placeholder': 'What is this other option'
       '#other__description': 'Other checkbox description'
+    checkboxes_other_indexed:
+      '#type': webform_checkboxes_other
+      '#title': 'Checkboxes other indexed'
+      '#options':
+        - 'Zero'
+        - 'One'
+        - 'Two'
+        - 'Three'
+      '#default_value':
+        - 0
+        - 1
+        - 2
+        - 3
+      '#required': true
+      '#options_display': two_columns
+      '#options_description_display': help
+      '#other__option_label': 'Is there another option you wish to enter?'
+      '#other__placeholder': 'What is this other option'
+      '#other__description': 'Other checkbox description'
   radios_other:
     '#type': details
     '#title': 'Radios other (radios_other)'
@@ -157,7 +177,6 @@ elements: |
         Two: Two
         Three: Three
       '#wrapper_type': container
-  
 css: ''
 javascript: ''
 settings:
@@ -245,6 +264,8 @@ settings:
   wizard_toggle: false
   wizard_toggle_show_label: ''
   wizard_toggle_hide_label: ''
+  wizard_page_type: container
+  wizard_page_title_tag: h2
   preview: 0
   preview_label: ''
   preview_title: ''

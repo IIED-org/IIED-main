@@ -17,7 +17,7 @@ class WebformSettingsArchivedTest extends WebformBrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['webform_node', 'webform_templates', 'webform'];
+  protected static $modules = ['webform_node', 'webform_templates', 'webform'];
 
   /**
    * Webforms to load.

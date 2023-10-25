@@ -1,0 +1,5 @@
+administer lp host entity:
+  title: 'Administer lp host entity settings'
+  restrict access: true
+access lp host entity overview:
+  title: 'Access lp host entity overview page'

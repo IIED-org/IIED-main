@@ -5,6 +5,7 @@ namespace Drupal\masquerade;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Security\TrustedCallbackInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Url;
 
 /**
  * Masquerade callbacks.
@@ -42,11 +43,11 @@ class MasqueradeCallbacks implements TrustedCallbackInterface {
    * {@inheritdoc}
    */
   public static function trustedCallbacks() {
-    return ['renderCacheLink'];
+    return ['renderCacheLink', 'renderSwitchBackLink'];
   }
 
   /**
-   * #post_render_cache callback; replaces placeholder with masquerade link.
+   * The #post_render_cache callback; replaces placeholder with masquerade link.
    *
    * @param int $account_id
    *   The account ID.
@@ -68,6 +69,27 @@ class MasqueradeCallbacks implements TrustedCallbackInterface {
       ];
     }
     return ['#markup' => ''];
+  }
+
+  /**
+   * Lazy builder callback for switch-back link.
+   *
+   * @return array|string
+   *   Render array or an emty string.
+   */
+  public function renderSwitchBackLink() {
+    if ($this->masquerade->isMasquerading()) {
+      return [
+        [
+          '#type' => 'link',
+          '#title' => new TranslatableMarkup('Switch back'),
+          '#url' => Url::fromRoute('masquerade.unmasquerade', [], [
+            'query' => \Drupal::destination()->getAsArray(),
+          ]),
+        ],
+      ];
+    }
+    return '';
   }
 
 }

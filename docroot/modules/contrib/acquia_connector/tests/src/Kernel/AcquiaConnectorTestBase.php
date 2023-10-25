@@ -33,7 +33,6 @@ abstract class AcquiaConnectorTestBase extends KernelTestBase {
   protected static $modules = [
     'system',
     'user',
-    'path_alias',
     'acquia_connector',
     'acquia_connector_test',
   ];

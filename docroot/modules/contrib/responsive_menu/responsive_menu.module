@@ -21,9 +21,9 @@ define('RESPONSIVE_MENU_BREAKPOINT_FILENAME', '/responsive_menu_breakpoint.css')
 function responsive_menu_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
     case 'responsive_menu.settings':
-      $readme = Link::fromTextAndUrl('README.md', Url::fromUri('base:' . drupal_get_path('module', 'responsive_menu') . '/README.md'))->toRenderable();
+      $readme = Link::fromTextAndUrl('README.md', Url::fromUri('base:' . \Drupal::service('extension.list.module')->getPath('responsive_menu') . '/README.md'))->toRenderable();
       return '<p>' . t('3rd party libraries are required to enable some of the features. See the @readme file for more information about where to download and place them.', [
-        '@readme' => render($readme),
+        '@readme' => \Drupal::service('renderer')->render($readme),
       ]) . '</p><p>' . t("At a minimum you need to place the 'Responsive menu mobile icon' block in a region. If you want to display a horizontal menu at a specified breakpoint then you also need to place the 'Horizontal menu' block, although this is optional.") . '</p>';
   }
 }
@@ -188,14 +188,8 @@ function responsive_menu_prepare_output() {
 
   // Allow for the menu position to be based on the language direction.
   // @see issue #3095162 for details.
-  if ($config->get('off_canvas_position') === 'contextual' || $config->get('off_canvas_position') === 'contextual-front') {
+  if ($config->get('off_canvas_position') === 'contextual') {
     $language = \Drupal::languageManager()->getCurrentLanguage()->getDirection();
-    if ($config->get('off_canvas_position') === 'contextual-front') {
-      $language === 'rtl' ? 'right-front' : 'left-front';
-    }
-    else {
-      $language === 'rtl' ? 'right' : 'left';
-    }
     $output['#attached']['drupalSettings']['responsive_menu']['position'] = $language === 'rtl' ? 'right' : 'left';
   }
   else {

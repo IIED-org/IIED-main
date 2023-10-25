@@ -1,0 +1,12 @@
+name: "Layout Paragraphs Test of Altered Paragraph Templates"
+description: "Controls should render correctly even when paragraph templates are customized."
+core_version_requirement: ^9.1 || ^10
+package: Layout Paragraphs
+type: module
+dependencies:
+  - layout_paragraphs:layout_paragraphs
+
+# Information added by Drupal.org packaging script on 2023-05-13
+version: '2.0.3'
+project: 'layout_paragraphs'
+datestamp: 1683938209

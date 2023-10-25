@@ -501,15 +501,16 @@ class ChartDataCollectorTable extends FormElement {
       $submit['#wrapper_attributes'] = $wrapper_attributes;
     }
 
+    $value = [];
+    $value['add']['row'] = t('Add row');
+    $value['add']['column'] = t('Add column');
+    $value['delete']['row'] = t('Delete row');
+    $value['delete']['column'] = t('Delete column');
+
     $submit += [
       '#type' => 'submit',
       '#name' => $name,
-      '#value' => match(TRUE) {
-        $operation === 'add' && $on === 'row' => t('Add row'),
-        $operation === 'add' && $on === 'column' => t('Add column'),
-        $operation === 'delete' && $on === 'row' => t('Delete row'),
-        default => t('Delete column'),
-      },
+      '#value' => $value[$operation][$on],
       '#limit_validation_errors' => [],
       '#submit' => [[get_called_class(), 'tableOperationSubmit']],
       '#operation' => $operation,

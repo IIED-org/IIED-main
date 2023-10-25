@@ -18,9 +18,6 @@ function components_twig_extension_test_theme($existing, $type, $theme, $path): 
   $items['components_twig_extension_test_add_filter_plural_named_arguments'] = [
     'render element' => 'element',
   ];
-  $items['components_twig_extension_test_add_filter_deprecated_named_arguments'] = [
-    'render element' => 'element',
-  ];
   $items['components_twig_extension_test_recursive_merge_filter'] = [
     'render element' => 'element',
   ];
@@ -31,12 +28,6 @@ function components_twig_extension_test_theme($existing, $type, $theme, $path): 
     'render element' => 'element',
   ];
   $items['components_twig_extension_test_set_filter_named_arguments'] = [
-    'render element' => 'element',
-  ];
-  $items['components_twig_extension_test_set_filter_deprecated_named_argument'] = [
-    'render element' => 'element',
-  ];
-  $items['components_twig_extension_test_set_filter_deprecated_named_arguments'] = [
     'render element' => 'element',
   ];
   $items['components_twig_extension_test_template_function'] = [

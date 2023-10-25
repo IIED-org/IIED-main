@@ -12,3 +12,8 @@ services:
   logger.channel.xmlsitemap:
     parent: logger.channel_base
     arguments: ['xmlsitemap']
+  xmlsitemap.link_settings_config_subscriber:
+    class: Drupal\xmlsitemap\EventSubscriber\LinkSettingsConfigSubscriber
+    arguments: ['@xmlsitemap.link_storage', '@cache_tags.invalidator']
+    tags:
+      - { name: event_subscriber }

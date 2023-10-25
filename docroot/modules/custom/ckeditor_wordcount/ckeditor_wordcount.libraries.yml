@@ -1,0 +1,7 @@
+editor:
+    version: VERSION
+    js:
+        scripts/build/wordcount.js: {minified: true}
+    css:
+        theme:
+            styles/wordcount.css: {}

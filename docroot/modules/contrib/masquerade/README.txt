@@ -20,7 +20,7 @@ None.
 -- INSTALLATION --
 
 * Install as usual, see
-  http://drupal.org/documentation/install/modules-themes/modules-8
+  https://www.drupal.org/docs/extending-drupal/installing-modules
 
 * Grant the "Masquerade as another user" permission to the desired roles.
 
@@ -60,7 +60,8 @@ None.
   architecture tries to meet the expectations of these user stories:
 
   - This is helpful. Even though I don't know whether I'll actually need it.
-  - This is secure. 100% test coverage for the limited functionality it provides.
+  - This is secure. 100% test coverage for the limited functionality
+    it provides.
   - This isn't bloat. Super small, dead simple, focused on the >80% task.
   - This is friendly. Available when I need it, close to "zero-conf", and has
     absolutely no other UI implications.

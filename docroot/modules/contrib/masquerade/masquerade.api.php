@@ -23,7 +23,7 @@ use Drupal\user\UserInterface;
  * @param \Drupal\user\UserInterface $target_account
  *   The target user account to check for masquerade access.
  *
- * @return bool
+ * @return bool|null
  *   Either a Boolean or NULL:
  *   - FALSE to explicitly deny access. If a module denies access, no other
  *     module is able to grant access and access is denied.

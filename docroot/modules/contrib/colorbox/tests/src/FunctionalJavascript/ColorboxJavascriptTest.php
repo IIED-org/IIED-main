@@ -29,7 +29,7 @@ class ColorboxJavascriptTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'colorbox',
     'colorbox_library_test',
     'node',
@@ -138,7 +138,7 @@ class ColorboxJavascriptTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->createContentType(['type' => 'page']);
     FieldStorageConfig::create([

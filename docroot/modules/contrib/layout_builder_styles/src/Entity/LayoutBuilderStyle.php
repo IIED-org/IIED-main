@@ -134,14 +134,14 @@ class LayoutBuilderStyle extends ConfigEntityBase implements LayoutBuilderStyleI
    * {@inheritdoc}
    */
   public function getBlockRestrictions() {
-    return isset($this->block_restrictions) ? $this->block_restrictions : [];
+    return $this->block_restrictions ?? [];
   }
 
   /**
    * {@inheritdoc}
    */
   public function getLayoutRestrictions() {
-    return isset($this->layout_restrictions) ? $this->layout_restrictions : [];
+    return $this->layout_restrictions ?? [];
   }
 
 }

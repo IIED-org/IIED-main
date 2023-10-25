@@ -10,7 +10,7 @@
  */
 function iied_slider_theme($existing, $type, $theme, $path) {
   // Store TARDIS preprocess theme functions in a separate .inc file.
-  \Drupal::moduleHandler()->loadInclude('iied_slider', 'inc', 'iied_slider.theme');
+  // \Drupal::moduleHandler()->loadInclude('iied_slider', 'inc', 'iied_slider.theme'); 
 
   return array(
     'iied_slider' => array(

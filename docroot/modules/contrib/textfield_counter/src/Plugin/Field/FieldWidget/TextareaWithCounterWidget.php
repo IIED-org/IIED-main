@@ -29,6 +29,7 @@ class TextareaWithCounterWidget extends TextareaWidget {
       'maxlength' => 0,
       'counter_position' => 'after',
       'js_prevent_submit' => TRUE,
+      'count_only_mode' => FALSE,
       'count_html_characters' => TRUE,
       'textcount_status_message' => self::getDefaultTextCountStatusMessage(),
     ] + parent::defaultSettings();
@@ -43,6 +44,7 @@ class TextareaWithCounterWidget extends TextareaWidget {
 
     $this->addMaxlengthSettingsFormElement($form);
     $this->addCounterPositionSettingsFormElement($form);
+    $this->addCountOnlyModeSettingsFormElement($form);
     $this->addJsPreventSubmitSettingsFormElement($form);
     $this->addCountHtmlSettingsFormElement($form);
     $this->addTextCountStatusMessageSettingsFormElement($form);
@@ -58,6 +60,7 @@ class TextareaWithCounterWidget extends TextareaWidget {
 
     $this->addMaxlengthSummary($summary);
     $this->addPositionSummary($summary);
+    $this->addCountOnlyModeSummary($summary);
     $this->addJsSubmitPreventSummary($summary);
     $this->addCountHtmlSummary($summary);
     $this->addTextCountStatusMessageSummary($summary);
@@ -82,9 +85,8 @@ class TextareaWithCounterWidget extends TextareaWidget {
       }
       $element['#textfield-maxlength'] = $maxlength;
       $element['#textfield-count-html'] = $count_html_characters;
-      $classes = class_uses($this);
-      if (count($classes)) {
-        $element['#element_validate'][] = [array_pop($classes), 'validateFieldFormElement'];
+      if (!$this->getSetting('count_only_mode')) {
+        $element['#element_validate'][] = [static::class, 'validateFieldFormElement'];
       }
     }
 

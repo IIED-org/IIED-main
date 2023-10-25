@@ -3,10 +3,10 @@
  * Adds textfield counter JavaScript.
  */
 
-/*global jQuery, Drupal, window, CKEDITOR*/
+/*global jQuery, Drupal, window, once, CKEDITOR*/
 /*jslint white:true, this, browser:true*/
 
-(function ($, Drupal, window) {
+(function ($, Drupal, window, once) {
 
   "use strict";
 
@@ -37,7 +37,7 @@
       var fieldSettings = settings.textfieldCounter[key];
 
       $.each(fieldSettings.key, function (index) {
-        $("." + fieldSettings.key[index]).not(".description").once("textfield-counter-text-watcher").once("textfield-counter-counter-watcher").each(function () {
+        $(once("textfield-counter-text-watcher", "." + fieldSettings.key[index])).filter("textarea, input[type=text]").each(function () {
           var counter, maxlength, currentLength, remaining, countHTML;
 
           maxlength = fieldSettings.maxlength;
@@ -81,8 +81,7 @@
   }
 
   function formSubmitListener(context, settings) {
-    $(context).find("form").once("textfield-counter-form-submit-listener").each(function () {
-      $(this).submit(function (e) {
+    $(once('textfield-counter-form-submit-listener','form', context)).filter("textarea, input[type=text]").each(function () {      $(this).submit(function (e) {
         var errorElements = $(this).find(".textcount_over");
         errorElements.each(function (elementIndex) {
           $.each(settings.textfieldCounter, function (settingsIndex, fieldSettings) {
@@ -110,7 +109,7 @@
         $.each(settings.textfieldCounter ,function (fieldDefinitionKey, fieldSettings) {
           // Use the fieldDefinitionKey to get the HTML ID, which is used to
           // reference the editor.
-          var fieldID = $("." + fieldDefinitionKey + ":first").attr("id");
+          var fieldID = $("." + fieldDefinitionKey + "[id]:first").attr("id");
           if (CKEDITOR.instances[fieldID]) {
             // Add keyup listener.
             CKEDITOR.instances[fieldID].on("key", function () {
@@ -155,6 +154,58 @@
         });
       });
     }
+
+    if (window.hasOwnProperty("CKEditor5")) {
+      var ckeditor5Init = function() {
+        // Loop through each of the textfield settings.
+        $.each(settings.textfieldCounter ,function (fieldDefinitionKey, fieldSettings) {
+          // Use the fieldDefinitionKey to get the HTML ID, which is used to
+          // reference the editor.
+          var textfield = $("." + fieldDefinitionKey + "[id]:first");
+          var editor = Drupal.CKEditor5Instances.get($(textfield).attr('data-ckeditor5-id'));
+
+          if (editor) {
+            var countOnKey = function(evt, data) {
+              var countHTML, maxlength, text, currentLength, remaining;
+
+              countHTML = fieldSettings.countHTMLCharacters;
+              maxlength = fieldSettings.maxlength;
+              text = $.trim(editor.getData());
+              if (countHTML) {
+                currentLength = text.length;
+              }
+              else {
+                // The following is done to retrieve the current length:
+                // 1) The content is inserted into a DIV as HTML.
+                // 2) $.text() is used to retrieve just the text of the element.
+                // 3) The context is trimmed.
+                // 4) Multiple consecutive newlines are replaced with a single
+                // newline, so as to only count a linebreak as a single
+                // character.
+                currentLength = $("<div/>").html(text).text().trim().replace(/(\r?\n|\r)+/g, "\n").length;
+              }
+              remaining = maxlength - currentLength;
+
+              // Set the current count on the counter.
+              textfield.siblings(".textfield_counter_counter:first").children(".current_count:first").text(currentLength);
+              // Set the remaining count on the counter.
+              textfield.siblings(".textfield_counter_counter:first").children(".remaining_count:first").text(remaining);
+              // Set the classes on the parent.
+              checkClasses(textfield.parent(), remaining);
+            };
+
+            editor.editing.view.document.on('keydown', countOnKey);
+            editor.editing.view.document.on('keyup', countOnKey);
+          }
+        });
+      };
+
+      var ckeditor5Timeout = setTimeout(function() {
+        ckeditor5Init();
+        clearTimeout(ckeditor5Timeout);
+      }, 300);
+    }
+
   }
 
   Drupal.behaviors.textfieldCounterTextarea = {
@@ -165,4 +216,4 @@
     }
   };
 
-}(jQuery, Drupal, window));
+}(jQuery, Drupal, window, once));

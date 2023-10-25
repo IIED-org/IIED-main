@@ -1,0 +1,12 @@
+name: Layout Paragraphs Entity Validator Test
+description: Helps test custom entity validators on paragraphs
+package: Testing
+type: module
+core_version_requirement: ^9.1 || ^10
+dependencies:
+  - paragraphs:paragraphs
+
+# Information added by Drupal.org packaging script on 2023-05-13
+version: '2.0.3'
+project: 'layout_paragraphs'
+datestamp: 1683938209

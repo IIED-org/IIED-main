@@ -60,13 +60,15 @@ function acquia_connector_requirements($phase) {
   else {
     // Should get cached data if it exists.
     $subscription = $subscription->getSubscription();
-    $href = isset($subscription['uuid']) ? 'https://loud.acquia.com/app/develop/applications/' . $subscription['uuid'] : 'https://cloud.acquia.com';
+    $href = isset($subscription['uuid']) ? 'https://cloud.acquia.com/app/develop/applications/' . $subscription['uuid'] : 'https://cloud.acquia.com';
     $requirements['acquia_subscription_status'] = [
       'title' => t('Acquia Subscription status'),
       'severity' => REQUIREMENT_WARNING,
       'value' => t('Inactive'),
-      'description' => t('Your subscription is expired or you are using an invalid identifier and key pair. You can check the subscription identifier and the subscription key at the <a href=":settings">Acquia settings</a> page. Check <a href=":acquia-network">your subscription on the Acquia Subscription</a> for further status information.', [
+      'description' => t('Your subscription is expired or you are using an invalid identifier and key pair. You can check the subscription identifier and the subscription key at the <a href=":settings">Acquia settings</a> page or try to <a href=":refresh-status">manually refresh the subscription status</a>. Check <a href=":acquia-network">your subscription on the Acquia Subscription</a> for further status information.', [
         ':settings' => Url::fromRoute('acquia_connector.settings')
+          ->toString(),
+        ':refresh-status' => Url::fromRoute('acquia_connector.refresh_status')
           ->toString(),
         ':acquia-network' => $href,
       ]),

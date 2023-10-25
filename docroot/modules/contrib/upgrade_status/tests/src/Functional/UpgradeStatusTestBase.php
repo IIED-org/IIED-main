@@ -20,12 +20,12 @@ abstract class UpgradeStatusTestBase extends BrowserTestBase {
   protected static $modules = [
     'upgrade_status',
     'upgrade_status_test_error',
-    'upgrade_status_test_9_compatible',
     'upgrade_status_test_10_compatible',
+    'upgrade_status_test_11_compatible',
     'upgrade_status_test_submodules_a',
     'upgrade_status_test_submodules_with_error',
     'upgrade_status_test_contrib_error',
-    'upgrade_status_test_contrib_9_compatible',
+    'upgrade_status_test_contrib_10_compatible',
     'upgrade_status_test_theme_functions',
     'upgrade_status_test_twig',
     'upgrade_status_test_library',
@@ -36,7 +36,7 @@ abstract class UpgradeStatusTestBase extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     $this->container->get('theme_installer')->install(['upgrade_status_test_theme']);
@@ -48,8 +48,8 @@ abstract class UpgradeStatusTestBase extends BrowserTestBase {
   protected function runFullScan() {
     $edit = [
       'scan[data][list][upgrade_status_test_error]' => TRUE,
-      'scan[data][list][upgrade_status_test_9_compatible]' => TRUE,
       'scan[data][list][upgrade_status_test_10_compatible]' => TRUE,
+      'scan[data][list][upgrade_status_test_11_compatible]' => TRUE,
       'scan[data][list][upgrade_status_test_submodules]' => TRUE,
       'scan[data][list][upgrade_status_test_submodules_with_error]' => TRUE,
       'scan[data][list][upgrade_status_test_twig]' => TRUE,
@@ -59,10 +59,11 @@ abstract class UpgradeStatusTestBase extends BrowserTestBase {
       'scan[data][list][upgrade_status_test_library_exception]' => TRUE,
       'scan[data][list][upgrade_status_test_deprecated]' => TRUE,
       'collaborate[data][list][upgrade_status_test_contrib_error]' => TRUE,
-      ($this->getDrupalCoreMajorVersion() < 9 ? 'relax' : 'collaborate') . '[data][list][upgrade_status]' => TRUE,
-      ($this->getDrupalCoreMajorVersion() < 9 ? 'relax' : 'collaborate') . '[data][list][upgrade_status_test_contrib_9_compatible]' => TRUE,
+      ($this->getDrupalCoreMajorVersion() < 10 ? 'relax' : 'collaborate') . '[data][list][upgrade_status]' => TRUE,
+      ($this->getDrupalCoreMajorVersion() < 10 ? 'relax' : 'collaborate') . '[data][list][upgrade_status_test_contrib_10_compatible]' => TRUE,
     ];
-    $this->drupalPostForm('admin/reports/upgrade-status', $edit, 'Scan selected');
+    $this->drupalGet('admin/reports/upgrade-status');
+    $this->submitForm($edit, 'Scan selected');
   }
 
   /**

@@ -5,11 +5,11 @@ namespace Drupal\svg_image_responsive\Plugin\Field\FieldFormatter;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannel;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Url;
 use Drupal\Core\Utility\LinkGeneratorInterface;
 use Drupal\file\Entity\File;
 use Drupal\Core\Cache\Cache;
@@ -43,11 +43,19 @@ class SvgResponsiveImageFormatter extends ResponsiveImageFormatter {
   private $logger;
 
   /**
+   * File Url Generator service.
+   *
+   * @var \Drupal\Core\File\FileUrlGeneratorInterface
+   */
+  protected $fileUrlGenerator;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, EntityStorageInterface $responsive_image_style_storage, EntityStorageInterface $image_style_storage, LinkGeneratorInterface $link_generator, AccountInterface $current_user, LoggerChannel $logger) {
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, EntityStorageInterface $responsive_image_style_storage, EntityStorageInterface $image_style_storage, LinkGeneratorInterface $link_generator, AccountInterface $current_user, LoggerChannel $logger, FileUrlGeneratorInterface $file_url_generator) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings, $responsive_image_style_storage, $image_style_storage, $link_generator, $current_user);
     $this->logger = $logger;
+    $this->fileUrlGenerator = $file_url_generator;
   }
 
   /**
@@ -66,7 +74,8 @@ class SvgResponsiveImageFormatter extends ResponsiveImageFormatter {
       $container->get('entity_type.manager')->getStorage('image_style'),
       $container->get('link_generator'),
       $container->get('current_user'),
-      $container->get('logger.channel.file')
+      $container->get('logger.channel.file'),
+      $container->get('file_url_generator')
     );
   }
 
@@ -122,14 +131,14 @@ class SvgResponsiveImageFormatter extends ResponsiveImageFormatter {
       $cacheContexts = [];
       if (isset($linkFile)) {
         $imageUri = $file->getFileUri();
-        $url = Url::fromUri(file_create_url($imageUri));
+        $url = $this->fileUrlGenerator->generate($imageUri);
         $cacheContexts[] = 'url.site';
       }
       $cacheTags = Cache::mergeTags($cacheTags, $file->getCacheTags());
 
       // Link the <picture> element to the original file.
       if (isset($linkFile)) {
-        $url = file_url_transform_relative(file_create_url($file->getFileUri()));
+        $url = $this->fileUrlGenerator->generateString($file->getFileUri());
       }
       // Extract field item attributes for the theme function, and unset them
       // from the $item so that the field template does not re-render them.

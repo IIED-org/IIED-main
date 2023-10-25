@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\Tests\color_field\FunctionalJavascript;
 
+use Drupal\Core\Entity\Entity\EntityFormDisplay;
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
@@ -14,29 +18,18 @@ use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 class ColorFieldWidgetJavascriptTests extends WebDriverTestBase {
 
   /**
-   * Modules to enable.
-   *
-   * @var array
-   */
-  public static $modules = [
-    'field',
-    'node',
-    'color_field',
-  ];
-
-  /**
    * The Entity View Display for the article node type.
    *
    * @var \Drupal\Core\Entity\Entity\EntityViewDisplay
    */
-  protected $display;
+  protected EntityViewDisplay $display;
 
   /**
    * The Entity Form Display for the article node type.
    *
    * @var \Drupal\Core\Entity\Entity\EntityFormDisplay
    */
-  protected $form;
+  protected EntityFormDisplay $form;
 
   /**
    * {@inheritdoc}
@@ -44,59 +37,20 @@ class ColorFieldWidgetJavascriptTests extends WebDriverTestBase {
   protected $defaultTheme = 'stark';
 
   /**
-   * {@inheritdoc}
+   * Modules to enable.
+   *
+   * @var array
    */
-  protected function setUp() {
-    parent::setUp();
-
-    $this->drupalCreateContentType(['type' => 'article']);
-    $user = $this->drupalCreateUser([
-      'create article content', 'edit own article content',
-    ]);
-    $this->drupalLogin($user);
-    $entityTypeManager = $this->container->get('entity_type.manager');
-    FieldStorageConfig::create([
-      'field_name' => 'field_color',
-      'entity_type' => 'node',
-      'type' => 'color_field_type',
-    ])->save();
-    FieldConfig::create([
-      'field_name' => 'field_color',
-      'label' => 'Freeform Color',
-      'description' => 'Color field description',
-      'entity_type' => 'node',
-      'bundle' => 'article',
-      'required' => TRUE,
-      'default_value' => [
-        [
-          'color' => 'ffb81c',
-          'opacity' => 0.5,
-        ],
-      ],
-    ])->save();
-    FieldStorageConfig::create([
-      'field_name' => 'field_color_repeat',
-      'entity_type' => 'node',
-      'type' => 'color_field_type',
-    ])->save();
-    FieldConfig::create([
-      'field_name' => 'field_color_repeat',
-      'label' => 'Repeat Color',
-      'description' => 'Color repeat description',
-      'entity_type' => 'node',
-      'bundle' => 'article',
-      'required' => FALSE,
-    ])->save();
-    $this->form = $entityTypeManager->getStorage('entity_form_display')
-      ->load('node.article.default');
-    $this->display = $entityTypeManager->getStorage('entity_view_display')
-      ->load('node.article.default');
-  }
+  protected static $modules = [
+    'field',
+    'node',
+    'color_field',
+  ];
 
   /**
    * Test color_field_widget_box.
    */
-  public function testColorFieldWidgetBox() {
+  public function testColorFieldWidgetBox(): void {
     $this->form
       ->setComponent('field_color_repeat', [
         'type' => 'color_field_widget_box',
@@ -188,7 +142,7 @@ class ColorFieldWidgetJavascriptTests extends WebDriverTestBase {
    * Ensure that our handling of the palette is correctly handling different
    * types of color values. Like don't break if using commas in rgba values.
    */
-  public function testColorFieldSpectrum() {
+  public function testColorFieldSpectrum(): void {
     $this->form
       ->setComponent('field_color_repeat', [
         'type' => 'color_field_widget_spectrum',
@@ -243,7 +197,7 @@ class ColorFieldWidgetJavascriptTests extends WebDriverTestBase {
    * buttons. We could use $session->evaluateScript() to do it but we'll
    * presume it is  tested internally and just test the basic integration.
    */
-  public function testColorFieldWidgetGrid() {
+  public function testColorFieldWidgetGrid(): void {
     $this->form
       ->setComponent('field_color_repeat', [
         'type' => 'color_field_widget_grid',
@@ -293,6 +247,56 @@ class ColorFieldWidgetJavascriptTests extends WebDriverTestBase {
 HEREDOC;
 
     $this->assertFalse($session->evaluateScript($script));
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
+
+    $this->drupalCreateContentType(['type' => 'article']);
+    $user = $this->drupalCreateUser([
+      'create article content', 'edit own article content',
+    ]);
+    $this->drupalLogin($user);
+    $entityTypeManager = $this->container->get('entity_type.manager');
+    FieldStorageConfig::create([
+      'field_name' => 'field_color',
+      'entity_type' => 'node',
+      'type' => 'color_field_type',
+    ])->save();
+    FieldConfig::create([
+      'field_name' => 'field_color',
+      'label' => 'Freeform Color',
+      'description' => 'Color field description',
+      'entity_type' => 'node',
+      'bundle' => 'article',
+      'required' => TRUE,
+      'default_value' => [
+        [
+          'color' => 'ffb81c',
+          'opacity' => 0.5,
+        ],
+      ],
+    ])->save();
+    FieldStorageConfig::create([
+      'field_name' => 'field_color_repeat',
+      'entity_type' => 'node',
+      'type' => 'color_field_type',
+    ])->save();
+    FieldConfig::create([
+      'field_name' => 'field_color_repeat',
+      'label' => 'Repeat Color',
+      'description' => 'Color repeat description',
+      'entity_type' => 'node',
+      'bundle' => 'article',
+      'required' => FALSE,
+    ])->save();
+    $this->form = $entityTypeManager->getStorage('entity_form_display')
+      ->load('node.article.default');
+    $this->display = $entityTypeManager->getStorage('entity_view_display')
+      ->load('node.article.default');
   }
 
 }

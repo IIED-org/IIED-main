@@ -6,7 +6,7 @@ core_version_requirement: ^8.8 || ^9 || ^10
 dependencies:
   - charts:charts
 
-# Information added by Drupal.org packaging script on 2023-06-27
-version: '5.0.7'
+# Information added by Drupal.org packaging script on 2023-09-06
+version: '5.0.8'
 project: 'charts'
-datestamp: 1687898053
+datestamp: 1694037416

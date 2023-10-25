@@ -62,6 +62,7 @@ class EntityTypeInfo implements ContainerInjectionInterface {
         // dynamically.
         $entity_link = $entity_type->getLinkTemplate('edit-form');
         $this->setEntityTypeLinkTemplate($entity_type, $entity_link, 'devel-load', "/devel/$entity_type_id", $entity_link);
+        $this->setEntityTypeLinkTemplate($entity_type, $entity_link, 'devel-load-with-references', "/devel/load-with-references/$entity_type_id", $entity_link);
       }
       if ($entity_type->hasViewBuilderClass() && $entity_type->hasLinkTemplate('canonical')) {
         // We use canonical template to extract and set additional parameters

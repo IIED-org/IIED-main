@@ -1,0 +1,22 @@
+uuid: 40e992e4-a46e-4bc5-a206-961e707a2e39
+langcode: en
+status: true
+dependencies: {  }
+id: views_page---acquia_search__page
+display_id: views_page---acquia_search__page
+autosubmit: true
+autosubmit_hide: true
+sorts:
+  search_api_relevance:
+    weight: 0
+    label_asc: ''
+    label_desc: ''
+  field_sort_date:
+    weight: 0
+    label_asc: ''
+    label_desc: ''
+  title_1:
+    weight: 0
+    label_asc: ''
+    label_desc: ''
+weight: null

@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Contains functionality for testing forms in the LP Builder.
+ */
+
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_paragraph_view().
+ */
+function layout_paragraphs_form_rendering_test_paragraph_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  $build['lp_test_form'] = [
+    'form' => $form = \Drupal::formBuilder()->getForm('Drupal\layout_paragraphs_form_rendering_test\Form\TestForm'),
+    '#weight' => -1000,
+  ];
+}

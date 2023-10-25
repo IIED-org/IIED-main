@@ -5,6 +5,7 @@
  * Install, update and uninstall functions for the context module.
  */
 
+use Drupal\block\Entity\Block;
 use Drupal\context\Plugin\ContextReaction\Blocks;
 
 /**
@@ -72,4 +73,39 @@ function context_update_8003() {
     }
   }
   drupal_flush_all_caches();
+}
+
+/**
+ * Remove unnecessary block dependencies.
+ */
+function context_update_8004() {
+  $blocks = Block::loadMultiple();
+  foreach ($blocks as $block) {
+    $block_visiblity_settings = $block->getVisibility();
+
+    if (empty($block_visiblity_settings)) {
+      continue;
+    }
+
+    if (isset($block_visiblity_settings['context_all']) && empty($block_visiblity_settings['context_all']['values'])) {
+      $block->setVisibilityConfig('context_all', []);
+    }
+    if (isset($block_visiblity_settings['context']) && empty($block_visiblity_settings['context']['values'])) {
+      $block->setVisibilityConfig('context', []);
+    }
+    if (isset($block_visiblity_settings['view_inclusion']) && empty($block_visiblity_settings['view_inclusion']['view_inclusion'])) {
+      $block->setVisibilityConfig('view_inclusion', []);
+    }
+    if (isset($block_visiblity_settings['request_path_exclusion']) && empty($block_visiblity_settings['request_path_exclusion']['pages'])) {
+      $block->setVisibilityConfig('request_path_exclusion', []);
+    }
+    if (isset($block_visiblity_settings['user_status'])) {
+      $user_status_config = $block_visiblity_settings['user_status'];
+      $settings = array_filter($user_status_config['user_status']);
+      if (empty($settings)) {
+        $block->setVisibilityConfig('user_status', []);
+      }
+    }
+    $block->save();
+  }
 }

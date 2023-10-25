@@ -804,7 +804,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     // @see /admin/structure/webform/submissions/manage
     if (empty($webform) && empty($source_entity)) {
       $columns['webform_id'] = [
-        'title' => $this->t('Webform'),
+        'title' => $this->t('Webform', [], ['context' => 'form']),
       ];
       $columns['entity'] = [
         'title' => $this->t('Submitted to'),
@@ -1192,7 +1192,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       $this->loggerFactory->get('webform')
         ->notice('Deleted @form: Submission #@id.', [
           '@id' => $entity->id(),
-          '@form' => ($webform) ? $webform->label() : '[' . $this->t('Webform') . ']',
+          '@form' => ($webform) ? $webform->label() : '[' . $this->t('Webform', [], ['context' => 'form']) . ']',
         ]);
     }
 
@@ -1268,7 +1268,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
         $webform_submissions = $this->loadMultiple($sids);
 
         $webform->invokeHandlers('prePurge', $webform_submissions);
-        $this->moduleHandler()->invokeAll('webform_submissions_pre_purge', [$webform_submissions]);
+        $this->moduleHandler()->invokeAll('webform_submissions_pre_purge', [&$webform_submissions]);
 
         $this->delete($webform_submissions);
 
@@ -1378,6 +1378,26 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   protected function loadData(array &$webform_submissions) {
     // Load webform submission data.
     if ($sids = array_keys($webform_submissions)) {
+      $submissions_data = [];
+
+      // Initialize all multiple value elements to make sure a value is defined.
+      $webform_default_data = [];
+      foreach ($webform_submissions as $sid => $webform_submission) {
+        /** @var \Drupal\webform\WebformInterface $webform */
+        $webform = $webform_submissions[$sid]->getWebform();
+        $webform_id = $webform->id();
+        if (!isset($webform_default_data[$webform_id])) {
+          $webform_default_data[$webform_id] = [];
+          $elements = ($webform) ? $webform->getElementsInitializedFlattenedAndHasValue() : [];
+          foreach ($elements as $element_key => $element) {
+            if (!empty($element['#webform_multiple'])) {
+              $webform_default_data[$webform_id][$element_key] = [];
+            }
+          }
+        }
+        $submissions_data[$sid] = $webform_default_data[$webform_id];
+      }
+
       /** @var \Drupal\Core\Database\StatementInterface $result */
       $result = $this->database->select('webform_submission_data', 'sd')
         ->fields('sd', ['webform_id', 'sid', 'name', 'property', 'delta', 'value'])
@@ -1387,7 +1407,6 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
         ->orderBy('sd.property', 'ASC')
         ->orderBy('sd.delta', 'ASC')
         ->execute();
-      $submissions_data = [];
       while ($record = $result->fetchAssoc()) {
         $sid = $record['sid'];
         $name = $record['name'];

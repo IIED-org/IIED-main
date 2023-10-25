@@ -146,6 +146,13 @@ class ContextAllAnyTest extends KernelTestBase {
     $this->assertTrue($condition->evaluate(), 'All contexts are active');
     $this->assertEquals($condition->summary(), 'Return true on the basis of other active contexts: ~another_context, test', 'Context applied.');
 
+    // Test that a non-existent context evaluates to false.
+    $condition->setConfig('values', 'does_not_exist');
+    $this->assertFalse($condition->evaluate(), 'All contexts are not active');
+
+    $condition->setConfig('values', "another_context\r\ndoes_not_exist");
+    $this->assertFalse($condition->evaluate(), 'All contexts are not active');
+
   }
 
   /**

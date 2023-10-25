@@ -13,13 +13,20 @@ use Symfony\Component\Routing\Route;
 class DevelGenerateRoutes implements ContainerInjectionInterface {
 
   /**
+   * The manager to be used for instantiating plugins.
+   *
+   * @var \Drupal\Component\Plugin\PluginManagerInterface
+   */
+  protected $develGenerateManager;
+
+  /**
    * Constructs a new devel_generate route subscriber.
    *
    * @param \Drupal\Component\Plugin\PluginManagerInterface $devel_generate_manager
    *   The DevelGeneratePluginManager.
    */
   public function __construct(PluginManagerInterface $devel_generate_manager) {
-    $this->DevelGenerateManager = $devel_generate_manager;
+    $this->develGenerateManager = $devel_generate_manager;
   }
 
   /**
@@ -35,7 +42,7 @@ class DevelGenerateRoutes implements ContainerInjectionInterface {
    * Define routes for all devel_generate plugins.
    */
   public function routes() {
-    $devel_generate_plugins = $this->DevelGenerateManager->getDefinitions();
+    $devel_generate_plugins = $this->develGenerateManager->getDefinitions();
 
     $routes = [];
     foreach ($devel_generate_plugins as $id => $plugin) {

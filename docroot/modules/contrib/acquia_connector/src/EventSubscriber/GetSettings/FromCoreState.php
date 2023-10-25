@@ -21,10 +21,10 @@ class FromCoreState implements EventSubscriberInterface {
   protected $state;
 
   /**
-   * GetSettingsFromCoreConfig constructor.
+   * Get Settings From Core State constructor.
    *
    * @param \Drupal\Core\State\StateInterface $state
-   *   The configuration factory.
+   *   The state service.
    */
   public function __construct(StateInterface $state) {
     $this->state = $state;

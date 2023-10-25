@@ -3,6 +3,7 @@
 namespace Drupal\webform_submission_log;
 
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\webform\WebformInterface;
@@ -56,7 +57,7 @@ class WebformSubmissionLogManager implements WebformSubmissionLogManagerInterfac
   /**
    * {@inheritdoc}
    */
-  public function getQuery(EntityInterface $webform_entity = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, array $options = []) {
+  public function getQuery(EntityInterface $webform_entity = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, array $options = []): SelectInterface {
     // Default options.
     $options += [
       'header' => NULL,
@@ -133,8 +134,16 @@ class WebformSubmissionLogManager implements WebformSubmissionLogManagerInterfac
       ->execute();
     $records = [];
     while ($record = $result->fetchObject()) {
-      $record->variables = unserialize($record->variables, ['allowed_classes' => FALSE]);
-      $record->data = unserialize($record->data, ['allowed_classes' => FALSE]);
+      $record->variables = unserialize($record->variables, [
+      'allowed_classes' => [
+        'Drupal\Core\StringTranslation\TranslatableMarkup',
+      ],
+      ]);
+      $record->data = unserialize($record->data, [
+      'allowed_classes' => [
+        'Drupal\Core\StringTranslation\TranslatableMarkup',
+      ],
+      ]);
       $records[] = $record;
     }
     return $records;

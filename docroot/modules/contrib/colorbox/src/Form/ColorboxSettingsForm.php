@@ -25,7 +25,7 @@ class ColorboxSettingsForm extends ConfigFormBase {
   /**
    * Library discovery service.
    *
-   * @var LibraryDiscoveryInterface
+   * @var Drupal\Core\Asset\LibraryDiscoveryInterface
    */
   protected $libraryDiscovery;
 
@@ -116,30 +116,24 @@ class ColorboxSettingsForm extends ConfigFormBase {
       '#open' => TRUE,
     ];
     $dompurify_message = $dompurify_exists ?
-      $this->t('The DOMPurify library is installed. ' .
-        'This library will sanitize HTML in Colorbox captions.') :
-      $this->t('The <a href="@dompurify_link">DOMPurify</a> ' .
-        'library is not installed. ' .
-        'This library is necessary if you want to use HTML in Colorbox captions. ' .
-        'Without it, all captions will be treated as plain text.',
+      $this->t('The DOMPurify library is installed. This library will sanitize HTML in Colorbox captions.') :
+      $this->t('The <a href="@dompurify_link">DOMPurify</a> library is not installed. This library is necessary if you want to use HTML in Colorbox captions. Without it, all captions will be treated as plain text.',
         [
-          '@dompurify_link' => 'https://github.com/cure53/DOMPurify/archive/main.zip'
+          '@dompurify_link' => 'https://github.com/cure53/DOMPurify/archive/main.zip',
         ]);
-    $form['colorbox_dompurify']['dompurify_message'] = array(
+    $form['colorbox_dompurify']['dompurify_message'] = [
       '#type' => 'markup',
       '#prefix' => '<p>',
       '#suffix' => '</p>',
       '#markup' => $dompurify_message,
-    );
+    ];
     if (!$dompurify_exists) {
-      $form['colorbox_dompurify']['dompurify_hide_warning'] = array(
+      $form['colorbox_dompurify']['dompurify_hide_warning'] = [
         '#type' => 'checkbox',
-        '#title' => t('Don\'t show warning on status report'),
+        '#title' => t("Don't show warning on status report"),
         '#default_value' => $config->get('dompurify_hide_warning'),
-        '#description' => t('By default, a warning appears on Drupal\'s ' .
-          'status report if this library is missing. Check this box to ' .
-          'suppress the warning.'),
-      );
+        '#description' => t("By default, a warning appears on Drupal's status report if this library is missing. Check this box to suppress the warning."),
+      ];
     }
 
     $form['colorbox_custom_settings'] = [

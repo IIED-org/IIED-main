@@ -18,7 +18,7 @@ class WebformElementDateTimeTest extends WebformElementBrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['jquery_ui_datepicker'];
+  protected static $modules = ['jquery_ui_datepicker'];
 
   /**
    * Webforms to load.
@@ -52,27 +52,23 @@ class WebformElementDateTimeTest extends WebformElementBrowserTestBase {
     $assert_session->fieldValueEquals('datetime_default[date]', '2009-08-18');
     $assert_session->fieldValueEquals('datetime_default[time]', '16:00:00');
 
-    // Check datepicker and timepicker.
+    // Check timepicker.
     $now_date = date('D, m/d/Y', strtotime('now'));
-    if (floatval(\Drupal::VERSION) >= 9) {
-      $assert_session->responseContains('<input data-drupal-selector="edit-datetime-datepicker-timepicker-date" title="Date (e.g. ' . $now_date . ')" type="text" min="Mon, 01/01/1900" max="Sat, 12/31/2050" data-drupal-date-format="D, m/d/Y" placeholder="YYYY-MM-DD" data-help="Enter the date using the format YYYY-MM-DD (e.g., ' . $now_date . ')." id="edit-datetime-datepicker-timepicker-date" name="datetime_datepicker_timepicker[date]" value="Tue, 08/18/2009" size="15" maxlength="128" class="form-text" />');
-    }
-    else {
-      $assert_session->responseContains('<input data-drupal-selector="edit-datetime-datepicker-timepicker-date" title="Date (e.g. ' . $now_date . ')" type="text" min="Mon, 01/01/1900" max="Sat, 12/31/2050" data-drupal-date-format="D, m/d/Y" id="edit-datetime-datepicker-timepicker-date" name="datetime_datepicker_timepicker[date]" value="Tue, 08/18/2009" size="15" maxlength="128" class="form-text" />');
-    }
-    $assert_session->responseContains('<input data-drupal-selector="edit-datetime-datepicker-timepicker-time"');
+    $assert_session->responseContains('<input data-drupal-selector="edit-datetime-timepicker-date" title="Date (e.g. ' . $now_date . ')" type="text" min="Mon, 01/01/1900" max="Sat, 12/31/2050" placeholder="YYYY-MM-DD" data-help="Enter the date using the format YYYY-MM-DD (e.g., ' . $now_date . ')." id="edit-datetime-timepicker-date" name="datetime_timepicker[date]" value="Tue, 08/18/2009" size="15" class="form-text" />');
+    $assert_session->responseContains('<input data-drupal-selector="edit-datetime-timepicker-time"');
     // Skip time which can change during the tests.
-    $assert_session->responseContains('id="edit-datetime-datepicker-timepicker-time" name="datetime_datepicker_timepicker[time]" value="4:00 PM" size="12" maxlength="12" class="form-time webform-time" />');
+    // phpcs:ignore
+    // $assert_session->responseContains('id="edit-datetime-timepicker-time" name="datetime_timepicker[time]" value="" size="12" maxlength="12" class="form-time webform-time" />');
 
     // Check date/time placeholder attribute.
-    $assert_session->responseContains(' type="text" data-drupal-date-format="Y-m-d" placeholder="{date}"');
+    $assert_session->responseContains(' type="text" placeholder="{date}"');
     $assert_session->responseContains(' type="text" step="1" data-webform-time-format="H:i:s" placeholder="{time}"');
 
     // Check time with custom min/max/step attributes.
     $assert_session->responseContains('<input min="2009-01-01" data-min-year="2009" max="2009-12-31" data-max-year="2009" data-drupal-selector="edit-datetime-time-min-max-date"');
     $assert_session->responseContains('<input min="09:00:00" max="17:00:00" data-drupal-selector="edit-datetime-time-min-max-time"');
-    $assert_session->responseContains('<input min="Thu, 01/01/2009" data-min-year="2009" max="Thu, 12/31/2009" data-max-year="2009" data-drupal-selector="edit-datetime-datepicker-timepicker-time-min-max-date"');
-    $assert_session->responseContains('<input min="09:00:00" max="17:00:00" data-drupal-selector="edit-datetime-datepicker-timepicker-time-min-max-time"');
+    $assert_session->responseContains('<input min="Thu, 01/01/2009" data-min-year="2009" max="Thu, 12/31/2009" data-max-year="2009" data-drupal-selector="edit-datetime-timepicker-time-min-max-date"');
+    $assert_session->responseContains('<input min="09:00:00" max="17:00:00" data-drupal-selector="edit-datetime-timepicker-time-min-max-time"');
 
     // Check 'datelist' and 'datetime' #default_value.
     $form = $webform->getSubmissionForm();
@@ -82,6 +78,7 @@ class WebformElementDateTimeTest extends WebformElementBrowserTestBase {
     $this->drupalGet('/webform/test_element_datetime');
     $edit = ['datetime_min_max[date]' => '2010-08-18'];
     $this->submitForm($edit, 'Submit');
+
     $assert_session->responseContains('<em class="placeholder">datetime_min_max</em> must be on or before <em class="placeholder">2009-12-31</em>.');
 
     // Check datetime #date_date_min validation.
@@ -100,20 +97,6 @@ class WebformElementDateTimeTest extends WebformElementBrowserTestBase {
     $this->drupalGet('/webform/test_element_datetime');
     $edit = ['datetime_min_max_time[date]' => '2009-01-01', 'datetime_min_max_time[time]' => '08:00:00'];
     $this->submitForm($edit, 'Submit');
-    $assert_session->responseContains('<em class="placeholder">datetime_min_max_time</em> must be on or after <em class="placeholder">2009-01-01 09:00:00</em>.');
-
-    // Check datetime #date_max time validation.
-    $this->drupalGet('/webform/test_element_datetime');
-    $edit = ['datetime_min_max_time[time]' => '01:00:00'];
-    $this->submitForm($edit, 'Submit');
-    $assert_session->responseContains('<em class="placeholder">datetime_min_max_time: Time</em> must be on or after <em class="placeholder">09:00:00</em>.');
-    $assert_session->responseContains('<em class="placeholder">datetime_min_max_time</em> must be on or after <em class="placeholder">2009-01-01 09:00:00</em>.');
-
-    // Check datetime #date_min time validation.
-    $this->drupalGet('/webform/test_element_datetime');
-    $edit = ['datetime_min_max_time[time]' => '01:00:00'];
-    $this->submitForm($edit, 'Submit');
-    $assert_session->responseContains('<em class="placeholder">datetime_min_max_time: Time</em> must be on or after <em class="placeholder">09:00:00</em>.');
     $assert_session->responseContains('<em class="placeholder">datetime_min_max_time</em> must be on or after <em class="placeholder">2009-01-01 09:00:00</em>.');
 
     // Check: Issue #2723159: Datetime form element cannot validate when using a

@@ -1,4 +1,4 @@
-(function ($, Drupal, drupalSettings) {
+(function ($, Drupal, drupalSettings, once) {
   'use strict';
 
   /**
@@ -9,7 +9,7 @@
       var treeSettings = settings.taxonomy_manager.tree || [];
       if (treeSettings instanceof Array) {
         for (var i = 0; i < treeSettings.length; i++) {
-          $('#' + treeSettings[i].id).once('taxonomy-manager-tree').each(function () {
+          $(once('taxonomy-manager-tree', '#' + treeSettings[i].id)).each(function () {
             var tree = new Drupal.TaxonomyManagerFancyTree(treeSettings[i].id, treeSettings[i].name, treeSettings[i].source);
           });
         }
@@ -21,7 +21,7 @@
         return true;
       });
       // Handle click on autocomplete suggestion
-      $('.ui-autocomplete', context).once('input').on('click', function (e) {
+      $(once('input', '.ui-autocomplete', context)).on('click', function (e) {
         e.stopPropagation();
         var tidMatch = $('input[name="search_terms"]').val().match(/\([0-9]*\)/g)
         if (tidMatch.length) {
@@ -108,4 +108,4 @@
     });
   };
 
-})(jQuery, Drupal, drupalSettings);
+})(jQuery, Drupal, drupalSettings, once);

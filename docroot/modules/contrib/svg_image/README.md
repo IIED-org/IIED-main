@@ -1,49 +1,43 @@
-# SVG Image module
+# SVG Image
 
-## CONTENTS OF THIS FILE
 
- - [Introduction](#introduction)
- - [Features](#features)
- - [Requirements](#requirements)
- - [Installation](#installation)
- - [Configuration](#configuration)
- - [Maintainers](#maintainers)
+SVG Image module changes default image field widget and formatter to allow use SVG image with the standard Image field.
 
-## INTRODUCTION
+Using SVG Image module you will not need to use another field to use SVG image instead of the already created Image
+field. Just add the `svg` extension into the field settings and module will do the rest.
 
-This module changes default image field widget and formatter to allow use SVG image with the standard Image field.
+## Table of contents
 
-Using SVG Image module you will not need to use another field to use SVG image instead of the already created Image field.
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Maintainers](#maintainers)
 
-## FEATURES
+## Requirements
 
-Beyond the  main functionality module allows site builder to:
-* Add a custom width and height to the image in the formatter
-* Choose how to render image - using `<svg>` tag or `<img>`
-
-## REQUIREMENTS
 This module requires:
 * Drupal core module "Image"
-* PHP > 5.6
-* SimpleXML library (Drupal core also requires it)
+* libxml PHP extension (part of the SVG Sanitizer)
 
-Module was tested on Drupal versions:
-* 8.3.x
-* 8.4.x
-* 8.5.x
-
-## INSTALLATION
+## Installation
 Install as you would normally install a contributed Drupal module. Visit:
 https://www.drupal.org/docs/extending-drupal/installing-drupal-modules for further information.
 
-## CONFIGURATION
+If responsive image support is needed please also enable SVG Image Responsive (`svg_image_responsive`)
+module.
+
+## Configuration
 All configuration is available via Image field settings.
 You can set up:
 - Display image as SVG (Using `<svg>` HTML tag). `<img>` tag will be used otherwise
 - Display SVG image with predefined *width* and *height* (It will not be applied to the other image types)
 
-MAINTAINERS
+
+# Maintainers
 -----------
-* [Yaroslav Lushnikov (zvse)](https://www.drupal.org/user/2870933)
+* [Yaroslav Lushnikov (imyaro)](https://www.drupal.org/user/2870933)
 
 Drupal8 version of the module was developed with [DrupalJedi](https://www.drupal.org/drupaljedi) support.
+
+Further development and support provided by **[Attico International](https://www.drupal.org/node/3048850)**
+

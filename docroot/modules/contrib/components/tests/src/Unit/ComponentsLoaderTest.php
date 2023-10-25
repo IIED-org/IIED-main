@@ -12,18 +12,11 @@ use Drupal\Tests\UnitTestCase;
 class ComponentsLoaderTest extends UnitTestCase {
 
   /**
-   * The components info service.
+   * The components registry service.
    *
-   * @var \Drupal\components\Template\ComponentsInfo|\PHPUnit_Framework_MockObject_MockObject
+   * @var \Drupal\components\Template\ComponentsRegistry|\PHPUnit\Framework\MockObject\MockObject
    */
-  protected $componentsInfo;
-
-  /**
-   * The theme manager.
-   *
-   * @var \Drupal\Core\Theme\ThemeManagerInterface|\PHPUnit_Framework_MockObject_MockObject
-   */
-  protected $themeManager;
+  protected $componentsRegistry;
 
   /**
    * The system under test.
@@ -33,311 +26,175 @@ class ComponentsLoaderTest extends UnitTestCase {
   protected $systemUnderTest;
 
   /**
-   * {@inheritdoc}
+   * Invokes a protected or private method of an object.
    *
-   * @throws \Twig\Error\LoaderError
+   * @param object|null $obj
+   *   The instantiated object (or null for static methods.)
+   * @param string $method
+   *   The method to invoke.
+   * @param mixed $args
+   *   The parameters to be passed to the method.
+   *
+   * @return mixed
+   *   The return value of the method.
+   *
+   * @throws \ReflectionException
    */
-  public function setUp() {
-    parent::setUp();
-
-    // Set up components info service.
-    $this->componentsInfo = $this->createMock('\Drupal\components\Template\ComponentsInfo');
-    $this->componentsInfo
-      ->expects($this->atLeastOnce())
-      ->method('getAllThemeInfo')
-      ->willReturn([
-        'earth' => [
-          'namespaces' => [
-            'earth' => ['/earth/templates'],
-          ],
-        ],
-        'jupiter' => [
-          'namespaces' => [
-            'jupiter' => ['/jupiter/templates'],
-            'components' => ['/jupiter/components'],
-            'jupiter_extras' => ['/jupiter/extras'],
-          ],
-        ],
-        'luna' => [
-          'namespaces' => [
-            'luna' => ['/luna/templates'],
-            'components' => ['/luna/components'],
-            'luna_extras' => ['/luna/extras'],
-            'system' => ['/luna/system'],
-          ],
-        ],
-        'sol' => [
-          'namespaces' => [
-            'sol' => ['/sol/templates'],
-            'components' => ['/sol/components'],
-            'sol_extras' => ['/sol/extras'],
-          ],
-        ],
-      ]);
-    $this->componentsInfo
-      ->expects($this->atLeastOnce())
-      ->method('getAllModuleInfo')
-      ->willReturn([
-        'components' => [
-          'namespaces' => [
-            'components' => ['/components/components'],
-            'components_extras' => ['/components/extras'],
-            'system' => ['/components/system'],
-          ],
-        ],
-      ]);
-    $this->componentsInfo
-      ->expects($this->atLeastOnce())
-      ->method('isProtectedNamespace')
-      ->will($this->returnValueMap([
-        ['system', TRUE],
-        ['components', FALSE],
-        ['components_extras', FALSE],
-        ['earth', FALSE],
-        ['jupiter', FALSE],
-        ['jupiter_extras', FALSE],
-        ['luna', FALSE],
-        ['luna_extras', FALSE],
-        ['sol', FALSE],
-        ['sol_extras', FALSE],
-      ]));
-    $this->componentsInfo
-      ->expects($this->atLeastOnce())
-      ->method('getProtectedNamespaceExtensionInfo')
-      ->will($this->returnValueMap([
-        [
-          'system',
-          ['name' => 'System', 'type' => 'module', 'package' => 'Core'],
-        ],
-      ]));
-
-    // Set up theme manager data.
-    $themes = [
-      'sol' => $this->createMock('\Drupal\Core\Extension\Extension'),
-      'earth' => $this->createMock('\Drupal\Core\Extension\Extension'),
-      'luna' => $this->createMock('\Drupal\Core\Extension\Extension'),
-      'jupiter' => $this->createMock('\Drupal\Core\Extension\Extension'),
-    ];
-    foreach (array_keys($themes) as $key) {
-      $themes[$key]
-        ->method('getName')
-        ->willReturn($key);
-    }
-
-    $active_themes = [
-      'luna' => $this->createMock('\Drupal\Core\Theme\ActiveTheme'),
-      'jupiter' => $this->createMock('\Drupal\Core\Theme\ActiveTheme'),
-    ];
-    foreach (array_keys($active_themes) as $key) {
-      $active_themes[$key]
-        ->method('getName')
-        ->willReturn($key);
-    }
-    $active_themes['luna']
-      ->expects($this->atLeastOnce())
-      ->method('getBaseThemeExtensions')
-      ->willReturn([$themes['earth'], $themes['sol']]);
-    $active_themes['jupiter']
-      ->method('getBaseThemeExtensions')
-      ->willReturn([$themes['sol']]);
-
-    $this->themeManager = $this->createMock('\Drupal\Core\Theme\ThemeManagerInterface');
-    $this->themeManager
-      ->expects($this->atLeastOnce())
-      ->method('getActiveTheme')
-      ->willReturn($active_themes['luna'], $active_themes['jupiter'], $active_themes['luna']);
-
-    $this->systemUnderTest = new ComponentsLoader($this->componentsInfo, $this->themeManager);
-    $this->systemUnderTest->checkActiveTheme();
+  public function invokeProtectedMethod(?object $obj, string $method, ...$args) {
+    // Use reflection to test a protected method.
+    $methodUnderTest = new \ReflectionMethod($obj, $method);
+    $methodUnderTest->setAccessible(TRUE);
+    return $methodUnderTest->invokeArgs($obj, $args);
   }
 
   /**
-   * Tests checking the active theme.
+   * Tests finding a template.
    *
-   * @covers ::checkActiveTheme
+   * @covers ::findTemplate
    *
-   * @throws \Twig\Error\LoaderError
+   * @dataProvider providerTestFindTemplate
    */
-  public function testCheckActiveTheme() {
-    $result = $this->systemUnderTest->checkActiveTheme();
-    $this->assertEquals('jupiter', $result);
-    $result = $this->systemUnderTest->checkActiveTheme();
-    $this->assertEquals('luna', $result);
-  }
+  public function testFindTemplate(string $name, bool $throw, ?string $getTemplate, ?string $expected, ?string $exception = NULL) {
+    // Mock services.
+    $componentsRegistry = $this->createMock('\Drupal\components\Template\ComponentsRegistry');
+    $componentsRegistry
+      ->method('getTemplate')
+      ->willReturn($getTemplate);
 
-  /**
-   * Tests prepending paths to a namespace.
-   *
-   * @covers ::setActiveTheme
-   *
-   * @throws \Twig\Error\LoaderError
-   */
-  public function testSetActiveTheme() {
-    $namespaces = [
-      'components' => [
-        '/luna/components',
-        '/sol/components',
-        '/components/components',
-      ],
-      'components_extras' => ['/components/extras'],
-      'sol' => ['/sol/templates'],
-      'sol_extras' => ['/sol/extras'],
-      'earth' => ['/earth/templates'],
-      'luna' => ['/luna/templates'],
-      'luna_extras' => ['/luna/extras'],
-    ];
+    $this->systemUnderTest = new ComponentsLoader($componentsRegistry);
 
-    $expected = array_keys($namespaces);
-    $result = $this->systemUnderTest->getNamespaces();
-    $this->assertEquals($expected, $result);
+    try {
+      // Use reflection to test protected methods and properties.
+      $result = $this->invokeProtectedMethod($this->systemUnderTest, 'findTemplate', $name, $throw);
 
-    foreach ($expected as $namespace) {
-      $expected = $namespaces[$namespace];
-      $result = $this->systemUnderTest->getPaths($namespace);
-      $this->assertEquals($expected, $result);
+      if (!$exception) {
+        $this->assertEquals($expected, $result, $this->getName());
+      }
+    }
+    catch (\Exception $e) {
+      if ($exception) {
+        $this->assertEquals($exception, $e->getMessage(), $this->getName());
+        $exception = '';
+      }
+      else {
+        $this->fail('No exception expected; "' . $e->getMessage() . '" thrown during: ' . $this->getName());
+      }
     }
 
-    // The mocked theme manager will swap the active theme.
-    $this->systemUnderTest->checkActiveTheme();
-
-    $namespaces = [
-      'components' => [
-        '/jupiter/components',
-        '/sol/components',
-        '/components/components',
-      ],
-      'components_extras' => ['/components/extras'],
-      'sol' => ['/sol/templates'],
-      'sol_extras' => ['/sol/extras'],
-      'jupiter' => ['/jupiter/templates'],
-      'jupiter_extras' => ['/jupiter/extras'],
-    ];
-
-    $expected = array_keys($namespaces);
-    $result = $this->systemUnderTest->getNamespaces();
-    $this->assertEquals($expected, $result);
-
-    foreach ($expected as $namespace) {
-      $expected = $namespaces[$namespace];
-      $result = $this->systemUnderTest->getPaths($namespace);
-      $this->assertEquals($expected, $result);
+    if ($exception) {
+      $this->fail('No exception thrown, but "' . $exception . '" was expected during: ' . $this->getName());
     }
   }
 
   /**
-   * Tests the use of the active theme cache.
+   * Provides test data to ::testFindTemplate().
    *
-   * @covers ::setActiveTheme
-   *
-   * @throws \Twig\Error\LoaderError
+   * @see testFindTemplate()
    */
-  public function testSetActiveThemeCache() {
-    // Add a path to the sol namespace.
-    $expected = ['/sol/templates', '/test/templates'];
-    $this->systemUnderTest->addPath('/test/templates', 'sol');
-    $result = $this->systemUnderTest->getPaths('sol');
-    $this->assertEquals($expected, $result);
-
-    // The mocked theme manager will swap the active theme twice.
-    $this->systemUnderTest->checkActiveTheme();
-    $this->systemUnderTest->checkActiveTheme();
-
-    // The cache doesn't have the path added earlier.
-    $expected = ['/sol/templates'];
-    $result = $this->systemUnderTest->getPaths('sol');
-    $this->assertEquals($expected, $result);
-  }
-
-  /**
-   * Tests adding paths to a namespace.
-   *
-   * @param string $path
-   *   Path to prepend.
-   * @param string $namespace
-   *   Namespace to alter.
-   * @param array $expected
-   *   Expected namespace paths.
-   *
-   * @covers ::addPath
-   *
-   * @throws \Twig\Error\LoaderError
-   *
-   * @dataProvider providerTestAddPath
-   */
-  public function testAddPath(string $path, string $namespace, array $expected) {
-    $this->systemUnderTest->addPath($path, $namespace);
-    $result = $this->systemUnderTest->getPaths($namespace);
-    $this->assertEquals($expected, $result);
-  }
-
-  /**
-   * Data provider for testAddPath().
-   *
-   * @see testAddPath()
-   */
-  public function providerTestAddPath(): array {
+  public function providerTestFindTemplate(): array {
     return [
-      'basic add' => [
-        'path' => '/test/templates',
-        'namespace' => 'sol',
-        'expected' => ['/sol/templates', '/test/templates'],
+      'error when template name has no @' => [
+        'name' => 'n/template.twig',
+        'throw' => FALSE,
+        'getTemplate' => 'not called',
+        'expected' => NULL,
+        'exception' => NULL,
       ],
-      'Test appending on a namespace that does not exist' => [
-        'path' => '/pluto/templates',
-        'namespace' => 'pluto',
-        'expected' => ['/pluto/templates'],
+      'error when template name has no namespace' => [
+        'name' => '@/template.twig',
+        'throw' => FALSE,
+        'getTemplate' => 'not called',
+        'expected' => NULL,
+        'exception' => NULL,
       ],
-      'Test trimming the trailing slash off of the path' => [
-        'path' => '/test/trim/',
-        'namespace' => 'sol',
-        'expected' => ['/sol/templates', '/test/trim'],
+      'error when template name does not have an expected extension' => [
+        'name' => '@ns/template.txt',
+        'throw' => FALSE,
+        'getTemplate' => 'not called',
+        'expected' => NULL,
+        'exception' => NULL,
+      ],
+      'exception when invalid template name and $throw = TRUE' => [
+        'name' => '@ns/template.txt',
+        'throw' => TRUE,
+        'getTemplate' => 'not called',
+        'expected' => '',
+        'exception' => 'Malformed namespaced template name "@ns/template.txt" (expecting "@namespace/template_name.twig").',
+      ],
+      'error when template not found' => [
+        'name' => '@ns/template.twig',
+        'throw' => FALSE,
+        'getTemplate' => NULL,
+        'expected' => NULL,
+        'exception' => NULL,
+      ],
+      'exception when template not found and $throw = TRUE' => [
+        'name' => '@ns/template.twig',
+        'throw' => TRUE,
+        'getTemplate' => NULL,
+        'expected' => NULL,
+        'exception' => 'Unable to find template "@ns/template.twig" in the components registry.',
+      ],
+      'template (.twig) found' => [
+        'name' => '@ns/template.twig',
+        'throw' => TRUE,
+        'getTemplate' => 'themes/contrib/example/ns/template.twig',
+        'expected' => 'themes/contrib/example/ns/template.twig',
+        'exception' => NULL,
+      ],
+      'template (.html) found' => [
+        'name' => '@ns/template.html',
+        'throw' => TRUE,
+        'getTemplate' => 'themes/contrib/example/ns/template.html',
+        'expected' => 'themes/contrib/example/ns/template.html',
+        'exception' => NULL,
+      ],
+      'template (.svg) found' => [
+        'name' => '@ns/icon.svg',
+        'throw' => TRUE,
+        'getTemplate' => 'themes/contrib/example/ns/icon.svg',
+        'expected' => 'themes/contrib/example/ns/icon.svg',
+        'exception' => NULL,
       ],
     ];
   }
 
   /**
-   * Tests prepending paths to a namespace.
+   * Tests checking if a template exists.
    *
-   * @param string $path
-   *   Path to prepend.
-   * @param string $namespace
-   *   Namespace to alter.
-   * @param array $expected
-   *   Expected namespace paths.
+   * @covers ::exists
    *
-   * @covers ::prependPath
-   *
-   * @throws \Twig\Error\LoaderError
-   *
-   * @dataProvider providerTestPrependPath
+   * @dataProvider providerTestExists
    */
-  public function testPrependPath(string $path, string $namespace, array $expected) {
-    $this->systemUnderTest->prependPath($path, $namespace);
-    $result = $this->systemUnderTest->getPaths($namespace);
-    $this->assertEquals($expected, $result);
+  public function testExists(string $template, ?string $getTemplate, bool $expected) {
+    // Mock services.
+    $componentsRegistry = $this->createMock('\Drupal\components\Template\ComponentsRegistry');
+    $componentsRegistry
+      ->method('getTemplate')
+      ->willReturn($getTemplate);
+
+    $this->systemUnderTest = new ComponentsLoader($componentsRegistry);
+
+    $result = $this->systemUnderTest->exists($template);
+    $this->assertEquals($expected, $result, $this->getName());
   }
 
   /**
-   * Data provider for testPrependPath().
+   * Provides test data to ::testExists().
    *
-   * @see testPrependPath()
+   * @see testExists()
    */
-  public function providerTestPrependPath(): array {
+  public function providerTestExists(): array {
     return [
-      'basic prepend' => [
-        'path' => '/test/templates',
-        'namespace' => 'sol',
-        'expected' => ['/test/templates', '/sol/templates'],
+      'confirms a template does exist' => [
+        'template' => '@ns/example-exists.twig',
+        'getTemplate' => 'themes/contrib/example/ns/example-exists.twig',
+        'expected' => TRUE,
       ],
-      'Test prepending on a namespace that does not exist' => [
-        'path' => '/pluto/templates',
-        'namespace' => 'pluto',
-        'expected' => ['/pluto/templates'],
-      ],
-      'Test trimming the trailing slash off of the path' => [
-        'path' => '/test/trim/',
-        'namespace' => 'sol',
-        'expected' => ['/test/trim', '/sol/templates'],
+      'confirms a template does not exists' => [
+        'template' => '@ns/example-does-not-exist.twig',
+        'getTemplate' => NULL,
+        'expected' => FALSE,
       ],
     ];
   }

@@ -15,7 +15,7 @@ class TwigExtensionFiltersTest extends UnitTestCase {
   /**
    * The renderer.
    *
-   * @var \Drupal\Core\Render\RendererInterface|\PHPUnit_Framework_MockObject_MockObject
+   * @var \Drupal\Core\Render\RendererInterface|\PHPUnit\Framework\MockObject\MockObject
    */
   protected $renderer;
 
@@ -36,7 +36,7 @@ class TwigExtensionFiltersTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     $this->renderer = $this->createMock('\Drupal\Core\Render\RendererInterface');
@@ -146,32 +146,7 @@ class TwigExtensionFiltersTest extends UnitTestCase {
       $exception = FALSE;
     }
     catch (\Exception $e) {
-      $needle = 'The set filter only works on arrays or "Traversable" objects, got "string".';
-      if (method_exists($this, 'assertStringContainsString')) {
-        $this->assertStringContainsString($needle, $e->getMessage());
-      }
-      else {
-        $this->assertContains($needle, $e->getMessage());
-      }
-      $exception = TRUE;
-    }
-    if (!$exception) {
-      $this->fail('Expected Exception, none was thrown.');
-    }
-  }
-
-  /**
-   * Tests exceptions during set filter.
-   *
-   * @covers ::setFilter
-   */
-  public function testSetFilterMissingArgumentException() {
-    try {
-      TwigExtension::setFilter(['an-array'], NULL, 'value');
-      $exception = FALSE;
-    }
-    catch (\Exception $e) {
-      $this->assertStringContainsString('Value for argument "at" is required for filter "set".', $e->getMessage());
+      $this->assertStringContainsString('The "set" filter only works on arrays or "Traversable" objects, got "string".', $e->getMessage());
       $exception = TRUE;
     }
     if (!$exception) {
@@ -184,9 +159,8 @@ class TwigExtensionFiltersTest extends UnitTestCase {
    *
    * @param array $element
    *   The element to alter.
-   * @param string|array $at
-   *   The dotted-path to the deeply nested element to set. (Or an array value
-   *   to merge, if using the backwards-compatible 8.x-2.x syntax.)
+   * @param string $at
+   *   The dotted-path to the deeply nested element to set.
    * @param mixed $value
    *   The value to set.
    * @param array $expected
@@ -196,7 +170,7 @@ class TwigExtensionFiltersTest extends UnitTestCase {
    *
    * @dataProvider providerTestSetFilter
    */
-  public function testSetFilter(array $element, $at, $value, array $expected) {
+  public function testSetFilter(array $element, string $at, $value, array $expected) {
     $result = NULL;
     try {
       $result = TwigExtension::setFilter($element, $at, $value);
@@ -259,40 +233,6 @@ class TwigExtensionFiltersTest extends UnitTestCase {
           ],
         ],
       ],
-      'Uses 8.x-2.x syntax for backwards-compatibility' => [
-        'element' => [
-          'existing' => 'value',
-          'element' => [
-            '#type' => 'element',
-            '#attributes' => [
-              'class' => ['old-value-1', 'old-value-2'],
-              'id' => 'element',
-            ],
-          ],
-        ],
-        'at' => [
-          'extra' => 'extra-value',
-          'element' => [
-            '#attributes' => [
-              'class' => ['new-value'],
-              'placeholder' => 'Label',
-            ],
-          ],
-        ],
-        'value' => NULL,
-        'expected' => [
-          'existing' => 'value',
-          'extra' => 'extra-value',
-          'element' => [
-            '#type' => 'element',
-            '#attributes' => [
-              'class' => ['new-value', 'old-value-2'],
-              'id' => 'element',
-              'placeholder' => 'Label',
-            ],
-          ],
-        ],
-      ],
     ];
   }
 
@@ -307,32 +247,7 @@ class TwigExtensionFiltersTest extends UnitTestCase {
       $exception = FALSE;
     }
     catch (\Exception $e) {
-      $needle = 'The add filter only works on arrays or "Traversable" objects, got "string".';
-      if (method_exists($this, 'assertStringContainsString')) {
-        $this->assertStringContainsString($needle, $e->getMessage());
-      }
-      else {
-        $this->assertContains($needle, $e->getMessage());
-      }
-      $exception = TRUE;
-    }
-    if (!$exception) {
-      $this->fail('Expected Exception, none was thrown.');
-    }
-  }
-
-  /**
-   * Tests exceptions during add filter.
-   *
-   * @covers ::addFilter
-   */
-  public function testAddFilterMissingArgumentException() {
-    try {
-      TwigExtension::addFilter(['an-array'], NULL, 'value');
-      $exception = FALSE;
-    }
-    catch (\Exception $e) {
-      $this->assertStringContainsString('Value for argument "at" is required for filter "add".', $e->getMessage());
+      $this->assertStringContainsString('The "add" filter only works on arrays or "Traversable" objects, got "string".', $e->getMessage());
       $exception = TRUE;
     }
     if (!$exception) {

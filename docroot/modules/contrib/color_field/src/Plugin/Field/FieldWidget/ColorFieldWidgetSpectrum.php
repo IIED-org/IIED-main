@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\color_field\Plugin\Field\FieldWidget;
 
 use Drupal\Core\Field\FieldItemListInterface;
@@ -22,23 +24,7 @@ class ColorFieldWidgetSpectrum extends ColorFieldWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public static function defaultSettings() {
-    return [
-      'show_input' => FALSE,
-      'show_palette' => FALSE,
-      'palette' => '',
-      'show_palette_only' => FALSE,
-      'show_buttons' => FALSE,
-      'cancel_text' => 'Cancel',
-      'choose_text' => 'Choose',
-      'allow_empty' => FALSE,
-    ] + parent::defaultSettings();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
+  public function settingsForm(array $form, FormStateInterface $form_state): array {
     $element = [];
 
     $element['show_input'] = [
@@ -109,22 +95,21 @@ class ColorFieldWidgetSpectrum extends ColorFieldWidgetBase {
       '#default_value' => $this->getSetting('allow_empty'),
       '#description' => $this->t('Allow empty value.'),
     ];
+
     return $element;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function settingsSummary() {
-    $summary = [];
-
-    return $summary;
+  public function settingsSummary(): array {
+    return [];
   }
 
   /**
    * {@inheritdoc}
    */
-  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
+  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
     $element = parent::formElement($items, $delta, $element, $form, $form_state);
     $element['#attached']['library'][] = 'color_field/color-field-widget-spectrum';
 
@@ -133,10 +118,13 @@ class ColorFieldWidgetSpectrum extends ColorFieldWidgetBase {
 
     // Compare with default settings make sure they are the same datatype.
     $defaults = self::defaultSettings();
+
     foreach ($settings as $key => $value) {
-      if (is_bool($defaults[$key])) {
-        $settings[$key] = boolval($value);
+      if (!is_bool($defaults[$key])) {
+        continue;
       }
+
+      $settings[$key] = boolval($value);
     }
 
     // Parsing Palette data so that it works with spectrum color picker.
@@ -156,6 +144,7 @@ class ColorFieldWidgetSpectrum extends ColorFieldWidgetBase {
 
       // Support all kinds of color modes.
       $re = '/(rgba|hsva|hsla)[\(\s][0-9]*[%\,\s]+[0-9]*[%\,\s]+[0-9]*[%\,\s]+[0-9\.]+[\)\s]*|(rgb|hsv|hsl)[\(\s][0-9]+[%\,\s]+[0-9]+[%\,\s]+[0-9]+[\)\s]*|[\#]?[0-9a-f]+|[a-z]+/mi';
+
       foreach ($rows as $row) {
         // Next explode each row into an array of values.
         preg_match_all($re, $row, $matches);
@@ -171,6 +160,22 @@ class ColorFieldWidgetSpectrum extends ColorFieldWidgetBase {
     $element['opacity']['#attributes']['class'][] = 'js-color-field-widget-spectrum__opacity';
 
     return $element;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function defaultSettings(): array {
+    return [
+      'show_input' => FALSE,
+      'show_palette' => FALSE,
+      'palette' => '',
+      'show_palette_only' => FALSE,
+      'show_buttons' => FALSE,
+      'cancel_text' => 'Cancel',
+      'choose_text' => 'Choose',
+      'allow_empty' => FALSE,
+    ] + parent::defaultSettings();
   }
 
 }

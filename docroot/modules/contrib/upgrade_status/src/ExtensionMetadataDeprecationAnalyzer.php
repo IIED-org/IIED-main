@@ -51,7 +51,7 @@ final class ExtensionMetadataDeprecationAnalyzer {
         }
 
         if (!isset($info['core_version_requirement'])) {
-          $deprecations[] = new DeprecationMessage("Add core_version_requirement: ^8 || ^9 to designate that the extension is compatible with Drupal 9. See https://drupal.org/node/3070687.", $error_path, 0);
+          $deprecations[] = new DeprecationMessage("Add core_version_requirement: ^9 || ^10 to designate that the extension is compatible with Drupal 10. See https://drupal.org/node/3070687.", $error_path, 0);
         }
         elseif (!ProjectCollector::isCompatibleWithNextMajorDrupal($info['core_version_requirement'])) {
           $deprecations[] = new DeprecationMessage("Value of core_version_requirement: {$info['core_version_requirement']} is not compatible with the next major version of Drupal core. See https://drupal.org/node/3070687.", $error_path, 0);

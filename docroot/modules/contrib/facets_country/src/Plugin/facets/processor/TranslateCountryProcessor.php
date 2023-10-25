@@ -13,7 +13,6 @@ use Drupal\facets\FacetInterface;
 use Drupal\facets\Processor\BuildProcessorInterface;
 use Drupal\facets\Processor\ProcessorPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Security\TrustedCallbackInterface;
 
 /**
  * Class TranslateCountryProcessor.
@@ -76,10 +75,10 @@ class TranslateCountryProcessor extends ProcessorPluginBase implements BuildProc
     $property = NULL;
     /** @var \Drupal\Core\TypedData\DataDefinitionInterface $definition */
     foreach ($dataDefinition->getPropertyDefinitions() as $key => $definition) {
-    //   if ($dataDefinition->getDataType() === 'field_item::country') {
+      if ($dataDefinition->getDataType() === 'field_item:country') {
         $property = $key;
         break;
-    //  }
+      }
     }
 
     if ($property === NULL) {
@@ -102,8 +101,7 @@ class TranslateCountryProcessor extends ProcessorPluginBase implements BuildProc
     /** @var \Drupal\Core\TypedData\DataDefinitionInterface $dataDefinition */
     $dataDefinition = $facet->getDataDefinition();
 
-    //return $dataDefinition->getDataType() === 'field_item:country';
-    return TRUE;
-   }
+    return $dataDefinition->getDataType() === 'field_item:country';
+  }
 
 }

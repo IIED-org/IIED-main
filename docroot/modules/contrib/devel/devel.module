@@ -486,14 +486,16 @@ if (!function_exists('ksm')) {
  *   Optional name for identifying the output.
  * @param string $type
  *   Optional message type see MessengerInterface, defaults to TYPE_STATUS.
+ * @param bool $load_dependencies
+ *   Optional load dependencies if an entity is passed.
  *
  * @return input
  *   The unaltered input value.
  *
  * @see \Drupal\devel\DevelDumperManager::message()
  */
-function dpm($input, $name = NULL, $type = MessengerInterface::TYPE_STATUS) {
-  \Drupal::service('devel.dumper')->message($input, $name, $type);
+function dpm($input, $name = NULL, $type = MessengerInterface::TYPE_STATUS, $load_dependencies = FALSE) {
+  \Drupal::service('devel.dumper')->message($input, $name, $type, NULL, $load_dependencies);
   return $input;
 }
 
@@ -508,22 +510,24 @@ function dpm($input, $name = NULL, $type = MessengerInterface::TYPE_STATUS) {
  *   An arbitrary value to output.
  * @param string $name
  *   Optional name for identifying the output.
+ * @param bool $load_dependencies
+ *   Optional load dependencies if an entity is passed.
  *
  * @return mixed
  *   The unaltered input value.
  *
  * @see \Drupal\devel\DevelDumperManager::message()
  */
-function dvm($input, $name = NULL) {
-  \Drupal::service('devel.dumper')->message($input, $name, MessengerInterface::TYPE_STATUS, 'drupal_variable');
+function dvm($input, $name = NULL, $load_dependencies = FALSE) {
+  \Drupal::service('devel.dumper')->message($input, $name, MessengerInterface::TYPE_STATUS, 'drupal_variable', $load_dependencies);
   return $input;
 }
 
 /**
  * An alias for dpm(), for historic reasons.
  */
-function dsm($input, $name = NULL) {
-  return dpm($input, $name);
+function dsm($input, $name = NULL, $load_dependencies = FALSE) {
+  return dpm($input, $name, $load_dependencies);
 }
 
 /**
@@ -681,7 +685,8 @@ function ddebug_backtrace($return = FALSE, $pop = 0, $options = DEBUG_BACKTRACE_
         }
         else {
           $function = 'main()';
-          $call['args'] = $_GET;
+          $requestStack = \Drupal::service('request_stack');
+          $call['args'] = $requestStack->getCurrentRequest()->query->all();
         }
         $nicetrace[($counter <= 10 ? $nbsp : '') . --$counter . ': ' . $function] = $call;
         array_shift($backtrace);

@@ -27,6 +27,7 @@ build:
         commands:
           - cd ${SOURCE_DIR}
           - sudo -u www-data composer config repositories.asset {"composer","https://asset-packagist.org"}
+          - sudo -u www-data composer config --no-plugins allow-plugins.oomphinc/composer-installers-extender true
           - sudo -u www-data composer config extra.installer-types.0 "npm-asset"
           - sudo -u www-data composer config extra.installer-types.1 "bower-asset"
           - sudo -u www-data composer config extra.installer-paths.libraries\/\{\$name\} "[type:bower-asset]"

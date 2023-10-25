@@ -16,7 +16,7 @@ class DazzlerTest extends UnitTestCase {
   /**
    * The mocked element info manager.
    *
-   * @var \Drupal\Core\Render\ElementInfoManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+   * @var \Drupal\Core\Render\ElementInfoManagerInterface|\PHPUnit\Framework\MockObject\MockObject
    */
   protected $elementInfoManager;
 
@@ -30,12 +30,12 @@ class DazzlerTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp():void {
     parent::setUp();
 
     // Mock services.
     $this->initElementInfoManager();
-    $twig_service = $this->createMock('\Twig_Environment');
+    $twig_service = $this->createMock('\Twig\Environment');
     $twig_service->method('isDebug')->willReturn(TRUE);
 
     // Mock \Drupal::service() calls.
@@ -366,7 +366,7 @@ class DazzlerTest extends UnitTestCase {
    */
   public function testPreRenderFormNoDebugging() {
     // Turn off Twig debugging.
-    $twig_service = $this->createMock('\Twig_Environment');
+    $twig_service = $this->createMock('\Twig\Environment');
     $twig_service->method('isDebug')->willReturn(FALSE);
     $container = new ContainerBuilder();
     $container->set('element_info', $this->elementInfoManager);
@@ -892,7 +892,7 @@ class DazzlerTest extends UnitTestCase {
    * @see testPreprocessFormElement()
    */
   public function providerPreprocessFormElement() {
-    $variables1 = [
+    $variables = [
       'element' => [
         '#formdazzle' => [
           'suggestion_suffix' => '__form_id_suggestion',
@@ -903,18 +903,21 @@ class DazzlerTest extends UnitTestCase {
       ],
       'label' => ['#theme' => 'form_element_label'],
     ];
-    $expected1 = $variables1;
-    $expected1['label']['#theme'] = 'form_element_label__form_id_suggestion';
-    $variables2 = $variables1;
-    $variables2['label']['#theme'] = [
+    $expected = $variables;
+    $expected['label']['#theme'] = 'form_element_label__form_id_suggestion';
+    $test2_variables = $variables;
+    $test2_variables['label']['#theme'] = [
       'form_element_label__thing',
       'form_element_label',
     ];
-    $expected2 = $variables2;
-    $expected2['label']['#theme'][1] = 'form_element_label__form_id_suggestion';
+    $test2_expected = $test2_variables;
+    $test2_expected['label']['#theme'][1] = 'form_element_label__form_id_suggestion';
     return [
-      'Add suggestion to #theme string value' => [$variables1, $expected1],
-      'Add suggestion to #theme last array value' => [$variables2, $expected2],
+      'Add suggestion to #theme string value' => [$variables, $expected],
+      'Add suggestion to #theme last array value' => [
+        $test2_variables,
+        $test2_expected,
+      ],
     ];
   }
 
@@ -952,7 +955,7 @@ class DazzlerTest extends UnitTestCase {
       'webform' => FALSE,
       'formdazzle' => FALSE,
     ];
-    $implementations2 = $implementations;
+    $other_implementations = $implementations;
 
     return [
       'reorders form_alter implementations' => [
@@ -961,9 +964,9 @@ class DazzlerTest extends UnitTestCase {
         $expected,
       ],
       'does not reorder other implementations' => [
-        $implementations2,
+        $other_implementations,
         'other_hook_alter',
-        $implementations2,
+        $other_implementations,
       ],
     ];
   }

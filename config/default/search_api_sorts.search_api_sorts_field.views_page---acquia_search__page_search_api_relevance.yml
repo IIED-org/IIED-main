@@ -1,0 +1,11 @@
+uuid: ed61d394-4025-4a01-afa1-5e1f2f1cc478
+langcode: en
+status: true
+dependencies: {  }
+id: views_page---acquia_search__page_search_api_relevance
+label: Relevance
+weight: 0
+display_id: views_page---acquia_search__page
+field_identifier: search_api_relevance
+default_sort: true
+default_order: desc

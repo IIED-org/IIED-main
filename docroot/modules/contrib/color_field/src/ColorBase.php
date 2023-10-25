@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\color_field;
 
 /**
@@ -8,35 +10,11 @@ namespace Drupal\color_field;
 abstract class ColorBase implements ColorInterface {
 
   /**
-   * The opacity of the color.
-   *
-   * @var float
-   */
-  protected $opacity;
-
-  /**
-   * Get the opacity.
-   *
-   * @return float
-   *   The opacity value between 0 and 1.
-   */
-  public function getOpacity() {
-    return $this->opacity;
-  }
-
-  /**
-   * Set the opacity.
-   */
-  public function setOpacity($opacity) {
-    $this->opacity = $opacity;
-  }
-
-  /**
    * Regexes to match various color formats.
    *
-   * @var array
+   * @var string[]
    */
-  public static $patterns = [
+  public static array $patterns = [
     'cmyk'  => '/^(?:device-)?cmyk\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d+(?:\.\d+)?|\.\d+)\s*\)/',
     'rgba'  => '/^rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d+(?:\.\d+)?|\.\d+)\s*\)/',
     'rgb' => '/^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/',
@@ -51,9 +29,9 @@ abstract class ColorBase implements ColorInterface {
   /**
    * Named HTML colors.
    *
-   * @var array
+   * @var string[]
    */
-  public static $namedColors = [
+  public static array $namedColors = [
     "aliceblue" => "f0f8ff",
     "antiquewhite" => "faebd7",
     "aqua" => "00ffff",
@@ -198,5 +176,29 @@ abstract class ColorBase implements ColorInterface {
     "yellow" => "ffff00",
     "yellowgreen" => "9acd32",
   ];
+
+  /**
+   * The opacity of the color.
+   *
+   * @var float
+   */
+  protected float $opacity;
+
+  /**
+   * Get the opacity.
+   *
+   * @return float
+   *   The opacity value between 0 and 1.
+   */
+  public function getOpacity(): float {
+    return $this->opacity;
+  }
+
+  /**
+   * Set the opacity.
+   */
+  public function setOpacity(float $opacity): void {
+    $this->opacity = $opacity;
+  }
 
 }

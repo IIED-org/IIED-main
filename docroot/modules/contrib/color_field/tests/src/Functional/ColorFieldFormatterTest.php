@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\Tests\color_field\Functional;
 
 /**
@@ -12,7 +14,7 @@ class ColorFieldFormatterTest extends ColorFieldFunctionalTestBase {
   /**
    * Test color_field_formatter_text formatter.
    */
-  public function testColorFieldFormatterText() {
+  public function testColorFieldFormatterText(): void {
     $this->form->setComponent('field_color', [
       'type' => 'color_field_widget_default',
       'settings' => [
@@ -44,7 +46,7 @@ class ColorFieldFormatterTest extends ColorFieldFunctionalTestBase {
       'field_color[0][opacity]' => 1,
     ];
 
-    $this->drupalPostForm(NULL, $edit, t('Save'));
+    $this->submitForm($edit, t('Save'));
     $this->assertSession()->responseContains('#E70000 1</div>');
 
     // Ensure alternate hex format works.
@@ -63,7 +65,8 @@ class ColorFieldFormatterTest extends ColorFieldFunctionalTestBase {
       ],
     ])->save();
 
-    $this->drupalPostForm('node/add/article', $edit, t('Save'));
+    $this->drupalGet('node/add/article');
+    $this->submitForm($edit, t('Save'));
     $this->assertSession()->responseContains('#FF8C00</div>');
 
     // Test rgba Render mode.
@@ -81,7 +84,8 @@ class ColorFieldFormatterTest extends ColorFieldFunctionalTestBase {
       ],
     ])->save();
 
-    $this->drupalPostForm('node/add/article', $edit, t('Save'));
+    $this->drupalGet('node/add/article');
+    $this->submitForm($edit, t('Save'));
     $this->assertSession()->responseContains('rgba(255,239,0,0.9)');
 
     // Test RGB render mode.
@@ -99,14 +103,15 @@ class ColorFieldFormatterTest extends ColorFieldFunctionalTestBase {
       ],
     ])->save();
 
-    $this->drupalPostForm('node/add/article', $edit, t('Save'));
+    $this->drupalGet('node/add/article');
+    $this->submitForm($edit, t('Save'));
     $this->assertSession()->responseContains('rgb(0,129,31)');
   }
 
   /**
    * Test color_field_formatter_swatch formatter.
    */
-  public function testColorFieldFormatterSwatch() {
+  public function testColorFieldFormatterSwatch(): void {
     $this->form->setComponent('field_color', [
       'type' => 'color_field_widget_default',
       'settings' => [
@@ -127,7 +132,8 @@ class ColorFieldFormatterTest extends ColorFieldFunctionalTestBase {
       'field_color[0][opacity]' => 0.9,
     ];
 
-    $this->drupalPostForm('node/add/article', $edit, t('Save'));
+    $this->drupalGet('node/add/article');
+    $this->submitForm($edit, t('Save'));
     $this->assertSession()->responseContains('background-color: rgba(0,68,255,0.9)');
     $this->assertSession()->responseContains('color_field__swatch--square');
 
@@ -146,7 +152,8 @@ class ColorFieldFormatterTest extends ColorFieldFunctionalTestBase {
       ],
     ])->save();
 
-    $this->drupalPostForm('node/add/article', $edit, t('Save'));
+    $this->drupalGet('node/add/article');
+    $this->submitForm($edit, t('Save'));
     $this->assertSession()->responseContains('background-color: rgb(118,0,137)');
     $this->assertSession()->responseContains('color_field__swatch--circle');
   }
@@ -154,7 +161,7 @@ class ColorFieldFormatterTest extends ColorFieldFunctionalTestBase {
   /**
    * Test color_field_formatter_css formatter.
    */
-  public function testColorFieldFormatterCss() {
+  public function testColorFieldFormatterCss(): void {
     $this->form->setComponent('field_color', [
       'type' => 'color_field_widget_default',
       'settings' => [
@@ -175,7 +182,8 @@ class ColorFieldFormatterTest extends ColorFieldFunctionalTestBase {
       'field_color[0][opacity]' => 0.9,
     ];
 
-    $this->drupalPostForm('node/add/article', $edit, t('Save'));
+    $this->drupalGet('node/add/article');
+    $this->submitForm($edit, t('Save'));
     $this->assertSession()->responseContains('body { background-color: rgba(255,244,48,0.9) !important; }');
 
     // Test without opacity and not important.
@@ -196,7 +204,8 @@ class ColorFieldFormatterTest extends ColorFieldFunctionalTestBase {
       'label' => 'hidden',
     ])->save();
 
-    $this->drupalPostForm('node/add/article', $edit, t('Save'));
+    $this->drupalGet('node/add/article');
+    $this->submitForm($edit, t('Save'));
     $this->assertSession()->responseContains('body { background-color: rgb(255,255,255); }');
   }
 

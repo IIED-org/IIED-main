@@ -3,7 +3,7 @@
  * JavaScript behaviors for managed file uploads.
  */
 
-(function ($, Drupal) {
+(function ($, Drupal, once) {
 
   'use strict';
 
@@ -15,8 +15,7 @@
   Drupal.behaviors.webformManagedFileAutoUpload = {
     attach: function attach(context) {
       // Add submit handler to file upload form.
-      $(context).find('form')
-        .once('webform-auto-file-upload')
+      $(once('webform-auto-file-upload', 'form', context))
         .on('submit', function (event) {
           var $form = $(this);
           if ($form.data('webform-auto-file-uploads') > 0 && blockSubmit($form)) {
@@ -59,7 +58,7 @@
         };
       }
 
-      $(context).find('input[type="file"]').once('webform-auto-file-upload').on('change', function () {
+      $(once('webform-auto-file-upload', 'input[type="file"]', context)).on('change', function () {
         // Track file upload.
         $(this).data('webform-auto-file-upload', true);
 
@@ -71,7 +70,8 @@
     },
     detach: function detach(context, settings, trigger) {
       if (trigger === 'unload') {
-        $(context).find('input[type="file"]').removeOnce('webform-auto-file-upload').each(function () {
+        const removedElements = once.remove('webform-auto-file-upload', 'input[type="file"]', context);
+        $(removedElements).each(function () {
           if ($(this).data('webform-auto-file-upload')) {
             // Remove file upload tracking.
             $(this).removeData('webform-auto-file-upload');
@@ -102,7 +102,7 @@
 
     var message = Drupal.t('File upload in progress. Uploaded file may be lost.') +
       '\n' +
-      Drupal.t('Do you want to continue?');
+      Drupal.t('Click OK to submit the form without finishing the file upload or cancel to return to form.');
     var result = !window.confirm(message);
 
     // If submit once behavior is available, make sure to clear it if the form
@@ -114,4 +114,4 @@
     return result;
   }
 
-})(jQuery, Drupal);
+})(jQuery, Drupal, once);

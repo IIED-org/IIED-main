@@ -6,6 +6,7 @@ use Drupal\Core\Entity\BundleEntityFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\webform\Form\WebformDialogFormTrait;
+use Drupal\webform\Utility\WebformElementHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -121,13 +122,15 @@ class WebformEntityAddForm extends BundleEntityFormBase {
     ];
     /** @var \Drupal\webform\WebformEntityStorageInterface $webform_storage */
     $webform_storage = $this->entityTypeManager->getStorage('webform');
-    $form['category'] = [
+    $form['categories'] = [
       '#type' => 'webform_select_other',
-      '#title' => $this->t('Category'),
-      '#options' => $webform_storage->getCategories(),
-      '#empty_option' => $this->t('- None -'),
-      '#default_value' => $webform->get('category'),
+      '#title' => $this->t('Categories'),
+      '#options' => $webform_storage->getCategories(NULL, TRUE),
+      '#multiple' => TRUE,
+      '#select2' => TRUE,
+      '#default_value' => $webform->get('categories'),
     ];
+    WebformElementHelper::process($form['categories']);
     $form['status'] = [
       '#type' => 'radios',
       '#title' => $this->t('Status'),
@@ -138,6 +141,20 @@ class WebformEntityAddForm extends BundleEntityFormBase {
       ],
       '#options_display' => 'side_by_side',
     ];
+
+    if ($this->moduleHandler->moduleExists('config_translation')) {
+      $langcode_options = [];
+      foreach ($this->languageManager->getLanguages() as $language) {
+        $langcode_options[$language->getId()] = $language->getName();
+      }
+      $form['langcode'] = [
+        '#type' => 'select',
+        '#title' => $this->t('Language'),
+        '#options' => $langcode_options,
+        '#default_value' => $this->languageManager->getCurrentLanguage()->getId(),
+        '#access' => (count($langcode_options) > 1),
+      ];
+    }
 
     $form = $this->protectBundleIdElement($form);
 

@@ -8,7 +8,7 @@
 /**
  * Implements hook_install().
  */
-function formdazzle_install() {
+function formdazzle_install(): void {
   // Ensure formdazzle_module_implements_alter comes after other module's
   // hook_module_implements_alter().
   module_set_weight('formdazzle', 10);

@@ -1,6 +1,0 @@
-{
-    "name": "string_translation_ui",
-    "type": "drupal-module",
-    "description": "Provides a admin area to insert new strings to be translatable.",
-    "minimum-stability": "dev"
-}

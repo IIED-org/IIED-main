@@ -1,0 +1,15 @@
+<div class="lpb-section-menu">
+  <h4 class="visually-hidden">{{ 'Add Section'|t }}</h4>
+  <div class="lpb-section-menu__group">
+    {% for type in types %}
+      <div class="lpb-section-menu__item type-{{type.id}} is-layout">
+        <a class="lpb-section-menu-button" data-type="{{ type.id }}" href="#{{ type.id }}" title="{{ type.title }}">
+        {% if type.image %}
+        <img src="{{ type.image }}" alt ="" />
+        {% endif %}
+        <div>{{ type.title }}</div>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+</div>

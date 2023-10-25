@@ -16,7 +16,7 @@ class WebformAccessTest extends WebformAccessBrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['field_ui'];
+  protected static $modules = ['field_ui'];
 
   /**
    * Tests webform access.
@@ -186,7 +186,7 @@ class WebformAccessTest extends WebformAccessBrowserTestBase {
     $this->drupalLogin($this->rootUser);
     $this->drupalGet('/admin/structure/webform/access/group/manage/manager');
     $assert_session->fieldExists('label');
-    $assert_session->fieldExists('description[value]');
+    $assert_session->fieldExists('description[value][value]');
     $assert_session->fieldExists('type');
     $assert_session->fieldExists('admins[]');
     $assert_session->fieldExists('users[]');

@@ -23,7 +23,7 @@ final class TwigDeprecationAnalyzerTest extends KernelTestBase {
     $sut = $this->container->get('upgrade_status.twig_deprecation_analyzer');
     $twig_deprecations = $sut->analyze($extension);
 
-    if (version_compare(\Drupal::VERSION, '9.0.0') === -1) {
+    if (version_compare('10.0.0', \Drupal::VERSION) === -1) {
       $this->assertCount(1, $twig_deprecations, var_export($twig_deprecations, TRUE));
       $this->assertEquals(new DeprecationMessage(
         'Twig Filter "deprecatedfilter" is deprecated. See https://drupal.org/node/3071078.',
@@ -32,6 +32,7 @@ final class TwigDeprecationAnalyzerTest extends KernelTestBase {
       ), $twig_deprecations[0]);
     }
     else {
+      // Spaceless deprecation exists in Twig 2 which is in Drupal 9.
       $this->assertCount(2, $twig_deprecations, var_export($twig_deprecations, TRUE));
       $this->assertContainsEquals(new DeprecationMessage(
         'Twig Filter "deprecatedfilter" is deprecated. See https://drupal.org/node/3071078.',

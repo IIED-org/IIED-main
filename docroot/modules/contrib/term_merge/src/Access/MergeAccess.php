@@ -24,7 +24,8 @@ class MergeAccess implements AccessInterface {
    *   The access result.
    */
   public function access(Vocabulary $taxonomy_vocabulary, AccountInterface $account) {
-    return AccessResult::allowedIfHasPermission($account, 'edit terms in ' . $taxonomy_vocabulary->id());
+    return AccessResult::allowedIfHasPermission($account, 'edit terms in ' . $taxonomy_vocabulary->id())->orIf(
+      AccessResult::allowedIfHasPermission($account, 'administer taxonomy'));
   }
 
 }

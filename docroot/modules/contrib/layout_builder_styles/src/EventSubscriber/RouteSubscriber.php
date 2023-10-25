@@ -6,7 +6,7 @@ use Drupal\Core\Routing\RouteSubscriberBase;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * Class RouteSubscriber.
+ * Route subscriber to add the custom config form.
  */
 class RouteSubscriber extends RouteSubscriberBase {
 

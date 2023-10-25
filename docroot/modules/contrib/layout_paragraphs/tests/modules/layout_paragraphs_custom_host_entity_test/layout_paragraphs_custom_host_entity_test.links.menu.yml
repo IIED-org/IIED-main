@@ -1,0 +1,10 @@
+entity.lp_host_entity.settings:
+  title: LP Host Entity
+  description: Configure a LP Host Entity entity type
+  route_name:  entity.lp_host_entity.settings
+  parent: system.admin_structure
+entity.lp_host_entity.collection:
+  title: LP Host Entities
+  description: List of lp host entities
+  route_name: entity.lp_host_entity.collection
+  parent: system.admin_content

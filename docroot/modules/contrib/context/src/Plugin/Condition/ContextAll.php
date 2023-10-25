@@ -74,6 +74,9 @@ class ContextAll extends ConditionPluginBase implements ContainerFactoryPluginIn
 
       /** @var \Drupal\context\ContextInterface $context */
       $context = $this->contextManager->getContext($id);
+      if (empty($context)) {
+        continue;
+      }
       /** @var \Drupal\Core\Condition\ConditionInterface[] $context_conditions */
       $context_conditions = $context->getConditions();
       foreach ($context_conditions as $condition) {
@@ -89,7 +92,7 @@ class ContextAll extends ConditionPluginBase implements ContainerFactoryPluginIn
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildConfigurationForm($form, $form_state);
-    unset($form['negate']);
+    $form['negate']['#access'] = FALSE;
     $form['values'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Context (all)'),
@@ -143,19 +146,23 @@ class ContextAll extends ConditionPluginBase implements ContainerFactoryPluginIn
     // Handle negated contexts first.
     foreach ($negated_contexts as $name) {
       /** @var \Drupal\context\ContextInterface $negated_context */
-      $negated_context = $this->contextManager->getContext($name);
-      if ($this->contextManager->evaluateContextConditions($negated_context) && !$negated_context->disabled()) {
-        return FALSE;
+      if ($negated_context = $this->contextManager->getContext($name)) {
+        if ($this->contextManager->evaluateContextConditions($negated_context) && !$negated_context->disabled()) {
+          return FALSE;
+        }
       }
     }
 
     // Now handle required contexts.
     foreach ($required_contexts as $name) {
       /** @var \Drupal\context\ContextInterface $required_context */
-      if ($required_context = $this->contextManager->getContext($name)) {
-        if (!$this->contextManager->evaluateContextConditions($required_context) && !$required_context->disabled()) {
-          return FALSE;
-        }
+      $required_context = $this->contextManager->getContext($name);
+      // A non-existent context can never be active.
+      if (!isset($required_context)) {
+        return FALSE;
+      }
+      if (!$this->contextManager->evaluateContextConditions($required_context) && !$required_context->disabled()) {
+        return FALSE;
       }
     }
 

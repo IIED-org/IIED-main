@@ -22,7 +22,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *     "num" = 1,
  *     "title_length" = 12,
  *     "kill" = FALSE
- *   }
+ *   },
+ *   dependencies = {
+ *     "taxonomy",
+ *   },
  * )
  */
 class VocabularyDevelGenerate extends DevelGenerateBase implements ContainerFactoryPluginInterface {

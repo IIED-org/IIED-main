@@ -7,7 +7,7 @@ configure: multiple_registration.multiple_registration_list_index
 dependencies:
   - drupal:path_alias
 
-# Information added by Drupal.org packaging script on 2023-04-26
-version: '3.2.1'
+# Information added by Drupal.org packaging script on 2023-05-15
+version: '3.2.4'
 project: 'multiple_registration'
-datestamp: 1682510947
+datestamp: 1684156691

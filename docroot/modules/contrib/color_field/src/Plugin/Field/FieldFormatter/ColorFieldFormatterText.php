@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\color_field\Plugin\Field\FieldFormatter;
 
+use Drupal\color_field\ColorHex;
 use Drupal\color_field\Plugin\Field\FieldType\ColorFieldType;
+use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\color_field\ColorHex;
 
 /**
  * Plugin implementation of the color_field text formatter.
@@ -25,17 +28,7 @@ class ColorFieldFormatterText extends FormatterBase {
   /**
    * {@inheritdoc}
    */
-  public static function defaultSettings() {
-    return [
-      'format' => 'hex',
-      'opacity' => TRUE,
-    ] + parent::defaultSettings();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
+  public function settingsForm(array $form, FormStateInterface $form_state): array {
     $opacity = $this->getFieldSetting('opacity');
 
     $elements = [];
@@ -59,29 +52,9 @@ class ColorFieldFormatterText extends FormatterBase {
   }
 
   /**
-   * This function is used to get the color format.
-   *
-   * @param string $format
-   *   Format is of string type.
-   *
-   * @return array|string
-   *   Returns array or string.
-   */
-  protected function getColorFormat($format = NULL) {
-    $formats = [];
-    $formats['hex'] = $this->t('Hex triplet');
-    $formats['rgb'] = $this->t('RGB Decimal');
-
-    if ($format) {
-      return $formats[$format];
-    }
-    return $formats;
-  }
-
-  /**
    * {@inheritdoc}
    */
-  public function settingsSummary() {
+  public function settingsSummary(): array {
     $opacity = $this->getFieldSetting('opacity');
     $settings = $this->getSettings();
 
@@ -101,7 +74,7 @@ class ColorFieldFormatterText extends FormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function viewElements(FieldItemListInterface $items, $langcode) {
+  public function viewElements(FieldItemListInterface $items, $langcode): array {
     $elements = [];
 
     foreach ($items as $delta => $item) {
@@ -114,7 +87,44 @@ class ColorFieldFormatterText extends FormatterBase {
   /**
    * {@inheritdoc}
    */
-  protected function viewValue(ColorFieldType $item) {
+  public static function defaultSettings(): array {
+    return [
+      'format' => 'hex',
+      'opacity' => TRUE,
+    ] + parent::defaultSettings();
+  }
+
+  /**
+   * This function is used to get the color format.
+   *
+   * @param string|null $format
+   *   Format is of string type.
+   *
+   * @return \Drupal\Component\Render\MarkupInterface[]|\Drupal\Component\Render\MarkupInterface
+   *   Returns array or string.
+   */
+  protected function getColorFormat(?string $format = NULL): array|MarkupInterface {
+    $formats = [];
+    $formats['hex'] = $this->t('Hex triplet');
+    $formats['rgb'] = $this->t('RGB Decimal');
+
+    if ($format) {
+      return $formats[$format];
+    }
+
+    return $formats;
+  }
+
+  /**
+   * View value as text in hex or rgb format.
+   *
+   * @param \Drupal\color_field\Plugin\Field\FieldType\ColorFieldType $item
+   *   The field item.
+   *
+   * @return string
+   *   The color in hex or rgb format (per field settings).
+   */
+  protected function viewValue(ColorFieldType $item): string {
     $opacity = $this->getFieldSetting('opacity');
     $settings = $this->getSettings();
 
@@ -122,21 +132,18 @@ class ColorFieldFormatterText extends FormatterBase {
 
     switch ($settings['format']) {
       case 'hex':
-        if ($opacity && $settings['opacity']) {
-          $output = $color_hex->toString(TRUE);
-        }
-        else {
-          $output = $color_hex->toString(FALSE);
-        }
+        $output = $opacity && $settings['opacity']
+            ? $color_hex->toString(TRUE)
+            : $color_hex->toString(FALSE);
+
         break;
 
       case 'rgb':
-        if ($opacity && $settings['opacity']) {
-          $output = $color_hex->toRgb()->toString(TRUE);
-        }
-        else {
-          $output = $color_hex->toRgb()->toString(FALSE);
-        }
+      default:
+        $output = $opacity && $settings['opacity']
+            ? $color_hex->toRgb()->toString(TRUE)
+            : $color_hex->toRgb()->toString(FALSE);
+
         break;
     }
 

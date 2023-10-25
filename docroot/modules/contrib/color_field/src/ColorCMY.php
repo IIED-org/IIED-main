@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\color_field;
 
 /**
@@ -10,41 +12,41 @@ class ColorCMY extends ColorBase {
   /**
    * The cyan.
    *
-   * @var float
+   * @var int
    */
-  private $cyan;
+  protected int $cyan;
 
   /**
    * The magenta.
    *
-   * @var float
+   * @var int
    */
-  private $magenta;
+  protected int $magenta;
 
   /**
    * The yellow.
    *
-   * @var float
+   * @var int
    */
-  private $yellow;
+  protected int $yellow;
 
   /**
    * Create a new CMYK color.
    *
-   * @param float $cyan
+   * @param int $cyan
    *   The cyan.
-   * @param float $magenta
+   * @param int $magenta
    *   The magenta.
-   * @param float $yellow
+   * @param int $yellow
    *   The yellow.
    * @param float $opacity
    *   The opacity.
    */
-  public function __construct($cyan, $magenta, $yellow, $opacity) {
+  public function __construct(int $cyan, int $magenta, int $yellow, float $opacity) {
     $this->cyan = $cyan;
     $this->magenta = $magenta;
     $this->yellow = $yellow;
-    $this->opacity = floatval($opacity);
+    $this->opacity = $opacity;
   }
 
   /**
@@ -53,7 +55,7 @@ class ColorCMY extends ColorBase {
    * @return int
    *   The amount of cyan.
    */
-  public function getCyan() {
+  public function getCyan(): int {
     return $this->cyan;
   }
 
@@ -63,7 +65,7 @@ class ColorCMY extends ColorBase {
    * @return int
    *   The amount of magenta.
    */
-  public function getMagenta() {
+  public function getMagenta(): int {
     return $this->magenta;
   }
 
@@ -73,7 +75,7 @@ class ColorCMY extends ColorBase {
    * @return int
    *   The amount of yellow.
    */
-  public function getYellow() {
+  public function getYellow(): int {
     return $this->yellow;
   }
 
@@ -81,46 +83,49 @@ class ColorCMY extends ColorBase {
    * A string representation of this color in the current format.
    *
    * @param bool $opacity
-   *   Whether or not to display the opacity.
+   *   Whether to display the opacity.
    *
    * @return string
    *   The color in format: #RRGGBB.
    */
-  public function toString($opacity = TRUE) {
+  public function toString(bool $opacity = TRUE): string {
     return $this->toHex()->toString($opacity);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function toHex() {
+  public function toHex(): ColorHex {
     return $this->toRgb()->toHex();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function toRgb() {
+  public function toRgb(): ColorRGB {
     $red = (1 - $this->cyan) * 255;
     $green = (1 - $this->magenta) * 255;
     $blue = (1 - $this->yellow) * 255;
+
     return new ColorRGB($red, $green, $blue, $this->getOpacity());
   }
 
   /**
    * {@inheritdoc}
    */
-  public function toCmy() {
-    $cyan = ($this->cyan * (1 - $this->key) + $this->key);
-    $magenta = ($this->magenta * (1 - $this->key) + $this->key);
-    $yellow = ($this->yellow * (1 - $this->key) + $this->key);
-    return new ColorCMY($cyan, $magenta, $yellow);
+  public function toCmyk(): ColorCMYK {
+    $key = min($this->getCyan(), $this->getMagenta(), $this->getYellow());
+    $cyan = $this->cyan * (1 - $key) + $key;
+    $magenta = $this->magenta * (1 - $key) + $key;
+    $yellow = $this->yellow * (1 - $key) + $key;
+
+    return new ColorCMYK($cyan, $magenta, $yellow, $key, $this->getOpacity());
   }
 
   /**
    * {@inheritdoc}
    */
-  public function toHsl() {
+  public function toHsl(): ColorHSL {
     return $this->toRgb()->toHsl();
   }
 

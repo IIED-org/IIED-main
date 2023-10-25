@@ -2,7 +2,7 @@ name: 'Facets Country'
 type: module
 description: 'Provides a Facets processor for translating country ISO-codes to their corresponding label'
 core: 8.x
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^8 || ^9 || ^10
 package: 'Search'
 
 dependencies:

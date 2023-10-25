@@ -6,5 +6,6 @@ readmore_js.selector:
   js:
     js/selector.js: {}
   dependencies:
+    - core/drupal
     - core/jquery
-    - core/jquery.once
+    - core/once

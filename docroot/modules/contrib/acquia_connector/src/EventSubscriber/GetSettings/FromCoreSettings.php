@@ -30,8 +30,11 @@ class FromCoreSettings implements EventSubscriberInterface {
    * @see \Drupal\acquia_connector\Settings
    */
   public function onGetSettings(AcquiaSubscriptionSettingsEvent $event) {
-    $settings = CoreSettings::get('acquia_connector.settings');
-    if ($settings instanceof Settings) {
+    $network_id = CoreSettings::get('ah_network_identifier', '');
+    $network_key = CoreSettings::get('ah_network_key', '');
+    $app_uuid = CoreSettings::get('ah_application_uuid', '');
+    if ($network_id !== '' && $network_key !== '' && $app_uuid !== '') {
+      $settings = new Settings($event->getConfig(), $network_id, $network_key, $app_uuid);
       $event->setSettings($settings);
       $event->setProvider('core_settings');
       // @phpstan-ignore-next-line

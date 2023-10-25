@@ -11,7 +11,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\ProxyClass\Routing\RouteBuilder;
 
 /**
- * Class CommonSettingsPageForm.
+ * Provides a form for configuring common settings for Multiple Registration.
  *
  * @package Drupal\multiple_registration\Form
  */

@@ -6,13 +6,13 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Layout\LayoutPluginManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Layout\LayoutPluginManager;
 
 /**
- * Class LayoutParagraphsSectionsSettingsForm.
+ * Defines a form for modifying Layout Paragraphs sections settings.
  */
 class LayoutParagraphsSectionsSettingsForm extends ConfigFormBase {
 
@@ -40,7 +40,7 @@ class LayoutParagraphsSectionsSettingsForm extends ConfigFormBase {
   /**
    * The Layouts Manager.
    *
-   * @var \Drupal\Core\Layout\LayoutPluginManager
+   * @var \Drupal\Core\Layout\LayoutPluginManagerInterface
    */
   protected $layoutPluginManager;
 
@@ -55,7 +55,7 @@ class LayoutParagraphsSectionsSettingsForm extends ConfigFormBase {
    *   The entity type bundle info service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Core entity type manager service.
-   * @param \Drupal\Core\Layout\LayoutPluginManager $layout_plugin_manager
+   * @param \Drupal\Core\Layout\LayoutPluginManagerInterface $layout_plugin_manager
    *   Core layout plugin manager service.
    */
   public function __construct(
@@ -63,7 +63,7 @@ class LayoutParagraphsSectionsSettingsForm extends ConfigFormBase {
     TypedConfigManagerInterface $typedConfigManager,
     EntityTypeBundleInfoInterface $entity_type_bundle_info,
     EntityTypeManagerInterface $entity_type_manager,
-    LayoutPluginManager $layout_plugin_manager
+    LayoutPluginManagerInterface $layout_plugin_manager
   ) {
     parent::__construct($config_factory);
     $this->typedConfigManager = $typedConfigManager;

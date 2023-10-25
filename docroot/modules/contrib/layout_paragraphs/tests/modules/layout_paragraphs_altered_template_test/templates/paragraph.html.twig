@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Copy of templates/paragraph.html.twig from the Paragraph module.
+#}
+{%
+  set classes = [
+    'paragraph',
+    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+    not paragraph.isPublished() ? 'paragraph--unpublished'
+  ]
+%}
+{% block paragraph %}
+  <div{{ attributes.addClass(classes) }}>
+    {% block content %}
+      Custom template rendering {{ paragraph.bundle }} paragraph type.
+      {# Renders the text field. #}
+      {{ content.field_text }}
+      {# Renders the regions (require for section paragraphs) #}
+      {{ content.regions }}
+    {% endblock %}
+  </div>
+{% endblock paragraph %}

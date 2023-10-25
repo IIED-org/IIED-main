@@ -17,7 +17,7 @@ class WebformAccessEntityRestTest extends WebformBrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['webform', 'webform_test_rest'];
+  protected static $modules = ['webform', 'webform_test_rest'];
 
   /**
    * Tests webform entity REST acces.

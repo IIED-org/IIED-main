@@ -3,7 +3,7 @@
  * Colorbox JS.
  */
 
-(function ($, Drupal, drupalSettings) {
+(function ($, Drupal, drupalSettings, once) {
 
   'use strict';
 
@@ -26,8 +26,8 @@
         return $(this).data('colorbox-gallery')
       };
 
-      $('.colorbox', context)
-        .once('init-colorbox').each(function() {
+      $(once('init-colorbox', '.colorbox', context))
+        .each(function() {
         // Only images are supported for the "colorbox" class.
         // The "photo" setting forces the href attribute to be treated as an image.
         var extendParams = {
@@ -109,4 +109,4 @@
     }
   }
 
-})(jQuery, Drupal, drupalSettings);
+})(jQuery, Drupal, drupalSettings, once);

@@ -1,0 +1,38 @@
+{% set all_types = types.layout|merge(types.content) %}
+{{ status_messages }}
+<div{{ attributes }}>
+  <h4 class="visually-hidden">{{ 'Add Item'|t }}</h4>
+  {% if all_types|length > 1 %}
+  <div class="lpb-component-list__search">
+    <input class="lpb-component-list-search-input" type="text" placeholder="Filter items..." />
+  </div>
+  <div class="lpb-component-list__group">
+    {% if types.layout %}
+    <div class="lpb-component-list__group--layout">
+    {% endif %}
+    {% for type in types.layout %}
+      <div class="lpb-component-list__item type-{{type.id}} is-layout">
+        <a{{ type.link_attributes.setAttribute('href', type.url) }}>{% if type.image %}<img src="{{ type.image }}" alt ="" />{% endif %}{{ type.label }}</a>
+      </div>
+    {% endfor %}
+    {% if types.layout %}
+    </div>
+    {% endif %}
+    {% if types.content %}
+    <div class="lpb-component-list__group--content">
+    {% endif %}
+    {% for type in types.content %}
+      <div class="lpb-component-list__item type-{{type.id}}">
+        <a{{ type.link_attributes.setAttribute('href', type.url) }}>{% if type.image %}<img src="{{ type.image }}" alt ="" />{% endif %}{{ type.label }}</a>
+      </div>
+    {% endfor %}
+    {% if types.content %}
+    </div>
+    {% endif %}
+  </div>
+  {% else %}
+  <div class="lpb-component-list__empty-message">
+  {{ empty_message }}
+  </div>
+  {% endif %}
+</div>

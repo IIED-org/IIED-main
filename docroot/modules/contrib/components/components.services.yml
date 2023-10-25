@@ -1,11 +1,11 @@
 services:
-  components.info:
-    class: Drupal\components\Template\ComponentsInfo
-    arguments: ['@extension.list.module', '@extension.list.theme', '@module_handler', '@theme.manager', '@cache.default']
+  components.registry:
+    class: Drupal\components\Template\ComponentsRegistry
+    arguments: ['@extension.list.module', '@extension.list.theme', '@module_handler', '@theme.manager', '@cache.default', '@file_system']
 
   components.twig.loader:
     class: Drupal\components\Template\Loader\ComponentsLoader
-    arguments: ['@components.info', '@theme.manager']
+    arguments: ['@components.registry']
     tags:
       - { name: twig.loader, priority: 200 }
 

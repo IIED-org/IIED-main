@@ -48,10 +48,13 @@ class RouteSubscriber extends RouteSubscriberBase {
   /**
    * {@inheritdoc}
    */
-  protected function alterRoutes(RouteCollection $collection) {
+  protected function alterRoutes(RouteCollection $collection): void {
     foreach ($this->entityTypeManager->getDefinitions() as $entity_type_id => $entity_type) {
       if ($route = $this->getEntityLoadRoute($entity_type)) {
         $collection->add("entity.$entity_type_id.devel_load", $route);
+      }
+      if ($route = $this->getEntityLoadWithReferencesRoute($entity_type)) {
+        $collection->add("entity.$entity_type_id.devel_load_with_references", $route);
       }
       if ($route = $this->getEntityRenderRoute($entity_type)) {
         $collection->add("entity.$entity_type_id.devel_render", $route);
@@ -71,7 +74,7 @@ class RouteSubscriber extends RouteSubscriberBase {
    * @return \Symfony\Component\Routing\Route|null
    *   The generated route, if available.
    */
-  protected function getEntityLoadRoute(EntityTypeInterface $entity_type) {
+  protected function getEntityLoadRoute(EntityTypeInterface $entity_type): ?Route {
     if ($devel_load = $entity_type->getLinkTemplate('devel-load')) {
       $route = (new Route($devel_load))
         ->addDefaults([
@@ -94,6 +97,37 @@ class RouteSubscriber extends RouteSubscriberBase {
   }
 
   /**
+   * Gets the entity load route.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
+   *   The entity type.
+   *
+   * @return \Symfony\Component\Routing\Route|null
+   *   The generated route, if available.
+   */
+  protected function getEntityLoadWithReferencesRoute(EntityTypeInterface $entity_type) {
+    if ($devel_load = $entity_type->getLinkTemplate('devel-load-with-references')) {
+      $entity_type_id = $entity_type->id();
+      $route = new Route($devel_load);
+      $route
+        ->addDefaults([
+          '_controller' => '\Drupal\devel\Controller\EntityDebugController::entityLoadWithReferences',
+          '_title' => 'Devel Load (with references)',
+        ])
+        ->addRequirements([
+          '_permission' => 'access devel information',
+        ])
+        ->setOption('_admin_route', TRUE)
+        ->setOption('_devel_entity_type_id', $entity_type_id)
+        ->setOption('parameters', [
+          $entity_type_id => ['type' => 'entity:' . $entity_type_id],
+        ]);
+
+      return $route;
+    }
+  }
+
+  /**
    * Gets the entity render route.
    *
    * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
@@ -102,7 +136,7 @@ class RouteSubscriber extends RouteSubscriberBase {
    * @return \Symfony\Component\Routing\Route|null
    *   The generated route, if available.
    */
-  protected function getEntityRenderRoute(EntityTypeInterface $entity_type) {
+  protected function getEntityRenderRoute(EntityTypeInterface $entity_type): ?Route {
     if ($devel_render = $entity_type->getLinkTemplate('devel-render')) {
       $route = (new Route($devel_render))
         ->addDefaults([
@@ -133,7 +167,7 @@ class RouteSubscriber extends RouteSubscriberBase {
    * @return \Symfony\Component\Routing\Route|null
    *   The generated route, if available.
    */
-  protected function getEntityTypeDefinitionRoute(EntityTypeInterface $entity_type) {
+  protected function getEntityTypeDefinitionRoute(EntityTypeInterface $entity_type): ?Route {
     if ($devel_definition = $entity_type->getLinkTemplate('devel-definition')) {
       $route = (new Route($devel_definition))
         ->addDefaults([
@@ -153,6 +187,7 @@ class RouteSubscriber extends RouteSubscriberBase {
 
       return $route;
     }
+    return NULL;
   }
 
   /**
@@ -207,7 +242,7 @@ class RouteSubscriber extends RouteSubscriberBase {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     $events = parent::getSubscribedEvents();
     $events[RoutingEvents::ALTER] = ['onAlterRoutes', 100];
     return $events;

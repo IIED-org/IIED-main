@@ -1,0 +1,14 @@
+name: Layout Paragraphs Custom Host Entity Test
+type: module
+description: 'Provides a lp host entity entity.'
+package: Layout Paragraphs Tests
+core_version_requirement: ^9.1 || ^10
+dependencies:
+  - layout_paragraphs
+  - drupal:text
+configure: entity.lp_host_entity.settings
+
+# Information added by Drupal.org packaging script on 2023-05-13
+version: '2.0.3'
+project: 'layout_paragraphs'
+datestamp: 1683938209

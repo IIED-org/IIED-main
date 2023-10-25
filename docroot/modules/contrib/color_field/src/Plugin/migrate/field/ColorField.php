@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\color_field\Plugin\migrate\field;
 
 use Drupal\migrate\Plugin\MigrationInterface;
@@ -39,7 +41,7 @@ class ColorField extends FieldPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getFieldWidgetMap() {
+  public function getFieldWidgetMap(): array {
     return [
       'color_field_default_widget' => 'color_field_widget_box',
       'color_field_simple_widget' => 'color_field_widget_grid',
@@ -51,7 +53,7 @@ class ColorField extends FieldPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getFieldFormatterMap() {
+  public function getFieldFormatterMap(): array {
     return [
       'color_field_default_formatter' => 'color_field_formatter_text',
       'color_field_css_declaration' => 'color_field_formatter_css',

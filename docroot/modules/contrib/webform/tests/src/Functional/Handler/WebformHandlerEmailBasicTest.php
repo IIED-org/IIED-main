@@ -119,12 +119,7 @@ class WebformHandlerEmailBasicTest extends WebformBrowserTestBase {
     ];
     $this->postSubmission($webform, $edit);
     $sent_email = $this->getLastEmail();
-    if (class_exists('\Symfony\Component\Mime\Address')) {
-      $this->assertEquals($sent_email['reply-to'], '"first_name" "last_name" <from@example.com>');
-    }
-    else {
-      $this->assertEquals($sent_email['reply-to'], '"first_name\" \"last_name" <from@example.com>');
-    }
+    $this->assertEquals($sent_email['reply-to'], '"first_name" "last_name" <from@example.com>');
     $this->assertEquals($sent_email['subject'], 'This has  & "special" \'characters\'');
     // NOTE:
     // Drupal's PhpMail::format function calls

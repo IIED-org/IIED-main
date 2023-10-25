@@ -3,8 +3,8 @@
 namespace Drupal\devel\EventSubscriber;
 
 use Drupal\Core\Session\AccountProxyInterface;
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -32,10 +32,10 @@ class ErrorHandlerSubscriber implements EventSubscriberInterface {
   /**
    * Register devel error handler.
    *
-   * @param \Symfony\Component\EventDispatcher\Event $event
+   * @param \Symfony\Component\HttpKernel\Event\RequestEvent|null $event
    *   The event to process.
    */
-  public function registerErrorHandler(Event $event = NULL) {
+  public function registerErrorHandler(RequestEvent $event = NULL) {
     if ($this->account && $this->account->hasPermission('access devel information')) {
       devel_set_handler(devel_get_handlers());
     }

@@ -7,7 +7,7 @@ configure: webform_content_creator.collection
 dependencies:
   - webform:webform
 
-# Information added by Drupal.org packaging script on 2023-04-21
-version: '4.0.2'
+# Information added by Drupal.org packaging script on 2023-05-12
+version: '4.0.4'
 project: 'webform_content_creator'
-datestamp: 1682091470
+datestamp: 1683912679

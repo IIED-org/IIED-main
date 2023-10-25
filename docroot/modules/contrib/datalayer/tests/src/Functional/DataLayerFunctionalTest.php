@@ -106,12 +106,12 @@ class DataLayerFunctionalTest extends BrowserTestBase {
     $assert->responseContains('"dataLayer":{"defaultLang"');
     $assert->responseContains('"userUid":"' . $user1->id() . '"');
 
-    // Repeat as a different user and verify the userUid data is not cached.
+    // Repeat as a different user and verify that page cache is still working.
     $user2 = $this->drupalCreateUser();
     $this->drupalLogin($user2);
     $this->drupalGet('/test-page');
     $assert = $this->assertSession();
-    $assert->responseHeaderEquals('X-Drupal-Dynamic-Cache', 'UNCACHEABLE');
+    $assert->responseHeaderEquals('X-Drupal-Dynamic-Cache', 'HIT');
     $assert->responseContains('"dataLayer":{"defaultLang"');
     $assert->responseContains('"userUid":"' . $user2->id() . '"');
   }

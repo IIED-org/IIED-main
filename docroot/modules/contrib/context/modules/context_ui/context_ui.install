@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the context_ui module.
+ */
+
+/**
+ * Issue #3280556: Remove context menus links.
+ */
+function context_ui_update_8001() {
+  $menu_link_manager = \Drupal::service('plugin.manager.menu.link');
+  $child_ids = $menu_link_manager->getChildIds('entity.context.collection');
+  foreach ($child_ids as $key => $value) {
+    if (strpos($value, 'menu_link_content') !== FALSE) {
+      $menu_link_manager->removeDefinition($value);
+    }
+  }
+}

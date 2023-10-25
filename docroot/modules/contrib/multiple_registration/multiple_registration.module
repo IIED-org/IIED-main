@@ -232,10 +232,10 @@ function _multiple_registration_rid(array $form, FormStateInterface $form_state)
     $connection = Database::getConnection();
     $connection->upsert('multiple_registration')
       ->fields([
-          'uid' => $uid,
-          'rid' => $rid,
-        ]
-      )
+        'uid' => $uid,
+        'rid' => $rid,
+      ]
+    )
       ->key('uid')
       ->execute();
   }
@@ -388,7 +388,7 @@ function multiple_registration_entity_form_display_alter(EntityFormDisplayInterf
           $query->condition('mr.uid', $uid);
           $query->fields('mr', ['rid']);
           $rid = $query->execute()->fetchField();
-          $custom_form_mode = $config->get('roles')[$rid]['form_mode_edit'] ?: 'default';
+          $custom_form_mode = $rid ? $config->get('roles')[$rid]['form_mode_edit'] : 'default';
           break;
       }
 
@@ -455,11 +455,11 @@ function multiple_registration_handle_user_entity($entity) {
   // Get all available roles.
   $users_roles = \Drupal::entityTypeManager()->getStorage('user_role')->loadMultiple();
   if (!empty($required_roles)) {
+    $config_roles = $config->get('roles');
     foreach ($required_roles as $user_role) {
-      $config_data = $config->get('roles')[$user_role]['form_mode_edit'];
-      if ($config_data) {
+      if (!empty($config_roles[$user_role]['form_mode_edit'])) {
         multiple_registration_update_registration_table($entity_id, $user_role);
-        // Do not allow set more then one custom edit
+        // Do not allow set more than one custom edit
         // form for the same user with different roles.
         break;
       }

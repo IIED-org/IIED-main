@@ -58,8 +58,8 @@ class ResponsiveMenuHooks extends BrowserTestBase {
    * module output in page_bottom.
    */
   public function testWarningWithNoBreakpoints() {
-    \Drupal::service('theme_installer')->install(['bartik']);
-    \Drupal::configFactory()->getEditable('system.theme')->set('default', 'bartik')->save();
+    \Drupal::service('theme_installer')->install(['Claro']);
+    \Drupal::configFactory()->getEditable('system.theme')->set('default', 'Claro')->save();
     $this->drupalGet('/node/1');
     $this->assertSession()->elementNotExists('css', '#off-canvas-wrapper');
   }

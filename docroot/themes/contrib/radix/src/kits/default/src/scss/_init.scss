@@ -1,0 +1,16 @@
+@import '~bootstrap/scss/functions';
+
+// Custom overrides
+@import 'base/variables';
+
+// Required
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/variables-dark';
+@import '~bootstrap/scss/maps';
+@import '~bootstrap/scss/utilities';
+@import '~bootstrap/scss/mixins';
+@import 'base/mixins';
+@import 'base/utilities';
+
+// Optional if using rfs()
+@import '~bootstrap/scss/vendor/rfs';

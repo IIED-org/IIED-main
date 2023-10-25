@@ -74,7 +74,7 @@ class EntityDebugController extends ControllerBase {
   public function entityLoad(RouteMatchInterface $route_match) {
     $output = [];
 
-    $entity = $this->getEntityFromRouteMatch($route_match);
+    $entity = $this->getEntityWithFieldDefinitions($route_match);
 
     if ($entity instanceof EntityInterface) {
       // Field definitions are lazy loaded and are populated only when needed.
@@ -86,6 +86,27 @@ class EntityDebugController extends ControllerBase {
       }
 
       $output = $this->dumper->exportAsRenderable($entity);
+    }
+
+    return $output;
+  }
+
+  /**
+   * Returns the loaded structure of the current entity with references.
+   *
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   A RouteMatch object.
+   *
+   * @return array
+   *   Array of page elements to render.
+   */
+  public function entityLoadWithReferences(RouteMatchInterface $route_match) {
+    $output = [];
+
+    $entity = $this->getEntityWithFieldDefinitions($route_match);
+
+    if ($entity instanceof EntityInterface) {
+      $output = $this->dumper->exportAsRenderable($entity, NULL, NULL, TRUE);
     }
 
     return $output;
@@ -137,6 +158,25 @@ class EntityDebugController extends ControllerBase {
   protected function getEntityFromRouteMatch(RouteMatchInterface $route_match) {
     $parameter_name = $route_match->getRouteObject()->getOption('_devel_entity_type_id');
     return $route_match->getParameter($parameter_name);
+  }
+
+  /**
+   * Returns an entity with field definitions from the given route match.
+   */
+  protected function getEntityWithFieldDefinitions(RouteMatchInterface $route_match): ?EntityInterface {
+    $entity = $this->getEntityFromRouteMatch($route_match);
+
+    if ($entity instanceof EntityInterface) {
+      // Field definitions are lazy loaded and are populated only when needed.
+      // By calling ::getFieldDefinitions() we are sure that field definitions
+      // are populated and available in the dump output.
+      // @see https://www.drupal.org/node/2311557
+      if ($entity instanceof FieldableEntityInterface) {
+        $entity->getFieldDefinitions();
+      }
+
+      return $entity;
+    }
   }
 
 }

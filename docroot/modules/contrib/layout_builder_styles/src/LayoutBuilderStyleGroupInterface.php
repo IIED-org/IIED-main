@@ -34,8 +34,8 @@ interface LayoutBuilderStyleGroupInterface extends ConfigEntityInterface {
   /**
    * Returns whether the group requires input.
    *
-   * @return boolean
-   *   Either true or false
+   * @return bool
+   *   Either TRUE or FALSE
    */
   public function getRequired();
 

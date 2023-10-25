@@ -94,7 +94,10 @@ function masquerade_target_user_access(UserInterface $target_account) {
   }
 
   // Invoke hook_masquerade_access() implementations.
-  $results = \Drupal::moduleHandler()->invokeAll('masquerade_access', [$user, $target_account]);
+  $results = \Drupal::moduleHandler()->invokeAll('masquerade_access', [
+    $user,
+    $target_account,
+  ]);
 
   // If an implementation explicitly denies access, then there is nothing else
   // to check.

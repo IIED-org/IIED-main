@@ -17,7 +17,7 @@ class WebformVariantPluginTest extends WebformBrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['webform', 'webform_test_variant'];
+  protected static $modules = ['webform', 'webform_test_variant'];
 
   /**
    * Tests webform variant plugin dependencies.

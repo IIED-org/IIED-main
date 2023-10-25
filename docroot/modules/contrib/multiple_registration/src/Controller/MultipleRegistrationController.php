@@ -19,7 +19,7 @@ use Drupal\multiple_registration\AvailableUserRolesService;
 use Drupal\Core\Messenger\Messenger;
 
 /**
- * Class MultipleRegistrationController.
+ * Provides a controller for the Multiple Registration module.
  *
  * @package Drupal\multiple_registration\Controller
  */
@@ -426,10 +426,10 @@ class MultipleRegistrationController extends ControllerBase {
    *   of given roles.
    */
   protected static function useRegistrationPage(array $roles) {
-    $pages_config = \Drupal::configFactory()->get('multiple_registration.create_registration_page_form_config');
+    $pages_config = \Drupal::configFactory()->get('multiple_registration.create_registration_page_form_config')->get('roles');
 
     foreach ($roles as $rid) {
-      if ($pages_config->get($rid) && $pages_config->get($rid)['url']) {
+      if (isset($pages_config[$rid]) && $pages_config[$rid]['url']) {
         return TRUE;
       }
     }

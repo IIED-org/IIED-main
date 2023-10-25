@@ -1,0 +1,28 @@
+services:
+  layout_paragraphs.renderer:
+    class: Drupal\layout_paragraphs\LayoutParagraphsRendererService
+    arguments: [ "@plugin.manager.core.layout", "@entity_type.manager", "@entity.repository", "@language_manager"]
+  layout_paragraphs.tempstore_repository:
+    class: Drupal\layout_paragraphs\LayoutParagraphsLayoutTempstoreRepository
+    arguments: ['@tempstore.private']
+  layout_paragraphs.param_converter.tempstore:
+    class: Drupal\layout_paragraphs\Routing\LayoutParagraphsTempstoreParamConverter
+    arguments:
+      - '@layout_paragraphs.tempstore_repository'
+      - '@entity_type.manager'
+    tags:
+      - { name: paramconverter, priority: 10 }
+  layout_paragraphs_allowed_types_subscriber:
+    class: \Drupal\layout_paragraphs\EventSubscriber\LayoutParagraphsAllowedTypesSubscriber
+    tags:
+      - { name: 'event_subscriber' }
+  layout_paragraphs_update_layout_subscriber:
+    class: \Drupal\layout_paragraphs\EventSubscriber\LayoutParagraphsUpdateLayoutSubscriber
+    tags:
+      - { name: 'event_subscriber' }
+  layout_paragraphs.builder_access:
+    class: Drupal\layout_paragraphs\Access\LayoutParagraphsBuilderAccess
+    arguments:
+     - '@entity_type.manager'
+    tags:
+      - { name: access_check, applies_to: _layout_paragraphs_builder_access }

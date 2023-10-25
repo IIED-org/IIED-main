@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\Tests\color_field\Kernel;
 
-use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FieldItemInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\field\Entity\FieldConfig;
-use Drupal\Tests\field\Kernel\FieldKernelTestBase;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\Tests\field\Kernel\FieldKernelTestBase;
 
 /**
  * Tests the new entity API for the color field type.
@@ -21,49 +23,12 @@ class ColorFieldTypeTest extends FieldKernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['color_field'];
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp() {
-    parent::setUp();
-
-    // Create a color field storage and field for validation.
-    FieldStorageConfig::create([
-      'field_name' => 'field_test',
-      'entity_type' => 'entity_test',
-      'type' => 'color_field_type',
-    ])->save();
-    FieldConfig::create([
-      'entity_type' => 'entity_test',
-      'field_name' => 'field_test',
-      'bundle' => 'entity_test',
-    ])->save();
-
-    // Create a second field with different options.
-    FieldStorageConfig::create([
-      'field_name' => 'field_hex',
-      'entity_type' => 'entity_test',
-      'type' => 'color_field_type',
-      'settings' => [
-        'format' => 'hexhex',
-      ],
-    ])->save();
-    FieldConfig::create([
-      'entity_type' => 'entity_test',
-      'field_name' => 'field_hex',
-      'bundle' => 'entity_test',
-      'settings' => [
-        'opacity' => FALSE,
-      ],
-    ])->save();
-  }
+  protected static $modules = ['color_field'];
 
   /**
    * Tests using entity fields of the telephone field type.
    */
-  public function testTestItem() {
+  public function testTestItem(): void {
     // Verify entity creation.
     $entity = EntityTest::create();
     $color = '#5BCEFA';
@@ -108,6 +73,43 @@ class ColorFieldTypeTest extends FieldKernelTestBase {
     $entity = EntityTest::create();
     $entity->field_test->generateSampleItems();
     $this->entityValidateAndSave($entity);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
+
+    // Create a color field storage and field for validation.
+    FieldStorageConfig::create([
+      'field_name' => 'field_test',
+      'entity_type' => 'entity_test',
+      'type' => 'color_field_type',
+    ])->save();
+    FieldConfig::create([
+      'entity_type' => 'entity_test',
+      'field_name' => 'field_test',
+      'bundle' => 'entity_test',
+    ])->save();
+
+    // Create a second field with different options.
+    FieldStorageConfig::create([
+      'field_name' => 'field_hex',
+      'entity_type' => 'entity_test',
+      'type' => 'color_field_type',
+      'settings' => [
+        'format' => 'hexhex',
+      ],
+    ])->save();
+    FieldConfig::create([
+      'entity_type' => 'entity_test',
+      'field_name' => 'field_hex',
+      'bundle' => 'entity_test',
+      'settings' => [
+        'opacity' => FALSE,
+      ],
+    ])->save();
   }
 
 }

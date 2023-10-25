@@ -2,11 +2,11 @@
 
 namespace Drupal\viewsreference\Plugin\Field\FieldWidget;
 
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Html;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\views\Views;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\views\Views;
 
 /**
  * Trait for shared code in Viewsreference Field Widgets.
@@ -53,7 +53,7 @@ trait ViewsReferenceTrait {
       case 'select':
         $view_selected_js_state = ['!value' => '_none'];
         $ajax_event = 'change';
-        $element['target_id']['#default_value'] = isset($field_value['target_id']) ? $field_value['target_id'] : '';
+        $element['target_id']['#default_value'] = $field_value['target_id'] ?? '';
         break;
 
       default:
@@ -133,7 +133,7 @@ trait ViewsReferenceTrait {
     ];
 
     $field_data = [];
-    if (isset($field_value['data'])) {
+    if (!empty($field_value['data'])) {
       $field_data = unserialize($field_value['data'], ['allowed_classes' => FALSE]);
     }
 
@@ -320,7 +320,7 @@ trait ViewsReferenceTrait {
     /** @var \Drupal\views\Entity\View $view */
     if ($view = \Drupal::service('entity_type.manager')->getStorage('view')->load($view_id)) {
       if ($displays = $view->get('display')) {
-        usort($displays, function($a, $b) {
+        usort($displays, function ($a, $b) {
           return $a['position'] <=> $b['position'];
         });
         foreach ($displays as $display) {
@@ -383,8 +383,7 @@ trait ViewsReferenceTrait {
       }
     }
     // Serialize settings to store them in the data attribute.
-    $values = $this->serializeSettingsValues($values);
-    return $values;
+    return $this->serializeSettingsValues($values);
   }
 
   /**
@@ -402,7 +401,7 @@ trait ViewsReferenceTrait {
     foreach ($values as $delta => $value) {
       $serialized_fields = [];
       foreach ($plugin_definitions as $plugin_definition) {
-        $serialized_fields[$plugin_definition['id']] = isset($value[$plugin_definition['id']]) ? $value[$plugin_definition['id']] : NULL;
+        $serialized_fields[$plugin_definition['id']] = $value[$plugin_definition['id']] ?? NULL;
         unset($values[$delta][$plugin_definition['id']]);
       }
       $values[$delta]['data'] = serialize($serialized_fields);

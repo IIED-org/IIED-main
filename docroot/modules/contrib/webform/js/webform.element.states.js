@@ -3,7 +3,7 @@
  * JavaScript behaviors for element #states.
  */
 
-(function ($, Drupal, drupalSettings) {
+(function ($, Drupal, drupalSettings, once) {
 
   'use strict';
 
@@ -14,7 +14,7 @@
    */
   Drupal.behaviors.webformElementStates = {
     attach: function (context) {
-      $(context).find('.webform-states-table--condition').once('webform-element-states-condition').each(function () {
+      $(once('webform-element-states-condition', '.webform-states-table--condition', context)).each(function () {
         var $condition = $(this);
         var $selector = $condition.find('.webform-states-table--selector select');
         var $value = $condition.find('.webform-states-table--value input');
@@ -46,7 +46,8 @@
               .removeClass('form-autocomplete');
           }
           // Always disable browser auto completion.
-          $value.attr('autocomplete', 'off');
+          var off = /chrom(e|ium)/.test(window.navigator.userAgent.toLowerCase()) ? 'chrome-off-' + Math.floor(Math.random() * 100000000) : 'off';
+          $value.attr('autocomplete', off);
         }).trigger('change');
       });
 
@@ -54,7 +55,7 @@
       // should be checked and disabled.
       var $state = $(context).find('.webform-states-table--state select');
       if ($state.length) {
-        $state.once('webform-element-states-state')
+        $(once('webform-element-states-state', $state))
           .on('change', toggleRequiredCheckbox);
         toggleRequiredCheckbox();
       }
@@ -101,4 +102,4 @@
     $input.trigger('change');
   }
 
-})(jQuery, Drupal, drupalSettings);
+})(jQuery, Drupal, drupalSettings, once);

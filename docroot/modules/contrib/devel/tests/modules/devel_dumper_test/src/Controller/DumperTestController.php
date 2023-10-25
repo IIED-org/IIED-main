@@ -7,7 +7,7 @@ use Drupal\devel\DevelDumperManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class DumperTestController.
+ * Controller class for dumper_test module.
  *
  * @package Drupal\devel_dumper_test\Controller
  */

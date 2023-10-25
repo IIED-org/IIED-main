@@ -49,71 +49,74 @@ class MasqueradeAccessTest extends MasqueradeWebTestBase {
    */
   public function testAccess() {
     $this->drupalLogin($this->rootUser);
-    $this->assertCanMasqueradeAs($this->admin_user);
+    $this->assertCanMasqueradeAs($this->adminUser);
 
-    $this->drupalLogin($this->admin_user);
+    $this->drupalLogin($this->adminUser);
     // Permission 'masquerade as super user' granted by default.
     $this->assertCanMasqueradeAs($this->rootUser);
+
     // Permission 'masquerade as any user' granted by default.
-    $this->assertCanMasqueradeAs($this->moderator_user);
+    $this->assertCanMasqueradeAs($this->moderatorUser);
     $this->assertCanMasqueradeAs($this->superUser);
     $this->assertCanMasqueradeAs($this->leadEditorUser);
-    $this->assertCanMasqueradeAs($this->editor_user);
-    $this->assertCanMasqueradeAs($this->masquerade_user);
-    $this->assertCanMasqueradeAs($this->auth_user);
+    $this->assertCanMasqueradeAs($this->editorUser);
+    $this->assertCanMasqueradeAs($this->masqueradeUser);
+    $this->assertCanMasqueradeAs($this->authUser);
 
     // Test 'masquerade as any user' permission except UID 1.
-    $this->drupalLogin($this->moderator_user);
+    $this->drupalLogin($this->moderatorUser);
     $this->assertCanNotMasqueradeAs($this->rootUser);
-    $this->assertCanMasqueradeAs($this->admin_user);
+    $this->assertCanMasqueradeAs($this->adminUser);
     $this->assertCanMasqueradeAs($this->superUser);
     $this->assertCanMasqueradeAs($this->leadEditorUser);
-    $this->assertCanMasqueradeAs($this->editor_user);
-    $this->assertCanMasqueradeAs($this->masquerade_user);
-    $this->assertCanMasqueradeAs($this->auth_user);
+    $this->assertCanMasqueradeAs($this->editorUser);
+    $this->assertCanMasqueradeAs($this->masqueradeUser);
+    $this->assertCanMasqueradeAs($this->authUser);
 
     // Test 'masquerade as @role' permission.
-    $this->drupalLogin($this->editor_user);
+    $this->drupalLogin($this->editorUser);
     $this->assertCanNotMasqueradeAs($this->rootUser);
-    $this->assertCanNotMasqueradeAs($this->admin_user);
-    $this->assertCanNotMasqueradeAs($this->moderator_user);
+    $this->assertCanNotMasqueradeAs($this->adminUser);
+    $this->assertCanNotMasqueradeAs($this->moderatorUser);
     $this->assertCanNotMasqueradeAs($this->superUser);
     $this->assertCanNotMasqueradeAs($this->leadEditorUser);
-    $this->assertCanMasqueradeAs($this->masquerade_user);
-    $this->assertCanMasqueradeAs($this->auth_user);
+    $this->assertCanMasqueradeAs($this->masqueradeUser);
+    $this->assertCanMasqueradeAs($this->authUser);
 
     // Test 'masquerade as @role' permission.
     $this->drupalLogin($this->leadEditorUser);
     $this->assertCanNotMasqueradeAs($this->rootUser);
-    $this->assertCanNotMasqueradeAs($this->admin_user);
-    $this->assertCanNotMasqueradeAs($this->moderator_user);
+    $this->assertCanNotMasqueradeAs($this->adminUser);
+    $this->assertCanNotMasqueradeAs($this->moderatorUser);
     $this->assertCanNotMasqueradeAs($this->superUser);
-    $this->assertCanNotMasqueradeAs($this->masquerade_user);
-    $this->assertCanMasqueradeAs($this->editor_user);
-    $this->assertCanMasqueradeAs($this->auth_user);
+    $this->assertCanNotMasqueradeAs($this->masqueradeUser);
+    $this->assertCanMasqueradeAs($this->editorUser);
+    $this->assertCanMasqueradeAs($this->authUser);
 
     // Test 'masquerade as authenticated' permission.
-    $this->drupalLogin($this->masquerade_user);
+    $this->drupalLogin($this->masqueradeUser);
     $this->assertCanNotMasqueradeAs($this->rootUser);
-    $this->assertCanNotMasqueradeAs($this->admin_user);
-    $this->assertCanNotMasqueradeAs($this->moderator_user);
+    $this->assertCanNotMasqueradeAs($this->adminUser);
+    $this->assertCanNotMasqueradeAs($this->moderatorUser);
     $this->assertCanNotMasqueradeAs($this->superUser);
     $this->assertCanNotMasqueradeAs($this->leadEditorUser);
-    $this->assertCanNotMasqueradeAs($this->editor_user);
-    $this->assertCanMasqueradeAs($this->auth_user);
+    $this->assertCanNotMasqueradeAs($this->editorUser);
+    $this->assertCanMasqueradeAs($this->authUser);
 
     // Verify that a user cannot masquerade as himself.
     $edit = [
-      'masquerade_as' => $this->masquerade_user->getAccountName(),
+      'masquerade_as' => $this->masqueradeUser->getAccountName(),
     ];
     $this->drupalGet('masquerade');
+    $this->assertSession()->statusCodeEquals(200);
     $this->submitForm($edit, 'Switch');
+    $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()
       ->responseContains($this->t('You cannot masquerade as yourself. Please choose a different user to masquerade as.'));
     $this->assertSession()->pageTextNotContains('Unmasquerade');
 
     // Basic 'masquerade' permission check.
-    $this->drupalLogin($this->auth_user);
+    $this->drupalLogin($this->authUser);
     $this->drupalGet('masquerade');
     $this->assertSession()->statusCodeEquals(403);
   }
@@ -131,7 +134,13 @@ class MasqueradeAccessTest extends MasqueradeWebTestBase {
       'masquerade_as' => $target_account->getAccountName(),
     ];
     $this->drupalGet('masquerade');
+    // This will return a 200 response because the visitor will be able to load
+    // the form.
+    $this->assertSession()->statusCodeEquals(200);
     $this->submitForm($edit, 'Switch');
+    // This will return a 403 response because the visitor will not be able to
+    // load the form after switching.
+    $this->assertSession()->statusCodeEquals(403);
     $this->assertSession()
       ->responseNotContains($this->t('You are not allowed to masquerade as %name.', [
         '%name' => $target_account->getDisplayName(),
@@ -153,7 +162,13 @@ class MasqueradeAccessTest extends MasqueradeWebTestBase {
       'masquerade_as' => $target_account->getAccountName(),
     ];
     $this->drupalGet('masquerade');
+    // This will return a 200 response because the visitor will be able to load
+    // the form.
+    $this->assertSession()->statusCodeEquals(200);
     $this->submitForm($edit, 'Switch');
+    // This will return a 200 response because the visitor will not have
+    // switched to the other account.
+    $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()
       ->responseContains($this->t('You are not allowed to masquerade as %name.', [
         '%name' => $target_account->getDisplayName(),

@@ -68,7 +68,7 @@ filters:
     status: false
     weight: -44
     settings:
-      allowed_html: '<a href hreflang> <em> <strong> <cite> <blockquote cite> <code> <ul type> <ol type start> <li> <dl> <dt> <dd> <h4 id> <h5 id> <h6 id> <s> <sup> <sub> <table> <caption> <tbody> <thead> <tfoot> <th> <td> <tr> <hr> <h1> <pre> <h3 id class="0 mt mt-0"> <p class="mb-6"> <img src alt data-entity-type data-entity-uuid data-align data-caption class="rounded-full"> <figure class="float-right ml-6 float-left mr-6"> <div class="float-right ml-6 mb-6 float-left mr-6 mb-6 float-right ml-6 mb-6 not-prose float-left mr-6 mb-6 not-prose float-right ml-6 mb-6 not-prose float-left mr-6 mb-6 not-prose caption aspect-w-16 aspect-h-9 not-prose"> <h2 id class="mt-0">'
+      allowed_html: '<h3 class="mt-0"> <h2 class="mt-0"> <p class="mb-6"> <img class="rounded-full"> <div class="float-right ml-6 mb-6 not-prose float-left mr-6 caption aspect-w-16 aspect-h-9">'
       filter_html_help: true
       filter_html_nofollow: false
   iied_filter_video:

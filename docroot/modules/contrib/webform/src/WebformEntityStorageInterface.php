@@ -25,11 +25,13 @@ interface WebformEntityStorageInterface extends ConfigEntityStorageInterface, Im
    *   If TRUE only template categories will be returned.
    *   If FALSE only webform categories will be returned.
    *   If NULL all categories will be returned.
+   * @param bool $default
+   *   If TRUE append default webform categories.
    *
    * @return string[]
    *   An array of translated categories, sorted alphabetically.
    */
-  public function getCategories($template = NULL);
+  public function getCategories($template = NULL, $default = FALSE);
 
   /**
    * Resets the internal, categories cache.
@@ -87,12 +89,16 @@ interface WebformEntityStorageInterface extends ConfigEntityStorageInterface, Im
   public function getMaxSerial(WebformInterface $webform);
 
   /**
-   * Get total results for all webforms.
+   * Get total number of results for specified webform or all webforms.
    *
-   * @return array
-   *   An associative array keyed by webform id contains total results for
-   *   all webforms.
+   * @param string|null $webform_id
+   *   (optional) A webform id.
+   *
+   * @return array|int
+   *   If no webform id is passed, an associative array keyed by webform id
+   *   contains total results for all webforms, otherwise the total number of
+   *   results for specified webform
    */
-  public function getTotalNumberOfResults();
+  public function getTotalNumberOfResults($webform_id = NULL);
 
 }

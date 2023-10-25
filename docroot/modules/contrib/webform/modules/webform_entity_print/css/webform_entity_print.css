@@ -22,10 +22,6 @@ summary {
   padding: .5em .5em 0 .5em;
 }
 
-summary::-webkit-details-marker {
-  display: none;
-}
-
 /**
  * Form.
  */

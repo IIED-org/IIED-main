@@ -1,5 +1,0 @@
-sidr.settings:
-  title: 'Sidr settings'
-  description: 'Global configuration for jQuery sidr.'
-  parent: system.admin_config_ui
-  route_name: sidr.settings

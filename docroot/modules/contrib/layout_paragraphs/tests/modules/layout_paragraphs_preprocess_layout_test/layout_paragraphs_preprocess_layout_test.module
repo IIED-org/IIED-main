@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Tests that layout paragraphs variables are available to layout preprocess.
+ */
+
+/**
+ * Implements hook_preprocess_layout().
+ */
+function layout_paragraphs_preprocess_layout_test_preprocess_layout(&$variables) {
+  /** @var \Drupal\layout_paragraphs\LayoutParagraphsSection $section */
+  $section = $variables['settings']['layout_paragraphs_section'];
+  $paragraph = $section->getEntity();
+  $bundle = $paragraph->bundle();
+  $variables['content']['first']['#prefix'] = 'bundle:' . $bundle;
+}

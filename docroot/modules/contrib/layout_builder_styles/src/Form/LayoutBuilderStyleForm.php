@@ -10,13 +10,11 @@ use Drupal\Core\Layout\LayoutPluginManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Url;
 use Drupal\layout_builder_styles\LayoutBuilderStyleInterface;
-use Drupal\layout_builder_styles\LayoutBuilderStyleGroupInterface;
 use Drupal\layout_builder_styles\Entity\LayoutBuilderStyleGroup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-
 /**
- * Class LayoutBuilderStyleForm.
+ * Form for creating layout builder styles.
  */
 class LayoutBuilderStyleForm extends EntityForm implements ContainerInjectionInterface {
 
@@ -46,7 +44,7 @@ class LayoutBuilderStyleForm extends EntityForm implements ContainerInjectionInt
    *
    * @param \Drupal\Core\Block\BlockManagerInterface $blockManager
    *   The block manager.
-   * @param \Drupal\Core\Block\LayoutPluginManagerInterface $layout_manager
+   * @param \Drupal\Core\Layout\LayoutPluginManagerInterface $layout_manager
    *   The layout plugin manager.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger.
@@ -98,7 +96,7 @@ class LayoutBuilderStyleForm extends EntityForm implements ContainerInjectionInt
 
     $form = parent::form($form, $form_state);
 
-    /** @var \Drupal\layout_builder_styles\LayoutBuilderStyleInterface $style */
+    /** @var \Drupal\layout_builder_styles\Entity\LayoutBuilderStyle $style */
     $style = $this->entity;
 
     $form['label'] = [
@@ -215,6 +213,7 @@ class LayoutBuilderStyleForm extends EntityForm implements ContainerInjectionInt
       ],
     ];
     $section_definitions = $this->layoutManager->getFilteredDefinitions('layout_builder', []);
+    /** @var \Drupal\Core\Layout\LayoutDefinition $definition */
     foreach ($section_definitions as $section_id => $definition) {
       $form['layout_restrictions'][$section_id] = [
         '#type' => 'checkbox',
@@ -241,6 +240,9 @@ class LayoutBuilderStyleForm extends EntityForm implements ContainerInjectionInt
    * {@inheritdoc}
    */
   public function buildEntity(array $form, FormStateInterface $form_state) {
+    /** @var \Drupal\layout_builder_styles\Entity\LayoutBuilderStyle
+     * $entity
+     */
     $entity = parent::buildEntity($form, $form_state);
 
     // We need to convert the individual checkbox values that were submitted

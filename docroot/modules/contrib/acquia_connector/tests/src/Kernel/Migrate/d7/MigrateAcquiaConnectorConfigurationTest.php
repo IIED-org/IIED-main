@@ -14,7 +14,7 @@ class MigrateAcquiaConnectorConfigurationTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['acquia_connector', 'path_alias'];
+  protected static $modules = ['acquia_connector'];
 
   protected $expectedConfig = [
     'acquia_connector.settings' => [
@@ -110,14 +110,7 @@ class MigrateAcquiaConnectorConfigurationTest extends MigrateDrupal7TestBase {
    */
   protected function setUp(): void {
     parent::setUp();
-    if (version_compare(\Drupal::VERSION, '9.3', '>=')) {
-      // phpcs:ignore
-      $path = \Drupal::service('extension.path.resolver')->getPath('module', 'acquia_connector');
-    }
-    else {
-      // @phpstan-ignore-next-line
-      $path = drupal_get_path('module', 'acquia_connector');
-    }
+    $path = \Drupal::service('extension.list.module')->getPath('acquia_connector');
     $this->loadFixture(implode(DIRECTORY_SEPARATOR, [
       DRUPAL_ROOT,
       $path,

@@ -5,11 +5,10 @@ namespace Drupal\masquerade\Plugin\Block;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Form\FormBuilderInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\masquerade\Form\MasqueradeForm;
-use Drupal\masquerade\Masquerade;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -38,37 +37,48 @@ class MasqueradeBlock extends BlockBase implements ContainerFactoryPluginInterfa
   protected $masquerade;
 
   /**
-   * Constructs a new MasqueradeBlock object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
-   *   The form builder service.
-   * @param \Drupal\masquerade\Masquerade $masquerade
-   *   The masquerade service.
+   * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, FormBuilderInterface $form_builder, Masquerade $masquerade) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-
-    $this->formBuilder = $form_builder;
-    $this->masquerade = $masquerade;
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    $instance = new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition
+    );
+    $instance->formBuilder = $container->get('form_builder');
+    $instance->masquerade = $container->get('masquerade');
+    return $instance;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('form_builder'),
-      $container->get('masquerade')
-    );
+  public function defaultConfiguration() {
+    return [
+      'show_unmasquerade_link' => FALSE,
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function blockForm($form, FormStateInterface $form_state) {
+    $form = parent::blockForm($form, $form_state);
+    $form['show_unmasquerade_link'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show unmasquerade link in block'),
+      '#description' => $this->t('If checked, this block will show a "Switch back" link when the user is masquerading.'),
+      '#default_value' => $this->configuration['show_unmasquerade_link'],
+    ];
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function blockSubmit($form, FormStateInterface $form_state) {
+    parent::blockSubmit($form, $form_state);
+    $this->configuration['show_unmasquerade_link'] = $form_state->getValue('show_unmasquerade_link');
   }
 
   /**
@@ -80,8 +90,10 @@ class MasqueradeBlock extends BlockBase implements ContainerFactoryPluginInterfa
       return AccessResult::forbidden();
     }
     if ($this->masquerade->isMasquerading()) {
-      return AccessResult::forbidden()
-        ->addCacheContexts(['session.is_masquerading']);
+      $access = $this->configuration['show_unmasquerade_link']
+        ? AccessResult::allowed()
+        : AccessResult::forbidden();
+      return $access->addCacheContexts(['session.is_masquerading']);
     }
     // Display block for all users that has any of masquerade permissions.
     return AccessResult::allowedIfHasPermissions($account, $this->masquerade->getPermissions(), 'OR')
@@ -99,6 +111,14 @@ class MasqueradeBlock extends BlockBase implements ContainerFactoryPluginInterfa
    * {@inheritdoc}
    */
   public function build() {
+    if ($this->configuration['show_unmasquerade_link'] && $this->masquerade->isMasquerading()) {
+      return [
+        [
+          '#lazy_builder' => ['masquerade.callbacks:renderSwitchBackLink', []],
+          '#create_placeholder' => TRUE,
+        ],
+      ];
+    }
     return $this->formBuilder->getForm(MasqueradeForm::class);
   }
 

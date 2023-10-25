@@ -64,6 +64,11 @@ devel.run_cron:
   route_name: devel.run_cron
   menu_name: devel
   class: \Drupal\devel\Plugin\Menu\DestinationMenuLink
+devel.switch_user:
+  title: 'Switch user'
+  route_name: devel.switch_user
+  menu_name: devel
+
 
 # Container info
 devel.container_info.service:

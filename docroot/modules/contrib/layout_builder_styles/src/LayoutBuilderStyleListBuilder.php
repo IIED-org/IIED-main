@@ -6,7 +6,6 @@ use Drupal\Core\Config\Entity\DraggableListBuilder;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\layout_builder_styles\Entity\LayoutBuilderStyleGroup;
 
-
 /**
  * Provides a listing of layout builder style entities.
  */
@@ -35,11 +34,12 @@ class LayoutBuilderStyleListBuilder extends DraggableListBuilder {
    */
   public function buildRow(EntityInterface $entity) {
     $row = [];
+    /** @var \Drupal\layout_builder_styles\Entity\LayoutBuilderStyle $entity */
     $row['label'] = $entity->label();
     $row['id'] = ['#plain_text' => $entity->id()];
     $row['type'] = ['#plain_text' => $entity->getType()];
     $group = $entity->getGroup();
-    if(empty($group) || empty(LayoutBuilderStyleGroup::load($group))) {
+    if (empty($group) || empty(LayoutBuilderStyleGroup::load($group))) {
       $row['group'] = ['#plain_text' => ''];
     }
     else {

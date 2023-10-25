@@ -1,3 +1,6 @@
+#
+# Create a new config.personal.yml to modify config.
+#
 name: devel
 type: drupal9
 docroot: web

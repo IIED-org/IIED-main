@@ -1,0 +1,41 @@
+{
+  "name": "drupal/layout_paragraphs",
+  "type": "drupal-module",
+  "description": "Layout Paragraphs",
+  "keywords": ["Drupal"],
+  "homepage": "https://www.drupal.org/project/layout_paragraphs",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/layout_paragraphs",
+    "source": "http://cgit.drupalcode.org/layout_paragraphs"
+  },
+  "license": "GPL-2.0+",
+  "minimum-stability": "dev",
+  "require": {
+    "bevacqua/dragula": "*",
+    "drupal/paragraphs": "^1.6"
+  },
+  "repositories": {
+    "drupal": {
+      "type": "composer",
+      "url": "https://packages.drupal.org/8"
+    },
+    "dragula": {
+        "type": "package",
+        "package": {
+            "name": "bevacqua/dragula",
+            "version": "3.7.2",
+            "type": "drupal-library",
+            "extra": {
+                "installer-name": "dragula"
+            },
+            "dist": {
+                "url": "https://github.com/bevacqua/dragula/archive/v3.7.2.zip",
+                "type": "zip"
+            },
+            "require": {
+                "composer/installers": "*"
+            }
+        }
+    }
+  }
+}

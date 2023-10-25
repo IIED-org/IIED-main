@@ -14,6 +14,7 @@ color-field-widget-box:
   dependencies:
     - core/jquery
     - core/drupalSettings
+    - core/once
 
 color-field-widget-spectrum:
   remote: https://github.com/bgrins/spectrum
@@ -32,6 +33,7 @@ color-field-widget-spectrum:
   dependencies:
     - core/jquery
     - core/drupalSettings
+    - core/once
 
 color-field-widget-grid:
   remote: https://github.com/recurser/jquery-simple-color
@@ -49,6 +51,7 @@ color-field-widget-grid:
   dependencies:
     - core/jquery
     - core/drupalSettings
+    - core/once
 
 color-field-formatter-swatch:
   css:

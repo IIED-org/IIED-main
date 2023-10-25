@@ -1,0 +1,9 @@
+uuid: 62dad8d8-4b3f-4c89-9f2f-834b9669f6cf
+langcode: en
+status: true
+dependencies: {  }
+id: media
+label: Media
+code: 302
+path: ''
+translatable_entity_only: false

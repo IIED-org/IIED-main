@@ -6,6 +6,7 @@ use Consolidation\OutputFormatters\StructuredData\RowsOfFields;
 use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
 use Consolidation\SiteProcess\Util\Escape;
 use Drupal\Component\Uuid\Php;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Utility\Token;
 use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
@@ -14,6 +15,8 @@ use Drush\SiteAlias\SiteAliasManagerAwareInterface;
 use Drush\Utils\StringUtils;
 use Symfony\Component\Console\Input\Input;
 use Symfony\Component\Console\Output\Output;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class DevelCommands.
@@ -29,16 +32,16 @@ class DevelCommands extends DrushCommands implements SiteAliasManagerAwareInterf
   use SiteAliasManagerAwareTrait;
   use ExecTrait;
 
-  protected $token;
+  protected Token $token;
 
-  protected $container;
+  protected ContainerInterface $container;
 
-  protected $eventDispatcher;
+  protected EventDispatcherInterface $eventDispatcher;
 
-  protected $moduleHandler;
+  protected ModuleHandlerInterface $moduleHandler;
 
   /**
-   *
+   * Constructs a new DevelCommands object.
    */
   public function __construct(Token $token, $container, $eventDispatcher, $moduleHandler) {
     parent::__construct();
@@ -49,6 +52,8 @@ class DevelCommands extends DrushCommands implements SiteAliasManagerAwareInterf
   }
 
   /**
+   * Gets the module handler.
+   *
    * @return \Drupal\Core\Extension\ModuleHandlerInterface
    *   The moduleHandler.
    */
@@ -57,6 +62,8 @@ class DevelCommands extends DrushCommands implements SiteAliasManagerAwareInterf
   }
 
   /**
+   * Gets the event dispatcher.
+   *
    * @return mixed
    *   The eventDispatcher.
    */
@@ -65,6 +72,8 @@ class DevelCommands extends DrushCommands implements SiteAliasManagerAwareInterf
   }
 
   /**
+   * Gets the container.
+   *
    * @return mixed
    *   The container.
    */
@@ -73,6 +82,8 @@ class DevelCommands extends DrushCommands implements SiteAliasManagerAwareInterf
   }
 
   /**
+   * Gets the token.
+   *
    * @return \Drupal\Core\Utility\Token
    *   The token.
    */
@@ -120,7 +131,7 @@ class DevelCommands extends DrushCommands implements SiteAliasManagerAwareInterf
     include_once './core/includes/install.inc';
     drupal_load_updates();
     $info = $this->codeLocate($implementation . "_$hook");
-    $exec = self::getEditor();
+    $exec = self::getEditor('');
     $cmd = sprintf($exec, Escape::shellArg($info['file']));
     $process = $this->processManager()->shell($cmd);
     $process->setTty(TRUE);
@@ -128,11 +139,19 @@ class DevelCommands extends DrushCommands implements SiteAliasManagerAwareInterf
   }
 
   /**
+   * Asks the user to select a hook implementation.
+   *
    * @hook interact hook
    */
   public function hookInteract(Input $input, Output $output) {
+    $hook_implementations = [];
     if (!$input->getArgument('implementation')) {
-      if ($hook_implementations = $this->getModuleHandler()->getImplementations($input->getArgument('hook'))) {
+      foreach ($this->getModuleHandler()->getModuleList() as $key => $extension) {
+        if ($this->getModuleHandler()->hasImplementations($input->getArgument('hook'), [$key])) {
+          $hook_implementations[] = $key;
+        }
+      }
+      if ($hook_implementations) {
         if (!$choice = $this->io()->choice('Enter the number of the hook implementation you wish to view.', array_combine($hook_implementations, $hook_implementations))) {
           throw new UserAbortException();
         }
@@ -163,7 +182,7 @@ class DevelCommands extends DrushCommands implements SiteAliasManagerAwareInterf
    */
   public function event($event, $implementation) {
     $info = $this->codeLocate($implementation);
-    $exec = self::getEditor();
+    $exec = self::getEditor('');
     $cmd = sprintf($exec, Escape::shellArg($info['file']));
     $process = $this->processManager()->shell($cmd);
     $process->setTty(TRUE);
@@ -171,6 +190,8 @@ class DevelCommands extends DrushCommands implements SiteAliasManagerAwareInterf
   }
 
   /**
+   * Asks the user to select an event and the event's implementation.
+   *
    * @hook interact devel:event
    */
   public function interactEvent(Input $input, Output $output) {

@@ -3,6 +3,7 @@
 namespace Drupal\webform_scheduled_email\Plugin\WebformHandler;
 
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\webform\Element\WebformMessage;
@@ -169,7 +170,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
     $send_options = [
       '[date:html_date]' => $this->t('Current date'),
       WebformOtherBase::OTHER_OPTION => $this->t('Custom @label…', ['@label' => $this->scheduledEmailManager->getDateTypeLabel()]),
-      (string) $this->t('Webform') => [
+      (string) $this->t('Webform', [], ['context' => 'form']) => [
         '[webform:open:html_date]' => $this->t('Open date'),
         '[webform:close:html_date]' => $this->t('Close date'),
       ],
@@ -331,7 +332,9 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     parent::submitConfigurationForm($form, $form_state);
     if ($form_state->getValue('queue')) {
-      $this->scheduledEmailManager->schedule($this->getWebform(), $this->getHandlerId());
+      // If this is a new handler, we need to get the $handler_id from the $form.
+      $handler_id = $this->getHandlerId() ?: NestedArray::getValue($form, ['general', 'handler_id', '#value']);
+      $this->scheduledEmailManager->schedule($this->getWebform(), $handler_id);
     }
   }
 

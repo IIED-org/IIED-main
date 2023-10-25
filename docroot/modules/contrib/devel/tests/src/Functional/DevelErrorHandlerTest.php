@@ -35,19 +35,20 @@ class DevelErrorHandlerTest extends DevelBrowserTestBase {
     $edit = [
       'error_handlers[]' => DEVEL_ERROR_HANDLER_NONE,
     ];
-    $this->drupalPostForm('admin/config/development/devel', $edit, 'Save configuration');
+    $this->submitForm($edit, 'Save configuration');
     $this->assertSession()->pageTextContains('The configuration options have been saved.');
 
     $error_handlers = \Drupal::config('devel.settings')->get('error_handlers');
     $this->assertEquals($error_handlers, [DEVEL_ERROR_HANDLER_NONE => DEVEL_ERROR_HANDLER_NONE]);
     $this->assertTrue($this->assertSession()->optionExists('edit-error-handlers', DEVEL_ERROR_HANDLER_NONE)->hasAttribute('selected'));
 
-    $this->markTestSkipped('Unclear to me what this Error Handler feature does.');
-
     $this->clickLink('notice+warning');
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertSession()->pageTextNotContains($expected_notice);
-    $this->assertSession()->pageTextNotContains($expected_warning);
+    // @todo Two assertions commented out. Can be fixed in conjunction with the following two issues.
+    // @see https://gitlab.com/drupalspoons/devel/-/issues/420
+    // @see https://gitlab.com/drupalspoons/devel/-/issues/454
+    // $this->assertSession()->pageTextNotContains($expected_notice);
+    // $this->assertSession()->pageTextNotContains($expected_warning);
     $this->assertSession()->elementNotExists('css', $messages_selector);
 
     // Ensures that selecting the DEVEL_ERROR_HANDLER_BACKTRACE_KINT option a
@@ -56,7 +57,7 @@ class DevelErrorHandlerTest extends DevelBrowserTestBase {
     $edit = [
       'error_handlers[]' => DEVEL_ERROR_HANDLER_BACKTRACE_KINT,
     ];
-    $this->drupalPostForm('admin/config/development/devel', $edit, 'Save configuration');
+    $this->submitForm($edit, 'Save configuration');
     $this->assertSession()->pageTextContains('The configuration options have been saved.');
 
     $error_handlers = \Drupal::config('devel.settings')->get('error_handlers');
@@ -72,7 +73,7 @@ class DevelErrorHandlerTest extends DevelBrowserTestBase {
     $edit = [
       'error_handlers[]' => DEVEL_ERROR_HANDLER_BACKTRACE_DPM,
     ];
-    $this->drupalPostForm('admin/config/development/devel', $edit, 'Save configuration');
+    $this->submitForm($edit, 'Save configuration');
     $this->assertSession()->pageTextContains('The configuration options have been saved.');
 
     $error_handlers = \Drupal::config('devel.settings')->get('error_handlers');
@@ -92,7 +93,7 @@ class DevelErrorHandlerTest extends DevelBrowserTestBase {
         DEVEL_ERROR_HANDLER_BACKTRACE_DPM => DEVEL_ERROR_HANDLER_BACKTRACE_DPM,
       ],
     ];
-    $this->drupalPostForm('admin/config/development/devel', $edit, 'Save configuration');
+    $this->submitForm($edit, 'Save configuration');
     $this->assertSession()->pageTextContains('The configuration options have been saved.');
 
     $error_handlers = \Drupal::config('devel.settings')->get('error_handlers');

@@ -20,7 +20,7 @@ class WebformSettingsAjaxTest extends WebformBrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['webform', 'webform_node'];
+  protected static $modules = ['webform', 'webform_node'];
 
   /**
    * Test webform submission form Ajax setting.

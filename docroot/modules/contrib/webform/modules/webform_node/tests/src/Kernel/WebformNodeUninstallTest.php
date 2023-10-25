@@ -21,12 +21,12 @@ class WebformNodeUninstallTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'field', 'filter', 'text', 'user', 'node', 'webform', 'webform_node'];
+  protected static $modules = ['system', 'field', 'text', 'user', 'node', 'webform', 'webform_node'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->installEntitySchema('user');
     $this->installEntitySchema('node');

@@ -8,7 +8,7 @@ use Drupal\multiple_registration\Controller\MultipleRegistrationController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class DeleteRegistrationPageForm.
+ * Provides a form for deleting user registrations in Multiple Registration.
  *
  * @package Drupal\multiple_registration\Form
  */

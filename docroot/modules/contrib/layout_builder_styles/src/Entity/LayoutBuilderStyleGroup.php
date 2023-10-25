@@ -82,7 +82,7 @@ class LayoutBuilderStyleGroup extends ConfigEntityBase implements LayoutBuilderS
   /**
    * A boolean indicating whether the selection is required.
    *
-   * @var boolean
+   * @var bool
    */
   protected $required;
 

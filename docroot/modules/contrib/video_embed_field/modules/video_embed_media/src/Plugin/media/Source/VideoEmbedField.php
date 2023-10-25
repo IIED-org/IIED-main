@@ -5,6 +5,7 @@ namespace Drupal\video_embed_media\Plugin\media\Source;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldTypePluginManagerInterface;
 use Drupal\media\MediaInterface;
 use Drupal\media\MediaSourceBase;
@@ -23,7 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   default_thumbnail_filename = "video.png"
  * )
  */
-class VideoEmbedField extends MediaSourceBase {
+class VideoEmbedField extends MediaSourceBase implements VideoEmbedFieldInterface {
 
   /**
    * The video provider manager.
@@ -84,7 +85,7 @@ class VideoEmbedField extends MediaSourceBase {
   /**
    * {@inheritdoc}
    */
-  public function defaultConfiguration() {
+  public function defaultConfiguration(): array {
     return [
       'source_field' => 'field_media_video_embed_field',
     ];
@@ -142,7 +143,7 @@ class VideoEmbedField extends MediaSourceBase {
   /**
    * {@inheritdoc}
    */
-  public function getMetadataAttributes() {
+  public function getMetadataAttributes(): array {
     return [
       'id' => $this->t('Video ID.'),
       'source' => $this->t('Video source machine name.'),
@@ -181,7 +182,7 @@ class VideoEmbedField extends MediaSourceBase {
   /**
    * {@inheritdoc}
    */
-  public function getSourceFieldDefinition(MediaTypeInterface $type) {
+  public function getSourceFieldDefinition(MediaTypeInterface $type): ?FieldDefinitionInterface {
     // video_embed_media has not historically had a value in
     // $this->configuration['source_field'], instead just creating
     // field_media_video_embed_field on install and treating that as the source.
@@ -191,9 +192,16 @@ class VideoEmbedField extends MediaSourceBase {
     if ($field) {
       // Be sure that the suggested source field actually exists.
       $fields = $this->entityFieldManager->getFieldDefinitions('media', $type->id());
-      return isset($fields[$field]) ? $fields[$field] : NULL;
+      return $fields[$field] ?? NULL;
     }
     return NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSourceFieldConstraints(): array {
+    return [];
   }
 
 }

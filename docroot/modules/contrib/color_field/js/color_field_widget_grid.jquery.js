@@ -3,7 +3,7 @@
  * Javascript for Color Field.
  */
 
-(function ($, Drupal) {
+(function ($, Drupal, once) {
 
   'use strict';
 
@@ -17,9 +17,7 @@
    */
   Drupal.behaviors.color_field_jquery_simple_color = {
     attach: function (context, settings) {
-      var $context = $(context);
-
-      $context.find('.js-color-field-widget-grid__color').once('colorFieldJquerySimpleColor').each(function (index, element) {
+      $(once('colorFieldJquerySimpleColor', '.js-color-field-widget-grid__color', context)).each(function (index, element) {
         var $element = $(element);
         var widgetSettings = settings.color_field.color_field_widget_grid[$(this).attr('id')];
 
@@ -35,4 +33,4 @@
     }
   };
 
-})(jQuery, Drupal);
+})(jQuery, Drupal, once);

@@ -18,7 +18,7 @@ class WebformHandlerTest extends WebformBrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['webform', 'webform_test_handler'];
+  protected static $modules = ['webform', 'webform_test_handler'];
 
   /**
    * Webforms to load.

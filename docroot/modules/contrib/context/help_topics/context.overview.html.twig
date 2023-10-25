@@ -1,0 +1,20 @@
+---
+label: 'About Context'
+top_level: true
+---
+
+{% set context_link_text %}
+{% trans %}Context{% endtrans %}
+{% endset %}
+<h2>{% trans %}About{% endtrans %}</h2>
+<p>{% trans %}The <em>Context</em> module lets users define conditions for when certain reactions should take place.{% endtrans %}</p>
+<p>{% trans %}An example of a condition could be when viewing a certain node type and blocks should be placed as a reaction when viewing a page with this node type.{% endtrans %}</p>
+<h2>{% trans %}Uses{% endtrans %}</h2>
+<dl>
+<dt>{% trans %}Managing Context{% endtrans %}</dt>
+<dd>{% trans %}Users with <em>Administer contexts</em> permission can add contextual conditions and reactions for different portions of their site. For each context, they can choose the conditions that trigger this context to be active and choose different aspects of their site that should react to this active context.{% endtrans %}</dd>
+<dt>{% trans %}Adding new custom reactions{% endtrans %}</dt>
+<dd>{% trans %}Reactions for the context module are defined trough the new <a href="https://www.drupal.org/developing/api/8/plugins">Drupal 8 Plugin API</a>.{% endtrans %}</dd>
+<dd>{% trans %}The Context module defines a plugin type named ContextReaction that users can extend when creating their own plugins.{% endtrans %}</dd>
+<dd>{% trans %}A context reaction requires a configuration form and execute method. The execution of the plugin is also something that will have to be handled by the author of the reaction.{% endtrans %}</dd>
+</dl>

@@ -9,7 +9,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\devel_generate\DevelGenerateBase;
-use Drush\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -150,6 +149,7 @@ class UserDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
     if ($kill) {
       $uids = $this->userStorage->getQuery()
         ->condition('uid', 1, '>')
+        ->accessCheck(FALSE)
         ->execute();
       $users = $this->userStorage->loadMultiple($uids);
       $this->userStorage->delete($users);
@@ -196,7 +196,7 @@ class UserDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
     $values = [
       'num' => array_shift($args),
       'time_range' => 0,
-      'roles' => StringUtils::csvToArray($options['roles']),
+      'roles' => self::csvToArray($options['roles']),
       'kill' => $options['kill'],
       'pass' => $options['pass'],
     ];

@@ -102,7 +102,6 @@ class WebformOptionsHelperTest extends UnitTestCase {
    */
   public function providerConvertOptionsToString() {
     $tests[] = [[99 => 99], ['99' => 99]];
-    $tests[] = [[99.11 => 99], ['99' => 99]];
     $tests[] = [[TRUE => 99], ['1' => 99]];
     return $tests;
   }

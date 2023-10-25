@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\color_field;
 
 /**
@@ -13,7 +15,7 @@ interface ColorInterface {
    * @return string
    *   The color as a string.
    */
-  public function toString();
+  public function toString(): string;
 
   /**
    * Get the color as a hex instance.
@@ -21,25 +23,22 @@ interface ColorInterface {
    * @return \Drupal\color_field\ColorHex
    *   The color as a hex instance.
    */
-  public function toHex();
+  public function toHex(): ColorHex;
 
   /**
-   * Get the color as a RGB instance.
+   * Get the color as an RGB instance.
    *
    * @return \Drupal\color_field\ColorRGB
-   *   The color as a RGB instance.
+   *   The color as an RGB instance.
    */
-  public function toRgb();
+  public function toRgb(): ColorRGB;
 
   /**
-   * Get the color as a HSL instance.
+   * Get the color as an HSL instance.
    *
    * @return \Drupal\color_field\ColorHSL
-   *   The color as a HSL instance.
+   *   The color as an HSL instance.
    */
-  public function toHsl();
+  public function toHsl(): ColorHSL;
 
-  // Public function toHSV();
-  // public function toCMYK();
-  // public function toCSS();
 }

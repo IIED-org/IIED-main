@@ -2,7 +2,7 @@ name: 'Upgrade status test theme'
 type: theme
 description: 'Theme for testing deprecations in themes'
 base theme: false
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^9 || ^10
 libraries-override:
   upgrade_status_test_library/deprecated_library:
     css:
@@ -13,6 +13,6 @@ libraries-extend:
     - upgrade_status_test_theme/library
 
 # Information added by Drupal.org packaging script on 2023-03-14
-version: '8.x-3.19'
+version: '4.0.0'
 project: 'upgrade_status'
-datestamp: 1678815323
+datestamp: 1678815092

@@ -86,8 +86,8 @@ class AddTermsToVocabularyForm extends FormBase {
     ];
     $form['keep_order'] = [
       '#type' => 'checkbox',
-      '#title' => t('Create the term in the order provided in the list.'),
-      '#description' => t('All terms will be added after the last existing term.'),
+      '#title' => $this->t('Create the term in the order provided in the list.'),
+      '#description' => $this->t('All terms will be added after the last existing term.'),
     ];
     $form['add'] = [
       '#type' => 'submit',

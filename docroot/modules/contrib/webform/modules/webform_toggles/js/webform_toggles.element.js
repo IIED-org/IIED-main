@@ -3,7 +3,7 @@
  * JavaScript behaviors for toggle integration.
  */
 
-(function ($, Drupal) {
+(function ($, Drupal, once) {
 
   'use strict';
 
@@ -23,7 +23,7 @@
         return;
       }
 
-      $(context).find('.js-webform-toggle').once('webform-toggle').each(function () {
+      $(once('webform-toggle', '.js-webform-toggle', context)).each(function () {
         var $toggle = $(this);
         var $wrapper = $toggle.parent();
         var $checkbox = $wrapper.find('input[type="checkbox"]');
@@ -66,9 +66,9 @@
         var $wrapper = $toggle.parent();
         var $checkbox = $wrapper.find('input[type="checkbox"]');
         var isDisabled = ($checkbox.attr('disabled') || $checkbox.attr('readonly'));
-        $toggle[isDisabled ? 'disabled' : 'disabled']();
+        $toggle[isDisabled ? 'disabled' : 'enabled']();
       });
     });
   }
 
-})(jQuery, Drupal);
+})(jQuery, Drupal, once);

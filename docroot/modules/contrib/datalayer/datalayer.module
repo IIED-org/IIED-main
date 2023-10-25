@@ -119,28 +119,6 @@ function datalayer_page_attachments(array &$attachments) {
   if (empty($attachments['#attached'])) {
     $attachments['#attached'] = [];
   }
-  if (empty($attachments['#attached']['html_head'])) {
-    $attachments['#attached']['html_head'] = [];
-  }
-
-  $datalayer_attachment = datalayer_get_data_from_page();
-  $attachments['#attached']['html_head'][] = [
-    [
-      '#type' => 'html_tag',
-      '#tag' => 'script',
-      // Use json_encode() instead of
-      // Drupal\Component\Serialization\Json::encode() because we want to pass
-      // the additional JSON_UNESCAPED_UNICODE flag.
-      '#value' => 'window.dataLayer = window.dataLayer || []; window.dataLayer.push(' . json_encode($datalayer_attachment, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE) . ');',
-    ],
-    'datalayers-js',
-  ];
-
-  // If we're exposing user data make sure that context is added to the
-  // cachability for the page. And, we add this regardless of configuration
-  // becasue in datalayer_get_data_from_page() we always add userUid no matter
-  // what.
-  $attachments['#cache']['contexts'][] = 'user';
 
   // Include data-layer-helper library.
   if ($datalayer_settings->get('lib_helper')) {
@@ -168,6 +146,19 @@ function datalayer_page_attachments(array &$attachments) {
 
   // Common datalayer JS.
   $attachments['#attached']['library'][] = 'datalayer/behaviors';
+}
+
+/**
+ * Implements hook_page_bottom().
+ */
+function datalayer_page_bottom(array &$page_bottom) {
+  $page_bottom['datalayer'] = [
+    '#lazy_builder' => ['datalayer.lazy_builders:lazyScriptTag', []],
+    '#create_placeholder' => TRUE,
+    '#cache' => [
+      'contexts' => ['user'],
+    ],
+  ];
 }
 
 /**

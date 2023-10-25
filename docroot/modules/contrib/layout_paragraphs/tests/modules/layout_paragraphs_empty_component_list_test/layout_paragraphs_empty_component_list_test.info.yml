@@ -1,0 +1,12 @@
+name: Layout Paragraphs Empty Component List Test
+description: Tests that the correct message is displayed when the component list is empty.
+core_version_requirement: ^9.1 || ^10
+type: module
+package: Layout Paragraphs
+dependencies:
+  - layout_paragraphs
+
+# Information added by Drupal.org packaging script on 2023-05-13
+version: '2.0.3'
+project: 'layout_paragraphs'
+datestamp: 1683938209

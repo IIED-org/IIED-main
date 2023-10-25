@@ -21,7 +21,7 @@ class DevelStateEditorTest extends DevelBrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
     $this->state = $this->container->get('state');
     $this->drupalPlaceBlock('page_title_block');
@@ -128,7 +128,7 @@ class DevelStateEditorTest extends DevelBrowserTestBase {
     $this->assertFalse($button->hasAttribute('disabled'));
 
     $edit = ['new_value' => 1];
-    $this->drupalPostForm('devel/state/edit/devel.simple', $edit, 'Save');
+    $this->submitForm($edit, 'Save');
     $this->assertSession()->pageTextContains(strtr('Variable @name was successfully edited.', ['@name' => 'devel.simple']));
     $this->assertEquals(1, $this->state->get('devel.simple'));
 
@@ -144,11 +144,11 @@ class DevelStateEditorTest extends DevelBrowserTestBase {
 
     // Try to save an invalid yaml input.
     $edit = ['new_value' => 'devel: \'value updated'];
-    $this->drupalPostForm('devel/state/edit/devel.array', $edit, 'Save');
+    $this->submitForm($edit, 'Save');
     $this->assertSession()->pageTextContains('Invalid input:');
 
     $edit = ['new_value' => 'devel: \'value updated\''];
-    $this->drupalPostForm('devel/state/edit/devel.array', $edit, 'Save');
+    $this->submitForm($edit, 'Save');
     $this->assertSession()->pageTextContains(strtr('Variable @name was successfully edited.', ['@name' => 'devel.array']));
     $this->assertEquals(['devel' => 'value updated'], $this->state->get('devel.array'));
 

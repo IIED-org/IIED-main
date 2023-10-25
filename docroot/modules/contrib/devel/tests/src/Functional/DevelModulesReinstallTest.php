@@ -19,7 +19,7 @@ class DevelModulesReinstallTest extends DevelBrowserTestBase {
   /**
    * Set up test.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->drupalLogin($this->adminUser);
   }
@@ -42,7 +42,8 @@ class DevelModulesReinstallTest extends DevelBrowserTestBase {
       $edit["reinstall[$module]"] = TRUE;
     }
 
-    $this->drupalPostForm('devel/reinstall', $edit, 'Reinstall');
+    $this->drupalGet('devel/reinstall');
+    $this->submitForm($edit, 'Reinstall');
     $this->assertSession()->pageTextContains('Uninstalled and installed: ' . implode(', ', $modules) . '.');
 
   }

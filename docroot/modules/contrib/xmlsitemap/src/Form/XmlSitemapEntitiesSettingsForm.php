@@ -189,7 +189,7 @@ class XmlSitemapEntitiesSettingsForm extends ConfigFormBase {
       if ($value) {
         foreach ($bundles[$key] as $bundle_key => $bundle_value) {
           if (!$values['settings'][$key]['types'][$bundle_key]) {
-            xmlsitemap_link_bundle_delete($key, $bundle_key, TRUE);
+            xmlsitemap_link_bundle_delete($key, $bundle_key);
           }
           elseif (!xmlsitemap_link_bundle_check_enabled($key, $bundle_key)) {
             xmlsitemap_link_bundle_enable($key, $bundle_key);
@@ -198,7 +198,7 @@ class XmlSitemapEntitiesSettingsForm extends ConfigFormBase {
       }
       else {
         foreach ($bundles[$key] as $bundle_key => $bundle_value) {
-          xmlsitemap_link_bundle_delete($key, $bundle_key, TRUE);
+          xmlsitemap_link_bundle_delete($key, $bundle_key);
         }
       }
     }
