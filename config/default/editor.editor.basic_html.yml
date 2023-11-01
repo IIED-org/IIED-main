@@ -16,16 +16,14 @@ settings:
       - subscript
       - superscript
       - removeFormat
-      - indent
-      - outdent
-      - blockQuote
-      - horizontalLine
-      - specialCharacters
       - '|'
       - link
       - '|'
       - bulletedList
       - numberedList
+      - '|'
+      - blockQuote
+      - horizontalLine
       - '|'
       - heading
       - style
@@ -40,23 +38,6 @@ settings:
     ckeditor5_list:
       reversed: false
       startIndex: true
-    ckeditor5_sourceEditing:
-      allowed_tags:
-        - '<cite>'
-        - '<dl>'
-        - '<dt>'
-        - '<dd>'
-        - '<div>'
-        - '<img src alt height width data-entity-type data-entity-uuid data-align data-caption>'
-        - '<a hreflang>'
-        - '<blockquote cite>'
-        - '<ul type>'
-        - '<ol type>'
-        - '<h4 id>'
-        - '<h5 id>'
-        - '<h6 id>'
-        - '<h3 id>'
-        - '<h2 id>'
     ckeditor5_style:
       styles:
         -

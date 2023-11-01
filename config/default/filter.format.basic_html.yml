@@ -17,7 +17,7 @@ filters:
     status: true
     weight: -10
     settings:
-      allowed_html: '<br> <p class="mb-6"> <h2 class="mt-0" id> <h3 class="mt-0" id> <h4 id> <h5 id> <h6 id> <strong> <em> <sub> <sup> <blockquote cite> <a href hreflang> <ul type> <ol start type> <li> <hr> <cite> <dl> <dt> <dd> <div> <img src alt height width data-entity-type data-entity-uuid data-align data-caption>'
+      allowed_html: '<br> <p class="mb-6"> <h2 class="mt-0"> <h3 class="mt-0"> <h4> <h5> <h6> <strong> <em> <sub> <sup> <blockquote> <a href> <ul> <ol start> <li> <hr>'
       filter_html_help: false
       filter_html_nofollow: false
   filter_align:
