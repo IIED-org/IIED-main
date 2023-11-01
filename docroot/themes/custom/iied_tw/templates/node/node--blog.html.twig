@@ -149,7 +149,9 @@
       class="container mx-auto lg:px-8 xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12">
       <div
         class="order-1 xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4 md:order-2">
-        {#-- image --#}
+
+        {#-- image if field_display_image --#}
+        {% if node.field_display_image.value %}
         <figure class="mb-6 -mx-4 sm:mx-0">
           {{ content.field_main_image[0] }}
           <figcaption
@@ -157,6 +159,8 @@
             {{ content.field_image_caption }}
           </figcaption>
         </figure>
+        {% endif %}
+
         {#-- body --#}
         <div class="pb-12 prose border-b border-gray-300 md:prose-lg lg:max-w-none">
           <div {{ content_attributes.addClass('node-content') }}> 
