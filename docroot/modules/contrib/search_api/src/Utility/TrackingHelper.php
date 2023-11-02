@@ -88,6 +88,10 @@ class TrackingHelper implements TrackingHelperInterface {
    * {@inheritdoc}
    */
   public function trackReferencedEntityUpdate(EntityInterface $entity, bool $deleted = FALSE) {
+    if (!empty($entity->search_api_skip_tracking)) {
+      return;
+    }
+
     /** @var \Drupal\search_api\IndexInterface[] $indexes */
     $indexes = [];
     try {

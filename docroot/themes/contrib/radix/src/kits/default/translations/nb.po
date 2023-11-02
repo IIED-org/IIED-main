@@ -1,2 +1,0 @@
-msgid "Open access"
-msgstr "Åpen tilgang"

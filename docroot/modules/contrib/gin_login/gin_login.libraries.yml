@@ -5,3 +5,5 @@ login:
 wallpaper:
   js:
     dist/js/wallpaper.js: { minified: false }
+  dependencies:
+    - core/once

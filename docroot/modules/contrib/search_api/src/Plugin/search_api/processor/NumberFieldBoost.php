@@ -48,7 +48,7 @@ class NumberFieldBoost extends ProcessorPluginBase implements PluginFormInterfac
     $boost_factors[Utility::formatBoostFactor(0)] = $this->t('Ignore');
 
     foreach ($this->index->getFields(TRUE) as $field_id => $field) {
-      if (in_array($field->getType(), ['integer', 'decimal'])) {
+      if (in_array($field->getType(), ['integer', 'decimal', 'date'])) {
         $form['boosts'][$field_id] = [
           '#type' => 'details',
           '#title' => $field->getLabel(),
@@ -145,6 +145,14 @@ class NumberFieldBoost extends ProcessorPluginBase implements PluginFormInterfac
 
             }
             if ($value) {
+              // Normalize values from dates (which are represented by UNIX
+              // timestamps) to be not too large to store in the database, and
+              // to also not be negative (in case it is a date from before
+              // 1970).
+              if ($field->getType() === 'date') {
+                $value /= 1000000;
+                $value = max($value, 0);
+              }
               $item->setBoost($item->getBoost() * (double) $value * (double) $settings['boost_factor']);
             }
           }

@@ -25,6 +25,7 @@ class AggregatedFieldProperty extends ConfigurablePropertyBase {
   public function defaultConfiguration() {
     return [
       'type' => 'union',
+      'separator' => "\n\n",
       'fields' => [],
     ];
   }
@@ -34,7 +35,7 @@ class AggregatedFieldProperty extends ConfigurablePropertyBase {
    */
   public function buildConfigurationForm(FieldInterface $field, array $form, FormStateInterface $form_state) {
     $index = $field->getIndex();
-    $configuration = $field->getConfiguration();
+    $configuration = $field->getConfiguration() + $this->defaultConfiguration();
 
     $form['#attached']['library'][] = 'search_api/drupal.search_api.admin_css';
     $form['#tree'] = TRUE;
@@ -51,6 +52,20 @@ class AggregatedFieldProperty extends ConfigurablePropertyBase {
     foreach ($this->getTypes('description') as $type => $description) {
       $form['type'][$type]['#description'] = $description;
     }
+
+    $form['separator'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Value separator'),
+      '#description' => $this->t('The text to insert between multiple values when aggregating them with the "@type" aggregation type. Can contain escape sequences like "\n" for a newline or "\t" for a horizontal tab.', ['@type' => $this->t('Concatenation')]),
+      '#size' => 30,
+      '#maxlength' => 64,
+      '#default_value' => addcslashes($configuration['separator'], "\0..\37\\"),
+      '#states' => [
+        'visible' => [
+          'input[name="type"]' => ['value' => 'concat'],
+        ],
+      ],
+    ];
 
     $form['fields'] = [
       '#type' => 'checkboxes',
@@ -114,6 +129,7 @@ class AggregatedFieldProperty extends ConfigurablePropertyBase {
   public function submitConfigurationForm(FieldInterface $field, array &$form, FormStateInterface $form_state) {
     $values = [
       'type' => $form_state->getValue('type'),
+      'separator' => stripcslashes($form_state->getValue('separator')),
       'fields' => array_keys(array_filter($form_state->getValue('fields'))),
     ];
     $field->setConfiguration($values);

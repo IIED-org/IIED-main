@@ -195,16 +195,11 @@ class HtmlFilter extends FieldsProcessorPluginBase {
   protected function processFieldValue(&$value, $type) {
     // Remove invisible content.
     $text = preg_replace('@<(applet|audio|canvas|command|embed|iframe|map|menu|noembed|noframes|noscript|script|style|svg|video)[^>]*>.*</\1>@siU', ' ', $value);
-    // Let removed tags still delimit words.
     $is_text_type = $this->getDataTypeHelper()->isTextType($type);
     if ($is_text_type) {
+      // Let removed tags still delimit words.
       $text = str_replace(['<', '>'], [' <', '> '], $text);
-      if ($this->configuration['title']) {
-        $text = preg_replace('/(<[-a-z_]+[^>]*["\s])title\s*=\s*("([^"]+)"|\'([^\']+)\')([^>]*>)/i', '$1 $5 $3$4 ', $text);
-      }
-      if ($this->configuration['alt']) {
-        $text = preg_replace('/<[-a-z_]+[^>]*["\s]alt\s*=\s*("([^"]+)"|\'([^\']+)\')[^>]*>/i', ' <img>$2$3</img> ', $text);
-      }
+      $text = $this->handleAttributes($text);
     }
     if ($this->configuration['tags'] && $is_text_type) {
       $text = strip_tags($text, '<' . implode('><', array_keys($this->configuration['tags'])) . '>');
@@ -214,6 +209,96 @@ class HtmlFilter extends FieldsProcessorPluginBase {
       $text = strip_tags($text);
       $value = $this->normalizeText(trim($text));
     }
+  }
+
+  /**
+   * Copies configured attributes out of HTML tags so they are indexed.
+   *
+   * @param string $text
+   *   The text to process, with spaces added around all HTML tags.
+   *
+   * @return string
+   *   The same text, with the contents of attributes "alt" and/or "title" (as
+   *   configured) copied into their element contents so they can be indexed.
+   */
+  protected function handleAttributes(string $text): string {
+    // Determine which attributes should be indexed and bail early if it's none.
+    $handled_attributes = [];
+    foreach (['alt', 'title'] as $attr) {
+      if ($this->configuration[$attr]) {
+        $handled_attributes[] = $attr;
+      }
+    }
+    if (!$handled_attributes) {
+      return $text;
+    }
+
+    $processed_text = '';
+    $pos = 0;
+    $text_len = mb_strlen($text);
+    // Go through the whole text, looking for HTML tags.
+    while ($pos < $text_len) {
+      // Find start of HTML tag.
+      // Since there is always a space in front of a "<" character, we do not
+      // need to write "$start_pos === FALSE" explicitly to check for a match.
+      $start_pos = mb_strpos($text, '<', $pos);
+      // Add everything from the last position to this start tag (or the end of
+      // the string, if we found none) to the processed text.
+      $processed_text .= mb_substr($text, $pos, $start_pos ? $start_pos - $pos : NULL);
+      if (!$start_pos) {
+        break;
+      }
+
+      // Find end of HTML tag.
+      // As above for $start_pos, $end_pos cannot be 0 since it must be greater
+      // than $start_pos. So, no need to check for FALSE strictly.
+      $end_pos = mb_strpos($text, '>', $start_pos + 1);
+      // Extract the contents of the tag, and add it to the processed text.
+      $tag_contents = mb_substr($text, $start_pos, $end_pos ? $end_pos + 1 - $start_pos : NULL);
+      $processed_text .= $tag_contents;
+      if (!$end_pos) {
+        break;
+      }
+      // Next, we want to begin searching right after the end of this HTML tag.
+      $pos = $end_pos + 1;
+
+      // Split the tag contents, without the angle brackets, into the element
+      // name and the rest.
+      $tag_contents = trim($tag_contents, '<> ');
+      [$element_name, $tag_contents] = explode(' ', $tag_contents, 2) + [1 => NULL];
+      // If there is just the element name, no need to look for attributes.
+      if (!$tag_contents) {
+        continue;
+      }
+
+      // This will match all the attributes we're looking for.
+      $attr_regex = '(?:' . implode('|', $handled_attributes) . ')';
+      $pattern = "/(?:^|\s)$attr_regex\s*+=\s*+(['\"])/Su";
+      $flags = PREG_OFFSET_CAPTURE | PREG_SET_ORDER;
+      if (preg_match_all($pattern, $tag_contents, $matches, $flags)) {
+        foreach ($matches as $match) {
+          // Now just extract the attribute value as everything between the
+          // matched quote character and the next such character.
+          // Unfortunately, preg_match_all() reports positions in bytes, not
+          // characters, so we need to use a bit of magic to reconcile this with
+          // our usual handling of Unicode.
+          $quote_char = $match[1][0];
+          /** @var int $quote_pos */
+          $quote_pos = $match[1][1];
+          $tag_contents_from_quote = substr($tag_contents, $quote_pos + 1);
+          $length = mb_strpos($tag_contents_from_quote, $quote_char);
+          $attr_value = mb_substr($tag_contents_from_quote, 0, $length);
+          // Take care of self-closing tags, so users are still able to set a
+          // boost for, for instance, the "alt" attribute from an "img" tag.
+          if ($tag_contents[-1] === '/') {
+            $attr_value = " <$element_name> $attr_value </$element_name>";
+          }
+          $processed_text .= ' ' . $attr_value;
+        }
+      }
+    }
+
+    return $processed_text;
   }
 
   /**

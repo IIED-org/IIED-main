@@ -27,6 +27,7 @@ use Drupal\Core\State\StateInterface;
 use Drupal\Core\TypedData\ComplexDataDefinitionInterface;
 use Drupal\Core\TypedData\ComplexDataInterface;
 use Drupal\Core\TypedData\TypedDataManagerInterface;
+use Drupal\external_entities\Entity\Query\External\Query as ExternalEntitiesQuery;
 use Drupal\field\FieldConfigInterface;
 use Drupal\field\FieldStorageConfigInterface;
 use Drupal\search_api\Datasource\DatasourcePluginBase;
@@ -851,10 +852,13 @@ class ContentEntity extends DatasourcePluginBase implements PluginFormInterface 
         // We only handle the case of picking up from where the last page left
         // off. (This will cause an infinite loop if anyone ever wants to index
         // Search API tasks in an index, so check for that to be on the safe
-        // side.)
+        // side. Also, the external_entities module doesn't reliably support
+        // conditions on entity queries, so disable this functionality in that
+        // case, too.)
         if (isset($last_ids[$context_key])
             && $last_ids[$context_key]['page'] == ($page - 1)
-            && $this->getEntityTypeId() !== 'search_api_task') {
+            && $this->getEntityTypeId() !== 'search_api_task'
+            && !($select instanceof ExternalEntitiesQuery)) {
           $select->condition($entity_id, $last_ids[$context_key]['last_id'], '>');
           $offset = 0;
         }

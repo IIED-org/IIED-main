@@ -141,6 +141,15 @@ class HtmlFilterTest extends UnitTestCase {
         ],
         TRUE,
       ],
+      // Test handling of very long tags.
+      [
+        '<img alt="ALT" src="image/png;base64,' . str_repeat('1', 1000000) . '" /> word </a>',
+        [
+          Utility::createTextToken('ALT', 2),
+          Utility::createTextToken('word'),
+        ],
+        TRUE,
+      ],
       // Test fault tolerance.
       [
         'a < b',
@@ -187,7 +196,7 @@ class HtmlFilterTest extends UnitTestCase {
       '<h2>Foo Bar <em>Baz</em></h2>
 
 <p>Bla Bla Bla. <strong title="Foobar">Important:</strong> Bla.</p>
-<img src="/foo.png" alt="Some picture" />
+<img src="image/png;base64,' . str_repeat('1', 1000000) . '" alt="Some picture" />
 <span>This is hidden</span>',
       [
         Utility::createTextToken('Foo Bar', 3.0),

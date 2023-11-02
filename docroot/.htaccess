@@ -80,6 +80,13 @@ AddEncoding gzip svgz
   RewriteCond %{QUERY_STRING} ^o=(.*)$
   RewriteRule ^pubs/display\.php$ http://www.iied.org/%1/ [QSD,L,R=302]
 
+# UrbanARK redirects
+  # Rewrite only urbanark.org URLs
+  RewriteCond %{HTTP_HOST} ^(.*)urbanark\.org
+  # Redirect all pages to the project page
+  RewriteRule . https://www.iied.org/urban-africa-risk-knowledge-urban-ark [R=301]
+
+  # Upgrade http to https
   RewriteCond %{ENV:AH_SITE_ENVIRONMENT} prod [NC]
   RewriteCond %{HTTPS} off
   RewriteCond %{HTTP:X-Forwarded-Proto} !https

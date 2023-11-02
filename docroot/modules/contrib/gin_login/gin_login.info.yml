@@ -4,7 +4,7 @@ description: Custom Drupal Login for Gin theme
 configure: gin_login.configuration_form
 core_version_requirement: ^8.9 || ^9 || ^10
 
-# Information added by Drupal.org packaging script on 2023-05-02
-version: '8.x-1.6'
+# Information added by Drupal.org packaging script on 2023-10-21
+version: '2.0.3'
 project: 'gin_login'
-datestamp: 1683024011
+datestamp: 1697916982

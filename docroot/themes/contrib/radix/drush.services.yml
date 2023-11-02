@@ -1,6 +1,0 @@
-services:
-  radix.subtheme.command:
-    class: 'Drush\Commands\radix\SubThemeCommands'
-    tags:
-      -
-        name: 'drush.command'

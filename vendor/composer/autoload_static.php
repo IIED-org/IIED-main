@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc55356c53f91567181cb9bc578ac52ab
+class ComposerStaticInitc7142a64c37f96d53e584392e4f37422
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -33,7 +33,6 @@ class ComposerStaticInitc55356c53f91567181cb9bc578ac52ab
         '3917c79c5052b270641b5a200963dbc2' => __DIR__ . '/..' . '/kint-php/kint/init.php',
         '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
         '38143a9afc50997d55e4815db8489d1c' => __DIR__ . '/..' . '/rector/rector/bootstrap.php',
-        '2191cedbacc400f3030e0b51d4e2aaf1' => __DIR__ . '/..' . '/rogervila/array-diff-multidimensional/src/helpers.php',
         '92c8763cd6170fce6fcfe7e26b4e8c10' => __DIR__ . '/..' . '/symfony/phpunit-bridge/bootstrap.php',
     );
 
@@ -126,7 +125,6 @@ class ComposerStaticInitc55356c53f91567181cb9bc578ac52ab
         ),
         'R' => 
         array (
-            'Rogervila\\' => 10,
             'Robo\\' => 5,
             'React\\Promise\\' => 14,
         ),
@@ -480,10 +478,6 @@ class ComposerStaticInitc55356c53f91567181cb9bc578ac52ab
         'Seld\\JsonLint\\' => 
         array (
             0 => __DIR__ . '/..' . '/seld/jsonlint/src/Seld/JsonLint',
-        ),
-        'Rogervila\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/rogervila/array-diff-multidimensional/src',
         ),
         'Robo\\' => 
         array (
@@ -1516,11 +1510,11 @@ class ComposerStaticInitc55356c53f91567181cb9bc578ac52ab
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc55356c53f91567181cb9bc578ac52ab::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc55356c53f91567181cb9bc578ac52ab::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitc55356c53f91567181cb9bc578ac52ab::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInitc55356c53f91567181cb9bc578ac52ab::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInitc55356c53f91567181cb9bc578ac52ab::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc7142a64c37f96d53e584392e4f37422::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc7142a64c37f96d53e584392e4f37422::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitc7142a64c37f96d53e584392e4f37422::$prefixesPsr0;
+            $loader->fallbackDirsPsr0 = ComposerStaticInitc7142a64c37f96d53e584392e4f37422::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInitc7142a64c37f96d53e584392e4f37422::$classMap;
 
         }, null, ClassLoader::class);
     }

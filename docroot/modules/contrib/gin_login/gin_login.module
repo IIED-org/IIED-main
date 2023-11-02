@@ -5,8 +5,8 @@
  * gin_login.module
  */
 
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Url;
-use Drupal\user\UserInterface;
 use Drupal\gin\GinSettings;
 
 /**
@@ -47,9 +47,12 @@ function gin_login_page_attachments_alter(&$page) {
       $page['#attached']['drupalSettings']['gin']['highcontrastmode_class'] = 'gin--high-contrast-mode';
     }
 
+    /** @var \Symfony\Component\HttpFoundation\Request $origin_url */
+    $origin_url = \Drupal::request()->getSchemeAndHttpHost() . \Drupal::request()->getBaseUrl();
+
     // Expose Gin Login settings to JS.
     $path = \Drupal::service('extension.list.module')->getPath('gin_login');
-    $page['#attached']['drupalSettings']['gin_login']['path'] = '/' . $path;
+    $page['#attached']['drupalSettings']['gin_login']['path'] = $origin_url . '/' . $path;
 
     // Add login library.
     $page['#attached']['library'][] = 'gin_login/login';
@@ -95,6 +98,16 @@ function gin_login_form_alter(&$form, $form_state, $form_id) {
   // User form (Login, Register or Forgot password)
   if (strpos($form_id, 'user_login') !== FALSE || strpos($form_id, 'user_register') !== FALSE || in_array($form_id, ['user_pass'])) {
     $form['actions']['submit']['#attributes']['class'][] = 'button--primary';
+
+    // Check if site is in maintenance mode.
+    // Display a message if true.
+    if (\Drupal::state()->get('system.maintenance_mode')) {
+      \Drupal::messenger()->addWarning(
+        new FormattableMarkup(\Drupal::config('system.maintenance')->get('message'), [
+          '@site' => \Drupal::config('system.site')->get('name'),
+        ])
+      );
+    }
   }
 
   // Adding button/links to Register and Forgot password.
@@ -113,10 +126,11 @@ function gin_login_form_alter(&$form, $form_state, $form_id) {
     ];
 
     // Register button.
-    if (\Drupal::config('user.settings')->get('register') != UserInterface::REGISTER_ADMINISTRATORS_ONLY) {
+    $register_url = Url::fromRoute('user.register');
+    if ($register_url->access()) {
       $form['more-links']['register_button'] = [
         '#type' => 'link',
-        '#url' => Url::fromRoute('user.register'),
+        '#url' => $register_url,
         '#title' => t('Create new account'),
         '#attributes' => [
           'class' => [
@@ -207,6 +221,32 @@ function gin_login_preprocess_ginlogin(&$variables) {
 }
 
 /**
+ * Implements hook_theme_suggestions_HOOK_alter() for 'page'.
+ */
+function gin_login_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+  if (!_gin_login_gin_is_active()) {
+    return;
+  }
+
+  // Get path from Route.
+  $route = \Drupal::routeMatch()->getRouteName();
+
+  switch ($route) {
+    case 'user.login':
+      $suggestions[] = 'page__user__login';
+      break;
+
+    case 'user.pass':
+      $suggestions[] = 'page__user__password';
+      break;
+
+    case 'user.register':
+      $suggestions[] = 'page__user__register';
+      break;
+  }
+}
+
+/**
  * Helper function to check if we're on the right paths.
  */
 function _gin_login__check_path() {
@@ -247,7 +287,7 @@ function _gin_login_gin_is_active() {
 
   // Admin theme will have no value if is set to use the default theme.
   if ($admin_theme_name) {
-    $admin_base_themes = isset($theme_handler[$admin_theme_name]->base_themes) ? $theme_handler[$admin_theme_name]->base_themes : [];
+    $admin_base_themes = $theme_handler[$admin_theme_name]->base_themes ?? [];
     $admin_base_themes[$admin_theme_name] = $admin_theme_name;
   }
   else {
