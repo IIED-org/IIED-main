@@ -70,7 +70,7 @@ AddEncoding gzip svgz
   
   # Rewrite pubs.iied.org to www.iied.org/publications
   RewriteCond %{HTTP_HOST} ^pubs\.iied\.org$
-  RewriteRule ^$ https://www.iied.org/publications [L,R=301]
+  RewriteRule ^$ https://www.iied.org/publications/ [L,R=301]
 
   # Rewrite pubs.iied.org/anything to www.iied.org/anything
   RewriteCond %{HTTP_HOST} ^pubs\.iied\.org
