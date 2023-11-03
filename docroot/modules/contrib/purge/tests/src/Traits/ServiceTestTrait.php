@@ -63,8 +63,8 @@ trait ServiceTestTrait {
    * this test. This applies to plugin managers for instance.
    */
   public function testCodeContract(): void {
-    $this->assertTrue($this->service instanceof ServiceInterface);
-    $this->assertTrue($this->service instanceof ServiceBase);
+    $this->assertInstanceOf(ServiceInterface::class, $this->service);
+    $this->assertInstanceOf(ServiceBase::class, $this->service);
   }
 
   /**
@@ -77,12 +77,12 @@ trait ServiceTestTrait {
    */
   public function assertIterator(array $expected_plugins, $type = NULL): void {
     // Assert that the service implements PHP's \Iterator interface.
-    $this->assertTrue($this->service instanceof \Iterator);
+    $this->assertInstanceOf(\Iterator::class, $this->service);
     // Iterate the service, count all items and typecheck the instances.
     $items = 0;
     foreach ($this->service as $instance) {
       if ($type) {
-        $this->assertTrue($instance instanceof $type, var_export($instance->getPluginId(), TRUE));
+        $this->assertInstanceOf($type, $instance, var_export($instance->getPluginId(), TRUE));
       }
       $items++;
     }

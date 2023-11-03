@@ -6,8 +6,8 @@
  */
 
 use Drupal\Component\Utility\Environment;
-use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\File\Event\FileUploadSanitizeNameEvent;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\file\Entity\File;
 
 /**

@@ -12,6 +12,11 @@
     "extra": {
         "branch-alias": {
             "dev-8.x-3.x": "3.x-dev"
+        },
+        "drush": {
+            "services": {
+                "drush.services.yml": ">=9"
+            }
         }
     }
 }

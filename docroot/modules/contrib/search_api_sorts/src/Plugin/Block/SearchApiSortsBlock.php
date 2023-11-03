@@ -65,7 +65,7 @@ class SearchApiSortsBlock extends BlockBase {
       'sortByWeightElement',
     ]);
 
-    // TODO: fetch path by configuration (data source?) instead of current path.
+    // @todo fetch path by configuration (data source?) instead of current path.
     $url = \Drupal::request()->getRequestUri();
     $base_path = \Drupal::request()->getBasePath();
     $url = str_replace($base_path, '', $url);
@@ -108,7 +108,9 @@ class SearchApiSortsBlock extends BlockBase {
       '#theme' => 'item_list__search_api_sorts',
       '#items' => $items,
       '#attributes' => [
-        'class' => ['search-api-sorts', 'search-api-sorts--' . Html::getClass($search_api_display->getPluginId())],
+        'class' => [
+          'search-api-sorts', 'search-api-sorts--' . Html::getClass($search_api_display->getPluginId()),
+        ],
       ],
     ];
 

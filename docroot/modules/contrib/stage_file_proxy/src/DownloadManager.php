@@ -10,7 +10,9 @@ use Drupal\Core\StreamWrapper\PublicStream;
 use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\Core\Utility\Error;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -77,15 +79,12 @@ final class DownloadManager implements DownloadManagerInterface {
     }
 
     try {
-      // Fetch remote file.
-      $options['Connection'] = 'close';
-      $response = $this->client->get($url, $options);
-
+      $response = $this->fetchResponse($server, $remote_file_dir, $relative_path, $options);
       $result = $response->getStatusCode();
       if ($result != 200) {
         $this->logger->warning('HTTP error @errorcode occurred when trying to fetch @remote.', [
           '@errorcode' => $result,
-          '@remote' => $url,
+          '@remote' => $server . '/' . UrlHelper::encodePath($remote_file_dir . '/' . $relative_path),
         ]);
         $this->lock->release($lock_id);
         return FALSE;
@@ -133,6 +132,39 @@ final class DownloadManager implements DownloadManagerInterface {
       $this->lock->release($lock_id);
       return FALSE;
     }
+  }
+
+  /**
+   * Helper to perform the actual fetching of the response.
+   *
+   * @see ::fetch()
+   *
+   * @throws \GuzzleHttp\Exception\ClientException
+   *   If the error isn't a 404, or the second request is also a 404.
+   */
+  protected function fetchResponse(string $server, string $remote_file_dir, string $relative_path, array $options): ResponseInterface {
+    try {
+      // Fetch remote file.
+      $url = $server . '/' . UrlHelper::encodePath($remote_file_dir . '/' . $relative_path);
+      $options['Connection'] = 'close';
+      $response = $this->client->get($url, $options);
+    }
+    catch (ClientException $e) {
+      if ($e->getCode() == 404) {
+        // If this is a 404, it may be an image style that is converting the
+        // file type.
+        // @see \Drupal\image\Controller\ImageStyleDownloadController::deliver()
+        $path_info = pathinfo($relative_path);
+        $converted_image_uri = $path_info['dirname'] . '/' . $path_info['filename'];
+        $url = $server . '/' . UrlHelper::encodePath($remote_file_dir . '/' . $converted_image_uri);
+        $response = $this->client->get($url, $options);
+      }
+      else {
+        throw $e;
+      }
+    }
+
+    return $response;
   }
 
   /**

@@ -6,7 +6,6 @@ use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceFormatterBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
-use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\WebformInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -37,20 +36,6 @@ abstract class WebformEntityReferenceFormatterBase extends EntityReferenceFormat
   protected $time;
 
   /**
-   * The language manager service.
-   *
-   * @var \Drupal\Core\Language\LanguageManagerInterface
-   */
-  protected $languageManager;
-
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
@@ -66,8 +51,6 @@ abstract class WebformEntityReferenceFormatterBase extends EntityReferenceFormat
     $instance->configFactory = $container->get('config.factory');
     $instance->renderer = $container->get('renderer');
     $instance->time = $container->get('datetime.time');
-    $instance->languageManager = $container->get('language_manager');
-    $instance->entityTypeManager = $container->get('entity_type.manager');
     return $instance;
   }
 
@@ -77,25 +60,12 @@ abstract class WebformEntityReferenceFormatterBase extends EntityReferenceFormat
   protected function getEntitiesToView(EntityReferenceFieldItemListInterface $items, $langcode) {
     /** @var \Drupal\webform\WebformInterface[] $entities */
     $entities = parent::getEntitiesToView($items, $langcode);
-    foreach ($entities as &$entity) {
+    foreach ($entities as $entity) {
       /** @var \Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem $item */
       $item = $entity->_referringItem;
 
       // Only override an open webform.
       if ($entity->isOpen()) {
-        if ($entity->hasTranslations()) {
-          $entity_storage = $this->entityTypeManager->getStorage($entity->getEntityTypeId());
-          $current_language = $this->languageManager->getConfigOverrideLanguage();
-          $this->languageManager->setConfigOverrideLanguage($this->languageManager->getLanguage($langcode));
-          /** @var \Drupal\webform\WebformInterface $translated_entity */
-          $translated_entity = $entity_storage->loadUnchanged($entity->id());
-          $elements = $entity->getElementsDecoded();
-          WebformElementHelper::merge($elements, $translated_entity->getElementsDecoded());
-          $translated_entity->setElements($elements);
-          $entity = $translated_entity;
-          $this->languageManager->setConfigOverrideLanguage($current_language);
-        }
-
         if (isset($item->open)) {
           $entity->set('open', $item->open);
         }

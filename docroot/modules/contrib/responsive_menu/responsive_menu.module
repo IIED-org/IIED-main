@@ -188,8 +188,14 @@ function responsive_menu_prepare_output() {
 
   // Allow for the menu position to be based on the language direction.
   // @see issue #3095162 for details.
-  if ($config->get('off_canvas_position') === 'contextual') {
+  if ($config->get('off_canvas_position') === 'contextual' || $config->get('off_canvas_position') === 'contextual-front') {
     $language = \Drupal::languageManager()->getCurrentLanguage()->getDirection();
+    if ($config->get('off_canvas_position') === 'contextual-front') {
+      $language === 'rtl' ? 'right-front' : 'left-front';
+    }
+    else {
+      $language === 'rtl' ? 'right' : 'left';
+    }
     $output['#attached']['drupalSettings']['responsive_menu']['position'] = $language === 'rtl' ? 'right' : 'left';
   }
   else {

@@ -3,9 +3,9 @@
 namespace Drupal\config_filter\Plugin;
 
 use Drupal\config_filter\ConfigFilterManagerInterface;
-use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Plugin\DefaultPluginManager;
 
 /**
  * Provides the Config filter plugin plugin manager.

@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * @file
+ * Sets the Drush Purge plugins to enabled by default.
+ */
+
+function purge_drush_purge_queuers_alter(&$definitions) {
+  _purge_drush_alter_definition($definitions);
+}
+
+function purge_drush_purge_tagsheader_alter(&$definitions) {
+  _purge_drush_alter_definition($definitions);
+}
+
+function purge_drush_purge_queues_alter(&$definitions) {
+  _purge_drush_alter_definition($definitions);
+}
+
+function purge_drush_purge_invalidation_alter(&$definitions) {
+  _purge_drush_alter_definition($definitions);
+}
+
+function purge_drush_purge_diagnostic_alter(&$definitions) {
+  _purge_drush_alter_definition($definitions);
+}
+
+function purge_drush_purge_purgers_alter(&$definitions) {
+  _purge_drush_alter_definition($definitions);
+}
+
+function purge_drush_purge_processor_alter(&$definitions) {
+  _purge_drush_alter_definition($definitions);
+}
+
+function _purge_drush_alter_definition(&$definitions) {
+  foreach ($definitions as $key => $def) {
+    if (strpos($key, 'drush_purge') === 0) {
+      $definitions[$key]['enable_by_default'] = TRUE;
+    }
+  }
+}

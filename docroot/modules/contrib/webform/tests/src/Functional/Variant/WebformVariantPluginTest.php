@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\webform\Functional\Variant;
 
-use Drupal\webform\Entity\Webform;
 use Drupal\Tests\webform\Functional\WebformBrowserTestBase;
+use Drupal\webform\Entity\Webform;
 
 /**
  * Tests for the webform variant plugin.

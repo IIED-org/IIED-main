@@ -6,7 +6,7 @@ core_version_requirement: ^9 || ^10
 dependencies:
   - drupal:toolbar
 
-# Information added by Drupal.org packaging script on 2023-07-04
-version: '8.x-1.0-rc3'
+# Information added by Drupal.org packaging script on 2023-10-13
+version: '8.x-1.0-rc4'
 project: 'gin_toolbar'
-datestamp: 1688477490
+datestamp: 1697192880

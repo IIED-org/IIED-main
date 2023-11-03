@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\webform_access\Functional;
 
+use Drupal\Tests\webform_node\Functional\WebformNodeBrowserTestBase;
 use Drupal\webform_access\Entity\WebformAccessGroup;
 use Drupal\webform_access\Entity\WebformAccessType;
-use Drupal\Tests\webform_node\Functional\WebformNodeBrowserTestBase;
 
 /**
  * Test base for webform access.

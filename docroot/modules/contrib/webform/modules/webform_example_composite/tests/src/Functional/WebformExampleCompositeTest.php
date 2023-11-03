@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\webform_example_composite\Functional;
 
+use Drupal\Tests\webform\Functional\WebformBrowserTestBase;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
-use Drupal\Tests\webform\Functional\WebformBrowserTestBase;
 
 /**
  * Tests for webform example composite.

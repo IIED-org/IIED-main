@@ -7,7 +7,7 @@ type: module
 lifecycle: stable
 package: Search
 
-# Information added by Drupal.org packaging script on 2022-10-05
-version: '8.x-1.7'
+# Information added by Drupal.org packaging script on 2023-10-15
+version: '8.x-1.8'
 project: 'search_api_autocomplete'
-datestamp: 1664975439
+datestamp: 1697366385

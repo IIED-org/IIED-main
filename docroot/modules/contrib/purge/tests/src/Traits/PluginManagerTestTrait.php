@@ -43,10 +43,10 @@ trait PluginManagerTestTrait {
    * Test if the plugin manager complies to the basic requirements.
    */
   public function testCodeContract(): void {
-    $this->assertTrue($this->pluginManager instanceof $this->pluginManagerClass);
-    $this->assertTrue($this->pluginManager instanceof PluginManagerInterface);
-    $this->assertTrue($this->pluginManager instanceof DefaultPluginManager);
-    $this->assertTrue($this->pluginManager instanceof CachedDiscoveryInterface);
+    $this->assertInstanceOf($this->pluginManagerClass, $this->pluginManager);
+    $this->assertInstanceOf(PluginManagerInterface::class, $this->pluginManager);
+    $this->assertInstanceOf(DefaultPluginManager::class, $this->pluginManager);
+    $this->assertInstanceOf(CachedDiscoveryInterface::class, $this->pluginManager);
   }
 
 }

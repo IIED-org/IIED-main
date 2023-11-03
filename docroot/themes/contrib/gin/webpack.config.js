@@ -22,6 +22,7 @@ module.exports = {
     'sidebar': ['./js/sidebar.js'],
     'sticky': ['./js/sticky.js'],
     'toolbar': ['./js/toolbar.js'],
+    'tableheader': ['./js/tableheader.js'],
     // ################################################
     // CSS
     // ################################################
@@ -65,6 +66,7 @@ module.exports = {
     'components/webform': ['./styles/components/webform.scss'],
     'components/workbench': ['./styles/components/workbench.scss'],
     // Layout
+    'layout/navigation': ['./styles/layout/navigation.scss'],
     'layout/toolbar': ['./styles/layout/toolbar.scss'],
     'layout/horizontal_toolbar': ['./styles/layout/horizontal_toolbar.scss'],
     'layout/classic_toolbar': ['./styles/layout/classic_toolbar.scss'],

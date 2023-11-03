@@ -47,6 +47,8 @@ class PluginManagerTest extends KernelPluginManagerTestBase {
     'b',
     'c',
     'withform',
+    'drush_purge_queue_work',
+    'drush_purge_invalidate',
   ];
 
   /**

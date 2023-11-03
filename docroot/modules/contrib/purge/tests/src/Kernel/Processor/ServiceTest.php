@@ -37,7 +37,7 @@ class ServiceTest extends KernelServiceTestBase {
    */
   public function testCount(): void {
     $this->initializeService();
-    $this->assertTrue($this->service instanceof \Countable);
+    $this->assertInstanceOf(\Countable::class, $this->service);
     $this->assertEquals(2, count($this->service));
   }
 
@@ -46,11 +46,11 @@ class ServiceTest extends KernelServiceTestBase {
    */
   public function testGet(): void {
     $this->initializeService();
-    $this->assertTrue($this->service->get('a') instanceof ProcessorInterface);
-    $this->assertTrue($this->service->get('b') instanceof ProcessorInterface);
+    $this->assertInstanceOf(ProcessorInterface::class, $this->service->get('a'));
+    $this->assertInstanceOf(ProcessorInterface::class, $this->service->get('b'));
     $this->assertFalse($this->service->get('c'));
     $this->service->setPluginsEnabled(['c']);
-    $this->assertTrue($this->service->get('c') instanceof ProcessorInterface);
+    $this->assertInstanceOf(ProcessorInterface::class, $this->service->get('c'));
   }
 
   /**

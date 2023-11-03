@@ -3,8 +3,8 @@
 namespace Drupal\Tests\webform\Unit\Utility;
 
 use Drupal\Core\Serialization\Yaml;
-use Drupal\webform\Utility\WebformYaml;
 use Drupal\Tests\UnitTestCase;
+use Drupal\webform\Utility\WebformYaml;
 
 /**
  * Tests webform tidy utility.

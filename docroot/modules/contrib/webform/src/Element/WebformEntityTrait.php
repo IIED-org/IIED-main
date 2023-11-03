@@ -2,9 +2,9 @@
 
 namespace Drupal\webform\Element;
 
-use Drupal\views\Plugin\EntityReferenceSelection\ViewsSelection;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\OptGroup;
+use Drupal\views\Plugin\EntityReferenceSelection\ViewsSelection;
 use Drupal\webform\Utility\WebformOptionsHelper;
 
 /**

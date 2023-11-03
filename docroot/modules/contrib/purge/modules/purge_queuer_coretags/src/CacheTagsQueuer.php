@@ -70,10 +70,9 @@ class CacheTagsQueuer implements CacheTagsInvalidatorInterface, ContainerAwareIn
           ->get('purge_queuer_coretags.settings')
           ->get('blacklist');
 
-        // Make sure to disable ourselves during module installation.
+        // Ensure config is an array.
         if (!is_array($this->blacklistedTagPrefixes)) {
-          $this->queuer = FALSE;
-          return FALSE;
+          $this->blacklistedTagPrefixes = [];
         }
       }
     }

@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\webform\Functional\Settings;
 
+use Drupal\Tests\webform\Functional\WebformBrowserTestBase;
 use Drupal\Tests\webform_node\Traits\WebformNodeBrowserTestTrait;
 use Drupal\webform\Entity\Webform;
-use Drupal\Tests\webform\Functional\WebformBrowserTestBase;
 
 /**
  * Tests for webform submission form ajax.

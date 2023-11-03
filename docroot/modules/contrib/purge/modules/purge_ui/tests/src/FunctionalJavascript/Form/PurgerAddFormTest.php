@@ -104,7 +104,7 @@ class PurgerAddFormTest extends AjaxFormTestBase {
     $this->visitDashboard();
     $this->getSession()->getPage()->clickLink('Add purger');
     $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->assertActionExists('edit-cancel', 'Cancel');
+    $this->getSession()->getPage()->hasButton('Cancel');
   }
 
   /**

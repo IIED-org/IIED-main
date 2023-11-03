@@ -6,7 +6,7 @@ use Drupal\Core\Config\Entity\Query\QueryFactory;
 use Drupal\Core\Entity\EntityTypeInterface;
 
 /**
- * Class SearchApiSortsTestEntityQueryFactory.
+ * Defines a query factory for the search_api_sorts_test_entity entity type.
  *
  * @package Drupal\search_api_sorts_test_entity\Entity
  */

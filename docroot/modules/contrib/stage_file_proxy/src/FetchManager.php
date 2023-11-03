@@ -57,7 +57,8 @@ class FetchManager implements FetchManagerInterface {
     $this->configFactory = $config_factory;
 
     if (is_null($download_manager)) {
-      @trigger_error('Calling ' . __METHOD__ . ' without the $download_manager argument is deprecated in 2.1.0 and will be required in 3.0.0.', E_USER_DEPRECATED);
+      @trigger_error('Calling ' . __METHOD__ . ' without the $download_manager argument is deprecated in stage_file_proxy:2.1.0 and will be required in stage_file_proxy:3.0.0. See https://www.drupal.org/project/stage_file_proxy/issues/3375749', E_USER_DEPRECATED);
+      // phpcs:ignore
       $this->downloadManager = \Drupal::service('stage_file_proxy.download_manager');
     }
     else {

@@ -1,3 +1,20 @@
+Search API Autocomplete 1.8 (2023-10-15):
+-----------------------------------------
+- #3382226 by bvoynick, drunken monkey, keshavv, claudiu.cristea: Fixed errors
+  with newer Solr module versions.
+- #3385144 by codebymikey, drunken monkey: Fixed unnecessary tabIndex of
+  suggestions list.
+- #3273631 by drunken monkey: Fixed autocomplete on field-specific filters.
+- #3328528 by mvogel, drunken monkey: Fixed dangling permissions after deleting
+  an autocomplete search.
+- #3342798 by kjl16, drunken monkey: Fixed URL suggestions redirecting when
+  pressing the Tab key.
+- #3263882 by DieterHolvoet, drunken monkey: Fixed wrong render() call in
+  AutocompleteController.
+- #3339352 by drunken monkey: Fixed Javascript code style.
+- #3320634 by drunken monkey, _pratik_, darvanen: Replaced README.txt with
+  README.md.
+
 Search API Autocomplete 1.7 (2022-10-05):
 -----------------------------------------
 - #3262214 by Lal_, japerry, balintpekker, drunken monkey, Berdir: Fixed

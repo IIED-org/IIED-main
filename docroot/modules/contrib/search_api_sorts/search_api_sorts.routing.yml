@@ -19,4 +19,4 @@ entity.search_api_sorts_field.edit_form:
   defaults:
     _controller: '\Drupal\search_api_sorts\Controller\AdminController::redirectEditForm'
   requirements:
-      _permission: 'administer search_api'
+    _permission: 'administer search_api'

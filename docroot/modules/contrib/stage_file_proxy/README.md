@@ -41,7 +41,7 @@ information, see
    $ drush en --yes stage_file_proxy
 
 2. Configure connection to the source. This is available via the UI, at
-   Configuration > Stage File Proxy Settings (admin/config/system/stage_file_proxy)
+   Configuration > Stage File Proxy Settings
 
 As this module should only be used on non-production sites, it is preferable to
 configure this within your settings.php or settings.local.php file. Detailed

@@ -73,7 +73,7 @@ abstract class DiagnosticCheckBase extends PluginBase implements DiagnosticCheck
     $this->severity = $this->run();
     if (!is_int($this->severity)) {
       $class = $this->getPluginDefinition()['class'];
-      throw new CheckNotImplementedCorrectly("Exected integer as return from $class::run()!");
+      throw new CheckNotImplementedCorrectly("Expected integer as return from $class::run()!");
     }
     if ($this->severity < -1 || $this->severity > 2) {
       $class = $this->getPluginDefinition()['class'];

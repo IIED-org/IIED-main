@@ -3,6 +3,8 @@
 namespace Drupal\purge\Logger;
 
 /**
+ * Logger workaround for Drupal 9 and 10.
+ *
  * Provides support for psr/log v1 and v3. With psr/log:^3 PHP 8.0 type hints
  * are used, which breaks PHP 7.4. This allows overriding methods in the psr/log
  * interface while supporting v1 and v3.

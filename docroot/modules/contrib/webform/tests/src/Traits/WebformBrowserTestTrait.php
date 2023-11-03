@@ -10,10 +10,10 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\filter\Entity\FilterFormat;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
+use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Utility\WebformYaml;
 use Drupal\webform\WebformInterface;
-use Drupal\webform\Entity\Webform;
 
 /**
  * Provides convenience methods for webform assertions in browser tests.

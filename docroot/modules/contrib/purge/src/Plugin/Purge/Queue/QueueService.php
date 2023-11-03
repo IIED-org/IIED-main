@@ -183,7 +183,8 @@ class QueueService extends ServiceBase implements QueueServiceInterface, Destruc
       $items[$i] = $inv;
     }
 
-    $this->logger->debug("claimed @no items.", ['@no' => count($items)]);
+    $output = implode(', ', $items);
+    $this->logger->debug("claimed @no items: @output", ['@no' => count($items), '@output' => $output]);
     return $items;
   }
 
@@ -255,6 +256,9 @@ class QueueService extends ServiceBase implements QueueServiceInterface, Destruc
               "The queue returned FALSE on createItemMultiple().");
           }
           foreach ($chunk as $key => $invalidation) {
+            if (!array_key_exists($key, $ids)) {
+              continue;
+            }
             $this->buffer->set($invalidation, TxBuffer::ADDED);
             $this->buffer->setProperty($invalidation, 'item_id', $ids[$key]);
             $this->buffer->setProperty($invalidation, 'created', time());

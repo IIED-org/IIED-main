@@ -5,8 +5,8 @@
  * Options alter hooks.
  */
 
-use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\Core\Language\LanguageManager;
+use Drupal\webform\Utility\WebformOptionsHelper;
 
 /**
  * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter() for range options.

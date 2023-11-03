@@ -6,7 +6,6 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\image\Plugin\Field\FieldFormatter\ImageUrlFormatter;
@@ -37,27 +36,15 @@ class SvgImageUrlFormatter extends ImageUrlFormatter {
   /**
    * {@inheritdoc}
    */
-  public function __construct($pluginId, $pluginDefinition, FieldDefinitionInterface $fieldDefinition, array $settings, $label, $viewMode, array $thirdPartySettings, EntityStorageInterface $ImageStyleStorage, AccountInterface $currentUser, FileUrlGeneratorInterface $fileUrlGenerator) {
-    parent::__construct($pluginId, $pluginDefinition, $fieldDefinition, $settings, $label, $viewMode, $thirdPartySettings, $ImageStyleStorage, $currentUser);
-    $this->fileUrlGenerator = $fileUrlGenerator;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition) {
-    return new static(
-      $pluginId,
-      $pluginDefinition,
-      $configuration['field_definition'],
-      $configuration['settings'],
-      $configuration['label'],
-      $configuration['view_mode'],
-      $configuration['third_party_settings'],
-      $container->get('entity_type.manager')->getStorage('image_style'),
-      $container->get('current_user'),
-      $container->get('file_url_generator')
-    );
+    $instance = parent::create($container, $configuration, $pluginId, $pluginDefinition);
+
+    // Do not override the parent constructor to set extra class properties. The
+    // constructor parameter order is different in different Drupal core
+    // releases, even in minor releases in the same Drupal core version.
+    $instance->fileUrlGenerator = $container->get('file_url_generator');
+
+    return $instance;
   }
 
   /**
@@ -72,27 +59,28 @@ class SvgImageUrlFormatter extends ImageUrlFormatter {
       return $elements;
     }
 
-    /** @var \Drupal\image\ImageStyleInterface $image_style */
-    $image_style = $this->imageStyleStorage->load($this->getSetting('image_style'));
+    /** @var \Drupal\image\ImageStyleInterface $imageStyle */
+    $imageStyle = $this->imageStyleStorage->load($this->getSetting('image_style'));
     /** @var \Drupal\file\FileInterface[] $images */
     foreach ($images as $delta => $image) {
-      $image_uri = $image->getFileUri();
+      $imageUri = $image->getFileUri();
       $isSvg = svg_image_is_file_svg($image);
-      $url = ($image_style && !$isSvg)
-        ? $image_style->buildUrl($image_uri)
-        : $this->fileUrlGenerator->generateAbsoluteString($image_uri);
+      $url = ($imageStyle && !$isSvg)
+        ? $imageStyle->buildUrl($imageUri)
+        : $this->fileUrlGenerator->generateAbsoluteString($imageUri);
 
       $url = $this->fileUrlGenerator->transformRelative($url);
 
       // Add cacheability metadata from the image and image style.
       $cacheability = CacheableMetadata::createFromObject($image);
-      if ($image_style) {
-        $cacheability->addCacheableDependency(CacheableMetadata::createFromObject($image_style));
+      if ($imageStyle) {
+        $cacheability->addCacheableDependency(CacheableMetadata::createFromObject($imageStyle));
       }
 
       $elements[$delta] = ['#markup' => Markup::create($url)];
       $cacheability->applyTo($elements[$delta]);
     }
+
     return $elements;
   }
 

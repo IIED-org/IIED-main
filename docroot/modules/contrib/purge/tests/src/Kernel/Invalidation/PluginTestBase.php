@@ -77,14 +77,14 @@ abstract class PluginTestBase extends KernelTestBase {
    * Tests the code contract strictly enforced on invalidation type plugins.
    */
   public function testCodeContract(): void {
-    $this->assertTrue($this->getInstance() instanceof ImmutableInvalidationInterface);
-    $this->assertTrue($this->getInstance() instanceof InvalidationInterface);
-    $this->assertTrue($this->getInstance() instanceof ImmutableInvalidationBase);
-    $this->assertTrue($this->getInstance() instanceof InvalidationBase);
-    $this->assertTrue($this->getImmutableInstance() instanceof ImmutableInvalidationInterface);
-    $this->assertFalse($this->getImmutableInstance() instanceof InvalidationInterface);
-    $this->assertTrue($this->getImmutableInstance() instanceof ImmutableInvalidationBase);
-    $this->assertFalse($this->getImmutableInstance() instanceof InvalidationBase);
+    $this->assertInstanceOf(ImmutableInvalidationInterface::class, $this->getInstance());
+    $this->assertInstanceOf(InvalidationInterface::class, $this->getInstance());
+    $this->assertInstanceOf(ImmutableInvalidationBase::class, $this->getInstance());
+    $this->assertInstanceOf(InvalidationBase::class, $this->getInstance());
+    $this->assertInstanceOf(ImmutableInvalidationInterface::class, $this->getImmutableInstance());
+    $this->assertNotInstanceOf(InvalidationInterface::class, $this->getImmutableInstance());
+    $this->assertInstanceOf(ImmutableInvalidationBase::class, $this->getImmutableInstance());
+    $this->assertNotInstanceOf(InvalidationBase::class, $this->getImmutableInstance());
   }
 
   /**
@@ -457,9 +457,9 @@ abstract class PluginTestBase extends KernelTestBase {
     $d = $mutable->getPluginDefinition();
     $this->assertTrue(is_array($d));
     $this->assertTrue(is_array($d['examples']));
-    $this->assertTrue($d['label'] instanceof TranslatableMarkup);
+    $this->assertInstanceOf(TranslatableMarkup::class, $d['label']);
     $this->assertFalse(empty((string) $d['label']));
-    $this->assertTrue($d['description'] instanceof TranslatableMarkup);
+    $this->assertInstanceOf(TranslatableMarkup::class, $d['description']);
     $this->assertFalse(empty((string) $d['description']));
     $this->assertTrue(isset($d['expression_required']));
     $this->assertTrue(isset($d['expression_can_be_empty']));
@@ -474,9 +474,9 @@ abstract class PluginTestBase extends KernelTestBase {
     $d = $immutable->getPluginDefinition();
     $this->assertTrue(is_array($d));
     $this->assertTrue(is_array($d['examples']));
-    $this->assertTrue($d['label'] instanceof TranslatableMarkup);
+    $this->assertInstanceOf(TranslatableMarkup::class, $d['label']);
     $this->assertFalse(empty((string) $d['label']));
-    $this->assertTrue($d['description'] instanceof TranslatableMarkup);
+    $this->assertInstanceOf(TranslatableMarkup::class, $d['description']);
     $this->assertFalse(empty((string) $d['description']));
     $this->assertTrue(isset($d['expression_required']));
     $this->assertTrue(isset($d['expression_can_be_empty']));

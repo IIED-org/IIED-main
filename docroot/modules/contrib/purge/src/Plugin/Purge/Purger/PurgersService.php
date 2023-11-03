@@ -432,7 +432,7 @@ class PurgersService extends ServiceBase implements PurgersServiceInterface {
         }
       }
 
-      // Discover types in need of processing and - just to be sure - reset state.
+      // Discover types in need of processing and, to be sure, reset state.
       $types = [];
       foreach ($invalidations as $i => $invalidation) {
         $types[$i] = $invalidation->getType();
@@ -469,13 +469,13 @@ class PurgersService extends ServiceBase implements PurgersServiceInterface {
           }
         }
 
-        // Invalidate objects by offering each group to its method on the purger.
+        // Invalidate objects by offering each group to method on the purger.
         foreach ($groups as $method => $offers) {
           if (!count($offers)) {
             continue;
           }
 
-          // Leave a trace in the logs, when errors occur, its likely after this.
+          // Leave a trace in the logs. when errors occur its likely after this.
           $this->logger->debug("offering @no items to @plugin's @id::@method()", [
             '@no' => count($offers),
             '@id' => $id,
@@ -502,8 +502,8 @@ class PurgersService extends ServiceBase implements PurgersServiceInterface {
         }
       }
 
-      // As processing finished we have the obligation to reset context. A call to
-      // getState() will now lead to evaluation of the outcome for each object.
+      // As processing finished we need to reset context. A call to getState()
+      // will now lead to evaluation of the outcome for each object.
       foreach ($invalidations as $i => $invalidation) {
         $invalidation->setStateContext(NULL);
       }

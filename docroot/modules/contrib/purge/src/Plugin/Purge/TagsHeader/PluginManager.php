@@ -29,6 +29,7 @@ class PluginManager extends DefaultPluginManager {
       $module_handler,
       'Drupal\purge\Plugin\Purge\TagsHeader\TagsHeaderInterface',
       'Drupal\purge\Annotation\PurgeTagsHeader');
+    $this->alterInfo('purge_tagsheader');
     $this->setCacheBackend($cache_backend, 'purge_tagsheader_plugins');
   }
 

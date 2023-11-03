@@ -13,7 +13,7 @@ use Drupal\viewsreference\Plugin\ViewsReferenceSettingInterface;
  * @ViewsReferenceSetting(
  *   id = "title",
  *   label = @Translation("Include View Title"),
- *   default_value = 0,
+ *   default_value = false,
  * )
  */
 class ViewsReferenceTitle extends PluginBase implements ViewsReferenceSettingInterface {

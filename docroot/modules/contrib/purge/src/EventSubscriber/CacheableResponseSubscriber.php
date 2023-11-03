@@ -41,7 +41,7 @@ class CacheableResponseSubscriber implements EventSubscriberInterface {
   /**
    * Add cache tags headers on cacheable responses.
    *
-   * @param \Symfony\Component\HttpKernel\Event\ResponseEvent  $event
+   * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
    *   The event to process.
    */
   public function onRespond(ResponseEvent $event) {

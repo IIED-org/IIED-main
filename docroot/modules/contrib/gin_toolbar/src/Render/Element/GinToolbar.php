@@ -6,9 +6,9 @@ use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Security\TrustedCallbackInterface;
 
 /**
- * Class GinToolbar.
+ * Adds active trail to trail.
  *
- * @package Drupal\gin_toolbar\Render\Element
+ * * @package Drupal\gin_toolbar\Render\Element.
  */
 class GinToolbar implements TrustedCallbackInterface {
 

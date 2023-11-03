@@ -59,7 +59,7 @@ class ConfigurationForm extends QueuerConfigFormBase {
       if (!isset($form['blacklist']['blacklist'][$delta])) {
         $element = [
           '#type' => 'textfield',
-          '#default_value' => isset($blacklist[$delta]) ? $blacklist[$delta] : '',
+          '#default_value' => $blacklist[$delta] ?? '',
         ];
         $form['blacklist']['blacklist'][$delta] = $element;
       }

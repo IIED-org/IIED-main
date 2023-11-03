@@ -8,9 +8,10 @@
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\gin_toolbar\Render\Element\GinToolbar;
-use Drupal\gin\GinUserPicture;
+use Drupal\gin\GinNavigation;
 use Drupal\gin\GinSettings;
+use Drupal\gin\GinUserPicture;
+use Drupal\gin_toolbar\Render\Element\GinToolbar;
 
 /**
  * Implements hook_preprocess_HOOK() for html.
@@ -42,8 +43,21 @@ function gin_toolbar_preprocess_html(&$variables) {
     return;
   }
 
-  // Set toolbar class.
-  $variables['attributes']['class'][] = 'gin--' . $toolbar . '-toolbar';
+  // Check for new Drupal navigation.
+  if ($toolbar === 'new') {
+    /** @var \Drupal\gin\GinNavigaton $navigation */
+    $navigation = \Drupal::classResolver(GinNavigation::class);
+    // Get new navigation.
+    $variables['page_top']['navigation'] = $navigation->getNavigationStructure();
+    // Get active trail.
+    $variables['#attached']['drupalSettings']['active_trail_paths'] = $navigation->getNavigationActiveTrail();
+    // Set toolbar class.
+    $variables['attributes']['class'][] = 'gin--navigation';
+  }
+  else {
+    // Set toolbar class.
+    $variables['attributes']['class'][] = 'gin--' . $toolbar . '-toolbar';
+  }
 }
 
 /**
@@ -73,6 +87,10 @@ function gin_toolbar_page_attachments_alter(&$page) {
   elseif ($toolbar === 'horizontal') {
     // Attach the horizontal toolbar styles.
     $page['#attached']['library'][] = 'gin/gin_horizontal_toolbar';
+  }
+  elseif ($toolbar === 'new') {
+    // Attach the new drupal navigation styles.
+    $page['#attached']['library'][] = 'gin/navigation';
   }
   else {
     // Attach toolbar styles.
@@ -247,6 +265,23 @@ function gin_toolbar_preprocess_menu__toolbar(&$variables) {
 }
 
 /**
+ * Implements hook_navigation().
+ */
+function gin_toolbar_preprocess_navigation(&$variables) {
+  // Get theme configs.
+  /** @var \Drupal\gin\GinSettings $settings */
+  $settings = \Drupal::classResolver(GinSettings::class);
+  $logo_default = $settings->getDefault('logo.use_default');
+  $variables['icon_default'] = $logo_default;
+  $variables['toolbar_variant'] = $settings->get('classic_toolbar');
+  $variables['secondary_toolbar_frontend'] = $settings->get('secondary_toolbar_frontend');
+
+  if (!$logo_default) {
+    $variables['icon_path'] = $settings->getDefault('logo.path');
+  }
+}
+
+/**
  * Implements hook_ckeditor_css_alter().
  */
 function gin_toolbar_ckeditor_css_alter(array &$css) {
@@ -342,12 +377,56 @@ function gin_toolbar_help($route_name, RouteMatchInterface $route_match) {
  * Implements hook_theme().
  */
 function gin_toolbar_theme() {
-  return [
-    'container__administration_menu' => [
-      'base hook' => 'container',
-      'render element' => 'container',
+  // Check if help is enabled.
+  $help_enabled = FALSE;
+  $module_handler = \Drupal::service('module_handler');
+  if ($module_handler->moduleExists('help')) {
+    $help_enabled = TRUE;
+  }
+
+  $items['navigation'] = [
+    'variables' => [
+      'path' => \Drupal::service('extension.list.theme')->getPath('gin'),
+      'menu_middle' => [],
+      'menu_top' => [],
+      'menu_bottom' => [],
     ],
   ];
+
+  $items['menu_region__top'] = [
+    'variables' => [
+      'links' => [],
+      'title' => NULL,
+      'menu_name' => NULL,
+    ],
+  ];
+
+  $items['menu_region__middle'] = [
+    'base hook' => 'menu',
+    'variables' => [
+      'menu_name' => NULL,
+      'items' => [],
+      'attributes' => [],
+      'title' => NULL,
+    ],
+  ];
+
+  $items['menu_region__bottom'] = [
+    'variables' => [
+      'help_enabled' => $help_enabled,
+      'items' => [],
+      'title' => NULL,
+      'menu_name' => NULL,
+      'path' => \Drupal::service('extension.list.theme')->getPath('gin'),
+    ],
+  ];
+
+  $items['container__administration_menu'] = [
+    'base hook' => 'container',
+    'render element' => 'container',
+  ];
+
+  return $items;
 }
 
 /**

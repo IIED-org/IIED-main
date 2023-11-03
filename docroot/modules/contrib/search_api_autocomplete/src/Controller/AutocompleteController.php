@@ -166,7 +166,7 @@ class AutocompleteController extends ControllerBase implements ContainerInjectio
         if ($build) {
           // Render the label.
           try {
-            $label = $this->renderer->render($build);
+            $label = $this->renderer->renderPlain($build);
           }
           catch (\Exception $e) {
             watchdog_exception('search_api_autocomplete', $e, '%type while rendering an autocomplete suggestion: @message in %function (line %line of %file).');

@@ -3,3 +3,8 @@ type: theme
 description: 'Test theme for responsive_menu module.'
 base theme: stable
 core_version_requirement: ^9 || ^10
+
+# Information added by Drupal.org packaging script on 2023-10-25
+version: '5.0.0-alpha1'
+project: 'responsive_menu'
+datestamp: 1698222945

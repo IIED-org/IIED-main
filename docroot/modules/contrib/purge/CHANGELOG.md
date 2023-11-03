@@ -14,10 +14,10 @@ and this project adheres to
 ## [8.x-3.2] - 2021-10-04
 
 ### Fixed
-- **#3240230:** Don't hard depend on dunamic_page_cache module anymore.
+- **#3240230:** Don't hard depend on dynamic_page_cache module anymore.
 - **#3240238:** Revert FilterResponseEvent::isMainRequest() deprecation fix.
-- **#2976480:** rewrite of CacheableResponseSubscriberTest by japerry which now passes.
-- Revert: `Tests: deprecation warning in src/Functional/DashboardPurgersTest.php`
+- **#2976480:** rewrite of CacheableResponseSubscriberTest which now passes.
+- Revert: `deprecation warning in src/Functional/DashboardPurgersTest.php`
 
 ## [8.x-3.1] - 2021-10-01
 
@@ -108,7 +108,7 @@ and this project adheres to
 - `TypeUnsupportedException`, thrown from `InvalidationsService::get()`, this
   prevents people from adding things to their queue that aren't supported.
 - `QueueSizeDiagnosticCheck` which warns after 30000 queue items and does a
-  safety shutdown over 10000.
+  safety shutdown over 100000.
 - **Improvement:** `drush` commands:
     - `cache-rebuild-external (cre)` shorthand for
       "`drush p-invalidate everything`".
@@ -144,7 +144,7 @@ and this project adheres to
 
 ### Added
 - `drush p-queue-volume` to view the current queue volume.
-- `drush p-debug-en` and `drush p-debug-dis` for quickly enabling and disabing
+- `drush p-debug-en` and `drush p-debug-dis` for quickly enabling and disabling
   debug logging again. Works great together with `drush p-queue-work -v`!
 - `\Drupal\purge\Logger\LoggerChannelPart::isDebuggingEnabled()` to make it
   easier for downstreams to prevent heavy overhead code when this ain’t needed.

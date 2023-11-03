@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\search_api_sorts\Functional;
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 
 /**
@@ -10,6 +11,8 @@ use Drupal\Core\Url;
  * @group search_api_sorts
  */
 class IntegrationTest extends SortsFunctionalBase {
+
+  use StringTranslationTrait;
 
   /**
    * Tests sorting.
@@ -50,7 +53,14 @@ class IntegrationTest extends SortsFunctionalBase {
     // that the sort order is still the same.
     $this->clickLink('ID');
     $this->assertSession()->statusCodeEquals(200);
-    $url = Url::fromUserInput('/search-api-sorts-test', ['query' => ['sort' => 'id', 'order' => 'asc']]);
+    $url = Url::fromUserInput('/search-api-sorts-test',
+    [
+      'query' => [
+        'sort' => 'id',
+        'order' => 'asc',
+      ],
+    ]
+    );
     $this->assertSession()->addressEquals($url);
     $this->assertPositions([
       'default | foo bar baz foobaz föö',
@@ -63,7 +73,14 @@ class IntegrationTest extends SortsFunctionalBase {
     // that the sort order now also has changed.
     $this->clickLink('ID');
     $this->assertSession()->statusCodeEquals(200);
-    $url = Url::fromUserInput('/search-api-sorts-test', ['query' => ['sort' => 'id', 'order' => 'desc']]);
+    $url = Url::fromUserInput(
+      '/search-api-sorts-test', [
+        'query' => [
+          'sort' => 'id',
+          'order' => 'desc',
+        ],
+      ]
+    );
     $this->assertSession()->addressEquals($url);
     $this->assertPositions([
       'default | bar baz',
@@ -139,11 +156,11 @@ class IntegrationTest extends SortsFunctionalBase {
     // Assert that only enabled sorts are saved in the database.
     foreach ($configs_to_be_saved as $config_id) {
       $this->assertNotEmpty($this->container->get('entity_type.manager')->getStorage('search_api_sorts_field')
-        ->load($this->escapedDisplayId . '_' . $config_id), t("Config @config_name was not saved as expected", ['@config_name' => $config_id]));
+        ->load($this->escapedDisplayId . '_' . $config_id), $this->t("Config @config_name was not saved as expected", ['@config_name' => $config_id]));
     }
     foreach ($configs_not_to_be_saved as $config_id) {
       $this->assertEmpty($this->container->get('entity_type.manager')->getStorage('search_api_sorts_field')
-        ->load($this->escapedDisplayId . '_' . $config_id), t("Config @config_name that should not have been saved was saved unexpectedly", ['@config_name' => $config_id]));
+        ->load($this->escapedDisplayId . '_' . $config_id), $this->t("Config @config_name that should not have been saved was saved unexpectedly", ['@config_name' => $config_id]));
     }
   }
 

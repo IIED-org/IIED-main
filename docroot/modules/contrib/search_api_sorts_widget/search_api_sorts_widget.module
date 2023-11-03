@@ -1,6 +1,5 @@
 <?php
 
-use Drupal\Core\Block\BlockPluginInterface;
 /**
  * @file
  * Primary module hooks for Search API Sorts Widget module.
@@ -9,9 +8,10 @@ use Drupal\Core\Block\BlockPluginInterface;
  * This file is no longer required in Drupal 8.
  * @see https://www.drupal.org/node/2217931
  */
+
 /**
  * Implements hook_block_view_BASE_BLOCK_ID_alter().
  */
-function search_api_sorts_widget_block_view_search_api_sorts_block_alter(array &$build, BlockPluginInterface $block) {
+function search_api_sorts_widget_block_view_search_api_sorts_block_alter(array &$build, \Drupal\Core\Block\BlockPluginInterface $block) {
   $build['#pre_render'][] = '\Drupal\search_api_sorts_widget\BlockViewAlter::preRender';
 }

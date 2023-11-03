@@ -250,7 +250,7 @@ class PurgeBlockForm extends FormBase {
             );
           }
           if ($invalidation->getState() === InvStatesInterface::SUCCEEDED) {
-            $this->messenger->addMessage($this->t('Succesfully cleared @object.', ['@object' => $object]));
+            $this->messenger->addMessage($this->t('Successfully cleared @object.', ['@object' => $object]));
           }
           elseif ($invalidation->getState() === InvStatesInterface::PROCESSING) {
             $this->messenger->addWarning(

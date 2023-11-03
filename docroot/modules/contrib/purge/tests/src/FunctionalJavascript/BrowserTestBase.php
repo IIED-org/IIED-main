@@ -19,7 +19,7 @@ abstract class BrowserTestBase extends WebDriverTestBase {
    *
    * Classy is deprecated, but needed to make working with dialogs possible.
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'starterkit_theme';
 
   /**
    * {@inheritdoc}

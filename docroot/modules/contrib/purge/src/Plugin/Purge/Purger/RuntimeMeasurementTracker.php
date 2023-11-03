@@ -53,7 +53,7 @@ class RuntimeMeasurementTracker implements RuntimeMeasurementTrackerInterface {
   }
 
   /**
-   * Intialize or reinitialize the counter objects.
+   * Initialize or reinitialize the counter objects.
    *
    * @throws \LogicException
    *   Thrown when $this->purgers isn't initialized.

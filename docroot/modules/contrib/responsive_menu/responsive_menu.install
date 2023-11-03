@@ -149,6 +149,17 @@ function responsive_menu_update_95002() {
 }
 
 /**
+ * Change config theme name to new scheme.
+ */
+function responsive_menu_update_95003() {
+  $config = \Drupal::configFactory()
+    ->getEditable('responsive_menu.settings');
+  $theme = str_replace('theme-', '', $config->get('theme'));
+  $config->set('theme', $theme)
+    ->save(TRUE);
+}
+
+/**
  * Implements hook_requirements().
  */
 function responsive_menu_requirements($phase) {

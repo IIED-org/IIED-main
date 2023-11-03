@@ -14,6 +14,11 @@ class CacheableResponseSubscriberTest extends BrowserTestBase {
 
   use AssertPageCacheContextsAndTagsTrait;
 
+  /**
+   * Dump Headers Flag.
+   *
+   * @var bool
+   */
   protected $dumpHeaders = TRUE;
 
   /**
@@ -24,7 +29,7 @@ class CacheableResponseSubscriberTest extends BrowserTestBase {
   protected static $modules = [
     'purge_tagsheader_test',
     'system_test',
-    'early_rendering_controller_test'
+    'early_rendering_controller_test',
   ];
 
   /**

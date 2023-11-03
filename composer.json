@@ -314,10 +314,7 @@
             "3260656": "https://www.drupal.org/files/issues/2022-11-08/3260656-6-update2.x.diff"
           },
           "drupal/search_api_sorts_widget": {
-            "3289530": "https://www.drupal.org/files/issues/2022-10-14/search_api_sorts_widget-3289530-5.patch"
-          },
-          "drupal/responsive_menu": {
-            "3297963": "https://www.drupal.org/files/issues/2023-04-18/d10-compatibility-3297964-12.patch"
+            "3289530": "https://www.drupal.org/files/issues/2022-06-16/search_api_sorts_widget.1.x-dev.rector.patch"
           },
           "drupal/readmore_js": {
             "3385364": "https://www.drupal.org/files/issues/2023-09-06/drupal-10-compatibility-fixes-3385364-2.patch"
@@ -327,9 +324,6 @@
           },
           "drupal/dynamic_entity_reference": {
             "3350347": "https://www.drupal.org/files/issues/2023-07-17/dynamic_entity_reference-3350347-D10-hal-support-10.patch"
-          },
-          "drupal/search_api_autocomplete": {
-            "3382226": "https://www.drupal.org/files/issues/2023-10-01/3382226-22--solr_version_check_bug.patch"
           }
         },
         "drupal-lenient": {

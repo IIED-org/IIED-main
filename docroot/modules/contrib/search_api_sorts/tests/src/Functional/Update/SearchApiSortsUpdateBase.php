@@ -33,9 +33,14 @@ abstract class SearchApiSortsUpdateBase extends UpdatePathTestBase {
    * {@inheritdoc}
    */
   protected function setDatabaseDumpFiles() {
+    $filled = DRUPAL_ROOT . '/core/modules/system/tests/fixtures/update/drupal-9.4.0.filled.standard.php.gz';
+    if (\Drupal::VERSION < 10) {
+      $filled = DRUPAL_ROOT . '/core/modules/system/tests/fixtures/update/drupal-8.8.0.filled.standard.php.gz';
+    }
+
     $this->databaseDumpFiles = [
-      DRUPAL_ROOT . '/core/modules/system/tests/fixtures/update/drupal-8.8.0.filled.standard.php.gz',
-      __DIR__ . '/../../../../../search_api/modules/search_api_db/tests/fixtures/update/search-api-db-base.php',
+      $filled,
+      DRUPAL_ROOT . '/modules/contrib/search_api/modules/search_api_db/tests/fixtures/update/search-api-db-base.php',
       __DIR__ . '/../../../fixtures/update/search-api-sorts-db-base.php',
     ];
   }

@@ -235,10 +235,11 @@ class ViewsAutocompleteFiltersController implements ContainerInjectionInterface 
           elseif (!empty($view->result[$index]->_relationship_entities[$field_relationship])) {
             $view_entity = $view->result[$index]->_relationship_entities[$field_relationship];
           }
-          if ($view_entity) {
+          // Check if we have the entity and its field.
+          $real_field_name = $view_field->field;
+          if ($view_entity && $view_entity->$real_field_name) {
             $entity = $this->entityRepository->getTranslationFromContext($view_entity);
             // Make sure we get the right entity field (value).
-            $real_field_name = $view_field->field;
             $raw_field = $entity->$real_field_name->value;
           }
           // Get the view value, if the filter is not an entity field.

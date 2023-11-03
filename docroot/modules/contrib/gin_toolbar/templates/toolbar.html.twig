@@ -6,7 +6,7 @@
 #}
 {% include '@gin/navigation/toolbar--gin.html.twig' ignore missing %}
 {% if secondary_toolbar_frontend and toolbar_variant != 'classic' %}
-<div class="gin-secondary-toolbar gin-secondary-toolbar--frontend"{{ toolbar_variant == 'vertical' ? ' data-offset-top' : '' }}>
+<div class="gin-secondary-toolbar gin-secondary-toolbar--frontend"{{ toolbar_variant == 'vertical' or toolbar_variant == 'new' ? ' data-offset-top' : '' }}>
   <div class="gin-secondary-toolbar__layout-container">
     <div class="gin-breadcrumb-wrapper">
       <div class="region-breadcrumb">

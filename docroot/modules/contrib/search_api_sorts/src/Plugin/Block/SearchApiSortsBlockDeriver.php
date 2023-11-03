@@ -24,7 +24,7 @@ class SearchApiSortsBlockDeriver implements ContainerDeriverInterface {
   /**
    * The entity storage used for search api sorts.
    *
-   * @var \Drupal\Core\Entity\EntityStorageInterface $indexStorage
+   * @var \Drupal\Core\Entity\EntityStorageInterface
    */
   protected $indexStorage;
 
@@ -42,7 +42,7 @@ class SearchApiSortsBlockDeriver implements ContainerDeriverInterface {
    */
   public function getDerivativeDefinition($derivative_id, $base_plugin_definition) {
     $derivatives = $this->getDerivativeDefinitions($base_plugin_definition);
-    return isset($derivatives[$derivative_id]) ? $derivatives[$derivative_id] : NULL;
+    return $derivatives[$derivative_id] ?? NULL;
   }
 
   /**

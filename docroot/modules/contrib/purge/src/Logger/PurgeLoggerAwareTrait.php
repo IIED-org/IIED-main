@@ -29,7 +29,8 @@ trait PurgeLoggerAwareTrait {
   /**
    * Sets a logger.
    *
-   * @param LoggerInterface $logger
+   * @param \Psr\Log\LoggerInterface $logger
+   *   The Logger.
    */
   public function setLogger(LoggerInterface $logger): void {
     $this->logger = $logger;

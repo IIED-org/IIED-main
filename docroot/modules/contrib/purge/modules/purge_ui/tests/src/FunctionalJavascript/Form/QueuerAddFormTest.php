@@ -50,6 +50,7 @@ class QueuerAddFormTest extends AjaxFormTestBase {
         'c',
         'withform',
         'purge_ui_block_queuer',
+        'drush_purge_queue_add',
       ]
     );
     $this->drupalGet($this->getPath());

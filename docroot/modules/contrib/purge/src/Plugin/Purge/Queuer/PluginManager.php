@@ -29,6 +29,7 @@ class PluginManager extends DefaultPluginManager {
       $module_handler,
       'Drupal\purge\Plugin\Purge\Queuer\QueuerInterface',
       'Drupal\purge\Annotation\PurgeQueuer');
+    $this->alterInfo('purge_queuers');
     $this->setCacheBackend($cache_backend, 'purge_queuer_plugins');
   }
 

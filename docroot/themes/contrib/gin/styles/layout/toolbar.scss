@@ -1,17 +1,17 @@
 // Toolbar Variables
 :root {
-  --gin-toolbar-secondary-height: 48px;
   --gin-toolbar-height: 39px;
+  --gin-toolbar-secondary-height: 48px;
   --gin-scroll-offset: 72px;
   --gin-toolbar-y-offset: var(--gin-toolbar-height); // Needs px to work in calc() functions.
   --gin-toolbar-x-offset: 0px; // Needs px to work in calc() functions.
   --gin-sticky-offset: 0px; // Needs px to work in calc() functions.
 
   @include mq(medium) {
+    --gin-toolbar-height: 0px; // Needs px to work in calc() functions.
     --gin-toolbar-secondary-height: 60px;
     --gin-icon-size-toolbar: 22px;
     --gin-scroll-offset: 130px;
-    --gin-toolbar-y-offset: 0px; // Needs px to work in calc() functions.
     --gin-toolbar-x-offset: var(--gin-toolbar-width-collapsed);
     --gin-sticky-offset: var(--gin-height-sticky);
   }
@@ -617,44 +617,3 @@ a.toolbar-menu__trigger,
 .toolbar-loading #toolbar-item-administration-tray {
   box-shadow: none;
 }
-
-// New navigation approach.
-// .toolbar-fixed[data-toolbar-menu=open] {
-//   @include mq(medium) {
-//     padding-left: calc(var(--gin-toolbar-width-collapsed) + var(--gin-toolbar-width));
-
-//     .toolbar-menu-administration > .toolbar-menu > .menu-item--active-trail > .toolbar-menu {
-//       z-index: 1;
-//       display: block;
-//       border-right: 1px solid var(--gin-border-color-layer);
-//       box-shadow: 7px 0 16px rgba(0,0,0,.075);
-
-//       > li {
-//         float: none;
-//       }
-//     }
-
-//     .toolbar-menu-administration > .toolbar-menu > .menu-item:not(.menu-item--active-trail) > .toolbar-menu {
-//       box-shadow: none;
-//     }
-
-//     // Submenu
-//     .toolbar-menu-administration > .toolbar-menu > .menu-item > .toolbar-menu > .menu-item:hover .toolbar-menu,
-//     .toolbar-menu-administration > .toolbar-menu > .menu-item > .toolbar-menu > .menu-item.menu-item--active-trail .toolbar-menu {
-//       position: relative;
-//       opacity: 1;
-//       display: block;
-//       margin-left: var(--gin-spacing-l);
-//       border-left-color: var(--gin-color-text-light);
-//       height: auto;
-
-//       .menu-item-title {
-//         display: none;
-//       }
-
-//       .toolbar-icon {
-//         padding: .75em;
-//       }
-//     }
-//   }
-// }
