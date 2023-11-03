@@ -3,10 +3,10 @@
 namespace Drupal\webform_scheduled_email\Commands;
 
 use Consolidation\AnnotatedCommand\CommandData;
-use Drush\Commands\DrushCommands;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform_scheduled_email\Plugin\WebformHandler\ScheduleEmailWebformHandler;
 use Drupal\webform_scheduled_email\WebformScheduledEmailManagerInterface;
+use Drush\Commands\DrushCommands;
 
 /**
  * Webform scheduled email commands for Drush 9.x.

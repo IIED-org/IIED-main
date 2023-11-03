@@ -79,7 +79,6 @@ class LoggerServiceTest extends UnitTestCase {
   public function testDestruct($expect_write, $call = NULL, $arguments = []): void {
     $config_factory = $this->getConfigFactoryStub($this->defaultConfig);
 
-
     $config_factory
       ->expects($expect_write ? $this->once() : $this->never())
       ->method('getEditable')

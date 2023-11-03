@@ -29,6 +29,7 @@ class PluginManager extends DefaultPluginManager {
       $module_handler,
       'Drupal\purge\Plugin\Purge\Processor\ProcessorInterface',
       'Drupal\purge\Annotation\PurgeProcessor');
+    $this->alterInfo('purge_processor');
     $this->setCacheBackend($cache_backend, 'purge_processor_plugins');
   }
 

@@ -5,9 +5,7 @@ namespace Drupal\gin_toolbar\Menu;
 use Drupal\Core\Menu\MenuActiveTrail;
 
 /**
- * Class GinToolbarActiveTrail.
- *
- * @package Drupal\gin_toolbar\Menu
+ * Handles the active trail.
  */
 class GinToolbarActiveTrail extends MenuActiveTrail {
 
@@ -20,6 +18,20 @@ class GinToolbarActiveTrail extends MenuActiveTrail {
     $route_name = $this->routeMatch->getRouteName();
     $route_params = $this->routeMatch->getRawParameters()->all();
 
+    // Content.
+    if (in_array($route_name, [
+      'system.admin_content',
+      'node.add_page',
+      'entity.node.canonical',
+      'entity.node.edit_form',
+    ])) {
+      $link = $this->getLinkByRoutes($menu_name, [
+            [$route_name, $route_params],
+            ['system.admin_content', []],
+      ]);
+    }
+
+    // Create Content.
     if ($route_name === 'node.add') {
       $link = $this->getLinkByRoutes($menu_name, [
             [$route_name, $route_params],
@@ -28,17 +40,76 @@ class GinToolbarActiveTrail extends MenuActiveTrail {
       ]);
     }
 
-    if ($route_name === 'node.add_page') {
+    // Media.
+    if (in_array($route_name, [
+      'view.media_library.page',
+      'entity.media.collection',
+      'entity.media.add_page',
+      'entity.media.add_form',
+    ])) {
       $link = $this->getLinkByRoutes($menu_name, [
             [$route_name, $route_params],
-            ['system.admin_content', []],
+            ['entity.media.collection', []],
       ]);
     }
 
-    if (in_array($route_name, ['entity.node.canonical', 'entity.node.edit_form'])) {
+    // Create Media.
+    if ($route_name === 'entity.media.add_form') {
       $link = $this->getLinkByRoutes($menu_name, [
             [$route_name, $route_params],
-            ['system.admin_content', []],
+            ['entity.media.add_page', []],
+            ['entity.media.collection', []],
+      ]);
+    }
+
+    // Files.
+    if ($route_name === 'view.files.page_1') {
+      $link = $this->getLinkByRoutes($menu_name, [
+            [$route_name, $route_params],
+            ['view.files.page_1 ', []],
+      ]);
+    }
+
+    // Blocks.
+    if ($route_name === 'entity.block_content.collection') {
+      $link = $this->getLinkByRoutes($menu_name, [
+            [$route_name, $route_params],
+            ['entity.block_content.collection', []],
+      ]);
+    }
+
+    // User.
+    if (in_array($route_name, [
+      'entity.user.collection',
+      'user.role.settings',
+    ])) {
+      $link = $this->getLinkByRoutes($menu_name, [
+            [$route_name, $route_params],
+            ['entity.user.collection', []],
+      ]);
+    }
+
+    // Reports.
+    if (in_array($route_name, [
+      'dblog.overview',
+      'dblog.access_denied',
+      'dblog.page_not_found',
+      'dblog.search',
+    ])) {
+      $link = $this->getLinkByRoutes($menu_name, [
+            [$route_name, $route_params],
+            ['system.admin_reports', []],
+      ]);
+    }
+
+    // Configuration.
+    if (in_array($route_name, [
+      'system.admin_config',
+      'devel.admin_settings',
+    ])) {
+      $link = $this->getLinkByRoutes($menu_name, [
+            [$route_name, $route_params],
+            ['system.admin_config', []],
       ]);
     }
 

@@ -10,14 +10,14 @@ class SortsField {
   /**
    * The field of the sorting.
    *
-   * @var string $field
+   * @var string
    */
   protected $field;
 
   /**
    * The direction of the sorting.
    *
-   * @var string $order
+   * @var string
    */
   protected $order;
 

@@ -381,6 +381,14 @@ webform.settings:
         default_empty_option_optional:
           type: label
           label: 'Default empty option optional label'
+        default_algolia_places_app_id:
+          type: string
+          label: 'Default Algolia application id'
+          deprecated: "The 'default_algolia_places_api_key' config schema is deprecated in webform:6.2.0 and is removed from webform 7.0.0."
+        default_algolia_places_api_key:
+          type: string
+          label: 'Default Algolia API key'
+          deprecated: "The 'default_algolia_places_api_key' config schema is deprecated in webform:6.2.0 and is removed from webform 7.0.0."
         excluded_elements:
           type: ignore
           label: 'Excluded types'

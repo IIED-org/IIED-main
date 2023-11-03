@@ -43,7 +43,7 @@ class FileQueueTest extends PluginTestBase {
    * @see \Drupal\purge\Plugin\Purge\Queue\File::destruct
    */
   public function testBufferReadingAndWriting(): void {
-    $this->assertTrue($this->queue instanceof DestructableInterface);
+    $this->assertInstanceOf(DestructableInterface::class, $this->queue);
     $this->assertFalse(file_exists($this->file));
 
     // Two assertions within this test, check the raw payload written to

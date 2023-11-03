@@ -50,6 +50,8 @@ class ProcessorAddFormTest extends AjaxFormTestBase {
         'c',
         'withform',
         'purge_ui_block_processor',
+        'drush_purge_queue_work',
+        'drush_purge_invalidate',
       ]
     );
     $this->drupalGet($this->getPath());
@@ -113,7 +115,7 @@ class ProcessorAddFormTest extends AjaxFormTestBase {
     $this->visitDashboard();
     $this->getSession()->getPage()->clickLink('Add processor');
     $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->assertActionExists('edit-cancel', 'Cancel');
+    $this->getSession()->getPage()->hasButton('Cancel');
   }
 
   /**

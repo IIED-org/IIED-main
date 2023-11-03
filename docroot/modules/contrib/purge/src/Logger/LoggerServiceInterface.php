@@ -50,7 +50,7 @@ interface LoggerServiceInterface extends ServiceProviderInterface, ServiceModifi
    *
    * @return array[]
    *   Unassociative array, with associative arrays in them. Each array
-   *   represents a single chanenl and has a key 'id' and 'grants', the latter
+   *   represents a single channel and has a key 'id' and 'grants', the latter
    *   is another unassociative array with the enabled grants for that channel.
    */
   public function getChannels();

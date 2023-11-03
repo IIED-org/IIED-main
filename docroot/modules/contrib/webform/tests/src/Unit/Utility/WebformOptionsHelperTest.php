@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\webform\Unit\Utility;
 
-use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\Tests\UnitTestCase;
+use Drupal\webform\Utility\WebformOptionsHelper;
 
 /**
  * Tests webform options utility.

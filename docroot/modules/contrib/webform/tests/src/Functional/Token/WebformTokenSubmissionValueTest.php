@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\webform\Functional\Token;
 
-use Drupal\webform\Entity\Webform;
 use Drupal\Tests\webform\Functional\WebformBrowserTestBase;
+use Drupal\webform\Entity\Webform;
 
 /**
  * Tests for webform token submission value.

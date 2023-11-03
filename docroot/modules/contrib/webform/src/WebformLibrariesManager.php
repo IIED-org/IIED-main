@@ -3,8 +3,8 @@
 namespace Drupal\webform;
 
 use Drupal\Core\Asset\LibraryDiscoveryInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -194,7 +194,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       $t_args = [':href' => ($this->moduleHandler->moduleExists('help')) ? Url::fromRoute('help.page', ['name' => 'webform'], ['fragment' => 'libraries'])->toString() : 'https://www.drupal.org/docs/8/modules/webform/webform-libraries'];
       $description['download'] = [
         '#markup' => '<hr/>' .
-          $this->t('Please download external libaries using one the <a href=":href">recommended methods.', $t_args),
+          $this->t('Please download external libaries using one the <a href=":href">recommended methods</a>.', $t_args),
       ];
       $t_args = [':href' => Url::fromRoute('webform.config.advanced')->toString()];
       $description['cdn'] = [
@@ -419,7 +419,6 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'homepage_url' => Url::fromUri('https://github.com/floating-ui/floating-ui'),
       'download_url' => Url::fromUri('https://registry.npmjs.org/@popperjs/core/-/core-2.11.6.tgz'),
       'version' => '2.11.6',
-      'core' => 9,
       'license' => 'MIT',
     ];
     $libraries['tippyjs'] = [
@@ -429,7 +428,6 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'homepage_url' => Url::fromUri('https://github.com/atomiks/tippyjs'),
       'download_url' => Url::fromUri('https://registry.npmjs.org/tippy.js/-/tippy.js-6.3.7.tgz'),
       'version' => '6.3.7',
-      'core' => 9,
       'license' => 'MIT',
     ];
     $libraries['jquery.select2'] = [

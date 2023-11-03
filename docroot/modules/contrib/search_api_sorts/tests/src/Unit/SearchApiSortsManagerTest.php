@@ -95,7 +95,10 @@ class SearchApiSortsManagerTest extends UnitTestCase {
    * @covers ::getActiveSort
    */
   public function testGetActiveSort($order_argument, $expected) {
-    $this->request->query = new ParameterBag(['sort' => 'sort_field', 'order' => $order_argument]);
+    $this->request->query = new ParameterBag([
+      'sort' => 'sort_field',
+      'order' => $order_argument,
+    ]);
     $this->requestStack->push($this->request);
 
     $manager = $this->entityTypeManagerProphecy->reveal();

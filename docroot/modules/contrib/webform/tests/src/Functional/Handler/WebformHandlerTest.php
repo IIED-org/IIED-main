@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\webform\Functional\Handler;
 
+use Drupal\Tests\webform\Functional\WebformBrowserTestBase;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
-use Drupal\Tests\webform\Functional\WebformBrowserTestBase;
 
 /**
  * Tests for webform handler plugin.

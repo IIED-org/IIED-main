@@ -4,11 +4,11 @@ namespace Drupal\webform_submission_log;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Database\Query\SelectInterface;
+use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
-use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 
 /**
  * Webform submission log manager.

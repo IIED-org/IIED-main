@@ -10,7 +10,7 @@ Please see the [docs](http://solarium.readthedocs.io/en/stable/) for a more deta
 
 ## Requirements
 
-Solarium 6.4.x only supports PHP 8.0 and up.
+Solarium 6.3.2 and up only supports PHP 8.0 and up.
 
 It's highly recommended to have cURL enabled in your PHP environment. However if you don't have cURL available you can
 switch from using cURL (the default) to a pure PHP based HTTP client adapter which works for the essential stuff but
@@ -28,9 +28,9 @@ Example:
 composer require solarium/solarium
 ```
 
-### Pitfall when upgrading to 6.4
+### Pitfall when upgrading to 6.3.2
 
-Support for PHP 7 was removed in Solarium 6.4.0. Upgrade to PHP 8 first to use the latest Solarium version.
+Support for PHP 7 was removed in Solarium 6.3.2. Upgrade to PHP 8 first to use the latest Solarium version.
 
 ### Pitfall when upgrading to 6.3
 
@@ -208,5 +208,4 @@ You can run the tests in a Windows environment. For all of them to pass, you mus
 
 * [![Run Tests](https://github.com/solariumphp/solarium/workflows/Run%20Tests/badge.svg)](https://github.com/solariumphp/solarium/actions)
 * [![codecov](https://codecov.io/gh/solariumphp/solarium/branch/master/graph/badge.svg)](https://codecov.io/gh/solariumphp/solarium)
-* [![SensioLabsInsight](https://insight.sensiolabs.com/projects/292e29f7-10a9-4685-b9ac-37925ebef9ae/small.png)](https://insight.sensiolabs.com/projects/292e29f7-10a9-4685-b9ac-37925ebef9ae)
 * [![Total Downloads](https://poser.pugx.org/solarium/solarium/downloads.svg)](https://packagist.org/packages/solarium/solarium)

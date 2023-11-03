@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class AdminController.
+ * Controller for the admin UI.
  *
  * @package Drupal\search_api_sorts\Controller
  */
@@ -89,7 +89,9 @@ class AdminController extends ControllerBase {
 
     $build['table'] = [
       '#type' => 'table',
-      '#header' => [$this->t('Display'), $this->t('Description'), $this->t('Operations')],
+      '#header' => [
+        $this->t('Display'), $this->t('Description'), $this->t('Operations'),
+      ],
       '#title' => $this->t('Sorts configuration.'),
       '#rows' => $rows,
       '#empty' => $this->t('You have no search displays defined yet. An example of a display is a views page using this index, or a search api pages page.'),

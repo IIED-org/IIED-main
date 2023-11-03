@@ -11,7 +11,8 @@
 
 Helper module to bring the Gin toolbar into the Frontend of your site. Requires the [Gin Admin Theme](https://drupal.org/project/gin).
 
-This module is needed due to some technical limitations of Drupal (Admin) themes.
+This module is needed due to some technical limitations of
+Drupal (Admin) themes.
 
 - For a full description of the module, visit the [project page](https://www.drupal.org/project/gin_toolbar).
 - Use the [Issue queue](https://www.drupal.org/project/issues/gin_toolbar) to submit bug reports and feature suggestions, or track changes.

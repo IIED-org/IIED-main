@@ -7,8 +7,8 @@ use Drupal\Component\Utility\Bytes;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\ContentEntityForm;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
@@ -1756,6 +1756,13 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   The current state of the form.
    */
   public function autosave(array &$form, FormStateInterface $form_state) {
+    // Make sure the submission exists before validating it.
+    /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
+    $webform_submission = $this->getEntity();
+    if ($webform_submission->id() && !WebformSubmission::load($webform_submission->id())) {
+      return;
+    }
+
     if ($form_state->hasAnyErrors()) {
       if ($this->draftEnabled() && $this->getWebformSetting('draft_auto_save') && !$this->entity->isCompleted()) {
         $form_state->set('in_draft', TRUE);
@@ -1854,6 +1861,14 @@ class WebformSubmissionForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
+    // Make sure the submission exists before validating it.
+    /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
+    $webform_submission = $this->getEntity();
+    if ($webform_submission->id() && !WebformSubmission::load($webform_submission->id())) {
+      $form_state->setErrorByName(NULL, $this->t('An error occurred while trying to validate the submission. Please save your work and reload this page.'));
+      return;
+    }
+
     parent::validateForm($form, $form_state);
 
     // Disable inline form error when performing validation via the API.

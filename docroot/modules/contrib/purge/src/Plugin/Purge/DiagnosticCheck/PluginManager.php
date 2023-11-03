@@ -29,6 +29,7 @@ class PluginManager extends DefaultPluginManager {
       $module_handler,
       'Drupal\purge\Plugin\Purge\DiagnosticCheck\DiagnosticCheckInterface',
       'Drupal\purge\Annotation\PurgeDiagnosticCheck');
+    $this->alterInfo('purge_diagnostic');
     $this->setCacheBackend($cache_backend, 'purge_diagnosticcheck_plugins');
   }
 

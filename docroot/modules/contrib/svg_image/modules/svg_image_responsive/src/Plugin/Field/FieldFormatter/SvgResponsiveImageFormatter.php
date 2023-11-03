@@ -52,31 +52,13 @@ class SvgResponsiveImageFormatter extends ResponsiveImageFormatter {
   /**
    * {@inheritdoc}
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, EntityStorageInterface $responsive_image_style_storage, EntityStorageInterface $image_style_storage, LinkGeneratorInterface $link_generator, AccountInterface $current_user, LoggerChannel $logger, FileUrlGeneratorInterface $file_url_generator) {
-    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings, $responsive_image_style_storage, $image_style_storage, $link_generator, $current_user);
-    $this->logger = $logger;
-    $this->fileUrlGenerator = $file_url_generator;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $plugin_id,
-      $plugin_definition,
-      $configuration['field_definition'],
-      $configuration['settings'],
-      $configuration['label'],
-      $configuration['view_mode'],
-      $configuration['third_party_settings'],
-      $container->get('entity_type.manager')->getStorage('responsive_image_style'),
-      $container->get('entity_type.manager')->getStorage('image_style'),
-      $container->get('link_generator'),
-      $container->get('current_user'),
-      $container->get('logger.channel.file'),
-      $container->get('file_url_generator')
-    );
+    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
+
+    $instance->logger = $container->get('logger.channel.file');
+    $instance->fileUrlGenerator = $container->get('file_url_generator');
+
+    return $instance;
   }
 
   /**
@@ -199,7 +181,7 @@ class SvgResponsiveImageFormatter extends ResponsiveImageFormatter {
    */
   public static function defaultSettings() {
     return [
-        'svg_attributes' => ['width' => '', 'height' => ''], 'svg_render_as_image' => TRUE,
+        'svg_attributes' => ['width' => NULL, 'height' => NULL], 'svg_render_as_image' => TRUE,
       ] + parent::defaultSettings();
   }
 

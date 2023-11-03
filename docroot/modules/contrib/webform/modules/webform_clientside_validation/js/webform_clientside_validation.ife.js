@@ -95,7 +95,7 @@
 
       // Move checkbox errors to appear as the last item in the
       // parent container.
-      $(this.currentForm).find('.form-type-checkbox').each(function () {
+      $(this.currentForm).find('.js-form-type-checkbox').each(function () {
         var $container = $(this);
         var $errorMessages = $container.find('strong.error.form-item--error-message');
         $container.append($errorMessages);

@@ -5,7 +5,7 @@ namespace Drupal\search_api_sorts_test_entity\Entity;
 use Drupal\Core\Config\Entity\Query\Query;
 
 /**
- * Class SearchApiSortsTestEntityQuery.
+ * Defines a query class for the search_api_sorts_test_entity entity type.
  */
 class SearchApiSortsTestEntityQuery extends Query {
 

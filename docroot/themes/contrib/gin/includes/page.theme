@@ -81,6 +81,10 @@ function gin_page_attachments_alter(&$page) {
       // Attach the horizontal toolbar styles.
       $page['#attached']['library'][] = 'gin/gin_horizontal_toolbar';
     }
+    elseif ($toolbar === 'new') {
+      // Attach the new drupal navigation styles.
+      $page['#attached']['library'][] = 'gin/navigation';
+    }
     else {
       // Attach toolbar styles.
       $page['#attached']['library'][] = 'gin/gin_toolbar';

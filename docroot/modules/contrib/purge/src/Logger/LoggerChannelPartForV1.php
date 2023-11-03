@@ -15,4 +15,5 @@ class LoggerChannelPartForV1 extends LoggerChannelPartBase {
   public function log($level, $message, array $context = []): void {
     $this->doLog($level, $message, $context);
   }
+
 }

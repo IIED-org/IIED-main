@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * Flush caches to reload the plugins in their new location.
+ */
+function purge_drush_update_8101() {
+  drupal_flush_all_caches();
+}

@@ -150,6 +150,12 @@
   // Drupal
   --gin-offset-x: var(--gin-toolbar-x-offset);
   --gin-offset-y: calc(var(--gin-toolbar-y-offset) + var(--gin-sticky-offset));
+
+  // Links
+  --gin-link-decoration-style: dotted;
+
+  // Max line length
+  --gin-max-line-length: 80ch;
 }
 
 // Density spacings
@@ -207,6 +213,9 @@
   --gin-bg-layer3: #47474c;
   --gin-bg-layer4: #19191b;
   --gin-bg-secondary: var(--gin-bg-app);
+
+  // Unpublished
+  --gin-bg-unpublished: var(--gin-bg-warning-light);
 
   // Context
   --gin-color-contextual: var(--gin-bg-layer3);

@@ -49,7 +49,7 @@ class ViewsAutocompleteFiltersInstallHelper {
         $dependencies = array_diff($dependencies, ['views_autocomplete_filters']);
         $this->configFactory
           ->getEditable($name)
-          ->set('dependencies.module', $dependencies)
+          ->set('dependencies.module', array_values($dependencies))
           ->save(TRUE);
       }
     }

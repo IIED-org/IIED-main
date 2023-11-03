@@ -8,6 +8,7 @@ use Drupal\search_api\Entity\Server;
 use Drupal\search_api_autocomplete\Entity\Search;
 use Drupal\search_api_autocomplete\SearchInterface;
 use Drupal\search_api_test\PluginTestTrait;
+use Drupal\user\Entity\Role;
 
 /**
  * Tests saving a Search API autocomplete config entity.
@@ -27,6 +28,7 @@ class SearchCrudTest extends KernelTestBase {
     'search_api',
     'search_api_db',
     'user',
+    'system',
   ];
 
   /**
@@ -158,11 +160,27 @@ class SearchCrudTest extends KernelTestBase {
 
   /**
    * Tests whether deleting a search entity works correctly.
+   *
+   * @covers search_api_autocomplete_search_api_autocomplete_search_delete
    */
   public function testDelete() {
-    $values = $this->getSearchTestValues();
-    $search = Search::create($values);
+    $search = Search::create($this->getSearchTestValues());
     $search->save();
+
+    // Make sure the search-specific permission exists, and will be removed from
+    // all roles when the search is deleted.
+    $all_permissions = \Drupal::service('user.permissions')->getPermissions();
+    $permission = 'use search_api_autocomplete for muh';
+    $this->assertArrayHasKey($permission, $all_permissions);
+    /** @var \Drupal\user\RoleInterface $role */
+    $role = Role::create([
+      'id' => 'test_role',
+      'label' => 'Test role',
+      'permissions' => [$permission],
+    ]);
+    $role->save();
+    $role = Role::load('test_role');
+    $this->assertContains($permission, $role->getPermissions());
 
     $loaded_search = Search::load($search->id());
     $this->assertInstanceOf(SearchInterface::class, $loaded_search);
@@ -171,6 +189,13 @@ class SearchCrudTest extends KernelTestBase {
 
     $loaded_search = Search::load($search->id());
     $this->assertNull($loaded_search);
+
+    // Try re-saving the role and make sure this doesn't lead to an exception,
+    // as the permission has already been removed.
+    $role = Role::load('test_role');
+    $role->set('label', 'New label');
+    $role->save();
+    $this->assertNotContains($permission, $role->getPermissions());
   }
 
   /**

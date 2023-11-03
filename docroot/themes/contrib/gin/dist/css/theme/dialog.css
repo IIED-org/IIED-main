@@ -7,8 +7,8 @@
 .ui-dialog [open] .claro-details__summary--vertical-tabs-item,
 .ui-dialog .vertical-tabs__menu-item.is-selected .vertical-tabs__menu-link {
   color: var(--gin-color-primary);
-  -webkit-text-decoration-style: dotted;
-          text-decoration-style: dotted;
+  -webkit-text-decoration-style: var(--gin-link-decoration-style);
+          text-decoration-style: var(--gin-link-decoration-style);
 }
 
 .ui-dialog a:hover,
@@ -35,14 +35,14 @@
 
 .ui-dialog *|*:-webkit-any-link:not(svg|a) {
   text-decoration: underline;
-  -webkit-text-decoration-style: dotted;
-          text-decoration-style: dotted;
+  -webkit-text-decoration-style: var(--gin-link-decoration-style);
+          text-decoration-style: var(--gin-link-decoration-style);
 }
 
 .ui-dialog *|*:any-link:not(svg|a) {
   text-decoration: underline;
-  -webkit-text-decoration-style: dotted;
-          text-decoration-style: dotted;
+  -webkit-text-decoration-style: var(--gin-link-decoration-style);
+          text-decoration-style: var(--gin-link-decoration-style);
 }
 
 .ui-dialog .is-horizontal .tabs__link:hover,
@@ -350,7 +350,7 @@
 
 .ui-dialog .password-confirm {
   width: 100%;
-  max-width: 520px;
+  max-width: var(--gin-max-line-length);
 }
 
 .ui-dialog .password-strength__title {
@@ -587,11 +587,11 @@
 }
 
 [dir="ltr"] .ui-dialog table:has(.tabledrag-cell-content__item .form-checkbox) th.select-all .form-checkbox {
-  margin-left: calc(var(--tabledrag-handle-icon-size) + var(--space-m));
+  margin-left: calc(var(--tabledrag-handle-icon-size, 1.0625rem) + var(--gin-spacing-m));
 }
 
 [dir="rtl"] .ui-dialog table:has(.tabledrag-cell-content__item .form-checkbox) th.select-all .form-checkbox {
-  margin-right: calc(var(--tabledrag-handle-icon-size) + var(--space-m));
+  margin-right: calc(var(--tabledrag-handle-icon-size, 1.0625rem) + var(--gin-spacing-m));
 }
 
 .gin--dark-mode .ui-dialog .form-boolean:hover, .gin--dark-mode .ui-dialog .form-boolean:active {
@@ -709,7 +709,7 @@
 
 .ui-dialog .form-item__description,
 .ui-dialog .fieldset__description {
-  max-width: 520px;
+  max-width: var(--gin-max-line-length);
   color: var(--gin-color-text-light);
 }
 

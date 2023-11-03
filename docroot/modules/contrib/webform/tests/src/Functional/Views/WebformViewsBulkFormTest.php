@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\webform\Functional\Views;
 
-use Drupal\webform\Entity\Webform;
 use Drupal\Tests\webform\Functional\WebformBrowserTestBase;
+use Drupal\webform\Entity\Webform;
 
 /**
  * Tests a webform submission bulk form.

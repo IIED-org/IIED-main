@@ -15,7 +15,10 @@ function search_api_sorts_update_8101(&$sandbox) {
 
   if (!isset($sandbox['total'])) {
     drupal_flush_all_caches();
-    $sandbox['total'] = $field_storage->getQuery()->count()->execute();
+    $sandbox['total'] = $field_storage->getQuery()
+      ->count()
+      ->accessCheck(FALSE)
+      ->execute();
     $sandbox['current'] = 0;
   }
 
@@ -26,6 +29,7 @@ function search_api_sorts_update_8101(&$sandbox) {
 
   $entity_batch = $field_storage->getQuery()
     ->range($sandbox['current'], 250)
+    ->accessCheck(FALSE)
     ->execute();
 
   $entities = $field_storage->loadMultiple($entity_batch);
@@ -52,12 +56,16 @@ function search_api_sorts_update_8101(&$sandbox) {
  * minimal.
  */
 function search_api_sorts_update_8102(&$sandbox) {
-  /** @var \Drupal\Core\Config\Entity\ConfigEntityStorage $fieldStorage */
+  /** @var \Drupal\Core\Config\Entity\ConfigEntityStorage $field_storage */
   $field_storage = \Drupal::service('entity_type.manager')
     ->getStorage('search_api_sorts_field');
 
   if (!isset($sandbox['total'])) {
-    $sandbox['total'] = $field_storage->getQuery()->condition('status', FALSE)->count()->execute();
+    $sandbox['total'] = $field_storage->getQuery()
+      ->condition('status', FALSE)
+      ->count()
+      ->accessCheck(FALSE)
+      ->execute();
     $sandbox['current'] = 0;
   }
 
@@ -66,8 +74,10 @@ function search_api_sorts_update_8102(&$sandbox) {
     return t('search_api_sorts - no entities to be deleted.');
   }
 
-  $entity_batch = $field_storage->getQuery()->condition('status', FALSE)
+  $entity_batch = $field_storage->getQuery()
+    ->condition('status', FALSE)
     ->range(0, 100)
+    ->accessCheck(FALSE)
     ->execute();
 
   $entities = $field_storage->loadMultiple($entity_batch);

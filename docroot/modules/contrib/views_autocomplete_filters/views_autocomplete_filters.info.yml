@@ -9,7 +9,7 @@ tags:
   - views
   - utility
 
-# Information added by Drupal.org packaging script on 2023-10-09
-version: '8.x-1.6'
+# Information added by Drupal.org packaging script on 2023-10-18
+version: '8.x-1.7'
 project: 'views_autocomplete_filters'
-datestamp: 1696855918
+datestamp: 1697624367

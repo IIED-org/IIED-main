@@ -5,7 +5,7 @@ namespace Drupal\purge\Plugin\Purge\Invalidation;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 
 /**
- * Desribes the invalidation object.
+ * Describes the invalidation object.
  *
  * Invalidations are small value objects that describe and track invalidations
  * on one or more external caching systems within the Purge pipeline. These

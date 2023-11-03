@@ -112,7 +112,7 @@ interface PurgerInterface extends ContainerFactoryPluginInterface, PurgerCapacit
    *
    * One note of warning: depending on the implementation specifics of a plugin,
    * sorting and dispatching types to different code paths can be less efficient
-   * compared to external platforms allowing you to mix and send everyhing in
+   * compared to external platforms allowing you to mix and send everything in
    * one single batch. Therefore, consult the API of the platform your plugin
    * supports to decide what the most efficient implementation will be.
    *

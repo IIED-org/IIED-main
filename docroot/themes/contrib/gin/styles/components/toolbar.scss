@@ -259,6 +259,13 @@ body.gin--classic-toolbar {
       }
     }
 
+    // Admin Toolbar Language Switcher
+    .toolbar-icon-language {
+      &:before {
+        mask-image: icon('tmgmt');
+      }
+    }
+
     // BAT
     .toolbar-icon-bat-admin {
       &:before {
@@ -297,7 +304,8 @@ body.gin--classic-toolbar {
 
     // Coffee & Search
     .toolbar-icon-coffee,
-    #toolbar-item-administration-search {
+    #toolbar-item-administration-search,
+    #admin-toolbar-mobile-search-tab .toolbar-icon {
       &:before {
         mask-image: icon('search');
       }
@@ -822,4 +830,8 @@ body.gin--classic-toolbar {
     border-left: 0;
     border-right: 0;
   }
+}
+
+.toolbar-loading #toolbar-item-administration-tray.toolbar-tray {
+  background: var(--gin-bg-layer);
 }

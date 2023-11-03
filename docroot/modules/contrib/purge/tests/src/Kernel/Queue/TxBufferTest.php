@@ -58,7 +58,7 @@ class TxBufferTest extends KernelTestBase {
     $this->assertFalse($this->purgeQueueTxbuffer->current());
     $this->purgeQueueTxbuffer->set($objects, TxBufferInterface::CLAIMED);
     $c = $this->purgeQueueTxbuffer->current();
-    $this->assertTrue($c instanceof InvalidationInterface);
+    $this->assertInstanceOf(InvalidationInterface::class, $c);
     $this->assertEquals($objects[0]->getId(), $c->getId());
   }
 
@@ -101,7 +101,7 @@ class TxBufferTest extends KernelTestBase {
     $this->assertFalse($this->purgeQueueTxbuffer->getByProperty('find', 'you'));
     $this->assertFalse($this->purgeQueueTxbuffer->getByProperty('find', 0));
     $match = $this->purgeQueueTxbuffer->getByProperty('find', 'me');
-    $this->assertTrue($match instanceof InvalidationInterface);
+    $this->assertInstanceOf(InvalidationInterface::class, $match);
     $this->assertEquals($i->getId(), $match->getId());
   }
 
@@ -189,7 +189,7 @@ class TxBufferTest extends KernelTestBase {
 
     // Test that iterating the buffer works as expected.
     foreach ($this->purgeQueueTxbuffer as $id => $i) {
-      $this->assertTrue($i instanceof InvalidationInterface);
+      $this->assertInstanceOf(InvalidationInterface::class, $i);
       $found = FALSE;
       foreach ($objects as $i) {
         if ($i->getId() === $id) {

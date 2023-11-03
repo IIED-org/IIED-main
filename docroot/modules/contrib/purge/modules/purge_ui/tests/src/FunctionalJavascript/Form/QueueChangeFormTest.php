@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\purge_ui\FunctionalJavascript\Form;
 
+use Drupal\Core\Url;
 use Drupal\purge_ui\Form\QueueChangeForm;
 
 /**
@@ -9,7 +10,7 @@ use Drupal\purge_ui\Form\QueueChangeForm;
  *
  * @group purge
  */
-class QueueChangeFormTest extends AjaxFormTestBase {
+class QueueChangeFormTest extends FormTestBase {
 
   /**
    * {@inheritdoc}
@@ -39,16 +40,18 @@ class QueueChangeFormTest extends AjaxFormTestBase {
    */
   public function testChangeForm(): void {
     $this->drupalLogin($this->adminUser);
-    $this->drupalGet($this->getPath());
+    $session = $this->assertSession();
+    $this->drupalGet('/admin/config/development/performance/purge/queue/change');
+
     // Assert some of the page presentation.
-    $this->assertSession()->responseContains('Change queue engine');
-    $this->assertSession()->responseContains('The queue engine is the underlying plugin which stores');
-    $this->assertSession()->responseContains('when you change the queue, it will be emptied as well');
-    $this->assertSession()->responseContains('Description');
-    $this->assertSession()->buttonExists('Cancel');
-    $this->assertSession()->buttonExists( 'Change');
+    $session->pageTextContains('Change queue engine');
+    $session->pageTextContains('The queue engine is the underlying plugin which stores');
+    $session->pageTextContains('when you change the queue, it will be emptied as well');
+    $session->pageTextContains('Description');
+    $session->buttonExists('Cancel');
+    $session->buttonExists('Change');
     // Assert that 'memory' is selected queue.
-    $this->assertSession()->checkboxChecked('edit-plugin-id-memory');
+    $session->checkboxChecked('edit-plugin-id-memory');
   }
 
   /**
@@ -56,33 +59,12 @@ class QueueChangeFormTest extends AjaxFormTestBase {
    */
   public function testChangeFormSubmit(): void {
     $this->drupalLogin($this->adminUser);
-
-    $form = $this->formInstance()->buildForm([], $this->getFormStateInstance());
-    $submitted = $this->getFormStateInstance();
-    $submitted->setValue('plugin_id', 'b');
-    $ajax = $this->formInstance()->changeQueue($form, $submitted);
-    $this->assertAjaxCommandReloadConfigForm($ajax);
-    $this->assertAjaxCommandCloseModalDialog($ajax);
-    $this->assertAjaxCommandsTotal($ajax, 2);
-    $this->drupalGet($this->getPath());
+    $this->drupalGet(Url::fromRoute($this->route));
+    $this->getSession()->getPage()->selectFieldOption('plugin_id', 'b');
+    $this->getSession()->getPage()->pressButton('Change');
+    $this->assertSession()->fieldValueEquals('plugin_id', 'b');
+    $this->drupalGet(Url::fromRoute($this->route));
     $this->assertSession()->responseContains('Change queue engine');
     $this->assertSession()->checkboxChecked('edit-plugin-id-b');
-
-    // Assert that the dialog closes.
-    $url = $this->getPath();
-    $js = <<<JS
-    var ajaxSettings = {
-      url: '{$url}',
-      dialogType: 'modal',
-      dialog: { width: 400 },
-    };
-    var myAjaxObject = Drupal.ajax(ajaxSettings);
-    myAjaxObject.execute();
-    JS;
-    $this->getSession()->executeScript($js);
-    $this->assertSession()->waitForElement('css', '.ui-dialog');
-    $this->getSession()->getPage()->find("css", ".ui-dialog-buttonset")->pressButton("Cancel");
-    $this->assertSession()->waitForElementRemoved('css', '.ui-dialog');
   }
-
 }

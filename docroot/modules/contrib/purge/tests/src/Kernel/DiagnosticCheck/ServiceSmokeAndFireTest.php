@@ -52,7 +52,7 @@ class ServiceSmokeAndFireTest extends KernelServiceTestBase {
     $fire = $this->service->isSystemOnFire();
     $this->assertTrue(is_object($fire));
     if (is_object($fire)) {
-      $this->assertTrue($fire instanceof DiagnosticCheckInterface);
+      $this->assertInstanceOf(DiagnosticCheckInterface::class, $fire);
     }
   }
 
@@ -65,7 +65,7 @@ class ServiceSmokeAndFireTest extends KernelServiceTestBase {
     $smoke = $this->service->isSystemShowingSmoke();
     $this->assertTrue(is_object($smoke));
     if (is_object($smoke)) {
-      $this->assertTrue($smoke instanceof DiagnosticCheckInterface);
+      $this->assertInstanceOf(DiagnosticCheckInterface::class, $smoke);
     }
   }
 

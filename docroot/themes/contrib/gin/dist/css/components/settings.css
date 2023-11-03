@@ -265,6 +265,14 @@
   background-image: url(../../media/settings/toolbar_sidebar_darkmode.png);
 }
 
+[data-drupal-selector=edit-classic-toolbar] .form-radios .form-item input[data-gin-toolbar=new] {
+  background-image: url(../../media/settings/toolbar_new.png);
+}
+
+.gin--dark-mode [data-drupal-selector=edit-classic-toolbar] .form-radios .form-item input[data-gin-toolbar=new] {
+  background-image: url(../../media/settings/toolbar_new_darkmode.png);
+}
+
 [data-drupal-selector=edit-classic-toolbar] .form-radios .form-item input[data-gin-toolbar=horizontal] {
   background-image: url(../../media/settings/toolbar_minimal.png);
 }
@@ -303,5 +311,48 @@
 
 .gin--dark-mode [data-drupal-selector=edit-layout-density] .form-radios .form-item input[data-drupal-selector=edit-layout-density-small] {
   background-image: url(../../media/settings/layout_density_small_darkmode.png);
+}
+
+.gin-beta-flag,
+.gin-experimental-flag,
+.gin-new-flag {
+  font-size: 10px;
+  font-weight: var(--gin-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  display: inline-block;
+  padding: .125em .5em;
+  vertical-align: .125em;
+  border-radius: var(--gin-border-xs);
+}
+
+.gin-beta-flag,
+.gin-experimental-flag {
+  color: #555;
+  background: #ddd;
+}
+
+.gin--dark-mode .gin-beta-flag,
+.gin--dark-mode .gin-experimental-flag {
+  color: #eee;
+  background: #444;
+}
+
+.gin-new-flag {
+  color: #fff;
+  background-color: #26a769;
+}
+
+input[data-gin-toolbar=new] + label .gin-new-flag {
+  position: absolute;
+  top: -100px;
+}
+
+[dir="ltr"] input[data-gin-toolbar=new] + label .gin-new-flag {
+  right: 8px;
+}
+
+[dir="rtl"] input[data-gin-toolbar=new] + label .gin-new-flag {
+  left: 8px;
 }
 

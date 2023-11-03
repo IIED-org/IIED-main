@@ -92,7 +92,7 @@ class ServiceTest extends KernelServiceTestBase {
     $claims = $this->service->claim(100, 10);
     $this->assertTrue(is_array($claims));
     $this->assertEquals(1, count($claims));
-    $this->assertTrue($claims[0] instanceof InvalidationInterface);
+    $this->assertInstanceOf(InvalidationInterface::class, $claims[0]);
     $this->assertTrue($claims[0]->getId() === $i->getId());
     $this->assertEquals($claims[0]->getState(), InvalidationInterface::FRESH);
     // Now test with more objects.

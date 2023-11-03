@@ -28,7 +28,7 @@ function search_api_sorts_help($route_name, RouteMatchInterface $route_match) {
  * Implements hook_entity_type_alter().
  */
 function search_api_sorts_entity_type_alter(array &$entity_types) {
-  /** @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
+  /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
   if (isset($entity_types['search_api_index'])) {
     $entity_types['search_api_index']->setFormClass('sorts', '\Drupal\search_api_sorts\Form\IndexSortsForm');
     $entity_types['search_api_index']->setLinkTemplate('sorts', $entity_types['search_api_index']->getLinkTemplate('canonical') . '/sorts');

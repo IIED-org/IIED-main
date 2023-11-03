@@ -120,7 +120,7 @@ class ServiceTest extends KernelServiceTestBase {
    */
   public function testCount(): void {
     $this->initializeService();
-    $this->assertTrue($this->service instanceof \Countable);
+    $this->assertInstanceOf(\Countable::class, $this->service);
     $this->assertEquals(11, count($this->service));
   }
 
@@ -165,35 +165,34 @@ class ServiceTest extends KernelServiceTestBase {
    */
   public function testFilters(): void {
     $this->initializeService();
-    $this->assertTrue($this->service->filterInfo() instanceof \Iterator);
-    $this->assertTrue($this->service->filterInfo() instanceof \Countable);
-    $this->assertTrue($this->service->filterOk() instanceof \Iterator);
-    $this->assertTrue($this->service->filterOk() instanceof \Countable);
-    $this->assertTrue($this->service->filterWarnings() instanceof \Iterator);
-    $this->assertTrue($this->service->filterWarnings() instanceof \Countable);
-    $this->assertTrue($this->service->filterWarningAndErrors() instanceof \Iterator);
-    $this->assertTrue($this->service->filterWarningAndErrors() instanceof \Countable);
-    $this->assertTrue($this->service->filterErrors() instanceof \Iterator);
-    $this->assertTrue($this->service->filterErrors() instanceof \Countable);
+    $this->assertInstanceOf(\Iterator::class, $this->service->filterInfo());
+    $this->assertInstanceOf(\Countable::class, $this->service->filterInfo());
+    $this->assertInstanceOf(\Iterator::class, $this->service->filterOk());
+    $this->assertInstanceOf(\Iterator::class, $this->service->filterWarnings());
+    $this->assertInstanceOf(\Countable::class, $this->service->filterWarnings());
+    $this->assertInstanceOf(\Iterator::class, $this->service->filterWarningAndErrors());
+    $this->assertInstanceOf(\Countable::class, $this->service->filterWarningAndErrors());
+    $this->assertInstanceOf(\Iterator::class, $this->service->filterErrors());
+    $this->assertInstanceOf(\Countable::class, $this->service->filterErrors());
     $this->assertEquals(1, count($this->service->filterInfo()));
     foreach ($this->service->filterInfo() as $check) {
-      $this->assertTrue($check instanceof DiagnosticCheckInterface);
+      $this->assertInstanceOf(DiagnosticCheckInterface::class, $check);
     }
     $this->assertEquals(3, count($this->service->filterOk()));
     foreach ($this->service->filterOk() as $check) {
-      $this->assertTrue($check instanceof DiagnosticCheckInterface);
+      $this->assertInstanceOf(DiagnosticCheckInterface::class, $check);
     }
     $this->assertEquals(5, count($this->service->filterWarnings()));
     foreach ($this->service->filterWarnings() as $check) {
-      $this->assertTrue($check instanceof DiagnosticCheckInterface);
+      $this->assertInstanceOf(DiagnosticCheckInterface::class, $check);
     }
     $this->assertEquals(7, count($this->service->filterWarningAndErrors()));
     foreach ($this->service->filterWarningAndErrors() as $check) {
-      $this->assertTrue($check instanceof DiagnosticCheckInterface);
+      $this->assertInstanceOf(DiagnosticCheckInterface::class, $check);
     }
     $this->assertEquals(2, count($this->service->filterErrors()));
     foreach ($this->service->filterErrors() as $check) {
-      $this->assertTrue($check instanceof DiagnosticCheckInterface);
+      $this->assertInstanceOf(DiagnosticCheckInterface::class, $check);
     }
   }
 
@@ -203,7 +202,7 @@ class ServiceTest extends KernelServiceTestBase {
   public function testIsSystemOnFire(): void {
     $this->initializePurgersService(['ida' => 'a']);
     $this->service->reload();
-    $this->assertTrue($this->service->isSystemOnFire() instanceof DiagnosticCheckInterface);
+    $this->assertInstanceOf(DiagnosticCheckInterface::class, $this->service->isSystemOnFire());
     $possibilities = ['alwayserror', 'maxage'];
     $this->assertTrue(in_array($this->service->isSystemOnFire()->getPluginId(), $possibilities));
   }
@@ -212,7 +211,7 @@ class ServiceTest extends KernelServiceTestBase {
    * Tests DiagnosticsService::isSystemShowingSmoke.
    */
   public function testIsSystemShowingSmoke(): void {
-    $this->assertTrue($this->service->isSystemShowingSmoke() instanceof DiagnosticCheckInterface);
+    $this->assertInstanceOf(DiagnosticCheckInterface::class, $this->service->isSystemShowingSmoke());
     $warning_plugin_id = $this->service->isSystemShowingSmoke()->getPluginId();
     $possibilities = [
       'alwayswarning',

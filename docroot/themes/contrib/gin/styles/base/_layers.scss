@@ -59,3 +59,13 @@
     margin-top: 0;
   }
 }
+
+#system-clear-cache + #system-performance-settings,
+.gin-layer-wrapper + .imageapi-optimize-default-pipeline {
+  margin-top: var(--gin-spacing-l);
+}
+
+// Unplublished node
+.node--unpublished {
+  background-color: var(--gin-bg-unpublished);
+}

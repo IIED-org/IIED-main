@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\webform_node\Kernel;
 
+use Drupal\KernelTests\KernelTestBase;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
-use Drupal\KernelTests\KernelTestBase;
 
 /**
  * Tests if webform nodes exist.

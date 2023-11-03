@@ -74,7 +74,7 @@ class CapacityTracker implements CapacityTrackerInterface {
   protected $spentExecutionTime;
 
   /**
-   * Counter represting the number of invalidation objects touched this request.
+   * Counter representing the number of invalidation objects touched this request.
    *
    * @var \Drupal\purge\Counter\CounterInterface
    */
@@ -283,7 +283,7 @@ class CapacityTracker implements CapacityTrackerInterface {
       // execution time and waiting time, from the time max.
       $time_left = $time_max - $this->spentExecutionTime()->get() - $this->getCooldownTimeTotal();
 
-      // Calculate how many invaldiations can still be processed with the time
+      // Calculate how many invalidations can still be processed with the time
       // that is left and subtract the number of already invalidated items.
       $limit = intval(floor($time_left / $this->getTimeHintTotal()) - $spent_inv);
 
@@ -336,7 +336,7 @@ class CapacityTracker implements CapacityTrackerInterface {
         }
 
         // Find the highest time, so that the system takes the least risk.
-        $this->timeHintTotal = max($hints_per_type);
+        $this->timeHintTotal = !empty($hints_per_type) ? max($hints_per_type) : $this->timeHintTotal;
       }
     }
     return $this->timeHintTotal;

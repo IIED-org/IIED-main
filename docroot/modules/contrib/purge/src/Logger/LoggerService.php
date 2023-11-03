@@ -150,7 +150,7 @@ class LoggerService extends ServiceProviderBase implements LoggerServiceInterfac
     if (!isset($this->channels[$id])) {
       $grants = [];
       foreach ($this->config as $channel) {
-        if ($channel['id'] === $id) {
+        if (isset($channel['id']) && $channel['id'] === $id) {
           $grants = $channel['grants'];
         }
       }
@@ -171,7 +171,7 @@ class LoggerService extends ServiceProviderBase implements LoggerServiceInterfac
    */
   public function hasChannel($id) {
     foreach ($this->config as $channel) {
-      if ($channel['id'] === $id) {
+      if (isset($channel['id']) && $channel['id'] === $id) {
         return TRUE;
       }
     }

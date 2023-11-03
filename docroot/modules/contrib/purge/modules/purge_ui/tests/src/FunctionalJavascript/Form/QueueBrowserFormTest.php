@@ -119,7 +119,7 @@ class QueueBrowserFormTest extends AjaxFormTestBase {
     $this->assertSession()->buttonExists('2');
     $this->getSession()->getPage()->pressButton('2');
     $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->assertActionNotExists('edit-3', '3');
+    $this->assertSession()->buttonNotExists('3');
     foreach ($needles as $i => $needle) {
       $needle = "<td>$needle</td>";
       if ($i >= 16) {

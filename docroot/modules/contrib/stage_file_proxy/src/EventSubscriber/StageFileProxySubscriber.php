@@ -120,6 +120,15 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
       return;
     }
 
+    // Quit if the extension is in the list of excluded extensions.
+    $excluded_extensions = $config->get('excluded_extensions') ?
+      array_map('trim', explode(',', $config->get('excluded_extensions'))) : [];
+
+    $extension = pathinfo($request_path)['extension'];
+    if (in_array($extension, $excluded_extensions)) {
+      return;
+    }
+
     $alter_excluded_paths_event = new AlterExcludedPathsEvent([]);
     $this->eventDispatcher->dispatch($alter_excluded_paths_event, 'stage_file_proxy.alter_excluded_paths');
     $excluded_paths = $alter_excluded_paths_event->getExcludedPaths();
@@ -132,8 +141,9 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
     // Note if the origin server files location is different. This
     // must be the exact path for the remote site's public file
     // system path, and defaults to the local public file system path.
-    $remote_file_dir = trim($config->get('origin_dir'));
-    if (!$remote_file_dir) {
+    $origin_dir = $config->get('origin_dir') ?? '';
+    $remote_file_dir = trim($origin_dir);
+    if (!empty($remote_file_dir)) {
       $remote_file_dir = $file_dir;
     }
 

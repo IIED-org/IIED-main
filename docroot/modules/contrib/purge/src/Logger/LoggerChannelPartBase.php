@@ -80,6 +80,18 @@ abstract class LoggerChannelPartBase extends LoggerChannel implements LoggerChan
     return $this->access[RfcLogLevel::DEBUG];
   }
 
+  /**
+   * Logger Channel Message.
+   *
+   * @param $level
+   *   Log Level.
+   * @param $message
+   *   The message.
+   * @param $context
+   *   Context for the message.
+   *
+   * @return void
+   */
   protected function doLog($level, $message, $context = []): void {
     if ($this->access[$this->levelTranslation[$level]]) {
       $context += ['@purge_channel_part' => $this->id];

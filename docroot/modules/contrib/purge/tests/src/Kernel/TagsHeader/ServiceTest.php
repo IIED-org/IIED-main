@@ -38,7 +38,7 @@ class ServiceTest extends KernelServiceTestBase {
    * Tests TagsHeadersService::count.
    */
   public function testCount(): void {
-    $this->assertTrue($this->service instanceof \Countable);
+    $this->assertInstanceOf(\Countable::class, $this->service);
     $this->assertEquals(count($this->plugins), count($this->service));
   }
 

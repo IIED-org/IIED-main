@@ -16,14 +16,6 @@ libraries:
 
 libraries-override:
   # Gin overrides: replace
-  core/drupal.tableselect:
-    js:
-      misc/tableselect.js: js/overrides/tableselect.js
-
-  core/drupal.tableheader:
-    js:
-      misc/tableheader.js: js/overrides/tableheader.js
-
   media_library/view:
     js:
       js/media_library.view.js: js/overrides/media_library.view.js
@@ -52,6 +44,8 @@ libraries-override:
 libraries-extend:
   core/drupal.tableselect:
     - gin/tableselect
+  core/drupal.tableheader:
+    - gin/tableheader
   core/drupal.autocomplete:
     - gin/autocomplete
   core/ckeditor:
@@ -141,7 +135,7 @@ regions:
 regions_hidden:
   - sidebar_first
 
-# Information added by Drupal.org packaging script on 2023-08-29
-version: '8.x-3.0-rc6'
+# Information added by Drupal.org packaging script on 2023-10-13
+version: '8.x-3.0-rc7'
 project: 'gin'
-datestamp: 1693299669
+datestamp: 1697193237

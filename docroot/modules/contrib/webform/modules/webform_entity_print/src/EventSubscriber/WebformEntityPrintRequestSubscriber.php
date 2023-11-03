@@ -2,9 +2,9 @@
 
 namespace Drupal\webform_entity_print\EventSubscriber;
 
-use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 

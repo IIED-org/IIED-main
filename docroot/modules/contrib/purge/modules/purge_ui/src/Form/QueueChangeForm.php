@@ -2,6 +2,7 @@
 
 namespace Drupal\purge_ui\Form;
 
+use Drupal\Core\Ajax\AjaxFormHelperTrait;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
 use Drupal\Core\Form\FormBase;
@@ -14,6 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class QueueChangeForm extends FormBase {
   use CloseDialogTrait;
+  use AjaxFormHelperTrait;
 
   /**
    * The 'purge.queue' service.
@@ -79,14 +81,17 @@ class QueueChangeForm extends FormBase {
       '#value' => $this->t('Cancel'),
       '#weight' => -10,
       '#button_type' => 'primary',
-      '#ajax' => ['callback' => '::closeDialog'],
     ];
     $form['actions']['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t("Change"),
       '#button_type' => 'danger',
-      '#ajax' => ['callback' => '::changeQueue'],
     ];
+
+    if ($this->isAjax()) {
+      $form['actions']['submit']['#ajax']['callback'] = '::ajaxSubmit';
+      $form['actions']['cancel']['#ajax']['callback'] = '::closeDialog';
+    }
     return $form;
   }
 
@@ -114,4 +119,10 @@ class QueueChangeForm extends FormBase {
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function successfulAjaxSubmit(array $form, FormStateInterface $form_state) {
+    return $this->changeQueue($form, $form_state);
+  }
 }

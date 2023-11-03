@@ -201,8 +201,11 @@ class SettingsForm extends ConfigFormBase {
       '#options' => [
         'left' => $this->t('Left'),
         'right' => $this->t('Right'),
+        'left-front' => $this->t('Left front'),
+        'right-front' => $this->t('Right front'),
         // To switch left/right position based on the language.
         'contextual' => $this->t('Contextual'),
+        'contextual-front' => $this->t('Contextual front'),
       ],
       '#title' => $this->t("Which side the mobile menu panel should slide out from. Choose the 'Contextual' option to have the menu slide out from the left for LTR languages and from the right for RTL languages."),
       '#default_value' => $this->config->get('off_canvas_position'),
@@ -211,10 +214,10 @@ class SettingsForm extends ConfigFormBase {
     $form['responsive_menu']['theme'] = [
       '#type' => 'select',
       '#options' => [
-        'theme-light' => $this->t('Light'),
-        'theme-dark' => $this->t('Dark'),
-        'theme-black' => $this->t('Black'),
-        'theme-white' => $this->t('White'),
+        'light' => $this->t('Light'),
+        'dark' => $this->t('Dark'),
+        'black' => $this->t('Black'),
+        'white' => $this->t('White'),
       ],
       '#title' => $this->t('Which mmenu theme to use'),
       '#default_value' => $this->config->get('off_canvas_theme'),

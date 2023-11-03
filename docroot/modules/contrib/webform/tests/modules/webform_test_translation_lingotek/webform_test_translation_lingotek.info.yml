@@ -10,7 +10,7 @@ dependencies:
   - 'lingotek:lingotek'
   - 'webform:webform'
 
-# Information added by Drupal.org packaging script on 2023-10-10
-version: '6.2.0-rc1'
+# Information added by Drupal.org packaging script on 2023-10-30
+version: '6.2.0'
 project: 'webform'
-datestamp: 1696976950
+datestamp: 1698674309

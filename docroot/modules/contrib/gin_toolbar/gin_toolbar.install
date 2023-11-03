@@ -30,8 +30,9 @@ function gin_toolbar_requirements($phase) {
   // Check if Drupal should be installed and gin in is in the install profile.
   if (InstallerKernel::installationAttempted()
     && isset($install_state['profile_info']['themes'])
-    && in_array('gin', $install_state['profile_info']['themes'], TRUE)) {
-      return $requirements;
+    && in_array('gin', $install_state['profile_info']['themes'], TRUE)
+  ) {
+    return $requirements;
   }
 
   // Gin is not installed and it's not supposed to be installed.

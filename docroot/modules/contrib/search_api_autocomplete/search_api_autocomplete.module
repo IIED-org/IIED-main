@@ -6,11 +6,14 @@
  */
 
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\search_api\Plugin\views\filter\SearchApiText;
 use Drupal\search_api\Plugin\views\query\SearchApiQuery;
 use Drupal\search_api_autocomplete\Search\SearchPluginDeriverBase;
 use Drupal\search_api_page\SearchApiPageInterface;
+use Drupal\user\Entity\Role;
 use Drupal\views\ViewEntityInterface;
 
 /**
@@ -70,6 +73,30 @@ function search_api_autocomplete_hook_info() {
 }
 
 /**
+ * Implements hook_ENTITY_TYPE_delete() for "search_api_autocomplete_search".
+ */
+function search_api_autocomplete_search_api_autocomplete_search_delete(EntityInterface $entity) {
+  // Remove the search-specific permission from all roles.
+  $permissionString = "use search_api_autocomplete for {$entity->id()}";
+  foreach (Role::loadMultiple() as $role) {
+    // Check if permission is set for this role and revoke it.
+    if ($role->hasPermission($permissionString)) {
+      $role->revokePermission($permissionString);
+      try {
+        $role->save();
+      }
+      catch (EntityStorageException $e) {
+        $variables = [
+          '%perm' => $permissionString,
+          '%role' => $role->label(),
+        ];
+        watchdog_exception('search_api_autocomplete', $e, '%type while trying to remove permission %perm from user role %role: @message in %function (line %line of %file).', $variables);
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_form_FORM_ID_alter() for "views_exposed_form".
  *
  * Adds autocompletion to input fields for fulltext keywords on views with
@@ -122,7 +149,7 @@ function search_api_autocomplete_form_views_exposed_form_alter(array &$form, For
     'arguments' => $view->args,
   ];
 
-  foreach ($view->filter as $filter_name => $filter) {
+  foreach ($view->filter as $filter) {
     if (!in_array($filter->realField, $fields)
         || empty($filter->options['expose']['identifier'])) {
       continue;
@@ -140,12 +167,13 @@ function search_api_autocomplete_form_views_exposed_form_alter(array &$form, For
     }
     $data = $base_data;
 
-    // The Views filter for individual fulltext fields uses a nested "value"
-    // field for the real input, due to Views internals.
-    if (!empty($element['value'])) {
-      $element = &$element['value'];
-      // In this case, we also need to manually pass the fulltext fields, so
-      // they will be applied properly.
+    // Look for single-field filters to handle those properly as well.
+    if ($filter instanceof SearchApiText) {
+      // Some individual Views filters in some versions of Drupal use a nested
+      // "value" key for the form element, so we need to take that into account.
+      if (!empty($element['value'])) {
+        $element = &$element['value'];
+      }
       $data['field'] = $filter->realField;
     }
 

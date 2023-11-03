@@ -7,10 +7,8 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormInterface;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\Tests\purge\FunctionalJavascript\BrowserTestBase;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Testbase for purge_ui forms.
@@ -205,16 +203,6 @@ abstract class FormTestBase extends BrowserTestBase {
       $this->drupalGet($path);
       $this->assertSession()->pageTextContains('The requested page could not be found.');
     }
-  }
-
-  /**
-   * Tests that the form route isn't accessible anonymously.
-   */
-  public function testRouteAccessGranted(): void {
-    $this->drupalLogin($this->adminUser);
-    $this->drupalGet($this->getPath());
-    $this->assertSession()->pageTextNotContains('You are not authorized to access this page.');
-    $this->assertSession()->pageTextNotContains('The requested page could not be found.');
   }
 
   /**

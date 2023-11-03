@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\webform\Functional\Wizard;
 
-use Drupal\webform\Entity\Webform;
 use Drupal\Core\Serialization\Yaml;
+use Drupal\webform\Entity\Webform;
 use Drupal\webform\WebformInterface;
 
 /**

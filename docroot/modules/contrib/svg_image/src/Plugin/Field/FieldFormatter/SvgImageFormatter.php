@@ -40,33 +40,20 @@ class SvgImageFormatter extends ImageFormatter {
    *
    * @var \Psr\Log\LoggerInterface
    */
-  private $logger;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function __construct($pluginId, $pluginDefinition, FieldDefinitionInterface $fieldDefinition, array $settings, $label, $viewMode, array $thirdPartySettings, AccountInterface $currentUser, EntityStorageInterface $ImageStyleStorage, LoggerInterface $logger, FileUrlGeneratorInterface $file_url_generator) {
-    parent::__construct($pluginId, $pluginDefinition, $fieldDefinition, $settings, $label, $viewMode, $thirdPartySettings, $currentUser, $ImageStyleStorage, $file_url_generator);
-    $this->logger = $logger;
-  }
+  protected $logger;
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition) {
-    return new static(
-      $pluginId,
-      $pluginDefinition,
-      $configuration['field_definition'],
-      $configuration['settings'],
-      $configuration['label'],
-      $configuration['view_mode'],
-      $configuration['third_party_settings'],
-      $container->get('current_user'),
-      $container->get('entity_type.manager')->getStorage('image_style'),
-      $container->get('logger.channel.file'),
-      $container->get('file_url_generator')
-    );
+    $instance = parent::create($container, $configuration, $pluginId, $pluginDefinition);
+
+    // Do not override the parent constructor to set extra class properties. The
+    // constructor parameter order is different in different Drupal core
+    // releases, even in minor releases in the same Drupal core version.
+    $instance->logger = $container->get('logger.channel.file');
+
+    return $instance;
   }
 
   /**
@@ -104,13 +91,13 @@ class SvgImageFormatter extends ImageFormatter {
       $cacheTags = $imageStyle ? $imageStyle->getCacheTags() : [];
     }
 
-    $svg_attributes = $this->getSetting('svg_attributes');
+    $svgAttributes = $this->getSetting('svg_attributes');
     foreach ($files as $delta => $file) {
       $attributes = [];
       $isSvg = svg_image_is_file_svg($file);
 
       if ($isSvg) {
-        $attributes = $svg_attributes;
+        $attributes = $svgAttributes;
       }
 
       if (isset($linkFile)) {
@@ -179,7 +166,7 @@ class SvgImageFormatter extends ImageFormatter {
    */
   public static function defaultSettings() {
     return [
-      'svg_attributes' => ['width' => '', 'height' => ''],
+      'svg_attributes' => ['width' => NULL, 'height' => NULL],
       'svg_render_as_image' => TRUE,
     ] + parent::defaultSettings();
   }
@@ -239,8 +226,7 @@ class SvgImageFormatter extends ImageFormatter {
     if (file_exists($fileUri)) {
       // Make sure that SVG is safe.
       $rawSvg = file_get_contents($fileUri);
-      $svgSanitizer = new Sanitizer();
-      return $svgSanitizer->sanitize($rawSvg);
+      return (new Sanitizer())->sanitize($rawSvg);
     }
 
     $this->logger->error(
