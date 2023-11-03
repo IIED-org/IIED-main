@@ -303,6 +303,10 @@
   .eu-cookie-compliance-secondary-button {
     @apply px-3 py-2 border-none transition rounded-full shadow-sm bg-iiedblue-500 cursor-pointer mr-2 font-semibold hover:bg-iiedblue-600;
   }
+  .eu-cookie-compliance-buttons,
+  .eu-cookie-compliance-message {
+    @apply my-2;
+  }
 
   /*-- ClickD form hacks --*/
   #clickdimform .clickdform input[type="text"] {
@@ -437,9 +441,15 @@
       transform: translate(0%, -56%) rotate(72deg);
     }
   }
-  
   /*-- mmenu.css position fix for gin toolbar --*/
   .mm-wrapper--position-left .mm-slideout {
     transform: none;
+  }
+  /*-- search --*/
+  .ui-widget.search-api-autocomplete-search { 
+    @apply bg-white text-base; 
+  } 
+  .ui-autocomplete .ui-menu-item .ui-menu-item-wrapper {
+    @apply p-0 bg-none;
   }
 }

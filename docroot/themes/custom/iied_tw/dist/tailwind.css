@@ -3331,6 +3331,12 @@ cite {
   background-color: rgb(0 169 213 / var(--tw-bg-opacity));
 }
 
+.eu-cookie-compliance-buttons,
+  .eu-cookie-compliance-message{
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
 /*-- ClickD form hacks --*/
 
 #clickdimform .clickdform input[type="text"]{
@@ -4055,6 +4061,20 @@ cite {
 
 .mm-wrapper--position-left .mm-slideout {
   transform: none;
+}
+
+/*-- search --*/
+
+.ui-widget.search-api-autocomplete-search{
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.ui-autocomplete .ui-menu-item .ui-menu-item-wrapper{
+  background-image: none;
+  padding: 0px;
 }
 
 .visible{
@@ -5389,12 +5409,21 @@ cite {
      object-position: center;
 }
 
+.p-0{
+  padding: 0px;
+}
+
 .p-2{
   padding: 0.5rem;
 }
 
 .p-4{
   padding: 1rem;
+}
+
+.px-1{
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
 }
 
 .px-2{
@@ -7270,6 +7299,11 @@ cite {
 
   .sm\:p-0{
     padding: 0px;
+  }
+
+  .sm\:px-2{
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
 
   .sm\:pt-6{

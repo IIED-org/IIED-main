@@ -116,7 +116,7 @@ class MySql extends GenericDatabase implements LocationAwareDatabaseInterface {
       $distance_field_alias = "{$condition['field']}__distance";
 
       // MySQL's spatial functions use meter as distance unit whereas Solr uses
-      // kilometer by default.  To maintain compatibility with Solr, here we
+      // kilometer by default. To maintain compatibility with Solr, here we
       // divide the resultant distance by a thousand so that it is in kilometer.
       $distance_field_alias = $db_query->addExpression("ST_Distance_Sphere(Point(:centre_lon, :centre_lat), ST_PointFromText($location_field_name)) / 1000", $distance_field_alias, [
         ':centre_lat' => $condition['lat'],

@@ -9,3 +9,7 @@ Robustify how ajax finds the facet block
 Source: https://www.drupal.org/files/issues/2023-01-20/facets-ajax-improvements-3013795-40.patch
 
 
+3336646
+Source: https://www.drupal.org/files/issues/2023-08-16/3336646-function-is-deprecated.patch
+
+

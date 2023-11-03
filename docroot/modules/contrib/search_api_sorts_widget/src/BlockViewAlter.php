@@ -22,9 +22,7 @@ class BlockViewAlter implements TrustedCallbackInterface {
   public static function preRender($build) {
     $build['content'] = \Drupal::formBuilder()
       ->getForm(
-        '\Drupal\search_api_sorts_widget\Form\WidgetForm',
-        $build['content'] ?? NULL,
-        $build['#derivative_plugin_id'] ?? NULL
+        '\Drupal\search_api_sorts_widget\Form\WidgetForm'
       );
     return $build;
   }

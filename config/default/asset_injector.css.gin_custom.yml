@@ -1,0 +1,29 @@
+uuid: 99a40db1-d098-4f44-9dd8-3adab316d83a
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+id: gin_custom
+label: 'Gin custom'
+code: |
+  /*-- CKE link button fix --*/
+  .ck-body-wrapper .ck {
+    --ck-z-modal: 1261;
+  }
+  .ui-dialog ~ .ck-body-wrapper {
+    --ck-z-modal: 1261;
+  }
+  /*-- bigger paragraph icons --*/
+  .lpb-component-list__item img {
+    min-width: 50px;
+  }
+media: all
+preprocess: true
+conditions:
+  current_theme:
+    id: current_theme
+    negate: false
+    theme: gin
+contexts: {  }
+conditions_require_all: true

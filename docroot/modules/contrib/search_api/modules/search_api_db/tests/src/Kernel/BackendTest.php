@@ -128,6 +128,7 @@ class BackendTest extends BackendTestBase {
     $this->searchSuccessPartial();
     $this->setServerMatchMode('prefix');
     $this->searchSuccessStartsWith();
+    $this->searchSuccessPhrase();
     $this->editServerMinChars();
     $this->searchSuccessMinChars();
     $this->checkUnknownOperator();
@@ -419,6 +420,69 @@ class BackendTest extends BackendTestBase {
   }
 
   /**
+   * Tests whether phrase matching works.
+   */
+  protected function searchSuccessPhrase(): void {
+    // Searching for keywords _without_ double-quotes should return documents
+    // that contain all of those keywords in any order.
+    $results = $this->buildSearch('foo baz')->execute();
+    $this->assertResults([1, 4, 5], $results);
+
+    $results = $this->buildSearch('foo bar baz')->execute();
+    $this->assertResults([1, 5], $results);
+
+    // Searching for keywords _with_ double-quotes should return only documents
+    // that contain those keywords sequentially.
+    $results = $this->buildSearch('"foo baz"')->execute();
+    $this->assertResults([4], $results);
+
+    $results = $this->buildSearch('"foo bar baz"')->execute();
+    $this->assertResults([1], $results);
+
+    // Add a test entity with more complex text to test a few edge cases.
+    $long_token_1 = str_repeat('foo', 12);
+    $long_token_2 = str_repeat('bar', 12);
+    $entity = $this->addTestEntity(6, [
+      'body' => "foo no bar $long_token_1 $long_token_2 su baz 000 quux",
+      'type' => 'article',
+    ]);
+    $this->indexItems($this->indexId);
+
+    // As this should also test the handling of short (ignored) tokens in a
+    // phrase search, we rely on "min_chars" being set to 3, so make sure this
+    // is indeed the case.
+    $min_chars = $this->getServer()->getBackendConfig()['min_chars'];
+    $this->assertEquals(3, $min_chars);
+
+    $results = $this->buildSearch("\"foo no bar\"")->execute();
+    $this->assertResults([1, 6], $results);
+
+    $results = $this->buildSearch("\"$long_token_1 $long_token_2\"")->execute();
+    $this->assertResults([6], $results);
+
+    $results = $this->buildSearch("\"bar $long_token_1 $long_token_2 su baz\"")->execute();
+    $this->assertResults([6], $results);
+
+    $results = $this->buildSearch("\"foo no bar\" \"$long_token_1 $long_token_2 su baz\"")->execute();
+    $this->assertResults([6], $results);
+
+    $results = $this->buildSearch("\"foo no bar $long_token_1 $long_token_2 su baz\"")->execute();
+    $this->assertResults([6], $results);
+
+    $long_token_2 = mb_substr($long_token_2, -2);
+    $results = $this->buildSearch("\"$long_token_1 $long_token_2 su baz\"")->execute();
+    $this->assertResults([], $results);
+
+    // '0' should be searchable.  See also testCleanNumericString().
+    $results = $this->buildSearch("\"baz 0\"")->execute();
+    $this->assertResults([6], $results);
+
+    // Delete the new test entity again so it doesn't mess up the tests in other
+    // methods.
+    $entity->delete();
+  }
+
+  /**
    * Edits the server to change the "Minimum word length" setting.
    */
   protected function editServerMinChars() {
@@ -622,12 +686,14 @@ class BackendTest extends BackendTestBase {
    */
   protected function regressionTest2511860() {
     $query = $this->buildSearch();
-    $query->addCondition('body', 'ab xy');
+    $query->addCondition('body', 'ab');
+    $query->addCondition('body', 'xy');
     $results = $query->execute();
     $this->assertEquals(5, $results->getResultCount(), 'Fulltext filters on short words do not change the result.');
 
     $query = $this->buildSearch();
-    $query->addCondition('body', 'ab ab');
+    $query->addCondition('body', 'ab');
+    $query->addCondition('body', 'ab');
     $results = $query->execute();
     $this->assertEquals(5, $results->getResultCount(), 'Fulltext filters on duplicate short words do not change the result.');
   }
@@ -1293,7 +1359,8 @@ class BackendTest extends BackendTestBase {
         'keys' => [
           '#conjunction' => 'AND',
           '#negation' => TRUE,
-          'foo baz',
+          'foo',
+          'baz',
         ],
         'expected_results' => [
           2,
@@ -1339,6 +1406,22 @@ class BackendTest extends BackendTestBase {
       'Match mode "prefix"' => ['prefix'],
       'Match mode "words"' => ['words'],
     ];
+  }
+
+  /**
+   * Tests whether cleanNumericString() works correctly.
+   */
+  public function testCleanNumericString() {
+    $class = new \ReflectionClass(Database::class);
+    /** @see \Drupal\search_api_db\Plugin\search_api\backend\Database::cleanNumericString() */
+    $method = $class->getMethod('cleanNumericString');
+    $method->setAccessible(TRUE);
+
+    $this->assertEquals('42', $method->invoke(NULL, '-042'));
+    $this->assertEquals('42', $method->invoke(NULL, '00042'));
+    $this->assertEquals('0', $method->invoke(NULL, '0'));
+    $this->assertEquals('0', $method->invoke(NULL, '000'));
+    $this->assertEquals('0', $method->invoke(NULL, '-0'));
   }
 
 }

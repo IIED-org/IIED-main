@@ -62,7 +62,6 @@ return array(
     'Seld\\Signal\\' => array($vendorDir . '/seld/signal-handler/src'),
     'Seld\\PharUtils\\' => array($vendorDir . '/seld/phar-utils/src'),
     'Seld\\JsonLint\\' => array($vendorDir . '/seld/jsonlint/src/Seld/JsonLint'),
-    'Rogervila\\' => array($vendorDir . '/rogervila/array-diff-multidimensional/src'),
     'Robo\\' => array($vendorDir . '/consolidation/robo/src'),
     'React\\Promise\\' => array($vendorDir . '/react/promise/src'),
     'Psy\\' => array($vendorDir . '/psy/psysh/src'),

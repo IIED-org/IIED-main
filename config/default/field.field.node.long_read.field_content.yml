@@ -7,7 +7,6 @@ dependencies:
     - node.type.long_read
     - paragraphs.paragraphs_type.about_the_author
     - paragraphs.paragraphs_type.accordion_box
-    - paragraphs.paragraphs_type.accordion_section
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.box
     - paragraphs.paragraphs_type.file_upload
@@ -72,7 +71,6 @@ settings:
       logo_block: logo_block
       timeline: timeline
       about_the_author: about_the_author
-      accordion_section: accordion_section
       highchart: highchart
       related_publication_inline: related_publication_inline
     negate: 0
@@ -85,7 +83,7 @@ settings:
         enabled: true
       accordion_section:
         weight: -52
-        enabled: true
+        enabled: false
       basic_text:
         weight: -77
         enabled: true
@@ -152,6 +150,9 @@ settings:
       section:
         weight: -70
         enabled: true
+      sticky_box:
+        weight: 64
+        enabled: false
       stories_block:
         weight: -49
         enabled: false
