@@ -64,6 +64,12 @@ AddEncoding gzip svgz
 # Various rewrite rules.
 <IfModule mod_rewrite.c>
   RewriteEngine on
+
+  # UrbanARK redirects
+  # Rewrite urbanark.org URLs to project page 
+  RewriteCond %{HTTP_HOST} ^(.*)urbanark\.org [NC]
+  RewriteRule ^ https://www.iied.org/urban-africa-risk-knowledge-urban-ark [R=301,L]
+
   # Determine whether environment is production and serve different robots.txt
   RewriteCond %{ENV:AH_SITE_ENVIRONMENT} !prod
   RewriteRule ^robots\.txt$ robots-noindex.txt [L]
@@ -148,11 +154,6 @@ AddEncoding gzip svgz
   # planotes.org
   RewriteCond %{HTTP_HOST} ^(www\.)?planotes.org$
   RewriteRule ^(.*) https://www.iied.org/participatory-learning-action-archive [R=301,L]
-
-  # UrbanARK redirects
-  # Rewrite urbanark.org URLs to project page 
-  RewriteCond %{HTTP_HOST} ^(.*)urbanark\.org
-  RewriteRule . https://www.iied.org/urban-africa-risk-knowledge-urban-ark [R=301]
 
   # Make sure Authorization HTTP header is available to PHP
   # even when running as CGI or FastCGI.
