@@ -11,7 +11,7 @@ dev:
   ac-env: 'dev'
   ac-realm: 'prod'
   paths:
-    drush-script: 'drush10'
+    drush-script: '/var/www/html/irforum.dev/vendor/drush/drush/drush'
 test:
   host: 'irforumdqqmr2dfs9.ssh.devcloud.acquia-sites.com'
   user: 'irforum.test'
@@ -21,7 +21,7 @@ test:
   ac-realm: 'prod'
   uri: 'iied-main-stage.ac.iied.org'
   paths:
-    drush-script: 'drush10'
+    drush-script: '/var/www/html/irforum.test/vendor/drush/drush/drush'
 prod:
   host: 'irforumqwqqyydr8q.ssh.devcloud.acquia-sites.com'
   user: 'irforum.prod'
@@ -31,4 +31,4 @@ prod:
   ac-realm: 'prod'
   uri: 'www.iied.org'
   paths:
-    drush-script: 'drush10'
+    drush-script: '/var/www/html/irforum.prod/vendor/drush/drush/drush'
