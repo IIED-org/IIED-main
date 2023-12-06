@@ -3,20 +3,26 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.storage.taxonomy_term.field_term_image
     - field.storage.taxonomy_term.field_url
+    - image.style.scale_80
+    - taxonomy.vocabulary.collection
     - taxonomy.vocabulary.list
     - taxonomy.vocabulary.organisation
     - taxonomy.vocabulary.person
     - taxonomy.vocabulary.person_type
+    - taxonomy.vocabulary.series
+    - taxonomy.vocabulary.theme
     - user.role.administrator
     - user.role.editor
     - user.role.manager
   module:
-    0: link
-    1: node
-    2: taxonomy
-    3: user
-    5: views_bulk_operations
+    - link
+    - node
+    - svg_image
+    - taxonomy
+    - user
+    - views_bulk_operations
 id: manage_terms
 label: 'Manage terms'
 module: views
@@ -228,14 +234,41 @@ display:
           id: vid
           table: taxonomy_term_field_data
           field: vid
+          relationship: none
+          group_type: group
+          admin_label: ''
           entity_type: taxonomy_term
           entity_field: vid
           plugin_id: bundle
+          operator: in
           value:
             list: list
+          group: 1
+          exposed: true
           expose:
+            label: Vocabulary
+            description: null
+            use_operator: false
+            operator: vid_op
             operator_limit_selection: false
             operator_list: {  }
+            identifier: vid
+            required: false
+            remember: false
+            multiple: false
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
       style:
         type: table
         options:
@@ -304,22 +337,235 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - url
         - url.query_args
         - user.roles
       tags:
         - 'config:field.storage.taxonomy_term.field_url'
   page_1:
     id: page_1
-    display_title: 'Lists page'
+    display_title: 'Terms page'
     display_plugin: page
     position: 1
     display_options:
+      fields:
+        name:
+          id: name
+          table: taxonomy_term_field_data
+          field: name
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: taxonomy_term
+          entity_field: name
+          plugin_id: term_name
+          label: Name
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: false
+            ellipsis: false
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: true
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          convert_spaces: false
+        field_term_image:
+          id: field_term_image
+          table: taxonomy_term__field_term_image
+          field: field_term_image
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: Image
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: target_id
+          type: image
+          settings:
+            image_link: ''
+            image_style: scale_80
+            image_loading:
+              attribute: lazy
+            svg_attributes:
+              width: null
+              height: null
+            svg_render_as_image: true
+          group_column: ''
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+      filters:
+        status:
+          id: status
+          table: taxonomy_term_field_data
+          field: status
+          entity_type: taxonomy_term
+          entity_field: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
+          expose:
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+        vid:
+          id: vid
+          table: taxonomy_term_field_data
+          field: vid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: taxonomy_term
+          entity_field: vid
+          plugin_id: bundle
+          operator: in
+          value:
+            collection: collection
+            list: list
+            series: series
+            theme: theme
+          group: 1
+          exposed: true
+          expose:
+            operator_id: vid_op
+            label: Vocabulary
+            description: ''
+            use_operator: false
+            operator: vid_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: vid
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              viewer: '0'
+              hh_contributor: '0'
+              hh_reviewer: '0'
+              publications_editor: '0'
+              editor: '0'
+              manager: '0'
+              administrator: '0'
+            reduce: true
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      defaults:
+        fields: false
+        filters: false
+        filter_groups: false
       display_description: ''
       display_extenders: {  }
-      path: admin/manage/lists
+      path: admin/manage/terms
       menu:
         type: tab
-        title: Lists
+        title: Terms
         description: ''
         weight: 3
         expanded: false
@@ -331,10 +577,11 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - url
         - url.query_args
         - user.roles
       tags:
-        - 'config:field.storage.taxonomy_term.field_url'
+        - 'config:field.storage.taxonomy_term.field_term_image'
   page_2:
     id: page_2
     display_title: 'Authors page'

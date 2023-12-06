@@ -25,6 +25,7 @@ dependencies:
     - taxonomy.vocabulary.list
     - taxonomy.vocabulary.organisation
     - taxonomy.vocabulary.person
+    - taxonomy.vocabulary.series
     - taxonomy.vocabulary.tags
     - taxonomy.vocabulary.theme
   module:
@@ -208,6 +209,7 @@ permissions:
   - 'edit terms in list'
   - 'edit terms in organisation'
   - 'edit terms in person'
+  - 'edit terms in series'
   - 'edit terms in tags'
   - 'edit terms in theme'
   - 'export tablefield'
