@@ -65,11 +65,6 @@ AddEncoding gzip svgz
 <IfModule mod_rewrite.c>
   RewriteEngine on
 
-  # UrbanARK redirects
-  # Rewrite urbanark.org URLs to project page 
-  RewriteCond %{HTTP_HOST} ^(.*)urbanark\.org [NC]
-  RewriteRule ^ https://www.iied.org/urban-africa-risk-knowledge-urban-ark [R=301,L]
-
   # Determine whether environment is production and serve different robots.txt
   RewriteCond %{ENV:AH_SITE_ENVIRONMENT} !prod
   RewriteRule ^robots\.txt$ robots-noindex.txt [L]

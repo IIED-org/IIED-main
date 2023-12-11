@@ -9,4 +9,7 @@ label: 'Taxonomy term'
 tags:
   canonical_url: '[term:url]'
   description: '[term:description]'
+  image_src: '[term:field_term_image]'
+  og_image: '[term:field_term_image]'
   title: '[term:name] | [site:name]'
+  twitter_cards_image: '[term:field_term_image]'
