@@ -1,0 +1,24 @@
+uuid: 8b79f7e3-3527-4acf-bfc6-cfd258903fd3
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.pubs_country
+  module:
+    - facets
+  theme:
+    - stark
+id: stark_country
+theme: stark
+region: sidebar_first
+weight: -9
+provider: null
+plugin: 'facet_block:pubs_country'
+settings:
+  id: 'facet_block:pubs_country'
+  label: 'Filter by area'
+  label_display: visible
+  provider: facets
+  context_mapping: {  }
+  block_id: country
+visibility: {  }

@@ -53,6 +53,7 @@ dependencies:
     - node.type.publication
   module:
     - address
+    - computed_field
     - datetime
     - field_group
     - isbn
@@ -168,11 +169,12 @@ third_party_settings:
         - field_status
         - field_product_code
         - field_meta_tags
+        - field_product_code_new
         - group_coming_soon_
       label: 'Admin only fields - do not use'
       region: content
       parent_name: ''
-      weight: 19
+      weight: 18
       format_type: details
       format_settings:
         classes: ''
@@ -345,7 +347,7 @@ content:
     third_party_settings: {  }
   field_lists:
     type: entity_reference_autocomplete_tags
-    weight: 17
+    weight: 16
     region: content
     settings:
       match_operator: CONTAINS
@@ -368,10 +370,11 @@ content:
     third_party_settings: {  }
   field_meta_tags:
     type: metatag_firehose
-    weight: 21
+    weight: 20
     region: content
     settings:
       sidebar: false
+      use_details: true
     third_party_settings: {  }
   field_parent:
     type: entity_reference_autocomplete
@@ -392,11 +395,17 @@ content:
     third_party_settings: {  }
   field_product_code:
     type: string_textfield
-    weight: 20
+    weight: 19
     region: content
     settings:
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  field_product_code_new:
+    type: computed_string_widget
+    weight: 21
+    region: content
+    settings: {  }
     third_party_settings: {  }
   field_project:
     type: entity_reference_autocomplete
@@ -428,7 +437,7 @@ content:
     third_party_settings: {  }
   field_reportagency1:
     type: string_textfield
-    weight: 18
+    weight: 17
     region: content
     settings:
       size: 60
@@ -466,7 +475,7 @@ content:
     third_party_settings: {  }
   field_status:
     type: options_select
-    weight: 19
+    weight: 18
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -572,7 +581,6 @@ content:
     third_party_settings: {  }
 hidden:
   field_pdf: true
-  field_product_code_new: true
   field_reportagency2: true
   field_reportagency3: true
   field_reportfin1: true

@@ -1,0 +1,72 @@
+<?php
+
+/**
+ * @file
+ * Core functions for the JSON:API Views module.
+ */
+
+use Drupal\Core\Link;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_views_preview_info_alter().
+ */
+function jsonapi_views_views_preview_info_alter(&$rows, $executable) {
+  // Build JSON:API View path for the current display.
+  $jsonapi_base_path = \Drupal::getContainer()->getParameter('jsonapi.base_path');
+  $path = implode('/', [
+    $jsonapi_base_path,
+    'views',
+    $executable->id(),
+    $executable->current_display,
+  ]);
+
+  // Only show preview if view is allowed to be exposed via JSON:API.
+  $extenders = $executable->getDisplay($executable->current_display)->getExtenders();
+  if (!empty($extenders['jsonapi_views']) && !$extenders['jsonapi_views']->isExposed()) {
+    return;
+  }
+
+  // Build Exposed sort queries.
+  $query = [];
+  $input = $executable->getExposedInput();
+  if (isset($input['sort_by']) && $input['sort_by']) {
+    $query['views-sort[sort_by]'] = $input['sort_by'];
+  }
+  if (isset($input['sort_order']) && $input['sort_order']) {
+    $query['views-sort[sort_order]'] = $input['sort_order'];
+  }
+
+  // Build Exposed filter queries.
+  $display_handler = $executable->getDisplay();
+  foreach ($display_handler->view->filter as $filter) {
+    if ($filter->isExposed() && $input[$filter->field]) {
+      $query["views-filter[{$filter->field}]"] = $input[$filter->field];
+    }
+  }
+
+  // Build Contextual filter queries.
+  foreach ($executable->args as $index => $arg) {
+    $query["views-argument[{$index}]"] = $arg;
+  }
+
+  // Build JSON:API View URL.
+  $url = Url::fromUri("internal:{$path}");
+  $url->setOptions(['query' => $query]);
+
+  // Build render array.
+  $rows['query'][] = [
+    [
+      'data' => [
+        '#prefix' => '<strong>',
+        '#markup' => t('JSON:API Views'),
+        '#suffix' => '</strong>',
+      ],
+    ],
+    [
+      'data' => [
+        '#markup' => Link::fromTextAndUrl(urldecode($url->toString()), $url)->toString(),
+      ],
+    ],
+  ];
+}

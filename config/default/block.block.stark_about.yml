@@ -1,0 +1,29 @@
+uuid: 10350468-b983-453d-aefc-0fe31a57a708
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.about
+  module:
+    - system
+  theme:
+    - stark
+id: stark_about
+theme: stark
+region: content
+weight: -13
+provider: null
+plugin: 'system_menu_block:about'
+settings:
+  id: 'system_menu_block:about'
+  label: About
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/about\r\n/people\r\n/contact-us\r\n/accountability\r\n/jobs-internships\r\n/iied-policies\r\n/associates\r\n/leadership\r\n/board-trustees\r\n/bloggers\r\n/guest-bloggers\r\n/climate-change-research-group\r\n/human-settlements-research-group\r\n/natural-resources-research-group\r\n/sustainable-markets-research-group"

@@ -1,0 +1,24 @@
+uuid: b884b307-3f20-4173-8173-921c468e12d0
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.theme
+  module:
+    - facets
+  theme:
+    - stark
+id: stark_theme_2
+theme: stark
+region: sidebar_first
+weight: -16
+provider: null
+plugin: 'facet_block:theme'
+settings:
+  id: 'facet_block:theme'
+  label: 'Filter by theme'
+  label_display: visible
+  provider: facets
+  context_mapping: {  }
+  block_id: iied_tw_theme_2
+visibility: {  }

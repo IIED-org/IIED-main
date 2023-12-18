@@ -1,0 +1,12 @@
+name: JSON Feed
+description: 'Adds support for JSON feeds to Views.'
+package: Views
+core_version_requirement: ^9 || ^10
+type: module
+dependencies:
+  - drupal:views
+
+# Information added by Drupal.org packaging script on 2023-06-13
+version: '2.0.2'
+project: 'json_feed'
+datestamp: 1686682370

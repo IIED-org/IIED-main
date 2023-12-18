@@ -1,0 +1,11 @@
+name: 'JSON:API Resources test module'
+type: module
+package: Testing
+dependencies:
+  - drupal:node
+  - jsonapi_resources:jsonapi_resources
+
+# Information added by Drupal.org packaging script on 2022-11-18
+version: '8.x-1.0-beta5'
+project: 'jsonapi_resources'
+datestamp: 1668787741

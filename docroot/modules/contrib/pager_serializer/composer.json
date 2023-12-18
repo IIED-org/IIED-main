@@ -1,0 +1,16 @@
+{
+  "name": "drupal/pager_serializer",
+  "type": "drupal-module",
+  "description": "This module is intended to be used with rest and the Rest export View with a decoupled UI.",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/pager_serializer",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/pager_serializer",
+    "source": "https://git.drupalcode.org/project/pager_serializer"
+  },
+  "require": {
+    "drupal/core": "^8.7.7 || ^9 || ^10"
+  }
+}

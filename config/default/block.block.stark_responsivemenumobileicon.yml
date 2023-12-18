@@ -1,0 +1,20 @@
+uuid: 4bc68b3c-a753-4b01-aa49-305c41ceb7c1
+langcode: en
+status: true
+dependencies:
+  module:
+    - responsive_menu
+  theme:
+    - stark
+id: stark_responsivemenumobileicon
+theme: stark
+region: sidebar_first
+weight: -10
+provider: null
+plugin: responsive_menu_toggle
+settings:
+  id: responsive_menu_toggle
+  label: 'Responsive menu mobile icon'
+  label_display: '0'
+  provider: responsive_menu
+visibility: {  }

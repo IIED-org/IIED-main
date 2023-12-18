@@ -1,0 +1,23 @@
+uuid: 03bc3bc3-179f-4da1-b0d3-2cbee42ba059
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.search
+  module:
+    - views
+  theme:
+    - stark
+id: stark_exposedformsearchpage_2_5
+theme: stark
+region: sidebar_first
+weight: -11
+provider: null
+plugin: 'views_exposed_filter_block:search-page_2'
+settings:
+  id: 'views_exposed_filter_block:search-page_2'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+visibility: {  }

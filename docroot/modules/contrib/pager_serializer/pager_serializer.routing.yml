@@ -1,0 +1,15 @@
+pager_serializer.settings:
+  path: '/admin/config/pager_serializer'
+  defaults:
+    _form: '\Drupal\pager_serializer\Form\SettingsForm'
+    _title: 'Pager Serializer'
+  requirements:
+    _permission: 'administer site configuration'
+
+pager_serializer.settings.reset:
+  path: '/admin/config/pager_serializer/reset'
+  defaults:
+    _form: '\Drupal\pager_serializer\Form\ResetSettingsForm'
+    _title: 'Pager Serializer'
+  requirements:
+    _permission: 'administer site configuration'

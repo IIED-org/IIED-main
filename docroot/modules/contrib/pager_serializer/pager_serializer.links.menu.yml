@@ -1,0 +1,5 @@
+pager_serializer.settings:
+  title: 'Pager Serializer'
+  parent: system.admin_config_services
+  description: "Configure pagination for Serialization."
+  route_name: pager_serializer.settings

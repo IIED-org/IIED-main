@@ -1,0 +1,28 @@
+uuid: 78e38252-1b72-49ed-8d53-b50071935616
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets_summary.facets_summary.search_summary
+  module:
+    - facets_summary
+    - system
+  theme:
+    - stark
+id: stark_searchsummary_2
+theme: stark
+region: content
+weight: -9
+provider: null
+plugin: 'facets_summary_block:search_summary'
+settings:
+  id: 'facets_summary_block:search_summary'
+  label: 'Search summary'
+  label_display: '0'
+  provider: facets_summary
+  context_mapping: {  }
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/search*'

@@ -1,0 +1,24 @@
+uuid: 55495342-6a1b-41f8-9bae-ce76385500e8
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.content_type
+  module:
+    - facets
+  theme:
+    - stark
+id: stark_contenttype
+theme: stark
+region: sidebar_first
+weight: -15
+provider: null
+plugin: 'facet_block:content_type'
+settings:
+  id: 'facet_block:content_type'
+  label: 'Filter by type'
+  label_display: visible
+  provider: facets
+  context_mapping: {  }
+  block_id: contenttype
+visibility: {  }

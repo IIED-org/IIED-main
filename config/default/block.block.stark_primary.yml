@@ -1,0 +1,25 @@
+uuid: 735c84ac-a293-40b1-8b58-a1359f929454
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.primary
+  module:
+    - system
+  theme:
+    - stark
+id: stark_primary
+theme: stark
+region: sidebar_first
+weight: -13
+provider: null
+plugin: 'system_menu_block:primary'
+settings:
+  id: 'system_menu_block:primary'
+  label: Primary
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility: {  }

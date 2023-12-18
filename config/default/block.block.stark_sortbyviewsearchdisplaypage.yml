@@ -1,0 +1,26 @@
+uuid: 15ca10e7-8cf0-4d3c-bc47-b55b39969f84
+langcode: en
+status: true
+dependencies:
+  module:
+    - context
+    - search_api_sorts
+  theme:
+    - stark
+id: stark_sortbyviewsearchdisplaypage
+theme: stark
+region: sidebar_first
+weight: -17
+provider: null
+plugin: 'search_api_sorts_block:views_page:search__page_2'
+settings:
+  id: 'search_api_sorts_block:views_page:search__page_2'
+  label: 'Sort by'
+  label_display: '0'
+  provider: search_api_sorts
+visibility:
+  view_inclusion:
+    id: view_inclusion
+    negate: false
+    view_inclusion:
+      view-search-page_2: view-search-page_2

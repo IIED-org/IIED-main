@@ -1,0 +1,20 @@
+uuid: 4e39009b-5370-4034-98d8-e47ad13edb9f
+langcode: en
+status: false
+dependencies:
+  module:
+    - iied_utils
+  theme:
+    - stark
+id: stark_headersearchblock
+theme: stark
+region: sidebar_first
+weight: -12
+provider: null
+plugin: header_search_block
+settings:
+  id: header_search_block
+  label: 'Header search block'
+  label_display: '0'
+  provider: iied_utils
+visibility: {  }

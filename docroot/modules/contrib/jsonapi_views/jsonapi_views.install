@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * @file
+ * Install and update hooks for the jsonapi_views module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function jsonapi_views_install() {
+  // Enable jsonapi_views plugin.
+  $config = \Drupal::service('config.factory')->getEditable('views.settings');
+  $display_extenders = $config->get('display_extenders') ?: [];
+  $display_extenders[] = 'jsonapi_views';
+  $config->set('display_extenders', $display_extenders);
+  $config->save();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function jsonapi_views_uninstall() {
+  // Disable jsonapi_views plugin.
+  $config = \Drupal::service('config.factory')->getEditable('views.settings');
+  $display_extenders = $config->get('display_extenders') ?: [];
+  $key = array_search('jsonapi_views', $display_extenders);
+  if ($key !== FALSE) {
+    unset($display_extenders[$key]);
+    $config->set('display_extenders', $display_extenders);
+    $config->save();
+  }
+}
+
+/**
+ * Enable jsonapi_views display extender.
+ */
+function jsonapi_views_update_8001() {
+  // Enable jsonapi_views plugin.
+  $config = \Drupal::service('config.factory')->getEditable('views.settings');
+  $display_extenders = $config->get('display_extenders') ?: [];
+  $display_extenders[] = 'jsonapi_views';
+  $config->set('display_extenders', $display_extenders);
+  $config->save();
+}

@@ -18,6 +18,7 @@ dependencies:
     - datetime
     - field_formatter
     - file
+    - json_feed
     - media
     - media_pdf_thumbnail
     - node

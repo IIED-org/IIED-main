@@ -1,0 +1,3 @@
+views.style.pager_serializer:
+  type: views.style.serializer
+  label: 'Serialized output format'

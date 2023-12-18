@@ -1,0 +1,24 @@
+uuid: e588a903-c55b-4941-a4c7-a90d5b35e55a
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.pubs_theme
+  module:
+    - facets
+  theme:
+    - stark
+id: stark_theme
+theme: stark
+region: sidebar_first
+weight: -11
+provider: null
+plugin: 'facet_block:pubs_theme'
+settings:
+  id: 'facet_block:pubs_theme'
+  label: 'Filter by theme'
+  label_display: visible
+  provider: facets
+  context_mapping: {  }
+  block_id: theme
+visibility: {  }

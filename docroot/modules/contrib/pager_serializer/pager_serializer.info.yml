@@ -1,0 +1,13 @@
+name: Pager Serializer
+type: module
+description: "Extends the standard Serializer with pager data."
+package: Web services
+core_version_requirement: ^8.7.7 || ^9 || ^10
+configure: pager_serializer.settings
+dependencies:
+  - drupal:rest
+
+# Information added by Drupal.org packaging script on 2022-06-28
+version: '8.x-1.2'
+project: 'pager_serializer'
+datestamp: 1656444581

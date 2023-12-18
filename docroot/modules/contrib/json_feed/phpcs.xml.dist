@@ -1,0 +1,6 @@
+<ruleset name="json_feed">
+  <description>PHP CodeSniffer configuration for json_feed.</description>
+  <file>.</file>
+  <rule ref="Drupal"/>
+  <rule ref="DrupalPractice"/>
+</ruleset>

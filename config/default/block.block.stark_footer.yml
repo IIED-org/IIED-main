@@ -1,0 +1,21 @@
+uuid: c91added-ceff-46f2-98be-effa6a63ebc5
+langcode: en
+status: false
+dependencies:
+  theme:
+    - stark
+id: stark_footer
+theme: stark
+region: footer
+weight: -13
+provider: null
+plugin: 'block_content:390124bf-6d34-47b0-bdbc-32f93fa79cee'
+settings:
+  id: 'block_content:390124bf-6d34-47b0-bdbc-32f93fa79cee'
+  label: Footer
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

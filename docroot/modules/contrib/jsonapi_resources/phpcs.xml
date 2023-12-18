@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<ruleset>
+  <description>PHPCS overrides for JSON:API Resources.</description>
+
+  <!-- Set ignore extensions. -->
+  <!-- @see https://www.drupal.org/node/2867601#comment-12075633 -->
+  <arg name="ignore" value="*.css,*.md,*.txt"/>
+
+  <!-- Use colors in output. -->
+  <arg name="colors"/>
+
+  <!-- Show progress. -->
+  <arg value="p"/>
+
+  <!-- Include existing standards. -->
+  <rule ref="Drupal"/>
+  <rule ref="DrupalPractice"/>
+
+  <rule ref="Drupal">
+    <!-- Ignore `<?php declare(strict_types = 1)` -->
+    <exclude name="Drupal.WhiteSpace.OpenTagNewline.BlankLine" />
+    <!-- Ignore @todo format -->
+    <exclude name="Drupal.Commenting.TodoComment.TodoFormat" />
+    <!-- Ignore overly strict array formatting -->
+    <exclude name="Drupal.Arrays.Array.LongLineDeclaration" />
+  </rule>
+
+</ruleset>

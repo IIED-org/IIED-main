@@ -1,0 +1,40 @@
+uuid: d08c5bc4-28a5-4cd9-8431-fbf1e7f8cfe7
+langcode: en
+status: false
+dependencies:
+  module:
+    - block_class
+    - node
+    - system
+  theme:
+    - stark
+third_party_settings:
+  block_class:
+    classes: 'text-center m-3'
+_core:
+  default_config_hash: 7rR9chwXvdM2H8OYMAYx9Zj3GGlPMrZp_M3ZA4thYTk
+id: stark_page_title
+theme: stark
+region: content
+weight: -6
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  label_display: '0'
+  provider: core
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      article: article
+      page: page
+  request_path:
+    id: request_path
+    negate: true
+    context_mapping: {  }
+    pages: '<front>'

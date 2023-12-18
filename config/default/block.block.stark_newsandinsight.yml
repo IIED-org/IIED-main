@@ -1,0 +1,29 @@
+uuid: 04b00c85-09a0-47ec-95ce-345986c9f890
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.news-and-insight
+  module:
+    - system
+  theme:
+    - stark
+id: stark_newsandinsight
+theme: stark
+region: content
+weight: -12
+provider: null
+plugin: 'system_menu_block:news-and-insight'
+settings:
+  id: 'system_menu_block:news-and-insight'
+  label: 'News and insight'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/news-and-insight\r\n/blogs\r\n/news\r\n/events\r\n/conversations\r\n/newsletters\r\n/media-centre\r\n/experts\r\n/bookshelf\r\n/podcasts\r\n/long-reads\r\n/longreads\r\n/iied-debates"

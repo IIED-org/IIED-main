@@ -1,0 +1,29 @@
+uuid: 869e8224-76ac-4519-8ab8-9f5047ec37dc
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.our-approach
+  module:
+    - system
+  theme:
+    - stark
+id: stark_ourapproach
+theme: stark
+region: content
+weight: -11
+provider: null
+plugin: 'system_menu_block:our-approach'
+settings:
+  id: 'system_menu_block:our-approach'
+  label: 'Our approach'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/our-approach\r\n/partnerships\r\n/process\r\n/impact"

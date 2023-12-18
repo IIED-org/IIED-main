@@ -1,0 +1,16 @@
+{
+  "name": "drupal/jsonapi_views",
+  "type": "drupal-module",
+  "description": "This module creates custom JSON:API resources from Views.",
+  "keywords": [
+    "Drupal",
+    "JSON:API"
+  ],
+  "license": "GPL-2.0-or-later",
+  "homepage": "https://www.drupal.org/project/jsonapi_views",
+  "minimum-stability": "dev",
+  "require": {
+    "drupal/core": ">=8.8",
+    "drupal/jsonapi_resources": "^1.0"
+  }
+}

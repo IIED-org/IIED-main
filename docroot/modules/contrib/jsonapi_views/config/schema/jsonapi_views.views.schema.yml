@@ -1,0 +1,6 @@
+views.display_extender.jsonapi_views:
+  type: views_display_extender
+  mapping:
+    enabled:
+      type: boolean
+      label: 'Exposed via JSON:API'

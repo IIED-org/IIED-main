@@ -1,0 +1,34 @@
+uuid: d83f8b62-89f4-45d7-bc08-d865c36a4a45
+langcode: en
+status: false
+dependencies:
+  config:
+    - views.view.related_publications
+  module:
+    - node
+    - views
+  theme:
+    - stark
+id: stark_views_block__related_publications_block_1
+theme: stark
+region: sidebar_first
+weight: -13
+provider: null
+plugin: 'views_block:related_publications-block_1'
+settings:
+  id: 'views_block:related_publications-block_1'
+  label: ''
+  label_display: '0'
+  provider: views
+  context_mapping: {  }
+  views_label: ''
+  items_per_page: none
+  exposed: {  }
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      publication: publication

@@ -1,0 +1,28 @@
+uuid: 3b2e6d8b-bde7-4ed5-9f21-a5318b3d49b6
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets_summary.facets_summary.pubs_summary
+  module:
+    - facets_summary
+    - system
+  theme:
+    - stark
+id: stark_pubssummary
+theme: stark
+region: content
+weight: -8
+provider: null
+plugin: 'facets_summary_block:pubs_summary'
+settings:
+  id: 'facets_summary_block:pubs_summary'
+  label: 'Pubs summary'
+  label_display: '0'
+  provider: facets_summary
+  context_mapping: {  }
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/search/pubs*'

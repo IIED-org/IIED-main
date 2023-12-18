@@ -1,0 +1,37 @@
+uuid: cef3fef2-4f84-491f-8cde-0c62f675897d
+langcode: en
+status: false
+dependencies:
+  config:
+    - system.menu.account
+  module:
+    - system
+    - user
+  theme:
+    - stark
+id: stark_useraccountmenu
+theme: stark
+region: header
+weight: -8
+provider: null
+plugin: 'system_menu_block:account'
+settings:
+  id: 'system_menu_block:account'
+  label: 'User account menu'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      authenticated: authenticated
+      viewer: viewer
+      editor: editor
+      manager: manager
+      administrator: administrator

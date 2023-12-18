@@ -1,0 +1,26 @@
+pager_serializer.settings:
+  type: config_object
+  label: 'Pager serializer settings'
+  mapping:
+    rows_label:
+      type: string
+    pager_label:
+      type: string
+    pager_object_enabled:
+      type: boolean
+    current_page_enabled:
+      type: boolean
+    current_page_label:
+      type: string
+    total_items_enabled:
+      type: boolean
+    total_items_label:
+      type: string
+    total_pages_enabled:
+      type: boolean
+    total_pages_label:
+      type: string
+    items_per_page_enabled:
+      type: boolean
+    items_per_page_label:
+      type: string

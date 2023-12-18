@@ -1,0 +1,24 @@
+uuid: b688de97-3f6c-4903-9958-48a1426ab144
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.pubs_document_type
+  module:
+    - facets
+  theme:
+    - stark
+id: stark_documenttype_2
+theme: stark
+region: sidebar_first
+weight: -10
+provider: null
+plugin: 'facet_block:pubs_document_type'
+settings:
+  id: 'facet_block:pubs_document_type'
+  label: 'Filter by document type'
+  label_display: visible
+  provider: facets
+  context_mapping: {  }
+  block_id: documenttype_2
+visibility: {  }
