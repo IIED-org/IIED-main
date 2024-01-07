@@ -1,0 +1,111 @@
+{% if content.field_author_s_ is not empty and content.field_publisher is not empty and node.field_lit_code.value != 'X' %}  
+  <div class="pl-4 my-8 border-l-2 border-iiedblue-500">
+      <p class="mb-4 font-bold">Cite this publication</p>
+    <div>
+      
+
+       {% set authors = [] %}
+            {% for item in node.field_author_s_ %}
+              {% if item.entity is not empty and item.entity.bundle == 'person' %}
+                  {% set name = item.entity.field_name.family ~ ', ' ~ (item.entity.field_name.given|first) ~ '.' %}
+                  {% set authors = authors|merge([name|trim]) %}
+                {% else %}
+                 {% set authors = authors|merge([item.entity.label|trim]) %}
+              {% endif %}   
+            {% endfor %}
+
+        {% if authors|length > 1 %}
+          {% set last_author = authors|last %}
+          {% set authors = authors|slice(0, authors|length - 1)|join(', ') ~ ' and ' ~ last_author %}
+        {% else %}
+          {% set authors = authors|first %}
+        {% endif %}
+
+        {{ authors }}
+
+
+
+        {% set editors = [] %}
+        {% for item in node.field_editor_s_ %}
+          {% if item.entity is not empty and item.entity.bundle == 'person' %}
+            {% set name = item.entity.field_name.family ~ ', ' ~ (item.entity.field_name.given|first) ~ '.' %}
+            {% set name_with_eds = name ~ ' (eds)' %}
+            {% set editors = editors|merge([name_with_eds|trim]) %}
+          {% endif %}
+        {% endfor %}
+
+        {% if editors|length > 1 %}
+          {% set last_editor = editors|last %}
+          {% set editors = editors|slice(0, editors|length - 1)|join(', ') ~ ' and ' ~ last_editor %}
+        {% else %}
+          {% set editors = editors|first %}
+        {% endif %}
+
+        {{ editors }}
+
+
+        {% set translators = [] %}
+        {% for item in node.field_translator %}
+          {% set name = item.entity.field_name.family ~ ', ' ~ (item.entity.field_name.given|first) ~ '.' %}
+          {% set name_with_translator = name ~ ' (translator)' %}
+          {% set translators = translators|merge([name_with_translator|trim]) %}
+        {% endfor %}
+
+        {% if translators|length > 1 %}
+          {% set last_translator = translators|last %}
+          {% set translators = translators|slice(0, translators|length - 1)|join(', ') ~ ' and ' ~ last_translator %}
+        {% else %}
+          {% set translators = translators|first %}
+        {% endif %}
+
+        {{ translators }}
+
+          ({{ node.field_date_published.value|date('Y') }}).
+
+          <em>{{ node.label }}</em>.
+
+          {% for item in node.field_publisher %}
+          {{- item.entity.name.value ~ ', ' ~ item.entity.field_location.locality -}}
+          {% if not loop.last %}{{';'}}{% endif %}
+          {% endfor %}
+
+        <br/>
+        Available at 
+          {% if content.field_doi %}
+              {{ content.field_doi }}
+            {% else %}
+              <a href="https://www.iied.org{{ url }}">https://www.iied.org{{ url }}</a>
+          {% endif %}
+
+    </div>
+  </div>
+{% endif %}  
+
+
+
+
+{# old way with view mode 
+        {% for item in node.field_author_s_ %}
+          {% if loop.last and loop.length > 1 %}
+            and
+          {% elseif not loop.first %},
+          {% endif %}
+          {{ item.entity|view('author_name') }}
+        {% endfor %}
+
+                {% for item in node.field_editor_s_ %}
+          {{ item.entity|view('author_name') }}
+            {% if loop.last %}
+              (eds).
+            {% elseif not loop.last and loop.length > 1 %}(eds), 
+              {% endif %}
+          {% endfor %}
+
+          {% for item in node.field_translator %}
+            {{ item.entity|view('author_name') }}
+              {% if loop.last %}
+                (translator)
+              {% elseif not loop.first %},
+              {% endif %}
+          {% endfor %}
+#}
