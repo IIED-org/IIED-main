@@ -2,8 +2,7 @@
   <div class="pl-4 my-8 border-l-2 border-iiedblue-500">
       <p class="mb-4 font-bold">Cite this publication</p>
     <div>
-      
-
+      {# Checks author is person #}
        {% set authors = [] %}
             {% for item in node.field_author_s_ %}
               {% if item.entity is not empty and item.entity.bundle == 'person' %}
@@ -22,8 +21,6 @@
         {% endif %}
 
         {{ authors }}
-
-
 
         {% set editors = [] %}
         {% for item in node.field_editor_s_ %}
