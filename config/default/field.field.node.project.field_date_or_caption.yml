@@ -1,0 +1,19 @@
+uuid: f887d22c-fcbf-47e2-9760-f9282056de5b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_date_or_caption
+    - node.type.project
+id: node.project.field_date_or_caption
+field_name: field_date_or_caption
+entity_type: node
+bundle: project
+label: Caption
+description: "Displays on card only. Leave blank to display '<status> project'."
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

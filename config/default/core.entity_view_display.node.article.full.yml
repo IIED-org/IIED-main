@@ -11,6 +11,7 @@ dependencies:
     - field.field.node.article.field_collections
     - field.field.node.article.field_contact
     - field.field.node.article.field_content
+    - field.field.node.article.field_date_or_caption
     - field.field.node.article.field_display_image
     - field.field.node.article.field_hide_date
     - field.field.node.article.field_image
@@ -112,7 +113,7 @@ content:
     label: hidden
     settings:
       view_mode: default
-      link: false
+      link: ''
     third_party_settings:
       ds:
         ds_limit: ''
@@ -203,6 +204,7 @@ content:
 hidden:
   comment: true
   field_alternative_label: true
+  field_date_or_caption: true
   field_image: true
   field_project: true
   field_tagline: true
