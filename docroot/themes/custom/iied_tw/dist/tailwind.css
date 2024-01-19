@@ -5110,10 +5110,6 @@ cite {
   align-self: center;
 }
 
-.justify-self-start{
-  justify-self: start;
-}
-
 .justify-self-end{
   justify-self: end;
 }
@@ -5162,10 +5158,6 @@ cite {
 
 .rounded-xl{
   border-radius: 0.75rem;
-}
-
-.rounded-2xl{
-  border-radius: 1rem;
 }
 
 .rounded-b-2xl{
@@ -5252,10 +5244,6 @@ cite {
 
 .border-t-2{
   border-top-width: 2px;
-}
-
-.border-r-2{
-  border-right-width: 2px;
 }
 
 .border-dashed{
@@ -5386,11 +5374,6 @@ cite {
   background-color: rgb(250 237 245 / var(--tw-bg-opacity));
 }
 
-.bg-iiedpink-500{
-  --tw-bg-opacity: 1;
-  background-color: rgb(206 83 158 / var(--tw-bg-opacity));
-}
-
 .bg-white{
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
@@ -5453,8 +5436,8 @@ cite {
   fill: #fff;
 }
 
-.stroke-white{
-  stroke: #fff;
+.stroke-gray-300{
+  stroke: #d1d5db;
 }
 
 .object-contain{
@@ -5838,16 +5821,6 @@ cite {
 .text-white{
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
-.text-gray-50{
-  --tw-text-opacity: 1;
-  color: rgb(249 250 251 / var(--tw-text-opacity));
-}
-
-.text-gray-100{
-  --tw-text-opacity: 1;
-  color: rgb(243 244 246 / var(--tw-text-opacity));
 }
 
 .no-underline{
@@ -6896,10 +6869,6 @@ cite {
   line-height: 1;
 }
 
-.first-letter\:uppercase::first-letter{
-  text-transform: uppercase;
-}
-
 .first-letter\:text-iiedpink-700::first-letter{
   --tw-text-opacity: 1;
   color: rgb(186 63 138 / var(--tw-text-opacity));
@@ -7007,11 +6976,6 @@ cite {
   border-color: rgb(242 169 12 / var(--tw-border-opacity));
 }
 
-.hover\:border-iiedpink-600:hover{
-  --tw-border-opacity: 1;
-  border-color: rgb(196 73 148 / var(--tw-border-opacity));
-}
-
 .hover\:bg-gray-100:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
@@ -7035,6 +6999,10 @@ cite {
 .hover\:bg-iiedorange-600:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(242 169 12 / var(--tw-bg-opacity));
+}
+
+.hover\:stroke-gray-400:hover{
+  stroke: #9ca3af;
 }
 
 .hover\:text-gray-900:hover{
@@ -7213,23 +7181,9 @@ cite {
   border-color: rgb(0 179 223 / var(--tw-border-opacity));
 }
 
-.group:hover .group-hover\:border-iiedpink-600{
-  --tw-border-opacity: 1;
-  border-color: rgb(196 73 148 / var(--tw-border-opacity));
-}
-
 .group:hover .group-hover\:bg-gray-100{
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
-}
-
-.group:hover .group-hover\:bg-white{
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-}
-
-.group:hover .group-hover\:stroke-iiedpink-500{
-  stroke: #ce539e;
 }
 
 .group:hover .group-hover\:shadow-lg{
@@ -7546,10 +7500,6 @@ cite {
     align-items: center;
   }
 
-  .md\:justify-between{
-    justify-content: space-between;
-  }
-
   .md\:space-y-0 > :not([hidden]) ~ :not([hidden]){
     --tw-space-y-reverse: 0;
     margin-top: calc(0px * calc(1 - var(--tw-space-y-reverse)));
@@ -7567,11 +7517,6 @@ cite {
 
   .md\:text-lg{
     font-size: 1.125rem;
-    line-height: 1.75rem;
-  }
-
-  .md\:text-xl{
-    font-size: 1.25rem;
     line-height: 1.75rem;
   }
 }
@@ -7730,11 +7675,6 @@ cite {
     width: 100%;
   }
 
-  .lg\:w-fit{
-    width: -moz-fit-content;
-    width: fit-content;
-  }
-
   .lg\:max-w-max{
     max-width: -moz-max-content;
     max-width: max-content;
@@ -7746,11 +7686,6 @@ cite {
 
   .lg\:max-w-screen-lg{
     max-width: 1024px;
-  }
-
-  .lg\:-rotate-3{
-    --tw-rotate: -3deg;
-    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
   }
 
   .lg\:grid-cols-12{
@@ -7771,10 +7706,6 @@ cite {
 
   .lg\:flex-col{
     flex-direction: column;
-  }
-
-  .lg\:flex-wrap{
-    flex-wrap: wrap;
   }
 
   .lg\:items-center{
@@ -7824,41 +7755,12 @@ cite {
     margin-left: calc(1.5rem * calc(1 - var(--tw-space-x-reverse)));
   }
 
-  .lg\:overflow-hidden{
-    overflow: hidden;
-  }
-
   .lg\:rounded-br-xl{
     border-bottom-right-radius: 0.75rem;
   }
 
   .lg\:rounded-tr-none{
     border-top-right-radius: 0px;
-  }
-
-  .lg\:border-b-2{
-    border-bottom-width: 2px;
-  }
-
-  .lg\:border-l-0{
-    border-left-width: 0px;
-  }
-
-  .lg\:border-r-0{
-    border-right-width: 0px;
-  }
-
-  .lg\:border-b-4{
-    border-bottom-width: 4px;
-  }
-
-  .lg\:border-t-2{
-    border-top-width: 2px;
-  }
-
-  .lg\:bg-gray-300{
-    --tw-bg-opacity: 1;
-    background-color: rgb(209 213 219 / var(--tw-bg-opacity));
   }
 
   .lg\:px-8{
@@ -7884,11 +7786,6 @@ cite {
   .lg\:text-5xl{
     font-size: 3rem;
     line-height: 1;
-  }
-
-  .lg\:text-lg{
-    font-size: 1.125rem;
-    line-height: 1.75rem;
   }
 }
 
