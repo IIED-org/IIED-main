@@ -22,6 +22,7 @@ dependencies:
     - paragraphs.paragraphs_type.modal_image
     - paragraphs.paragraphs_type.quote
     - paragraphs.paragraphs_type.related_content
+    - paragraphs.paragraphs_type.related_content_no_image
     - paragraphs.paragraphs_type.related_project
     - paragraphs.paragraphs_type.related_publication_inline
     - paragraphs.paragraphs_type.section
@@ -70,6 +71,7 @@ settings:
       highchart: highchart
       related_content: related_content
       related_project: related_project
+      related_content_no_image: related_content_no_image
       related_publication_inline: related_publication_inline
     negate: 0
     target_bundles_drag_drop:
@@ -133,6 +135,9 @@ settings:
       related_content:
         weight: 53
         enabled: true
+      related_content_no_image:
+        weight: 60
+        enabled: true
       related_link:
         weight: -59
         enabled: false
@@ -148,6 +153,9 @@ settings:
       section:
         weight: -57
         enabled: true
+      sticky_box:
+        weight: 66
+        enabled: false
       stories_block:
         weight: -46
         enabled: false

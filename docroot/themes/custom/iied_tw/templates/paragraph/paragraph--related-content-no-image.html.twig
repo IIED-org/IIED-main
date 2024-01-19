@@ -1,0 +1,54 @@
+{#
+/**
+
+ */
+#}
+{%
+  set classes = [
+    'paragraph',
+    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+    not paragraph.isPublished() ? 'paragraph--unpublished'
+  ]
+%}
+
+{% set bg_colour = content.field_background_colour.0 %}
+
+{% block paragraph %}
+
+  <div{{ attributes.addClass(classes) }}>
+    {% block content %}
+
+      {% if paragraph.field_related_content.0.entity %}
+      {% set referenced_node = paragraph.field_related_content.0.entity %}
+      <a class="hover:no-underline" href="{{ path('entity.node.canonical', {'node': referenced_node.id()}) }}">
+
+        <aside class="{{ bg_colour }} p-4 mb-8 rounded-2xl h-full overflow-hidden transition-shadow hover:shadow-md group not-prose">
+          
+            {% if content.field_card_label|render|striptags|trim is not empty %}
+            <div class="inline-block px-3 py-1 mb-6 text-base text-gray-800 bg-white rounded-full">{{ content.field_card_label }}
+            </div>
+            {% endif %}
+
+            <div>
+              {% if paragraph.field_related_content.0.entity %}
+                {% set referenced_node = paragraph.field_related_content.0.entity %}
+                <h4 class="mb-4 text-gray-900">{{ referenced_node.label() }}</h4>
+              {% endif %}
+          
+              {% if content.field_stories_cta_description|render|striptags|trim is not empty %}
+              <div class="mb-6 text-base text-gray-500">{{ content.field_stories_cta_description }}</div>
+              {% endif %}
+            </div>
+          
+          {% if content.field_card_link_text|render|striptags|trim is not empty %}
+          <div class="flex items-center text-base text-gray-800">{{ content.field_card_link_text }}<span class="inline-block p-2 border ml-2 border-gray-300 bg-white rounded-full group-hover:border-iiedblue-500 transform duration-150 ease-in group-hover:translate-x-0.5"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round"></path></svg></span></div>
+          {% endif %}
+
+        </aside>  
+      </a>
+      {% endif %}
+
+    {% endblock %}
+  </div>
+{% endblock paragraph %}

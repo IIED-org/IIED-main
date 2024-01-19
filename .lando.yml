@@ -35,8 +35,8 @@ services:
       - 3000:3000
       - 3001:3001
   solr:
-    type: solr:8.11
-    portforward: true
+    type: solr:7
+    portforward: false
     core: lando
     config:
       dir: lando/solr
