@@ -11,5 +11,5 @@
    {% endblock %}
 
    {% block date %}
-   <p class="text-gray-500">{{ node.field_date_or_caption.value }}</p>
+   <p class="text-gray-500">{{ node.type.entity.label() }}, {{ content.field_date_or_caption }}</p>
    {% endblock %}

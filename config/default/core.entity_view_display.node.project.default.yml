@@ -8,7 +8,6 @@ dependencies:
     - field.field.node.project.field_additional_resources
     - field.field.node.project.field_collections
     - field.field.node.project.field_contact
-    - field.field.node.project.field_date_or_caption
     - field.field.node.project.field_dates
     - field.field.node.project.field_display_image
     - field.field.node.project.field_funded_by
@@ -82,14 +81,6 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 20
-    region: content
-  field_date_or_caption:
-    type: string
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 6
     region: content
   field_dates:
     type: string

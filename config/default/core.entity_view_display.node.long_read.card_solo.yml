@@ -34,12 +34,13 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 1
+    weight: 105
     region: content
   field_main_image:
-    type: entity_reference_label
+    type: entity_reference_entity_view
     label: hidden
     settings:
+      view_mode: default
       link: false
     third_party_settings:
       ds:
@@ -50,7 +51,7 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    weight: 2
+    weight: 106
     region: content
   field_subheading:
     type: string
@@ -58,7 +59,15 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 0
+    weight: 103
+    region: content
+  field_theme_s_:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 102
     region: content
 hidden:
   body: true
@@ -67,7 +76,6 @@ hidden:
   field_image_caption: true
   field_project: true
   field_tags: true
-  field_theme_s_: true
   langcode: true
   links: true
   search_api_excerpt: true

@@ -9,7 +9,6 @@ dependencies:
     - field.field.node.project.field_additional_resources
     - field.field.node.project.field_collections
     - field.field.node.project.field_contact
-    - field.field.node.project.field_date_or_caption
     - field.field.node.project.field_dates
     - field.field.node.project.field_display_image
     - field.field.node.project.field_funded_by
@@ -165,7 +164,6 @@ hidden:
   field_additional_resources: true
   field_collections: true
   field_contact: true
-  field_date_or_caption: true
   field_dates: true
   field_display_image: true
   field_funded_by: true

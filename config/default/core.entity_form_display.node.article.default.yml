@@ -10,7 +10,6 @@ dependencies:
     - field.field.node.article.field_collections
     - field.field.node.article.field_contact
     - field.field.node.article.field_content
-    - field.field.node.article.field_date_or_caption
     - field.field.node.article.field_display_image
     - field.field.node.article.field_hide_date
     - field.field.node.article.field_image
@@ -54,7 +53,6 @@ third_party_settings:
         - field_hide_date
         - field_standfirst
         - field_tagline
-        - field_date_or_caption
         - field_main_image
         - field_image_caption
         - field_display_image
@@ -105,7 +103,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 38
+    weight: 37
     region: content
     settings:
       rows: 9
@@ -127,7 +125,7 @@ content:
     third_party_settings: {  }
   field_alternative_label:
     type: string_textfield
-    weight: 42
+    weight: 41
     region: content
     settings:
       size: 60
@@ -141,7 +139,7 @@ content:
     third_party_settings: {  }
   field_collections:
     type: entity_reference_autocomplete
-    weight: 8
+    weight: 7
     region: content
     settings:
       match_operator: CONTAINS
@@ -151,7 +149,7 @@ content:
     third_party_settings: {  }
   field_contact:
     type: text_textarea
-    weight: 41
+    weight: 40
     region: content
     settings:
       rows: 5
@@ -159,25 +157,16 @@ content:
     third_party_settings: {  }
   field_content:
     type: layout_paragraphs
-    weight: 40
+    weight: 39
     region: content
     settings:
       preview_view_mode: default
       nesting_depth: 0
       require_layouts: 1
-      empty_message: ''
-    third_party_settings: {  }
-  field_date_or_caption:
-    type: string_textfield
-    weight: 34
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
     third_party_settings: {  }
   field_display_image:
     type: boolean_checkbox
-    weight: 37
+    weight: 36
     region: content
     settings:
       display_label: true
@@ -191,7 +180,7 @@ content:
     third_party_settings: {  }
   field_image_caption:
     type: text_textarea
-    weight: 36
+    weight: 35
     region: content
     settings:
       rows: 5
@@ -199,14 +188,14 @@ content:
     third_party_settings: {  }
   field_main_image:
     type: media_library_widget
-    weight: 35
+    weight: 34
     region: content
     settings:
       media_types: {  }
     third_party_settings: {  }
   field_paragraphs:
     type: paragraphs
-    weight: 39
+    weight: 38
     region: content
     settings:
       title: Paragraph
@@ -224,7 +213,7 @@ content:
     third_party_settings: {  }
   field_project:
     type: entity_reference_autocomplete
-    weight: 10
+    weight: 9
     region: content
     settings:
       match_operator: CONTAINS
@@ -250,7 +239,7 @@ content:
     third_party_settings: {  }
   field_tags:
     type: entity_reference_autocomplete_tags
-    weight: 9
+    weight: 8
     region: content
     settings:
       match_operator: CONTAINS
@@ -270,7 +259,7 @@ content:
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 11
+    weight: 10
     region: content
     settings:
       include_locked: true

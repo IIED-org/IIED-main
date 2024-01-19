@@ -58,22 +58,16 @@
       {{ content.field_stories_cta_description }}
        {% if "1" in paragraph.field_link_style.0.value %}  
           <div>     
-            <a class="h-12 px-6 py-4 mt-8 text-lg text-gray-800 transition-colors duration-150 bg-white border rounded-full shadow-sm cursor-pointer md:text-xl button border-iiedorange-500 hover:shadow-none hover:bg-gray-100 focus:shadow-outline hover:no-underline hover:text-gray-900" id="cta-link" href="{{ paragraph.field_stories_cta_link.0.url }}">{{ paragraph.field_stories_cta_link.title }}</a>
+            <a class="h-12 px-6 py-2 mt-8 text-lg font-semibold text-gray-800 transition-colors duration-150 bg-white border rounded-full shadow-sm cursor-pointer button border-iiedorange-500 hover:shadow-none hover:bg-gray-100 focus:shadow-outline hover:no-underline hover:text-gray-900" href="{{ paragraph.field_stories_cta_link.0.url }}">{{ paragraph.field_stories_cta_link.title }}</a>
           </div>
           {% elseif "2" in paragraph.field_link_style.0.value %}
           <div class="text-center">     
-            <a class="h-12 px-6 py-4 mt-8 text-lg text-gray-800 transition-colors duration-150 bg-white border rounded-full shadow-sm cursor-pointer md:text-xl button border-iiedorange-500 hover:shadow-none hover:bg-gray-100 focus:shadow-outline hover:no-underline hover:text-gray-900" id="cta-link" href="{{ paragraph.field_stories_cta_link.0.url }}">{{ paragraph.field_stories_cta_link.title }}</a>
+            <a class="h-12 px-6 py-2 mt-8 text-lg font-semibold text-gray-800 transition-colors duration-150 bg-white border rounded-full shadow-sm cursor-pointer button border-iiedorange-500 hover:shadow-none hover:bg-gray-100 focus:shadow-outline hover:no-underline hover:text-gray-900" href="{{ paragraph.field_stories_cta_link.0.url }}">{{ paragraph.field_stories_cta_link.title }}</a>
           </div>
           {% elseif "3" in paragraph.field_link_style.0.value %}
           <div class="mb-6 not-prose">
-            <a class="inline-flex items-center mb-6 text-lg group" id="cta-link" href="{{ paragraph.field_stories_cta_link.0.url }}">{{ paragraph.field_stories_cta_link.title }} <span class="inline-block p-2 border ml-2 border-gray-300 rounded-full group-hover:border-iiedblue-500 transform duration-150 ease-in group-hover:translate-x-0.5"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round"></path></svg></span> </a>
+            <a class="inline-flex items-center mb-6 text-lg" href="{{ paragraph.field_stories_cta_link.0.url }}">{{ paragraph.field_stories_cta_link.title }} <span class="inline-block p-2 ml-2 border border-gray-300 rounded-full"> <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round"></path></svg></span> </a>
           </div>
-
-          {% elseif "4" in paragraph.field_link_style.0.value %}
-          <div class="mb-6 not-prose">
-            <a class="flex items-center justify-between p-4 mb-6 overflow-hidden text-lg border border-gray-300 rounded-full group hover:border-iiedpink-600 md:text-xl" id="cta-link" href="{{ paragraph.field_stories_cta_link.0.url }}">{{ paragraph.field_stories_cta_link.title }} <span class="inline-block p-2 border border-iiedpink-500 rounded-full group-hover:border-iiedpink-600 bg-iiedpink-500 group-hover:bg-white transform duration-150 ease-in group-hover:-translate-x-0.5"> <svg class="w-6 h-6 stroke-white group-hover:stroke-iiedpink-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round"></path></svg></span> </a>
-          </div>
-
           {% else %}
           {{ content.field_stories_cta_link }}
         {% endif %}

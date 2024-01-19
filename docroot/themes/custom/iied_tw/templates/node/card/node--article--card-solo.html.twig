@@ -11,12 +11,8 @@
    {% endblock %}
 
    {% block date %}
-      {% if node.field_date_or_caption.value is not empty %}
-         <p class="text-gray-500">{{ node.field_date_or_caption.value }}</p>
-         {% else %}
-         {% if "On" in content.field_hide_date.0 %}          
-         {% else %}
-         <p class="text-gray-500">{{ node.getCreatedTime|date('d F Y') }} </p>
-         {% endif %}
+      {% if "On" in content.field_hide_date.0 %}          
+      {% else %}
+      <p class="text-gray-500">{{ node.getCreatedTime|date('d F Y') }} </p>
       {% endif %}
    {% endblock %}

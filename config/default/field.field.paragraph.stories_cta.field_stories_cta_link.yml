@@ -14,7 +14,7 @@ field_name: field_stories_cta_link
 entity_type: paragraph
 bundle: stories_cta
 label: Link
-description: '25 character limit for buttons. Use small round button for longer text.'
+description: ''
 required: false
 translatable: false
 default_value: {  }

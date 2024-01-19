@@ -9,7 +9,6 @@ dependencies:
     - field.field.node.project.field_additional_resources
     - field.field.node.project.field_collections
     - field.field.node.project.field_contact
-    - field.field.node.project.field_date_or_caption
     - field.field.node.project.field_dates
     - field.field.node.project.field_display_image
     - field.field.node.project.field_funded_by
@@ -45,7 +44,7 @@ third_party_settings:
       label: Project-card
       parent_name: ''
       region: hidden
-      weight: 27
+      weight: 28
       format_type: html_element
       format_settings:
         classes: 'card pointer overflow-hidden'
@@ -62,7 +61,7 @@ third_party_settings:
       label: Row-nogutters
       parent_name: ''
       region: hidden
-      weight: 28
+      weight: 29
       format_type: html_element
       format_settings:
         classes: 'row no-gutters'
@@ -79,7 +78,7 @@ third_party_settings:
       label: 'card body'
       parent_name: ''
       region: hidden
-      weight: 29
+      weight: 30
       format_type: html_element
       format_settings:
         classes: card-body
@@ -96,7 +95,7 @@ third_party_settings:
       label: col-md-8
       parent_name: ''
       region: hidden
-      weight: 26
+      weight: 27
       format_type: html_element
       format_settings:
         classes: col-md-8
@@ -113,26 +112,18 @@ targetEntityType: node
 bundle: project
 mode: card_solo
 content:
-  field_date_or_caption:
-    type: string
-    label: inline
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 2
-    region: content
   field_image:
     type: image
     label: hidden
     settings:
       image_link: ''
       image_style: card_370
-      image_loading:
-        attribute: lazy
       svg_attributes:
         width: null
         height: null
       svg_render_as_image: true
+      image_loading:
+        attribute: lazy
     third_party_settings:
       ds:
         ft:

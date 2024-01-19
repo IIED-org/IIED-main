@@ -20,9 +20,6 @@ settings:
     -
       value: '3'
       label: 'Small round button'
-    -
-      value: '4'
-      label: 'Jumbo button'
   allowed_values_function: ''
 module: options
 locked: false

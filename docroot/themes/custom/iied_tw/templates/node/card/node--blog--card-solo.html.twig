@@ -1,9 +1,1 @@
 {% extends '@iied_tw/node/card/node--card-solo.html.twig' %}
-
-    {% block date %}
-        {% if node.field_date_or_caption.value is not empty %}
-        <p class="text-gray-500">{{ node.field_date_or_caption.value }}</p>
-        {% else %}
-        <p class="text-gray-500">{{ node.type.entity.label() }}, {{ node.getCreatedTime|date('d F Y') }} </p>
-      {% endif %}
-    {% endblock %}
