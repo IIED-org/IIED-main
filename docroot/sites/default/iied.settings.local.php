@@ -187,17 +187,3 @@ ini_set('display_startup_errors', TRUE);
 
 // Config for sstage file proxy remote files.
 $config['stage_file_proxy.settings']['origin']  = 'https://www.iied.org';
-
-// Local search config
-$config['search_api.server.acquia_search_server'] = [
-  'backend' => 'search_api_solr',
-  'backend_config' => [
-    'connector' => 'standard',
-    'connector_config' => [
-      'host' => 'solr',
-      'path' => '/',
-      'core' => 'lando',
-      'identifier' => 'local',
-    ]
-  ],
-];

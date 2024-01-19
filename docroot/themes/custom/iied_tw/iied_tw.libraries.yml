@@ -18,6 +18,3 @@ priority-nav:
 copyprint:
    js:
     dist/js/copyprint.js: { async: true }
-copycite:
-   js:
-    dist/js/copycite.js: { async: true }

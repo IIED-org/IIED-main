@@ -9,6 +9,7 @@ dependencies:
     - field.field.node.blog.field_author_s_
     - field.field.node.blog.field_blogger_info
     - field.field.node.blog.field_collections
+    - field.field.node.blog.field_date_or_caption
     - field.field.node.blog.field_display_image
     - field.field.node.blog.field_image_caption
     - field.field.node.blog.field_main_image
@@ -130,6 +131,7 @@ content:
     weight: 0
     region: content
 hidden:
+  field_date_or_caption: true
   field_display_image: true
   field_project: true
   field_tagline: true

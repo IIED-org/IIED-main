@@ -171,23 +171,19 @@
           {{ content.field_external_url }}
           {{ content.field_iied_url }}
           
-        </div>
-        {# cite #}
-        {# TODO: Rewrite in twig instead of using views! #}
-       
-        {# {% if drupal_view_result('citation', 'block_1') is not empty %}
+          </div>
+    {# cite #}
+    {# TODO: Rewrite in twig instead of using views! #}
+        {% if drupal_view_result('citation', 'block_1') is not empty %}
         <div class="pl-4 my-8 border-l-2 border-iiedblue-500">
           <span class="font-bold">How to cite:</span><br />
           {{- drupal_view('citation', 'block_1') -}}
         </div>
-        {% endif %} #}
-
-        {# cite twig update #}
-        {% include '@iied_tw/partials/_publication_citation.html.twig' %}
+        {% endif %}
 
       </div>
 
- 
+
 {# {{ drupal_entity('node', node.field_media.0.target_id, 'card') }} this sort of works to print a view mode #}
 {# {{ node.content.field_media.entity.name.value }} this prints the whole thing #}
 
