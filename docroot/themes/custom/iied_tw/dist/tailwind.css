@@ -3143,7 +3143,8 @@ cite {
 
 #block-exposedformsearchpage-2-5 .bef--secondary,
   #edit-submit-search--2,
-  #edit-submit-search {
+  #edit-submit-search,
+  #edit-submit-search--3 {
   display: none;
 }
 
@@ -7673,6 +7674,10 @@ cite {
 
   .lg\:w-full{
     width: 100%;
+  }
+
+  .lg\:w-2\/3{
+    width: 66.666667%;
   }
 
   .lg\:max-w-max{
