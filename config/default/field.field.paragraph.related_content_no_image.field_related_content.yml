@@ -1,0 +1,43 @@
+uuid: cd3605e0-27c9-4f58-9686-353bc5af720c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_related_content
+    - node.type.article
+    - node.type.blog
+    - node.type.event
+    - node.type.long_read
+    - node.type.news
+    - node.type.page
+    - node.type.project
+    - node.type.publication
+    - paragraphs.paragraphs_type.related_content_no_image
+id: paragraph.related_content_no_image.field_related_content
+field_name: field_related_content
+entity_type: paragraph
+bundle: related_content_no_image
+label: 'Related content'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      article: article
+      blog: blog
+      event: event
+      long_read: long_read
+      news: news
+      page: page
+      project: project
+      publication: publication
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: article
+field_type: entity_reference
