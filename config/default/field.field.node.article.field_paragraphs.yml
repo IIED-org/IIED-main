@@ -18,7 +18,6 @@ dependencies:
     - paragraphs.paragraphs_type.media_list
     - paragraphs.paragraphs_type.modal_image
     - paragraphs.paragraphs_type.quote
-    - paragraphs.paragraphs_type.related_content_no_image
     - paragraphs.paragraphs_type.related_project
     - paragraphs.paragraphs_type.related_publication_inline
     - paragraphs.paragraphs_type.stories_cta
@@ -59,7 +58,6 @@ settings:
       timeline: timeline
       accordion_box: accordion_box
       stories_cta: stories_cta
-      related_content_no_image: related_content_no_image
       highchart: highchart
       related_project: related_project
       related_publication_inline: related_publication_inline
@@ -125,9 +123,6 @@ settings:
       related_content:
         weight: 57
         enabled: false
-      related_content_no_image:
-        weight: 40
-        enabled: true
       related_link:
         weight: -46
         enabled: false
@@ -142,9 +137,6 @@ settings:
         enabled: false
       section:
         weight: -44
-        enabled: false
-      sticky_box:
-        weight: 69
         enabled: false
       stories_block:
         weight: -43

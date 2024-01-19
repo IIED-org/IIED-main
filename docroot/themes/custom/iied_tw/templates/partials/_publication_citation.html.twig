@@ -76,7 +76,7 @@
           {% for item in node.field_publisher %}
           {{- item.entity.name.value ~ ', ' ~ item.entity.field_location.locality -}}
           {% if not loop.last %}{{';'}}{% endif %}
-          {% endfor %}.
+          {% endfor %}
 
         <br/>
         Available at 

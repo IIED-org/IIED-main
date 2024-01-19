@@ -10,7 +10,7 @@ Card to display related content
             class="flex flex-row h-full overflow-hidden transition-shadow bg-white border border-gray-300 lg:flex-col rounded-xl group hover:shadow-md grow"
           >
       
-            <div class="relative border-r lg:static lg:order-1 lg:border-r-0 lg:border-b-2 border-iiedgreen-500">
+            <div class="relative lg:static lg:order-1">
 
               {% block image %}
                 {% set image_uri = node.field_main_image|file_uri %}

@@ -31,6 +31,7 @@ dependencies:
     - field.field.node.event.field_where_and_how
     - node.type.event
   module:
+    - datetime
     - datetime_range
     - layout_builder
     - user
@@ -51,6 +52,15 @@ content:
     third_party_settings: {  }
     weight: 1
     region: content
+  field_date:
+    type: datetime_default
+    label: hidden
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 2
+    region: content
   field_daterange:
     type: daterange_default
     label: hidden
@@ -59,12 +69,13 @@ content:
       format_type: medium
       separator: '-'
     third_party_settings: {  }
-    weight: 2
+    weight: 3
     region: content
   field_main_image:
-    type: entity_reference_label
+    type: entity_reference_entity_view
     label: hidden
     settings:
+      view_mode: default
       link: true
     third_party_settings: {  }
     weight: 0
@@ -74,14 +85,13 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: 4
     region: content
 hidden:
   body: true
   field_alternative_label: true
   field_collections: true
   field_contact: true
-  field_date: true
   field_dates: true
   field_direct_link: true
   field_display_time: true
