@@ -5110,10 +5110,6 @@ cite {
   align-self: center;
 }
 
-.justify-self-start{
-  justify-self: start;
-}
-
 .justify-self-end{
   justify-self: end;
 }
@@ -5148,6 +5144,10 @@ cite {
   border-radius: 0.25rem;
 }
 
+.rounded-2xl{
+  border-radius: 1rem;
+}
+
 .rounded-3xl{
   border-radius: 1.5rem;
 }
@@ -5162,10 +5162,6 @@ cite {
 
 .rounded-xl{
   border-radius: 0.75rem;
-}
-
-.rounded-2xl{
-  border-radius: 1rem;
 }
 
 .rounded-b-2xl{
@@ -5252,10 +5248,6 @@ cite {
 
 .border-t-2{
   border-top-width: 2px;
-}
-
-.border-r-2{
-  border-right-width: 2px;
 }
 
 .border-dashed{
@@ -5451,6 +5443,10 @@ cite {
 
 .fill-white{
   fill: #fff;
+}
+
+.stroke-gray-300{
+  stroke: #d1d5db;
 }
 
 .stroke-white{
@@ -5755,6 +5751,11 @@ cite {
   line-height: 1.25;
 }
 
+.text-gray-100{
+  --tw-text-opacity: 1;
+  color: rgb(243 244 246 / var(--tw-text-opacity));
+}
+
 .text-gray-300{
   --tw-text-opacity: 1;
   color: rgb(209 213 219 / var(--tw-text-opacity));
@@ -5838,16 +5839,6 @@ cite {
 .text-white{
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
-.text-gray-50{
-  --tw-text-opacity: 1;
-  color: rgb(249 250 251 / var(--tw-text-opacity));
-}
-
-.text-gray-100{
-  --tw-text-opacity: 1;
-  color: rgb(243 244 246 / var(--tw-text-opacity));
 }
 
 .no-underline{
@@ -7037,6 +7028,10 @@ cite {
   background-color: rgb(242 169 12 / var(--tw-bg-opacity));
 }
 
+.hover\:stroke-gray-400:hover{
+  stroke: #9ca3af;
+}
+
 .hover\:text-gray-900:hover{
   --tw-text-opacity: 1;
   color: rgb(17 24 39 / var(--tw-text-opacity));
@@ -7546,10 +7541,6 @@ cite {
     align-items: center;
   }
 
-  .md\:justify-between{
-    justify-content: space-between;
-  }
-
   .md\:space-y-0 > :not([hidden]) ~ :not([hidden]){
     --tw-space-y-reverse: 0;
     margin-top: calc(0px * calc(1 - var(--tw-space-y-reverse)));
@@ -7726,13 +7717,13 @@ cite {
     width: 24rem;
   }
 
-  .lg\:w-full{
-    width: 100%;
-  }
-
   .lg\:w-fit{
     width: -moz-fit-content;
     width: fit-content;
+  }
+
+  .lg\:w-full{
+    width: 100%;
   }
 
   .lg\:max-w-max{
@@ -7840,16 +7831,12 @@ cite {
     border-bottom-width: 2px;
   }
 
-  .lg\:border-l-0{
-    border-left-width: 0px;
+  .lg\:border-b-4{
+    border-bottom-width: 4px;
   }
 
   .lg\:border-r-0{
     border-right-width: 0px;
-  }
-
-  .lg\:border-b-4{
-    border-bottom-width: 4px;
   }
 
   .lg\:border-t-2{
@@ -7884,11 +7871,6 @@ cite {
   .lg\:text-5xl{
     font-size: 3rem;
     line-height: 1;
-  }
-
-  .lg\:text-lg{
-    font-size: 1.125rem;
-    line-height: 1.75rem;
   }
 }
 
