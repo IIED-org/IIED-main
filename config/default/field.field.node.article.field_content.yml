@@ -22,6 +22,7 @@ dependencies:
     - paragraphs.paragraphs_type.modal_image
     - paragraphs.paragraphs_type.quote
     - paragraphs.paragraphs_type.related_content
+    - paragraphs.paragraphs_type.related_content_no_image
     - paragraphs.paragraphs_type.related_project
     - paragraphs.paragraphs_type.related_publication_inline
     - paragraphs.paragraphs_type.section
@@ -74,6 +75,7 @@ settings:
       tab_box: tab_box
       timeline: timeline
       video_embed: video_embed
+      related_content_no_image: related_content_no_image
       sticky_box: sticky_box
     negate: 0
     target_bundles_drag_drop:
@@ -136,6 +138,9 @@ settings:
         enabled: true
       related_content:
         weight: -58
+        enabled: true
+      related_content_no_image:
+        weight: 60
         enabled: true
       related_link:
         weight: -51
