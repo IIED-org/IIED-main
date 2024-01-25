@@ -1,0 +1,91 @@
+{#
+/**
+ * @file
+ * Theme override to display a block.
+ *
+ * Available variables:
+ * - plugin_id: The ID of the block implementation.
+ * - label: The configured label of the block if visible.
+ * - configuration: A list of the block's configuration values.
+ *   - label: The configured label for the block.
+ *   - label_display: The display settings for the label.
+ *   - provider: The module or other provider that provided this block plugin.
+ *   - Block plugin specific settings will also be stored here.
+ * - content: The content of this block.
+ * - attributes: array of HTML attributes populated by modules, intended to
+ *   be added to the main container tag of this template.
+ *   - id: A valid HTML ID and guaranteed unique.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ *
+ * @see template_preprocess_block()
+ * HH can you help block 
+ */
+#}
+<div{{ attributes.addClass('bg-iiedbg-10') }}>
+  {{ title_prefix }}
+  {% if label %}
+    <h2{{ title_attributes.addClass('mb-4') }}>{{ label }}</h2>
+  {% endif %}
+  {{ title_suffix }}
+
+  <div class="container">   
+    <div class="grid items-center grid-cols-1 md:grid-cols-3">
+      <div class="flex items-center justify-center overflow-hidden">
+          
+          <img src="/themes/custom/iied_tw/images/hh-contribute.svg" alt="" class="">
+
+
+      </div>
+      
+      <div class="md:col-span-2">
+            
+          {% block content %}
+          {{ content }}
+          {% endblock %}
+                        
+
+          {% if logged_in %}
+            <div class="mb-6 prose prose-lg">
+              <p>
+              Are you working on a hidden handbrake? Let us know how we can join forces  
+              </p>
+              <p>
+              Email: <a href="mailto:hiddenhandbrakes@iied.org">hiddenhandbrakes@iied.org</a>
+              </p>
+          </div>
+          {% else %}
+          <div class="mb-6 prose prose-lg">
+            <p>
+            Log in or create an account to share a hidden handbrake with the community. Are you working on a hidden handbrake? Let us know how we can join forces  
+            </p>
+          </div>
+                
+          <div class="flex">
+            <div class="flex items-center h-10 px-3 py-2 mb-4 mr-4 font-semibold transition bg-white border border-gray-500 rounded-full shadow-sm shrink-0 hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500 hover:ring-1">
+            {{ link('Login', 'route:user.login') }}
+            </div> 
+            <div class="flex items-center h-10 px-3 py-2 mb-4 font-semibold transition bg-white border border-gray-500 rounded-full shadow-sm shrink-0 hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500 hover:ring-1">
+                <a href="{{ path('multiple_registration.role_registration_page', {'rid': 'contributor'}, {'query': {'destination': path('<current>') }}) }}" class="use-ajax" data-dialog-type ="modal" data-dialog-options="{&quot;width&quot;:700,&quot;dialogClass&quot;:&quot;&quot;}">{{ 'Register'|t }}</a>
+            </div>
+            <div>
+              Email: <a href="mailto:hiddenhandbrakes@iied.org">hiddenhandbrakes@iied.org</a>
+            </div>
+          </div>
+          {% endif %}
+
+      </div>
+
+    </div>
+  </div>
+
+
+</div>
+
+
+
+
