@@ -1,0 +1,19 @@
+uuid: a4b67964-4241-422c-a2a9-6481a9928da3
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.key_figure
+    - field.storage.block_content.field_number_prefix
+id: block_content.key_figure.field_number_prefix
+field_name: field_number_prefix
+entity_type: block_content
+bundle: key_figure
+label: 'Number prefix'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

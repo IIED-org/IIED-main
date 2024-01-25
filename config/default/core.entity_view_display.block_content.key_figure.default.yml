@@ -1,0 +1,74 @@
+uuid: 9753e71e-ce2f-4c04-a187-ddb719feeb90
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.key_figure
+    - field.field.block_content.key_figure.field_description
+    - field.field.block_content.key_figure.field_number
+    - field.field.block_content.key_figure.field_number_prefix
+    - field.field.block_content.key_figure.field_number_suffix
+  module:
+    - ds
+    - text
+id: block_content.key_figure.default
+targetEntityType: block_content
+bundle: key_figure
+mode: default
+content:
+  field_description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_number:
+    type: number_integer
+    label: hidden
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 1
+    region: content
+  field_number_prefix:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 0
+    region: content
+  field_number_suffix:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 2
+    region: content
+hidden:
+  langcode: true
+  search_api_excerpt: true

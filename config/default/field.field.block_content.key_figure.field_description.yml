@@ -1,0 +1,26 @@
+uuid: e71d659b-41ca-4f10-9439-007eb7d18f7a
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.key_figure
+    - field.storage.block_content.field_description
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    allowed_formats: {  }
+id: block_content.key_figure.field_description
+field_name: field_description
+entity_type: block_content
+bundle: key_figure
+label: Description
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long
