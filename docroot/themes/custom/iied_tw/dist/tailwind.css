@@ -4120,6 +4120,10 @@ cite {
   visibility: hidden;
 }
 
+.fixed{
+  position: fixed;
+}
+
 .absolute{
   position: absolute;
 }
@@ -4242,6 +4246,10 @@ cite {
   top: 48%;
 }
 
+.-left-full{
+  left: -100%;
+}
+
 .-z-10{
   z-index: -10;
 }
@@ -4264,6 +4272,10 @@ cite {
 
 .z-30{
   z-index: 30;
+}
+
+.z-40{
+  z-index: 40;
 }
 
 .order-1{
@@ -4399,6 +4411,10 @@ cite {
 
 .-ml-2{
   margin-left: -0.5rem;
+}
+
+.-mr-14{
+  margin-right: -3.5rem;
 }
 
 .-mr-2{
@@ -4795,6 +4811,10 @@ cite {
   max-width: 20rem;
 }
 
+.flex-1{
+  flex: 1 1 0%;
+}
+
 .flex-auto{
   flex: 1 1 auto;
 }
@@ -4953,6 +4973,10 @@ cite {
 
 .place-items-center{
   place-items: center;
+}
+
+.content-center{
+  align-content: center;
 }
 
 .content-start{
@@ -5131,6 +5155,10 @@ cite {
   overflow-x: auto;
 }
 
+.overflow-y-auto{
+  overflow-y: auto;
+}
+
 .truncate{
   overflow: hidden;
   text-overflow: ellipsis;
@@ -5305,6 +5333,11 @@ cite {
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
 
+.bg-gray-600{
+  --tw-bg-opacity: 1;
+  background-color: rgb(75 85 99 / var(--tw-bg-opacity));
+}
+
 .bg-gray-800{
   --tw-bg-opacity: 1;
   background-color: rgb(31 41 55 / var(--tw-bg-opacity));
@@ -5378,6 +5411,11 @@ cite {
 .bg-white{
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.bg-gray-500{
+  --tw-bg-opacity: 1;
+  background-color: rgb(107 114 128 / var(--tw-bg-opacity));
 }
 
 .bg-\[url\(\'\/sites\/default\/files\/2023-10\/cloudsbd\.svg\'\)\]{
@@ -5458,6 +5496,10 @@ cite {
 
 .p-0{
   padding: 0px;
+}
+
+.p-1{
+  padding: 0.25rem;
 }
 
 .p-2{
@@ -5639,6 +5681,10 @@ cite {
   padding-top: 1rem;
 }
 
+.pt-5{
+  padding-top: 1.25rem;
+}
+
 .pt-6{
   padding-top: 1.5rem;
 }
@@ -5649,6 +5695,10 @@ cite {
 
 .text-center{
   text-align: center;
+}
+
+.align-middle{
+  vertical-align: middle;
 }
 
 .font-headline{
@@ -5836,6 +5886,14 @@ cite {
   opacity: 0.2;
 }
 
+.opacity-75{
+  opacity: 0.75;
+}
+
+.opacity-50{
+  opacity: 0.5;
+}
+
 .shadow{
   --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
@@ -5922,6 +5980,18 @@ cite {
   transition-duration: 150ms;
 }
 
+.transition-all{
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.transition-opacity{
+  transition-property: opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
 .duration-150{
   transition-duration: 150ms;
 }
@@ -5932,6 +6002,10 @@ cite {
 
 .duration-300{
   transition-duration: 300ms;
+}
+
+.duration-500{
+  transition-duration: 500ms;
 }
 
 .ease-in{
@@ -7087,6 +7161,11 @@ cite {
   border-color: rgb(165 180 252 / var(--tw-border-opacity));
 }
 
+.focus\:bg-gray-600:focus{
+  --tw-bg-opacity: 1;
+  background-color: rgb(75 85 99 / var(--tw-bg-opacity));
+}
+
 .focus\:text-white:focus{
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
@@ -7437,12 +7516,20 @@ cite {
     margin-top: 0px;
   }
 
+  .md\:block{
+    display: block;
+  }
+
   .md\:flex{
     display: flex;
   }
 
   .md\:grid{
     display: grid;
+  }
+
+  .md\:hidden{
+    display: none;
   }
 
   .md\:h-48{
@@ -7652,6 +7739,10 @@ cite {
     width: 25%;
   }
 
+  .lg\:w-2\/3{
+    width: 66.666667%;
+  }
+
   .lg\:w-2\/4{
     width: 50%;
   }
@@ -7674,10 +7765,6 @@ cite {
 
   .lg\:w-full{
     width: 100%;
-  }
-
-  .lg\:w-2\/3{
-    width: 66.666667%;
   }
 
   .lg\:max-w-max{
@@ -7893,6 +7980,10 @@ cite {
 
   .xl\:grid{
     display: grid;
+  }
+
+  .xl\:hidden{
+    display: none;
   }
 
   .xl\:w-3\/4{
