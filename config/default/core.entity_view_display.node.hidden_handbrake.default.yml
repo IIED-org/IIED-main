@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_display.comment.comment.default
     - field.field.node.hidden_handbrake.body
     - field.field.node.hidden_handbrake.comment
+    - field.field.node.hidden_handbrake.field_additional_elements
     - field.field.node.hidden_handbrake.field_author_location
     - field.field.node.hidden_handbrake.field_date_published
     - field.field.node.hidden_handbrake.field_examples
@@ -24,6 +25,7 @@ dependencies:
     - address
     - comment
     - datetime
+    - entity_reference_revisions
     - text
     - user
 id: node.hidden_handbrake.default
@@ -53,6 +55,15 @@ content:
       pager_id: 0
     third_party_settings: {  }
     weight: 10
+    region: content
+  field_additional_elements:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 23
     region: content
   field_author_location:
     type: address_default
