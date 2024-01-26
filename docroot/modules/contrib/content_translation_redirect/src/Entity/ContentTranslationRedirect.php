@@ -3,9 +3,11 @@
 namespace Drupal\content_translation_redirect\Entity;
 
 use Drupal\content_translation_redirect\ContentTranslationRedirectInterface;
+use Drupal\content_translation_redirect\ContentTranslationRedirectManagerInterface;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Url;
 
 /**
@@ -84,6 +86,47 @@ class ContentTranslationRedirect extends ConfigEntityBase implements ContentTran
   /**
    * {@inheritdoc}
    */
+  public function getTargetEntityTypeId(): ?string {
+    $id = $this->id();
+
+    // The default redirect affects all supported entity types.
+    if ($id === NULL || $id === static::DEFAULT_ID) {
+      return NULL;
+    }
+
+    return explode('__', $id)[0];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTargetEntityType(): ?EntityTypeInterface {
+    $entity_type_id = $this->getTargetEntityTypeId();
+
+    if ($entity_type_id !== NULL) {
+      return $this->entityTypeManager()->getDefinition($entity_type_id, FALSE);
+    }
+
+    return NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTargetBundle(): ?string {
+    $id = $this->id();
+
+    // The default redirect affects all supported entity types.
+    if ($id === NULL || $id === static::DEFAULT_ID) {
+      return NULL;
+    }
+
+    return explode('__', $id)[1] ?? NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getStatusCode(): ?int {
     return $this->code;
   }
@@ -133,29 +176,25 @@ class ContentTranslationRedirect extends ConfigEntityBase implements ContentTran
   /**
    * {@inheritdoc}
    */
-  public function preSave(EntityStorageInterface $storage) {
+  public function preSave(EntityStorageInterface $storage): void {
     parent::preSave($storage);
 
     if ($this->isNew()) {
-      $parts = explode('__', $this->id());
-      $entity_type_id = $parts[0];
+      $entity_type = $this->getTargetEntityType();
 
-      $entity_type = $this->entityTypeManager()
-        ->getDefinition($entity_type_id, FALSE);
-
-      if ($entity_type) {
-        $bundle_id = $parts[1] ?? NULL;
+      if ($entity_type !== NULL) {
+        $bundle_id = $this->getTargetBundle();
 
         // Get the entity type label.
         $label = (string) $entity_type->getLabel();
 
         // Get the bundle label.
         if ($bundle_id !== NULL) {
-          $bundle_info = $this->entityTypeBundleInfo()->getBundleInfo($entity_type_id);
-          $label .= ': ' . $bundle_info[$bundle_id]['label'];
+          $bundle_info = $this->entityTypeBundleInfo()->getBundleInfo($entity_type->id());
+          $label .= ': ' . ($bundle_info[$bundle_id]['label'] ?? $bundle_id);
         }
 
-        // Set the label on new entity.
+        // Set the new label.
         $this->set('label', $label);
       }
     }
@@ -164,7 +203,27 @@ class ContentTranslationRedirect extends ConfigEntityBase implements ContentTran
   /**
    * {@inheritdoc}
    */
-  public static function sort(ConfigEntityInterface $a, ConfigEntityInterface $b) {
+  public function postSave(EntityStorageInterface $storage, $update = TRUE): void {
+    parent::postSave($storage, $update);
+    static::manager()->resetCache($this);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function postDelete(EntityStorageInterface $storage, array $entities): void {
+    parent::postDelete($storage, $entities);
+    $manager = static::manager();
+
+    foreach ($entities as $entity) {
+      $manager->resetCache($entity);
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function sort(ConfigEntityInterface $a, ConfigEntityInterface $b): int {
     // Always put Default in first place.
     if ($a->id() === static::DEFAULT_ID) {
       return -1;
@@ -176,35 +235,13 @@ class ContentTranslationRedirect extends ConfigEntityBase implements ContentTran
   }
 
   /**
-   * Returns redirect status codes.
+   * Returns the content translation redirect manager.
    *
-   * @return \Drupal\Core\StringTranslation\TranslatableMarkup[]
-   *   Redirect status codes.
+   * @return \Drupal\content_translation_redirect\ContentTranslationRedirectManagerInterface
+   *   The content translation redirect manager.
    */
-  public static function getStatusCodes(): array {
-    return [
-      300 => t('300 Multiple Choices'),
-      301 => t('301 Moved Permanently'),
-      302 => t('302 Found'),
-      303 => t('303 See Other'),
-      304 => t('304 Not Modified'),
-      305 => t('305 Use Proxy'),
-      307 => t('307 Temporary Redirect'),
-    ];
-  }
-
-  /**
-   * Returns translation modes.
-   *
-   * @return \Drupal\Core\StringTranslation\TranslatableMarkup[]
-   *   Translation modes.
-   */
-  public static function getTranslationModes(): array {
-    return [
-      static::MODE_TRANSLATABLE => t('Translatable entities'),
-      static::MODE_UNTRANSLATABLE => t('Untranslatable entities'),
-      static::MODE_ALL => t('All entities'),
-    ];
+  protected static function manager(): ContentTranslationRedirectManagerInterface {
+    return \Drupal::service('content_translation_redirect.manager');
   }
 
 }

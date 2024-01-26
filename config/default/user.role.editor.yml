@@ -27,6 +27,7 @@ dependencies:
     - file
     - filter
     - form_mode_control
+    - help
     - media
     - media_pdf_thumbnail
     - media_revisions_ui
@@ -48,6 +49,7 @@ permissions:
   - 'access content'
   - 'access content overview'
   - 'access files overview'
+  - 'access help pages'
   - 'access toolbar'
   - 'access user profiles'
   - 'add pdf image entity entities'

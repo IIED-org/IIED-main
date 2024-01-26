@@ -297,7 +297,7 @@ class ContentEntityCloneTest extends EntityKernelTestBase {
     // Retrieve the entity properties.
     $reflection = new \ReflectionClass($entity);
     $properties = $reflection->getProperties(~\ReflectionProperty::IS_STATIC);
-    $translation_unique_properties = ['activeLangcode', 'translationInitialize', 'fieldDefinitions', 'languages', 'langcodeKey', 'defaultLangcode', 'defaultLangcodeKey', 'revisionTranslationAffectedKey', 'validated', 'validationRequired', 'entityTypeId', 'typedData', 'cacheContexts', 'cacheTags', 'cacheMaxAge', '_serviceIds', '_entityStorages', 'languageAware'];
+    $translation_unique_properties = ['activeLangcode', 'translationInitialize', 'fieldDefinitions', 'languages', 'langcodeKey', 'defaultLangcode', 'defaultLangcodeKey', 'revisionTranslationAffectedKey', 'validated', 'validationRequired', 'entityTypeId', 'typedData', 'cacheContexts', 'cacheTags', 'cacheMaxAge', '_serviceIds', '_entityStorages', 'enforceDefaultTranslation', 'languageAware'];
 
     foreach ($properties as $property) {
       // Modify each entity property on the clone and assert that the change is

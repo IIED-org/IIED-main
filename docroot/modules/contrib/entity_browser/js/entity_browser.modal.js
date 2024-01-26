@@ -4,7 +4,7 @@
  * Defines the behavior of the entity browser's modal display.
  */
 
-(function ($, Drupal, drupalSettings) {
+(function ($, Drupal, drupalSettings, window, document) {
 
   'use strict';
 
@@ -84,6 +84,23 @@
   };
 
   /**
+   * Registers behaviours for adding throbber on modal open.
+   */
+  Drupal.behaviors.entityBrowserAddThrobber = {
+    attach: function (context) {
+      if (context === document) {
+        $(window).on({
+          'dialog:aftercreate': function (event, dialog, $element, settings) {
+            if ($element.find('iframe.entity-browser-modal-iframe').length) {
+              $element.append(Drupal.theme('ajaxProgressThrobber'));
+            }
+          }
+        });
+      }
+    }
+  };
+
+  /**
    * Recalculates size of the modal.
    */
   Drupal.entityBrowserModal.fluidDialog = function () {
@@ -126,4 +143,4 @@
     });
   };
 
-}(jQuery, Drupal, drupalSettings));
+}(jQuery, Drupal, drupalSettings, window, document));

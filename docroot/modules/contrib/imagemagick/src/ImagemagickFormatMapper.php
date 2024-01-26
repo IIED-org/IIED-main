@@ -19,50 +19,23 @@ class ImagemagickFormatMapper implements ImagemagickFormatMapperInterface {
   use StringTranslationTrait;
 
   /**
-   * The cache service.
-   *
-   * @var \Drupal\Core\Cache\CacheBackendInterface
-   */
-  protected $cache;
-
-  /**
-   * The config factory service.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
-   * The typed config service.
-   *
-   * @var \Drupal\Core\Config\TypedConfigManagerInterface
-   */
-  protected $typedConfig;
-
-  /**
-   * The MIME map manager service.
-   *
-   * @var \Drupal\sophron\MimeMapManagerInterface
-   */
-  protected $mimeMapManager;
-
-  /**
    * Constructs an ImagemagickFormatMapper object.
    *
-   * @param \Drupal\Core\Cache\CacheBackendInterface $cache_service
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   The cache service.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The config factory.
-   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typed_config
+   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typedConfig
    *   The typed config service.
-   * @param \Drupal\sophron\MimeMapManagerInterface $mime_map_manager
+   * @param \Drupal\sophron\MimeMapManagerInterface $mimeMapManager
    *   The MIME map manager service.
    */
-  public function __construct(CacheBackendInterface $cache_service, ConfigFactoryInterface $config_factory, TypedConfigManagerInterface $typed_config, MimeMapManagerInterface $mime_map_manager) {
-    $this->cache = $cache_service;
-    $this->configFactory = $config_factory;
-    $this->typedConfig = $typed_config;
-    $this->mimeMapManager = $mime_map_manager;
+  public function __construct(
+    protected readonly CacheBackendInterface $cache,
+    protected readonly ConfigFactoryInterface $configFactory,
+    protected readonly TypedConfigManagerInterface $typedConfig,
+    protected readonly MimeMapManagerInterface $mimeMapManager,
+  ) {
   }
 
   /**
@@ -79,7 +52,7 @@ class ImagemagickFormatMapper implements ImagemagickFormatMapperInterface {
     $schema_errors = $this->checkConfigSchema($this->typedConfig, 'imagemagick.settings', $data);
     if ($schema_errors !== TRUE) {
       foreach ($schema_errors as $key => $value) {
-        list(, $path) = explode(':', $key);
+        [, $path] = explode(':', $key);
         $components = explode('.', $path);
         if ($components[0] === 'image_formats') {
           if (isset($components[2])) {
@@ -144,7 +117,7 @@ class ImagemagickFormatMapper implements ImagemagickFormatMapperInterface {
   public function getFormatFromExtension(string $extension) {
     $extension = mb_strtolower($extension);
     $enabled_extensions = $this->resolveEnabledExtensions();
-    return $extension ? (isset($enabled_extensions[$extension]) ? $enabled_extensions[$extension] : NULL) : NULL;
+    return $extension ? ($enabled_extensions[$extension] ?? NULL) : NULL;
   }
 
   /**

@@ -7,7 +7,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
- * Class ComputedFieldHelpers.
+ * The ComputedFieldHelpers class.
  */
 class ComputedFieldHelpers {
 

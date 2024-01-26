@@ -23,9 +23,6 @@ imagemagick.settings:
     debug:
       type: boolean
       label: 'Display debugging information'
-    locale:
-      type: string
-      label: 'Locale for escaping shell commands'
     image_formats:
       type: sequence
       sequence:

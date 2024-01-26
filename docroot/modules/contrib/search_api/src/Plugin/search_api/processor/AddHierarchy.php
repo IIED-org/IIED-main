@@ -339,7 +339,7 @@ class AddHierarchy extends ProcessorPluginBase implements PluginFormInterface {
             $parents = array_merge($parents, $values);
           }
         }
-        catch (\InvalidArgumentException $e) {
+        catch (\InvalidArgumentException) {
           // Might happen, for example, if the property only exists on a certain
           // bundle, and this entity has the wrong one.
         }

@@ -14,7 +14,7 @@ use Drupal\message_subscribe\Subscribers\DeliveryCandidateInterface;
  */
 function message_subscribe_test_message_subscribe_get_subscribers(MessageInterface $message, $subscribe_options = [], $context = []) {
   // Set state variable.
-  \Drupal::state('message_subscribe_test')->set('hook_called', TRUE);
+  \Drupal::state()->set('message_subscribe_test.hook_called', TRUE);
 
   // Add user 4.
   return [
@@ -27,9 +27,9 @@ function message_subscribe_test_message_subscribe_get_subscribers(MessageInterfa
  */
 function message_subscribe_test_message_subscribe_get_subscribers_alter(array &$uids, array $values) {
   // Set state variable.
-  \Drupal::state('message_subscribe_test')->set('alter_hook_called', TRUE);
+  \Drupal::state()->set('message_subscribe_test.alter_hook_called', TRUE);
 
-  if (!\Drupal::state('message_subscribe_test')->get('disable_subscribers_alter', FALSE)) {
+  if (!\Drupal::state()->get('message_subscribe_test.disable_subscribers_alter', FALSE)) {
     $uids[10001] = new DeliveryCandidate(['bar_flag'], ['email'], 10001);
 
     // Remove user 2.
@@ -41,6 +41,6 @@ function message_subscribe_test_message_subscribe_get_subscribers_alter(array &$
  * Implements hook_message_subscribe_message_alter().
  */
 function message_subscribe_test_message_subscribe_message_alter(MessageInterface $message, DeliveryCandidateInterface $delivery_candidate) {
-  $calls = \Drupal::state('message_subscribe_test')->get('message_alter_hook_called', 0);
-  \Drupal::state('message_subscribe_test')->set('message_alter_hook_called', $calls + 1);
+  $calls = \Drupal::state()->get('message_subscribe_test.message_alter_hook_called', 0);
+  \Drupal::state()->set('message_subscribe_test.message_alter_hook_called', $calls + 1);
 }

@@ -14,12 +14,13 @@ namespace Drupal\computed_field\Plugin\Field\FieldWidget;
  *   }
  * )
  */
-
 class ComputedStringWidget extends ComputedWidgetBase {
+
   /**
    * Define how the widget is constructed.
    */
   public function getDefaultValue() {
     return '';
   }
+
 }

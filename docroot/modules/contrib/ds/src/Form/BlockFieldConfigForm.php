@@ -7,7 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Extension\ModuleHandler;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\Context\ContextRepositoryInterface;
 use Drupal\Core\Plugin\ContextAwarePluginAssignmentTrait;
 use Drupal\Core\Plugin\ContextAwarePluginInterface;
@@ -30,7 +30,7 @@ class BlockFieldConfigForm extends FieldFormBase implements ContainerInjectionIn
   /**
    * {@inheritdoc}
    */
-  public function __construct(ConfigFactory $config_factory, EntityTypeManagerInterface $entity_type_manager, CacheTagsInvalidatorInterface $cache_invalidator, ModuleHandler $module_handler, ContextRepositoryInterface $context_repository) {
+  public function __construct(ConfigFactory $config_factory, EntityTypeManagerInterface $entity_type_manager, CacheTagsInvalidatorInterface $cache_invalidator, ModuleHandlerInterface $module_handler, ContextRepositoryInterface $context_repository) {
     parent::__construct($config_factory, $entity_type_manager, $cache_invalidator, $module_handler);
     $this->contextRepository = $context_repository;
   }

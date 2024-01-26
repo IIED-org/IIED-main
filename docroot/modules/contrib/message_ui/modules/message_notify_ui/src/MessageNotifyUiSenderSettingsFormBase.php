@@ -4,12 +4,14 @@ namespace Drupal\message_notify_ui;
 
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\message\Entity\Message;
 
 /**
  * Base class for Message notify ui sender settings form plugins.
  */
 abstract class MessageNotifyUiSenderSettingsFormBase extends PluginBase implements MessageNotifyUiSenderSettingsFormInterface {
+  use StringTranslationTrait;
 
   /**
    * The form settings.

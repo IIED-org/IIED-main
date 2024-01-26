@@ -5,7 +5,7 @@ namespace Drupal\charts\Annotation;
 use Drupal\Component\Annotation\Plugin;
 
 /**
- * Defines an Chart annotation object.
+ * Defines a Chart annotation object.
  *
  * @Annotation
  */
@@ -24,5 +24,12 @@ class Chart extends Plugin {
    * @var string
    */
   public $name;
+
+  /**
+   * An array of chart types the chart library supports.
+   *
+   * @var array
+   */
+  public $types = [];
 
 }

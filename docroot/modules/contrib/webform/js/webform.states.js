@@ -228,7 +228,7 @@
       // Fix #required for fieldsets.
       // @see Issue #2977569: Hidden fieldsets that become visible with conditional logic cannot be made required.
       if ($target.is('.js-webform-type-radios, .js-webform-type-checkboxes, fieldset')) {
-        $target.find('legend span.fieldset-legend:not(.visually-hidden)').toggleClass('js-form-required form-required', e.value);
+        $target.find('legend span.fieldset-legend:not(.visually-hidden),legend span.fieldset__label:not(.visually-hidden)').toggleClass('js-form-required form-required', e.value);
       }
 
       // Issue #2986017: Fieldsets shouldn't have required attribute.

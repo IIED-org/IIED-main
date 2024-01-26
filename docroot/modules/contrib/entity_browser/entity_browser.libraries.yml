@@ -1,30 +1,27 @@
 common:
-  version: VERSION
   js:
     js/entity_browser.common.js: {}
   dependencies:
     - core/drupal.dialog.ajax
+    - core/drupal
+    - core/jquery
 
 pager:
-  version: VERSION
   css:
     theme:
       css/entity_browser.pager.css: {}
 
 entity_browser:
-  version: VERSION
   css:
     theme:
       css/entity_browser.entity_browser.css: {}
 
 entity_list:
-  version: VERSION
   css:
     component:
       css/entity_browser.entity_list.css: {}
 
 iframe:
-  version: VERSION
   css:
     theme:
       css/entity_browser.iframe.css: {}
@@ -33,33 +30,32 @@ iframe:
   dependencies:
     - core/drupalSettings
     - core/once
+    - core/drupal
+    - core/jquery
     - entity_browser/common
 
 iframe_selection:
-  version: VERSION
   js:
     js/entity_browser.iframe_selection.js: {}
   dependencies:
     - core/drupalSettings
-    - core/jquery
 
 entity_reference:
-  version: VERSION
   js:
     js/entity_browser.entity_reference.js: {}
   dependencies:
     - entity_browser/common
     - entity_browser/entity_list
     - core/sortable
+    - core/drupal
+    - core/jquery
 
 file_browser:
-  version: VERSION
   css:
     component:
       css/entity_browser.file_browser.css: {}
 
 modal:
-  version: VERSION
   css:
     component:
       css/entity_browser.modal.css: {}
@@ -67,10 +63,11 @@ modal:
     js/entity_browser.modal.js: {}
   dependencies:
     - core/drupalSettings
+    - core/drupal
     - core/once
+    - core/jquery
 
 modal_selection:
-  version: VERSION
   css:
     component:
       css/entity_browser.modal_selection.css: {}
@@ -80,29 +77,33 @@ modal_selection:
     - core/drupalSettings
 
 tabs:
-  version: VERSION
   css:
     component:
       css/entity_browser.tabs.css: {}
   js:
     js/entity_browser.tabs.js: {}
   dependencies:
+    - core/drupal
     - core/drupalSettings
     - core/once
+    - core/jquery
 
 view:
-  version: VERSION
   js:
     js/entity_browser.view.js: {}
   dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
     - core/once
 
 multi_step_display:
-  version: VERSION
   js:
     js/entity_browser.command_queue.js: {}
     js/entity_browser.multi_step_display.js: {}
   dependencies:
     - entity_browser/entity_list
     - core/sortable
+    - core/drupal
     - core/once
+    - core/jquery

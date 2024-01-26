@@ -47,4 +47,23 @@ interface ChartInterface extends PluginInspectionInterface, PluginFormInterface,
    */
   public function getChartName();
 
+  /**
+   * Gets the supported chart types.
+   *
+   * @return array
+   *   The supported chart types.
+   */
+  public function getSupportedChartTypes();
+
+  /**
+   * Checks if a chart type is supported.
+   *
+   * @param string $chart_type_id
+   *   The chart type ID.
+   *
+   * @return bool
+   *   TRUE if the chart type is supported, FALSE otherwise.
+   */
+  public function isSupportedChartType(string $chart_type_id);
+
 }

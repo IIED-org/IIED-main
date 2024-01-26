@@ -20,7 +20,7 @@
 
   @include mq(medium) {
     --gin-toolbar-height: 0px; // Needs px to work in calc() functions.
-    --gin-toolbar-secondary-height: 60px;
+    --gin-toolbar-secondary-height: 52px;
     --gin-toolbar-x-offset: var(--drupal-displace-offset-left, 64px);
     --gin-scroll-offset: 130px;
     --gin-sticky-offset: var(--gin-height-sticky);
@@ -38,6 +38,10 @@ body.gin--navigation {
     padding-top: var(--gin-toolbar-y-offset) !important;
     padding-left: var(--gin-toolbar-x-offset, 39px) !important;
   }
+}
+
+.gin--navigation .gin-secondary-toolbar:not(.gin-secondary-toolbar--frontend) {
+  margin-bottom: var(--gin-spacing-xxs);
 }
 
 .gin--navigation .gin-secondary-toolbar--frontend {
@@ -60,10 +64,11 @@ body.gin--navigation {
 
   .admin-toolbar {
     top: 0;
-    border-right: 1px solid var(--gin-border-color-layer);
     overflow-y: initial;
     padding-inline: 0;
     padding-block-start: 0;
+    border-right: 0;
+    box-shadow: 1px 0 0 var(--gin-border-color-layer);
 
     // Hide on smaller screens for now as this is not ready yet.
     @include mq($to: medium) {
@@ -105,10 +110,20 @@ body.gin--navigation {
     margin-bottom: -4px;
   }
 
+  // Content block
+  .toolbar-block__content.toolbar-block__content--content {
+    margin-block-start: var(--space-s);
+  }
+
   // Navigation link
   .toolbar-link {
     color: var(--gin-color-text);
     font-weight: normal;
+  }
+
+  // Toolbar menu
+  .toolbar-menu {
+    margin-inline: 0;
   }
 
   // Focus
@@ -118,7 +133,7 @@ body.gin--navigation {
   }
 
   .navigation-menu-wrapper.menu--logo {
-    margin-bottom: 1.75rem;
+    margin-bottom: -5px;
   }
 
   .menu-item.current > .toolbar-link {
@@ -177,7 +192,9 @@ body.gin--navigation {
   .toolbar-menu__item--level-1 > .toolbar-link--manage-fields,
   .toolbar-menu__item--level-1 > .toolbar-link--manage-form-display,
   .toolbar-menu__item--level-1 > .toolbar-link--manage-display,
-  .toolbar-menu__item--level-1 > .toolbar-link--delete {
+  .toolbar-menu__item--level-1 > .toolbar-link--manage-permissions,
+  .toolbar-menu__item--level-1 > .toolbar-link--delete,
+  .toolbar-menu__item--level-1 > .toolbar-link[class*="toolbar-link--admin-toolbar-tools-extra-linksentity"] {
     display: none;
   }
 
@@ -244,6 +261,52 @@ html:not(.admin-toolbar-expanded) .gin--navigation .toolbar-menu__item--level-1.
 }
 
 // --------------
+// Text overflow
+// --------------
+.toolbar-menu .toolbar-link--has-icon {
+  &,
+  .toolbar-link__label {
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  &::before,
+  &::after {
+    flex-shrink: 0;
+  }
+}
+
+// --------------
+// Sidebar toggle
+// --------------
+button.toolbar-link--sidebar-toggle {
+  background: var(--gin-bg-layer2);
+
+  &::before {
+    opacity: .75;
+    position: relative;
+    mask-size: var(--space-s) var(--space-s);
+    transition: transform var(--gin-transition);
+  }
+
+  &:hover::before,
+  &:active::before,
+  &:focus::before {
+    opacity: 1;
+  }
+
+  &[aria-expanded=false]::before {
+    left: 1px;
+    transform: rotate(-90deg);
+  }
+
+  &[aria-expanded=true]::before {
+    left: -1px;
+    transform: rotate(90deg);
+  }
+}
+
+// --------------
 // Icon overrides
 // --------------
 
@@ -267,9 +330,11 @@ html:not(.admin-toolbar-expanded) .gin--navigation .toolbar-menu__item--level-1.
 .toolbar-link--gin-home {
   color: var(--gin-bg-layer2);
   box-sizing: border-box;
-  max-width: 30px;
-  padding: 5px !important; // make the logo 32px
-  margin: 8px 8px 4px !important;
+  width: 40px;
+  height: 40px;
+  max-width: 40px;
+  padding: 10px !important; // make the logo 32px
+  margin: 6px 4px 0 !important;
 
   &, &:hover, &:focus {
     background: var(--gin-color-primary) !important;
@@ -294,11 +359,11 @@ html:not(.admin-toolbar-expanded) .gin--navigation .toolbar-menu__item--level-1.
   }
 }
 
-.toolbar-link--tools::before {
+.toolbar-link--admin-toolbar-tools-help::before {
   --icon: #{icon('tool')};
 }
 
-.toolbar-link--appearance::before {
+.toolbar-link--system-themes-page::before {
   --icon: #{icon('appearance')};
 }
 
@@ -310,7 +375,7 @@ html:not(.admin-toolbar-expanded) .gin--navigation .toolbar-menu__item--level-1.
   --icon: #{icon('bookmarks')};
 }
 
-.toolbar-link--configuration::before {
+.toolbar-link--system-admin-config::before {
   --icon: #{icon('config')};
 }
 
@@ -322,7 +387,7 @@ html:not(.admin-toolbar-expanded) .gin--navigation .toolbar-menu__item--level-1.
   --icon: #{icon('create')};
 }
 
-.toolbar-link--extend::before {
+.toolbar-link--system-modules-list::before {
   --icon: #{icon('extend-new')};
 }
 
@@ -338,24 +403,21 @@ html:not(.admin-toolbar-expanded) .gin--navigation .toolbar-menu__item--level-1.
   --icon: #{icon('media')};
 }
 
-.toolbar-link--people::before {
+.toolbar-link--entity-user-collection::before {
   --icon: #{icon('people-new')};
 }
 
-.toolbar-link--reports::before {
+.toolbar-link--system-admin-reports::before {
   --icon: #{icon('reports')};
 }
 
-.toolbar-link--structure::before {
+.toolbar-link--system-admin-structure::before {
   --icon: #{icon('structure')};
 }
 
+.toolbar-link--sidebar-toggle[aria-expanded=false]::before,
 .toolbar-link--sidebar-toggle[aria-expanded=true]::before {
-  --icon: #{icon('toggle-collapse')};
-}
-
-.toolbar-link--sidebar-toggle[aria-expanded=false]::before {
-  --icon: #{icon('toggle-expand')};
+  --icon: #{icon('chevron-down')};
 }
 
 .toolbar-link--user::before {
@@ -389,14 +451,6 @@ html:not(.admin-toolbar-expanded) .gin--navigation .toolbar-menu__item--level-1.
 // of secondary one
 .gin--navigation .toolbar-link--user {
   display: none !important;
-}
-
-// -----------
-// Sticky menu
-// -----------
-.admin-toolbar__sticky-section .toolbar-menu {
-  display: flex;
-  flex-direction: column;
 }
 
 // -----------------------

@@ -6,5 +6,6 @@ dependencies:
     - taxonomy
 id: taxonomy_term.name_only
 label: 'Name only'
+description: ''
 targetEntityType: taxonomy_term
 cache: true

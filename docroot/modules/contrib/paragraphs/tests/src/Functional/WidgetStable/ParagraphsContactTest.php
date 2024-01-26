@@ -33,7 +33,7 @@ class ParagraphsContactTest extends ParagraphsTestBase {
     $this->addParagraphsType('text');
 
     // Create a contact form.
-    $contact_form = ContactForm::create(['id' => 'test_contact_form']);
+    $contact_form = ContactForm::create(['id' => 'test_contact_form', 'label' => 'Test form']);
     $contact_form->save();
     // Add a paragraphs field to the contact form.
     $this->addParagraphsField($contact_form->id(), 'paragraphs', 'contact_message');

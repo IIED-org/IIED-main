@@ -71,6 +71,12 @@ charts.settings.library_plugin.highcharts:
             main_breadcrumb:
               type: label
               label: 'Main breadcrumb'
+            thousands_sep:
+              type: label
+              label: 'Number formatting: Thousand separator'
+            decimal_point:
+              type: label
+              label: 'Number formatting: Decimal point'
             no_data:
               type: label
               label: 'No data'
@@ -89,6 +95,15 @@ charts.settings.library_plugin.highcharts:
             view_fullscreen:
               type: label
               label: 'View fullscreen'
+            context_button_title:
+              type: label
+              label: 'Context button title'
+            drill_up_text:
+              type: label
+              label: 'Drill up text'
+            invalid_date:
+              type: label
+              label: 'Invalid date'
             months:
               type: sequence
               label: Months
@@ -113,3 +128,22 @@ charts.settings.library_plugin.highcharts:
               sequence:
                 type: label
                 label: 'Short Weekday'
+            export_data:
+              type: mapping
+              label: 'Export data'
+              mapping:
+                annotation_header:
+                  type: label
+                  label: 'The annotation column title'
+                category_datetime_header:
+                  type: label
+                  label: 'The category column title when axis type set to "datetime"'
+                category_header:
+                  type: label
+                  label: 'The category column title'
+            numeric_symbols:
+              type: sequence
+              label: 'Numeric symbols'
+              sequence:
+                type: label
+                label: 'Numeric symbol'

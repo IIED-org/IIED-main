@@ -6,5 +6,6 @@ dependencies:
     - taxonomy
 id: taxonomy_term.dashboard_add_author
 label: 'Dashboard add author'
+description: ''
 targetEntityType: taxonomy_term
 cache: true

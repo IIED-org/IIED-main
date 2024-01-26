@@ -55,8 +55,7 @@
     $element = $element.clone(true);
 
     var dialog = Drupal.dialog($element, {
-      // Turn off autoResize from dialog.position so draggable is not disabled.
-      autoResize: false,
+      autoResize: true,
       resizable: false,
       title: title,
       width: 'auto',

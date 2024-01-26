@@ -3,8 +3,8 @@
 namespace Drupal\Tests\message_subscribe_ui\Functional;
 
 use Drupal\entity_test\FieldStorageDefinition;
-use Drupal\Tests\field\Traits\EntityReferenceTestTrait;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\Tests\field\Traits\EntityReferenceTestTrait;
 use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
 
 /**
@@ -96,7 +96,7 @@ class SubscriptionsBlockTest extends BrowserTestBase {
         ],
       ];
       $this->createEntityReferenceField('node', 'article', 'field_terms_' . $i, NULL, 'taxonomy_term', 'default', $handler_settings, FieldStorageDefinition::CARDINALITY_UNLIMITED);
-      foreach (range(1, 5) as $j) {
+      for ($j = 0; $j < 5; $j += 1) {
         $this->terms[] = $this->createTerm($vocab);
       }
     }
@@ -115,7 +115,7 @@ class SubscriptionsBlockTest extends BrowserTestBase {
     ]);
 
     // Place the subscription block.
-    $this->placeBlock('message_subscribe_ui_block', ['label' => t('Manage subscriptions')]);
+    $this->placeBlock('message_subscribe_ui_block', ['label' => 'Manage subscriptions']);
     $this->flagService = $this->container->get('flag');
   }
 
@@ -127,24 +127,24 @@ class SubscriptionsBlockTest extends BrowserTestBase {
 
     // Check that the block is empty when viewing another user.
     $this->drupalGet($this->adminUser->toUrl());
-    $this->assertSession()->pageTextNotContains(t('Manage subscriptions'));
-    $this->assertSession()->pageTextNotContains(t('Subscribe to @label', ['@label' => $this->adminUser->getDisplayName()]));
+    $this->assertSession()->pageTextNotContains('Manage subscriptions');
+    $this->assertSession()->pageTextNotContains('Subscribe to ' . $this->adminUser->getDisplayName());
 
     $this->drupalGet($this->node->toUrl());
-    $this->assertSession()->pageTextContains(t('Manage subscriptions'));
+    $this->assertSession()->pageTextContains('Manage subscriptions');
     foreach ([1, 3, 7, 9] as $i) {
-      $this->assertSession()->pageTextContains(t('Subscribe to @title', ['@title' => $this->terms[$i]->label()]));
+      $this->assertSession()->pageTextContains('Subscribe to ' . $this->terms[$i]->label());
     }
     // The subscription to the node itself should be available.
-    $this->assertSession()->pageTextContains(t('Subscribe to @title', ['@title' => $this->node->label()]));
-    $this->assertSession()->pageTextNotContains(t('Subscribe to @label', ['@label' => $this->adminUser->getDisplayName()]));
+    $this->assertSession()->pageTextContains('Subscribe to ' . $this->node->label());
+    $this->assertSession()->pageTextNotContains('Subscribe to ' . $this->adminUser->getDisplayName());
 
     // Subscribe to 1 and 7.
     $edit = [
       'subscriptions[taxonomy_term][' . $this->terms[1]->id() . ']' => TRUE,
       'subscriptions[taxonomy_term][' . $this->terms[7]->id() . ']' => TRUE,
     ];
-    $this->submitForm($edit, t('Save'));
+    $this->submitForm($edit, 'Save');
     $flag = $this->flagService->getFlagById('subscribe_term');
     foreach ([1, 3, 7, 9] as $i) {
       $term = $this->terms[$i];
@@ -152,13 +152,13 @@ class SubscriptionsBlockTest extends BrowserTestBase {
         $this->assertNotEmpty($this->flagService->getEntityFlaggings($flag, $term, $this->webUser));
 
         // Subscriptions should be checked.
-        $this->assertSession()->checkboxChecked(t('Subscribe to @label', ['@label' => $term->label()]));
+        $this->assertSession()->checkboxChecked('Subscribe to ' . $term->label());
       }
       else {
         $this->assertEmpty($this->flagService->getEntityFlaggings($flag, $term, $this->webUser));
 
         // Subscriptions should not be unchecked.
-        $this->assertSession()->checkboxNotChecked(t('Subscribe to @label', ['@label' => $term->label()]));
+        $this->assertSession()->checkboxNotChecked('Subscribe to ' . $term->label());
       }
     }
 
@@ -170,19 +170,19 @@ class SubscriptionsBlockTest extends BrowserTestBase {
     $role->save();
 
     $this->drupalGet($this->node->toUrl());
-    $this->assertSession()->pageTextContains(t('Subscribe to @label', ['@label' => $this->adminUser->getDisplayName()]));
+    $this->assertSession()->pageTextContains('Subscribe to ' . $this->adminUser->getDisplayName());
 
     $this->drupalGet($this->adminUser->toUrl());
-    $this->assertSession()->pageTextContains(t('Subscribe to @label', ['@label' => $this->adminUser->getDisplayName()]));
+    $this->assertSession()->pageTextContains('Subscribe to ' . $this->adminUser->getDisplayName());
 
     $edit = [
       'subscriptions[user][' . $this->adminUser->id() . ']' => TRUE,
     ];
-    $this->submitForm($edit, t('Save'));
+    $this->submitForm($edit, 'Save');
     $flag = $this->flagService->getFlagById('subscribe_user');
     $this->assertNotEmpty($this->flagService->getEntityFlaggings($flag, $this->adminUser, $this->webUser));
     // Subscriptions should be checked.
-    $this->assertSession()->checkboxChecked(t('Subscribe to @label', ['@label' => $this->adminUser->getDisplayName()]));
+    $this->assertSession()->checkboxChecked('Subscribe to ' . $this->adminUser->getDisplayName());
 
     // Remove node and taxonomy flagging, and recheck the node page.
     $role->revokePermission('flag subscribe_term');
@@ -193,11 +193,11 @@ class SubscriptionsBlockTest extends BrowserTestBase {
     $this->drupalGet($this->node->toUrl());
 
     foreach ([1, 3, 7, 9] as $i) {
-      $this->assertSession()->pageTextNotContains(t('Subscribe to @title', ['@title' => $this->terms[$i]->label()]));
+      $this->assertSession()->pageTextNotContains('Subscribe to ' . $this->terms[$i]->label());
     }
     // The subscription to the node itself should not be available.
-    $this->assertSession()->pageTextNotContains(t('Subscribe to @title', ['@title' => $this->node->label()]));
-    $this->assertSession()->pageTextContains(t('Subscribe to @label', ['@label' => $this->adminUser->getDisplayName()]));
+    $this->assertSession()->pageTextNotContains('Subscribe to ' . $this->node->label());
+    $this->assertSession()->pageTextContains('Subscribe to ' . $this->adminUser->getDisplayName());
   }
 
 }

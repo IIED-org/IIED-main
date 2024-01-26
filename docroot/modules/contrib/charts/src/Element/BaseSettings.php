@@ -116,17 +116,31 @@ class BaseSettings extends FormElement {
     $required = !empty($element['#required']) ? $element['#required'] : FALSE;
     $options = $value;
 
-    $library_options = [];
-    if ($used_in !== 'config_form') {
-      $library_options['site_default'] = new TranslatableMarkup('Site Default');
+    $library_options = self::getLibraries();
+    if ($used_in !== 'config_form' && $library_options) {
+      $library_options = [
+        'site_default' => new TranslatableMarkup('Site Default'),
+      ] + $library_options;
     }
-    $library_options += self::getLibraries();
+    if (!$library_options) {
+      $element['no_chart_plugin_error'] = [
+        '#type' => 'container',
+        '#attributes' => [
+          'class' => ['messages', 'messages--error'],
+        ],
+        'content' => [
+          '#markup' => new TranslatableMarkup('<p>Please <a href="/admin/modules">install</a> at least one module that implements a chart library plugin.</p>'),
+        ],
+      ];
+      return $element;
+    }
 
     if (!empty($element['#library']) && isset($library_options[$element['#library']])) {
       $element['library'] = [
         '#type' => 'value',
         '#value' => $element['#library'],
       ];
+      $selected_library = $element['#library'];
     }
     else {
       $element['library'] = [
@@ -142,13 +156,22 @@ class BaseSettings extends FormElement {
           'wrapper' => $wrapper_id,
         ],
       ];
+      $selected_library = $options['library'] ?: array_key_first($library_options);
     }
 
+    // Making sure that the selected chart type is part of chart type options
+    // associated with the library.
+    $chart_type_options = self::getChartTypes($selected_library);
+    $selected_chart_type = $options['type'] ?? '';
+    if (!isset($chart_type_options[$selected_chart_type])) {
+      $selected_chart_type = NULL;
+    }
     $element['type'] = [
       '#title' => new TranslatableMarkup('Chart type'),
       '#type' => 'radios',
-      '#default_value' => $options['type'],
-      '#options' => self::getChartTypes(),
+      '#default_value' => $selected_chart_type,
+      '#options' => $chart_type_options,
+      '#access' => !empty($chart_type_options),
       '#required' => $required,
       '#attributes' => [
         'class' => [
@@ -157,6 +180,18 @@ class BaseSettings extends FormElement {
         ],
       ],
     ];
+
+    if (!$chart_type_options) {
+      $error_message = $selected_library !== 'site_default' ?
+        new TranslatableMarkup('<p>The selected chart library does not have valid chart type options. Please select another charting library or install a module that have chart type options.</p>') :
+        new TranslatableMarkup('<p>The site default charting library has not been set yet, or it does not support chart type options. Please ensure that you have correctly <a href="/admin/config/content/charts">configured the chart module</a>.</p>');
+      $element['no_chart_type_plugin_error'] = [
+        '#type' => 'container',
+        '#attributes' => ['class' => ['messages', 'messages--error']],
+        'content' => ['#markup' => $error_message],
+      ];
+      return $element;
+    }
 
     if (!empty($element['#series'])) {
       $element = self::processSeriesForm($element, $options, $form_state);
@@ -497,8 +532,8 @@ class BaseSettings extends FormElement {
       ],
     ];
 
-    if ($used_in === 'config_form' && !empty($options['library'])) {
-      $element = self::buildLibraryConfigurationForm($element, $form_state, $options['library']);
+    if ($used_in === 'config_form' && $selected_library) {
+      $element = self::buildLibraryConfigurationForm($element, $form_state, $selected_library);
     }
 
     return $element;
@@ -584,20 +619,49 @@ class BaseSettings extends FormElement {
   }
 
   /**
-   * The types of chart.
+   * Gets chart types by chart library.
+   *
+   * @param string $library_plugin_id
+   *   The library.
    *
    * @return array
    *   The type options.
    */
-  public static function getChartTypes() {
-    $plugin_manager = \Drupal::service('plugin.manager.charts_type');
-    $plugin_definitions = $plugin_manager->getDefinitions();
+  public static function getChartTypes(string $library_plugin_id = ''): array {
+    if ($library_plugin_id === 'site_default') {
+      $library_plugin_id = static::getConfiguredSiteDefaultLibraryId();
+    }
+    if (!$library_plugin_id) {
+      \Drupal::logger('charts')->error('Update your custom code to pass the library in getChartTypes() or install a module that implement a charting library plugin.');
+      return [];
+    }
+
+    $chart_type_plugin_manager = \Drupal::service('plugin.manager.charts_type');
+    $chart_plugin_manager = \Drupal::service('plugin.manager.charts');
+
+    /** @var \Drupal\charts\Plugin\chart\Library\ChartInterface $chart_plugin */
+    $chart_plugin = $chart_plugin_manager->createInstance($library_plugin_id, []);
+    $chart_type_plugin_definitions = $chart_type_plugin_manager->getDefinitions();
     $types_options = [];
 
-    foreach ($plugin_definitions as $plugin_definition) {
-      $types_options[$plugin_definition['id']] = $plugin_definition['label'];
+    foreach ($chart_type_plugin_definitions as $plugin_definition) {
+      $chart_type_id = $plugin_definition['id'];
+      if ($chart_plugin->isSupportedChartType($chart_type_id)) {
+        $types_options[$chart_type_id] = $plugin_definition['label'];
+      }
     }
     return $types_options;
+  }
+
+  /**
+   * Gets the configured site default library chart plugin id.
+   *
+   * @return string
+   *   The plugin id or an empty string if nothing has been configured.
+   */
+  public static function getConfiguredSiteDefaultLibraryId(): string {
+    $chart_config = \Drupal::config('charts.settings');
+    return $chart_config->get('charts_default_settings.library') ?? '';
   }
 
   /**
@@ -1375,7 +1439,7 @@ class BaseSettings extends FormElement {
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
-  private static function buildLibraryConfigurationForm(array $element, FormStateInterface $form_state, $library) {
+  private static function buildLibraryConfigurationForm(array $element, FormStateInterface $form_state, string $library) {
     $plugin_configuration = $element['#value']['library_config'] ?? [];
     // Using plugins to get the available installed libraries.
     /** @var \Drupal\charts\ChartManager $plugin_manager */

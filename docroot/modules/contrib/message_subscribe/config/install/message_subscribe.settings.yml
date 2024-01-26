@@ -4,3 +4,4 @@ flag_prefix: subscribe
 debug_mode: false
 default_notifiers:
   - email
+range: 100

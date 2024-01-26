@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @QueueWorker(
  *   id = "message_subscribe",
- *   title = @Translation("Process bounced emails"),
+ *   title = @Translation("Process messages"),
  *   cron = {"time" = 60}
  * )
  */
@@ -30,7 +30,7 @@ class MessageSubscribe extends QueueWorkerBase implements ContainerFactoryPlugin
    *
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, SubscribersInterface $subscribers) {
+  final public function __construct(array $configuration, $plugin_id, $plugin_definition, SubscribersInterface $subscribers) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->subscribers = $subscribers;
   }
@@ -39,7 +39,7 @@ class MessageSubscribe extends QueueWorkerBase implements ContainerFactoryPlugin
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
+    return new self(
       $configuration,
       $plugin_id,
       $plugin_definition,

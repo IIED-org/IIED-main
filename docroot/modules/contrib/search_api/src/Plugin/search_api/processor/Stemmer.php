@@ -74,7 +74,7 @@ class Stemmer extends FieldsProcessorPluginBase {
    *   otherwise.
    */
   protected static function isEnglish(string $langcode): bool {
-    return substr($langcode, 0, 2) === 'en';
+    return str_starts_with($langcode, 'en');
   }
 
   /**

@@ -8,6 +8,7 @@ use Drupal\node\NodeInterface;
  * Test content_moderation functionality with localization and translation.
  *
  * @group content_moderation
+ * @group #slow
  */
 class ModerationLocaleTest extends ModerationStateTestBase {
 
@@ -86,7 +87,7 @@ class ModerationLocaleTest extends ModerationStateTestBase {
     ];
     $this->submitForm($edit, 'Save (this translation)');
     // Here the error has occurred "The website encountered an unexpected error.
-    // Please try again later."
+    // Try again later."
     // If the translation has got lost.
     $this->assertSession()->pageTextContains('Article French node Draft has been updated.');
 

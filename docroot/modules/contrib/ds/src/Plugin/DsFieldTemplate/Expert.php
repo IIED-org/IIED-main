@@ -19,6 +19,8 @@ class Expert extends DsFieldTemplateBase {
   public function alterForm(&$form) {
     $config = $this->getConfiguration();
 
+    $use_textareaa_for_prefix_suffix = \Drupal::config('ds.settings')->get('ft_expert_prefix_suffix_textarea');
+
     // Add label.
     $form['lb'] = [
       '#type' => 'textfield',
@@ -33,7 +35,7 @@ class Expert extends DsFieldTemplateBase {
       '#title' => $this->t('Prefix'),
       '#size' => '100',
       '#description' => $this->t('You can enter any html in here.'),
-      '#default_value' => isset($config['prefix']) ? $config['prefix'] : '',
+      '#default_value' => $config['prefix'] ?? '',
       '#prefix' => '<div class="field-prefix">',
       '#suffix' => '</div>',
     ];
@@ -145,7 +147,7 @@ class Expert extends DsFieldTemplateBase {
       '#title' => $this->t('Suffix'),
       '#size' => '100',
       '#description' => $this->t('You can enter any html in here.'),
-      '#default_value' => isset($config['suffix']) ? $config['suffix'] : '',
+      '#default_value' => $config['suffix'] ?? '',
       '#prefix' => '<div class="field-suffix">',
       '#suffix' => '</div>',
     ];
@@ -168,6 +170,14 @@ class Expert extends DsFieldTemplateBase {
         '#dialog' => TRUE,
       ];
     }
+
+    if ($use_textareaa_for_prefix_suffix) {
+      foreach (['prefix', 'suffix'] as $key) {
+        $form[$key]['#type'] = 'textarea';
+        $form[$key]['#rows'] = 2;
+        unset($form['prefix']['#size']);
+      }
+    }
   }
 
   /**
@@ -176,7 +186,7 @@ class Expert extends DsFieldTemplateBase {
   public function defaultConfiguration() {
     $config = [];
     $config['lb'] = '';
-    $config['lb-col'] = \Drupal::config('ds.settings')->get('ft-show-colon');
+    $config['lb-col'] = \Drupal::config('ds.settings')->get('ft_show_colon');
 
     $wrappers = [
       'lb' => ['title' => $this->t('Label')],

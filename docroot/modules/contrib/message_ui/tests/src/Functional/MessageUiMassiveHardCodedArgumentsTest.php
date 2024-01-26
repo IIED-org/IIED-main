@@ -39,7 +39,7 @@ class MessageUiMassiveHardCodedArgumentsTest extends AbstractTestMessageUi {
     $this->configSet('update_tokens.update_tokens', TRUE);
     $this->configSet('update_tokens.how_to_update', 'update_with_item');
 
-    /* @var $message Message */
+    /** @var \Drupal\message\Entity\Message $message */
     $message = Message::create(['template' => $this->messageTemplate->id()]);
 
     $message
@@ -72,7 +72,7 @@ class MessageUiMassiveHardCodedArgumentsTest extends AbstractTestMessageUi {
 
     $this->assertTrue($original_arguments != $message->getArguments(), 'The message arguments has changed during the queue worker work.');
 
-    // Creating a new message and her hard coded arguments.
+    // Creating a new message and hard coded arguments.
     $message = Message::create(['template' => $this->messageTemplate->id()]);
     $message->setOwner($this->account)->save();
 

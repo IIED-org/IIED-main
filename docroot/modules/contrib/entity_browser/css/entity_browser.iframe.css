@@ -13,7 +13,8 @@
   border: none;
 }
 
-.entity-browser-iframe-container .ajax-progress-fullscreen {
+.entity-browser-iframe-container .ajax-progress-fullscreen,
+.entity-browser-iframe-container .ajax-progress--fullscreen {
   position: absolute;
   z-index: 500;
 }

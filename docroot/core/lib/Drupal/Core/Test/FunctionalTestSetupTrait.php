@@ -135,9 +135,12 @@ trait FunctionalTestSetupTrait {
       $yaml = new SymfonyYaml();
       $content = file_get_contents($directory . '/services.yml');
       $services = $yaml->parse($content);
+      $test_file_name = (new \ReflectionClass($this))->getFileName();
+      // @todo Decide in https://www.drupal.org/project/drupal/issues/3395099 when/how to trigger deprecation errors or even failures for contrib modules.
+      $is_core_test = str_starts_with($test_file_name, DRUPAL_ROOT . DIRECTORY_SEPARATOR . 'core');
       $services['services']['testing.config_schema_checker'] = [
         'class' => ConfigSchemaChecker::class,
-        'arguments' => ['@config.typed', $this->getConfigSchemaExclusions()],
+        'arguments' => ['@config.typed', $this->getConfigSchemaExclusions(), $is_core_test],
         'tags' => [['name' => 'event_subscriber']],
       ];
       file_put_contents($directory . '/services.yml', $yaml->dump($services));
@@ -327,6 +330,14 @@ trait FunctionalTestSetupTrait {
     // some tests expect to be able to test mail system implementations.
     $config->getEditable('system.mail')
       ->set('interface.default', 'test_mail_collector')
+      ->set('mailer_dsn', [
+        'scheme' => 'null',
+        'host' => 'null',
+        'user' => NULL,
+        'password' => NULL,
+        'port' => NULL,
+        'options' => [],
+      ])
       ->save();
 
     // By default, verbosely display all errors and disable all production
@@ -503,21 +514,24 @@ trait FunctionalTestSetupTrait {
    *   Array of parameters for use in install_drupal().
    */
   protected function installParameters() {
-    $connection_info = Database::getConnectionInfo();
-    $driver = $connection_info['default']['driver'];
-    unset($connection_info['default']['driver']);
-    unset($connection_info['default']['namespace']);
-    unset($connection_info['default']['autoload']);
-    unset($connection_info['default']['pdo']);
-    unset($connection_info['default']['init_commands']);
-    unset($connection_info['default']['isolation_level']);
+    $formInput = Database::getConnectionInfo()['default'];
+    $driverName = $formInput['driver'];
+    $driverNamespace = $formInput['namespace'];
+
+    unset($formInput['driver']);
+    unset($formInput['namespace']);
+    unset($formInput['autoload']);
+    unset($formInput['pdo']);
+    unset($formInput['init_commands']);
+    unset($formInput['isolation_level']);
     // Remove database connection info that is not used by SQLite.
-    if ($driver === 'sqlite') {
-      unset($connection_info['default']['username']);
-      unset($connection_info['default']['password']);
-      unset($connection_info['default']['host']);
-      unset($connection_info['default']['port']);
+    if ($driverName === "sqlite") {
+      unset($formInput['username']);
+      unset($formInput['password']);
+      unset($formInput['host']);
+      unset($formInput['port']);
     }
+
     $parameters = [
       'interactive' => FALSE,
       'parameters' => [
@@ -526,8 +540,8 @@ trait FunctionalTestSetupTrait {
       ],
       'forms' => [
         'install_settings_form' => [
-          'driver' => $driver,
-          $driver => $connection_info['default'],
+          'driver' => $driverNamespace,
+          $driverNamespace => $formInput,
         ],
         'install_configure_form' => [
           'site_name' => 'Drupal',
@@ -550,7 +564,6 @@ trait FunctionalTestSetupTrait {
     ];
 
     // If we only have one db driver available, we cannot set the driver.
-    include_once DRUPAL_ROOT . '/core/includes/install.inc';
     if (count($this->getDatabaseTypes()) == 1) {
       unset($parameters['forms']['install_settings_form']['driver']);
     }
@@ -620,8 +633,6 @@ trait FunctionalTestSetupTrait {
     $this->classLoader = require __DIR__ . '/../../../../../autoload.php';
     $request = Request::createFromGlobals();
     $kernel = TestRunnerKernel::createFromRequest($request, $this->classLoader);
-    // TestRunnerKernel expects the working directory to be DRUPAL_ROOT.
-    chdir(DRUPAL_ROOT);
     $kernel->boot();
     $kernel->preHandle($request);
     $this->prepareDatabasePrefix();
@@ -687,7 +698,8 @@ trait FunctionalTestSetupTrait {
   /**
    * Returns all supported database driver installer objects.
    *
-   * This wraps drupal_get_database_types() for use without a current container.
+   * This wraps DatabaseDriverList::getInstallableList() for use without a
+   * current container.
    *
    * @return \Drupal\Core\Database\Install\Tasks[]
    *   An array of available database driver installer objects.
@@ -696,7 +708,10 @@ trait FunctionalTestSetupTrait {
     if (isset($this->originalContainer) && $this->originalContainer) {
       \Drupal::setContainer($this->originalContainer);
     }
-    $database_types = drupal_get_database_types();
+    $database_types = [];
+    foreach (Database::getDriverList()->getInstallableList() as $name => $driver) {
+      $database_types[$name] = $driver->getInstallTasks();
+    }
     if (isset($this->originalContainer) && $this->originalContainer) {
       \Drupal::unsetContainer();
     }

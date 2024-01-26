@@ -88,4 +88,12 @@ interface ViewsBulkOperationsViewDataInterface {
    */
   public function getEntityDefault(ResultRow $row, $relationship_id, ViewExecutable $view): ?FieldableEntityInterface;
 
+  /**
+   * Get entity data array for this view results.
+   *
+   * @return array<string, string>
+   *   Bulk form keys and labels keyed by row index.
+   */
+  public function getViewEntityData(): array;
+
 }

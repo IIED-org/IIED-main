@@ -168,7 +168,7 @@ class NameFormatParserTest extends UnitTestCase {
           'LGg' => 'John',
           // Trims whitespace around the next token.
           'Tg' => 'John',
-          // @todo: assess the old check_plain run on code test / token.
+          // @todo assess the old check_plain run on code test / token.
           'Sg' => 'John',
           // Conditional entries.
           // Brackets.
@@ -291,7 +291,7 @@ class NameFormatParserTest extends UnitTestCase {
           'LG(t g m f s c)' => 'Mr. John Peter Doe Sr B.Sc, Phd',
           // Trims whitespace around the next token.
           'T(t g m f s c)' => 'MR. JoHn pEter dOE sR b.Sc, pHd',
-          // @todo: Assess the old check_plain run on code test / token.
+          // @todo Assess the old check_plain run on code test / token.
           'S(t g m f s c)' => 'MR. JoHn pEter dOE sR b.Sc, pHd',
           // Use the first word of the next token.
           'Bc' => 'b.Sc',

@@ -16,7 +16,7 @@ use Drupal\Core\Field\Plugin\Field\FieldFormatter\IntegerFormatter;
  * )
  */
 class ComputedIntegerFormatter extends IntegerFormatter {
-  /**
+  /*
    * Include default formatting for cache settings.
    * Implements:
    *    defaultSettings()
@@ -25,7 +25,7 @@ class ComputedIntegerFormatter extends IntegerFormatter {
    */
   use ComputedCacheFormatterTrait;
 
-  /**
+  /*
    * Include formatting for numeric fields.
    * Implements:
    *    viewElements(...)

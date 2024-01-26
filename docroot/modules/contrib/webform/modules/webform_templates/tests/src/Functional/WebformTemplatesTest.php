@@ -59,6 +59,16 @@ class WebformTemplatesTest extends WebformBrowserTestBase {
     $assert_session->responseContains('Test: Webform: Template');
     $assert_session->responseContains('Test using a webform as a template.');
 
+    // Check template filtering by key and category.
+    $this->drupalGet('/admin/structure/webform/templates', ['query' => ['category' => 'Not a category']]);
+    $assert_session->responseNotContains('Test: Webform: Template');
+    $this->drupalGet('/admin/structure/webform/templates', ['query' => ['category' => 'Test: Webform']]);
+    $assert_session->responseContains('Test: Webform: Template');
+    $this->drupalGet('/admin/structure/webform/templates', ['query' => ['search' => 'Not a search']]);
+    $assert_session->responseNotContains('Test: Webform: Template');
+    $this->drupalGet('/admin/structure/webform/templates', ['query' => ['category' => 'Test: Webform: Template']]);
+    $assert_session->responseContains('Test: Webform: Template');
+
     // Check template is accessible to user with create webform access.
     $this->drupalGet('/webform/test_form_template');
     $assert_session->statusCodeEquals(200);

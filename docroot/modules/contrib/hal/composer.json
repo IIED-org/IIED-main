@@ -8,6 +8,7 @@
   },
   "require-dev": {
     "drupal/entity_reference_revisions": "1.x-dev",
-    "drupal/aggregator": "2.x-dev"
+    "drupal/aggregator": "2.x-dev",
+    "drupal/rdf": "2.x-dev"
   }
 }

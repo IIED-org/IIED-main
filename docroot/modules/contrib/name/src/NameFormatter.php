@@ -2,12 +2,12 @@
 
 namespace Drupal\name;
 
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
-use Drupal\Component\Render\FormattableMarkup;
 use Drupal\name\Render\NameListFormattableMarkup;
 
 /**
@@ -115,7 +115,7 @@ class NameFormatter implements NameFormatterInterface {
    * {@inheritdoc}
    */
   public function getSetting($key) {
-    return isset($this->settings[$key]) ? $this->settings[$key] : NULL;
+    return $this->settings[$key] ?? NULL;
   }
 
   /**
@@ -237,7 +237,7 @@ class NameFormatter implements NameFormatterInterface {
    *   The settings to use to format the list.
    */
   protected function getListSettings($format) {
-    /* @var \Drupal\name\Entity\NameListFormat $listFormat */
+    /** @var \Drupal\name\Entity\NameListFormat $listFormat */
     $listFormat = $this->listFormatStorage->load($format);
     if (!$format) {
       $listFormat = $this->listFormatStorage->load('default');

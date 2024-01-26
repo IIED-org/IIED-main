@@ -3,22 +3,13 @@
 namespace Drupal\entity_browser\Plugin\Field\FieldWidget;
 
 use Drupal\Component\Utility\Bytes;
+use Drupal\Component\Utility\Environment;
 use Drupal\Component\Utility\SortArray;
-use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Url;
-use Drupal\entity_browser\FieldWidgetDisplayManager;
 use Drupal\image\Entity\ImageStyle;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\Component\Utility\Environment;
-use Symfony\Component\Mime\MimeTypeGuesserInterface;
 
 /**
  * Entity browser file widget.
@@ -58,13 +49,6 @@ class FileBrowserWidget extends EntityReferenceBrowserWidget {
   protected $configFactory;
 
   /**
-   * The display repository service.
-   *
-   * @var \Drupal\Core\Entity\EntityDisplayRepositoryInterface
-   */
-  protected $displayRepository;
-
-  /**
    * The mime type guesser service.
    *
    * @var \Symfony\Component\Mime\MimeTypeGuesserInterface
@@ -72,63 +56,13 @@ class FileBrowserWidget extends EntityReferenceBrowserWidget {
   protected $mimeTypeGuesser;
 
   /**
-   * Constructs widget plugin.
-   *
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
-   *   The definition of the field to which the widget is associated.
-   * @param array $settings
-   *   The widget settings.
-   * @param array $third_party_settings
-   *   Any third party settings.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   Entity type manager service.
-   * @param \Drupal\entity_browser\FieldWidgetDisplayManager $field_display_manager
-   *   Field widget display plugin manager.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The config factory.
-   * @param \Drupal\Core\Entity\EntityDisplayRepositoryInterface $display_repository
-   *   The entity display repository service.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler service.
-   * @param \Drupal\Core\Session\AccountInterface $current_user
-   *   The current user.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger.
-   * @param \Symfony\Component\Mime\MimeTypeGuesserInterface $mime_type_guesser
-   *   The mime type guesser service.
-   */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings, EntityTypeManagerInterface $entity_type_manager, FieldWidgetDisplayManager $field_display_manager, ConfigFactoryInterface $config_factory, EntityDisplayRepositoryInterface $display_repository, ModuleHandlerInterface $module_handler, AccountInterface $current_user, MimeTypeGuesserInterface $mime_type_guesser, MessengerInterface $messenger) {
-    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings, $entity_type_manager, $field_display_manager, $module_handler, $current_user, $messenger);
-    $this->entityTypeManager = $entity_type_manager;
-    $this->fieldDisplayManager = $field_display_manager;
-    $this->configFactory = $config_factory;
-    $this->displayRepository = $display_repository;
-    $this->mimeTypeGuesser = $mime_type_guesser;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $plugin_id,
-      $plugin_definition,
-      $configuration['field_definition'],
-      $configuration['settings'],
-      $configuration['third_party_settings'],
-      $container->get('entity_type.manager'),
-      $container->get('plugin.manager.entity_browser.field_widget_display'),
-      $container->get('config.factory'),
-      $container->get('entity_display.repository'),
-      $container->get('module_handler'),
-      $container->get('current_user'),
-      $container->get('file.mime_type.guesser'),
-      $container->get('messenger')
-    );
+    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
+    $instance->configFactory = $container->get('config.factory');
+    $instance->mimeTypeGuesser = $container->get('file.mime_type.guesser');
+    return $instance;
   }
 
   /**
@@ -161,7 +95,7 @@ class FileBrowserWidget extends EntityReferenceBrowserWidget {
       '#title' => $this->t('File view mode'),
       '#type' => 'select',
       '#default_value' => $this->getSetting('view_mode'),
-      '#options' => $this->displayRepository->getViewModeOptions('file'),
+      '#options' => $this->entityDisplayRepository->getViewModeOptions('file'),
       '#access' => $has_file_entity,
     ];
 

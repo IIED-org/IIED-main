@@ -8,11 +8,11 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Security\TrustedCallbackInterface;
 use Drupal\name\NameOptionsProvider;
 use Drupal\name\Traits\NameFormDisplaySettingsTrait;
 use Drupal\name\Traits\NameFormSettingsHelperTrait;
-use Drupal\Core\Security\TrustedCallbackInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the 'name' widget.
@@ -101,13 +101,19 @@ class NameWidget extends WidgetBase implements ContainerFactoryPluginInterface, 
       '#show_component_required_marker' => !empty($settings['show_component_required_marker']),
     ];
 
+    // WidgetBase may have already overridden the display title
+    // if the field is multi-cardinality.
+    if (!empty($settings['field_title_display']) && $element['#title_display'] === 'before') {
+      $element['#title_display'] = $settings['field_title_display'];
+    }
+
     $components = array_filter($settings['components']);
     foreach (_name_translations() as $key => $title) {
       if (isset($components[$key])) {
         $element['#components'][$key]['type'] = 'textfield';
 
         $size = !empty($settings['size'][$key]) ? $settings['size'][$key] : 60;
-        $title_display = isset($settings['title_display'][$key]) ? $settings['title_display'][$key] : 'description';
+        $title_display = $settings['title_display'][$key] ?? 'description';
 
         $element['#components'][$key]['title'] = Html::escape($settings['labels'][$key]);
         $element['#components'][$key]['title_display'] = $title_display;
@@ -117,9 +123,7 @@ class NameWidget extends WidgetBase implements ContainerFactoryPluginInterface, 
 
         // Provides backwards compatibility with Drupal 6 modules.
         $field_type = ($key == 'title' || $key == 'generational') ? 'select' : 'text';
-        $field_type = isset($settings['field_type'][$key])
-            ? $settings['field_type'][$key]
-            : (isset($settings[$key . '_field']) ? $settings[$key . '_field'] : $field_type);
+        $field_type = $settings['field_type'][$key] ?? ($settings[$key . '_field'] ?? $field_type);
 
         if ($field_type == 'select') {
           $element['#components'][$key]['type'] = 'select';
@@ -199,6 +203,13 @@ class NameWidget extends WidgetBase implements ContainerFactoryPluginInterface, 
     $element['#excluded_components'] = array_diff_key(_name_translations(), $components);
     $element['#pre_render'][] = [$this, 'fieldSettingsFormPreRender'];
     $element['widget_layout']['#states'] = [
+      'visible' => [
+        ':input[name$="[override_field_settings]"]' => [
+          'checked' => TRUE,
+        ],
+      ],
+    ];
+    $element['field_title_display']['#states'] = [
       'visible' => [
         ':input[name$="[override_field_settings]"]' => [
           'checked' => TRUE,

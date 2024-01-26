@@ -30,7 +30,7 @@ use Drupal\entity_reference_revisions\EntityNeedsSaveInterface;
  *   id = "entity_reference_revisions",
  *   label = @Translation("Entity reference revisions"),
  *   description = @Translation("An entity field containing an entity reference to a specific revision."),
- *   category = @Translation("Reference revisions"),
+ *   category = "reference",
  *   no_ui = FALSE,
  *   class = "\Drupal\entity_reference_revisions\Plugin\Field\FieldType\EntityReferenceRevisionsItem",
  *   list_class = "\Drupal\entity_reference_revisions\EntityReferenceRevisionsFieldItemList",
@@ -83,13 +83,20 @@ class EntityReferenceRevisionsItem extends EntityReferenceItem implements Option
     foreach ($common_references as $entity_type) {
 
       $options[$entity_type->id()] = [
-        'label' => $entity_type->getLabel(),
+        'label' => t('@entity_type (revisions)', ['@entity_type' => $entity_type->getLabel()]),
         'field_storage_config' => [
           'settings' => [
             'target_type' => $entity_type->id(),
           ]
         ]
       ];
+
+      // Change the label on Drupal 10.1+.
+      if (version_compare(\Drupal::VERSION, '10.1.999', '<')) {
+        $options[$entity_type->id()]['label'] = $entity_type->getLabel();
+      }
+
+
       $default_reference_settings = $entity_type->get('default_reference_revision_settings');
       if (is_array($default_reference_settings)) {
         $options[$entity_type->id()] = array_merge($options[$entity_type->id()], $default_reference_settings);

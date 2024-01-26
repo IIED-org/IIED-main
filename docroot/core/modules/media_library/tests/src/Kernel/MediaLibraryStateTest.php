@@ -44,7 +44,6 @@ class MediaLibraryStateTest extends KernelTestBase {
     $this->installEntitySchema('user');
     $this->installEntitySchema('file');
     $this->installSchema('file', 'file_usage');
-    $this->installSchema('system', 'sequences');
     $this->installEntitySchema('media');
     $this->installConfig([
       'field',
@@ -289,6 +288,9 @@ class MediaLibraryStateTest extends KernelTestBase {
 
     $state = MediaLibraryState::fromRequest(new Request($query));
     $this->assertInstanceOf(MediaLibraryState::class, $state);
+
+    // Assert ajax_page_state is no longer in the state.
+    $this->assertFalse($state->has('ajax_page_state'));
   }
 
   /**
@@ -357,6 +359,12 @@ class MediaLibraryStateTest extends KernelTestBase {
     $test_data['changed hash'] = [
       ['hash' => 'fail'],
       TRUE,
+    ];
+
+    // Assert ajax_page_state is removed if in the query.
+    $test_data['ajax_page_state'] = [
+      ['ajax_page_state' => 'A long string that gets removed'],
+      FALSE,
     ];
 
     return $test_data;

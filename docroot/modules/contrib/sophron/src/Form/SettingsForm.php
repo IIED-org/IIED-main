@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Drupal\sophron\Form;
 
@@ -7,8 +9,9 @@ use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\sophron\MimeMapManagerInterface;
 use Drupal\sophron\CoreExtensionMimeTypeGuesserExtended;
+use Drupal\sophron\MimeMapManagerInterface;
+use FileEye\MimeMap\MappingException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Yaml\Yaml;
 
@@ -40,9 +43,9 @@ class SettingsForm extends ConfigFormBase {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
-   * @param \Drupal\sophron\MimeMapManagerInterface $mime_map_manager
+   * @param \Drupal\sophron\MimeMapManagerInterface $mimeMapManager
    *   The MIME map manager service.
-   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typed_config
+   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typedConfig
    *   The typed config service.
    */
   public function __construct(
@@ -165,7 +168,7 @@ class SettingsForm extends ConfigFormBase {
     }
 
     // Mapping gaps.
-    if ($gaps = $this->determineMapGaps($this->mimeMapManager->getMapClass())) {
+    if ($gaps = $this->determineMapGaps()) {
       $form['mapping']['gaps'] = [
         '#type' => 'details',
         '#collapsible' => TRUE,
@@ -195,15 +198,14 @@ class SettingsForm extends ConfigFormBase {
     $rows = [];
     $i = 1;
     foreach ($this->mimeMapManager->listTypes() as $type_string) {
-      if ($type = $this->mimeMapManager->getType($type_string)) {
-        $rows[] = [
-          $i++,
-          $type_string,
-          implode(', ', $type->getExtensions()),
-          $type->hasDescription() ? $type->getDescription() : '',
-          implode(', ', $type->getAliases()),
-        ];
-      }
+      $type = $this->mimeMapManager->getType($type_string);
+      $rows[] = [
+        $i++,
+        $type_string,
+        implode(', ', $type->getExtensions()),
+        $type->hasDescription() ? $type->getDescription() : '',
+        implode(', ', $type->getAliases()),
+      ];
     }
     $form['types']['table'] = [
       '#type' => 'table',
@@ -228,16 +230,14 @@ class SettingsForm extends ConfigFormBase {
     $rows = [];
     $i = 1;
     foreach ($this->mimeMapManager->listExtensions() as $ext) {
-      $extension_string = (string) $ext;
-      if ($extension = $this->mimeMapManager->getExtension($extension_string)) {
-        $defaultExtensionType = $this->mimeMapManager->getType($extension->getDefaultType());
-        $rows[] = [
-          $i++,
-          $extension_string,
-          implode(', ', $extension->getTypes()),
-          $defaultExtensionType->hasDescription() ? $defaultExtensionType->getDescription() : '',
-        ];
-      }
+      $extension = $this->mimeMapManager->getExtension((string) $ext);
+      $defaultExtensionType = $this->mimeMapManager->getType($extension->getDefaultType());
+      $rows[] = [
+        $i++,
+        (string) $ext,
+        implode(', ', $extension->getTypes()),
+        $defaultExtensionType->hasDescription() ? $defaultExtensionType->getDescription() : '',
+      ];
     }
     $form['extensions']['table'] = [
       '#type' => 'table',
@@ -279,7 +279,7 @@ class SettingsForm extends ConfigFormBase {
               $fail_items[$item] = $item;
             }
           }
-          $form_state->setErrorByName('map_commands', $this->t("The items at line(s) @lines are wrongly typed. Make sure they follow the pattern '- [method, [arg1, ..., argN]]'.", [
+          $form_state->setErrorByName('map_commands', $this->t("The items at line(s) @lines are wrongly typed. Make sure they follow the pattern '- {method: foo, arguments: [arg1, arg2, ...]}'.", [
             '@lines' => implode(', ', $fail_items),
           ]));
         }
@@ -325,17 +325,14 @@ class SettingsForm extends ConfigFormBase {
 
     $rows = [];
     foreach ($extensions as $ext) {
-      $extension_string = (string) $ext;
-      $drupal_mime_type = $core_extended_guesser->guessMimeType('a.' . $extension_string);
+      $drupal_mime_type = $core_extended_guesser->guessMimeType('a.' . (string) $ext);
 
-      $extension = $this->mimeMapManager->getExtension($extension_string);
-      if ($extension) {
-        try {
-          $mimemap_mime_type = $extension->getDefaultType();
-        }
-        catch (\Exception $e) {
-          $mimemap_mime_type = '';
-        }
+      $extension = $this->mimeMapManager->getExtension((string) $ext);
+      try {
+        $mimemap_mime_type = $extension->getDefaultType();
+      }
+      catch (MappingException $e) {
+        $mimemap_mime_type = '';
       }
 
       $gap = '';
@@ -347,7 +344,7 @@ class SettingsForm extends ConfigFormBase {
       }
 
       if ($gap !== '') {
-        $rows[] = [$extension_string, $drupal_mime_type, $gap];
+        $rows[] = [(string) $ext, $drupal_mime_type, $gap];
       }
     }
 

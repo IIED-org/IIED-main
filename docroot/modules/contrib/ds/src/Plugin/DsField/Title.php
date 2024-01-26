@@ -14,6 +14,7 @@ abstract class Title extends Field {
    */
   public function settingsForm($form, FormStateInterface $form_state) {
     $config = $this->getConfiguration();
+    $field_name = $form_state->getStorage()['plugin_settings_edit'];
 
     $settings['link'] = [
       '#type' => 'checkbox',
@@ -27,11 +28,30 @@ abstract class Title extends Field {
       '#description' => $this->t('Put a class on the link. Eg: btn btn-default'),
       '#states' => [
         'visible' => [
-          ':input[name="fields[node_title][settings_edit_form][settings][link]"]' => [
-            'checked' => TRUE
-          ]
-        ]
-      ]
+          ':input[name="fields[' . $field_name . '][settings_edit_form][settings][link]"]' => [
+            'checked' => TRUE,
+          ],
+        ],
+      ],
+    ];
+    $settings['link_target'] = [
+      '#type' => 'select',
+      '#title' => 'Link target',
+      '#options' => [
+        '_blank' => '_blank',
+        '_top' => '_top',
+        '_parent' => '_parent',
+      ],
+      '#empty_option' => 'Default',
+      '#default_value' => $config['link_target'],
+      '#description' => $this->t('Set a target attribute.'),
+      '#states' => [
+        'visible' => [
+          ':input[name="fields[' . $field_name . '][settings_edit_form][settings][link]"]' => [
+            'checked' => TRUE,
+          ],
+        ],
+      ],
     ];
     $settings['wrapper'] = [
       '#type' => 'textfield',
@@ -73,6 +93,10 @@ abstract class Title extends Field {
       $summary[] = 'Class: ' . $config['class'];
     }
 
+    if (!empty($config['link_target'])) {
+      $summary[] = 'Link target: ' . $config['link_target'];
+    }
+
     return $summary;
   }
 
@@ -86,6 +110,7 @@ abstract class Title extends Field {
       'link class' => '',
       'wrapper' => 'h2',
       'class' => '',
+      'link_target' => NULL,
     ];
 
     return $configuration;

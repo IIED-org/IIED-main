@@ -317,7 +317,6 @@ class ReferencedEntitiesReindexingTest extends KernelTestBase {
     $tracking_helper = \Drupal::getContainer()
       ->get('search_api.tracking_helper');
     $method = new \ReflectionMethod(TrackingHelper::class, 'getForeignEntityRelationsMap');
-    $method->setAccessible(TRUE);
     /** @see \Drupal\search_api\Utility\TrackingHelper::getForeignEntityRelationsMap() */
     $map = $method->invoke($tracking_helper, $this->index);
     usort($map, function (array $a, array $b): int {

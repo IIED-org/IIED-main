@@ -2,13 +2,13 @@
 
 namespace Drupal\name;
 
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\name\Entity\NameListFormat;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Component\Render\FormattableMarkup;
 
 /**
  * The name list builder.
@@ -94,12 +94,10 @@ class NameListFormatListBuilder extends ConfigEntityListBuilder {
     $settings = $entity->listSettings();
 
     $and_options = $this->formatter->getLastDelimitorTypes();
-    $and_delimiter = isset($and_options[$settings['and']]) ? $and_options[$settings['and']] : $this->t('-- invalid option --');
+    $and_delimiter = $and_options[$settings['and']] ?? $this->t('-- invalid option --');
 
     $and_behavior_options = $this->formatter->getLastDelimitorBehaviors(FALSE);
-    $and_behavior = isset($and_behavior_options[$settings['delimiter_precedes_last']])
-        ? $and_behavior_options[$settings['delimiter_precedes_last']]
-        : $this->t('-- invalid option --');
+    $and_behavior = $and_behavior_options[$settings['delimiter_precedes_last']] ?? $this->t('-- invalid option --');
     if ($settings['el_al_min']) {
       $behavior = $this->t('Reduce after @max items and show @min items followed by <em>el al</em>.', [
         '@max' => $settings['el_al_min'],

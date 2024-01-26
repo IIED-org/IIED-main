@@ -20,8 +20,8 @@ ds.field_template.minimal:
       type: sequence
       label: 'Classes for the template'
       sequence:
-        - type: string
-          label: 'Class name'
+        type: string
+        label: 'Class name'
 
 ds.field_template.default:
   type: mapping
@@ -37,8 +37,8 @@ ds.field_template.default:
       type: sequence
       label: 'Classes for the template'
       sequence:
-        - type: string
-          label: 'Class name'
+        type: string
+        label: 'Class name'
 
 ds.field_template.expert:
   type: mapping
@@ -114,8 +114,8 @@ ds.field_template.expert:
       type: boolean
       label: 'Enable default attributes for the field item wrapper'
     prefix:
-      type: string
+      type: text
       label: 'The prefix of the field'
     suffix:
-      type: string
+      type: text
       label: 'The suffix of the field'

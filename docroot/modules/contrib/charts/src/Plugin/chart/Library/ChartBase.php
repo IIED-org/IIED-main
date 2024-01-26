@@ -24,6 +24,21 @@ abstract class ChartBase extends PluginBase implements ChartInterface {
   /**
    * {@inheritdoc}
    */
+  public function getSupportedChartTypes() {
+    return $this->pluginDefinition['types'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isSupportedChartType(string $chart_type_id) {
+    $supported_chart_types = $this->getSupportedChartTypes();
+    return !$supported_chart_types || in_array($chart_type_id, $supported_chart_types);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getConfiguration() {
     return $this->configuration;
   }

@@ -75,7 +75,7 @@ class NameNodeTokenReplaceTest extends NameTestBase {
       'credentials' => 'UUCreds, UUMoreCreds',
     ])->save();
 
-    /* @var $node \Drupal\node\NodeInterface */
+    /** @var \Drupal\node\NodeInterface $node */
     $node = Node::create([
       'type' => 'article',
       'tnid' => 0,
@@ -101,7 +101,7 @@ class NameNodeTokenReplaceTest extends NameTestBase {
     ]);
     $node->save();
 
-    /* @var \Drupal\name\Plugin\Field\FieldType\NameItem $item */
+    /** @var \Drupal\name\Plugin\Field\FieldType\NameItem $item */
     $item = $node->get('field_name')->get(0);
     $components = $item->filteredArray();
 
@@ -115,9 +115,8 @@ class NameNodeTokenReplaceTest extends NameTestBase {
     $tests['[node:field_name:generational]'] = $components['generational'];
     $tests['[node:field_name:credentials]'] = $components['credentials'];
 
-    // @todo: consider multiple value tests, "[node:field_name:1:family]".
-
-    /* @var \Drupal\name\Plugin\Field\FieldType\NameItem $item */
+    // @todo consider multiple value tests, "[node:field_name:1:family]".
+    /** @var \Drupal\name\Plugin\Field\FieldType\NameItem $item */
     $item = $account->get('field_realname')->get(0);
     $components = $item->filteredArray();
 
@@ -127,8 +126,7 @@ class NameNodeTokenReplaceTest extends NameTestBase {
     $tests['[node:author:field_realname]'] = $this->formatter->format($components);
     $tests['[node:author:field_realname:family]'] = $components['family'];
 
-    // @todo: consider current user tests, "[current-user:display-name]".
-
+    // @todo consider current user tests, "[current-user:display-name]".
     // Test to make sure that we generated something for each token.
     $this->assertFalse(in_array(0, array_map('strlen', $tests)), 'No empty tokens generated.');
 
@@ -140,7 +138,7 @@ class NameNodeTokenReplaceTest extends NameTestBase {
         '%expected' => $expected,
         '%actual' => $output,
       ]));
-      // @todo: caching tests.
+      // @todo caching tests.
       // @see NodeTokenReplaceTest.
       // $this->assertEquals($bubbleable_metadata, $metadata_tests[$input]);
     }

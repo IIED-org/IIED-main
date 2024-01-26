@@ -9,11 +9,11 @@ dependencies:
     - taxonomy.vocabulary.document_type
     - taxonomy.vocabulary.list
   content:
+    - 'taxonomy_term:document_type:2fc385a6-964d-4b92-881d-9c8b48755746'
     - 'taxonomy_term:document_type:9b686be7-6c6b-42b4-81d6-655cc0650a17'
     - 'taxonomy_term:document_type:a9161f6f-f33c-4b44-af78-0ccc81ab09ea'
     - 'taxonomy_term:document_type:f4e90378-926b-430d-a5a1-d3bb14db7a72'
     - 'taxonomy_term:list:85f1ee52-f4d3-4bc8-a993-df456ddcfa08'
-    - 'taxonomy_term:tags:2fc385a6-964d-4b92-881d-9c8b48755746'
   module:
     - datetime
     - node
@@ -396,7 +396,6 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
-        - user
         - 'user.node_grants:view'
         - user.permissions
       tags:
@@ -416,7 +415,6 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
-        - user
         - 'user.node_grants:view'
         - user.permissions
       tags:
@@ -560,7 +558,6 @@ display:
       max-age: -1
       contexts:
         - 'languages:language_interface'
-        - user
         - 'user.node_grants:view'
         - user.permissions
       tags:

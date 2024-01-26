@@ -17,7 +17,7 @@ use Drupal\flag\FlagInterface;
 function message_subscribe_email_flag_action_access($action, FlagInterface $flag, AccountInterface $account, EntityInterface $flaggable = NULL) {
   // The 'unflag' action is always allowed here, so only check 'flag'.
   $prefix = \Drupal::config('message_subscribe_email.settings')->get('flag_prefix') . '_';
-  if ($action === 'flag' && $flaggable && strpos($flag->id(), $prefix) === 0) {
+  if ($action === 'flag' && $flaggable && $flaggable->id() && strpos($flag->id(), $prefix) === 0) {
 
     $flag_service = \Drupal::service('flag');
     $request = \Drupal::request();
@@ -32,7 +32,7 @@ function message_subscribe_email_flag_action_access($action, FlagInterface $flag
     if (empty($sid) && $account->isAnonymous()) {
       // Ensure something is in $_SESSION, otherwise the session ID will
       // not persist.
-      // TODO: Replace this with something cleaner once core provides it.
+      // @todo Replace this with something cleaner once core provides it.
       // See https://www.drupal.org/node/2865991.
       $_SESSION['flag'] = TRUE;
 
@@ -87,7 +87,10 @@ function message_subscribe_email_message_subscribe_get_subscribers_alter(array &
   );
   $debug && \Drupal::logger('message_subscribe_email')->debug(
     'Gathering email subscriptions using flags: @flags for users: @uids',
-    ['@flags' => implode(', ', $flag_ids), '@uids' => implode(', ', array_keys($uids))]
+    [
+      '@flags' => implode(', ', $flag_ids),
+      '@uids' => implode(', ', array_keys($uids)),
+    ]
   );
 
   $all_email_subscribers = [];

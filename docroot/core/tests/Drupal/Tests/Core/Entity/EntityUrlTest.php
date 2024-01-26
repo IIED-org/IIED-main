@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\Core\Entity;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
@@ -105,6 +107,30 @@ class EntityUrlTest extends UnitTestCase {
     $this->expectException(EntityMalformedException::class);
     $this->expectExceptionMessage('The "' . $this->entityTypeId . '" entity cannot have a URI as it does not have an ID');
     $entity->toUrl();
+  }
+
+  /**
+   * Tests the toUrl() method without specifying the $rel parameter..
+   *
+   * @covers ::toUrl
+   */
+  public function testToUrlDefault() {
+    $values = ['id' => $this->entityId];
+    $entity = $this->getEntity(UrlTestEntity::class, $values);
+
+    $this->expectException(UndefinedLinkTemplateException::class);
+    $this->expectExceptionMessage("Cannot generate default URL because no link template 'canonical' or 'edit-form' was found for the '" . $this->entityTypeId . "' entity type");
+    $entity->toUrl();
+
+    $this->registerLinkTemplate('edit-form');
+    /** @var \Drupal\Core\Url $url */
+    $url = $entity->toUrl();
+    $this->assertUrl('entity.test_entity.edit_form', ['test_entity' => $this->entityId], $entity, FALSE, $url);
+
+    $this->registerLinkTemplate('canonical');
+    /** @var \Drupal\Core\Url $url */
+    $url = $entity->toUrl();
+    $this->assertUrl('entity.test_entity.canonical', ['test_entity' => $this->entityId], $entity, FALSE, $url);
   }
 
   /**

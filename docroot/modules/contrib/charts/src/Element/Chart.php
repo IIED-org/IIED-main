@@ -2,9 +2,9 @@
 
 namespace Drupal\charts\Element;
 
+use Drupal\charts\ChartManager;
 use Drupal\charts\Plugin\chart\Library\ChartBase;
 use Drupal\charts\Plugin\chart\Library\ChartInterface;
-use Drupal\charts\ChartManager;
 use Drupal\charts\TypeManager;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -21,6 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @RenderElement("chart")
  */
 class Chart extends RenderElement implements ContainerFactoryPluginInterface {
+
   use StringTranslationTrait;
 
   /**
@@ -52,7 +53,7 @@ class Chart extends RenderElement implements ContainerFactoryPluginInterface {
   protected $moduleHandler;
 
   /**
-   * Constructs Chart object.
+   * Constructs a Chart object.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
@@ -191,7 +192,7 @@ class Chart extends RenderElement implements ContainerFactoryPluginInterface {
     }
     $this->moduleHandler->alter($alter_hooks, $element, $chart_id);
 
-    // Include the library specific render callback via their plugin manager.
+    // Include the library-specific render callback via their plugin manager.
     // Use the first charting library if the requested library is not available.
     $library = $element['#chart_library'] ?? '';
     $library = $this->getLibrary($library);
@@ -199,7 +200,13 @@ class Chart extends RenderElement implements ContainerFactoryPluginInterface {
     $element['#chart_library'] = $library;
     $charts_settings = $this->configFactory->get('charts.settings');
     $plugin_configuration = $charts_settings->get('charts_default_settings.library_config') ?? [];
+    /** @var \Drupal\charts\Plugin\chart\Library\ChartInterface $plugin */
     $plugin = $this->chartsManager->createInstance($library, $plugin_configuration);
+    if (!$plugin->isSupportedChartType($type_name)) {
+      // Chart type not supported by the library.
+      throw new \LogicException(sprintf('The provided chart type "%s" is not supported by "%s" chart plugin library.', $type_name, $plugin->getChartName()));
+    }
+
     $element = $plugin->preRender($element);
 
     if (!empty($element['#chart_definition'])) {

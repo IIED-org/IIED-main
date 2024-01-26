@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\message_ui\Functional;
 
+use Drupal\message\Entity\Message;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
-use Drupal\message\Entity\Message;
 
 /**
  * Testing the editing of the hard coded arguments.
@@ -44,7 +44,7 @@ class MessageUiHardCodedArgumentsTest extends AbstractTestMessageUi {
     // Load 'authenticated' user role.
     $role = Role::load(RoleInterface::AUTHENTICATED_ID);
 
-    /* @var $role Role */
+    /** @var \Drupal\user\Entity\Role $role */
     user_role_grant_permissions($role->id(), ['bypass message access control']);
 
     $this->drupalLogin($this->user1);
@@ -58,7 +58,7 @@ class MessageUiHardCodedArgumentsTest extends AbstractTestMessageUi {
 
     // Get the message template and create an instance.
     $message_template = $this->loadMessageTemplate('dummy_message');
-    /* @var $message Message */
+    /** @var \Drupal\message\Entity\Message $message */
     $message = Message::create(['template' => $message_template->id()]);
     $message->setOwner($this->user1);
     $message->save();
@@ -83,7 +83,7 @@ class MessageUiHardCodedArgumentsTest extends AbstractTestMessageUi {
     ];
     $this->drupalGet('message/' . $message->id() . '/edit');
 
-    $this->submitForm($edit, t('Update'));
+    $this->submitForm($edit, 'Update');
 
     // The message token as updated automatically.
     $this->assertSession()->pageTextContains($this->user2->getAccountName());
@@ -96,7 +96,7 @@ class MessageUiHardCodedArgumentsTest extends AbstractTestMessageUi {
     ];
     $this->drupalGet('message/' . $message->id() . '/edit');
 
-    $this->submitForm($edit, t('Update'));
+    $this->submitForm($edit, 'Update');
 
     // The hard coded token was updated with a custom value.
     $this->assertSession()->pageTextContains('Dummy name');

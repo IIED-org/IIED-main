@@ -207,7 +207,7 @@ function paragraphs_library_form_paragraphs_type_form_alter(&$form, FormStateInt
 /**
  * Entity builder for the paragraphs type form with group property.
  *
- * @see primer_base_form_paragraphs_type_form_alter()
+ * @see paragraphs_library_form_paragraphs_type_form_alter()
  */
 function paragraphs_library_form_paragraphs_type_form_builder($entity_type, ParagraphsTypeInterface $type, &$form, FormStateInterface $form_state) {
   if ($form_state->getValue('allow_library_conversion')) {

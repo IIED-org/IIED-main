@@ -15,7 +15,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @Chart(
  *   id = "charts_test_library",
- *   name = @Translation("Charts Test Library")
+ *   name = @Translation("Charts Test Library"),
+ *   types = {
+ *     "area",
+ *     "bar",
+ *     "bubble",
+ *     "column",
+ *     "donut",
+ *     "gauge",
+ *     "line",
+ *     "pie",
+ *     "scatter",
+ *   },
  * )
  */
 class ChartsTestLibrary extends ChartBase implements ContainerFactoryPluginInterface {

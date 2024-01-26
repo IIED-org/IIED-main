@@ -21,13 +21,13 @@ This code starts with some of the example modules in the Message stack, changing
 Add the following to your composer.json to add necessary patches:
 
 ```
-       "patches": {
-            "drupal/message_subscribe": {
-                "Issue #2928789: Fatal exception with flag module": "https://www.drupal.org/files/issues/2019-12-15/account_id_2928789_0.patch",
-                "Issue #3101137: Fix endless loop": "https://www.drupal.org/files/issues/2019-12-15/3101137-fix-endless-loop.patch,
-                "Issue #3101141: Message Subscribe Email removes all emails": "https://www.drupal.org/files/issues/2019-12-15/3101141-check-email-flag_0.patch"
-            }
-       },
+"patches": {
+  "drupal/message_subscribe": {
+    "Issue #2928789: Fatal exception with flag module": "https://www.drupal.org/files/issues/2019-12-15/account_id_2928789_0.patch",
+    "Issue #3101137: Fix endless loop": "https://www.drupal.org/files/issues/2019-12-15/3101137-fix-endless-loop.patch,
+    "Issue #3101141: Message Subscribe Email removes all emails": "https://www.drupal.org/files/issues/2019-12-15/3101141-check-email-flag_0.patch"
+  }
+},
 ```
 
 
@@ -58,4 +58,3 @@ Review the code in `message_implementation.module` to see what hooks are being
  used to generate messages. You can alter them later as needed. Lots of examples
  are provided, you won't use all of them, so remove and change as you
  like.
-

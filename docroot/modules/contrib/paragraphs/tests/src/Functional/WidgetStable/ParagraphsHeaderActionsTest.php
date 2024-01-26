@@ -245,20 +245,7 @@ class ParagraphsHeaderActionsTest extends ParagraphsTestBase {
     // Add a Paragraph type.
     $paragraph_type = 'text_paragraph';
     $this->addParagraphsType($paragraph_type);
-    $edit = [
-      'new_storage_type' => 'field_ui:entity_reference_revisions:paragraph',
-      'label' => 'Second paragraph',
-      'field_name' => 'second',
-    ];
-    $this->submitForm($edit, 'Save and continue');
-    $this->submitForm([], 'Save field settings');
-    $this->submitForm([], 'Save settings');
-
-    $this->drupalGet('/admin/structure/types/manage/paragraphed_test/form-display');
-    $edit = [
-      'fields[field_second][type]' => 'paragraphs',
-    ];
-    $this->submitForm($edit, 'Save');
+    static::fieldUIAddNewField('admin/structure/types/manage/paragraphed_test', 'second', 'Second paragraph', 'field_ui:entity_reference_revisions:paragraph', [], []);
 
     // Add a text field to the text_paragraph type.
     static::fieldUIAddNewField(

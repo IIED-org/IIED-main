@@ -10,7 +10,7 @@ Source: https://www.drupal.org/files/issues/2023-05-12/media-thumbnail-formatter
 
 
 The language of content entities incorrectly falls back to the default language...
-Source: https://www.drupal.org/files/issues/2021-09-16/3061761-46.patch
+Source: https://www.drupal.org/files/issues/2023-12-18/3061761-57.patch
 
 
 3208030

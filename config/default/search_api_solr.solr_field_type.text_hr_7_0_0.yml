@@ -239,6 +239,9 @@ solr_configs:
             -
               name: buildOnStartup
               VALUE: 'false'
+            -
+              name: indexPath
+              VALUE: ./hr
 text_files:
   stopwords: |
     baš

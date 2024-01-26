@@ -80,6 +80,9 @@ trait NameAdditionalPreferredTrait {
     return $elements;
   }
 
+  /**
+   *
+   */
   protected function settingsNameAdditionalPreferredSummary(&$summary) {
     if ($type = $this->getSetting('preferred_field_reference')) {
       $targets = $this->getAdditionalSources();
@@ -160,6 +163,9 @@ trait NameAdditionalPreferredTrait {
     return $sources;
   }
 
+  /**
+   *
+   */
   protected function getEmptyOption() {
     if ($this->getTraitUsageIsField()) {
       return $this->t('-- none --');
@@ -169,6 +175,9 @@ trait NameAdditionalPreferredTrait {
     }
   }
 
+  /**
+   *
+   */
   protected function getTraitUsageIsField() {
     return is_subclass_of($this, 'Drupal\Core\Field\FieldItemBase');
   }

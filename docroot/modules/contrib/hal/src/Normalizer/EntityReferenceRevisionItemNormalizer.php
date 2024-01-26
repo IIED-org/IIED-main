@@ -2,6 +2,8 @@
 
 namespace Drupal\hal\Normalizer;
 
+use Drupal\entity_reference_revisions\Plugin\Field\FieldType\EntityReferenceRevisionsItem;
+
 /**
  * Defines a class for normalizing EntityReferenceRevisionItems.
  */
@@ -12,7 +14,7 @@ class EntityReferenceRevisionItemNormalizer extends EntityReferenceItemNormalize
    *
    * @var string
    */
-  protected $supportedInterfaceOrClass = '\Drupal\entity_reference_revisions\Plugin\Field\FieldType\EntityReferenceRevisionsItem';
+  protected $supportedInterfaceOrClass = EntityReferenceRevisionsItem::class;
 
   /**
    * {@inheritdoc}

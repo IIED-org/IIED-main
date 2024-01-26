@@ -81,7 +81,7 @@ abstract class BlockBase extends DsFieldBase implements ContainerFactoryPluginIn
     $block_config = $this->blockConfig();
     $block->setConfiguration($block_config);
 
-    $add_wrappers = isset($this->getFieldConfiguration()['properties']['add_block_wrappers']) ? $this->getFieldConfiguration()['properties']['add_block_wrappers'] : FALSE;
+    $add_wrappers = isset($this->getFieldConfiguration()['properties']['add_block_wrappers']) && $this->getFieldConfiguration()['properties']['add_block_wrappers'];
 
     // Inject context values.
     if ($block instanceof ContextAwarePluginInterface) {
@@ -98,6 +98,10 @@ abstract class BlockBase extends DsFieldBase implements ContainerFactoryPluginIn
 
     if ($block->access(\Drupal::currentUser())) {
       $block_build = $block->build();
+
+      if (Element::isEmpty($block_build)) {
+        return [];
+      }
 
       // If the user has chosen to add the block wrappers, theme as a block.
       if ($add_wrappers) {

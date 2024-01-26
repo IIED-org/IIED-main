@@ -4,10 +4,10 @@ sophron.mapping_command:
   type: mapping
   label: 'Mapping command'
   mapping:
-    0:
+    method:
       type: string
       label: 'Method callback'
-    1:
+    arguments:
       type: sequence
       label: 'The arguments to pass to the method'
       sequence:

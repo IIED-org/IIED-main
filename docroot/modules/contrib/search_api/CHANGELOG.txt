@@ -1,3 +1,22 @@
+Search API 1.31 (2023-11-25):
+-----------------------------
+- #3388678 by drunken monkey, benjifisher: Fixed performance regression in HTML
+  Filter processor.
+- #3398192 by drunken monkey, BenStallings, admirlju: Fixed warning for
+  undefined array key "type" in SearchApiDate::opBetween().
+- #3394189 by drunken monkey: Dropped support for Drupal 9.
+- #3321677 by drunken monkey, david.muffley: Fixed out-of-memory errors during
+  indexing.
+- #3397017 by drunken monkey, gaddman: Fixed MySQL error in edge cases when
+  indexing bigrams.
+- #3394738 by drunken monkey: Fixed fatal error after upgrade to 1.30.
+- #3308184 by drunken monkey, admirlju: Fixed handling of incomplete field
+  definitions when generating Views data.
+- #3392465 by drunken monkey: Fixed use of location filter together with AND
+  facets in DB backend.
+- #3293474 by admirlju, jhedstrom, drunken monkey: Added configurable maximum
+  length for exposed Views fulltext filter.
+
 Search API 1.30 (2023-10-15):
 -----------------------------
 - #3390450 by drunken monkey: Fixed highlighting of HTML field values.

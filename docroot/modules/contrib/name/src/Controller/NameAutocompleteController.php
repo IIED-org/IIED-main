@@ -2,13 +2,13 @@
 
 namespace Drupal\name\Controller;
 
+use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityFieldManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\name\NameAutocomplete;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
-use Drupal\name\NameAutocomplete;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**

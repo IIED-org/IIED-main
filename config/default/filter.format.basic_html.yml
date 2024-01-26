@@ -11,6 +11,30 @@ name: 'Basic HTML'
 format: basic_html
 weight: -10
 filters:
+  editor_file_reference:
+    id: editor_file_reference
+    provider: editor
+    status: true
+    weight: 11
+    settings: {  }
+  filter_align:
+    id: filter_align
+    provider: filter
+    status: true
+    weight: 7
+    settings: {  }
+  filter_autop:
+    id: filter_autop
+    provider: filter
+    status: true
+    weight: 0
+    settings: {  }
+  filter_caption:
+    id: filter_caption
+    provider: filter
+    status: true
+    weight: 8
+    settings: {  }
   filter_html:
     id: filter_html
     provider: filter
@@ -20,35 +44,17 @@ filters:
       allowed_html: '<br> <p class="mb-6"> <h2 class="mt-0"> <h3 class="mt-0"> <h4> <h5> <h6> <strong> <em> <sub> <sup> <blockquote> <a href> <ul> <ol start> <li> <hr>'
       filter_html_help: false
       filter_html_nofollow: false
-  filter_align:
-    id: filter_align
-    provider: filter
-    status: true
-    weight: 7
-    settings: {  }
-  filter_caption:
-    id: filter_caption
-    provider: filter
-    status: true
-    weight: 8
-    settings: {  }
   filter_html_image_secure:
     id: filter_html_image_secure
     provider: filter
     status: true
     weight: 9
     settings: {  }
-  editor_file_reference:
-    id: editor_file_reference
-    provider: editor
-    status: true
-    weight: 11
-    settings: {  }
-  filter_autop:
-    id: filter_autop
+  filter_image_lazy_load:
+    id: filter_image_lazy_load
     provider: filter
     status: true
-    weight: 0
+    weight: 12
     settings: {  }
   filter_url:
     id: filter_url
@@ -62,10 +68,4 @@ filters:
     provider: iied_filters
     status: true
     weight: 0
-    settings: {  }
-  filter_image_lazy_load:
-    id: filter_image_lazy_load
-    provider: filter
-    status: true
-    weight: 12
     settings: {  }

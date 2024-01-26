@@ -11,7 +11,7 @@ use Drupal\Core\Plugin\Context\EntityContextDefinition;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
- * Sets the current node as a context on node routes.
+ * Sets the current node as a context on entity routes.
  */
 class DsBlockFieldEntityContext implements ContextProviderInterface {
 

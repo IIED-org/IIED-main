@@ -26,20 +26,20 @@ core.entity_view_display.*.*.*.third_party.ds:
               type: 'sequence'
               label: 'The layout classes'
               sequence:
-                - type: ds.classes.[%key]
-                  label: 'Classes array'
+                type: ds.classes.[%key]
+                label: 'Classes array'
             wrappers:
               type: 'sequence'
               label: 'The layout wrappers'
               sequence:
-                - type: string
-                  label: 'Field wrapper'
+                type: string
+                label: 'Field wrapper'
             outer_wrapper:
               type: string
               label: 'The outer wrapper of the layout'
             attributes:
               type: string
-              label: 'The attributesof the layout'
+              label: 'The attributes of the layout'
             link_attribute:
               type: string
               label: 'The link attribute of the layout'
@@ -53,34 +53,34 @@ core.entity_view_display.*.*.*.third_party.ds:
       type: sequence
       label: 'The regions of the layout'
       sequence:
-        - type: sequence
-          label: 'The fields belonging to the region'
-          sequence:
-            - type: string
-              label: 'The field name'
+        type: sequence
+        label: 'The fields belonging to the region'
+        sequence:
+          type: string
+          label: 'The field name'
     fields:
       type: sequence
       label: 'The Display Suite field plugins'
       sequence:
-        - type: mapping
-          label: 'A Display Suite field plugin'
-          mapping:
-            plugin_id:
-              type: string
-              label: 'The plugin ID of the field'
-            weight:
-              type: integer
-              label: 'The weight of the field'
-            label:
-              type: string
-              label: 'The position of the label'
-            formatter:
-              type: string
-              label: 'The formatter of the field'
-            settings:
-              type: ds.field_plugin.[%parent.plugin_id]
-            ft:
-              type: ds.field_template.settings
+        type: mapping
+        label: 'A Display Suite field plugin'
+        mapping:
+          plugin_id:
+            type: string
+            label: 'The plugin ID of the field'
+          weight:
+            type: integer
+            label: 'The weight of the field'
+          label:
+            type: string
+            label: 'The position of the label'
+          formatter:
+            type: string
+            label: 'The formatter of the field'
+          settings:
+            type: ds.field_plugin.[%parent.plugin_id]
+          ft:
+            type: ds.field_template.settings
 
 field.formatter.third_party.ds:
   type: mapping
@@ -106,5 +106,36 @@ ds.classes.*:
   type: sequence
   label: 'A list of classes'
   sequence:
-    - type: string
-      label: 'Class name'
+    type: string
+    label: 'Class name'
+
+layout_plugin.settings.*:
+  type: layout_plugin.settings
+  mapping:
+    classes:
+      type: 'sequence'
+      label: 'The layout classes'
+      sequence:
+        type: ds.classes.[%key]
+        label: 'Classes array'
+    wrappers:
+      type: 'sequence'
+      label: 'The layout wrappers'
+      sequence:
+        type: string
+        label: 'Field wrapper'
+    outer_wrapper:
+      type: string
+      label: 'The outer wrapper of the layout'
+    attributes:
+      type: string
+      label: 'The attributes of the layout'
+    link_attribute:
+      type: string
+      label: 'The link attribute of the layout'
+    link_custom:
+      type: string
+      label: 'The custom path of the layout'
+    label:
+      type: string
+      label: 'The position of the label'

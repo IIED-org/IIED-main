@@ -1,11 +1,11 @@
 entity.message.canonical:
   path: '/message/{message}'
   defaults:
-  # Calls the view controller, defined the message entity alter hook.
+    # Calls the view controller, defined the message entity alter hook.
     _entity_view: 'message'
     _title: 'Message Content'
   requirements:
-  # Calls the access controller of the entity, $operation 'view'
+    # Calls the access controller of the entity, $operation 'view'
     _entity_access: 'message.view'
 
 message_ui.add_page:
@@ -15,14 +15,14 @@ message_ui.add_page:
     _controller: '\Drupal\message_ui\Controller\MessageController::addPage'
     # appears_on: # Should we define a route for converting MENU_LOCAL_ACTION.
   requirements:
-     _entity_create_access: 'message'
+    _entity_create_access: 'message'
   options:
     _admin_route: TRUE
 
 message_ui.add:
   path: '/message/add/{message_template}'
   defaults:
-  # Calls the form.add controller, defined in the message entity alter hook.
+    # Calls the form.add controller, defined in the message entity alter hook.
     _controller: '\Drupal\message_ui\Controller\MessageController::add'
     _title: 'Create Message'
   requirements:
@@ -36,11 +36,11 @@ message_ui.add:
 entity.message.edit_form:
   path: '/message/{message}/edit'
   defaults:
-  # Calls the form.edit controller, defined in the message entity alter hook.
+    # Calls the form.edit controller, defined in the message entity alter hook.
     _entity_form: message.edit
     _title: 'Edit Message'
   requirements:
-    _entity_access: 'message.edit'
+    _entity_access: 'message.update'
   options:
     _admin_route: TRUE
 

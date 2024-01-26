@@ -23,8 +23,8 @@ class LayoutFluidTest extends TestBase {
 
     $assert = [
       'regions' => [
-        'left' => '<td colspan="8">' . t('Left') . '</td>',
-        'right' => '<td colspan="8">' . t('Right') . '</td>',
+        'left' => '<td colspan="8">' . $this->t('Left') . '</td>',
+        'right' => '<td colspan="8">' . $this->t('Right') . '</td>',
       ],
     ];
 

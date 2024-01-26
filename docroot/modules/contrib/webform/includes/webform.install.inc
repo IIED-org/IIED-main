@@ -521,7 +521,7 @@ function _webform_update_html_editor() {
       if ($entity_type_id) {
         \Drupal::entityTypeManager()
           ->getStorage($entity_type_id)
-          ->create($source->read($name))
+          ->createFromStorageRecord($source->read($name))
           ->save();
       }
       else {

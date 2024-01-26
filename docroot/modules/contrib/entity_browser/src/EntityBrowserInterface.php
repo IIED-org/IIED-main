@@ -129,7 +129,7 @@ interface EntityBrowserInterface extends ConfigEntityInterface {
   public function getFirstWidget();
 
   /**
-   * Adds paramterers that will be passed to the widget.
+   * Adds parameters that will be passed to the widget.
    *
    * @param array $parameters
    *   An array of parameters.

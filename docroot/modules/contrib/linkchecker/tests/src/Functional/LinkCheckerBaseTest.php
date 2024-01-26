@@ -25,6 +25,11 @@ abstract class LinkCheckerBaseTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
+  public $adminUser;
+
+  /**
+   * {@inheritdoc}
+   */
   protected static $modules = [
     'filter',
     'linkchecker',

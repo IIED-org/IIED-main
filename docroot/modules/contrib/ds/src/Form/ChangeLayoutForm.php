@@ -163,19 +163,35 @@ class ChangeLayoutForm extends FormBase {
       ];
 
       $fallback_image = \Drupal::service('extension.list.module')->getPath('ds') . '/images/preview.png';
-      $old_image = $old_layout_info->getIconPath() ?: $fallback_image;
-      $new_image = $new_layout->getIconPath() ?: $fallback_image;
+      $old_image = $old_layout_info->getIcon() ?: $fallback_image;
+      $new_image = $new_layout->getIcon() ?: $fallback_image;
       $arrow = \Drupal::service('extension.list.module')->getPath('ds') . '/images/arrow.png';
 
-      $form['preview']['old_layout'] = [
-        '#markup' => '<div class="ds-layout-preview-image"><img src="' . base_path() . $old_image . '"/></div>',
-      ];
+      if (is_string($old_image)) {
+        $form['preview']['old_layout'] = [
+          '#markup' => '<div class="ds-layout-preview-image"><img src="' . base_path() . $old_image . '"/></div>',
+        ];
+      }
+      else {
+        $form['preview']['old_layout'] = $old_image;
+        $form['preview']['old_layout']['#prefix'] = '<div class="ds-layout-preview-image">';
+        $form['preview']['old_layout']['#suffix'] = '</div>';
+      }
+
       $form['preview']['arrow'] = [
         '#markup' => '<div class="ds-layout-preview-arrow"><img src="' . base_path() . $arrow . '"/></div>',
       ];
-      $form['preview']['new_layout'] = [
-        '#markup' => '<div class="ds-layout-preview-image"><img src="' . base_path() . $new_image . '"/></div>',
-      ];
+      if (is_string($new_image)) {
+        $form['preview']['new_layout'] = [
+          '#markup' => '<div class="ds-layout-preview-image"><img src="' . base_path() . $new_image . '"/></div>',
+        ];
+      }
+      else {
+        $form['preview']['new_layout'] = $new_image;
+        $form['preview']['new_layout']['#prefix'] = '<div class="ds-layout-preview-image">';
+        $form['preview']['new_layout']['#suffix'] = '</div>';
+      }
+
       $form['#attached']['library'][] = 'ds/admin';
 
       // Submit button.

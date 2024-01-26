@@ -32,7 +32,7 @@ class TwigFieldForm extends FieldFormBase {
       '#type' => 'textarea',
       '#title' => $this->t('Template'),
       '#rows' => 5,
-      '#default_value' => isset($field['properties']['content']) ? $field['properties']['content'] : '',
+      '#default_value' => $field['properties']['content'] ?? '',
       '#required' => TRUE,
     ];
 

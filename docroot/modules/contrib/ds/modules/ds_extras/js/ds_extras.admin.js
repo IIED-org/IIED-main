@@ -3,36 +3,38 @@
  * Javascript functionality for the Display Suite Extras administration UI.
  */
 
-(function ($, Drupal) {
-
-  'use strict';
-
+(($, Drupal) => {
   Drupal.behaviors.DSExtrasSummaries = {
-    attach: function (context) {
+    attach(context) {
+      // eslint-disable-next-line no-shadow
+      $('#edit-fs2', context).drupalSetSummary((context) => {
+        const extraFields = $('#edit-fs2-fields-extra', context);
 
-      $('#edit-fs2', context).drupalSetSummary(function (context) {
-        var extra_fields = $('#edit-fs2-fields-extra', context);
-
-        if (extra_fields.is(':checked')) {
+        if (extraFields.is(':checked')) {
           return Drupal.t('Enabled');
         }
 
         return Drupal.t('Disabled');
       });
 
-      $('#edit-fs3', context).drupalSetSummary(function (context) {
-        var values = [];
+      // eslint-disable-next-line no-shadow
+      $('#edit-fs3', context).drupalSetSummary((context) => {
+        const values = [];
 
-        $('input:checked', context).parent().each(function () {
-          values.push(Drupal.checkPlain($.trim($('.option', this).text())));
-        });
+        $('input:checked', context)
+          .parent()
+          .toArray()
+          .forEach((element) => {
+            values.push(
+              Drupal.checkPlain($.trim($('.option', element).text())),
+            );
+          });
 
         if (values.length > 0) {
           return values.join(', ');
         }
         return Drupal.t('Disabled');
       });
-    }
+    },
   };
-
 })(jQuery, Drupal);

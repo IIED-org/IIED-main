@@ -241,7 +241,7 @@ class NameAdminTest extends NameTestBase {
       // Integers 0 (never reduce) through 20.
       // 'el_al_min' => '',
       // Integers 1 through 20.
-      // 'el_al_first' => '',
+      // 'el_al_first' => '',.
     ];
     $this->drupalGet('admin/config/regional/name/list/add');
     $this->submitForm($values, t('Save list format'));
@@ -338,7 +338,8 @@ class NameAdminTest extends NameTestBase {
           $results = isset($elements[0]) ? $elements[0]->getParent()->getAttribute('href') : '';
           $message = "Testing {$cell_code} on row {$id} using '{$xpath}' and expecting '" . Html::escape($value) . "', got '" . Html::escape($results) . "'.";
           if ($results == $value || strpos($results, $value . '?destination=') === 0) {
-          } else {
+          }
+          else {
             $this->fail($message);
           }
         }

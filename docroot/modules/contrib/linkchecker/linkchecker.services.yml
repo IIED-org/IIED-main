@@ -34,6 +34,7 @@ services:
       - '@datetime.time'
       - '@queue'
       - '@plugin.manager.link_status_handler'
+      - '@event_dispatcher'
 
   plugin.manager.link_status_handler:
     class: Drupal\linkchecker\Plugin\LinkStatusHandlerManager

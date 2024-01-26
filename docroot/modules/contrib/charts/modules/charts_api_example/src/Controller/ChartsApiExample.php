@@ -2,11 +2,11 @@
 
 namespace Drupal\charts_api_example\Controller;
 
+use Drupal\Component\Uuid\UuidInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Messenger\MessengerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Component\Uuid\UuidInterface;
 
 /**
  * Charts Api Example.
@@ -324,6 +324,7 @@ class ChartsApiExample extends ControllerBase {
       '#type' => 'chart',
       '#tooltips' => $charts_settings->get('charts_default_settings.display.tooltips'),
       '#title' => $this->t('@library Scatter Chart', ['@library' => ucfirst($library)]),
+      '#data_markers' => TRUE,
       '#chart_type' => 'scatter',
       'series' => [
         '#type' => 'chart_data',

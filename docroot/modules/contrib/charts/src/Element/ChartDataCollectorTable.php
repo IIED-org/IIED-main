@@ -123,7 +123,7 @@ class ChartDataCollectorTable extends FormElement {
       '#header' => [],
       '#responsive' => FALSE,
       '#attributes' => [
-        'class' => 'data-collector-table',
+        'class' => ['data-collector-table'],
       ],
     ];
 
@@ -823,6 +823,16 @@ class ChartDataCollectorTable extends FormElement {
             }
           }
         }
+        // Adding a couple types not currently supported but hopefully soon.
+        if (in_array($type, [
+          'scatter',
+          'bubble',
+          'candlestick',
+          'boxplot',
+        ])) {
+          // Enclose the data value in an array.
+          $series[$i]['data'] = [$series[$i]['data']];
+        }
       }
       else {
         $j = 0;
@@ -843,6 +853,14 @@ class ChartDataCollectorTable extends FormElement {
             if ($is_single_axis) {
               $series[$j]['data'][] = [$series[$j]['name'], $cell_value];
               $series[$j]['title'][] = $row[0]['data'];
+            }
+            elseif (in_array($type, [
+              'scatter',
+              'bubble',
+              'candlestick',
+              'boxplot',
+            ])) {
+              $series[$j]['data'][0][] = $cell_value;
             }
             else {
               $series[$j]['data'][] = $cell_value;

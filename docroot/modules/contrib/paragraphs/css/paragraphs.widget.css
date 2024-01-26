@@ -399,6 +399,10 @@ tr:hover .paragraphs-description::after {
   font-size: 81.3%;
 }
 
+.js .paragraphs-convert-button {
+  margin-left: 0;
+}
+
 .paragraph--view-mode--preview {
   padding-right: 1em;
 }

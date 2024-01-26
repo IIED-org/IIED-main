@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\message_subscribe_email\Functional;
 
+use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\node\Traits\ContentTypeCreationTrait;
 use Drupal\Tests\node\Traits\NodeCreationTrait;
-use Drupal\Tests\BrowserTestBase;
 
 /**
  * Tests the views provided by this module for the UI.
@@ -101,7 +101,7 @@ class ViewsTest extends BrowserTestBase {
       $this->assertSession()->statusCodeEquals(200);
       $this->drupalGet('user/' . $user->id() . '/message-subscribe/subscribe_node');
       $this->assertSession()->statusCodeEquals(200);
-      $this->assertSession()->pageTextContains(t('You are not subscribed to any items.'));
+      $this->assertSession()->pageTextContains('You are not subscribed to any items.');
     }
 
     // Add a node, and subscribe user 2 to that node.
@@ -113,19 +113,19 @@ class ViewsTest extends BrowserTestBase {
     $this->drupalGet('user/' . $users[2]->id() . '/message-subscribe/subscribe_node');
     // The node title (label) appears on the list of subscribed content.
     $this->assertSession()->pageTextContains($node->label());
-    $this->assertSession()->pageTextContains(t("Don't send email"));
+    $this->assertSession()->pageTextContains("Don't send email");
 
     // Subscribe user 2 to user 1.
     $flag = $this->flagService->getFlagById('subscribe_user');
     $this->flagService->flag($flag, $users[1], $users[2]);
     $this->drupalGet('user/' . $users[2]->id() . '/message-subscribe/subscribe_user');
     $this->assertSession()->pageTextContains($users[1]->label());
-    $this->assertSession()->pageTextContains(t("Don't send email"));
+    $this->assertSession()->pageTextContains("Don't send email");
 
     // Login user 3.
     $this->drupalLogin($users[3]);
     $this->drupalGet('user/' . $users[3]->id() . '/message-subscribe');
-    $this->assertSession()->pageTextContains(t('You are not subscribed to any items.'));
+    $this->assertSession()->pageTextContains('You are not subscribed to any items.');
     $flag = $this->flagService->getFlagById('subscribe_node');
     $this->flagService->flag($flag, $node, $users[3]);
     $this->drupalGet('user/' . $users[3]->id() . '/message-subscribe');

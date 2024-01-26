@@ -8,9 +8,9 @@
 }
 
 .ft-settings .ft-group {
-  border-top: 1px solid #aaa;
-  padding: 5px 0;
   overflow: auto;
+  padding: 5px 0;
+  border-top: 1px solid #aaa;
 }
 
 .field-formatter-settings-edit-form .ft-group .form-item {
@@ -32,14 +32,14 @@
 }
 
 .ds-layout-preview-suggestion {
-  min-width: 150px;
   overflow: hidden;
+  min-width: 150px;
   padding-left: 30px;
 }
 
 .ft-group div.form-item {
-  float: left;
-  width: 130px;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .ds-after-suggestion {

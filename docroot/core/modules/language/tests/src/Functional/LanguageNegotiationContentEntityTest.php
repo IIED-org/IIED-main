@@ -49,8 +49,8 @@ class LanguageNegotiationContentEntityTest extends BrowserTestBase {
   protected function setUp(): void {
     parent::setUp();
 
-    ConfigurableLanguage::create(['id' => 'es'])->save();
-    ConfigurableLanguage::create(['id' => 'fr'])->save();
+    ConfigurableLanguage::createFromLangcode('es')->save();
+    ConfigurableLanguage::createFromLangcode('fr')->save();
 
     // In order to reflect the changes for a multilingual site in the container
     // we have to rebuild it.
@@ -160,31 +160,6 @@ class LanguageNegotiationContentEntityTest extends BrowserTestBase {
     $last_interface_language = $last[LanguageInterface::TYPE_INTERFACE];
     $this->assertSame($last_interface_language, $default_site_langcode, 'Interface language did not change from the default site language.');
     $this->assertSame($last_content_language, $translation->language()->getId(), 'Content language matches the current entity translation language.');
-  }
-
-  /**
-   * Tests language negotiation fallback when there is no active language.
-   *
-   * @see entity_test_entity_display_build_alter()
-   */
-  public function testContentEntityLanguageFallback() {
-    $this->drupalGet('/es/entity_test/1');
-
-    // In entity_test_entity_display_build_alter() a 'div' is added with
-    // a data attribute populated by $entity->toUrl(), without passing any
-    // context about the current language. The ::toUrl method should fall back
-    // to the user's current language.
-    $element = $this->getSession()->getPage()->find('css', '[data-to-url]');
-
-    // Prepend the 'base path' since the Drupal test bot is running in a
-    // subdirectory.
-    $this->assertEquals($GLOBALS['base_path'] . 'es/entity_test/1', $element->getAttribute('data-to-url'));
-
-    // The same routine should work for the French language.
-    $this->drupalGet('/fr/entity_test/1');
-    $element = $this->getSession()->getPage()->find('css', '[data-to-url]');
-    $this->assertEquals($GLOBALS['base_path'] . 'fr/entity_test/1', $element->getAttribute('data-to-url'));
-
   }
 
   /**

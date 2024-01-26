@@ -47,8 +47,8 @@ class MessagePermissions {
       'view ' . $template->id() . ' message' => [
         'title' => $this->t('%template_name: View a message instance', $template_params),
       ],
-      'edit ' . $template->id() . ' message' => [
-        'title' => $this->t('%template_name: Edit a message instance', $template_params),
+      'update ' . $template->id() . ' message' => [
+        'title' => $this->t('%template_name: Update a message instance', $template_params),
       ],
       'create ' . $template->id() . ' message' => [
         'title' => $this->t('%template_name: Create a new message instance', $template_params),

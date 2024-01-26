@@ -4,7 +4,6 @@ namespace Drupal\name\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Entity\EntityFieldManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Url;
 use Drupal\Core\Entity\Exception\UndefinedLinkTemplateException;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -12,11 +11,12 @@ use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\Url;
 use Drupal\name\NameFormatParser;
+use Drupal\name\NameFormatter as NameFormatterService;
 use Drupal\name\NameGeneratorInterface;
 use Drupal\name\Traits\NameAdditionalPreferredTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\name\NameFormatter as NameFormatterService;
 
 /**
  * Plugin implementation of the 'name' formatter.
@@ -210,7 +210,7 @@ class NameFormatter extends FormatterBase implements ContainerFactoryPluginInter
     $summary = [];
 
     // Name format.
-    $machine_name = isset($settings['format']) ? $settings['format'] : 'default';
+    $machine_name = $settings['format'] ?? 'default';
     $name_format = $this->entityTypeManager->getStorage('name_format')->load($machine_name);
     if ($name_format) {
       $summary[] = $this->t('Format: @format (@machine_name)', [
@@ -227,7 +227,7 @@ class NameFormatter extends FormatterBase implements ContainerFactoryPluginInter
       $summary[] = $this->t('List format: Individually');
     }
     else {
-      $machine_name = isset($settings['list_format']) ? $settings['list_format'] : 'default';
+      $machine_name = $settings['list_format'] ?? 'default';
       $name_format = $this->entityTypeManager->getStorage('name_list_format')->load($machine_name);
       if ($name_format) {
         $summary[] = $this->t('List format: @format (@machine_name)', [
@@ -285,7 +285,7 @@ class NameFormatter extends FormatterBase implements ContainerFactoryPluginInter
 
     $settings = $this->settings;
 
-    $format = isset($settings['format']) ? $settings['format'] : 'default';
+    $format = $settings['format'] ?? 'default';
     $is_multiple = $this->fieldDefinition->getFieldStorageDefinition()->isMultiple() && $items->count() > 1;
     $list_format = $is_multiple && !empty($settings['list_format']) ? $settings['list_format'] : '';
 

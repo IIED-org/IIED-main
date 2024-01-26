@@ -90,6 +90,18 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
   protected $activeLangcode = LanguageInterface::LANGCODE_DEFAULT;
 
   /**
+   * Override the result of isDefaultTranslation().
+   *
+   * Under certain circumstances, such as when changing default translation, the
+   * default value needs to be overridden.
+   *
+   * @var bool|null
+   *
+   * @internal
+   */
+  protected ?bool $enforceDefaultTranslation = NULL;
+
+  /**
    * Local cache for the default language code.
    *
    * @var string
@@ -420,9 +432,27 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
   }
 
   /**
+   * Set or clear an override of the isDefaultTranslation() result.
+   *
+   * @param bool|null $enforce_default_translation
+   *   If boolean value is passed, the value will override the result of
+   *   isDefaultTranslation() method. If NULL is passed, the default logic will
+   *   be used.
+   *
+   * @return $this
+   */
+  public function setDefaultTranslationEnforced(?bool $enforce_default_translation): static {
+    $this->enforceDefaultTranslation = $enforce_default_translation;
+    return $this;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function isDefaultTranslation() {
+    if ($this->enforceDefaultTranslation !== NULL) {
+      return $this->enforceDefaultTranslation;
+    }
     return $this->activeLangcode === LanguageInterface::LANGCODE_DEFAULT;
   }
 
@@ -449,9 +479,12 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
   public function preSave(EntityStorageInterface $storage) {
     // An entity requiring validation should not be saved if it has not been
     // actually validated.
-    assert(!$this->validationRequired || $this->validated, 'Entity validation was skipped.');
-
-    $this->validated = FALSE;
+    if ($this->validationRequired && !$this->validated) {
+      throw new \LogicException('Entity validation is required, but was skipped.');
+    }
+    else {
+      $this->validated = FALSE;
+    }
 
     parent::preSave($storage);
   }
@@ -1497,7 +1530,7 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
    * {@inheritdoc}
    */
   public function toUrl($rel = 'canonical', array $options = []) {
-    if (\Drupal::languageManager()->isMultilingual() && $this instanceof TranslatableDataInterface && $rel == 'canonical' && !isset($options['language']) && !$this->isLanguageAware()) {
+    if ($this->languageManager()->isMultilingual() && $this instanceof TranslatableDataInterface && !in_array($rel, ['collection', 'add-page', 'add-form'], TRUE) && !isset($options['language']) && !$this->isLanguageAware()) {
       $currentLanguage = $this->languageManager()->getCurrentLanguage(LanguageInterface::TYPE_CONTENT);
       $options['language'] = $currentLanguage;
 

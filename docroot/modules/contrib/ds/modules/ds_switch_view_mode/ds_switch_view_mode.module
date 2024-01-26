@@ -5,6 +5,7 @@
  * Display Suite Switch View mode.
  */
 
+use Drupal\content_moderation\ContentPreprocess;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -24,6 +25,7 @@ function ds_switch_view_mode_entity_base_field_info(EntityTypeInterface $entity_
       ->setLabel(t('DS switch'))
       ->setName('ds_switch')
       ->setRevisionable(TRUE)
+      ->setTranslatable(TRUE)
       ->setDescription(t('Holds the DS view mode of the node.'))
       ->setSetting('default_value', '')
       ->setPropertyConstraints('value', ['Length' => ['max' => 60]]);
@@ -36,10 +38,19 @@ function ds_switch_view_mode_entity_base_field_info(EntityTypeInterface $entity_
  * Implements hook_entity_view_mode_alter().
  */
 function ds_switch_view_mode_entity_view_mode_alter(&$view_mode, EntityInterface $entity, $context) {
-  if ($entity->getEntityTypeId() == 'node' && node_is_page($entity) && !empty($entity->ds_switch->value) && $view_mode == 'full') {
-    $original_view_mode = $view_mode;
-    $view_mode = $entity->ds_switch->value;
-    \Drupal::moduleHandler()->alter('ds_switch_view_mode', $view_mode, $original_view_mode, $entity);
+  if ($entity->getEntityTypeId() == 'node' && !empty($entity->ds_switch->value) && $view_mode == 'full') {
+    $node_is_page = node_is_page($entity);
+    if (!$node_is_page && \Drupal::moduleHandler()->moduleExists('content_moderation')) {
+      $node_is_page = \Drupal::service('class_resolver')
+        ->getInstanceFromDefinition(ContentPreprocess::class)
+        ->isLatestVersionPage($entity);
+    }
+
+    if ($node_is_page) {
+      $original_view_mode = $view_mode;
+      $view_mode = $entity->ds_switch->value;
+      \Drupal::moduleHandler()->alter('ds_switch_view_mode', $view_mode, $original_view_mode, $entity);
+    }
   }
 }
 
@@ -111,12 +122,7 @@ function ds_switch_view_mode_form_node_form_alter(&$form, FormStateInterface $fo
       }
       $chosen_layout = $layouts[$mode];
       if (empty($chosen_layout)) {
-        if (isset($layouts['full'])) {
-          $chosen_layout = $layouts['full'];
-        }
-        else {
-          $chosen_layout = $layouts[''];
-        }
+        $chosen_layout = $layouts['full'] ?? $layouts[''];
       }
       $layout_settings = $chosen_layout->getThirdPartySettings('ds');
 
@@ -126,17 +132,18 @@ function ds_switch_view_mode_form_node_form_alter(&$form, FormStateInterface $fo
       if (isset($layout_settings['layout'])) {
         /** @var \Drupal\Core\Layout\LayoutDefinition $chosen_layout */
         $chosen_layout = $ds_layouts[$layout_settings['layout']['id']];
-        $image = $chosen_layout->getIconPath();
+        $image = $chosen_layout->getIcon();
         if (empty($image)) {
           $image = $fallback_image;
         }
+        $form['ds_switch_view_mode']['preview']['image'] = $image;
       }
       else {
         $image = $fallback_image;
+        $form['ds_switch_view_mode']['preview']['image'] = [
+          '#markup' => '<div class="ds-layout-preview-image"><img src="' . base_path() . $image . '"/></div>',
+        ];
       }
-      $form['ds_switch_view_mode']['preview']['image'] = [
-        '#markup' => '<div class="ds-layout-preview-image"><img src="' . base_path() . $image . '"/></div>',
-      ];
     }
   }
 }

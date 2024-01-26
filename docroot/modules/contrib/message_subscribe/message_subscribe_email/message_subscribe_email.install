@@ -13,13 +13,9 @@
 function message_subscribe_email_install() {
   // Add the `message_subscribe_email` field to the user form.
   /** @var \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display */
-  if (method_exists(\Drupal::service('entity_display.repository'), 'getFormDisplay')) {
-    $display = \Drupal::service('entity_display.repository')->getFormDisplay('user', 'user');
-  }
-  else {
-    // Pre-Drupal 8.8.
-    $display = entity_get_form_display('user', 'user', 'default');
-  }
+  $display = \Drupal::service('entity_display.repository')
+    ->getFormDisplay('user', 'user');
+
   if (!$display->getComponent('message_subscribe_email')) {
     $settings = [
       'type' => 'boolean_checkbox',

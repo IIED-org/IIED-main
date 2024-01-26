@@ -8,7 +8,7 @@
   "minimum-stability": "dev",
   "require-dev": {
     "drupal/devel": "5.x-dev",
-    "drupal/classy": "^1.0"
+    "drupal/field_group": "3.x-dev"
   },
   "authors": [
     {

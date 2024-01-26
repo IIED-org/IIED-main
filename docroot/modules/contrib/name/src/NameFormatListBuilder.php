@@ -2,13 +2,13 @@
 
 namespace Drupal\name;
 
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Component\Render\FormattableMarkup;
 use Drupal\name\Entity\NameFormat;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Name format list builder for the admin page.

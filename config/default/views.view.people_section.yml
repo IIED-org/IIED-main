@@ -237,7 +237,6 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url.query_args
-        - user
         - user.permissions
       tags: {  }
   block_1:
@@ -334,7 +333,6 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url.query_args
-        - user
         - user.permissions
       tags: {  }
   block_10:
@@ -518,7 +516,6 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url.query_args
-        - user
         - user.permissions
       tags: {  }
   block_2:
@@ -680,7 +677,6 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url.query_args
-        - user
         - user.permissions
       tags: {  }
   block_3:
@@ -835,7 +831,6 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url.query_args
-        - user
         - user.permissions
       tags: {  }
     deleted: false
@@ -974,7 +969,6 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url.query_args
-        - user
         - user.permissions
       tags: {  }
   block_5:
@@ -1112,7 +1106,6 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url.query_args
-        - user
         - user.permissions
       tags: {  }
   block_6:
@@ -1250,7 +1243,6 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url.query_args
-        - user
         - user.permissions
       tags: {  }
   block_7:
@@ -1388,7 +1380,6 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url.query_args
-        - user
         - user.permissions
       tags: {  }
   block_8:

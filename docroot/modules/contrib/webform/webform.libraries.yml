@@ -1337,7 +1337,10 @@ libraries.tippyjs:
   directory: tippyjs
   cdn:
     /libraries/tippyjs/dist/: https://unpkg.com/tippy.js@6.3.7/dist/
+  css:
+    component:
+      /libraries/tippyjs/dist/tippy.css: { }
   js:
-    /libraries/tippyjs/dist/tippy-bundle.umd.js: { }
+    /libraries/tippyjs/dist/tippy.umd.js: { }
   dependencies:
     - webform/libraries.popperjs

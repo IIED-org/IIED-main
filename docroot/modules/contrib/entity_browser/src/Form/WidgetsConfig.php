@@ -161,7 +161,7 @@ class WidgetsConfig extends EntityForm {
 
     $form['submit'] = [
       '#type' => 'submit',
-      '#value' => t('Save'),
+      '#value' => $this->t('Save'),
     ];
 
     return $form;

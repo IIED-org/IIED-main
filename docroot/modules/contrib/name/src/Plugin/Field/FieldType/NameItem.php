@@ -3,18 +3,18 @@
 namespace Drupal\name\Plugin\Field\FieldType;
 
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Link;
-use Drupal\Core\Url;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemBase;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Security\TrustedCallbackInterface;
 use Drupal\Core\TypedData\DataDefinition;
+use Drupal\Core\Url;
+use Drupal\name\Traits\NameAdditionalPreferredTrait;
 use Drupal\name\Traits\NameFieldSettingsTrait;
 use Drupal\name\Traits\NameFormDisplaySettingsTrait;
 use Drupal\name\Traits\NameFormSettingsHelperTrait;
-use Drupal\name\Traits\NameAdditionalPreferredTrait;
 
 /**
  * Plugin implementation of the 'name' field type.

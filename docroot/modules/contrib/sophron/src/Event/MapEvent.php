@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Drupal\sophron\Event;
 
@@ -32,7 +34,8 @@ class MapEvent extends Event {
    *   The MimeMap class being processed.
    */
   public function __construct(
-    protected string $mapClass) {
+    protected string $mapClass,
+  ) {
   }
 
   /**

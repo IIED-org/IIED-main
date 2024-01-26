@@ -309,4 +309,17 @@ trait ParagraphsTestBaseTrait {
     $this->workflow->save();
   }
 
+  /**
+   * Checks the core version.
+   *
+   * @param string $version
+   *   The core version, for example 10.2.
+   *
+   * @return bool
+   *   Whether the core version is higher than the requested one.
+   */
+  protected  function coreVersion(string $version): bool {
+    return version_compare(\Drupal::VERSION, $version, '>=');
+  }
+
 }

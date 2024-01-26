@@ -13,12 +13,12 @@ dependencies:
     - user.role.administrator
     - user.role.manager
   module:
-    0: datetime
-    1: node
-    2: options
-    3: taxonomy
-    4: user
-    6: views_bulk_operations
+    - datetime
+    - node
+    - options
+    - taxonomy
+    - user
+    - views_bulk_operations
 id: manage_lists
 label: 'Manage lists'
 module: views
@@ -700,7 +700,6 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user
         - 'user.node_grants:view'
         - user.roles
       tags:
@@ -732,7 +731,6 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user
         - 'user.node_grants:view'
         - user.roles
       tags:

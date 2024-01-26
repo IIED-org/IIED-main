@@ -51,11 +51,6 @@ class DrupalListener implements TestListener {
    */
   public function startTest(Test $test): void {
     $this->symfonyListener->startTest($test);
-    // Check for incorrect visibility of the $modules property.
-    $class = new \ReflectionClass($test);
-    if ($class->hasProperty('modules') && !$class->getProperty('modules')->isProtected()) {
-      @trigger_error('The ' . get_class($test) . '::$modules property must be declared protected. See https://www.drupal.org/node/2909426', E_USER_DEPRECATED);
-    }
   }
 
   /**

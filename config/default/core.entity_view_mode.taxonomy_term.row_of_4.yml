@@ -6,5 +6,6 @@ dependencies:
     - taxonomy
 id: taxonomy_term.row_of_4
 label: 'row of 4'
+description: ''
 targetEntityType: taxonomy_term
 cache: true

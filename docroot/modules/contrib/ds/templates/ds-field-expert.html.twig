@@ -33,8 +33,8 @@
   {% if not label_hidden %}
     {%
       set title_classes = [
-        'field-label-' ~ element['#label_display']|clean_class,
-         (element['#label_display'] == 'visually_hidden' ? 'visually-hidden'),
+        'field__label',
+        label_display == 'visually_hidden' ? 'visually-hidden',
       ]
     %}
     {%- if settings['lbw-def-at'] -%}
@@ -60,15 +60,15 @@
 {% endmacro %}
 
 {% macro content(items, settings, field_item_wrapper_attributes, content_attributes) %}
-  {% for item in items %}
-    {% if settings.fi %}
-      {% if settings['fi-def-at'] %}
-        <{{ settings['fi-el'] }} {{ field_item_wrapper_attributes.mergeAttributes(item.attributes) }} >
-      {% else %}
-        <{{ settings['fi-el'] }} {{ field_item_wrapper_attributes }} >
-      {% endif %}
-          {{- item.content -}}
-        </{{ settings['fi-el'] }}>
+  {%- for item in items -%}
+    {%- if settings.fi -%}
+      {%- if settings['fi-def-at'] -%}
+        <{{ settings['fi-el'] }} {{- field_item_wrapper_attributes.mergeAttributes(item.attributes) }}>
+      {%- else -%}
+        <{{ settings['fi-el'] }} {{- field_item_wrapper_attributes }}>
+      {%- endif %}
+      {{- item.content -}}
+      </{{ settings['fi-el'] }}>
     {% else %}
       {{ item.content }}
     {% endif %}

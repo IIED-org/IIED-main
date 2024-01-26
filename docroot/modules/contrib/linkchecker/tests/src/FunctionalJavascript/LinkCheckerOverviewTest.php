@@ -15,6 +15,11 @@ class LinkCheckerOverviewTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
+  public $adminUser;
+
+  /**
+   * {@inheritdoc}
+   */
   protected $defaultTheme = 'stark';
 
   /**

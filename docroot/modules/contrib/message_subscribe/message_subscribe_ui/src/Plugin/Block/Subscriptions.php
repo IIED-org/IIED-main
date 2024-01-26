@@ -94,8 +94,8 @@ class Subscriptions extends BlockBase implements FormInterface, ContainerFactory
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
+  final public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new self(
       $configuration,
       $plugin_id,
       $plugin_definition,
@@ -157,7 +157,11 @@ class Subscriptions extends BlockBase implements FormInterface, ContainerFactory
     $entities += $entity->referencedEntities();
     $form['description'] = [
       '#type' => 'markup',
-      '#markup' => $this->t('Manage all <a href=":url">subscriptions</a>.', [':url' => Url::fromRoute('message_subscribe_ui.tab', ['user' => \Drupal::currentUser()->id()])->toString()]),
+      '#markup' => $this->t('Manage all <a href=":url">subscriptions</a>.', [
+        ':url' => Url::fromRoute('message_subscribe_ui.tab',
+        ['user' => $this->currentUser->id()],
+        )->toString(),
+      ]),
     ];
     $form['subscriptions'] = [
       '#type' => 'container',
@@ -232,7 +236,7 @@ class Subscriptions extends BlockBase implements FormInterface, ContainerFactory
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    // TODO: Implement validateForm() method.
+    // @todo Implement validateForm() method.
   }
 
   /**

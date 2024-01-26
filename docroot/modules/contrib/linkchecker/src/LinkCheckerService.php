@@ -10,10 +10,13 @@ use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Drupal\linkchecker\Event\BuildHeader;
+use Drupal\linkchecker\Event\LinkcheckerEvents;
 use Drupal\linkchecker\Plugin\LinkStatusHandlerManager;
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Exception\RequestException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class LinkCheckerService.
@@ -72,15 +75,23 @@ class LinkCheckerService {
   protected $statusHandlerManager;
 
   /**
+   * The event dispatcher.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected EventDispatcherInterface $eventDispatcher;
+
+  /**
    * Constructs a new LinkCheckerService object.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, ConfigFactory $config, Client $httpClient, TimeInterface $time, QueueFactory $queueFactory, LinkStatusHandlerManager $statusHandlerManager) {
+  public function __construct(EntityTypeManagerInterface $entityTypeManager, ConfigFactory $config, Client $httpClient, TimeInterface $time, QueueFactory $queueFactory, LinkStatusHandlerManager $statusHandlerManager, EventDispatcherInterface $eventDispatcher) {
     $this->entityTypeManager = $entityTypeManager;
     $this->linkcheckerSetting = $config->get('linkchecker.settings');
     $this->httpClient = $httpClient;
     $this->time = $time;
     $this->queue = $queueFactory->get('linkchecker_check');
     $this->statusHandlerManager = $statusHandlerManager;
+    $this->eventDispatcher = $eventDispatcher;
   }
 
   /**
@@ -160,6 +171,15 @@ class LinkCheckerService {
       // required to prevent timeouts on URLs that are large downloads.
       $headers['Range'] = 'bytes=0-1024';
     }
+
+    // Allow other modules to alter the header.
+    $context = [
+      'method' => $link->getRequestMethod(),
+      'url' => $link->getUrl(),
+    ];
+    $event = new BuildHeader($headers, $context);
+    $this->eventDispatcher->dispatch($event, LinkcheckerEvents::BUILD_HEADER);
+    $headers = $event->getHeaders();
 
     // Add in the headers.
     $options = [

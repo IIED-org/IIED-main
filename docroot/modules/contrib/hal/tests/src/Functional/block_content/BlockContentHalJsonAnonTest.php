@@ -46,7 +46,7 @@ class BlockContentHalJsonAnonTest extends BlockContentResourceTestBase {
     return $normalization + [
       '_links' => [
         'self' => [
-          'href' => $this->baseUrl . '/block/1?_format=hal_json',
+          'href' => $this->baseUrl . '/admin/content/block/1?_format=hal_json',
         ],
         'type' => [
           'href' => $this->baseUrl . '/rest/type/block_content/basic',

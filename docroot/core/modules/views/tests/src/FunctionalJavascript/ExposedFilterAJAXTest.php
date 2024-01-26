@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\views\FunctionalJavascript;
 
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
@@ -115,7 +117,6 @@ class ExposedFilterAJAXTest extends WebDriverTestBase {
 
     // Reset the form.
     $this->submitForm([], 'Reset');
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     $this->assertSession()->pageTextContains('Page One');
     $this->assertSession()->pageTextContains('Page Two');

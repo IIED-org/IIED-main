@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\message_subscribe\Kernel\Form;
 
-use Drupal\message_subscribe\Form\MessageSubscribeAdminSettings;
 use Drupal\KernelTests\ConfigFormTestBase;
+use Drupal\message_subscribe\Form\MessageSubscribeAdminSettings;
 
 /**
  * Test the admin settings form.
@@ -50,6 +50,11 @@ class MessageSubscribeAdminSettingsTest extends ConfigFormTestBase {
         '#value' => TRUE,
         '#config_name' => 'message_subscribe.settings',
         '#config_key' => 'debug_mode',
+      ],
+      'range' => [
+        '#value' => 100,
+        '#config_name' => 'message_subscribe.settings',
+        '#config_key' => 'range',
       ],
       'default_notifiers' => [
         '#value' => ['email', 'test'],

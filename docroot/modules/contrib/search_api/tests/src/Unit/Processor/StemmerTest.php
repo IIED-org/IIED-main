@@ -168,7 +168,7 @@ class StemmerTest extends UnitTestCase {
       $this->processor->preprocessSearchQuery($query);
       $this->assertFalse($should_process, "Keys weren't processed but should have been.");
     }
-    catch (\RuntimeException $e) {
+    catch (\RuntimeException) {
       $this->assertTrue($should_process, "Keys were processed but shouldn't have been.");
     }
   }

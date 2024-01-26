@@ -40,8 +40,8 @@ interface MessageUiViewsContextualLinksInterface extends PluginInspectionInterfa
   /**
    * Checking if the user have access to do the action.
    *
-   * @return \Drupal\Core\Access\AccessResultInterface
-   *   Access result interface object.
+   * @return bool|\Drupal\Core\Access\AccessResultInterface
+   *   The access result.
    */
   public function access();
 

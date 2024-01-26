@@ -11,6 +11,9 @@ stage_file_proxy.settings:
     origin_dir:
       type: string
       label: "Origin dir"
+    proxy_headers:
+      type: string
+      label: "Proxy headers"
     use_imagecache_root:
       type: boolean
       label: "Use imagecache root"

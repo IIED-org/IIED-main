@@ -41,6 +41,11 @@ class EntityReferenceRevisionsNormalizerTest extends BrowserTestBase {
    * {@inheritdoc}
    */
   protected function setUp(): void {
+
+    if (version_compare(\Drupal::VERSION, '10', '>=')) {
+      $this->markTestSkipped('HAL support has been moved to hal module');
+    }
+
     parent::setUp();
     // Create paragraphs and article content types.
     $this->drupalCreateContentType(array('type' => 'entity_revisions', 'name' => 'Entity revisions'));
@@ -53,10 +58,6 @@ class EntityReferenceRevisionsNormalizerTest extends BrowserTestBase {
    * Tests the entity reference revisions configuration.
    */
   public function testEntityReferenceRevisions() {
-
-    if (version_compare(\Drupal::VERSION, '10', '>=')) {
-      $this->markTestSkipped('HAL support has been moved to hal module');
-    }
 
     $admin_user = $this->drupalCreateUser(array(
       'administer site configuration',

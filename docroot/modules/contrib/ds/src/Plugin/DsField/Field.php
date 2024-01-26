@@ -79,8 +79,13 @@ TWIG;
 
     // Build the link attributes.
     $link_attributes = new Attribute();
-    if (!empty($config['link']) && !empty($config['link class'])) {
-      $link_attributes->addClass($config['link class']);
+    if (!empty($config['link'])) {
+      if (!empty($config['link class'])) {
+        $link_attributes->addClass($config['link class']);
+      }
+      if (!empty($config['link_target'])) {
+        $link_attributes->setAttribute('target', $config['link_target']);
+      }
     }
 
     return [

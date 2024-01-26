@@ -4,6 +4,7 @@ namespace Drupal\computed_field\Plugin\Field\FieldType;
 
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Plugin implementation of the 'computed_string' field type.
@@ -19,6 +20,7 @@ use Drupal\Core\Form\FormStateInterface;
  */
 class ComputedStringItem extends ComputedStringItemBase {
   use ComputedFieldStronglyTypedItemTrait;
+  use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
@@ -57,10 +59,10 @@ class ComputedStringItem extends ComputedStringItemBase {
 
     $element['max_length'] = [
       '#type' => 'number',
-      '#title' => t('Maximum length'),
+      '#title' => $this->t('Maximum length'),
       '#default_value' => $settings['max_length'],
       '#required' => TRUE,
-      '#description' => t('The maximum length of the field in characters.'),
+      '#description' => $this->t('The maximum length of the field in characters.'),
       '#min' => 1,
       '#disabled' => $has_data,
     ];

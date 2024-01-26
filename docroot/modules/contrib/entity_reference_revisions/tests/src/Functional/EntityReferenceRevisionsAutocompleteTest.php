@@ -53,7 +53,7 @@ class EntityReferenceRevisionsAutocompleteTest extends BrowserTestBase {
    * referenced entity and of the entity the field is attached to are different.
    */
   public function testEntityReferenceRevisionsAutocompleteProcessing() {
-    $admin_user = $this->drupalCreateUser(array(
+    $admin_permissions = array(
       'administer site configuration',
       'administer nodes',
       'administer blocks',
@@ -63,7 +63,12 @@ class EntityReferenceRevisionsAutocompleteTest extends BrowserTestBase {
       'administer node display',
       'administer node form display',
       'edit any article content',
-    ));
+    );
+    if (version_compare(\Drupal::VERSION, '10.1', '>=')) {
+      $admin_permissions[] = 'administer block types';
+      $admin_permissions[] = 'administer block content';
+    }
+    $admin_user = $this->drupalCreateUser($admin_permissions);
     $this->drupalLogin($admin_user);
 
     // Create a custom block content bundle.
