@@ -33,7 +33,10 @@ use Drupal\message_subscribe\Subscribers\DeliveryCandidateInterface;
 function hook_message_subscribe_get_subscribers(MessageInterface $message, array $subscribe_options = [], array $context = []) {
   return [
     2 => new DeliveryCandidate(['subscribe_node'], ['sms'], 2),
-    7 => new DeliveryCandidate(['subscribe_og', 'subscribe_user'], ['sms', 'email'], 7),
+    7 => new DeliveryCandidate(['subscribe_og', 'subscribe_user'], [
+      'sms',
+      'email',
+    ], 7),
   ];
 }
 

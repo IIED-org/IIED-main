@@ -9,7 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class MessageMultipleDeleteForm.
+ * Delete multiple messages with this form.
  *
  * @package Drupal\message_ui\Form
  */
@@ -95,6 +95,7 @@ class MessageMultipleDeleteForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $templates = $form_state->getValue('message_templates');
     $query = $this->entityTypeManager->getStorage('message')->getQuery()
+      ->accessCheck(FALSE)
       ->condition('template', $templates, 'IN');
 
     // Allow other modules to alter the query.

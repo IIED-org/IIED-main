@@ -23,8 +23,8 @@ ds.field.*:
       type: sequence
       label: 'Entities'
       sequence:
-        - type: string
-          label: 'Entity'
+        type: string
+        label: 'Entity'
     properties:
       type: ds.field.properties.[%parent.type]
 
@@ -42,6 +42,15 @@ ds.field.properties.token:
         format:
           type: string
           label: 'The format'
+    force_global_entity:
+      type: boolean
+      label: 'Force use global entity'
+    use_global_entity:
+      type: boolean
+      label: 'Use View entity token'
+    use_global_view_token:
+      type: boolean
+      label: 'Use View global view token'
 
 ds.field.properties.block:
   type: mapping

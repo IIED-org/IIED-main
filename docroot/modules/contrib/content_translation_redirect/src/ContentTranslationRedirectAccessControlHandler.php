@@ -3,6 +3,7 @@
 namespace Drupal\content_translation_redirect;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityAccessControlHandler;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -15,7 +16,7 @@ class ContentTranslationRedirectAccessControlHandler extends EntityAccessControl
   /**
    * {@inheritdoc}
    */
-  protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account) {
+  protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account): AccessResultInterface {
     if ($operation === 'delete') {
       /** @var \Drupal\content_translation_redirect\ContentTranslationRedirectInterface $entity */
       return AccessResult::allowedIf(!$entity->isLocked())->addCacheableDependency($entity)

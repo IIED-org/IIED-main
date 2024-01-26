@@ -59,18 +59,18 @@ interface SubscribersInterface {
    *   Example usage.
    *
    * @code
-   *   $subscribe_options['uids'] = array(
-   *     1 => array(
-   *       'notifiers' => array('email'),
-   *     ),
-   *   );
-   *   $context = array(
-   *     'node' => array(1),
+   *   $subscribe_options['uids'] = [
+   *     1 => [
+   *       'notifiers' => ['email'],
+   *     ],
+   *   ];
+   *   $context = [
+   *     'node' => [1],
    *     // The node author.
-   *     'user' => array(10),
+   *     'user' => [10],
    *     // Related taxonomy terms.
-   *     'taxonomy_term' => array(100, 200, 300)
-   *   );
+   *     'taxonomy_term' => [100, 200, 300]
+   *   ];
    * @endcode
    */
   public function sendMessage(EntityInterface $entity, MessageInterface $message, array $notify_options = [], array $subscribe_options = [], array $context = []);

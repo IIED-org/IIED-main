@@ -2,11 +2,11 @@
 
 namespace Drupal\name\Plugin\diff\Field;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\diff\FieldDiffBuilderBase;
 use Drupal\diff\DiffEntityParser;
+use Drupal\diff\FieldDiffBuilderBase;
 use Drupal\name\NameFormatterInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

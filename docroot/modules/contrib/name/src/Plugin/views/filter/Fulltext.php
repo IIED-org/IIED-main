@@ -3,7 +3,6 @@
 namespace Drupal\name\Plugin\views\filter;
 
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Database\Query\Condition;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\views\Plugin\views\filter\FilterPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -146,7 +145,7 @@ class Fulltext extends FilterPluginBase {
    *   The db field.
    */
   public function op_word($fulltext_field) {
-    $where = $this->operator == 'word' ? new Condition('OR') : new Condition('AND');
+    $where = $this->connection->condition($this->operator == 'word' ? 'OR' : 'AND');
     $value = mb_strtolower($this->value[0]);
 
     $words = preg_split('/ /', $value, -1, PREG_SPLIT_NO_EMPTY);

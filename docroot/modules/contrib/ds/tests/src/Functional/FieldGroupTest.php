@@ -7,17 +7,16 @@ use Drupal\Tests\field_group\Functional\FieldGroupTestTrait;
 /**
  * Tests for field group integration with Display Suite.
  *
- * @group ds_disabled
+ * @group ds
  */
 class FieldGroupTest extends TestBase {
 
-  //use FieldGroupTestTrait;
+  use FieldGroupTestTrait;
 
   /**
    * Test tabs.
    */
   public function testFieldPlugin() {
-    return;
 
     // Create a node.
     $settings = ['type' => 'article', 'promote' => 1];
@@ -29,8 +28,8 @@ class FieldGroupTest extends TestBase {
     ];
     $layout_assert = [
       'regions' => [
-        'left' => '<td colspan="8">' . t('Left') . '</td>',
-        'right' => '<td colspan="8">' . t('Right') . '</td>',
+        'left' => '<td colspan="8">' . $this->t('Left') . '</td>',
+        'right' => '<td colspan="8">' . $this->t('Right') . '</td>',
       ],
     ];
     $this->dsSelectLayout($layout, $layout_assert);

@@ -16,6 +16,11 @@ class LinkcheckerRedirectTest extends KernelTestBase {
   use NodeCreationTrait;
 
   /**
+   * {@inheritdoc}
+   */
+  public $cron;
+
+  /**
    * The redirect storage.
    *
    * @var \Drupal\Core\Entity\EntityStorageInterface

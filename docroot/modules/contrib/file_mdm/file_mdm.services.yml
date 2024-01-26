@@ -1,4 +1,6 @@
 services:
+  _defaults:
+    autowire: true
   cache.file_mdm:
     class: Drupal\Core\Cache\CacheBackendInterface
     tags:
@@ -8,10 +10,16 @@ services:
   logger.channel.file_mdm:
     parent: logger.channel_base
     arguments: ['file_mdm']
+  Drupal\file_mdm\FileMetadataManager:
+    arguments:
+      $logger: '@logger.channel.file_mdm'
+      $cache: '@cache.file_mdm'
+  Drupal\file_mdm\FileMetadataManagerInterface: '@Drupal\file_mdm\FileMetadataManager'
   file_metadata_manager:
-    class: Drupal\file_mdm\FileMetadataManager
-    arguments: ['@plugin.manager.file_metadata', '@logger.channel.file_mdm', '@config.factory', '@file_system', '@cache.file_mdm', '@stream_wrapper_manager']
-  plugin.manager.file_metadata:
-    class: Drupal\file_mdm\Plugin\FileMetadataPluginManager
-    parent: default_plugin_manager
-    arguments: ['@config.factory']
+    alias: Drupal\file_mdm\FileMetadataManagerInterface
+    deprecated: 'The "%alias_id%" service alias is deprecated. Use "Drupal\file_mdm\FileMetadataManagerInterface" service id instead.'
+  Drupal\file_mdm\Plugin\FileMetadataPluginManager:
+    arguments:
+      $namespaces: '@container.namespaces'
+      $cache: '@cache.discovery'
+  Drupal\file_mdm\Plugin\FileMetadataPluginManagerInterface: '@Drupal\file_mdm\Plugin\FileMetadataPluginManager'

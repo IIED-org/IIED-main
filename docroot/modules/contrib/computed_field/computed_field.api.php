@@ -13,7 +13,7 @@
  * @param array $context
  *   An array containing the 'entity' and 'field_name'.
  */
-function hook_computed_field_value_alter(&$value, $context) {
+function hook_computed_field_value_alter(&$value, array $context) {
   $service = Drupal::service('computed_field.helpers');
 
   // Only proceed when the hook does not exist.
@@ -31,7 +31,7 @@ function hook_computed_field_value_alter(&$value, $context) {
  * @param array $context
  *   An array containing the 'entity' and 'field_name'.
  */
-function hook_computed_field_FIELD_NAME_value_alter(&$value, $context) {
+function hook_computed_field_FIELD_NAME_value_alter(&$value, array $context) {
   $service = Drupal::service('computed_field.helpers');
 
   // Only proceed when the hook does not exist.

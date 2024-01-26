@@ -66,7 +66,7 @@ function search_api_db_update_8102() {
     try {
       $schema->addPrimaryKey($table, ['item_id']);
     }
-    catch (SchemaObjectExistsException $e) {
+    catch (SchemaObjectExistsException) {
       // Primary key was already added, maybe by a conscientious site admin.
       // Nothing to do here in that case.
     }

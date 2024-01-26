@@ -6,6 +6,7 @@ use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\entity_browser\Element\EntityBrowserElement;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\Tests\ckeditor5\Traits\CKEditor5TestTrait;
 use Drupal\user\Entity\Role;
 
 /**
@@ -14,6 +15,8 @@ use Drupal\user\Entity\Role;
  * @group entity_browser
  */
 class CardinalityTest extends EntityBrowserWebDriverTestBase {
+
+  use CKEditor5TestTrait;
 
   /**
    * Modules to enable.
@@ -208,7 +211,6 @@ class CardinalityTest extends EntityBrowserWebDriverTestBase {
    * Tests cardinality functionality using Entity Embed button.
    */
   public function testEntityEmbed() {
-
     $this->config('entity_browser.browser.bundle_filter')
       ->set('widgets.b882a89d-9ce4-4dfe-9802-62df93af232a.settings.view', 'bundle_filter_exposed')
       ->save();
@@ -230,7 +232,9 @@ class CardinalityTest extends EntityBrowserWebDriverTestBase {
     $humperdinck = $this->createNode(['type' => 'article', 'title' => 'Humperdinck']);
 
     $this->drupalGet('/node/add/test_entity_embed');
-    $this->assertSession()->waitForElement('css', 'a.cke_button__bundle_filter_test')->click();
+
+    $this->waitForEditor();
+    $this->pressEditorButton('Bundle Filter Test Embed');
     $this->assertSession()->waitForElementVisible('xpath', "//iframe[contains(@name, 'entity_browser_iframe_bundle_filter')]", 3000);
     $this->getSession()->switchToIFrame('entity_browser_iframe_bundle_filter');
     $this->assertSession()->waitForElementVisible('xpath', "//div[contains(@class, 'views-exposed-form')]");
@@ -246,7 +250,8 @@ class CardinalityTest extends EntityBrowserWebDriverTestBase {
       ->save();
 
     $this->drupalGet('/node/add/test_entity_embed');
-    $this->assertSession()->waitForElement('css', 'a.cke_button__bundle_filter_test')->click();
+    $this->waitForEditor();
+    $this->pressEditorButton('Bundle Filter Test Embed');
     $this->assertSession()->waitForElementVisible('xpath', "//iframe[contains(@name, 'entity_browser_iframe_bundle_filter')]", 3000);
     $this->getSession()->switchToIFrame('entity_browser_iframe_bundle_filter');
     $this->assertSession()->waitForElementVisible('xpath', "//div[contains(@class, 'views-exposed-form')]");

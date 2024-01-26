@@ -2,7 +2,7 @@
   "name": "drupal/entity_browser",
   "description": "Entity browsing and selecting component.",
   "type": "drupal-module",
-  "homepage": "http://drupal.org/project/entity_browser",
+  "homepage": "https://drupal.org/project/entity_browser",
   "authors": [
     {
       "name": "Janez Urevc",
@@ -28,15 +28,19 @@
   "license": "GPL-2.0+",
   "minimum-stability": "dev",
   "require": {
-    "drupal/core": "^9.2 || ^10"
+    "drupal/core": "^9.5 || ^10"
   },
   "require-dev": {
-    "drupal/token": "1.x-dev",
-    "drupal/inline_entity_form": "1.x-dev",
-    "drupal/paragraphs": "1.x-dev",
-    "drupal/embed": "~1.0",
-    "drupal/entity_embed": "1.x-dev",
-    "drupal/entityqueue": "1.x-dev",
-    "drupal/entity_reference_revisions": "1.x-dev"
+    "drupal/ckeditor": "^1.0",
+    "drupal/token": "^1.0",
+    "drupal/inline_entity_form": "^1.0@rc",
+    "drupal/paragraphs": "^1.0",
+    "drupal/embed": "^1.0",
+    "drupal/entity_embed": "^1.0",
+    "drupal/entityqueue": "^1.0",
+    "drupal/entity_reference_revisions": "^1.0"
+  },
+  "conflict": {
+    "drupal/media_entity": "1.*"
   }
 }

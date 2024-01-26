@@ -55,20 +55,14 @@ class ImagemagickExecutionEvent extends Event {
   const PRE_IDENTIFY_EXECUTE = 'imagemagick.identify.preExecute';
 
   /**
-   * The ImageMagick/GraphicsMagick execution arguments object.
-   *
-   * @var \Drupal\imagemagick\ImagemagickExecArguments
-   */
-  protected $arguments;
-
-  /**
    * Constructs the object.
    *
    * @param \Drupal\imagemagick\ImagemagickExecArguments $arguments
    *   The ImageMagick/GraphicsMagick execution arguments object.
    */
-  public function __construct(ImagemagickExecArguments $arguments) {
-    $this->arguments = $arguments;
+  public function __construct(
+    protected readonly ImagemagickExecArguments $arguments,
+  ) {
   }
 
   /**

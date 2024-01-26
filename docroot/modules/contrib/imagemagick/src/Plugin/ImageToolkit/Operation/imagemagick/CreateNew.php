@@ -3,6 +3,7 @@
 namespace Drupal\imagemagick\Plugin\ImageToolkit\Operation\imagemagick;
 
 use Drupal\Component\Utility\Color;
+use Drupal\imagemagick\PackageSuite;
 
 /**
  * Defines imagemagick CreateNew operation.
@@ -80,26 +81,28 @@ class CreateNew extends ImagemagickImageToolkitOperationBase {
 
     // Add the required arguments to allow Imagemagick to create an image
     // from scratch.
-    $arg = '-size ' . $arguments['width'] . 'x' . $arguments['height'];
+    $this->addArguments(['-size', $arguments['width'] . 'x' . $arguments['height']]);
 
     // Transparent color syntax for GIF files differs by package.
     if ($arguments['extension'] === 'gif') {
-      switch ($this->getToolkit()->getExecManager()->getPackage()) {
-        case 'imagemagick':
-          $arg .= ' xc:transparent -transparent-color ' . $this->escapeArgument($arguments['transparent_color']);
-          break;
-
-        case 'graphicsmagick':
-          $arg .= ' xc:' . $this->escapeArgument($arguments['transparent_color']) . ' -transparent ' . $this->escapeArgument($arguments['transparent_color']);
-          break;
-
-      }
+      $this->addArguments(
+        match ($this->getToolkit()->getExecManager()->getPackageSuite()) {
+          PackageSuite::Imagemagick => [
+            'xc:transparent',
+            '-transparent-color',
+            $arguments['transparent_color'],
+          ],
+          PackageSuite::Graphicsmagick => [
+            'xc:' . $arguments['transparent_color'],
+            '-transparent', $arguments['transparent_color'],
+          ],
+        }
+      );
     }
     else {
-      $arg .= ' xc:transparent';
+      $this->addArguments(['xc:transparent']);
     }
 
-    $this->addArgument($arg);
     return TRUE;
   }
 

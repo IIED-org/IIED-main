@@ -39,10 +39,7 @@
 
       // Only expand level one if sidebar is in expanded state.
       // Gin Custom start ---------------------
-      if (activeItem) {
-        activeItem.closest('.toolbar-menu__item.toolbar-menu__item--level-1')?.classList.add('toolbar-menu__item--expanded');
-        activeItem.closest('.toolbar-menu__item.toolbar-menu__item--level-1')?.classList.add('active-path');
-      }
+      activeItem?.closest('.toolbar-menu__item.toolbar-menu__item--level-1')?.classList.add('active-path');
       // Gin Custom end ------------------------
     });
     // Scroll to the open trays so they're in view.
@@ -229,7 +226,7 @@
     const buttonEl = hoveredEl.querySelector('.toolbar-link'); // The level-1 list item <button>.
     const clonedFlyout = hoveredEl.querySelector('.toolbar-menu__submenu').cloneNode(true); // Flyout clone.
     const clonedFlyoutId = `${hoveredEl.id}--flyout-clone`; // ID for flyout aria-controls.
-    if (hoveredEl.classList.contains('toolbar-menu__item--expanded')) return;
+    // if (hoveredEl.classList.contains('toolbar-menu__item--expanded')) return;
     closeFlyout();
     closeTooltip();
     // Add aria attributes to the flyout and <button>.
@@ -266,11 +263,11 @@
 
     // If the active submenu is not yet open (it might be open if it has
     // focus-within and the user did a  mouseleave and mouseenter).
-    if (!hoveredEl.classList.contains('toolbar-menu__item--expanded')) {
+    // if (!hoveredEl.classList.contains('toolbar-menu__item--expanded')) {
       // Only position if the submenu is not already open. This prevents the
       // flyout from unexpectedly shifting.
       positionFlyout(hoveredEl);
-    }
+    // }
     hoveredEl.classList.add('toolbar-menu__item--expanded');
 
     // When a level-1 item hover ends, check if the flyout has focus and if

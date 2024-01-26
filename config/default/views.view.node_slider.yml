@@ -7,8 +7,8 @@ dependencies:
     - node.type.article
     - taxonomy.vocabulary.tags
   content:
+    - 'taxonomy_term:tags:028da6f9-570d-4825-8dea-88573b233d71'
     - 'taxonomy_term:tags:0f288425-47c7-41c5-b45e-b228e21af573'
-    - 'taxonomy_term:tags:248724fa-c92c-4f93-bcfe-2db6c435b4da'
     - 'taxonomy_term:tags:3b4237a2-6ae0-47b0-be90-b17116ff8eb5'
     - 'taxonomy_term:tags:5f3eb645-fc5d-4a75-8676-9499995a78b2'
   module:
@@ -300,7 +300,6 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
-        - user
         - 'user.node_grants:view'
         - user.permissions
       tags: {  }
@@ -459,7 +458,6 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
-        - user
         - 'user.node_grants:view'
         - user.permissions
       tags: {  }
@@ -585,7 +583,6 @@ display:
       max-age: -1
       contexts:
         - 'languages:language_interface'
-        - user
         - 'user.node_grants:view'
         - user.permissions
       tags: {  }
@@ -744,7 +741,6 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
-        - user
         - 'user.node_grants:view'
         - user.permissions
       tags: {  }

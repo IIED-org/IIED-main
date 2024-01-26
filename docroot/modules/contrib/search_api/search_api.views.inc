@@ -198,8 +198,11 @@ function _search_api_views_get_handlers(FieldInterface $field) {
   try {
     $types = [];
 
-    $definition = $field->getDataDefinition();
-    $entity_type_id = $definition->getSetting('target_type');
+    $definition = NULL;
+    if ($field->getPropertyPath() !== NULL) {
+      $definition = $field->getDataDefinition();
+    }
+    $entity_type_id = $definition?->getSetting('target_type');
     if ($entity_type_id) {
       $entity_type = \Drupal::entityTypeManager()
         ->getDefinition($entity_type_id);
@@ -215,11 +218,11 @@ function _search_api_views_get_handlers(FieldInterface $field) {
 
     // Special treatment for languages (as we have no specific Search API data
     // type for those).
-    if ($definition->getSetting('views_type') === 'language') {
+    if ($definition?->getSetting('views_type') === 'language') {
       $types[] = 'language';
     }
 
-    if ($definition->getSetting('allowed_values')) {
+    if ($definition?->getSetting('allowed_values')) {
       $types[] = 'options';
     }
 
@@ -603,7 +606,7 @@ function _search_api_views_data_special_fields(array &$table, IndexInterface $in
       $property = $field->getDataDefinition();
       $datasource = $field->getDatasource();
     }
-    catch (SearchApiException $e) {
+    catch (SearchApiException) {
       // Will probably cause other problems elsewhere, but here we can just
       // ignore it.
       continue;
@@ -1013,7 +1016,7 @@ function _search_api_views_get_field_handler_mapping() {
       if ($type == '*') {
         $mappings['default'] = $definition;
       }
-      elseif (strpos($type, '*') === FALSE) {
+      elseif (!str_contains($type, '*')) {
         $mappings['simple'][$type] = $definition;
       }
       else {

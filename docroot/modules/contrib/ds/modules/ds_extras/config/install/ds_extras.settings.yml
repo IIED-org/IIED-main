@@ -7,3 +7,4 @@ override_node_revision_view_mode: 'full'
 region_to_block: false
 region_blocks: {  }
 switch_field: false
+switch_field_prefix: 'node--view-mode-'

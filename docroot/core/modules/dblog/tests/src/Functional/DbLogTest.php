@@ -66,6 +66,7 @@ class DbLogTest extends BrowserTestBase {
     $this->adminUser = $this->drupalCreateUser([
       'administer site configuration',
       'access administration pages',
+      'access help pages',
       'access site reports',
       'administer users',
     ]);
@@ -139,6 +140,36 @@ class DbLogTest extends BrowserTestBase {
 
     // Verify severity.
     $this->assertSession()->pageTextContains('Notice');
+  }
+
+  /**
+   * Tests that the details page displays the backtrace for a logged \Throwable.
+   */
+  public function testOnError(): void {
+    // Log in as the admin user.
+    $this->drupalLogin($this->adminUser);
+
+    // Load a page that throws an exception in the controller, and includes its
+    // function arguments in the exception backtrace.
+    $this->drupalGet('error-test/trigger-exception');
+
+    // Load the details page for the most recent event logged by the "php"
+    // logger.
+    $query = Database::getConnection()->select('watchdog')
+      ->condition('type', 'php');
+    $query->addExpression('MAX([wid])');
+    $wid = $query->execute()->fetchField();
+    $this->drupalGet('admin/reports/dblog/event/' . $wid);
+
+    // Verify the page displays a dblog-event table with a "Type" header.
+    $table = $this->assertSession()->elementExists('xpath', "//table[@class='dblog-event']");
+    $type = "//tr/th[contains(text(), 'Type')]/../td";
+    $this->assertSession()->elementsCount('xpath', $type, 1, $table);
+
+    // Verify that the backtrace row exists and is HTML-encoded.
+    $backtrace = "//tr//pre[contains(@class, 'backtrace')]";
+    $this->assertCount(1, $table->findAll('xpath', $backtrace));
+    $this->assertSession()->responseContains('&lt;script&gt;alert(&#039;xss&#039;)&lt;/script&gt;');
   }
 
   /**
@@ -795,14 +826,14 @@ class DbLogTest extends BrowserTestBase {
    */
   public function testTemporaryUser() {
     // Create a temporary user.
-    $tempuser = $this->drupalCreateUser();
-    $tempuser_uid = $tempuser->id();
+    $temporary_user = $this->drupalCreateUser();
+    $temporary_user_uid = $temporary_user->id();
 
     // Log in as the admin user.
     $this->drupalLogin($this->adminUser);
 
     // Generate a single watchdog entry.
-    $this->generateLogEntries(1, ['user' => $tempuser, 'uid' => $tempuser_uid]);
+    $this->generateLogEntries(1, ['user' => $temporary_user, 'uid' => $temporary_user_uid]);
     $query = Database::getConnection()->select('watchdog');
     $query->addExpression('MAX([wid])');
     $wid = $query->execute()->fetchField();
@@ -812,8 +843,8 @@ class DbLogTest extends BrowserTestBase {
     $this->assertSession()->pageTextContains('Dblog test log message');
 
     // Delete the user.
-    $tempuser->delete();
-    $this->drupalGet('user/' . $tempuser_uid);
+    $temporary_user->delete();
+    $this->drupalGet('user/' . $temporary_user_uid);
     $this->assertSession()->statusCodeEquals(404);
 
     // Check if the full message displays on the details page.

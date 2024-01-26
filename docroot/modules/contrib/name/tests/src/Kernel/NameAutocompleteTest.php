@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\name\Kernel;
 
-use Drupal\name\Controller\NameAutocompleteController;
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\name\Controller\NameAutocompleteController;
 use Drupal\Tests\name\Functional\NameTestTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

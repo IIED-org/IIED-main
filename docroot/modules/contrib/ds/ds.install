@@ -95,3 +95,87 @@ function ds_update_8005() {
     }
   }
 }
+
+/**
+ * Update config settings to set field bc layer to TRUE.
+ */
+function ds_update_8006() {
+  \Drupal::configFactory()->getEditable('ds.settings')
+    ->set('ft_bc', TRUE)
+    ->save(TRUE);
+}
+
+/**
+ * Sets the 'Exclude layout builder blocks on block field form' to FALSE.
+ */
+function ds_update_8007() {
+  \Drupal::configFactory()->getEditable('ds.settings')
+    ->set('exclude_layout_builder_blocks_on_block_field', FALSE)
+    ->save(TRUE);
+}
+
+/**
+ * Sets the 'Expert field template prefix/suffix textarea' setting to FALSE.
+ */
+function ds_update_8008() {
+  \Drupal::configFactory()->getEditable('ds.settings')
+    ->set('ft_expert_prefix_suffix_textarea', FALSE)
+    ->save(TRUE);
+}
+
+/**
+ * Convert keys using hyphens to use underscores.
+ */
+function ds_update_8009() {
+  $config = \Drupal::configFactory()->getEditable('ds.settings');
+
+  $keys = [
+    'ft-default',
+    'ft-show-colon',
+    'ft-layout-builder',
+  ];
+
+  foreach ($keys as $key) {
+    $new_key = str_replace('-', '_', $key);
+    $config->set($new_key, $config->get($key));
+    $config->clear($key);
+  }
+
+  $config->save(TRUE);
+}
+
+/**
+ * Sets the 'Exclude DS layouts in Layout Builder' setting to FALSE.
+ */
+function ds_update_8010() {
+  \Drupal::configFactory()->getEditable('ds.settings')
+    ->set('exclude_ds_layout_layout_builder', FALSE)
+    ->save(TRUE);
+}
+
+/**
+ * Sets the 'Use DS layout images' setting to TRUE.
+ */
+function ds_update_8011() {
+  \Drupal::configFactory()->getEditable('ds.settings')
+    ->set('layout_icon_image_bc', TRUE)
+    ->save(TRUE);
+}
+
+/**
+ * Sets the 'Global field template BC' setting to TRUE.
+ */
+function ds_update_8012() {
+  \Drupal::configFactory()->getEditable('ds.settings')
+    ->set('ft_default_bc', TRUE)
+    ->save(TRUE);
+}
+
+/**
+ * Sets the 'Layout suggestion BC' setting to TRUE.
+ */
+function ds_update_8013() {
+  \Drupal::configFactory()->getEditable('ds.settings')
+    ->set('layout_suggestion_bc', TRUE)
+    ->save(TRUE);
+}

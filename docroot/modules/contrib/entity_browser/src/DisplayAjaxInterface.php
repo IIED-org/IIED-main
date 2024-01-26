@@ -11,7 +11,7 @@ interface DisplayAjaxInterface {
    * Adds ajax capabilities to the entity browser form.
    *
    * This will be used in Plugins like Modal that require the Entity Browser
-   * form to be sumbitted with ajax.  All other plugins that don't require it
+   * form to be submitted with ajax. All other plugins that don't require it
    * can leave it blank.
    *
    * @param array $form

@@ -2,7 +2,6 @@
 
 namespace Drupal\content_translation_redirect;
 
-use Drupal\content_translation_redirect\Entity\ContentTranslationRedirect;
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Link;
@@ -15,9 +14,10 @@ class ContentTranslationRedirectListBuilder extends ConfigEntityListBuilder {
   /**
    * {@inheritdoc}
    */
-  protected function getEntityIds() {
+  protected function getEntityIds(): array {
     $entity_ids = parent::getEntityIds();
 
+    // Always load default redirects.
     if ($entity_ids) {
       $default_id = ContentTranslationRedirectInterface::DEFAULT_ID;
       $entity_ids[$default_id] = $default_id;
@@ -36,7 +36,7 @@ class ContentTranslationRedirectListBuilder extends ConfigEntityListBuilder {
   /**
    * {@inheritdoc}
    */
-  public function buildHeader() {
+  public function buildHeader(): array {
     $header['label'] = $this->t('Type');
     $header['code'] = $this->t('Redirect status');
     $header['path'] = $this->t('Redirect path');
@@ -47,15 +47,33 @@ class ContentTranslationRedirectListBuilder extends ConfigEntityListBuilder {
   /**
    * {@inheritdoc}
    */
-  public function buildRow(EntityInterface $entity) {
+  public function buildRow(EntityInterface $entity): array {
     /** @var \Drupal\content_translation_redirect\ContentTranslationRedirectInterface $entity */
     $code = $entity->getStatusCode();
-    $path = $entity->getPath();
 
     $row['label'] = $entity->label();
-    $row['code'] = $code ? ContentTranslationRedirect::getStatusCodes()[$code] : $this->t('Not specified');
-    $row['path'] = $path ? ($path === '/' ? $this->t('Front page') : Link::fromTextAndUrl($path, $entity->getUrl())) : $this->t('Original content');
-    $row['mode'] = ContentTranslationRedirect::getTranslationModes()[$entity->getTranslationMode()];
+    $row['code'] = $this->t('Disabled');
+    $row['path'] = '—';
+    $row['mode'] = '—';
+
+    if ($code !== NULL) {
+      $path = $entity->getPath();
+      $mode = $entity->getTranslationMode();
+
+      $row['code'] = ContentTranslationRedirectManager::getStatusCodes()[$code] ?? $code;
+      $row['mode'] = ContentTranslationRedirectManager::getTranslationModes()[$mode] ?? $mode;
+
+      if ($path === '') {
+        $row['path'] = $this->t('Original content');
+      }
+      elseif ($path === '/') {
+        $row['path'] = $this->t('Front page');
+      }
+      else {
+        $row['path'] = Link::fromTextAndUrl($path, $entity->getUrl());
+      }
+    }
+
     return $row + parent::buildRow($entity);
   }
 

@@ -60,11 +60,16 @@ class ParagraphsLibraryItemEntityBrowserTest extends EntityBrowserWebDriverTestB
     $this->drupalLogin($admin);
 
     // Make everything that is needed translatable.
+    $this->drupalGet('admin/config/regional/content-language');
+    $this->assertSession()->fieldExists('entity_types[paragraphs_library_item]')->check();
+    // Open details for Content settings in Drupal 10.2.
+    $ssummary = $this->getSession()->getPage()->find('css', '#edit-settings-paragraphs-library-item summary');
+    if ($ssummary) {
+      $ssummary->click();
+    }
     $edit = [
-      'entity_types[paragraphs_library_item]' => TRUE,
       'settings[paragraphs_library_item][paragraphs_library_item][translatable]' => TRUE,
     ];
-    $this->drupalGet('admin/config/regional/content-language');
     $this->submitForm($edit, 'Save configuration');
 
     $this->addParagraphsType('text');
@@ -91,7 +96,6 @@ class ParagraphsLibraryItemEntityBrowserTest extends EntityBrowserWebDriverTestB
     $this->getSession()->getPage()->pressButton('Select reusable paragraph');
     $this->waitForAjaxToFinish();
     $this->getSession()->switchToIFrame('entity_browser_iframe_paragraphs_library_items');
-    $this->waitForAjaxToFinish();
     $style_selector = $this->getSession()->getPage()->find('css', 'input[value="paragraphs_library_item:1"].form-radio');
     $style_selector->click();
     $this->getSession()->switchToIFrame();
@@ -130,7 +134,6 @@ JS;
     $this->getSession()->getPage()->pressButton('Select reusable paragraph');
     $this->waitForAjaxToFinish();
     $this->getSession()->switchToIFrame('entity_browser_iframe_paragraphs_library_items');
-    $this->waitForAjaxToFinish();
     // Check that there is only one translation of the paragraph listed.
     $rows = $this->xpath('//*[@id="entity-browser-paragraphs-library-items-form"]/div[1]/div[2]/table/tbody/tr');
     $this->assertCount(1, $rows);
@@ -154,7 +157,6 @@ JS;
     $this->getSession()->getPage()->pressButton('Select reusable paragraph');
     $this->waitForAjaxToFinish();
     $this->getSession()->switchToIFrame('entity_browser_iframe_paragraphs_library_items');
-    $this->waitForAjaxToFinish();
     $style_selector = $this->getSession()->getPage()->find('css', 'input[value="paragraphs_library_item:2"].form-radio');
     $style_selector->click();
     $this->getSession()->switchToIFrame();
@@ -192,7 +194,6 @@ JS;
     $this->getSession()->getPage()->pressButton('Select reusable paragraph');
     $this->waitForAjaxToFinish();
     $this->getSession()->switchToIFrame('entity_browser_iframe_paragraphs_library_items');
-    $this->waitForAjaxToFinish();
     $style_selector = $this->getSession()->getPage()->find('css', 'input[value="paragraphs_library_item:3"].form-radio');
     $this->assertTrue($style_selector->isVisible());
     $style_selector->click();

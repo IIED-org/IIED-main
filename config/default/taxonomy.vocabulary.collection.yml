@@ -4,5 +4,5 @@ status: true
 dependencies: {  }
 name: Collection
 vid: collection
-description: ''
+description: 'Curated sets of pages, non-essential for navigation.'
 weight: 0

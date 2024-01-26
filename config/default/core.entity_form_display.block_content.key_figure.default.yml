@@ -1,0 +1,64 @@
+uuid: f4d678b8-10b9-4bee-a11f-e0c6289c7fc9
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.key_figure
+    - field.field.block_content.key_figure.field_description
+    - field.field.block_content.key_figure.field_number
+    - field.field.block_content.key_figure.field_number_prefix
+    - field.field.block_content.key_figure.field_number_suffix
+  module:
+    - text
+id: block_content.key_figure.default
+targetEntityType: block_content
+bundle: key_figure
+mode: default
+content:
+  field_description:
+    type: text_textarea
+    weight: 4
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_number:
+    type: number
+    weight: 1
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_number_prefix:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_number_suffix:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  info:
+    type: string_textfield
+    weight: 5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 3
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+hidden: {  }

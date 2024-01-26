@@ -8,10 +8,13 @@ use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Base class for computed field's dummy widgets.
- *
  */
-
 abstract class ComputedWidgetBase extends WidgetBase {
+  /**
+   * The default value.
+   *
+   * @var string
+   */
   public $default_value = '';
 
   /**
@@ -45,14 +48,13 @@ abstract class ComputedWidgetBase extends WidgetBase {
     $element = [];
 
     $element['value'] = $element + [
-        '#title' => $this->fieldDefinition->getName(),
-        '#type' => 'hidden',
-        '#default_value' => $this->getDefaultValue(),
-        '#disabled' => TRUE,
-        '#description' => $this->t('Normally this field should not be shown!'),
-      ];
+      '#title' => $this->fieldDefinition->getName(),
+      '#type' => 'hidden',
+      '#default_value' => $this->getDefaultValue(),
+      '#disabled' => TRUE,
+      '#description' => $this->t('Normally this field should not be shown!'),
+    ];
     return $element;
   }
-
 
 }

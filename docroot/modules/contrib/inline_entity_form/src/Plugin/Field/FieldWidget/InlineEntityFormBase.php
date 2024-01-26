@@ -468,7 +468,7 @@ abstract class InlineEntityFormBase extends WidgetBase implements ContainerFacto
    * @todo Replace line 472 \Drupal call with Dependency Injection.
    */
   protected function isTranslating(FormStateInterface $form_state) {
-    if (TranslationHelper::isTranslating($form_state)) {
+    if (\Drupal::hasService('content_translation.manager') && TranslationHelper::isTranslating($form_state)) {
       $translation_manager = \Drupal::service('content_translation.manager');
       $target_type = $this->getFieldSetting('target_type');
       foreach ($this->getTargetBundles() as $bundle) {

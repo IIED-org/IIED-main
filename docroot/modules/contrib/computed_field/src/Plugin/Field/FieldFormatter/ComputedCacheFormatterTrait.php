@@ -14,9 +14,13 @@ use Drupal\Core\Form\FormStateInterface;
 trait ComputedCacheFormatterTrait {
 
   /**
-   * List of time options and their factor in seconds to calculate cache seconds
-   * @param $mode string 'singular' or 'plural'
+   * List of time options and their factor in seconds to calculate cache sec.
+   *
+   * @param string $mode
+   *   String 'singular' or 'plural'.
+   *
    * @return array
+   *   Return a list of time.
    */
   private static function unitOptions($mode) {
     switch ($mode) {
@@ -30,7 +34,6 @@ trait ComputedCacheFormatterTrait {
           3600 => t('hours'),
           84400 => t('days'),
         ];
-        break;
 
       case 'singular':
         return [
@@ -39,7 +42,6 @@ trait ComputedCacheFormatterTrait {
           3600 => t('hour'),
           84400 => t('day'),
         ];
-        break;
 
       default:
         return [];
@@ -55,7 +57,6 @@ trait ComputedCacheFormatterTrait {
       'cache_duration' => 1,
     ] + parent::defaultSettings();
   }
-
 
   /**
    * {@inheritdoc}
@@ -85,7 +86,7 @@ trait ComputedCacheFormatterTrait {
    * {@inheritdoc}
    */
   public function settingsSummary() {
-    $cache_duration = (int)$this->getSetting('cache_duration');
+    $cache_duration = (int) $this->getSetting('cache_duration');
     $cache_unit = $this->getSetting('cache_unit');
     $mode = ($cache_duration == 1) ? 'singular' : 'plural';
 
@@ -93,10 +94,12 @@ trait ComputedCacheFormatterTrait {
     if ($cache_unit < 0) {
       $summary[] = t('Cache: default');
     }
-    elseif ($cache_unit == 0) { // off
+    // Off.
+    elseif ($cache_unit == 0) {
       $summary[] = t('Cache: <b>off</b>');
     }
-    elseif ($cache_unit == 1) { // seconds
+    // Seconds.
+    elseif ($cache_unit == 1) {
       $summary[] = t('Cache: @duration @unit',
         $args = [
           '@duration' => $cache_duration,

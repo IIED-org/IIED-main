@@ -41,8 +41,8 @@ use Drupal\name\NameListFormatInterface;
  *     "el_al_first",
  *   },
  *   links = {
- *     "edit-form" = "/admin/config/regional/name/list/manage/{name_format}",
- *     "delete-form" = "/admin/config/regional/name/list/manage/{name_format}/delete"
+ *     "edit-form" = "/admin/config/regional/name/list/manage/{name_list_format}",
+ *     "delete-form" = "/admin/config/regional/name/list/manage/{name_list_format}/delete"
  *   }
  * )
  */

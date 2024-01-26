@@ -31,13 +31,13 @@ class MenuTest extends BrowserTestBase {
 
     // Link should appear on main config page.
     $this->drupalGet(Url::fromRoute('system.admin_config'));
-    $this->assertSession()->linkExists(t('Message subscribe settings'));
+    $this->assertSession()->linkExists('Message subscribe settings');
 
     // Link should be on the message-specific overview page.
     $this->drupalGet(Url::fromRoute('message.main_settings'));
-    $this->assertSession()->linkExists(t('Message subscribe settings'));
+    $this->assertSession()->linkExists('Message subscribe settings');
 
-    $this->clickLink(t('Message subscribe settings'));
+    $this->clickLink('Message subscribe settings');
     $this->assertSession()->statusCodeEquals(200);
   }
 

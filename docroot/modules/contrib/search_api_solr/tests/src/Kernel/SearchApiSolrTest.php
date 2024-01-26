@@ -11,10 +11,9 @@ use Drupal\search_api\Query\ResultSetInterface;
 use Drupal\search_api\Utility\Utility;
 use Drupal\search_api_solr\Controller\SolrConfigSetController;
 use Drupal\search_api_solr\SearchApiSolrException;
-use Drupal\search_api_solr\SolrBackendInterface;
-use Drupal\Tests\search_api_solr\Traits\InvokeMethodTrait;
 use Drupal\search_api_solr\Utility\SolrCommitTrait;
 use Drupal\search_api_solr\Utility\Utility as SolrUtility;
+use Drupal\Tests\search_api_solr\Traits\InvokeMethodTrait;
 use Drupal\user\Entity\User;
 
 /**
@@ -47,9 +46,9 @@ class SearchApiSolrTest extends SolrBackendTestBase {
    * into languages that should be available in all test and those only
    * required for special tests.
    *
-   * @see checkSchemaLanguages()
-   *
    * @var array
+   *
+   * @see checkSchemaLanguages()
    */
   protected $moreLanguageIds = [
     'ar' => 'ar',
@@ -653,24 +652,24 @@ class SearchApiSolrTest extends SolrBackendTestBase {
     $query = $this->buildSearch();
     $query->setLanguages([LanguageInterface::LANGCODE_NOT_SPECIFIED]);
     $conditions = $query->createConditionGroup('OR', ['facet:id']);
-    $conditions->addCondition('id', 'A');
-    $conditions->addCondition('id', 'B');
+    $conditions->addCondition('id', '27');
+    $conditions->addCondition('id', '28');
     $query->addConditionGroup($conditions);
     $fq = $this->invokeMethod($backend, 'getFilterQueries', [$query, &$options]);
     $this->assertEquals(1, count($fq));
     $this->assertEquals(['facet:id' => 'facet:id'], $fq[0]['tags']);
-    $this->assertEquals('(its_id:"A" its_id:"B")', $fq[0]['query']);
+    $this->assertEquals('(its_id:"27" its_id:"28")', $fq[0]['query']);
 
     $query = $this->buildSearch();
     $query->setLanguages([LanguageInterface::LANGCODE_NOT_SPECIFIED]);
     $conditions = $query->createConditionGroup('AND', ['facet:id']);
-    $conditions->addCondition('id', 'A');
-    $conditions->addCondition('id', 'B');
+    $conditions->addCondition('id', '27');
+    $conditions->addCondition('id', '28');
     $query->addConditionGroup($conditions);
     $fq = $this->invokeMethod($backend, 'getFilterQueries', [$query, &$options]);
     $this->assertEquals(1, count($fq));
     $this->assertEquals(['facet:id' => 'facet:id'], $fq[0]['tags']);
-    $this->assertEquals('(+its_id:"A" +its_id:"B")', $fq[0]['query']);
+    $this->assertEquals('(+its_id:"27" +its_id:"28")', $fq[0]['query']);
 
     $query = $this->buildSearch();
     $query->setLanguages(['en']);
@@ -1423,7 +1422,7 @@ class SearchApiSolrTest extends SolrBackendTestBase {
    */
   public function testConfigGeneration(array $files) {
     $server = $this->getServer();
-    /** @var SolrBackendInterface $backend */
+    /** @var \Drupal\search_api_solr\SolrBackendInterface $backend */
     $backend = $server->getBackend();
     $solr_major_version = $backend->getSolrConnector()->getSolrMajorVersion();
     $backend_config = $server->getBackendConfig();
@@ -1530,7 +1529,7 @@ class SearchApiSolrTest extends SolrBackendTestBase {
         'fieldType name="text_en" class="solr.TextField"',
         'fieldType name="text_de" class="solr.TextField"',
         '<fieldType name="collated_und" class="solr.ICUCollationField" locale="" strength="primary" caseLevel="false"/>',
-'<fieldType name="text_foo_en" class="solr.TextField" positionIncrementGap="100">
+        '<fieldType name="text_foo_en" class="solr.TextField" positionIncrementGap="100">
   <analyzer type="index">
     <tokenizer class="solr.WhitespaceTokenizerFactory"/>
     <filter class="solr.LengthFilterFactory" min="2" max="100"/>

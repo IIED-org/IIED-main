@@ -2,6 +2,7 @@
 
 namespace Drupal\ds\Plugin\DsField\Node;
 
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\ds\Plugin\DsField\DsFieldBase;
 
 /**
@@ -19,22 +20,61 @@ class NodeAuthor extends DsFieldBase {
   /**
    * {@inheritdoc}
    */
+  public function settingsForm($form, FormStateInterface $form_state) {
+    $config = $this->getConfiguration();
+
+    $settings['display_name'] = [
+      '#type' => 'checkbox',
+      '#title' => 'Show display name instead of raw username',
+      '#default_value' => $config['display_name'],
+    ];
+
+    return $settings;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function settingsSummary($settings) {
+    $config = $this->getConfiguration();
+
+    $summary = [];
+    if (!empty($config['display_name'])) {
+      $summary[] = 'Show display name instead of username';
+    }
+
+    return $summary;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function defaultConfiguration() {
+    return [
+      'display_name' => FALSE,
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function build() {
-    /* @var \Drupal\node\NodeInterface $node */
+    /** @var \Drupal\node\NodeInterface $node */
     $node = $this->entity();
     $user = $node->getOwner();
 
-    // Users without a user name are anonymous users. These are never linked.
-    if (empty($user->name)) {
+    // User 0 is anonymous.
+    if (empty($user->id())) {
       return [
         '#plain_text' => \Drupal::config('user.settings')->get('anonymous'),
       ];
     }
 
     $field = $this->getFieldConfiguration();
+    $author_name = !empty($this->configuration['display_name']) ? $user->getDisplayName() : $user->getAccountName();
     if ($field['formatter'] == 'author') {
       return [
-        '#markup' => $user->getAccountName(),
+        '#markup' => $author_name,
         '#cache' => [
           'tags' => $user->getCacheTags(),
         ],

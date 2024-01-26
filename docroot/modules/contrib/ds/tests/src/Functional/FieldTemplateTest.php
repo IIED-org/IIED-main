@@ -7,7 +7,12 @@ use Drupal\Core\Cache\Cache;
 /**
  * Tests for display of nodes and fields.
  *
- * @group ds_disabled
+ * For some reason, ds_test_form_entity_view_display_edit_form_alter fails
+ * on the pipeline, no idea why. So the group is ds_single which I use locally
+ * to run the tests and methods are prefixed with _ in version control so the
+ * bot doesn't run any tests.
+ *
+ * @group ds_single
  */
 class FieldTemplateTest extends TestBase {
 
@@ -26,14 +31,11 @@ class FieldTemplateTest extends TestBase {
   /**
    * Tests on field templates.
    */
-  public function testDsFieldTemplate() {
-
-    return;
+  public function _testDsFieldTemplate() {
 
     // Get a node.
-    /** @var \Drupal\node\NodeInterface $node */
     $node = $this->entitiesTestSetup('hidden');
-    $body_field = $node->body->value;
+    $body_field = $node->get('body')->value;
 
     // Default theming function.
     $this->drupalGet('node/' . $node->id());
@@ -65,13 +67,12 @@ class FieldTemplateTest extends TestBase {
    */
   public function _testDsFieldTemplate2() {
     // Get a node.
-    /** @var \Drupal\node\NodeInterface $node */
     $node = $this->entitiesTestSetup('hidden');
-    $body_field = $node->body->value;
+    $body_field = $node->get('body')->value;
 
     // Reset theming function.
     $edit = [
-      'fs1[ft-default]' => 'reset',
+      'fs1[ft_default]' => 'reset',
     ];
     $this->drupalGet('admin/structure/ds/settings');
     $this->submitForm($edit, t('Save configuration'));
@@ -79,39 +80,39 @@ class FieldTemplateTest extends TestBase {
     // As long as we don't change anything in the UI, the default template will
     // be used.
     $this->drupalGet('node/' . $node->id());
-    $elements = $this->xpath('//div[@class="group-right"]/div/p');
+    $elements = $this->xpath('//div[@class="group-right"]/p');
     $this->assertTrimEqual($elements[0]->getText(), $body_field);
 
     $this->entitiesSetLabelClass('above', 'body');
     $this->drupalGet('node/' . $node->id());
     $elements = $this->xpath('//div[@class="group-right"]/p');
     $this->assertTrimEqual($elements[0]->getText(), $body_field);
-    $elements = $this->xpath('//div[@class="group-right"]/div[@class="field-label-above"]');
+    $elements = $this->xpath('//div[@class="group-right"]/div[@class="field__label"]');
     $this->assertTrimEqual($elements[0]->getText(), 'Body');
 
     $this->entitiesSetLabelClass('inline', 'body');
     $this->drupalGet('node/' . $node->id());
     $elements = $this->xpath('//div[@class="group-right"]/p');
     $this->assertTrimEqual($elements[0]->getText(), $body_field);
-    $elements = $this->xpath('//div[@class="group-right"]/div[@class="field-label-inline"]');
+    $elements = $this->xpath('//div[@class="group-right"]/div[@class="field__label"]');
     $this->assertTrimEqual($elements[0]->getText(), 'Body');
 
     $this->entitiesSetLabelClass('above', 'body', 'My body');
     $this->drupalGet('node/' . $node->id());
     $elements = $this->xpath('//div[@class="group-right"]/p');
     $this->assertTrimEqual($elements[0]->getText(), $body_field);
-    $elements = $this->xpath('//div[@class="group-right"]/div[@class="field-label-above"]');
+    $elements = $this->xpath('//div[@class="group-right"]/div[@class="field__label"]');
     $this->assertTrimEqual($elements[0]->getText(), 'My body');
 
     $this->entitiesSetLabelClass('inline', 'body', 'My body');
     $this->drupalGet('node/' . $node->id());
     $elements = $this->xpath('//div[@class="group-right"]/p');
     $this->assertTrimEqual($elements[0]->getText(), $body_field);
-    $elements = $this->xpath('//div[@class="group-right"]/div[@class="field-label-inline"]');
+    $elements = $this->xpath('//div[@class="group-right"]/div[@class="field__label"]');
     $this->assertTrimEqual($elements[0]->getText(), 'My body');
 
     $edit = [
-      'fs1[ft-show-colon]' => 'reset',
+      'fs1[ft_show_colon]' => 'reset',
     ];
     $this->drupalGet('admin/structure/ds/settings');
     $this->submitForm($edit, t('Save configuration'));
@@ -122,7 +123,7 @@ class FieldTemplateTest extends TestBase {
     $this->drupalGet('node/' . $node->id());
     $elements = $this->xpath('//div[@class="group-right"]/p');
     $this->assertTrimEqual($elements[0]->getText(), $body_field);
-    $elements = $this->xpath('//div[@class="group-right"]/div[@class="field-label-inline"]');
+    $elements = $this->xpath('//div[@class="group-right"]/div[@class="field__label"]');
     $this->assertTrimEqual($elements[0]->getText(), 'My body:');
 
     $this->entitiesSetLabelClass('hidden', 'body');
@@ -136,9 +137,8 @@ class FieldTemplateTest extends TestBase {
    */
   public function _testDsFieldTemplate3() {
     // Get a node.
-    /** @var \Drupal\node\NodeInterface $node */
     $node = $this->entitiesTestSetup('hidden');
-    $body_field = $node->body->value;
+    $body_field = $node->get('body')->value;
 
     // Custom field function with outer wrapper.
     $edit = [
@@ -187,9 +187,8 @@ class FieldTemplateTest extends TestBase {
    */
   public function _testDsFieldTemplate4() {
     // Get a node.
-    /** @var \Drupal\node\NodeInterface $node */
     $node = $this->entitiesTestSetup('hidden');
-    $body_field = $node->body->value;
+    $body_field = $node->get('body')->value;
 
     // With outer wrapper and field items wrapper.
     $edit = [
@@ -266,9 +265,8 @@ class FieldTemplateTest extends TestBase {
    */
   public function _testDsFieldTemplate5() {
     // Get a node.
-    /** @var \Drupal\node\NodeInterface $node */
     $node = $this->entitiesTestSetup('hidden');
-    $body_field = $node->body->value;
+    $body_field = $node->get('body')->value;
 
     // With field item div wrapper.
     $edit = [
@@ -387,35 +385,35 @@ class FieldTemplateTest extends TestBase {
     drupal_flush_all_caches();
 
     $this->drupalGet('node/' . $node->id());
-    $elements = $this->xpath('//div[@class="group-right"]/div[@class="ow-class"]/div[@class="field-label-above"]');
+    $elements = $this->xpath('//div[@class="group-right"]/div[@class="ow-class"]/div[@class="field__label"]');
     $this->assertTrimEqual($elements[0]->getText(), 'Body');
     $elements = $this->xpath('//div[@class="group-right"]/div[@class="ow-class"]/div[@class="fi-class-2"]/span[@class="fi-class"]/p');
     $this->assertTrimEqual($elements[0]->getText(), $body_field);
 
     $this->entitiesSetLabelClass('inline', 'body');
     $this->drupalGet('node/' . $node->id());
-    $elements = $this->xpath('//div[@class="group-right"]/div[@class="ow-class"]/div[@class="field-label-inline"]');
+    $elements = $this->xpath('//div[@class="group-right"]/div[@class="ow-class"]/div[@class="field__label"]');
     $this->assertTrimEqual($elements[0]->getText(), 'Body');
     $elements = $this->xpath('//div[@class="group-right"]/div[@class="ow-class"]/div[@class="fi-class-2"]/span[@class="fi-class"]/p');
     $this->assertTrimEqual($elements[0]->getText(), $body_field);
 
     $this->entitiesSetLabelClass('above', 'body', 'My body');
     $this->drupalGet('node/' . $node->id());
-    $elements = $this->xpath('//div[@class="group-right"]/div[@class="ow-class"]/div[@class="field-label-above"]');
+    $elements = $this->xpath('//div[@class="group-right"]/div[@class="ow-class"]/div[@class="field__label"]');
     $this->assertTrimEqual($elements[0]->getText(), 'My body');
     $elements = $this->xpath('//div[@class="group-right"]/div[@class="ow-class"]/div[@class="fi-class-2"]/span[@class="fi-class"]/p');
     $this->assertTrimEqual($elements[0]->getText(), $body_field);
 
     $this->entitiesSetLabelClass('inline', 'body', 'My body');
     $this->drupalGet('node/' . $node->id());
-    $elements = $this->xpath('//div[@class="group-right"]/div[@class="ow-class"]/div[@class="field-label-inline"]');
+    $elements = $this->xpath('//div[@class="group-right"]/div[@class="ow-class"]/div[@class="field__label"]');
     $this->assertTrimEqual($elements[0]->getText(), 'My body');
     $elements = $this->xpath('//div[@class="group-right"]/div[@class="ow-class"]/div[@class="fi-class-2"]/span[@class="fi-class"]/p');
     $this->assertTrimEqual($elements[0]->getText(), $body_field);
 
     $this->entitiesSetLabelClass('inline', 'body', 'My body', '', TRUE);
     $this->drupalGet('node/' . $node->id());
-    $elements = $this->xpath('//div[@class="group-right"]/div[@class="ow-class"]/div[@class="field-label-inline"]');
+    $elements = $this->xpath('//div[@class="group-right"]/div[@class="ow-class"]/div[@class="field__label"]');
     $this->assertTrimEqual($elements[0]->getText(), 'My body:');
     $elements = $this->xpath('//div[@class="group-right"]/div[@class="ow-class"]/div[@class="fi-class-2"]/span[@class="fi-class"]/p');
     $this->assertTrimEqual($elements[0]->getText(), $body_field);
@@ -474,7 +472,6 @@ class FieldTemplateTest extends TestBase {
    */
   public function _testDsFieldTemplateXss() {
     // Get a node.
-    /** @var \Drupal\node\NodeInterface $node */
     $node = $this->entitiesTestSetup('hidden');
 
     $edit = [
@@ -516,7 +513,6 @@ class FieldTemplateTest extends TestBase {
    */
   public function _testDsMultipleFieldItems() {
     // Get a node.
-    /** @var \Drupal\node\NodeInterface $node */
     $node = $this->entitiesTestSetup('hidden');
 
     $edit = [
@@ -555,24 +551,23 @@ class FieldTemplateTest extends TestBase {
    */
   public function _testFieldTemplateMinimal() {
     // Get a node.
-    /** @var \Drupal\node\NodeInterface $node */
     $node = $this->entitiesTestSetup('hidden');
-    $body_field = $node->body->value;
+    $body_field = $node->get('body')->value;
 
     $edit = [
       'fields[body][region]' => 'right',
     ];
-    $this->dsConfigureUi($edit, 'admin/structure/types/manage/article/display');
+    $this->dsConfigureUi($edit);
 
     // Set minimal template on.
     $edit = [
       'fields[body][settings_edit_form][third_party_settings][ds][ft][id]' => 'minimal',
     ];
-    $this->dsEditFormatterSettings($edit, 'body');
+    $this->dsEditFormatterSettings($edit);
     drupal_flush_all_caches();
 
     $this->drupalGet('node/' . $node->id());
-    $elements = $this->xpath('//div[@class="group-right"]/div[@class="field field-name-body"]/p');
+    $elements = $this->xpath('//div[@class="group-right"]/div[@class="field field--name-body field--label-hidden"]/p');
     $this->assertTrimEqual($elements[0]->getText(), $body_field);
 
     // Choose field classes.
@@ -587,7 +582,7 @@ class FieldTemplateTest extends TestBase {
     drupal_flush_all_caches();
 
     $this->drupalGet('node/' . $node->id());
-    $classes = 'test_field_class ' . $node->id() . ' field field-name-body';
+    $classes = 'test_field_class ' . $node->id() . ' field field--name-body field--label-hidden';
     $elements = $this->xpath('//div[@class="group-right"]/div[@class="' . $classes . '"]/p');
     $this->assertTrimEqual($elements[0]->getText(), $body_field);
 
@@ -602,6 +597,43 @@ class FieldTemplateTest extends TestBase {
     $this->assertSession()->responseContains('minimal overridden in test theme!');
     $classes = 'test_field_class ' . $node->id() . ' field field-name-body';
     $elements = $this->xpath('//div[@class="group-right"]/div[@class="' . $classes . '"]/p');
+    $this->assertTrimEqual($elements[0]->getText(), $body_field);
+
+  }
+
+  /**
+   * Tests default selection of global template.
+   */
+  public function _testDefaultFieldTemplateMinimal() {
+
+    // Set default to minimal.
+    \Drupal::configFactory()->getEditable('ds.settings')
+      ->set('ft_default', 'minimal')
+      ->save();
+    drupal_flush_all_caches();
+
+    // Get a node.
+    $node = $this->entitiesTestSetup('hidden');
+    $body_field = $node->get('body')->value;
+
+    $edit = [
+      'fields[body][region]' => 'right',
+    ];
+    $this->dsConfigureUi($edit);
+
+    $this->drupalGet('node/' . $node->id());
+    $elements = $this->xpath('//div[@class="group-right"]/div[@class="field field--name-body field--label-hidden"]/p');
+    $this->assertTrimEqual($elements[0]->getText(), $body_field);
+
+    // Explicitly save minimal.
+    $edit = [
+      'fields[body][settings_edit_form][third_party_settings][ds][ft][id]' => 'minimal',
+    ];
+    $this->dsEditFormatterSettings($edit);
+    drupal_flush_all_caches();
+
+    $this->drupalGet('node/' . $node->id());
+    $elements = $this->xpath('//div[@class="group-right"]/div[@class="field field--name-body field--label-hidden"]/p');
     $this->assertTrimEqual($elements[0]->getText(), $body_field);
 
   }

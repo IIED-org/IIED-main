@@ -31,8 +31,8 @@ class TokenFieldForm extends FieldFormBase {
     $form['content'] = [
       '#type' => 'text_format',
       '#title' => $this->t('Field content'),
-      '#default_value' => isset($field['properties']['content']['value']) ? $field['properties']['content']['value'] : '',
-      '#format' => isset($field['properties']['content']['format']) ? $field['properties']['content']['format'] : 'plain_text',
+      '#default_value' => $field['properties']['content']['value'] ?? '',
+      '#format' => $field['properties']['content']['format'] ?? 'plain_text',
       '#base_type' => 'textarea',
       '#required' => TRUE,
     ];
@@ -54,6 +54,31 @@ class TokenFieldForm extends FieldFormBase {
         '#global_types' => FALSE,
         '#dialog' => TRUE,
       ];
+      // Token options.
+      $form['token_options'] = [
+        '#type' => 'details',
+        '#title' => $this->t('Token Options'),
+        '#group' => 'advanced',
+        '#open' => FALSE,
+      ];
+      $form['token_options']['use_global_entity'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Use the global entity (e.g. Node).'),
+        '#default_value' => $field['properties']['use_global_entity'] ?? FALSE,
+        '#description' => $this->t('Replace tokens using the current entity page view via merge - only if current entity is not the same page view entity.'),
+      ];
+      $form['token_options']['force_global_entity'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Use the global entity (e.g. Node) via Force.'),
+        '#default_value' => $field['properties']['force_global_entity'] ?? FALSE,
+        '#description' => $this->t('Replace tokens using the current entity page view via force override.'),
+      ];
+      $form['token_options']['use_global_view_token'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Use the global view token.'),
+        '#default_value' => $field['properties']['use_global_view_token'] ?? FALSE,
+        '#description' => $this->t('Replace tokens using the current view page instead of the view where the entity is displayed.'),
+      ];
     }
 
     return $form;
@@ -65,6 +90,9 @@ class TokenFieldForm extends FieldFormBase {
   public function getProperties(FormStateInterface $form_state) {
     return [
       'content' => $form_state->getValue('content'),
+      'use_global_entity' => $form_state->getValue('use_global_entity'),
+      'force_global_entity' => $form_state->getValue('force_global_entity'),
+      'use_global_view_token' => $form_state->getValue('use_global_view_token'),
     ];
   }
 

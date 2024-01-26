@@ -76,7 +76,7 @@ class NameOptionsProvider {
         if ($this->termStorage && $this->vocabularyStorage) {
           $vocabulary = $this->vocabularyStorage->load($matches[1]);
           if ($vocabulary) {
-            $max_length = isset($fs['max_length'][$component]) ? $fs['max_length'][$component] : 255;
+            $max_length = $fs['max_length'][$component] ?? 255;
             foreach ($this->termStorage->loadTree($vocabulary->id()) as $term) {
               if (mb_strlen($term->name) <= $max_length) {
                 $options[] = $term->name;

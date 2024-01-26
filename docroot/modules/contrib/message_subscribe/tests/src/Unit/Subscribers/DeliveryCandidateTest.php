@@ -45,7 +45,10 @@ class DeliveryCandidateTest extends UnitTestCase {
     $this->assertEquals(['foo' => 'foo'], $candidate->getFlags());
     $this->assertInstanceOf(DeliveryCandidateInterface::class, $candidate->removeFlag('foo'));
     $this->assertEmpty($candidate->getFlags());
-    $this->assertInstanceOf(DeliveryCandidateInterface::class, $candidate->setFlags(['foo', 'bar']));
+    $this->assertInstanceOf(DeliveryCandidateInterface::class, $candidate->setFlags([
+      'foo',
+      'bar',
+    ]));
     $this->assertEquals(['foo' => 'foo', 'bar' => 'bar'], $candidate->getFlags());
   }
 
@@ -64,7 +67,10 @@ class DeliveryCandidateTest extends UnitTestCase {
     $this->assertEquals(['foo' => 'foo'], $candidate->getNotifiers());
     $this->assertInstanceOf(DeliveryCandidateInterface::class, $candidate->removeNotifier('foo'));
     $this->assertEmpty($candidate->getNotifiers());
-    $this->assertInstanceOf(DeliveryCandidateInterface::class, $candidate->setNotifiers(['foo', 'bar']));
+    $this->assertInstanceOf(DeliveryCandidateInterface::class, $candidate->setNotifiers([
+      'foo',
+      'bar',
+    ]));
     $this->assertEquals(['foo' => 'foo', 'bar' => 'bar'], $candidate->getNotifiers());
   }
 

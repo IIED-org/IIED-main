@@ -4,25 +4,25 @@
  * @file
  * Defines an API for displaying and inputing names.
  *
- * TODO: Make sure that all labels are based on the _name_translations()
+ * @todo Make sure that all labels are based on the _name_translations()
  * function and use a name:: prefix. This can be parsed out here to allow
  * string overrides to work and to integrate with i18n too.
  * t('@name_given', ['@name_given' => t('Given')])
  */
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\field\FieldConfigInterface;
-use Drupal\user\UserInterface;
-use Drupal\user\Entity\User;
-use Drupal\field\Entity\FieldConfig;
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Template\Attribute;
-use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\Core\Render\RendererInterface;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\FieldConfigInterface;
 use Drupal\name\Element\Name;
+use Drupal\user\Entity\User;
+use Drupal\user\UserInterface;
 
 /**
  * Helper function to get any defined name widget layout options.
@@ -246,7 +246,7 @@ function name_get_additional_component(EntityTypeManagerInterface $entityTypeMan
             foreach ($target_items as $item) {
               try {
                 $renderable = $viewBuilder->viewFieldItem($item, ['label' => 'hidden']);
-                /* @var $value \Drupal\Component\Render\MarkupInterface */
+                /** @var \Drupal\Component\Render\MarkupInterface $value */
                 if ($value = (string) $renderer->render($renderable)) {
                   // Remove any markup, but decode entities as the parser
                   // requires raw unescaped strings.
@@ -473,7 +473,7 @@ function name_element_render_component(array $components, $component_key, array 
     && !in_array('default_value_input', $base_element['#field_parents'], TRUE);
 
   // Enable the title options.
-  $title_display = isset($component['title_display']) ? $component['title_display'] : 'description';
+  $title_display = $component['title_display'] ?? 'description';
   switch ($title_display) {
     case 'title':
       $label = [

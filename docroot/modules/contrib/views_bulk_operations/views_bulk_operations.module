@@ -26,7 +26,7 @@ function views_bulk_operations_views_data_alter(&$data): void {
 function views_bulk_operations_help($route_name, RouteMatchInterface $route_match): ?string {
   switch ($route_name) {
     case 'help.page.views_bulk_operations':
-      $filepath = dirname(__FILE__) . '/README.txt';
+      $filepath = dirname(__FILE__) . '/README.md';
       if (file_exists($filepath)) {
         $readme = file_get_contents($filepath);
         $output = '<pre>' . $readme . '</pre>';

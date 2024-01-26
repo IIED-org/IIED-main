@@ -30,6 +30,7 @@ trait ComputedFieldItemTrait {
    * Fetches the raw result of the computation.
    *
    * @return mixed
+   *   Returns fetches the raw result.
    */
   protected function getRawResult() {
     return $this->executeCode();

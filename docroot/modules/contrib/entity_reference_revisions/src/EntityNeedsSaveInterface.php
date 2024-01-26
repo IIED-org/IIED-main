@@ -14,4 +14,14 @@ interface EntityNeedsSaveInterface {
    *   TRUE if the entity needs to be saved.
    */
   public function needsSave();
+  
+  /**
+   * Sets the "needs save" flag on an entity.
+   *
+   * @param bool $needs_save
+   *   TRUE if the entity needs to be saved.
+   *
+   * @return void
+   */
+  public function setNeedsSave(bool $needs_save);  
 }

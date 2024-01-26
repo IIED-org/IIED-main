@@ -10,7 +10,7 @@ use Drupal\Core\Field\FieldItemListInterface;
  */
 abstract class ComputedFormatterBase extends FormatterBase {
 
-  /**
+  /*
    * Include default formatting for cache settings.
    * Implements:
    *    defaultSettings()
@@ -41,7 +41,7 @@ abstract class ComputedFormatterBase extends FormatterBase {
               $this->viewMode,
             ],
             'max-age' => $cache_duration * $cache_unit,
-          ]
+          ],
         ];
       }
     }
@@ -51,11 +51,15 @@ abstract class ComputedFormatterBase extends FormatterBase {
 
   /**
    * Do something with the value before displaying it.
+   *
    * @param mixed $value
+   *   Some value.
    *
    * @return mixed
+   *   Return some value.
    */
   protected function prepareValue($value) {
     return $value;
   }
+
 }

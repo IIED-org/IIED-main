@@ -6,5 +6,6 @@ dependencies:
     - taxonomy
 id: taxonomy_term.author_name
 label: 'Author name'
+description: ''
 targetEntityType: taxonomy_term
 cache: true

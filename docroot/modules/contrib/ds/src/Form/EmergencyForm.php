@@ -129,7 +129,7 @@ class EmergencyForm extends ConfigFormBase {
    */
   public function submitFieldAttach(array &$form, FormStateInterface $form_state) {
     $this->state->set('ds.disabled', ($this->state->get('ds.disabled', FALSE) ? FALSE : TRUE));
-    $this->messenger()->addMessage(t('The configuration options have been saved.'));
+    $this->messenger()->addMessage($this->t('The configuration options have been saved.'));
   }
 
   /**

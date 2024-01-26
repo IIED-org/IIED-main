@@ -73,7 +73,7 @@
 
     bindCheckboxes() {
       var selectionObject = this;
-      var checkboxes = $('.form-checkbox', this.vbo_form);
+      var checkboxes = $('.js-vbo-checkbox', this.vbo_form);
       checkboxes.on('change', function (event) {
         selectionObject.toggleButtonsState();
       });
@@ -81,14 +81,14 @@
 
     toggleButtonsState() {
       // If no rows are checked, disable any form submit actions.
-      var buttons = $('[id^="edit-actions"] input[type="submit"], [id^="edit-actions"] button[type="submit"]', this.vbo_form);
+      var buttons = $('input[data-vbo="vbo-action"], button[data-vbo="vbo-action"]', this.vbo_form);
       var anyItemsSelected;
 
       if (this.view_id.length && this.display_id.length) {
         anyItemsSelected = this.totalCount;
       }
       else {
-        anyItemsSelected = $('.form-checkbox:checked', this.vbo_form).length;
+        anyItemsSelected = $('.js-vbo-checkbox:checked', this.vbo_form).length;
       }
 
       if (this.$actionSelect.length) {
@@ -127,7 +127,7 @@
       }
       else {
         // Build standard list.
-        $('.form-checkbox', this.vbo_form).each(function () {
+        $('.js-vbo-checkbox', this.vbo_form).each(function () {
           let dom_value = $(this).val();
           // All bulk form keys are quite long, it'd be safe to assume
           // anything above 10 characters to filter out other values.

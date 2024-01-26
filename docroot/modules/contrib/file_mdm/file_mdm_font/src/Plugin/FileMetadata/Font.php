@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\file_mdm_font\Plugin\FileMetadata;
 
 use Drupal\file_mdm\FileMetadataException;
@@ -20,17 +22,11 @@ use FontLib\Table\Type\name;
  */
 class Font extends FileMetadataPluginBase {
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getSupportedKeys($options = NULL) {
+  public function getSupportedKeys(array $options = NULL): array {
     return array_merge(['FontType', 'FontWeight'], array_values(name::$nameIdCodes));
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function doGetMetadataFromFile() {
+  protected function doGetMetadataFromFile(): mixed {
     $font = LibFont::load($this->getLocalTempPath());
     // @todo ::parse raises 'Undefined offset' notices in phenx/php-font-lib
     // 0.5, suppress errors while upstream is fixed.
@@ -69,7 +65,7 @@ class Font extends FileMetadataPluginBase {
    * @throws \Drupal\file_mdm\FileMetadataException
    *   In case the key is invalid.
    */
-  protected function validateKey($key, $method) {
+  protected function validateKey(mixed $key, string $method): bool {
     if (!is_string($key)) {
       throw new FileMetadataException("Invalid metadata key specified", $this->getPluginId(), $method);
     }
@@ -79,10 +75,7 @@ class Font extends FileMetadataPluginBase {
     return TRUE;
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function doGetMetadata($key = NULL) {
+  protected function doGetMetadata(mixed $key = NULL): mixed {
     if ($key === NULL) {
       return $this->metadata;
     }
@@ -90,23 +83,17 @@ class Font extends FileMetadataPluginBase {
       $this->validateKey($key, __FUNCTION__);
       $l_key = strtolower($key);
       if (in_array($l_key, array_map('strtolower', $this->getSupportedKeys()), TRUE)) {
-        return isset($this->metadata[$l_key]) ? $this->metadata[$l_key] : NULL;
+        return $this->metadata[$l_key] ?? NULL;
       }
       return NULL;
     }
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function doSetMetadata($key, $value) {
+  protected function doSetMetadata(mixed $key, mixed $value): bool {
     throw new FileMetadataException('Changing font metadata is not supported', $this->getPluginId());
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function doRemoveMetadata($key) {
+  protected function doRemoveMetadata(mixed $key): bool {
     throw new FileMetadataException('Deleting font metadata is not supported', $this->getPluginId());
   }
 

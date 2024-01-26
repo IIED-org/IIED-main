@@ -18,7 +18,7 @@ entity.content_translation_redirect.edit_form:
   path: '/admin/config/regional/content-translation-redirect/{content_translation_redirect}'
   defaults:
     _entity_form: 'content_translation_redirect.edit'
-    _title: 'Edit content translation redirect'
+    _title_callback: '\Drupal\content_translation_redirect\Controller\ContentTranslationRedirectController::editTitle'
   requirements:
     _entity_access: 'content_translation_redirect.update'
 

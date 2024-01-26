@@ -7,11 +7,11 @@ use Drupal\Core\Field\FieldItemListInterface;
 /**
  * Additional formatter trait for computed numeric fields.
  *
- * This trait provides the "view" formatter (prefix, suffix, thousands separator)
+ * This trait provides the "view" formatter
+ * (prefix, suffix, thousands separator).
  *
  * @class NumericFormatterBase;
  */
-
 trait ComputedNumericFormatterTrait {
 
   /**
@@ -26,16 +26,23 @@ trait ComputedNumericFormatterTrait {
     foreach ($items as $delta => $item) {
       if ($cache_unit < 0) {
         $value = $item->value;
-      } else {
+      }
+      else {
         $value = $item->executeCode();
       }
-      if (is_null($value)) continue;
+      if (is_null($value)) {
+        continue;
+      }
       $output = $this->numberFormat($value);
 
       // Account for prefix and suffix.
       if ($this->getSetting('prefix_suffix')) {
-        $prefixes = isset($settings['prefix']) ? array_map(['Drupal\Core\Field\FieldFilteredMarkup', 'create'], explode('|', $settings['prefix'])) : [''];
-        $suffixes = isset($settings['suffix']) ? array_map(['Drupal\Core\Field\FieldFilteredMarkup', 'create'], explode('|', $settings['suffix'])) : [''];
+        $prefixes = isset($settings['prefix'])
+        ? array_map(['Drupal\Core\Field\FieldFilteredMarkup', 'create'], explode('|', $settings['prefix']))
+        : [''];
+        $suffixes = isset($settings['suffix'])
+        ? array_map(['Drupal\Core\Field\FieldFilteredMarkup', 'create'], explode('|', $settings['suffix']))
+        : [''];
         $prefix = (count($prefixes) > 1) ? $this->formatPlural($item->value, $prefixes[0], $prefixes[1]) : $prefixes[0];
         $suffix = (count($suffixes) > 1) ? $this->formatPlural($item->value, $suffixes[0], $suffixes[1]) : $suffixes[0];
         $output = $prefix . $output . $suffix;
@@ -56,7 +63,7 @@ trait ComputedNumericFormatterTrait {
               $this->viewMode,
             ],
             'max-age' => $cache_duration * $cache_unit,
-          ]
+          ],
         ];
       }
     }

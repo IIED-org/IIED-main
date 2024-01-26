@@ -3,7 +3,7 @@
     "type": "drupal-module",
     "description": "Provides a service to manage file metadata.",
     "require": {
-        "drupal/core": "^9.3 | ^10",
+        "drupal/core": "^10.1",
         "phenx/php-font-lib": "^0.5.4",
         "fileeye/pel": "^0.9.20"
     },

@@ -2,10 +2,10 @@
 
 namespace Drupal\message_ui\Plugin\QueueWorker;
 
+use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\Core\Render\Markup;
 use Drupal\message\Entity\Message;
 use Drupal\message\Entity\MessageTemplate;
-use Drupal\Core\Queue\QueueWorkerBase;
 
 /**
  * Queue worker plugin instance to update the message arguments.
@@ -41,7 +41,7 @@ class MessageArgumentsWorker extends QueueWorkerBase {
     $messages = Message::loadMultiple(array_keys($result));
 
     foreach ($messages as $message) {
-      /* @var Message $message */
+      /** @var \Drupal\message\Entity\Message $message */
       self::messageArgumentsUpdate($message, $data['new_arguments']);
       $data['last_mid'] = $message->id();
     }
@@ -64,7 +64,7 @@ class MessageArgumentsWorker extends QueueWorkerBase {
    */
   public static function getArguments($template, $count = FALSE) {
 
-    /* @var $message_template MessageTemplate */
+    /** @var \Drupal\message\Entity\MessageTemplate $message_template */
     if (!$message_template = MessageTemplate::load($template)) {
       return [];
     }
@@ -87,7 +87,7 @@ class MessageArgumentsWorker extends QueueWorkerBase {
    * A helper function for generate a new array of the message's arguments.
    *
    * @param \Drupal\message\Entity\Message $message
-   *   The message which her arguments need an update.
+   *   The message with arguments need an update.
    * @param array $arguments
    *   The new arguments need to be calculated.
    */
@@ -96,7 +96,7 @@ class MessageArgumentsWorker extends QueueWorkerBase {
     $message_arguments = [];
 
     foreach ($arguments as $token) {
-      // Get the hard coded value of the message and him in the message.
+      // Get the hard coded value of the message.
       $token_name = str_replace(['@{', '}'], ['[', ']'], $token);
       $token_service = \Drupal::token();
       $value = $token_service->replace($token_name, ['message' => $message]);
@@ -121,7 +121,7 @@ class MessageArgumentsWorker extends QueueWorkerBase {
     $messages = Message::loadMultiple($mids);
 
     foreach ($messages as $message) {
-      /* @var Message $message */
+      /** @var \Drupal\message\Entity\Message $message */
       MessageArgumentsWorker::messageArgumentsUpdate($message, $arguments);
     }
   }

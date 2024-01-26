@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Drupal\Tests\sophron\Kernel;
 
@@ -87,10 +89,22 @@ class SophronApiTest extends KernelTestBase {
     $config
       ->set('map_option', MimeMapManagerInterface::DEFAULT_MAP)
       ->set('map_commands', [
-        ['aaa', ['paramA', 'paramB']],
-        ['bbb', ['paramC', 'paramD']],
-        ['ccc', ['paramE']],
-        ['ddd', []],
+        [
+          'method' => 'aaa',
+          'arguments' => ['paramA', 'paramB'],
+        ],
+        [
+          'method' => 'bbb',
+          'arguments' => ['paramC', 'paramD'],
+        ],
+        [
+          'method' => 'ccc',
+          'arguments' => ['paramE'],
+        ],
+        [
+          'method' => 'ddd',
+          'arguments' => [],
+        ],
       ])
       ->save();
     $manager = \Drupal::service('sophron.mime_map.manager');

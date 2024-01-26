@@ -10,7 +10,7 @@ dependencies:
   - 'webform:webform'
   - 'webform:webform_image_select'
 
-# Information added by Drupal.org packaging script on 2023-10-30
-version: '6.2.0'
+# Information added by Drupal.org packaging script on 2023-12-07
+version: '6.2.2'
 project: 'webform'
-datestamp: 1698674309
+datestamp: 1701948372

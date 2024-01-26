@@ -1,0 +1,12 @@
+uuid: e576f521-170c-46b1-8714-03d4da3b142b
+langcode: en
+status: true
+dependencies: {  }
+id: iied_light_background
+label: 'IIED light background'
+classes: bg-iiedbg-10
+type: section
+group: default
+block_restrictions: {  }
+layout_restrictions: {  }
+weight: 0

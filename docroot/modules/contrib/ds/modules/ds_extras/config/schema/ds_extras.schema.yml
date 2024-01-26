@@ -8,15 +8,15 @@ ds_extras.settings:
       type: sequence
       label: 'Region blocks'
       sequence:
-        - type: mapping
-          label: Region block
-          mapping:
-            title:
-              type: string
-              label: Title
-            info:
-              type: string
-              label: Info
+        type: mapping
+        label: Region block
+        mapping:
+          title:
+            type: string
+            label: Title
+          info:
+            type: string
+            label: Info
     fields_extra:
       type: boolean
       label: 'Add extra fields'
@@ -24,14 +24,17 @@ ds_extras.settings:
       type: sequence
       label: 'List of extra fields'
       sequence:
-        - type: string
-          label: 'Extra field'
+        type: string
+        label: 'Extra field'
     field_permissions:
       type: boolean
       label: 'Field permissions enabled'
     switch_field:
       type: boolean
       label: 'Add a switch view mode field'
+    switch_field_prefix:
+      type: string
+      label: 'Switch field prefix'
     hidden_region:
       type: boolean
       label: 'Add a hidden region'

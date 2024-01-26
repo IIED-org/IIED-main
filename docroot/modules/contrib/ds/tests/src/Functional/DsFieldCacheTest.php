@@ -15,7 +15,7 @@ class DsFieldCacheTest extends TestBase {
   use NodeCreationTrait;
   use DsTestTrait;
 
-  public static $modules = ['page_cache', 'dynamic_page_cache'];
+  protected static $modules = ['page_cache', 'dynamic_page_cache'];
 
   /**
    * {@inheritdoc}

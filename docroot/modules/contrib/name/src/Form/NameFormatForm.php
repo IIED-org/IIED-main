@@ -4,8 +4,8 @@ namespace Drupal\name\Form;
 
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\name\NameFormatParser;
 use Drupal\name\Entity\NameFormat;
+use Drupal\name\NameFormatParser;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -93,6 +93,9 @@ class NameFormatForm extends EntityForm {
     return $actions;
   }
 
+  /**
+   *
+   */
   public function delete(array $form, FormStateInterface $form_state) {
     $form_state['redirect_route'] = [
       'route_name' => 'name_format_delete_confirm',

@@ -1,0 +1,58 @@
+{#
+/**
+ * @file
+ * Theme override to display a block.
+ *
+ * Available variables:
+ * - plugin_id: The ID of the block implementation.
+ * - label: The configured label of the block if visible.
+ * - configuration: A list of the block's configuration values.
+ *   - label: The configured label for the block.
+ *   - label_display: The display settings for the label.
+ *   - provider: The module or other provider that provided this block plugin.
+ *   - Block plugin specific settings will also be stored here.
+ * - content: The content of this block.
+ * - attributes: array of HTML attributes populated by modules, intended to
+ *   be added to the main container tag of this template.
+ *   - id: A valid HTML ID and guaranteed unique.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ *
+ * @see template_preprocess_block()
+ */
+#}
+{{ attach_library('iied_tw/number-counter') }}
+<div{{ attributes.addClass('not-prose') }}>
+  {{ title_prefix }}
+  {% if label %}
+    <h2{{ title_attributes.addClass('mb-6') }}>{{ label }}</h2>
+  {% endif %}
+  {{ title_suffix }}
+  {% block content %}
+    <div class="relative inline-block px-2">
+    <span class="absolute inset-x-0 h-6 bottom-2 bg-iiedorange-500" aria-hidden="true"></span> 
+    <span class="relative inline-flex mb-4 text-4xl font-bold sm:text-5xl">
+    <span>{{ content.field_number_prefix.0 }}</span>
+    {% if content.field_number %}
+    <span>{{ content.field_number.0 }}</span>
+    {% endif %}
+
+     <span>
+      {% if '%' in content.field_number_suffix.0|render|striptags|trim %}
+      {{ content.field_number_suffix.0 }}
+      {% else %}
+      &nbsp;{{ content.field_number_suffix.0 }}
+      {% endif %}
+     </span>
+  
+    </span>
+    </div>
+    {{ content.field_description }}
+
+
+  {% endblock %}
+</div>

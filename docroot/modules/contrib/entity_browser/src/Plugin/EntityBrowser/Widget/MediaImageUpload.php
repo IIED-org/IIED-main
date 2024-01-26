@@ -115,7 +115,7 @@ class MediaImageUpload extends FileUpload {
     if (empty($media_type_options)) {
       $url = Url::fromRoute('entity.media_type.add_form')->toString();
       $form['media_type'] = [
-        '#markup' => $this->t("You don't have media type of the Image type. You should <a href='!link'>create one</a>", ['!link' => $url]),
+        '#markup' => $this->t("You don't have media type of the Image type. You should <a href=':link'>create one</a>.", [':link' => $url]),
       ];
     }
     else {

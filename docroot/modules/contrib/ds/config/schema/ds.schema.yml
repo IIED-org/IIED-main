@@ -10,15 +10,24 @@ ds.settings:
     field_template:
       type: boolean
       label: 'Uses field templates'
-    ft-default:
+    ft_default:
       type: string
       label: 'The default template'
-    ft-show-colon:
+    ft_show_colon:
       type: boolean
       label: 'Kill the label colon'
-    ft-layout-builder:
+    ft_layout_builder:
       type: boolean
       label: 'Enable field templates on Layout Builder field blocks'
+    ft_bc:
+      type: boolean
+      label: 'Use original field templates'
+    ft_default_bc:
+      type: boolean
+      label: 'Undo default field template fix'
+    ft_expert_prefix_suffix_textarea:
+      type: boolean
+      label: 'Use textarea for prefix/suffix in expert field template'
     classes:
       type: mapping
       label: 'Display Suite classes'
@@ -27,14 +36,26 @@ ds.settings:
           type: sequence
           label: 'Region classes'
           sequence:
-            - type: string
-              label: 'Region class'
+            type: string
+            label: 'Region class'
         field:
           type: sequence
           label: 'Field classes'
           sequence:
-            - type: string
-              label: 'Field class'
+            type: string
+            label: 'Field class'
     use_field_names:
       type: boolean
       label: 'Use field names as field keys'
+    exclude_layout_builder_blocks_on_block_field:
+      type: boolean
+      label: 'Exclude Layout Builder blocks on block field'
+    exclude_ds_layout_layout_builder:
+      type: boolean
+      label: 'Exclude DS layouts in layout builder'
+    layout_icon_image_bc:
+      type: boolean
+      label: 'Use original Display Suite icons instead of the icon map'
+    layout_suggestion_bc:
+      type: boolean
+      label: 'Undo layout suggestion fix'

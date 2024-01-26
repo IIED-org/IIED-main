@@ -7,12 +7,13 @@
 
 use Drupal\Core\Url;
 use Drupal\Component\Utility\Html;
-use Drupal\paragraphs\ParagraphInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\paragraphs\ParagraphInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\layout_paragraphs\Utility\Dialog;
 use Drupal\paragraphs\Entity\ParagraphsType;
+use Drupal\Core\Entity\FieldableEntityInterface;
 
 /**
  * Implements hook_help().
@@ -372,6 +373,89 @@ function layout_paragraphs_paragraph_presave(ParagraphInterface $paragraph) {
     // rather than using setBehaviorSettings().
     $behavior_settings['layout_paragraphs']['parent_uuid'] = $correct_uuid;
     $paragraph->set('behavior_settings', serialize($behavior_settings));
+  }
+}
+
+/**
+ * Implements hook_entity_translation_create().
+ *
+ * Supports asynchronous translations by duplicating paragraphs referenced
+ * by an entity reference revisions field that is translatable, updating parent
+ * uuid references in layouts.
+ */
+function layout_paragraphs_entity_translation_create(FieldableEntityInterface $entity) {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $paragraph_storage = $entity_type_manager->getStorage('paragraph');
+  /** @var \Drupal\field\FieldConfigInterface[] $field_definitions */
+  $field_definitions = $entity_type_manager->getStorage('field_config')
+    ->loadByProperties([
+      'entity_type' => $entity->getEntityTypeId(),
+      'bundle' => $entity->bundle(),
+      'field_type' => 'entity_reference_revisions',
+    ]);
+
+  $langcode_key = $entity->getEntityType()->getKey('langcode');
+  $langcode = $entity->get($langcode_key)->value;
+
+  foreach ($field_definitions as $field_definition) {
+    if ($field_definition->isTranslatable() === FALSE) {
+      continue;
+    }
+    if ($field_definition->getFieldStorageDefinition()->getSetting('target_type') !== 'paragraph') {
+      continue;
+    }
+
+    $async_values = [];
+    $values = $entity->get($field_definition->getName())->getValue() ?? [];
+
+    // Get the list of referenced paragraphs using the available property.
+    $paragraphs = array_map(function ($value) use ($paragraph_storage) {
+      if (isset($value['entity'])) {
+        $paragraph = $value['entity'];
+      }
+      elseif (isset($value['target_revision_id'])) {
+        $paragraph = $paragraph_storage->loadRevision($value['target_revision_id']);
+      }
+      elseif (isset($value['target_id'])) {
+        $paragraph = $paragraph_storage->load($value['target_id']);
+      }
+      return $paragraph ?? NULL;
+    }, $values);
+
+    // Save an array of the original uuids.
+    $original_uuids = array_map(function ($paragraph) {
+      return $paragraph->uuid();
+    }, $paragraphs);
+
+    // Duplicate the paragraphs.
+    $duplicates = array_map(function ($paragraph) use ($langcode) {
+      $duplicate = $paragraph->createDuplicate();
+      $langcode_key = $duplicate->getEntityType()->getKey('langcode');
+      $duplicate->set($langcode_key, $langcode);
+      return $duplicate;
+    }, $paragraphs);
+
+    // Get an array of new uuids so we can map references to parents uuids.
+    $new_uuids = array_map(function ($paragraph) {
+      return $paragraph->uuid();
+    }, $duplicates);
+
+    // Map old uuids to new uuids.
+    $uuid_map = array_combine($original_uuids, $new_uuids);
+
+    // Update references to the correct, new parent uuids in the
+    // behavior settings.
+    $async_values = array_map(function ($paragraph) use ($uuid_map) {
+      $behavior_settings = $paragraph->getAllBehaviorSettings();
+      $parent_uuid = $behavior_settings['layout_paragraphs']['parent_uuid'] ?? NULL;
+      if (!empty($parent_uuid)) {
+        $behavior_settings['layout_paragraphs']['parent_uuid'] = $uuid_map[$parent_uuid];
+        $paragraph->setAllBehaviorSettings($behavior_settings);
+      }
+      return $paragraph;
+    }, $duplicates);
+
+    $entity->set($field_definition->getName(), $async_values);
   }
 }
 

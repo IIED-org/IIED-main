@@ -17,7 +17,7 @@ class ViewsTest extends TestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'node',
     'field_ui',
     'taxonomy',
@@ -99,8 +99,8 @@ class ViewsTest extends TestBase {
     ];
     $assert = [
       'regions' => [
-        'left' => '<td colspan="8">' . t('Left') . '</td>',
-        'right' => '<td colspan="8">' . t('Right') . '</td>',
+        'left' => '<td colspan="8">' . $this->t('Left') . '</td>',
+        'right' => '<td colspan="8">' . $this->t('Right') . '</td>',
       ],
     ];
     $this->dsSelectLayout($layout, $assert, 'admin/structure/types/manage/article/display/teaser');
@@ -116,10 +116,10 @@ class ViewsTest extends TestBase {
     ];
     $assert = [
       'regions' => [
-        'first' => '<td colspan="8">' . t('First') . '</td>',
-        'second' => '<td colspan="8">' . t('Second') . '</td>',
-        'third' => '<td colspan="8">' . t('Third') . '</td>',
-        'fourth' => '<td colspan="8">' . t('Fourth') . '</td>',
+        'first' => '<td colspan="8">' . $this->t('First') . '</td>',
+        'second' => '<td colspan="8">' . $this->t('Second') . '</td>',
+        'third' => '<td colspan="8">' . $this->t('Third') . '</td>',
+        'fourth' => '<td colspan="8">' . $this->t('Fourth') . '</td>',
       ],
     ];
     $this->dsSelectLayout($layout, $assert);

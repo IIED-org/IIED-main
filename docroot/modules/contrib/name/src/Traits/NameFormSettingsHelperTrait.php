@@ -52,7 +52,7 @@ trait NameFormSettingsHelperTrait {
             '#weight' => -2,
           ],
         ],
-      ] + (isset($form['name_settings']) ? $form['name_settings'] : []),
+      ] + ($form['name_settings'] ?? []),
     ] + $form;
     foreach ($components as $key => $title) {
       if (!empty($excluded_components[$key])) {

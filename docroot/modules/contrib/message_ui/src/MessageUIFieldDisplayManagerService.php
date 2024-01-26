@@ -5,7 +5,7 @@ namespace Drupal\message_ui;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
- * Class MessageUIFieldDisplayManagerService.
+ * Field Display Manager Service.
  *
  * @package Drupal\message_ui
  */
@@ -32,15 +32,14 @@ class MessageUIFieldDisplayManagerService implements MessageUIFieldDisplayManage
    * {@inheritdoc}
    */
   public function setFieldsDisplay($template) {
-    $this->entityTypeManager->getStorage('entity_form_display')
-      ->resetCache();
+    $entity_form_display_storage = $this->entityTypeManager->getStorage('entity_form_display');
+    $entity_form_display_storage->resetCache();
 
     /** @var \Drupal\Core\Entity\Display\EntityDisplayInterface $form_display */
-    $form_display = $this->entityTypeManager->getStorage('entity_form_display')->load("message.{$template}.default");
+    $form_display = $entity_form_display_storage->load("message.{$template}.default");
 
     if (!$form_display) {
-      $form_display = \Drupal::entityTypeManager()
-        ->getStorage('entity_form_display')
+      $form_display = $entity_form_display_storage
         ->create([
           'targetEntityType' => 'message',
           'bundle' => $template,

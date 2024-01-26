@@ -12,11 +12,6 @@ class ParagraphsTest extends EntityBrowserWebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'classy';
-
-  /**
-   * {@inheritdoc}
-   */
   protected static $modules = [
     'views',
     'block',
@@ -129,8 +124,8 @@ class ParagraphsTest extends EntityBrowserWebDriverTestBase {
     // Submit the form.
     $this->submitForm([], 'Save');
     $this->assertSession()->linkExists('Hello world');
-    $this->assertSession()->elementTextContains('css', '.field--name-field-paragraphs-nested', 'Nested node');
-    $this->assertSession()->elementTextContains('css', '.field--name-field-paragraphs-nested', 'Nested second node');
+    $this->assertSession()->elementTextContains('css', '.paragraph--type--content-embed', 'Nested node');
+    $this->assertSession()->elementTextContains('css', '.paragraph--type--content-embed', 'Nested second node');
 
     $parent_node = $this->container->get('entity_type.manager')
       ->getStorage('node')
@@ -149,7 +144,7 @@ class ParagraphsTest extends EntityBrowserWebDriverTestBase {
     // Make sure the form submitted and a link to the articles are present.
     $this->assertSession()->linkExists('Hello world');
     $this->assertSession()->linkNotExists('Nested node');
-    $this->assertSession()->elementTextContains('css', '.field--name-field-paragraphs-nested', 'Nested second node');
+    $this->assertSession()->elementTextContains('css', '.paragraph--type--content-embed', 'Nested second node');
   }
 
 }

@@ -152,7 +152,7 @@ function entity_browser_file_validate_image_resolution(FileInterface $file, $max
         // body that is significantly different.
         if (!$file->isPermanent() && $image->scale($width, $height)) {
           $image->save();
-          $file->filesize = $image->getFileSize();
+          $file->setSize($image->getFileSize());
           \Drupal::messenger()->addMessage(t('The image was resized to fit within the maximum allowed dimensions of %dimensions pixels.', ['%dimensions' => $maximum_dimensions]));
         }
         else {

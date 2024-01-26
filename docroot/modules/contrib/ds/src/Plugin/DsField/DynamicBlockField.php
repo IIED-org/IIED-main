@@ -43,8 +43,8 @@ class DynamicBlockField extends BlockBase {
     $field = $this->getFieldConfiguration();
     $title = $field['title'];
 
-    if (isset($field['properties']['use_block_title']) && $field['properties']['use_block_title'] == TRUE) {
-      /* @var $block BlockPluginInterface */
+    if (isset($field['properties']['use_block_title']) && $field['properties']['use_block_title']) {
+      /* @var $block \Drupal\Core\Block\BlockPluginInterface */
       $block = $this->getBlock();
 
       if ($block instanceof ViewsBlock) {

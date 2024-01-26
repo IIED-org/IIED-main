@@ -1,0 +1,11 @@
+--- ds.module
++++ ds.module
+@@ -630,7 +630,7 @@ function ds_preprocess_ds_layout(&$variables) {
+   }
+ 
+   // Copy entity to top level to improve theme experience.
+-  if (isset($variables['content']['#entity'])) {
++  if (isset($variables['content']['#entity']) && isset($variables['content']['#entity_type'])) {
+     $variables[$variables['content']['#entity_type']] = $variables['content']['#entity'];
+   }
+ }

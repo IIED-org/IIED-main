@@ -1,0 +1,23 @@
+uuid: c1a180b9-0161-4254-b324-0d991f1c2c8b
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.key_figure
+    - field.storage.block_content.field_number
+id: block_content.key_figure.field_number
+field_name: field_number
+entity_type: block_content
+bundle: key_figure
+label: Number
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

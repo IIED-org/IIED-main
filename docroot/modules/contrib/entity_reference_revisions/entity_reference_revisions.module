@@ -218,11 +218,33 @@ function entity_reference_revisions_create_field($entity_type, $bundle, $field_n
  * Implements hook_form_FORM_ID_alter() for 'field_ui_field_storage_add_form'.
  */
 function entity_reference_revisions_form_field_ui_field_storage_add_form_alter(array &$form) {
-  // Move the "Entity reference revisions" option to the end of the list and rename it to
-  // "Other".
-  unset($form['add']['new_storage_type']['#options'][(string) t('Reference revisions')]['entity_reference_revisions']);
-  $form['add']['new_storage_type']['#options'][(string) t('Reference revisions')]['entity_reference_revisions'] = t('Other…');
+  if (version_compare(\Drupal::VERSION, '10.1.999', '<')) {
+    // Move the "Entity reference revisions" option to the end of the list and rename it to
+    // "Other".
+    unset($form['add']['new_storage_type']['#options'][(string) t('Reference revisions')]['entity_reference_revisions']);
+    $form['add']['new_storage_type']['#options'][(string) t('Reference revisions')]['entity_reference_revisions'] = t('Other…');
+    return;
+  }
+
+  // Changes the entity reference revisions option.
+  if (isset($form["group_field_options_wrapper"]["fields"]["entity_reference_revisions"]["#title"])) {
+    $form["group_field_options_wrapper"]["fields"]["entity_reference_revisions"]["#title"] = t('Other (revisions)');
+    $form["group_field_options_wrapper"]["fields"]["entity_reference_revisions"]["#weight"] = 99;
+  }
+
 }
+
+/**
+ * Implements hook_field_info_alter().
+ */
+function entity_reference_revisions_field_info_alter(&$info) {
+
+  if (version_compare(\Drupal::VERSION, '10.1.999', '<')) {
+    $info['entity_reference_revisions']['category'] = t('Reference revisions');
+  }
+
+}
+
 
 /**
  * Implements hook_entity_revision_create().
@@ -271,10 +293,12 @@ function entity_reference_revisions_entity_revision_create(ContentEntityInterfac
 
             /** @var \Drupal\Core\Entity\ContentEntityInterface $target_entity */
             $target_entity = $item->entity;
-            if (!$target_entity->hasTranslation($active_langcode)) {
-              $target_entity->addTranslation($active_langcode, $target_entity->toArray());
+            if ($target_entity->isTranslatable()) {
+              if (!$target_entity->hasTranslation($active_langcode)) {
+                $target_entity->addTranslation($active_langcode, $target_entity->toArray());
+              }
+              $target_entity = $item->entity->getTranslation($active_langcode);
             }
-            $target_entity = $item->entity->getTranslation($active_langcode);
             $revised_entity = $target_storage->createRevision($target_entity, $new_revision->isDefaultRevision(), $keep_untranslatable_fields);
 
             // Restore the revision ID.
@@ -294,7 +318,7 @@ function entity_reference_revisions_entity_revision_create(ContentEntityInterfac
  */
 function _entity_reference_revisions_orphan_purger_batch_dispatcher() {
   $args = func_get_args();
-  list($service, $method) = explode(':', array_shift($args));
+  [$service, $method] = explode(':', array_shift($args));
   // The second argument (context) is passed by reference.
   $values = $args[1];
   $args[1] = &$values;

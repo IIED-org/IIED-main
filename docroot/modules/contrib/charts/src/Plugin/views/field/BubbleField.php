@@ -2,6 +2,7 @@
 
 namespace Drupal\charts\Plugin\views\field;
 
+use Drupal\charts\ChartViewsFieldInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
@@ -21,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @ingroup views_field_handlers
  * @ViewsField("field_charts_fields_bubble")
  */
-class BubbleField extends FieldPluginBase implements ContainerFactoryPluginInterface {
+class BubbleField extends FieldPluginBase implements ContainerFactoryPluginInterface, ChartViewsFieldInterface {
 
   /**
    * The messenger service.
@@ -202,6 +203,16 @@ class BubbleField extends FieldPluginBase implements ContainerFactoryPluginInter
       Json::decode($yAxisFieldValue),
       Json::decode($zAxisFieldValue),
     ]);
+  }
+
+  /**
+   * Set the data type for the chart field to be an array.
+   *
+   * @return string
+   *   The data type.
+   */
+  public function getChartFieldDataType(): string {
+    return 'array';
   }
 
 }

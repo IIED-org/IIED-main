@@ -1,0 +1,134 @@
+{#
+/**
+ * @file
+ * Theme override to display a taxonomy term.
+ *
+ * Available variables:
+ * - url: URL of the current term.
+ * - name: (optional) Name of the current term.
+ * - content: Items for the content of the term (fields and description).
+ *   Use 'content' to print them all, or print a subset such as
+ *   'content.description'. Use the following code to exclude the
+ *   printing of a given child element:
+ *   @code
+ *   {{ content|without('description') }}
+ *   @endcode
+ * - attributes: HTML attributes for the wrapper.
+ * - page: Flag for the full page state.
+ * - term: The taxonomy term entity, including:
+ *   - id: The ID of the taxonomy term.
+ *   - bundle: Machine name of the current vocabulary.
+ * - view_mode: View mode, e.g. 'full', 'teaser', etc.
+ *
+ * @see template_preprocess_taxonomy_term()
+ * for Hidden handbrakes 
+ * This is the updated version with extra images
+ */
+#}
+{%
+  set classes = [
+    'taxonomy-term',
+    'vocabulary-' ~ term.bundle|clean_class,
+  ]
+%}
+
+<div{{ attributes.setAttribute('id', 'taxonomy-term-' ~ term.id).addClass(classes) }}>
+  
+  {# <div class="container pt-6 pb-2">
+      <nav aria-label="themes">
+      <div class="flex flex-wrap justify-between">
+        <div class="flex flex-wrap items-center mb-4 space-x-3">
+          {% for key, item in term.field_theme %}
+            {% if key is not empty %}
+              <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': item.entity.tid.value}) }}">
+              {{ item.entity.label }}</a>
+              {{ not loop.last ? '<div aria-hidden="true" class="w-px h-4 bg-gray-300"></div>' }}
+            {% endif %}
+          {% endfor %}
+        </div>
+        <div class="mb-4">{{ drupal_block('language_block:language_interface', wrapper=false) }}</div>
+      </div>
+    </nav>
+  </div> #}
+
+    {# Block for login/authenticated users #}
+    {% if logged_in %}
+    {% include '@iied_tw/partials/_hh_authenticated.html.twig' %}
+    {% endif %}
+
+    <div class="bg-iiedbg-10 bg-[url('/themes/custom/iied_tw/images/hh-main-bg.svg')] bg-cover bg-bottom mb-12 xl:mb-16">
+      <div class="container items-baseline pt-16 overflow-hidden pb-44">
+        <div class="">
+          {{ title_prefix }}
+          <h1 class="mb-6">{{ name }}</h1>
+          {{ title_suffix }}
+        </div>
+        <div class="flex justify-between">
+          <p class="prose prose-lg lg:prose-xl">
+          {{ term.description.0.value|striptags }}
+          </p>
+            {% for key, item in term.field_badge %}
+              {% if key is not empty %}
+                  <img class="self-center ml-4" src="{{ item.entity.uri.value|image_style('scale_80') }}" alt="collection badge">
+              {% endif %}
+            {% endfor %}
+        </div>
+      </div>
+    </div>
+
+
+{% if term.field_overview.value is not empty %}
+  {{ attach_library('iied_tw/alpine') }}
+  <div class="pt-6">
+    <div class="tab-wrapper" 
+      x-data="{ tab: window.location.hash ? window.location.hash.substring(1) : 'discover' }"
+      x-init="$refs[tab].focus()"
+      id="tab_wrapper"
+      >
+      <nav class="border-b border-gray-300">
+        <div class="container flex flex-row">
+          <a x-ref="discover" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-4 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-4': tab === 'discover' }" @click.prevent="tab = 'discover'; window.location.hash = 'discover'" href="#">Discover hidden handbrakes</a>
+
+          <a x-ref="overview" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-4 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-4': tab === 'overview' }" @click.prevent="tab = 'overview'; window.location.hash = 'overview'" href="#">Overview</a>
+        {# My HH tab
+        {% if (drupal_view_result('my_hidden_handbrakes', 'block_1') is not empty) and (logged_in) %}  
+          <a x-ref="my_hh" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-4 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-4': tab === 'my-hh' }" @click.prevent="tab = 'my-hh'; window.location.hash = 'my-hh'" href="#">My hidden handbrakes</a>
+        {% endif %} #}
+
+        </div>  
+      </nav>
+        <div class="pt-6 tab-panel bg-iiedbg-10" x-show="tab === 'discover'" x-transition:enter.duration.750ms>
+          <div class="content">
+            {{ content|without('field_overview', 'field_tags', 'field_theme') }}
+          </div>
+        </div>
+        <div class="pt-6 tab-panel bg-iiedbg-10" x-show="tab === 'overview'" x-transition:enter.duration.750ms>
+           <div class="container content lg:grid lg:gap-x-6 lg:grid-cols-12">
+              <div class="mt-6 mb-24 prose md:prose-lg lg:col-span-8 lg:col-start-5">
+              {{ term.field_overview.value|raw }}
+              </div>
+          </div>
+        </div>
+        {# My HH tab
+        <div class="pt-6 tab-panel" x-show="tab === 'my-hh'" x-transition:enter.duration.750ms>
+           <div class="container mx-auto content xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12">
+              <div class="mb-12 xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4">
+              {{ drupal_view('webform_submissions_hh', 'block_1') }}
+              {{ drupal_view('my_hidden_handbrakes', 'block_1') }}
+              </div>
+          </div>
+        </div> #}
+
+
+      </div>
+    </div>
+  </div>
+</div>
+{% else %}
+  <div class="content">
+      {{ content }}
+  </div>
+  
+{# TODO: needs adjusting to show tags #}
+  {{ content.field_tags }} 
+{% endif %}

@@ -17,7 +17,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @Chart(
  *   id = "c3",
- *   name = @Translation("C3")
+ *   name = @Translation("C3"),
+ *   types = {
+ *     "area",
+ *     "bar",
+ *     "bubble",
+ *     "column",
+ *     "donut",
+ *     "gauge",
+ *     "line",
+ *     "pie",
+ *     "scatter",
+ *     "spline",
+ *   },
  * )
  */
 class C3 extends ChartBase implements ContainerFactoryPluginInterface {

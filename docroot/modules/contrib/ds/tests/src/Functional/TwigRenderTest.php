@@ -24,7 +24,7 @@ class TwigRenderTest extends TestBase {
     ];
     $layout_assert = [
       'regions' => [
-        'ds_content' => '<td colspan="8">' . t('Content') . '</td>',
+        'ds_content' => '<td colspan="8">' . $this->t('Content') . '</td>',
       ],
     ];
     $this->dsSelectLayout($layout, $layout_assert);

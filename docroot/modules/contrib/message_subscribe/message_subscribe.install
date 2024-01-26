@@ -25,3 +25,12 @@ function message_subscribe_update_8100() {
   $config->set('debug_mode', FALSE);
   $config->save();
 }
+
+/**
+ * Set the range configuration setting.
+ */
+function message_subscribe_update_8121() {
+  $config = \Drupal::configFactory()->getEditable('message_subscribe.settings');
+  $config->set('range', 100);
+  $config->save();
+}

@@ -38,7 +38,7 @@ class ParagraphsConfigTest extends ParagraphsTestBase {
     $this->addParagraphsType('text');
 
     // Add a second language.
-    ConfigurableLanguage::create(['id' => 'de'])->save();
+    ConfigurableLanguage::createFromLangcode('de')->save();
 
     // Enable translation for paragraphed content type. Do not enable
     // translation for the ERR paragraphs field nor for fields on the
@@ -89,7 +89,7 @@ class ParagraphsConfigTest extends ParagraphsTestBase {
     $this->assertSession()->responseNotContains('<div class="messages messages--error');
 
     // Add a second language.
-    ConfigurableLanguage::create(['id' => 'de'])->save();
+    ConfigurableLanguage::createFromLangcode('de')->save();
 
     // Enable translation for paragraphed content type.
     $edit = [
@@ -125,13 +125,27 @@ class ParagraphsConfigTest extends ParagraphsTestBase {
 
     // Check a not paragraphs translatable field does not display the message.
     $this->drupalGet('admin/structure/types/manage/paragraphed_test/fields/add-field');
-    $edit = [
-      'new_storage_type' => 'field_ui:entity_reference:node',
-      'label' => 'new_no_paragraphs_field',
-      'field_name' => 'new_no_paragraphs_field',
-    ];
-    $this->submitForm($edit, 'Save and continue');
-    $this->submitForm([], 'Save field settings');
+    if ($this->coreVersion('10.2')) {
+      $selected_group = [
+        'new_storage_type' => 'reference',
+      ];
+      $this->submitForm($selected_group, 'Change field group');
+      $edit = [
+        'group_field_options_wrapper' => 'field_ui:entity_reference:node',
+        'label' => 'new_no_field_paragraphs',
+        'field_name' => 'new_no_field_paragraphs',
+      ];
+      $this->submitForm($edit, 'Continue');
+    }
+    else {
+      $edit = [
+        'new_storage_type' => 'field_ui:entity_reference:node',
+        'label' => 'new_no_paragraphs_field',
+        'field_name' => 'new_no_paragraphs_field',
+      ];
+      $this->submitForm($edit, 'Save and continue');
+      $this->submitForm([], 'Save field settings');
+    }
     $this->assertSession()->pageTextNotContains('Paragraphs fields do not support translation.');
     $this->assertSession()->responseNotContains('<div class="messages messages--warning');
   }
@@ -207,8 +221,8 @@ class ParagraphsConfigTest extends ParagraphsTestBase {
 
     $this->drupalGet('admin/structure/types/manage/paragraphed_test/fields/node.paragraphed_test.paragraphs');
     $edit = [
-      'settings[handler_settings][negate]' => 0,
-      'settings[handler_settings][target_bundles_drag_drop][paragraph_type_test][enabled]' => 1,
+      'settings[handler_settings][negate]' => '0',
+      'settings[handler_settings][target_bundles_drag_drop][paragraph_type_test][enabled]' => '1',
     ];
     $this->submitForm($edit, 'Save settings');
     $this->assertSession()->pageTextContains('Saved paragraphs configuration.');
@@ -230,8 +244,8 @@ class ParagraphsConfigTest extends ParagraphsTestBase {
 
     $this->drupalGet('admin/structure/types/manage/paragraphed_test/fields/node.paragraphed_test.paragraphs');
     $edit = [
-      'settings[handler_settings][negate]' => 1,
-      'settings[handler_settings][target_bundles_drag_drop][text][enabled]' => 1,
+      'settings[handler_settings][negate]' => '1',
+      'settings[handler_settings][target_bundles_drag_drop][text][enabled]' => '1',
     ];
     $this->submitForm($edit, 'Save settings');
     $this->assertSession()->pageTextContains('Saved paragraphs configuration.');

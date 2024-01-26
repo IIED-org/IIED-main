@@ -7,6 +7,8 @@ ds_1col:
   regions:
     ds_content:
       label: Content
+  icon_map:
+    - [ds_content]
 ds_1col_wrapper:
   label: One column layout + wrapper
   category: Display Suite
@@ -16,6 +18,8 @@ ds_1col_wrapper:
   regions:
     ds_content:
       label: Content
+  icon_map:
+    - [ds_content]
 ds_2col:
   label: Two column layout
   category: Display Suite
@@ -28,6 +32,8 @@ ds_2col:
       label: Left
     right:
       label: Right
+  icon_map:
+    - [left, right]
 ds_2col_fluid:
   label: Fluid two column layout
   category: Display Suite
@@ -40,6 +46,8 @@ ds_2col_fluid:
       label: Left
     right:
       label: Right
+  icon_map:
+    - [left, right]
 ds_2col_stacked:
   label: Two column stacked layout
   category: Display Suite
@@ -56,6 +64,10 @@ ds_2col_stacked:
       label: Right
     footer:
       label: Footer
+  icon_map:
+    - [header]
+    - [left, right]
+    - [footer]
 ds_2col_stacked_fluid:
   label: Fluid two column stacked layout
   category: Display Suite
@@ -72,6 +84,10 @@ ds_2col_stacked_fluid:
       label: Right
     footer:
       label: Footer
+  icon_map:
+    - [header]
+    - [left, right]
+    - [footer]
 ds_3col:
   label: Three column - 25/50/25
   category: Display Suite
@@ -86,6 +102,8 @@ ds_3col:
       label: Middle
     right:
       label: Right
+  icon_map:
+    - [left, middle, right]
 ds_3col_equal_width:
   label: Three column - equal width
   category: Display Suite
@@ -100,6 +118,8 @@ ds_3col_equal_width:
       label: Middle
     right:
       label: Right
+  icon_map:
+    - [left, middle, right]
 ds_3col_stacked:
   label: Three column stacked - 25/50/25
   category: Display Suite
@@ -118,6 +138,10 @@ ds_3col_stacked:
       label: Right
     footer:
       label: Footer
+  icon_map:
+    - [header]
+    - [left, middle, right]
+    - [footer]
 ds_3col_stacked_fluid:
   label: Fluid three column stacked - 25/50/25
   category: Display Suite
@@ -136,6 +160,10 @@ ds_3col_stacked_fluid:
       label: Right
     footer:
       label: Footer
+  icon_map:
+    - [header]
+    - [left, middle, right]
+    - [footer]
 ds_3col_stacked_equal_width:
   label: Three column stacked - equal width
   category: Display Suite
@@ -154,6 +182,10 @@ ds_3col_stacked_equal_width:
       label: Right
     footer:
       label: Footer
+  icon_map:
+    - [header]
+    - [left, middle, right]
+    - [footer]
 ds_4col:
   label: Four column - equal width
   category: Display Suite
@@ -170,6 +202,8 @@ ds_4col:
       label: Third
     fourth:
       label: Fourth
+  icon_map:
+    - [first, second, third, fourth]
 ds_reset:
   label: Reset layout
   category: Display Suite
@@ -179,3 +213,5 @@ ds_reset:
   regions:
     ds_content:
       label: Content
+  icon_map:
+    - [ds_content]

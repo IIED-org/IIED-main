@@ -68,7 +68,7 @@ class FieldController extends ControllerBase implements ContainerInjectionInterf
             '#plain_text' => $field_value['label'],
           ],
         ];
-        $row[] = isset($field_value['type_label']) ? $field_value['type_label'] : $this->t('Unknown');
+        $row[] = $field_value['type_label'] ?? $this->t('Unknown');
         $row[] = $field_value['id'];
         $row[] = ucwords(str_replace('_', ' ', implode(', ', $field_value['entities'])));
 

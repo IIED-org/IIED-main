@@ -6,7 +6,7 @@ package: Layout Paragraphs
 dependencies:
   - layout_paragraphs
 
-# Information added by Drupal.org packaging script on 2023-05-13
-version: '2.0.3'
+# Information added by Drupal.org packaging script on 2023-12-11
+version: '2.0.4'
 project: 'layout_paragraphs'
-datestamp: 1683938209
+datestamp: 1702252846

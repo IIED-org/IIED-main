@@ -14,7 +14,7 @@ function charts_billboard_requirements($phase) {
   switch ($phase) {
     case 'runtime':
       $library_path = charts_billboard_find_library();
-      $config = \Drupal::service('config.factory')->getEditable('charts.settings');
+      $config = \Drupal::config('charts.settings');
       $cdn = $config->get('advanced.requirements.cdn') ?? FALSE;
 
       if (!$library_path) {

@@ -15,8 +15,8 @@
     },
     "require": {
         "oomphinc/composer-installers-extender": "^2",
-        "npm-asset/chart.js": "^3.3",
-        "npm-asset/chartjs-adapter-date-fns": "^2"
+        "npm-asset/chart.js": "^4.4",
+        "npm-asset/chartjs-adapter-date-fns": "^3.0"
     },
     "extra": {
         "installer-types": [

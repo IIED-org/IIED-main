@@ -1,9 +1,6 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\Tests\serialization\Unit\Normalizer\ComplexDataNormalizerTest.
- */
+declare(strict_types=1);
 
 namespace Drupal\Tests\serialization\Unit\Normalizer;
 
@@ -118,6 +115,14 @@ class ComplexDataNormalizerTest extends UnitTestCase {
  * Test normalizer with a different supported class.
  */
 class TestExtendedNormalizer extends ComplexDataNormalizer {
-  protected $supportedInterfaceOrClass = \stdClass::class;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSupportedTypes(?string $format): array {
+    return [
+      \stdClass::class => TRUE,
+    ];
+  }
 
 }

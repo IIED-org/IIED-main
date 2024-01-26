@@ -7,13 +7,8 @@ To submit bug reports and feature suggestions, or to track changes: https://drup
 
 # Requirements
 
-* The module **must** be downloaded or updated using Composer, see [Download contributed modules and themes using Composer](https://www.drupal.org/node/2718229#adding-modules).
-This ensures the all dependency modules get downloaded as well.
-
-* Drupal 9.3.x and higher or 10.0.x and higher
-
 * Either ImageMagick (http://www.imagemagick.org) or GraphicsMagick
-  (http://www.graphicsmagick.org) need to be installed on your server and the
+  (http://www.graphicsmagick.org) must be installed on your server and the
   convert binary needs to be accessible and executable from PHP.
 
 * The PHP configuration must allow invocation of _proc_open()_, which is
@@ -27,14 +22,12 @@ these requirements.
 * Install the required module packages with Composer. From the Drupal
   installation root directory, type
   ```
-  $ composer require drupal/imagemagick:^3
+  $ composer require drupal/imagemagick
   ```
-  This will download both the ImageMagick module and any dependent module
-  (namely, the File Metadata Manager module).
+  This will download both the ImageMagick module and any dependent package.
 
 * Enable the module. Navigate to _Manage > Extend_. Check the box next to the
-  ImageMagick module and then click the 'Install' button at the bottom. If
-  File Metadata Manager is not already installed, the system will prompt you
+  ImageMagick module and then click the 'Install' button at the bottom. If any dependent module is not already installed, the system will prompt you
   to confirm installing it too. Just confirm and proceed.
 
 # Configuration
@@ -45,20 +38,11 @@ these requirements.
 * Select the graphics package (ImageMagick or GraphicsMagick) you want to use
   with the toolkit.
 
-* If the convert binary cannot be found in the default shell path, you need to
+* If the convert binary cannot be found in the default shell path, you must
   enter the path to the executables, including the trailing slash/backslash.
 
 * Enable and/or disable the image formats that the toolkit needs to support,
   see below.
-
-* Select a locale to be used when escaping command line arguments, in the
-  'Execution options' box, 'Locale' field. The default, 'en_US.UTF-8', should
-  work in most cases. If that is not available on the server, enter another
-  locale. On *nix servers, type 'locale -a' in a shell window to see a list of
-  all locales available. This is particularly needed if you are going to
-  process image files with non-ASCII characters in the file name: without a
-  locale defined, the non-ASCII characters will be dropped by the escape
-  function, leading to errors.
 
 # Enable/disable supported image formats
 

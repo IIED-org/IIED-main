@@ -2,16 +2,12 @@
 
 namespace Drupal\entity_browser\Plugin\views\filter;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\views\Plugin\views\HandlerBase;
-use Drupal\views\Plugin\views\filter\Bundle;
 use Drupal\Core\Form\FormStateInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\Core\KeyValueStore\KeyValueStoreExpirableInterface;
-use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
-use Drupal\views\ViewExecutable;
 use Drupal\views\Plugin\views\display\DisplayPluginBase;
+use Drupal\views\Plugin\views\filter\Bundle;
+use Drupal\views\Plugin\views\HandlerBase;
+use Drupal\views\ViewExecutable;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Filter class which allows filtering by entity bundles.
@@ -21,13 +17,6 @@ use Drupal\views\Plugin\views\display\DisplayPluginBase;
  * @ViewsFilter("entity_browser_bundle")
  */
 class ContextualBundle extends Bundle {
-
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
 
   /**
    * A request stack symfony instance.
@@ -44,35 +33,13 @@ class ContextualBundle extends Bundle {
   protected $selectionStorage;
 
   /**
-   * The bundle info service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
+   * {@inheritdoc}
    */
-  protected $bundleInfoService;
-
-  /**
-   * Constructs a Bundle object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity manager.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   A request stack symfony instance.
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info_service
-   *   The bundle info service.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, RequestStack $request_stack, KeyValueStoreExpirableInterface $selection_storage, EntityTypeBundleInfoInterface $bundle_info_service) {
-    HandlerBase::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->requestStack = $request_stack;
-    $this->entityTypeManager = $entity_type_manager;
-    $this->selectionStorage = $selection_storage;
-    $this->is_handler = TRUE;
-    $this->bundleInfoService = $bundle_info_service;
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
+    $instance->requestStack = $container->get('request_stack');
+    $instance->selectionStorage = $container->get('entity_browser.selection_storage');
+    return $instance;
   }
 
   /**
@@ -95,21 +62,6 @@ class ContextualBundle extends Bundle {
         }
       }
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('entity_type.manager'),
-      $container->get('request_stack'),
-      $container->get('entity_browser.selection_storage'),
-      $container->get('entity_type.bundle.info')
-    );
   }
 
   /**

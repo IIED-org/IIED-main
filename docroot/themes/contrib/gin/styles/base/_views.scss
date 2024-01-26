@@ -196,6 +196,23 @@
 .views-tabs {
   a {
     padding: var(--gin-spacing-xs) var(--gin-spacing-m);
+
+    &.views-display-disabled-link {
+      padding-inline-start: var(--gin-spacing-l);
+
+      &::before {
+        mask-image: icon('hide');
+        mask-repeat: no-repeat;
+        mask-position: center left;
+        mask-size: contain;
+        width: var(--gin-spacing-l);
+        height: var(--gin-spacing-s);
+        margin-inline-start: calc(var(--gin-spacing-m) * -1);
+        background-color: currentColor;
+        display: inline-block;
+        content: '';
+      }
+    }
   }
 
   .add a,
@@ -416,13 +433,6 @@ a.views-field-excluded {
 .views-exposed-form .form-datetime-wrapper {
   margin-bottom: 0;
   margin-right: var(--gin-spacing-xs);
-}
-
-.views-field .marker {
-  font-size: var(--gin-font-size-xxs);
-  font-style: italic;
-  color: var(--gin-color-text-light);
-  padding: var(--gin-spacing-xxs);
 }
 
 .view-header {

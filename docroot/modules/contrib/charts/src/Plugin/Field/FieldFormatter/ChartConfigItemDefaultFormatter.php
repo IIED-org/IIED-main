@@ -55,9 +55,32 @@ class ChartConfigItemDefaultFormatter extends FormatterBase {
    *
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
-  protected function viewElement(FieldItemInterface $item, $chart_id) {
+  protected function viewElement(FieldItemInterface $item, string $chart_id) {
     $settings = $item->toArray()['config'];
-    return Chart::buildElement($settings, $chart_id);
+    if ($this->hasData($settings['series']['data_collector_table'])) {
+      return Chart::buildElement($settings, $chart_id);
+    }
+    return [];
+  }
+
+  /**
+   * Checks if the chart has data.
+   *
+   * @param array $data_collector_table
+   *   The data collector table.
+   *
+   * @return bool
+   *   TRUE if the chart has data, FALSE otherwise.
+   */
+  protected function hasData(array $data_collector_table) {
+    foreach ($data_collector_table as $row) {
+      foreach ($row as $cell) {
+        if (!empty($cell['data'])) {
+          return TRUE;
+        }
+      }
+    }
+    return FALSE;
   }
 
 }

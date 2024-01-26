@@ -5,23 +5,13 @@
  * Contains Drupal\message_ui\message_ui.module.
  */
 
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
 use Drupal\message\Entity\Message;
 use Drupal\message_ui\Plugin\QueueWorker\MessageArgumentsWorker;
-use Drupal\Core\Url;
-use Drupal\Core\Link;
-
-/**
- * Grant permission for the operation upon message.
- */
-const MESSAGE_UI_ALLOW = TRUE;
-
-/**
- * Deny permission for the operation upon message.
- */
-const MESSAGE_UI_DENY = TRUE;
 
 /**
  * Implements hook_entity_insert().
@@ -57,7 +47,7 @@ function message_ui_entity_base_field_info_alter(&$fields, EntityTypeInterface $
   }
 
   if (!empty($fields['uid'])) {
-    /* @var Drupal\Core\Field\BaseFieldDefinition $fields['uid'] */
+    /** @var Drupal\Core\Field\BaseFieldDefinition $fields['uid'] */
     $fields['uid']->setDisplayOptions('view', [
       'label' => 'hidden',
       'type' => 'author',
@@ -100,7 +90,7 @@ function message_ui_entity_type_alter(array &$entity_types) {
     return;
   }
 
-  /* @var $message_config \Drupal\Core\Config\Entity\ConfigEntityType */
+  /** @var \Drupal\Core\Config\Entity\ConfigEntityType $message_config */
   $entity_types['message']
     ->setAccessClass('Drupal\message_ui\MessageAccessControlHandler')
     ->setHandlerClass('view_builder', 'Drupal\message\MessageViewBuilder')
@@ -310,7 +300,7 @@ function message_ui_entity_update(EntityInterface $entity) {
 
     $chunks = array_chunk(array_keys($result), $item_to_process);
 
-    // @todo : Correct location for operations callback?
+    // @todo Correct location for operations callback?
     $operations = [];
     foreach ($chunks as $chunk) {
       $operations[] = [
@@ -319,7 +309,7 @@ function message_ui_entity_update(EntityInterface $entity) {
       ];
     }
 
-    // @todo : Correct location for finished callback?
+    // @todo Correct location for finished callback?
     // Set the batch.
     $batch = [
       'operations' => $operations,
@@ -347,46 +337,4 @@ function message_ui_entity_update(EntityInterface $entity) {
   }
 
   return NULL;
-}
-
-/**
- * Implements hook_entity_load().
- */
-function message_ui_entity_load(array &$entities, $entity_type_id) {
-  static $saved;
-
-  if (!empty($saved)) {
-    return;
-  }
-
-  if ($entity_type_id != 'view') {
-    return;
-  }
-
-  foreach ($entities as &$entity) {
-
-    if ($entity->id() != 'message') {
-      continue;
-    }
-
-    $display = $entity->get('display');
-
-    if (!empty($display['default']['display_options']['fields']['message_ui_contextual_links'])) {
-      $saved = TRUE;
-      continue;
-    }
-
-    $display['default']['display_options']['fields']['message_ui_contextual_links'] = [
-      'id' => 'message_ui_contextual_links',
-      'table' => 'message',
-      'field' => 'message_ui_contextual_links',
-      'entity_type' => 'message',
-      'label' => 'Operations',
-    ];
-
-    $entity->set('display', $display);
-    // Mark the entity as saved.
-    $saved = TRUE;
-    $entity->save();
-  }
 }

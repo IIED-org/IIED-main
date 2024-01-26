@@ -207,14 +207,14 @@ class SubscribersTest extends MessageSubscribeTestBase {
     ]);
 
     $node = $this->nodes[0];
-    $user1 = $this->users[1];
-    $user2 = $this->users[2];
-
     $uids = $this->messageSubscribers->getSubscribers($node, $message);
 
     // Assert subscribers data.
     $expected_uids = [
-      $this->users[2]->id() => new DeliveryCandidate(['subscribe_node', 'subscribe_user'], [], $this->users[2]->id()),
+      $this->users[2]->id() => new DeliveryCandidate([
+        'subscribe_node',
+        'subscribe_user',
+      ], [], $this->users[2]->id()),
     ];
     $this->assertEquals($uids, $expected_uids, 'All subscribers except for the triggering user were fetched.');
 
@@ -226,7 +226,10 @@ class SubscribersTest extends MessageSubscribeTestBase {
     // Assert subscribers data.
     $expected_uids = [
       $this->users[1]->id() => new DeliveryCandidate(['subscribe_node'], [], $this->users[1]->id()),
-      $this->users[2]->id() => new DeliveryCandidate(['subscribe_node', 'subscribe_user'], [], $this->users[2]->id()),
+      $this->users[2]->id() => new DeliveryCandidate([
+        'subscribe_node',
+        'subscribe_user',
+      ], [], $this->users[2]->id()),
     ];
     $this->assertEquals($uids, $expected_uids, 'All subscribers including the triggering user were fetched.');
   }
@@ -277,20 +280,20 @@ class SubscribersTest extends MessageSubscribeTestBase {
     $node = $this->nodes[0];
     $uids = $this->messageSubscribers->getSubscribers($node, $message);
     // @see message_subscribe_test.module
-    $this->assertTrue(\Drupal::state('message_subscribe_test')->get('hook_called'));
-    $this->assertTrue(\Drupal::state('message_subscribe_test')->get('alter_hook_called'));
+    $this->assertTrue(\Drupal::state()->get('message_subscribe_test.hook_called'));
+    $this->assertTrue(\Drupal::state()->get('message_subscribe_test.alter_hook_called'));
     $this->assertEquals([
       4 => new DeliveryCandidate(['foo_flag'], ['email'], 4),
       10001 => new DeliveryCandidate(['bar_flag'], ['email'], 10001),
     ], $uids);
 
     // Disable the test module from adding a fake user.
-    \Drupal::state('message_subscribe_test')->set('disable_subscribers_alter', TRUE);
+    \Drupal::state()->set('message_subscribe_test.disable_subscribers_alter', TRUE);
 
     // Send a message and verify the message alter hook is called (should be
     // called once for each subscriber, so 2 times).
     $this->messageSubscribers->sendMessage($node, $message, [], ['entity access' => FALSE]);
-    $this->assertEquals(2, \Drupal::state('message_subscribe_test')->get('message_alter_hook_called', FALSE));
+    $this->assertEquals(2, \Drupal::state()->get('message_subscribe_test.message_alter_hook_called', FALSE));
   }
 
   /**

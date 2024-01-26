@@ -17,3 +17,8 @@ build:
         testgroups: '--all'
         suppress-deprecations: false
         halt-on-fail: false
+      run_tests.functional:
+        types: 'PHPUnit-Functional'
+        testgroups: '--all'
+        suppress-deprecations: false
+        halt-on-fail: false

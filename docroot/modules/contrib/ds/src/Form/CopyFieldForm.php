@@ -45,7 +45,7 @@ class CopyFieldForm extends FieldFormBase {
       '#options' => $fields,
       '#title' => $this->t('Fields'),
       '#required' => TRUE,
-      '#default_value' => isset($field['properties']['ds_plugin']) ? $field['properties']['ds_plugin'] : '',
+      '#default_value' => $field['properties']['ds_plugin'] ?? '',
     ];
 
     return $form;

@@ -18,6 +18,9 @@ use Drupal\views\Plugin\views\row\EntityRow as ViewsEntityRow;
  */
 class EntityRow extends ViewsEntityRow {
 
+  /** @var \Drupal\ds\Plugin\views\Entity\Render\TranslationLanguageRenderer */
+  protected $entityLanguageRenderer;
+
   /**
    * {@inheritdoc}
    */
@@ -174,13 +177,13 @@ class EntityRow extends ViewsEntityRow {
       $form['grouping_fieldset']['group_field'] = [
         '#type' => 'select',
         '#options' => $sort_options,
-        '#default_value' => isset($this->options['grouping_fieldset']['group_field']) ? $this->options['grouping_fieldset']['group_field'] : '',
+        '#default_value' => $this->options['grouping_fieldset']['group_field'] ?? '',
       ];
       $form['grouping_fieldset']['group_field_function'] = [
         '#type' => 'textfield',
         '#title' => 'Heading function',
-        '#description' => Html::escape(t('The value of the field can be in a very raw format (eg, date created). Enter a custom function which you can use to format that value. The value and the object will be passed into that function eg. custom_function($raw_value, $object);')),
-        '#default_value' => isset($this->options['grouping_fieldset']['group_field_function']) ? $this->options['grouping_fieldset']['group_field_function'] : '',
+        '#description' => Html::escape($this->t('The value of the field can be in a very raw format (eg, date created). Enter a custom function which you can use to format that value. The value and the object will be passed into that function eg. custom_function($raw_value, $object);')),
+        '#default_value' => $this->options['grouping_fieldset']['group_field_function'] ?? '',
       ];
     }
     else {
@@ -198,15 +201,15 @@ class EntityRow extends ViewsEntityRow {
       }
     }
     $form['delta_fieldset'] = array(
-      '#type' => 'fieldset',
-      '#title' => t('Delta fields'),
+      '#type' => 'details',
+      '#title' => $this->t('Delta fields'),
       '#collapsible' => TRUE,
       '#collapsed' => empty($this->options['delta_fields']),
     );
     $form['delta_fieldset']['delta_fields'] = array(
       '#type' => 'select',
-      '#title' => t('Select fields'),
-      '#description' => t('Select fields which "delta" value should be added to the result row. On the manage display of an entity you can decide to look for this delta value to only print that row.'),
+      '#title' => $this->t('Select fields'),
+      '#description' => $this->t('Select fields which "delta" value should be added to the result row. On the manage display of an entity you can decide to look for this delta value to only print that row.'),
       '#options' => $delta_fields,
       '#multiple' => TRUE,
       '#default_value' => !empty($this->options['delta_fieldset']['delta_fields']) ? $this->options['delta_fieldset']['delta_fields'] : '',
@@ -233,28 +236,33 @@ class EntityRow extends ViewsEntityRow {
     if (!isset($this->entityLanguageRenderer)) {
       $view = $this->getView();
       $rendering_language = $view->display_handler->getOption('rendering_language');
-      $langcode = NULL;
       $dynamic_renderers = [
         '***LANGUAGE_entity_translation***' => 'TranslationLanguageRenderer',
         '***LANGUAGE_entity_default***' => 'DefaultLanguageRenderer',
+        '***LANGUAGE_language_interface***' => 'CurrentLanguageRenderer',
       ];
       if (isset($dynamic_renderers[$rendering_language])) {
         // Dynamic language set based on result rows or instance defaults.
         $renderer = $dynamic_renderers[$rendering_language];
+        $class = '\Drupal\ds\Plugin\views\Entity\Render\\' . $renderer;
+        $entity_type = \Drupal::service('entity_type.manager')->getDefinition($this->getEntityTypeId());
+        $this->entityLanguageRenderer = new $class($view, $this->getLanguageManager(), $entity_type);
       }
       else {
-        if (strpos($rendering_language, '***LANGUAGE_') !== FALSE) {
+
+        if (str_contains($rendering_language, '***LANGUAGE_')) {
           $langcode = PluginBase::queryLanguageSubstitutions()[$rendering_language];
         }
         else {
           // Specific langcode set.
           $langcode = $rendering_language;
         }
+
         $renderer = 'ConfigurableLanguageRenderer';
+        $class = '\Drupal\ds\Plugin\views\Entity\Render\\' . $renderer;
+        $entity_type = \Drupal::service('entity_type.manager')->getDefinition($this->getEntityTypeId());
+        $this->entityLanguageRenderer = new $class($view, $this->getLanguageManager(), $entity_type, $langcode);
       }
-      $class = '\Drupal\ds\Plugin\views\Entity\Render\\' . $renderer;
-      $entity_type = \Drupal::service('entity_type.manager')->getDefinition($this->getEntityTypeId());
-      $this->entityLanguageRenderer = new $class($view, $this->getLanguageManager(), $entity_type, $langcode);
     }
     return $this->entityLanguageRenderer;
   }

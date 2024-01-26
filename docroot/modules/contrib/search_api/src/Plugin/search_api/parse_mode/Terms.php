@@ -54,7 +54,7 @@ class Terms extends ParseModePluginBase {
       // Depending on whether we are currently in a quoted phrase, or maybe just
       // starting one, act accordingly.
       if ($quoted) {
-        if (substr($token, -1) === '"') {
+        if (str_ends_with($token, '"')) {
           $token = substr($token, 0, -1);
           $phrase_contents[] = trim($token);
           $phrase_contents = array_filter($phrase_contents, 'strlen');

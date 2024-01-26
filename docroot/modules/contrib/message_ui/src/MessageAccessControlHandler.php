@@ -56,7 +56,10 @@ class MessageAccessControlHandler extends EntityAccessControlHandler {
     }
 
     /** @var \Drupal\Core\Access\AccessResult[] $results */
-    $results = $this->moduleHandler()->invokeAll('message_message_ui_create_access_control', [$entity_bundle, $account]);
+    $results = $this->moduleHandler()->invokeAll('message_message_ui_create_access_control', [
+      $entity_bundle,
+      $account,
+    ]);
 
     foreach ($results as $result) {
       if ($result->isNeutral()) {
@@ -72,7 +75,7 @@ class MessageAccessControlHandler extends EntityAccessControlHandler {
     }
 
     // With no bundle, e.g. on message/add, check access to any message bundle.
-    // @todo: perhaps change this method to a service as in NodeAddAccessCheck.
+    // @todo perhaps change this method to a service as in NodeAddAccessCheck.
     foreach (\Drupal::entityTypeManager()->getStorage('message_template')->loadMultiple() as $template) {
       $access = AccessResult::allowedIfHasPermission($account, 'create ' . $template->id() . ' message');
 

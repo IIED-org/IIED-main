@@ -40,6 +40,22 @@ class BrowserTestBaseTest extends BrowserTestBase {
   protected $defaultTheme = 'stark';
 
   /**
+   * Tests that JavaScript Drupal settings can be read.
+   */
+  public function testDrupalSettings() {
+    // Trigger a 403 because those pages have very little else going on.
+    $this->drupalGet('admin');
+    $this->assertSame([], $this->getDrupalSettings());
+
+    // Now try the same 403 as an authenticated user and verify that Drupal
+    // settings do show up.
+    $account = $this->drupalCreateUser();
+    $this->drupalLogin($account);
+    $this->drupalGet('admin');
+    $this->assertNotSame([], $this->getDrupalSettings());
+  }
+
+  /**
    * Tests basic page test.
    */
   public function testGoTo() {
@@ -119,7 +135,7 @@ class BrowserTestBaseTest extends BrowserTestBase {
     // Check that the hidden field exists and has a specific value.
     $this->assertSession()->hiddenFieldExists('strawberry');
     $this->assertSession()->hiddenFieldExists('red');
-    $this->assertSession()->hiddenFieldExists('redstrawberryhiddenfield');
+    $this->assertSession()->hiddenFieldExists('red-strawberry-hidden-field');
     $this->assertSession()->hiddenFieldValueNotEquals('strawberry', 'brown');
     $this->assertSession()->hiddenFieldValueEquals('strawberry', 'red');
 

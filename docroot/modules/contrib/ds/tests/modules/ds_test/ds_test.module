@@ -15,7 +15,7 @@ use Drupal\Core\Render\Element;
  */
 function ds_test_theme_suggestions_alter(&$suggestions, $variables, $base_theme_hook) {
   if (isset($variables['content']) && is_array($variables['content']) && isset($variables['content']['#ds_configuration']) && $base_theme_hook != 'ds_entity_view') {
-    if (isset($_GET['store_suggestions'])) {
+    if (NULL !== \Drupal::requestStack()->getCurrentRequest()->query->get('store_suggestions')) {
       \Drupal::cache()->set('ds_test_suggestions', $suggestions);
     }
   }

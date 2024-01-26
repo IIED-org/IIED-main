@@ -39,7 +39,7 @@
           <ul>
         {% endif %}
         {% for item in items %}
-          <li{{ attributes.addClass('w-full px-4 mb-10 lg:w-1/4 w-1/2').removeClass('flex flex-wrap -mx-4 -mb-10 text-left') }}>
+          <li{{ attributes.addClass('w-full px-4 mb-10 lg:w-1/4 sm:w-1/2').removeClass('flex flex-wrap -mx-4 -mb-10 text-left') }}>
             {{ link(item.title, item.url) }}
             {% if item.below %}
               {{ menus.menu_links(item.below, menu_level + 1) }}

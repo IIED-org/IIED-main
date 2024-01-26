@@ -7,10 +7,10 @@ charts_chartjs:
     gpl-compatible: false
   # @todo
   cdn:
-    /libraries/chartjs/: https://unpkg.com/chart.js@3.7.1/
-    /libraries/chartjs-adapter-date-fns/: https://unpkg.com/chartjs-adapter-date-fns@2.0.0/
+    /libraries/chart.js/: https://unpkg.com/chart.js@4.4.0/
+    /libraries/chartjs-adapter-date-fns/: https://unpkg.com/chartjs-adapter-date-fns@3.0.0/
   js:
-    /libraries/chartjs/dist/chart.js: { }
+    /libraries/chart.js/dist/chart.umd.js: { }
     /libraries/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.js: { }
   dependencies:
     - core/drupal

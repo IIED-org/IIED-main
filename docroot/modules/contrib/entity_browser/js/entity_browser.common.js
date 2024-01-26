@@ -106,6 +106,9 @@
       combined_entities = existing_entities.concat(selected_entities);
     }
 
+    // Ensure unique entities are selected.
+    combined_entities = [...new Set(combined_entities)];
+
     // Having more elements than cardinality should never happen, because
     // server side authentication should prevent it, but we handle it here
     // anyway.
@@ -127,7 +130,7 @@
    *   Name of event to bind to.
    */
   Drupal.entityBrowser.registerJsCallbacks = function (element, callbacks, event_name) {
-    // JS callbacks are registred as strings. We need to split their names and
+    // JS callbacks are registered as strings. We need to split their names and
     // find actual functions.
     for (var i = 0; i < callbacks.length; i++) {
       var callback = callbacks[i].split('.');

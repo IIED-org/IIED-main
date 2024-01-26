@@ -2,6 +2,7 @@
 
 namespace Drupal\message_ui\Plugin\views\field;
 
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
 
@@ -42,7 +43,12 @@ class MessageUIContextualLinks extends FieldPluginBase {
       $contextual_link = $contextual_links->createInstance($plugin['id']);
       $contextual_link->setMessage($values->_entity);
 
-      if (!$link = $contextual_link->getRouterInfo()) {
+      $access = $contextual_link->access();
+      if ($access instanceof AccessResultInterface) {
+        $access = $access->isAllowed();
+      }
+
+      if (!$access || !$link = $contextual_link->getRouterInfo()) {
         // Nothing happens in the plugin. Skip.
         continue;
       }

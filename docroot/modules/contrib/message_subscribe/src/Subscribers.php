@@ -140,16 +140,16 @@ class Subscribers implements SubscribersInterface {
    * {@inheritdoc}
    */
   public function sendMessage(EntityInterface $entity, MessageInterface $message, array $notify_options = [], array $subscribe_options = [], array $context = []) {
-    $use_queue = isset($subscribe_options['use queue']) ? $subscribe_options['use queue'] : $this->config->get('use_queue');
-    $notify_message_owner = isset($subscribe_options['notify message owner']) ? $subscribe_options['notify message owner'] : $this->config->get('notify_own_actions');
-
+    $use_queue = $subscribe_options['use queue'] ?? $this->config->get('use_queue');
+    $notify_message_owner = $subscribe_options['notify message owner'] ?? $this->config->get('notify_own_actions');
+    $range = $this->config->get('range') ?? 100;
     // Save message by default.
     $subscribe_options += [
       'save message' => TRUE,
       'skip context' => FALSE,
       'last uid' => 0,
       'uids' => [],
-      'range' => $use_queue ? 100 : FALSE,
+      'range' => $use_queue ? $range : FALSE,
       'end time' => FALSE,
       'use queue' => $use_queue,
       'queue' => FALSE,
@@ -205,7 +205,7 @@ class Subscribers implements SubscribersInterface {
       return;
     }
     $this->debug('Preparing to process subscriptions for users: @uids', ['@uids' => implode(', ', array_keys($uids))]);
-
+    $last_uid = NULL;
     foreach ($uids as $uid => $delivery_candidate) {
       $last_uid = $uid;
       // Clone the message in case it will need to be saved, it won't
@@ -239,10 +239,13 @@ class Subscribers implements SubscribersInterface {
         ];
 
         $result = $this->messageNotifier->send($cloned_message, $options, $notifier_name);
-        $this->debug($result ? 'Successfully sent message via notifier @notifier to user @uid' : 'Failed to send message via notifier @notifier to user @uid', ['@notifier' => $notifier_name, '@uid' => $uid]);
+        $this->debug($result ? 'Successfully sent message via notifier @notifier to user @uid' : 'Failed to send message via notifier @notifier to user @uid', [
+          '@notifier' => $notifier_name,
+          '@uid' => $uid,
+        ]);
 
         // Check we didn't timeout.
-        if ($use_queue && $subscribe_options['queue']['end time'] && time() < $subscribe_options['queue']['end time']) {
+        if ($use_queue && $subscribe_options['end time'] && time() < $subscribe_options['end time']) {
           continue 2;
         }
       }
@@ -271,7 +274,7 @@ class Subscribers implements SubscribersInterface {
    */
   public function getSubscribers(EntityInterface $entity, MessageInterface $message, array $options = [], array &$context = []) {
     $context = !empty($context) ? $context : $this->getBasicContext($entity, !empty($options['skip context']), $context);
-    $notify_message_owner = isset($options['notify message owner']) ? $options['notify message owner'] : $this->config->get('notify_own_actions');
+    $notify_message_owner = $options['notify message owner'] ?? $this->config->get('notify_own_actions');
 
     $uids = [];
 

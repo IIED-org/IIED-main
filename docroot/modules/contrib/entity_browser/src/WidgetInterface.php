@@ -76,7 +76,7 @@ interface WidgetInterface extends PluginInspectionInterface, ConfigurableInterfa
    *
    * @param array $original_form
    *   Entire form bult up to this point. Form elements for widget should generally
-   *   not be added directly to it but returned from funciton as a separated
+   *   not be added directly to it but returned from function as a separated
    *   unit.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   Form state object.

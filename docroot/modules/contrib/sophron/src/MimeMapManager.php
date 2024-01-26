@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Drupal\sophron;
 
@@ -116,7 +118,7 @@ class MimeMapManager implements MimeMapManagerInterface {
    */
   public function getMappingErrors(string $map_class): array {
     $this->setMapClass($map_class);
-    return isset($this->initializedMapClasses[$map_class]) ? $this->initializedMapClasses[$map_class] : [];
+    return $this->initializedMapClasses[$map_class] ?? [];
   }
 
   /**

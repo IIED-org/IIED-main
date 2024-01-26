@@ -2,10 +2,12 @@
 
 namespace Drupal\message_notify_ui\Plugin\MessageUiViewsContextualLinks;
 
-use Drupal\Core\Url;
-use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslationInterface;
+use Drupal\Core\Url;
 use Drupal\message_ui\MessageUiViewsContextualLinksBase;
 use Drupal\message_ui\MessageUiViewsContextualLinksInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -20,6 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class MessageUiContextualLinkNotifyMessage extends MessageUiViewsContextualLinksBase implements MessageUiViewsContextualLinksInterface, ContainerFactoryPluginInterface {
+  use StringTranslationTrait;
 
   /**
    * Drupal\Core\Entity\EntityTypeManagerInterface definition.
@@ -36,6 +39,13 @@ class MessageUiContextualLinkNotifyMessage extends MessageUiViewsContextualLinks
   protected $currentUser;
 
   /**
+   * The string translation service.
+   *
+   * @var \Drupal\Core\StringTranslation\TranslationInterface
+   */
+  protected $stringTranslation;
+
+  /**
    * Construct.
    *
    * @param array $configuration
@@ -48,11 +58,20 @@ class MessageUiContextualLinkNotifyMessage extends MessageUiViewsContextualLinks
    *   The entity type manager service.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   The current user service.
+   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
+   *   The string translation service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, AccountProxyInterface $current_user) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    EntityTypeManagerInterface $entity_type_manager,
+    AccountProxyInterface $current_user,
+    TranslationInterface $string_translation) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityTypeManager = $entity_type_manager;
     $this->currentUser = $current_user;
+    $this->stringTranslation = $string_translation;
   }
 
   /**
@@ -64,7 +83,8 @@ class MessageUiContextualLinkNotifyMessage extends MessageUiViewsContextualLinks
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
-      $container->get('current_user')
+      $container->get('current_user'),
+      $container->get('string_translation')
     );
   }
 
@@ -80,7 +100,7 @@ class MessageUiContextualLinkNotifyMessage extends MessageUiViewsContextualLinks
    */
   public function getRouterInfo() {
     return [
-      'title' => t('Notify'),
+      'title' => $this->t('Notify'),
       'url' => Url::fromRoute('entity.message.notify_form', ['message' => $this->message->id()]),
     ];
   }

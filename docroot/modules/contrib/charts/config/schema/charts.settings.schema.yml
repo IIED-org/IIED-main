@@ -19,3 +19,6 @@ charts.settings:
             cdn:
               type: boolean
               label: 'Check if CDN is being used for external libraries'
+    dependencies:
+      type: config_dependencies
+      label: 'Dependencies'

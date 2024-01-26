@@ -120,7 +120,7 @@ function name_post_update_formatter_settings_link_and_external_sources() {
         ->getStorage('entity_view_display')
         ->loadByProperties($properties);
       foreach ($view_displays as $view_display) {
-        /* @var \Drupal\Core\Entity\Entity\EntityViewDisplay $view_display */
+        /** @var \Drupal\Core\Entity\Entity\EntityViewDisplay $view_display */
         if ($component = $view_display->getComponent($field_name)) {
           $settings = (array) $component['settings'];
           if (empty($settings['markup']) || $settings['markup'] == '1') {
@@ -162,7 +162,7 @@ function name_post_update_field_settings_merge() {
     ->getStorage('field_storage_config')
     ->loadByProperties(['type' => 'name']);
   foreach ($field_storage_configs as $field_storage) {
-    /* @var \Drupal\field\Entity\FieldStorageConfig $field_storage */
+    /** @var \Drupal\field\Entity\FieldStorageConfig $field_storage */
     $storage_settings = $field_storage->getSettings();
     $merged_settings = array_intersect_key($storage_settings, $merged_fields);
     $field_name = $field_storage->getName();
@@ -170,7 +170,7 @@ function name_post_update_field_settings_merge() {
       ->getStorage('field_config')
       ->loadByProperties(['field_name' => $field_name]);
     foreach ($fields as $field) {
-      /* @var \Drupal\field\Entity\FieldConfig $field */
+      /** @var \Drupal\field\Entity\FieldConfig $field */
       $field_settings = $field->getSettings();
       $field_settings += $merged_settings;
       $field->setSettings($field_settings)->save();
@@ -188,13 +188,13 @@ function name_post_update_field_settings_remove_inline_css() {
     ->getStorage('field_storage_config')
     ->loadByProperties(['type' => 'name']);
   foreach ($field_storage_configs as $field_storage) {
-    /* @var \Drupal\field\Entity\FieldStorageConfig $field_storage */
+    /** @var \Drupal\field\Entity\FieldStorageConfig $field_storage */
     $field_name = $field_storage->getName();
     $fields = \Drupal::entityTypeManager()
       ->getStorage('field_config')
       ->loadByProperties(['field_name' => $field_name]);
     foreach ($fields as $field) {
-      /* @var \Drupal\field\Entity\FieldConfig $field */
+      /** @var \Drupal\field\Entity\FieldConfig $field */
       $field_settings = $field->getSettings();
       unset($field_settings['inline_css']);
       unset($field_settings['component_css']);

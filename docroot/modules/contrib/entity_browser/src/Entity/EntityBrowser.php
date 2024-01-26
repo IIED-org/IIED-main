@@ -6,9 +6,9 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityWithPluginCollectionInterface;
 use Drupal\Core\Plugin\DefaultSingleLazyPluginCollection;
+use Drupal\entity_browser\DisplayRouterInterface;
 use Drupal\entity_browser\EntityBrowserInterface;
 use Drupal\entity_browser\WidgetInterface;
-use Drupal\entity_browser\DisplayRouterInterface;
 use Drupal\entity_browser\WidgetsCollection;
 use Symfony\Component\Routing\Route;
 
@@ -204,7 +204,7 @@ class EntityBrowser extends ConfigEntityBase implements EntityBrowserInterface, 
    */
   public function setDisplay($display) {
     $this->display = $display;
-    $this->displayPluginCollection = NULL;
+    $this->displayCollection = NULL;
     $this->display_configuration = [];
     $this->getDisplay();
     return $this;

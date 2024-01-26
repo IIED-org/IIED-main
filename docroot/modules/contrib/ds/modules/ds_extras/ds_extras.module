@@ -20,10 +20,12 @@ use Drupal\Core\Link;
 function ds_extras_layout_alter(&$definitions) {
   if (\Drupal::config('ds_extras.settings')->get('hidden_region')) {
     /** @var \Drupal\Core\Layout\LayoutDefinition $layout */
-    foreach ($definitions as $key => $layout) {
-      $regions = $layout->getRegions();
-      $regions['ds_hidden'] = ['label' => t('Hidden')];
-      $layout->setRegions($regions);
+    foreach ($definitions as $layout) {
+      if ($layout->getProvider() == 'ds') {
+        $regions = $layout->getRegions();
+        $regions['ds_hidden'] = ['label' => t('Hidden')];
+        $layout->setRegions($regions);
+      }
     }
   }
 }
@@ -220,7 +222,7 @@ function ds_extras_form_ds_admin_form_alter(&$form, FormStateInterface $form_sta
   $form['fs2']['fields_extra_list'] = [
     '#type' => 'textarea',
     '#description' => t('Enter fields line by line, where each line is a combination of entity type, bundle and field name. E.g. node|article|tweetbutton. It might be possible that the actual content of the field depends on configuration of that field/module.'),
-    '#default_value' => implode("\n", $config->get('fields_extra_list')),
+    '#default_value' => is_array($config->get('fields_extra_list')) ? implode("\n", $config->get('fields_extra_list')) : $config->get('fields_extra_list'),
     '#states' => [
       'visible' => [
         'input[name="fs2[fields_extra]"]' => ['checked' => TRUE],
@@ -251,6 +253,18 @@ function ds_extras_form_ds_admin_form_alter(&$form, FormStateInterface $form_sta
     '#title' => t('View mode switcher'),
     '#description' => t('Adds a field with links to switch view modes inline with Ajax. Only works for nodes at this time. It does not work in combination with the reset layout.'),
     '#default_value' => $config->get('switch_field'),
+  ];
+
+  $form['fs3']['switch_field_prefix'] = [
+    '#type' => 'textfield',
+    '#title' => t('View mode switcher prefix'),
+    '#description' => t('Prefix for the selector, the default should be fine.'),
+    '#default_value' => $config->get('switch_field_prefix'),
+    '#states' => [
+      'visible' => [
+        'input[name="fs3[switch_field]"]' => ['checked' => TRUE],
+      ],
+    ],
   ];
 
   $form['fs3']['hidden_region'] = [
@@ -305,6 +319,7 @@ function ds_extras_settings_submit($form, FormStateInterface $form_state) {
     ->set('fields_extra_list', $extra_fields)
     ->set('field_permissions', $values['fs3']['field_permissions'])
     ->set('switch_field', $values['fs3']['switch_field'])
+    ->set('switch_field_prefix', $values['fs3']['switch_field_prefix'])
     ->set('hidden_region', $values['fs3']['hidden_region'])
     ->set('override_node_revision', $values['fs3']['override_node_revision'])
     ->set('override_node_revision_view_mode', $values['fs3']['override_node_revision_view_mode']);
@@ -422,7 +437,7 @@ function ds_extras_entity_extra_field_info() {
     foreach ($fields as $field) {
       $field = trim($field);
       if (!empty($field)) {
-        list($entity, $bundle, $field_name) = explode('|', $field);
+        [$entity, $bundle, $field_name] = explode('|', $field);
         $extra[Html::escape($entity)][Html::escape($bundle)]['display'][$field_name] = [
           'label' => Unicode::ucfirst(str_replace('_', ' ', Html::escape($field_name))),
           'description' => Unicode::ucfirst(str_replace('_', ' ', Html::escape($field_name))),

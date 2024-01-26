@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Provides local tasks for the message subscription UI.
  */
-class MessageSubscribeUiLocalTask extends DeriverBase implements ContainerDeriverInterface {
+final class MessageSubscribeUiLocalTask extends DeriverBase implements ContainerDeriverInterface {
 
   /**
    * The message subscription service.
@@ -33,7 +33,7 @@ class MessageSubscribeUiLocalTask extends DeriverBase implements ContainerDerive
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, $base_plugin_id) {
-    return new static(
+    return new self(
       $container->get('message_subscribe.subscribers')
     );
   }

@@ -55,7 +55,7 @@ class EntityBrowserSelectionDisplay extends Plugin {
    *
    * Currently supported javascript commands are adding and removing selection
    * from selection display. Javascript commands use Ajax requests to load
-   * relevant changes and makes user experience way better, becase form is not
+   * relevant changes and makes user experience way better, because form is not
    * flashed every time.
    *
    * @var bool

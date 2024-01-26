@@ -171,7 +171,7 @@ class SearchApiQuery extends QueryPluginBase {
     // @todo Instead use Views::viewsData() – injected, too – to load the base
     //   table definition and use the "index" (or maybe rename to
     //   "search_api_index") field from there.
-    if (substr($table, 0, 17) == 'search_api_index_') {
+    if (str_starts_with($table, 'search_api_index_')) {
       $index_id = substr($table, 17);
       if ($entity_type_manager) {
         return $entity_type_manager->getStorage('search_api_index')
@@ -200,7 +200,7 @@ class SearchApiQuery extends QueryPluginBase {
       try {
         $object = $row->_object ?: $row->_item->getOriginalObject();
       }
-      catch (SearchApiException $e) {
+      catch (SearchApiException) {
         return NULL;
       }
       $entity = $object->getValue();
@@ -705,7 +705,7 @@ class SearchApiQuery extends QueryPluginBase {
       }
     }
 
-    foreach ($results as $item_id => $result) {
+    foreach ($results as $result) {
       $values = [];
       $values['_item'] = $result;
       try {
@@ -718,7 +718,7 @@ class SearchApiQuery extends QueryPluginBase {
           }
         }
       }
-      catch (SearchApiException $e) {
+      catch (SearchApiException) {
         // Can't actually be thrown here, but catch for the static analyzer's
         // sake.
       }
@@ -741,7 +741,7 @@ class SearchApiQuery extends QueryPluginBase {
             $path .= '|' . $field_id;
           }
         }
-        catch (SearchApiException $e) {
+        catch (SearchApiException) {
           // If we're not able to retrieve the data definition at this point,
           // it doesn't really matter.
         }
@@ -876,7 +876,7 @@ class SearchApiQuery extends QueryPluginBase {
    *   the actual results yet if the query hasn't been executed yet.
    */
   public function getSearchApiResults() {
-    return $this->query ? $this->query->getResults() : NULL;
+    return $this->query?->getResults();
   }
 
   /**

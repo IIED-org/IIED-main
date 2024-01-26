@@ -88,7 +88,7 @@ class ParagraphsLegacyContentModerationTranslationsTest extends ParagraphsTestBa
     // Add a text field to the text_paragraph type.
     static::fieldUIAddNewField('admin/structure/paragraphs_type/text', 'text', 'Text', 'text_long', [], []);
     // Add an untranslatable string field.
-    static::fieldUIAddNewField('admin/structure/paragraphs_type/text', 'untranslatable', 'Text', 'string', [], []);
+    static::fieldUIAddNewField('admin/structure/paragraphs_type/text', 'untranslatable', 'Untranslatable text', 'string', [], []);
 
     $this->addParagraphsField('container', 'field_paragraphs', 'paragraph', 'entity_reference_paragraphs');
 

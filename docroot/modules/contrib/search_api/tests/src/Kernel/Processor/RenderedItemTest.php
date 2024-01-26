@@ -273,7 +273,7 @@ class RenderedItemTest extends ProcessorTestBase {
           break;
 
         default:
-          $this->assertTrue(FALSE);
+          $this->fail();
       }
     }
   }

@@ -1,13 +1,13 @@
 dragula:
   remote: https://github.com/bevacqua/dragula
-  version: 3.7.2
+  version: 3.7.3
   license:
     name: MIT
     url: https://github.com/bevacqua/dragula/blob/master/license
     gpl-compatible: true
   directory: dragula
   cdn:
-    /libraries/dragula/dist/: https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/
+    /libraries/dragula/dist/: https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/
   css:
     theme:
       /libraries/dragula/dist/dragula.min.css: { minified: true }

@@ -195,6 +195,7 @@ abstract class ComponentFormBase extends FormBase implements ComponentFormInterf
           '#type' => 'button',
           '#weight' => 200,
           '#value' => $this->t('Cancel'),
+          '#limit_validation_errors' => [],
           '#ajax' => [
             'callback' => '::cancel',
             'progress' => 'none',

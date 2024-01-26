@@ -141,7 +141,7 @@ class NameAutocomplete {
       }
     }
 
-    // @todo: preg_split fails with a notice if $action['separater'] == ' '.
+    // @todo preg_split fails with a notice if $action['separater'] == ' '.
     @$pieces = preg_split('/[' . preg_quote($action['separater']) . ']+/', $string);
 
     // We should have nice clean parameters to query.

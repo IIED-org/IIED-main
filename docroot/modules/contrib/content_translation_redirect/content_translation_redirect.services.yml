@@ -1,6 +1,9 @@
 services:
+  content_translation_redirect.manager:
+    class: Drupal\content_translation_redirect\ContentTranslationRedirectManager
+    arguments: ['@entity_type.manager', '@cache_tags.invalidator']
   content_translation_redirect.request_subscriber:
     class: Drupal\content_translation_redirect\EventSubscriber\ContentTranslationRedirectRequestSubscriber
-    arguments: ['@current_route_match', '@language_manager', '@entity_type.manager']
+    arguments: ['@current_route_match', '@language_manager', '@entity_type.manager', '@content_translation_redirect.manager', '@event_dispatcher']
     tags:
       - { name: event_subscriber }

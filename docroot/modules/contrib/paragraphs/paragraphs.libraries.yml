@@ -95,3 +95,8 @@ paragraphs.seven:
   css:
     theme:
       css/paragraphs.seven.css: {}
+
+paragraph-field-type-icon:
+  css:
+    theme:
+      css/paragraphs.field-type-icon.css: {}

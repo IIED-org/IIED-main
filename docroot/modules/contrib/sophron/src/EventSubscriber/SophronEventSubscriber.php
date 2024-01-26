@@ -1,12 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Drupal\sophron\EventSubscriber;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\sophron\Event\MapEvent;
-use FileEye\MimeMap\MapHandler;
 use FileEye\MimeMap\MalformedTypeException;
+use FileEye\MimeMap\MapHandler;
 use FileEye\MimeMap\MappingException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -25,7 +27,7 @@ class SophronEventSubscriber implements EventSubscriberInterface {
   /**
    * Constructs a SophronEventSubscriber object.
    *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The config factory.
    */
   public function __construct(
@@ -56,8 +58,8 @@ class SophronEventSubscriber implements EventSubscriberInterface {
     $map_commands = $this->sophronSettings->get('map_commands') ?? [];
     $map = MapHandler::map($event->getMapClass());
     foreach ($map_commands as $command) {
-      $method = $command[0] ?? '';
-      $args = $command[1] ?? [];
+      $method = $command['method'] ?? '';
+      $args = $command['arguments'] ?? [];
       try {
         if (!is_callable([$map, $method])) {
           throw new \InvalidArgumentException("Non-existing mapping method '{$method}'");

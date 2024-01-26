@@ -4,21 +4,15 @@ namespace Drupal\Tests\message_subscribe\Unit;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\flag\FlagInterface;
 use Drupal\flag\FlagServiceInterface;
-use Drupal\message\Entity\Message;
 use Drupal\message_notify\MessageNotifier;
 use Drupal\message_subscribe\Subscribers;
 use Drupal\Tests\UnitTestCase;
-use Drupal\user\UserInterface;
-use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Unit tests for the subscribers service.
@@ -28,6 +22,8 @@ use Prophecy\Argument;
  * @coversDefaultClass \Drupal\message_subscribe\Subscribers
  */
 class SubscribersTest extends UnitTestCase {
+
+  use ProphecyTrait;
 
   /**
    * Mock flag service.

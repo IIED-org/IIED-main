@@ -68,24 +68,28 @@ is initialised, and make the necessary changes to the mappings.
 Mapping commands should be entered in the following format, one command per
 line:
 ```
-- [method, [arg1, arg2, ...]]
+- {method: foo, arguments: [arg1, arg2, ...]}
 ```
-Where _method_ is a method from the _FileEye\MimeMap\Map\AbstractMap_ class,
+Where _foo_ is a method from the _FileEye\MimeMap\Map\AbstractMap_ class,
 and the _argN_ are the method's arguments.
 
 Most useful commands:
 
-* _addTypeExtensionMapping, [type, extension]_ adds a type-to-extension
-  mapping. Example: ```- [addTypeExtensionMapping, [application/dsptype, tsp]]```
+* _{method: addTypeExtensionMapping, arguments: [type, extension]}_ adds a
+  type-to-extension mapping.
+  Example: ```- {method: addTypeExtensionMapping, arguments: [application/dsptype, tsp]}```
 
-* _addTypeAlias, [type, alias]_ adds an alias of a MIME type.
-  Example: ```- [addTypeAlias, [application/atom+xml, application/atom]]```
+* _{method: addTypeAlias, arguments: [type, alias]}_ adds an alias of a
+  MIME type.
+  Example: ```- {method: addTypeAlias, arguments: [application/atom+xml, application/atom]}```
 
-* _setExtensionDefaultType, [type, extension]_ changes the default extension
-  for a MIME type. Example: ```- [setExtensionDefaultType, [asc, text/plain]]```
+* _{method: setExtensionDefaultType, arguments: [extension, type]}_ changes
+  the default extension for a MIME type.
+  Example: ```- {method: setExtensionDefaultType, arguments: [asc, text/plain]}```
 
-* _removeType, [type]_ removes the entire mapping of a type.
-  Example: ```- [removeType, [text/plain]]```
+* _{method: removeType, arguments: [type]}_ removes the entire mapping of a
+  type.
+  Example: ```- {method: removeType, arguments: [text/plain]}```
 
 ## Updating Sophron map
 

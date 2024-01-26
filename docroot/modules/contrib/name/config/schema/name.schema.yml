@@ -441,6 +441,9 @@ field.field_settings.name:
     widget_layout:
       type: string
       label: 'Widget layout'
+    field_title_display:
+      type: string
+      label: 'Field title display option'
     component_layout:
       type: string
       label: 'Component layout'
@@ -533,27 +536,27 @@ field.field_settings.name:
       label: 'Alternative field reference multivalue separator'
 
 field.value.name:
-    type: mapping
-    label: 'Default value'
-    mapping:
-      title:
-        label: 'Title'
-        type: string
-      given:
-        label: 'Given'
-        type: string
-      middle:
-        label: 'Middle'
-        type: string
-      family:
-        label: 'Family'
-        type: string
-      generational:
-        label: 'Generational'
-        type: string
-      credentials:
-        label: 'Credentials'
-        type: string
+  type: mapping
+  label: 'Default value'
+  mapping:
+    title:
+      label: 'Title'
+      type: string
+    given:
+      label: 'Given'
+      type: string
+    middle:
+      label: 'Middle'
+      type: string
+    family:
+      label: 'Family'
+      type: string
+    generational:
+      label: 'Generational'
+      type: string
+    credentials:
+      label: 'Credentials'
+      type: string
 
 field.widget.settings.name_default:
   type: mapping

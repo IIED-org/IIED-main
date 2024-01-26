@@ -13,17 +13,20 @@ class ContentTranslationRedirectStorage extends ConfigEntityStorage implements C
   /**
    * {@inheritdoc}
    */
-  public function loadByEntity(EntityInterface $entity): ?ContentTranslationRedirectInterface {
-    $ids[] = $entity->getEntityTypeId() . '__' . $entity->bundle();
-    $ids[] = $entity->getEntityTypeId();
-    $ids[] = ContentTranslationRedirectInterface::DEFAULT_ID;
+  public function getPossibleIds(EntityInterface $entity): array {
+    return [
+      $entity->getEntityTypeId() . '__' . $entity->bundle(),
+      $entity->getEntityTypeId(),
+      ContentTranslationRedirectInterface::DEFAULT_ID,
+    ];
+  }
 
-    foreach ($ids as $id) {
-      if ($redirect = $this->load($id)) {
-        return $redirect;
-      }
-    }
-    return NULL;
+  /**
+   * {@inheritdoc}
+   */
+  public function loadByEntity(EntityInterface $entity): ?ContentTranslationRedirectInterface {
+    $redirects = $this->loadMultiple($this->getPossibleIds($entity));
+    return reset($redirects) ?: NULL;
   }
 
 }

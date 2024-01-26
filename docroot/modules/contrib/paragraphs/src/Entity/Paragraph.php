@@ -188,8 +188,8 @@ class Paragraph extends ContentEntityBase implements ParagraphInterface {
    */
   public function getAllBehaviorSettings() {
     if ($this->unserializedBehaviorSettings === NULL) {
-      $this->unserializedBehaviorSettings = unserialize($this->get('behavior_settings')->value);
-    }
+      $this->unserializedBehaviorSettings = unserialize($this->get('behavior_settings')->value ?? '');
+     }
     if (!is_array($this->unserializedBehaviorSettings)) {
       $this->unserializedBehaviorSettings = [];
     }
