@@ -6,5 +6,6 @@ dependencies:
     - node
 id: node.document_meta
 label: 'Document meta'
+description: ''
 targetEntityType: node
 cache: true

@@ -118,3 +118,6 @@ advanced:
   debug: false
   requirements:
     cdn: true
+dependencies:
+  module:
+    - charts_highcharts

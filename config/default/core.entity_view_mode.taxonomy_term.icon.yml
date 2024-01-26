@@ -6,5 +6,6 @@ dependencies:
     - taxonomy
 id: taxonomy_term.icon
 label: Icon
+description: ''
 targetEntityType: taxonomy_term
 cache: true

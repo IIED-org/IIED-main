@@ -2,11 +2,14 @@ uuid: 5136ae83-7b5f-4e5c-abb7-bceeec6c4db4
 langcode: en
 status: true
 dependencies:
+  config:
+    - filter.format.webform_default
   module:
     - comment
     - contact
     - eu_cookie_compliance
     - file
+    - filter
     - media
     - media_pdf_thumbnail
     - search_api_autocomplete
@@ -29,6 +32,7 @@ permissions:
   - 'skip comment approval'
   - 'use search_api_autocomplete for acquia_search'
   - 'use search_api_autocomplete for search'
+  - 'use text format webform_default'
   - 'view media'
   - 'view private pdf thumbnails'
   - 'view published pdf image entity entities'

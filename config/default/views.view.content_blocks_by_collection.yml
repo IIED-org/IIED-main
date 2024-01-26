@@ -158,7 +158,6 @@ display:
             vids:
               collection: collection
             anyall: ','
-          default_argument_skip_url: false
           summary_options:
             base_path: ''
             count: true
