@@ -26,7 +26,7 @@
  * HH can you help block 
  */
 #}
-<div{{ attributes.addClass('bg-iiedbg-10') }}>
+<div{{ attributes.addClass('bg-iiedbg-10 py-12 mb-12') }}>
   {{ title_prefix }}
   {% if label %}
     <h2{{ title_attributes.addClass('mb-4') }}>{{ label }}</h2>
@@ -34,7 +34,7 @@
   {{ title_suffix }}
 
   <div class="container">   
-    <div class="grid items-center grid-cols-1 md:grid-cols-3">
+    <div class="grid items-center grid-cols-1 gap-12 md:grid-cols-3">
       <div class="flex items-center justify-center overflow-hidden">
           
           <img src="/themes/custom/iied_tw/images/hh-contribute.svg" alt="" class="">
@@ -43,11 +43,11 @@
       </div>
       
       <div class="md:col-span-2">
-            
+          <div class="mb-4">
           {% block content %}
           {{ content }}
           {% endblock %}
-                        
+          </div>              
 
           {% if logged_in %}
             <div class="mb-6 prose prose-lg">
@@ -65,14 +65,14 @@
             </p>
           </div>
                 
-          <div class="flex">
+          <div class="flex items-center">
             <div class="flex items-center h-10 px-3 py-2 mb-4 mr-4 font-semibold transition bg-white border border-gray-500 rounded-full shadow-sm shrink-0 hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500 hover:ring-1">
             {{ link('Login', 'route:user.login') }}
             </div> 
-            <div class="flex items-center h-10 px-3 py-2 mb-4 font-semibold transition bg-white border border-gray-500 rounded-full shadow-sm shrink-0 hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500 hover:ring-1">
+            <div class="flex items-center h-10 px-3 py-2 mb-4 mr-4 font-semibold transition bg-white border border-gray-500 rounded-full shadow-sm shrink-0 hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500 hover:ring-1">
                 <a href="{{ path('multiple_registration.role_registration_page', {'rid': 'contributor'}, {'query': {'destination': path('<current>') }}) }}" class="use-ajax" data-dialog-type ="modal" data-dialog-options="{&quot;width&quot;:700,&quot;dialogClass&quot;:&quot;&quot;}">{{ 'Register'|t }}</a>
             </div>
-            <div>
+            <div class="mb-4">
               Email: <a href="mailto:hiddenhandbrakes@iied.org">hiddenhandbrakes@iied.org</a>
             </div>
           </div>

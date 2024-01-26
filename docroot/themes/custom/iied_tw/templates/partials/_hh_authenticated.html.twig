@@ -2,19 +2,14 @@
     <div class="bg-iiedblue-50 bg-[url('/themes/custom/iied_tw/templates/layout/icons/line-pattern.svg')]">
     
         <div class="container items-center justify-between p-4 sm:flex sm:pace-x-6">
-            <div class="flex">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 shrink-0">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                <p class="mb-2 ml-2 mr-6 text-lg prose">Welcome. Before submitting your hidden handbrake, please read the overview for supporting information and guidelines on submissions.</p>
+            <div>
+                <p class="mb-2 ml-2 mr-6 text-lg prose">Welcome. Before submitting your hidden handbrake, please <a href="/hidden-handbrakes-overview-key-research">read the overview</a> for supporting information and guidelines on submissions.</p>
             </div>
 
             <div class="flex items-center mb-4 space-x-4"> 
-            <svg xmlns="http://www.w3.org/2000/svg" width="38.414" height="30.828" viewBox="0 0 38.414 30.828">
+            <svg class="motion-safe:animate-[bounce-x_2s_ease-in-out_infinite]" xmlns="http://www.w3.org/2000/svg" width="38.414" height="30.828" viewBox="0 0 38.414 30.828">
             <path id="Path_8579" data-name="Path 8579" d="M25,5,39,19m0,0L25,33M39,19H3" transform="translate(-2 -3.586)" fill="none" stroke="#374151" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
             </svg>
-
-
 
             <a class="flex items-center h-10 px-3 py-2 font-semibold transition bg-white border border-gray-500 rounded-full shadow-sm shrink-0 webform-dialog webform-dialog-normal button hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500 hover:ring-1" href="/form/hidden-handbrake">Share a hidden handbrake
             </a>
@@ -32,4 +27,12 @@
         </svg>
         {{ user.displayname }}
     </div>
+
+    Add perosn icon 
+                <div class="flex">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 shrink-0">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <p class="mb-2 ml-2 mr-6 text-lg prose">Welcome. Before submitting your hidden handbrake, please read the overview for supporting information and guidelines on submissions.</p>
+            </div>
 #}
