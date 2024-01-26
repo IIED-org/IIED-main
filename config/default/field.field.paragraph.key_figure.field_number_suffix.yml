@@ -1,0 +1,19 @@
+uuid: 2d76fbe5-eff6-4b81-8534-771c81fbd04d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_number_suffix
+    - paragraphs.paragraphs_type.key_figure
+id: paragraph.key_figure.field_number_suffix
+field_name: field_number_suffix
+entity_type: paragraph
+bundle: key_figure
+label: 'Number suffix'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

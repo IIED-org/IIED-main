@@ -1,0 +1,29 @@
+{#
+/**
+ * @file
+ * Theme override for a 'form' element.
+ *
+ * Available variables
+ * - attributes: A list of HTML attributes for the wrapper element.
+ * - children: The child elements of the form.
+ *
+ * @see template_preprocess_form()
+ */
+#}
+
+{%
+  set classes = [
+    'grid',
+    'grid-cols-2',
+    'sm:grid-cols-4',
+    'gap-4', 
+    'lg:gap-x-10',
+  ]
+%}
+
+<form{{ attributes.addClass(classes) }}>
+<div class="col-span-2 my-4">
+<h2>Discover hidden handbrakes</h2>
+</div>
+  {{ children }}
+</form>

@@ -1,0 +1,8 @@
+uuid: a290ff36-0c38-4f83-94e1-19ee6a6e1458
+langcode: en
+status: true
+dependencies: {  }
+id: key_figure
+label: 'Key figure'
+revision: 0
+description: 'An important statistic'

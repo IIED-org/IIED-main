@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.node.card
     - field.field.node.hidden_handbrake.body
     - field.field.node.hidden_handbrake.comment
+    - field.field.node.hidden_handbrake.field_additional_elements
     - field.field.node.hidden_handbrake.field_author_location
     - field.field.node.hidden_handbrake.field_date_published
     - field.field.node.hidden_handbrake.field_examples
@@ -45,6 +46,7 @@ content:
 hidden:
   body: true
   comment: true
+  field_additional_elements: true
   field_author_location: true
   field_examples: true
   field_hh_webform_sync: true

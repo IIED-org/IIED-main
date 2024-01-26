@@ -1,0 +1,51 @@
+uuid: 91cb2210-ec34-464f-b9e4-3edc93bc0c16
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.key_figure.field_description
+    - field.field.paragraph.key_figure.field_number
+    - field.field.paragraph.key_figure.field_number_prefix
+    - field.field.paragraph.key_figure.field_number_suffix
+    - paragraphs.paragraphs_type.key_figure
+  module:
+    - text
+id: paragraph.key_figure.default
+targetEntityType: paragraph
+bundle: key_figure
+mode: default
+content:
+  field_description:
+    type: text_textarea
+    weight: 3
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_number:
+    type: number
+    weight: 1
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_number_prefix:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_number_suffix:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

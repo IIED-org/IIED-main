@@ -149,3 +149,6 @@ modification+administrator+taxonomy_term+person: taxonomy_term.person.default
 'use  The form mode default linked to  message entity( example_create_comment )': message.example_create_comment.default
 'use  The form mode default linked to  message entity( example_create_node )': message.example_create_node.default
 'use  The form mode default linked to  paragraph entity( sticky_box )': paragraph.sticky_box.default
+'use  The form mode default linked to  block_content entity( key_figure )': block_content.key_figure.default
+'use  The form mode default linked to  paragraph entity( key_figure )': paragraph.key_figure.default
+'use  The form mode default linked to  paragraph entity( related_content_no_image )': paragraph.related_content_no_image.default

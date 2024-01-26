@@ -215,7 +215,7 @@
     background-position: 95% center !important;
   }
 
-  /*-- rotate 4 colour borders for publiucations grid  --*/
+  /*-- rotate 4 colour borders for publications grid  --*/
   .grid .views-row:nth-child(8n + 1) .color-rotate {
     @apply border-iiedpink-500;
   }
@@ -451,5 +451,41 @@
   } 
   .ui-autocomplete .ui-menu-item .ui-menu-item-wrapper {
     @apply p-0 bg-none;
+  }
+  /*-- animations --*/
+  @keyframes bounce-x {
+    0%, 100% {
+      transform: translateX(-25%);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: translateX(0);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+  }
+/*-- rotate 4 colour borders for hh grid  --*/
+  .grid .views-row:nth-child(8n + 1) .bg-color-rotate {
+    @apply bg-iiedpink-10;
+  }
+  .grid .views-row:nth-child(8n + 2) .bg-color-rotate {
+    @apply bg-iiedorange-10;
+  }
+  .grid .views-row:nth-child(8n + 3) .bg-color-rotate {
+    @apply bg-iiedblue-10;
+  }
+  .grid .views-row:nth-child(8n + 4) .bg-color-rotate {
+    @apply bg-iiedgreen-10;
+  }
+  .grid .views-row:nth-child(8n + 5) .bg-color-rotate {
+    @apply bg-iiedgreen-10;
+  }
+  .grid .views-row:nth-child(8n + 6) .bg-color-rotate {
+    @apply bg-iiedblue-10;
+  }
+  .grid .views-row:nth-child(8n + 7) .bg-color-rotate {
+    @apply bg-iiedorange-10;
+  }
+  .grid .views-row:nth-child(8n + 8) .bg-color-rotate {
+    @apply bg-iiedpink-10;
   }
 }
