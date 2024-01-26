@@ -20,10 +20,6 @@ New issues should be associated with the [IIED-main project](https://github.com/
 - **Ready for test**: Issued assigned to someone else to check work is complete
 - **Done**: Issue is closed
 
-There are two [milestones ](https://github.com/IIED-org/pubs/milestones)
-* [Site freeze](https://github.com/IIED-org/pubs/milestone/1), which should contain all the pre-requisites in the [Teams project](https://teams.microsoft.com/l/entity/com.microsoft.teamspace.tab.planner/_djb2_msteams_prefix_2584532485?context=%7B%22subEntityId%22%3Anull%2C%22channelId%22%3A%2219%3A4c87f5ca830a468780a27d73d3024b0c%40thread.skype%22%7D&groupId=662a2f37-a62f-4018-99ac-faea87204980&tenantId=d5c06f4c-c977-41f9-9baa-6c4050719973) and [Site freeze to launch document](https://iied.sharepoint.com/:w:/s/WebTeam/EfX3W_u4pAlCn1Qkq6diPa4BSJ-8qP7jpJ9v7fExJrOcOw?e=MfaJkd). 
-* [Soft launch](https://github.com/IIED-org/pubs/milestone/2) (yet to be fully defined)
-
 ## Local developer setup with Lando
 
 This repository comes with a .lando.yml file which will help to set up locally
@@ -43,7 +39,7 @@ needed. Please check the relevent documentation.
 1. Clone this repo, move into the directory that contains the codebase and connect to Acquia git remote.
 
 ```
-git clone git@github.com:IIED-org/pubs.git IIED-main
+git clone git@github.com:IIED-org/IIED-main.git IIED-main
 cd IIED-main
 git remote add ac <acquiaGitPath>
 ```
@@ -135,7 +131,7 @@ lando drush cex
 ```
 
 A git diff will show that the config/default/config_split.config_split.local.yml
-file has been updated to inclide the module, rather than the core.extensions.yml
+file has been updated to include the module, rather than the core.extensions.yml
 
 ```
 $ git diff
@@ -153,7 +149,7 @@ index acadb2a47..1ff8d48de 100644
    views_ui: 0
 ```
 
-This should result in the modue being enabled only when the local split is
+This should result in the module being enabled only when the local split is
 active.
 
 6. Enable and configure stage_file_proxy
@@ -168,7 +164,7 @@ lando drush en stage_file_proxy
 Now add the the following line to the end of the settings.local.php file.
 
 ```
-$config['stage_file_proxy.settings']['origin']  = 'https://pubs.iied.org';
+$config['stage_file_proxy.settings']['origin']  = 'https://www.iied.org';
 ```
 
 7. Common drush commands.
