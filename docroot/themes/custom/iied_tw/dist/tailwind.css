@@ -4270,6 +4270,10 @@ cite {
   left: -13px;
 }
 
+.-left-full{
+  left: -100%;
+}
+
 .-right-3{
   right: -0.75rem;
 }
@@ -4344,10 +4348,6 @@ cite {
 
 .top-\[48\%\]{
   top: 48%;
-}
-
-.-left-full{
-  left: -100%;
 }
 
 .-z-10{
@@ -5075,10 +5075,6 @@ cite {
   place-items: center;
 }
 
-.content-center{
-  align-content: center;
-}
-
 .content-start{
   align-content: flex-start;
 }
@@ -5433,9 +5429,9 @@ cite {
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
 
-.bg-gray-600{
+.bg-gray-500{
   --tw-bg-opacity: 1;
-  background-color: rgb(75 85 99 / var(--tw-bg-opacity));
+  background-color: rgb(107 114 128 / var(--tw-bg-opacity));
 }
 
 .bg-gray-800{
@@ -5511,11 +5507,6 @@ cite {
 .bg-white{
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-}
-
-.bg-gray-500{
-  --tw-bg-opacity: 1;
-  background-color: rgb(107 114 128 / var(--tw-bg-opacity));
 }
 
 .bg-\[url\(\'\/sites\/default\/files\/2023-10\/cloudsbd\.svg\'\)\]{
@@ -5809,10 +5800,6 @@ cite {
   text-align: center;
 }
 
-.align-middle{
-  vertical-align: middle;
-}
-
 .font-headline{
   font-family: Noto Serif, serif;
 }
@@ -5998,10 +5985,6 @@ cite {
   opacity: 0.2;
 }
 
-.opacity-75{
-  opacity: 0.75;
-}
-
 .opacity-50{
   opacity: 0.5;
 }
@@ -6080,6 +6063,12 @@ cite {
   transition-duration: 150ms;
 }
 
+.transition-all{
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
 .transition-colors{
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -6088,18 +6077,6 @@ cite {
 
 .transition-shadow{
   transition-property: box-shadow;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-
-.transition-all{
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-
-.transition-opacity{
-  transition-property: opacity;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
@@ -6114,10 +6091,6 @@ cite {
 
 .duration-300{
   transition-duration: 300ms;
-}
-
-.duration-500{
-  transition-duration: 500ms;
 }
 
 .ease-in{
@@ -7433,11 +7406,6 @@ cite {
   border-color: rgb(165 180 252 / var(--tw-border-opacity));
 }
 
-.focus\:bg-gray-600:focus{
-  --tw-bg-opacity: 1;
-  background-color: rgb(75 85 99 / var(--tw-bg-opacity));
-}
-
 .focus\:text-white:focus{
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
@@ -7613,6 +7581,10 @@ cite {
     height: 6rem;
   }
 
+  .sm\:w-1\/2{
+    width: 50%;
+  }
+
   .sm\:w-24{
     width: 6rem;
   }
@@ -7628,10 +7600,6 @@ cite {
 
   .sm\:w-full{
     width: 100%;
-  }
-
-  .sm\:w-1\/2{
-    width: 50%;
   }
 
   .sm\:-rotate-2{
@@ -7689,16 +7657,16 @@ cite {
          column-gap: 1.5rem;
   }
 
-  .sm\:space-y-0 > :not([hidden]) ~ :not([hidden]){
-    --tw-space-y-reverse: 0;
-    margin-top: calc(0px * calc(1 - var(--tw-space-y-reverse)));
-    margin-bottom: calc(0px * var(--tw-space-y-reverse));
-  }
-
   .sm\:space-x-6 > :not([hidden]) ~ :not([hidden]){
     --tw-space-x-reverse: 0;
     margin-right: calc(1.5rem * var(--tw-space-x-reverse));
     margin-left: calc(1.5rem * calc(1 - var(--tw-space-x-reverse)));
+  }
+
+  .sm\:space-y-0 > :not([hidden]) ~ :not([hidden]){
+    --tw-space-y-reverse: 0;
+    margin-top: calc(0px * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(0px * var(--tw-space-y-reverse));
   }
 
   .sm\:overflow-hidden{
@@ -7809,20 +7777,12 @@ cite {
     margin-top: 0px;
   }
 
-  .md\:block{
-    display: block;
-  }
-
   .md\:flex{
     display: flex;
   }
 
   .md\:grid{
     display: grid;
-  }
-
-  .md\:hidden{
-    display: none;
   }
 
   .md\:h-48{
@@ -8256,6 +8216,10 @@ cite {
     margin-bottom: 0px;
   }
 
+  .xl\:mb-16{
+    margin-bottom: 4rem;
+  }
+
   .xl\:mb-2{
     margin-bottom: 0.5rem;
   }
@@ -8270,14 +8234,6 @@ cite {
 
   .xl\:mr-8{
     margin-right: 2rem;
-  }
-
-  .xl\:mb-24{
-    margin-bottom: 6rem;
-  }
-
-  .xl\:mb-16{
-    margin-bottom: 4rem;
   }
 
   .xl\:block{
