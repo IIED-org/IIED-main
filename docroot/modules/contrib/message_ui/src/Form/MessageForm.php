@@ -3,8 +3,8 @@
 namespace Drupal\message_ui\Form;
 
 use Drupal\Core\Entity\ContentEntityForm;
-use Drupal\Core\Language\Language;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\Language;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -38,6 +38,20 @@ class MessageForm extends ContentEntityForm {
   protected $languageManager;
 
   /**
+   * Token service.
+   *
+   * @var \Drupal\Core\Utility\Token
+   */
+  protected $token;
+
+  /**
+   * Anonymous setting.
+   *
+   * @var string
+   */
+  protected $anonymousSetting;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -45,6 +59,8 @@ class MessageForm extends ContentEntityForm {
     $instance->languageManager = $container->get('language_manager');
     $instance->entityTypeManager = $container->get('entity_type.manager');
     $instance->account = $container->get('current_user');
+    $instance->token = $container->get('token');
+    $instance->anonymousSetting = $container->get('config.factory')->get('message_ui.settings')->get('anonymous');
     return $instance;
   }
 
@@ -62,7 +78,7 @@ class MessageForm extends ContentEntityForm {
     if ($this->config('message_ui.settings')->get('show_preview')) {
       $form['text'] = [
         '#type' => 'item',
-        '#title' => t('Message template'),
+        '#title' => $this->t('Message template'),
         '#markup' => implode("\n", $template->getText()),
       ];
     }
@@ -76,7 +92,7 @@ class MessageForm extends ContentEntityForm {
 
     $form['owner'] = [
       '#type' => 'fieldset',
-      '#title' => t('Owner information'),
+      '#title' => $this->t('Owner information'),
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
       '#group' => 'advanced',
@@ -86,7 +102,7 @@ class MessageForm extends ContentEntityForm {
         'library' => ['message_ui/message_ui.message'],
         'drupalSettings' => [
           'message_ui' => [
-            'anonymous' => \Drupal::config('message_ui.settings')->get('anonymous'),
+            'anonymous' => $this->anonymousSetting,
           ],
         ],
       ],
@@ -100,14 +116,14 @@ class MessageForm extends ContentEntityForm {
       $form['created']['#group'] = 'owner';
     }
 
-    // @todo: assess the best way to access and create tokens tab from D7.
+    // @todo assess the best way to access and create tokens tab from D7.
     $tokens = $message->getArguments();
 
     $access = $this->account->hasPermission('update tokens') || $this->account->hasPermission('bypass message access control');
     if (!empty($tokens) && ($access)) {
       $form['tokens'] = [
         '#type' => 'fieldset',
-        '#title' => t('Tokens and arguments'),
+        '#title' => $this->t('Tokens and arguments'),
         '#collapsible' => TRUE,
         '#collapsed' => TRUE,
         '#group' => 'advanced',
@@ -117,13 +133,13 @@ class MessageForm extends ContentEntityForm {
       // Give the user an option to update the har coded tokens.
       $form['tokens']['replace_tokens'] = [
         '#type' => 'select',
-        '#title' => t('Update tokens value automatically'),
-        '#description' => t('By default, the hard coded values will be replaced automatically. If unchecked - you can update their value manually.'),
+        '#title' => $this->t('Update tokens value automatically'),
+        '#description' => $this->t('By default, the hard coded values will be replaced automatically. If unchecked - you can update their value manually.'),
         '#default_value' => 'no_update',
         '#options' => [
-          'no_update' => t("Don't update"),
-          'update' => t('Update automatically'),
-          'update_manually' => t('Update manually'),
+          'no_update' => $this->t("Don't update"),
+          'update' => $this->t('Update automatically'),
+          'update_manually' => $this->t('Update manually'),
         ],
       ];
 
@@ -140,7 +156,7 @@ class MessageForm extends ContentEntityForm {
       foreach ($message->getArguments() as $name => $value) {
         $form['tokens']['values'][$name] = [
           '#type' => 'textfield',
-          '#title' => t("@name's value", ['@name' => $name]),
+          '#title' => $this->t("@name's value", ['@name' => $name]),
           '#default_value' => $value,
         ];
       }
@@ -154,7 +170,7 @@ class MessageForm extends ContentEntityForm {
       '#access' => $this->languageManager->isMultilingual(),
     ];
 
-    // @todo : add similar to node/from library, adding css for
+    // @todo add similar to node/from library, adding css for
     // 'message-form-owner' class.
     // $form['#attached']['library'][] = 'node/form';
     return $form;
@@ -167,20 +183,20 @@ class MessageForm extends ContentEntityForm {
     $element = parent::actions($form, $form_state);
     $message = $this->entity;
 
-    // @todo : check if we need access control here on form submit.
+    // @todo check if we need access control here on form submit.
     // Create custom save button with conditional label / value.
     $element['save'] = $element['submit'];
     if ($message->isNew()) {
-      $element['save']['#value'] = t('Create');
+      $element['save']['#value'] = $this->t('Create');
     }
     else {
-      $element['save']['#value'] = t('Update');
+      $element['save']['#value'] = $this->t('Update');
     }
     $element['save']['#weight'] = 0;
 
     $mid = $message->id();
     $url = is_object($message) && !empty($mid) ? Url::fromRoute('entity.message.canonical', ['message' => $mid]) : Url::fromRoute('message.overview_templates');
-    $link = Link::fromTextAndUrl(t('Cancel'), $url)->toString();
+    $link = Link::fromTextAndUrl($this->t('Cancel'), $url)->toString();
 
     // Add a cancel link to the message form actions.
     $element['cancel'] = [
@@ -203,7 +219,7 @@ class MessageForm extends ContentEntityForm {
     // Build the node object from the submitted values.
     parent::submitForm($form, $form_state);
 
-    /* @var $message Message */
+    /** @var Message $message */
     $message = $this->entity;
 
     // Set message owner.
@@ -225,10 +241,9 @@ class MessageForm extends ContentEntityForm {
         foreach (array_keys($args) as $token) {
 
           if ($token_actions == 'update') {
-            // Get the hard coded value of the message and him in the message.
+            // Get the hard coded value of the message.
             $token_name = str_replace(['@{', '}'], ['[', ']'], $token);
-            $token_service = \Drupal::token();
-            $value = $token_service->replace($token_name, ['message' => $message]);
+            $value = $this->token->replace($token_name, ['message' => $message]);
           }
           else {
             // Hard coded value given from the user.
@@ -247,11 +262,11 @@ class MessageForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    /* @var $message Message */
+    /** @var Message $message */
     $message = $this->entity;
     $insert = $message->isNew();
 
-    $message->save();
+    $ret = $message->save();
 
     // Set up message link and status message contexts.
     $message_link = $message->toLink($this->t('View'))->toString();
@@ -268,11 +283,11 @@ class MessageForm extends ContentEntityForm {
     // Display newly created or updated message depending on if new entity.
     if ($insert) {
       $this->logger('content')->notice('@type: added %title.', $context);
-      $this->messenger()->addMessage(t('@type %title has been created.', $t_args));
+      $this->messenger()->addMessage($this->t('@type %title has been created.', $t_args));
     }
     else {
       $this->logger('content')->notice('@type: updated %title.', $context);
-      $this->messenger()->addMessage(t('@type %title has been updated.', $t_args));
+      $this->messenger()->addMessage($this->t('@type %title has been updated.', $t_args));
     }
 
     // Redirect to message view display if user has access.
@@ -285,15 +300,17 @@ class MessageForm extends ContentEntityForm {
       else {
         $form_state->setRedirect('<front>');
       }
-      // @todo : for node they clear temp store here, but perhaps unused with
+      // @todo for node they clear temp store here, but perhaps unused with
       // message.
     }
     else {
       // In the unlikely case something went wrong on save, the message will be
       // rebuilt and message form redisplayed.
-      $this->messenger()->addMessage(t('The message could not be saved.'), 'error');
+      $this->messenger()->addMessage($this->t('The message could not be saved.'), 'error');
       $form_state->setRebuild();
     }
+
+    return $ret;
   }
 
 }

@@ -3,6 +3,7 @@ services:
     class: Drupal\linkchecker\Commands\LinkCheckerCommands
     arguments:
       - '@config.factory'
+      - '@logger.channel.linkchecker'
       - '@linkchecker.extractor_batch'
       - '@linkchecker.checker_batch'
       - '@linkchecker.clean_up'

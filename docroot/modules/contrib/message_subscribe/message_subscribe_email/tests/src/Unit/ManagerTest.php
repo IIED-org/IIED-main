@@ -8,6 +8,7 @@ use Drupal\flag\FlagInterface;
 use Drupal\flag\FlagServiceInterface;
 use Drupal\message_subscribe_email\Manager;
 use Drupal\Tests\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Unit tests for the message subscribe email manager utility class.
@@ -17,6 +18,8 @@ use Drupal\Tests\UnitTestCase;
  * @group message_subscribe_email
  */
 class ManagerTest extends UnitTestCase {
+
+  use ProphecyTrait;
 
   /**
    * Tests the flag retrieval.

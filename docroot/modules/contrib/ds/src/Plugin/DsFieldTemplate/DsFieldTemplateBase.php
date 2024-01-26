@@ -59,6 +59,7 @@ abstract class DsFieldTemplateBase extends PluginBase implements DsFieldTemplate
       '#attributes' => [
         'class' => ['colon-checkbox'],
       ],
+      '#description' => $this->t('Note: depending on the selected template, this setting might have no effect at all.')
     ];
     $field_classes = Ds::getClasses('field');
 
@@ -109,7 +110,7 @@ abstract class DsFieldTemplateBase extends PluginBase implements DsFieldTemplate
   public function defaultConfiguration() {
     $config = [];
     $config['lb'] = '';
-    $config['lb-col'] = \Drupal::config('ds.settings')->get('ft-show-colon');
+    $config['lb-col'] = \Drupal::config('ds.settings')->get('ft_show_colon');
     $config['classes'] = [];
 
     return $config;

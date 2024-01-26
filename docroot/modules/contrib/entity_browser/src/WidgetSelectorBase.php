@@ -25,7 +25,7 @@ abstract class WidgetSelectorBase extends PluginBase implements WidgetSelectorIn
    *
    * @var array
    */
-  protected $widgets_ids;
+  protected $widget_ids;
 
   /**
    * ID of the default widget.

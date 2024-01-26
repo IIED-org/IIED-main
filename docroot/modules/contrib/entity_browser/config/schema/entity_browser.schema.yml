@@ -34,7 +34,7 @@ entity_browser.browser.*:
           id:
             type: string
           uuid:
-            type: string
+            type: uuid
           label:
             type: label
           weight:
@@ -84,13 +84,21 @@ entity_browser.browser.display.modal:
       type: boolean
       label: 'Auto open'
 
-entity_browser.browser.widget.upload:
+entity_browser.browser.widget.base:
   type: mapping
-  label: 'Upload widget configuration'
+  label: 'Entity Browser widget base plugin configuration'
   mapping:
     submit_text:
       type: label
       label: 'Submit button text'
+    auto_select:
+      type: boolean
+      label: 'Automatically submit selection'
+
+entity_browser.browser.widget.upload:
+  type: entity_browser.browser.widget.base
+  label: 'Upload widget configuration'
+  mapping:
     upload_location:
       type: string
       label: 'Upload location'
@@ -102,15 +110,9 @@ entity_browser.browser.widget.upload:
       label: 'Allowed file extensions'
 
 entity_browser.browser.widget.view:
-  type: mapping
+  type: entity_browser.browser.widget.base
   label: 'View widget configuration'
   mapping:
-    submit_text:
-      type: label
-      label: 'Submit button text'
-    auto_select:
-      type: boolean
-      label: 'Automatically submit selection'
     view:
       type: string
       label: 'View ID'
@@ -122,6 +124,14 @@ entity_browser.browser.widget.view:
       sequence:
         type: integer
         label: 'View display arguments'
+
+entity_browser.browser.widget.media_image_upload:
+  type: entity_browser.browser.widget.upload
+  label: 'Media image upload configuration'
+  mapping:
+    media_type:
+      type: string
+      label: 'Media Type'
 
 entity_browser.browser.selection_display.multi_step_display:
   type: mapping

@@ -4,8 +4,8 @@
  */
 
 .ds-3col > .group-left {
-  width: 25%;
   float: left; /* LTR */
+  width: 25%;
 }
 
 [dir="rtl"] .ds-3col > .group-left {
@@ -13,8 +13,8 @@
 }
 
 .ds-3col > .group-middle {
-  width: 50%;
   float: left; /* LTR */
+  width: 50%;
 }
 
 [dir="rtl"] .ds-3col > .group-middle {
@@ -22,8 +22,8 @@
 }
 
 .ds-3col > .group-right {
-  width: 25%;
   float: right; /* LTR */
+  width: 25%;
 }
 
 [dir="rtl"] .ds-3col > .group-right {

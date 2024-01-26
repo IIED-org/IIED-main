@@ -77,6 +77,9 @@ class EntityReferenceRevisionsAdminTest extends BrowserTestBase {
       'settings[handler_settings][target_bundles][article]' => TRUE,
       'default_value_input[field_entity_reference_revisions][0][target_id]' => $node_target->label() . ' (' . $node_target->id() . ')',
     ];
+    if (version_compare(\Drupal::VERSION, '10.1', '>=')) {
+      $field_edit['set_default_value'] = TRUE;
+    }
     static::fieldUIAddNewField('admin/structure/types/manage/entity_revisions', 'entity_reference_revisions', 'Entity reference revisions', 'entity_reference_revisions', $storage_edit, $field_edit);
     \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
     $this->assertSession()->pageTextContains('Saved Entity reference revisions configuration.');
@@ -135,15 +138,32 @@ class EntityReferenceRevisionsAdminTest extends BrowserTestBase {
 
     // Make sure the non-revisionable entities are not selectable as referenced
     // entities.
-    $edit = array(
-      'new_storage_type' => 'entity_reference_revisions',
-      'label' => 'Entity reference revisions field',
-      'field_name' => 'entity_ref_revisions_field',
-    );
     $this->drupalGet('admin/structure/types/manage/entity_revisions/fields/add-field');
-    $this->submitForm($edit, 'Save and continue');
-    $this->assertSession()->optionNotExists('edit-settings-target-type', 'user');
-    $this->assertSession()->optionExists('edit-settings-target-type', 'node');
+    if (version_compare(\Drupal::VERSION, '10.2', '>=')) {
+      $selected_group = [
+        'new_storage_type' => 'reference',
+      ];
+      $this->submitForm($selected_group, 'Change field group');
+      $this->assertSession()->pageTextContains('Other (revisions)');
+      $edit = array(
+        'group_field_options_wrapper' => 'entity_reference_revisions',
+        'label' => 'Entity reference revisions field',
+        'field_name' => 'entity_ref_revisions_field',
+      );
+      $this->submitForm($edit, 'Continue');
+      $this->assertSession()->optionNotExists('field_storage[subform][settings][target_type]', 'user');
+      $this->assertSession()->optionExists('field_storage[subform][settings][target_type]', 'node');
+    }
+    else {
+      $edit = array(
+        'new_storage_type' => 'entity_reference_revisions',
+        'label' => 'Entity reference revisions field',
+        'field_name' => 'entity_ref_revisions_field',
+      );
+      $this->submitForm($edit, 'Save and continue');
+      $this->assertSession()->optionNotExists('edit-settings-target-type', 'user');
+      $this->assertSession()->optionExists('edit-settings-target-type', 'node');
+    }
 
     // Check ERR default value and property definitions label are set properly.
     $field_definition = $node->getFieldDefinition('field_entity_reference_revisions');

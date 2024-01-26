@@ -320,3 +320,6 @@
             - [setExtensionDefaultType, [wvx, video/x-ms-wvx]]
             - [setExtensionDefaultType, [xcf, application/x-xcf]]
             - [setExtensionDefaultType, [xps, application/vnd.ms-xpsdocument]]
+            - [setExtensionDefaultType, [avi, video/x-msvideo]]
+            - [setExtensionDefaultType, [m4a, audio/mp4]]
+            - [setExtensionDefaultType, [wav, audio/x-wav]]

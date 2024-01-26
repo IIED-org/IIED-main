@@ -70,7 +70,7 @@ function template_preprocess_charts_chart(&$variables) {
   ];
   $variables['content_prefix'] = $element['#content_prefix'];
   $variables['content_suffix'] = $element['#content_suffix'];
-  $config = \Drupal::service('config.factory')->getEditable('charts.settings');
+  $config = \Drupal::config('charts.settings');
   $variables['debug'] = [];
   if (!empty($config->get('advanced.debug'))) {
     $variables['debug'] = [
@@ -141,8 +141,7 @@ function charts_library_info_alter(&$libraries, $extension) {
   }
 
   // Only try to apply cdn changes if the cdn requirements is on.
-  $config = \Drupal::service('config.factory')
-    ->getEditable('charts.settings');
+  $config = \Drupal::config('charts.settings');
   if (!$config->get('advanced.requirements.cdn')) {
     return;
   }

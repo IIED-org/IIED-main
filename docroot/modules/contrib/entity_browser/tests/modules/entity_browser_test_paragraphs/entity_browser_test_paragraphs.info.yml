@@ -12,7 +12,7 @@ dependencies:
   - drupal:views
   - drupal:user
 
-# Information added by Drupal.org packaging script on 2023-01-18
-version: '8.x-2.9'
+# Information added by Drupal.org packaging script on 2023-12-11
+version: '8.x-2.10'
 project: 'entity_browser'
-datestamp: 1674057919
+datestamp: 1702325313

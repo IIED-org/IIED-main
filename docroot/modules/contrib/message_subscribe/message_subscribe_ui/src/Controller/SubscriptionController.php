@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Default controller for the message_subscribe_ui module.
  */
-class SubscriptionController extends ControllerBase {
+final class SubscriptionController extends ControllerBase {
 
   /**
    * The message subscribe settings.
@@ -71,7 +71,7 @@ class SubscriptionController extends ControllerBase {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static(
+    return new self(
       $container->get('current_user'),
       $container->get('flag'),
       $container->get('message_subscribe.subscribers'),
@@ -180,7 +180,7 @@ class SubscriptionController extends ControllerBase {
     $prefix = $this->config->get('flag_prefix');
     // View name + display ID.
     $default_view_name = $prefix . '_' . $entity_type . ':default';
-    list($view_name, $display_id) = explode(':', $flag->getThirdPartySetting('message_subscribe_ui', 'view_name', $default_view_name));
+    [$view_name, $display_id] = explode(':', $flag->getThirdPartySetting('message_subscribe_ui', 'view_name', $default_view_name));
 
     if (!$view = Views::getView($view_name)) {
       // View doesn't exist.

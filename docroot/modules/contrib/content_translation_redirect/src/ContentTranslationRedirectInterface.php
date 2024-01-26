@@ -3,6 +3,7 @@
 namespace Drupal\content_translation_redirect;
 
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Url;
 
 /**
@@ -29,6 +30,38 @@ interface ContentTranslationRedirectInterface extends ConfigEntityInterface {
    * Act on all entities.
    */
   public const MODE_ALL = 'all';
+
+  /**
+   * Gets the entity type ID for which this redirect is used.
+   *
+   * @return string|null
+   *   The entity type ID, or NULL in the following cases:
+   *   - The redirect does not yet have an ID.
+   *   - This is the default redirect.
+   */
+  public function getTargetEntityTypeId(): ?string;
+
+  /**
+   * Gets the entity type definition for which this redirect is used.
+   *
+   * @return \Drupal\Core\Entity\EntityTypeInterface|null
+   *   The entity type definition, or NULL in the following cases:
+   *   - The redirect does not yet have an ID.
+   *   - This is the default redirect.
+   *   - The entity type ID is invalid.
+   */
+  public function getTargetEntityType(): ?EntityTypeInterface;
+
+  /**
+   * Gets the bundle for which this redirect is used.
+   *
+   * @return string|null
+   *   The bundle name, or NULL in the following cases:
+   *   - The redirect does not yet have an ID.
+   *   - This is the default redirect.
+   *   - The redirect is not bundle-specific.
+   */
+  public function getTargetBundle(): ?string;
 
   /**
    * Gets the redirect status code.

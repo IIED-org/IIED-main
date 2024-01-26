@@ -8,6 +8,13 @@ namespace Drupal\Tests\paragraphs\FunctionalJavascript;
 trait LoginAdminTrait {
 
   /**
+   * Drupal user object created by loginAsAdmin().
+   *
+   * @var \Drupal\user\UserInterface
+   */
+  protected $admin_user = NULL;
+
+  /**
    * Creates an user with admin permissions and log in.
    *
    * @param array $additional_permissions

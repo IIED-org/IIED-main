@@ -96,7 +96,7 @@ class SearchApiAllTerms extends SearchApiTerm {
       $terms = $this->getEntityTypeManager()->getStorage('taxonomy_term')
         ->loadMultiple($this->value);
     }
-    catch (PluginException $e) {
+    catch (PluginException) {
       $this->query->abort($this->t('Could not load taxonomy terms.'));
       return;
     }

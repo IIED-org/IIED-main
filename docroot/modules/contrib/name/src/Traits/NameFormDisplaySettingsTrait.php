@@ -44,6 +44,7 @@ trait NameFormDisplaySettingsTrait {
         'credentials' => 'description',
       ],
       'widget_layout' => 'stacked',
+      'field_title_display' => 'before',
       'show_component_required_marker' => FALSE,
       'credentials_inline' => FALSE,
     ];
@@ -156,6 +157,20 @@ trait NameFormDisplaySettingsTrait {
         '#options' => $title_display_options,
       ];
     }
+
+    $element['field_title_display'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Title Display'),
+      '#description' => $this->t('Whether to show or hide the top-level field label.'),
+      '#default_value' => $this->getSetting('field_title_display'),
+      '#table_group' => 'above',
+      '#options' => [
+        'before' => $this->t('Before'),
+        'invisible' => $this->t('Visually hidden'),
+        'none' => $this->t('Hidden'),
+      ],
+      '#weight' => -49,
+    ];
 
     $widget_layout_options = [];
     foreach (name_widget_layouts() as $layout => $info) {

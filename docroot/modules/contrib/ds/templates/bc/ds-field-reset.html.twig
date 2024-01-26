@@ -1,0 +1,29 @@
+{#
+/**
+ * @file
+ * Template to reset all HTML for the field.
+ *
+ * Available variables:
+ * - element: The field element.
+ * - label: The label of the field.
+ * - show_colon: TRUE if colon should be displayed after label.
+ * - items: List of all the field items. Each item contains:
+ *   - attributes: List of HTML attributes for each item.
+ *   - content: The field item's content.
+ */
+#}
+{% if not label_hidden %}
+  {%
+    set title_classes = [
+      'field-label-' ~ element['#label_display']|clean_class,
+      (element['#label_display'] == 'visually_hidden' ? 'visually-hidden'),
+    ]
+  %}
+  <div{{ attributes.addClass(title_classes) }}>
+    {{- label }}{% if show_colon %}:{% endif -%}
+  </div>
+{% endif %}
+
+{% for item in items %}
+  {{ item.content }}
+{% endfor %}

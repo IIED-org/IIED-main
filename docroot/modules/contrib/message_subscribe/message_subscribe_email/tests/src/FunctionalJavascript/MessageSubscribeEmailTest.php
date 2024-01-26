@@ -85,17 +85,17 @@ class MessageSubscribeEmailTest extends WebDriverTestBase {
     $this->drupalGet($this->nodes[2]->toUrl());
 
     // Subscribe to the node.
-    $this->clickLink(t('Subscribe'));
+    $this->clickLink('Subscribe');
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertTrue((bool) $this->flagService->getFlagging($flag, $this->nodes[2], $this->users[2]));
 
     // Unsubscribe from the node.
-    $this->clickLink(t('Unsubscribe'));
+    $this->clickLink('Unsubscribe');
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertFalse((bool) $this->flagService->getFlagging($flag, $this->nodes[2], $this->users[2]));
 
     // Subscribe again!
-    $this->clickLink(t('Subscribe'));
+    $this->clickLink('Subscribe');
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertTrue((bool) $this->flagService->getFlagging($flag, $this->nodes[2], $this->users[2]));
   }

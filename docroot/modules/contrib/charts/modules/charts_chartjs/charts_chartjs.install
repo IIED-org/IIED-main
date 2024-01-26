@@ -14,7 +14,7 @@ function charts_chartjs_requirements($phase) {
   switch ($phase) {
     case 'runtime':
       $library_path = charts_chartjs_find_library();
-      $config = \Drupal::service('config.factory')->getEditable('charts.settings');
+      $config = \Drupal::config('charts.settings');
       $cdn = $config->get('advanced.requirements.cdn') ?? FALSE;
 
       if (!$library_path) {
@@ -86,7 +86,7 @@ function charts_chartjs_find_library() {
   $searchdir[] = $site_name . '/libraries';
 
   foreach ($searchdir as $dir) {
-    if (file_exists($dir . '/chartjs/dist/chart.js')) {
+    if (file_exists($dir . '/chartjs/dist/chart.js') || file_exists($dir . '/chartjs/dist/chart.umd.js')) {
       return $dir . '/chartjs';
     }
   }

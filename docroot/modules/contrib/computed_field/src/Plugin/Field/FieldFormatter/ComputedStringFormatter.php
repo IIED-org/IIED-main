@@ -4,6 +4,7 @@ namespace Drupal\computed_field\Plugin\Field\FieldFormatter;
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Plugin implementation of the 'computed_string' formatter.
@@ -18,12 +19,14 @@ use Drupal\Core\Form\FormStateInterface;
  * )
  */
 class ComputedStringFormatter extends ComputedFormatterBase {
+  use StringTranslationTrait;
+
   /**
    * {@inheritdoc}
    */
   public static function defaultSettings() {
     return [
-      'sanitized' => TRUE
+      'sanitized' => TRUE,
     ] + parent::defaultSettings();
   }
 
@@ -34,9 +37,9 @@ class ComputedStringFormatter extends ComputedFormatterBase {
     return [
       'sanitized' => [
         '#type' => 'checkbox',
-        '#title' => t('Sanitized'),
+        '#title' => $this->t('Sanitized'),
         '#default_value' => $this->getSetting('sanitized'),
-      ]
+      ],
     ] + parent::settingsForm($form, $form_state);
   }
 
@@ -46,22 +49,22 @@ class ComputedStringFormatter extends ComputedFormatterBase {
   public function settingsSummary() {
     $summary = parent::settingsSummary();
 
-    $summary[] = $this->getSetting('sanitized') ? t('Sanitized') : t('Unsanitized');
+    $summary[] = $this->getSetting('sanitized') ? $this->t('Sanitized') : $this->t('Unsanitized');
 
     return $summary;
   }
 
   /**
-   * @inheritdoc
+   * {@inheritdoc}
    */
   protected function prepareValue($value) {
 
     if ($this->getSetting('sanitized')) {
       return nl2br(Html::escape($value));
-    } else {
+    }
+    else {
       return nl2br($value);
     }
   }
-
 
 }

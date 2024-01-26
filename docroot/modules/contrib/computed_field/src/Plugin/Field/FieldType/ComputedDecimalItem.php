@@ -7,6 +7,7 @@ use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\TypedData\DataDefinition;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Plugin implementation of the 'computed_decimal' field type.
@@ -23,6 +24,7 @@ use Drupal\Core\TypedData\DataDefinition;
  */
 class ComputedDecimalItem extends ComputedFieldItemBase {
   use ComputedFieldStronglyTypedItemTrait;
+  use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
@@ -92,19 +94,19 @@ class ComputedDecimalItem extends ComputedFieldItemBase {
     $precision_range = range(10, 32);
     $element['precision'] = [
       '#type' => 'select',
-      '#title' => t('Precision'),
+      '#title' => $this->t('Precision'),
       '#options' => array_combine($precision_range, $precision_range),
       '#default_value' => $settings['precision'],
-      '#description' => t('The total number of digits to store in the database, including those to the right of the decimal.'),
+      '#description' => $this->t('The total number of digits to store in the database, including those to the right of the decimal.'),
       '#disabled' => $has_data,
     ];
     $scale_range = range(0, 10);
     $element['scale'] = [
       '#type' => 'select',
-      '#title' => t('Scale', [], ['context' => 'decimal places']),
+      '#title' => $this->t('Scale', [], ['context' => 'decimal places']),
       '#options' => array_combine($scale_range, $scale_range),
       '#default_value' => $settings['scale'],
-      '#description' => t('The number of digits to the right of the decimal.'),
+      '#description' => $this->t('The number of digits to the right of the decimal.'),
       '#disabled' => $has_data,
     ];
 

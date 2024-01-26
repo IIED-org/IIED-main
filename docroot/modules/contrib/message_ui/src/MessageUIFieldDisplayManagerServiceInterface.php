@@ -3,7 +3,7 @@
 namespace Drupal\message_ui;
 
 /**
- * Interface MessageUIFieldDisplayManagerServiceInterface.
+ * Field Display Manager Service Interface.
  *
  * @package Drupal\message_ui
  */

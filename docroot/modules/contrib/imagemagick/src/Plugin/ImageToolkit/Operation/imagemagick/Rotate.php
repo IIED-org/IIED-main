@@ -64,10 +64,13 @@ class Rotate extends ImagemagickImageToolkitOperationBase {
    */
   protected function execute(array $arguments) {
     // Rotate.
-    $arg = '-background ' . $this->escapeArgument($arguments['background']);
-    $arg .= ' -rotate ' . $arguments['degrees'];
-    $arg .= ' +repage';
-    $this->addArgument($arg);
+    $this->addArguments([
+      '-background',
+      $arguments['background'],
+      '-rotate',
+      $arguments['degrees'],
+      '+repage',
+    ]);
 
     // Need to resize the image after rotation to make sure it complies with
     // the dimensions expected, calculated via the Rectangle class.

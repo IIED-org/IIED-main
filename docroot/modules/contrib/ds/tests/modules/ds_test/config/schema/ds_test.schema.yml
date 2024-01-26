@@ -12,5 +12,5 @@ ds.field_template.ds_test_template:
       type: sequence
       label: 'Classes for the template'
       sequence:
-        - type: string
-          label: 'Class name'
+        type: string
+        label: 'Class name'

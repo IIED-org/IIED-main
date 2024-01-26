@@ -37,3 +37,12 @@ function ds_extras_update_8001() {
   // Delete the old config file.
   $original_config->delete();
 }
+
+/**
+ * Update config settings to set the switch_field_prefix value.
+ */
+function ds_extras_update_8002() {
+  \Drupal::configFactory()->getEditable('ds_extras.settings')
+    ->set('switch_field_prefix', 'node--view-mode-')
+    ->save(TRUE);
+}

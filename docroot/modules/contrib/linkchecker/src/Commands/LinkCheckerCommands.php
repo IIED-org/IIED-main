@@ -3,6 +3,7 @@
 namespace Drupal\linkchecker\Commands;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Psr\Log\LoggerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\linkchecker\LinkCheckerBatch;
 use Drupal\linkchecker\LinkCleanUp;
@@ -45,6 +46,13 @@ class LinkCheckerCommands extends DrushCommands {
   protected $linkCleanUp;
 
   /**
+   * The logger.
+   *
+   * @var \Psr\Log\LoggerInterface|null
+   */
+  protected $linkCheckerLogger;
+
+  /**
    * LinkCheckerCommands constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
@@ -56,9 +64,10 @@ class LinkCheckerCommands extends DrushCommands {
    * @param \Drupal\linkchecker\LinkCleanUp  $linkCleanUp
    *   The link clean up.
    */
-  public function __construct(ConfigFactoryInterface $configFactory, LinkExtractorBatch $extractorBatch, LinkCheckerBatch $checkerBatch, LinkCleanUp $linkCleanUp) {
+  public function __construct(ConfigFactoryInterface $configFactory, LoggerInterface $logger, LinkExtractorBatch $extractorBatch, LinkCheckerBatch $checkerBatch, LinkCleanUp $linkCleanUp) {
     parent::__construct();
-    $this->linkcheckerSetting = $configFactory->get('linkchecker.settings');;
+    $this->linkcheckerSetting = $configFactory->get('linkchecker.settings');
+    $this->linkCheckerLogger = $logger;
     $this->extractorBatch = $extractorBatch;
     $this->checkerBatch = $checkerBatch;
     $this->linkCleanUp = $linkCleanUp;
@@ -80,7 +89,7 @@ class LinkCheckerCommands extends DrushCommands {
       drush_backend_batch_process();
     }
     else {
-      $this->logger->warning('No content configured for link analysis.');
+      $this->linkCheckerLogger->warning('No content configured for link analysis.');
     }
   }
 
@@ -103,7 +112,7 @@ class LinkCheckerCommands extends DrushCommands {
       drush_backend_batch_process();
     }
     else {
-      $this->logger->warning('No content configured for link analysis.');
+      $this->linkCheckerLogger->warning('No content configured for link analysis.');
     }
   }
 
@@ -115,11 +124,11 @@ class LinkCheckerCommands extends DrushCommands {
    * @aliases lcch
    */
   public function check() {
-    $this->logger->info('Starting link checking...');
+    $this->linkCheckerLogger->info('Starting link checking...');
 
     // Always rebuild queue on Drush command run to check all links.
     if (empty($this->checkerBatch->getTotalLinksToProcess())) {
-      $this->logger->notice($this->t('There are no links to check.'));
+      $this->linkCheckerLogger->notice($this->t('There are no links to check.'));
       return;
     }
 

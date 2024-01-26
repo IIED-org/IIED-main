@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests;
 
 use Behat\Mink\Driver\BrowserKitDriver;
-use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Session\AccountInterface;
@@ -127,7 +128,7 @@ trait UiHelperTrait {
    * If a user is already logged in, then the current user is logged out before
    * logging in the specified user.
    *
-   * Please note that neither the current user nor the passed-in user object is
+   * Note that neither the current user nor the passed-in user object is
    * populated with data of the logged in user. If you need full access to the
    * user object after logging in, it must be updated manually. If you also need
    * access to the plain-text password of the user (set by drupalCreateUser()),
@@ -161,7 +162,7 @@ trait UiHelperTrait {
 
     // @see ::drupalUserIsLoggedIn()
     $account->sessionId = $this->getSession()->getCookie(\Drupal::service('session_configuration')->getOptions(\Drupal::request())['name']);
-    $this->assertTrue($this->drupalUserIsLoggedIn($account), new FormattableMarkup('User %name successfully logged in.', ['%name' => $account->getAccountName()]));
+    $this->assertTrue($this->drupalUserIsLoggedIn($account), "User {$account->getAccountName()} successfully logged in.");
 
     $this->loggedInUser = $account;
     $this->container->get('current_user')->setAccount($account);

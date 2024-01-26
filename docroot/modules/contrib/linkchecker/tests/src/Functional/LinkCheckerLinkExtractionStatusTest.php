@@ -14,6 +14,11 @@ class LinkCheckerLinkExtractionStatusTest extends LinkCheckerBaseTest {
   /**
    * {@inheritdoc}
    */
+  public $adminUser;
+
+  /**
+   * {@inheritdoc}
+   */
   protected function setUp(): void {
     parent::setUp();
 

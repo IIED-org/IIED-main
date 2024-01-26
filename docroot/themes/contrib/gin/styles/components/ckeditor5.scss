@@ -1,5 +1,5 @@
 .ck {
-  --ck-spacing-small: var(--gin-spacing-xs);
+  --ck-spacing-small: var(--gin-spacing-xxs);
 
   --ck-color-text: var(--gin-color-text);
 
@@ -73,6 +73,15 @@
 
   .ck-toolbar__separator {
     opacity: .3;
+  }
+
+  .ck-toolbar_grouping:focus,
+  .ck-toolbar__items:focus {
+    box-shadow: none;
+  }
+
+  .ck.ck-editor__editable_inline {
+    padding: 0 var(--gin-spacing-s);
   }
 
   .ck-button[aria-pressed=true] {

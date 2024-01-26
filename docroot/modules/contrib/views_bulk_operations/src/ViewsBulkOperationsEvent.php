@@ -34,14 +34,14 @@ class ViewsBulkOperationsEvent extends Event {
    *
    * @var array
    */
-  protected array $entityTypeIds;
+  protected array $entityTypeIds = [];
 
   /**
    * Row entity getter information.
    *
    * @var array
    */
-  protected array $entityGetter;
+  protected array $entityGetter = [];
 
   /**
    * Object constructor.

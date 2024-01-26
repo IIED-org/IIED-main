@@ -5,6 +5,8 @@
  * Hooks and documentation related to paragraphs module.
  */
 
+use Drupal\paragraphs\ParagraphInterface;
+
 /**
  * @addtogroup hooks
  * @{
@@ -45,6 +47,28 @@ function hook_paragraphs_behavior_info_alter(&$paragraphs_behavior) {
  *   - allow_reference_changes: Boolean if changes to structure are OK.
  */
 function hook_paragraphs_widget_actions_alter(array &$widget_actions, array &$context) {
+}
+
+/**
+ * Alters the paragraphs after conversion.
+ *
+ * This hook is fired once per converted paragraph entity. The hook
+ * implementations must handle paragraphs translations on their own.
+ *
+ * @param \Drupal\paragraphs\ParagraphInterface $original
+ *   The original paragraph entity.
+ * @param \Drupal\paragraphs\ParagraphInterface $converted
+ *   The converted paragraph entity.
+ */
+function hook_paragraphs_conversion_alter(ParagraphInterface $original, ParagraphInterface $converted) {
+  // Alter the converted text value.
+  if ($converted->bundle() == 'text_image') {
+    $field_name = 'field_text_demo';
+    if ($converted->hasField($field_name) && !$converted->get($field_name)->isEmpty()) {
+      $value = implode(', ', ['New', $converted->get($field_name)->value]);
+      $converted->set($field_name, $value);
+    }
+  }
 }
 
 /**

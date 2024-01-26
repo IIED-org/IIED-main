@@ -52,7 +52,7 @@ function entity_browser_entity_form_inline_entity_form_reference_form_alter(&$re
     $cardinality = $instance->getFieldStorageDefinition()->get('cardinality') - $count_existing_selection;
   }
 
-  $bundles = $reference_form['entity_id']['#selection_settings']['target_bundles'];
+  $bundles = $reference_form['entity_id']['#selection_settings']['target_bundles'] ?? [];
   $target_entity_type = $reference_form['entity_id']['#target_type'];
   unset($reference_form['entity_id']);
   $reference_form['entity_browser'] = [

@@ -5,6 +5,7 @@ namespace Drupal\ds\Plugin\Derivative;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
 use Drupal\views\ViewsData;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -15,6 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @see \Drupal\ds\Plugin\views\row\EntityRow
  */
 class DsEntityRow implements ContainerDeriverInterface {
+  use StringTranslationTrait;
 
   /**
    * Stores all entity row plugin information.
@@ -93,7 +95,7 @@ class DsEntityRow implements ContainerDeriverInterface {
           'id' => 'ds_entity:' . $entity_type_id,
           'provider' => 'ds',
           'title' => 'Display Suite: ' . $entity_type->getLabel(),
-          'help' => t('Display the @label', ['@label' => $entity_type->getLabel()]),
+          'help' => $this->t('Display the @label', ['@label' => $entity_type->getLabel()]),
           'base' => [$entity_type->getDataTable() ?: $entity_type->getBaseTable()],
           'entity_type' => $entity_type_id,
           'display_types' => ['normal'],

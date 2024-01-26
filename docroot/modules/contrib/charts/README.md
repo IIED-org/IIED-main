@@ -40,6 +40,15 @@ additional features, such as radar charts.
   animations, it requires a commercial license. It's free for non-commercial
   use. See http://www.highcharts.com
 
+## Chart Types
+
+Each charting library has its own set of chart types. The Charts module
+focuses on chart types that are available in *most* of the libraries.
+To avoid a confusing user interface, the Charts module no longer includes
+chart types that are not supported by the selected library in the Chart
+Type selection. For example, if you select the Chart.js library, you will
+not see the "Gauge" chart type.
+
 ## Installing Libraries
 
 All the Charts submodules default to using a content delivery network (CDN) to

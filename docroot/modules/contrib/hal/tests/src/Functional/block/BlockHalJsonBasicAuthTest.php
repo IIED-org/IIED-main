@@ -20,7 +20,7 @@ class BlockHalJsonBasicAuthTest extends BlockResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'stark';
 
   /**
    * {@inheritdoc}

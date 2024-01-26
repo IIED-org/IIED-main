@@ -194,7 +194,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       $t_args = [':href' => ($this->moduleHandler->moduleExists('help')) ? Url::fromRoute('help.page', ['name' => 'webform'], ['fragment' => 'libraries'])->toString() : 'https://www.drupal.org/docs/8/modules/webform/webform-libraries'];
       $description['download'] = [
         '#markup' => '<hr/>' .
-          $this->t('Please download external libaries using one the <a href=":href">recommended methods</a>.', $t_args),
+          $this->t('Please download external libraries using one the <a href=":href">recommended methods</a>.', $t_args),
       ];
       $t_args = [':href' => Url::fromRoute('webform.config.advanced')->toString()];
       $description['cdn'] = [

@@ -133,6 +133,19 @@ class SettingsForm extends ConfigFormBase {
       ],
     ];
 
+    $form['proxy_headers'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('HTTP headers'),
+      '#default_value' => $config->get('proxy_headers'),
+      '#description' => $this->t('When Stage File Proxy is configured to transfer the
+        remote file to local machine, it will use this headers for HTTP request.
+        Use format like "Referer|http://example.com/'),
+      '#required' => FALSE,
+      '#config' => [
+        'key' => 'stage_file_proxy.settings:proxy_headers',
+      ],
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -161,6 +174,7 @@ class SettingsForm extends ConfigFormBase {
       'hotlink',
       'verify',
       'excluded_extensions',
+      'proxy_headers',
     ];
     foreach ($keys as $key) {
       $value = $form_state->getValue($key);

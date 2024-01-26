@@ -63,7 +63,7 @@ abstract class Date extends DsFieldBase {
    */
   public function build() {
     $field = $this->getFieldConfiguration();
-    $date_format = str_replace('ds_post_date_', '', $field['formatter']);
+    $date_format = str_replace('ds_post_date_', '', $field['formatter'] ?? '');
     $render_key = $this->getRenderKey();
 
     return [
@@ -80,7 +80,7 @@ abstract class Date extends DsFieldBase {
 
     $date_formatters = [];
     foreach ($date_types as $machine_name => $entity) {
-      /* @var $entity \Drupal\Core\Datetime\DateFormatInterface */
+      /** @var \Drupal\Core\Datetime\DateFormatInterface $entity */
       if ($entity->isLocked()) {
         continue;
       }

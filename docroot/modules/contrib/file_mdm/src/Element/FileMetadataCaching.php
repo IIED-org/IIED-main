@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\file_mdm\Element;
 
 use Drupal\Core\Form\FormStateInterface;
@@ -12,9 +14,6 @@ use Drupal\Core\Render\Element\FormElement;
  */
 class FileMetadataCaching extends FormElement {
 
-  /**
-   * {@inheritdoc}
-   */
   public function getInfo() {
     $class = get_class($this);
     return [
@@ -24,9 +23,6 @@ class FileMetadataCaching extends FormElement {
     ];
   }
 
-  /**
-   * {@inheritdoc}
-   */
   public static function valueCallback(&$element, $input, FormStateInterface $form_state) {
     if ($input !== FALSE && $input !== NULL) {
       $disallowed_paths = $input['disallowed_paths'];
@@ -59,7 +55,7 @@ class FileMetadataCaching extends FormElement {
    * @return array
    *   The processed element.
    */
-  public static function processCaching(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function processCaching(array &$element, FormStateInterface $form_state, array &$complete_form): array {
     $element['enabled'] = [
       '#type' => 'checkbox',
       '#title' => t('Cache metadata'),
@@ -99,8 +95,15 @@ class FileMetadataCaching extends FormElement {
 
   /**
    * Form element validation handler.
+   *
+   * @param array $element
+   *   The form element to process.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   * @param array $complete_form
+   *   The complete form structure.
    */
-  public static function validateCaching(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function validateCaching(array &$element, FormStateInterface $form_state, array &$complete_form): void {
     // Validate cache exclusion paths.
     foreach ($element['#value']['disallowed_paths'] as $path) {
       if (!\Drupal::service('stream_wrapper_manager')->isValidUri($path)) {

@@ -3,6 +3,7 @@
 namespace Drupal\message_notify_ui\Plugin\MessageNotifyUiSenderSettingsForm;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\message_notify\MessageNotifier;
 use Drupal\message_notify_ui\MessageNotifyUiSenderSettingsFormBase;
 use Drupal\message_notify_ui\MessageNotifyUiSenderSettingsFormInterface;
@@ -17,6 +18,7 @@ use Drupal\message_notify_ui\MessageNotifyUiSenderSettingsFormInterface;
  * )
  */
 class MessageNotifyUiSenderMailSettingsForm extends MessageNotifyUiSenderSettingsFormBase implements MessageNotifyUiSenderSettingsFormInterface {
+  use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
@@ -25,13 +27,13 @@ class MessageNotifyUiSenderMailSettingsForm extends MessageNotifyUiSenderSetting
     return [
       'use_custom' => [
         '#type' => 'checkbox',
-        '#title' => t('Use custom email'),
-        '#description' => t('Use the message owner message'),
+        '#title' => $this->t('Use custom email'),
+        '#description' => $this->t('Use the message owner message'),
       ],
       'email' => [
         '#type' => 'email',
-        '#title' => t('Email address'),
-        '#description' => t('The email address'),
+        '#title' => $this->t('Email address'),
+        '#description' => $this->t('The email address'),
         '#states' => [
           'visible' => [
             ':input[name="use_custom"]' => ['checked' => TRUE],
@@ -46,7 +48,7 @@ class MessageNotifyUiSenderMailSettingsForm extends MessageNotifyUiSenderSetting
    */
   public function validate(array $form, FormStateInterface $formState) {
     if ($formState->getValue('use_custom') && !$formState->getValue('email')) {
-      $formState->setErrorByName('email', t('The email field cannot be empty.'));
+      $formState->setErrorByName('email', $this->t('The email field cannot be empty.'));
     }
   }
 
@@ -65,7 +67,7 @@ class MessageNotifyUiSenderMailSettingsForm extends MessageNotifyUiSenderSetting
     }
 
     if ($notifier->send($this->getMessage(), $settings, 'email')) {
-      \Drupal::messenger()->addMessage(t('The email sent successfully.'));
+      \Drupal::messenger()->addMessage($this->t('The email sent successfully.'));
     }
   }
 

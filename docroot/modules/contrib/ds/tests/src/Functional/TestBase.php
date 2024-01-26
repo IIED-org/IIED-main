@@ -3,6 +3,7 @@
 namespace Drupal\Tests\ds\Functional;
 
 use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\BrowserTestBase;
@@ -21,15 +22,16 @@ abstract class TestBase extends BrowserTestBase {
   use EntityReferenceTestTrait;
   use FieldUiTestTrait;
   use TaxonomyTestTrait;
+  use StringTranslationTrait;
 
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'starterkit_theme';
 
   /**
    * Modules to install.
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'node',
     'user',
     'field_ui',
@@ -40,6 +42,7 @@ abstract class TestBase extends BrowserTestBase {
     'ds_test',
     'ds_switch_view_mode',
     'layout_discovery',
+    'field_group',
   ];
 
   /**

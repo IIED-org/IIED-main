@@ -2,11 +2,14 @@
 
 namespace Drupal\message_ui\Controller;
 
-use Drupal\Core\Url;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\message\Entity\Message;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Entity\EntityAccessControlHandlerInterface;
+use Drupal\Core\Form\FormBuilderInterface;
+use Drupal\Core\Url;
+use Drupal\message\Entity\Message;
 use Drupal\message\MessageTemplateInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Controller for adding messages.
@@ -18,13 +21,31 @@ class MessageController extends ControllerBase implements ContainerInjectionInte
    *
    * @var \Drupal\Core\Entity\EntityAccessControlHandlerInterface
    */
-  private $accessHandler;
+  protected $accessHandler;
+
+  /**
+   * The form builder object.
+   *
+   * @var \Drupal\Core\Form\FormBuilderInterface
+   */
+  protected $formBuilder;
 
   /**
    * Constructs a MessageUiController object.
    */
-  public function __construct() {
-    $this->accessHandler = $this->entityTypeManager()->getAccessControlHandler('message');
+  public function __construct(EntityAccessControlHandlerInterface $access_handler, FormBuilderInterface $form_builder) {
+    $this->accessHandler = $access_handler;
+    $this->formBuilder = $form_builder;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('entity_type.manager')->getAccessControlHandler('message'),
+      $container->get('form_builder')
+    );
   }
 
   /**
@@ -41,8 +62,7 @@ class MessageController extends ControllerBase implements ContainerInjectionInte
 
     // Only use message templates the user has access to.
     foreach ($this->entityTypeManager()->getStorage('message_template')->loadMultiple() as $template) {
-      $access = $this->entityTypeManager()
-        ->getAccessControlHandler('message')
+      $access = $this->accessHandler
         ->createAccess($template->id(), NULL, [], TRUE);
       if ($access->isAllowed()) {
         $content[$template->id()] = $template;
@@ -88,10 +108,10 @@ class MessageController extends ControllerBase implements ContainerInjectionInte
    *   An array as expected by drupal_render().
    */
   public function deleteMultiple() {
-    // @todo - create the path corresponding to below.
+    // @todo create the path corresponding to below.
     // From devel module - admin/config/development/message_delete_multiple.
     // @todo pass messages to be deleted in args?
-    $build = \Drupal::formBuilder()->getForm('Drupal\message_ui\Form\DeleteMultiple');
+    $build = $this->formBuilder->getForm('Drupal\message_ui\Form\DeleteMultiple');
 
     return $build;
   }

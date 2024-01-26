@@ -8,7 +8,7 @@ namespace Drupal\entity_browser\Events;
 final class Events {
 
   /**
-   * The SELECED event occurs when enities are selected in currently active
+   * The SELECTED event occurs when entities are selected in currently active
    * widget.
    *
    * @var string
@@ -26,7 +26,7 @@ final class Events {
   /**
    * The REGISTER_JS_CALLBACKS collects JS callbacks that need to be notified when
    * we bring selected entities back to the form. Callbacks are responsible to
-   * propagate selection further to entitiy fields, etc.
+   * propagate selection further to entity fields, etc.
    *
    * @var string
    */

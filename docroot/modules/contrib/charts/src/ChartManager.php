@@ -2,15 +2,15 @@
 
 namespace Drupal\charts;
 
-use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Plugin\DefaultPluginManager;
 
 /**
  * Chart Manager.
  *
- * Provides the Chart plugin plugin manager and manages discovery and
- * instantiation of chart plugins.
+ * Provides the Chart plugin manager and manages discovery and instantiation of
+ * chart plugins.
  */
 class ChartManager extends DefaultPluginManager {
 

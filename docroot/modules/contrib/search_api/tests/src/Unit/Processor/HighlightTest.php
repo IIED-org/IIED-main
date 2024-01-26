@@ -1183,7 +1183,6 @@ END;
    */
   public function testRegressionBug3022724($text, array $keys, $expected) {
     $method = new \ReflectionMethod($this->processor, 'createExcerpt');
-    $method->setAccessible(TRUE);
     $excerpt = $method->invoke($this->processor, $text, $keys);
     $this->assertEquals($expected, $excerpt);
   }
@@ -1218,7 +1217,6 @@ END;
    */
   public function testRegressionBug3390450(): void {
     $method = new \ReflectionMethod($this->processor, 'highlightField');
-    $method->setAccessible(TRUE);
     $text = '<h1 title="agreement">Main</h1><a href="/underwriting-agreement">investment underwriting agreement</a>';
     $excerpt = $method->invoke($this->processor, $text, ['agreement']);
     $expected = '<h1 title="agreement">Main</h1><a href="/underwriting-agreement">investment underwriting <strong>agreement</strong></a>';

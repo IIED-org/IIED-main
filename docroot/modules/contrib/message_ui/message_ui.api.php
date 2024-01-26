@@ -9,8 +9,8 @@ namespace Drupal\message_ui;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\Query\QueryInterface;
-use Drupal\message\Entity\Message;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\message\Entity\Message;
 
 /**
  * Alter the output of the message.

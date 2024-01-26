@@ -8,8 +8,8 @@
 }
 
 .ds-3col-stacked-fluid > .group-left {
-  width: 25%;
   float: left; /* LTR */
+  width: 25%;
 }
 
 [dir="rtl"] .ds-3col-stacked-fluid > .group-left {
@@ -17,8 +17,8 @@
 }
 
 .ds-3col-stacked-fluid > .group-middle {
-  width: 100%;
   float: left; /* LTR */
+  width: 100%;
 }
 
 [dir="rtl"] .ds-3col-stacked-fluid > .group-middle {
@@ -34,8 +34,8 @@
 }
 
 .ds-3col-stacked-fluid > .group-right {
-  width: 25%;
   float: right; /* LTR */
+  width: 25%;
 }
 
 [dir="rtl"] .ds-3col-stacked-fluid > .group-right {

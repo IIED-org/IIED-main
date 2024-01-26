@@ -489,8 +489,8 @@ class ParagraphsWidgetButtonsTest extends ParagraphsTestBase {
     $this->assertSession()->selectExists('paragraphs[add_more][add_more_select]');
 
     $edit = [
-      'settings[handler_settings][negate]' => 0,
-      'settings[handler_settings][target_bundles_drag_drop][text][enabled]' => 1,
+      'settings[handler_settings][negate]' => '0',
+      'settings[handler_settings][target_bundles_drag_drop][text][enabled]' => '1',
     ];
     $this->drupalGet('admin/structure/types/manage/paragraphed_test/fields/node.paragraphed_test.paragraphs');
     $this->submitForm($edit, 'Save settings');

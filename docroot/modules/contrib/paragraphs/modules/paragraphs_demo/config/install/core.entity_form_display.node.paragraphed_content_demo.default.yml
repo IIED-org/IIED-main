@@ -33,7 +33,11 @@ content:
       edit_mode: closed
       add_mode: dropdown
       form_display_mode: default
-      default_paragraph_type: ''
+      features:
+        duplicate: duplicate
+        collapse_edit_all: collapse_edit_all
+        convert: convert
+        add_above: '0'
     third_party_settings: {  }
   langcode:
     type: language_select

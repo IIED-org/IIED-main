@@ -70,7 +70,7 @@ class ThemeSwitcher implements ThemeSwitcherInterface {
       $defaultTheme = $this->themeInitializer
         ->getActiveThemeByName($defaultTheme);
     }
-    catch (MissingThemeDependencyException $e) {
+    catch (MissingThemeDependencyException) {
       // It is highly unlikely that the default theme cannot be initialized, but
       // in this case the site will have far larger problems than incorrect
       // indexing. Just act like all is fine.

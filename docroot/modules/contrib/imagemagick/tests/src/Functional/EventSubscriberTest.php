@@ -4,7 +4,8 @@ namespace Drupal\Tests\imagemagick\Functional;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\file_mdm\FileMetadataInterface;
-use Drupal\imagemagick\ImagemagickExecArguments;
+use Drupal\file_mdm\FileMetadataManagerInterface;
+use Drupal\imagemagick\ArgumentMode;
 use Drupal\imagemagick\Plugin\ImageToolkit\ImagemagickToolkit;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\imagemagick\Kernel\ToolkitSetupTrait;
@@ -29,6 +30,8 @@ class EventSubscriberTest extends BrowserTestBase {
   protected $defaultTheme = 'stark';
 
   /**
+   * Provides a list of available modules.
+   *
    * @var \Drupal\Core\Extension\ModuleExtensionList
    */
   protected $moduleList;
@@ -57,7 +60,7 @@ class EventSubscriberTest extends BrowserTestBase {
     $this->setUpToolkit($toolkit_id, $toolkit_config, $toolkit_settings);
     $this->prepareImageFileHandling();
 
-    $fmdm = \Drupal::service('file_metadata_manager');
+    $fmdm = \Drupal::service(FileMetadataManagerInterface::class);
 
     // Change the Advanced Colorspace setting, must be included in the command
     // line.
@@ -70,31 +73,27 @@ class EventSubscriberTest extends BrowserTestBase {
     if (!$image->isValid()) {
       $this->fail("Could not load image $image_uri.");
     }
-
+    /** @var \Drupal\imagemagick\Plugin\ImageToolkit\ImagemagickToolkit $toolkit */
+    $toolkit = $image->getToolkit();
     // Check the source colorspace.
     if ($toolkit_settings['binaries'] === 'imagemagick') {
-      $this->assertSame('SRGB', $image->getToolkit()->getColorspace());
+      $this->assertSame('SRGB', $toolkit->getColorspace());
     }
     else {
-      $this->assertNull($image->getToolkit()->getColorspace());
+      $this->assertNull($toolkit->getColorspace());
     }
 
     // Setup a list of arguments.
-    $image->getToolkit()->arguments()
-      ->add("-resize 100x75!")
-      ->add("-quality 75");
+    $toolkit->arguments()
+      ->add(["-resize", "100x75!"])
+      ->add(["-quality", "75"]);
 
     // Save the derived image.
     $image->save($image_uri . '.derived');
 
     // Check expected command line.
-    if (substr(PHP_OS, 0, 3) === 'WIN') {
-      $expected = "-resize 100x75! -quality 75 -colorspace \"GRAY\"";
-    }
-    else {
-      $expected = "-resize 100x75! -quality 75 -colorspace 'GRAY'";
-    }
-    $this->assertSame($expected, $image->getToolkit()->arguments()->toString(ImagemagickExecArguments::POST_SOURCE));
+    $expected = "[-resize] [100x75!] [-quality] [75] [-colorspace] [GRAY]";
+    $this->assertSame($expected, $toolkit->arguments()->toDebugString(ArgumentMode::PostSource));
 
     // Check that the colorspace has been actually changed in the file.
     Cache::InvalidateTags([
@@ -103,12 +102,14 @@ class EventSubscriberTest extends BrowserTestBase {
     $fmdm->release($image_uri . '.derived');
     $image_md = $fmdm->uri($image_uri . '.derived');
     $image = $this->imageFactory->get($image_uri . '.derived');
+    /** @var \Drupal\imagemagick\Plugin\ImageToolkit\ImagemagickToolkit $toolkit */
+    $toolkit = $image->getToolkit();
     $this->assertSame(FileMetadataInterface::LOADED_FROM_FILE, $image_md->isMetadataLoaded(ImagemagickToolkit::FILE_METADATA_PLUGIN_ID));
     if ($toolkit_settings['binaries'] === 'imagemagick') {
-      $this->assertSame('GRAY', $image->getToolkit()->getColorspace());
+      $this->assertSame('GRAY', $toolkit->getColorspace());
     }
     else {
-      $this->assertNull($image->getToolkit()->getColorspace());
+      $this->assertNull($toolkit->getColorspace());
     }
 
     // Change the Prepend settings, must be included in the command line.
@@ -116,18 +117,15 @@ class EventSubscriberTest extends BrowserTestBase {
       ->set('prepend', '-debug All')
       ->save();
     $image = $this->imageFactory->get($image_uri);
-    $image->getToolkit()->arguments()
-      ->add("-resize 100x75!")
-      ->add("-quality 75");
+    /** @var \Drupal\imagemagick\Plugin\ImageToolkit\ImagemagickToolkit $toolkit */
+    $toolkit = $image->getToolkit();
+    $toolkit->arguments()
+      ->add(["-resize", "100x75!"])
+      ->add(["-quality", "75"]);
     $image->save($image_uri . '.derived');
-    if (substr(PHP_OS, 0, 3) === 'WIN') {
-      $expected = "-resize 100x75! -quality 75 -colorspace \"GRAY\"";
-    }
-    else {
-      $expected = "-resize 100x75! -quality 75 -colorspace 'GRAY'";
-    }
-    $this->assertSame('-debug All', $image->getToolkit()->arguments()->toString(ImagemagickExecArguments::PRE_SOURCE));
-    $this->assertSame($expected, $image->getToolkit()->arguments()->toString(ImagemagickExecArguments::POST_SOURCE));
+    $expected = "[-resize] [100x75!] [-quality] [75] [-colorspace] [GRAY]";
+    $this->assertSame('[-debug] [All]', $toolkit->arguments()->toDebugString(ArgumentMode::PreSource));
+    $this->assertSame($expected, $toolkit->arguments()->toDebugString(ArgumentMode::PostSource));
   }
 
   /**
@@ -150,10 +148,12 @@ class EventSubscriberTest extends BrowserTestBase {
 
     // By default, no coalesce of animated GIFs.
     $image = $this->imageFactory->get($image_uri);
-    $image->getToolkit()->arguments()->add("-resize 100x75!");
+    /** @var \Drupal\imagemagick\Plugin\ImageToolkit\ImagemagickToolkit $toolkit */
+    $toolkit = $image->getToolkit();
+    $toolkit->arguments()->add(["-resize", "100x75!"]);
     $image->save("public://imagetest/coalesced.gif");
-    $expected = "-resize 100x75! -quality 100";
-    $this->assertSame($expected, $image->getToolkit()->arguments()->toString(ImagemagickExecArguments::POST_SOURCE));
+    $expected = "[-resize] [100x75!] [-quality] [100]";
+    $this->assertSame($expected, $toolkit->arguments()->toDebugString(ArgumentMode::PostSource));
 
     // Change the Advanced Coalesce setting, '-coalesce' must now be included
     // in the command line.
@@ -161,24 +161,30 @@ class EventSubscriberTest extends BrowserTestBase {
       ->set('advanced.coalesce', TRUE)
       ->save();
     $image = $this->imageFactory->get($image_uri);
-    $image->getToolkit()->arguments()->add("-resize 100x75!");
+    /** @var \Drupal\imagemagick\Plugin\ImageToolkit\ImagemagickToolkit $toolkit */
+    $toolkit = $image->getToolkit();
+    $toolkit->arguments()->add(["-resize", "100x75!"]);
     $image->save("public://imagetest/coalesced.gif");
-    $expected = "-coalesce -resize 100x75! -quality 100";
-    $this->assertSame($expected, $image->getToolkit()->arguments()->toString(ImagemagickExecArguments::POST_SOURCE));
+    $expected = "[-coalesce] [-resize] [100x75!] [-quality] [100]";
+    $this->assertSame($expected, $toolkit->arguments()->toDebugString(ArgumentMode::PostSource));
 
     // Single frame GIF should not be coalesceable.
     $image = $this->imageFactory->get("public://image-test.gif");
-    $image->getToolkit()->arguments()->add("-resize 100x75!");
+    /** @var \Drupal\imagemagick\Plugin\ImageToolkit\ImagemagickToolkit $toolkit */
+    $toolkit = $image->getToolkit();
+    $toolkit->arguments()->add(["-resize", "100x75!"]);
     $image->save("public://imagetest/coalesced.gif");
-    $expected = "-resize 100x75! -quality 100";
-    $this->assertSame($expected, $image->getToolkit()->arguments()->toString(ImagemagickExecArguments::POST_SOURCE));
+    $expected = "[-resize] [100x75!] [-quality] [100]";
+    $this->assertSame($expected, $toolkit->arguments()->toDebugString(ArgumentMode::PostSource));
 
     // PNG should not be coalesceable.
     $image = $this->imageFactory->get("public://image-test.png");
-    $image->getToolkit()->arguments()->add("-resize 100x75!");
+    /** @var \Drupal\imagemagick\Plugin\ImageToolkit\ImagemagickToolkit $toolkit */
+    $toolkit = $image->getToolkit();
+    $toolkit->arguments()->add(["-resize", "100x75!"]);
     $image->save("public://imagetest/coalesced.png");
-    $expected = "-resize 100x75! -quality 100";
-    $this->assertSame($expected, $image->getToolkit()->arguments()->toString(ImagemagickExecArguments::POST_SOURCE));
+    $expected = "[-resize] [100x75!] [-quality] [100]";
+    $this->assertSame($expected, $toolkit->arguments()->toDebugString(ArgumentMode::PostSource));
   }
 
 }

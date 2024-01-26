@@ -191,6 +191,16 @@ function webform_css_alter(&$css, AttachedAssetsInterface $assets) {
  * Implements hook_js_alter().
  */
 function webform_js_alter(&$javascript, AttachedAssetsInterface $assets) {
+  // Ensure codemirror.js always loads first with weight = -1.
+  // This prevents "Uncaught ReferenceError: CodeMirror is not defined" errors.
+  // If the CKEditor Codemirror module is installed, it will overwrite
+  // the Webform module's codemirror.js weight.
+  // @see ckeditor_codemirror/ckeditor_codemirror.libraries.yml
+  // @see webform/webform.libraries.yml
+  if (isset($javascript['libraries/codemirror/lib/codemirror.js'])) {
+    $javascript['libraries/codemirror/lib/codemirror.js']['weight'] = -1;
+  }
+
   _webform_asset_alter($javascript, 'javascript');
 }
 

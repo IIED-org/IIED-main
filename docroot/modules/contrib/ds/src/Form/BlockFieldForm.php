@@ -7,6 +7,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 
 /**
@@ -38,7 +39,14 @@ class BlockFieldForm extends FieldFormBase implements ContainerInjectionInterfac
 
     $blocks = [];
     foreach ($manager->getDefinitions() as $plugin_id => $plugin_definition) {
-      $blocks[$plugin_id] = $plugin_definition['admin_label'];
+      $extra = '';
+      if (strpos($plugin_id, 'field_block:') !== FALSE || strpos($plugin_id, 'inline_block:') !== FALSE) {
+        if (\Drupal::config('ds.settings')->get('exclude_layout_builder_blocks_on_block_field')) {
+          continue;
+        }
+        $extra = ' (Layout Builder: ' . $plugin_id . ')';
+      }
+      $blocks[$plugin_id] = $plugin_definition['admin_label'] . $extra;
     }
     asort($blocks);
 
@@ -47,21 +55,21 @@ class BlockFieldForm extends FieldFormBase implements ContainerInjectionInterfac
       '#options' => $blocks,
       '#title' => $this->t('Block'),
       '#required' => TRUE,
-      '#default_value' => isset($field['properties']['block']) ? $field['properties']['block'] : '',
+      '#default_value' => $field['properties']['block'] ?? '',
     ];
 
     $form['use_block_title'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Use block title as the field label'),
-      '#default_value' => isset($field['properties']['use_block_title']) ? $field['properties']['use_block_title'] : FALSE,
+      '#default_value' => $field['properties']['use_block_title'] ?? FALSE,
       '#weight' => 90,
     ];
 
     $form['add_block_wrappers'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Add block wrappers and classes'),
-      '#default_value' => isset($field['properties']['add_block_wrappers']) ? $field['properties']['add_block_wrappers'] : FALSE,
-      '#description' => $this->t('Render using the block theme hook to add the block wrappers and clases.'),
+      '#default_value' => $field['properties']['add_block_wrappers'] ?? FALSE,
+      '#description' => $this->t('Render using the block theme hook to add the block wrappers and classes.'),
       '#weight' => 91,
     ];
 
@@ -115,11 +123,14 @@ class BlockFieldForm extends FieldFormBase implements ContainerInjectionInterfac
     $block_id = $this->field['properties']['block'];
     $block = $manager->createInstance($block_id);
 
-    // Use a separate function so we don't override $form_state.
-    $block_config_form = $this->getBlockConfigForm($block);
-
+    // Create fake form state and inject default theme in form state (Site
+    // branding needs it for instance).
+    $fake_form_state = new FormState();
+    $default_theme = $this->config('system.theme')->get('default');
+    $fake_form_state->set('block_theme', $default_theme);
+    $block_config_form = $block->blockForm([], $fake_form_state);
     if ($block_config_form) {
-      $url = new Url('ds.manage_block_field_config', ['field_key' => $this->field['id']]);
+      $url = Url::fromRoute('ds.manage_block_field_config', ['field_key' => $this->field['id']]);
       $form_state->setRedirectUrl($url);
     }
 

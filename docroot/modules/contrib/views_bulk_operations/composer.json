@@ -21,10 +21,10 @@
     "php": ">=7.4.0"
   },
   "require-dev": {
-    "drush/drush": "^11"
+    "drush/drush": "^12"
   },
   "suggest": {
-    "drush/drush": "^10 || ^11"
+    "drush/drush": "^11 || ^12"
   },
   "extra": {
     "drush": {

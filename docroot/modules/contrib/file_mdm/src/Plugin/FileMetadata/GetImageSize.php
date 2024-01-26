@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\file_mdm\Plugin\FileMetadata;
 
 use Drupal\file_mdm\FileMetadataException;
@@ -15,17 +17,11 @@ use Drupal\file_mdm\FileMetadataException;
  */
 class GetImageSize extends FileMetadataPluginBase {
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getSupportedKeys($options = NULL) {
+  public function getSupportedKeys(array $options = NULL): array {
     return [0, 1, 2, 3, 'mime', 'channels', 'bits'];
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function doGetMetadataFromFile() {
+  protected function doGetMetadataFromFile(): mixed {
     if ($data = @getimagesize($this->getLocalTempPath())) {
       return $data;
     }
@@ -43,42 +39,30 @@ class GetImageSize extends FileMetadataPluginBase {
    * @throws \Drupal\file_mdm\FileMetadataException
    *   In case the key is invalid.
    */
-  protected function validateKey($key, $method) {
-    if (!is_int($key) && !is_string($key)) {
-      throw new FileMetadataException("Invalid metadata key specified", $this->getPluginId(), $method);
-    }
+  protected function validateKey(mixed $key, string $method): bool {
     if (!in_array($key, $this->getSupportedKeys(), TRUE)) {
       throw new FileMetadataException("Invalid metadata key '{$key}' specified", $this->getPluginId(), $method);
     }
     return TRUE;
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function doGetMetadata($key = NULL) {
+  protected function doGetMetadata(mixed $key = NULL): mixed {
     if ($key === NULL) {
       return $this->metadata;
     }
     else {
       $this->validateKey($key, __FUNCTION__);
-      return isset($this->metadata[$key]) ? $this->metadata[$key] : NULL;
+      return $this->metadata[$key] ?? NULL;
     }
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function doSetMetadata($key, $value) {
+  protected function doSetMetadata(mixed $key, mixed $value): bool {
     $this->validateKey($key, __FUNCTION__);
     $this->metadata[$key] = $value;
     return TRUE;
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function doRemoveMetadata($key) {
+  protected function doRemoveMetadata(mixed $key): bool {
     $this->validateKey($key, __FUNCTION__);
     if (isset($this->metadata[$key])) {
       unset($this->metadata[$key]);

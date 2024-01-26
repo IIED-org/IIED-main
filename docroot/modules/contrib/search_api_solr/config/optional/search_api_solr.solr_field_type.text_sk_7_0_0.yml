@@ -226,6 +226,9 @@ solr_configs:
               name: name
               VALUE: sk
             -
+              name: indexPath
+              VALUE: ./sk
+            -
               name: lookupImpl
               VALUE: AnalyzingInfixLookupFactory
             -
@@ -248,7 +251,7 @@ solr_configs:
               VALUE: 'false'
 text_files:
   stopwords: |
-    ﻿a
+    a
     aby
     aj
     ak

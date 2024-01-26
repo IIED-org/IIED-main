@@ -18,11 +18,6 @@ class InlineEntityFormTest extends EntityBrowserWebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'classy';
-
-  /**
-   * {@inheritdoc}
-   */
   protected static $modules = [
     'views',
     'block',

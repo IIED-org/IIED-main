@@ -3,6 +3,7 @@
 namespace Drupal\Tests\layout_paragraphs\FunctionalJavascript;
 
 use Drupal\language\Entity\ConfigurableLanguage;
+use Behat\Mink\Exception\ExpectationException;
 
 /**
  * Tests various translation contexts for Layout Paragraphs.
@@ -40,6 +41,41 @@ class TranslationTest extends BuilderTestBase {
    */
   public function testAsymmetricTranslations() {
     $this->testContentTranslations(TRUE);
+
+    /** @var Drupal\node\Entity\Node $node */
+    $node = \Drupal::entityTypeManager()
+      ->getStorage('node')
+      ->load(1);
+
+    $paragraphs = $node->field_content->referencedEntities();
+    $src_paragraph_ids = array_map(function ($paragraph) {
+      return $paragraph->id();
+    }, $paragraphs);
+    $src_paragraph_languages = array_unique(array_map(function ($paragraph) {
+      return $paragraph->language()->getId();
+    }, $paragraphs));
+
+    $translation = $node->getTranslation('de');
+    $paragraphs = $translation->field_content->referencedEntities();
+    $translation_paragraph_ids = array_map(function ($paragraph) {
+      return $paragraph->id();
+    }, $paragraphs);
+    $translation_paragraph_languages = array_unique(array_map(function ($paragraph) {
+      return $paragraph->language()->getId();
+    }, $paragraphs));
+
+    if (count($src_paragraph_languages) > 1) {
+      throw new ExpectationException('There should only be one language in source paragraphs.', $this->getSession()->getDriver());
+    }
+    if (count($translation_paragraph_languages) > 1) {
+      throw new ExpectationException('There should only be one language in translated paragraphs.', $this->getSession()->getDriver());
+    }
+    if ($translation_paragraph_languages == $src_paragraph_languages) {
+      throw new ExpectationException('Translated paragraphs should be in a different language than source paragraphs.', $this->getSession()->getDriver());
+    }
+    if (count(array_intersect($src_paragraph_ids, $translation_paragraph_ids)) > 0) {
+      throw new ExpectationException('Async translations should duplicate paragraphs, not just translate them.', $this->getSession()->getDriver());
+    }
   }
 
   /**

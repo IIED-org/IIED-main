@@ -334,7 +334,7 @@ class CommandHelper implements LoggerAwareInterface {
         IndexBatchHelper::create($index, $currentBatchSize, $current_limit);
         $batchSet = TRUE;
       }
-      catch (SearchApiException $e) {
+      catch (SearchApiException) {
         throw new ConsoleException($this->t("Couldn't create a batch, please check the batch size and limit parameters."));
       }
     }
@@ -496,7 +496,7 @@ class CommandHelper implements LoggerAwareInterface {
         $label = $item->getDatasource()
           ->getItemLabel($item->getOriginalObject());
       }
-      catch (SearchApiException $e) {
+      catch (SearchApiException) {
         $label = NULL;
       }
       $rows[] = [
@@ -730,7 +730,7 @@ class CommandHelper implements LoggerAwareInterface {
       $storage = $this->entityTypeManager->getStorage($entity->getEntityTypeId());
       return $storage->loadOverrideFree($entity->id());
     }
-    catch (InvalidPluginDefinitionException $e) {
+    catch (InvalidPluginDefinitionException) {
       return NULL;
     }
   }

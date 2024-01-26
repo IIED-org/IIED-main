@@ -23,13 +23,13 @@
         "type": "package",
         "package": {
             "name": "bevacqua/dragula",
-            "version": "3.7.2",
+            "version": "3.7.3",
             "type": "drupal-library",
             "extra": {
                 "installer-name": "dragula"
             },
             "dist": {
-                "url": "https://github.com/bevacqua/dragula/archive/v3.7.2.zip",
+                "url": "https://github.com/bevacqua/dragula/archive/v3.7.3.zip",
                 "type": "zip"
             },
             "require": {

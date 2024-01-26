@@ -48,8 +48,10 @@ class MessageNotifyUiTest extends AbstractTestMessageUi {
       'use_custom' => TRUE,
       'email' => 'foo@gmail.com',
     ];
+
     $this->drupalGet('message/' . $message->id() . '/notify');
-    $this->submitForm($edit, t('Notify'));
+    $this->submitForm($edit, 'Notify');
+
     $this->assertSession()->pageTextContains('The email sent successfully.');
   }
 

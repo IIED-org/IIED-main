@@ -4,8 +4,8 @@ namespace Drupal\charts\Plugin\views\field;
 
 use Drupal\charts\Element\BaseSettings;
 use Drupal\charts\Plugin\views\style\ChartsPluginStyleChart;
-use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\views\Plugin\views\field\FieldPluginBase;
 
 /**
  * Provides a Views handler that exposes a Chart Type field.
@@ -36,13 +36,14 @@ class ExposedChartType extends FieldPluginBase {
   public function buildExposedForm(&$form, FormStateInterface $form_state) {
     $label = $this->options['label'] ? $this->options['label'] : 'Chart Type';
     $selected_options = $this->options['chart_types'];
-    $all_types = BaseSettings::getChartTypes();
+    $style_plugin = $this->view->style_plugin;
+    $settings = $style_plugin->options['chart_settings'] ?? [];
+
+    $all_types = BaseSettings::getChartTypes($settings['library']);
     $options = array_filter($all_types, function ($key) use ($selected_options) {
       return in_array($key, $selected_options, TRUE);
     }, ARRAY_FILTER_USE_KEY);
 
-    $style_plugin = $this->view->style_plugin;
-    $settings = $style_plugin->options['chart_settings'] ?? [];
     $chart_plugin_selected_type = $settings['type'] ?? '';
     if ($chart_plugin_selected_type) {
       // Move the selected.
@@ -97,16 +98,17 @@ class ExposedChartType extends FieldPluginBase {
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
 
+    $style_plugin = $this->view->style_plugin;
+    $settings = $style_plugin->options['chart_settings'] ?? [];
+
     $form['chart_types'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('Chart Type Options'),
       '#description' => $this->t('Pick the chart type options to be exposed. You may need to disable your Views cache.'),
-      '#options' => BaseSettings::getChartTypes(),
+      '#options' => BaseSettings::getChartTypes($settings['library']),
       '#default_value' => $this->options['chart_types'],
     ];
 
-    $style_plugin = $this->view->style_plugin;
-    $settings = $style_plugin->options['chart_settings'] ?? [];
     if (!empty($settings['type'])) {
       $form['chart_types'][$settings['type']] = [
         '#default_value' => $settings['type'],

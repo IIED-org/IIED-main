@@ -5,12 +5,12 @@ namespace Drupal\charts_google\Plugin\chart\Library;
 use Drupal\charts\Element\Chart as ChartElement;
 use Drupal\charts\Plugin\chart\Library\ChartBase;
 use Drupal\charts\TypeManager;
+use Drupal\Component\Utility\Html;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\Element;
-use Drupal\Component\Utility\Html;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Render\ElementInfoManagerInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -20,7 +20,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @Chart(
  *   id = "google",
- *   name = @Translation("Google")
+ *   name = @Translation("Google"),
+ *   types = {
+ *     "area",
+ *     "bar",
+ *     "bubble",
+ *     "column",
+ *     "donut",
+ *     "gauge",
+ *     "line",
+ *     "pie",
+ *     "scatter",
+ *     "spline",
+ *   },
  * )
  */
 class Google extends ChartBase implements ContainerFactoryPluginInterface {
@@ -110,7 +122,7 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
     $form['use_material_design'] = [
       '#title' => $this->t('Use Material Design'),
       '#type' => 'checkbox',
-      '#default_value' => $this->configuration['use_material_design'],
+      '#default_value' => $this->configuration['use_material_design'] ?? FALSE,
       '#description' => $this->t('Use Material Design for charts.'),
     ];
 

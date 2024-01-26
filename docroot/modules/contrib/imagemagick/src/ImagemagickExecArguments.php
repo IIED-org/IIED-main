@@ -14,124 +14,163 @@ class ImagemagickExecArguments {
 
   /**
    * Mode for arguments to be placed before the source path.
+   *
+   * @deprecated in imagemagick:8.x-3.7 and is removed from imagemagick:4.0.0.
+   *   Use ArgumentMode instead.
+   *
+   * @see https://www.drupal.org/node/3409254
    */
   const PRE_SOURCE = 0;
 
   /**
    * Mode for arguments to be placed after the source path.
+   *
+   * @deprecated in imagemagick:8.x-3.7 and is removed from imagemagick:4.0.0.
+   *   Use ArgumentMode instead.
+   *
+   * @see https://www.drupal.org/node/3409254
    */
   const POST_SOURCE = 1;
 
   /**
    * Mode for arguments not to be placed on the command line.
+   *
+   * @deprecated in imagemagick:8.x-3.7 and is removed from imagemagick:4.0.0.
+   *   Use ArgumentMode instead.
+   *
+   * @see https://www.drupal.org/node/3409254
    */
   const INTERNAL = 2;
-
-  /**
-   * The ImageMagick execution manager service.
-   *
-   * @var \Drupal\imagemagick\ImagemagickExecManagerInterface
-   */
-  protected $execManager;
 
   /**
    * The array of command line arguments to be used by 'convert'.
    *
    * @var string[]
    */
-  protected $arguments = [];
+  protected array $arguments = [];
 
   /**
    * Path of the image file.
-   *
-   * @var string
    */
-  protected $source = '';
+  protected string $source = '';
 
   /**
    * The local filesystem path to the source image file.
-   *
-   * @var string
    */
-  protected $sourceLocalPath = '';
+  protected string $sourceLocalPath = '';
 
   /**
    * The source image format.
-   *
-   * @var string
    */
-  protected $sourceFormat = '';
+  protected string $sourceFormat = '';
 
   /**
    * The source image frames to access.
-   *
-   * @var string
    */
-  protected $sourceFrames;
+  protected string $sourceFrames;
 
   /**
    * The image destination URI/path on saving.
-   *
-   * @var string
    */
-  protected $destination = NULL;
+  protected ?string $destination = NULL;
 
   /**
    * The local filesystem path to the image destination.
-   *
-   * @var string
    */
-  protected $destinationLocalPath = '';
+  protected string $destinationLocalPath = '';
 
   /**
    * The image destination format on saving.
-   *
-   * @var string
    */
-  protected $destinationFormat = '';
+  protected string $destinationFormat = '';
 
   /**
    * Constructs an ImagemagickExecArguments object.
    *
-   * @param \Drupal\imagemagick\ImagemagickExecManagerInterface $exec_manager
+   * @param \Drupal\imagemagick\ImagemagickExecManagerInterface $execManager
    *   The ImageMagick execution manager service.
    */
-  public function __construct(ImagemagickExecManagerInterface $exec_manager) {
-    $this->execManager = $exec_manager;
+  public function __construct(
+    protected readonly ImagemagickExecManagerInterface $execManager,
+  ) {
   }
 
   /**
-   * Gets a portion of the command line arguments string.
+   * Gets the arguments as a list of command line arguments.
    *
-   * @param int $mode
-   *   The mode of the string on the command line. Can be self::PRE_SOURCE or
-   *   self::POST_SOURCE.
+   * @param ArgumentMode $mode
+   *   The mode of the string on the command line.
    *
-   * @return string
-   *   The sring of command line arguments.
+   * @return list<string>
+   *   The list.
    */
-  public function toString(int $mode): string {
-    if (!$this->arguments) {
-      return '';
-    }
+  public function toArray(ArgumentMode $mode): array {
     $ret = [];
     foreach ($this->arguments as $a) {
       if ($a['mode'] === $mode) {
         $ret[] = $a['argument'];
       }
     }
-    return implode(' ', $ret);
+    return $ret;
+  }
+
+  /**
+   * Gets a portion of the command line arguments string, for debugging.
+   *
+   * @param ArgumentMode $mode
+   *   The mode of the string on the command line.
+   *
+   * @return string
+   *   The string of command line arguments.
+   */
+  public function toDebugString(ArgumentMode $mode): string {
+    if (!$this->arguments) {
+      return '';
+    }
+    return '[' . implode('] [', $this->toArray($mode)) . ']';
+  }
+
+  /**
+   * Gets a portion of the command line arguments string.
+   *
+   * @param int|ArgumentMode $mode
+   *   The mode of the string on the command line.
+   *
+   * @return string
+   *   The string of command line arguments.
+   *
+   * @deprecated in imagemagick:8.x-3.7 and is removed from imagemagick:4.0.0.
+   *   Use ::toDebugString() to get a string representing the command
+   *   parameters for debug purposes.
+   *
+   * @see https://www.drupal.org/node/3414601
+   */
+  public function toString(int|ArgumentMode $mode): string {
+    @trigger_error(__METHOD__ . '() is deprecated in imagemagick:8.x-3.7 and is removed from imagemagick:4.0.0. Use ::toDebugString() to get a string representing the command parameters for debug purposes. See https://www.drupal.org/node/3414601', E_USER_DEPRECATED);
+    if (is_int($mode)) {
+      @trigger_error('Passing an integer value for $mode in ' . __METHOD__ . '() is deprecated in imagemagick:8.x-3.7 and is removed from imagemagick:4.0.0. Use ArgumentMode instead. See https://www.drupal.org/node/3409254', E_USER_DEPRECATED);
+      $mode = match ($mode) {
+        static::PRE_SOURCE => ArgumentMode::PreSource,
+        static::POST_SOURCE => ArgumentMode::PostSource,
+        static::INTERNAL => ArgumentMode::Internal,
+        default => ArgumentMode::PreSource,
+      };
+    }
+    if (!$this->arguments) {
+      return '';
+    }
+    return implode(' ', $this->toArray($mode));
   }
 
   /**
    * Adds a command line argument.
    *
-   * @param string $argument
-   *   The command line argument to be added.
-   * @param int $mode
+   * @param string|string[] $arguments
+   *   The command line arguments to be added.
+   * @param int|ArgumentMode $mode
    *   (optional) The mode of the argument in the command line. Determines if
    *   the argument should be placed before or after the source image file path.
-   *   Defaults to self::POST_SOURCE.
+   *   Defaults to ArgumentMode::PostSource.
    * @param int $index
    *   (optional) The position of the argument in the arguments array.
    *   Reflects the sequence of arguments in the command line. Defaults to
@@ -142,21 +181,64 @@ class ImagemagickExecArguments {
    *
    * @return $this
    */
-  public function add(string $argument, int $mode = self::POST_SOURCE, int $index = self::APPEND, array $info = []): ImagemagickExecArguments {
-    $argument = [
-      'argument' => $argument,
-      'mode' => $mode,
-      'info' => $info,
-    ];
-    if ($index === self::APPEND) {
-      $this->arguments[] = $argument;
+  public function add(string|array $arguments, int|ArgumentMode $mode = ArgumentMode::PostSource, int $index = self::APPEND, array $info = []): ImagemagickExecArguments {
+    if (is_int($mode)) {
+      @trigger_error('Passing an integer value for $mode in ' . __METHOD__ . '() is deprecated in imagemagick:8.x-3.7 and is removed from imagemagick:4.0.0. Use ArgumentMode instead. See https://www.drupal.org/node/3409254', E_USER_DEPRECATED);
+      $mode = match ($mode) {
+        // @phpstan-ignore-next-line
+        static::PRE_SOURCE => ArgumentMode::PreSource,
+        // @phpstan-ignore-next-line
+        static::POST_SOURCE => ArgumentMode::PostSource,
+        // @phpstan-ignore-next-line
+        static::INTERNAL => ArgumentMode::Internal,
+        default => ArgumentMode::PreSource,
+      };
     }
-    elseif ($index === 0) {
-      array_unshift($this->arguments, $argument);
+
+    if (is_string($arguments)) {
+      @trigger_error('Passing a string value for $arguments in ' . __METHOD__ . '() is deprecated in imagemagick:8.x-3.7 and is removed from imagemagick:4.0.0. Pass an array of space trimmed strings instead. See https://www.drupal.org/node/3414601', E_USER_DEPRECATED);
+      // Split the $argument string in multiple space-separated tokens. Quotes,
+      // both " and ', can delimit tokens with spaces inside. Such tokens can
+      // contain escaped quotes too.
+      //
+      // @see https://stackoverflow.com/questions/366202/regex-for-splitting-a-string-using-space-when-not-surrounded-by-single-or-double
+      // @see https://stackoverflow.com/questions/6525556/regular-expression-to-match-escaped-characters-quotes
+      $re = '/[^\s"\']+|"([^"\\\\]*(?:\\\\.[^"\\\\]*)*)"|\'([^\'\\\\]*(?:\\\\.[^\'\\\\]*)*)\'/m';
+      preg_match_all($re, $arguments, $tokens, PREG_SET_ORDER);
+      $args = [];
+      foreach ($tokens as $token) {
+        // The escape character needs to be removed, Symfony Process will
+        // escape the quote character again.
+        $args[] = str_replace("\\", "", end($token));
+      }
     }
     else {
-      array_splice($this->arguments, $index, 0, [$argument]);
+      $args = $arguments;
     }
+
+    if ($args === []) {
+      return $this;
+    }
+
+    // Add each token as a separate argument.
+    foreach ($args as $token) {
+      $arg = [
+        'argument' => $token,
+        'mode' => $mode,
+        'info' => $info,
+      ];
+      if ($index === self::APPEND) {
+        $this->arguments[] = $arg;
+      }
+      elseif ($index === 0) {
+        array_unshift($this->arguments, $arg);
+        $index++;
+      }
+      else {
+        array_splice($this->arguments, $index++, 0, [$arg]);
+      }
+    }
+
     return $this;
   }
 
@@ -165,7 +247,7 @@ class ImagemagickExecArguments {
    *
    * @param string $regex
    *   The regular expression pattern to be matched in the argument.
-   * @param int $mode
+   * @param int|ArgumentMode|null $mode
    *   (optional) If set, limits the search to the mode of the argument.
    *   Defaults to NULL.
    * @param array $info
@@ -175,10 +257,22 @@ class ImagemagickExecArguments {
    * @return array
    *   Returns an array with the matching arguments.
    */
-  public function find(string $regex, int $mode = NULL, array $info = []): array {
+  public function find(string $regex, int|ArgumentMode|null $mode = NULL, array $info = []): array {
+    if (is_int($mode)) {
+      @trigger_error('Passing an integer value for $mode in ' . __METHOD__ . '() is deprecated in imagemagick:8.x-3.7 and is removed from imagemagick:4.0.0. Use ArgumentMode instead. See https://www.drupal.org/node/3409254', E_USER_DEPRECATED);
+      $mode = match ($mode) {
+        // @phpstan-ignore-next-line
+        static::PRE_SOURCE => ArgumentMode::PreSource,
+        // @phpstan-ignore-next-line
+        static::POST_SOURCE => ArgumentMode::PostSource,
+        // @phpstan-ignore-next-line
+        static::INTERNAL => ArgumentMode::Internal,
+        default => ArgumentMode::PreSource,
+      };
+    }
     $ret = [];
     foreach ($this->arguments as $i => $a) {
-      if ($mode !== NULL && $a['mode'] !== $mode) {
+      if ($mode && $a['mode'] !== $mode) {
         continue;
 
       }
@@ -328,7 +422,7 @@ class ImagemagickExecArguments {
    * @see http://www.imagemagick.org/script/command-line-processing.php
    */
   public function getSourceFrames() {
-    return $this->sourceFrames;
+    return $this->sourceFrames ?? NULL;
   }
 
   /**
@@ -434,9 +528,17 @@ class ImagemagickExecArguments {
    * @return string
    *   An escaped string for use in the
    *   ImagemagickExecManagerInterface::execute method.
+   *
+   * @deprecated in imagemagick:8.x-3.7 and is removed from imagemagick:4.0.0.
+   *   There is no need to escape arguments any more.
+   *
+   * @see https://www.drupal.org/node/3414601
    */
   public function escape(string $argument): string {
-    return $this->execManager->escapeShellArg($argument);
+    @trigger_error(__METHOD__ . '() is deprecated in imagemagick:8.x-3.7 and is removed from imagemagick:4.0.0. There is no need to escape arguments any more. See https://www.drupal.org/node/3414601', E_USER_DEPRECATED);
+    /** @var \Drupal\imagemagick\ImagemagickExecManager $manager */
+    $manager = $this->execManager;
+    return $manager->escapeShellArg($argument);
   }
 
 }

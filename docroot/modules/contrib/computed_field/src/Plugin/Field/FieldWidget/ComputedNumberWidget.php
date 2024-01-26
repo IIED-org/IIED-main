@@ -15,12 +15,13 @@ namespace Drupal\computed_field\Plugin\Field\FieldWidget;
  *   }
  * )
  */
-
 class ComputedNumberWidget extends ComputedWidgetBase {
+
   /**
    * Define how the widget is constructed.
    */
   public function getDefaultValue() {
     return 0;
   }
+
 }

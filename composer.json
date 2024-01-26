@@ -92,7 +92,7 @@
         "drupal/core-project-message": "^10",
         "drupal/core-recommended": "^10",
         "drupal/core-vendor-hardening": "^8.8",
-        "drupal/csv_serialization": "^3.0",
+        "drupal/csv_serialization": "^4.0",
         "drupal/ctools": "^4.0",
         "drupal/datalayer": "^2.0",
         "drupal/draggableviews": "^2.0",
@@ -102,7 +102,7 @@
         "drupal/facets": "^2.0",
         "drupal/field_formatter": "^3.0",
         "drupal/field_group": "^3.1",
-        "drupal/file_mdm": "^2.2",
+        "drupal/file_mdm": "^3.0",
         "drupal/form_mode_control": "^2.0@RC",
         "drupal/format_bytes": "^2.0",
         "drupal/formdazzle": "^3.0",
@@ -113,7 +113,7 @@
         "drupal/google_tag": "^1.4",
         "drupal/hal": "^2.0",
         "drupal/honeypot": "^2.1",
-        "drupal/imagemagick": "^3.3",
+        "drupal/imagemagick": "^3.7",
         "drupal/inline_entity_form": "^1.0@RC",
         "drupal/isbn": "^1.2",
         "drupal/language_switcher_extended": "^1.0",
@@ -212,7 +212,8 @@
             "oomphinc/composer-installers-extender": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "mglaman/composer-drupal-lenient": true,
-            "phpstan/extension-installer": true
+            "phpstan/extension-installer": true,
+            "php-http/discovery": true
         }
     },
     "extra": {
@@ -270,7 +271,7 @@
           "drupal/core": {
             "Wrong language handling in MediaThumbnailFormatter when linking": "https://www.drupal.org/files/issues/2021-05-06/2961404-17.patch",
             "Media Thumbnail Formatter doesn't translate the title attribute correctly":"https://www.drupal.org/files/issues/2023-05-12/media-thumbnail-formatter-title-not-translated-3089216.patch",
-            "The language of content entities incorrectly falls back to the default language...":"https://www.drupal.org/files/issues/2021-09-16/3061761-46.patch",
+            "The language of content entities incorrectly falls back to the default language...":"https://www.drupal.org/files/issues/2023-12-18/3061761-57.patch",
             "3208030":"https://www.drupal.org/files/issues/2022-07-08/3208030_16.patch",
             "3209204":"https://www.drupal.org/files/issues/2021-09-07/3209204-adding-existing-translation_0.patch"
           },
@@ -278,10 +279,6 @@
             "Add option to show current search string in facet summary": "https://www.drupal.org/files/issues/2022-12-30/facets-current_search_string-2979223-57.patch",
             "Robustify how ajax finds the facet block": "https://www.drupal.org/files/issues/2023-01-20/facets-ajax-improvements-3013795-40.patch",
             "3336646":"https://www.drupal.org/files/issues/2023-08-16/3336646-function-is-deprecated.patch"
-          },
-          "drupal/ds": {
-            "Provide entity context to DS block fields":"https://www.drupal.org/files/issues/2020-10-12/ds-content_entity-2939322-14.patch",
-            "Undefined index: #entity_type (https://www.drupal.org/project/ds/issues/3331674)":"https://git.drupalcode.org/issue/ds-3331674/-/commit/6f87865e8a6fe90db0770bec90d38914f7566f68.patch"
           },
           "drupal/views_field_view": {
             "Contextual filter parameter is not working":"https://www.drupal.org/files/issues/2022-08-09/multible_Contextual_filter_parameter-2873359-30.patch"
@@ -309,12 +306,6 @@
           },
           "drupal/allowed_formats": {
             "Default value for format dropdown missing": "https://www.drupal.org/files/issues/2022-02-02/2950548-allowed_formats-missing_default_value.patch"
-          },
-          "drupal/layout_paragraphs": {
-            "3260656": "https://www.drupal.org/files/issues/2022-11-08/3260656-6-update2.x.diff"
-          },
-          "drupal/search_api_sorts_widget": {
-            "3289530": "https://www.drupal.org/files/issues/2022-06-16/search_api_sorts_widget.1.x-dev.rector.patch"
           },
           "drupal/readmore_js": {
             "3385364": "https://www.drupal.org/files/issues/2023-09-06/drupal-10-compatibility-fixes-3385364-2.patch"

@@ -6,7 +6,7 @@ package: Media
 dependencies:
   - drupal:media
 
-# Information added by Drupal.org packaging script on 2022-10-11
-version: '8.x-1.1'
+# Information added by Drupal.org packaging script on 2023-11-27
+version: '8.x-1.2'
 project: 'media_entity_file_replace'
-datestamp: 1665518902
+datestamp: 1701092782

@@ -7,6 +7,7 @@ frontUi:
       css/frontUi.css: {}
   dependencies:
     - core/drupal
+    - core/drupal.ajax
     - core/jquery
     - core/once
 

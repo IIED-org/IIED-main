@@ -81,16 +81,21 @@ class FieldsHelper implements FieldsHelperInterface {
    *   The entity type bundle info service.
    * @param \Drupal\search_api\Utility\DataTypeHelperInterface $dataTypeHelper
    *   The data type helper service.
-   * @param \Drupal\search_api\Utility\ThemeSwitcherInterface $themeSwitcher
-   *   The theme switcher service.
+   * @param \Drupal\search_api\Utility\ThemeSwitcherInterface|null $themeSwitcher
+   *   (optional) The theme switcher service.
    */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
     EntityFieldManagerInterface $entityFieldManager,
     EntityTypeBundleInfoInterface $entityBundleInfo,
     DataTypeHelperInterface $dataTypeHelper,
-    ThemeSwitcherInterface $themeSwitcher
+    ?ThemeSwitcherInterface $themeSwitcher = NULL,
   ) {
+    if (!$themeSwitcher) {
+      @trigger_error('Constructing \Drupal\search_api\Utility\FieldsHelper without the $themeSwitcher parameter is deprecated in search_api:8.x-1.31 and it will be required in search_api:2.0.0. See https://www.drupal.org/node/3320841',
+        E_USER_DEPRECATED);
+      $themeSwitcher = \Drupal::service('search_api.theme_switcher');
+    }
     $this->entityTypeManager = $entityTypeManager;
     $this->entityFieldManager = $entityFieldManager;
     $this->entityBundleInfo = $entityBundleInfo;
@@ -124,7 +129,7 @@ class FieldsHelper implements FieldsHelperInterface {
     $directFields = [];
     $nestedFields = [];
     foreach (array_keys($fields) as $key) {
-      if (strpos($key, ':') !== FALSE) {
+      if (str_contains($key, ':')) {
         [$direct, $nested] = explode(':', $key, 2);
         $nestedFields[$direct][$nested] = $fields[$key];
       }
@@ -400,7 +405,7 @@ class FieldsHelper implements FieldsHelperInterface {
       $definition = $this->entityTypeManager->getDefinition($entity_type_id);
       return $definition->entityClassImplements(ContentEntityInterface::class);
     }
-    catch (PluginNotFoundException $e) {
+    catch (PluginNotFoundException) {
       return FALSE;
     }
   }
@@ -409,7 +414,7 @@ class FieldsHelper implements FieldsHelperInterface {
    * {@inheritdoc}
    */
   public function isFieldIdReserved($fieldId) {
-    return substr($fieldId, 0, 11) == 'search_api_';
+    return str_starts_with($fieldId, 'search_api_');
   }
 
   /**

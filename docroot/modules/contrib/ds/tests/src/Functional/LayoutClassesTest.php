@@ -2,8 +2,6 @@
 
 namespace Drupal\Tests\ds\Functional;
 
-use Drupal\Core\Entity\Entity\EntityViewDisplay;
-
 /**
  * Tests for managing layouts and classes on Field UI screen.
  *
@@ -51,10 +49,10 @@ class LayoutClassesTest extends TestBase {
 
     $assert = [
       'regions' => [
-        'header' => '<td colspan="8">' . t('Header') . '</td>',
-        'left' => '<td colspan="8">' . t('Left') . '</td>',
-        'right' => '<td colspan="8">' . t('Right') . '</td>',
-        'footer' => '<td colspan="8">' . t('Footer') . '</td>',
+        'header' => '<td colspan="8">' . $this->t('Header') . '</td>',
+        'left' => '<td colspan="8">' . $this->t('Left') . '</td>',
+        'right' => '<td colspan="8">' . $this->t('Right') . '</td>',
+        'footer' => '<td colspan="8">' . $this->t('Footer') . '</td>',
       ],
     ];
 
@@ -87,17 +85,17 @@ class LayoutClassesTest extends TestBase {
     $data = $entity_display->getThirdPartySettings('ds');
 
     $this->assertNotEmpty($data, t('Configuration found for layout settings for node article'));
-    $this->assertNotEmpty(in_array('ds_extras_extra_test_field', $data['regions']['header']), t('Extra field is in header'));
-    $this->assertNotEmpty(in_array('node_post_date', $data['regions']['header']), t('Post date is in header'));
-    $this->assertNotEmpty(in_array('dynamic_token_field:node-test_field', $data['regions']['left']), t('Test field is in left'));
-    $this->assertNotEmpty(in_array('node_author', $data['regions']['left']), t('Author is in left'));
-    $this->assertNotEmpty(in_array('node_links', $data['regions']['left']), t('Links is in left'));
-    $this->assertNotEmpty(in_array('dynamic_block_field:node-test_block_field', $data['regions']['left']), t('Test block field is in left'));
-    $this->assertNotEmpty(in_array('body', $data['regions']['right']), t('Body is in right'));
-    $this->assertNotEmpty(in_array('class_name_1', $data['layout']['settings']['classes']['header']), t('Class name 1 is in header'));
-    $this->assertEmpty($data['layout']['settings']['classes']['left'], t('Left has no classes'));
-    $this->assertEmpty($data['layout']['settings']['classes']['right'], t('Right has classes'));
-    $this->assertNotEmpty(in_array('class_name_2', $data['layout']['settings']['classes']['footer']), t('Class name 2 is in header'));
+    $this->assertNotEmpty(in_array('ds_extras_extra_test_field', $data['regions']['header']), $this->t('Extra field is in header'));
+    $this->assertNotEmpty(in_array('node_post_date', $data['regions']['header']), $this->t('Post date is in header'));
+    $this->assertNotEmpty(in_array('dynamic_token_field:node-test_field', $data['regions']['left']), $this->t('Test field is in left'));
+    $this->assertNotEmpty(in_array('node_author', $data['regions']['left']), $this->t('Author is in left'));
+    $this->assertNotEmpty(in_array('node_links', $data['regions']['left']), $this->t('Links is in left'));
+    $this->assertNotEmpty(in_array('dynamic_block_field:node-test_block_field', $data['regions']['left']), $this->t('Test block field is in left'));
+    $this->assertNotEmpty(in_array('body', $data['regions']['right']), $this->t('Body is in right'));
+    $this->assertNotEmpty(in_array('class_name_1', $data['layout']['settings']['classes']['header']), $this->t('Class name 1 is in header'));
+    $this->assertEmpty($data['layout']['settings']['classes']['left'], $this->t('Left has no classes'));
+    $this->assertEmpty($data['layout']['settings']['classes']['right'], $this->t('Right has classes'));
+    $this->assertNotEmpty(in_array('class_name_2', $data['layout']['settings']['classes']['footer']), $this->t('Class name 2 is in header'));
 
     // Create a article node and verify settings.
     $settings = [
@@ -219,7 +217,7 @@ class LayoutClassesTest extends TestBase {
 
     // Verify settings.
     /** @var \Drupal\Core\Entity\Display\EntityViewDisplayInterface $entity_display */
-    $entity_display = EntityViewDisplay::load('node.article.full');
+    $entity_display = \Drupal::entityTypeManager()->getStorage('entity_view_display')->load('node.article.full');
     $data = $entity_display->getThirdPartySettings('ds');
     $this->assertEquals('ds/ds_2col_stacked', $data['layout']['library']);
     $this->assertEquals(5, count($data['layout']['settings']['wrappers']));

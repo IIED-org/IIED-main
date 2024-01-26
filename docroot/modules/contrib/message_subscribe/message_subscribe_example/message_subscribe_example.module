@@ -5,28 +5,19 @@
  * Holds hook implementation for the Message Subscribe Example module.
  */
 
-use Drupal\Core\Entity\ContentEntityBase;
-use Drupal\node\Entity\Node;
 use Drupal\comment\Entity\Comment;
-use Drupal\user\Entity\User;
+use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\message\Entity\Message;
-use Drupal\message\MessageInterface;
 use Drupal\message_subscribe\Subscribers\DeliveryCandidate;
+use Drupal\node\Entity\Node;
+use Drupal\user\Entity\User;
 
 /**
  * Implements hook_message_subscribe_get_subscribers_alter().
  *
  * Alter the subscribers list.
  *
- * @param \Drupal\message_subscribe\Subscribers\DeliveryCandidateInterface[] &$uids
- *   The array of delivery candidates as defined by
- *   `hook_message_subscribe_get_subscribers()`.
- * @param array $values
- *   A keyed array of values containing:
- *   - 'context' - The context array.
- *   - 'entity_type' - The entity type ID.
- *   - 'entity' - The entity object
- *   - 'subscribe_options' - The subscribe options array.
+ * {@inheritdoc}
  */
 function message_subscribe_example_message_subscribe_get_subscribers_alter(array &$uids, array $values) {
 
@@ -52,9 +43,9 @@ function message_subscribe_example_message_subscribe_get_subscribers_alter(array
   // a custom list (see hook_user_insert() below). This is just an
   // illustration of another solution.
   $query = \Drupal::entityQuery('user')
-  ->condition('status', 1);
+    ->condition('status', 1);
   $query->condition('roles', 'administrators');
-  $admin_uids = $query->execute();
+  $admin_uids = $query->accessCheck(FALSE)->execute();
   foreach ($admin_uids as $uid) {
     $uids[$uid] = new DeliveryCandidate([], ['email'], $uid);
   }
@@ -69,7 +60,10 @@ function message_subscribe_example_node_insert(Node $node) {
 
   // Add a message for the node author.
   $template = $node->isPublished() ? 'publish_node' : 'create_node';
-  $message = Message::create(['template' => $template, 'uid' => $node->getOwnerId()]);
+  $message = Message::create([
+    'template' => $template,
+    'uid' => $node->getOwnerId(),
+  ]);
   $message->set('field_node_reference', $node);
   $message->set('field_published', $node->isPublished());
   $message->save();
@@ -84,8 +78,8 @@ function message_subscribe_example_node_insert(Node $node) {
   if (in_array($node->bundle(), ['article'])) {
     // Find all active users.
     $query = \Drupal::entityQuery('user')
-    ->condition('status', 1);
-    $uids = $query->execute();
+      ->condition('status', 1);
+    $uids = $query->accessCheck(FALSE)->execute();
     $users = User::loadMultiple($uids);
 
     // Add a content subscription flag for each user.
@@ -165,7 +159,10 @@ function message_subscribe_example_comment_insert(Comment $comment) {
 
   // Create a message for the node author.
   $node = $comment->get('entity_id')->first()->get('entity')->getTarget()->getValue();
-  $message = Message::create(['template' => 'create_comment', 'uid' => $node->getOwnerId()]);
+  $message = Message::create([
+    'template' => 'create_comment',
+    'uid' => $node->getOwnerId(),
+  ]);
   $message->set('field_comment_reference', $comment);
   $message->set('field_published', $comment->isPublished());
   $message->save();
@@ -195,9 +192,9 @@ function message_subscribe_example_user_insert(User $account) {
   // or if you're automatically flagging administrators. It's just another
   // illustration of things that can be done.
   $query = \Drupal::entityQuery('user')
-  ->condition('status', 1);
+    ->condition('status', 1);
   $query->condition('roles', 'administrator');
-  $admin_uids = $query->execute();
+  $admin_uids = $query->accessCheck(FALSE)->execute();
 
   $flags = ['subscribe_user'];
   $notifiers = ['email'];
@@ -211,7 +208,10 @@ function message_subscribe_example_user_insert(User $account) {
   }
 
   // Queue messages to our custom list of subscribers.
-  $message = Message::create(['template' => 'user_register', 'uid' => $account->id()]);
+  $message = Message::create([
+    'template' => 'user_register',
+    'uid' => $account->id(),
+  ]);
   $message->set('field_user', $account);
   $message->set('field_published', $account->isActive());
   $message->save();
@@ -234,7 +234,7 @@ function message_subscribe_example_update_message_status(ContentEntityBase $enti
   $field = 'field_' . $entity->getEntityType()->id() . '_reference';
   $query->condition($field . '.target_id', $entity->id());
 
-  $results = $query->execute();
+  $results = $query->accessCheck(FALSE)->execute();
   if (empty($results)) {
     return;
   }

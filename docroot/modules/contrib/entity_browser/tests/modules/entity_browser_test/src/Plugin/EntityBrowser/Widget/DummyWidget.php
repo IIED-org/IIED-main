@@ -5,6 +5,7 @@ namespace Drupal\entity_browser_test\Plugin\EntityBrowser\Widget;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\entity_browser\WidgetBase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Dummy widget implementation for test purposes.
@@ -24,6 +25,22 @@ class DummyWidget extends WidgetBase {
    * @var \Drupal\Core\Entity\EntityInterface
    */
   public $entity;
+
+  /**
+   * State property.
+   *
+   * @var \Drupal\Core\State\StateInterface
+   */
+  protected $state;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
+    $instance->state = $container->get('state');
+    return $instance;
+  }
 
   /**
    * {@inheritdoc}
@@ -60,7 +77,7 @@ class DummyWidget extends WidgetBase {
    * {@inheritdoc}
    */
   public function access() {
-    if (\Drupal::state()->get('eb_test_dummy_widget_access', TRUE)) {
+    if ($this->state->get('eb_test_dummy_widget_access', TRUE)) {
       $access = AccessResult::allowed();
       $access->addCacheContexts(['eb_dummy']);
     }

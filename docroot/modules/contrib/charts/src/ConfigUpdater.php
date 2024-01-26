@@ -173,6 +173,7 @@ class ConfigUpdater implements ContainerInjectionInterface {
   public function updateExistingViewsVersion3ToNewSettings() {
     $view_storage = $this->entityTypeManager->getStorage('view');
     $view_ids = $view_storage->getQuery()
+      ->accessCheck(FALSE)
       ->condition('display.*.display_options.style.type', 'chart', '=')
       ->execute();
 

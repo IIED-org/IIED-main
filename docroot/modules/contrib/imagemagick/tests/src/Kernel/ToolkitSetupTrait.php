@@ -3,8 +3,8 @@
 namespace Drupal\Tests\imagemagick\Kernel;
 
 use Drupal\Core\File\FileSystemInterface;
-use Drupal\Tests\TestFileCreationTrait;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\Tests\TestFileCreationTrait;
 
 /**
  * Trait to manage toolkit setup tasks common across tests.
@@ -81,7 +81,7 @@ trait ToolkitSetupTrait {
    *   - 'toolkit_config': the config object of the toolkit.
    *   - 'toolkit_settings': an associative array of toolkit settings.
    */
-  public function providerToolkitConfiguration(): array {
+  public static function providerToolkitConfiguration(): array {
     return [
       'ImageMagick-imagemagick' => [
         'toolkit_id' => 'imagemagick',
@@ -90,9 +90,6 @@ trait ToolkitSetupTrait {
           'binaries' => 'imagemagick',
           'quality' => 100,
           'debug' => TRUE,
-          // Add a fallback locale for DrupalCI testbots that do not have
-          // en_US.UTF-8 installed.
-          'locale' => 'en_US.UTF-8 C.UTF-8',
         ],
       ],
       'ImageMagick-graphicsmagick' => [
@@ -102,9 +99,6 @@ trait ToolkitSetupTrait {
           'binaries' => 'graphicsmagick',
           'quality' => 100,
           'debug' => TRUE,
-          // Add a fallback locale for DrupalCI testbots that do not have
-          // en_US.UTF-8 installed.
-          'locale' => 'en_US.UTF-8 C.UTF-8',
         ],
       ],
     ];

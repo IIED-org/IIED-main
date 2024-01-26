@@ -117,8 +117,11 @@ class ParagraphsUiTest extends ParagraphsTestBase {
       'new_storage_type' => 'field_ui:entity_reference_revisions:paragraph',
       'label' => 'Paragraph',
       'field_name' => 'paragraph',
-    ], 'Save and continue');
-    $this->submitForm([], 'Save field settings');
+    ], $this->coreVersion('10.2') ? 'Continue' : 'Save and continue');
+    if (!$this->coreVersion('10.2')) {
+      $this->submitForm([], 'Save field settings');
+    }
+    $this->submitForm([], 'Save settings');
 
     // Visit the "Manage form display" page of the new content type.
     $this->drupalGet('admin/structure/types/manage/test/form-display');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\Component\Utility;
 
 use Drupal\Component\Utility\UrlHelper;
@@ -54,6 +56,7 @@ class UrlHelperTest extends TestCase {
       'example.com',
       'www.example.com',
       'ex-ample.com',
+      // cspell:disable-next-line
       '3xampl3.com',
       'example.com/parenthesis',
       'example.com/index.html#pagetop',

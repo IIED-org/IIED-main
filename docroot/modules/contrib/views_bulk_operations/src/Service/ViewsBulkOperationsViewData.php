@@ -10,13 +10,17 @@ use Drupal\views\Plugin\views\display\DisplayPluginBase;
 use Drupal\views\ResultRow;
 use Drupal\views\ViewExecutable;
 use Drupal\views\Views;
+use Drupal\views_bulk_operations\Form\ViewsBulkOperationsFormTrait;
 use Drupal\views_bulk_operations\ViewsBulkOperationsEvent;
+use Drupal\views_bulk_operations\ViewEntityDataEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Gets Views data needed by VBO.
  */
 class ViewsBulkOperationsViewData implements ViewsBulkOperationsViewDataInterface {
+
+  use ViewsBulkOperationsFormTrait;
 
   /**
    * Event dispatcher service.
@@ -280,6 +284,36 @@ class ViewsBulkOperationsViewData implements ViewsBulkOperationsViewDataInterfac
     }
 
     return $entity;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getViewEntityData(): array {
+    // Allow other modules to get bulk form keys and entity labels for
+    // possible performance improvements on non-standard views.
+    $event = new ViewEntityDataEvent($this->getViewProvider(), $this->getData(), $this->view);
+    $this->eventDispatcher->dispatch($event, ViewEntityDataEvent::NAME);
+    $view_entity_data = $event->getViewEntityData();
+    if (count($view_entity_data) !== 0) {
+      return $view_entity_data;
+    }
+
+    // If no data has been provided, get it the default way.
+    $base_field = $this->view->storage->get('base_field');
+    foreach ($this->view->result as $row_index => $row) {
+      if ($entity = $this->getEntity($row)) {
+        $view_entity_data[$row_index] = [
+          self::calculateEntityBulkFormKey(
+            $entity,
+            $row->{$base_field}
+          ),
+          $entity->label(),
+        ];
+      }
+    }
+
+    return $view_entity_data;
   }
 
 }

@@ -2,13 +2,41 @@
 
 namespace Drupal\message_subscribe\Form;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\DefaultPluginManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Settings form for Message Subscribe.
  */
-class MessageSubscribeAdminSettings extends ConfigFormBase {
+final class MessageSubscribeAdminSettings extends ConfigFormBase {
+
+  /**
+   * The notifier plugin manager.
+   *
+   * @var \Drupal\Core\Plugin\DefaultPluginManager
+   */
+  protected $notifierManager;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(ConfigFactoryInterface $config_factory, DefaultPluginManager $notifier_manager) {
+    $this->setConfigFactory($config_factory);
+    $this->notifierManager = $notifier_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new self(
+      $container->get('config.factory'),
+      $container->get('plugin.message_notify.notifier.manager')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -24,7 +52,13 @@ class MessageSubscribeAdminSettings extends ConfigFormBase {
     parent::submitForm($form, $form_state);
     $config = $this->config('message_subscribe.settings');
 
-    foreach (['use_queue', 'notify_own_actions', 'flag_prefix', 'debug_mode'] as $variable) {
+    foreach ([
+      'use_queue',
+      'notify_own_actions',
+      'flag_prefix',
+      'debug_mode',
+      'range',
+    ] as $variable) {
       $config->set($variable, $form_state->getValue($variable));
     }
     $config->set('default_notifiers', array_values($form_state->getValue('default_notifiers')));
@@ -44,11 +78,9 @@ class MessageSubscribeAdminSettings extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
-    /** @var \Drupal\Core\Plugin\DefaultPluginManager $message_notifiers */
-    $message_notifiers = \Drupal::service('plugin.message_notify.notifier.manager');
     $options = array_map(function ($definition) {
       return $definition['title'];
-    }, $message_notifiers->getDefinitions());
+    }, $this->notifierManager->getDefinitions());
 
     $config = $this->config('message_subscribe.settings');
 
@@ -89,6 +121,15 @@ class MessageSubscribeAdminSettings extends ConfigFormBase {
       '#title' => $this->t('Enable debugging mode'),
       '#description' => $this->t('Enables verbose logging of subscription activities for debugging purposes. <strong>This should not be enabled in a production environment.</strong>'),
       '#default_value' => $config->get('debug_mode'),
+    ];
+
+    $form['range'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Maximum subscribers per batch'),
+      '#description' => $this->t('The maximum number of subscribers to get in a batch, default 100. <strong>Be careful changing this value as it can impact the performance of your system.</strong>'),
+      '#default_value' => $config->get('range'),
+      '#min' => 1,
+      '#step' => 1,
     ];
 
     return parent::buildForm($form, $form_state);

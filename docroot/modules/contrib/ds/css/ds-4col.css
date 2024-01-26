@@ -4,8 +4,8 @@
  */
 
 .ds-4col > .group-first {
-  width: 25%;
   float: left; /* LTR */
+  width: 25%;
 }
 
 [dir="rtl"] .ds-4col > .group-first {
@@ -13,8 +13,8 @@
 }
 
 .ds-4col > .group-second {
-  width: 25%;
   float: left; /* LTR */
+  width: 25%;
 }
 
 [dir="rtl"] .ds-4col > .group-second {
@@ -22,8 +22,8 @@
 }
 
 .ds-4col > .group-third {
-  width: 25%;
   float: left; /* LTR */
+  width: 25%;
 }
 
 [dir="rtl"] .ds-4col > .group-third {
@@ -31,8 +31,8 @@
 }
 
 .ds-4col > .group-fourth {
-  width: 25%;
   float: left; /* LTR */
+  width: 25%;
 }
 
 [dir="rtl"] .ds-4col > .group-fourth {

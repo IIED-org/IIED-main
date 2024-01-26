@@ -582,8 +582,8 @@ class ParagraphsLibraryTest extends ParagraphsTestBase {
     // Disallow the paragraphs type "Text" for the used content type.
     $this->drupalGet('admin/structure/types/manage/paragraphed_test/fields/node.paragraphed_test.field_paragraphs');
     $edit = [
-      'settings[handler_settings][negate]' => 0,
-      'settings[handler_settings][target_bundles_drag_drop][from_library][enabled]' => 1,
+      'settings[handler_settings][negate]' => '0',
+      'settings[handler_settings][target_bundles_drag_drop][from_library][enabled]' => '1',
       'settings[handler_settings][target_bundles_drag_drop][text][enabled]' => FALSE,
     ];
     $this->submitForm($edit, 'Save settings');

@@ -17,7 +17,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @Chart(
  *   id = "billboard",
- *   name = @Translation("Billboard.js")
+ *   name = @Translation("Billboard.js"),
+ *   types = {
+ *     "area",
+ *     "bar",
+ *     "bubble",
+ *     "column",
+ *     "donut",
+ *     "gauge",
+ *     "line",
+ *     "pie",
+ *     "scatter",
+ *     "spline",
+ *   },
  * )
  */
 class Billboard extends ChartBase implements ContainerFactoryPluginInterface {

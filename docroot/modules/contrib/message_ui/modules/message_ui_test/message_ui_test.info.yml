@@ -6,11 +6,11 @@ package: Message
 hidden: true
 
 dependencies:
- - message:message
- - drupal:views
- - message_ui:message_ui
+  - message:message
+  - drupal:views
+  - message_ui:message_ui
 
-# Information added by Drupal.org packaging script on 2023-07-03
-version: '8.x-1.0'
+# Information added by Drupal.org packaging script on 2023-11-17
+version: '8.x-1.1'
 project: 'message_ui'
-datestamp: 1688399907
+datestamp: 1700260928

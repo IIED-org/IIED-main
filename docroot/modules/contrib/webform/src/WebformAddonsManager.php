@@ -372,14 +372,6 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'element',
     ];
 
-    // Element: Webform Quiz Elements.
-    $projects['webform_quiz_elements'] = [
-      'title' => $this->t('Webform Quiz Elements'),
-      'description' => $this->t('Create a simple quiz out of a webform with webform quiz elements module.'),
-      'url' => Url::fromUri('https://www.drupal.org/project/webform_quiz_elements'),
-      'category' => 'element',
-    ];
-
     // Element: Webform Private Elements.
     $projects['webform_private_elements'] = [
       'title' => $this->t('Webform Private Elements'),
@@ -1130,10 +1122,10 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
     ];
 
     // Integrations: Webform Authorize.Net.
-    $projects['authorizenetwebform'] = [
+    $projects['webform_authorizenet'] = [
       'title' => $this->t('Webform Authorize.Net'),
       'description' => $this->t('Integrates Webform with Authorize.Net.'),
-      'url' => Url::fromUri('https://github.com/ivan-trokhanenko/authorizenetwebform'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_authorizenet'),
       'category' => 'integration',
     ];
 
@@ -1741,6 +1733,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'title' => $this->t('Simple Google reCAPTCHA'),
       'description' => $this->t('Provides simple integration with Google reCaptcha, keeping forms and webforms secure.'),
       'url' => Url::fromUri('https://www.drupal.org/project/simple_recaptcha'),
+      'category' => 'spam',
+    ];
+
+    // Spam:Spam Master.
+    $projects['spammaster'] = [
+      'title' => $this->t('Spam Master'),
+      'description' => $this->t('Spam Master is a Spam Protection Module that blocks new user registrations, comments, and threads with Real Time anti-spam lists.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/spammaster'),
       'category' => 'spam',
     ];
 

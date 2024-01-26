@@ -65,7 +65,7 @@ class ImageFieldTest extends EntityBrowserWebDriverTestBase {
       'uri' => 'public://example.jpg',
     ]);
     $this->image->save();
-    // Register usage for this file to avoid validation erros when referencing
+    // Register usage for this file to avoid validation errors when referencing
     // this file on node save.
     \Drupal::service('file.usage')->add($this->image, 'entity_browser', 'test', '1');
 

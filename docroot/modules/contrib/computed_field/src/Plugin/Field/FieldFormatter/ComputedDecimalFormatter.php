@@ -17,7 +17,7 @@ use Drupal\Core\Field\Plugin\Field\FieldFormatter\DecimalFormatter;
  * )
  */
 class ComputedDecimalFormatter extends DecimalFormatter {
-  /**
+  /*
    * Include default formatting for cache settings.
    * Implements:
    *    defaultSettings()
@@ -26,7 +26,7 @@ class ComputedDecimalFormatter extends DecimalFormatter {
    */
   use ComputedCacheFormatterTrait;
 
-  /**
+  /*
    * Include formatting for numeric fields.
    * Implements:
    *    viewElements(...)

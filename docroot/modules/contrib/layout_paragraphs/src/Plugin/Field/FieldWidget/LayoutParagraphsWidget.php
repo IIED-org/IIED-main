@@ -322,6 +322,7 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
         $items[$delta]->entity = $paragraph;
       }
     }
+    $this->layoutParagraphsLayout->setParagraphsReferenceField($items);
     $this->tempstore->set($this->layoutParagraphsLayout);
   }
 

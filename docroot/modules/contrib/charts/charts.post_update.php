@@ -134,3 +134,50 @@ function charts_post_update_00_update_charts_version_3_to_latest_settings_struct
   }
   return 'No update of the settings structure was done.';
 }
+
+/**
+ * Re-save views that are using the chart style to recalculate dependencies.
+ */
+function charts_post_update_resave_views_to_account_calculated_library_dependencies(&$sandbox) {
+  $view_storage = \Drupal::entityTypeManager()->getStorage('view');
+  $view_ids = $view_storage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('display.*.display_options.style.type', 'chart', '=')
+    ->execute();
+  $labels = [];
+  if ($view_ids) {
+    foreach ($view_ids as $view_id) {
+      /** @var \Drupal\views\ViewEntityInterface $view */
+      $view = $view_storage->load($view_id);
+      // Re-save the view to update its dependencies.
+      $view->save();
+      $labels[] = $view->label();
+    }
+  }
+
+  if ($labels) {
+    return t('The following views have been re-saved to re-calculate their dependencies: @views', [
+      '@views' => implode(',', $labels),
+    ]);
+  }
+  return t('This site did not have any chart related views.');
+}
+
+/**
+ * Setting charts config module dependencies based on the selected library.
+ */
+function charts_post_update_setting_charts_config_module_dependencies(&$sandbox) {
+  $config = \Drupal::service('config.factory')
+    ->getEditable('charts.settings');
+  $settings = $config->get('charts_default_settings');
+  $library = $settings['library'] ?? '';
+  $type = $settings['type'] ?? '';
+  if ($library || $type) {
+    /** @var \Drupal\charts\EventSubscriber\ConfigImportSubscriber $config_import_subscriber */
+    $config_import_subscriber = \Drupal::service('charts.config_import_subscriber');
+    $config->set('dependencies', $config_import_subscriber->calculateDependencies($library, $type))
+      ->save();
+    return 'Updated chart settings dependencies';
+  }
+  return 'The default config for charts did not have a library and type set. So no dependencies were set.';
+}

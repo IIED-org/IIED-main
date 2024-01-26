@@ -196,7 +196,7 @@ trait DsTestTrait {
    * Utility function to clear field settings.
    */
   public function entitiesClearFieldSettings() {
-    $display = EntityViewDisplay::load('node.article.default');
+    $display = \Drupal::entityTypeManager()->getStorage('entity_view_display')->load('node.article.default');
 
     // Remove all third party settings from components.
     foreach ($display->getComponents() as $key => $info) {

@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\file_mdm\Kernel;
 
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\file_mdm\FileMetadataInterface;
+use Drupal\file_mdm\FileMetadataManagerInterface;
 
 /**
  * Tests that File Metadata Manager works properly.
@@ -12,17 +15,12 @@ use Drupal\file_mdm\FileMetadataInterface;
  */
 class FileMetadataManagerTest extends FileMetadataManagerTestBase {
 
-  /**
-   * Modules to enable.
-   *
-   * @var array
-   */
   protected static $modules = ['system', 'file_mdm', 'file_test'];
 
   /**
    * Tests using the 'getimagesize' plugin.
    */
-  public function testFileMetadata() {
+  public function testFileMetadata(): void {
     // Prepare a copy of test files.
     $this->fileSystem->copy('core/tests/fixtures/files/image-test.png', 'public://', FileSystemInterface::EXISTS_REPLACE);
     $this->fileSystem->copy($this->moduleList->getPath('file_mdm') . '/tests/files/test-exif.jpeg', 'public://', FileSystemInterface::EXISTS_REPLACE);
@@ -106,7 +104,7 @@ class FileMetadataManagerTest extends FileMetadataManagerTestBase {
     ];
 
     // Get the file metadata manager service.
-    $fmdm = $this->container->get('file_metadata_manager');
+    $fmdm = $this->container->get(FileMetadataManagerInterface::class);
 
     // Walk through test files.
     foreach ($image_files as $image_file) {
@@ -167,9 +165,9 @@ class FileMetadataManagerTest extends FileMetadataManagerTestBase {
   }
 
   /**
-   * Test caching.
+   * Tests caching.
    */
-  public function testFileMetadataCaching() {
+  public function testFileMetadataCaching(): void {
     // Prepare a copy of test files.
     $this->fileSystem->copy($this->moduleList->getPath('file_mdm') . '/tests/files/test-exif.jpeg', 'public://', FileSystemInterface::EXISTS_REPLACE);
     $this->fileSystem->copy('core/tests/fixtures/files/image-test.gif', 'public://', FileSystemInterface::EXISTS_REPLACE);
@@ -219,7 +217,7 @@ class FileMetadataManagerTest extends FileMetadataManagerTestBase {
     ];
 
     // Get the file metadata manager service.
-    $fmdm = $this->container->get('file_metadata_manager');
+    $fmdm = $this->container->get(FileMetadataManagerInterface::class);
 
     // Walk through test files.
     foreach ($image_files as $image_file) {
@@ -292,7 +290,7 @@ class FileMetadataManagerTest extends FileMetadataManagerTestBase {
   /**
    * Tests remote files, setting local temp path explicitly.
    */
-  public function testRemoteFileSetLocalPath() {
+  public function testRemoteFileSetLocalPath(): void {
     // The image files that will be tested.
     $image_files = [
       [
@@ -312,7 +310,7 @@ class FileMetadataManagerTest extends FileMetadataManagerTestBase {
     ];
 
     // Get the file metadata manager service.
-    $fmdm = $this->container->get('file_metadata_manager');
+    $fmdm = $this->container->get(FileMetadataManagerInterface::class);
 
     // Copy the test file to a temp location.
     $this->fileSystem->copy($this->moduleList->getPath('file_mdm') . '/tests/files/test-exif.jpeg', 'temporary://', FileSystemInterface::EXISTS_REPLACE);
@@ -348,7 +346,7 @@ class FileMetadataManagerTest extends FileMetadataManagerTestBase {
   /**
    * Tests remote files, letting file_mdm manage setting local temp path.
    */
-  public function testRemoteFileCopy() {
+  public function testRemoteFileCopy(): void {
     // The image files that will be tested.
     $image_files = [
       [
@@ -367,7 +365,7 @@ class FileMetadataManagerTest extends FileMetadataManagerTestBase {
     ];
 
     // Get the file metadata manager service.
-    $fmdm = $this->container->get('file_metadata_manager');
+    $fmdm = $this->container->get(FileMetadataManagerInterface::class);
     $file_system = $this->container->get('file_system');
 
     // Copy the test file to dummy-remote wrapper.
@@ -400,9 +398,9 @@ class FileMetadataManagerTest extends FileMetadataManagerTestBase {
   /**
    * Tests URI sanitization.
    */
-  public function testSanitizedUri() {
+  public function testSanitizedUri(): void {
     // Get the file metadata manager service.
-    $fmdm = $this->container->get('file_metadata_manager');
+    $fmdm = $this->container->get(FileMetadataManagerInterface::class);
 
     // Copy a test file to test directory.
     $test_directory = 'public://test-images/';

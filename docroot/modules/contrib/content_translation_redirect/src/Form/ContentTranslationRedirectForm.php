@@ -2,8 +2,8 @@
 
 namespace Drupal\content_translation_redirect\Form;
 
-use Drupal\content_translation_redirect\Entity\ContentTranslationRedirect;
-use Drupal\Core\Entity\ContentEntityTypeInterface;
+use Drupal\content_translation_redirect\ContentTranslationRedirectManager;
+use Drupal\content_translation_redirect\ContentTranslationRedirectManagerInterface;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -16,6 +16,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ContentTranslationRedirectForm extends EntityForm {
 
   /**
+   * The content translation redirect manager.
+   *
+   * @var \Drupal\content_translation_redirect\ContentTranslationRedirectManagerInterface
+   */
+  protected $manager;
+
+  /**
    * The entity type bundle info.
    *
    * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
@@ -25,18 +32,22 @@ class ContentTranslationRedirectForm extends EntityForm {
   /**
    * ContentTranslationRedirectForm constructor.
    *
+   * @param \Drupal\content_translation_redirect\ContentTranslationRedirectManagerInterface $manager
+   *   The content translation redirect manager.
    * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info
    *   The entity type bundle info.
    */
-  public function __construct(EntityTypeBundleInfoInterface $entity_type_bundle_info) {
+  public function __construct(ContentTranslationRedirectManagerInterface $manager, EntityTypeBundleInfoInterface $entity_type_bundle_info) {
     $this->entityTypeBundleInfo = $entity_type_bundle_info;
+    $this->manager = $manager;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): self {
     return new static(
+      $container->get('content_translation_redirect.manager'),
       $container->get('entity_type.bundle.info')
     );
   }
@@ -44,7 +55,7 @@ class ContentTranslationRedirectForm extends EntityForm {
   /**
    * {@inheritdoc}
    */
-  public function form(array $form, FormStateInterface $form_state) {
+  public function form(array $form, FormStateInterface $form_state): array {
     $form = parent::form($form, $form_state);
 
     /** @var \Drupal\content_translation_redirect\ContentTranslationRedirectInterface $redirect */
@@ -66,9 +77,9 @@ class ContentTranslationRedirectForm extends EntityForm {
       '#description' => $this->t('You can find more information about HTTP redirect status codes <a href="@status-codes" target="_blank">here</a>.', [
         '@status-codes' => 'https://en.wikipedia.org/wiki/List_of_HTTP_status_codes',
       ]),
-      '#options' => ContentTranslationRedirect::getStatusCodes(),
+      '#options' => ContentTranslationRedirectManager::getStatusCodes(),
       '#default_value' => $redirect->getStatusCode(),
-      '#empty_option' => $this->t('- Not specified -'),
+      '#empty_option' => $this->t('- Disabled -'),
     ];
     $form['path'] = [
       '#type' => 'path',
@@ -80,7 +91,7 @@ class ContentTranslationRedirectForm extends EntityForm {
     $form['mode'] = [
       '#type' => 'radios',
       '#title' => $this->t('Act on'),
-      '#options' => ContentTranslationRedirect::getTranslationModes(),
+      '#options' => ContentTranslationRedirectManager::getTranslationModes(),
       '#default_value' => $redirect->getTranslationMode(),
       '#required' => TRUE,
     ];
@@ -90,7 +101,7 @@ class ContentTranslationRedirectForm extends EntityForm {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
+  public function validateForm(array &$form, FormStateInterface $form_state): void {
     if (($path = $form_state->getValue('path')) && $path[0] !== '/') {
       $form_state->setErrorByName('path', $this->t("The path '%path' has to start with a slash.", ['%path' => $path]));
     }
@@ -99,7 +110,7 @@ class ContentTranslationRedirectForm extends EntityForm {
   /**
    * {@inheritdoc}
    */
-  public function save(array $form, FormStateInterface $form_state) {
+  public function save(array $form, FormStateInterface $form_state): int {
     $status = parent::save($form, $form_state);
 
     if ($status === SAVED_NEW) {
@@ -114,6 +125,7 @@ class ContentTranslationRedirectForm extends EntityForm {
     }
 
     $form_state->setRedirect('entity.content_translation_redirect.collection');
+    return $status;
   }
 
   /**
@@ -125,67 +137,26 @@ class ContentTranslationRedirectForm extends EntityForm {
   protected function getAvailableBundles(): array {
     $options = [];
 
-    $entity_types = $this->getSupportedEntityTypes();
+    $entity_types = $this->manager->getSupportedEntityTypes();
     $storage = $this->entityTypeManager->getStorage('content_translation_redirect');
 
-    foreach ($entity_types as $entity_type_id => $entity_type_label) {
-      if (!$storage->load($entity_type_id)) {
-        $options[$entity_type_label][$entity_type_id] = $this->t('@label (Default)', [
-          '@label' => $entity_type_label,
-        ]);
+    foreach ($entity_types as $entity_type_id => $entity_type) {
+      $label = (string) $entity_type->getLabel();
+
+      if ($storage->load($entity_type_id) === NULL) {
+        $options[$label][$entity_type_id] = "$label (Default)";
       }
 
       $bundles = $this->entityTypeBundleInfo->getBundleInfo($entity_type_id);
       foreach ($bundles as $bundle_id => $bundle_info) {
         $redirect_id = $entity_type_id . '__' . $bundle_id;
 
-        if (!$storage->load($redirect_id)) {
-          $options[$entity_type_label][$redirect_id] = $bundle_info['label'];
+        if ($storage->load($redirect_id) === NULL) {
+          $options[$label][$redirect_id] = $bundle_info['label'];
         }
       }
     }
     return $options;
-  }
-
-  /**
-   * Returns a list of supported entity types.
-   *
-   * @return array
-   *   A list of available entity types.
-   */
-  protected function getSupportedEntityTypes(): array {
-    $entity_types = [];
-
-    // A list of entity types that are not supported.
-    $unsupported_types = [
-      // Custom blocks.
-      'block_content',
-      // Comments.
-      'comment',
-      // Contact messages.
-      'contact_message',
-      // Menu items.
-      'menu_link_content',
-      // Shortcut items.
-      'shortcut',
-    ];
-
-    foreach ($this->entityTypeManager->getDefinitions() as $entity_type_id => $entity_type) {
-      // Check for a content entity type.
-      if (!$entity_type instanceof ContentEntityTypeInterface) {
-        continue;
-      }
-      // Check for a supported entity type.
-      if (in_array($entity_type_id, $unsupported_types)) {
-        continue;
-      }
-
-      // Check for a translatable entity type with a canonical link.
-      if ($entity_type->isTranslatable() && $entity_type->hasLinkTemplate('canonical')) {
-        $entity_types[$entity_type_id] = (string) $entity_type->getLabel();
-      }
-    }
-    return $entity_types;
   }
 
 }

@@ -4,14 +4,21 @@ namespace Drupal\name\Form;
 
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\name\NameFormatterInterface;
 use Drupal\name\Entity\NameListFormat;
+use Drupal\name\NameFormatterInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a form controller for name list formats.
  */
 class NameListFormatForm extends EntityForm {
+
+  /**
+   * The name formatter.
+   *
+   * @var \Drupal\name\NameFormatterInterface
+   */
+  protected $formatter;
 
   /**
    * {@inheritdoc}

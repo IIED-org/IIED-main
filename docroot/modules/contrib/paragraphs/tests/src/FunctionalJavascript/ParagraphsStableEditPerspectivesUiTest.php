@@ -200,17 +200,22 @@ class ParagraphsStableEditPerspectivesUiTest extends WebDriverTestBase {
     $this->assertSession()->waitForElementVisible('css', '#edit-name-machine-name-suffix .link');
     $page->pressButton('Edit');
     $page->fillField('field_name', 'testparagraphfield');
-    $page->pressButton('Save and continue');
+    if ($this->coreVersion('10.2')) {
+      $page->pressButton('Continue');
+      $edit = [
+        'field_storage[subform][settings][target_type]' => 'paragraph',
+      ];
+      $this->submitForm($edit, 'Save settings');
+    }
+    else {
+      $page->pressButton('Save and continue');
+      $edit = [
+        'settings[target_type]' => 'paragraph',
+      ];
+      $this->submitForm($edit, 'Save field settings');
+      $this->submitForm([], 'Save settings');
+    }
 
-    $edit = [
-      'settings[target_type]' => 'paragraph',
-    ];
-    $this->submitForm($edit, 'Save field settings');
-    $this->submitForm([], 'Save settings');
-    $this->drupalGet('admin/structure/types/manage/testcontent/form-display');
-    $page->selectFieldOption('fields[field_testparagraphfield][type]', 'paragraphs');
-    $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->submitForm([], 'Save');
     $this->drupalGet('node/add/testcontent');
     $style_selector = $page->find('css', '.paragraphs-tabs');
     $this->assertFalse($style_selector->isVisible());

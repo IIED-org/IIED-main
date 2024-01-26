@@ -45,7 +45,7 @@
       }
     );
 
-    var throbber = $('<div class="ajax-progress-fullscreen"></div>');
+    var throbber = $(Drupal.theme('ajaxProgressIndicatorFullscreen'));
     $(this).parent().css('width', iframeSettings['width']);
 
     // Register callbacks.

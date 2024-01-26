@@ -14,7 +14,7 @@ class FieldPermissionsTest extends TestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'node',
     'field_ui',
     'taxonomy',

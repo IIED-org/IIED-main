@@ -38,7 +38,7 @@ The module is inspired by discussions at [#2630242 Provide methods to retrieve E
 This ensures that all dependencies get downloaded as well, with the appropriate
 release level.
 
-* Drupal 9.3.x and higher or 10.0.x and higher
+* Drupal 10.1.x and higher
 
 
 ## Installing
@@ -81,11 +81,11 @@ bits     | The number of bits for each color                            |
 
 1. __Basic usage:__
 
-  a. Use the _file_metadata_manager_ service to prepare collecting metadata for
+  a. Use the _FileMetadataManagerInterface::class_ service to prepare collecting metadata for
      the file located at a desired URI:
 
 ```php
-   $fmdm = \Drupal::service('file_metadata_manager');
+   $fmdm = \Drupal::service(FileMetadataManagerInterface::class);
    $my_file_metadata = $fmdm->uri('public::/my_directory/test-image.jpeg');
 ```
 
@@ -99,7 +99,7 @@ bits     | The number of bits for each color                            |
   c. Summarizing, in the context of a controller returning a render array:
 
 ```php
-  $fmdm = \Drupal::service('file_metadata_manager');
+  $fmdm = \Drupal::service(FileMetadataManagerInterface::class);
   $my_file_metadata = $fmdm->uri('public::/my_directory/test-image.jpeg');
   $mime = $my_file_metadata->getMetadata('getimagesize', 'mime');
   return ['#markup' => 'MIME type: ' . $mime];
@@ -114,7 +114,7 @@ MIME type: image/jpeg
 2. __Use a known local temp copy of the remote file to avoid remote file access:__
 
 ```php
-$fmdm = \Drupal::service('file_metadata_manager');
+$fmdm = \Drupal::service(FileMetadataManagerInterface::class);
 $my_file_metadata = $fmdm->uri('remote_wrapper::/my_directory/test-image.jpeg');
 $my_file_metadata->setLocalTempPath($temp_path);
 $mime = $my_file_metadata->getMetadata('getimagesize', 'mime');
@@ -123,7 +123,7 @@ $mime = $my_file_metadata->getMetadata('getimagesize', 'mime');
 3. __Make a local temp copy of the remote file to avoid remote file access:__
 
 ```php
-$fmdm = \Drupal::service('file_metadata_manager');
+$fmdm = \Drupal::service(FileMetadataManagerInterface::class);
 $my_file_metadata = $fmdm->uri('remote_wrapper::/my_directory/test-image.jpeg');
 $my_file_metadata->copyUriToTemp();
 $mime = $my_file_metadata->getMetadata('getimagesize', 'mime');

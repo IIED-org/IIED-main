@@ -19,7 +19,7 @@ class BlockTest extends TestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'node',
     'user',
     'comment',
@@ -48,6 +48,8 @@ class BlockTest extends TestBase {
       'admin display suite',
       'admin fields',
       'administer blocks',
+      'administer block types',
+      'administer block content',
       'administer block_content display',
     ]);
     $this->drupalLogin($this->adminUser);
@@ -63,9 +65,9 @@ class BlockTest extends TestBase {
       'label' => 'Basic Block',
       'id' => 'basic',
     ];
-    $this->drupalGet('admin/structure/block/block-content/types/add', []);
+    $this->drupalGet('admin/structure/block-content/add');
     $this->submitForm($edit, 'Save');
-    $this->assertSession()->pageTextContains('Custom block type Basic Block has been added.');
+    $this->assertSession()->pageTextContains('Block type Basic Block has been added.');
 
     // Create a basic block.
     $edit = [];
@@ -87,7 +89,7 @@ class BlockTest extends TestBase {
     $this->submitForm($instance, t('Save block'));
 
     // Change to a DS layout.
-    $url = 'admin/structure/block/block-content/manage/basic/display';
+    $url = 'admin/structure/block-content/manage/basic/display';
     $edit = ['ds_layout' => 'ds_2col'];
     $this->drupalGet($url, []);
     $this->submitForm($edit, t('Save'));
@@ -96,7 +98,7 @@ class BlockTest extends TestBase {
       'fields[block_description][region]' => 'left',
       'fields[body][region]' => 'right',
     ];
-    $this->dsConfigureUi($fields, 'admin/structure/block/block-content/manage/basic/display');
+    $this->dsConfigureUi($fields, 'admin/structure/block-content/manage/basic/display');
 
     // View the block.
     $this->drupalGet('<front>');

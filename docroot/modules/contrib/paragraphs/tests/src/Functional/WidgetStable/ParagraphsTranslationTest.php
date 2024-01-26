@@ -368,37 +368,13 @@ class ParagraphsTranslationTest extends ParagraphsTestBase {
     $this->assertEquals(count($this->xpath('//*[@name="field_paragraphs_demo_0_subform_field_paragraphs_demo_images_add_more"]')), 0);
 
     // Add a non translatable field to Text Paragraph type.
-    $edit = [
-      'new_storage_type' => 'text_long',
-      'label' => 'untranslatable_field',
-      'field_name' => 'untranslatable_field',
-    ];
-    $this->drupalGet('admin/structure/paragraphs_type/text/fields/add-field');
-    $this->submitForm($edit, 'Save and continue');
-    $this->submitForm([], 'Save field settings');
-    $this->submitForm([], 'Save settings');
+    static::fieldUIAddNewField('admin/structure/paragraphs_type/text', 'untranslatable_field', 'untranslatable_field', 'text_long', [], []);
 
     // Add a non translatable reference field.
-    $edit = [
-      'new_storage_type' => 'field_ui:entity_reference:node',
-      'label' => 'untranslatable_ref_field',
-      'field_name' => 'untranslatable_ref_field',
-    ];
-    $this->drupalGet('admin/structure/paragraphs_type/text/fields/add-field');
-    $this->submitForm($edit, 'Save and continue');
-    $this->submitForm([], 'Save field settings');
-    $this->submitForm(['settings[handler_settings][target_bundles][paragraphed_content_demo]' => TRUE], 'Save settings');
+    static::fieldUIAddNewField('admin/structure/paragraphs_type/text', 'untranslatable_ref_field', 'untranslatable_ref_field', 'field_ui:entity_reference:node', [], ['settings[handler_settings][target_bundles][paragraphed_content_demo]' => TRUE]);
 
     // Add a non translatable link field.
-    $edit = [
-      'new_storage_type' => 'link',
-      'label' => 'untranslatable_link_field',
-      'field_name' => 'untranslatable_link_field',
-    ];
-    $this->drupalGet('admin/structure/paragraphs_type/text/fields/add-field');
-    $this->submitForm($edit, 'Save and continue');
-    $this->submitForm([], 'Save field settings');
-    $this->submitForm([], 'Save settings');
+    static::fieldUIAddNewField('admin/structure/paragraphs_type/text', 'untranslatable_link_field', 'untranslatable_link_field', 'link', [], []);
 
     // Attempt to add a translation.
     $this->drupalGet('node/' . $node->id() . '/translations/add/de/fr');

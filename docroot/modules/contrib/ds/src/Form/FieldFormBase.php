@@ -7,7 +7,7 @@ use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Extension\ModuleHandler;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
@@ -35,7 +35,7 @@ class FieldFormBase extends ConfigFormBase implements ContainerInjectionInterfac
   /**
    * Drupal module handler.
    *
-   * @var \Drupal\Core\Extension\ModuleHandler
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
 
@@ -55,10 +55,10 @@ class FieldFormBase extends ConfigFormBase implements ContainerInjectionInterfac
    *   The entity type manager.
    * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cache_invalidator
    *   The cache invalidator.
-   * @param \Drupal\Core\Extension\ModuleHandler $module_handler
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
    */
-  public function __construct(ConfigFactory $config_factory, EntityTypeManagerInterface $entity_type_manager, CacheTagsInvalidatorInterface $cache_invalidator, ModuleHandler $module_handler) {
+  public function __construct(ConfigFactory $config_factory, EntityTypeManagerInterface $entity_type_manager, CacheTagsInvalidatorInterface $cache_invalidator, ModuleHandlerInterface $module_handler) {
     parent::__construct($config_factory);
     $this->entityTypeManager = $entity_type_manager;
     $this->cacheInvalidator = $cache_invalidator;
@@ -102,7 +102,7 @@ class FieldFormBase extends ConfigFormBase implements ContainerInjectionInterfac
     $form['name'] = [
       '#title' => $this->t('Label'),
       '#type' => 'textfield',
-      '#default_value' => isset($field['label']) ? $field['label'] : '',
+      '#default_value' => $field['label'] ?? '',
       '#description' => $this->t('The human-readable label of the field.'),
       '#maxlength' => 128,
       '#required' => TRUE,
@@ -111,7 +111,7 @@ class FieldFormBase extends ConfigFormBase implements ContainerInjectionInterfac
 
     $form['id'] = [
       '#type' => 'machine_name',
-      '#default_value' => isset($field['id']) ? $field['id'] : '',
+      '#default_value' => $field['id'] ?? '',
       '#maxlength' => 32,
       '#description' => $this->t('The machine-readable name of this field. This name must contain only lowercase letters and underscores. This name must be unique.'),
       '#disabled' => !empty($field['id']),
@@ -134,14 +134,14 @@ class FieldFormBase extends ConfigFormBase implements ContainerInjectionInterfac
       '#type' => 'checkboxes',
       '#required' => TRUE,
       '#options' => $entity_options,
-      '#default_value' => isset($field['entities']) ? $field['entities'] : [],
+      '#default_value' => $field['entities'] ?? [],
     ];
 
     $form['ui_limit'] = [
       '#title' => $this->t('Limit field'),
       '#description' => $this->t('Limit this field on field UI per bundles and/or view modes. The values are in the form of $bundle|$view_mode, where $view_mode may be either a view mode set to use custom settings, or \'default\'. You may use * to select all, e.g article|*, *|full or *|*. Enter one value per line.'),
       '#type' => 'textarea',
-      '#default_value' => isset($field['ui_limit']) ? $field['ui_limit'] : '',
+      '#default_value' => $field['ui_limit'] ?? '',
     ];
 
     $form['submit'] = [

@@ -191,10 +191,10 @@ class ViewsBulkOperationsBulkForm extends FieldPluginBase implements CacheableDe
    * query has been built. Also, no point doing this on the view
    * admin page.
    *
-   * @param array $bulk_form_keys
-   *   The calculated bulk form keys.
+   * @param array $view_entity_data
+   *   See ViewsBulkOperationsViewDataInterface::getViewEntityData().
    */
-  protected function updateTempstoreData(array $bulk_form_keys = NULL): void {
+  protected function updateTempstoreData(array $view_entity_data = NULL): void {
     // Initialize tempstore object and get data if available.
     $this->tempStoreData = $this->getTempstoreData($this->view->id(), $this->view->current_display);
 
@@ -209,8 +209,11 @@ class ViewsBulkOperationsBulkForm extends FieldPluginBase implements CacheableDe
     ];
 
     // Add bulk form keys when the form is displayed.
-    if (isset($bulk_form_keys)) {
-      $variable['bulk_form_keys'] = $bulk_form_keys;
+    if ($view_entity_data !== NULL) {
+      $variable['bulk_form_keys'] = [];
+      foreach ($view_entity_data as $row_index => $item) {
+        $variable['bulk_form_keys'][$row_index] = $item[0];
+      }
     }
 
     // Set redirect URL taking destination into account.
@@ -404,6 +407,7 @@ class ViewsBulkOperationsBulkForm extends FieldPluginBase implements CacheableDe
         '#prefix' => '<div class="scroll">',
         '#suffix' => '</div>',
       ];
+      parent::buildOptionsForm($form, $form_state);
       return;
     }
 
@@ -562,6 +566,9 @@ class ViewsBulkOperationsBulkForm extends FieldPluginBase implements CacheableDe
    */
   public function submitOptionsForm(&$form, FormStateInterface $form_state) {
     $selected_actions = &$form_state->getValue(['options', 'selected_actions']);
+    if ($selected_actions === NULL) {
+      return;
+    }
     $selected_actions = \array_filter($selected_actions, static fn ($action_data) => !empty($action_data['state']));
     foreach ($selected_actions as &$item) {
       unset($item['state']);
@@ -637,19 +644,8 @@ class ViewsBulkOperationsBulkForm extends FieldPluginBase implements CacheableDe
     $action_options = $this->getBulkOptions();
     if (!empty($this->view->result) && !empty($action_options)) {
 
-      // Calculate bulk form keys and get labels for all rows.
-      $bulk_form_keys = [];
-      $entity_labels = [];
-      $base_field = $this->view->storage->get('base_field');
-      foreach ($this->view->result as $row_index => $row) {
-        if ($entity = $this->getEntity($row)) {
-          $bulk_form_keys[$row_index] = self::calculateEntityBulkFormKey(
-            $entity,
-            $row->{$base_field}
-          );
-          $entity_labels[$row_index] = $entity->label();
-        }
-      }
+      // Get bulk form keys and entity labels for all rows.
+      $entity_data = $this->viewData->getViewEntityData();
 
       // Update and fetch tempstore data to be available from this point
       // as it's needed for proper functioning of further logic.
@@ -658,7 +654,7 @@ class ViewsBulkOperationsBulkForm extends FieldPluginBase implements CacheableDe
       // (data is subject to change - new entities added or deleted after
       // the form display). TODO: consider using $form_state->set() instead.
       if (empty($form_state->getUserInput()['op'])) {
-        $this->updateTempstoreData($bulk_form_keys);
+        $this->updateTempstoreData($entity_data);
       }
       else {
         $this->updateTempstoreData();
@@ -676,7 +672,8 @@ class ViewsBulkOperationsBulkForm extends FieldPluginBase implements CacheableDe
 
       // Render checkboxes for all rows.
       $page_selected = [];
-      foreach ($bulk_form_keys as $row_index => $bulk_form_key) {
+      foreach ($entity_data as $row_index => $entity_data_item) {
+        [$bulk_form_key, $entity_label] = $entity_data_item;
         $checked = isset($this->tempStoreData['list'][$bulk_form_key]);
         if (!empty($this->tempStoreData['exclude_mode'])) {
           $checked = !$checked;
@@ -687,10 +684,11 @@ class ViewsBulkOperationsBulkForm extends FieldPluginBase implements CacheableDe
         }
         $form[$this->options['id']][$row_index] = [
           '#type' => 'checkbox',
-          '#title' => $entity_labels[$row_index],
+          '#title' => $entity_label,
           '#title_display' => 'invisible',
           '#default_value' => $checked,
           '#return_value' => $bulk_form_key,
+          '#attributes' => ['class' => ['js-vbo-checkbox']],
         ];
 
         // We should use #value instead of #default_value to always apply
@@ -726,12 +724,16 @@ class ViewsBulkOperationsBulkForm extends FieldPluginBase implements CacheableDe
           $form['actions'][$id] = [
             '#type' => 'submit',
             '#value' => $label,
+            '#attributes' => [
+              'data-vbo' => 'vbo-action',
+            ],
           ];
         }
       }
       else {
         // Replace the form submit button label.
         $form['actions']['submit']['#value'] = $this->t('Apply to selected items');
+        $form['actions']['submit']['#attributes']['data-vbo'] = 'vbo-action';
 
         $form['header'][$this->options['id']]['action'] = [
           '#type' => 'select',

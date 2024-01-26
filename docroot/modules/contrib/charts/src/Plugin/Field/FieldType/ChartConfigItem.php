@@ -81,9 +81,11 @@ class ChartConfigItem extends FieldItemBase {
    * {@inheritdoc}
    */
   public function setValue($values, $notify = TRUE) {
-    if (isset($values) && isset($values['config'])) {
-      $values['library'] = $values['config']['library'];
-      $values['type'] = $values['config']['type'];
+    if (is_array($values['config'])) {
+      $values += [
+        'library' => $values['config']['library'] ?? NULL,
+        'type' => $values['config']['type'] ?? NULL,
+      ];
     }
 
     parent::setValue($values, $notify);

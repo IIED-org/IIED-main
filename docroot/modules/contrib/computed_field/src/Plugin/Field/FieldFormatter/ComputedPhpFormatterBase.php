@@ -6,7 +6,7 @@ use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 
 /**
- * Base class for own php-formatter
+ * Base class for own php-formatter.
  */
 abstract class ComputedPhpFormatterBase extends ComputedStringFormatter {
 
@@ -21,11 +21,10 @@ abstract class ComputedPhpFormatterBase extends ComputedStringFormatter {
     foreach ($items as $delta => $item) {
       if ($cache_unit < 0) {
         $elements[$delta] = [
-          '#markup' => $this->prepareValue($this->formatItem($item->value, $item, $delta, $langcode))
+          '#markup' => $this->prepareValue($this->formatItem($item->value, $item, $delta, $langcode)),
         ];
       }
       else {
-        $value = $this->prepareValue($item->executeCode());
         $elements[$delta] = [
           '#markup' => $this->prepareValue($this->formatItem($item->executeCode(), $item, $delta, $langcode)),
           '#cache' => [
@@ -35,7 +34,7 @@ abstract class ComputedPhpFormatterBase extends ComputedStringFormatter {
               $this->viewMode,
             ],
             'max-age' => $cache_duration * $cache_unit,
-          ]
+          ],
         ];
       }
     }
@@ -49,14 +48,17 @@ abstract class ComputedPhpFormatterBase extends ComputedStringFormatter {
    * @param mixed $value
    *   The (computed) value of the item.
    * @param \Drupal\Core\Field\FieldItemInterface $item
-   *   The item to format for output
+   *   The item to format for output.
    * @param int $delta
-   *   The delta value (index) of the item in case of multiple items
+   *   The delta value (index) of the item in case of multiple items.
    * @param string $langcode
-   *   The language code
+   *   The language code.
+   *
    * @return mixed
+   *   Returns the value.
    */
   public function formatItem($value, FieldItemInterface $item, $delta = 0, $langcode = NULL) {
     return $value;
   }
+
 }

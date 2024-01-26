@@ -17,4 +17,4 @@ Installing the demo/test module
 Enable the module, check status and run a migration:
 drush en migrate_source_csv_test -y
 drush migrate-status
-drush migrate-import migrate_csv
+drush migrate-import migrate_csv_test

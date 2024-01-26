@@ -143,7 +143,7 @@ trait NameFieldSettingsTrait {
       'autocomplete' => $this->t('Autocomplete'),
     ];
 
-    // @todo: Refactor out for alternative sources.
+    // @todo Refactor out for alternative sources.
     $autocomplete_sources_options = [
       'title' => $this->t('Title options'),
       'generational' => $this->t('Generational options'),
@@ -257,8 +257,8 @@ trait NameFieldSettingsTrait {
       }
     }
 
-    // TODO - Grouping & grouping sort
-    // TODO - Allow reverse free tagging back into the vocabulary.
+    // @todo Grouping & grouping sort
+    // @todo Allow reverse free tagging back into the vocabulary.
     $title_options = implode("\n", array_filter($settings['title_options']));
     $element['title_options'] = [
       '#type' => 'textarea',
@@ -284,7 +284,7 @@ trait NameFieldSettingsTrait {
       '#table_group' => 'none',
     ];
     if (\Drupal::moduleHandler()->moduleExists('taxonomy')) {
-      // TODO - Make the labels more generic.
+      // @todo Make the labels more generic.
       // Generational suffixes may be imported from one or more vocabularies
       // using the tag '[vocabulary:xxx]', where xxx is the vocabulary id.
       // Terms that exceed the maximum length of the generational suffix are

@@ -3,10 +3,10 @@
 namespace Drupal\Tests\message_subscribe\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\Tests\message\Kernel\MessageTemplateCreateTrait;
 use Drupal\Tests\node\Traits\ContentTypeCreationTrait;
 use Drupal\Tests\node\Traits\NodeCreationTrait;
 use Drupal\Tests\user\Traits\UserCreationTrait;
-use Drupal\Tests\message\Kernel\MessageTemplateCreateTrait;
 
 /**
  * Base class for messsage subscribe kernel tests.

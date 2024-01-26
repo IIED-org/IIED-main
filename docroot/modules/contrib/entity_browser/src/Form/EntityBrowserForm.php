@@ -195,6 +195,9 @@ class EntityBrowserForm extends FormBase implements EntityBrowserFormInterface, 
       $this->entityBrowser->getDisplay()->addAjax($form);
     }
 
+    // Disable inline form error.
+    $form['#disable_inline_form_errors'] = TRUE;
+
     $form['#attached']['library'][] = 'entity_browser/entity_browser';
 
     return $form;

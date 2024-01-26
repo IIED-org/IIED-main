@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Drupal\Tests\sophron\Kernel;
 
@@ -27,7 +29,7 @@ class SophronGuesserTest extends KernelTestBase {
   }
 
   /**
-   * @covers ::guess
+   * @covers ::guessMimeType
    */
   public function testGuesserNotInstalled(): void {
     $guesser = \Drupal::service('file.mime_type.guesser.extension');
@@ -35,7 +37,7 @@ class SophronGuesserTest extends KernelTestBase {
   }
 
   /**
-   * @covers ::guess
+   * @covers ::guessMimeType
    */
   public function testGuesserInstalled(): void {
     \Drupal::service('module_installer')->install(['sophron_guesser']);
@@ -44,7 +46,7 @@ class SophronGuesserTest extends KernelTestBase {
   }
 
   /**
-   * @covers ::guess
+   * @covers ::guessMimeType
    */
   public function testGuesserInstallUninstall(): void {
     $guesser = \Drupal::service('file.mime_type.guesser.extension');

@@ -1,0 +1,16 @@
+includes:
+  - phar://phpstan.phar/conf/bleedingEdge.neon
+
+parameters:
+  level: 1
+  paths:
+    - .
+  reportUnmatchedIgnoredErrors: false
+  ignoreErrors:
+    # new static() is a best practice in Drupal, so we cannot fix that.
+    - "#^Unsafe usage of new static#"
+
+    # Ignore common errors for now.
+    - "#Drupal calls should be avoided in classes, use dependency injection instead#"
+    - "#^Plugin definitions cannot be altered.#"
+    - "#^Class .* extends @internal class#"

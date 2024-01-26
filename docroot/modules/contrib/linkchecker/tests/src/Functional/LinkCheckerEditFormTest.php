@@ -25,6 +25,11 @@ class LinkCheckerEditFormTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
+  public $adminUser;
+
+  /**
+   * {@inheritdoc}
+   */
   protected static $modules = [
     'filter',
     'content_translation',

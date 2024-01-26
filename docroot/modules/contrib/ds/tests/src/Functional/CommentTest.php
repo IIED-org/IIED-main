@@ -14,14 +14,14 @@ class CommentTest extends CommentTestBase {
 
   use DsTestTrait;
 
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'starterkit_theme';
 
   /**
    * Modules to install.
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'node',
     'user',
     'comment',

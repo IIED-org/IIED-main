@@ -3,10 +3,10 @@
 namespace Drupal\Tests\message_ui\Functional;
 
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\message\Entity\Message;
 use Drupal\message_ui\MessagePermissions;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
-use Drupal\message\Entity\Message;
 
 /**
  * Testing the message access use case.
@@ -63,7 +63,7 @@ class MessageUiPermissionsTest extends AbstractTestMessageUi {
     $this->assertSession()->statusCodeEquals(200);
 
     // Create a message.
-    $this->submitForm([], t('Create'));
+    $this->submitForm([], 'Create');
 
     // Create the message url.
     $msg_url = '/message/1';
@@ -80,7 +80,7 @@ class MessageUiPermissionsTest extends AbstractTestMessageUi {
     $this->assertSession()->statusCodeEquals(403);
 
     // Grant permission to the user.
-    $this->grantMessageUiPermission('edit');
+    $this->grantMessageUiPermission('update');
     $this->drupalGet($msg_url . '/edit');
     // The user can't edit a message.
     $this->assertSession()->statusCodeEquals(200);
@@ -92,8 +92,9 @@ class MessageUiPermissionsTest extends AbstractTestMessageUi {
 
     // Grant the permission to the user.
     $this->grantMessageUiPermission('delete');
+
     $this->drupalGet($msg_url . '/delete');
-    $this->submitForm([], t('Delete'));
+    $this->submitForm([], 'Delete');
 
     // User did not have permission to the overview page - verify access
     // denied.
@@ -136,7 +137,7 @@ class MessageUiPermissionsTest extends AbstractTestMessageUi {
     // Get the message template and create an instance.
     $message_template = $this->loadMessageTemplate('foo');
 
-    /* @var $message Message */
+    /** @var \Drupal\message\Entity\Message $message */
     $message = Message::create(['template' => $message_template->id()]);
     $message->setOwner($this->account);
     $message->save();

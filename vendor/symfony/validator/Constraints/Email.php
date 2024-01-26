@@ -43,7 +43,7 @@ class Email extends Constraint
     ];
 
     protected const ERROR_NAMES = [
-        self::INVALID_FORMAT_ERROR => 'STRICT_CHECK_FAILED_ERROR',
+        self::INVALID_FORMAT_ERROR => 'INVALID_FORMAT_ERROR',
     ];
 
     /**
@@ -53,6 +53,7 @@ class Email extends Constraint
 
     public $message = 'This value is not a valid email address.';
     public $mode;
+    /** @var callable|null */
     public $normalizer;
 
     public function __construct(

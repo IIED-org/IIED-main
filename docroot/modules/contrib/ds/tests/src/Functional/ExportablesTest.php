@@ -59,10 +59,10 @@ class ExportablesTest extends TestBase {
 
     $assert = [
       'regions' => [
-        'header' => '<td colspan="8">' . t('Header') . '</td>',
-        'left' => '<td colspan="8">' . t('Left') . '</td>',
-        'right' => '<td colspan="8">' . t('Right') . '</td>',
-        'footer' => '<td colspan="8">' . t('Footer') . '</td>',
+        'header' => '<td colspan="8">' . $this->t('Header') . '</td>',
+        'left' => '<td colspan="8">' . $this->t('Left') . '</td>',
+        'right' => '<td colspan="8">' . $this->t('Right') . '</td>',
+        'footer' => '<td colspan="8">' . $this->t('Footer') . '</td>',
       ],
     ];
 

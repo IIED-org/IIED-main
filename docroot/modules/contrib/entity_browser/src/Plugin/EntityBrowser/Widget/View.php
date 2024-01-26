@@ -6,16 +6,11 @@ use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
-use Drupal\entity_browser\WidgetBase;
 use Drupal\Core\Url;
-use Drupal\entity_browser\WidgetValidationManager;
+use Drupal\entity_browser\WidgetBase;
 use Drupal\views\Entity\View as ViewEntity;
 use Drupal\views\Views;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Uses a view to provide entity listing in a browser's widget.
@@ -28,7 +23,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
  *   auto_select = TRUE
  * )
  */
-class View extends WidgetBase implements ContainerFactoryPluginInterface {
+class View extends WidgetBase {
 
   /**
    * The current user.
@@ -36,6 +31,13 @@ class View extends WidgetBase implements ContainerFactoryPluginInterface {
    * @var \Drupal\Core\Session\AccountInterface
    */
   protected $currentUser;
+
+  /**
+   * The renderer.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
 
   /**
    * {@inheritdoc}
@@ -51,38 +53,10 @@ class View extends WidgetBase implements ContainerFactoryPluginInterface {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('event_dispatcher'),
-      $container->get('entity_type.manager'),
-      $container->get('plugin.manager.entity_browser.widget_validation'),
-      $container->get('current_user')
-    );
-  }
-
-  /**
-   * Constructs a new View object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
-   *   Event dispatcher service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
-   * @param \Drupal\entity_browser\WidgetValidationManager $validation_manager
-   *   The Widget Validation Manager service.
-   * @param \Drupal\Core\Session\AccountInterface $current_user
-   *   The current user.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EventDispatcherInterface $event_dispatcher, EntityTypeManagerInterface $entity_type_manager, WidgetValidationManager $validation_manager, AccountInterface $current_user) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $event_dispatcher, $entity_type_manager, $validation_manager);
-    $this->currentUser = $current_user;
+    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
+    $instance->currentUser = $container->get('current_user');
+    $instance->renderer = $container->get('renderer');
+    return $instance;
   }
 
   /**
@@ -138,7 +112,7 @@ class View extends WidgetBase implements ContainerFactoryPluginInterface {
     }
 
     $form['view']['view'] = [
-      '#markup' => \Drupal::service('renderer')->render($form['view']['view']),
+      '#markup' => $this->renderer->render($form['view']['view']),
     ];
 
     return $form;
@@ -229,7 +203,7 @@ class View extends WidgetBase implements ContainerFactoryPluginInterface {
     foreach ($selected_rows as $row) {
       $item = explode(':', $row);
       if (count($item) == 2) {
-        list($type, $id) = $item;
+        [$type, $id] = $item;
         $storage = $this->entityTypeManager->getStorage($type);
         if ($entity = $storage->load($id)) {
           $entities[] = $entity;
@@ -257,7 +231,7 @@ class View extends WidgetBase implements ContainerFactoryPluginInterface {
     // Get only those enabled Views that have entity_browser displays.
     $displays = Views::getApplicableViews('entity_browser_display');
     foreach ($displays as $display) {
-      list($view_id, $display_id) = $display;
+      [$view_id, $display_id] = $display;
       $view = $this->entityTypeManager->getStorage('view')->load($view_id);
       $options[$view_id . '.' . $display_id] = $this->t('@view : @display', ['@view' => $view->label(), '@display' => $view->get('display')[$display_id]['display_title']]);
     }
@@ -282,7 +256,7 @@ class View extends WidgetBase implements ContainerFactoryPluginInterface {
     $this->configuration['submit_text'] = $values['submit_text'];
     $this->configuration['auto_select'] = $values['auto_select'];
     if (!empty($values['view'])) {
-      list($view_id, $display_id) = explode('.', $values['view']);
+      [$view_id, $display_id] = explode('.', $values['view']);
       $this->configuration['view'] = $view_id;
       $this->configuration['view_display'] = $display_id;
     }

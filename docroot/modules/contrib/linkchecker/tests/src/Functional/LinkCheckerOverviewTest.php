@@ -15,6 +15,11 @@ class LinkCheckerOverviewTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
+  public $adminUser;
+
+  /**
+   * {@inheritdoc}
+   */
   protected $defaultTheme = 'stark';
 
   /**

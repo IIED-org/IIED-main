@@ -21,8 +21,8 @@ class BookNavigation extends DsFieldBase {
    */
   public function isAllowed() {
 
-    // We only allow the 'full' view mode.
-    if ($this->viewMode() != 'full') {
+    // We only allow the 'full' and 'default' view mode.
+    if (!in_array($this->viewMode(), ['default', 'full'])) {
       return FALSE;
     }
 
@@ -37,7 +37,7 @@ class BookNavigation extends DsFieldBase {
       }
     }
 
-    // Return false when there where no displays.
+    // Return false when there are no displays.
     return FALSE;
   }
 

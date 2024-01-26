@@ -222,6 +222,9 @@ solr_configs:
               name: name
               VALUE: hu
             -
+              name: indexPath
+              VALUE: ./hu
+            -
               name: lookupImpl
               VALUE: AnalyzingInfixLookupFactory
             -
@@ -244,7 +247,7 @@ solr_configs:
               VALUE: 'false'
 text_files:
   stopwords: |
-    ﻿a
+    a
     abba
     abban
     abból

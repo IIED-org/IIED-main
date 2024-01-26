@@ -17,6 +17,9 @@ ds.field_plugin.title:
     link class:
       type: string
       label: 'Link class'
+    link_target:
+      type: string
+      label: 'Link target'
     wrapper:
       type: string
       label: 'Wrapper of the field'
@@ -47,7 +50,18 @@ ds.field_plugin.link:
       type: string
       label:  'Class of the field'
 
+ds.field_plugin.node_author:
+  type: mapping
+  label: 'Mapping for the author name field settings'
+  mapping:
+    display_name:
+      type: boolean
+      label: 'Use display name'
+
 ds.field_plugin.user:
+  type: ds.field_plugin.entity
+
+ds.field_plugin.comment_user:
   type: ds.field_plugin.entity
 
 ds.field_plugin.mail_link:
