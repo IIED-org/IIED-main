@@ -3,7 +3,7 @@
         'name' => 'drupal/recommended-project',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '5028db7d7082a459e1d51095439478c5a6dd3190',
+        'reference' => '48bd096365271d7212169e6030e92ac82caa723c',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -33,6 +33,15 @@
             'install_path' => __DIR__ . '/../ajgl/breakpoint-twig-extension',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'apvarun/toastify-js' => array(
+            'pretty_version' => 'v1.12.0',
+            'version' => '1.12.0.0',
+            'reference' => NULL,
+            'type' => 'drupal-library',
+            'install_path' => __DIR__ . '/../../docroot/libraries/toastify-js',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'asm89/stack-cors' => array(
             'pretty_version' => 'v2.2.0',
@@ -1450,7 +1459,7 @@
         'drupal/recommended-project' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '5028db7d7082a459e1d51095439478c5a6dd3190',
+            'reference' => '48bd096365271d7212169e6030e92ac82caa723c',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
