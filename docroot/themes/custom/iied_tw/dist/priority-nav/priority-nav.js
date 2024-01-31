@@ -3,6 +3,7 @@
  * Repository: https://github.com/gijsroge/priority-navigation.git
  * Description: Priority+ pattern navigation that hides menu items if they don't fit on screen.
  * Demo: http://gijsroge.github.io/priority-nav.js/
+ * Modified: 202040131 cb comment out remove function
  */
 (function (root, factory) {
     if (typeof define === "function" && define.amd) {
@@ -556,18 +557,18 @@
     /**
      * Remove function
      */
-    Element.prototype.remove = function() {
-        this.parentElement.removeChild(this);
-    };
+    // Element.prototype.remove = function() {
+    //     this.parentElement.removeChild(this);
+    // };
 
-    /*global HTMLCollection */
-    NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
-        for(var i = 0, len = this.length; i < len; i++) {
-            if(this[i] && this[i].parentElement) {
-                this[i].parentElement.removeChild(this[i]);
-            }
-        }
-    };
+    // /*global HTMLCollection */
+    // NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
+    //     for(var i = 0, len = this.length; i < len; i++) {
+    //         if(this[i] && this[i].parentElement) {
+    //             this[i].parentElement.removeChild(this[i]);
+    //         }
+    //     }
+    // };
 
 
     /**
