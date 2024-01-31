@@ -25,3 +25,7 @@ Source: https://www.drupal.org/files/issues/2021-09-07/3209204-adding-existing-t
 Source: https://www.drupal.org/files/issues/2023-12-20/fix-toolbarjs-null-handling.patch
 
 
+3410100
+Source: https://www.drupal.org/files/issues/2024-01-23/drupal-revert-source-editing-validation-tightening-3410100-38.patch
+
+
