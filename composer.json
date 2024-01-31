@@ -60,9 +60,22 @@
             "reference": "2.7.2"
           }
         }
+      },
+      "apvarun/toastify-js": {
+        "type": "package",
+         "package": {
+          "name": "apvarun/toastify-js",
+          "version": "v1.12.0",
+          "type": "drupal-library",
+          "dist": {
+            "url": "https://github.com/apvarun/toastify-js/archive/refs/tags/1.12.0.zip",
+            "type": "zip"
+          }
+        }
       }
     },
     "require": {
+        "apvarun/toastify-js": "^1.12",
         "bower-asset/c3": "^0.7.20",
         "bower-asset/chartjs": "^2.9",
         "bower-asset/d3": "^5.16",
@@ -273,7 +286,9 @@
             "Media Thumbnail Formatter doesn't translate the title attribute correctly":"https://www.drupal.org/files/issues/2023-05-12/media-thumbnail-formatter-title-not-translated-3089216.patch",
             "The language of content entities incorrectly falls back to the default language...":"https://www.drupal.org/files/issues/2023-12-18/3061761-57.patch",
             "3208030":"https://www.drupal.org/files/issues/2022-07-08/3208030_16.patch",
-            "3209204":"https://www.drupal.org/files/issues/2021-09-07/3209204-adding-existing-translation_0.patch"
+            "3209204":"https://www.drupal.org/files/issues/2021-09-07/3209204-adding-existing-translation_0.patch",
+            "3409505":"https://www.drupal.org/files/issues/2023-12-20/fix-toolbarjs-null-handling.patch",
+            "3410100":"https://www.drupal.org/files/issues/2024-01-23/drupal-revert-source-editing-validation-tightening-3410100-38.patch"
           },
           "drupal/facets": {
             "Add option to show current search string in facet summary": "https://www.drupal.org/files/issues/2022-12-30/facets-current_search_string-2979223-57.patch",

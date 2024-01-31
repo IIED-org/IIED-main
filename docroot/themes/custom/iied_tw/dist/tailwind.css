@@ -8349,6 +8349,10 @@ cite {
     width: 20rem;
   }
 
+  .xl\:w-full{
+    width: 100%;
+  }
+
   .xl\:max-w-screen-xl{
     max-width: 1280px;
   }

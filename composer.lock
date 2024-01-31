@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bd67b315b50e622d44b8e0296de66f42",
+    "content-hash": "707c23f04a83c8d7087d05bda771d0b4",
     "packages": [
         {
             "name": "acquia/http-hmac-php",
@@ -66,6 +66,15 @@
                 "source": "https://github.com/acquia/http-hmac-php/tree/6.1.0"
             },
             "time": "2023-05-15T20:41:16+00:00"
+        },
+        {
+            "name": "apvarun/toastify-js",
+            "version": "v1.12.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/apvarun/toastify-js/archive/refs/tags/1.12.0.zip"
+            },
+            "type": "drupal-library"
         },
         {
             "name": "asm89/stack-cors",

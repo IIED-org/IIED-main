@@ -208,7 +208,9 @@
         $(window).on({
           'dialog:aftercreate': (event, dialog, $element, settings) => {
             const toolbarBar = document.getElementById('toolbar-bar');
-            toolbarBar.style.marginTop = '0';
+            if (toolbarBar) {
+              toolbarBar.style.marginTop = '0';
+            }
 
             // When off-canvas is positioned in top, toolbar has to be moved down.
             if (settings.drupalOffCanvasPosition === 'top') {
@@ -227,7 +229,9 @@
           },
           'dialog:beforeclose': () => {
             const toolbarBar = document.getElementById('toolbar-bar');
-            toolbarBar.style.marginTop = '0';
+            if (toolbarBar) {
+              toolbarBar.style.marginTop = '0';
+            }
           },
         });
       });
