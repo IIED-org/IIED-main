@@ -6436,6 +6436,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Pass only strings to UserSession::hasPermission()": "https://www.drupal.org/files/issues/2023-12-20/form_mode_control-string_permission-3409223-6.patch"
                 }
             },
             "installation-source": "dist",

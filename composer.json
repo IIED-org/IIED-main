@@ -280,6 +280,9 @@
             "Robustify how ajax finds the facet block": "https://www.drupal.org/files/issues/2023-01-20/facets-ajax-improvements-3013795-40.patch",
             "3336646":"https://www.drupal.org/files/issues/2023-08-16/3336646-function-is-deprecated.patch"
           },
+          "drupal/form_mode_control": {
+            "Pass only strings to UserSession::hasPermission()":"https://www.drupal.org/files/issues/2023-12-20/form_mode_control-string_permission-3409223-6.patch"
+          },
           "drupal/views_field_view": {
             "Contextual filter parameter is not working":"https://www.drupal.org/files/issues/2022-08-09/multible_Contextual_filter_parameter-2873359-30.patch"
           },
