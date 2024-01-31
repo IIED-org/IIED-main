@@ -7,19 +7,21 @@ Hidden handbrakes card
 
         <a href="{{ url }}" class="hover:no-underline">
           <div
-            class="flex h-full overflow-hidden transition-shadow bg-white border border-gray-500 rounded-xl group hover:shadow-md grow hover:bg-iiedblue-10"
+            class="flex h-full overflow-hidden transition-shadow bg-white border border-gray-500 xl:flex-col rounded-xl group hover:shadow-md grow hover:bg-iiedblue-10"
           >
       
             {% block image %}
-                        {% set image_uri = node.field_main_image|file_uri %}
-                        {% set image_alt = node.field_main_image.entity.field_media_image.alt %}
+                        {% set image_uri = node.field_hidden_handbrake_image.entity.field_media_image|file_uri %}
+                        {% set image_alt = node.field_hidden_handbrake_image.entity.field_media_image.alt %}
             {% if image_uri is not null %}
-              <img class="object-cover w-3/12 h-auto" src="{{ image_uri|image_style('card_256') }}" alt="{{ image_alt }}" />
+            <div class="flex items-center justify-center w-3/12 xl:w-full bg-color-rotate">
+              <img src="{{ file_url(image_uri) }}" alt="{{ image_alt }}" />
+            </div>
             {% endif %}
             {% endblock %}
 
           
-            <div class="flex flex-col justify-between w-9/12 p-4 grow">
+            <div class="flex flex-col justify-between w-9/12 p-4 xl:w-full grow">
               <div>
                 <h5 class="mb-4 text-xl leading-relaxed text-gray-900">
                   {{ label }}
