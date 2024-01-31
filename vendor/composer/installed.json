@@ -4810,7 +4810,8 @@
                     "Media Thumbnail Formatter doesn't translate the title attribute correctly": "https://www.drupal.org/files/issues/2023-05-12/media-thumbnail-formatter-title-not-translated-3089216.patch",
                     "The language of content entities incorrectly falls back to the default language...": "https://www.drupal.org/files/issues/2023-12-18/3061761-57.patch",
                     "3208030": "https://www.drupal.org/files/issues/2022-07-08/3208030_16.patch",
-                    "3209204": "https://www.drupal.org/files/issues/2021-09-07/3209204-adding-existing-translation_0.patch"
+                    "3209204": "https://www.drupal.org/files/issues/2021-09-07/3209204-adding-existing-translation_0.patch",
+                    "3409505": "https://www.drupal.org/files/issues/2023-12-20/fix-toolbarjs-null-handling.patch"
                 }
             },
             "installation-source": "dist",
