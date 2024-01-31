@@ -7,65 +7,12 @@ Hidden handbrakes card
 
         <a href="{{ url }}" class="hover:no-underline">
           <div
-            class="flex h-full overflow-hidden transition-shadow bg-white border border-gray-500 xl:flex-col rounded-xl group hover:shadow-md grow hover:bg-iiedblue-10"
-          >
-      
-            {% block image %}
-                        {% set image_uri = node.field_hidden_handbrake_image|file_uri %}
-                        {% set image_alt = node.field_hidden_handbrake_image.entity.field_media_image.alt %}
-            {% if image_uri is not null %}
-            <div class="flex items-center justify-center w-3/12 xl:w-full bg-color-rotate">
-              <img class="" src="{{ image_uri|image_style('scale_sm') }}" alt="{{ image_alt }}" />
-            </div>
-            {% endif %}
-            {% endblock %}
-
-          
-            <div class="flex flex-col justify-between w-9/12 p-4 xl:w-full grow">
-              <div>
-                <h5 class="mb-4 text-xl leading-relaxed text-gray-900">
-                  {{ label }}
-                </h5>
-
-                  <p class="mb-2 text-gray-700">{{ node.field_tagline.0.value }}</p>
-              </div>
-              <div class="flex justify-between">
-                <p class="text-gray-500">{{ node.getCreatedTime|date('d F Y') }}</p>
-
-              {% if node.comment.comment_count %}
-              <div class="flex items-center px-2 py-1 rounded-full not-prose bg-iiedblue-50">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" stroke-width="1.5" stroke="#9CA3AF" class="w-4 h-4 mr-1">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"></path>
-                    </svg>
-                  {{ content.comment['#items'].comment_count }} 
-                  {{ node.comment.comment_count }}
-                  </div>
-              {% endif %}
-            </div>
-
-
-            </div>
-          </div>
-        </a>
-
-</article>
-
-
-
-
-
-{# 
-old card 
-<article{{ attributes.addClass('h-full') }}>
-
-        <a href="{{ url }}" class="hover:no-underline">
-          <div
             class="flex h-full overflow-hidden transition-shadow bg-white border border-gray-500 rounded-xl group hover:shadow-md grow hover:bg-iiedblue-10"
           >
       
             {% block image %}
-                        {% set image_uri = node.field_hidden_handbrake_image|file_uri %}
-                        {% set image_alt = node.field_hidden_handbrake_image.entity.field_media_image.alt %}
+                        {% set image_uri = node.field_main_image|file_uri %}
+                        {% set image_alt = node.field_main_image.entity.field_media_image.alt %}
             {% if image_uri is not null %}
               <img class="object-cover w-3/12 h-auto" src="{{ image_uri|image_style('card_256') }}" alt="{{ image_alt }}" />
             {% endif %}
@@ -99,4 +46,4 @@ old card
           </div>
         </a>
 
-</article> #}
+</article>
