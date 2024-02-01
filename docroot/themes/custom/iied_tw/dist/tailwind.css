@@ -3149,8 +3149,7 @@ cite {
 }
 
 .js input.form-autocomplete {
-  background-image: url(/themes/custom/iied_pubs/assets/images/search_icon.png);
-  background-position: 95% center !important;
+  background-image: none;
 }
 
 /*-- rotate 4 colour borders for publications grid  --*/
@@ -3446,7 +3445,7 @@ cite {
   transition-duration: 150ms;
 }
 
-.tracker-select select {
+.tracker-select select, .search-select select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -4152,6 +4151,82 @@ cite {
   padding: 0px;
 }
 
+.search-page .srp-w{
+  width: 100%;
+  max-width: 640px;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+.search-page .srp-h{
+  height: 3.5rem;
+}
+
+.search-page .srp-text{
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.item-list__checkbox{
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.facets-widget-checkbox .facets-checkbox{
+  margin-right: 0.125rem;
+  border-radius: 0.25rem;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(209 213 219 / var(--tw-border-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(176 53 128 / var(--tw-text-opacity));
+  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.facets-widget-checkbox .facets-checkbox:focus{
+  --tw-border-opacity: 1;
+  border-color: rgb(226 103 178 / var(--tw-border-opacity));
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+  --tw-ring-color: rgb(236 113 188 / var(--tw-ring-opacity));
+  --tw-ring-opacity: 0.5;
+  --tw-ring-offset-width: 0px;
+}
+
+.facet-box .block-facet--checkbox:first-child {
+  border-top: none;
+}
+
+.search-page .filter-chip{
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  margin-left: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.search-page .filter-chip > :not([hidden]) ~ :not([hidden]){
+  --tw-space-x-reverse: 0;
+  margin-right: calc(0.25rem * var(--tw-space-x-reverse));
+  margin-left: calc(0.25rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+.search-page .filter-chip{
+  border-radius: 9999px;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(209 213 219 / var(--tw-border-opacity));
+  padding: 0.5rem;
+}
+
+.search-page .filter-chip:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(224 246 251 / var(--tw-bg-opacity));
+}
+
 /*-- animations --*/
 
 @keyframes bounce-x {
@@ -4290,6 +4365,10 @@ cite {
   top: -3rem;
 }
 
+.-top-14{
+  top: -3.5rem;
+}
+
 .-top-8{
   top: -2rem;
 }
@@ -4308,6 +4387,10 @@ cite {
 
 .bottom-3{
   bottom: 0.75rem;
+}
+
+.end-0{
+  inset-inline-end: 0px;
 }
 
 .left-0{
@@ -4471,6 +4554,11 @@ cite {
   margin-right: auto;
 }
 
+.my-1{
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
 .my-12{
   margin-top: 3rem;
   margin-bottom: 3rem;
@@ -4589,12 +4677,24 @@ cite {
   margin-left: 0.5rem;
 }
 
+.ml-3{
+  margin-left: 0.75rem;
+}
+
 .ml-4{
   margin-left: 1rem;
 }
 
 .ml-auto{
   margin-left: auto;
+}
+
+.mr-0{
+  margin-right: 0px;
+}
+
+.mr-0\.5{
+  margin-right: 0.125rem;
 }
 
 .mr-1{
@@ -4822,10 +4922,6 @@ cite {
   width: 1rem;
 }
 
-.w-44{
-  width: 11rem;
-}
-
 .w-48{
   width: 12rem;
 }
@@ -4905,6 +5001,10 @@ cite {
 
 .max-w-screen-md{
   max-width: 768px;
+}
+
+.max-w-screen-sm{
+  max-width: 640px;
 }
 
 .max-w-xs{
@@ -5677,11 +5777,6 @@ cite {
   padding-bottom: 6rem;
 }
 
-.py-3{
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
-}
-
 .py-4{
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -5743,6 +5838,10 @@ cite {
 
 .pb-6{
   padding-bottom: 1.5rem;
+}
+
+.pe-3{
+  padding-inline-end: 0.75rem;
 }
 
 .pl-0{
@@ -8117,6 +8216,10 @@ cite {
     align-items: center;
   }
 
+  .lg\:justify-end{
+    justify-content: flex-end;
+  }
+
   .lg\:gap-10{
     gap: 2.5rem;
   }
@@ -8157,12 +8260,6 @@ cite {
     --tw-space-x-reverse: 0;
     margin-right: calc(3rem * var(--tw-space-x-reverse));
     margin-left: calc(3rem * calc(1 - var(--tw-space-x-reverse)));
-  }
-
-  .lg\:space-x-6 > :not([hidden]) ~ :not([hidden]){
-    --tw-space-x-reverse: 0;
-    margin-right: calc(1.5rem * var(--tw-space-x-reverse));
-    margin-left: calc(1.5rem * calc(1 - var(--tw-space-x-reverse)));
   }
 
   .lg\:overflow-hidden{
@@ -8428,6 +8525,11 @@ cite {
 
   .xl\:pt-6{
     padding-top: 1.5rem;
+  }
+
+  .xl\:text-3xl{
+    font-size: 1.875rem;
+    line-height: 2.25rem;
   }
 
   .xl\:text-4xl{
