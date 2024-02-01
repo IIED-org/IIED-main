@@ -5,6 +5,7 @@ dependencies:
   config:
     - facets.facet.type
   module:
+    - block_class
     - facets
   theme:
     - iied_tw
@@ -16,7 +17,7 @@ provider: null
 plugin: 'facet_block:type'
 settings:
   id: 'facet_block:type'
-  label: 'Filter by document type'
+  label: 'Document type'
   label_display: visible
   provider: facets
   context_mapping: {  }

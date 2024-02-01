@@ -5,6 +5,7 @@ dependencies:
   config:
     - facets.facet.theme
   module:
+    - block_class
     - facets
   theme:
     - iied_tw
@@ -16,7 +17,7 @@ provider: null
 plugin: 'facet_block:theme'
 settings:
   id: 'facet_block:theme'
-  label: 'Filter by theme'
+  label: Theme
   label_display: visible
   provider: facets
   context_mapping: {  }
