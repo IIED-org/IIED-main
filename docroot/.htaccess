@@ -1,9 +1,19 @@
 #
 # Apache/PHP/Drupal settings:
 #
+<ifmodule mod_setenvif.c>
+SetEnvIf AH_CLIENT_IP ^185\.9\.144\.243$ Deny_Host
+SetEnvIf AH_CLIENT_IP ^47\.76\.35\.19$ Deny_Host
+Order allow,deny
+Allow From All
+Deny from env=Deny_Host
+</ifmodule>
 
-# Block robot IPs
-Deny from 185.9.144.243 
+# Block rogue user agents
+RewriteEngine On
+RewriteCond %{HTTP_USER_AGENT} ^.*(Bytedance|Bytespider).*$ [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} "Mozilla/5\.0 \.Linux\. Android 5\.0\. AppleWebKit/537\.36 \.KHTML\. like Gecko\. Mobile Safari/537\.36 \.compatible\. Bytespider\. spider-feedback\.bytedance\.com\." [NC]
+RewriteRule .* - [F,L]
 
 # Protect files and directories from prying eyes.
 <FilesMatch "\.(engine|inc|info|install|make|module|profile|test|po|sh|.*sql|theme|twig|tpl(\.php)?|xtmpl|yml)(~|\.sw[op]|\.bak|\.orig|\.save)?$|^(\.(?!well-known).*|Entries.*|Repository|Root|Tag|Template|composer\.(json|lock)|web\.config)$|cron\.php|install\.php|^(CHANGELOG|COPYRIGHT|INSTALL.*|LICENSE|MAINTAINERS|README|UPDATE).txt$|^#.*#$|\.php(~|\.sw[op]|\.bak|\.orig|\.save)$">
