@@ -35,8 +35,8 @@ widget:
     reset_text: 'Show all items'
     hide_reset_when_no_selection: false
     soft_limit_settings:
-      show_less_label: 'Show fewer areas'
-      show_more_label: 'Show more areas'
+      show_less_label: '– Show fewer areas'
+      show_more_label: '+ Show more areas'
 empty_behavior:
   behavior: none
 only_visible_when_facet_source_is_visible: true

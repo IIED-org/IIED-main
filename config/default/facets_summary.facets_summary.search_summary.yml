@@ -22,12 +22,6 @@ processor_configs:
     weights:
       build: '0'
     settings: {  }
-  show_string:
-    processor_id: show_string
-    weights:
-      build: '-10'
-    settings:
-      label: for
 facets:
   theme:
     checked: true

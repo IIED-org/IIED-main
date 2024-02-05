@@ -11,7 +11,7 @@
  */
 #}
 {% apply spaceless %}
-  <select{{ attributes.addClass('border-none rounded-xl') }}>
+  <select{{ attributes.addClass('border border-gray-300 rounded-xl') }}>
     {% for option in options %}
       {% if option.type == 'optgroup' %}
         <optgroup label="{{ option.label }}">

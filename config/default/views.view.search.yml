@@ -8,13 +8,13 @@ dependencies:
     - user.role.anonymous
     - user.role.authenticated
   module:
-    0: better_exposed_filters
-    1: rest
-    2: search_api
-    3: serialization
-    4: text
-    5: user
-    7: views_data_export
+    - better_exposed_filters
+    - rest
+    - search_api
+    - serialization
+    - text
+    - user
+    - views_data_export
 id: search
 label: Search
 module: views
@@ -358,6 +358,7 @@ display:
       tags:
         - 'config:field.storage.node.body'
         - 'config:search_api.index.acquia_search_index'
+        - 'search_api_list:acquia_search_index'
   data_export_1:
     id: data_export_1
     display_title: 'Data export'
@@ -385,6 +386,7 @@ display:
       tags:
         - 'config:field.storage.node.body'
         - 'config:search_api.index.acquia_search_index'
+        - 'search_api_list:acquia_search_index'
   page_1:
     id: page_1
     display_title: 'Pubs search'
@@ -550,12 +552,14 @@ display:
       tags:
         - 'config:field.storage.node.body'
         - 'config:search_api.index.acquia_search_index'
+        - 'search_api_list:acquia_search_index'
   page_2:
     id: page_2
     display_title: Page
     display_plugin: page
     position: 2
     display_options:
+      title: ''
       exposed_form:
         type: basic
         options:
@@ -571,6 +575,7 @@ display:
       sorts: {  }
       defaults:
         cache: false
+        title: false
         css_class: false
         use_ajax: false
         exposed_form: false
@@ -597,3 +602,4 @@ display:
       tags:
         - 'config:field.storage.node.body'
         - 'config:search_api.index.acquia_search_index'
+        - 'search_api_list:acquia_search_index'
