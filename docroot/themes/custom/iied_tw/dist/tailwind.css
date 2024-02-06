@@ -7163,6 +7163,11 @@ cite {
   text-transform: uppercase;
 }
 
+.first-letter\:text-iiedgreen-700::first-letter{
+  --tw-text-opacity: 1;
+  color: rgb(150 172 24 / var(--tw-text-opacity));
+}
+
 .first-letter\:text-iiedpink-700::first-letter{
   --tw-text-opacity: 1;
   color: rgb(186 63 138 / var(--tw-text-opacity));
@@ -8201,6 +8206,10 @@ cite {
     grid-column: span 4 / span 4;
   }
 
+  .xl\:col-span-6{
+    grid-column: span 6 / span 6;
+  }
+
   .xl\:col-span-7{
     grid-column: span 7 / span 7;
   }
@@ -8219,6 +8228,10 @@ cite {
 
   .xl\:col-start-4{
     grid-column-start: 4;
+  }
+
+  .xl\:col-start-6{
+    grid-column-start: 6;
   }
 
   .xl\:row-span-2{
