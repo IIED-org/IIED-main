@@ -133,3 +133,43 @@ function iied_utils_get_page_entity() {
   }
   return FALSE;
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter() for views_exposed_form().
+ *
+ * Custom integration for facets. When a Views exposed filter is modified on a
+ * search results page it will lose any facets which have been already selected.
+ * This adds hidden fields for each facet so their values are retained.
+ */
+function iied_utils_form_views_exposed_form_alter(&$form, FormStateInterface $form_state) {
+  // Retrieve the view object and the query plugin.
+  $storage = $form_state->getStorage();
+  if (!isset($storage['view'])) {
+    return;
+  }
+  $view = $storage['view'];
+  if (!($view instanceof ViewExecutable)) {
+    return;
+  }
+  $query_plugin = $view->getQuery();
+  // Make sure the view is based on Search API and has the "Preserve facets"
+  // option enabled, and that the Facets module is installed.
+  $preserve_facets = !empty($query_plugin->options['preserve_facet_query_args'])
+    && $query_plugin instanceof SearchApiQuery
+    && \Drupal::moduleHandler()->moduleExists('facets');
+  if ($preserve_facets) {
+    // Retrieve the facet source.
+    $query = $query_plugin->getSearchApiQuery();
+    $display_id = $query->getSearchId(FALSE);
+    $facet_source_id = str_replace(':', '__', 'search_api:' . $display_id);
+    $facet_source = \Drupal::entityTypeManager()
+      ->getStorage('facets_facet_source')
+      ->load($facet_source_id);
+    if (!$facet_source) {
+      return;
+    }
+    if ( 'facets_pretty_paths' == $facet_source->getUrlProcessorName()) {
+      $form['#action'] = NULL;
+    }
+  }
+}

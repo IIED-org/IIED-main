@@ -1,0 +1,55 @@
+<?php
+
+/**
+ * @file
+ * Facets Pretty Paths module file.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function facets_pretty_paths_form_facets_facet_edit_form_alter(&$form, FormStateInterface $form_state) {
+
+  // Load the facet and facet source configuration.
+  $facet = \Drupal::routeMatch()->getParameter('facets_facet');
+  $facetsource_config = $facet->getFacetSourceConfig();
+
+  // Only alter form when pretty paths is active.
+  if ($facetsource_config->getUrlProcessorName() == 'facets_pretty_paths') {
+
+    /* @var $pretty_paths_coder_manager \Drupal\facets_pretty_paths\Coder\CoderPluginManager */
+    $pretty_paths_coder_manager = \Drupal::service('plugin.manager.facets_pretty_paths.coder');
+    $coders = [];
+    $coder_descriptions = [];
+    foreach ($pretty_paths_coder_manager->getDefinitions() as $coder_id => $definition) {
+      $coders[$definition['id']] = !empty($definition['label']) ? $definition['label'] : $coder_id;
+      $coder_descriptions[$definition['id']] = !empty($definition['description']) ? $definition['description'] : '';
+    }
+    $form['facet_settings']['facets_pretty_paths_coder'] = [
+      '#type' => 'radios',
+      '#title' => t('Pretty paths coder'),
+      '#options' => $coders,
+      '#default_value' => $facet->getThirdPartySetting('facets_pretty_paths', 'coder', 'default_coder'),
+    ];
+
+    foreach ($coder_descriptions as $coder_id => $coder_description) {
+      $form['facet_settings']['facets_pretty_paths_coder'][$coder_id]['#description'] = $coder_description;
+    }
+
+    // We need to add our custom submit handler before the defaults. If we
+    // trigger after the defaults, $facet->save() will break the entity form.
+    array_unshift($form['actions']['submit']['#submit'], "facets_pretty_paths_facet_edit_form_submit");
+  }
+}
+
+/**
+ * Custom submit handler which saves the selected coder for a given facet.
+ */
+function facets_pretty_paths_facet_edit_form_submit(&$form, FormStateInterface $form_state) {
+  $coder = $form_state->getValue(['facet_settings', 'facets_pretty_paths_coder']);
+  $facet = \Drupal::routeMatch()->getParameter('facets_facet');
+  $facet->setThirdPartySetting('facets_pretty_paths', 'coder', $coder);
+  $facet->save();
+}
