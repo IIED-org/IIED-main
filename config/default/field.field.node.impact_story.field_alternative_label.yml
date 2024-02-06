@@ -1,0 +1,19 @@
+uuid: 7564da22-ac77-49cb-ac90-6dfb3288f9f0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_alternative_label
+    - node.type.impact_story
+id: node.impact_story.field_alternative_label
+field_name: field_alternative_label
+entity_type: node
+bundle: impact_story
+label: 'Alternative label'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

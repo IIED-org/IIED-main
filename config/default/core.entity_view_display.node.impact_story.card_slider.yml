@@ -1,0 +1,63 @@
+uuid: aa691382-59ce-4d6b-94c6-ff74016374ac
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.card_slider
+    - field.field.node.impact_story.body
+    - field.field.node.impact_story.field_alternative_label
+    - field.field.node.impact_story.field_content
+    - field.field.node.impact_story.field_date_or_caption
+    - field.field.node.impact_story.field_hero_image
+    - field.field.node.impact_story.field_image_caption
+    - field.field.node.impact_story.field_main_image
+    - field.field.node.impact_story.field_project
+    - field.field.node.impact_story.field_read_length
+    - field.field.node.impact_story.field_second_image
+    - field.field.node.impact_story.field_standfirst
+    - field.field.node.impact_story.field_tagline
+    - field.field.node.impact_story.field_tags
+    - field.field.node.impact_story.field_theme_s_
+    - node.type.impact_story
+  module:
+    - user
+id: node.impact_story.card_slider
+targetEntityType: node
+bundle: impact_story
+mode: card_slider
+content:
+  field_main_image:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_tagline:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  body: true
+  field_alternative_label: true
+  field_content: true
+  field_date_or_caption: true
+  field_hero_image: true
+  field_image_caption: true
+  field_project: true
+  field_read_length: true
+  field_second_image: true
+  field_standfirst: true
+  field_tags: true
+  field_theme_s_: true
+  langcode: true
+  search_api_excerpt: true

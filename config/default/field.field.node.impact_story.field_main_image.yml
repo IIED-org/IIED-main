@@ -1,0 +1,29 @@
+uuid: b472f4dc-f631-434a-93a1-87e02401cbb6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_main_image
+    - media.type.image
+    - node.type.impact_story
+id: node.impact_story.field_main_image
+field_name: field_main_image
+entity_type: node
+bundle: impact_story
+label: 'Main image'
+description: 'Image for the card'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      image: image
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
