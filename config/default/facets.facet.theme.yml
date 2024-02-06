@@ -6,7 +6,11 @@ dependencies:
     - search_api.index.acquia_search_index
     - views.view.search
   module:
+    - facets_pretty_paths
     - search_api
+third_party_settings:
+  facets_pretty_paths:
+    coder: taxonomy_term_name_coder
 id: theme
 name: Theme
 weight: -3

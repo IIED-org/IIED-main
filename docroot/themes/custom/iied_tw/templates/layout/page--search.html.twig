@@ -112,14 +112,14 @@
           <div x-show="open" x-transition:enter="transition ease-out duration-400" x-transition:enter-start="-left-full" x-transition:enter-end="left-0" x-transition:leave="transition ease-in duration-400" x-transition:leave-start="left-0" x-transition:leave-end="-left-full" class="fixed inset-0 z-40 flex transition-all xl:hidden">
             <!-- Overlay background -->
             <div @click="open = false" class="fixed inset-0">
-              <div class="absolute inset-0 bg-gray-500 opacity-50"></div>
+              <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
             <!-- Sidebar content -->
             <div class="relative flex flex-col flex-1 w-full max-w-xs bg-white">
               <!-- Close button -->
               <div class="absolute top-0 right-0 p-1 -mr-14">
                 <button @click="open = false" class="flex items-center justify-center w-12 h-12 rounded-full focus:outline-none focus:iiedblue-800" aria-label="Close sidebar">
-                  <svg class="w-8 h-8" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                  <svg class="w-8 h-8" stroke="white" fill="none" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                   </svg>
                 </button>

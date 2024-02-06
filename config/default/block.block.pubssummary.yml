@@ -1,6 +1,6 @@
 uuid: abf866d5-5ff3-493e-85e6-c5e28aa30873
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - facets_summary.facets_summary.pubs_summary
@@ -25,4 +25,4 @@ visibility:
   request_path:
     id: request_path
     negate: false
-    pages: '/search/pubs*'
+    pages: '/search/*'

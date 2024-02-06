@@ -15,7 +15,7 @@ processor_configs:
   hide_when_not_rendered:
     processor_id: hide_when_not_rendered
     weights:
-      build: '1'
+      build: '45'
     settings: {  }
   show_count:
     processor_id: show_count

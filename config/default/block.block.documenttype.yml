@@ -17,7 +17,7 @@ provider: null
 plugin: 'facet_block:type'
 settings:
   id: 'facet_block:type'
-  label: 'Document type'
+  label: 'Publication type'
   label_display: visible
   provider: facets
   context_mapping: {  }
