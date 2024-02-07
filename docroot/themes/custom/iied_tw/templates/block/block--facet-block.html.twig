@@ -27,7 +27,7 @@
 #}
 {{ attach_library('iied_tw/alpine') }}
 {{ attach_library('iied_tw/alpine-collapse') }}
-  <div{{ attributes.addClass('mt-3', 'bg-white', 'border', 'border-gray-300', 'rounded-xl', 'px-3', 'py-3') }}>
+  <div{{ attributes.addClass('border-t', 'border-gray-300', 'px-3', 'py-4') }}>
   <div x-data="{ expanded: false }">
    {{ title_prefix }}
     {% if label %}

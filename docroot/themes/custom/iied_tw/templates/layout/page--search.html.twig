@@ -71,32 +71,88 @@
 
   {{ page.help }}
 
-  {{ page.preface }}
+
 
 <div class="container my-12">
   <main role="main">
     <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
 
-    <div class="lg:flex lg:space-x-6">
+<div class="lg:flex lg:space-x-12">
+  <div class="lg:w-1/4">
+    <h1 class="mb-4 text-2xl xl:text-3xl">Search results</h1>
+  </div>
+  
+  {# Search box  #}
+  <div class="search-page lg:w-3/4">
+  {{ drupal_block('views_exposed_filter_block:search-page_2', {wrapper: false}) }}
+  {# result summary  #}
+  {{ drupal_block('facets_summary_block:search_summary') }}
+  {{ drupal_block('facets_summary_block:pubs_summary') }}
+  </div>
+ </div>
 
+
+
+    <div class="lg:flex lg:space-x-12">
+
+
+  {# Off-canvas overlay on mobile #}
     {% if page.sidebar %}
-        <aside class="mb-6 lg:w-1/4" role="complementary">
-          {{ page.sidebar }}
+      <aside x-data="{ open: false }" class="mb-2 lg:w-1/4" role="complementary">
+        <div class="hidden mt-3 mb-3 ml-3 text-gray-500 lg:block">Filter by</div>
+          <!-- Button to show the filters -->
+          <button @click="open = true" class="flex px-3 py-2 border border-gray-300 lg:hidden rounded-xl" value="Filters">
+            <svg fill="#000000" class="mt-1" width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000">
+            <g id="SVGRepo_iconCarrier" data-name="SVGRepo iconCarrier">
+            <path class="cls-1" d="M15.12,3.55H.88c-.21,0-.38.17-.38.38s.17.38.38.38h14.24c.21,0,.38-.17.38-.38s-.17-.38-.38-.38h0ZM12.07,7.62H3.93c-.21,0-.38.17-.38.38s.17.38.38.38h8.14c.21,0,.38-.17.38-.38s-.17-.38-.38-.38h0ZM9.53,11.69h-3.08c-.21,0-.38.17-.38.38s.17.38.38.38h3.08c.21,0,.38-.17.38-.38s-.17-.38-.38-.38h0Z"/></g>
+          </svg>
+            <label class="px-3">Filters</label>
+          </button>
+          <!-- Sidebar -->
+          <div x-show="open" x-transition:enter="transition ease-out duration-400" x-transition:enter-start="-left-full" x-transition:enter-end="left-0" x-transition:leave="transition ease-in duration-400" x-transition:leave-start="left-0" x-transition:leave-end="-left-full" class="fixed inset-0 z-40 flex transition-all xl:hidden">
+            <!-- Overlay background -->
+            <div @click="open = false" class="fixed inset-0">
+              <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <!-- Sidebar content -->
+            <div class="relative flex flex-col flex-1 w-full max-w-xs bg-white">
+              <!-- Close button -->
+              <div class="absolute top-0 right-0 p-1 -mr-14">
+                <button @click="open = false" class="flex items-center justify-center w-12 h-12 rounded-full focus:outline-none focus:iiedblue-800" aria-label="Close sidebar">
+                  <svg class="w-8 h-8" stroke="white" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+              </div>
+              <!-- Sidebar body -->
+              <div class="flex-1 h-0 p-4 pt-5 overflow-y-auto">
+              <div class="mt-3 mb-2 ml-3 text-gray-500">Filter by</div>
+                {{ page.sidebar }}
+              </div>
+            </div>
+          </div>
+          <!-- Sidebar for desktop -->
+          <div class="hidden border border-gray-300 lg:block rounded-xl facet-box">
+            {{ page.sidebar }}
+          </div>
         </aside>
-      {% endif %}
+    {% endif %} 
 
-      <div class="lg:w-3/4">
+
+{# absolute right-0 lg:relative -top-14  #}
+      <div class="relative lg:w-3/4">
+          <div class="lg:flex lg:justify-end"> {{ page.preface }} </div>
         {{ page.content }}
       </div>{# /.layout-content #}
       
- {#
+
+{#
         {% if page.sidebar_second %}
         <aside class="md:w-1/4" role="complementary">
           {{ page.sidebar_second }}
         </aside>
       {% endif %}
-          #}    
-      
+#}        
       
     </div>
   </main>
@@ -116,3 +172,11 @@
       {{ page.footer }}
     </footer>
   {% endif %}
+
+  {# Old version
+    {% if page.sidebar %}
+        <aside class="mb-6 lg:w-1/4" role="complementary">
+          {{ page.sidebar }}
+        </aside>
+      {% endif %} 
+#}

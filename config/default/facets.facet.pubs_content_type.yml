@@ -1,4 +1,4 @@
-uuid: 6e3df23a-644b-4fb3-9dec-68413264980b
+uuid: 917f9da5-1aa7-46f9-a99d-e14bfc662ac4
 langcode: en
 status: true
 dependencies:
@@ -6,40 +6,44 @@ dependencies:
     - search_api.index.acquia_search_index
     - views.view.search
   module:
+    - facets_pretty_paths
     - search_api
-id: pubs_document_type
-name: 'Document type'
-weight: 1
+third_party_settings:
+  facets_pretty_paths:
+    coder: default_coder
+id: pubs_content_type
+name: 'Content type'
+weight: -1
 min_count: 1
 missing: false
 missing_label: others
-url_alias: type
+url_alias: content_type
 facet_source_id: 'search_api:views_page__search__page_1'
-field_identifier: field_document_type
+field_identifier: type
 query_operator: and
-hard_limit: 10
+hard_limit: 0
 exclude: false
-use_hierarchy: true
+use_hierarchy: false
 keep_hierarchy_parents_active: false
 hierarchy:
   type: taxonomy
   config: {  }
-expand_hierarchy: true
-enable_parent_when_child_gets_disabled: false
+expand_hierarchy: false
+enable_parent_when_child_gets_disabled: true
 widget:
   type: checkbox
   config:
     show_numbers: true
     soft_limit: 0
-    show_reset_link: true
-    reset_text: 'Show all items'
+    show_reset_link: false
+    reset_text: 'Show all'
     hide_reset_when_no_selection: false
     soft_limit_settings:
       show_less_label: 'Show less'
       show_more_label: 'Show more'
 empty_behavior:
   behavior: none
-only_visible_when_facet_source_is_visible: true
+only_visible_when_facet_source_is_visible: false
 show_only_one_result: false
 show_title: false
 processor_configs:
@@ -48,28 +52,42 @@ processor_configs:
     weights:
       sort: 20
     settings:
-      sort: ASC
+      sort: DESC
+  combine_processor:
+    processor_id: combine_processor
+    weights:
+      build: 5
+    settings:
+      content_type:
+        combine: false
+        mode: null
+      country:
+        combine: false
+        mode: null
+      pubs_country:
+        combine: false
+        mode: null
+      pubs_document_type:
+        combine: false
+        mode: null
+      pubs_theme:
+        combine: false
+        mode: null
+      theme:
+        combine: false
+        mode: null
+      type:
+        combine: false
+        mode: null
+      vocabulary:
+        combine: false
+        mode: union
   count_widget_order:
     processor_id: count_widget_order
     weights:
       sort: 30
     settings:
       sort: DESC
-  dependent_processor:
-    processor_id: dependent_processor
-    weights:
-      build: 5
-    settings:
-      pubs_country:
-        enable: false
-        condition: null
-        values: ''
-        negate: false
-      pubs_theme:
-        enable: false
-        condition: null
-        values: ''
-        negate: false
   display_value_widget_order:
     processor_id: display_value_widget_order
     weights:

@@ -6,14 +6,18 @@ dependencies:
     - search_api.index.acquia_search_index
     - views.view.search
   module:
+    - facets_pretty_paths
     - search_api
+third_party_settings:
+  facets_pretty_paths:
+    coder: default_coder
 id: content_type
 name: 'Content type'
-weight: -1
+weight: -4
 min_count: 1
 missing: false
 missing_label: others
-url_alias: content_type
+url_alias: type
 facet_source_id: 'search_api:views_page__search__page_2'
 field_identifier: type
 query_operator: and
@@ -52,9 +56,18 @@ processor_configs:
   combine_processor:
     processor_id: combine_processor
     weights:
-      build: -8
+      build: 5
     settings:
       country:
+        combine: false
+        mode: null
+      pubs_content_type:
+        combine: false
+        mode: null
+      pubs_country:
+        combine: false
+        mode: null
+      pubs_theme:
         combine: false
         mode: null
       theme:

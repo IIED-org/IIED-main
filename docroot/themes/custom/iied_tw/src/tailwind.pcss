@@ -206,13 +206,13 @@
 
   #block-exposedformsearchpage-2-5 .bef--secondary,
   #edit-submit-search--2,
-  #edit-submit-search {
+  #edit-submit-search,
+  #edit-submit-search--3 {
     display: none;
   }
 
   .js input.form-autocomplete {
-    background-image: url(/themes/custom/iied_pubs/assets/images/search_icon.png);
-    background-position: 95% center !important;
+    background-image: none;
   }
 
   /*-- rotate 4 colour borders for publications grid  --*/
@@ -316,7 +316,7 @@
     @apply px-3 py-2 border-none transition rounded-full shadow-sm bg-iiedorange-500 cursor-pointer;
   }
 
-  .tracker-select select {
+  .tracker-select select, .search-select select {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -452,6 +452,33 @@
   .ui-autocomplete .ui-menu-item .ui-menu-item-wrapper {
     @apply p-0 bg-none;
   }
+  
+ .js input.form-autocomplete.ui-autocomplete-loading {
+    @apply bg-throbber;
+    background-position: right 2.2em center;   
+ }
+  .search-page .srp-w {
+      @apply w-full max-w-screen-sm px-5;
+    }
+  .search-page .srp-h {
+      @apply h-14;
+    }
+  .search-page .srp-text {
+    @apply text-base;
+  }  
+  .item-list__checkbox { 
+    @apply my-3;
+   } 
+   .facets-widget-checkbox .facets-checkbox {
+    @apply mr-0.5 border border-gray-300 rounded shadow-sm text-iiedpink-800 focus:border-iiedpink-300 focus:ring focus:ring-offset-0 focus:ring-iiedpink-200 focus:ring-opacity-50;
+   } 
+   .facet-box .block-facet--checkbox:first-child {
+    border-top: none;
+  }
+  .search-page .filter-chip {
+      @apply inline-flex items-center px-2 py-1 ml-2 my-1 space-x-1 border border-gray-300 rounded-full hover:bg-iiedblue-10;
+  }
+
   /*-- animations --*/
   @keyframes bounce-x {
     0%, 100% {

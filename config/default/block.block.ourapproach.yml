@@ -11,7 +11,7 @@ dependencies:
 id: ourapproach
 theme: iied_tw
 region: content
-weight: -11
+weight: -8
 provider: null
 plugin: 'system_menu_block:our-approach'
 settings:
