@@ -1,0 +1,22 @@
+uuid: 7474a685-acee-40bf-b35e-427c56c04837
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.impact_story
+id: node.impact_story.promote
+field_name: promote
+entity_type: node
+bundle: impact_story
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

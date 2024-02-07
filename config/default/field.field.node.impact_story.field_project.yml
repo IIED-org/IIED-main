@@ -1,0 +1,29 @@
+uuid: dd4adb99-09d5-4a3f-8a65-bbf27f2cf0c7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_project
+    - node.type.impact_story
+    - node.type.project
+id: node.impact_story.field_project
+field_name: field_project
+entity_type: node
+bundle: impact_story
+label: Project
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      project: project
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

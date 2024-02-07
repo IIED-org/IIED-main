@@ -1,0 +1,26 @@
+uuid: ca893615-e15d-499a-af6c-e3c9455dfcc1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_standfirst
+    - node.type.impact_story
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    allowed_formats: {  }
+id: node.impact_story.field_standfirst
+field_name: field_standfirst
+entity_type: node
+bundle: impact_story
+label: Standfirst
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long
