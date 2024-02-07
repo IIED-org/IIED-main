@@ -4151,6 +4151,11 @@ cite {
   padding: 0px;
 }
 
+.js input.form-autocomplete.ui-autocomplete-loading{
+  background-image: url("../images/ajax-throbber.png");
+  background-position: right 2.2em center;
+}
+
 .search-page .srp-w{
   width: 100%;
   max-width: 640px;
@@ -6108,14 +6113,6 @@ cite {
 
 .opacity-20{
   opacity: 0.2;
-}
-
-.opacity-60{
-  opacity: 0.6;
-}
-
-.opacity-50{
-  opacity: 0.5;
 }
 
 .opacity-75{
