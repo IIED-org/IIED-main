@@ -10,7 +10,7 @@ field_name: field_date_or_caption
 entity_type: node
 bundle: impact_story
 label: Caption
-description: ''
+description: 'Add optional date or short caption'
 required: false
 translatable: true
 default_value: {  }

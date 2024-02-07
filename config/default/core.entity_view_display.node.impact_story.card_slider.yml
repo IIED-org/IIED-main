@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.impact_story.field_alternative_label
     - field.field.node.impact_story.field_content
     - field.field.node.impact_story.field_date_or_caption
+    - field.field.node.impact_story.field_global_term
     - field.field.node.impact_story.field_hero_image
     - field.field.node.impact_story.field_image_caption
     - field.field.node.impact_story.field_main_image
@@ -51,6 +52,7 @@ hidden:
   field_alternative_label: true
   field_content: true
   field_date_or_caption: true
+  field_global_term: true
   field_hero_image: true
   field_image_caption: true
   field_project: true
