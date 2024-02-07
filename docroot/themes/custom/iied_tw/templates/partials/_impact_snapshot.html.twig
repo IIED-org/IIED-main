@@ -1,0 +1,55 @@
+{#-- snapshot header --#}
+<div class="container mx-auto mb-6 xl:grid xl:gap-12 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12">
+{# -- header -- #}
+    <div class="xl:col-span-6">
+        <header class="">
+            <nav aria-label="breadcrumb">
+                {{ drupal_block('language_block:language_interface', wrapper=false) }}
+                <div class="flex my-4 space-x-1">
+                    {% if parent_term_name %}
+                    <span><a href="{{ parent_term_url }}">{{ parent_term_name }}</a> > </span>
+                    {% endif %}
+                    <span> {{ content.field_global_term }} </span>
+                </div>
+            </nav>
+            <h1 class="mb-6">{{ node.label }}</h1>
+            
+            {#-- standfirst --#}
+            <div class="mb-4 prose prose-lg lg:prose-xl">
+                {{ content.field_standfirst }}
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between">
+            
+            <div class="flex mb-2 space-x-1 text-gray-500">
+            {% if content.field_date_or_caption|render|striptags|trim is not empty %}
+                <div class="mr-1">{{ content.field_date_or_caption }}</div> •
+            {% endif %}
+            {{ content.field_read_length }}
+            </div>
+
+                
+                {# -- share -- #}
+                <div class="flex flex-wrap justify-between py-4 sm:flex-row">
+                <div class="flex items-center xl:mb-4">
+                    {% include '@iied_tw/partials/_share_links.html.twig' %}
+                </div>
+                </div>
+
+            </div>
+
+        </header>
+    </div>
+    
+    {#-- image --#}
+    <div class="xl:col-span-6 img-full">
+        <figure class="-mx-4 overflow-hidden rounded-3xl sm:mx-0">
+        {{ content.field_second_image }}
+        </figure>
+
+        <figcaption class="px-4 mt-1 text-base leading-tight text-gray-500 sm:p-0">
+        {{ content.field_image_caption }}
+        </figcaption>
+    </div>
+
+</div>

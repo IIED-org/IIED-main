@@ -1,0 +1,29 @@
+uuid: e643c0a9-a52c-47ca-ac38-cd49771a0590
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_theme_s_
+    - node.type.impact_story
+    - taxonomy.vocabulary.theme
+id: node.impact_story.field_theme_s_
+field_name: field_theme_s_
+entity_type: node
+bundle: impact_story
+label: Theme(s)
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      theme: theme
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

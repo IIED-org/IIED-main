@@ -1,0 +1,64 @@
+{#
+/** Impact story
+
+ */
+#}
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    not node.isPublished() ? 'node--unpublished',
+  ]
+%}
+
+<article{{ attributes.addClass(classes) }}>
+  <div class="my-6">
+    <main>
+
+    {% if content.field_second_image[0] and not content.field_hero_image[0] %}
+      {% include '@iied_tw/partials/_impact_snapshot.html.twig' %}
+      {% else %}
+      {% include '@iied_tw/partials/_impact_feature.html.twig' %}
+    {% endif %}
+
+
+      {% if content.field_second_image is not empty and content.field_hero_image is empty %} 
+         {% include '@iied_tw/partials/_impact_snapshot.html.twig' %}
+      {% else %}
+
+      {% endif %}
+
+      <div class="container mx-auto xl:grid xl:gap-12 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12">
+            {#-- main body --#}
+          <div class="xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4">
+              <div class="prose md:prose-lg first-letter:text-8xl first-letter:float-left first-letter:font-serif first-letter:mr-2 first-letter:text-iiedgreen-700">
+                {{ content.body }}
+              </div>
+          </div>
+      </div>
+    
+      {#-- layout paragraphs --#}
+      {{ content.field_content }}
+
+      {#-- tags --#}
+      <div class="container mx-auto xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12">
+        <div class="xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4">
+          {{ content.field_tags }} 
+
+          <div class="flex items-center py-4">
+            {% include '@iied_tw/partials/_share_links.html.twig' %}
+            {% include '@iied_tw/partials/_copy_print_links.html.twig' %}
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</article>
+  {% if drupal_view_result('related_nodes', 'block_igl') is not empty %}
+    <section class="py-12 bg-gray-100">
+      <div class="container">
+        {{ drupal_view('related_nodes', 'block_igl') }}
+    </div>
+    </section>
+  {% endif %}

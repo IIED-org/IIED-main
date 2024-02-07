@@ -1,0 +1,14 @@
+uuid: f2d5e3af-ce97-43e3-bfdd-9a86d9a1d9a7
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.impact_story
+id: node_type_impact_story
+entity_type_id: node_type
+entity_id: impact_story
+action: display_page
+allow_override: 1
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

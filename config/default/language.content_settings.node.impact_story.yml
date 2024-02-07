@@ -1,0 +1,16 @@
+uuid: ea1f72cb-99d3-43ef-9bae-ad4694005786
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.impact_story
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: node.impact_story
+target_entity_type_id: node
+target_bundle: impact_story
+default_langcode: site_default
+language_alterable: true
