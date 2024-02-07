@@ -14,91 +14,51 @@
 <article{{ attributes.addClass(classes) }}>
   <div class="my-6">
     <main>
-        {#-- grid --#}
-      <div
-          class="container mx-auto xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12"
-        >
-            <!-- header -->
-            <div class="xl:col-span-6">
-              <header class="">
-              <nav aria-label="themes">
-                <div class="mb-4 sm:justify-between sm:flex xl:flex-col">
-                  <div class="order-1 mb-2 xl:order-1 sm:order-2">{{ drupal_block('language_block:language_interface', wrapper=false) }}</div>
-                  <div class="mb-2 xl:order-2">Our approach</div>
-                </div>
-              </nav>
-                <div class="mb-6">
-                  <h1 class="mb-6">{{ node.label }}</h1>
-                </div>
 
-                {#-- standfirst --#}
-                <div
-                  class="mb-4 prose prose-lg lg:prose-xl"
-                >
-                  {{ content.field_standfirst }}
-                </div>
-
-                <div
-                  class="flex flex-wrap justify-between py-4 border-b border-gray-300 sm:flex-row xl:flex-col"
-                >
-                  {% if content.field_date_or_caption is not empty %} 
-                  <div class="flex mb-2 text-gray-500">
-                  <span class="mr-1">{{ content.field_date_or_caption }}</span> {{ content.field_read_length }}
-                  </div>
-                  {% endif %}
-                  <!-- share -->
-                  <div class="flex flex-wrap justify-between py-4 sm:flex-row">
-                    <div class="flex items-center xl:mb-4">
-                      {% include '@iied_tw/partials/_share_links.html.twig' %}
-                    </div>
-                  </div>
-
-                </div>
-    
-            
-
-              </header>
-            </div>
-            <!-- header -->
-
-            <!-- image -->
-            <div class="relative xl:col-span-6">
-              <figure class="-mx-4 overflow-hidden xl:mb-2 rounded-3xl sm:mx-0">
-              {{ content.field_second_image }}
-              </figure>
-    
-              <figcaption class="right-0 text-sm text-gray-500 border-gray-300 xl:pl-2 xl:border-l xl:-mt-2 xl:absolute xl:w-48 2xl:w-80 xl:pt-2">
-                {{ content.field_image_caption }}
-              </figcaption>
-            </div>
+    {% if content.field_second_image[0] and not content.field_hero_image[0] %}
+      {% include '@iied_tw/partials/_impact_snapshot.html.twig' %}
+      {% else %}
+      {% include '@iied_tw/partials/_impact_feature.html.twig' %}
+    {% endif %}
 
 
-            <!-- main body -->
-            <div class="xl:-mt-8 xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4">
+      {% if content.field_second_image is not empty and content.field_hero_image is empty %} 
+         {% include '@iied_tw/partials/_impact_snapshot.html.twig' %}
+      {% else %}
+
+      {% endif %}
+
+      <div class="container mx-auto xl:grid xl:gap-12 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12">
+            {#-- main body --#}
+          <div class="xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4">
               <div class="prose md:prose-lg first-letter:text-8xl first-letter:float-left first-letter:font-serif first-letter:mr-2 first-letter:text-iiedgreen-700">
-              {{ content.body }}
+                {{ content.body }}
               </div>
-            </div>
+          </div>
       </div>
     
       {#-- layout paragraphs --#}
       {{ content.field_content }}
 
       {#-- tags --#}
-      <div class="container mx-auto xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12"
-        >
-      <div class="xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4">
-      {{ content.field_tags }} 
+      <div class="container mx-auto xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12">
+        <div class="xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4">
+          {{ content.field_tags }} 
 
-        <div class="flex items-center py-4">
-          {% include '@iied_tw/partials/_share_links.html.twig' %}
-          {% include '@iied_tw/partials/_copy_print_links.html.twig' %}
+          <div class="flex items-center py-4">
+            {% include '@iied_tw/partials/_share_links.html.twig' %}
+            {% include '@iied_tw/partials/_copy_print_links.html.twig' %}
+          </div>
         </div>
-      </div>
       </div>
 
     </main>
   </div>
 </article>
-{% include '@iied_tw/partials/_related_project.html.twig' %}
-{% include '@iied_tw/partials/_related_nodes_insight.html.twig' %}
+  {% if drupal_view_result('related_nodes', 'block_igl') is not empty %}
+    <section class="py-12 bg-gray-100">
+      <div class="container">
+        {{ drupal_view('related_nodes', 'block_igl') }}
+    </div>
+    </section>
+  {% endif %}

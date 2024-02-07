@@ -165,3 +165,34 @@ function iied_tw_form_user_login_form_alter(&$form, FormStateInterface $form_sta
     ],
   ];
 }
+
+/**
+ * Implements hook_preprocess_node() for Impact story nodes.
+ */
+function iied_tw_preprocess_node(&$variables) {
+  if ($variables['node']->bundle() == 'impact_story' && !$variables['node']->field_global_term->isEmpty()) {
+    // Load the taxonomy term entity.
+    $term = $variables['node']->field_global_term->entity;
+
+    if ($term) {
+      $parent_ids = $term->parent->getValue();
+      // Since parent field can be multiple, we take the first one if it exists
+      $parent_tid = !empty($parent_ids) ? reset($parent_ids)['target_id'] : NULL;
+
+      if ($parent_tid && $parent_tid !== '0') {
+        // Load the parent term.
+        $parent_term = \Drupal\taxonomy\Entity\Term::load($parent_tid);
+        
+        if ($parent_term) {
+          // Add the parent term name to the variable array.
+          $variables['parent_term_name'] = $parent_term->label();
+          // Add the parent term URL to the variable array.
+          $variables['parent_term_url'] = \Drupal\Core\Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $parent_tid])->toString();
+        }
+      }
+    }
+  }
+}
+
+
+

@@ -3092,7 +3092,7 @@ cite {
   border-color: rgb(170 192 44 / var(--tw-border-opacity));
 }
 
-.paragraph--type--image-wide img{
+.paragraph--type--image-wide img, .img-full img{
   width: 100%;
 }
 
@@ -5913,6 +5913,11 @@ cite {
   color: rgb(0 149 193 / var(--tw-text-opacity));
 }
 
+.text-iiedgreen-500{
+  --tw-text-opacity: 1;
+  color: rgb(170 192 44 / var(--tw-text-opacity));
+}
+
 .text-iiedgreen-800{
   --tw-text-opacity: 1;
   color: rgb(140 162 14 / var(--tw-text-opacity));
@@ -8230,10 +8235,6 @@ cite {
     grid-column-start: 4;
   }
 
-  .xl\:col-start-6{
-    grid-column-start: 6;
-  }
-
   .xl\:row-span-2{
     grid-row: span 2 / span 2;
   }
@@ -8332,6 +8333,10 @@ cite {
 
   .xl\:gap-10{
     gap: 2.5rem;
+  }
+
+  .xl\:gap-12{
+    gap: 3rem;
   }
 
   .xl\:gap-6{
