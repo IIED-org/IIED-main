@@ -1,0 +1,38 @@
+{#
+For long read solo card display
+#}
+
+<article{{ attributes.addClass('h-full') }}>
+
+        <a href="{{ url }}" class="hover:no-underline">
+          <div class="flex flex-row h-full overflow-hidden transition-shadow bg-gray-800 border border-gray-300 lg:flex-col rounded-xl hover:shadow-md group grow">
+
+            <div class="relative border-r lg:static lg:order-1 lg:border-r-0 lg:border-b-4 border-iiedgreen-500">
+
+              {% block image %}
+                {% set image_uri = node.field_main_image|file_uri %}
+                {% set image_alt = node.field_main_image.entity.field_media_image.alt %}
+              {% if image_uri is not null %}
+                <img class="object-cover h-full md:w-full" src="{{ image_uri|image_style('card_256') }}" alt="{{ image_alt }}" />
+              {% endif %}
+              {% endblock %}
+
+            </div>
+
+
+            <div class="flex flex-col justify-between w-9/12 p-4 lg:w-full lg:order-2">
+              <h5 class="mb-4 text-xl leading-relaxed text-white lg:text-2xl">
+                {{ label }}
+              </h5>
+                <p class="mb-4 text-gray-100"> {{ node.field_tagline.0.value }}</p>
+                <div class="-mr-4 border-b text-iiedgreen-500 border-iiedgreen-500">
+                    <span>{{ node.type.entity.label() }}</span>
+                </div>
+
+            </div>
+
+
+          </div>
+        </a>
+
+</article>

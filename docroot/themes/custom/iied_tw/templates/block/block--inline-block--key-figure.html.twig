@@ -25,8 +25,8 @@
  * @see template_preprocess_block()
  */
 #}
-{{ attach_library('iied_tw/number-counter') }}
-<div{{ attributes.addClass('not-prose') }}>
+{{ attach_library('iied_tw/counter') }}
+<div{{ attributes.addClass('not-prose', 'text-center', 'mb-8') }}>
   {{ title_prefix }}
   {% if label %}
     <h2{{ title_attributes.addClass('mb-6') }}>{{ label }}</h2>
@@ -38,7 +38,7 @@
     <span class="relative inline-flex mb-4 text-4xl font-bold sm:text-5xl">
     <span>{{ content.field_number_prefix.0 }}</span>
     {% if content.field_number %}
-    <span>{{ content.field_number.0 }}</span>
+    <span class="stat-number" data-n="{{ content.field_number.0 }}">{{ content.field_number.0 }}</span>
     {% endif %}
 
      <span>
