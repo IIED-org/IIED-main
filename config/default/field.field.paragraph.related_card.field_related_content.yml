@@ -1,10 +1,9 @@
-uuid: 1aa6e8f7-37fe-469c-9c4a-84514d49027a
+uuid: 154b6c14-573d-4a95-9c78-e001a906bb36
 langcode: en
 status: true
 dependencies:
   config:
-    - block_content.type.card_wide
-    - field.storage.block_content.field_reference_content
+    - field.storage.paragraph.field_related_content
     - node.type.article
     - node.type.blog
     - node.type.event
@@ -12,15 +11,14 @@ dependencies:
     - node.type.long_read
     - node.type.news
     - node.type.page
-    - node.type.project
-    - node.type.publication
-id: block_content.card_wide.field_reference_content
-field_name: field_reference_content
-entity_type: block_content
-bundle: card_wide
-label: 'Reference content'
+    - paragraphs.paragraphs_type.related_card
+id: paragraph.related_card.field_related_content
+field_name: field_related_content
+entity_type: paragraph
+bundle: related_card
+label: 'Related content'
 description: ''
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
@@ -35,8 +33,6 @@ settings:
       long_read: long_read
       news: news
       page: page
-      project: project
-      publication: publication
     sort:
       field: _none
       direction: ASC

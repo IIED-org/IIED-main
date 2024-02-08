@@ -1,0 +1,10 @@
+uuid: 5d8335df-8dc3-4561-8269-76509622c031
+langcode: en
+status: true
+dependencies: {  }
+id: related_card
+label: 'Related card'
+icon_uuid: null
+icon_default: null
+description: 'Creates a small card, use inline with text rather than aside.'
+behavior_plugins: {  }

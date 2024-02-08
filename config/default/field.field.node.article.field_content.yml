@@ -21,6 +21,7 @@ dependencies:
     - paragraphs.paragraphs_type.media_list
     - paragraphs.paragraphs_type.modal_image
     - paragraphs.paragraphs_type.quote
+    - paragraphs.paragraphs_type.related_card
     - paragraphs.paragraphs_type.related_content
     - paragraphs.paragraphs_type.related_content_no_image
     - paragraphs.paragraphs_type.related_project
@@ -76,6 +77,7 @@ settings:
       timeline: timeline
       video_embed: video_embed
       related_content_no_image: related_content_no_image
+      related_card: related_card
       sticky_box: sticky_box
     negate: 0
     target_bundles_drag_drop:
@@ -118,6 +120,9 @@ settings:
       info_box:
         weight: -61
         enabled: true
+      key_figure:
+        weight: 55
+        enabled: false
       linked_person:
         weight: -60
         enabled: false
@@ -135,6 +140,9 @@ settings:
         enabled: true
       quote:
         weight: -72
+        enabled: true
+      related_card:
+        weight: 62
         enabled: true
       related_content:
         weight: -58
