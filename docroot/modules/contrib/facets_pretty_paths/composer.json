@@ -1,0 +1,41 @@
+{
+  "name": "drupal/facets_pretty_paths",
+  "type": "drupal-module",
+  "description": "Pretty paths for Facets.",
+  "keywords": ["drupal"],
+  "license": "GPL-2.0-or-later",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "All contributors",
+      "homepage": "https://www.drupal.org/node/2625160/committers"
+    }
+  ],
+  "require": {
+    "drupal/facets": "^1 || ^2 || ^3",
+    "drupal/pathauto": "^1"
+  },
+  "require-dev": {
+    "drupal/search_api": "^1.29"
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://packages.drupal.org/8"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Drupal\\facets_pretty_paths\\": "./src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Drupal\\Tests\\facets_pretty_paths\\": "./tests/src"
+    }
+  },
+  "config": {
+    "sort-packages": true
+  }
+}

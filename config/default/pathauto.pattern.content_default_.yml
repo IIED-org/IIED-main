@@ -9,16 +9,17 @@ label: 'Content (default)'
 type: 'canonical_entities:node'
 pattern: '[node:title]'
 selection_criteria:
-  5b7a0b2c-e88c-479c-b08c-1b4ff1798572:
+  420ffdb7-53bb-4688-987d-5cee6ef2638e:
     id: 'entity_bundle:node'
     negate: false
-    uuid: 5b7a0b2c-e88c-479c-b08c-1b4ff1798572
+    uuid: 420ffdb7-53bb-4688-987d-5cee6ef2638e
     context_mapping:
       node: node
     bundles:
       article: article
       blog: blog
       event: event
+      impact_story: impact_story
       long_read: long_read
       news: news
       page: page

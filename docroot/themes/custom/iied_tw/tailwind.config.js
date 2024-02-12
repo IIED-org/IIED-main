@@ -9,11 +9,11 @@ module.exports = {
       DEFAULT: '1rem', sm: '1rem',
       lg: '1.5rem',
       xl: '2rem'
-      }, 
+      },
     },
-    
+
     extend: {
-      fontFamily: {
+            fontFamily: {
         sans: ['Lato', 'sans-serif'],
         headline: ['Noto Serif', 'serif'], 
       },
@@ -81,6 +81,9 @@ module.exports = {
       },
       content: {
         'keypoint': 'url("/themes/custom/iied_tw/templates/layout/icons/keypoint.svg")',
+      },
+      backgroundImage: {
+        'throbber': 'url("../images/ajax-throbber.png")',
       },
       typography: (theme) => ({
         DEFAULT: {

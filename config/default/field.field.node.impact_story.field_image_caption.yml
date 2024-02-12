@@ -1,0 +1,26 @@
+uuid: 733f5b8c-d071-4ea5-bb6b-447f7afc2491
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_image_caption
+    - node.type.impact_story
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    allowed_formats: {  }
+id: node.impact_story.field_image_caption
+field_name: field_image_caption
+entity_type: node
+bundle: impact_story
+label: 'Image caption'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

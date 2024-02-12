@@ -1,0 +1,16 @@
+services:
+  facets_pretty_paths.route_subscriber:
+    class: Drupal\facets_pretty_paths\RouteSubscriber
+    arguments: ['@plugin.manager.facets.facet_source']
+    tags:
+      - { name: event_subscriber }
+  plugin.manager.facets_pretty_paths.coder:
+    class: Drupal\facets_pretty_paths\Coder\CoderPluginManager
+    parent: default_plugin_manager
+  facets_pretty_paths.breadcrumb:
+    class: Drupal\facets_pretty_paths\PrettyPathBreadcrumb
+    tags:
+      - { name: breadcrumb_builder, priority: 1500 }
+  facets_pretty_paths.active_filters:
+    class: Drupal\facets_pretty_paths\PrettyPathsActiveFilters
+    arguments: ['@entity_type.manager', '@current_route_match', '@plugin.manager.facets_pretty_paths.coder', '@request_stack', '@batch.storage']

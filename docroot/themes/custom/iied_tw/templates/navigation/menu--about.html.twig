@@ -18,32 +18,70 @@
  *   - in_active_trail: TRUE if the link is in the active trail.
  */
 #}
+
+{{ attach_library('iied_tw/alpine') }}
 {% import _self as menus %}
 
-{#
-  We call a macro which calls itself to render the full tree.
-  @see https://twig.symfony.com/doc/1.x/tags/macro.html
-#}
-{{ menus.menu_links(items, attributes, 0) }}
+<div x-data="{ isOpen: false, isLargeScreen: window.innerWidth >= 1024 }"
+     x-init="() => { 
+       isOpen = isLargeScreen; 
+       window.addEventListener('resize', () => {
+         isLargeScreen = window.innerWidth >= 1024;
+         isOpen = isLargeScreen;
+       });
+     }">
+  {{ menus.menu_links(items, attributes, 0) }}
 
-{% macro menu_links(items, attributes, menu_level) %}
-  {% import _self as menus %}
-  {% if items %}
-  <div class="container flex flex-wrap my-6"><span class="px-2 py-2 font-semibold">In this section:</span>
-    {% if menu_level == 0 %}
-      <ul{{ attributes.addClass('flex', 'flex-wrap', 'tertiary-menu') }}>
-    {% else %}
-      <ul>
+  {% macro menu_links(items, attributes, menu_level) %}
+    {% import _self as menus %}
+    {% if items %}
+      <nav class="container flex items-start justify-between pb-2 my-6 border-b border-gray-300 lg:border-b-0">
+        <ul{{ attributes.addClass('flex', 'flex-col', 'lg:flex-row', 'tertiary-menu', 'space-x-0', 'lg:space-x-2') }}>
+          {# Always visible first item: Explicitly kept outside of any conditional visibility control #}
+          {% set first_item = items|first %}
+          <li{{ first_item.attributes.addClass('block') }}>
+            {{ link(first_item.title, first_item.url, { 'class':['block', 'py-2', 'px-4', 'text-gray-900', 'hover:text-gray-900', 'visited:text-gray-900', 'font-semibold', 'rounded-full', 'hover:bg-iiedgreen-10'] }) }}
+          </li>
+          
+          {# Loop through the remaining items in the menu, ensuring visibility control is correctly handled #}
+          {% for item in items %}
+            {# Skip the first item to avoid duplication #}
+            {% if not loop.first %}
+              <li{{ item.attributes.addClass('block lg:block') }}
+                  x-show="isOpen || isLargeScreen">
+                {{ link(item.title, item.url, { 'class':['block', 'py-2', 'px-4', 'text-gray-900', 'hover:text-gray-900', 'visited:text-gray-900', 'font-semibold', 'rounded-full', 'hover:bg-iiedgreen-10' ] }) }}
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+
+        {# Toggle button shown only on small screens #}
+        <div class="flex items-center lg:hidden">
+          <button @click="isOpen = !isOpen"
+                  class="flex items-center justify-center w-10 h-10 text-gray-900 border border-gray-300 rounded-full hover:bg-gray-100 hover:border-iiedblue-500">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
+                class="w-6 h-6 transition-transform duration-100" :class="{'rotate-180': isOpen}">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+          </button>
+        </div>
+
+      </nav>
     {% endif %}
-    {% for item in items %}
-      <li{{ item.attributes }}>
-        {{ link(item.title, item.url, { 'class':['block', 'py-2', 'px-1', 'sm:px-2', 'mb-2']}) }}
-        {% if item.below %}
-          {{ menus.menu_links(item.below, attributes, menu_level + 1) }}
-        {% endif %}
-      </li>
-    {% endfor %}
-    </ul>
-    </div>
-  {% endif %}
-{% endmacro %}
+  {% endmacro %}
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

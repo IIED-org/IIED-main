@@ -225,6 +225,7 @@ class ComposerStaticInitc7142a64c37f96d53e584392e4f37422
         array (
             'Drush\\' => 6,
             'Drupal\\sophron\\' => 15,
+            'Drupal\\facets_pretty_paths\\' => 27,
             'Drupal\\Core\\' => 12,
             'Drupal\\Composer\\Plugin\\VendorHardening\\' => 39,
             'Drupal\\Composer\\Plugin\\Scaffold\\' => 32,
@@ -719,6 +720,10 @@ class ComposerStaticInitc7142a64c37f96d53e584392e4f37422
         'Drupal\\sophron\\' => 
         array (
             0 => __DIR__ . '/../..' . '/docroot/modules/contrib/sophron/src',
+        ),
+        'Drupal\\facets_pretty_paths\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/docroot/modules/contrib/facets_pretty_paths/src',
         ),
         'Drupal\\Core\\' => 
         array (

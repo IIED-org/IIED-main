@@ -3,22 +3,22 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.body
-    - field.storage.taxonomy_term.field_name
     - field.storage.node.field_area_list
     - field.storage.node.field_author_s_
+    - field.storage.node.body
     - field.storage.node.field_collections
-    - field.storage.node.field_date_published
     - field.storage.node.field_document_type
     - field.storage.node.field_product_code
     - field.storage.node.field_product_code_new
+    - field.storage.node.field_date_published
     - field.storage.node.field_theme_s_
+    - field.storage.taxonomy_term.field_name
     - search_api.server.acquia_search_server
   module:
     - acquia_search
     - search_api_solr
-    - node
     - taxonomy
+    - node
     - search_api
 third_party_settings:
   acquia_search:
@@ -64,8 +64,8 @@ third_party_settings:
     multilingual:
       limit_to_content_language: false
       include_language_independent: true
-      specific_languages: {  }
       use_language_undefined_as_fallback_language: false
+      specific_languages: {  }
       use_universal_collation: false
 _core:
   default_config_hash: m3BA7ry9oerhED2EXWWHra57A4vZj7Eobsr5-29dq4M
@@ -133,7 +133,7 @@ field_settings:
       config:
         - field.storage.node.field_date_published
   field_document_type:
-    label: 'Document type'
+    label: 'Publication type'
     datasource_id: 'entity:node'
     property_path: field_document_type
     type: integer
@@ -190,6 +190,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.taxonomy_term.field_name
+  langcode:
+    label: Language
+    datasource_id: 'entity:taxonomy_term'
+    property_path: langcode
+    type: string
+    dependencies:
+      module:
+        - taxonomy
   name:
     label: Name
     datasource_id: 'entity:taxonomy_term'
@@ -334,6 +342,7 @@ processor_settings:
   content_access:
     weights:
       preprocess_query: -49
+  custom_value: {  }
   entity_status: {  }
   entity_type: {  }
   hierarchy:
@@ -365,6 +374,7 @@ processor_settings:
       - field_product_code_new
       - field_title_or_name
       - given
+      - langcode
       - name
       - name_1
       - name_2

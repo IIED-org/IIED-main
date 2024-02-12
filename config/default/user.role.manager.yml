@@ -14,6 +14,7 @@ dependencies:
     - node.type.event
     - node.type.hidden_handbrake
     - node.type.hidden_page
+    - node.type.impact_story
     - node.type.long_read
     - node.type.news
     - node.type.page
@@ -117,6 +118,7 @@ permissions:
   - 'create hidden_handbrake content'
   - 'create hidden_page content'
   - 'create image media'
+  - 'create impact_story content'
   - 'create long_read content'
   - 'create media'
   - 'create news content'
@@ -142,6 +144,7 @@ permissions:
   - 'delete any hidden_handbrake content'
   - 'delete any hidden_page content'
   - 'delete any image media'
+  - 'delete any impact_story content'
   - 'delete any long_read content'
   - 'delete any media'
   - 'delete any news content'
@@ -153,6 +156,7 @@ permissions:
   - 'delete document media revisions'
   - 'delete hidden_handbrake revisions'
   - 'delete image media revisions'
+  - 'delete impact_story revisions'
   - 'delete media'
   - 'delete own article content'
   - 'delete own blog content'
@@ -162,6 +166,7 @@ permissions:
   - 'delete own hidden_handbrake content'
   - 'delete own hidden_page content'
   - 'delete own image media'
+  - 'delete own impact_story content'
   - 'delete own long_read content'
   - 'delete own news content'
   - 'delete own page content'
@@ -185,6 +190,7 @@ permissions:
   - 'edit any hidden_handbrake content'
   - 'edit any hidden_page content'
   - 'edit any image media'
+  - 'edit any impact_story content'
   - 'edit any long_read content'
   - 'edit any news content'
   - 'edit any page content'
@@ -199,6 +205,7 @@ permissions:
   - 'edit own hidden_handbrake content'
   - 'edit own hidden_page content'
   - 'edit own image media'
+  - 'edit own impact_story content'
   - 'edit own long_read content'
   - 'edit own news content'
   - 'edit own page content'
@@ -245,6 +252,7 @@ permissions:
   - 'revert hidden_handbrake revisions'
   - 'revert hidden_page revisions'
   - 'revert image media revisions'
+  - 'revert impact_story revisions'
   - 'revert long_read revisions'
   - 'revert news revisions'
   - 'revert page revisions'
@@ -254,6 +262,7 @@ permissions:
   - 'switch shortcut sets'
   - 'translate any entity'
   - 'translate editable entities'
+  - 'translate impact_story node'
   - 'translate paragraph'
   - 'unpublish any content'
   - 'unpublish any node type hidden_handbrake'
@@ -285,6 +294,7 @@ permissions:
   - 'view hidden_handbrake revisions'
   - 'view hidden_page revisions'
   - 'view image media revisions'
+  - 'view impact_story revisions'
   - 'view long_read revisions'
   - 'view media'
   - 'view news revisions'
