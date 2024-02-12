@@ -3227,11 +3227,9 @@ cite {
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
 }
 
-@media (min-width: 1024px){
-  .tertiary-menu .is-active{
-    --tw-bg-opacity: 1;
-    background-color: rgb(243 246 225 / var(--tw-bg-opacity));
-  }
+.tertiary-menu .is-active{
+  --tw-bg-opacity: 1;
+  background-color: rgb(243 246 225 / var(--tw-bg-opacity));
 }
 
 /*-- extra padding for secondary menu --*/
@@ -6227,6 +6225,10 @@ cite {
   transition-duration: 150ms;
 }
 
+.duration-100{
+  transition-duration: 100ms;
+}
+
 .duration-150{
   transition-duration: 150ms;
 }
@@ -6237,14 +6239,6 @@ cite {
 
 .duration-300{
   transition-duration: 300ms;
-}
-
-.duration-500{
-  transition-duration: 500ms;
-}
-
-.duration-100{
-  transition-duration: 100ms;
 }
 
 .ease-in{
@@ -7484,14 +7478,14 @@ cite {
   background-color: rgb(0 169 213 / var(--tw-bg-opacity));
 }
 
-.hover\:bg-iiedorange-600:hover{
-  --tw-bg-opacity: 1;
-  background-color: rgb(242 169 12 / var(--tw-bg-opacity));
-}
-
 .hover\:bg-iiedgreen-10:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(243 246 225 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-iiedorange-600:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(242 169 12 / var(--tw-bg-opacity));
 }
 
 .hover\:stroke-gray-400:hover{
