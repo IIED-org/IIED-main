@@ -1,0 +1,25 @@
+uuid: f5ded987-30ea-45ab-bc46-fe388ebd72a0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.related_card.field_related_content
+    - paragraphs.paragraphs_type.related_card
+id: paragraph.related_card.default
+targetEntityType: paragraph
+bundle: related_card
+mode: default
+content:
+  field_related_content:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

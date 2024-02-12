@@ -4291,6 +4291,10 @@ cite {
   background-color: rgb(250 237 245 / var(--tw-bg-opacity));
 }
 
+.paragraph--type--related-card{
+  margin-bottom: 1.5rem;
+}
+
 .visible{
   visibility: visible;
 }

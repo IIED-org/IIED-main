@@ -21,3 +21,6 @@ copyprint:
 copycite:
    js:
     dist/js/copycite.js: { async: true }
+counter:
+   js:
+    dist/js/counter.js: {}
