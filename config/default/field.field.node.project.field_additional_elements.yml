@@ -21,7 +21,6 @@ dependencies:
     - paragraphs.paragraphs_type.quote
     - paragraphs.paragraphs_type.related_publication_inline
     - paragraphs.paragraphs_type.stories_table
-    - paragraphs.paragraphs_type.tab_box
     - paragraphs.paragraphs_type.video_embed
   module:
     - entity_reference_revisions
@@ -56,7 +55,6 @@ settings:
       quote: quote
       stories_table: stories_table
       related_publication_inline: related_publication_inline
-      tab_box: tab_box
     negate: 0
     target_bundles_drag_drop:
       about_the_author:
@@ -98,6 +96,9 @@ settings:
       info_box:
         weight: -13
         enabled: true
+      key_figure:
+        weight: 55
+        enabled: false
       linked_person:
         weight: -10
         enabled: false
@@ -116,8 +117,14 @@ settings:
       quote:
         weight: 48
         enabled: true
+      related_card:
+        weight: 62
+        enabled: false
       related_content:
         weight: 58
+        enabled: false
+      related_content_no_image:
+        weight: 64
         enabled: false
       related_link:
         weight: 49
@@ -166,7 +173,7 @@ settings:
         enabled: false
       tab_box:
         weight: 62
-        enabled: true
+        enabled: false
       timeline:
         weight: 63
         enabled: false

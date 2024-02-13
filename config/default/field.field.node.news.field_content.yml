@@ -1,10 +1,11 @@
-uuid: 09eae757-ea2e-4c5b-ae8f-3d8d56e5c5e4
+uuid: bf51e1e1-34d6-4834-ad67-85e24e5b7100
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_paragraphs
-    - node.type.blog
+    - field.storage.node.field_content
+    - node.type.news
+    - paragraphs.paragraphs_type.accordion_box
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.box
     - paragraphs.paragraphs_type.file_upload
@@ -12,23 +13,28 @@ dependencies:
     - paragraphs.paragraphs_type.highchart
     - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.image_small
+    - paragraphs.paragraphs_type.image_wide
     - paragraphs.paragraphs_type.info_box
-    - paragraphs.paragraphs_type.logo_block
     - paragraphs.paragraphs_type.media_embed
     - paragraphs.paragraphs_type.media_list
     - paragraphs.paragraphs_type.modal_image
     - paragraphs.paragraphs_type.quote
+    - paragraphs.paragraphs_type.related_card
+    - paragraphs.paragraphs_type.related_content
+    - paragraphs.paragraphs_type.related_content_no_image
+    - paragraphs.paragraphs_type.related_project
     - paragraphs.paragraphs_type.related_publication_inline
+    - paragraphs.paragraphs_type.section
     - paragraphs.paragraphs_type.stories_cta
     - paragraphs.paragraphs_type.stories_table
     - paragraphs.paragraphs_type.video_embed
   module:
     - entity_reference_revisions
-id: node.blog.field_paragraphs
-field_name: field_paragraphs
+id: node.news.field_content
+field_name: field_content
 entity_type: node
-bundle: blog
-label: Paragraphs
+bundle: news
+label: Content
 description: ''
 required: false
 translatable: false
@@ -38,146 +44,152 @@ settings:
   handler: 'default:paragraph'
   handler_settings:
     target_bundles:
+      section: section
       basic_text: basic_text
-      image: image
       box: box
-      info_box: info_box
       quote: quote
-      video_embed: video_embed
-      media_embed: media_embed
-      gallery: gallery
-      media_list: media_list
+      image: image
+      image_wide: image_wide
       image_small: image_small
-      stories_table: stories_table
-      logo_block: logo_block
       modal_image: modal_image
-      file_upload: file_upload
-      stories_cta: stories_cta
+      media_list: media_list
+      media_embed: media_embed
+      accordion_box: accordion_box
+      gallery: gallery
       highchart: highchart
+      info_box: info_box
+      related_content: related_content
+      related_project: related_project
       related_publication_inline: related_publication_inline
+      stories_cta: stories_cta
+      file_upload: file_upload
+      stories_table: stories_table
+      video_embed: video_embed
+      related_content_no_image: related_content_no_image
+      related_card: related_card
     negate: 0
     target_bundles_drag_drop:
       about_the_author:
-        weight: -50
-        enabled: false
-      accordion_box:
-        weight: -57
-        enabled: false
-      accordion_section:
-        weight: 40
-        enabled: false
-      basic_text:
-        weight: -69
-        enabled: true
-      box:
-        weight: -66
-        enabled: true
-      file_upload:
-        weight: -53
-        enabled: true
-      gallery:
-        weight: -61
-        enabled: true
-      highchart:
-        weight: 45
-        enabled: true
-      image:
-        weight: -67
-        enabled: true
-      image_small:
-        weight: -59
-        enabled: true
-      image_wide:
-        weight: -68
-        enabled: false
-      in_page_menu:
         weight: -46
         enabled: false
-      info_box:
+      accordion_box:
         weight: -65
+        enabled: true
+      accordion_section:
+        weight: -64
+        enabled: false
+      basic_text:
+        weight: -74
+        enabled: true
+      box:
+        weight: -73
+        enabled: true
+      file_upload:
+        weight: -50
+        enabled: true
+      gallery:
+        weight: -63
+        enabled: true
+      highchart:
+        weight: -62
+        enabled: true
+      image:
+        weight: -71
+        enabled: true
+      image_small:
+        weight: -69
+        enabled: true
+      image_wide:
+        weight: -70
+        enabled: true
+      in_page_menu:
+        weight: -52
+        enabled: false
+      info_box:
+        weight: -61
         enabled: true
       key_figure:
         weight: 55
         enabled: false
       linked_person:
-        weight: -51
+        weight: -60
         enabled: false
       logo_block:
-        weight: -55
-        enabled: true
+        weight: -59
+        enabled: false
       media_embed:
-        weight: -62
+        weight: -66
         enabled: true
       media_list:
-        weight: -60
+        weight: -67
         enabled: true
       modal_image:
-        weight: -54
+        weight: -68
         enabled: true
       quote:
-        weight: -64
+        weight: -72
         enabled: true
       related_card:
         weight: 62
-        enabled: false
+        enabled: true
       related_content:
-        weight: 57
-        enabled: false
+        weight: -58
+        enabled: true
       related_content_no_image:
-        weight: 64
-        enabled: false
+        weight: 60
+        enabled: true
       related_link:
-        weight: -52
+        weight: -51
         enabled: false
       related_project:
-        weight: 59
-        enabled: false
+        weight: -57
+        enabled: true
       related_publication_inline:
-        weight: 61
-        enabled: true
-      researcher_profiles:
-        weight: -48
-        enabled: false
-      section:
-        weight: -47
-        enabled: false
-      sticky_box:
-        weight: 70
-        enabled: false
-      stories_block:
-        weight: -45
-        enabled: false
-      stories_cta:
-        weight: -44
-        enabled: true
-      stories_curated_content:
-        weight: -43
-        enabled: false
-      stories_link_list:
-        weight: -42
-        enabled: false
-      stories_quote:
-        weight: -41
-        enabled: false
-      stories_table:
         weight: -56
         enabled: true
+      researcher_profiles:
+        weight: -43
+        enabled: false
+      section:
+        weight: -75
+        enabled: true
+      sticky_box:
+        weight: 64
+        enabled: false
+      stories_block:
+        weight: -55
+        enabled: false
+      stories_cta:
+        weight: -53
+        enabled: true
+      stories_curated_content:
+        weight: -49
+        enabled: false
+      stories_link_list:
+        weight: -48
+        enabled: false
+      stories_quote:
+        weight: -47
+        enabled: false
+      stories_table:
+        weight: -45
+        enabled: true
       stories_text:
-        weight: -40
+        weight: -44
         enabled: false
       stories_views:
-        weight: -39
+        weight: -54
         enabled: false
       tab:
-        weight: -36
+        weight: -42
         enabled: false
       tab_box:
-        weight: -38
+        weight: -41
         enabled: false
       timeline:
-        weight: -37
+        weight: -40
         enabled: false
       video_embed:
-        weight: -63
+        weight: -39
         enabled: true
 field_type: entity_reference_revisions

@@ -162,15 +162,29 @@
         {% endif %}
 
         {#-- body --#}
-        <div class="pb-12 prose border-b border-gray-300 md:prose-lg lg:max-w-none">
+        <div class="prose md:prose-lg lg:max-w-none">
           <div {{ content_attributes.addClass('node-content') }}> 
           {{ content.body }} 
           {{ content.field_paragraphs }}
           </div>
-        </div>  
+        </div>
+
+      </div>
+    </div>
+
+      <div class="pb-12"> 
+      {#-- layout paragraphs --#}
+      {{ content.field_content }}
+      </div>
+
+    <div
+      class="container mx-auto lg:px-8 xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12">
+      <div
+        class="xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4">
+
         {#-- about the author --#} 
         {% if content.field_about_the_author %}
-        <section class="py-6 border-b border-gray-300 lg:max-w-none">
+        <section class="py-6 border-t border-b border-gray-300 lg:max-w-none">
           <h3>About the author</h3>
           <div class="flex flex-col prose sm:justify-between sm:flex-row sm:gap-x-6 md:prose-lg lg:max-w-none">
           {{ content.field_about_the_author[0] }} 

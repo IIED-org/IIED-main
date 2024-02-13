@@ -9,15 +9,11 @@ dependencies:
     - paragraphs.paragraphs_type.box
     - paragraphs.paragraphs_type.file_upload
     - paragraphs.paragraphs_type.gallery
-    - paragraphs.paragraphs_type.highchart
     - paragraphs.paragraphs_type.image
-    - paragraphs.paragraphs_type.image_small
     - paragraphs.paragraphs_type.info_box
     - paragraphs.paragraphs_type.media_embed
     - paragraphs.paragraphs_type.media_list
-    - paragraphs.paragraphs_type.modal_image
     - paragraphs.paragraphs_type.quote
-    - paragraphs.paragraphs_type.related_project
     - paragraphs.paragraphs_type.related_publication_inline
     - paragraphs.paragraphs_type.stories_cta
     - paragraphs.paragraphs_type.video_embed
@@ -45,13 +41,9 @@ settings:
       video_embed: video_embed
       box: box
       gallery: gallery
-      highchart: highchart
       media_list: media_list
-      modal_image: modal_image
-      image_small: image_small
       quote: quote
       stories_cta: stories_cta
-      related_project: related_project
       related_publication_inline: related_publication_inline
     negate: 0
     target_bundles_drag_drop:
@@ -78,13 +70,13 @@ settings:
         enabled: true
       highchart:
         weight: 46
-        enabled: true
+        enabled: false
       image:
         weight: 14
         enabled: true
       image_small:
         weight: 48
-        enabled: true
+        enabled: false
       image_wide:
         weight: 15
         enabled: false
@@ -94,6 +86,9 @@ settings:
       info_box:
         weight: 16
         enabled: true
+      key_figure:
+        weight: 55
+        enabled: false
       linked_person:
         weight: 17
         enabled: false
@@ -108,19 +103,25 @@ settings:
         enabled: true
       modal_image:
         weight: 47
-        enabled: true
+        enabled: false
       quote:
         weight: 48
         enabled: true
+      related_card:
+        weight: 62
+        enabled: false
       related_content:
         weight: 58
+        enabled: false
+      related_content_no_image:
+        weight: 64
         enabled: false
       related_link:
         weight: 49
         enabled: false
       related_project:
         weight: 60
-        enabled: true
+        enabled: false
       related_publication_inline:
         weight: 61
         enabled: true
@@ -129,6 +130,9 @@ settings:
         enabled: false
       section:
         weight: 52
+        enabled: false
+      sticky_box:
+        weight: 70
         enabled: false
       stories_block:
         weight: 53
