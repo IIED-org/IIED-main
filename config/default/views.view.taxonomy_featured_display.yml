@@ -7,6 +7,7 @@ dependencies:
     - node.type.article
     - node.type.blog
     - node.type.event
+    - node.type.impact_story
     - node.type.long_read
     - node.type.news
     - node.type.project
@@ -406,6 +407,7 @@ display:
             article: article
             blog: blog
             event: event
+            impact_story: impact_story
             long_read: long_read
             news: news
             project: project

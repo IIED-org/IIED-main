@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.blog.field_author_s_
     - field.field.node.blog.field_blogger_info
     - field.field.node.blog.field_collections
+    - field.field.node.blog.field_content
     - field.field.node.blog.field_date_or_caption
     - field.field.node.blog.field_display_image
     - field.field.node.blog.field_image_caption
@@ -21,6 +22,7 @@ dependencies:
     - node.type.blog
   module:
     - field_group
+    - layout_paragraphs
     - media_library
     - paragraphs
     - path
@@ -67,6 +69,7 @@ third_party_settings:
         - field_display_image
         - body
         - field_paragraphs
+        - field_content
       label: Content
       region: content
       parent_name: group_tabs
@@ -176,6 +179,16 @@ content:
       match_limit: 10
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  field_content:
+    type: layout_paragraphs
+    weight: 9
+    region: content
+    settings:
+      preview_view_mode: default
+      nesting_depth: 0
+      require_layouts: 1
+      empty_message: ''
     third_party_settings: {  }
   field_date_or_caption:
     type: string_textfield

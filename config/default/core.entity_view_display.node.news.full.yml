@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.news.field_admin
     - field.field.node.news.field_collections
     - field.field.node.news.field_contact
+    - field.field.node.news.field_content
     - field.field.node.news.field_display_image
     - field.field.node.news.field_image_caption
     - field.field.node.news.field_main_image
@@ -22,8 +23,10 @@ dependencies:
     - field.field.node.news.field_video
     - node.type.news
   module:
+    - ds
     - entity_reference_revisions
     - layout_builder
+    - layout_paragraphs
     - text
     - user
 third_party_settings:
@@ -64,6 +67,23 @@ content:
     label: above
     settings: {  }
     third_party_settings: {  }
+    weight: 8
+    region: content
+  field_content:
+    type: layout_paragraphs
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings:
+      ds:
+        ds_limit: ''
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
     weight: 7
     region: content
   field_display_image:
@@ -74,7 +94,7 @@ content:
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    weight: 11
+    weight: 12
     region: content
   field_image_caption:
     type: text_default
@@ -97,7 +117,7 @@ content:
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 8
+    weight: 9
     region: content
   field_paragraphs:
     type: entity_reference_revisions_entity_view
@@ -114,7 +134,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 10
+    weight: 11
     region: content
   field_standfirst:
     type: text_default
@@ -129,7 +149,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 9
+    weight: 10
     region: content
   field_theme_s_:
     type: entity_reference_label

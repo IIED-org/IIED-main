@@ -944,7 +944,22 @@ display:
         arguments: false
         filters: false
         filter_groups: false
+        header: false
       display_description: ''
+      header:
+        area_1:
+          id: area_1
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: false
+          content:
+            value: "<div class=\"flex flex-wrap justify-between\">\r\n<h2 class=\"mb-6\">More impact stories</h2>\r\n<a href=\"/impact\" class=\"mt-2 mb-4\">See all</a>\r\n</div>"
+            format: full_html
+          tokenize: false
       display_extenders: {  }
       block_description: 'impacts by global'
     cache_metadata:
@@ -991,6 +1006,7 @@ display:
             article: article
             blog: blog
             event: event
+            impact_story: impact_story
             long_read: long_read
             news: news
             project: project
@@ -1319,6 +1335,7 @@ display:
           operator: in
           value:
             article: article
+            impact_story: impact_story
             project: project
           group: 1
           exposed: false
