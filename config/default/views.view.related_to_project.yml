@@ -81,7 +81,7 @@ display:
         type: infinite_scroll
         options:
           offset: 0
-          items_per_page: 12
+          items_per_page: 4
           total_pages: null
           id: 0
           tags:
@@ -297,6 +297,7 @@ display:
           admin_label: 'field_project: Content'
           plugin_id: standard
           required: false
+      use_ajax: true
       header: {  }
       footer: {  }
       display_extenders: {  }
