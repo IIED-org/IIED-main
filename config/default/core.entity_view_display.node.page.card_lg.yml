@@ -15,6 +15,7 @@ dependencies:
     - field.field.node.page.field_rows
     - field.field.node.page.field_standfirst
     - field.field.node.page.field_tagline
+    - field.field.node.page.field_tags
     - node.type.page
   module:
     - layout_builder
@@ -67,6 +68,7 @@ hidden:
   field_main_image: true
   field_rows: true
   field_standfirst: true
+  field_tags: true
   langcode: true
   search_api_excerpt: true
   sharing_buttons: true

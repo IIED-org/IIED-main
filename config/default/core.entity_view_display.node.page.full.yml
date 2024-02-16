@@ -15,6 +15,7 @@ dependencies:
     - field.field.node.page.field_rows
     - field.field.node.page.field_standfirst
     - field.field.node.page.field_tagline
+    - field.field.node.page.field_tags
     - node.type.page
   module:
     - layout_builder
@@ -72,7 +73,7 @@ content:
     label: hidden
     settings:
       view_mode: default
-      link: false
+      link: ''
     third_party_settings: {  }
     weight: 5
     region: content
@@ -114,6 +115,14 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 1
+    region: content
+  field_tags:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 10
     region: content
 hidden:
   field_alternative_label: true

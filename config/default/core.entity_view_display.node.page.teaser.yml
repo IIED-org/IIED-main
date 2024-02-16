@@ -15,6 +15,7 @@ dependencies:
     - field.field.node.page.field_rows
     - field.field.node.page.field_standfirst
     - field.field.node.page.field_tagline
+    - field.field.node.page.field_tags
     - node.type.page
   module:
     - layout_builder
@@ -67,6 +68,22 @@ third_party_settings:
                 entity: layout_builder.entity
             weight: 2
             additional: {  }
+          c24480d4-3c45-401a-860a-f2a414363b34:
+            uuid: c24480d4-3c45-401a-860a-f2a414363b34
+            region: content
+            configuration:
+              id: 'field_block:node:page:field_tags'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_label
+                label: above
+                settings:
+                  link: true
+                third_party_settings: {  }
+            weight: 3
+            additional: {  }
         third_party_settings: {  }
 _core:
   default_config_hash: cSv5lDnbIgDug475Hdz3woED2XMqYv3awI-J9u1JLbY
@@ -82,6 +99,14 @@ content:
       trim_length: 600
     third_party_settings: {  }
     weight: 100
+    region: content
+  field_tags:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 102
     region: content
   links:
     settings: {  }
