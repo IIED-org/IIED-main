@@ -35,10 +35,9 @@ bundle: blog
 mode: card
 content:
   field_main_image:
-    type: entity_reference_entity_view
+    type: entity_reference_label
     label: hidden
     settings:
-      view_mode: card_cover
       link: false
     third_party_settings:
       ds:

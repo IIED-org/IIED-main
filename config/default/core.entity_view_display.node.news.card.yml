@@ -36,18 +36,11 @@ mode: card
 content:
   field_main_image:
     type: entity_reference_label
-    label: above
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
     weight: 0
-    region: content
-  field_tagline:
-    type: basic_string
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 1
     region: content
 hidden:
   body: true
@@ -62,6 +55,7 @@ hidden:
   field_paragraphs: true
   field_project: true
   field_standfirst: true
+  field_tagline: true
   field_tags: true
   field_theme_s_: true
   field_video: true

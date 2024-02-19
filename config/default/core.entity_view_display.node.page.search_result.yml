@@ -15,6 +15,7 @@ dependencies:
     - field.field.node.page.field_rows
     - field.field.node.page.field_standfirst
     - field.field.node.page.field_tagline
+    - field.field.node.page.field_tags
     - node.type.page
   module:
     - ds
@@ -64,6 +65,7 @@ hidden:
   field_rows: true
   field_standfirst: true
   field_tagline: true
+  field_tags: true
   langcode: true
   links: true
   sharing_buttons: true

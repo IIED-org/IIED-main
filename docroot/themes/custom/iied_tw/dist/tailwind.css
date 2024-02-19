@@ -4289,7 +4289,7 @@ cite {
   background-color: rgb(250 237 245 / var(--tw-bg-opacity));
 }
 
-.paragraph--type--related-card{
+.paragraph--type--related-card, .paragraph--type--related-publication-inline{
   margin-bottom: 1.5rem;
 }
 
