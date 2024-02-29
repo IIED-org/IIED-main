@@ -1,0 +1,7 @@
+tfa.settings:
+  title: 'Two-factor Authentication'
+  description: 'TFA process and plugin settings.'
+  route_name: tfa.settings
+  parent: user.admin_index
+  requirements:
+    _permission: 'admin tfa settings'

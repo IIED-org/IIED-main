@@ -1,0 +1,6 @@
+administer alogin:
+  title: 'Administer Authenticator Login'
+  description: 'Grants access to authenticator configuration form.'
+alogin bypass enforced redirect:
+  title: 'Bypass enforced redirection'
+  description: 'Bypass enforced redirection to setup 2FA after login.'

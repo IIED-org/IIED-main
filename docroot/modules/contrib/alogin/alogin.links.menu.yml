@@ -1,0 +1,6 @@
+alogin.alogin_config_form:
+  title: 'Authenticator Configurations'
+  route_name: alogin.alogin_config_form
+  description: 'Authenticator Configurations.'
+  parent: system.admin_config_system
+  weight: 99

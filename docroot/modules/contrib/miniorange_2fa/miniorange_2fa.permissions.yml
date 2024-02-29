@@ -1,0 +1,21 @@
+miniorange 2fa customer setup:
+    title: Customer setup tab
+    description: Using this tab one can deregister the account from the miniOrange 2FA module and disable the module/2FA for all users.
+    restrict access: true
+#miniorange 2fa setup second factor:
+#    title: Setup two factor tab
+#    description: This tab belongs to the user who activated the miniOrange 2FA module, so no need to give permission to other roles.
+#    restrict access: true
+miniorange 2fa login settings:
+    title: Login settings tab
+    description: Manage 2FA configurations for the entire site. This includes enabling/disabling 2FA for user accounts. Changing the settings related to the role/domain-based 2FA, allowed 2FA methods, change/re-configure 2FA, and many more.
+    restrict access: true
+miniorange 2fa user management:
+    title: User management tab
+    description: Manage all users 2FA. This includes reset 2FA for user accounts.
+    restrict access: true
+miniorange 2fa headless:
+    title: Headless 2FA setup tab
+    restrict access: true
+miniorange 2fa licensing:
+    title: Licensing tab

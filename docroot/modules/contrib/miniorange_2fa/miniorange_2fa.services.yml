@@ -1,0 +1,4 @@
+services:
+    init_subscriber:
+        class: Drupal\miniorange_2fa\EventSubscriber\InitSubscriber
+        tags: [ name: event_subscriber ]

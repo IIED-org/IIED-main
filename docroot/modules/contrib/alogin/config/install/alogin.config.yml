@@ -1,0 +1,5 @@
+alogin:
+  allow_enable_disable: 0
+  redirect: 0
+  message_type: 'status'
+  redirect_message: 'Please setup 2FA via email.'

@@ -1,0 +1,31 @@
+<?php
+
+function alogin_schema() {
+  $schema['alogin_user_settings'] = [
+    'description' => 'Stores OTP settings of a user.',
+    'fields'      => [
+      'uid' => [
+        'description' => 'UID of the User.',
+        'type'        => 'int',
+        'unsigned'    => TRUE,
+        'not null'    => TRUE,
+        'default'     => 0
+      ],
+      'secret' => [
+        'description' => 'Barcode secret.',
+        'type'        => 'varchar_ascii',
+        'length'      => 255,
+        'not null'    => TRUE,
+        'default'     => 0
+      ],
+      'enabled' => [
+        'description' => 'OTP enabled or not.',
+        'type'        => 'int',
+        'length'      => 11,
+        'not null'    => TRUE,
+        'default'     => 0
+      ]
+    ]
+  ];
+  return $schema;
+}

@@ -1,0 +1,349 @@
+<?php
+
+/**
+ * @file
+ * Module file for miniOrange 2FA Module.
+ */
+
+use Drupal\Core\Url;
+use Drupal\miniorange_2fa\MoAuthConstants;
+use Drupal\user\Entity\User;
+use Drupal\user\UserInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\miniorange_2fa\MoAuthUtilities;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\miniorange_2fa\Form\MoAuthCustomerSetup;
+
+function miniorange_2fa_menu_local_tasks_alter(&$data, $route_name)
+{
+    $variables_and_values = array(
+        'mo_auth_enable_two_factor',
+    );
+    $mo_db_values = MoAuthUtilities::miniOrange_set_get_configurations($variables_and_values, 'GET');
+
+    $account = \Drupal::currentUser();
+    $available = MoAuthUtilities::check_for_userID($account->id());
+
+    /**
+     * Remove 2FA Configurations tab from the user profile in following cases
+     * 1. If module is disabled 2. User has not configured the 2FA
+     */
+    if (!$mo_db_values['mo_auth_enable_two_factor'] || $available === FALSE && isset($data['tabs']['0']['miniorange_2fa.user.mo_mfa_form'])) {
+        unset($data['tabs']['0']['miniorange_2fa.user.mo_mfa_form']);
+    }
+}
+
+function miniorange_2fa_form_alter(&$form, FormStateInterface $form_state, $form_id)
+{
+    $utilities = new MoAuthUtilities();
+    $variables_and_values = array(
+        'mo_auth_enable_login_with_email',
+        'mo_auth_enable_login_with_phone',
+        'mo_auth_override_login_labels',
+        'mo_auth_username_title',
+        'mo_auth_username_description',
+        'mo_auth_enable_two_factor',
+        'mo_auth_use_only_2nd_factor',
+        'mo_auth_2fa_use_pass',
+        'mo_auth_2fa_license_expiry',
+        'mo_auth_2fa_license_type',
+        'mo_auth_enable_2fa_for_password_reset',
+    );
+    $mo_db_values = $utilities->miniOrange_set_get_configurations($variables_and_values, 'GET');
+
+    /**
+     * Disable few of the radio buttons from radio button group.
+     */
+    if ($form_id == 'miniorange_2fa_setup_two_factor') {
+        $form['mo_setup_second_factor']['mo_auth_method']['WHATSAPP'] = ['#disabled' => TRUE];
+    }
+
+    if ($form_id == 'user_login_block' || $form_id == 'user_login_form' || $form_id == 'user_profile_form') {
+        if(isset($_GET['destination'])){
+            user_cookie_save(['destination'=> $_GET['destination']]);
+        }
+        switch ($form_id) {
+            case 'user_login_form':
+                /**
+                 * Check if login with email or phone enabled if yes call function miniorange_2fa_form_extra_validate.
+                 */
+                if ($mo_db_values['mo_auth_enable_login_with_email'] || $mo_db_values['mo_auth_enable_login_with_phone']) {
+                    array_unshift($form['#validate'], 'miniorange_2fa_form_extra_validate');
+                }
+
+                /**
+                 * Check for settings to override login form username title and description.
+                 */
+                if ($mo_db_values['mo_auth_override_login_labels']) {
+                    $form['name']['#title'] = t($mo_db_values['mo_auth_username_title']);
+                    $form['name']['#description'] = t($mo_db_values['mo_auth_username_description']);
+                }
+                break;
+        }
+
+        if ($utilities->isCustomerRegistered()) {
+            $loginSettings = $mo_db_values['mo_auth_enable_two_factor'];
+            $state = \Drupal::state()->get('system.maintenance_mode');
+            if ($state == 0 && $loginSettings && !$utilities->check_trusted_IPs()) {
+                $only_2nd_factor = $mo_db_values['mo_auth_use_only_2nd_factor'];
+                $use_pass = $mo_db_values['mo_auth_2fa_use_pass'];
+                if ($only_2nd_factor and (!isset($use_pass))) {
+                    \Drupal::service('page_cache_kill_switch')->trigger();
+                    $output = array_diff_key($form, array_flip(( array )['pass']));
+                    $output1 = array_diff_key($output, array_flip(( array )['actions']));
+                    $output2 = array_diff_key($output1, array_flip(( array )['#validate']));
+                    $form = $output2;
+                    $form['minorange_login_tfa'] = array(
+                        '#type' => 'submit',
+                        '#value' => t('Login with 2nd Factor'),
+                        '#submit' => array('miniorange_2fa_form_alter_submit'),
+                        '#prefix' => '<br><br><br>',
+                    );
+                } elseif (isset($use_pass)) {
+                    \Drupal::service('page_cache_kill_switch')->trigger();
+                    \Drupal::messenger()->addError("You will have to setup 2FA for the first time to enable passwordless login.");
+                    array_unshift($form['#submit'], 'miniorange_2fa_form_alter_submit');
+                    \Drupal::configFactory()->getEditable('miniorange_2fa.settings')->clear('mo_auth_2fa_use_pass')->save();
+                } else {
+                    array_unshift($form['#submit'], 'miniorange_2fa_form_alter_submit');
+                }
+            }
+        }
+    }
+
+    if($form_id == 'system_modules_uninstall_confirm_form') {
+      if (in_array('miniOrange Second Factor Authentication', $form['modules']['#items'])) {
+        $form['keep_configuration'] = [
+          '#type' => 'checkbox',
+          '#title' => t('Preserve configured 2FA settings of users'),
+          '#description' => t('Enabling this would keep your 2FA configuration intact even when the module is uninstalled.'),
+        ];
+      }
+    }
+    }
+
+function miniorange_2fa_form_extra_validate($form, FormStateInterface &$form_state)
+{
+
+    $login_input = $form_state->getValue('name');
+    if (filter_var($login_input, FILTER_VALIDATE_EMAIL)) {
+        $user = user_load_by_mail($login_input);
+        if ($user) {
+            $form_state->setValue('name', $user->getAccountName());
+        }
+    } elseif (preg_match('/^[0-9]{6,16}$/', str_replace("+", "", $login_input))) {
+        $resultSet = MoAuthUtilities::loadUserByPhoneNumber($login_input);
+        if ($resultSet['status'] === 'SUCCESS') {
+            $user = User::load($resultSet['userID']);
+            $form_state->setValue('name', $user->getAccountName());
+        } elseif ($resultSet['status'] === 'FAILED') {
+            \Drupal::messenger()->addError(t($resultSet['error']));
+            //$form_state->setValidationComplete(FALSE );
+            //$form_state->setErrorByName('name', t( $resultSet['error'] ) );
+        }
+    }
+}
+
+function miniorange_2fa_form_alter_submit(&$form, FormStateInterface $form_state)
+{
+    \Drupal::messenger()->deleteAll();
+    $utilities = new MoAuthUtilities();
+    $variables_and_values1 = array(
+        'mo_auth_use_only_2nd_factor',
+        'mo_auth_enable_login_with_email',
+        'mo_auth_enable_login_with_phone',
+    );
+    $mo_db_values = $utilities->miniOrange_set_get_configurations($variables_and_values1, 'GET');
+    $formValues = $form_state->getValues();
+
+    /**
+     * Handle enable login with Email option when with second factor enabled
+     */
+    if ($mo_db_values['mo_auth_enable_login_with_email'] || $mo_db_values['mo_auth_enable_login_with_phone']) {
+        miniorange_2fa_form_extra_validate($form, $form_state);
+    }
+
+    /**
+     * Handle Login with second factor ( NO PASSWORD REQUIRED )
+     */
+    $mo_auth_use_only_2nd_factor = $mo_db_values['mo_auth_use_only_2nd_factor'];
+    $username = $form_state->getValue('name');
+    if ($mo_auth_use_only_2nd_factor) {
+        if (isset($formValues['pass'])) {
+            $password = $formValues['pass'];
+            unset($_GET['destination']);
+            if (!(\Drupal::service('user.auth')->authenticate($username, $password))) {
+                \Drupal::messenger()->addError(t('Invalid username/password'));
+                return;
+            }
+        }
+    } else {
+        $password = $form_state->getValue('pass');
+        unset($_GET['destination']);
+        if (!(\Drupal::service('user.auth')->authenticate($username, $password))) {
+            \Drupal::messenger()->addError(t('Invalid username/password'));
+            return;
+        }
+    }
+
+    $tmpDestination = isset($_GET['destination']) ? $_GET['destination'] : '';
+
+    $utilities->invoke2fa_OR_inlineRegistration($username, $tmpDestination);
+}
+
+/**
+ * Fetch license whenever cron run and keep
+ * remaining transactions upto date so that user
+ * can see those
+ */
+function miniorange_2fa_cron()
+{
+    $utilities = new MoAuthUtilities();
+    if ($utilities->isCustomerRegistered()) {
+        $customer = new MoAuthCustomerSetup();
+        $from_state = '';
+        $customer->mo_auth_fetch_customer_license('', $from_state, 'CRON');
+    }
+}
+
+/**
+ * Catch the call from SSO modules and invoke 2FA.
+ */
+function miniorange_2fa_invoke_miniorange_2fa_before_login($account)
+{
+    $utilities = new MoAuthUtilities();
+    $variables_and_values = array(
+        'mo_auth_enable_two_factor',
+    );
+    $mo_db_values = $utilities->miniOrange_set_get_configurations($variables_and_values, 'GET');
+    if ($utilities->isCustomerRegistered() && $mo_db_values['mo_auth_enable_two_factor'] === TRUE) {
+        $utilities->mo_add_loggers_for_failures('<strong>Email in SSO Response: </strong>' . $account->getAccountName(), 'info');
+        $utilities->invoke2fa_OR_inlineRegistration($account->getAccountName());
+    }
+}
+
+/**
+ * This is for s-d-s-c
+ */
+function miniorange_2fa_cilogon_auth_pre_authorize($account)
+{
+    $user = user_load_by_mail($account->getEmail());
+    if ($user === false) {
+        /** If user is not exist in Drupal then return TRUE so that CILogin module creates that users */
+        return TRUE;
+    }
+    $utilities = new MoAuthUtilities();
+    $variables_and_values = array(
+        'mo_auth_enable_two_factor',
+    );
+    $mo_db_values = $utilities->miniOrange_set_get_configurations($variables_and_values, 'GET');
+    if ($utilities->isCustomerRegistered() && $mo_db_values['mo_auth_enable_two_factor'] === TRUE) {
+        $utilities->mo_add_loggers_for_failures('<strong>Email in SSO Response: </strong>' . $user->getEmail(), 'info');
+        $utilities->invoke2fa_OR_inlineRegistration($user->getAccountName());
+    }
+    return TRUE;
+}
+
+function miniorange_2fa_user_delete($account)
+{
+    $utilities = new MoAuthUtilities();
+    if ($utilities->isCustomerRegistered()) {
+        $utilities->delete_user_from_UserAuthentication_table($account);
+    }
+}
+
+/**
+ * @param $user
+ * Handle user status and email change
+ */
+
+function miniorange_2fa_user_presave(UserInterface $user)
+{
+    $module_enable = \Drupal::config('miniorange_2fa.settings')->get('mo_auth_enable_two_factor');
+    $utilities = new MoAuthUtilities();
+    if ($module_enable && $utilities->isCustomerRegistered() && !is_null($user->get('uid')->value)) {
+        $updatedEmail = $user->get('mail')->value;
+        $userStatus = $user->get('status')->value; //TRUE if user is active else FALSE
+        $userID = $user->get('uid')->value;
+
+        /**
+         * Get existing email which need to replace with $updatedEmail
+         */
+        $existingEmail = '';
+        $account = User::load($userID);
+        if ($account != NULL) {
+            $existingEmail = $account->get('mail')->value;
+        }
+
+        /**
+         * Update the email if email change detected
+         */
+        if ($existingEmail !== '' && $updatedEmail !== $existingEmail) {
+            $utilities->update_user_email_from_UserAuthentication_table($existingEmail, $updatedEmail);
+        }
+        /**
+         * Disable or enable the user depending upon the status value
+         */
+        if ($existingEmail !== '') {
+            if ($userStatus == FALSE) {
+                $utilities->update_user_status_from_server($updatedEmail, FALSE);
+            } else {
+                $utilities->update_user_status_from_server($updatedEmail, TRUE);
+            }
+        }
+    }
+}
+
+/**
+ * Implements hook_help().
+ */
+function miniorange_2fa_help($route_name, RouteMatchInterface $route_match)
+{
+    switch ($route_name) {
+        case 'help.page.miniorange_2fa':
+            $url = Url::fromRoute('user.admin_index')->toString();
+            $moduleLink = $url . '/miniorange_2fa/customer_setup';
+
+            $setupGuideLinkDoc = 'https://plugins.miniorange.com/drupal-2fa-setup-guides';
+            $setupGuideLinkVideo = 'https://www.youtube.com/watch?v=IjcmXpZUwgk&list=PL2vweZ-PcNpeOYZk3tPy6MoDV8ELT0odI';
+            $FAQs = 'https://faq.miniorange.com/kb/drupal/two-factor-authentication-drupal/';
+
+            $output = '';
+            $output .= '<h3>' . t('About <a target="_blank" href="https://plugins.miniorange.com/drupal-two-factor-authentication-2fa">[Know more]</a>') . '</h3>';
+            $output .= '<p>' . t('A highly secure & easy to setup Two Factor Authentication (TFA) for your Drupal site. Rather than relying on a password alone, which can be phished or guessed, miniOrange Two Factor Authentication (TFA) adds a second layer of security to your Drupal accounts. It protects your site from hacks and unauthorized login attempts.') . '</p>';
+            $output .= '<h3>' . t('Configuration') . '</h3>';
+            $output .= '<p>' . t('Configure Two-Factor Authentication from Configuration » <a target = "_blank" href=" ' . $url . ' ">People</a> » <a target = "_blank" href=" ' . $moduleLink . ' ">miniOrange Two-Factor Authentication</a>:') . '</p>';
+            $output .= '<p>
+                           <ol>
+                              <li>' . t('Register with miniOrange. If you already have miniOrange account, enter your username and password to retrieve your account.') . '</li>
+                              <li>' . t('Once the account is retrieved, go to Setup Two-Factor tab to configure the authentication method you would like to use.') . '</li>
+                              <li>' . t('If you need any assistance, reach out to us at <a href="mailto:drupalsupport@xecurify.com">drupalsupport@xecurify.com</a> or <a href="mailto:info@xecurify.com">info@xecurify.com</a>') . '</li>
+                           </ol>
+                        </p>';
+            $output .= '<br><h3>' . t('Setup Guides') . '</h3>';
+            $output .= '<p>
+                            <ul>
+                              <li>' . t('For detailed step-by-step setup guides, <a target = "_blank" href="' . $setupGuideLinkDoc . '">click here</a>.') . '</li>
+                              <li>' . t('We also have video guides that will take you through all the steps necessary to configure the module. To view the video library, <a target = "_blank" href="' . $setupGuideLinkVideo . '">click here</a>.') . '</li>
+                           </ul>
+                        </p>
+                        ';
+            $output .= '<br><h3>' . t('Frequently Asked Questions') . '</h3>
+                        <p>' . t('<a target = "_blank" href="' . $FAQs . '">Click here</a>, to check out our FAQ page. It has all the solutions to most frequently encountered questions.') . '</p><br>';
+            return $output;
+    }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ * Use this hook to pass values form PHP to Javascript.
+ * For more reference please refer to this document
+ *  1. https://www.codimth.com/blog/web/drupal/passing-data-php-javascript-drupal-8
+ *  2. https://www.drupal.org/docs/drupal-apis/javascript-api/add-javascript-to-your-theme-or-module
+ */
+function miniorange_2fa_preprocess_page(&$variables)
+{
+  $kba_answer_length = MoAuthConstants::KBA_ANSWER_LENGTH;
+  $variables['#attached']['library'][] = 'miniorange_2fa/miniorange_2fa.custom_kba_validation';
+  $variables['#attached']['drupalSettings']['miniorange_2fa']['kba_answer_length'] = $kba_answer_length;
+}

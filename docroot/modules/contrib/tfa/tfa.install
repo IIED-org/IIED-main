@@ -1,0 +1,325 @@
+<?php
+
+/**
+ * @file
+ * Installation related functions for TFA module.
+ */
+
+use Drupal\Core\Session\AccountInterface;
+use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_requirements().
+ */
+function tfa_requirements($phase) {
+  $requirements = [];
+  if ($phase == 'runtime') {
+    if (!extension_loaded('openssl')) {
+      if (extension_loaded('mcrypt')) {
+        $severity = REQUIREMENT_WARNING;
+        $description = t('The TFA module recommends the PHP OpenSSL extension to be installed on the web server.');
+      }
+      else {
+        $severity = REQUIREMENT_ERROR;
+        $description = t('The TFA module requires either the PHP OpenSSL or Mcrypt extensions to be installed on the web server.');
+      }
+
+      $requirements['tfa_extensions'] = [
+        'title' => t('Two-factor authentication'),
+        'value' => t('Required PHP extensions'),
+        'description' => $description,
+        'severity' => $severity,
+      ];
+    }
+
+    $requirements['tfa_libraries'] = [
+      'title' => t('Two-factor authentication'),
+    ];
+    if (class_exists('\Otp\Otp')) {
+      $version = method_exists('\Otp\OtpInterface', 'checkHotpResync') ? '2.1.0 or newer' : '2.0.0';
+
+      $requirements['tfa_libraries']['severity'] = REQUIREMENT_OK;
+      $requirements['tfa_libraries']['value'] = t('Third-party libraries');
+      $requirements['tfa_libraries']['description'] = t('One Time Passwords (christian-riesen/otp) @version is installed', ['@version' => $version]);
+    }
+    else {
+      $requirements['tfa_libraries']['severity'] = REQUIREMENT_ERROR;
+      $requirements['tfa_libraries']['value'] = t('Third-party libraries');
+      $requirements['tfa_libraries']['description'] = t("Please install the 'christian-riesen/otp' library via composer. See the module README for instructions.");
+    }
+  }
+  return $requirements;
+}
+
+/**
+ * Clear plugin cache as validation plugins moved to ga_login module.
+ */
+function tfa_update_8001() {
+  \Drupal::cache('discovery')
+    ->invalidateMultiple(['tfa_setup', 'tfa_validation']);
+}
+
+/**
+ * Add new email configuration values.
+ */
+function tfa_update_8002() {
+  $config = \Drupal::configFactory()->getEditable('tfa.settings');
+  $config
+    ->set('mail.tfa_enabled_configuration.subject', "Your [site:name] account now has two-factor authentication")
+    ->set('mail.tfa_enabled_configuration.body', "[user:display-name],\n\nThanks for configuring two-factor authentication on your [site:name] account!\n\nThis additional level of security will help to ensure that only you are able to log in to your account.\n\nIf you ever lose the device you configured, you should act quickly to delete its association with this account.\n\n-- \n[site:name] team")
+    ->set('mail.tfa_disabled_configuration.subject', "Your [site:name] account no longer has two-factor authentication")
+    ->set('mail.tfa_disabled_configuration.body', "[user:display-name],\n\nTwo-factor authentication has been disabled on your [site:name] account.\n\nIf you did not take this action, please contact a site administrator immediately.\n\n-- \n[site:name] team")
+    ->save();
+}
+
+/**
+ * Move old 'require tfa' permissions into tfa.settings.
+ */
+function tfa_update_8003() {
+  $required_roles = [];
+  $role_storage = \Drupal::entityTypeManager()->getStorage('user_role');
+  foreach ($role_storage->loadMultiple() as $role) {
+    /** @var \Drupal\user\RoleInterface $role */
+    $rid = $role->id();
+    $required_roles[$rid] = 0;
+    if ($role->hasPermission('require tfa')) {
+      $required_roles[$rid] = $rid;
+      $role->revokePermission('require tfa')
+        ->save();
+    }
+  }
+  unset($required_roles[AccountInterface::ANONYMOUS_ROLE]);
+
+  $config = \Drupal::configFactory()->getEditable('tfa.settings');
+  $config->set('required_roles', $required_roles)
+    ->save();
+}
+
+/**
+ * Set the enabled validation plugin to an allowed validation plugin.
+ */
+function tfa_update_8004() {
+  // Update configuration with new property values.
+  $config = \Drupal::configFactory()->getEditable('tfa.settings');
+  $validation_plugin = $config->get('validation_plugin');
+  $config
+    ->clear('validation_plugin')
+    ->set('default_validation_plugin', $validation_plugin)
+    ->set('allowed_validation_plugins', [$validation_plugin => $validation_plugin])
+    ->save();
+
+  // Update user settings to turn enabled plugins string into an array.
+  $user_data_service = \Drupal::service('user.data');
+  $tfa_users_settings = $user_data_service->get('tfa', NULL, 'tfa_user_settings');
+  foreach ($tfa_users_settings as $uid => $settings) {
+    if (isset($settings['data']['plugins']) && !is_array($settings['data']['plugins'])) {
+      /*
+       * Fix a bug with how plugins were previously stored.
+       *
+       * - Previously if the user enabled both a validation plugin and its
+       *   fallback, only the fallback would be stored in their data array.
+       *
+       * - So if the current validation plugin id is not the same as the plugin
+       *   id stored in user data, then we need to add both to the new array.
+       */
+      $plugins = [];
+      if ($validation_plugin != $settings['data']['plugins']) {
+        $plugins[$validation_plugin] = $validation_plugin;
+      }
+      $plugins[$settings['data']['plugins']] = $settings['data']['plugins'];
+      $settings['data']['plugins'] = $plugins;
+      $user_data_service->set('tfa', $uid, 'tfa_user_settings', $settings);
+    }
+  }
+}
+
+/**
+ * Convert tfa_recovery_code from a fallback plugin into validation plugin.
+ */
+function tfa_update_8005() {
+  $config = \Drupal::configFactory()->getEditable('tfa.settings');
+
+  if (!empty($config->get('fallback_plugins'))) {
+    // There could have been multiple instances of recovery codes as fallbacks.
+    // But as a validation plugin we only need the settings for one of those, so
+    // get the first instance.
+    $settings = [];
+    foreach ($config->get('fallback_plugins') as $fallbacks) {
+      if (isset($fallbacks['tfa_recovery_code'])) {
+        $settings = $fallbacks['tfa_recovery_code']['settings'];
+        break;
+      }
+    }
+
+    // Save the settings to the validation_plugin_settings array, and enable the
+    // tfa_recovery_code plugin as an allowed plugin.
+    if (!empty($settings)) {
+      $validation_plugin_settings = $config->get('validation_plugin_settings');
+      $validation_plugin_settings['tfa_recovery_code'] = $settings;
+
+      $allowed_validation_plugins = $config->get('allowed_validation_plugins');
+      $allowed_validation_plugins['tfa_recovery_code'] = 'tfa_recovery_code';
+
+      $config
+        ->clear('fallback_plugins')
+        ->set('validation_plugin_settings', $validation_plugin_settings)
+        ->set('allowed_validation_plugins', $allowed_validation_plugins)
+        ->save();
+    }
+  }
+}
+
+/**
+ * Update plugin names from ga_login prefix to tfa.
+ */
+function tfa_update_8006() {
+  /** @var \Drupal\Core\Config\Config $config */
+  $config = \Drupal::configFactory()->getEditable('tfa.settings');
+
+  // Update default_validation_plugin.
+  $old_plugins = ['ga_login_hotp', 'ga_login_totp'];
+  $new_plugins = ['tfa_hotp', 'tfa_totp'];
+  $config->set('default_validation_plugin', str_replace($old_plugins, $new_plugins, $config->get('default_validation_plugin')));
+
+  // Update validation_plugin_settings.
+  $validation_plugins = $config->get('validation_plugin_settings');
+  foreach ($validation_plugins as $key => $validation_plugin) {
+    switch ($key) {
+      case 'ga_login_hotp':
+      case 'ga_login_totp':
+        $new_key = str_replace('ga_login_', 'tfa_', $key);
+        $validation_plugins[$new_key] = $validation_plugin;
+        unset($validation_plugins[$key]);
+        break;
+    }
+  }
+  $config->set('validation_plugin_settings', $validation_plugins);
+
+  // Update allowed_validation_plugins.
+  $allowed_validation_plugins = $config->get('allowed_validation_plugins');
+  foreach ($allowed_validation_plugins as $key => $allowed_validation_plugin) {
+    switch ($key) {
+      case 'ga_login_hotp':
+      case 'ga_login_totp':
+        $new_key = str_replace('ga_login_', 'tfa_', $key);
+        $allowed_validation_plugins[$new_key] = $new_key;
+        unset($allowed_validation_plugins[$key]);
+        break;
+    }
+  }
+  $config->set('allowed_validation_plugins', $allowed_validation_plugins);
+
+  $config->save();
+}
+
+/**
+ * Update plugin names from ga_login prefix to tfa in users_data.
+ */
+function tfa_update_8007(&$sandbox) {
+  /** @var \Drupal\user\UserData $user_data */
+  $user_data = \Drupal::service('user.data');
+  $tfa_settings = $user_data->get('tfa', NULL, 'tfa_user_settings');
+
+  // Setup batch.
+  if (!isset($sandbox['total'])) {
+    $sandbox['total'] = count($tfa_settings);
+    $sandbox['current'] = 0;
+  }
+  $batch_size = 50;
+
+  foreach (array_slice($tfa_settings, $sandbox['current'], $batch_size, TRUE) as $uid => $user_settings) {
+    $changed = FALSE;
+    $plugins = $user_settings['data']['plugins'];
+    $new_plugins = [];
+    foreach ($plugins as $key => $plugin) {
+      switch ($key) {
+        case 'ga_login_hotp':
+        case 'ga_login_totp':
+          $new_key = str_replace('ga_login_', 'tfa_', $key);
+          $new_plugins[$new_key] = $new_key;
+          $changed = TRUE;
+          break;
+
+        default:
+          $new_plugins[$key] = $key;
+          break;
+      }
+    }
+    if ($changed) {
+      $user_settings['data']['plugins'] = $new_plugins;
+      $user_data->set('tfa', $uid, 'tfa_user_settings', $user_settings);
+    }
+    $sandbox['current']++;
+  }
+
+  if ($sandbox['total'] == 0) {
+    $sandbox['#finished'] = 1;
+  }
+  else {
+    $sandbox['#finished'] = ($sandbox['current'] / $sandbox['total']);
+  }
+}
+
+/**
+ * Uninstall the ga_login module.
+ */
+function tfa_update_8008(&$sandbox) {
+  \Drupal::cache('discovery')
+    ->invalidateMultiple(['tfa_setup', 'tfa_validation']);
+
+  if (\Drupal::service('module_handler')->moduleExists('ga_login')) {
+    \Drupal::service('module_installer')->uninstall(['ga_login'], FALSE);
+  }
+}
+
+/**
+ * Grant users with new "administer tfa for other users" permission.
+ */
+function tfa_update_8009() {
+  if ($roles = Role::loadMultiple()) {
+    foreach ($roles as $role) {
+      if ($role->hasPermission('administer users')) {
+        $role->grantPermission('administer tfa for other users');
+        $role->save();
+      }
+    }
+  }
+}
+
+/**
+ * Changes type of 'enabled' config schema from int to bool.
+ */
+function tfa_update_8010() {
+  $config = \Drupal::configFactory()->getEditable('tfa.settings');
+  $config->set('enabled', boolval($config->get('enabled')))
+    ->save();
+}
+
+/**
+ * Rename the cookie_name setting, and set new default value.
+ */
+function tfa_update_8012() {
+  $config = \Drupal::configFactory()->getEditable('tfa.settings');
+  $cookie_name = $config->get('cookie_name');
+  $value = (empty($cookie_name) || ($cookie_name === 'TFA')) ? 'tfa-trusted-browser' : $cookie_name;
+  $config
+    ->set('trust_cookie_name', $value)
+    ->clear('cookie_name')
+    ->save();
+}
+
+/**
+ * Move trusted browser settings to login_plugin_settings.tfa_trusted_browser.
+ */
+function tfa_update_8013() {
+  $config = \Drupal::configFactory()->getEditable('tfa.settings');
+  $value = [
+    'cookie_expiration' => $config->get('trust_cookie_expiration') ? $config->get('trust_cookie_expiration') / 86400 : 30,
+    'cookie_name' => $config->get('trust_cookie_name') ?: 'tfa-trusted-browser',
+  ];
+  $config
+    ->set('login_plugin_settings.tfa_trusted_browser', $value)
+    ->clear('trust_cookie_expiration')
+    ->clear('trust_cookie_name')
+    ->save();
+}

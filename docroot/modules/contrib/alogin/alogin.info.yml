@@ -1,0 +1,10 @@
+name: 'Authenticator Login'
+type: module
+package: Security
+description: 'Allows users to setup 2FA using Authenticator service.'
+core_version_requirement: ^8.8 || ^9.1 || ^10
+
+# Information added by Drupal.org packaging script on 2023-09-20
+version: '2.0.8'
+project: 'alogin'
+datestamp: 1695199703

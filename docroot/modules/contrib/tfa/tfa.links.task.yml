@@ -1,0 +1,10 @@
+tfa.overview:
+  route_name: tfa.overview
+  base_route: entity.user.canonical
+  weight: 9
+  title: 'TFA'
+
+tfa.settings:
+  route_name: tfa.settings
+  title: 'TFA Settings'
+  base_route: tfa.settings

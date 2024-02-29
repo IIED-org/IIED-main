@@ -1,0 +1,11 @@
+name: TFA Test Plugins
+type: module
+description: For testing core TFA APIs
+package: Testing
+dependencies:
+  - tfa:tfa
+
+# Information added by Drupal.org packaging script on 2024-01-24
+version: '8.x-1.5'
+project: 'tfa'
+datestamp: 1706085437

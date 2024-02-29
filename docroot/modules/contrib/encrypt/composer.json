@@ -1,0 +1,12 @@
+{
+  "name": "drupal/encrypt",
+  "description": "Provides an API for two-way encryption.",
+  "type": "drupal-module",
+  "extra": {
+    "drush": {
+      "services": {
+        "drush.services.yml": "^9 || ^10 || ^11"
+      }
+    }
+  }
+}
