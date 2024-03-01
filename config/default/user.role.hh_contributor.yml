@@ -5,6 +5,7 @@ dependencies:
   module:
     - eu_cookie_compliance
     - file
+    - tfa
 id: hh_contributor
 label: Contributor
 weight: -7
@@ -12,3 +13,4 @@ is_admin: null
 permissions:
   - 'delete own files'
   - 'display eu cookie compliance popup'
+  - 'setup own tfa'

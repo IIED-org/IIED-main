@@ -9,7 +9,6 @@ module:
   admin_toolbar_links_access_filter: 0
   admin_toolbar_tools: 0
   allowed_formats: 0
-  alogin: 0
   asset_injector: 0
   automated_cron: 0
   ban: 0
@@ -52,6 +51,7 @@ module:
   dynamic_entity_reference: 0
   dynamic_page_cache: 0
   editor: 0
+  encrypt: 0
   entity_reference_revisions: 0
   facets: 0
   facets_pretty_paths: 0
@@ -86,6 +86,7 @@ module:
   jquery_ui_slider: 0
   jquery_ui_touch_punch: 0
   jsonapi: 0
+  key: 0
   language: 0
   language_switcher_extended: 0
   layout_builder: 0
@@ -135,6 +136,7 @@ module:
   purge_ui: 0
   rabbit_hole: 0
   readmore_js: 0
+  real_aes: 0
   redirect: 0
   responsive_image: 0
   responsive_menu: 0
@@ -166,6 +168,7 @@ module:
   term_merge: 0
   term_reference_change: 0
   text: 0
+  tfa: 0
   token: 0
   toolbar: 0
   tour: 0

@@ -24,6 +24,7 @@ dependencies:
     - publishcontent
     - system
     - taxonomy
+    - tfa
     - toolbar
     - view_unpublished
 id: publications_editor
@@ -55,6 +56,7 @@ permissions:
   - 'publish editable node type publication'
   - 'publish own node type publication'
   - 'revert publication revisions'
+  - 'setup own tfa'
   - 'translate document media'
   - 'translate editable entities'
   - 'translate publication node'

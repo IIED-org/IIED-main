@@ -61,6 +61,7 @@ dependencies:
     - system
     - tablefield
     - taxonomy
+    - tfa
     - toolbar
     - view_unpublished
     - webform
@@ -259,6 +260,7 @@ permissions:
   - 'revert project revisions'
   - 'revert publication revisions'
   - 'revert webform revisions'
+  - 'setup own tfa'
   - 'switch shortcut sets'
   - 'translate any entity'
   - 'translate editable entities'

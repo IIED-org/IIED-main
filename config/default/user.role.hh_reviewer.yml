@@ -17,6 +17,7 @@ dependencies:
     - node
     - publishcontent
     - system
+    - tfa
     - toolbar
     - view_unpublished
 id: hh_reviewer
@@ -42,6 +43,7 @@ permissions:
   - 'publish editable node type hidden_handbrake'
   - 'publish own node type hidden_handbrake'
   - 'revert hidden_handbrake revisions'
+  - 'setup own tfa'
   - 'unpublish any node type hidden_handbrake'
   - 'unpublish editable content'
   - 'unpublish editable node type hidden_handbrake'
