@@ -1,5 +1,0 @@
-alogin.settings_form:
-  route_name: alogin.settings_form
-  title: 'Enable 2FA'
-  base_route: entity.user.canonical
-  weight: 100

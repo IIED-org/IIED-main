@@ -1,0 +1,11 @@
+_core:
+  default_config_hash: 3y_T7uq39PxfaiMhRrD0lw9NwOUcZqs3ZacRs1QB02o
+alogin:
+  allow_enable_disable: 0
+  redirect: 0
+  message_type: status
+  redirect_message: 'Please setup 2FA via email.'
+allow_enable_disable: 0
+redirect: 1
+message_type: status
+redirect_message: 'redirecting, but when and where?'

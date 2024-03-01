@@ -154,9 +154,6 @@ class ComposerStaticInitc7142a64c37f96d53e584392e4f37422
             'Psr\\Cache\\' => 10,
             'Prophecy\\PhpUnit\\' => 17,
             'Prophecy\\' => 9,
-            'PragmaRX\\Google2FA\\' => 19,
-            'PragmaRX\\Google2FAQRCode\\Tests\\' => 31,
-            'PragmaRX\\Google2FAQRCode\\' => 25,
             'PhpParser\\' => 10,
             'Peast\\' => 6,
             'ParagonIE\\ConstantTime\\' => 23,
@@ -250,8 +247,8 @@ class ComposerStaticInitc7142a64c37f96d53e584392e4f37422
             'Doctrine\\Common\\Annotations\\' => 28,
             'Doctrine\\Common\\' => 16,
             'Dflydev\\DotAccessData\\' => 22,
+            'Defuse\\Crypto\\' => 14,
             'DeepCopy\\' => 9,
-            'DASPRiD\\Enum\\' => 13,
         ),
         'C' => 
         array (
@@ -279,7 +276,6 @@ class ComposerStaticInitc7142a64c37f96d53e584392e4f37422
         array (
             'Behat\\Mink\\Driver\\' => 18,
             'Behat\\Mink\\' => 11,
-            'BaconQrCode\\' => 12,
         ),
         'A' => 
         array (
@@ -577,18 +573,6 @@ class ComposerStaticInitc7142a64c37f96d53e584392e4f37422
         array (
             0 => __DIR__ . '/..' . '/phpspec/prophecy/src/Prophecy',
         ),
-        'PragmaRX\\Google2FA\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/pragmarx/google2fa/src',
-        ),
-        'PragmaRX\\Google2FAQRCode\\Tests\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/pragmarx/google2fa-qrcode/tests',
-        ),
-        'PragmaRX\\Google2FAQRCode\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/pragmarx/google2fa-qrcode/src',
-        ),
         'PhpParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
@@ -831,13 +815,13 @@ class ComposerStaticInitc7142a64c37f96d53e584392e4f37422
         array (
             0 => __DIR__ . '/..' . '/dflydev/dot-access-data/src',
         ),
+        'Defuse\\Crypto\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/defuse/php-encryption/src',
+        ),
         'DeepCopy\\' => 
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
-        ),
-        'DASPRiD\\Enum\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/dasprid/enum/src',
         ),
         'Consolidation\\SiteProcess\\' => 
         array (
@@ -923,10 +907,6 @@ class ComposerStaticInitc7142a64c37f96d53e584392e4f37422
         'Behat\\Mink\\' => 
         array (
             0 => __DIR__ . '/..' . '/behat/mink/src',
-        ),
-        'BaconQrCode\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/bacon/bacon-qr-code/src',
         ),
         'Asm89\\Stack\\' => 
         array (

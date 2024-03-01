@@ -204,63 +204,6 @@
             "install-path": "../asm89/stack-cors"
         },
         {
-            "name": "bacon/bacon-qr-code",
-            "version": "2.0.8",
-            "version_normalized": "2.0.8.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Bacon/BaconQrCode.git",
-                "reference": "8674e51bb65af933a5ffaf1c308a660387c35c22"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Bacon/BaconQrCode/zipball/8674e51bb65af933a5ffaf1c308a660387c35c22",
-                "reference": "8674e51bb65af933a5ffaf1c308a660387c35c22",
-                "shasum": ""
-            },
-            "require": {
-                "dasprid/enum": "^1.0.3",
-                "ext-iconv": "*",
-                "php": "^7.1 || ^8.0"
-            },
-            "require-dev": {
-                "phly/keep-a-changelog": "^2.1",
-                "phpunit/phpunit": "^7 | ^8 | ^9",
-                "spatie/phpunit-snapshot-assertions": "^4.2.9",
-                "squizlabs/php_codesniffer": "^3.4"
-            },
-            "suggest": {
-                "ext-imagick": "to generate QR code images"
-            },
-            "time": "2022-12-07T17:46:57+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "BaconQrCode\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-2-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Ben Scholzen 'DASPRiD'",
-                    "email": "mail@dasprids.de",
-                    "homepage": "https://dasprids.de/",
-                    "role": "Developer"
-                }
-            ],
-            "description": "BaconQrCode is a QR code generator for PHP.",
-            "homepage": "https://github.com/Bacon/BaconQrCode",
-            "support": {
-                "issues": "https://github.com/Bacon/BaconQrCode/issues",
-                "source": "https://github.com/Bacon/BaconQrCode/tree/2.0.8"
-            },
-            "install-path": "../bacon/bacon-qr-code"
-        },
-        {
             "name": "behat/mink",
             "version": "v1.11.0",
             "version_normalized": "1.11.0.0",
@@ -2368,59 +2311,6 @@
             "install-path": "../cweagans/composer-patches"
         },
         {
-            "name": "dasprid/enum",
-            "version": "1.0.5",
-            "version_normalized": "1.0.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/DASPRiD/Enum.git",
-                "reference": "6faf451159fb8ba4126b925ed2d78acfce0dc016"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/DASPRiD/Enum/zipball/6faf451159fb8ba4126b925ed2d78acfce0dc016",
-                "reference": "6faf451159fb8ba4126b925ed2d78acfce0dc016",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.1 <9.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^7 | ^8 | ^9",
-                "squizlabs/php_codesniffer": "*"
-            },
-            "time": "2023-08-25T16:18:39+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "DASPRiD\\Enum\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-2-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Ben Scholzen 'DASPRiD'",
-                    "email": "mail@dasprids.de",
-                    "homepage": "https://dasprids.de/",
-                    "role": "Developer"
-                }
-            ],
-            "description": "PHP 7.1 enum implementation",
-            "keywords": [
-                "enum",
-                "map"
-            ],
-            "support": {
-                "issues": "https://github.com/DASPRiD/Enum/issues",
-                "source": "https://github.com/DASPRiD/Enum/tree/1.0.5"
-            },
-            "install-path": "../dasprid/enum"
-        },
-        {
             "name": "dealerdirect/phpcodesniffer-composer-installer",
             "version": "v1.0.0",
             "version_normalized": "1.0.0.0",
@@ -2500,6 +2390,76 @@
                 "source": "https://github.com/PHPCSStandards/composer-installer"
             },
             "install-path": "../dealerdirect/phpcodesniffer-composer-installer"
+        },
+        {
+            "name": "defuse/php-encryption",
+            "version": "v2.4.0",
+            "version_normalized": "2.4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/defuse/php-encryption.git",
+                "reference": "f53396c2d34225064647a05ca76c1da9d99e5828"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/defuse/php-encryption/zipball/f53396c2d34225064647a05ca76c1da9d99e5828",
+                "reference": "f53396c2d34225064647a05ca76c1da9d99e5828",
+                "shasum": ""
+            },
+            "require": {
+                "ext-openssl": "*",
+                "paragonie/random_compat": ">= 2",
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5|^6|^7|^8|^9|^10",
+                "yoast/phpunit-polyfills": "^2.0.0"
+            },
+            "time": "2023-06-19T06:10:36+00:00",
+            "bin": [
+                "bin/generate-defuse-key"
+            ],
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Defuse\\Crypto\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Hornby",
+                    "email": "taylor@defuse.ca",
+                    "homepage": "https://defuse.ca/"
+                },
+                {
+                    "name": "Scott Arciszewski",
+                    "email": "info@paragonie.com",
+                    "homepage": "https://paragonie.com"
+                }
+            ],
+            "description": "Secure PHP Encryption Library",
+            "keywords": [
+                "aes",
+                "authenticated encryption",
+                "cipher",
+                "crypto",
+                "cryptography",
+                "encrypt",
+                "encryption",
+                "openssl",
+                "security",
+                "symmetric key cryptography"
+            ],
+            "support": {
+                "issues": "https://github.com/defuse/php-encryption/issues",
+                "source": "https://github.com/defuse/php-encryption/tree/v2.4.0"
+            },
+            "install-path": "../defuse/php-encryption"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -3697,57 +3657,6 @@
                 "issues": "https://www.drupal.org/project/issues/allowed_formats"
             },
             "install-path": "../../docroot/modules/contrib/allowed_formats"
-        },
-        {
-            "name": "drupal/alogin",
-            "version": "2.0.8",
-            "version_normalized": "2.0.8.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/alogin.git",
-                "reference": "2.0.8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/alogin-2.0.8.zip",
-                "reference": "2.0.8",
-                "shasum": "de448462a6dc2c701ec387995af524f783fe5b0a"
-            },
-            "require": {
-                "bacon/bacon-qr-code": "^2.0",
-                "drupal/core": "^8.8 || ^9.1 || ^10",
-                "pragmarx/google2fa-qrcode": "^3.0"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "2.0.8",
-                    "datestamp": "1695199699",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "installation-source": "dist",
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Ahmed Raza",
-                    "homepage": "https://www.drupal.org/user/3007075",
-                    "email": "raza1778@gmail.com"
-                }
-            ],
-            "description": "Allow users to setup 2FA via authenticator apps.",
-            "homepage": "https://www.drupal.org/project/alogin",
-            "support": {
-                "source": "https://git.drupalcode.org/project/alogin",
-                "issues": "https://www.drupal.org/project/issues/alogin"
-            },
-            "install-path": "../../docroot/modules/contrib/alogin"
         },
         {
             "name": "drupal/asset_injector",
@@ -9752,69 +9661,6 @@
             "install-path": "../../docroot/modules/contrib/migrate_source_csv"
         },
         {
-            "name": "drupal/miniorange_2fa",
-            "version": "5.1.4",
-            "version_normalized": "5.1.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/miniorange_2fa.git",
-                "reference": "5.1.4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/miniorange_2fa-5.1.4.zip",
-                "reference": "5.1.4",
-                "shasum": "a9a67f5926d7f1341e3b423bd3b54a299be9ffa8"
-            },
-            "require": {
-                "drupal/core": "^9.3 || ^10"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "5.1.4",
-                    "datestamp": "1704713917",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "installation-source": "dist",
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "abhay19",
-                    "homepage": "https://www.drupal.org/user/3549350"
-                },
-                {
-                    "name": "arsh244",
-                    "homepage": "https://www.drupal.org/user/3619504"
-                },
-                {
-                    "name": "gauravsood91",
-                    "homepage": "https://www.drupal.org/user/3288491"
-                },
-                {
-                    "name": "shashank_thigale",
-                    "homepage": "https://www.drupal.org/user/3632808"
-                },
-                {
-                    "name": "Shrishail Hiremath",
-                    "homepage": "https://www.drupal.org/user/3669372"
-                }
-            ],
-            "description": "Easily add Second Factor Authentication to protect sites from unauthorized login attempts.",
-            "homepage": "https://www.drupal.org/project/miniorange_2fa",
-            "support": {
-                "source": "https://git.drupalcode.org/project/miniorange_2fa"
-            },
-            "install-path": "../../docroot/modules/contrib/miniorange_2fa"
-        },
-        {
             "name": "drupal/multiple_registration",
             "version": "3.3.1",
             "version_normalized": "3.3.1.0",
@@ -10656,6 +10502,63 @@
                 "issues": "https://www.drupal.org/project/issues/readonlymode"
             },
             "install-path": "../../docroot/modules/contrib/readonlymode"
+        },
+        {
+            "name": "drupal/real_aes",
+            "version": "2.5.0",
+            "version_normalized": "2.5.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/real_aes.git",
+                "reference": "8.x-2.5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/real_aes-8.x-2.5.zip",
+                "reference": "8.x-2.5",
+                "shasum": "5a3b87e53da07a3fbaf37e9423d0223b15f716d2"
+            },
+            "require": {
+                "defuse/php-encryption": "^2.0",
+                "drupal/core": "^8 || ^9 || ^10",
+                "drupal/encrypt": "^3.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-2.5",
+                    "datestamp": "1669655648",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Heine",
+                    "homepage": "https://www.drupal.org/user/17943"
+                },
+                {
+                    "name": "nerdstein",
+                    "homepage": "https://www.drupal.org/user/1557710"
+                },
+                {
+                    "name": "rlhawk",
+                    "homepage": "https://www.drupal.org/user/352283"
+                }
+            ],
+            "description": "Provides an Authenticated AES encryption method for Encrypt through the Defuse PHP Encryption library.",
+            "homepage": "https://www.drupal.org/project/real_aes",
+            "support": {
+                "source": "https://git.drupalcode.org/project/real_aes"
+            },
+            "install-path": "../../docroot/modules/contrib/real_aes"
         },
         {
             "name": "drupal/redirect",
@@ -18565,131 +18468,6 @@
                 "source": "https://github.com/politsin/jquery-ui-touch-punch/tree/1.0"
             },
             "install-path": "../../docroot/libraries/jquery-ui-touch-punch"
-        },
-        {
-            "name": "pragmarx/google2fa",
-            "version": "v8.0.1",
-            "version_normalized": "8.0.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/antonioribeiro/google2fa.git",
-                "reference": "80c3d801b31fe165f8fe99ea085e0a37834e1be3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/antonioribeiro/google2fa/zipball/80c3d801b31fe165f8fe99ea085e0a37834e1be3",
-                "reference": "80c3d801b31fe165f8fe99ea085e0a37834e1be3",
-                "shasum": ""
-            },
-            "require": {
-                "paragonie/constant_time_encoding": "^1.0|^2.0",
-                "php": "^7.1|^8.0"
-            },
-            "require-dev": {
-                "phpstan/phpstan": "^0.12.18",
-                "phpunit/phpunit": "^7.5.15|^8.5|^9.0"
-            },
-            "time": "2022-06-13T21:57:56+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "PragmaRX\\Google2FA\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Antonio Carlos Ribeiro",
-                    "email": "acr@antoniocarlosribeiro.com",
-                    "role": "Creator & Designer"
-                }
-            ],
-            "description": "A One Time Password Authentication package, compatible with Google Authenticator.",
-            "keywords": [
-                "2fa",
-                "Authentication",
-                "Two Factor Authentication",
-                "google2fa"
-            ],
-            "support": {
-                "issues": "https://github.com/antonioribeiro/google2fa/issues",
-                "source": "https://github.com/antonioribeiro/google2fa/tree/v8.0.1"
-            },
-            "install-path": "../pragmarx/google2fa"
-        },
-        {
-            "name": "pragmarx/google2fa-qrcode",
-            "version": "v3.0.0",
-            "version_normalized": "3.0.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/antonioribeiro/google2fa-qrcode.git",
-                "reference": "ce4d8a729b6c93741c607cfb2217acfffb5bf76b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/antonioribeiro/google2fa-qrcode/zipball/ce4d8a729b6c93741c607cfb2217acfffb5bf76b",
-                "reference": "ce4d8a729b6c93741c607cfb2217acfffb5bf76b",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.1",
-                "pragmarx/google2fa": ">=4.0"
-            },
-            "require-dev": {
-                "bacon/bacon-qr-code": "^2.0",
-                "chillerlan/php-qrcode": "^1.0|^2.0|^3.0|^4.0",
-                "khanamiryan/qrcode-detector-decoder": "^1.0",
-                "phpunit/phpunit": "~4|~5|~6|~7|~8|~9"
-            },
-            "suggest": {
-                "bacon/bacon-qr-code": "For QR Code generation, requires imagick",
-                "chillerlan/php-qrcode": "For QR Code generation"
-            },
-            "time": "2021-08-15T12:53:48+00:00",
-            "type": "library",
-            "extra": {
-                "component": "package",
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
-            },
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "PragmaRX\\Google2FAQRCode\\": "src/",
-                    "PragmaRX\\Google2FAQRCode\\Tests\\": "tests/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Antonio Carlos Ribeiro",
-                    "email": "acr@antoniocarlosribeiro.com",
-                    "role": "Creator & Designer"
-                }
-            ],
-            "description": "QR Code package for Google2FA",
-            "keywords": [
-                "2fa",
-                "Authentication",
-                "Two Factor Authentication",
-                "google2fa",
-                "qr code",
-                "qrcode"
-            ],
-            "support": {
-                "issues": "https://github.com/antonioribeiro/google2fa-qrcode/issues",
-                "source": "https://github.com/antonioribeiro/google2fa-qrcode/tree/v3.0.0"
-            },
-            "install-path": "../pragmarx/google2fa-qrcode"
         },
         {
             "name": "psr/cache",
