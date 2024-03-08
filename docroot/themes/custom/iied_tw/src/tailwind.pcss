@@ -317,7 +317,7 @@
   #clickdimform #btnSubmit,
   .clickdimensions #btnSubmit
    {
-    @apply px-3 py-2 border-none rounded-full bg-iiedorange-500 cursor-pointer font-sans font-semibold text-gray-800 transition-colors duration-150 shadow-sm button hover:shadow-none hover:bg-iiedorange-600 focus:shadow-outline;
+    @apply px-3 py-2 border-none rounded-full bg-iiedorange-500 cursor-pointer font-sans font-semibold text-gray-800 transition-colors duration-150 shadow-sm hover:shadow-none hover:bg-iiedorange-600;
   }
 
   .tracker-select select, .search-select select {
@@ -494,7 +494,7 @@
       animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
     }
   }
-/*-- rotate 4 colour borders for hh grid  --*/
+  /*-- rotate 4 colour borders for hh grid  --*/
   .grid .views-row:nth-child(8n + 1) .bg-color-rotate {
     @apply bg-iiedpink-10;
   }
@@ -522,4 +522,15 @@
   .paragraph--type--related-card, .paragraph--type--related-publication-inline {
     @apply mb-6;
   }
+
+  /*-- sign up forms --*/
+  #mc_embed_signup .input-group li input {
+    @apply mr-2 border border-gray-300 rounded shadow-sm text-iiedpink-800 focus:border-iiedpink-300 focus:ring focus:ring-offset-0 focus:ring-iiedpink-200 focus:ring-opacity-50;
+  }
+
+ #mc_embed_signup #mc-embedded-subscribe {
+  @apply h-12 max-w-xs px-6 py-2 mb-6 text-lg cursor-pointer font-semibold text-gray-800 transition-colors duration-150 rounded-full shadow-sm hover:shadow-none bg-iiedorange-500 hover:bg-iiedorange-600;
+ }
+
 }
+
