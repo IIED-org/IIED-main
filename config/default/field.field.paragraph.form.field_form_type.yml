@@ -1,0 +1,21 @@
+uuid: a7423d62-6cec-4475-90af-2c77b5c8de3c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_form_type
+    - paragraphs.paragraphs_type.form
+  module:
+    - options
+id: paragraph.form.field_form_type
+field_name: field_form_type
+entity_type: paragraph
+bundle: form
+label: 'Form type'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string
