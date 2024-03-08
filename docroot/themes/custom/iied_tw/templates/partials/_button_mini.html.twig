@@ -1,9 +1,10 @@
 <a
-  class="flex items-center mb-6 text-lg"
+  class="flex items-center mb-6 text-lg group"
   href="{{ url }}"
   title="{{ button_title }}"
   >{{ button_title }}
-  <span class="inline-block p-2 ml-2 border border-gray-300 rounded-full">
+  <span class="inline-block p-2 ml-2 border border-gray-300 rounded-full transform duration-150 ease-in group-hover:translate-x-0.5">
    {% include '@iied_tw/layout/icons/arrow-right.svg' %}
   </span>
 </a>
+

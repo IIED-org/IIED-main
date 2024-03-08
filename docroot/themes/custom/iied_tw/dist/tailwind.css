@@ -3411,7 +3411,8 @@ cite {
 
 /*-- ClickD form hacks --*/
 
-#clickdimform .clickdform input[type="text"]{
+#clickdimform .clickdform input[type="text"], 
+  .clickdimensions .clickdform input[type="text"]{
   height: 2.25rem;
   border-radius: 0.5rem;
   border-width: 1px;
@@ -3423,7 +3424,8 @@ cite {
   padding-bottom: 0.5rem;
 }
 
-#clickdimform #btnSubmit{
+#clickdimform #btnSubmit,
+  .clickdimensions #btnSubmit{
   cursor: pointer;
   border-radius: 9999px;
   border-style: none;
@@ -3433,6 +3435,7 @@ cite {
   padding-right: 0.75rem;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+  font-family: Lato, sans-serif;
   --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);

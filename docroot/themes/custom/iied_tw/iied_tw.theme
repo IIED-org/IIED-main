@@ -194,5 +194,15 @@ function iied_tw_preprocess_node(&$variables) {
   }
 }
 
+/**
+ * Implements hook__theme_suggestions_block_alter().
+ */
 
+function iied_tw_theme_suggestions_block_alter(array &$suggestions, array $variables) 
+{ 
+  // Block suggestions for custom block types. 
+  if (isset($variables['elements']['content']['#block_content'])) { 
+    array_splice($suggestions, 1, 0, 'block__type__' . $variables['elements']['content']['#block_content']->bundle()); 
+  } 
+}
 
