@@ -28,7 +28,7 @@ validation_plugin_settings:
     time_skew: 10
     site_name_prefix: 1
     name_prefix: TFA
-    issuer: Drupal
+    issuer: 'IIED website'
   tfa_hotp:
     counter_window: 10
     site_name_prefix: 1
