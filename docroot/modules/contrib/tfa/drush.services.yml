@@ -1,0 +1,6 @@
+services:
+  tfa.commands:
+    class: \Drupal\tfa\Commands\TfaCommands
+    arguments: ['@database']
+    tags:
+      - { name: drush.command }

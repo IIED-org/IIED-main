@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Hooks for tfa_test_user.module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\tfa_test_user\Entity\TfaTestUser;
+
+/**
+ * Implements hook_entity_bundle_info().
+ */
+function tfa_test_user_entity_bundle_info_alter(array &$bundles): void {
+  $bundles['user']['user']['class'] = TfaTestUser::class;
+}

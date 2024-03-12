@@ -1,0 +1,93 @@
+<?php
+
+/**
+ * @file
+ * Contains tfa.module.
+ */
+
+use Drupal\Component\Render\PlainTextOutput;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\block\Entity\Block;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Url;
+use Drupal\user\UserInterface;
+
+/**
+ * Implements hook_help().
+ */
+function tfa_help($route_name, RouteMatchInterface $route_match) {
+  $output = '';
+  switch ($route_name) {
+    // Main module help for the tfa module.
+    case 'help.page.tfa':
+      $output .= '<h3>' . \Drupal::translation()->translate('About') . '</h3>';
+      $output .= '<p>' . \Drupal::translation()->translate('Pluggable provider of second factor authentication for Drupal. For more information, see the online documentation for the <a href=":tfa">Two-factor Authentication</a> module.',
+        [':tfa' => 'https://www.drupal.org/project/tfa']
+      ) . '</p>';
+  }
+  return $output;
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function tfa_block_access(Block $block, $operation, AccountInterface $account) {
+  // Remove access to the core user_login_block so we can replace with the TFA
+  // login block.
+  if (\Drupal::config('tfa.settings')->get('enabled') && $block->getPluginId() === 'user_login_block' && $operation != 'update' && $operation != 'delete') {
+    return AccessResult::forbidden();
+  }
+  // No opinion.
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_entity_operation().
+ */
+function tfa_entity_operation(EntityInterface $entity) {
+  $operations = [];
+
+  if ($entity instanceof UserInterface) {
+    $url = Url::fromRoute('tfa.overview', ['user' => $entity->id()]);
+    if ($url->access($entity) === TRUE) {
+      $operations['tfa'] = [
+        'title' => t('TFA'),
+        'url' => $url,
+        'weight' => 50,
+      ];
+    }
+  }
+
+  return $operations;
+}
+
+/**
+ * Implements hook_mail().
+ */
+function tfa_mail($key, &$message, $params) {
+  $token_service = \Drupal::token();
+  $language_manager = \Drupal::languageManager();
+  $variables = ['user' => $params['account']];
+
+  $language = $language_manager->getLanguage($params['account']->getPreferredLangcode());
+  $original_language = $language_manager->getConfigOverrideLanguage();
+  $language_manager->setConfigOverrideLanguage($language);
+  $tfa_config = \Drupal::config('tfa.settings');
+
+  $token_options = [
+    'langcode' => $message['langcode'],
+    'clear' => TRUE,
+  ];
+
+  // Configuration mapping key matches the hook_mail() $key.
+  $subject = $tfa_config->get("mail.{$key}.subject");
+  $subject = $token_service->replace($subject, $variables, $token_options);
+  $message['subject'] = PlainTextOutput::renderFromHtml($subject);
+
+  $body = $tfa_config->get("mail.{$key}.body");
+  $message['body'][] = $token_service->replace($body, $variables, $token_options);
+
+  $language_manager->setConfigOverrideLanguage($original_language);
+}

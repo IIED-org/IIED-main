@@ -38,6 +38,7 @@ dependencies:
     - publishcontent
     - system
     - taxonomy
+    - tfa
     - toolbar
     - view_unpublished
 id: editor
@@ -105,6 +106,7 @@ permissions:
   - 'publish own node type publication'
   - 'revert hidden_handbrake revisions'
   - 'revert publication revisions'
+  - 'setup own tfa'
   - 'translate article node'
   - 'translate blog node'
   - 'translate document media'

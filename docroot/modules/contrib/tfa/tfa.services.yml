@@ -1,0 +1,20 @@
+services:
+  plugin.manager.tfa.login:
+    class: Drupal\tfa\TfaLoginPluginManager
+    parent: default_plugin_manager
+    arguments: ['@config.factory', '@user.data', '@encrypt.encryption_profile.manager','@encryption']
+  plugin.manager.tfa.send:
+    class: Drupal\tfa\TfaSendPluginManager
+    parent: default_plugin_manager
+  plugin.manager.tfa.validation:
+    class: Drupal\tfa\TfaValidationPluginManager
+    parent: default_plugin_manager
+    arguments: ['@config.factory', '@user.data', '@encrypt.encryption_profile.manager','@encryption']
+  plugin.manager.tfa.setup:
+    class: Drupal\tfa\TfaSetupPluginManager
+    parent: default_plugin_manager
+    arguments: ['@user.data', '@encrypt.encryption_profile.manager','@encryption']
+  tfa.route_subscriber:
+    class: Drupal\tfa\Routing\TfaRouteSubscriber
+    tags:
+      - { name: event_subscriber }

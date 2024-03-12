@@ -1,0 +1,14 @@
+name: TFA Web Services
+type: module
+description: TFA web service provider for the Services Module.
+core: 8.x
+core_version_requirement: ^8 || ^9 || ^10
+package: Services
+dependencies:
+  - services:services
+  - tfa:tfa
+
+# Information added by Drupal.org packaging script on 2024-01-24
+version: '8.x-1.5'
+project: 'tfa'
+datestamp: 1706085437

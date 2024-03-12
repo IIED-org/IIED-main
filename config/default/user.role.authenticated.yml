@@ -15,6 +15,7 @@ dependencies:
     - search_api_autocomplete
     - shortcut
     - system
+    - tfa
 _core:
   default_config_hash: btW6TFHajhy7Eo6YUvdFiPh4TcPggo8GBXYctjV6zag
 id: authenticated
@@ -29,6 +30,7 @@ permissions:
   - 'delete own files'
   - 'display eu cookie compliance popup'
   - 'post comments'
+  - 'setup own tfa'
   - 'skip comment approval'
   - 'use search_api_autocomplete for acquia_search'
   - 'use search_api_autocomplete for search'

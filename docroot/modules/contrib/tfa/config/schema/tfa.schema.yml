@@ -1,0 +1,137 @@
+tfa.settings:
+  type: config_object
+  label: 'TFA settings'
+  mapping:
+    enabled:
+      type: boolean
+      label: 'TFA enabled'
+    required_roles:
+      type: sequence
+      label: 'Roles required to setup TFA'
+      sequence:
+        type: string
+        label: 'Role'
+    send_plugins:
+     type: sequence
+     label: 'Enabled send plugins'
+     sequence:
+       type: tfa.send.config.[%key]
+    login_plugins:
+      type: sequence
+      label: 'Enabled Login plugins'
+      sequence:
+        type: tfa.login.config.[%key]
+    login_plugin_settings:
+      label: 'TFA login plugin configuration'
+      type: sequence
+      sequence:
+        type: tfa.login.plugin.config.[%key]
+    allowed_validation_plugins:
+      type: sequence
+      label: 'Allowed validation plugins'
+      sequence:
+        type: string
+        label: 'Validation plugin ID'
+    default_validation_plugin:
+      type: string
+      label: 'Default validation plugin'
+    validation_plugin_settings:
+      label: 'TFA validation plugin configuration'
+      type: sequence
+      sequence:
+        type: tfa.validation.plugin.config.[%key]
+    validation_skip:
+      type: integer
+      label: 'No. of times a user without tfa validation set-up can login.'
+    reset_pass_skip_enabled:
+      type: boolean
+      label: 'Allow super administrator to skip TFA when resetting password.'
+    encryption:
+      type: string
+      label: 'The id of the encryption profile.'
+    tfa_flood_uid_only:
+      type: integer
+      label: 'TFA Flood UID Ban Only'
+    tfa_flood_window:
+      type: integer
+      label: 'TFA Flood Window'
+    tfa_flood_threshold:
+      type: integer
+      label: 'TFA Flood Threshold'
+    help_text:
+      type: label
+      label: 'Text to display on help page. Plain text only.'
+    mail:
+      type: config_object
+      label: 'Various Emails sent by TFA'
+      mapping:
+        # Mapping keys match expected hook_mail $key.
+        tfa_enabled_configuration:
+          type: mail
+          label: 'User-enabled TFA email'
+        tfa_disabled_configuration:
+          type: mail
+          label: 'User-disabled TFA email'
+
+tfa.login.config.tfa_trusted_browser:
+  type: string
+  label: 'Tfa Trusted Browser'
+
+tfa.validation.plugin.config.tfa_hotp:
+  type: mapping
+  label: 'TFA HOTP plugin settings'
+  mapping:
+    counter_window:
+      type: integer
+      label: 'How far ahead from current counter should we check the code.'
+    site_name_prefix:
+      type: integer
+      label: 'If checked, the site name will be used instead of a static string. This can be useful for multi-site installations.'
+    name_prefix:
+      type: string
+      label: 'Prefix for HOTP QR code names. Suffix is account username.'
+    issuer:
+      type: string
+      label: 'The provider or service this account is associated with.'
+
+tfa.login.plugin.config.tfa_trusted_browser:
+  type: mapping
+  label: 'TFA trusted browser plugin settings'
+  mapping:
+    cookie_allow_subdomains:
+      type: boolean
+      label: 'Is cookie allowed in subdomains. Default is true.'
+    cookie_expiration:
+      type: integer
+      label: 'How long before TFA cookies expire. Default is 30 days.'
+    cookie_name:
+      type: string
+      label: 'Cookie name of TFA trusted browser cookie. Default is "tfa-trusted-browser".'
+
+tfa.validation.plugin.config.tfa_recovery_code:
+  type: mapping
+  label: 'TFA Recovery Code settings'
+  mapping:
+    recovery_codes_amount:
+      type: integer
+      label: 'Number of recovery codes generated'
+
+tfa.validation.plugin.config.tfa_totp:
+  type: mapping
+  label: 'TFA TOTP plugin settings'
+  mapping:
+    time_skew:
+      type: integer
+      label: 'Number of 30 second chunks to allow TOTP keys between.'
+    site_name_prefix:
+      type: integer
+      label: 'If checked, the site name will be used instead of a static string. This can be useful for multi-site installations.'
+    name_prefix:
+      type: string
+      label: 'Prefix for TOTP QR code names. Suffix is account username.'
+    issuer:
+      type: string
+      label: 'The provider or service this account is associated with.'
+
+views.field.tfa_enabled_field:
+  type: views.field.boolean

@@ -1,0 +1,20 @@
+{
+    "name": "drupal/tfa",
+    "type": "drupal-module",
+    "description": "Pluggable provider of two factor authentication for Drupal",
+    "license": "GPL-2.0-or-later",
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.0",
+        "chillerlan/php-qrcode": "^1.0.9 || ^2.0 || ^3.2 || ^4.0",
+        "christian-riesen/otp": "^2.1",
+        "drupal/encrypt": "~3.0"
+    },
+    "extra": {
+        "drush": {
+            "services": {
+                "drush.services.yml": "^9 || ^10 || ^11"
+            }
+        }
+    }
+}
