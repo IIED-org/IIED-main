@@ -1,0 +1,32 @@
+uuid: f6970345-6d74-4be1-ba4a-bb0442dfe7e4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.form.field_basic_text
+    - field.field.paragraph.form.field_form_type
+    - paragraphs.paragraphs_type.form
+  module:
+    - options
+    - text
+id: paragraph.form.default
+targetEntityType: paragraph
+bundle: form
+mode: default
+content:
+  field_basic_text:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_form_type:
+    type: list_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden:
+  search_api_excerpt: true

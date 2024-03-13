@@ -16,7 +16,7 @@ bundle: stories_cta
 label: Link
 description: '25 character limit for buttons. Use small round button for longer text.'
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:

@@ -1,0 +1,27 @@
+uuid: d6211469-9093-48df-94e9-24fdd514cbdc
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paragraphs
+id: paragraph.field_form_type
+field_name: field_form_type
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: mailchimp
+      label: mailchimp
+    -
+      value: clickdimensions
+      label: clickdimensions
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
