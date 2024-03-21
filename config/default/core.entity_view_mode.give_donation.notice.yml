@@ -1,0 +1,13 @@
+uuid: f8616f5b-66c0-41e5-b5b2-2c3d34ecc63c
+langcode: en
+status: true
+dependencies:
+  module:
+    - give
+_core:
+  default_config_hash: MjQ90HfNmkNSTsKn7ASKI_asS-1WpKljIX3fiyQJf3E
+id: give_donation.notice
+label: 'Notice e-mail'
+description: ''
+targetEntityType: give_donation
+cache: true

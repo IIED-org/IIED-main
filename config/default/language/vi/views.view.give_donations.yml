@@ -1,0 +1,7 @@
+display:
+  default:
+    display_title: Default
+  page_filter:
+    display_options:
+      menu:
+        title: Filter

@@ -1,0 +1,47 @@
+uuid: 14f6decb-b0b6-479c-9854-6504d7558a8b
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: EoQAjPV9cnpT8cVcoCjjpwRpYpDbzsFdSzE7C5ENjlM
+id: donate
+label: Donate
+recipients:
+  - webmaster@iied.org
+autoreply: true
+onetime_mail:
+  subject: 'Thank you for your donation'
+  body: "Dear [donor_name],\r\n\r\nThank you for your donation of [formatted_amount] through our [give_label] form. Your contribution helps us fulfill our mission. Below is a receipt for your records."
+recurring_mail:
+  subject: 'Thank you for your donation'
+  body: "Dear [donor_name],\r\n\r\nThank you for your recurring donation of [formatted_amount] [recurrence]. Your contribution helps us fulfill our mission. Below is a receipt for your records."
+pledge_mail:
+  subject: 'Thank you for your pledge'
+  body: "Dear [donor_name],\r\n\r\nThank you for your donation by check of [formatted_amount] on [date]. Your contribution helps us fulfill our mission. Attached is a summary of your pledge to donate by check.  We will send confirmation for your donation once we have received and processed your check"
+check_or_other_text: 'Extra text can go here'
+credit_card_extra_text: 'Extra text can go here'
+bankTransferDetails: 'Extra text can go here'
+collect_address: true
+payment_page_title: 'Thank you for supporting IIED, :name!'
+submit_text: Donate
+payment_submit_text: Donate
+thanks_message: 'Thank you, [give_donation:name], for your donation of [give_donation:amount]'
+redirect_uri: /donate
+donor_name_description: 'The donation will be billed using this name'
+frequencies:
+  -
+    interval: month
+    interval_count: 0
+    description: 'One-off donation'
+  -
+    interval: week
+    interval_count: 1
+    description: Weekly
+  -
+    interval: month
+    interval_count: 1
+    description: Monthly
+  -
+    interval: month
+    interval_count: 1
+    description: Yearly

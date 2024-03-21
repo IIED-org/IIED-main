@@ -1,0 +1,14 @@
+_core:
+  default_config_hash: kXYR8Zz3SjO70sU39YZ_GBN1_SJxy6BITRWeh8YQQjQ
+default_form: donate
+stripe_secret_key: sk_test_51Owjze087u3L054udFI0EJgTZPq3H0sxn9T1HlYE7H0fSEWAoL4SlkErodmrDIZiGefUiWYouh9hiuyJQSpTIBZN00nsP9Z5Lj
+stripe_publishable_key: pk_test_51Owjze087u3L054ucZDXInPo3LUaQ1tj6mJwEo2O6H4Jc7urwC5wCPprNgTtCRR0gPVKwveHfBaD2CbDkxKVQEG200JW2NIri9
+reply_to: webmaster@iied.org
+flood:
+  limit: 0
+  interval: 0
+api_key_dwolla: ''
+send_receipt: false
+currency_symbol: gbp
+min: 1
+log_problems: 1

@@ -1,0 +1,163 @@
+uuid: aa8ae93c-2776-4367-be4f-fd128c8b39d4
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.give_donation.receipt
+    - give.form.donate
+  module:
+    - give
+_core:
+  default_config_hash: yPMy2-affDW9daoKsNwATex35VaJnDxlEzFoMuY2W6A
+id: give_donation.donate.receipt
+targetEntityType: give_donation
+bundle: donate
+mode: receipt
+content:
+  address_address1:
+    weight: -2
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  address_address2:
+    weight: -1
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  address_city:
+    weight: 11
+    region: content
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  address_country:
+    weight: 14
+    region: content
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  address_line1:
+    weight: 9
+    region: content
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  address_line2:
+    weight: 10
+    region: content
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  address_state:
+    weight: 12
+    region: content
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  address_zip:
+    weight: 13
+    region: content
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  amount:
+    weight: 0
+    region: content
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    type: give_cents_to_dollars
+  card_brand:
+    weight: 5
+    region: content
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  card_funding:
+    weight: 4
+    region: content
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  card_last4:
+    weight: 6
+    region: content
+    label: inline
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
+  check_or_other_information:
+    weight: 7
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  give_form:
+    weight: 2
+    region: content
+    label: inline
+    settings:
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_label
+  method:
+    weight: 3
+    region: content
+    label: inline
+    settings:
+      long: '1'
+    third_party_settings: {  }
+    type: give_method
+  recurring:
+    weight: 1
+    region: content
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    type: give_recurrence
+  telephone:
+    weight: 8
+    region: content
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+hidden:
+  changed: true
+  complete: true
+  created: true
+  id: true
+  label: true
+  langcode: true
+  mail: true
+  name: true
+  search_api_excerpt: true
+  stripe_token: true
+  uuid: true

@@ -10,6 +10,7 @@ dependencies:
     - eu_cookie_compliance
     - file
     - filter
+    - form_mode_control
     - media
     - media_pdf_thumbnail
     - search_api_autocomplete
@@ -32,6 +33,7 @@ permissions:
   - 'post comments'
   - 'setup own tfa'
   - 'skip comment approval'
+  - 'use  The form mode default linked to  give_donation entity( donate )'
   - 'use search_api_autocomplete for acquia_search'
   - 'use search_api_autocomplete for search'
   - 'use text format webform_default'

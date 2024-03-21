@@ -1,0 +1,13 @@
+uuid: f01a69c8-fc21-4125-b06b-f4117854e1a8
+langcode: en
+status: true
+dependencies:
+  module:
+    - give
+_core:
+  default_config_hash: d76yFja58XxkmavdaIhkWzmO42lEXD6mmvtZS9XOEuQ
+id: give_donation.receipt
+label: 'Receipt e-mail'
+description: ''
+targetEntityType: give_donation
+cache: true

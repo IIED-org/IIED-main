@@ -1,0 +1,51 @@
+uuid: f2aff6d5-9ba9-4c66-8605-5e4b6ea91fc7
+langcode: en
+status: true
+dependencies:
+  config:
+    - give.form.donate
+_core:
+  default_config_hash: 07HFngEu-gSuOJfFjz2yuDZKsmJVgXix9w-stSI-bUY
+id: give_donation.donate.default
+targetEntityType: give_donation
+bundle: donate
+mode: default
+content:
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  mail:
+    weight: -40
+    region: content
+  name:
+    weight: -50
+    region: content
+  recurring:
+    weight: 50
+    region: content
+hidden:
+  address_city: true
+  address_country: true
+  address_line1: true
+  address_line2: true
+  address_state: true
+  address_zip: true
+  amount: true
+  card_brand: true
+  card_funding: true
+  card_last4: true
+  changed: true
+  check_or_other_information: true
+  complete: true
+  created: true
+  give_form: true
+  id: true
+  label: true
+  method: true
+  stripe_token: true
+  telephone: true
+  uuid: true

@@ -1,0 +1,242 @@
+uuid: 777a1f6e-0202-44f0-8d55-f1bb274317c8
+langcode: en
+status: true
+dependencies:
+  config:
+    - give.form.donate
+  module:
+    - give
+_core:
+  default_config_hash: EJebwNziYNzl4Ll8M1Z84_UVimNfGGt3YdBDLbELlD0
+id: give_donation.donate.default
+targetEntityType: give_donation
+bundle: donate
+mode: default
+content:
+  address_address1:
+    weight: -2
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  address_address2:
+    weight: -1
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  address_city:
+    weight: 12
+    region: content
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  address_country:
+    weight: 18
+    region: content
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  address_line1:
+    weight: 9
+    region: content
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  address_line2:
+    weight: 10
+    region: content
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  address_state:
+    weight: 14
+    region: content
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  address_zip:
+    weight: 16
+    region: content
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  amount:
+    weight: 5
+    region: content
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    type: give_cents_to_dollars
+  card_brand:
+    weight: 21
+    region: content
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  card_funding:
+    weight: 20
+    region: content
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  card_last4:
+    weight: 22
+    region: content
+    label: inline
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
+  changed:
+    weight: 17
+    region: content
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: long
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    type: timestamp
+  check_or_other_information:
+    weight: 15
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  complete:
+    weight: 8
+    region: content
+    label: inline
+    settings:
+      format: yes-no
+      format_custom_true: ''
+      format_custom_false: ''
+    third_party_settings: {  }
+    type: boolean
+  created:
+    weight: 7
+    region: content
+    label: inline
+    settings:
+      date_format: long
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: long
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    type: timestamp
+  give_form:
+    weight: 3
+    region: content
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+  id:
+    weight: 0
+    region: content
+    label: inline
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
+  label:
+    weight: 4
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  mail:
+    weight: 2
+    region: content
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+  method:
+    weight: 11
+    region: content
+    label: inline
+    settings:
+      long: '1'
+    third_party_settings: {  }
+    type: give_method
+  name:
+    weight: 1
+    region: content
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  recurring:
+    weight: 6
+    region: content
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    type: give_recurrence
+  stripe_token:
+    weight: 19
+    region: content
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  telephone:
+    weight: 13
+    region: content
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+hidden:
+  langcode: true
+  search_api_excerpt: true
+  uuid: true

@@ -1,0 +1,203 @@
+uuid: acfc596e-627a-4b28-a5ff-5056419769fd
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.give_donation.notice
+    - give.form.donate
+  module:
+    - give
+_core:
+  default_config_hash: oXWKIFaXkqYvC6hYBB_ONSKYHS1r15yg6PTyneHpXos
+id: give_donation.donate.notice
+targetEntityType: give_donation
+bundle: donate
+mode: notice
+content:
+  address_address1:
+    weight: -2
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  address_address2:
+    weight: -1
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  address_city:
+    weight: 9
+    region: content
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  address_country:
+    weight: 12
+    region: content
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  address_line1:
+    weight: 7
+    region: content
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  address_line2:
+    weight: 8
+    region: content
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  address_state:
+    weight: 10
+    region: content
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  address_zip:
+    weight: 11
+    region: content
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  amount:
+    weight: 2
+    region: content
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    type: give_cents_to_dollars
+  card_brand:
+    weight: 17
+    region: content
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  card_funding:
+    weight: 16
+    region: content
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  card_last4:
+    weight: 18
+    region: content
+    label: inline
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
+  check_or_other_information:
+    weight: 15
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  complete:
+    weight: 5
+    region: content
+    label: inline
+    settings:
+      format: yes-no
+      format_custom_true: ''
+      format_custom_false: ''
+    third_party_settings: {  }
+    type: boolean
+  created:
+    weight: 4
+    region: content
+    label: inline
+    settings:
+      date_format: long
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: long
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    type: timestamp
+  give_form:
+    weight: 6
+    region: content
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+  mail:
+    weight: 1
+    region: content
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    type: email_mailto
+  method:
+    weight: 13
+    region: content
+    label: inline
+    settings:
+      long: '1'
+    third_party_settings: {  }
+    type: give_method
+  name:
+    weight: 0
+    region: content
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  recurring:
+    weight: 3
+    region: content
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    type: give_recurrence
+  telephone:
+    weight: 14
+    region: content
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+hidden:
+  changed: true
+  id: true
+  label: true
+  langcode: true
+  search_api_excerpt: true
+  stripe_token: true
+  uuid: true

@@ -43,6 +43,7 @@ dependencies:
     - file
     - filter
     - form_mode_control
+    - give
     - help
     - layout_builder
     - masquerade
@@ -292,6 +293,7 @@ permissions:
   - 'view article revisions'
   - 'view blog revisions'
   - 'view document media revisions'
+  - 'view donations'
   - 'view event revisions'
   - 'view hidden_handbrake revisions'
   - 'view hidden_page revisions'
