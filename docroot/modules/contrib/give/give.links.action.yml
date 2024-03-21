@@ -1,0 +1,6 @@
+give_form.add:
+  route_name: entity.give_form.add_form
+  title: 'New form'
+  weight: 1
+  appears_on:
+    - entity.give_form.collection

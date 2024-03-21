@@ -1,0 +1,7 @@
+id: tzedakah
+label: 'Tzedakah'
+recipients: {  }
+reply: ''
+weight: 0
+status: true
+langcode: en

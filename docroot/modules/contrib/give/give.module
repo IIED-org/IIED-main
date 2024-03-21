@@ -1,0 +1,327 @@
+<?php
+
+/**
+ * @file
+ * Enables the use of donation forms to give money on your site.
+ */
+use Drupal\give\Plugin\Field\FieldType\PaymentMethod;
+use Drupal\give\DonationInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Url;
+
+/**
+ * Denotes that the donation is not completed.
+ */
+const DONATION_NOT_COMPLETED = 0;
+
+/**
+ * Denotes that the donation is completed.
+ */
+const DONATION_COMPLETED = 1;
+
+
+// See https://dashboard.stripe.com/settings/settlement_currencies
+const STRIPE_CURRENCY_SYMBOLS = [
+    'gbp' => '£',
+    'eur' => '€',
+    'usd' => '$',
+    'sek' => 'kr',
+    'nok' => 'kr',
+    'dkk' => 'kr',
+    'chf' => 'CHF',
+    'aud' => '$AU',
+    'cad' => '$CA',
+    'jpy' => '¥',
+    'nzd' => '$NZ',
+    'pln' => 'zł',
+    'hkd' => '$HK',
+    'sgd' => '$SG',
+    'zar' => 'R',
+    'huf' => 'Ft',
+    'ron' => 'lei',
+    'czk' => 'Kč'
+  ];
+
+/**
+ * Implements hook_help().
+ */
+function give_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.give':
+      $menu_page = \Drupal::moduleHandler()->moduleExists('menu_ui') ? Url::fromRoute('entity.menu.collection')->toString() : '#';
+      $block_page = \Drupal::moduleHandler()->moduleExists('block') ? Url::fromRoute('block.admin_display')->toString() : '#';
+      $give_page = Url::fromRoute('entity.give_form.collection')->toString();
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('The Give module allows anonymous and authenticated members to pay by card (via stripe) or pledge to pay by cheque or bank transfer using configurable donation forms. For more information, see the <a href=":give">online documentation for the Give module</a>.', [':give' => 'https://www.drupal.org/project/give']) . '</p>';
+      $output .= '<h3>' . t('Uses') . '</h3>';
+      $output .= '<dl>';
+      $output .= '<dt>' . t('Configuring give (donation) forms') . '</dt>';
+      $output .= '<dd>' . t('On the <a href=":give_admin">Give forms page</a>, you can configure the fields and display of the donation forms. Each give form has a machine name, a label, and zero or more defined recipients to receive notification when someone donates (or tries to donate).', [':give_admin' => $give_page]) . '</dd>';
+      $output .= '<dt>' . t('Linking to give (donation) forms') . '</dt>';
+      $output .= '<dd>' . t('One give form can be designated as the default donation form. If you choose to designate a default form, the <em>Give</em> menu link in the <em>Main</em> menu will link to it. You can modify this link from the <a href=":menu-settings">Menus page</a> if you have the Menu UI module installed. You can also create links to other give forms; the URL for each form you have set up has format <em>give/machine_name_of_form</em>.', [':menu-settings' => $menu_page]) . '</p>';
+      $output .= '<dt>' . t('Adding fields to give forms') . '</dt>';
+      $output .= '<dd>' . t('From the <a href=":give_admin">Give forms page</a>, you can configure the fields to be shown on different give forms, including their labels and help text. If you would like other content (such as text or images) to appear on a donation form, use a block. You can create and edit blocks on the <a href=":blocks">Block layout page</a>, if the Block module is installed. Another possibility is to embed donation forms in content with an entity reference field, or in paragraphs with the contributed <a href=":paragraphs">Paragraphs module</a>.', [
+        ':blocks' => $block_page,
+        ':give_admin' => $give_page,
+        ':paragraphs' => 'https://www.drupal.org/project/paragraphs',
+      ]) . '</dd>';
+      $output .= '</dl>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function give_entity_extra_field_info() {
+  $fields = [];
+  foreach (array_keys(\Drupal::service('entity_type.bundle.info')->getBundleInfo('give_donation')) as $bundle) {
+    $fields['give_donation'][$bundle]['form']['name'] = [
+      'label' => t('Donor name'),
+      'description' => t('Text'),
+      'weight' => -50,
+    ];
+    $fields['give_donation'][$bundle]['form']['mail'] = [
+      'label' => t('Donor e-mail'),
+      'description' => t('Email'),
+      'weight' => -40,
+    ];
+    $fields['give_donation'][$bundle]['form']['recurring'] = [
+      'label' => t('Recurring donation'),
+      'description' => t('Option'),
+      'weight' => 50,
+    ];
+  }
+  return $fields;
+}
+
+/**
+ * Implements hook_entity_operation().
+ */
+function give_entity_operation(EntityInterface $entity) {
+  $operations = [];
+  $info = $entity->getEntityType();
+  // Add preview e-mails link to Give (donation) forms.
+  if ($info->getBundleOf() == 'give_donation') {
+    $account = \Drupal::currentUser();
+    if ($account->hasPermission('manage give forms')) {
+      $operations['preview-reply'] = [
+        'title' => t('Preview e-mails'),
+        'weight' => 15,
+        'url' => Url::fromRoute("entity.give_form.preview_reply", [
+          $entity->getEntityTypeId() => $entity->id(),
+        ]),
+      ];
+    }
+  }
+  return $operations;
+}
+
+/**
+ * Implements hook_mail().
+ */
+function give_mail($key, &$message, $params) {
+  $give_donation = $params['give_donation'];
+  /* @var $donor \Drupal\user\UserInterface */
+  $donor = $params['donor'];
+  $language = \Drupal::languageManager()->getLanguage($message['langcode']);
+
+  $variables = [
+    '@site-name' => \Drupal::config('system.site')->get('name'),
+    '@label' => $give_donation->label(),
+    '@form' => !empty($params['give_form']) ? $params['give_form']->label() : NULL,
+    '@form-url' => (new Url('<current>', [], ['absolute' => TRUE, 'language' => $language]))->toString(),
+    '@donor-name' => $donor->getDisplayName(),
+  ];
+  if ($donor->isAuthenticated()) {
+    $variables['@donor-url'] = $donor->toUrl('canonical', ['absolute' => TRUE, 'language' => $language])->toString();
+  }
+  else {
+    $variables['@donor-url'] = $params['donor']->getEmail();
+  }
+
+  $reply_to = \Drupal::config('give.settings')->get('reply_to') ?: \Drupal::config('system.site')->get('mail');
+  // We set the From value here because it is not working in $message['from']
+  $message['headers'] = [
+    'MIME-Version' => '1.0',
+    'Content-Type' => 'text/plain; charset=UTF-8; format=flowed; delsp=yes',
+    'Content-Transfer-Encoding' => '8Bit',
+    'X-Mailer' => 'Drupal',
+    'Return-Path' => $reply_to,
+    'Sender' => $reply_to,
+    'From' => \Drupal::config('system.site')->get('name') . '<' . $reply_to . '>',
+    'Reply-to' => $reply_to,
+  ];
+
+  switch ($key) {
+    case 'donation_notice':
+      $options = ['langcode' => $language->getId()];
+      $message['subject'] .= t('[@form] @label', $variables, $options);
+      $markup = \Drupal::entityTypeManager()->getViewBuilder('give_donation')->view($give_donation, 'notice');
+      $message['body'][] = \Drupal::service('renderer')->render($markup);
+      break;
+
+    case 'donation_receipt':
+      $give_form = $params['give_form'];
+      if ($reply_type = $give_donation->getReplyType()) {
+        $conf = $give_form->get($reply_type .'_mail');
+        if (empty($conf)) {
+          $err = 'Unknown reply type %type triggered for %donor-name (@donor-from) via %give_form; no message sent.';
+          $args = [
+            '%donor-name' => $donor->getDisplayName(),
+            '@donor-from' => $donor->getEmail(),
+            '%give_form' => $give_form->label(),
+            '%type' => $give_donation->getReplyType(),
+          ];
+          \Drupal::logger('give')->notice($err, $args);
+          \Drupal::messenger()->addError($err, $args);
+          $message['send'] = 0;
+          return;
+        }
+        $message['subject'] .= give_replace_donation_tokens($conf['subject'], $give_donation);
+        $message['body'][] = give_replace_donation_tokens($conf['body'], $give_donation);
+        $markup = \Drupal::entityTypeManager()->getViewBuilder('give_donation')->view($give_donation, 'receipt');
+        $message['body'][] = \Drupal::service('renderer')->render($markup);
+      }
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function give_theme($existing, $type, $theme, $path) {
+  return [
+    // Make Drupal aware of our field template for our view mode.
+    // @see give_theme_suggestions_field_alter().
+    'field__give_donation__mail' => [
+      'base hook' => 'field',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for fields.
+ *
+ * Provide an alternate suggestion for fields in our donation e-mail view modes.
+ */
+function give_theme_suggestions_field_alter(array &$suggestions, array $variables) {
+  // If it's not from our module, don't mess with it.
+  if ($variables['element']['#entity_type'] !== 'give_donation' || $variables['element']['#bundle'] !== 'donate') {
+    return;
+  }
+
+  if (in_array($variables['element']['#view_mode'], ['notice', 'receipt'], TRUE)) {
+    $suggestions[] = 'field__give_donation__mail';
+  }
+}
+
+/**
+ * Simple no-dependency token replacement.  More robust would be better.
+ */
+function give_replace_donation_tokens($message, DonationInterface $donation) {
+  $search_replace = [
+    '[donor_name]' => $donation->getDonorName(),
+    '[donor_email]' => $donation->mail->value,
+    '[give_label]' => $donation->getGiveForm()->label(),
+    '[formatted_amount]' => $donation->getFormattedAmount(),
+    '[recurring]' => $donation->isRecurring() ? 'recurring ' : '',
+    '[recurrence]' => strtolower($donation->getRecurrence()),
+    '[today_date]' => strftime('%B %e, %Y'),
+    '[date]' => strftime('%B %e, %Y', $donation->getChangedTime()),
+    '[card_brand]' => $donation->getCardBrand(),
+    '[card_funding]' => $donation->getCardFunding(),
+  ];
+  return str_replace(give_donation_tokens(), array_values($search_replace), $message);
+}
+
+/**
+ * Tokens used in simple search-replace for donation messages.
+ */
+function give_donation_tokens() {
+  return [
+    '[donor_name]',
+    '[donor_email]',
+    '[give_label]',
+    '[formatted_amount]',
+    '[recurring]',
+    '[recurrence]',
+    '[today_date]',
+    '[date]',
+    '[card_brand]',
+    '[card_funding]'
+  ];
+}
+
+/**
+ * Default pre-created frequencies.
+ */
+function give_get_default_frequencies() {
+  return [
+    0 => [
+      'interval' => 'month',
+      'interval_count' => '1',
+      'description' => 'Every month',
+    ],
+    1 => [
+      'interval' => 'month',
+      'interval_count' => '3',
+      'description' => 'Every 3 months (quarterly)',
+    ],
+    2 => [
+      'interval' => 'month',
+      'interval_count' => '6',
+      'description' => 'Every 6 months (semi-annually)',
+    ],
+    3 => [
+      'interval' => 'month',
+      'interval_count' => '12',
+      'description' => 'Every year (annually)',
+    ],
+  ];
+}
+
+/**
+ * Utility
+ *
+ * @param int $dollars
+ * @param string $symbol
+ * @return string
+ */
+function format_stripe_currency(float $dollars, string $symbol = NULL) : string {
+  if (!$symbol) {
+    $symbol = \Drupal::config('give.settings')->get('currency_symbol');
+  }
+  return STRIPE_CURRENCY_SYMBOLS[$symbol] . $dollars;
+}
+
+/**
+ * Get all the donation payment method machine names and friendly names on the system.
+ * @return array[]
+ *
+ * @todo implement caching in addition to the static var
+ * @todo eventually this should be a plugin, including a name and description.
+ */
+function payment_method_names() {
+  static $all_methods;
+  if (!$all_methods) {
+    $all_methods = [
+      PaymentMethod::GIVE_VIA_CHECK => t('Check', [], ['context' => 'donation payment method']),
+      PaymentMethod::GIVE_VIA_BANK => t('Bank transfer', [], ['context' => 'donation payment method']),
+      //PaymentMethod::GIVE_VIA_OTHER => t('Other'),
+    ];
+    if (\Drupal::config('give.settings')->get('stripe_publishable_key')){
+      $all_methods[PaymentMethod::GIVE_VIA_STRIPE] = t('Payment card (Stripe)', [], ['context' => 'donation payment method']);
+    }
+    \Drupal::moduleHandler()->alter('give_methods', $all_methods);
+  }
+  return $all_methods;
+}
+
+/**
+ * migration callback.
+ */
+function migrate_times_100($val) {
+  return $val*100;
+}

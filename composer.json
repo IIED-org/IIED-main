@@ -124,6 +124,7 @@
         "drupal/gin": "^3.0",
         "drupal/gin_lb": "^1.0@beta",
         "drupal/gin_login": "^2.0",
+        "drupal/give": "^2.0@beta",
         "drupal/google_tag": "^1.4",
         "drupal/hal": "^2.0",
         "drupal/honeypot": "^2.1",

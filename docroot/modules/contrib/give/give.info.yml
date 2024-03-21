@@ -1,0 +1,14 @@
+name: Give
+type: module
+description: Accept donations via stripe, cheque or bank transfer
+core_version_requirement: ^8 || ^9 || ^10
+package: Give
+configure: give.settings
+dependencies:
+  - drupal:field
+  - drupal:views
+
+# Information added by Drupal.org packaging script on 2024-03-03
+version: '2.0.0-beta5'
+project: 'give'
+datestamp: 1709465165

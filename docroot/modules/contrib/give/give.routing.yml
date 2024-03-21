@@ -1,0 +1,33 @@
+give.settings:
+  path: '/admin/config/services/give'
+  defaults:
+    _form:  '\Drupal\give\Form\GiveForm\GiveSettings'
+    _title: 'Give (donation processing) settings'
+  requirements:
+    _permission: 'administer give'
+
+entity.give_form.preview_reply:
+  path: '/admin/structure/give/manage/{give_form}/preview-reply'
+  defaults:
+    _title: 'Preview automated receipts and notifications'
+    _controller: '\Drupal\give\Controller\GiveController::givePreviewReply'
+  requirements:
+    _entity_access: 'give_form.update'
+
+give.site_page:
+  path: '/give'
+  defaults:
+    _title: 'Give'
+    _controller: '\Drupal\give\Controller\GiveController::giveSitePage'
+    give_form: NULL
+  requirements:
+    _permission: 'access give forms'
+
+#second page of the donation form
+entity.give_form.donate:
+  path: '/give/{give_form}/{give_donation}'
+  defaults:
+    _title: 'Donate'
+    _controller: '\Drupal\give\Controller\GiveController::takeDonation'
+  requirements:
+    _entity_access: 'give_form.view'

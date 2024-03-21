@@ -1,0 +1,11 @@
+give-stripe:
+  version: 3.x
+  js:
+    https://js.stripe.com/v3/: {type: external, minified: true}
+give-stripe-helper:
+  version: 3.x
+  js:
+    js/give-stripe-helper.js: {}
+  dependencies:
+    - core/drupalSettings
+    - give/give-stripe

@@ -1,0 +1,117 @@
+# Schema for the configuration files of the Give module.
+
+give.settings:
+  type: config_object
+  label: 'Give Settings'
+  #todo Nest the api keys thus: apikeys.dwollar.secret
+  mapping:
+    # todo. Instead of this, forms should be weighted like taxonomy terms.
+    default_form:
+      type: string
+      label: 'Default Form'
+    stripe_secret_key:
+      type: string
+      label: 'Stripe secret API key'
+    stripe_publishable_key:
+      type: string
+      label: 'Stripe publishable API key'
+    reply_to:
+      type: string
+      label: 'Reply to address'
+    flood:
+      type: mapping
+      label: 'flood control'
+      mapping:
+        limit:
+          type: integer
+          label: 'Limit'
+        interval:
+          type: integer
+          label: 'Interval'
+    api_key_dwolla:
+          type: string
+          label: 'Dwolla API key'
+    send_receipt:
+      type: boolean
+      label: 'Send a receipt if e-mail address provided'
+    currency_symbol:
+      type: string
+      label: Currency symbol
+    min:
+      type: integer
+      label: 'Minimum donation amount'
+
+give.form.*:
+  type: config_entity
+  label: 'Give form'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    recipients:
+      type: sequence
+      label: 'Recipients'
+      sequence:
+        type: email
+        label: 'Email address'
+    autoreply:
+      type: boolean
+      label: 'Send autoreply following donation'
+    onetime_mail:
+      type: mail
+      label: 'One-time donation acknowledgement'
+    recurring_mail:
+      type: mail
+      label: 'Recurring donation acknowledgement'
+    pledge_mail:
+      type: mail
+      label: 'Pledged donation acknowledgement'
+    check_or_other_text:
+      type: string
+      label: 'Check or other text'
+    credit_card_extra_text:
+      type: string
+      label: 'Credit card extra text'
+    bankTransferDetails:
+      type: string
+      label: Details needed for bank transfer
+    collect_address:
+      type: boolean
+      label: 'Collect address with credit card, check, or other'
+    payment_page_title:
+      type: string
+      label: 'Payment page title'
+    submit_text:
+      type: string
+      label: 'Submit button text'
+    payment_submit_text:
+      type: string
+      label: 'Submit payment button text'
+    thanks_message:
+      type: string
+      label: Success message with Donation tokens.
+    redirect_uri:
+      type: path
+      label: 'Redirect page'
+    donor_name_description:
+      type: string
+      label: 'Donor name description'
+    frequencies:
+      type: sequence
+      label: 'Frequencies'
+      sequence:
+        type: mapping
+        label: 'Frequency'
+        mapping:
+          interval:
+            type: string
+            label: 'Interval'
+          interval_count:
+            type: integer
+            label: 'Interval Count'
+          description:
+            type: 'label'
+            label: 'Description'

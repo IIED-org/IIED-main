@@ -1,0 +1,481 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the give module.
+ */
+
+use Drupal\give\Entity\Donation;
+use Drupal\views\Entity\View;
+use Drupal\user\Entity\Role;
+use Drupal\Core\Database\Database;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\give\Entity\GiveForm;
+use Symfony\Component\Yaml\Yaml;
+use Drupal\user\EntityOwnerTrait;
+use Drupal\Core\Config\FileStorage;
+
+/**
+ * Implements hook_install().
+ */
+function give_install() {
+  // Adjustments to the pre-created donation form.
+  $default_donate_form_id = 'donate';
+
+  // Set the recipient to use the site mail by default.
+  $mail = \Drupal::config('system.site')->get('mail');
+  $donate_form = GiveForm::load($default_donate_form_id);
+
+  // Check that form exists before trying to set it as default.
+  if (!$donate_form) {
+    return;
+  }
+
+  $donate_form->setRecipients([$mail]);
+  $donate_form->save();
+
+  // Set this form as the default donation form.
+  $give_settings = \Drupal::configFactory()->getEditable('give.settings');
+  $give_settings->set('default_form', $default_donate_form_id)->save();
+}
+
+/**
+ * Implements hook_schema().
+ *
+ * Defines a supplementary database tables used to record problems, if any,
+ * encountered during a donation attempt.
+ *
+ * Note that the main information about donations is stored directly in the
+ * donation entity, and as such the database schema for donation entity fields
+ * is defined in Drupal\give\Entity\Donation.php baseFieldDefinitions().
+ *
+ * @see hook_schema()
+ */
+function give_schema() {
+  $schema = [];
+  $schema['give_problem'] = [
+    'description' => 'Stores a log identifiable errors and issues encountered during a donation attempt.',
+    'fields' => [
+      'pid' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique problem ID.',
+      ],
+      'donation_uuid' => [
+        'type' => 'varchar_ascii',
+        'length' => 128,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Foreign key to {give_donation}.uuid; uniquely identifies a Give donation to which this log message applies.',
+      ],
+      'type' => [
+        'type' => 'varchar_ascii',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'A rough categorization of the problem.',
+      ],
+      'detail' => [
+        'type' => 'varchar_ascii',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Detail regarding the problem.',
+      ],
+      'user_agent' => [
+        'type' => 'varchar_ascii',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Browser user agent.',
+      ],
+      'timestamp' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'The Unix timestamp when this problem was logged.',
+      ],
+    ],
+    'primary key' => ['pid'],
+    'indexes' => [
+      'type' => ['type'],
+      'donation_uuid' => ['donation_uuid'],
+      'timestamp' => ['timestamp'],
+    ],
+  ];
+
+  return $schema;
+}
+
+/**
+ * Add 'stripe_token' field to 'donation' entities.
+ */
+function give_update_8001() {
+  // Install the definition that this field had in
+  // \Drupal\give\Entity\Donation::baseFieldDefinitions()
+  // at the time that this update function was written. If/when code is
+  // deployed that changes that definition, the corresponding module must
+  // implement an update function that invokes
+  // \Drupal::entityDefinitionUpdateManager()->updateFieldStorageDefinition()
+  // with the new definition.
+  $storage_definition = BaseFieldDefinition::create('string')
+    ->setLabel(t('Stripe token'))
+    ->setDescription(t('The token returned by Stripe used to tell Stripe to process the donation.'));
+
+  \Drupal::entityDefinitionUpdateManager()
+    ->installFieldStorageDefinition('stripe_token', 'give_donation', 'give', $storage_definition);
+}
+
+/**
+ * Add the default frequencies to the already created entities.
+ */
+function give_update_8002() {
+  $entities = \Drupal::entityQuery('give_form')
+    ->accessCheck(FALSE);
+  $ids = $entities->execute();
+  foreach ($ids as $id) {
+    $give_form = GiveForm::load($id);
+    if (empty($give_form->getFrequencies())) {
+      $default = give_get_default_frequencies();
+      $give_form->setFrequencies($default);
+      $give_form->save();
+    }
+  }
+}
+
+/**
+ * Add address and card info fields to 'donation' entities.
+ */
+function give_update_8003() {
+  $fields = [];
+
+  $fields['address_line1'] = BaseFieldDefinition::create('string')
+    ->setLabel(t('Address line 1'))
+    ->setDescription(t('The street address or PO Box of the donor; used in billing address.'));
+
+  $fields['address_line2'] = BaseFieldDefinition::create('string')
+    ->setLabel(t('Address line 2'))
+    ->setDescription(t('Optional apartment/suite/unit of the donor; used in billing address.'));
+
+  $fields['address_city'] = BaseFieldDefinition::create('string')
+    ->setLabel(t('City or district'))
+    ->setDescription(t('The town of the donor; used in billing address.'));
+
+  $fields['address_zip'] = BaseFieldDefinition::create('string')
+    ->setLabel(t('Postal code'))
+    ->setDescription(t('ZIP or postal code of the donor; used in billing address.'));
+
+  $fields['address_state'] = BaseFieldDefinition::create('string')
+    ->setLabel(t('State or province'))
+    ->setDescription(t('The state/province/region of the donor; used in billing address.'));
+
+  $fields['address_country'] = BaseFieldDefinition::create('string')
+    ->setLabel(t('Country'))
+    ->setDescription(t('The country the donor; used in billing address.'));
+
+  $fields['card_brand'] = BaseFieldDefinition::create('string')
+    ->setLabel(t('Card brand'))
+    ->setDescription(t('The card brand (Visa, MasterCard, etc).'));
+
+  $fields['card_funding'] = BaseFieldDefinition::create('string')
+    ->setLabel(t('Card funding'))
+    ->setDescription(t('The card funding type (credit, debit).'));
+
+  $fields['card_last4'] = BaseFieldDefinition::create('integer')
+    ->setLabel(t('Last four'))
+    ->setDescription(t('The last four digits of the credit/debit card, if applicable.'));
+
+  foreach ($fields as $field => $storage_definition) {
+    \Drupal::entityDefinitionUpdateManager()
+      ->installFieldStorageDefinition($field, 'give_donation', 'give', $storage_definition);
+  }
+}
+
+/**
+ * Remove impossibilities.
+ */
+function give_update_8004() {
+  $field_storage_definition = \Drupal::entityDefinitionUpdateManager()->getFieldStorageDefinition('recurring', 'give_donation');
+
+  $field_storage_definition->setDisplayOptions('form', [
+    'type' => 'options_select',
+    'settings' => [
+      'display_label' => TRUE,
+    ],
+    'weight' => 15,
+  ]);
+
+  \Drupal::entityDefinitionUpdateManager()
+    ->updateFieldStorageDefinition($field_storage_definition);
+}
+
+/**
+ * Add problem log table.
+ */
+function give_update_8005() {
+  $db_schema = \Drupal::database()->schema();
+  if ($db_schema->tableExists('give_problem')) {
+    return;
+  }
+  $give_problem_schema = [
+    'description' => 'Stores a log identifiable errors and issues encountered during a donation attempt.',
+    'fields' => [
+      'pid' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique problem ID.',
+      ],
+      'donation_uuid' => [
+        'type' => 'varchar_ascii',
+        'length' => 128,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Foreign key to {give_donation}.uuid; uniquely identifies a Give donation to which this log message applies.',
+      ],
+      'type' => [
+        'type' => 'varchar_ascii',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'A rough categorization of the problem.',
+      ],
+      'detail' => [
+        'type' => 'varchar_ascii',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Detail regarding the problem.',
+      ],
+      'timestamp' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'The Unix timestamp when this problem was logged.',
+      ],
+    ],
+    'primary key' => ['pid'],
+    'indexes' => [
+      'type' => ['type'],
+      'donation_uuid' => ['donation_uuid'],
+      'timestamp' => ['timestamp'],
+    ],
+  ];
+  $db_schema->createTable('give_problem', $give_problem_schema);
+}
+
+/**
+ * Set default values for the new fields.
+ */
+function give_update_8006() {
+  $module_path = \Drupal::service('extension.path.resolver')->getPath('module', 'give');
+  $default_config = Yaml::parse(file_get_contents($module_path . '/config/install/give.form.donate.yml'));
+  $config_factory = \Drupal::configFactory();
+
+  $default_values = [
+    'autoreply',
+    'collect_address',
+    'subject_recurring',
+    'reply_recurring',
+    'subject',
+    'reply',
+    'subject_pledge',
+    'reply_pledge',
+  ];
+
+  // Find all give_form configs.
+  foreach ($config_factory->listAll('give.form.') as $give_form) {
+    $give_form = $config_factory->getEditable($give_form);
+
+    // Check if the give_form has default values for the new fields and if not
+    // we set them.
+    foreach ($default_values as $default_value) {
+      if (empty($give_form->get($default_value))) {
+        $give_form->set($default_value, $default_config[$default_value]);
+      }
+    }
+    $give_form->save();
+  }
+}
+
+/**
+ * Add new fields.
+ *
+ * Per https://www.drupal.org/node/2554097
+ */
+function give_update_8007() {
+  $fields = [];
+
+  $fields['method'] = BaseFieldDefinition::create('list_integer')
+    ->setLabel(t('Method'))
+    ->setDescription(t('The donation method (payment card, check pledge).'));
+
+  $fields['telephone'] = BaseFieldDefinition::create('string')
+    ->setLabel(t('Phone'))
+    ->setDescription(t('The telephone number of the donor.'))
+    ->setSetting('max_length', 20);
+
+  $fields['check_or_other_information'] = BaseFieldDefinition::create('string')
+    ->setLabel(t('Further information'))
+    ->setDescription(t('Any questions or explain anything needed to arrange for giving donation.'))
+    ->setSetting('max_length', 2000);
+
+  foreach ($fields as $field => $storage_definition) {
+    \Drupal::entityDefinitionUpdateManager()
+      ->installFieldStorageDefinition($field, 'give_donation', 'give', $storage_definition);
+  }
+}
+
+/**
+ * Adds user agent column in the give_problem table.
+ */
+function give_update_8008() {
+  Database::getConnection()
+    ->schema()
+    ->addField('give_problem', 'user_agent', [
+      'type' => 'varchar_ascii',
+      'length' => 255,
+      'not null' => TRUE,
+      'default' => '',
+      'description' => 'Browser user agent.',
+    ]);
+}
+
+/**
+ * Implements hook_update_n
+ *
+ * Update to drupal 9 compatibility, for 2.0.x branch
+ *  - removal of minimal text format
+ *  - new donation owner field
+ *  - drop donation label field in favour a dynamic label which is more standard.
+ *  - tidied up config schema to include 'mail' type.
+ *  - upgraded donation 'method' field
+ */
+function give_update_8009() {
+  // Rename mail subjects and bodies in PaymentForm
+  // UNTESTED Not sure if old values are accessible once schema has been updated, and if not, how this should be done.
+  foreach (\Drupal::configFactory()->listAll('give.form.') as $give_form_name) {
+    $give_form = \Drupal::configFactory()->getEditable($give_form_name);
+    $give_form->set('onetime_mail', [
+      'subject' => $give_form->get('subject'),
+      'body' => $give_form->get('reply'),
+    ]);
+    $give_form->set('recurring_mail', [
+      'subject' => $give_form->get('subject_recurring'),
+      'body' => $give_form->get('reply_recurring'),
+    ]);
+    $give_form->set('pledge_mail', [
+      'subject' => $give_form->get('subject_pledge'),
+      'body' => $give_form->get('reply_pledge'),
+    ]);
+  }
+  $give_form->save();
+  // Delete this when it is shown to be successful
+  Drupal::messenger()->addWarning('Check that mail config is updated: '.print_r($give_form->getRawData(), 1));
+
+  $entity_def_updater = \Drupal::entityDefinitionUpdateManager();
+  //delete the donation->label() field.
+  $label_field_def = $entity_def_updater->getFieldStorageDefinition('label', 'give_donation');
+  $entity_def_updater->uninstallFieldStorageDefinition($label_field_def);
+
+  $entity_type_manager = \Drupal::entityTypeManager();
+  // Add the new entity owner field to donation Entity
+  $entity_type = $entity_type_manager->getDefinition('give_donation');
+  foreach (EntityOwnerTrait::ownerBaseFieldDefinitions($entity_type) as $field_name => $def) {
+    $entity_def_updater->installFieldStorageDefinition($field_name, 'give_donation', 'give', $def);
+  }
+  // Populate the new entity Owner field from the name field, if possible.
+  $donation_ids = $entity_type_manager->getStorage('give_donation')->getQuery()->execute();
+  $user_storage = $entity_type_manager->getStorage('user');
+  foreach ($donation_ids as $did) {
+    $don = Donation::load($did);
+    $uids = $user_storage->getQuery()->condition('name', $don->name->value)->execute();
+    if ($uid = reset($uids)) {
+      $don->set('uid', $uid)->save();
+    }
+  }
+
+  $database = \Drupal::database();
+  $temp_method_values = $database->select('give_donation', 'd')
+    ->fields('d', ['id', 'method'])
+    ->execute()
+    ->fetchAllKeyed();
+  $database->update('give_donation')
+    ->fields(['method' => NULL])
+    ->execute();
+
+  // Remove the old method field
+  $method_field_definition = $entity_def_updater->getFieldStorageDefinition('method', 'give_donation');
+  $entity_def_updater->uninstallFieldStorageDefinition($method_field_definition);
+
+  // Change the method field from list_integer to a string.
+  $method_field_definition = BaseFieldDefinition::create('string')
+    ->setLabel(t('Method'))
+    ->setDescription(t('The donation method (payment card, check pledge).'))
+    ->setDisplayConfigurable('view', TRUE);
+  $entity_def_updater->installFieldStorageDefinition('method', 'give_donation', 'give', $method_field_definition);
+
+  // Restore the mapped values to the changed field
+  $value_map = [1 => 'card', 2 => 'dwollar', 3 => 'check'];
+  foreach ($temp_method_values as $id => $value) {
+    $database->update('give_donation')
+      ->fields(['method' => $value_map[$value]])
+      ->condition('id', $id)
+      ->execute();
+  }
+
+  // Delete and re-install the give_donations view from file.
+  // This needs testing... Maybe cache needs clearing too.
+  if ($view = View::load('give_donations')) {
+    $view->delete();
+    // Hattip to https://gist.github.com/mikecrittenden/2d2c6734c506d509505fa79142125757
+    $conf_name = 'views.view.give_donations';
+    $file_storage = new FileStorage(\Drupal::service('extension.path.resolver')->getPath('module', 'give') . '/config/install');
+    \Drupal::service('config.storage')->write(
+      $conf_name,
+      $file_storage->read($conf_name)
+    );
+    \Drupal::messenger()->addWarning('The donations view has been reset to default. See admin/structure/views/view/give_donations.');
+  }
+
+}
+
+/**
+ * change the permission names.
+ */
+function give_update_9000() {
+  foreach (Role::loadMultiple() as $role) {
+    /** @var \Drupal\user\Entity\Role $role */
+    if ($role->hasPermission('create and edit give forms')) {
+      $role->grantPermission('manage give forms')->save();
+    }
+  }
+}
+
+/**
+ * change the donation field to a decimal of precision 2
+ */
+function give_update_9001() {
+  $database = \Drupal::database();
+  $old_values = $database->select('give_donation', 'd')
+    ->fields('d', ['id', 'amount'])
+    ->execute();
+
+  $entity_def_updater = \Drupal::entityDefinitionUpdateManager();
+  $entity_def_updater->uninstallFieldStorageDefinition(
+    $entity_def_updater->getFieldStorageDefinition('amount', 'give_donation')
+  );
+  $entity_def_updater->installFieldStorageDefinition(
+    'amount',
+    'give_donation',
+    'give',
+    \Drupal::service('entity_field.manager')->getBaseFieldDefinitions('give_donation')['amount']
+  );
+
+  foreach ($old_values->fetchAllKeyed(0) as $id => $amount) {
+    $database->update('give_donation')
+      ->fields(['amount' => $amount / 100])
+      ->condition('id', $id)
+      ->execute();
+  }
+}
+

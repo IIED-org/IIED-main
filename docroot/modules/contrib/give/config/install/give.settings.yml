@@ -1,0 +1,10 @@
+default_form: give
+stripe_publishable_key: ''
+stripe_secret_key: ''
+log_problems: true
+currency_symbol: usd
+flood:
+  limit: 0
+  interval: 0
+api_key_dwolla: ''
+send_receipt: false

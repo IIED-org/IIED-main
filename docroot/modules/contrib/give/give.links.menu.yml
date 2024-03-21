@@ -1,0 +1,23 @@
+entity.give_form.collection:
+  title: 'Donation forms'
+  description: 'Create and manage donation (give) forms.'
+  parent: system.admin_structure
+  route_name: entity.give_form.collection
+#@todo. Better than having a Give link in the main menu pointing to a default form, each form should be configured with its own path and menu link
+give.site_page:
+  title: Give
+  route_name: give.site_page
+  menu_name: main
+  enabled: 0
+
+give.settings:
+  title: 'Give donation settings'
+  description: 'Give donation processing settings for Stripe'
+  route_name: give.settings
+  parent: system.admin_config_services
+
+give.donation_list:
+  title: Donations
+  description: 'List of donations, complete and pending'
+  route_name: entity.give_donation.collection
+  parent: system.admin_reports

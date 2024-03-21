@@ -130,6 +130,7 @@ class ComposerStaticInitc7142a64c37f96d53e584392e4f37422
             'Symfony\\Component\\BrowserKit\\' => 29,
             'Symfony\\Bridge\\PsrHttpMessage\\' => 30,
             'Symfony\\Bridge\\PhpUnit\\' => 23,
+            'Stripe\\' => 7,
             'Spatie\\PdfToImage\\' => 18,
             'Solarium\\' => 9,
             'SlevomatCodingStandard\\' => 23,
@@ -499,6 +500,10 @@ class ComposerStaticInitc7142a64c37f96d53e584392e4f37422
         'Symfony\\Bridge\\PhpUnit\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/phpunit-bridge',
+        ),
+        'Stripe\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/stripe/stripe-php/lib',
         ),
         'Spatie\\PdfToImage\\' => 
         array (

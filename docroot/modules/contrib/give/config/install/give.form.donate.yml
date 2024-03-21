@@ -1,0 +1,45 @@
+status: true
+dependencies: {  }
+id: donate
+label: Donate
+recipients: {  }
+autoreply: false
+onetime_mail:
+  subject: 'Thank you for your donation'
+  body: "Dear [donor_name],\r\n\r\nThank you for your donation of [formatted_amount] through our [give_label] form. Your contribution helps us fulfill our mission. Below is a receipt for your records."
+recurring_mail:
+  subject: 'Thank you for your donation'
+  body: "Dear [donor_name],\r\n\r\nThank you for your recurring donation of [formatted_amount] [recurrence]. Your contribution helps us fulfill our mission. Below is a receipt for your records."
+pledge_mail:
+  subject: 'Thank you for your pledge'
+  body: "Dear [donor_name],\r\n\r\nThank you for your donation by check of [formatted_amount] on [date]. Your contribution helps us fulfill our mission. Attached is a summary of your pledge to donate by check.  We will send confirmation for your donation once we have received and processed your check"
+check_or_other_text: ''
+collect_address: false
+weight: 0
+redirect_uri: /
+thanks_message: "Thank you, [give_donation:name], for your donation of [give_donation:amount]"
+submit_text: Give
+payment_submit_text: Give
+payment_page_title: Thank you for supporting :sitename, :name!
+donor_name_description: The donation will be billed using this name
+frequencies:
+  -
+    interval: month
+    interval_count: 0
+    description: 'One off payment'
+  -
+    interval: month
+    interval_count: 1
+    description: 'Every month'
+  -
+    interval: month
+    interval_count: 3
+    description: 'Every 3 months (quarterly)'
+  -
+    interval: month
+    interval_count: 6
+    description: 'Every 6 months (semi-annually)'
+  -
+    interval: month
+    interval_count: 12
+    description: 'Every year (annually)'

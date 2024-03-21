@@ -1,0 +1,13 @@
+name: 'Give test module'
+type: module
+description: 'Contains test give form.'
+package: Testing
+# version: VERSION
+core_version_requirement: ^8 || ^9 || ^10
+dependencies:
+  - give:give
+
+# Information added by Drupal.org packaging script on 2024-03-03
+version: '2.0.0-beta5'
+project: 'give'
+datestamp: 1709465165

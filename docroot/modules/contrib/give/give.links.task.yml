@@ -1,0 +1,18 @@
+#donations reports
+
+#default tab. Views provides 2 more tabs
+entity.give_donation.collection:
+  title: 'List'
+  route_name: entity.give_donation.collection
+  base_route: entity.give_donation.collection
+
+#give_form
+entity.give_form.edit_form:
+  title: 'Edit'
+  route_name: entity.give_form.edit_form
+  base_route: entity.give_form.edit_form
+
+entity.give_form.collection:
+  title: 'Forms'
+  route_name: entity.give_form.collection
+  base_route: entity.give_form.collection

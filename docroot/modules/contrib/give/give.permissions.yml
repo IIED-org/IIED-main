@@ -1,0 +1,15 @@
+administer give:
+  title: 'Administer give settings'
+  description: 'Provide API information for Stripe and Dwolla.'
+  restrict access: true
+manage give forms:
+  title: 'Manage donation forms'
+#TODO replace this with a role selector on each give_form.
+access give forms:
+  title: 'Make donations'
+manage donations:
+  title: 'Manage donations'
+  description: CRUD operations on donations
+view donations:
+  title: 'view give (donation) submissions'
+  restrict access: true

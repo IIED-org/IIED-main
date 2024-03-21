@@ -1,0 +1,47 @@
+id: d7_ubercart_give
+label: Ubercart payments to Give log
+#migrate as simple as possible, ubercart orders.\
+migration_tags:
+  - Drupal 7
+  - Content
+source:
+  # May be necessary to override this plugin in hook_migrate_plugins_alter to
+  # filter out orders you don't want to migrate.
+  plugin: d7_uc_order_give
+  constants:
+    form: 'membership'
+    label: '1 year'
+    recur: 0
+    default_method: other
+process:
+  id: order_id
+  created: created
+  changed: modified
+  uid: uid
+  give_form: constants/form
+  name:
+    plugin: concat
+    source:
+      - delivery_first_name
+      - delivery_last_name
+    delimiter: ' '
+  mail: primary_email
+  label: constants/label
+  amount:
+    plugin: callback
+    source: order_total
+    callable: migrate_times_100
+  recurring: constants/recur
+  #use hook_migrate_plugins_alter() to determine a plugin which maps your old payments onto the new ones (card, check, other). See payment_method_names()
+  method: constants/default_method
+  complete:
+    plugin: static_map
+    source: order_status
+    # Implement hook_migrate_plugins_alter() to complete the map for your order statuses
+    map:
+      pending: 0
+    default_value: 1
+destination:
+  plugin: entity:give_donation
+migration_dependencies: {}
+
