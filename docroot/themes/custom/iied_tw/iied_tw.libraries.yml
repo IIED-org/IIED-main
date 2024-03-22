@@ -24,3 +24,7 @@ copycite:
 counter:
    js:
     dist/js/counter.js: {}
+paypal:
+  header: true
+  js:
+    https://www.paypalobjects.com/donate/sdk/donate-sdk.js: { type: external }
