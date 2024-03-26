@@ -9,7 +9,6 @@ dependencies:
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.box
     - paragraphs.paragraphs_type.file_upload
-    - paragraphs.paragraphs_type.form
     - paragraphs.paragraphs_type.gallery
     - paragraphs.paragraphs_type.highchart
     - paragraphs.paragraphs_type.image
@@ -54,7 +53,6 @@ settings:
       modal_image: modal_image
       image_small: image_small
       quote: quote
-      form: form
       stories_table: stories_table
       related_publication_inline: related_publication_inline
     negate: 0
@@ -76,9 +74,6 @@ settings:
         enabled: true
       file_upload:
         weight: -14
-        enabled: true
-      form:
-        weight: 49
         enabled: true
       gallery:
         weight: 38

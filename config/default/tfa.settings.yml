@@ -1,7 +1,7 @@
 _core:
   default_config_hash: dE7ohRe7gCL2n0BFaWfocJnskZdQ6wHnzaFTl3O0RJ0
 langcode: en
-enabled: false
+enabled: true
 required_roles:
   hh_reviewer: hh_reviewer
   publications_editor: publications_editor
