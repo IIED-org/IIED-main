@@ -13,6 +13,7 @@ module:
   automated_cron: 0
   ban: 0
   better_exposed_filters: 0
+  better_passwords: 0
   big_pipe: 0
   block: 0
   block_class: 0
@@ -204,6 +205,7 @@ module:
   xmlsitemap: 1
   content_translation: 10
   formdazzle: 10
+  password_policy: 10
   views: 10
   paragraphs: 11
   login_redirect_per_role: 1000

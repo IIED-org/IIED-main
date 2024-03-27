@@ -5,15 +5,37 @@ dependencies:
   config:
     - field.field.user.user.field_email_updates
     - field.field.user.user.field_first_name
+    - field.field.user.user.field_last_password_reset
     - field.field.user.user.field_occupation
     - field.field.user.user.field_organisation
+    - field.field.user.user.field_password_expiration
+    - field.field.user.user.field_pending_expire_sent
     - field.field.user.user.user_picture
     - image.style.thumbnail
   module:
+    - datetime
+    - field_group
     - name
     - path
     - svg_image
     - user
+third_party_settings:
+  field_group:
+    group_email_user_name_password:
+      children:
+        - account
+      label: 'Email, User name, Password'
+      region: content
+      parent_name: ''
+      weight: 0
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        open: true
+        description: "<H6>NOTE: PASSWORDS MUST BE A MINIMUM OF 15 CHARACTERS LONG</H6>\r\n\r\nYou can add uppercase letters, numbers, and punctuation to make your password stronger.\r\n"
+        required_fields: true
 _core:
   default_config_hash: K-1rBM8mTIkFp9RqOC2tMRUukOQ1xbRCfSKK8dEddnA
 id: user.user.default
@@ -22,25 +44,25 @@ bundle: user
 mode: default
 content:
   account:
-    weight: -10
+    weight: 1
     region: content
     settings: {  }
     third_party_settings: {  }
   contact:
-    weight: 5
+    weight: 6
     region: content
     settings: {  }
     third_party_settings: {  }
   field_email_updates:
     type: boolean_checkbox
-    weight: 34
+    weight: 12
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   field_first_name:
     type: name_default
-    weight: 32
+    weight: 10
     region: content
     settings:
       override_field_settings: false
@@ -68,10 +90,17 @@ content:
         family: description
         generational: description
         credentials: description
+      field_title_display: before
+    third_party_settings: {  }
+  field_last_password_reset:
+    type: datetime_default
+    weight: 5
+    region: content
+    settings: {  }
     third_party_settings: {  }
   field_occupation:
     type: string_textfield
-    weight: 33
+    weight: 11
     region: content
     settings:
       size: 60
@@ -79,11 +108,18 @@ content:
     third_party_settings: {  }
   field_organisation:
     type: string_textfield
-    weight: 31
+    weight: 9
     region: content
     settings:
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  field_password_expiration:
+    type: boolean_checkbox
+    weight: 4
+    region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   google_analytics:
     weight: 3
@@ -91,28 +127,29 @@ content:
     settings: {  }
     third_party_settings: {  }
   language:
-    weight: 0
+    weight: 3
     region: content
     settings: {  }
     third_party_settings: {  }
   path:
     type: path
-    weight: 30
+    weight: 8
     region: content
     settings: {  }
     third_party_settings: {  }
   timezone:
-    weight: 6
+    weight: 7
     region: content
     settings: {  }
     third_party_settings: {  }
   user_picture:
     type: image_image
-    weight: -1
+    weight: 2
     region: content
     settings:
       progress_indicator: throbber
       preview_image_style: thumbnail
     third_party_settings: {  }
 hidden:
+  field_pending_expire_sent: true
   langcode: true

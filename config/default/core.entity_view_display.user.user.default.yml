@@ -5,8 +5,11 @@ dependencies:
   config:
     - field.field.user.user.field_email_updates
     - field.field.user.user.field_first_name
+    - field.field.user.user.field_last_password_reset
     - field.field.user.user.field_occupation
     - field.field.user.user.field_organisation
+    - field.field.user.user.field_password_expiration
+    - field.field.user.user.field_pending_expire_sent
     - field.field.user.user.user_picture
     - image.style.thumbnail
   module:
@@ -103,15 +106,18 @@ content:
     settings:
       image_link: content
       image_style: thumbnail
+      image_loading:
+        attribute: lazy
       svg_attributes:
         width: null
         height: null
       svg_render_as_image: true
-      image_loading:
-        attribute: lazy
     third_party_settings: {  }
     weight: 0
     region: content
 hidden:
+  field_last_password_reset: true
+  field_password_expiration: true
+  field_pending_expire_sent: true
   langcode: true
   search_api_excerpt: true
