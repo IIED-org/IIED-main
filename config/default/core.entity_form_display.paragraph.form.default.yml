@@ -1,0 +1,32 @@
+uuid: 23b81c4f-8705-46e1-ba55-0a3fdc5dbe7d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.form.field_basic_text
+    - field.field.paragraph.form.field_form_type
+    - paragraphs.paragraphs_type.form
+  module:
+    - text
+id: paragraph.form.default
+targetEntityType: paragraph
+bundle: form
+mode: default
+content:
+  field_basic_text:
+    type: text_textarea
+    weight: 1
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_form_type:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

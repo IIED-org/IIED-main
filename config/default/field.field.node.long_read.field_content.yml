@@ -10,6 +10,7 @@ dependencies:
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.box
     - paragraphs.paragraphs_type.file_upload
+    - paragraphs.paragraphs_type.form
     - paragraphs.paragraphs_type.gallery
     - paragraphs.paragraphs_type.highchart
     - paragraphs.paragraphs_type.image
@@ -74,6 +75,7 @@ settings:
       about_the_author: about_the_author
       highchart: highchart
       related_publication_inline: related_publication_inline
+      form: form
       related_content_no_image: related_content_no_image
     negate: 0
     target_bundles_drag_drop:
@@ -94,6 +96,9 @@ settings:
         enabled: true
       file_upload:
         weight: -64
+        enabled: true
+      form:
+        weight: 49
         enabled: true
       gallery:
         weight: -67
@@ -116,6 +121,9 @@ settings:
       info_box:
         weight: -65
         enabled: true
+      key_figure:
+        weight: 57
+        enabled: false
       linked_person:
         weight: -61
         enabled: false
@@ -134,6 +142,9 @@ settings:
       quote:
         weight: -75
         enabled: true
+      related_card:
+        weight: 64
+        enabled: false
       related_content:
         weight: -58
         enabled: true

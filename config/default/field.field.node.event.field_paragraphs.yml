@@ -9,6 +9,7 @@ dependencies:
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.box
     - paragraphs.paragraphs_type.file_upload
+    - paragraphs.paragraphs_type.form
     - paragraphs.paragraphs_type.gallery
     - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.image_small
@@ -52,6 +53,7 @@ settings:
       modal_image: modal_image
       logo_block: logo_block
       stories_cta: stories_cta
+      form: form
       related_publication_inline: related_publication_inline
     negate: 0
     target_bundles_drag_drop:
@@ -72,6 +74,9 @@ settings:
         enabled: true
       file_upload:
         weight: -68
+        enabled: true
+      form:
+        weight: 49
         enabled: true
       gallery:
         weight: -54
@@ -94,6 +99,9 @@ settings:
       info_box:
         weight: -64
         enabled: true
+      key_figure:
+        weight: 57
+        enabled: false
       linked_person:
         weight: -61
         enabled: false
@@ -112,8 +120,14 @@ settings:
       quote:
         weight: -62
         enabled: true
+      related_card:
+        weight: 64
+        enabled: false
       related_content:
         weight: 58
+        enabled: false
+      related_content_no_image:
+        weight: 66
         enabled: false
       related_link:
         weight: -48
@@ -129,6 +143,9 @@ settings:
         enabled: false
       section:
         weight: -46
+        enabled: false
+      sticky_box:
+        weight: 72
         enabled: false
       stories_block:
         weight: -45
