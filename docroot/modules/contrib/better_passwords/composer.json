@@ -1,0 +1,8 @@
+{
+  "name": "drupal/better_passwords",
+  "description": "Attempts to ensure better passwords according to recommendations from groups like NIST.",
+  "type": "drupal-module",
+  "require": {
+    "bjeavons/zxcvbn-php": "*"
+  }
+}

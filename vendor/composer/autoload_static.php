@@ -75,6 +75,7 @@ class ComposerStaticInitc7142a64c37f96d53e584392e4f37422
         ),
         'Z' => 
         array (
+            'ZxcvbnPhp\\' => 10,
             'ZipStream\\' => 10,
         ),
         'W' => 
@@ -327,6 +328,10 @@ class ComposerStaticInitc7142a64c37f96d53e584392e4f37422
         'chillerlan\\QRCode\\' => 
         array (
             0 => __DIR__ . '/..' . '/chillerlan/php-qrcode/src',
+        ),
+        'ZxcvbnPhp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/bjeavons/zxcvbn-php/src',
         ),
         'ZipStream\\' => 
         array (

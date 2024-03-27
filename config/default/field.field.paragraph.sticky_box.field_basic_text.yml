@@ -18,7 +18,7 @@ bundle: sticky_box
 label: 'Basic text'
 description: ''
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:

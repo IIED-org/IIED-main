@@ -9,7 +9,6 @@ dependencies:
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.box
     - paragraphs.paragraphs_type.file_upload
-    - paragraphs.paragraphs_type.form
     - paragraphs.paragraphs_type.gallery
     - paragraphs.paragraphs_type.highchart
     - paragraphs.paragraphs_type.image
@@ -77,7 +76,6 @@ settings:
       tab_box: tab_box
       timeline: timeline
       video_embed: video_embed
-      form: form
       related_content_no_image: related_content_no_image
       related_card: related_card
       sticky_box: sticky_box
@@ -100,9 +98,6 @@ settings:
         enabled: true
       file_upload:
         weight: -50
-        enabled: true
-      form:
-        weight: 49
         enabled: true
       gallery:
         weight: -63
