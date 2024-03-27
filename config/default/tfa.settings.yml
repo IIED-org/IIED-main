@@ -1,15 +1,15 @@
 _core:
   default_config_hash: dE7ohRe7gCL2n0BFaWfocJnskZdQ6wHnzaFTl3O0RJ0
 langcode: en
-enabled: true
+enabled: false
 required_roles:
-  hh_reviewer: hh_reviewer
-  publications_editor: publications_editor
-  editor: editor
   manager: manager
   authenticated: '0'
   viewer: '0'
   hh_contributor: '0'
+  hh_reviewer: '0'
+  publications_editor: '0'
+  editor: '0'
   administrator: '0'
 send_plugins: {  }
 login_plugins:
