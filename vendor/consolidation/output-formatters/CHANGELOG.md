@@ -1,5 +1,13 @@
 # Change Log
 
+### 4.5.0 - 2 Apr 2024
+
+- Support Symfony 7 (#111)
+
+### 4.4.0 - 20 Mar 2024
+
+- Make table headers optional when table is empty (#108)
+
 ### 4.3.2 - 5 Jul 2023
 
 - Make var-dump and var-export usable for non-arrays (#109)

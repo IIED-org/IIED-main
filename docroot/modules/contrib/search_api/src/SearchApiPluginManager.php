@@ -10,7 +10,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 /**
  * Extends the default plugin manager to add support for alter events.
  */
-class SearchApiPluginManager extends DefaultPluginManager {
+abstract class SearchApiPluginManager extends DefaultPluginManager {
 
   /**
    * The event dispatcher.

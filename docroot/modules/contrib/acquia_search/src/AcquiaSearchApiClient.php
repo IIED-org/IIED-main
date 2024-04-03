@@ -144,13 +144,12 @@ class AcquiaSearchApiClient {
     }
 
     $indexes = $this->searchRequest($path, $query_string);
+    $this->lock->release($lock);
     if (empty($indexes) && !is_array($indexes)) {
       // When API is not reachable, cache it for 1 minute.
       $this->cache->set($cid, FALSE, $now + 60, ['acquia_search_indexes']);
-
       return FALSE;
     }
-    $this->lock->release($lock);
 
     if (isset($indexes['data'])) {
       foreach ($indexes['data'] as $index) {

@@ -727,6 +727,14 @@ interface IndexInterface extends ConfigEntityInterface {
   public function isReindexing();
 
   /**
+   * Retrieves the ID of the indexing lock used by this index.
+   *
+   * @return string
+   *   A lock ID/name.
+   */
+  public function getLockId(): string;
+
+  /**
    * Creates a query object for this index.
    *
    * @param array $options

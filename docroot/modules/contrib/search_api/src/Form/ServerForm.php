@@ -320,9 +320,10 @@ class ServerForm extends EntityForm {
     if (!$form_state->isRebuilding()) {
       try {
         $server = $this->getEntity();
-        $server->save();
+        $return = $server->save();
         $this->messenger->addStatus($this->t('The server was successfully saved.'));
         $form_state->setRedirect('entity.search_api_server.canonical', ['search_api_server' => $server->id()]);
+        return $return;
       }
       catch (EntityStorageException $e) {
         $form_state->setRebuild();
@@ -334,6 +335,7 @@ class ServerForm extends EntityForm {
         $this->messenger->addError($this->t('The server could not be saved.'));
       }
     }
+    return 0;
   }
 
 }

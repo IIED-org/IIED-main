@@ -42,6 +42,7 @@ trait ExampleContentTrait {
       'name' => 'foo bar baz foobaz föö smile' . $smiley,
       'body' => 'test test case Case casE',
       'type' => 'item',
+      // cspell:disable-next-line
       'keywords' => ['Orange', 'orange', 'örange', 'Orange', $smiley],
       'category' => 'item_category',
     ]);

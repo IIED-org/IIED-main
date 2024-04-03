@@ -148,7 +148,7 @@ class Item implements \IteratorAggregate, ItemInterface {
    */
   public function getDatasourceId() {
     if (!isset($this->datasourceId)) {
-      list($this->datasourceId) = Utility::splitCombinedId($this->itemId);
+      [$this->datasourceId] = Utility::splitCombinedId($this->itemId);
     }
     return $this->datasourceId;
   }

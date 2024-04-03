@@ -50,6 +50,7 @@ class StopwordsTest extends UnitTestCase {
    * Processor checks for exact case, and tokenized content.
    */
   public function processDataProvider() {
+    // cspell:disable
     return [
       [
         'or',
@@ -87,6 +88,7 @@ class StopwordsTest extends UnitTestCase {
         ['stopword1', 'ÄÖÜÀÁ', 'stopword3'],
       ],
     ];
+    // cspell:enable
   }
 
   /**
@@ -106,6 +108,7 @@ class StopwordsTest extends UnitTestCase {
     $keys = ['#conjunction' => 'AND', 'foo', 'bar', 'bar foo'];
     $query->keys($keys);
 
+    // cspell:disable-next-line
     $configuration = ['stopwords' => ['foobar', 'bar', 'barfoo']];
     $this->processor->setConfiguration($configuration);
     $this->processor->preprocessSearchQuery($query);

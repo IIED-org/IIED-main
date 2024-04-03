@@ -620,6 +620,13 @@ class UnsavedIndexConfiguration implements IndexInterface, UnsavedConfigurationI
   /**
    * {@inheritdoc}
    */
+  public function getLockId(): string {
+    return $this->entity->getLockId();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function query(array $options = []) {
     return $this->entity->query($options);
   }

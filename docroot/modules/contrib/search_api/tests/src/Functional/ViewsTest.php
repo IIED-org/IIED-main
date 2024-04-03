@@ -501,6 +501,7 @@ class ViewsTest extends SearchApiBrowserTestBase {
    */
   protected function regressionTest3031991() {
     $query = [
+      // cspell:disable-next-line
       'search_api_fulltext' => 'foo blabla',
       'search_api_fulltext_op' => 'or',
       'search_api_fulltext_2' => 'bar',
@@ -1163,7 +1164,7 @@ class ViewsTest extends SearchApiBrowserTestBase {
       foreach ($fields as $field) {
         $field_entity = $entity;
         while (strpos($field, ':')) {
-          list($direct_property, $field) = Utility::splitPropertyPath($field, FALSE);
+          [$direct_property, $field] = Utility::splitPropertyPath($field, FALSE);
           if (empty($field_entity->{$direct_property}[0]->entity)) {
             continue 2;
           }

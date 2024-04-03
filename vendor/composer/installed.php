@@ -3,7 +3,7 @@
         'name' => 'drupal/recommended-project',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '2a634bd12bf12a0993e38ec883374b4cecaca711',
+        'reference' => 'e1f5bbcc03c972ee8826a12408fdb846daabc8d1',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -287,9 +287,9 @@
             'dev_requirement' => false,
         ),
         'consolidation/output-formatters' => array(
-            'pretty_version' => '4.3.2',
-            'version' => '4.3.2.0',
-            'reference' => '06711568b4cd169700ff7e8075db0a9a341ceb58',
+            'pretty_version' => '4.5.0',
+            'version' => '4.5.0.0',
+            'reference' => '7a611b01eb48eb19cd54672339fc08c0985bf540',
             'type' => 'library',
             'install_path' => __DIR__ . '/../consolidation/output-formatters',
             'aliases' => array(),
@@ -458,9 +458,9 @@
             'dev_requirement' => false,
         ),
         'drupal/acquia_search' => array(
-            'pretty_version' => '3.1.10',
-            'version' => '3.1.10.0',
-            'reference' => '3.1.10',
+            'pretty_version' => '3.1.11',
+            'version' => '3.1.11.0',
+            'reference' => '3.1.11',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/acquia_search',
             'aliases' => array(),
@@ -1558,7 +1558,7 @@
         'drupal/recommended-project' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '2a634bd12bf12a0993e38ec883374b4cecaca711',
+            'reference' => 'e1f5bbcc03c972ee8826a12408fdb846daabc8d1',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -1601,9 +1601,9 @@
             'dev_requirement' => false,
         ),
         'drupal/search_api' => array(
-            'pretty_version' => '1.31.0',
-            'version' => '1.31.0.0',
-            'reference' => '8.x-1.31',
+            'pretty_version' => '1.32.0',
+            'version' => '1.32.0.0',
+            'reference' => '8.x-1.32',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/search_api',
             'aliases' => array(),
@@ -2806,8 +2806,8 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0|2.0|3.0',
-                1 => '1.0.0 || 2.0.0 || 3.0.0',
+                0 => '1.0.0 || 2.0.0 || 3.0.0',
+                1 => '1.0|2.0|3.0',
             ),
         ),
         'psy/psysh' => array(

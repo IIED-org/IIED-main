@@ -640,7 +640,7 @@ class SearchApiQuery extends QueryPluginBase {
     }
     catch (\Exception $e) {
       $this->abort($e->getMessage());
-      // Recursion to get the same error behaviour as above.
+      // Recursion to get the same error behavior as above.
       $this->execute($view);
     }
   }

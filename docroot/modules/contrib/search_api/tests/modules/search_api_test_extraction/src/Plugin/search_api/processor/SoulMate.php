@@ -157,7 +157,7 @@ class SoulMate extends ProcessorPluginBase {
         continue;
       }
       $property_path = $field->getPropertyPath();
-      list($direct, $nested) = Utility::splitPropertyPath($property_path, FALSE);
+      [$direct, $nested] = Utility::splitPropertyPath($property_path, FALSE);
       if ($direct === 'soul_mate') {
         $to_extract[$nested][] = $field;
       }

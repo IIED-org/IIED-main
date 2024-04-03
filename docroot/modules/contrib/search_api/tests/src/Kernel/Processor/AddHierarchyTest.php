@@ -3,13 +3,19 @@
 namespace Drupal\Tests\search_api\Kernel\Processor;
 
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
-use Drupal\Tests\field\Traits\EntityReferenceTestTrait;
+use Drupal\Tests\field\Traits\EntityReferenceFieldCreationTrait;
 use Drupal\node\Entity\NodeType;
 use Drupal\search_api\Item\Field;
 use Drupal\search_api\Query\Query;
 use Drupal\Tests\node\Traits\NodeCreationTrait;
 use Drupal\Tests\search_api\Kernel\ResultsTrait;
 use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
+
+// Workaround to support tests against both Drupal 10.1 and Drupal 11.0.
+// @todo Remove once we depend on Drupal 10.2.
+if (!trait_exists(EntityReferenceFieldCreationTrait::class)) {
+  class_alias('\Drupal\Tests\field\Traits\EntityReferenceTestTrait', EntityReferenceFieldCreationTrait::class);
+}
 
 /**
  * Tests the "Hierarchy" processor.
@@ -23,7 +29,7 @@ use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
 class AddHierarchyTest extends ProcessorTestBase {
 
   use NodeCreationTrait;
-  use EntityReferenceTestTrait;
+  use EntityReferenceFieldCreationTrait;
   use ResultsTrait;
   use TaxonomyTestTrait;
 

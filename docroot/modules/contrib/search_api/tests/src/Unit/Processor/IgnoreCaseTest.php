@@ -54,6 +54,7 @@ class IgnoreCaseTest extends UnitTestCase {
       ['Foo bar', 'foo bar'],
       ['foo Bar', 'foo bar'],
       ['Foo Bar', 'foo bar'],
+      // cspell:disable-next-line
       ['Foo bar BaZ, ÄÖÜÀÁ<>»«.', 'foo bar baz, äöüàá<>»«.'],
     ];
   }

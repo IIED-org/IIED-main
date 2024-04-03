@@ -53,8 +53,8 @@
 }
 
 details .messages {
-  margin-left: 20px;
   margin-right: 20px;
+  margin-left: 20px;
 }
 
 /*
@@ -93,8 +93,8 @@ details .messages {
  * Miscellaneous
  */
 .search-api-checkboxes-list .form-checkboxes {
-  max-height: 30em;
   overflow: auto;
+  max-height: 30em;
   margin-left: -1rem;
   padding-left: 1rem;
 }

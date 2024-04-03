@@ -32,8 +32,8 @@ include:
   # As long as you include this, any future includes added by the Drupal Association will be accessible to your pipelines automatically.
   # View these include files at https://git.drupalcode.org/project/gitlab_templates/
   ################
-  - project: $_GITLAB_TEMPLATES_REPO
-    ref: $_GITLAB_TEMPLATES_REF
+  - project: issue/gitlab_templates-3436206
+    ref: 3436206-lorem-ipsum-dictionary
     file:
       - '/includes/include.drupalci.main.yml'
       - '/includes/include.drupalci.variables.yml'
@@ -46,9 +46,11 @@ include:
 #
 # Docs at https://git.drupalcode.org/project/gitlab_templates/-/blob/1.0.x/includes/include.drupalci.variables.yml
 ################
-# variables:
-#   SKIP_ESLINT: '1'
-
+variables:
+  COMPOSER_ROOT_VERSION: '1.x-dev'
+  _PHPUNIT_CONCURRENT: '1'
+  _CURL_TEMPLATES_REPO: issue/gitlab_templates-3436206
+  _CURL_TEMPLATES_REF: 3436206-lorem-ipsum-dictionary
 
 ###################################################################################
 #

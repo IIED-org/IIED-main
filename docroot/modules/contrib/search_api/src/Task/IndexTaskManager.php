@@ -6,6 +6,7 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Config\ConfigImporter;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Utility\Error;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\SearchApiException;
@@ -102,7 +103,7 @@ class IndexTaskManager implements IndexTaskManagerInterface, EventSubscriberInte
       }
     }
     catch (SearchApiException $e) {
-      watchdog_exception('search_api', $e);
+      Error::logException(\Drupal::logger('search_api'), $e);
     }
 
     if (empty($context['sandbox']['indexes'])) {

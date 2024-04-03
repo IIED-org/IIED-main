@@ -1,29 +1,20 @@
 <?php
 
-namespace Drupal\Tests\search_api\Unit;
+namespace Drupal\Tests\search_api\Kernel;
 
-use Drupal\Tests\Core\Menu\LocalTaskIntegrationTestBase;
+use Drupal\KernelTests\KernelTestBase;
 
 /**
  * Tests whether Search API's local tasks work correctly.
  *
  * @group search_api
  */
-class LocalTasksTest extends LocalTaskIntegrationTestBase {
+class LocalTasksTest extends KernelTestBase {
 
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
-    parent::setUp();
-
-    // Set the path of the module dynamically.
-    $module_path = str_replace(\Drupal::root(), '', __DIR__);
-    $module_path = str_replace('tests/src/Unit', '', $module_path);
-    $module_path = trim($module_path, '/');
-
-    $this->directoryList = ['search_api' => $module_path];
-  }
+  protected static $modules = ['search_api'];
 
   /**
    * Tests whether the server's local tasks are present at the given route.
@@ -91,6 +82,22 @@ class LocalTasksTest extends LocalTaskIntegrationTestBase {
       ['entity.search_api_index.fields'],
       ['entity.search_api_index.processors'],
     ];
+  }
+
+  /**
+   * Asserts integration for local tasks.
+   *
+   * @param $route_name
+   *   Route name to base task building on.
+   * @param $expected_tasks
+   *   A list of tasks groups by level expected at the given route.
+   */
+  protected function assertLocalTasks(string $route_name, array $expected_tasks): void {
+    $manager = $this->container->get('plugin.manager.menu.local_task');
+    $route_tasks = array_map(function (array $tasks): array {
+      return array_keys($tasks);
+    }, $manager->getLocalTasksForRoute($route_name));
+    $this->assertSame($expected_tasks, $route_tasks);
   }
 
 }

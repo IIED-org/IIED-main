@@ -59,7 +59,7 @@ trait LoggerTrait {
    * @param string|null $link
    *   (optional) A link to associate with the message, if any.
    *
-   * @see watchdog_exception()
+   * @see \Drupal\Core\Utility\Error::logException()
    * @see \Drupal\Core\Utility\Error::decodeException()
    */
   protected function logException(\Throwable $exception, $message = NULL, array $variables = [], $severity = RfcLogLevel::ERROR, $link = NULL) {

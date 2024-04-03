@@ -281,6 +281,12 @@ class TaskManager implements TaskManagerInterface {
    * {@inheritdoc}
    */
   public function setTasksBatch(array $conditions = []) {
+    // We don't want to set a batch during an installation or update hook.
+    if (defined('MAINTENANCE_MODE')
+        && in_array(MAINTENANCE_MODE, ['install', 'update'])) {
+      return;
+    }
+
     $task_ids = $this->getTasksQuery($conditions)->range(0, 100)->execute();
 
     if (!$task_ids) {
@@ -367,7 +373,14 @@ class TaskManager implements TaskManagerInterface {
     }
 
     $pending = $this->getTasksCount($conditions);
-    $context['finished'] = 1 - $pending / $context['results']['total'];
+    // Guard against a total count of 0, which sometimes happens.
+    $context['results']['total'] = max($context['results']['total'], $pending);
+    if ($context['results']['total'] > 0) {
+      $context['finished'] = 1 - $pending / $context['results']['total'];
+    }
+    else {
+      $context['finished'] = 1;
+    }
     $executed = $context['results']['total'] - $pending;
     if ($executed > 0) {
       $context['message'] = $this->formatPlural(
