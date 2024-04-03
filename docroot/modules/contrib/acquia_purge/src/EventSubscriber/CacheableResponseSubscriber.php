@@ -2,10 +2,10 @@
 
 namespace Drupal\acquia_purge\EventSubscriber;
 
-use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Drupal\Core\Cache\CacheableResponseInterface;
 use Drupal\purge\EventSubscriber\CacheableResponseSubscriber as PurgeCacheableResponseSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -42,7 +42,7 @@ class CacheableResponseSubscriber extends PurgeCacheableResponseSubscriber imple
     // Alternatively, if dynamic_page_cache module is uninstalled, then we
     // fallback on testing that at least 'no-cache' cache directive is not
     // present in the response headers.
-    if ($response instanceof CacheableResponseInterface) {
+    if ($response instanceof CacheableResponseInterface && $response->isCacheable()) {
       // Iterate all tagsheader plugins and add a header for each plugin.
       $tags = $response->getCacheableMetadata()->getCacheTags();
       foreach ($this->purgeTagsHeaders as $header) {

@@ -1,0 +1,218 @@
+type: default
+team: dit
+group: drupal-cloud
+service: acquia_purge
+
+validate_config: true
+
+environment_image:
+  file: ".acquia/Dockerfile.ci"
+  context: "."
+  build_args:
+    - secrets:
+        - type: vault
+          key: SSH_KEY
+          value: GIT_SSH_KEY
+          path: secret/pipeline-default/GIT_SSH_KEY
+
+_orca_steps: &orca_steps
+  steps:
+    - setup_ramfs:
+        - cp -ar /acquia /ramfs  &&  df -hT
+    - before_install:
+        - cd /ramfs${CI_WORKSPACE}
+        - |
+          # If ORCA version is overridden then use that.
+          if [ "$ORCA_VERSION" != "$ORCA_VERSION_OVERRIDE" ]; then
+            # Remove ORCA if it is already installed and install appropriate version of
+            # ORCA using the ORCA_VERSION_OVERRIDE environment variable. This allows
+            # us to change the ORCA version at runtime.
+            rm -rf ../orca
+            composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION_OVERRIDE"
+          fi
+          ../orca/bin/ci/before_install.sh
+    - "PHP version selection":
+        - |
+          cd /ramfs${CI_WORKSPACE}
+          # Override the default PHP version provided by the container to PHP 8.2.
+          if [ "$JENKINS_PHP_VERSION" = 8.2 ]; then
+            update-alternatives --install /usr/local/bin/php php /usr/bin/php8.2 82
+            update-alternatives --set php /usr/bin/php8.2
+
+            if [ "$ORCA_COVERAGE_ENABLE" = "TRUE" ]; then
+              # Updating php-config.
+              update-alternatives --install /usr/local/bin/php-config php-config /usr/bin/php-config8.2 82
+              update-alternatives --set php-config /usr/bin/php-config8.2
+              php-config --version
+
+              # Updating phpize.
+              update-alternatives --install /usr/local/bin/phpize phpize /usr/bin/phpize8.2 82
+              update-alternatives --set phpize /usr/bin/phpize8.2
+              phpize --version
+
+              # Installing xdebug.
+              pecl install xdebug
+
+              # Adding Configuration
+              echo "zend_extension=xdebug" > /etc/php/8.2/cli/conf.d/99-xdebug.ini
+              cat /etc/php/8.2/cli/conf.d/99-xdebug.ini
+            fi
+          fi
+          # Override the default PHP version provided by the container to PHP 8.0.
+          if [ "$JENKINS_PHP_VERSION" = 8.0 ]; then
+            update-alternatives --install /usr/local/bin/php php /usr/bin/php8.0 80
+            update-alternatives --set php /usr/bin/php8.0
+
+            if [ "$ORCA_COVERAGE_ENABLE" = "TRUE" ]; then
+              # Updating php-config.
+              update-alternatives --install /usr/local/bin/php-config php-config /usr/bin/php-config8.0 80
+              update-alternatives --set php-config /usr/bin/php-config8.0
+              php-config --version
+
+              # Updating phpize.
+              update-alternatives --install /usr/local/bin/phpize phpize /usr/bin/phpize8.0 80
+              update-alternatives --set phpize /usr/bin/phpize8.0
+              phpize --version
+
+              # Installing xdebug.
+              pecl install xdebug
+
+              # Adding Configuration
+              echo "zend_extension=xdebug" > /etc/php/8.0/cli/conf.d/99-xdebug.ini
+              cat /etc/php/8.0/cli/conf.d/99-xdebug.ini
+            fi
+          fi
+          # Override the default PHP version provided by the container to PHP 7.4.
+          if [ "$JENKINS_PHP_VERSION" = 7.4 ]; then
+            update-alternatives --install /usr/local/bin/php php /usr/bin/php7.4 81
+            update-alternatives --set php /usr/bin/php7.4
+          fi
+          php -v
+    - "XDEBUG config":
+        - |
+          php_version="$(php -r 'echo PHP_VERSION;' | cut -d '.' -f 1,2)"
+          if [ "$ORCA_COVERAGE_ENABLE" = "TRUE" ]  &&  [ ${php_version} = 8.1 ]; then
+            echo xdebug.mode=coverage > /usr/local/etc/php/conf.d/xdebug.ini
+          fi
+
+          if [ "$ORCA_COVERAGE_ENABLE" = "FALSE" ]; then
+            mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini docker-php-ext-xdebug.ini.back
+            mv /usr/local/etc/php/conf.d/xdebug.ini xdebug.ini.back
+          fi
+    - install:
+        - cd /ramfs${CI_WORKSPACE}
+        - ../orca/bin/ci/install.sh
+
+    - |
+      cd /ramfs${CI_WORKSPACE}
+      [ -d "../orca-build" ] && composer config allow-plugins true --working-dir=../orca-build -n || exit 0
+    - before_script:
+        - cd /ramfs${CI_WORKSPACE}
+        - ../orca/bin/ci/before_script.sh
+    - script:
+        - cd /ramfs${CI_WORKSPACE}
+        - ../orca/bin/ci/script.sh
+    - "Fix Path":
+        - |
+          if [ "$ORCA_COVERAGE_ENABLE" = TRUE ]; then
+            cd /ramfs${CI_WORKSPACE}
+            sed -i 's/\/ramfs//' /acquia/acquia_purge/clover.xml
+            sed -i 's/\/ramfs//' /acquia/acquia_purge/junit.xml
+          fi
+_orca_job: &orca_job
+  <<: *orca_steps
+_orca_job_allow_failures: &orca_job_allow_failures
+  - ignore_failures: true
+    <<: *orca_steps
+pre_build:
+  static_code_analysis:
+    - args: --env ORCA_JOB=STATIC_CODE_ANALYSIS
+      <<: *orca_job
+  integrated_test_on_oldest_supported:
+    - args: --env ORCA_JOB=INTEGRATED_TEST_ON_OLDEST_SUPPORTED
+      <<: *orca_job
+  integrated_test_on_latest_lts:
+    - args: --env ORCA_JOB=INTEGRATED_TEST_ON_LATEST_LTS
+      <<: *orca_job
+  integrated_test_on_prev_minor:
+    - args: --env ORCA_JOB=INTEGRATED_TEST_ON_PREVIOUS_MINOR
+      <<: *orca_job
+  isolated_test_on_current:
+    - args: --env ORCA_JOB=ISOLATED_TEST_ON_CURRENT --env ORCA_COVERAGE_ENABLE=TRUE --env ORCA_COVERAGE_CLOVER=/acquia/acquia_purge/clover.xml --env ORCA_JUNIT_LOG=/acquia/acquia_purge/junit.xml
+      ca_data: /acquia
+      <<: *orca_job
+  integrated_test_on_current:
+    - args: --env ORCA_JOB=INTEGRATED_TEST_ON_CURRENT
+      <<: *orca_job
+  isolated_test_on_current_dev:
+    - args: --env ORCA_JOB=ISOLATED_TEST_ON_CURRENT_DEV
+      <<: *orca_job
+  integrated_test_on_current_dev:
+    - args: --env ORCA_JOB=INTEGRATED_TEST_ON_CURRENT_DEV
+      <<: *orca_job
+  strict_deprecated_code_scan:
+    - args: --env ORCA_JOB=STRICT_DEPRECATED_CODE_SCAN
+      <<: *orca_job
+  isolated_test_on_next_minor:
+    - args: --env ORCA_JOB=ISOLATED_TEST_ON_NEXT_MINOR
+      <<: *orca_job
+  isolated_test_on_next_minor_dev:
+    - args: --env ORCA_JOB=ISOLATED_TEST_ON_NEXT_MINOR_DEV
+      <<: *orca_job
+  integrated_test_on_next_minor:
+    - args: --env ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MINOR
+      <<: *orca_job
+  integrated_test_on_next_minor_dev:
+    - args: --env ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MINOR_DEV
+      <<: *orca_job
+  isolated_test_on_current_php8:
+    - args: --env ORCA_JOB=ISOLATED_TEST_ON_CURRENT
+      <<: *orca_job
+  deprecated_code_scan_with_contrib:
+    - args: --env ORCA_JOB=DEPRECATED_CODE_SCAN_W_CONTRIB
+      <<: *orca_job
+  loose_deprecated_code_scan:
+    - args: --env ORCA_JOB=LOOSE_DEPRECATED_CODE_SCAN
+      <<: *orca_job
+  # php 8.2 tests
+  isolated_test_on_current_php82:
+    - args: --env ORCA_JOB=ISOLATED_TEST_ON_CURRENT --env JENKINS_PHP_VERSION=8.2
+      <<: *orca_job
+  integrated_test_on_latest_lts_php82:
+    - args: --env ORCA_JOB=INTEGRATED_TEST_ON_LATEST_LTS --env JENKINS_PHP_VERSION=8.2
+      <<: *orca_job
+  # isolated_test_on_next_major_latest_minor_beta_later:
+  #   - args: --env ORCA_JOB=ISOLATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_BETA_OR_LATER
+  #     <<: *orca_job
+  # integrated_test_on_next_major_latest_minor_beta_later:
+  #   - args: --env ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_BETA_OR_LATER
+  #     <<: *orca_job
+  # isolated_test_on_next_major_latest_minor_dev:
+  #   - args: --env ORCA_JOB=ISOLATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_DEV
+  #     <<: *orca_job
+  # integrated_test_on_next_major_latest_minor_dev:
+  #   - args: --env ORCA_JOB=INTEGRATED_TEST_ON_NEXT_MAJOR_LATEST_MINOR_DEV
+  #     <<: *orca_job
+  # isolated_upgrade_test_to_next_major_dev:
+  #   - args: --env ORCA_JOB=ISOLATED_UPGRADE_TEST_TO_NEXT_MAJOR_DEV
+  #     <<: *orca_job
+  # isolated_upgrade_test_to_next_major_beta_later:
+  #   - args: --env ORCA_JOB=ISOLATED_UPGRADE_TEST_TO_NEXT_MAJOR_BETA_OR_LATER
+  #     <<: *orca_job
+
+
+  security_composition_analysis:
+    required: false
+
+  code_analysis:
+    required: true
+    project_key: acquia.drupal-cloud.dit:acquia_purge
+    quality_gate:
+      wait_for_quality_gate: false
+      max_time_limit: 2
+      abort_pipeline: false
+
+#notify:
+#  channel: drupal-integration-eng
+#  on_success: change
+#  on_failure: always

@@ -171,7 +171,7 @@ class AcquiaPlatformCdnPurger extends PurgerBase implements DebuggerAwareInterfa
       'url'         => 'invalidateUrls',
       'everything'  => 'invalidateEverything',
     ];
-    return isset($methods[$type]) ? $methods[$type] : 'invalidate';
+    return $methods[$type] ?? 'invalidate';
   }
 
 }

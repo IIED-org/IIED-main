@@ -504,7 +504,7 @@ class AcquiaCloudPurger extends PurgerBase implements DebuggerAwareInterface, Pu
       'wildcardurl' => 'invalidateWildcardUrls',
       'everything'  => 'invalidateEverything',
     ];
-    return isset($methods[$type]) ? $methods[$type] : 'invalidate';
+    return $methods[$type] ?? 'invalidate';
   }
 
 }
