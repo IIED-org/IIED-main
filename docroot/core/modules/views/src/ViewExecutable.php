@@ -705,7 +705,7 @@ class ViewExecutable {
 
       $this->exposed_input = \Drupal::request()->query->all();
       // unset items that are definitely not our input:
-      foreach (['page', 'q', 'ajax_page_state'] as $key) {
+      foreach (['page', 'q'] as $key) {
         if (isset($this->exposed_input[$key])) {
           unset($this->exposed_input[$key]);
         }
@@ -1956,17 +1956,6 @@ class ViewExecutable {
 
     if (!isset($args)) {
       $args = $this->args;
-
-      // Exclude arguments that were computed, not passed on the URL.
-      $position = 0;
-      if (!empty($this->argument)) {
-        foreach ($this->argument as $argument) {
-          if (!empty($argument->is_default)) {
-            unset($args[$position]);
-          }
-          $position++;
-        }
-      }
     }
 
     $path = $this->getPath();
