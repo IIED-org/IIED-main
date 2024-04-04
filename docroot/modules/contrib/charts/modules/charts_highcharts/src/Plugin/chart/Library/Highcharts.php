@@ -32,6 +32,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *     "line",
  *     "pie",
  *     "scatter",
+ *     "solidgauge",
  *     "spline",
  *   },
  * )

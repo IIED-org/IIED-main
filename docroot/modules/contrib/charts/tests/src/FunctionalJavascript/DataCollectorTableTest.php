@@ -4,7 +4,6 @@ namespace Drupal\Tests\charts\FunctionalJavascript;
 
 use Drupal\charts_test\Form\DataCollectorTableTestForm;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Url;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\Tests\charts\Traits\ConfigUpdateTrait;
 
@@ -76,46 +75,44 @@ class DataCollectorTableTest extends WebDriverTestBase {
 
     // Test adding a row.
     $this->doTableOperation('add', 'row');
-    // New row should not have any data.
+    // The New row should not have any data.
     $this->assertNewCellIsEmpty('row');
 
     // Test adding a column.
     $this->doTableOperation('add', 'column');
-    // New column should not have any data.
+    // The New column should not have any data.
     $this->assertNewCellIsEmpty('column');
 
-    // Delete second and third row.
+    // Delete the second and third row.
     $this->doTableOperation('delete', 'row', [2, 3]);
-    // Remove middle column.
+    // Remove the middle column.
     $this->doTableOperation('delete', 'column', [2]);
 
-    // Import csv from resources - not passing complaining file not found.
-    // $file_input_selector = 'files[series]';
-    // $file_input = $this->getSession()
-    // ->getPage()
-    // ->find('css', '[name="' . $file_input_selector . '"]');
-    // $file_input->setValue($this->getResourcesUrl() .
-    // '/csv/first_column.csv');
-    // $this->prepareRequest();
-    // code/web/modules/custom/charts/tests/resources/csv/first_row.csv.
-    // $button_selector = 'details[data-drupal-selector="edit-import"].
-    // Input[value="Upload CSV"]';
-    // $page = $this->getSession()->getPage();
-    // $path = $this->getResourcesUrl() . '/csv/first_column.csv';
-    // $page->attachFileToField($file_input_selector, $path);
-    // $this->pressAjaxButton($button_selector);
-    // $web_assert = $this->assertSession();
-    // $web_assert->assertWaitOnAjaxRequest(20000);
-    // $page = $this->getSession()->getPage();
-    // Count rows
-    // $targets = $page->findAll('css', static::TABLE_ROW_SELECTOR);
-    // $this->assertTrue(count($targets) === 7);
-    // Count columns
-    // $targets = $page->findAll('css', static::TABLE_COLUMN_SELECTOR);
-    // $this->assertTrue(count($targets) === 3);
-    // Delete all the rows and columns - skip for now.
-    // Confirm that only one row and column left - skip.
-    // Submit the form and verify the submitted data. - skip.
+    // Import csv from resources.
+    // Opening the dom "details" element.
+    $series_import_details = $this->getSession()->getPage()->find('css', 'details[data-drupal-selector="edit-series-import"]');
+    $this->assertFalse($series_import_details->hasAttribute('open'), 'Details closed');
+    $this->getSession()->executeScript("document.querySelector('details[data-drupal-selector=edit-series-import]').setAttribute('open', true);");
+    $this->assertTrue($series_import_details->hasAttribute('open'), 'Details open');
+    // Add the CSV file containing the test data.
+    $file_field_name = 'files[series]';
+    $filename = $this->getResourcePath() . '/csv/first_column.csv';
+    $this->getSession()->getPage()->attachFileToField($file_field_name, $filename);
+    // Submit upload the file and wait for ajax processing.
+    $button_selector = 'details[data-drupal-selector="edit-series-import"] input[value="Upload CSV"]';
+    $this->pressAjaxButton($button_selector);
+    $this->assertSession()->assertWaitOnAjaxRequest(20000);
+
+    // Verify the uploaded data.
+    $page = $this->getSession()->getPage();
+    $targets = $page->findAll('css', static::TABLE_ROW_SELECTOR);
+    $this->assertEquals(7, count($targets), 'The count of number of expected rows match.');
+    $targets = $page->findAll('css', static::TABLE_COLUMN_SELECTOR);
+    $this->assertEquals(3, count($targets), 'The count of number of expected columns match.');
+    $cell_input = $page->find('css', 'input[name="series[data_collector_table][0][0][data]"]');
+    $this->assertEquals('Categories', $cell_input->getValue(), 'The cell value of row 1 at column 1 match.');
+    $cell_input = $page->find('css', 'input[name="series[data_collector_table][6][2][data]"]');
+    $this->assertEquals(234, $cell_input->getValue(), 'The last uploaded value in the cell match.');
   }
 
   /**
@@ -150,7 +147,7 @@ class DataCollectorTableTest extends WebDriverTestBase {
    * @param array $positions
    *   The position.
    */
-  protected function doTableOperation($operation, $on, array $positions = []) {
+  protected function doTableOperation(string $operation, string $on, array $positions = []) {
     $value = ucfirst($operation) . ' ' . $on;
 
     if ($operation === 'add') {
@@ -240,7 +237,7 @@ class DataCollectorTableTest extends WebDriverTestBase {
    * @param string $locator
    *   The locator.
    */
-  protected function assertDeletionOperation(&$current_count, $locator) {
+  protected function assertDeletionOperation(int &$current_count, string $locator) {
     $web_assert = $this->assertSession();
     $web_assert->assertWaitOnAjaxRequest();
     $current_count--;
@@ -250,12 +247,12 @@ class DataCollectorTableTest extends WebDriverTestBase {
   }
 
   /**
-   * Press ajax button.
+   * Press the ajax button.
    *
    * @param string $selector
    *   The selector.
    */
-  protected function pressAjaxButton($selector) {
+  protected function pressAjaxButton(string $selector) {
     $button = $this->assertSession()->waitForElementVisible('css', $selector);
     $this->assertNotEmpty($button);
     $button->click();
@@ -280,14 +277,13 @@ class DataCollectorTableTest extends WebDriverTestBase {
   }
 
   /**
-   * Get url of resources.
+   * Get the path of the resource.
    *
-   * @return \Drupal\Core\GeneratedUrl|string
-   *   The url.
+   * @return string
+   *   The resource folder path.
    */
-  protected function getResourcesUrl() {
-    $resources_path = \Drupal::service('extension.list.module')->getPath('charts') . '/tests/resources';
-    return Url::fromUri('internal:/' . $resources_path)->toString();
+  protected function getResourcePath() {
+    return \Drupal::root() . '/' . \Drupal::service('extension.list.module')->getPath('charts') . '/tests/resources';
   }
 
 }

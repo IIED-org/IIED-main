@@ -24,6 +24,7 @@ use Drupal\Core\Url;
  *     "donut",
  *     "line",
  *     "pie",
+ *     "polarArea",
  *     "scatter",
  *     "spline",
  *   },

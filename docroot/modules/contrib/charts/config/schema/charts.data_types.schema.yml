@@ -97,7 +97,7 @@ charts_display:
       label: 'Gauge'
     color_changer:
       type: boolean
-      label: 'Expose color changer'
+      label: 'Enable color changer widget'
 
 charts_xaxis:
   type: mapping

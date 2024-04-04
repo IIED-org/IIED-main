@@ -3,6 +3,8 @@ charts_google:
   js:
     js/charts_google.js: { weight: -1 }
   dependencies:
+    - core/drupal
+    - core/drupalSettings
     - charts/global
     - core/once
 google:

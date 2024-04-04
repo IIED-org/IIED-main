@@ -479,6 +479,14 @@ class BaseSettings extends FormElement {
     if ($used_in === 'basic_form') {
       $element = self::processBasicForm($element, $options);
     }
+    if ($used_in === 'view_form' || $used_in === 'basic_form') {
+      $element['display']['color_changer'] = [
+        '#title' => new TranslatableMarkup('Enable color changer widget'),
+        '#type' => 'checkbox',
+        '#description' => new TranslatableMarkup('Display a widget that enables users to switch the chart colors.'),
+        '#default_value' => !empty($options['display']['color_changer']),
+      ];
+    }
 
     // Settings for gauges.
     $element['display']['gauge'] = [
@@ -767,14 +775,6 @@ class BaseSettings extends FormElement {
       '#default_value' => !empty($options['display']['stacking']),
     ];
 
-    $element['display']['color_changer'] = [
-      '#title' => new TranslatableMarkup('Expose color changer'),
-      '#type' => 'checkbox',
-      '#description' => new TranslatableMarkup('Display a widget that enables users to switch the chart colors.'),
-      '#default_value' => !empty($options['display']['color_changer']),
-      '#weight' => 10,
-    ];
-
     $element['yaxis']['inherit'] = [
       '#title' => new TranslatableMarkup('Add a secondary y-axis'),
       '#type' => 'checkbox',
@@ -934,14 +934,6 @@ class BaseSettings extends FormElement {
       '#title' => new TranslatableMarkup('Stacking'),
       '#description' => new TranslatableMarkup('Enable stacking for this chart. Will stack based on the selected label field.'),
       '#default_value' => !empty($options['fields']['stacking']) ? $options['fields']['stacking'] : FALSE,
-    ];
-
-    $element['fields']['color_changer'] = [
-      '#title' => new TranslatableMarkup('Expose color changer'),
-      '#type' => 'checkbox',
-      '#description' => new TranslatableMarkup('Display a widget that enables users to switch the chart colors.'),
-      '#default_value' => !empty($options['fields']['color_changer']),
-      '#weight' => 10,
     ];
 
     $element['fields']['data_providers'] = [
