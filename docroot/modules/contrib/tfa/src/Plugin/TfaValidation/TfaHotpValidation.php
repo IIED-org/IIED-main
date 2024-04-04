@@ -307,7 +307,9 @@ class TfaHotpValidation extends TfaBasePlugin implements TfaValidationInterface,
       $seed = $this->getSeed();
       $counter = $this->getHotpCounter();
       $this->isValid = ($seed && ($counter = $this->auth->otp->checkHotpResync(Encoding::base32DecodeUpper($seed), $counter, $code, $this->counterWindow)));
-      $this->setUserData('tfa', ['tfa_hotp_counter' => ++$counter], $this->uid, $this->userData);
+      if ($this->isValid) {
+        $this->setUserData('tfa', ['tfa_hotp_counter' => ++$counter], $this->uid, $this->userData);
+      }
     }
     return $this->isValid;
   }

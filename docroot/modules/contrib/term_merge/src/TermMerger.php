@@ -103,7 +103,7 @@ class TermMerger implements TermMergerInterface {
     $this->migrateReferences($terms_to_merge, $target_term);
 
     $event = new TermsMergedEvent($terms_to_merge, $target_term);
-    $this->dispatcher->dispatch(TermMergeEventNames::TERMS_MERGED, $event);
+    $this->dispatcher->dispatch($event, TermMergeEventNames::TERMS_MERGED);
 
     $this->termStorage->delete($terms_to_merge);
   }

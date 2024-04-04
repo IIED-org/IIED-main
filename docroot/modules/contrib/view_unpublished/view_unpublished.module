@@ -5,20 +5,22 @@
  * Main functions and hook implementations of the View Unpublished module.
  */
 
+declare(strict_types=1);
+
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
-use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
  * Implements hook_node_access_records().
  */
-function view_unpublished_node_access_records(NodeInterface $node) {
+function view_unpublished_node_access_records(NodeInterface $node): array {
   $grants = [];
   $access_content_grants = [];
-  foreach ($node->getTranslationLanguages(TRUE) as $langcode => $language) {
+  foreach (array_keys($node->getTranslationLanguages()) as $langcode) {
     $translated_node = $node->getTranslation($langcode);
-    if ($translated_node->isPublished() === TRUE) {
+    if ($translated_node->isPublished()) {
       $access_content_grants[] = [
         'realm' => 'view_unpublished_published_content',
         'gid' => 1,
@@ -61,8 +63,8 @@ function view_unpublished_node_access_records(NodeInterface $node) {
   }
 
   // Only use the $access_content_grants if we have to.
-  if (count($grants) > 0) {
-    $grants = array_merge($grants, $access_content_grants);
+  if ($grants !== []) {
+    return array_merge($grants, $access_content_grants);
   }
   return $grants;
 }
@@ -70,14 +72,15 @@ function view_unpublished_node_access_records(NodeInterface $node) {
 /**
  * Implements hook_node_grants().
  */
-function view_unpublished_node_grants(AccountInterface $account, $op) {
+function view_unpublished_node_grants(AccountInterface $account, string $op): array {
+  /** @var array $grants_cache */
   $grants_cache = &drupal_static(__FUNCTION__, []);
   if (isset($grants_cache[$account->id()][$op])) {
     return $grants_cache[$account->id()][$op];
   }
 
   $grants = [];
-  if ($op == 'view') {
+  if ($op === 'view') {
     if ($account->hasPermission('view own unpublished content')) {
       $grants['view_unpublished_author'] = [$account->id()];
     }
@@ -86,7 +89,8 @@ function view_unpublished_node_grants(AccountInterface $account, $op) {
     }
     if ($account->hasPermission('view any unpublished content')) {
       $grants['view_unpublished_content'] = [1];
-      return $grants;
+      $grants_cache[$account->id()][$op] = $grants;
+      return $grants_cache[$account->id()][$op];
     }
     foreach (NodeType::loadMultiple() as $type) {
       $type_id = $type->id();
@@ -101,27 +105,20 @@ function view_unpublished_node_grants(AccountInterface $account, $op) {
 }
 
 /**
- * @file
- * Contains view_unpublished.module.
- */
-
-/**
  * Implements hook_help().
  */
-function view_unpublished_help($route_name, RouteMatchInterface $arg) {
-  switch ($route_name) {
-    case 'help.page.view_unpublished':
-      $output = '';
-      $output .= '<h3>' . t('About') . '</h3>';
-      $output .= '<p>' . t('This module allows you to grant access for specific user roles to view unpublished nodes of a specific type. Access control is quite granular in this regard.') . '</p>';
+function view_unpublished_help(string $route_name, RouteMatchInterface $arg): string {
+  $output = '';
+  if ($route_name === 'help.page.view_unpublished') {
+    $output .= '<h3>' . t('About') . '</h3>';
+    $output .= '<p>' . t('This module allows you to grant access for specific user roles to view unpublished nodes of a specific type. Access control is quite granular in this regard.') . '</p>';
 
-      // Add a link to the Drupal.org project.
-      $output .= '<p>';
-      $output .= t('Visit the <a href=":project_link">View Unpublished project pages</a> on Drupal.org for more information.', [
-        ':project_link' => 'https://www.drupal.org/project/view_unpublished',
-      ]);
-      $output .= '</p>';
-
-      return $output;
+    // Add a link to the Drupal.org project.
+    $output .= '<p>';
+    $output .= t('Visit the <a href=":project_link">View Unpublished project pages</a> on Drupal.org for more information.', [
+      ':project_link' => 'https://www.drupal.org/project/view_unpublished',
+    ]);
+    $output .= '</p>';
   }
+  return $output;
 }

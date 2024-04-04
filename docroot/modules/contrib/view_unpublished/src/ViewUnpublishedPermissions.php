@@ -1,31 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\view_unpublished;
 
+use Drupal\Core\Entity\BundlePermissionHandlerTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\Entity\NodeType;
 
 /**
  * Provides dynamic permissions for viewing unpublished nodes per type.
  */
-class ViewUnpublishedPermissions {
+final class ViewUnpublishedPermissions {
 
+  use BundlePermissionHandlerTrait;
   use StringTranslationTrait;
 
   /**
    * Returns an array of view unpublished permissions per node type.
    *
-   * @return array
+   * @return array[]
    *   The node type view unpublished permissions.
    *
    * @see \Drupal\user\PermissionHandlerInterface::getPermissions()
    */
-  public function permissions() {
+  public function permissions(): array {
     $perms = [];
     // Generate view unpublished permissions for all node types.
-    foreach (NodeType::loadMultiple() as $type) {
-      $perms += $this->buildPermissions($type);
-    }
+    $perms = $this->generatePermissions(NodeType::loadMultiple(), [$this, 'buildPermissions']);
 
     return $perms;
   }
@@ -36,10 +38,12 @@ class ViewUnpublishedPermissions {
    * @param \Drupal\node\Entity\NodeType $type
    *   The node type.
    *
-   * @return array
+   * @phpstan-return non-empty-array{non-falsy-string:array{title:\Drupal\Core\StringTranslation\TranslatableMarkup}}
+   *
+   * @return array[]
    *   An associative array of permission names and descriptions.
    */
-  protected function buildPermissions(NodeType $type) {
+  protected function buildPermissions(NodeType $type): array {
     $type_id = $type->id();
     $type_params = ['%type_name' => $type->label()];
 

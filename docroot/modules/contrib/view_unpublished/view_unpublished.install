@@ -5,28 +5,42 @@
  * Contains install and update functions for view_unpublished.
  */
 
+declare(strict_types=1);
+
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 
 /**
  * Implements hook_install().
+ *
+ * @todo Remove this in 2.0.x.
  */
-function view_unpublished_install() {
-  Drupal::service('view_unpublished.install_helper')->flagRebuild();
+function view_unpublished_install(): void {
+  /** @var \Drupal\view_unpublished\ViewUnpublishedInstallHelper $install_helper */
+  $install_helper = Drupal::service('view_unpublished.install_helper');
+  $install_helper->flagRebuild();
 }
 
 /**
  * Implements hook_uninstall().
+ *
+ * @todo Remove this in 2.0.x.
  */
-function view_unpublished_uninstall() {
-  Drupal::service('view_unpublished.install_helper')->flagRebuild();
-  // Remove any errant view_unpublished dependency.
-  Drupal::service('view_unpublished.install_helper')->removeDependency();
+function view_unpublished_uninstall(bool $is_syncing): void {
+  /** @var \Drupal\view_unpublished\ViewUnpublishedInstallHelper $install_helper */
+  $install_helper = Drupal::service('view_unpublished.install_helper');
+  $install_helper->flagRebuild();
+  if (!$is_syncing) {
+    // Remove any errant view_unpublished dependency.
+    $install_helper->removeDependency();
+  }
 }
 
 /**
  * Make a node access permissions rebuild needed to fix multilingual grants.
  */
-function view_unpublished_update_8001() {
+function view_unpublished_update_8001(): TranslatableMarkup {
+  // @todo Remove this in 2.0.x.
   // We can't just rebuild all the permissions in the update batch because of
   // https://www.drupal.org/node/2785155 and the ability to run updates using
   // the update_free_access setting.
@@ -40,6 +54,9 @@ function view_unpublished_update_8001() {
 /**
  * Remove any view_unpublished dependency that may have been added to views.
  */
-function view_unpublished_update_8002() {
-  Drupal::service('view_unpublished.install_helper')->removeDependency();
+function view_unpublished_update_8002(): void {
+  // @todo Remove this in 2.0.x and implement hook_update_last_removed with return value 8002.
+  /** @var \Drupal\view_unpublished\ViewUnpublishedInstallHelper $install_helper */
+  $install_helper = Drupal::service('view_unpublished.install_helper');
+  $install_helper->removeDependency();
 }

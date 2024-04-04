@@ -6,7 +6,7 @@ type: module
 dependencies:
   - drupal:node
 
-# Information added by Drupal.org packaging script on 2023-04-17
-version: '8.x-1.1'
+# Information added by Drupal.org packaging script on 2024-03-02
+version: '8.x-1.2'
 project: 'view_unpublished'
-datestamp: 1681757576
+datestamp: 1709383478

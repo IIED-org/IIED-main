@@ -12,6 +12,7 @@ use Drupal\Core\Url;
 use Drupal\taxonomy\VocabularyInterface;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -23,6 +24,7 @@ abstract class MergeTermsTestBase extends BrowserTestBase {
     TaxonomyTestTrait::createVocabulary as traitCreateVocabulary;
   }
   use MessengerTrait;
+  use ProphecyTrait;
 
   /**
    * {@inheritdoc}

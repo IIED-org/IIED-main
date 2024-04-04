@@ -387,16 +387,16 @@
         },
         {
             "name": "chillerlan/php-settings-container",
-            "version": "3.1.1",
+            "version": "3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/chillerlan/php-settings-container.git",
-                "reference": "c41e89f8bf963d1e88584a47fb78d1cd204b6e2a"
+                "reference": "8f93648fac8e6bacac8e00a8d325eba4950295e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chillerlan/php-settings-container/zipball/c41e89f8bf963d1e88584a47fb78d1cd204b6e2a",
-                "reference": "c41e89f8bf963d1e88584a47fb78d1cd204b6e2a",
+                "url": "https://api.github.com/repos/chillerlan/php-settings-container/zipball/8f93648fac8e6bacac8e00a8d325eba4950295e6",
+                "reference": "8f93648fac8e6bacac8e00a8d325eba4950295e6",
                 "shasum": ""
             },
             "require": {
@@ -405,9 +405,9 @@
             },
             "require-dev": {
                 "phan/phan": "^5.4",
-                "phpcsstandards/php_codesniffer": "^3.8",
                 "phpmd/phpmd": "^2.15",
-                "phpunit/phpunit": "^10.5"
+                "phpunit/phpunit": "^10.5",
+                "squizlabs/php_codesniffer": "^3.9"
             },
             "type": "library",
             "autoload": {
@@ -448,7 +448,7 @@
                     "type": "ko_fi"
                 }
             ],
-            "time": "2024-01-05T23:55:20+00:00"
+            "time": "2024-03-02T20:07:15+00:00"
         },
         {
             "name": "christian-riesen/otp",
@@ -7152,17 +7152,17 @@
         },
         {
             "name": "drupal/media_pdf_thumbnail",
-            "version": "5.5.0",
+            "version": "5.6.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/media_pdf_thumbnail.git",
-                "reference": "8.x-5.5"
+                "reference": "8.x-5.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/media_pdf_thumbnail-8.x-5.5.zip",
-                "reference": "8.x-5.5",
-                "shasum": "737e678ac21877225c1c9db450f8e3b79ad83541"
+                "url": "https://ftp.drupal.org/files/projects/media_pdf_thumbnail-8.x-5.6.zip",
+                "reference": "8.x-5.6",
+                "shasum": "4632bc532c4f18da18784fc911ff41abdd7f0bc4"
             },
             "require": {
                 "drupal/core": "^9 || ^10",
@@ -7172,8 +7172,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-5.5",
-                    "datestamp": "1678523552",
+                    "version": "8.x-5.6",
+                    "datestamp": "1711185709",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -9844,27 +9844,27 @@
         },
         {
             "name": "drupal/term_merge",
-            "version": "2.0.0-beta5",
+            "version": "2.0.0-beta6",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/term_merge.git",
-                "reference": "2.0.0-beta5"
+                "reference": "2.0.0-beta6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/term_merge-2.0.0-beta5.zip",
-                "reference": "2.0.0-beta5",
-                "shasum": "0fd2d18f7fd43be69a5891bd7b1377a4efbd1460"
+                "url": "https://ftp.drupal.org/files/projects/term_merge-2.0.0-beta6.zip",
+                "reference": "2.0.0-beta6",
+                "shasum": "ec81cd7281e409f3d512d9c5bf894f92ab996016"
             },
             "require": {
-                "drupal/core": "^9 || ^10",
+                "drupal/core": "^9 || ^10 || ^11",
                 "drupal/term_reference_change": "*"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-beta5",
-                    "datestamp": "1695317218",
+                    "version": "2.0.0-beta6",
+                    "datestamp": "1710869688",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -10095,17 +10095,17 @@
         },
         {
             "name": "drupal/tfa",
-            "version": "1.5.0",
+            "version": "1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/tfa.git",
-                "reference": "8.x-1.5"
+                "reference": "8.x-1.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/tfa-8.x-1.5.zip",
-                "reference": "8.x-1.5",
-                "shasum": "7ad87575e2743e343e9a793f9cc4746b1602d133"
+                "url": "https://ftp.drupal.org/files/projects/tfa-8.x-1.6.zip",
+                "reference": "8.x-1.6",
+                "shasum": "3b660e25b694fd97d7be777b07ab92b1fd7252f4"
             },
             "require": {
                 "chillerlan/php-qrcode": "^1.0.9 || ^2.0 || ^3.2 || ^4.0",
@@ -10122,8 +10122,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.5",
-                    "datestamp": "1706121372",
+                    "version": "8.x-1.6",
+                    "datestamp": "1712169197",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10476,26 +10476,30 @@
         },
         {
             "name": "drupal/view_unpublished",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/view_unpublished.git",
-                "reference": "8.x-1.1"
+                "reference": "8.x-1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/view_unpublished-8.x-1.1.zip",
-                "reference": "8.x-1.1",
-                "shasum": "f9f5e88cbaf1a1e71952d94cf67ef2f180e292be"
+                "url": "https://ftp.drupal.org/files/projects/view_unpublished-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "14374dd56d841270207e21974c7b7cf8aa1804f7"
             },
             "require": {
                 "drupal/core": "^9.4 || ^10"
             },
+            "require-dev": {
+                "drupal/coder": "^8.3.18",
+                "phpcompatibility/php-compatibility": "10.x-dev@dev"
+            },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.1",
-                    "datestamp": "1681757575",
+                    "version": "8.x-1.2",
+                    "datestamp": "1709383642",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10509,20 +10513,8 @@
             "authors": [
                 {
                     "name": "Agnes Chisholm",
-                    "homepage": "https://www.drupal.org/user/66428",
+                    "homepage": "https://www.drupal.org/user/173461",
                     "email": "amaria@chisholmtech.com"
-                },
-                {
-                    "name": "beeradb",
-                    "homepage": "https://www.drupal.org/user/120651"
-                },
-                {
-                    "name": "elevins",
-                    "homepage": "https://www.drupal.org/user/781882"
-                },
-                {
-                    "name": "entendu",
-                    "homepage": "https://www.drupal.org/user/173461"
                 },
                 {
                     "name": "fathima.asmat",
@@ -14437,16 +14429,16 @@
         },
         {
             "name": "spatie/pdf-to-image",
-            "version": "2.2.0",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/pdf-to-image.git",
-                "reference": "9b8d5bae5b77f6023e87b2401028e52b7addbd48"
+                "reference": "7c68cc95c0a5e63d712b705ff55459071c2a7b54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/pdf-to-image/zipball/9b8d5bae5b77f6023e87b2401028e52b7addbd48",
-                "reference": "9b8d5bae5b77f6023e87b2401028e52b7addbd48",
+                "url": "https://api.github.com/repos/spatie/pdf-to-image/zipball/7c68cc95c0a5e63d712b705ff55459071c2a7b54",
+                "reference": "7c68cc95c0a5e63d712b705ff55459071c2a7b54",
                 "shasum": ""
             },
             "require": {
@@ -14485,7 +14477,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/pdf-to-image/issues",
-                "source": "https://github.com/spatie/pdf-to-image/tree/2.2.0"
+                "source": "https://github.com/spatie/pdf-to-image/tree/2.3.0"
             },
             "funding": [
                 {
@@ -14493,7 +14485,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-03-08T07:52:26+00:00"
+            "time": "2024-03-07T09:42:07+00:00"
         },
         {
             "name": "symfony/console",

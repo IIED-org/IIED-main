@@ -1,13 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\view_unpublished;
 
 use Drupal\Core\Config\CachedStorage;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use function is_array;
 
 /**
- * A helper class used by un-/install hooks.
+ * A helper class used by un/-install/update hooks.
+ *
+ * @todo Remove this in 2.0.x.
  *
  * @see view_unpublished_install
  * @see view_unpublished_uninstall
@@ -54,9 +59,9 @@ final class ViewUnpublishedInstallHelper {
   /**
    * Helper that flags node_access to be rebuilt if unpublished nodes exist.
    */
-  public function flagRebuild() {
+  public function flagRebuild(): void {
     $query = $this->entityTypeManager->getStorage('node')->getQuery();
-    $count_unpublished = (int) $query
+    $count_unpublished = $query
       ->condition('status', FALSE)
       ->accessCheck(FALSE)
       ->count()
@@ -69,12 +74,12 @@ final class ViewUnpublishedInstallHelper {
   /**
    * Remove the errant view_unpublished dependency from Views.
    */
-  public function removeDependency() {
+  public function removeDependency(): void {
 
     $view_names = $this->configStorage->listAll('views.view');
     foreach ($view_names as $name) {
       $dependencies = $this->configFactory->get($name)->get('dependencies.module');
-      if (!empty($dependencies) && array_key_exists('view_unpublished', array_flip($dependencies))) {
+      if (is_array($dependencies) && $dependencies !== [] && array_key_exists('view_unpublished', array_flip($dependencies))) {
         $dependencies = array_diff($dependencies, ['view_unpublished']);
         $this->configFactory
           ->getEditable($name)
