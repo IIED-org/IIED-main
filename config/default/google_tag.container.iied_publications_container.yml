@@ -3,21 +3,13 @@ langcode: en
 status: true
 dependencies:
   module:
-    - block_content
-    - comment
-    - contact
     - context
-    - media
-    - menu_link_content
     - node
-    - paragraphs
-    - redirect
-    - shortcut
-    - taxonomy
 id: iied_publications_container
 label: 'IIED main container'
 weight: 0
 container_id: GTM-5QNCJ5
+hostname: www.googletagmanager.com
 data_layer: dataLayer
 include_classes: false
 whitelist_classes: |-
@@ -65,14 +57,6 @@ conditions:
       page: page
       project: project
       publication: publication
-  context:
-    id: context
-    negate: null
-    values: ''
-  context_all:
-    id: context_all
-    negate: null
-    values: ''
   user_status:
     id: user_status
     negate: false
