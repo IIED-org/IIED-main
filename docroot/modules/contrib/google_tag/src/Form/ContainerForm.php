@@ -8,6 +8,7 @@ use Drupal\Core\Executable\ExecutableManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\SubformState;
 use Drupal\Core\Plugin\Context\ContextRepositoryInterface;
+use Drupal\google_tag\Entity\ContainerManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -32,6 +33,13 @@ class ContainerForm extends EntityForm {
   protected $contextRepository;
 
   /**
+   * The container entity.
+   *
+   * @var \Drupal\google_tag\Entity\ContainerManagerInterface
+   */
+  protected $containerManager;
+
+  /**
    * {@inheritdoc}
    */
   public function getFormId() {
@@ -46,9 +54,10 @@ class ContainerForm extends EntityForm {
    * @param \Drupal\Core\Plugin\Context\ContextRepositoryInterface $context_repository
    *   The lazy context repository service.
    */
-  public function __construct(ExecutableManagerInterface $condition_manager, ContextRepositoryInterface $context_repository) {
+  public function __construct(ExecutableManagerInterface $condition_manager, ContextRepositoryInterface $context_repository, ContainerManagerInterface $container_manager) {
     $this->conditionManager = $condition_manager;
     $this->contextRepository = $context_repository;
+    $this->containerManager = $container_manager;
   }
 
   /**
@@ -60,7 +69,8 @@ class ContainerForm extends EntityForm {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('plugin.manager.condition'),
-      $container->get('context.repository')
+      $container->get('context.repository'),
+      $container->get('google_tag.container_manager')
     );
   }
 
@@ -197,14 +207,19 @@ class ContainerForm extends EntityForm {
       $form_state->set(['conditions', $condition_id], $condition);
       $form[$condition_id] = $this->conditionFieldset($condition, $form_state);
     }
-/*
-    // Add comment to first condition tab.
-    // @todo This would apply if all insertion conditions were converted to
-    // condition plugins.
-    $description = $this->t('On this and the following tabs, specify the conditions on which the GTM JavaScript snippet will either be inserted on or omitted from the page response, thereby enabling or disabling tracking and other analytics. All conditions must be satisfied for the snippet to be inserted. The snippet will be omitted if any condition is not met.');
-    $condition_id = current(array_keys($definitions));
-    $form[$condition_id]['#description'] = $description;
-*/
+    /*
+     * // Add comment to first condition tab.
+     * // @todo This would apply if all insertion conditions were converted to
+     * // condition plugins.
+     * $description = $this->t('On this and the following tabs, specify the
+     *   conditions on which the GTM JavaScript snippet will either be inserted
+     *   on or omitted from the page response, thereby enabling or disabling
+     *   tracking and other analytics. All conditions must be satisfied for the
+     *   snippet to be inserted. The snippet will be omitted if any condition is
+     *   not met.');
+     * $condition_id = current(array_keys($definitions));
+     * $form[$condition_id]['#description'] = $description;
+     */
     return $form;
   }
 
@@ -300,16 +315,16 @@ class ContainerForm extends EntityForm {
     // Those with default configuration are assumed not to apply as the default
     // values should produce no restriction.
     // However, core treats an empty values list opposite this module.
-    parent::save($form, $form_state);
+    $result = parent::save($form, $form_state);
 
     // @todo This could be done in container::postSave() method.
     global $_google_tag_display_message;
     $_google_tag_display_message = TRUE;
-    $manager = \Drupal::service('google_tag.container_manager');
-    $manager->createAssets($this->entity);
+    $this->containerManager->createAssets($this->entity);
 
     // Redirect to collection page.
     $form_state->setRedirect('entity.google_tag_container.collection');
+    return $result;
   }
 
   /**

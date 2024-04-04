@@ -2,7 +2,6 @@
 
 namespace Drupal\ds\Form;
 
-use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Form\FormState;
@@ -136,29 +135,6 @@ class BlockFieldForm extends FieldFormBase implements ContainerInjectionInterfac
 
     // Invalidate all blocks.
     Cache::invalidateTags(['config:ds.block_base']);
-  }
-
-  /**
-   * Returns the block form for the block plugin.
-   *
-   * We use this to check if the block has a form to redirect to.
-   *
-   * @param \Drupal\Core\Block\BlockPluginInterface $block_plugin
-   *   The block plugin to check.
-   *
-   * @return array
-   *   The form render array.
-   *   It will be empty is the block didn't inject anything.
-   *
-   * @see \Drupal\Core\Block\BlockPluginTrait::blockForm()
-   */
-  public function getBlockConfigForm(BlockPluginInterface $block_plugin) {
-    // Inject default theme in form state (Site branding needs it for instance).
-    $form_state = new FormState();
-    $default_theme = $this->config('system.theme')->get('default');
-    $form_state->set('block_theme', $default_theme);
-    $block_config_form = $block_plugin->blockForm([], $form_state);
-    return $block_config_form;
   }
 
 }

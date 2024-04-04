@@ -37,7 +37,7 @@ class DsFieldCacheTest extends TestBase {
       'fields[test_caching_field][label]' => 'above',
     ];
     $this->drupalGet('admin/structure/types/manage/article/display');
-    $this->submitForm(['ds_layout' => 'ds_2col'], t('Save'));
+    $this->submitForm(['ds_layout' => 'ds_2col'], 'Save');
     $this->dsConfigureUi($fields);
 
     // Create and visit the node so that it is cached as empty, ensure the title

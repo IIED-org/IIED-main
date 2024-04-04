@@ -20,6 +20,7 @@ class GTMMultipleTest extends GTMTestBase {
       'label' => 'Default',
       'weight' => 3,
       'container_id' => 'GTM-default',
+      'hostname' => 'www.googletagmanager.com',
       'include_environment' => '1',
       'environment_id' => 'env-7',
       'environment_token' => 'ddddddddddddddddddddd',
@@ -30,6 +31,7 @@ class GTMMultipleTest extends GTMTestBase {
       'label' => 'Primary',
       'weight' => 2,
       'container_id' => 'GTM-primary',
+      'hostname' => 'my-server-side-gtm.com',
       'include_environment' => '1',
       'environment_id' => 'env-1',
       'environment_token' => 'ppppppppppppppppppppp',
@@ -40,6 +42,7 @@ class GTMMultipleTest extends GTMTestBase {
       'label' => 'Secondary',
       'weight' => 1,
       'container_id' => 'GTM-secondary',
+      'hostname' => 'yet-another-hostname.com',
       'include_environment' => '1',
       'environment_id' => 'env-2',
       'environment_token' => 'sssssssssssssssssssss',
@@ -82,7 +85,7 @@ class GTMMultipleTest extends GTMTestBase {
       parent::assertTrue(TRUE, $message);
       foreach ($this->types as $type) {
         $uri = "$this->basePath/google_tag/{$key}/google_tag.$type.js";
-        // Remove the if-else when core_version_requirement >= 9.3 for this module.
+        // Remove if-else when core_version_requirement >= 9.3 for this module.
         if (\Drupal::hasService('file_url_generator')) {
           $url = \Drupal::service('file_url_generator')->generateString($uri);
         }

@@ -39,6 +39,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  *     "label",
  *     "weight",
  *     "container_id",
+ *     "hostname",
  *     "data_layer",
  *     "include_classes",
  *     "whitelist_classes",
@@ -99,6 +100,13 @@ class Container extends ConfigEntityBase implements ConfigEntityInterface, Entit
    * @var string
    */
   public $container_id;
+
+  /**
+   * The Google Tag Manager hostname.
+   *
+   * @var string
+   */
+  public $hostname;
 
   /**
    * The name of the data layer.
@@ -257,6 +265,7 @@ class Container extends ConfigEntityBase implements ConfigEntityInterface, Entit
   protected function scriptSnippet() {
     // Gather data.
     $container_id = $this->variableClean('container_id');
+    $hostname = $this->variableClean('hostname');
     $data_layer = $this->variableClean('data_layer');
     $query = $this->environmentQuery();
 
@@ -268,7 +277,7 @@ class Container extends ConfigEntityBase implements ConfigEntityInterface, Entit
   var f=d.getElementsByTagName(s)[0];
   var j=d.createElement(s);
   var dl=l!='dataLayer'?'&l='+l:'';
-  j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl+'$query';
+  j.src='https://$hostname/gtm.js?id='+i+dl+'$query';
   j.async=true;
   f.parentNode.insertBefore(j,f);
 })(window,document,'script','$data_layer','$container_id');
@@ -285,11 +294,12 @@ EOS;
   protected function noscriptSnippet() {
     // Gather data.
     $container_id = $this->variableClean('container_id');
+    $hostname = $this->variableClean('hostname');
     $query = $this->environmentQuery();
 
     // Build noscript snippet.
     $noscript = <<<EOS
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=$container_id$query"
+<noscript><iframe src="https://$hostname/ns.html?id=$container_id$query"
  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 EOS;
     return $this->compactSnippet($noscript, ["\n"]);
@@ -393,9 +403,15 @@ EOS;
 
     if (!isset($satisfied[$this->id])) {
       $id = $this->get('container_id');
+      $hostname = $this->get('hostname');
 
       if (empty($id)) {
         // No container ID.
+        return $satisfied[$this->id] = FALSE;
+      }
+
+      if (empty($hostname)) {
+        // No hostname.
         return $satisfied[$this->id] = FALSE;
       }
 
@@ -525,7 +541,7 @@ EOS;
    * @return string
    *   The snippet URI.
    */
-  public function snippetURI($type) {
+  public function snippetUri($type) {
     return $this->snippetDirectory() . "/google_tag.$type.js";
   }
 
@@ -554,7 +570,7 @@ EOS;
    *   The tag array.
    */
   public function fileTag($type, $weight) {
-    $uri = $this->snippetURI($type);
+    $uri = $this->snippetUri($type);
     // Remove the if-else when core_version_requirement >= 9.3 for this module.
     if (\Drupal::hasService('file_url_generator')) {
       $url = \Drupal::service('file_url_generator')->generateString($uri);
@@ -594,8 +610,8 @@ EOS;
         '#tag' => 'script',
         '#value' => new FormattableMarkup($contents, []),
         '#weight' => $weight,
-      ]
-      : ['#type' => 'ignore_tag'],
+      ] :
+      ['#type' => 'ignore_tag'],
       "google_tag_{$type}_tag__{$this->id()}",
     ];
     return $attachment;

@@ -2,11 +2,11 @@
 
 namespace Drupal\google_tag\Plugin\Condition;
 
-use Drupal\google_tag\ConditionBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\google_tag\ConditionBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

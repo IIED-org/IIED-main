@@ -7,7 +7,7 @@ configure: form_mode_control.configuration
 dependencies:
   - drupal:field
 
-# Information added by Drupal.org packaging script on 2022-07-31
-version: '8.x-2.1'
+# Information added by Drupal.org packaging script on 2024-02-28
+version: '8.x-2.2'
 project: 'form_mode_control'
-datestamp: 1659299484
+datestamp: 1709142670

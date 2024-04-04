@@ -2,7 +2,6 @@
 
 namespace Drupal\google_tag\Entity;
 
-// use Drupal\google_tag\Entity\ContainerManagerInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
@@ -110,7 +109,7 @@ class ContainerManager implements ContainerManagerInterface {
     foreach ($snippets as $type => $snippet) {
       if ($include_script_as_file && $type != 'noscript') {
         // Write to file.
-        $uri = $container->snippetURI($type);
+        $uri = $container->snippetUri($type);
         $path = $this->fileSystem->saveData($snippet, $uri, FileSystemInterface::EXISTS_REPLACE);
         $result = !$path ? FALSE : $result;
       }
@@ -158,7 +157,7 @@ class ContainerManager implements ContainerManagerInterface {
    * @return array
    *   The entity ID array.
    */
-  public function loadContainerIDs() {
+  public function loadContainerIds() {
     return $this->entityTypeManager
       ->getStorage('google_tag_container')
       ->getQuery()
@@ -171,7 +170,7 @@ class ContainerManager implements ContainerManagerInterface {
    * {@inheritdoc}
    */
   public function getScriptAttachments(array &$attachments) {
-    $ids = $this->loadContainerIDs();
+    $ids = $this->loadContainerIds();
     $containers = $this->entityTypeManager->getStorage('google_tag_container')->loadMultiple($ids);
     foreach ($containers as $container) {
       if (!$container->insertSnippet()) {
@@ -204,7 +203,7 @@ class ContainerManager implements ContainerManagerInterface {
    * {@inheritdoc}
    */
   public function getNoScriptAttachments(array &$page) {
-    $ids = $this->loadContainerIDs();
+    $ids = $this->loadContainerIds();
     $containers = $this->entityTypeManager->getStorage('google_tag_container')->loadMultiple($ids);
     foreach ($containers as $container) {
       if (!$container->insertSnippet()) {
@@ -219,7 +218,7 @@ class ContainerManager implements ContainerManagerInterface {
    * {@inheritdoc}
    */
   public function createAllAssets() {
-    $ids = $this->loadContainerIDs();
+    $ids = $this->loadContainerIds();
     if (!$ids) {
       return TRUE;
     }
@@ -244,7 +243,7 @@ class ContainerManager implements ContainerManagerInterface {
       }
     }
 
-    $ids = $this->loadContainerIDs();
+    $ids = $this->loadContainerIds();
     if (!$ids) {
       return TRUE;
     }
@@ -296,7 +295,7 @@ class ContainerManager implements ContainerManagerInterface {
 
     foreach ($types as $type) {
       if ($include_script_as_file && $type != 'noscript') {
-        $uri = $container->snippetURI($type);
+        $uri = $container->snippetUri($type);
         if (!is_file($uri)) {
           return FALSE;
         }

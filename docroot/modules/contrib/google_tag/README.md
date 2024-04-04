@@ -1,73 +1,67 @@
-## CONTENTS OF THIS FILE
+# GoogleTagManager
 
- * Introduction
- * Requirements
- * Installation
- * Configuration
- * Troubleshooting
- * Maintainers
 
-## INTRODUCTION
+## Introduction
 
 This project integrates the site with the Google Tag Manager (GTM) application.
 GTM allows you to deploy analytics and measurement tag configurations from a
 web-based user interface (hosted by Google) instead of requiring administrative
 access to your website.
 
- * For a full description, visit the project page:  
-   https://www.drupal.org/project/google_tag
+For a full description, visit the [project page](https://www.drupal.org/project/google_tag).
 
- * To submit bug reports and feature suggestions, or to track changes:  
-   https://www.drupal.org/project/issues/google_tag
+Submit bug reports and feature suggestions, or track changes in the
+[issue queue](https://www.drupal.org/project/issues/google_tag).
 
-## REQUIREMENTS
 
-Sign up for GTM and obtain a 'container ID' for your website. Enter the  
-'container ID' on the settings form for this module (see Configuration).
+## Requirements
 
- * https://tagmanager.google.com/
+Sign up for GTM and obtain a 'container ID' for your website at
+[this link](https://tagmanager.google.com/). Enter the 'container ID' on the
+settings form for this module (see Configuration).
 
-## INSTALLATION
 
-Place the project files in an appropriate modules directory and enable the
-module as you would any other contributed module. For further information see:
+## Installation
 
- * https://www.drupal.org/node/895232
+Install as you would normally install a contributed Drupal module. For further
+information, see
+[Installing Drupal Modules](https://www.drupal.org/docs/extending-drupal/installing-drupal-modules).
 
-## CONFIGURATION
+
+## Configuration
 
 Users in roles with the 'Administer Google Tag Manager' permission will be able
 to manage the module settings and containers for the site. Configure permissions
 as usual at:
 
- * Administration » People » Permissions  
- * admin/people/permissions
+- Administration » People » Permissions
+- admin/people/permissions
 
 From the module settings page, configure the snippet URI and the default
 conditions on which the tags are inserted on a page response. Conditions exist
 for: page paths, user roles, and response statuses. See:
 
- * Administration » Configuration » System » Google Tag Manager  
- * admin/config/system/google-tag/settings
+- Administration » Configuration » System » Google Tag Manager
+- admin/config/system/google-tag/settings
 
 From the container management page, manage the containers to be inserted on a
 page response. Add one or more containers with separate container IDs and the
 snippet insertion conditions. See:
 
- * Administration » Configuration » System » Google Tag Manager  
- * admin/config/system/google-tag
+- Administration » Configuration » System » Google Tag Manager
+- admin/config/system/google-tag
 
-For development purposes, create a GTM environment for your website and enter
-the 'environment ID' on the 'Advanced' tab of the settings form.
+For development purposes, [create a GTM environment](https://tagmanager.google.com/#/admin)
+for your website and enter the 'environment ID' on the 'Advanced' tab of the
+settings form.
 
- * https://tagmanager.google.com/#/admin
 
-## TROUBLESHOOTING
+## Troubleshooting
 
 If the JavaScript snippets are not present in the HTML output, try the following
 steps to debug the situation:
 
- * Confirm the snippet files exist at the snippet base URI shown on the module
+- Confirm the snippet files exist at the snippet base URI shown on the module
    settings page. By default this is public://google_tag/ which on most sites
    equates to sites/default/files/google_tag/.
 
@@ -80,11 +74,11 @@ steps to debug the situation:
    deployed.
 
    NOTE: Snippet files will only be recreated on cache rebuild if the 'Recreate
-   snippets on cache rebuild' setting is enabled (this is the default). A cache
-   rebuild can be triggered from the command line using drush or from the site
-   performance administration page.
+   snippets on cache rebuild' setting is enabled (this setting is disabled by
+   default). A cache rebuild can be triggered from the command line using drush
+   or from the site performance administration page.
 
- * Enable debug output on the module settings page to display the result of each
+- Enable debug output on the module settings page to display the result of each
    snippet insertion condition in the message area. Modify the insertion
    conditions as needed.
 
@@ -100,8 +94,7 @@ snippets on cache rebuild' module setting. Otherwise snippet files will be
 created and owned by the user running Drush. On the next cache rebuild the web
 user may not be able to delete the files (resulting in a fatal error).
 
-## MAINTAINERS
 
-Current maintainer:
+## Maintainers
 
- * Jim Berry (https://www.drupal.org/u/solotandem)
+- Jim Berry - [solotandem](https://www.drupal.org/u/solotandem)

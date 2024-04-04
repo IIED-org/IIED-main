@@ -2,11 +2,11 @@
 
 namespace Drupal\google_tag\Plugin\Condition;
 
-use Drupal\google_tag\ConditionBase;
-use Drupal\domain\DomainNegotiator;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\domain\DomainNegotiator;
+use Drupal\google_tag\ConditionBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

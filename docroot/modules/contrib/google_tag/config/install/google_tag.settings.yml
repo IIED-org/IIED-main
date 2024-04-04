@@ -6,10 +6,11 @@ flush_snippets: false
 debug_output: false
 _default_container:
   container_id: ''
+  hostname: 'www.googletagmanager.com'
   path_toggle: 'exclude listed'
-  path_list: "/admin*\n/batch*\n/node/add*\n/node/*/edit\n/node/*/delete\n/node/*/layout\n/taxonomy/term/*/edit\n/taxonomy/term/*/layout\n/user/*/edit*\n/user/*/cancel*\n/user/*/layout"
+  path_list: "/admin\n/admin/*\n/batch\n/batch/*\n/node/add*\n/node/*/edit\n/node/*/delete\n/node/*/layout\n/taxonomy/term/*/edit\n/taxonomy/term/*/layout\n/user/*/edit*\n/user/*/cancel*\n/user/*/layout"
   role_toggle: 'exclude listed'
-  role_list: {}
+  role_list: {  }
   status_toggle: 'exclude listed'
   status_list: "403\n404"
   data_layer: 'dataLayer'
