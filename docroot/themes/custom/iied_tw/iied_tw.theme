@@ -206,3 +206,27 @@ function iied_tw_theme_suggestions_block_alter(array &$suggestions, array $varia
   } 
 }
 
+/**
+ * Implements hook_preprocess_HOOK() for taxonomy-term templates.
+ */
+function iied_tw_preprocess_taxonomy_term(&$variables) {
+  // Get the taxonomy term entity.
+  $term = $variables['elements']['#taxonomy_term'];
+
+  // Check if the term belongs to the 'global' vocabulary.
+  if ($term->bundle() == 'global' && $term->hasField('field_term_image') && !$term->get('field_term_image')->isEmpty()) {
+    $image_file = $term->get('field_term_image')->entity;
+    if ($image_file) {
+      // Use the URL generator service to get the file URL.
+      $uri = $image_file->getFileUri();
+
+      // Use the Drupal service container to get the file_url_generator service.
+      $url = \Drupal::service('file_url_generator')->generateAbsoluteString($uri);
+      
+      $variables['term_image_url'] = $url;
+    }
+  }
+}
+
+
+

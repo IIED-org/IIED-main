@@ -1,0 +1,73 @@
+{#
+/**
+ * @file
+ * Theme override to display a taxonomy term.
+ *
+ * Available variables:
+ * - url: URL of the current term.
+ * - name: (optional) Name of the current term.
+ * - content: Items for the content of the term (fields and description).
+ *   Use 'content' to print them all, or print a subset such as
+ *   'content.description'. Use the following code to exclude the
+ *   printing of a given child element:
+ *   @code
+ *   {{ content|without('description') }}
+ *   @endcode
+ * - attributes: HTML attributes for the wrapper.
+ * - page: Flag for the full page state.
+ * - term: The taxonomy term entity, including:
+ *   - id: The ID of the taxonomy term.
+ *   - bundle: Machine name of the current vocabulary.
+ * - view_mode: View mode, e.g. 'full', 'teaser', etc.
+ *
+ * @see template_preprocess_taxonomy_term()
+ * copy of global for Donate page 
+ */
+#}
+
+{{ attach_library('iied_tw/paypal') }}
+
+{%
+  set classes = [
+    'taxonomy-term',
+    'vocabulary-' ~ term.bundle|clean_class,
+  ]
+%}
+<div{{ attributes.setAttribute('id', 'taxonomy-term-' ~ term.id).addClass(classes) }}>
+
+  <section>
+    <div class="relative h-screen overflow-hidden">
+    
+        <div class="absolute inset-0">
+          {% if term_image_url %}
+          <img src="{{ term_image_url }}" alt="Donate background hero image" class="object-cover object-center w-full h-full" />
+          {% endif %}
+          <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+        </div>
+        
+        <div class="container relative z-10 flex flex-col justify-end h-full">
+
+          <div class="transition-all xl:grid xl:gap-12 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12">
+            
+            <div class="mb-12 xl:col-span-6">
+              <h1 class="mb-4 text-5xl font-bold text-white">{{ name }}</h1>
+              <h2 class="mb-8 text-iiedgreen-500">{{ term.description.0.value|striptags }}</h2>
+            </div>
+
+            <div class="relative max-w-sm px-12 py-8 m-6 mb-12 group bg-iiedblue-10 xl:col-span-6 rounded-t-3xl rounded-br-3xl">
+              {{ drupal_entity('block_content', '6456') }}
+            </div>
+
+          </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <div class="content">
+    {{ content }}
+  </div>
+
+</div>
+
