@@ -9,6 +9,7 @@ use Drupal\views\Views;
  * Tests the combine filter handler.
  *
  * @group views
+ * @group #slow
  *
  * @coversDefaultClass \Drupal\views\Plugin\views\filter\Combine
  */
@@ -88,6 +89,65 @@ class FilterCombineTest extends ViewsKernelTestBase {
       [
         'name' => 'Ringo',
         'job' => 'Drummer',
+      ],
+      [
+        'name' => 'Ginger',
+        'job' => NULL,
+      ],
+    ];
+    $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
+  }
+
+  /**
+   * Tests the Combine field filter with the 'regular_expression' operator.
+   */
+  public function testFilterCombineRegEx() {
+    $view = Views::getView('test_view');
+    $view->setDisplay();
+
+    $fields = $view->displayHandlers->get('default')->getOption('fields');
+    $view->displayHandlers->get('default')->overrideOption('fields', $fields + [
+      'job' => [
+        'id' => 'job',
+        'table' => 'views_test_data',
+        'field' => 'job',
+        'relationship' => 'none',
+      ],
+    ]);
+
+    // Change the filtering.
+    $view->displayHandlers->get('default')->overrideOption('filters', [
+      'age' => [
+        'id' => 'combine',
+        'table' => 'views',
+        'field' => 'combine',
+        'relationship' => 'none',
+        'operator' => 'regular_expression',
+        'fields' => [
+          'name',
+          'job',
+        ],
+        'value' => '(ing|write)',
+      ],
+    ]);
+
+    $this->executeView($view);
+    $resultset = [
+      [
+        'name' => 'John',
+        'job' => 'Singer',
+      ],
+      [
+        'name' => 'George',
+        'job' => 'Singer',
+      ],
+      [
+        'name' => 'Ringo',
+        'job' => 'Drummer',
+      ],
+      [
+        'name' => 'Paul',
+        'job' => 'Songwriter',
       ],
       [
         'name' => 'Ginger',
@@ -193,7 +253,7 @@ class FilterCombineTest extends ViewsKernelTestBase {
 
     // Confirm that the query with multiple filters used the "CONCAT_WS"
     // operator.
-    $this->assertStringContainsString('CONCAT_WS(', $view->query->query());
+    $this->assertStringContainsString('CONCAT_WS(', (string) $view->query->query());
   }
 
   /**
@@ -279,7 +339,7 @@ class FilterCombineTest extends ViewsKernelTestBase {
 
     // Confirm that the query with single filter does not use the "CONCAT_WS"
     // operator.
-    $this->assertStringNotContainsString('CONCAT_WS(', $view->query->query());
+    $this->assertStringNotContainsString('CONCAT_WS(', (string) $view->query->query());
   }
 
   /**

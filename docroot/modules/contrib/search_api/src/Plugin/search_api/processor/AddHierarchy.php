@@ -12,6 +12,7 @@ use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\TypedData\ComplexDataDefinitionInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Item\FieldInterface;
+use Drupal\search_api\LoggerTrait;
 use Drupal\search_api\Plugin\PluginFormTrait;
 use Drupal\search_api\Plugin\search_api\data_type\value\TextValue;
 use Drupal\search_api\Processor\ProcessorPluginBase;
@@ -33,6 +34,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class AddHierarchy extends ProcessorPluginBase implements PluginFormInterface {
 
+  use LoggerTrait;
   use PluginFormTrait;
 
   /**
@@ -59,6 +61,7 @@ class AddHierarchy extends ProcessorPluginBase implements PluginFormInterface {
     $processor = parent::create($container, $configuration, $plugin_id, $plugin_definition);
 
     $processor->setEntityTypeManager($container->get('entity_type.manager'));
+    $processor->setLogger($container->get('logger.channel.search_api'));
 
     return $processor;
   }
@@ -121,7 +124,7 @@ class AddHierarchy extends ProcessorPluginBase implements PluginFormInterface {
           $vars = [
             '%index' => $this->index->label(),
           ];
-          watchdog_exception('search_api', $e, '%type while trying to retrieve a list of hierarchical fields on index %index: @message in %function (line %line of %file).', $vars);
+          $this->logException($e, '%type while trying to retrieve a list of hierarchical fields on index %index: @message in %function (line %line of %file).', $vars);
           continue;
         }
         if ($definition instanceof ComplexDataDefinitionInterface) {
@@ -275,7 +278,7 @@ class AddHierarchy extends ProcessorPluginBase implements PluginFormInterface {
         if (!$field) {
           continue;
         }
-        list ($entity_type_id, $property) = explode('-', $property_specifier);
+        [$entity_type_id, $property] = explode('-', $property_specifier);
         foreach ($field->getValues() as $entity_id) {
           if ($entity_id instanceof TextValue) {
             $entity_id = $entity_id->getOriginalText();
@@ -290,7 +293,7 @@ class AddHierarchy extends ProcessorPluginBase implements PluginFormInterface {
                 '%field' => $field->getLabel(),
                 '%field_id' => $field->getFieldIdentifier(),
               ];
-              watchdog_exception('search_api', $e, '%type while trying to add hierarchy values to field %field (%field_id) on index %index: @message in %function (line %line of %file).', $vars);
+              $this->logException($e, '%type while trying to add hierarchy values to field %field (%field_id) on index %index: @message in %function (line %line of %file).', $vars);
               continue;
             }
           }

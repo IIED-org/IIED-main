@@ -228,7 +228,7 @@ class Basic extends TrackerPluginBase implements PluginFormInterface {
           if (isset($existing[$item_id])) {
             continue;
           }
-          list($datasource_id) = Utility::splitCombinedId($item_id);
+          [$datasource_id] = Utility::splitCombinedId($item_id);
           $insert->values([
             'index_id' => $index_id,
             'datasource' => $datasource_id,

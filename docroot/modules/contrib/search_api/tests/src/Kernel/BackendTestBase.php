@@ -227,7 +227,7 @@ abstract class BackendTestBase extends KernelTestBase {
       }
     }
     foreach ($conditions as $condition) {
-      list($field, $value) = explode(',', $condition, 2);
+      [$field, $value] = explode(',', $condition, 2);
       $query->addCondition($field, $value);
     }
     $query->range(0, 10);
@@ -281,6 +281,7 @@ abstract class BackendTestBase extends KernelTestBase {
         '#conjunction' => 'OR',
         '#negation' => TRUE,
         'bar',
+        // cspell:disable-next-line
         'fooblob',
       ],
     ];
@@ -1010,6 +1011,7 @@ abstract class BackendTestBase extends KernelTestBase {
     $this->addTestEntity(8, [
       'name' => 'Article with long body',
       'type' => 'article',
+      // cspell:disable-next-line
       'body' => 'astringlongerthanfiftycharactersthatcantbestoredbythedbbackend',
     ]);
     $count = $this->indexItems($this->indexId);
@@ -1022,6 +1024,7 @@ abstract class BackendTestBase extends KernelTestBase {
     $this->assertEquals(count($this->entities), $count, 'Switching type from text to string worked.');
 
     // For a string field, 50 characters shouldn't be a problem.
+    // cspell:disable-next-line
     $query = $this->buildSearch(NULL, ['body,astringlongerthanfiftycharactersthatcantbestoredbythedbbackend']);
     $results = $query->execute();
     $this->assertResults([8], $results, 'Filter on new string field');
@@ -1040,6 +1043,7 @@ abstract class BackendTestBase extends KernelTestBase {
   protected function regressionTest2616804() {
     // The word has 28 Unicode characters but 56 bytes. Verify that it is still
     // indexed correctly.
+    // cspell:disable-next-line
     $mb_word = 'äöüßáŧæøðđŋħĸµäöüßáŧæøðđŋħĸµ';
     // We put the word 8 times into the body so we can also verify that the 255
     // character limit for strings counts characters, not bytes.

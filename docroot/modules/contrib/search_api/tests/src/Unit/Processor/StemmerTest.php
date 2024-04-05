@@ -215,6 +215,7 @@ class StemmerTest extends UnitTestCase {
    *   Arrays of arguments for testProcess().
    */
   public function processDataProvider(): array {
+    // cspell:disable
     return [
       ['Yo', 'yo'],
       ['ties', 'tie'],
@@ -305,6 +306,7 @@ class StemmerTest extends UnitTestCase {
       [" \tExtra  spaces \rappeared \n", 'extra space appear'],
       ["\tspaced-out  \r\n", 'space out'],
     ];
+    // cspell:enable
   }
 
   /**

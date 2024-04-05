@@ -75,7 +75,7 @@ class AcquiaCloudCheck extends DiagnosticCheckBase implements DiagnosticCheckInt
     // Use get_object_vars() to avoid the following Phpstan error:
     // Access to an undefined property Drupal\Core\Extension\Extension::$info.
     $info = get_object_vars($this->moduleExtensionList->get('acquia_purge'));
-    $version = isset($info['info']['version']) ? $info['info']['version'] : 'dev';
+    $version = $info['info']['version'] ?? 'dev';
     $this->value = $version;
 
     // Block the entire system when this is a third-party platform.

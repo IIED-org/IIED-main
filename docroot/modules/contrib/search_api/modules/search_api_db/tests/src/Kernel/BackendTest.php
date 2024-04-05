@@ -23,6 +23,8 @@ use Drupal\search_api_db\Tests\DatabaseTestsTrait;
 use Drupal\Tests\search_api\Kernel\BackendTestBase;
 use Drupal\Tests\search_api\Kernel\TestLogger;
 
+// cspell:ignore foob fooblob
+
 /**
  * Tests index and search capabilities using the Database search backend.
  *
@@ -55,7 +57,7 @@ class BackendTest extends BackendTestBase {
   /**
    * The test logger installed in the container.
    *
-   * Will throw expections whenever a warning or error is logged.
+   * Will throw exceptions whenever a warning or error is logged.
    *
    * @var \Drupal\Tests\search_api\Kernel\TestLogger
    */
@@ -737,7 +739,7 @@ class BackendTest extends BackendTestBase {
 
     // Make sure to re-index the proper version of the item to avoid confusing
     // the other tests.
-    list($datasource_id, $raw_id) = Utility::splitCombinedId($item_id);
+    [$datasource_id, $raw_id] = Utility::splitCombinedId($item_id);
     $index->trackItemsUpdated($datasource_id, [$raw_id]);
     $this->indexItems($index->id());
   }

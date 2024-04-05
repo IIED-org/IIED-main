@@ -6,12 +6,18 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\search_api\Utility\Utility;
-use Drupal\Tests\field\Traits\EntityReferenceTestTrait;
+use Drupal\Tests\field\Traits\EntityReferenceFieldCreationTrait;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Entity\Server;
 use Drupal\search_api\Item\Field;
 use Drupal\search_api\Processor\ProcessorInterface;
 use Drupal\search_api_test\PluginTestTrait;
+
+// Workaround to support tests against both Drupal 10.1 and Drupal 11.0.
+// @todo Remove once we depend on Drupal 10.2.
+if (!trait_exists(EntityReferenceFieldCreationTrait::class)) {
+  class_alias('\Drupal\Tests\field\Traits\EntityReferenceTestTrait', EntityReferenceFieldCreationTrait::class);
+}
 
 /**
  * Tests the admin UI for processors.
@@ -20,7 +26,7 @@ use Drupal\search_api_test\PluginTestTrait;
  */
 class ProcessorIntegrationTest extends SearchApiBrowserTestBase {
 
-  use EntityReferenceTestTrait;
+  use EntityReferenceFieldCreationTrait;
   use PluginTestTrait;
 
   /**
@@ -595,7 +601,7 @@ TAGS
     $this->enableProcessor('role_filter');
 
     $configuration = [
-      'default' => 1,
+      'default' => '1',
       'roles' => [
         'anonymous',
       ],
@@ -735,7 +741,6 @@ TAGS
         ],
       ],
     ];
-    unset($configuration['boosts']['parent_reference']);
     $this->editSettingsForm($configuration, 'number_field_boost', $form_values);
   }
 

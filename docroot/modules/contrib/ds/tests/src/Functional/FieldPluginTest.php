@@ -18,7 +18,7 @@ class FieldPluginTest extends TestBase {
       'title_label' => 'alternative article title',
     ];
     $this->drupalGet('admin/structure/types/manage/article');
-    $this->submitForm($edit, t('Save'));
+    $this->submitForm($edit, 'Save');
 
     $this->dsSelectLayout();
 

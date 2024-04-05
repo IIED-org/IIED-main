@@ -19,3 +19,15 @@ acquia_search.settings:
 plugin.plugin_configuration.search_api_solr_connector.solr_acquia_connector:
   type: plugin.plugin_configuration.search_api_solr_connector.standard
   label: 'Search API Acquia Search connector settings'
+
+plugin.plugin_configuration.search_api_backend.acquia_search_solr:
+  type: plugin.plugin_configuration.search_api_backend.search_api_solr
+  label: 'Acquia Search API Solr settings'
+
+search_api.index.*.third_party.acquia_search:
+  type: mapping
+  label: 'Acquia Search API Solr index settings'
+  mapping:
+    use_edismax:
+      type: boolean
+      label: 'Use the eDisMax query parser'

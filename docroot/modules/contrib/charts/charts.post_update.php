@@ -181,3 +181,41 @@ function charts_post_update_setting_charts_config_module_dependencies(&$sandbox)
   }
   return 'The default config for charts did not have a library and type set. So no dependencies were set.';
 }
+
+/**
+ * Move color changer from fields to display.
+ */
+function charts_post_update_move_views_style_color_changer_from_fields_to_display(&$sandbox) {
+  $view_storage = \Drupal::entityTypeManager()->getStorage('view');
+  $view_ids = $view_storage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('display.*.display_options.style.type', 'chart', '=')
+    ->execute();
+  $labels = [];
+  if ($view_ids) {
+    foreach ($view_ids as $view_id) {
+      /** @var \Drupal\views\ViewEntityInterface $view */
+      $view = $view_storage->load($view_id);
+      $changed = FALSE;
+      foreach (array_keys($view->get('display')) as $display_id) {
+        $display = &$view->getDisplay($display_id);
+        if (isset($display['display_options']['style']['options']['chart_settings']['fields']['color_changer'])) {
+          $changed = TRUE;
+          $display['display_options']['style']['options']['chart_settings']['display']['color_changer'] = !empty($display['display_options']['style']['options']['chart_settings']['fields']['color_changer']);
+          unset($display['display_options']['style']['options']['chart_settings']['fields']['color_changer']);
+        }
+      }
+      if ($changed) {
+        $view->save();
+        $labels[] = $view->label();
+      }
+    }
+  }
+
+  if ($labels) {
+    return t('The following views have been updated to move the color changer from fields to display: @views', [
+      '@views' => implode(',', $labels),
+    ]);
+  }
+  return t('This site did not have any chart related views.');
+}

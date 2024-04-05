@@ -1,5 +1,5 @@
 
-ARG BASE_IMAGE=devops-orca-container:php81
+ARG BASE_IMAGE=devops-orca-container:php81-alpine
 
 ARG REPO_LOCATION
 
@@ -7,6 +7,13 @@ ARG ORCA_VERSION=^4
 
 FROM ${REPO_LOCATION}${BASE_IMAGE}
 
+# Google API credentials for Domo integration.
+ARG CLIENT_ID
+ARG CLIENT_SECRET
+ARG REFRESH_TOKEN
+ENV ORCA_GOOGLE_API_CLIENT_ID=${CLIENT_ID}
+ENV ORCA_GOOGLE_API_CLIENT_SECRET=${CLIENT_SECRET}
+ENV ORCA_GOOGLE_API_REFRESH_TOKEN=${REFRESH_TOKEN}
 # Sets ORCA_VERSION environment variable.
 ENV ORCA_VERSION=^4
 # Overrides the ORCA_VERSION if a specific version is provided in a job. Defaults to the

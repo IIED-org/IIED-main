@@ -2,13 +2,13 @@
 
 namespace Drupal\Tests\google_tag\Functional;
 
-use Drupal\google_tag\Entity\Container;
+use Drupal\Core\Utility\Error;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\google_tag\Entity\Container;
 
 /**
  * Tests the Google Tag Manager.
  *
- * @todo
  * Use the settings form to save configuration and create snippet files.
  * Confirm snippet file and page response contents.
  * Test further the snippet insertion conditions.
@@ -91,7 +91,12 @@ abstract class GTMTestBase extends BrowserTestBase {
     }
     catch (\Exception $e) {
       parent::assertTrue(TRUE, t('Inside CATCH block'));
-      watchdog_exception('gtm_test', $e);
+      if (method_exists('\Drupal\Core\Utility\Error', 'logException')) {
+        Error::logException(\Drupal::logger('gtm_test'), $e);
+      }
+      else {
+        watchdog_exception('gtm_test', $e);
+      }
     }
     finally {
       parent::assertTrue(TRUE, t('Inside FINALLY block'));
@@ -173,7 +178,7 @@ abstract class GTMTestBase extends BrowserTestBase {
 
     // Confirm no containers.
     $manager = $this->container->get('google_tag.container_manager');
-    $ids = $manager->loadContainerIDs();
+    $ids = $manager->loadContainerIds();
     $message = 'No containers found after delete';
     parent::assertTrue(empty($ids), $message);
 
@@ -248,6 +253,10 @@ abstract class GTMTestBase extends BrowserTestBase {
     $message = 'Found in script snippet file: container_id';
     parent::assertTrue($status, $message);
 
+    $status = strpos($contents, "src='https://$variables->hostname") !== FALSE;
+    $message = 'Found in script snippet file: hostname';
+    parent::assertTrue($status, $message);
+
     $status = strpos($contents, "gtm_preview=$variables->environment_id") !== FALSE;
     $message = 'Found in script snippet file: environment_id';
     parent::assertTrue($status, $message);
@@ -263,6 +272,10 @@ abstract class GTMTestBase extends BrowserTestBase {
   protected function verifyNoScriptSnippet($contents, $variables) {
     $status = strpos($contents, "id=$variables->container_id") !== FALSE;
     $message = 'Found in noscript snippet cache: container_id';
+    parent::assertTrue($status, $message);
+
+    $status = strpos($contents, "src=\"https://$variables->hostname") !== FALSE;
+    $message = 'Found in noscript snippet cache: hostname';
     parent::assertTrue($status, $message);
 
     $status = strpos($contents, "gtm_preview=$variables->environment_id") !== FALSE;
@@ -321,6 +334,10 @@ abstract class GTMTestBase extends BrowserTestBase {
     $message = 'Found in script tag: container_id and data data_layer';
     parent::assertTrue($status, $message);
 
+    $status = strpos($contents, "src='https://$variables->hostname") !== FALSE;
+    $message = 'Found in script tag: hostname';
+    parent::assertTrue($status, $message);
+
     $status = strpos($contents, "gtm_preview=$variables->environment_id") !== FALSE;
     $message = 'Found in script tag: environment_id';
     parent::assertTrue($status, $message);
@@ -345,6 +362,10 @@ abstract class GTMTestBase extends BrowserTestBase {
 
     $status = strpos($contents, "id=$variables->container_id") !== FALSE;
     $message = 'Found in noscript tag: container_id';
+    parent::assertTrue($status, $message);
+
+    $status = strpos($contents, "src=\"https://$variables->hostname") !== FALSE;
+    $message = 'Found in noscript tag: hostname';
     parent::assertTrue($status, $message);
 
     $status = strpos($contents, "gtm_preview=$variables->environment_id") !== FALSE;

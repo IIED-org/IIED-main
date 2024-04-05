@@ -47,7 +47,9 @@ class MediaPdfThumbnailImagickManager {
     try {
       $pdf = new Pdf($source);
       $pdf->getNumberOfPages() > intval($page) ? $pdf->setPage(intval($page)) : '';
-      $pdf->setLayerMethod(null);
+      if (method_exists($pdf, 'setLayerMethod') && is_callable([$pdf, 'setLayerMethod'])) {
+        $pdf->setLayerMethod(NULL);
+      }
       if (file_exists($target)) {
         $this->fileSystem->delete($target);
       }

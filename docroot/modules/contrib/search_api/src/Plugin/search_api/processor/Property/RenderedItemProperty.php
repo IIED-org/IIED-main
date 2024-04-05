@@ -7,6 +7,9 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\search_api\Item\FieldInterface;
 use Drupal\search_api\Processor\ConfigurablePropertyBase;
+use Drupal\search_api\Utility\Utility;
+use Drupal\user\Entity\Role;
+use Drupal\user\RoleInterface;
 
 /**
  * Defines a "rendered item" property.
@@ -35,7 +38,9 @@ class RenderedItemProperty extends ConfigurablePropertyBase {
     $index = $field->getIndex();
     $form['#tree'] = TRUE;
 
-    $roles = user_role_names();
+    $roles = array_map(function (RoleInterface $role) {
+      return Utility::escapeHtml($role->label());
+    }, Role::loadMultiple());
     $form['roles'] = [
       '#type' => 'select',
       '#title' => $this->t('User roles'),

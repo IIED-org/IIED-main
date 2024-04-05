@@ -93,16 +93,15 @@
    */
   Drupal.behaviors.states = {
     attach(context, settings) {
-      const elements = once('states', '[data-drupal-states]', context);
-      const il = elements.length;
-
+      const $states = $(context).find('[data-drupal-states]');
+      const il = $states.length;
       for (let i = 0; i < il; i++) {
         const config = JSON.parse(
-          elements[i].getAttribute('data-drupal-states'),
+          $states[i].getAttribute('data-drupal-states'),
         );
         Object.keys(config || {}).forEach((state) => {
           new states.Dependent({
-            element: $(elements[i]),
+            element: $($states[i]),
             state: states.State.sanitize(state),
             constraints: config[state],
           });
@@ -121,7 +120,7 @@
    *
    * @constructor Drupal.states.Dependent
    *
-   * @param {{state: Drupal.states.state, constraints: *, element: (*|jQuery|HTMLElement)}} args
+   * @param {object} args
    *   Object with the following keys (all of which are required)
    * @param {jQuery} args.element
    *   A jQuery object of the dependent element
@@ -150,6 +149,7 @@
    *
    * @prop {function} RegExp
    * @prop {function} Function
+   * @prop {function} Array
    * @prop {function} Number
    */
   states.Dependent.comparisons = {
@@ -159,6 +159,15 @@
     Function(reference, value) {
       // The "reference" variable is a comparison function.
       return reference(value);
+    },
+    Array(reference, value) {
+      // Make sure value is an array.
+      if (!Array.isArray(value)) {
+        return false;
+      }
+
+      // The arrays values should match.
+      return JSON.stringify(reference.sort()) === JSON.stringify(value.sort());
     },
     Number(reference, value) {
       // If "reference" is a number and "value" is a string, then cast
@@ -682,11 +691,14 @@
   $document.on('state:disabled', (e) => {
     // Only act when this change was triggered by a dependency and not by the
     // element monitoring itself.
+    const tagsSupportDisable =
+      'button, fieldset, optgroup, option, select, textarea, input';
     if (e.trigger) {
       $(e.target)
         .closest('.js-form-item, .js-form-submit, .js-form-wrapper')
         .toggleClass('form-disabled', e.value)
-        .find('select, input, textarea')
+        .find(tagsSupportDisable)
+        .addBack(tagsSupportDisable)
         .prop('disabled', e.value);
     }
   });

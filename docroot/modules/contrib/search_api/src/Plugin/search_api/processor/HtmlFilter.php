@@ -246,7 +246,44 @@ class HtmlFilter extends FieldsProcessorPluginBase {
       }
     }
 
-    return Html::serialize($dom);
+    return static::serializeHtml($dom);
+  }
+
+  /**
+   * Converts the body of a \DOMDocument back to an HTML snippet.
+   *
+   * The function serializes the body part of a \DOMDocument back to an (X)HTML
+   * snippet. The resulting (X)HTML snippet will be properly formatted to be
+   * compatible with HTML user agents.
+   *
+   * Copied from the Drupal 10.1 version of
+   * \Drupal\Component\Utility\Html::serialize().
+   *
+   * @param \DOMDocument $document
+   *   A \DOMDocument object to serialize, only the tags below the first <body>
+   *   node will be converted.
+   *
+   * @return string
+   *   A valid (X)HTML snippet, as a string.
+   *
+   * @see \Drupal\Component\Utility\Html::serialize()
+   */
+  protected static function serializeHtml(\DOMDocument $document): string {
+    $body_node = $document->getElementsByTagName('body')->item(0);
+    $html = '';
+
+    if ($body_node !== NULL) {
+      foreach ($body_node->getElementsByTagName('script') as $node) {
+        Html::escapeCdataElement($node);
+      }
+      foreach ($body_node->getElementsByTagName('style') as $node) {
+        Html::escapeCdataElement($node, '/*', '*/');
+      }
+      foreach ($body_node->childNodes as $node) {
+        $html .= $document->saveXML($node);
+      }
+    }
+    return $html;
   }
 
   /**

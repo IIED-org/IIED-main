@@ -7,9 +7,11 @@
 
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem;
 use Drupal\Core\Field\TypedData\FieldItemDataDefinition;
 use Drupal\Core\TypedData\DataDefinitionInterface;
 use Drupal\Core\TypedData\DataReferenceDefinitionInterface;
+use Drupal\Core\Utility\Error;
 use Drupal\search_api\Datasource\DatasourceInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Event\MappingViewsFieldHandlersEvent;
@@ -112,7 +114,7 @@ function search_api_views_data() {
       $args = [
         '%index' => $index->label(),
       ];
-      watchdog_exception('search_api', $e, '%type while computing Views data for index %index: @message in %function (line %line of %file).', $args);
+      Error::logException(\Drupal::logger('search_api'), $e, '%type while computing Views data for index %index: @message in %function (line %line of %file).', $args);
     }
   }
 
@@ -137,6 +139,7 @@ function search_api_views_plugins_cache_alter(array &$plugins) {
     $bases = ['search_api_index_dummy'];
   }
 
+  $plugins['search_api_none']['base'] = $bases;
   $plugins['search_api_tag']['base'] = $bases;
   $plugins['search_api_time']['base'] = $bases;
 }
@@ -202,18 +205,22 @@ function _search_api_views_get_handlers(FieldInterface $field) {
     if ($field->getPropertyPath() !== NULL) {
       $definition = $field->getDataDefinition();
     }
-    $entity_type_id = $definition?->getSetting('target_type');
-    if ($entity_type_id) {
-      $entity_type = \Drupal::entityTypeManager()
-        ->getDefinition($entity_type_id);
-      $bundle_of = $entity_type->getBundleOf();
-      if ($bundle_of) {
-        $types[] = "bundle_of:$bundle_of";
-        $types[] = ['bundle_of', $bundle_of];
-      }
 
-      $types[] = "entity:$entity_type_id";
-      $types[] = ['entity', $entity_type_id];
+    // Check whether this is an entity reference field.
+    if (is_a($definition?->getClass(), EntityReferenceItem::class, TRUE)) {
+      $entity_type_id = $definition->getSetting('target_type');
+      if ($entity_type_id) {
+        $entity_type = \Drupal::entityTypeManager()
+          ->getDefinition($entity_type_id);
+        $bundle_of = $entity_type->getBundleOf();
+        if ($bundle_of) {
+          $types[] = "bundle_of:$bundle_of";
+          $types[] = ['bundle_of', $bundle_of];
+        }
+
+        $types[] = "entity:$entity_type_id";
+        $types[] = ['entity', $entity_type_id];
+      }
     }
 
     // Special treatment for languages (as we have no specific Search API data
@@ -247,7 +254,7 @@ function _search_api_views_get_handlers(FieldInterface $field) {
   catch (SearchApiException | PluginNotFoundException $e) {
     $vars['%index'] = $field->getIndex()->label();
     $vars['%field'] = $field->getPrefixedLabel();
-    watchdog_exception('search_api', $e, '%type while adding Views handlers for field %field on index %index: @message in %function (line %line of %file).', $vars);
+    Error::logException(\Drupal::logger('search_api'), $e, '%type while adding Views handlers for field %field on index %index: @message in %function (line %line of %file).', $vars);
   }
 
   return [];
@@ -900,7 +907,7 @@ function _search_api_views_get_field_handler_for_property(DataDefinitionInterfac
       && $property instanceof FieldItemDataDefinition
       && !$property->isComputed()
       && !$property->getFieldDefinition()->isComputed()) {
-    list(, $field_name) = Utility::splitPropertyPath($property_path, TRUE);
+    [, $field_name] = Utility::splitPropertyPath($property_path, TRUE);
     if (!isset($definition['fallback_handler'])) {
       $definition['fallback_handler'] = $definition['id'];
       $definition['id'] = 'search_api_field';

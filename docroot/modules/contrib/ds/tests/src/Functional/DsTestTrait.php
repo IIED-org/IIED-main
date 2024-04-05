@@ -16,7 +16,7 @@ trait DsTestTrait {
     ];
     $this->drupalGet($url, $options);
 
-    $this->submitForm($edit, t('Save'));
+    $this->submitForm($edit, 'Save');
 
     $assert += [
       'regions' => [
@@ -42,7 +42,7 @@ trait DsTestTrait {
     ];
     $this->drupalGet('admin/structure/ds/classes');
 
-    $this->submitForm($edit, t('Save configuration'));
+    $this->submitForm($edit, 'Save configuration');
     $this->assertSession()->pageTextContains('The configuration options have been saved.');
     $this->assertSession()->responseContains('class_name_1');
     $this->assertSession()->responseContains('class_name_2');
@@ -59,7 +59,7 @@ trait DsTestTrait {
     ];
     $this->drupalGet($url);
 
-    $this->submitForm($edit, t('Save'));
+    $this->submitForm($edit, 'Save');
   }
 
   /**
@@ -84,8 +84,8 @@ trait DsTestTrait {
       unset($edit['fields[' . $field_name . '][settings_edit_form][third_party_settings][ds][ft][id]']);
     }
 
-    $this->submitForm($edit, t('Update'));
-    $this->submitForm([], t('Save'));
+    $this->submitForm($edit, 'Update');
+    $this->submitForm([], 'Save');
   }
 
   /**
@@ -102,8 +102,8 @@ trait DsTestTrait {
       unset($edit['fields[' . $field_name . '][settings_edit_form][third_party_settings][ds][ds_limit]']);
     }
 
-    $this->submitForm($edit, t('Update'));
-    $this->submitForm([], t('Save'));
+    $this->submitForm($edit, 'Update');
+    $this->submitForm([], 'Save');
   }
 
   /**
@@ -123,7 +123,7 @@ trait DsTestTrait {
     ];
     $this->drupalGet($url);
 
-    $this->submitForm($edit, t('Save'));
+    $this->submitForm($edit, 'Save');
     $text = t('The field %name has been saved', ['%name' => $edit['name']]);
     $this->assertSession()->responseContains((string) $text);
   }
@@ -145,7 +145,7 @@ trait DsTestTrait {
     ];
     $this->drupalGet($url);
 
-    $this->submitForm($edit, t('Save'));
+    $this->submitForm($edit, 'Save');
     $text = t('The field %name has been saved', ['%name' => $edit['name']]);
     $this->assertSession()->responseContains((string) $text);
   }

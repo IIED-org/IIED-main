@@ -85,8 +85,8 @@ class SearchApiEntityField extends EntityField {
   public function getParentPath() {
     if (!isset($this->parentPath)) {
       $combined_property_path = $this->getCombinedPropertyPath();
-      list(, $property_path) = Utility::splitCombinedId($combined_property_path);
-      list($this->parentPath) = Utility::splitPropertyPath($property_path);
+      [, $property_path] = Utility::splitCombinedId($combined_property_path);
+      [$this->parentPath] = Utility::splitPropertyPath($property_path);
     }
 
     return $this->parentPath;

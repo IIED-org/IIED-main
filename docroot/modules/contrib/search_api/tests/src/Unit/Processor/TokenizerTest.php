@@ -10,6 +10,8 @@ use Drupal\search_api\Utility\Utility;
 use Drupal\Tests\UnitTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
+// cspell:ignore wordxword wordxwordrword wordxwordxword
+
 /**
  * Tests the "Tokenizer" processor.
  *
@@ -71,6 +73,7 @@ class TokenizerTest extends UnitTestCase {
       ['words!word', [Utility::createTextToken('words'), $word_token]],
       ['words$word', [Utility::createTextToken('words'), $word_token]],
       // Test whether overriding the default works and is case-insensitive.
+      // cspell:disable
       [
         'wordXwordxword',
         [$word_token, Utility::createTextToken('wordxword')],
@@ -96,7 +99,9 @@ class TokenizerTest extends UnitTestCase {
         [$word_token, $word_token, $word_token],
         ['spaces' => 'R-Z'],
       ],
+      // cspell:enable
       // Test whether minimum word size works.
+      // cspell:disable
       [
         'wordSwo',
         [$word_token],
@@ -126,6 +131,7 @@ class TokenizerTest extends UnitTestCase {
         'foo-bar',
         [Utility::createTextToken('foobar')],
       ],
+      // cspell:enable
       // Test changing ignored characters.
       [
         'word-word',
@@ -134,6 +140,7 @@ class TokenizerTest extends UnitTestCase {
       ],
       [
         'foobar',
+        // cspell:disable-next-line
         [Utility::createTextToken('foobr')],
         ['ignored' => 'a'],
       ],
@@ -168,6 +175,7 @@ class TokenizerTest extends UnitTestCase {
     // Create a string of CJK characters from various character ranges in
     // the Unicode tables. $starts contains the starts of the character ranges,
     // $ends the ends.
+    // cspell:disable
     $starts = [
       'CJK unified' => 0x4e00,
       'CJK Ext A' => 0x3400,
@@ -212,6 +220,7 @@ class TokenizerTest extends UnitTestCase {
       'Lisu' => 0xa4fd,
       'Yi' => 0xa48f,
     ];
+    // cspell:enable
 
     // Generate characters consisting of starts, midpoints, and ends.
     $chars = [];
@@ -317,9 +326,9 @@ class TokenizerTest extends UnitTestCase {
     $this->invokeMethod('prepare');
 
     $input = file_get_contents($this->root . '/core/modules/search/tests/UnicodeTest.txt');
-    $basestrings = explode(chr(10), $input);
+    $base_strings = explode(chr(10), $input);
     $strings = [];
-    foreach ($basestrings as $key => $string) {
+    foreach ($base_strings as $key => $string) {
       if ($key % 2) {
         // Even line, should be removed by simplifyText().
         $simplified = $this->invokeMethod('simplifyText', [$string]);
@@ -331,14 +340,14 @@ class TokenizerTest extends UnitTestCase {
         // into limits of truncation.
         $start = 0;
         while ($start < mb_strlen($string)) {
-          $newstr = mb_substr($string, $start, 30);
+          $new_string = mb_substr($string, $start, 30);
           // Special case: leading zeros are removed from numeric strings,
           // and there's one string in this file that is numbers starting with
           // zero, so prepend a 1 on that string.
-          if (preg_match('/^[0-9]+$/', $newstr)) {
-            $newstr = '1' . $newstr;
+          if (preg_match('/^[0-9]+$/', $new_string)) {
+            $new_string = '1' . $new_string;
           }
-          $strings[] = $newstr;
+          $strings[] = $new_string;
           $start += 30;
         }
       }
@@ -389,6 +398,7 @@ class TokenizerTest extends UnitTestCase {
    *   - The message to display for the assertion.
    */
   public function searchSimplifyPunctuationProvider() {
+    // cspell:disable
     $cases = [
       [
         '20.03/94-28,876',
@@ -416,6 +426,7 @@ class TokenizerTest extends UnitTestCase {
         'Umlauts and accented characters are not treated as word boundaries',
       ],
     ];
+    // cspell:enable
     return $cases;
   }
 

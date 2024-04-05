@@ -155,7 +155,7 @@ class IntegrationTest extends SearchApiBrowserTestBase {
       'id' => $this->indexId,
       'status' => 1,
       'description' => 'test Index:: 123~',
-      'server' => 456,
+      'server' => '456',
       'datasources[entity:node]' => TRUE,
     ];
     $this->submitForm($edit, 'Save');
@@ -277,6 +277,7 @@ class IntegrationTest extends SearchApiBrowserTestBase {
   protected function createIndex() {
     $settings_path = 'admin/config/search/search-api/add-index';
     $this->indexId = 'test_index';
+    // cspell:disable-next-line
     $index_description = 'An >index< used for &! tęsting.';
     $index_name = 'Search >API< test &!^* index';
     $index_datasource = 'entity:node';
@@ -562,7 +563,7 @@ class IntegrationTest extends SearchApiBrowserTestBase {
     $this->drupalGet($settings_path);
     $edit = [
       'status' => FALSE,
-      'datasource_configs[entity:node][bundles][default]' => 0,
+      'datasource_configs[entity:node][bundles][default]' => '0',
       'datasource_configs[entity:node][bundles][selected][article]' => FALSE,
       'datasource_configs[entity:node][bundles][selected][page]' => FALSE,
     ];
@@ -577,7 +578,7 @@ class IntegrationTest extends SearchApiBrowserTestBase {
 
     $edit = [
       'status' => TRUE,
-      'datasource_configs[entity:node][bundles][default]' => 0,
+      'datasource_configs[entity:node][bundles][default]' => '0',
       'datasource_configs[entity:node][bundles][selected][article]' => TRUE,
       'datasource_configs[entity:node][bundles][selected][page]' => TRUE,
     ];
@@ -592,7 +593,7 @@ class IntegrationTest extends SearchApiBrowserTestBase {
     // items from the tracking table.
     $edit = [
       'status' => TRUE,
-      'datasource_configs[entity:node][bundles][default]' => 0,
+      'datasource_configs[entity:node][bundles][default]' => '0',
       'datasource_configs[entity:node][bundles][selected][article]' => FALSE,
       'datasource_configs[entity:node][bundles][selected][page]' => FALSE,
     ];
@@ -608,7 +609,7 @@ class IntegrationTest extends SearchApiBrowserTestBase {
     // re-add the two articles to the tracking table.
     $edit = [
       'status' => TRUE,
-      'datasource_configs[entity:node][bundles][default]' => 0,
+      'datasource_configs[entity:node][bundles][default]' => '0',
       'datasource_configs[entity:node][bundles][selected][article]' => TRUE,
       'datasource_configs[entity:node][bundles][selected][page]' => FALSE,
     ];
@@ -624,7 +625,7 @@ class IntegrationTest extends SearchApiBrowserTestBase {
     // result in only the page being present in the tracking table.
     $edit = [
       'status' => TRUE,
-      'datasource_configs[entity:node][bundles][default]' => 0,
+      'datasource_configs[entity:node][bundles][default]' => '0',
       'datasource_configs[entity:node][bundles][selected][article]' => FALSE,
       'datasource_configs[entity:node][bundles][selected][page]' => TRUE,
     ];
@@ -640,7 +641,7 @@ class IntegrationTest extends SearchApiBrowserTestBase {
     // change the tracking table, which should still only contain the page.
     $edit = [
       'status' => TRUE,
-      'datasource_configs[entity:node][bundles][default]' => 1,
+      'datasource_configs[entity:node][bundles][default]' => '1',
       'datasource_configs[entity:node][bundles][selected][article]' => TRUE,
       'datasource_configs[entity:node][bundles][selected][page]' => FALSE,
     ];
@@ -656,7 +657,7 @@ class IntegrationTest extends SearchApiBrowserTestBase {
     // should result in only the articles being tracked.
     $edit = [
       'status' => TRUE,
-      'datasource_configs[entity:node][bundles][default]' => 1,
+      'datasource_configs[entity:node][bundles][default]' => '1',
       'datasource_configs[entity:node][bundles][selected][article]' => FALSE,
       'datasource_configs[entity:node][bundles][selected][page]' => TRUE,
     ];
@@ -793,7 +794,7 @@ class IntegrationTest extends SearchApiBrowserTestBase {
     $this->submitForm([], 'Save changes');
 
     $edit = [
-      'datasource_configs[entity:node][bundles][default]' => 1,
+      'datasource_configs[entity:node][bundles][default]' => '1',
     ];
     $this->drupalGet($this->getIndexPath('edit'));
     $this->assertHtmlEscaped($content_type_name);
@@ -958,7 +959,7 @@ class IntegrationTest extends SearchApiBrowserTestBase {
   protected function addField($datasource_id, $property_path, $label = NULL) {
     $path = $this->getIndexPath('fields/add/nojs');
     $url_options = ['query' => ['datasource' => $datasource_id]];
-    list($parent_path) = Utility::splitPropertyPath($property_path);
+    [$parent_path] = Utility::splitPropertyPath($property_path);
     if ($parent_path) {
       $url_options['query']['property_path'] = $parent_path;
     }
@@ -1275,9 +1276,9 @@ class IntegrationTest extends SearchApiBrowserTestBase {
   }
 
   /**
-   * Sets an index to "read only" and checks if it reacts correctly.
+   * Sets an index to "read-only" and checks if it reacts correctly.
    *
-   * The expected behavior is that, when an index is set to "read only", it
+   * The expected behavior is that, when an index is set to "read-only", it
    * keeps tracking but won't index any items.
    */
   protected function setReadOnly() {
@@ -1292,7 +1293,7 @@ class IntegrationTest extends SearchApiBrowserTestBase {
     $edit = [
       'status' => TRUE,
       'read_only' => TRUE,
-      'datasource_configs[entity:node][bundles][default]' => 0,
+      'datasource_configs[entity:node][bundles][default]' => '0',
       'datasource_configs[entity:node][bundles][selected][article]' => TRUE,
       'datasource_configs[entity:node][bundles][selected][page]' => TRUE,
     ];
@@ -1310,14 +1311,14 @@ class IntegrationTest extends SearchApiBrowserTestBase {
 
     // Also try indexing via the API to make sure it is really not possible.
     $indexed = $this->indexItems();
-    $this->assertEquals(0, $indexed, 'No items were indexed after setting the index to "read only".');
+    $this->assertEquals(0, $indexed, 'No items were indexed after setting the index to "read-only".');
     $remaining_after = $this->countRemainingItems();
-    $this->assertEquals($remaining_before, $remaining_after, 'No items were indexed after setting the index to "read only".');
+    $this->assertEquals($remaining_before, $remaining_after, 'No items were indexed after setting the index to "read-only".');
 
-    // Disable "read only" and verify indexing now works again.
+    // Disable "read-only" and verify indexing now works again.
     $edit = [
       'read_only' => FALSE,
-      'datasource_configs[entity:node][bundles][default]' => 1,
+      'datasource_configs[entity:node][bundles][default]' => '1',
       'datasource_configs[entity:node][bundles][selected][article]' => FALSE,
       'datasource_configs[entity:node][bundles][selected][page]' => FALSE,
     ];
@@ -1331,7 +1332,7 @@ class IntegrationTest extends SearchApiBrowserTestBase {
     $this->checkForMetaRefresh();
 
     $remaining_after = $index->getTrackerInstance()->getRemainingItemsCount();
-    $this->assertEquals(0, $remaining_after, 'Items were indexed after removing the "read only" flag.');
+    $this->assertEquals(0, $remaining_after, 'Items were indexed after removing the "read-only" flag.');
   }
 
   /**
@@ -1485,7 +1486,7 @@ class IntegrationTest extends SearchApiBrowserTestBase {
       ->count()
       ->execute() - 1;
     $this->assertSession()->pageTextContains("Successfully indexed $count items.");
-    $this->assertSession()->pageTextContains('1 item could not be indexed.');
+    $this->assertSession()->pageTextContains('Number of indexed items is less than expected (by 1).');
     $this->assertSession()->pageTextNotContains("Couldn't index items.");
     $this->assertSession()->pageTextNotContains('An error occurred');
 
@@ -1511,7 +1512,7 @@ class IntegrationTest extends SearchApiBrowserTestBase {
     $this->assertSession()->statusCodeEquals(200);
     $this->checkForMetaRefresh();
     $this->assertSession()->pageTextContains("Successfully indexed 1 item.");
-    $this->assertSession()->pageTextNotContains('could not be indexed.');
+    $this->assertSession()->pageTextNotContains('Number of indexed items is less than expected');
     $this->assertSession()->pageTextNotContains("Couldn't index items.");
     $this->assertSession()->pageTextNotContains('An error occurred');
   }

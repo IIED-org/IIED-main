@@ -1,3 +1,48 @@
+Search API 1.32 (2024-03-31):
+-----------------------------
+- #3427068 by jonathan1055, drunken monkey: Fixed cspell errors.
+- #3432090 by kulmjens, drunken monkey: Added read-only hint and other
+  improvements to the "View" tabs.
+- #3432042 by BramDriesen, drunken monkey: Changed PHPUnit tests in GitLab CI to
+  run concurrently.
+- #3426614 by misterdidi, drunken monkey: Fixed missing view name in message
+  when caching is turned off.
+- #3425506 by drunken monkey, msnassar: Fixed unnecessary storing of aggregated
+  fields config values.
+- #3431163 by drunken monkey: Fixed pipelines against Drupal 10.1 and 10.3.
+- #3427391 by joachim, matias, drunken monkey: Fixed position of "Cancel" link
+  in field edit modal.
+- #3425235 by drunken monkey, sarwan_verma: Fixed incompatibility with Drupal
+  11.
+- #3427069 by drunken monkey: Fixed GitLab CI pipelines by disabling CSpell.
+- #3425195 by drunken monkey: Fixed GitLab CI pipelines (phpstan and stylelint).
+- #3423063 by ericgsmith, drunken monkey: Fixed performance issue in search
+  views with disabled caching.
+- #3396064 by claudiu.cristea, drunken monkey, acbramley: Fixed the GitLab CI
+  integration.
+- #3291409 by drunken monkey, Tomefa: Fixed excerpts generated from aggregated
+  fields.
+- #3294051 by drunken monkey, SAVEL, huzooka, dewalt: Fixed invalidation of
+  caches when indexing fails.
+- #3414348 by drunken monkey, ressa: Improved the description of the "Custom
+  Value" property.
+- #3412456 by sidharth_soman, drunken monkey, sandipta: Fixed usage of
+  deprecated user_roles() and user_role_names() functions.
+- #3377099 by drunken monkey, keshavv: Fixed calls to deprecated
+  watchdog_exception() function.
+- #3394192 by drunken monkey: Increased Drupal core version requirement to 10.1.
+- #3406283 by drunken monkey: Fixed "undefined variable" warning in CustomValue
+  processor.
+- #3410655 by drunken monkey: Fixed violations of the new
+  declare(strict_types=1) coding standard.
+- #3367890 by drunken monkey, id.aleks: Fixed problems with parallel indexing.
+- #3394367 by claudiu.cristea, huzooka, drunken monkey: Fixed false positives
+  when detecting entity reference fields for Views.
+- #3405649 by drunken monkey: Fixed test failures against Drupal 10.2.
+- #3401460 by jwineichen, amourow: Added a logo.
+- #3151796 by drunken monkey: Fixed problems when executing Search API tasks
+  during installation or updates.
+
 Search API 1.31 (2023-11-25):
 -----------------------------
 - #3388678 by drunken monkey, benjifisher: Fixed performance regression in HTML

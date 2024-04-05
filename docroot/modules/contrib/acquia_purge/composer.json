@@ -10,7 +10,8 @@
         }
     ],
     "require": {
-        "drupal/purge": "^3.4"
+        "drupal/purge": "^3.4",
+        "php": "^7.4 || ^8"
     },
     "extra": {
         "branch-alias": {

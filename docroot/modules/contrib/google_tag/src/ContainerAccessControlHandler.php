@@ -118,17 +118,17 @@ class ContainerAccessControlHandler extends EntityAccessControlHandler implement
       // Because cacheable metadata might be missing, forbid cache write.
       $access = AccessResult::forbidden()->setCacheMaxAge(0);
     }
-/*
-    elseif ($missing_value) {
-      // The context exists but has no value. For example, the node type
-      // condition will have a missing context value on any non-node route like
-      // the frontpage.
-      // @todo Checking this state here prevents the evaluation of other
-      // conditions. If this condition does not apply, then that should NOT
-      // preclude further evaluation NOR result in automatic access.
-      $access = AccessResult::allowed();
-    }
-*/
+    /*
+     * elseif ($missing_value) {
+     *   // The context exists but has no value. For example, the node type
+     *   // condition will have a missing context value on any non-node route
+     *   // like the frontpage.
+     *   // @todo Checking this state here prevents the evaluation of other
+     *   // conditions. If this condition does not apply, then that should NOT
+     *   // preclude further evaluation NOR result in automatic access.
+     *   $access = AccessResult::allowed();
+     * }
+     */
     elseif ($this->resolveConditions($conditions, 'and') !== FALSE) {
       $access = AccessResult::allowed();
     }
@@ -220,7 +220,8 @@ class ContainerAccessControlHandler extends EntityAccessControlHandler implement
         $pass = TRUE;
       }
 
-      $this->entity->displayMessage('@condition check @satisfied', ['@condition' => str_replace('gtag_', '', $condition_id), '@satisfied' => $pass]);
+      $this->entity->displayMessage('@condition check @satisfied',
+        ['@condition' => str_replace('gtag_', '', $condition_id), '@satisfied' => $pass]);
 
       if (!$pass && $condition_logic == 'and') {
         // This condition failed and all conditions are needed; deny access.

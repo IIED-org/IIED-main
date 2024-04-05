@@ -11,6 +11,8 @@ use Drupal\Tests\search_api\Kernel\PostRequestIndexingTrait;
 use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\views\Tests\AssertViewsCacheTagsTrait;
 
+// cspell:ignore angua littlebottom überwald
+
 /**
  * Tests that cached Search API views get invalidated at the right occasions.
  *

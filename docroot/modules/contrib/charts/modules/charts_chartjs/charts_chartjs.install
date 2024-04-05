@@ -86,7 +86,7 @@ function charts_chartjs_find_library() {
   $searchdir[] = $site_name . '/libraries';
 
   foreach ($searchdir as $dir) {
-    if (file_exists($dir . '/chartjs/dist/chart.js') || file_exists($dir . '/chartjs/dist/chart.umd.js')) {
+    if (file_exists($dir . '/chart.js/dist/chart.js') || file_exists($dir . '/chart.js/dist/chart.umd.js')) {
       return $dir . '/chartjs';
     }
   }

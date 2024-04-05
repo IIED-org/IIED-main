@@ -4,7 +4,7 @@ namespace Drupal\Tests\term_merge\Functional;
 
 use Drupal\node\Entity\Node;
 use Drupal\term_merge\TermMerger;
-use Drupal\Tests\field\Traits\EntityReferenceTestTrait;
+use Drupal\Tests\field\Traits\EntityReferenceFieldCreationTrait;
 use Drupal\Tests\node\Traits\ContentTypeCreationTrait;
 use Drupal\Tests\node\Traits\NodeCreationTrait;
 
@@ -17,7 +17,7 @@ class TermMergerNodeCrudTest extends MergeTermsTestBase {
 
   use NodeCreationTrait;
   use ContentTypeCreationTrait;
-  use EntityReferenceTestTrait;
+  use EntityReferenceFieldCreationTrait;
 
   /**
    * {@inheritdoc}

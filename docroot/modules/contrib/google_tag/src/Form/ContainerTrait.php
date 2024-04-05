@@ -3,6 +3,7 @@
 namespace Drupal\google_tag\Form;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\user\Entity\Role;
 
 /**
  * Defines shared routines for the container and settings forms.
@@ -34,6 +35,16 @@ trait ContainerTrait {
       '#type' => 'details',
       '#title' => $this->t('Advanced'),
       '#group' => 'settings',
+    ];
+
+    $fieldset['hostname'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Hostname'),
+      '#description' => $this->t('The tagging server hostname. Default value is "www.googletagmanager.com". Only change this if the site uses a  <a href="https://developers.google.com/tag-manager/serverside">different tagging server</a>.'),
+      '#default_value' => $container->get("{$this->prefix}hostname"),
+      '#attributes' => ['placeholder' => ['www.googletagmanager.com']],
+      '#maxlength' => 253,
+      '#required' => TRUE,
     ];
 
     $fieldset['data_layer'] = [
@@ -155,7 +166,7 @@ trait ContainerTrait {
     $plural = 'roles';
     $options = array_map(function ($role) {
       return $role->label();
-    }, user_roles());
+    }, Role::loadMultiple());
     $config = compact(['fieldset_title', 'singular', 'plural', 'options']);
     return $this->genericFieldset($config, $form_state);
   }
@@ -261,6 +272,20 @@ trait ContainerTrait {
         // @todo Is there a way to validate the container ID?
         // It may be valid but not the correct one for the website.
         $form_state->setError($form['general']['container_id'], $this->t('A valid container ID is case sensitive and formatted like GTM-xxxxxx.'));
+      }
+    }
+
+    // Documentation indicates data_layer does not apply with a custom hostname.
+    // See https://developers.google.com/tag-platform/learn/sst-fundamentals/2-what-is-sst
+    $hostname = $form_state->getValue('hostname');
+    if (!is_null($hostname)) {
+      $hostname = trim($hostname);
+      $form_state->setValue('hostname', $hostname);
+
+      // This filter allows a string without period separators that does not
+      // exceed 63 characters (a valid domain name 'label' length).
+      if (!filter_var($hostname, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) {
+        $form_state->setError($form['advanced']['hostname'], $this->t('Hostname is not a valid domain name.'));
       }
     }
 

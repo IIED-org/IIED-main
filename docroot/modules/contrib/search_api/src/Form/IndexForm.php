@@ -311,7 +311,7 @@ class IndexForm extends EntityForm {
     // it to the correct place in the form values.
     $form['options']['read_only'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Read only'),
+      '#title' => $this->t('Read-only'),
       '#description' => $this->t('Do not write to this index or track the status of items in this index.'),
       '#default_value' => $index->isReadOnly(),
       '#parents' => ['read_only'],
@@ -622,7 +622,7 @@ class IndexForm extends EntityForm {
       try {
         /** @var \Drupal\search_api\IndexInterface $index */
         $index = $this->getEntity();
-        $index->save();
+        $return = $index->save();
         $this->messenger->addStatus($this->t('The index was successfully saved.'));
         $button = $form_state->getTriggeringElement();
         if (!empty($button['#redirect_to_url'])) {
@@ -631,6 +631,7 @@ class IndexForm extends EntityForm {
         else {
           $form_state->setRedirect('entity.search_api_index.canonical', ['search_api_index' => $index->id()]);
         }
+        return $return;
       }
       catch (EntityStorageException $e) {
         $form_state->setRebuild();
@@ -642,6 +643,7 @@ class IndexForm extends EntityForm {
         $this->messenger->addError($this->t('The index could not be saved.'));
       }
     }
+    return 0;
   }
 
 }

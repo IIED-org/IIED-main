@@ -238,7 +238,10 @@ function media_pdf_thumbnail_entity_delete(EntityInterface $entity) {
   if ($entity->getEntityTypeId() == 'pdf_image_entity') {
     $fid = $entity->image_file_id->value;
     if ($fid) {
-      Drupal::entityTypeManager()->getStorage('file')->load($fid)->delete();
+      $file = Drupal::entityTypeManager()->getStorage('file')->load($fid);
+      if ($file) {
+        $file->delete();
+      }
       $fileUri = $entity->image_file_uri->value;
       Drupal::service('file_system')->delete($fileUri);
     }

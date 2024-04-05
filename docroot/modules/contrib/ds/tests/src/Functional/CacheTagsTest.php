@@ -20,7 +20,7 @@ class CacheTagsTest extends TestBase {
     // Create field CSS classes.
     $edit = ['fields' => "test_field_class\ntest_field_class_2|Field class 2"];
     $this->drupalGet('admin/structure/ds/classes');
-    $this->submitForm($edit, t('Save configuration'));
+    $this->submitForm($edit, 'Save configuration');
 
     // Create a token field.
     $token_field = [

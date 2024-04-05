@@ -126,7 +126,9 @@ class TfaHotpSetup extends TfaHotpValidation implements TfaSetupInterface {
     // This ensures that things work even if we reset the application.
     $code = preg_replace('/\s+/', '', $code);
     $counter = $this->auth->otp->checkHotpResync(Encoding::base32DecodeUpper($this->seed), 1, $code, $this->counterWindow);
-    $this->setUserData('tfa', ['tfa_hotp_counter' => ++$counter], $this->uid, $this->userData);
+    if ($counter) {
+      $this->setUserData('tfa', ['tfa_hotp_counter' => ++$counter], $this->uid, $this->userData);
+    }
     return ((bool) $counter);
   }
 

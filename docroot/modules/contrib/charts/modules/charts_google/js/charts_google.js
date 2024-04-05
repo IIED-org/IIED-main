@@ -2,7 +2,7 @@
  * @file
  * JavaScript integration between Google and Drupal.
  */
-(function (Drupal, once) {
+(function (Drupal, drupalSettings, once) {
 
   'use strict';
 
@@ -15,7 +15,11 @@
    */
   Drupal.behaviors.chartsGooglecharts = {
     attach: function (context) {
-      const globalOptions = drupalSettings.charts.google.global_options;
+      // Define a fallback value for globalOptions;
+      const globalOptions = drupalSettings.charts === undefined ? {
+        useMaterialDesign: false,
+        chartType: 'bar'
+      } : drupalSettings.charts.google.global_options;
       let useMaterialDesign = globalOptions.useMaterialDesign;
       let chartType = globalOptions.chartType;
       const materialDesignPackages = ['bar', 'line', 'spline', 'scatter', 'column',];
@@ -183,4 +187,4 @@
       timers[uniqueId] = setTimeout(callback, ms);
     };
   })();
-}(Drupal, once));
+}(Drupal, drupalSettings, once));

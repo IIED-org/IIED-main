@@ -20,6 +20,8 @@ use GuzzleHttp\Client;
 use Psr\Log\LoggerInterface;
 use Solarium\Core\Client\Request;
 use Solarium\Core\Event\PreExecuteRequest;
+use Solarium\Plugin\NoWaitForResponseRequest;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -105,11 +107,26 @@ class SearchSubscriberTest extends UnitTestCase {
    */
   public function testMissingCookie(): void {
     $request = $this->createMock(Request::class);
+    $event_name = PreExecuteRequest::class;
     $request
       ->method('getHandler')
       ->willReturn('handler');
+
+    if (class_exists(NoWaitForResponseRequest::class)) {
+      $search_subscriber = $this->createMock(NoWaitForResponseRequest::class);
+    }
+    else {
+      $search_subscriber = $this->searchSubscriber;
+    }
+    $event_dispatcher = $this->createMock(EventDispatcherInterface::class);
+    $event_dispatcher
+      ->expects($this->any())
+      ->method('getListeners')
+      ->willReturn([
+        [$search_subscriber, 'preExecuteRequest'],
+      ]);
     $event = new PreExecuteRequest($request, $this->createMock(Endpoint::class));
-    $this->searchSubscriber->preExecuteRequest($event);
+    $this->searchSubscriber->preExecuteRequest($event, $event_name, $event_dispatcher);
     $resp = $event->getResponse();
     self::assertNotNull($resp);
     self::assertEquals(401, $resp->getStatusCode());

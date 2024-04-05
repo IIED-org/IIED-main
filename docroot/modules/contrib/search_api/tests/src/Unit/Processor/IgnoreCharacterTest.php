@@ -50,6 +50,7 @@ class IgnoreCharacterTest extends UnitTestCase {
    * Data provider for testValueConfiguration().
    */
   public function ignoreCharacterSetsDataProvider() {
+    // cspell:disable
     return [
       ['word_s', 'words', ['Pc' => 'Pc']],
       ['word⁔s', 'words', ['Pc' => 'Pc']],
@@ -105,6 +106,7 @@ class IgnoreCharacterTest extends UnitTestCase {
       ['woྰrds', 'words', ['Mn' => 'Mn', 'Pd' => 'Pd', 'Pe' => 'Pe']],
       ['worྵdྶs', 'words', ['Mn' => 'Mn', 'Pd' => 'Pd', 'Pe' => 'Pe']],
     ];
+    // cspell:enable
   }
 
   /**

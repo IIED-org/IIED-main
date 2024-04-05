@@ -18,7 +18,7 @@ class HiddenRegionTest extends TestBase {
       'fs3[hidden_region]' => TRUE,
     ];
     $this->drupalGet('admin/structure/ds/settings');
-    $this->submitForm($edit, t('Save configuration'));
+    $this->submitForm($edit, 'Save configuration');
 
     $this->dsSelectLayout();
 

@@ -19,6 +19,7 @@ class ContainerListBuilder extends ConfigEntityListBuilder {
     $header['label'] = t('Label');
     $header['id'] = t('Machine name');
     $header['container_id'] = t('Container ID');
+    $header['hostname'] = t('Hostname');
     $header['weight'] = t('Weight');
     return $header + parent::buildHeader();
   }
@@ -31,6 +32,7 @@ class ContainerListBuilder extends ConfigEntityListBuilder {
     $row['label'] = $entity->label();
     $row['id'] = $entity->id();
     $row['container_id'] = $entity->get('container_id');
+    $row['hostname'] = $entity->get('hostname');
     $row['weight'] = $entity->get('weight');
     return $row + parent::buildRow($entity);
   }

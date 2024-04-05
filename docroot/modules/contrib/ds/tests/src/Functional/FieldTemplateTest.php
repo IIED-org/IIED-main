@@ -8,11 +8,11 @@ use Drupal\Core\Cache\Cache;
  * Tests for display of nodes and fields.
  *
  * For some reason, ds_test_form_entity_view_display_edit_form_alter fails
- * on the pipeline, no idea why. So the group is ds_single which I use locally
+ * on the pipeline, no idea why. So the group is ds_disabled which I use locally
  * to run the tests and methods are prefixed with _ in version control so the
  * bot doesn't run any tests.
  *
- * @group ds_single
+ * @group ds_disabled
  */
 class FieldTemplateTest extends TestBase {
 
@@ -75,7 +75,7 @@ class FieldTemplateTest extends TestBase {
       'fs1[ft_default]' => 'reset',
     ];
     $this->drupalGet('admin/structure/ds/settings');
-    $this->submitForm($edit, t('Save configuration'));
+    $this->submitForm($edit, 'Save configuration');
 
     // As long as we don't change anything in the UI, the default template will
     // be used.
@@ -115,7 +115,7 @@ class FieldTemplateTest extends TestBase {
       'fs1[ft_show_colon]' => 'reset',
     ];
     $this->drupalGet('admin/structure/ds/settings');
-    $this->submitForm($edit, t('Save configuration'));
+    $this->submitForm($edit, 'Save configuration');
     // Clear node cache to get the colon.
     $tags = $node->getCacheTags();
     Cache::invalidateTags($tags);

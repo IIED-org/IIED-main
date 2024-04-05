@@ -1196,7 +1196,7 @@ class ContentEntity extends DatasourcePluginBase implements PluginFormInterface 
    *   mapping dependency types to arrays of dependency names.
    */
   protected function getPropertyPathDependencies($property_path, array $properties) {
-    list($key, $nested_path) = Utility::splitPropertyPath($property_path, FALSE);
+    [$key, $nested_path] = Utility::splitPropertyPath($property_path, FALSE);
     if (!isset($properties[$key])) {
       return [];
     }

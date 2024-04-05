@@ -11,6 +11,8 @@ use Drush\Commands\DrushCommands;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
+// cspell:ignore disa
+
 /**
  * Defines Drush commands for the Search API.
  */

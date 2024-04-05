@@ -11,6 +11,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Gets the Acquia Search Server settings from Cloud environment variables.
+ *
+ * @phpcs:disable SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable
  */
 class AcquiaHosting implements EventSubscriberInterface {
 
@@ -83,6 +85,12 @@ class AcquiaHosting implements EventSubscriberInterface {
     $options = $this->database->getConnectionOptions();
     $connection_info = Database::getAllConnectionInfo();
     $ahDbRole = $this->getAhDatabaseRole($options, $connection_info);
+
+    // ACSF Sites should use the pre-configured env and db roles instead.
+    if (isset($GLOBALS['gardens_site_settings'])) {
+      $ahEnv = $GLOBALS['gardens_site_settings']['env'];
+      $ahDbRole = $GLOBALS['gardens_site_settings']['conf']['acsf_db_name'];
+    }
 
     $acquiaIdentifier = $this->subscription->getSettings()->getIdentifier();
 

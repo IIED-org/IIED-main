@@ -403,26 +403,20 @@ class HighlightTest extends UnitTestCase {
    * @see \Drupal\Tests\search_api\Unit\Processor\HighlightTest::testPostprocessSearchResultsHighlightPartial()
    */
   public function postprocessSearchResultsHighlightPartialDataProvider() {
-    $data_sets = [
+    // cspell:disable
+    return [
       'normal' => [
         'Some longwordtoshowpartialmatching value',
         'partial',
         'Some longwordtoshow<strong>partial</strong>matching value',
       ],
-    ];
-
-    // Test multi-byte support only if this PHP installation actually contains
-    // the necessary function. Otherwise, we can't really be blamed for not
-    // supporting them.
-    if (function_exists('mb_stripos')) {
-      $data_sets['multi-byte'] = [
+      'multi-byte' => [
         'Alle Angaben ohne Gewähr.',
         'Ähr',
         'Alle Angaben ohne Gew<strong>ähr</strong>.',
-      ];
-    }
-
-    return $data_sets;
+      ],
+    ];
+    // cspell:enable
   }
 
   /**
@@ -629,7 +623,7 @@ END;
   /**
    * Tests whether highlighting works on a longer text matching near the end.
    */
-  public function testPostprocessSearchResultsExerptMatchNearEnd() {
+  public function testPostprocessSearchResultsExcerptMatchNearEnd() {
     $query = $this->createMock(QueryInterface::class);
     $query->expects($this->once())
       ->method('getProcessingLevel')
@@ -768,6 +762,7 @@ END;
       ->willReturn(QueryInterface::PROCESSING_FULL);
     $query->expects($this->atLeastOnce())
       ->method('getOriginalKeys')
+      // cspell:disable-next-line
       ->will($this->returnValue(['#conjunction' => 'AND', 'congues']));
     /** @var \Drupal\search_api\Query\QueryInterface $query */
 
@@ -788,6 +783,7 @@ END;
     ];
 
     $items = $this->createItems($this->index, 1, $fields);
+    // cspell:disable-next-line
     $items[$this->itemIds[0]]->setExtraData('highlighted_keys', ['congue']);
 
     $results = new ResultSet($query);
@@ -798,6 +794,7 @@ END;
 
     $output = $results->getResultItems();
     $excerpt = $output[$this->itemIds[0]]->getExcerpt();
+    // cspell:disable-next-line
     $correct_output = '… tristique, ligula sit amet condimentum dapibus, lorem nunc <strong>congue</strong> velit, et dictum augue leo sodales augue. Maecenas …';
     $this->assertEquals($correct_output, $excerpt, 'Excerpt was added.');
   }
@@ -1194,6 +1191,7 @@ END;
    *   An array of argument arrays for testRegressionBug3022724().
    */
   public function regressionBug3022724DataProvider() {
+    // cspell:disable
     return [
       'multiple snippets' => [
         'text' => 'field value 1 … field value 2 … field value with first foo match … then long text of no matches, interspersed with some Hungarian: Jó napot kívánok! Hogy vagy? … then a field value with a second foo match – will it get highlighted?',
@@ -1206,6 +1204,7 @@ END;
         'expected' => '… nItWhichCanLeadToProblemsGettingAContextForHighlightingThis.<strong>Foo</strong>.Match …',
       ],
     ];
+    // cspell:enable
   }
 
   /**

@@ -41,6 +41,7 @@ class File extends Constraint
         self::EMPTY_ERROR => 'EMPTY_ERROR',
         self::TOO_LARGE_ERROR => 'TOO_LARGE_ERROR',
         self::INVALID_MIME_TYPE_ERROR => 'INVALID_MIME_TYPE_ERROR',
+        self::INVALID_EXTENSION_ERROR => 'INVALID_EXTENSION_ERROR',
         self::FILENAME_TOO_LONG => 'FILENAME_TOO_LONG',
     ];
 
@@ -76,31 +77,31 @@ class File extends Constraint
      * @param array<string|string[]>|string $extensions
      */
     public function __construct(
-        array $options = null,
-        int|string $maxSize = null,
-        bool $binaryFormat = null,
-        array|string $mimeTypes = null,
-        int $filenameMaxLength = null,
-        string $notFoundMessage = null,
-        string $notReadableMessage = null,
-        string $maxSizeMessage = null,
-        string $mimeTypesMessage = null,
-        string $disallowEmptyMessage = null,
-        string $filenameTooLongMessage = null,
+        ?array $options = null,
+        int|string|null $maxSize = null,
+        ?bool $binaryFormat = null,
+        array|string|null $mimeTypes = null,
+        ?int $filenameMaxLength = null,
+        ?string $notFoundMessage = null,
+        ?string $notReadableMessage = null,
+        ?string $maxSizeMessage = null,
+        ?string $mimeTypesMessage = null,
+        ?string $disallowEmptyMessage = null,
+        ?string $filenameTooLongMessage = null,
 
-        string $uploadIniSizeErrorMessage = null,
-        string $uploadFormSizeErrorMessage = null,
-        string $uploadPartialErrorMessage = null,
-        string $uploadNoFileErrorMessage = null,
-        string $uploadNoTmpDirErrorMessage = null,
-        string $uploadCantWriteErrorMessage = null,
-        string $uploadExtensionErrorMessage = null,
-        string $uploadErrorMessage = null,
-        array $groups = null,
+        ?string $uploadIniSizeErrorMessage = null,
+        ?string $uploadFormSizeErrorMessage = null,
+        ?string $uploadPartialErrorMessage = null,
+        ?string $uploadNoFileErrorMessage = null,
+        ?string $uploadNoTmpDirErrorMessage = null,
+        ?string $uploadCantWriteErrorMessage = null,
+        ?string $uploadExtensionErrorMessage = null,
+        ?string $uploadErrorMessage = null,
+        ?array $groups = null,
         mixed $payload = null,
 
-        array|string $extensions = null,
-        string $extensionsMessage = null,
+        array|string|null $extensions = null,
+        ?string $extensionsMessage = null,
     ) {
         parent::__construct($options, $groups, $payload);
 

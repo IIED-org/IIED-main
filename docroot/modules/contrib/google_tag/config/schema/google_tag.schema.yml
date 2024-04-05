@@ -42,6 +42,10 @@ google_tag.container.*:
       type: string
       label: 'Container ID'
       #translatable: true
+    hostname:
+      type: string
+      label: 'Hostname'
+      #translatable: true
     data_layer:
       type: string
       label: 'Data layer'

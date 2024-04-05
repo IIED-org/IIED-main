@@ -6,6 +6,8 @@ use Drupal\Core\Cache\MemoryBackend;
 
 /**
  * A variant of the memory cache backend that allows to change the request time.
+ *
+ * @todo Remove once we depend on Drupal 10.3.
  */
 class TestMemoryBackend extends MemoryBackend {
 

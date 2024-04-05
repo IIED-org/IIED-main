@@ -506,6 +506,7 @@ class Query implements QueryInterface, RefinableCacheableDependencyInterface {
    */
   public function abort($error_message = NULL) {
     $this->aborted = $error_message ?? TRUE;
+    return $this;
   }
 
   /**

@@ -163,7 +163,8 @@ class RecommendationsCheck extends DiagnosticCheckBase implements DiagnosticChec
       // Test for the shield module and whether it is activated using a user
       // name. This module puts entire sites behind HTTP auth.
       if ($this->moduleHandler->moduleExists('shield')) {
-        if ($this->configFactory->get('shield.settings')->get('credentials.shield.user')) {
+        if ($this->configFactory->get('shield.settings')->get('shield_enable') &&
+          $this->configFactory->get('shield.settings')->get('credentials.shield.user')) {
           $found = TRUE;
         }
       }

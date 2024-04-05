@@ -129,35 +129,30 @@ class EntityStatusTest extends UnitTestCase {
    * Tests if unpublished/inactive entities are removed from the indexed items.
    */
   public function testAlterItems() {
-    $entity_types = [
-      'node' => [
-        'class' => Node::class,
-        'method' => 'isPublished',
-      ],
-      'comment' => [
-        'class' => Comment::class,
-        'method' => 'isPublished',
-      ],
-      'user' => [
-        'class' => User::class,
-        'method' => 'isActive',
-      ],
-      'file' => [
-        'class' => File::class,
-      ],
+    $entity_type_classes = [
+      'node' => Node::class,
+      'comment' => Comment::class,
+      'user' => User::class,
+      'file' => File::class,
     ];
     $fields_helper = \Drupal::getContainer()->get('search_api.fields_helper');
     $items = [];
-    foreach ($entity_types as $entity_type => $info) {
+    foreach ($entity_type_classes as $entity_type => $class) {
       $datasource_id = "entity:$entity_type";
       foreach ([1 => TRUE, 2 => FALSE] as $i => $status) {
         $item_id = Utility::createCombinedId($datasource_id, "$i:en");
         $item = $fields_helper->createItem($this->index, $item_id, $this->datasources[$datasource_id]);
-        $entity = $this->getMockBuilder($info['class'])
+        $entity = $this->getMockBuilder($class)
           ->disableOriginalConstructor()
           ->getMock();
-        if (isset($info['method'])) {
-          $entity->method($info['method'])
+        if ($entity instanceof EntityPublishedInterface) {
+          /** @var \Drupal\Core\Entity\EntityPublishedInterface&\PHPUnit\Framework\MockObject\MockObject $entity */
+          $entity->method('isPublished')
+            ->will($this->returnValue($status));
+        }
+        elseif ($entity instanceof User) {
+          /** @var \Drupal\user\Entity\User&\PHPUnit\Framework\MockObject\MockObject $entity */
+          $entity->method('isActive')
             ->will($this->returnValue($status));
         }
         /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */

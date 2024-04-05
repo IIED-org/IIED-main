@@ -1,0 +1,6 @@
+form_mode_control.settings:
+  type: sequence
+  label: 'Form Mode Control settings'
+  sequence:
+    type: string
+    label: 'Config value'

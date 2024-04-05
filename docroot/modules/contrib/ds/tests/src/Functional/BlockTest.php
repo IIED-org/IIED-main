@@ -74,7 +74,7 @@ class BlockTest extends TestBase {
     $edit['info[0][value]'] = 'Test Block';
     $edit['body[0][value]'] = $this->randomMachineName(16);
     $this->drupalGet('block/add/basic', []);
-    $this->submitForm($edit, t('Save'));
+    $this->submitForm($edit, 'Save');
     $this->assertSession()->pageTextContains('Basic Block Test Block has been created.');
 
     // Place the block.
@@ -86,13 +86,13 @@ class BlockTest extends TestBase {
     $block = BlockContent::load(1);
     $url = 'admin/structure/block/add/block_content:' . $block->uuid() . '/' . $this->config('system.theme')->get('default');
     $this->drupalGet($url);
-    $this->submitForm($instance, t('Save block'));
+    $this->submitForm($instance, 'Save block');
 
     // Change to a DS layout.
     $url = 'admin/structure/block-content/manage/basic/display';
     $edit = ['ds_layout' => 'ds_2col'];
     $this->drupalGet($url, []);
-    $this->submitForm($edit, t('Save'));
+    $this->submitForm($edit, 'Save');
 
     $fields = [
       'fields[block_description][region]' => 'left',

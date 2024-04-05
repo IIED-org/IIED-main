@@ -7,12 +7,15 @@
 
 use Drupal\Core\Url;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Config\FileStorage;
+use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Entity\ContentEntityFormInterface;
 use Drupal\Core\Entity\EntityFormInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Installer\InstallerKernel;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -28,9 +31,9 @@ function language_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
     case 'help.page.language':
       $output = '';
-      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<h2>' . t('About') . '</h2>';
       $output .= '<p>' . t('The Language module allows you to configure the languages used on your site, and provides information for the <a href=":content">Content Translation</a>, <a href=":interface">Interface Translation</a>, and <a href=":configuration">Configuration Translation</a> modules, if they are installed. For more information, see the <a href=":doc_url">online documentation for the Language module</a>.', [':doc_url' => 'https://www.drupal.org/documentation/modules/language', ':content' => (\Drupal::moduleHandler()->moduleExists('content_translation')) ? Url::fromRoute('help.page', ['name' => 'content_translation'])->toString() : '#', ':interface' => (\Drupal::moduleHandler()->moduleExists('locale')) ? Url::fromRoute('help.page', ['name' => 'locale'])->toString() : '#', ':configuration' => (\Drupal::moduleHandler()->moduleExists('config_translation')) ? Url::fromRoute('help.page', ['name' => 'config_translation'])->toString() : '#']) . '</p>';
-      $output .= '<h3>' . t('Uses') . '</h3>';
+      $output .= '<h2>' . t('Uses') . '</h2>';
       $output .= '<dl>';
       $output .= '<dt>' . t('Adding languages') . '</dt>';
       $output .= '<dd>' . t('You can add languages on the <a href=":language_list">Languages</a> page by selecting <em>Add language</em> and choosing a language from the drop-down menu. This language is then displayed in the languages list, where it can be configured further. If the <a href=":interface">Interface translation module</a> is installed, and the <em>translation server</em> is set as a translation source, then the interface translation for this language is automatically downloaded as well.', [':language_list' => Url::fromRoute('entity.configurable_language.collection')->toString(), ':interface' => (\Drupal::moduleHandler()->moduleExists('locale')) ? Url::fromRoute('help.page', ['name' => 'locale'])->toString() : '#']) . '</dd>';
@@ -289,8 +292,26 @@ function language_negotiation_url_prefixes_update() {
 /**
  * Implements hook_modules_installed().
  */
-function language_modules_installed($modules) {
+function language_modules_installed($modules, $is_syncing) {
+  if ($is_syncing) {
+    return;
+  }
+
   if (!in_array('language', $modules)) {
+    if (InstallerKernel::installationAttempted()) {
+      // If the install profile provides its own language.types configuration do
+      // not overwrite it.
+      $profile_directory = \Drupal::service('extension.list.profile')->getPath(\Drupal::installProfile());
+      $profile_storages = [
+        new FileStorage($profile_directory . '/' . InstallStorage::CONFIG_INSTALL_DIRECTORY),
+        new FileStorage($profile_directory . '/' . InstallStorage::CONFIG_OPTIONAL_DIRECTORY),
+      ];
+      foreach ($profile_storages as $storage) {
+        if ($storage->exists('language.types')) {
+          return;
+        }
+      }
+    }
     // Since newly (un)installed modules may change the default settings for
     // non-locked language types (e.g. content language), we need to resave the
     // language type configuration.
@@ -318,8 +339,8 @@ function language_modules_installed($modules) {
 /**
  * Implements hook_modules_uninstalled().
  */
-function language_modules_uninstalled($modules) {
-  language_modules_installed($modules);
+function language_modules_uninstalled($modules, $is_syncing) {
+  language_modules_installed($modules, $is_syncing);
 }
 
 /**

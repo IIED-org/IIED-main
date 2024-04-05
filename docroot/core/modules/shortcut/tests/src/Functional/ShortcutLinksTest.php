@@ -15,6 +15,7 @@ use Drupal\views\Entity\View;
  * Create, view, edit, delete, and change shortcut links.
  *
  * @group shortcut
+ * @group #slow
  */
 class ShortcutLinksTest extends ShortcutTestBase {
 
@@ -465,7 +466,7 @@ class ShortcutLinksTest extends ShortcutTestBase {
    */
   protected function assertShortcutQuickLink(string $label, int $index = 0, string $message = ''): void {
     $links = $this->xpath('//a[normalize-space()=:label]', [':label' => $label]);
-    $message = ($message ? $message : new FormattableMarkup('Shortcut quick link with label %label found.', ['%label' => $label]));
+    $message = ($message ? $message : (string) new FormattableMarkup('Shortcut quick link with label %label found.', ['%label' => $label]));
     $this->assertArrayHasKey($index, $links, $message);
   }
 

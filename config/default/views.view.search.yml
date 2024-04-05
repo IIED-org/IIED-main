@@ -234,7 +234,7 @@ display:
             anonymous: anonymous
             authenticated: authenticated
       cache:
-        type: none
+        type: search_api_none
         options: {  }
       empty:
         area:
@@ -435,7 +435,7 @@ display:
                   collapsible: false
                   is_secondary: false
       cache:
-        type: none
+        type: search_api_none
       empty:
         area:
           id: area
@@ -616,7 +616,7 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       cache:
-        type: none
+        type: search_api_none
       sorts: {  }
       defaults:
         cache: false

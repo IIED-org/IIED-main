@@ -130,9 +130,9 @@ class ColorboxSettingsForm extends ConfigFormBase {
     if (!$dompurify_exists) {
       $form['colorbox_dompurify']['dompurify_hide_warning'] = [
         '#type' => 'checkbox',
-        '#title' => t("Don't show warning on status report"),
+        '#title' => $this->t("Don't show warning on status report"),
         '#default_value' => $config->get('dompurify_hide_warning'),
-        '#description' => t("By default, a warning appears on Drupal's status report if this library is missing. Check this box to suppress the warning."),
+        '#description' => $this->t("By default, a warning appears on Drupal's status report if this library is missing. Check this box to suppress the warning."),
       ];
     }
 

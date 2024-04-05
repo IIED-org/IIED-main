@@ -10,8 +10,3 @@ services:
     arguments: ['@entity_type.manager']
     tags:
       - { name: event_subscriber }
-  ds.ds_block_field_entity_context:
-    class: Drupal\ds\ContextProvider\DsBlockFieldEntityContext
-    arguments: ['@entity_type.manager']
-    tags:
-      - { name: 'context_provider' }

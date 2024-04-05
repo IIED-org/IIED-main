@@ -321,7 +321,6 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
       '#chart_id' => $chart_id,
       '#id' => Html::getUniqueId('chart_' . $chart_id),
       '#stacking' => $chart_settings['fields']['stacking'] ?? '0',
-      '#color_changer' => $chart_settings['fields']['color_changer'] ?? FALSE,
       '#polar' => $chart_settings['display']['polar'],
       '#three_dimensional' => $chart_settings['display']['three_dimensional'],
       '#gauge' => $chart_settings['display']['gauge'],
@@ -340,6 +339,7 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
       '#height' => $chart_settings['display']['dimensions']['height'],
       '#width_units' => $chart_settings['display']['dimensions']['width_units'],
       '#height_units' => $chart_settings['display']['dimensions']['height_units'],
+      '#color_changer' => $chart_settings['display']['color_changer'] ?? FALSE,
       '#attributes' => ['data-drupal-selector-chart' => Html::getId($chart_id)],
       // Pass info about the actual view results to allow further processing.
       '#view' => $this->view,

@@ -35,7 +35,10 @@ function hook_google_tag_insert_alter(&$satisfied, Container $container) {
  * Alter the snippets to be inserted on a page response.
  *
  * This hook allows other modules to alter the snippets to be inserted based on
- * custom settings not defined by this module.
+ * custom settings not defined by this module. This hook runs after snippets are
+ * created, which happens 1) on save of a container, 2) during cache rebuild (if
+ * the 'recreate snippets on cache rebuild' module setting is enabled), and 3)
+ * during a page response (if the snippets are needed and missing).
  *
  * @param array $snippets
  *   Associative array of snippets keyed by type: script, noscript and

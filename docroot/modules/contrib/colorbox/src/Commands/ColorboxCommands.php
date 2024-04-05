@@ -2,7 +2,7 @@
 
 namespace Drupal\colorbox\Commands;
 
-use Drupal\Core\Asset\LibraryDiscovery;
+use Drupal\Core\Asset\LibraryDiscoveryInterface;
 use Drush\Commands\DrushCommands;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
@@ -24,14 +24,14 @@ class ColorboxCommands extends DrushCommands {
   /**
    * Library discovery service.
    *
-   * @var \Drupal\Core\Asset\LibraryDiscovery
+   * @var Drupal\Core\Asset\LibraryDiscoveryInterface
    */
   protected $libraryDiscovery;
 
   /**
    * {@inheritdoc}
    */
-  public function __construct(LibraryDiscovery $library_discovery) {
+  public function __construct(LibraryDiscoveryInterface $library_discovery) {
     $this->libraryDiscovery = $library_discovery;
   }
 

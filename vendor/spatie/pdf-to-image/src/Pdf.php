@@ -19,9 +19,7 @@ class Pdf
 
     public $imagick;
 
-    protected $numberOfPages;
-
-    protected $validOutputFormats = ['jpg', 'jpeg', 'png'];
+    protected $validOutputFormats = ['jpg', 'jpeg', 'png', 'webp'];
 
     protected $layerMethod = Imagick::LAYERMETHOD_FLATTEN;
 
@@ -31,19 +29,19 @@ class Pdf
 
     protected $thumbnailWidth;
 
+    private $numberOfPages = null;
+
     public function __construct(string $pdfFile)
     {
         if (! file_exists($pdfFile)) {
             throw new PdfDoesNotExist("File `{$pdfFile}` does not exist");
         }
 
+        $this->pdfFile = $pdfFile;
+
         $this->imagick = new Imagick();
 
-        $this->imagick->pingImage($pdfFile);
-
-        $this->numberOfPages = $this->imagick->getNumberImages();
-
-        $this->pdfFile = $pdfFile;
+        $this->imagick->readImage($this->pdfFile);
     }
 
     public function setResolution(int $resolution)
@@ -108,6 +106,10 @@ class Pdf
 
     public function getNumberOfPages(): int
     {
+        if ($this->numberOfPages === null) {
+            $this->numberOfPages = $this->imagick->getNumberImages();
+        }
+
         return $this->numberOfPages;
     }
 
@@ -122,7 +124,7 @@ class Pdf
         return file_put_contents($pathToImage, $imageData) !== false;
     }
 
-        public function saveAllPagesAsImages(string $directory, string $prefix = ''): array
+    public function saveAllPagesAsImages(string $directory, string $prefix = ''): array
     {
         $numberOfPages = $this->getNumberOfPages();
 

@@ -161,7 +161,7 @@ class MergeTermsTarget extends FormBase {
     if (count($selected_term_ids) > 0) {
       $query->condition('tid', $selected_term_ids, 'NOT IN');
     }
-    $tids = $query->execute();
+    $tids = $query->accessCheck()->execute();
     if (empty($tids)) {
       return [];
     }

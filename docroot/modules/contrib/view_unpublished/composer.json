@@ -9,5 +9,8 @@
             "email": "amaria@chisholmtech.com"
         }
     ],
-    "require": {}
+    "require-dev": {
+        "phpcompatibility/php-compatibility": "10.x-dev@dev",
+        "drupal/coder": "^8.3.18"
+    }
 }

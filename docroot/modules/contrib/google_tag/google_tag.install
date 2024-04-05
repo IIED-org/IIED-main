@@ -21,7 +21,10 @@ function google_tag_requirements($phase) {
       // Google Tag Manager container ID has not been set.
       $requirements['google_tag'] = [
         'title' => t('Google Tag Manager'),
-        'description' => t('Configure default settings on the <a href=":url1">module settings page</a>. Afterwards, add a container on the <a href=":url2">container management page</a>.', [':url1' => Url::fromRoute('google_tag.settings_form')->toString(), ':url2' => Url::fromRoute('entity.google_tag_container.collection')->toString()]),
+        'description' => t('Configure default settings on the <a href=":url1">module settings page</a>. Afterwards, add a container on the <a href=":url2">container management page</a>.', [
+          ':url1' => Url::fromRoute('google_tag.settings_form')->toString(),
+          ':url2' => Url::fromRoute('entity.google_tag_container.collection')->toString(),
+        ]),
         'severity' => REQUIREMENT_WARNING,
         'value' => t('Not configured'),
       ];
@@ -185,7 +188,7 @@ function google_tag_update_8103(&$sandbox) {
 
   // Update the module settings.
   $snippet_uri_changed = TRUE;
-  $uri = isset($module_data['uri']) ? $module_data['uri'] : 'public:/';
+  $uri = $module_data['uri'] ?? 'public:/';
   if (substr($uri, -11) == '/google_tag') {
     // Remove the default directory as this will be appended in code.
     $uri = substr($uri, 0, -11);
@@ -205,4 +208,30 @@ function google_tag_update_8103(&$sandbox) {
     return t('Updated the snippet parent URI and added the flush_snippets setting. The old snippet directory was not deleted.');
   }
   return t('Added the flush_snippets setting and retained the snippet parent URI.');
+}
+
+/**
+ * Add hostname to the default container settings and all containers.
+ */
+function google_tag_update_8104(&$sandbox) {
+  $module_config = \Drupal::service('config.factory')->getEditable('google_tag.settings');
+  $module_data = $module_config->get();
+
+  // Add hostname to the default container settings.
+  $module_data['_default_container']['hostname'] = 'www.googletagmanager.com';
+  $module_config->setData($module_data)->save();
+
+  $storage = \Drupal::entityTypeManager()->getStorage('google_tag_container');
+  $ids = $storage->getQuery()->execute();
+  $containers = $storage->loadMultiple($ids);
+
+  // Add hostname (if not set) to each container (regardless of status).
+  foreach ($containers as $container) {
+    if (empty($container->get('hostname'))) {
+      $container->set('hostname', 'www.googletagmanager.com');
+      $container->save();
+    }
+  }
+
+  return t('Add www.googletagmanager.com as the default hostname and the hostname for each container.');
 }

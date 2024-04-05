@@ -21,6 +21,8 @@ use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
 
+// cspell:ignore knoten körper titel zusammenfassung
+
 /**
  * Tests the "Rendered item" processor.
  *
@@ -244,7 +246,7 @@ class RenderedItemTest extends ProcessorTestBase {
     $this->assertEquals(0, \Drupal::currentUser()->id());
 
     foreach ($items as $key => $item) {
-      list($datasource_id, $entity_id) = Utility::splitCombinedId($key);
+      [$datasource_id, $entity_id] = Utility::splitCombinedId($key);
       $type = $this->index->getDatasource($datasource_id)->label();
 
       $field = $item->getField('rendered_item');
