@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.node.blog.body
     - field.field.node.blog.field_about_the_author
+    - field.field.node.blog.field_alternative_label
     - field.field.node.blog.field_author_s_
     - field.field.node.blog.field_blogger_info
     - field.field.node.blog.field_collections
@@ -46,6 +47,14 @@ content:
     third_party_settings: {  }
     weight: 9
     region: content
+  field_alternative_label:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 12
+    region: content
   field_author_s_:
     type: entity_reference_entity_view
     label: hidden
@@ -85,7 +94,7 @@ content:
       view_mode: default
       link: ''
     third_party_settings: {  }
-    weight: 128
+    weight: 11
     region: content
   field_image_caption:
     type: text_default

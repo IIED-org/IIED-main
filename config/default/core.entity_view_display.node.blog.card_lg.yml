@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.node.card_lg
     - field.field.node.blog.body
     - field.field.node.blog.field_about_the_author
+    - field.field.node.blog.field_alternative_label
     - field.field.node.blog.field_author_s_
     - field.field.node.blog.field_blogger_info
     - field.field.node.blog.field_collections
@@ -132,6 +133,7 @@ content:
     weight: 0
     region: content
 hidden:
+  field_alternative_label: true
   field_content: true
   field_date_or_caption: true
   field_display_image: true

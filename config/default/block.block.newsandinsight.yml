@@ -5,6 +5,7 @@ dependencies:
   config:
     - system.menu.news-and-insight
   module:
+    - block_class
     - system
   theme:
     - iied_tw
@@ -26,4 +27,4 @@ visibility:
   request_path:
     id: request_path
     negate: false
-    pages: "/news-and-insight\r\n/blogs\r\n/news\r\n/events\r\n/conversations\r\n/newsletters\r\n/media-centre\r\n/experts\r\n/bookshelf\r\n/podcasts\r\n/long-reads\r\n/longreads\r\n/iied-debates"
+    pages: "/taxonomy/term/41596\r\n/taxonomy/term/41606\r\n/taxonomy/term/41611\r\n/taxonomy/term/41621\r\n/taxonomy/term/41601\r\n/taxonomy/term/41626\r\n/taxonomy/term/41616\r\n/taxonomy/term/42136\r\n/taxonomy/term/41931\r\n/taxonomy/term/41941\r\n/taxonomy/term/42036"
