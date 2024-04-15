@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.node.blog.body
     - field.field.node.blog.field_about_the_author
+    - field.field.node.blog.field_alternative_label
     - field.field.node.blog.field_author_s_
     - field.field.node.blog.field_blogger_info
     - field.field.node.blog.field_collections
@@ -93,6 +94,7 @@ third_party_settings:
         - field_author_s_
         - field_about_the_author
         - created
+        - field_alternative_label
       label: Attribution
       region: content
       parent_name: group_tabs
@@ -151,6 +153,14 @@ content:
       add_mode: dropdown
       form_display_mode: default
       default_paragraph_type: ''
+    third_party_settings: {  }
+  field_alternative_label:
+    type: string_textfield
+    weight: 31
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   field_author_s_:
     type: entity_reference_autocomplete
@@ -299,7 +309,7 @@ content:
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
-    weight: 3
+    weight: 4
     region: content
     settings:
       display_label: true
@@ -327,7 +337,7 @@ content:
       placeholder: ''
     third_party_settings: {  }
   translation:
-    weight: 2
+    weight: 3
     region: content
     settings: {  }
     third_party_settings: {  }

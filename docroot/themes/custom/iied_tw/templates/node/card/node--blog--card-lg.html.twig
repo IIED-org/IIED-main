@@ -1,4 +1,17 @@
 {% extends '@iied_tw/node/card/node--card-lg.html.twig' %}
+
+    {% block lglabel %}
+    <div
+    class="absolute bottom-0 left-0 z-10 px-4 pt-2 pb-5 text-gray-900 lg:h-10 lg:top-0 lg:z-30 bg-iiedblue-500 rounded-tr-xl lg:rounded-tr-none lg:rounded-br-xl"
+    >
+        {% if node.field_alternative_label is not empty %}
+        {{ node.field_alternative_label.0.value|striptags }}
+        {% else %}
+        Insight
+        {% endif %}
+    </div>
+    {% endblock %}
+
     {% block tagline %}
     <p class="text-gray-700">{{ node.field_tagline.0.value }}</p>
     {% endblock %}
