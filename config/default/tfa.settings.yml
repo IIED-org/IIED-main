@@ -3,13 +3,13 @@ _core:
 langcode: en
 enabled: true
 required_roles:
+  publications_editor: publications_editor
   editor: editor
   manager: manager
   authenticated: '0'
   viewer: '0'
   hh_contributor: '0'
   hh_reviewer: '0'
-  publications_editor: '0'
   administrator: '0'
 send_plugins: {  }
 login_plugins:
@@ -23,11 +23,6 @@ allowed_validation_plugins:
   tfa_totp: tfa_totp
 default_validation_plugin: tfa_totp
 validation_plugin_settings:
-  tfa_hotp:
-    counter_window: 10
-    site_name_prefix: 1
-    name_prefix: TFA
-    issuer: Drupal
   tfa_recovery_code:
     recovery_codes_amount: 10
   tfa_totp:
@@ -35,6 +30,11 @@ validation_plugin_settings:
     site_name_prefix: 1
     name_prefix: TFA
     issuer: 'IIED website'
+  tfa_hotp:
+    counter_window: 10
+    site_name_prefix: 1
+    name_prefix: TFA
+    issuer: Drupal
 validation_skip: 1
 reset_pass_skip_enabled: false
 encryption: tfa_encryption
