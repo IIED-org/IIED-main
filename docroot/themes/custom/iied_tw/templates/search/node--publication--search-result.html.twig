@@ -5,7 +5,7 @@
         {% set image_uri = node.field_cover_image|file_uri %}
         {% set image_alt = node.field_cover_image.alt %}
         {% if image_uri is not null %}
-          <img class="object-cover w-3/12 h-auto" src="{{ image_uri|image_style('search_cover') }}" alt="{{ image_alt }}" />
+          {{ node.field_cover_image[0].entity|view('card_cover') }}
         {% endif %}
       {% else %}
           {{ node.field_media[0].entity|view('card_cover') }}

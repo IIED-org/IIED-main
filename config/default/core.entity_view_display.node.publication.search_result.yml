@@ -86,7 +86,7 @@ third_party_settings:
       label: Media
       parent_name: ''
       region: hidden
-      weight: 7
+      weight: 49
       format_type: html_element
       format_settings:
         classes: media
@@ -156,6 +156,14 @@ content:
             prefix: ''
             suffix: '  '
     weight: 3
+    region: content
+  field_cover_image:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 6
     region: content
   field_date_published:
     type: datetime_default
@@ -286,7 +294,6 @@ hidden:
   field_a_serial: true
   field_admin: true
   field_area_list: true
-  field_cover_image: true
   field_deptlist: true
   field_doi: true
   field_external_url: true
