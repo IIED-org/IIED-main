@@ -1,0 +1,27 @@
+          
+
+
+<!-- Search box with transition/close -->
+<div x-show="showSearch" x-collapse @click.away="showSearch = false" @keydown.escape.window="showSearch = false"
+    id="searchbox"
+    class="transition-all duration-300 ease-in-out transform" x-ref="searchBox">
+    
+    <!-- Search box -->
+    <div x-show="showSearch" class="py-8 bg-gray-100">
+        <div class="container">
+            <div class="lg:flex lg:space-x-12">
+                <div class="lg:w-1/4">
+                    <h1 class="my-4 text-2xl xl:text-3xl">Search IIED</h1> 
+                </div>
+                
+                <div class="search-page lg:w-3/4">
+                    <div class="pt-2">
+                        {{ drupal_block('views_exposed_filter_block:search-page_2', {wrapper: false}) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

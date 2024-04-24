@@ -532,5 +532,15 @@
   @apply h-12 max-w-xs px-6 py-2 mb-6 text-lg cursor-pointer font-semibold text-gray-800 transition-colors duration-150 rounded-full shadow-sm hover:shadow-none bg-iiedorange-500 hover:bg-iiedorange-600;
  }
 
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 }
 
