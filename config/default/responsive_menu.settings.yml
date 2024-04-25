@@ -6,7 +6,7 @@ off_canvas_menus: 'primary, secondary'
 horizontal_wrapping_element: nav
 horizontal_breakpoint: large
 horizontal_media_query: 'screen and (min-width: 1024px)'
-include_css: true
+include_css: false
 off_canvas_position: left-front
 off_canvas_theme: light
 pagedim: none
@@ -17,7 +17,7 @@ horizontal_superfish_speed_out: 100
 horizontal_superfish_hoverintent: true
 drag: false
 breakpoint_css_filepath: 'public://css'
-use_breakpoint: true
+use_breakpoint: false
 allow_admin: false
 wrapper_admin: true
 wrapper_theme: false
