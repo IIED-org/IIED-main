@@ -15,16 +15,23 @@
         <a class="text-gray-900 visited:text-gray-900 hover:no-underline" id="topnav-donate" href="/donate" title="Donate">Donate</a>
     </button>
 
-    <!-- menu -->
-    <div class="" x-data="{showMenu : false}">
-        <button @click.prevent="showMenu = !showMenu " class="px-2 py-4">
-            <svg x-show="!showMenu" class="w-6 h-6 mr-2" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                <path d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
-            <svg x-show="showMenu" class="w-6 h-6 mr-2" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M6 18L18 6M6 6l12 12"></path></svg>
-        </button>
+    <!-- menu toggle button -->
+    <div class="flex items-center">
+    <button @click="isOpen = !isOpen" type="button" class="px-2 py-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-iiedblue-300"
+            :aria-expanded="isOpen ? 'true' : 'false'"
+            aria-controls="menu"
+            aria-label="Toggle menu">
+        <svg x-show="!isOpen" class="w-6 h-6 mr-2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+        <svg x-show="isOpen" class="w-6 h-6 mr-2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+    </button>
     </div>
-    <!-- end menu -->
-     {{ drupal_block('responsive_menu_toggle', {wrapper: false}) }}
+
+     
+     {# If we wanted to use the responsive menu module we could add the button like this
+     {{ drupal_block('responsive_menu_toggle', {wrapper: false}) }} #}
 
 </div>
