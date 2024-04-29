@@ -4522,6 +4522,10 @@ cite {
   right: 0px;
 }
 
+.right-1{
+  right: 0.25rem;
+}
+
 .right-5{
   right: 1.25rem;
 }
@@ -4538,12 +4542,24 @@ cite {
   top: 0px;
 }
 
+.top-1{
+  top: 0.25rem;
+}
+
 .top-1\/2{
   top: 50%;
 }
 
 .top-\[48\%\]{
   top: 48%;
+}
+
+.right-2{
+  right: 0.5rem;
+}
+
+.top-2{
+  top: 0.5rem;
 }
 
 .-z-10{
@@ -4882,6 +4898,18 @@ cite {
   margin-top: 2rem;
 }
 
+.ml-12{
+  margin-left: 3rem;
+}
+
+.ml-44{
+  margin-left: 11rem;
+}
+
+.ml-6{
+  margin-left: 1.5rem;
+}
+
 .block{
   display: block;
 }
@@ -5115,6 +5143,18 @@ cite {
 
 .w-px{
   width: 1px;
+}
+
+.w-40{
+  width: 10rem;
+}
+
+.w-60{
+  width: 15rem;
+}
+
+.w-80{
+  width: 20rem;
 }
 
 .max-w-3xl{
@@ -5760,6 +5800,11 @@ cite {
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
 
+.bg-gray-50{
+  --tw-bg-opacity: 1;
+  background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+}
+
 .bg-gray-500{
   --tw-bg-opacity: 1;
   background-color: rgb(107 114 128 / var(--tw-bg-opacity));
@@ -5854,11 +5899,6 @@ cite {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.bg-gray-50{
-  --tw-bg-opacity: 1;
-  background-color: rgb(249 250 251 / var(--tw-bg-opacity));
-}
-
 .bg-opacity-50{
   --tw-bg-opacity: 0.5;
 }
@@ -5885,6 +5925,14 @@ cite {
 
 .bg-gradient-to-t{
   background-image: linear-gradient(to top, var(--tw-gradient-stops));
+}
+
+.bg-\[url\(\'\/themes\/custom\/iied_tw\/images\/bg-shape-blue\.svg\'\)\]{
+  background-image: url('/themes/custom/iied_tw/images/bg-shape-blue.svg');
+}
+
+.bg-\[url\(\'\/themes\/custom\/iied_tw\/images\/bg-shape-pink\.svg\'\)\]{
+  background-image: url('/themes/custom/iied_tw/images/bg-shape-pink.svg');
 }
 
 .from-black{
@@ -5939,6 +5987,14 @@ cite {
 
 .bg-bottom{
   background-position: bottom;
+}
+
+.bg-right-bottom{
+  background-position: right bottom;
+}
+
+.bg-no-repeat{
+  background-repeat: no-repeat;
 }
 
 .fill-current{
@@ -6146,6 +6202,10 @@ cite {
   padding-left: 2rem;
 }
 
+.pr-14{
+  padding-right: 3.5rem;
+}
+
 .pr-16{
   padding-right: 4rem;
 }
@@ -6292,6 +6352,10 @@ cite {
 
 .leading-tight{
   line-height: 1.25;
+}
+
+.leading-snug{
+  line-height: 1.375;
 }
 
 .text-gray-100{
@@ -7885,6 +7949,12 @@ cite {
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
 }
 
+.focus\:ring-1:focus{
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
 .focus\:ring-2:focus{
   --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
   --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
@@ -8193,6 +8263,14 @@ cite {
 
   .sm\:p-0{
     padding: 0px;
+  }
+
+  .sm\:pr-4{
+    padding-right: 1rem;
+  }
+
+  .sm\:pr-9{
+    padding-right: 2.25rem;
   }
 
   .sm\:pt-6{
@@ -8669,6 +8747,14 @@ cite {
     background-color: rgb(209 213 219 / var(--tw-bg-opacity));
   }
 
+  .lg\:bg-\[url\(\'\/themes\/custom\/iied_tw\/images\/bg-shape-blue\.svg\'\)\]{
+    background-image: url('/themes/custom/iied_tw/images/bg-shape-blue.svg');
+  }
+
+  .lg\:bg-\[url\(\'\/themes\/custom\/iied_tw\/images\/bg-shape-pink\.svg\'\)\]{
+    background-image: url('/themes/custom/iied_tw/images/bg-shape-pink.svg');
+  }
+
   .lg\:px-8{
     padding-left: 2rem;
     padding-right: 2rem;
@@ -8697,6 +8783,11 @@ cite {
   .lg\:text-xl{
     font-size: 1.25rem;
     line-height: 1.75rem;
+  }
+
+  .lg\:text-4xl{
+    font-size: 2.25rem;
+    line-height: 2.5rem;
   }
 }
 
@@ -8868,6 +8959,12 @@ cite {
   .xl\:gap-x-6{
     -moz-column-gap: 1.5rem;
          column-gap: 1.5rem;
+  }
+
+  .xl\:space-x-8 > :not([hidden]) ~ :not([hidden]){
+    --tw-space-x-reverse: 0;
+    margin-right: calc(2rem * var(--tw-space-x-reverse));
+    margin-left: calc(2rem * calc(1 - var(--tw-space-x-reverse)));
   }
 
   .xl\:rounded-bl-xl{

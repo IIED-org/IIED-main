@@ -71,8 +71,8 @@
             scrollByPage(element, direction) {
                 const containerWidth = element.offsetWidth;
                 const maxScrollLeft = element.scrollWidth - containerWidth;
-                const currentScroll = element.scrollLeft;
-                const targetScroll = direction === 'left' ? currentScroll - containerWidth : currentScroll + containerWidth;
+                const currentScroll = element.scrollLeft;                
+                const targetScroll = direction === 'left' ? currentScroll - (containerWidth - 96) : currentScroll + (containerWidth - 96);
                 this.smoothScroll(element, targetScroll, 1000); // Duration is 1000ms
             },
             smoothScroll(element, endX, duration) {
@@ -101,8 +101,8 @@
                 const scrolledToEnd = element.scrollWidth - element.scrollLeft - element.clientWidth <= threshold;
                 this.isAtEnd = scrolledToEnd;
             }
-          }" x-init="updateScrollState($refs.scrollContainer)" @scroll="updateScrollState($refs.scrollContainer)">
-          {{ page.secondary_menu }}
+            }" x-init="updateScrollState($refs.scrollContainer)" @scroll="updateScrollState($refs.scrollContainer)">
+           {{ page.secondary_menu }}
 
               <!-- Button to scroll left -->
               <div x-show="!isAtStart" class="absolute top-0 left-0 justify-start hidden w-20 h-full pointer-events-none sm:flex bg-gradient-to-r from-white via-white to-transparent">
@@ -140,8 +140,8 @@
                   </div>
               </div>
 
+        </div>
       </div>
-    </div>
 
       {% include '@iied_tw/partials/_search_expand.html.twig' %}
       {% include '@iied_tw/partials/_off-canvas-menu.html.twig' %}
