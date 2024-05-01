@@ -75,7 +75,7 @@ AddEncoding gzip svgz
   RewriteRule .* - [F,L]
   RewriteCond %{HTTP_USER_AGENT} ^.*(Bytedance|Bytespider|ClaudeBot).*$ [NC]
   RewriteRule .* - [F,L]
-  RewriteCond %{HTTP_USER_AGENT} "Mozilla\/5\.0 AppleWebKit\/537\.36 \(KHTML, like Gecko; compatible; ClaudeBot\/1\.0; +claudebot@anthropic\.com\)" [NC]
+  RewriteCond %{HTTP_USER_AGENT} "Mozilla\/5\.0 AppleWebKit\/537\.36 \(KHTML, like Gecko; compatible; ClaudeBot\/1\.0; \+claudebot@anthropic\.com\)" [NC]
   RewriteRule .* - [F,L]
 
   # Determine whether environment is production and serve different robots.txt
