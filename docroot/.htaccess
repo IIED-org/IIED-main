@@ -4,6 +4,7 @@
 <ifmodule mod_setenvif.c>
 SetEnvIf AH_CLIENT_IP ^185\.9\.144\.243$ Deny_Host
 SetEnvIf AH_CLIENT_IP ^47\.76\.35\.19$ Deny_Host
+SetEnvIf AH_CLIENT_IP ^47\.242\.224\.53$ Deny_Host
 Order allow,deny
 Allow From All
 Deny from env=Deny_Host
