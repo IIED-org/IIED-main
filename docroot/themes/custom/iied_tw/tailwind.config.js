@@ -77,6 +77,10 @@ module.exports = {
         },
         iiedbg: {
           "10": "#F9F8F6"
+        },
+        secondary: {
+          "green": "#05AA76",
+          "green-dark": "#04875E"
         }
       },
       content: {

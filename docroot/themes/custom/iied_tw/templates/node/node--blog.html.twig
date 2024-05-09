@@ -124,7 +124,7 @@
               {% set bloggerinfo %}
               {{ content.field_blogger_info }} 
               {% endset %}
-              <div>{{ bloggerinfo|striptags }} </div>
+              <div>{{ bloggerinfo|striptags|replace({'&nbsp;': ' '}) }} </div>
           </div>  
         </div>
         {#-- date and share --#}

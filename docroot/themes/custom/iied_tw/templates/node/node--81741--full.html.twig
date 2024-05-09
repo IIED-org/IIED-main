@@ -1,0 +1,112 @@
+{#
+/**
+ *copy of node.page with extras fro IIED manifesto /manifesto-for-thriving-world
+ */
+#}
+{{ attach_library('iied_tw/bg-colour') }}
+
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    not node.isPublished() ? 'node--unpublished',
+  ]
+%}
+
+<article{{ attributes.addClass(classes) }}>
+  <div class="my-6">
+    
+    {#-- grid --#}
+    <div
+      class="container mx-auto lg:px-8 xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12"
+    >
+      <div
+        class="order-1 xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4 md:order-2"
+      >
+        <nav aria-label="themes">
+          <div class="flex flex-wrap mb-6 space-x-3">
+            {{ content.field_global_term }} 
+          </div>
+        </nav>
+        <h1 class="mb-6 text-4xl lg:text-5xl">{{ node.label }}</h1>
+
+        {#-- standfirst --#}
+        <div
+          class="mb-4 prose-lg border-b-2 lg:prose-xl border-iiedorange-500"
+        >
+          {{ content.field_standfirst }}
+        </div>
+
+        {# attribution #} 
+
+        {#-- date and share --#}
+        
+        <div
+          class="flex flex-col flex-wrap justify-between pb-4 border-b border-gray-300 xl:border-none sm:flex-row"
+        >
+
+          {% if content.field_date_or_caption is not empty %}
+          <div class="flex items-center">
+          {{ content.field_date_or_caption }}
+          </div>
+          {% endif %}
+
+          <div class="flex items-center">
+            {% include '@iied_tw/partials/_share_links.html.twig' %}
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    {# main content #}
+    <div
+      class="container mx-auto lg:px-8 xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12">
+      <div
+        class="order-1 xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4 md:order-2">
+        {#-- image if field_display_image --#}
+
+        {% if node.field_display_image.value %}
+        <figure class="mb-6 -mx-4 sm:mx-0">
+          {{ content.field_main_image[0] }}
+          <figcaption
+            class="px-4 mt-1 text-base leading-tight text-gray-500 sm:p-0">
+            {{ content.field_image_caption }}
+          </figcaption>
+        </figure>
+        {% endif %}
+
+        {#-- body --#}
+        <div class="prose md:prose-lg">
+          <div {{ content_attributes.addClass('node-content') }}> 
+          {{ content.body }} 
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+      {#-- layout paragraphs --#}
+      {{ content.field_content }}
+
+    <div
+      class="container mx-auto mb-4 lg:px-8 xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12">
+      <div class="xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4">
+        <div class="flex items-center py-4">
+          {% include '@iied_tw/partials/_share_links.html.twig' %}
+          {% include '@iied_tw/partials/_copy_print_links.html.twig' %}
+        </div>
+      </div>
+    </div>
+        
+    
+  </div>
+</article>
+
+  {% if drupal_view_result('related_nodes', 'block_gl') is not empty %}
+    <section class="py-12 bg-gray-100">
+      <div class="container">
+        {{ drupal_view('related_nodes', 'block_gl') }}
+    </div>
+    </section>
+  {% endif %}
