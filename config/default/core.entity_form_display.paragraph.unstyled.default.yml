@@ -1,0 +1,25 @@
+uuid: a9698637-78fb-4db8-8620-5ad32630447d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.unstyled.field_basic_text
+    - paragraphs.paragraphs_type.unstyled
+  module:
+    - text
+id: paragraph.unstyled.default
+targetEntityType: paragraph
+bundle: unstyled
+mode: default
+content:
+  field_basic_text:
+    type: text_textarea
+    weight: 0
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

@@ -27,4 +27,7 @@ counter:
 paypal:
   header: true
   js:
-    https://www.paypalobjects.com/donate/sdk/donate-sdk.js: { type: external }    
+    https://www.paypalobjects.com/donate/sdk/donate-sdk.js: { type: external }
+bg-colour:
+   js:
+    dist/js/bg-colour.js: { async: true }

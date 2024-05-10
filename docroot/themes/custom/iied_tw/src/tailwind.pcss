@@ -532,5 +532,16 @@
   @apply h-12 max-w-xs px-6 py-2 mb-6 text-lg cursor-pointer font-semibold text-gray-800 transition-colors duration-150 rounded-full shadow-sm hover:shadow-none bg-iiedorange-500 hover:bg-iiedorange-600;
  }
 
+  /* Dynamic colour change */
+  .bg-transition {
+    transition: background-color 2s ease;
+  }
+  /* Target state once scrolled into view */
+  .bg-active {
+    background-color: #AAC02C !important;  /* iiedgreen-500 */
+  }
+  .bg-active figcaption, .bg-active p {
+    color: #111827 !important;
+  }
 }
 

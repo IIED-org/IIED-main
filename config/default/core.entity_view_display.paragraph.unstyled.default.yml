@@ -1,0 +1,23 @@
+uuid: 99f223c7-1a89-448c-b23f-be94736a44ac
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.unstyled.field_basic_text
+    - paragraphs.paragraphs_type.unstyled
+  module:
+    - text
+id: paragraph.unstyled.default
+targetEntityType: paragraph
+bundle: unstyled
+mode: default
+content:
+  field_basic_text:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

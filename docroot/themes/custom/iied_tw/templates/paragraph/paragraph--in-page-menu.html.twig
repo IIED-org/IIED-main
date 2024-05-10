@@ -54,7 +54,7 @@
 {% block paragraph %}
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
-        <div class="p-4 xl:mr-8 mb-6 relative bg-gray-100 rounded-xl before:absolute before:content-[''] before:border-b-transparent before:border-t-gray-100 xl:before:border-t-transparent before:border-l-transparent xl:before:border-l-gray-100  before:border-[10px] before:border-r-transparent before:-bottom-5 before:left-[calc(50%_-_10px)] xl:before:left-[100%] xl:before:-right-5 xl:before:bottom-[80%]">
+        <div class="p-4 xl:mr-8 min-w-56 mb-6 relative bg-gray-100 rounded-xl before:absolute before:content-[''] before:border-b-transparent before:border-t-gray-100 xl:before:border-t-transparent before:border-l-transparent xl:before:border-l-gray-100  before:border-[10px] before:border-r-transparent before:-bottom-5 before:left-[calc(50%_-_10px)] xl:before:left-[100%] xl:before:-right-5 xl:before:bottom-[80%]">
       {{ content }}
       </div>
     {% endblock %}
