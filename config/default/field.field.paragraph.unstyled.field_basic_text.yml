@@ -1,0 +1,26 @@
+uuid: a646b197-04ad-41c5-b30d-5ed11ea11a12
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_basic_text
+    - paragraphs.paragraphs_type.unstyled
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    allowed_formats: {  }
+id: paragraph.unstyled.field_basic_text
+field_name: field_basic_text
+entity_type: paragraph
+bundle: unstyled
+label: 'Basic text'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

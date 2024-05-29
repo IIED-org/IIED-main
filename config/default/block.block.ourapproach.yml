@@ -5,6 +5,7 @@ dependencies:
   config:
     - system.menu.our-approach
   module:
+    - block_class
     - system
   theme:
     - iied_tw
@@ -26,4 +27,4 @@ visibility:
   request_path:
     id: request_path
     negate: false
-    pages: "/our-approach\r\n/partnerships\r\n/process\r\n/impact"
+    pages: "/our-approach\r\n/partnerships\r\n/process\r\n/impact\r\n/node/81741"
