@@ -12,17 +12,17 @@ type: list_string
 settings:
   allowed_values:
     -
-      value: '1'
-      label: Workshop
-    -
-      value: '2'
-      label: 'Learning event'
-    -
-      value: '3'
-      label: Seminar
+      value: '7'
+      label: Conference
     -
       value: '4'
       label: 'Critical theme'
+    -
+      value: '10'
+      label: 'IIED Debates'
+    -
+      value: '2'
+      label: 'Learning event'
     -
       value: '5'
       label: Lecture
@@ -30,20 +30,20 @@ settings:
       value: '6'
       label: Presentation
     -
-      value: '7'
-      label: Conference
+      value: '3'
+      label: Seminar
     -
       value: '8'
       label: 'Side event'
     -
+      value: social
+      label: Social
+    -
       value: '9'
       label: Webinar
     -
-      value: '10'
-      label: 'IIED Debates'
-    -
-      value: social
-      label: Social
+      value: '1'
+      label: Workshop
     -
       value: other
       label: Other
