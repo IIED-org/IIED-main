@@ -41,6 +41,12 @@ settings:
     -
       value: '10'
       label: 'IIED Debates'
+    -
+      value: social
+      label: Social
+    -
+      value: other
+      label: Other
   allowed_values_function: ''
 module: options
 locked: false
