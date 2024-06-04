@@ -31,3 +31,6 @@ paypal:
 bg-colour:
    js:
     dist/js/bg-colour.js: { async: true }
+clickdimensions:
+  js:
+    https://cdn-eu.clickdimensions.com/web/v10/CDWidget.js: { type: external, attributes: { defer: true } }

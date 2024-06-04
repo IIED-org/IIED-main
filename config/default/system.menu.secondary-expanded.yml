@@ -1,0 +1,8 @@
+uuid: f8549f6a-176c-42ce-b6b8-2c0de9964c69
+langcode: en
+status: true
+dependencies: {  }
+id: secondary-expanded
+label: 'Secondary expanded'
+description: 'Themes menu for off-canvas'
+locked: false

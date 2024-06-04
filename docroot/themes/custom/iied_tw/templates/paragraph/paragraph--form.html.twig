@@ -48,14 +48,22 @@
   ]
 %}
 
-{% set form_type = content.field_form_type.0 %}
+{% set form_type = content.field_form_type.0['#markup'] %}
 
 {% block paragraph %}
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
-      <aside class="signup {{ form_type }}">
-      {{ content.field_basic_text }}
-      </aside>  
+      {% if form_type == 'clickdimensions' %}
+        {{ attach_library('iied_tw/clickdimensions') }}
+        <div id="clickdimform" class="signup {{ form_type }}">
+        <script type="text/javascript">var loc = "https://analytics-eu.clickdimensions.com/iiedorg-asnkj/pages/";</script>
+          {{ content.field_basic_text }}
+        </div>
+        {% else %}
+        <div class="signup {{ form_type }}">
+        {{ content.field_basic_text }}
+        </div>  
+      {% endif %}
     {% endblock %}
   </div>
 {% endblock paragraph %}
