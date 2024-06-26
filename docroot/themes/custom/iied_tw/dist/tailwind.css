@@ -3436,7 +3436,6 @@ cite {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   font-family: Lato, sans-serif;
-  font-weight: 600;
   --tw-text-opacity: 1;
   color: rgb(31 41 55 / var(--tw-text-opacity));
   --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -4380,6 +4379,13 @@ cite {
 
 .bg-active figcaption, .bg-active p {
   color: #111827 !important;
+}
+
+/* comma after text */
+
+.item-with-comma::after {
+  content: ',';
+  padding-right: 0.25rem;
 }
 
 .visible{
@@ -8113,6 +8119,10 @@ cite {
 }
 
 @media (min-width: 768px){
+  .md\:sticky{
+    position: sticky;
+  }
+
   .md\:order-1{
     order: 1;
   }
@@ -8268,6 +8278,10 @@ cite {
     position: relative;
   }
 
+  .lg\:sticky{
+    position: sticky;
+  }
+
   .lg\:bottom-0{
     bottom: 0px;
   }
@@ -8341,16 +8355,16 @@ cite {
     margin-right: -1rem;
   }
 
+  .lg\:mr-4{
+    margin-right: 1rem;
+  }
+
   .lg\:mt-0{
     margin-top: 0px;
   }
 
   .lg\:mt-8{
     margin-top: 2rem;
-  }
-
-  .lg\:mr-4{
-    margin-right: 1rem;
   }
 
   .lg\:block{
@@ -8591,13 +8605,13 @@ cite {
     line-height: 1;
   }
 
-  .lg\:text-xl{
-    font-size: 1.25rem;
+  .lg\:text-lg{
+    font-size: 1.125rem;
     line-height: 1.75rem;
   }
 
-  .lg\:text-lg{
-    font-size: 1.125rem;
+  .lg\:text-xl{
+    font-size: 1.25rem;
     line-height: 1.75rem;
   }
 }
@@ -8871,6 +8885,10 @@ cite {
 }
 
 @media (min-width: 1536px){
+  .\32xl\:sticky{
+    position: sticky;
+  }
+
   .\32xl\:order-1{
     order: 1;
   }
