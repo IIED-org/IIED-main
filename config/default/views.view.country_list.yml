@@ -39,7 +39,7 @@ display:
             alter_text: false
             text: ''
             make_link: true
-            path: '/search?f%5B0%5D=content_type%3Apublication&f%5B1%5D=country%3A{{ field_area_list__value }}'
+            path: '/search/type/publication/country/{{ field_area_list__value }}'
             absolute: false
             external: false
             replace_spaces: false

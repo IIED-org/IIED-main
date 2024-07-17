@@ -5252,7 +5252,12 @@ display:
           default_row_class: true
           columns:
             title: title
+            timestamp: timestamp
+            created: created
+            revision_timestamp: revision_timestamp
             changed: changed
+            revision_uid: revision_uid
+            revision_log: revision_log
           default: '-1'
           info:
             title:
@@ -5262,8 +5267,43 @@ display:
               separator: ''
               empty_column: false
               responsive: ''
+            timestamp:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            created:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            revision_timestamp:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
             changed:
-              sortable: false
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            revision_uid:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            revision_log:
+              sortable: true
               default_sort_order: asc
               align: ''
               separator: ''

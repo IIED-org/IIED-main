@@ -1,0 +1,8 @@
+uuid: edcd2ad3-e53c-4289-ba60-8de67da4c25d
+langcode: en
+status: true
+dependencies: {  }
+id: primary-expanded
+label: 'Primary expanded'
+description: 'Top level menu for off-canvas'
+locked: false

@@ -36,3 +36,6 @@ scroll-nav:
   header: true
   js:
     dist/js/scroll-nav.js: { async: true }
+clickdimensions:
+  js:
+    https://cdn-eu.clickdimensions.com/web/v10/CDWidget.js: { type: external, attributes: { defer: true } }

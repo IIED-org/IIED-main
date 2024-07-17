@@ -317,7 +317,7 @@
   #clickdimform #btnSubmit,
   .clickdimensions #btnSubmit
    {
-    @apply px-3 py-2 border-none rounded-full bg-iiedorange-500 cursor-pointer font-sans font-semibold text-gray-800 transition-colors duration-150 shadow-sm hover:shadow-none hover:bg-iiedorange-600;
+    @apply px-3 py-2 border-none rounded-full bg-iiedorange-500 cursor-pointer font-sans text-gray-800 transition-colors duration-150 shadow-sm hover:shadow-none hover:bg-iiedorange-600;
   }
 
   .tracker-select select, .search-select select {
@@ -552,6 +552,11 @@
   .no-scrollbar {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+  }
+  /* comma after text */
+  .item-with-comma::after {
+    content: ',';
+    padding-right: 0.25rem;
   }
 }
 
