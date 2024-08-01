@@ -6113,6 +6113,10 @@ cite {
   text-align: center;
 }
 
+.align-top{
+  vertical-align: top;
+}
+
 .font-headline{
   font-family: Noto Serif, serif;
 }
