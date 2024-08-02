@@ -182,7 +182,7 @@ class SelfMemberReferenceSniff extends AbstractScopeSniff
     /**
      * Returns the declaration names for classes/interfaces/functions with a namespace.
      *
-     * @param array $tokens   Token stack for this file
+     * @param array $tokens   Token stack for this file.
      * @param int   $stackPtr The position where the namespace building will start.
      *
      * @return string
@@ -225,7 +225,7 @@ class SelfMemberReferenceSniff extends AbstractScopeSniff
         $namespaceDeclaration = $phpcsFile->findPrevious(T_NAMESPACE, $stackPtr);
 
         if ($namespaceDeclaration !== false) {
-            $endOfNamespaceDeclaration = $phpcsFile->findNext([T_SEMICOLON, T_OPEN_CURLY_BRACKET], $namespaceDeclaration);
+            $endOfNamespaceDeclaration = $phpcsFile->findNext([T_SEMICOLON, T_OPEN_CURLY_BRACKET, T_CLOSE_TAG], $namespaceDeclaration);
             $namespace = $this->getDeclarationNameWithNamespace(
                 $phpcsFile->getTokens(),
                 ($endOfNamespaceDeclaration - 1)

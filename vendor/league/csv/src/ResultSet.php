@@ -18,20 +18,27 @@ use CallbackFilterIterator;
 use Closure;
 use Generator;
 use Iterator;
+use IteratorIterator;
 use JsonSerializable;
 use League\Csv\Serializer\Denormalizer;
 use League\Csv\Serializer\MappingFailed;
 use League\Csv\Serializer\TypeCastingFailed;
 use LimitIterator;
+use Traversable;
 
 use function array_filter;
 use function array_flip;
+use function array_key_exists;
+use function array_reduce;
 use function array_search;
+use function array_values;
 use function is_string;
 use function iterator_count;
 
 /**
  * Represents the result set of a {@link Reader} processed by a {@link Statement}.
+ *
+ * @template TValue of array
  */
 class ResultSet implements TabularDataReader, JsonSerializable
 {
@@ -88,13 +95,17 @@ class ResultSet implements TabularDataReader, JsonSerializable
     }
 
     /**
-     * Returns a new instance from a collection without header..
+     * Returns a new instance from a collection without header.
      *
      * @throws SyntaxError
      */
-    public static function createFromRecords(Iterator|array $records = []): self
+    public static function createFromRecords(iterable $records = []): self
     {
-        return new self($records);
+        return new self(match (true) {
+            $records instanceof Iterator => $records,
+            $records instanceof Traversable => new IteratorIterator($records),
+            default => new ArrayIterator($records),
+        });
     }
 
     /**
@@ -116,12 +127,12 @@ class ResultSet implements TabularDataReader, JsonSerializable
     }
 
     /**
-     * @param Closure(array<mixed>, array-key=): mixed $closure
+     * @param Closure(array<mixed>, array-key=): mixed $callback
      */
-    public function each(Closure $closure): bool
+    public function each(Closure $callback): bool
     {
         foreach ($this as $offset => $record) {
-            if (false === $closure($record, $offset)) {
+            if (false === $callback($record, $offset)) {
                 return false;
             }
         }
@@ -130,12 +141,12 @@ class ResultSet implements TabularDataReader, JsonSerializable
     }
 
     /**
-     * @param Closure(array<mixed>, array-key=): bool $closure
+     * @param Closure(array<mixed>, array-key=): bool $callback
      */
-    public function exists(Closure $closure): bool
+    public function exists(Closure $callback): bool
     {
         foreach ($this as $offset => $record) {
-            if (true === $closure($record, $offset)) {
+            if (true === $callback($record, $offset)) {
                 return true;
             }
         }
@@ -144,68 +155,118 @@ class ResultSet implements TabularDataReader, JsonSerializable
     }
 
     /**
-     * @param Closure(TInitial|null, array<mixed>, array-key=): TInitial $closure
+     * @param Closure(TInitial|null, array<mixed>, array-key=): TInitial $callback
      * @param TInitial|null $initial
      *
      * @template TInitial
      *
      * @return TInitial|null
      */
-    public function reduce(Closure $closure, mixed $initial = null): mixed
+    public function reduce(Closure $callback, mixed $initial = null): mixed
     {
         foreach ($this as $offset => $record) {
-            $initial = $closure($initial, $record, $offset);
+            $initial = $callback($initial, $record, $offset);
         }
 
         return $initial;
     }
 
-    public function filter(Closure $closure): TabularDataReader
+    /**
+     * @param positive-int $recordsCount
+     *
+     * @throws InvalidArgument
+     *
+     * @return iterable<TabularDataReader>
+     */
+    public function chunkBy(int $recordsCount): iterable
     {
-        return Statement::create()->where($closure)->process($this);
+        if ($recordsCount < 1) {
+            throw InvalidArgument::dueToInvalidChunkSize($recordsCount, __METHOD__);
+        }
+
+        $header = $this->getHeader();
+        $records = [];
+        $nbRecords = 0;
+        foreach ($this->getRecords() as $record) {
+            $records[] = $record;
+            ++$nbRecords;
+            if ($nbRecords === $recordsCount) {
+                yield new self($records, $header);
+                $records = [];
+                $nbRecords = 0;
+            }
+        }
+
+        if ([] !== $records) {
+            yield new self($records, $header);
+        }
     }
 
-    public function slice(int $offset, int $length = null): TabularDataReader
+    /**
+     * @param array<string> $headers
+     */
+    public function mapHeader(array $headers): TabularDataReader
+    {
+        return Statement::create()->process($this, $headers);
+    }
+
+    public function filter(Query\Predicate|Closure $predicate): TabularDataReader
+    {
+        return Statement::create()->where($predicate)->process($this);
+    }
+
+    public function slice(int $offset, ?int $length = null): TabularDataReader
     {
         return Statement::create()->offset($offset)->limit($length ?? -1)->process($this);
     }
 
-    public function sorted(Closure $orderBy): TabularDataReader
+    public function sorted(Query\Sort|Closure $orderBy): TabularDataReader
     {
         return Statement::create()->orderBy($orderBy)->process($this);
     }
 
     public function select(string|int ...$columns): TabularDataReader
     {
-        $header = [];
-        $documentHeader = $this->getHeader();
-        $hasNoHeader = [] === $documentHeader;
-        foreach ($columns as $field) {
-            if (is_string($field)) {
-                if ($hasNoHeader) {
-                    throw new InvalidArgument(__METHOD__.' can only use named column if the tabular data has a non-empty header.');
-                }
+        if ([] === $columns) {
+            return $this;
+        }
 
-                $index = array_search($field, $this->header, true);
+        $recordsHeader = $this->getHeader();
+        $hasHeader = [] !== $recordsHeader;
+        $selectColumn = function (array $header, string|int $field) use ($recordsHeader, $hasHeader): array {
+            if (is_string($field)) {
+                $index = array_search($field, $recordsHeader, true);
                 if (false === $index) {
                     throw InvalidArgument::dueToInvalidColumnIndex($field, 'offset', __METHOD__);
                 }
 
                 $header[$index] = $field;
-                continue;
+
+                return $header;
             }
 
-            if (!$hasNoHeader && !array_key_exists($field, $documentHeader)) {
+            if ($hasHeader && !array_key_exists($field, $recordsHeader)) {
                 throw InvalidArgument::dueToInvalidColumnIndex($field, 'offset', __METHOD__);
             }
 
-            $header[$field] = $documentHeader[$field] ?? $field;
-        }
+            $header[$field] = $recordsHeader[$field] ?? $field;
 
-        /** @var array<int, string> $finalHeader */
-        $finalHeader = $hasNoHeader ? [] : $header;
+            return $header;
+        };
 
-        return new self($this->combineHeader($header), $finalHeader);
+        /** @var array<string> $header */
+        $header = array_reduce($columns, $selectColumn, []);
+        $callback = function (array $record) use ($header): array {
+            $element = [];
+            $row = array_values($record);
+            foreach ($header as $offset => $headerName) {
+                $element[$headerName] = $row[$offset] ?? null;
+            }
+
+            return $element;
+        };
+
+        return new self(new MapIterator($this, $callback), $hasHeader ? $header : []);
     }
 
     public function matching(string $expression): iterable
@@ -230,26 +291,26 @@ class ResultSet implements TabularDataReader, JsonSerializable
     /**
      * @param array<string> $header
      *
-     * @throws SyntaxError
+     * @throws Exception
      *
-     * @return Iterator<array-key, array<array-key, mixed>>
+     * @return Iterator<array-key, TValue>
      */
     public function getRecords(array $header = []): Iterator
     {
-        $header = $this->prepareHeader($header);
-
-        return $this->combineHeader($header);
+        return $this->combineHeader($this->prepareHeader($header));
     }
 
     /**
-     * @param class-string $className
+     * @template T of object
+     * @param class-string<T> $className
      * @param array<string> $header
      *
      * @throws Exception
      * @throws MappingFailed
      * @throws TypeCastingFailed
+     * @return iterator<T>
      */
-    public function getObjects(string $className, array $header = []): Iterator
+    public function getRecordsAsObject(string $className, array $header = []): Iterator
     {
         $header = $this->prepareHeader($header);
 
@@ -284,7 +345,7 @@ class ResultSet implements TabularDataReader, JsonSerializable
      *
      * @param array<array-key, string|int> $header
      *
-     * @return Iterator<array-key, array<array-key, mixed>>
+     * @return Iterator<array-key, TValue>
      */
     protected function combineHeader(array $header): Iterator
     {
@@ -376,6 +437,13 @@ class ResultSet implements TabularDataReader, JsonSerializable
         return $this->nthAsObject(0, $className, $header);
     }
 
+    public function fetchColumn(string|int $index = 0): Iterator
+    {
+        return $this->yieldColumn(
+            $this->getColumnIndex($index, 'offset', __METHOD__)
+        );
+    }
+
     /**
      * @throws Exception
      */
@@ -462,10 +530,10 @@ class ResultSet implements TabularDataReader, JsonSerializable
     }
 
     /**
+     * DEPRECATION WARNING! This method will be removed in the next major point release.
+     *
+     * @see ResultSet::nth()
      * @deprecated since version 9.9.0
-     *
-     * @see ::nth
-     *
      * @codeCoverageIgnore
      */
     public function fetchOne(int $nth_record = 0): array
@@ -474,18 +542,21 @@ class ResultSet implements TabularDataReader, JsonSerializable
     }
 
     /**
-     * @deprecated since version 9.8.0
+     * DEPRECATION WARNING! This method will be removed in the next major point release.
      *
-     * @see ::fetchColumnByName
-     * @see ::fetchColumnByOffset
-     *
+     * @see Reader::getRecordsAsObject()
+     * @deprecated Since version 9.15.0
      * @codeCoverageIgnore
+     *
+     * @param class-string $className
+     * @param array<string> $header
+     *
      * @throws Exception
+     * @throws MappingFailed
+     * @throws TypeCastingFailed
      */
-    public function fetchColumn($index = 0): Iterator
+    public function getObjects(string $className, array $header = []): Iterator
     {
-        return $this->yieldColumn(
-            $this->getColumnIndex($index, 'offset', __METHOD__)
-        );
+        return $this->getRecordsAsObject($className, $header);
     }
 }
