@@ -11,7 +11,7 @@ third_party_settings:
 name: Event
 type: event
 description: 'Single page, same for various types of event (workshop, webinar etc.) '
-help: ''
+help: null
 new_revision: true
 preview_mode: 1
 display_submitted: false

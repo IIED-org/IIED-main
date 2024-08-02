@@ -4,5 +4,5 @@ status: true
 dependencies: {  }
 id: banner_custom
 label: 'Banner (custom)'
-revision: 1
+revision: true
 description: 'Custom large banner with image and link'

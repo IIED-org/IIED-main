@@ -6,3 +6,4 @@ name: Collection
 vid: collection
 description: 'Curated sets of pages, non-essential for navigation.'
 weight: 0
+new_revision: false

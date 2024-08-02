@@ -11,7 +11,7 @@ third_party_settings:
 name: Insight
 type: blog
 description: 'Regularly updated special interest opinion page. Members of staff and guests can submit an insight on topics relevant to IIED’s strategy.'
-help: ''
+help: null
 new_revision: true
 preview_mode: 1
 display_submitted: false

@@ -6,3 +6,4 @@ name: Global
 vid: global
 description: 'Sitewide terms'
 weight: 0
+new_revision: false

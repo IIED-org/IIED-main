@@ -1,3 +1,4 @@
+langcode: en
 id: cover_image
 label: 'Cover image'
 ui_limit: ''

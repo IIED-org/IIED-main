@@ -6,3 +6,4 @@ name: List
 vid: list
 description: 'Set of publications'
 weight: 0
+new_revision: false

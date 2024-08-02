@@ -6,3 +6,4 @@ name: 'Document type'
 vid: document_type
 description: 'Material type'
 weight: 0
+new_revision: false

@@ -4,5 +4,5 @@ status: true
 dependencies: {  }
 id: card_wide
 label: 'Card wide'
-revision: 0
+revision: false
 description: 'Larger card (3-4 col) for placement in layout builder.'
