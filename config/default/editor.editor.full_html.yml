@@ -61,14 +61,11 @@ settings:
           label: 'p bottom margin'
           element: '<p class="mb-6">'
         -
-          label: 'img rounded'
-          element: '<img class="rounded-full">'
-        -
           label: 'div right'
-          element: '<div class="float-right ml-6 mb-6 not-prose">'
+          element: '<div class="float-right mb-6 ml-6 not-prose">'
         -
           label: 'div left'
-          element: '<div class="float-left mr-6 mb-6 not-prose">'
+          element: '<div class="float-left mb-6 mr-6 not-prose">'
         -
           label: 'div caption'
           element: '<div class="caption">'
