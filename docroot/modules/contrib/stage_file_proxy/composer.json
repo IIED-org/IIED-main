@@ -5,24 +5,20 @@
     "license": "GPL-2.0-or-later",
     "minimum-stability": "dev",
     "require": {
-        "drupal/core": "^9 || ^10",
-        "php": ">=8"
+        "drupal/core": "^10.3 || ^11",
+        "php": ">=8.1"
     },
     "require-dev": {
-        "drush/drush": "^11 || ^12",
+        "drush/drush": ">=12",
         "drupal/coder": "^8.3"
-    },
-    "extra": {
-        "drush": {
-            "services": {
-                "stage_file_proxy.drush.services.yml": "^11"
-            }
-        }
     },
     "config": {
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
+    },
+    "conflict": {
+        "drush/drush": "<12"
     },
     "scripts": {
         "phpcs": "vendor/bin/phpcs -p .",

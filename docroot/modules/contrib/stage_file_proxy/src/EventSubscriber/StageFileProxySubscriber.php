@@ -23,71 +23,35 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class StageFileProxySubscriber implements EventSubscriberInterface {
 
   /**
-   * The manager used to fetch the file against.
-   *
-   * @var \Drupal\stage_file_proxy\DownloadManagerInterface
-   */
-  protected $manager;
-
-  /**
-   * The logger.
-   *
-   * @var \Psr\Log\LoggerInterface
-   */
-  protected $logger;
-
-  /**
-   * The event dispatcher.
-   *
-   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-   */
-  protected $eventDispatcher;
-
-  /**
-   * The configuration factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
-   * The request stack.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected $requestStack;
-
-  /**
    * Construct the FetchManager.
    *
    * @param \Drupal\stage_file_proxy\DownloadManagerInterface $manager
    *   The manager used to fetch the file against.
    * @param \Psr\Log\LoggerInterface $logger
    *   The logger interface.
-   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
    *   The event dispatcher.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The config factory.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
    *   The request stack.
    */
-  public function __construct(DownloadManagerInterface $manager, LoggerInterface $logger, EventDispatcherInterface $event_dispatcher, ConfigFactoryInterface $config_factory, RequestStack $request_stack) {
-    $this->manager = $manager;
-    $this->logger = $logger;
-    $this->eventDispatcher = $event_dispatcher;
-    $this->configFactory = $config_factory;
-    $this->requestStack = $request_stack;
+  public function __construct(
+    protected DownloadManagerInterface $manager,
+    protected LoggerInterface $logger,
+    protected EventDispatcherInterface $eventDispatcher,
+    protected ConfigFactoryInterface $configFactory,
+    protected RequestStack $requestStack,
+  ) {
   }
 
   /**
-   * Fetch the file from it's origin.
+   * Fetch the file from its origin.
    *
    * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
    *   The event to process.
-   *
-   * @todo Drop GetRequestEvent typehint when dropping Drupal 9 support.
    */
-  public function checkFileOrigin(RequestEvent|GetRequestEvent $event) {
+  public function checkFileOrigin(RequestEvent $event) {
     $config = $this->configFactory->get('stage_file_proxy.settings');
 
     // Get the origin server.
@@ -108,12 +72,7 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
 
     $request_path = mb_substr($request_path, 1);
 
-    if (strpos($request_path, '' . $file_dir) !== 0) {
-      return;
-    }
-
-    // Disallow directory traversal.
-    if (in_array('..', explode('/', $request_path))) {
+    if (!str_starts_with($request_path, '' . $file_dir)) {
       return;
     }
 
@@ -191,6 +150,7 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
       $options = [
         'verify' => $config->get('verify'),
         'query' => $query_parameters,
+        'headers' => $this->createProxyHeadersArray($config->get('proxy_headers')),
       ];
 
       if ($config->get('hotlink')) {
@@ -252,10 +212,31 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
    * @return array
    *   An array of event listener definitions.
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     // Priority 240 is after ban middleware but before page cache.
     $events[KernelEvents::REQUEST][] = ['checkFileOrigin', 240];
     return $events;
+  }
+
+  /**
+   * Helper function to generate HTTP headers array.
+   *
+   * @param string $headers_string
+   *   Header string to break apart.
+   *
+   * @return array
+   *   Any array for proxy headers.
+   */
+  protected function createProxyHeadersArray(string $headers_string): array {
+    $lines = explode("\n", $headers_string);
+    $headers = [];
+    foreach ($lines as $line) {
+      $header = explode('|', $line);
+      if (count($header) > 1) {
+        $headers[$header[0]] = $header[1];
+      }
+    }
+    return $headers;
   }
 
 }

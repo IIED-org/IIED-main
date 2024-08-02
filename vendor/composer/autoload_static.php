@@ -83,6 +83,7 @@ class ComposerStaticInitc7142a64c37f96d53e584392e4f37422
         ),
         'W' => 
         array (
+            'Wikimedia\\Composer\\Merge\\V2\\' => 28,
             'Webmozart\\Assert\\' => 17,
         ),
         'V' => 
@@ -340,6 +341,10 @@ class ComposerStaticInitc7142a64c37f96d53e584392e4f37422
         'ZipStream\\' => 
         array (
             0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
+        ),
+        'Wikimedia\\Composer\\Merge\\V2\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/wikimedia/composer-merge-plugin/src',
         ),
         'Webmozart\\Assert\\' => 
         array (

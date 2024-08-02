@@ -22,7 +22,8 @@
               blockCSS: 'display: inline-block; width: auto;',
               afterToggle: function(trigger, element, expanded) {
                 if(!expanded) { // The "Close" link was clicked
-                 window.scrollTo({ top: element.offsetTop, behavior: 'smooth' });
+                  // Would be good to make this optional, commenting out for now.
+                  // window.scrollTo({ top: element.offsetTop, behavior: 'smooth' });
                 }
               }
             });

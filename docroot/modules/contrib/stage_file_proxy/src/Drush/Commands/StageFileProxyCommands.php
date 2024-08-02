@@ -5,8 +5,9 @@ namespace Drupal\stage_file_proxy\Drush\Commands;
 use Drupal\Component\DependencyInjection\ContainerInterface;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Database\Connection;
-use Drupal\stage_file_proxy\FetchManagerInterface;
+use Drupal\stage_file_proxy\DownloadManagerInterface;
 use Drush\Commands\DrushCommands;
 use GuzzleHttp\Exception\ClientException;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -17,65 +18,41 @@ use Symfony\Component\Console\Helper\ProgressBar;
 class StageFileProxyCommands extends DrushCommands {
 
   /**
-   * The database service.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $database;
-
-  /**
-   * The stage_file_proxy.fetch_manager service.
-   *
-   * @var \Drupal\stage_file_proxy\FetchManagerInterface
-   */
-  protected $fetchManager;
-
-  /**
    * The module config.
    *
    * Not called "config": name is used by Drush to store a DrushConfig instance.
    *
    * @var \Drupal\Core\Config\ImmutableConfig
    */
-  protected $moduleConfig;
-
-  /**
-   * The app root.
-   *
-   * @var string
-   */
-  protected $root;
+  protected ImmutableConfig $moduleConfig;
 
   /**
    * StageFileProxyCommands constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
-   *   The config.factory service.
+   *   The config factory service.
    * @param \Drupal\Core\Database\Connection $database
    *   The database service.
-   * @param \Drupal\stage_file_proxy\FetchManagerInterface $fetchManager
+   * @param \Drupal\stage_file_proxy\DownloadManagerInterface $fetchManager
    *   The stage_file_proxy.fetch_manager service.
    * @param string $root
    *   The app root.
    */
   public function __construct(
     ConfigFactoryInterface $configFactory,
-    Connection $database,
-    FetchManagerInterface $fetchManager,
-    string $root
+    protected Connection $database,
+    protected DownloadManagerInterface $fetchManager,
+    protected string $root,
   ) {
     parent::__construct();
 
     $this->moduleConfig = $configFactory->get('stage_file_proxy.settings');
-    $this->database = $database;
-    $this->fetchManager = $fetchManager;
-    $this->root = $root;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container): self {
+  public static function create(ContainerInterface $container): static {
     return new static(
       $container->get('config.factory'),
       $container->get('database'),
@@ -92,10 +69,12 @@ class StageFileProxyCommands extends DrushCommands {
    * @option skip-progress-bar Skip displaying a progress bar.
    * @option fid Only download the file that has this file id.
    */
-  public function dl(array $command_options = [
-    'skip-progress-bar' => FALSE,
-    'fid' => 0,
-  ]) {
+  public function dl(
+    array $command_options = [
+      'skip-progress-bar' => FALSE,
+      'fid' => 0,
+    ],
+  ): void {
     $logger = $this->logger();
     $server = $this->moduleConfig->get('origin');
     if (empty($server)) {
@@ -138,20 +117,16 @@ class StageFileProxyCommands extends DrushCommands {
       $progress_bar = new ProgressBar($this->output(), $results_number);
     }
     foreach ($results as $uri) {
-      if (strpos($uri, $publicPrefix) !== 0) {
+      if (!str_starts_with($uri, $publicPrefix)) {
         $notPublicFilesNumber++;
-        if ($progress_bar) {
-          $progress_bar->advance();
-        }
+        $progress_bar?->advance();
         continue;
       }
 
       $relativePath = mb_substr($uri, mb_strlen($publicPrefix));
 
       if (file_exists("{$this->root}/{$fileDir}/{$relativePath}")) {
-        if ($progress_bar) {
-          $progress_bar->advance();
-        }
+        $progress_bar?->advance();
         continue;
       }
 

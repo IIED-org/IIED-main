@@ -33,21 +33,6 @@
         "type": "composer",
         "url": "https://asset-packagist.org"
       },
-      "ckwordcount": {
-      "type": "package",
-      "package": {
-          "name": "w8tcha/ckeditor-wordcount-plugin",
-          "version": "1.17.8",
-          "type": "drupal-library",
-          "dist": {
-              "url": "https://github.com/w8tcha/CKEditor-WordCount-Plugin/releases/download/v1.17.8/CKEditor-WordCount-Plugin.zip",
-              "type": "zip"
-          },
-          "require": {
-              "composer/installers": "~1.0"
-          }
-        }
-      },
       "flexslider": {
         "type": "package",
         "package": {
@@ -171,7 +156,7 @@
         "drupal/search_api_sorts": "1.x-dev@dev",
         "drupal/search_api_sorts_widget": "^1.0",
         "drupal/serial": "^2.0",
-        "drupal/stage_file_proxy": "^2.1",
+        "drupal/stage_file_proxy": "^3",
         "drupal/stories": "^3.0@alpha",
         "drupal/svg_image": "^3.0",
         "drupal/taxonomy_import": "^2.0",
@@ -204,6 +189,8 @@
         "npm-asset/masonry-layout": "^4.2",
         "oomphinc/composer-installers-extender": "^2.0",
         "spatie/pdf-to-image": "^2.0",
+        "w8tcha/ckeditor-wordcount-plugin": "^1.17",
+        "wikimedia/composer-merge-plugin": "^2.1",
         "woocommerce/flexslider": "~2.0"
     },
     "require-dev": {
@@ -232,7 +219,8 @@
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "mglaman/composer-drupal-lenient": true,
             "phpstan/extension-installer": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "wikimedia/composer-merge-plugin": true
         }
     },
     "extra": {
@@ -309,7 +297,8 @@
             "Add 'front' options to menu position":"https://www.drupal.org/files/issues/2022-06-20/responsive_menu-menuposition-3274889-3.diff"
           },
 	        "drupal/readmore_js": {
-            "Fix readmore_js to prevent scroll to top.":"https://git.drupalcode.org/issue/readmore_js-3312818/-/commit/67f2912296417d5a3db83045909323c73dcdd605.patch"
+            "Fix readmore_js to prevent scroll to top.":"https://git.drupalcode.org/issue/readmore_js-3312818/-/commit/67f2912296417d5a3db83045909323c73dcdd605.patch",
+            "3385364":"https://www.drupal.org/files/issues/2023-09-06/drupal-10-compatibility-fixes-3385364-2.patch"
           },
           "drupal/search_api_solr": {
             "Fix search_api_solr to avoid 'can not use FieldCache on multivalued field'.":"https://git.drupalcode.org/issue/search_api_solr-3326515/-/commit/c8293cc85563c52b17357c7f1ccea2f4c9f359f1.patch"
@@ -326,15 +315,17 @@
           "drupal/allowed_formats": {
             "Default value for format dropdown missing": "https://www.drupal.org/files/issues/2022-02-02/2950548-allowed_formats-missing_default_value.patch"
           },
-          "drupal/readmore_js": {
-            "3385364": "https://www.drupal.org/files/issues/2023-09-06/drupal-10-compatibility-fixes-3385364-2.patch"
-          },
           "drupal/video_embed_field": {
             "3311063": "https://www.drupal.org/files/issues/2023-09-12/3311063-35.patch"
           }
         },
         "drupal-lenient": {
             "allowed-list": ["drupal/responsive_menu", "drupal/search_api_sorts_widget", "drupal/readmore_js"]
+        },
+        "merge-plugin": {
+          "include": [
+              "[web-root]/modules/contrib/ckwordcount/composer.libraries.json"
+          ]
         }
-    }
+      }
 }

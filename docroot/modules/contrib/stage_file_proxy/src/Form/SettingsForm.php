@@ -3,8 +3,11 @@
 namespace Drupal\stage_file_proxy\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
+use Drupal\Core\Form\ConfigTarget;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Form\RedundantEditableConfigNamesTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -12,20 +15,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class SettingsForm extends ConfigFormBase {
 
-  /**
-   * The site path.
-   *
-   * @var string
-   */
-  protected $sitePath;
+  use RedundantEditableConfigNamesTrait;
 
   /**
    * {@inheritdoc}
    */
-  public function __construct(ConfigFactoryInterface $config_factory, string $site_path) {
-    parent::__construct($config_factory);
-
-    $this->sitePath = $site_path;
+  public function __construct(
+    ConfigFactoryInterface $config_factory,
+    TypedConfigManagerInterface $typedConfigManager,
+    protected string $sitePath,
+  ) {
+    parent::__construct($config_factory, $typedConfigManager);
   }
 
   /**
@@ -35,6 +35,7 @@ class SettingsForm extends ConfigFormBase {
     // @phpstan-ignore-next-line
     return new static(
       $container->get('config.factory'),
+      $container->get('config.typed'),
       $container->getParameter('site.path')
     );
   }
@@ -44,15 +45,6 @@ class SettingsForm extends ConfigFormBase {
    */
   public function getFormId() {
     return 'stage_file_proxy_settings';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function getEditableConfigNames() {
-    return [
-      'stage_file_proxy.settings',
-    ];
   }
 
   /**
@@ -70,6 +62,11 @@ class SettingsForm extends ConfigFormBase {
       '#config' => [
         'key' => 'stage_file_proxy.settings:origin',
       ],
+      '#config_target' => new ConfigTarget(
+        'stage_file_proxy.settings',
+        'origin',
+        toConfig: fn($value) => trim($value, '/ '),
+      ),
     ];
 
     $form['verify'] = [
@@ -81,6 +78,7 @@ class SettingsForm extends ConfigFormBase {
       '#config' => [
         'key' => 'stage_file_proxy.settings:verify',
       ],
+      '#config_target' => 'stage_file_proxy.settings:verify',
     ];
 
     $stage_file_proxy_origin_dir = $config->get('origin_dir');
@@ -99,6 +97,7 @@ class SettingsForm extends ConfigFormBase {
       '#config' => [
         'key' => 'stage_file_proxy.settings:origin_dir',
       ],
+      '#config_target' => 'stage_file_proxy.settings:origin_dir',
     ];
 
     $form['use_imagecache_root'] = [
@@ -110,6 +109,7 @@ class SettingsForm extends ConfigFormBase {
       '#config' => [
         'key' => 'stage_file_proxy.settings:use_imagecache_root',
       ],
+      '#config_target' => 'stage_file_proxy.settings:use_imagecache_root',
     ];
 
     $form['hotlink'] = [
@@ -121,6 +121,7 @@ class SettingsForm extends ConfigFormBase {
       '#config' => [
         'key' => 'stage_file_proxy.settings:hotlink',
       ],
+      '#config_target' => 'stage_file_proxy.settings:hotlink',
     ];
 
     $form['excluded_extensions'] = [
@@ -132,6 +133,7 @@ class SettingsForm extends ConfigFormBase {
       '#config' => [
         'key' => 'stage_file_proxy.settings:excluded_extensions',
       ],
+      '#config_target' => 'stage_file_proxy.settings:excluded_extensions',
     ];
 
     $form['proxy_headers'] = [
@@ -145,6 +147,7 @@ class SettingsForm extends ConfigFormBase {
       '#config' => [
         'key' => 'stage_file_proxy.settings:proxy_headers',
       ],
+      '#config_target' => 'stage_file_proxy.settings:proxy_headers',
     ];
 
     return parent::buildForm($form, $form_state);
@@ -160,32 +163,6 @@ class SettingsForm extends ConfigFormBase {
     if (!empty($origin) && filter_var($origin, FILTER_VALIDATE_URL) === FALSE) {
       $form_state->setErrorByName('origin', 'Origin needs to be a valid URL.');
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
-    $config = $this->config('stage_file_proxy.settings');
-
-    $keys = [
-      'origin',
-      'origin_dir',
-      'use_imagecache_root',
-      'hotlink',
-      'verify',
-      'excluded_extensions',
-      'proxy_headers',
-    ];
-    foreach ($keys as $key) {
-      $value = $form_state->getValue($key);
-      if ($key === 'origin') {
-        $value = trim($value, '/ ');
-      }
-      $config->set($key, $value);
-    }
-    $config->save();
-    $this->messenger()->addMessage($this->t('Your settings have been saved.'));
   }
 
 }
